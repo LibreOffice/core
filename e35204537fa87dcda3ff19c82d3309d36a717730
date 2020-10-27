@@ -70,6 +70,30 @@
       "revId": "e35204537fa87dcda3ff19c82d3309d36a717730",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2192692b_900e75e3",
+        "filename": "cui/uiconfig/ui/paraindentspacing.ui",
+        "patchSetId": 22
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-10-27T10:36:27Z",
+      "side": 1,
+      "message": "ah wait, if I launch \"format paragraph\" manually with gen and a dbgutil build I get an assert that there is no label and it crashes so I think that\u0027s the problem. Let me have a look at getting this to pass",
+      "parentUuid": "1e89027d_e25853b0",
+      "range": {
+        "startLine": 510,
+        "startChar": 35,
+        "endLine": 510,
+        "endChar": 48
+      },
+      "revId": "e35204537fa87dcda3ff19c82d3309d36a717730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
