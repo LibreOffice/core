@@ -24,7 +24,7 @@
 #include <vcl/print.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 #include <map>
 #include <vector>
 #include <utility>
@@ -204,7 +204,7 @@ class SwRenderData
 {
     /** pages valid for printing (according to the current settings)
      This set of pages does NOT depend on the 'PageRange' that is used as a printing option! */
-    std::set< sal_Int32 >                       m_aValidPages;          ///< the set of possible pages (see StringRangeEnumerator::getRangesFromString )
+    o3tl::sorted_vector< sal_Int32 >            m_aValidPages;          ///< the set of possible pages (see StringRangeEnumerator::getRangesFromString )
 
     /// printer paper tray to use for each of the m_aValidPages above
     std::map< sal_Int32, sal_Int32 >            m_aPrinterPaperTrays;
@@ -262,8 +262,8 @@ public:
 
     typedef std::vector< std::pair< sal_Int32, sal_Int32 > >    PagePairsVec_t;
 
-    std::set< sal_Int32 > &             GetValidPagesSet()          { return m_aValidPages; }
-    const std::set< sal_Int32 > &       GetValidPagesSet() const    { return m_aValidPages; }
+    o3tl::sorted_vector< sal_Int32 > &       GetValidPagesSet()          { return m_aValidPages; }
+    const o3tl::sorted_vector< sal_Int32 > & GetValidPagesSet() const    { return m_aValidPages; }
 
     /** a map for printer paper tray numbers to use for each document page
        a value of -1 for the tray means that there is no specific tray defined */

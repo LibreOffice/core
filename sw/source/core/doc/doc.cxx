@@ -470,7 +470,7 @@ struct PostItField_ : public SetGetExpField
         : SetGetExpField( rNdIdx, pField, nullptr ) {}
 
     sal_uInt16 GetPageNo( const StringRangeEnumerator &rRangeEnum,
-            const std::set< sal_Int32 > &rPossiblePages,
+            const o3tl::sorted_vector< sal_Int32 > &rPossiblePages,
             sal_uInt16& rVirtPgNo, sal_uInt16& rLineNo );
 
     const SwPostItField* GetPostIt() const
@@ -483,7 +483,7 @@ struct PostItField_ : public SetGetExpField
 
 sal_uInt16 PostItField_::GetPageNo(
     const StringRangeEnumerator &rRangeEnum,
-    const std::set< sal_Int32 > &rPossiblePages,
+    const o3tl::sorted_vector< sal_Int32 > &rPossiblePages,
     /* out */ sal_uInt16& rVirtPgNo, /* out */ sal_uInt16& rLineNo )
 {
     //Problem: If a PostItField is contained in a Node that is represented
@@ -680,7 +680,7 @@ void SwDoc::CalculatePagesForPrinting(
     bool bPrintEmptyPages   = !bPrintSelection && rOptions.IsPrintEmptyPages( bIsPDFExport );
 
     std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
-    std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
+    o3tl::sorted_vector< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
     // Map page numbers from user input (possibly ignoring blanks) to physical page numbers
     std::map< sal_Int32, sal_Int32 > aUIPages2PhyPagesMap;
     rValidPages.clear();
@@ -902,7 +902,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     sal_Int32 nDocPageCount )
 {
     std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
-    std::set< sal_Int32 > &rValidPagesSet = rData.GetValidPagesSet();
+    o3tl::sorted_vector< sal_Int32 > &rValidPagesSet = rData.GetValidPagesSet();
     std::vector< std::pair< sal_Int32, sal_Int32 > > &rPagePairs = rData.GetPagePairsForProspectPrinting();
     std::map< sal_Int32, const SwPageFrame * > validStartFrames;
 
