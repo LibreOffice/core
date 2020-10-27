@@ -26,8 +26,8 @@ dialogs = [
         # tested in sc/qa/uitest/search_replace/*
     # {"command": ".uno:InsertObjectChart", "closeButton": "cancel"},
         # tested in uitest/calc_tests/create_chart.py
-    {"command": ".uno:DataDataPilotRun", "closeButton": "cancel", "skipTestOK": True},
-        # OK button triggers a new dialog
+    # {"command": ".uno:DataDataPilotRun", "closeButton": "cancel", "skipTestOK": True},
+        # tested in sc/qa/uitest/calc_tests8/tdf137726.py
     # {"command": ".uno:FunctionDialog", "closeButton": "cancel"},
         # Cancel button tested in uitest/calc_tests/function_wizard.py
         # OK button tested in sc/qa/uitest/calc_tests7/tdf123479.py
