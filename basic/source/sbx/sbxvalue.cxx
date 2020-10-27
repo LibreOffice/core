@@ -361,8 +361,7 @@ SbxValues SbxValue::Get(SbxDataType t) const
 
 const OUString& SbxValue::GetCoreString() const
 {
-    SbxValues aRes;
-    aRes.eType = SbxCoreSTRING;
+    SbxValues aRes(SbxCoreSTRING);
     if( Get( aRes ) )
     {
         const_cast<SbxValue*>(this)->aToolString = *aRes.pOUString;
@@ -377,8 +376,7 @@ const OUString& SbxValue::GetCoreString() const
 OUString SbxValue::GetOUString() const
 {
     OUString aResult;
-    SbxValues aRes;
-    aRes.eType = SbxSTRING;
+    SbxValues aRes(SbxSTRING);
     if( Get( aRes ) )
     {
         aResult = *aRes.pOUString;
@@ -506,12 +504,10 @@ void SbxValue::PutStringExt( const OUString& r )
     SbxDataType eTargetType = SbxDataType( aData.eType & 0x0FFF );
 
     // tinker a Source-Value
-    SbxValues aRes;
-    aRes.eType = SbxSTRING;
+    SbxValues aRes(SbxSTRING);
 
     // Only if really something was converted, take the copy,
     // otherwise take the original (Unicode remains)
-    bool bRet;
     if( ImpConvStringExt( aStr, eTargetType ) )
         aRes.pOUString = &aStr;
     else
@@ -530,8 +526,7 @@ void SbxValue::PutStringExt( const OUString& r )
             SetFlag( SbxFlagBits::Fixed );
     }
 
-    Put( aRes );
-    bRet = bool( !IsError() );
+    const bool bRet = Put(aRes);
 
     // If FIXED resulted in an error, set it back
     // (UI-Action should not result in an error, but simply fail)
@@ -543,11 +538,9 @@ void SbxValue::PutStringExt( const OUString& r )
 
 bool SbxValue::PutBool( bool b )
 {
-    SbxValues aRes;
-    aRes.eType = SbxBOOL;
+    SbxValues aRes(SbxBOOL);
     aRes.nUShort = sal::static_int_cast< sal_uInt16 >(b ? SbxTRUE : SbxFALSE);
-    Put( aRes );
-    return !IsError();
+    return Put(aRes);
 }
 
 bool SbxValue::PutEmpty()
@@ -587,17 +580,15 @@ void SbxValue::fillAutomationDecimal
 
 bool SbxValue::PutString( const OUString& r )
 {
-    SbxValues aRes;
-    aRes.eType = SbxSTRING;
+    SbxValues aRes(SbxSTRING);
     aRes.pOUString = const_cast<OUString*>(&r);
-    Put( aRes );
-    return !IsError();
+    return Put(aRes);
 }
 
 
 #define PUT( p, e, t, m ) \
 bool SbxValue::p( t n ) \
-{ SbxValues aRes(e); aRes.m = n; Put( aRes ); return !IsError(); }
+{ SbxValues aRes(e); aRes.m = n; return Put(aRes); }
 
 void SbxValue::PutDate( double n )
 { SbxValues aRes(SbxDATE); aRes.nDouble = n; Put( aRes ); }
@@ -758,8 +749,7 @@ bool SbxValue::Convert( SbxDataType eTo )
     }
 
     // Conversion of the data:
-    SbxValues aNew;
-    aNew.eType = eTo;
+    SbxValues aNew(eTo);
     if( Get( aNew ) )
     {
         // The data type could be converted. It ends here with fixed elements,
