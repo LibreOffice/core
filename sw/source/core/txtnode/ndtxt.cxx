@@ -2186,7 +2186,8 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
                 pHt->GetAttr(),
                 nAttrStt - nDeletedDummyChars,
                 nAttrEnd - nDeletedDummyChars,
-                SetAttrMode::NOTXTATRCHR | SetAttrMode::IS_COPY);
+                SetAttrMode::NOTXTATRCHR | SetAttrMode::IS_COPY,
+                pOtherDoc != nullptr);
             if (pNewHt)
             {
                 lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );

@@ -289,7 +289,8 @@ public:
     /// @return     inserted hint; 0 if not sure the hint is inserted
     SwTextAttr* InsertItem( SfxPoolItem& rAttr,
                   const sal_Int32 nStart, const sal_Int32 nEnd,
-                  const SetAttrMode nMode = SetAttrMode::DEFAULT );
+                  const SetAttrMode nMode = SetAttrMode::DEFAULT,
+                  bool bSourceDocIsNotDestDoc = false );
 
     /** Set these attributes at TextNode. If the whole range is comprised
        set them only in AutoAttrSet (SwContentNode::SetAttr). */

@@ -1018,7 +1018,8 @@ SwTextAttr* MakeTextAttr(
     sal_Int32 const nStt,
     sal_Int32 const nEnd,
     CopyOrNewType const bIsCopy,
-    SwTextNode *const pTextNode )
+    SwTextNode *const pTextNode,
+    bool bSourceDocIsNotDestDoc )
 {
     if ( isCHRATR(rAttr.Which()) )
     {
@@ -1113,8 +1114,41 @@ SwTextAttr* MakeTextAttr(
                 : new SwTextRefMark( static_cast<SwFormatRefMark&>(rNew), nStt, &nEnd );
         break;
     case RES_TXTATR_TOXMARK:
-        pNew = new SwTextTOXMark( static_cast<SwTOXMark&>(rNew), nStt, &nEnd );
+    {
+        SwTOXMark& rMark = static_cast<SwTOXMark&>(rNew);
+
+        // TODO add SwDoc* to SwTOXType so we don't need external knowledge that this is
+        // being copied from a different document that the destination ?
+        const SwTOXType* pNeedReplace = bSourceDocIsNotDestDoc ? rMark.GetTOXType() : nullptr;
+        if (pNeedReplace)
+        {
+            // TODO merge this crud with the original I c-n-p'ed it from
+            TOXTypes eTOXTypes = pNeedReplace->GetType();
+            const OUString& rTOXName = pNeedReplace->GetTypeName();
+
+            // search for respective TOX type
+            const sal_uInt16 nCnt = rDoc.GetTOXTypeCount( eTOXTypes );
+            SwTOXType* pToxType = nullptr;
+            for ( sal_uInt16 n = 0; n < nCnt; ++n )
+            {
+                pToxType = const_cast<SwTOXType*>(rDoc.GetTOXType( eTOXTypes, n ));
+                if ( pToxType->GetTypeName() == rTOXName )
+                    break;
+                pToxType = nullptr;
+            }
+
+            if ( !pToxType )  // TOX type not found, create new
+            {
+                pToxType = const_cast<SwTOXType*>(
+                        rDoc.InsertTOXType( SwTOXType( eTOXTypes, rTOXName )));
+            }
+
+            rMark.RegisterToTOXType(*pToxType);
+        }
+
+        pNew = new SwTextTOXMark(rMark, nStt, &nEnd);
         break;
+    }
     case RES_TXTATR_CJK_RUBY:
         pNew = new SwTextRuby( static_cast<SwFormatRuby&>(rNew), nStt, nEnd );
         break;
@@ -1256,7 +1290,8 @@ SwTextAttr* SwTextNode::InsertItem(
     SfxPoolItem& rAttr,
     const sal_Int32 nStart,
     const sal_Int32 nEnd,
-    const SetAttrMode nMode )
+    const SetAttrMode nMode,
+    bool bSourceDocIsNotDestDoc)
 {
     // character attributes will be inserted as automatic styles:
     assert( !isCHRATR(rAttr.Which()) && "AUTOSTYLES - "
@@ -1269,7 +1304,7 @@ SwTextAttr* SwTextNode::InsertItem(
             nStart,
             nEnd,
             (nMode & SetAttrMode::IS_COPY) ? CopyOrNewType::Copy : CopyOrNewType::New,
-            this );
+            this, bSourceDocIsNotDestDoc);
 
     if ( pNew )
     {

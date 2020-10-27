@@ -39,7 +39,7 @@ SwTextAttr * MakeTextAttr(
     sal_Int32 const nStt,
     sal_Int32 const nEnd,
     CopyOrNewType const bIsCopy = CopyOrNewType::New,
-    SwTextNode *const pTextNode = nullptr );
+    SwTextNode *const pTextNode = nullptr, bool bSourceDocIsNotDestDoc = false );
 
 SwTextAttr * MakeTextAttr(
     SwDoc & rDoc,
