@@ -595,7 +595,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // #i78856, reset all attributes but not the language attributes
             // (for this build an array of all relevant attributes and
             // remove the languages from that)
-            std::set<sal_uInt16> aAttribs;
+            o3tl::sorted_vector<sal_uInt16> aAttribs;
 
             sal_uInt16 aResetableSetRange[] = {
                 RES_FRMATR_BEGIN, RES_FRMATR_END-1,
@@ -612,7 +612,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             while (*pUShorts)
             {
                 for (sal_uInt16 i = pUShorts[0]; i <= pUShorts[1]; ++i)
-                    aAttribs.insert( aAttribs.end(), i );
+                    aAttribs.insert( i );
                 pUShorts += 2;
             }
             // we don't want to change writing direction.
@@ -904,7 +904,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.SelWrd();
             }
             //now remove the attribute
-            std::set<sal_uInt16> aAttribs;
+            o3tl::sorted_vector<sal_uInt16> aAttribs;
             aAttribs.insert( RES_TXTATR_INETFMT );
             rWrtSh.ResetAttr( aAttribs );
             if(!bSel)

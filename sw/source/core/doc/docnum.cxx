@@ -59,7 +59,7 @@ namespace {
     void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam, sal_uInt16 marker,
             SwRootFrame const*const pLayout)
     {
-        std::set<sal_uInt16> aResetAttrsArray;
+        o3tl::sorted_vector<sal_uInt16> aResetAttrsArray;
         aResetAttrsArray.insert( marker );
         // #i114929#
         // On a selection setup a corresponding Point-and-Mark in order to get

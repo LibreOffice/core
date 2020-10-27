@@ -799,7 +799,7 @@ namespace
                         // expand range to the whole paragraph
                         // and reset only the paragraph attributes
                         SwPaM aPam( *pTNd, pTNd->GetText().getLength() );
-                        std::set<sal_uInt16> aResetAttrsArray;
+                        o3tl::sorted_vector<sal_uInt16> aResetAttrsArray;
 
                         sal_uInt16 aResetableSetRange[] = {
                                 RES_PARATR_BEGIN, RES_PARATR_END - 1,
@@ -811,7 +811,7 @@ namespace
                         while (*pUShorts)
                         {
                             for (sal_uInt16 i = pUShorts[0]; i <= pUShorts[1]; ++i)
-                                aResetAttrsArray.insert( aResetAttrsArray.end(), i );
+                                aResetAttrsArray.insert( i );
                             pUShorts += 2;
                         }
 
