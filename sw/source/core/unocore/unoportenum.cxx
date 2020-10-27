@@ -573,7 +573,7 @@ static void lcl_ExportBookmark(
     const SwUnoCursor * const pUnoCursor,
     SwXBookmarkPortion_ImplList& rBkmArr,
     const sal_Int32 nIndex,
-    const std::set<sal_Int32>& rFramePositions,
+    const o3tl::sorted_vector<sal_Int32>& rFramePositions,
     bool bOnlyFrameStarts)
 {
     for ( SwXBookmarkPortion_ImplList::iterator aIter = rBkmArr.begin(), aEnd = rBkmArr.end(); aIter != aEnd; )
@@ -634,9 +634,7 @@ static void lcl_ExportSoftPageBreak(
     SwSoftPageBreakList& rBreakArr,
     const sal_Int32 nIndex)
 {
-    for ( SwSoftPageBreakList::iterator aIter = rBreakArr.begin(),
-          aEnd = rBreakArr.end();
-          aIter != aEnd; )
+    for ( auto aIter = rBreakArr.begin(), aEnd = rBreakArr.end(); aIter != aEnd; )
     {
         if ( nIndex > *aIter )
         {
@@ -1121,7 +1119,7 @@ static void lcl_ExportBkmAndRedline(
     SwXRedlinePortion_ImplList& rRedlineArr,
     SwSoftPageBreakList& rBreakArr,
     const sal_Int32 nIndex,
-    const std::set<sal_Int32>& rFramePositions,
+    const o3tl::sorted_vector<sal_Int32>& rFramePositions,
     bool bOnlyFrameBookmarkStarts)
 {
     if (!rBkmArr.empty())
@@ -1157,7 +1155,7 @@ static void lcl_ExportAnnotationStarts(
     const SwUnoCursor * const pUnoCursor,
     SwAnnotationStartPortion_ImplList& rAnnotationStartArr,
     const sal_Int32 nIndex,
-    const std::set<sal_Int32>& rFramePositions,
+    const o3tl::sorted_vector<sal_Int32>& rFramePositions,
     bool bOnlyFrame)
 {
     for ( SwAnnotationStartPortion_ImplList::iterator aIter = rAnnotationStartArr.begin(), aEnd = rAnnotationStartArr.end();
@@ -1191,7 +1189,7 @@ static void lcl_ExportAnnotationStarts(
 
 /// Fills character positions from rFrames into rFramePositions.
 static void lcl_ExtractFramePositions(FrameClientSortList_t& rFrames, sal_Int32 nCurrentIndex,
-                                      std::set<sal_Int32>& rFramePositions)
+                                      o3tl::sorted_vector<sal_Int32>& rFramePositions)
 {
     for (const auto& rFrame : rFrames)
     {
@@ -1346,7 +1344,7 @@ static void lcl_CreatePortions(
         SwUnoCursorHelper::SelectPam(*pUnoCursor, true); // set mark
 
         // First remember the frame positions.
-        std::set<sal_Int32> aFramePositions;
+        o3tl::sorted_vector<sal_Int32> aFramePositions;
         lcl_ExtractFramePositions(i_rFrames, nCurrentIndex, aFramePositions);
 
         // Then export start of collapsed bookmarks which "cover" at-char
