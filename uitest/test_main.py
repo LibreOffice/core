@@ -9,7 +9,6 @@ import sys
 import getopt
 import os
 import unittest
-import calc_tests
 import importlib
 import importlib.machinery
 
