@@ -46,6 +46,30 @@
       "revId": "e35204537fa87dcda3ff19c82d3309d36a717730",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e89027d_e25853b0",
+        "filename": "cui/uiconfig/ui/paraindentspacing.ui",
+        "patchSetId": 22
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-10-27T08:53:10Z",
+      "side": 1,
+      "message": "Thanks for this confirmation.  Should I ask Xisco about this?  (I have looked at the error message in the console output without achieving any useful insight.)",
+      "parentUuid": "c57f5650_2c80e14f",
+      "range": {
+        "startLine": 510,
+        "startChar": 35,
+        "endLine": 510,
+        "endChar": 48
+      },
+      "revId": "e35204537fa87dcda3ff19c82d3309d36a717730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
