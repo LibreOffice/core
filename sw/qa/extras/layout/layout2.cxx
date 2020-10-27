@@ -21,6 +21,8 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <fmtfsize.hxx>
@@ -45,6 +47,7 @@
 #include <unoframe.hxx>
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdotext.hxx>
 #include <dcontact.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
@@ -2562,7 +2565,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137185)
     auto xTextFrame = SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Align me!"), xTextFrame->getText()->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString(), xTxt->getText()->getString());
+    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+    CPPUNIT_ASSERT(pTextObj);
+    auto aOutStr = pTextObj->GetOutlinerParaObject()->GetTextObject();
+
+    CPPUNIT_ASSERT(aOutStr.GetText(0).isEmpty());
     // Before the patch it failed, because the text appeared 2 times on each other.
 }
 
