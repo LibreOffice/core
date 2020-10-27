@@ -242,6 +242,8 @@ void ScPivotLayoutDialog::SetupSource()
         }
     }
 
+    bool bSourceBoxHasEntries = mxSourceListBox->get_count() > 0;
+
     if (bIsNamedRange)
     {
         mxSourceListBox->set_active_text(sSourceNamedRangeName);
@@ -249,12 +251,13 @@ void ScPivotLayoutDialog::SetupSource()
     }
     else
     {
-        mxSourceListBox->set_active(0);
+        // If entries - select first entry
+        mxSourceListBox->set_active(bSourceBoxHasEntries ? 0 : -1);
         mxSourceRadioSelection->set_active(true);
     }
 
-    // If entries - select first entry, otherwise disable the radio button.
-    if (mxSourceListBox->get_count() <= 0)
+    // If no entries disable the radio button.
+    if (!bSourceBoxHasEntries)
         mxSourceRadioNamedRange->set_sensitive(false);
 
     ToggleSource();
