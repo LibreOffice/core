@@ -89,6 +89,8 @@ public:
     bool WalkUpFromFunctionDecl(FunctionDecl const* decl);
     bool VisitFunctionDecl(FunctionDecl const* decl);
 
+    bool VisitCallExpr(CallExpr const* expr);
+
 private:
     bool rewrite(SourceLocation location);
     bool isExcludedFile(SourceLocation spellingLocation) const;
@@ -507,6 +509,48 @@ bool ToolsLong::VisitFunctionDecl(FunctionDecl const* decl)
                compiler.getSourceManager().getSpellingLoc(decl->getNameInfo().getLoc())))
     {
         functionDecls_.insert({ decl, fbk });
+    }
+    return true;
+}
+
+bool ToolsLong::VisitCallExpr(CallExpr const* expr)
+{
+    if (ignoreLocation(expr))
+    {
+        return true;
+    }
+    auto const d1 = expr->getDirectCallee();
+    if (d1 == nullptr || !loplugin::DeclCheck(d1).Function("curl_easy_getinfo").GlobalNamespace())
+    {
+        return true;
+    }
+    if (expr->getNumArgs() != 3)
+    {
+        return true;
+    }
+    //TODO: Check expr->getArg(1) is CURLINFO_RESPONSE_CODE
+    auto const e1 = dyn_cast<UnaryOperator>(expr->getArg(2)->IgnoreParenImpCasts());
+    if (e1 == nullptr || e1->getOpcode() != UO_AddrOf)
+    {
+        return true;
+    }
+    auto const e2 = dyn_cast<DeclRefExpr>(e1->getSubExpr()->IgnoreParenImpCasts());
+    if (e2 == nullptr)
+    {
+        return true;
+    }
+    auto const d2 = e2->getDecl();
+    if (auto const d3 = dyn_cast<ParmVarDecl>(d2))
+    {
+        parmVarDecls_.erase(d3);
+    }
+    else if (auto const d4 = dyn_cast<VarDecl>(d2))
+    {
+        varDecls_.erase(d4);
+    }
+    else if (auto const d5 = dyn_cast<FieldDecl>(d2))
+    {
+        fieldDecls_.erase(d5);
     }
     return true;
 }

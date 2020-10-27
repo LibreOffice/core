@@ -117,7 +117,7 @@ std::string curlGet(const OString& rURL)
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, static_cast<void*>(&response_body));
 
     CURLcode cc = curl_easy_perform(curl);
-    tools::Long http_code = 0;
+    long http_code = 0;
     curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 
     if (http_code != 200)
@@ -150,7 +150,7 @@ void curlDownload(const OString& rURL, const OUString& sFileURL)
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, static_cast<void*>(&aFile));
 
     CURLcode cc = curl_easy_perform(curl);
-    tools::Long http_code = 0;
+    long http_code = 0;
     curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 
     if (http_code != 200)
