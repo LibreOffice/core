@@ -242,7 +242,7 @@ void PhysicalFontFamily::UpdateDevFontList( ImplDeviceFontList& rDevFontList ) c
     }
 }
 
-void PhysicalFontFamily::GetFontHeights( std::set<int>& rHeights ) const
+void PhysicalFontFamily::GetFontHeights( o3tl::sorted_vector<int>& rHeights ) const
 {
     // add all available font heights
     for (auto const& font : maFontFaces)

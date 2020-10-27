@@ -23,7 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 #include <unotools/fontcfg.hxx>
 
@@ -60,7 +60,7 @@ public:
     const OUString&     GetAliasNames() const    { return maMapNames; }
     int                 GetMinQuality() const    { return mnMinQuality; }
     FontTypeFaces       GetTypeFaces() const     { return mnTypeFaces; }
-    void                GetFontHeights( std::set<int>& rHeights ) const;
+    void                GetFontHeights( o3tl::sorted_vector<int>& rHeights ) const;
 
     const OUString&     GetMatchFamilyName() const { return maMatchFamilyName; }
     ImplFontAttrs       GetMatchType() const     { return mnMatchType ; }
