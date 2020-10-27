@@ -91,14 +91,16 @@ programfiles=$(echo ${files} | grep -o '/program/[^/]* ' | xargs -n 1 basename)
 globalallowlist="ld-linux-x86-64.so.2 ld-linux.so.2 libc.so.6 libm.so.6 libdl.so.2 libpthread.so.0 librt.so.1 libutil.so.1 libnsl.so.1 libcrypt.so.1 libgcc_s.so.1 libstdc++.so.6 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libxml2.so.2 libxslt.so.1 libexslt.so.0 ${LO_ELFCHECK_ALLOWLIST-}"
 x11allowlist="libX11.so.6 libX11-xcb.so.1 libXext.so.6 libSM.so.6 libICE.so.6 libXinerama.so.1 libXrender.so.1 libXrandr.so.2 libcairo.so.2"
 openglallowlist="libGL.so.1"
-gioallowlist="libgio-2.0.so.0 libgobject-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
-gstreamerallowlist="libgstaudio-1.0.so.0 libgstpbutils-1.0.so.0 libgstvideo-1.0.so.0 libgstbase-1.0.so.0 libgstreamer-1.0.so.0"
-gtk3allowlist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libgio-2.0.so.0 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3 libharfbuzz.so.0"
-qt5allowlist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libQt5X11Extras.so.5 libcairo.so.2 libglib-2.0.so.0 libgobject-2.0.so.0 libxcb.so.1 libxcb-icccm.so.4"
+gobjectallowlist="libgobject-2.0.so.0 libglib-2.0.so.0"
+gdbusallowlist="libdbus-glib-1.so.2 libdbus-1.so.3 libgmodule-2.0.so.0 libgthread-2.0.so.0 ${gobjectallowlist}"
+gioallowlist="libgio-2.0.so.0 ${gdbusallowlist}"
+gstreamerallowlist="libgstaudio-1.0.so.0 libgstpbutils-1.0.so.0 libgstvideo-1.0.so.0 libgstbase-1.0.so.0 libgstreamer-1.0.so.0 ${gobjectallowlist}"
+gtk3allowlist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libharfbuzz.so.0 ${gioallowlist}"
+qt5allowlist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libQt5X11Extras.so.5 libcairo.so.2 libxcb.so.1 libxcb-icccm.so.4 ${gobjectallowlist}"
 kf5allowlist="libKF5ConfigCore.so.5 libKF5CoreAddons.so.5 libKF5I18n.so.5 libKF5KIOCore.so.5 libKF5KIOFileWidgets.so.5 libKF5KIOWidgets.so.5 libKF5WindowSystem.so.5"
-avahiallowlist="libdbus-glib-1.so.2 libdbus-1.so.3 libgobject-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0 libavahi-common.so.3 libavahi-client.so.3"
+avahiallowlist="libavahi-common.so.3 libavahi-client.so.3 ${gdbusallowlist}"
 kerberosallowlist="libgssapi_krb5.so.2 libcom_err.so.2 libkrb5.so.3"
-dconfallowlist="libdconf.so.1 libgio-2.0.so.0 libglib-2.0.so.0 libgobject-2.0.so.0"
+dconfallowlist="libdconf.so.1 libgio-2.0.so.0 ${gobjectallowlist}"
 
 check_one_file()
 {
