@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5fd6698_d20f79af",
+        "filename": "sc/source/filter/excel/xecontent.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1658,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-27T09:18:32Z",
+      "side": 1,
+      "message": "Avoid unnecessary formatting changes to optimize the patch for the review.",
+      "range": {
+        "startLine": 1658,
+        "startChar": 6,
+        "endLine": 1658,
+        "endChar": 83
+      },
+      "revId": "8c5f2ad9afdbcbfba45153bd54b7dae4a2d12e04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
