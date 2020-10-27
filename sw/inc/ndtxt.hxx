@@ -30,7 +30,7 @@
 #include "modeltoviewhelper.hxx"
 
 #include <sfx2/Metadatable.hxx>
-
+#include <o3tl/sorted_vector.hxx>
 #include <memory>
 #include <vector>
 #include <set>
@@ -74,7 +74,7 @@ namespace com::sun::star {
     namespace text { class XTextContent; }
 }
 
-typedef std::set< sal_Int32 > SwSoftPageBreakList;
+typedef o3tl::sorted_vector< sal_Int32 > SwSoftPageBreakList;
 
 /// SwTextNode is a paragraph in the document model.
 class SW_DLLPUBLIC SwTextNode
