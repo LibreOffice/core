@@ -85,6 +85,43 @@ static void lcl_SetDecimalDigitsTo1(weld::MetricSpinButton& rField)
     rField.set_min(rField.normalize(nMin), FieldUnit::TWIP);
 }
 
+// returns in pt
+static sal_Int64 lcl_GetMinLineWidth(SvxBorderLineStyle aStyle)
+{
+    switch (aStyle)
+    {
+    case SvxBorderLineStyle::NONE:
+        return 0;
+
+    case SvxBorderLineStyle::SOLID:
+    case SvxBorderLineStyle::DOTTED:
+    case SvxBorderLineStyle::DASHED:
+    case SvxBorderLineStyle::FINE_DASHED:
+    case SvxBorderLineStyle::DASH_DOT:
+    case SvxBorderLineStyle::DASH_DOT_DOT:
+        return 15;
+
+        // Double lines
+    case SvxBorderLineStyle::DOUBLE: return 22;
+    case SvxBorderLineStyle::DOUBLE_THIN: return 22;
+    case SvxBorderLineStyle::THINTHICK_SMALLGAP: return 20;
+    case SvxBorderLineStyle::THINTHICK_MEDIUMGAP: return 15;
+    case SvxBorderLineStyle::THINTHICK_LARGEGAP: return 15;
+    case SvxBorderLineStyle::THICKTHIN_SMALLGAP: return 20;
+    case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP: return 15;
+    case SvxBorderLineStyle::THICKTHIN_LARGEGAP: return 15;
+
+    case SvxBorderLineStyle::EMBOSSED: return 15;
+    case SvxBorderLineStyle::ENGRAVED: return 15;
+
+    case SvxBorderLineStyle::OUTSET: return 10;
+    case SvxBorderLineStyle::INSET: return 10;
+
+    default:
+        return 15;
+    }
+}
+
 // number of preset images to show
 const sal_uInt16 SVX_BORDER_PRESET_COUNT = 5;
 
@@ -1192,14 +1229,36 @@ IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, weld::MetricSpinButton&, 
 
 IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
 {
-    sal_Int64 nVal = m_xLineWidthMF->get_value(FieldUnit::NONE);
-    nVal = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
-                nVal,
-                m_xLineWidthMF->get_digits(),
-                FieldUnit::POINT, MapUnit::MapTwip ));
-    m_aFrameSel.SetStyleToSelection ( nVal,
+    sal_Int64 nOldWidth = m_xLineWidthMF->get_value(FieldUnit::NONE);
+    nOldWidth = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
+        nOldWidth,
+        m_xLineWidthMF->get_digits(),
+        FieldUnit::POINT,
+        MapUnit::MapTwip));
+
+    const sal_Int64 nOldMinWidth = lcl_GetMinLineWidth(m_aFrameSel.getCurrentStyleLineStyle());
+    const sal_Int64 nNewMinWidth = lcl_GetMinLineWidth(m_xLbLineStyle->GetSelectEntryStyle());
+
+    // auto change line-width if it doesn't correspond to minimal value
+    // let's change only in case when user has not changed the line-width into some custom value
+    const sal_Int64 nNewWidth = (nOldMinWidth == nOldWidth)? nNewMinWidth : nOldWidth;
+
+    // set value inside edit box
+    if (nOldWidth != nNewWidth)
+    {
+        const sal_Int64 nNewWidthPt = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
+            nNewWidth,
+            m_xLineWidthMF->get_digits(),
+            MapUnit::MapTwip,
+            FieldUnit::POINT));
+        m_xLineWidthMF->set_value(nNewWidthPt, FieldUnit::POINT);
+    }
+
+    // set value inside style box
+    m_aFrameSel.SetStyleToSelection( nNewWidth,
         m_xLbLineStyle->GetSelectEntryStyle() );
 }
+
 
 // ValueSet handling
 sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nValueSetIdx ) const
@@ -1331,34 +1390,33 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 
     static struct {
         SvxBorderLineStyle mnStyle;
-        tools::Long mnMinWidth;
         SvtLineListBox::ColorFunc mpColor1Fn;
         SvtLineListBox::ColorFunc mpColor2Fn;
         SvtLineListBox::ColorDistFunc mpColorDistFn;
     } const aLines[] = {
         // Simple lines
-        { SvxBorderLineStyle::SOLID,        0, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::DOTTED,       0, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::DASHED,       0, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::FINE_DASHED,  0, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::DASH_DOT,     0, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::DASH_DOT_DOT, 0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::SOLID,        &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DOTTED,       &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DASHED,       &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::FINE_DASHED,  &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DASH_DOT,     &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DASH_DOT_DOT, &sameColor, &sameColor, &sameDistColor },
 
         // Double lines
-        { SvxBorderLineStyle::DOUBLE,              10, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::DOUBLE_THIN,         10, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::THINTHICK_SMALLGAP,  20, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::THINTHICK_MEDIUMGAP,  0, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::THINTHICK_LARGEGAP,   0, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::THICKTHIN_SMALLGAP,  20, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::THICKTHIN_MEDIUMGAP,  0, &sameColor, &sameColor, &sameDistColor },
-        { SvxBorderLineStyle::THICKTHIN_LARGEGAP,   0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DOUBLE,              &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DOUBLE_THIN,         &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THINTHICK_SMALLGAP,  &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THINTHICK_MEDIUMGAP, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THINTHICK_LARGEGAP,  &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THICKTHIN_SMALLGAP,  &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THICKTHIN_MEDIUMGAP, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THICKTHIN_LARGEGAP,  &sameColor, &sameColor, &sameDistColor },
 
-        { SvxBorderLineStyle::EMBOSSED, 15, &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor, &lcl_mediumColor },
-        { SvxBorderLineStyle::ENGRAVED, 15, &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor, &lcl_mediumColor },
+        { SvxBorderLineStyle::EMBOSSED, &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor, &lcl_mediumColor },
+        { SvxBorderLineStyle::ENGRAVED, &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor, &lcl_mediumColor },
 
-        { SvxBorderLineStyle::OUTSET, 10, &SvxBorderLine::lightColor, &SvxBorderLine::darkColor, &sameDistColor },
-        { SvxBorderLineStyle::INSET,  10, &SvxBorderLine::darkColor, &SvxBorderLine::lightColor, &sameDistColor }
+        { SvxBorderLineStyle::OUTSET, &SvxBorderLine::lightColor, &SvxBorderLine::darkColor, &sameDistColor },
+        { SvxBorderLineStyle::INSET,  &SvxBorderLine::darkColor, &SvxBorderLine::lightColor, &sameDistColor }
     };
 
     m_xLbLineStyle->SetSourceUnit( FieldUnit::TWIP );
@@ -1369,8 +1427,12 @@ void SvxBorderTabPage::FillLineListBox_Impl()
             continue;
 
         m_xLbLineStyle->InsertEntry(
-            SvxBorderLine::getWidthImpl(aLines[i].mnStyle), aLines[i].mnStyle,
-            aLines[i].mnMinWidth, aLines[i].mpColor1Fn, aLines[i].mpColor2Fn, aLines[i].mpColorDistFn);
+            SvxBorderLine::getWidthImpl(aLines[i].mnStyle),
+            aLines[i].mnStyle,
+            lcl_GetMinLineWidth(aLines[i].mnStyle),
+            aLines[i].mpColor1Fn,
+            aLines[i].mpColor2Fn,
+            aLines[i].mpColorDistFn);
     }
 
     sal_Int64 nVal = m_xLineWidthMF->get_value(FieldUnit::NONE);
