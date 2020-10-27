@@ -810,9 +810,11 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
     mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
-    OString aXPath
-        = "/w:document/w:body/w:p/w:r/w:rPr/w14:textFill/w14:solidFill/w14:srgbClr/w14:alpha";
-    double fValue = getXPath(pXmlDoc, aXPath, "val").toDouble();
+    double fValue = getXPath(
+            pXmlDoc,
+            "/w:document/w:body/w:p/w:r/w:rPr/w14:textFill/w14:solidFill/w14:srgbClr/w14:alpha",
+            "val")
+        .toDouble();
     sal_Int16 nActual = basegfx::fround(fValue / oox::drawingml::PER_PERCENT);
 
     // Without the accompanying fix in place, this test would have failed, as the w14:textFill

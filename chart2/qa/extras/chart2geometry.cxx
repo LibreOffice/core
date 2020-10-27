@@ -296,9 +296,9 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
     // Find transparency gradient name
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc);
-    const OString sChartPath(
+    const OUString sOUChartStyleName = getXPathContent(
+        pXmlDoc,
         "//office:document-content/office:body/office:chart/chart:chart/@chart:style-name");
-    const OUString sOUChartStyleName = getXPathContent(pXmlDoc, sChartPath);
     const OString sStylePath(
         "//office:document-content/office:automatic-styles/style:style[@style:name='"
         + OU2O(sOUChartStyleName) + "']");
@@ -310,9 +310,8 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
     // Verify the content of the opacity definition
     xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc2);
-    const OString sOpacityPath("//office:document-styles/office:styles/draw:opacity");
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
-    const OString sStart(sOpacityPath + "[" + sAttribute);
+    const OString sStart("//office:document-styles/office:styles/draw:opacity[" + sAttribute);
     assertXPath(pXmlDoc2, sStart + "]", 1);
     assertXPath(pXmlDoc2, sStart + " and @draw:style='linear']");
     assertXPath(pXmlDoc2, sStart + " and @draw:start='30%']");
@@ -348,9 +347,9 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
     // Find transparency gradient name
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc);
-    const OString sChartPath("//office:document-content/office:body/office:chart/chart:chart/"
-                             "chart:plot-area/chart:wall/@chart:style-name");
-    const OUString sOUChartStyleName = getXPathContent(pXmlDoc, sChartPath);
+    const OUString sOUChartStyleName
+        = getXPathContent(pXmlDoc, "//office:document-content/office:body/office:chart/chart:chart/"
+                                   "chart:plot-area/chart:wall/@chart:style-name");
     const OString sStylePath(
         "//office:document-content/office:automatic-styles/style:style[@style:name='"
         + OU2O(sOUChartStyleName) + "']");
@@ -362,9 +361,8 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
     // Verify content of the opacity definition
     xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc2);
-    const OString sOpacityPath("//office:document-styles/office:styles/draw:opacity");
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
-    const OString sStart(sOpacityPath + "[" + sAttribute);
+    const OString sStart("//office:document-styles/office:styles/draw:opacity[" + sAttribute);
     assertXPath(pXmlDoc2, sStart + "]", 1);
     assertXPath(pXmlDoc2, sStart + " and @draw:style='linear']");
     assertXPath(pXmlDoc2, sStart + " and @draw:start='0%']");
@@ -400,9 +398,9 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
     // Find transparency gradient name
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc);
-    const OString sChartPath("//office:document-content/office:body/office:chart/chart:chart/"
-                             "chart:legend/@chart:style-name");
-    const OUString sOUChartStyleName = getXPathContent(pXmlDoc, sChartPath);
+    const OUString sOUChartStyleName
+        = getXPathContent(pXmlDoc, "//office:document-content/office:body/office:chart/chart:chart/"
+                                   "chart:legend/@chart:style-name");
     const OString sStylePath(
         "//office:document-content/office:automatic-styles/style:style[@style:name='"
         + OU2O(sOUChartStyleName) + "']");
@@ -414,9 +412,8 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
     // Verify content of the opacity definition
     xmlDocUniquePtr pXmlDoc2 = parseExport("Object 1/styles.xml", "impress8");
     CPPUNIT_ASSERT(pXmlDoc2);
-    const OString sOpacityPath("//office:document-styles/office:styles/draw:opacity");
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
-    const OString sStart(sOpacityPath + "[" + sAttribute);
+    const OString sStart("//office:document-styles/office:styles/draw:opacity[" + sAttribute);
     assertXPath(pXmlDoc2, sStart + "]", 1);
     assertXPath(pXmlDoc2, sStart + " and @draw:style='axial']");
     assertXPath(pXmlDoc2, sStart + " and @draw:start='0%']");
@@ -517,10 +514,9 @@ void Chart2GeometryTest::testTdf135366LabelExport()
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Find label style
-    const OString sLabelPath(
-        "//office:document-content/office:body/office:chart/chart:chart/chart:plot-area"
-        "/chart:series/chart:data-point[1]/chart:data-label/@chart:style-name");
-    const OUString sOULabelStyleName = getXPathContent(pXmlDoc, sLabelPath);
+    const OUString sOULabelStyleName = getXPathContent(
+        pXmlDoc, "//office:document-content/office:body/office:chart/chart:chart/chart:plot-area"
+                 "/chart:series/chart:data-point[1]/chart:data-label/@chart:style-name");
 
     // Verify content of graphic properties of label style
     const OString sStylePath(

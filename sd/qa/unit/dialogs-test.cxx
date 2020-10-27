@@ -634,9 +634,7 @@ void SdDialogsTest::openAnyDialog()
         //
         // Take any example here, it's only for demonstration - using
         // even a known one to demonstrate the fallback possibility
-        const OString aUIXMLDescription("modules/sdraw/ui/breakdialog.ui");
-
-        dumpDialogToPath(aUIXMLDescription);
+        dumpDialogToPath("modules/sdraw/ui/breakdialog.ui");
     }
 }
 

@@ -1273,9 +1273,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
     /// only checking, if transparency is not set.
     if( rBackColor != COL_TRANSPARENT )
     {
-        OString sOut =
-            " " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=";
-        Strm().WriteOString( sOut );
+        Strm().WriteOString( " " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=" );
         HTMLOutFuncs::Out_Color( Strm(), rBackColor);
     }
 

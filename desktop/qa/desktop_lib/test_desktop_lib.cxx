@@ -1783,8 +1783,7 @@ void DesktopLOKTest::testInput()
     Scheduler::ProcessEventsToIdle();
     char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT(pText != nullptr);
-    OString aLovely("far beyond lovely ");
-    CPPUNIT_ASSERT_EQUAL(aLovely, OString(pText));
+    CPPUNIT_ASSERT_EQUAL(OString("far beyond lovely "), OString(pText));
     free(pText);
 }
 

@@ -511,9 +511,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
         m_sTag = "allextensions"; // Means empty parameter
     }
     //FIXME: Temporary URL
-    OString sPrefixURL = "https://yusufketen.com/api/";
-    OString sSuffixURL = ".json";
-    OString rURL = sPrefixURL + m_sTag + sSuffixURL;
+    OString rURL = "https://yusufketen.com/api/" + m_sTag + ".json";
     m_sURL = rURL;
 
     m_xExtensionManager

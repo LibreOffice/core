@@ -1207,8 +1207,6 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
     // support for FIELD_SEQ_BEGIN, FIELD_SEQ_END and URL. It wraps text primitives (but is not limited to)
     // thus do the MetafileAction embedding stuff but just handle recursively.
     const OString aCommentStringCommon("FIELD_SEQ_BEGIN");
-    const OString aCommentStringPage("FIELD_SEQ_BEGIN;PageField");
-    const OString aCommentStringEnd("FIELD_SEQ_END");
     OUString aURL;
 
     switch (rFieldPrimitive.getType())
@@ -1220,7 +1218,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
         }
         case drawinglayer::primitive2d::FIELD_TYPE_PAGE:
         {
-            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringPage));
+            mpMetaFile->AddAction(new MetaCommentAction("FIELD_SEQ_BEGIN;PageField"));
             break;
         }
         case drawinglayer::primitive2d::FIELD_TYPE_URL:
@@ -1244,7 +1242,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
     process(rContent);
 
     // for the end comment the type is not relevant yet, they are all the same. Just add.
-    mpMetaFile->AddAction(new MetaCommentAction(aCommentStringEnd));
+    mpMetaFile->AddAction(new MetaCommentAction("FIELD_SEQ_END"));
 
     if (!(mpPDFExtOutDevData
           && drawinglayer::primitive2d::FIELD_TYPE_URL == rFieldPrimitive.getType()))
@@ -1266,20 +1264,14 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
 void VclMetafileProcessor2D::processTextHierarchyLinePrimitive2D(
     const primitive2d::TextHierarchyLinePrimitive2D& rLinePrimitive)
 {
-    const OString aCommentString("XTEXT_EOL");
-
     // process recursively and add MetaFile comment
     process(rLinePrimitive);
-    mpMetaFile->AddAction(new MetaCommentAction(aCommentString));
+    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_EOL"));
 }
 
 void VclMetafileProcessor2D::processTextHierarchyBulletPrimitive2D(
     const primitive2d::TextHierarchyBulletPrimitive2D& rBulletPrimitive)
 {
-    // in Outliner::PaintBullet(), a MetafileComment for bullets is added, too. The
-    // "XTEXT_EOC" is used, use here, too.
-    const OString aCommentString("XTEXT_EOC");
-
     // this is a part of list item, start LILabel ( = bullet)
     if (mbInListItem)
     {
@@ -1289,7 +1281,9 @@ void VclMetafileProcessor2D::processTextHierarchyBulletPrimitive2D(
 
     // process recursively and add MetaFile comment
     process(rBulletPrimitive);
-    mpMetaFile->AddAction(new MetaCommentAction(aCommentString));
+    // in Outliner::PaintBullet(), a MetafileComment for bullets is added, too. The
+    // "XTEXT_EOC" is used, use here, too.
+    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_EOC"));
 
     if (mbInListItem)
     {
@@ -1400,11 +1394,8 @@ void VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D(
 void VclMetafileProcessor2D::processTextHierarchyBlockPrimitive2D(
     const primitive2d::TextHierarchyBlockPrimitive2D& rBlockPrimitive)
 {
-    const OString aCommentStringA("XTEXT_PAINTSHAPE_BEGIN");
-    const OString aCommentStringB("XTEXT_PAINTSHAPE_END");
-
     // add MetaFile comment, process recursively and add MetaFile comment
-    mpMetaFile->AddAction(new MetaCommentAction(aCommentStringA));
+    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_PAINTSHAPE_BEGIN"));
     process(rBlockPrimitive);
 
     if (mnCurrentOutlineLevel >= 0)
@@ -1416,7 +1407,7 @@ void VclMetafileProcessor2D::processTextHierarchyBlockPrimitive2D(
         }
     }
 
-    mpMetaFile->AddAction(new MetaCommentAction(aCommentStringB));
+    mpMetaFile->AddAction(new MetaCommentAction("XTEXT_PAINTSHAPE_END"));
 }
 
 void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
