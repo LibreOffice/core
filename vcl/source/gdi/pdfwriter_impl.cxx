@@ -78,6 +78,7 @@
 #include <impglyphitem.hxx>
 #include <pdf/XmpMetadata.hxx>
 #include <pdf/objectcopier.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 #include "pdfwriter_impl.hxx"
 
@@ -5437,7 +5438,7 @@ struct AnnotationSortEntry
 
 struct AnnotSortContainer
 {
-    std::set< sal_Int32 >               aObjects;
+    o3tl::sorted_vector< sal_Int32 >      aObjects;
     std::vector< AnnotationSortEntry >    aSortedAnnots;
 };
 
