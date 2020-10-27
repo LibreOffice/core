@@ -144,6 +144,27 @@ void SmEditWindow::dispose()
     vcl::Window::dispose();
 }
 
+OUString SmEditWindow::GetSurroundingText() const
+{
+    if (pEditView)
+        return pEditView->GetSurroundingText();
+    return OUString();
+}
+
+Selection SmEditWindow::GetSurroundingTextSelection() const
+{
+    if (pEditView)
+        return pEditView->GetSurroundingTextSelection();
+    return Selection(0, 0);
+}
+
+bool SmEditWindow::DeleteSurroundingText(const Selection& rSelection)
+{
+    if (pEditView)
+        return pEditView->DeleteSurroundingText(rSelection);
+    return false;
+}
+
 void SmEditWindow::StartCursorMove()
 {
     if (!IsInlineEditEnabled())

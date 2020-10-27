@@ -68,6 +68,10 @@ class SmEditWindow final : public vcl::Window, public DropTargetHelper
     virtual void MouseButtonUp(const MouseEvent &rEvt) override;
     virtual void MouseButtonDown(const MouseEvent &rEvt) override;
 
+    virtual OUString GetSurroundingText() const override;
+    virtual Selection GetSurroundingTextSelection() const override;
+    virtual bool DeleteSurroundingText(const Selection& rSelection) override;
+
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
