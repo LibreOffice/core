@@ -346,7 +346,7 @@ namespace SwLangHelper
         }
         else // change language for all text
         {
-            std::set<sal_uInt16> aAttribs;
+            o3tl::sorted_vector<sal_uInt16> aAttribs;
             for (sal_uInt16 i : aLangWhichId_Writer)
             {
                 rWrtSh.SetDefault( SvxLanguageItem( LANGUAGE_NONE, i ) );
@@ -375,7 +375,7 @@ namespace SwLangHelper
         }
         else
         {
-            std::set<sal_uInt16> aAttribs;
+            o3tl::sorted_vector<sal_uInt16> aAttribs;
             aAttribs.insert( RES_CHRATR_LANGUAGE );
             aAttribs.insert( RES_CHRATR_CJK_LANGUAGE );
             aAttribs.insert( RES_CHRATR_CTL_LANGUAGE );

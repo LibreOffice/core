@@ -29,7 +29,7 @@
  * hard formatting (Attribute)
  */
 
-void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
+void SwEditShell::ResetAttr( const o3tl::sorted_vector<sal_uInt16> &attrs, SwPaM* pPaM )
 {
     CurrShell aCurr( this );
     SwPaM* pCursor = pPaM ? pPaM : GetCursor( );

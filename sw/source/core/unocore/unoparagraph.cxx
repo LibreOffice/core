@@ -1110,7 +1110,7 @@ SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
 
     if(bBelowFrameAtrEnd || bDrawingLayerRange)
     {
-        std::set<sal_uInt16> aWhichIds;
+        o3tl::sorted_vector<sal_uInt16> aWhichIds;
 
         // For FillBitmapMode two IDs have to be reset (!)
         if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)

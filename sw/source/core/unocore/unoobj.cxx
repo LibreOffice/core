@@ -1982,7 +1982,7 @@ beans::PropertyState SwUnoCursorHelper::GetPropertyState(
 
 static void
 lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
-                        std::set<sal_uInt16> const &rWhichIds )
+                        o3tl::sorted_vector<sal_uInt16> const &rWhichIds )
 {
     // if we are resetting paragraph attributes, we need to select the full paragraph first
     SwPosition aStart = *rPaM.Start();
@@ -2025,7 +2025,7 @@ void SwUnoCursorHelper::SetPropertyToDefault(
 
     if (pEntry->nWID < RES_FRMATR_END)
     {
-        std::set<sal_uInt16> aWhichIds;
+        o3tl::sorted_vector<sal_uInt16> aWhichIds;
         aWhichIds.insert( pEntry->nWID );
         if (pEntry->nWID < RES_PARATR_BEGIN)
         {
@@ -2310,7 +2310,7 @@ static sal_uInt16 g_ResetableSetRange[] = {
 };
 
 static void
-lcl_EnumerateIds(sal_uInt16 const* pIdRange, std::set<sal_uInt16> &rWhichIds)
+lcl_EnumerateIds(sal_uInt16 const* pIdRange, o3tl::sorted_vector<sal_uInt16> &rWhichIds)
 {
     while (*pIdRange)
     {
@@ -2318,7 +2318,7 @@ lcl_EnumerateIds(sal_uInt16 const* pIdRange, std::set<sal_uInt16> &rWhichIds)
         const sal_uInt16 nEnd   = *pIdRange++;
         for (sal_uInt16 nId = nStart + 1;  nId <= nEnd;  ++nId)
         {
-            rWhichIds.insert( rWhichIds.end(), nId );
+            rWhichIds.insert( nId );
         }
     }
 }
@@ -2330,8 +2330,8 @@ SwXTextCursor::setAllPropertiesToDefault()
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    std::set<sal_uInt16> aParaWhichIds;
-    std::set<sal_uInt16> aWhichIds;
+    o3tl::sorted_vector<sal_uInt16> aParaWhichIds;
+    o3tl::sorted_vector<sal_uInt16> aWhichIds;
     lcl_EnumerateIds(g_ParaResetableSetRange, aParaWhichIds);
     lcl_EnumerateIds(g_ResetableSetRange, aWhichIds);
     if (!aParaWhichIds.empty())
@@ -2357,8 +2357,8 @@ SwXTextCursor::setPropertiesToDefault(
         return;
 
     SwDoc& rDoc = rUnoCursor.GetDoc();
-    std::set<sal_uInt16> aWhichIds;
-    std::set<sal_uInt16> aParaWhichIds;
+    o3tl::sorted_vector<sal_uInt16> aWhichIds;
+    o3tl::sorted_vector<sal_uInt16> aParaWhichIds;
     for (const OUString& rName : rPropertyNames)
     {
         SfxItemPropertySimpleEntry const*const  pEntry =

@@ -121,6 +121,7 @@
 #include <svtools/embedhlp.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <sal/log.hxx>
 
 #include <algorithm>
@@ -7108,15 +7109,15 @@ static bool IsLine( const SdrObject* pObj )
     return pSdrPathObj && pSdrPathObj->IsLine() && pSdrPathObj->GetPointCount() == 2;
 }
 
-static bool GetCellPosition( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
+static bool GetCellPosition( const SdrObject* pObj, const o3tl::sorted_vector< sal_Int32 >& rRows, const o3tl::sorted_vector< sal_Int32 >& rColumns,
                             sal_Int32& nTableIndex, sal_Int32& nRow, sal_Int32& nRowCount, sal_Int32& nColumn, sal_Int32& nColumnCount )
 {
     tools::Rectangle aSnapRect( pObj->GetSnapRect() );
     bool bCellObject = ( aSnapRect.GetWidth() > 1 ) && ( aSnapRect.GetHeight() > 1 );
     if ( bCellObject )
     {
-        std::set< sal_Int32 >::const_iterator aRowIter( rRows.find( aSnapRect.Top() ) );
-        std::set< sal_Int32 >::const_iterator aColumnIter( rColumns.find( aSnapRect.Left() ) );
+        auto aRowIter = rRows.find( aSnapRect.Top() );
+        auto aColumnIter = rColumns.find( aSnapRect.Left() );
         if ( ( aRowIter == rRows.end() ) || ( aColumnIter == rColumns.end() ) )
             bCellObject = false;
         else
@@ -7151,10 +7152,10 @@ static bool GetCellPosition( const SdrObject* pObj, const std::set< sal_Int32 >&
 #define LinePositionBLTR    0x20000000
 
 
-static void GetRowPositions( const tools::Rectangle& rSnapRect, const std::set< sal_Int32 >& rRows,
-                        const std::set< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nColumn, sal_Int32 nFlags )
+static void GetRowPositions( const tools::Rectangle& rSnapRect, const o3tl::sorted_vector< sal_Int32 >& rRows,
+                        const o3tl::sorted_vector< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nColumn, sal_Int32 nFlags )
 {
-    std::set< sal_Int32 >::const_iterator aRow( rRows.find( rSnapRect.Top() ) );
+    auto aRow = rRows.find( rSnapRect.Top() );
     if ( aRow == rRows.end() )
         return;
 
@@ -7173,9 +7174,9 @@ static void GetRowPositions( const tools::Rectangle& rSnapRect, const std::set< 
 
 
 static void GetColumnPositions( const tools::Rectangle& rSnapRect,
-                        const std::set< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nRow, sal_Int32 nFlags )
+                        const o3tl::sorted_vector< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nRow, sal_Int32 nFlags )
 {
-    std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( rSnapRect.Left() ) );
+    auto aColumn = rColumns.find( rSnapRect.Left() );
     if ( aColumn == rColumns.end() )
         return;
 
@@ -7192,13 +7193,13 @@ static void GetColumnPositions( const tools::Rectangle& rSnapRect,
     }
 }
 
-static void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
+static void GetLinePositions( const SdrObject* pObj, const o3tl::sorted_vector< sal_Int32 >& rRows, const o3tl::sorted_vector< sal_Int32 >& rColumns,
                         std::vector< sal_Int32 >& rPositions, const tools::Rectangle& rGroupSnap )
 {
     tools::Rectangle aSnapRect( pObj->GetSnapRect() );
     if ( aSnapRect.Left() == aSnapRect.Right() )
     {
-        std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( aSnapRect.Left() ) );
+        auto aColumn = rColumns.find( aSnapRect.Left() );
         if ( ( aColumn != rColumns.end() ) || ( aSnapRect.Left() == rGroupSnap.Right() ) )
         {
             sal_Int32 nColumn, nFlags;
@@ -7219,7 +7220,7 @@ static void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >
     }
     else if ( aSnapRect.Top() == aSnapRect.Bottom() )
     {
-        std::set< sal_Int32 >::const_iterator aRow( rRows.find( aSnapRect.Top() ) );
+        auto aRow = rRows.find( aSnapRect.Top() );
         if ( ( aRow != rRows.end() ) || ( aSnapRect.Top() == rGroupSnap.Bottom() ) )
         {
             sal_Int32 nRow, nFlags;
@@ -7248,8 +7249,8 @@ static void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >
         else
             nPosition |= aPt1.Y() < aPt2.Y() ? LinePositionBLTR : LinePositionTLBR;
 
-        std::set< sal_Int32 >::const_iterator aRow( rRows.find( std::min(aPt1.Y(), aPt2.Y() ) ) );
-        std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( std::min(aPt1.X(), aPt2.X() ) ) );
+        auto aRow = rRows.find( std::min(aPt1.Y(), aPt2.Y() ) );
+        auto aColumn = rColumns.find( std::min(aPt1.X(), aPt2.X() ) );
         if ( ( aRow != rRows.end() ) && ( aColumn != rColumns.end() ) )
         {
             nPosition |= ( std::distance( rRows.begin(), aRow ) * rColumns.size() ) + std::distance( rColumns.begin(), aColumn );
@@ -7258,12 +7259,12 @@ static void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >
     }
 }
 
-static void CreateTableRows( const Reference< XTableRows >& xTableRows, const std::set< sal_Int32 >& rRows, sal_Int32 nTableBottom )
+static void CreateTableRows( const Reference< XTableRows >& xTableRows, const o3tl::sorted_vector< sal_Int32 >& rRows, sal_Int32 nTableBottom )
 {
     if ( rRows.size() > 1 )
         xTableRows->insertByIndex( 0, rRows.size() - 1 );
 
-    std::set< sal_Int32 >::const_iterator aIter( rRows.begin() );
+    auto aIter = rRows.begin();
     sal_Int32 nLastPosition( *aIter );
     for ( sal_Int32 n = 0; n < xTableRows->getCount(); n++ )
     {
@@ -7285,12 +7286,12 @@ static void CreateTableRows( const Reference< XTableRows >& xTableRows, const st
     }
 }
 
-static void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const std::set< sal_Int32 >& rColumns, sal_Int32 nTableRight )
+static void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const o3tl::sorted_vector< sal_Int32 >& rColumns, sal_Int32 nTableRight )
 {
     if ( rColumns.size() > 1 )
         xTableColumns->insertByIndex( 0, rColumns.size() - 1 );
 
-    std::set< sal_Int32 >::const_iterator aIter( rColumns.begin() );
+    auto aIter = rColumns.begin();
     sal_Int32 nLastPosition( *aIter );
     for ( sal_Int32 n = 0; n < xTableColumns->getCount(); n++ )
     {
@@ -7504,8 +7505,8 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, const sal_uInt32
     if (!pSubList)
         return pRet;
 
-    std::set< sal_Int32 > aRows;
-    std::set< sal_Int32 > aColumns;
+    o3tl::sorted_vector< sal_Int32 > aRows;
+    o3tl::sorted_vector< sal_Int32 > aColumns;
 
     SdrObjListIter aGroupIter( pSubList, SdrIterMode::DeepNoGroups, false );
     while( aGroupIter.IsMore() )

@@ -40,6 +40,7 @@
 
 #include <optional>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 #include <cstddef>
 #include <memory>
@@ -126,7 +127,7 @@ namespace sw::mark { class IFieldmark; }
 namespace com::sun::star::embed { class XEmbeddedObject; }
 
 typedef std::map<const css::embed::XEmbeddedObject*, sal_Int32> WW8OleMap;
-typedef std::set< sal_Int32 > SwSoftPageBreakList;
+typedef o3tl::sorted_vector< sal_Int32 > SwSoftPageBreakList;
 
 #define GRF_MAGIC_1 0x12    // 3 magic bytes for PicLocFc attribute
 #define GRF_MAGIC_2 0x34

@@ -23,7 +23,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
-
+#include <o3tl/sorted_vector.hxx>
 #include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 
@@ -905,7 +905,7 @@ std::unique_ptr<ImplDeviceFontSizeList> PhysicalFontCollection::GetDeviceFontSiz
     PhysicalFontFamily* pFontFamily = FindFontFamily( rFontName );
     if( pFontFamily != nullptr )
     {
-        std::set<int> rHeights;
+        o3tl::sorted_vector<int> rHeights;
         pFontFamily->GetFontHeights( rHeights );
 
         for( const auto& rHeight : rHeights )

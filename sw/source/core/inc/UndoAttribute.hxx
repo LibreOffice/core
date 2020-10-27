@@ -26,7 +26,7 @@
 #include <svl/itemset.hxx>
 #include <swtypes.hxx>
 #include <calbck.hxx>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 class SvxTabStopItem;
 class SwFormat;
@@ -64,7 +64,7 @@ public:
 class SwUndoResetAttr : public SwUndo, private SwUndRng
 {
     const std::unique_ptr<SwHistory> m_pHistory;
-    std::set<sal_uInt16> m_Ids;
+    o3tl::sorted_vector<sal_uInt16> m_Ids;
     const sal_uInt16 m_nFormatId;             // Format-Id for Redo
 
 public:
@@ -77,7 +77,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
-    void SetAttrs( const std::set<sal_uInt16> &rAttrs );
+    void SetAttrs( const o3tl::sorted_vector<sal_uInt16> &rAttrs );
 
     SwHistory& GetHistory() { return *m_pHistory; }
 };

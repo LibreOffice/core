@@ -32,6 +32,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <o3tl/sorted_vector.hxx>
 
 namespace tools { class PolyPolygon; }
 class SwDoc;
@@ -273,7 +274,7 @@ public:
         return static_cast<const T&>(GetDefault(sal_uInt16(nWhich)));
     }
 
-    void ResetAttr( const std::set<sal_uInt16> &attrs = std::set<sal_uInt16>(), SwPaM* pCursor = nullptr );
+    void ResetAttr( const o3tl::sorted_vector<sal_uInt16> &attrs = o3tl::sorted_vector<sal_uInt16>(), SwPaM* pCursor = nullptr );
     void GCAttr();
 
     /// @return the scripttype of the selection.

@@ -23,7 +23,7 @@
 
 #include <algorithm>
 #include <vector>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 CmapResult::CmapResult( bool bSymbolic,
     const sal_UCS4* pRangeCodes, int nRangeCount )
@@ -330,7 +330,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     if( aConverter && aCvtContext )
     {
         // determine the set of supported code points from encoded ranges
-        std::set<sal_UCS4> aSupportedCodePoints;
+        o3tl::sorted_vector<sal_UCS4> aSupportedCodePoints;
+        aSupportedCodePoints.reserve(256);
 
         static const int NINSIZE = 64;
         static const int NOUTSIZE = 64;

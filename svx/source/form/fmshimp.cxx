@@ -2603,7 +2603,7 @@ void FmXFormShell::impl_RemoveElement_nothrow_Lock(const Reference<XInterface>& 
         }
     }
 
-    InterfaceBag::iterator wasSelectedPos = m_aCurrentSelection.find( Element );
+    auto wasSelectedPos = m_aCurrentSelection.find( Element );
     if ( wasSelectedPos != m_aCurrentSelection.end() )
         m_aCurrentSelection.erase( wasSelectedPos );
 }
