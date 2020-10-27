@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0491e28a_1788af92",
+        "filename": "svtools/source/java/javainteractionhandler.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-27T10:18:51Z",
+      "side": 1,
+      "message": "this include seems unused now",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 38
+      },
+      "revId": "97662dfe59ef77859c6c2d9f30cbc15c418f2eb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
