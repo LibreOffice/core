@@ -545,7 +545,9 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
         if( pOutlinerParaObject && ( bOwnParaObj || !mpObject->IsEmptyPresObj() || mpObject->getSdrPageFromSdrObject()->IsMasterPage() ) )
         {
-            mpOutliner->SetText( *pOutlinerParaObject );
+            // Text has not to be get again, because already exists
+            if( !mpOutliner->GetEditEngine().GetTextLen() )
+                mpOutliner->SetText( *pOutlinerParaObject );
 
             // put text to object and set EmptyPresObj to FALSE
             if( mpText && bOwnParaObj && mpObject->IsEmptyPresObj() && pTextObj->IsReallyEdited() )
