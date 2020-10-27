@@ -153,6 +153,8 @@ public:
     /** Sets the passed color to all selected frame borders. */
     void                SetColorToSelection( const Color& rColor );
 
+    SvxBorderLineStyle getCurrentStyleLineStyle() const;
+
     // accessibility
 
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
