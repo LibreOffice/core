@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "945d1059_76803cc4",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-10-27T15:04:17Z",
+      "side": 1,
+      "message": "Side note: this comparing the index key to determine validity is odd anyway, I\u0027d rather check if both types are compatible. We\u0027re lucky that a date can\u0027t be entered in free form but has the calendar picker and isn\u0027t even evaluated here..",
+      "revId": "790cd22bd2521c8c272e7d2509d386a06b869e70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
