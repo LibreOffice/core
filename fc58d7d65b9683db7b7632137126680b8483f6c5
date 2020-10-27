@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37cea210_7b80ca0b",
+        "filename": "vcl/uiconfig/ui/printdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-27T09:46:49Z",
+      "side": 0,
+      "message": "Removing the label was not recommended by the design people since it now looks like depending on the number of copies. Not a blocker though but please make sure you did intentionally (please comment in this case).\n\nSurprisingly, the collate control was moved down before.",
+      "range": {
+        "startLine": 758,
+        "startChar": 49,
+        "endLine": 758,
+        "endChar": 93
+      },
+      "revId": "fc58d7d65b9683db7b7632137126680b8483f6c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
