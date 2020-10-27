@@ -169,6 +169,7 @@ public:
     void testDOTMAutoText();
     void testDOCXAutoTextGallery();
     void testWatermarkDOCX();
+    void testTdf136453();
     void testTdf134252();
     void testWatermarkPosition();
     void testTdf67238();
@@ -371,6 +372,7 @@ public:
     CPPUNIT_TEST(testDOTMAutoText);
     CPPUNIT_TEST(testDOCXAutoTextGallery);
     CPPUNIT_TEST(testWatermarkDOCX);
+    CPPUNIT_TEST(testTdf136453);
     CPPUNIT_TEST(testTdf134252);
     CPPUNIT_TEST(testWatermarkPosition);
     CPPUNIT_TEST(testTdf67238);
@@ -1080,6 +1082,57 @@ void SwUiWriterTest::testWatermarkDOCX()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(45), pWatermark->GetAngle());
     CPPUNIT_ASSERT_EQUAL(Color(0x548dd4), pWatermark->GetColor());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), pWatermark->GetTransparency());
+}
+
+void SwUiWriterTest::testTdf136453()
+{
+    load(DATA_DIRECTORY, "tdf136453.fodt");
+
+    SwXTextDocument *const pTextDoc(dynamic_cast<SwXTextDocument*>(mxComponent.get()));
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* const pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwWrtShell *const pWrtShell(pDoc->GetDocShell()->GetWrtShell());
+
+    sal_uLong const nNodes(pDoc->GetNodes().Count());
+
+    pWrtShell->SttEndDoc(false);
+    pWrtShell->SetMark();
+    pWrtShell->Up(true, 1);
+    pWrtShell->SttPara(true);
+    pWrtShell->Delete();
+
+    // one paragraph deleted, section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 3, pDoc->GetNodes().Count());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(nNodes, pDoc->GetNodes().Count());
+
+    // check that every node has 1 frame
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/txt", 1);
+
+    pWrtShell->Redo();
+
+    // one paragraph deleted, section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 3, pDoc->GetNodes().Count());
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section", 0);
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(nNodes, pDoc->GetNodes().Count());
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/txt", 1);
 }
 
 void SwUiWriterTest::testWatermarkPosition()
