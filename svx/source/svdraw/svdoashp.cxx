@@ -2177,7 +2177,36 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
 
     DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
 
+<<<<<<< HEAD   (800bdf tdf#135198 tdf#138050 sw editing: fix text box position sync)
     if( pOutlinerParaObject )
+=======
+    if( !pOutlinerParaObject ||
+        (pOutlinerParaObject->IsVertical() == bVertical) )
+        return;
+
+    // get item settings
+    const SfxItemSet& rSet = GetObjectItemSet();
+
+    // Also exchange horizontal and vertical adjust items
+    SdrTextHorzAdjust eHorz = rSet.Get(SDRATTR_TEXT_HORZADJUST).GetValue();
+    SdrTextVertAdjust eVert = rSet.Get(SDRATTR_TEXT_VERTADJUST).GetValue();
+
+    // rescue object size, SetSnapRect below expects logic rect,
+    // not snap rect.
+    tools::Rectangle aObjectRect = GetLogicRect();
+
+    // prepare ItemSet to set exchanged width and height items
+    SfxItemSet aNewSet(*rSet.GetPool(),
+        svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+        // Expanded item ranges to also support horizontal and vertical adjust.
+        SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
+        SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST>{});
+
+    aNewSet.Put(rSet);
+
+    // Exchange horizontal and vertical adjusts
+    switch(eVert)
+>>>>>>> CHANGE (1aacd8 tdf#138307 Chart import: fix lost custom shape text)
     {
         if(pOutlinerParaObject->IsVertical() != bVertical)
         {

@@ -177,6 +177,12 @@ public:
     void testTdf134255();
     void testTdf134977();
     void testTdf137917();
+<<<<<<< HEAD   (800bdf tdf#135198 tdf#138050 sw editing: fix text box position sync)
+=======
+    void testTdf138204();
+    void testTdf138181();
+    void testCustomShapeText();
+>>>>>>> CHANGE (1aacd8 tdf#138307 Chart import: fix lost custom shape text)
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -317,6 +323,12 @@ public:
     CPPUNIT_TEST(testTdf134255);
     CPPUNIT_TEST(testTdf134977);
     CPPUNIT_TEST(testTdf137917);
+<<<<<<< HEAD   (800bdf tdf#135198 tdf#138050 sw editing: fix text box position sync)
+=======
+    CPPUNIT_TEST(testTdf138204);
+    CPPUNIT_TEST(testTdf138181);
+    CPPUNIT_TEST(testCustomShapeText);
+>>>>>>> CHANGE (1aacd8 tdf#138307 Chart import: fix lost custom shape text)
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2899,6 +2911,76 @@ void Chart2ExportTest::testTdf137917()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:minorTimeUnit", "val", "days");
 }
 
+<<<<<<< HEAD   (800bdf tdf#135198 tdf#138050 sw editing: fix text box position sync)
+=======
+void Chart2ExportTest::testTdf138204()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf138204.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Check the first data label field type
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLbl/c:tx/c:rich/a:p/a:fld", "type", "CELLRANGE");
+
+    Reference< chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 1));
+    CPPUNIT_ASSERT(xDataSeries.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aFields.getLength());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE, aFields[0]->getFieldType());
+    //CPPUNIT_ASSERT_EQUAL(OUString("67.5%"), aFields[0]->getString()); TODO: Not implemented yet
+}
+
+void Chart2ExportTest::testTdf138181()
+{
+    load("/chart2/qa/extras/data/xlsx/", "piechart_deleted_legendentry.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+        UNO_QUERY_THROW);
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xLegendEntry1, xLegendEntry2, xLegendEntry3;
+
+    // first legend entry is visible
+    xLegendEntry1
+        = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0:LegendEntry=0");
+    CPPUNIT_ASSERT(xLegendEntry1.is());
+
+    // second legend entry is not visible
+    xLegendEntry2
+        = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=1:LegendEntry=0");
+    CPPUNIT_ASSERT(!xLegendEntry2.is());
+
+    // third legend entry is visible
+    xLegendEntry3
+        = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=2:LegendEntry=0");
+    CPPUNIT_ASSERT(xLegendEntry3.is());
+}
+
+void Chart2ExportTest::testCustomShapeText()
+{
+    load("/chart2/qa/extras/data/ods/", "tdf72776.ods");
+    reload("calc8");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+        UNO_QUERY_THROW);
+    // test that the text of custom shape exists inside the chart
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(1), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xCustomShape.is());
+
+    Reference< text::XText > xRange(xCustomShape, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xRange->getString().isEmpty());
+}
+
+>>>>>>> CHANGE (1aacd8 tdf#138307 Chart import: fix lost custom shape text)
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
