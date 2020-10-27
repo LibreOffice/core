@@ -558,6 +558,7 @@ boost::property_tree::ptree SfxConfigGroupListBox::DumpAsPropertyTree(SvTreeList
 {
     SvLBoxString* pString;
     SvTreeListEntry* pChild;
+    SfxGroupInfo_Impl* pData;
     boost::property_tree::ptree aTree;
     std::pair<SvTreeListEntries::const_iterator, SvTreeListEntries::const_iterator> aIters =
         GetModel()->GetChildIterators(pEntry);
@@ -571,10 +572,19 @@ boost::property_tree::ptree SfxConfigGroupListBox::DumpAsPropertyTree(SvTreeList
         if (pString)
         {
             aEntry.put("text", pString->GetText());
-            if (pChild->HasChildren())
-                aEntry.add_child("entries", DumpAsPropertyTree(pChild));
-            aTree.push_back(std::make_pair("", aEntry));
         }
+
+        pData = static_cast<SfxGroupInfo_Impl*>(pChild->GetUserData());
+        if (pData)
+        {
+            aEntry.put("uri", pData->sCommand);
+            aEntry.put("description", pData->sHelpText);
+        }
+
+        if (pChild->HasChildren())
+            aEntry.add_child("entries", DumpAsPropertyTree(pChild));
+
+        aTree.push_back(std::make_pair("", aEntry));
     }
     return aTree;
 }
@@ -824,7 +834,9 @@ void SfxConfigGroupListBox::FillScriptListAll(const css::uno::Reference< css::sc
         if ( xNode->hasChildNodes() )
         {
             Image aImage;
+            OUString sUri;
             OUString sName;
+            OUString sDescription;
             SvTreeListEntry* pEntry;
 
             // tdf#120362: Don't ask to enable disabled Java when filling script list
@@ -849,6 +861,28 @@ void SfxConfigGroupListBox::FillScriptListAll(const css::uno::Reference< css::sc
                 pEntry = InsertEntry( sName, pParent );
                 SetExpandedEntryBmp( pEntry, aImage );
                 SetCollapsedEntryBmp( pEntry, aImage );
+
+                if (xChild->getType() == browse::BrowseNodeTypes::SCRIPT) {
+                    Reference < beans::XPropertySet >xPropSet( xChild, UNO_QUERY );
+                    if (!xPropSet.is())
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        xPropSet->getPropertyValue("URI") >>= sUri;
+                        xPropSet->getPropertyValue("Description") >>= sDescription;
+                    }
+                    catch (Exception &) {
+                    }
+
+                    aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0 ));
+                       aArr.back()->sCommand = sUri;
+                       aArr.back()->sHelpText = sDescription;
+                       pEntry->SetUserData( aArr.back().get() );
+                }
+
                 FillScriptListAll(xChild, pEntry);
             }
         }
