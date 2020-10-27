@@ -243,6 +243,11 @@ OUString EditTextObject::GetText(sal_Int32 nPara) const
     return mpImpl->GetText(nPara);
 }
 
+sal_uLong EditTextObject::GetTextLen() const
+{
+    return mpImpl->GetTextLen();
+}
+
 void EditTextObject::ClearPortionInfo()
 {
     mpImpl->ClearPortionInfo();
@@ -688,6 +693,15 @@ OUString EditTextObjectImpl::GetText(sal_Int32 nPara) const
         return OUString();
 
     return aContents[nPara]->GetText();
+}
+
+sal_uLong EditTextObjectImpl::GetTextLen() const
+{
+    sal_uLong nLen = 0;
+    for( auto const& content : aContents )
+        nLen += content->GetText().getLength();
+
+    return nLen;
 }
 
 void EditTextObjectImpl::ClearPortionInfo()
