@@ -24,10 +24,9 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-
+#include <o3tl/sorted_vector.hxx>
 #include <typeinfo>
 #include <algorithm>
-#include <set>
 #include <unordered_set>
 #include <memory>
 
@@ -250,7 +249,7 @@ namespace internal
     {
     private:
         OPropertySetAggregationHelper&  m_rAggregationHelper;
-        std::set< sal_Int32 >         m_aProperties;
+        o3tl::sorted_vector< sal_Int32 > m_aProperties;
         sal_Int32                       m_nCurrentlyForwarding;
 
     public:
