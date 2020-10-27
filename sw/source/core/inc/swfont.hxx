@@ -30,7 +30,6 @@
 #include <editeng/borderline.hxx>
 #include <optional>
 #include <o3tl/enumarray.hxx>
-#include <optional>
 
 class SfxItemSet;
 class SwAttrSet;
