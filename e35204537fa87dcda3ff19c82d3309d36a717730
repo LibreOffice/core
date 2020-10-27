@@ -22,6 +22,30 @@
       "revId": "e35204537fa87dcda3ff19c82d3309d36a717730",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c57f5650_2c80e14f",
+        "filename": "cui/uiconfig/ui/paraindentspacing.ui",
+        "patchSetId": 22
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-10-27T08:46:47Z",
+      "side": 1,
+      "message": "Yeah, I don\u0027t know which test it is, but that\u0027s the problem, some unit test is waiting for something to happen which isn\u0027t happening, or isn\u0027t available, because of the change.",
+      "parentUuid": "cada6337_640bc816",
+      "range": {
+        "startLine": 510,
+        "startChar": 35,
+        "endLine": 510,
+        "endChar": 48
+      },
+      "revId": "e35204537fa87dcda3ff19c82d3309d36a717730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
