@@ -317,6 +317,10 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
         positions.push_back(QPointF(aPos.X(), aPos.Y()));
     }
 
+    // seems to be common to try to layout an empty string...
+    if (positions.empty())
+        return;
+
     if (nOrientation)
         pQt5Layout->SetOrientation(nOrientation);
 
