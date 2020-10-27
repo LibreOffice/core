@@ -697,12 +697,13 @@ void ScGlobal::EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescap
     }
 }
 
-sal_Int32 ScGlobal::FindUnquoted( const OUString& rString, sal_Unicode cChar)
+sal_Int32 ScGlobal::FindUnquoted( const OUString& rString, sal_Unicode cChar, sal_Int32 nStart )
 {
+    assert(nStart >= 0);
     const sal_Unicode cQuote = '\'';
     const sal_Unicode* const pStart = rString.getStr();
     const sal_Unicode* const pStop = pStart + rString.getLength();
-    const sal_Unicode* p = pStart;
+    const sal_Unicode* p = pStart + nStart;
     bool bQuoted = false;
     while (p < pStop)
     {
