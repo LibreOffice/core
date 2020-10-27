@@ -213,12 +213,10 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     {
         aWndPos   ->SetQuickHelpText(ScResId(SCSTR_QHELP_POSWND));
         aWndPos   ->SetHelpId       (HID_INSWIN_POS);
-    }
-    aTextWindow.SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
-    aTextWindow.SetHelpId       (HID_INSWIN_INPUT);
 
-    if (!comphelper::LibreOfficeKit::isActive())
-    {
+        aTextWindow.SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
+        aTextWindow.SetHelpId       (HID_INSWIN_INPUT);
+
         // No SetHelpText: the helptexts come from the Help
         SetItemText (SID_INPUT_FUNCTION, ScResId(SCSTR_QHELP_BTNCALC));
         SetHelpId   (SID_INPUT_FUNCTION, HID_INSWIN_CALC);
@@ -1128,7 +1126,8 @@ ScTextWndGroup::ScTextWndGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     Size aSize = GetSizePixel();
     maTextWnd->SetSizePixel(Size(aSize.Width() - 4 * gnBorderWidth, aSize.Height() - 2 * gnBorderHeight));
     maTextWnd->Show();
-    maTextWnd->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
+    if (!comphelper::LibreOfficeKit::isActive())
+        maTextWnd->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
     maTextWnd->SetHelpId(HID_INSWIN_INPUT);
     maScrollBar->SetScrollHdl(LINK(this, ScTextWndGroup, Impl_ScrollHdl));
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
