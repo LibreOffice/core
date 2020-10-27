@@ -35,6 +35,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <editeng/urlfieldhelper.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/unolingu.hxx>
@@ -324,6 +325,14 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             }
             break;
 
+        case SID_EDIT_HYPERLINK:
+            {
+                // Ensure the field is selected first
+                pOutView->SelectFieldAtCursor();
+                pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
+            }
+            break;
+
         case SID_COPY_HYPERLINK_LOCATION:
             {
                 const SvxFieldData* pField = pOutView->GetFieldAtCursor();
@@ -333,6 +342,13 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                         = pOutView->GetWindow()->GetClipboard();
                     vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard);
                 }
+            }
+            break;
+
+        case SID_REMOVE_HYPERLINK:
+            {
+                // Ensure the field is selected first
+                URLFieldHelper::RemoveURLField(pOutView->GetEditView());
             }
             break;
 
@@ -415,7 +431,9 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     }
 
     if ( rSet.GetItemState( SID_OPEN_HYPERLINK ) != SfxItemState::UNKNOWN
-        || rSet.GetItemState(SID_COPY_HYPERLINK_LOCATION) != SfxItemState::UNKNOWN)
+        || rSet.GetItemState(SID_EDIT_HYPERLINK) != SfxItemState::UNKNOWN
+        || rSet.GetItemState(SID_COPY_HYPERLINK_LOCATION) != SfxItemState::UNKNOWN
+        || rSet.GetItemState(SID_REMOVE_HYPERLINK) != SfxItemState::UNKNOWN)
     {
         SdrView* pView = pViewData->GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
@@ -433,6 +451,8 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         {
             rSet.DisableItem( SID_OPEN_HYPERLINK );
             rSet.DisableItem( SID_COPY_HYPERLINK_LOCATION );
+            rSet.DisableItem( SID_EDIT_HYPERLINK );
+            rSet.DisableItem( SID_REMOVE_HYPERLINK );
         }
     }
 
