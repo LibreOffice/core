@@ -25,7 +25,7 @@
 #include <vector>
 #include <set>
 #include <basegfx/basegfxdllapi.h>
-
+#include <o3tl/sorted_vector.hxx>
 
 namespace com::sun::star::drawing { struct PolyPolygonBezierCoords; }
 
@@ -118,7 +118,7 @@ namespace basegfx::utils
             points in a tools::PolyPolygon by giving the polygon and point index.
             Adding points double makes no sense, hence the std::set
          */
-        typedef std::set< PointIndex > PointIndexSet;
+        typedef o3tl::sorted_vector< PointIndex > PointIndexSet;
 
         /** Read poly-polygon from SVG.
 
