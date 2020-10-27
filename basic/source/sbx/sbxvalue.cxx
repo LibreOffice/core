@@ -352,6 +352,13 @@ bool SbxValue::Get( SbxValues& rRes ) const
     return bRes;
 }
 
+SbxValues SbxValue::Get(SbxDataType t) const
+{
+    SbxValues aRes(t);
+    Get(aRes);
+    return aRes;
+}
+
 const OUString& SbxValue::GetCoreString() const
 {
     SbxValues aRes;
@@ -378,33 +385,6 @@ OUString SbxValue::GetOUString() const
     }
     return aResult;
 }
-
-bool SbxValue::GetBool() const
-{
-    SbxValues aRes;
-    aRes.eType = SbxBOOL;
-    Get( aRes );
-    return aRes.nUShort != 0;
-}
-
-#define GET( g, e, t, m ) \
-t SbxValue::g() const { SbxValues aRes(e); Get( aRes ); return aRes.m; }
-
-GET( GetByte,     SbxBYTE,       sal_uInt8,     nByte )
-GET( GetChar,     SbxCHAR,       sal_Unicode,   nChar )
-GET( GetCurrency, SbxCURRENCY,   sal_Int64,     nInt64 )
-GET( GetDate,     SbxDATE,       double,        nDouble )
-GET( GetDouble,   SbxDOUBLE,     double,        nDouble )
-GET( GetInteger,  SbxINTEGER,    sal_Int16,     nInteger )
-GET( GetLong,     SbxLONG,       sal_Int32,     nLong )
-GET( GetObject,   SbxOBJECT,     SbxBase*,      pObj )
-GET( GetSingle,   SbxSINGLE,     float,         nSingle )
-GET( GetULong,    SbxULONG,      sal_uInt32,    nULong )
-GET( GetUShort,   SbxUSHORT,     sal_uInt16,    nUShort )
-GET( GetInt64,    SbxSALINT64,   sal_Int64,     nInt64 )
-GET( GetUInt64,   SbxSALUINT64,  sal_uInt64,    uInt64 )
-GET( GetDecimal,  SbxDECIMAL,    SbxDecimal*,   pDecimal )
-
 
 //////////////////////////// Write data
 
