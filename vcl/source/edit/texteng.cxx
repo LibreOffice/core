@@ -58,7 +58,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <memory>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 #include <string_view>
 #include <vector>
 
@@ -1700,8 +1700,8 @@ void TextEngine::CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos )
     TextNode* pNode = pTEParaPortion->GetNode();
     SAL_WARN_IF( pNode->GetText().isEmpty(), "vcl", "CreateTextPortions: should not be used for empty paragraphs!" );
 
-    std::set<sal_Int32> aPositions;
-    std::set<sal_Int32>::iterator aPositionsIt;
+    o3tl::sorted_vector<sal_Int32> aPositions;
+    o3tl::sorted_vector<sal_Int32>::const_iterator aPositionsIt;
     aPositions.insert(0);
 
     const sal_uInt16 nAttribs = pNode->GetCharAttribs().Count();
@@ -1777,7 +1777,7 @@ void TextEngine::CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos )
 
     if ( aPositionsIt != aPositions.end() )
     {
-        std::set<sal_Int32>::iterator nextIt = aPositionsIt;
+        o3tl::sorted_vector<sal_Int32>::const_iterator nextIt = aPositionsIt;
         for ( ++nextIt; nextIt != aPositions.end(); ++aPositionsIt, ++nextIt )
         {
             std::unique_ptr<TETextPortion> pNew( new TETextPortion( *nextIt - *aPositionsIt ) );

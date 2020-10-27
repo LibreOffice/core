@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <set>
+#include <o3tl/sorted_vector.hxx>
 
 #define SFX_ENDOFSELECTION      (-1)
 
@@ -92,18 +93,18 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC StringRangeEnumerator
     bool setRange( const OUString& i_rNewRange );
     bool insertRange( sal_Int32 nFirst, sal_Int32 nLast, bool bSequence );
     void insertJoinedRanges( const std::vector< sal_Int32 >& rNumbers );
-    bool checkValue( sal_Int32, const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
+    bool checkValue( sal_Int32, const o3tl::sorted_vector< sal_Int32 >* i_pPossibleValues = nullptr ) const;
 public:
     class TOOLS_DLLPUBLIC Iterator
     {
         const StringRangeEnumerator*      pEnumerator;
-        const std::set< sal_Int32 >*      pPossibleValues;
+        const o3tl::sorted_vector< sal_Int32 >* pPossibleValues;
         sal_Int32                         nRangeIndex;
         sal_Int32                         nCurrent;
 
         friend class StringRangeEnumerator;
         Iterator( const StringRangeEnumerator* i_pEnum,
-                  const std::set< sal_Int32 >* i_pPossibleValues,
+                  const o3tl::sorted_vector< sal_Int32 >* i_pPossibleValues,
                   sal_Int32 i_nRange,
                   sal_Int32 i_nCurrent )
         : pEnumerator( i_pEnum ), pPossibleValues( i_pPossibleValues )
@@ -126,10 +127,10 @@ public:
                            );
 
     sal_Int32 size() const { return mnCount; }
-    Iterator begin( const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
-    Iterator end( const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
+    Iterator begin( const o3tl::sorted_vector< sal_Int32 >* i_pPossibleValues = nullptr ) const;
+    Iterator end( const o3tl::sorted_vector< sal_Int32 >* i_pPossibleValues = nullptr ) const;
 
-    bool hasValue( sal_Int32 nValue, const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
+    bool hasValue( sal_Int32 nValue, const o3tl::sorted_vector< sal_Int32 >* i_pPossibleValues = nullptr ) const;
 
     /**
     i_rPageRange:     the string to be changed into a sequence of numbers
@@ -160,7 +161,7 @@ public:
                                      sal_Int32 i_nMinNumber,
                                      sal_Int32 i_nMaxNumber,
                                      sal_Int32 i_nLogicalOffset = -1,
-                                     std::set< sal_Int32 > const * i_pPossibleValues = nullptr
+                                     o3tl::sorted_vector< sal_Int32 > const * i_pPossibleValues = nullptr
                                     );
 };
 

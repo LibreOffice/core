@@ -24,13 +24,13 @@
 #include <cppuhelper/propshlp.hxx>
 
 #include <vector>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 
 
 class UnoPropertyArrayHelper final : public ::cppu::IPropertyArrayHelper
 {
-    std::set<sal_Int32>       maIDs;
+    o3tl::sorted_vector<sal_Int32>       maIDs;
 
     bool    ImplHasProperty( sal_uInt16 nPropId ) const;
 

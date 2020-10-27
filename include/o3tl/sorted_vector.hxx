@@ -45,6 +45,7 @@ public:
     typedef typename std::vector<Value>::const_reverse_iterator const_reverse_iterator;
     typedef typename std::vector<Value>::difference_type difference_type;
     typedef typename std::vector<Value>::size_type size_type;
+    typedef Value value_type;
 
     constexpr sorted_vector( std::initializer_list<Value> init )
         : m_vector(init)

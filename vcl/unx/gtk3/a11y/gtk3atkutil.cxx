@@ -135,7 +135,7 @@ class DocumentFocusListener :
     public ::cppu::WeakImplHelper< accessibility::XAccessibleEventListener >
 {
 
-    std::set< uno::Reference< uno::XInterface > > m_aRefList;
+    o3tl::sorted_vector< uno::Reference< uno::XInterface > > m_aRefList;
 
 public:
     /// @throws lang::IndexOutOfBoundsException

@@ -67,6 +67,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
@@ -2390,7 +2391,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rS
     ContentNode* pNode = pParaPortion->GetNode();
     DBG_ASSERT( pNode->Len(), "CreateTextPortions should not be used for empty paragraphs!" );
 
-    std::set< sal_Int32 > aPositions;
+    o3tl::sorted_vector< sal_Int32 > aPositions;
     aPositions.insert( 0 );
 
     sal_uInt16 nAttr = 0;
@@ -2463,10 +2464,10 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rS
     // A portion may also have been formed by a line break:
     aPositions.insert( nPortionStart );
 
-    std::set< sal_Int32 >::iterator nInvPos = aPositions.find(  nPortionStart );
+    auto nInvPos = aPositions.find(  nPortionStart );
     DBG_ASSERT( (nInvPos != aPositions.end()), "InvPos ?!" );
 
-    std::set< sal_Int32 >::iterator i = nInvPos;
+    auto i = nInvPos;
     ++i;
     while ( i != aPositions.end() )
     {

@@ -30,7 +30,7 @@
 
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
-
+#include <o3tl/sorted_vector.hxx>
 #include <set>
 
 namespace com::sun::star::beans { class XPropertySet; }
@@ -168,7 +168,7 @@ bool isRowSetAlive(const css::uno::Reference< css::uno::XInterface>& _rxRowSet);
     // checks if the css::sdbcx::XColumnsSupplier provided by _rxRowSet supplies any columns
 
 
-typedef ::std::set< css::uno::Reference< css::uno::XInterface > > InterfaceBag;
+typedef ::o3tl::sorted_vector< css::uno::Reference< css::uno::XInterface > > InterfaceBag;
 
 #endif // INCLUDED_SVX_FMTOOLS_HXX
 

@@ -66,6 +66,7 @@
 #include <sax/tools/converter.hxx>
 #include <oox/token/namespacemap.hxx>
 #include <editeng/unoprnms.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
@@ -157,7 +158,8 @@ void registerNamespaces( FastParser& rParser )
 
     // Filter out duplicates: a namespace can have multiple URLs, think of
     // strict vs transitional.
-    std::set<sal_Int32> aSet;
+    o3tl::sorted_vector<sal_Int32> aSet;
+    aSet.reserve(ids.getLength());
     for (const auto& rId : ids)
         aSet.insert(rId.Second);
 
