@@ -407,9 +407,8 @@ void ScCopyPasteTest::testTdf107394()
     ScImportExport aObj(rDoc, ScAddress(0,0,0));
     aObj.SetImportBroadcast(true);
 
-    OString aHTML("<pre>First\nVery long sentence.</pre>");
     SvMemoryStream aStream;
-    aStream.WriteOString(aHTML);
+    aStream.WriteOString("<pre>First\nVery long sentence.</pre>");
     aStream.Seek(0);
     CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::HTML));
 

@@ -5124,9 +5124,11 @@ void ScExportTest::testRotatedImageODS()
     xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pTemp, m_xSFactory, "content.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
-    const OString sPathStart = "/office:document-content/office:body/office:spreadsheet/"
-                               "table:table/table:shapes/draw:frame";
-    const OUString sTransform = getXPath(pXmlDoc, sPathStart, "transform");
+    const OUString sTransform = getXPath(
+        pXmlDoc,
+        "/office:document-content/office:body/office:spreadsheet/"
+            "table:table/table:shapes/draw:frame",
+        "transform");
     // Attribute transform has the structure skew (...) rotate (...) translate (x y)
     // parts are separated by blank
     OUString sTranslate(sTransform.copy(sTransform.lastIndexOf('(')));

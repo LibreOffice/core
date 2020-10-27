@@ -1611,10 +1611,14 @@ void SdTiledRenderingTest::testTdf104405()
 
     // check that the first cell has acquired the resulting vertical style
     xmlDocUniquePtr pXmlDoc = parseXmlDump();
-    OString aPrefix = "/SdDrawDocument/SdrModel/SdPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
-                      "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem";
     // the following name has a compiler-dependent part
-    CPPUNIT_ASSERT_EQUAL(OUString("2"), getXPath(pXmlDoc, aPrefix, "value"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("2"),
+        getXPath(
+            pXmlDoc,
+            "/SdDrawDocument/SdrModel/SdPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
+                "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem",
+            "value"));
 }
 
 void SdTiledRenderingTest::testTdf81754()

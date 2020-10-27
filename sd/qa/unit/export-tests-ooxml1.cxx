@@ -1100,8 +1100,7 @@ void SdOOXMLExportTest1::testDashOnHairline()
     xDocShRef->DoClose();
 
     xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
-    const OString sXmlPath = "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:ln/a:custDash/a:ds";
-    assertXPath(pXmlDoc, sXmlPath, 11);
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:ln/a:custDash/a:ds", 11);
 }
 
 void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
@@ -1170,8 +1169,7 @@ void SdOOXMLExportTest1::testTdf128345FullTransparentGradient()
 
     // Make sure the shape has no fill. Without the patch, fill was solid red.
     xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
-    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr");
-    assertXPath(pXmlDoc, sPathStart + "/a:noFill");
+    assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:noFill");
 }
 
 void SdOOXMLExportTest1::testTdf128345GradientLinear()

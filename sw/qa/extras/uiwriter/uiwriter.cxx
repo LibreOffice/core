@@ -7463,13 +7463,9 @@ void SwUiWriterTest::testInconsistentBookmark()
         {
             const OString aPath("/office:document-content/office:body/office:text/text:p");
 
-            const OString aTagBookmarkStart("bookmark-start");
-            const OString aTagControl("control");
-            const OString aTagBookmarkEnd("bookmark-end");
-
-            const int pos1 = getXPathPosition(pXmlDoc, aPath, aTagBookmarkStart);
-            const int pos2 = getXPathPosition(pXmlDoc, aPath, aTagControl);
-            const int pos3 = getXPathPosition(pXmlDoc, aPath, aTagBookmarkEnd);
+            const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
+            const int pos2 = getXPathPosition(pXmlDoc, aPath, "control");
+            const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
 
             CPPUNIT_ASSERT_GREATER(pos1, pos2);
             CPPUNIT_ASSERT_GREATER(pos2, pos3);

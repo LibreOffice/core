@@ -2685,8 +2685,8 @@ void SdOOXMLExportTest2::testTdf1225573_FontWorkScaleX()
     // Error was, that attribute 'fromWordArt' was ignored
     // ensure, resulting pptx has fromWordArt="1" on textArchDown shape
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
-    const OString sPathStart("/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr");
-    assertXPath(pXmlDocContent, sPathStart + "[@fromWordArt='1']");
+    assertXPath(
+        pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr[@fromWordArt='1']");
 
     // Error was, that text in legacy shapes of category "Follow Path" was not scaled to the path.
     uno::Reference<beans::XPropertySet> xShapeArchProps(getShapeFromPage(0, 0, xDocShRef));

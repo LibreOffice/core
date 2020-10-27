@@ -17,7 +17,7 @@
 #include "compat.hxx"
 #include "plugin.hxx"
 
-// Find cases where a variable of a string type (at least for now, only OUString) is initialized
+// Find cases where a variable of a OString/OUString type is initialized
 // with a literal value (incl. as an empty string) and used only once.  Conservatively this only
 // covers local non-static variables that are not defined outside of the loop (if any) in which they
 // are used, as other cases may deliberately use the variable for performance (or even correctness,
@@ -37,6 +37,13 @@
 
 namespace
 {
+bool isStringType(QualType type)
+{
+    loplugin::TypeCheck const c(type);
+    return c.Class("OString").Namespace("rtl").GlobalNamespace()
+           || c.Class("OUString").Namespace("rtl").GlobalNamespace();
+}
+
 class ElideStringVar : public loplugin::FilteringPlugin<ElideStringVar>
 {
 public:
@@ -67,12 +74,12 @@ public:
                 continue;
             }
             report(DiagnosticsEngine::Warning,
-                   "replace single use of literal OUString variable with a literal",
+                   "replace single use of literal %0 variable with a literal",
                    (*var.second.singleUse)->getExprLoc())
-                << (*var.second.singleUse)->getSourceRange();
-            report(DiagnosticsEngine::Note, "literal OUString variable defined here",
+                << var.first->getType() << (*var.second.singleUse)->getSourceRange();
+            report(DiagnosticsEngine::Note, "literal %0 variable defined here",
                    var.first->getLocation())
-                << var.first->getSourceRange();
+                << var.first->getType() << var.first->getSourceRange();
         }
     }
 
@@ -94,10 +101,7 @@ public:
         {
             return true;
         }
-        if (!loplugin::TypeCheck(decl->getType())
-                 .Class("OUString")
-                 .Namespace("rtl")
-                 .GlobalNamespace())
+        if (!isStringType(decl->getType()))
         {
             return true;
         }
@@ -110,10 +114,7 @@ public:
         {
             return true;
         }
-        if (!loplugin::TypeCheck(e1->getType())
-                 .Class("OUString")
-                 .Namespace("rtl")
-                 .GlobalNamespace())
+        if (!isStringType(e1->getType()))
         {
             return true;
         }
@@ -124,10 +125,9 @@ public:
             case 1:
             {
                 auto const e2 = e1->getArg(0);
-                if (loplugin::TypeCheck(e2->getType())
-                        .Class("OUStringLiteral")
-                        .Namespace("rtl")
-                        .GlobalNamespace())
+                loplugin::TypeCheck const c(e2->getType());
+                if (c.Class("OStringLiteral").Namespace("rtl").GlobalNamespace()
+                    || c.Class("OUStringLiteral").Namespace("rtl").GlobalNamespace())
                 {
                     break;
                 }
@@ -139,14 +139,19 @@ public:
             }
             case 2:
             {
-                auto const t = e1->getArg(0)->getType();
+                auto const e2 = e1->getArg(0);
+                auto const t = e2->getType();
                 if (!(t.isConstQualified() && t->isConstantArrayType()))
                 {
                     return true;
                 }
-                auto const e2 = e1->getArg(1);
-                if (!(isa<CXXDefaultArgExpr>(e2)
-                      && loplugin::TypeCheck(e2->getType())
+                if (isa<AbstractConditionalOperator>(e2->IgnoreParenImpCasts()))
+                {
+                    return true;
+                }
+                auto const e3 = e1->getArg(1);
+                if (!(isa<CXXDefaultArgExpr>(e3)
+                      && loplugin::TypeCheck(e3->getType())
                              .Struct("Dummy")
                              .Namespace("libreoffice_internal")
                              .Namespace("rtl")

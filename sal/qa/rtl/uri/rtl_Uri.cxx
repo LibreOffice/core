@@ -47,8 +47,7 @@ namespace Stringtest
         void test_FromUTF8_001()
             {
                 // string --> ustring
-                OString sStrUTF8("h%C3%A4llo");
-                OUString suStrUTF8 = OStringToOUString(sStrUTF8, RTL_TEXTENCODING_ASCII_US);
+                OUString suStrUTF8 = OStringToOUString("h%C3%A4llo", RTL_TEXTENCODING_ASCII_US);
 
                 // UTF8 --> real ustring
                 OUString suStr_UriDecodeToIuri      = rtl::Uri::decode(suStrUTF8, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);

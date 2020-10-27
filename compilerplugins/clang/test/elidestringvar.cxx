@@ -14,25 +14,25 @@
 OUString f(sal_Unicode c, int n)
 {
     OUString s1(c);
-    // expected-note@+1 {{literal OUString variable defined here [loplugin:elidestringvar]}}
+    // expected-note@+1 {{literal 'rtl::OUString' variable defined here [loplugin:elidestringvar]}}
     OUString s2('a');
-    // expected-note@+1 {{literal OUString variable defined here [loplugin:elidestringvar]}}
+    // expected-note@+1 {{literal 'rtl::OUString' variable defined here [loplugin:elidestringvar]}}
     OUString s3(u'a');
     static constexpr OUStringLiteral s4lit(u"a");
-    // expected-note@+1 {{literal OUString variable defined here [loplugin:elidestringvar]}}
+    // expected-note@+1 {{literal 'rtl::OUString' variable defined here [loplugin:elidestringvar]}}
     OUString s4 = s4lit;
     switch (n)
     {
         case 1:
             return s1;
         case 2:
-            // expected-error@+1 {{replace single use of literal OUString variable with a literal [loplugin:elidestringvar]}}
+            // expected-error@+1 {{replace single use of literal 'rtl::OUString' variable with a literal [loplugin:elidestringvar]}}
             return s2;
         case 3:
-            // expected-error@+1 {{replace single use of literal OUString variable with a literal [loplugin:elidestringvar]}}
+            // expected-error@+1 {{replace single use of literal 'rtl::OUString' variable with a literal [loplugin:elidestringvar]}}
             return s3;
         default:
-            // expected-error@+1 {{replace single use of literal OUString variable with a literal [loplugin:elidestringvar]}}
+            // expected-error@+1 {{replace single use of literal 'rtl::OUString' variable with a literal [loplugin:elidestringvar]}}
             return s4;
     }
 }

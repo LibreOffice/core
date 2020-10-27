@@ -211,9 +211,8 @@ namespace rtl_OStringBuffer
         void makeStringAndClear_001()
         {
             OStringBuffer   aStrBuf1;
-            OString         aStr1;
 
-            bool lastRes = (aStrBuf1.makeStringAndClear() ==  aStr1 );
+            bool lastRes = aStrBuf1.makeStringAndClear().isEmpty();
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -236,9 +235,8 @@ namespace rtl_OStringBuffer
         void makeStringAndClear_002()
         {
             OStringBuffer   aStrBuf2(26);
-            OString         aStr2;
 
-            bool lastRes = (aStrBuf2.makeStringAndClear() == aStr2 );
+            bool lastRes = aStrBuf2.makeStringAndClear().isEmpty();
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -975,7 +973,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[0] );
             sal_Int32              expVal1 = 0;
-            OString         expVal2;
             sal_Int32              expVal3 = 32;
             sal_Int32              input   = 0;
 
@@ -984,7 +981,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength equal to 0",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1035,7 +1032,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[1] );
             sal_Int32              expVal1 = 0;
-            OString         expVal2;
             sal_Int32              expVal3 = 17;
             sal_Int32              input   = 0;
 
@@ -1044,7 +1040,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength less than the length of OUStringBuffer(1)",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1055,7 +1051,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[2] );
             sal_Int32              expVal1 = 20;
-            OString         expVal2;
             sal_Int32              expVal3 = 20;
             sal_Int32              input   = 20;
 
@@ -1064,7 +1059,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength more than the capacity of OStringBuffer()",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1075,7 +1070,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[2] );
             sal_Int32              expVal1 = 3;
-            OString         expVal2;
             sal_Int32              expVal3 = 16;
             sal_Int32              input   = 3;
 
@@ -1084,7 +1078,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength more than the length of OStringBuffer()",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1095,7 +1089,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[2] );
             sal_Int32              expVal1 = 0;
-            OString         expVal2;
             sal_Int32              expVal3 = 16;
             sal_Int32              input   = 0;
 
@@ -1104,7 +1097,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength more than the length of OStringBuffer()",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1115,7 +1108,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[3] );
             sal_Int32              expVal1 = 20;
-            OString         expVal2;
             sal_Int32              expVal3 = 20;
             sal_Int32              input   = 20;
 
@@ -1124,7 +1116,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength more than the capacity of OStringBuffer("")",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1135,7 +1127,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[3] );
             sal_Int32              expVal1 = 5;
-            OString         expVal2;
             sal_Int32              expVal3 = 16;
             sal_Int32              input   = 5;
 
@@ -1144,7 +1135,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength more than the length of OStringBuffer("")",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1155,7 +1146,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[3] );
             sal_Int32              expVal1 = 0;
-            OString         expVal2;
             sal_Int32              expVal3 = 16;
             sal_Int32              input   = 0;
 
@@ -1164,7 +1154,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength less than the length of OStringBuffer("")",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1175,7 +1165,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[4] );
             sal_Int32              expVal1 = 20;
-            OString         expVal2;
             sal_Int32              expVal3 = 20;
             sal_Int32              input   = 20;
 
@@ -1184,7 +1173,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength more than the length of OStringBuffer(\0)",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1195,7 +1184,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[4] );
             sal_Int32              expVal1 = 5;
-            OString         expVal2;
             sal_Int32              expVal3 = 17;
             sal_Int32              input   = 5;
 
@@ -1204,7 +1192,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength more than the length of OStringBuffer(\0)",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1215,7 +1203,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[4] );
             sal_Int32              expVal1 = 0;
-            OString         expVal2;
             sal_Int32              expVal3 = 17;
             sal_Int32              input   = 0;
 
@@ -1224,7 +1211,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength less than the length of OStringBuffer(\0)",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1315,7 +1302,6 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf( arrOUS[5] );
             sal_Int32              expVal1 = 0;
-            OString         expVal2;
             sal_Int32              expVal3 = 48;
             sal_Int32              input   = 0;
 
@@ -1324,7 +1310,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "newLength equal to 0",
-                aStrBuf.getStr() == expVal2 &&
+                aStrBuf.getStr()[0] == '\0' &&
                     aStrBuf.getLength() == expVal1 &&
                     aStrBuf.getCapacity() == expVal3
             );
@@ -1443,6 +1429,8 @@ namespace rtl_OStringBuffer
     {
         OString arrOUS[5];
 
+        OString empty; // silence loplugin
+
     public:
         void setUp() override
         {
@@ -1508,9 +1496,8 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr7 );
             OStringBuffer   aStrBuf( arrOUS[0] );
-            OString                input2;
 
-            aStrBuf.append( input2 );
+            aStrBuf.append( empty );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -1576,9 +1563,8 @@ namespace rtl_OStringBuffer
         {
             OString                expVal;
             OStringBuffer   aStrBuf( arrOUS[1] );
-            OString                input2;
 
-            aStrBuf.append( input2 );
+            aStrBuf.append( empty );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -1644,9 +1630,8 @@ namespace rtl_OStringBuffer
         {
             OString                expVal;
             OStringBuffer   aStrBuf( arrOUS[2] );
-            OString                input2;
 
-            aStrBuf.append( input2 );
+            aStrBuf.append( empty );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -1712,9 +1697,8 @@ namespace rtl_OStringBuffer
         {
             OString                expVal;
             OStringBuffer   aStrBuf( arrOUS[3] );
-            OString                input2;
 
-            aStrBuf.append( input2 );
+            aStrBuf.append( empty );
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -1780,9 +1764,8 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr28 );
             OStringBuffer   aStrBuf( arrOUS[4] );
-            OString                input2;
 
-            aStrBuf.append( input2 );
+            aStrBuf.append( empty );
 
             CPPUNIT_ASSERT_MESSAGE
             (

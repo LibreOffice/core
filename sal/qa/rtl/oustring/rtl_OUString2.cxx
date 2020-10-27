@@ -296,65 +296,53 @@ public:
 
         void toDouble_test_3()
             {
-                OString sValue("3");
-                toDouble_test(sValue);
+                toDouble_test("3");
             }
         void toDouble_test_3_5()
             {
-                OString sValue("3.5");
-                toDouble_test(sValue);
+                toDouble_test("3.5");
             }
         void toDouble_test_3_0625()
             {
-                OString sValue("3.0625");
-                toDouble_test(sValue);
+                toDouble_test("3.0625");
             }
         void toDouble_test_pi()
             {
                 // value from http://www.angio.net/pi/digits/50.txt
-                OString sValue("3.141592653589793238462643383279502884197169399375");
-                toDouble_test(sValue);
+                toDouble_test("3.141592653589793238462643383279502884197169399375");
             }
 
         void toDouble_test_1()
             {
-                OString sValue("1");
-                toDouble_test(sValue);
+                toDouble_test("1");
             }
         void toDouble_test_10()
             {
-                OString sValue("10");
-                toDouble_test(sValue);
+                toDouble_test("10");
             }
         void toDouble_test_100()
             {
-                OString sValue("100");
-                toDouble_test(sValue);
+                toDouble_test("100");
             }
         void toDouble_test_1000()
             {
-                OString sValue("1000");
-                toDouble_test(sValue);
+                toDouble_test("1000");
             }
         void toDouble_test_10000()
             {
-                OString sValue("10000");
-                toDouble_test(sValue);
+                toDouble_test("10000");
             }
         void toDouble_test_1e99()
             {
-                OString sValue("1e99");
-                toDouble_test(sValue);
+                toDouble_test("1e99");
             }
         void toDouble_test_1e_n99()
             {
-                OString sValue("1e-99");
-                toDouble_test(sValue);
+                toDouble_test("1e-99");
             }
         void toDouble_test_1e308()
             {
-                OString sValue("1e308");
-                toDouble_test(sValue);
+                toDouble_test("1e308");
             }
 
         // Change the following lines only, if you add, remove or rename
@@ -424,75 +412,61 @@ public:
 
         void toFloat_test_3()
             {
-                OString sValue("3");
-                toFloat_test(sValue);
+                toFloat_test("3");
             }
         void toFloat_test_3_5()
             {
-                OString sValue("3.5");
-                toFloat_test(sValue);
+                toFloat_test("3.5");
             }
         void toFloat_test_3_0625()
             {
-                OString sValue("3.0625");
-                toFloat_test(sValue);
+                toFloat_test("3.0625");
             }
         void toFloat_test_3_0625_e()
             {
-                OString sValue("3.0625e-4");
-                toFloat_test(sValue);
+                toFloat_test("3.0625e-4");
             }
         void toFloat_test_pi()
             {
                 // value from http://www.angio.net/pi/digits/50.txt
-                OString sValue("3.141592653589793238462643383279502884197169399375");
-                toFloat_test(sValue);
+                toFloat_test("3.141592653589793238462643383279502884197169399375");
             }
 
         void toFloat_test_1()
             {
-                OString sValue("1");
-                toFloat_test(sValue);
+                toFloat_test("1");
             }
         void toFloat_test_10()
             {
-                OString sValue("10");
-                toFloat_test(sValue);
+                toFloat_test("10");
             }
         void toFloat_test_100()
             {
-                OString sValue("100");
-                toFloat_test(sValue);
+                toFloat_test("100");
             }
         void toFloat_test_1000()
             {
-                OString sValue("1000");
-                toFloat_test(sValue);
+                toFloat_test("1000");
             }
         void toFloat_test_10000()
             {
-                OString sValue("10000");
-                toFloat_test(sValue);
+                toFloat_test("10000");
             }
         void toFloat_test_mix()
             {
-                OString sValue("456789321455.123456789012");
-                toFloat_test(sValue);
+                toFloat_test("456789321455.123456789012");
             }
         void toFloat_test_1e99()
             {
-                OString sValue("1e99");
-                toFloat_test(sValue);
+                toFloat_test("1e99");
             }
         void toFloat_test_1e_n99()
             {
-                OString sValue("1e-9");
-                toFloat_test(sValue);
+                toFloat_test("1e-9");
             }
         void toFloat_test_1e308()
             {
-                OString sValue("1e308");
-                toFloat_test(sValue);
+                toFloat_test("1e308");
             }
 
         // Change the following lines only, if you add, remove or rename

@@ -194,22 +194,16 @@ public:
     void testEqual()
     {
         {
-            OString aMsg1 = sSampleString;
-            OString aMsg2 = sSampleString;
-
-            OString aSum1 = getDigest(aMsg1, rtl_Digest_AlgorithmMD5);
-            OString aSum2 = getDigest(aMsg2, rtl_Digest_AlgorithmMD5);
+            OString aSum1 = getDigest(sSampleString, rtl_Digest_AlgorithmMD5);
+            OString aSum2 = getDigest(sSampleString, rtl_Digest_AlgorithmMD5);
 
             CPPUNIT_ASSERT_MESSAGE("md5sum must have a length", aSum1.getLength() == 32 && aSum2.getLength() == 32 );
             CPPUNIT_ASSERT_EQUAL_MESSAGE("source is the same, dest must be also the same", aSum1, aSum2);
         }
 
         {
-            OString aMsg1 = sSampleString;
-            OString aMsg2 = sSampleString_only_one_diff;
-
-            OString aSum1 = getDigest(aMsg1, rtl_Digest_AlgorithmMD5);
-            OString aSum2 = getDigest(aMsg2, rtl_Digest_AlgorithmMD5);
+            OString aSum1 = getDigest(sSampleString, rtl_Digest_AlgorithmMD5);
+            OString aSum2 = getDigest(sSampleString_only_one_diff, rtl_Digest_AlgorithmMD5);
 
             CPPUNIT_ASSERT_MESSAGE("md5sum must have a length", aSum1.getLength() == 32 && aSum2.getLength() == 32 );
             CPPUNIT_ASSERT_MESSAGE("differ only in one char", aSum1 != aSum2);
@@ -380,13 +374,11 @@ public:
 
             std::unique_ptr<sal_uInt8[]> pResult(new sal_uInt8[RTL_DIGEST_LENGTH_SHA1]);
 
-            OString sExpected = "06f460d693aecdd3b5cbe8365408eccfc570f32a";
-
             rtl_digest_SHA1(aData, sizeof(aData), pResult.get(), RTL_DIGEST_LENGTH_SHA1);
 
             OString sKey = createHex(pResult.get(), RTL_DIGEST_LENGTH_SHA1);
 
-            CPPUNIT_ASSERT_EQUAL(sExpected, sKey);
+            CPPUNIT_ASSERT_EQUAL(OString("06f460d693aecdd3b5cbe8365408eccfc570f32a"), sKey);
         }
 
         // tdf#114939, verify that rtl_digest_SHA1 computes broken results for certain input (which

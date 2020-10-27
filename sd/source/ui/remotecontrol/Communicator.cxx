@@ -58,9 +58,8 @@ void Communicator::execute()
     pTransmitter->addMessage( "LO_SERVER_SERVER_PAIRED\n\n",
                               Transmitter::PRIORITY_HIGH );
 
-    OString aServerInformation = "LO_SERVER_INFO\n" LIBO_VERSION_DOTTED "\n\n";
-
-    pTransmitter->addMessage( aServerInformation, Transmitter::PRIORITY_HIGH );
+    pTransmitter->addMessage( "LO_SERVER_INFO\n" LIBO_VERSION_DOTTED "\n\n",
+                              Transmitter::PRIORITY_HIGH );
 
     Receiver aReceiver( pTransmitter.get() );
     try {
