@@ -400,7 +400,7 @@
 #define SID_CONVERT_TO_METAFILE             (SID_SD_START+379)
     // FREE
 #define SID_CONVERT_TO_CONTOUR              (SID_SD_START+381)
-#define SID_EDIT_HYPERLINK                  (SID_SD_START+382)
+    // FREE
 #define ID_VAL_DUMMY1                       (SID_SD_START+383)
 #define ID_VAL_DUMMY2                       (SID_SD_START+384)
 #define ID_VAL_DUMMY3                       (SID_SD_START+385)

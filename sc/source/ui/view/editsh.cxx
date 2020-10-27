@@ -35,6 +35,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/urlfieldhelper.hxx>
 #include <svx/hlnkitem.hxx>
 #include <vcl/EnumContext.hxx>
 #include <editeng/postitem.hxx>
@@ -45,6 +46,7 @@
 #include <editeng/wghtitem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -625,6 +627,16 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 return;
             }
         break;
+
+        case SID_EDIT_HYPERLINK:
+            {
+                // Ensure the field is selected first
+                pEditView->SelectFieldAtCursor();
+                pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(
+                    SID_HYPERLINK_DIALOG);
+            }
+        break;
+
         case SID_COPY_HYPERLINK_LOCATION:
         {
                 const SvxFieldData* pField = pEditView->GetFieldAtCursor();
@@ -641,6 +653,12 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     else
                         vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, nullptr);
                 }
+            }
+        break;
+
+        case SID_REMOVE_HYPERLINK:
+            {
+                URLFieldHelper::RemoveURLField(*pEditView);
             }
         break;
 
@@ -765,7 +783,9 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_OPEN_HYPERLINK:
+            case SID_EDIT_HYPERLINK:
             case SID_COPY_HYPERLINK_LOCATION:
+            case SID_REMOVE_HYPERLINK:
                 {
                     if ( !GetURLField() )
                         rSet.DisableItem( nWhich );

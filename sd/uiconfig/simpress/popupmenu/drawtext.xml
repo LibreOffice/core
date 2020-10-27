@@ -18,7 +18,9 @@
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
+  <menu:menuitem menu:id=".uno:EditHyperlink"/>
   <menu:menuitem menu:id=".uno:CopyHyperlinkLocation"/>
+  <menu:menuitem menu:id=".uno:RemoveHyperlink"/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:SetDefault"/>

@@ -3250,9 +3250,22 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:EditHyperlink" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Hyperlink</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Edit Hyperlink...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:CopyHyperlinkLocation" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Copy Hyperlink Location</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RemoveHyperlink" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Remove Hyperlink</value>
         </prop>
       </node>
       <node oor:name=".uno:OpenSmartTagMenuOnCursor" oor:op="replace">
