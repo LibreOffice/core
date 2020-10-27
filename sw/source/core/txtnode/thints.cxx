@@ -1113,8 +1113,23 @@ SwTextAttr* MakeTextAttr(
                 : new SwTextRefMark( static_cast<SwFormatRefMark&>(rNew), nStt, &nEnd );
         break;
     case RES_TXTATR_TOXMARK:
-        pNew = new SwTextTOXMark( static_cast<SwTOXMark&>(rNew), nStt, &nEnd );
+    {
+        SwTOXMark& rMark = static_cast<SwTOXMark&>(rNew);
+
+        // tdf#98868 if the SwTOXType is from a different document that the
+        // target, re-register the TOXMark against a matching SwTOXType from
+        // the target document instead
+        const SwTOXType* pTOXType = rMark.GetTOXType();
+        if (pTOXType && &pTOXType->GetDoc() != &rDoc)
+        {
+            SwTOXType* pToxType = SwHistorySetTOXMark::GetSwTOXType(rDoc, pTOXType->GetType(),
+                                                                    pTOXType->GetTypeName());
+            rMark.RegisterToTOXType(*pToxType);
+        }
+
+        pNew = new SwTextTOXMark(rMark, nStt, &nEnd);
         break;
+    }
     case RES_TXTATR_CJK_RUBY:
         pNew = new SwTextRuby( static_cast<SwFormatRuby&>(rNew), nStt, nEnd );
         break;
