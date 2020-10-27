@@ -2092,6 +2092,19 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     m_pCategories->SetStylesInfo(&m_aStylesInfo);
 
     UpdateUI();
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        VclPtr<FixedText> aNameTxt;
+        VclPtr<PushButton> aHelpBtn;
+
+        get(aHelpBtn, "help");
+        get(aNameTxt, "macronameft");
+
+        m_pDescriptionText->SetReadOnly();
+        aNameTxt.disposeAndClear();
+        aHelpBtn.disposeAndClear();
+    }
 }
 
 SvxScriptSelectorDialog::~SvxScriptSelectorDialog()
