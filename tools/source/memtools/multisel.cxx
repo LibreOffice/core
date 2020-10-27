@@ -486,7 +486,7 @@ StringRangeEnumerator::StringRangeEnumerator( const OUString& i_rInput,
         mbValidInput = setRange( i_rInput );
 }
 
-bool StringRangeEnumerator::checkValue( sal_Int32 i_nValue, const std::set< sal_Int32 >* i_pPossibleValues ) const
+bool StringRangeEnumerator::checkValue( sal_Int32 i_nValue, const o3tl::sorted_vector< sal_Int32 >* i_pPossibleValues ) const
 {
     if( i_nValue < 0 || i_nValue < mnMin || i_nValue > mnMax )
         return false;
@@ -626,7 +626,7 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange )
     return true;
 }
 
-bool StringRangeEnumerator::hasValue( sal_Int32 i_nValue, const std::set< sal_Int32 >* i_pPossibleValues ) const
+bool StringRangeEnumerator::hasValue( sal_Int32 i_nValue, const o3tl::sorted_vector< sal_Int32 >* i_pPossibleValues ) const
 {
     if( i_pPossibleValues && i_pPossibleValues->find( i_nValue ) == i_pPossibleValues->end() )
         return false;
@@ -696,7 +696,7 @@ bool StringRangeEnumerator::Iterator::operator==( const Iterator& i_rCompare ) c
     return i_rCompare.pEnumerator == pEnumerator && i_rCompare.nRangeIndex == nRangeIndex && i_rCompare.nCurrent == nCurrent;
 }
 
-StringRangeEnumerator::Iterator StringRangeEnumerator::begin( const std::set< sal_Int32 >* i_pPossibleValues ) const
+StringRangeEnumerator::Iterator StringRangeEnumerator::begin( const o3tl::sorted_vector< sal_Int32 >* i_pPossibleValues ) const
 {
     StringRangeEnumerator::Iterator it( this,
                                         i_pPossibleValues,
@@ -707,7 +707,7 @@ StringRangeEnumerator::Iterator StringRangeEnumerator::begin( const std::set< sa
     return it;
 }
 
-StringRangeEnumerator::Iterator StringRangeEnumerator::end( const std::set< sal_Int32 >* i_pPossibleValues ) const
+StringRangeEnumerator::Iterator StringRangeEnumerator::end( const o3tl::sorted_vector< sal_Int32 >* i_pPossibleValues ) const
 {
     return StringRangeEnumerator::Iterator( this, i_pPossibleValues, -1, -1 );
 }
@@ -717,7 +717,7 @@ bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
                                                  sal_Int32 i_nMinNumber,
                                                  sal_Int32 i_nMaxNumber,
                                                  sal_Int32 i_nLogicalOffset,
-                                                 std::set< sal_Int32 > const * i_pPossibleValues
+                                                 o3tl::sorted_vector< sal_Int32 > const * i_pPossibleValues
                                                )
 {
     o_rPageVector.clear();
