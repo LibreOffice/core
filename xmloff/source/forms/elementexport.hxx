@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -88,7 +88,7 @@ namespace xmloff
                 ,public OElementExport
     {
     protected:
-        typedef std::set<sal_Int16> Int16Set;
+        typedef o3tl::sorted_vector<sal_Int16> Int16Set;
             // used below
 
         OUString                m_sControlId;           // the control id to use when exporting
