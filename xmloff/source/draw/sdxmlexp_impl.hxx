@@ -25,7 +25,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 #include <vector>
 
 namespace tools { class Rectangle; }
@@ -54,7 +54,7 @@ enum XmlPlaceholder
     XmlPlaceholderVerticalOutline
 };
 
-typedef std::set<sal_Int32> SdXMLFormatMap;
+typedef o3tl::sorted_vector<sal_Int32> SdXMLFormatMap;
 
 struct HeaderFooterPageSettingsImpl
 {

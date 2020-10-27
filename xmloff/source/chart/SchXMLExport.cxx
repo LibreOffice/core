@@ -44,6 +44,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include <rtl/math.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -3363,9 +3364,11 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     // collect elements
     if( bVaryColorsByPoint && xColorScheme.is() )
     {
-        ::std::set< sal_Int32 > aAttrPointSet;
-        aAttrPointSet.insert( pPoints, pPoints + aDataPointSeq.getLength() );
-        const ::std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
+        o3tl::sorted_vector< sal_Int32 > aAttrPointSet;
+        aAttrPointSet.reserve(aDataPointSeq.getLength());
+        for (auto p = pPoints; p < pPoints + aDataPointSeq.getLength(); ++p)
+            aAttrPointSet.insert( *p );
+        const auto aEndIt = aAttrPointSet.end();
         for( nElement = 0; nElement < nSeriesLength; ++nElement )
         {
             aPropertyStates.clear();
