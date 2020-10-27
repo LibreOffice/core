@@ -38,7 +38,7 @@ def get_files_list(directory, extension):
     return array_items
 
 def linkFormat(name):
-    bugId = re.search(r'\d{6}|\d{5}', name)
+    bugId = re.search(r'\d{5,6}', name)
     if bugId:
         return "[https://bugs.documentfoundation.org/show_bug.cgi?id={} {}]"\
                 .format(bugId.group(), name)
@@ -49,12 +49,12 @@ def linkFormat(name):
 def main():
     uitest_ext = '.py'
     uitest_dirs = {
-            'Writer' : ['../uitest/writer_tests/', '../writerperfect/qa/uitest/', '../sw/qa/uitest/'],
-            'Calc' : ['../uitest/calc_tests', '../sc/qa/uitest/'],
+            'Writer' : ['../writerperfect/qa/uitest/', '../sw/qa/uitest/'],
+            'Calc' : ['../sc/qa/uitest/'],
             'Impress' : ['../uitest/impress_tests/', '../sd/qa/uitest/'],
             'Math': ['../uitest/math_tests/'],
-            'Draw': [''],
-            'Manual_tests': ['../uitest/manual_tests/']}
+            'Demo': ['../uitest/demo_ui/'],
+            'Draw': ['']}
 
     print('{{TopMenu}}')
     print('{{Menu}}')
