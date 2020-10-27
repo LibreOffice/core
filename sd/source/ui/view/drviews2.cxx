@@ -45,6 +45,7 @@
 #include <editeng/section.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/CustomPropertyField.hxx>
+#include <editeng/urlfieldhelper.hxx>
 
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
@@ -2164,6 +2165,23 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             GetViewFrame()->GetDispatcher()->Execute( SID_HYPERLINK_DIALOG );
 
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_REMOVE_HYPERLINK:
+        {
+            if (mpDrawView->IsTextEdit())
+            {
+                // First make sure the field is selected
+                OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
+                if (pOutView)
+                {
+                    pOutView->SelectFieldAtCursor();
+                    URLFieldHelper::RemoveURLField(pOutView->GetEditView());
+                }
+            }
             Cancel();
             rReq.Done ();
         }

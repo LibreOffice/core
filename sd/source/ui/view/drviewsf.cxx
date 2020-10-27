@@ -60,6 +60,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/urlfieldhelper.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
 #include <memory>
@@ -511,6 +512,13 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 {
                     rSet.DisableItem(nWhich);
                 }
+            }
+            break;
+
+            case SID_REMOVE_HYPERLINK:
+            {
+                if (!URLFieldHelper::IsCursorAtURLField(mpDrawView->GetTextEditOutlinerView()))
+                    rSet.DisableItem(nWhich);
             }
             break;
 
