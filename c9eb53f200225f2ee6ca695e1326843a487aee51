@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea3438d1_7eb71893",
+        "filename": "sw/qa/core/layout/layout.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-27T12:31:13Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 29
+      },
+      "revId": "c9eb53f200225f2ee6ca695e1326843a487aee51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0830d4a_0d255af2",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-27T12:31:13Z",
+      "side": 1,
+      "message": "We can remove this part.",
+      "range": {
+        "startLine": 665,
+        "startChar": 0,
+        "endLine": 668,
+        "endChar": 67
+      },
+      "revId": "c9eb53f200225f2ee6ca695e1326843a487aee51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
