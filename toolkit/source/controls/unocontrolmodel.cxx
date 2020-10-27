@@ -46,7 +46,7 @@
 #include <vcl/unohelp.hxx>
 
 #include <memory>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -546,7 +546,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
 
     OutStream->writeShort( UNOCONTROL_STREAMVERSION );
 
-    std::set<sal_uInt16> aProps;
+    o3tl::sorted_vector<sal_uInt16> aProps;
 
     for (const auto& rData : maData)
     {
