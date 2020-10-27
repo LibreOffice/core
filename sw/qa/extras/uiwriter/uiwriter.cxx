@@ -1125,6 +1125,57 @@ void SwUiWriterTest::testWatermarkDOCX()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), pWatermark->GetTransparency());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf136453)
+{
+    load(DATA_DIRECTORY, "tdf136453.fodt");
+
+    SwXTextDocument *const pTextDoc(dynamic_cast<SwXTextDocument*>(mxComponent.get()));
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* const pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwWrtShell *const pWrtShell(pDoc->GetDocShell()->GetWrtShell());
+
+    sal_uLong const nNodes(pDoc->GetNodes().Count());
+
+    pWrtShell->SttEndDoc(false);
+    pWrtShell->SetMark();
+    pWrtShell->Up(true, 1);
+    pWrtShell->SttPara(true);
+    pWrtShell->Delete();
+
+    // one paragraph deleted, section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 3, pDoc->GetNodes().Count());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(nNodes, pDoc->GetNodes().Count());
+
+    // check that every node has 1 frame
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/txt", 1);
+
+    pWrtShell->Redo();
+
+    // one paragraph deleted, section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 3, pDoc->GetNodes().Count());
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section", 0);
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(nNodes, pDoc->GetNodes().Count());
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/txt", 1);
+}
+
 void SwUiWriterTest::testWatermarkPosition()
 {
     // tdf#108494 Watermark inserted in the document with page break was outside the first page
