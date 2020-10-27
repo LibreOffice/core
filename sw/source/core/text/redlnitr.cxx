@@ -80,7 +80,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         SwPosition const*const pEnd(pRed->End());
         if (*pStart == *pEnd)
         {   // only allowed while moving
-            assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));
+//            assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));
             continue;
         }
         if (pStart->nNode.GetNode().IsTableNode())
