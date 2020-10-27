@@ -69,11 +69,28 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
 void AquaSalGraphics::InvalidateContext()
 {
     UnsetState();
+
+    CGContextRelease(maContextHolder.get());
+    CGContextRelease(maBGContextHolder.get());
+    CGContextRelease(maCSContextHolder.get());
+
     maContextHolder.set(nullptr);
+    maCSContextHolder.set(nullptr);
+    maBGContextHolder.set(nullptr);
 }
 
 void AquaSalGraphics::UnsetState()
 {
+    if (maBGContextHolder.isSet())
+    {
+        CGContextRelease(maBGContextHolder.get());
+        maBGContextHolder.set(nullptr);
+    }
+    if (maCSContextHolder.isSet())
+    {
+        CGContextRelease(maCSContextHolder.get());
+        maBGContextHolder.set(nullptr);
+    }
     if (maContextHolder.isSet())
     {
         maContextHolder.restoreState();
@@ -119,7 +136,12 @@ bool AquaSalGraphics::CheckContext()
             {
                 CGContextRelease(maContextHolder.get());
             }
+            CGContextRelease(maBGContextHolder.get());
+            CGContextRelease(maCSContextHolder.get());
+
             maContextHolder.set(nullptr);
+            maBGContextHolder.set(nullptr);
+            maCSContextHolder.set(nullptr);
             maLayer.set(nullptr);
         }
 
@@ -133,13 +155,16 @@ bool AquaSalGraphics::CheckContext()
             const CGSize aLayerSize = { static_cast<CGFloat>(nScaledWidth), static_cast<CGFloat>(nScaledHeight) };
 
             const int nBytesPerRow = (nBitmapDepth * nScaledWidth) / 8;
-            void* pRawData = std::malloc(nBytesPerRow * nScaledHeight);
-            const int nFlags = kCGImageAlphaNoneSkipFirst;
-            CGContextHolder aContextHolder(CGBitmapContextCreate(
-                pRawData, nScaledWidth, nScaledHeight, 8, nBytesPerRow, GetSalData()->mxRGBSpace, nFlags));
+            int nFlags = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host;
+            maBGContextHolder.set(CGBitmapContextCreate(
+                NULL, nScaledWidth, nScaledHeight, 8, nBytesPerRow, GetSalData()->mxRGBSpace, nFlags));
 
-            maLayer.set(CGLayerCreateWithContext(aContextHolder.get(), aLayerSize, nullptr));
+            maLayer.set(CGLayerCreateWithContext(maBGContextHolder.get(), aLayerSize, nullptr));
             maLayer.setScale(fScale);
+
+            nFlags = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Host;
+            maCSContextHolder.set(CGBitmapContextCreate(
+                NULL, nScaledWidth, nScaledHeight, 8, nBytesPerRow, GetSalData()->mxRGBSpace, nFlags));
 
             CGContextRef xDrawContext = CGLayerGetContext(maLayer.get());
             maContextHolder = xDrawContext;
@@ -217,8 +242,17 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
 
         const CGSize aSize = maLayer.getSizePoints();
         const CGRect aRect = CGRectMake(0, 0, aSize.width,  aSize.height);
+        const CGRect aRectPoints = { CGPointZero, maLayer.getSizePixels() };
+        CGContextSetBlendMode(maCSContextHolder.get(), kCGBlendModeCopy);
+        CGContextDrawLayerInRect(maCSContextHolder.get(), aRectPoints, maLayer.get());
 
-        CGContextDrawLayerInRect(rCGContextHolder.get(), aRect, maLayer.get());
+        CGImageRef img = CGBitmapContextCreateImage(maCSContextHolder.get());
+        CGImageRef displayColorSpaceImage = CGImageCreateCopyWithColorSpace(img, [[mpFrame->getNSWindow() colorSpace] CGColorSpace]);
+        CGContextSetBlendMode(rCGContextHolder.get(), kCGBlendModeCopy);
+        CGContextDrawImage(rCGContextHolder.get(), aRect, displayColorSpaceImage);
+
+        CGImageRelease(img);
+        CGImageRelease(displayColorSpaceImage);
 
         rCGContextHolder.restoreState();
     }

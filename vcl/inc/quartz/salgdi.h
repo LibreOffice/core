@@ -134,6 +134,8 @@ class AquaSalGraphics : public SalGraphics
 {
     CGLayerHolder maLayer; // Quartz graphics layer
     CGContextHolder maContextHolder;  // Quartz drawing context
+    CGContextHolder maBGContextHolder;  // Quartz drawing context for CGLayer
+    CGContextHolder maCSContextHolder;  // Quartz drawing context considering the color space
 
     XorEmulation*                           mpXorEmulation;
     int                                     mnXorMode; // 0: off 1: on 2: invert only
