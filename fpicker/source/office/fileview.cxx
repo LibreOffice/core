@@ -1098,8 +1098,8 @@ OUString SvtFileView::GetConfigString() const
 void SvtFileView::SetConfigString(const OUString& rCfgStr)
 {
     sal_Int32 nIdx = 0;
-    mpImpl->mnSortColumn = static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32());
-    mpImpl->mbAscending = static_cast<bool>(static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32()));
+    sal_uInt16 nSortColumn = static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32());
+    bool bAscending = static_cast<bool>(static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32()));
 
     std::vector<int> aWidths(mpImpl->mxView->TypeColumnVisible() ? 4 : 3, -1);
 
@@ -1120,6 +1120,9 @@ void SvtFileView::SetConfigString(const OUString& rCfgStr)
 
     weld::TreeView* pView = mpImpl->mxView->getWidget();
     pView->set_column_fixed_widths(aWidths);
+    if (mpImpl->mnSortColumn != nSortColumn)
+        pView->set_sort_indicator(TRISTATE_INDET, mpImpl->GetSortColumn());
+    mpImpl->Resort_Impl(nSortColumn, bAscending);
 }
 
 SvtFileView_Impl::SvtFileView_Impl(SvtFileView* pAntiImpl, weld::Window* pTopLevel,
