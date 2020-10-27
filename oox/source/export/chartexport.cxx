@@ -103,6 +103,7 @@
 
 #include <rtl/math.hxx>
 #include <o3tl/temporary.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -3664,10 +3665,11 @@ void ChartExport::exportDataPoints(
 
     if( bVaryColorsByPoint && xColorScheme.is() )
     {
-        ::std::set< sal_Int32 > aAttrPointSet;
-        ::std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
-                    ::std::inserter( aAttrPointSet, aAttrPointSet.begin()));
-        const ::std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
+        o3tl::sorted_vector< sal_Int32 > aAttrPointSet;
+        aAttrPointSet.reserve(aDataPointSeq.getLength());
+        for (auto p = pPoints; p < pPoints + aDataPointSeq.getLength(); ++p)
+            aAttrPointSet.insert(*p);
+        const auto aEndIt = aAttrPointSet.end();
         for( nElement = 0; nElement < nSeriesLength; ++nElement )
         {
             uno::Reference< beans::XPropertySet > xPropSet;
@@ -3724,10 +3726,11 @@ void ChartExport::exportDataPoints(
     if( bVaryColorsByPoint )
         return;
 
-    ::std::set< sal_Int32 > aAttrPointSet;
-    ::std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
-                ::std::inserter( aAttrPointSet, aAttrPointSet.begin()));
-    const ::std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
+    o3tl::sorted_vector< sal_Int32 > aAttrPointSet;
+    aAttrPointSet.reserve(aDataPointSeq.getLength());
+    for (auto p = pPoints; p < pPoints + aDataPointSeq.getLength(); ++p)
+        aAttrPointSet.insert(*p);
+    const auto aEndIt = aAttrPointSet.end();
     for( nElement = 0; nElement < nSeriesLength; ++nElement )
     {
         uno::Reference< beans::XPropertySet > xPropSet;
