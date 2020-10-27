@@ -99,6 +99,8 @@ public:
 
     OUString GetText(sal_Int32 nPara) const;
 
+    sal_uLong GetTextLen() const;
+
     void ClearPortionInfo();
 
     bool HasOnlineSpellErrors() const;

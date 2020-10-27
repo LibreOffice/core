@@ -30,8 +30,6 @@
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
 #include <iterator>
 
 #include <com/sun/star/util/Color.hpp>

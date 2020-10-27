@@ -230,6 +230,8 @@ public:
     sal_Int32 GetParagraphCount() const;
     OUString GetText(sal_Int32 nParagraph) const;
 
+    sal_uLong GetTextLen() const;
+
     void ClearPortionInfo();
 
     bool HasOnlineSpellErrors() const;
