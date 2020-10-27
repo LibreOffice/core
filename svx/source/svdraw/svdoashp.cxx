@@ -2156,16 +2156,20 @@ bool SdrObjCustomShape::IsAutoGrowWidth() const
 
 void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
 {
-    ForceOutlinerParaObject();
-
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
 
     DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
 
-    if( !pOutlinerParaObject )
-        return;
+    if( !pOutlinerParaObject && bVertical )
+    {
+        // we only need to force an outliner para object if the default of
+        // horizontal text is changed
+        ForceOutlinerParaObject();
+        pOutlinerParaObject = GetOutlinerParaObject();
+    }
 
-    if(pOutlinerParaObject->IsVertical() == bVertical)
+    if( !pOutlinerParaObject ||
+        (pOutlinerParaObject->IsVertical() == bVertical) )
         return;
 
     // get item settings

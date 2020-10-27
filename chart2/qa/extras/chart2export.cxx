@@ -181,6 +181,7 @@ public:
     void testTdf123647();
     void testTdf136267();
     void testDataLabelPlacementPieChart();
+    void testCustomShapeText();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -324,6 +325,7 @@ public:
     CPPUNIT_TEST(testTdf123647);
     CPPUNIT_TEST(testTdf136267);
     CPPUNIT_TEST(testDataLabelPlacementPieChart);
+    CPPUNIT_TEST(testCustomShapeText);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2966,7 +2968,22 @@ void Chart2ExportTest::testDataLabelPlacementPieChart()
     sal_Int32 nLabelPlacement = 0;
     CPPUNIT_ASSERT(aAny >>= nLabelPlacement);
     CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::OUTSIDE, nLabelPlacement);
+}
 
+void Chart2ExportTest::testCustomShapeText()
+{
+    load("/chart2/qa/extras/data/ods/", "tdf72776.ods");
+    reload("calc8");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+        UNO_QUERY_THROW);
+    // test that the text of custom shape exists inside the chart
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(1), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xCustomShape.is());
+
+    Reference< text::XText > xRange(xCustomShape, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xRange->getString().isEmpty());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
