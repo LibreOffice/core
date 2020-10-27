@@ -2177,10 +2177,10 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
 
     DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
 
-    if( pOutlinerParaObject )
-    {
-        if(pOutlinerParaObject->IsVertical() != bVertical)
-        {
+    if( !pOutlinerParaObject ||
+        (pOutlinerParaObject->IsVertical() == bVertical) )
+        return;
+
             // get item settings
             const SfxItemSet& rSet = GetObjectItemSet();
 
@@ -2224,8 +2224,6 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
 
             // restore object size
             SetSnapRect(aObjectRect);
-        }
-    }
 }
 
 void SdrObjCustomShape::SuggestTextFrameSize(Size aSuggestedTextFrameSize)
