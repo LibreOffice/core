@@ -2162,10 +2162,8 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
 
     DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
 
-    if( !pOutlinerParaObject )
-        return;
-
-    if(pOutlinerParaObject->IsVertical() == bVertical)
+    if( !pOutlinerParaObject ||
+        (pOutlinerParaObject->IsVertical() == bVertical) )
         return;
 
     // get item settings
