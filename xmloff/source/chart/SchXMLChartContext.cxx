@@ -34,6 +34,7 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlstyle.hxx>
+#include <xmloff/xmlprmap.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
 
 #include <vector>
@@ -1147,8 +1148,19 @@ SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
                 SAL_WARN_IF( !mxDrawPage.is(), "xmloff.chart", "Invalid Chart Page" );
             }
             if( mxDrawPage.is())
+            {
+                // tdf#72776: remove TextWritingMode property from additional shapes in chart,
+                // because it is mapped wrongly in the underlying draw mapper, but for draw it is necessary.
+                // We remove that property here only for shapes in chart, thus these shapes can use the correct mapping
+                // from the writer paragraph settings (attribute 'writing-mode' <-> property 'WritingMode')
+                const rtl::Reference< SvXMLImportPropertyMapper >& mpPropertySetMapper = GetImport().GetShapeImport()->GetPropertySetMapper();
+                const rtl::Reference< XMLPropertySetMapper >& maPropMapper = mpPropertySetMapper->getPropertySetMapper();
+                sal_Int32 nUnwantedWrongEntry = maPropMapper->FindEntryIndex( "TextWritingMode", XML_NAMESPACE_STYLE, GetXMLToken(XML_WRITING_MODE) );
+                maPropMapper->RemoveEntry(nUnwantedWrongEntry);
+
                 pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
                     GetImport(), nPrefix, rLocalName, xAttrList, mxDrawPage );
+            }
             break;
     }
 
