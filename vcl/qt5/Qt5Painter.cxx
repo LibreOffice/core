@@ -25,11 +25,15 @@ Qt5Painter::Qt5Painter(Qt5Graphics& rGraphics, bool bPrepareBrush, sal_uInt8 nTr
     : m_rGraphics(rGraphics)
 {
     if (rGraphics.m_pQImage)
-        begin(rGraphics.m_pQImage);
+    {
+        if (!begin(rGraphics.m_pQImage))
+            std::abort();
+    }
     else
     {
         assert(rGraphics.m_pFrame);
-        begin(rGraphics.m_pFrame->GetQWidget());
+        if (!begin(rGraphics.m_pFrame->GetQWidget()))
+            std::abort();
     }
     if (!rGraphics.m_aClipPath.isEmpty())
         setClipPath(rGraphics.m_aClipPath);
