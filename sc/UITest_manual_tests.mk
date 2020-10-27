@@ -7,9 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UITest_UITest,calc_demo))
+$(eval $(call gb_UITest_UITest,manual_tests))
 
-$(eval $(call gb_UITest_add_modules,calc_demo,$(SRCDIR)/uitest,\
-	calc_tests/ \
+$(eval $(call gb_UITest_add_modules,manual_tests,$(SRCDIR)/sc/qa/uitest,\
+	manual_tests/ \
 ))
+
+$(eval $(call gb_UITest_set_defs,manual_tests, \
+    TDOC="$(SRCDIR)/sc/qa/uitest/data" \
+))
+
 # vim: set noet sw=4 ts=4:
