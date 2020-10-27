@@ -27,7 +27,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <queue>
 #include <stack>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 #include <unordered_map>
 #include <vector>
 #include <optional>
@@ -485,7 +485,7 @@ private:
     std::stack< tools::SvRef< DomainMapperTableManager > > m_aTableManagers;
     tools::SvRef<DomainMapperTableHandler> m_pTableHandler;
     // List of document lists overrides. They are applied only once on first occurrence in document
-    std::set<sal_Int32> m_aListOverrideApplied;
+    o3tl::sorted_vector<sal_Int32> m_aListOverrideApplied;
 
     //each context needs a stack of currently used attributes
     std::stack<PropertyMapPtr>  m_aPropertyStacks[NUMBER_OF_CONTEXTS];
