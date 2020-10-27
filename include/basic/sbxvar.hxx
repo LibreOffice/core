@@ -135,27 +135,27 @@ public:
 
     SbxValues * data() { return &aData; }
 
-    sal_Unicode GetChar() const;
-    sal_Int16   GetInteger() const;
-    sal_Int32   GetLong() const;
-    sal_Int64   GetInt64() const;
-    sal_uInt64  GetUInt64() const;
+    sal_Unicode GetChar() const { return Get(SbxCHAR).nChar; }
+    sal_Int16 GetInteger() const { return Get(SbxINTEGER).nInteger; }
+    sal_Int32 GetLong() const { return Get(SbxLONG).nLong; }
+    sal_Int64 GetInt64() const { return Get(SbxSALINT64).nInt64; }
+    sal_uInt64 GetUInt64() const { return Get(SbxSALUINT64).uInt64; }
 
-    sal_Int64   GetCurrency() const;
-    SbxDecimal* GetDecimal() const;
+    sal_Int64 GetCurrency() const { return Get(SbxCURRENCY).nInt64; }
+    SbxDecimal* GetDecimal() const { return Get(SbxDECIMAL).pDecimal; }
 
-    float       GetSingle() const;
-    double      GetDouble() const;
-    double      GetDate() const;
+    float GetSingle() const { return Get(SbxSINGLE).nSingle; }
+    double GetDouble() const { return Get(SbxDOUBLE).nDouble; }
+    double GetDate() const { return Get(SbxDATE).nDouble; }
 
-    bool    GetBool() const;
+    bool GetBool() const { return Get(SbxBOOL).nUShort != 0; }
     const OUString&   GetCoreString() const;
     OUString    GetOUString() const;
 
-    SbxBase*    GetObject() const;
-    sal_uInt8   GetByte() const;
-    sal_uInt16  GetUShort() const;
-    sal_uInt32  GetULong() const;
+    SbxBase* GetObject() const { return Get(SbxOBJECT).pObj; }
+    sal_uInt8 GetByte() const { return Get(SbxBYTE).nByte; }
+    sal_uInt16 GetUShort() const { return Get(SbxUSHORT).nUShort; }
+    sal_uInt32 GetULong() const { return Get(SbxULONG).nULong; }
 
     bool PutInteger( sal_Int16 );
     bool PutLong( sal_Int32 );
@@ -202,6 +202,9 @@ public:
     inline SbxValue& operator /=( const SbxValue& );
     inline SbxValue& operator +=( const SbxValue& );
     inline SbxValue& operator -=( const SbxValue& );
+
+private:
+    SbxValues Get(SbxDataType t) const;
 };
 
 inline bool SbxValue::operator<=( const SbxValue& r ) const
