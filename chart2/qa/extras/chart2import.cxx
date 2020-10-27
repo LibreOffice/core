@@ -170,6 +170,7 @@ public:
     void testTdf134111();
     void testTdf136752();
     void testTdf137505();
+    void testTdf137734();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -286,6 +287,7 @@ public:
     CPPUNIT_TEST(testTdf134111);
     CPPUNIT_TEST(testTdf136752);
     CPPUNIT_TEST(testTdf137505);
+    CPPUNIT_TEST(testTdf137734);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1540,7 +1542,7 @@ void Chart2ImportTest::testVaryColorDefaultValues2013XLSX()
     uno::Any aAny = xPropSet->getPropertyValue("VaryColorsByPoint");
     bool bVaryColor = false;
     CPPUNIT_ASSERT(aAny >>= bVaryColor);
-    CPPUNIT_ASSERT(bVaryColor);
+    CPPUNIT_ASSERT(!bVaryColor);
 }
 
 void Chart2ImportTest::testPlotVisOnlyDefaultValue2013XLSX()
@@ -2722,6 +2724,21 @@ void Chart2ImportTest::testTdf137505()
     // check the text size of custom shape, inside the chart.
     CPPUNIT_ASSERT(xProps->getPropertyValue("CharHeight") >>= nFontSize);
     CPPUNIT_ASSERT_EQUAL(float(12), nFontSize);
+}
+
+void Chart2ImportTest::testTdf137734()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf137734.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("VaryColorsByPoint");
+    bool bVaryColor = true;
+    CPPUNIT_ASSERT(aAny >>= bVaryColor);
+    CPPUNIT_ASSERT(!bVaryColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);

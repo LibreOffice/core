@@ -49,7 +49,7 @@ AxisModel::AxisModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
     mnTickMarkSkip( 0 ),
     mnTypeId( nTypeId ),
     mbAuto( false ),
-    mbDeleted( !bMSO2007Doc ),
+    mbDeleted( false ),
     mbNoMultiLevel( false )
 {
 }
