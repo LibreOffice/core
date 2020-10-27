@@ -994,13 +994,15 @@ class SfxStringItem;
 
 #define SID_TOGGLE_RESOLVED_NOTES                       ( SID_SVX_START + 1189 )
 
+#define SID_EDIT_HYPERLINK                              ( SID_SVX_START + 1192 )
 #define SID_COPY_HYPERLINK_LOCATION                     ( SID_SVX_START + 1193 )
+#define SID_REMOVE_HYPERLINK                            ( SID_SVX_START + 1194 )
 
 // #define SID_SHOW_SIDEBAR                                ( SID_SVX_START + 1190 ) -> sfxsids.hrc
 // #define SID_HIDE_SIDEBAR                                ( SID_SVX_START + 1191 ) -> sfxsids.hrc
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_HIDE_SIDEBAR + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_REMOVE_HYPERLINK + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END
