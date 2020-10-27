@@ -426,11 +426,14 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
             CGContextScaleCTM( xSrcContext, +1, -1 );
             aSrcPoint.y = (nScaledSourceY + nScaledSourceHeight) - (mnHeight * fScale);
         }
+        CGContextSetBlendMode(xSrcContext, kCGBlendModeCopy);
+
         CGContextDrawLayerAtPoint(xSrcContext, aSrcPoint, maLayer.get());
     }
 
     // draw at new destination
     const CGRect aTargetRect = CGRectMake(nScaledTargetX, nScaledTargetY, nScaledSourceWidth, nScaledSourceHeight);
+    CGContextSetBlendMode(xCopyContext, kCGBlendModeCopy);
     CGContextDrawLayerInRect(xCopyContext, aTargetRect, sSourceLayerHolder.get());
 
     maContextHolder.restoreState();
