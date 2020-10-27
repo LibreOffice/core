@@ -21,6 +21,8 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtcntnt.hxx>
@@ -40,6 +42,7 @@
 #include <unoframe.hxx>
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdotext.hxx>
 #include <dcontact.hxx>
 
 #include <config_features.h>
@@ -4503,8 +4506,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf137185)
     auto xTextFrame = SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Align me!"), xTextFrame->getText()->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString(), xTxt->getText()->getString());
-    // Before the patch it failled, because the text appeared 2 times on each other.
+    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+    CPPUNIT_ASSERT(pTextObj);
+    auto aOutStr = pTextObj->GetOutlinerParaObject()->GetTextObject();
+
+    CPPUNIT_ASSERT(aOutStr.GetText(0).isEmpty());
+    // Before the patch it failed, because the text appeared 2 times on each other.
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
