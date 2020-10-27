@@ -1010,6 +1010,11 @@ void FrameSelector::SetColorToSelection( const Color& rColor )
         mxImpl->SetBorderState( **aIt, FrameBorderState::Show );
 }
 
+SvxBorderLineStyle FrameSelector::getCurrentStyleLineStyle() const
+{
+    return mxImpl->maCurrStyle.GetBorderLineStyle();
+}
+
 // accessibility
 Reference< XAccessible > FrameSelector::CreateAccessible()
 {
