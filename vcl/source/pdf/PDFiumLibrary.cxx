@@ -498,6 +498,11 @@ PDFiumBitmap::~PDFiumBitmap()
     }
 }
 
+void PDFiumBitmap::fillRect(int left, int top, int width, int height, sal_uInt32 nColor)
+{
+    FPDFBitmap_FillRect(mpBitmap, left, top, width, height, nColor);
+}
+
 PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
     : mpAnnotation(pAnnotation)
 {

@@ -74,6 +74,7 @@ public:
     PDFiumBitmap(FPDF_BITMAP pBitmap);
     ~PDFiumBitmap();
     FPDF_BITMAP getPointer() { return mpBitmap; }
+    void fillRect(int left, int top, int width, int height, sal_uInt32 nColor);
 };
 
 class VCL_DLLPUBLIC PDFiumAnnotation final
