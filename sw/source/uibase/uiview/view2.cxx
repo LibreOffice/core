@@ -173,7 +173,7 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhi
     rWrtSh.ExtendedSelectAll();
 
     // set language attribute to default for all text
-    std::set<sal_uInt16> aAttribs;
+    o3tl::sorted_vector<sal_uInt16> aAttribs;
     aAttribs.insert( nWhichId );
     rWrtSh.ResetAttr( aAttribs );
 

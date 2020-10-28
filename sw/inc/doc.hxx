@@ -697,7 +697,7 @@ public:
      control, if the side effect "send data changed events" is triggered or not. */
     void ResetAttrs( const SwPaM &rRg,
                      bool bTextAttr = true,
-                     const std::set<sal_uInt16> &rAttrs = std::set<sal_uInt16>(),
+                     const o3tl::sorted_vector<sal_uInt16> &rAttrs = o3tl::sorted_vector<sal_uInt16>(),
                      const bool bSendDataChangedEvents = true,
                      SwRootFrame const* pLayout = nullptr);
     void RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark = false,

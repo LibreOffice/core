@@ -1016,7 +1016,7 @@ void resetCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& r
         break;
         case FN_UNO_CHARFMT_SEQUENCE:
         {
-            std::set<sal_uInt16> aWhichIds;
+            o3tl::sorted_vector<sal_uInt16> aWhichIds;
             aWhichIds.insert( RES_TXTATR_CHARFMT);
             rDoc.ResetAttrs(rPam, true, aWhichIds);
         }
