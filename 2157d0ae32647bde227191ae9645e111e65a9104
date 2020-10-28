@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2cfcb918_637355f1",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-28T13:51:08Z",
+      "side": 1,
+      "message": "line shapes",
+      "range": {
+        "startLine": 682,
+        "startChar": 42,
+        "endLine": 682,
+        "endChar": 53
+      },
+      "revId": "2157d0ae32647bde227191ae9645e111e65a9104",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd2688a3_a983a366",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1316,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-28T13:51:08Z",
+      "side": 1,
+      "message": "correctly",
+      "range": {
+        "startLine": 1316,
+        "startChar": 71,
+        "endLine": 1316,
+        "endChar": 79
+      },
+      "revId": "2157d0ae32647bde227191ae9645e111e65a9104",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4e8f75d_d05e1961",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1316,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-28T13:51:08Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1316,
+        "startChar": 11,
+        "endLine": 1316,
+        "endChar": 12
+      },
+      "revId": "2157d0ae32647bde227191ae9645e111e65a9104",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
