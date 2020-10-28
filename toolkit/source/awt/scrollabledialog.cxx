@@ -101,12 +101,9 @@ void ScrollableDialog::lcl_Scroll( long nX, long nY )
     {
         vcl::Window* pChild = GetChild( index );
         if ( pChild && pChild != maVScrollBar.get() && pChild != maHScrollBar.get() )
-        {
-            Point aPos = pChild->GetPosPixel();
-            aPos += Point( nXScroll, nYScroll );
-            pChild->SetPosPixel( aPos );
-        }
+            pChild->Scroll(nXScroll, nYScroll);
     }
+    Invalidate(InvalidateFlags::Children | InvalidateFlags::Update);
 }
 
 IMPL_LINK( ScrollableDialog, ScrollBarHdl, ScrollBar*, pSB, void )
