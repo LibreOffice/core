@@ -181,47 +181,59 @@ sal_Int32 firebird::ColumnTypeInfo::getSdbcType() const
 
 OUString firebird::ColumnTypeInfo::getColumnTypeName() const
 {
-    short aType = m_aType & ~1; // Remove last bit -- it is used to denote whether column
-                // can store Null, not needed for type determination
-
-    switch (aType)
+    sal_Int32 nDataType = this->getSdbcType();
+    switch (nDataType)
     {
-     case SQL_TEXT:
-         return "SQL_TEXT";
-     case SQL_VARYING:
-         return "SQL_VARYING";
-     case SQL_SHORT:
-         return "SQL_SHORT";
-     case SQL_LONG:
-         return "SQL_LONG";
-     case SQL_FLOAT:
-         return "SQL_FLOAT";
-     case SQL_DOUBLE:
-         return "SQL_DOUBLE";
-     case SQL_D_FLOAT:
-         return "SQL_D_FLOAT";
-     case SQL_TIMESTAMP:
-         return "SQL_TIMESTAMP";
-     case SQL_BLOB:
-         return "SQL_BLOB";
-     case SQL_ARRAY:
-         return "SQL_ARRAY";
-     case SQL_TYPE_TIME:
-         return "SQL_TYPE_TIME";
-     case SQL_TYPE_DATE:
-         return "SQL_TYPE_DATE";
-     case SQL_INT64:
-         return "SQL_INT64";
-     case SQL_NULL:
-         return "SQL_NULL";
-     case SQL_QUAD:
-         return "SQL_QUAD";
-     case SQL_BOOLEAN:
-         return "SQL_BOOLEAN";
-     default:
-         assert(false); // Should never happen
-         return OUString();
-    }
+        case DataType::BIT:
+            return "BIT";
+        case DataType::TINYINT:
+            return "TINYINT";
+        case DataType::SMALLINT:
+            return "SMALLINT";
+        case DataType::INTEGER:
+            return "INTEGER";
+        case DataType::BIGINT:
+            return "BIGINT";
+        case DataType::FLOAT:
+            return "FLOAT";
+        case DataType::REAL:
+            return "REAL";
+        case DataType::DOUBLE:
+            return "DOUBLE";
+        case DataType::NUMERIC:
+            return "NUMERIC";
+        case DataType::DECIMAL:
+            return "DECIMAL";
+        case DataType::CHAR:
+            return "CHAR";
+        case DataType::VARCHAR:
+            return "VARCHAR";
+        case DataType::LONGVARCHAR:
+            return "LONGVARCHAR";
+        case DataType::DATE:
+            return "DATE";
+        case DataType::TIME:
+            return "TIME";
+        case DataType::TIMESTAMP:
+            return "TIMESTAMP";
+        case DataType::BINARY:
+            return "BINARY";
+        case DataType::LONGVARBINARY:
+            return "LONGVARBINARY";
+        case DataType::ARRAY:
+            return "ARRAY";
+        case DataType::BLOB:
+            return "BLOB";
+        case DataType::CLOB:
+            return "CLOB";
+        case DataType::BOOLEAN:
+            return "BOOLEAN";
+        case DataType::SQLNULL:
+            return "NULL";
+        default:
+            assert(false); // Should never happen
+            return OUString();
+     }
 }
 
 short firebird::getFBTypeFromBlrType(short blrType)
