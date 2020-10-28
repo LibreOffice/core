@@ -987,7 +987,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
         aPalette[1] = BitmapColor(aColorPix);
 
         Bitmap aBitmap(Size(8, 8), 1, &aPalette);
-        BitmapWriteAccess* pContent(aBitmap.AcquireWriteAccess());
+        BitmapScopedWriteAccess pContent(aBitmap);
 
         for(sal_uInt16 a(0); a < 8; a++)
         {
