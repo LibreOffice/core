@@ -21,6 +21,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FONTTABLE_HXX
 
 #include <memory>
+#include <vector>
 #include "LoggedResources.hxx"
 #include <com/sun/star/io/XInputStream.hpp>
 
@@ -52,6 +53,10 @@ class FontTable : public LoggedProperties, public LoggedTable
     sal_uInt32          size();
     FontEntry::Pointer_t  getFontEntry(sal_uInt32 nIndex);
 
+    bool addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
+                         const OUString& fontName, const char* extra,
+                         std::vector<unsigned char> key);
+
  private:
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) override;
@@ -77,18 +82,18 @@ class FontTable : public LoggedProperties, public LoggedTable
                                ::writerfilter::Reference<Stream>::Pointer_t ref) override;
     virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
     virtual void lcl_endShape( ) override;
-
 };
 typedef tools::SvRef< FontTable >          FontTablePtr;
 
 class EmbeddedFontHandler : public LoggedProperties
 {
 public:
-    EmbeddedFontHandler( const OUString& fontName, const char* style );
+    EmbeddedFontHandler(FontTable& rFontTable, const OUString& fontName, const char* style);
     virtual ~EmbeddedFontHandler() override;
 private:
     virtual void lcl_attribute( Id name, Value& val ) override;
     virtual void lcl_sprm( Sprm& rSprm ) override;
+    FontTable& fontTable;
     OUString fontName;
     const char* const style;
     OUString fontKey;
