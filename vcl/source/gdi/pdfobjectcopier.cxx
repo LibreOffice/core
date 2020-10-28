@@ -275,13 +275,18 @@ void PDFObjectCopier::copyPageResources(filter::PDFObjectElement* pPage, OString
 {
     // Maps from source object id (PDF image) to target object id (export result).
     std::map<sal_Int32, sal_Int32> aCopiedResources;
+    copyPageResources(pPage, rLine, aCopiedResources);
+}
 
+void PDFObjectCopier::copyPageResources(filter::PDFObjectElement* pPage, OStringBuffer& rLine,
+                                        std::map<sal_Int32, sal_Int32>& rCopiedResources)
+{
     rLine.append(" /Resources <<");
     static const std::initializer_list<OString> aKeys
         = { "ColorSpace", "ExtGState", "Font", "XObject", "Shading" };
     for (const auto& rKey : aKeys)
     {
-        rLine.append(copyExternalResources(*pPage, rKey, aCopiedResources));
+        rLine.append(copyExternalResources(*pPage, rKey, rCopiedResources));
     }
     rLine.append(">>");
 }

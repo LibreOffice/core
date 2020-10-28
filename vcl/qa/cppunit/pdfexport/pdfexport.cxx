@@ -2131,7 +2131,7 @@ void PdfExportTest::testMultiPagePDF()
     {   // embedded PDF page 2
         vcl::filter::PDFObjectElement* pXObject2 = pXObjects->LookupObject(rIDs[1]);
         CPPUNIT_ASSERT(pXObject2);
-        CPPUNIT_ASSERT_EQUAL(OString("Im34"), rIDs[1]);
+        CPPUNIT_ASSERT_EQUAL(OString("Im24"), rIDs[1]);
 
         auto pSubtype2 = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject2->Lookup("Subtype"));
         CPPUNIT_ASSERT(pSubtype2);
