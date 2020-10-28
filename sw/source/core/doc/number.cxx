@@ -278,24 +278,26 @@ void SwNumFormat::SetCharFormat( SwCharFormat* pChFormat)
         EndListeningAll();
 }
 
-void SwNumFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwNumFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
     // Look for the NumRules object in the Doc where this NumFormat is set.
     // The format does not need to exist!
     const SwCharFormat* pFormat = nullptr;
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    switch( nWhich )
+    switch(pLegacy->GetWhich())
     {
-    case RES_ATTRSET_CHG:
-    case RES_FMT_CHG:
-        pFormat = GetCharFormat();
-        break;
+        case RES_ATTRSET_CHG:
+        case RES_FMT_CHG:
+            pFormat = GetCharFormat();
+            break;
     }
 
-    if( pFormat && !pFormat->GetDoc()->IsInDtor() )
-        UpdateNumNodes( *const_cast<SwDoc*>(pFormat->GetDoc()) );
+    if(pFormat && !pFormat->GetDoc()->IsInDtor())
+        UpdateNumNodes(*const_cast<SwDoc*>(pFormat->GetDoc()));
     else
-        CheckRegistration( pOld );
+        CheckRegistration(pLegacy->m_pOld);
 }
 
 OUString SwNumFormat::GetCharFormatName() const
