@@ -742,23 +742,29 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnUseSkiaToggled, weld::ToggleButton&, void)
     UpdateSkiaStatus();
 }
 
+void OfaViewTabPage::HideSkiaWidgets()
+{
+    m_xUseSkia->hide();
+    m_xForceSkiaRaster->hide();
+    m_xSkiaStatusEnabled->hide();
+    m_xSkiaStatusDisabled->hide();
+}
+
 void OfaViewTabPage::UpdateSkiaStatus()
 {
-    bool skiaHidden = true;
 #if HAVE_FEATURE_SKIA
+    bool skiaHidden = true;
+
     // For now Skia is used mainly on Windows, enable the controls there.
     if (Application::GetToolkitName() == "win")
         skiaHidden = false;
     // It can also be used on Linux, but only with the rarely used 'gen' backend.
     if (Application::GetToolkitName() == "x11")
         skiaHidden = false;
-#endif
+
     if (skiaHidden)
     {
-        m_xUseSkia->hide();
-        m_xForceSkiaRaster->hide();
-        m_xSkiaStatusEnabled->hide();
-        m_xSkiaStatusDisabled->hide();
+        HideSkiaWidgets();
         return;
     }
 
@@ -770,6 +776,9 @@ void OfaViewTabPage::UpdateSkiaStatus()
     // FIXME: should really add code to show a 'lock' icon here.
     m_xUseSkia->set_sensitive(!officecfg::Office::Common::VCL::UseSkia::isReadOnly());
     m_xForceSkiaRaster->set_sensitive(m_xUseSkia->get_active() && !officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly());
+#else
+    HideSkiaWidgets();
+#endif
 }
 
 std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )

@@ -124,6 +124,7 @@ private:
     DECL_LINK(OnUseSkiaToggled, weld::ToggleButton&, void);
     DECL_STATIC_LINK(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void);
     void UpdateSkiaStatus();
+    void HideSkiaWidgets();
 
 public:
     OfaViewTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
