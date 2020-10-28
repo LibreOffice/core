@@ -33,6 +33,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/fileformat.h>
+#include <comphelper/fileurl.hxx>
 
 static void swapNibbles(unsigned char &c)
 {
@@ -1406,6 +1407,25 @@ bool checkSeek(SvStream &rSt, sal_uInt64 nOffset)
 {
     const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
     return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
+}
+
+namespace tools
+{
+bool isEmptyFileUrl(const OUString& rUrl)
+{
+    if (!comphelper::isFileUrl(rUrl))
+    {
+        return false;
+    }
+
+    SvFileStream aStream(rUrl, StreamMode::READ);
+    if (!aStream.IsOpen())
+    {
+        return false;
+    }
+
+    return aStream.remainingSize() == 0;
+}
 }
 
 //STREAM_SEEK_TO_END in some of the Seek backends is special cased to be
