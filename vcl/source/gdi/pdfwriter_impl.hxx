@@ -53,6 +53,7 @@
 
 #include <outdata.hxx>
 #include <vcl/filter/pdfobjectcontainer.hxx>
+#include <pdf/ExternalPDFStreams.hxx>
 #include "pdffontcache.hxx"
 #include "pdfbuildin_fonts.hxx"
 
@@ -190,19 +191,25 @@ struct ReferenceXObjectEmit
     /// Size of the bitmap replacement, in pixels.
     Size m_aPixelSize;
     /// PDF data from the graphic object, if not writing a reference XObject.
-    std::vector<sal_Int8> m_aPDFData;
-    sal_Int32 m_nPDFPageIndex;
+    sal_Int32 m_nExternalPDFDataIndex;
+    sal_Int32 m_nExternalPDFPageIndex;
 
     ReferenceXObjectEmit()
-        : m_nFormObject(0),
-          m_nEmbeddedObject(0),
-          m_nBitmapObject(0),
-          m_nPDFPageIndex(-1)
+        : m_nFormObject(0)
+        , m_nEmbeddedObject(0)
+        , m_nBitmapObject(0)
+        , m_nExternalPDFDataIndex(-1)
+        , m_nExternalPDFPageIndex(-1)
     {
     }
 
     /// Returns the ID one should use when referring to this bitmap.
     sal_Int32 getObject() const;
+
+    bool hasExternalPDFData() const
+    {
+        return m_nExternalPDFDataIndex >= 0;
+    }
 };
 
 struct BitmapEmit
@@ -739,6 +746,8 @@ private:
     PDFWriter::PDFWriterContext         m_aContext;
     osl::File                           m_aFile;
     bool                                m_bOpen;
+
+    ExternalPDFStreams m_aExternalPDFStreams;
 
     /* output redirection; e.g. to accumulate content streams for
        XObjects
