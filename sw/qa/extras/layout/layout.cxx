@@ -35,6 +35,12 @@
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <textboxhelper.hxx>
+#include <unoframe.hxx>
+#include <drawdoc.hxx>
+#include <svx/svdpage.hxx>
+#include <dcontact.hxx>
 
 #include <config_features.h>
 
@@ -4462,6 +4468,43 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf135035)
     CPPUNIT_ASSERT_LESS(nParentWidth / 2, nFly2Width);
     CPPUNIT_ASSERT_LESS(nParentWidth / 2, nFly1Width);
     CPPUNIT_ASSERT_GREATER(nParentWidth, nFly3Width);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf137185)
+{
+    // First load the sample bugdoc
+    load(DATA_DIRECTORY, "tdf137185.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    // Get the doc shell
+    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+
+    // Get the DrawObject from page
+    auto pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    CPPUNIT_ASSERT(pModel);
+    auto pPage = pModel->GetPage(0);
+    CPPUNIT_ASSERT(pModel);
+    auto pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObj);
+
+    // Get the format of the draw object
+    auto pShape = FindFrameFormat(pObj);
+    CPPUNIT_ASSERT(pShape);
+
+    // Check the text of the shape
+    uno::Reference<text::XText> xTxt(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Align me!"), xTxt->getText()->getString());
+
+    // Add a textbox to the shape
+    SwTextBoxHelper::create(pShape, true);
+
+    // Check if the text moved from the shape to the frame
+    auto pFormat = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
+    auto xTextFrame = SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Align me!"), xTextFrame->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(), xTxt->getText()->getString());
+    // Before the patch it failled, because the text appeared 2 times on each other.
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
