@@ -20,6 +20,8 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <memory>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/docfilt.hxx>
 
 #define WRITER_TEXT_FILTER "Text"
 #define CALC_TEXT_FILTER   "Text - txt - csv (StarCalc)"
@@ -128,6 +130,34 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
     return GetHTMLToken( OStringToOUString( aToken.toAsciiLowerCase(), RTL_TEXTENCODING_ASCII_US ) ) != HtmlTokenId::NONE;
 }
 
+/**
+ * Given an (empty) file URL in rMediaDesc and rExt, looks up the best filter type for it and
+ * writes the type name to rType, the filter name to rMediaDesc.
+ */
+bool HandleEmptyFileUrlByExtension(MediaDescriptor& rMediaDesc, const OUString& rExt,
+                                   OUString& rType)
+{
+    OUString aURL = rMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString());
+    if (!tools::isEmptyFileUrl(aURL))
+    {
+        return false;
+    }
+
+    if (rExt.isEmpty())
+    {
+        return false;
+    }
+
+    std::shared_ptr<const SfxFilter> pFilter(SfxFilterMatcher().GetFilter4Extension(rExt));
+    if (!pFilter)
+    {
+        return false;
+    }
+
+    rMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= pFilter->GetFilterName();
+    rType = pFilter->GetTypeName();
+    return true;
+}
 }
 
 PlainTextFilterDetect::PlainTextFilterDetect() {}
@@ -193,7 +223,7 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_TEXT_FILTER);
         else if (aExt == "csv" || aExt == "tsv" || aExt == "tab" || aExt == "xls" || aName.endsWith(".csv.gz"))
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_TEXT_FILTER);
-        else
+        else if (!HandleEmptyFileUrlByExtension(aMediaDesc, aExt, aType))
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_TEXT_FILTER);
     }
 
