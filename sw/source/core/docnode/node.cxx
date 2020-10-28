@@ -1565,11 +1565,7 @@ bool SwContentNode::SetAttr(const SfxPoolItem& rAttr )
                   aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
         bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rAttr, &aOld, &aNew );
         if( bRet )
-        {
-            SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
-            SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            ModifyNotification( &aChgOld, &aChgNew ); // Send all changed ones
-        }
+            sw::ClientNotifyAttrChg(*this, *GetpSwAttrSet(), aOld, aNew);
     }
     return bRet;
 }
@@ -1640,12 +1636,7 @@ bool SwContentNode::SetAttr( const SfxItemSet& rSet )
                   aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
         bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rSet, &aOld, &aNew );
         if( bRet )
-        {
-            // Some special treatment for Attributes
-            SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
-            SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            ModifyNotification( &aChgOld, &aChgNew ); // Send out all changed ones
-        }
+            sw::ClientNotifyAttrChg(*this, *GetpSwAttrSet(), aOld, aNew);
     }
     return bRet;
 }
@@ -1690,9 +1681,7 @@ bool SwContentNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 
     if( bRet )
     {
-        SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
-        SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-        ModifyNotification( &aChgOld, &aChgNew ); // All changed ones are sent
+        sw::ClientNotifyAttrChg(*this, *GetpSwAttrSet(), aOld, aNew);
 
         if( !GetpSwAttrSet()->Count() ) // Empty?, delete it
             mpAttrSet.reset();
@@ -1727,11 +1716,7 @@ bool SwContentNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
                 ++nDel;
 
         if( nDel )
-        {
-            SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
-            SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            ModifyNotification( &aChgOld, &aChgNew ); // All changed ones are sent
-        }
+            sw::ClientNotifyAttrChg(*this, *GetpSwAttrSet(), aOld, aNew);
     }
     if( !GetpSwAttrSet()->Count() ) // Empty?, delete it
         mpAttrSet.reset();
@@ -1766,10 +1751,7 @@ sal_uInt16 SwContentNode::ResetAllAttr()
 
     if( bRet )
     {
-        SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
-        SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-        ModifyNotification( &aChgOld, &aChgNew ); // All changed ones are sent
-
+        sw::ClientNotifyAttrChg(*this, *GetpSwAttrSet(), aOld, aNew);
         if( !GetpSwAttrSet()->Count() ) // Empty? Delete
             mpAttrSet.reset();
     }

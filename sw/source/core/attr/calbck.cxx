@@ -378,4 +378,12 @@ void sw::BroadcastingModify::CallSwClientNotify(const SfxHint& rHint) const
     SwModify::CallSwClientNotify(rHint);
     const_cast<BroadcastingModify*>(this)->GetNotifier().Broadcast(rHint);
 }
+
+void sw::ClientNotifyAttrChg(SwModify& rModify, const SwAttrSet& aSet, SwAttrSet& aOld, SwAttrSet& aNew)
+{
+    const SwAttrSetChg aChgOld(aSet, aOld);
+    const SwAttrSetChg aChgNew(aSet, aNew);
+    const sw::LegacyModifyHint aHint(&aChgOld, &aChgNew);
+    rModify.SwClientNotify(rModify, aHint);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
