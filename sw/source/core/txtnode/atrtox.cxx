@@ -79,7 +79,7 @@ void SwTextTOXMark::CopyTOXMark( SwDoc& rDoc )
     // if the requested tox type does not exist, create it
     if(!pType)
     {
-        rDoc.InsertTOXType( SwTOXType( eType, rNm ) );
+        rDoc.InsertTOXType( SwTOXType( rDoc, eType, rNm ) );
         pType = rDoc.GetTOXType(eType, 0);
     }
 

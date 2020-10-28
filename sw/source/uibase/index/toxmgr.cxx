@@ -227,7 +227,7 @@ sal_uInt16 SwTOXMgr::GetUserTypeID(const OUString& rStr)
         if(pTmp && pTmp->GetTypeName() == rStr)
             return i;
     }
-    SwTOXType aUserType(TOX_USER, rStr);
+    SwTOXType aUserType(*pSh->GetDoc(), TOX_USER, rStr);
     pSh->InsertTOXType(aUserType);
     return nSize;
 }
