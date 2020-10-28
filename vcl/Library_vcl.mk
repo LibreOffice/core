@@ -319,6 +319,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/CommonSalLayout \
     vcl/source/gdi/TypeSerializer \
     vcl/source/pdf/PDFiumLibrary \
+    vcl/source/pdf/ExternalPDFStreams \
     vcl/source/graphic/GraphicID \
     vcl/source/graphic/GraphicLoader \
     vcl/source/graphic/GraphicObject \
