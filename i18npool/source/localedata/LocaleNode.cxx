@@ -23,6 +23,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <o3tl/sorted_vector.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
@@ -37,8 +38,8 @@
 // NOTE: MUST match the Locale versionDTD attribute defined in data/locale.dtd
 #define LOCALE_VERSION_DTD "2.0.3"
 
-typedef ::std::set< OUString > NameSet;
-typedef ::std::set< sal_Int16 > ValueSet;
+typedef ::o3tl::sorted_vector< OUString > NameSet;
+typedef ::o3tl::sorted_vector< sal_Int16 > ValueSet;
 
 namespace cssi = ::com::sun::star::i18n;
 
@@ -827,7 +828,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     if (bShowNextFreeFormatIndex)
     {
         sal_Int16 nNext = i18npool::nFirstFreeFormatIndex;
-        std::set<sal_Int16>::const_iterator it( aFormatIndexSet.find( nNext));
+        auto it = aFormatIndexSet.find( nNext);
         if (it != aFormatIndexSet.end())
         {
             // nFirstFreeFormatIndex already used, find next free including gaps.
