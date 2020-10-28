@@ -4377,7 +4377,7 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
     return true;
 }
 
-Selection GtkSalFrame::CalcDeleteSurroundingSelection(const OUString& rSurroundingText, int nCursorIndex, int nOffset, int nChars)
+Selection GtkSalFrame::CalcDeleteSurroundingSelection(const OUString& rSurroundingText, sal_Int32 nCursorIndex, int nOffset, int nChars)
 {
     Selection aInvalid(SAL_MAX_UINT32, SAL_MAX_UINT32);
 
