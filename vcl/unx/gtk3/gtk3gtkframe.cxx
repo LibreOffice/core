@@ -2567,7 +2567,11 @@ void GtkSalFrame::GrabFocus()
     if (!gtk_widget_get_can_focus(pGrabWidget) && m_nSetFocusSignalId)
         gtk_widget_set_can_focus(pGrabWidget, true);
     if (!gtk_widget_has_focus(pGrabWidget))
+    {
         gtk_widget_grab_focus(pGrabWidget);
+        if (m_pIMHandler)
+            m_pIMHandler->focusChanged(true);
+    }
 }
 
 gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer frame)
