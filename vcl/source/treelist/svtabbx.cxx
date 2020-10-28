@@ -32,12 +32,61 @@
 #include <strings.hrc>
 #include <svdata.hxx>
 #include <memory>
+#include <tools/json_writer.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 constexpr SvLBoxTabFlags MYTABMASK =
     SvLBoxTabFlags::ADJUST_RIGHT | SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::FORCE;
+
+static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
+                                     SvTreeListEntry* pEntry,
+                                     SvTabListBox* pTabListBox,
+                                     bool bCheckButtons)
+{
+    while (pEntry)
+    {
+        auto aNode = rJsonWriter.startStruct();
+
+        const SvLBoxItem* pIt = pEntry->GetFirstItem(SvLBoxItemType::String);
+        if (pIt)
+            rJsonWriter.put("text", static_cast<const SvLBoxString*>(pIt)->GetText());
+
+        if (bCheckButtons)
+        {
+            SvButtonState eCheckState = pTabListBox->GetCheckButtonState(pEntry);
+            if (eCheckState == SvButtonState::Unchecked)
+                rJsonWriter.put("state", "false");
+            else if (eCheckState == SvButtonState::Checked)
+                rJsonWriter.put("state", "true");
+        }
+
+        if (pTabListBox->IsSelected(pEntry))
+            rJsonWriter.put("selected", "true");
+
+        rJsonWriter.put("row", OString::number(pTabListBox->GetModel()->GetAbsPos(pEntry)).getStr());
+
+        SvTreeListEntry* pChild = pTabListBox->FirstChild(pEntry);
+        if (pChild)
+        {
+            auto childrenNode = rJsonWriter.startArray("children");
+            lcl_DumpEntryAndSiblings(rJsonWriter, pChild, pTabListBox, bCheckButtons);
+        }
+
+        pEntry = pEntry->NextSibling();
+    }
+}
+
+void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    SvTreeListBox::DumpAsPropertyTree(rJsonWriter);
+
+    bool bCheckButtons = static_cast<int>(nTreeFlags & SvTreeFlags::CHKBTN);
+
+    auto entriesNode = rJsonWriter.startArray("entries");
+    lcl_DumpEntryAndSiblings(rJsonWriter, First(), this, bCheckButtons);
+}
 
 // SvTreeListBox callback
 
