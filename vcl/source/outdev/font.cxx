@@ -560,16 +560,7 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
 
 void OutputDevice::ImplRefreshAllFontData(bool bNewFontLists)
 {
-    auto svdata = ImplGetSVData();
-    DBG_TESTSOLARMUTEX();
-    if (!svdata->mnFontUpdatesLockCount)
-        ImplUpdateFontDataForAllFrames(&OutputDevice::ImplRefreshFontData, bNewFontLists);
-    else
-    {
-        svdata->mbFontUpdatesPending = true;
-        if (bNewFontLists)
-            svdata->mbFontUpdatesNewLists = true;
-    }
+    ImplUpdateFontDataForAllFrames( &OutputDevice::ImplRefreshFontData, bNewFontLists );
 }
 
 void OutputDevice::ImplUpdateAllFontData(bool bNewFontLists)
@@ -612,27 +603,6 @@ void OutputDevice::ImplUpdateFontDataForAllFrames( const FontUpdateHandler_t pHd
     {
         ( pPrinter->*pHdl )( bNewFontLists );
         pPrinter = pPrinter->mpNext;
-    }
-}
-
-void OutputDevice::LockFontUpdates(bool bLock)
-{
-    auto svdata = ImplGetSVData();
-    DBG_TESTSOLARMUTEX();
-    if (bLock)
-    {
-        ++svdata->mnFontUpdatesLockCount;
-    }
-    else if (svdata->mnFontUpdatesLockCount > 0)
-    {
-        --svdata->mnFontUpdatesLockCount;
-        if (!svdata->mnFontUpdatesLockCount && svdata->mbFontUpdatesPending)
-        {
-            ImplRefreshAllFontData(svdata->mbFontUpdatesNewLists);
-
-            svdata->mbFontUpdatesPending = false;
-            svdata->mbFontUpdatesNewLists = false;
-        }
     }
 }
 
