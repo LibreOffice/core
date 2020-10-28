@@ -68,8 +68,6 @@ $(eval $(call gb_Library_use_externals,cui,\
 	boost_headers \
 	$(call gb_Helper_optional,OPENCL,\
 		clew) \
-    $(call gb_Helper_optional,DESKTOP,\
-		curl) \
     icuuc \
     icu_headers \
     libxml2 \
