@@ -219,6 +219,7 @@ public:
 
     const SwHistory* GetHistory() const { return m_pHistory.get(); }
           SwHistory* GetHistory()       { return m_pHistory.get(); }
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 // This class saves the PaM as sal_uInt16's and is able to restore it

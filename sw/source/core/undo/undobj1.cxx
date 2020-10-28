@@ -76,6 +76,7 @@ void SwUndoFlyBase::dumpAsXml(xmlTextWriterPtr pWriter) const
                                 BAD_CAST(OString::boolean(m_bDelFormat).getStr()));
 
     SwUndo::dumpAsXml(pWriter);
+    SwUndoSaveSection::dumpAsXml(pWriter);
 
     if (m_pFrameFormat)
     {

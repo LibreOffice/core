@@ -1308,6 +1308,11 @@ void SwUndoSaveSection::RestoreSection(
     }
 }
 
+void SwUndoSaveSection::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    SwUndoSaveContent::dumpAsXml(pWriter);
+}
+
 // save and set the RedlineData
 SwRedlineSaveData::SwRedlineSaveData(
     SwComparePosition eCmpPos,
