@@ -191,8 +191,8 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
     Graphic         aRet;
     tools::Long            nTileWidth = static_cast<tools::Long>(mxMtrWidth->get_value(FieldUnit::PIXEL));
     tools::Long            nTileHeight = static_cast<tools::Long>(mxMtrHeight->get_value(FieldUnit::PIXEL));
-    const Size      aSize( std::max( FRound( nTileWidth * fScaleX ), 1L ),
-                           std::max( FRound( nTileHeight * fScaleY ), 1L ) );
+    const Size      aSize( std::max<tools::Long>( FRound( nTileWidth * fScaleX ), 1 ),
+                           std::max<tools::Long>( FRound( nTileHeight * fScaleY ), 1 ) );
 
     if( rGraphic.IsAnimated() )
     {

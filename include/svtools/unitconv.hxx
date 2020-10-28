@@ -30,7 +30,7 @@ namespace weld { class MetricSpinButton; }
 
 // typedef ---------------------------------------------------------------
 
-typedef long (*FUNC_CONVERT)(tools::Long);
+typedef tools::Long (*FUNC_CONVERT)(tools::Long);
 
 // Functions -------------------------------------------------------------
 

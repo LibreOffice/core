@@ -22,6 +22,7 @@
 #include <stringutil.hxx>
 #include <dbdocfun.hxx>
 #include <generalfunction.hxx>
+#include <test/cppunitasserthelper.hxx>
 
 #include <formula/errorcodes.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
