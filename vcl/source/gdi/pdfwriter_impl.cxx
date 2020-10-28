@@ -8358,7 +8358,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
 
 void PDFWriterImpl::writeJPG( JPGEmit& rObject )
 {
-    if (!rObject.m_aReferenceXObject.m_aPDFData.empty() && !m_aContext.UseReferenceXObject)
+    if (rObject.m_aReferenceXObject.hasExternalPDFData() && !m_aContext.UseReferenceXObject)
     {
         writeReferenceXObject(rObject.m_aReferenceXObject);
         return;
@@ -8457,23 +8457,19 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
     {
         // Parse the PDF data, we need that to write the PDF dictionary of our
         // object.
-        SvMemoryStream aPDFStream;
-        aPDFStream.WriteBytes(rEmit.m_aPDFData.data(), rEmit.m_aPDFData.size());
-        aPDFStream.Seek(0);
-        filter::PDFDocument aPDFDocument;
-        if (!aPDFDocument.Read(aPDFStream))
-        {
-            SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: reading the PDF document failed");
+        if (rEmit.m_nExternalPDFDataIndex < 0)
             return;
-        }
-        std::vector<filter::PDFObjectElement*> aPages = aPDFDocument.GetPages();
+        auto & rExternalPDFStream = m_aExternalPDFStreams.get(rEmit.m_nExternalPDFDataIndex);
+        auto & rPDFDocument = rExternalPDFStream.getPDFDocument();
+
+        std::vector<filter::PDFObjectElement*> aPages = rPDFDocument.GetPages();
         if (aPages.empty())
         {
             SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: no pages");
             return;
         }
 
-        size_t nPageIndex = rEmit.m_nPDFPageIndex >= 0 ? rEmit.m_nPDFPageIndex : 0;
+        size_t nPageIndex = rEmit.m_nExternalPDFPageIndex >= 0 ? rEmit.m_nExternalPDFPageIndex : 0;
 
         filter::PDFObjectElement* pPage = aPages[nPageIndex];
         if (!pPage)
@@ -8545,7 +8541,9 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         }
 
         PDFObjectCopier aCopier(*this);
-        aCopier.copyPageResources(pPage, aLine);
+        auto & rResources = rExternalPDFStream.getCopiedResources();
+        aCopier.copyPageResources(pPage, aLine, rResources);
+
         aLine.append(" /BBox [ 0 0 ");
         aLine.append(nWidth);
         aLine.append(" ");
@@ -8687,7 +8685,7 @@ namespace
 
 bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 {
-    if (!rObject.m_aReferenceXObject.m_aPDFData.empty() && !m_aContext.UseReferenceXObject)
+    if (rObject.m_aReferenceXObject.hasExternalPDFData() && !m_aContext.UseReferenceXObject)
     {
         writeReferenceXObject(rObject.m_aReferenceXObject);
         return true;
@@ -9009,10 +9007,10 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     sal_uInt32 nLength = rGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength();
     auto const & rArray = rGraphic.getVectorGraphicData()->getVectorGraphicDataArray();
 
-    auto pPDFData = std::make_shared<std::vector<sal_Int8>>(rArray.getConstArray(), rArray.getConstArray() + nLength);
-
     if (m_aContext.UseReferenceXObject)
     {
+        auto pPDFData = std::make_shared<std::vector<sal_Int8>>(rArray.getConstArray(), rArray.getConstArray() + nLength);
+
         // Store the original PDF data as an embedded file.
         m_aEmbeddedFiles.emplace_back();
         m_aEmbeddedFiles.back().m_nObject = createObject();
@@ -9021,8 +9019,9 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     }
     else
     {
-        rEmit.m_nPDFPageIndex = rGraphic.getVectorGraphicData()->getPageIndex();
-        rEmit.m_aPDFData = *pPDFData;
+        sal_Int32 aIndex = m_aExternalPDFStreams.store(reinterpret_cast<const sal_uInt8*>(rArray.getConstArray()), nLength);
+        rEmit.m_nExternalPDFPageIndex = rGraphic.getVectorGraphicData()->getPageIndex();
+        rEmit.m_nExternalPDFDataIndex = aIndex;
     }
 
     rEmit.m_nFormObject = createObject();
