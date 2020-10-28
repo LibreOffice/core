@@ -183,3 +183,14 @@
  	w--;
      }
  
+--- misc/pixman/pixman/pixman-utils.c
++++ misc/build/pixman/pixman/pixman-utils.c
+@@ -214,7 +214,7 @@
+ 	g = float_to_unorm (src[i].g, 8);
+ 	b = float_to_unorm (src[i].b, 8);
+ 
+-	dst[i] = (a << 24) | (r << 16) | (g << 8) | (b << 0);
++	dst[i] = ((uint32_t)a << 24) | (r << 16) | (g << 8) | (b << 0);
+     }
+ }
+ 
