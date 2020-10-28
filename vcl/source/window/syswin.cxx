@@ -707,15 +707,15 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                         if( std::abs(g.nX-aState.mnX) < 2 && std::abs(g.nY-aState.mnY) < 5 )
                         {
                             tools::Long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
-                            if( aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > o3tl::make_unsigned(aDesktop.Right()) ||
-                                aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > o3tl::make_unsigned(aDesktop.Bottom()) )
+                            if( static_cast<tools::Long>(aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > aDesktop.Right() ||
+                                static_cast<tools::Long>(aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > aDesktop.Bottom() )
                             {
                                 // displacing would leave screen
                                 aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; // should result in (0,0)
                                 aState.mnY = displacement;
                                 if( bWrapped ||
-                                    aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > o3tl::make_unsigned(aDesktop.Right()) ||
-                                    aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > o3tl::make_unsigned(aDesktop.Bottom()) )
+                                    static_cast<tools::Long>(aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > aDesktop.Right() ||
+                                    static_cast<tools::Long>(aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > aDesktop.Bottom() )
                                     break;  // further displacement not possible -> break
                                 // avoid endless testing
                                 bWrapped = true;

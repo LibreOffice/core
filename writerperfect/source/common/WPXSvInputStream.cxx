@@ -882,14 +882,14 @@ const unsigned char* WPXSvInputStream::read(unsigned long numBytes, unsigned lon
     return mpImpl->mpReadBuffer;
 }
 
-tools::Long WPXSvInputStream::tell()
+long WPXSvInputStream::tell()
 {
     tools::Long retVal = mpImpl->tell();
     return retVal - static_cast<tools::Long>(mpImpl->mnReadBufferLength)
            + static_cast<tools::Long>(mpImpl->mnReadBufferPos);
 }
 
-int WPXSvInputStream::seek(tools::Long offset, librevenge::RVNG_SEEK_TYPE seekType)
+int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
 {
     sal_Int64 tmpOffset = offset;
     if (seekType == librevenge::RVNG_SEEK_CUR)

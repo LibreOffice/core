@@ -36,11 +36,11 @@ enum class DeviceFormat {
 
 constexpr ::Color SALCOLOR_NONE ( 0xFF, 0xFF, 0xFF, 0xFF );
 
-// must equal to class Point
+// must equal to the Windows POINT type, which is why we use sal_Int32
 struct SalPoint
 {
-    tools::Long        mnX;
-    tools::Long        mnY;
+    sal_Int32        mnX;
+    sal_Int32        mnY;
 };
 
 typedef const SalPoint*   PCONSTSALPOINT;

@@ -983,7 +983,7 @@ SwTwips SwTextFly::CalcMinBottom() const
                 {
                     const SwRect& aBound( pAnchoredObj->GetObjRectWithSpaces() );
                     if( aBound.Top() < nEndOfFrame )
-                        nRet = std::max( nRet, aBound.Bottom() );
+                        nRet = std::max<tools::Long>( nRet, aBound.Bottom() );
                 }
             }
         }

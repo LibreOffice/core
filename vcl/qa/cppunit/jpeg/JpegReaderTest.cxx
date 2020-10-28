@@ -9,6 +9,7 @@
  */
 
 #include <unotest/bootstrapfixturebase.hxx>
+#include <test/cppunitasserthelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <tools/stream.hxx>

@@ -11,6 +11,7 @@
 #define INCLUDED_VCL_DEVICE_COORDINATE_HXX
 
 #include <config_vcl.h>
+#include <tools/long.hxx>
 
 #if VCL_FLOAT_DEVICE_PIXEL
 #include <basegfx/point/b2dpoint.hxx>
@@ -19,7 +20,7 @@ typedef double DeviceCoordinate;
 #else /* !VCL_FLOAT_DEVICE_PIXEL */
 
 #include <basegfx/point/b2ipoint.hxx>
-typedef long DeviceCoordinate;
+typedef tools::Long DeviceCoordinate;
 
 #endif /* ! Carpet Cushion */
 
