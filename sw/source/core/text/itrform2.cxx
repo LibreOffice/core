@@ -2069,7 +2069,7 @@ void SwTextFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
     OSL_ENSURE( ! m_pFrame->IsVertical() || m_pFrame->IsSwapped(),
             "SwTextFormatter::CalcUnclipped with unswapped frame" );
 
-    tools::Long nFlyAsc, nFlyDesc;
+    SwTwips nFlyAsc, nFlyDesc;
     m_pCurr->MaxAscentDescent( rTop, rBottom, nFlyAsc, nFlyDesc );
     rTop = Y() + GetCurr()->GetAscent();
     rBottom = rTop + nFlyDesc;
@@ -2096,7 +2096,7 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     aTmpInf.SetIdx( nStartIdx );
     aTmpInf.SetPos( aStart );
 
-    tools::Long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
+    SwTwips nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
     pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
 
     const sal_uInt16 nTmpHeight = pCurrent->GetRealHeight();
@@ -2215,7 +2215,7 @@ void SwTextFormatter::AlignFlyInCntBase( tools::Long nBaseLine ) const
             nFlags |= AsCharFlags::Reverse;
     }
 
-    tools::Long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
+    SwTwips nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
 
     while( pPos )
     {
@@ -2577,7 +2577,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     // aBase.X() = Offset in the line after the current position
     // aBase.Y() = LineIter.Y() + Ascent of the current position
 
-    tools::Long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
+    SwTwips nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
     // i#11859 - use new method <SwLineLayout::MaxAscentDescent(..)>
     // to change line spacing behaviour at paragraph - Compatibility to MS Word
     //SwLinePortion *pPos = pCurr->GetFirstPortion();

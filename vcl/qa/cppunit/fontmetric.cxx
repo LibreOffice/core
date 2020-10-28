@@ -9,6 +9,7 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <cppunit/TestAssert.h>
+#include <test/cppunitasserthelper.hxx>
 
 #include <vcl/metric.hxx>
 

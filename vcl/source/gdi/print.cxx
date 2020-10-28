@@ -240,7 +240,7 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
     tools::Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
     const Size      aDPISize( LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)) );
-    const tools::Long      nBaseExtent = std::max( FRound( aDPISize.Width() / 300. ), 1L );
+    const tools::Long      nBaseExtent = std::max<tools::Long>( FRound( aDPISize.Width() / 300. ), 1 );
     tools::Long            nMove;
     const sal_uInt16    nTrans = ( nTransparencePercent < 13 ) ? 0 :
         ( nTransparencePercent < 38 ) ? 25 :

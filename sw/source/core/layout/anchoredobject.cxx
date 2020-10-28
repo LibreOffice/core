@@ -575,8 +575,8 @@ const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
         const SvxULSpaceItem& rUL = rFormat.GetULSpace();
         const SvxLRSpaceItem& rLR = rFormat.GetLRSpace();
         {
-            maObjRectWithSpaces.Top ( std::max( maObjRectWithSpaces.Top() - tools::Long(rUL.GetUpper()), 0L ));
-            maObjRectWithSpaces.Left( std::max( maObjRectWithSpaces.Left()- rLR.GetLeft(),  0L ));
+            maObjRectWithSpaces.Top ( std::max<tools::Long>( maObjRectWithSpaces.Top() - tools::Long(rUL.GetUpper()), 0 ));
+            maObjRectWithSpaces.Left( std::max<tools::Long>( maObjRectWithSpaces.Left()- rLR.GetLeft(),  0 ));
             maObjRectWithSpaces.AddHeight(rUL.GetLower() );
             maObjRectWithSpaces.AddWidth(rLR.GetRight() );
         }

@@ -31,16 +31,16 @@
 
 void Color::IncreaseLuminance(sal_uInt8 cLumInc)
 {
-    R = sal_uInt8(std::clamp(tools::Long(R) + cLumInc, 0L, 255L));
-    G = sal_uInt8(std::clamp(tools::Long(G) + cLumInc, 0L, 255L));
-    B = sal_uInt8(std::clamp(tools::Long(B) + cLumInc, 0L, 255L));
+    R = sal_uInt8(std::clamp(R + cLumInc, 0, 255));
+    G = sal_uInt8(std::clamp(G + cLumInc, 0, 255));
+    B = sal_uInt8(std::clamp(B + cLumInc, 0, 255));
 }
 
 void Color::DecreaseLuminance(sal_uInt8 cLumDec)
 {
-    R = sal_uInt8(std::clamp(tools::Long(R) - cLumDec, 0L, 255L));
-    G = sal_uInt8(std::clamp(tools::Long(G) - cLumDec, 0L, 255L));
-    B = sal_uInt8(std::clamp(tools::Long(B) - cLumDec, 0L, 255L));
+    R = sal_uInt8(std::clamp(R - cLumDec, 0, 255));
+    G = sal_uInt8(std::clamp(G - cLumDec, 0, 255));
+    B = sal_uInt8(std::clamp(B - cLumDec, 0, 255));
 }
 
 void Color::DecreaseContrast(sal_uInt8 nContDec)
@@ -50,9 +50,9 @@ void Color::DecreaseContrast(sal_uInt8 nContDec)
         const double fM = (128.0 - 0.4985 * nContDec) / 128.0;
         const double fOff = 128.0 - fM * 128.0;
 
-        R = sal_uInt8(std::clamp(FRound(R * fM + fOff), 0L, 255L));
-        G = sal_uInt8(std::clamp(FRound(G * fM + fOff), 0L, 255L));
-        B = sal_uInt8(std::clamp(FRound(B * fM + fOff), 0L, 255L));
+        R = sal_uInt8(std::clamp<tools::Long>(FRound(R * fM + fOff), 0, 255));
+        G = sal_uInt8(std::clamp<tools::Long>(FRound(G * fM + fOff), 0, 255));
+        B = sal_uInt8(std::clamp<tools::Long>(FRound(B * fM + fOff), 0, 255));
     }
 }
 

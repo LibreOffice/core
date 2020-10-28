@@ -553,7 +553,7 @@ sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     return bRet;
 }
 
-static bool RTLDrawingsHack(tools::Long &rLeft,
+static bool RTLDrawingsHack(SwTwips &rLeft,
     sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize)
 {

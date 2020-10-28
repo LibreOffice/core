@@ -18,6 +18,7 @@
  */
 
 #include <test/bootstrapfixture.hxx>
+#include <test/cppunitasserthelper.hxx>
 #include <tools/stream.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/bitmapaccess.hxx>
