@@ -62,6 +62,8 @@ public:
     std::unique_ptr<PDFiumBitmap> createBitmap(int nWidth, int nHeight, int nAlpha);
 };
 
+class PDFiumPage;
+
 class VCL_DLLPUBLIC PDFiumBitmap final
 {
 private:
@@ -75,6 +77,7 @@ public:
     ~PDFiumBitmap();
     FPDF_BITMAP getPointer() { return mpBitmap; }
     void fillRect(int left, int top, int width, int height, sal_uInt32 nColor);
+    void renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX, int nSizeY);
 };
 
 class VCL_DLLPUBLIC PDFiumAnnotation final
@@ -109,7 +112,6 @@ public:
     std::vector<basegfx::B2DPoint> getLineGeometry();
 };
 
-class PDFiumPage;
 class PDFiumTextPage;
 
 class VCL_DLLPUBLIC PDFiumPathSegment final
