@@ -376,20 +376,15 @@ SwHistorySetTOXMark::SwHistorySetTOXMark( const SwTextTOXMark* pTextHt, sal_uLon
     static_cast<SvtListener*>(&m_TOXMark)->EndListeningAll();
 }
 
-void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
+SwTOXType* SwHistorySetTOXMark::GetSwTOXType(SwDoc& rDoc, TOXTypes eTOXTypes, const OUString& rTOXName)
 {
-    SwTextNode * pTextNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTextNode();
-    OSL_ENSURE( pTextNd, "SwHistorySetTOXMark: no TextNode" );
-    if ( !pTextNd )
-        return;
-
     // search for respective TOX type
-    const sal_uInt16 nCnt = pDoc->GetTOXTypeCount( m_eTOXTypes );
+    const sal_uInt16 nCnt = rDoc.GetTOXTypeCount(eTOXTypes);
     SwTOXType* pToxType = nullptr;
     for ( sal_uInt16 n = 0; n < nCnt; ++n )
     {
-        pToxType = const_cast<SwTOXType*>(pDoc->GetTOXType( m_eTOXTypes, n ));
-        if ( pToxType->GetTypeName() == m_TOXName )
+        pToxType = const_cast<SwTOXType*>(rDoc.GetTOXType(eTOXTypes, n));
+        if (pToxType->GetTypeName() == rTOXName)
             break;
         pToxType = nullptr;
     }
@@ -397,8 +392,20 @@ void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
     if ( !pToxType )  // TOX type not found, create new
     {
         pToxType = const_cast<SwTOXType*>(
-                pDoc->InsertTOXType( SwTOXType( m_eTOXTypes, m_TOXName )));
+                rDoc.InsertTOXType(SwTOXType(eTOXTypes, rTOXName)));
     }
+
+    return pToxType;
+}
+
+void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
+{
+    SwTextNode * pTextNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTextNode();
+    OSL_ENSURE( pTextNd, "SwHistorySetTOXMark: no TextNode" );
+    if ( !pTextNd )
+        return;
+
+    SwTOXType* pToxType = GetSwTOXType(*pDoc, m_eTOXTypes, m_TOXName);
 
     SwTOXMark aNew( m_TOXMark );
     aNew.RegisterToTOXType( *pToxType );
