@@ -6481,6 +6481,34 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     }
 }
 
+bool SwEditWin::DeleteSurroundingText(const Selection& rSelection)
+{
+    SwWrtShell& rSh = m_rView.GetWrtShell();
+
+    if (rSh.HasSelection())
+        return false;
+
+    // rSelection is relative to the start of the sentence, so find that and
+    // adjust the range by it
+    SwPosition *pPos = rSh.GetCursor()->GetPoint();
+    const sal_Int32 nPos = pPos->nContent.GetIndex();
+
+    rSh.HideCursor();
+    rSh.GoStartSentence();
+    const sal_Int32 nStartPos = rSh.GetCursor()->GetPoint()->nContent.GetIndex();
+    pPos->nContent = nPos;
+    rSh.ClearMark();
+    rSh.ShowCursor();
+
+    if (rSh.SelectText(nStartPos + rSelection.Min(), nStartPos + rSelection.Max()))
+    {
+        rSh.Delete();
+        return true;
+    }
+
+    return false;
+}
+
 void SwEditWin::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
     OString sRectangle;
