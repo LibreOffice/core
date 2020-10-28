@@ -127,6 +127,16 @@ void ToolsLong::run()
     // sberg says this is fine
     if (loplugin::isSamePathname(fn, SRCDIR "/pyuno/source/module/pyuno.cxx"))
         return;
+    // these are places where the external API is actually "long"
+    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/filter/jpeg/JpegReader.cxx"))
+        return;
+    if (loplugin::isSamePathname(fn, SRCDIR "/writerperfect/source/common/WPXSvInputStream.cxx"))
+        return;
+    if (loplugin::isSamePathname(fn,
+                                 SRCDIR "/writerperfect/source/calc/MSWorksCalcImportFilter.cxx"))
+        return;
+    if (loplugin::isSamePathname(fn, SRCDIR "/desktop/source/lib/init.cxx"))
+        return;
 
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 

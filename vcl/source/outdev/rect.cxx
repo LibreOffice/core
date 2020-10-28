@@ -251,8 +251,8 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     if( mbOutputClipped )
         return;
 
-    const tools::Long nDistX = std::max( rDist.Width(), 1L );
-    const tools::Long nDistY = std::max( rDist.Height(), 1L );
+    const tools::Long nDistX = std::max<tools::Long>( rDist.Width(), 1 );
+    const tools::Long nDistY = std::max<tools::Long>( rDist.Height(), 1 );
     tools::Long nX = ( rRect.Left() >= aDstRect.Left() ) ? rRect.Left() : ( rRect.Left() + ( ( aDstRect.Left() - rRect.Left() ) / nDistX ) * nDistX );
     tools::Long nY = ( rRect.Top() >= aDstRect.Top() ) ? rRect.Top() : ( rRect.Top() + ( ( aDstRect.Top() - rRect.Top() ) / nDistY ) * nDistY );
     const tools::Long nRight = aDstRect.Right();

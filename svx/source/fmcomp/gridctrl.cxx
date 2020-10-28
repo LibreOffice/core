@@ -2267,7 +2267,7 @@ void DbGridControl::MoveToLast()
 
 void DbGridControl::MoveToPrev()
 {
-    tools::Long nNewRow = std::max(GetCurRow() - 1, 0L);
+    tools::Long nNewRow = std::max<tools::Long>(GetCurRow() - 1, 0);
     if (GetCurRow() != nNewRow)
         MoveToPosition(nNewRow);
 }

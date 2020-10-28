@@ -152,11 +152,11 @@ public:
 };
 
 typedef void (SwRect::*SwRectSet)( const tools::Long nNew );
-typedef long (SwRect::*SwRectGet)() const;
+typedef tools::Long (SwRect::*SwRectGet)() const;
 typedef Point (SwRect::*SwRectPoint)() const;
 typedef Size (SwRect::*SwRectSize)() const;
 typedef bool (SwRect::*SwRectMax)( tools::Long ) const;
-typedef long (SwRect::*SwRectDist)( tools::Long ) const;
+typedef tools::Long (SwRect::*SwRectDist)( tools::Long ) const;
 typedef void (SwRect::*SwRectSetTwice)( tools::Long, tools::Long );
 typedef void (SwRect::*SwRectSetPos)( const Point& );
 

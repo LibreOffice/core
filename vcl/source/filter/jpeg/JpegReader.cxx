@@ -105,7 +105,7 @@ static boolean fill_input_buffer (j_decompress_ptr cinfo)
     return TRUE;
 }
 
-static void skip_input_data (j_decompress_ptr cinfo, tools::Long numberOfBytes)
+static void skip_input_data (j_decompress_ptr cinfo, long numberOfBytes)
 {
     SourceManagerStruct * source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
 

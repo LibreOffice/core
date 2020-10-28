@@ -1214,19 +1214,19 @@ void WinSalFrame::Show( bool bVisible, bool bNoActivate )
         ImplSalShow( mhWnd, bVisible, bNoActivate );
 }
 
-void WinSalFrame::SetMinClientSize( long nWidth, long nHeight )
+void WinSalFrame::SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     mnMinWidth  = nWidth;
     mnMinHeight = nHeight;
 }
 
-void WinSalFrame::SetMaxClientSize( long nWidth, long nHeight )
+void WinSalFrame::SetMaxClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     mnMaxWidth  = nWidth;
     mnMaxHeight = nHeight;
 }
 
-void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
+void WinSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                                                    sal_uInt16 nFlags )
 {
     bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
@@ -1578,7 +1578,7 @@ void WinSalFrame::GetWorkArea( tools::Rectangle &rRect )
     rRect.SetBottom( aRect.bottom-1 );
 }
 
-void WinSalFrame::GetClientSize( long& rWidth, long& rHeight )
+void WinSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
 {
     rWidth  = maGeometry.nWidth;
     rHeight = maGeometry.nHeight;
@@ -1614,10 +1614,10 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
     RECT aRect2 = aWinRect;
     AdjustWindowRectEx( &aRect2, GetWindowStyle( mhWnd ),
                     FALSE,     GetWindowExStyle( mhWnd ) );
-    long nTopDeco = abs( aWinRect.top - aRect2.top );
-    long nLeftDeco = abs( aWinRect.left - aRect2.left );
-    long nBottomDeco = abs( aWinRect.bottom - aRect2.bottom );
-    long nRightDeco = abs( aWinRect.right - aRect2.right );
+    tools::Long nTopDeco = abs( aWinRect.top - aRect2.top );
+    tools::Long nLeftDeco = abs( aWinRect.left - aRect2.left );
+    tools::Long nBottomDeco = abs( aWinRect.bottom - aRect2.bottom );
+    tools::Long nRightDeco = abs( aWinRect.right - aRect2.right );
 
     // adjust window position/size to fit the screen
     if ( !(pState->mnMask & (WindowStateMask::X | WindowStateMask::Y)) )
@@ -2176,7 +2176,7 @@ void WinSalFrame::CaptureMouse( bool bCapture )
     SendMessageW( mhWnd, nMsg, 0, 0 );
 }
 
-void WinSalFrame::SetPointerPos( long nX, long nY )
+void WinSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
 {
     POINT aPt;
     aPt.x = static_cast<int>(nX);
@@ -2927,15 +2927,15 @@ void WinSalFrame::BeginSetClipRegion( sal_uInt32 nRects )
     mbFirstClipRect       = true;
 }
 
-void WinSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void WinSalFrame::UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     if( ! mpClipRgnData )
         return;
 
     RECT*       pRect = mpNextClipRect;
     RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
-    long        nRight = nX + nWidth;
-    long        nBottom = nY + nHeight;
+    tools::Long        nRight = nX + nWidth;
+    tools::Long        nBottom = nY + nHeight;
 
     if ( mbFirstClipRect )
     {
@@ -4520,7 +4520,7 @@ static LRESULT ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
         Size checkSize( GetSystemMetrics( SM_CXMENUCHECK ), GetSystemMetrics( SM_CYMENUCHECK ) );
 
         pMI->itemWidth = checkSize.Width() + 3 + bmpSize.Width() + 3 + strSize.cx;
-        pMI->itemHeight = std::max( std::max( checkSize.Height(), bmpSize.Height() ), strSize.cy );
+        pMI->itemHeight = std::max<tools::Long>( std::max<tools::Long>( checkSize.Height(), bmpSize.Height() ), strSize.cy );
         pMI->itemHeight += 4;
 
         DeleteObject( SelectObject(hdc, hfntOld) );

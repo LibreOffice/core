@@ -12,6 +12,7 @@
 #include <ostream>
 #include <vector>
 #include <tools/long.hxx>
+#include <test/cppunitasserthelper.hxx>
 
 #if HAVE_MORE_FONTS
 // must be declared before inclusion of test/bootstrapfixture.hxx

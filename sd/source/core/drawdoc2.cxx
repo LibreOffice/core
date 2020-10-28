@@ -569,8 +569,8 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
 
                 sal_uLong nTop    = aPageOffset.Y();
                 sal_uLong nLeft   = aPageOffset.X();
-                sal_uLong nBottom = std::max(static_cast<::tools::Long>(aDefSize.Height() - aOutSize.Height() - nTop + nOffset), 0L);
-                sal_uLong nRight  = std::max(static_cast<::tools::Long>(aDefSize.Width() - aOutSize.Width() - nLeft + nOffset), 0L);
+                sal_uLong nBottom = std::max<::tools::Long>(aDefSize.Height() - aOutSize.Height() - nTop + nOffset, 0);
+                sal_uLong nRight  = std::max<::tools::Long>(aDefSize.Width() - aOutSize.Width() - nLeft + nOffset, 0);
 
                 pPage->SetBorder(nLeft, nTop, nRight, nBottom);
             }
