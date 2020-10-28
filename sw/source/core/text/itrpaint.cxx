@@ -427,7 +427,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetOpt().IsParagraph() && !GetTextFrame()->GetFollow() &&
             GetInfo().GetIdx() >= TextFrameIndex(GetInfo().GetText().getLength()))
         {
-            const SwTmpEndPortion aEnd( *pEndTempl );
+            const SwTmpEndPortion aEnd( *pEndTempl, m_pCurr->HasRedlineEnd(),
+                           m_pCurr->HasRedlineEndDel() );
             GetFnt()->ChgPhysFnt( GetInfo().GetVsh(), *pOut );
 
             if ( bAdjustBaseLine )
