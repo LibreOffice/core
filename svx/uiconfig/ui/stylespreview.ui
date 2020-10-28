@@ -85,7 +85,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="stylespreview|up">Previous</property>
                     <property name="use_underline">True</property>
-                    <property name="icon_name">cmd/lc_prevrecord.png</property>
+                    <property name="icon_name">cmd/sc_prevrecord.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -110,7 +110,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="stylespreview|down">Next</property>
                     <property name="use_underline">True</property>
-                    <property name="icon_name">cmd/lc_nextrecord.png</property>
+                    <property name="icon_name">cmd/sc_nextrecord.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
