@@ -7,26 +7,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/document/XExtendedFilterDetection.hpp>
-
-#include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <unotest/macros_test.hxx>
+
+#include <com/sun/star/document/XExtendedFilterDetection.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
+#include <tools/stream.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace io
+namespace com::sun::star::io
 {
 class XInputStream;
-}
-}
-}
 }
 
 using namespace com::sun::star;
@@ -34,22 +29,37 @@ using namespace com::sun::star;
 namespace
 {
 /// Test class for PlainTextFilterDetect.
-class TextFilterDetectTest : public test::BootstrapFixture
+class TextFilterDetectTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
-public:
-    void testTdf114428();
+    uno::Reference<uno::XComponentContext> mxComponentContext;
+    uno::Reference<lang::XComponent> mxComponent;
 
-    CPPUNIT_TEST_SUITE(TextFilterDetectTest);
-    CPPUNIT_TEST(testTdf114428);
-    CPPUNIT_TEST_SUITE_END();
+public:
+    void setUp() override;
+    void tearDown() override;
+    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 };
+
+void TextFilterDetectTest::setUp()
+{
+    test::BootstrapFixture::setUp();
+
+    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
+    mxDesktop.set(frame::Desktop::create(mxComponentContext));
+}
+
+void TextFilterDetectTest::tearDown()
+{
+    if (mxComponent.is())
+        mxComponent->dispose();
+
+    test::BootstrapFixture::tearDown();
+}
 
 char const DATA_DIRECTORY[] = "/filter/qa/unit/data/";
 
-void TextFilterDetectTest::testTdf114428()
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
 {
-    uno::Reference<uno::XComponentContext> xComponentContext
-        = comphelper::getComponentContext(getMultiServiceFactory());
     uno::Reference<document::XExtendedFilterDetection> xDetect(
         getMultiServiceFactory()->createInstance("com.sun.star.comp.filters.PlainTextFilterDetect"),
         uno::UNO_QUERY);
@@ -68,7 +78,22 @@ void TextFilterDetectTest::testTdf114428()
     CPPUNIT_ASSERT_EQUAL(OUString("HTML (StarWriter)"), aFilterName);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(TextFilterDetectTest);
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
+{
+    // Given an empty file, with a pptx extension
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "empty.pptx";
+
+    // When loading the file
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure it is opened in Impress.
+    uno::Reference<lang::XServiceInfo> xServiceInfo(getComponent(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo.is());
+
+    // Without the accompanying fix in place, this test would have failed, as it was opened in
+    // Writer instead.
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument"));
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

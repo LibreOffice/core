@@ -23,6 +23,7 @@ $(eval $(call gb_Library_use_libraries,textfd,\
 	cppuhelper \
 	cppu \
 	sal \
+	sfx \
 	tl \
 	utl \
 	svt \
