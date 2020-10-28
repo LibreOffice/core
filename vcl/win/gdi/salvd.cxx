@@ -32,7 +32,7 @@
 #include <sal/log.hxx>
 #include <o3tl/temporary.hxx>
 
-HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppData)
+HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, tools::Long nDY, sal_uInt16 nBitCount, void **ppData)
 {
     HBITMAP hBitmap;
 
@@ -73,7 +73,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY,
 }
 
 std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
-                                                       long &nDX, long &nDY,
+                                                       tools::Long &nDX, tools::Long &nDY,
                                                        DeviceFormat eFormat,
                                                        const SystemGraphicsData* pData )
 {
@@ -141,7 +141,7 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
     return std::unique_ptr<SalVirtualDevice>(pVDev);
 }
 
-WinSalVirtualDevice::WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitCount, bool bForeignDC, long nWidth, long nHeight)
+WinSalVirtualDevice::WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitCount, bool bForeignDC, tools::Long nWidth, tools::Long nHeight)
     : mhLocalDC(hDC),          // HDC or 0 for Cache Device
       mhBmp(hBMP),             // Memory Bitmap
       mnBitCount(nBitCount),   // BitCount (0 or 1)
@@ -197,7 +197,7 @@ void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
     mbGraphics = false;
 }
 
-bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
+bool WinSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
 {
     if( mbForeignDC || !mhBmp )
         return true;    // ???

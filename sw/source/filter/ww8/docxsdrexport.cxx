@@ -716,9 +716,11 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     *   2147483647( MAX_INTEGER_VALUE ).
     *  Therefore changing the following accordingly so that LO sync's up with MSO.
     **/
-    sal_uInt64 cx = TwipsToEMU(std::clamp(rSize.Width(), 0L, tools::Long(SAL_MAX_INT32)));
+    sal_uInt64 cx
+        = TwipsToEMU(std::clamp(rSize.Width(), tools::Long(0), tools::Long(SAL_MAX_INT32)));
     OString aWidth(OString::number(std::min(cx, sal_uInt64(SAL_MAX_INT32))));
-    sal_uInt64 cy = TwipsToEMU(std::clamp(rSize.Height(), 0L, tools::Long(SAL_MAX_INT32)));
+    sal_uInt64 cy
+        = TwipsToEMU(std::clamp(rSize.Height(), tools::Long(0), tools::Long(SAL_MAX_INT32)));
     OString aHeight(OString::number(std::min(cy, sal_uInt64(SAL_MAX_INT32))));
 
     m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_extent, XML_cx, aWidth, XML_cy, aHeight);

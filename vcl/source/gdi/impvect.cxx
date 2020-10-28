@@ -49,7 +49,7 @@ static constexpr tools::Long BACK_MAP( tools::Long _def_nVal )
 {
     return ((_def_nVal + 2) >> 2) - 1;
 }
-static void VECT_PROGRESS( const Link<long, void>* pProgress, tools::Long _def_nVal )
+static void VECT_PROGRESS( const Link<tools::Long, void>* pProgress, tools::Long _def_nVal )
 {
     if(pProgress)
       pProgress->Call(_def_nVal);
@@ -642,7 +642,7 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
 namespace ImplVectorizer {
 
 bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                    sal_uInt8 cReduce, const Link<long,void>* pProgress )
+                    sal_uInt8 cReduce, const Link<tools::Long,void>* pProgress )
 {
     bool bRet = false;
 

@@ -211,15 +211,15 @@ void SwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
                 aFrmSize = Size(nLBorder - 3, (aTextLine.GetHeight() + 2) * 3);
                 break;
         }
-        aFrmSize.setWidth( std::max(5L, aFrmSize.Width()) );
-        aFrmSize.setHeight( std::max(5L, aFrmSize.Height()) );
+        aFrmSize.setWidth( std::max(tools::Long(5), aFrmSize.Width()) );
+        aFrmSize.setHeight( std::max(tools::Long(5), aFrmSize.Height()) );
     }
     else
     {
         sal_uInt32 nFreeWidth = aPagePrtArea.GetWidth() - rRenderContext.GetTextWidth(DEMOTEXT);
 
         aFrmSize = Size(nFreeWidth / 2, (aTextLine.GetHeight() + 2) * 3);
-        aDrawObj.SetSize(Size(std::max(5L, static_cast<tools::Long>(nFreeWidth) / 3L), std::max(5L, aFrmSize.Height() * 3L)));
+        aDrawObj.SetSize(Size(std::max(tools::Long(5), tools::Long(nFreeWidth / 3)), std::max(tools::Long(5), aFrmSize.Height() * 3)));
         aDrawObj.SetPos(Point(aParaPrtArea.Right() + 1, aParaPrtArea.Bottom() / 2));
         aParaPrtArea.SetRight( aDrawObj.Right() );
     }

@@ -779,9 +779,9 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                 bool bFail = nSecurityCount == 0;
                 tools::Long nWidth(0), nHeight(0);
                 if (!bFail)
-                    bFail = o3tl::checked_sub(nNumb[2], nNumb[0], nWidth) || o3tl::checked_add(nWidth, 1L, nWidth);
+                    bFail = o3tl::checked_sub(nNumb[2], nNumb[0], nWidth) || o3tl::checked_add(nWidth, tools::Long(1), nWidth);
                 if (!bFail)
-                    bFail = o3tl::checked_sub(nNumb[3], nNumb[1], nHeight) || o3tl::checked_add(nHeight, 1L, nHeight);
+                    bFail = o3tl::checked_sub(nNumb[3], nNumb[1], nHeight) || o3tl::checked_add(nHeight, tools::Long(1), nHeight);
                 if (!bFail && nWidth > 0 && nHeight > 0)
                 {
                     GDIMetaFile aMtf;

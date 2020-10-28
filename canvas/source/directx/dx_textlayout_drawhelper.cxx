@@ -206,7 +206,7 @@ namespace dxcanvas
             {
                 // create the DXArray
                 const sal_Int32 nLen( rLogicalAdvancements.getLength() );
-                std::unique_ptr<sal_Int32[]> pDXArray( new sal_Int32[nLen] );
+                std::unique_ptr<::tools::Long[]> pDXArray( new ::tools::Long[nLen] );
                 for( sal_Int32 i=0; i<nLen; ++i )
                     pDXArray[i] = basegfx::fround( rLogicalAdvancements[i] );
 

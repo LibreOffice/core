@@ -714,7 +714,7 @@ sal_uInt16 WinSalGraphics::GetBitCount() const
     return mpImpl->GetBitCount();
 }
 
-long WinSalGraphics::GetGraphicsWidth() const
+tools::Long WinSalGraphics::GetGraphicsWidth() const
 {
     return mpImpl->GetGraphicsWidth();
 }
@@ -770,22 +770,22 @@ void WinSalGraphics::SetROPFillColor( SalROPColor nROPColor )
     mpImpl->SetROPFillColor( nROPColor );
 }
 
-void WinSalGraphics::drawPixel( long nX, long nY )
+void WinSalGraphics::drawPixel( tools::Long nX, tools::Long nY )
 {
     mpImpl->drawPixel( nX, nY );
 }
 
-void WinSalGraphics::drawPixel( long nX, long nY, Color nColor )
+void WinSalGraphics::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
 {
     mpImpl->drawPixel( nX, nY, nColor );
 }
 
-void WinSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
+void WinSalGraphics::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
 {
     mpImpl->drawLine( nX1, nY1, nX2, nY2 );
 }
 
-void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
+void WinSalGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     mpImpl->drawRect( nX, nY, nWidth, nHeight );
 }
@@ -913,7 +913,7 @@ static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
 
 #define POSTSCRIPT_BUFSIZE 0x4000           // MAXIMUM BUFSIZE EQ 0xFFFF
 
-bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uInt32 nSize )
+bool WinSalGraphics::drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize )
 {
     bool bRetValue = false;
 

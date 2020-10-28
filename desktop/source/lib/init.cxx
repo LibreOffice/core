@@ -1037,8 +1037,8 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               const int nTileWidth, const int nTileHeight);
 static int doc_getTileMode(LibreOfficeKitDocument* pThis);
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
-                                tools::Long* pWidth,
-                                tools::Long* pHeight);
+                                long* pWidth,
+                                long* pHeight);
 static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
                                        const char* pArguments);
 
@@ -3315,8 +3315,8 @@ static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*
 }
 
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
-                                tools::Long* pWidth,
-                                tools::Long* pHeight)
+                                long* pWidth,
+                                long* pHeight)
 {
     comphelper::ProfileZone aZone("doc_getDocumentSize");
 
