@@ -340,7 +340,7 @@ double XclTools::GetXclDefColWidthCorrection( tools::Long nXclDefFontHeight )
     // TODO: convert this to take font digit width directly (and possibly DPI?), to avoid guessing
     // the digit width and pixel size. Or DPI might stay 96, to not follow Excel dependency on DPI
     // in addition to used font, and have absolute size of the correction fixed 5/96 in.
-    return 40960.0 / ::std::max( nXclDefFontHeight - 15, 60L ) + 50.0;
+    return 40960.0 / ::std::max( nXclDefFontHeight - 15, tools::Long(60) ) + 50.0;
 }
 
 // formatting

@@ -363,15 +363,15 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
 
     std::unique_ptr<Scanline[]> pSrcScan;
     std::unique_ptr<Scanline[]> pDstScan;
-    std::unique_ptr<long[]>     pMapX;
-    std::unique_ptr<long[]>     pMapY;
+    std::unique_ptr<tools::Long[]>     pMapX;
+    std::unique_ptr<tools::Long[]>     pMapY;
 
     try
     {
         pSrcScan.reset(new Scanline[rSrcBuffer.mnHeight]);
         pDstScan.reset(new Scanline[pDstBuffer->mnHeight]);
-        pMapX.reset(new long[pDstBuffer->mnWidth]);
-        pMapY.reset(new long[pDstBuffer->mnHeight]);
+        pMapX.reset(new tools::Long[pDstBuffer->mnWidth]);
+        pMapY.reset(new tools::Long[pDstBuffer->mnHeight]);
     }
     catch( const std::bad_alloc& )
     {

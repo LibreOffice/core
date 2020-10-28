@@ -2181,16 +2181,16 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
         tools::Long        nVal;
 
         nVal = pSearchColors[ i ].GetRed();
-        aColParam.pMinR[ i ] = static_cast<sal_uLong>(std::max( nVal, 0L ));
-        aColParam.pMaxR[ i ] = static_cast<sal_uLong>(std::min( nVal, 255L ));
+        aColParam.pMinR[ i ] = static_cast<sal_uLong>(std::max( nVal, tools::Long(0) ));
+        aColParam.pMaxR[ i ] = static_cast<sal_uLong>(std::min( nVal, tools::Long(255) ));
 
         nVal = pSearchColors[ i ].GetGreen();
-        aColParam.pMinG[ i ] = static_cast<sal_uLong>(std::max( nVal, 0L ));
-        aColParam.pMaxG[ i ] = static_cast<sal_uLong>(std::min( nVal, 255L ));
+        aColParam.pMinG[ i ] = static_cast<sal_uLong>(std::max( nVal, tools::Long(0) ));
+        aColParam.pMaxG[ i ] = static_cast<sal_uLong>(std::min( nVal, tools::Long(255) ));
 
         nVal = pSearchColors[ i ].GetBlue();
-        aColParam.pMinB[ i ] = static_cast<sal_uLong>(std::max( nVal, 0L ));
-        aColParam.pMaxB[ i ] = static_cast<sal_uLong>(std::min( nVal, 255L ));
+        aColParam.pMinB[ i ] = static_cast<sal_uLong>(std::max( nVal, tools::Long(0) ));
+        aColParam.pMaxB[ i ] = static_cast<sal_uLong>(std::min( nVal, tools::Long(255) ));
     }
 
     aColParam.pDstCols = pReplaceColors;

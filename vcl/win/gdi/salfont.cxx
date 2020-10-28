@@ -1614,7 +1614,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
                                             pEncoding, pGlyphWidths, nGlyphCount);
 }
 
-const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
+const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     // create matching FontSelectPattern
     // we need just enough to get to the font file data
@@ -1635,7 +1635,7 @@ const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long
     return pData;
 }
 
-void WinSalGraphics::FreeEmbedFontData( const void* pData, long /*nLen*/ )
+void WinSalGraphics::FreeEmbedFontData( const void* pData, tools::Long /*nLen*/ )
 {
     delete[] static_cast<char const *>(pData);
 }

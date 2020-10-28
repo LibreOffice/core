@@ -1607,7 +1607,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         if ( nDiff > 0 )
         {
             nChg = BROWSE_HEIGHT - pUp->getFrameArea().Height();
-            nChg = std::min( nDiff, nChg );
+            nChg = std::min( nDiff, SwTwips(nChg) );
 
             if ( !IsBodyFrame() )
             {
@@ -1621,7 +1621,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                     {
                         {
                             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pBody);
-                            aFrm.Height(std::max( 0L, aFrm.Height() - nChg ));
+                            aFrm.Height(std::max( tools::Long(0), aFrm.Height() - nChg ));
                         }
 
                         pBody->InvalidatePrt_();

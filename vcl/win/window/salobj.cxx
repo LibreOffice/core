@@ -622,12 +622,12 @@ void WinSalObject::BeginSetClipRegion( sal_uInt32 nRectCount )
     mbFirstClipRect       = true;
 }
 
-void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void WinSalObject::UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     RECT*       pRect = mpNextClipRect;
     RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
-    long        nRight = nX + nWidth;
-    long        nBottom = nY + nHeight;
+    tools::Long        nRight = nX + nWidth;
+    tools::Long        nBottom = nY + nHeight;
 
     if ( mbFirstClipRect )
     {
@@ -682,7 +682,7 @@ void WinSalObject::EndSetClipRegion()
     SetWindowRgn( mhWnd, hRegion, TRUE );
 }
 
-void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
+void WinSalObject::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     sal_uLong nStyle = 0;
     bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;

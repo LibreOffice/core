@@ -130,8 +130,8 @@ public:
 
     SalTwoRect getTwoRect() const { return maRects; }
 
-    long getBitmapWidth() const { return maRects.mnSrcWidth; }
-    long getBitmapHeight() const { return maRects.mnSrcHeight; }
+    tools::Long getBitmapWidth() const { return maRects.mnSrcWidth; }
+    tools::Long getBitmapHeight() const { return maRects.mnSrcHeight; }
 
     /// Reset the DC with the defined color.
     void fill(sal_uInt32 color);
@@ -227,10 +227,10 @@ public:
 protected:
     virtual bool        setClipRegion( const vcl::Region& ) override;
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void        drawPixel( long nX, long nY ) override;
-    virtual void        drawPixel( long nX, long nY, Color nColor ) override;
-    virtual void        drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
-    virtual void        drawRect( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void        drawPixel( tools::Long nX, tools::Long nY ) override;
+    virtual void        drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override;
+    virtual void        drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) override;
+    virtual void        drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     virtual void        drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void        drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) override;
@@ -255,8 +255,8 @@ protected:
     virtual bool        implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient) override;
 
     // CopyArea --> No RasterOp, but ClipRegion
-    virtual void        copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
-                                  long nSrcHeight, bool bWindowInvalidate ) override;
+    virtual void        copyArea( tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX, tools::Long nSrcY, tools::Long nSrcWidth,
+                                  tools::Long nSrcHeight, bool bWindowInvalidate ) override;
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
@@ -269,14 +269,14 @@ protected:
                                   const SalBitmap& rSalBitmap,
                                   Color nMaskColor ) override;
 
-    virtual std::shared_ptr<SalBitmap> getBitmap( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual Color       getPixel( long nX, long nY ) override;
+    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
+    virtual Color       getPixel( tools::Long nX, tools::Long nY ) override;
 
     // invert --> ClipRegion (only Windows or VirDevs)
-    virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) override;
+    virtual void        invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, SalInvert nFlags) override;
     virtual void        invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) override;
 
-    virtual bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uInt32 nSize ) override;
+    virtual bool        drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize ) override;
 
     // native widget rendering methods that require mirroring
 protected:
@@ -308,7 +308,7 @@ public:
                            const basegfx::B2DPoint& rY,
                            const SalBitmap& rSourceBitmap,
                            const SalBitmap* pAlphaBitmap) override;
-    virtual bool       drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency ) override;
+    virtual bool       drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency ) override;
 
 private:
     // local helpers
@@ -323,7 +323,7 @@ public:
     // get the depth of the device
     virtual sal_uInt16          GetBitCount() const override;
     // get the width of the device
-    virtual long            GetGraphicsWidth() const override;
+    virtual tools::Long            GetGraphicsWidth() const override;
 
     // set the clip region to empty
     virtual void            ResetClipRegion() override;
@@ -383,9 +383,9 @@ public:
     // embeddable by GetDevFontList or NULL in case of error
     // parameters: pFont: describes the font in question
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void* GetEmbedFontData(const PhysicalFontFace*, long* pDataLen) override;
+    virtual const void* GetEmbedFontData(const PhysicalFontFace*, tools::Long* pDataLen) override;
     // frees the font data again
-    virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) override;
+    virtual void            FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
     virtual void            GetGlyphWidths( const PhysicalFontFace*,
                                             bool bVertical,
                                             std::vector< sal_Int32 >& rWidths,

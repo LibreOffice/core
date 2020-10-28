@@ -1486,7 +1486,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArray
     if( mnLevel <= 1 )
         return;
 
-    std::unique_ptr<long[]> const pTempPos(new long[nMaxIndex]);
+    std::unique_ptr<tools::Long[]> const pTempPos(new tools::Long[nMaxIndex]);
     for( int n = 1; n < mnLevel; ++n )
     {
         mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos.get() );
