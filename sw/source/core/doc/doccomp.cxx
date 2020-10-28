@@ -225,7 +225,7 @@ private:
     {
         CompareData &m_rData1, &m_rData2;
         const MovedData &m_rMoved1, &m_rMoved2;
-        std::unique_ptr<long[]> m_pMemory;
+        std::unique_ptr<tools::Long[]> m_pMemory;
         tools::Long *m_pFDiag, *m_pBDiag;
 
         void Compare( sal_uLong nStt1, sal_uLong nEnd1, sal_uLong nStt2, sal_uLong nEnd2 );
@@ -787,7 +787,7 @@ Compare::CompareSequence::CompareSequence(
     : m_rData1( rD1 ), m_rData2( rD2 ), m_rMoved1( rMD1 ), m_rMoved2( rMD2 )
 {
     sal_uLong nSize = rMD1.GetCount() + rMD2.GetCount() + 3;
-    m_pMemory.reset( new long[ nSize * 2 ] );
+    m_pMemory.reset( new tools::Long[ nSize * 2 ] );
     m_pFDiag = m_pMemory.get() + ( rMD2.GetCount() + 1 );
     m_pBDiag = m_pMemory.get() + ( nSize + rMD2.GetCount() + 1 );
 

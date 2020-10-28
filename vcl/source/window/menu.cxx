@@ -1577,7 +1577,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
         if( nMaxWidth > nScreenWidth/2 )
             nMaxWidth = nScreenWidth/2;
 
-        sal_uInt16 gfxExtra = static_cast<sal_uInt16>(std::max( nExtra, 7L )); // #107710# increase space between checkmarks/images/text
+        sal_uInt16 gfxExtra = static_cast<sal_uInt16>(std::max<tools::Long>( nExtra, 7 )); // #107710# increase space between checkmarks/images/text
         nImgOrChkPos = static_cast<sal_uInt16>(nExtra);
         tools::Long nImgOrChkWidth = 0;
         if( aMaxSize.Height() > 0 ) // NWF case
@@ -2968,7 +2968,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     SAL_WARN_IF(nMaxHeight < 768, "vcl",
                 "Available height misdetected as " << nMaxHeight
                                                    << "px. Setting to 768px instead.");
-    nMaxHeight = std::max(nMaxHeight, 768l);
+    nMaxHeight = std::max<tools::Long>(nMaxHeight, 768l);
 
     if (pStartedFrom && pStartedFrom->IsMenuBar())
         nMaxHeight -= pW->GetSizePixel().Height();

@@ -102,10 +102,10 @@ public:
     virtual void                DrawMenuBar() override;
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle ) override;
     virtual void                Show( bool bVisible, bool bNoActivate = false ) override;
-    virtual void                SetMinClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetMaxClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( long& rWidth, long& rHeight ) override;
+    virtual void                SetMinClientSize( tools::Long nWidth, tools::Long nHeight ) override;
+    virtual void                SetMaxClientSize( tools::Long nWidth, tools::Long nHeight ) override;
+    virtual void                SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags ) override;
+    virtual void                GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void                SetWindowState( const SalFrameState* pState ) override;
@@ -116,7 +116,7 @@ public:
     virtual void                ToTop( SalFrameToTop nFlags ) override;
     virtual void                SetPointer( PointerStyle ePointerStyle ) override;
     virtual void                CaptureMouse( bool bMouse ) override;
-    virtual void                SetPointerPos( long nX, long nY ) override;
+    virtual void                SetPointerPos( tools::Long nX, tools::Long nY ) override;
     using SalFrame::Flush;
     virtual void                Flush() override;
     virtual void                SetInputContext( SalInputContext* pContext ) override;
@@ -136,7 +136,7 @@ public:
     virtual void                SetApplicationID( const OUString &rApplicationID ) override;
     virtual void                ResetClipRegion() override;
     virtual void                BeginSetClipRegion( sal_uInt32 nRects ) override;
-    virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                EndSetClipRegion() override;
 };
 

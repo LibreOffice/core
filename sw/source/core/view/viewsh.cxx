@@ -351,9 +351,9 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                         aTmp1 = GetOut()->LogicToPixel( aTmp1 );
                         tools::Rectangle aTmp2( GetOut()->PixelToLogic( aTmp1 ) );
                         if ( aTmp2.Left() > aRect.Left() )
-                            aTmp1.SetLeft( std::max( 0L, aTmp1.Left() - 1 ) );
+                            aTmp1.SetLeft( std::max<tools::Long>( 0, aTmp1.Left() - 1 ) );
                         if ( aTmp2.Top() > aRect.Top() )
-                            aTmp1.SetTop( std::max( 0L, aTmp1.Top() - 1 ) );
+                            aTmp1.SetTop( std::max<tools::Long>( 0, aTmp1.Top() - 1 ) );
                         aTmp1.AdjustRight(1 );
                         aTmp1.AdjustBottom(1 );
                         aTmp1 = GetOut()->PixelToLogic( aTmp1 );
@@ -1171,7 +1171,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                                 const tools::Rectangle &rBound = pObj->GetObjRect().SVRect();
                                 if (rBound.Left() != FAR_AWAY) {
                                     // OD 03.03.2003 #107927# - use correct datatype
-                                    const SwTwips nL = std::max( 0L, rBound.Left() - nOfst );
+                                    const SwTwips nL = std::max<SwTwips>( 0, rBound.Left() - nOfst );
                                     if ( nL < nMinLeft )
                                         nMinLeft = nL;
                                     if( rBound.Right() + nOfst > nMaxRight )
@@ -1304,7 +1304,7 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
                 aRect.AddWidth(2*aPixSz.Width() );
             aRect.Pos().setY( lYDiff < 0 ? aOldVis.Bottom() - aPixSz.Height()
                                          : aRect.Top() - aSize.Height() + aPixSz.Height() );
-            aRect.Pos().setX( std::max( 0L, aRect.Left()-aPixSz.Width() ) );
+            aRect.Pos().setX( std::max<tools::Long>( 0, aRect.Left()-aPixSz.Width() ) );
             aRect.Pos()  = GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.Pos()));
             aRect.SSize( GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.SSize())) );
             maVisArea = aRect;

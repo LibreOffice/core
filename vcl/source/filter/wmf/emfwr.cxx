@@ -846,18 +846,18 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, c
         return;
 
     sal_uInt32  nNormWidth;
-    std::unique_ptr<long[]> pOwnArray;
+    std::unique_ptr<tools::Long[]> pOwnArray;
     tools::Long*  pDX;
 
     // get text sizes
     if( pDXArray )
     {
         nNormWidth = maVDev->GetTextWidth( rText );
-        pDX = const_cast<long*>(pDXArray);
+        pDX = const_cast<tools::Long*>(pDXArray);
     }
     else
     {
-        pOwnArray.reset(new long[ nLen ]);
+        pOwnArray.reset(new tools::Long[ nLen ]);
         nNormWidth = maVDev->GetTextArray( rText, pOwnArray.get() );
         pDX = pOwnArray.get();
     }
