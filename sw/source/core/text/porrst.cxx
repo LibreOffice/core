@@ -46,7 +46,9 @@
 
 #include <crsrsh.hxx>
 
-SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion )
+SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion,
+                const bool bCh, const bool bDel ) :
+    bChanged( bCh ), bDeleted( bDel )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
@@ -62,6 +64,8 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     SwFont aFont(*pOldFnt);
     aFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
+    aFont.SetStrikeout( bDeleted ? STRIKEOUT_SINGLE : STRIKEOUT_NONE );
+    aFont.SetUnderline( (bChanged && !bDeleted) ? LINESTYLE_SINGLE : LINESTYLE_NONE );
     const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
 
     // draw the pilcrow
