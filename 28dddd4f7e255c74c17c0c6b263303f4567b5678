@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "632c87a9_5cc3346b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-28T09:58:19Z",
+      "side": 1,
+      "message": "It\u0027s not that unlikely :-) E.g., see tdf#70423, where importing plain text files with LF line endings on Windows (without explicitly choosing file line endings) results in one single big paragraph.",
+      "range": {
+        "startLine": 9,
+        "startChar": 17,
+        "endLine": 9,
+        "endChar": 40
+      },
+      "revId": "28dddd4f7e255c74c17c0c6b263303f4567b5678",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
