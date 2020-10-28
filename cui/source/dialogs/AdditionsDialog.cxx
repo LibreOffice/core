@@ -15,6 +15,7 @@
 
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
@@ -30,7 +31,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <unotools/textsearch.hxx>
-
+#include <unotools/ucbstreamhelper.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <com/sun/star/deployment/DeploymentException.hpp>
@@ -40,8 +41,6 @@
 
 #include <com/sun/star/task/XInteractionApprove.hpp>
 
-//cURL
-#include <curl/curl.h>
 #include <orcus/json_document_tree.hpp>
 #include <orcus/config.hpp>
 #include <orcus/pstring.hpp>
@@ -70,97 +69,54 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 
-#ifdef UNX
-const char kUserAgent[] = "LibreOffice AdditionsDownloader/1.0 (Linux)";
-#else
-const char kUserAgent[] = "LibreOffice AdditionsDownloader/1.0 (unknown platform)";
-#endif
-
 namespace
 {
-size_t WriteCallback(void* ptr, size_t size, size_t nmemb, void* userp)
-{
-    if (!userp)
-        return 0;
-
-    std::string* response = static_cast<std::string*>(userp);
-    size_t real_size = size * nmemb;
-    response->append(static_cast<char*>(ptr), real_size);
-    return real_size;
-}
-
-// Callback to get the response data from server to a file.
-size_t WriteCallbackFile(void* ptr, size_t size, size_t nmemb, void* userp)
-{
-    if (!userp)
-        return 0;
-
-    SvStream* response = static_cast<SvStream*>(userp);
-    size_t real_size = size * nmemb;
-    response->WriteBytes(ptr, real_size);
-    return real_size;
-}
-
 // Gets the content of the given URL and returns as a standard string
-std::string curlGet(const OString& rURL)
+std::string ucbGet(const OUString& rURL)
 {
-    CURL* curl = curl_easy_init();
-
-    if (!curl)
-        return std::string();
-
-    curl_easy_setopt(curl, CURLOPT_URL, rURL.getStr());
-
-    std::string response_body;
-
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, static_cast<void*>(&response_body));
-
-    CURLcode cc = curl_easy_perform(curl);
-    long http_code = 0;
-    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-
-    if (http_code != 200)
+    try
     {
-        SAL_WARN("cui.dialogs", "Download failed. Error code: " << http_code);
-        response_body.clear();
+        auto const s = utl::UcbStreamHelper::CreateStream(
+            rURL, StreamMode::STD_READ, css::uno::Reference<css::task::XInteractionHandler>());
+        if (!s)
+        {
+            SAL_WARN("cui.dialogs", "CreateStream <" << rURL << "> failed");
+            return {};
+        }
+        std::string response_body;
+        do
+        {
+            char buf[4096];
+            auto const n = s->ReadBytes(buf, sizeof buf);
+            response_body.append(buf, n);
+        } while (s->good());
+        if (s->bad())
+        {
+            SAL_WARN("cui.dialogs", "Reading <" << rURL << "> failed with " << s->GetError());
+            return {};
+        }
+        return response_body;
     }
-
-    if (cc != CURLE_OK)
+    catch (css::uno::Exception&)
     {
-        SAL_WARN("cui.dialogs", "curl error: " << cc);
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "Download failed");
+        return {};
     }
-
-    return response_body;
 }
 
-// Downloads and saves the file at the given rURL to a local path (sFileURL)
-void curlDownload(const OString& rURL, const OUString& sFileURL)
+// Downloads and saves the file at the given rURL to a local path (sFolderURL/fileName)
+void ucbDownload(const OUString& rURL, const OUString& sFolderURL, const OUString& fileName)
 {
-    CURL* curl = curl_easy_init();
-    SvFileStream aFile(sFileURL, StreamMode::WRITE);
-
-    if (!curl)
-        return;
-
-    curl_easy_setopt(curl, CURLOPT_URL, rURL.getStr());
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, kUserAgent);
-
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallbackFile);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, static_cast<void*>(&aFile));
-
-    CURLcode cc = curl_easy_perform(curl);
-    long http_code = 0;
-    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-
-    if (http_code != 200)
+    try
     {
-        SAL_WARN("cui.dialogs", "Download failed. Error code: " << http_code);
+        ucbhelper::Content(sFolderURL, {}, comphelper::getProcessComponentContext())
+            .transferContent(ucbhelper::Content(rURL, {}, comphelper::getProcessComponentContext()),
+                             ucbhelper::InsertOperation::Copy, fileName,
+                             css::ucb::NameClash::OVERWRITE);
     }
-
-    if (cc != CURLE_OK)
+    catch (css::uno::Exception&)
     {
-        SAL_WARN("cui.dialogs", "curl error: " << cc);
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "Download failed");
     }
 }
 
@@ -264,14 +220,14 @@ bool getPreviewFile(const AdditionInfo& aAdditionInfo, OUString& sPreviewFile)
     userFolder += "/user/additions/" + aAdditionInfo.sExtensionID + "/";
 
     OUString aPreviewFile(INetURLObject(aAdditionInfo.sScreenshotURL).getName());
-    OString aPreviewURL = OUStringToOString(aAdditionInfo.sScreenshotURL, RTL_TEXTENCODING_UTF8);
+    OUString aPreviewURL = aAdditionInfo.sScreenshotURL;
 
     try
     {
         osl::Directory::createPath(userFolder);
 
         if (!xFileAccess->exists(userFolder + aPreviewFile))
-            curlDownload(aPreviewURL, userFolder + aPreviewFile);
+            ucbDownload(aPreviewURL, userFolder, aPreviewFile);
     }
     catch (const uno::Exception&)
     {
@@ -454,7 +410,7 @@ void SearchAndParseThread::execute()
 
     if (m_bIsFirstLoading)
     {
-        std::string sResponse = curlGet(m_pAdditionsDialog->m_sURL);
+        std::string sResponse = ucbGet(m_pAdditionsDialog->m_sURL);
         parseResponse(sResponse, m_pAdditionsDialog->m_aAllExtensionsVector);
         std::sort(m_pAdditionsDialog->m_aAllExtensionsVector.begin(),
                   m_pAdditionsDialog->m_aAllExtensionsVector.end(),
@@ -496,7 +452,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     m_xEntrySearch->connect_focus_out(LINK(this, AdditionsDialog, FocusOut_Impl));
     m_xButtonClose->connect_clicked(LINK(this, AdditionsDialog, CloseButtonHdl));
 
-    m_sTag = OUStringToOString(sAdditionsTag, RTL_TEXTENCODING_UTF8);
+    m_sTag = sAdditionsTag;
     m_nMaxItemCount = PAGE_SIZE; // Dialog initialization item count
     m_nCurrentListItemCount = 0; // First, there is no item on the list.
 
@@ -511,7 +467,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
         m_sTag = "allextensions"; // Means empty parameter
     }
     //FIXME: Temporary URL
-    OString rURL = "https://yusufketen.com/api/" + m_sTag + ".json";
+    OUString rURL = "https://yusufketen.com/api/" + m_sTag + ".json";
     m_sURL = rURL;
 
     m_xExtensionManager
@@ -722,14 +678,14 @@ bool AdditionsItem::getExtensionFile(OUString& sExtensionFile)
     userFolder += "/user/additions/" + m_sExtensionID + "/";
 
     OUString aExtesionsFile(INetURLObject(m_sDownloadURL).getName());
-    OString aExtesionsURL = OUStringToOString(m_sDownloadURL, RTL_TEXTENCODING_UTF8);
+    OUString aExtesionsURL = m_sDownloadURL;
 
     try
     {
         osl::Directory::createPath(userFolder);
 
         if (!xFileAccess->exists(userFolder + aExtesionsFile))
-            curlDownload(aExtesionsURL, userFolder + aExtesionsFile);
+            ucbDownload(aExtesionsURL, userFolder, aExtesionsFile);
     }
     catch (const uno::Exception&)
     {
