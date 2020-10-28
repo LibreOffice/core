@@ -240,7 +240,7 @@ void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark,
 
 void SwDoc::ResetAttrs( const SwPaM &rRg,
                         bool bTextAttr,
-                        const std::set<sal_uInt16> &rAttrs,
+                        const o3tl::sorted_vector<sal_uInt16> &rAttrs,
                         const bool bSendDataChangedEvents,
                         SwRootFrame const*const pLayout)
 {
@@ -322,7 +322,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
                                                  RES_TXTATR_INETFMT, RES_TXTATR_UNKNOWN_CONTAINER,
                                                  RES_PARATR_BEGIN, RES_FRMATR_END - 1,
                                                  RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>{});
-    for( std::set<sal_uInt16>::const_reverse_iterator it = rAttrs.rbegin(); it != rAttrs.rend(); ++it )
+    for( auto it = rAttrs.rbegin(); it != rAttrs.rend(); ++it )
     {
         if( POOLATTR_END > *it )
             aDelSet.Put( *GetDfltAttr( *it ));

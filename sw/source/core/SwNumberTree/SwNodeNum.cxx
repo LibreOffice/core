@@ -337,13 +337,13 @@ void SwNodeNum::UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
 
     pTextNode->RemoveFromList();
     // --> clear all list attributes and the list style
-    std::set<sal_uInt16> aResetAttrsArray;
-    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ID );
-    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_LEVEL );
-    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ISRESTART );
-    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_RESTARTVALUE );
-    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ISCOUNTED );
-    aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_NUMRULE );
+    o3tl::sorted_vector<sal_uInt16> aResetAttrsArray;
+    aResetAttrsArray.insert( RES_PARATR_LIST_ID );
+    aResetAttrsArray.insert( RES_PARATR_LIST_LEVEL );
+    aResetAttrsArray.insert( RES_PARATR_LIST_ISRESTART );
+    aResetAttrsArray.insert( RES_PARATR_LIST_RESTARTVALUE );
+    aResetAttrsArray.insert( RES_PARATR_LIST_ISCOUNTED );
+    aResetAttrsArray.insert( RES_PARATR_NUMRULE );
     SwPaM aPam( *pTextNode );
     pTextNode->GetDoc().ResetAttrs( aPam, false,
                                     aResetAttrsArray,
