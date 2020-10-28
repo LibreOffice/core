@@ -7,11 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <test/bootstrapfixture.hxx>
+#include <unotest/macros_test.hxx>
+
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <test/bootstrapfixture.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
@@ -26,9 +30,32 @@ using namespace com::sun::star;
 namespace
 {
 /// Test class for PlainTextFilterDetect.
-class TextFilterDetectTest : public test::BootstrapFixture
+class TextFilterDetectTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
+    uno::Reference<uno::XComponentContext> mxComponentContext;
+    uno::Reference<lang::XComponent> mxComponent;
+
+public:
+    void setUp() override;
+    void tearDown() override;
+    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 };
+
+void TextFilterDetectTest::setUp()
+{
+    test::BootstrapFixture::setUp();
+
+    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
+    mxDesktop.set(frame::Desktop::create(mxComponentContext));
+}
+
+void TextFilterDetectTest::tearDown()
+{
+    if (mxComponent.is())
+        mxComponent->dispose();
+
+    test::BootstrapFixture::tearDown();
+}
 
 char const DATA_DIRECTORY[] = "/filter/qa/unit/data/";
 
@@ -52,6 +79,23 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
     OUString aFilterName = aMediaDesc.getUnpackedValueOrDefault("FilterName", OUString());
     // This was empty, XML declaration caused HTML detect to not handle XHTML.
     CPPUNIT_ASSERT_EQUAL(OUString("HTML (StarWriter)"), aFilterName);
+}
+
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
+{
+    // Given an empty file, with a pptx extension
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "empty.pptx";
+
+    // When loading the file
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure it is opened in Impress.
+    uno::Reference<lang::XServiceInfo> xServiceInfo(getComponent(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo.is());
+
+    // Without the accompanying fix in place, this test would have failed, as it was opened in
+    // Writer instead.
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument"));
 }
 }
 
