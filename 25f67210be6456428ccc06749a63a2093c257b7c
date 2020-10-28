@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3374b373_a02d1f71",
+        "filename": "include/xmloff/xmlimp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-28T16:42:32Z",
+      "side": 1,
+      "message": "duplicating \"and\"",
+      "range": {
+        "startLine": 249,
+        "startChar": 56,
+        "endLine": 249,
+        "endChar": 60
+      },
+      "revId": "25f67210be6456428ccc06749a63a2093c257b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
