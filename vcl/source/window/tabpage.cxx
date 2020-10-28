@@ -265,12 +265,9 @@ void TabPage::lcl_Scroll( long nX, long nY )
     {
         vcl::Window* pChild = GetChild( index );
         if ( pChild && pChild != m_pVScroll.get() && pChild != m_pHScroll.get() )
-        {
-            Point aPos = pChild->GetPosPixel();
-            aPos += Point( nXScroll, nYScroll );
-            pChild->SetPosPixel( aPos );
-        }
+            pChild->Scroll(nXScroll, nYScroll);
     }
+    Invalidate(InvalidateFlags::Children | InvalidateFlags::Update);
 }
 
 IMPL_LINK( TabPage, ScrollBarHdl, ScrollBar*, pSB, void )
