@@ -383,9 +383,6 @@ struct ImplSVData
     VclPtr<WorkWindow>      mpDefaultWin;                   // Default-Window
     bool                    mbDeInit = false;               // Is VCL deinitializing
     std::unique_ptr<SalSystem> mpSalSystem;                 // SalSystem interface
-    int                     mnFontUpdatesLockCount = 0;     // avoid repeated font updates
-    bool                    mbFontUpdatesPending = false;   // need to update font data after unlock
-    bool                    mbFontUpdatesNewLists = false;  // generate new font lists
     bool                    mbResLocaleSet = false;         // SV-Resource-Manager
     std::locale             maResLocale;                    // Resource locale
     ImplSchedulerContext    maSchedCtx;                     // Data for class Scheduler

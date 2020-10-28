@@ -1292,9 +1292,6 @@ public:
     //If bNewFontLists is true then drop and refetch lists of system fonts
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
 
-    // Lock font updates for all output devices
-    static void LockFontUpdates(bool bLock);
-
 protected:
     SAL_DLLPRIVATE const LogicalFontInstance* GetFontInstance() const;
     SAL_DLLPRIVATE tools::Long GetEmphasisAscent() const { return mnEmphasisAscent; }
