@@ -503,6 +503,13 @@ void PDFiumBitmap::fillRect(int left, int top, int width, int height, sal_uInt32
     FPDFBitmap_FillRect(mpBitmap, left, top, width, height, nColor);
 }
 
+void PDFiumBitmap::renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX,
+                                    int nSizeY)
+{
+    FPDF_RenderPageBitmap(mpBitmap, pPage->getPointer(), nStartX, nStartY, nSizeX, nSizeY,
+                          /*rotate=*/0, /*flags=*/0);
+}
+
 PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
     : mpAnnotation(pAnnotation)
 {
