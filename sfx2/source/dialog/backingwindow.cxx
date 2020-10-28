@@ -68,6 +68,7 @@ float const fMultiplier = 1.4f;
 BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     Window( i_pParent ),
     mbLocalViewInitialized(false),
+    maButtonsTextColor(Color(officecfg::Office::Common::Help::StartCenter::StartCenterTextColor::get())),
     mbInitControls( false )
 {
     m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" ));
@@ -254,13 +255,23 @@ void BackingWindow::initControls()
     mpExtensionsButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
 
     // setup nice colors
+    mpCreateLabel->SetControlForeground(maButtonsTextColor);
     vcl::Font aFont(mpCreateLabel->GetSettings().GetStyleSettings().GetLabelFont());
     aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
     mpCreateLabel->SetControlFont(aFont);
 
+    mpHelpButton->SetControlForeground(maButtonsTextColor);
+    mpExtensionsButton->SetControlForeground(maButtonsTextColor);
+
+    const Color aButtonsBackground(officecfg::Office::Common::Help::StartCenter::StartCenterBackgroundColor::get());
+
+    mpAllButtonsBox->SetBackground(aButtonsBackground);
+    mpSmallButtonsBox->SetBackground(aButtonsBackground);
+
     // motif image under the buttons
     Wallpaper aWallpaper(get<FixedImage>("motif")->GetImage().GetBitmapEx());
     aWallpaper.SetStyle(WallpaperStyle::BottomRight);
+    aWallpaper.SetColor(aButtonsBackground);
 
     mpButtonsBox->SetBackground(aWallpaper);
 
@@ -297,6 +308,9 @@ void BackingWindow::setupButton( PushButton* pButton )
     vcl::Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
     aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
     pButton->SetControlFont(aFont);
+
+    // color that fits the theme
+    pButton->SetControlForeground(maButtonsTextColor);
     pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
 }
 
@@ -305,6 +319,9 @@ void BackingWindow::setupButton( MenuToggleButton* pButton )
     vcl::Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
     aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
     pButton->SetControlFont(aFont);
+
+    // color that fits the theme
+    pButton->SetControlForeground(maButtonsTextColor);
 
     PopupMenu* pMenu = pButton->GetPopupMenu();
     pMenu->SetMenuFlags(pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries);
