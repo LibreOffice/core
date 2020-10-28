@@ -642,6 +642,7 @@ void Window::ImplCallOverlapPaint()
 
 IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Timer *, void)
 {
+#ifndef IOS
     comphelper::ProfileZone aZone("VCL idle re-paint");
 
     // save paint events until layout is done
@@ -664,6 +665,7 @@ IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Timer *, void)
             mpWindowImpl->mpFrameData->maPaintIdle.IsActive())
             mpWindowImpl->mpFrameData->maPaintIdle.Stop();
     }
+#endif
 }
 
 IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl, Timer *, void)
