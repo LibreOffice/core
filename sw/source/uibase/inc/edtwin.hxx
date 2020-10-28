@@ -190,6 +190,7 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
 
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;
+    virtual bool DeleteSurroundingText(const Selection& rSelection) override;
 
     void ShowAutoCorrectQuickHelp(const OUString& rWord, SvxAutoCorrect& rACorr);
     bool ShowAutoText(const std::vector<OUString>& rChunkCandidates);
