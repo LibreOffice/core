@@ -1038,11 +1038,6 @@ void Application::RemoveUserEvent( ImplSVEvent * nUserEvent )
     }
 }
 
-void Application::LockFontUpdates(bool bLock)
-{
-    OutputDevice::LockFontUpdates(bLock);
-}
-
 vcl::Window* Application::GetFocusWindow()
 {
     return ImplGetSVData()->mpWinData->mpFocusWin;
