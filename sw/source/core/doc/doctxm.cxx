@@ -628,7 +628,7 @@ const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, sal_uInt16 nId ) const
 
 const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 {
-    SwTOXType * pNew = new SwTOXType( rTyp );
+    SwTOXType * pNew = new SwTOXType(rTyp);
     mpTOXTypes->emplace_back( pNew );
     return pNew;
 }

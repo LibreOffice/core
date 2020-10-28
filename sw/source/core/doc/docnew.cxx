@@ -819,21 +819,21 @@ SwDoc::GetXmlIdRegistry()
 void SwDoc::InitTOXTypes()
 {
     ShellResource* pShellRes = SwViewShell::GetShellRes();
-    SwTOXType * pNew = new SwTOXType(TOX_CONTENT,   pShellRes->aTOXContentName        );
+    SwTOXType* pNew = new SwTOXType(*this, TOX_CONTENT, pShellRes->aTOXContentName);
     mpTOXTypes->emplace_back( pNew );
-    pNew = new SwTOXType(TOX_INDEX,                 pShellRes->aTOXIndexName  );
+    pNew = new SwTOXType(*this, TOX_INDEX, pShellRes->aTOXIndexName);
     mpTOXTypes->emplace_back( pNew );
-    pNew = new SwTOXType(TOX_USER,                  pShellRes->aTOXUserName  );
+    pNew = new SwTOXType(*this, TOX_USER, pShellRes->aTOXUserName);
     mpTOXTypes->emplace_back( pNew );
-    pNew = new SwTOXType(TOX_ILLUSTRATIONS,         pShellRes->aTOXIllustrationsName );
+    pNew = new SwTOXType(*this, TOX_ILLUSTRATIONS, pShellRes->aTOXIllustrationsName);
     mpTOXTypes->emplace_back( pNew );
-    pNew = new SwTOXType(TOX_OBJECTS,               pShellRes->aTOXObjectsName       );
+    pNew = new SwTOXType(*this, TOX_OBJECTS, pShellRes->aTOXObjectsName);
     mpTOXTypes->emplace_back( pNew );
-    pNew = new SwTOXType(TOX_TABLES,                pShellRes->aTOXTablesName        );
+    pNew = new SwTOXType(*this, TOX_TABLES, pShellRes->aTOXTablesName);
     mpTOXTypes->emplace_back( pNew );
-    pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
+    pNew = new SwTOXType(*this, TOX_AUTHORITIES, pShellRes->aTOXAuthoritiesName);
     mpTOXTypes->emplace_back( pNew );
-    pNew = new SwTOXType(TOX_CITATION,           pShellRes->aTOXCitationName   );
+    pNew = new SwTOXType(*this, TOX_CITATION, pShellRes->aTOXCitationName);
     mpTOXTypes->emplace_back( pNew );
 }
 

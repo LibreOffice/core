@@ -392,7 +392,7 @@ SwTOXType* SwHistorySetTOXMark::GetSwTOXType(SwDoc& rDoc, TOXTypes eTOXTypes, co
     if ( !pToxType )  // TOX type not found, create new
     {
         pToxType = const_cast<SwTOXType*>(
-                rDoc.InsertTOXType(SwTOXType(eTOXTypes, rTOXName)));
+                rDoc.InsertTOXType(SwTOXType(rDoc, eTOXTypes, rTOXName)));
     }
 
     return pToxType;
