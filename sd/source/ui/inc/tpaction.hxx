@@ -55,7 +55,7 @@ private:
     bool                    bTreeUpdated;
     std::vector<css::presentation::ClickAction> maCurrentActions;
     OUString                aLastFile;
-    ::std::vector< long >   aVerbVector;
+    ::std::vector< tools::Long >   aVerbVector;
 
     std::unique_ptr<weld::ComboBox> m_xLbAction;
     std::unique_ptr<weld::Label> m_xFtTree;                // jump destination controls

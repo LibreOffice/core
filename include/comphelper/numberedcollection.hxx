@@ -28,6 +28,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <tools/long.hxx>
 
 #include <unordered_map>
 #include <vector>
@@ -58,10 +59,10 @@ class COMPHELPER_DLLPUBLIC NumberedCollection final : private ::cppu::BaseMutex
         };
 
         typedef std::unordered_map<
-                    long,
+                    tools::Long,
                     TNumberedItem  > TNumberedItemHash;
 
-        typedef ::std::vector< long > TDeadItemList;
+        typedef ::std::vector< tools::Long > TDeadItemList;
 
 
     // interface
