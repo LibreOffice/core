@@ -566,6 +566,12 @@ inline std::size_t write_uInt16_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
 
 [[nodiscard]] TOOLS_DLLPUBLIC bool checkSeek(SvStream &rSt, sal_uInt64 nOffset);
 
+namespace tools
+{
+/// Is rUrl a file:// URL with no contents?
+TOOLS_DLLPUBLIC bool isEmptyFileUrl(const OUString& rUrl);
+}
+
 // FileStream
 
 class TOOLS_DLLPUBLIC SvFileStream final : public SvStream

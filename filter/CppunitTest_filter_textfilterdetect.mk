@@ -34,12 +34,7 @@ $(eval $(call gb_CppunitTest_use_ure,filter_textfilterdetect))
 
 $(eval $(call gb_CppunitTest_use_vcl,filter_textfilterdetect))
 
-$(eval $(call gb_CppunitTest_use_components,filter_textfilterdetect,\
-    configmgr/source/configmgr \
-    filter/source/textfilterdetect/textfd \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-))
+$(eval $(call gb_CppunitTest_use_rdb,filter_textfilterdetect,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,filter_textfilterdetect))
 
