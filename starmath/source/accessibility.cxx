@@ -484,7 +484,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
             Size  aSize (pNode->GetSize());
 
-            std::unique_ptr<long[]> pXAry(new long[ aNodeText.getLength() ]);
+            std::unique_ptr<tools::Long[]> pXAry(new tools::Long[ aNodeText.getLength() ]);
             pWin->SetFont( pNode->GetFont() );
             pWin->GetTextArray( aNodeText, pXAry.get(), 0, aNodeText.getLength() );
             aTLPos.AdjustX(nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0 );
@@ -554,7 +554,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
 
                 tools::Long nNodeX = pNode->GetLeft();
 
-                std::unique_ptr<long[]> pXAry(new long[ aTxt.getLength() ]);
+                std::unique_ptr<tools::Long[]> pXAry(new tools::Long[ aTxt.getLength() ]);
                 pWin->SetFont( pNode->GetFont() );
                 pWin->GetTextArray( aTxt, pXAry.get(), 0, aTxt.getLength() );
                 for (sal_Int32 i = 0;  i < aTxt.getLength()  &&  nRes == -1;  ++i)

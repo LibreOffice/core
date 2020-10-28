@@ -157,7 +157,7 @@ void SbxDecimal::setShort( sal_Int16 val )
 
 void SbxDecimal::setLong( sal_Int32 val )
 {
-    VarDecFromI4( static_cast<tools::Long>(val), &maDec );
+    VarDecFromI4( static_cast<long>(val), &maDec );
 }
 
 void SbxDecimal::setUShort( sal_uInt16 val )

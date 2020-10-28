@@ -552,7 +552,7 @@ static void lcl_PreprocessRowsInCells( SwTabFrame& rTab, SwRowFrame& rLastLine,
 
                     SwBorderAttrAccess aAccess( SwFrame::GetCache(), pCell );
                     const SwBorderAttrs &rAttrs = *aAccess.Get();
-                    nMinHeight = std::max( nMinHeight, lcl_CalcTopAndBottomMargin( *static_cast<SwLayoutFrame*>(pCell), rAttrs ) );
+                    nMinHeight = std::max<tools::Long>( nMinHeight, lcl_CalcTopAndBottomMargin( *static_cast<SwLayoutFrame*>(pCell), rAttrs ) );
                     pCell = pCell->GetNext();
                 }
             }
@@ -2911,7 +2911,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         setFramePrintAreaValid(false);
     }
 
-    tools::Long nRightOffset = std::max( 0L, nTmpRight );
+    tools::Long nRightOffset = std::max<tools::Long>( 0, nTmpRight );
 
     SwTwips nLower = pAttrs->CalcBottomLine();
     // #i29550#
@@ -2966,7 +2966,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                         // surrounding fly frames on the right
                         // -> right indent is maximum of given right offset
                         //    and wished right offset.
-                        nRightSpacing = nRightLine + std::max( nRightOffset, nWishRight );
+                        nRightSpacing = nRightLine + std::max<tools::Long>( nRightOffset, nWishRight );
                     }
                     else
                     {
@@ -2997,7 +2997,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                         // surrounding fly frames on the left
                         // -> right indent is maximum of given left offset
                         //    and wished left offset.
-                        nLeftSpacing = nLeftLine + std::max( nLeftOffset, nWishLeft );
+                        nLeftSpacing = nLeftLine + std::max<tools::Long>( nLeftOffset, nWishLeft );
                     }
                     else
                     {
@@ -3019,11 +3019,11 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                     const SwTwips nCenterSpacing = ( nMax - nWishedTableWidth ) / 2;
                     nLeftSpacing = nLeftLine +
                                    ( (nLeftOffset > 0) ?
-                                     std::max( nCenterSpacing, nLeftOffset ) :
+                                     std::max<tools::Long>( nCenterSpacing, nLeftOffset ) :
                                      nCenterSpacing );
                     nRightSpacing = nRightLine +
                                     ( (nRightOffset > 0) ?
-                                      std::max( nCenterSpacing, nRightOffset ) :
+                                      std::max<tools::Long>( nCenterSpacing, nRightOffset ) :
                                       nCenterSpacing );
                 }
                 break;
@@ -3046,7 +3046,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                         // they overlap with the table.
                         // Thus, take maximum of left spacing and left offset.
                         // OD 10.03.2003 #i9040# - consider left line attribute.
-                        nLeftSpacing = std::max( nLeftSpacing, ( nLeftOffset + nLeftLine ) );
+                        nLeftSpacing = std::max<tools::Long>( nLeftSpacing, ( nLeftOffset + nLeftLine ) );
                     }
                     // OD 23.01.2003 #106895# - add 1st param to <SwBorderAttrs::CalcRight(..)>
                     nRightSpacing = pAttrs->CalcRight( this );
@@ -3056,7 +3056,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                         // they overlap with the table.
                         // Thus, take maximum of right spacing and right offset.
                         // OD 10.03.2003 #i9040# - consider right line attribute.
-                        nRightSpacing = std::max( nRightSpacing, ( nRightOffset + nRightLine ) );
+                        nRightSpacing = std::max<tools::Long>( nRightSpacing, ( nRightOffset + nRightLine ) );
                     }
                 }
                 break;
@@ -3072,14 +3072,14 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                         // they overlap with the table.
                         // Thus, take maximum of right spacing and right offset.
                         // OD 10.03.2003 #i9040# - consider left line attribute.
-                        nLeftSpacing = std::max( nLeftSpacing, ( pAttrs->CalcLeftLine() + nLeftOffset ) );
+                        nLeftSpacing = std::max<tools::Long>( nLeftSpacing, ( pAttrs->CalcLeftLine() + nLeftOffset ) );
                     }
                     // OD 10.03.2003 #i9040# - consider right and left line attribute.
                     const SwTwips nWishRight =
                             nMax - (nLeftSpacing-pAttrs->CalcLeftLine()) - nWishedTableWidth;
                     nRightSpacing = nRightLine +
                                     ( (nRightOffset > 0) ?
-                                      std::max( nWishRight, nRightOffset ) :
+                                      std::max<tools::Long>( nWishRight, nRightOffset ) :
                                       nWishRight );
                 }
                 break;
@@ -3176,7 +3176,7 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
             if ( IsRestrictTableGrowth() )
             {
-                nTmp = std::min( nDist, nReal + nTmp );
+                nTmp = std::min<tools::Long>( nDist, nReal + nTmp );
                 nDist = nTmp < 0 ? 0 : nTmp;
             }
         }
@@ -3966,7 +3966,7 @@ tools::Long CalcHeightWithFlys( const SwFrame *pFrame )
                                                                             aRectFnSet.GetBottom(pAnchoredObj->GetObjRect()),
                                                                             aRectFnSet.GetBottom(pFrame->getFrameArea()) );
 
-                            nHeight = std::max( nHeight, nDistOfFlyBottomToAnchorTop2 );
+                            nHeight = std::max<tools::Long>( nHeight, nDistOfFlyBottomToAnchorTop2 );
                         }
                     }
                 }
@@ -4038,7 +4038,7 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrame *_pCell,
                 // #i26945#
                 if ( _bConsiderObjs )
                 {
-                    nFlyAdd = std::max( 0L, nFlyAdd - nLowHeight );
+                    nFlyAdd = std::max<tools::Long>( 0, nFlyAdd - nLowHeight );
                     nFlyAdd = std::max( nFlyAdd, ::CalcHeightWithFlys( pLow ) );
                 }
             }
@@ -4635,8 +4635,8 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         const SwFormatFrameSize &rSz = pMod->GetFrameSize();
         SwTwips nMinHeight = 0;
         if (rSz.GetHeightSizeType() == SwFrameSize::Minimum)
-            nMinHeight = std::max(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*this),
-                                  0L);
+            nMinHeight = std::max<tools::Long>(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*this),
+                                  0);
 
         // Only necessary to calculate minimal row height if height
         // of pRow is at least nMinHeight. Otherwise nMinHeight is the
@@ -5776,8 +5776,8 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
             SwTwips nMinRowHeight = 0;
             if (rSz.GetHeightSizeType() == SwFrameSize::Minimum)
             {
-                nMinRowHeight = std::max(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*pFirstRow),
-                                         0L);
+                nMinRowHeight = std::max<tools::Long>(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*pFirstRow),
+                                         0);
             }
 
             nTmpHeight += std::max( nHeightOfFirstContentLine, nMinRowHeight );

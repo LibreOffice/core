@@ -1622,7 +1622,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                         tools::Long        nMnemonicY;
                         DeviceCoordinate nMnemonicWidth;
 
-                        std::unique_ptr<long[]> const pCaretXArray(new long[2 * nLineLen]);
+                        std::unique_ptr<tools::Long[]> const pCaretXArray(new tools::Long[2 * nLineLen]);
                         /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(),
                                                 nIndex, nLineLen );
                         tools::Long lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
@@ -1691,7 +1691,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         DeviceCoordinate nMnemonicWidth = 0;
         if ( nMnemonicPos != -1 )
         {
-            std::unique_ptr<long[]> const pCaretXArray(new long[2 * aStr.getLength()]);
+            std::unique_ptr<tools::Long[]> const pCaretXArray(new tools::Long[2 * aStr.getLength()]);
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
             tools::Long lc_x1 = pCaretXArray[2*nMnemonicPos];
             tools::Long lc_x2 = pCaretXArray[2*nMnemonicPos+1];
@@ -2129,7 +2129,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
                 nMnemonicPos = nLen-1;
             }
 
-            std::unique_ptr<long[]> const pCaretXArray(new long[2 * nLen]);
+            std::unique_ptr<tools::Long[]> const pCaretXArray(new tools::Long[2 * nLen]);
             /*sal_Bool bRet =*/ GetCaretPositions( aStr, pCaretXArray.get(), nIndex, nLen, pGlyphs );
             tools::Long lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
             tools::Long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
