@@ -127,6 +127,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     void AddObj( SwDrawFrameFormat*, const SdrMark& );
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDODRAW_HXX
