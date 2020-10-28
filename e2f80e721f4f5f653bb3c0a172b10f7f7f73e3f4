@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "aad7fc28_1758dd18",
+        "filename": "vcl/inc/pdf/ExternalPDFStreams.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-10-28T17:02:24Z",
+      "side": 1,
+      "message": "Missing one-liner comment about what is the purpose of this struct.",
+      "revId": "e2f80e721f4f5f653bb3c0a172b10f7f7f73e3f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "230e7919_282dd0d1",
         "filename": "vcl/inc/pdf/ExternalPDFStreams.hxx",
         "patchSetId": 3
@@ -13,6 +30,23 @@
       "writtenOn": "2020-10-28T16:09:50Z",
       "side": 1,
       "message": "If this is a unique_ptr, then the compiler won\u0027t generate an implicit operator \u003d() for ExternalPDFStream, which means we can\u0027t put it into an std::vector. Patch set 2 was just a rebase (by accident), patch set 3 is meant to fix this.",
+      "revId": "e2f80e721f4f5f653bb3c0a172b10f7f7f73e3f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc158b7a_c279c193",
+        "filename": "vcl/inc/pdf/ExternalPDFStreams.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-10-28T17:02:24Z",
+      "side": 1,
+      "message": "Same here.",
       "revId": "e2f80e721f4f5f653bb3c0a172b10f7f7f73e3f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
