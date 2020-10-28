@@ -156,8 +156,34 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
         osl::File::remove( fileUrl );
         return false;
     }
-    EmbeddedFontsHelper::activateFont( fontName, fileUrl );
+    m_aAccumulatedFonts.emplace_back(std::make_pair(fontName, fileUrl));
     return true;
+}
+
+namespace
+{
+    struct UpdateFontsGuard
+    {
+        UpdateFontsGuard()
+        {
+            OutputDevice::ImplClearAllFontData(true);
+        }
+
+        ~UpdateFontsGuard()
+        {
+            OutputDevice::ImplRefreshAllFontData(true);
+        }
+    };
+}
+
+void EmbeddedFontsHelper::activateFonts()
+{
+    if (m_aAccumulatedFonts.empty())
+        return;
+    UpdateFontsGuard aUpdateFontsGuard;
+    for (const auto& rEntry : m_aAccumulatedFonts)
+        EmbeddedFontsHelper::activateFont(rEntry.first, rEntry.second);
+    m_aAccumulatedFonts.clear();
 }
 
 OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, const char* extra )

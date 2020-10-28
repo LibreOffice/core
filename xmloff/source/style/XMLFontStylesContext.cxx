@@ -28,7 +28,6 @@
 #include <comphelper/seqstream.hxx>
 
 #include <sal/log.hxx>
-#include <vcl/embeddedfontshelper.hxx>
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -326,7 +325,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url, bo
         uno::Reference< io::XInputStream > inputStream;
         inputStream.set( storage->openStreamElement( url.copy( url.indexOf( '/' ) + 1 ), ::embed::ElementModes::READ ),
             UNO_QUERY_THROW );
-        if( EmbeddedFontsHelper::addEmbeddedFont( inputStream, fontName, "?", std::vector< unsigned char >(), eot ))
+        if (GetImport().addEmbeddedFont(inputStream, fontName, "?", std::vector< unsigned char >(), eot))
             GetImport().NotifyEmbeddedFontRead();
         inputStream->closeInput();
     }
@@ -338,7 +337,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const ::css::uno::Seque
 {
     const uno::Reference< io::XInputStream > xInput( new comphelper::SequenceInputStream( rData ) );
     const OUString fontName = font.familyName();
-    if( EmbeddedFontsHelper::addEmbeddedFont( xInput, fontName, "?", std::vector< unsigned char >(), eot ) )
+    if (GetImport().addEmbeddedFont(xInput, fontName, "?", std::vector< unsigned char >(), eot))
         GetImport().NotifyEmbeddedFontRead();
     xInput->closeInput();
 }
