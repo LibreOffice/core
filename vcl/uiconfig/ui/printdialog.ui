@@ -842,7 +842,7 @@
                                               <object class="GtkLabel" id="lbRangeExpander">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes" context="printdialog|rangeexpander">_more</property>
+                                                <property name="label" translatable="yes" context="printdialog|rangeexpander">_More</property>
                                                 <property name="use_underline">True</property>
                                               </object>
                                             </child>
