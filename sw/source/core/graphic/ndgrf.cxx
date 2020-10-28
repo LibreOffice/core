@@ -51,6 +51,15 @@
 
 using namespace com::sun::star;
 
+
+namespace
+{
+    void lcl_SwClientNotify(SwModify& rModify, const SfxPoolItem& rOldNew)
+    {
+        const sw::LegacyModifyHint aHint(&rOldNew, &rOldNew);
+        rModify.SwClientNotify(rModify, aHint);
+    }
+}
 SwGrfNode::SwGrfNode(
         const SwNodeIndex & rWhere,
         const OUString& rGrfName,
@@ -205,7 +214,7 @@ bool SwGrfNode::ReRead(
                 if( getLayoutFrame( GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) )
                 {
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
-                    ModifyNotification( &aMsgHint, &aMsgHint );
+                    lcl_SwClientNotify(*this, aMsgHint);
                 }
                 else if ( bNewGrf )
                 {
@@ -264,7 +273,7 @@ bool SwGrfNode::ReRead(
     if( bReadGrf && bNewGrf )
     {
         SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
-        ModifyNotification( &aMsgHint, &aMsgHint );
+        lcl_SwClientNotify(*this, aMsgHint);
     }
 
     return bReadGrf;
@@ -461,7 +470,7 @@ bool SwGrfNode::SwapIn(bool bWaitForData)
                 maGrfObj.SetGraphic( Graphic() );
                 onGraphicChanged();
                 SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
-                ModifyNotification( &aMsgHint, &aMsgHint );
+                lcl_SwClientNotify(*this, aMsgHint);
             }
         }
         else
@@ -831,7 +840,7 @@ void SwGrfNode::ApplyInputStream(
             mbIsStreamReadOnly = bIsStreamReadOnly;
             mbLinkedInputStreamReady = true;
             SwMsgPoolItem aMsgHint( RES_LINKED_GRAPHIC_STREAM_ARRIVED );
-            ModifyNotification( &aMsgHint, &aMsgHint );
+            lcl_SwClientNotify(*this, aMsgHint);
         }
     }
 }
@@ -845,7 +854,7 @@ void SwGrfNode::UpdateLinkWithInputStream()
     GetLink()->setStreamToLoadFrom( mxInputStream, mbIsStreamReadOnly );
     GetLink()->Update();
     SwMsgPoolItem aMsgHint( RES_GRAPHIC_ARRIVED );
-    ModifyNotification( &aMsgHint, &aMsgHint );
+    lcl_SwClientNotify(*this, aMsgHint);
 
     // #i88291#
     mxInputStream.clear();
