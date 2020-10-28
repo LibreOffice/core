@@ -642,7 +642,7 @@ public:
                 }
 
                 // DX array rendering
-                std::unique_ptr<long[]> pItems(new long[aText.getLength()+10]);
+                std::unique_ptr<tools::Long[]> pItems(new tools::Long[aText.getLength()+10]);
                 rDev.GetTextArray(aText, pItems.get());
                 for (tools::Long j = 0; j < aText.getLength(); ++j)
                 {

@@ -1196,7 +1196,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 pVirDev->SetFont( aSrcFont );
                 const sal_Int32 nLen = aTemp.getLength();
-                std::unique_ptr<long[]> pDXAry(nLen ? new long[ nLen ] : nullptr);
+                std::unique_ptr<tools::Long[]> pDXAry(nLen ? new tools::Long[ nLen ] : nullptr);
                 const sal_Int32 nNormSize = pVirDev->GetTextArray( aTemp, pDXAry.get() );
                 if (nLen && nNormSize == 0)
                 {

@@ -2111,8 +2111,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     {
                         nEnd = aTabCols.GetRight() - rEntry.nPos;
                         SvxColumnDescription aColDesc( nStart, nEnd,
-                                std::max(0L, aTabCols.GetRight() - rEntry.nMax),
-                                std::max(0L, aTabCols.GetRight() - rEntry.nMin),
+                                std::max(tools::Long(0), aTabCols.GetRight() - rEntry.nMax),
+                                std::max(tools::Long(0), aTabCols.GetRight() - rEntry.nMin),
                                                     !aTabCols.IsHidden(i) );
                         aColItem.Append(aColDesc);
                     }

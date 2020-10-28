@@ -780,8 +780,7 @@ SvStream& GalleryBinaryEngine::writeGalleryTheme(SvStream& rOStm, const GalleryT
     pCompat.reset();
 
     // Fill the rest of the buffer.
-    const tools::Long nRest
-        = std::max(512L - (static_cast<tools::Long>(rOStm.Tell()) - nReservePos), 0L);
+    const tools::Long nRest = std::max(512 - (rOStm.Tell() - nReservePos), tools::Long(0));
 
     if (nRest)
     {

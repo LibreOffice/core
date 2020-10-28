@@ -864,7 +864,7 @@ static void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect const & rLRect )
 
     // Discriminate vertically stretched rect from horizontally stretched
     // and restrict minimum nHalfLWidth to 1
-    tools::Long nHalfLWidth = std::max( static_cast<tools::Long>(std::min( rLRect.Width(  ), rLRect.Height(  ) ) / 2), 1L );
+    tools::Long nHalfLWidth = std::max( std::min( rLRect.Width(  ), rLRect.Height(  ) ) / 2, tools::Long(1) );
 
     if ( rLRect.Height(  ) > rLRect.Width(  ) )
     {
@@ -1237,7 +1237,7 @@ static tools::Long lcl_AlignWidth( const tools::Long nWidth, SwPaintProperties c
         const tools::Long nW = nWidth % properties.nSPixelSzW;
 
         if ( !nW || nW > properties.nSHalfPixelSzW )
-            return std::max(1L, nWidth - properties.nSHalfPixelSzW);
+            return std::max(tools::Long(1), nWidth - properties.nSHalfPixelSzW);
     }
     return nWidth;
 }
@@ -1249,7 +1249,7 @@ static tools::Long lcl_AlignHeight( const tools::Long nHeight, SwPaintProperties
         const tools::Long nH = nHeight % properties.nSPixelSzH;
 
         if ( !nH || nH > properties.nSHalfPixelSzH )
-            return std::max(1L, nHeight - properties.nSHalfPixelSzH);
+            return std::max(tools::Long(1), nHeight - properties.nSHalfPixelSzH);
     }
     return nHeight;
 }
@@ -5487,7 +5487,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                 nY -= nRuby;
                 if( bBorder )
                 {
-                    SwTwips nPos = std::max( aInter.Left(), nY );
+                    SwTwips nPos = std::max<tools::Long>( aInter.Left(), nY );
                     SwTwips nW = std::min(nRight, aTmp.Pos().X()) - nPos;
                     SwRect aVert( Point( nPos, aGrid.Top() ),
                                   Size( nW, 1 ) );
@@ -6507,7 +6507,7 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
     const bool bHori = rP1.Y() == rP2.Y();
 
     // use pointers to member function in order to unify flow
-    typedef long (Point::*pmfPtGet)() const;
+    typedef tools::Long (Point::*pmfPtGet)() const;
     typedef void (Point::*pmfPtSet)(tools::Long);
     const pmfPtGet pDirPtX = &Point::X;
     const pmfPtGet pDirPtY = &Point::Y;

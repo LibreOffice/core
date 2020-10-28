@@ -2911,7 +2911,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         setFramePrintAreaValid(false);
     }
 
-    tools::Long nRightOffset = std::max( 0L, nTmpRight );
+    tools::Long nRightOffset = std::max( tools::Long(0), nTmpRight );
 
     SwTwips nLower = pAttrs->CalcBottomLine();
     // #i29550#
@@ -4038,7 +4038,7 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrame *_pCell,
                 // #i26945#
                 if ( _bConsiderObjs )
                 {
-                    nFlyAdd = std::max( 0L, nFlyAdd - nLowHeight );
+                    nFlyAdd = std::max( tools::Long(0), nFlyAdd - nLowHeight );
                     nFlyAdd = std::max( nFlyAdd, ::CalcHeightWithFlys( pLow ) );
                 }
             }
@@ -4636,7 +4636,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         SwTwips nMinHeight = 0;
         if (rSz.GetHeightSizeType() == SwFrameSize::Minimum)
             nMinHeight = std::max(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*this),
-                                  0L);
+                                  tools::Long(0));
 
         // Only necessary to calculate minimal row height if height
         // of pRow is at least nMinHeight. Otherwise nMinHeight is the
@@ -5777,7 +5777,7 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
             if (rSz.GetHeightSizeType() == SwFrameSize::Minimum)
             {
                 nMinRowHeight = std::max(rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*pFirstRow),
-                                         0L);
+                                         tools::Long(0));
             }
 
             nTmpHeight += std::max( nHeightOfFirstContentLine, nMinRowHeight );

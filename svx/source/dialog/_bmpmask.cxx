@@ -662,12 +662,12 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         tools::Long        nR;
         tools::Long        nG;
         tools::Long        nB;
-        std::unique_ptr<long[]> pMinR(new long[nCount]);
-        std::unique_ptr<long[]> pMaxR(new long[nCount]);
-        std::unique_ptr<long[]> pMinG(new long[nCount]);
-        std::unique_ptr<long[]> pMaxG(new long[nCount]);
-        std::unique_ptr<long[]> pMinB(new long[nCount]);
-        std::unique_ptr<long[]> pMaxB(new long[nCount]);
+        std::unique_ptr<tools::Long[]> pMinR(new tools::Long[nCount]);
+        std::unique_ptr<tools::Long[]> pMaxR(new tools::Long[nCount]);
+        std::unique_ptr<tools::Long[]> pMinG(new tools::Long[nCount]);
+        std::unique_ptr<tools::Long[]> pMaxG(new tools::Long[nCount]);
+        std::unique_ptr<tools::Long[]> pMinB(new tools::Long[nCount]);
+        std::unique_ptr<tools::Long[]> pMaxB(new tools::Long[nCount]);
         sal_uInt16      i;
 
         aMtf.SetPrefSize( rMtf.GetPrefSize() );
@@ -679,16 +679,16 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
             tools::Long nTol = ( pTols[i] * 255 ) / 100;
 
             tools::Long nVal = static_cast<tools::Long>(pSrcCols[i].GetRed());
-            pMinR[i] = std::max( nVal - nTol, 0L );
-            pMaxR[i] = std::min( nVal + nTol, 255L );
+            pMinR[i] = std::max( nVal - nTol, tools::Long(0) );
+            pMaxR[i] = std::min( nVal + nTol, tools::Long(255) );
 
             nVal = static_cast<tools::Long>(pSrcCols[i].GetGreen());
-            pMinG[i] = std::max( nVal - nTol, 0L );
-            pMaxG[i] = std::min( nVal + nTol, 255L );
+            pMinG[i] = std::max( nVal - nTol, tools::Long(0) );
+            pMaxG[i] = std::min( nVal + nTol, tools::Long(255) );
 
             nVal = static_cast<tools::Long>(pSrcCols[i].GetBlue());
-            pMinB[i] = std::max( nVal - nTol, 0L );
-            pMaxB[i] = std::min( nVal + nTol, 255L );
+            pMinB[i] = std::max( nVal - nTol, tools::Long(0) );
+            pMaxB[i] = std::min( nVal + nTol, tools::Long(255) );
 
             pTrans[ i ] = (pDstCols[ i ] == COL_TRANSPARENT);
         }

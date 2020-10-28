@@ -95,7 +95,7 @@ namespace toolkit
     namespace
     {
         typedef void (SpinButton::*SetSpinButtonValue) (tools::Long);
-        typedef long (SpinButton::*GetSpinButtonValue) () const;
+        typedef tools::Long (SpinButton::*GetSpinButtonValue) () const;
 
 
         void lcl_setSpinButtonValue(vcl::Window* _pWindow, SetSpinButtonValue _pSetter, sal_Int32 _nValue )

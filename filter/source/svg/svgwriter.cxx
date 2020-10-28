@@ -2583,12 +2583,12 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
     ImplMap( rPos, aPos );
 
-    std::unique_ptr<long[]> xTmpArray(new long[nLen]);
+    std::unique_ptr<tools::Long[]> xTmpArray(new tools::Long[nLen]);
     // get text sizes
     if( pDXArray )
     {
         aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
-        memcpy(xTmpArray.get(), pDXArray, nLen * sizeof(long));
+        memcpy(xTmpArray.get(), pDXArray, nLen * sizeof(tools::Long));
     }
     else
     {

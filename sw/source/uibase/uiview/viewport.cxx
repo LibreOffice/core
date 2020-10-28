@@ -131,14 +131,14 @@ tools::Long SwView::SetHScrollMax( tools::Long lMax )
 
     // At negative values the document is completely visible.
     // In this case, no scrolling.
-    return std::max( std::min( lMax, lSize ), 0L );
+    return std::max( std::min( lMax, lSize ), tools::Long(0) );
 }
 
 tools::Long SwView::SetVScrollMax( tools::Long lMax )
 {
     const tools::Long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     tools::Long lSize = GetDocSz().Height() + lBorder - m_aVisArea.GetHeight();
-    return std::max( std::min( lMax, lSize), 0L );        // see horizontal
+    return std::max( std::min( lMax, lSize), tools::Long(0) );        // see horizontal
 }
 
 Point SwView::AlignToPixel(const Point &rPt) const
@@ -373,7 +373,7 @@ void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect,
         pPt->setX( rRect.Left() - (nRangeX != USHRT_MAX ? nRangeX : nXScroll) );
         pPt->setX( std::max( ::GetLeftMargin( *this ) + nLeftOfst, pPt->X() ) );
         pPt->setX( std::min( rRect.Left() - nScrollX, pPt->X() ) );
-        pPt->setX( std::max( 0L, pPt->X() ) );
+        pPt->setX( std::max( tools::Long(0), pPt->X() ) );
     }
 }
 
@@ -570,7 +570,7 @@ bool SwView::PageUp()
 
     Point aPos(m_aVisArea.TopLeft());
     aPos.AdjustY( -(m_aVisArea.GetHeight() - (GetYScroll() / 2)) );
-    aPos.setY( std::max(0L, aPos.Y()) );
+    aPos.setY( std::max(tools::Long(0), aPos.Y()) );
     SetVisArea( aPos );
     return true;
 }

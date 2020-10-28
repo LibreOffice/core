@@ -120,7 +120,8 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
                         nSum1 = static_cast<tools::Long>(
                             sqrt(static_cast<double>(nSum1 * nSum1 + nSum2 * nSum2)));
 
-                        aGrey.SetIndex(~static_cast<sal_uInt8>(std::clamp(nSum1, 0L, 255L)));
+                        aGrey.SetIndex(~static_cast<sal_uInt8>(
+                            std::clamp(nSum1, tools::Long(0), tools::Long(255))));
                         pWriteAcc->SetPixelOnData(pScanline, nX, aGrey);
 
                         if (nX < (nWidth - 1))

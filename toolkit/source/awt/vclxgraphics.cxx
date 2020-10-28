@@ -465,7 +465,7 @@ void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rTex
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::COLORS|InitOutDevFlags::FONT );
-        std::unique_ptr<long []> pDXA(new long[rText.getLength()]);
+        std::unique_ptr<tools::Long []> pDXA(new tools::Long[rText.getLength()]);
         for(int i = 0; i < rText.getLength(); i++)
         {
             pDXA[i] = rLongs[i];

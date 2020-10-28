@@ -234,7 +234,7 @@ const std::vector<DdeConnection*>& DdeConnection::GetConnections()
 }
 
 DdeTransaction::DdeTransaction( DdeConnection& d, const OUString& rItemName,
-                                long n )
+                                tools::Long n )
     : rDde( d )
 {
     DdeInstData* pInst = ImpGetInstData();
@@ -336,7 +336,7 @@ void DdeTransaction::Done( bool bDataValid )
     aDone.Call( bDataValid );
 }
 
-DdeLink::DdeLink( DdeConnection& d, const OUString& aItemName, long n )
+DdeLink::DdeLink( DdeConnection& d, const OUString& aItemName, tools::Long n )
     : DdeTransaction (d, aItemName, n)
 {
 }
@@ -352,7 +352,7 @@ void DdeLink::Notify()
     aNotify.Call( nullptr );
 }
 
-DdeRequest::DdeRequest( DdeConnection& d, const OUString& i, long n )
+DdeRequest::DdeRequest( DdeConnection& d, const OUString& i, tools::Long n )
     : DdeTransaction( d, i, n )
 {
     nType = XTYP_REQUEST;
@@ -365,21 +365,21 @@ DdeHotLink::DdeHotLink( DdeConnection& d, const OUString& i )
 }
 
 DdePoke::DdePoke( DdeConnection& d, const OUString& i, const DdeData& rData,
-                  long n )
+                  tools::Long n )
     : DdeTransaction( d, i, n )
 {
     aDdeData = rData;
     nType = XTYP_POKE;
 }
 
-DdeExecute::DdeExecute( DdeConnection& d, const OUString& rData, long n )
+DdeExecute::DdeExecute( DdeConnection& d, const OUString& rData, tools::Long n )
     : DdeTransaction( d, OUString(), n )
 {
     aDdeData = DdeData( rData.getStr(), sizeof(sal_Unicode) * (rData.getLength() + 1), SotClipboardFormatId::STRING );
     nType = XTYP_EXECUTE;
 }
 
-long DdeConnection::GetError() const
+tools::Long DdeConnection::GetError() const
 {
     return pImp->nStatus;
 }

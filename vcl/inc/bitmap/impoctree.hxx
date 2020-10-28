@@ -100,8 +100,9 @@ inline void ImpErrorQuad::ImplAddColorError7(const ImpErrorQuad& rErrQuad)
 
 inline BitmapColor ImpErrorQuad::ImplGetColor()
 {
-    return BitmapColor(std::clamp(nRed, 0L, 8160L) >> 5, std::clamp(nGreen, 0L, 8160L) >> 5,
-                       std::clamp(nBlue, 0L, 8160L) >> 5);
+    return BitmapColor(std::clamp(nRed, tools::Long(0), tools::Long(8160)) >> 5,
+                       std::clamp(nGreen, tools::Long(0), tools::Long(8160)) >> 5,
+                       std::clamp(nBlue, tools::Long(0), tools::Long(8160)) >> 5);
 }
 
 #endif // INCLUDED_VCL_INC_IMPOCTREE_HXX
