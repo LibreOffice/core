@@ -1834,7 +1834,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
 
     const tools::Long nStSz = pStart->GetFormat()->GetFrameSize().GetWidth();
     const tools::Long nEdSz = pEnd->GetFormat()->GetFrameSize().GetWidth();
-    const tools::Long nWish = std::max( 1L, pTable->GetFormat()->GetFrameSize().GetWidth() );
+    const tools::Long nWish = std::max<tools::Long>( 1, pTable->GetFormat()->GetFrameSize().GetWidth() );
     while ( pTable )
     {
         SwRectFnSet aRectFnSet(pTable);

@@ -39,7 +39,7 @@ DdeData::DdeData()
     xImp->nFmt = SotClipboardFormatId::STRING;
 }
 
-DdeData::DdeData(const void* p, long n, SotClipboardFormatId f)
+DdeData::DdeData(const void* p, tools::Long n, SotClipboardFormatId f)
 {
     xImp.reset(new DdeDataImp);
     xImp->hData = nullptr;
@@ -99,7 +99,7 @@ void const * DdeData::getData() const
     return xImp->pData;
 }
 
-long DdeData::getSize() const
+tools::Long DdeData::getSize() const
 {
     return xImp->nData;
 }
