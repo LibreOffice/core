@@ -4086,6 +4086,19 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
 
         if( aSttIdx != nEnde )
         {
+            // tdf#134436 delete section nodes like SwUndoDelete::SwUndoDelete
+            SwNode *pTmpNd;
+            while (pEnd == rPam.GetPoint()
+                && nEnde + 2 < m_rDoc.GetNodes().Count()
+                && (pTmpNd = m_rDoc.GetNodes()[nEnde + 1])->IsEndNode()
+                && pTmpNd->StartOfSectionNode()->IsSectionNode()
+                && aSttIdx <= pTmpNd->StartOfSectionNode()->GetIndex())
+            {
+                SwNodeRange range(*pTmpNd->StartOfSectionNode(), *pTmpNd);
+                m_rDoc.GetNodes().SectionUp(&range);
+                --nEnde; // account for deleted start node
+            }
+
             // delete the Nodes into the NodesArary
             m_rDoc.GetNodes().Delete( aSttIdx, nEnde - aSttIdx.GetIndex() );
         }
@@ -4502,7 +4515,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                           ( !bOneNode && !rPos.nContent.GetIndex() ) );
     bool bCopyBookmarks = true;
     bool bCopyPageSource  = false;
-    bool bStartIsTextNode = nullptr != pSttTextNd;
+    int nDeleteTextNodes = 0;
 
     // #i104585# copy outline num rule to clipboard (for ASCII filter)
     if (pDoc->IsClipBoard() && m_rDoc.GetOutlineNumRule())
@@ -4539,6 +4552,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     do {
         if( pSttTextNd )
         {
+            ++nDeleteTextNodes; // must be joined in Undo
             // Don't copy the beginning completely?
             if( !bCopyCollFormat || bColumnSel || pStt->nContent.GetIndex() )
             {
@@ -4642,7 +4656,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             else if( rPos.nContent.GetIndex() )
             {   // Insertion in the middle of a text node, it has to be split
                 // (and joined from undo)
-                bStartIsTextNode = true;
+                ++nDeleteTextNodes;
 
                 const sal_Int32 nContentEnd = pEnd->nContent.GetIndex();
                 {
@@ -4695,11 +4709,9 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
                 // if we have to insert an extra text node
                 // at the destination, this node will be our new destination
-                // (text) node, and thus we set bStartisTextNode to true. This
-                // will ensure that this node will be deleted during Undo
-                // using JoinNext.
-                OSL_ENSURE( !bStartIsTextNode, "Oops, undo may be instable now." );
-                bStartIsTextNode = true;
+                // (text) node, and thus we increment nDeleteTextNodes. This
+                // will ensure that this node will be deleted during Undo.
+                ++nDeleteTextNodes; // must be deleted
             }
 
             const bool bEmptyDestNd = pDestTextNd->GetText().isEmpty();
@@ -4789,7 +4801,14 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     if( rPos.nNode != aInsPos )
     {
         pCopyPam->GetMark()->nNode = aInsPos;
-        pCopyPam->GetMark()->nContent.Assign(pCopyPam->GetContentNode(false), 0);
+        if (aInsPos < rPos.nNode)
+        {   // tdf#134250 decremented in (pEndTextNd && !pDestTextNd) above
+            pCopyPam->GetContentNode(false)->MakeEndIndex(&pCopyPam->GetMark()->nContent);
+        }
+        else // incremented in (!pSttTextNd && pDestTextNd) above
+        {
+            pCopyPam->GetMark()->nContent.Assign(pCopyPam->GetContentNode(false), 0);
+        }
         rPos = *pCopyPam->GetMark();
     }
     else
@@ -4799,10 +4818,10 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pCopyPam->Move( fnMoveForward, bCanMoveBack ? GoInContent : GoInNode );
     else
     {
-        // Reset the offset to 0 as it was before the insertion
-        pCopyPam->GetPoint()->nContent = 0;
-
         pCopyPam->GetPoint()->nNode++;
+
+        // Reset the offset to 0 as it was before the insertion
+        pCopyPam->GetPoint()->nContent.Assign(pCopyPam->GetPoint()->nNode.GetNode().GetContentNode(), 0);
         // If the next node is a start node, then step back: the start node
         // has been copied and needs to be in the selection for the undo
         if (pCopyPam->GetPoint()->nNode.GetNode().IsStartNode())
@@ -4827,7 +4846,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     // If Undo is enabled, store the inserted area
     if (pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo->SetInsertRange( *pCopyPam, true, bStartIsTextNode );
+        pUndo->SetInsertRange(*pCopyPam, true, nDeleteTextNodes);
     }
 
     if( pCpyRange )

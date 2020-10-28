@@ -1315,6 +1315,8 @@ void RecreateStartTextFrames(SwTextNode & rNode)
             ? *pFrame->GetMergedPara()->pFirstNode
             : rNode);
         assert(rFirstNode.GetIndex() <= rNode.GetIndex());
+        // clear old one first to avoid DelFrames confusing updates & asserts...
+        pFrame->SetMergedPara(nullptr);
         pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
                     *pFrame, rFirstNode, eMode));
         eMode = sw::FrameMode::New; // Existing is not idempotent!
@@ -1548,6 +1550,10 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 pPageMaker->CheckInsert( nIndex );
 
             pFrame->InsertBehind( pLay, pPrv );
+            if (pPage) // would null in SwCellFrame ctor
+            {   // tdf#134931 call ResetTurbo(); not sure if Paste() would be
+                pFrame->InvalidatePage(pPage); // better than InsertBehind()?
+            }
             // #i27138#
             // notify accessibility paragraphs objects about changed
             // CONTENT_FLOWS_FROM/_TO relation.
@@ -1635,7 +1641,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                     SwFrame *const pNext(
                         // if there's a parent section, it has been split
                         // into 2 SwSectionFrame already :(
-                        (   pFrame->GetNext()->IsSctFrame()
+                        (   pFrame->GetNext()
+                         && pFrame->GetNext()->IsSctFrame()
                          && pActualSection->GetUpper()
                          && pActualSection->GetUpper()->GetSectionNode() ==
                              static_cast<SwSectionFrame const*>(pFrame->GetNext())->GetSection()->GetFormat()->GetSectionNode())

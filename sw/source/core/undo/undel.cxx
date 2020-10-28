@@ -855,6 +855,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         SwPosition aPos( aIdx );
         if( !m_bDelFullPara )
         {
+            assert(!m_bTableDelLastNd || pInsNd->IsTextNode());
             if( pInsNd->IsTableNode() )
             {
                 pInsNd = rDoc.GetNodes().MakeTextNode( aIdx,
@@ -879,7 +880,17 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         if( m_aEndStr )
         {
             // discard attributes since they all saved!
-            SwTextNode* pTextNd = aPos.nNode.GetNode().GetTextNode();
+            SwTextNode * pTextNd;
+            if (!m_bDelFullPara && aPos.nNode.GetNode().IsSectionNode())
+            {   // tdf#134250 section node wasn't deleted; but aPos must point to it in bNodeMove case below
+                assert(nSttContent == 0);
+                assert(!m_aSttStr);
+                pTextNd = rDoc.GetNodes()[aPos.nNode.GetIndex() + 1]->GetTextNode();
+            }
+            else
+            {
+                pTextNd = aPos.nNode.GetNode().GetTextNode();
+            }
 
             if( pTextNd && pTextNd->HasSwAttrSet() )
                 pTextNd->ResetAllAttr();
@@ -899,6 +910,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                     lcl_ReAnchorAtContentFlyFrames(*rDoc.GetSpzFrameFormats(), aPos, nOldIdx);
                 pTextNd = aPos.nNode.GetNode().GetTextNode();
             }
+            assert(pTextNd); // else where does m_aEndStr come from?
             if( pTextNd )
             {
                 OUString const ins( pTextNd->InsertText(*m_aEndStr, aPos.nContent,
@@ -1041,8 +1053,11 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
     // delete the temporarily added Node
-    if( pInsNd )
+    if (pInsNd && !m_bTableDelLastNd)
+    {
+        assert(&aIdx.GetNode() == pInsNd);
         rDoc.GetNodes().Delete( aIdx );
+    }
     if( m_pRedlSaveData )
         SetSaveData(rDoc, *m_pRedlSaveData);
 
@@ -1096,6 +1111,16 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     // create frames after SetSaveData has recreated redlines
     if (0 != m_nNode)
     {
+        // tdf#136453 only if section nodes at the start
+        if (m_bBackSp && m_nReplaceDummy != 0)
+        {
+            // tdf#134252 *first* create outer section frames
+            // note: text node m_nSttNode currently has frame with an upper;
+            // there's a hack in InsertCnt_() to move it below new section frame
+            SwNodeIndex const start(rDoc.GetNodes(), nSttNode - m_nReplaceDummy);
+            SwNodeIndex const end(rDoc.GetNodes(), nSttNode); // exclude m_nSttNode
+            ::MakeFrames(&rDoc, start, end);
+        }
         // tdf#121031 if the start node is a text node, it already has a frame;
         // if it's a table, it does not
         // tdf#109376 exception: end on non-text-node -> start node was inserted
@@ -1113,6 +1138,15 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     if (pMovedNode)
     {   // probably better do this after creating all frames
         lcl_MakeAutoFrames(*rDoc.GetSpzFrameFormats(), pMovedNode->GetIndex());
+    }
+
+    // tdf#134021 only after MakeFrames(), because it may be the only node
+    // that has layout frames
+    if (pInsNd && m_bTableDelLastNd)
+    {
+        assert(&aIdx.GetNode() == pInsNd);
+        SwPaM tmp(aIdx, aIdx);
+        rDoc.getIDocumentContentOperations().DelFullPara(tmp);
     }
 
     AddUndoRedoPaM(rContext, true);

@@ -636,7 +636,12 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                     SwSectionNode* pSctNd = pSttNd->GetSectionNode();
                     if( bNewFrames && pSctNd )
-                        pSctNd->DelFrames();
+                    {   // tdf#135056 skip over code in DelFrames() that moves
+                        // SwNodeIndex around because in case of nested
+                        // sections, m_pStartOfSection will point between
+                        // undo nodes-array and doc nodes-array
+                        pSctNd->DelFrames(nullptr, true);
+                    }
 
                     RemoveNode( aRg.aEnd.GetIndex(), 1, false ); // delete EndNode
                     sal_uLong nSttPos = pSttNd->GetIndex();
@@ -663,7 +668,11 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     {
                         pSctNd->NodesArrChgd();
                         ++nSectNdCnt;
-                        bNewFrames = false;
+                        // tdf#132326 do not let frames survive in undo nodes
+                        if (!GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNodes))
+                        {
+                            bNewFrames = false;
+                        }
                     }
                 }
             }

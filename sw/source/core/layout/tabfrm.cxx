@@ -2402,6 +2402,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                         GetUpper()->Grow( LONG_MAX, true ) );
 
                 {
+                    SwFrameDeleteGuard g(Lower()); // tdf#134965 prevent RemoveFollowFlowLine()
                     SetInRecalcLowerRow( true );
                     ::lcl_RecalcRow( static_cast<SwRowFrame*>(Lower()), nDeadLine );
                     SetInRecalcLowerRow( false );

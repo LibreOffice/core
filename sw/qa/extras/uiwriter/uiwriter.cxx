@@ -169,6 +169,8 @@ public:
     void testDOTMAutoText();
     void testDOCXAutoTextGallery();
     void testWatermarkDOCX();
+    void testTdf136453();
+    void testTdf134252();
     void testWatermarkPosition();
     void testTdf67238();
     void testFdo75110();
@@ -220,6 +222,7 @@ public:
     void testSearchWithTransliterate();
     void testTdf73660();
     void testNewDocModifiedState();
+    void testTdf133967();
     void testTdf132187();
     void testTdf77342();
     void testTdf63553();
@@ -247,14 +250,19 @@ public:
     void testTextTableCellNames();
     void testShapeAnchorUndo();
 #if HAVE_FEATURE_UI
+    void testTdf134250();
+    void testTdf127635();
     void testDde();
 #endif
     void testDocModState();
+    void testTdf135056();
     void testTdf94804();
+    void testTdf132160();
     void testTdf34957();
     void testTdf89954();
     void testTdf89720();
     void testTdf88986();
+    void testTdf134931();
     void testTdf87922();
 #if HAVE_MORE_FONTS
     void testTdf77014();
@@ -277,8 +285,11 @@ public:
     void testTdf84695Tab();
     void testTableStyleUndo();
     void testRedlineCopyPaste();
+    void testTdf134436();
+    void testTdf135260();
     void testRedlineParam();
     void testRedlineViewAuthor();
+    void testTdf132911();
     void testTdf91292();
     void testTdf78727();
     void testRedlineTimestamp();
@@ -293,6 +304,7 @@ public:
 #if HAVE_MORE_FONTS
     void testTdf35021_tabOverMarginDemo();
 #endif
+    void testTdf133990();
     void testTdf106701_tabOverMarginAutotab();
     void testTdf104492();
     void testTdf107025();
@@ -311,6 +323,7 @@ public:
     void testCreateDocxAnnotation();
     void testTdf107976();
     void testTdf108524();
+    void testTdf134021();
 #if HAVE_MORE_FONTS
     void testTableInSection();
     void testTableInNestedSection();
@@ -346,8 +359,10 @@ public:
     void testTdf116403();
     void testHtmlCopyImages();
     void testTdf116789();
+    void testTdf133982();
     void testTdf117225();
     void testTdf91801();
+    void testTdf133358();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -368,6 +383,8 @@ public:
     CPPUNIT_TEST(testDOTMAutoText);
     CPPUNIT_TEST(testDOCXAutoTextGallery);
     CPPUNIT_TEST(testWatermarkDOCX);
+    CPPUNIT_TEST(testTdf136453);
+    CPPUNIT_TEST(testTdf134252);
     CPPUNIT_TEST(testWatermarkPosition);
     CPPUNIT_TEST(testTdf67238);
     CPPUNIT_TEST(testFdo75110);
@@ -419,6 +436,7 @@ public:
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTdf73660);
     CPPUNIT_TEST(testNewDocModifiedState);
+    CPPUNIT_TEST(testTdf133967);
     CPPUNIT_TEST(testTdf132187);
     CPPUNIT_TEST(testTdf77342);
     CPPUNIT_TEST(testTdf63553);
@@ -446,14 +464,19 @@ public:
     CPPUNIT_TEST(testTextTableCellNames);
     CPPUNIT_TEST(testShapeAnchorUndo);
 #if HAVE_FEATURE_UI
+    CPPUNIT_TEST(testTdf134250);
+    CPPUNIT_TEST(testTdf127635);
     CPPUNIT_TEST(testDde);
 #endif
     CPPUNIT_TEST(testDocModState);
+    CPPUNIT_TEST(testTdf135056);
     CPPUNIT_TEST(testTdf94804);
+    CPPUNIT_TEST(testTdf132160);
     CPPUNIT_TEST(testTdf34957);
     CPPUNIT_TEST(testTdf89954);
     CPPUNIT_TEST(testTdf89720);
     CPPUNIT_TEST(testTdf88986);
+    CPPUNIT_TEST(testTdf134931);
     CPPUNIT_TEST(testTdf87922);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTdf77014);
@@ -476,8 +499,11 @@ public:
     CPPUNIT_TEST(testTdf84695Tab);
     CPPUNIT_TEST(testTableStyleUndo);
     CPPUNIT_TEST(testRedlineCopyPaste);
+    CPPUNIT_TEST(testTdf134436);
+    CPPUNIT_TEST(testTdf135260);
     CPPUNIT_TEST(testRedlineParam);
     CPPUNIT_TEST(testRedlineViewAuthor);
+    CPPUNIT_TEST(testTdf132911);
     CPPUNIT_TEST(testTdf91292);
     CPPUNIT_TEST(testTdf78727);
     CPPUNIT_TEST(testRedlineTimestamp);
@@ -492,6 +518,7 @@ public:
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
 #endif
+    CPPUNIT_TEST(testTdf133990);
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf107025);
@@ -510,6 +537,7 @@ public:
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf108524);
+    CPPUNIT_TEST(testTdf134021);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST(testTableInNestedSection);
@@ -545,8 +573,10 @@ public:
     CPPUNIT_TEST(testTdf116403);
     CPPUNIT_TEST(testHtmlCopyImages);
     CPPUNIT_TEST(testTdf116789);
+    CPPUNIT_TEST(testTdf133982);
     CPPUNIT_TEST(testTdf117225);
     CPPUNIT_TEST(testTdf91801);
+    CPPUNIT_TEST(testTdf133358);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1074,6 +1104,57 @@ void SwUiWriterTest::testWatermarkDOCX()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(45), pWatermark->GetAngle());
     CPPUNIT_ASSERT_EQUAL(Color(0x548dd4), pWatermark->GetColor());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), pWatermark->GetTransparency());
+}
+
+void SwUiWriterTest::testTdf136453()
+{
+    load(DATA_DIRECTORY, "tdf136453.fodt");
+
+    SwXTextDocument *const pTextDoc(dynamic_cast<SwXTextDocument*>(mxComponent.get()));
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* const pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwWrtShell *const pWrtShell(pDoc->GetDocShell()->GetWrtShell());
+
+    sal_uLong const nNodes(pDoc->GetNodes().Count());
+
+    pWrtShell->SttEndDoc(false);
+    pWrtShell->SetMark();
+    pWrtShell->Up(true, 1);
+    pWrtShell->SttPara(true);
+    pWrtShell->Delete();
+
+    // one paragraph deleted, section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 3, pDoc->GetNodes().Count());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(nNodes, pDoc->GetNodes().Count());
+
+    // check that every node has 1 frame
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/txt", 1);
+
+    pWrtShell->Redo();
+
+    // one paragraph deleted, section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 3, pDoc->GetNodes().Count());
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section", 0);
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(nNodes, pDoc->GetNodes().Count());
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/txt", 1);
 }
 
 void SwUiWriterTest::testWatermarkPosition()
@@ -4016,7 +4097,70 @@ void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, con
 
     xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
 }
+
 #if HAVE_FEATURE_UI
+
+void SwUiWriterTest::testTdf134250()
+{
+    load(DATA_DIRECTORY, "tdf134250.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    uno::Reference<text::XTextContent> xTextContent(xSections->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
+
+    // select all with table at start -> 3 times
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    // this would crash in 2 different ways
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    // Without the fix in place, section's content would have been gone after undo
+    CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
+
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
+
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+}
+
 void SwUiWriterTest::testDde()
 {
     // Type asdf and copy it.
@@ -4040,7 +4184,51 @@ void SwUiWriterTest::testDde()
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
     CPPUNIT_ASSERT(xField->getString().endsWith("asdf"));
 }
+
+void SwUiWriterTest::testTdf127635()
+{
+    SwDoc* pDoc = createDoc();
+
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, ' ', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'b', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+
+    //Select 'a'
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    // enable redlining
+    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    // hide
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, ' ', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'd', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    // accept all redlines
+    while(pEditShell->GetRedlineCount())
+        pEditShell->AcceptRedline(0);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: C d b
+    // - Actual  : Cd  b
+    CPPUNIT_ASSERT_EQUAL(OUString("C d b"), getParagraph(1)->getString());
+}
+
 #endif
+
 //IdleTask class to add a low priority Idle task
 class IdleTask
 {
@@ -4103,6 +4291,49 @@ void SwUiWriterTest::testDocModState()
     CPPUNIT_ASSERT(!(pShell->IsModified()));
 }
 
+void SwUiWriterTest::testTdf135056()
+{
+    load(DATA_DIRECTORY, "tdf135056.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
+
+    const SwTOXBase* pTOX = pWrtShell->GetTOX(0);
+    CPPUNIT_ASSERT(pTOX);
+
+    //Without the fix in place, it would have hung here
+    pWrtShell->DeleteTOX(*pTOX, true);
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pWrtShell->GetTOXCount());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
+}
+
+void SwUiWriterTest::testTdf132160()
+{
+    load(DATA_DIRECTORY, "tdf132160.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // this would crash due to delete redline starting with ToX
+    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    // this would crash due to insert redline ending on table node
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+}
+
 void SwUiWriterTest::testTdf94804()
 {
     //create new writer document
@@ -4149,6 +4380,34 @@ void SwUiWriterTest::testUnicodeNotationToggle()
     lcl_dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
     sDocString = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
     CPPUNIT_ASSERT_EQUAL( sDocString, sOriginalDocString );
+}
+
+void SwUiWriterTest::testTdf133967()
+{
+    load(DATA_DIRECTORY, "tdf133967.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
+
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    for (sal_Int32 i = 0; i < 10; ++i)
+    {
+        lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+        Scheduler::ProcessEventsToIdle();
+
+        lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // Without the fix in place, this test would have failed with:
+    //- Expected: 1
+    //- Actual  : 45
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 void SwUiWriterTest::testTdf132187()
@@ -4237,6 +4496,41 @@ void SwUiWriterTest::testTdf88986()
 
     // This was missing along with the gradient and other tables.
     CPPUNIT_ASSERT(aSet.HasItem(SID_COLOR_TABLE));
+}
+
+void SwUiWriterTest::testTdf134931()
+{
+    load(DATA_DIRECTORY, "tdf134931.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_dispatchCommand(mxComponent, ".uno:GoDown", {});
+
+    for (sal_Int32 i = 0; i < 10; ++i)
+    {
+        lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xIndexAccess->getCount());
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 1
+    // Because the tables are pasted but not displayed
+
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
 }
 
 void SwUiWriterTest::testTdf87922()
@@ -4527,6 +4821,65 @@ void SwUiWriterTest::testTdf96515()
 
     // This was 2, a new page was created for the new paragraph.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+void SwUiWriterTest::testTdf134252()
+{
+    load(DATA_DIRECTORY, "tdf134252.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCursor(xTextViewCursorSupplier->getViewCursor());
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+
+    // select all with section
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("bar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING), xCursor->getString());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xCursor->getString());
+
+    // this would crash
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("bar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING), xCursor->getString());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xCursor->getString());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("bar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING), xCursor->getString());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xCursor->getString());
 }
 
 void SwUiWriterTest::testTdf96943()
@@ -4964,6 +5317,118 @@ void SwUiWriterTest::testRedlineCopyPaste()
     CPPUNIT_ASSERT_EQUAL(OUString("abcdefgh"), pTextNode->GetText());
 }
 
+void SwUiWriterTest::testTdf134436()
+{
+    load(DATA_DIRECTORY, "tdf134436.fodt");
+
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+    SwDoc * pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell * pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+
+    // select all 3 times, table at the start
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    // the stupid SwXTextView::getString doesn't work "for symmetry" so use CursorShell
+    // ... no \n yet in 6.1 branch :(
+    //CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("ab"), pWrtShell->GetCursor()->GetText());
+
+    // first, the section doesn't get deleted
+    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    // CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("ab"), pWrtShell->GetCursor()->GetText());
+
+    // second, the section does get deleted because point is at the end
+    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    //CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("ab"), pWrtShell->GetCursor()->GetText());
+
+    // the problem was that the section was not deleted on Redo
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    //CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("ab"), pWrtShell->GetCursor()->GetText());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
+}
+
+void SwUiWriterTest::testTdf135260()
+{
+    SwDoc* pDoc = createDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert("test");
+
+    // Turn on track changes
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+
+    for(int i = 0; i < 4; i++) {
+        pWrtShell->DelLeft();
+    }
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    // accept all redlines
+    while(pEditShell->GetRedlineCount())
+        pEditShell->AcceptRedline(0);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected:
+    // - Actual  : tes
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+}
+
 void SwUiWriterTest::testRedlineParam()
 {
     // Create a document with minimal content.
@@ -5057,6 +5522,84 @@ void SwUiWriterTest::testRedlineViewAuthor()
     uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
     // This was 'Unknown Author' instead of 'A U. Thor'.
     CPPUNIT_ASSERT_EQUAL(aAuthor, xField->getPropertyValue("Author").get<OUString>());
+
+    //Reset the redline author after using it, otherwise, it might interfere with other unittests
+    pView->SetRedlineAuthor("Unknown Author");
+    pDocShell->SetView(pView);
+}
+
+void SwUiWriterTest::testTdf132911()
+{
+    load(DATA_DIRECTORY, "tdf132911.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    auto getShapes = [&]() -> int
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+        return xDraws->getCount();
+    };
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    // Without the fix in place, it would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    //FIXME: tdf#135247
+    //lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    //Scheduler::ProcessEventsToIdle();
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    //CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
 
 void SwUiWriterTest::testTdf91292()
@@ -5292,6 +5835,33 @@ void SwUiWriterTest::testTdf35021_tabOverMarginDemo()
     CPPUNIT_ASSERT_MESSAGE("Decimal Tab width is ~4096", nMargin < nWidth);
 }
 #endif
+
+void SwUiWriterTest::testTdf133990()
+{
+    load(DATA_DIRECTORY, "tdf133990.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    //Use selectAll 3 times in a row
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    //Without the fix in place, it would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
 
 void SwUiWriterTest::testTdf106701_tabOverMarginAutotab()
 {
@@ -5725,6 +6295,34 @@ void SwUiWriterTest::testTdf108524()
     // This was 0, section wasn't split, instead it was only on the first page
     // and it was cut off.
     assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
+}
+
+void SwUiWriterTest::testTdf134021()
+{
+    load(DATA_DIRECTORY, "tdf134021.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(12, getPages());
+
+    lcl_dispatchCommand(mxComponent, ".uno:JumpToNextTable", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Without the fix in place, it would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(12, getPages());
 }
 
 void SwUiWriterTest::testLinesInSectionInTable()
@@ -6354,6 +6952,31 @@ void SwUiWriterTest::testTdf116789()
     CPPUNIT_ASSERT_EQUAL(xText1, xText2);
 }
 
+void SwUiWriterTest::testTdf133982()
+{
+    load(DATA_DIRECTORY, "tdf133982.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+
+    //Use selectAll 3 times in a row
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    //Without the fix in place, it would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+}
+
 void SwUiWriterTest::testTdf117225()
 {
     // Test that saving a document with an embedded object does not leak
@@ -6385,6 +7008,38 @@ void SwUiWriterTest::testTdf91801()
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell(xTable->getCellByName("A1"));
     CPPUNIT_ASSERT_EQUAL(555.0, xCell->getValue());
+}
+
+void SwUiWriterTest::testTdf133358()
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    pWrtSh->Insert("Test");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
+
+    uno::Reference<beans::XPropertyState> xParagraph(getParagraph(1), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+
+    lcl_dispatchCommand(mxComponent, ".uno:IncrementIndent", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1251), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+
+    // Without the fix in place, this test would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1251), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

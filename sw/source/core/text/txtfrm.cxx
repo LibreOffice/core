@@ -957,6 +957,11 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
             rMerged.pParaPropsNode = &const_cast<SwTextNode&>(rNode);
             rMerged.pParaPropsNode->AddToListRLHidden();
         }
+        // called from SwRangeRedline::InvalidateRange()
+        if (rNode.GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+        {
+            const_cast<SwTextNode&>(rNode).SetRedlineMergeFlag(SwNode::Merge::NonFirst);
+        }
     }
     rMerged.mergedText = text.makeStringAndClear();
     return TextFrameIndex(nInserted);
@@ -1850,7 +1855,6 @@ void UpdateMergedParaForMove(sw::MergedPara & rMerged,
     }
     if (nLastEnd != rNode.Len()) // without nLen, string yet to be removed
     {
-        assert(rNode.Len() == 0 || nLastEnd < nSourceEnd);
         if (nLastEnd < nSourceEnd)
         {
             deleted.emplace_back(std::max(nLastEnd, nSourceStart), nSourceEnd);

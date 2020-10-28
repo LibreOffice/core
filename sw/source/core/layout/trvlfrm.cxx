@@ -293,42 +293,43 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
                 comphelper::FlagRestorationGuard g(
                         pState->m_bPosMatchesBounds, true);
                 SwPosition prevTextPos(*pPos);
-                SwLayoutFrame::GetCursorOfst(&prevTextPos, aPoint, pState);
-
-                SwRect aTextRect;
-                pTextFrame->GetCharRect(aTextRect, prevTextPos);
-
-                if (prevTextPos.nContent < pContentNode->Len())
+                if (SwLayoutFrame::GetCursorOfst(&prevTextPos, aPoint, pState))
                 {
-                    // aRextRect is just a line on the left edge of the
-                    // previous character; to get a better measure from
-                    // lcl_getDistance, extend that to a rectangle over
-                    // the entire character.
-                    SwPosition const nextTextPos(prevTextPos.nNode,
-                            SwIndex(prevTextPos.nContent, +1));
-                    SwRect nextTextRect;
-                    pTextFrame->GetCharRect(nextTextRect, nextTextPos);
-                    SwRectFnSet aRectFnSet(pTextFrame);
-                    if (aRectFnSet.GetTop(aTextRect) ==
-                        aRectFnSet.GetTop(nextTextRect)) // same line?
+                    SwRect aTextRect;
+                    pTextFrame->GetCharRect(aTextRect, prevTextPos);
+
+                    if (prevTextPos.nContent < pContentNode->Len())
                     {
-                        // need to handle mixed RTL/LTR portions somehow
-                        if (aRectFnSet.GetLeft(aTextRect) <
-                            aRectFnSet.GetLeft(nextTextRect))
+                        // aRextRect is just a line on the left edge of the
+                        // previous character; to get a better measure from
+                        // lcl_getDistance, extend that to a rectangle over
+                        // the entire character.
+                        SwPosition const nextTextPos(prevTextPos.nNode,
+                                SwIndex(prevTextPos.nContent, +1));
+                        SwRect nextTextRect;
+                        pTextFrame->GetCharRect(nextTextRect, nextTextPos);
+                        SwRectFnSet aRectFnSet(pTextFrame);
+                        if (aRectFnSet.GetTop(aTextRect) ==
+                            aRectFnSet.GetTop(nextTextRect)) // same line?
                         {
-                            aRectFnSet.SetRight( aTextRect,
-                                aRectFnSet.GetLeft(nextTextRect));
-                        }
-                        else // RTL
-                        {
-                            aRectFnSet.SetLeft( aTextRect,
-                                aRectFnSet.GetLeft(nextTextRect));
+                            // need to handle mixed RTL/LTR portions somehow
+                            if (aRectFnSet.GetLeft(aTextRect) <
+                                aRectFnSet.GetLeft(nextTextRect))
+                            {
+                                aRectFnSet.SetRight( aTextRect,
+                                    aRectFnSet.GetLeft(nextTextRect));
+                            }
+                            else // RTL
+                            {
+                                aRectFnSet.SetLeft( aTextRect,
+                                    aRectFnSet.GetLeft(nextTextRect));
+                            }
                         }
                     }
-                }
 
-                nTextDistance = lcl_getDistance(aTextRect, rPoint);
-                bValidTextDistance = true;
+                    nTextDistance = lcl_getDistance(aTextRect, rPoint);
+                    bValidTextDistance = true;
+                }
             }
 
             double nBackDistance = 0;

@@ -34,8 +34,9 @@
 
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     : SwUndo( nUndoId, rPam.GetDoc() ), SwUndRng( rPam ),
-    pTextFormatColl( nullptr ), pLastNdColl(nullptr), pFrameFormats( nullptr ), pRedlData( nullptr ),
-    bSttWasTextNd( true ), nNdDiff( 0 ), nSetPos( 0 )
+    pTextFormatColl( nullptr ), pLastNdColl(nullptr), pFrameFormats( nullptr ), pRedlData( nullptr )
+    , m_nDeleteTextNodes(1)
+    , nNdDiff( 0 ), nSetPos( 0 )
 {
     pHistory.reset( new SwHistory );
     SwDoc* pDoc = rPam.GetDoc();
@@ -44,6 +45,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     if( pTextNd )
     {
         pTextFormatColl = pTextNd->GetTextColl();
+        assert(pTextFormatColl);
         pHistory->CopyAttr( pTextNd->GetpSwpHints(), nSttNode,
                             0, pTextNd->GetText().getLength(), false );
         if( pTextNd->HasSwAttrSet() )
@@ -91,7 +93,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
 //  Flys, anchored to any paragraph, but not first and last, are handled by DelContentIndex (see SwUndoInserts::UndoImpl) and are not stored in m_FlyUndos.
 
 void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
-                                    bool bSttIsTextNd )
+                                    int const nDeleteTextNodes)
 {
     const SwPosition* pTmpPos = rPam.End();
     nEndNode = pTmpPos->nNode.GetIndex();
@@ -106,10 +108,10 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
         nSttNode = pTmpPos->nNode.GetIndex();
         nSttContent = pTmpPos->nContent.GetIndex();
 
-        if( !bSttIsTextNd )      // if a table selection is added ...
+        m_nDeleteTextNodes = nDeleteTextNodes;
+        if (m_nDeleteTextNodes == 0) // if a table selection is added...
         {
-            ++nSttNode;         // ... than the CopyPam is not fully correct
-            bSttWasTextNd = false;
+            ++nSttNode;         // ... then the CopyPam is not fully correct
         }
     }
 
@@ -219,8 +221,10 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
                     new SwNodeIndex(rDoc.GetNodes().GetEndOfContent()));
             MoveToUndoNds(rPam, m_pUndoNodeIndex.get());
 
-            if( !bSttWasTextNd )
+            if (m_nDeleteTextNodes == 0)
+            {
                 rPam.Move( fnMoveBackward, GoInContent );
+            }
         }
     }
 
@@ -241,15 +245,19 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         if( !pTextFormatColl ) // if 0 than it's no TextNode -> delete
         {
             SwNodeIndex aDelIdx( rIdx );
-            ++rIdx;
-            SwContentNode* pCNd = rIdx.GetNode().GetContentNode();
-            rPam.GetPoint()->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
-            rPam.SetMark();
+            assert(0 < m_nDeleteTextNodes && m_nDeleteTextNodes < 3);
+            for (int i = 0; i < m_nDeleteTextNodes; ++i)
+            {
+                rPam.Move(fnMoveForward, GoInNode);
+            }
             rPam.DeleteMark();
 
-            RemoveIdxRel(aDelIdx.GetIndex(), *rPam.GetPoint());
+            for (int i = 0; i < m_nDeleteTextNodes; ++i)
+            {
+                RemoveIdxRel(aDelIdx.GetIndex() + i, *rPam.GetPoint());
+            }
 
-            rDoc.GetNodes().Delete( aDelIdx );
+            rDoc.GetNodes().Delete( aDelIdx, m_nDeleteTextNodes );
         }
         else
         {
@@ -303,8 +311,10 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         sal_uLong const nMvNd = m_pUndoNodeIndex->GetIndex();
         m_pUndoNodeIndex.reset();
         MoveFromUndoNds(*pDoc, nMvNd, *rPam.GetMark());
-        if( bSttWasTextNd )
+        if (m_nDeleteTextNodes != 0)
+        {
             MovePtForward(rPam, bMvBkwrd);
+        }
         rPam.Exchange();
     }
 

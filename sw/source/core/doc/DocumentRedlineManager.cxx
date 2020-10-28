@@ -144,50 +144,88 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
     // no need to call UpdateFootnoteNums for FTNNUM_PAGE:
     // the AppendFootnote/RemoveFootnote will do it by itself!
     rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
-    SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
-    if (!pStartNode)
+    SwPosition currentStart(*rPam.Start());
+    SwTextNode * pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
+    while (!pStartNode)
     {
-        SwTableNode *const pTableNode(rPam.Start()->nNode.GetNode().GetTableNode());
-        assert(pTableNode); // known pathology
-        for (sal_uLong j = pTableNode->GetIndex(); j <= pTableNode->EndOfSectionIndex(); ++j)
+        SwStartNode *const pTableOrSectionNode(
+            currentStart.nNode.GetNode().IsTableNode()
+                ? static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetTableNode())
+                : static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetSectionNode()));
+        assert(pTableOrSectionNode); // known pathology
+        for (sal_uLong j = pTableOrSectionNode->GetIndex(); j <= pTableOrSectionNode->EndOfSectionIndex(); ++j)
         {
-            pTableNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
+            pTableOrSectionNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
         }
         for (SwRootFrame const*const pLayout : rDoc.GetAllLayouts())
         {
             if (pLayout->IsHideRedlines())
             {
-                pTableNode->DelFrames(pLayout);
+                if (pTableOrSectionNode->IsTableNode())
+                {
+                    static_cast<SwTableNode*>(pTableOrSectionNode)->DelFrames(pLayout);
+                }
+                else
+                {
+                    static_cast<SwSectionNode*>(pTableOrSectionNode)->DelFrames(pLayout);
+                }
             }
         }
+        currentStart.nNode = pTableOrSectionNode->EndOfSectionIndex() + 1;
+        currentStart.nContent.Assign(currentStart.nNode.GetNode().GetContentNode(), 0);
+        pStartNode = currentStart.nNode.GetNode().GetTextNode();
     }
-    else
+    if (currentStart < *rPam.End())
     {
-        std::vector<SwTextFrame*> frames;
-        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
-        for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        SwTextNode * pNode(pStartNode);
+        do
         {
-            if (pFrame->getRootFrame()->IsHideRedlines())
+            std::vector<SwTextFrame*> frames;
+            SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pNode);
+            for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
             {
-                frames.push_back(pFrame);
+                if (pFrame->getRootFrame()->IsHideRedlines())
+                {
+                    frames.push_back(pFrame);
+                }
             }
+            if (frames.empty())
+            {
+                auto const& layouts(rDoc.GetAllLayouts());
+                assert(std::none_of(layouts.begin(), layouts.end(),
+                    [](SwRootFrame const*const pLayout) { return pLayout->IsHideRedlines(); }));
+                (void) layouts;
+                break;
+            }
+            auto eMode(sw::FrameMode::Existing);
+            SwTextNode * pLast(pNode);
+            for (SwTextFrame * pFrame : frames)
+            {
+                SwTextNode & rFirstNode(pFrame->GetMergedPara()
+                    ? *pFrame->GetMergedPara()->pFirstNode
+                    : *pNode);
+                assert(pNode == pStartNode
+                        ? rFirstNode.GetIndex() <= pNode->GetIndex()
+                        : &rFirstNode == pNode);
+                // clear old one first to avoid DelFrames confusing updates & asserts...
+                pFrame->SetMergedPara(nullptr);
+                pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
+                    *pFrame, rFirstNode, eMode));
+                eMode = sw::FrameMode::New; // Existing is not idempotent!
+                // the first node of the new redline is not necessarily the first
+                // node of the merged frame, there could be another redline nearby
+                sw::AddRemoveFlysAnchoredToFrameStartingAtNode(*pFrame, *pNode, nullptr);
+                // if redline is split across table and table cell is empty, there's no redline in the cell and so no merged para
+                if (pFrame->GetMergedPara())
+                {
+                    pLast = const_cast<SwTextNode*>(pFrame->GetMergedPara()->pLastNode);
+                }
+            }
+            SwNodeIndex tmp(*pLast);
+            // skip over hidden sections!
+            pNode = static_cast<SwTextNode*>(pLast->GetNodes().GoNextSection(&tmp, /*bSkipHidden=*/true, /*bSkipProtect=*/false));
         }
-        auto eMode(sw::FrameMode::Existing);
-        for (SwTextFrame * pFrame : frames)
-        {
-            SwTextNode & rFirstNode(pFrame->GetMergedPara()
-                ? *pFrame->GetMergedPara()->pFirstNode
-                : *pStartNode);
-            assert(rFirstNode.GetIndex() <= pStartNode->GetIndex());
-            // clear old one first to avoid DelFrames confusing updates & asserts...
-            pFrame->SetMergedPara(nullptr);
-            pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
-                *pFrame, rFirstNode, eMode));
-            eMode = sw::FrameMode::New; // Existing is not idempotent!
-            // the first node of the new redline is not necessarily the first
-            // node of the merged frame, there could be another redline nearby
-            sw::AddRemoveFlysAnchoredToFrameStartingAtNode(*pFrame, *pStartNode, nullptr);
-        }
+        while (pNode && pNode->GetIndex() <= rPam.End()->nNode.GetIndex());
     }
     // fields last - SwGetRefField::UpdateField requires up-to-date frames
     UpdateFieldsForRedline(rDoc.getIDocumentFieldsAccess()); // after footnotes
@@ -199,50 +237,68 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 
 void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 {
+    bool isAppendObjsCalled(false);
     rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
-    SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
-    if (!pStartNode)
+    SwPosition currentStart(*rPam.Start());
+    SwTextNode * pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
+    while (!pStartNode)
     {
-        SwTableNode const*const pTableNode(rPam.Start()->nNode.GetNode().GetTableNode());
-        assert(pTableNode); // known pathology
-        for (sal_uLong j = pTableNode->GetIndex(); j <= pTableNode->EndOfSectionIndex(); ++j)
+        SwStartNode const*const pTableOrSectionNode(
+            currentStart.nNode.GetNode().IsTableNode()
+                ? static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetTableNode())
+                : static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetSectionNode()));
+        assert(pTableOrSectionNode); // known pathology
+        for (sal_uLong j = pTableOrSectionNode->GetIndex(); j <= pTableOrSectionNode->EndOfSectionIndex(); ++j)
         {
-            pTableNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::None);
+            pTableOrSectionNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::None);
         }
         if (rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines())
         {
             // note: this will also create frames for all currently hidden flys
             // because it calls AppendAllObjs
-            ::MakeFrames(&rDoc, rPam.Start()->nNode, rPam.End()->nNode);
+            SwNodeIndex const end(*pTableOrSectionNode->EndOfSectionNode());
+            ::MakeFrames(&rDoc, currentStart.nNode, end);
+            isAppendObjsCalled = true;
         }
+        currentStart.nNode = pTableOrSectionNode->EndOfSectionIndex() + 1;
+        currentStart.nContent.Assign(currentStart.nNode.GetNode().GetContentNode(), 0);
+        pStartNode = currentStart.nNode.GetNode().GetTextNode();
     }
-    else
+    if (currentStart < *rPam.End())
     {
-        std::vector<SwTextFrame*> frames;
-        std::set<SwRootFrame*> layouts;
-        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
-        for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        SwTextNode * pNode(pStartNode);
+        do
         {
-            if (pFrame->getRootFrame()->IsHideRedlines())
+            std::vector<SwTextFrame*> frames;
+            SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pNode);
+            for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
             {
-                frames.push_back(pFrame);
-                layouts.insert(pFrame->getRootFrame());
+                if (pFrame->getRootFrame()->IsHideRedlines())
+                {
+                    frames.push_back(pFrame);
+                }
             }
-        }
-        if (frames.empty())
-        {
-            return;
-        }
-        if (rPam.GetPoint()->nNode != rPam.GetMark()->nNode)
-        {
+            if (frames.empty())
+            {
+                auto const& layouts(rDoc.GetAllLayouts());
+                assert(std::none_of(layouts.begin(), layouts.end(),
+                    [](SwRootFrame const*const pLayout) { return pLayout->IsHideRedlines(); }));
+                (void) layouts;
+                break;
+            }
+
             // first, call CheckParaRedlineMerge on the first paragraph,
             // to init flag on new merge range (if any) + 1st node post the merge
             auto eMode(sw::FrameMode::Existing);
+            SwTextNode * pLast(pNode);
             for (SwTextFrame * pFrame : frames)
             {
                 if (auto const pMergedPara = pFrame->GetMergedPara())
                 {
-                    assert(pMergedPara->pFirstNode->GetIndex() <= pStartNode->GetIndex());
+                    pLast = const_cast<SwTextNode*>(pMergedPara->pLastNode);
+                    assert(pNode == pStartNode
+                        ? pMergedPara->pFirstNode->GetIndex() <= pNode->GetIndex()
+                        : pMergedPara->pFirstNode == pNode);
                     // clear old one first to avoid DelFrames confusing updates & asserts...
                     SwTextNode & rFirstNode(*pMergedPara->pFirstNode);
                     pFrame->SetMergedPara(nullptr);
@@ -251,24 +307,36 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                     eMode = sw::FrameMode::New; // Existing is not idempotent!
                 }
             }
-            // now start node until end of merge + 1 has proper flags; MakeFrames
-            // should pick up from the next node in need of frames by checking flags
-            SwNodeIndex const start(*pStartNode, +1);
-            SwNodeIndex const end(rPam.End()->nNode, +1); // end is exclusive
-            // note: this will also create frames for all currently hidden flys
-            // both on first and non-first nodes because it calls AppendAllObjs
-            ::MakeFrames(&rDoc, start, end);
-            // re-use this to move flys that are now on the wrong frame, with end
-            // of redline as "second" node; the nodes between start and end should
-            // be complete with MakeFrames already
-            sw::MoveMergedFlysAndFootnotes(frames, *pStartNode,
-                    *rPam.End()->nNode.GetNode().GetTextNode(), false);
+            if (pLast != pNode)
+            {
+                // now start node until end of merge + 1 has proper flags; MakeFrames
+                // should pick up from the next node in need of frames by checking flags
+                SwNodeIndex const start(*pNode, +1);
+                SwNodeIndex const end(*pLast, +1); // end is exclusive
+                // note: this will also create frames for all currently hidden flys
+                // both on first and non-first nodes because it calls AppendAllObjs
+                ::MakeFrames(&rDoc, start, end);
+                isAppendObjsCalled = true;
+                // re-use this to move flys that are now on the wrong frame, with end
+                // of redline as "second" node; the nodes between start and end should
+                // be complete with MakeFrames already
+                sw::MoveMergedFlysAndFootnotes(frames, *pNode, *pLast, false);
+            }
+            SwNodeIndex tmp(*pLast);
+            // skip over hidden sections!
+            pNode = static_cast<SwTextNode*>(pLast->GetNodes().GoNextSection(&tmp, /*bSkipHidden=*/true, /*bSkipProtect=*/false));
         }
-        else
-        {   // recreate flys in the one node the hard way...
-            for (auto const& pLayout : layouts)
+        while (pNode && pNode->GetIndex() <= rPam.End()->nNode.GetIndex());
+    }
+
+    if (!isAppendObjsCalled)
+    {   // recreate flys in the one node the hard way...
+        for (auto const& pLayout : rDoc.GetAllLayouts())
+        {
+            if (pLayout->IsHideRedlines())
             {
                 AppendAllObjs(rDoc.GetSpzFrameFormats(), pLayout);
+                break;
             }
         }
     }
@@ -423,17 +491,15 @@ namespace
 
                     if( pCSttNd && pCEndNd )
                         rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                    else
-                    {
-                        rDoc.getIDocumentContentOperations().DeleteRange( aPam );
-
-                        if( pCSttNd && !pCEndNd )
+                    else if (pCSttNd && !pCEndNd)
                         {
                             aPam.GetBound().nContent.Assign( nullptr, 0 );
                             aPam.GetBound( false ).nContent.Assign( nullptr, 0 );
-                            aPam.DeleteMark();
                             rDoc.getIDocumentContentOperations().DelFullPara( aPam );
                         }
+                    else
+                    {
+                        rDoc.getIDocumentContentOperations().DeleteRange(aPam);
                     }
                     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
                 }
@@ -537,17 +603,20 @@ namespace
 
                     if( pCSttNd && pCEndNd )
                         rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                    else
-                    {
-                        rDoc.getIDocumentContentOperations().DeleteRange( aPam );
-
-                        if( pCSttNd && !pCEndNd )
+                    else if (pCSttNd && !pCEndNd)
                         {
                             aPam.GetBound().nContent.Assign( nullptr, 0 );
                             aPam.GetBound( false ).nContent.Assign( nullptr, 0 );
-                            aPam.DeleteMark();
+                            if (aPam.End()->nNode.GetNode().IsStartNode())
+                            {   // end node will be deleted too! see nNodeDiff+1
+                                --aPam.End()->nNode;
+                            }
+                            assert(!aPam.End()->nNode.GetNode().IsStartNode());
                             rDoc.getIDocumentContentOperations().DelFullPara( aPam );
                         }
+                    else
+                    {
+                        rDoc.getIDocumentContentOperations().DeleteRange(aPam);
                     }
                     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
                 }
@@ -1318,7 +1387,15 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         {
                             // Overlaps the current one completely,
                             // split the new one
-                            if( *pEnd != *pREnd )
+                            if (*pEnd == *pREnd)
+                            {
+                                pNewRedl->SetEnd(*pRStt, pEnd);
+                            }
+                            else if (*pStt == *pRStt)
+                            {
+                                pNewRedl->SetStart(*pREnd, pStt);
+                            }
+                            else
                             {
                                 SwRangeRedline* pNew = new SwRangeRedline( *pNewRedl );
                                 pNew->SetStart( *pREnd );
@@ -1327,8 +1404,6 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 n = 0;      // re-initialize
                                 bDec = true;
                             }
-                            else
-                                pNewRedl->SetEnd( *pRStt, pEnd );
                         }
                         break;
 
@@ -1582,7 +1657,13 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             {
                                 pRedl->PushData( *pNewRedl );
                                 if( *pEnd == *pREnd )
+                                {
                                     pNewRedl->SetEnd( *pRStt, pEnd );
+                                }
+                                else if (*pStt == *pRStt)
+                                {
+                                    pNewRedl->SetStart(*pREnd, pStt);
+                                }
                                 else
                                 {
                                     pNew = new SwRangeRedline( *pNewRedl );
@@ -1749,20 +1830,23 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     case SwComparePosition::Outside:
                         // Overlaps the current one completely,
                         // split or shorten the new one
-                        if( *pEnd != *pREnd )
+                        if (*pEnd == *pREnd)
                         {
-                            if( *pEnd != *pRStt )
-                            {
-                                SwRangeRedline* pNew = new SwRangeRedline( *pNewRedl );
-                                pNew->SetStart( *pREnd );
-                                pNewRedl->SetEnd( *pRStt, pEnd );
-                                AppendRedline( pNew, bCallDelete );
-                                n = 0;      // re-initialize
-                                bDec = true;
-                            }
+                            pNewRedl->SetEnd(*pRStt, pEnd);
+                        }
+                        else if (*pStt == *pRStt)
+                        {
+                            pNewRedl->SetStart(*pREnd, pStt);
                         }
                         else
+                        {
+                            SwRangeRedline* pNew = new SwRangeRedline( *pNewRedl );
+                            pNew->SetStart( *pREnd );
                             pNewRedl->SetEnd( *pRStt, pEnd );
+                            AppendRedline( pNew, bCallDelete );
+                            n = 0;      // re-initialize
+                            bDec = true;
+                        }
                         break;
                     default:
                         break;
