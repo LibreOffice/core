@@ -102,7 +102,7 @@ private:
     using SwEditShell::AutoCorrect;
     using SwCursorShell::GotoMark;
 
-    typedef long (SwWrtShell::*SELECTFUNC)(const Point *, bool bProp );
+    typedef tools::Long (SwWrtShell::*SELECTFUNC)(const Point *, bool bProp );
     typedef void (SwWrtShell::*SELECTFUNC2)(const Point *, bool bProp );
 
     SELECTFUNC2 m_fnDrag      = &SwWrtShell::BeginDrag;

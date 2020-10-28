@@ -312,7 +312,7 @@ static void GetTextAreaOutline(
 
             const SvxCharScaleWidthItem& rCharScaleWidthItem = rSdrObjCustomShape.GetMergedItem( EE_CHAR_FONTWIDTH );
             sal_uInt16 nCharScaleWidth = rCharScaleWidthItem.GetValue();
-            std::unique_ptr<long[]> pDXArry;
+            std::unique_ptr<tools::Long[]> pDXArry;
             sal_Int32 nWidth = 0;
 
             // VERTICAL
@@ -365,7 +365,7 @@ static void GetTextAreaOutline(
             {
                 if ( ( nCharScaleWidth != 100 ) && nCharScaleWidth )
                 {   // applying character spacing
-                    pDXArry.reset(new long[ rText.getLength() ]);
+                    pDXArry.reset(new tools::Long[ rText.getLength() ]);
                     pVirDev->GetTextArray( rText, pDXArry.get());
                     FontMetric aFontMetric( pVirDev->GetFontMetric() );
                     aFont.SetAverageFontWidth( static_cast<sal_Int32>( static_cast<double>(aFontMetric.GetAverageFontWidth()) * ( double(100) / static_cast<double>(nCharScaleWidth) ) ) );

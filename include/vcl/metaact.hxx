@@ -503,7 +503,7 @@ private:
 
     Point       maStartPt;
     OUString    maStr;
-    std::unique_ptr<long[]>
+    std::unique_ptr<tools::Long[]>
                 mpDXAry;
     sal_Int32   mnIndex;
     sal_Int32   mnLen;

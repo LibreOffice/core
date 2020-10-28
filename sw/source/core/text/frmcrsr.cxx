@@ -382,12 +382,12 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     if ( aRectFnSet.IsVert() )
     {
         if ( aRectFnSet.IsVertL2R() )
-            nMaxY = std::min( aRectFnSet.GetPrtBottom(*pFrame), nUpperMaxY );
+            nMaxY = std::min( SwTwips(aRectFnSet.GetPrtBottom(*pFrame)), nUpperMaxY );
         else
-            nMaxY = std::max( aRectFnSet.GetPrtBottom(*pFrame), nUpperMaxY );
+            nMaxY = std::max( SwTwips(aRectFnSet.GetPrtBottom(*pFrame)), nUpperMaxY );
     }
     else
-        nMaxY = std::min( aRectFnSet.GetPrtBottom(*pFrame), nUpperMaxY );
+        nMaxY = std::min( SwTwips(aRectFnSet.GetPrtBottom(*pFrame)), nUpperMaxY );
     if ( pFrame->IsEmpty() || ! aRectFnSet.GetHeight(pFrame->getFramePrintArea()) )
     {
         Point aPnt1 = pFrame->getFrameArea().Pos() + pFrame->getFramePrintArea().Pos();
@@ -1407,7 +1407,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
             nFirst = nFirst - nDist;
         else
             nFirst = 0;
-        nDist = std::max( nDist, GetLineSpace() );
+        nDist = std::max( nDist, SwTwips(GetLineSpace()) );
         nDist += nLineHeight;
         nDiff -= nFirst;
 

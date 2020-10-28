@@ -50,7 +50,7 @@ namespace sw { struct Extent; }
 namespace basegfx::utils { class B2DClipState; }
 
 #define FAR_AWAY (SAL_MAX_INT32 - 20000)  // initial position of a Fly
-#define BROWSE_HEIGHT (56700L * 10L) // 10 Meters
+constexpr tools::Long BROWSE_HEIGHT = 56700 * 10; // 10 Meters
 #define GRFNUM_NO 0
 #define GRFNUM_YES 1
 #define GRFNUM_REPLACE 2

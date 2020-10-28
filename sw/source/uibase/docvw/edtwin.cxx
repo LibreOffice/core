@@ -683,7 +683,7 @@ void SwEditWin::JustifyAreaTimer()
 #ifdef UNX
     const tools::Long coMinLen = 100;
 #else
-    const long coMinLen = 50;
+    const tools::Long coMinLen = 50;
 #endif
     tools::Long const nTimeout = 800,
          nDiff = std::max(

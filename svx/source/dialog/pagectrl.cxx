@@ -75,8 +75,8 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     rRenderContext.Push(PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
-    Fraction aXScale(aWinSize.Width(), std::max(tools::Long(aSize.Width() * 2 + aSize.Width() / 8), 1L));
-    Fraction aYScale(aWinSize.Height(), std::max(aSize.Height(), 1L));
+    Fraction aXScale(aWinSize.Width(), std::max(aSize.Width() * 2 + aSize.Width() / 8, tools::Long(1)));
+    Fraction aYScale(aWinSize.Height(), std::max(aSize.Height(), tools::Long(1)));
     MapMode aMapMode(rRenderContext.GetMapMode());
 
     if(aYScale < aXScale)

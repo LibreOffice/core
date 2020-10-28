@@ -609,7 +609,7 @@ namespace emfio
                                                                                        // dxAry will not fit
                     if ( nNewTextLen )
                     {
-                        std::unique_ptr<long[]> pDXAry, pDYAry;
+                        std::unique_ptr<tools::Long[]> pDXAry, pDYAry;
                         auto nDxArySize =  nMaxStreamPos - mpInputStream->Tell();
                         auto nDxAryEntries = nDxArySize >> 1;
                         bool        bUseDXAry = false;
@@ -617,10 +617,10 @@ namespace emfio
                         if ( ( ( nDxAryEntries % nOriginalTextLen ) == 0 ) && ( nNewTextLen <= nOriginalTextLen ) )
                         {
                             sal_Int32 i; // needed just outside the for
-                            pDXAry.reset(new long[ nNewTextLen ]);
+                            pDXAry.reset(new tools::Long[ nNewTextLen ]);
                             if ( nOptions & ETO_PDY )
                             {
-                                pDYAry.reset(new long[ nNewTextLen ]);
+                                pDYAry.reset(new tools::Long[ nNewTextLen ]);
                             }
                             for (i = 0; i < nNewTextLen; i++ )
                             {
@@ -1109,7 +1109,7 @@ namespace emfio
                                                 {
                                                     Point  aPt;
                                                     sal_uInt32  nStringLen, nDXCount;
-                                                    std::unique_ptr<long[]> pDXAry;
+                                                    std::unique_ptr<tools::Long[]> pDXAry;
                                                     SvMemoryStream aMemoryStream( nEscLen );
                                                     aMemoryStream.WriteBytes(pData.get(), nEscLen);
                                                     aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
@@ -1127,7 +1127,7 @@ namespace emfio
                                                         if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
                                                             nDXCount = 0;
                                                         if ( nDXCount )
-                                                            pDXAry.reset(new long[ nDXCount ]);
+                                                            pDXAry.reset(new tools::Long[ nDXCount ]);
                                                         for  (sal_uInt32 i = 0; i < nDXCount; i++ )
                                                         {
                                                             sal_Int32 val;

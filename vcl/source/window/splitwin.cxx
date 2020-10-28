@@ -1762,7 +1762,7 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
     {
         std::vector< ImplSplitItem >&  rItems = mpSplitSet->mvItems;
         sal_uInt16       nItems = mpSplitSet->mvItems.size();
-        mpLastSizes = new long[nItems*2];
+        mpLastSizes = new tools::Long[nItems*2];
         for ( sal_uInt16 i = 0; i < nItems; i++ )
         {
             mpLastSizes[i*2]   = rItems[i].mnSize;

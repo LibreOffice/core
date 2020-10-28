@@ -305,7 +305,7 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
             SwTwips nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
             if( nPrtHeight < 0 )
             {
-                const SwTwips nTmpDiff = std::max( aRectFnSet.GetTop(getFramePrintArea()), -nPrtHeight );
+                const SwTwips nTmpDiff = std::max( SwTwips(aRectFnSet.GetTop(getFramePrintArea())), -nPrtHeight );
                 SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                 aRectFnSet.SubTop( aPrt, nTmpDiff );
             }
@@ -348,8 +348,8 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
     {
         if ( pBoss->GetMaxFootnoteHeight() != LONG_MAX )
         {
-            nDist = std::min( nDist, pBoss->GetMaxFootnoteHeight()
-                         - aRectFnSet.GetHeight(getFrameArea()) );
+            nDist = std::min( nDist,
+                        SwTwips(pBoss->GetMaxFootnoteHeight() - aRectFnSet.GetHeight(getFrameArea())) );
             if ( nDist <= 0 )
                 return 0;
         }
