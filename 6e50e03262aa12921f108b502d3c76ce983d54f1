@@ -45,6 +45,30 @@
       "revId": "6e50e03262aa12921f108b502d3c76ce983d54f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc9e6e72_4cc6278b",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-28T15:42:10Z",
+      "side": 1,
+      "message": "https://bugs.documentfoundation.org/show_bug.cgi?id\u003d137470\nAsked Yusuf via Telegram to take care but no progress so far. Just switching the URL is not enough.",
+      "parentUuid": "fd515fe2_f7ba820c",
+      "range": {
+        "startLine": 445,
+        "startChar": 4,
+        "endLine": 446,
+        "endChar": 55
+      },
+      "revId": "6e50e03262aa12921f108b502d3c76ce983d54f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
