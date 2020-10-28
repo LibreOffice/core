@@ -973,7 +973,7 @@ void ScDocument::FillInfo(
                 {
                     tools::Long nSize = 0;
                     for( SCCOL nDocCol = nFirstRealDocCol; nDocCol < nFirstDocCol; ++nDocCol )
-                        nSize += std::max( static_cast< tools::Long >( GetColWidth( nDocCol, nTab ) * fColScale ), 1L );
+                        nSize += std::max<tools::Long>( GetColWidth( nDocCol, nTab ) * fColScale, 1 );
                     rArray.SetAddMergedLeftSize( nCol, nRow, nSize );
                 }
                 // additional space after last column
@@ -981,7 +981,7 @@ void ScDocument::FillInfo(
                 {
                     tools::Long nSize = 0;
                     for( SCCOL nDocCol = nLastDocCol + 1; nDocCol <= nLastRealDocCol; ++nDocCol )
-                        nSize += std::max( static_cast< tools::Long >( GetColWidth( nDocCol, nTab ) * fColScale ), 1L );
+                        nSize += std::max<tools::Long>( GetColWidth( nDocCol, nTab ) * fColScale, 1 );
                     rArray.SetAddMergedRightSize( nCol, nRow, nSize );
                 }
                 // additional space above first row
@@ -989,7 +989,7 @@ void ScDocument::FillInfo(
                 {
                     tools::Long nSize = 0;
                     for( SCROW nDocRow = nFirstRealDocRow; nDocRow < nFirstDocRow; ++nDocRow )
-                        nSize += std::max( static_cast< tools::Long >( GetRowHeight( nDocRow, nTab ) * fRowScale ), 1L );
+                        nSize += std::max<tools::Long>( GetRowHeight( nDocRow, nTab ) * fRowScale, 1 );
                     rArray.SetAddMergedTopSize( nCol, nRow, nSize );
                 }
                 // additional space beyond last row
@@ -997,7 +997,7 @@ void ScDocument::FillInfo(
                 {
                     tools::Long nSize = 0;
                     for( SCROW nDocRow = nLastDocRow + 1; nDocRow <= nLastRealDocRow; ++nDocRow )
-                        nSize += std::max( static_cast< tools::Long >( GetRowHeight( nDocRow, nTab ) * fRowScale ), 1L );
+                        nSize += std::max<tools::Long>( GetRowHeight( nDocRow, nTab ) * fRowScale, 1 );
                     rArray.SetAddMergedBottomSize( nCol, nRow, nSize );
                 }
 

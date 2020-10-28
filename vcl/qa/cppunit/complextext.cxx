@@ -17,6 +17,7 @@
 // must be declared before inclusion of test/bootstrapfixture.hxx
 static std::ostream& operator<<(std::ostream& rStream, const std::vector<tools::Long>& rVec);
 #endif
+#include <test/cppunitasserthelper.hxx>
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/wrkwin.hxx>

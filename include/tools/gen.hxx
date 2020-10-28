@@ -724,6 +724,8 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
 }
 }
 
+namespace tools
+{
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const tools::Rectangle& rectangle )
@@ -733,6 +735,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     else
         return stream << rectangle.getWidth() << 'x' << rectangle.getHeight()
                       << "@(" << rectangle.getX() << ',' << rectangle.getY() << ")";
+}
 }
 
 #endif

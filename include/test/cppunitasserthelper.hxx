@@ -10,7 +10,9 @@
 #ifndef INCLUDED_TEST_CPPUNITASSERTHELPER_HXX
 #define INCLUDED_TEST_CPPUNITASSERTHELPER_HXX
 
+#include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>

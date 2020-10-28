@@ -1091,7 +1091,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 {
     if( rAction.mpDXAry )
     {
-        mpDXAry.reset( new long[ mnLen ] );
+        mpDXAry.reset( new tools::Long[ mnLen ] );
         memcpy( mpDXAry.get(), rAction.mpDXAry.get(), mnLen * sizeof( long ) );
     }
 }
@@ -1111,7 +1111,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 
     if (nAryLen > 0)
     {
-        mpDXAry.reset( new long[ nAryLen ] );
+        mpDXAry.reset( new tools::Long[ nAryLen ] );
         memcpy( mpDXAry.get(), pDXAry, nAryLen * sizeof(long) );
     }
 }
@@ -1194,7 +1194,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
         if ( mnLen >= nAryLen )
         {
-            mpDXAry.reset( new (std::nothrow)long[ mnLen ] );
+            mpDXAry.reset( new (std::nothrow)tools::Long[ mnLen ] );
             if ( mpDXAry )
             {
                 sal_Int32 i;

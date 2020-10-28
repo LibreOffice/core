@@ -53,7 +53,7 @@ public:
     sal_Int32       GetDenominator() const;
 
     explicit operator sal_Int32() const;
-#if SAL_TYPES_SIZEOFLONG == 8
+#if SAL_TYPES_SIZEOFPOINTER == 8
     explicit operator ::tools::Long() const { return sal_Int32(*this); }
 #endif
     explicit operator double() const;
