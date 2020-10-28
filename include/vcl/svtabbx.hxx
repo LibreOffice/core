@@ -22,6 +22,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/treelistbox.hxx>
 #include <vcl/accessibletableprovider.hxx>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 #include <tools/debug.hxx>
 
@@ -96,6 +97,8 @@ public:
     sal_uLong        GetEntryPos( const SvTreeListEntry* pEntry ) const;
 
     void             SetTabJustify( sal_uInt16 nTab, SvTabJustify );
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 // class SvHeaderTabListBox ---------------------------------------------------

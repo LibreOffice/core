@@ -30,12 +30,63 @@
 #include <strings.hrc>
 #include <svdata.hxx>
 #include <memory>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 static constexpr SvLBoxTabFlags MYTABMASK =
     SvLBoxTabFlags::ADJUST_RIGHT | SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::FORCE;
+
+static boost::property_tree::ptree lcl_DumpEntryAndSiblings(SvTreeListEntry* pEntry,
+                                                            SvTabListBox* pTabListBox,
+                                                            bool bCheckButtons)
+{
+    boost::property_tree::ptree aEntries;
+
+    while (pEntry)
+    {
+        boost::property_tree::ptree aEntry;
+
+        const SvLBoxItem* pIt = pEntry->GetFirstItem(SvLBoxItemType::String);
+        if (pIt)
+            aEntry.put("text", static_cast<const SvLBoxString*>(pIt)->GetText());
+
+        if (bCheckButtons)
+        {
+            SvButtonState eCheckState = pTabListBox->GetCheckButtonState(pEntry);
+            if (eCheckState == SvButtonState::Unchecked)
+                aEntry.put("state", "false");
+            else if (eCheckState == SvButtonState::Checked)
+                aEntry.put("state", "true");
+        }
+
+        if (pTabListBox->IsSelected(pEntry))
+            aEntry.put("selected", "true");
+
+        aEntry.put("row", OString::number(pTabListBox->GetModel()->GetAbsPos(pEntry)).getStr());
+
+        SvTreeListEntry* pChild = pTabListBox->FirstChild(pEntry);
+        if (pChild)
+            aEntry.push_back(std::make_pair("children", lcl_DumpEntryAndSiblings(pChild, pTabListBox, bCheckButtons)));
+
+        aEntries.push_back(std::make_pair("", aEntry));
+
+        pEntry = pEntry->NextSibling();
+    }
+
+    return aEntries;
+}
+
+boost::property_tree::ptree SvTabListBox::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(SvTreeListBox::DumpAsPropertyTree());
+
+    bool bCheckButtons = static_cast<int>(nTreeFlags & SvTreeFlags::CHKBTN);
+    aTree.push_back(std::make_pair("entries", lcl_DumpEntryAndSiblings(First(), this, bCheckButtons)));
+
+    return aTree;
+}
 
 // SvTreeListBox callback
 
