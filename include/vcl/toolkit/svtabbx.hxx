@@ -88,6 +88,8 @@ public:
 
     void             SetTabJustify( sal_uInt16 nTab, SvTabJustify );
     void             SetTabEditable( sal_uInt16 nTab, bool bEditable );
+
+    virtual void     DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 // class SvHeaderTabListBox ---------------------------------------------------
