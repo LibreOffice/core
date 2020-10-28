@@ -35,6 +35,15 @@
 
 using namespace com::sun::star;
 
+namespace {
+    void lcl_SwClientNotify(SwModify& rModify, const SwAttrSet& aSet, SwAttrSet& aOld, SwAttrSet& aNew)
+    {
+        const SwAttrSetChg aChgOld(aSet, aOld);
+        const SwAttrSetChg aChgNew(aSet, aNew);
+        const sw::LegacyModifyHint aHint(&aChgOld, &aChgNew);
+        rModify.SwClientNotify(rModify, aHint);
+    }
+}
 
 SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
               const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrame,
@@ -129,9 +138,7 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
     // create PoolItem attribute for Modify
     if( aOld.Count() )
     {
-        SwAttrSetChg aChgOld( m_aSet, aOld );
-        SwAttrSetChg aChgNew( m_aSet, aNew );
-        ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
+        lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
     }
 
     if(GetRegisteredIn() != rFormat.GetRegisteredIn())
@@ -156,7 +163,8 @@ void SwFormat::SetName( const OUString& rNewName, bool bBroadcast )
         SwStringMsgPoolItem aOld( RES_NAME_CHANGED, m_aFormatName );
         SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
         m_aFormatName = rNewName;
-        ModifyNotification( &aOld, &aNew );
+        const sw::LegacyModifyHint aHint(&aOld, &aNew);
+        SwClientNotify(*this, aHint);
     }
     else
     {
@@ -236,7 +244,8 @@ SwFormat::~SwFormat()
         {
             SAL_INFO("sw.core", "reparenting " << typeid(*pClient).name() << " at " << pClient << " from " << typeid(*this).name() << " at " << this << " to "  << typeid(*pParentFormat).name() << " at " << pParentFormat);
             pParentFormat->Add( pClient );
-            pClient->ModifyNotification( &aOldFormat, &aNewFormat );
+            const sw::LegacyModifyHint aHint(&aOldFormat, &aNewFormat);
+            pClient->SwClientNotify(*this, aHint);
         }
     }
 }
@@ -366,7 +375,8 @@ bool SwFormat::SetDerivedFrom(SwFormat *pDerFrom)
 
     SwFormatChg aOldFormat( this );
     SwFormatChg aNewFormat( this );
-    ModifyNotification( &aOldFormat, &aNewFormat );
+    const sw::LegacyModifyHint aHint(&aOldFormat, &aNewFormat);
+    SwClientNotify(*this, aHint);
 
     return true;
 }
@@ -496,11 +506,7 @@ bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
             if(bRet)
             {
                 m_aSet.SetModifyAtAttr(this);
-
-                SwAttrSetChg aChgOld(m_aSet, aOld);
-                SwAttrSetChg aChgNew(m_aSet, aNew);
-
-                ModifyNotification(&aChgOld, &aChgNew);
+                lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
             }
         }
 
@@ -536,9 +542,7 @@ bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
             // some special treatments for attributes
             m_aSet.SetModifyAtAttr( this );
 
-            SwAttrSetChg aChgOld( m_aSet, aOld );
-            SwAttrSetChg aChgNew( m_aSet, aNew );
-            ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
+            lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
         }
     }
     return bRet;
@@ -602,11 +606,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
                 if(bRet)
                 {
                     m_aSet.SetModifyAtAttr(this);
-
-                    SwAttrSetChg aChgOld(m_aSet, aOld);
-                    SwAttrSetChg aChgNew(m_aSet, aNew);
-
-                    ModifyNotification(&aChgOld, &aChgNew);
+                    lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
                 }
             }
 
@@ -640,9 +640,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
         {
             // some special treatments for attributes
             m_aSet.SetModifyAtAttr( this );
-            SwAttrSetChg aChgOld( m_aSet, aOld );
-            SwAttrSetChg aChgNew( m_aSet, aNew );
-            ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
+            lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
         }
     }
     return bRet;
@@ -673,11 +671,7 @@ bool SwFormat::ResetFormatAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
               aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
     bool bRet = 0 != m_aSet.ClearItem_BC( nWhich1, nWhich2, &aOld, &aNew );
     if( bRet )
-    {
-        SwAttrSetChg aChgOld( m_aSet, aOld );
-        SwAttrSetChg aChgNew( m_aSet, aNew );
-        ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
-    }
+        lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
     return bRet;
 }
 
@@ -702,11 +696,7 @@ sal_uInt16 SwFormat::ResetAllFormatAttr()
               aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
     bool bRet = 0 != m_aSet.ClearItem_BC( 0, &aOld, &aNew );
     if( bRet )
-    {
-        SwAttrSetChg aChgOld( m_aSet, aOld );
-        SwAttrSetChg aChgNew( m_aSet, aNew );
-        ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
-    }
+        lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
     return aNew.Count();
 }
 
@@ -733,11 +723,7 @@ void SwFormat::DelDiffs( const SfxItemSet& rSet )
               aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
     bool bRet = 0 != m_aSet.Intersect_BC( rSet, &aOld, &aNew );
     if( bRet )
-    {
-        SwAttrSetChg aChgOld( m_aSet, aOld );
-        SwAttrSetChg aChgNew( m_aSet, aNew );
-        ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
-    }
+        lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
 }
 
 /** SwFormat::IsBackgroundTransparent
