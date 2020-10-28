@@ -351,7 +351,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             {
                 SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
                 if (pFrameFormat)
-                    SwTextBoxHelper::create(pFrameFormat);
+                    SwTextBoxHelper::create(pFrameFormat, pObj->HasText());
             }
             break;
         }

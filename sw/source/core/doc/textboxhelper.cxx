@@ -15,6 +15,7 @@
 #include <fmtfsize.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentState.hxx>
 #include <docsh.hxx>
 #include <unocoll.hxx>
 #include <unoframe.hxx>
@@ -51,11 +52,26 @@
 
 using namespace com::sun::star;
 
-void SwTextBoxHelper::create(SwFrameFormat* pShape)
+void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
 {
     // If TextBox wasn't enabled previously
     if (pShape->GetAttrSet().HasItem(RES_CNTNT) && pShape->GetOtherTextBoxFormat())
         return;
+
+    // Store the current text conent of the shape
+    OUString sCopyableText;
+
+    if (bCopyText)
+    {
+        if (auto pSdrShape = pShape->FindRealSdrObject())
+        {
+            uno::Reference<text::XText> xSrcCnt(pSdrShape->getWeakUnoShape(), uno::UNO_QUERY);
+            auto xCur = xSrcCnt->createTextCursor();
+            xCur->gotoStart(false);
+            xCur->gotoEnd(true);
+            sCopyableText = xCur->getText()->getString();
+        }
+    }
 
     // Create the associated TextFrame and insert it into the document.
     uno::Reference<text::XTextContent> xTextFrame(
@@ -178,6 +194,24 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
 
     if (aTxFrmSet.Count())
         pFormat->SetFormatAttr(aTxFrmSet);
+
+    // Check if the shape had text before and move it to the new textframe
+    if (bCopyText && !sCopyableText.isEmpty())
+    {
+        auto pSdrShape = pShape->FindRealSdrObject();
+        if (pSdrShape)
+        {
+            auto pSourceText = dynamic_cast<SdrTextObj*>(pSdrShape);
+            uno::Reference<text::XTextRange> xDestText(xRealTextFrame, uno::UNO_QUERY);
+
+            xDestText->setString(sCopyableText);
+
+            if (pSourceText)
+                pSourceText->SetText(OUString());
+
+            pShape->GetDoc()->getIDocumentState().SetModified();
+        }
+    }
 }
 
 void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
