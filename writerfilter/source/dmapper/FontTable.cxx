@@ -32,6 +32,7 @@ namespace writerfilter::dmapper
 
 struct FontTable_Impl
 {
+    std::unique_ptr<EmbeddedFontsHelper> xEmbeddedFontHelper;
     std::vector< FontEntry::Pointer_t > aFontEntries;
     FontEntry::Pointer_t pCurrentEntry;
     FontTable_Impl() {}
@@ -115,7 +116,7 @@ void FontTable::lcl_sprm(Sprm& rSprm)
             writerfilter::Reference< Properties >::Pointer_t pProperties = rSprm.getProps();
             if( pProperties )
             {
-                EmbeddedFontHandler handler( m_pImpl->pCurrentEntry->sFontName,
+                EmbeddedFontHandler handler(*this, m_pImpl->pCurrentEntry->sFontName,
                     nSprmId == NS_ooxml::LN_CT_Font_embedRegular ? ""
                     : nSprmId == NS_ooxml::LN_CT_Font_embedBold ? "b"
                     : nSprmId == NS_ooxml::LN_CT_Font_embedItalic ? "i"
@@ -222,8 +223,18 @@ sal_uInt32 FontTable::size()
     return m_pImpl->aFontEntries.size();
 }
 
-EmbeddedFontHandler::EmbeddedFontHandler( const OUString& _fontName, const char* _style )
+bool FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
+                                const OUString& fontName, const char* extra,
+                                std::vector<unsigned char> key)
+{
+    if (!m_pImpl->xEmbeddedFontHelper)
+        m_pImpl->xEmbeddedFontHelper.reset(new EmbeddedFontsHelper);
+    return m_pImpl->xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key);
+}
+
+EmbeddedFontHandler::EmbeddedFontHandler(FontTable& rFontTable, const OUString& _fontName, const char* _style )
 : LoggedProperties("EmbeddedFontHandler")
+, fontTable( rFontTable )
 , fontName( _fontName )
 , style( _style )
 {
@@ -252,7 +263,7 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
             key[ i + 16 ] = val;
         }
     }
-    EmbeddedFontsHelper::addEmbeddedFont( inputStream, fontName, style, key );
+    fontTable.addEmbeddedFont( inputStream, fontName, style, key );
     inputStream->closeInput();
 }
 
