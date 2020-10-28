@@ -1430,6 +1430,15 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
             }
         }
     }
+    else if (bExtDoc && pExtInfo && !bExtDocInherited && !pExtInfo->mbExternal && pSheetEndPos)
+    {
+        // Pass partial info up to caller, there may be an external name
+        // following, and if after *pSheetEndPos it's external sheet-local.
+        // For global names aTab is empty and *pSheetEndPos==0.
+        pExtInfo->mbExternal = true;
+        pExtInfo->maTabName = aTab;
+        pExtInfo->mnFileId = rDoc.GetExternalRefManager()->getExternalFileId(aDocName);
+    }
 
     rRawRes |= nRes;
 
