@@ -135,26 +135,8 @@ Size OutputDevice::GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) cons
     return aSize;
 }
 
-namespace
-{
-    struct UpdateFontsGuard
-    {
-        UpdateFontsGuard()
-        {
-            OutputDevice::ImplClearAllFontData(true);
-        }
-
-        ~UpdateFontsGuard()
-        {
-            OutputDevice::ImplRefreshAllFontData(true);
-        }
-    };
-}
-
 bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFontName )
 {
-    UpdateFontsGuard aUpdateFontsGuard;
-
     ImplInitFontList();
 
     if( !mpGraphics && !AcquireGraphics() )

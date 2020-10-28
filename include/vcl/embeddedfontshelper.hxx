@@ -26,6 +26,18 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 */
 class VCL_DLLPUBLIC EmbeddedFontsHelper
 {
+private:
+    std::vector<std::pair<OUString, OUString>> m_aAccumulatedFonts;
+
+    /**
+      Adds the given font to the list of known fonts. The font is used only until application
+      exit.
+
+      @param fontName name of the font (e.g. 'Times New Roman')
+      @param fileUrl URL of the font file
+    */
+    static void activateFont( const OUString& fontName, const OUString& fileUrl );
+
 public:
     /// Specification of what kind of operation is allowed when embedding a font
     enum class FontRights
@@ -41,14 +53,15 @@ public:
         FontWeight weight, FontPitch pitch, FontRights rights );
 
     /**
-      Reads a font from the input stream, saves it to a temporary font file and activates the font.
+      Reads a font from the input stream, saves it to a temporary font file and adds it to the list of
+      fonts that activateFonts will activate.
       @param stream stream of font data
       @param fontName name of the font (e.g. 'Times New Roman')
       @param extra additional text to use for name (e.g. to distinguish regular from bold, italic,...), "?" for unique
       @param key key to xor the data with, from the start until the key's length (not repeated)
       @param eot whether the data is compressed in Embedded OpenType format
     */
-    static bool addEmbeddedFont( const css::uno::Reference< css::io::XInputStream >& stream,
+    bool addEmbeddedFont( const css::uno::Reference< css::io::XInputStream >& stream,
         const OUString& fontName, const char* extra,
         std::vector< unsigned char > key, bool eot = false);
 
@@ -63,13 +76,10 @@ public:
     static OUString fileUrlForTemporaryFont( const OUString& fontName, const char* extra );
 
     /**
-      Adds the given font to the list of known fonts. The font is used only until application
+      Adds the accumulated fonts to the list of known fonts. The fonts are used only until application
       exit.
-
-      @param fontName name of the font (e.g. 'Times New Roman')
-      @param fileUrl URL of the font file
     */
-    static void activateFont( const OUString& fontName, const OUString& fileUrl );
+    void activateFonts();
 
     /**
       Returns if the restrictions specified in the font (if present) allow embedding
@@ -85,6 +95,11 @@ public:
       @internal
     */
     static void clearTemporaryFontFiles();
+
+    ~EmbeddedFontsHelper()
+    {
+        activateFonts();
+    }
 };
 
 #endif
