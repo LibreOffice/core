@@ -721,8 +721,8 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, weld::MetricSpinButton&, void )
     }
 
     //set maximum values
-    m_xCLNrEdt->set_max(std::max(1L,
-        std::min(tools::Long(nMaxCols), tools::Long( m_xColMgr->GetActualSize() / (nGutterWidth + MINLAY)) )));
+    m_xCLNrEdt->set_max(std::max<tools::Long>(1,
+        std::min<tools::Long>(nMaxCols, m_xColMgr->GetActualSize() / (nGutterWidth + MINLAY) )));
 
     //prompt example window
     if(!m_bLockUpdate)
@@ -795,8 +795,8 @@ void SwColumnPage::Init()
 
         // set maximum number of columns
         // values below 1 are not allowed
-    m_xCLNrEdt->set_max(std::max(1L,
-        std::min(tools::Long(nMaxCols), tools::Long( m_xColMgr->GetActualSize() / g_nMinWidth) )));
+    m_xCLNrEdt->set_max(std::max<tools::Long>(1,
+        std::min<tools::Long>(nMaxCols, m_xColMgr->GetActualSize() / g_nMinWidth )));
 }
 
 bool SwColumnPage::isLineNotNone() const

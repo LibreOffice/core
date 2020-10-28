@@ -36,6 +36,7 @@
 #include <unotools/tempfile.hxx>
 #include <scitems.hxx>
 #include <tokenarray.hxx>
+#include <test/cppunitasserthelper.hxx>
 
 #include <orcus/csv_parser.hpp>
 

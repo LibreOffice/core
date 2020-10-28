@@ -23,6 +23,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
+#include <test/cppunitasserthelper.hxx>
 
 #include <unoview.hxx>
 #include <unoviewcontainer.hxx>

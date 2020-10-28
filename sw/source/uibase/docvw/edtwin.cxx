@@ -689,7 +689,7 @@ void SwEditWin::JustifyAreaTimer()
          nDiff = std::max(
          std::max( m_aMovePos.Y() - rVisArea.Bottom(), rVisArea.Top() - m_aMovePos.Y() ),
          std::max( m_aMovePos.X() - rVisArea.Right(),  rVisArea.Left() - m_aMovePos.X()));
-    m_aTimer.SetTimeout( std::max( coMinLen, nTimeout - nDiff*2L) );
+    m_aTimer.SetTimeout( std::max<tools::Long>( coMinLen, nTimeout - nDiff*2L) );
 }
 
 void SwEditWin::LeaveArea(const Point &rPos)
