@@ -40,8 +40,11 @@ class SwTextFormatInfo;
 
 class SwTmpEndPortion : public SwLinePortion
 {
+    bool bChanged;
+    bool bDeleted;
+
 public:
-    explicit SwTmpEndPortion( const SwLinePortion &rPortion );
+    explicit SwTmpEndPortion( const SwLinePortion &rPortion, const bool bChanged, const bool bDel );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 };
 

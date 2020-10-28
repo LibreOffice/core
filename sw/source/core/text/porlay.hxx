@@ -92,6 +92,8 @@ private:
     bool m_bClipping  : 1; // Clipping needed for exact line height
     bool m_bContent   : 1; // Text for line numbering
     bool m_bRedline   : 1; // The Redlining
+    bool m_bRedlineEnd: 1; // Redlining for paragraph mark: tracked change at the end
+    bool m_bRedlineEndDel : 1; // Redlining for paragraph mark: tracked deletion at the end
     bool m_bForcedLeftMargin : 1; // Left adjustment moved by the Fly
     bool m_bHanging : 1; // Contains a hanging portion in the margin
     bool m_bUnderscore : 1;
@@ -123,6 +125,15 @@ public:
     bool HasContent() const { return m_bContent; }
     void SetRedline( const bool bNew ) { m_bRedline = bNew; }
     bool HasRedline() const { return m_bRedline; }
+<<<<<<< HEAD   (60fe5d tdf#137505 OOXML Import: Custom shape in chart: fix font siz)
+=======
+    void SetRedlineEnd( const bool bNew ) { m_bRedlineEnd = bNew; }
+    bool HasRedlineEnd() const { return m_bRedlineEnd; }
+    void SetRedlineEndDel( const bool bNew ) { m_bRedlineEndDel = bNew; }
+    bool HasRedlineEndDel() const { return m_bRedlineEndDel; }
+    void SetRedlineText ( const OUString& sText ) { m_sRedlineText = sText; }
+    const OUString* GetRedlineText() const { return &m_sRedlineText; }
+>>>>>>> CHANGE (350dbb tdf#105967 sw change tracking: fix pilcrow symbol)
     void SetForcedLeftMargin() { m_bForcedLeftMargin = true; }
     bool HasForcedLeftMargin() const { return m_bForcedLeftMargin; }
     void SetHanging( const bool bNew ) { m_bHanging = bNew; }

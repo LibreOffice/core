@@ -46,7 +46,9 @@
 
 #include <crsrsh.hxx>
 
-SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion )
+SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion,
+                const bool bCh, const bool bDel ) :
+    bChanged( bCh ), bDeleted( bDel )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
@@ -63,8 +65,16 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
         aFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
         const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
 
+<<<<<<< HEAD   (60fe5d tdf#137505 OOXML Import: Custom shape in chart: fix font siz)
         // draw the pilcrow
         rInf.DrawText(OUString(CH_PAR), *this);
+=======
+    SwFont aFont(*pOldFnt);
+    aFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
+    aFont.SetStrikeout( bDeleted ? STRIKEOUT_SINGLE : STRIKEOUT_NONE );
+    aFont.SetUnderline( (bChanged && !bDeleted) ? LINESTYLE_SINGLE : LINESTYLE_NONE );
+    const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
+>>>>>>> CHANGE (350dbb tdf#105967 sw change tracking: fix pilcrow symbol)
 
         const_cast<SwTextPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
     }
