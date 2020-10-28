@@ -631,7 +631,7 @@ void ScPivotLayoutDialog::Close()
 
 IMPL_LINK_NOARG( ScPivotLayoutDialog, OKClicked, weld::Button&, void )
 {
-    /* tdf#137726 hide so its not a candidate to be parent of any error
+    /* tdf#137726 hide so it's not a candidate to be parent of any error
        messages that may appear because this dialog is going to disappear on
        response(RET_OK) and the error dialog is not run in its own event loop
        but instead async */
