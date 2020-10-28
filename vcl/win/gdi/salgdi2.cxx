@@ -57,9 +57,9 @@ void WinSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraph
     mpImpl->copyBits( rPosAry, pSrcGraphics );
 }
 
-void WinSalGraphics::copyArea( long nDestX, long nDestY,
-                            long nSrcX, long nSrcY,
-                            long nSrcWidth, long nSrcHeight,
+void WinSalGraphics::copyArea( tools::Long nDestX, tools::Long nDestY,
+                            tools::Long nSrcX, tools::Long nSrcY,
+                            tools::Long nSrcWidth, tools::Long nSrcHeight,
                             bool bWindowInvalidate )
 {
     mpImpl->copyArea( nDestX, nDestY, nSrcX, nSrcY,
@@ -212,8 +212,8 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
     }
 }
 
-bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
-                                    long nHeight, sal_uInt8 nTransparency )
+bool WinSalGraphics::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                    tools::Long nHeight, sal_uInt8 nTransparency )
 {
     return mpImpl->drawAlphaRect( nX, nY, nWidth, nHeight, nTransparency );
 }
@@ -225,17 +225,17 @@ void WinSalGraphics::drawMask( const SalTwoRect& rPosAry,
     mpImpl->drawMask( rPosAry, rSSalBitmap, nMaskColor );
 }
 
-std::shared_ptr<SalBitmap> WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
+std::shared_ptr<SalBitmap> WinSalGraphics::getBitmap( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
 {
     return mpImpl->getBitmap( nX, nY, nDX, nDY );
 }
 
-Color WinSalGraphics::getPixel( long nX, long nY )
+Color WinSalGraphics::getPixel( tools::Long nX, tools::Long nY )
 {
     return mpImpl->getPixel( nX, nY );
 }
 
-void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+void WinSalGraphics::invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, SalInvert nFlags )
 {
     mpImpl->invert( nX, nY, nWidth, nHeight, nFlags );
 }

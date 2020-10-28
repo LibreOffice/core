@@ -1312,7 +1312,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
     // To compensate for the accuracy of calculation later on in SwTable::SetTabCols
     // we keep adding up a little.
     nRet += COLFUZZY;
-    return static_cast<sal_uInt16>(std::max( tools::Long(MINLAY), nRet ));
+    return static_cast<sal_uInt16>(std::max<tools::Long>( MINLAY, nRet ));
 }
 
 /* The Line is within the Selection but not outlined by the TabCols.

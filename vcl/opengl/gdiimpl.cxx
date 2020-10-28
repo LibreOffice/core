@@ -858,8 +858,8 @@ void OpenGLSalGraphicsImpl::DrawRect( tools::Long nX, tools::Long nY, tools::Lon
     tools::Long nY1( nY );
     tools::Long nX2( nX + nWidth );
     tools::Long nY2( nY + nHeight );
-    const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
-                                 { nX2, nY1 }, { nX2, nY2 }};
+    const SalPoint aPoints[] = { { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY2) }, { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY1) },
+                                 { static_cast<sal_Int32>(nX2), static_cast<sal_Int32>(nY1) }, { static_cast<sal_Int32>(nX2), static_cast<sal_Int32>(nY2) }};
 
     DrawConvexPolygon( 4, aPoints, true );
 }
@@ -870,8 +870,8 @@ void OpenGLSalGraphicsImpl::DrawRect( const tools::Rectangle& rRect )
     tools::Long nY1( rRect.Top() );
     tools::Long nX2( rRect.Right() );
     tools::Long nY2( rRect.Bottom() );
-    const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
-                                 { nX2, nY1 }, { nX2, nY2 }};
+    const SalPoint aPoints[] = { { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY2) }, { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY1) },
+                                 { static_cast<sal_Int32>(nX2), static_cast<sal_Int32>(nY1) }, { static_cast<sal_Int32>(nX2), static_cast<sal_Int32>(nY2) }};
 
     DrawConvexPolygon( 4, aPoints, true );
 }

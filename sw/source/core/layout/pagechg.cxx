@@ -2302,8 +2302,8 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
                 const bool bLastColumn = pPageToAdjust->GetNext() == pEndOfRow;
                 const bool bLastRow = !pEndOfRow;
 
-                nMinPageLeft  = std::min( nMinPageLeft, aNewPagePos.getX() );
-                nMaxPageRight = std::max( nMaxPageRight, aNewPagePos.getX() + nCurrentPageWidth);
+                nMinPageLeft  = std::min<tools::Long>( nMinPageLeft, aNewPagePos.getX() );
+                nMaxPageRight = std::max<tools::Long>( nMaxPageRight, aNewPagePos.getX() + nCurrentPageWidth);
 
                 // border of nGapBetweenPages around the current page:
                 SwRect aPageRectWithBorders( aNewPagePos.getX() - nGapBetweenPages,

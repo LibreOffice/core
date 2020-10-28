@@ -207,7 +207,7 @@ namespace vcl
             return;
         }
 
-        std::unique_ptr<long[]> pCharWidths(new long[ _nLength ]);
+        std::unique_ptr<tools::Long[]> pCharWidths(new tools::Long[ _nLength ]);
         tools::Long nTextWidth = GetTextArray( _rText, pCharWidths.get(), _nStartIndex, _nLength );
         m_rTargetDevice.DrawTextArray( _rStartPoint, _rText, pCharWidths.get(), _nStartIndex, _nLength );
         pCharWidths.reset();

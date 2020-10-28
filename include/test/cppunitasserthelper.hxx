@@ -10,7 +10,9 @@
 #ifndef INCLUDED_TEST_CPPUNITASSERTHELPER_HXX
 #define INCLUDED_TEST_CPPUNITASSERTHELPER_HXX
 
+#include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -96,6 +98,38 @@ template <> struct assertion_traits<css::table::CellRangeAddress>
         return ost.str();
     }
 };
+
+#if SAL_TYPES_SIZEOFPOINTER == 8
+/** @brief Trait used by CPPUNIT_ASSERT* macros to compare tools::Long to regular long literals
+ *
+ */
+template <> struct assertion_traits<tools::Long>
+{
+    static bool equal(const tools::Long& x, const tools::Long& y) { return x == y; }
+
+    static bool less(const tools::Long& x, const tools::Long& y) { return x < y; }
+
+    static std::string toString(const tools::Long& x)
+    {
+        OStringStream ost;
+        ost << x;
+        return ost.str();
+    }
+};
+
+// helper to avoid casting everywhere we compare a long literal to a tools::Long value
+inline void assertEquals(const long& expected, const tools::Long& actual, SourceLine sourceLine,
+                         const std::string& message)
+{
+    if (!assertion_traits<sal_Int64>::equal(
+            expected, static_cast<sal_Int64>(actual))) // lazy toString conversion...
+    {
+        Asserter::failNotEqual(assertion_traits<sal_Int64>::toString(expected),
+                               assertion_traits<sal_Int64>::toString(actual), sourceLine, message);
+    }
+}
+
+#endif
 
 CPPUNIT_NS_END
 

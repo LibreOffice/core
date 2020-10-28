@@ -885,7 +885,7 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             }
                             // #i35143# - Assure, that the page
                             // doesn't exceed the defined browse height.
-                            aFrm.Height( std::min( nBot, BROWSE_HEIGHT ) );
+                            aFrm.Height( std::min<tools::Long>( nBot, BROWSE_HEIGHT ) );
                         }
                     }
 

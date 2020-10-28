@@ -479,7 +479,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     tools::Long nStepCount = GetGradientSteps( rGradient, rRect, false/*bMtf*/, true/*bComplex*/ );
 
     // at least three steps and at most the number of colour differences
-    tools::Long nSteps = std::max( nStepCount, 2L );
+    tools::Long nSteps = std::max<tools::Long>( nStepCount, 2 );
     tools::Long nCalcSteps  = std::abs( nRedSteps );
     tools::Long nTempSteps = std::abs( nGreenSteps );
     if ( nTempSteps > nCalcSteps )
@@ -829,7 +829,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     tools::Long nStepCount = GetGradientSteps( rGradient, rRect, true, true );
 
     // at least three steps and at most the number of colour differences
-    tools::Long nSteps = std::max( nStepCount, 2L );
+    tools::Long nSteps = std::max<tools::Long>( nStepCount, 2 );
     tools::Long nCalcSteps  = std::abs( nRedSteps );
     tools::Long nTempSteps = std::abs( nGreenSteps );
     if ( nTempSteps > nCalcSteps )

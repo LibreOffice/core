@@ -35,8 +35,8 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
         {
             const tools::Long nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
             const tools::Long nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
-            std::unique_ptr<long[]> pColm(new long[nWidth2]);
-            std::unique_ptr<long[]> pRows(new long[nHeight2]);
+            std::unique_ptr<tools::Long[]> pColm(new tools::Long[nWidth2]);
+            std::unique_ptr<tools::Long[]> pRows(new tools::Long[nHeight2]);
             std::unique_ptr<BitmapColor[]> pColRow1(new BitmapColor[nWidth2]);
             std::unique_ptr<BitmapColor[]> pColRow2(new BitmapColor[nWidth2]);
             std::unique_ptr<BitmapColor[]> pColRow3(new BitmapColor[nWidth2]);
@@ -45,7 +45,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
             BitmapColor* pRowTmp3 = pColRow3.get();
             BitmapColor* pColor;
             tools::Long nY, nX, i, nSumR, nSumG, nSumB, nMatrixVal, nTmp;
-            std::array<std::array<long, 256>, 9> aKoeff;
+            std::array<std::array<tools::Long, 256>, 9> aKoeff;
             tools::Long* pTmp;
 
             // create LUT of products of matrix value and possible color component values
