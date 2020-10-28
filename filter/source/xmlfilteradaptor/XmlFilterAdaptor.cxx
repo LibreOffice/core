@@ -110,11 +110,10 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
 
 
     // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
+    // ...except when it's one of the XMLTransformer subclasses
     Reference < XInterface > xFilter = mxContext->getServiceManager()->createInstanceWithArgumentsAndContext( sXMLImportService, aAnys, mxContext );
     assert(xFilter);
-    Reference < XFastDocumentHandler > xHandler( xFilter, UNO_QUERY );
-    assert(xHandler);
-    Reference < XImporter > xImporter( xHandler, UNO_QUERY );
+    Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     assert(xImporter);
     xImporter->setTargetDocument ( mxDoc );
 
@@ -166,8 +165,6 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
         }
     }
 
-//    sal_Bool xconv_ret = sal_True;
-
     if (xStatusIndicator.is()){
         xStatusIndicator->setValue(nSteps++);
     }
@@ -175,24 +172,43 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     // Calling Filtering Component
 
     try {
-        auto pImport = dynamic_cast<SvXMLImport*>(xHandler.get());
-        assert(pImport);
-        if (xConverter2)
+        Reference < XFastParser > xFastParser( xFilter, UNO_QUERY ); // SvXMLImport subclasses
+        Reference < XDocumentHandler > xDocHandler( xFilter, UNO_QUERY ); // XMLTransformer subclasses
+        assert(xFastParser || xDocHandler);
+        if (xConverter2 && xFastParser)
         {
-            if (!xConverter2->importer(aDescriptor,pImport,msUserData)) {
+            if (!xConverter2->importer(aDescriptor,xFastParser,msUserData)) {
                 if (xStatusIndicator.is())
                     xStatusIndicator->end();
                 return false;
             }
         }
-        else
+        else if (xConverter1 && xDocHandler)
         {
+            if (!xConverter1->importer(aDescriptor,xDocHandler,msUserData)) {
+                if (xStatusIndicator.is())
+                    xStatusIndicator->end();
+                return false;
+            }
+        }
+        else if (xConverter1 && xFastParser)
+        {
+            auto pImport = dynamic_cast<SvXMLImport*>(xFastParser.get());
+            assert(pImport);
             Reference<XDocumentHandler> xDocHandler = new SvXMLLegacyToFastDocHandler(pImport);
             if (!xConverter1->importer(aDescriptor,xDocHandler,msUserData)) {
                 if (xStatusIndicator.is())
                     xStatusIndicator->end();
                 return false;
             }
+        }        
+        else
+        {
+            SAL_WARN("filter.xmlfa", "no working combination found");
+            assert(false);
+            if (xStatusIndicator.is())
+                xStatusIndicator->end();
+            return false;
         }
     }
     catch( const Exception& )
