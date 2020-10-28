@@ -179,6 +179,11 @@ namespace
     #endif
         }
     }
+    void lcl_SwClientNotify(SwModify& rModify, const SfxPoolItem* pNew)
+    {
+        const sw::LegacyModifyHint aHint(nullptr, pNew);
+        rModify.SwClientNotify(rModify, aHint);
+    }
 }
 
 namespace sw
@@ -404,7 +409,7 @@ void DocumentFieldsManager::UpdateFields( bool bCloseDB )
         case SwFieldIds::Dde:
         {
             SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-            pFieldType->ModifyNotification( nullptr, &aUpdateDDE );
+            lcl_SwClientNotify(*pFieldType, &aUpdateDDE );
             break;
         }
         case SwFieldIds::GetExp:
@@ -414,7 +419,7 @@ void DocumentFieldsManager::UpdateFields( bool bCloseDB )
             // Expression fields are treated separately
             break;
         default:
-            pFieldType->ModifyNotification ( nullptr, nullptr );
+            lcl_SwClientNotify(*pFieldType, nullptr );
         }
     }
 
@@ -562,7 +567,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
                     if (bUpdateFields)
                         UpdateTableFields( &aTableUpdate );
                     else
-                        pNewField->GetTyp()->ModifyNotification(nullptr, &aTableUpdate);
+                        lcl_SwClientNotify(*pNewField->GetTyp(), &aTableUpdate);
 
                     if (! bUpdateFields)
                         bTableSelBreak = true;
@@ -572,8 +577,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
 
         case SwFieldIds::Macro:
             if( bUpdateFields && pDstTextField->GetpTextNode() )
-                pDstTextField->GetpTextNode()->
-                    ModifyNotification( nullptr, pDstFormatField );
+                lcl_SwClientNotify(*pDstTextField->GetpTextNode(), pDstFormatField);
             break;
 
         case SwFieldIds::DatabaseName:
@@ -618,7 +622,7 @@ void DocumentFieldsManager::UpdateRefFields()
 {
     for( auto const & pFieldType : *mpFieldTypes )
         if( SwFieldIds::GetRef == pFieldType->Which() )
-            pFieldType->ModifyNotification( nullptr, nullptr );
+            lcl_SwClientNotify(*pFieldType, nullptr );
 }
 
 void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
@@ -1351,10 +1355,10 @@ void DocumentFieldsManager::UpdatePageFields( SfxPoolItem* pMsgHint )
         case SwFieldIds::Chapter:
         case SwFieldIds::GetExp:
         case SwFieldIds::RefPageGet:
-            pFieldType->ModifyNotification( nullptr, pMsgHint );
+            lcl_SwClientNotify(*pFieldType, pMsgHint);
             break;
         case SwFieldIds::DocStat:
-            pFieldType->ModifyNotification( nullptr, nullptr );
+            lcl_SwClientNotify(*pFieldType, nullptr);
             break;
         default: break;
         }
