@@ -375,7 +375,7 @@ namespace svt::table
         tools::Long        impl_ni_calculateColumnWidths(
                         ColPos const i_assumeInflexibleColumnsUpToIncluding,
                         bool const i_assumeVerticalScrollbar,
-                        ::std::vector< long >& o_newColWidthsPixel
+                        ::std::vector< tools::Long >& o_newColWidthsPixel
                     ) const;
 
         /** positions all child windows, e.g. the both scrollbars, the corner window, and the data window

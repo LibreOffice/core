@@ -2567,7 +2567,7 @@ namespace cppcanvas::internal
                         // generating a DX array, and uniformly
                         // distributing the excess/insufficient width
                         // to every logical character.
-                        std::unique_ptr< long []> pDXArray( new long[nLen] );
+                        std::unique_ptr< ::tools::Long []> pDXArray( new ::tools::Long[nLen] );
 
                         rVDev.GetTextArray( pAct->GetText(), pDXArray.get(),
                                             pAct->GetIndex(), pAct->GetLen() );

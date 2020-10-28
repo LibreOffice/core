@@ -26,6 +26,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
+#include <tools/long.hxx>
 
 #include "LocaleNode.hxx"
 #include <i18npool/reservedconstants.hxx>
@@ -167,8 +168,8 @@ OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
         ++nError;
         fprintf( stderr,
                 "Error: more than %ld character%s (%ld) in %s '%s' not supported by application.\n",
-                sal::static_int_cast< long >(nMaxLen), (nMaxLen > 1 ? "s" : ""),
-                sal::static_int_cast< long >(nLen),
+                sal::static_int_cast< tools::Long >(nMaxLen), (nMaxLen > 1 ? "s" : ""),
+                sal::static_int_cast< tools::Long >(nLen),
                 (pNode ? OSTR( pNode->getName()) : ""),
                 OSTR( aVal));
     }
@@ -1340,7 +1341,7 @@ void LCSearchNode::generateCode (const OFileWriter &of) const
         ++nError;
         fprintf(
             stderr, "Error: LC_SEARCH: more than 1 child: %ld\n",
-            sal::static_int_cast< long >(getNumberOfChildren()));
+            sal::static_int_cast< tools::Long >(getNumberOfChildren()));
     }
     sal_Int32 i;
     LocaleNode* pSearchOptions = getChildAt( 0 );

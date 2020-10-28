@@ -469,8 +469,8 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
             for( const auto& rxAnnotation : aAnnotations )
             {
                 RealPoint2D aPoint( rxAnnotation->getPosition() );
-                aTagRect.SetLeft( sal::static_int_cast< long >( aPoint.X * 100.0 ) );
-                aTagRect.SetTop( sal::static_int_cast< long >( aPoint.Y * 100.0 ) );
+                aTagRect.SetLeft( sal::static_int_cast< ::tools::Long >( aPoint.X * 100.0 ) );
+                aTagRect.SetTop( sal::static_int_cast< ::tools::Long >( aPoint.Y * 100.0 ) );
                 aTagRect.SetRight( aTagRect.Left() + width - 1 );
                 aTagRect.SetBottom( aTagRect.Top() + height - 1 );
 
