@@ -1560,8 +1560,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf115557, "tdf115557.docx")
     assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignmentRelativeFromTopMargin, "tdf137641_RelativeFromTopMargin.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignmentRelativeFromTopMarginDML, "tdf137641_RelativeFromTopMargin.docx")
 {
+    // Import as DML.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc,
@@ -1586,6 +1587,37 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignmentRelativeFromTopMargin, "tdf1376
         "relativeFrom", "topMargin");
     assertXPathContent(pXmlDoc,
                        "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/"
+                       "wp:anchor/wp:positionV/wp:align",
+                       "center");
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignmentRelativeFromTopMarginVML, "tdf137642_Vertical_Alignment_toppage.docx")
+{
+    // Import as VML.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/"
+                "wp:anchor/wp:positionV",
+                "relativeFrom", "topMargin");
+    assertXPathContent(pXmlDoc,
+                       "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/"
+                       "wp:anchor/wp:positionV/wp:align",
+                       "top");
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/"
+                "wp:anchor/wp:positionV",
+                "relativeFrom", "topMargin");
+    assertXPathContent(pXmlDoc,
+                       "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/"
+                       "wp:anchor/wp:positionV/wp:align",
+                       "bottom");
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/"
+                "wp:anchor/wp:positionV",
+                "relativeFrom", "topMargin");
+    assertXPathContent(pXmlDoc,
+                       "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/"
                        "wp:anchor/wp:positionV/wp:align",
                        "center");
 }
