@@ -665,7 +665,7 @@ void SwNoTextFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
     if( nChgHght > 0)
         Grow( nChgHght );
     else if( nChgHght < 0)
-        Shrink( std::min(getFramePrintArea().Height(), -nChgHght) );
+        Shrink( std::min<tools::Long>(getFramePrintArea().Height(), -nChgHght) );
 }
 
 bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,

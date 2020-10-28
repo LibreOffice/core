@@ -96,7 +96,7 @@ struct BlurArrays
     {
         for (tools::Long i = 0; i < maShared.mnDiv; i++)
         {
-            maPositionTable[i] = std::clamp(i - maShared.mnRadius, 0L, nLastIndex);
+            maPositionTable[i] = std::clamp<tools::Long>(i - maShared.mnRadius, 0, nLastIndex);
             maWeightTable[i] = maShared.mnRadius + 1 - std::abs(i - maShared.mnRadius);
         }
     }

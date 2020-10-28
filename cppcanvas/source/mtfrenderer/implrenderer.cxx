@@ -995,7 +995,7 @@ namespace cppcanvas::internal
                 {
                     ::tools::Long nInterval = ( nWidth - nStrikeoutWidth * nLen ) / nLen;
                     nStrikeoutWidth += nInterval;
-                    ::tools::Long* pStrikeoutCharWidths = new long[nLen];
+                    ::tools::Long* pStrikeoutCharWidths = new ::tools::Long[nLen];
 
                     for ( int i = 0;i<nLen; i++)
                     {
@@ -1589,8 +1589,8 @@ namespace cppcanvas::internal
                         // least one dimension
 
                         // Remark the 1L cannot be replaced, that would cause max to compare long/int
-                        const Size aMtfSizePix( std::max( aMtfSizePixPre.Width(), 1L ),
-                                                std::max( aMtfSizePixPre.Height(), 1L ) );
+                        const Size aMtfSizePix( std::max<::tools::Long>( aMtfSizePixPre.Width(), 1 ),
+                                                std::max<::tools::Long>( aMtfSizePixPre.Height(), 1 ) );
 
                         // Setup local transform, such that the
                         // metafile renders itself into the given
@@ -2885,8 +2885,8 @@ namespace cppcanvas::internal
             // #i44110# correct null-sized output - there are shapes
             // which have zero size in at least one dimension
             // Remark the 1L cannot be replaced, that would cause max to compare long/int
-            const Size aMtfSizePix( std::max( aMtfSizePixPre.Width(), 1L ),
-                                    std::max( aMtfSizePixPre.Height(), 1L ) );
+            const Size aMtfSizePix( std::max<::tools::Long>( aMtfSizePixPre.Width(), 1 ),
+                                    std::max<::tools::Long>( aMtfSizePixPre.Height(), 1 ) );
 
             sal_Int32 nCurrActions(0);
             ActionFactoryParameters aParms(aStateStack,

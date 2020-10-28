@@ -588,12 +588,12 @@ LineInfo OutputDevice::ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const
     if( aInfo.GetStyle() == LineStyle::Dash )
     {
         if( aInfo.GetDotCount() && aInfo.GetDotLen() )
-            aInfo.SetDotLen( std::max( ImplLogicWidthToDevicePixel( aInfo.GetDotLen() ), 1L ) );
+            aInfo.SetDotLen( std::max<tools::Long>( ImplLogicWidthToDevicePixel( aInfo.GetDotLen() ), 1 ) );
         else
             aInfo.SetDotCount( 0 );
 
         if( aInfo.GetDashCount() && aInfo.GetDashLen() )
-            aInfo.SetDashLen( std::max( ImplLogicWidthToDevicePixel( aInfo.GetDashLen() ), 1L ) );
+            aInfo.SetDashLen( std::max<tools::Long>( ImplLogicWidthToDevicePixel( aInfo.GetDashLen() ), 1 ) );
         else
             aInfo.SetDashCount( 0 );
 

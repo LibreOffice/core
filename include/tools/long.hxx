@@ -23,11 +23,13 @@
  */
 namespace tools
 {
-typedef long Long;
-typedef unsigned long ULong;
-// stage 3:
-//typedef sal_Int64 Long;
-//typedef sal_uInt64 ULong;
+#if SAL_TYPES_SIZEOFPOINTER == 8
+typedef sal_Int64 Long;
+typedef sal_uInt64 ULong;
+#else
+typedef sal_Int32 Long;
+typedef sal_uInt32 ULong;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

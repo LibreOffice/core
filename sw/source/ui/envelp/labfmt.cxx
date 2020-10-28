@@ -176,8 +176,8 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
                             : ROUND(m_aItem.m_lVDist / 10.0));
 
     // Scale factor
-    const float fx = float(lOutWPix23) / std::max(1L, lDispW);
-    const float fy = float(lOutHPix23) / std::max(1L, lDispH);
+    const float fx = float(lOutWPix23) / std::max<tools::Long>(1, lDispW);
+    const float fy = float(lOutHPix23) / std::max<tools::Long>(1, lDispH);
     const float f  = std::min(fx, fy);
 
     // zero point
@@ -383,8 +383,8 @@ void SwLabFormatPage::ChangeMinMax()
     m_xHDistField->set_min(nMinSize, FieldUnit::CM);
     m_xVDistField->set_min(nMinSize, FieldUnit::CM);
 
-    m_xHDistField->set_max(tools::Long(100) * ((lMax - lLeft ) / std::max(1L, static_cast<tools::Long>(nCols))), FieldUnit::TWIP);
-    m_xVDistField->set_max(tools::Long(100) * ((lMax - lUpper) / std::max(1L, static_cast<tools::Long>(nRows))), FieldUnit::TWIP);
+    m_xHDistField->set_max(100 * ((lMax - lLeft ) / std::max(1, nCols)), FieldUnit::TWIP);
+    m_xVDistField->set_max(100 * ((lMax - lUpper) / std::max(1, nRows)), FieldUnit::TWIP);
 
     m_xWidthField->set_min(nMinSize, FieldUnit::CM);
     m_xHeightField->set_min(nMinSize, FieldUnit::CM);
@@ -395,8 +395,8 @@ void SwLabFormatPage::ChangeMinMax()
     m_xLeftField->set_max(tools::Long(100) * (lMax - nCols * lHDist), FieldUnit::TWIP);
     m_xUpperField->set_max(tools::Long(100) * (lMax - nRows * lVDist), FieldUnit::TWIP);
 
-    m_xColsField->set_range(1, (lMax - lLeft ) / std::max(1L, lHDist));
-    m_xRowsField->set_range(1, (lMax - lUpper) / std::max(1L, lVDist));
+    m_xColsField->set_range(1, (lMax - lLeft ) / std::max<tools::Long>(1, lHDist));
+    m_xRowsField->set_range(1, (lMax - lUpper) / std::max<tools::Long>(1, lVDist));
 
     m_xPWidthField->set_range(tools::Long(100) * lMinPWidth, tools::Long(100) * lMax, FieldUnit::TWIP);
     m_xPHeightField->set_range(tools::Long(100) * lMinPHeight, tools::Long(100) * lMax, FieldUnit::TWIP);

@@ -9,6 +9,7 @@
 
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <test/cppunitasserthelper.hxx>
 
 #include <comphelper/fileformat.h>
 
