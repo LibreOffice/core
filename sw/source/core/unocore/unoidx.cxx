@@ -112,7 +112,7 @@ lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
     }
     if(!pNewType)
     {
-        SwTOXType aNewType(TOX_USER, rNewName);
+        SwTOXType aNewType(*pDoc, TOX_USER, rNewName);
         pNewType = pDoc->InsertTOXType( aNewType );
     }
 
@@ -1813,7 +1813,7 @@ SwXDocumentIndexMark::attach(
                 }
                 if (!pTOXType)
                 {
-                    SwTOXType aUserType(TOX_USER, m_pImpl->m_sUserIndexName);
+                    SwTOXType aUserType(*pDoc, TOX_USER, m_pImpl->m_sUserIndexName);
                     pTOXType = pDoc->InsertTOXType(aUserType);
                 }
             }
