@@ -2877,28 +2877,6 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 maActionListeners.actionPerformed( aEvent );
             }
-            else
-            {
-                // open the URL
-                OUString sURL;
-                VclPtr< FixedHyperlink > pBase = GetAs< FixedHyperlink >();
-                if ( pBase )
-                    sURL = pBase->GetURL();
-                Reference< css::system::XSystemShellExecute > xSystemShellExecute( css::system::SystemShellExecute::create(
-                    ::comphelper::getProcessComponentContext() ) );
-                if ( !sURL.isEmpty() )
-                {
-                    try
-                    {
-                        // start browser
-                        xSystemShellExecute->execute(
-                            sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
-                    }
-                    catch( uno::Exception& )
-                    {
-                    }
-                }
-            }
             [[fallthrough]];
         }
         default:
