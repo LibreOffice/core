@@ -43,7 +43,7 @@ struct VCL_DLLPUBLIC ControlLayoutData
     // where one character may consist of many glyphs
     std::vector< tools::Rectangle >            m_aUnicodeBoundRects;
     // start indices of lines
-    std::vector< long >                 m_aLineIndices;
+    std::vector< tools::Long >                 m_aLineIndices;
     // notify parent control on destruction
     VclPtr<const Control>               m_pParent;
 

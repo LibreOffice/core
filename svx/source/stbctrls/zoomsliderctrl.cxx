@@ -41,7 +41,7 @@ struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
     sal_uInt16                   mnMinZoom;
     sal_uInt16                   mnMaxZoom;
     sal_uInt16                   mnSliderCenter;
-    std::vector< long >      maSnappingPointOffsets;
+    std::vector< tools::Long >      maSnappingPointOffsets;
     std::vector< sal_uInt16 >    maSnappingPointZooms;
     Image                    maSliderButton;
     Image                    maIncreaseButton;

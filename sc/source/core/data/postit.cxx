@@ -245,13 +245,13 @@ void ScCaptionCreator::FitCaptionToRect( const tools::Rectangle* pVisRect )
     tools::Rectangle aCaptRect = mxCaption->GetLogicRect();
     Point aCaptPos = aCaptRect.TopLeft();
     // move textbox inside right border of visible area
-    aCaptPos.setX( ::std::min< long >( aCaptPos.X(), rVisRect.Right() - aCaptRect.GetWidth() ) );
+    aCaptPos.setX( ::std::min< tools::Long >( aCaptPos.X(), rVisRect.Right() - aCaptRect.GetWidth() ) );
     // move textbox inside left border of visible area (this may move it outside on right side again)
-    aCaptPos.setX( ::std::max< long >( aCaptPos.X(), rVisRect.Left() ) );
+    aCaptPos.setX( ::std::max< tools::Long >( aCaptPos.X(), rVisRect.Left() ) );
     // move textbox inside bottom border of visible area
-    aCaptPos.setY( ::std::min< long >( aCaptPos.Y(), rVisRect.Bottom() - aCaptRect.GetHeight() ) );
+    aCaptPos.setY( ::std::min< tools::Long >( aCaptPos.Y(), rVisRect.Bottom() - aCaptRect.GetHeight() ) );
     // move textbox inside top border of visible area (this may move it outside on bottom side again)
-    aCaptPos.setY( ::std::max< long >( aCaptPos.Y(), rVisRect.Top() ) );
+    aCaptPos.setY( ::std::max< tools::Long >( aCaptPos.Y(), rVisRect.Top() ) );
     // update caption
     aCaptRect.SetPos( aCaptPos );
     mxCaption->SetLogicRect( aCaptRect );
@@ -1207,7 +1207,7 @@ ScCaptionPtr ScNoteUtil::CreateTempCaption(
         pCaption->SetText( aBuffer.makeStringAndClear() );
         ScCaptionUtil::SetDefaultItems( *pCaption, rDoc, nullptr );
         // adjust caption size to text size
-        tools::Long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
+        tools::Long nMaxWidth = ::std::min< tools::Long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
         pCaption->SetMergedItem( makeSdrTextAutoGrowWidthItem( true ) );
         pCaption->SetMergedItem( makeSdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
         pCaption->SetMergedItem( makeSdrTextMaxFrameWidthItem( nMaxWidth ) );

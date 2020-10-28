@@ -2600,12 +2600,12 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     rFill.SetRight( nRight );
     rFill.SetRightMax( nRightMax );
 
-    typedef std::map< long, std::pair< long, long >, FuzzyCompare > BoundaryMap;
+    typedef std::map< tools::Long, std::pair< tools::Long, long >, FuzzyCompare > BoundaryMap;
     BoundaryMap aBoundaries;
     BoundaryMap::iterator aIter;
-    std::pair< long, long > aPair;
+    std::pair< tools::Long, long > aPair;
 
-    typedef std::map< long, bool > HiddenMap;
+    typedef std::map< tools::Long, bool > HiddenMap;
     HiddenMap aHidden;
     HiddenMap::iterator aHiddenIter;
 
@@ -2665,7 +2665,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     {
         const tools::Long nTabTop = aRectFnSet.GetPrtTop(*pTab);
         const tools::Long nKey = aRectFnSet.YDiff( rEntry.first, nTabTop );
-        const std::pair< long, long > aTmpPair = rEntry.second;
+        const std::pair< tools::Long, long > aTmpPair = rEntry.second;
         const tools::Long nFirst = aRectFnSet.YDiff( aTmpPair.first, nTabTop );
         const tools::Long nSecond = aTmpPair.second;
 

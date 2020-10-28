@@ -21,7 +21,7 @@
 #include <sal/config.h>
 
 #include <tools/diagnose_ex.h>
-
+#include <tools/long.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/utils/canvastools.hxx>
@@ -118,7 +118,7 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
+        std::unique_ptr< ::tools::Long []> aOffsets(new ::tools::Long[maLogicalAdvancements.getLength()]);
         setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
 
         std::vector< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
@@ -166,7 +166,7 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
+        std::unique_ptr< ::tools::Long []> aOffsets(new ::tools::Long[maLogicalAdvancements.getLength()]);
         setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
 
         MetricVector aMetricVector;
@@ -335,7 +335,7 @@ namespace vclcanvas
         if( maLogicalAdvancements.hasElements() )
         {
             // TODO(P2): cache that
-            std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
+            std::unique_ptr< ::tools::Long []> aOffsets(new ::tools::Long[maLogicalAdvancements.getLength()]);
             setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
 
             // TODO(F3): ensure correct length and termination for DX

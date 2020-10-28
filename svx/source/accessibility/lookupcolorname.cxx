@@ -44,7 +44,7 @@ public:
     OUString lookUp(tools::Long color) const;
 
 private:
-    typedef std::unordered_map< long, OUString > Map;
+    typedef std::unordered_map< tools::Long, OUString > Map;
 
     Map map_;
 };

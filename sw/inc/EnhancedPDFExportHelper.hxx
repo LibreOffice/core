@@ -180,7 +180,7 @@ class SwTaggedPDFHelper
  * painting process, the parameter bEditEngineOnly indicated that only
  * the bookmarks from the EditEngine have to be processed.
  */
-typedef std::set< long, lt_TableColumn > TableColumnsMapEntry;
+typedef std::set< tools::Long, lt_TableColumn > TableColumnsMapEntry;
 typedef std::pair< SwRect, sal_Int32 > IdMapEntry;
 typedef std::vector< IdMapEntry > LinkIdMap;
 typedef std::map< const SwTable*, TableColumnsMapEntry > TableColumnsMap;

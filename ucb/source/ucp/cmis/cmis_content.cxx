@@ -115,7 +115,7 @@ namespace
                 break;
             case libcmis::PropertyType::Integer:
                 {
-                    vector< long > aCmisLongs = pProperty->getLongs( );
+                    vector< tools::Long > aCmisLongs = pProperty->getLongs( );
                     uno::Sequence< sal_Int64 > aLongs( aCmisLongs.size( ) );
                     sal_Int64* aLongsArr = aLongs.getArray( );
                     sal_Int32 i = 0;

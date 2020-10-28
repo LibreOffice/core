@@ -286,7 +286,7 @@ protected:
     const DdeTopic* GetSysTopic() const { return pSysTopic; }
 private:
     std::vector<DdeTopic*> aTopics;
-    std::vector< long >    aFormats;
+    std::vector< tools::Long >    aFormats;
     DdeTopic*       pSysTopic;
     DdeString*      pName;
     std::vector<std::unique_ptr<Conversation>>

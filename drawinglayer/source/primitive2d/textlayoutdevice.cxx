@@ -249,7 +249,7 @@ namespace drawinglayer::primitive2d
             if(nDXArrayCount)
             {
                 OSL_ENSURE(nDXArrayCount == nTextLength, "DXArray size does not correspond to text portion size (!)");
-                std::vector< long > aIntegerDXArray(nDXArrayCount);
+                std::vector< tools::Long > aIntegerDXArray(nDXArrayCount);
 
                 for(sal_uInt32 a(0); a < nDXArrayCount; a++)
                 {

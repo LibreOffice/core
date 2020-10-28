@@ -186,7 +186,7 @@ namespace cppcanvas::internal
             {
                 // no external DX array given, create one from given
                 // string
-                std::unique_ptr< long []> pCharWidths( new long[nLen] );
+                std::unique_ptr< ::tools::Long []> pCharWidths( new ::tools::Long[nLen] );
 
                 rVDev.GetTextArray( rText, pCharWidths.get(),
                                     nStartPos, nLen );
