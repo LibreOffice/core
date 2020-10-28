@@ -23,7 +23,8 @@ class TestXControlShape(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls._uno.tearDown()
+        if cls._uno:
+            cls._uno.tearDown()
 
     def test_getAndSetControlShape(self):
         xDoc = self.__class__._uno.openDocFromTDOC("xcontrolshape.odt")
