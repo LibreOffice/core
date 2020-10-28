@@ -49,8 +49,9 @@ public:
     using SavedLink = std::map<const SwFrameFormat*, const SwFrameFormat*>;
     /// Maps a draw format to content.
     using SavedContent = std::map<const SwFrameFormat*, SwFormatContent>;
-    /// Create a TextBox for a shape.
-    static void create(SwFrameFormat* pShape);
+    /// Create a TextBox for a shape. If the second parameter is true,
+    /// the original text in the shape will be copied to the frame
+    static void create(SwFrameFormat* pShape, bool bCopyText = false);
     /// Destroy a TextBox for a shape.
     static void destroy(SwFrameFormat* pShape);
     /// Get interface of a shape's TextBox, if there is any.
