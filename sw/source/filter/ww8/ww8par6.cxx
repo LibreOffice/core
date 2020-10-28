@@ -5263,7 +5263,7 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
 tools::Long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 {
     // array for reading of the extended ( self-defined ) SPRMs
-    typedef long (SwWW8ImplReader::*FNReadRecordExt)(WW8PLCFManResult*);
+    typedef tools::Long (SwWW8ImplReader::*FNReadRecordExt)(WW8PLCFManResult*);
 
     static const FNReadRecordExt aWwSprmTab[] =
     {

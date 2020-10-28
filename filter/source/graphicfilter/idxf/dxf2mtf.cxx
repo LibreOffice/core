@@ -643,7 +643,7 @@ void DXF2GDIMetaFile::Draw3DFaceEntity(const DXF3DFaceEntity & rE, const DXFTran
     if ((rE.nIEFlags&0x0f)==0) pVirDev->DrawPolygon(aPoly);
     else {
         for (i=0; i<nN; i++) {
-            if ( (rE.nIEFlags & (1<<i)) == 0 ) {
+            if ( (rE.nIEFlags & (static_cast<tools::Long>(1)<<i)) == 0 ) {
                 DrawLine(aPoly[i],aPoly[(i+1)%nN]);
             }
         }

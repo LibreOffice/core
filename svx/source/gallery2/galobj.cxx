@@ -135,8 +135,8 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
             else
             {
                 const float fFactor  = static_cast<float>(aBmpSize.Width()) / aBmpSize.Height();
-                const Size  aNewSize( std::max( static_cast<tools::Long>(fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
-                                      std::max( static_cast<tools::Long>(fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
+                const Size  aNewSize( std::max<tools::Long>( fFactor < 1. ? S_THUMB * fFactor : S_THUMB, 8 ),
+                                      std::max<tools::Long>( fFactor < 1. ? S_THUMB : S_THUMB / fFactor, 8 ) );
                 if(aThumbBmp.Scale(
                     static_cast<double>(aNewSize.Width()) / aBmpSize.Width(),
                     static_cast<double>(aNewSize.Height()) / aBmpSize.Height(),
