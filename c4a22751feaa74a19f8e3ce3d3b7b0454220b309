@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16e51b9f_c32687d5",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-10-28T16:02:51Z",
+      "side": 1,
+      "message": "No need for that comment",
+      "revId": "c4a22751feaa74a19f8e3ce3d3b7b0454220b309",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3911394_9bd7cbda",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-10-28T16:02:51Z",
+      "side": 1,
+      "message": "if (!pDoc || pDoc-\u003eIsImportingXML())\n    return;",
+      "revId": "c4a22751feaa74a19f8e3ce3d3b7b0454220b309",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c6470ba_e033e9d7",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-10-28T16:02:51Z",
+      "side": 1,
+      "message": "const bool bNeedsMirrorYCorrection \u003d (pObj-\u003eGetObjIdentifier() \u003d\u003d OBJ_CUSTOMSHAPE)\n    \u0026\u0026 static_cast\u003cSdrObjCustomShape*\u003e(pObj)-\u003eIsMirroredY();",
+      "revId": "c4a22751feaa74a19f8e3ce3d3b7b0454220b309",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c17ead06_b341db7d",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-10-28T16:02:51Z",
+      "side": 1,
+      "message": "Add the comment to the lcl_AreRectanglesApproxEqual function, as it\u0027s used multiple times?",
+      "revId": "c4a22751feaa74a19f8e3ce3d3b7b0454220b309",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7198a5ad_5a8c0344",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-10-28T16:02:51Z",
+      "side": 1,
+      "message": "No change here, except a trailing space.",
+      "revId": "c4a22751feaa74a19f8e3ce3d3b7b0454220b309",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c185555_85f26167",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2211,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-10-28T16:02:51Z",
+      "side": 1,
+      "message": "Or make it a static local function, since it\u0027s tested here too?",
+      "revId": "c4a22751feaa74a19f8e3ce3d3b7b0454220b309",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
