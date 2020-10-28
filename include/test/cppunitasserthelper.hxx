@@ -11,6 +11,7 @@
 #define INCLUDED_TEST_CPPUNITASSERTHELPER_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -96,6 +97,15 @@ template <> struct assertion_traits<css::table::CellRangeAddress>
         return ost.str();
     }
 };
+
+/** @brief Trait used by CPPUNIT_ASSERT* macros to compare tools::Long to regular long literals
+ *
+ */
+inline void assertEquals(const long& expected, const tools::Long& actual, SourceLine sourceLine,
+                         const std::string& message)
+{
+    assertEquals(expected, static_cast<long>(actual), sourceLine, message);
+}
 
 CPPUNIT_NS_END
 

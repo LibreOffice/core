@@ -1595,7 +1595,7 @@ namespace emfio
                     // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
                     SolarMutexGuard aGuard;
                     ScopedVclPtrInstance< VirtualDevice > pVDev;
-                    pDX = new long[ rText.getLength() ];
+                    pDX = new tools::Long[ rText.getLength() ];
                     pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
                     pVDev->SetFont( maLatestFont );
                     pVDev->GetTextArray( rText, pDX, 0, rText.getLength());

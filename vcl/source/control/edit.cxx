@@ -472,14 +472,14 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     const sal_Int32 nLen = aText.getLength();
 
     tools::Long nDXBuffer[256];
-    std::unique_ptr<long[]> pDXBuffer;
+    std::unique_ptr<tools::Long[]> pDXBuffer;
     tools::Long* pDX = nDXBuffer;
 
     if (nLen)
     {
         if (o3tl::make_unsigned(2 * nLen) > SAL_N_ELEMENTS(nDXBuffer))
         {
-            pDXBuffer.reset(new long[2 * (nLen + 1)]);
+            pDXBuffer.reset(new tools::Long[2 * (nLen + 1)]);
             pDX = pDXBuffer.get();
         }
 
@@ -1068,14 +1068,14 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
     tools::Long nTextPos = 0;
 
     tools::Long   nDXBuffer[256];
-    std::unique_ptr<long[]> pDXBuffer;
+    std::unique_ptr<tools::Long[]> pDXBuffer;
     tools::Long*  pDX = nDXBuffer;
 
     if( !aText.isEmpty() )
     {
         if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
         {
-            pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
+            pDXBuffer.reset(new tools::Long[2*(aText.getLength()+1)]);
             pDX = pDXBuffer.get();
         }
 
@@ -1192,11 +1192,11 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     OUString aText = ImplGetText();
 
     tools::Long   nDXBuffer[256];
-    std::unique_ptr<long[]> pDXBuffer;
+    std::unique_ptr<tools::Long[]> pDXBuffer;
     tools::Long*  pDX = nDXBuffer;
     if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
     {
-        pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
+        pDXBuffer.reset(new tools::Long[2*(aText.getLength()+1)]);
         pDX = pDXBuffer.get();
     }
 
@@ -2131,14 +2131,14 @@ void Edit::Command( const CommandEvent& rCEvt )
         {
             OUString aText = ImplGetText();
             tools::Long   nDXBuffer[256];
-            std::unique_ptr<long[]> pDXBuffer;
+            std::unique_ptr<tools::Long[]> pDXBuffer;
             tools::Long*  pDX = nDXBuffer;
 
             if( !aText.isEmpty() )
             {
                 if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
                 {
-                    pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
+                    pDXBuffer.reset(new tools::Long[2*(aText.getLength()+1)]);
                     pDX = pDXBuffer.get();
                 }
 

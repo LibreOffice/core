@@ -8,6 +8,7 @@
  */
 
 #include <test/bootstrapfixture.hxx>
+#include <test/cppunitasserthelper.hxx>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
