@@ -33,6 +33,7 @@
 
 class SwModify;
 class SfxPoolItem;
+class SwAttrSet;
 
 /*
     SwModify and SwClient cooperate in propagating attribute changes.
@@ -229,6 +230,8 @@ template<typename TElementType, typename TSource, sw::IteratorMode eMode> class 
 
 namespace sw
 {
+    void ClientNotifyAttrChg(SwModify& rModify, const SwAttrSet& aSet, SwAttrSet& aOld, SwAttrSet& aNew);
+
     // this class is part of the migration: it still forwards the "old"
     // SwModify events and announces them both to the old SwClients still
     // registered and also to the new SvtListeners.

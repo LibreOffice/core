@@ -35,15 +35,6 @@
 
 using namespace com::sun::star;
 
-namespace {
-    void lcl_SwClientNotify(SwModify& rModify, const SwAttrSet& aSet, SwAttrSet& aOld, SwAttrSet& aNew)
-    {
-        const SwAttrSetChg aChgOld(aSet, aOld);
-        const SwAttrSetChg aChgNew(aSet, aNew);
-        const sw::LegacyModifyHint aHint(&aChgOld, &aChgNew);
-        rModify.SwClientNotify(rModify, aHint);
-    }
-}
 
 SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
               const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrame,
@@ -138,7 +129,7 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
     // create PoolItem attribute for Modify
     if( aOld.Count() )
     {
-        lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
+        sw::ClientNotifyAttrChg(*this, m_aSet, aOld, aNew);
     }
 
     if(GetRegisteredIn() != rFormat.GetRegisteredIn())
@@ -506,7 +497,7 @@ bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
             if(bRet)
             {
                 m_aSet.SetModifyAtAttr(this);
-                lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
+                sw::ClientNotifyAttrChg(*this, m_aSet, aOld, aNew);
             }
         }
 
@@ -542,7 +533,7 @@ bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
             // some special treatments for attributes
             m_aSet.SetModifyAtAttr( this );
 
-            lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
+            sw::ClientNotifyAttrChg(*this, m_aSet, aOld, aNew);
         }
     }
     return bRet;
@@ -606,7 +597,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
                 if(bRet)
                 {
                     m_aSet.SetModifyAtAttr(this);
-                    lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
+                    sw::ClientNotifyAttrChg(*this, m_aSet, aOld, aNew);
                 }
             }
 
@@ -640,7 +631,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
         {
             // some special treatments for attributes
             m_aSet.SetModifyAtAttr( this );
-            lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
+            sw::ClientNotifyAttrChg(*this, m_aSet, aOld, aNew);
         }
     }
     return bRet;
@@ -671,7 +662,7 @@ bool SwFormat::ResetFormatAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
               aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
     bool bRet = 0 != m_aSet.ClearItem_BC( nWhich1, nWhich2, &aOld, &aNew );
     if( bRet )
-        lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
+        sw::ClientNotifyAttrChg(*this, m_aSet, aOld, aNew);
     return bRet;
 }
 
@@ -696,7 +687,7 @@ sal_uInt16 SwFormat::ResetAllFormatAttr()
               aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
     bool bRet = 0 != m_aSet.ClearItem_BC( 0, &aOld, &aNew );
     if( bRet )
-        lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
+        sw::ClientNotifyAttrChg(*this, m_aSet, aOld, aNew);
     return aNew.Count();
 }
 
@@ -723,7 +714,7 @@ void SwFormat::DelDiffs( const SfxItemSet& rSet )
               aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
     bool bRet = 0 != m_aSet.Intersect_BC( rSet, &aOld, &aNew );
     if( bRet )
-        lcl_SwClientNotify(*this, m_aSet, aOld, aNew);
+        sw::ClientNotifyAttrChg(*this, m_aSet, aOld, aNew);
 }
 
 /** SwFormat::IsBackgroundTransparent
