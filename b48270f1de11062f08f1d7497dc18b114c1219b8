@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7862ead_ea72156a",
+        "filename": "dbaccess/source/core/dataaccess/documenteventnotifier.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-28T21:24:41Z",
+      "side": 1,
+      "message": "auto xEventBroadcaster \u003d std::exchange(m_pEventBroadcaster, {});\n\nmakes it explicit that m_pEventBroadcaster shall afterwards be empty",
+      "range": {
+        "startLine": 147,
+        "startChar": 8,
+        "endLine": 148,
+        "endChar": 37
+      },
+      "revId": "b48270f1de11062f08f1d7497dc18b114c1219b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
