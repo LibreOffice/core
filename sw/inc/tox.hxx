@@ -148,15 +148,17 @@ public:
 class SwTOXType final: public sw::BroadcastingModify
 {
 public:
-    SwTOXType(TOXTypes eTyp, const OUString& aName);
+    SwTOXType(SwDoc& rDoc, TOXTypes eTyp, const OUString& rName);
 
     // @@@ public copy ctor, but no copy assignment?
     SwTOXType(const SwTOXType& rCopy);
 
     inline const OUString&  GetTypeName() const;
     inline TOXTypes         GetType() const;
+    SwDoc& GetDoc() const { return m_rDoc; }
 
 private:
+    SwDoc&          m_rDoc;
     OUString        m_aName;
     TOXTypes        m_eType;
 

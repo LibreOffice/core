@@ -174,6 +174,7 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
     bool IsEqual( const SwTOXMark& rCmp ) const;
 
+    static SwTOXType* GetSwTOXType(SwDoc& rDoc, TOXTypes eTOXTypes, const OUString& rTOXName);
 };
 
 class SwHistoryResetText : public SwHistoryHint

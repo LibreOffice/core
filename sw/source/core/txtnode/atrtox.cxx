@@ -79,7 +79,7 @@ void SwTextTOXMark::CopyTOXMark( SwDoc* pDoc )
     // if the requested tox type does not exist, create it
     if(!pType)
     {
-        pDoc->InsertTOXType( SwTOXType( eType, rNm ) );
+        pDoc->InsertTOXType( SwTOXType( *pDoc, eType, rNm ) );
         pType = pDoc->GetTOXType(eType, 0);
     }
 

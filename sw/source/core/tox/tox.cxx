@@ -194,13 +194,15 @@ void SwTOXMark::InsertTOXMarks( SwTOXMarks& aMarks, const SwTOXType& rType )
 }
 
 // Manage types of TOX
-SwTOXType::SwTOXType(TOXTypes eTyp, const OUString& rName)
-    : m_aName(rName)
+SwTOXType::SwTOXType(SwDoc& rDoc, TOXTypes eTyp, const OUString& rName)
+    : m_rDoc(rDoc)
+    , m_aName(rName)
     , m_eType(eTyp)
 { } 
 
 SwTOXType::SwTOXType(const SwTOXType& rCopy)
-    : m_aName(rCopy.m_aName)
+    : m_rDoc(rCopy.m_rDoc)
+    , m_aName(rCopy.m_aName)
     , m_eType(rCopy.m_eType)
 {
     if (auto pRegister = const_cast<SwTOXType&>(rCopy).GetRegisteredIn())
