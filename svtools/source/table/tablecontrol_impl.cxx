@@ -687,7 +687,7 @@ namespace svt::table
 
 
     tools::Long TableControl_Impl::impl_ni_calculateColumnWidths( ColPos const i_assumeInflexibleColumnsUpToIncluding,
-        bool const i_assumeVerticalScrollbar, ::std::vector< long >& o_newColWidthsPixel ) const
+        bool const i_assumeVerticalScrollbar, ::std::vector< tools::Long >& o_newColWidthsPixel ) const
     {
         // the available horizontal space
         tools::Long gridWidthPixel = m_rAntiImpl.GetOutputSizePixel().Width();
@@ -711,9 +711,9 @@ namespace svt::table
         // collect some meta data for our columns:
         // - their current (pixel) metrics
         tools::Long accumulatedCurrentWidth = 0;
-        ::std::vector< long > currentColWidths;
+        ::std::vector< tools::Long > currentColWidths;
         currentColWidths.reserve( colCount );
-        typedef ::std::vector< ::std::pair< long, long > >   ColumnLimits;
+        typedef ::std::vector< ::std::pair< tools::Long, long > >   ColumnLimits;
         ColumnLimits effectiveColumnLimits;
         effectiveColumnLimits.reserve( colCount );
         tools::Long accumulatedMinWidth = 0;
@@ -963,7 +963,7 @@ namespace svt::table
         //     - V-YES: all fine, result from 1. is still valid
         //     - V-NO: redistribute the remaining space (if any) amongst all columns which allow it
 
-        ::std::vector< long > newWidthsPixel;
+        ::std::vector< tools::Long > newWidthsPixel;
         tools::Long gridWidthPixel = impl_ni_calculateColumnWidths( i_assumeInflexibleColumnsUpToIncluding, true, newWidthsPixel );
 
         // the width/height of a scrollbar, needed several times below

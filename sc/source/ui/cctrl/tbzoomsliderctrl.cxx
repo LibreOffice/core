@@ -91,7 +91,7 @@ struct ScZoomSlider::ScZoomSliderWnd_Impl
     sal_uInt16                   mnCurrentZoom;
     sal_uInt16                   mnMinZoom;
     sal_uInt16                   mnMaxZoom;
-    std::vector< long >      maSnappingPointOffsets;
+    std::vector< tools::Long >      maSnappingPointOffsets;
     std::vector< sal_uInt16 >    maSnappingPointZooms;
     Image                    maSliderButton;
     Image                    maIncreaseButton;
