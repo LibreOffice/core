@@ -1008,7 +1008,7 @@ void DesktopLOKTest::testSheetSelections()
     {
         char* pUsedMimeType = nullptr;
         char* pCopiedContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pUsedMimeType);
-        std::vector<tools::Long> aExpected = {5, 6, 7, 8, 9};
+        std::vector<long> aExpected = {5, 6, 7, 8, 9};
         std::istringstream iss(pCopiedContent);
         for (size_t i = 0; i < aExpected.size(); i++)
         {
@@ -1055,7 +1055,7 @@ void DesktopLOKTest::testSheetSelections()
     {
         char* pUsedMimeType  = nullptr;
         char* pCopiedContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pUsedMimeType);
-        std::vector<tools::Long> aExpected = { 8 };
+        std::vector<long> aExpected = { 8 };
         std::istringstream iss(pCopiedContent);
         for (size_t i = 0; i < aExpected.size(); i++)
         {
