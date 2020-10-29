@@ -392,6 +392,8 @@ FontNameBox::~FontNameBox()
     --gFontNameBoxes;
     if (!gFontNameBoxes)
     {
+        for (auto &rDev : gFontPreviewVirDevs)
+            rDev.disposeAndClear();
         gFontPreviewVirDevs.clear();
         gRenderedFontNames.clear();
     }
