@@ -22,6 +22,30 @@
       "revId": "8c5f2ad9afdbcbfba45153bd54b7dae4a2d12e04",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6fedec7_05780b97",
+        "filename": "sc/source/filter/excel/xecontent.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1658,
+      "author": {
+        "id": 1002525
+      },
+      "writtenOn": "2020-10-29T09:40:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5fd6698_d20f79af",
+      "range": {
+        "startLine": 1658,
+        "startChar": 6,
+        "endLine": 1658,
+        "endChar": 83
+      },
+      "revId": "8c5f2ad9afdbcbfba45153bd54b7dae4a2d12e04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
