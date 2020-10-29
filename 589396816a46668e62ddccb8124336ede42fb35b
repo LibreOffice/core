@@ -22,6 +22,30 @@
       "revId": "589396816a46668e62ddccb8124336ede42fb35b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4001850e_c22109dd",
+        "filename": "svx/source/dialog/fntctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-29T14:24:25Z",
+      "side": 1,
+      "message": "AutoCorrectFontColor should take current background into account. AutoCorrectFontColor is called down in ln 1061, after the background is already set. So here you would need to check the \"darkness\" of the background, and in case of AUTO, use either white or black. I don\u0027t know why the app color settings may be used here, actually...",
+      "parentUuid": "71d1c56d_5019887d",
+      "range": {
+        "startLine": 842,
+        "startChar": 22,
+        "endLine": 842,
+        "endChar": 85
+      },
+      "revId": "589396816a46668e62ddccb8124336ede42fb35b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
