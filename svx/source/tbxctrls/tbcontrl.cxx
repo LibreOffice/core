@@ -57,7 +57,6 @@
 #include <svx/svxids.hrc>
 #include <helpids.h>
 #include <sfx2/sidebar/Sidebar.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <svx/xtable.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>

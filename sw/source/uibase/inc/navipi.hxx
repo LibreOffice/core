@@ -26,7 +26,6 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <sfx2/weldutils.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include "conttree.hxx"
