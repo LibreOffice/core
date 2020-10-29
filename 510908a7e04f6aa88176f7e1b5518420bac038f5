@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "485aaa3e_7dc0f5a4",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 3258,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2020-10-29T07:28:22Z",
+      "side": 1,
+      "message": "I noticed in Impress this one is not used, maybe ContextLabel will work? (in calc is fine)",
+      "revId": "510908a7e04f6aa88176f7e1b5518420bac038f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
