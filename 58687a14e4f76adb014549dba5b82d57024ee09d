@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95959b4c_663be229",
+        "filename": "basic/source/sbx/sbxdec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-29T06:18:52Z",
+      "side": 1,
+      "message": "This change looks incorrect anyway, since this _WIN32-only part uses WINAPI, which uses LONG, which is typedef for long?",
+      "range": {
+        "startLine": 160,
+        "startChar": 30,
+        "endLine": 160,
+        "endChar": 41
+      },
+      "revId": "58687a14e4f76adb014549dba5b82d57024ee09d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
