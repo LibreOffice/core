@@ -34,6 +34,24 @@
       "revId": "510908a7e04f6aa88176f7e1b5518420bac038f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "309ed3ae_d1e61d6a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 3258,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2020-10-29T09:07:33Z",
+      "side": 1,
+      "message": "\u003e I\u0027d also want to remove \"...\" from \"Edit Hyperlink...\" :) But i am not sure about how translation works in core side (there might be a 1:1 mapping with text). So i didn\u0027t touch it.\n\u003e \n\nI think \u0027...\u0027 should stay there as it opens the dialog.",
+      "parentUuid": "3a0f3511_946d22ba",
+      "revId": "510908a7e04f6aa88176f7e1b5518420bac038f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
