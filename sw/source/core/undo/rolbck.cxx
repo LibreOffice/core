@@ -373,7 +373,7 @@ SwHistorySetTOXMark::SwHistorySetTOXMark( const SwTextTOXMark* pTextHt, sal_uLon
     , m_nStart( pTextHt->GetStart() )
     , m_nEnd( pTextHt->GetAnyEnd() )
 {
-    static_cast<SvtListener*>(&m_TOXMark)->EndListeningAll();
+    m_TOXMark.EndListeningAll();
 }
 
 SwTOXType* SwHistorySetTOXMark::GetSwTOXType(SwDoc& rDoc, TOXTypes eTOXTypes, const OUString& rTOXName)
