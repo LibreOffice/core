@@ -18,6 +18,7 @@
  */
 
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <tools/long.hxx>
 
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
