@@ -1017,7 +1017,7 @@ sal_Int64 SerfSession::LOCK( const OUString & /*inPath*/,
     Init( rEnv );
 
     // refresh existing lock.
-    theLock->timeout = static_cast< tools::Long >( nTimeout );
+    theLock->timeout = static_cast< long >( nTimeout );
 
     TimeValue startCall;
     osl_getSystemTime( &startCall );
