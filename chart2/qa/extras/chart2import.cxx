@@ -2739,6 +2739,18 @@ void Chart2ImportTest::testTdf137734()
     bool bVaryColor = true;
     CPPUNIT_ASSERT(aAny >>= bVaryColor);
     CPPUNIT_ASSERT(!bVaryColor);
+
+    // tdf#126133 Test primary X axis Rotation value
+    Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xXAxis.is());
+    Reference<chart2::XTitled> xTitled(xXAxis, uno::UNO_QUERY_THROW);
+    Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+    CPPUNIT_ASSERT(xTitle.is());
+    Reference<beans::XPropertySet> xTitlePropSet(xTitle, uno::UNO_QUERY_THROW);
+    uno::Any aAny2 = xTitlePropSet->getPropertyValue("TextRotation");
+    double nRotation = -1;
+    CPPUNIT_ASSERT(aAny2 >>= nRotation);
+    CPPUNIT_ASSERT_EQUAL(0.0, nRotation);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);

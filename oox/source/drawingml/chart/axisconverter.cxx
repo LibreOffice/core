@@ -371,6 +371,10 @@ void AxisConverter::convertFromModel(
         if( mrModel.mxTitle.is() && (rTypeGroups.front()->getTypeInfo().meTypeCategory != TYPECATEGORY_RADAR) )
         {
             Reference< XTitled > xTitled( xAxis, UNO_QUERY_THROW );
+            if (((nAxisIdx == API_X_AXIS && rTypeInfo.meTypeId != TYPEID_HORBAR)
+                || (nAxisIdx == API_Y_AXIS && rTypeInfo.meTypeId == TYPEID_HORBAR))
+                && (mrModel.mnAxisPos == XML_l || mrModel.mnAxisPos == XML_r))
+                mrModel.mxTitle->mnDefaultRotation = 0;
             TitleConverter aTitleConv( *this, *mrModel.mxTitle );
             aTitleConv.convertFromModel( xTitled, OoxResId(STR_DIAGRAM_AXISTITLE), OBJECTTYPE_AXISTITLE, nAxesSetIdx, nAxisIdx );
         }
