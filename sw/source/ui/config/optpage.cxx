@@ -1984,8 +1984,6 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin, cons
 
     rExampleWin.SetFont( rFont, rCJKFont,rCTLFont );
     rExampleWin.SetPreviewText(rText);
-
-    rExampleWin.SetBackColor(aBackCol);
 }
 
 SwCompareOptionsTabPage::SwCompareOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)

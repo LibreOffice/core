@@ -1346,15 +1346,6 @@ void SvxCharEffectsPage::EnableNoneFontColor()
     m_bEnableNoneFontColor = true;
 }
 
-Color SvxCharEffectsPage::GetPreviewFontColor(const Color& rColor) const
-{
-    if (rColor == COL_AUTO)
-        return COL_BLACK;
-    if (m_bEnableNoneFontColor && rColor == COL_NONE_COLOR)
-        return COL_BLACK;
-    return rColor;
-}
-
 SvxCharEffectsPage::~SvxCharEffectsPage()
 {
     m_xUnderlineColorLB.reset();
@@ -1431,9 +1422,10 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     SvxFont& rCTLFont = GetPreviewCTLFont();
 
     const Color& rSelectedColor = m_xFontColorLB->GetSelectEntryColor();
-    rFont.SetColor(GetPreviewFontColor(rSelectedColor));
-    rCJKFont.SetColor(GetPreviewFontColor(rSelectedColor));
-    rCTLFont.SetColor(GetPreviewFontColor(rSelectedColor));
+    rFont.SetColor(rSelectedColor);
+    rCJKFont.SetColor(rSelectedColor);
+    rCTLFont.SetColor(rSelectedColor);
+    m_aPreviewWin.AutoCorrectFontColor(); // handle color COL_AUTO
 
     FontLineStyle eUnderline = static_cast<FontLineStyle>(m_xUnderlineLB->get_active_id().toInt32());
     FontLineStyle eOverline = static_cast<FontLineStyle>(m_xOverlineLB->get_active_id().toInt32());
@@ -1544,9 +1536,10 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
 
             const SvxColorItem& rItem = static_cast<const SvxColorItem&>(rSet.Get( nWhich ));
             Color aColor = rItem.GetValue();
-            rFont.SetColor(GetPreviewFontColor(aColor));
-            rCJKFont.SetColor(GetPreviewFontColor(aColor));
-            rCTLFont.SetColor(GetPreviewFontColor(aColor));
+            rFont.SetColor(aColor);
+            rCJKFont.SetColor(aColor);
+            rCTLFont.SetColor(aColor);
+            m_aPreviewWin.AutoCorrectFontColor(); // handle color COL_AUTO
 
             m_aPreviewWin.Invalidate();
 
