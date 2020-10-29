@@ -138,10 +138,10 @@ bool IsCompleteSignature(SvStream& rStream, vcl::filter::PDFDocument& rDocument,
     return std::find(rAllEOFs.begin(), rAllEOFs.end(), nFileEnd) != rAllEOFs.end();
 }
 
+#if HAVE_FEATURE_PDFIUM
 /// Collects the checksum of each page of one version of the PDF.
 void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<BitmapChecksum>& rPageChecksums)
 {
-#if HAVE_FEATURE_PDFIUM
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     vcl::pdf::PDFiumDocument aPdfDocument(
         FPDF_LoadMemDocument(rStream.GetData(), rStream.GetSize(), /*password=*/nullptr));
@@ -158,10 +158,8 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<BitmapChecksum
         BitmapChecksum nPageChecksum = pPdfPage->getChecksum();
         rPageChecksums.push_back(nPageChecksum);
     }
-#else
-    (void)rStream;
-#endif
 }
+#endif
 
 /**
  * Checks if incremental updates after singing performed valid modifications only.
@@ -175,6 +173,7 @@ bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignatu
         return false;
     }
 
+#if HAVE_FEATURE_PDFIUM
     SvMemoryStream aSignatureStream;
     sal_uInt64 nPos = rStream.Tell();
     rStream.Seek(0);
@@ -196,6 +195,10 @@ bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignatu
     // Fail if any page looks different after signing and at the end. Annotations/commenting doesn't
     // count, though.
     return aSignedPages == aAllPages;
+#else
+    (void)rStream;
+    return true;
+#endif
 }
 }
 
