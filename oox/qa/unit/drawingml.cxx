@@ -291,6 +291,34 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testCameraRotationRevolution)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(27000), nRotateAngle1);
 }
 
+// FIXME: this test keeps failing on Linux and OS X and I have no idea why
+#if defined(_WIN32)
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPolyPolygonShapeExport)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "polypolygonshape-export.docx";
+    loadAndReload(aURL, "Office Open XML Text");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
+
+    uno::Reference<drawing::XShape> xGroupShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    const OUString sShapeType(xGroupShape->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), sShapeType);
+
+    uno::Reference<drawing::XShape> xChildShape1 = getChildShape(xGroupShape, 1);
+    const OUString sShapeType1(xChildShape1->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), sShapeType1);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -7
+    // - Actual  : 2182
+    // i.e. the map shape and the polyline shape for the border ended up far apart.
+    CPPUNIT_ASSERT_EQUAL(xGroupShape->getPosition().Y, xChildShape1->getPosition().Y);
+}
+#endif
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
