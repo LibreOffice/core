@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b27af4ca_db8e4f23",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5126,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-29T06:41:41Z",
+      "side": 1,
+      "message": "Please make all new and changed lines to adhere to our clang-format rules, even in files that are excluded from the clang-format checks. E.g., no spaces between parentheses and arguments.",
+      "range": {
+        "startLine": 5126,
+        "startChar": 7,
+        "endLine": 5126,
+        "endChar": 8
+      },
+      "revId": "6cfc71f32019b8de7e5f3795a84d62563038a197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "241be8ce_7736677e",
         "filename": "sc/source/filter/xml/xmlexprt.cxx",
         "patchSetId": 1
