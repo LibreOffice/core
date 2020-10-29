@@ -35,13 +35,13 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <tools/json_writer.hxx>
+#include <vcl/toolbox.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <memory>
 
 #include <vcl/InterimItemWindow.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
 
 using namespace ::com::sun::star;
 
