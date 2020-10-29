@@ -54,4 +54,43 @@ class compareDocuments(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_tdf137855(self):
+
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf137855.odt"))
+
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+
+        self.ui_test.execute_dialog_through_command(".uno:CompareDocuments")
+
+        xOpenDialog = self.xUITest.getTopFocusWindow()
+        xFileName = xOpenDialog.getChild("file_name")
+        xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf137855_2.odt")}))
+
+        xOpenBtn = xOpenDialog.getChild("open")
+        xOpenBtn.executeAction("CLICK", tuple())
+
+        # Close the dialog and open it again so the list of changes is updated
+        xTrackDlg = self.xUITest.getTopFocusWindow()
+        xcloseBtn = xTrackDlg.getChild("close")
+        xcloseBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
+        xTrackDlg = self.xUITest.getTopFocusWindow()
+        changesList = xTrackDlg.getChild("writerchanges")
+
+        # Check the number of changes
+        self.assertEqual(263, len(changesList.getChildren()))
+
+        # Without the fix in place, this test would have crashed here
+        xAccBtn = xTrackDlg.getChild("acceptall")
+        xAccBtn.executeAction("CLICK", tuple())
+
+        self.assertEqual(0, len(changesList.getChildren()))
+
+        xcloseBtn = xTrackDlg.getChild("close")
+        xcloseBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
