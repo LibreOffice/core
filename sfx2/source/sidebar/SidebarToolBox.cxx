@@ -25,7 +25,6 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/miscopt.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -33,6 +32,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
+#include <officecfg/Office/Common.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -57,17 +57,17 @@ namespace {
 
 namespace sfx2::sidebar {
 
-SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
-    : ToolBox(pParentWindow, 0),
-      mbAreHandlersRegistered(false),
-      mbUseDefaultButtonSize(true),
-      mbSideBar(true)
+SidebarToolBox::SidebarToolBox(vcl::Window* pParentWindow, bool bSideBar)
+    : ToolBox(pParentWindow, 0)
+    , mxConfigListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Common/Misc"))
+    , mxConfigIconSize(std::make_unique<IconSizeConfig>(mxConfigListener, bSideBar, this))
+    , mbAreHandlersRegistered(false)
+    , mbUseDefaultButtonSize(true)
+    , mbSideBar(bSideBar)
 {
     SetBackground(Wallpaper());
     SetPaintTransparent(true);
     SetToolboxButtonSize(GetDefaultButtonSize());
-
-    SvtMiscOptions().AddListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
 
 #ifdef DEBUG
     SetText(OUString("SidebarToolBox"));
@@ -81,7 +81,8 @@ SidebarToolBox::~SidebarToolBox()
 
 void SidebarToolBox::dispose()
 {
-    SvtMiscOptions().RemoveListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
+    mxConfigIconSize.reset();
+    mxConfigListener.clear();
 
     ControllerContainer aControllers;
     aControllers.swap(maControllers);
@@ -108,7 +109,7 @@ void SidebarToolBox::dispose()
 
 ToolBoxButtonSize SidebarToolBox::GetDefaultButtonSize() const
 {
-    return SvtMiscOptions().GetSidebarIconSize();
+    return static_cast<ToolBoxButtonSize>(mxConfigIconSize->get());
 }
 
 void SidebarToolBox::InsertItem(const OUString& rCommand,
@@ -252,7 +253,13 @@ IMPL_LINK(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
         xController->execute(static_cast<sal_Int16>(pToolBox->GetModifier()));
 }
 
-IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
+void IconSizeConfig::setProperty(const css::uno::Any &rProperty)
+{
+    ConfigurationListenerProperty::setProperty(rProperty);
+    m_xToolBox->ChangedIconSizeHandler();
+}
+
+void SidebarToolBox::ChangedIconSizeHandler()
 {
     SolarMutexGuard g;
 
@@ -323,15 +330,8 @@ class NotebookbarToolBox : public SidebarToolBox
 {
 public:
     explicit NotebookbarToolBox(vcl::Window* pParentWindow)
-    : SidebarToolBox(pParentWindow)
+        : SidebarToolBox(pParentWindow, false)
     {
-        mbSideBar = false;
-        SetToolboxButtonSize(GetDefaultButtonSize());
-    }
-
-    virtual ToolBoxButtonSize GetDefaultButtonSize() const override
-    {
-        return SvtMiscOptions().GetNotebookbarIconSize();
     }
 };
 

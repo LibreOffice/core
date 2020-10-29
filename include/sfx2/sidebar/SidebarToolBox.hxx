@@ -20,6 +20,7 @@
 #define INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
 
 #include <config_options.h>
+#include <comphelper/configurationlistener.hxx>
 #include <sfx2/dllapi.h>
 #include <vcl/toolbox.hxx>
 #include <map>
@@ -27,6 +28,22 @@
 namespace com::sun::star::frame { class XToolbarController; }
 
 namespace sfx2::sidebar {
+
+class SidebarToolBox;
+
+class IconSizeConfig : public comphelper::ConfigurationListenerProperty<sal_Int16>
+{
+private:
+    VclPtr<SidebarToolBox> m_xToolBox;
+protected:
+    virtual void setProperty(const css::uno::Any &rProperty) override;
+public:
+    IconSizeConfig(const rtl::Reference<comphelper::ConfigurationListener> &rListener, bool bSideBar, SidebarToolBox* pToolBox)
+        : ConfigurationListenerProperty(rListener, bSideBar ? OUString("SidebarIconSize") : OUString("NotebookbarIconSize"))
+        , m_xToolBox(pToolBox)
+    {
+    }
+};
 
 /** The sidebar tool box has two responsibilities:
     1. Coordinated location, size, and other states with its parent
@@ -36,7 +53,7 @@ namespace sfx2::sidebar {
 class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SidebarToolBox : public ToolBox
 {
 public:
-    SidebarToolBox(vcl::Window* pParentWindow);
+    SidebarToolBox(vcl::Window* pParentWindow, bool bSideBar = true);
     virtual ~SidebarToolBox() override;
     virtual void dispose() override;
 
@@ -57,9 +74,13 @@ public:
 
     void InitToolBox(VclBuilder::stringmap& rMap);
 
+    void ChangedIconSizeHandler();
+
 protected:
     typedef std::map<sal_uInt16, css::uno::Reference<css::frame::XToolbarController>> ControllerContainer;
     ControllerContainer maControllers;
+    rtl::Reference<comphelper::ConfigurationListener> mxConfigListener;
+    std::unique_ptr<IconSizeConfig> mxConfigIconSize;
     bool mbAreHandlersRegistered;
     bool mbUseDefaultButtonSize;
     bool mbSideBar;
@@ -68,7 +89,6 @@ protected:
     DECL_LINK(ClickHandler, ToolBox*, void);
     DECL_LINK(DoubleClickHandler, ToolBox*, void);
     DECL_LINK(SelectHandler, ToolBox*, void);
-    DECL_LINK(ChangedIconSizeHandler, LinkParamNone*, void );
 
     css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId(const sal_uInt16 nItemId) const;
 
