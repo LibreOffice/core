@@ -41,7 +41,7 @@ AxisModel::AxisModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
     mnLabelOffset( 100 ),
     mnMajorTickMark( bMSO2007Doc ? XML_out : XML_cross ),
     mnMajorTimeUnit( XML_days ),
-    mnMinorTickMark( bMSO2007Doc ? XML_none : XML_cross ),
+    mnMinorTickMark( XML_none ),
     mnMinorTimeUnit( XML_days ),
     mnOrientation( XML_minMax ),
     mnTickLabelPos( XML_nextTo ),
