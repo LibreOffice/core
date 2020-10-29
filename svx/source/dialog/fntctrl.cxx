@@ -839,8 +839,16 @@ void SvxFontPrevWindow::SetFontWidthScale( sal_uInt16 n )
 
 void SvxFontPrevWindow::AutoCorrectFontColor()
 {
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aFontColor(rStyleSettings.GetWindowTextColor());
+    Color aFontColor( svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+    Color aFontColor(svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor);
+    std::optional<Color> aBackColor = pImpl->mxBackColor;
+    if (COL_AUTO != aBackColor)
+    {
+        if (aBackColor->IsDark() && aFontColor.IsDark())
+            aFontColor = COL_WHITE;
+        else if (aBackColor->IsBright() && aFontColor.IsBright())
+            aFontColor = COL_BLACK;
+    }
 
     if (COL_AUTO == pImpl->maFont.GetColor())
         pImpl->maFont.SetColor(aFontColor);
@@ -1017,7 +1025,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     rCJKFont.SetTransparent( bTransparent );
     rCTLFont.SetTransparent( bTransparent );
 
-    Color aBackCol( COL_TRANSPARENT );
+    Color aBackCol( svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
     if( !bPreviewBackgroundToCharacter )
     {
         if( GetWhich( rSet, SID_ATTR_BRUSH, nWhich ) )
