@@ -93,6 +93,30 @@
       "revId": "6cfc71f32019b8de7e5f3795a84d62563038a197",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b149d50_bd9adf89",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5129,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-29T06:53:36Z",
+      "side": 1,
+      "message": "Yes, and we already use it widely in the codebase; just usually with variables declared right in the initializer inside the if. It\u0027s a bit unusual *to me* to see the initializer part in if that initializes a variable declared elsewhere. But it\u0027s fine, as I mentioned, and I just wanted to share my interest :-)",
+      "parentUuid": "71494f3c_077ff5f3",
+      "range": {
+        "startLine": 5129,
+        "startChar": 13,
+        "endLine": 5129,
+        "endChar": 57
+      },
+      "revId": "6cfc71f32019b8de7e5f3795a84d62563038a197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
