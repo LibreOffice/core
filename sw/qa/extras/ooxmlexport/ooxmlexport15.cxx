@@ -906,6 +906,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136814, "tdf136814.odt")
     assertXPath(pXmlDocument, "/w:document/w:body/w:sectPr/w:pgBorders/w:right", "space", "3");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf122966, "tdf122966.docx")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    assertXPath(pXmlDocument, "//wps:wsp/wps:spPr/a:xfrm/a:off", "x", "0");
+    assertXPath(pXmlDocument, "//wps:wsp/wps:spPr/a:xfrm/a:off", "y", "0");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

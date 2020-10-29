@@ -401,6 +401,15 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
 
     tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     tools::Rectangle aRect( aPolyPolygon.GetBoundRect() );
+    if (!IsGroupShape(xShape) && IsGroupShape(m_xParent))
+    {
+        // tdf#122966, approximate solution: snap the whole polygon shape to the top left corner
+        // (relative to the GroupShape)
+        aRect.AdjustRight(-aRect.Left());
+        aRect.AdjustBottom(-aRect.Top());
+        aRect.SetLeft(0);
+        aRect.SetTop(0);
+    }
 
 #if OSL_DEBUG_LEVEL > 0
     awt::Size size = MapSize( awt::Size( aRect.GetWidth(), aRect.GetHeight() ) );
