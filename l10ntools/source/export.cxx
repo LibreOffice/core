@@ -557,7 +557,7 @@ void Export::Execute( int nToken, const char * pToken )
             }
         }
         break;
-        case TEXT:
+        case _TEXT:
         case LISTTEXT_:
         case LISTTEXT: {
             // this is an entry for a List

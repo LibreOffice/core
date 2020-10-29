@@ -42,7 +42,7 @@
 #define SMALRESOURCE        505         /* PageItem {                       */
 #define TEXTLINE            506         /* TEXT = "hhh"                     */
 #define LONGTEXTLINE        507         /* TEXT = "hhh" TEST "HHH" ...      */
-#define TEXT                508         /* "Something like this"            */
+#define _TEXT                508         /* "Something like this"            */
 #define LEVELUP             509         /* {                                */
 #define LEVELDOWN           510         /* };                               */
 #define APPFONTMAPPING      511         /* MAP_APPFONT(10,10)               */

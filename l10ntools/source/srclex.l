@@ -135,8 +135,8 @@ void YYWarning();
 }
 
 \".*\" {
-/* TEXT // "A Text" */
-	WorkOnTokenSet( TEXT, yytext );
+/* _TEXT // "A Text" */
+	WorkOnTokenSet( _TEXT, yytext );
 }
 
 "{"[ \t]*\\?	{
