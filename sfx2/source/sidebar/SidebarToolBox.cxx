@@ -25,8 +25,9 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/miscopt.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -155,9 +156,11 @@ void SidebarToolBox::CreateController (
 {
     const OUString sCommandName (GetItemCommand(nItemId));
 
+    css::uno::Reference<css::awt::XWindow> xWindow(GetComponentInterface(), css::uno::UNO_QUERY);
+
     uno::Reference<frame::XToolbarController> xController(sfx2::sidebar::ControllerFactory::CreateToolBoxController(
             this, nItemId, sCommandName, rxFrame, rxFrame->getController(),
-            VCLUnoHelper::GetInterface(this), nItemWidth, bSideBar));
+            xWindow, nItemWidth, bSideBar));
 
     if (xController.is())
         maControllers.insert(std::make_pair(nItemId, xController));
