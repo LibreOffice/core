@@ -68,8 +68,8 @@ void StylesPreviewToolBoxControl::InitializeStyles(
             css::uno::Reference<css::container::XNameAccess> xParaStyles;
             xStylesSupplier->getStyleFamilies()->getByName("ParagraphStyles") >>= xParaStyles;
             static const std::vector<OUString> aWriterStyles
-                = { "Standard",  "Text body", "Title",     "Subtitle",
-                    "Heading 1", "Heading 2", "Heading 3", "Quotations" };
+                = { "Standard",  "Text body", "Heading 1", "Heading 2", "Heading 3", "Heading 4",
+                    "Title", "Subtitle", "Quotations", "Preformatted Text" };
             for (const OUString& aStyle : aWriterStyles)
             {
                 try
