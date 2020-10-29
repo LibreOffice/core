@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db4308f1_51d9ff53",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2214,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-10-29T12:47:31Z",
+      "side": 1,
+      "message": "I guess this can be removed instead of commented?",
+      "revId": "670420d88a7a0f7292361eee5eebde2d540818f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
