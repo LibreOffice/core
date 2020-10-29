@@ -1,0 +1,8 @@
+Verified+1: Jenkins
+Code-Review+2: Caolán McNamara <caolanm@redhat.com>
+Code-Review+1: Heiko Tietze <heiko.tietze@documentfoundation.org>
+Submitted-by: Caolán McNamara <caolanm@redhat.com>
+Submitted-at: Thu, 29 Oct 2020 10:09:07 +0100
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/104971
+Project: core
+Branch: refs/heads/master
