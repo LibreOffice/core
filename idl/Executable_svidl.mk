@@ -33,6 +33,7 @@ $(eval $(call gb_Executable_set_include,svidl,\
 $(eval $(call gb_Executable_use_sdk_api,svidl))
 
 $(eval $(call gb_Executable_use_libraries,svidl,\
+	comphelper \
 	tl \
 	sal \
 ))
