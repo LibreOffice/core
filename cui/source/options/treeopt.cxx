@@ -620,7 +620,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ShowPageHdl_Impl, weld::TreeView&, void)
     SelectHdl_Impl();
 }
 
-IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl, weld::Button&, void)
+void OfaTreeOptionsDialog::ResetCurrentPageFromConfig()
 {
     if (!(xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry)))
         return;
@@ -636,6 +636,11 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl, weld::Button&, void)
     }
     else if ( pPageInfo->m_xExtPage )
         pPageInfo->m_xExtPage->ResetPage();
+}
+
+IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl, weld::Button&, void)
+{
+    ResetCurrentPageFromConfig();
 }
 
 void OfaTreeOptionsDialog::ApplyOptions()
@@ -671,19 +676,6 @@ void OfaTreeOptionsDialog::ApplyOptions()
     }
 }
 
-IMPL_LINK_NOARG(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, void)
-{
-    ApplyOptions();
-
-    if ( bNeedsRestart )
-    {
-        SolarMutexGuard aGuard;
-        if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                        m_xDialog.get(), eRestartReason))
-            m_xDialog->response(RET_OK);
-    }
-}
-
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, HelpHdl_Impl, weld::Widget&, bool)
 {
     Help* pHelp = Application::GetHelp();
@@ -700,8 +692,10 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, HelpHdl_Impl, weld::Widget&, bool)
     return true;
 }
 
-IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, weld::Button&, void)
+IMPL_LINK(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, rButton, void)
 {
+    bool bOkPressed = &rButton == xOkPB.get();
+
     if (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
     {
         OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
@@ -717,17 +711,30 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, weld::Button&, void)
                 DeactivateRC nLeave = pPageInfo->m_xPage->DeactivatePage(pGroupInfo->m_pOutItemSet.get());
                 if ( nLeave == DeactivateRC::KeepPage )
                 {
-                    // the page mustn't be left
-                    xTreeLB->select(*xCurrentPageEntry);
-                    return;
+                    // the page mustn't be left, so return early
+                    assert(xTreeLB->is_selected(*xCurrentPageEntry)); // presumably this must be true here
+                    if (bOkPressed)
+                        return;
                 }
             }
-            pPageInfo->m_xPage->set_visible(false);
         }
     }
 
     ApplyOptions();
-    m_xDialog->response(RET_OK);
+    ApplyItemSets();
+    utl::ConfigManager::storeConfigItems();
+
+    if (bOkPressed)
+        m_xDialog->response(RET_OK);
+    else
+    {
+        // for the Apply case, now that the settings are saved to config,
+        // reload the current page so it knows what the config now states
+        ResetCurrentPageFromConfig();
+        // reselect it to undo possible DeactivatePage above
+        xCurrentPageEntry.reset();
+        SelectHdl_Impl();
+    }
 
     if ( bNeedsRestart )
     {
@@ -735,9 +742,6 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, weld::Button&, void)
         ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
                                         m_pParent, eRestartReason);
     }
-
-    ApplyItemSets();
-    utl::ConfigManager::storeConfigItems();
 }
 
 void OfaTreeOptionsDialog::ApplyItemSets()
@@ -767,7 +771,7 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     xTreeLB->connect_changed( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
     xBackPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );
     xApplyPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, ApplyHdl_Impl ) );
-    xOkPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, OKHdl_Impl ) );
+    xOkPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, ApplyHdl_Impl ) );
     m_xDialog->connect_help( LINK( this, OfaTreeOptionsDialog, HelpHdl_Impl ) );
 }
 
@@ -899,7 +903,8 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
         if ( nLeave == DeactivateRC::KeepPage )
         {
-            // we cannot leave this page
+            // we cannot leave this page, this is may be from a user clicking a different entry
+            // in the tree so reselect the current page
             xTreeLB->select(*xCurrentPageEntry);
             return;
         }
