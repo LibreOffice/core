@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/processfactory.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <sidebar/ControllerFactory.hxx>
-#include <sfx2/viewfrm.hxx>
 
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/miscopt.hxx>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -264,12 +265,17 @@ IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
             // dropdown. The controller should know better than us what it was.
             xController->updateImage();
         }
-        else if (SfxViewFrame::Current())
+        else
         {
-            OUString aCommandURL = GetItemCommand(it.first);
-            css::uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, xFrame, GetImageSize());
-            SetItemImage(it.first, aImage);
+            css::uno::Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+            css::uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xContext);
+            css::uno::Reference<frame::XFrame> xFrame = xDesktop->getCurrentFrame();
+            if (xFrame)
+            {
+                OUString aCommandURL = GetItemCommand(it.first);
+                Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, xFrame, GetImageSize());
+                SetItemImage(it.first, aImage);
+            }
         }
     }
 
