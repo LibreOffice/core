@@ -638,7 +638,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl, weld::Button&, void)
         pPageInfo->m_xExtPage->ResetPage();
 }
 
-void OfaTreeOptionsDialog::ApplyOptions(bool deactivate)
+void OfaTreeOptionsDialog::ApplyOptions()
 {
     std::unique_ptr<weld::TreeIter> xEntry = xTreeLB->make_iterator();
     bool bEntry = xTreeLB->get_iter_first(*xEntry);
@@ -658,10 +658,7 @@ void OfaTreeOptionsDialog::ApplyOptions(bool deactivate)
 
             if ( pPageInfo->m_xExtPage )
             {
-                if ( deactivate )
-                {
-                    pPageInfo->m_xExtPage->DeactivatePage();
-                }
+                pPageInfo->m_xExtPage->DeactivatePage();
                 pPageInfo->m_xExtPage->SavePage();
             }
             if ( pPageInfo->m_xPage && RID_OPTPAGE_CHART_DEFCOLORS == pPageInfo->m_nPageId )
@@ -676,7 +673,7 @@ void OfaTreeOptionsDialog::ApplyOptions(bool deactivate)
 
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, void)
 {
-    ApplyOptions(/*deactivate =*/false);
+    ApplyOptions();
 
     if ( bNeedsRestart )
     {
@@ -729,7 +726,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, weld::Button&, void)
         }
     }
 
-    ApplyOptions(/*deactivate =*/ true);
+    ApplyOptions();
     m_xDialog->response(RET_OK);
 
     if ( bNeedsRestart )
