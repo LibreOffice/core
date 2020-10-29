@@ -16,9 +16,11 @@
 #include <unotxdoc.hxx>
 #include <flyfrm.hxx>
 #include <fmtornt.hxx>
-//#include <frameformats.hxx>
 #include <frmtool.hxx>
 #include <textboxhelper.hxx>
+#include <drawdoc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <svx/svdpage.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/core/layout/data/";
 
@@ -173,9 +175,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
     // tdf#135198: check whether text box stays inside shape after moving it upwards
     load(DATA_DIRECTORY, "shape-textbox.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pDocShell = pTextDoc->GetDocShell();
-    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    SdrObject* pTextBoxObj = pWrtShell->GetObjAt({ 8000, 3000 });
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pTextBoxObj = pPage->GetObj(0);
 
     xmlDocUniquePtr pLayoutBefore = parseLayoutDump();
     CPPUNIT_ASSERT(pLayoutBefore);
