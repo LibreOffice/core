@@ -74,7 +74,7 @@ private:
 class StylesPreviewWindow_Base
 {
 protected:
-    static constexpr unsigned STYLES_COUNT = 4;
+    static constexpr unsigned STYLES_COUNT = 6;
 
     std::unique_ptr<StyleItemController> m_xStyleControllers[STYLES_COUNT];
     std::unique_ptr<weld::CustomWeld> m_xStyleControllersWeld[STYLES_COUNT];
