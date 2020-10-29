@@ -12,6 +12,7 @@
 
 #include <sal/config.h>
 
+#include <cstdint>
 #include <string>
 
 #include <cppunit/TestAssert.h>
@@ -19,7 +20,7 @@
 // ostream << char16_t is deleted since C++20 (but just keep outputting numeric values):
 template <> inline std::string CppUnit::assertion_traits<char16_t>::toString(char16_t const& x)
 {
-    return assertion_traits<unsigned>::toString(unsigned(x));
+    return assertion_traits<std::uint_least16_t>::toString(std::uint_least16_t(x));
 }
 
 #endif
