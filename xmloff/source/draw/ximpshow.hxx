@@ -23,15 +23,14 @@
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"
 #include <memory>
-
-class ShowsImpImpl;
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 
 // presentations:animations
 
 class SdXMLShowsContext : public SvXMLImportContext
 {
-    std::unique_ptr<ShowsImpImpl>   mpImpl;
-
 public:
 
     SdXMLShowsContext( SdXMLImport& rImport,
@@ -43,6 +42,12 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
                 sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+private:
+    css::uno::Reference< css::lang::XSingleServiceFactory > mxShowFactory;
+    css::uno::Reference< css::container::XNameContainer > mxShows;
+    css::uno::Reference< css::beans::XPropertySet > mxPresProps;
+    css::uno::Reference< css::container::XNameAccess > mxPages;
+    OUString maCustomShowName;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHOW_HXX

@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -51,35 +48,29 @@ using namespace ::xmloff::token;
 class ShowsImpImpl
 {
 public:
-    Reference< XSingleServiceFactory > mxShowFactory;
-    Reference< XNameContainer > mxShows;
-    Reference< XPropertySet > mxPresProps;
-    Reference< XNameAccess > mxPages;
-    OUString maCustomShowName;
 };
 
 
 SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport, const Reference< XFastAttributeList >& xAttrList )
-:   SvXMLImportContext(rImport),
-    mpImpl(new ShowsImpImpl )
+:   SvXMLImportContext(rImport)
 {
 
     Reference< XCustomPresentationSupplier > xShowsSupplier( rImport.GetModel(), UNO_QUERY );
     if( xShowsSupplier.is() )
     {
-        mpImpl->mxShows = xShowsSupplier->getCustomPresentations();
-        mpImpl->mxShowFactory.set( mpImpl->mxShows, UNO_QUERY );
+        mxShows = xShowsSupplier->getCustomPresentations();
+        mxShowFactory.set( mxShows, UNO_QUERY );
     }
 
     Reference< XDrawPagesSupplier > xDrawPagesSupplier( rImport.GetModel(), UNO_QUERY );
     if( xDrawPagesSupplier.is() )
-        mpImpl->mxPages.set( xDrawPagesSupplier->getDrawPages(), UNO_QUERY );
+        mxPages.set( xDrawPagesSupplier->getDrawPages(), UNO_QUERY );
 
     Reference< XPresentationSupplier > xPresentationSupplier( rImport.GetModel(), UNO_QUERY );
     if( xPresentationSupplier.is() )
-        mpImpl->mxPresProps.set( xPresentationSupplier->getPresentation(), UNO_QUERY );
+        mxPresProps.set( xPresentationSupplier->getPresentation(), UNO_QUERY );
 
-    if( !mpImpl->mxPresProps.is() )
+    if( !mxPresProps.is() )
         return;
 
     bool bAll = true;
@@ -98,13 +89,13 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport, const Reference< XFa
         {
             case XML_ELEMENT(PRESENTATION, XML_START_PAGE):
             {
-                mpImpl->mxPresProps->setPropertyValue("FirstPage", Any(sValue) );
+                mxPresProps->setPropertyValue("FirstPage", Any(sValue) );
                 bAll = false;
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_SHOW):
             {
-                mpImpl->maCustomShowName = sValue;
+                maCustomShowName = sValue;
                 bAll = false;
                 break;
             }
@@ -116,37 +107,37 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport, const Reference< XFa
 
                 const sal_Int32 nMS = (aDuration.Hours * 60 +
                         aDuration.Minutes) * 60 + aDuration.Seconds;
-                mpImpl->mxPresProps->setPropertyValue("Pause", Any(nMS) );
+                mxPresProps->setPropertyValue("Pause", Any(nMS) );
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_ANIMATIONS):
             {
                 aAny <<= IsXMLToken( sValue, XML_ENABLED );
-                mpImpl->mxPresProps->setPropertyValue("AllowAnimations", aAny );
+                mxPresProps->setPropertyValue("AllowAnimations", aAny );
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_STAY_ON_TOP):
             {
                 aAny <<= IsXMLToken( sValue, XML_TRUE );
-                mpImpl->mxPresProps->setPropertyValue("IsAlwaysOnTop", aAny );
+                mxPresProps->setPropertyValue("IsAlwaysOnTop", aAny );
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_FORCE_MANUAL):
             {
                 aAny <<= IsXMLToken( sValue, XML_TRUE );
-                mpImpl->mxPresProps->setPropertyValue("IsAutomatic", aAny );
+                mxPresProps->setPropertyValue("IsAutomatic", aAny );
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_ENDLESS):
             {
                 aAny <<= IsXMLToken( sValue, XML_TRUE );
-                mpImpl->mxPresProps->setPropertyValue("IsEndless", aAny );
+                mxPresProps->setPropertyValue("IsEndless", aAny );
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_FULL_SCREEN):
             {
                 aAny <<= IsXMLToken( sValue, XML_TRUE );
-                mpImpl->mxPresProps->setPropertyValue("IsFullScreen", aAny );
+                mxPresProps->setPropertyValue("IsFullScreen", aAny );
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_MOUSE_VISIBLE):
@@ -157,40 +148,40 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport, const Reference< XFa
             case XML_ELEMENT(PRESENTATION, XML_START_WITH_NAVIGATOR):
             {
                 aAny <<= IsXMLToken( sValue, XML_TRUE );
-                mpImpl->mxPresProps->setPropertyValue("StartWithNavigator", aAny );
+                mxPresProps->setPropertyValue("StartWithNavigator", aAny );
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_MOUSE_AS_PEN):
             {
                 aAny <<= IsXMLToken( sValue, XML_TRUE );
-                mpImpl->mxPresProps->setPropertyValue("UsePen", aAny );
+                mxPresProps->setPropertyValue("UsePen", aAny );
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_TRANSITION_ON_CLICK):
             {
                 aAny <<= IsXMLToken( sValue, XML_ENABLED );
-                mpImpl->mxPresProps->setPropertyValue("IsTransitionOnClick", aAny );
+                mxPresProps->setPropertyValue("IsTransitionOnClick", aAny );
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_SHOW_LOGO):
             {
                 aAny <<= IsXMLToken( sValue, XML_TRUE );
-                mpImpl->mxPresProps->setPropertyValue("IsShowLogo", aAny );
+                mxPresProps->setPropertyValue("IsShowLogo", aAny );
                 break;
             }
         }
     }
-    mpImpl->mxPresProps->setPropertyValue("IsShowAll", Any(bAll) );
-    mpImpl->mxPresProps->setPropertyValue("IsMouseVisible", Any(bIsMouseVisible) );
+    mxPresProps->setPropertyValue("IsShowAll", Any(bAll) );
+    mxPresProps->setPropertyValue("IsMouseVisible", Any(bIsMouseVisible) );
 }
 
 SdXMLShowsContext::~SdXMLShowsContext()
 {
-    if( mpImpl && !mpImpl->maCustomShowName.isEmpty() )
+    if( !maCustomShowName.isEmpty() )
     {
         uno::Any aAny;
-        aAny <<= mpImpl->maCustomShowName;
-        mpImpl->mxPresProps->setPropertyValue("CustomShow", aAny );
+        aAny <<= maCustomShowName;
+        mxPresProps->setPropertyValue("CustomShow", aAny );
     }
 }
 
@@ -221,7 +212,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShowsContext::cre
 
         if( !aName.isEmpty() && !aPages.isEmpty() )
         {
-            Reference< XIndexContainer > xShow( mpImpl->mxShowFactory->createInstance(), UNO_QUERY );
+            Reference< XIndexContainer > xShow( mxShowFactory->createInstance(), UNO_QUERY );
             if( xShow.is() )
             {
                 SvXMLTokenEnumerator aPageNames( aPages, ',' );
@@ -229,11 +220,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShowsContext::cre
 
                 while( aPageNames.getNextToken( sPageName ) )
                 {
-                    if( !mpImpl->mxPages->hasByName( sPageName ) )
+                    if( !mxPages->hasByName( sPageName ) )
                         continue;
 
                     Reference< XDrawPage > xPage;
-                    mpImpl->mxPages->getByName( sPageName ) >>= xPage;
+                    mxPages->getByName( sPageName ) >>= xPage;
                     if( xPage.is() )
                     {
                         xShow->insertByIndex( xShow->getCount(), Any(xPage) );
@@ -242,13 +233,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShowsContext::cre
 
                 Any aAny;
                 aAny <<= xShow;
-                if( mpImpl->mxShows->hasByName( aName ) )
+                if( mxShows->hasByName( aName ) )
                 {
-                    mpImpl->mxShows->replaceByName( aName, aAny );
+                    mxShows->replaceByName( aName, aAny );
                 }
                 else
                 {
-                    mpImpl->mxShows->insertByName( aName, aAny );
+                    mxShows->insertByName( aName, aAny );
                 }
             }
         }
