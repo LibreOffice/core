@@ -78,7 +78,6 @@
                       <object class="GtkComboBoxText" id="mousepos">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="halign">start</property>
                         <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes" context="optviewpage|mousepos">Default button</item>
@@ -100,7 +99,6 @@
                       <object class="GtkComboBoxText" id="mousemiddle">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="halign">start</property>
                         <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes" context="optviewpage|mousemiddle">No function</item>
@@ -162,6 +160,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="column-spacing">6</property>
+                        <property name="hexpand">True</property>
                         <child>
                           <object class="GtkLabel" id="label13">
                             <property name="visible">True</property>
@@ -209,6 +208,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="column-spacing">6</property>
+                        <property name="hexpand">True</property>
                         <child>
                           <object class="GtkComboBoxText" id="contextmenushortcuts">
                             <property name="visible">True</property>
