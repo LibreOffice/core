@@ -2560,7 +2560,9 @@ struct SvxStyleToolBoxControl::Impl
                     "Heading 1",
                     "Heading 2",
                     "Heading 3",
-                    "Quotations"
+                    "Heading 4",
+                    "Quotations",
+                    "Preformatted Text"
                 };
                 for( const OUString& aStyle: aWriterStyles )
                 {
