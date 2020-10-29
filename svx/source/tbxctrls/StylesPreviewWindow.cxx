@@ -369,7 +369,7 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
 
         m_xStyleControllersWeld[i].reset(
             new weld::CustomWeld(xBuilder, sId, *m_xStyleControllers[i]));
-        m_xStyleControllersWeld[i]->set_size_request(100, 60);
+        m_xStyleControllersWeld[i]->set_size_request(128, 28);
     }
 
     m_xUp->connect_clicked(LINK(this, StylesPreviewWindow_Base, GoUp));
@@ -477,14 +477,14 @@ IMPL_LINK(StylesPreviewWindow_Base, GoUp, const OString&, /*rItem*/, void)
     if (m_nStyleIterator == 0)
         m_nStyleIterator = m_aAllStyles.size();
     else
-        m_nStyleIterator--;
+        m_nStyleIterator = m_nStyleIterator - 2;
 
     Update();
 }
 
 IMPL_LINK(StylesPreviewWindow_Base, GoDown, const OString&, /*rItem*/, void)
 {
-    m_nStyleIterator++;
+    m_nStyleIterator = m_nStyleIterator + 2;
     Update();
 }
 
