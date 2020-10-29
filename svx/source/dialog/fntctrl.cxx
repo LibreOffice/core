@@ -191,7 +191,7 @@ public:
         SvtLanguageOptions aLanguageOptions;
         m_bCJKEnabled = aLanguageOptions.IsAnyEnabled();
         m_bCTLEnabled = aLanguageOptions.IsCTLFontEnabled();
-
+        mxBackColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
         Invalidate100PercentFontWidth();
     }
 
@@ -501,13 +501,8 @@ static void SetPrevFontEscapement(SvxFont& rFont, sal_uInt8 nProp, sal_uInt8 nEs
 
 void SvxFontPrevWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-    svtools::ColorConfig aColorConfig;
-    Color aTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
-    rRenderContext.SetTextColor(aTextColor);
-
-    rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
+    rRenderContext.SetTextColor( svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+    rRenderContext.SetBackground( svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
 }
 
 void SvxFontPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
@@ -596,12 +591,6 @@ void SvxFontPrevWindow::ResetColor()
     Invalidate();
 }
 
-void SvxFontPrevWindow::SetBackColor(const Color &rColor)
-{
-    pImpl->mxBackColor = rColor;
-    Invalidate();
-}
-
 void SvxFontPrevWindow::SetTextLineColor(const Color &rColor)
 {
     pImpl->mxTextLineColor = rColor;
@@ -612,6 +601,19 @@ void SvxFontPrevWindow::SetOverlineColor(const Color &rColor)
 {
     pImpl->mxOverlineColor = rColor;
     Invalidate();
+}
+
+void DrawBevel(vcl::RenderContext& rRenderContext, const tools::Rectangle aRect)
+{
+    const int nWidth = 10;
+    const tools::Long w(aRect.GetWidth());
+    const tools::Long h(aRect.GetHeight());
+    rRenderContext.SetFillColor(COL_GRAY7);
+    rRenderContext.DrawRect( tools::Rectangle(0,0,w,nWidth) );
+    rRenderContext.DrawRect( tools::Rectangle(0,0,nWidth,h) );
+    rRenderContext.SetFillColor(COL_GRAY3);
+    rRenderContext.DrawRect( tools::Rectangle(w-nWidth,0,w,h) );
+    rRenderContext.DrawRect( tools::Rectangle(0,h-nWidth,w,h) );
 }
 
 void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
@@ -717,6 +719,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
             rRenderContext.SetLineColor();
             rRenderContext.SetFillColor(*pImpl->mxBackColor);
             rRenderContext.DrawRect(aRect);
+            DrawBevel(rRenderContext,aRect);
             rRenderContext.SetLineColor(aLineCol);
             rRenderContext.SetFillColor(aFillCol);
         }
@@ -839,17 +842,19 @@ void SvxFontPrevWindow::SetFontWidthScale( sal_uInt16 n )
 
 void SvxFontPrevWindow::AutoCorrectFontColor()
 {
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aFontColor(rStyleSettings.GetWindowTextColor());
+    Color aColor(COL_AUTO);
+    if ( pImpl->mxBackColor ) aColor = *pImpl->mxBackColor;
+    const bool bIsDark(aColor.IsDark());
 
-    if (COL_AUTO == pImpl->maFont.GetColor())
-        pImpl->maFont.SetColor(aFontColor);
-
-    if (COL_AUTO == pImpl->maCJKFont.GetColor())
-        pImpl->maCJKFont.SetColor(aFontColor);
-
-    if (COL_AUTO == pImpl->maCTLFont.GetColor())
-        pImpl->maCTLFont.SetColor(aFontColor);
+    aColor = pImpl->maFont.GetColor();
+    if (aColor == COL_AUTO)
+        pImpl->maFont.SetColor( bIsDark ? COL_WHITE : COL_BLACK );
+    aColor = pImpl->maCJKFont.GetColor();
+    if (aColor == COL_AUTO)
+        pImpl->maCJKFont.SetColor( bIsDark ? COL_WHITE : COL_BLACK );
+    aColor = pImpl->maCTLFont.GetColor();
+    if (aColor == COL_AUTO)
+        pImpl->maCTLFont.SetColor( bIsDark ? COL_WHITE : COL_BLACK );
 }
 
 void SvxFontPrevWindow::SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont )
@@ -1016,18 +1021,6 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     rFont.SetTransparent( bTransparent );
     rCJKFont.SetTransparent( bTransparent );
     rCTLFont.SetTransparent( bTransparent );
-
-    Color aBackCol( COL_TRANSPARENT );
-    if( !bPreviewBackgroundToCharacter )
-    {
-        if( GetWhich( rSet, SID_ATTR_BRUSH, nWhich ) )
-        {
-            const SvxBrushItem& rBrush = static_cast<const  SvxBrushItem&>( rSet.Get( nWhich ) );
-            if( GPOS_NONE == rBrush.GetGraphicPos() )
-                aBackCol = rBrush.GetColor();
-        }
-    }
-    SetBackColor( aBackCol );
 
     // Font
     SetPrevFont( rSet, SID_ATTR_CHAR_FONT, rFont );

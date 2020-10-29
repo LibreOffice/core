@@ -702,7 +702,6 @@ private:
 public:
     virtual void                DrawBorder(tools::Rectangle aBorderRect);
 
-
     /** @name Pixel functions
      */
     ///@{
