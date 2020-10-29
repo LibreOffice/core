@@ -125,7 +125,8 @@ void ToolsLong::run()
 
     StringRef fn(handler.getMainFileName());
     // sberg says this is fine
-    if (loplugin::isSamePathname(fn, SRCDIR "/pyuno/source/module/pyuno.cxx"))
+    if (loplugin::isSamePathname(fn, SRCDIR "/pyuno/source/module/pyuno.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR "/ucb/source/ucp/webdav-neon/NeonSession.cxx"))
         return;
 
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
