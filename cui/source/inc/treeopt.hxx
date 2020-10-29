@@ -156,7 +156,7 @@ private:
     static VectorOfNodes LoadNodes( Module* pModule, const OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
-    void            ApplyOptions( bool deactivate );
+    void            ApplyOptions();
 
     DECL_LINK(ShowPageHdl_Impl, weld::TreeView&, void);
     DECL_LINK(BackHdl_Impl, weld::Button&, void);
