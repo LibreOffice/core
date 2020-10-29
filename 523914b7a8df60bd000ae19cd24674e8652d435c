@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75f348db_a64ce70f",
+        "filename": "sc/source/filter/excel/xecontent.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-29T16:56:32Z",
+      "side": 1,
+      "message": "It seems, there is a usable truncate function for OUStringBuffer already:\n\n$ git grep -i truncate -- sc | grep cxx\n...\nsc/source/ui/docshell/docsh.cxx:        //truncate to the number of characters that should fit, even in the\nsc/source/ui/docshell/docsh.cxx:        aString \u003d comphelper::string::truncateToLength(aReplacement, nLen).makeStringAndClear();",
+      "range": {
+        "startLine": 1650,
+        "startChar": 0,
+        "endLine": 1662,
+        "endChar": 1
+      },
+      "revId": "523914b7a8df60bd000ae19cd24674e8652d435c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40c39ec6_73aa618e",
+        "filename": "sc/source/filter/excel/xecontent.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1683,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-29T16:56:32Z",
+      "side": 1,
+      "message": "We can add these to the new local function",
+      "range": {
+        "startLine": 1680,
+        "startChar": 1,
+        "endLine": 1683,
+        "endChar": 41
+      },
+      "revId": "523914b7a8df60bd000ae19cd24674e8652d435c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
