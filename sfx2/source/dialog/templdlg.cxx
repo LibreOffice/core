@@ -241,6 +241,8 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, QueryTooltipHdl, const weld::TreeIter&, 
     OUString sQuickHelpText(aTemplName);
 
     const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
+    if (!pItem)
+        return sQuickHelpText;
     SfxStyleSheetBase* pStyle = pStyleSheetPool->Find(aTemplName, pItem->GetFamily());
 
     if (pStyle && pStyle->IsUsed())  // pStyle is in use in the document?
