@@ -16,6 +16,24 @@
       "revId": "510908a7e04f6aa88176f7e1b5518420bac038f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a0f3511_946d22ba",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 3258,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2020-10-29T08:27:54Z",
+      "side": 1,
+      "message": "Thanks for the catch:) I will update \u0026 check and send a new one.\n\nLater:\nThere was a re-definition in file DrawImpressCommands.xcu, i removed it. So it now uses the one in GenericCommands.xcu.\n\nI\u0027d also want to remove \"...\" from \"Edit Hyperlink...\" :) But i am not sure about how translation works in core side (there might be a 1:1 mapping with text). So i didn\u0027t touch it.\n\nThanks again for your comment.",
+      "parentUuid": "485aaa3e_7dc0f5a4",
+      "revId": "510908a7e04f6aa88176f7e1b5518420bac038f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
