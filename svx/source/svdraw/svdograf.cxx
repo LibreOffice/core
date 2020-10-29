@@ -561,6 +561,11 @@ OUString SdrGrafObj::TakeObjNameSingul() const
     {
         switch (rVectorGraphicDataPtr->getVectorGraphicDataType())
         {
+        case VectorGraphicDataType::Svg:
+        {
+            sName.append(SvxResId(STR_ObjNameSingulGRAFSVG));
+            break;
+        }
         case VectorGraphicDataType::Wmf:
         {
             sName.append(SvxResId(STR_ObjNameSingulGRAFWMF));
@@ -571,12 +576,12 @@ OUString SdrGrafObj::TakeObjNameSingul() const
             sName.append(SvxResId(STR_ObjNameSingulGRAFEMF));
             break;
         }
-        default: // case VectorGraphicDataType::Svg:
+        case VectorGraphicDataType::Pdf:
         {
-            sName.append(SvxResId(STR_ObjNameSingulGRAFSVG));
+            sName.append(SvxResId(STR_ObjNameSingulGRAFPDF));
             break;
         }
-        }
+        } //no default, see tdf#137813
     }
     else
     {
@@ -631,6 +636,11 @@ OUString SdrGrafObj::TakeObjNamePlural() const
     {
         switch (rVectorGraphicDataPtr->getVectorGraphicDataType())
         {
+        case VectorGraphicDataType::Svg:
+        {
+            sName.append(SvxResId(STR_ObjNamePluralGRAFSVG));
+            break;
+        }
         case VectorGraphicDataType::Wmf:
         {
             sName.append(SvxResId(STR_ObjNamePluralGRAFWMF));
@@ -641,12 +651,12 @@ OUString SdrGrafObj::TakeObjNamePlural() const
             sName.append(SvxResId(STR_ObjNamePluralGRAFEMF));
             break;
         }
-        default: // case VectorGraphicDataType::Svg:
+        case VectorGraphicDataType::Pdf:
         {
-            sName.append(SvxResId(STR_ObjNamePluralGRAFSVG));
+            sName.append(SvxResId(STR_ObjNamePluralGRAFPDF));
             break;
         }
-        }
+        } //no default, see tdf#137813
     }
     else
     {
