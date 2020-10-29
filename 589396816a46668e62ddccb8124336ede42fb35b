@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71d1c56d_5019887d",
+        "filename": "svx/source/dialog/fntctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-29T14:06:41Z",
+      "side": 1,
+      "message": "With app color background \u003d black and font color \u003d automatic the preview is black on black. It works with black/white or both auto.",
+      "range": {
+        "startLine": 842,
+        "startChar": 22,
+        "endLine": 842,
+        "endChar": 85
+      },
+      "revId": "589396816a46668e62ddccb8124336ede42fb35b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
