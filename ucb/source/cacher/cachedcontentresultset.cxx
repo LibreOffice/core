@@ -32,7 +32,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/macros.hxx>
-#include <tools/long.hxx>
 #include <memory>
 
 using namespace com::sun::star::beans;
@@ -366,8 +365,8 @@ class CCRS_PropertySetInfo :
     std::unique_ptr<Sequence< css::beans::Property >>
                             m_pProperties;
 
-    tools::Long                    m_nFetchSizePropertyHandle;
-    tools::Long                    m_nFetchDirectionPropertyHandle;
+    sal_Int32               m_nFetchSizePropertyHandle;
+    sal_Int32               m_nFetchDirectionPropertyHandle;
 
 private:
     sal_Int32
