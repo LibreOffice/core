@@ -21,12 +21,16 @@
 
 #include <table/tablemodel.hxx>
 #include <table/tablesort.hxx>
+#include <tools/color.hxx>
 
 #include <com/sun/star/awt/grid/GridDataEvent.hpp>
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
+#include <com/sun/star/awt/grid/XGridColumn.hpp>
+#include <com/sun/star/awt/grid/XSortableGridData.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
+#include <cppuhelper/weakref.hxx>
 
 #include <memory>
 
@@ -38,12 +42,8 @@ namespace svt::table
     //= UnoControlTableModel
 
     class UnoGridColumnFacade;
-    struct UnoControlTableModel_Impl;
     class UnoControlTableModel : public ITableModel, public ITableDataSort
     {
-    private:
-        std::unique_ptr<UnoControlTableModel_Impl>  m_pImpl;
-
     public:
         UnoControlTableModel();
         virtual ~UnoControlTableModel() override;
@@ -94,8 +94,8 @@ namespace svt::table
         void    removeAllColumns();
 
         // other operations
-        void    setVerticalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
-        void    setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
+        void    setVerticalScrollbarVisibility( ScrollbarVisibility const i_visibility );
+        void    setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility );
 
         void    setDataModel( css::uno::Reference< css::awt::grid::XGridDataModel > const & i_gridDataModel );
         bool    hasDataModel() const;
@@ -145,6 +145,35 @@ namespace svt::table
 
     private:
         void    impl_notifyTableMetricsChanged() const;
+
+        typedef ::std::vector< PTableModelListener >    ModellListeners;
+        typedef ::std::vector< PColumnModel >           ColumnModels;
+
+        ColumnModels                                    aColumns;
+        bool                                            bHasColumnHeaders;
+        bool                                            bHasRowHeaders;
+        ScrollbarVisibility                             eVScrollMode;
+        ScrollbarVisibility                             eHScrollMode;
+        PTableRenderer                                  pRenderer;
+        PTableInputHandler                              pInputHandler;
+        TableMetrics                                    nRowHeight;
+        TableMetrics                                    nColumnHeaderHeight;
+        TableMetrics                                    nRowHeaderWidth;
+        ::std::optional< ::Color >                    m_aGridLineColor;
+        ::std::optional< ::Color >                    m_aHeaderBackgroundColor;
+        ::std::optional< ::Color >                    m_aHeaderTextColor;
+        ::std::optional< ::Color >                    m_aActiveSelectionBackColor;
+        ::std::optional< ::Color >                    m_aInactiveSelectionBackColor;
+        ::std::optional< ::Color >                    m_aActiveSelectionTextColor;
+        ::std::optional< ::Color >                    m_aInactiveSelectionTextColor;
+        ::std::optional< ::Color >                    m_aTextColor;
+        ::std::optional< ::Color >                    m_aTextLineColor;
+        ::std::optional< ::std::vector< ::Color > >   m_aRowColors;
+        css::style::VerticalAlignment                   m_eVerticalAlign;
+        bool                                            bEnabled;
+        ModellListeners                                 m_aListeners;
+        css::uno::WeakReference< css::awt::grid::XGridDataModel >                 m_aDataModel;
+        css::uno::WeakReference< css::awt::grid::XGridColumnModel >               m_aColumnModel;
     };
 
 
