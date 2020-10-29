@@ -26,9 +26,6 @@ FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString const& rF
     , m_xContentGrid(m_xBuilder->weld_container("contentGrid"))
     , m_xPreviewWindow(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWindow))
 {
-    svtools::ColorConfig aColorConfig;
-    Color aFillColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
-    m_aPreviewWindow.SetBackColor(aFillColor);
     initialize();
 }
 
