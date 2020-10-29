@@ -429,6 +429,8 @@ namespace drawinglayer::primitive2d
 
 #ifdef _WIN32
             // for WIN32 systems, correct the FontWidth if FontScaling is used
+            const sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
+            const bool bFontIsScaled(nHeight != nWidth);
             if(bFontIsScaled && nHeight > 0)
             {
                 const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aRetval));
