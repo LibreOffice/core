@@ -805,7 +805,7 @@ bool SwRedlineItr::ChkSpecialUnderline_() const
 bool SwRedlineItr::CheckLine(
         sal_uLong const nStartNode, sal_Int32 const nChkStart,
         sal_uLong const nEndNode, sal_Int32 nChkEnd, OUString& rRedlineText,
-        bool& bRedlineEnd, bool& bRedlineEndDel)
+        bool& bRedlineEnd)
 {
     // note: previously this would return true in the (!m_bShow && m_pExt)
     // case, but surely that was a bug?
@@ -817,7 +817,7 @@ bool SwRedlineItr::CheckLine(
     sal_Int32 nOldStart = m_nStart;
     sal_Int32 nOldEnd = m_nEnd;
     SwRedlineTable::size_type const nOldAct = m_nAct;
-    bool bRet = bRedlineEnd = bRedlineEndDel = false;
+    bool bRet = bRedlineEnd = false;
 
     for (m_nAct = m_nFirst; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++m_nAct)
     {
@@ -829,13 +829,12 @@ bool SwRedlineItr::CheckLine(
         if (nChkStart <= m_nEnd && (nChkEnd > m_nStart || COMPLETE_STRING == m_nEnd))
         {
             bRet = true;
-            if ( COMPLETE_STRING == m_nEnd )
-                bRedlineEnd = true;
-            if ( pRedline->GetType() == RedlineType::Delete )
-            {
+            if ( rRedlineText.isEmpty() && pRedline->GetType() == RedlineType::Delete )
                 rRedlineText = const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true);
-                if ( COMPLETE_STRING == m_nEnd )
-                    bRedlineEndDel = true;
+            if ( COMPLETE_STRING == m_nEnd )
+            {
+                bRedlineEnd = true;
+                break;
             }
         }
     }

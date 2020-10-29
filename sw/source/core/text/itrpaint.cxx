@@ -427,8 +427,20 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetOpt().IsParagraph() && !GetTextFrame()->GetFollow() &&
             GetInfo().GetIdx() >= TextFrameIndex(GetInfo().GetText().getLength()))
         {
-            const SwTmpEndPortion aEnd( *pEndTempl, m_pCurr->HasRedlineEnd(),
-                           m_pCurr->HasRedlineEndDel() );
+            TextFrameIndex nOffset = GetInfo().GetIdx();
+            SeekStartAndChg( GetInfo(), true );
+            bool bHasRedlineEnd( GetRedln() && m_pCurr->HasRedlineEnd() );
+            if( bHasRedlineEnd )
+            {
+                std::pair<SwTextNode const*, sal_Int32> const pos(
+                        GetTextFrame()->MapViewToModel(nOffset));
+                GetRedln()->Seek(*m_pFont, pos.first->GetIndex(), pos.second, 0);
+            }
+
+            const SwTmpEndPortion aEnd( *pEndTempl,
+                           bHasRedlineEnd ? m_pFont->GetUnderline() : LINESTYLE_NONE,
+                           bHasRedlineEnd ? m_pFont->GetStrikeout() : STRIKEOUT_NONE,
+                           bHasRedlineEnd ? m_pFont->GetColor() : COL_AUTO );
             GetFnt()->ChgPhysFnt( GetInfo().GetVsh(), *pOut );
 
             if ( bAdjustBaseLine )

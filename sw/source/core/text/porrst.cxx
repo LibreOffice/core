@@ -47,8 +47,10 @@
 #include <crsrsh.hxx>
 
 SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion,
-                const bool bCh, const bool bDel ) :
-    bChanged( bCh ), bDeleted( bDel )
+                const FontLineStyle eUL,
+                const FontStrikeout eStrkout,
+                const Color& rCol ) :
+    eUnderline( eUL ), eStrikeout( eStrkout ), aColor( rCol )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
@@ -63,9 +65,27 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
     const SwFont* pOldFnt = rInf.GetFont();
 
     SwFont aFont(*pOldFnt);
-    aFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
-    aFont.SetStrikeout( bDeleted ? STRIKEOUT_SINGLE : STRIKEOUT_NONE );
-    aFont.SetUnderline( (bChanged && !bDeleted) ? LINESTYLE_SINGLE : LINESTYLE_NONE );
+
+    // Paint strikeout/underline based on redline color and settings
+    // (with an extra pilcrow in the background, because there is
+    // no SetStrikeoutColor(), also SetUnderColor() doesn't work()).
+    if ( eUnderline != LINESTYLE_NONE || eStrikeout != STRIKEOUT_NONE )
+    {
+        aFont.SetColor( aColor );
+        // don't show underline with strikeout
+        aFont.SetUnderline( eStrikeout == STRIKEOUT_NONE ? eUnderline : LINESTYLE_NONE );
+        aFont.SetStrikeout( eStrikeout );
+
+        const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
+
+        // draw the pilcrow with strikeout/underline in redline color
+        rInf.DrawText(CH_PAR, *this);
+
+    }
+
+    aFont.SetColor( NON_PRINTING_CHARACTER_COLOR );
+    aFont.SetStrikeout( STRIKEOUT_NONE );
+    aFont.SetUnderline( LINESTYLE_NONE );
     const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
 
     // draw the pilcrow
