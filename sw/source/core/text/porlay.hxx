@@ -94,7 +94,6 @@ private:
     bool m_bContent   : 1; // Text for line numbering
     bool m_bRedline   : 1; // The Redlining
     bool m_bRedlineEnd: 1; // Redlining for paragraph mark: tracked change at the end
-    bool m_bRedlineEndDel : 1; // Redlining for paragraph mark: tracked deletion at the end
     bool m_bForcedLeftMargin : 1; // Left adjustment moved by the Fly
     bool m_bHanging : 1; // Contains a hanging portion in the margin
     bool m_bUnderscore : 1;
@@ -134,8 +133,6 @@ public:
     bool HasRedline() const { return m_bRedline; }
     void SetRedlineEnd( const bool bNew ) { m_bRedlineEnd = bNew; }
     bool HasRedlineEnd() const { return m_bRedlineEnd; }
-    void SetRedlineEndDel( const bool bNew ) { m_bRedlineEndDel = bNew; }
-    bool HasRedlineEndDel() const { return m_bRedlineEndDel; }
     void SetRedlineText ( const OUString& sText ) { m_sRedlineText = sText; }
     const OUString* GetRedlineText() const { return &m_sRedlineText; }
     void SetForcedLeftMargin() { m_bForcedLeftMargin = true; }

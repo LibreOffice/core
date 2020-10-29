@@ -23,6 +23,7 @@
 
 #include <TextFrameIndex.hxx>
 #include <txttypes.hxx>
+#include <txtfrm.hxx>
 
 #include "porlin.hxx"
 #include "portxt.hxx"
@@ -40,11 +41,15 @@ class SwTextFormatInfo;
 
 class SwTmpEndPortion : public SwLinePortion
 {
-    bool bChanged;
-    bool bDeleted;
+    const FontLineStyle eUnderline;
+    const FontStrikeout eStrikeout;
+    Color aColor;
 
 public:
-    explicit SwTmpEndPortion( const SwLinePortion &rPortion, const bool bChanged, const bool bDel );
+    explicit SwTmpEndPortion( const SwLinePortion &rPortion,
+                    const FontLineStyle eUnderline,
+                    const FontStrikeout eStrikeout,
+                    const Color& rColor );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 };
 
