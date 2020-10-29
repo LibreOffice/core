@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_layout, \
     svt \
     tl \
     svl \
+    svxcore \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_core_layout,\
