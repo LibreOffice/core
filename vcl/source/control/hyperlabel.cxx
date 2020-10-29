@@ -25,42 +25,24 @@
 
 namespace vcl
 {
-    class HyperLabelImpl
-    {
-    public:
-        sal_Int16           ID;
-        sal_Int32           Index;
-        bool                bInteractive;
-        Size                m_aMinSize;
-        bool                m_bHyperMode;
-
-        HyperLabelImpl();
-    };
-
-
-    HyperLabelImpl::HyperLabelImpl()
-        : ID(0)
+    HyperLabel::HyperLabel( vcl::Window* _pParent, WinBits _nWinStyle )
+        :FixedText( _pParent, _nWinStyle )
+        , ID(0)
         , Index(0)
         , bInteractive(false)
         , m_bHyperMode(false)
     {
-    }
-
-    HyperLabel::HyperLabel( vcl::Window* _pParent, WinBits _nWinStyle )
-        :FixedText( _pParent, _nWinStyle )
-        ,m_pImpl( new HyperLabelImpl )
-    {
         implInit();
     }
 
-    Size const & HyperLabel::CalcMinimumSize( tools::Long nMaxWidth ) const
+    Size const & HyperLabel::CalcMinimumSize( tools::Long nMaxWidth )
     {
-        m_pImpl->m_aMinSize = FixedText::CalcMinimumSize( nMaxWidth );
+        m_aMinSize = FixedText::CalcMinimumSize( nMaxWidth );
         // the MinimumSize is used to size the FocusRectangle
         // and for the MouseMove method
-        m_pImpl->m_aMinSize.AdjustHeight(2 );
-        m_pImpl->m_aMinSize.AdjustWidth(1 );
-        return m_pImpl->m_aMinSize;
+        m_aMinSize.AdjustHeight(2 );
+        m_aMinSize.AdjustWidth(1 );
+        return m_aMinSize;
     }
 
     void HyperLabel::implInit()
@@ -84,14 +66,14 @@ namespace vcl
         vcl::Font aFont = GetControlFont( );
 
         bool bHyperMode = false;
-        if (!rMEvt.IsLeaveWindow() && IsEnabled() && m_pImpl->bInteractive)
+        if (!rMEvt.IsLeaveWindow() && IsEnabled() && bInteractive)
         {
             Point aPoint = GetPointerPosPixel();
-            if (aPoint.X() < m_pImpl->m_aMinSize.Width())
+            if (aPoint.X() < m_aMinSize.Width())
                 bHyperMode = true;
         }
 
-        m_pImpl->m_bHyperMode = bHyperMode;
+        m_bHyperMode = bHyperMode;
         if (bHyperMode)
         {
             aFont.SetUnderline(LINESTYLE_SINGLE);
@@ -107,7 +89,7 @@ namespace vcl
 
     void HyperLabel::MouseButtonDown( const MouseEvent& )
     {
-        if ( m_pImpl->m_bHyperMode && m_pImpl->bInteractive )
+        if ( m_bHyperMode && bInteractive )
         {
             maClickHdl.Call( this );
         }
@@ -115,10 +97,10 @@ namespace vcl
 
     void HyperLabel::GetFocus()
     {
-        if ( IsEnabled() && m_pImpl->bInteractive )
+        if ( IsEnabled() && bInteractive )
         {
             Point aPoint(0,0);
-            tools::Rectangle rRect(aPoint, Size( m_pImpl->m_aMinSize.Width(), GetSizePixel().Height() ) );
+            tools::Rectangle rRect(aPoint, Size( m_aMinSize.Width(), GetSizePixel().Height() ) );
             ShowFocus( rRect );
         }
     }
@@ -133,35 +115,29 @@ namespace vcl
         disposeOnce();
     }
 
-    void HyperLabel::dispose()
-    {
-        m_pImpl.reset();
-        FixedText::dispose();
-    }
-
     void HyperLabel::SetInteractive( bool _bInteractive )
     {
-        m_pImpl->bInteractive = ( _bInteractive && IsEnabled() );
+        bInteractive = ( _bInteractive && IsEnabled() );
     }
 
     sal_Int16 HyperLabel::GetID() const
     {
-        return m_pImpl->ID;
+        return ID;
     }
 
     sal_Int32 HyperLabel::GetIndex() const
     {
-        return m_pImpl->Index;
+        return Index;
     }
 
-    void HyperLabel::SetID( sal_Int16 ID )
+    void HyperLabel::SetID( sal_Int16 newID )
     {
-        m_pImpl->ID = ID;
+        this->ID = newID;
     }
 
-    void HyperLabel::SetIndex( sal_Int32 Index )
+    void HyperLabel::SetIndex( sal_Int32 newIndex )
     {
-        m_pImpl->Index = Index;
+        Index = newIndex;
     }
 
     void HyperLabel::SetLabel( const OUString& _rText )

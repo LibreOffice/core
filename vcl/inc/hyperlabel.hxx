@@ -25,11 +25,8 @@
 
 namespace vcl
 {
-    class HyperLabelImpl;
-
     class HyperLabel final : public FixedText
     {
-        std::unique_ptr<HyperLabelImpl>     m_pImpl;
         Link<HyperLabel*,void>  maClickHdl;
 
         virtual void        MouseMove( const MouseEvent& rMEvt ) override;
@@ -44,7 +41,6 @@ namespace vcl
     public:
         HyperLabel( vcl::Window* _pParent, WinBits _nWinStyle );
         virtual ~HyperLabel( ) override;
-        virtual void dispose() override;
 
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
         virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
@@ -62,7 +58,13 @@ namespace vcl
 
         void                SetClickHdl( const Link<HyperLabel*,void>& rLink ) { maClickHdl = rLink; }
 
-        Size const &        CalcMinimumSize( tools::Long nMaxWidth ) const;
+        Size const &        CalcMinimumSize( tools::Long nMaxWidth );
+    private:
+        sal_Int16           ID;
+        sal_Int32           Index;
+        bool                bInteractive;
+        Size                m_aMinSize;
+        bool                m_bHyperMode;
     };
 }
 
