@@ -1,0 +1,9 @@
+Verified+1: René Engelhard <rene@debian.org>
+Verified+1: Jenkins
+Code-Review+2: Noel Grandin <noel.grandin@collabora.co.uk>
+Code-Review+1: René Engelhard <rene@debian.org>
+Submitted-by: Noel Grandin <noel.grandin@collabora.co.uk>
+Submitted-at: Thu, 29 Oct 2020 20:01:04 +0100
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/105015
+Project: core
+Branch: refs/heads/libreoffice-7-0
