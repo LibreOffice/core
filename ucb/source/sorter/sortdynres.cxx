@@ -336,7 +336,7 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
                 }
             case ListActionType::MOVED:
                 {
-                    tools::Long nOffset = 0;
+                    sal_Int32 nOffset = 0;
                     if ( aAction.ActionInfo >>= nOffset )
                     {
                         pCurSet->Move( aAction.Position,
