@@ -48,6 +48,18 @@ void OutputDevice::DrawBorder(tools::Rectangle aBorderRect)
     DrawRect(aBorderRect);
 }
 
+void OutputDevice::DrawBevel(const tools::Rectangle aBevelRect, const tools::Long nWidth)
+{
+    const tools::Long w(aBevelRect.GetWidth());
+    const tools::Long h(aBevelRect.GetHeight());
+    SetFillColor(COL_GRAY7);
+    DrawRect( tools::Rectangle(0,0,w,nWidth) );
+    DrawRect( tools::Rectangle(0,0,nWidth,h) );
+    SetFillColor(COL_GRAY3);
+    DrawRect( tools::Rectangle(w-nWidth,0,w,h) );
+    DrawRect( tools::Rectangle(0,h-nWidth,w,h) );
+}
+
 void OutputDevice::DrawRect( const tools::Rectangle& rRect )
 {
     assert(!is_double_buffered_window());

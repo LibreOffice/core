@@ -701,7 +701,7 @@ private:
 
 public:
     virtual void                DrawBorder(tools::Rectangle aBorderRect);
-
+    virtual void                DrawBevel(const tools::Rectangle aBevelRect, const tools::Long nWidth = 1);
 
     /** @name Pixel functions
      */

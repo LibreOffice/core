@@ -324,7 +324,6 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
         aFont.SetRelief( static_cast< FontRelief >( _xReportControlFormat->getCharRelief() ) );
         aFont.SetColor( Color(_xReportControlFormat->getCharColor()) );
         m_aPreview.SetFont( aFont, aFont, aFont );
-        m_aPreview.SetBackColor( Color(_xReportControlFormat->getControlBackground()) );
         m_aPreview.SetTextLineColor( Color( _xReportControlFormat->getCharUnderlineColor() ) );
     }
     catch( const Exception& )
