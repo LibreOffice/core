@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "615e4e92_e8d444e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2020-10-29T08:09:06Z",
+      "side": 1,
+      "message": "\"Move\" is a better word for this",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "2ec30f1fe744827c142e5d49af6e4b45176fccbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
