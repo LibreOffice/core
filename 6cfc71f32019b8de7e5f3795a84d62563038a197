@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8da1a35b_07e93f93",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5126,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-10-29T06:47:27Z",
+      "side": 1,
+      "message": "Will change it. Saves me time for the next patches :)",
+      "parentUuid": "b27af4ca_db8e4f23",
+      "range": {
+        "startLine": 5126,
+        "startChar": 7,
+        "endLine": 5126,
+        "endChar": 8
+      },
+      "revId": "6cfc71f32019b8de7e5f3795a84d62563038a197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "241be8ce_7736677e",
         "filename": "sc/source/filter/xml/xmlexprt.cxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-10-29T06:40:26Z",
       "side": 1,
       "message": "This seems unusual to me - but that is likely just because of being rare yet... I am used to either of the traditional variants:\n\n    if ((bVBACompat \u003d pDoc-\u003eIsInVBAMode()))\n\nor\n\n    bVBACompat \u003d pDoc-\u003eIsInVBAMode();\n    if (bVBACompat)\n\nbut not a problem - just mentioning ... :-) logically your variant seems fine.",
+      "range": {
+        "startLine": 5129,
+        "startChar": 13,
+        "endLine": 5129,
+        "endChar": 57
+      },
+      "revId": "6cfc71f32019b8de7e5f3795a84d62563038a197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71494f3c_077ff5f3",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5129,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-10-29T06:47:27Z",
+      "side": 1,
+      "message": "I was not happy with the assignment directly in the if statment as above, so I checked for a feature in the C++ language, and I found it in https://skebanga.github.io/if-with-initializer/.",
+      "parentUuid": "241be8ce_7736677e",
       "range": {
         "startLine": 5129,
         "startChar": 13,
