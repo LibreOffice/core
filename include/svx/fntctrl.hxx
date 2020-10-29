@@ -49,7 +49,6 @@ public:
     SvxFont&            GetCTLFont();
     void                SetColor( const Color& rColor );
     void                ResetColor();
-    void                SetBackColor( const Color& rColor );
     void                SetTextLineColor(const Color& rColor);
     void                SetOverlineColor(const Color& rColor);
     void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
