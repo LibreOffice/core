@@ -738,6 +738,9 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, weld::Button&, void)
         ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
                                         m_pParent, eRestartReason);
     }
+
+    ApplyItemSets();
+    utl::ConfigManager::storeConfigItems();
 }
 
 void OfaTreeOptionsDialog::ApplyItemSets()
@@ -1932,15 +1935,7 @@ short OfaTreeOptionsDialog::run()
         pClamp.reset( new SvxDicListChgClamp( xDictionaryList ) );
     }
 
-    short nRet = SfxOkDialogController::run();
-
-    if( RET_OK == nRet )
-    {
-        ApplyItemSets();
-        utl::ConfigManager::storeConfigItems();
-    }
-
-    return nRet;
+    return SfxOkDialogController::run();
 }
 
 // class ExtensionsTabPage -----------------------------------------------
