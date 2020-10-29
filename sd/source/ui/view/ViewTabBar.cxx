@@ -525,7 +525,7 @@ void ViewTabBar::UpdateTabBarButtons()
     int nWidthReq = rNotebook.get_preferred_size().Width();
     // The excess width over the page request that the notebook uses we will
     // use this later to help measure the best height-for-width given the
-    // eventual allocatated width of the notebook
+    // eventual allocated width of the notebook
     mnNoteBookWidthPadding = nWidthReq - nMaxPageWidthReq;
 }
 

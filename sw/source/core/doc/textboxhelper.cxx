@@ -409,7 +409,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
         auto xTextFrame = SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat);
         uno::Reference<text::XTextCursor> xCursor = xTextFrame->getText()->createTextCursor();
 
-        // Select all paragraps in the textframe
+        // Select all paragraphs in the textframe
         xCursor->gotoStart(false);
         xCursor->gotoEnd(true);
         uno::Reference<beans::XPropertySet> xFrameParaProps(xCursor, uno::UNO_QUERY);
