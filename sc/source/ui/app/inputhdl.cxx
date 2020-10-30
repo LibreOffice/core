@@ -3831,6 +3831,54 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
     return bUsed;
 }
 
+OUString ScInputHandler::GetSurroundingText()
+{
+    if (eMode != SC_INPUT_NONE)
+    {
+        UpdateActiveView();
+        if (pTableView || pTopView)
+        {
+            if (pTableView)
+                return pTableView->GetSurroundingText();
+            else if (pTopView)                      // call only once
+                return pTopView->GetSurroundingText();
+        }
+    }
+    return OUString();
+}
+
+Selection ScInputHandler::GetSurroundingTextSelection()
+{
+    if (eMode != SC_INPUT_NONE)
+    {
+        UpdateActiveView();
+        if (pTableView || pTopView)
+        {
+            if (pTableView)
+                return pTableView->GetSurroundingTextSelection();
+            else if (pTopView)                      // call only once
+                return pTopView->GetSurroundingTextSelection();
+        }
+    }
+    return Selection(0, 0);
+}
+
+bool ScInputHandler::DeleteSurroundingText(const Selection& rSelection)
+{
+    if (eMode != SC_INPUT_NONE)
+    {
+        UpdateActiveView();
+        if (pTableView || pTopView)
+        {
+            if (pTableView)
+                return pTableView->DeleteSurroundingText(rSelection);
+            else if (pTopView)                      // call only once
+                return pTopView->DeleteSurroundingText(rSelection);
+        }
+    }
+    return false;
+}
+
 void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::CursorPos )

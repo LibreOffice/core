@@ -3348,6 +3348,48 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
     Window::KeyInput(rKEvt);
 }
 
+OUString ScGridWindow::GetSurroundingText() const
+{
+    bool bEditView = mrViewData.HasEditView(eWhich);
+    if (bEditView)
+    {
+        ScModule* pScMod = SC_MOD();
+        ScInputHandler* pHdl = pScMod->GetInputHdl(mrViewData.GetViewShell());
+        if (pHdl)
+            return pHdl->GetSurroundingText();
+    }
+
+    return Window::GetSurroundingText();
+}
+
+Selection ScGridWindow::GetSurroundingTextSelection() const
+{
+    bool bEditView = mrViewData.HasEditView(eWhich);
+    if (bEditView)
+    {
+        ScModule* pScMod = SC_MOD();
+        ScInputHandler* pHdl = pScMod->GetInputHdl(mrViewData.GetViewShell());
+        if (pHdl)
+            return pHdl->GetSurroundingTextSelection();
+    }
+
+    return Window::GetSurroundingTextSelection();
+}
+
+bool ScGridWindow::DeleteSurroundingText(const Selection& rSelection)
+{
+    bool bEditView = mrViewData.HasEditView(eWhich);
+    if (bEditView)
+    {
+        ScModule* pScMod = SC_MOD();
+        ScInputHandler* pHdl = pScMod->GetInputHdl(mrViewData.GetViewShell());
+        if (pHdl)
+            return pHdl->DeleteSurroundingText(rSelection);
+    }
+
+    return Window::DeleteSurroundingText(rSelection);
+}
+
 void ScGridWindow::StopMarking()
 {
     DrawEndAction();                // Cancel Select/move on Drawing-Layer

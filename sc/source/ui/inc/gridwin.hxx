@@ -337,6 +337,10 @@ public:
     rtl::Reference<sdr::overlay::OverlayManager> getOverlayManager() const;
     void flushOverlayManager();
 
+    virtual OUString GetSurroundingText() const override;
+    virtual Selection GetSurroundingTextSelection() const override;
+    virtual bool DeleteSurroundingText(const Selection& rSelection) override;
+
     virtual void    Command( const CommandEvent& rCEvt ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
