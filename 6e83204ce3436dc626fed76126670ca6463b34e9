@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76e9ba23_833fc4d0",
+        "filename": "sd/uiconfig/sdraw/ui/drawpagedialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-30T15:27:02Z",
+      "side": 1,
+      "message": "I wonder if we can/should change this into \"slide\". What do you think?",
+      "range": {
+        "startLine": 8,
+        "startChar": 86,
+        "endLine": 8,
+        "endChar": 90
+      },
+      "revId": "6e83204ce3436dc626fed76126670ca6463b34e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
