@@ -19,6 +19,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fmtfield.hxx>
+#include <vcl/svtabbx.hxx>
 
 class ToolBox;
 class SfxViewShell;
@@ -122,6 +123,8 @@ public:
                                                 bool bTakeOwnership = true) override;
     std::unique_ptr<weld::TextView> weld_text_view(const OString& id,
                                                    bool bTakeOwnership = false) override;
+    std::unique_ptr<weld::TreeView> weld_tree_view(const OString& id,
+                                                   bool bTakeOwnership = false) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -157,6 +160,7 @@ public:
         notifyDialogState();
     }
 
+    using BaseInstanceClass::set_sensitive;
     virtual void set_sensitive(bool sensitive) override
     {
         BaseInstanceClass::set_sensitive(sensitive);
@@ -301,6 +305,19 @@ public:
                ::VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
                std::string sTypeOfJSON);
     virtual void set_text(const OUString& rText) override;
+};
+
+class JSTreeView : public JSWidget<SalInstanceTreeView, ::SvTabListBox>
+{
+public:
+    JSTreeView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+               ::SvTabListBox* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+               std::string sTypeOfJSON);
+
+    /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
+    virtual void set_toggle(int pos, TriState eState, int col = -1) override;
+    /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
+    virtual void select(int pos) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
