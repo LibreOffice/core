@@ -18,6 +18,7 @@
  */
 
 #include "objectformattertxtfrm.hxx"
+#include <IDocumentUndoRedo.hxx>
 #include <sortedobjs.hxx>
 #include <rootfrm.hxx>
 #include <anchoredobject.hxx>
@@ -354,10 +355,16 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
                 SwFrameFormat& rFormat = pObj->GetFrameFormat();
                 if (SwTextBoxHelper::isTextBox(&rFormat, RES_DRAWFRMFMT))
                 {
-                    SfxItemSet aSet(rFormat.GetDoc()->GetAttrPool(),
-                                    svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
                     if (const SwPageFrame* pPageFrame = pObj->GetPageFrame())
                     {
+                        SwDoc* pDoc = rFormat.GetDoc();
+
+                        // avoid Undo creation,
+                        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
+
+                        SfxItemSet aSet(pDoc->GetAttrPool(),
+                                        svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
+
                         const SwRect& rPageFrameArea = pPageFrame->getFrameArea();
                         aSet.Put(SwFormatVertOrient(pObj->GetObjRect().Top() - rPageFrameArea.Top(),
                                                     text::VertOrientation::NONE,
