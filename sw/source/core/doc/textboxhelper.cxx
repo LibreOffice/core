@@ -130,6 +130,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
     uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
     syncProperty(pShape, RES_FOLLOW_TEXT_FLOW, MID_FOLLOW_TEXT_FLOW,
                  xShapePropertySet->getPropertyValue(UNO_NAME_IS_FOLLOWING_TEXT_FLOW));
+    syncProperty(pShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_ANCHOR_TYPE));
     syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT,
                  xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT));
     syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_RELATION,
@@ -160,15 +162,10 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
         return;
 
     SfxItemSet aTxFrmSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
-    SwFormatAnchor aNewAnch = pFormat->GetAnchor();
 
-    if (pShape->GetAnchor().GetContentAnchor())
-        aNewAnch.SetAnchor(pShape->GetAnchor().GetContentAnchor());
-    if (pShape->GetAnchor().GetPageNum() > 0)
-        aNewAnch.SetPageNum(pShape->GetAnchor().GetPageNum());
-
-    aNewAnch.SetType(pShape->GetAnchor().GetAnchorId());
-    aTxFrmSet.Put(aNewAnch);
+    if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR
+        || rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
+        aTxFrmSet.Put(rAnch);
 
     SwFormatVertOrient aVOri(pFormat->GetVertOrient());
     SwFormatHoriOrient aHOri(pFormat->GetHoriOrient());
@@ -626,17 +623,38 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             switch (nMemberID)
             {
                 case MID_ANCHOR_ANCHORTYPE:
+                {
+                    uno::Reference<beans::XPropertySet> const xPropertySet(
+                        SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat),
+                        uno::UNO_QUERY);
+                    // Surround (Wrap) has to be THROUGH always:
+                    xPropertySet->setPropertyValue(UNO_NAME_SURROUND,
+                                                   uno::makeAny(text::WrapTextMode_THROUGH));
+                    // Use At_Char anchor instead of As_Char anchoring:
                     if (aValue.get<text::TextContentAnchorType>()
-                        == text::TextContentAnchorType_AS_CHARACTER)
+                        == text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER)
                     {
-                        uno::Reference<beans::XPropertySet> const xPropertySet(
-                            SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat),
-                            uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue(UNO_NAME_SURROUND,
-                                                       uno::makeAny(text::WrapTextMode_THROUGH));
-                        return;
+                        xPropertySet->setPropertyValue(
+                            UNO_NAME_ANCHOR_TYPE,
+                            uno::makeAny(
+                                text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER));
                     }
-                    break;
+                    else // Otherwise copy the anchor type of the shape
+                    {
+                        xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, aValue);
+                    }
+                    // After anchoring the position must be set as well:
+                    if (aValue.get<text::TextContentAnchorType>()
+                        == text::TextContentAnchorType::TextContentAnchorType_AT_PAGE)
+                    {
+                        xPropertySet->setPropertyValue(
+                            UNO_NAME_ANCHOR_PAGE_NO,
+                            uno::makeAny(pShape->GetAnchor().GetPageNum()));
+                    }
+
+                    return;
+                }
+                break;
             }
             break;
         case FN_TEXT_RANGE:
