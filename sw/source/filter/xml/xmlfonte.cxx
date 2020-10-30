@@ -84,7 +84,7 @@ XMLFontAutoStylePool* SwXMLExport::CreateFontAutoStylePool()
     return new SwXMLFontAutoStylePool_Impl( *this, !blockFontEmbedding );
 }
 
-void SwXMLImport::NotifyEmbeddedFontRead()
+void SwXMLImport::NotifyContainsEmbeddedFont()
 {
     getDoc()->getIDocumentSettingAccess().set( DocumentSettingId::EMBED_FONTS, true );
 }

@@ -173,7 +173,7 @@ public:
     css::uno::Reference<css::document::XDocumentProperties>
             GetDocumentProperties() const;
 
-    virtual void NotifyEmbeddedFontRead() override;
+    virtual void NotifyContainsEmbeddedFont() override;
 
     const SwDoc* getDoc() const;
     SwDoc* getDoc();
