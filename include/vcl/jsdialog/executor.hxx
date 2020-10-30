@@ -13,6 +13,23 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/weld.hxx>
 
+static StringMap jsonToStringMap(const char* pJSON)
+{
+    StringMap aArgs;
+    if (pJSON && pJSON[0] != '\0')
+    {
+        std::stringstream aStream(pJSON);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        for (const auto& rPair : aTree)
+        {
+            aArgs[OUString::fromUtf8(rPair.first.c_str())]
+                = OUString::fromUtf8(rPair.second.get_value<std::string>(".").c_str());
+        }
+    }
+    return aArgs;
+}
 class LOKTrigger
 {
 public:
@@ -21,6 +38,11 @@ public:
     static void trigger_changed(weld::Entry& rEdit) { rEdit.signal_changed(); }
 
     static void trigger_changed(weld::ComboBox& rComboBox) { rComboBox.signal_changed(); }
+
+    static void trigger_row_activated(weld::TreeView& rTreeView)
+    {
+        rTreeView.signal_row_activated();
+    }
 
     static void trigger_clicked(weld::Toolbar& rToolbar, const OString& rIdent)
     {
