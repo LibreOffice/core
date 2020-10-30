@@ -1757,7 +1757,7 @@ public:     // really private, but can only be done public
 
     void SetRelativeJustify( bool bRel );
     bool IsRelativeJustify();
-    bool IsRelativeJustify( sal_uInt16 nColl );
+    bool IsRelativeJustify(sal_uInt16 nColl, o3tl::sorted_vector<sal_uInt16>& rVisitedStyles);
     void Read_Justify(sal_uInt16, const sal_uInt8*, short nLen);
 
     void Read_IdctHint(sal_uInt16, const sal_uInt8*, short nLen);
