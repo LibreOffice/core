@@ -22,6 +22,7 @@
 class ToolBox;
 class ComboBox;
 class VclMultiLineEdit;
+class SvTabListBox;
 
 typedef std::map<OString, weld::Widget*> WidgetMap;
 
@@ -108,8 +109,9 @@ public:
     weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
                       FactoryFunction pUITestFactoryFunction = nullptr,
                       void* pUserData = nullptr) override;
-    std::unique_ptr<weld::Toolbar> weld_toolbar(const OString& id) override;
-    std::unique_ptr<weld::TextView> weld_text_view(const OString& id) override;
+    virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString& id) override;
+    virtual std::unique_ptr<weld::TextView> weld_text_view(const OString& id) override;
+    virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString& id) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -145,6 +147,7 @@ public:
         notifyDialogState();
     }
 
+    using BaseInstanceClass::set_sensitive;
     virtual void set_sensitive(bool sensitive) override
     {
         BaseInstanceClass::set_sensitive(sensitive);
@@ -288,6 +291,22 @@ public:
                ::VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
                std::string sTypeOfJSON);
     virtual void set_text(const OUString& rText) override;
+};
+
+class JSTreeView : public JSWidget<SalInstanceTreeView, ::SvTabListBox>
+{
+public:
+    JSTreeView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+               ::SvTabListBox* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+               std::string sTypeOfJSON);
+
+    using SalInstanceTreeView::set_toggle;
+    /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
+    virtual void set_toggle(int pos, TriState eState, int col = -1) override;
+
+    using SalInstanceTreeView::select;
+    /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
+    virtual void select(int pos) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
