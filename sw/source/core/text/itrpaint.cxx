@@ -329,6 +329,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 SeekAndChg( GetInfo() );
             else
                 SeekAndChgBefore( GetInfo() );
+            // paint redlining
+            static_cast<SwBreakPortion&>(*pPor).PaintRedline( GetInfo() );
         }
         else
             bSeeked = false;
