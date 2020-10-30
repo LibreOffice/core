@@ -9,6 +9,15 @@
  }
  
  /* This is the "magic number" approach to converting a double into fixed
+@@ -249,7 +249,7 @@
+     } else if ((f >> CAIRO_FIXED_FRAC_BITS) > INT16_MAX) {
+ 	x = INT32_MAX;
+     } else {
+-	x = f << (16 - CAIRO_FIXED_FRAC_BITS);
++	x = (uint32_t)f << (16 - CAIRO_FIXED_FRAC_BITS);
+     }
+ 
+     return x;
 --- src/cairo-gstate.c
 +++ src/cairo-gstate.c
 @@ -2297,7 +2297,7 @@
@@ -109,3 +118,44 @@
  #else
  #  define  GRID_AREA_TO_ALPHA(c)  (((c)*255 + GRID_XY/2) / GRID_XY)
  #endif
+--- src/cairo-xlib-render-compositor.c
++++ src/cairo-xlib-render-compositor.c
+@@ -1849,8 +1849,8 @@
+ 	    return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+     }
+ 
+-    dx = -dst_x << 16;
+-    dy = -dst_y << 16;
++    dx = (unsigned)-dst_x << 16;
++    dy = (unsigned)-dst_y << 16;
+     for (i = 0; i < traps->num_traps; i++) {
+ 	cairo_trapezoid_t *t = &traps->traps[i];
+ 
+--- src/cairo-xlib-source.c
++++ src/cairo-xlib-source.c
+@@ -567,7 +567,7 @@
+ {
+     cairo_xlib_display_t *display = dst->display;
+     uint32_t pixel =
+-	color->alpha_short >> 8 << 24 |
++	(uint32_t)(color->alpha_short >> 8) << 24 |
+ 	color->red_short   >> 8 << 16 |
+ 	color->green_short >> 8 << 8 |
+ 	color->blue_short  >> 8 << 0;
+--- src/cairo-xlib-surface-shm.c
++++ src/cairo-xlib-surface-shm.c
+@@ -1152,9 +1152,11 @@
+     cairo_surface_t *surface;
+ 
+     surface = NULL;
+-    if (has_shm (other))
+-	surface = &_cairo_xlib_shm_surface_create (other, format, width, height,
+-						   FALSE, has_shm_pixmaps (other))->image.base;
++    if (has_shm (other)) {
++	cairo_xlib_shm_surface_t * shm_surface = _cairo_xlib_shm_surface_create (other, format, width, height,
++						   FALSE, has_shm_pixmaps (other));
++	if (shm_surface) surface = &shm_surface->image.base;
++    }
+ 
+     return surface;
+ }
