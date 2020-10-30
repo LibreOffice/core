@@ -15,6 +15,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/treelistentry.hxx>
 
 using namespace weld;
 
@@ -46,6 +47,25 @@ void JSDialogNotifyIdle::Invoke()
             boost::property_tree::ptree aTree = m_aContentWindow->DumpAsPropertyTree();
             aTree.put("id", m_aNotifierWindow->GetLOKWindowId());
             aTree.put("jsontype", m_sTypeOfJSON);
+
+            if (m_sTypeOfJSON == "autofilter")
+            {
+                vcl::Window* pWindow = m_aContentWindow.get();
+                DockingWindow* pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
+                while (pWindow && !pDockingWIndow)
+                {
+                    pWindow = pWindow->GetParent();
+                    pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
+                }
+
+                if (pDockingWIndow)
+                {
+                    Point aPos = pDockingWIndow->GetFloatingPos();
+                    aTree.put("posx", aPos.getX());
+                    aTree.put("posy", aPos.getY());
+                }
+            }
+
             boost::property_tree::write_json(aStream, aTree);
             const std::string message = aStream.str();
             if (m_bForce || message != m_LastNotificationMessage)
@@ -428,6 +448,21 @@ std::unique_ptr<weld::TextView> JSInstanceBuilder::weld_text_view(const OString&
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::TreeView> JSInstanceBuilder::weld_tree_view(const OString& id,
+                                                                  bool bTakeOwnership)
+{
+    SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
+    auto pWeldWidget
+        = pTreeView ? std::make_unique<JSTreeView>(GetNotifierWindow(), GetContentWindow(),
+                                                   pTreeView, this, bTakeOwnership, m_sTypeOfJSON)
+                    : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -708,6 +743,47 @@ void JSTextView::set_text(const OUString& rText)
 {
     SalInstanceTextView::set_text(rText);
     notifyDialogState();
+}
+
+JSTreeView::JSTreeView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                       ::SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                       std::string sTypeOfJSON)
+    : JSWidget<SalInstanceTreeView, ::SvTabListBox>(aNotifierWindow, aContentWindow, pTreeView,
+                                                    pBuilder, bTakeOwnership, sTypeOfJSON)
+{
+}
+
+void JSTreeView::set_toggle(int pos, TriState eState, int col)
+{
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, 0);
+
+    while (pEntry && pos--)
+        pEntry = m_xTreeView->Next(pEntry);
+
+    if (pEntry)
+        SalInstanceTreeView::set_toggle(pEntry, eState, col);
+}
+
+void JSTreeView::select(int pos)
+{
+    assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
+    disable_notify_events();
+    if (pos == -1 || (pos == 0 && n_children() == 0))
+        m_xTreeView->SelectAll(false);
+    else
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, 0);
+
+        while (pEntry && pos--)
+            pEntry = m_xTreeView->Next(pEntry);
+
+        if (pEntry)
+        {
+            m_xTreeView->Select(pEntry, true);
+            m_xTreeView->MakeVisible(pEntry);
+        }
+    }
+    enable_notify_events();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
