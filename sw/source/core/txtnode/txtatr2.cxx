@@ -63,7 +63,7 @@ void SwTextCharFormat::ModifyNotification( const SfxPoolItem* pOld, const SfxPoo
             *GetEnd(),
             nWhich);
 
-        m_pTextNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
+        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
     }
 }
 
@@ -171,7 +171,7 @@ void SwTextINetFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
             *GetEnd(),
             nWhich);
 
-        m_pTextNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
+        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
     }
 }
 
@@ -214,7 +214,7 @@ void SwTextRuby::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             *GetEnd(),
             nWhich);
 
-        m_pTextNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
+        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
     }
 }
 

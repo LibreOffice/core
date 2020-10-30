@@ -83,7 +83,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                         *pAttr->End(),
                         RES_FMT_CHG);
 
-                    const_cast< SwTextNode* >(pTextNd)->ModifyNotification(&aUpdateAttr, &aUpdateAttr);
+                    const_cast<SwTextNode*>(pTextNd)->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
                 }
             }
         }
