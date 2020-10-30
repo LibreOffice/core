@@ -105,6 +105,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133334_followPgStyle, "tdf133334_followPgStyle.o
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf88126, "tdf88126.docx")
+{
+    // Without the fix in place, this test would have hung
+    CPPUNIT_ASSERT_EQUAL(11, getPages());
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118701, "tdf118701.docx")
 {
     // This was 6, related to moving inline images after the page breaks
