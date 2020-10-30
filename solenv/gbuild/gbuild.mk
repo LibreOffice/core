@@ -46,6 +46,8 @@ MAKEFLAGS += r
 
 true := T
 false :=
+gb_not = $(if $(1),$(false),$(true))
+
 define NEWLINE
 
 
