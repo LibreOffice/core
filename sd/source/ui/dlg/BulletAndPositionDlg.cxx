@@ -197,6 +197,14 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));
 
+    // tdf#130526: Hide "Apply To Master"-button in Draw and rename "Slide" to "Page"
+    DocumentType aDocumentType = pView->GetDoc().GetDocumentType();
+    if (aDocumentType == DocumentType::Draw)
+    {
+        m_xApplyToMaster->hide();
+        m_xSlideRB->set_label(SdResId(STR_PAGE_NAME));
+    }
+
     // End PageCreated
 
     Reset(&rSet);
