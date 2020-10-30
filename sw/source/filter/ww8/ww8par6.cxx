@@ -326,7 +326,10 @@ bool SwWW8ImplReader::IsRelativeJustify()
         {
             sal_Int16 nRelative = m_vColl[m_nCurrentColl].m_nRelativeJustify;
             if ( nRelative < 0 && m_nCurrentColl )
-                bRet = IsRelativeJustify( m_vColl[m_nCurrentColl].m_nBase );
+            {
+                o3tl::sorted_vector<sal_uInt16> aVisitedStyles;
+                bRet = IsRelativeJustify(m_vColl[m_nCurrentColl].m_nBase, aVisitedStyles);
+            }
             else
                 bRet = nRelative > 0;
         }
@@ -334,7 +337,10 @@ bool SwWW8ImplReader::IsRelativeJustify()
         {
             sal_Int16 nRelative = m_xPlcxMan->GetPap()->nRelativeJustify;
             if ( nRelative < 0 )
-                bRet = IsRelativeJustify( m_nCurrentColl );
+            {
+                o3tl::sorted_vector<sal_uInt16> aVisitedStyles;
+                bRet = IsRelativeJustify(m_nCurrentColl, aVisitedStyles);
+            }
             else
                 bRet = nRelative > 0;
         }
@@ -343,19 +349,20 @@ bool SwWW8ImplReader::IsRelativeJustify()
     return bRet;
 }
 
-bool SwWW8ImplReader::IsRelativeJustify( sal_uInt16 nColl )
+bool SwWW8ImplReader::IsRelativeJustify(sal_uInt16 nColl, o3tl::sorted_vector<sal_uInt16>& rVisitedStyles)
 {
     assert( m_xWwFib->GetFIBVersion() >= ww::eWW8
         && "pointless to search styles if relative justify is impossible");
     bool bRet = true;
     if ( StyleExists(nColl) )
     {
+        rVisitedStyles.insert(nColl);
         // if relativeJustify is undefined (-1), then check the parent style.
         sal_Int16 nRelative = m_vColl[nColl].m_nRelativeJustify;
         if ( nColl == 0 || nRelative >= 0 )
             bRet = nRelative > 0;
-        else if ( nColl != m_vColl[nColl].m_nBase )
-            bRet = IsRelativeJustify( m_vColl[nColl].m_nBase );
+        else if (rVisitedStyles.find(m_vColl[nColl].m_nBase) == rVisitedStyles.end()) // detect loop in chain
+            bRet = IsRelativeJustify(m_vColl[nColl].m_nBase, rVisitedStyles);
     }
 
     return bRet;
