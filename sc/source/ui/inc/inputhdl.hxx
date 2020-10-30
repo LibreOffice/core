@@ -203,6 +203,10 @@ public:
 
     void            InputCommand( const CommandEvent& rCEvt );
 
+    OUString        GetSurroundingText();
+    Selection       GetSurroundingTextSelection();
+    bool            DeleteSurroundingText(const Selection& rSelection);
+
     void            InsertFunction( const OUString& rFuncName, bool bAddPar = true );
     void            ClearText();
 
