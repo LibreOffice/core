@@ -373,9 +373,7 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
         }
     }
     if(bTriggerNode)
-    {
-        pTextNd->ModifyNotification(pNodeOld, pNodeNew);
-    }
+        pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(pNodeOld, pNodeNew));
     if(bExpand)
     {
         mpTextField->ExpandTextField( pOld == nullptr && pNew == nullptr );
@@ -476,9 +474,7 @@ void SwTextField::ExpandTextField(const bool bForceNotify) const
         if ( bSameExpandSimpleNotification )
         {
             if( bHiddenParaChanged )
-            {
-                m_pTextNode->ModifyNotification( nullptr, nullptr );
-            }
+                m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, nullptr));
             if ( !bForceNotify )
             {
                 // done, if no further notification forced.
@@ -559,9 +555,7 @@ void SwTextField::NotifyContentChange(SwFormatField& rFormatField)
 {
     //if not in undo section notify the change
     if (m_pTextNode && m_pTextNode->GetNodes().IsDocNodes())
-    {
-        m_pTextNode->ModifyNotification(nullptr, &rFormatField);
-    }
+        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, &rFormatField));
 }
 
 /*static*/

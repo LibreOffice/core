@@ -202,11 +202,12 @@ public:
     /// End: Data collected during idle time
 
 protected:
-    /// for hanging TextFormatCollections somewhere else (Outline-Numbering!)
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
 
 public:
     using SwContentNode::GetAttr;
+    /// for hanging TextFormatCollections somewhere else (Outline-Numbering!)
+    void TriggerNodeUpdate(const sw::LegacyModifyHint&);
 
     const OUString& GetText() const { return m_Text; }
 
