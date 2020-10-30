@@ -138,6 +138,11 @@ IDocumentMarkAccess* SwXBookmark::GetIDocumentMarkAccess()
     return m_pImpl->m_pDoc->getIDocumentMarkAccess();
 }
 
+SwDoc * SwXBookmark::GetDoc()
+{
+    return m_pImpl->m_pDoc;
+}
+
 SwXBookmark::SwXBookmark(SwDoc *const pDoc)
     : m_pImpl( new SwXBookmark::Impl(pDoc) )
 {
@@ -518,10 +523,6 @@ SwXBookmark::removeVetoableChangeListener(
     OSL_FAIL("SwXBookmark::removeVetoableChangeListener(): not implemented");
 }
 
-SwXFieldmark::SwXFieldmark(bool _isReplacementObject, SwDoc* pDc)
-    : SwXFieldmark_Base(pDc)
-    , m_bReplacementObject(_isReplacementObject)
-{ }
 
 void SwXFieldmarkParameters::insertByName(const OUString& aName, const uno::Any& aElement)
 {
@@ -597,6 +598,36 @@ IFieldmark::parameter_map_t* SwXFieldmarkParameters::getCoreParameters()
     return m_pFieldmark->GetParameters();
 }
 
+SwXFieldmark::SwXFieldmark(bool const isReplacementObject, SwDoc *const pDoc)
+    : SwXFieldmark_Base(pDoc)
+    , m_bReplacementObject(isReplacementObject)
+{
+}
+
+OUString SAL_CALL
+SwXFieldmark::getImplementationName()
+{
+    return "SwXFieldmark";
+}
+
+uno::Sequence<OUString> SAL_CALL
+SwXFieldmark::getSupportedServiceNames()
+{
+    // is const, no lock needed
+    if (m_bReplacementObject)
+    {
+        return {"com.sun.star.text.TextContent",
+                "com.sun.star.text.Bookmark",
+                "com.sun.star.text.FormFieldmark"};
+    }
+    else
+    {
+        return {"com.sun.star.text.TextContent",
+                "com.sun.star.text.Bookmark",
+                "com.sun.star.text.Fieldmark"};
+    }
+}
+
 void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTextRange )
 {
 
@@ -619,9 +650,12 @@ void SwXFieldmark::setFieldType(const OUString & fieldType)
     IFieldmark *pBkm = dynamic_cast<IFieldmark*>(GetBookmark());
     if(!pBkm)
         throw uno::RuntimeException();
-    if(fieldType == getFieldType())
+
+    OUString const oldFieldType(getFieldType());
+    if (fieldType == oldFieldType)
         return;
 
+    // note: this must not change between point-fieldmarks and range-fieldmarks
     if(fieldType == ODF_FORMDROPDOWN || fieldType == ODF_FORMCHECKBOX || fieldType == ODF_FORMDATE)
     {
         ::sw::mark::IFieldmark* pNewFieldmark = GetIDocumentMarkAccess()->changeFormFieldmarkType(pBkm, fieldType);
@@ -631,6 +665,18 @@ void SwXFieldmark::setFieldType(const OUString & fieldType)
             return;
         }
     }
+
+    if ((!m_bReplacementObject && (fieldType == ODF_UNHANDLED
+                                    || fieldType == ODF_FORMDATE
+                                    || fieldType == ODF_FORMTEXT))
+        || (m_bReplacementObject && (fieldType == ODF_FORMCHECKBOX
+                                    || fieldType == ODF_FORMDROPDOWN)))
+    {
+         pBkm->SetFieldname(fieldType);
+         return;
+    }
+
+    throw uno::RuntimeException("changing to that type isn't implemented");
 
     // We did not generate a new fieldmark, so set the type ID
     pBkm->SetFieldname(fieldType);
@@ -673,7 +719,7 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
         else
             pXBkmk = new SwXFieldmark(isReplacementObject, &rDoc);
 
-        xMark.set(pXBkmk);
+        xMark.set(static_cast<::cppu::OWeakObject*>(pXBkmk), uno::UNO_QUERY); // work around ambiguous base
         pXBkmk->registerInMark(*pXBkmk, pMarkBase);
     }
     return xMark;
@@ -710,8 +756,7 @@ SwXFieldmark::setPropertyValue(const OUString& PropertyName,
 
         pCheckboxFm->SetChecked( bChecked );
     }
-    else
-        SwXFieldmark_Base::setPropertyValue( PropertyName, rValue );
+    // this doesn't support any SwXBookmark property
 }
 
 // support 'hidden' "Checked" property ( note: this property is just for convenience to support
@@ -728,7 +773,113 @@ uno::Any SAL_CALL SwXFieldmark::getPropertyValue(const OUString& rPropertyName)
 
         return uno::makeAny( pCheckboxFm->IsChecked() );
     }
-    return SwXFieldmark_Base::getPropertyValue( rPropertyName );
+    return uno::Any(); // this doesn't support any SwXBookmark property
+}
+
+uno::Reference<beans::XPropertySetInfo> SAL_CALL
+SwXFieldmark::getPropertySetInfo()
+{
+    SolarMutexGuard g;
+
+    static uno::Reference<beans::XPropertySetInfo> const xRef(
+        aSwMapProvider.GetPropertySet(PROPERTY_MAP_FIELDMARK)
+            ->getPropertySetInfo() );
+    return xRef;
+}
+
+// XComponent
+void SAL_CALL SwXFieldmark::dispose()
+{
+    return SwXBookmark::dispose();
+}
+void SAL_CALL SwXFieldmark::addEventListener(
+        uno::Reference<lang::XEventListener> const& xListener)
+{
+    return SwXBookmark::addEventListener(xListener);
+}
+void SAL_CALL SwXFieldmark::removeEventListener(
+        uno::Reference<lang::XEventListener> const& xListener)
+{
+    return SwXBookmark::removeEventListener(xListener);
+}
+
+// XTextContent
+void SAL_CALL SwXFieldmark::attach(
+            uno::Reference<text::XTextRange> const& xTextRange)
+{
+    return SwXBookmark::attach(xTextRange);
+}
+
+uno::Reference<text::XTextRange> SAL_CALL SwXFieldmark::getAnchor()
+{
+    return SwXBookmark::getAnchor();
+}
+
+uno::Reference<text::XTextRange>
+SwXFieldmark::GetCommand(IFieldmark const& rMark)
+{
+    SwPosition const sepPos(sw::mark::FindFieldSep(rMark));
+    SwPosition start(rMark.GetMarkStart());
+    ++start.nContent;
+    return SwXTextRange::CreateXTextRange(*GetDoc(), start, &sepPos);
+}
+
+uno::Reference<text::XTextRange>
+SwXFieldmark::GetResult(IFieldmark const& rMark)
+{
+    SwPosition sepPos(sw::mark::FindFieldSep(rMark));
+    ++sepPos.nContent;
+    SwPosition const& rEnd(rMark.GetMarkEnd());
+    return SwXTextRange::CreateXTextRange(*GetDoc(), sepPos, &rEnd);
+}
+
+// XTextField
+OUString SAL_CALL
+SwXFieldmark::getPresentation(sal_Bool const bShowCommand)
+{
+    SolarMutexGuard g;
+
+    IFieldmark const*const pMark(dynamic_cast<IFieldmark*>(GetBookmark()));
+    if (!pMark)
+    {
+        throw lang::DisposedException();
+    }
+
+    if (bShowCommand)
+    {
+        if (m_bReplacementObject)
+        {
+            return OUString();
+        }
+        else
+        {   // also for ODF_FORMDATE, which shouldn't be a fieldmark...
+            uno::Reference<text::XTextRange> const xCommand(GetCommand(*pMark));
+            return xCommand->getString();
+        }
+    }
+    else
+    {
+        OUString const type(getFieldType());
+        if (type == ODF_FORMCHECKBOX)
+        {
+            ::sw::mark::ICheckboxFieldmark const*const pCheckboxFm(
+                    dynamic_cast<ICheckboxFieldmark const*>(pMark));
+            assert(pCheckboxFm);
+            return pCheckboxFm->IsChecked()
+                    ? OUString(u"\u2612")
+                    : OUString(u"\u2610");
+        }
+        else if (type == ODF_FORMDROPDOWN)
+        {
+            return sw::mark::ExpandFieldmark(const_cast<IFieldmark *>(pMark));
+        }
+        else
+        {
+            assert(!m_bReplacementObject);
+            uno::Reference<text::XTextRange> const xResult(GetResult(*pMark));
+            return xResult->getString();
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
