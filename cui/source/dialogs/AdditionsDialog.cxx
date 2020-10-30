@@ -45,12 +45,6 @@
 #include <orcus/config.hpp>
 #include <orcus/pstring.hpp>
 
-// FIXME
-// This preprocessor command is written to prevent the error caused by "css::util::SearchAlgorithms2::ABSOLUTE" in the AdditionsDialog().
-#ifdef ABSOLUTE
-#undef ABSOLUTE
-#endif
-
 #define PAGE_SIZE 30
 
 using namespace css;
