@@ -39,7 +39,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 
 #include <comphelper/fileurl.hxx>
-#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -58,33 +57,15 @@
 
 using namespace ::com::sun::star;
 
-struct FSStorage_Impl
-{
-    OUString  m_aURL;
-    ::ucbhelper::Content m_aContent;
-    sal_Int32 m_nMode;
-    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
-    uno::Reference< uno::XComponentContext > m_xContext;
-
-    FSStorage_Impl( const ::ucbhelper::Content& aContent, sal_Int32 nMode, uno::Reference< uno::XComponentContext > const & xContext )
-    : m_aURL( aContent.getURL() )
-    , m_aContent( aContent )
-    , m_nMode( nMode )
-    , m_xContext( xContext )
-    {
-        OSL_ENSURE( !m_aURL.isEmpty(), "The URL must not be empty" );
-    }
-
-    // Copy assignment is forbidden and not implemented.
-    FSStorage_Impl (const FSStorage_Impl &) = delete;
-    FSStorage_Impl & operator= (const FSStorage_Impl &) = delete;
-};
-
 FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
                     sal_Int32 nMode,
                     uno::Reference< uno::XComponentContext > const & xContext )
-: m_pImpl( new FSStorage_Impl( aContent, nMode, xContext ) )
+: m_aURL( aContent.getURL() )
+, m_aContent( aContent )
+, m_nMode( nMode )
+, m_xContext( xContext )
 {
+    OSL_ENSURE( !m_aURL.isEmpty(), "The URL must not be empty" );
     // TODO: use properties
     if ( !xContext.is() )
         throw uno::RuntimeException();
@@ -123,7 +104,7 @@ bool FSStorage::MakeFolderNoUI( const OUString& rFolder )
 ucbhelper::Content& FSStorage::GetContent()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return m_pImpl->m_aContent;
+    return m_aContent;
 }
 
 void FSStorage::CopyStreamToSubStream( const OUString& aSourceURL,
@@ -265,9 +246,6 @@ void SAL_CALL FSStorage::copyToStorage( const uno::Reference< embed::XStorage >&
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     if ( !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject*> ( this ), uno::UNO_QUERY ) )
         throw lang::IllegalArgumentException(); // TODO:
 
@@ -309,11 +287,8 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     // TODO/LATER: may need possibility to create folder if it was removed, since the folder can not be locked
-    INetURLObject aFileURL( m_pImpl->m_aURL );
+    INetURLObject aFileURL( m_aURL );
     aFileURL.Append( aStreamName );
 
     if ( ::utl::UCBContentHelper::IsFolder( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
@@ -332,7 +307,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
             if ( aFileURL.GetProtocol() == INetProtocol::File )
             {
                 uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
-                    ucb::SimpleFileAccess::create( m_pImpl->m_xContext ) );
+                    ucb::SimpleFileAccess::create( m_xContext ) );
                 xResult = xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             }
             else
@@ -410,15 +385,12 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     if ( ( nStorageMode & embed::ElementModes::WRITE )
-      && !( m_pImpl->m_nMode & embed::ElementModes::WRITE ) )
+      && !( m_nMode & embed::ElementModes::WRITE ) )
           throw io::IOException(); // TODO: error handling
 
     // TODO/LATER: may need possibility to create folder if it was removed, since the folder can not be locked
-    INetURLObject aFolderURL( m_pImpl->m_aURL );
+    INetURLObject aFolderURL( m_aURL );
     aFolderURL.Append( aStorName );
 
     bool bFolderExists = ::utl::UCBContentHelper::IsFolder( aFolderURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
@@ -453,7 +425,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
             throw io::IOException(); // there is no such folder
 
         ::ucbhelper::Content aResultContent( aFolderURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
-        xResult = new FSStorage( aResultContent, nStorageMode, m_pImpl->m_xContext );
+        xResult = new FSStorage( aResultContent, nStorageMode, m_xContext );
     }
     catch( embed::InvalidStorageException& )
     {
@@ -490,11 +462,8 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const OUSt
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     // TODO/LATER: may need possibility to create folder if it was removed, since the folder can not be locked
-    INetURLObject aFileURL( m_pImpl->m_aURL );
+    INetURLObject aFileURL( m_aURL );
     aFileURL.Append( aStreamName );
 
     uno::Reference < io::XStream > xTempResult;
@@ -504,7 +473,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const OUSt
         ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
         uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
 
-        xTempResult = io::TempFile::create(m_pImpl->m_xContext);
+        xTempResult = io::TempFile::create(m_xContext);
         uno::Reference < io::XOutputStream > xTempOut = xTempResult->getOutputStream();
         uno::Reference < io::XInputStream > xTempIn = xTempResult->getInputStream();
 
@@ -568,9 +537,6 @@ void SAL_CALL FSStorage::copyStorageElementLastCommitTo(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     uno::Reference< embed::XStorage > xSourceStor( openStorageElement( aStorName, embed::ElementModes::READ ),
                                                     uno::UNO_SET_THROW );
     xSourceStor->copyToStorage( xTargetStorage );
@@ -580,10 +546,7 @@ sal_Bool SAL_CALL FSStorage::isStreamElement( const OUString& aElementName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
-    INetURLObject aURL( m_pImpl->m_aURL );
+    INetURLObject aURL( m_aURL );
     aURL.Append( aElementName );
 
     return !::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
@@ -593,10 +556,7 @@ sal_Bool SAL_CALL FSStorage::isStorageElement( const OUString& aElementName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
-    INetURLObject aURL( m_pImpl->m_aURL );
+    INetURLObject aURL( m_aURL );
     aURL.Append( aElementName );
 
     return ::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
@@ -606,10 +566,7 @@ void SAL_CALL FSStorage::removeElement( const OUString& aElementName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
-    INetURLObject aURL( m_pImpl->m_aURL );
+    INetURLObject aURL( m_aURL );
     aURL.Append( aElementName );
 
     if ( !::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) )
@@ -623,13 +580,10 @@ void SAL_CALL FSStorage::renameElement( const OUString& aElementName, const OUSt
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
-    INetURLObject aOldURL( m_pImpl->m_aURL );
+    INetURLObject aOldURL( m_aURL );
     aOldURL.Append( aElementName );
 
-    INetURLObject aNewURL( m_pImpl->m_aURL );
+    INetURLObject aNewURL( m_aURL );
     aNewURL.Append( aNewName );
 
     if ( !::utl::UCBContentHelper::IsFolder( aOldURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) )
@@ -691,13 +645,10 @@ void SAL_CALL FSStorage::copyElementTo( const OUString& aElementName,
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     if ( !xDest.is() )
         throw uno::RuntimeException();
 
-    INetURLObject aOwnURL( m_pImpl->m_aURL );
+    INetURLObject aOwnURL( m_aURL );
     aOwnURL.Append( aElementName );
 
     if ( xDest->hasByName( aNewName ) )
@@ -766,7 +717,7 @@ void SAL_CALL FSStorage::moveElementTo( const OUString& aElementName,
     ::osl::MutexGuard aGuard( m_aMutex );
     copyElementTo( aElementName, xDest, aNewName );
 
-    INetURLObject aOwnURL( m_pImpl->m_aURL );
+    INetURLObject aOwnURL( m_aURL );
     aOwnURL.Append( aElementName );
     if ( !::utl::UCBContentHelper::Kill( aOwnURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         throw io::IOException(); // TODO: error handling
@@ -778,16 +729,13 @@ uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     if ( aName.isEmpty() )
         throw lang::IllegalArgumentException();
 
     uno::Any aResult;
     try
     {
-        INetURLObject aURL( m_pImpl->m_aURL );
+        INetURLObject aURL( m_aURL );
         aURL.Append( aName );
 
 
@@ -829,9 +777,6 @@ uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
 uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( !m_pImpl )
-        throw lang::DisposedException();
 
     uno::Sequence< OUString > aResult;
 
@@ -885,13 +830,10 @@ sal_Bool SAL_CALL FSStorage::hasByName( const OUString& aName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     if ( aName.isEmpty() )
         throw lang::IllegalArgumentException();
 
-    INetURLObject aURL( m_pImpl->m_aURL );
+    INetURLObject aURL( m_aURL );
     aURL.Append( aName );
 
     return ( ::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) )
@@ -900,11 +842,6 @@ sal_Bool SAL_CALL FSStorage::hasByName( const OUString& aName )
 
 uno::Type SAL_CALL FSStorage::getElementType()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     // it is a multitype container
     return uno::Type();
 }
@@ -912,9 +849,6 @@ uno::Type SAL_CALL FSStorage::getElementType()
 sal_Bool SAL_CALL FSStorage::hasElements()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( !m_pImpl )
-        throw lang::DisposedException();
 
     try
     {
@@ -941,16 +875,11 @@ void SAL_CALL FSStorage::dispose()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
-    if ( m_pImpl->m_pListenersContainer )
+    if ( m_pListenersContainer )
     {
         lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
-        m_pImpl->m_pListenersContainer->disposeAndClear( aSource );
+        m_pListenersContainer->disposeAndClear( aSource );
     }
-
-    m_pImpl.reset();
 }
 
 void SAL_CALL FSStorage::addEventListener(
@@ -958,13 +887,10 @@ void SAL_CALL FSStorage::addEventListener(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
+    if ( !m_pListenersContainer )
+        m_pListenersContainer.reset(new ::comphelper::OInterfaceContainerHelper2( m_aMutex ));
 
-    if ( !m_pImpl->m_pListenersContainer )
-        m_pImpl->m_pListenersContainer.reset(new ::comphelper::OInterfaceContainerHelper2( m_aMutex ));
-
-    m_pImpl->m_pListenersContainer->addInterface( xListener );
+    m_pListenersContainer->addInterface( xListener );
 }
 
 void SAL_CALL FSStorage::removeEventListener(
@@ -972,22 +898,14 @@ void SAL_CALL FSStorage::removeEventListener(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
-    if ( m_pImpl->m_pListenersContainer )
-        m_pImpl->m_pListenersContainer->removeInterface( xListener );
+    if ( m_pListenersContainer )
+        m_pListenersContainer->removeInterface( xListener );
 }
 
 //  XPropertySet
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL FSStorage::getPropertySetInfo()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     //TODO:
     return uno::Reference< beans::XPropertySetInfo >();
 }
@@ -995,11 +913,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL FSStorage::getPropertySetInfo
 
 void SAL_CALL FSStorage::setPropertyValue( const OUString& aPropertyName, const uno::Any& )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     if ( aPropertyName == "URL" || aPropertyName == "OpenMode" )
         throw beans::PropertyVetoException(); // TODO
     else
@@ -1011,13 +924,10 @@ uno::Any SAL_CALL FSStorage::getPropertyValue( const OUString& aPropertyName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     if ( aPropertyName == "URL" )
-        return uno::makeAny( m_pImpl->m_aURL );
+        return uno::makeAny( m_aURL );
     else if ( aPropertyName == "OpenMode" )
-        return uno::makeAny( m_pImpl->m_nMode );
+        return uno::makeAny( m_nMode );
 
     throw beans::UnknownPropertyException(aPropertyName); // TODO
 }
@@ -1027,11 +937,6 @@ void SAL_CALL FSStorage::addPropertyChangeListener(
             const OUString& /*aPropertyName*/,
             const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     //TODO:
 }
 
@@ -1040,11 +945,6 @@ void SAL_CALL FSStorage::removePropertyChangeListener(
             const OUString& /*aPropertyName*/,
             const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     //TODO:
 }
 
@@ -1053,11 +953,6 @@ void SAL_CALL FSStorage::addVetoableChangeListener(
             const OUString& /*PropertyName*/,
             const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     //TODO:
 }
 
@@ -1066,11 +961,6 @@ void SAL_CALL FSStorage::removeVetoableChangeListener(
             const OUString& /*PropertyName*/,
             const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     //TODO:
 }
 
@@ -1079,13 +969,10 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     if ( sStreamPath.toChar() == '/' )
         throw lang::IllegalArgumentException();
 
-    INetURLObject aBaseURL( m_pImpl->m_aURL );
+    INetURLObject aBaseURL( m_aURL );
     if ( !aBaseURL.setFinalSlash() )
         throw uno::RuntimeException();
 
@@ -1109,7 +996,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
             if ( comphelper::isFileUrl( aFileURL ) )
             {
                 uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
-                    ucb::SimpleFileAccess::create( m_pImpl->m_xContext ) );
+                    ucb::SimpleFileAccess::create( m_xContext ) );
                 uno::Reference< io::XStream > xStream =
                     xSimpleFileAccess->openFileReadWrite( aFileURL );
 
@@ -1191,11 +1078,8 @@ void SAL_CALL FSStorage::removeStreamElementByHierarchicalName( const OUString& 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
     // TODO/LATER: may need possibility to create folder if it was removed, since the folder can not be locked
-    INetURLObject aBaseURL( m_pImpl->m_aURL );
+    INetURLObject aBaseURL( m_aURL );
     if ( !aBaseURL.setFinalSlash() )
         throw uno::RuntimeException();
 

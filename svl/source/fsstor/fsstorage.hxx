@@ -27,11 +27,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/weak.hxx>
 
 #include <ucbhelper/content.hxx>
 
-struct FSStorage_Impl;
 class FSStorage : public css::lang::XTypeProvider
                 , public css::embed::XStorage
                 , public css::embed::XHierarchicalStorageAccess
@@ -39,9 +39,11 @@ class FSStorage : public css::lang::XTypeProvider
                 , public ::cppu::OWeakObject
 {
     ::osl::Mutex m_aMutex;
-    std::unique_ptr<FSStorage_Impl> m_pImpl;
-
-protected:
+    OUString  m_aURL;
+    ::ucbhelper::Content m_aContent;
+    sal_Int32 m_nMode;
+    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
 
