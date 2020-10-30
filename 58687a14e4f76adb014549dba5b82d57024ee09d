@@ -22,6 +22,30 @@
       "revId": "58687a14e4f76adb014549dba5b82d57024ee09d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d68dd36_1066e00b",
+        "filename": "basic/source/sbx/sbxdec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-30T09:14:09Z",
+      "side": 1,
+      "message": "I agree, please remove that",
+      "parentUuid": "95959b4c_663be229",
+      "range": {
+        "startLine": 160,
+        "startChar": 30,
+        "endLine": 160,
+        "endChar": 41
+      },
+      "revId": "58687a14e4f76adb014549dba5b82d57024ee09d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
