@@ -1208,6 +1208,12 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
                 m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_BOOKMARK;
             }
             break;
+            case PROPERTY_MAP_FIELDMARK:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_FIELDMARK(pEntries);
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FIELDMARK;
+            }
+            break;
             case PROPERTY_MAP_PARAGRAPH_EXTENSIONS:
             {
                 static SfxItemPropertySet aPROPERTY_MAP_PARAGRAPH_EXTENSIONS(pEntries);

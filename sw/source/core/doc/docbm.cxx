@@ -1347,6 +1347,13 @@ namespace sw::mark
     sal_Int32 MarkManager::getBookmarksCount() const
         { return m_vBookmarks.size(); }
 
+    IDocumentMarkAccess::const_iterator_t MarkManager::getFieldmarksBegin() const
+        { return m_vFieldmarks.begin(); }
+
+    IDocumentMarkAccess::const_iterator_t MarkManager::getFieldmarksEnd() const
+        { return m_vFieldmarks.end(); }
+
+
     // finds the first that is starting after
     IDocumentMarkAccess::const_iterator_t MarkManager::findFirstBookmarkStartsAfter(const SwPosition& rPos) const
     {

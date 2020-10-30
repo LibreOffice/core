@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -69,6 +70,8 @@ protected:
     ::sw::mark::IMark* GetBookmark() const;
 
     IDocumentMarkAccess* GetIDocumentMarkAccess();
+
+    SwDoc * GetDoc();
 
     void registerInMark( SwXBookmark& rXMark, ::sw::mark::IMark* const pMarkBase );
 
@@ -177,13 +180,20 @@ class SwXFieldmarkParameters
 };
 
 typedef cppu::ImplInheritanceHelper< SwXBookmark,
-    css::text::XFormField > SwXFieldmark_Base;
+        css::text::XFormField,
+        css::text::XTextField
+    > SwXFieldmark_Base;
 
 class SwXFieldmark final
     : public SwXFieldmark_Base
 {
     ::sw::mark::ICheckboxFieldmark* getCheckboxFieldmark();
-    bool m_bReplacementObject;
+    bool const m_bReplacementObject;
+
+    css::uno::Reference<css::text::XTextRange>
+        GetCommand(::sw::mark::IFieldmark const& rMark);
+    css::uno::Reference<css::text::XTextRange>
+        GetResult(::sw::mark::IFieldmark const& rMark);
 
     SwXFieldmark(bool isReplacementObject, SwDoc* pDoc);
 
@@ -194,15 +204,41 @@ public:
 
     virtual void attachToRange(
             const css::uno::Reference<css::text::XTextRange > & xTextRange) override;
-    virtual OUString SAL_CALL getFieldType() override;
-    virtual void SAL_CALL setFieldType(const OUString& description ) override;
-    virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getParameters(  ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL
+        getSupportedServiceNames() override;
+
+    // XPropertySet
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL
+        getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
             const css::uno::Any& rValue) override;
-
     virtual css::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName) override;
+
+    // XComponent
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL addEventListener(
+            const css::uno::Reference<css::lang::XEventListener> & xListener) override;
+    virtual void SAL_CALL removeEventListener(
+            const css::uno::Reference<css::lang::XEventListener> & xListener) override;
+
+    // XTextContent
+    virtual void SAL_CALL attach(
+            const css::uno::Reference<css::text::XTextRange> & xTextRange) override;
+    virtual css::uno::Reference<css::text::XTextRange> SAL_CALL getAnchor() override;
+
+    // XTextField
+    virtual OUString SAL_CALL getPresentation(sal_Bool bShowCommand) override;
+
+    // XFormField
+    virtual OUString SAL_CALL getFieldType() override;
+    virtual void SAL_CALL setFieldType(const OUString& description) override;
+    virtual css::uno::Reference<css::container::XNameContainer> SAL_CALL getParameters() override;
+
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNOBOOKMARK_HXX
