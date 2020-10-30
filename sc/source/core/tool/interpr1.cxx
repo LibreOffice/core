@@ -8084,11 +8084,18 @@ void ScInterpreter::ScIndirect()
         bTryXlA1 = false;
     }
 
+    OUString sRefStr = GetString().getString();
+    if (sRefStr.isEmpty())
+    {
+        // Bail out early for empty cells, rely on "we do have a string" below.
+        PushError( FormulaError::NoRef);
+        return;
+    }
 
     const ScAddress::Details aDetails( bTryXlA1 ? FormulaGrammar::CONV_OOO : eConv, aPos );
     const ScAddress::Details aDetailsXlA1( FormulaGrammar::CONV_XL_A1, aPos );
     SCTAB nTab = aPos.Tab();
-    OUString sRefStr = GetString().getString();
+
     ScRefAddress aRefAd, aRefAd2;
     ScAddress::ExternalInfo aExtInfo;
     if ( ConvertDoubleRef(mrDoc, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo) ||
