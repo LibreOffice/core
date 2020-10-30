@@ -406,7 +406,6 @@ done
 /usr/share/icons/gnome/*/apps/*png
 /usr/share/icons/gnome/*/apps/*svg
 /usr/share/icons/gnome/*/mimetypes/*png
-/usr/share/icons/gnome/*/mimetypes/*svg
 /usr/share/icons/hicolor/*/apps/*png
 /usr/share/icons/hicolor/*/apps/*svg
 /usr/share/icons/hicolor/*/mimetypes/*png
