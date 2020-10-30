@@ -42,6 +42,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/fileformat.h>
@@ -61,6 +62,9 @@
 #include <docsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
+#include <unodraw.hxx>
+#include <textboxhelper.hxx>
+#include <fmtanchr.hxx>
 
 class Test : public SwModelTestBase
 {
