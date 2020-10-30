@@ -998,26 +998,14 @@ cmd/sc_open_h.png cmd/sc_open.png
 
 # Wizard
 cmd/32/commontaskbarvisible.png cmd/32/autopilotmenu.png
-cmd/32/dbnewformautopilot.png cmd/32/autopilotmenu.png
-cmd/32/dbnewqueryautopilot.png cmd/32/autopilotmenu.png
-cmd/32/dbnewreportautopilot.png cmd/32/autopilotmenu.png
-cmd/32/dbnewtableautopilot.png cmd/32/autopilotmenu.png
 cmd/32/graphicfiltertoolbox.png cmd/32/autopilotmenu.png
 cmd/32/usewizards.png cmd/32/autopilotmenu.png
 
 cmd/lc_commontaskbarvisible.png cmd/lc_autopilotmenu.png
-cmd/lc_dbnewformautopilot.png cmd/lc_autopilotmenu.png
-cmd/lc_dbnewqueryautopilot.png cmd/lc_autopilotmenu.png
-cmd/lc_dbnewreportautopilot.png cmd/lc_autopilotmenu.png
-cmd/lc_dbnewtableautopilot.png cmd/lc_autopilotmenu.png
 cmd/lc_graphicfiltertoolbox.png cmd/lc_autopilotmenu.png
 cmd/lc_usewizards.png cmd/lc_autopilotmenu.png
 
 cmd/sc_commontaskbarvisible.png cmd/sc_autopilotmenu.png
-cmd/sc_dbnewformautopilot.png cmd/sc_autopilotmenu.png
-cmd/sc_dbnewqueryautopilot.png cmd/sc_autopilotmenu.png
-cmd/sc_dbnewreportautopilot.png cmd/sc_autopilotmenu.png
-cmd/sc_dbnewtableautopilot.png cmd/sc_autopilotmenu.png
 cmd/sc_graphicfiltertoolbox.png cmd/sc_autopilotmenu.png
 cmd/sc_usewizards.png cmd/sc_autopilotmenu.png
 
