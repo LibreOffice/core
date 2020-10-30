@@ -311,7 +311,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url, bo
 {
     if( GetImport().embeddedFontAlreadyProcessed( url ))
     {
-        GetImport().NotifyEmbeddedFontRead();
+        GetImport().NotifyContainsEmbeddedFont();
         return;
     }
     OUString fontName = font.familyName();
@@ -327,7 +327,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url, bo
         inputStream.set( storage->openStreamElement( url.copy( url.indexOf( '/' ) + 1 ), ::embed::ElementModes::READ ),
             UNO_QUERY_THROW );
         if (GetImport().addEmbeddedFont(inputStream, fontName, "?", std::vector< unsigned char >(), eot))
-            GetImport().NotifyEmbeddedFontRead();
+            GetImport().NotifyContainsEmbeddedFont();
         inputStream->closeInput();
     }
     else
@@ -339,7 +339,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const ::css::uno::Seque
     const uno::Reference< io::XInputStream > xInput( new comphelper::SequenceInputStream( rData ) );
     const OUString fontName = font.familyName();
     if (GetImport().addEmbeddedFont(xInput, fontName, "?", std::vector< unsigned char >(), eot))
-        GetImport().NotifyEmbeddedFontRead();
+        GetImport().NotifyContainsEmbeddedFont();
     xInput->closeInput();
 }
 

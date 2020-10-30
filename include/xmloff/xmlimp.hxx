@@ -591,7 +591,7 @@ public:
         const OUString& fontName, const char* extra,
         std::vector< unsigned char > key, bool eot);
 
-    virtual void NotifyEmbeddedFontRead() {};
+    virtual void NotifyContainsEmbeddedFont() {}
 
     // something referencing a macro/script was imported
     void NotifyMacroEventRead();

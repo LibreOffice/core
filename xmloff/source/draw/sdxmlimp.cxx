@@ -684,7 +684,7 @@ OUString SdXMLImport::GetDateTimeDecl( const OUString& rName, bool& rbFixed, OUS
     return aDecl.maStrText;
 }
 
-void SdXMLImport::NotifyEmbeddedFontRead()
+void SdXMLImport::NotifyContainsEmbeddedFont()
 {
     uno::Reference< lang::XMultiServiceFactory > xFac( GetModel(), uno::UNO_QUERY );
     if( xFac.is() )

@@ -1875,7 +1875,7 @@ const ScXMLEditAttributeMap& ScXMLImport::GetEditAttributeMap() const
     return *mpEditAttrMap;
 }
 
-void ScXMLImport::NotifyEmbeddedFontRead()
+void ScXMLImport::NotifyContainsEmbeddedFont()
 {
     if (pDoc)
         pDoc->SetEmbedFonts(true);

@@ -453,7 +453,7 @@ public:
 
     ScEditEngineDefaulter* GetEditEngine();
     const ScXMLEditAttributeMap& GetEditAttributeMap() const;
-    virtual void NotifyEmbeddedFontRead() override;
+    virtual void NotifyContainsEmbeddedFont() override;
 };
 
 #endif

@@ -178,7 +178,7 @@ public:
     OUString GetFooterDecl( const OUString& rName ) const;
     OUString GetDateTimeDecl( const OUString& rName, bool& rbFixed, OUString& rDateTimeFormat );
 
-    virtual void NotifyEmbeddedFontRead() override;
+    virtual void NotifyContainsEmbeddedFont() override;
 };
 
 #endif  //  _SDXMLIMP_HXX
