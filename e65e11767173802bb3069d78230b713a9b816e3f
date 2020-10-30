@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80fb4ca3_f5fc83b1",
+        "filename": "xmloff/source/style/XMLFontStylesContext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-30T12:40:42Z",
+      "side": 1,
+      "message": "thats a bit misleading name now, but the implementation of that just sets a flag so not a problem...",
+      "revId": "e65e11767173802bb3069d78230b713a9b816e3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
