@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_TEST_BOXCLIPPER_HXX
-#define INCLUDED_BASEGFX_TEST_BOXCLIPPER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -29,7 +28,5 @@ namespace basegfx2d {
 double getRandomOrdinal( const std::size_t n );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
