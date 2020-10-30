@@ -216,8 +216,7 @@ void Window::KeyInput(const KeyEvent& rKEvt)
     if (getenv("SD_DEBUG") && rKEvt.GetKeyCode().GetCode() == KEY_F12 && mpViewShell)
     {
         mpViewShell->GetDoc()->dumpAsXml(nullptr);
-        OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
-        if (pOLV)
+        if (OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView())
             pOLV->GetEditView().GetEditEngine()->dumpAsXmlEditDoc(nullptr);
         return;
     }
@@ -980,8 +979,8 @@ OUString Window::GetSurroundingText() const
         return OUString();
     else if ( mpViewShell->GetView()->IsTextEdit() )
     {
-        OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
-        return pOLV->GetEditView().GetSurroundingText();
+        if (OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView())
+            return pOLV->GetEditView().GetSurroundingText();
     }
     return OUString();
 }
@@ -994,13 +993,10 @@ Selection Window::GetSurroundingTextSelection() const
     }
     else if ( mpViewShell->GetView()->IsTextEdit() )
     {
-        OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
-        return pOLV->GetEditView().GetSurroundingTextSelection();
+        if (OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView())
+            return pOLV->GetEditView().GetSurroundingTextSelection();
     }
-    else
-    {
-        return Selection( 0, 0 );
-    }
+    return Selection( 0, 0 );
 }
 
 bool Window::DeleteSurroundingText(const Selection& rSelection)
@@ -1011,13 +1007,10 @@ bool Window::DeleteSurroundingText(const Selection& rSelection)
     }
     else if ( mpViewShell->GetView()->IsTextEdit() )
     {
-        OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
-        return pOLV->GetEditView().DeleteSurroundingText(rSelection);
+        if (OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView())
+            return pOLV->GetEditView().DeleteSurroundingText(rSelection);
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
