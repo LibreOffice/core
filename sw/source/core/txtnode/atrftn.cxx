@@ -371,9 +371,9 @@ void SwTextFootnote::SetNumber(const sal_uInt16 nNewNum,
 void SwTextFootnote::InvalidateNumberInLayout()
 {
     assert(m_pTextNode);
-    SwFormatFootnote const& rFootnote(GetFootnote());
     SwNodes &rNodes = m_pTextNode->GetDoc().GetNodes();
-    m_pTextNode->ModifyNotification( nullptr, &rFootnote );
+    const sw::LegacyModifyHint aHint(nullptr, &GetFootnote());
+    m_pTextNode->TriggerNodeUpdate(aHint);
     if ( m_pStartNode )
     {
         // must iterate over all TextNodes because of footnotes on other pages
@@ -383,7 +383,7 @@ void SwTextFootnote::InvalidateNumberInLayout()
         {
             SwNode* pNd;
             if( ( pNd = rNodes[ nSttIdx ] )->IsTextNode() )
-                static_cast<SwTextNode*>(pNd)->ModifyNotification( nullptr, &rFootnote );
+                static_cast<SwTextNode*>(pNd)->TriggerNodeUpdate(aHint);
         }
     }
 }
