@@ -196,7 +196,7 @@ public:
     const css::uno::Reference<css::beans::XPropertySet>& GetCustomField() const { return m_xCustomField; }
     void SetCustomField(css::uno::Reference<css::beans::XPropertySet> const& xCustomField) { m_xCustomField = xCustomField; }
     const css::uno::Reference<css::text::XTextField>& GetTextField() const { return m_xTextField;}
-    void SetTextField(css::uno::Reference<css::text::XTextField> const& xTextField) { m_xTextField = xTextField;}
+    void SetTextField(css::uno::Reference<css::text::XTextField> const& xTextField);
     const css::uno::Reference<css::text::XFormField>& GetFormField() const { return m_xFormField;}
     void SetFormField(css::uno::Reference<css::text::XFormField> const& xFormField) { m_xFormField = xFormField;}
 

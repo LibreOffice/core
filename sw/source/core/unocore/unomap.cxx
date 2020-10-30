@@ -604,6 +604,17 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 m_aMapEntriesArr[nPropertyId] = GetBookmarkPropertyMap();
             }
             break;
+            case PROPERTY_MAP_FIELDMARK:
+            {
+                static SfxItemPropertyMapEntry const aFieldmarkMap_Impl[] =
+                {
+                    // FIXME: is this supposed to actually exist as UNO property, or is it supposed to be in the "parameters" of the field?
+                    { u"Checked", 0, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
+                    { u"", 0, css::uno::Type(), 0, 0 }
+                };
+                m_aMapEntriesArr[nPropertyId] = aFieldmarkMap_Impl;
+            }
+            break;
             case PROPERTY_MAP_PARAGRAPH_EXTENSIONS:
             {
                 m_aMapEntriesArr[nPropertyId] = GetParagraphExtensionsPropertyMap();

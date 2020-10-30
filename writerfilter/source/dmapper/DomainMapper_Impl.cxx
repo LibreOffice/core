@@ -3569,6 +3569,20 @@ FieldContext::~FieldContext()
 {
 }
 
+void FieldContext::SetTextField(uno::Reference<text::XTextField> const& xTextField)
+{
+#ifndef NDEBUG
+    if (xTextField.is())
+    {
+        uno::Reference<lang::XServiceInfo> const xServiceInfo(xTextField, uno::UNO_QUERY);
+        assert(xServiceInfo.is());
+        // those must be set by SetFormField()
+        assert(!xServiceInfo->supportsService("com.sun.star.text.Fieldmark")
+            && !xServiceInfo->supportsService("com.sun.star.text.FormFieldmark"));
+    }
+#endif
+    m_xTextField = xTextField;
+}
 
 void FieldContext::AppendCommand(const OUString& rPart)
 {
@@ -4975,8 +4989,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_FORMDROPDOWN :
                     case FIELD_FORMTEXT :
                         {
-                            uno::Reference< text::XTextField > xTextField( xFieldInterface, uno::UNO_QUERY );
-                            if ( !xTextField.is() )
+                            if (bCreateEnhancedField)
                             {
                                 FFDataHandler::Pointer_t
                                 pFFDataHandler(pContext->getFFDataHandler());
@@ -5454,6 +5467,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                             uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
                     break;
                 }
+
+                if (!bCreateEnhancedField)
+                {
+                    pContext->SetTextField( uno::Reference<text::XTextField>(xFieldInterface, uno::UNO_QUERY) );
+                }
             }
             else
             {
@@ -5487,8 +5505,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                 else
                     m_bParaHadField = false;
             }
-            //set the text field if there is any
-            pContext->SetTextField( uno::Reference< text::XTextField >( xFieldInterface, uno::UNO_QUERY ) );
         }
         catch( const uno::Exception& )
         {

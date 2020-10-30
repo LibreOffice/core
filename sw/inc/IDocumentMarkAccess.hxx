@@ -309,6 +309,14 @@ class IDocumentMarkAccess
 
 
         // Fieldmarks
+        /** returns a STL-like random access iterator to the begin of the sequence of fieldmarks.
+        */
+        virtual const_iterator_t getFieldmarksBegin() const =0;
+
+        /** returns a STL-like random access iterator to the end of the sequence of fieldmarks.
+        */
+        virtual const_iterator_t getFieldmarksEnd() const =0;
+
         /// get Fieldmark for CH_TXT_ATR_FIELDSTART/CH_TXT_ATR_FIELDEND at rPos
         virtual ::sw::mark::IFieldmark* getFieldmarkAt(const SwPosition& rPos) const =0;
         virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& pos) const =0;

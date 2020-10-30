@@ -26,6 +26,7 @@
 
 #include <unofield.hxx>
 #include <unofieldcoll.hxx>
+#include <unobookmark.hxx>
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <doc.hxx>
@@ -3038,6 +3039,12 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
     for (const auto & rMetaField : MetaFields)
     {
         m_pImpl->m_Items.push_back( rMetaField );
+    }
+    // also add fieldmarks
+    IDocumentMarkAccess& rMarksAccess(*rDoc.getIDocumentMarkAccess());
+    for (auto iter = rMarksAccess.getFieldmarksBegin(); iter != rMarksAccess.getFieldmarksEnd(); ++iter)
+    {
+        m_pImpl->m_Items.emplace_back(SwXFieldmark::CreateXFieldmark(rDoc, *iter), uno::UNO_QUERY);
     }
 }
 
