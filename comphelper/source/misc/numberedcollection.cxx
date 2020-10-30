@@ -21,7 +21,6 @@
 #include <comphelper/numberedcollection.hxx>
 #include <com/sun/star/frame/UntitledNumbersConst.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <tools/long.hxx>
 
 namespace comphelper{
 
@@ -230,7 +229,7 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
 void NumberedCollection::impl_cleanUpDeadItems (      TNumberedItemHash& lItems    ,
                                                 const TDeadItemList&     lDeadItems)
 {
-    for (const tools::Long& rDeadItem : lDeadItems)
+    for (const sal_IntPtr& rDeadItem : lDeadItems)
     {
         lItems.erase(rDeadItem);
     }
