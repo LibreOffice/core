@@ -495,6 +495,10 @@ StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , StylesPreviewWindow_Base(*m_xBuilder, aDefaultStyles, xDispatchProvider)
 {
+    m_xUp->set_stack_background();
+    m_xDown->set_stack_background();
+    m_xContainer->set_stack_background();
+
     SetOptimalSize();
 }
 
