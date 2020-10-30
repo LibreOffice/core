@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	offapi \
 	officecfg \
 	oovbaapi \
+	pch \
 	registry \
 	remotebridges \
 	ridljar \

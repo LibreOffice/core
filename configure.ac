@@ -5223,7 +5223,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-mariadb-sdbc \
         --disable-online-update \
         --disable-opencl \
-        --disable-pch \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
         --disable-skia \
