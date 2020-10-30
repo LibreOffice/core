@@ -608,10 +608,6 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
         {
             rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA);
         }
-        else if (rTypeModel.maPositionVerticalRelative == "top-margin-area")
-        {
-            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA_TOP);
-        }
         else if (rTypeModel.maPositionVerticalRelative == "bottom-margin-area")
         {
             rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA_BOTTOM);
