@@ -146,6 +146,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
     syncProperty(pShape, RES_FOLLOW_TEXT_FLOW, MID_FOLLOW_TEXT_FLOW,
                  xShapePropertySet->getPropertyValue(UNO_NAME_IS_FOLLOWING_TEXT_FLOW));
+    syncProperty(pShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_ANCHOR_TYPE));
     syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT,
                  xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT));
     syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_RELATION,
@@ -177,11 +179,16 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
         SfxItemSet aTxFrmSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
         SwFormatAnchor aNewAnch = pFormat->GetAnchor();
 
+<<<<<<< HEAD   (09df81 tdf#137798 sw: apply textbox Text alignment)
         if (pShape->GetAnchor().GetContentAnchor())
             aNewAnch.SetAnchor(pShape->GetAnchor().GetContentAnchor());
         if (pShape->GetAnchor().GetPageNum() > 0)
             aNewAnch.SetPageNum(pShape->GetAnchor().GetPageNum());
+=======
+    SfxItemSet aTxFrmSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
+>>>>>>> CHANGE (a7bd63 tdf#137802 tdf#84691 sw: sync anchoring of textbox with UNO)
 
+<<<<<<< HEAD   (09df81 tdf#137798 sw: apply textbox Text alignment)
         aNewAnch.SetType(pShape->GetAnchor().GetAnchorId());
         aTxFrmSet.Put(aNewAnch);
 
@@ -193,6 +200,11 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
         aHOri.SetRelationOrient(pShape->GetHoriOrient().GetRelationOrient());
         aTxFrmSet.Put(aVOri);
         aTxFrmSet.Put(aHOri);
+=======
+    if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR
+        || rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
+        aTxFrmSet.Put(rAnch);
+>>>>>>> CHANGE (a7bd63 tdf#137802 tdf#84691 sw: sync anchoring of textbox with UNO)
 
         if (aTxFrmSet.Count())
             pFormat->SetFormatAttr(aTxFrmSet);
@@ -592,8 +604,166 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
         bool bAdjustSize = false;
         switch (nWID)
         {
+<<<<<<< HEAD   (09df81 tdf#137798 sw: apply textbox Text alignment)
             case RES_HORI_ORIENT:
                 switch (nMemberID)
+=======
+            switch (nMemberID)
+            {
+                case MID_L_MARGIN:
+                    aPropertyName = UNO_NAME_LEFT_MARGIN;
+                    break;
+                case MID_R_MARGIN:
+                    aPropertyName = UNO_NAME_RIGHT_MARGIN;
+                    break;
+            }
+            break;
+        }
+        case RES_VERT_ORIENT:
+            switch (nMemberID)
+            {
+                case MID_VERTORIENT_ORIENT:
+                    aPropertyName = UNO_NAME_VERT_ORIENT;
+                    break;
+                case MID_VERTORIENT_RELATION:
+                    aPropertyName = UNO_NAME_VERT_ORIENT_RELATION;
+                    break;
+                case MID_VERTORIENT_POSITION:
+                    aPropertyName = UNO_NAME_VERT_ORIENT_POSITION;
+                    bAdjustY = true;
+                    break;
+            }
+            break;
+        case RES_FRM_SIZE:
+            switch (nMemberID)
+            {
+                case MID_FRMSIZE_IS_AUTO_HEIGHT:
+                    aPropertyName = UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT;
+                    break;
+                case MID_FRMSIZE_REL_HEIGHT_RELATION:
+                    aPropertyName = UNO_NAME_RELATIVE_HEIGHT_RELATION;
+                    break;
+                case MID_FRMSIZE_REL_WIDTH_RELATION:
+                    aPropertyName = UNO_NAME_RELATIVE_WIDTH_RELATION;
+                    break;
+                default:
+                    aPropertyName = UNO_NAME_SIZE;
+                    bAdjustSize = true;
+                    break;
+            }
+            break;
+        case RES_ANCHOR:
+            switch (nMemberID)
+            {
+                case MID_ANCHOR_ANCHORTYPE:
+                {
+                    uno::Reference<beans::XPropertySet> const xPropertySet(
+                        SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat),
+                        uno::UNO_QUERY);
+                    // Surround (Wrap) has to be THROUGH always:
+                    xPropertySet->setPropertyValue(UNO_NAME_SURROUND,
+                                                   uno::makeAny(text::WrapTextMode_THROUGH));
+                    // Use At_Char anchor instead of As_Char anchoring:
+                    if (aValue.get<text::TextContentAnchorType>()
+                        == text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER)
+                    {
+                        xPropertySet->setPropertyValue(
+                            UNO_NAME_ANCHOR_TYPE,
+                            uno::makeAny(
+                                text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER));
+                    }
+                    else // Otherwise copy the anchor type of the shape
+                    {
+                        xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, aValue);
+                    }
+                    // After anchoring the position must be set as well:
+                    if (aValue.get<text::TextContentAnchorType>()
+                        == text::TextContentAnchorType::TextContentAnchorType_AT_PAGE)
+                    {
+                        xPropertySet->setPropertyValue(
+                            UNO_NAME_ANCHOR_PAGE_NO,
+                            uno::makeAny(pShape->GetAnchor().GetPageNum()));
+                    }
+
+                    return;
+                }
+                break;
+            }
+            break;
+        case FN_TEXT_RANGE:
+        {
+            uno::Reference<text::XTextRange> xRange;
+            rValue >>= xRange;
+            SwUnoInternalPaM aInternalPaM(*pFormat->GetDoc());
+            if (sw::XTextRangeToSwPaM(aInternalPaM, xRange))
+            {
+                SwFormatAnchor aAnchor(pFormat->GetAnchor());
+                aAnchor.SetAnchor(aInternalPaM.Start());
+                pFormat->SetFormatAttr(aAnchor);
+            }
+        }
+        break;
+        case RES_CHAIN:
+            switch (nMemberID)
+            {
+                case MID_CHAIN_PREVNAME:
+                    aPropertyName = UNO_NAME_CHAIN_PREV_NAME;
+                    break;
+                case MID_CHAIN_NEXTNAME:
+                    aPropertyName = UNO_NAME_CHAIN_NEXT_NAME;
+                    break;
+            }
+            break;
+        case RES_TEXT_VERT_ADJUST:
+            aPropertyName = UNO_NAME_TEXT_VERT_ADJUST;
+            break;
+        case RES_BOX:
+            switch (nMemberID)
+            {
+                case LEFT_BORDER_DISTANCE:
+                    aPropertyName = UNO_NAME_LEFT_BORDER_DISTANCE;
+                    break;
+                case RIGHT_BORDER_DISTANCE:
+                    aPropertyName = UNO_NAME_RIGHT_BORDER_DISTANCE;
+                    break;
+                case TOP_BORDER_DISTANCE:
+                    aPropertyName = UNO_NAME_TOP_BORDER_DISTANCE;
+                    break;
+                case BOTTOM_BORDER_DISTANCE:
+                    aPropertyName = UNO_NAME_BOTTOM_BORDER_DISTANCE;
+                    break;
+            }
+            break;
+        case RES_OPAQUE:
+            aPropertyName = UNO_NAME_OPAQUE;
+            break;
+        case RES_FRAMEDIR:
+            aPropertyName = UNO_NAME_WRITING_MODE;
+            break;
+        case RES_WRAP_INFLUENCE_ON_OBJPOS:
+            switch (nMemberID)
+            {
+                case MID_ALLOW_OVERLAP:
+                    aPropertyName = UNO_NAME_ALLOW_OVERLAP;
+                    break;
+            }
+            break;
+    }
+
+    if (aPropertyName.isEmpty())
+        return;
+
+    // Position/size should be the text position/size, not the shape one as-is.
+    if (bAdjustX || bAdjustY || bAdjustSize)
+    {
+        tools::Rectangle aRect = getTextRectangle(pShape, /*bAbsolute=*/false);
+        if (!aRect.IsEmpty())
+        {
+            if (bAdjustX || bAdjustY)
+            {
+                sal_Int32 nValue;
+                if (aValue >>= nValue)
+>>>>>>> CHANGE (a7bd63 tdf#137802 tdf#84691 sw: sync anchoring of textbox with UNO)
                 {
                     case MID_HORIORIENT_ORIENT:
                         aPropertyName = UNO_NAME_HORI_ORIENT;

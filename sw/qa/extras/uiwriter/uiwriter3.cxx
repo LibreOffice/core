@@ -1157,4 +1157,169 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132637_protectTrackChanges)
     CPPUNIT_ASSERT(!pTextDoc->GetDocShell()->IsReadOnly());
 }
 
+<<<<<<< HEAD   (09df81 tdf#137798 sw: apply textbox Text alignment)
+=======
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf127652)
+{
+    load(DATA_DIRECTORY, "tdf127652.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwCursorShell* pShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    // get a page cursor
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                              uno::UNO_QUERY);
+
+    // go to the start of page 4
+    xCursor->jumpToPage(4);
+    xCursor->jumpToStartOfPage();
+
+    // mark a section that overlaps multiple pages
+    pWrtShell->Down(false, 2);
+    pWrtShell->Up(true, 5);
+
+    // delete the marked section
+    pWrtShell->DelRight();
+
+    // go to the start of page 4
+    xCursor->jumpToPage(4);
+    xCursor->jumpToStartOfPage();
+
+    // move up to page 3
+    pWrtShell->Up(false, 5);
+
+    // check that we are on the third page
+    // in the bug one issue was that the cursor was placed incorrectly, so
+    // moving up to the previous page would not work any more
+    sal_uInt16 assertPage = 3;
+    sal_uInt16 currentPage = pShell->GetPageNumSeqNonEmpty();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("We are on the wrong page!", assertPage, currentPage);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, AtPageTextBoxCrash)
+{
+    // Load sample file
+    load(DATA_DIRECTORY, "AtPageTextBoxCrash.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Get the Writer-Shell for later use
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    // Get the format of the shape
+    const SwFrameFormats& rFrmFormats = *pWrtSh->GetDoc()->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
+    auto pShape = rFrmFormats.front();
+    CPPUNIT_ASSERT(pShape);
+
+    // Add a textbox to the shape
+    SwTextBoxHelper::create(pShape);
+    auto pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
+    CPPUNIT_ASSERT(pTxBxFrm);
+
+    // Change its anchor to page
+    uno::Reference<beans::XPropertySet> xShpProps(getShape(1), uno::UNO_QUERY_THROW);
+    xShpProps->setPropertyValue(
+        "AnchorType", uno::makeAny(text::TextContentAnchorType::TextContentAnchorType_AT_PAGE));
+
+    // The page anchored objects must not have content anchor
+    // unless this will lead to crash later, for example on
+    // removing the paragraph where it is achored to...
+    CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_PAGE, pTxBxFrm->GetAnchor().GetAnchorId());
+    CPPUNIT_ASSERT(!pTxBxFrm->GetAnchor().GetContentAnchor());
+
+    // Remove the paragraph where the textframe should be anchored
+    // before. Now with the patch it must not crash...
+    auto xPara = getParagraph(1);
+    xPara->getText()->setString(OUString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135661)
+{
+    load(DATA_DIRECTORY, "tdf135661.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3424), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1545), xShape->getPosition().Y);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    xShape.set(getShape(1), uno::UNO_QUERY);
+
+    //Without the fix in place, the shape position would have been 0,0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3424), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1545), xShape->getPosition().Y);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
+{
+    load(DATA_DIRECTORY, "tdf133477.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Save the shape to a BMP.
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(mxComponentContext);
+    uno::Reference<lang::XComponent> xSourceDoc(getShape(1), uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xSourceDoc);
+
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+    uno::Sequence<beans::PropertyValue> aDescriptor(
+        comphelper::InitPropertySequence({ { "OutputStream", uno::makeAny(xOutputStream) },
+                                           { "FilterName", uno::makeAny(OUString("BMP")) } }));
+    xGraphicExporter->filter(aDescriptor);
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    // Read it back and check the color of the first pixel.
+    Graphic aGraphic;
+    ReadGraphic(aStream, aGraphic);
+    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    CPPUNIT_ASSERT_EQUAL(Color(0, 102, 204), aBitmap.GetPixelColor(0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137964)
+{
+    load(DATA_DIRECTORY, "tdf137964.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3579), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4090), xShape->getPosition().Y);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(1);
+    SwContact* pTextBox = static_cast<SwContact*>(pObject->GetUserCall());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_FLYFRMFMT), pTextBox->GetFormat()->Which());
+
+    pWrtShell->SelectObj(Point(), 0, pObject);
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_UP);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_LEFT);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, the shape would have stayed where it was
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2579), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3090), xShape->getPosition().Y);
+}
+
+>>>>>>> CHANGE (a7bd63 tdf#137802 tdf#84691 sw: sync anchoring of textbox with UNO)
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
