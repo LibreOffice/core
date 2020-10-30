@@ -42,6 +42,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/fileformat.h>
@@ -61,6 +62,9 @@
 #include <docsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
+#include <unodraw.hxx>
+#include <textboxhelper.hxx>
+#include <fmtanchr.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -2656,6 +2660,44 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf124470, "tdf124470TableAndEmbeddedUsedFonts
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='table']", 1);
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='table-column']", 2);
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='paragraph']", 1);
+}
+
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(TestPageAnchoredTextBoxCrash, "AtPageTextBoxCrash.odt")
+{
+    // Open the sample file which has one shape
+    auto xShape = getShape(1);
+    CPPUNIT_ASSERT(xShape.is());
+
+    // Get the frame format of the shape
+    SwXShape* pShape = dynamic_cast<SwXShape*>(xShape.get());
+    CPPUNIT_ASSERT(pShape);
+    auto pShapeFormat = pShape->GetFrameFormat();
+    CPPUNIT_ASSERT(pShapeFormat);
+
+    // Add a textbox to the shape and get its property
+    SwTextBoxHelper::create(pShapeFormat);
+    auto pFrameFormat = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(pFrameFormat);
+    CPPUNIT_ASSERT(xShapeProps.is());
+
+    // Set the anchor of the shape TO_PAGE
+    xShapeProps->setPropertyValue(
+        UNO_NAME_ANCHOR_TYPE,
+        uno::makeAny(text::TextContentAnchorType::TextContentAnchorType_AT_PAGE));
+
+    // Check if the anchor is differenct for the shape and the frame
+    CPPUNIT_ASSERT_EQUAL(pShapeFormat->GetAnchor().GetAnchorId(),
+                         pFrameFormat->GetAnchor().GetAnchorId());
+    // And the frame has not got content in the anchor
+    CPPUNIT_ASSERT(!pFrameFormat->GetAnchor().GetContentAnchor());
+
+    // Save and reload
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // At this point without the patch it crashed before, now it should pass.
+    // Before the anchor has two setting AT_PAGE and AT_PARA/AT_CHAR as well,
+    // this lead to crash, now it have to be anchored AT_PAGE only.
 }
 
 DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf135942, "nestedTableInFooter.odt")
