@@ -1856,6 +1856,45 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf127652)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("We are on the wrong page!", assertPage, currentPage);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, AtPageTextBoxCrash)
+{
+    // Load sample file
+    load(DATA_DIRECTORY, "AtPageTextBoxCrash.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Get the Writer-Shell for later use
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    // Get the format of the shape
+    const SwFrameFormats& rFrmFormats = *pWrtSh->GetDoc()->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
+    auto pShape = rFrmFormats.front();
+    CPPUNIT_ASSERT(pShape);
+
+    // Add a textbox to the shape
+    SwTextBoxHelper::create(pShape);
+    auto pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
+    CPPUNIT_ASSERT(pTxBxFrm);
+
+    // Change its anchor to page
+    uno::Reference<beans::XPropertySet> xShpProps(getShape(1), uno::UNO_QUERY_THROW);
+    xShpProps->setPropertyValue(
+        "AnchorType", uno::makeAny(text::TextContentAnchorType::TextContentAnchorType_AT_PAGE));
+
+    // The page anchored objects must not have content anchor
+    // unless this will lead to crash later, for example on
+    // removing the paragraph where it is achored to...
+    CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_PAGE, pTxBxFrm->GetAnchor().GetAnchorId());
+    CPPUNIT_ASSERT(!pTxBxFrm->GetAnchor().GetContentAnchor());
+
+    // Remove the paragraph where the textframe should be anchored
+    // before. Now with the patch it must not crash...
+    auto xPara = getParagraph(1);
+    xPara->getText()->setString(OUString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135661)
 {
     load(DATA_DIRECTORY, "tdf135661.odt");
