@@ -66,6 +66,9 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
+
+    static constexpr OUStringLiteral S_NOBREAK_FOR_REDLINE = u"\u00A0";
+    void PaintRedline( const SwTextPaintInfo &rInf ) const;
 };
 
 class SwKernPortion : public SwLinePortion

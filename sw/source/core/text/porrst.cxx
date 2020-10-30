@@ -118,6 +118,25 @@ void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
         rInf.DrawLineBreak( *this );
 }
 
+void SwBreakPortion::PaintRedline( const SwTextPaintInfo &rInf ) const
+{
+    if( rInf.OnWin() && rInf.GetOpt().IsLineBreak() )
+    {
+        sal_Int16 nNoBreakWidth = rInf.GetTextSize(S_NOBREAK_FOR_REDLINE).Width();
+        if ( nNoBreakWidth > 0 )
+        {
+            // approximate portion size with multiple no-break spaces
+            // and draw these spaces (at least a single one) by DrawText
+            // painting the requested redline underline/strikeout
+            sal_Int16 nSpaces = (LINE_BREAK_WIDTH + nNoBreakWidth/2) / nNoBreakWidth;
+            OUStringBuffer aBuf(S_NOBREAK_FOR_REDLINE);
+            for (sal_Int16 i = 1; i < nSpaces; ++i)
+                aBuf.append(S_NOBREAK_FOR_REDLINE);
+            rInf.DrawText(aBuf.makeStringAndClear(), *this);
+        }
+    }
+}
+
 bool SwBreakPortion::Format( SwTextFormatInfo &rInf )
 {
     const SwLinePortion *pRoot = rInf.GetRoot();
