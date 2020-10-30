@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1ed7c07_4304093c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-30T08:21:27Z",
+      "side": 1,
+      "message": "...though, for the record, I notice that with GNOME/X11 (but not with GNOME/Wayland), e.g. the left-hand-side slide overview in Impress looks grayed out/generally broken.",
+      "range": {
+        "startLine": 19,
+        "startChar": 18,
+        "endLine": 19,
+        "endChar": 48
+      },
+      "revId": "26bb96e3dfbbbdaf0b66e3759d02054d182a50db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
