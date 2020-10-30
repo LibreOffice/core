@@ -1302,7 +1302,7 @@ public:
 
 class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::TreeView
 {
-private:
+protected:
     // owner for UserData
     std::vector<std::unique_ptr<OUString>> m_aUserData;
     VclPtr<SvTabListBox> m_xTreeView;

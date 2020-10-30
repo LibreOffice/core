@@ -22,6 +22,11 @@ public:
 
     static void trigger_changed(weld::ComboBox& rComboBox) { rComboBox.signal_changed(); }
 
+    static void trigger_row_activated(weld::TreeView& rTreeView)
+    {
+        rTreeView.signal_row_activated();
+    }
+
     static void trigger_clicked(weld::Toolbar& rToolbar, const OString& rIdent)
     {
         rToolbar.signal_clicked(rIdent);
@@ -36,6 +41,7 @@ public:
 namespace jsdialog
 {
 VCL_DLLPUBLIC bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rData);
+VCL_DLLPUBLIC StringMap jsonToStringMap(const char* pJSON);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

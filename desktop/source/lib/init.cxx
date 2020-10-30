@@ -441,24 +441,6 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
 }
 
 
-static StringMap jsonToStringMap(const char* pJSON)
-{
-    StringMap aArgs;
-    if (pJSON && pJSON[0] != '\0')
-    {
-        std::stringstream aStream(pJSON);
-        boost::property_tree::ptree aTree;
-        boost::property_tree::read_json(aStream, aTree);
-
-        for (const auto& rPair : aTree)
-        {
-            aArgs[OUString::fromUtf8(rPair.first.c_str())] = OUString::fromUtf8(rPair.second.get_value<std::string>(".").c_str());
-        }
-    }
-    return aArgs;
-}
-
-
 static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
 {
     boost::property_tree::ptree aTree;
@@ -3719,7 +3701,7 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
 {
     SolarMutexGuard aGuard;
 
-    StringMap aMap(jsonToStringMap(pArguments));
+    StringMap aMap(jsdialog::jsonToStringMap(pArguments));
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nWindowId);
 
     if (!pWindow && nWindowId >= 1000000000 /* why unsigned? */)
@@ -5706,7 +5688,7 @@ static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis, const char* pA
     if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT)
             return;
 
-    StringMap aMap(jsonToStringMap(pArguments));
+    StringMap aMap(jsdialog::jsonToStringMap(pArguments));
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {

@@ -11,9 +11,29 @@
 #include <vcl/weld.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <sal/log.hxx>
+#include <rtl/uri.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 namespace jsdialog
 {
+StringMap jsonToStringMap(const char* pJSON)
+{
+    StringMap aArgs;
+    if (pJSON && pJSON[0] != '\0')
+    {
+        std::stringstream aStream(pJSON);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        for (const auto& rPair : aTree)
+        {
+            aArgs[OUString::fromUtf8(rPair.first.c_str())]
+                = OUString::fromUtf8(rPair.second.get_value<std::string>(".").c_str());
+        }
+    }
+    return aArgs;
+}
+
 bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rData)
 {
     weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
@@ -140,6 +160,38 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                     pTextView->set_text(rData["data"]);
                     LOKTrigger::trigger_changed(*pTextView);
                     return true;
+                }
+            }
+        }
+        else if (sControlType == "treeview")
+        {
+            auto pTreeView = dynamic_cast<weld::TreeView*>(pWidget);
+            if (pTreeView)
+            {
+                if (sAction == "change")
+                {
+                    OUString sDataJSON = rtl::Uri::decode(
+                        rData["data"], rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
+                        RTL_TEXTENCODING_UTF8);
+                    StringMap aMap(jsonToStringMap(
+                        OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+
+                    OString nRowString = OUStringToOString(aMap["row"], RTL_TEXTENCODING_ASCII_US);
+                    int nRow = std::atoi(nRowString.getStr());
+                    bool bValue = aMap["value"] == "true";
+
+                    pTreeView->set_toggle(nRow, bValue ? TRISTATE_TRUE : TRISTATE_FALSE);
+
+                    return true;
+                }
+                else if (sAction == "select")
+                {
+                    OString nRowString
+                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    int nRow = std::atoi(nRowString.getStr());
+
+                    pTreeView->select(nRow);
+                    LOKTrigger::trigger_row_activated(*pTreeView);
                 }
             }
         }

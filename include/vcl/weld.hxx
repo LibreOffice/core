@@ -803,6 +803,8 @@ public:
 */
 class VCL_DLLPUBLIC TreeView : virtual public Container
 {
+    friend class ::LOKTrigger;
+
 public:
     typedef std::pair<const TreeIter&, int> iter_col;
     typedef std::pair<const TreeIter&, OUString> iter_string;
