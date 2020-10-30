@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <sidebar/SidebarToolBox.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #define ICON_SIZE 25

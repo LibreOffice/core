@@ -20,7 +20,7 @@
 
 #include <sidebar/Paint.hxx>
 
-#include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <sidebar/SidebarToolBox.hxx>
 
 namespace sfx2::sidebar {
 
