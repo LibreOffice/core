@@ -22,6 +22,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
 #include <boost/property_tree/json_parser.hpp>
+#include <vcl/toolkit/treelistentry.hxx>
+#include <vcl/jsdialog/executor.hxx>
 
 JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
                                        VclPtr<vcl::Window> aContentWindow, std::string sTypeOfJSON)
@@ -39,30 +41,42 @@ void JSDialogNotifyIdle::ForceUpdate() { m_bForce = true; }
 
 void JSDialogNotifyIdle::Invoke()
 {
-    try
-    {
-        if (!m_aNotifierWindow)
-            return;
+    if (!m_aNotifierWindow)
+        return;
 
-        const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier();
-        if (pNotifier)
+    const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier();
+    if (pNotifier)
+    {
+        tools::JsonWriter aJsonWriter;
+        m_aContentWindow->DumpAsPropertyTree(aJsonWriter);
+        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
+        aJsonWriter.put("jsontype", m_sTypeOfJSON);
+
+        if (m_sTypeOfJSON == "autofilter")
         {
-            tools::JsonWriter aJsonWriter;
-            m_aContentWindow->DumpAsPropertyTree(aJsonWriter);
-            aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
-            aJsonWriter.put("jsontype", m_sTypeOfJSON);
-            if (m_bForce || !aJsonWriter.isDataEquals(m_LastNotificationMessage))
+            vcl::Window* pWindow = m_aContentWindow.get();
+            DockingWindow* pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
+            while (pWindow && !pDockingWIndow)
             {
-                m_bForce = false;
-                m_LastNotificationMessage = aJsonWriter.extractAsStdString();
-                pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG,
-                                                      m_LastNotificationMessage.c_str());
+                pWindow = pWindow->GetParent();
+                pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
+            }
+
+            if (pDockingWIndow)
+            {
+                Point aPos = pDockingWIndow->GetFloatingPos();
+                aJsonWriter.put("posx", aPos.getX());
+                aJsonWriter.put("posy", aPos.getY());
             }
         }
-    }
-    catch (boost::property_tree::json_parser::json_parser_error& rError)
-    {
-        SAL_WARN("vcl", rError.message());
+
+        if (m_bForce || !aJsonWriter.isDataEquals(m_LastNotificationMessage))
+        {
+            m_bForce = false;
+            m_LastNotificationMessage = aJsonWriter.extractAsStdString();
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG,
+                                                  m_LastNotificationMessage.c_str());
+        }
     }
 }
 
@@ -412,6 +426,20 @@ std::unique_ptr<weld::TextView> JSInstanceBuilder::weld_text_view(const OString&
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::TreeView> JSInstanceBuilder::weld_tree_view(const OString& id)
+{
+    SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
+    auto pWeldWidget = pTreeView
+                           ? std::make_unique<JSTreeView>(GetNotifierWindow(), GetContentWindow(),
+                                                          pTreeView, this, false, m_sTypeOfJSON)
+                           : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -691,6 +719,47 @@ void JSTextView::set_text(const OUString& rText)
 {
     SalInstanceTextView::set_text(rText);
     notifyDialogState();
+}
+
+JSTreeView::JSTreeView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                       ::SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                       std::string sTypeOfJSON)
+    : JSWidget<SalInstanceTreeView, ::SvTabListBox>(aNotifierWindow, aContentWindow, pTreeView,
+                                                    pBuilder, bTakeOwnership, sTypeOfJSON)
+{
+}
+
+void JSTreeView::set_toggle(int pos, TriState eState, int col)
+{
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, 0);
+
+    while (pEntry && pos--)
+        pEntry = m_xTreeView->Next(pEntry);
+
+    if (pEntry)
+        SalInstanceTreeView::set_toggle(pEntry, eState, col);
+}
+
+void JSTreeView::select(int pos)
+{
+    assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
+    disable_notify_events();
+    if (pos == -1 || (pos == 0 && n_children() == 0))
+        m_xTreeView->SelectAll(false);
+    else
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, 0);
+
+        while (pEntry && pos--)
+            pEntry = m_xTreeView->Next(pEntry);
+
+        if (pEntry)
+        {
+            m_xTreeView->Select(pEntry, true);
+            m_xTreeView->MakeVisible(pEntry);
+        }
+    }
+    enable_notify_events();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
