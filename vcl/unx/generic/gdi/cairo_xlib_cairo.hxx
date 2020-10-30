@@ -48,9 +48,9 @@ namespace cairo {
     struct X11Pixmap
     {
         void* mpDisplay;  // the relevant display connection
-        tools::Long  mhDrawable; // a drawable
+        Pixmap  mhDrawable; // a drawable
 
-        X11Pixmap( tools::Long hDrawable, void* pDisplay ) :
+        X11Pixmap( Pixmap hDrawable, void* pDisplay ) :
             mpDisplay(pDisplay),
             mhDrawable(hDrawable)
         {}
