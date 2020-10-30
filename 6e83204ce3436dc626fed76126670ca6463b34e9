@@ -22,6 +22,30 @@
       "revId": "6e83204ce3436dc626fed76126670ca6463b34e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9d7dd42_3a69768f",
+        "filename": "sd/uiconfig/sdraw/ui/drawpagedialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-10-30T20:19:26Z",
+      "side": 1,
+      "message": "The dialog opens via Page\u003eProperties\u003ePage Properties menu. Because of this, I think it should be remain as Page.",
+      "parentUuid": "76e9ba23_833fc4d0",
+      "range": {
+        "startLine": 8,
+        "startChar": 86,
+        "endLine": 8,
+        "endChar": 90
+      },
+      "revId": "6e83204ce3436dc626fed76126670ca6463b34e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
