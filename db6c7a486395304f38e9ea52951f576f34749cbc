@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2e6a8e1_d15894c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-30T14:49:29Z",
+      "side": 1,
+      "message": "(see \u003chttps://gerrit.libreoffice.org/c/core/+/105073\u003e \"Drop the #undef ABSOLUTE FIXME\")",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 47
+      },
+      "revId": "db6c7a486395304f38e9ea52951f576f34749cbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
