@@ -28,7 +28,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
-#include <tools/long.hxx>
 
 #include "LocaleNode.hxx"
 #include <i18npool/reservedconstants.hxx>
