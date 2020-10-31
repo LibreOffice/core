@@ -48,7 +48,6 @@
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
-#include <svtools/miscopt.hxx>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -75,6 +74,7 @@
 #include <tokenarray.hxx>
 #include <scmatrix.hxx>
 #include <tokenstringcontext.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace formula;
 using namespace ::com::sun::star;
@@ -4304,8 +4304,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
         bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] );
         if (!bMayBeFuncName && (cSymbol[0] == '_' && cSymbol[1] == '_') && !utl::ConfigManager::IsFuzzing())
         {
-            SvtMiscOptions aOpt;
-            bMayBeFuncName = aOpt.IsExperimentalMode();
+            bMayBeFuncName = officecfg::Office::Common::Misc::ExperimentalMode::get();
         }
 
         bAsciiNonAlnum = !bMayBeFuncName && !rtl::isAsciiDigit( cSymbol[0] );

@@ -30,7 +30,6 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/miscopt.hxx>
 #include <vcl/timer.hxx>
 #include "document.hxx"
 #include "edit.hxx"
@@ -213,7 +212,6 @@ class SmViewShell: public SfxViewShell
 {
     std::unique_ptr<sfx2::DocumentInserter> mpDocInserter;
     std::unique_ptr<SfxRequest> mpRequest;
-    SvtMiscOptions          maOpts;
     VclPtr<SmGraphicWindow> mpGraphic;
     SmGraphicController maGraphicController;
     OUString maStatusText;
@@ -309,7 +307,7 @@ public:
     void SetInsertIntoEditWindow(bool bEditWindowHadFocusLast){
         mbInsertIntoEditWindow = bEditWindowHadFocusLast;
     }
-    bool IsInlineEditEnabled() const;
+    static bool IsInlineEditEnabled();
 
 private:
     void ZoomByItemSet(const SfxItemSet *pSet);

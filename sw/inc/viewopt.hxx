@@ -22,13 +22,12 @@
 
 #include <config_feature_desktop.h>
 
+#include <officecfg/Office/Common.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 
 #include <sfx2/zoomitem.hxx>
 #include "swdllapi.h"
-
-#include <svtools/miscopt.hxx>
 
 class SwRect;
 namespace vcl { class Window; }
@@ -303,7 +302,8 @@ public:
 
     //show/hide outline content visibility button
     bool IsShowOutlineContentVisibilityButton() const
-        { SvtMiscOptions aMiscOptions; return aMiscOptions.IsExperimentalMode() && (m_nCoreOptions & ViewOptFlags1::ShowOutlineContentVisibilityButton); }
+        { return officecfg::Office::Common::Misc::ExperimentalMode::get() &&
+                 (m_nCoreOptions & ViewOptFlags1::ShowOutlineContentVisibilityButton); }
     void SetShowOutlineContentVisibilityButton(bool b)
         { SetCoreOption(b, ViewOptFlags1::ShowOutlineContentVisibilityButton); }
 
