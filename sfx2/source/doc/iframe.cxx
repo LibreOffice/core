@@ -35,7 +35,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <svtools/miscopt.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svl/itemprop.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL IFrameObject::load(
     const uno::Sequence < css::beans::PropertyValue >& /*lDescriptor*/,
     const uno::Reference < frame::XFrame >& xFrame )
 {
-    if ( SvtMiscOptions().IsPluginsEnabled() )
+    if ( officecfg::Office::Common::Misc::PluginsEnabled::get() )
     {
         DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
         VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
