@@ -894,8 +894,42 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
     rString = aRetStr.makeStringAndClear();
 }
 
-ScRangeData* ScRangeStringConverter::GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument& rDoc)
+ScRangeData* ScRangeStringConverter::GetRangeDataFromString( const OUString& rString, const SCTAB nTab,
+        const ScDocument& rDoc, formula::FormulaGrammar::AddressConvention eConv )
 {
+    // This may be called with an external 'doc'#name but wouldn't find any.
+
+    // Dot '.' is not allowed in range names, if present only lookup if it's a
+    // sheet-local name. Same for '!' Excel syntax.
+    // If eConv == FormulaGrammar::CONV_A1_XL_A1 then try both, first our own.
+    sal_Int32 nIndex = -1;
+    if (eConv == FormulaGrammar::CONV_OOO || eConv == FormulaGrammar::CONV_A1_XL_A1)
+        nIndex = ScGlobal::FindUnquoted( rString, '.');
+    if (nIndex < 0 && (eConv == FormulaGrammar::CONV_A1_XL_A1
+                || eConv == FormulaGrammar::CONV_XL_A1
+                || eConv == FormulaGrammar::CONV_XL_R1C1
+                || eConv == FormulaGrammar::CONV_XL_OOX))
+        nIndex = ScGlobal::FindUnquoted( rString, '!');
+
+    if (nIndex >= 0)
+    {
+        if (nIndex == 0)
+            return nullptr;     // Can't be a name.
+
+        OUString aTab( rString.copy( 0, nIndex));
+        ScGlobal::EraseQuotes( aTab, '\'');
+        SCTAB nLocalTab;
+        if (!rDoc.GetTable( aTab, nLocalTab))
+            return nullptr;
+
+        ScRangeName* pLocalRangeName = rDoc.GetRangeName(nLocalTab);
+        if (!pLocalRangeName)
+            return nullptr;
+
+        const OUString aName( rString.copy( nIndex+1));
+        return pLocalRangeName->findByUpperName( ScGlobal::getCharClassPtr()->uppercase( aName));
+    }
+
     ScRangeName* pLocalRangeName = rDoc.GetRangeName(nTab);
     ScRangeData* pData = nullptr;
     OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rString);

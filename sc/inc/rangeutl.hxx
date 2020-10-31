@@ -221,7 +221,8 @@ public:
                             const ScDocument& rDoc );
 
 /// String to RangeData core
-    static ScRangeData* GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument& rDoc);
+    static ScRangeData* GetRangeDataFromString( const OUString& rString, const SCTAB nTab,
+                            const ScDocument& rDoc, formula::FormulaGrammar::AddressConvention eConv );
 };
 
 class ScArea

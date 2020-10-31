@@ -8128,7 +8128,7 @@ void ScInterpreter::ScIndirect()
     {
         do
         {
-            ScRangeData* pData = ScRangeStringConverter::GetRangeDataFromString(sRefStr, nTab, mrDoc);
+            ScRangeData* pData = ScRangeStringConverter::GetRangeDataFromString( sRefStr, nTab, mrDoc, eConv);
             if (!pData)
                 break;
 
