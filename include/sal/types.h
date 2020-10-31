@@ -23,6 +23,7 @@
 #include "sal/config.h"
 
 #include <stddef.h>
+#include <stdint.h>
 
 #include "sal/macros.h"
 #include "sal/typesizes.h"
@@ -35,16 +36,11 @@ typedef unsigned char sal_Bool;
 #   define sal_False ((sal_Bool)0)
 #   define sal_True  ((sal_Bool)1)
 
-/* char is assumed to always be 1 byte long */
-typedef signed char         sal_Int8;
-typedef unsigned char       sal_uInt8;
-
-#if SAL_TYPES_SIZEOFSHORT == 2
-    typedef signed short      sal_Int16;
-    typedef unsigned short    sal_uInt16;
-#else
-     #error "Could not find 16-bit type, add support for your architecture"
-#endif
+// Definitions
+typedef int8_t      sal_Int8;
+typedef uint8_t     sal_uInt8;
+typedef int16_t     sal_Int16;
+typedef uint16_t    sal_uInt16;
 
 #if SAL_TYPES_SIZEOFLONG == 4
     typedef signed long       sal_Int32;
@@ -177,12 +173,12 @@ typedef void *                   sal_Handle;
  * "-0x7F... - 1" instead of as "-0x80..." prevents warnings about applying the
  * unary minus operator to unsigned quantities.
  */
-#define SAL_MIN_INT8          ((sal_Int8)   (-0x7F - 1))
-#define SAL_MAX_INT8          ((sal_Int8)   0x7F)
-#define SAL_MAX_UINT8         ((sal_uInt8)  0xFF)
-#define SAL_MIN_INT16         ((sal_Int16)  (-0x7FFF - 1))
-#define SAL_MAX_INT16         ((sal_Int16)  0x7FFF)
-#define SAL_MAX_UINT16        ((sal_uInt16) 0xFFFF)
+#define SAL_MIN_INT8          INT8_MIN
+#define SAL_MAX_INT8          INT8_MAX
+#define SAL_MAX_UINT8         UINT8_MAX
+#define SAL_MIN_INT16         INT16_MIN
+#define SAL_MAX_INT16         INT16_MAX
+#define SAL_MAX_UINT16        UINT16_MAX
 #define SAL_MIN_INT32         ((sal_Int32)  (-0x7FFFFFFF - 1))
 #define SAL_MAX_INT32         ((sal_Int32)  0x7FFFFFFF)
 #define SAL_MAX_UINT32        ((sal_uInt32) 0xFFFFFFFF)
