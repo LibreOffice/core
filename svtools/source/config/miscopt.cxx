@@ -52,12 +52,10 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_SYMBOLSTYLE              2
 #define PROPERTYNAME_DISABLEUICUSTOMIZATION "DisableUICustomization"
 #define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   3
-#define PROPERTYNAME_MACRORECORDERMODE       "MacroRecorderMode"
-#define PROPERTYHANDLE_MACRORECORDERMODE        4
 #define PROPERTYNAME_SIDEBARICONSIZE        "SidebarIconSize"
-#define PROPERTYHANDLE_SIDEBARICONSIZE          5
+#define PROPERTYHANDLE_SIDEBARICONSIZE          4
 #define PROPERTYNAME_NOTEBOOKBARICONSIZE    "NotebookbarIconSize"
-#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      6
+#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      5
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
@@ -73,7 +71,6 @@ private:
     sal_Int16   m_nToolboxStyle;
     bool        m_bIsToolboxStyleRO;
     bool        m_bDisableUICustomization;
-    bool        m_bMacroRecorderMode;
     bool        m_bIconThemeWasSetAutomatically;
 
         virtual void ImplCommit() override;
@@ -106,12 +103,6 @@ public:
 
         bool DisableUICustomization() const
         { return m_bDisableUICustomization; }
-
-        void SetMacroRecorderMode( bool bSet )
-        { m_bMacroRecorderMode = bSet; SetModified(); }
-
-        bool IsMacroRecorderMode() const
-        { return m_bMacroRecorderMode; }
 
         sal_Int16 GetSymbolsSize() const
         { return m_nSymbolsSize; }
@@ -193,7 +184,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsSymbolsStyleRO( false )
     , m_nToolboxStyle( 1 )
     , m_bIsToolboxStyleRO( false )
-    , m_bMacroRecorderMode( false )
     , m_bIconThemeWasSetAutomatically( false )
 {
     // Use our static list of configuration keys to get his values.
@@ -275,12 +265,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
                     OSL_FAIL("Wrong type of \"Misc\\DisableUICustomization\"!" );
-                break;
-            }
-            case PROPERTYHANDLE_MACRORECORDERMODE :
-            {
-                if( !(seqValues[nProperty] >>= m_bMacroRecorderMode) )
-                    OSL_FAIL("Wrong type of \"Misc\\MacroRecorderMode\"!" );
                 break;
             }
         }
@@ -511,11 +495,6 @@ void SvtMiscOptions_Impl::ImplCommit()
                 seqValues[nProperty] <<= m_bDisableUICustomization;
                 break;
             }
-            case PROPERTYHANDLE_MACRORECORDERMODE :
-            {
-                seqValues[nProperty] <<= m_bMacroRecorderMode;
-                break;
-            }
         }
     }
     // Set properties in configuration.
@@ -533,7 +512,6 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_TOOLBOXSTYLE,
         PROPERTYNAME_ICONTHEME,
         PROPERTYNAME_DISABLEUICUSTOMIZATION,
-        PROPERTYNAME_MACRORECORDERMODE,
         PROPERTYNAME_SIDEBARICONSIZE,
         PROPERTYNAME_NOTEBOOKBARICONSIZE
     };
@@ -646,16 +624,6 @@ sal_Int16 SvtMiscOptions::GetToolboxStyle() const
 void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
 {
     m_pImpl->SetToolboxStyle( nStyle );
-}
-
-void SvtMiscOptions::SetMacroRecorderMode( bool bSet )
-{
-    m_pImpl->SetMacroRecorderMode( bSet );
-}
-
-bool SvtMiscOptions::IsMacroRecorderMode() const
-{
-    return m_pImpl->IsMacroRecorderMode();
 }
 
 namespace

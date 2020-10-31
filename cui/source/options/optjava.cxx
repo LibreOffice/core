@@ -32,7 +32,6 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
-#include <svtools/miscopt.hxx>
 
 #include <strings.hrc>
 #include <vcl/svapp.hxx>
@@ -482,8 +481,10 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 
     if ( m_xMacroCB->get_state_changed_from_saved() )
     {
-        SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetMacroRecorderMode(m_xMacroCB->get_active());
+        std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
+                comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::MacroRecorderMode::set( m_xMacroCB->get_active(), xChanges );
+        xChanges->commit();
         bModified = true;
     }
 
@@ -561,8 +562,6 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     ClearJavaInfo();
     m_xJavaList->clear();
 
-    SvtMiscOptions aMiscOpt;
-
 #if HAVE_FEATURE_JAVA
     bool bEnabled = false;
     javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
@@ -586,7 +585,7 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
 
     m_xExperimentalCB->set_active( officecfg::Office::Common::Misc::ExperimentalMode::get() );
     m_xExperimentalCB->save_state();
-    m_xMacroCB->set_active(aMiscOpt.IsMacroRecorderMode());
+    m_xMacroCB->set_active( officecfg::Office::Common::Misc::MacroRecorderMode::get() );
     m_xMacroCB->save_state();
 
     m_aResetIdle.Start();

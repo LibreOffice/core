@@ -3006,7 +3006,8 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     SvtMiscOptions aMiscOptions;
                     const OUString& sName{GetObjectShell()->GetFactory().GetFactoryName()};
                     bool bMacrosDisabled = officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
-                    if (bMacrosDisabled || !aMiscOptions.IsMacroRecorderMode() ||
+                    if (bMacrosDisabled ||
+                         !officecfg::Office::Common::Misc::MacroRecorderMode::get() ||
                          ( sName!="swriter" && sName!="scalc" ) )
                     {
                         rSet.DisableItem( nWhich );
@@ -3031,7 +3032,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 {
                     SvtMiscOptions aMiscOptions;
                     const OUString& sName{GetObjectShell()->GetFactory().GetFactoryName()};
-                    if ( !aMiscOptions.IsMacroRecorderMode() ||
+                    if ( !officecfg::Office::Common::Misc::MacroRecorderMode::get() ||
                          ( sName!="swriter" && sName!="scalc" ) )
                     {
                         rSet.DisableItem( nWhich );
