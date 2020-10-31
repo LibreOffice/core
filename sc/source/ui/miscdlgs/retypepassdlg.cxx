@@ -371,7 +371,7 @@ IMPL_LINK_NOARG(ScRetypePassInputDlg, RadioBtnHdl, weld::ToggleButton&, void)
     else
     {
         m_xPasswordGrid->set_sensitive(false);
-        m_xBtnOk->set_sensitive(false);
+        m_xBtnOk->set_sensitive(true);
     }
 }
 
