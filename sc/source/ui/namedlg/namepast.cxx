@@ -24,6 +24,8 @@
 #include <rangenam.hxx>
 #include <viewdata.hxx>
 #include <scui_def.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
 
 ScNamePasteDlg::ScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell)
     : GenericDialogController(pParent, "modules/scalc/ui/insertname.ui", "InsertNameDialog")
@@ -32,6 +34,7 @@ ScNamePasteDlg::ScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell)
     , m_xBtnClose(m_xBuilder->weld_button("close"))
 {
     ScDocument& rDoc = pShell->GetDocument();
+    m_aSheetSep = OUString( rDoc.GetSheetSeparator());
     std::map<OUString, ScRangeName*> aCopyMap;
     rDoc.GetRangeNameMap(aCopyMap);
     for (const auto& [aTemp, pName] : aCopyMap)
@@ -70,10 +73,14 @@ IMPL_LINK(ScNamePasteDlg, ButtonHdl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xBtnPaste.get())
     {
+        const OUString aGlobalScope( ScResId( STR_GLOBAL_SCOPE));
         std::vector<ScRangeNameLine> aSelectedLines = m_xTable->GetSelectedEntries();
         for (const auto& rLine : aSelectedLines)
         {
-            maSelectedNames.push_back(rLine.aName);
+            if (rLine.aScope == aGlobalScope)
+                maSelectedNames.push_back(rLine.aName);
+            else
+                maSelectedNames.push_back(rLine.aScope + m_aSheetSep + rLine.aName);
         }
         m_xDialog->response(BTN_PASTE_NAME);
     }

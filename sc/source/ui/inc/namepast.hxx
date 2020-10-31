@@ -41,6 +41,7 @@ private:
 
     std::vector<OUString> maSelectedNames;
     std::map<OUString, std::unique_ptr<ScRangeName>> m_RangeMap;
+    OUString m_aSheetSep;
 
 public:
     ScNamePasteDlg(weld::Window* pParent, ScDocShell* pShell);
