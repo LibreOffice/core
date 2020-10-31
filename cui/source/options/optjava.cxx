@@ -472,8 +472,10 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 
     if ( m_xExperimentalCB->get_state_changed_from_saved() )
     {
-        SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetExperimentalMode( m_xExperimentalCB->get_active() );
+        std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
+                comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::ExperimentalMode::set( m_xExperimentalCB->get_active(), xChanges );
+        xChanges->commit();
         bModified = true;
         RequestRestart( svtools::RESTART_REASON_EXP_FEATURES );
     }
@@ -582,7 +584,7 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     m_xJavaEnableCB->set_sensitive(false);
 #endif
 
-    m_xExperimentalCB->set_active( aMiscOpt.IsExperimentalMode() );
+    m_xExperimentalCB->set_active( officecfg::Office::Common::Misc::ExperimentalMode::get() );
     m_xExperimentalCB->save_state();
     m_xMacroCB->set_active(aMiscOpt.IsMacroRecorderMode());
     m_xMacroCB->save_state();

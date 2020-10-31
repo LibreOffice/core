@@ -91,7 +91,6 @@
 #include <svl/intitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/helpopt.hxx>
-#include <svtools/miscopt.hxx>
 #include <svx/databaseregistrationui.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
@@ -1368,9 +1367,8 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             // Disable Basic IDE options, if experimental features are not enabled
             if( RID_SVXPAGE_BASICIDE_OPTIONS == nPageId )
             {
-                    SvtMiscOptions aMiscOpt;
-                    if( ! aMiscOpt.IsExperimentalMode() )
-                        continue;
+                if( ! officecfg::Office::Common::Misc::ExperimentalMode::get() )
+                    continue;
             }
 
             AddTabPage( nPageId, sNewTitle, nGroup );

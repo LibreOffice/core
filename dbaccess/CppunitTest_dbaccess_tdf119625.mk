@@ -61,6 +61,10 @@ $(eval $(call gb_CppunitTest_set_include,dbaccess_tdf119625,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,dbaccess_tdf119625,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_api,dbaccess_tdf119625,\
     offapi \
     oovbaapi \
