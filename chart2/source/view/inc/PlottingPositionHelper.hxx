@@ -21,7 +21,6 @@
 #include <chartview/ExplicitScaleValues.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>
-#include <rtl/math.hxx>
 #include <tools/long.hxx>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>

@@ -42,7 +42,6 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <config_fuzzers.h>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 

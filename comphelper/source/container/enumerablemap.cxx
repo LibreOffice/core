@@ -34,9 +34,9 @@
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/math.hxx>
 #include <typelib/typedescription.hxx>
 
+#include <cmath>
 #include <map>
 #include <memory>
 #include <utility>

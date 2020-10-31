@@ -20,7 +20,6 @@
 #include <about.hxx>
 
 #include <osl/process.h>     //osl_getProcessLocale
-#include <rtl/character.hxx> //rtl::isAsciiHexDigit
 #include <sal/log.hxx>       //SAL_WARN
 #include <vcl/settings.hxx>  //GetSettings
 #include <vcl/svapp.hxx>     //Application::

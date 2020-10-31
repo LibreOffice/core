@@ -456,6 +456,8 @@ excludelist:
     chart2/source/view/axes/VAxisBase.cxx:
     # Needed for direct member access
     - com/sun/star/drawing/XShapes.hpp
+    # Needed for implicit dtor
+    - com/sun/star/chart2/XAxis.hpp
     chart2/source/view/axes/VAxisProperties.cxx:
     # Actually used
     - com/sun/star/chart2/XAxis.hpp
@@ -464,9 +466,15 @@ excludelist:
     chart2/source/view/axes/VCartesianCoordinateSystem.cxx:
     # Actually used
     - com/sun/star/chart2/XCoordinateSystem.hpp
+    chart2/source/view/axes/VPolarAngleAxis.cxx:
+    # Needed for implicit dtor
+    - com/sun/star/chart2/XAxis.hpp
     chart2/source/view/axes/VPolarCoordinateSystem.cxx:
     # Actually used
     - com/sun/star/chart2/XCoordinateSystem.hpp
+    chart2/source/view/axes/VCartesianAxis.cxx:
+    # Needed for implicit dtor
+    - com/sun/star/chart2/XAxis.hpp
     chart2/source/view/axes/VCartesianGrid.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
@@ -486,6 +494,8 @@ excludelist:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
     - com/sun/star/drawing/XShape.hpp
+    # Actually used
+    - rtl/math.hxx
     chart2/source/view/main/VButton.cxx:
     # Actually used
     - com/sun/star/lang/XMultiServiceFactory.hpp
@@ -591,6 +601,9 @@ excludelist:
     chart2/source/controller/accessibility/AccessibleChartView.cxx:
     # Actually used
     - com/sun/star/view/XSelectionSupplier.hpp
+    chart2/source/controller/chartapiwrapper/AxisWrapper.cxx:
+    # Needed for implicit dtor
+    - com/sun/star/frame/XModel.hpp
     chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx:
     # Needed for rtl::math::round
     - rtl/math.hxx
@@ -607,6 +620,9 @@ excludelist:
     chart2/source/controller/chartapiwrapper/ChartDocumentWrapper.cxx:
     # Actually used
     - vector
+    chart2/source/controller/chartapiwrapper/WrappedAxisAndGridExistenceProperties.cxx:
+    # Needed for implicit dtor
+    - com/sun/star/chart2/XAxis.hpp
     chart2/source/controller/dialogs/ChartTypeDialogController.cxx:
     # Actually used
     - com/sun/star/chart2/XChartDocument.hpp
@@ -623,6 +639,9 @@ excludelist:
     chart2/source/controller/dialogs/dlg_DataEditor.cxx:
     # Needed for direct member access
     - com/sun/star/awt/XWindow.hpp
+    chart2/source/controller/dialogs/dlg_View3D.cxx:
+    # Needed for implicit dtor
+    - com/sun/star/chart2/XDiagram.hpp
     chart2/source/controller/dialogs/RangeSelectionHelper.cxx:
     # Actually used
     - com/sun/star/chart2/XChartDocument.hpp
@@ -638,6 +657,12 @@ excludelist:
     chart2/source/controller/dialogs/tp_ChartType.cxx:
     # Actually used
     - com/sun/star/chart2/XChartDocument.hpp
+    chart2/source/controller/dialogs/tp_DataSource.cxx:
+    # Needed for implicit dtor
+    - com/sun/star/frame/XModel.hpp
+    chart2/source/controller/itemsetwrapper/TextLabelItemConverter.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     chart2/source/controller/itemsetwrapper/ItemConverter.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
@@ -660,6 +685,8 @@ excludelist:
     chart2/source/controller/itemsetwrapper/DataPointItemConverter.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     chart2/source/controller/itemsetwrapper/AxisItemConverter.cxx:
     # Needed for rtl::math::round
     - rtl/math.hxx
@@ -713,6 +740,8 @@ excludelist:
     chart2/source/controller/main/PositionAndSizeHelper.cxx:
     # Actually used
     - com/sun/star/awt/Rectangle.hpp
+    # Needed for implicit dtor
+    - com/sun/star/chart2/XDiagram.hpp
     chart2/source/controller/main/StatusBarCommandDispatch.cxx:
     # Actually used
     - com/sun/star/view/XSelectionSupplier.hpp

@@ -35,7 +35,6 @@
  ************************************************************************/
 
 #include <vector>
-#include <time.h>
 #include <string.h>
 
 #include <memory>
@@ -49,12 +48,8 @@
 #include "pq_xusers.hxx"
 
 #include <rtl/uuid.h>
-#include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
-#include <o3tl/enumarray.hxx>
-#include <osl/module.h>
 
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

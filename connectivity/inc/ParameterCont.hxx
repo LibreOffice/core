@@ -20,7 +20,6 @@
 
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <comphelper/interaction.hxx>
-#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace dbtools
 {

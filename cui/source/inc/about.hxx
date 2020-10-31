@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <vcl/bitmapex.hxx>
 #include <vcl/weld.hxx>
 
 class AboutDialog : public weld::GenericDialogController

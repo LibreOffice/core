@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/svapp.hxx>
+#include <memory>
 
 namespace canvas
 {

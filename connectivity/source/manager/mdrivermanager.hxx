@@ -26,7 +26,6 @@
 #include <vector>
 
 #include <com/sun/star/sdbc/XDriverManager2.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -34,7 +33,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/logging.hxx>
-#include <osl/mutex.hxx>
 #include <connectivity/DriversConfig.hxx>
 
 namespace drivermanager

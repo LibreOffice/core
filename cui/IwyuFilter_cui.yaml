@@ -13,6 +13,9 @@ excludelist:
     cui/source/dialogs/DiagramDialog.cxx:
     # Needed for direct member access
     - com/sun/star/beans/PropertyValue.hpp
+    cui/source/dialogs/pastedlg.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/PropertyValue.hpp
     cui/source/dialogs/SignSignatureLineDialog.cxx:
     # Actually used
     - com/sun/star/graphic/XGraphic.hpp
@@ -21,6 +24,15 @@ excludelist:
     # Actually used
     - com/sun/star/linguistic2/XMeaning.hpp
     - com/sun/star/linguistic2/XThesaurus.hpp
+    cui/source/dialogs/tipofthedaydlg.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/PropertyValue.hpp
+    cui/source/dialogs/toolbarmodedlg.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/PropertyValue.hpp
+    cui/source/tabpages/numfmt.cxx:
+    # Actually used
+    - com/sun/star/frame/XModel.hpp
     cui/source/customize/cfg.cxx:
     # Actually used
     - com/sun/star/ui/dialogs/XFilePicker3.hpp

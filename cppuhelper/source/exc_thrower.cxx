@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <rtl/instance.hxx>
 #include <osl/diagnose.h>
-#include <osl/doublecheckedlocking.h>
 #include <sal/log.hxx>
 #include <uno/dispatcher.hxx>
 #include <uno/lbnames.h>

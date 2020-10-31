@@ -36,7 +36,6 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 
-#include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>

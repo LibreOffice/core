@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 
 namespace connectivity::sdbcx

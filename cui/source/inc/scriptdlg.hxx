@@ -21,7 +21,6 @@
 
 #include <memory>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/abstdlg.hxx>
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

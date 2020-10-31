@@ -34,9 +34,7 @@
 #include <svx/unoshape.hxx>
 #include <editeng/fhgtitem.hxx>
 
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <svx/helperhittest3d.hxx>

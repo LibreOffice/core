@@ -26,7 +26,6 @@
 #include <RegressionCurveHelper.hxx>
 #include <unonames.hxx>
 
-#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>

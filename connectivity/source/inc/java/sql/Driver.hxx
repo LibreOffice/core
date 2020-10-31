@@ -22,7 +22,6 @@
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <comphelper/logging.hxx>

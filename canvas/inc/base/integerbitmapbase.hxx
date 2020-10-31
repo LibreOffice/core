@@ -21,7 +21,6 @@
 
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <verifyinput.hxx>
-#include <osl/diagnose.h>
 
 
 namespace canvas

@@ -14,7 +14,6 @@
 
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/types.hxx>
 #include <dialmgr.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -28,6 +27,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/weld.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 static OUString GetCurrentApp()
 {

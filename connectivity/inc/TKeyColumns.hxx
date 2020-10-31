@@ -20,7 +20,6 @@
 #pragma once
 
 #include <connectivity/sdbcx/VCollection.hxx>
-#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

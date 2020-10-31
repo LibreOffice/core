@@ -13,11 +13,8 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>

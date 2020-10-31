@@ -33,7 +33,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <dialmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -41,6 +40,7 @@
 #include <rtl/bootstrap.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")

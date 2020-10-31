@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include "mysqlc_connection.hxx"
 #include "mysqlc_propertyids.hxx"
@@ -27,7 +26,6 @@
 #include "mysqlc_general.hxx"
 
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace connectivity::mysqlc;

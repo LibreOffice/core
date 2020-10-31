@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <connectivity/dbtoolsdllapi.hxx>
 #include "sdbcx/VKey.hxx"
 
 namespace connectivity

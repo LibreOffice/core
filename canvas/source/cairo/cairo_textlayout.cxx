@@ -30,19 +30,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/metric.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 
 
 #include "cairo_textlayout.hxx"
-
-#include <cairo.h>
-
-#if defined CAIRO_HAS_FT_FONT
-# include <cairo-ft.h>
-#else
-# error Native API needed.
-#endif
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

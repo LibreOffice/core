@@ -22,6 +22,10 @@ excludelist:
     cppuhelper/source/exc_thrower.cxx:
     # No hpp -> hdl switch
     - cppuhelper/detail/XExceptionThrower.hpp
+    # Needed for mobile versions
+    - sal/log.hxx
+    - com/sun/star/ucb/InteractiveAugmentedIOException.hpp
+    - com/sun/star/ucb/NameClashException.hpp
     # Needed for cppu::throwException
     - cppuhelper/exc_hlp.hxx
     cppuhelper/source/findsofficepath.c:
@@ -46,3 +50,10 @@ excludelist:
     cppuhelper/source/tdmgr.cxx:
     # Needed to inherit linker visibility from function declaration
     - cppuhelper/bootstrap.hxx
+    cppuhelper/source/typemanager.cxx:
+    # Actually used
+    - com/sun/star/reflection/TypeDescriptionSearchDepth.hpp
+    - com/sun/star/uno/TypeClass.hpp
+    cppuhelper/source/servicemanager.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp

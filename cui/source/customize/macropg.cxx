@@ -32,10 +32,6 @@
 #include <strings.hrc>
 #include <comphelper/namedvaluecollection.hxx>
 
-#include <algorithm>
-#include <iterator>
-#include <set>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 

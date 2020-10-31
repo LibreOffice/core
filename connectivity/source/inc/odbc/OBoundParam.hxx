@@ -22,6 +22,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <odbc/odbcbasedllapi.hxx>
+#include <connectivity/odbc.hxx>
 
 namespace connectivity::odbc
     {

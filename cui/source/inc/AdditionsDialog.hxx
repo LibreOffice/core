@@ -10,13 +10,9 @@
 
 #pragma once
 
-#include <vcl/svapp.hxx>
 #include <salhelper/thread.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/weld.hxx>
-#include <strings.hrc>
-#include <comphelper/string.hxx>
-#include "dialmgr.hxx"
 
 // Detect changes on the UI
 #include <vcl/timer.hxx>
@@ -26,19 +22,13 @@
 
 // Extension Manager Connection
 #include <com/sun/star/deployment/XExtensionManager.hpp>
-#include <com/sun/star/deployment/ExtensionManager.hpp>
-#include <com/sun/star/deployment/XPackageManager.hpp>
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/task/XJob.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <cppuhelper/implbase.hxx>
+
+#include <atomic>
 
 class AdditionsDialog;
 class SearchAndParseThread;
