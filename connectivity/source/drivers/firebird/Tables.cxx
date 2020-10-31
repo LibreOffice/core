@@ -94,35 +94,6 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
 
     aSql.append(dbtools::createStandardTypePart(xColProp, _xConnection));
 
-    // Add character set for BINARY (fix) type:
-    // BINARY is distinguished from other CHAR types by its character set.
-    // Octets is a special character set for binary data.
-    if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(
-                    PROPERTY_ID_TYPE)) )
-    {
-        sal_Int32 aType = 0;
-        xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE))
-            >>= aType;
-        if(aType == DataType::BINARY || aType == DataType::VARBINARY)
-        {
-            aSql.append(" ");
-            aSql.append("CHARACTER SET OCTETS");
-        }
-        else if(aType == DataType::CLOB)
-        {
-            // CLOB is a special type of blob in Firebird context.
-            // Subtype number 1 always refers to CLOB
-            aSql.append(" ");
-            aSql.append("SUB_TYPE 1");
-        }
-        else if(aType == DataType::LONGVARBINARY)
-        {
-            aSql.append(" ");
-            aSql.append("SUB_TYPE ");
-            aSql.append(OUString::number(static_cast<short>(BlobSubtype::Image)));
-        }
-    }
-
     if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
     {
         aSql.append(" ");
