@@ -268,7 +268,7 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
 {
     if (!lcl_HasSystemFilePicker())
         m_xFileDlgFrame->hide();
-    else if (SvtMiscOptions().IsUseSystemFileDialogReadOnly())
+    else if (officecfg::Office::Common::Misc::UseSystemFileDialog::isReadOnly())
     {
         m_xFileDlgROImage->show();
         m_xFileDlgCB->set_sensitive(false);
@@ -330,8 +330,10 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 
     if ( m_xFileDlgCB->get_state_changed_from_saved() )
     {
-        SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetUseSystemFileDialog( !m_xFileDlgCB->get_active() );
+        std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
+                comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::UseSystemFileDialog::set( !m_xFileDlgCB->get_active(), xChanges );
+        xChanges->commit();
         bModified = true;
     }
 
@@ -392,8 +394,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xPopUpNoHelpCB->save_state();
     m_xShowTipOfTheDay->set_active( officecfg::Office::Common::Misc::ShowTipOfTheDay::get() );
     m_xShowTipOfTheDay->save_state();
-    SvtMiscOptions aMiscOpt;
-    m_xFileDlgCB->set_active( !aMiscOpt.UseSystemFileDialog() );
+    m_xFileDlgCB->set_active( !officecfg::Office::Common::Misc::UseSystemFileDialog::get() );
     m_xFileDlgCB->save_state();
     m_xPrintDlgCB->set_active( !officecfg::Office::Common::Misc::UseSystemPrintDialog::get() );
     m_xPrintDlgCB->save_state();

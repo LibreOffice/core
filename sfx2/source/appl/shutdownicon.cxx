@@ -28,7 +28,6 @@
 #include <sfx2/app.hxx>
 #include <osl/mutex.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/miscopt.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
@@ -53,6 +52,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <osl/file.hxx>
@@ -175,7 +175,7 @@ ShutdownIcon::ShutdownIcon( const css::uno::Reference< XComponentContext > & rxC
     m_xContext( rxContext ),
     m_bInitialized( false )
 {
-    m_bSystemDialogs = SvtMiscOptions().UseSystemFileDialog();
+    m_bSystemDialogs = officecfg::Office::Common::Misc::UseSystemFileDialog::get();
 }
 
 ShutdownIcon::~ShutdownIcon()
@@ -276,7 +276,7 @@ void ShutdownIcon::StartFileDialog()
 {
     ::SolarMutexGuard aGuard;
 
-    bool bDirty = ( m_bSystemDialogs != SvtMiscOptions().UseSystemFileDialog() );
+    bool bDirty = ( m_bSystemDialogs != officecfg::Office::Common::Misc::UseSystemFileDialog::get() );
 
     if ( m_pFileDlg && bDirty )
     {
@@ -419,7 +419,7 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
     // This fix is dependent on the dialog settings. Destroying the dialog here will
     // crash the non-native dialog implementation! Therefore make this dependent on
     // the settings.
-    if ( SvtMiscOptions().UseSystemFileDialog() )
+    if ( officecfg::Office::Common::Misc::UseSystemFileDialog::get() )
     {
         m_pFileDlg.reset();
     }

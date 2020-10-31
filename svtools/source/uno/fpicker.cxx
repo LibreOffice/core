@@ -21,8 +21,8 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-#include <svtools/miscopt.hxx>
 #include <svl/pickerhistoryaccess.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -57,7 +57,7 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
         return xResult;
 
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
-    if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
+    if (xFactory.is() && officecfg::Office::Common::Misc::UseSystemFileDialog::get())
     {
         xResult.set( Application::createFilePicker( context ) );
 
@@ -125,7 +125,7 @@ Reference< css::uno::XInterface > FolderPicker_CreateInstance (
         return xResult;
 
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
-    if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
+    if (xFactory.is() && officecfg::Office::Common::Misc::UseSystemFileDialog::get())
     {
         xResult.set( Application::createFolderPicker( context ) );
         if (!xResult.is())
