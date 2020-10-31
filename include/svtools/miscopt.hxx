@@ -73,10 +73,6 @@ class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
         sal_Int16   GetToolboxStyle() const;
         void        SetToolboxStyle( sal_Int16 nStyle );
 
-        bool        ShowLinkWarningDialog() const;
-        void        SetShowLinkWarningDialog( bool bSet );
-        bool        IsShowLinkWarningDialogReadOnly() const;
-
         void        SetMacroRecorderMode( bool bSet );
         bool        IsMacroRecorderMode() const;
 

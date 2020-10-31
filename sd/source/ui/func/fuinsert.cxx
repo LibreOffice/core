@@ -22,6 +22,7 @@
 #include <fuinsert.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <editeng/outlobj.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxdlg.hxx>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
@@ -37,7 +38,6 @@
 #include <svtools/insdlg.hxx>
 #include <sfx2/request.hxx>
 #include <svl/globalnameitem.hxx>
-#include <svtools/miscopt.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svx/linkwarn.hxx>
 #include <avmedia/mediawindow.hxx>
@@ -177,7 +177,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
             if(pGrafObj && bAsLink )
             {
                 // really store as link only?
-                if( SvtMiscOptions().ShowLinkWarningDialog() )
+                if( officecfg::Office::Common::Misc::ShowLinkWarningDialog::get() )
                 {
                     SvxLinkWarningDialog aWarnDlg(mpWindow->GetFrameWeld(), aFileName);
                     if (aWarnDlg.run() != RET_OK)

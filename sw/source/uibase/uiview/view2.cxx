@@ -30,6 +30,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <SwCapObjType.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <docary.hxx>
@@ -39,7 +40,6 @@
 #include <swundo.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <svl/urihelper.hxx>
-#include <svtools/miscopt.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -450,7 +450,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             }
 
             // really store as link only?
-            if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
+            if( bAsLink && officecfg::Office::Common::Misc::ShowLinkWarningDialog::get() )
             {
                 SvxLinkWarningDialog aWarnDlg(GetFrameWeld(), pFileDlg->GetPath());
                 if (aWarnDlg.run() != RET_OK)
