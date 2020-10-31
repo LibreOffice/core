@@ -1121,16 +1121,15 @@ OUString SwPaM::GetText() const
 
 void SwPaM::InvalidatePaM()
 {
-    const SwNode &_pNd = GetNode();
-    const SwTextNode *_pTextNd = _pNd.GetTextNode();
-    if (_pTextNd != nullptr)
-    {
-        // pretend that the PaM marks inserted text to recalc the portion...
-        SwInsText aHint( Start()->nContent.GetIndex(),
-                        End()->nContent.GetIndex() - Start()->nContent.GetIndex() + 1 );
-        SwModify *_pModify=const_cast<SwModify*>(static_cast<SwModify const *>(_pTextNd));
-        _pModify->ModifyNotification( nullptr, &aHint);
-    }
+    const SwNode& pNd = GetNode();
+    SwTextNode* pTextNd = const_cast<SwTextNode*>(pNd.GetTextNode());
+    if(!pTextNd)
+        return;
+    // pretend that the PaM marks inserted text to recalc the portion...
+    SwInsText aHint(
+            Start()->nContent.GetIndex(),
+            End()->nContent.GetIndex() - Start()->nContent.GetIndex() + 1);
+    pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, &aHint));
 }
 
 void SwPaM::dumpAsXml(xmlTextWriterPtr pWriter) const
