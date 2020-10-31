@@ -272,8 +272,8 @@ bool SwGrfNode::ReRead(
     // create an updates for the frames
     if( bReadGrf && bNewGrf )
     {
-        SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
-        lcl_SwClientNotify(*this, aMsgHint);
+        const SwUpdateAttr aHint(0,0,0);
+        lcl_SwClientNotify(*this, aHint);
     }
 
     return bReadGrf;

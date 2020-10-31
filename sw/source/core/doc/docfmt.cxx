@@ -629,7 +629,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             {
                 SwFormatChg aChgFormat( mpDfltCharFormat.get() );
                 // notify the frames
-                aCallMod.ModifyNotification( &aChgFormat, &aChgFormat );
+                aCallMod.SwClientNotify(aCallMod, sw::LegacyModifyHint( &aChgFormat, &aChgFormat ));
             }
         }
     }
@@ -638,7 +638,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     {
         SwAttrSetChg aChgOld( aOld, aOld );
         SwAttrSetChg aChgNew( aNew, aNew );
-        aCallMod.ModifyNotification( &aChgOld, &aChgNew );      // all changed are sent
+        aCallMod.SwClientNotify(aCallMod, sw::LegacyModifyHint( &aChgOld, &aChgNew ));      // all changed are sent
     }
 
     // remove the default formats from the object again
