@@ -16,6 +16,24 @@
       "revId": "88267a7de0b65a2c784931ffc0c1408b82495da9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b99229c1_cf78034c",
+        "filename": "connectivity/source/drivers/firebird/Tables.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2020-10-31T19:28:06Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "3687590d_12208664",
+      "revId": "88267a7de0b65a2c784931ffc0c1408b82495da9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

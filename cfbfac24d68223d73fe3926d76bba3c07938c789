@@ -22,6 +22,30 @@
       "revId": "cfbfac24d68223d73fe3926d76bba3c07938c789",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14fbf195_d8940929",
+        "filename": "connectivity/source/drivers/firebird/Util.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2020-10-31T19:28:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75aa323d_15161613",
+      "range": {
+        "startLine": 224,
+        "startChar": 19,
+        "endLine": 224,
+        "endChar": 34
+      },
+      "revId": "cfbfac24d68223d73fe3926d76bba3c07938c789",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
