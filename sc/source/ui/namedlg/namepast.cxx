@@ -26,6 +26,7 @@
 #include <scui_def.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <compiler.hxx>
 
 ScNamePasteDlg::ScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell)
     : GenericDialogController(pParent, "modules/scalc/ui/insertname.ui", "InsertNameDialog")
@@ -80,7 +81,11 @@ IMPL_LINK(ScNamePasteDlg, ButtonHdl, weld::Button&, rButton, void)
             if (rLine.aScope == aGlobalScope)
                 maSelectedNames.push_back(rLine.aName);
             else
-                maSelectedNames.push_back(rLine.aScope + m_aSheetSep + rLine.aName);
+            {
+                OUString aSheet( rLine.aScope);
+                ScCompiler::CheckTabQuotes( aSheet);
+                maSelectedNames.push_back( aSheet + m_aSheetSep + rLine.aName);
+            }
         }
         m_xDialog->response(BTN_PASTE_NAME);
     }
