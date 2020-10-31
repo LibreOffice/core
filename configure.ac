@@ -4167,6 +4167,7 @@ if test "$CCACHE" != ""; then
     dnl an empty program will do, we're checking the compiler flags
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
                       [use_ccache=yes], [use_ccache=no])
+    CFLAGS=$save_CFLAGS
     if test $use_ccache = yes; then
         AC_MSG_RESULT([yes])
     else
@@ -4174,7 +4175,6 @@ if test "$CCACHE" != ""; then
         CC_BASE="ccache $CC_BASE"
         AC_MSG_RESULT([no])
     fi
-    CFLAGS=$save_CFLAGS
     AC_LANG_POP([C])
 fi
 
@@ -5752,7 +5752,6 @@ if test -n "$ENABLE_PCH"; then
     else
         AC_MSG_RESULT(no)
     fi
-    CFLAGS=$save_CFLAGS
 fi
 AC_SUBST(PCH_INSTANTIATE_TEMPLATES)
 
@@ -5788,7 +5787,6 @@ if test -n "$BUILDING_PCH_WITH_OBJ"; then
     else
         AC_MSG_RESULT(no)
     fi
-    CFLAGS=$save_CFLAGS
 fi
 AC_SUBST(PCH_CODEGEN)
 AC_SUBST(PCH_NO_CODEGEN)
@@ -5804,7 +5802,6 @@ if test -n "$BUILDING_PCH_WITH_OBJ"; then
     else
         AC_MSG_RESULT(no)
     fi
-    CFLAGS=$save_CFLAGS
 fi
 AC_SUBST(PCH_DEBUGINFO)
 
@@ -9502,7 +9499,6 @@ int main(int argc, char **argv) {
    else return 1;
 }
        ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3])],[AC_MSG_RESULT([skipped; cross-compiling])])
-    CFLAGS=$save_CFLAGS
     AC_LANG_POP(C)
 
     dnl FIXME Check if the Python library can be linked with, too?
@@ -9925,7 +9921,7 @@ if test "$enable_firebird_sdbc" = "yes" ; then
                 AC_MSG_ERROR([Ensure firebird 3.0.x is installed])
             fi
         else
-            __save_CFLAGS="${CFLAGS}"
+            save_CFLAGS="${CFLAGS}"
             CFLAGS="${CFLAGS} ${FIREBIRD_CFLAGS}"
             AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <ibase.h>
 #if defined(FB_API_VER) && FB_API_VER == 30
@@ -9933,7 +9929,7 @@ int fb_api_is_30(void) { return 0; }
 #else
 #error "Wrong Firebird API version"
 #endif]])],AC_MSG_RESULT([OK]),AC_MSG_ERROR([Ensure firebird 3.0.x is installed]))
-            CFLAGS="${__save_CFLAGS}"
+            CFLAGS="$save_CFLAGS"
         fi
         ENABLE_FIREBIRD_SDBC=TRUE
         AC_DEFINE([ENABLE_FIREBIRD_SDBC],1)
@@ -10458,13 +10454,13 @@ if test "$with_system_harfbuzz" = "yes"; then
         AC_MSG_ERROR([--with-system-graphite must be used when --with-system-harfbuzz is used])
     fi
     AC_MSG_CHECKING([whether system Harfbuzz is built with Graphite support])
-    _save_libs="$LIBS"
-    _save_cflags="$CFLAGS"
+    save_LIBS="$LIBS"
+    save_CFLAGS="$CFLAGS"
     LIBS="$LIBS $HARFBUZZ_LIBS"
     CFLAGS="$CFLAGS $HARFBUZZ_CFLAGS"
     AC_CHECK_FUNC(hb_graphite2_face_get_gr_face,,[AC_MSG_ERROR([Harfbuzz needs to be built with Graphite support.])])
-    LIBS="$_save_libs"
-    CFLAGS="$_save_cflags"
+    LIBS="$save_LIBS"
+    CFLAGS="$save_CFLAGS"
 else
     if test "$with_system_graphite" = "yes"; then
         AC_MSG_ERROR([--without-system-graphite must be used when --without-system-harfbuzz is used])
@@ -11985,14 +11981,14 @@ if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
     dnl an empty program will do, we're checking the compiler flags
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
                       [use_ccache=yes], [use_ccache=no])
+    CFLAGS=$save_CFLAGS
+    CC=$save_CC
     if test $use_ccache = yes; then
         AC_MSG_RESULT([yes])
     else
         LO_CLANG_CC="$CCACHE $LO_CLANG_CC"
         AC_MSG_RESULT([no])
     fi
-    CFLAGS=$save_CFLAGS
-    CC=$save_CC
     AC_LANG_POP([C])
 
     AC_MSG_CHECKING([whether $LO_CLANG_CXX is already ccached])
