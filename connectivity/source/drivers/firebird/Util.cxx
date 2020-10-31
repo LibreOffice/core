@@ -217,15 +217,17 @@ OUString firebird::ColumnTypeInfo::getColumnTypeName() const
         case DataType::TIMESTAMP:
             return "TIMESTAMP";
         case DataType::BINARY:
-            return "BINARY";
+            return "CHAR CHARACTER SET OCTETS";
+        case DataType::VARBINARY:
+            return "VARCHAR CHARACTER SET OCTETS";
         case DataType::LONGVARBINARY:
-            return "LONGVARBINARY";
+            return "BLOB SUB_TYPE " + OUString::number(static_cast<short>(BlobSubtype::Image));
         case DataType::ARRAY:
             return "ARRAY";
         case DataType::BLOB:
-            return "BLOB";
+            return "BLOB SUB_TYPE BINARY";
         case DataType::CLOB:
-            return "CLOB";
+            return "BLOB SUB_TYPE TEXT";
         case DataType::BOOLEAN:
             return "BOOLEAN";
         case DataType::SQLNULL:
