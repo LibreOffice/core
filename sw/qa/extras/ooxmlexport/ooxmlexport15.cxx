@@ -844,6 +844,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135660, "tdf135660.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom wrap distance is wrong", static_cast<sal_Int32>(199), nWrapDistanceBottom);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136814, "tdf136814.odt")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    // Padding in this document is 0.10 cm which should translate to 3 pt (approx. 1.0583mm)
+    assertXPath(pXmlDocument, "/w:document/w:body/w:sectPr/w:pgBorders/w:top", "space", "3");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:sectPr/w:pgBorders/w:left", "space", "3");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:sectPr/w:pgBorders/w:bottom", "space", "3");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:sectPr/w:pgBorders/w:right", "space", "3");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
