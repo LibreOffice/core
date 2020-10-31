@@ -10117,7 +10117,7 @@ if test "$with_system_odbc" = "yes" -o '(' "$with_system_headers" = "yes" -a "$w
     AC_MSG_RESULT([external])
     SYSTEM_ODBC_HEADERS=TRUE
 
-    if test "$build_os" = "cygwin"; then
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
         save_CPPFLAGS=$CPPFLAGS
         find_winsdk
         PathFormat "$winsdktest"
