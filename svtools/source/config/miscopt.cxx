@@ -50,16 +50,14 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_TOOLBOXSTYLE             1
 #define PROPERTYNAME_ICONTHEME              "SymbolStyle"
 #define PROPERTYHANDLE_SYMBOLSTYLE              2
-#define PROPERTYNAME_SHOWLINKWARNINGDIALOG  "ShowLinkWarningDialog"
-#define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG    3
 #define PROPERTYNAME_DISABLEUICUSTOMIZATION "DisableUICustomization"
-#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   4
+#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   3
 #define PROPERTYNAME_MACRORECORDERMODE       "MacroRecorderMode"
-#define PROPERTYHANDLE_MACRORECORDERMODE        5
+#define PROPERTYHANDLE_MACRORECORDERMODE        4
 #define PROPERTYNAME_SIDEBARICONSIZE        "SidebarIconSize"
-#define PROPERTYHANDLE_SIDEBARICONSIZE          6
+#define PROPERTYHANDLE_SIDEBARICONSIZE          5
 #define PROPERTYNAME_NOTEBOOKBARICONSIZE    "NotebookbarIconSize"
-#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      7
+#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      6
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
@@ -74,8 +72,6 @@ private:
     bool        m_bIsSymbolsStyleRO;
     sal_Int16   m_nToolboxStyle;
     bool        m_bIsToolboxStyleRO;
-    bool        m_bShowLinkWarningDialog;
-    bool        m_bIsShowLinkWarningDialogRO;
     bool        m_bDisableUICustomization;
     bool        m_bMacroRecorderMode;
     bool        m_bIconThemeWasSetAutomatically;
@@ -161,15 +157,6 @@ public:
         // translate from VCL settings
         void SetToolboxStyle( sal_Int16 nStyle );
 
-        bool ShowLinkWarningDialog() const
-        { return m_bShowLinkWarningDialog; }
-
-        void SetShowLinkWarningDialog( bool bSet )
-        {  m_bShowLinkWarningDialog = bSet; SetModified(); }
-
-        bool IsShowLinkWarningDialogReadOnly() const
-        { return m_bIsShowLinkWarningDialogRO; }
-
         void AddListenerLink( const Link<LinkParamNone*,void>& rLink );
         void RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
         void CallListeners();
@@ -206,8 +193,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsSymbolsStyleRO( false )
     , m_nToolboxStyle( 1 )
     , m_bIsToolboxStyleRO( false )
-    , m_bShowLinkWarningDialog( true )
-    , m_bIsShowLinkWarningDialogRO( false )
     , m_bMacroRecorderMode( false )
     , m_bIconThemeWasSetAutomatically( false )
 {
@@ -271,16 +256,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                     OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
                 }
                 m_bIsToolboxStyleRO = seqRO[nProperty];
-                break;
-            }
-
-            case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG :
-            {
-                if( !(seqValues[nProperty] >>= m_bShowLinkWarningDialog) )
-                {
-                    OSL_FAIL("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
-                }
-                m_bIsShowLinkWarningDialogRO = seqRO[nProperty];
                 break;
             }
 
@@ -371,13 +346,6 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
                                                             {
                                                                 OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
-                                                            }
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG     :   {
-                                                            if( !(seqValues[nProperty] >>= m_bShowLinkWarningDialog) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
                                                             }
                                                         }
                                                     break;
@@ -538,13 +506,6 @@ void SvtMiscOptions_Impl::ImplCommit()
                 break;
             }
 
-            case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG :
-            {
-                if ( !m_bIsShowLinkWarningDialogRO )
-                    seqValues[nProperty] <<= m_bShowLinkWarningDialog;
-                break;
-            }
-
             case PROPERTYHANDLE_DISABLEUICUSTOMIZATION :
             {
                 seqValues[nProperty] <<= m_bDisableUICustomization;
@@ -571,7 +532,6 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_SYMBOLSET,
         PROPERTYNAME_TOOLBOXSTYLE,
         PROPERTYNAME_ICONTHEME,
-        PROPERTYNAME_SHOWLINKWARNINGDIALOG,
         PROPERTYNAME_DISABLEUICUSTOMIZATION,
         PROPERTYNAME_MACRORECORDERMODE,
         PROPERTYNAME_SIDEBARICONSIZE,
@@ -686,21 +646,6 @@ sal_Int16 SvtMiscOptions::GetToolboxStyle() const
 void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
 {
     m_pImpl->SetToolboxStyle( nStyle );
-}
-
-bool SvtMiscOptions::ShowLinkWarningDialog() const
-{
-    return m_pImpl->ShowLinkWarningDialog();
-}
-
-void SvtMiscOptions::SetShowLinkWarningDialog( bool bSet )
-{
-    m_pImpl->SetShowLinkWarningDialog( bSet );
-}
-
-bool SvtMiscOptions::IsShowLinkWarningDialogReadOnly() const
-{
-    return m_pImpl->IsShowLinkWarningDialogReadOnly();
 }
 
 void SvtMiscOptions::SetMacroRecorderMode( bool bSet )

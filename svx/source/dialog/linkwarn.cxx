@@ -19,7 +19,7 @@
 
 #include <osl/file.hxx>
 #include <svx/linkwarn.hxx>
-#include <svtools/miscopt.hxx>
+#include <officecfg/Office/Common.hxx>
 
 SvxLinkWarningDialog::SvxLinkWarningDialog(weld::Widget* pParent, const OUString& _rFileName)
     : MessageDialogController(pParent, "svx/ui/linkwarndialog.ui", "LinkWarnDialog", "ask")
@@ -34,9 +34,9 @@ SvxLinkWarningDialog::SvxLinkWarningDialog(weld::Widget* pParent, const OUString
     m_xDialog->set_primary_text(sInfoText);
 
     // load state of "warning on" checkbox from misc options
-    SvtMiscOptions aMiscOpt;
-    m_xWarningOnBox->set_active(aMiscOpt.ShowLinkWarningDialog());
-    m_xWarningOnBox->set_sensitive(!aMiscOpt.IsShowLinkWarningDialogReadOnly());
+    m_xWarningOnBox->set_active(officecfg::Office::Common::Misc::ShowLinkWarningDialog::get());
+    m_xWarningOnBox->set_sensitive(
+        !officecfg::Office::Common::Misc::ShowLinkWarningDialog::isReadOnly());
 }
 
 SvxLinkWarningDialog::~SvxLinkWarningDialog()
@@ -44,10 +44,14 @@ SvxLinkWarningDialog::~SvxLinkWarningDialog()
     try
     {
         // save value of "warning off" checkbox, if necessary
-        SvtMiscOptions aMiscOpt;
         bool bChecked = m_xWarningOnBox->get_active();
-        if (aMiscOpt.ShowLinkWarningDialog() != bChecked)
-            aMiscOpt.SetShowLinkWarningDialog(bChecked);
+        if (officecfg::Office::Common::Misc::ShowLinkWarningDialog::get() != bChecked)
+        {
+            std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Misc::ShowLinkWarningDialog::set(bChecked, xChanges);
+            xChanges->commit();
+        }
     }
     catch (...)
     {

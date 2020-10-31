@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <officecfg/Office/Common.hxx>
 #include <sal/log.hxx>
 #include <sfx2/opengrf.hxx>
 #include <svx/svdograf.hxx>
@@ -30,7 +31,6 @@
 #include <svx/svxids.hrc>
 #include <vcl/graphicfilter.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/miscopt.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -325,7 +325,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
                 bool bAsLink = aDlg.IsAsLink();
 
                 // really store as link only?
-                if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
+                if( bAsLink && officecfg::Office::Common::Misc::ShowLinkWarningDialog::get() )
                 {
                     SvxLinkWarningDialog aWarnDlg(pWin ? pWin->GetFrameWeld() : nullptr, aFileName);
                     if (aWarnDlg.run() != RET_OK)
