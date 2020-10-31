@@ -28,8 +28,6 @@
 #include <sfx2/zoomitem.hxx>
 #include "swdllapi.h"
 
-#include <svtools/miscopt.hxx>
-
 class SwRect;
 namespace vcl { class Window; }
 class OutputDevice;
@@ -302,8 +300,7 @@ public:
         { SetCoreOption(b, ViewOptFlags1::UseHeaderFooterMenu); }
 
     //show/hide outline content visibility button
-    bool IsShowOutlineContentVisibilityButton() const
-        { SvtMiscOptions aMiscOptions; return aMiscOptions.IsExperimentalMode() && (m_nCoreOptions & ViewOptFlags1::ShowOutlineContentVisibilityButton); }
+    bool IsShowOutlineContentVisibilityButton() const;
     void SetShowOutlineContentVisibilityButton(bool b)
         { SetCoreOption(b, ViewOptFlags1::ShowOutlineContentVisibilityButton); }
 

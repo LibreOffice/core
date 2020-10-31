@@ -60,14 +60,12 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG    6
 #define PROPERTYNAME_DISABLEUICUSTOMIZATION "DisableUICustomization"
 #define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   7
-#define PROPERTYNAME_EXPERIMENTALMODE       "ExperimentalMode"
-#define PROPERTYHANDLE_EXPERIMENTALMODE         8
 #define PROPERTYNAME_MACRORECORDERMODE       "MacroRecorderMode"
-#define PROPERTYHANDLE_MACRORECORDERMODE        9
+#define PROPERTYHANDLE_MACRORECORDERMODE        8
 #define PROPERTYNAME_SIDEBARICONSIZE        "SidebarIconSize"
-#define PROPERTYHANDLE_SIDEBARICONSIZE          10
+#define PROPERTYHANDLE_SIDEBARICONSIZE          9
 #define PROPERTYNAME_NOTEBOOKBARICONSIZE    "NotebookbarIconSize"
-#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      11
+#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      10
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
@@ -91,7 +89,6 @@ private:
     bool        m_bShowLinkWarningDialog;
     bool        m_bIsShowLinkWarningDialogRO;
     bool        m_bDisableUICustomization;
-    bool        m_bExperimentalMode;
     bool        m_bMacroRecorderMode;
     bool        m_bIconThemeWasSetAutomatically;
 
@@ -135,12 +132,6 @@ public:
 
         bool DisableUICustomization() const
         { return m_bDisableUICustomization; }
-
-        void SetExperimentalMode( bool bSet )
-        { m_bExperimentalMode = bSet; SetModified(); }
-
-        bool IsExperimentalMode() const
-        { return m_bExperimentalMode; }
 
         void SetMacroRecorderMode( bool bSet )
         { m_bMacroRecorderMode = bSet; SetModified(); }
@@ -254,7 +245,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsUseSystemPrintDialogRO( false )
     , m_bShowLinkWarningDialog( true )
     , m_bIsShowLinkWarningDialogRO( false )
-    , m_bExperimentalMode( false )
     , m_bMacroRecorderMode( false )
     , m_bIconThemeWasSetAutomatically( false )
 {
@@ -377,12 +367,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
                     OSL_FAIL("Wrong type of \"Misc\\DisableUICustomization\"!" );
-                break;
-            }
-            case PROPERTYHANDLE_EXPERIMENTALMODE :
-            {
-                if( !(seqValues[nProperty] >>= m_bExperimentalMode) )
-                    OSL_FAIL("Wrong type of \"Misc\\ExperimentalMode\"!" );
                 break;
             }
             case PROPERTYHANDLE_MACRORECORDERMODE :
@@ -675,11 +659,6 @@ void SvtMiscOptions_Impl::ImplCommit()
                 seqValues[nProperty] <<= m_bDisableUICustomization;
                 break;
             }
-            case PROPERTYHANDLE_EXPERIMENTALMODE :
-            {
-                seqValues[nProperty] <<= m_bExperimentalMode;
-                break;
-            }
             case PROPERTYHANDLE_MACRORECORDERMODE :
             {
                 seqValues[nProperty] <<= m_bMacroRecorderMode;
@@ -706,7 +685,6 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_USESYSTEMPRINTDIALOG,
         PROPERTYNAME_SHOWLINKWARNINGDIALOG,
         PROPERTYNAME_DISABLEUICUSTOMIZATION,
-        PROPERTYNAME_EXPERIMENTALMODE,
         PROPERTYNAME_MACRORECORDERMODE,
         PROPERTYNAME_SIDEBARICONSIZE,
         PROPERTYNAME_NOTEBOOKBARICONSIZE
@@ -864,16 +842,6 @@ void SvtMiscOptions::SetShowLinkWarningDialog( bool bSet )
 bool SvtMiscOptions::IsShowLinkWarningDialogReadOnly() const
 {
     return m_pImpl->IsShowLinkWarningDialogReadOnly();
-}
-
-void SvtMiscOptions::SetExperimentalMode( bool bSet )
-{
-    m_pImpl->SetExperimentalMode( bSet );
-}
-
-bool SvtMiscOptions::IsExperimentalMode() const
-{
-    return m_pImpl->IsExperimentalMode();
 }
 
 void SvtMiscOptions::SetMacroRecorderMode( bool bSet )

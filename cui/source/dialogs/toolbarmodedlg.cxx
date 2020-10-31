@@ -17,12 +17,12 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/types.hxx>
 #include <dialmgr.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <strings.hrc>
-#include <svtools/miscopt.hxx>
 #include <unotools/confignode.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -116,7 +116,7 @@ ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
     m_pApply->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
     m_pApplyAll->connect_clicked(LINK(this, ToolbarmodeDialog, OnApplyClick));
 
-    if (!SvtMiscOptions().IsExperimentalMode())
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
     {
         m_pRadioButtons[nGroupedbarFull]->set_visible(false);
         m_pRadioButtons[nContextualGroups]->set_visible(false);

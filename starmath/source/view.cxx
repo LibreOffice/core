@@ -28,6 +28,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -1983,9 +1984,9 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
     }
 }
 
-bool SmViewShell::IsInlineEditEnabled() const
+bool SmViewShell::IsInlineEditEnabled()
 {
-    return maOpts.IsExperimentalMode();
+    return officecfg::Office::Common::Misc::ExperimentalMode::get();
 }
 
 void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
