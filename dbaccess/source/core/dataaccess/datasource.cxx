@@ -58,7 +58,6 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <sal/log.hxx>
-#include <svtools/miscopt.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <rtl/digest.h>
@@ -617,9 +616,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         //ignore when we don't have a model. E.g. Mailmerge, data sources, fields...
         bIgnoreMigration = true;
     }
-    SvtMiscOptions aMiscOptions;
 
-    if (!aMiscOptions.IsExperimentalMode())
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
         bIgnoreMigration = true;
 
     if(!bIgnoreMigration && m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")

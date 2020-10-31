@@ -20,9 +20,9 @@
 #include <dsntypes.hxx>
 #include <unotools/confignode.hxx>
 #include <osl/diagnose.h>
-#include <svtools/miscopt.hxx>
 #include <tools/wldcrd.hxx>
 #include <osl/file.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <comphelper/string.hxx>
 
 namespace dbaccess
@@ -285,8 +285,7 @@ bool ODsnTypeCollection::isEmbeddedDatabase( const OUString& _sURL )
 
 OUString ODsnTypeCollection::getEmbeddedDatabase()
 {
-    SvtMiscOptions aMiscOptions;
-    if (aMiscOptions.IsExperimentalMode())
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get())
         return "sdbc:embedded:firebird";
     else
         return "sdbc:embedded:hsqldb";

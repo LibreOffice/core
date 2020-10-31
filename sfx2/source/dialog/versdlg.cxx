@@ -24,6 +24,7 @@
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
+#include <officecfg/Office/Common.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
@@ -242,8 +243,7 @@ void SfxVersionDialog::Init_Impl()
     m_xDeleteButton->set_sensitive(false);
     m_xCompareButton->set_sensitive(false);
 
-    SvtMiscOptions miscOptions;
-    if ( !miscOptions.IsExperimentalMode() )
+    if ( !officecfg::Office::Common::Misc::ExperimentalMode::get() )
         m_xCmisButton->hide( );
     uno::Reference<document::XCmisDocument> xCmisDoc(pObjShell->GetModel(), uno::UNO_QUERY);
     if (xCmisDoc && xCmisDoc->isVersionable())

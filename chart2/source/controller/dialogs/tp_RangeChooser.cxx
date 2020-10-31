@@ -25,7 +25,7 @@
 #include <TabPageNotifiable.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <svtools/miscopt.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 
 namespace
@@ -109,8 +109,7 @@ RangeChooserTabPage::RangeChooserTabPage(weld::Container* pPage, weld::DialogCon
     m_xEd_TimeStart->connect_changed( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_xEd_TimeEnd->connect_changed( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
 
-    SvtMiscOptions aOpts;
-    if ( !aOpts.IsExperimentalMode() )
+    if ( !officecfg::Office::Common::Misc::ExperimentalMode::get() )
     {
         m_xFL_TimeBased->hide();
         m_xCB_TimeBased->hide();
