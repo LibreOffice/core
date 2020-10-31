@@ -59,7 +59,6 @@
 #include <array>
 #include <vector>
 #include <algorithm>
-#include <string.h>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::beans { struct NamedValue; }

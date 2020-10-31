@@ -25,6 +25,7 @@
 #include <cstddef>
 
 #include <stdlib.h>
+#include <rtl/math.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>

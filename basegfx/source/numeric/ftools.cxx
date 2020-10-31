@@ -18,7 +18,6 @@
  */
 
 #include <basegfx/numeric/ftools.hxx>
-#include <algorithm>
 
 namespace basegfx
 {

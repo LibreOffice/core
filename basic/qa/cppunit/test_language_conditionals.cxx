@@ -8,7 +8,6 @@
  */
 
 #include "basictest.hxx"
-#include <rtl/ustring.hxx>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>

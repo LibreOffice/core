@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sfx2/sfxbasemodel.hxx>
 

@@ -19,10 +19,8 @@
 #include <avmedia/MediaControlBase.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediaitem.hxx>
-#include <svtools/miscopt.hxx>
 #include <tools/time.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <bitmaps.hlst>
 #include <strings.hrc>
 #include <helpids.h>
 #include <mediamisc.hxx>

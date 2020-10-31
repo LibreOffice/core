@@ -20,7 +20,6 @@
 #include <basic/sberrors.hxx>
 #include <basic/sbstar.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/svapp.hxx>
 #include <sbstdobj.hxx>
 
 #define ATTR_IMP_TYPE           1

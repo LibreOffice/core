@@ -18,6 +18,7 @@
  */
 
 #include <sb.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <vcl/errinf.hxx>

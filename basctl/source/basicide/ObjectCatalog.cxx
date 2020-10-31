@@ -24,7 +24,6 @@
 #include <helpids.h>
 
 #include <vcl/taskpanelist.hxx>
-#include <vcl/svapp.hxx>
 
 namespace basctl
 {

@@ -25,7 +25,6 @@
 #include <bastypes.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <deque>
 #include <string_view>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>

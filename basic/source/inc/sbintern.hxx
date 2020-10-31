@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <basic/basicdllapi.h>
 #include <basic/sbstar.hxx>
 #include <sbxfac.hxx>
 #include <unotools/transliterationwrapper.hxx>

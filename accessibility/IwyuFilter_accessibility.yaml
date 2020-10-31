@@ -4,3 +4,9 @@ excludelist:
     accessibility/source/standard/vclxaccessiblecombobox.cxx:
     # Needed for implicit dtor
     - vcl/window.hxx
+    accessibility/source/extended/accessibletabbar.cxx:
+    # Needed for implicit dtor
+    - com/sun/star/awt/XWindowPeer.hpp
+    accessibility/source/standard/accessiblemenucomponent.cxx:
+    # Needed for implicit dtor
+    - com/sun/star/awt/XWindowPeer.hpp
