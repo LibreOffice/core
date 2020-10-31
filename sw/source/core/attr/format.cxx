@@ -202,7 +202,7 @@ void SwFormat::CopyAttrs( const SwFormat& rFormat )
 
             SwAttrSetChg aChgOld( m_aSet, aOld );
             SwAttrSetChg aChgNew( m_aSet, aNew );
-            ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
+            SwClientNotify(*this, sw::LegacyModifyHint(&aChgOld, &aChgNew)); // send all modified ones
         }
     }
 
