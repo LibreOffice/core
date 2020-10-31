@@ -24,11 +24,13 @@
 #include <memory>
 
 #include <rtl/ref.hxx>
+#include <sfx2/docinsert.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svtools/miscopt.hxx>
 #include <vcl/timer.hxx>
 #include "document.hxx"
 #include "edit.hxx"
@@ -206,26 +208,25 @@ public:
 };
 
 namespace sfx2 { class FileDialogHelper; }
-struct SmViewShell_Impl;
 
 class SmViewShell: public SfxViewShell
 {
-    std::unique_ptr<SmViewShell_Impl> mpImpl;
-
+    std::unique_ptr<sfx2::DocumentInserter> mpDocInserter;
+    std::unique_ptr<SfxRequest> mpRequest;
+    SvtMiscOptions          maOpts;
     VclPtr<SmGraphicWindow> mpGraphic;
     SmGraphicController maGraphicController;
     OUString maStatusText;
-
     bool mbPasteState;
-
-    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
     /** Used to determine whether insertions using SID_INSERTSPECIAL and SID_INSERTCOMMANDTEXT
      * should be inserted into SmEditWindow or directly into the SmDocShell as done if the
      * visual editor was last to have focus.
      */
     bool mbInsertIntoEditWindow;
+
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+
 protected:
 
     static Size GetTextLineSize(OutputDevice const & rDevice,
