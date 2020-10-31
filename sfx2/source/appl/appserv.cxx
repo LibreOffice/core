@@ -1130,8 +1130,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_TEMPLATE_MANAGER:
                     {
-                        SvtMiscOptions aMiscOptions;
-                        if ( !aMiscOptions.IsExperimentalMode() )
+                        if ( !officecfg::Office::Common::Misc::ExperimentalMode::get() )
                         {
                            rSet.DisableItem( nWhich );
                            rSet.Put( SfxVisibilityItem( nWhich, false ) );

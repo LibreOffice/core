@@ -123,7 +123,7 @@ public:
     void DeleteEditView();
 
     bool HandleWheelCommands(const CommandEvent& rCEvt);
-    bool IsInlineEditEnabled();
+    static bool IsInlineEditEnabled();
     void StartCursorMove();
 
     // for Accessibility

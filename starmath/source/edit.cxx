@@ -68,8 +68,7 @@ void SmGetLeftSelectionPart(const ESelection &rSel,
 
 bool SmEditWindow::IsInlineEditEnabled()
 {
-    SmViewShell *pView = GetView();
-    return pView && pView->IsInlineEditEnabled();
+    return SmViewShell::IsInlineEditEnabled();
 }
 
 
