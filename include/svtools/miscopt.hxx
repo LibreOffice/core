@@ -86,9 +86,6 @@ class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
         void        SetShowLinkWarningDialog( bool bSet );
         bool        IsShowLinkWarningDialogReadOnly() const;
 
-        void        SetExperimentalMode( bool bSet );
-        bool        IsExperimentalMode() const;
-
         void        SetMacroRecorderMode( bool bSet );
         bool        IsMacroRecorderMode() const;
 

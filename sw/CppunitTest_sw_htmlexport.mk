@@ -50,6 +50,10 @@ $(eval $(call gb_CppunitTest_set_include,sw_htmlexport,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,sw_htmlexport,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_api,sw_htmlexport,\
 	udkapi \
 	offapi \

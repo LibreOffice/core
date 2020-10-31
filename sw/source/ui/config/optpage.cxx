@@ -68,8 +68,6 @@
 
 #include <optload.hxx>
 
-#include <svtools/miscopt.hxx>
-
 using namespace ::com::sun::star;
 
 namespace {
@@ -107,8 +105,7 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xFieldHiddenCB(m_xBuilder->weld_check_button("hiddentextfield"))
     , m_xFieldHiddenParaCB(m_xBuilder->weld_check_button("hiddenparafield"))
 {
-    SvtMiscOptions aMiscOptions;
-    if (!aMiscOptions.IsExperimentalMode())
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
         m_xShowOutlineContentVisibilityButton->hide();
 
     /* This part is visible only with Writer/Web->View dialogue. */
