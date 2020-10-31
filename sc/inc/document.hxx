@@ -803,6 +803,12 @@ public:
      */
     bool InsertNewRangeName( SCTAB nTab, const OUString& rName, const ScAddress& rPos, const OUString& rExpr );
 
+    /** Obtain the sheet separator corresponding to the document's grammar.
+
+        @return '.' for our own grammars, '!' for Excel grammars.
+     */
+    SC_DLLPUBLIC sal_Unicode GetSheetSeparator() const;
+
     SCTAB GetMaxTableNumber() const { return static_cast<SCTAB>(maTabs.size()) - 1; }
 
     ScRangePairList*    GetColNameRanges() { return xColNameRanges.get(); }

@@ -1346,4 +1346,12 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
     }
 }
 
+sal_Unicode ScDocument::GetSheetSeparator() const
+{
+    const ScCompiler::Convention* pConv = ScCompiler::GetRefConvention(
+            FormulaGrammar::extractRefConvention( GetGrammar()));
+    assert(pConv);
+    return pConv ? pConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR) : '.';
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
