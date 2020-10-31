@@ -862,9 +862,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         tmp.push_back(aRow);
 
-        // Binary (CHAR)
-        // It is distinguished from Text type by its character set
-        aRow[1] = new ORowSetValueDecorator(OUString("CHAR"));
+        // Binary (CHAR); we use the Firebird synonym CHARACTER
+        // to fool LO into seeing it as different types.
+        // It is distinguished from Text type by its character set OCTETS;
+        // that will be added by Tables::createStandardColumnPart
+        aRow[1] = new ORowSetValueDecorator(OUString("CHARACTER"));
         aRow[2] = new ORowSetValueDecorator(DataType::BINARY);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(32765)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
@@ -875,7 +877,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         tmp.push_back(aRow);
 
         // Varbinary (VARCHAR)
-        aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR"));
+        aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR CHARACTER SET OCTETS"));
         aRow[2] = new ORowSetValueDecorator(DataType::VARBINARY);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(32765)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
@@ -883,7 +885,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
                 sal_Int16(ColumnSearch::NONE)); // Searchable
 
         // Clob (SQL_BLOB)
-        aRow[1] = new ORowSetValueDecorator(OUString("BLOB")); // BLOB, with subtype 1
+        aRow[1] = new ORowSetValueDecorator(OUString("BLOB SUB_TYPE TEXT")); // BLOB, with subtype 1
         aRow[2] = new ORowSetValueDecorator(DataType::CLOB);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(2147483647)); // Precision = max length
         aRow[6] = new ORowSetValueDecorator(); // Create Params
@@ -896,6 +898,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
 
         // Longvarbinary (SQL_BLOB)
         // Distinguished from simple blob with a user-defined subtype.
+        aRow[1] = new ORowSetValueDecorator(OUString("BLOB SUB_TYPE " + OUString::number(static_cast<short>(BlobSubtype::Image))) ); // BLOB, with subtype 0
         aRow[2] = new ORowSetValueDecorator(DataType::LONGVARBINARY);
         tmp.push_back(aRow);
 
@@ -1002,7 +1005,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         tmp.push_back(aRow);
 
         // SQL_BLOB
-        aRow[1] = new ORowSetValueDecorator(OUString("BLOB"));
+        aRow[1] = new ORowSetValueDecorator(OUString("BLOB SUB_TYPE BINARY"));
         aRow[2] = new ORowSetValueDecorator(DataType::BLOB);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(0)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(); // Create Params
