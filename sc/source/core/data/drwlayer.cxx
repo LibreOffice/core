@@ -952,7 +952,7 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
             lcl_SetLogicRectFromAnchor(pObj, rNoRotatedAnchor, pDoc);
         }
     }
-    else // aAnchorType == SCA_CELL, other types will not occure here.
+    else // aAnchorType == SCA_CELL, other types will not occur here.
     {
         // XML has no end cell address in this case. We generate it from position.
         UpdateCellAnchorFromPositionEnd(*pObj, rNoRotatedAnchor, *pDoc, nTab1,
@@ -964,7 +964,7 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
     rNoRotatedAnchor.setShapeRect(GetDocument(), pObj->GetLogicRect(), true);
 
     // Start and end addresses and offsets in rData refer to the actual snap rectangle of the
-    // shape. We initialize them here based on the "full" sized object. Adaption to reduced size
+    // shape. We initialize them here based on the "full" sized object. Adaptation to reduced size
     // (by hidden row/col) is done later in RecalcPos.
     GetCellAnchorFromPosition(pObj->GetSnapRect(), rData, *pDoc, nTab1, false /*bHiddenAsZero*/);
 
@@ -976,11 +976,11 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
             || pDoc->ColHidden(rData.maStart.Col(), rData.maStart.Tab())))
         pObj->SetVisible(false);
 
-    // Set visibiliy. ToDo: Really used?
+    // Set visibility. ToDo: Really used?
     rNoRotatedAnchor.setShapeRect(GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
 
     // And set maShapeRect in rData. It stores not only the current rectangles, but currently,
-    // existance of maShapeRect is the flag for initialization is done.
+    // existence of maShapeRect is the flag for initialization is done.
     rData.setShapeRect(GetDocument(), pObj->GetSnapRect(), pObj->IsVisible());
 
     pObj->getSdrModelFromSdrObject().setLock(bWasLocked);
