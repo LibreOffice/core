@@ -54,18 +54,16 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_USESYSTEMFILEDIALOG      3
 #define PROPERTYNAME_ICONTHEME              "SymbolStyle"
 #define PROPERTYHANDLE_SYMBOLSTYLE              4
-#define PROPERTYNAME_USESYSTEMPRINTDIALOG   "UseSystemPrintDialog"
-#define PROPERTYHANDLE_USESYSTEMPRINTDIALOG     5
 #define PROPERTYNAME_SHOWLINKWARNINGDIALOG  "ShowLinkWarningDialog"
-#define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG    6
+#define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG    5
 #define PROPERTYNAME_DISABLEUICUSTOMIZATION "DisableUICustomization"
-#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   7
+#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   6
 #define PROPERTYNAME_MACRORECORDERMODE       "MacroRecorderMode"
-#define PROPERTYHANDLE_MACRORECORDERMODE        8
+#define PROPERTYHANDLE_MACRORECORDERMODE        7
 #define PROPERTYNAME_SIDEBARICONSIZE        "SidebarIconSize"
-#define PROPERTYHANDLE_SIDEBARICONSIZE          9
+#define PROPERTYHANDLE_SIDEBARICONSIZE          8
 #define PROPERTYNAME_NOTEBOOKBARICONSIZE    "NotebookbarIconSize"
-#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      10
+#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      9
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
@@ -84,8 +82,6 @@ private:
     bool        m_bIsSymbolsStyleRO;
     sal_Int16   m_nToolboxStyle;
     bool        m_bIsToolboxStyleRO;
-    bool        m_bUseSystemPrintDialog;
-    bool        m_bIsUseSystemPrintDialogRO;
     bool        m_bShowLinkWarningDialog;
     bool        m_bIsShowLinkWarningDialogRO;
     bool        m_bDisableUICustomization;
@@ -186,12 +182,6 @@ public:
         // translate from VCL settings
         void SetToolboxStyle( sal_Int16 nStyle );
 
-        bool UseSystemPrintDialog() const
-        { return m_bUseSystemPrintDialog; }
-
-        void SetUseSystemPrintDialog( bool bSet )
-        {  m_bUseSystemPrintDialog = bSet; SetModified(); }
-
         bool ShowLinkWarningDialog() const
         { return m_bShowLinkWarningDialog; }
 
@@ -241,8 +231,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsSymbolsStyleRO( false )
     , m_nToolboxStyle( 1 )
     , m_bIsToolboxStyleRO( false )
-    , m_bUseSystemPrintDialog( false )
-    , m_bIsUseSystemPrintDialogRO( false )
     , m_bShowLinkWarningDialog( true )
     , m_bIsShowLinkWarningDialogRO( false )
     , m_bMacroRecorderMode( false )
@@ -328,16 +316,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                     OSL_FAIL("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
                 }
                 m_bIsUseSystemFileDialogRO = seqRO[nProperty];
-                break;
-            }
-
-            case PROPERTYHANDLE_USESYSTEMPRINTDIALOG :
-            {
-                if( !(seqValues[nProperty] >>= m_bUseSystemPrintDialog) )
-                {
-                    OSL_FAIL("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
-                }
-                m_bIsUseSystemPrintDialogRO = seqRO[nProperty];
                 break;
             }
 
@@ -452,13 +430,6 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
                                                             {
                                                                 OSL_FAIL("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
-                                                            }
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_USESYSTEMPRINTDIALOG     :   {
-                                                            if( !(seqValues[nProperty] >>= m_bUseSystemPrintDialog) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
                                                             }
                                                         }
                                                     break;
@@ -640,13 +611,6 @@ void SvtMiscOptions_Impl::ImplCommit()
                 break;
             }
 
-            case PROPERTYHANDLE_USESYSTEMPRINTDIALOG :
-            {
-                if ( !m_bIsUseSystemPrintDialogRO )
-                    seqValues[nProperty] <<= m_bUseSystemPrintDialog;
-                break;
-            }
-
             case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG :
             {
                 if ( !m_bIsShowLinkWarningDialogRO )
@@ -682,7 +646,6 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_TOOLBOXSTYLE,
         PROPERTYNAME_USESYSTEMFILEDIALOG,
         PROPERTYNAME_ICONTHEME,
-        PROPERTYNAME_USESYSTEMPRINTDIALOG,
         PROPERTYNAME_SHOWLINKWARNINGDIALOG,
         PROPERTYNAME_DISABLEUICUSTOMIZATION,
         PROPERTYNAME_MACRORECORDERMODE,
@@ -817,16 +780,6 @@ sal_Int16 SvtMiscOptions::GetToolboxStyle() const
 void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
 {
     m_pImpl->SetToolboxStyle( nStyle );
-}
-
-bool SvtMiscOptions::UseSystemPrintDialog() const
-{
-    return m_pImpl->UseSystemPrintDialog();
-}
-
-void SvtMiscOptions::SetUseSystemPrintDialog( bool bEnable )
-{
-    m_pImpl->SetUseSystemPrintDialog( bEnable );
 }
 
 bool SvtMiscOptions::ShowLinkWarningDialog() const
