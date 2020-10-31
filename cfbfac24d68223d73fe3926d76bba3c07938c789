@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75aa323d_15161613",
+        "filename": "connectivity/source/drivers/firebird/Util.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2020-10-31T18:48:14Z",
+      "side": 1,
+      "message": "This should be \"BLOB SUB_TYPE\" + OUString::number(static_cast\u003cshort\u003e(BlobSubtype::Image)",
+      "range": {
+        "startLine": 224,
+        "startChar": 19,
+        "endLine": 224,
+        "endChar": 34
+      },
+      "revId": "cfbfac24d68223d73fe3926d76bba3c07938c789",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

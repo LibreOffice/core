@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3687590d_12208664",
+        "filename": "connectivity/source/drivers/firebird/Tables.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2020-10-31T18:48:14Z",
+      "side": 0,
+      "message": "This whole if block can be deleted, it doesn\u0027t do anything anymore.",
+      "revId": "88267a7de0b65a2c784931ffc0c1408b82495da9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
