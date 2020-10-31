@@ -677,6 +677,18 @@ DECLARE_WW8EXPORT_TEST(testTdf134570, "tdf134570.doc")
     }
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf136814, "tdf136814.odt")
+{
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    sal_Int32 nBorderDistance = static_cast<sal_Int32>(106);
+
+    CPPUNIT_ASSERT_EQUAL(nBorderDistance, getProperty<sal_Int32>(xStyle, "TopBorderDistance"));
+    CPPUNIT_ASSERT_EQUAL(nBorderDistance, getProperty<sal_Int32>(xStyle, "RightBorderDistance"));
+    CPPUNIT_ASSERT_EQUAL(nBorderDistance, getProperty<sal_Int32>(xStyle, "BottomBorderDistance"));
+    CPPUNIT_ASSERT_EQUAL(nBorderDistance, getProperty<sal_Int32>(xStyle, "LeftBorderDistance"));
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4365,8 +4365,7 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
     }
 
     // BRC.dptSpace
-    sal_uInt16 nLDist = nDist;
-    nLDist /= 20;               // unit of measurement: pt
+    sal_uInt16 nLDist = rtl::math::round(nDist / 20.0); // unit of measurement: pt
     if( nLDist > 0x1f )
         nLDist = 0x1f;
 
