@@ -72,7 +72,6 @@ void DecoToolBox::calcMinSize()
             aTbx->InsertItem( nId, GetItemImage( nId ) );
         }
     }
-    aTbx->SetOutStyle( TOOLBOX_STYLE_FLAT );
     maMinSize = aTbx->CalcWindowSizePixel();
 
     aTbx.disposeAndClear();
@@ -129,7 +128,6 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
 
     m_aCloseBtn->maImage = Image(StockImage::Yes, SV_RESID_BITMAP_CLOSEDOC);
 
-    m_aCloseBtn->SetOutStyle(TOOLBOX_STYLE_FLAT);
     m_aCloseBtn->SetBackground();
     m_aCloseBtn->SetPaintTransparent(true);
     m_aCloseBtn->SetParentClipMode(ParentClipMode::NoClip);

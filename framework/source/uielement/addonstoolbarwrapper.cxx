@@ -118,7 +118,6 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
         {
             // Fill toolbar with container contents
             pToolBarManager->FillAddonToolbar( m_aConfigData );
-            pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
             pToolBar->EnableCustomize();
             ::Size aActSize( pToolBar->GetSizePixel() );
             ::Size aSize( pToolBar->CalcWindowSizePixel() );
