@@ -105,13 +105,6 @@ namespace {
 // Collation may treat parentheses differently.
 const sal_Unicode cParenthesesReplacement = 0x0001;
 
-sal_Unicode lcl_getSheetSeparator(ScDocument& rDoc)
-{
-    const ScCompiler::Convention* pConv = ScCompiler::GetRefConvention(
-            FormulaGrammar::extractRefConvention( rDoc.GetGrammar()));
-    return pConv ? pConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR) : '.';
-}
-
 ScTypedCaseStrSet::const_iterator findText(
     const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator const & itPos,
     const OUString& rStart, OUString& rResult, bool bBack)
@@ -311,7 +304,7 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
         return;
     ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
-    const sal_Unicode cSheetSep = lcl_getSheetSeparator(rDoc);
+    const sal_Unicode cSheetSep = rDoc.GetSheetSeparator();
 
     OUString aDelimiters = ScEditUtil::ModifyDelimiters(" !~\"");
         // delimiters (in addition to ScEditUtil): only characters that are
@@ -1064,7 +1057,7 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
 
     ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
     const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
-    const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDocSh->GetDocument());
+    const sal_Unicode cSheetSep = pDocSh->GetDocument().GetSheetSeparator();
     FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
     bool bFound = false;
     while( !bFound )
