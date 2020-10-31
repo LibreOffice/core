@@ -21,6 +21,7 @@
 #include <iostream>
 #include <rtl/instance.hxx>
 #include <officecfg/Office/BasicIDE.hxx>
+#include <officecfg/Office/Common.hxx>
 
 namespace
 {
@@ -39,7 +40,7 @@ CodeCompleteOptions::CodeCompleteOptions()
 
 bool CodeCompleteOptions::IsCodeCompleteOn()
 {
-    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsCodeCompleteOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bIsCodeCompleteOn;
 }
 
 void CodeCompleteOptions::SetCodeCompleteOn( bool b )
@@ -49,7 +50,7 @@ void CodeCompleteOptions::SetCodeCompleteOn( bool b )
 
 bool CodeCompleteOptions::IsExtendedTypeDeclaration()
 {
-    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bExtendedTypeDeclarationOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bExtendedTypeDeclarationOn;
 }
 
 void CodeCompleteOptions::SetExtendedTypeDeclaration( bool b )
@@ -59,7 +60,7 @@ void CodeCompleteOptions::SetExtendedTypeDeclaration( bool b )
 
 bool CodeCompleteOptions::IsProcedureAutoCompleteOn()
 {
-    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsProcedureAutoCompleteOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bIsProcedureAutoCompleteOn;
 }
 
 void CodeCompleteOptions::SetProcedureAutoCompleteOn( bool b )
@@ -69,7 +70,7 @@ void CodeCompleteOptions::SetProcedureAutoCompleteOn( bool b )
 
 bool CodeCompleteOptions::IsAutoCloseQuotesOn()
 {
-    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCloseQuotesOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bIsAutoCloseQuotesOn;
 }
 
 void CodeCompleteOptions::SetAutoCloseQuotesOn( bool b )
@@ -79,7 +80,7 @@ void CodeCompleteOptions::SetAutoCloseQuotesOn( bool b )
 
 bool CodeCompleteOptions::IsAutoCloseParenthesisOn()
 {
-    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCloseParenthesisOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bIsAutoCloseParenthesisOn;
 }
 
 void CodeCompleteOptions::SetAutoCloseParenthesisOn( bool b )
@@ -89,7 +90,7 @@ void CodeCompleteOptions::SetAutoCloseParenthesisOn( bool b )
 
 bool CodeCompleteOptions::IsAutoCorrectOn()
 {
-    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCorrectOn;
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bIsAutoCorrectOn;
 }
 
 void CodeCompleteOptions::SetAutoCorrectOn( bool b )

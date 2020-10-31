@@ -116,7 +116,6 @@
 #include <comphelper/extract.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
-#include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -155,6 +154,7 @@
 #include <memory>
 #include <vector>
 #include <vbahelper/vbaaccesshelper.hxx>
+#include <officecfg/Office/Common.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -4327,8 +4327,7 @@ void ScXMLExport::WriteDataStream()
     if (!pDoc)
         return;
 
-    SvtMiscOptions aMiscOptions;
-    if (!aMiscOptions.IsExperimentalMode())
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
         // Export this only in experimental mode.
         return;
 

@@ -13,8 +13,8 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <cppunit/extensions/HelperMacros.h>
-#include <svtools/miscopt.hxx>
 #include <com/sun/star/util/Time.hpp>
+#include <officecfg/Office/Common.hxx>
 
 class Tdf119625Test : public DBTestBase
 {
@@ -57,10 +57,13 @@ const expect_t expect[] = { { 0, 15, 10, 10 }, { 1, 23, 30, 30 }, { 2, 5, 0, 0 }
 
 void Tdf119625Test::testTime()
 {
-    SvtMiscOptions aMiscOptions;
-    bool oldValue = aMiscOptions.IsExperimentalMode();
-
-    aMiscOptions.SetExperimentalMode(true);
+    bool oldValue = officecfg::Office::Common::Misc::ExperimentalMode::get();
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::ExperimentalMode::set(true, xChanges);
+        xChanges->commit();
+    }
 
     // the migration requires the file to be writable
     utl::TempFile const temp(createTempCopy("tdf119625.odb"));
@@ -105,7 +108,12 @@ void Tdf119625Test::testTime()
 
     closeDocument(uno::Reference<lang::XComponent>(xDocument, uno::UNO_QUERY));
     if (!oldValue)
-        aMiscOptions.SetExperimentalMode(false);
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::ExperimentalMode::set(false, xChanges);
+        xChanges->commit();
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Tdf119625Test);

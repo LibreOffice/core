@@ -22,6 +22,7 @@
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sidebar/Tools.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/UI/Sidebar.hxx>
 #include <unotools/confignode.hxx>
 #include <comphelper/lok.hxx>
@@ -99,8 +100,7 @@ css::uno::Sequence<OUString> BuildContextList (const ContextList& rContextList)
 ResourceManager::ResourceManager()
     : maDecks(),
       maPanels(),
-      maProcessedApplications(),
-      maMiscOptions()
+      maProcessedApplications()
 {
     ReadDeckList();
     ReadPanelList();
@@ -131,7 +131,7 @@ std::shared_ptr<DeckDescriptor> ResourceManager::ImplGetDeckDescriptor(const OUS
 {
     for (auto const& deck : maDecks)
     {
-        if (deck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+        if (deck->mbExperimental && !officecfg::Office::Common::Misc::ExperimentalMode::get())
             continue;
         if (deck->msId == rsDeckId)
             return deck;
@@ -170,7 +170,7 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
     std::multimap<sal_Int32,DeckContextDescriptor> aOrderedIds;
     for (auto const& deck : maDecks)
     {
-        if (deck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+        if (deck->mbExperimental && !officecfg::Office::Common::Misc::ExperimentalMode::get())
             continue;
 
         const DeckDescriptor& rDeckDescriptor (*deck);
@@ -207,7 +207,7 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
     for (auto const& panel : maPanels)
     {
         const PanelDescriptor& rPanelDescriptor (*panel);
-        if (rPanelDescriptor.mbExperimental && !maMiscOptions.IsExperimentalMode())
+        if (rPanelDescriptor.mbExperimental && !officecfg::Office::Common::Misc::ExperimentalMode::get())
             continue;
         if ( rPanelDescriptor.msDeckId != sDeckId )
             continue;
