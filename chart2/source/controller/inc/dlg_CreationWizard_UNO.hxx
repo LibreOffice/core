@@ -30,8 +30,6 @@
 
 #include "dlg_CreationWizard.hxx"
 #include <tools/link.hxx>
-#include <vcl/vclptr.hxx>
-#include <vcl/vclevent.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::frame { class XModel; }

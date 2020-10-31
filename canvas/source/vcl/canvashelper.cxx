@@ -25,7 +25,6 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/vector/b2dsize.hxx>

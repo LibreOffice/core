@@ -19,8 +19,6 @@
 
 #include <comphelper/attributelist.hxx>
 
-#include <vector>
-
 using namespace osl;
 using namespace com::sun::star;
 

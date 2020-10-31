@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -42,8 +41,6 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>

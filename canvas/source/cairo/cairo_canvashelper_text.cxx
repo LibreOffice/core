@@ -30,7 +30,6 @@
 
 #include <canvas/canvastools.hxx>
 #include <verifyinput.hxx>
-#include <cairo.h>
 
 #include "cairo_canvasfont.hxx"
 #include "cairo_canvashelper.hxx"

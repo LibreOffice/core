@@ -19,6 +19,12 @@ excludelist:
     # Base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XOfficeInstallationDirectories.hpp
+    comphelper/qa/unit/test_guards.cxx:
+        # Keep for system-cppunit; see also commit 456d61ec526e250fd1af894e109d5914ac9c9e6e
+    - unotest/bootstrapfixturebase.hxx
+    comphelper/source/container/embeddedobjectcontainer.cxx:
+    # Keep for OSL_DEBUG_LEVEL > 1
+    - com/sun/star/container/XNameAccess.hpp
     comphelper/source/container/IndexedPropertyValuesContainer.cxx:
     # Needed for typedef
     - com/sun/star/beans/PropertyValue.hpp
@@ -37,6 +43,9 @@ excludelist:
     comphelper/source/misc/fileurl.cxx:
     # Needed for linker visibility
     - comphelper/fileurl.hxx
+    comphelper/source/misc/AccessibleImplementationHelper.cxx:
+    # Needed for template
+    - com/sun/star/uno/Sequence.hxx
     comphelper/source/misc/getexpandeduri.cxx:
     # Needed for linker visibility
     - comphelper/getexpandeduri.hxx
@@ -46,6 +55,9 @@ excludelist:
     comphelper/source/misc/hash.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
+    comphelper/source/misc/instancelocker.cxx:
+    # Needed for template
+    - com/sun/star/embed/XActionsApproval.hpp
     include/comphelper/interaction.hxx:
     # Stop warnings about include/
     - com/sun/star/task/XInteractionApprove.hpp

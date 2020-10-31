@@ -33,7 +33,6 @@
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <typelib/typedescription.h>

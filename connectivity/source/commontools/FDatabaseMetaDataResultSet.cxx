@@ -25,8 +25,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
 #include <o3tl/unreachable.hxx>

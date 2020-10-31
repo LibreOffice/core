@@ -60,7 +60,6 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
@@ -69,7 +68,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 
 #include <unotools/localedatawrapper.hxx>

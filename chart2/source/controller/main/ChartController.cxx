@@ -20,8 +20,6 @@
 #include <memory>
 #include <sal/config.h>
 
-#include <set>
-
 #include <ChartController.hxx>
 #include <servicenames.hxx>
 #include <ResId.hxx>

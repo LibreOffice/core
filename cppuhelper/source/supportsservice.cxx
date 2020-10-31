@@ -16,7 +16,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
 
 bool cppu::supportsService(
     css::lang::XServiceInfo * implementation, OUString const & name)

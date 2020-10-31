@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <algorithm>
-#include <vector>
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>

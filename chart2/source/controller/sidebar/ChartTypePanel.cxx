@@ -22,7 +22,6 @@
 
 #include <ChartController.hxx>
 #include <ChartModelHelper.hxx>
-#include <ChartResourceGroupDlgs.hxx>
 #include <ChartResourceGroups.hxx>
 #include <ChartTypeDialogController.hxx>
 #include <DiagramHelper.hxx>

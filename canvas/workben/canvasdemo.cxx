@@ -26,7 +26,6 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/FillRule.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
@@ -35,15 +34,13 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclmain.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 
 using namespace ::com::sun::star;

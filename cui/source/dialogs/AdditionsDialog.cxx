@@ -10,6 +10,8 @@
 #include <config_folders.h>
 
 #include <AdditionsDialog.hxx>
+#include <dialmgr.hxx>
+#include <strings.hrc>
 
 #include <sal/log.hxx>
 
@@ -35,6 +37,7 @@
 #include <ucbhelper/content.hxx>
 
 #include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>

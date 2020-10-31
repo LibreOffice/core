@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <rtl/math.hxx>
 
 namespace chart
 {

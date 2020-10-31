@@ -25,7 +25,6 @@
 #include <tools/link.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <about.hxx>
 #include <cfgutil.hxx>
 #include <cui/cuicharmap.hxx>
 #include <cuifmsearch.hxx>
@@ -56,7 +55,6 @@
 #include <SpellDialog.hxx>
 #include <srchxtra.hxx>
 #include <thesdlg.hxx>
-#include <tipofthedaydlg.hxx>
 #include <transfrm.hxx>
 #include <zoom.hxx>
 #include <AdditionsDialog.hxx>

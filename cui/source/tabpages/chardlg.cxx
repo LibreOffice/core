@@ -38,7 +38,6 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/kernitem.hxx>
-#include <editeng/blinkitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/colritem.hxx>

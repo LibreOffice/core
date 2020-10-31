@@ -20,7 +20,6 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
-#include <vcl/metric.hxx>
 
 #include <map>
 #include <set>

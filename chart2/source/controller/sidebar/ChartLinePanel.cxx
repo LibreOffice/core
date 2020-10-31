@@ -9,15 +9,11 @@
 
 #include "ChartLinePanel.hxx"
 
-#include <PropertyHelper.hxx>
 #include <ChartController.hxx>
 
-#include <svx/xlineit0.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlinjoit.hxx>
-#include <svx/xlndsit.hxx>
 #include <svx/xlntrit.hxx>
-#include <svx/unomid.hxx>
 
 #include <svx/linectrl.hxx>
 #include <svx/tbcontrl.hxx>

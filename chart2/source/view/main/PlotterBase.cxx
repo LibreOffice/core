@@ -20,7 +20,6 @@
 #include <PlotterBase.hxx>
 #include <PlottingPositionHelper.hxx>
 #include <ShapeFactory.hxx>
-#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 
 namespace chart

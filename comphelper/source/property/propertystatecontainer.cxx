@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/propertystatecontainer.hxx>
-#include <rtl/ustrbuf.hxx>
 
 
 namespace comphelper

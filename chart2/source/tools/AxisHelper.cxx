@@ -41,7 +41,6 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/lang/XServiceName.hpp>

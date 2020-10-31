@@ -25,6 +25,7 @@
 #include <svx/frmdirlbox.hxx>
 #include <i18nutil/paper.hxx>
 #include <svx/flagsdef.hxx>
+#include <vcl/print.hxx>
 
 // class SvxPageDescPage -------------------------------------------------
 /*

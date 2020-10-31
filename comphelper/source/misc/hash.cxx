@@ -9,7 +9,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <comphelper/hash.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/alloc.h>

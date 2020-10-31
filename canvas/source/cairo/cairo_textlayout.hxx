@@ -29,7 +29,6 @@
 
 #include <vcl/outdev.hxx>
 
-#include <vcl/cairo.hxx>
 #include "cairo_canvasfont.hxx"
 
 

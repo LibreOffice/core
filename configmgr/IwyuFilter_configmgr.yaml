@@ -13,3 +13,43 @@ excludelist:
     configmgr/source/dconf.cxx:
     # Generic wrapper for dconf
     - dconf/dconf.h
+    configmgr/source/broadcaster.cxx:
+    # Needed for template
+    - com/sun/star/beans/XPropertiesChangeListener.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/container/XContainerListener.hpp
+    - com/sun/star/lang/XEventListener.hpp
+    - com/sun/star/util/XChangesListener.hpp
+    configmgr/source/childaccess.cxx:
+    # Actually used
+    - vector
+    - com/sun/star/uno/XInterface.hpp
+    configmgr/source/configurationprovider.cxx:
+    # Actually used
+    - com/sun/star/uno/XInterface.hpp
+    configmgr/source/components.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    configmgr/source/access.cxx:
+    # Actually used
+    - vector
+    - com/sun/star/beans/XPropertiesChangeListener.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/beans/XVetoableChangeListener.hpp
+    - com/sun/star/container/XContainerListener.hpp
+    - com/sun/star/lang/XEventListener.hpp
+    - com/sun/star/uno/XInterface.hpp
+    configmgr/source/parsemanager.cxx:
+    # Actually used
+    - set
+    configmgr/source/partial.cxx:
+    # Actually used
+    - set
+    configmgr/source/rootaccess.cxx:
+    # Actually used
+    - vector
+    - com/sun/star/util/ElementChange.hpp
+    - com/sun/star/util/XChangesListener.hpp
+    configmgr/source/xcdparser.cxx:
+    # Actually used
+    - set

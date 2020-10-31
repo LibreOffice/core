@@ -72,7 +72,6 @@
 #include <toolkit/awt/vclxmenu.hxx>
 
 #include <sfx2/viewsh.hxx>
-#include <sfx2/ipclient.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
@@ -87,7 +86,6 @@
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
-#include <sfx2/lokhelper.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <sfx2/dispatch.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

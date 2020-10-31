@@ -18,6 +18,9 @@ excludelist:
     connectivity/source/commontools/dbexception.cxx:
     # Actually used
     - com/sun/star/sdb/SQLErrorEvent.hpp
+    connectivity/source/commontools/dbtools2.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XDataSource.hpp
     connectivity/source/commontools/paramwrapper.cxx:
     # Actually used
     - com/sun/star/sdbc/XParameters.hpp
@@ -45,6 +48,9 @@ excludelist:
     connectivity/source/drivers/file/FCatalog.cxx:
     # Actually used
     - com/sun/star/sdbc/XRow.hpp
+    connectivity/source/drivers/file/FNumericFunctions.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     connectivity/source/drivers/hsqldb/HStorageAccess.cxx:
     # Needed for HSQLDB_DBG
     - accesslog.hxx
@@ -65,6 +71,9 @@ excludelist:
     connectivity/source/drivers/mork/MDriver.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
+    connectivity/source/drivers/mork/MColumnAlias.cxx:
+    # Needed for indirect dtor
+    - com/sun/star/container/XHierarchicalNameAccess.hpp
     connectivity/source/drivers/mysql_jdbc/YDriver.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp

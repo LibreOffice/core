@@ -26,7 +26,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/style/XStyleSupplier.hpp>
-#include "charttoolsdllapi.hxx"
 
 #include <memory>
 

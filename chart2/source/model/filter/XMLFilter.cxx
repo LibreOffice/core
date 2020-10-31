@@ -24,7 +24,6 @@
 #include <unotools/saveopt.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
@@ -35,7 +34,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
-#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -51,7 +49,6 @@
 #include <com/sun/star/document/GraphicStorageHandler.hpp>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
-#include <xmloff/xmlnamespace.hxx>
 
 using namespace ::com::sun::star;
 

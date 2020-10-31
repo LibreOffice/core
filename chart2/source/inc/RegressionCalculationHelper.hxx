@@ -20,8 +20,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <rtl/math.hxx>
-
+#include <cmath>
 #include <utility>
 #include <vector>
 

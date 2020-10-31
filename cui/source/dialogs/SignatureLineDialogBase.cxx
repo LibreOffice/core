@@ -11,11 +11,7 @@
 
 #include <utility>
 
-#include <config_folders.h>
 #include <vcl/weld.hxx>
-#include <sal/log.hxx>
-#include <rtl/bootstrap.hxx>
-#include <tools/stream.hxx>
 
 using namespace css;
 using namespace css::uno;

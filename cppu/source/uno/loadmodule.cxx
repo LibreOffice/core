@@ -26,7 +26,6 @@
 #include <osl/module.hxx>
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/uri.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 

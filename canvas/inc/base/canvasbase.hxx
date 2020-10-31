@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/rendering/TextDirection.hpp>
-#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <verifyinput.hxx>
 

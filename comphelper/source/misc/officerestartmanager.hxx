@@ -22,6 +22,7 @@
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XCallback.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>

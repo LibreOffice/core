@@ -27,9 +27,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <tools/diagnose_ex.h>
-#include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
 
 namespace chart

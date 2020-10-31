@@ -26,8 +26,8 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <tools/lineend.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 SvPasteObjectDialog::SvPasteObjectDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/pastespecial.ui", "PasteSpecialDialog")

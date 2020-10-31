@@ -30,7 +30,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <algorithm>
-#include <iterator>
 
 namespace com::sun::star::uno { class XComponentContext; }
 

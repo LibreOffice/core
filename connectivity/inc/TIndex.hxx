@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <connectivity/dbtoolsdllapi.hxx>
 #include "sdbcx/VIndex.hxx"
 
 namespace connectivity
