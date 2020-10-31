@@ -1267,7 +1267,7 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
                 n == nEndNd ? nEndCnt : pNd->GetText().getLength(),
                 RES_FMT_CHG);
 
-            pNd->ModifyNotification(&aHt, &aHt);
+            pNd->TriggerNodeUpdate(sw::LegacyModifyHint(&aHt, &aHt));
 
             // SwUpdateAttr must be handled first, otherwise indexes are off
             if (GetType() == RedlineType::Delete)
