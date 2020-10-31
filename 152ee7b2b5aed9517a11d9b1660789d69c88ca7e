@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9d88df4_f1717169",
+        "filename": "cppu/qa/cppumaker/types.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-31T20:42:23Z",
+      "side": 1,
+      "message": "this is an IDL file, not a c++ file, stdint.h does not work here at all",
+      "revId": "152ee7b2b5aed9517a11d9b1660789d69c88ca7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe27ccb2_916ba90c",
+        "filename": "include/sal/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-31T20:42:23Z",
+      "side": 1,
+      "message": "we can probably do this here, but this file is __extremely__ sensitive because it is consumed both internally, by own our code, and exported for use by C++ extension code.\nAs such, we have to be careful about not breaking code that is consuming this file in environments outside our control.",
+      "revId": "152ee7b2b5aed9517a11d9b1660789d69c88ca7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
