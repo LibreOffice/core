@@ -786,8 +786,7 @@ IMPL_LINK_NOARG( SwDoc, DoUpdateModifiedOLE, Timer *, void )
     ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
                      0, pNodes->size(), GetDocShell());
     getIDocumentLayoutAccess().GetCurrentLayout()->StartAllAction();
-    SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
-
+    SwUpdateAttr aHint(0,0,0);
     for( SwOLENodes::size_type i = 0; i < pNodes->size(); ++i )
     {
         ::SetProgressState( i, GetDocShell() );
@@ -799,7 +798,7 @@ IMPL_LINK_NOARG( SwDoc, DoUpdateModifiedOLE, Timer *, void )
         // If it doesn't want to be informed
         if( pOLENd->GetOLEObj().GetOleRef().is() ) // Broken?
         {
-            pOLENd->ModifyNotification( &aMsgHint, &aMsgHint );
+            pOLENd->UpdateAttr(aHint);
         }
     }
     getIDocumentLayoutAccess().GetCurrentLayout()->EndAllAction();
