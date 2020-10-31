@@ -22,6 +22,7 @@
 
 #include <editeng/editids.hrc>
 #include <editeng/svxacorr.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
@@ -94,6 +95,13 @@ bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 #endif
             ;
 }
+
+bool SwViewOption::IsShowOutlineContentVisibilityButton() const
+{
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() &&
+        (m_nCoreOptions & ViewOptFlags1::ShowOutlineContentVisibilityButton);
+}
+
 
 void SwViewOption::DrawRect( OutputDevice *pOut,
                              const SwRect &rRect, ::Color nCol )

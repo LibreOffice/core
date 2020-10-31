@@ -21,8 +21,8 @@
 
 #include <unotools/confignode.hxx>
 #include <map>
+#include <vector>
 #include <set>
-#include <svtools/miscopt.hxx>
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XModel; }
@@ -106,8 +106,6 @@ private:
     PanelContainer maPanels;
     mutable std::set<OUString> maProcessedApplications;
     std::map<OUString, OUString> maLastActiveDecks;
-
-    SvtMiscOptions maMiscOptions;
 
     void ReadDeckList();
     void ReadPanelList();
