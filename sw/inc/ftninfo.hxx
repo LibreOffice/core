@@ -72,6 +72,7 @@ public:
 
     void SetPrefix(const OUString& rSet) { m_sPrefix = rSet; }
     void SetSuffix(const OUString& rSet) { m_sSuffix = rSet; }
+    void UpdateFormatOrAttr();
 };
 
 enum SwFootnotePos
