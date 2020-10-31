@@ -107,8 +107,9 @@ const sal_Unicode cParenthesesReplacement = 0x0001;
 
 sal_Unicode lcl_getSheetSeparator(ScDocument& rDoc)
 {
-    ScCompiler aComp(rDoc, ScAddress(), rDoc.GetGrammar());
-    return aComp.GetNativeAddressSymbol(ScCompiler::Convention::SHEET_SEPARATOR);
+    const ScCompiler::Convention* pConv = ScCompiler::GetRefConvention(
+            FormulaGrammar::extractRefConvention( rDoc.GetGrammar()));
+    return pConv ? pConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR) : '.';
 }
 
 ScTypedCaseStrSet::const_iterator findText(
