@@ -158,7 +158,6 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
         {
             // Fill toolbar with container contents
             pToolBarManager->FillToolbar( m_xConfigData );
-            pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
             pToolBar->EnableCustomize();
             ::Size aActSize( pToolBar->GetSizePixel() );
             ::Size aSize( pToolBar->CalcWindowSizePixel() );
@@ -173,7 +172,6 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
         m_bPersistent = false;
         if ( pToolBar && pToolBarManager )
         {
-            pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
             pToolBar->EnableCustomize();
             ::Size aActSize( pToolBar->GetSizePixel() );
             ::Size aSize( pToolBar->CalcWindowSizePixel() );

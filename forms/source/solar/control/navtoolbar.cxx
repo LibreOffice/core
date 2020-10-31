@@ -232,7 +232,6 @@ namespace frm
     void NavigationToolBar::implInit( )
     {
         m_pToolbar = VclPtr<ImplNavToolBar>::Create( this );
-        m_pToolbar->SetOutStyle( TOOLBOX_STYLE_FLAT );
         m_pToolbar->Show();
 
         // need the SfxApplication for retrieving information about our

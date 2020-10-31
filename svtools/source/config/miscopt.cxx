@@ -46,16 +46,14 @@ using namespace ::com::sun::star;
 // PROPERTYHANDLE defines must be sequential from zero for Commit/Load
 #define PROPERTYNAME_SYMBOLSET              "SymbolSet"
 #define PROPERTYHANDLE_SYMBOLSET                0
-#define PROPERTYNAME_TOOLBOXSTYLE           "ToolboxStyle"
-#define PROPERTYHANDLE_TOOLBOXSTYLE             1
 #define PROPERTYNAME_ICONTHEME              "SymbolStyle"
-#define PROPERTYHANDLE_SYMBOLSTYLE              2
+#define PROPERTYHANDLE_SYMBOLSTYLE              1
 #define PROPERTYNAME_DISABLEUICUSTOMIZATION "DisableUICustomization"
-#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   3
+#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   2
 #define PROPERTYNAME_SIDEBARICONSIZE        "SidebarIconSize"
-#define PROPERTYHANDLE_SIDEBARICONSIZE          4
+#define PROPERTYHANDLE_SIDEBARICONSIZE          3
 #define PROPERTYNAME_NOTEBOOKBARICONSIZE    "NotebookbarIconSize"
-#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      5
+#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      4
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
@@ -68,8 +66,6 @@ private:
     ToolBoxButtonSize m_nNotebookbarIconSize;
     bool        m_bIsNotebookbarIconSizeRO;
     bool        m_bIsSymbolsStyleRO;
-    sal_Int16   m_nToolboxStyle;
-    bool        m_bIsToolboxStyleRO;
     bool        m_bDisableUICustomization;
     bool        m_bIconThemeWasSetAutomatically;
 
@@ -141,13 +137,6 @@ public:
         bool IconThemeWasSetAutomatically()
         {return m_bIconThemeWasSetAutomatically;}
 
-        // translate to VCL settings ( "0" = 3D, "1" = FLAT )
-        sal_Int16 GetToolboxStyle() const
-        { return m_nToolboxStyle ? TOOLBOX_STYLE_FLAT : 0; }
-
-        // translate from VCL settings
-        void SetToolboxStyle( sal_Int16 nStyle );
-
         void AddListenerLink( const Link<LinkParamNone*,void>& rLink );
         void RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
         void CallListeners();
@@ -182,8 +171,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_nNotebookbarIconSize( ToolBoxButtonSize::DontCare )
     , m_bIsNotebookbarIconSizeRO( false )
     , m_bIsSymbolsStyleRO( false )
-    , m_nToolboxStyle( 1 )
-    , m_bIsToolboxStyleRO( false )
     , m_bIconThemeWasSetAutomatically( false )
 {
     // Use our static list of configuration keys to get his values.
@@ -236,16 +223,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                 } else
                     m_nNotebookbarIconSize = static_cast<ToolBoxButtonSize>(nTmp);
                 m_bIsNotebookbarIconSizeRO = seqRO[nProperty];
-                break;
-            }
-
-            case PROPERTYHANDLE_TOOLBOXSTYLE :
-            {
-                if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
-                {
-                    OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
-                }
-                m_bIsToolboxStyleRO = seqRO[nProperty];
                 break;
             }
 
@@ -326,13 +303,6 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                                 m_nNotebookbarIconSize = static_cast<ToolBoxButtonSize>(nTmp);
                                                         }
                                                     break;
-            case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
-                                                            if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
-                                                            }
-                                                        }
-                                                    break;
             case PROPERTYHANDLE_SYMBOLSTYLE         :   {
                                                             OUString aIconTheme;
                                                             if (seqValues[nProperty] >>= aIconTheme)
@@ -364,13 +334,6 @@ void SvtMiscOptions_Impl::CallListeners()
 {
     for (auto const& elem : aList)
         elem.Call( nullptr );
-}
-
-void SvtMiscOptions_Impl::SetToolboxStyle( sal_Int16 nStyle )
-{
-    m_nToolboxStyle = nStyle ? 1 : 0;
-    SetModified();
-    CallListeners();
 }
 
 void SvtMiscOptions_Impl::SetSymbolsSize( sal_Int16 nSet )
@@ -468,13 +431,6 @@ void SvtMiscOptions_Impl::ImplCommit()
                 break;
             }
 
-            case PROPERTYHANDLE_TOOLBOXSTYLE :
-            {
-                if ( !m_bIsToolboxStyleRO )
-                    seqValues[nProperty] <<= m_nToolboxStyle;
-                break;
-            }
-
             case PROPERTYHANDLE_SYMBOLSTYLE :
             {
                 if ( !m_bIsSymbolsStyleRO ) {
@@ -509,7 +465,6 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
     return Sequence<OUString>
     {
         PROPERTYNAME_SYMBOLSET,
-        PROPERTYNAME_TOOLBOXSTYLE,
         PROPERTYNAME_ICONTHEME,
         PROPERTYNAME_DISABLEUICUSTOMIZATION,
         PROPERTYNAME_SIDEBARICONSIZE,
@@ -614,16 +569,6 @@ void SvtMiscOptions::SetIconTheme(const OUString& iconTheme)
 bool SvtMiscOptions::DisableUICustomization() const
 {
     return m_pImpl->DisableUICustomization();
-}
-
-sal_Int16 SvtMiscOptions::GetToolboxStyle() const
-{
-    return m_pImpl->GetToolboxStyle();
-}
-
-void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
-{
-    m_pImpl->SetToolboxStyle( nStyle );
 }
 
 namespace

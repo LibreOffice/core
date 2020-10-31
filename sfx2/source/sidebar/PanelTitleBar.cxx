@@ -95,7 +95,6 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
             VCLUnoHelper::GetInterface(maToolBox.get()),
             0, true));
     maToolBox->SetController(mnMenuItemIndex, xController);
-    maToolBox->SetOutStyle(TOOLBOX_STYLE_FLAT);
     maToolBox->SetQuickHelpText(
         mnMenuItemIndex,
         SfxResId(SFX_STR_SIDEBAR_MORE_OPTIONS));

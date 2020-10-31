@@ -1376,27 +1376,6 @@ void ToolBox::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
         pItem->maHelpId = rHelpId;
 }
 
-void ToolBox::SetOutStyle( sal_uInt16 nNewStyle )
-{
-    // always force flat looking toolbars since NWF
-    nNewStyle |= TOOLBOX_STYLE_FLAT;
-
-    if ( mnOutStyle == nNewStyle )
-        return;
-
-    mnOutStyle = nNewStyle;
-    ImplDisableFlatButtons();
-
-    // so as to redo the ButtonDevice
-    if ( !(mnOutStyle & TOOLBOX_STYLE_FLAT) )
-    {
-        mnMaxItemWidth  = 1;
-        mnMaxItemHeight = 1;
-    }
-
-    ImplInvalidate( true, true );
-}
-
 // disable key input if all items are disabled
 void ToolBox::ImplUpdateInputEnable()
 {
