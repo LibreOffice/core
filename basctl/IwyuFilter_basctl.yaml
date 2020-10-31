@@ -5,3 +5,6 @@ excludelist:
     # Needed for TypedWhichId defines is basslots.hxx
     - sfx2/dinfdlg.hxx
     - sfx2/minfitem.hxx
+    basctl/source/basicide/baside2b.cxx:
+    # Needed for implicit dtor
+    - com/sun/star/container/XHierarchicalNameAccess.hpp

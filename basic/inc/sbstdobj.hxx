@@ -22,7 +22,6 @@
 #include <basic/sbxobj.hxx>
 #include <vcl/graph.hxx>
 #include "sbxfac.hxx"
-#include <basic/basicdllapi.h>
 
 class SbStdFactory final : public SbxFactory
 {

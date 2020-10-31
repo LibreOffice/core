@@ -27,9 +27,9 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/file.hxx>
-#include <rtl/math.hxx>
 #include <i18nlangtag/lang.h>
 
+#include <cmath>
 #include <vector>
 #include <memory>
 #include <com/sun/star/lang/XComponent.hpp>

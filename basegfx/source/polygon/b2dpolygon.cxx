@@ -25,7 +25,6 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
-#include <algorithm>
 #include <memory>
 #include <vector>
 

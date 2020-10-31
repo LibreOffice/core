@@ -1,6 +1,12 @@
 ---
 assumeFilename: basic/source/classes/global.cxx
 excludelist:
+    basic/source/runtime/dllmgr.hxx:
+    # Needed on WIN
+    - memory
+    basic/qa/cppunit/test_compiler_checks.cxx:
+    # Keep for system-cppunit; see also commit 456d61ec526e250fd1af894e109d5914ac9c9e6e
+    - unotest/bootstrapfixturebase.hxx
     basic/source/runtime/methods.cxx:
     # Needed on WIN
     - o3tl/char16_t2wchar_t.hxx

@@ -18,10 +18,9 @@
  */
 
 
-#include <math.h>
+#include <cmath>
 
 #include <o3tl/temporary.hxx>
-#include <rtl/math.hxx>
 #include <parser.hxx>
 #include <expr.hxx>
 #include <tools/long.hxx>

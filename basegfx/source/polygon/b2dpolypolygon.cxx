@@ -22,7 +22,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
-#include <algorithm>
 
 class ImplB2DPolyPolygon
 {

@@ -20,7 +20,6 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include <basic/basicdllapi.h>
 
 class SbxBase;
 class SbxObject;

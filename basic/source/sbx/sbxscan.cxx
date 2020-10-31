@@ -44,7 +44,7 @@
 #include <strings.hrc>
 
 #include <rtl/character.hxx>
-#include <sal/log.hxx>
+#include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
 
 

@@ -22,13 +22,7 @@
 #include <mediamisc.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <helpids.h>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
-#include <unotools/syslocale.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <math.h>
-#include <algorithm>
 #include <avmedia/MediaControlBase.hxx>
 
 namespace avmedia

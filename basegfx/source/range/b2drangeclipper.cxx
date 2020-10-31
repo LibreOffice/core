@@ -24,11 +24,11 @@
 #include <basegfx/range/b2drangeclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <rtl/math.hxx>
 
 #include <o3tl/vector_pool.hxx>
 
 #include <algorithm>
+#include <cassert>
 #include <list>
 #include <iterator>
 
