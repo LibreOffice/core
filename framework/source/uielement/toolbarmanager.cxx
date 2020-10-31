@@ -1619,7 +1619,6 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar, void )
 
     VclPtrInstance<ToolBox> pOverflowToolBar( pToolBar, WB_BORDER | WB_SCROLL );
     pOverflowToolBar->SetLineSpacing(true);
-    pOverflowToolBar->SetOutStyle( pToolBar->GetOutStyle() );
     m_aOverflowManager.set( new ToolBarManager( m_xContext, m_xFrame, OUString(), pOverflowToolBar ) );
     m_aOverflowManager->FillOverflowToolbar( pToolBar );
 
