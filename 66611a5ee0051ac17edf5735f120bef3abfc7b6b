@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a87735ff_13628e6f",
+        "filename": "svtools/source/uno/unocontroltablemodel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-31T09:34:05Z",
+      "side": 1,
+      "message": "So now it is initialized twice in the same ctor? ;-D",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 53
+      },
+      "revId": "66611a5ee0051ac17edf5735f120bef3abfc7b6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
