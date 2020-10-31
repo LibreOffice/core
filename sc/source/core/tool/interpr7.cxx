@@ -16,13 +16,13 @@
 #include <formula/errorcodes.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <svtools/miscopt.hxx>
 #include <tools/urlobj.hxx>
 
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
+#include <officecfg/Office/Common.hxx>
 #include <libxml/xpath.h>
 #include <datastreamgettime.hxx>
 #include <dpobject.hxx>
@@ -456,8 +456,7 @@ void ScInterpreter::ScDebugVar()
     // users.  This is a convenient way to extract arbitrary internal state to
     // a cell for easier debugging.
 
-    SvtMiscOptions aMiscOptions;
-    if (!aMiscOptions.IsExperimentalMode())
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
     {
         PushError(FormulaError::NoName);
         return;

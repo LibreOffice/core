@@ -13,7 +13,7 @@
 #include <sc.hrc>
 #include <defaultsoptions.hxx>
 #include <document.hxx>
-#include <svtools/miscopt.hxx>
+#include <officecfg/Office/Common.hxx>
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rCoreSet)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/optdefaultpage.ui", "OptDefaultPage", &rCoreSet)
@@ -24,7 +24,7 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(weld::Container* pPage, weld::DialogCon
     m_xEdNSheets->connect_changed( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
     m_xEdSheetPrefix->connect_changed( LINK(this, ScTpDefaultsOptions, PrefixModifiedHdl) );
     m_xEdSheetPrefix->connect_focus_in( LINK(this, ScTpDefaultsOptions, PrefixEditOnFocusHdl) );
-    if (!SvtMiscOptions().IsExperimentalMode())
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
         m_xEdJumboSheets->hide();
 }
 
