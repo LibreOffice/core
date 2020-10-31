@@ -210,30 +210,35 @@ SwCharFormat* SwEndNoteInfo::GetCurrentCharFormat(const bool bAnchor) const
         : m_pCharFormat;
 }
 
+void SwEndNoteInfo::UpdateFormatOrAttr()
+{
+    auto pFormat = GetCurrentCharFormat(m_pCharFormat == nullptr);
+    if (!pFormat || !m_aDepends.IsListeningTo(pFormat) || pFormat->IsFormatInDTOR())
+        return;
+    SwDoc* pDoc = pFormat->GetDoc();
+    SwFootnoteIdxs& rFootnoteIdxs = pDoc->GetFootnoteIdxs();
+    for(auto pTextFootnote : rFootnoteIdxs)
+    {
+        const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
+        if(rFootnote.IsEndNote() == m_bEndNote)
+            pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumberRLHidden(), rFootnote.GetNumStr());
+    }
+}
+
+
 void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHint)
 {
     if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        const sal_uInt16 nWhich = pLegacyHint->m_pOld ? pLegacyHint->m_pOld->Which() : pLegacyHint->m_pNew ? pLegacyHint->m_pNew->Which() : 0 ;
-        if (RES_ATTRSET_CHG == nWhich || RES_FMT_CHG == nWhich)
+        switch(pLegacyHint->GetWhich())
         {
-            auto pFormat = GetCurrentCharFormat(m_pCharFormat == nullptr);
-            if (!pFormat || !m_aDepends.IsListeningTo(pFormat) || pFormat->IsFormatInDTOR())
-                return;
-            SwDoc* pDoc = pFormat->GetDoc();
-            SwFootnoteIdxs& rFootnoteIdxs = pDoc->GetFootnoteIdxs();
-            for( size_t nPos = 0; nPos < rFootnoteIdxs.size(); ++nPos )
-            {
-                SwTextFootnote *pTextFootnote = rFootnoteIdxs[ nPos ];
-                const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
-                if ( rFootnote.IsEndNote() == m_bEndNote )
-                {
-                    pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumberRLHidden(), rFootnote.GetNumStr());
-                }
-            }
+            case RES_ATTRSET_CHG:
+            case RES_FMT_CHG:
+                UpdateFormatOrAttr();
+                break;
+            default:
+                CheckRegistration( pLegacyHint->m_pOld );
         }
-        else
-            CheckRegistration( pLegacyHint->m_pOld );
     }
     else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
@@ -346,9 +351,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
         GetFootnoteIdxs().UpdateAllFootnote();
     else if( bFootnoteChrFormats )
     {
-        SwFormatChg aOld( pOldChrFormat );
-        SwFormatChg aNew( pNewChrFormat );
-        mpFootnoteInfo->ModifyNotification( &aOld, &aNew );
+        mpFootnoteInfo->UpdateFormatOrAttr();
     }
 
     // #i81002# no update during loading
@@ -415,9 +418,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         GetFootnoteIdxs().UpdateAllFootnote();
     else if( bFootnoteChrFormats )
     {
-        SwFormatChg aOld( pOldChrFormat );
-        SwFormatChg aNew( pNewChrFormat );
-        mpEndNoteInfo->ModifyNotification( &aOld, &aNew );
+        mpEndNoteInfo->UpdateFormatOrAttr();
     }
 
     // #i81002# no update during loading

@@ -1090,6 +1090,15 @@ SwContentNode::~SwContentNode()
     if ( mpAttrSet && mbSetModifyAtAttr )
         const_cast<SwAttrSet*>(static_cast<const SwAttrSet*>(mpAttrSet.get()))->SetModifyAtAttr( nullptr );
 }
+void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)
+{
+    if (GetNodes().IsDocNodes()
+            && IsTextNode()
+            && RES_ATTRSET_CHG == rUpdate.getWhichAttr())
+        static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
+    NotifyClients(&rUpdate, &rUpdate);
+    CallSwClientNotify(sw::LegacyModifyHint(&rUpdate, &rUpdate));
+}
 
 void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
 {
@@ -1155,12 +1164,17 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
                 break;
 
             case RES_UPDATE_ATTR:
-                if (GetNodes().IsDocNodes()
-                        && IsTextNode()
-                        && pLegacyHint->m_pNew
-                        && RES_ATTRSET_CHG == static_cast<const SwUpdateAttr*>(pLegacyHint->m_pNew)->getWhichAttr())
-                    bCalcHidden = true;
-                break;
+                // RES_UPDATE_ATTR _should_ always contain a SwUpdateAttr hint in old and new.
+                // However, faking one with just a basic SfxPoolItem setting a WhichId has been observed.
+                // This makes the crude "WhichId" type divert from the true type, which is bad.
+                // Thus we are asserting here, but falling back to an proper
+                // hint instead. so that we at least will not spread such poison further.
+                assert(pLegacyHint->m_pNew == pLegacyHint->m_pOld);
+                assert(dynamic_cast<const SwUpdateAttr*>(pLegacyHint->m_pNew));
+                const SwUpdateAttr aFallbackHint(0,0,0);
+                const SwUpdateAttr& rUpdateAttr = pLegacyHint->m_pNew ? *static_cast<const SwUpdateAttr*>(pLegacyHint->m_pNew) : aFallbackHint;
+                UpdateAttr(rUpdateAttr);
+                return;
         }
         if(bSetParent && GetpSwAttrSet())
             AttrSetHandleHelper::SetParent(mpAttrSet, *this, pFormatColl, pFormatColl);
