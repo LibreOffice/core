@@ -410,6 +410,5 @@ done
 /usr/share/icons/hicolor/*/apps/*png
 /usr/share/icons/hicolor/*/apps/*svg
 /usr/share/icons/hicolor/*/mimetypes/*png
-/usr/share/icons/hicolor/*/mimetypes/*svg
 /usr/share/mime/packages/*
 /usr/share/appdata/*
