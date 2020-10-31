@@ -277,7 +277,7 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
 #if !ENABLE_GTK3
     m_xPrintDlgFrame->hide();
 #else
-    if (!SvtMiscOptions().IsExperimentalMode())
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
     {
         m_xPrintDlgFrame->hide();
     }

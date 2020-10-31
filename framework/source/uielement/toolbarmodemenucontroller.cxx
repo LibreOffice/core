@@ -29,6 +29,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 
+#include <officecfg/Office/Common.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
@@ -131,7 +132,6 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
     const Sequence<OUString> aModeNodeNames (aModesNode.getNodeNames());
     const sal_Int32 nCount(aModeNodeNames.getLength());
-    SvtMiscOptions aMiscOptions;
     tools::Long nCountToolbar = 0;
 
     for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
@@ -147,7 +147,7 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         bool hasNotebookbar = comphelper::getBOOL( aModeNode.getNodeValue( "HasNotebookbar" ) );
 
         // Allow Notebookbar only in experimental mode
-        if ( isExperimental && !aMiscOptions.IsExperimentalMode() )
+        if ( isExperimental && !officecfg::Office::Common::Misc::ExperimentalMode::get() )
             continue;
         if (!hasNotebookbar)
             nCountToolbar++;

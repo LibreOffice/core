@@ -23,6 +23,7 @@
 #include <vcl/weld.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <officecfg/Office/Common.hxx>
 
 #include <swabstdlg.hxx>
 #include <swuiexp.hxx>
@@ -33,7 +34,6 @@
 #include <docsh.hxx>
 #include <ndtxt.hxx>
 #include <strings.hrc>
-#include <svtools/miscopt.hxx>
 #include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star;
@@ -329,8 +329,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS)
     m_xForbiddenChars->set_label(SwResId(STR_BOOKMARK_FORBIDDENCHARS) + " " + BookmarkTable::aForbiddenChars);
     m_xForbiddenChars->set_visible(false);
 
-    SvtMiscOptions aMiscOpt;
-    if ( !aMiscOpt.IsExperimentalMode() )
+    if ( !officecfg::Office::Common::Misc::ExperimentalMode::get() )
     {
         m_xHideCB->set_visible( false );
         m_xConditionFT->set_visible( false );

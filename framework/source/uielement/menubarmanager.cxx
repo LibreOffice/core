@@ -44,6 +44,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/javainteractionhandler.hxx>
 #include <uno/current_context.hxx>
@@ -1329,7 +1330,7 @@ void MenuBarManager::FillMenu(
                 }
 
                 if (!aCommandURL.isEmpty() && vcl::CommandInfoProvider::IsExperimental(aCommandURL, rModuleIdentifier) &&
-                    !SvtMiscOptions().IsExperimentalMode())
+                    !officecfg::Office::Common::Misc::ExperimentalMode::get())
                 {
                     continue;
                 }

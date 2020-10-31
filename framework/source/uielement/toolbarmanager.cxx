@@ -24,6 +24,7 @@
 #include <uielement/toolbarmanager.hxx>
 
 #include <framework/generictoolbarcontroller.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <uielement/styletoolbarcontroller.hxx>
 #include <properties.h>
 #include <framework/sfxhelperfunctions.hxx>
@@ -1005,7 +1006,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                 }
 
                 if (!aCommandURL.isEmpty() && vcl::CommandInfoProvider::IsExperimental(aCommandURL, m_aModuleIdentifier) &&
-                    !SvtMiscOptions().IsExperimentalMode())
+                    !officecfg::Office::Common::Misc::ExperimentalMode::get())
                 {
                     continue;
                 }
