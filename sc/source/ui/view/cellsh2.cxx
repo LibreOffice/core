@@ -31,7 +31,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
-#include <svtools/miscopt.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -65,6 +64,7 @@
 #include <queryentry.hxx>
 #include <markdata.hxx>
 #include <documentlinkmgr.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <o3tl/make_shared.hxx>
 #include <memory>
@@ -1199,8 +1199,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
             case SID_DATA_STREAMS_PLAY:
             case SID_DATA_STREAMS_STOP:
                 {
-                    SvtMiscOptions aMiscOptions;
-                    if ( !aMiscOptions.IsExperimentalMode() )
+                    if ( !officecfg::Office::Common::Misc::ExperimentalMode::get() )
                         rSet.DisableItem( nWhich );
                 }
                 break;
