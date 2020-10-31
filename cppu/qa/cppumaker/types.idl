@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/RuntimeException.idl>
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/XNamingService.idl>
+#include <stdint.h>
 
 singleton FILE: com::sun::star::uno::XInterface;
 singleton lconv: com::sun::star::uno::XInterface;
@@ -689,12 +690,12 @@ exception TestException1: com::sun::star::uno::RuntimeException {
 exception TestException2: TestException1 {};
 
 constants Constants {
-    const byte byteMin = -128;
-    const byte byteMax = 127;
-    const short shortMin = -32768;
-    const short shortMax = 32767;
-    const unsigned short unsignedShortMin = 0;
-    const unsigned short unsignedShortMax = 65535;
+    const int8_t byteMin = -128;
+    const int8_t byteMax = 127;
+    const int16_t shortMin = -32768;
+    const int16_t shortMax = 32767;
+    const uint16_t unsignedShortMin = 0;
+    const uint16_t unsignedShortMax = 65535;
     const long longMin = -2147483648;
     const long longMax = 2147483647;
     const unsigned long unsignedLongMin = 0;
