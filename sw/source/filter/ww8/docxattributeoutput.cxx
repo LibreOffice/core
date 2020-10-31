@@ -3369,7 +3369,7 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
         pAttr->add( FSNS( XML_w, XML_sz ), OString::number( nWidth ) );
 
         // Get the distance (in pt)
-        pAttr->add( FSNS( XML_w, XML_space ), OString::number( nDist / 20 ) );
+        pAttr->add( FSNS( XML_w, XML_space ), OString::number( rtl::math::round( nDist / 20.0 ) ) );
 
         // Get the color code as an RRGGBB hex value
         OString sColor( msfilter::util::ConvertColor( pBorderLine->GetColor( ) ) );
