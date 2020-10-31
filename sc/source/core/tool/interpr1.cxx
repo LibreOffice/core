@@ -8190,12 +8190,45 @@ void ScInterpreter::ScIndirect()
         }
         while (false);
 
-        // It may be even a TableRef.
+        // It may be even a TableRef or an external name.
         // Anything else that resolves to one reference could be added
         // here, but we don't want to compile every arbitrary string. This
         // is already nasty enough...
-        sal_Int32 nIndex = sRefStr.indexOf('[');
-        if (nIndex >= 0 && sRefStr.indexOf(']',nIndex+1) > nIndex)
+        sal_Int32 nIndex = ScGlobal::FindUnquoted( sRefStr, '[');
+        const bool bTableRef = (nIndex > 0 && ScGlobal::FindUnquoted( sRefStr, ']', nIndex+1) > nIndex);
+        bool bExternalName = false;     // External references would had been consumed above already.
+        if (!bTableRef)
+        {
+            // This is our own file name reference representation centric.. but
+            // would work also for XL '[doc]'!name and also for
+            // '[doc]Sheet1'!name ... sickos.
+            if (sRefStr[0] == '\'')
+            {
+                // Minimum 'a'#name or 'a'!name
+                // bTryXlA1 means try both, first our own.
+                if (bTryXlA1 || eConv == FormulaGrammar::CONV_OOO)
+                {
+                    nIndex = ScGlobal::FindUnquoted( sRefStr, '#');
+                    if (nIndex >= 3 && sRefStr[nIndex-1] == '\'')
+                    {
+                        bExternalName = true;
+                        eConv = FormulaGrammar::CONV_OOO;
+                    }
+                }
+                if (!bExternalName && (bTryXlA1 || eConv != FormulaGrammar::CONV_OOO))
+                {
+                    nIndex = ScGlobal::FindUnquoted( sRefStr, '!');
+                    if (nIndex >= 3 && sRefStr[nIndex-1] == '\'')
+                    {
+                        bExternalName = true;
+                        if (eConv == FormulaGrammar::CONV_OOO)
+                            eConv = FormulaGrammar::CONV_XL_A1;
+                    }
+                }
+            }
+
+        }
+        if (bExternalName || bTableRef)
         {
             do
             {
@@ -8203,8 +8236,17 @@ void ScInterpreter::ScIndirect()
                 aComp.SetRefConvention( eConv);     // must be after grammar
                 std::unique_ptr<ScTokenArray> pTokArr( aComp.CompileString( sRefStr));
 
+                if (pTokArr->GetCodeError() != FormulaError::NONE || !pTokArr->GetLen())
+                    break;
+
                 // Whatever... use only the specific case.
-                if (!pTokArr->HasOpCode( ocTableRef))
+                if (bExternalName)
+                {
+                    const formula::FormulaToken* pTok = pTokArr->FirstToken();
+                    if (!pTok || pTok->GetType() != svExternalName)
+                        break;
+                }
+                else if (!pTokArr->HasOpCode( ocTableRef))
                     break;
 
                 aComp.CompileTokenArray();
@@ -8223,6 +8265,8 @@ void ScInterpreter::ScIndirect()
                 {
                     case svSingleRef:
                     case svDoubleRef:
+                    case svExternalSingleRef:
+                    case svExternalDoubleRef:
                     case svError:
                         PushTokenRef( xTok);
                         // success!
