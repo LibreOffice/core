@@ -232,13 +232,10 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
     , nSelMenuItem(0)
     , aLayoutManager(aLink)
     , nSymbolsSize(SFX_SYMBOLS_SIZE_SMALL)
-    , nOutStyle(0)
 {
     SvtMiscOptions aSvtMiscOptions;
     nSymbolsSize = aSvtMiscOptions.GetCurrentSymbolsSize();
-    nOutStyle  = aSvtMiscOptions.GetToolboxStyle();
 
-    SetOutStyle(TOOLBOX_STYLE_FLAT);
     xSource->Show();
     pLbSource->connect_changed(LINK( this, BibToolBar, SelHdl));
 
@@ -568,12 +565,6 @@ IMPL_LINK_NOARG( BibToolBar, OptionsChanged_Impl, LinkParamNone*, void )
     if ( nSymbolsSize != eSymbolsSize )
     {
         nSymbolsSize = eSymbolsSize;
-        bRebuildToolBar = true;
-    }
-    else if ( nOutStyle != SvtMiscOptions().GetToolboxStyle() )
-    {
-        nOutStyle = SvtMiscOptions().GetToolboxStyle();
-        SetOutStyle( nOutStyle );
         bRebuildToolBar = true;
     }
 

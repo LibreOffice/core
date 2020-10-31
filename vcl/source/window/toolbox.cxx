@@ -1109,7 +1109,6 @@ void ToolBox::ImplInitToolBoxData()
     mnRightBorder         = 0;
     mnBottomBorder        = 0;
     mnLastResizeDY        = 0;
-    mnOutStyle            = TOOLBOX_STYLE_FLAT; // force flat buttons since NWF
     mnHighItemId          = 0;
     mnCurItemId           = 0;
     mnDownItemId          = 0;
@@ -2596,11 +2595,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     tools::Long    nImageOffY  = 0;
     DrawButtonFlags nStyle      = DrawButtonFlags::NONE;
 
-    // draw separators in flat style only
-    if ( (mnOutStyle & TOOLBOX_STYLE_FLAT) &&
-         (pItem->meType == ToolBoxItemType::SEPARATOR) &&
-         nPos > 0
-         )
+    // draw separators
+    if ( (pItem->meType == ToolBoxItemType::SEPARATOR) && nPos > 0 )
     {
         ImplDrawSeparator(rRenderContext, nPos, aButtonRect);
     }
@@ -2622,15 +2618,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
         nStyle |= DrawButtonFlags::Pressed;
     }
 
-    if ( mnOutStyle & TOOLBOX_STYLE_FLAT )
-    {
-        ImplErase(rRenderContext, pItem->maRect, nHighlight != 0, bHasOpenPopup );
-    }
-    else
-    {
-        DecorationView aDecoView(&rRenderContext);
-        aDecoView.DrawButton(aButtonRect, nStyle);
-    }
+    ImplErase(rRenderContext, pItem->maRect, nHighlight != 0, bHasOpenPopup );
 
     nOffX += pItem->maRect.Left();
     nOffY += pItem->maRect.Top();
@@ -3118,7 +3106,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    if ( bDrawHotSpot && ( (mnOutStyle & TOOLBOX_STYLE_FLAT) || !mnOutStyle ) )
+    if ( bDrawHotSpot )
     {
         bool bClearHigh = true;
         if ( !rMEvt.IsLeaveWindow() && (mnCurPos == ITEM_NOTFOUND) )
@@ -3130,28 +3118,25 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                 {
                     if ( (item.meType == ToolBoxItemType::BUTTON) && item.mbEnabled )
                     {
-                        if ( !mnOutStyle || (mnOutStyle & TOOLBOX_STYLE_FLAT) )
+                        bClearHigh = false;
+                        if ( mnHighItemId != item.mnId )
                         {
-                            bClearHigh = false;
-                            if ( mnHighItemId != item.mnId )
+                            if ( mnHighItemId )
                             {
-                                if ( mnHighItemId )
-                                {
-                                    ImplHideFocus();
-                                    ImplToolItems::size_type nPos = GetItemPos( mnHighItemId );
-                                    InvalidateItem(nPos);
-                                    CallEventListeners( VclEventId::ToolboxHighlightOff, reinterpret_cast< void* >( nPos ) );
-                                }
-                                if ( mpData->mbMenubuttonSelected )
-                                {
-                                    // remove highlight from menubutton
-                                    InvalidateMenuButton();
-                                }
-                                mnHighItemId = item.mnId;
-                                InvalidateItem(nTempPos);
-                                ImplShowFocus();
-                                CallEventListeners( VclEventId::ToolboxHighlight );
+                                ImplHideFocus();
+                                ImplToolItems::size_type nPos = GetItemPos( mnHighItemId );
+                                InvalidateItem(nPos);
+                                CallEventListeners( VclEventId::ToolboxHighlightOff, reinterpret_cast< void* >( nPos ) );
                             }
+                            if ( mpData->mbMenubuttonSelected )
+                            {
+                                // remove highlight from menubutton
+                                InvalidateMenuButton();
+                            }
+                            mnHighItemId = item.mnId;
+                            InvalidateItem(nTempPos);
+                            ImplShowFocus();
+                            CallEventListeners( VclEventId::ToolboxHighlight );
                         }
                     }
                     break;

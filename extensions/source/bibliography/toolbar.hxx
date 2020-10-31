@@ -154,7 +154,6 @@ class BibToolBar:   public ToolBox
         OUString                aQueryField;
         Link<void*,void>        aLayoutManager;
         sal_Int16               nSymbolsSize;
-        sal_Int16               nOutStyle;
 
         sal_uInt16              nTBC_SOURCE;
         sal_uInt16              nTBC_QUERY;

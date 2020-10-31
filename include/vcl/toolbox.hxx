@@ -43,8 +43,6 @@ class  PopupMenu;
 class VclMenuEvent;
 class StyleSettings;
 
-constexpr sal_uInt16 TOOLBOX_STYLE_FLAT = 0x0004;
-
 // item ids in the custom menu may not exceed this constant
 constexpr sal_uInt16 TOOLBOX_MENUITEM_START = 0x1000;
 
@@ -117,7 +115,6 @@ private:
     tools::Long                mnActivateCount;
     Degree10            mnImagesRotationAngle;
     sal_uInt16          mnLastFocusItemId;
-    sal_uInt16          mnOutStyle;
     sal_uInt16          mnHighItemId;
     sal_uInt16          mnCurItemId;
     sal_uInt16          mnDownItemId;
@@ -441,9 +438,6 @@ public:
     void                Lock( bool bLock );
     // read configuration to determine locking behaviour
     static bool         AlwaysLocked();
-
-    void                SetOutStyle( sal_uInt16 nNewStyle );
-    sal_uInt16          GetOutStyle() const { return mnOutStyle; }
 
     void                EnableCustomize( bool bEnable = true );
     bool                IsCustomize() const { return mbCustomize; }

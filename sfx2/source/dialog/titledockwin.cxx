@@ -45,7 +45,6 @@ namespace sfx2
         SetBackground( Wallpaper() );
 
         m_aToolbox->SetSelectHdl( LINK( this, TitledDockingWindow, OnToolboxItemSelected ) );
-        m_aToolbox->SetOutStyle( TOOLBOX_STYLE_FLAT );
         m_aToolbox->SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetDialogColor() ) );
         m_aToolbox->Show();
         impl_resetToolBox();
