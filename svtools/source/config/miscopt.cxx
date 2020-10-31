@@ -44,31 +44,27 @@ using namespace ::com::sun::star;
 #define ROOTNODE_MISC                       "Office.Common/Misc"
 
 // PROPERTYHANDLE defines must be sequential from zero for Commit/Load
-#define PROPERTYNAME_PLUGINSENABLED         "PluginsEnabled"
-#define PROPERTYHANDLE_PLUGINSENABLED           0
 #define PROPERTYNAME_SYMBOLSET              "SymbolSet"
-#define PROPERTYHANDLE_SYMBOLSET                1
+#define PROPERTYHANDLE_SYMBOLSET                0
 #define PROPERTYNAME_TOOLBOXSTYLE           "ToolboxStyle"
-#define PROPERTYHANDLE_TOOLBOXSTYLE             2
+#define PROPERTYHANDLE_TOOLBOXSTYLE             1
 #define PROPERTYNAME_ICONTHEME              "SymbolStyle"
-#define PROPERTYHANDLE_SYMBOLSTYLE              3
+#define PROPERTYHANDLE_SYMBOLSTYLE              2
 #define PROPERTYNAME_SHOWLINKWARNINGDIALOG  "ShowLinkWarningDialog"
-#define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG    4
+#define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG    3
 #define PROPERTYNAME_DISABLEUICUSTOMIZATION "DisableUICustomization"
-#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   5
+#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   4
 #define PROPERTYNAME_MACRORECORDERMODE       "MacroRecorderMode"
-#define PROPERTYHANDLE_MACRORECORDERMODE        6
+#define PROPERTYHANDLE_MACRORECORDERMODE        5
 #define PROPERTYNAME_SIDEBARICONSIZE        "SidebarIconSize"
-#define PROPERTYHANDLE_SIDEBARICONSIZE          7
+#define PROPERTYHANDLE_SIDEBARICONSIZE          6
 #define PROPERTYNAME_NOTEBOOKBARICONSIZE    "NotebookbarIconSize"
-#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      8
+#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      7
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
 private:
     ::std::vector<Link<LinkParamNone*,void>> aList;
-    bool        m_bPluginsEnabled;
-    bool        m_bIsPluginsEnabledRO;
     sal_Int16   m_nSymbolsSize;
     bool        m_bIsSymbolsSizeRO;
     ToolBoxButtonSize m_nSidebarIconSize;
@@ -120,9 +116,6 @@ public:
 
         bool IsMacroRecorderMode() const
         { return m_bMacroRecorderMode; }
-
-        bool IsPluginsEnabled() const
-        { return m_bPluginsEnabled; }
 
         sal_Int16 GetSymbolsSize() const
         { return m_nSymbolsSize; }
@@ -204,8 +197,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     // Init baseclasses first
     : ConfigItem( ROOTNODE_MISC )
 
-    , m_bPluginsEnabled( false )
-    , m_bIsPluginsEnabledRO( false )
     , m_nSymbolsSize( 0 )
     , m_bIsSymbolsSizeRO( false )
     , m_nSidebarIconSize( ToolBoxButtonSize::DontCare )
@@ -239,16 +230,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             continue;
         switch( nProperty )
         {
-            case PROPERTYHANDLE_PLUGINSENABLED :
-            {
-                if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
-                {
-                    OSL_FAIL("Wrong type of \"Misc\\PluginsEnabled\"!" );
-                }
-                m_bIsPluginsEnabledRO = seqRO[nProperty];
-                break;
-            }
-
             case PROPERTYHANDLE_SYMBOLSET :
             {
                 if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
@@ -361,13 +342,6 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
             continue;
         switch( comphelper::findValue(aInternalPropertyNames, rPropertyNames[nProperty]) )
         {
-            case PROPERTYHANDLE_PLUGINSENABLED      :   {
-                                                            if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\PluginsEnabled\"!" );
-                                                            }
-                                                        }
-                                                    break;
             case PROPERTYHANDLE_SYMBOLSET           :   {
                                                             if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
                                                             {
@@ -521,13 +495,6 @@ void SvtMiscOptions_Impl::ImplCommit()
     {
         switch( nProperty )
         {
-            case PROPERTYHANDLE_PLUGINSENABLED :
-            {
-                if ( !m_bIsPluginsEnabledRO )
-                    seqValues[nProperty] <<= m_bPluginsEnabled;
-                break;
-            }
-
             case PROPERTYHANDLE_SYMBOLSET :
             {
                 if ( !m_bIsSymbolsSizeRO )
@@ -601,7 +568,6 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
 {
     return Sequence<OUString>
     {
-        PROPERTYNAME_PLUGINSENABLED,
         PROPERTYNAME_SYMBOLSET,
         PROPERTYNAME_TOOLBOXSTYLE,
         PROPERTYNAME_ICONTHEME,
@@ -641,10 +607,6 @@ SvtMiscOptions::~SvtMiscOptions()
     m_pImpl.reset();
 }
 
-bool SvtMiscOptions::IsPluginsEnabled() const
-{
-    return m_pImpl->IsPluginsEnabled();
-}
 
 sal_Int16 SvtMiscOptions::GetSymbolsSize() const
 {

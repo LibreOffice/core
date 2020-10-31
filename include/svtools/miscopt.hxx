@@ -57,8 +57,6 @@ class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
 
         bool        DisableUICustomization() const;
 
-        bool        IsPluginsEnabled() const;
-
         sal_Int16   GetSymbolsSize() const;
         void        SetSymbolsSize( sal_Int16 eSet );
         ToolBoxButtonSize   GetSidebarIconSize() const;
