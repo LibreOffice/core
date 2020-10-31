@@ -45,7 +45,6 @@
 #include <svl/stritem.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/miscopt.hxx>
 #include <svl/whiter.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <editeng/editeng.hxx>
@@ -855,13 +854,6 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(vcl::Window *pParentWindow, sal_uInt16 nId,
     static_cast<SfxDockingWindow *>(GetWindow())->Initialize(pInfo);
 }
 
-struct SmViewShell_Impl
-{
-    std::unique_ptr<sfx2::DocumentInserter> pDocInserter;
-    std::unique_ptr<SfxRequest> pRequest;
-    SvtMiscOptions          aOpts;
-};
-
 SFX_IMPL_SUPERCLASS_INTERFACE(SmViewShell, SfxViewShell)
 
 void SmViewShell::InitInterface_Impl()
@@ -1568,10 +1560,10 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_IMPORT_FORMULA:
         {
-            mpImpl->pRequest.reset(new SfxRequest( rReq ));
-            mpImpl->pDocInserter.reset(new ::sfx2::DocumentInserter(pWin ? pWin->GetFrameWeld() : nullptr,
+            mpRequest.reset(new SfxRequest( rReq ));
+            mpDocInserter.reset(new ::sfx2::DocumentInserter(pWin ? pWin->GetFrameWeld() : nullptr,
                               GetDoc()->GetFactory().GetFactoryName()));
-            mpImpl->pDocInserter->StartExecuteModal( LINK( this, SmViewShell, DialogClosedHdl ) );
+            mpDocInserter->StartExecuteModal( LINK( this, SmViewShell, DialogClosedHdl ) );
             break;
         }
 
@@ -1897,7 +1889,6 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
 SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
     : SfxViewShell(pFrame_, SfxViewShellFlags::HAS_PRINTOPTIONS)
-    , mpImpl(new SmViewShell_Impl)
     , mpGraphic(VclPtr<SmGraphicWindow>::Create(this))
     , maGraphicController(*mpGraphic, SID_GAPHIC_SM, pFrame_->GetBindings())
     , mbPasteState(false)
@@ -1952,11 +1943,11 @@ void SmViewShell::Activate( bool bIsMDIActivate )
 IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
     assert(_pFileDlg && "SmViewShell::DialogClosedHdl(): no file dialog");
-    assert(mpImpl->pDocInserter && "ScDocShell::DialogClosedHdl(): no document inserter");
+    assert(mpDocInserter && "ScDocShell::DialogClosedHdl(): no document inserter");
 
     if ( ERRCODE_NONE == _pFileDlg->GetError() )
     {
-        std::unique_ptr<SfxMedium> pMedium = mpImpl->pDocInserter->CreateMedium();
+        std::unique_ptr<SfxMedium> pMedium = mpDocInserter->CreateMedium();
 
         if ( pMedium )
         {
@@ -1975,8 +1966,8 @@ IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, voi
         }
     }
 
-    mpImpl->pRequest->SetReturnValue( SfxBoolItem( mpImpl->pRequest->GetSlot(), true ) );
-    mpImpl->pRequest->Done();
+    mpRequest->SetReturnValue( SfxBoolItem( mpRequest->GetSlot(), true ) );
+    mpRequest->Done();
 }
 
 void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
@@ -1994,7 +1985,7 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 bool SmViewShell::IsInlineEditEnabled() const
 {
-    return mpImpl->aOpts.IsExperimentalMode();
+    return maOpts.IsExperimentalMode();
 }
 
 void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
