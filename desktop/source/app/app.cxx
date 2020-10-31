@@ -98,7 +98,6 @@
 #include <osl/process.h>
 #include <rtl/byteseq.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/miscopt.hxx>
 #include <svtools/menuoptions.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/glxtestprocess.hxx>
@@ -1493,9 +1492,11 @@ int Desktop::Main()
         // Ensure that we use not the system file dialogs as
         // headless mode relies on Application::EnableHeadlessMode()
         // which does only work for VCL dialogs!!
-        SvtMiscOptions aMiscOptions;
-        pExecGlobals->bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
-        aMiscOptions.SetUseSystemFileDialog( false );
+        pExecGlobals->bUseSystemFileDialog = officecfg::Office::Common::Misc::UseSystemFileDialog::get();
+        std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
+                comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::UseSystemFileDialog::set( false, xChanges );
+        xChanges->commit();
     }
 
     pExecGlobals->bRestartRequested = xRestartManager->isRestartRequested(true);
@@ -1620,7 +1621,12 @@ int Desktop::doShutdown()
     // Restore old value
     const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
     if ( rCmdLineArgs.IsHeadless() || rCmdLineArgs.IsEventTesting() )
-        SvtMiscOptions().SetUseSystemFileDialog( pExecGlobals->bUseSystemFileDialog );
+    {
+        std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
+                comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::UseSystemFileDialog::set( pExecGlobals->bUseSystemFileDialog, xChanges );
+        xChanges->commit();
+    }
 
     OUString pidfileName = rCmdLineArgs.GetPidfileName();
     if ( !pidfileName.isEmpty() )

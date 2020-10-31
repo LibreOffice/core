@@ -50,27 +50,23 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_SYMBOLSET                1
 #define PROPERTYNAME_TOOLBOXSTYLE           "ToolboxStyle"
 #define PROPERTYHANDLE_TOOLBOXSTYLE             2
-#define PROPERTYNAME_USESYSTEMFILEDIALOG    "UseSystemFileDialog"
-#define PROPERTYHANDLE_USESYSTEMFILEDIALOG      3
 #define PROPERTYNAME_ICONTHEME              "SymbolStyle"
-#define PROPERTYHANDLE_SYMBOLSTYLE              4
+#define PROPERTYHANDLE_SYMBOLSTYLE              3
 #define PROPERTYNAME_SHOWLINKWARNINGDIALOG  "ShowLinkWarningDialog"
-#define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG    5
+#define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG    4
 #define PROPERTYNAME_DISABLEUICUSTOMIZATION "DisableUICustomization"
-#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   6
+#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   5
 #define PROPERTYNAME_MACRORECORDERMODE       "MacroRecorderMode"
-#define PROPERTYHANDLE_MACRORECORDERMODE        7
+#define PROPERTYHANDLE_MACRORECORDERMODE        6
 #define PROPERTYNAME_SIDEBARICONSIZE        "SidebarIconSize"
-#define PROPERTYHANDLE_SIDEBARICONSIZE          8
+#define PROPERTYHANDLE_SIDEBARICONSIZE          7
 #define PROPERTYNAME_NOTEBOOKBARICONSIZE    "NotebookbarIconSize"
-#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      9
+#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      8
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
 private:
     ::std::vector<Link<LinkParamNone*,void>> aList;
-    bool        m_bUseSystemFileDialog;
-    bool        m_bIsUseSystemFileDialogRO;
     bool        m_bPluginsEnabled;
     bool        m_bIsPluginsEnabledRO;
     sal_Int16   m_nSymbolsSize;
@@ -115,16 +111,6 @@ public:
         void Load( const Sequence< OUString >& rPropertyNames );
 
         //  public interface
-
-
-        bool UseSystemFileDialog() const
-        { return m_bUseSystemFileDialog; }
-
-        void SetUseSystemFileDialog( bool bSet )
-        {  m_bUseSystemFileDialog = bSet; SetModified(); }
-
-        bool IsUseSystemFileDialogReadOnly() const
-        { return m_bIsUseSystemFileDialogRO; }
 
         bool DisableUICustomization() const
         { return m_bDisableUICustomization; }
@@ -218,8 +204,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     // Init baseclasses first
     : ConfigItem( ROOTNODE_MISC )
 
-    , m_bUseSystemFileDialog( false )
-    , m_bIsUseSystemFileDialogRO( false )
     , m_bPluginsEnabled( false )
     , m_bIsPluginsEnabledRO( false )
     , m_nSymbolsSize( 0 )
@@ -306,16 +290,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                     OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
                 }
                 m_bIsToolboxStyleRO = seqRO[nProperty];
-                break;
-            }
-
-            case PROPERTYHANDLE_USESYSTEMFILEDIALOG :
-            {
-                if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
-                {
-                    OSL_FAIL("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
-                }
-                m_bIsUseSystemFileDialogRO = seqRO[nProperty];
                 break;
             }
 
@@ -423,13 +397,6 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
                                                             {
                                                                 OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
-                                                            }
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
-                                                            if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
                                                             }
                                                         }
                                                     break;
@@ -589,13 +556,6 @@ void SvtMiscOptions_Impl::ImplCommit()
                 break;
             }
 
-            case PROPERTYHANDLE_USESYSTEMFILEDIALOG :
-            {
-                if ( !m_bIsUseSystemFileDialogRO )
-                    seqValues[nProperty] <<= m_bUseSystemFileDialog;
-                break;
-            }
-
             case PROPERTYHANDLE_SYMBOLSTYLE :
             {
                 if ( !m_bIsSymbolsStyleRO ) {
@@ -644,7 +604,6 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_PLUGINSENABLED,
         PROPERTYNAME_SYMBOLSET,
         PROPERTYNAME_TOOLBOXSTYLE,
-        PROPERTYNAME_USESYSTEMFILEDIALOG,
         PROPERTYNAME_ICONTHEME,
         PROPERTYNAME_SHOWLINKWARNINGDIALOG,
         PROPERTYNAME_DISABLEUICUSTOMIZATION,
@@ -680,21 +639,6 @@ SvtMiscOptions::~SvtMiscOptions()
     MutexGuard aGuard( GetInitMutex() );
 
     m_pImpl.reset();
-}
-
-bool SvtMiscOptions::UseSystemFileDialog() const
-{
-    return m_pImpl->UseSystemFileDialog();
-}
-
-void SvtMiscOptions::SetUseSystemFileDialog( bool bEnable )
-{
-    m_pImpl->SetUseSystemFileDialog( bEnable );
-}
-
-bool SvtMiscOptions::IsUseSystemFileDialogReadOnly() const
-{
-    return m_pImpl->IsUseSystemFileDialogReadOnly();
 }
 
 bool SvtMiscOptions::IsPluginsEnabled() const

@@ -55,10 +55,6 @@ class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
         void        AddListenerLink( const Link<LinkParamNone*,void>& rLink );
         void        RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
 
-        bool        UseSystemFileDialog() const;
-        void        SetUseSystemFileDialog( bool bSet );
-        bool        IsUseSystemFileDialogReadOnly() const;
-
         bool        DisableUICustomization() const;
 
         bool        IsPluginsEnabled() const;
