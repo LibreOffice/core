@@ -16,6 +16,10 @@ $(eval $(call gb_Library_set_include,swqahelper,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,swqahelper,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_externals,swqahelper, \
 	boost_headers \
 	cppunit \

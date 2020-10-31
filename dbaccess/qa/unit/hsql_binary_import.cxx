@@ -13,7 +13,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <cppunit/extensions/HelperMacros.h>
-#include <svtools/miscopt.hxx>
+#include <officecfg/Office/Common.hxx>
 
 class HsqlBinaryImportTest : public DBTestBase
 {
@@ -37,12 +37,11 @@ void HsqlBinaryImportTest::setUp()
 
 void HsqlBinaryImportTest::testBinaryImport()
 {
-    SvtMiscOptions aMiscOptions;
-    bool oldValue = aMiscOptions.IsExperimentalMode();
+    bool oldValue = officecfg::Office::Common::Misc::ExperimentalMode::get();
 
-    aMiscOptions.SetExperimentalMode(true);
-    // the migration requires the file to be writable
-    utl::TempFile const temp(createTempCopy("hsqldb_migration_test.odb"));
+    officecfg::Office::Common::Misc::ExperimentalMode::set(true)
+        // the migration requires the file to be writable
+        utl::TempFile const temp(createTempCopy("hsqldb_migration_test.odb"));
     uno::Reference<XOfficeDatabaseDocument> const xDocument = getDocumentForUrl(temp.GetURL());
 
     uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
@@ -84,7 +83,7 @@ void HsqlBinaryImportTest::testBinaryImport()
 
     closeDocument(uno::Reference<lang::XComponent>(xDocument, uno::UNO_QUERY));
     if (!oldValue)
-        aMiscOptions.SetExperimentalMode(false);
+        officecfg::Office::Common::Misc::ExperimentalMode::set(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HsqlBinaryImportTest);
