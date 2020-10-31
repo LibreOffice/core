@@ -23,7 +23,6 @@
 #include <config_options.h>
 #include <basic/basicdllapi.h>
 #include <rtl/ustring.hxx>
-#include <svtools/miscopt.hxx>
 #include <unordered_map>
 
 typedef std::unordered_map< OUString, OUString > CodeCompleteVarTypes;
@@ -44,7 +43,6 @@ private:
     bool bIsAutoCloseParenthesisOn;
     bool bIsAutoCorrectOn;
     bool bExtendedTypeDeclarationOn;
-    SvtMiscOptions aMiscOptions;
 
 public:
     CodeCompleteOptions();

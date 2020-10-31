@@ -13,7 +13,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <cppunit/extensions/HelperMacros.h>
-#include <svtools/miscopt.hxx>
 
 class Tdf126268Test : public DBTestBase
 {
@@ -51,10 +50,8 @@ const expect_t expect[] = {
 
 void Tdf126268Test::testNumbers()
 {
-    SvtMiscOptions aMiscOptions;
-    bool oldValue = aMiscOptions.IsExperimentalMode();
-
-    aMiscOptions.SetExperimentalMode(true);
+    bool oldValue = officecfg::Office::Common::Misc::ExperimentalMode::get();
+    officecfg::Office::Common::Misc::ExperimentalMode::set(true);
 
     // the migration requires the file to be writable
     utl::TempFile const temp(createTempCopy("tdf126268.odb"));
@@ -81,7 +78,7 @@ void Tdf126268Test::testNumbers()
 
     closeDocument(uno::Reference<lang::XComponent>(xDocument, uno::UNO_QUERY));
     if (!oldValue)
-        aMiscOptions.SetExperimentalMode(false);
+        officecfg::Office::Common::Misc::ExperimentalMode::set(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Tdf126268Test);
