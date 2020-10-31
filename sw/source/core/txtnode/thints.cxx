@@ -3298,9 +3298,8 @@ bool SwpHints::TryInsertHint(
     // ... and notify listeners
     if ( rNode.HasWriterListeners() )
     {
-        SwUpdateAttr aHint(nHtStart, nHintEnd, nWhich, aWhichSublist);
-
-        rNode.ModifyNotification( nullptr, &aHint );
+        const SwUpdateAttr aHint(nHtStart, nHintEnd, nWhich, aWhichSublist);
+        rNode.TriggerNodeUpdate(sw::LegacyModifyHint(&aHint, &aHint));
     }
 
 #ifdef DBG_UTIL

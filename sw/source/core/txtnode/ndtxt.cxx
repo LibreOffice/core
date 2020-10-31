@@ -1953,7 +1953,7 @@ void SwTextNode::CopyAttr( SwTextNode *pDest, const sal_Int32 nTextStartIdx,
             nOldPos,
             0);
 
-        pDest->ModifyNotification( nullptr, &aHint );
+        pDest->TriggerNodeUpdate(sw::LegacyModifyHint(&aHint, &aHint));
     }
 }
 

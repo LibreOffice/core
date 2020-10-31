@@ -920,7 +920,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
 
                         sFormula.clear();
                         // trigger formatting
-                        const_cast<SwFormatField*>(pFormatField)->ModifyNotification( nullptr, nullptr );
+                        const_cast<SwFormatField*>(pFormatField)->UpdateTextNode( nullptr, nullptr );
                     }
                     break;
 

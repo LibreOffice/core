@@ -484,6 +484,7 @@ public:
     {
         SwClientNotify(*this, sw::LegacyModifyHint(pOld, pNew));
     }
+    void UpdateAttr(const SwUpdateAttr&);
 
 private:
     SwContentNode( const SwContentNode & rNode ) = delete;
