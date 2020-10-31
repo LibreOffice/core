@@ -337,8 +337,10 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 
     if ( m_xPrintDlgCB->get_state_changed_from_saved() )
     {
-        SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetUseSystemPrintDialog( !m_xPrintDlgCB->get_active() );
+        std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
+                comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::UseSystemPrintDialog::set( !m_xPrintDlgCB->get_active(), xChanges );
+        xChanges->commit();
         bModified = true;
     }
 
@@ -393,7 +395,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     SvtMiscOptions aMiscOpt;
     m_xFileDlgCB->set_active( !aMiscOpt.UseSystemFileDialog() );
     m_xFileDlgCB->save_state();
-    m_xPrintDlgCB->set_active( !aMiscOpt.UseSystemPrintDialog() );
+    m_xPrintDlgCB->set_active( !officecfg::Office::Common::Misc::UseSystemPrintDialog::get() );
     m_xPrintDlgCB->save_state();
 
     m_xDocStatusCB->set_active(officecfg::Office::Common::Print::PrintingModifiesDocument::get());

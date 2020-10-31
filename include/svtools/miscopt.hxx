@@ -79,9 +79,6 @@ class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
         sal_Int16   GetToolboxStyle() const;
         void        SetToolboxStyle( sal_Int16 nStyle );
 
-        bool        UseSystemPrintDialog() const;
-        void        SetUseSystemPrintDialog( bool bSet );
-
         bool        ShowLinkWarningDialog() const;
         void        SetShowLinkWarningDialog( bool bSet );
         bool        IsShowLinkWarningDialogReadOnly() const;
