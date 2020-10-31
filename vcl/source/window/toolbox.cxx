@@ -1109,7 +1109,6 @@ void ToolBox::ImplInitToolBoxData()
     mnRightBorder         = 0;
     mnBottomBorder        = 0;
     mnLastResizeDY        = 0;
-    mnOutStyle            = TOOLBOX_STYLE_FLAT; // force flat buttons since NWF
     mnHighItemId          = 0;
     mnCurItemId           = 0;
     mnDownItemId          = 0;
@@ -1357,8 +1356,6 @@ bool ToolBox::ImplCalcItem()
     // recalc required ?
     if ( !mbCalc )
         return false;
-
-    ImplDisableFlatButtons();
 
     OutputDevice *pDefault = Application::GetDefaultDevice();
     float fScaleFactor = pDefault ? pDefault->GetDPIScaleFactor() : 1.0;
@@ -2560,8 +2557,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     // execute pending paint requests
     ImplCheckUpdate();
 
-    ImplDisableFlatButtons();
-
     rRenderContext.SetFillColor();
 
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
@@ -2596,11 +2591,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     tools::Long    nImageOffY  = 0;
     DrawButtonFlags nStyle      = DrawButtonFlags::NONE;
 
-    // draw separators in flat style only
-    if ( (mnOutStyle & TOOLBOX_STYLE_FLAT) &&
-         (pItem->meType == ToolBoxItemType::SEPARATOR) &&
-         nPos > 0
-         )
+    // draw separators
+    if ( (pItem->meType == ToolBoxItemType::SEPARATOR) && nPos > 0 )
     {
         ImplDrawSeparator(rRenderContext, nPos, aButtonRect);
     }
@@ -2622,15 +2614,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
         nStyle |= DrawButtonFlags::Pressed;
     }
 
-    if ( mnOutStyle & TOOLBOX_STYLE_FLAT )
-    {
-        ImplErase(rRenderContext, pItem->maRect, nHighlight != 0, bHasOpenPopup );
-    }
-    else
-    {
-        DecorationView aDecoView(&rRenderContext);
-        aDecoView.DrawButton(aButtonRect, nStyle);
-    }
+    ImplErase(rRenderContext, pItem->maRect, nHighlight != 0, bHasOpenPopup );
 
     nOffX += pItem->maRect.Left();
     nOffY += pItem->maRect.Top();
@@ -2944,8 +2928,6 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
 
 bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
 {
-    ImplDisableFlatButtons();
-
     if ( !mpData )
         return false;
 
@@ -3054,8 +3036,6 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     if ( ImplHandleMouseMove( rMEvt ) )
         return;
 
-    ImplDisableFlatButtons();
-
     Point aMousePos = rMEvt.GetPosPixel();
 
     // only highlight when the focus is not inside a child window of a toolbox
@@ -3118,7 +3098,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    if ( bDrawHotSpot && ( (mnOutStyle & TOOLBOX_STYLE_FLAT) || !mnOutStyle ) )
+    if ( bDrawHotSpot )
     {
         bool bClearHigh = true;
         if ( !rMEvt.IsLeaveWindow() && (mnCurPos == ITEM_NOTFOUND) )
@@ -3130,28 +3110,25 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                 {
                     if ( (item.meType == ToolBoxItemType::BUTTON) && item.mbEnabled )
                     {
-                        if ( !mnOutStyle || (mnOutStyle & TOOLBOX_STYLE_FLAT) )
+                        bClearHigh = false;
+                        if ( mnHighItemId != item.mnId )
                         {
-                            bClearHigh = false;
-                            if ( mnHighItemId != item.mnId )
+                            if ( mnHighItemId )
                             {
-                                if ( mnHighItemId )
-                                {
-                                    ImplHideFocus();
-                                    ImplToolItems::size_type nPos = GetItemPos( mnHighItemId );
-                                    InvalidateItem(nPos);
-                                    CallEventListeners( VclEventId::ToolboxHighlightOff, reinterpret_cast< void* >( nPos ) );
-                                }
-                                if ( mpData->mbMenubuttonSelected )
-                                {
-                                    // remove highlight from menubutton
-                                    InvalidateMenuButton();
-                                }
-                                mnHighItemId = item.mnId;
-                                InvalidateItem(nTempPos);
-                                ImplShowFocus();
-                                CallEventListeners( VclEventId::ToolboxHighlight );
+                                ImplHideFocus();
+                                ImplToolItems::size_type nPos = GetItemPos( mnHighItemId );
+                                InvalidateItem(nPos);
+                                CallEventListeners( VclEventId::ToolboxHighlightOff, reinterpret_cast< void* >( nPos ) );
                             }
+                            if ( mpData->mbMenubuttonSelected )
+                            {
+                                // remove highlight from menubutton
+                                InvalidateMenuButton();
+                            }
+                            mnHighItemId = item.mnId;
+                            InvalidateItem(nTempPos);
+                            ImplShowFocus();
+                            CallEventListeners( VclEventId::ToolboxHighlight );
                         }
                     }
                     break;
@@ -4848,44 +4825,6 @@ void ToolBox::ImplHideFocus()
         mpData->mbMenubuttonSelected = false;
         InvalidateMenuButton();
     }
-}
-
-void ToolBox::ImplDisableFlatButtons()
-{
-#ifdef _WIN32        // Check in the Windows registry if an AT tool wants no flat toolboxes
-    static bool bInit = false, bValue = false;
-    if( ! bInit )
-    {
-        bInit = true;
-        HKEY hkey;
-
-        if( ERROR_SUCCESS == RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\LibreOffice\\Accessibility\\AtToolSupport", &hkey) )
-        {
-            DWORD dwType = 0;
-            wchar_t Data[6]; // possible values: "true", "false", "1", "0", DWORD
-            DWORD cbData = sizeof(Data);
-
-            if( ERROR_SUCCESS == RegQueryValueExW(hkey, L"DisableFlatToolboxButtons",
-                nullptr, &dwType, reinterpret_cast<LPBYTE>(Data), &cbData) )
-            {
-                switch (dwType)
-                {
-                    case REG_SZ:
-                        bValue = ((0 == wcsicmp(Data, L"1")) || (0 == wcsicmp(Data, L"true")));
-                        break;
-                    case REG_DWORD:
-                        bValue = static_cast<bool>(reinterpret_cast<DWORD *>(Data)[0]);
-                        break;
-                }
-            }
-            RegCloseKey(hkey);
-        }
-    }
-    if( bValue )
-        mnOutStyle &= ~TOOLBOX_STYLE_FLAT;
-#else
-    (void) this; // loplugin:staticmethods
-#endif
 }
 
 void ToolBox::SetToolbarLayoutMode( ToolBoxLayoutMode eLayout )

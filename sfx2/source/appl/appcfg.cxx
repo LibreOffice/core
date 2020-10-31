@@ -127,11 +127,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
         {
             switch(nWhich)
             {
-                case SID_ATTR_BUTTON_OUTSTYLE3D :
-                    if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_OUTSTYLE3D ),
-                              aMiscOptions.GetToolboxStyle() != TOOLBOX_STYLE_FLAT)))
-                        bRet = true;
-                    break;
                 case SID_ATTR_BUTTON_BIGSIZE :
                 {
                     if( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_BIGSIZE ), aMiscOptions.AreCurrentSymbolsLarge() ) ) )
@@ -451,13 +446,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     SvtMiscOptions aMiscOptions;
     std::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_OUTSTYLE3D), true, &pItem) )
-    {
-        DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        sal_uInt16 nOutStyle =
-            static_cast<const SfxBoolItem *>(pItem)->GetValue() ? 0 : TOOLBOX_STYLE_FLAT;
-        aMiscOptions.SetToolboxStyle( nOutStyle );
-    }
 
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_BIGSIZE), true, &pItem) )
     {
