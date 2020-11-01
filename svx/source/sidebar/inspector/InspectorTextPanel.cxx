@@ -62,9 +62,9 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
 static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, OUString& rString)
 {
     // Hide Asian and Complex properties
-    if (SvtLanguageOptions().IsCJKFontEnabled() && rPropName.indexOf("Asian") != -1)
+    if (!SvtLanguageOptions().IsCJKFontEnabled() && rPropName.indexOf("Asian") != -1)
         return false;
-    if (SvtLanguageOptions().IsCTLFontEnabled() && rPropName.indexOf("Complex") != -1)
+    if (!SvtLanguageOptions().IsCTLFontEnabled() && rPropName.indexOf("Complex") != -1)
         return false;
 
     if (bool bValue; rAny >>= bValue)
