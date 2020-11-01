@@ -707,7 +707,7 @@ bool X11SalBitmap::Create(
         css::uno::Sequence< css::uno::Any > args;
 
         if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
-            tools::Long pixmapHandle = {}; // spurious -Werror=maybe-uninitialized
+            sal_Int64 pixmapHandle = {}; // spurious -Werror=maybe-uninitialized
             sal_Int32 depth;
             if( ( args[1] >>= pixmapHandle ) && ( args[2] >>= depth ) ) {
 
