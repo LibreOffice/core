@@ -861,9 +861,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         tmp.push_back(aRow);
 
-        // Binary (CHAR)
-        // It is distinguished from Text type by its character set
-        aRow[1] = new ORowSetValueDecorator(OUString("CHAR CHARACTER SET OCTETS"));
+        // Binary (CHAR); we use the Firebird synonym CHARACTER
+        // to fool LO into seeing it as different types.
+        // It is distinguished from Text type by its character set OCTETS;
+        // that will be added by Tables::createStandardColumnPart
+        aRow[1] = new ORowSetValueDecorator(OUString("CHARACTER"));
         aRow[2] = new ORowSetValueDecorator(DataType::BINARY);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(32765)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
@@ -873,8 +875,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         tmp.push_back(aRow);
 
-        // Varbinary (VARCHAR)
-        aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR CHARACTER SET OCTETS"));
+        // Varbinary (VARCHAR); see comment above about BINARY
+        aRow[1] = new ORowSetValueDecorator(OUString("CHARACTER VARYING"));
         aRow[2] = new ORowSetValueDecorator(DataType::VARBINARY);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(32765)); // Prevision = max length
         aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
