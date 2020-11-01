@@ -480,6 +480,7 @@ class SwXLinkTargetSupplier final : public cppu::WeakImplHelper
     OUString m_sSections;
     OUString m_sOutlines;
     OUString m_sBookmarks;
+    OUString m_sDrawingObjects;
 
 public:
     SwXLinkTargetSupplier(SwXTextDocument& rxDoc);
@@ -578,6 +579,35 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
+
+class SwXDrawingObjectTarget final : public cppu::WeakImplHelper
+<
+    css::beans::XPropertySet,
+    css::lang::XServiceInfo
+>
+{
+    const SfxItemPropertySet*   m_pPropSet;
+    OUString                    m_sDrawingObjectText;
+
+public:
+    SwXDrawingObjectTarget(const OUString& rDrawingObjectText);
+    virtual ~SwXDrawingObjectTarget() override;
+
+    //XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
+    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+
+    //XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+};
+
 
 enum class SwCreateDrawTable {
     Dash = 1, Gradient, Hatch, Bitmap, TransGradient, Marker, Defaults

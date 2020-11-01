@@ -169,7 +169,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sSuffix == "outline" ||
                         sSuffix == "text" ||
                         sSuffix == "graphic" ||
-                        sSuffix == "ole" )
+                        sSuffix == "ole" ||
+                        sSuffix == "drawingobject" )
                         sText = sText.copy( 0, nFound - 1);
                 }
                 // #i104300#

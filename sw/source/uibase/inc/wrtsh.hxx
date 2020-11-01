@@ -482,6 +482,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool GotoTable( const OUString& rName );
     void GotoFormatField( const SwFormatField& rField );
     const SwRangeRedline* GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect);
+    bool GotoDrawingObject(const OUString& rName);
 
     void ChangeHeaderOrFooter(const OUString& rStyleName, bool bHeader, bool bOn, bool bShowWarning);
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) override;
