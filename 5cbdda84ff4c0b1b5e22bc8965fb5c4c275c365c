@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f4186ea_94309e7e",
+        "filename": "sw/qa/extras/ww8export/ww8export3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-01T13:11:30Z",
+      "side": 1,
+      "message": "This line is longer than 100 characters. Also it should use UNO_QUERY_THROW instead of UNO_QUERY, since we are sure that the query must succeed, and failing is an exceptional situation (error). UNO_QUERY is used in situations where the query may legitimately fail, and we then test the result for validity to branch execution.",
+      "range": {
+        "startLine": 682,
+        "startChar": 4,
+        "endLine": 682,
+        "endChar": 111
+      },
+      "revId": "5cbdda84ff4c0b1b5e22bc8965fb5c4c275c365c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8e4e124_4b20c30b",
+        "filename": "sw/qa/extras/ww8export/ww8export3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-01T13:11:30Z",
+      "side": 1,
+      "message": "The static cast here in initializer is redundant. Also, it\u0027s nice if you always make sure to declare non-changing things as const. Something like\n\n    const sal_Int32 nBorderDistance \u003d 106;",
+      "range": {
+        "startLine": 683,
+        "startChar": 32,
+        "endLine": 683,
+        "endChar": 58
+      },
+      "revId": "5cbdda84ff4c0b1b5e22bc8965fb5c4c275c365c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
