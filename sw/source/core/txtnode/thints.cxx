@@ -705,7 +705,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
 
     // 4. Split rNewHint into 1 ... n new hints:
 
-    std::set<sal_Int32> aBounds;
+    o3tl::sorted_vector<sal_Int32> aBounds;
     aBounds.insert( nThisStart );
     aBounds.insert( nThisEnd );
 
@@ -727,8 +727,8 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
         }
     }
 
-    std::set<sal_Int32>::iterator aStartIter = aBounds.lower_bound( nThisStart );
-    std::set<sal_Int32>::iterator aEndIter = aBounds.upper_bound( nThisEnd );
+    auto aStartIter = aBounds.lower_bound( nThisStart );
+    auto aEndIter = aBounds.upper_bound( nThisEnd );
     sal_Int32 nPorStart = *aStartIter;
     ++aStartIter;
     bool bDestroyHint = true;
