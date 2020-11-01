@@ -25,6 +25,8 @@
 #include <vcl/window.hxx>
 #include <vcl/transfer.hxx>
 
+class OutlinerView;
+
 namespace sd {
 
 class ViewShell;
@@ -151,6 +153,8 @@ public:
     void SetUseDropScroll (bool bUseDropScroll);
     void DropScroll (const Point& rMousePos);
     virtual void KeyInput(const KeyEvent& rKEvt) override;
+private:
+    OutlinerView* GetOutlinerView() const;
 protected:
     Point maWinPos;
     Point maViewOrigin;

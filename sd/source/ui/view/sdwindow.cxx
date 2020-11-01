@@ -36,6 +36,7 @@
 #include <View.hxx>
 #include <FrameView.hxx>
 #include <OutlineViewShell.hxx>
+#include <OutlineView.hxx>
 #include <drawdoc.hxx>
 #include <WindowUpdater.hxx>
 #include <ViewShellBase.hxx>
@@ -973,43 +974,43 @@ css::uno::Reference<css::accessibility::XAccessible>
     }
 }
 
+OutlinerView* Window::GetOutlinerView() const
+{
+    OutlinerView *pOLV = nullptr;
+    sd::View* pView = mpViewShell->GetView();
+    if (mpViewShell->GetShellType() == ViewShell::ST_OUTLINE)
+    {
+        if (OutlineView* pOView = dynamic_cast<OutlineView*>(pView))
+            pOLV = pOView->GetViewByWindow(this);
+    }
+    else if (pView->IsTextEdit())
+    {
+        pOLV = pView->GetTextEditOutlinerView();
+    }
+    return pOLV;
+}
+
 OUString Window::GetSurroundingText() const
 {
-    if ( mpViewShell->GetShellType() == ViewShell::ST_OUTLINE )
-        return OUString();
-    else if ( mpViewShell->GetView()->IsTextEdit() )
-    {
-        if (OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView())
-            return pOLV->GetEditView().GetSurroundingText();
-    }
+    OutlinerView *pOLV = GetOutlinerView();
+    if (pOLV)
+        return pOLV->GetEditView().GetSurroundingText();
     return OUString();
 }
 
 Selection Window::GetSurroundingTextSelection() const
 {
-    if ( mpViewShell->GetShellType() == ViewShell::ST_OUTLINE )
-    {
-        return Selection( 0, 0 );
-    }
-    else if ( mpViewShell->GetView()->IsTextEdit() )
-    {
-        if (OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView())
-            return pOLV->GetEditView().GetSurroundingTextSelection();
-    }
+    OutlinerView *pOLV = GetOutlinerView();
+    if (pOLV)
+        return pOLV->GetEditView().GetSurroundingTextSelection();
     return Selection( 0, 0 );
 }
 
 bool Window::DeleteSurroundingText(const Selection& rSelection)
 {
-    if ( mpViewShell->GetShellType() == ViewShell::ST_OUTLINE )
-    {
-        return false;
-    }
-    else if ( mpViewShell->GetView()->IsTextEdit() )
-    {
-        if (OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView())
-            return pOLV->GetEditView().DeleteSurroundingText(rSelection);
-    }
+    OutlinerView *pOLV = GetOutlinerView();
+    if (pOLV)
+        return pOLV->GetEditView().DeleteSurroundingText(rSelection);
     return false;
 }
 
