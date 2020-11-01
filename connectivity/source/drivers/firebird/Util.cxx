@@ -217,9 +217,13 @@ OUString firebird::ColumnTypeInfo::getColumnTypeName() const
         case DataType::TIMESTAMP:
             return "TIMESTAMP";
         case DataType::BINARY:
-            return "CHAR CHARACTER SET OCTETS";
+            // in Firebird, that is the same datatype "CHAR" as DataType::CHAR,
+            // only with CHARACTER SET OCTETS; we use the synonym CHARACTER
+            // to fool LO into seeing it as different types.
+            return "CHARACTER";
         case DataType::VARBINARY:
-            return "VARCHAR CHARACTER SET OCTETS";
+            // see above comment about DataType::BINARY.
+            return "CHARACTER VARYING";
         case DataType::LONGVARBINARY:
             return "BLOB SUB_TYPE " + OUString::number(static_cast<short>(BlobSubtype::Image));
         case DataType::ARRAY:
