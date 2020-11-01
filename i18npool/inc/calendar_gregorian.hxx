@@ -24,6 +24,8 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 #include <unicode/calendar.h>
+#include <unicode/umachine.h>
+
 #include <rtl/ref.hxx>
 
 #include <memory>
