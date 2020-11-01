@@ -509,7 +509,7 @@
                                           <object class="GtkGrid" id="rangegrid">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="row_spacing">2</property>
+                                            <property name="row_spacing">3</property>
                                             <property name="column_spacing">6</property>
                                             <child>
                                               <object class="GtkRadioButton" id="rbAllPages">
@@ -600,6 +600,7 @@
                                                 <property name="label" translatable="yes" context="printdialog|includeevenodd">Include:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">evenoddbox</property>
+                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -647,6 +648,7 @@
                                                     <property name="label" translatable="yes" context="printdialog|fromwhich">_From which print:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">printextrabox</property>
+                                                    <property name="xalign">1</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -671,6 +673,7 @@
                                                     <property name="label" translatable="yes" context="printdialog|labelpapersides">Paper _sides:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">sidesbox</property>
+                                                    <property name="xalign">1</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -706,6 +709,7 @@
                                                     <property name="label" translatable="yes" context="printdialog|labelcopies">_Number of copies:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">copycount</property>
+                                                    <property name="xalign">1</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -734,13 +738,14 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                <object class="GtkLabel" id="cbPrintOrder">
+                                                  <object class="GtkLabel" id="cbPrintOrder">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="label" translatable="yes" context="printdialog|cbPrintOrder">Order:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">reverseorder</property>
+                                                    <property name="xalign">1</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -837,9 +842,6 @@
                                                 <child>
                                                   <placeholder/>
                                                 </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
                                               </object>
                                             </child>
                                             <child type="label">
@@ -908,6 +910,7 @@
                                                 <property name="label" translatable="yes" context="printdialog|labelorientation">Orientation:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">pageorientationbox</property>
+                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -922,6 +925,7 @@
                                                 <property name="label" translatable="yes" context="printdialog|labelsize">Paper size:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">papersizebox</property>
+                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -987,6 +991,7 @@
                                                   <object class="GtkBox" id="box12">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
+                                                    <property name="valign">center</property>
                                                     <property name="spacing">3</property>
                                                     <child>
                                                       <object class="GtkRadioButton" id="pagespersheetbtn">
@@ -995,6 +1000,7 @@
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">False</property>
                                                         <property name="halign">start</property>
+                                                        <property name="valign">center</property>
                                                         <property name="use_underline">True</property>
                                                         <property name="active">True</property>
                                                         <property name="draw_indicator">True</property>
@@ -1034,6 +1040,7 @@
                                                   <object class="GtkComboBoxText" id="pagespersheetbox">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
+                                                    <property name="valign">center</property>
                                                     <property name="hexpand">True</property>
                                                     <property name="active">0</property>
                                                     <items>
@@ -1063,10 +1070,10 @@
                                                 <child>
                                                   <object class="GtkLabel" id="pagestxt">
                                                     <property name="can_focus">False</property>
-                                                    <property name="halign">end</property>
                                                     <property name="label" translatable="yes" context="printdialog|pagespersheettxt">Pages:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">pagerows</property>
+                                                    <property name="xalign">1</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -1124,10 +1131,10 @@
                                                 <child>
                                                   <object class="GtkLabel" id="pagemargintxt1">
                                                     <property name="can_focus">False</property>
-                                                    <property name="halign">end</property>
                                                     <property name="label" translatable="yes" context="printdialog|pagemargintxt1">Margin:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">pagemarginsb</property>
+                                                    <property name="xalign">1</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -1166,10 +1173,10 @@
                                                 <child>
                                                   <object class="GtkLabel" id="sheetmargintxt1">
                                                     <property name="can_focus">False</property>
-                                                    <property name="halign">end</property>
                                                     <property name="label" translatable="yes" context="printdialog|sheetmargintxt1">Distance:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">sheetmarginsb</property>
+                                                    <property name="xalign">1</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -1209,10 +1216,11 @@
                                                   <object class="GtkLabel" id="labelorder">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="halign">end</property>
+                                                    <property name="valign">center</property>
                                                     <property name="label" translatable="yes" context="printdialog|labelorder">Order:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">orderbox</property>
+                                                    <property name="xalign">1</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -1223,6 +1231,7 @@
                                                   <object class="GtkComboBoxText" id="orderbox">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
+                                                    <property name="valign">center</property>
                                                     <property name="hexpand">True</property>
                                                     <items>
                                                       <item translatable="yes" context="printdialog|liststore2">Left to right, then down</item>
@@ -1427,6 +1436,28 @@
     <widgets>
       <widget name="pagegrid"/>
       <widget name="expandpagegrid"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupLabel">
+    <widgets>
+      <widget name="rbAllPages"/>
+      <widget name="rbRangePages"/>
+      <widget name="rbRangeSelection"/>
+      <widget name="includeevenodd"/>
+      <widget name="labelsize"/>
+      <widget name="labelorientation"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupLabel2">
+    <widgets>
+      <widget name="fromwhich"/>
+      <widget name="labelpapersides"/>
+      <widget name="labelcopies"/>
+      <widget name="cbPrintOrder"/>
+      <widget name="pagestxt"/>
+      <widget name="pagemargintxt1"/>
+      <widget name="sheetmargintxt1"/>
+      <widget name="labelorder"/>
     </widgets>
   </object>
   <object class="GtkTreeStore" id="liststore1">
