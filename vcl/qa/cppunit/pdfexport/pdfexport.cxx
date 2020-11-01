@@ -2205,6 +2205,197 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testFormFontName)
     CPPUNIT_ASSERT_EQUAL(OUString("0 0 0 rg /TiRo 12 Tf"), aDA);
 }
 
+// Check we don't have duplicated objects when we reexport the PDF multiple
+// times or the size will exponentially increase over time.
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportPDF)
+{
+// setenv only works on unix based systems
+#ifndef _WIN32
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            unsetenv("LO_IMPORT_USE_PDFIUM");
+    });
+
+    // Load the PDF and save as PDF
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "PDFWithImages.pdf";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // Assert that the XObject in the page resources dictionary is a reference XObject.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+
+    // The document has 2 pages.
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPages.size());
+
+    // PAGE 1
+    {
+        vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+        CPPUNIT_ASSERT(pResources);
+
+        auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+        CPPUNIT_ASSERT(pXObjects);
+
+        std::vector<OString> rIDs;
+        for (auto const & rPair : pXObjects->GetItems())
+            rIDs.push_back(rPair.first);
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), rIDs.size());
+
+        std::vector<int> aBitmapRefs1;
+        std::vector<int> aBitmapRefs2;
+
+        {
+            // FORM object 1
+            OString aID = rIDs[0];
+            CPPUNIT_ASSERT_EQUAL(OString("Im12"), aID);
+            vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(aID);
+            CPPUNIT_ASSERT(pXObject);
+
+            auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject->Lookup("Subtype"));
+            CPPUNIT_ASSERT(pSubtype);
+            CPPUNIT_ASSERT_EQUAL(OString("Form"), pSubtype->GetValue());
+
+            auto pInnerResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject->Lookup("Resources"));
+            CPPUNIT_ASSERT(pInnerResources);
+            auto pInnerXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pInnerResources->LookupElement("XObject"));
+            CPPUNIT_ASSERT(pInnerXObjects);
+            CPPUNIT_ASSERT_EQUAL(size_t(1), pInnerXObjects->GetItems().size());
+            OString aInnerObjectID = pInnerXObjects->GetItems().begin()->first;
+            CPPUNIT_ASSERT_EQUAL(OString("Im13"), aInnerObjectID);
+
+            vcl::filter::PDFObjectElement* pInnerXObject = pInnerXObjects->LookupObject(aInnerObjectID);
+            CPPUNIT_ASSERT(pInnerXObject);
+
+            auto pInnerSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pInnerXObject->Lookup("Subtype"));
+            CPPUNIT_ASSERT(pInnerSubtype);
+            CPPUNIT_ASSERT_EQUAL(OString("Form"), pInnerSubtype->GetValue());
+
+            auto pInnerInnerResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pInnerXObject->Lookup("Resources"));
+            CPPUNIT_ASSERT(pInnerInnerResources);
+            auto pInnerInnerXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pInnerInnerResources->LookupElement("XObject"));
+            CPPUNIT_ASSERT(pInnerInnerXObjects);
+            CPPUNIT_ASSERT_EQUAL(size_t(2), pInnerInnerXObjects->GetItems().size());
+
+            std::vector<OString> aBitmapIDs1;
+            for (auto const & rPair : pInnerInnerXObjects->GetItems())
+                aBitmapIDs1.push_back(rPair.first);
+
+            {
+                CPPUNIT_ASSERT_EQUAL(OString("Im11"), aBitmapIDs1[0]);
+                auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pInnerInnerXObjects->LookupElement(aBitmapIDs1[0]));
+                CPPUNIT_ASSERT(pRef);
+                aBitmapRefs1.push_back(pRef->GetObjectValue());
+                CPPUNIT_ASSERT_EQUAL(0, pRef->GetGenerationValue());
+
+                vcl::filter::PDFObjectElement* pBitmap = pInnerInnerXObjects->LookupObject(aBitmapIDs1[0]);
+                CPPUNIT_ASSERT(pBitmap);
+                auto pBitmapSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pBitmap->Lookup("Subtype"));
+                CPPUNIT_ASSERT(pBitmapSubtype);
+                CPPUNIT_ASSERT_EQUAL(OString("Image"), pBitmapSubtype->GetValue());
+            }
+            {
+                CPPUNIT_ASSERT_EQUAL(OString("Im5"), aBitmapIDs1[1]);
+                auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pInnerInnerXObjects->LookupElement(aBitmapIDs1[1]));
+                CPPUNIT_ASSERT(pRef);
+                aBitmapRefs1.push_back(pRef->GetObjectValue());
+                CPPUNIT_ASSERT_EQUAL(0, pRef->GetGenerationValue());
+
+                vcl::filter::PDFObjectElement* pBitmap = pInnerInnerXObjects->LookupObject(aBitmapIDs1[1]);
+                CPPUNIT_ASSERT(pBitmap);
+                auto pBitmapSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pBitmap->Lookup("Subtype"));
+                CPPUNIT_ASSERT(pBitmapSubtype);
+                CPPUNIT_ASSERT_EQUAL(OString("Image"), pBitmapSubtype->GetValue());
+            }
+        }
+
+        {
+            // FORM object 2
+            OString aID = rIDs[1];
+            CPPUNIT_ASSERT_EQUAL(OString("Im4"), aID);
+            vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(aID);
+            CPPUNIT_ASSERT(pXObject);
+
+            auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject->Lookup("Subtype"));
+            CPPUNIT_ASSERT(pSubtype);
+            CPPUNIT_ASSERT_EQUAL(OString("Form"), pSubtype->GetValue());
+
+            auto pInnerResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject->Lookup("Resources"));
+            CPPUNIT_ASSERT(pInnerResources);
+            auto pInnerXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pInnerResources->LookupElement("XObject"));
+            CPPUNIT_ASSERT(pInnerXObjects);
+            CPPUNIT_ASSERT_EQUAL(size_t(1), pInnerXObjects->GetItems().size());
+            OString aInnerObjectID = pInnerXObjects->GetItems().begin()->first;
+            CPPUNIT_ASSERT_EQUAL(OString("Im5"), aInnerObjectID);
+
+            vcl::filter::PDFObjectElement* pInnerXObject = pInnerXObjects->LookupObject(aInnerObjectID);
+            CPPUNIT_ASSERT(pInnerXObject);
+
+            auto pInnerSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pInnerXObject->Lookup("Subtype"));
+            CPPUNIT_ASSERT(pInnerSubtype);
+            CPPUNIT_ASSERT_EQUAL(OString("Form"), pInnerSubtype->GetValue());
+
+            auto pInnerInnerResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pInnerXObject->Lookup("Resources"));
+            CPPUNIT_ASSERT(pInnerInnerResources);
+            auto pInnerInnerXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pInnerInnerResources->LookupElement("XObject"));
+            CPPUNIT_ASSERT(pInnerInnerXObjects);
+            CPPUNIT_ASSERT_EQUAL(size_t(2), pInnerInnerXObjects->GetItems().size());
+
+            std::vector<OString> aBitmapIDs2;
+            for (auto const & rPair : pInnerInnerXObjects->GetItems())
+                aBitmapIDs2.push_back(rPair.first);
+
+            {
+                CPPUNIT_ASSERT_EQUAL(OString("Im11"), aBitmapIDs2[0]);
+                auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pInnerInnerXObjects->LookupElement(aBitmapIDs2[0]));
+                CPPUNIT_ASSERT(pRef);
+                aBitmapRefs2.push_back(pRef->GetObjectValue());
+                CPPUNIT_ASSERT_EQUAL(0, pRef->GetGenerationValue());
+
+                vcl::filter::PDFObjectElement* pBitmap = pInnerInnerXObjects->LookupObject(aBitmapIDs2[0]);
+                CPPUNIT_ASSERT(pBitmap);
+                auto pBitmapSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pBitmap->Lookup("Subtype"));
+                CPPUNIT_ASSERT(pBitmapSubtype);
+                CPPUNIT_ASSERT_EQUAL(OString("Image"), pBitmapSubtype->GetValue());
+            }
+            {
+                CPPUNIT_ASSERT_EQUAL(OString("Im5"), aBitmapIDs2[1]);
+                auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pInnerInnerXObjects->LookupElement(aBitmapIDs2[1]));
+                CPPUNIT_ASSERT(pRef);
+                aBitmapRefs2.push_back(pRef->GetObjectValue());
+                CPPUNIT_ASSERT_EQUAL(0, pRef->GetGenerationValue());
+
+                vcl::filter::PDFObjectElement* pBitmap = pInnerInnerXObjects->LookupObject(aBitmapIDs2[1]);
+                CPPUNIT_ASSERT(pBitmap);
+                auto pBitmapSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pBitmap->Lookup("Subtype"));
+                CPPUNIT_ASSERT(pBitmapSubtype);
+                CPPUNIT_ASSERT_EQUAL(OString("Image"), pBitmapSubtype->GetValue());
+            }
+        }
+        // Ref should point to the same bitmap
+        CPPUNIT_ASSERT_EQUAL(aBitmapRefs1[0], aBitmapRefs2[0]);
+        CPPUNIT_ASSERT_EQUAL(aBitmapRefs1[1], aBitmapRefs2[1]);
+    }
+
+#endif
+}
+
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
