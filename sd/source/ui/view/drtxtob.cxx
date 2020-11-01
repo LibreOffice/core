@@ -180,11 +180,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                     assert(mpViewShell);
 
-                    if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
-                    {
-                        pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
-                            mpViewShell->GetActiveWindow());
-                    }
+                    if (OutlineView* pOView = dynamic_cast<OutlineView*>(mpView))
+                        pOLV = pOView->GetViewByWindow(mpViewShell->GetActiveWindow());
 
                     sal_uInt16 stretchY = 100;
                     if( pOutliner )
@@ -254,11 +251,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
-                    if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
-                    {
-                        pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
-                            mpViewShell->GetActiveWindow());
-                    }
+                    if (OutlineView* pOView = dynamic_cast<OutlineView*>(mpView))
+                        pOLV = pOView->GetViewByWindow(mpViewShell->GetActiveWindow());
 
                     bool bOutlineViewSh = dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr;
 

@@ -121,11 +121,9 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
     assert(mpViewShell);
 
-    if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
+    if (OutlineView* pOView = dynamic_cast<OutlineView*>(mpView))
     {
-        pOLV = static_cast<OutlineView*>(mpView)
-            ->GetViewByWindow(mpViewShell->GetActiveWindow());
-
+        pOLV = pOView->GetViewByWindow(mpViewShell->GetActiveWindow());
         aGuard.reset( new OutlineViewModelChangeGuard( static_cast<OutlineView&>(*mpView) ) );
     }
 
