@@ -118,9 +118,10 @@ private:
     OUString            maStorageName;
     bool                mbDocMgr;
 
-    std::unique_ptr<BasicManagerImpl>   mpImpl;
+    LibraryContainerInfo    maContainerInfo;
 
-    BASIC_DLLPRIVATE void Init();
+    std::vector<std::unique_ptr<BasicLibInfo>> aLibs;
+    OUString         aBasicLibPath;
 
 protected:
     bool            ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage );
