@@ -138,7 +138,7 @@ struct SystemGraphicsData
     CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( UNX )
     void*           pDisplay;       // the relevant display connection
-    tools::Long            hDrawable;      // a drawable
+    sal_uIntPtr     hDrawable;      // a drawable
     void*           pVisual;        // the visual in use
     int             nScreen;        // the current screen of the drawable
     void*           pXRenderFormat; // render format for drawable

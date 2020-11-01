@@ -38,7 +38,7 @@ namespace cairo {
         explicit X11SysData( const SystemEnvData& );
 
         void*   pDisplay;       // the relevant display connection
-        tools::Long    hDrawable;      // a drawable
+        Drawable hDrawable;     // a drawable
         void*   pVisual;        // the visual in use
         int nScreen;        // the current screen of the drawable
         void*   pRenderFormat;  // render format for drawable
