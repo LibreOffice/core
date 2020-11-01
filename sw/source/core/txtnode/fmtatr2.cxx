@@ -84,10 +84,11 @@ SwFormatCharFormat* SwFormatCharFormat::Clone( SfxItemPool* ) const
 }
 
 // forward to the TextAttribute
-void SwFormatCharFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwFormatCharFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if( m_pTextAttribute )
-        m_pTextAttribute->ModifyNotification( pOld, pNew );
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(m_pTextAttribute && pLegacy)
+        m_pTextAttribute->TriggerNodeUpdate(*pLegacy);
 }
 
 // forward to the TextAttribute
