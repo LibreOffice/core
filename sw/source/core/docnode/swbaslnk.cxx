@@ -61,14 +61,14 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     //              them haven't a loaded Graphic.
     rGrfNd.LockModify();
     {
-        SwIterator<SwClient,SwGrfNode> aIter(rGrfNd);
-        for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
-            if(dynamic_cast<const SwContentFrame*>( pLast) ==  nullptr)
+        SwIterator<SwModify,SwGrfNode> aIter(rGrfNd);
+        for(SwModify* pLast = aIter.First(); pLast; pLast = aIter.Next())
+            if(dynamic_cast<const SwContentFrame*>(pLast) ==  nullptr)
                 pLast->ModifyNotification(&rItem, &rItem);
     }
     {
         SwIterator<SwContentFrame,SwGrfNode> aIter(rGrfNd);
-        for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
+        for(SwContentFrame* pLast = aIter.First(); pLast; pLast = aIter.Next())
             pLast->ModifyNotification(&rItem, &rItem);
     }
     rGrfNd.UnlockModify();

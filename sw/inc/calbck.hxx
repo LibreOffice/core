@@ -144,7 +144,10 @@ public:
     // should be called only from SwModify the client is registered in
     // mba: IMHO this method should be pure virtual
     // DO NOT USE IN NEW CODE! use SwClientNotify instead.
-    virtual void Modify(const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue);
+    virtual void Modify(const SfxPoolItem*, const SfxPoolItem*);
+    // controlled access to Modify method
+    // mba: this is still considered a hack and it should be fixed; the name makes grep-ing easier
+    void ModifyNotification(const SfxPoolItem*, const SfxPoolItem*);
     // when overriding this, you MUST call SwClient::SwClientModify() in the override!
     virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
@@ -152,9 +155,6 @@ public:
     // its SwClient objects can decide to get registered to the latter instead by calling this method
     std::unique_ptr<sw::ModifyChangedHint> CheckRegistration( const SfxPoolItem* pOldValue );
 
-    // controlled access to Modify method
-    // mba: this is still considered a hack and it should be fixed; the name makes grep-ing easier
-    virtual void ModifyNotification( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue ) { Modify ( pOldValue, pNewValue ); }
     void SwClientNotifyCall( const SwModify& rModify, const SfxHint& rHint ) { SwClientNotify( rModify, rHint ); }
 
     const SwModify* GetRegisteredIn() const { return m_pRegisteredIn; }
