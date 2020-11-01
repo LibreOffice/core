@@ -23,6 +23,10 @@
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <drawbase.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <drawdoc.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
 
 /**
    Always:
@@ -621,6 +625,39 @@ bool SwWrtShell::GotoOutline( const OUString& rName )
     bool bRet = SwCursorShell::GotoOutline (rName);
     if (bRet)
         m_aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+bool SwWrtShell::GotoDrawingObject(std::u16string_view rName)
+{
+    SwPosition aPos = *GetCursor()->GetPoint();
+    bool bRet = false;
+    SdrView* pDrawView = GetDrawView();
+    if (pDrawView)
+    {
+        pDrawView->SdrEndTextEdit();
+        pDrawView->UnmarkAll();
+        SdrPage* pPage = getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+        const size_t nCount = pPage->GetObjCount();
+        for (size_t i = 0; i < nCount; ++i)
+        {
+            SdrObject* pObj = pPage->GetObj(i);
+            if (pObj->GetName() == rName)
+            {
+                SdrPageView* pPageView = pDrawView->GetSdrPageView();
+                if(pPageView)
+                {
+                    pDrawView->MarkObj(pObj, pPageView);
+                    m_aNavigationMgr.addEntry(aPos);
+                    EnterStdMode();
+                    HideCursor();
+                    EnterSelFrameMode();
+                    bRet = true;
+                }
+                break;
+            }
+        }
+    }
     return bRet;
 }
 
