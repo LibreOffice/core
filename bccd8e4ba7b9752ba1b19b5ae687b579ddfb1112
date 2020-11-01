@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18feeed4_ebe63f55",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-01T18:39:19Z",
+      "side": 1,
+      "message": "this should preferably be\n\n    aLibs.push_back(std::make_unique\u003cBasicLibInfo\u003e());\n    return aLibs.back().get();\n\nbecause make_unique means one fewer alloc",
+      "revId": "bccd8e4ba7b9752ba1b19b5ae687b579ddfb1112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
