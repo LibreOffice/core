@@ -40,7 +40,7 @@
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">center</property>
+                    <property name="valign">start</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
@@ -181,11 +181,9 @@
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="height">2</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -568,6 +566,14 @@
       <widget name="labelDegrees"/>
       <widget name="labelRefEdge"/>
       <widget name="LabelTxtDir"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupWidget">
+    <widgets>
+      <widget name="comboboxHorzAlign"/>
+      <widget name="comboboxVertAlign"/>
+      <widget name="spinDegrees"/>
+      <widget name="references"/>
     </widgets>
   </object>
 </interface>
