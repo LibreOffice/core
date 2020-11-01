@@ -20,6 +20,9 @@
 #ifndef INCLUDED_VCL_TEXTRECTINFO_HXX
 #define INCLUDED_VCL_TEXTRECTINFO_HXX
 
+#include <sal/config.h>
+
+#include <tools/long.hxx>
 #include <vcl/dllapi.h>
 class OutputDevice;
 
