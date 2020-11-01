@@ -49,20 +49,21 @@ SwTextCharFormat::~SwTextCharFormat( )
 {
 }
 
-void SwTextCharFormat::ModifyNotification( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwTextCharFormat::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
 {
-    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
-             || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
-        "SwTextCharFormat::Modify(): unknown Modify");
+    const auto nWhich = rHint.GetWhich();
+    SAL_WARN_IF(
+            !isCHRATR(nWhich) &&
+            RES_OBJECTDYING != nWhich &&
+            RES_ATTRSET_CHG != nWhich &&
+            RES_FMT_CHG != nWhich, "sw.core", "SwTextCharFormat::TriggerNodeUpdate: unknown hint type");
 
-    if ( m_pTextNode )
+    if(m_pTextNode)
     {
         SwUpdateAttr aUpdateAttr(
             GetStart(),
             *GetEnd(),
             nWhich);
-
         m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
     }
 }

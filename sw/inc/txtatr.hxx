@@ -39,8 +39,7 @@ public:
     SwTextCharFormat( SwFormatCharFormat& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTextCharFormat( ) override;
 
-    // Passed from SwFormatCharFormat (no derivation from SwClient!).
-    void ModifyNotification( const SfxPoolItem*, const SfxPoolItem* );
+    void TriggerNodeUpdate(const sw::LegacyModifyHint&);
     bool GetInfo( SfxPoolItem const & rInfo ) const;
 
     // get and set TextNode pointer

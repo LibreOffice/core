@@ -759,11 +759,8 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         // pasting the frames, but that causes other problems that look
         // expensive to solve.
         const SfxPoolItem *pItem;
-        if( HasWriterListeners() && SfxItemState::SET == pNode->GetSwAttrSet().
-            GetItemState( RES_PAGEDESC, true, &pItem ) )
-        {
-            pNode->ModifyNotification( pItem, pItem );
-        }
+        if(HasWriterListeners() && SfxItemState::SET == pNode->GetSwAttrSet().GetItemState(RES_PAGEDESC, true, &pItem))
+            pNode->TriggerNodeUpdate(sw::LegacyModifyHint(pItem, pItem));
     }
     return pNode;
 }
@@ -2484,12 +2481,12 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
 
     // notify frames - before moving hints, because footnotes
     // want to find their anchor text frame in the follow chain
-    SwInsText aInsHint( nDestStart, nLen );
-    pDest->ModifyNotification( nullptr, &aInsHint );
-    sw::MoveText const moveHint(pDest, nDestStart, nTextStartIdx, nLen);
-    CallSwClientNotify(moveHint);
-    SwDelText aDelHint( nTextStartIdx, nLen );
-    ModifyNotification( nullptr, &aDelHint );
+    SwInsText aInsHint(nDestStart, nLen);
+    pDest->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, &aInsHint));
+    const sw::MoveText aMoveHint(pDest, nDestStart, nTextStartIdx, nLen);
+    CallSwClientNotify(aMoveHint);
+    const SwDelText aDelHint(nTextStartIdx, nLen);
+    TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, &aDelHint));
 
     // 2. move attributes
     // Iterate over attribute array until the start of the attribute

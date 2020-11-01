@@ -41,7 +41,7 @@ public:
     SwFormatCharFormat( const SwFormatCharFormat& rAttr );
 
 private:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
     /// @@@ public copy ctor, but no copy assignment?
     SwFormatCharFormat & operator= (const SwFormatCharFormat &) = delete;
