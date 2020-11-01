@@ -1880,7 +1880,7 @@ cmd/sc_showbrowser.png cmd/sc_controlproperties.png
 cmd/sc_showpropbrowser.png cmd/sc_controlproperties.png
 
 # Slide command aliases
-cmd/32/firstslide.png cmd/32/firstpage.png
+cmd/32/firstslide.png cmd/32/firstrecord.png
 cmd/32/insertdatefieldfix.png cmd/32/datefield.png
 cmd/32/insertdatefieldvar.png cmd/32/datefield.png
 cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
@@ -1900,7 +1900,7 @@ cmd/32/moveslideup.png cmd/32/upsearch.png
 cmd/32/nextslide.png cmd/32/nextrecord.png
 cmd/32/previousslide.png cmd/32/prevrecord.png
 
-cmd/lc_firstslide.png cmd/lc_firstpage.png
+cmd/lc_firstslide.png cmd/lc_firstrecord.png
 cmd/lc_insertdatefieldfix.png cmd/lc_datefield.png
 cmd/lc_insertdatefieldvar.png cmd/lc_datefield.png
 cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
@@ -1920,7 +1920,7 @@ cmd/lc_moveslideup.png cmd/lc_upsearch.png
 cmd/lc_nextslide.png cmd/lc_nextrecord.png
 cmd/lc_previousslide.png cmd/lc_prevrecord.png
 
-cmd/sc_firstslide.png cmd/sc_firstpage.png
+cmd/sc_firstslide.png cmd/sc_firstrecord.png
 cmd/sc_insertdatefieldfix.png cmd/sc_datefield.png
 cmd/sc_insertdatefieldvar.png cmd/sc_datefield.png
 cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
