@@ -69,7 +69,9 @@
 #include <swcrsr.hxx>
 #include <hints.hxx>
 #include <frameformats.hxx>
+#ifdef DBG_UTIL
 #include <sal/backtrace.hxx>
+#endif
 
 using namespace ::com::sun::star::i18n;
 
@@ -1169,11 +1171,13 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
                 // This makes the crude "WhichId" type divert from the true type, which is bad.
                 // Thus we are asserting here, but falling back to an proper
                 // hint instead. so that we at least will not spread such poison further.
+#ifdef DBG_UTIL
                 if(pLegacyHint->m_pNew != pLegacyHint->m_pOld)
                 {
                     auto pBT = sal::backtrace_get(20);
                     SAL_WARN("sw.core", "UpdateAttr not matching! " << sal::backtrace_to_string(pBT.get()));
                 }
+#endif
                 assert(pLegacyHint->m_pNew == pLegacyHint->m_pOld);
                 assert(dynamic_cast<const SwUpdateAttr*>(pLegacyHint->m_pNew));
                 const SwUpdateAttr aFallbackHint(0,0,0);
