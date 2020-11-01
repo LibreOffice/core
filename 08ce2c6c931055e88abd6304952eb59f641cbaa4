@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4382c97b_580462d7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-01T08:06:22Z",
+      "side": 1,
+      "message": "We don\u0027t use cm internally: actually, the division converts twips (twentieths of a point) into points.\n\nPlease make lines in the commit message no longer than 100 character. This is our convention in the code, and it\u0027s good to follow in the commit message, too, to allow easy reading. (It\u0027s OK to break this rule when you paste some logs or other output verbatim; but in case when you write your own text, please use the length limit.)",
+      "range": {
+        "startLine": 9,
+        "startChar": 17,
+        "endLine": 9,
+        "endChar": 19
+      },
+      "revId": "08ce2c6c931055e88abd6304952eb59f641cbaa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "804931a4_c03d1841",
         "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
         "patchSetId": 1
