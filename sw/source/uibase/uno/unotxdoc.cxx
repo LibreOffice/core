@@ -162,6 +162,8 @@
 #include <xmloff/odffields.hxx>
 #include <tools/json_writer.hxx>
 
+#include <svx/svdpage.hxx>
+
 #define TWIPS_PER_PIXEL 15
 
 using namespace ::com::sun::star;
@@ -3865,6 +3867,7 @@ SwXLinkTargetSupplier::SwXLinkTargetSupplier(SwXTextDocument& rxDoc) :
     m_sSections   = SwResId(STR_CONTENT_TYPE_REGION);
     m_sOutlines   = SwResId(STR_CONTENT_TYPE_OUTLINE);
     m_sBookmarks  = SwResId(STR_CONTENT_TYPE_BOOKMARK);
+    m_sDrawingObjects = SwResId(STR_CONTENT_TYPE_DRAWOBJECT);
 }
 
 SwXLinkTargetSupplier::~SwXLinkTargetSupplier()
@@ -3927,6 +3930,13 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
                                         m_pxDoc->getBookmarks(), rName, sSuffix );
         aRet <<= Reference< XPropertySet >(xBkms, UNO_QUERY);
     }
+    else if(rName == m_sDrawingObjects)
+    {
+        sSuffix += "drawingobject";
+        Reference<XNameAccess> xDrawingObjects = new SwXLinkNameAccessWrapper(
+                    *m_pxDoc, rName, sSuffix);
+        aRet <<= Reference<XPropertySet>(xDrawingObjects, UNO_QUERY);
+    }
     else
         throw NoSuchElementException();
     return aRet;
@@ -3940,7 +3950,8 @@ Sequence< OUString > SwXLinkTargetSupplier::getElementNames()
              m_sOLEs,
              m_sSections,
              m_sOutlines,
-             m_sBookmarks };
+             m_sBookmarks,
+             m_sDrawingObjects };
 }
 
 sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
@@ -3951,7 +3962,8 @@ sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
         rName == m_sOLEs   ||
         rName == m_sSections ||
         rName == m_sOutlines ||
-        rName == m_sBookmarks    )
+        rName == m_sBookmarks ||
+        rName == m_sDrawingObjects )
         return true;
     return false;
 }
@@ -4025,17 +4037,39 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
                 if(!m_pxDoc->GetDocShell())
                     throw RuntimeException("No document shell available");
                 SwDoc* pDoc = m_pxDoc->GetDocShell()->GetDoc();
-                const size_t nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
 
-                for (size_t i = 0; i < nOutlineCount && !bFound; ++i)
+                if (sSuffix == "|outline")
                 {
-                    const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
-                    const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
-                    if(sParam == lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
+                    const size_t nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
+
+                    for (size_t i = 0; i < nOutlineCount && !bFound; ++i)
                     {
-                        Reference< XPropertySet >  xOutline = new SwXOutlineTarget(sParam);
-                        aRet <<= xOutline;
-                        bFound = true;
+                        const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
+                        const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
+                        if(sParam == lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
+                        {
+                            Reference< XPropertySet >  xOutline = new SwXOutlineTarget(sParam);
+                            aRet <<= xOutline;
+                            bFound = true;
+                        }
+                    }
+                }
+                else if (sSuffix == "|drawingobject")
+                {
+                    SwDrawModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+                    if (pModel)
+                    {
+                        SdrPage* pPage = pModel->GetPage(0);
+                        for (size_t i = 0; i < pPage->GetObjCount() && !bFound; ++i)
+                        {
+                            SdrObject* pObj = pPage->GetObj(i);
+                            if (sParam == pObj->GetName())
+                            {
+                                Reference<XPropertySet> xDrawingObject = new SwXDrawingObjectTarget(sParam);
+                                aRet <<= xDrawingObject;
+                                bFound = true;
+                            }
+                        }
                     }
                 }
             }
@@ -4063,17 +4097,37 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
     {
         if(!m_pxDoc->GetDocShell())
             throw RuntimeException("No document shell available");
-
         SwDoc* pDoc = m_pxDoc->GetDocShell()->GetDoc();
-        const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
-        const size_t nOutlineCount = rOutlineNodes.size();
-        aRet.realloc(nOutlineCount);
-        OUString* pResArr = aRet.getArray();
-        const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
-        for (size_t i = 0; i < nOutlineCount; ++i)
+        if (m_sLinkSuffix == "|outline")
         {
-            OUString sEntry = lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule) + "|outline";
-            pResArr[i] = sEntry;
+            const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
+            const size_t nOutlineCount = rOutlineNodes.size();
+            aRet.realloc(nOutlineCount);
+            OUString* pResArr = aRet.getArray();
+            const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
+            for (size_t i = 0; i < nOutlineCount; ++i)
+            {
+                OUString sEntry = lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule) + "|outline";
+                pResArr[i] = sEntry;
+            }
+        }
+        else if (m_sLinkSuffix == "|drawingobject")
+        {
+            SwDrawModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+            if(pModel)
+            {
+                SdrPage* pPage = pModel->GetPage(0);
+                const size_t nObjCount = pPage->GetObjCount();
+                aRet.realloc(nObjCount);
+                OUString* pResArr = aRet.getArray();
+                auto j = 0;
+                for (size_t i = 0; i < nObjCount; ++i)
+                {
+                    SdrObject* pObj = pPage->GetObj(i);
+                    if (!pObj->GetName().isEmpty())
+                        pResArr[j++] = pObj->GetName() + "|drawingobject";
+                }
+            }
         }
     }
     else
@@ -4102,16 +4156,33 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
                 if(!m_pxDoc->GetDocShell())
                     throw RuntimeException("No document shell available");
                 SwDoc* pDoc = m_pxDoc->GetDocShell()->GetDoc();
-                const size_t nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
-
-                for (size_t i = 0; i < nOutlineCount && !bRet; ++i)
+                if (m_sLinkSuffix == "|outline")
                 {
-                    const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
-                    const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
-                    if(sParam ==
-                        lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
+                    const size_t nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
+
+                    for (size_t i = 0; i < nOutlineCount && !bRet; ++i)
                     {
-                        bRet = true;
+                        const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
+                        const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
+                        if(sParam ==
+                            lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
+                        {
+                            bRet = true;
+                        }
+                    }
+                }
+                else if (m_sLinkSuffix == "|drawingobject")
+                {
+                    SwDrawModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+                    if (pModel)
+                    {
+                        SdrPage* pPage = pModel->GetPage(0);
+                        const size_t nObjCount = pPage->GetObjCount();
+                        for (size_t i = 0; i < nObjCount && !bRet; ++i)
+                        {
+                            if (sParam == pPage->GetObj(i)->GetName())
+                                bRet = true;
+                        }
                     }
                 }
             }
@@ -4177,6 +4248,8 @@ static Any lcl_GetDisplayBitmap(const OUString& _sLinkSuffix)
         sImgId = RID_BMP_NAVI_BOOKMARK;
     else if(sLinkSuffix == "region")
         sImgId = RID_BMP_NAVI_REGION;
+    else if(sLinkSuffix == "drawingobject")
+        sImgId = RID_BMP_NAVI_DRAWOBJECT;
 
     if (!sImgId.isEmpty())
     {
@@ -4299,6 +4372,73 @@ sal_Bool SwXOutlineTarget::supportsService(const OUString& ServiceName)
 }
 
 Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames()
+{
+    Sequence<OUString> aRet { "com.sun.star.document.LinkTarget" };
+
+    return aRet;
+}
+
+SwXDrawingObjectTarget::SwXDrawingObjectTarget(const OUString& rDrawingObjectText) :
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
+    m_sDrawingObjectText(rDrawingObjectText)
+{
+}
+
+SwXDrawingObjectTarget::~SwXDrawingObjectTarget()
+{
+}
+
+Reference< XPropertySetInfo >  SwXDrawingObjectTarget::getPropertySetInfo()
+{
+    static Reference< XPropertySetInfo >  xRet = m_pPropSet->getPropertySetInfo();
+    return xRet;
+}
+
+void SwXDrawingObjectTarget::setPropertyValue(
+    const OUString& rPropertyName, const Any& /*aValue*/)
+{
+    throw UnknownPropertyException(rPropertyName);
+}
+
+Any SwXDrawingObjectTarget::getPropertyValue(const OUString& rPropertyName)
+{
+    if(rPropertyName != UNO_LINK_DISPLAY_NAME)
+        throw UnknownPropertyException(rPropertyName);
+
+    return Any(m_sDrawingObjectText);
+}
+
+void SwXDrawingObjectTarget::addPropertyChangeListener(
+    const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
+{
+}
+
+void SwXDrawingObjectTarget::removePropertyChangeListener(
+    const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
+{
+}
+
+void SwXDrawingObjectTarget::addVetoableChangeListener(
+    const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
+{
+}
+
+void SwXDrawingObjectTarget::removeVetoableChangeListener(
+    const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
+{
+}
+
+OUString SwXDrawingObjectTarget::getImplementationName()
+{
+    return "SwXDrawingObjectTarget";
+}
+
+sal_Bool SwXDrawingObjectTarget::supportsService(const OUString& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+Sequence< OUString > SwXDrawingObjectTarget::getSupportedServiceNames()
 {
     Sequence<OUString> aRet { "com.sun.star.document.LinkTarget" };
 

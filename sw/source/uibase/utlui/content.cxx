@@ -4269,11 +4269,34 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
     }
 }
 
+static void lcl_AssureStdModeAtShell(SwWrtShell* pWrtShell)
+{
+    // deselect any drawing or frame and leave editing mode
+    SdrView* pSdrView = pWrtShell->GetDrawView();
+    if (pSdrView && pSdrView->IsTextEdit() )
+    {
+        bool bLockView = pWrtShell->IsViewLocked();
+        pWrtShell->LockView(true);
+        pWrtShell->EndTextEdit();
+        pWrtShell->LockView(bLockView);
+    }
+
+    if (pWrtShell->IsSelFrameMode() || pWrtShell->IsObjSelected())
+    {
+        pWrtShell->UnSelectFrame();
+        pWrtShell->LeaveSelFrameMode();
+        pWrtShell->GetView().LeaveDrawCreate();
+        pWrtShell->EnterStdMode();
+        pWrtShell->DrawSelChanged();
+        pWrtShell->GetView().StopShellTimer();
+    }
+    else
+        pWrtShell->EnterStdMode();
+}
+
 void SwContentTree::GotoContent(const SwContent* pCnt)
 {
-    m_pActiveShell->EnterStdMode();
-
-    bool bSel = false;
+    lcl_AssureStdModeAtShell(m_pActiveShell);
     switch(pCnt->GetParent()->GetType())
     {
         case ContentTypeId::OUTLINE   :
@@ -4290,8 +4313,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         case ContentTypeId::GRAPHIC   :
         case ContentTypeId::OLE       :
         {
-            if(m_pActiveShell->GotoFly(pCnt->GetName()))
-                bSel = true;
+            m_pActiveShell->GotoFly(pCnt->GetName());
         }
         break;
         case ContentTypeId::BOOKMARK:
@@ -4312,7 +4334,6 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
                 m_pActiveShell->Right( CRSR_SKIP_CHARS, true, 1, false);
                 m_pActiveShell->SwCursorShell::SelectTextAttr( RES_TXTATR_INETFMT, true );
             }
-
         }
         break;
         case ContentTypeId::REFERENCE:
@@ -4328,52 +4349,30 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         }
         break;
         case ContentTypeId::POSTIT:
-            m_pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
             m_pActiveShell->GotoFormatField(*static_cast<const SwPostItContent*>(pCnt)->GetPostIt());
         break;
         case ContentTypeId::DRAWOBJECT:
         {
-            SwPosition aPos = *m_pActiveShell->GetCursor()->GetPoint();
-            SdrView* pDrawView = m_pActiveShell->GetDrawView();
-            if (pDrawView)
-            {
-                pDrawView->SdrEndTextEdit();
-                pDrawView->UnmarkAll();
-                SwDrawModel* _pModel = m_pActiveShell->getIDocumentDrawModelAccess().GetDrawModel();
-                SdrPage* pPage = _pModel->GetPage(0);
-                const size_t nCount = pPage->GetObjCount();
-                for( size_t i=0; i<nCount; ++i )
-                {
-                    SdrObject* pTemp = pPage->GetObj(i);
-                    if (pTemp->GetName() == pCnt->GetName())
-                    {
-                        SdrPageView* pPV = pDrawView->GetSdrPageView();
-                        if( pPV )
-                        {
-                            pDrawView->MarkObj( pTemp, pPV );
-                        }
-                    }
-                }
-                m_pActiveShell->GetNavigationMgr().addEntry(aPos);
-                m_pActiveShell->EnterStdMode();
-                bSel = true;
-            }
+            m_pActiveShell->GotoDrawingObject(pCnt->GetName());
         }
         break;
         default: break;
     }
-    if(bSel)
+
+    if (m_pActiveShell->IsFrameSelected() || m_pActiveShell->IsObjSelected())
     {
         m_pActiveShell->HideCursor();
         m_pActiveShell->EnterSelFrameMode();
     }
+
     SwView& rView = m_pActiveShell->GetView();
     rView.StopShellTimer();
     rView.GetPostItMgr()->SetActiveSidebarWin(nullptr);
     rView.GetEditWin().GrabFocus();
 
-    // force scroll to cursor position when navigating to inactive document
-    if(!bSel)
+    // assure visible view area is at cursor position
+    if (!m_pActiveShell->IsCursorVisible() && !m_pActiveShell->IsFrameSelected() &&
+            !m_pActiveShell->IsObjSelected())
     {
         Point rPoint = m_pActiveShell->GetCursorDocPos();
         rPoint.setX(0);
