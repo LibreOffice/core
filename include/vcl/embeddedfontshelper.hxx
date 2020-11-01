@@ -96,7 +96,7 @@ public:
     */
     static void clearTemporaryFontFiles();
 
-    ~EmbeddedFontsHelper()
+    ~EmbeddedFontsHelper() COVERITY_NOEXCEPT_FALSE
     {
         activateFonts();
     }
