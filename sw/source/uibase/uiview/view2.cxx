@@ -2066,7 +2066,9 @@ bool SwView::JumpToSwMark( const OUString& rMark )
             sCmp = sCmp.toAsciiLowerCase();
             FlyCntType eFlyType = FLYCNTTYPE_ALL;
 
-            if( sCmp == "region" )
+            if (sCmp == "drawingobject")
+                bRet = m_pWrtShell->GotoDrawingObject(sName);
+            else if( sCmp == "region" )
             {
                 m_pWrtShell->EnterStdMode();
                 bRet = m_pWrtShell->GotoRegion( sName );
@@ -2158,6 +2160,9 @@ bool SwView::JumpToSwMark( const OUString& rMark )
 
         // reset ViewStatus
         SetCursorAtTop( bSaveCT, bSaveCC );
+
+        if(!m_pWrtShell->IsFrameSelected() && !m_pWrtShell->IsObjSelected())
+            m_pWrtShell->ShowCursor();
 
         if( !bHasShFocus )
             m_pWrtShell->ShellLoseFocus();
