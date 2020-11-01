@@ -111,10 +111,15 @@ using namespace ::com::sun::star;
 
 #include <svx/xdef.hxx>
 
-void ScDocShell::ReloadAllLinks()
+void ScDocShell::AllowLinkUpdate()
 {
     m_aDocument.SetLinkFormulaNeedingCheck(false);
     getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+}
+
+void ScDocShell::ReloadAllLinks()
+{
+    AllowLinkUpdate();
 
     ReloadTabLinks();
     weld::Window *pDialogParent = GetActiveDialogParent();

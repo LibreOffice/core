@@ -1583,6 +1583,15 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
                                             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                 }
             }
+            else
+            {
+                // No links yet, but loading an existing document may have
+                // disabled link update but there's no "Allow updating" infobar
+                // that could enable it again. So in order to enable the user
+                // to add formulas with external references allow link updates
+                // again.
+                pDocSh->AllowLinkUpdate();
+            }
 
             bool bReImport = false;                             // update imported data
             ScDBCollection* pDBColl = rDoc.GetDBCollection();
