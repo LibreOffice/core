@@ -95,7 +95,6 @@
 
 using namespace ::com::sun::star;
 
-
 namespace sw {
 
 bool GetAtPageRelOrientation(sal_Int16 & rOrientation, bool const isIgnorePrintArea)
@@ -2497,7 +2496,7 @@ void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
         assert( m_ffList->end() != it );
         SAL_INFO_IF(m_aFormatName == rNewName, "sw.core", "SwFrmFmt not really renamed, as both names are equal");
 
-        SwStringMsgPoolItem aOld( RES_NAME_CHANGED, m_aFormatName );
+        const SwStringMsgPoolItem aOld( RES_NAME_CHANGED, m_aFormatName );
         // As it's a non-unique list, rename should never fail!
         bool const renamed =
             m_ffList->m_PosIndex.modify( it,
@@ -2505,8 +2504,8 @@ void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
         assert(renamed);
         (void)renamed; // unused in NDEBUG
         if (bBroadcast) {
-            SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
-            ModifyNotification( &aOld, &aNew );
+            const SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
+            GetNotifier().Broadcast(sw::LegacyModifyHint( &aOld, &aNew ));
         }
     }
     else
@@ -3143,16 +3142,12 @@ void SwFlyFrameFormat::SetObjTitle( const OUString& rTitle, bool bBroadcast )
         return;
     }
 
-    if( bBroadcast )
+    const SwStringMsgPoolItem aOld(RES_TITLE_CHANGED, pMasterObject->GetTitle());
+    pMasterObject->SetTitle(rTitle);
+    if(bBroadcast)
     {
-        SwStringMsgPoolItem aOld( RES_TITLE_CHANGED, pMasterObject->GetTitle() );
-        SwStringMsgPoolItem aNew( RES_TITLE_CHANGED, rTitle );
-        pMasterObject->SetTitle( rTitle );
-        ModifyNotification( &aOld, &aNew );
-    }
-    else
-    {
-        pMasterObject->SetTitle( rTitle );
+        const SwStringMsgPoolItem aNew(RES_TITLE_CHANGED, rTitle);
+        GetNotifier().Broadcast(sw::LegacyModifyHint(&aOld, &aNew));
     }
 }
 
@@ -3180,16 +3175,12 @@ void SwFlyFrameFormat::SetObjDescription( const OUString& rDescription, bool bBr
         return;
     }
 
-    if( bBroadcast )
+    const SwStringMsgPoolItem aOld( RES_DESCRIPTION_CHANGED, pMasterObject->GetDescription() );
+    pMasterObject->SetDescription( rDescription );
+    if(bBroadcast)
     {
-        SwStringMsgPoolItem aOld( RES_DESCRIPTION_CHANGED, pMasterObject->GetDescription() );
-        SwStringMsgPoolItem aNew( RES_DESCRIPTION_CHANGED, rDescription );
-        pMasterObject->SetDescription( rDescription );
-        ModifyNotification( &aOld, &aNew );
-    }
-    else
-    {
-        pMasterObject->SetDescription( rDescription );
+        const SwStringMsgPoolItem aNew( RES_DESCRIPTION_CHANGED, rDescription );
+        GetNotifier().Broadcast(sw::LegacyModifyHint(&aOld, &aNew));
     }
 }
 
