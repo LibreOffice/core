@@ -235,7 +235,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="reduceresolution">
-                        <property name="label" translatable="yes" context="pdfgeneralpage|reduceresolution">_Reduce image resolution</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|reduceresolution">Reduce ima_ge resolution</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -547,7 +547,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="forms">
-                        <property name="label" translatable="yes" context="pdfgeneralpage|forms">_Create PDF form</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|forms">Create PDF for_m</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -723,7 +723,7 @@
                                         <property name="can_focus">False</property>
                                         <property name="valign">baseline</property>
                                         <property name="vexpand">True</property>
-                                        <property name="label" translatable="yes" context="pdfgeneralpage|pdfaversion">PDF/A _version:</property>
+                                        <property name="label" translatable="yes" context="pdfgeneralpage|pdfaversion">PDF_/A version:</property>
                                         <property name="use_underline">True</property>
                                         <accessibility>
                                           <relation type="label-for" target="pdfaversion"/>
@@ -757,7 +757,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="pdfua">
-                        <property name="label" translatable="yes" context="pdfgeneralpage|pdfua">U_niversal Accessibility (PDF/UA)</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|pdfua">Universal Accessibilit_y (PDF/UA)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -811,7 +811,7 @@
                     <property name="row_spacing">3</property>
                     <child>
                       <object class="GtkCheckButton" id="bookmarks">
-                        <property name="label" translatable="yes" context="pdfgeneralpage|bookmarks">Export _outlines</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|bookmarks">Export outl_ines</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -846,7 +846,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="comments">
-                        <property name="label" translatable="yes" context="pdfgeneralpage|comments">_Comments as PDF annotations</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|comments">Comm_ents as PDF annotations</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
