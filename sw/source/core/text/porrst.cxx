@@ -72,8 +72,7 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
     if ( eUnderline != LINESTYLE_NONE || eStrikeout != STRIKEOUT_NONE )
     {
         aFont.SetColor( aColor );
-        // don't show underline with strikeout
-        aFont.SetUnderline( eStrikeout == STRIKEOUT_NONE ? eUnderline : LINESTYLE_NONE );
+        aFont.SetUnderline( eUnderline );
         aFont.SetStrikeout( eStrikeout );
 
         const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
@@ -98,6 +97,7 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     : SwLinePortion( rPortion )
 {
     nLineLength = TextFrameIndex(1);
+    m_eRedline = RedlineType::None;
     SetWhichPor( PortionType::Break );
 }
 
@@ -115,24 +115,38 @@ SwLinePortion *SwBreakPortion::Compress()
 void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsLineBreak() )
-        rInf.DrawLineBreak( *this );
-}
-
-void SwBreakPortion::PaintRedline( const SwTextPaintInfo &rInf ) const
-{
-    if( rInf.OnWin() && rInf.GetOpt().IsLineBreak() )
     {
-        sal_Int16 nNoBreakWidth = rInf.GetTextSize(S_NOBREAK_FOR_REDLINE).Width();
-        if ( nNoBreakWidth > 0 )
+        rInf.DrawLineBreak( *this );
+
+        // paint redlining
+        if (m_eRedline != RedlineType::None)
         {
-            // approximate portion size with multiple no-break spaces
-            // and draw these spaces (at least a single one) by DrawText
-            // painting the requested redline underline/strikeout
-            sal_Int16 nSpaces = (LINE_BREAK_WIDTH + nNoBreakWidth/2) / nNoBreakWidth;
-            OUStringBuffer aBuf(S_NOBREAK_FOR_REDLINE);
-            for (sal_Int16 i = 1; i < nSpaces; ++i)
-                aBuf.append(S_NOBREAK_FOR_REDLINE);
-            rInf.DrawText(aBuf.makeStringAndClear(), *this);
+            sal_Int16 nNoBreakWidth = rInf.GetTextSize(S_NOBREAK_FOR_REDLINE).Width();
+            if ( nNoBreakWidth > 0 )
+            {
+                // approximate portion size with multiple no-break spaces
+                // and draw these spaces (at least a single one) by DrawText
+                // painting the requested redline underline/strikeout
+                sal_Int16 nSpaces = (LINE_BREAK_WIDTH + nNoBreakWidth/2) / nNoBreakWidth;
+                OUStringBuffer aBuf(S_NOBREAK_FOR_REDLINE);
+                for (sal_Int16 i = 1; i < nSpaces; ++i)
+                    aBuf.append(S_NOBREAK_FOR_REDLINE);
+
+                const SwFont* pOldFnt = rInf.GetFont();
+
+                SwFont aFont(*pOldFnt);
+
+                if (m_eRedline == RedlineType::Delete)
+                    aFont.SetUnderline( LINESTYLE_NONE );
+                else
+                    aFont.SetStrikeout( STRIKEOUT_NONE );
+
+                const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
+
+                rInf.DrawText(aBuf.makeStringAndClear(), *this);
+
+                const_cast<SwTextPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
+            }
         }
     }
 }

@@ -24,6 +24,7 @@
 #include <swrect.hxx>
 #include <swtypes.hxx>
 #include "portxt.hxx"
+#include <svx/ctredlin.hxx>
 
 #include <vector>
 #include <deque>
@@ -98,6 +99,8 @@ private:
     bool m_bHanging : 1; // Contains a hanging portion in the margin
     bool m_bUnderscore : 1;
 
+    enum RedlineType m_eRedlineEnd; // redline type of pilcrow and line break symbols
+
     OUString m_sRedlineText; // shortened text of (first) tracked deletion shown in margin
 
     SwTwips GetHangingMargin_() const;
@@ -133,6 +136,8 @@ public:
     bool HasRedline() const { return m_bRedline; }
     void SetRedlineEnd( const bool bNew ) { m_bRedlineEnd = bNew; }
     bool HasRedlineEnd() const { return m_bRedlineEnd; }
+    void SetRedlineEndType( const enum RedlineType eNew ) { m_eRedlineEnd = eNew; }
+    RedlineType GetRedlineEndType() const { return m_eRedlineEnd; }
     void SetRedlineText ( const OUString& sText ) { m_sRedlineText = sText; }
     const OUString* GetRedlineText() const { return &m_sRedlineText; }
     void SetForcedLeftMargin() { m_bForcedLeftMargin = true; }
