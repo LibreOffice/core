@@ -390,10 +390,8 @@ ScTPValidationValue::ScTPValidationValue(weld::Container* pPage, weld::DialogCon
 ScTPValidationValue::~ScTPValidationValue()
 {
     m_xEdMin.reset();
-    m_xEdMin.reset();
     m_xEdMax.reset();
     m_xBtnRef.reset();
-    m_xEdMax.reset();
 }
 
 void ScTPValidationValue::Init()
@@ -406,8 +404,8 @@ void ScTPValidationValue::Init()
     m_xEdMin->SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
     m_xEdMin->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillEditFocusHdl ) );
     m_xEdMax->SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
-    m_xBtnRef->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillButtonFocusHdl ) );
     m_xEdMax->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillEditFocusHdl ) );
+    m_xBtnRef->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillButtonFocusHdl ) );
 
     m_xLbAllow->set_active( SC_VALIDDLG_ALLOW_ANY );
     m_xLbValue->set_active( SC_VALIDDLG_DATA_EQUAL );
