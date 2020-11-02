@@ -62,6 +62,7 @@
 #include <vcl/unohelp2.hxx>
 #include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <tools/json_writer.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -2922,6 +2923,15 @@ bool Edit::DeleteSurroundingText(const Selection& rSelection)
 FactoryFunction Edit::GetUITestFactory() const
 {
     return EditUIObject::create;
+}
+
+
+void Edit::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    Control::DumpAsPropertyTree(rJsonWriter);
+
+    if (!maPlaceholderText.isEmpty())
+        rJsonWriter.put("placeholder", maPlaceholderText);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
