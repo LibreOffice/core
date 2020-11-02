@@ -175,7 +175,7 @@ void XMLDashStyleImport::importXML(
             }
             break;
         default:
-            SAL_WARN("xmloff.style", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aStrValue);
+            XMLOFF_WARN_UNKNOWN("xmloff.style", aIter);
         }
     }
 

@@ -157,7 +157,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBibliographyCo
                     break;
                 }
                 default:
-                    SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                    XMLOFF_WARN_UNKNOWN("xmloff", aIter);
                     break;
             }
         }

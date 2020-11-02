@@ -48,7 +48,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLLabelSeparatorConte
     {
         return new SchXMLParagraphContext( GetImport(), m_aSeparator );
     }
-    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 

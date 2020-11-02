@@ -311,7 +311,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
             }
             break;
         default:
-            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -353,7 +353,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLBackgroundImageCont
                 return new XMLBase64ImportContext( GetImport(), m_xBase64Stream );
         }
     }
-    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 

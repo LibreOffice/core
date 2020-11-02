@@ -75,18 +75,23 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
     if( ignoreLocation( call ))
         return true;
     const FunctionDecl* func = call->getDirectCallee();
-    if( !func )
+    if( !func || !func->getIdentifier())
         return true;
 
-    if( !( func->getNumParams() == 5 && func->getIdentifier() != NULL
-          && ( func->getName() == "sal_detail_log" || func->getName() == "log" || func->getName() == "DbgUnhandledException")) )
+    auto name = func->getName();
+    if( !( name == "sal_detail_log" || name == "log" || name == "DbgUnhandledException" || name == "XMLOFF_WARN_UNKNOWN") )
         return true;
 
     auto tc = loplugin::DeclCheck(func);
     enum class LogCallKind { Sal, DbgUnhandledException};
     LogCallKind kind;
     int areaArgIndex;
-    if( tc.Function("sal_detail_log") || tc.Function("log").Namespace("detail").Namespace("sal").GlobalNamespace() )
+    if( tc.Function("XMLOFF_WARN_UNKNOWN") )
+        {
+        kind = LogCallKind::Sal; // fine
+        areaArgIndex = 0;
+        }
+    else if( tc.Function("sal_detail_log") || tc.Function("log").Namespace("detail").Namespace("sal").GlobalNamespace() )
         {
         kind = LogCallKind::Sal; // fine
         areaArgIndex = 1;
@@ -121,6 +126,8 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
     if( loplugin::DeclCheck(inFunction).Function("log").Namespace("detail").Namespace("sal").GlobalNamespace()
         || loplugin::DeclCheck(inFunction).Function("sal_detail_logFormat").GlobalNamespace() )
         return true; // These functions only forward to sal_detail_log, so ok.
+    if( loplugin::DeclCheck(inFunction).Function("XMLOFF_WARN_UNKNOWN").GlobalNamespace())
+        return true;
     if( call->getArg( areaArgIndex )->isNullPointerConstant( compiler.getASTContext(),
         Expr::NPC_ValueDependentIsNotNull ) != Expr::NPCK_NotNull )
         { // If the area argument is a null pointer, that is allowed only for SAL_DEBUG.

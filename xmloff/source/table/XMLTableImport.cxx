@@ -799,7 +799,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableTemplateContex
                         maTableTemplate[pElements->msStyleName] = aIter.toString();
                         break;
                     default:
-                        SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                        XMLOFF_WARN_UNKNOWN("xmloff", aIter);
                 }
             }
         }
@@ -821,7 +821,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableTemplateContex
                         maTableTemplate[pElements->msStyleName] = aIter.toString();
                         break;
                     default:
-                        SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                        XMLOFF_WARN_UNKNOWN("xmloff", aIter);
                 }
             }
         }

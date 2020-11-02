@@ -159,7 +159,7 @@ void XMLFootnoteSeparatorImport::startFastElement(
                 break;
             }
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sAttrValue);
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 

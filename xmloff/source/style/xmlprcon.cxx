@@ -67,7 +67,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLPropertySetContex
         XMLPropertyState aProp( nEntryIndex );
         return createFastChildContext( nElement, xAttrList, mrProperties, aProp );
     }
-    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 
@@ -81,7 +81,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLPropertySetContex
     ::std::vector< XMLPropertyState > &/*rProperties*/,
     const XMLPropertyState& /*rProp*/ )
 {
-    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 

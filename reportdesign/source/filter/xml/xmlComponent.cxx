@@ -51,7 +51,7 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
                     m_xComponent->setName(sValue);
                     break;
                 default:
-                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                    XMLOFF_WARN_UNKNOWN("reportdesign", aIter);
             }
         }
         catch(const Exception&)

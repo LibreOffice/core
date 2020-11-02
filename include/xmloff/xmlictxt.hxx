@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <rtl/ustring.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <sax/fastattribs.hxx>
 #include <memory>
 
 namespace com::sun::star::xml::sax { class XAttributeList; }
@@ -132,6 +133,14 @@ public:
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) final override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) final override;
 };
+
+void XMLOFF_DLLPUBLIC XMLOFF_WARN_UNKNOWN(const char *area, sax_fastparser::FastAttributeList::FastAttributeIter const & rIter);
+
+#define XMLOFF_WARN_UNKNOWN_ATTR(area, token, value) \
+    SAL_WARN(area, "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(token) << "=" << value);
+
+#define XMLOFF_WARN_UNKNOWN_ELEMENT(area, token) \
+    SAL_WARN(area, "unknown element " << SvXMLImport::getPrefixAndNameFromToken(token));
 
 #endif // INCLUDED_XMLOFF_XMLICTXT_HXX
 

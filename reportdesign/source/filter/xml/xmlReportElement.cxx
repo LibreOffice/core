@@ -60,7 +60,7 @@ OXMLReportElement::OXMLReportElement( ORptFilter& rImport,
                     m_xComponent->setPrintRepeatedValues(sValue == s_sTRUE);
                     break;
                 default:
-                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
+                    XMLOFF_WARN_UNKNOWN("reportdesign", aIter);
                     break;
             }
         }

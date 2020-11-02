@@ -312,7 +312,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableCellPropsConte
             if ( aIter.getToken() == XML_ELEMENT(XLINK, XML_HREF) )
                 sURL = aIter.toString();
             else
-                SAL_WARN("sc", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                XMLOFF_WARN_UNKNOWN("sc", aIter);
         }
         if ( !sURL.isEmpty() )
         {
@@ -363,7 +363,7 @@ ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_Int32 /*nElement*/,
                 msBaseCell = sValue;
                 break;
             default:
-                SAL_WARN("sc", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("sc", aIter);
         }
     }
 }

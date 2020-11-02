@@ -50,7 +50,7 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport
                     m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,uno::makeAny(ORptFilter::convertFormula(sValue)));
                     break;
                 default:
-                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
+                    XMLOFF_WARN_UNKNOWN("reportdesign", aIter);
                     break;
             }
 

@@ -79,7 +79,7 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
                 m_sCellStyleName = sValue;
                 break;
             default:
-                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+                XMLOFF_WARN_UNKNOWN_ATTR("dbaccess", aIter.getToken(), aIter.toString());
         }
     }
 }

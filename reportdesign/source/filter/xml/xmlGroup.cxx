@@ -158,7 +158,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                     m_xGroup->setKeepTogether(lcl_getKeepTogetherOption(sValue));
                     break;
                 default:
-                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                    XMLOFF_WARN_UNKNOWN("reportdesign", aIter);
                     break;
             }
         }

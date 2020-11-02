@@ -104,7 +104,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
             break;
 
         default:
-            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
