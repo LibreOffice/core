@@ -462,6 +462,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     bool bIsSubMenu = pParent->GetParentMenu();
 
     int nChecksHeight = mxTreeChecks->get_height_rows(9);
+    int nDiffHeight = nChecksHeight - mxTreeChecks->get_preferred_size().Height();
     if (!bIsSubMenu && nWidth != -1)
     {
         mnCheckWidthReq = nWidth - mxFrame->get_border_width() * 2 - 4;
@@ -518,6 +519,9 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
         mxTreeChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
         mxListChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
     }
+
+    mxContainer->set_size_request(mxContainer->get_preferred_size().Width(),
+                                  mxContainer->get_preferred_size().Height() + nDiffHeight);
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, FocusHdl, weld::Widget&, void)
