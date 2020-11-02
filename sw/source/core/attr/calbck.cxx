@@ -113,13 +113,6 @@ void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
     }
 };
 
-void SwClient::ModifyNotification(const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue)
-{
-    SwModify aFallbackMod;
-    auto pMod = dynamic_cast<SwModify*>(this);
-    SwClientNotify(pMod ? *pMod : aFallbackMod, sw::LegacyModifyHint(pOldValue, pNewValue));
-}
-
 void SwClient::StartListeningToSameModifyAs(const SwClient& other)
 {
     if(other.m_pRegisteredIn)
@@ -203,11 +196,6 @@ bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 void SwModify::Add( SwClient* pDepend )
 {
     DBG_TESTSOLARMUTEX();
-    // - Preexisting SwModifys should only ever be used via sw::BroadcastingModify.
-    //   This includes sw::BroadcastMixin, which is the long-term target (without
-    //   SwModify).
-    // - New classes should use sw::BroadcastMixin alone.
-    assert(dynamic_cast<sw::BroadcastingModify*>(this));
 
     if(pDepend->m_pRegisteredIn == this )
         return;
