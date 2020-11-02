@@ -31,7 +31,8 @@ dialogs = [
     # {"command": ".uno:FunctionDialog", "closeButton": "cancel"},
         # Cancel button tested in uitest/calc_tests/function_wizard.py
         # OK button tested in sc/qa/uitest/calc_tests7/tdf123479.py
-    {"command": ".uno:InsertName", "closeButton": "close"},
+    # {"command": ".uno:InsertName", "closeButton": "close"},
+        # tested in sc/qa/uitest/range_name/create_range_name.py
     {"command": ".uno:InsertObjectFloatingFrame", "closeButton": "cancel"},
     {"command": ".uno:FontworkGalleryFloater", "closeButton": "cancel"},
     # {"command": ".uno:HyperlinkDialog", "closeButton": "ok"},
