@@ -215,9 +215,8 @@ SwFormatField* SwFormatField::Clone( SfxItemPool* ) const
 
 void SwFormatField::InvalidateField()
 {
-    SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT,
-            &static_cast<SwModify&>(*this)); // cast to base class (void*)
-    CallSwClientNotify(sw::LegacyModifyHint{ &item, &item });
+    const SwPtrMsgPoolItem aItem(RES_REMOVE_UNO_OBJECT, &static_cast<SwModify&>(*this));
+    CallSwClientNotify(sw::LegacyModifyHint{ &aItem, &aItem });
 }
 
 void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )

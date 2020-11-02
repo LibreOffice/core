@@ -779,4 +779,9 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFormat::getSdrAllFillAt
     return drawinglayer::attribute::SdrAllFillAttributesHelperPtr();
 }
 
+void SwFormat::RemoveAllUnos()
+{
+    SwPtrMsgPoolItem aMsgHint(RES_REMOVE_UNO_OBJECT, this);
+    SwClientNotify(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

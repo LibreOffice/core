@@ -185,9 +185,8 @@ void SwTOXMark::Notify(const SfxHint& rHint)
 
 void SwTOXMark::InvalidateTOXMark()
 {
-    SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
-        &static_cast<SwModify&>(*this) ); // cast to base class!
-    NotifyClients(&aMsgHint, &aMsgHint);
+    const SwPtrMsgPoolItem aMsgHint(RES_REMOVE_UNO_OBJECT, &static_cast<SwModify&>(*this));
+    CallSwClientNotify(sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
 }
 
 OUString SwTOXMark::GetText(SwRootFrame const*const pLayout) const

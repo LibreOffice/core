@@ -96,12 +96,6 @@ OUString SwSdrUndo::GetComment() const
     return m_pSdrUndo->GetComment();
 }
 
-static void lcl_SendRemoveToUno( SwFormat& rFormat )
-{
-    SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, &rFormat );
-    rFormat.ModifyNotification( &aMsgHint, &aMsgHint );
-}
-
 static void lcl_SaveAnchor( SwFrameFormat* pFormat, sal_uLong& rNodePos )
 {
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
@@ -205,8 +199,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
 
     ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx );
 
-    // notify UNO objects to decouple
-    ::lcl_SendRemoveToUno( *pFormat );
+    pFormat->RemoveAllUnos();
 
     // remove from array
     SwDoc* pDoc = pFormat->GetDoc();
@@ -259,8 +252,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
 
         ::lcl_SaveAnchor( rSave.pFormat, rSave.nNodeIdx );
 
-        // notify UNO objects to decouple
-        ::lcl_SendRemoveToUno( *rSave.pFormat );
+        rSave.pFormat->RemoveAllUnos();
 
         rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), rSave.pFormat ));
     }
@@ -291,8 +283,7 @@ void SwUndoDrawGroup::AddObj( sal_uInt16 nPos, SwDrawFrameFormat* pFormat, SdrOb
     rSave.pFormat = pFormat;
     ::lcl_SaveAnchor( pFormat, rSave.nNodeIdx );
 
-       // notify UNO objects to decouple
-    ::lcl_SendRemoveToUno( *pFormat );
+    pFormat->RemoveAllUnos();
 
     // remove from array
     SwFrameFormats& rFlyFormats = *pFormat->GetDoc()->GetSpzFrameFormats();
@@ -323,8 +314,7 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj, const SwDoc& rDoc )
 
     ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx );
 
-       // notify UNO objects to decouple
-    ::lcl_SendRemoveToUno( *pFormat );
+    pFormat->RemoveAllUnos();
 
     // remove from array
     SwFrameFormats& rFlyFormats = *pFormat->GetDoc()->GetSpzFrameFormats();
@@ -357,8 +347,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
 
         ::lcl_SaveAnchor( rSave.pFormat, rSave.nNodeIdx );
 
-           // notify UNO objects to decouple
-        ::lcl_SendRemoveToUno( *rSave.pFormat );
+        rSave.pFormat->RemoveAllUnos();
 
         rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), rSave.pFormat ));
     }
@@ -392,8 +381,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
 
     ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx );
 
-       // notify UNO objects to decouple
-    ::lcl_SendRemoveToUno( *pFormat );
+    pFormat->RemoveAllUnos();
 
     // remove from array
     SwDoc* pDoc = pFormat->GetDoc();
@@ -529,8 +517,7 @@ void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         pContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
         pObj->SetUserCall( nullptr );
 
-           // notify UNO objects to decouple
-        ::lcl_SendRemoveToUno( *pFormat );
+        pFormat->RemoveAllUnos();
 
         rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), pFormat ));
         ::lcl_SaveAnchor( pFormat, rSave.nNodeIdx );
@@ -545,8 +532,7 @@ void SwUndoDrawDelete::AddObj( SwDrawFrameFormat* pFormat,
     rSave.pFormat = pFormat;
     ::lcl_SaveAnchor( pFormat, rSave.nNodeIdx );
 
-       // notify UNO objects to decouple
-    ::lcl_SendRemoveToUno( *pFormat );
+    pFormat->RemoveAllUnos();
 
     // remove from array
     SwDoc* pDoc = pFormat->GetDoc();

@@ -250,6 +250,7 @@ public:
     // Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const;
+    void RemoveAllUnos();
 };
 
 #endif // INCLUDED_SW_INC_FORMAT_HXX
