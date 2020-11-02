@@ -181,6 +181,7 @@ public:
     void testTdf123647();
     void testTdf136267();
     void testDataLabelPlacementPieChart();
+    void testTdf137874();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -324,6 +325,7 @@ public:
     CPPUNIT_TEST(testTdf123647);
     CPPUNIT_TEST(testTdf136267);
     CPPUNIT_TEST(testDataLabelPlacementPieChart);
+    CPPUNIT_TEST(testTdf137874);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2966,7 +2968,21 @@ void Chart2ExportTest::testDataLabelPlacementPieChart()
     sal_Int32 nLabelPlacement = 0;
     CPPUNIT_ASSERT(aAny >>= nLabelPlacement);
     CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::OUTSIDE, nLabelPlacement);
+}
 
+void Chart2ExportTest::testTdf137874()
+{
+    load("/chart2/qa/extras/data/xlsx/", "piechart_legend.xlsx");
+    reload("Calc Office Open XML");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+                                               UNO_QUERY_THROW);
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xLegendEntry;
+    xLegendEntry
+        = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0:LegendEntry=0");
+    CPPUNIT_ASSERT(xLegendEntry.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
