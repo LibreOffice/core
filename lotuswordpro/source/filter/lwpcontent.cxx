@@ -90,7 +90,6 @@ void LwpContent::Read()
     //ClassName.Read(pStrm);
     m_ClassName.Read(pStrm);
 
-    LwpObjectID SkipID;
     if(LwpFileHeader::m_nFileRevision >= 0x0006)
     {
         //SkipID.ReadIndexed(pStrm);
@@ -101,6 +100,7 @@ void LwpContent::Read()
 
     if (LwpFileHeader::m_nFileRevision >= 0x0007)
     {
+        LwpObjectID SkipID;
         if(LwpFileHeader::m_nFileRevision < 0x000B)
         {
             SkipID.ReadIndexed(pStrm);
