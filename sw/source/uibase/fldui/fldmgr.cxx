@@ -1511,7 +1511,7 @@ bool SwFieldMgr::InsertField(
     else if( bPageVar )
         static_cast<SwRefPageGetFieldType*>(pCurShell->GetFieldType( 0, SwFieldIds::RefPageGet ))->UpdateFields();
     else if( SwFieldTypesEnum::GetRef == rData.m_nTypeId )
-        pField->GetTyp()->ModifyNotification( nullptr, nullptr );
+        pField->GetTyp()->UpdateFields();
 
     // delete temporary field
     pField.reset();
