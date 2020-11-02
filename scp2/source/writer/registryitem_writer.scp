@@ -282,7 +282,7 @@ RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_AppUserModelID
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "soffice.StarWriterDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_FriendlyTypeName
@@ -402,7 +402,7 @@ RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_AppUserModelID
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "soffice.StarWriterGlobalDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_FriendlyTypeName
@@ -488,7 +488,7 @@ RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_AppUserModelID
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "soffice.StarWriterTemplate.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_FriendlyTypeName
@@ -847,7 +847,7 @@ RegistryItem gid_Regitem_Openoffice_Writerdocument_1_AppUserModelID
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "LibreOffice.WriterDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_FriendlyTypeName
@@ -1096,7 +1096,7 @@ RegistryItem gid_Regitem_Openoffice_Writertemplate_1_AppUserModelID
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "LibreOffice.WriterTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_FriendlyTypeName
@@ -1246,7 +1246,7 @@ RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_AppUserModelID
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "LibreOffice.WriterGlobalDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_FriendlyTypeName
@@ -1396,7 +1396,7 @@ RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_AppUserModelID
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "LibreOffice.WriterWebTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_FriendlyTypeName

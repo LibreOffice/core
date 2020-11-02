@@ -282,7 +282,7 @@ RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_AppUserModelID
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "soffice.StarCalcDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Calc";
+    Value = "Collabora.CollaboraOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_FriendlyTypeName
@@ -395,7 +395,7 @@ RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_AppUserModelID
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "soffice.StarCalcTemplate.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Calc";
+    Value = "Collabora.CollaboraOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_FriendlyTypeName
@@ -700,7 +700,7 @@ RegistryItem gid_Regitem_Openoffice_Calcdocument_1_AppUserModelID
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "LibreOffice.CalcDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Calc";
+    Value = "Collabora.CollaboraOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_FriendlyTypeName
@@ -918,7 +918,7 @@ RegistryItem gid_Regitem_Openoffice_Calctemplate_1_AppUserModelID
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "LibreOffice.CalcTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Calc";
+    Value = "Collabora.CollaboraOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_FriendlyTypeName

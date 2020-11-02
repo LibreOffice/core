@@ -286,7 +286,7 @@ End
         ModuleID = modid; \
         Subkey = STRING(CONCAT2(LibreOffice.,name)); \
         Name = STRING(AppUserModelID); \
-        Value = STRING(CONCAT2(TheDocumentFoundation.LibreOffice.,doc_type)); \
+        Value = STRING(CONCAT2(Collabora.CollaboraOffice.,doc_type)); \
     End
 
 #define REGISTRY_ENTRY_ICON(name,modid,icon_id) \

@@ -282,7 +282,7 @@ RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_AppUserModelID
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "soffice.StarImpressDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Impress";
+    Value = "Collabora.CollaboraOffice.Impress";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_FriendlyTypeName
@@ -409,7 +409,7 @@ RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_AppUserModelID
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "soffice.StarImpressTemplate.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Impress";
+    Value = "Collabora.CollaboraOffice.Impress";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_FriendlyTypeName
@@ -714,7 +714,7 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1_AppUserModelID
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "LibreOffice.ImpressDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Impress";
+    Value = "Collabora.CollaboraOffice.Impress";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_FriendlyTypeName
@@ -931,7 +931,7 @@ RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_AppUserModelID
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "LibreOffice.ImpressTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Impress";
+    Value = "Collabora.CollaboraOffice.Impress";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_FriendlyTypeName

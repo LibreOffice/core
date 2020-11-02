@@ -83,7 +83,7 @@ RegistryItem gid_Regitem_Openoffice_Databasedocument_1_AppUserModelID
     ModuleID = gid_Module_Prg_Base_Bin;
     Subkey = "LibreOffice.DatabaseDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Base";
+    Value = "Collabora.CollaboraOffice.Base";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_FriendlyTypeName

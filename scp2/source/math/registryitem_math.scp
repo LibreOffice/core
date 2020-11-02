@@ -281,7 +281,7 @@ RegistryItem gid_Regitem_Soffice_Starmathdocument_6_AppUserModelID
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "soffice.StarMathDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Math";
+    Value = "Collabora.CollaboraOffice.Math";
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_6_FriendlyTypeName
@@ -557,7 +557,7 @@ RegistryItem gid_Regitem_Openoffice_Mathdocument_1_AppUserModelID
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "LibreOffice.MathDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Math";
+    Value = "Collabora.CollaboraOffice.Math";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_FriendlyTypeName
