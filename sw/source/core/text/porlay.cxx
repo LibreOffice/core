@@ -606,13 +606,16 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
     {
         OUString sRedlineText;
         bool bHasRedlineEnd;
+        enum RedlineType eRedlineEnd;
         bHasRedline = rLine.GetRedln()->CheckLine(start.first->GetIndex(), start.second,
-            end.first->GetIndex(), end.second, sRedlineText, bHasRedlineEnd);
+            end.first->GetIndex(), end.second, sRedlineText, bHasRedlineEnd, eRedlineEnd);
         if( bHasRedline )
         {
             SetRedlineText( sRedlineText );
             if( bHasRedlineEnd )
                 SetRedlineEnd( bHasRedlineEnd );
+            if( eRedlineEnd != RedlineType::None )
+                SetRedlineEndType( eRedlineEnd );
         }
     }
     SetRedline( bHasRedline );
@@ -676,6 +679,7 @@ void SwLineLayout::ResetFlags()
     m_bFormatAdj = m_bDummy = m_bEndHyph = m_bMidHyph = m_bFly
     = m_bRest = m_bBlinking = m_bClipping = m_bContent = m_bRedline
     = m_bRedlineEnd = m_bForcedLeftMargin = m_bHanging = false;
+    m_eRedlineEnd = RedlineType::None;
 }
 
 SwLineLayout::SwLineLayout()
