@@ -1633,7 +1633,7 @@ void SAL_CALL ScXMLImport::endDocument()
                     SdrObject* pObj = pPage->GetObj(i);
                     ScDrawObjData* pData
                         = ScDrawLayer::GetObjDataTab(pObj, nTab);
-                    // Existance of pData means, that it is a cell anchored object
+                    // Existence of pData means, that it is a cell anchored object
                     if (pData)
                     {
                         // Finish and correct import based on full size (no hidden row/col) and LTR

@@ -743,7 +743,7 @@ def __setlang__():
         global _
         c = _.doc.CurrentController.getViewCursor()
         locs = [i for i in [c.CharLocale, c.CharLocaleAsian, c.CharLocaleComplex] if i.Language != 'zxx'] # not None language
-		# FIXME-BCP47: this needs adaption to language tags, a simple split on
+		# FIXME-BCP47: this needs adaptation to language tags, a simple split on
 		# '-' and assuming second field would be country would already fail if
 		# a script tag was present.
         loc = Locale(__uilocale__.split('-')[0], __uilocale__.split('-')[1], '')
