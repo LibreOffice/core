@@ -69,7 +69,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="outline">
-                        <property name="label" translatable="yes" context="pdfviewpage|outline">_Outline and page</property>
+                        <property name="label" translatable="yes" context="pdfviewpage|outline">Outl_ine and page</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -417,7 +417,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="contlayout">
-                    <property name="label" translatable="yes" context="pdfviewpage|contlayout">_Continuous</property>
+                    <property name="label" translatable="yes" context="pdfviewpage|contlayout">C_ontinuous</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -438,7 +438,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="contfacinglayout">
-                    <property name="label" translatable="yes" context="pdfviewpage|contfacinglayout">C_ontinuous facing</property>
+                    <property name="label" translatable="yes" context="pdfviewpage|contfacinglayout">Co_ntinuous facing</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
