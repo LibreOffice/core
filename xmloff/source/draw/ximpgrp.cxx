@@ -90,12 +90,12 @@ void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
     GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
-void SdXMLGroupShapeContext::EndElement()
+void SdXMLGroupShapeContext::endFastElement(sal_Int32 nElement)
 {
     if( mxChildren.is() )
         GetImport().GetShapeImport()->popGroupAndPostProcess();
 
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

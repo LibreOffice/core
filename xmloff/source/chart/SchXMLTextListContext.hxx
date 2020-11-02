@@ -34,7 +34,7 @@ public:
                             const OUString& rLocalName,
                             css::uno::Sequence< OUString>& rTextList );
     virtual ~SchXMLTextListContext() override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,

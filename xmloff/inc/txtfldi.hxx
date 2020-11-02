@@ -138,7 +138,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList) override;
 
     /// create XTextField and insert into document; calls PrepareTextField
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     /// create the appropriate field context from
     /// (for use in paragraph import)
@@ -993,7 +993,7 @@ private:
                                    const OUString& sAttrValue ) override;
 
     /// create textfield, attach master, and insert into document
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     /// empty method
     virtual void PrepareField(
@@ -1130,7 +1130,7 @@ private:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 /** Import a script field (<text:script>) */

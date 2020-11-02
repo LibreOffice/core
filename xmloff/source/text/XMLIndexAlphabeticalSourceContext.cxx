@@ -161,7 +161,7 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
     }
 }
 
-void XMLIndexAlphabeticalSourceContext::EndElement()
+void XMLIndexAlphabeticalSourceContext::endFastElement(sal_Int32 nElement)
 {
 
     Any aAny;
@@ -194,7 +194,7 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
         rIndexPropertySet->setPropertyValue("Locale", aAny);
     }
 
-    XMLIndexSourceBaseContext::EndElement();
+    XMLIndexSourceBaseContext::endFastElement(nElement);
 }
 
 SvXMLImportContextRef XMLIndexAlphabeticalSourceContext::CreateChildContext(

@@ -498,7 +498,7 @@ SvXMLImportContextRef SchXMLPlotAreaContext::CreateChildContext(
     return pContext;
 }
 
-void SchXMLPlotAreaContext::EndElement()
+void SchXMLPlotAreaContext::endFastElement(sal_Int32 )
 {
     // set categories
     if( !mrCategoriesAddress.isEmpty() && mxNewDoc.is())
@@ -594,7 +594,7 @@ void SchXMLDataLabelSpanContext::characters(const OUString& rChars)
     maCharBuffer.append(rChars);
 }
 
-void SchXMLDataLabelSpanContext::EndElement()
+void SchXMLDataLabelSpanContext::endFastElement(sal_Int32 )
 {
     mrLabels.push_back(maCharBuffer.makeStringAndClear());
 }
@@ -781,7 +781,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
     mrIndex += nRepeat;
 }
 
-void SchXMLDataPointContext::EndElement()
+void SchXMLDataPointContext::endFastElement(sal_Int32 )
 {
     if(!mDataPoint.msStyleName.isEmpty() || mDataPoint.mCustomLabels.size() > 0)
     {

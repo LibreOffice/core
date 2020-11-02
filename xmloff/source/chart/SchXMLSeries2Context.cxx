@@ -541,7 +541,7 @@ struct DomainInfo
 
 }
 
-void SchXMLSeries2Context::EndElement()
+void SchXMLSeries2Context::endFastElement(sal_Int32 )
 {
     // special handling for different chart types.  This is necessary as the
     // roles are not yet saved in the file format

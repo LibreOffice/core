@@ -136,12 +136,12 @@ void XMLIndexBibliographyEntryContext::StartElement(
     m_nValues++;
 }
 
-void XMLIndexBibliographyEntryContext::EndElement()
+void XMLIndexBibliographyEntryContext::endFastElement(sal_Int32 nElement)
 {
     // only valid, if we have bibliography info
     if (bBibliographyInfoOK)
     {
-        XMLIndexSimpleEntryContext::EndElement();
+        XMLIndexSimpleEntryContext::endFastElement(nElement);
     }
 }
 

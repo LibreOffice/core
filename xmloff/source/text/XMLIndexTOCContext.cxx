@@ -245,7 +245,7 @@ void XMLIndexTOCContext::StartElement(
 
 }
 
-void XMLIndexTOCContext::EndElement()
+void XMLIndexTOCContext::endFastElement(sal_Int32 )
 {
     // complete import of index by removing the markers (if the index
     // was actually inserted, that is)

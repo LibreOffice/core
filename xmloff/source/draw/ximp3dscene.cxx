@@ -151,7 +151,7 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 }
 
-void SdXML3DSceneShapeContext::EndElement()
+void SdXML3DSceneShapeContext::endFastElement(sal_Int32 nElement)
 {
     if(!mxShape.is())
         return;
@@ -166,7 +166,7 @@ void SdXML3DSceneShapeContext::EndElement()
         GetImport().GetShapeImport()->popGroupAndPostProcess();
 
     // call parent
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 }
 
 SvXMLImportContextRef SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPrefix,

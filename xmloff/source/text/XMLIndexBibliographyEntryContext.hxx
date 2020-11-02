@@ -61,7 +61,7 @@ protected:
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 
     /** call FillPropertyValues and insert into template */
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     /** fill property values for this template entry */
     virtual void FillPropertyValues(

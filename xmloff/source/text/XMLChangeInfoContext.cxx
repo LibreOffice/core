@@ -75,7 +75,7 @@ SvXMLImportContextRef XMLChangeInfoContext::CreateChildContext(
     return xContext;
 }
 
-void XMLChangeInfoContext::EndElement()
+void XMLChangeInfoContext::endFastElement(sal_Int32 )
 {
     // set values at changed region context
     rChangedRegion.SetChangeInfo(rType, sAuthorBuffer.makeStringAndClear(),

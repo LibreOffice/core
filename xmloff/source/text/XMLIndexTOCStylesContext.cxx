@@ -82,7 +82,7 @@ void XMLIndexTOCStylesContext::StartElement(
     }
 }
 
-void XMLIndexTOCStylesContext::EndElement()
+void XMLIndexTOCStylesContext::endFastElement(sal_Int32 )
 {
     // if valid...
     if (nOutlineLevel < 0)

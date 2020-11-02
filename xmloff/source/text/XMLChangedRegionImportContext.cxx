@@ -127,7 +127,7 @@ SvXMLImportContextRef XMLChangedRegionImportContext::CreateChildContext(
     return xContext;
 }
 
-void XMLChangedRegionImportContext::EndElement()
+void XMLChangedRegionImportContext::endFastElement(sal_Int32 )
 {
     // restore old XCursor (if necessary)
     if (xOldCursor.is())

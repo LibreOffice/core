@@ -56,7 +56,7 @@ public:
     SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
 private:
     css::uno::Reference< css::container::XNameAccess > mxLayerManager;
@@ -111,7 +111,7 @@ SvXMLImportContextRef SdXMLLayerContext::CreateChildContext( sal_uInt16 nPrefix,
     return nullptr;
 }
 
-void SdXMLLayerContext::EndElement()
+void SdXMLLayerContext::endFastElement(sal_Int32 )
 {
     SAL_WARN_IF( msName.isEmpty(), "xmloff", "xmloff::SdXMLLayerContext::EndElement(), draw:layer element without draw:name!" );
     if( msName.isEmpty() )

@@ -121,7 +121,7 @@ SvXMLImportContext* XFormsModelContext::HandleChild(
     return pContext;
 }
 
-void XFormsModelContext::EndElement()
+void XFormsModelContext::endFastElement(sal_Int32 )
 {
     // update before putting model into document
     Reference<XUpdatable> xUpdate( mxModel, UNO_QUERY );

@@ -243,7 +243,7 @@ public:
         const char* pServiceName,   /// see XMLTextFieldImportContext
         sal_uInt16 nPrfx,               /// see XMLTextFieldImportContext
         const OUString& rLocalName, /// see XMLTextFieldImportContext
-        // for finding appropriate field master (see EndElement())
+        // for finding appropriate field master (see endFastElement())
         VarType eVarType,               /// variable type
         // config variables:
         bool bFormula,              /// see XMLTextFieldImportContext
@@ -262,7 +262,7 @@ protected:
 
     /// create XTextField, attach master and insert into document;
     /// also calls PrepareTextField
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     /// find appropriate field master
     bool FindFieldMaster(
@@ -476,7 +476,7 @@ private:
                                    const OUString& sAttrValue ) override;
 
     /// create, prepare and insert database field master and database field
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 #endif

@@ -277,7 +277,7 @@ void SchXMLTableContext::StartElement( const uno::Reference< xml::sax::XAttribut
     }
 }
 
-void SchXMLTableContext::EndElement()
+void SchXMLTableContext::endFastElement(sal_Int32 )
 {
     if( mbHasColumnPermutation )
     {
@@ -572,7 +572,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
@@ -677,7 +677,7 @@ SvXMLImportContextRef SchXMLTableCellContext::CreateChildContext(
     return pContext;
 }
 
-void SchXMLTableCellContext::EndElement()
+void SchXMLTableCellContext::endFastElement(sal_Int32 )
 {
     if( mbReadText && !maCellContent.isEmpty() ) //apply text from <text:p> element
         mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ].aString = maCellContent;
@@ -1065,7 +1065,7 @@ SvXMLImportContextRef SchXMLRangeSomewhereContext::CreateChildContext(
     return nullptr;
 }
 
-void SchXMLRangeSomewhereContext::EndElement()
+void SchXMLRangeSomewhereContext::endFastElement(sal_Int32 )
 {
     mrRangeString = maRangeStringBuffer.makeStringAndClear();
 }

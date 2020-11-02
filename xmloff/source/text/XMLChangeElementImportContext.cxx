@@ -85,7 +85,7 @@ void XMLChangeElementImportContext::StartElement( const Reference< XAttributeLis
     }
 }
 
-void XMLChangeElementImportContext::EndElement()
+void XMLChangeElementImportContext::endFastElement(sal_Int32 )
 {
     if(bAcceptContent)
     {

@@ -92,7 +92,7 @@ SvXMLImportContextRef XFormsInstanceContext::CreateChildContext(
 
 }
 
-void XFormsInstanceContext::EndElement()
+void XFormsInstanceContext::endFastElement(sal_Int32 )
 {
     Sequence<PropertyValue> aSequence( 3 );
     PropertyValue* pSequence = aSequence.getArray();
