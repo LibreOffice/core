@@ -35,8 +35,7 @@ class SwTextRefMark;
 
 class SAL_DLLPUBLIC_RTTI SwFormatRefMark final
     : public SfxPoolItem
-    , public SwModify
-    , public sw::BroadcasterMixin
+    , public sw::BroadcastingModify
 {
     friend class SwTextRefMark;
     SwTextRefMark* m_pTextAttr;

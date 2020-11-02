@@ -29,7 +29,7 @@ SwFormatRefMark::~SwFormatRefMark( )
 
 SwFormatRefMark::SwFormatRefMark( const OUString& rName )
     : SfxPoolItem(RES_TXTATR_REFMARK)
-    , SwModify()
+    , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
     , m_aRefName(rName)
 {
@@ -37,8 +37,7 @@ SwFormatRefMark::SwFormatRefMark( const OUString& rName )
 
 SwFormatRefMark::SwFormatRefMark( const SwFormatRefMark& rAttr )
     : SfxPoolItem(RES_TXTATR_REFMARK)
-    , SwModify()
-    , BroadcasterMixin()
+    , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
     , m_aRefName(rAttr.m_aRefName)
 {
