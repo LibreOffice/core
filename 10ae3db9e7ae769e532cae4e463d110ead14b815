@@ -46,6 +46,30 @@
       "revId": "10ae3db9e7ae769e532cae4e463d110ead14b815",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8851750_328143e1",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-02T09:11:10Z",
+      "side": 1,
+      "message": "Thanks; it\u0027s useful for me to know for the future - was interested if it\u0027s OK if I use such code somewhere or not.",
+      "parentUuid": "2bfe3f23_ecf7368f",
+      "range": {
+        "startLine": 817,
+        "startChar": 15,
+        "endLine": 817,
+        "endChar": 55
+      },
+      "revId": "10ae3db9e7ae769e532cae4e463d110ead14b815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
