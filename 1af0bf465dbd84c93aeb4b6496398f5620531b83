@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b012dd62_c9973ac0",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-02T12:31:25Z",
+      "side": 1,
+      "message": "Please don\u0027t revert this order. Checking for Is*FontEnabled is cheap; looking for substring is more expensive.",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 43
+      },
+      "revId": "1af0bf465dbd84c93aeb4b6496398f5620531b83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
