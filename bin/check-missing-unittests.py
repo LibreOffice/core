@@ -10,6 +10,7 @@ import os
 import datetime
 import subprocess
 import sys
+import re
 
 def main(ignoredBugs):
     results = {
@@ -50,7 +51,9 @@ def main(ignoredBugs):
         summary = commitInfo[0].strip('"').lower()
 
         #Check summary has a bug id
-        if 'tdf#' in summary or 'fdo#' in summary:
+        reBugId = re.search(r'(?<=tdf#|fdo#)\d{5,6}', summary)
+        if reBugId:
+            bugId = reBugId.group()
 
             isIgnored = False
             for i in ignoredBugs:
@@ -58,16 +61,6 @@ def main(ignoredBugs):
                     isIgnored = True
             if isIgnored:
                 continue
-
-            if 'tdf#' in summary:
-                if not summary.split('tdf#')[1][0].isdigit():
-                    continue
-                bugId = ''.join(filter(str.isdigit, summary.split('tdf#')[1].split(' ')[0]))
-            elif 'fdo#' in summary:
-                if not summary.split('fdo#')[1][0].isdigit():
-                    continue
-                bugId = ''.join(filter(str.isdigit, summary.split('fdo#')[1].split(' ')[0]))
-
 
             if bugId in hasTestSet:
                 continue
