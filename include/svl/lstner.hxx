@@ -20,7 +20,9 @@
 #define INCLUDED_SVL_LSTNER_HXX
 
 #include <svl/svldllapi.h>
+#include <map>
 #include <memory>
+#include <vector>
 
 class SfxBroadcaster;
 class SfxHint;
@@ -37,15 +39,18 @@ enum class DuplicateHandling { Unexpected, Prevent, Allow };
 
 class SVL_DLLPUBLIC SfxListener
 {
-    struct Impl;
-    std::unique_ptr<Impl> mpImpl;
+    std::vector<SfxBroadcaster*> maBCs;
+#ifdef DBG_UTIL
+    std::map<SfxBroadcaster*, std::unique_ptr<sal::BacktraceState>>
+        maCallStacks;
+#endif
 
 private:
     const SfxListener&  operator=(const SfxListener &) = delete;
 
 public:
 
-                        SfxListener();
+                        SfxListener() {}
                         SfxListener( const SfxListener &rCopy );
     virtual             ~SfxListener() COVERITY_NOEXCEPT_FALSE;
 

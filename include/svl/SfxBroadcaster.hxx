@@ -21,6 +21,7 @@
 
 #include <svl/svldllapi.h>
 #include <memory>
+#include <vector>
 
 class SfxListener;
 class SfxHint;
@@ -28,8 +29,9 @@ class SfxBroadcasterTest;
 
 class SVL_DLLPUBLIC SfxBroadcaster
 {
-    struct Impl;
-    std::unique_ptr<Impl> mpImpl;
+    /** Contains the positions of removed listeners. */
+    std::vector<size_t>     m_RemovedPositions;
+    std::vector<SfxListener*> m_Listeners;
 
 private:
     void                    AddListener( SfxListener& rListener );
@@ -41,7 +43,7 @@ protected:
 
 public:
 
-                            SfxBroadcaster();
+                            SfxBroadcaster() {}
                             SfxBroadcaster( const SfxBroadcaster &rBC );
     virtual                 ~SfxBroadcaster() COVERITY_NOEXCEPT_FALSE;
 
