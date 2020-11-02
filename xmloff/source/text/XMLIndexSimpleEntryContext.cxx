@@ -91,7 +91,7 @@ void XMLIndexSimpleEntryContext::StartElement(
 
 }
 
-void XMLIndexSimpleEntryContext::EndElement()
+void XMLIndexSimpleEntryContext::endFastElement(sal_Int32 )
 {
     Sequence<PropertyValue> aValues(m_nValues);
 

@@ -405,7 +405,7 @@ public:
             const css::uno::Reference<css::xml::sax::XAttributeList > & rFrameAttrList,
             bool bMultipleContent = false );
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual void SAL_CALL characters( const OUString& rChars ) override;
 
@@ -1106,7 +1106,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
     Create();
 }
 
-void XMLTextFrameContext_Impl::EndElement()
+void XMLTextFrameContext_Impl::endFastElement(sal_Int32 )
 {
     if( ( XML_TEXT_FRAME_OBJECT_OLE == nType ||
           XML_TEXT_FRAME_GRAPHIC == nType) &&
@@ -1403,7 +1403,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     }
 }
 
-void XMLTextFrameContext::EndElement()
+void XMLTextFrameContext::endFastElement(sal_Int32 )
 {
     /// solve if multiple image child contexts were imported
     SvXMLImportContextRef const pMultiContext(solveMultipleImages());

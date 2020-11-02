@@ -61,7 +61,7 @@ public:
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual void SAL_CALL characters( const OUString& rChars ) override;
 };
@@ -96,7 +96,7 @@ void XMLEmbeddedObjectImportContext_Impl::StartElement(
                             xAttrList );
 }
 
-void XMLEmbeddedObjectImportContext_Impl::EndElement()
+void XMLEmbeddedObjectImportContext_Impl::endFastElement(sal_Int32 )
 {
     xHandler->endElement( GetImport().GetNamespaceMap().GetQNameByKey(
                                 GetPrefix(), GetLocalName() ) );
@@ -273,7 +273,7 @@ void XMLEmbeddedObjectImportContext::StartElement(
                             xAttrList );
 }
 
-void XMLEmbeddedObjectImportContext::EndElement()
+void XMLEmbeddedObjectImportContext::endFastElement(sal_Int32 )
 {
     if( !xHandler.is() )
         return;

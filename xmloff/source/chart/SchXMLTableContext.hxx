@@ -59,7 +59,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     void setRowPermutation( const css::uno::Sequence< sal_Int32 > & rPermutation );
     void setColumnPermutation( const css::uno::Sequence< sal_Int32 > & rPermutation );
@@ -180,7 +180,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLTABLECONTEXT_HXX

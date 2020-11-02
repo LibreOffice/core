@@ -57,12 +57,6 @@ void XMLIndexBibliographySourceContext::ProcessAttribute(
 }
 
 
-void XMLIndexBibliographySourceContext::EndElement()
-{
-    // No attributes, no properties.
-}
-
-
 SvXMLImportContextRef XMLIndexBibliographySourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,

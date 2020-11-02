@@ -709,7 +709,7 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
     xNewDia->setDiagramData( xDataSource, aArgs );
 }
 
-void SchXMLChartContext::EndElement()
+void SchXMLChartContext::endFastElement(sal_Int32 )
 {
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
     uno::Reference< beans::XPropertySet > xProp( xDoc, uno::UNO_QUERY );

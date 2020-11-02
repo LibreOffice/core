@@ -343,7 +343,7 @@ void SdXMLShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeL
     GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
-void SdXMLShapeContext::EndElement()
+void SdXMLShapeContext::endFastElement(sal_Int32 )
 {
     if(mxCursor.is())
     {
@@ -2146,7 +2146,7 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     SdXMLShapeContext::StartElement(xAttrList);
 }
 
-void SdXMLMeasureShapeContext::EndElement()
+void SdXMLMeasureShapeContext::endFastElement(sal_Int32 nElement)
 {
     do
     {
@@ -2165,7 +2165,7 @@ void SdXMLMeasureShapeContext::EndElement()
     }
     while(false);
 
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 }
 
 
@@ -2456,7 +2456,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const css::uno::Reference< cs
     SdXMLShapeContext::StartElement(mxAttrList);
 }
 
-void SdXMLGraphicObjectShapeContext::EndElement()
+void SdXMLGraphicObjectShapeContext::endFastElement(sal_Int32 nElement)
 {
     if (mxBase64Stream.is())
     {
@@ -2471,7 +2471,7 @@ void SdXMLGraphicObjectShapeContext::EndElement()
         }
     }
 
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 }
 
 SvXMLImportContextRef SdXMLGraphicObjectShapeContext::CreateChildContext(
@@ -2578,12 +2578,12 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
         mxChartContext->StartElement( xAttrList );
 }
 
-void SdXMLChartShapeContext::EndElement()
+void SdXMLChartShapeContext::endFastElement(sal_Int32 nElement)
 {
     if( mxChartContext.is() )
-        mxChartContext->EndElement();
+        mxChartContext->endFastElement(nElement);
 
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 }
 
 void SdXMLChartShapeContext::characters( const OUString& rChars )
@@ -2709,7 +2709,7 @@ void SdXMLObjectShapeContext::StartElement( const css::uno::Reference< css::xml:
     GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
-void SdXMLObjectShapeContext::EndElement()
+void SdXMLObjectShapeContext::endFastElement(sal_Int32 nElement)
 {
     if (GetImport().isGeneratorVersionOlderThan(
                 SvXMLImport::OOo_34x, SvXMLImport::LO_41x)) // < LO 4.0
@@ -2741,7 +2741,7 @@ void SdXMLObjectShapeContext::EndElement()
             xProps->setPropertyValue("PersistName", uno::makeAny( aPersistName ) );
     }
 
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
@@ -2873,7 +2873,7 @@ void SdXMLAppletShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStri
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLAppletShapeContext::EndElement()
+void SdXMLAppletShapeContext::endFastElement(sal_Int32 nElement)
 {
     uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
     if( xProps.is() )
@@ -2916,7 +2916,7 @@ void SdXMLAppletShapeContext::EndElement()
         SetThumbnail();
     }
 
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 }
 
 SvXMLImportContextRef SdXMLAppletShapeContext::CreateChildContext( sal_uInt16 p_nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
@@ -3080,7 +3080,7 @@ void SdXMLPluginShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStri
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLPluginShapeContext::EndElement()
+void SdXMLPluginShapeContext::endFastElement(sal_Int32 nElement)
 {
     uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
 
@@ -3182,7 +3182,7 @@ void SdXMLPluginShapeContext::EndElement()
         SetThumbnail();
     }
 
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 }
 
 SvXMLImportContextRef SdXMLPluginShapeContext::CreateChildContext( sal_uInt16 p_nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
@@ -3296,7 +3296,7 @@ void SdXMLFloatingFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLFloatingFrameShapeContext::EndElement()
+void SdXMLFloatingFrameShapeContext::endFastElement(sal_Int32 nElement)
 {
     uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
 
@@ -3311,7 +3311,7 @@ void SdXMLFloatingFrameShapeContext::EndElement()
     }
 
     SetThumbnail();
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 }
 
 
@@ -3565,7 +3565,7 @@ void SdXMLFrameShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
     // ignore
 }
 
-void SdXMLFrameShapeContext::EndElement()
+void SdXMLFrameShapeContext::endFastElement(sal_Int32 nElement)
 {
     // solve if multiple image child contexts were imported
     SvXMLImportContextRef const pSelectedContext(solveMultipleImages());
@@ -3627,14 +3627,15 @@ void SdXMLFrameShapeContext::EndElement()
 
             if( mxImplContext.is() )
             {
+                auto nElement2 = XML_ELEMENT(DRAW, eToken);
                 mxImplContext->StartElement( mxAttrList );
-                mxImplContext->EndElement();
+                mxImplContext->endFastElement(nElement2);
             }
         }
     }
 
     mxImplContext = nullptr;
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 }
 
 void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix,
@@ -3752,7 +3753,7 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
     SdXMLShapeContext::StartElement(xAttrList);
 }
 
-void SdXMLCustomShapeContext::EndElement()
+void SdXMLCustomShapeContext::endFastElement(sal_Int32 nElement)
 {
     // Customshapes remember mirror state in its enhanced geometry.
     // SetTransformation() in StartElement() may have applied mirroring, but that is not yet
@@ -3850,7 +3851,7 @@ void SdXMLCustomShapeContext::EndElement()
         }
     }
 
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 
     // tdf#98163 call a custom slot to be able to reset the UNO API
     // implementations held on the SdrObjects of type
@@ -3987,12 +3988,12 @@ void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::
     }
 }
 
-void SdXMLTableShapeContext::EndElement()
+void SdXMLTableShapeContext::endFastElement(sal_Int32 nElement)
 {
     if( mxTableImportContext.is() )
-        mxTableImportContext->EndElement();
+        mxTableImportContext->endFastElement(nElement);
 
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 
     if( mxShape.is() )
     {

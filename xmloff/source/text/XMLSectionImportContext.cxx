@@ -307,7 +307,7 @@ void XMLSectionImportContext::ProcessAttributes(
     }
 }
 
-void XMLSectionImportContext::EndElement()
+void XMLSectionImportContext::endFastElement(sal_Int32 )
 {
     // get rid of last paragraph
     // (unless it's the only paragraph in the section)

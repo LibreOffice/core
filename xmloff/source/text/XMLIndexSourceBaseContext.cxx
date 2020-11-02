@@ -206,7 +206,7 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
     }
 }
 
-void XMLIndexSourceBaseContext::EndElement()
+void XMLIndexSourceBaseContext::endFastElement(sal_Int32 )
 {
     rIndexPropertySet->setPropertyValue("IsRelativeTabstops", css::uno::Any(bRelativeTabs));
     rIndexPropertySet->setPropertyValue("CreateFromChapter", css::uno::Any(bChapterIndex));

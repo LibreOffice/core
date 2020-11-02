@@ -713,7 +713,7 @@ SvXMLImportContextRef SchXMLAxisContext::CreateChildContext(
     return pContext;
 }
 
-void SchXMLAxisContext::EndElement()
+void SchXMLAxisContext::endFastElement(sal_Int32 )
 {
     if( !m_bDateScaleImported && m_nAxisType==chart::ChartAxisType::AUTOMATIC )
     {

@@ -118,7 +118,7 @@ namespace xmloff
         virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual void    EndElement() override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
@@ -220,7 +220,7 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void StartElement(
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual void    EndElement() override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
@@ -443,7 +443,7 @@ namespace xmloff
         virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual void    EndElement() override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     private:
         void    adjustDefaultControlProperty();
@@ -493,7 +493,7 @@ namespace xmloff
         virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual void    EndElement() override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
@@ -613,7 +613,7 @@ namespace xmloff
         virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual void EndElement() override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     private:
         // OElementImport overridables
@@ -639,7 +639,7 @@ namespace xmloff
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void    StartElement(
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual void    EndElement() override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,

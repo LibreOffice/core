@@ -102,7 +102,7 @@ public:
 
     virtual void StartElement( const Reference< XAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     void InitColumns();
 
@@ -139,7 +139,7 @@ public:
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     sal_Int32 getColumnSpan() const { return mnColSpan; }
     sal_Int32 getRowSpan() const { return mnRowSpan; }
@@ -592,7 +592,7 @@ void XMLTableImportContext::StartElement( const Reference< XAttributeList >& /*x
 {
 }
 
-void XMLTableImportContext::EndElement()
+void XMLTableImportContext::endFastElement(sal_Int32 )
 {
     for( const std::shared_ptr< MergeInfo >& xInfo : maMergeInfos )
     {
@@ -723,7 +723,7 @@ SvXMLImportContextRef XMLCellImportContext::CreateChildContext( sal_uInt16 nPref
     return pContext;
 }
 
-void XMLCellImportContext::EndElement()
+void XMLCellImportContext::endFastElement(sal_Int32 )
 {
     if(mxCursor.is())
     {

@@ -261,7 +261,7 @@ XMLSetVarFieldImportContext::XMLSetVarFieldImportContext(
 {
 }
 
-void XMLSetVarFieldImportContext::EndElement()
+void XMLSetVarFieldImportContext::endFastElement(sal_Int32 )
 {
     // should we call PrepareField on the field, or rather on it's master?
     // currently: call on field (just like superclass)
@@ -976,7 +976,7 @@ void XMLDatabaseDisplayImportContext::ProcessAttribute(
     bValid = m_bTableOK && m_bDatabaseOK && bColumnOK;
 }
 
-void XMLDatabaseDisplayImportContext::EndElement()
+void XMLDatabaseDisplayImportContext::endFastElement(sal_Int32 )
 {
     // we have an EndElement of our own, because database fields need
     // to be attached to a field master before they can be inserted into

@@ -87,7 +87,7 @@ public:
     SdXMLEventContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList, const Reference< XShape >& rxShape );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,    const Reference< XAttributeList>& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 class XMLEventSoundContext : public SvXMLImportContext
@@ -241,7 +241,7 @@ SvXMLImportContextRef SdXMLEventContext::CreateChildContext( sal_uInt16 nPrefix,
     return new XMLEventSoundContext( GetImport(), nPrefix, rLocalName, xAttrList, this );
 }
 
-void SdXMLEventContext::EndElement()
+void SdXMLEventContext::endFastElement(sal_Int32 )
 {
     GetImport().GetShapeImport()->addShapeEvents(maData);
 }

@@ -248,7 +248,7 @@ static auto PopFieldmark(XMLTextImportHelper & rHelper) -> void
     }
 }
 
-void XMLTextMarkImportContext::EndElement()
+void XMLTextMarkImportContext::endFastElement(sal_Int32 )
 {
     static const char sAPI_bookmark[] = "com.sun.star.text.Bookmark";
 

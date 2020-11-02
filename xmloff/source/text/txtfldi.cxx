@@ -156,7 +156,7 @@ OUString const & XMLTextFieldImportContext::GetContent()
     return sContent;
 }
 
-void XMLTextFieldImportContext::EndElement()
+void XMLTextFieldImportContext::endFastElement(sal_Int32 )
 {
     DBG_ASSERT(!GetServiceName().isEmpty(), "no service name for element!");
     if (bValid)
@@ -2852,7 +2852,7 @@ void XMLDdeFieldImportContext::ProcessAttribute(
     }
 }
 
-void XMLDdeFieldImportContext::EndElement()
+void XMLDdeFieldImportContext::endFastElement(sal_Int32 )
 {
     if (!bValid)
         return;
@@ -3353,7 +3353,7 @@ SvXMLImportContextRef XMLAnnotationImportContext::CreateChildContext(
     return pContext;
 }
 
-void XMLAnnotationImportContext::EndElement()
+void XMLAnnotationImportContext::endFastElement(sal_Int32 )
 {
     DBG_ASSERT(!GetServiceName().isEmpty(), "no service name for element!");
     if( mxCursor.is() )

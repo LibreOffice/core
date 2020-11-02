@@ -150,7 +150,7 @@ void XMLFootnoteImportContext::StartElement(
     // else: ignore footnote! Content will be merged into document.
 }
 
-void XMLFootnoteImportContext::EndElement()
+void XMLFootnoteImportContext::endFastElement(sal_Int32 )
 {
     // get rid of last dummy paragraph
     rHelper.DeleteParagraph();

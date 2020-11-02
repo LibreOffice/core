@@ -124,7 +124,7 @@ void XMLIndexUserSourceContext::ProcessAttribute(
     }
 }
 
-void XMLIndexUserSourceContext::EndElement()
+void XMLIndexUserSourceContext::endFastElement(sal_Int32 nElement)
 {
     rIndexPropertySet->setPropertyValue("CreateFromEmbeddedObjects", css::uno::Any(bUseObjects));
     rIndexPropertySet->setPropertyValue("CreateFromGraphicObjects", css::uno::Any(bUseGraphic));
@@ -139,7 +139,7 @@ void XMLIndexUserSourceContext::EndElement()
         rIndexPropertySet->setPropertyValue("UserIndexName", css::uno::Any(sIndexName));
     }
 
-    XMLIndexSourceBaseContext::EndElement();
+    XMLIndexSourceBaseContext::endFastElement(nElement);
 }
 
 SvXMLImportContextRef XMLIndexUserSourceContext::CreateChildContext(

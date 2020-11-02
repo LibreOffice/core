@@ -67,7 +67,7 @@ XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImpo
 XMLCalculationSettingsContext::~XMLCalculationSettingsContext()
 {
 }
-void XMLCalculationSettingsContext::EndElement()
+void XMLCalculationSettingsContext::endFastElement(sal_Int32 )
 {
     if (nYear != 1930 )
     {

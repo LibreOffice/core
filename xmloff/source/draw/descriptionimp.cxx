@@ -45,7 +45,7 @@ SdXMLDescriptionContext::~SdXMLDescriptionContext()
 {
 }
 
-void SdXMLDescriptionContext::EndElement()
+void SdXMLDescriptionContext::endFastElement(sal_Int32 )
 {
     if( msText.isEmpty() )
         return;

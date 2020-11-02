@@ -111,7 +111,7 @@ void XMLIndexTableSourceContext::ProcessAttribute(
     }
 }
 
-void XMLIndexTableSourceContext::EndElement()
+void XMLIndexTableSourceContext::endFastElement(sal_Int32 nElement)
 {
     rIndexPropertySet->setPropertyValue("CreateFromLabels", css::uno::Any(bUseCaption));
 
@@ -125,7 +125,7 @@ void XMLIndexTableSourceContext::EndElement()
         rIndexPropertySet->setPropertyValue("LabelDisplayType", css::uno::Any(nDisplayFormat));
     }
 
-    XMLIndexSourceBaseContext::EndElement();
+    XMLIndexSourceBaseContext::endFastElement(nElement);
 }
 
 SvXMLImportContextRef XMLIndexTableSourceContext::CreateChildContext(

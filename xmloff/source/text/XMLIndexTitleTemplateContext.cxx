@@ -76,7 +76,7 @@ void XMLIndexTitleTemplateContext::StartElement(
     }
 }
 
-void XMLIndexTitleTemplateContext::EndElement()
+void XMLIndexTitleTemplateContext::endFastElement(sal_Int32 )
 {
     Any aAny;
 

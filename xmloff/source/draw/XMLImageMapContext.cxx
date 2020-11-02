@@ -126,7 +126,7 @@ public:
     void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
@@ -195,7 +195,7 @@ void XMLImageMapObjectContext::StartElement(
     }
 }
 
-void XMLImageMapObjectContext::EndElement()
+void XMLImageMapObjectContext::endFastElement(sal_Int32 )
 {
     // only create and insert image map object if validity flag is set
     // (and we actually have an image map)
@@ -611,7 +611,7 @@ SvXMLImportContextRef XMLImageMapContext::CreateChildContext(
     return xContext;
 }
 
-void XMLImageMapContext::EndElement()
+void XMLImageMapContext::endFastElement(sal_Int32 )
 {
     Reference < XPropertySetInfo > xInfo =
         xPropertySet->getPropertySetInfo();

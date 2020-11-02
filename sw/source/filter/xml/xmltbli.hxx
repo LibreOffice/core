@@ -181,7 +181,7 @@ public:
     const SwStartNode *InsertTableSection(const SwStartNode *pPrevSttNd = nullptr,
                                   OUString const* pStringValueStyleName = nullptr);
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     void SetHasSubTables( bool bNew ) { m_bHasSubTables = bNew; }
 };

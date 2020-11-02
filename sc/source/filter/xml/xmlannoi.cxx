@@ -146,11 +146,11 @@ void ScXMLAnnotationContext::characters( const OUString& rChars )
     maTextBuffer.append(rChars);
 }
 
-void ScXMLAnnotationContext::EndElement()
+void ScXMLAnnotationContext::endFastElement(sal_Int32 nElement)
 {
     if (pShapeContext)
     {
-        pShapeContext->EndElement();
+        pShapeContext->endFastElement(nElement);
         pShapeContext.reset();
     }
 

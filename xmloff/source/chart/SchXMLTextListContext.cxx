@@ -80,7 +80,7 @@ SchXMLTextListContext::~SchXMLTextListContext()
 {
 }
 
-void SchXMLTextListContext::EndElement()
+void SchXMLTextListContext::endFastElement(sal_Int32 )
 {
     sal_Int32 nCount = m_aTextVector.size();
     m_rTextList.realloc(nCount);
