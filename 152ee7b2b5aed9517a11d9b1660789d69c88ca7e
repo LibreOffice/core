@@ -33,6 +33,24 @@
       "revId": "152ee7b2b5aed9517a11d9b1660789d69c88ca7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ea14b51_2218f613",
+        "filename": "include/sal/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-02T22:03:12Z",
+      "side": 1,
+      "message": "I\u0027m not an expert. If it riscs to break I should not touch it.\nFurthermore 32 and 64 bits can not be altered because interfere in other places.",
+      "parentUuid": "fe27ccb2_916ba90c",
+      "revId": "152ee7b2b5aed9517a11d9b1660789d69c88ca7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
