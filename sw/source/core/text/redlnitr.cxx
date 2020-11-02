@@ -805,7 +805,7 @@ bool SwRedlineItr::ChkSpecialUnderline_() const
 bool SwRedlineItr::CheckLine(
         sal_uLong const nStartNode, sal_Int32 const nChkStart,
         sal_uLong const nEndNode, sal_Int32 nChkEnd, OUString& rRedlineText,
-        bool& bRedlineEnd)
+        bool& bRedlineEnd, RedlineType& eRedlineEnd)
 {
     // note: previously this would return true in the (!m_bShow && m_pExt)
     // case, but surely that was a bug?
@@ -818,6 +818,7 @@ bool SwRedlineItr::CheckLine(
     sal_Int32 nOldEnd = m_nEnd;
     SwRedlineTable::size_type const nOldAct = m_nAct;
     bool bRet = bRedlineEnd = false;
+    eRedlineEnd = RedlineType::None;
 
     for (m_nAct = m_nFirst; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++m_nAct)
     {
@@ -831,11 +832,16 @@ bool SwRedlineItr::CheckLine(
             bRet = true;
             if ( rRedlineText.isEmpty() && pRedline->GetType() == RedlineType::Delete )
                 rRedlineText = const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true);
+            // store redlining at paragraph break
             if ( COMPLETE_STRING == m_nEnd )
             {
+                eRedlineEnd = pRedline->GetType();
                 bRedlineEnd = true;
                 break;
             }
+            // store redlining at line end (for line break formatting)
+            else if ( nChkEnd <= m_nEnd )
+                eRedlineEnd = pRedline->GetType();
         }
     }
 

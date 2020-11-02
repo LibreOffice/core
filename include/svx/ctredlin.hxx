@@ -59,6 +59,7 @@ enum class RedlineType : sal_uInt16
     TableRowDelete = 0x7,// Table row has been deleted.
     TableCellInsert = 0x8,// Table cell has been inserted.
     TableCellDelete = 0x9,// Table cell has been deleted.
+    None = USHRT_MAX - 1, // special value to indicate missing redlining in some return value
     Any = USHRT_MAX // special value to indicate any redline type in some method calls
 };
 

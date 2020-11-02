@@ -299,6 +299,14 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 pEndTempl = pPor;
         }
 
+        // set redlining for line break symbol
+        if ( pPor->IsBreakPortion() && GetInfo().GetOpt().IsParagraph() && GetRedln() )
+        {
+            SeekAndChg( GetInfo() );
+            if ( m_pCurr->GetRedlineEndType() != RedlineType::None )
+                static_cast<SwBreakPortion&>(*pPor).SetRedline( m_pCurr->GetRedlineEndType() );
+        }
+
         // A special case are GluePortions which output blanks.
 
         // 6168: Avoid that the rest of a FieldPortion gets the attributes of the
@@ -326,12 +334,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             // Paragraph symbols should have the same font as the paragraph in front of them,
             // except for the case that there's redlining in the paragraph
             if( GetRedln() )
-            {
                 SeekAndChg( GetInfo() );
-                // paint redlining
-                if ( m_pCurr->HasRedline() )
-                    static_cast<SwBreakPortion&>(*pPor).PaintRedline( GetInfo() );
-            }
             else
                 SeekAndChgBefore( GetInfo() );
         }
@@ -433,6 +436,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetIdx() >= TextFrameIndex(GetInfo().GetText().getLength()))
         {
             bool bHasRedlineEnd( GetRedln() && m_pCurr->HasRedlineEnd() );
+            RedlineType eRedlineEnd = bHasRedlineEnd ? m_pCurr->GetRedlineEndType() : RedlineType::None;
             if( bHasRedlineEnd )
             {
                 TextFrameIndex nOffset = GetInfo().GetIdx();
@@ -442,8 +446,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 GetRedln()->Seek(*m_pFont, pos.first->GetIndex(), pos.second, 0);
             }
             const SwTmpEndPortion aEnd( *pEndTempl,
-                           bHasRedlineEnd ? m_pFont->GetUnderline() : LINESTYLE_NONE,
-                           bHasRedlineEnd ? m_pFont->GetStrikeout() : STRIKEOUT_NONE,
+                           bHasRedlineEnd && eRedlineEnd != RedlineType::Delete ? m_pFont->GetUnderline() : LINESTYLE_NONE,
+                           bHasRedlineEnd && eRedlineEnd == RedlineType::Delete ? m_pFont->GetStrikeout() : STRIKEOUT_NONE,
                            bHasRedlineEnd ? m_pFont->GetColor() : COL_AUTO );
             GetFnt()->ChgPhysFnt( GetInfo().GetVsh(), *pOut );
 

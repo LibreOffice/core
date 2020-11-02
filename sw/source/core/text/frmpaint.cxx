@@ -502,7 +502,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
         else if( pSh->GetWin() )
         {
             std::unique_ptr<SwFont> pFnt;
-            RedlineType eRedline = RedlineType::Any;
+            RedlineType eRedline = RedlineType::None;
             const SwTextNode& rTextNode = *GetTextNodeForParaProps();
             if ( rTextNode.HasSwAttrSet() )
             {
@@ -605,7 +605,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
 
                     // show redline color and settings drawing a background pilcrow,
                     // but keep also other formattings (with neutral pilcrow color)
-                    if ( eRedline != RedlineType::Any )
+                    if ( eRedline != RedlineType::None )
                     {
                         pFnt->DrawText_( aDrawInf );
                         if ( eRedline == RedlineType::Delete )

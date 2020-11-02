@@ -24,6 +24,7 @@
 #include <TextFrameIndex.hxx>
 #include <txttypes.hxx>
 #include <txtfrm.hxx>
+#include <svx/ctredlin.hxx>
 
 #include "porlin.hxx"
 #include "portxt.hxx"
@@ -55,6 +56,8 @@ public:
 
 class SwBreakPortion : public SwLinePortion
 {
+    RedlineType m_eRedline;
+
 public:
     explicit SwBreakPortion( const SwLinePortion &rPortion );
     // Returns 0 if we have no usable data
@@ -68,7 +71,7 @@ public:
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 
     static constexpr OUStringLiteral S_NOBREAK_FOR_REDLINE = u"\u00A0";
-    void PaintRedline( const SwTextPaintInfo &rInf ) const;
+    void SetRedline( const RedlineType eRedline ) { m_eRedline = eRedline; }
 };
 
 class SwKernPortion : public SwLinePortion
