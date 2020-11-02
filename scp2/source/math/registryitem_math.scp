@@ -218,7 +218,7 @@ RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Progid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\ProgID";
-    Value = "LibreOffice.MathDocument.1";
+    Value = "CollaboraOffice.MathDocument.1";
 End
 
 RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Programmable
@@ -252,7 +252,7 @@ RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Versionind
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\VersionIndependentProgID";
-    Value = "LibreOffice.MathDocument.1";
+    Value = "CollaboraOffice.MathDocument.1";
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_6
@@ -281,7 +281,7 @@ RegistryItem gid_Regitem_Soffice_Starmathdocument_6_AppUserModelID
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "soffice.StarMathDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Math";
+    Value = "Collabora.CollaboraOffice.Math";
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_6_FriendlyTypeName
@@ -479,7 +479,7 @@ End
 RegistryItem gid_Regitem_MathDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "CollaboraOffice.MathDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -503,7 +503,7 @@ RegistryItem gid_Regitem__Odf
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = ".odf";
-    Value = "LibreOffice.MathDocument.1";
+    Value = "CollaboraOffice.MathDocument.1";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odf
@@ -511,7 +511,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Math_Bin;
     Name = ".odf";
-    Value = "LibreOffice.MathDocument.1";
+    Value = "CollaboraOffice.MathDocument.1";
     Styles = ();
 End
 
@@ -520,50 +520,50 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
     ModuleID = gid_Module_Prg_Math_Bin;
     Name = "application/vnd.oasis.opendocument.formula";
-    Value = "LibreOffice.MathDocument.1";
+    Value = "CollaboraOffice.MathDocument.1";
     Styles = ();
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_Curver
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.MathDocument\CurVer";
+    Subkey = "CollaboraOffice.MathDocument\CurVer";
     ModuleID = gid_Module_Prg_Math_Bin;
-    Value = "LibreOffice.MathDocument.1";
+    Value = "CollaboraOffice.MathDocument.1";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1";
+    Subkey = "CollaboraOffice.MathDocument.1";
     REG_VALUE_LNG(OO_FORMULA)
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\CLSID";
+    Subkey = "CollaboraOffice.MathDocument.1\CLSID";
     Value = "{D2D59CD1-0A6A-4D36-AE20-47817077D57C}";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\DefaultIcon";
+    Subkey = "CollaboraOffice.MathDocument.1\DefaultIcon";
     Value = "<progpath>\program\soffice.bin,12";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1";
+    Subkey = "CollaboraOffice.MathDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Math";
+    Value = "Collabora.CollaboraOffice.Math";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1";
+    Subkey = "CollaboraOffice.MathDocument.1";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(OO_FORMULA)
 End
@@ -572,7 +572,7 @@ End
 RegistryItem gid_Regitem_odf_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "LibreOffice.MathDocument.1";
+    Subkey = "CollaboraOffice.MathDocument.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -589,62 +589,62 @@ End
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\Insertable";
+    Subkey = "CollaboraOffice.MathDocument.1\Insertable";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Protocol_Stdfileediting_Server
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\protocol\StdFileEditing\server";
+    Subkey = "CollaboraOffice.MathDocument.1\protocol\StdFileEditing\server";
     Value = "<progpath>\program\soffice.exe";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Protocol_Stdfileediting_Verb_0
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\protocol\StdFileEditing\verb\0";
+    Subkey = "CollaboraOffice.MathDocument.1\protocol\StdFileEditing\verb\0";
     Value = "&Edit";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Protocol_Stdfileediting_Verb__1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\protocol\StdFileEditing\verb\-1";
+    Subkey = "CollaboraOffice.MathDocument.1\protocol\StdFileEditing\verb\-1";
     Value = "&Show";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Protocol_Stdfileediting_Verb__2
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\protocol\StdFileEditing\verb\-2";
+    Subkey = "CollaboraOffice.MathDocument.1\protocol\StdFileEditing\verb\-2";
     Value = "&Open";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\shell";
+    Subkey = "CollaboraOffice.MathDocument.1\shell";
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\shell\new";
+    Subkey = "CollaboraOffice.MathDocument.1\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\shell\new\command";
+    Subkey = "CollaboraOffice.MathDocument.1\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\shell\open\command";
+    Subkey = "CollaboraOffice.MathDocument.1\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
     Styles = ();
 End
@@ -652,14 +652,14 @@ End
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\shell\print\command";
+    Subkey = "CollaboraOffice.MathDocument.1\shell\print\command";
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "LibreOffice.MathDocument.1\shell\printto\command";
+    Subkey = "CollaboraOffice.MathDocument.1\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
@@ -670,7 +670,7 @@ RegistryItem gid_Regitem_OpenOffice_ODF_OpenWith_Math
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".odf\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Math_Bin;
-    Name = "LibreOffice.MathDocument.1";
+    Name = "CollaboraOffice.MathDocument.1";
     Value = " ";
 End
 
