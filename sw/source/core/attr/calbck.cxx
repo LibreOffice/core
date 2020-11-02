@@ -25,6 +25,7 @@
 #include <tools/debug.hxx>
 #include <sal/log.hxx>
 #include <algorithm>
+#include <sal/backtrace.hxx>
 
 namespace sw
 {
@@ -196,8 +197,18 @@ bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 void SwModify::Add( SwClient* pDepend )
 {
     DBG_TESTSOLARMUTEX();
+    // You should not EVER use SwModify directly in new code:
+    // - Preexisting SwModifys should only ever be used via sw::BroadcastingModify.
+    //   This includes sw::BroadcastMixin, which is the long-term target (without
+    //   SwModify).
+    // - New classes should use sw::BroadcastMixin alone.
+    if(!dynamic_cast<sw::BroadcastingModify*>(this))
+    {
+        auto pBT = sal::backtrace_get(20);
+        SAL_WARN("sw.core", "Modify that is not broadcasting used!\n" << sal::backtrace_to_string(pBT.get()));
+    }
 
-    if(pDepend->m_pRegisteredIn == this )
+    if(pDepend->m_pRegisteredIn == this)
         return;
 
 #if OSL_DEBUG_LEVEL > 0

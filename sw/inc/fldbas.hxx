@@ -237,7 +237,7 @@ OUString  FormatNumber(sal_uInt32 nNum, SvxNumType nFormat, LanguageType nLang =
  For each class there is one instance of the associated type class.
  Base class of all field types is SwFieldType. */
 
-class SW_DLLPUBLIC SwFieldType : public SwModify, public sw::BroadcasterMixin
+class SW_DLLPUBLIC SwFieldType : public sw::BroadcastingModify
 {
     css::uno::WeakReference<css::beans::XPropertySet> m_wXFieldMaster;
 

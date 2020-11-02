@@ -39,8 +39,7 @@ class SwRootFrame;
 
 class SW_DLLPUBLIC SwFormatFootnote final
     : public SfxPoolItem
-    , public SwModify
-    , public sw::BroadcasterMixin
+    , public sw::BroadcastingModify
 {
     friend class SwTextFootnote;
     SwTextFootnote* m_pTextAttr;   ///< My TextAttribute.

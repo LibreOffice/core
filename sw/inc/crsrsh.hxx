@@ -135,7 +135,7 @@ bool GetRanges(std::vector<std::shared_ptr<SwUnoCursor>> & rRanges,
 
 class SW_DLLPUBLIC SwCursorShell
     : public SwViewShell
-    , public SwModify
+    , public sw::BroadcastingModify
     , public ::sw::IShellCursorSupplier
 {
     friend class SwCallLink;

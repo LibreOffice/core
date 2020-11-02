@@ -128,7 +128,7 @@ OUString SwFieldType::GetTypeStr(SwFieldTypesEnum nTypeId)
 
 // each field references a field type that is unique for each document
 SwFieldType::SwFieldType( SwFieldIds nWhichId )
-    : SwModify()
+    : sw::BroadcastingModify()
     , m_nWhich(nWhichId)
 {
 }

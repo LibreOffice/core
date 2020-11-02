@@ -136,8 +136,7 @@ namespace o3tl {
 }
 
 class SW_DLLPUBLIC SwPageDesc
-    : public SwModify
-    , public sw::BroadcasterMixin
+    : public sw::BroadcastingModify
 {
     friend class SwDoc;
     friend class SwPageDescs;
