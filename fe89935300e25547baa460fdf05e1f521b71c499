@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4fca27_59ad8525",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2020-11-02T15:00:29Z",
+      "side": 1,
+      "message": "Not sure I actually understand this correctly, was first confused by the \"is correctly positioned because ... wrongly takes into account ...\".\n\nAfter looking at the change, I understand it like:\n\"Currently the help window in Calc is correctly positioned in qt5, since the qt5 backend takes the native menu bar into account when positioning frames (as added in commit 337b592a721bef2c54cbe8c4927e5cc5a68c2138 which fixed tdf#123779).\n\nHowever, that handling is incorrect in general. As a result, moving of undocked toolbars is handled incorrectly.\n\nSo add the offset to the help positioning instead.\"\n\n(i.e. add offset in another place that is more appropriate than where 337b592a721bef2c54cbe8c4927e5cc5a68c2138 had put it)\n\nIs that understanding correct?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "fe89935300e25547baa460fdf05e1f521b71c499",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
