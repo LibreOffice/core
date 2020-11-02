@@ -145,9 +145,6 @@ public:
     // mba: IMHO this method should be pure virtual
     // DO NOT USE IN NEW CODE! use SwClientNotify instead.
     virtual void Modify(const SfxPoolItem*, const SfxPoolItem*);
-    // controlled access to Modify method
-    // mba: this is still considered a hack and it should be fixed; the name makes grep-ing easier
-    void ModifyNotification(const SfxPoolItem*, const SfxPoolItem*);
     // when overriding this, you MUST call SwClient::SwClientModify() in the override!
     virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 

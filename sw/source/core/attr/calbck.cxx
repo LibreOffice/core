@@ -113,13 +113,6 @@ void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
     }
 };
 
-void SwClient::ModifyNotification(const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue)
-{
-    SwModify aFallbackMod;
-    auto pMod = dynamic_cast<SwModify*>(this);
-    SwClientNotify(pMod ? *pMod : aFallbackMod, sw::LegacyModifyHint(pOldValue, pNewValue));
-}
-
 void SwClient::StartListeningToSameModifyAs(const SwClient& other)
 {
     if(other.m_pRegisteredIn)
