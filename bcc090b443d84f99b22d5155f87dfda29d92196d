@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53d89da1_849dd477",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-11-02T20:13:47Z",
+      "side": 1,
+      "message": "I suspect you don\u0027t need to add this to the already overcluttered OutputDevice, and it definitely doesn\u0027t need to be virtual. I imagine it can live as a member of SvxFontPrevWindow",
+      "revId": "bcc090b443d84f99b22d5155f87dfda29d92196d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
