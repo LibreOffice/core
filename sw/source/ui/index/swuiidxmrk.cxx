@@ -66,7 +66,7 @@ using namespace ::comphelper;
 
 // dialog to insert a directory selection
 SwIndexMarkPane::SwIndexMarkPane(const std::shared_ptr<weld::Dialog>& rDialog, weld::Builder& rBuilder, bool bNewDlg,
-    SwWrtShell& rWrtShell)
+    SwWrtShell* pWrtShell)
     : m_xDialog(rDialog)
     , m_bDel(false)
     , m_bNewMark(bNewDlg)
@@ -76,7 +76,7 @@ SwIndexMarkPane::SwIndexMarkPane(const std::shared_ptr<weld::Dialog>& rDialog, w
     , m_bPhoneticED2_ChangedByUser(false)
     , m_nLangForPhoneticReading(LANGUAGE_CHINESE_SIMPLIFIED)
     , m_bIsPhoneticReadingEnabled(false)
-    , m_pSh(&rWrtShell)
+    , m_pSh(pWrtShell)
     , m_xTypeFT(rBuilder.weld_label("typeft"))
     , m_xTypeDCB(rBuilder.weld_combo_box("typecb"))
     , m_xNewBT(rBuilder.weld_button("new"))
@@ -938,7 +938,7 @@ SwIndexMarkPane::~SwIndexMarkPane()
 {
 }
 
-void    SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark const * pCurTOXMark)
+void SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark const * pCurTOXMark)
 {
     m_pSh = &rWrtShell;
     m_pTOXMgr.reset( new SwTOXMgr(m_pSh) );
@@ -959,10 +959,10 @@ SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* _pBindings,
     SfxChildWinInfo const * pInfo, bool bNew)
     : SfxModelessDialogController(_pBindings, pChild, pParent,
         "modules/swriter/ui/indexentry.ui", "IndexEntryDialog")
-    , m_aContent(m_xDialog, *m_xBuilder, bNew, *::GetActiveWrtShell())
+    , m_aContent(m_xDialog, *m_xBuilder, bNew, ::GetActiveWrtShell())
 {
-    if (SwWrtShell* pSh = ::GetActiveWrtShell())
-        m_aContent.ReInitDlg(*pSh);
+    if (SwWrtShell* pWrtShell = ::GetActiveWrtShell())
+        m_aContent.ReInitDlg(*pWrtShell);
     Initialize(pInfo);
 }
 
@@ -980,7 +980,7 @@ void SwIndexMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
 SwIndexMarkModalDlg::SwIndexMarkModalDlg(weld::Window *pParent, SwWrtShell& rSh, SwTOXMark const * pCurTOXMark)
     : SfxDialogController(pParent, "modules/swriter/ui/indexentry.ui",
                           "IndexEntryDialog")
-    , m_aContent(m_xDialog, *m_xBuilder, false, rSh)
+    , m_aContent(m_xDialog, *m_xBuilder, false, &rSh)
 {
     m_aContent.ReInitDlg(rSh, pCurTOXMark);
 }
@@ -1677,8 +1677,7 @@ SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
     , m_aContent(*this, *m_xBuilder, bNew)
 {
     Initialize(pInfo);
-    SwWrtShell* pWrtShell = ::GetActiveWrtShell();
-    if (pWrtShell)
+    if (SwWrtShell* pWrtShell = ::GetActiveWrtShell())
         m_aContent.ReInitDlg(*pWrtShell);
 }
 
