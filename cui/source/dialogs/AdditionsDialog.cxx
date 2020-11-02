@@ -17,6 +17,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <comphelper/simplefileaccessinteraction.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <tools/urlobj.hxx>
@@ -77,7 +78,7 @@ std::string ucbGet(const OUString& rURL)
     try
     {
         auto const s = utl::UcbStreamHelper::CreateStream(
-            rURL, StreamMode::STD_READ, css::uno::Reference<css::task::XInteractionHandler>());
+            rURL, StreamMode::STD_READ, new comphelper::SimpleFileAccessInteraction({}));
         if (!s)
         {
             SAL_WARN("cui.dialogs", "CreateStream <" << rURL << "> failed");
