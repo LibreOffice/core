@@ -50,7 +50,7 @@ public:
 protected:
 
     /// Collect element contents
-    virtual void Characters(const OUString& sString) override;
+    virtual void SAL_CALL characters(const OUString& sString) override;
 
     /// add Text PropertyValue
     virtual void FillPropertyValues(

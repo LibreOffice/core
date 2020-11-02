@@ -119,7 +119,7 @@ static bool lcl_IsWhiteSpace( sal_Unicode c )
         || c == u'\x000D';
 }
 
-void TokenContext::Characters( const OUString& rCharacters )
+void TokenContext::characters( const OUString& rCharacters )
 {
     // get iterators for string data
     const sal_Unicode* pBegin = rCharacters.getStr();

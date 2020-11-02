@@ -300,7 +300,7 @@ bool OPropertyImport::encounteredAttribute(const OUString& _rAttributeName) cons
     return m_aEncounteredAttributes.end() != m_aEncounteredAttributes.find(_rAttributeName);
 }
 
-void OPropertyImport::Characters(const OUString& _rChars )
+void OPropertyImport::characters(const OUString& _rChars )
 {
     // ignore them (should be whitespace only)
     OSL_ENSURE(_rChars.trim().isEmpty(), "OPropertyImport::Characters: non-whitespace characters!");
@@ -366,7 +366,7 @@ SvXMLImportContextRef OPropertyElementsContext::CreateChildContext(sal_uInt16 _n
         OSL_ENSURE(0 == _rxAttrList->getLength(), "OPropertyElementsContext::StartElement: the form:properties element should not have attributes!");
     }
 
-    void OPropertyElementsContext::Characters(const OUString& _rChars)
+    void OPropertyElementsContext::characters(const OUString& _rChars)
     {
         OSL_ENSURE(_rChars.trim().isEmpty(), "OPropertyElementsContext::Characters: non-whitespace characters detected!");
     }

@@ -154,7 +154,7 @@ void DomBuilderContext::StartElement(
     }
 }
 
-void DomBuilderContext::Characters( const OUString& rCharacters )
+void DomBuilderContext::characters( const OUString& rCharacters )
 {
     SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
 

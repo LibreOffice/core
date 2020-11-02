@@ -129,7 +129,7 @@ public:
                                          const OUString& rLName,
                                          OUString& rTitleOrDesc );
 
-    virtual void Characters( const OUString& rText ) override;
+    virtual void SAL_CALL characters( const OUString& rText ) override;
 };
 
 }
@@ -144,7 +144,7 @@ XMLTextFrameTitleOrDescContext_Impl::XMLTextFrameTitleOrDescContext_Impl(
 {
 }
 
-void XMLTextFrameTitleOrDescContext_Impl::Characters( const OUString& rText )
+void XMLTextFrameTitleOrDescContext_Impl::characters( const OUString& rText )
 {
     mrTitleOrDesc += rText;
 }
@@ -407,7 +407,7 @@ public:
 
     virtual void EndElement() override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
     SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -1249,7 +1249,7 @@ SvXMLImportContextRef XMLTextFrameContext_Impl::CreateChildContext(
     return pContext;
 }
 
-void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
+void XMLTextFrameContext_Impl::characters( const OUString& rChars )
 {
     maUrlBuffer.append(rChars);
 }

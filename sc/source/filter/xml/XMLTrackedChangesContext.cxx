@@ -161,7 +161,7 @@ public:
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
     virtual void EndElement() override;
 };
@@ -703,7 +703,7 @@ SvXMLImportContextRef ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nT
         if (pTextPContext)
         {
             if (!bWasContext)
-                pTextPContext->Characters(sText.makeStringAndClear());
+                pTextPContext->characters(sText.makeStringAndClear());
             xContext = pTextPContext->CreateChildContext(nTempPrefix, rLName, xTempAttrList);
         }
     }
@@ -711,12 +711,12 @@ SvXMLImportContextRef ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nT
     return xContext;
 }
 
-void ScXMLChangeTextPContext::Characters( const OUString& rChars )
+void ScXMLChangeTextPContext::characters( const OUString& rChars )
 {
     if (!pTextPContext)
         sText.append(rChars);
     else
-        pTextPContext->Characters(rChars);
+        pTextPContext->characters(rChars);
 }
 
 void ScXMLChangeTextPContext::EndElement()

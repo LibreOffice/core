@@ -69,7 +69,7 @@ public:
      * content. Classes that wish to deal with character content have
      * to override this method anyway, and will thus get rid of the
      * warnings. */
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
 protected:
     /** will be called for each attribute */

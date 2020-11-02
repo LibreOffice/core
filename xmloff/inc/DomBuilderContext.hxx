@@ -79,7 +79,7 @@ public:
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 };
 
 #endif

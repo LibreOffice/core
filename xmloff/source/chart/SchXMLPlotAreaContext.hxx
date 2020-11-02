@@ -146,7 +146,7 @@ private:
     OUStringBuffer maCharBuffer;
 public:
     SchXMLDataLabelSpanContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels);
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
     virtual void EndElement() override;
 };
 

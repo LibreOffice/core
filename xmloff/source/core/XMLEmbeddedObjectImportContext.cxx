@@ -63,7 +63,7 @@ public:
 
     virtual void EndElement() override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 };
 
 }
@@ -102,7 +102,7 @@ void XMLEmbeddedObjectImportContext_Impl::EndElement()
                                 GetPrefix(), GetLocalName() ) );
 }
 
-void XMLEmbeddedObjectImportContext_Impl::Characters( const OUString& rChars )
+void XMLEmbeddedObjectImportContext_Impl::characters( const OUString& rChars )
 {
     xHandler->characters( rChars );
 }
@@ -293,7 +293,7 @@ void XMLEmbeddedObjectImportContext::EndElement()
     }
 }
 
-void XMLEmbeddedObjectImportContext::Characters( const OUString& rChars )
+void XMLEmbeddedObjectImportContext::characters( const OUString& rChars )
 {
     if( xHandler.is() )
         xHandler->characters( rChars );

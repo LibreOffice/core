@@ -64,10 +64,6 @@ void SvXMLImportContext::EndElement()
 {
 }
 
-void SvXMLImportContext::Characters( const OUString& )
-{
-}
-
 // css::xml::sax::XFastContextHandler:
 void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
@@ -129,9 +125,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::cre
     return nullptr;
 }
 
-void SAL_CALL SvXMLImportContext::characters(const OUString &rChars)
+void SAL_CALL SvXMLImportContext::characters(const OUString &/*rChars*/)
 {
-    Characters(rChars);
 }
 
 // XInterface

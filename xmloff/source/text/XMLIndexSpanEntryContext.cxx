@@ -43,7 +43,7 @@ XMLIndexSpanEntryContext::~XMLIndexSpanEntryContext()
 {
 }
 
-void XMLIndexSpanEntryContext::Characters(const OUString& sString)
+void XMLIndexSpanEntryContext::characters(const OUString& sString)
 {
     sContent.append(sString);
 }

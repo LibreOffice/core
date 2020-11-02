@@ -2586,10 +2586,10 @@ void SdXMLChartShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-void SdXMLChartShapeContext::Characters( const OUString& rChars )
+void SdXMLChartShapeContext::characters( const OUString& rChars )
 {
     if( mxChartContext.is() )
-        mxChartContext->Characters( rChars );
+        mxChartContext->characters( rChars );
 }
 
 SvXMLImportContextRef SdXMLChartShapeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
