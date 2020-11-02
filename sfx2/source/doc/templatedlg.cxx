@@ -17,6 +17,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
@@ -580,10 +581,15 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, ImportClickHdl, weld::Button&, void)
 
 IMPL_STATIC_LINK_NOARG(SfxTemplateManagerDlg, LinkClickHdl, weld::Button&, void)
 {
-    uno::Sequence<beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "AdditionsTag";
-    aArgs[0].Value <<= OUString("Templates");
-    comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
+    if ( officecfg::Office::Common::Misc::ExperimentalMode::get() )
+    {
+        uno::Sequence<beans::PropertyValue> aArgs(1);
+        aArgs[0].Name = "AdditionsTag";
+        aArgs[0].Value <<= OUString("Templates");
+        comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
+    }
+    else
+        OnTemplateLink();
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
@@ -1026,6 +1032,33 @@ void SfxTemplateManagerDlg::OnTemplateExport()
                                                   VclMessageType::Info, VclButtonsType::Ok,
                                                   sText.replaceFirst("$1", OUString::number(nCount))));
         xBox->run();
+    }
+}
+
+void SfxTemplateManagerDlg::OnTemplateLink ()
+{
+    try
+    {
+        Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
+        uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(OUString("/org.openoffice.Office.Common/Help/StartCenter"))}
+        }));
+        Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", args), UNO_QUERY);
+        if( xNameAccess.is() )
+        {
+            OUString sURL;
+            //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
+            Any value( xNameAccess->getByName("TemplateRepositoryURL") );
+            sURL = value.get<OUString> ();
+            localizeWebserviceURI(sURL);
+            Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
+            xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
+        }
+    }
+    catch (const Exception&)
+    {
     }
 }
 
