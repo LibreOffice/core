@@ -940,10 +940,8 @@ void SwViewShell::SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara)
     GetDoc()->getIDocumentState().SetModified();
     for (auto const & pFieldType : *GetDoc()->getIDocumentFieldsAccess().GetFieldTypes())
     {
-        if (pFieldType->Which() == SwFieldIds::Database)
-        {
-            pFieldType->ModifyNotification(nullptr, nullptr);
-        }
+        if(pFieldType->Which() == SwFieldIds::Database)
+            pFieldType->UpdateFields();
     }
     EndAction();
 }
@@ -2172,10 +2170,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         SwHiddenParaFieldType* pFieldType = static_cast<SwHiddenParaFieldType*>(GetDoc()->
                                           getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::HiddenPara));
         if( pFieldType && pFieldType->HasWriterListeners() )
-        {
-            SwMsgPoolItem aHint( RES_HIDDENPARA_PRINT );
-            pFieldType->ModifyNotification( &aHint, nullptr);
-        }
+            pFieldType->PrintHiddenPara();
         bReformat = true;
     }
     if ( !bReformat && mpOpt->IsShowHiddenChar() != rOpt.IsShowHiddenChar() )

@@ -271,7 +271,8 @@ public:
 
     SwFieldIds              Which() const { return m_nWhich; }
 
-    inline  void            UpdateFields() const;
+    void UpdateFields() const;
+    void PrintHiddenPara();
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     SwFormatField* FindFormatForField(const SwField*) const;
     SwFormatField* FindFormatForPostItId(sal_uInt32 nPostItId) const;
@@ -281,11 +282,6 @@ public:
     void GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp);
     void GatherFields(std::vector<SwFormatField*>& rvFormatFields, bool bCollectOnlyInDocNodes=true) const;
 };
-
-inline void SwFieldType::UpdateFields() const
-{
-    const_cast<SwFieldType*>(this)->ModifyNotification( nullptr, nullptr );
-}
 
 /** Base class of all fields.
  Type of field is queried via Which.

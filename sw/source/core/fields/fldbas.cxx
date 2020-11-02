@@ -40,6 +40,7 @@
 #include <authfld.hxx>
 #include <calbck.hxx>
 #include <viewsh.hxx>
+#include <hints.hxx>
 
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
@@ -142,6 +143,17 @@ void SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
 }
 void SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
 {
+}
+
+void SwFieldType::UpdateFields() const
+{
+    const_cast<SwFieldType*>(this)->SwClientNotify(*this, sw::LegacyModifyHint(nullptr, nullptr));
+}
+
+void SwFieldType::PrintHiddenPara()
+{
+    const SwMsgPoolItem aHint(RES_HIDDENPARA_PRINT);
+    SwClientNotify(*this, sw::LegacyModifyHint(&aHint, nullptr));
 }
 
 void SwFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
