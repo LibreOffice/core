@@ -725,6 +725,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
 {
     const sal_Int32 nColCount = getColumnCount();
     const sal_Int32 nRowCount = getRowCount();
+
     if( nRowCount == 0 )
         return;
 
@@ -741,6 +742,9 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
     sal_Int32 nCol, nRow;
     for( nRow = 0; nRow < nRowCount; ++nRow )
     {
+        Reference< XPropertySet > xRowSet( xRows->getByIndex(nRow), UNO_QUERY_THROW );
+        sal_Int32 nRowPropHeight = 0;
+        xRowSet->getPropertyValue( gsSize ) >>= nRowPropHeight;
         sal_Int32 nMinHeight = 0;
 
         bool bIsEmpty = true; // check if all cells in this row are merged
@@ -764,7 +768,13 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
                     bool bCellHasText = xCell->hasText();
                     if (bRowHasText == bCellHasText)
                     {
-                        nMinHeight = std::max( nMinHeight, xCell->getMinimumHeight() );
+                        if(nRowPropHeight > 0)
+                        {
+                            nMinHeight = std::max( nMinHeight, xCell->getMinimumHeight() );
+                            nMinHeight = std::min( nMinHeight, nRowPropHeight);
+                        }
+                        else
+                            nMinHeight = xCell->getMinimumHeight();
                     }
                     else if ( !bRowHasText && bCellHasText )
                     {
@@ -784,7 +794,6 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
         else
         {
             sal_Int32 nRowHeight = 0;
-            Reference< XPropertySet > xRowSet( xRows->getByIndex(nRow), UNO_QUERY_THROW );
 
             bool bOptimal = false;
             xRowSet->getPropertyValue( sOptimalSize ) >>= bOptimal;
@@ -854,7 +863,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
     }
 
     // now scale if wanted and needed
-    if( bFit && nCurrentHeight != rArea.getHeight() )
+    if( bFit && nCurrentHeight != rArea.getHeight())
         distribute(maRows, o3tl::saturating_sub<sal_Int32>(rArea.getHeight(), nCurrentHeight));
 
     // last step, update left edges
@@ -864,7 +873,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
         maRows[nRow].mnPos = nNewHeight;
         nNewHeight = o3tl::saturating_add(nNewHeight, maRows[nRow].mnSize);
 
-        if( bFit )
+        if( bFit)
         {
             Reference< XPropertySet > xRowSet( xRows->getByIndex(nRow), UNO_QUERY_THROW );
             xRowSet->setPropertyValue( gsSize, Any( maRows[nRow].mnSize ) );
