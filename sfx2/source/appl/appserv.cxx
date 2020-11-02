@@ -1337,11 +1337,43 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_MORE_DICTIONARIES:
         {
-            uno::Sequence<beans::PropertyValue> aArgs(1);
-            aArgs[0].Name = "AdditionsTag";
-            aArgs[0].Value <<= OUString("Dictionary");
-            comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
-            break;
+            if (SvtMiscOptions().IsExperimentalMode())
+            {
+                uno::Sequence<beans::PropertyValue> aArgs(1);
+                aArgs[0].Name = "AdditionsTag";
+                aArgs[0].Value <<= OUString("Dictionary");
+                comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
+                break;
+            }
+            else
+            {
+                try
+                {
+                    uno::Reference< uno::XComponentContext > xContext =
+                        ::comphelper::getProcessComponentContext();
+                    uno::Reference< css::system::XSystemShellExecute > xSystemShell(
+                        css::system::SystemShellExecute::create(xContext) );
+                    // read repository URL from configuration
+                    OUString sTemplRepoURL(officecfg::Office::Common::Dictionaries::RepositoryURL::get());
+                    if ( xSystemShell.is() && !sTemplRepoURL.isEmpty() )
+                    {
+                        // read locale from configuration
+                        OUString sLocale(officecfg::Setup::L10N::ooLocale::get());
+                        if (sLocale.isEmpty())
+                            sLocale = "en-US";
+                        OUString aURLBuf =  sTemplRepoURL + "?lang=" + sLocale;
+                        xSystemShell->execute(
+                            aURLBuf,
+                            OUString(),
+                            css::system::SystemShellExecuteFlags::URIS_ONLY );
+                    }
+                }
+                catch( const css::uno::Exception& )
+                {
+                    TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxApplication::OfaExec_Impl(SID_MORE_DICTIONARIES)" );
+                }
+                break;
+            }
         }
 #if HAVE_FEATURE_SCRIPTING
         case SID_BASICIDE_APPEAR:

@@ -49,6 +49,11 @@
       <value install:module="wnt">WIN</value>
     </prop>
   </node>
+  <node oor:name="Dictionaries">
+    <prop oor:name="RepositoryURL">
+      <value>${DICT_REPO_URL}</value>
+    </prop>
+  </node>
   <node oor:name="VCL">
     <prop oor:name="UseOpenGL" oor:type="xs:boolean">
       <value install:module="macosx">false</value>
