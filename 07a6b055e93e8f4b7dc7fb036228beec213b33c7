@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05d279b0_49d1059a",
+        "filename": "bin/check-missing-unittests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-02T15:48:30Z",
+      "side": 1,
+      "message": "I would append also \\b to the end of the regex, since otherwise it would also match part of longer number sequences or things like 12345abcde.\n\n    r\u0027(?\u003c\u003dtdf#|fdo#)\\d{5,6}\\b\u0027",
+      "range": {
+        "startLine": 54,
+        "startChar": 46,
+        "endLine": 54,
+        "endChar": 51
+      },
+      "revId": "07a6b055e93e8f4b7dc7fb036228beec213b33c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
