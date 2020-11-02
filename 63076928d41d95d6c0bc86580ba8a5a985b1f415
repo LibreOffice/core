@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "367094a0_e68e47d6",
+        "filename": "sw/source/core/attr/calbck.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-02T05:56:16Z",
+      "side": 1,
+      "message": "This uses a dynamic_cast; can\u0027t it instead use another virtual function returning an SwModify for notification? Pro: no dynamic_cast overhead; con: another virtual method ...",
+      "range": {
+        "startLine": 119,
+        "startChar": 16,
+        "endLine": 119,
+        "endChar": 45
+      },
+      "revId": "63076928d41d95d6c0bc86580ba8a5a985b1f415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
