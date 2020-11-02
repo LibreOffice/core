@@ -177,7 +177,6 @@ class SW_DLLPUBLIC SwModify: public SwClient
     template<typename E, typename S, sw::IteratorMode> friend class SwIterator;
     sw::WriterListener* m_pWriterListeners;                // the start of the linked list of clients
     bool m_bModifyLocked : 1;         // don't broadcast changes now
-    bool m_bLockClientList : 1;       // may be set when this instance notifies its clients
     bool m_bInCache   : 1;
     bool m_bInSwFntCache : 1;
 
@@ -190,7 +189,7 @@ class SW_DLLPUBLIC SwModify: public SwClient
     SwModify &operator =(const SwModify&) = delete;
 public:
     SwModify()
-        : SwClient(), m_pWriterListeners(nullptr), m_bModifyLocked(false), m_bLockClientList(false), m_bInCache(false), m_bInSwFntCache(false)
+        : SwClient(), m_pWriterListeners(nullptr), m_bModifyLocked(false), m_bInCache(false), m_bInSwFntCache(false)
     {}
 
     // broadcasting: send notifications to all clients
