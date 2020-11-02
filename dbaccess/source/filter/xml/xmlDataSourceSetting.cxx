@@ -81,7 +81,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                 m_aSetting.Name = sValue;
                 break;
             default:
-                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                XMLOFF_WARN_UNKNOWN_ATTR("dbaccess", aIter.getToken(), aIter.toString());
         }
     }
 

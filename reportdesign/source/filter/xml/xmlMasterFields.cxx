@@ -53,7 +53,7 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
                 sDetailField = sValue;
                 break;
             default:
-                SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
+                XMLOFF_WARN_UNKNOWN("reportdesign", aIter);
                 break;
         }
     }

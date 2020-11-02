@@ -216,7 +216,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLPropStyleContext::c
                                                     maProperties,
                                                     xImpPrMap );
     }
-    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 

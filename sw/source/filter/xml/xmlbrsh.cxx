@@ -99,7 +99,7 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
                 *pItem, sValue, MID_GRAPHIC_FILTER, rUnitConv );
             break;
         default:
-            SAL_WARN("sw", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+            XMLOFF_WARN_UNKNOWN("sw", aIter);
         }
     }
 
@@ -118,7 +118,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLBrushItemImportCo
                 return new XMLBase64ImportContext(GetImport(), m_xBase64Stream);
         }
     }
-    SAL_WARN("sw", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    XMLOFF_WARN_UNKNOWN_ELEMENT("sw", nElement);
     return nullptr;
 }
 

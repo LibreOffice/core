@@ -209,7 +209,7 @@ void SvxXMLTableImportContext::importColor( const uno::Reference< XFastAttribute
                 break;
             }
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }

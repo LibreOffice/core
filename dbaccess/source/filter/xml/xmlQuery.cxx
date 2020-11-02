@@ -54,7 +54,7 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
                 m_bEscapeProcessing = sValue == "true";
                 break;
             default:
-                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                XMLOFF_WARN_UNKNOWN("dbaccess", aIter);
         }
     }
 }

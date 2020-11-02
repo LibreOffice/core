@@ -75,7 +75,7 @@ void XMLSymbolImageContext::startFastElement(
                 // it is always assumed 'actuate=onLoad', 'type=simple', 'show=embed'
                 break;
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
@@ -93,7 +93,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLSymbolImageContext:
                 return new XMLBase64ImportContext( GetImport(), mxBase64Stream );
         }
     }
-    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 

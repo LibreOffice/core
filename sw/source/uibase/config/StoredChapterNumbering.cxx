@@ -290,7 +290,7 @@ public:
                     SAL_WARN("xmloff", "unknown value for style:family=" << aIter.toString());
             }
             else
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
 
         if (nFamily != XmlStyleFamily::DATA_STYLE && !name.isEmpty() && !displayName.isEmpty())
         {

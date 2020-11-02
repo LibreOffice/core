@@ -181,7 +181,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFon
         nElement == XML_ELEMENT(SVG_COMPAT, XML_FONT_FACE_SRC) )
         return new XMLFontStyleContextFontFaceSrc( GetImport(), *this );
     else
-        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 
@@ -224,7 +224,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFon
     if( nElement == XML_ELEMENT(SVG, XML_FONT_FACE_URI) ||
         nElement == XML_ELEMENT(SVG_COMPAT, XML_FONT_FACE_URI) )
         return new XMLFontStyleContextFontFaceUri( GetImport(), font );
-    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 
@@ -253,7 +253,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFon
         }
     }
     else
-        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 

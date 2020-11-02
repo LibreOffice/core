@@ -106,7 +106,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLDrawingPageProper
                 rProperties.push_back( aPropState );
             }
             else
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
         break;
     }
@@ -348,7 +348,7 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
                 break;
             }
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
@@ -380,7 +380,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPageMasterContext
         return mxPageMasterStyle.get();
     }
     else
-        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     return nullptr;
 }
@@ -413,7 +413,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPresentationPageL
         maList.push_back(xLclContext);
     }
     else
-        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     return xContext.get();
 }
@@ -664,7 +664,7 @@ SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
                 break;
             }
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
@@ -730,7 +730,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
                 break;
             }
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -882,7 +882,7 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
         case XML_ELEMENT(STYLE, XML_STYLE):
             break; // ignore
         default:
-            SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
     // call base class
@@ -1397,7 +1397,7 @@ SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
         }
         else
         {
-            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
@@ -1425,7 +1425,7 @@ void SdXMLHeaderFooterDeclContext::endFastElement(sal_Int32 nToken)
     }
     else
     {
-        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nToken));
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nToken);
     }
 }
 

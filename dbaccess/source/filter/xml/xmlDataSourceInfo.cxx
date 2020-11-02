@@ -72,7 +72,7 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
                 bFoundCharset = true;
                 break;
             default:
-                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                XMLOFF_WARN_UNKNOWN("dbaccess", aIter);
         }
         if ( !aProperty.Name.isEmpty() )
         {

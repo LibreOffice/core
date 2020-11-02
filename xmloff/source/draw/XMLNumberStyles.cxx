@@ -545,7 +545,7 @@ SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext(
                 mbTextual = IsXMLToken( sValue, XML_TRUE );
                 break;
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -595,7 +595,7 @@ SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rIm
         if( aIter.getToken() == XML_ELEMENT(NUMBER, XML_AUTOMATIC_ORDER) )
                 mbAutomatic = IsXMLToken( sValue, XML_TRUE );
         else
-            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 }
 

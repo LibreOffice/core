@@ -75,7 +75,7 @@ OXMLCell::OXMLCell( ORptFilter& rImport
                 m_pContainer->setRowSpanned(sValue.toInt32());
                 break;
             default:
-                SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("reportdesign", aIter);
                 break;
         }
     }

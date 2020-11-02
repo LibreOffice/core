@@ -63,7 +63,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetContext::c
         return createFastChildContext( nElement, xAttrList, *pEntry ).get();
     }
     else
-        SAL_WARN("sw", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+        XMLOFF_WARN_UNKNOWN_ELEMENT("sw", nElement);
     return nullptr;
 }
 

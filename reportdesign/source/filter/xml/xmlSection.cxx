@@ -73,7 +73,7 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
                     m_xSection->setRepeatSection(sValue == s_sTRUE );
                     break;
                 default:
-                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
+                    XMLOFF_WARN_UNKNOWN("reportdesign", aIter);
             }
         }
     }

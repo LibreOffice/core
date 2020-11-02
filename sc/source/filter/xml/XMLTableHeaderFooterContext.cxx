@@ -59,7 +59,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         if( aIter.getToken() == XML_ELEMENT(STYLE, XML_DISPLAY) )
             bDisplay = IsXMLToken(aIter.toString(), XML_TRUE);
         else
-            SAL_WARN("sc", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+            XMLOFF_WARN_UNKNOWN("sc", aIter);
     }
     if( bLeft )
     {

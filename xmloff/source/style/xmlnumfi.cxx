@@ -396,7 +396,7 @@ SvXMLNumFmtMapContext::SvXMLNumFmtMapContext( SvXMLImport& rImport,
                 sName = sValue;
                 break;
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
@@ -429,7 +429,7 @@ SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
                 bColSet = ::sax::Converter::convertColor( m_nColor, sValue );
                 break;
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
@@ -463,7 +463,7 @@ SvXMLNumFmtEmbeddedTextContext::SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rIm
                 nTextPosition = nAttrVal;
         }
         else
-            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 }
 
@@ -772,7 +772,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 sCalendar = sValue;
                 break;
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
     if ( aNumInfo.nMinDecimalDigits == -1)
@@ -838,7 +838,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLNumFmtElementCont
         return new SvXMLNumFmtEmbeddedTextContext( GetImport(), nElement, *this, xAttrList );
     }
     else
-        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 
@@ -1201,7 +1201,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                 aNatNumAttr.Style = sValue;
                 break;
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
