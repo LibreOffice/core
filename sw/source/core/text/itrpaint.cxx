@@ -326,11 +326,14 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             // Paragraph symbols should have the same font as the paragraph in front of them,
             // except for the case that there's redlining in the paragraph
             if( GetRedln() )
+            {
                 SeekAndChg( GetInfo() );
+                // paint redlining
+                if ( m_pCurr->HasRedline() )
+                    static_cast<SwBreakPortion&>(*pPor).PaintRedline( GetInfo() );
+            }
             else
                 SeekAndChgBefore( GetInfo() );
-            // paint redlining
-            static_cast<SwBreakPortion&>(*pPor).PaintRedline( GetInfo() );
         }
         else
             bSeeked = false;

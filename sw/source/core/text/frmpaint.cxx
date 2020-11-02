@@ -502,6 +502,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
         else if( pSh->GetWin() )
         {
             std::unique_ptr<SwFont> pFnt;
+            RedlineType eRedline = RedlineType::Any;
             const SwTextNode& rTextNode = *GetTextNodeForParaProps();
             if ( rTextNode.HasSwAttrSet() )
             {
@@ -525,6 +526,17 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     aAttrHandler.Init(  rTextNode.GetSwAttrSet(),
                                        *rTextNode.getIDocumentSettingAccess() );
                     SwRedlineItr aRedln(rTextNode, *pFnt, aAttrHandler, nRedlPos, SwRedlineItr::Mode::Show);
+                    const SwRangeRedline* pRedline = rIDRA.GetRedlineTable()[nRedlPos];
+                    // show redlining only on the inserted/deleted empty paragraph, but not on the next one
+                    if ( rTextNode.GetIndex() != pRedline->End()->nNode.GetIndex() )
+                        eRedline = pRedline->GetType();
+                    // except if the next empty paragraph starts a new redline (e.g. deletion after insertion)
+                    else if ( nRedlPos + 1 < rIDRA.GetRedlineTable().size() )
+                    {
+                        const SwRangeRedline* pNextRedline = rIDRA.GetRedlineTable()[nRedlPos + 1];
+                        if ( rTextNode.GetIndex() == pNextRedline->Start()->nNode.GetIndex() )
+                            eRedline = pNextRedline->GetType();
+                    }
                 }
             }
 
@@ -590,6 +602,17 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     aDrawInf.SetFrame( this );
                     aDrawInf.SetFont( pFnt.get() );
                     aDrawInf.SetSnapToGrid( false );
+
+                    // show redline color and settings drawing a background pilcrow,
+                    // but keep also other formattings (with neutral pilcrow color)
+                    if ( eRedline != RedlineType::Any )
+                    {
+                        pFnt->DrawText_( aDrawInf );
+                        if ( eRedline == RedlineType::Delete )
+                            pFnt->SetStrikeout( STRIKEOUT_NONE );
+                        else
+                            pFnt->SetUnderline( LINESTYLE_NONE );
+                    }
 
                     pFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
                     pFnt->DrawText_( aDrawInf );
