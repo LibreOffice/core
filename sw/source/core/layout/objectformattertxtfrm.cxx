@@ -665,6 +665,30 @@ bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
     return bAnchorIsMovedForward;
 }
 
+static void CleanupEmptyFootnoteFrame(SwFrame* pLowerFrame)
+{
+    // Calc on a SwTextFrame in a footnote can move it to the next page -
+    // deletion of the SwFootnoteFrame was disabled with SwFrameDeleteGuard
+    // but now we have to clean up empty footnote frames to prevent crashes.
+    // Note: check it at this level, not lower: both container and footnote
+    // can be deleted at the same time!
+    if (pLowerFrame->IsFootnoteContFrame())
+    {
+        for (SwFrame * pFootnote = pLowerFrame->GetLower(); pFootnote; )
+        {
+            assert(pFootnote->IsFootnoteFrame());
+            SwFrame *const pNextNote = pFootnote->GetNext();
+            if (!pFootnote->IsDeleteForbidden() && !pFootnote->GetLower() && !pFootnote->IsColLocked() &&
+                !static_cast<SwFootnoteFrame*>(pFootnote)->IsBackMoveLocked())
+            {
+                pFootnote->Cut();
+                SwFrame::DestroyFrame(pFootnote);
+            }
+            pFootnote = pNextNote;
+        }
+    }
+}
+
 // #i40140# - helper method to format layout frames used by
 // method <SwObjectFormatterTextFrame::FormatAnchorFrameForCheckMoveFwd()>
 // #i44049# - format till a certain lower frame, if provided.
@@ -694,21 +718,7 @@ static void lcl_FormatContentOfLayoutFrame( SwLayoutFrame* pLayFrame,
         // Note: check it at this level, not lower: both container and footnote
         // can be deleted at the same time!
         SwFrame *const pNext = pLowerFrame->GetNext();
-        if (pLowerFrame->IsFootnoteContFrame())
-        {
-            for (SwFrame * pFootnote = pLowerFrame->GetLower(); pFootnote; )
-            {
-                assert(pFootnote->IsFootnoteFrame());
-                SwFrame *const pNextNote = pFootnote->GetNext();
-                if (!pFootnote->IsDeleteForbidden() && !pFootnote->GetLower() && !pFootnote->IsColLocked() &&
-                    !static_cast<SwFootnoteFrame*>(pFootnote)->IsBackMoveLocked())
-                {
-                    pFootnote->Cut();
-                    SwFrame::DestroyFrame(pFootnote);
-                }
-                pFootnote = pNextNote;
-            }
-        }
+        CleanupEmptyFootnoteFrame(pLowerFrame);
         pLowerFrame = pNext;
     }
 }
