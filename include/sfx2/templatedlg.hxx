@@ -84,7 +84,7 @@ protected:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
     void OnTemplateImportCategory(const OUString& sCategory);
-//    static void OnTemplateLink ();
+    static void OnTemplateLink ();
     void OnTemplateOpen ();
     void OnTemplateExport ();
 

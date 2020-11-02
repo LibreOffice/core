@@ -48,7 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-
+#include <officecfg/Office/Common.hxx>
 #include <svx/svxdlg.hxx>
 #include <editeng/optitems.hxx>
 #include <optlingu.hxx>
@@ -872,7 +872,10 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     m_xLinguOptionsCLB->connect_changed( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     m_xLinguOptionsCLB->connect_row_activated(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
 
-    m_xMoreDictsLink->connect_activate_link(LINK(this, SvxLinguTabPage, OnLinkClick));
+    if ( officecfg::Office::Common::Misc::ExperimentalMode::get() )
+        m_xMoreDictsLink->connect_activate_link(LINK(this, SvxLinguTabPage, OnLinkClick));
+    else
+        m_xMoreDictsLink->set_uri("https://extensions.libreoffice.org/dictionaries/");
     if (officecfg::Office::Security::Hyperlinks::Open::get() == SvtExtendedSecurityOptions::OPEN_NEVER)
         m_xMoreDictsLink->hide();
 
@@ -1576,7 +1579,10 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
     m_xPrioUpPB->set_sensitive( false );
     m_xPrioDownPB->set_sensitive( false );
 
-    m_xMoreDictsLink->connect_activate_link(LINK(this, SvxEditModulesDlg, OnLinkClick));
+    if ( officecfg::Office::Common::Misc::ExperimentalMode::get() )
+        m_xMoreDictsLink->connect_activate_link(LINK(this, SvxEditModulesDlg, OnLinkClick));
+    else
+        m_xMoreDictsLink->set_uri("https://extensions.libreoffice.org/dictionaries/");
     if (officecfg::Office::Security::Hyperlinks::Open::get() == SvtExtendedSecurityOptions::OPEN_NEVER)
         m_xMoreDictsLink->hide();
 
