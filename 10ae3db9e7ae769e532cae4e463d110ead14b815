@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4e1b777_21897008",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-02T08:59:29Z",
+      "side": 1,
+      "message": "Could `bool(tmp) \u003d\u003d bool(xContext)` be an option, or do we not consider that a good code for some reason?",
+      "range": {
+        "startLine": 817,
+        "startChar": 15,
+        "endLine": 817,
+        "endChar": 55
+      },
+      "revId": "10ae3db9e7ae769e532cae4e463d110ead14b815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
