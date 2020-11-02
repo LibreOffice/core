@@ -97,6 +97,20 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 }
             }
         }
+        else if (sControlType == "checkbox")
+        {
+            auto pCheckButton = dynamic_cast<weld::CheckButton*>(pWidget);
+            if (pCheckButton)
+            {
+                if (sAction == "change")
+                {
+                    bool bChecked = rData["data"] == "true";
+                    pCheckButton->set_state(bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+                    LOKTrigger::trigger_toggled(*static_cast<weld::ToggleButton*>(pCheckButton));
+                    return true;
+                }
+            }
+        }
         else if (sControlType == "drawingarea")
         {
             auto pArea = dynamic_cast<weld::DrawingArea*>(pWidget);

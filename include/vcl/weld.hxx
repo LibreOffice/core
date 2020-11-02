@@ -1291,6 +1291,8 @@ public:
 
 class VCL_DLLPUBLIC ToggleButton : virtual public Button
 {
+    friend class ::LOKTrigger;
+
 protected:
     Link<ToggleButton&, void> m_aToggleHdl;
     TriState m_eSavedValue = TRISTATE_FALSE;
