@@ -960,7 +960,8 @@ SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* _pBindings,
         "modules/swriter/ui/indexentry.ui", "IndexEntryDialog")
     , m_aContent(m_xDialog, *m_xBuilder, bNew, *::GetActiveWrtShell())
 {
-    m_aContent.ReInitDlg(*::GetActiveWrtShell());
+    if (SwWrtShell* pSh = ::GetActiveWrtShell())
+        m_aContent.ReInitDlg(*pSh);
     Initialize(pInfo);
 }
 
