@@ -53,27 +53,6 @@ using namespace com::sun::star;
 static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size &rOrigGrfSize );
 
 
-static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
-{
-    //call first all not SwNoTextFrames, then the SwNoTextFrames.
-    //              The reason is, that in the SwNoTextFrames the Graphic
-    //              after a Paint will be swapped out! So all other "behind"
-    //              them haven't a loaded Graphic.
-    rGrfNd.LockModify();
-    {
-        SwIterator<SwModify,SwGrfNode> aIter(rGrfNd);
-        for(SwModify* pLast = aIter.First(); pLast; pLast = aIter.Next())
-            if(dynamic_cast<const SwContentFrame*>(pLast) ==  nullptr)
-                pLast->ModifyNotification(&rItem, &rItem);
-    }
-    {
-        SwIterator<SwContentFrame,SwGrfNode> aIter(rGrfNd);
-        for(SwContentFrame* pLast = aIter.First(); pLast; pLast = aIter.Next())
-            pLast->ModifyNotification(&rItem, &rItem);
-    }
-    rGrfNd.UnlockModify();
-}
-
 ::sfx2::SvBaseLink::UpdateResult SwBaseLink::DataChanged(
     const OUString& rMimeType, const uno::Any & rValue )
 {
@@ -163,15 +142,8 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     if ( !bUpdate || bFrameInPaint )
         return SUCCESS;
 
-    if (pSwGrfNode)
-    {
-        if (!SetGrfFlySize(aGrfSz, pSwGrfNode, aOldSz))
-        {
-            SwMsgPoolItem aMsgHint(RES_GRAPHIC_ARRIVED);
-            lcl_CallModify(*pSwGrfNode, aMsgHint);
-            return SUCCESS;
-        }
-    }
+    if(pSwGrfNode && !SetGrfFlySize(aGrfSz, pSwGrfNode, aOldSz))
+        pSwGrfNode->TriggerGraphicArrived();
 
     return SUCCESS;
 }

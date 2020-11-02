@@ -42,6 +42,7 @@
 #include <hints.hxx>
 #include <swbaslnk.hxx>
 #include <pagefrm.hxx>
+#include <cntfrm.hxx>
 
 #include <rtl/ustring.hxx>
 #include <o3tl/deleter.hxx>
@@ -367,6 +368,27 @@ void SwGrfNode::SetGraphic(const Graphic& rGraphic)
 {
     maGrfObj.SetGraphic(rGraphic, OUString());
     onGraphicChanged();
+}
+
+void SwGrfNode::TriggerGraphicArrived()
+{
+    const SwMsgPoolItem aMsgHint(RES_GRAPHIC_ARRIVED);
+    // FIXME: instead of hacking the notification to only handle specific clients.
+    // this should have been implemented cleanly witth two hints, e.g.
+    // RES_GRAPHIC_ARRIVED_PREP and RES_GRAPHIC_ARRIVED.
+    LockModify();
+    {
+        SwIterator<SwModify,SwGrfNode> aIter(*this);
+        for(SwModify* pLast = aIter.First(); pLast; pLast = aIter.Next())
+            if(dynamic_cast<const SwContentFrame*>(pLast) ==  nullptr)
+                pLast->SwClientNotify(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
+    }
+    {
+        SwIterator<SwContentFrame,SwGrfNode> aIter(*this);
+        for(SwContentFrame* pLast = aIter.First(); pLast; pLast = aIter.Next())
+            pLast->SwClientNotify(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
+    }
+    UnlockModify();
 }
 
 const Graphic& SwGrfNode::GetGrf(bool bWait) const
@@ -853,8 +875,7 @@ void SwGrfNode::UpdateLinkWithInputStream()
 
     GetLink()->setStreamToLoadFrom( mxInputStream, mbIsStreamReadOnly );
     GetLink()->Update();
-    SwMsgPoolItem aMsgHint( RES_GRAPHIC_ARRIVED );
-    lcl_SwClientNotify(*this, aMsgHint);
+    TriggerGraphicArrived();
 
     // #i88291#
     mxInputStream.clear();
