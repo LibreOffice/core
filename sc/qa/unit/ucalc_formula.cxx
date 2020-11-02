@@ -8539,6 +8539,32 @@ void Test::testTdf133260()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testTdf100818()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Sheet1"));
+
+    //Insert local range name
+    ScRangeData* pLocal = new ScRangeData( *m_pDoc, "local", "$Sheet1.$A$1");
+    std::unique_ptr<ScRangeName> pLocalRangeName(new ScRangeName);
+    pLocalRangeName->insert(pLocal);
+    m_pDoc->SetRangeName(0, std::move(pLocalRangeName));
+
+    m_pDoc->SetValue(0, 0, 0, 1.0);
+
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (1, "Sheet2"));
+
+    m_pDoc->SetString(0, 0, 1, "=INDIRECT(\"Sheet1.local\")");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : #REF!
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), m_pDoc->GetString(0,0,1));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->SetRangeName(0,nullptr); // Delete the names.
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testMatConcat()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
