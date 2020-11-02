@@ -22,6 +22,8 @@ public:
 
     static void trigger_changed(weld::ComboBox& rComboBox) { rComboBox.signal_changed(); }
 
+    static void trigger_toggled(weld::ToggleButton& rButton) { rButton.signal_toggled(); }
+
     static void trigger_row_activated(weld::TreeView& rTreeView)
     {
         rTreeView.signal_row_activated();
