@@ -719,7 +719,7 @@
           <value xml:lang="en-US">Format Page</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Properties...</value>
+          <value xml:lang="en-US">Page Properties...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -730,7 +730,7 @@
           <value xml:lang="en-US">Format Slide</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Properties...</value>
+          <value xml:lang="en-US">Slide Properties...</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:PageSetup</value>
