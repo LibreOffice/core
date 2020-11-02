@@ -114,7 +114,7 @@ static ErrCode ReadThroughComponent(
     const uno::Reference<XInputStream>& xInputStream,
     const uno::Reference<XComponent>& xModelComponent,
     const uno::Reference<XComponentContext> & rContext,
-    const uno::Reference< XDocumentHandler >& _xFilter )
+    const uno::Reference<XFastParser>& rFastParser )
 {
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
@@ -125,27 +125,18 @@ static ErrCode ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get filter
-    SAL_WARN_IF( !_xFilter.is(), "reportdesign", "Can't instantiate filter component." );
-    if( !_xFilter.is() )
+    SAL_WARN_IF( !rFastParser.is(), "reportdesign", "Can't instantiate filter component." );
+    if( !rFastParser.is() )
         return ErrCode(1);
 
     // connect model and filter
-    uno::Reference < XImporter > xImporter( _xFilter, UNO_QUERY );
+    uno::Reference < XImporter > xImporter( rFastParser, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
 
     // finally, parser the stream
     try
     {
-        uno::Reference < XFastParser > xFastParser( _xFilter, UNO_QUERY );\
-        if (xFastParser.is())
-            xFastParser->parseStream( aParserInput );
-        else
-        {
-            uno::Reference< XParser > xParser = xml::sax::Parser::create(rContext);
-            // connect parser and filter
-            xParser->setDocumentHandler( _xFilter );
-            xParser->parseStream( aParserInput );
-        }
+        rFastParser->parseStream( aParserInput );
     }
     catch (const SAXParseException&)
     {
@@ -233,7 +224,8 @@ static ErrCode ReadThroughComponent(
         if ( _xProp.is() )
             aFilterCompArgs[ nArgs++ ] <<= _xProp;
 
-        Reference< xml::sax::XDocumentHandler > xDocHandler(
+        // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
+        Reference< XFastParser > xFastParser(
             rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(_sFilterName, aFilterCompArgs, rxContext),
             uno::UNO_QUERY_THROW );
         uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
@@ -241,7 +233,7 @@ static ErrCode ReadThroughComponent(
         return ReadThroughComponent( xInputStream
                                     ,xModelComponent
                                     ,rxContext
-                                    ,xDocHandler );
+                                    ,xFastParser );
     }
 
     // TODO/LATER: better error handling
