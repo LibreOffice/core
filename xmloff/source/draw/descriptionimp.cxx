@@ -69,7 +69,7 @@ void SdXMLDescriptionContext::EndElement()
 
 // This method is called for all characters that are contained in the
 // current element. The default is to ignore them.
-void SdXMLDescriptionContext::Characters( const OUString& rChars )
+void SdXMLDescriptionContext::characters( const OUString& rChars )
 {
     msText += rChars;
 }

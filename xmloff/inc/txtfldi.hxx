@@ -131,7 +131,7 @@ public:
         const OUString& rLocalName);     /// element name w/o prefix
 
     /// process character data: will be collected in member sContentBuffer
-    virtual void Characters( const OUString& sContent ) override;
+    virtual void SAL_CALL characters( const OUString& sContent ) override;
 
     /// parses attributes and calls ProcessAttribute
     virtual void StartElement(

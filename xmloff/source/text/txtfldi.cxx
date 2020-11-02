@@ -189,7 +189,7 @@ void XMLTextFieldImportContext::EndElement()
     rTextImportHelper.InsertString(GetContent());
 }
 
-void XMLTextFieldImportContext::Characters(const OUString& rContent)
+void XMLTextFieldImportContext::characters(const OUString& rContent)
 {
     sContentBuffer.append(rContent);
 }

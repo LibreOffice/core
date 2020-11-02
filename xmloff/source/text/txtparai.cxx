@@ -388,7 +388,7 @@ public:
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 };
 
 class XMLImpHyperlinkContext_Impl : public SvXMLImportContext
@@ -415,7 +415,7 @@ public:
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 };
 
 }
@@ -520,7 +520,7 @@ SvXMLImportContextRef XMLImpHyperlinkContext_Impl::CreateChildContext(
     }
 }
 
-void XMLImpHyperlinkContext_Impl::Characters( const OUString& rChars )
+void XMLImpHyperlinkContext_Impl::characters( const OUString& rChars )
 {
     GetImport().GetTextImport()->InsertString( rChars, mrbIgnoreLeadingSpace );
 }
@@ -548,7 +548,7 @@ public:
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 };
 
 }
@@ -579,7 +579,7 @@ SvXMLImportContextRef XMLImpRubyBaseContext_Impl::CreateChildContext(
                                nToken, m_rHints, rIgnoreLeadingSpace );
 }
 
-void XMLImpRubyBaseContext_Impl::Characters( const OUString& rChars )
+void XMLImpRubyBaseContext_Impl::characters( const OUString& rChars )
 {
     GetImport().GetTextImport()->InsertString( rChars, rIgnoreLeadingSpace );
 }
@@ -632,7 +632,7 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLImpRubyContext_Impl & rParent );
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 };
 
 }
@@ -665,7 +665,7 @@ XMLImpRubyTextContext_Impl::XMLImpRubyTextContext_Impl(
     }
 }
 
-void XMLImpRubyTextContext_Impl::Characters( const OUString& rChars )
+void XMLImpRubyTextContext_Impl::characters( const OUString& rChars )
 {
     m_rRubyContext.AppendText( rChars );
 }
@@ -776,7 +776,7 @@ public:
             sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
             const Reference< xml::sax::XAttributeList > & i_xAttrList) override;
 
-    virtual void Characters( const OUString& i_rChars ) override;
+    virtual void SAL_CALL characters( const OUString& i_rChars ) override;
 
     virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
         OUString const & i_rLocalName, OUString const & i_rValue);
@@ -846,7 +846,7 @@ SvXMLImportContextRef XMLMetaImportContextBase::CreateChildContext(
         i_rLocalName, i_xAttrList, nToken, m_rHints, m_rIgnoreLeadingSpace );
 }
 
-void XMLMetaImportContextBase::Characters( const OUString& i_rChars )
+void XMLMetaImportContextBase::characters( const OUString& i_rChars )
 {
     GetImport().GetTextImport()->InsertString(i_rChars, m_rIgnoreLeadingSpace);
 }
@@ -1824,7 +1824,7 @@ SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
                              );
 }
 
-void XMLImpSpanContext_Impl::Characters( const OUString& rChars )
+void XMLImpSpanContext_Impl::characters( const OUString& rChars )
 {
     OUString sStyleName;
     if( pHint )
@@ -2243,7 +2243,7 @@ SvXMLImportContextRef XMLParaContext::CreateChildContext(
                                 nStarFontsConvFlags);
 }
 
-void XMLParaContext::Characters( const OUString& rChars )
+void XMLParaContext::characters( const OUString& rChars )
 {
     OUString sChars =
         GetImport().GetTextImport()->ConvertStarFonts( rChars, sStyleName,

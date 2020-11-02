@@ -52,7 +52,7 @@ public:
 
     virtual void EndElement() override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
     void SetComponent( css::uno::Reference< css::lang::XComponent > const & rComp );
 

@@ -92,7 +92,7 @@ void XMLIndexTitleTemplateContext::EndElement()
     }
 }
 
-void XMLIndexTitleTemplateContext::Characters(
+void XMLIndexTitleTemplateContext::characters(
     const OUString& sString)
 {
     sContent.append(sString);

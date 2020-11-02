@@ -68,7 +68,7 @@ protected:
     virtual void EndElement() override;
 
     /** pick up title characters */
-    virtual void Characters(const OUString& sString) override;
+    virtual void SAL_CALL characters(const OUString& sString) override;
 };
 
 #endif

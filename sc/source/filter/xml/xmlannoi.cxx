@@ -141,7 +141,7 @@ SvXMLImportContextRef ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPr
     return xContext;
 }
 
-void ScXMLAnnotationContext::Characters( const OUString& rChars )
+void ScXMLAnnotationContext::characters( const OUString& rChars )
 {
     maTextBuffer.append(rChars);
 }

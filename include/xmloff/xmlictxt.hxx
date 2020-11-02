@@ -99,10 +99,6 @@ public:
      * that require virtual methods. The default is to do nothing. */
     virtual void EndElement();
 
-    /** This method is called for all characters that are contained in the
-     * current element. The default is to ignore them. */
-    virtual void Characters( const OUString& rChars );
-
     // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement (sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
@@ -121,6 +117,8 @@ public:
         const OUString & Namespace, const OUString & Name,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
+    /** This method is called for all characters that are contained in the
+     * current element. The default is to ignore them. */
     virtual void SAL_CALL characters(const OUString & aChars) override;
 
     // XInterface

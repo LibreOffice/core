@@ -99,7 +99,7 @@ namespace xmloff
 
         virtual void StartElement(
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual void Characters(const OUString& _rChars) override;
+        virtual void SAL_CALL characters(const OUString& _rChars) override;
 
     protected:
         /** handle one single attribute.
@@ -168,7 +168,7 @@ namespace xmloff
 #if OSL_DEBUG_LEVEL > 0
         virtual void StartElement(
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual void Characters(const OUString& _rChars) override;
+        virtual void SAL_CALL characters(const OUString& _rChars) override;
 #endif
     };
 

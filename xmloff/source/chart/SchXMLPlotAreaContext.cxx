@@ -589,7 +589,7 @@ SchXMLDataLabelSpanContext::SchXMLDataLabelSpanContext( SvXMLImport& rImport, co
 {
 }
 
-void SchXMLDataLabelSpanContext::Characters(const OUString& rChars)
+void SchXMLDataLabelSpanContext::characters(const OUString& rChars)
 {
     maCharBuffer.append(rChars);
 }

@@ -43,7 +43,7 @@ public:
 
     // This method is called for all characters that are contained in the
     // current element. The default is to ignore them.
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_DESCRIPTIONIMP_HXX
