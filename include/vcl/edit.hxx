@@ -259,6 +259,8 @@ public:
     void SetForceControlBackground(bool b) { mbForceControlBackground = b; }
 
     bool IsPassword() const { return mbPassword; }
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 #endif // INCLUDED_VCL_EDIT_HXX
