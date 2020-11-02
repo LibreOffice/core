@@ -2668,7 +2668,9 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
         ViewLegendEntry aEntry;
         OUString aLabelText;
         bool bVaryColorsByPoint = rSeries.isVaryColorsByPoint();
-        if( bVaryColorsByPoint )
+        if (bVaryColorsByPoint
+            || m_xChartTypeModel->getChartType().equalsIgnoreAsciiCase(
+                CHART2_SERVICE_NAME_CHARTTYPE_PIE))
         {
             Sequence< OUString > aCategoryNames;
             if( m_pExplicitCategoriesProvider )
