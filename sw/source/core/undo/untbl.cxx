@@ -1117,7 +1117,7 @@ void SaveTable::NewFrameFormat( const SwTableLine* pTableLn, const SwTableBox* p
         const SfxPoolItem& rOld = pOldFormat->GetFormatAttr( RES_BOXATR_FORMAT ),
                          & rNew = pFormat->GetFormatAttr( RES_BOXATR_FORMAT );
         if( rOld != rNew )
-            pFormat->ModifyNotification( &rOld, &rNew );
+            pFormat->SwClientNotify(*pFormat, sw::LegacyModifyHint(&rOld, &rNew));
     }
 
     if( !pOldFormat->HasWriterListeners() )

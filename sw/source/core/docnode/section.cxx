@@ -258,8 +258,7 @@ SwSection::~SwSection()
         }
 
         // If the Section is the last Client in the Format we can delete it
-        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFormat );
-        lcl_SwClientNotify(*pFormat, &aMsgHint);
+        pFormat->RemoveAllUnos();
         if( !pFormat->HasWriterListeners() )
         {
             // Do not add to the Undo. This should've happened earlier.

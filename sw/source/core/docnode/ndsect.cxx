@@ -561,10 +561,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
             return ;
         }
 
-        {
-            SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFormat );
-            pFormat->ModifyNotification( &aMsgHint, &aMsgHint );
-        }
+        pFormat->RemoveAllUnos();
 
         // A ClearRedo could result in a recursive call of this function and delete some section
         // formats, thus the position inside the SectionFormatTable could have changed
@@ -1309,8 +1306,7 @@ void SwSectionNode::NodesArrChgd()
 
     if( !rNds.IsDocNodes() )
     {
-        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFormat );
-        pFormat->ModifyNotification( &aMsgHint, &aMsgHint );
+        pFormat->RemoveAllUnos();
     }
 
     pFormat->LockModify();

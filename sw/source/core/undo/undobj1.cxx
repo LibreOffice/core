@@ -202,10 +202,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     }
 
     // all Uno objects should now log themselves off
-    {
-        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, m_pFrameFormat );
-        m_pFrameFormat->ModifyNotification( &aMsgHint, &aMsgHint );
-    }
+    m_pFrameFormat->RemoveAllUnos();
 
     if ( RES_DRAWFRMFMT != m_pFrameFormat->Which() )
     {
