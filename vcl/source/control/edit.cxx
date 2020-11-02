@@ -2938,4 +2938,15 @@ FactoryFunction Edit::GetUITestFactory() const
     return EditUIObject::create;
 }
 
+
+boost::property_tree::ptree Edit::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
+
+    if (!maPlaceholderText.isEmpty())
+        aTree.put("placeholder", maPlaceholderText);
+
+    return aTree;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
