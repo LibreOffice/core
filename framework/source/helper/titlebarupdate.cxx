@@ -115,8 +115,7 @@ void SAL_CALL TitleBarUpdate::disposing(const css::lang::EventObject&)
 }
 
 //http://live.gnome.org/GnomeShell/ApplicationBased
-//See http://msdn.microsoft.com/en-us/library/dd378459(v=VS.85).aspx for future
-//Windows 7 equivalent support
+//http://msdn.microsoft.com/en-us/library/dd378459(v=VS.85).aspx
 void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow ();
