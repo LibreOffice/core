@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce1aae2a_53beeddf",
+        "filename": "include/svx/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-11-02T15:51:24Z",
+      "side": 1,
+      "message": "In a future patch, please use ngettext to pluralize this string. Some languages have no plural forms, some have one like English, some have two, some have three. See tdf#132932",
+      "revId": "22c88a039a557343ab11fbf7abc8f2a087e1a3c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
