@@ -454,14 +454,12 @@ public:
     virtual SwFormatColl* ChgFormatColl( SwFormatColl* );
     SwFormatColl* GetFormatColl() const { return const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn())); }
 
-//FEATURE::CONDCOLL
     inline SwFormatColl& GetAnyFormatColl() const;
     void SetCondFormatColl( SwFormatColl* );
     inline SwFormatColl* GetCondFormatColl() const;
 
     bool IsAnyCondition( SwCollCondition& rTmp ) const;
-    void ChkCondColl();
-//FEATURE::CONDCOLL
+    void ChkCondColl(const SwTextFormatColl* pColl = nullptr);
 
     /** Invalidates NumRule at the node. NumRule is updated
        on EndAction of a Shell at the latest. */

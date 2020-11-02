@@ -32,6 +32,7 @@ class SwPageFrame;
 class SwFrame;
 class SwHistory;
 class SwTextNode;
+class SwTextFormatColl;
 
 // Base class for all Message-Hints:
 // "Overhead" of SfxPoolItem is handled here
@@ -128,6 +129,12 @@ public:
     RedlineUnDelText(sal_Int32 nS, sal_Int32 nL);
 };
 
+class CondCollCondChg final : public SfxHint
+{
+public:
+    const SwTextFormatColl& m_rColl;
+    CondCollCondChg(const SwTextFormatColl& rColl) : m_rColl(rColl) {};
+};
 }
 
 class SwUpdateAttr final : public SwMsgPoolItem
@@ -249,13 +256,6 @@ public:
 #else
     { m_pChgSet->ClearItem( nWhichL ); }
 #endif
-};
-
-class SwCondCollCondChg final : public SwMsgPoolItem
-{
-public:
-    SwFormat *pChangedFormat;
-    SwCondCollCondChg( SwFormat *pFormat );
 };
 
 class SwVirtPageNumInfo final : public SwMsgPoolItem

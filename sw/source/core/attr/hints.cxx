@@ -165,11 +165,6 @@ const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 }
 #endif
 
-SwCondCollCondChg::SwCondCollCondChg( SwFormat *pFormat )
-    : SwMsgPoolItem( RES_CONDCOLL_CONDCHG ), pChangedFormat( pFormat )
-{
-}
-
 SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrame *pPg ) :
     SwMsgPoolItem( RES_VIRTPAGENUM_INFO ), m_pPage( nullptr ), m_pOrigPage( pPg ), m_pFrame( nullptr )
 {
