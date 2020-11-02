@@ -62,9 +62,20 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
 
         if (aBitmapEx.IsAlpha())
         {
-            aBitmapEx.setAlphaFrom( cIndexFrom, nAlphaTo );
-            aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
-            aReturnGraphic = ::Graphic(aBitmapEx);
+            if (nAlphaTo == sal::static_int_cast< sal_Int8 >(0x0))
+            {
+                Bitmap aMask(aBitmapEx.GetMask());
+                Bitmap aMask2(aBitmap.CreateMask(aColorFrom, nTolerance));
+                aMask.CombineSimple(aMask2, BmpCombine::Or);
+                aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
+                aReturnGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
+            }
+            else
+            {
+                aBitmapEx.setAlphaFrom(cIndexFrom, nAlphaTo);
+                aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
+                aReturnGraphic = ::Graphic(aBitmapEx);
+            }
         }
         else if (aBitmapEx.IsTransparent())
         {
