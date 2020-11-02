@@ -41,6 +41,11 @@ def change_measurement_unit(UITestCase, unit):
     actionProps = mkPropertyValues(props)
     xUnit.executeAction("SELECT", actionProps)
 
+    # tdf#137930: Check apply button doesn't reset the value
+    xApplyBtn = xDialogOpt.getChild("apply")
+    xApplyBtn.executeAction("CLICK", tuple())
+    UITestCase.assertEqual(unit, get_state_as_dict(xUnit)['SelectEntryText'])
+
     xOKBtn = xDialogOpt.getChild("ok")
     UITestCase.ui_test.close_dialog_through_button(xOKBtn)
 
