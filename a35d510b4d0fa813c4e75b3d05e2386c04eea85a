@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42aaf688_5e8a11fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-02T09:04:32Z",
+      "side": 1,
+      "message": "what exactly would fail?",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43ba3515_999a3fd1",
+        "filename": "avmedia/source/viewer/mediawindow_impl.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-02T09:04:32Z",
+      "side": 1,
+      "message": "I think it is generally better to use something like\n\n  std::max(X, tools::Long(0))\n\nso that this will not accidentally keep computing std::max for a wrong (potentially too small) type if the type of X ever changes in the future.",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaa06757_de23595c",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-02T09:04:32Z",
+      "side": 1,
+      "message": "which of those four steps does this commit address?  I\u0027m confused",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52f437e9_9ec15a82",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-02T09:04:32Z",
+      "side": 1,
+      "message": "So, contrary to the commit subject, this is only for the Windows 64-bit platform, not the Windows 32-bit platform?\nIIUC, the problematic uses of `long` (e.g., relating to the geometry primitives in tools/gen.hxx?) that shall become 64-bit on all platforms were not related to the issue of casting between pointers and integers, so I\u0027m puzzled why SAL_TYPES_SIZEOFPOINTER would be a useful way to discriminate here (and elsewhere in this patchset).",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
