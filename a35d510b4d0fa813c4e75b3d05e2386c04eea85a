@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "e1dc3808_4685594f",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-02T09:28:46Z",
+      "side": 1,
+      "message": "So this is just a sub-step of (4)?  (It apparently does not replace tools::Long with sal_Int64, but rather keeps tools::Long around.)",
+      "parentUuid": "6be51d84_2861166b",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52f437e9_9ec15a82",
         "filename": "include/tools/long.hxx",
         "patchSetId": 15
@@ -136,6 +154,24 @@
       "side": 1,
       "message": "yes, this is only for the 64-bit windows platform. I don\u0027t see the point in messing with the 32-bit platforms, they are\n(a) become more and more rare\n(b) unlikely to even have enough available process memory to load extremely large calc spreadsheets\n\nThe primary problem we are addressing here is bringing Windows-64bit up to same capability as Linux-64bit when it comes to handling very large spreadsheets,\nwhich is caused by things like tools::Rectangle using \"long\",\nwhich means that all the work done to make Libreoffice on 64-bit Linux capable of loading large spreadsheets is useless on Windows,\nwhere long is 32-bit.",
       "parentUuid": "52f437e9_9ec15a82",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "add98069_09fd74dd",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-02T09:28:46Z",
+      "side": 1,
+      "message": "Aha.  Then please make that clear in the accompanying documentation.  (My understanding from the discussion of this patch series so far was that the plan is to ultimately change the occurrences of long -\u003e tools::Long -\u003e sal_Int64 throughout.)",
+      "parentUuid": "503318bb_9cbb0c45",
       "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
