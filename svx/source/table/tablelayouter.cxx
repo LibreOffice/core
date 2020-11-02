@@ -725,6 +725,8 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
 {
     const sal_Int32 nColCount = getColumnCount();
     const sal_Int32 nRowCount = getRowCount();
+    bool bScale = true;
+
     if( nRowCount == 0 )
         return;
 
@@ -853,8 +855,20 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
             nCurrentHeight = o3tl::saturating_add(nCurrentHeight, maRows[nRow].mnSize - nOldSize);
     }
 
+    if( rArea.getHeight() <= nCurrentHeight )
+    {
+        bScale = false;
+        for( nRow = 0; nRow < nRowCount; ++nRow )
+        {
+            Reference< XPropertySet > xRowSet( xRows->getByIndex(nRow), UNO_QUERY_THROW );
+            sal_Int32 nRowHeight = 0;
+            xRowSet->getPropertyValue( gsSize ) >>= nRowHeight;
+            maRows[nRow].mnSize = nRowHeight;
+        }
+    }
+
     // now scale if wanted and needed
-    if( bFit && nCurrentHeight != rArea.getHeight() )
+    if( bFit && nCurrentHeight != rArea.getHeight() && bScale )
         distribute(maRows, o3tl::saturating_sub<sal_Int32>(rArea.getHeight(), nCurrentHeight));
 
     // last step, update left edges
@@ -864,7 +878,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
         maRows[nRow].mnPos = nNewHeight;
         nNewHeight = o3tl::saturating_add(nNewHeight, maRows[nRow].mnSize);
 
-        if( bFit )
+        if( bFit && bScale)
         {
             Reference< XPropertySet > xRowSet( xRows->getByIndex(nRow), UNO_QUERY_THROW );
             xRowSet->setPropertyValue( gsSize, Any( maRows[nRow].mnSize ) );
