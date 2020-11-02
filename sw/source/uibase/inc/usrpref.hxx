@@ -106,8 +106,8 @@ public:
 class SwWebColorConfig : public utl::ConfigItem
 {
 private:
-    SwMasterUsrPref&        rParent;
-    css::uno::Sequence<OUString> aPropNames;
+    SwMasterUsrPref&        m_rParent;
+    css::uno::Sequence<OUString> m_aPropNames;
 
     virtual void ImplCommit() override;
 
