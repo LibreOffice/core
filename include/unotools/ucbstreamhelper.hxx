@@ -33,14 +33,12 @@ namespace com::sun::star::io
             }
 
 namespace com::sun::star::awt { class XWindow; }
-namespace com::sun::star::task { class XInteractionHandler; }
 
 namespace utl
 {
     class UNOTOOLS_DLLPUBLIC UcbStreamHelper
     {
     public:
-        static std::unique_ptr<SvStream> CreateStream(const OUString& rFileName, StreamMode eOpenMode, css::uno::Reference<css::task::XInteractionHandler> const & handler);
         static std::unique_ptr<SvStream> CreateStream(const OUString& rFileName, StreamMode eOpenMode, css::uno::Reference<css::awt::XWindow> xParentWin = nullptr);
         static std::unique_ptr<SvStream> CreateStream(const OUString& rFileName, StreamMode eOpenMode,
                                                       bool bFileExists, css::uno::Reference<css::awt::XWindow> xParentWin = nullptr);
