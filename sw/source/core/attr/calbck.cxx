@@ -185,28 +185,7 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
         return;
 
     LockModify();
-
-    // mba: WTF?!
-    if( !pOldValue )
-    {
-        m_bLockClientList = true;
-    }
-    else
-    {
-        switch( pOldValue->Which() )
-        {
-        case RES_OBJECTDYING:
-        case RES_REMOVE_UNO_OBJECT:
-            m_bLockClientList = static_cast<const SwPtrMsgPoolItem*>(pOldValue)->pObject != this;
-            break;
-
-        default:
-            m_bLockClientList = true;
-        }
-    }
-
     ModifyBroadcast( pOldValue, pNewValue );
-    m_bLockClientList = false;
     UnlockModify();
 }
 
@@ -224,7 +203,11 @@ bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 void SwModify::Add( SwClient* pDepend )
 {
     DBG_TESTSOLARMUTEX();
-    OSL_ENSURE( !m_bLockClientList, "Client inserted while in Modify" );
+    // - Preexisting SwModifys should only ever be used via sw::BroadcastingModify.
+    //   This includes sw::BroadcastMixin, which is the long-term target (without
+    //   SwModify).
+    // - New classes should use sw::BroadcastMixin alone.
+    assert(dynamic_cast<sw::BroadcastingModify*>(this));
 
     if(pDepend->m_pRegisteredIn == this )
         return;
@@ -375,6 +358,7 @@ sw::ClientIteratorBase* sw::ClientIteratorBase::s_pClientIters = nullptr;
 
 void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
 {
+    DBG_TESTSOLARMUTEX();
     SwIterator<SwClient,SwModify> aIter(*this);
     for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
         pClient->SwClientNotify( *this, rHint );
