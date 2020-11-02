@@ -1504,9 +1504,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     }
                 }
 
-                // Update document to new conditions
-                SwCondCollCondChg aMsg( pColl );
-                pColl->ModifyNotification( &aMsg, &aMsg );
+                pColl->GetNotifier().Broadcast(sw::CondCollCondChg(*pColl));
             }
             else if( pCondItem && !pColl->HasWriterListeners() )
             {
