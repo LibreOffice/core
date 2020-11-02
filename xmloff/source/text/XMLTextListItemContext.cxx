@@ -124,7 +124,7 @@ XMLTextListItemContext::~XMLTextListItemContext()
 {
 }
 
-void XMLTextListItemContext::EndElement()
+void XMLTextListItemContext::endFastElement(sal_Int32 )
 {
     // finish current list item
     rTxtImport.GetTextListHelper().SetListItem( nullptr );

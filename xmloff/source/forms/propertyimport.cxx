@@ -476,7 +476,7 @@ void OListPropertyContext::StartElement( const Reference< XAttributeList >& _rxA
     }
 }
 
-void OListPropertyContext::EndElement()
+void OListPropertyContext::endFastElement(sal_Int32 )
 {
     OSL_ENSURE( !m_sPropertyName.isEmpty() && !m_sPropertyType.isEmpty(),
         "OListPropertyContext::EndElement: no property name or type!" );

@@ -110,7 +110,7 @@ namespace xmloff
         }
     }
 
-    void OFormsRootImport::EndElement()
+    void OFormsRootImport::endFastElement(sal_Int32 )
     {
         LEAVE_LOG_CONTEXT( );
     }

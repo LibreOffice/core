@@ -38,7 +38,7 @@ namespace xmloff
     {
     }
 
-    void OFormEventsImportContext::EndElement()
+    void OFormEventsImportContext::endFastElement(sal_Int32 )
     {
         Sequence< ScriptEventDescriptor > aTranslated(aCollectEvents.size());
         ScriptEventDescriptor* pTranslated = aTranslated.getArray();

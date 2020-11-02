@@ -45,7 +45,7 @@ public:
             const css::uno::Reference< css::beans::XPropertySet >& rPropSet );
     virtual ~XMLReplacementImageContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,

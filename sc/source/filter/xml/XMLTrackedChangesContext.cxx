@@ -163,7 +163,7 @@ public:
 
     virtual void SAL_CALL characters( const OUString& rChars ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 class ScXMLChangeCellContext : public ScXMLImportContext
@@ -719,7 +719,7 @@ void ScXMLChangeTextPContext::characters( const OUString& rChars )
         pTextPContext->characters(rChars);
 }
 
-void ScXMLChangeTextPContext::EndElement()
+void ScXMLChangeTextPContext::endFastElement(sal_Int32 )
 {
     if (!pTextPContext)
         pChangeCellContext->SetText(sText.makeStringAndClear());

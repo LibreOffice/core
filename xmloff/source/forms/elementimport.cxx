@@ -175,7 +175,7 @@ namespace xmloff
         return OPropertyImport::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
     }
 
-    void OElementImport::EndElement()
+    void OElementImport::endFastElement(sal_Int32 )
     {
         OSL_ENSURE(m_xElement.is(), "OElementImport::EndElement: invalid element created!");
         if (!m_xElement.is())
@@ -895,7 +895,7 @@ namespace xmloff
             _rPropValue.Value = PropertyConversion::convertString(aProp.Type, sValue);
     }
 
-    void OControlImport::EndElement()
+    void OControlImport::endFastElement(sal_Int32 nElement)
     {
         OSL_ENSURE(m_xElement.is(), "OControlImport::EndElement: invalid control!");
         if ( !m_xElement.is() )
@@ -967,7 +967,7 @@ namespace xmloff
         }
 
         // let the base class set all the values
-        OElementImport::EndElement();
+        OElementImport::endFastElement(nElement);
 
         // restore the "value property value", if necessary
         if ( bRestoreValuePropertyValue && pValueProperty )
@@ -1445,13 +1445,13 @@ namespace xmloff
         }
     }
 
-    void OTextLikeImport::EndElement()
+    void OTextLikeImport::endFastElement(sal_Int32 nElement)
     {
         removeRedundantCurrentValue();
         adjustDefaultControlProperty();
 
         // let the base class do the stuff
-        OControlImport::EndElement();
+        OControlImport::endFastElement(nElement);
 
         // some cleanups
         rtl::Reference < XMLTextImportHelper > xTextImportHelper( m_rContext.getGlobalContext().GetTextImport() );
@@ -1519,7 +1519,7 @@ namespace xmloff
         }
     }
 
-    void OListAndComboImport::EndElement()
+    void OListAndComboImport::endFastElement(sal_Int32 nElement)
     {
         // append the list source property the properties sequence of our importer
         // the string item list
@@ -1555,7 +1555,7 @@ namespace xmloff
             implPushBackPropertyValue(aDefaultSelected);
         }
 
-        OControlImport::EndElement();
+        OControlImport::endFastElement(nElement);
 
         // the external list source, if applicable
         if ( m_xElement.is() && !m_sCellListSource.isEmpty() )
@@ -1848,9 +1848,9 @@ namespace xmloff
         return OControlImport::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
     }
 
-    void OGridImport::EndElement()
+    void OGridImport::endFastElement(sal_Int32 nElement)
     {
-        OControlImport::EndElement();
+        OControlImport::endFastElement(nElement);
 
         // now that we have all children, attach the events
         css::uno::Reference< css::container::XIndexAccess > xIndexContainer(m_xMeAsContainer, css::uno::UNO_QUERY);
@@ -1911,9 +1911,9 @@ namespace xmloff
         simulateDefaultedAttribute(OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME, "_blank");
     }
 
-    void OFormImport::EndElement()
+    void OFormImport::endFastElement(sal_Int32 nElement)
     {
-        OElementImport::EndElement();
+        OElementImport::endFastElement(nElement);
 
         // now that we have all children, attach the events
         css::uno::Reference< css::container::XIndexAccess > xIndexContainer(m_xMeAsContainer, css::uno::UNO_QUERY);

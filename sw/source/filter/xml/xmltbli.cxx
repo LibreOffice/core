@@ -420,7 +420,7 @@ public:
     virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
@@ -652,7 +652,7 @@ SvXMLImportContextRef SwXMLTableCellContext_Impl::CreateChildContext(
     return pContext;
 }
 
-void SwXMLTableCellContext_Impl::EndElement()
+void SwXMLTableCellContext_Impl::endFastElement(sal_Int32 )
 {
     if( GetTable()->IsValid() )
     {
@@ -869,7 +869,7 @@ public:
             const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
@@ -929,7 +929,7 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
         GetTable()->InsertRow( aStyleName, aDfltCellStyleName, bInHead );
 }
 
-void SwXMLTableRowContext_Impl::EndElement()
+void SwXMLTableRowContext_Impl::endFastElement(sal_Int32 )
 {
     if( GetTable()->IsValid() )
     {
@@ -2863,7 +2863,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
     return pStNd;
 }
 
-void SwXMLTableContext::EndElement()
+void SwXMLTableContext::endFastElement(sal_Int32 )
 {
     if( IsValid() && !m_xParentTable.is() )
     {

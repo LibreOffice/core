@@ -83,7 +83,7 @@ public:
 
     virtual void SAL_CALL characters( const OUString& rChars ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     void SetShape(
         const css::uno::Reference< css::drawing::XShape >& rxShape,

@@ -73,7 +73,7 @@ public:
                 css::xml::sax::XAttributeList > & xAttrList,
             css::text::TextContentAnchorType eDfltAnchorType );
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,

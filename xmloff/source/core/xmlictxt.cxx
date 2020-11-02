@@ -60,7 +60,7 @@ void SvXMLImportContext::StartElement( const uno::Reference< xml::sax::XAttribut
 {
 }
 
-void SvXMLImportContext::EndElement()
+void SvXMLImportContext::endFastElement(sal_Int32 )
 {
 }
 
@@ -103,14 +103,8 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & /*rNamesp
     StartElement( mrImport.maAttrList.get() );
 }
 
-void SAL_CALL SvXMLImportContext::endFastElement(sal_Int32 )
-{
-    EndElement();
-}
-
 void SAL_CALL SvXMLImportContext::endUnknownElement (const OUString & /*rNamespace*/, const OUString & /*rElementName*/)
 {
-    EndElement();
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createFastChildContext

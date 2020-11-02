@@ -56,12 +56,10 @@ void XMLIndexBibliographySourceContext::ProcessAttribute(
     // We have no attributes. Who wants attributes, anyway?
 }
 
-
-void XMLIndexBibliographySourceContext::EndElement()
+void XMLIndexBibliographySourceContext::endFastElement(sal_Int32 )
 {
     // No attributes, no properties.
 }
-
 
 SvXMLImportContextRef XMLIndexBibliographySourceContext::CreateChildContext(
     sal_uInt16 nPrefix,

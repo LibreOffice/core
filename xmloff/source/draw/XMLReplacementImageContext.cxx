@@ -69,7 +69,7 @@ XMLReplacementImageContext::~XMLReplacementImageContext()
 {
 }
 
-void XMLReplacementImageContext::EndElement()
+void XMLReplacementImageContext::endFastElement(sal_Int32 )
 {
     OSL_ENSURE( !m_sHRef.isEmpty() || m_xBase64Stream.is(),
                 "neither URL nor base64 image data given" );

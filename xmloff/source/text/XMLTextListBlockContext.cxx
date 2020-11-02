@@ -229,7 +229,7 @@ XMLTextListBlockContext::~XMLTextListBlockContext()
 {
 }
 
-void XMLTextListBlockContext::EndElement()
+void XMLTextListBlockContext::endFastElement(sal_Int32 )
 {
     // Numbering has not to be restarted if it has been restarted within
     // a child list.

@@ -1177,7 +1177,7 @@ static void CheckAndResolveEquationParameter( css::drawing::EnhancedCustomShapeP
     }
 }
 
-void XMLEnhancedCustomShapeContext::EndElement()
+void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
 {
     // resolve properties that are indexing an Equation
     if ( !maEquations.empty() )

@@ -120,7 +120,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
     }
 }
 
-void XMLIndexTOCSourceContext::EndElement()
+void XMLIndexTOCSourceContext::endFastElement(sal_Int32 nElement)
 {
     rIndexPropertySet->setPropertyValue("CreateFromMarks", css::uno::Any(bUseMarks));
     rIndexPropertySet->setPropertyValue("CreateFromOutline", css::uno::Any(bUseOutline));
@@ -129,7 +129,7 @@ void XMLIndexTOCSourceContext::EndElement()
     rIndexPropertySet->setPropertyValue("Level", css::uno::Any(static_cast<sal_Int16>(nOutlineLevel)));
 
     // process common attributes
-    XMLIndexSourceBaseContext::EndElement();
+    XMLIndexSourceBaseContext::endFastElement(nElement);
 }
 
 SvXMLImportContextRef XMLIndexTOCSourceContext::CreateChildContext(

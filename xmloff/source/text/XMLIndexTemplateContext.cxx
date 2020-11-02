@@ -140,7 +140,7 @@ void XMLIndexTemplateContext::StartElement(
     }
 }
 
-void XMLIndexTemplateContext::EndElement()
+void XMLIndexTemplateContext::endFastElement(sal_Int32 )
 {
     if (!bOutlineLevelOK)
         return;

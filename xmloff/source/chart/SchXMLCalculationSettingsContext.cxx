@@ -64,7 +64,7 @@ SvXMLImportContextRef SchXMLCalculationSettingsContext::CreateChildContext( sal_
     return new SchXMLCalculationSettingsContext(GetImport(),nPrefix,rLocalName,xAttrList);
 }
 
-void SchXMLCalculationSettingsContext::EndElement()
+void SchXMLCalculationSettingsContext::endFastElement(sal_Int32 )
 {
     if ( m_aNullDate.hasValue() )
     {

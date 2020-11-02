@@ -608,7 +608,7 @@ public:
             XMLHints_Impl& rHints,
             bool& rIgnLeadSpace );
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -702,7 +702,7 @@ XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
     }
 }
 
-void XMLImpRubyContext_Impl::EndElement()
+void XMLImpRubyContext_Impl::endFastElement(sal_Int32 )
 {
     const rtl::Reference < XMLTextImportHelper > xTextImport(
         GetImport().GetTextImport());
@@ -770,7 +770,7 @@ public:
     virtual void StartElement(
             const Reference<xml::sax::XAttributeList> & i_xAttrList) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
@@ -817,7 +817,7 @@ void XMLMetaImportContextBase::StartElement(
     }
 }
 
-void XMLMetaImportContextBase::EndElement()
+void XMLMetaImportContextBase::endFastElement(sal_Int32 )
 {
     SAL_WARN_IF(!m_xStart.is(), "xmloff.text", "no mxStart?");
     if (!m_xStart.is()) return;
@@ -1948,7 +1948,7 @@ XMLParaContext::XMLParaContext(
         sStyleName = aCondStyleName;
 }
 
-void XMLParaContext::EndElement()
+void XMLParaContext::endFastElement(sal_Int32 )
 {
     rtl::Reference < XMLTextImportHelper > xTxtImport(
         GetImport().GetTextImport());
@@ -2334,7 +2334,7 @@ XMLNumberedParaContext::XMLNumberedParaContext(
     i_rImport.GetTextImport()->GetTextListHelper().PushListContext( this );
 }
 
-void XMLNumberedParaContext::EndElement()
+void XMLNumberedParaContext::endFastElement(sal_Int32 )
 {
     if (!m_ListId.isEmpty()) {
         GetImport().GetTextImport()->PopListContext();

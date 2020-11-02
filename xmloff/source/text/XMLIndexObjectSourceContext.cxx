@@ -110,7 +110,7 @@ void XMLIndexObjectSourceContext::ProcessAttribute(
     }
 }
 
-void XMLIndexObjectSourceContext::EndElement()
+void XMLIndexObjectSourceContext::endFastElement(sal_Int32 nElement)
 {
     rIndexPropertySet->setPropertyValue("CreateFromStarCalc", css::uno::Any(bUseCalc));
     rIndexPropertySet->setPropertyValue("CreateFromStarChart", css::uno::Any(bUseChart));
@@ -118,7 +118,7 @@ void XMLIndexObjectSourceContext::EndElement()
     rIndexPropertySet->setPropertyValue("CreateFromStarMath", css::uno::Any(bUseMath));
     rIndexPropertySet->setPropertyValue("CreateFromOtherEmbeddedObjects", css::uno::Any(bUseOtherObjects));
 
-    XMLIndexSourceBaseContext::EndElement();
+    XMLIndexSourceBaseContext::endFastElement(nElement);
 }
 
 SvXMLImportContextRef XMLIndexObjectSourceContext::CreateChildContext(

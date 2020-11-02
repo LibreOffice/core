@@ -49,7 +49,7 @@ public:
             const bool bIsHeader );
     virtual ~XMLTextListItemContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                  const OUString& rLocalName,

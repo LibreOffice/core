@@ -105,7 +105,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
 private:
     SchXMLImportHelper& mrImportHelper;
@@ -147,7 +147,7 @@ private:
 public:
     SchXMLDataLabelSpanContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels);
     virtual void SAL_CALL characters( const OUString& rChars ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 class SchXMLDataLabelParaContext: public SvXMLImportContext
@@ -204,7 +204,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 class SchXMLCoordinateRegionContext : public SvXMLImportContext

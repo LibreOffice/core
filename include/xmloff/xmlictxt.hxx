@@ -94,11 +94,6 @@ public:
      * require virtual methods. The default is to do nothing. */
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
-    /** EndElement is called before a context will be destructed, but
-     * after an elements context has been parsed. It may be used for actions
-     * that require virtual methods. The default is to do nothing. */
-    virtual void EndElement();
-
     // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement (sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
@@ -106,6 +101,9 @@ public:
     virtual void SAL_CALL startUnknownElement(const OUString & Namespace, const OUString & Name,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
+    /** endFastElement is called before a context will be destructed, but
+     * after an elements context has been parsed. It may be used for actions
+     * that require virtual methods. The default is to do nothing. */
     virtual void SAL_CALL endFastElement(sal_Int32 Element) override;
 
     virtual void SAL_CALL endUnknownElement(const OUString & Namespace, const OUString & Name) override;
