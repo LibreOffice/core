@@ -206,13 +206,13 @@ namespace {
 // #i3317# - re-factoring of the position stack
 class SwOszControl
 {
-    static const SwFlyFrame *pStack1;
-    static const SwFlyFrame *pStack2;
-    static const SwFlyFrame *pStack3;
-    static const SwFlyFrame *pStack4;
-    static const SwFlyFrame *pStack5;
+    static const SwFlyFrame* m_pStack1;
+    static const SwFlyFrame* m_pStack2;
+    static const SwFlyFrame* m_pStack3;
+    static const SwFlyFrame* m_pStack4;
+    static const SwFlyFrame* m_pStack5;
 
-    const SwFlyFrame *pFly;
+    const SwFlyFrame* m_pFly;
     std::vector<Point> maObjPositions;
 
 public:
@@ -224,54 +224,54 @@ public:
 
 }
 
-const SwFlyFrame *SwOszControl::pStack1 = nullptr;
-const SwFlyFrame *SwOszControl::pStack2 = nullptr;
-const SwFlyFrame *SwOszControl::pStack3 = nullptr;
-const SwFlyFrame *SwOszControl::pStack4 = nullptr;
-const SwFlyFrame *SwOszControl::pStack5 = nullptr;
+const SwFlyFrame* SwOszControl::m_pStack1 = nullptr;
+const SwFlyFrame* SwOszControl::m_pStack2 = nullptr;
+const SwFlyFrame* SwOszControl::m_pStack3 = nullptr;
+const SwFlyFrame* SwOszControl::m_pStack4 = nullptr;
+const SwFlyFrame* SwOszControl::m_pStack5 = nullptr;
 
-SwOszControl::SwOszControl( const SwFlyFrame *pFrame )
-    : pFly( pFrame )
+SwOszControl::SwOszControl(const SwFlyFrame* pFrame)
+    : m_pFly(pFrame)
 {
-    if ( !SwOszControl::pStack1 )
-        SwOszControl::pStack1 = pFly;
-    else if ( !SwOszControl::pStack2 )
-        SwOszControl::pStack2 = pFly;
-    else if ( !SwOszControl::pStack3 )
-        SwOszControl::pStack3 = pFly;
-    else if ( !SwOszControl::pStack4 )
-        SwOszControl::pStack4 = pFly;
-    else if ( !SwOszControl::pStack5 )
-        SwOszControl::pStack5 = pFly;
+    if (!SwOszControl::m_pStack1)
+        SwOszControl::m_pStack1 = m_pFly;
+    else if (!SwOszControl::m_pStack2)
+        SwOszControl::m_pStack2 = m_pFly;
+    else if (!SwOszControl::m_pStack3)
+        SwOszControl::m_pStack3 = m_pFly;
+    else if (!SwOszControl::m_pStack4)
+        SwOszControl::m_pStack4 = m_pFly;
+    else if (!SwOszControl::m_pStack5)
+        SwOszControl::m_pStack5 = m_pFly;
 }
 
 SwOszControl::~SwOszControl()
 {
-    if ( SwOszControl::pStack1 == pFly )
-        SwOszControl::pStack1 = nullptr;
-    else if ( SwOszControl::pStack2 == pFly )
-        SwOszControl::pStack2 = nullptr;
-    else if ( SwOszControl::pStack3 == pFly )
-        SwOszControl::pStack3 = nullptr;
-    else if ( SwOszControl::pStack4 == pFly )
-        SwOszControl::pStack4 = nullptr;
-    else if ( SwOszControl::pStack5 == pFly )
-        SwOszControl::pStack5 = nullptr;
+    if (SwOszControl::m_pStack1 == m_pFly)
+        SwOszControl::m_pStack1 = nullptr;
+    else if (SwOszControl::m_pStack2 == m_pFly)
+        SwOszControl::m_pStack2 = nullptr;
+    else if (SwOszControl::m_pStack3 == m_pFly)
+        SwOszControl::m_pStack3 = nullptr;
+    else if (SwOszControl::m_pStack4 == m_pFly)
+        SwOszControl::m_pStack4 = nullptr;
+    else if (SwOszControl::m_pStack5 == m_pFly)
+        SwOszControl::m_pStack5 = nullptr;
     // #i3317#
     maObjPositions.clear();
 }
 
 bool SwOszControl::IsInProgress( const SwFlyFrame *pFly )
 {
-    if ( SwOszControl::pStack1 && !pFly->IsLowerOf( SwOszControl::pStack1 ) )
+    if (SwOszControl::m_pStack1 && !pFly->IsLowerOf(SwOszControl::m_pStack1))
         return true;
-    if ( SwOszControl::pStack2 && !pFly->IsLowerOf( SwOszControl::pStack2 ) )
+    if (SwOszControl::m_pStack2 && !pFly->IsLowerOf(SwOszControl::m_pStack2))
         return true;
-    if ( SwOszControl::pStack3 && !pFly->IsLowerOf( SwOszControl::pStack3 ) )
+    if (SwOszControl::m_pStack3 && !pFly->IsLowerOf(SwOszControl::m_pStack3))
         return true;
-    if ( SwOszControl::pStack4 && !pFly->IsLowerOf( SwOszControl::pStack4 ) )
+    if (SwOszControl::m_pStack4 && !pFly->IsLowerOf(SwOszControl::m_pStack4))
         return true;
-    if ( SwOszControl::pStack5 && !pFly->IsLowerOf( SwOszControl::pStack5 ) )
+    if (SwOszControl::m_pStack5 && !pFly->IsLowerOf(SwOszControl::m_pStack5))
         return true;
     return false;
 }
@@ -287,7 +287,7 @@ bool SwOszControl::ChkOsz()
     }
     else
     {
-        Point aNewObjPos = pFly->GetObjRect().Pos();
+        Point aNewObjPos = m_pFly->GetObjRect().Pos();
         for ( auto const & pt : maObjPositions )
         {
             if ( aNewObjPos == pt )
@@ -548,14 +548,23 @@ namespace {
 class SwDistance
 {
 public:
-    SwTwips nMain, nSub;
-    SwDistance() : nMain(0), nSub(0) { }
+    SwTwips m_nMain, m_nSub;
+    SwDistance()
+        : m_nMain(0)
+        , m_nSub(0)
+    {
+    }
     bool operator<( const SwDistance& rTwo ) const
-        { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && nSub &&
-          rTwo.nSub && nSub < rTwo.nSub ); }
+        {
+            return m_nMain < rTwo.m_nMain
+                   || (m_nMain == rTwo.m_nMain && m_nSub && rTwo.m_nSub && m_nSub < rTwo.m_nSub);
+        }
     bool operator<=( const SwDistance& rTwo ) const
-        { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && ( !nSub ||
-          !rTwo.nSub || nSub <= rTwo.nSub ) ); }
+        {
+            return m_nMain < rTwo.m_nMain
+                   || (m_nMain == rTwo.m_nMain
+                       && (!m_nSub || !rTwo.m_nSub || m_nSub <= rTwo.m_nSub));
+        }
 };
 
 }
@@ -564,12 +573,12 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                                          const Point &rPt,
                                          const SwContentFrame *pCnt )
 {
-    rRet.nSub = 0;
+    rRet.m_nSub = 0;
     //If the point stays inside the Cnt everything is clear already; the Content
     //automatically has a distance of 0.
     if ( pCnt->getFrameArea().IsInside( rPt ) )
     {
-        rRet.nMain = 0;
+        rRet.m_nMain = 0;
         return pCnt;
     }
     else
@@ -593,19 +602,19 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
             if( bVert )
             {
                 if ( bVertL2R )
-                    rRet.nMain =  rPt.X() - nTopForObjPos;
+                    rRet.m_nMain = rPt.X() - nTopForObjPos;
                 else
-                    rRet.nMain =  nTopForObjPos - rPt.X();
+                    rRet.m_nMain = nTopForObjPos - rPt.X();
             }
             else
-                rRet.nMain =  rPt.Y() - nTopForObjPos;
+                rRet.m_nMain = rPt.Y() - nTopForObjPos;
             return pCnt;
         }
         else if ( rPt.Y() <= pUp->getFrameArea().Top() )
         {
             // <rPt> point is above environment of given content frame
             // correct for vertical layout?
-            rRet.nMain = LONG_MAX;
+            rRet.m_nMain = LONG_MAX;
         }
         else if( rPt.X() < pUp->getFrameArea().Left() &&
                  rPt.Y() <= ( bVert ? pUp->getFrameArea().Top() : pUp->getFrameArea().Bottom() ) )
@@ -622,24 +631,27 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                 if( bVert )
                 {
                     if ( bVertL2R )
-                        rRet.nMain = rPt.X() - nTopForObjPos;
+                        rRet.m_nMain = rPt.X() - nTopForObjPos;
                     else
-                        rRet.nMain =  nTopForObjPos - rPt.X();
+                        rRet.m_nMain = nTopForObjPos - rPt.X();
                 }
                 else
-                    rRet.nMain = rPt.Y() - nTopForObjPos;
+                    rRet.m_nMain = rPt.Y() - nTopForObjPos;
                 return pCnt;
             }
             else
-                rRet.nMain = LONG_MAX;
+                rRet.m_nMain = LONG_MAX;
         }
         else
         {
-            rRet.nMain = bVert
-                ? ( bVertL2R
-                    ? ( (pUp->getFrameArea().Left() + pUp->getFramePrintArea().Right()) - nTopForObjPos )
-                    : ( nTopForObjPos - (pUp->getFrameArea().Left() + pUp->getFramePrintArea().Left() ) ) )
-                : ( (pUp->getFrameArea().Top() + pUp->getFramePrintArea().Bottom()) - nTopForObjPos );
+            rRet.m_nMain
+                = bVert ? (bVertL2R
+                               ? ((pUp->getFrameArea().Left() + pUp->getFramePrintArea().Right())
+                                  - nTopForObjPos)
+                               : (nTopForObjPos
+                                  - (pUp->getFrameArea().Left() + pUp->getFramePrintArea().Left())))
+                        : ((pUp->getFrameArea().Top() + pUp->getFramePrintArea().Bottom())
+                           - nTopForObjPos);
 
             const SwFrame *pPre = pCnt;
             const SwFrame *pLay = pUp->GetLeaf( MAKEPAGE_NONE, true, pCnt );
@@ -649,8 +661,8 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
             const SwSectionFrame *pSect = pUp->FindSctFrame();
             if( pSect )
             {
-                rRet.nSub = rRet.nMain;
-                rRet.nMain = 0;
+                rRet.m_nSub = rRet.m_nMain;
+                rRet.m_nMain = 0;
             }
             if( pSect && !pSect->IsAnLower( pLay ) )
             {
@@ -743,9 +755,9 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                 else
                 {
                     if( bSct || pSect )
-                        rRet.nSub += nPrtHeight;
+                        rRet.m_nSub += nPrtHeight;
                     else
-                        rRet.nMain += nPrtHeight;
+                        rRet.m_nMain += nPrtHeight;
                     pPre = pLay;
                     pLay = pLay->GetLeaf( MAKEPAGE_NONE, true, pCnt );
                     if( pSect && !pSect->IsAnLower( pLay ) )
@@ -836,9 +848,9 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                     SwTwips nDiff = pLay->IsVertical() ? ( pLay->IsVertLR() ? ( rPt.X() - nFrameTop ) : ( nFrameTop - rPt.X() ) )
                                                        : ( rPt.Y() - nFrameTop );
                     if( bSct || pSect )
-                        rRet.nSub += nDiff;
+                        rRet.m_nSub += nDiff;
                     else
-                        rRet.nMain += nDiff;
+                        rRet.m_nMain += nDiff;
                 }
                 if ( pLay->IsFootnoteContFrame() && !static_cast<const SwLayoutFrame*>(pLay)->Lower() )
                 {
@@ -850,7 +862,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                 return pLay;
             }
             else
-                rRet.nMain = LONG_MAX;
+                rRet.m_nMain = LONG_MAX;
         }
     }
     return nullptr;
@@ -1104,23 +1116,23 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
             }
         }
         if ( !pUpFrame )
-            nUp.nMain = LONG_MAX;
-        if ( nUp.nMain >= 0 && LONG_MAX != nUp.nMain )
+            nUp.m_nMain = LONG_MAX;
+        if (nUp.m_nMain >= 0 && LONG_MAX != nUp.m_nMain)
         {
             bNegAllowed = false;
-            if ( nUpLst.nMain < 0 ) //don't take the wrong one, if the value
-                                    //just changed from negative to positive.
+            if (nUpLst.m_nMain < 0) //don't take the wrong one, if the value
+                //just changed from negative to positive.
             {   pUpLst = pUpFrame;
                 nUpLst = nUp;
             }
         }
-    } while ( pUpFrame && ( ( bNegAllowed && nUp.nMain < 0 ) || ( nUp <= nUpLst ) ) );
+    } while (pUpFrame && ((bNegAllowed && nUp.m_nMain < 0) || (nUp <= nUpLst)));
 
     const SwContentFrame *pDownLst;
     const SwContentFrame *pDownFrame = pCnt;
     SwDistance nDownLst;
-    if ( nDown.nMain < 0 )
-        nDown.nMain = LONG_MAX;
+    if (nDown.m_nMain < 0)
+        nDown.m_nMain = LONG_MAX;
     do
     {
         pDownLst = pDownFrame; nDownLst = nDown;
@@ -1131,32 +1143,34 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
         if ( pDownFrame )
         {
             ::lcl_CalcDownDist( nDown, aNew, pDownFrame );
-            if ( nDown.nMain < 0 )
-                nDown.nMain = LONG_MAX;
+            if (nDown.m_nMain < 0)
+                nDown.m_nMain = LONG_MAX;
             //It makes sense to search further, if the distance grows inside
             //a table.
             if ( pDownLst->IsInTab() && pDownFrame->IsInTab() )
             {
-                while ( pDownFrame && ( ( nDown.nMain != LONG_MAX && pDownFrame->IsInTab()) || bBody != pDownFrame->IsInDocBody() ) )
+                while (pDownFrame
+                       && ((nDown.m_nMain != LONG_MAX && pDownFrame->IsInTab())
+                           || bBody != pDownFrame->IsInDocBody()))
                 {
                     pDownFrame = pDownFrame->GetNextContentFrame();
                     if ( pDownFrame )
                         ::lcl_CalcDownDist( nDown, aNew, pDownFrame );
-                    if ( nDown.nMain < 0 )
-                        nDown.nMain = LONG_MAX;
+                    if (nDown.m_nMain < 0)
+                        nDown.m_nMain = LONG_MAX;
                 }
             }
         }
         if ( !pDownFrame )
-            nDown.nMain = LONG_MAX;
+            nDown.m_nMain = LONG_MAX;
 
-    } while ( pDownFrame && nDown <= nDownLst &&
-              nDown.nMain != LONG_MAX && nDownLst.nMain != LONG_MAX );
+    } while (pDownFrame && nDown <= nDownLst && nDown.m_nMain != LONG_MAX
+             && nDownLst.m_nMain != LONG_MAX);
 
     //If we couldn't find one in both directions, we'll search the Content whose
     //left upper corner is the nearest to the point. Such a situation may
     //happen, if the point doesn't lay in the text flow but in any margin.
-    if ( nDownLst.nMain == LONG_MAX && nUpLst.nMain == LONG_MAX )
+    if (nDownLst.m_nMain == LONG_MAX && nUpLst.m_nMain == LONG_MAX)
     {
         // If an OLE objects, which is contained in a fly frame
         // is resized in inplace mode and the new Position is outside the
@@ -1232,7 +1246,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
     {
         SwDistance aDist;
         pFrame = ::lcl_CalcDownDist( aDist, aNew, pCnt );
-        nY = aDist.nMain + aDist.nSub;
+        nY = aDist.m_nMain + aDist.m_nSub;
     }
 
     SwTwips nX = 0;

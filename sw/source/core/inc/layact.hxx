@@ -181,11 +181,11 @@ public:
 class SwLayIdle
 {
     TaskStopwatch m_aWatch;
-    SwRootFrame *pRoot;
-    SwViewShellImp  *pImp;           // The Idler registers and deregisters here
-    SwContentNode *pContentNode;    // The current cursor position is saved here
-    sal_Int32  nTextPos;
-    bool        bPageValid;     // Were we able to evaluate everything on the whole page?
+    SwRootFrame *m_pRoot;
+    SwViewShellImp  *m_pImp;           // The Idler registers and deregisters here
+    SwContentNode *m_pContentNode;    // The current cursor position is saved here
+    sal_Int32  m_nTextPos;
+    bool        m_bPageValid;     // Were we able to evaluate everything on the whole page?
 #ifdef DBG_UTIL
     bool m_bIndicator;
 

@@ -1932,23 +1932,23 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
     if( bProcess )
     {
         assert(pTextNode);
-        SwViewShell *pSh = pImp->GetShell();
-        if( COMPLETE_STRING == nTextPos )
+        SwViewShell *pSh = m_pImp->GetShell();
+        if( COMPLETE_STRING == m_nTextPos )
         {
-            --nTextPos;
+            --m_nTextPos;
             if( auto pCursorShell = dynamic_cast<SwCursorShell *>( pSh ) )
                 if( !pCursorShell->IsTableMode() )
                 {
                     SwPaM *pCursor = pCursorShell->GetCursor();
                     if( !pCursor->HasMark() && !pCursor->IsMultiSelection() )
                     {
-                        pContentNode = pCursor->GetContentNode();
-                        nTextPos =  pCursor->GetPoint()->nContent.GetIndex();
+                        m_pContentNode = pCursor->GetContentNode();
+                        m_nTextPos =  pCursor->GetPoint()->nContent.GetIndex();
                     }
                 }
         }
-        sal_Int32 const nPos((pContentNode && pTextNode == pContentNode)
-                ? nTextPos
+        sal_Int32 const nPos((m_pContentNode && pTextNode == m_pContentNode)
+                ? m_nTextPos
                 : COMPLETE_STRING);
 
         switch ( eJob )
@@ -1957,9 +1957,9 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
             {
                 SwRect aRepaint( const_cast<SwTextFrame*>(pTextFrame)->AutoSpell_(*pTextNode, nPos) );
                 // PENDING should stop idle spell checking
-                bPageValid = bPageValid && (SwTextNode::WrongState::TODO != pTextNode->GetWrongDirty());
+                m_bPageValid = m_bPageValid && (SwTextNode::WrongState::TODO != pTextNode->GetWrongDirty());
                 if ( aRepaint.HasArea() )
-                    pImp->GetShell()->InvalidateWindows( aRepaint );
+                    m_pImp->GetShell()->InvalidateWindows( aRepaint );
                 if (IsInterrupt())
                     return true;
                 break;
@@ -1984,9 +1984,9 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
             {
                 try {
                     const SwRect aRepaint( const_cast<SwTextFrame*>(pTextFrame)->SmartTagScan(*pTextNode) );
-                    bPageValid = bPageValid && !pTextNode->IsSmartTagDirty();
+                    m_bPageValid = m_bPageValid && !pTextNode->IsSmartTagDirty();
                     if ( aRepaint.HasArea() )
-                        pImp->GetShell()->InvalidateWindows( aRepaint );
+                        m_pImp->GetShell()->InvalidateWindows( aRepaint );
                 } catch( const css::uno::RuntimeException&) {
                     // handle smarttag problems gracefully and provide diagnostics
                     TOOLS_WARN_EXCEPTION( "sw.core", "SMART_TAGS");
@@ -2029,7 +2029,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
 {
     // Spellcheck all contents of the pages. Either only the
     // visible ones or all of them.
-    const SwViewShell* pViewShell = pImp->GetShell();
+    const SwViewShell* pViewShell = m_pImp->GetShell();
     const SwViewOption* pViewOptions = pViewShell->GetViewOptions();
     const SwDoc* pDoc = pViewShell->GetDoc();
 
@@ -2059,16 +2059,16 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
 
     SwPageFrame *pPage;
     if ( bVisAreaOnly )
-        pPage = pImp->GetFirstVisPage(pViewShell->GetOut());
+        pPage = m_pImp->GetFirstVisPage(pViewShell->GetOut());
     else
-        pPage = static_cast<SwPageFrame*>(pRoot->Lower());
+        pPage = static_cast<SwPageFrame*>(m_pRoot->Lower());
 
-    pContentNode = nullptr;
-    nTextPos = COMPLETE_STRING;
+    m_pContentNode = nullptr;
+    m_nTextPos = COMPLETE_STRING;
 
     while ( pPage )
     {
-        bPageValid = true;
+        m_bPageValid = true;
         const SwContentFrame *pCnt = pPage->ContainsContent();
         while( pCnt && pPage->IsAnLower( pCnt ) )
         {
@@ -2098,7 +2098,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
             }
         }
 
-        if( bPageValid )
+        if( m_bPageValid )
         {
             switch ( eJob )
             {
@@ -2111,7 +2111,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
 
         pPage = static_cast<SwPageFrame*>(pPage->GetNext());
         if ( pPage && bVisAreaOnly &&
-             !pPage->getFrameArea().IsOver( pImp->GetShell()->VisArea()))
+             !pPage->getFrameArea().IsOver( m_pImp->GetShell()->VisArea()))
              break;
     }
     return false;
@@ -2124,7 +2124,7 @@ void SwLayIdle::ShowIdle( Color eColor )
         return;
 
     m_bIndicator = true;
-    vcl::Window *pWin = pImp->GetShell()->GetWin();
+    vcl::Window *pWin = m_pImp->GetShell()->GetWin();
     if (pWin && !pWin->SupportsDoubleBuffering()) // FIXME make this work with double-buffering
     {
         tools::Rectangle aRect( 0, 0, 5, 5 );
@@ -2143,19 +2143,19 @@ void SwLayIdle::ShowIdle( Color eColor )
 #endif // DBG_UTIL
 
 SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
-    pRoot( pRt ),
-    pImp( pI )
+    m_pRoot( pRt ),
+    m_pImp( pI )
 #ifdef DBG_UTIL
     , m_bIndicator( false )
 #endif
 {
     SAL_INFO("sw.idle", "SwLayIdle() entry");
 
-    pImp->m_pIdleAct = this;
+    m_pImp->m_pIdleAct = this;
 
     SHOW_IDLE( COL_LIGHTRED );
 
-    pImp->GetShell()->EnableSmooth( false );
+    m_pImp->GetShell()->EnableSmooth( false );
 
     // First, spellcheck the visible area. Only if there's nothing
     // to do there, we trigger the IdleFormat.
@@ -2169,7 +2169,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
         // We remember the shells where the cursor is visible, so we can make
         // it visible again if needed after a document change.
         std::vector<bool> aBools;
-        for(SwViewShell& rSh : pImp->GetShell()->GetRingContainer())
+        for(SwViewShell& rSh : m_pImp->GetShell()->GetRingContainer())
         {
             ++rSh.mnStartAction;
             bool bVis = false;
@@ -2182,9 +2182,9 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
 
         bool bInterrupt(false);
         {
-            SwLayAction aAction(pRoot, pImp, &m_aWatch);
+            SwLayAction aAction(m_pRoot, m_pImp, &m_aWatch);
             aAction.SetWaitAllowed( false );
-            aAction.Action(pImp->GetShell()->GetOut());
+            aAction.Action(m_pImp->GetShell()->GetOut());
             bInterrupt = aAction.IsInterrupt();
         }
 
@@ -2192,7 +2192,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
         // somewhere or if the visibility of the CharRects has changed.
         bool bActions = false;
         size_t nBoolIdx = 0;
-        for(SwViewShell& rSh : pImp->GetShell()->GetRingContainer())
+        for(SwViewShell& rSh : m_pImp->GetShell()->GetRingContainer())
         {
             --rSh.mnStartAction;
 
@@ -2223,7 +2223,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
             // Prepare start/end actions via CursorShell, so the cursor, selection
             // and VisArea can be set correctly.
             nBoolIdx = 0;
-            for(SwViewShell& rSh : pImp->GetShell()->GetRingContainer())
+            for(SwViewShell& rSh : m_pImp->GetShell()->GetRingContainer())
             {
                 SwCursorShell* pCursorShell = dynamic_cast<SwCursorShell*>( &rSh);
 
@@ -2278,8 +2278,8 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
         }
 
         bool bInValid = false;
-        const SwViewOption& rVOpt = *pImp->GetShell()->GetViewOptions();
-        const SwViewShell* pViewShell = pImp->GetShell();
+        const SwViewOption& rVOpt = *m_pImp->GetShell()->GetViewOptions();
+        const SwViewShell* pViewShell = m_pImp->GetShell();
         // See conditions in DoIdleJob()
         const bool bSpell     = rVOpt.IsOnlineSpell();
         const bool bACmplWrd  = SwViewOption::IsAutoCompleteWords();
@@ -2288,7 +2288,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                                 !pViewShell->GetDoc()->isXForms() &&
                                 SwSmartTagMgr::Get().IsSmartTagsEnabled();
 
-        SwPageFrame *pPg = static_cast<SwPageFrame*>(pRoot->Lower());
+        SwPageFrame *pPg = static_cast<SwPageFrame*>(m_pRoot->Lower());
         do
         {
             bInValid = pPg->IsInvalidContent()    || pPg->IsInvalidLayout() ||
@@ -2305,8 +2305,8 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
 
         if ( !bInValid )
         {
-            pRoot->ResetIdleFormat();
-            SfxObjectShell* pDocShell = pImp->GetShell()->GetDoc()->GetDocShell();
+            m_pRoot->ResetIdleFormat();
+            SfxObjectShell* pDocShell = m_pImp->GetShell()->GetDoc()->GetDocShell();
             pDocShell->Broadcast( SfxEventHint( SfxEventHintId::SwEventLayoutFinished, SwDocShell::GetEventName(STR_SW_EVENT_LAYOUT_FINISHED), pDocShell ) );
             // Limit lifetime of the text glyphs cache to a single run of the
             // layout.
@@ -2314,15 +2314,15 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
         }
     }
 
-    pImp->GetShell()->EnableSmooth( true );
+    m_pImp->GetShell()->EnableSmooth( true );
 
-    if( pImp->IsAccessible() )
-        pImp->FireAccessibleEvents();
+    if( m_pImp->IsAccessible() )
+        m_pImp->FireAccessibleEvents();
 
     SAL_INFO("sw.idle", "SwLayIdle() return");
 
 #ifdef DBG_UTIL
-    if ( m_bIndicator && pImp->GetShell()->GetWin() )
+    if ( m_bIndicator && m_pImp->GetShell()->GetWin() )
     {
         // Do not invalidate indicator, this may cause an endless loop. Instead, just repaint it
         // This should be replaced by an overlay object in the future, anyways. Since it's only for debug
@@ -2334,7 +2334,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
 
 SwLayIdle::~SwLayIdle()
 {
-    pImp->m_pIdleAct = nullptr;
+    m_pImp->m_pIdleAct = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

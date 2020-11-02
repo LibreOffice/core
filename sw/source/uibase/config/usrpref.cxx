@@ -553,10 +553,10 @@ void SwCursorConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
     ConfigItem("Office.WriterWeb/Background", ConfigItemMode::ReleaseTree),
-    rParent(rPar),
-    aPropNames(1)
+    m_rParent(rPar),
+    m_aPropNames(1)
 {
-    aPropNames.getArray()[0] = "Color";
+    m_aPropNames.getArray()[0] = "Color";
 }
 
 SwWebColorConfig::~SwWebColorConfig()
@@ -565,29 +565,29 @@ SwWebColorConfig::~SwWebColorConfig()
 
 void SwWebColorConfig::ImplCommit()
 {
-    Sequence<Any> aValues(aPropNames.getLength());
+    Sequence<Any> aValues(m_aPropNames.getLength());
     Any* pValues = aValues.getArray();
-    for(int nProp = 0; nProp < aPropNames.getLength(); nProp++)
+    for(int nProp = 0; nProp < m_aPropNames.getLength(); nProp++)
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= rParent.GetRetoucheColor();   break;// "Color",
+            case  0: pValues[nProp] <<= m_rParent.GetRetoucheColor();   break;// "Color",
         }
     }
-    PutProperties(aPropNames, aValues);
+    PutProperties(m_aPropNames, aValues);
 }
 
 void SwWebColorConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void SwWebColorConfig::Load()
 {
-    Sequence<Any> aValues = GetProperties(aPropNames);
+    Sequence<Any> aValues = GetProperties(m_aPropNames);
     const Any* pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aPropNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() != aPropNames.getLength())
+    OSL_ENSURE(aValues.getLength() == m_aPropNames.getLength(), "GetProperties failed");
+    if(aValues.getLength() != m_aPropNames.getLength())
         return;
 
-    for(int nProp = 0; nProp < aPropNames.getLength(); nProp++)
+    for(int nProp = 0; nProp < m_aPropNames.getLength(); nProp++)
     {
         if(pValues[nProp].hasValue())
         {
@@ -595,7 +595,7 @@ void SwWebColorConfig::Load()
             {
                 case  0:
                     Color nSet;
-                    pValues[nProp] >>= nSet; rParent.SetRetoucheColor(nSet);
+                    pValues[nProp] >>= nSet; m_rParent.SetRetoucheColor(nSet);
                 break;// "Color",
             }
         }
