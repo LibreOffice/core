@@ -634,7 +634,7 @@ namespace sw {
 
 Meta::Meta(SwFormatMeta * const i_pFormat)
     : ::sfx2::Metadatable()
-    , SwModify()
+    , sw::BroadcastingModify()
     , m_pFormat(i_pFormat)
     , m_pTextNode(nullptr)
 {

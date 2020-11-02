@@ -225,6 +225,12 @@ void SwModify::Add( SwClient* pDepend )
 {
     DBG_TESTSOLARMUTEX();
     OSL_ENSURE( !m_bLockClientList, "Client inserted while in Modify" );
+    // You should not EVER use SwModify directly in new code:
+    // - Preexisting SwModifys should only ever be used via sw::BroadcastingModify.
+    //   This includes sw::BroadcastMixin, which is the long-term target (without
+    //   SwModify).
+    // - New classes should use sw::BroadcastMixin alone.
+    assert(dynamic_cast<sw::BroadcastingModify*>(this));
 
     if(pDepend->m_pRegisteredIn == this )
         return;
