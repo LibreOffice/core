@@ -93,6 +93,60 @@ class CreateRangeNameTest(UITestCase):
         # AssertionError: 'localRangeName' != 'A1'
         self.assertEqual('localRangeName', get_state_as_dict(xPosWindow)['Text'])
 
+        gridwin = calcDoc.getChild("grid_window")
+        enter_text_to_cell(gridwin, "A1", "1")
+
+        # Use the name range in the current sheet
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
+
+        self.ui_test.execute_dialog_through_command(".uno:InsertName")
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        xCtrl = xDialog.getChild('ctrl')
+        self.assertEqual(1, len(xCtrl.getChildren()))
+        self.assertEqual("localRangeName\t$Sheet1.$A$1\tSheet1", get_state_as_dict(xCtrl.getChild('0'))['Text'])
+        xCtrl.getChild('0').executeAction("SELECT", tuple())
+
+        xPasteBtn = xDialog.getChild("paste")
+        self.ui_test.close_dialog_through_button(xPasteBtn)
+
+        # use return key to paste the name range
+        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+
+        document = self.ui_test.get_component()
+        self.assertEqual("1", get_cell_by_position(document, 0, 1, 0).getString())
+        self.assertEqual("=localRangeName", get_cell_by_position(document, 0, 1, 0).getFormula())
+
+        # Insert a new sheet
+        self.ui_test.execute_dialog_through_command(".uno:Insert")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xOKButton = xDialog.getChild("ok")
+        xOKButton.executeAction("CLICK", tuple())
+
+        # Use the name range in the new sheet
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
+
+        self.ui_test.execute_dialog_through_command(".uno:InsertName")
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        xCtrl = xDialog.getChild('ctrl')
+        self.assertEqual(1, len(xCtrl.getChildren()))
+        self.assertEqual("localRangeName\t$Sheet1.$A$1\tSheet1", get_state_as_dict(xCtrl.getChild('0'))['Text'])
+        xCtrl.getChild('0').executeAction("SELECT", tuple())
+
+        xPasteBtn = xDialog.getChild("paste")
+        self.ui_test.close_dialog_through_button(xPasteBtn)
+
+        # use return key to paste the name range
+        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+
+        # tdf#137896: Without the fix in place, this test would have failed with
+        # AssertionError: '1' != '#NAME?'
+        self.assertEqual("1", get_cell_by_position(document, 0, 1, 0).getString())
+
+        # and AssertionError: '=Sheet1.localRangeName' != '=localrangename'
+        self.assertEqual("=Sheet1.localRangeName", get_cell_by_position(document, 0, 1, 0).getFormula())
+
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
