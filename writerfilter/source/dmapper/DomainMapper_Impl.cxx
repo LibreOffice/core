@@ -6001,7 +6001,6 @@ void DomainMapper_Impl::CloseFieldCommand()
             else
                 m_bParaHadField = false;
         }
-        //set the text field if there is any
     }
     catch( const uno::Exception& )
     {
