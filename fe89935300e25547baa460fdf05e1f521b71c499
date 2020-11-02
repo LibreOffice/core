@@ -22,6 +22,30 @@
       "revId": "fe89935300e25547baa460fdf05e1f521b71c499",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8f6d2c1_22cd7709",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-11-02T15:21:35Z",
+      "side": 1,
+      "message": "\u003e AuthorDate: 2019-06-22 02:31:22 +0200\n\nI really can\u0027t remember 😊\n\nThere is a reason I set the -2. I think the correct solution would be to use the maGeometry.n*Decoration stuff. Maybe I shouldn\u0027t have posted it uncommented. The whole \"help\" is yet an other hack on top of the hack in b15f6e3388eb031f2c57d21f0ea109f90e4e3c61, which is used by gtk3 and qt5. I think the right solution would be to adapt maGeometry.nTopDecoration for the case of the native menu bar, because you can\u0027t paint on it and it decreases the window size. I wouldn\u0027t spend to much time on this patch.\n\nThe wording means just, that the help positioning looks ok, but the internal handling still is wrong, resulting in the wrong dock behaviour. I just wanted to give you an idea, what doesn\u0027t work, because I already spend time on it.\n\nAnyway, the whole positioning code in LO must somehow take the native menubar into account. Without this hack to fix tdf#130841. The whole code is just a stack of hacks, which papers over the problem with internally using two different window sizes.",
+      "parentUuid": "5a4fca27_59ad8525",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "fe89935300e25547baa460fdf05e1f521b71c499",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
