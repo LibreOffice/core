@@ -666,6 +666,41 @@ namespace {
     {
         return rPaM.HasMark() && *rPaM.GetPoint() != *rPaM.GetMark();
     }
+
+    /// Is pFormat anchored in a fly frame which has an associated draw format?
+    bool IsInTextBox(const SwFrameFormat* pFormat)
+    {
+        const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
+        const SwPosition* pPosition = rAnchor.GetContentAnchor();
+        if (!pPosition)
+        {
+            return false;
+        }
+
+        const SwStartNode* pFlyNode = pPosition->nNode.GetNode().FindFlyStartNode();
+        if (!pFlyNode)
+        {
+            return false;
+        }
+
+        for ( const auto& pSpzFormat : *pFormat->GetDoc()->GetSpzFrameFormats() )
+        {
+            if (pSpzFormat->Which() != RES_FLYFRMFMT)
+            {
+                continue;
+            }
+
+            const SwNodeIndex* pIdx = pSpzFormat->GetContent().GetContentIdx();
+            if (!pIdx || pFlyNode != &pIdx->GetNode())
+            {
+                continue;
+            }
+
+            return SwTextBoxHelper::isTextBox(pSpzFormat, RES_FLYFRMFMT);
+        }
+
+        return false;
+    }
 }
 
 bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
@@ -951,6 +986,13 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                                 const SdrObject *pCpyObj = pCpyFormat->FindSdrObject();
                                 if (pCpyObj && CheckControlLayer(pCpyObj))
                                     continue;
+                            }
+                            else if (pCpyFormat->Which() == RES_FLYFRMFMT && IsInTextBox(pCpyFormat))
+                            {
+                                // This is a fly frame which is anchored in a TextBox, ignore it as
+                                // it's already copied as part of copying the content of the
+                                // TextBox.
+                                continue;
                             }
 
                             // Ignore TextBoxes, they are already handled in sw::DocumentLayoutManager::CopyLayoutFormat().
