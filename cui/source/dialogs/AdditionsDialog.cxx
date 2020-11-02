@@ -70,8 +70,7 @@ std::string ucbGet(const OUString& rURL)
 {
     try
     {
-        auto const s = utl::UcbStreamHelper::CreateStream(
-            rURL, StreamMode::STD_READ, css::uno::Reference<css::task::XInteractionHandler>());
+        auto const s = utl::UcbStreamHelper::CreateStream(rURL, StreamMode::STD_READ);
         if (!s)
         {
             SAL_WARN("cui.dialogs", "CreateStream <" << rURL << "> failed");
@@ -522,7 +521,10 @@ AdditionsDialog::getInstalledExtensions()
 void AdditionsDialog::SetProgress(const OUString& rProgress)
 {
     if (rProgress.isEmpty())
+    {
         m_xLabelProgress->hide();
+        m_xButtonClose->set_sensitive(true);
+    }
     else
     {
         SolarMutexGuard aGuard;
