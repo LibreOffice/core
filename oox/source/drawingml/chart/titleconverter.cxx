@@ -290,6 +290,8 @@ void LegendConverter::legendEntriesFormatting(const Reference<XDiagram>& rxDiagr
             if (!xDSCont.is())
                 continue;
 
+            bool bIsPieOrDonut
+                = rCT->getChartType().equalsIgnoreAsciiCase("com.sun.star.chart2.PieChartType");
             const Sequence<Reference<XDataSeries>> aDataSeriesSeq = xDSCont->getDataSeries();
             if (bSwapXAndY)
                 nIndex += aDataSeriesSeq.getLength() - 1;
@@ -297,8 +299,7 @@ void LegendConverter::legendEntriesFormatting(const Reference<XDiagram>& rxDiagr
             {
                 PropertySet aSeriesProp(rDataSeries);
                 bool bVaryColorsByPoint = aSeriesProp.getBoolProperty(PROP_VaryColorsByPoint);
-
-                if (bVaryColorsByPoint)
+                if (bVaryColorsByPoint || bIsPieOrDonut)
                 {
                     Reference<XDataSource> xDSrc(rDataSeries, UNO_QUERY);
                     if (!xDSrc.is())
