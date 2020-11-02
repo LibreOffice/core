@@ -3358,6 +3358,13 @@ OUString ScGridWindow::GetSurroundingText() const
         if (pHdl)
             return pHdl->GetSurroundingText();
     }
+    else if (SdrView* pSdrView = mrViewData.GetView()->GetScDrawView())
+    {
+        // if no cell editview is active, look at drawview
+        OutlinerView* pOlView = pSdrView->GetTextEditOutlinerView();
+        if (pOlView && pOlView->GetWindow() == this)
+            return pOlView->GetSurroundingText();
+    }
 
     return Window::GetSurroundingText();
 }
@@ -3372,6 +3379,13 @@ Selection ScGridWindow::GetSurroundingTextSelection() const
         if (pHdl)
             return pHdl->GetSurroundingTextSelection();
     }
+    else if (SdrView* pSdrView = mrViewData.GetView()->GetScDrawView())
+    {
+        // if no cell editview is active, look at drawview
+        OutlinerView* pOlView = pSdrView->GetTextEditOutlinerView();
+        if (pOlView && pOlView->GetWindow() == this)
+            return pOlView->GetSurroundingTextSelection();
+    }
 
     return Window::GetSurroundingTextSelection();
 }
@@ -3385,6 +3399,13 @@ bool ScGridWindow::DeleteSurroundingText(const Selection& rSelection)
         ScInputHandler* pHdl = pScMod->GetInputHdl(mrViewData.GetViewShell());
         if (pHdl)
             return pHdl->DeleteSurroundingText(rSelection);
+    }
+    else if (SdrView* pSdrView = mrViewData.GetView()->GetScDrawView())
+    {
+        // if no cell editview is active, look at drawview
+        OutlinerView* pOlView = pSdrView->GetTextEditOutlinerView();
+        if (pOlView && pOlView->GetWindow() == this)
+            return pOlView->DeleteSurroundingText(rSelection);
     }
 
     return Window::DeleteSurroundingText(rSelection);
