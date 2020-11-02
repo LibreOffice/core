@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "880314be_86b3d8f2",
+        "filename": "sw/source/core/docnode/section.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-02T10:23:18Z",
+      "side": 1,
+      "message": "\"RemoveAllUnos\" is a little hard to parse :-)\nperhaps \"RemoveAllUnoObjects\" ?",
+      "revId": "89c0bb5826f503fc9b0a99fc9c89fd7b8c95e48c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
