@@ -400,15 +400,14 @@ SwFrameFormat * SwLayoutFrame::GetFormat()
     return static_cast< SwFrameFormat * >( GetDep() );
 }
 
-void SwLayoutFrame::SetFrameFormat( SwFrameFormat *pNew )
+void SwLayoutFrame::SetFrameFormat(SwFrameFormat* pNew)
 {
-    if ( pNew != GetFormat() )
-    {
-        SwFormatChg aOldFormat( GetFormat() );
-        pNew->Add( this );
-        SwFormatChg aNewFormat( pNew );
-        ModifyNotification( &aOldFormat, &aNewFormat );
-    }
+    if(pNew == GetFormat())
+        return;
+    const SwFormatChg aOldFormat(GetFormat());
+    pNew->Add(this);
+    const SwFormatChg aNewFormat(pNew);
+    SwClientNotify(*pNew, sw::LegacyModifyHint(&aOldFormat, &aNewFormat));
 }
 
 SwContentFrame::SwContentFrame( SwContentNode * const pContent, SwFrame* pSib ) :
