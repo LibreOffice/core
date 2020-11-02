@@ -374,7 +374,7 @@ void SwGrfNode::TriggerGraphicArrived()
 {
     const SwMsgPoolItem aMsgHint(RES_GRAPHIC_ARRIVED);
     // FIXME: instead of hacking the notification to only handle specific clients.
-    // this should have been implemented cleanly witth two hints, e.g.
+    // this should have been implemented cleanly with two hints, e.g.
     // RES_GRAPHIC_ARRIVED_PREP and RES_GRAPHIC_ARRIVED.
     LockModify();
     {

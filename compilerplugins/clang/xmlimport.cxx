@@ -54,7 +54,7 @@ public:
             return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/filter/xml/xmlannoi.cxx"))
             return false;
-        // this class specifically wants to prevent some endFastElement processing happening in it's superclass
+        // this class specifically wants to prevent some endFastElement processing happening in its superclass
         if (loplugin::isSamePathname(fn, SRCDIR
                                      "/xmloff/source/text/XMLIndexBibliographySourceContext.cxx"))
             return false;
