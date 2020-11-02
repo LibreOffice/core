@@ -1044,11 +1044,8 @@ void SwXMLImport::UpdateTextCollConditions( SwDoc *pDoc )
                 default: break;
                 }
             }
-            if( bSendModify )
-            {
-                SwCondCollCondChg aMsg( pColl );
-                pColl->ModifyNotification( &aMsg, &aMsg );
-            }
+            if(bSendModify)
+                pColl->GetNotifier().Broadcast(sw::CondCollCondChg(*pColl));
         }
     }
 }

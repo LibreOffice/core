@@ -443,7 +443,6 @@
 //     class SwTableFormulaUpdate : public SwMsgPoolItem
 //     class SwAutoFormatGetDocNode: public SwMsgPoolItem
 //     class SwAttrSetChg: public SwMsgPoolItem
-//     class SwCondCollCondChg: public SwMsgPoolItem
 //     class SwVirtPageNumInfo: public SwMsgPoolItem
 //     class SwFindNearestNode : public SwMsgPoolItem
 //     class SwStringMsgPoolItem : public SwMsgPoolItem

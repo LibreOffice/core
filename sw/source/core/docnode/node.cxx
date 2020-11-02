@@ -1150,13 +1150,6 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
                 }
                 break;
 
-            case RES_CONDCOLL_CONDCHG:
-                if(pLegacyHint->m_pNew
-                        && static_cast<const SwCondCollCondChg*>(pLegacyHint->m_pNew)->pChangedFormat == GetRegisteredIn()
-                        && &GetNodes() == &GetDoc().GetNodes() )
-                    ChkCondColl();
-                return;    // Do not pass through to the base class/Frames
-
             case RES_ATTRSET_CHG:
                 if (GetNodes().IsDocNodes()
                         && IsTextNode()
@@ -1194,6 +1187,10 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
     else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
         m_pCondColl = const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(pModifyChangedHint->m_pNew));
+    }
+    else if(auto pCondCollCondChgHint = dynamic_cast<const sw::CondCollCondChg*>(&rHint))
+    {
+        ChkCondColl(&pCondCollCondChgHint->m_rColl);
     }
 }
 
@@ -2006,8 +2003,18 @@ bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const
     return false;
 }
 
-void SwContentNode::ChkCondColl()
+void SwContentNode::ChkCondColl(const SwTextFormatColl* pColl)
 {
+    if(pColl != GetRegisteredIn())
+    {
+        SAL_WARN("sw.core", "Wrong cond collection, skipping check of Cond Colls.");
+        return;
+    }
+    if(&GetNodes() != &GetDoc().GetNodes())
+    {
+        SAL_WARN("sw.core", "Nodes amiss, skipping check of Cond Colls.");
+        return;
+    }
     // Check, just to be sure
     if( RES_CONDTXTFMTCOLL != GetFormatColl()->Which() )
         return;
