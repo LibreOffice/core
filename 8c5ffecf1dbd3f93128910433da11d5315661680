@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fb40421_3515faed",
+        "filename": "linguistic/source/convdicxml.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-02T09:39:31Z",
+      "side": 1,
+      "message": "Interesting, if this is related to what OOXMLFastContextHandler::text does?",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 3
+      },
+      "revId": "8c5ffecf1dbd3f93128910433da11d5315661680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
