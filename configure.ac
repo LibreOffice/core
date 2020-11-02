@@ -1260,7 +1260,7 @@ AC_SUBST(DLOPEN_LIBS)
 
 AC_ARG_ENABLE(ios-simulator,
     AS_HELP_STRING([--enable-ios-simulator],
-        [build i386 or x86_64 for ios simulator])
+        [build for iOS simulator])
 )
 
 AC_ARG_ENABLE(ios-libreofficelight-app,
