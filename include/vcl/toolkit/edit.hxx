@@ -242,6 +242,8 @@ public:
     void SetForceControlBackground(bool b) { mbForceControlBackground = b; }
 
     bool IsPassword() const { return mbPassword; }
+
+    virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
