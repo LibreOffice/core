@@ -22,6 +22,30 @@
       "revId": "10ae3db9e7ae769e532cae4e463d110ead14b815",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bfe3f23_ecf7368f",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-02T09:09:02Z",
+      "side": 1,
+      "message": "I think directly representing this check as\n\n  X \u003d\u003d Y\n\nwould indeed be fine (but wanted to just address the -Werror here as a quickfix, without introducing further change).",
+      "parentUuid": "b4e1b777_21897008",
+      "range": {
+        "startLine": 817,
+        "startChar": 15,
+        "endLine": 817,
+        "endChar": 55
+      },
+      "revId": "10ae3db9e7ae769e532cae4e463d110ead14b815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
