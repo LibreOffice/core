@@ -80,9 +80,6 @@ namespace svt::table
         ,m_eVerticalAlign               ( VerticalAlignment_TOP )
         ,bEnabled                       ( true )
     {
-        bHasColumnHeaders = true;
-        bHasRowHeaders = false;
-        bEnabled = true;
         pRenderer = std::make_shared<GridTableRenderer>( *this );
         pInputHandler = std::make_shared<DefaultInputHandler>();
     }
