@@ -80,6 +80,7 @@ public:
 
     /// isolated only way to set GraphicObject to allow more actions when doing so
     void SetGraphic(const Graphic& rGraphic);
+    void TriggerGraphicArrived();
 
     /// wrappers for non-const calls at GraphicObject
     void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, tools::Long nExtraData, OutputDevice* pFirstFrameOutDev)
