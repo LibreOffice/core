@@ -714,8 +714,13 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
 
     m_xIconStyleLB->set_active(0);
 
-    m_xMoreIcons->set_from_icon_name("cmd/sc_additionsdialog.png");
-    m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
+    if (SvtMiscOptions().IsExperimentalMode())
+    {
+        m_xMoreIcons->set_from_icon_name("cmd/sc_additionsdialog.png");
+        m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
+    }
+    else
+        m_xMoreIcons->set_visible(false);
 
     UpdateSkiaStatus();
 }

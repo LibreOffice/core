@@ -34,6 +34,7 @@
 #include <svx/galtheme.hxx>
 #include <svx/galmisc.hxx>
 #include "galbrws1.hxx"
+#include <svtools/miscopt.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <svx/strings.hrc>
 #include <algorithm>
@@ -71,8 +72,13 @@ GalleryBrowser1::GalleryBrowser1(
     mxThemes->connect_key_press(LINK(this, GalleryBrowser1, KeyInputHdl));
     mxThemes->set_size_request(-1, mxThemes->get_height_rows(6));
 
-    mxMoreGalleries->set_from_icon_name("cmd/sc_additionsdialog.png");
-    mxMoreGalleries->connect_clicked(LINK(this, GalleryBrowser1, OnMoreGalleriesClick));
+    if (SvtMiscOptions().IsExperimentalMode())
+    {
+        mxMoreGalleries->set_from_icon_name("cmd/sc_additionsdialog.png");
+        mxMoreGalleries->connect_clicked(LINK(this, GalleryBrowser1, OnMoreGalleriesClick));
+    }
+    else
+        mxMoreGalleries->set_visible(false);
 
     // disable creation of new themes if a writable directory is not available
     if( mpGallery->GetUserURL().GetProtocol() == INetProtocol::NotValid )
