@@ -321,7 +321,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="allbookmarks">
-                        <property name="label" translatable="yes" context="pdfuserinterfacepage|allbookmarks">Show _All</property>
+                        <property name="label" translatable="yes" context="pdfuserinterfacepage|alloutlines">Show _All</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -342,7 +342,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="visiblebookmark">
-                        <property name="label" translatable="yes" context="pdfuserinterfacepage|visiblebookmark">_Visible levels:</property>
+                        <property name="label" translatable="yes" context="pdfuserinterfacepage|visibleoutline">_Visible levels:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
