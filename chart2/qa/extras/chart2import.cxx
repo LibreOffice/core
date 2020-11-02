@@ -170,6 +170,7 @@ public:
     void testTdf134111();
     void testTdf136752();
     void testTdf137505();
+    void testTdf137874();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -286,6 +287,7 @@ public:
     CPPUNIT_TEST(testTdf134111);
     CPPUNIT_TEST(testTdf136752);
     CPPUNIT_TEST(testTdf137505);
+    CPPUNIT_TEST(testTdf137874);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2722,6 +2724,21 @@ void Chart2ImportTest::testTdf137505()
     // check the text size of custom shape, inside the chart.
     CPPUNIT_ASSERT(xProps->getPropertyValue("CharHeight") >>= nFontSize);
     CPPUNIT_ASSERT_EQUAL(float(12), nFontSize);
+}
+
+void Chart2ImportTest::testTdf137874()
+{
+    load("/chart2/qa/extras/data/xlsx/", "piechart_legend.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+                                               UNO_QUERY_THROW);
+
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xLegendEntry(
+        getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0:LegendEntry=0"),
+        UNO_SET_THROW);
+    CPPUNIT_ASSERT(xLegendEntry.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
