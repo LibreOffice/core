@@ -1477,6 +1477,8 @@ namespace xmloff::token {
         XML_POWER,
         XML_PRECISION_AS_SHOWN,
         XML_PREFIX,
+        XML_INFIX,
+        XML_POSTFIX,
         XML_PRESENTATION,
         XML_PRESENTATION_ORGCHART,
         XML_PRESENTATION_OUTLINE,
