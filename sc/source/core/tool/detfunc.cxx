@@ -638,7 +638,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
 
-    tools::Rectangle aRect = GetDrawRect( nCol, nRow );
+    tools::Rectangle aRect = ScDrawLayer::GetCellRect(rDoc, ScAddress(nCol, nRow, nTab), true);
     aRect.AdjustLeft( -250 );
     aRect.AdjustRight(250 );
     aRect.AdjustTop( -70 );

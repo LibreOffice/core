@@ -1023,15 +1023,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         // Validation circle for detective.
         rData.setShapeRect(GetDocument(), pObj->GetLogicRect());
 
-        Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
-        aPos.setX(TwipsToHmm( aPos.X() ));
-        aPos.setY(TwipsToHmm( aPos.Y() ));
-
-        // Calculations and values as in detfunc.cxx
-
-        Size aSize( TwipsToHmm( pDoc->GetColWidth( nCol1, nTab1) ),
-                    TwipsToHmm( pDoc->GetRowHeight( nRow1, nTab1) ) );
-        tools::Rectangle aRect( aPos, aSize );
+        tools::Rectangle aRect = GetCellRect(*GetDocument(), rData.maStart, true);
         aRect.AdjustLeft( -250 );
         aRect.AdjustRight(250 );
         aRect.AdjustTop( -70 );
