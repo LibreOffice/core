@@ -330,6 +330,28 @@ public:
     }
 };
 
+// detect if the SwFrameFormat it is watching was deleted
+class SW_DLLPUBLIC FrameDeleteWatch final: public SvtListener
+{
+    SwFrameFormat* m_pFormat;
+public:
+    FrameDeleteWatch(SwFrameFormat* pFormat);
+
+    virtual void Notify(const SfxHint& rHint) override;
+
+    SwFrameFormat* GetFormat()
+    {
+        return m_pFormat;
+    }
+
+    bool WasDeleted() const
+    {
+        return !m_pFormat;
+    }
+
+    virtual ~FrameDeleteWatch() override;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
