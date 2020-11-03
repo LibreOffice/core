@@ -190,7 +190,18 @@ JSInstanceBuilder* JSInstanceBuilder::CreateAutofilterWindowBuilder(vcl::Window*
 JSInstanceBuilder::~JSInstanceBuilder()
 {
     if (m_nWindowId && (m_bHasTopLevelDialog || m_bIsNotebookbar))
+    {
         GetLOKWeldWidgetsMap().erase(m_nWindowId);
+    }
+    else
+    {
+        auto it = GetLOKWeldWidgetsMap().find(m_nWindowId);
+        if (it != GetLOKWeldWidgetsMap().end())
+        {
+            std::for_each(m_aRememberedWidgets.begin(), m_aRememberedWidgets.end(),
+                          [it](std::string& sId) { it->second.erase(sId.c_str()); });
+        }
+    }
 }
 
 std::map<sal_uInt64, WidgetMap>& JSInstanceBuilder::GetLOKWeldWidgetsMap()
@@ -230,6 +241,7 @@ void JSInstanceBuilder::RememberWidget(const OString& id, weld::Widget* pWidget)
     {
         it->second.erase(id);
         it->second.insert(WidgetMap::value_type(id, pWidget));
+        m_aRememberedWidgets.push_back(id.getStr());
     }
 }
 
