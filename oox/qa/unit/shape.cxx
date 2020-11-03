@@ -12,6 +12,9 @@
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <rtl/math.hxx>
 
 using namespace ::com::sun::star;
 
@@ -63,6 +66,26 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testMultipleGroupShapes)
     // - Actual  : 1
     // i.e. the 2 group shapes from the document were imported as a single one.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPage->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCustomshapePosition)
+{
+    load("customshape-position.docx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    sal_Int32 nY{};
+    xShape->getPropertyValue("VertOrientPosition") >>= nY;
+    // <wp:posOffset>581025</wp:posOffset> in the document.
+    sal_Int32 nExpected = rtl::math::round(581025.0 / 360);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1614
+    // - Actual  : 0
+    // i.e. the position of the shape was lost on import due to the rounded corners.
+    CPPUNIT_ASSERT_EQUAL(nExpected, nY);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

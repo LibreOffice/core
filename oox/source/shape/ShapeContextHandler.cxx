@@ -504,6 +504,15 @@ ShapeContextHandler::getShape()
         else if (mpShape)
         {
             basegfx::B2DHomMatrix aTransformation;
+
+            if (maPosition.X != 0 || maPosition.Y != 0)
+            {
+                // We got a position from writerfilter/, store that in the shape, otherwise the
+                // position won't be set.
+                mpShape->setWps(true);
+                mpShape->setPosition(maPosition);
+            }
+
             mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aTransformation, mpShape->getFillProperties() );
             xResult.set(mpShape->getXShape());
             mxGraphicShapeContext.clear( );
