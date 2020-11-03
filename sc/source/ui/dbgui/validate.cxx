@@ -108,7 +108,7 @@ ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSe
 
 void ScValidationDlg::EndDialog()
 {
-    // tdf#137215 ensure original modalality of true is restored before dialog loop ends
+    // tdf#137215 ensure original modality of true is restored before dialog loop ends
     if (m_bOwnRefHdlr)
         RemoveRefDlg(true);
     ScValidationDlgBase::EndDialog();
