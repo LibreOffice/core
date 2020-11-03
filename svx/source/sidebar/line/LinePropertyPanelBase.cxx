@@ -455,8 +455,10 @@ void LinePropertyPanelBase::ActivateControls()
 {
     mxGridLineProps->set_sensitive(!mbNoneLineStyle);
     mxBoxArrowProps->set_sensitive(!mbNoneLineStyle);
-    mxLineStyleTB->set_item_visible(".uno:LineEndStyle", mbArrowSupported);
     mxLineStyleTB->set_item_sensitive(".uno:LineEndStyle", !mbNoneLineStyle);
+
+    mxBoxArrowProps->set_visible(mbArrowSupported);
+    mxLineStyleTB->set_item_visible(".uno:LineEndStyle", mbArrowSupported);
 }
 
 void LinePropertyPanelBase::setMapUnit(MapUnit eMapUnit)
