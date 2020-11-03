@@ -717,6 +717,17 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
             rRenderContext.SetLineColor();
             rRenderContext.SetFillColor(*pImpl->mxBackColor);
             rRenderContext.DrawRect(aRect);
+            //bevel
+            const int nWidth = 20;
+            const tools::Long w(aRect.GetWidth());
+            const tools::Long h(aRect.GetHeight());
+            rRenderContext.SetFillColor(Application::GetSettings().GetStyleSettings().GetShadowColor());
+            rRenderContext.DrawRect( tools::Rectangle(0,0,w-nWidth,nWidth) );
+            rRenderContext.DrawRect( tools::Rectangle(0,0,nWidth,h-nWidth) );
+            rRenderContext.SetFillColor(Application::GetSettings().GetStyleSettings().GetDarkShadowColor());
+            rRenderContext.DrawRect( tools::Rectangle(w-nWidth,0,w,h) );
+            rRenderContext.DrawRect( tools::Rectangle(0,h-nWidth,w,h) );
+
             rRenderContext.SetLineColor(aLineCol);
             rRenderContext.SetFillColor(aFillCol);
         }
