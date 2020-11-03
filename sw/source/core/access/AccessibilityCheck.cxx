@@ -726,6 +726,48 @@ public:
     }
 };
 
+/// Checking if headings are ordered correctly.
+class HeadingOrderCheck : public NodeCheck
+{
+public:
+    HeadingOrderCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        const SwTextNode* pTextNode = pCurrent->GetTextNode();
+        if (!pTextNode)
+            return;
+
+        // If outline level stands for heading level...
+        const int currentLevel = pTextNode->GetAttrOutlineLevel();
+        if (currentLevel)
+        {
+            // ... and if is bigger than previous by more than 1, warn.
+            if (currentLevel - m_prevLevel > 1)
+            {
+                // Preparing and posting a warning.
+                OUString resultString = SwResId(STR_HEADING_ORDER);
+                resultString
+                    = resultString.replaceAll("%LEVEL_CURRENT%", OUString::number(currentLevel));
+                resultString
+                    = resultString.replaceAll("%LEVEL_PREV%", OUString::number(m_prevLevel));
+
+                lclAddIssue(m_rIssueCollection, resultString);
+            }
+
+            // Updating previous level.
+            m_prevLevel = currentLevel;
+        }
+    }
+
+private:
+    // Previous heading level to compare with.
+    int m_prevLevel = 0;
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -879,6 +921,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<NonInteractiveFormCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<FloatingTextCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TableHeadingCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<HeadingOrderCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
