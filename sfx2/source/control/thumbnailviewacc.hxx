@@ -122,8 +122,6 @@ private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >   mxEventListeners;
     ThumbnailView*                                               mpParent;
-    /// The current FOCUSED state.
-    bool mbIsFocused;
 
     /** Tell all listeners that the object is dying.  This callback is
         usually called from the WeakComponentImplHelper class.

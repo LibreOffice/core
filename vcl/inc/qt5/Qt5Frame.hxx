@@ -94,8 +94,6 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
 
     SystemEnvData m_aSystemData;
 
-    Qt5Menu* m_pSalMenu;
-
     Qt5DragSource* m_pDragSource;
     Qt5DropTarget* m_pDropTarget;
     bool m_bInDrag;

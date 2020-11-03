@@ -920,7 +920,6 @@ void GtkSalFrame::InitCommon()
     g_signal_connect( G_OBJECT(m_pWindow), "destroy", G_CALLBACK(signalDestroy), this );
 
     // init members
-    m_pCurrentCursor    = nullptr;
     m_nKeyModifiers     = ModKeyFlags::NONE;
     m_bFullscreen       = false;
     m_bSpanMonitorsWhenFullscreen = false;
@@ -2033,7 +2032,6 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
     m_ePointerStyle = ePointerStyle;
     GdkCursor *pCursor = getDisplay()->getCursor( ePointerStyle );
     gdk_window_set_cursor( gtk_widget_get_window(m_pWindow), pCursor );
-    m_pCurrentCursor = pCursor;
 
     // #i80791# use grabPointer the same way as CaptureMouse, respective float grab
     if( getDisplay()->MouseCaptured( this ) )

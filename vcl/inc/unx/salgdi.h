@@ -313,8 +313,6 @@ private:
     Color                           mnFillColor;
 #endif // ENABLE_CAIRO_CANVAS
 
-    Pixel                           nTextPixel_;
-
     Pixmap                          hBrush_;        // Dither
 
     bool                            bWindow_ : 1;       // is Window

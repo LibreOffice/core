@@ -182,7 +182,6 @@ class GtkSalFrame final : public SalFrame
     std::unique_ptr<GtkSalGraphics> m_pGraphics;
     bool                            m_bGraphics;
     ModKeyFlags                     m_nKeyModifiers;
-    GdkCursor                      *m_pCurrentCursor;
     PointerStyle                    m_ePointerStyle;
     ScreenSaverInhibitor            m_ScreenSaverInhibitor;
     gulong                          m_nSetFocusSignalId;

@@ -26,9 +26,9 @@ TemplateDefaultView::TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> x
     : TemplateLocalView(std::move(xWindow), std::move(xMenu))
 {
     tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
-    mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
-    ThumbnailView::setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
-    updateThumbnailDimensions(mnItemMaxSize);
+    tools::Long nItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
+    ThumbnailView::setItemDimensions( nItemMaxSize, nItemMaxSize, gnTextHeight, gnItemPadding );
+    updateThumbnailDimensions(nItemMaxSize);
 
     // startcenter specific settings
     maFillColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());

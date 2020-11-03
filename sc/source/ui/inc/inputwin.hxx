@@ -142,7 +142,6 @@ private:
 
     typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
 
-    css::uno::WeakReference< css::accessibility::XAccessible > xAcc;
     ScAccessibleEditObject* pAcc;
 
     OUString    aString;

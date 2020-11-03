@@ -38,8 +38,7 @@ using namespace ::com::sun::star;
 
 ThumbnailViewAcc::ThumbnailViewAcc( ThumbnailView* pParent ) :
     ValueSetAccComponentBase (m_aMutex),
-    mpParent( pParent ),
-    mbIsFocused(false)
+    mpParent( pParent )
 {
 }
 
@@ -576,8 +575,6 @@ ThumbnailViewItemAcc* ThumbnailViewItemAcc::getImplementation( const uno::Refere
 
 void ThumbnailViewAcc::GetFocus()
 {
-    mbIsFocused = true;
-
     // Broadcast the state change.
     css::uno::Any aOldState, aNewState;
     aNewState <<= css::accessibility::AccessibleStateType::FOCUSED;
@@ -588,8 +585,6 @@ void ThumbnailViewAcc::GetFocus()
 
 void ThumbnailViewAcc::LoseFocus()
 {
-    mbIsFocused = false;
-
     // Broadcast the state change.
     css::uno::Any aOldState, aNewState;
     aOldState <<= css::accessibility::AccessibleStateType::FOCUSED;

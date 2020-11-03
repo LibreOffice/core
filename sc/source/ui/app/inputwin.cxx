@@ -2027,8 +2027,6 @@ void ScTextWnd::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 css::uno::Reference< css::accessibility::XAccessible > ScTextWnd::CreateAccessible()
 {
     pAcc = new ScAccessibleEditControlObject(this, ScAccessibleEditObject::EditLine);
-    css::uno::Reference< css::accessibility::XAccessible > xAccessible = pAcc;
-    xAcc = xAccessible;
     return pAcc;
 }
 
