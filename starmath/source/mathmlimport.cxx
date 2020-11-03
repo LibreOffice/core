@@ -2084,7 +2084,7 @@ void SmXMLFracContext_Impl::endFastElement(sal_Int32 )
 
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.eType = TOVER;
+    aToken.eType = TFRAC;
     std::unique_ptr<SmStructureNode> pSNode(new SmBinVerNode(aToken));
     std::unique_ptr<SmNode> pOper(new SmRectangleNode(aToken));
     std::unique_ptr<SmNode> pSecond = popOrZero(rNodeStack);

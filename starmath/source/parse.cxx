@@ -130,6 +130,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "font", TFONT, '\0', TG::FontAttr, 5},
     { "forall", TFORALL, MS_FORALL, TG::Standalone, 5},
     { "fourier", TFOURIER, MS_FOURIER, TG::Standalone, 5},
+    { "frac", TFRAC, '\0', TG::NONE, 0},
     { "from", TFROM, '\0', TG::Limit, 0},
     { "func", TFUNC, '\0', TG::Function, 5},
     { "ge", TGE, MS_GE, TG::Relation, 0},
@@ -1745,6 +1746,9 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
         case TBINOM:
             return DoBinom();
 
+        case TFRAC:
+            return DoFrac();
+
         case TSTACK:
             return DoStack();
 
@@ -2400,6 +2404,22 @@ std::unique_ptr<SmTableNode> SmParser::DoBinom()
     auto xFirst = DoSum();
     auto xSecond = DoSum();
     xSNode->SetSubNodes(std::move(xFirst), std::move(xSecond));
+    return xSNode;
+}
+
+std::unique_ptr<SmBinVerNode> SmParser::DoFrac()
+{
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep()) throw std::range_error("parser depth limit");
+
+    std::unique_ptr<SmBinVerNode> xSNode = std::make_unique<SmBinVerNode>(m_aCurToken);
+    std::unique_ptr<SmNode> xOper = std::make_unique<SmRectangleNode>(m_aCurToken);
+
+    NextToken();
+
+    auto xFirst = DoSum();
+    auto xSecond = DoSum();
+    xSNode->SetSubNodes(std::move(xFirst), std::move(xOper), std::move(xSecond));
     return xSNode;
 }
 

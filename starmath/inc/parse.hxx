@@ -116,6 +116,7 @@ class SmParser
     std::unique_ptr<SmBracebodyNode> DoBracebody(bool bIsLeftRight);
     std::unique_ptr<SmTextNode> DoFunction();
     std::unique_ptr<SmTableNode> DoBinom();
+    std::unique_ptr<SmBinVerNode> DoFrac();
     std::unique_ptr<SmStructureNode> DoStack();
     std::unique_ptr<SmStructureNode> DoMatrix();
     std::unique_ptr<SmSpecialNode> DoSpecial();
