@@ -4306,10 +4306,11 @@ static void UnHideRedlines(SwRootFrame & rLayout,
             auto eMode(sw::FrameMode::Existing);
             for (SwTextFrame * pFrame : frames)
             {
-                if (rLayout.IsHideRedlines())
+                if (rLayout.HasMergedParas())
                 {
-                    assert(!pFrame->GetMergedPara() ||
-                        !rNode.IsCreateFrameWhenHidingRedlines());
+// nope: now switching from one mergedpara to different one
+//                    assert(!pFrame->GetMergedPara() ||
+//                        !rNode.IsCreateFrameWhenHidingRedlines());
                     if (rNode.IsCreateFrameWhenHidingRedlines())
                     {
                         {
@@ -4417,9 +4418,12 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 rNode.GetTableNode()->DelFrames(&rLayout);
             }
         }
+#if 1
+        // at this point it's false but it has no frames...
         if (!rNode.IsCreateFrameWhenHidingRedlines())
+#endif
         {
-            if (rLayout.IsHideRedlines())
+            if (rLayout.HasMergedParas())
             {
                 if (rNode.IsContentNode())
                 {
