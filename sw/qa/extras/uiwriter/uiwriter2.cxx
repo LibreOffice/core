@@ -266,9 +266,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
     pWrtShell->ApplyViewOptions(aViewOptions);
 
     // enable redlining
-    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
     // hide
-    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
 
     SwDocShell* const pDocShell = pTextDoc->GetDocShell();
     SwDoc* const pDoc = pDocShell->GetDoc();
