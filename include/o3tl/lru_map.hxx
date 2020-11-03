@@ -14,6 +14,7 @@
 #include <cassert>
 #include <list>
 #include <unordered_map>
+#include <cstddef>
 
 namespace o3tl
 {
