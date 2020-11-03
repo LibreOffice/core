@@ -49,56 +49,79 @@ namespace o3tl {
     template<> struct typed_flags<TG> : is_typed_flags<TG, 0x037fff> {};
 }
 
+// Tokens identifiers. Allow to know what kind of information the node contains.
 enum SmTokenType
 {
-    TEND,           TLGROUP,        TRGROUP,        TLPARENT,       TRPARENT,
-    TLBRACKET,      TRBRACKET,      TPLUS,          TMINUS,         TMULTIPLY,
-    TDIVIDEBY,      TASSIGN,        TPOUND,         TSPECIAL,       TSLASH,
-    TBACKSLASH,     TBLANK,         TSBLANK,        TRSUB,          TRSUP,
-    TCSUB,          TCSUP,          TLSUB,          TLSUP,          TGT,
-    TLT,            TAND,           TOR,            TINTERSECT,     TUNION,
-    TNEWLINE,       TBINOM,         TFROM,          TTO,            TINT,
-    TSUM,           TOPER,          TABS,           TSQRT,          TFACT,
-    TNROOT,         TOVER,          TTIMES,         TGE,            TLE,
-    TGG,            TLL,            TDOTSAXIS,      TDOTSLOW,       TDOTSVERT,
-    TDOTSDIAG,      TDOTSUP,        TDOTSDOWN,      TACUTE,         TBAR,
-    TBREVE,         TCHECK,         TCIRCLE,        TDOT,           TDDOT,
-    TDDDOT,         TGRAVE,         THAT,           TTILDE,         TVEC,
-    TUNDERLINE,     TOVERLINE,      TOVERSTRIKE,    TITALIC,        TNITALIC,
-    TBOLD,          TNBOLD,         TPHANTOM,       TFONT,          TSIZE,
-    TCOLOR,         TALIGNL,        TALIGNC,        TALIGNR,        TLEFT,
-    TRIGHT,         TLANGLE,        TLBRACE,        TLLINE,         TLDLINE,
-    TLCEIL,         TLFLOOR,        TNONE,          TMLINE,         TRANGLE,
-    TRBRACE,        TRLINE,         TRDLINE,        TRCEIL,         TRFLOOR,
-    TSTACK,         TMATRIX,        TDPOUND,        TPLACE,
-    TTEXT,          TNUMBER,        TCHARACTER,     TIDENT,         TNEQ,
-    TEQUIV,         TDEF,           TPROP,          TSIM,           TSIMEQ,
-    TAPPROX,        TPARALLEL,      TORTHO,         TIN,            TNOTIN,
-    TSUBSET,        TSUBSETEQ,      TSUPSET,        TSUPSETEQ,      TPLUSMINUS,
-    TMINUSPLUS,     TOPLUS,         TOMINUS,        TDIV,           TOTIMES,
-    TODIVIDE,       TTRANSL,        TTRANSR,        TIINT,          TIIINT,
-    TLINT,          TLLINT,         TLLLINT,        TPROD,          TCOPROD,
-    TFORALL,        TEXISTS,        TNOTEXISTS,     TLIM,           TNABLA,
-    TUOPER,         TBOPER,         TFIXED,         TSANS,          TSERIF,
-    TCDOT,          TODOT,          TLESLANT,       TGESLANT,       TNSUBSET,
-    TNSUPSET,       TNSUBSETEQ,     TNSUPSETEQ,     TPARTIAL,       TNEG,
-    TNI,            TBACKEPSILON,   TALEPH,         TIM,            TRE,
-    TWP,            TEMPTYSET,      TINFINITY,      TESCAPE,        TLIMSUP,
-    TLIMINF,        TNDIVIDES,      TDRARROW,       TDLARROW,       TDLRARROW,
-    TUNDERBRACE,    TOVERBRACE,     TCIRC,          THBAR,
-    TLAMBDABAR,     TLEFTARROW,     TRIGHTARROW,    TUPARROW,       TDOWNARROW,
-    TDIVIDES,       TSETN,          TSETZ,          TSETQ,
-    TSETR,          TSETC,          TWIDEVEC,       TWIDEHARPOON,   TWIDETILDE,
-    TWIDESLASH,     TWIDEBACKSLASH, TLDBRACKET,     TRDBRACKET,     TNOSPACE,
-    TUNKNOWN,       TPRECEDES,      TSUCCEEDS,      TPRECEDESEQUAL, TSUCCEEDSEQUAL,
-    TPRECEDESEQUIV, TSUCCEEDSEQUIV, TNOTPRECEDES,   TNOTSUCCEEDS,   THARPOON,
-    TINTD,          TLAPLACE,       TFOURIER,       TTOWARD,        TWIDEHAT,
+    // Uncategorized
+    TEND,           TSPECIAL,       TNONE,          TESCAPE,        TUNKNOWN,
+    TBLANK,         TSBLANK,        TPLACE,         TNOSPACE,       TDOTSDOWN,
+    TNEWLINE,       TDOTSAXIS,      TDOTSLOW,       TDOTSVERT,      TBACKEPSILON,
+    TDOTSDIAG,      TDOTSUP,
+    // Basic
+    TPLUS,          TMINUS,         TMULTIPLY,      TDIVIDEBY,      // +-*/
+    TGT,            TLT,            TGE,            TLE,            // > < >= <=
+    TASSIGN,        TNEQ,           TGG,            TLL,            // = != >>> <<<
+    TPARALLEL,      TORTHO,         TEQUIV,                         // Geometry
+    TOPER,          TSUM,           TPROD,          TCOPROD,        // Operators
+    TIM,            TRE,            THBAR,          TLAMBDABAR,     // Complex and constants
+    TPLUSMINUS,     TMINUSPLUS,     TSIM,           TSIMEQ,         // +- -+ ~ ~=
+    TLIM,           TLIMSUP,        TLIMINF,        TTOWARD,        // Limits
+    TOVER,          TTIMES,         TCDOT,          TDIV,           // Product type
+    TSLASH,         TBACKSLASH,     TWIDESLASH,     TWIDEBACKSLASH, //Slash
+    // Structure
+    TMATRIX,         TPOUND,        TDPOUND,        TSTACK,         TBINOM,
+    // Logic
+    TAND,           TOR,            TNEG,                           // && || !
+    TPRECEDES,      TSUCCEEDS,      TNOTPRECEDES,   TNOTSUCCEEDS,   // Order
+    TPRECEDESEQUAL, TSUCCEEDSEQUAL, TPRECEDESEQUIV, TSUCCEEDSEQUIV, // Order eq
+    TLEFTARROW,     TRIGHTARROW,    TUPARROW,       TDOWNARROW,     // Arrows
+    TDRARROW,       TDLARROW,       TDLRARROW,      TDEF,           // Double arrows, definition
+    TPROP,          TNDIVIDES,      TDIVIDES,       TAPPROX,        // Proportions, approximisation
+    TLESLANT,       TGESLANT,       TTRANSL,        TTRANSR,        // <= >= corresponds
+    // Tensors
+    TOPLUS,         TOMINUS,        TOTIMES,        TODIVIDE,       TODOT,
+    // Positions
+    TRSUB,          TRSUP,          TCSUB,          TCSUP,          TLSUB,
+    TLSUP,          TFROM,          TTO,            TUOPER,         TBOPER,
+    // Set theory
+    TSETN,          TSETZ,          TSETQ,          TSETR,          TSETC,
+    TIN,            TNOTIN,         TNI,            TEMPTYSET,      // Insideout
+    TSUBSET,        TSUBSETEQ,      TSUPSET,        TSUPSETEQ,      // Subsupset
+    TNSUBSET,       TNSUPSET,       TNSUBSETEQ,     TNSUPSETEQ,     // Not subsupset
+    TINTERSECT,     TUNION,         TSETMINUS,      TSETQUOTIENT,   // +-/
+    TALEPH,         TWP,            TINFINITY,                      // Abstract sets
+    TFORALL,        TEXISTS,        TNOTEXISTS,                     // Existential
+    // Font
+    TFONT,          TSIZE,          TCOLOR,         TPHANTOM,       // Basic
+    TITALIC,        TNITALIC,       TBOLD,          TNBOLD,         // Bold ital
+    TALIGNL,        TALIGNC,        TALIGNR,                        // Align
+    TUNDERLINE,     TOVERLINE,      TOVERSTRIKE,    TBAR,           // Lines
+    TFIXED,         TSANS,          TSERIF,                         // Types
+    TACUTE,         TGRAVE,         THAT,           TBREVE,         // Accents
+    TWIDEVEC,       TWIDEHARPOON,   TWIDETILDE,     TWIDEHAT,       // Wide math
+    TVEC,           THARPOON,       TTILDE,         TCIRCLE,        // math
+    TCHECK,
+    TTEXT,          TNUMBER,        TCHARACTER,     TIDENT,         // Content type
+    // Brackets
+    TLEFT,          TRIGHT,         TUNDERBRACE,    TOVERBRACE,     // Scalable, upsidedown
+    TLGROUP,        TRGROUP,        TLPARENT,       TRPARENT,       // Structural
+    TLBRACKET,      TRBRACKET,      TLDBRACKET,     TRDBRACKET,     // Bracket x1 & x2
+    TLCEIL,         TRCEIL,         TLFLOOR,        TRFLOOR,        // Reals -> Wholes
+    TLANGLE,        TRANGLE,        TLBRACE,        TRBRACE,        // <x> {x}
+    // Brackets Lines
+    TLLINE,         TRLINE,         TLDLINE,        TRDLINE,        TMLINE,
+    // Differencial calculus
+    TNABLA,         TPARTIAL,       TFOURIER,       TLAPLACE,       // Derivative, Transformation
+    TINTD,          TINT,           TIINT,          TIIINT,         // Integral
+    TLINT,          TLLINT,         TLLLINT,                        // Circuit integral
+    TDOT,           TDDOT,          TDDDOT,                         // Derivative dots
     // Function
     TFUNC,          TLN,            TLOG,           TEXP,           // Exp - Log
     TSIN,           TCOS,           TTAN,           TCOT,           // Trigo
     TSINH,          TCOSH,          TTANH,          TCOTH,          // Trigo hyperbolic
     TASIN,          TACOS,          TATAN,          TACOT,          // Arctrigo
     TASINH,         TACOSH,         TATANH,         TACOTH,         // Arctrigo hyperbolic
+    TSQRT,          TNROOT,         TFACT,          TABS,           // roots, n! |z|
     // Color
     TRGB,           TRGBA,          THEX,
     TAQUA,          TBLACK,         TBLUE,          TCYAN,          TFUCHSIA,

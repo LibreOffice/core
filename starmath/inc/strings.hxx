@@ -59,7 +59,7 @@
 #define RID_XUNIONY         "<?> union <?> "
 #define RID_XINTERSECTIONY  "<?> intersection <?> "
 #define RID_XSETMINUSY      "<?> setminus <?> "
-#define RID_XSLASHY         "<?> slash <?> "
+#define RID_XSETQUOTIENTY   "<?> setquotient <?> "
 #define RID_XSUBSETY        "<?> subset <?> "
 #define RID_XSUBSETEQY      "<?> subseteq <?> "
 #define RID_XSUPSETY        "<?> supset <?> "
