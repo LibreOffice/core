@@ -2170,7 +2170,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     std::unique_ptr<OutlinerParaObject> pOutliner = ImportAsOutliner( sText, pRes->nCp2OrIdx,
         pRes->nCp2OrIdx + pRes->nMemLen, MAN_AND );
 
-    m_pFormatOfJustInsertedApo = nullptr;
+    m_xFormatOfJustInsertedApo.reset();
     SwPostItField aPostIt(
         static_cast<SwPostItFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit)), sAuthor,
         sText, sInitials, OUString(), aDate );
@@ -4260,7 +4260,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_aParaStyleMapper(rD)
     , m_aCharStyleMapper(rD)
     , m_pFlyFormatOfJustInsertedGraphic(nullptr)
-    , m_pFormatOfJustInsertedApo(nullptr)
     , m_pPreviousNumPaM(nullptr)
     , m_pPrevNumRule(nullptr)
     , m_aTextNodesHavingFirstLineOfstSet()

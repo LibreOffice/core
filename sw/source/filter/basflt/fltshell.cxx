@@ -1126,4 +1126,31 @@ void UpdatePageDescs(SwDoc &rDoc, size_t nInPageDescOffset)
         rDoc.ChgPageDesc(i, rDoc.GetPageDesc(i));
 }
 
+FrameDeleteWatch::FrameDeleteWatch(SwFrameFormat* pFormat)
+    : m_pFormat(pFormat)
+{
+    if(m_pFormat)
+        StartListening(pFormat->GetNotifier());
+}
+
+void FrameDeleteWatch::Notify(const SfxHint& rHint)
+{
+    bool bDying = false;
+    if (rHint.GetId() == SfxHintId::Dying)
+        bDying = true;
+    else if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
+        bDying = pDrawFrameFormatHint->m_eId == sw::DrawFrameFormatHintId::DYING;
+    if (bDying)
+    {
+        m_pFormat = nullptr;
+        EndListeningAll();
+    }
+}
+
+FrameDeleteWatch::~FrameDeleteWatch()
+{
+    m_pFormat = nullptr;
+    EndListeningAll();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

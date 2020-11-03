@@ -2399,18 +2399,20 @@ void WW8TabDesc::CreateSwTable()
      Set fly anchor to its anchor pos, so that if a table starts immediately
      at this position a new node will be inserted before inserting the table.
     */
-    if (!bInsNode && m_pIo->m_pFormatOfJustInsertedApo)
+    SwFrameFormat* pFormat = (!bInsNode && m_pIo->m_xFormatOfJustInsertedApo)
+        ? m_pIo->m_xFormatOfJustInsertedApo->GetFormat() : nullptr;
+    if (pFormat)
     {
         const SwPosition* pAPos =
-            m_pIo->m_pFormatOfJustInsertedApo->GetAnchor().GetContentAnchor();
+            pFormat->GetAnchor().GetContentAnchor();
         if (pAPos && &pAPos->nNode.GetNode() == &pPoint->nNode.GetNode())
         {
             bInsNode = true;
             bSetMinHeight = true;
 
-            SwFormatSurround aSur(m_pIo->m_pFormatOfJustInsertedApo->GetSurround());
+            SwFormatSurround aSur(pFormat->GetSurround());
             aSur.SetAnchorOnly(true);
-            m_pIo->m_pFormatOfJustInsertedApo->SetFormatAttr(aSur);
+            pFormat->SetFormatAttr(aSur);
         }
     }
 
@@ -2797,7 +2799,7 @@ void WW8TabDesc::FinishSwTable()
                 }
             }
         }
-        m_pIo->m_pFormatOfJustInsertedApo = nullptr;
+        m_pIo->m_xFormatOfJustInsertedApo.reset();
         m_MergeGroups.clear();
     }
 }
