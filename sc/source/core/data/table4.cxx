@@ -445,7 +445,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     bool bMatchCase = false;
                     (void)rListData->GetSubIndex(aStr, rListIndex, bMatchCase);
                     size_t nListStrCount = rListData->GetSubCount();
-                    sal_uInt16 nPrevListIndex, nInc = 0;
+                    sal_uInt16 nPrevListIndex, nInc = 1;
                     for (SCSIZE i = 1; i < nValueCount && rListData; i++)
                     {
                         nColCurr = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
@@ -641,16 +641,31 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             bool bMatchCase = false;
             (void)rListData->GetSubIndex(aStr, rListIndex, bMatchCase);
+            size_t nListStrCount = rListData->GetSubCount();
+            sal_uInt16 nPrevListIndex, nInc = 1;
             nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
             nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
             for (SCSIZE i=1; i<nCount && rListData; i++)
             {
+                nPrevListIndex = rListIndex;
                 GetString(nCol, nRow, aStr);
                 if (!rListData->GetSubIndex(aStr, rListIndex, bMatchCase))
                     rListData = nullptr;
+                else
+                {
+                    sal_Int32 nIncCurr = rListIndex - nPrevListIndex;
+                    if (nIncCurr < 0)
+                        nIncCurr += nListStrCount;
+                    if (i == 1)
+                        nInc = nIncCurr;
+                    else if (nInc != nIncCurr)
+                        rListData = nullptr;
+                }
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                 nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
             }
+            if (rListData)
+                rInc = nInc;
         }
         else if ( nCount > 1 )
         {
@@ -1107,12 +1122,11 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if (!bPositive)
                 {
                     //  nListIndex of FillAnalyse points to the last entry -> adjust
-                    sal_uLong nSub = nISrcStart - nISrcEnd;
-                    for (sal_uLong i = 0; i < nSub; i++)
-                    {
-                        if (nListIndex == 0) nListIndex = nListCount;
-                        --nListIndex;
-                    }
+                    sal_Int64 nAdjust = nListIndex - (nISrcStart - nISrcEnd) * nInc;
+                    nAdjust = nAdjust % nListCount;
+                    if (nAdjust < 0)
+                        nAdjust += nListCount;
+                    nListIndex = nAdjust;
                 }
 
                 rInner = nIStart;
@@ -1122,13 +1136,13 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     {
                         if (bPositive)
                         {
-                            ++nListIndex;
-                            if (nListIndex >= nListCount) nListIndex = 0;
+                            nListIndex += nInc;
+                            if (nListIndex >= nListCount) nListIndex -= nListCount;
                         }
                         else
                         {
-                            if (nListIndex == 0) nListIndex = nListCount;
-                            --nListIndex;
+                            if (nListIndex < nInc) nListIndex += nListCount;
+                            nListIndex -= nInc;
                         }
                         aCol[nCol].SetRawString(static_cast<SCROW>(nRow), pListData->GetSubStr(nListIndex));
                     }
