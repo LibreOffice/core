@@ -960,13 +960,6 @@ cmd/32/mergedocument.png cmd/32/mergedocuments.png
 cmd/lc_mergedocument.png cmd/lc_mergedocuments.png
 cmd/sc_mergedocument.png cmd/sc_mergedocuments.png
 
-# Layout
-cmd/32/attributepagesize.png cmd/32/ruler.png
-
-cmd/lc_attributepagesize.png cmd/lc_ruler.png
-
-cmd/sc_attributepagesize.png cmd/sc_ruler.png
-
 # Print
 cmd/32/previewprintoptions.png cmd/32/printpreview.png
 cmd/32/printpagepreview.png cmd/32/printpreview.png
@@ -1196,10 +1189,13 @@ cmd/sc_gotoendofdoc.png cmd/sc_lastrecord.png
 cmd/sc_lastpage.png cmd/sc_lastrecord.png
 
 # |<
+cmd/32/firstpage.png cmd/32/firstrecord.png
 cmd/32/gotostartofdoc.png cmd/32/firstrecord.png
 
+cmd/lc_firstpage.png cmd/lc_firstrecord.png
 cmd/lc_gotostartofdoc.png cmd/lc_firstrecord.png
 
+cmd/sc_firstpage.png cmd/sc_firstrecord.png
 cmd/sc_gotostartofdoc.png cmd/sc_firstrecord.png
 
 # Hyperlink
