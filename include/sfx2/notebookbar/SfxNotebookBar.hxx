@@ -18,6 +18,7 @@
 namespace com::sun::star::frame
 {
 class XFrame;
+class XToolbarController;
 }
 namespace com::sun::star::uno
 {
@@ -28,10 +29,43 @@ class SfxBindings;
 class SfxViewFrame;
 class SfxViewShell;
 class SystemWindow;
+class ToolBox;
 class WeldedTabbedNotebookbar;
 
 namespace sfx2
 {
+class SidebarToolBoxController
+{
+public:
+    SidebarToolBoxController(ToolBox& rToolBox,
+                             const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    ~SidebarToolBoxController();
+
+private:
+    ToolBox& mrToolBox;
+
+    typedef std::map<sal_uInt16, css::uno::Reference<css::frame::XToolbarController>>
+        ControllerContainer;
+    ControllerContainer maControllers;
+    bool mbAreHandlersRegistered;
+    bool mbUseDefaultButtonSize;
+    bool mbSideBar;
+
+    DECL_LINK(DropDownClickHandler, ToolBox*, void);
+    DECL_LINK(ClickHandler, ToolBox*, void);
+    DECL_LINK(DoubleClickHandler, ToolBox*, void);
+    DECL_LINK(SelectHandler, ToolBox*, void);
+    DECL_LINK(ChangedIconSizeHandler, LinkParamNone*, void);
+
+    css::uno::Reference<css::frame::XToolbarController>
+    GetControllerForItemId(const sal_uInt16 nItemId) const;
+
+    void CreateController(const sal_uInt16 nItemId,
+                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                          const sal_Int32 nItemWidth, bool bSideBar);
+    void RegisterHandlers();
+};
+
 /** Helpers for easier access to NotebookBar via the sfx2 infrastructure.
 */
 class SFX2_DLLPUBLIC SfxNotebookBar
@@ -72,6 +106,10 @@ private:
 
     static std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>>
         m_pNotebookBarWeldedWrapper;
+
+    static std::vector<std::unique_ptr<SidebarToolBoxController>> m_aToolbarControllers;
+
+    static void ClearControllers();
 
     DECL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, void);
 };
