@@ -47,6 +47,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <type_traits>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -829,7 +830,7 @@ void Compare::CompareSequence::Compare( sal_uLong nStt1, sal_uLong nEnd1,
         /* Find a point of correspondence in the middle of the files.  */
 
         d = CheckDiag( nStt1, nEnd1, nStt2, nEnd2, &c );
-        b = m_pBDiag[ d ];
+        b = m_pBDiag[ std::make_signed_t<decltype(d)>(d) ];
 
         if( 1 != c )
         {

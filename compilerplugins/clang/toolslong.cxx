@@ -17,6 +17,8 @@
 #include "clang/AST/Attr.h"
 #include "clang/Basic/Builtins.h"
 
+#include "config_clang.h"
+
 #include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
@@ -32,6 +34,21 @@ bool isLong(QualType type)
     // some parts of the STL have ::difference_type => long
     if (type->getAs<AutoType>() || type->getAs<DecltypeType>())
         return false;
+#if CLANG_VERSION < 80000
+    // Prior to <https://github.com/llvm/llvm-project/commit/
+    // c50240dac133451b3eae5b89cecca4c1c4af9fd4> "[AST] Get aliased type info from an aliased
+    // TemplateSpecialization" in Clang 8, if type is a TemplateSpecializationType on top of a
+    // TypedefType, the above getAs<TypedefType> returned null (as it unconditionally desugared the
+    // TemplateSpecializationType to the underlying canonic type, not to any aliased type), so re-
+    // check with the TemplateSpecializationType's aliased type:
+    if (auto const t = type->getAs<TemplateSpecializationType>())
+    {
+        if (t->isTypeAlias())
+        {
+            return isLong(t->getAliasedType());
+        }
+    }
+#endif
     if (type->isSpecificBuiltinType(BuiltinType::Kind::Long))
         return true;
     auto arrayType = type->getAsArrayTypeUnsafe();
