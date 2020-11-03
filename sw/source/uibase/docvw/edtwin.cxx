@@ -1796,6 +1796,11 @@ KEYINPUT_CHECKTABLE:
                               && rSh.GetDrawView()->AreObjectsMarked() ) )
                     {
                         eKeyState = pFlyFormat ? SwKeyState::Fly_Change : SwKeyState::Draw_Change;
+                        if (nSelectionType & SelectionType::DrawObject)
+                        {
+                            // tdf#137964: always move the DrawObject if one is selected
+                            eKeyState = SwKeyState::Draw_Change;
+                        }
                         switch ( rKeyCode.GetCode() )
                         {
                             case KEY_RIGHT: nDir = MOVE_RIGHT_HUGE; break;
