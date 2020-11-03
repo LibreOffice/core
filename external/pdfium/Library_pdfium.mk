@@ -98,6 +98,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_textfield \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_button \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_textobject \
+    UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_privatedata \
 ))
 
 # fpdfapi
@@ -430,7 +431,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/dib/cfx_imagetransformer \
     UnpackedTarball/pdfium/core/fxge/dib/cfx_scanlinecompositor \
     UnpackedTarball/pdfium/core/fxge/dib/cstretchengine \
-    UnpackedTarball/pdfium/core/fxge/dib/fx_dib_main \
+    UnpackedTarball/pdfium/core/fxge/dib/fx_dib \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitDingbats \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitFixed \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitFixedBold \
@@ -493,7 +494,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_edit_impl \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_icon \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_list_box \
-    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_list_impl \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_cbbutton \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_cblistbox \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_list_ctrl \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_scroll_bar \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_special_button \
     UnpackedTarball/pdfium/core/fxcrt/cfx_timer \
@@ -631,10 +634,14 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/win32/cfx_psrenderer \
     UnpackedTarball/pdfium/core/fxge/win32/cpsoutput \
-    UnpackedTarball/pdfium/core/fxge/win32/fx_win32_device \
-    UnpackedTarball/pdfium/core/fxge/win32/fx_win32_dib \
-    UnpackedTarball/pdfium/core/fxge/win32/fx_win32_gdipext \
-    UnpackedTarball/pdfium/core/fxge/win32/fx_win32_print \
+    UnpackedTarball/pdfium/core/fxge/win32/cgdi_device_driver \
+    UnpackedTarball/pdfium/core/fxge/win32/cgdi_display_driver \
+    UnpackedTarball/pdfium/core/fxge/win32/cgdi_plus_ext \
+    UnpackedTarball/pdfium/core/fxge/win32/cgdi_printer_driver \
+    UnpackedTarball/pdfium/core/fxge/win32/cps_printer_driver \
+    UnpackedTarball/pdfium/core/fxge/win32/ctext_only_printer_driver \
+    UnpackedTarball/pdfium/core/fxge/win32/cwin32_platform \
+    UnpackedTarball/pdfium/core/fxge/cfx_windowsrenderdevice \
     UnpackedTarball/pdfium/core/fxcrt/cfx_fileaccess_windows \
     UnpackedTarball/pdfium/third_party/base/win/win_util \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_windowsrenderdevice \
