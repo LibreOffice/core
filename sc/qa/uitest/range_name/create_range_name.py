@@ -66,6 +66,29 @@ class CreateRangeNameTest(UITestCase):
         enter_text_to_cell(gridwin, "A2", "=SUM(RANGE1)")
         self.assertEqual(3.0, get_cell_by_position(document, 0, 0, 1).getValue())
 
+        # Change the name
+        self.ui_test.execute_dialog_through_command(".uno:DefineName")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xNamesList = xDialog.getChild('names')
+        self.assertEqual(1, len(xNamesList.getChildren()))
+
+        xName = xDialog.getChild('name')
+        self.assertEqual( 'RANGE1', get_state_as_dict(xName)["Text"])
+
+        xName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xName.executeAction("TYPE", mkPropertyValues({"TEXT":"RANGE2"}))
+
+        xOkBtn = xDialog.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        # tdf#87474 check the formula is updated after changing the name
+        self.assertEqual("=SUM(RANGE2)", get_cell_by_position(document, 0, 0, 1).getFormula())
+
+        self.xUITest.executeCommand(".uno:Undo")
+
+        self.assertEqual("=SUM(RANGE1)", get_cell_by_position(document, 0, 0, 1).getFormula())
+
         self.ui_test.close_doc()
 
     def test_create_local_range_name(self):
