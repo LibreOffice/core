@@ -19,6 +19,9 @@
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
+#include <drwlayer.hxx>
+#include <svx/svdpage.hxx>
+#include <userdat.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -26,11 +29,14 @@ using namespace ::com::sun::star::uno;
 class ScFiltersTest : public ScBootstrapFixture
 {
 public:
-
     ScFiltersTest();
 
     virtual void setUp() override;
 
+    void testTdf137576_Measureline();
+    void testTdf137216_HideCol();
+    void testTdf137044_CoverHiddenRows();
+    void testTdf137020_FlipVertical();
     void testTdf64229();
     void testTdf36933();
     void testTdf43700();
@@ -49,6 +55,10 @@ public:
     void testTdf130725();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testTdf137576_Measureline);
+    CPPUNIT_TEST(testTdf137216_HideCol);
+    CPPUNIT_TEST(testTdf137044_CoverHiddenRows);
+    CPPUNIT_TEST(testTdf137020_FlipVertical);
     CPPUNIT_TEST(testTdf64229);
     CPPUNIT_TEST(testTdf36933);
     CPPUNIT_TEST(testTdf43700);
@@ -66,9 +76,212 @@ public:
     CPPUNIT_TEST(testTdf129789);
     CPPUNIT_TEST(testTdf130725);
     CPPUNIT_TEST_SUITE_END();
+
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
+
+static void lcl_AssertRectEqualWithTolerance(const OString& sInfo,
+                                             const tools::Rectangle& rExpected,
+                                             const tools::Rectangle& rActual,
+                                             const sal_Int32 nTolerance)
+{
+    // Left
+    OString sMsg = sInfo + " Left expected " + OString::number(rExpected.Left()) + " actual "
+                   + OString::number(rActual.Left()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), labs(rExpected.Left() - rActual.Left()) <= nTolerance);
+
+    // Top
+    sMsg = sInfo + " Top expected " + OString::number(rExpected.Top()) + " actual "
+           + OString::number(rActual.Top()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), labs(rExpected.Top() - rActual.Top()) <= nTolerance);
+
+    // Width
+    sMsg = sInfo + " Width expected " + OString::number(rExpected.GetWidth()) + " actual "
+           + OString::number(rActual.GetWidth()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
+                           labs(rExpected.GetWidth() - rActual.GetWidth()) <= nTolerance);
+
+    // Height
+    sMsg = sInfo + " Height expected " + OString::number(rExpected.GetHeight()) + " actual "
+           + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
+                           labs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
+}
+
+static void lcl_AssertPointEqualWithTolerance(const OString& sInfo, const Point rExpected,
+                                              const Point rActual, const sal_Int32 nTolerance)
+{
+    // X
+    OString sMsg = sInfo + " X expected " + OString::number(rExpected.X()) + " actual "
+                   + OString::number(rActual.X()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), labs(rExpected.X() - rActual.X()) <= nTolerance);
+    // Y
+    sMsg = sInfo + " Y expected " + OString::number(rExpected.Y()) + " actual "
+           + OString::number(rActual.Y()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), labs(rExpected.Y() - rActual.Y()) <= nTolerance);
+}
+
+void ScFiltersTest::testTdf137576_Measureline()
+{
+    // The document contains a vertical measure line, anchored "To Cell (resize with cell)" with
+    // length 37mm. Save and reload had resulted in a line of 0mm length.
+
+    // Get document
+    ScDocShellRef xDocSh = loadDoc("tdf137576_Measureline.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137576_Measureline.ods", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get shape
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
+    SdrMeasureObj* pObj = static_cast<SdrMeasureObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("Load: No measure object", pObj);
+
+    // Check start and end point of measureline
+    const Point aStart = pObj->GetPoint(0);
+    lcl_AssertPointEqualWithTolerance("Load, start point: ", Point(4800, 1500), aStart, 1);
+    const Point aEnd = pObj->GetPoint(1);
+    lcl_AssertPointEqualWithTolerance("Load, end point: ", Point(4800, 5200), aEnd, 1);
+
+    // Save and reload
+    xDocSh = saveAndReload(&(*xDocSh), FORMAT_ODS);
+    ScDocument& rDoc2 = xDocSh->GetDocument();
+
+    // Get shape
+    pDrawLayer = rDoc2.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj = static_cast<SdrMeasureObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("Reload: No measure object", pObj);
+
+    // Check start and end point of measureline, should be unchanged
+    const Point aStart2 = pObj->GetPoint(0);
+    lcl_AssertPointEqualWithTolerance("Reload start point: ", Point(4800, 1500), aStart2, 1);
+    const Point aEnd2 = pObj->GetPoint(1);
+    lcl_AssertPointEqualWithTolerance("Reload end point: ", Point(4800, 5200), aEnd2, 1);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf137216_HideCol()
+{
+    // The document contains a shape anchored "To Cell (resize with cell)" with start in C3.
+    // Error was, that hiding column C did not make the shape invisible.
+
+    // Get document
+    ScDocShellRef xDocSh = loadDoc("tdf137216_HideCol.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137216_HideCol.ods", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get shape
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No object found", pObj);
+
+    // Assert object is visible before and invisible after hiding column.
+    CPPUNIT_ASSERT_MESSAGE("before column hide: Object should be visible", pObj->IsVisible());
+    rDoc.SetColHidden(2, 2, 0, true); // col C in UI = col index 2 to 2.
+    CPPUNIT_ASSERT_MESSAGE("after column hide: Object should be invisible", !pObj->IsVisible());
+}
+
+void ScFiltersTest::testTdf137044_CoverHiddenRows()
+{
+    // The document contains a shape anchored "To Cell (resize with cell)" with start in cell A4 and
+    // end in cell A7. Row height is 30mm. Hiding rows 5 and 6, then saving and reload had resulted
+    // in a wrong end cell offset and thus a wrong height of the shape.
+
+    // Get document
+    ScDocShellRef xDocSh = loadDoc("tdf137044_CoverHiddenRows.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137044_CoverHiddenRows.ods", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get shape
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No object", pObj);
+
+    // Get original object values
+    tools::Rectangle aSnapRectOrig = pObj->GetSnapRect();
+    Point aOriginalEndOffset = pDrawLayer->GetObjData(pObj)->maEndOffset;
+    lcl_AssertRectEqualWithTolerance("Load:", tools::Rectangle(Point(500, 3500), Size(1501, 11001)),
+                                     aSnapRectOrig, 1);
+    lcl_AssertPointEqualWithTolerance("Load: end offset", Point(2000, 2499), aOriginalEndOffset, 1);
+
+    // Hide rows 5 and 6 in UI = row index 4 to 5.
+    rDoc.SetRowHidden(4, 5, 0, true);
+
+    // Save and reload
+    xDocSh = saveAndReload(&(*xDocSh), FORMAT_ODS);
+    ScDocument& rDoc2 = xDocSh->GetDocument();
+
+    // Get shape
+    pDrawLayer = rDoc2.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No object", pObj);
+
+    // Get new values and compare. End offset should be the same, height should be 6000 smaller.
+    tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
+    Point aReloadEndOffset = pDrawLayer->GetObjData(pObj)->maEndOffset;
+    lcl_AssertRectEqualWithTolerance(
+        "Reload:", tools::Rectangle(Point(500, 3500), Size(1501, 5001)), aSnapRectReload, 1);
+    lcl_AssertPointEqualWithTolerance("Reload: end offset", Point(2000, 2499), aReloadEndOffset, 1);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf137020_FlipVertical()
+{
+    // Get document
+    ScDocShellRef xDocSh = loadDoc("tdf137020_FlipVertical.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137020_FlipVertical.ods", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get shape
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No object", pObj);
+
+    const tools::Rectangle aSnapRectOrig = pObj->GetSnapRect();
+
+    // Vertical mirror on center should not change the snap rect.
+    pObj->Mirror(aSnapRectOrig.LeftCenter(), aSnapRectOrig.RightCenter());
+    const tools::Rectangle aSnapRectFlip = pObj->GetSnapRect();
+    lcl_AssertRectEqualWithTolerance("Mirror:", aSnapRectOrig, aSnapRectFlip, 1);
+
+    // Save and reload
+    xDocSh = saveAndReload(&(*xDocSh), FORMAT_ODS);
+    ScDocument& rDoc2 = xDocSh->GetDocument();
+
+    // Get shape
+    pDrawLayer = rDoc2.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No object", pObj);
+
+    // Check pos and size of shape again, should be unchanged
+    const tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
+    lcl_AssertRectEqualWithTolerance("Reload:", aSnapRectOrig, aSnapRectReload, 1);
+
+    xDocSh->DoClose();
+}
 
 void ScFiltersTest::testTdf64229()
 {
