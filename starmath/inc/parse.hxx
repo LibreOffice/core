@@ -98,6 +98,7 @@ class SmParser
     std::unique_ptr<SmNode> DoSum();
     std::unique_ptr<SmNode> DoProduct();
     std::unique_ptr<SmNode> DoSubSup(TG nActiveGroup, SmNode *pGivenNode);
+    std::unique_ptr<SmNode> DoSubSupEvaluate(TG nActiveGroup, SmNode *pGivenNode);
     std::unique_ptr<SmNode> DoOpSubSup();
     std::unique_ptr<SmNode> DoPower();
     std::unique_ptr<SmBlankNode> DoBlank();
@@ -114,6 +115,7 @@ class SmParser
     std::unique_ptr<SmStructureNode> DoColor();
     std::unique_ptr<SmStructureNode> DoBrace();
     std::unique_ptr<SmBracebodyNode> DoBracebody(bool bIsLeftRight);
+    std::unique_ptr<SmStructureNode> DoEvaluate();
     std::unique_ptr<SmTextNode> DoFunction();
     std::unique_ptr<SmTableNode> DoBinom();
     std::unique_ptr<SmBinVerNode> DoFrac();
