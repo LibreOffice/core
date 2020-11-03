@@ -35,7 +35,6 @@ AutoReqProv: no
 %define _binary_payload w9.gzdio
 
 %define gnome_dir /usr
-%define gnome_mime_theme hicolor
 
 # only symlinks in the package that at the time of building point to non-existing files
 %global dont_check_desktop_files 1
@@ -128,62 +127,53 @@ fi
 # not strictly freedesktop-stuff but there is no common naming scheme yet.
 # One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
 # for e.g. application/vnd.oasis.opendocument.spreadsheet
-link_target_root="%{gnome_dir}/share/icons/%{gnome_mime_theme}"
+link_root="%{gnome_dir}/share/icons/hicolor"
 
-if [ ! -d "${link_target_root}" ]
-then
-  link_target_root="%{gnome_dir}/share/icons/gnome"
-fi
-
-for subdir in `cd ${link_target_root}; ls -d *`
+for subdir in `cd ${link_root}; ls --ignore="*theme*"`
 do
-  link_dir="%{gnome_dir}/share/icons/%{gnome_mime_theme}/$subdir/mimetypes"
-  link_target_dir="../../../gnome/$subdir/mimetypes/"
+  link_dir="${link_root}/$subdir/mimetypes"
 
   test -d "${link_dir}" || mkdir -p "${link_dir}"
-  test -d ${link_dir}/${link_target_dir} || continue
 
-  icon=${link_target_dir}%iconprefix-drawing.png;                     test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.png
-  icon=${link_target_dir}%iconprefix-drawing-template.png;            test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.template.png
-  icon=${link_target_dir}%iconprefix-formula.png;                     test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.math.png
-  icon=${link_target_dir}%iconprefix-master-document.png;             test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.global.png
-  icon=${link_target_dir}%iconprefix-oasis-database.png;              test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.base.png
-  icon=${link_target_dir}%iconprefix-oasis-database.png;              test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.database.png
-  icon=${link_target_dir}%iconprefix-oasis-drawing.png;               test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics.png
-  icon=${link_target_dir}%iconprefix-oasis-drawing-template.png;      test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
-  icon=${link_target_dir}%iconprefix-oasis-formula.png;               test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.formula.png
-  icon=${link_target_dir}%iconprefix-oasis-master-document.png;       test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-master.png
-  icon=${link_target_dir}%iconprefix-oasis-master-document-template.png;       test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-master-template.png
-  icon=${link_target_dir}%iconprefix-oasis-presentation.png;          test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation.png
-  icon=${link_target_dir}%iconprefix-oasis-presentation-template.png; test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
-  icon=${link_target_dir}%iconprefix-oasis-spreadsheet.png;           test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
-  icon=${link_target_dir}%iconprefix-oasis-spreadsheet-template.png;  test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
-  icon=${link_target_dir}%iconprefix-oasis-text.png;                  test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text.png
-  icon=${link_target_dir}%iconprefix-oasis-text-template.png;         test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-template.png
-  icon=${link_target_dir}%iconprefix-oasis-web-template.png;          test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-web.png
-  icon=${link_target_dir}%iconprefix-presentation.png;                test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.png
-  icon=${link_target_dir}%iconprefix-presentation-template.png;       test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.template.png
-  icon=${link_target_dir}%iconprefix-spreadsheet.png;                 test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.png
-  icon=${link_target_dir}%iconprefix-spreadsheet-template.png;        test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.template.png
-  icon=${link_target_dir}%iconprefix-text.png;                        test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.png
-  icon=${link_target_dir}%iconprefix-text-template.png;               test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.template.png
-  icon=${link_target_dir}%iconprefix-extension.png;                   test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.openofficeorg.extension.png
+  icon=${link_dir}/%iconprefix-drawing.png;                     test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.png
+  icon=${link_dir}/%iconprefix-drawing-template.png;            test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.template.png
+  icon=${link_dir}/%iconprefix-formula.png;                     test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.math.png
+  icon=${link_dir}/%iconprefix-master-document.png;             test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.global.png
+  icon=${link_dir}/%iconprefix-oasis-database.png;              test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.base.png
+  icon=${link_dir}/%iconprefix-oasis-database.png;              test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.database.png
+  icon=${link_dir}/%iconprefix-oasis-drawing.png;               test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics.png
+  icon=${link_dir}/%iconprefix-oasis-drawing-template.png;      test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
+  icon=${link_dir}/%iconprefix-oasis-formula.png;               test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.formula.png
+  icon=${link_dir}/%iconprefix-oasis-master-document.png;       test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-master.png
+  icon=${link_dir}/%iconprefix-oasis-master-document-template.png;       test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-master-template.png
+  icon=${link_dir}/%iconprefix-oasis-presentation.png;          test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation.png
+  icon=${link_dir}/%iconprefix-oasis-presentation-template.png; test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
+  icon=${link_dir}/%iconprefix-oasis-spreadsheet.png;           test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
+  icon=${link_dir}/%iconprefix-oasis-spreadsheet-template.png;  test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
+  icon=${link_dir}/%iconprefix-oasis-text.png;                  test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text.png
+  icon=${link_dir}/%iconprefix-oasis-text-template.png;         test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-template.png
+  icon=${link_dir}/%iconprefix-oasis-web-template.png;          test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-web.png
+  icon=${link_dir}/%iconprefix-presentation.png;                test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.png
+  icon=${link_dir}/%iconprefix-presentation-template.png;       test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.template.png
+  icon=${link_dir}/%iconprefix-spreadsheet.png;                 test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.png
+  icon=${link_dir}/%iconprefix-spreadsheet-template.png;        test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.template.png
+  icon=${link_dir}/%iconprefix-text.png;                        test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.png
+  icon=${link_dir}/%iconprefix-text-template.png;               test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.template.png
+  icon=${link_dir}/%iconprefix-extension.png;                   test -f ${icon} && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.openofficeorg.extension.png
 done
 
 #run always
-for theme in gnome hicolor; do
-    if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
-        # touch it, just in case we cannot find the binary...
-        touch /usr/share/icons/$theme
-        if [ -x /opt/gnome/bin/gtk-update-icon-cache ]; then
-            /opt/gnome/bin/gtk-update-icon-cache -q /usr/share/icons/$theme
-        elif (which gtk-update-icon-cache); then
-            gtk-update-icon-cache -q /usr/share/icons/$theme
-        fi
-        # ignore errors (e.g. when there is a cache, but no index.theme)
-        true
+if [ -e /usr/share/icons/hicolor/icon-theme.cache ] ; then
+    # touch it, just in case we cannot find the binary...
+    touch /usr/share/icons/hicolor
+    if [ -x /opt/gnome/bin/gtk-update-icon-cache ]; then
+        /opt/gnome/bin/gtk-update-icon-cache -q /usr/share/icons/hicolor
+    elif (which gtk-update-icon-cache); then
+        gtk-update-icon-cache -q /usr/share/icons/hicolor
     fi
-done
+    # ignore errors (e.g. when there is a cache, but no index.theme)
+    true
+fi
 
 
 # update /etc/mime.types
@@ -371,19 +361,17 @@ if [ "$1" = 0 ] ; then # only run when erasing the package - other cases handled
 fi
 
 #run always
-for theme in gnome hicolor; do
-  if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
-   # touch it, just in case we cannot find the binary...
-    touch /usr/share/icons/$theme
-    if [ -x /opt/gnome/bin/gtk-update-icon-cache ]; then
-      /opt/gnome/bin/gtk-update-icon-cache -q /usr/share/icons/$theme
-    elif (which gtk-update-icon-cache); then
-      gtk-update-icon-cache -q /usr/share/icons/$theme
-    fi
-    # ignore errors (e.g. when there is a cache, but no index.theme)
-    true
+if [ -e /usr/share/icons/hicolor/icon-theme.cache ] ; then
+ # touch it, just in case we cannot find the binary...
+  touch /usr/share/icons/hicolor
+  if [ -x /opt/gnome/bin/gtk-update-icon-cache ]; then
+    /opt/gnome/bin/gtk-update-icon-cache -q /usr/share/icons/hicolor
+  elif (which gtk-update-icon-cache); then
+    gtk-update-icon-cache -q /usr/share/icons/hicolor
   fi
-done
+  # ignore errors (e.g. when there is a cache, but no index.theme)
+  true
+fi
 
 %files
 # specify stale symlinks verbatim, not as glob - a change in recent versions of
@@ -403,10 +391,6 @@ done
 /usr/share/applications/%unixfilename-writer.desktop
 /usr/share/applications/%unixfilename-startcenter.desktop
 /usr/share/applications/%unixfilename-xsltfilter.desktop
-/usr/share/icons/gnome/*/apps/*png
-/usr/share/icons/gnome/*/apps/*svg
-/usr/share/icons/gnome/*/mimetypes/*png
-/usr/share/icons/gnome/*/mimetypes/*svg
 /usr/share/icons/hicolor/*/apps/*png
 /usr/share/icons/hicolor/*/apps/*svg
 /usr/share/icons/hicolor/*/mimetypes/*png
