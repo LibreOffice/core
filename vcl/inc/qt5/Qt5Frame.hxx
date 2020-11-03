@@ -210,8 +210,6 @@ public:
     virtual void SetApplicationID(const OUString&) override;
 
     inline bool CallCallback(SalEvent nEvent, const void* pEvent) const;
-
-    cairo_t* getCairoContext() const;
 };
 
 inline bool Qt5Frame::CallCallback(SalEvent nEvent, const void* pEvent) const

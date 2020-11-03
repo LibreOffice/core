@@ -36,7 +36,6 @@ public:
                     ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint );
                     virtual ~ScPaintHint() override;
 
-    void            SetPrintFlag(bool bSet) { bPrint = bSet; }
     SCCOL           GetStartCol() const     { return aRange.aStart.Col(); }
     SCROW           GetStartRow() const     { return aRange.aStart.Row(); }
     SCTAB           GetStartTab() const     { return aRange.aStart.Tab(); }

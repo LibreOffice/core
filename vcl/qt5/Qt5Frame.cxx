@@ -1437,15 +1437,4 @@ void Qt5Frame::handleDragLeave()
     m_bInDrag = false;
 }
 
-cairo_t* Qt5Frame::getCairoContext() const
-{
-    cairo_t* cr = nullptr;
-    if (m_bUseCairo)
-    {
-        cr = cairo_create(m_pSurface.get());
-        assert(cr);
-    }
-    return cr;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
