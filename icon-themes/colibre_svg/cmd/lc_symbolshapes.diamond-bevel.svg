@@ -1,1 +1,19 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="#fafafa"><path d="m12 16.627119 4.576271-4.627119-4.576271-4.6271187-4.5762712 4.6271187 4.5762712 4.677966z" fill-rule="evenodd"/><path d="m11.5 2.5-9 9h5.0666667l3.9333333-3.9333333zm1 0v5.0666667l3.933333 3.9333333h5.066667zm-10 10 9 9v-5.066667l-3.9333333-3.933333zm13.933333 0-3.933333 3.933333v5.066667l9-9z" stroke="#3a3a38" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+<?xml-stylesheet type="text/css" href="icons.css" ?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path
+	 class="icn icn--shape-color" 
+     d="M 12,16.627119 16.576271,12 12,7.3728813 7.4237288,12 12,16.677966 Z"
+     fill="#fafafa" 
+	 stroke="#3a3a38" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+  <path
+	 class="icn icn--shape-color" 
+     d="m 11.5,2.5 -9,9 H 7.5666667 L 11.5,7.5666667 Z m 1,0 V 7.5666667 L 16.433333,11.5 H 21.5 Z m -10,10 9,9 V 16.433333 L 7.5666667,12.5 Z m 13.933333,0 L 12.5,16.433333 V 21.5 l 9,-9 z"
+     fill="#fafafa" 
+	 stroke="#3a3a38" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+</svg>
