@@ -225,8 +225,6 @@ public:
     virtual void            StopEditEngine(bool bAll) override;
     virtual void            TextGrabFocus() override;
 
-    void GrabFocus() { mxTextWnd->GrabFocus(); }
-
     vcl::Window&            GetVclParent() { return mrParent; }
 
 private:

@@ -118,10 +118,6 @@ public:
 
     void                SetTabPageSizePixel( const Size& rSize );
 
-    //  pixel offset for the tab items, default is (0,0)
-    void                SetItemsOffset( const Point& rOffs );
-    Point               GetItemsOffset() const;
-
     void                InsertPage( sal_uInt16 nPageId, const OUString& rText,
                                     sal_uInt16 nPos = TAB_APPEND );
     void                RemovePage( sal_uInt16 nPageId );
