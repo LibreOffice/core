@@ -16,6 +16,24 @@
       "revId": "bd8edf5d2ac579e51bfbf5fa6061909a67a309c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09f8582d_21947153",
+        "filename": "sw/inc/calbck.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-11-03T22:06:52Z",
+      "side": 0,
+      "message": "m_bModifyLocked prevents recursion of at least NotifyClients -- that might be unexpected in some cases. In others it likely prevents the same Hint passing the same Modify twice ... which likely would be an endless loop/crash.\n\nSo chiseling away this stuff need to be done rather carefully. :/",
+      "parentUuid": "0b692351_1dce5d7b",
+      "revId": "bd8edf5d2ac579e51bfbf5fa6061909a67a309c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
