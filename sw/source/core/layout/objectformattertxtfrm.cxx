@@ -355,23 +355,22 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
                 SwFrameFormat& rFormat = pObj->GetFrameFormat();
                 if (SwTextBoxHelper::isTextBox(&rFormat, RES_DRAWFRMFMT))
                 {
-                    if (const SwPageFrame* pPageFrame = pObj->GetPageFrame())
+                    const SwFrameFormat* pOtherFormat = SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT);
+                    if (rFormat.GetVertOrient().GetPos() != pOtherFormat->GetVertOrient().GetPos() ||
+                        rFormat.GetAnchor().GetAnchorId() != pOtherFormat->GetAnchor().GetAnchorId())
                     {
-                        SwDoc* pDoc = rFormat.GetDoc();
+                        if (const SwPageFrame* pPageFrame = pObj->GetPageFrame())
+                        {
+                            const SwRect& rPageFrameArea = pPageFrame->getFrameArea();
+                            SfxItemSet aSet(rFormat.GetDoc()->GetAttrPool(),
+                                            svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
+                            aSet.Put(SwFormatVertOrient(pObj->GetObjRect().Top() - rPageFrameArea.Top(),
+                                                        text::VertOrientation::NONE,
+                                                        text::RelOrientation::PAGE_FRAME));
+                            aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, pObj->GetPageFrame()->GetPhyPageNum()));
 
-                        // avoid Undo creation,
-                        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-
-                        SfxItemSet aSet(pDoc->GetAttrPool(),
-                                        svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
-
-                        const SwRect& rPageFrameArea = pPageFrame->getFrameArea();
-                        aSet.Put(SwFormatVertOrient(pObj->GetObjRect().Top() - rPageFrameArea.Top(),
-                                                    text::VertOrientation::NONE,
-                                                    text::RelOrientation::PAGE_FRAME));
-                        aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, pObj->GetPageFrame()->GetPhyPageNum()));
-
-                        SwTextBoxHelper::syncFlyFrameAttr(rFormat, aSet);
+                            SwTextBoxHelper::syncFlyFrameAttr(rFormat, aSet);
+                        }
                     }
                 }
             }
