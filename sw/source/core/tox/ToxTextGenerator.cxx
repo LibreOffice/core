@@ -80,7 +80,7 @@ ToxTextGenerator::GetNumStringOfFirstNode(const SwTOXSortTabBase& rBase,
     if (!pNd) {
         return sRet;
     }
-    if (pLayout && pLayout->IsHideRedlines())
+    if (pLayout && pLayout->HasMergedParas())
     {   // note: pNd could be any node, since it could be Sequence etc.
         pNd = sw::GetParaPropsNode(*pLayout, SwNodeIndex(*pNd));
     }
@@ -366,7 +366,7 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source,
 
     sal_Int32 nOffset(0);
     GetAttributesForNode(result, nOffset, *pSrc, stripper, pool, pLayout);
-    if (pLayout && pLayout->IsHideRedlines())
+    if (pLayout && pLayout->HasMergedParas())
     {
         if (SwTextFrame const*const pFrame = static_cast<SwTextFrame*>(pSrc->getLayoutFrame(pLayout)))
         {

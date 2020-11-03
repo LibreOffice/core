@@ -127,7 +127,7 @@ static void DelFullParaMoveFrames(SwDoc & rDoc, SwUndRng const& rRange,
     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pFirstMergedDeletedTextNode);
     for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
     {
-        if (pFrame->getRootFrame()->IsHideRedlines())
+        if (pFrame->getRootFrame()->HasMergedParas())
         {
             assert(pFrame->GetMergedPara());
             assert(pFrame->GetMergedPara()->pFirstNode == pFirstMergedDeletedTextNode);
@@ -1079,7 +1079,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pNextNode);
             for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
             {
-                if (pFrame->getRootFrame()->IsHideRedlines())
+                if (pFrame->getRootFrame()->HasMergedParas())
                 {
                     frames.push_back(pFrame);
                 }

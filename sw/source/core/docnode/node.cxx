@@ -1373,7 +1373,7 @@ void SwContentNode::MakeFramesForAdjacentContentNode(SwContentNode& rNode)
 
     while( nullptr != (pUpper = aNode2Layout.UpperFrame( pFrame, rNode )) )
     {
-        if (pUpper->getRootFrame()->IsHideRedlines()
+        if (pUpper->getRootFrame()->HasMergedParas()
             && !rNode.IsCreateFrameWhenHidingRedlines())
         {
             continue;

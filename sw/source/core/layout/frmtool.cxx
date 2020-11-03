@@ -1382,7 +1382,7 @@ void RecreateStartTextFrames(SwTextNode & rNode)
     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rNode);
     for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
     {
-        if (pFrame->getRootFrame()->IsHideRedlines())
+        if (pFrame->getRootFrame()->HasMergedParas())
         {
             frames.push_back(pFrame);
         }
@@ -1534,7 +1534,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         if ( pNd->IsContentNode() )
         {
             SwContentNode* pNode = static_cast<SwContentNode*>(pNd);
-            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            if (pLayout->HasMergedParas() && !pNd->IsCreateFrameWhenHidingRedlines())
             {
                 if (pNd->IsTextNode()
                     && pNd->GetRedlineMergeFlag() == SwNode::Merge::NonFirst)
@@ -1612,7 +1612,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                     continue;
                 }
             }
-            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            if (pLayout->HasMergedParas() && !pNd->IsCreateFrameWhenHidingRedlines())
             {
                 assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
                 nIndex = pTableNode->EndOfSectionIndex();
@@ -1675,7 +1675,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         }
         else if ( pNd->IsSectionNode() )
         {
-            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            if (pLayout->HasMergedParas() && !pNd->IsCreateFrameWhenHidingRedlines())
             {
                 assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
                 continue; // skip it
@@ -1799,7 +1799,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         }
         else if ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )
         {
-            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            if (pLayout->HasMergedParas() && !pNd->IsCreateFrameWhenHidingRedlines())
             {
                 assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
                 continue; // skip it
@@ -1875,7 +1875,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         else if( pNd->IsStartNode() &&
                  SwFlyStartNode == static_cast<SwStartNode*>(pNd)->GetStartNodeType() )
         {
-            if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
+            if (pLayout->HasMergedParas() && !pNd->IsCreateFrameWhenHidingRedlines())
             {
                 assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
                 assert(false); // actually a fly-section can't be deleted?
@@ -1890,7 +1890,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         }
         else
         {
-            assert(!pLayout->IsHideRedlines()
+            assert(!pLayout->HasMergedParas()
                 || pNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden);
             // Neither Content nor table nor section, so we are done.
             break;

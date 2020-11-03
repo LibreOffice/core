@@ -777,7 +777,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     if (nullptr == pSectNd ||
         !pSectNd->GetNodes().IsDocNodes() ||
         IsHiddenFlag() ||
-        (pLayout->IsHideRedlines() && pSectNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden))
+        (pLayout->HasMergedParas() && pSectNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden))
     {
         return;
     }
@@ -1248,7 +1248,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode,
             pTextNd->getLayoutFrame(pLayout) &&
            !pTextNd->IsHiddenByParaField() &&
            !pTextNd->HasHiddenCharAttribute( true ) &&
-           (!pLayout || !pLayout->IsHideRedlines()
+           (!pLayout || !pLayout->HasMergedParas()
                 || static_cast<SwTextFrame*>(pTextNd->getLayoutFrame(pLayout))->GetTextNodeForParaProps() == pTextNd) &&
             ( !IsFromChapter() ||
                ::lcl_FindChapterNode(*pTextNd, pLayout) == pOwnChapterNode ))
@@ -1289,7 +1289,7 @@ void SwTOXBaseSection::UpdateTemplate(const SwTextNode* pOwnChapterNode,
                 if (pTextNd->GetText().getLength() &&
                     pTextNd->getLayoutFrame(pLayout) &&
                     pTextNd->GetNodes().IsDocNodes() &&
-                    (!pLayout || !pLayout->IsHideRedlines()
+                    (!pLayout || !pLayout->HasMergedParas()
                         || static_cast<SwTextFrame*>(pTextNd->getLayoutFrame(pLayout))->GetTextNodeForParaProps() == pTextNd) &&
                     (!IsFromChapter() || pOwnChapterNode ==
                         ::lcl_FindChapterNode(*pTextNd, pLayout)))
@@ -1512,7 +1512,7 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
             }
 
             if (pCNd->getLayoutFrame(pLayout)
-                && (!pLayout || !pLayout->IsHideRedlines()
+                && (!pLayout || !pLayout->HasMergedParas()
                     || pCNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
                 && ( !IsFromChapter() ||
                     ::lcl_FindChapterNode(*pCNd, pLayout) == pOwnChapterNode ))
@@ -1555,7 +1555,7 @@ void SwTOXBaseSection::UpdateTable(const SwTextNode* pOwnChapterNode,
                 aContentIdx.GetIndex() < pTableNd->EndOfSectionIndex() )
             {
                 if (pCNd->getLayoutFrame(pLayout)
-                    && (!pLayout || !pLayout->IsHideRedlines()
+                    && (!pLayout || !pLayout->HasMergedParas()
                         || pCNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
                     && (!IsFromChapter()
                         || ::lcl_FindChapterNode(*pCNd, pLayout) == pOwnChapterNode))

@@ -534,7 +534,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*this);
         for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
-            if (pFrame->getRootFrame()->IsHideRedlines())
+            if (pFrame->getRootFrame()->HasMergedParas())
             {
                 isHide = true;
             }
@@ -635,7 +635,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
             frames.push_back(pFrame);
-            if (pFrame->getRootFrame()->IsHideRedlines())
+            if (pFrame->getRootFrame()->HasMergedParas())
             {
                 isHide = true;
             }
@@ -805,7 +805,7 @@ void MoveDeletedPrevFrames(const SwTextNode & rDeletedPrev, SwTextNode & rNode)
     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rDeletedPrev);
     for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
     {
-        if (pFrame->getRootFrame()->IsHideRedlines())
+        if (pFrame->getRootFrame()->HasMergedParas())
         {
             frames.push_back(pFrame);
         }
@@ -815,7 +815,7 @@ void MoveDeletedPrevFrames(const SwTextNode & rDeletedPrev, SwTextNode & rNode)
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIt(rNode);
         for (SwTextFrame* pFrame = aIt.First(); pFrame; pFrame = aIt.Next())
         {
-            if (pFrame->getRootFrame()->IsHideRedlines())
+            if (pFrame->getRootFrame()->HasMergedParas())
             {
                 auto const it(std::find(frames2.begin(), frames2.end(), pFrame));
                 assert(it != frames2.end());
@@ -868,7 +868,7 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pMergeNode);
         for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
-            if (pFrame->getRootFrame()->IsHideRedlines())
+            if (pFrame->getRootFrame()->HasMergedParas())
             {
                 frames.push_back(pFrame);
             }
@@ -902,7 +902,7 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
                 }
                 break; // checking once is enough
             }
-            else if (pFrame->getRootFrame()->IsHideRedlines())
+            else if (pFrame->getRootFrame()->HasMergedParas())
             {
                 rNode.SetRedlineMergeFlag(SwNode::Merge::None);
                 break; // checking once is enough
