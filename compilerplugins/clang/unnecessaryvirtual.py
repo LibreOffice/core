@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import io
 import re
@@ -10,7 +10,7 @@ overridingSet = set()
 nonEmptySet = set()
 
 
-with io.open("workdir/loplugin.unnecessaryvirtual.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.unnecessaryvirtual.log", "r", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "definition:":
