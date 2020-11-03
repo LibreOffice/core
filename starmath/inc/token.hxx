@@ -109,8 +109,8 @@ enum SmTokenType
     TLBRACKET,      TRBRACKET,      TLDBRACKET,     TRDBRACKET,     // Bracket x1 & x2
     TLCEIL,         TRCEIL,         TLFLOOR,        TRFLOOR,        // Reals -> Wholes
     TLANGLE,        TRANGLE,        TLBRACE,        TRBRACE,        // <x> {x}
-    // Brackets Lines
-    TLLINE,         TRLINE,         TLDLINE,        TRDLINE,        TMLINE,
+    TLLINE,         TRLINE,         TLDLINE,        TRDLINE,        // Lines x1 x2
+    TMLINE,         TEVALUATE,                                      // Custom
     // Differencial calculus
     TNABLA,         TPARTIAL,       TFOURIER,       TLAPLACE,       // Derivative, Transformation
     TINTD,          TINT,           TIINT,          TIIINT,         // Integral
