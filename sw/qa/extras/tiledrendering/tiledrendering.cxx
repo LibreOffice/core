@@ -58,6 +58,7 @@
 #include <basesh.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <txtfrm.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
 
@@ -132,6 +133,7 @@ public:
     void testDeselectCustomShape();
     void testSemiTransparent();
     void testHighlightNumbering();
+    void testPilcrowRedlining();
     void testClipText();
     void testAnchorTypes();
     void testLanguageStatus();
@@ -202,6 +204,7 @@ public:
     CPPUNIT_TEST(testDeselectCustomShape);
     CPPUNIT_TEST(testSemiTransparent);
     CPPUNIT_TEST(testHighlightNumbering);
+    CPPUNIT_TEST(testPilcrowRedlining);
     CPPUNIT_TEST(testClipText);
     CPPUNIT_TEST(testAnchorTypes);
     CPPUNIT_TEST(testLanguageStatus);
@@ -2436,6 +2439,67 @@ void SwTiledRenderingTest::testHighlightNumbering()
     // Yellow highlighting over numbering
     Color aColor(pAccess->GetPixel(103, 148));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aColor);
+}
+
+void SwTiledRenderingTest::testPilcrowRedlining()
+{
+    // Load a document where the top left tile contains
+    // paragraph and line break symbols with redlining.
+    SwXTextDocument* pXTextDocument = createDoc("pilcrow-redlining.fodt");
+
+    // show non printing characters, including pilcrow and
+    // line break symbols with redlining
+    comphelper::dispatchCommand(".uno:ControlCodes", {});
+
+    // Render a larger area, and then get the color of the bottom right corner of our tile.
+    size_t nCanvasWidth = 2048;
+    size_t nCanvasHeight = 1024;
+    size_t nTileSize = 512;
+    std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
+                                                    Fraction(1.0), Point(), aPixmap.data());
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
+                              /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
+    pDevice->EnableMapMode(false);
+    Bitmap aBitmap = pDevice->GetBitmap(Point(100, 100), Size(nTileSize, nTileSize));
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+
+    const char* aTexts[] = { "Insert paragraph break", "Delete paragraph break",
+            "Insert line break", "Delete line break" };
+
+    // Check redlining (strikeout and underline) over the paragraph and line break symbols
+    for (int nLine = 0; nLine < 8; ++nLine)
+    {
+        bool bHasRedlineColor = false;
+        for (int i = 0; i < 36 && !bHasRedlineColor; ++i)
+        {
+            int nY = 96 + nLine * 36 + i;
+            for (sal_uInt32 j = 0; j < nTileSize - 1; ++j)
+            {
+                Color aColor(pAccess->GetPixel(nY, j));
+                Color aColor2(pAccess->GetPixel(nY+1, j));
+                Color aColor3(pAccess->GetPixel(nY, j+1));
+                Color aColor4(pAccess->GetPixel(nY+1, j+1));
+                // 4-pixel same color square sign strikeout or underline of redlining
+                // if its color is not white, black or non-printing character color
+                if ( aColor == aColor2 && aColor == aColor3 && aColor == aColor4 &&
+                    aColor != COL_WHITE && aColor != COL_BLACK &&
+                    aColor != NON_PRINTING_CHARACTER_COLOR )
+                {
+                    bHasRedlineColor = true;
+                    break;
+                }
+            }
+        }
+
+        OString sMessage = OString(aTexts[nLine/2]) +
+                (nLine % 2 ? OString(" (non empty line) ") : OString(" (empty line) ") );
+        CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), bHasRedlineColor);
+    }
+
+    comphelper::dispatchCommand(".uno:ControlCodes", {});
 }
 
 void SwTiledRenderingTest::testClipText()
