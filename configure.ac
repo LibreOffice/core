@@ -10564,7 +10564,9 @@ AC_SUBST(XRANDR_LIBS)
 AC_SUBST(ENABLE_RANDR)
 
 if test "$enable_neon" = "no" -o "$enable_mpl_subset" = "yes"; then
-    WITH_WEBDAV="serf"
+    if test -z "$WITH_WEBDAV"; then
+        WITH_WEBDAV="serf"
+    fi
 fi
 if test $_os = iOS -o $_os = Android; then
     WITH_WEBDAV="no"
