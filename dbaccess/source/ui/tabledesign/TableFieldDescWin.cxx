@@ -18,12 +18,9 @@
  */
 
 #include "TableFieldDescWin.hxx"
-#include <osl/diagnose.h>
 #include <FieldDescriptions.hxx>
 #include <strings.hrc>
 #include <TableDesignHelpBar.hxx>
-#include <vcl/event.hxx>
-#include <vcl/settings.hxx>
 #include <helpids.h>
 #include <core_resource.hxx>
 

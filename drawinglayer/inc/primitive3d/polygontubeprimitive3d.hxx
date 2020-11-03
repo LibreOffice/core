@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 
 

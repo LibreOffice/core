@@ -22,25 +22,18 @@
 #include "helperwrongspellrenderer.hxx"
 
 #include <sal/log.hxx>
-#include <tools/stream.hxx>
 #include <vcl/BitmapBasicMorphologyFilter.hxx>
 #include <vcl/BitmapFilterStackBlur.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/dibtools.hxx>
 #include <vcl/hatch.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
@@ -67,12 +60,7 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 
-#include <vcl/window.hxx>
 #include <vcl/gradient.hxx>
-#include <svtools/borderhelper.hxx>
-#include <editeng/borderline.hxx>
-
-#include <com/sun/star/table/BorderLineStyle.hpp>
 
 using namespace com::sun::star;
 

@@ -21,7 +21,6 @@
 #include <unosqlmessage.hxx>
 #include <stringconstants.hxx>
 #include <strings.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <connectivity/dbexception.hxx>
 #include <vcl/svapp.hxx>

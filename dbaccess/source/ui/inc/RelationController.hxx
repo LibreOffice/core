@@ -20,7 +20,6 @@
 
 #include <memory>
 #include "JoinController.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace weld
 {

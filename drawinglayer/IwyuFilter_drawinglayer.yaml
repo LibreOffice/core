@@ -1,9 +1,6 @@
 ---
 assumeFilename: drawinglayer/source/primitive2d/svggradientprimitive2d.cxx
 excludelist:
-    drawinglayer/source/drawinglayeruno/xprimitive2drenderer.cxx:
-    # Actually used
-    - com/sun/star/lang/XMultiServiceFactory.hpp
     drawinglayer/source/dumper/EnhancedShapeDumper.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
@@ -13,6 +10,12 @@ excludelist:
     drawinglayer/source/primitive2d/sceneprimitive2d.cxx:
     # Needed for direct member access
     - drawinglayer/attribute/sdrlightattribute3d.hxx
+    drawinglayer/source/primitive2d/textlayoutdevice.cxx:
+    # Needed for template
+    - com/sun/star/uno/XComponentContext.hpp
     drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:
     # Needed for direct member access
     - basegfx/matrix/b2dhommatrix.hxx
+    drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:
+    # Needed for rtl::math::sin
+    - rtl/math.hxx

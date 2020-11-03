@@ -24,7 +24,6 @@
 #include <svx/ParseContext.hxx>
 #include "TableFieldDescription.hxx"
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #include <com/sun/star/sdbcx/XAlterView.hpp>

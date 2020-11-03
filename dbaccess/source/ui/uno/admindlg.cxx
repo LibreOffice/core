@@ -19,7 +19,6 @@
 
 #include "admindlg.hxx"
 #include <dbadmin.hxx>
-#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace dbaui;

@@ -25,13 +25,8 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>

@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include <texture/texture.hxx>
 #include <vcl/bitmapex.hxx>
 

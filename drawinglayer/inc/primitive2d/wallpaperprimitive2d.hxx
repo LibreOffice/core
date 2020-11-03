@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/wall.hxx>

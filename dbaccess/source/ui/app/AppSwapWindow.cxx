@@ -20,9 +20,9 @@
 #include "AppSwapWindow.hxx"
 #include <helpids.h>
 #include "AppView.hxx"
+#include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/event.hxx>
 #include <vcl/mnemonic.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include "AppController.hxx"
 

@@ -19,7 +19,6 @@
 
 #include "UserSettingsDlg.hxx"
 #include <UserAdminDlg.hxx>
-#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace dbaui;

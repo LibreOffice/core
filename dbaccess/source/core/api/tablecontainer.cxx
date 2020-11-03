@@ -20,7 +20,6 @@
 #include <apitools.hxx>
 #include <tablecontainer.hxx>
 #include <table.hxx>
-#include <sal/log.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <core_resource.hxx>

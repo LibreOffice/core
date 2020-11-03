@@ -26,8 +26,6 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
-#include <converters.hxx>
-
 using namespace com::sun::star;
 using namespace std;
 

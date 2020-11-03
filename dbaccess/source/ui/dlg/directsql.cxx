@@ -22,14 +22,9 @@
 #include <sqledit.hxx>
 #include <strings.hrc>
 #include <comphelper/types.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/eeitem.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svl/itemset.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>

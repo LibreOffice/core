@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/bitmapex.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
 namespace drawinglayer
 {

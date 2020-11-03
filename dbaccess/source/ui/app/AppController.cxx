@@ -20,6 +20,7 @@
 #include <memory>
 #include "AppController.hxx"
 #include <core_resource.hxx>
+#include <dbexchange.hxx>
 #include <strings.hxx>
 #include <advancedsettingsdlg.hxx>
 #include "subcomponentmanager.hxx"
@@ -66,7 +67,6 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/interaction.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

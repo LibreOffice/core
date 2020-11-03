@@ -26,6 +26,7 @@
 #include <com/sun/star/deployment/XExtensionManager.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <com/sun/star/deployment/XPackageManagerFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/mutex.hxx>
 #include <vector>
 #include <unordered_map>

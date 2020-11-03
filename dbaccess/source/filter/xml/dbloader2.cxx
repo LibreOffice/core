@@ -31,7 +31,6 @@
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
@@ -47,7 +46,6 @@
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/propertysequence.hxx>

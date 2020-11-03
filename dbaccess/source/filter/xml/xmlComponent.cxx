@@ -23,6 +23,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <strings.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/diagnose_ex.h>
 #include <comphelper/propertysequence.hxx>
 

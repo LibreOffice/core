@@ -24,6 +24,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -23,7 +23,6 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
-#include <sal/log.hxx>
 #include <memory>
 
 using namespace com::sun::star;

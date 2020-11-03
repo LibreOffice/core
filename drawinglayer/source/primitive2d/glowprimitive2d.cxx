@@ -18,13 +18,7 @@
  */
 
 #include <drawinglayer/primitive2d/glowprimitive2d.hxx>
-#include <basegfx/color/bcolormodifier.hxx>
-#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-
-#include <sal/log.hxx>
-#include <memory>
 
 using namespace com::sun::star;
 

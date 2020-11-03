@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdb/XTextConnectionSettings.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

@@ -40,8 +40,6 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
-#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -62,7 +60,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/types.hxx>
 
@@ -72,9 +69,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <framework/titlehelper.hxx>
 #include <unotools/saveopt.hxx>
-#include <unotools/tempfile.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/file.hxx>
 #include <osl/diagnose.h>
 
 #include <vcl/GraphicObject.hxx>

@@ -21,7 +21,6 @@
 #include "ColumnPeer.hxx"
 #include <apitools.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <comphelper/processfactory.hxx>
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbu_OColumnControl_get_implementation(

@@ -12,12 +12,9 @@
 #include <stdio.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 
 namespace desktop {
 

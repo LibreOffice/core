@@ -46,7 +46,6 @@
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>

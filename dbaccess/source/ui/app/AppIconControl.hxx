@@ -19,9 +19,7 @@
 #pragma once
 
 #include <sfx2/thumbnailview.hxx>
-#include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 #include <AppElementType.hxx>
 

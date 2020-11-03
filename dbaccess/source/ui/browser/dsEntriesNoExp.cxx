@@ -23,7 +23,6 @@
 
 #include <unodatbr.hxx>
 #include <browserids.hxx>
-#include <imageprovider.hxx>
 #include <osl/diagnose.h>
 #include <dbtreelistbox.hxx>
 #include "dbtreemodel.hxx"

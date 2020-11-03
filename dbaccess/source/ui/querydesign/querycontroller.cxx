@@ -55,7 +55,6 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
