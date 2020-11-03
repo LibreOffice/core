@@ -373,6 +373,8 @@ void ToolsLong::run()
                    compat::getBeginLoc(expr))
                 << expr->getSubExpr()->IgnoreParenImpCasts()->getType() << expr->getType()
                 << expr->getSourceRange();
+            expr->dump();
+            expr->getType()->dump();
         }
     }
 }
