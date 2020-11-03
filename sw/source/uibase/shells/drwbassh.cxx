@@ -443,7 +443,8 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
             if ( bAlignPossible )
             {
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                if ( rMarkList.GetMarkCount() == 1 )
+                if (rMarkList.GetMarkCount() == 1
+                    && !SwTextBoxHelper::hasTextFrame(rMarkList.GetMark(0)->GetMarkedSdrObj()))
                 {
                     sal_Int16 nHorizOrient = -1, nVertOrient = -1;
 
@@ -479,8 +480,6 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         SwFormatHoriOrient aHOrient(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT));
                         aHOrient.SetHoriOrient( nHorizOrient );
                         pFrameFormat->SetFormatAttr(aHOrient);
-                        if (auto pTxFrm = SwTextBoxHelper::getOtherTextBoxFormat(pFrameFormat, RES_DRAWFRMFMT))
-                            pTxFrm->SetFormatAttr(aHOrient);
                         pSh->EndAction();
                     }
 
@@ -492,8 +491,6 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         SwFormatVertOrient aVOrient(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT));
                         aVOrient.SetVertOrient( nVertOrient );
                         pFrameFormat->SetFormatAttr(aVOrient);
-                        if (auto pTxFrm = SwTextBoxHelper::getOtherTextBoxFormat(pFrameFormat, RES_DRAWFRMFMT))
-                            pTxFrm->SetFormatAttr(aVOrient);
                         pSh->EndAction();
                     }
 
