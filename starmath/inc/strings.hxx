@@ -25,6 +25,7 @@
 #define RID_XSYMDIVIDEY     "<?> / <?> "
 #define RID_XDIVY           "<?> div <?> "
 #define RID_XOVERY          "{<?>} over {<?>} "
+#define RID_FRACXY          "frac {<?>} {<?>} "
 #define RID_XODIVIDEY       "<?> odivide <?> "
 #define RID_XODOTY          "<?> odot <?> "
 #define RID_XOMINUSY        "<?> ominus <?> "

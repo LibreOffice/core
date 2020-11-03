@@ -56,7 +56,7 @@ enum SmTokenType
     TEND,           TSPECIAL,       TNONE,          TESCAPE,        TUNKNOWN,
     TBLANK,         TSBLANK,        TPLACE,         TNOSPACE,       TDOTSDOWN,
     TNEWLINE,       TDOTSAXIS,      TDOTSLOW,       TDOTSVERT,      TBACKEPSILON,
-    TDOTSDIAG,      TDOTSUP,
+    TDOTSDIAG,      TDOTSUP,        TFRAC,
     // Basic
     TPLUS,          TMINUS,         TMULTIPLY,      TDIVIDEBY,      // +-*/
     TGT,            TLT,            TGE,            TLE,            // > < >= <=
