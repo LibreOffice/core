@@ -123,6 +123,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "drarrow" , TDRARROW, MS_DRARROW, TG::Standalone, 5},
     { "emptyset" , TEMPTYSET, MS_EMPTYSET, TG::Standalone, 5},
     { "equiv", TEQUIV, MS_EQUIV, TG::Relation, 0},
+    { "evaluate", TEVALUATE, '\0', TG::NONE, 0},
     { "exists", TEXISTS, MS_EXISTS, TG::Standalone, 5},
     { "exp", TEXP, '\0', TG::Function, 5},
     { "fact", TFACT, MS_FACT, TG::UnOper, 5},
@@ -1613,6 +1614,8 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
 
         case TLEFT :
             return DoBrace();
+                   case TEVALUATE:
+            return DoEvaluate();
 
         case TBLANK :
         case TSBLANK :
@@ -2374,6 +2377,171 @@ std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
     pBody->SetSubNodes(buildNodeArray(aNodes));
     pBody->SetScaleMode(bIsLeftRight ? SmScaleMode::Height : SmScaleMode::None);
     return pBody;
+}
+
+std::unique_ptr<SmStructureNode> SmParser::DoEvaluate()
+{
+
+/**
+std::unique_ptr<SmOperNode> SmParser::DoOperator()
+{
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
+    assert(TokenInGroup(TG::Oper));
+
+    auto xSNode = std::make_unique<SmOperNode>(m_aCurToken);
+
+    // get operator
+    auto xOperator = DoOper();
+
+    if (m_aCurToken.nGroup == TG::Limit || m_aCurToken.nGroup == TG::Power)
+        xOperator = DoSubSup(m_aCurToken.nGroup, xOperator.release());
+
+    // get argument
+    auto xArg = DoPower();
+
+    xSNode->SetSubNodes(std::move(xOperator), std::move(xArg));
+    return xSNode;
+}*/
+
+    /***/
+       // Checkout depth
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep()) throw std::range_error("parser depth limit");
+       // Creating node
+    std::unique_ptr<SmStructureNode> xSNode(new SmBraceNode(m_aCurToken));
+    xSNode->SetScaleMode(SmScaleMode::Height); // scalable line
+       // Parse from to
+    NextToken();
+    SmToken aToken( TRLINE, MS_VERTLINE, "rline", TG::RBrace, 5);
+    std::unique_ptr<SmNode> pRight;
+    pRight.reset(new SmMathSymbolNode(aToken));    if (m_aCurToken.nGroup == TG::Limit || m_aCurToken.nGroup == TG::Power)
+        pRight = DoSubSup(m_aCurToken.nGroup, pRight.release());
+    // Move to correct index
+
+    /*
+    switch (eType)
+        {
+            case TRSUB :    nIndex = static_cast<int>(RSUB);    break;
+            case TRSUP :    nIndex = static_cast<int>(RSUP);    break;
+            case TFROM :
+            case TCSUB :    nIndex = static_cast<int>(CSUB);    break;
+            case TTO :
+            case TCSUP :    nIndex = static_cast<int>(CSUP);    break;
+            case TLSUB :    nIndex = static_cast<int>(LSUB);    break;
+            case TLSUP :    nIndex = static_cast<int>(LSUP);    break;
+            default :
+                SAL_WARN( "starmath", "unknown case");
+        }
+        nIndex++;
+        assert(1 <= nIndex  &&  nIndex <= SUBSUP_NUM_ENTRIES);
+
+        std::unique_ptr<SmNode> xENode;
+        if (aSubNodes[nIndex]) // if already occupied at earlier iteration
+        {
+            // forget the earlier one, remember an error instead
+            aSubNodes[nIndex].reset();
+            xENode = DoError(SmParseError::DoubleSubsupscript); // this also skips current token.
+        }
+        else
+        {
+            // skip sub-/supscript token
+            NextToken();
+        }*/
+               // Parse body && left none
+    auto pBody = DoPower();
+    SmToken bToken( TNONE, '\0', "", TG::LBrace, 5);
+    auto pLeft = std::make_unique<SmMathSymbolNode>(bToken);
+       // Mount nodes
+    xSNode->SetSubNodes(std::move(pLeft), std::move(pBody), std::move(pRight));
+    return xSNode;
+
+    /***/
+
+    /*
+    assert(m_aCurToken.eType == TLEFT  ||  TokenInGroup(TG::LBrace));
+
+    std::unique_ptr<SmStructureNode> xSNode(new SmBraceNode(m_aCurToken));
+    std::unique_ptr<SmNode> pBody, pLeft, pRight;
+    SmScaleMode   eScaleMode = SmScaleMode::None;
+    SmParseError  eError     = SmParseError::None;
+
+
+    if (m_aCurToken.eType == TLEFT)
+    {   NextToken();
+
+        eScaleMode = SmScaleMode::Height;
+
+        // check for left bracket
+        if (TokenInGroup(TG::LBrace) || TokenInGroup(TG::RBrace))
+        {
+            pLeft.reset(new SmMathSymbolNode(m_aCurToken));
+
+            NextToken();
+            pBody = DoBracebody(true);
+
+            if (m_aCurToken.eType == TRIGHT)
+            {   NextToken();
+
+                // check for right bracket
+                if (TokenInGroup(TG::LBrace) || TokenInGroup(TG::RBrace))
+                {
+                    pRight.reset(new SmMathSymbolNode(m_aCurToken));
+                    NextToken();
+                }
+                else
+                    eError = SmParseError::RbraceExpected;
+            }
+            else
+                eError = SmParseError::RightExpected;
+        }
+        else
+            eError = SmParseError::LbraceExpected;
+    }
+    else
+    {
+        assert(TokenInGroup(TG::LBrace));
+
+        pLeft.reset(new SmMathSymbolNode(m_aCurToken));
+
+        NextToken();
+        pBody = DoBracebody(false);
+
+        SmTokenType  eExpectedType = TUNKNOWN;
+        switch (pLeft->GetToken().eType)
+        {   case TLPARENT :     eExpectedType = TRPARENT;   break;
+            case TLBRACKET :    eExpectedType = TRBRACKET;  break;
+            case TLBRACE :      eExpectedType = TRBRACE;    break;
+            case TLDBRACKET :   eExpectedType = TRDBRACKET; break;
+            case TLLINE :       eExpectedType = TRLINE;     break;
+            case TLDLINE :      eExpectedType = TRDLINE;    break;
+            case TLANGLE :      eExpectedType = TRANGLE;    break;
+            case TLFLOOR :      eExpectedType = TRFLOOR;    break;
+            case TLCEIL :       eExpectedType = TRCEIL;     break;
+            default :
+                SAL_WARN("starmath", "unknown case");
+            }
+
+        if (m_aCurToken.eType == eExpectedType)
+        {
+            pRight.reset(new SmMathSymbolNode(m_aCurToken));
+            NextToken();
+        }
+        else
+            eError = SmParseError::ParentMismatch;
+    }
+
+    if (eError == SmParseError::None)
+    {
+        assert(pLeft);
+        assert(pRight);
+        xSNode->SetSubNodes(std::move(pLeft), std::move(pBody), std::move(pRight));
+        xSNode->SetScaleMode(eScaleMode);
+        return xSNode;
+    }
+    return DoError(eError);*/
 }
 
 std::unique_ptr<SmTextNode> SmParser::DoFunction()
