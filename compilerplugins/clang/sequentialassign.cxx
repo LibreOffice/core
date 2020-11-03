@@ -118,6 +118,7 @@ public:
             || fn == SRCDIR "/starmath/source/cfgitem.cxx"
             || fn == SRCDIR "/ucb/source/ucp/ftp/ftpurl.cxx"
             || fn == SRCDIR "/starmath/source/node.cxx"
+            || fn == SRCDIR "/starmath/source/starmathdatabase.cxx"
             || fn == SRCDIR "/ucb/source/ucp/cmis/certvalidation_handler.cxx"
             || fn == SRCDIR "/reportdesign/source/ui/inspection/GeometryHandler.cxx"
             || fn == SRCDIR "/reportdesign/source/core/api/ReportDefinition.cxx"
