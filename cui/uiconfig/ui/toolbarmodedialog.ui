@@ -11,7 +11,6 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="ToolbarmodeDialog|Name">Select Your Preferred User Interface</property>
-    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
@@ -98,6 +97,7 @@
                   <object class="GtkAlignment">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkBox">
@@ -299,19 +299,21 @@
                   <object class="GtkAlignment">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="spacing">12</property>
                         <property name="baseline_position">top</property>
                         <child>
                           <object class="GtkImage" id="imImage">
-                            <property name="height_request">100</property>
+                            <property name="width_request">436</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="valign">center</property>
+                            <property name="valign">start</property>
                             <property name="vexpand">True</property>
                             <property name="stock">gtk-missing-image</property>
                           </object>
@@ -326,7 +328,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">start</property>
-                            <property name="margin_top">12</property>
+                            <property name="vexpand">True</property>
                             <property name="label">Information:</property>
                             <property name="wrap">True</property>
                             <property name="wrap_mode">word-char</property>
@@ -334,7 +336,7 @@
                             <property name="xalign">0</property>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
+                            <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
