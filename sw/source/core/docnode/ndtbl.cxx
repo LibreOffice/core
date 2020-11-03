@@ -2375,7 +2375,7 @@ void SwTableNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 
     while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
     {
-        if (pFrame->getRootFrame()->IsHideRedlines()
+        if (pFrame->getRootFrame()->HasMergedParas()
             && !pNode->IsCreateFrameWhenHidingRedlines())
         {
             continue;
@@ -2407,7 +2407,7 @@ void SwTableNode::MakeOwnFrames(SwNodeIndex* pIdxBehind)
     SwNode2Layout aNode2Layout( *pNd, GetIndex() );
     while( nullptr != (pUpper = aNode2Layout.UpperFrame( pFrame, *this )) )
     {
-        if (pUpper->getRootFrame()->IsHideRedlines()
+        if (pUpper->getRootFrame()->HasMergedParas()
             && !IsCreateFrameWhenHidingRedlines())
         {
             continue;

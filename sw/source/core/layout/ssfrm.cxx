@@ -414,7 +414,7 @@ SwContentFrame::SwContentFrame( SwContentNode * const pContent, SwFrame* pSib ) 
     SwFrame( pContent, pSib ),
     SwFlowFrame( static_cast<SwFrame&>(*this) )
 {
-    assert(!getRootFrame()->IsHideRedlines() || pContent->IsCreateFrameWhenHidingRedlines());
+    assert(!getRootFrame()->HasMergedParas() || pContent->IsCreateFrameWhenHidingRedlines());
 }
 
 void SwContentFrame::DestroyImpl()

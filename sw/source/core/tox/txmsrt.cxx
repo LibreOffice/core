@@ -599,7 +599,7 @@ void SwTOXPara::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16,
             // sw_redlinehide: this probably won't HideDeletions
             pSrc->CopyExpandText( rNd, &rInsPos, 0, -1,
                     pLayout, false, false, true );
-            if (pLayout && pLayout->IsHideRedlines())
+            if (pLayout && pLayout->HasMergedParas())
             {
                 if (SwTextFrame const*const pFrame = static_cast<SwTextFrame*>(pSrc->getLayoutFrame(pLayout)))
                 {

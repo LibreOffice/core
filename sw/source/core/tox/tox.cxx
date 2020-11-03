@@ -176,8 +176,8 @@ void SwTOXMark::Notify(const SfxHint& rHint)
         // Check for being hidden
         if(rNode.IsHiddenByParaField() || SwScriptInfo::IsInHiddenRange(rNode, rTextMark.GetStart()))
             return;
-        // Xhwxk for being hidden by hidden redlines
-        if(pLayout && pLayout->IsHideRedlines() && sw::IsMarkHintHidden(*pLayout, rNode, rTextMark))
+        // Check for being hidden by hidden redlines
+        if (pLayout && pLayout->HasMergedParas() && sw::IsMarkHintHidden(*pLayout, rNode, rTextMark))
             return;
         pCollectLayoutHint->m_rMarks.push_back(rTextMark);
     }

@@ -1072,7 +1072,7 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
         while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
         {
             OSL_ENSURE( pFrame->IsSctFrame(), "Depend of Section not a Section." );
-            if (pFrame->getRootFrame()->IsHideRedlines()
+            if (pFrame->getRootFrame()->HasMergedParas()
                 && !rIdx.GetNode().IsCreateFrameWhenHidingRedlines())
             {
                 continue;

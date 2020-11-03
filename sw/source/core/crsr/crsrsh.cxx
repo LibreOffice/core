@@ -1082,7 +1082,7 @@ bool SwCursorShell::IsSelOnePara() const
     {
         return true;
     }
-    if (GetLayout()->IsHideRedlines())
+    if (GetLayout()->HasMergedParas())
     {
         SwContentFrame const*const pFrame(GetCurrFrame(false));
         auto const n(m_pCurrentCursor->GetMark()->nNode.GetIndex());
@@ -1093,7 +1093,7 @@ bool SwCursorShell::IsSelOnePara() const
 
 bool SwCursorShell::IsSttPara() const
 {
-    if (GetLayout()->IsHideRedlines())
+    if (GetLayout()->HasMergedParas())
     {
         SwTextNode const*const pNode(m_pCurrentCursor->GetPoint()->nNode.GetNode().GetTextNode());
         if (pNode)
@@ -1112,7 +1112,7 @@ bool SwCursorShell::IsSttPara() const
 
 bool SwCursorShell::IsEndPara() const
 {
-    if (GetLayout()->IsHideRedlines())
+    if (GetLayout()->HasMergedParas())
     {
         SwTextNode const*const pNode(m_pCurrentCursor->GetPoint()->nNode.GetNode().GetTextNode());
         if (pNode)
@@ -2530,7 +2530,7 @@ void SwCursorShell::CallChgLnk()
 OUString SwCursorShell::GetSelText() const
 {
     OUString aText;
-    if (GetLayout()->IsHideRedlines())
+    if (GetLayout()->HasMergedParas())
     {
         SwContentFrame const*const pFrame(GetCurrFrame(false));
         if (FrameContainsNode(*pFrame, m_pCurrentCursor->GetMark()->nNode.GetIndex()))
