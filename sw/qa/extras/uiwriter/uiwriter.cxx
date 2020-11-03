@@ -388,6 +388,7 @@ public:
     void testInconsistentBookmark();
     void testInsertLongDateFormat();
     void testSpellOnlineParameter();
+    void testRedlineAutoCorrect();
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
 #endif
@@ -612,6 +613,7 @@ public:
     CPPUNIT_TEST(testTdf133589);
     CPPUNIT_TEST(testInsertLongDateFormat);
     CPPUNIT_TEST(testSpellOnlineParameter);
+    CPPUNIT_TEST(testRedlineAutoCorrect);
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7442,6 +7444,69 @@ void SwUiWriterTest::testSpellOnlineParameter()
     params = comphelper::InitPropertySequence({ { "Enable", uno::makeAny(!bSet) } });
     dispatchCommand(mxComponent, ".uno:SpellOnline", params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
+}
+
+void SwUiWriterTest::testRedlineAutoCorrect()
+{
+    SwDoc* pDoc = createDoc("redline-autocorrect.fodt");
+
+    dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // show tracked deletion
+    RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    CPPUNIT_ASSERT(nMode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
+    pWrtShell->SetRedlineFlags(nMode);
+    CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
+
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->AutoCorrect(corr, ' ');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    // tdf#83419 This was "Ts " removing the deletion of "t" silently by sentence capitalization
+    OUString sReplaced("ts ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced,
+                    static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // hide delete redlines
+    pWrtShell->SetRedlineFlags(nMode & ~RedlineFlags::ShowDelete);
+
+    // repeat it with not visible redlining
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    pWrtShell->AutoCorrect(corr, ' ');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    sReplaced = "S ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // show delete redlines
+    pWrtShell->SetRedlineFlags(nMode);
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    // This still keep the tracked deletion, capitalize only the visible text "s"
+    sReplaced = "tS ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // repeat it with visible redlining and word auto replacement of "tset"
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    pWrtShell->Insert("et");
+    pWrtShell->AutoCorrect(corr, ' ');
+    // This was "Ttest" removing the tracked deletion silently.
+    sReplaced = "ttest ";
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // tracked deletions after the correction point doesn't affect autocorrect
+    dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
+    pWrtShell->Insert("a");
+    pWrtShell->AutoCorrect(corr, ' ');
+    sReplaced = "A ttest ";
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
 void SwUiWriterTest::testTdf108423()
