@@ -11,6 +11,8 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -29,6 +31,9 @@
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <drawdoc.hxx>
+#include <dcontact.hxx>
+#include <svx/svdpage.hxx>
 
 namespace
 {
@@ -1903,6 +1908,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
     ReadGraphic(aStream, aGraphic);
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(Color(0, 102, 204), aBitmap.GetPixelColor(0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137964)
+{
+    load(DATA_DIRECTORY, "tdf137964.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3579), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4090), xShape->getPosition().Y);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(1);
+    SwContact* pTextBox = static_cast<SwContact*>(pObject->GetUserCall());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_FLYFRMFMT), pTextBox->GetFormat()->Which());
+
+    pWrtShell->SelectObj(Point(), 0, pObject);
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_UP);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_LEFT);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, the shape would have stayed where it was
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2579), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3090), xShape->getPosition().Y);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
