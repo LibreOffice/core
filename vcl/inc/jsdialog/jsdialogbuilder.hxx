@@ -64,6 +64,7 @@ class JSInstanceBuilder : public SalInstanceBuilder
     /// used in case of tab pages where dialog is not a direct top level
     VclPtr<vcl::Window> m_aParentDialog;
     VclPtr<vcl::Window> m_aContentWindow;
+    std::list<std::string> m_aRememberedWidgets;
     std::string m_sTypeOfJSON;
     bool m_bHasTopLevelDialog;
     bool m_bIsNotebookbar;
