@@ -463,7 +463,8 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
         }
         // TODO this is true initially but after delete ops it may be false... need to delete m_pMerged somewhere?
         // assert(SwRedlineTable::npos != nRedlPos);
-        assert(SwRedlineTable::npos != nRedlPos || m_pMergedPara->extents.size() <= 1);
+        // false now with fieldmarks
+        // assert(SwRedlineTable::npos != nRedlPos || m_pMergedPara->extents.size() <= 1);
     }
     if (!(pExtInp || m_pMergedPara || SwRedlineTable::npos != nRedlPos))
         return;
@@ -476,7 +477,7 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
     }
 
     m_pRedline.reset(new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
-                    m_pMergedPara
+                    (pRootFrame && pRootFrame->IsHideRedlines())
                         ? SwRedlineItr::Mode::Hide
                         : bShow
                             ? SwRedlineItr::Mode::Show
@@ -539,7 +540,6 @@ short SwRedlineItr::Seek(SwFont& rFnt,
     if( ExtOn() )
         return 0; // Abbreviation: if we're within an ExtendTextInputs
                   // there can't be other changes of attributes (not even by redlining)
-    assert(m_eMode == Mode::Hide || m_nNdIdx == nNode);
     if (m_eMode == Mode::Show)
     {
         if (m_bOn)
@@ -570,7 +570,7 @@ short SwRedlineItr::Seek(SwFont& rFnt,
 
         for ( ; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() ; ++m_nAct)
         {
-            m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd(m_nNdIdx, m_nStart, m_nEnd);
+            m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd(nNode, m_nStart, m_nEnd);
 
             if (nNew < m_nEnd)
             {
@@ -811,7 +811,6 @@ bool SwRedlineItr::CheckLine(
     // case, but surely that was a bug?
     if (m_nFirst == SwRedlineTable::npos || m_eMode != Mode::Show)
         return false;
-    assert(nStartNode == nEndNode); (void) nStartNode; (void) nEndNode;
     if( nChkEnd == nChkStart ) // empty lines look one char further
         ++nChkEnd;
     sal_Int32 nOldStart = m_nStart;
@@ -819,23 +818,42 @@ bool SwRedlineItr::CheckLine(
     SwRedlineTable::size_type const nOldAct = m_nAct;
     bool bRet = bRedlineEnd = false;
 
+    SwPosition const start(*m_rDoc.GetNodes()[nStartNode]->GetContentNode(), nChkStart);
+    SwPosition const end(*m_rDoc.GetNodes()[nEndNode]->GetContentNode(), nChkEnd);
     for (m_nAct = m_nFirst; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++m_nAct)
     {
         SwRangeRedline const*const pRedline(
             m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ] );
-        pRedline->CalcStartEnd( m_nNdIdx, m_nStart, m_nEnd );
-        if (nChkEnd < m_nStart)
-            break;
-        if (nChkStart <= m_nEnd && (nChkEnd > m_nStart || COMPLETE_STRING == m_nEnd))
+        bool isBreak(false);
+        switch (ComparePosition(*pRedline->Start(), *pRedline->End(), start, end))
         {
-            bRet = true;
-            if ( rRedlineText.isEmpty() && pRedline->GetType() == RedlineType::Delete )
-                rRedlineText = const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true);
-            if ( COMPLETE_STRING == m_nEnd )
-            {
+            case SwComparePosition::Behind:
+                isBreak = true;
+                break;
+            case SwComparePosition::OverlapBehind:
+            case SwComparePosition::Outside:
+            case SwComparePosition::Equal:
                 bRedlineEnd = true;
+                isBreak = true;
+                [[fallthrough]];
+            case SwComparePosition::Inside:
+            case SwComparePosition::OverlapBefore:
+            {
+                bRet = true;
+                if (rRedlineText.isEmpty() && pRedline->GetType() == RedlineType::Delete)
+                {
+                    rRedlineText = const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true);
+                }
                 break;
             }
+            case SwComparePosition::Before:
+            case SwComparePosition::CollideStart:
+            case SwComparePosition::CollideEnd:
+                break; // -Werror=switch
+        }
+        if (isBreak)
+        {
+            break;
         }
     }
 
