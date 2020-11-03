@@ -79,7 +79,8 @@ dialogs = [
         # tested in sc/qa/uitest/calc_tests9/tdf130371.py
     # {"command": ".uno:SheetInsertName", "closeButton": "close"},
         # dialog does not open
-    {"command": ".uno:CreateNames", "closeButton": "cancel", "skipTestOK": True},
+    #{"command": ".uno:CreateNames", "closeButton": "cancel", "skipTestOK": True},
+        # tested in sc/qa/uitest/range_name/tdf137617.py
         # OK button triggers a new dialog
     #{"command": ".uno:DefineLabelRange", "closeButton": "cancel"},
         # tested in sc/qa/uitest/calc_tests4/tdf131170.py
