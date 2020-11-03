@@ -127,7 +127,7 @@ public:
 
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID) override;
 
-    virtual std::unique_ptr<UIObject> get_visible_child(const OUString& rID);
+    std::unique_ptr<UIObject> get_visible_child(const OUString& rID);
 
     virtual std::set<OUString> get_children() const override;
 

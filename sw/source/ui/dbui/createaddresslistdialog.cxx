@@ -62,7 +62,7 @@ struct SwAddressFragment
         m_xEntry->set_grid_top_attach(nLine);
     }
 
-    virtual ~SwAddressFragment()
+    ~SwAddressFragment()
     {
         m_pGrid->move(m_xEntry.get(), nullptr);
         m_pGrid->move(m_xLabel.get(), nullptr);

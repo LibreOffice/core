@@ -111,7 +111,7 @@ public:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
-    virtual void        ActivatePage();
+    void                ActivatePage();
     bool                DeactivatePage();
 
     virtual Size GetOptimalSize() const override;

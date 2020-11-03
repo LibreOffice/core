@@ -80,7 +80,7 @@ public:
     // Fill view with template folders thumbnails
     void Populate ();
 
-    virtual void reload ();
+    void reload ();
 
     virtual void showAllTemplates ();
 
