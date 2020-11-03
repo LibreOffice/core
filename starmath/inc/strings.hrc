@@ -35,6 +35,7 @@
 #define RID_XSYMDIVIDEY_HELP                NC_("RID_XSYMDIVIDEY_HELP", "Division (Slash)" )
 #define RID_XDIVY_HELP                      NC_("RID_XDIVY_HELP", "Division (÷)" )
 #define RID_XOVERY_HELP                     NC_("RID_XOVERY_HELP", "Division (Fraction)" )
+#define RID_FRACXY_HELP                     NC_("RID_FRACXY_HELP", "Fraction" )
 #define RID_XODIVIDEY_HELP                  NC_("RID_XODIVIDEY_HELP", "Circled Slash" )
 #define RID_XODOTY_HELP                     NC_("RID_XODOTY_HELP", "Circled Dot" )
 #define RID_XOMINUSY_HELP                   NC_("RID_XOMINUSY_HELP", "Circled Minus" )

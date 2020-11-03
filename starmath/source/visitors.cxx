@@ -2280,13 +2280,23 @@ void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmBinVerNode* pNode )
 {
-    SmNode *pNum    = pNode->GetSubNode( 0 ),
-           *pDenom  = pNode->GetSubNode( 2 );
-    Append( "{ " );
-    LineToText( pNum );
-    Append( "over" );
-    LineToText( pDenom );
-    Append( "} " );
+    if( pNode->GetToken().eType == TOVER ){
+        SmNode *pNum    = pNode->GetSubNode( 0 ),
+               *pDenom  = pNode->GetSubNode( 2 );
+        Append( "{ " );
+        LineToText( pNum );
+        Append( "over" );
+        LineToText( pDenom );
+        Append( "} " );
+    } else{
+        SmNode *pNum    = pNode->GetSubNode( 0 ),
+               *pDenom  = pNode->GetSubNode( 2 );
+        Append( "frac {" );
+        LineToText( pNum );
+        Append( "} {" );
+        LineToText( pDenom );
+        Append( "}" );
+    }
 }
 
 void SmNodeToTextVisitor::Visit( SmBinDiagonalNode* pNode )
