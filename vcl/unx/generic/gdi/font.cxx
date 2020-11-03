@@ -49,7 +49,6 @@ void
 X11SalGraphics::SetTextColor( Color nColor )
 {
     mxTextRenderImpl->SetTextColor(nColor);
-    nTextPixel_     = GetPixel( nColor );
 }
 
 bool X11SalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,

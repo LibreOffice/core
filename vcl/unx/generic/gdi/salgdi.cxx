@@ -76,7 +76,6 @@ X11SalGraphics::X11SalGraphics():
     mnPenColor(SALCOLOR_NONE),
     mnFillColor(SALCOLOR_NONE),
 #endif // ENABLE_CAIRO_CANVAS
-    nTextPixel_(0),
     hBrush_(None),
     bWindow_(false),
     bVirDev_(false),

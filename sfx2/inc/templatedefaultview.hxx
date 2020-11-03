@@ -24,9 +24,6 @@ public:
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     void createContextMenu();
-
-private:
-    tools::Long    mnItemMaxSize;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

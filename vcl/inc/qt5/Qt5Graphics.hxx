@@ -50,12 +50,8 @@ class Qt5Graphics final : public SalGraphics, public Qt5GraphicsBase
     Color m_aFillColor;
     QPainter::CompositionMode m_eCompositionMode;
 
-    PhysicalFontCollection* m_pFontCollection;
     rtl::Reference<Qt5Font> m_pTextStyle[MAX_FALLBACK];
     Color m_aTextColor;
-    std::unique_ptr<QPushButton> m_focusedButton;
-    std::unique_ptr<QImage> m_image;
-    QRect m_lastPopupRect;
 
     Qt5Graphics(Qt5Frame* pFrame, QImage* pQImage);
 

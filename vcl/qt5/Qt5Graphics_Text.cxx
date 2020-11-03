@@ -86,7 +86,6 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
 {
     static const bool bUseFontconfig = (nullptr == getenv("SAL_VCL_QT5_NO_FONTCONFIG"));
 
-    m_pFontCollection = pPFC;
     if (pPFC->Count())
         return;
 

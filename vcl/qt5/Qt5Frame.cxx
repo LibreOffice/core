@@ -412,7 +412,7 @@ void Qt5Frame::SetIcon(sal_uInt16 nIcon)
     m_pQWidget->window()->setWindowIcon(aIcon);
 }
 
-void Qt5Frame::SetMenu(SalMenu* pMenu) { m_pSalMenu = static_cast<Qt5Menu*>(pMenu); }
+void Qt5Frame::SetMenu(SalMenu*) {}
 
 void Qt5Frame::DrawMenuBar() { /* not needed */}
 

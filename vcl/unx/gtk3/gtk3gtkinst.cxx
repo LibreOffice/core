@@ -7637,7 +7637,6 @@ class GtkInstanceMenuToggleButton : public GtkInstanceToggleButton, public MenuH
 private:
     GtkContainer* m_pContainer;
     GtkButton* m_pToggleMenuButton;
-    GtkBox* m_pBox;
     gulong m_nMenuBtnClickedId;
     gulong m_nToggleStateFlagsChangedId;
     gulong m_nMenuBtnStateFlagsChangedId;
@@ -7748,7 +7747,7 @@ public:
         , m_nToggleStateFlagsChangedId(g_signal_connect(m_pToggleButton, "state-flags-changed", G_CALLBACK(signalToggleStateFlagsChanged), this))
         , m_nMenuBtnStateFlagsChangedId(g_signal_connect(m_pToggleMenuButton, "state-flags-changed", G_CALLBACK(signalMenuBtnStateFlagsChanged), this))
     {
-        m_pBox = GtkInstanceMenuButton::formatMenuButton(gtk_bin_get_child(GTK_BIN(pMenuButton)));
+        GtkInstanceMenuButton::formatMenuButton(gtk_bin_get_child(GTK_BIN(pMenuButton)));
 
         insertAsParent(GTK_WIDGET(pMenuButton), GTK_WIDGET(m_pContainer));
         gtk_widget_hide(GTK_WIDGET(pMenuButton));
