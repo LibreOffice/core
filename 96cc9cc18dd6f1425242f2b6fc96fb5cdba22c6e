@@ -16,6 +16,24 @@
       "revId": "96cc9cc18dd6f1425242f2b6fc96fb5cdba22c6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63460b81_a12dfe85",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-11-03T15:34:43Z",
+      "side": 1,
+      "message": "The comment about page 4 is just to indicate that page number 6 is NOT important in this test. So anyone who breaks this test shouldn\u0027t worry if it has just moved to a different page number. (I put it in brackets now to make it look more like a side comment.)\n\nThe test/fix itself does nothing about the page number.  The key is that the page starts with \"Lorem ipsum\" -i.e. that the page break is not lost. Prior to this, there was no page break, and so it was in the middle of a page.",
+      "parentUuid": "801a40c3_04eadfc3",
+      "revId": "96cc9cc18dd6f1425242f2b6fc96fb5cdba22c6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
