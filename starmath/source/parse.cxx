@@ -123,6 +123,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "drarrow" , TDRARROW, MS_DRARROW, TG::Standalone, 5},
     { "emptyset" , TEMPTYSET, MS_EMPTYSET, TG::Standalone, 5},
     { "equiv", TEQUIV, MS_EQUIV, TG::Relation, 0},
+    { "evaluate", TEVALUATE, '\0', TG::NONE, 0},
     { "exists", TEXISTS, MS_EXISTS, TG::Standalone, 5},
     { "exp", TEXP, '\0', TG::Function, 5},
     { "fact", TFACT, MS_FACT, TG::UnOper, 5},
@@ -1513,6 +1514,78 @@ std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
     return pNode;
 }
 
+std::unique_ptr<SmNode> SmParser::DoSubSupEvaluate(TG nActiveGroup, SmNode *pGivenNode)
+{
+    std::unique_ptr<SmNode> xGivenNode(pGivenNode);
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
+    assert(nActiveGroup == TG::Power || nActiveGroup == TG::Limit);
+    assert(m_aCurToken.nGroup == nActiveGroup);
+
+    std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(m_aCurToken));
+    //! Of course 'm_aCurToken' is just the first sub-/supscript token.
+    //! It should be of no further interest. The positions of the
+    //! sub-/supscripts will be identified by the corresponding subnodes
+    //! index in the 'aSubNodes' array (enum value from 'SmSubSup').
+
+    pNode->SetUseLimits(nActiveGroup == TG::Limit);
+
+    // initialize subnodes array
+    std::vector<std::unique_ptr<SmNode>> aSubNodes(1 + SUBSUP_NUM_ENTRIES);
+    aSubNodes[0] = std::move(xGivenNode);
+    aSubNodes[0]->SetScaleMode(SmScaleMode::Height);
+
+    // process all sub-/supscripts
+    int  nIndex = 0;
+    while (TokenInGroup(nActiveGroup))
+    {
+        SmTokenType  eType (m_aCurToken.eType);
+
+        switch (eType)
+        {
+            case TFROM :    nIndex = static_cast<int>(RSUB);    break;
+            case TTO :      nIndex = static_cast<int>(RSUP);    break;
+            default :
+                SAL_WARN( "starmath", "unknown case");
+        }
+        nIndex++;
+        assert(1 <= nIndex  &&  nIndex <= SUBSUP_NUM_ENTRIES);
+
+        std::unique_ptr<SmNode> xENode;
+        if (aSubNodes[nIndex]) // if already occupied at earlier iteration
+        {
+            // forget the earlier one, remember an error instead
+            aSubNodes[nIndex].reset();
+            xENode = DoError(SmParseError::DoubleSubsupscript); // this also skips current token.
+        }
+        else
+        {
+            // skip sub-/supscript token
+            NextToken();
+        }
+
+        // get sub-/supscript node
+        // (even when we saw a double-sub/supscript error in the above
+        // in order to minimize mess and continue parsing.)
+        std::unique_ptr<SmNode> xSNode;
+        if (eType == TFROM  ||  eType == TTO)
+        {
+            // parse limits in old 4.0 and 5.0 style
+            xSNode = DoRelation();
+        }
+        else
+            xSNode = DoTerm(true);
+
+        aSubNodes[nIndex] = std::move(xENode ? xENode : xSNode);
+    }
+
+    pNode->SetSubNodes(buildNodeArray(aSubNodes));
+    pNode->SetScaleMode(SmScaleMode::Height);
+    return pNode;
+}
+
 std::unique_ptr<SmNode> SmParser::DoOpSubSup()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
@@ -1613,6 +1686,8 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
 
         case TLEFT :
             return DoBrace();
+                   case TEVALUATE:
+            return DoEvaluate();
 
         case TBLANK :
         case TSBLANK :
@@ -2374,6 +2449,35 @@ std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
     pBody->SetSubNodes(buildNodeArray(aNodes));
     pBody->SetScaleMode(bIsLeftRight ? SmScaleMode::Height : SmScaleMode::None);
     return pBody;
+}
+
+std::unique_ptr<SmStructureNode> SmParser::DoEvaluate()
+{
+
+    // Checkout depth and create node
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep()) throw std::range_error("parser depth limit");
+    std::unique_ptr<SmStructureNode> xSNode(new SmBraceNode(m_aCurToken));
+
+    // Parse from to
+    NextToken();
+    SmToken aToken( TRLINE, MS_VERTLINE, "rline", TG::RBrace, 5);
+    std::unique_ptr<SmNode> pRight;
+    pRight.reset(new SmMathSymbolNode(aToken));
+    if (m_aCurToken.nGroup == TG::Limit || m_aCurToken.nGroup == TG::Power)
+        pRight = DoSubSupEvaluate(m_aCurToken.nGroup, pRight.release());
+
+    // Parse body && left none
+    std::unique_ptr<SmNode> pBody = DoPower();
+    SmToken bToken( TNONE, '\0', "", TG::LBrace, 5);
+    std::unique_ptr<SmNode> pLeft;
+    pLeft.reset(new SmMathSymbolNode(bToken));
+
+    // Mount nodes
+    xSNode->SetSubNodes(std::move(pLeft), std::move(pBody), std::move(pRight));
+    xSNode->SetScaleMode(SmScaleMode::Height); // scalable line
+    return xSNode;
+
 }
 
 std::unique_ptr<SmTextNode> SmParser::DoFunction()
