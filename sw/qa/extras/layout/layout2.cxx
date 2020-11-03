@@ -42,6 +42,12 @@
 #include <rootfrm.hxx>
 #include <docsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <textboxhelper.hxx>
+#include <fmtornt.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <svx/svdpage.hxx>
+#include <drawdoc.hxx>
+#include <dcontact.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -2384,6 +2390,76 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124423)
     nPageWidth = getXPath(pXmlDoc, "//page/infos/prtBounds", "width").toInt32();
     CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly2Width);
     CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly1Width);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137546)
+{
+    // Load sample bugdoc
+    load(DATA_DIRECTORY, "tdf137546.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Get the SdrObject of the shape
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    auto pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    CPPUNIT_ASSERT(pModel);
+    SdrPage* pPage = pModel->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObj);
+
+    // Get the textbox and shape format
+    auto pShape = FindFrameFormat(pObj);
+    auto pFormat = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
+    CPPUNIT_ASSERT(pShape);
+    CPPUNIT_ASSERT(pFormat);
+
+    // Initialize variables to store the positions of the shape and frame
+    const sal_Int16 nShapeHPos = pShape->GetHoriOrient().GetPos();
+    const sal_Int16 nFrameHPos = pFormat->GetHoriOrient().GetPos();
+    const sal_Int16 nShapeVPos = pShape->GetVertOrient().GetPos();
+    const sal_Int16 nFrameVPos = pFormat->GetVertOrient().GetPos();
+
+    // Select the SdrObject
+    pTextDoc->GetDocShell()->GetWrtShell()->SelectObj(Point(), 0, pObj);
+
+    // Align it to left
+    dispatchCommand(mxComponent, ".uno:AlignLeft", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Get the difference of the positions before and after the align
+    const sal_Int16 nShapePosDeltaX = nShapeHPos - pShape->GetHoriOrient().GetPos();
+    const sal_Int16 nFramePosDeltaX = nFrameHPos - pFormat->GetHoriOrient().GetPos();
+
+    // Check if the align succesful
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The shape have to be aligned to left!",
+                                 text::HoriOrientation::LEFT,
+                                 pShape->GetHoriOrient().GetHoriOrient());
+
+    // The differences must be equal unless the test will fail
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bad X Align!", nShapePosDeltaX, nFramePosDeltaX);
+
+    // Now check the vertical alignment as well!
+
+    // Select the SdrObject
+    pTextDoc->GetDocShell()->GetWrtShell()->SelectObj(Point(), 0, pObj);
+
+    // Align it to top
+    dispatchCommand(mxComponent, ".uno:AlignUp", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Check if the align succesful
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The shape have to be aligned to  top!",
+                                 text::VertOrientation::TOP,
+                                 pShape->GetVertOrient().GetVertOrient());
+
+    // Get the difference of the positions before and after the align
+    const sal_Int16 nShapePosDeltaY = nShapeVPos - pShape->GetVertOrient().GetPos();
+    const sal_Int16 nFramePosDeltaY = nFrameVPos - pFormat->GetVertOrient().GetPos();
+
+    // The differences must be equal unless the test will fail
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bad Y Align!", nShapePosDeltaY, nFramePosDeltaY);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf135035)
