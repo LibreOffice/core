@@ -67,7 +67,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 if (sAction == "selected")
                 {
                     int separatorPos = rData["data"].indexOf(';');
-                    if (separatorPos)
+                    if (separatorPos > 0)
                     {
                         OUString entryPos = rData["data"].copy(0, separatorPos);
                         OString posString = OUStringToOString(entryPos, RTL_TEXTENCODING_ASCII_US);
