@@ -1,1 +1,27 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m3 6v15h15l3-3v-15h-15z" fill="#fafafa"/><path d="m6 2-4 4v16h16l4-4v-16zm.4140625 1h13.8789065l-2.646485 2.6464844-.353515.3535156h-13.8789065zm14.5859375.7070312v13.8789068l-3 3v-13.8789068l.353516-.3535156zm-18 3.2929688h14v14h-14z" fill="#3a3a38"/></svg>
+<?xml-stylesheet type="text/css" href="icons.css" ?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path
+	 class="icn icn--shape-color" 
+     d="M 2.5,6.2 6.5,2.5 h 15 v 15 l -3.7,4 H 2.5 Z"
+     fill="#fafafa" 
+	 stroke="#3a3a38" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="miter"
+     />
+  <path
+	 class="icn icn--shape-color" 
+     d="m 2.5,21.5 h 15 v -15 h -15 z"
+     fill="#fafafa" 
+	 stroke="#3a3a38" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="miter"
+     />
+  <path
+	 class="icn icn--shape-color" 
+     d="m 17.5,6.5 4,-4"
+     fill="#fafafa" 
+	 stroke="#3a3a38" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="miter"
+     />
+</svg>
