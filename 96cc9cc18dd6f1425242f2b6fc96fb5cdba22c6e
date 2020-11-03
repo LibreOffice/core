@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "801a40c3_04eadfc3",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-11-03T14:10:33Z",
+      "side": 1,
+      "message": "Care to document what was the old value? I.e. if this was on page 9, now on 6 and the ideal is 4, then this is progress. But this is not obvious from your comment.",
+      "revId": "96cc9cc18dd6f1425242f2b6fc96fb5cdba22c6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
