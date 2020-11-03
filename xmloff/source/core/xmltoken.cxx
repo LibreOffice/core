@@ -1483,6 +1483,8 @@ namespace xmloff::token {
         TOKEN( "power",                           XML_POWER ),
         TOKEN( "precision-as-shown",              XML_PRECISION_AS_SHOWN ),
         TOKEN( "prefix",                          XML_PREFIX ),
+        TOKEN( "infix",                           XML_INFIX ),
+        TOKEN( "postfix",                         XML_POSTFIX ),
         TOKEN( "presentation",                    XML_PRESENTATION ),
         TOKEN( "orgchart",                        XML_PRESENTATION_ORGCHART ),
         TOKEN( "outline",                         XML_PRESENTATION_OUTLINE ),
