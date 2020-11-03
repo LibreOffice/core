@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "64102027_4da988c3",
+        "filename": "cui/uiconfig/ui/toolbarmodedialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2020-11-03T13:56:09Z",
+      "side": 1,
+      "message": "that\u0027s the image width of all .png files. I draw with LibreOffice draw, which mean, you can draw, but it\u0027s not designed for pixel perfect.",
+      "parentUuid": "15343d89_2b907a13",
+      "range": {
+        "startLine": 313,
+        "startChar": 59,
+        "endLine": 313,
+        "endChar": 62
+      },
+      "revId": "ddb5e885d1ddc782e1d903532d57408e5c966d5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "784c6b5b_7fd1dcca",
         "filename": "extras/source/toolbarmode/sidebar.png",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2020-11-03T13:47:03Z",
       "side": 1,
       "message": "Took me quite long to understand the idea of the expandable deck for the sidebar. But if we drop this variant it\u0027s not worth to put much effort into it.",
+      "revId": "ddb5e885d1ddc782e1d903532d57408e5c966d5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b164ba1_b1a40a82",
+        "filename": "extras/source/toolbarmode/sidebar.png",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2020-11-03T13:56:09Z",
+      "side": 1,
+      "message": "True, but if I add Style I need two additional rows. However we will see, can be fixed in the future if needed.",
+      "parentUuid": "784c6b5b_7fd1dcca",
       "revId": "ddb5e885d1ddc782e1d903532d57408e5c966d5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
