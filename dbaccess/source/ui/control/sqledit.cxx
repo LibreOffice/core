@@ -31,12 +31,6 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <sqledit.hxx>
-#include <QueryTextView.hxx>
-#include <querycontainerwindow.hxx>
-#include <helpids.h>
-#include <undosqledit.hxx>
-#include <QueryDesignView.hxx>
-#include <svx/svxids.hrc>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svl/itemset.hxx>

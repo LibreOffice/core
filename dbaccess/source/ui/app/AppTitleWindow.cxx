@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/awt/XWindow.hpp>
 #include <core_resource.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/event.hxx>
 #include "AppTitleWindow.hxx"
 
 namespace dbaui

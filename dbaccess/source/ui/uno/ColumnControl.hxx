@@ -20,7 +20,6 @@
 
 #include <connectivity/CommonTools.hxx>
 #include <toolkit/controls/unocontrol.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace com::sun::star::uno { class XComponentContext; }
 

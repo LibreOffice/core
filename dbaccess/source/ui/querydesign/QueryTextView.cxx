@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 #include <QueryTextView.hxx>
 #include <querycontainerwindow.hxx>
 #include <helpids.h>
+#include <querycontroller.hxx>
 #include <sqledit.hxx>
 #include <undosqledit.hxx>
-#include <QueryDesignView.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

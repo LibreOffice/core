@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include <primitive3d/textureprimitive3d.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 

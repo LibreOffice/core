@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <basegfx/vector/b2dvector.hxx>

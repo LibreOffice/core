@@ -21,7 +21,6 @@
 
 #include <unoadmin.hxx>
 #include <advancedsettingsdlg.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <vcl/svapp.hxx>
 

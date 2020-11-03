@@ -19,9 +19,6 @@
 
 #include <sal/config.h>
 
-#include <iterator>
-#include <utility>
-
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>

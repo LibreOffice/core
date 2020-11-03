@@ -21,10 +21,7 @@
 
 #include <sal/config.h>
 
-#include <comphelper/syntaxhighlight.hxx>
 #include <sal/log.hxx>
-#include <svtools/colorcfg.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 #include <deque>
 

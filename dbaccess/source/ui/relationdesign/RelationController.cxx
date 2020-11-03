@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <iterator>
 #include <map>
 
 #include <strings.hrc>
@@ -30,7 +29,6 @@
 #include <comphelper/types.hxx>
 #include <core_resource.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>

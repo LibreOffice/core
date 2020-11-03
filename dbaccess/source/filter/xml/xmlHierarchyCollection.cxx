@@ -25,6 +25,7 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

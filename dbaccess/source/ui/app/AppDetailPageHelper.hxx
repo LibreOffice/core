@@ -25,7 +25,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <sfx2/weldutils.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/customweld.hxx>

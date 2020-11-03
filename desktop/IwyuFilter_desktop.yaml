@@ -49,6 +49,12 @@ excludelist:
     desktop/source/minidump/minidump.cxx:
     # Needed for ostringstream
     - sstream
+    desktop/source/deployment/gui/dp_gui_updatedialog.cxx:
+    # Actually used
+    - vector
+    desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:
+    # Actually used
+    - vector
     desktop/source/deployment/manager/dp_properties.cxx:
     # Actually used
     - com/sun/star/ucb/XCommandEnvironment.hpp
@@ -85,3 +91,6 @@ excludelist:
     desktop/source/deployment/registry/help/dp_help.cxx:
     # Actually used
     - com/sun/star/util/XMacroExpander.hpp
+    desktop/source/splash/splash.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx

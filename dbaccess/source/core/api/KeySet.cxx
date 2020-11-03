@@ -38,7 +38,6 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include <comphelper/types.hxx>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <algorithm>

@@ -18,17 +18,12 @@
  */
 #pragma once
 
-#include <com/sun/star/frame/XPopupMenuController.hpp>
-
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>
-#include <set>
-
-#include "dbexchange.hxx"
 
 namespace dbaui
 {

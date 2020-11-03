@@ -39,12 +39,7 @@
 #include <vcl/graph.hxx> // for PDFExtOutDevData Graphic support
 #include <toolkit/helper/formpdfexport.hxx> // for PDFExtOutDevData Graphic support
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/glowprimitive2d.hxx>
-#include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>

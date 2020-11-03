@@ -76,6 +76,12 @@ excludelist:
     dbaccess/source/filter/hsqldb/rowinputbinary.cxx:
     # Needed boost wrapper header
     - boost/date_time/posix_time/posix_time.hpp
+    dbaccess/source/filter/xml/xmlDatabase.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    dbaccess/source/filter/xml/xmlExport.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     dbaccess/source/shared/flt_reghelper.cxx:
     # Needed for weird included cxx file
     - comphelper/sequence.hxx
@@ -85,6 +91,9 @@ excludelist:
     dbaccess/source/ui/app/AppDetailPageHelper.cxx:
     # Actually used
     - com/sun/star/sdbc/XConnection.hpp
+    dbaccess/source/ui/app/DocumentInfoPreview.cxx:
+    # Needed for direct member access
+    - com/sun/star/document/XDocumentProperties.hpp
     dbaccess/source/ui/browser/brwview.cxx:
     # Needed for direct member access
     - com/sun/star/awt/XControlContainer.hpp
@@ -101,12 +110,18 @@ excludelist:
     dbaccess/source/ui/control/RelationControl.cxx:
     # Actually used
     - com/sun/star/awt/XWindow.hpp
+    dbaccess/source/ui/control/sqledit.cxx:
+    # Needed for template
+    - com/sun/star/container/XHierarchicalNameAccess.hpp
     dbaccess/source/ui/dlg/ConnectionHelper.cxx:
     # Actually used
     - com/sun/star/awt/XSystemDependentWindowPeer.hpp
     - com/sun/star/lang/SystemDependent.hpp
     dbaccess/source/ui/dlg/DbAdminImpl.cxx:
     # Actually used
+    - com/sun/star/sdbc/XDriver.hpp
+    dbaccess/source/ui/dlg/UserAdmin.cxx:
+    # Needed for template
     - com/sun/star/sdbc/XDriver.hpp
     dbaccess/source/ui/dlg/dbfindex.cxx:
     # Keep for osl_getThreadTextEncoding

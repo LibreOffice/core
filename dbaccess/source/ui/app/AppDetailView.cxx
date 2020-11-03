@@ -30,13 +30,11 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <core_resource.hxx>
-#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include "AppDetailPageHelper.hxx"
 #include <dbaccess/IController.hxx>
 #include <algorithm>
 #include <dbtreelistbox.hxx>
-#include <imageprovider.hxx>
 #include "AppController.hxx"
 
 using namespace ::dbaui;
