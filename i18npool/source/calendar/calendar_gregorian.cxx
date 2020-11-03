@@ -329,7 +329,7 @@ Calendar_gregorian::setLocalDateTime( double fTimeInDays )
             "Calendar_gregorian::setLocalDateTime: " << std::fixed << fM << " rounded to " << fR);
     int32_t nZoneOffset, nDSTOffset;
     UErrorCode status = U_ZERO_ERROR;
-    body->getTimeZone().getOffset( fR, TRUE, nZoneOffset, nDSTOffset, status );
+    body->getTimeZone().getOffset( fR, true, nZoneOffset, nDSTOffset, status );
     if ( !U_SUCCESS(status) ) throw ERROR;
     status = U_ZERO_ERROR;
     body->setTime( fR - (nZoneOffset + nDSTOffset), status );
