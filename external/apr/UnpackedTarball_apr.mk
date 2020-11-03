@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,apr,$(APR_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,apr,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,apr, \
+    external/apr/exit.patch \
     external/apr/uuid.patch \
 ))
 
