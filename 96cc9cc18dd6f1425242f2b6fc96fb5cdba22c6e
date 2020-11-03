@@ -34,6 +34,24 @@
       "revId": "96cc9cc18dd6f1425242f2b6fc96fb5cdba22c6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71edffd4_094bd9f8",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-11-03T16:01:25Z",
+      "side": 1,
+      "message": "\u003e The key is that the page starts with \"Lorem ipsum\" -i.e. that the page break is not lost. Prior to this, there was no page break, and so it was in the middle of a page.\n\nThis is exactly the piece of info I would put in a comment above the assert. :-) Sorry that I was unclear at first try.",
+      "parentUuid": "63460b81_a12dfe85",
+      "revId": "96cc9cc18dd6f1425242f2b6fc96fb5cdba22c6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
