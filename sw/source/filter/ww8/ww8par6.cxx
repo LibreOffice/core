@@ -2716,7 +2716,7 @@ void SwWW8ImplReader::StopApo()
 
     //#i8062#
     if (m_xSFlyPara && m_xSFlyPara->pFlyFormat)
-        m_pFormatOfJustInsertedApo = m_xSFlyPara->pFlyFormat;
+        m_xFormatOfJustInsertedApo.reset(new FrameDeleteWatch(m_xSFlyPara->pFlyFormat));
 
     m_xSFlyPara.reset();
     m_xWFlyPara.reset();
