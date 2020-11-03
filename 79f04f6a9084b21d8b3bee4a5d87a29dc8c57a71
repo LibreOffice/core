@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad6828ae_45d23767",
+        "filename": "vcl/source/gdi/bitmapex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2020-11-03T15:56:58Z",
+      "side": 1,
+      "message": "Without that change, the method do not takes effect. Taken from below `AdjustTransparency` method.",
+      "revId": "79f04f6a9084b21d8b3bee4a5d87a29dc8c57a71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

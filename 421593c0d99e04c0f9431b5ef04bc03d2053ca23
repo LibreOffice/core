@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "800de13f_3f9f5e11",
+        "filename": "vcl/source/graphic/UnoGraphicTransformer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2020-11-03T15:56:58Z",
+      "side": 0,
+      "message": "It seems that `nAlphaTo` is reverted and must be set to `0xFF - nAlphaTo`. But with such solution it doesn\u0027t difference from `else if (aBitmapEx.IsTransparent())` path.\n\nI have reduced duplicate code, by removing it",
+      "revId": "421593c0d99e04c0f9431b5ef04bc03d2053ca23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
