@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b692351_1dce5d7b",
+        "filename": "sw/inc/calbck.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-03T06:05:11Z",
+      "side": 0,
+      "message": "I\u0027m surprised m_bModifyLocked works - writer almost always manages do stuff recursively, so I would expect any locking to need a count, not a boolean",
+      "revId": "bd8edf5d2ac579e51bfbf5fa6061909a67a309c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
