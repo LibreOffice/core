@@ -226,6 +226,36 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
         }
     }
 
+    // tdf#83419 avoid bad autocorrect with visible redlines
+    // e.g. replacing the first letter of the tracked deletion
+    // with its capitalized (and not deleted) version.
+    if ( bDoReplace )
+    {
+        const OUString& rOrigText = pos.first->GetText();
+        // GetRedlineText() doesn't contain dummy characters, so handle them
+        sal_Int32 nLengthCorrection = 0;
+        for (sal_Int32 n = 0; n < rOrigText.getLength(); ++n)
+        {
+            sal_Unicode const Char = rOrigText[n];
+            if ( CH_TXTATR_BREAKWORD == Char || CH_TXTATR_INWORD == Char )
+                ++nLengthCorrection;
+        }
+        sal_Int32 nDelChars = rOrigText.getLength() - nLengthCorrection -
+                              pos.first->GetRedlineText().getLength();
+        // Are there tracked deletions before the correction point?
+        if ( nDelChars > 0 && pos.first->GetRedlineText().compareTo( nLengthCorrection == 0
+                                  ? rOrigText
+                                  : rOrigText.replaceAll(OUString(CH_TXTATR_INWORD), "")
+                                         .replaceAll(OUString(CH_TXTATR_BREAKWORD), ""),
+                              pos.second + nSourceLength + nDelChars ) != 0 &&
+            // and are they visible?
+            pFrame->GetText().compareTo(
+                    rOrigText, pos.second + nSourceLength + nDelChars + nLengthCorrection) == 0 )
+        {
+            bDoReplace = false;
+        }
+    }
+
     if ( bDoReplace )
     {
         SwDoc* pDoc = m_rEditSh.GetDoc();
