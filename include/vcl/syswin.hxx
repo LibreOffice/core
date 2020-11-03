@@ -196,7 +196,7 @@ public:
     void            SetMenuBarMode( MenuBarMode nMode );
     void            CollectMenuBarMnemonics(MnemonicGenerator& rMnemonicGenerator) const;
 
-    void SetNotebookBar(const OUString& rUIXMLDescription,
+    bool SetNotebookBar(const OUString& rUIXMLDescription,
                         const css::uno::Reference<css::frame::XFrame>& rFrame,
                         const NotebookBarAddonsItem& aNotebookBarAddonsItem,
                         bool bReloadNotebookbar = false);

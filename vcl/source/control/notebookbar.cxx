@@ -347,4 +347,9 @@ void NotebookBar::UpdatePersonaSettings()
     PersonaSettings = aAllSettings;
 }
 
+void NotebookBar::toolbar_foreach(const std::function<void(ToolBox&)>& func)
+{
+    m_pUIBuilder->toolbar_foreach(func);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
