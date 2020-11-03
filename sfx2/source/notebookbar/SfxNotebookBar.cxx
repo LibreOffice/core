@@ -13,6 +13,8 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <vcl/notebookbar.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/toolbox.hxx>
+#include <sidebar/ControllerFactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <comphelper/processfactory.hxx>
@@ -21,10 +23,12 @@
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/frame/XToolbarController.hpp>
 #include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/confignode.hxx>
 #include <comphelper/types.hxx>
 #include <framework/addonsoptions.hxx>
@@ -45,6 +49,7 @@ const char MERGE_NOTEBOOKBAR_URL[] = "URL";
 bool SfxNotebookBar::m_bLock = false;
 bool SfxNotebookBar::m_bHide = false;
 std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>> SfxNotebookBar::m_pNotebookBarWeldedWrapper;
+std::vector<std::unique_ptr<SidebarToolBoxController>> SfxNotebookBar::m_aToolbarControllers;
 
 static void NotebookbarAddonValues(
     std::vector<Image>& aImageValues,
@@ -380,8 +385,15 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             aNotebookBarAddonsItem.aImageValues = aImageValues;
 
             // setup if necessary
-            pSysWindow->SetNotebookBar(aBuf, xFrame, aNotebookBarAddonsItem , bReloadNotebookbar);
+            bool bChanged = pSysWindow->SetNotebookBar(aBuf, xFrame, aNotebookBarAddonsItem , bReloadNotebookbar);
             pNotebookBar = pSysWindow->GetNotebookBar();
+            if (bChanged)
+            {
+                SfxNotebookBar::ClearControllers();
+                pNotebookBar->toolbar_foreach([&xFrame](ToolBox& rEntry) {
+                    m_aToolbarControllers.emplace_back(std::make_unique<SidebarToolBoxController>(rEntry, xFrame));
+                });
+            }
             pNotebookBar->Show();
 
 
@@ -394,8 +406,9 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                                                     pNotebookBar->GetUIFilePath(),
                                                     xFrame,
                                                     nWindowId)));
-                pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl), pViewShell);
             }
+
+            pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl), pViewShell);
 
             pNotebookBar->GetParent()->Resize();
 
@@ -560,6 +573,141 @@ void SfxNotebookBar::ReloadNotebookBar(const OUString& sUIPath)
 IMPL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, pViewShell, void)
 {
     m_pNotebookBarWeldedWrapper.erase(pViewShell);
+    SfxNotebookBar::ClearControllers();
 }
+
+void SfxNotebookBar::ClearControllers()
+{
+    m_aToolbarControllers.clear();
+}
+
+SidebarToolBoxController::SidebarToolBoxController(ToolBox& rToolBox, const Reference<frame::XFrame>& rFrame)
+    : mrToolBox(rToolBox)
+{
+    for (size_t i = 0, nItemCount = mrToolBox.GetItemCount(); i < nItemCount; ++i)
+    {
+        sal_uInt16 nItemId = mrToolBox.GetItemId(i);
+        const OUString sCommandName(mrToolBox.GetItemCommand(nItemId));
+
+        uno::Reference<frame::XToolbarController> xController(sfx2::sidebar::ControllerFactory::CreateToolBoxController(
+                &mrToolBox, nItemId, sCommandName, rFrame, rFrame->getController(),
+                VCLUnoHelper::GetInterface(&mrToolBox), 0, false));
+
+        if (xController.is())
+            maControllers.insert(std::make_pair(nItemId, xController));
+    }
+
+    mrToolBox.SetDropdownClickHdl(LINK(this, SidebarToolBoxController, DropDownClickHandler));
+    mrToolBox.SetClickHdl(LINK(this, SidebarToolBoxController, ClickHandler));
+    mrToolBox.SetDoubleClickHdl(LINK(this, SidebarToolBoxController, DoubleClickHandler));
+    mrToolBox.SetSelectHdl(LINK(this, SidebarToolBoxController, SelectHandler));
+}
+
+SidebarToolBoxController::~SidebarToolBoxController()
+{
+//    SvtMiscOptions().RemoveListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
+
+    ControllerContainer aControllers;
+    aControllers.swap(maControllers);
+    for (auto const& controller : aControllers)
+    {
+        Reference<lang::XComponent> xComponent(controller.second, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+
+#if 0
+    SetDropdownClickHdl(Link<ToolBox *, void>());
+    SetClickHdl(Link<ToolBox *, void>());
+    SetDoubleClickHdl(Link<ToolBox *, void>());
+    SetSelectHdl(Link<ToolBox *, void>());
+    SetActivateHdl(Link<ToolBox *, void>());
+    SetDeactivateHdl(Link<ToolBox *, void>());
+#endif
+}
+
+Reference<frame::XToolbarController> SidebarToolBoxController::GetControllerForItemId (const sal_uInt16 nItemId) const
+{
+    ControllerContainer::const_iterator iController (maControllers.find(nItemId));
+    if (iController != maControllers.end())
+        return iController->second;
+
+    return Reference<frame::XToolbarController>();
+}
+
+IMPL_LINK(SidebarToolBoxController, DropDownClickHandler, ToolBox*, pToolBox, void)
+{
+    if (pToolBox != nullptr)
+    {
+        Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
+        if (xController.is())
+        {
+            Reference<awt::XWindow> xWindow = xController->createPopupWindow();
+            if (xWindow.is() )
+                xWindow->setFocus();
+        }
+    }
+}
+
+IMPL_LINK(SidebarToolBoxController, ClickHandler, ToolBox*, pToolBox, void)
+{
+    if (pToolBox == nullptr)
+        return;
+
+    Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
+    if (xController.is())
+        xController->click();
+}
+
+IMPL_LINK(SidebarToolBoxController, DoubleClickHandler, ToolBox*, pToolBox, void)
+{
+    if (pToolBox == nullptr)
+        return;
+
+    Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
+    if (xController.is())
+        xController->doubleClick();
+}
+
+IMPL_LINK(SidebarToolBoxController, SelectHandler, ToolBox*, pToolBox, void)
+{
+    if (pToolBox == nullptr)
+        return;
+
+    Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
+    if (xController.is())
+        xController->execute(static_cast<sal_Int16>(pToolBox->GetModifier()));
+}
+
+#if 0
+IMPL_LINK_NOARG(SidebarToolBoxController, ChangedIconSizeHandler, LinkParamNone*, void)
+{
+    SolarMutexGuard g;
+
+    if (mbUseDefaultButtonSize)
+        SetToolboxButtonSize(GetDefaultButtonSize());
+
+    for (auto const& it : maControllers)
+    {
+        Reference<frame::XSubToolbarController> xController(it.second, UNO_QUERY);
+        if (xController.is() && xController->opensSubToolbar())
+        {
+            // The button should show the last function that was selected from the
+            // dropdown. The controller should know better than us what it was.
+            xController->updateImage();
+        }
+        else if (SfxViewFrame::Current())
+        {
+            OUString aCommandURL = GetItemCommand(it.first);
+            css::uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, xFrame, GetImageSize());
+            SetItemImage(it.first, aImage);
+        }
+    }
+
+    Resize();
+    queue_resize();
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

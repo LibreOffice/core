@@ -53,6 +53,9 @@ public:
     OUString GetUIFilePath() const { return m_sUIXMLDescription; }
     void SetDisposeCallback(const Link<const SfxViewShell*, void> rDisposeCallback, const SfxViewShell* pViewShell);
 
+    // call func on each ToolBox
+    void toolbar_foreach(const std::function<void(ToolBox&)>& func);
+
 private:
     VclPtr<SystemWindow> m_pSystemWindow;
     css::uno::Reference<css::ui::XContextChangeEventListener> m_pEventListener;

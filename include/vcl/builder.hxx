@@ -41,6 +41,7 @@ class ScreenshotTest;
 class ScrollBar;
 class SvTabListBox;
 class Slider;
+class ToolBox;
 class DateField;
 class TimeField;
 class VclExpander;
@@ -104,6 +105,8 @@ public:
     {
         return m_sHelpRoot;
     }
+
+    void toolbar_foreach(const std::function<void(ToolBox&)>& func);
 
     /// Pre-loads all modules containing UI information
     static void preload();

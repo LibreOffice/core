@@ -831,6 +831,15 @@ VclBuilder::~VclBuilder()
     disposeBuilder();
 }
 
+void VclBuilder::toolbar_foreach(const std::function<void(ToolBox&)>& func)
+{
+    for (auto const& child : m_aChildren)
+    {
+        if (child.m_pWindow->GetType() == WindowType::TOOLBOX)
+            func(static_cast<ToolBox&>(*child.m_pWindow));
+    }
+}
+
 void VclBuilder::disposeBuilder()
 {
     for (std::vector<WinAndId>::reverse_iterator aI = m_aChildren.rbegin(),
