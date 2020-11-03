@@ -41,7 +41,8 @@ enum class PDFAnnotationSubType
     Watermark = 24,
     Threed = 25,
     Richmedia = 26,
-    XFAWidget = 27
+    XFAWidget = 27,
+    Redact = 28
 };
 
 } // namespace vcl::pdf
