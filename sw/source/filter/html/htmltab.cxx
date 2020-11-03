@@ -4860,41 +4860,6 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
 
 namespace
 {
-    class FrameDeleteWatch final: public SvtListener
-    {
-        SwFrameFormat* m_pFormat;
-    public:
-        FrameDeleteWatch(SwFrameFormat* pFormat)
-            : m_pFormat(pFormat)
-        {
-            if(m_pFormat)
-                StartListening(pFormat->GetNotifier());
-        }
-
-        virtual void Notify(const SfxHint& rHint) override
-        {
-            if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
-            {
-                if (pDrawFrameFormatHint->m_eId == sw::DrawFrameFormatHintId::DYING)
-                {
-                    m_pFormat = nullptr;
-                    EndListeningAll();
-                }
-            }
-        }
-
-        bool WasDeleted() const
-        {
-            return !m_pFormat;
-        }
-
-        virtual ~FrameDeleteWatch() override
-        {
-            m_pFormat = nullptr;
-            EndListeningAll();
-        }
-    };
-
     class IndexInRange
     {
     private:
