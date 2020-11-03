@@ -1558,6 +1558,7 @@ void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
             }
         }
     }
+    *this = BitmapEx( GetBitmap(), aAlphaMask );
 }
 
 void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
