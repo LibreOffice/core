@@ -60,13 +60,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
         BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
         Bitmap aBitmap(aBitmapEx.GetBitmap());
 
-        if (aBitmapEx.IsAlpha())
-        {
-            aBitmapEx.setAlphaFrom( cIndexFrom, nAlphaTo );
-            aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
-            aReturnGraphic = ::Graphic(aBitmapEx);
-        }
-        else if (aBitmapEx.IsTransparent())
+        if (aBitmapEx.IsTransparent())
         {
             if (nAlphaTo == sal::static_int_cast< sal_Int8 >(0xff))
             {
