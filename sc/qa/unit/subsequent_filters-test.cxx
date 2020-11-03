@@ -287,6 +287,7 @@ public:
     void testTextBoxBodyUpright();
     void testTextLengthDataValidityXLSX();
     void testDeleteCircles();
+    void testDrawCircleInMergeCells();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -461,6 +462,7 @@ public:
     CPPUNIT_TEST(testTextBoxBodyUpright);
     CPPUNIT_TEST(testTextLengthDataValidityXLSX);
     CPPUNIT_TEST(testDeleteCircles);
+    CPPUNIT_TEST(testDrawCircleInMergeCells);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5076,6 +5078,73 @@ void ScFiltersTest::testDeleteCircles()
 
     // There should not be a circle object!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testDrawCircleInMergeCells()
+{
+    ScDocShellRef xDocSh = loadDoc("testDrawCircleInMergeCells.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load testDrawCircleInMergeCells.ods", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+
+    // A1:B2 is merged.
+    ScRange aMergedRange(0,0,0);
+    rDoc.ExtendTotalMerge(aMergedRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,1,0), aMergedRange);
+
+    // Mark invalid value
+    bool bOverflow;
+    bool bMarkInvalid = ScDetectiveFunc(rDoc, 0).MarkInvalid(bOverflow);
+    CPPUNIT_ASSERT_EQUAL(true, bMarkInvalid);
+
+    // There should be a circle object!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+
+    SdrObject* pObj = pPage->GetObj(0);
+    tools::Rectangle aRect(pObj->GetLogicRect());
+    Point aStartCircle = aRect.TopLeft();
+    Point aEndCircle = aRect.BottomRight();
+
+    tools::Rectangle aCellRect = rDoc.GetMMRect(0,0,1,1,0);
+    aCellRect.AdjustLeft( -250 );
+    aCellRect.AdjustRight(250 );
+    aCellRect.AdjustTop( -70 );
+    aCellRect.AdjustBottom(70 );
+    Point aStartCell = aCellRect.TopLeft();
+    Point aEndCell = aCellRect.BottomRight();
+
+    CPPUNIT_ASSERT_EQUAL(aStartCell.X(), aStartCircle.X());
+    CPPUNIT_ASSERT_EQUAL(aEndCell.X(), aEndCircle.X());
+    CPPUNIT_ASSERT_EQUAL(aStartCell.Y(), aStartCircle.Y());
+    CPPUNIT_ASSERT_EQUAL(aEndCell.Y(), aEndCircle.Y());
+
+    // Change the height of the first row. (556 ~ 1cm)
+    rDoc.SetRowHeight(0, 0, 556);
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    pDrawLayer->RecalcPos(pObj,*pData,false,false);
+
+    tools::Rectangle aRecalcRect(pObj->GetLogicRect());
+    Point aStartRecalcCircle = aRecalcRect.TopLeft();
+    Point aEndRecalcCircle = aRecalcRect.BottomRight();
+
+    tools::Rectangle aRecalcCellRect = rDoc.GetMMRect(0,0,1,1,0);
+    aRecalcCellRect.AdjustLeft( -250 );
+    aRecalcCellRect.AdjustRight(250 );
+    aRecalcCellRect.AdjustTop( -70 );
+    aRecalcCellRect.AdjustBottom(70 );
+    Point aStartRecalcCell = aRecalcCellRect.TopLeft();
+    Point aEndRecalcCell1 = aRecalcCellRect.BottomRight();
+
+    CPPUNIT_ASSERT_EQUAL(aStartRecalcCell.X(), aStartRecalcCircle.X());
+    CPPUNIT_ASSERT_EQUAL(aEndRecalcCell1.X(), aEndRecalcCircle.X());
+    CPPUNIT_ASSERT_EQUAL(aStartRecalcCell.Y(), aStartRecalcCircle.Y());
+    CPPUNIT_ASSERT_EQUAL(aEndRecalcCell1.Y(), aEndRecalcCircle.Y());
 
     xDocSh->DoClose();
 }
