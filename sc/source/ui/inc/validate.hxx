@@ -182,6 +182,8 @@ public:
             (m_pHandler->*m_pSetReferenceHdl)( rRef, pDoc );
     }
 
+    virtual void EndDialog() override;
+
     virtual void            SetActive() override
     {
         if ( m_pHandler && m_pSetActiveHdl )
