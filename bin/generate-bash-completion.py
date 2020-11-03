@@ -27,7 +27,7 @@ DRAWDOCS = ["sxd", "std", "dxf", "emf", "eps", "met", "pct", "sgf", "sgv", "sda"
             "sdd", "vor", "svm", "wmf", "bmp", "gif", "jpg", "jpeg", "jfif", "fif",
             "jpe", "pcd", "pcx", "pgm", "png", "ppm", "psd", "ras", "tga", "tif",
             "tiff", "xbm", "xpm", "odg", "otg", "fodg", "odc", "odi", "sds",
-            "wpg", "svg", "vdx", "vsd", "vsdm", "vsdx"]
+            "wpg", "svg", "vdx", "vsd", "vsdm", "vsdx", "pdf"]
 
 IMPRESSDOCS = ["sxi", "sti", "ppt", "pps", "pot", "sxd", "sda", "sdd", "sdp",
                "vor", "cgm", "odp", "otp", "fodp", "ppsm", "ppsx", "pptm", "pptx",
