@@ -46,6 +46,8 @@ namespace sw {
     {
         Shown, Hidden
     };
+
+    enum class FieldmarkMode { ShowCommand = 1, ShowResult = 2, ShowBoth = 3 };
 };
 
 enum class SwInvalidateFlags
@@ -118,6 +120,7 @@ class SAL_DLLPUBLIC_RTTI SwRootFrame: public SwLayoutFrame
                                       // @see dcontact.cxx, ::Changed()
     bool    mbLayoutFreezed;
     bool    mbHideRedlines;
+    sw::FieldmarkMode m_FieldmarkMode;
 
     /**
      * For BrowseMode
@@ -416,6 +419,11 @@ public:
      */
     bool IsHideRedlines() const { return mbHideRedlines; }
     void SetHideRedlines(bool);
+    sw::FieldmarkMode GetFieldmarkMode() const { return m_FieldmarkMode; }
+    void SetFieldmarkMode(sw::FieldmarkMode);
+    bool HasMergedParas() const {
+        return IsHideRedlines() || GetFieldmarkMode() != sw::FieldmarkMode::ShowBoth;
+    }
 };
 
 inline tools::Long SwRootFrame::GetBrowseWidth() const
