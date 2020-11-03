@@ -18,8 +18,6 @@
  */
 
 #include <TableDesignHelpBar.hxx>
-#include <vcl/event.hxx>
-#include <vcl/settings.hxx>
 #include <helpids.h>
 
 using namespace dbaui;

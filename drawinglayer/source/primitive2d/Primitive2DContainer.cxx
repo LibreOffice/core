@@ -20,10 +20,8 @@
 #include <sal/config.h>
 
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <basegfx/utils/canvastools.hxx>
 
 using namespace css;
 

@@ -22,7 +22,7 @@
 #include <osl/process.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
-#include <rtl/ref.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace com::sun::star;
 

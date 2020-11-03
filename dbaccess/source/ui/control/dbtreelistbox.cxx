@@ -18,11 +18,13 @@
  */
 
 #include <dbtreelistbox.hxx>
+#include <dbexchange.hxx>
 #include <callbacks.hxx>
 
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
@@ -35,7 +37,6 @@
 #include <svx/dbaobjectex.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 

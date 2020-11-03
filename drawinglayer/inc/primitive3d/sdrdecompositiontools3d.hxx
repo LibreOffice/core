@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <vector>

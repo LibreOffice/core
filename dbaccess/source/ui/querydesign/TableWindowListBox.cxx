@@ -28,7 +28,6 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/event.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;

@@ -10,7 +10,6 @@
 #pragma once
 
 #include "emfphelperdata.hxx"
-#include <vector>
 
 namespace emfplushelper
 {

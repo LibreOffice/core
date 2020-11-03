@@ -23,7 +23,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <strings.hxx>
@@ -51,7 +50,6 @@
 
 #include <optional>
 #include <memory>
-#include <iterator>
 
 using namespace comphelper;
 using namespace ::com::sun::star::sdb;

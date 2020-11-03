@@ -34,7 +34,6 @@
 #include <paramdialog.hxx>
 #include <vcl/svapp.hxx>
 #include <CollectionView.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

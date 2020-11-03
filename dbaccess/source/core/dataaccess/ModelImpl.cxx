@@ -43,7 +43,6 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/documentinfo.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>

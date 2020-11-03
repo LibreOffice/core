@@ -21,7 +21,6 @@
 #include <dbwizsetup.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace dbaui;

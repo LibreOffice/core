@@ -24,7 +24,6 @@
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
-#include <ucbhelper/interactionrequest.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbcx/XUser.hpp>
@@ -46,7 +45,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace dbaui;
-using namespace ucbhelper;
 using namespace comphelper;
 
 namespace {

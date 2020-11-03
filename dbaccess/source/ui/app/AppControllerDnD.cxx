@@ -49,8 +49,6 @@
 #include <connectivity/dbtools.hxx>
 #include <dbexchange.hxx>
 #include <UITools.hxx>
-#include <algorithm>
-#include <iterator>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <svtools/querydelete.hxx>

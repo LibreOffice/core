@@ -72,7 +72,6 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>

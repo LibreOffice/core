@@ -8,14 +8,6 @@
  */
 
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
-#include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/color/bcolor.hxx>
-#include <rtl/instance.hxx>
-
-#include <utility>
-
-#include <sal/log.hxx>
 
 namespace drawinglayer::attribute
 {

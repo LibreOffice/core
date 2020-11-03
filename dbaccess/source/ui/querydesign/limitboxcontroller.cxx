@@ -21,7 +21,6 @@
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <core_resource.hxx>
 #include <strings.hrc>

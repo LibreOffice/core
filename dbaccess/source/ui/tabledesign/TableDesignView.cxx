@@ -27,7 +27,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
-#include <vcl/settings.hxx>
 #include <memory>
 
 using namespace ::dbaui;

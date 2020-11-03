@@ -31,6 +31,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
@@ -41,7 +42,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include "AppView.hxx"
 #include <helpids.h>
 #include <strings.hxx>
@@ -49,9 +49,7 @@
 #include <databaseobjectview.hxx>
 #include <imageprovider.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/event.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
