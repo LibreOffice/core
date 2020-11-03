@@ -95,7 +95,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     const sw::DocumentContentOperationsManager::ParaRstFormat* pPara = static_cast<sw::DocumentContentOperationsManager::ParaRstFormat*>(pArgs);
     SwContentNode* pNode = rpNd->GetContentNode();
-    if (pPara && pPara->pLayout && pPara->pLayout->IsHideRedlines()
+    if (pPara && pPara->pLayout && pPara->pLayout->HasMergedParas()
         && pNode && pNode->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
     {
         return true;
@@ -998,7 +998,7 @@ static bool lcl_SetTextFormatColl( const SwNodePtr& rpNode, void* pArgs )
 
     sw::DocumentContentOperationsManager::ParaRstFormat* pPara = static_cast<sw::DocumentContentOperationsManager::ParaRstFormat*>(pArgs);
 
-    if (pPara->pLayout && pPara->pLayout->IsHideRedlines())
+    if (pPara->pLayout && pPara->pLayout->HasMergedParas())
     {
         if (pCNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
         {

@@ -1445,7 +1445,7 @@ namespace sw {
 void
 GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
 {
-    if (pLayout && pLayout->IsHideRedlines())
+    if (pLayout && pLayout->HasMergedParas())
     {
         if (rIndex.GetNode().IsTextNode())
         {
@@ -1473,7 +1473,7 @@ GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
 void
 GotoNextLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
 {
-    if (pLayout && pLayout->IsHideRedlines())
+    if (pLayout && pLayout->HasMergedParas())
     {
         if (rIndex.GetNode().IsTextNode())
         {
@@ -1830,7 +1830,7 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, tools::Long nOffset, bool const bIsOutlMv
     SwRootFrame const* pLayout(nullptr);
     for (SwRootFrame const*const pLay : GetAllLayouts())
     {
-        if (pLay->IsHideRedlines())
+        if (pLay->HasMergedParas())
         {
             pLayout = pLay;
         }

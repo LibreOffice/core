@@ -1104,7 +1104,7 @@ namespace sw {
 bool IsMarkHintHidden(SwRootFrame const& rLayout,
         SwTextNode const& rNode, SwTextAttrEnd const& rHint)
 {
-    if (!rLayout.IsHideRedlines())
+    if (!rLayout.HasMergedParas())
     {
         return false;
     }

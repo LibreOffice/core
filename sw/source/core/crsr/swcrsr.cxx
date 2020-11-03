@@ -1165,7 +1165,7 @@ struct HideWrapper
         , m_rpTextNode(rpTextNode)
         , m_rPtPos(rPtPos)
     {
-        if (pLayout && pLayout->IsHideRedlines())
+        if (pLayout && pLayout->HasMergedParas())
         {
             m_pFrame = static_cast<SwTextFrame*>(rpTextNode->getLayoutFrame(pLayout));
             m_pText = &m_pFrame->GetText();
@@ -1281,7 +1281,7 @@ bool SwCursor::IsStartEndSentence(bool bEnd, SwRootFrame const*const pLayout) co
                     GetContentNode() && GetPoint()->nContent == GetContentNode()->Len() :
                     GetPoint()->nContent.GetIndex() == 0;
 
-    if ((pLayout != nullptr && pLayout->IsHideRedlines()) || !bRet)
+    if ((pLayout != nullptr && pLayout->HasMergedParas()) || !bRet)
     {
         SwCursor aCursor(*GetPoint(), nullptr);
         SwPosition aOrigPos = *aCursor.GetPoint();

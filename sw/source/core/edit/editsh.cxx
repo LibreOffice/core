@@ -859,7 +859,7 @@ sal_uInt16 SwEditShell::GetLineCount()
         {
             SwTextFrame *const pFrame(static_cast<SwTextFrame*>(pContentFrame));
             nRet = nRet + pFrame->GetLineCount(TextFrameIndex(COMPLETE_STRING));
-            if (GetLayout()->IsHideRedlines())
+            if (GetLayout()->HasMergedParas())
             {
                 if (auto const*const pMerged = pFrame->GetMergedPara())
                 {

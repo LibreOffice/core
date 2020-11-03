@@ -1149,7 +1149,7 @@ namespace //local functions originally from docfmt.cxx
         bool ret(false);
         SwTextNode *const pTNd = rNode.GetTextNode();
         sw::MergedPara const* pMerged(nullptr);
-        if (pLayout && pLayout->IsHideRedlines() && pTNd)
+        if (pLayout && pLayout->HasMergedParas() && pTNd)
         {
             SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(
                 pTNd->getLayoutFrame(pLayout)));
@@ -1191,7 +1191,7 @@ namespace //local functions originally from docfmt.cxx
         }
 
         // input cursor can't be on hidden node, and iteration skips them
-        assert(!pLayout || !pLayout->IsHideRedlines()
+        assert(!pLayout || !pLayout->HasMergedParas()
             || rNode.GetRedlineMergeFlag() != SwNode::Merge::Hidden);
 
         if (!pMerged)
@@ -1473,7 +1473,7 @@ namespace //local functions originally from docfmt.cxx
                     else
                     {
                         SwContentNode * pFirstNode(pNode);
-                        if (pLayout && pLayout->IsHideRedlines())
+                        if (pLayout && pLayout->HasMergedParas())
                         {
                             pFirstNode = sw::GetFirstAndLastNode(*pLayout, pStt->nNode).first;
                         }
@@ -1774,7 +1774,7 @@ namespace //local functions originally from docfmt.cxx
             if (!pTNd)
                 continue;
 
-            if (pLayout && pLayout->IsHideRedlines()
+            if (pLayout && pLayout->HasMergedParas()
                 && pTNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
             {   // not really sure what to do here, but applying to hidden
                 continue; // nodes doesn't make sense...
@@ -3486,7 +3486,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
                     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
                     for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
                     {
-                        if (pFrame->getRootFrame()->IsHideRedlines())
+                        if (pFrame->getRootFrame()->HasMergedParas())
                         {
                             frames.insert(pFrame);
                         }
@@ -3498,7 +3498,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
                     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
                     for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
                     {
-                        if (pFrame->getRootFrame()->IsHideRedlines())
+                        if (pFrame->getRootFrame()->HasMergedParas())
                         {
                             auto const it = frames.find(pFrame);
                             if (it != frames.end())
@@ -3863,7 +3863,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
 bool DocumentContentOperationsManager::lcl_RstTextAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     ParaRstFormat* pPara = static_cast<ParaRstFormat*>(pArgs);
-    if (pPara->pLayout && pPara->pLayout->IsHideRedlines()
+    if (pPara->pLayout && pPara->pLayout->HasMergedParas()
         && rpNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
     {
         return true; // skip hidden, since new items aren't applied

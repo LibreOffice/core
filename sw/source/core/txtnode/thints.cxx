@@ -2114,7 +2114,7 @@ bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
 {
     assert(!rSet.Count()); // handled inconsistently, typically an error?
 
-    if (pLayout && pLayout->IsHideRedlines())
+    if (pLayout && pLayout->HasMergedParas())
     {
         if (GetRedlineMergeFlag() == SwNode::Merge::Hidden)
         {

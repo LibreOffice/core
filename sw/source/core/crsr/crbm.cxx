@@ -126,7 +126,7 @@ namespace sw {
 
 bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark)
 {
-    if (!rLayout.IsHideRedlines())
+    if (!rLayout.HasMergedParas())
     {
         return false;
     }

@@ -306,7 +306,7 @@ namespace sw {
 
     bool IsParaPropsNode(SwRootFrame const& rLayout, SwTextNode const& rNode)
     {
-        if (rLayout.IsHideRedlines())
+        if (rLayout.HasMergedParas())
         {
             if (SwTextFrame const*const pFrame = static_cast<SwTextFrame*>(rNode.getLayoutFrame(&rLayout)))
             {
@@ -351,7 +351,7 @@ namespace sw {
     GetFirstAndLastNode(SwRootFrame const& rLayout, SwNodeIndex const& rPos)
     {
         SwTextNode *const pTextNode(rPos.GetNode().GetTextNode());
-        if (pTextNode && rLayout.IsHideRedlines())
+        if (pTextNode && rLayout.HasMergedParas())
         {
             if (SwTextFrame const*const pFrame = static_cast<SwTextFrame*>(pTextNode->getLayoutFrame(&rLayout)))
             {
@@ -368,7 +368,7 @@ namespace sw {
             SwTextNode const& rNode, SwRootFrame const*const pLayout)
     {
         rNode.SwContentNode::GetAttr(rFormatSet);
-        if (pLayout && pLayout->IsHideRedlines())
+        if (pLayout && pLayout->HasMergedParas())
         {
             auto pFrame = static_cast<SwTextFrame*>(rNode.getLayoutFrame(pLayout));
             if (sw::MergedPara const*const pMerged = pFrame ? pFrame->GetMergedPara() : nullptr)
