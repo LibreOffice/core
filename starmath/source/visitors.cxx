@@ -1967,23 +1967,32 @@ void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmBraceNode* pNode )
 {
-    SmNode *pLeftBrace  = pNode->OpeningBrace(),
-           *pBody       = pNode->Body(),
-           *pRightBrace = pNode->ClosingBrace();
-    //Handle special case where it's absolute function
-    if( pNode->GetToken( ).eType == TABS ) {
-        Append( "abs" );
-        LineToText( pBody );
-    } else {
-        if( pNode->GetScaleMode( ) == SmScaleMode::Height )
-            Append( "left " );
-        pLeftBrace->Accept( this );
-        Separate( );
+    if ( pNode->GetToken().eType == TEVALUATE )
+    {
+        SmNode *pBody = pNode->Body();
+        Append( "evaluate { " );
         pBody->Accept( this );
-        Separate( );
-        if( pNode->GetScaleMode( ) == SmScaleMode::Height )
-            Append( "right " );
-        pRightBrace->Accept( this );
+        Append("} ");
+    }
+    else{
+        SmNode *pLeftBrace  = pNode->OpeningBrace(),
+               *pBody       = pNode->Body(),
+               *pRightBrace = pNode->ClosingBrace();
+        //Handle special case where it's absolute function
+        if( pNode->GetToken( ).eType == TABS ) {
+            Append( "abs" );
+            LineToText( pBody );
+        } else {
+            if( pNode->GetScaleMode( ) == SmScaleMode::Height )
+                Append( "left " );
+            pLeftBrace->Accept( this );
+            Separate( );
+            pBody->Accept( this );
+            Separate( );
+            if( pNode->GetScaleMode( ) == SmScaleMode::Height )
+                Append( "right " );
+            pRightBrace->Accept( this );
+        }
     }
 }
 
@@ -2313,48 +2322,71 @@ void SmNodeToTextVisitor::Visit( SmBinDiagonalNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
 {
-    LineToText( pNode->GetBody( ) );
-    SmNode *pChild = pNode->GetSubSup( LSUP );
-    if( pChild ) {
-        Separate( );
-        Append( "lsup " );
-        LineToText( pChild );
+    if( pNode->GetToken().eType == TEVALUATE )
+    {
+        Append("evaluate { ");
+        pNode->GetSubNode( 0 )->GetSubNode( 1 )->Accept(this);
+        Append("} ");
+        SmNode* pChild = pNode->GetSubSup( RSUP );
+        if( pChild ) {
+            Separate( );
+            Append( "to { " );
+            LineToText( pChild );
+            Append( "} " );
+        }
+        pChild = pNode->GetSubSup( RSUB );
+        if( pChild ) {
+            Separate( );
+            Append( "from { " );
+            LineToText( pChild );
+            Append( "} " );
+        }
     }
-    pChild = pNode->GetSubSup( LSUB );
-    if( pChild ) {
-        Separate( );
-        Append( "lsub " );
-        LineToText( pChild );
-    }
-    pChild = pNode->GetSubSup( RSUP );
-    if( pChild ) {
-        Separate( );
-        Append( "^ " );
-        LineToText( pChild );
-    }
-    pChild = pNode->GetSubSup( RSUB );
-    if( pChild ) {
-        Separate( );
-        Append( "_ " );
-        LineToText( pChild );
-    }
-    pChild = pNode->GetSubSup( CSUP );
-    if( pChild ) {
-        Separate( );
-        if (pNode->IsUseLimits())
-            Append( "to " );
-        else
-            Append( "csup " );
-        LineToText( pChild );
-    }
-    pChild = pNode->GetSubSup( CSUB );
-    if( pChild ) {
-        Separate( );
-        if (pNode->IsUseLimits())
-            Append( "from " );
-        else
-            Append( "csub " );
-        LineToText( pChild );
+    else
+    {
+        LineToText( pNode->GetBody( ) );
+        SmNode *pChild = pNode->GetSubSup( LSUP );
+        if( pChild ) {
+            Separate( );
+            Append( "lsup " );
+            LineToText( pChild );
+        }
+        pChild = pNode->GetSubSup( LSUB );
+        if( pChild ) {
+            Separate( );
+            Append( "lsub " );
+            LineToText( pChild );
+        }
+        pChild = pNode->GetSubSup( RSUP );
+        if( pChild ) {
+            Separate( );
+            Append( "^ " );
+            LineToText( pChild );
+        }
+        pChild = pNode->GetSubSup( RSUB );
+        if( pChild ) {
+            Separate( );
+            Append( "_ " );
+            LineToText( pChild );
+        }
+        pChild = pNode->GetSubSup( CSUP );
+        if( pChild ) {
+            Separate( );
+            if (pNode->IsUseLimits())
+                Append( "to " );
+            else
+                Append( "csup " );
+            LineToText( pChild );
+        }
+        pChild = pNode->GetSubSup( CSUB );
+        if( pChild ) {
+            Separate( );
+            if (pNode->IsUseLimits())
+                Append( "from " );
+            else
+                Append( "csub " );
+            LineToText( pChild );
+        }
     }
 }
 
