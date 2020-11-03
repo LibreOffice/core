@@ -196,6 +196,21 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
                            nTextBoxTopAfter < nTextBoxTopBefore);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxSizeAtBottomOfPage)
+{
+    // tdf#137881: check whether text box at the bottom of the page stays the right size
+    load(DATA_DIRECTORY, "bottom-textbox-size.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pTextBoxObj = pPage->GetObj(0);
+
+    uno::Reference<drawing::XShape> xShape(pTextBoxObj->getUnoShape(), uno::UNO_QUERY_THROW);
+    const sal_Int32 nHeight = xShape->getSize().Height;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("text box was not supposed to be resized on fileopen",
+                                 static_cast<sal_Int32>(2200), nHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
