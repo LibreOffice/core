@@ -726,6 +726,38 @@ public:
     }
 };
 
+/// Checking if headings are ordered correctly.
+class HeadingOrderCheck : public NodeCheck
+{
+private:
+    // Previous heading level to compare with.
+    short m_prevLevel = 0;
+
+public:
+    HeadingOrderCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        const SwTextNode* pTextNode = pCurrent->GetTextNode();
+        if (!pTextNode)
+            return;
+
+        const short currentLevel = pTextNode->GetAttrOutlineLevel();
+
+        // If outline level stands for heading level...
+        if (currentLevel && currentLevel <= 10)
+        {
+            // ... and if is bigger than previous by more than 1, warn.
+            if (currentLevel - m_prevLevel > 1)
+                lclAddIssue(m_rIssueCollection, SwResId(STR_HEADING_ORDER));
+            m_prevLevel = currentLevel;
+        }
+    }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -879,6 +911,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<NonInteractiveFormCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<FloatingTextCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TableHeadingCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<HeadingOrderCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
