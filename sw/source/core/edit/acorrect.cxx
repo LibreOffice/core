@@ -203,6 +203,13 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
                 pNd->getLayoutFrame(m_rEditSh.GetLayout())));
     assert(pFrame);
+
+    // tdf#83419 avoid bad autocorrect with visible redlines
+    if ( pNd->GetText() != pNd->GetRedlineText() && pNd->GetRedlineText() != pFrame->GetText() )
+    {
+        return false;
+    }
+
     std::pair<SwTextNode *, sal_Int32> const pos(pFrame->MapViewToModel(TextFrameIndex(nPos)));
 
     SwPaM* pPam = &m_rCursor;
