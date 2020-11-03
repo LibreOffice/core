@@ -1393,6 +1393,8 @@ oblique
 power
 precision-as-shown
 prefix
+infix
+postfix
 presentation
 orgchart
 outline

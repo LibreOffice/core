@@ -72,6 +72,7 @@ one go*/
 #include <unomodel.hxx>
 #include <utility.hxx>
 #include <visitors.hxx>
+#include <starmathdatabase.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -1043,11 +1044,13 @@ class SmXMLFencedContext_Impl : public SmXMLRowContext_Impl
 protected:
     sal_Unicode cBegin;
     sal_Unicode cEnd;
+    bool bIsStretchy;
 
 public:
     SmXMLFencedContext_Impl(SmXMLImport &rImport)
-        : SmXMLRowContext_Impl(rImport),
-        cBegin('('), cEnd(')') {}
+        : SmXMLRowContext_Impl(rImport)
+        , cBegin('('), cEnd(')')
+        , bIsStretchy(false) {}
 
     void SAL_CALL startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList ) override;
     void SAL_CALL endFastElement(sal_Int32 nElement) override;
@@ -1070,6 +1073,9 @@ void SmXMLFencedContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno
             case XML_CLOSE:
                 cEnd = sValue[0];
                 break;
+            case XML_STRETCHY:
+                bIsStretchy = sValue == GetXMLToken(XML_TRUE);
+                break;
             default:
                 XMLOFF_WARN_UNKNOWN("starmath", aIter);
                 /*Go to superclass*/
@@ -1086,18 +1092,18 @@ void SmXMLFencedContext_Impl::endFastElement(sal_Int32 /*nElement*/)
     aToken.aText = ",";
     aToken.nLevel = 5;
 
-    aToken.eType = TLPARENT;
-    aToken.cMathChar = cBegin;
     std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(aToken));
+    if( bIsStretchy ) aToken = starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl( cBegin );
+    else aToken = starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl( cBegin );
+    if( aToken.eType == TERROR  ) aToken = SmToken( TLPARENT, MS_LPARENT, "(", TG::LBrace, 5 );
     std::unique_ptr<SmNode> pLeft(new SmMathSymbolNode(aToken));
-
-    aToken.cMathChar = cEnd;
-    aToken.eType = TRPARENT;
+    if( bIsStretchy ) aToken = starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl( cEnd );
+    else aToken = starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl( cEnd );
+    if( aToken.eType == TERROR  ) aToken = SmToken( TRPARENT, MS_RPARENT, ")", TG::LBrace, 5 );
     std::unique_ptr<SmNode> pRight(new SmMathSymbolNode(aToken));
 
     SmNodeArray aRelationArray;
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-
     aToken.cMathChar = '\0';
     aToken.eType = TIDENT;
 
@@ -1120,6 +1126,8 @@ void SmXMLFencedContext_Impl::endFastElement(sal_Int32 /*nElement*/)
 
 
     pSNode->SetSubNodes(std::move(pLeft), std::move(pBody), std::move(pRight));
+    // mfenced is always scalable. Stretchy keyword is not official, but in case of been in there
+    // can be used as a hint.
     pSNode->SetScaleMode(SmScaleMode::Height);
     GetSmImport().GetNodeStack().push_front(std::move(pSNode));
 }
@@ -1375,6 +1383,10 @@ class SmXMLOperatorContext_Impl : public SmXMLImportContext
 {
     SmXMLTokenAttrHelper maTokenAttrHelper;
     bool bIsStretchy;
+    bool bIsFenced;
+    bool isPrefix;
+    bool isInfix;
+    bool isPostfix;
     SmToken aToken;
 
 public:
@@ -1382,6 +1394,10 @@ public:
         : SmXMLImportContext(rImport)
         , maTokenAttrHelper(*this)
         , bIsStretchy(false)
+        , bIsFenced(false)
+        , isPrefix(false)
+        , isInfix(false)
+        , isPostfix(false)
     {
         aToken.eType = TSPECIAL;
         aToken.nLevel = 5;
@@ -1397,6 +1413,25 @@ public:
 void SmXMLOperatorContext_Impl::TCharacters(const OUString &rChars)
 {
     aToken.cMathChar = rChars[0];
+    SmToken bToken;
+    if( bIsFenced ){
+        if( bIsStretchy )
+        {
+            if( isPrefix ) bToken = starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl( aToken.cMathChar );
+            else if( isInfix ) bToken = SmToken( TMLINE, MS_VERTLINE, "mline", TG::NONE, 0 );
+            else if( isPostfix ) bToken = starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl( aToken.cMathChar );
+            else bToken = starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl( aToken.cMathChar );
+        }
+        else
+        {
+            if( isPrefix ) bToken = starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl( aToken.cMathChar );
+            else if( isInfix ) bToken = SmToken( TMLINE, MS_VERTLINE, "mline", TG::NONE, 0 );
+            else if( isPostfix ) bToken = starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl( aToken.cMathChar );
+            else bToken = starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl( aToken.cMathChar );
+        }
+    }
+    else bToken = starmathdatabase::Identify_SmXMLOperatorContext_Impl( aToken.cMathChar, bIsStretchy );
+    if( bToken.eType != TERROR ) aToken = bToken;
 }
 
 void SmXMLOperatorContext_Impl::endFastElement(sal_Int32 )
@@ -1427,6 +1462,14 @@ void SmXMLOperatorContext_Impl::startFastElement(sal_Int32 /*nElement*/, const u
         {
             case XML_STRETCHY:
                 bIsStretchy = sValue == GetXMLToken(XML_TRUE);
+                break;
+            case XML_FENCE:
+                bIsFenced   = sValue == GetXMLToken(XML_TRUE);
+                break;
+            case XML_FORM:
+                isPrefix    = sValue == GetXMLToken(XML_PREFIX);    // <
+                isInfix     = sValue == GetXMLToken(XML_INFIX);     // |
+                isPostfix   = sValue == GetXMLToken(XML_POSTFIX);   // >
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("starmath", aIter);
@@ -2229,12 +2272,14 @@ void SmXMLRowContext_Impl::endFastElement(sal_Int32 )
         aToken.cMathChar = MS_LBRACE;
         aToken.nLevel = 5;
         aToken.eType = TLGROUP;
+        aToken.nGroup = TG::NONE;
         aToken.aText = "{";
         aRelationArray[0] = new SmLineNode(aToken);
 
         aToken.cMathChar = MS_RBRACE;
         aToken.nLevel = 0;
         aToken.eType = TRGROUP;
+        aToken.nGroup = TG::NONE;
         aToken.aText = "}";
         aRelationArray[1] = new SmLineNode(aToken);
     }

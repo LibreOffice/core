@@ -66,7 +66,7 @@ enum SmTokenType
     TEND,           TSPECIAL,       TNONE,          TESCAPE,        TUNKNOWN,
     TBLANK,         TSBLANK,        TPLACE,         TNOSPACE,       TDOTSDOWN,
     TNEWLINE,       TDOTSAXIS,      TDOTSLOW,       TDOTSVERT,      TBACKEPSILON,
-    TDOTSDIAG,      TDOTSUP,        TFRAC,
+    TDOTSDIAG,      TDOTSUP,        TERROR,
     // Basic
     TPLUS,          TMINUS,         TMULTIPLY,      TDIVIDEBY,      // +-*/
     TGT,            TLT,            TGE,            TLE,            // > < >= <=
@@ -78,6 +78,7 @@ enum SmTokenType
     TLIM,           TLIMSUP,        TLIMINF,        TTOWARD,        // Limits
     TOVER,          TTIMES,         TCDOT,          TDIV,           // Product type
     TSLASH,         TBACKSLASH,     TWIDESLASH,     TWIDEBACKSLASH, //Slash
+    TFRAC,          TIT,                                            // mathml related
     // Structure
     TMATRIX,         TPOUND,        TDPOUND,        TSTACK,         TBINOM,
     // Logic
@@ -119,8 +120,8 @@ enum SmTokenType
     TLBRACKET,      TRBRACKET,      TLDBRACKET,     TRDBRACKET,     // Bracket x1 & x2
     TLCEIL,         TRCEIL,         TLFLOOR,        TRFLOOR,        // Reals -> Wholes
     TLANGLE,        TRANGLE,        TLBRACE,        TRBRACE,        // <x> {x}
-    // Brackets Lines
-    TLLINE,         TRLINE,         TLDLINE,        TRDLINE,        TMLINE,
+    TLLINE,         TRLINE,         TLDLINE,        TRDLINE,        // Lines x1 x2
+    TMLINE,         TEVALUATE,      TLRLINE,        TLRDLINE,       // Custom
     // Differential calculus
     TNABLA,         TPARTIAL,       TFOURIER,       TLAPLACE,       // Derivative, Transformation
     TINTD,          TINT,           TIINT,          TIIINT,         // Integral
@@ -156,12 +157,26 @@ struct SmToken
     sal_Int32      nRow; // 1-based
     sal_Int32      nCol; // 1-based
 
-    SmToken();
+    SmToken()
+        : eType(TUNKNOWN)
+        , cMathChar('\0')
+        , nGroup(TG::NONE)
+        , nLevel(0)
+        , nRow(0)
+        , nCol(0) {}
+
     SmToken(SmTokenType eTokenType,
             sal_Unicode cMath,
             const char* pText,
             TG nTokenGroup = TG::NONE,
-            sal_uInt16 nTokenLevel = 0);
+            sal_uInt16 nTokenLevel = 0)
+        : aText(OUString::createFromAscii(pText))
+        , eType(eTokenType)
+        , cMathChar(cMath)
+        , nGroup(nTokenGroup)
+        , nLevel(nTokenLevel)
+        , nRow(0)
+        , nCol(0){}
 };
 
 struct SmTokenTableEntry
