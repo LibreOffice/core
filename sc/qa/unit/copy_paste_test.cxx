@@ -19,6 +19,7 @@
 #include <viewfunc.hxx>
 #include <scitems.hxx>
 #include <attrib.hxx>
+#include <userlist.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
@@ -47,6 +48,7 @@ public:
     void testTdf88782_autofillLinearNumbersInMergedCells();
     void tdf137621_autofillMergedBool();
     void tdf137205_autofillDatesInMergedCells();
+    void tdf137653_137654_autofillUserlist();
     void tdf137625_autofillMergedUserlist();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
@@ -61,12 +63,14 @@ public:
     CPPUNIT_TEST(testTdf88782_autofillLinearNumbersInMergedCells);
     CPPUNIT_TEST(tdf137621_autofillMergedBool);
     CPPUNIT_TEST(tdf137205_autofillDatesInMergedCells);
+    CPPUNIT_TEST(tdf137653_137654_autofillUserlist);
     CPPUNIT_TEST(tdf137625_autofillMergedUserlist);
     CPPUNIT_TEST_SUITE_END();
 
 private:
 
     ScDocShellRef loadDocAndSetupModelViewController(const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite);
+    void addToUserList(const OUString& rStr);
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
@@ -753,6 +757,69 @@ void ScCopyPasteTest::tdf137205_autofillDatesInMergedCells()
     }
 }
 
+void ScCopyPasteTest::addToUserList(const OUString& rStr)
+{
+    ScUserListData* aListData = new ScUserListData(rStr);
+    ScGlobal::GetUserList()->push_back(aListData);
+}
+
+void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
+{
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController("tdf137653_137654_autofillUserlist.", FORMAT_ODS, true);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get the document controller
+    ScTabViewShell* pView = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pView != nullptr);
+
+    // delete every userlist to make sure there won't be any string that is in 2 different userlist
+    ScGlobal::GetUserList()->clear();
+    addToUserList({ "January,February,March,April,May,June,July,August,September,October,November,December" });
+    const ScUserListData* pListData = ScGlobal::GetUserList()->GetData("January");
+    sal_uInt16 nIdx1 = 0, nIdx2 = 0;
+    bool bHasIdx1, bHasIdx2;
+    bool bMatchCase = false;
+
+    // fillauto userlist, these areas contain only merged cells
+    pView->FillAuto(FILL_TO_RIGHT, 4, 5, 6, 7, 3);   //E6:G8
+    pView->FillAuto(FILL_TO_LEFT, 4, 5, 6, 7, 3);    //E6:G8
+    pView->FillAuto(FILL_TO_BOTTOM, 1, 18, 3, 19, 2); //B19:D20
+    pView->FillAuto(FILL_TO_TOP, 1, 18, 3, 19, 2);    //B19:D20
+
+    // compare the results of fill-right / -left with the reference stored in the test file
+    // this compares the whole area blindly, for specific test cases, check the test file
+    for (int nCol = 1; nCol <= 9; nCol++)
+    {
+        for (int nRow = 5; nRow <= 7; nRow++)
+        {
+            CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
+            CellType nType2 = rDoc.GetCellType(ScAddress(nCol, nRow + 4, 0));
+            bHasIdx1 = pListData->GetSubIndex(rDoc.GetString(nCol, nRow, 0), nIdx1, bMatchCase);
+            bHasIdx2 = pListData->GetSubIndex(rDoc.GetString(nCol, nRow + 4, 0), nIdx2, bMatchCase);
+
+            CPPUNIT_ASSERT_EQUAL(nType1, nType2);
+            CPPUNIT_ASSERT(bHasIdx1 && bHasIdx2);
+            CPPUNIT_ASSERT_EQUAL(nIdx1, nIdx2);   // userlist index value of cells
+        }
+    }
+
+    // compare the results of fill-up / -down
+    for (int nCol = 1; nCol <= 3; nCol++)
+    {
+        for (int nRow = 16; nRow <= 21; nRow++)
+        {
+            CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
+            CellType nType2 = rDoc.GetCellType(ScAddress(nCol + 4, nRow, 0));
+            bHasIdx1 = pListData->GetSubIndex(rDoc.GetString(nCol, nRow, 0), nIdx1, bMatchCase);
+            bHasIdx2 = pListData->GetSubIndex(rDoc.GetString(nCol + 4, nRow, 0), nIdx2, bMatchCase);
+
+            CPPUNIT_ASSERT_EQUAL(nType1, nType2);
+            CPPUNIT_ASSERT(bHasIdx1 && bHasIdx2);
+            CPPUNIT_ASSERT_EQUAL(nIdx1, nIdx2);   // userlist index value of cells
+        }
+    }
+}
+
 void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
 {
     ScDocShellRef xDocSh = loadDocAndSetupModelViewController("tdf137625_autofillMergedUserlist.", FORMAT_ODS, true);
@@ -761,6 +828,14 @@ void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
     // Get the document controller
     ScTabViewShell* pView = xDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pView != nullptr);
+
+    // delete every userlist to make sure there won't be any string that is in 2 different userlist
+    ScGlobal::GetUserList()->clear();
+    addToUserList({ "January,February,March,April,May,June,July,August,September,October,November,December" });
+    const ScUserListData* pListData = ScGlobal::GetUserList()->GetData("January");
+    sal_uInt16 nIdx1 = 0, nIdx2 = 0;
+    bool bHasIdx1, bHasIdx2;
+    bool bMatchCase = false;
 
     // fillauto userlist, these areas contain only merged cells
     pView->FillAuto(FILL_TO_RIGHT, 7, 5, 12, 7, 6);   //H6:M8
@@ -776,14 +851,13 @@ void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
         {
             CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
             CellType nType2 = rDoc.GetCellType(ScAddress(nCol, nRow + 4, 0));
-            double* pValue1 = rDoc.GetValueCell(ScAddress(nCol, nRow, 0));
-            double* pValue2 = rDoc.GetValueCell(ScAddress(nCol, nRow + 4, 0));
+            bHasIdx1 = pListData->GetSubIndex(rDoc.GetString(nCol, nRow, 0), nIdx1, bMatchCase);
+            bHasIdx2 = pListData->GetSubIndex(rDoc.GetString(nCol, nRow + 4, 0), nIdx2, bMatchCase);
 
             CPPUNIT_ASSERT_EQUAL(nType1, nType2);
-            if (pValue2 != nullptr)
-                CPPUNIT_ASSERT_EQUAL(*pValue1, *pValue2);   //cells with userlist value
-            else
-                CPPUNIT_ASSERT_EQUAL(pValue1, pValue2);     //empty cells
+            CPPUNIT_ASSERT_EQUAL(bHasIdx1, bHasIdx2);
+            if (bHasIdx1)
+                CPPUNIT_ASSERT_EQUAL(nIdx1, nIdx2);   //cells with userlist value
         }
     }
 
@@ -794,14 +868,13 @@ void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
         {
             CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
             CellType nType2 = rDoc.GetCellType(ScAddress(nCol + 4, nRow, 0));
-            double* pValue1 = rDoc.GetValueCell(ScAddress(nCol, nRow, 0));
-            double* pValue2 = rDoc.GetValueCell(ScAddress(nCol + 4, nRow, 0));
+            bHasIdx1 = pListData->GetSubIndex(rDoc.GetString(nCol, nRow, 0), nIdx1, bMatchCase);
+            bHasIdx2 = pListData->GetSubIndex(rDoc.GetString(nCol + 4, nRow, 0), nIdx2, bMatchCase);
 
             CPPUNIT_ASSERT_EQUAL(nType1, nType2);
-            if (pValue2 != nullptr)
-                CPPUNIT_ASSERT_EQUAL(*pValue1, *pValue2);   //cells with userlist value
-            else
-                CPPUNIT_ASSERT_EQUAL(pValue1, pValue2);     //empty cells
+            CPPUNIT_ASSERT_EQUAL(bHasIdx1, bHasIdx2);
+            if (bHasIdx1)
+                CPPUNIT_ASSERT_EQUAL(nIdx1, nIdx2);   //cells with userlist value
         }
     }
 }
