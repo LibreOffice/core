@@ -121,9 +121,11 @@ void SidebarToolBox::InsertItem(const OUString& rCommand,
     }
 
     ToolBox::InsertItem(aCommand, rFrame, nBits, rRequestedSize, nPos);
+#if 0
 
     CreateController(GetItemId(aCommand), rFrame, std::max(rRequestedSize.Width(), ::tools::Long(0)), mbSideBar);
     RegisterHandlers();
+#endif
 }
 
 bool SidebarToolBox::EventNotify (NotifyEvent& rEvent)

@@ -965,11 +965,12 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
     }
 }
 
-void SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription,
+bool SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription,
                                   const css::uno::Reference<css::frame::XFrame>& rFrame,
                                   const NotebookBarAddonsItem& aNotebookBarAddonsItem,
                                   bool bReloadNotebookbar)
 {
+    bool bChanged = false;
     if (rUIXMLDescription != maNotebookBarUIFile || bReloadNotebookbar)
     {
         static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())
@@ -977,7 +978,9 @@ void SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription,
         maNotebookBarUIFile = rUIXMLDescription;
         if(GetNotebookBar())
             GetNotebookBar()->SetSystemWindow(this);
+        bChanged = true;
     }
+    return bChanged;
 }
 
 void SystemWindow::CloseNotebookBar()
