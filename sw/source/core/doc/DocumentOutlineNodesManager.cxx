@@ -46,7 +46,7 @@ OUString GetExpandTextMerged(SwRootFrame const*const pLayout,
         SwTextNode const& rNode, bool const bWithNumber,
         bool const bWithSpacesForLevel, ExpandMode const i_mode)
 {
-    if (pLayout && pLayout->IsHideRedlines())
+    if (pLayout && pLayout->HasMergedParas())
     {
         SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(rNode.getLayoutFrame(pLayout)));
         if (pFrame)

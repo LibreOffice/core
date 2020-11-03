@@ -155,7 +155,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
             {
                 if( pSet != &rSet )
                 {
-                    if (!GetLayout()->IsHideRedlines()
+                    if (!GetLayout()->HasMergedParas()
                         || pNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
                     {
                         rSet.MergeValues( aSet );
@@ -211,7 +211,7 @@ bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
             // get the node
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
 
-            if (GetLayout()->IsHideRedlines()
+            if (GetLayout()->HasMergedParas()
                 && pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
             {
                 continue;
