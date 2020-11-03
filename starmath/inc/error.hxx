@@ -23,6 +23,7 @@
 
 class SmNode;
 
+// Those are the errors that the parser (parser.hxx/parser.cxx) may encounter.
 enum class SmParseError
 {
     None,

@@ -69,7 +69,7 @@
 #define RID_XUNIONY_HELP                    NC_("RID_XUNIONY_HELP", "Union" )
 #define RID_XINTERSECTIONY_HELP             NC_("RID_XINTERSECTIONY_HELP", "Intersection" )
 #define RID_XSETMINUSY_HELP                 NC_("RID_XSETMINUSY_HELP", "Difference" )
-#define RID_XSLASHY_HELP                    NC_("RID_XSLASHY_HELP", "Quotient Set" )
+#define RID_XSETQUOTIENTY_HELP              NC_("RID_XSETQUOTIENTY_HELP", "Quotient Set" )
 #define RID_XSUBSETY_HELP                   NC_("RID_XSUBSETY_HELP", "Subset" )
 #define RID_XSUBSETEQY_HELP                 NC_("RID_XSUBSETEQY_HELP", "Subset Or Equal To" )
 #define RID_XSUPSETY_HELP                   NC_("RID_XSUPSETY_HELP", "Superset" )
