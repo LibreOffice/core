@@ -35,6 +35,9 @@
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
+#include <IMark.hxx>
+#include <bookmrk.hxx>
 #include <rootfrm.hxx>
 #include <breakit.hxx>
 #include <vcl/commandevent.hxx>
@@ -47,14 +50,161 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
+class HideIterator
+{
+private:
+    IDocumentRedlineAccess const& m_rIDRA;
+    IDocumentMarkAccess const& m_rIDMA;
+    bool const m_isHideRedlines;
+    sw::FieldmarkMode const m_eFieldmarkMode;
+    SwPosition const m_Start;
+    /// next redline
+    SwRedlineTable::size_type m_RedlineIndex;
+    /// next fieldmark
+    std::pair<sw::mark::IFieldmark const*, std::unique_ptr<SwPosition>> m_Fieldmark;
+    std::optional<SwPosition> m_oNextFieldmarkHide;
+    /// current start/end pair
+    SwPosition const* m_pStartPos;
+    SwPosition const* m_pEndPos;
+
+public:
+    SwPosition const* GetStartPos() const { return m_pStartPos; }
+    SwPosition const* GetEndPos() const { return m_pEndPos; }
+
+    HideIterator(SwTextNode & rTextNode,
+            bool const isHideRedlines, sw::FieldmarkMode const eMode)
+        : m_rIDRA(rTextNode.getIDocumentRedlineAccess())
+        , m_rIDMA(*rTextNode.getIDocumentMarkAccess())
+        , m_isHideRedlines(isHideRedlines)
+        , m_eFieldmarkMode(eMode)
+        , m_Start(rTextNode, 0)
+        , m_RedlineIndex(m_rIDRA.GetRedlinePos(rTextNode, RedlineType::Any))
+        , m_pStartPos(nullptr)
+        , m_pEndPos(&m_Start)
+    {
+    }
+
+    // delete redlines and fieldmarks can't overlap, due to sw::CalcBreaks()
+    // and no combining of adjacent redlines
+    // -> dummy chars are delete-redlined *iff* entire fieldmark is
+    // Note: caller is responsible for checking for immediately adjacent hides
+    bool Next()
+    {
+        SwPosition const* pNextRedlineHide(nullptr);
+        assert(m_pEndPos);
+        if (m_isHideRedlines)
+        {
+            // position on current or next redline
+            for (; m_RedlineIndex < m_rIDRA.GetRedlineTable().size(); ++m_RedlineIndex)
+            {
+                SwRangeRedline const*const pRed = m_rIDRA.GetRedlineTable()[m_RedlineIndex];
+
+                if (m_pEndPos->nNode.GetIndex() < pRed->Start()->nNode.GetIndex())
+                    break;
+
+                if (pRed->GetType() != RedlineType::Delete)
+                    continue;
+
+                SwPosition const*const pStart(pRed->Start());
+                SwPosition const*const pEnd(pRed->End());
+                if (*pStart == *pEnd)
+                {   // only allowed while moving (either way?)
+//                  assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));
+                    continue;
+                }
+                if (pStart->nNode.GetNode().IsTableNode())
+                {
+                    assert(pEnd->nNode == m_Start.nNode && pEnd->nContent.GetIndex() == 0);
+                    continue; // known pathology, ignore it
+                }
+                if (*m_pEndPos <= *pStart)
+                {
+                    pNextRedlineHide = pStart;
+                    break; // the next one
+                }
+            }
+        }
+
+        // position on current or next fieldmark
+        m_oNextFieldmarkHide.reset();
+        if (m_eFieldmarkMode != sw::FieldmarkMode::ShowBoth)
+        {
+            sal_Unicode const magic(m_eFieldmarkMode == sw::FieldmarkMode::ShowResult
+                    ? CH_TXT_ATR_FIELDSTART
+                    : CH_TXT_ATR_FIELDSEP);
+            sal_Int32 const nPos(m_pEndPos->nNode.GetNode().GetTextNode()->GetText().indexOf(
+                    magic, m_pEndPos->nContent.GetIndex()));
+            if (nPos != -1)
+            {
+                m_oNextFieldmarkHide.emplace(*m_pEndPos->nNode.GetNode().GetTextNode(), nPos);
+                sw::mark::IFieldmark const*const pFieldmark(
+                        m_eFieldmarkMode == sw::FieldmarkMode::ShowResult
+                            ? m_rIDMA.getFieldmarkAt(*m_oNextFieldmarkHide)
+                            : m_rIDMA.getFieldmarkFor(*m_oNextFieldmarkHide));
+                assert(pFieldmark);
+                m_Fieldmark.first = pFieldmark;
+                // for cursor travelling, there should be 2 visible chars;
+                // whichever char is hidden, the cursor travelling needs to
+                // be adapted in any case to skip in some situation or other;
+                // always hide the CH_TXT_ATR_FIELDSEP for now
+                if (m_eFieldmarkMode == sw::FieldmarkMode::ShowResult)
+                {
+                    m_Fieldmark.second.reset(
+                        new SwPosition(sw::mark::FindFieldSep(*m_Fieldmark.first)));
+                    ++m_Fieldmark.second->nContent;
+                    ++m_oNextFieldmarkHide->nContent; // skip start
+                }
+                else
+                {
+                    m_Fieldmark.second.reset(
+                        new SwPosition(pFieldmark->GetMarkEnd()));
+                    --m_Fieldmark.second->nContent;
+                }
+            }
+        }
+
+        // == can happen only if redline starts inside field command, and in
+        // that case redline will end before field separator
+        assert(!pNextRedlineHide || !m_oNextFieldmarkHide
+            || *pNextRedlineHide != *m_oNextFieldmarkHide
+            || *m_rIDRA.GetRedlineTable()[m_RedlineIndex]->End() < *m_Fieldmark.second);
+        if (pNextRedlineHide
+            && (!m_oNextFieldmarkHide || *pNextRedlineHide < *m_oNextFieldmarkHide))
+        {
+            SwRangeRedline const*const pRed(m_rIDRA.GetRedlineTable()[m_RedlineIndex]);
+            m_pStartPos = pRed->Start();
+            m_pEndPos = pRed->End();
+            ++m_RedlineIndex;
+            return true;
+        }
+        else if (m_oNextFieldmarkHide)
+        {
+            assert(!pNextRedlineHide || *m_oNextFieldmarkHide < *pNextRedlineHide);
+            m_pStartPos = &*m_oNextFieldmarkHide;
+            m_pEndPos = m_Fieldmark.second.get();
+            return true;
+        }
+        else // nothing
+        {
+            assert(!pNextRedlineHide && !m_oNextFieldmarkHide);
+            m_pStartPos = nullptr;
+            m_pEndPos = nullptr;
+            return false;
+        }
+    }
+};
+
+}
+
 namespace sw {
 
 std::unique_ptr<sw::MergedPara>
 CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
        FrameMode const eMode)
 {
-    IDocumentRedlineAccess const& rIDRA = rTextNode.getIDocumentRedlineAccess();
-    if (!rFrame.getRootFrame()->IsHideRedlines())
+    if (!rFrame.getRootFrame()->HasMergedParas())
     {
         return nullptr;
     }
@@ -67,29 +217,12 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     SwTextNode * pParaPropsNode(nullptr);
     SwTextNode * pNode(&rTextNode);
     sal_Int32 nLastEnd(0);
-    for (auto i = rIDRA.GetRedlinePos(rTextNode, RedlineType::Any);
-         i < rIDRA.GetRedlineTable().size(); ++i)
+    for (auto iter = HideIterator(rTextNode,
+                rFrame.getRootFrame()->IsHideRedlines(),
+                rFrame.getRootFrame()->GetFieldmarkMode()); iter.Next(); )
     {
-        SwRangeRedline const*const pRed = rIDRA.GetRedlineTable()[i];
-
-        if (pNode->GetIndex() < pRed->Start()->nNode.GetIndex())
-            break;
-
-        if (pRed->GetType() != RedlineType::Delete)
-            continue;
-
-        SwPosition const*const pStart(pRed->Start());
-        SwPosition const*const pEnd(pRed->End());
-        if (*pStart == *pEnd)
-        {   // only allowed while moving (either way?)
-//            assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));
-            continue;
-        }
-        if (pStart->nNode.GetNode().IsTableNode())
-        {
-            assert(&pEnd->nNode.GetNode() == &rTextNode && pEnd->nContent.GetIndex() == 0);
-            continue; // known pathology, ignore it
-        }
+        SwPosition const*const pStart(iter.GetStartPos());
+        SwPosition const*const pEnd(iter.GetEndPos());
         bHaveRedlines = true;
         assert(pNode != &rTextNode || &pStart->nNode.GetNode() == &rTextNode); // detect calls with wrong start node
         if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
