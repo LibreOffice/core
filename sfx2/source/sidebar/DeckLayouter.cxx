@@ -425,7 +425,7 @@ void GetRequestedSizes (
             if (!(0 <= rItem.maLayoutSize.Minimum && rItem.maLayoutSize.Minimum <= rItem.maLayoutSize.Preferred
                   && rItem.maLayoutSize.Preferred <= rItem.maLayoutSize.Maximum))
             {
-                SAL_WARN("sfx.sidebar", "Please follow LayoutSize constraints: 0 ≤ "
+                SAL_INFO("sfx.sidebar", "Please follow LayoutSize constraints: 0 ≤ "
                          "Minimum ≤ Preferred ≤ Maximum."
                          " Currently: Minimum: "
                          << rItem.maLayoutSize.Minimum
