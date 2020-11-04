@@ -245,13 +245,6 @@ void SwWrtShell::Insert( const OUString &rStr )
         SwPaM aPaM(pEnd->nNode.GetNode(), pEnd->nContent.GetIndex() - rStr.getLength(),
                    pEnd->nNode.GetNode(), pEnd->nContent.GetIndex());
 
-        o3tl::sorted_vector<sal_uInt16> aAttribs;
-        for (sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; ++i)
-            if (i != sal_uInt16(RES_CHRATR_RSID))
-                aAttribs.insert(i);
-        aAttribs.insert(RES_TXTATR_CHARFMT);
-        ResetAttr(aAttribs, &aPaM);
-
         SetAttrSet(aCharAttrSet, SetAttrMode::DEFAULT, &aPaM);
     }
 
