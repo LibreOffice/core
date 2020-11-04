@@ -52,6 +52,24 @@
       "revId": "96cc9cc18dd6f1425242f2b6fc96fb5cdba22c6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e157607f_ceaf9fc5",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-11-04T05:39:36Z",
+      "side": 1,
+      "message": "OK, although Text, Portion, startsWith Lorem ipsum makes the comment seem redundant to me...",
+      "parentUuid": "71edffd4_094bd9f8",
+      "revId": "96cc9cc18dd6f1425242f2b6fc96fb5cdba22c6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
