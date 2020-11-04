@@ -21,6 +21,7 @@
 
 #include "swdllapi.h"
 #include "swatrset.hxx"
+#include "cacheowner.hxx"
 #include "calbck.hxx"
 #include <memory>
 
@@ -40,7 +41,7 @@ namespace drawinglayer::attribute {
 }
 
 /// Base class for various Writer styles.
-class SW_DLLPUBLIC SwFormat : public sw::BroadcastingModify
+class SW_DLLPUBLIC SwFormat : public sw::CacheOwner, public sw::BroadcastingModify
 {
     friend class SwFrameFormat;
 
@@ -60,7 +61,10 @@ class SW_DLLPUBLIC SwFormat : public sw::BroadcastingModify
                                        at format (UI-side!). */
     bool m_bHidden : 1;
     std::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
-
+    virtual void OnWhichChanging(const sal_uInt16 nWhich) override
+            { CheckCaching(nWhich); }
+    virtual void OnPreDestroy() override
+            { ClearFromCaches(); }
 protected:
     SwFormat( SwAttrPool& rPool, const char* pFormatNm,
             const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );

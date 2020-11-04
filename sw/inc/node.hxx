@@ -23,6 +23,7 @@
 #include <sal/types.h>
 
 #include "swdllapi.h"
+#include "cacheowner.hxx"
 #include "ndarr.hxx"
 #include "ndtyp.hxx"
 #include "index.hxx"
@@ -357,12 +358,16 @@ private:
 
 // SwContentNode
 
-class SW_DLLPUBLIC SwContentNode: public sw::BroadcastingModify, public SwNode, public SwIndexReg
+class SW_DLLPUBLIC SwContentNode: public sw::CacheOwner, public sw::BroadcastingModify, public SwNode, public SwIndexReg
 {
 
     sw::WriterMultiListener m_aCondCollListener;
     SwFormatColl* m_pCondColl;
     mutable bool mbSetModifyAtAttr;
+    virtual void OnWhichChanging(const sal_uInt16 nWhich) override
+            { CheckCaching(nWhich); }
+    virtual void OnPreDestroy() override
+            { ClearFromCaches(); }
 
 protected:
     SwContentNode( const SwNodeIndex &rWhere, const SwNodeType nNodeType,

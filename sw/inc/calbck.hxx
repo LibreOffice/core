@@ -174,8 +174,6 @@ class SW_DLLPUBLIC SwModify: public SwClient
     template<typename E, typename S, sw::IteratorMode> friend class SwIterator;
     sw::WriterListener* m_pWriterListeners;                // the start of the linked list of clients
     bool m_bModifyLocked : 1;         // don't broadcast changes now
-    bool m_bInCache   : 1;
-    bool m_bInSwFntCache : 1;
 
     // mba: IMHO this method should be pure virtual
     // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
@@ -184,9 +182,11 @@ class SW_DLLPUBLIC SwModify: public SwClient
 
     SwModify(SwModify const &) = delete;
     SwModify &operator =(const SwModify&) = delete;
+    virtual void OnWhichChanging(const sal_uInt16) {};
+    virtual void OnPreDestroy() {};
 public:
     SwModify()
-        : SwClient(), m_pWriterListeners(nullptr), m_bModifyLocked(false), m_bInCache(false), m_bInSwFntCache(false)
+        : SwClient(), m_pWriterListeners(nullptr), m_bModifyLocked(false)
     {}
 
     // broadcasting: send notifications to all clients
@@ -211,14 +211,9 @@ public:
 
     void LockModify()                   { m_bModifyLocked = true;  }
     void UnlockModify()                 { m_bModifyLocked = false; }
-    void SetInCache( bool bNew )        { m_bInCache = bNew;       }
-    void SetInSwFntCache( bool bNew )   { m_bInSwFntCache = bNew;  }
     void SetInDocDTOR();
     bool IsModifyLocked() const     { return m_bModifyLocked;  }
-    bool IsInCache()      const     { return m_bInCache;       }
-    bool IsInSwFntCache() const     { return m_bInSwFntCache;  }
 
-    void CheckCaching( const sal_uInt16 nWhich );
     bool HasOnlyOneListener() const { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
 };
 

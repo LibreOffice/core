@@ -2138,8 +2138,8 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
     bObjsDirect = true;
 }
 
-SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
-    : SwCacheObj(pMod)
+SwBorderAttrs::SwBorderAttrs(const sw::CacheOwner* pOwner, const SwFrame* pConstructor)
+    : SwCacheObj(pOwner)
     , m_rAttrSet(pConstructor->IsContentFrame()
                     ? pConstructor->IsTextFrame()
                         ? static_cast<const SwTextFrame*>(pConstructor)->GetTextNodeForParaProps()->GetSwAttrSet()
@@ -2194,7 +2194,7 @@ SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
 
 SwBorderAttrs::~SwBorderAttrs()
 {
-    const_cast<SwModify *>(static_cast<SwModify const *>(m_pOwner))->SetInCache( false );
+    const_cast<sw::CacheOwner *>(static_cast<sw::CacheOwner const *>(m_pOwner))->SetInCache( false );
 }
 
 /* All calc methods calculate a safety distance in addition to the values given by the attributes.
@@ -2533,14 +2533,16 @@ void SwBorderAttrs::CalcLineSpacing_()
     m_bLineSpacing = false;
 }
 
-static SwModify const* GetCacheOwner(SwFrame const& rFrame)
+static const sw::CacheOwner* GetCacheOwner(SwFrame const& rFrame)
 {
-    return rFrame.IsContentFrame()
-        ? static_cast<SwModify const*>(rFrame.IsTextFrame()
+    if(rFrame.IsContentFrame())
+    {
         // sw_redlinehide: presumably this caches the border attrs at the model level and can be shared across different layouts so we want the ParaProps node here
-            ? static_cast<const SwTextFrame&>(rFrame).GetTextNodeForParaProps()
-            : static_cast<const SwNoTextFrame&>(rFrame).GetNode())
-        : static_cast<SwModify const*>(static_cast<const SwLayoutFrame&>(rFrame).GetFormat());
+        if(rFrame.IsTextFrame())
+            return static_cast<const SwTextFrame&>(rFrame).GetTextNodeForParaProps();
+        return static_cast<const SwNoTextFrame&>(rFrame).GetNode();
+    }
+    return static_cast<const SwLayoutFrame&>(rFrame).GetFormat();
 }
 
 SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrame *pFrame ) :
@@ -2553,8 +2555,8 @@ SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrame *pFrame ) 
 
 SwCacheObj *SwBorderAttrAccess::NewObj()
 {
-    const_cast<SwModify *>(static_cast<SwModify const *>(m_pOwner))->SetInCache( true );
-    return new SwBorderAttrs( static_cast<SwModify const *>(m_pOwner), m_pConstructor );
+    const_cast<sw::CacheOwner *>(static_cast<sw::CacheOwner const *>(m_pOwner))->SetInCache( true );
+    return new SwBorderAttrs( static_cast<sw::CacheOwner const *>(m_pOwner), m_pConstructor );
 }
 
 SwBorderAttrs *SwBorderAttrAccess::Get()

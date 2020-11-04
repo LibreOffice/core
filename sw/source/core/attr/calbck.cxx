@@ -20,7 +20,6 @@
 #include <frame.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <swcache.hxx>
 #include <swfntcch.hxx>
 #include <tools/debug.hxx>
 #include <sal/log.hxx>
@@ -151,11 +150,7 @@ SwModify::~SwModify()
     DBG_TESTSOLARMUTEX();
     OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
 
-    if ( IsInCache() )
-        SwFrame::GetCache().Delete( this );
-
-    if ( IsInSwFntCache() )
-        pSwFontCache->Delete( this );
+    OnPreDestroy();
 
     // notify all clients that they shall remove themselves
     SwPtrMsgPoolItem aDyObject( RES_OBJECTDYING, this );
@@ -170,13 +165,7 @@ SwModify::~SwModify()
 void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
     DBG_TESTSOLARMUTEX();
-    if ( IsInCache() || IsInSwFntCache() )
-    {
-        const sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
-                                        pNewValue ? pNewValue->Which() : 0;
-        CheckCaching( nWhich );
-    }
-
+    OnWhichChanging(pOldValue ? pOldValue->Which() : pNewValue ? pNewValue->Which() : 0);
     if ( !m_pWriterListeners || IsModifyLocked() )
         return;
 
@@ -286,37 +275,6 @@ SwClient* SwModify::Remove( SwClient* pDepend )
     return pDepend;
 }
 
-void SwModify::CheckCaching( const sal_uInt16 nWhich )
-{
-    if( isCHRATR( nWhich ) )
-    {
-        SetInSwFntCache( false );
-    }
-    else
-    {
-        switch( nWhich )
-        {
-        case RES_OBJECTDYING:
-        case RES_FMT_CHG:
-        case RES_ATTRSET_CHG:
-            SetInSwFntCache( false );
-            [[fallthrough]];
-        case RES_UL_SPACE:
-        case RES_LR_SPACE:
-        case RES_BOX:
-        case RES_SHADOW:
-        case RES_FRM_SIZE:
-        case RES_KEEP:
-        case RES_BREAK:
-            if( IsInCache() )
-            {
-                SwFrame::GetCache().Delete( this );
-                SetInCache( false );
-            }
-            break;
-        }
-    }
-}
 
 sw::WriterMultiListener::WriterMultiListener(SwClient& rToTell)
     : m_rToTell(rToTell)
