@@ -743,7 +743,6 @@ void SwSectionFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
         return;
-    bool bClients = false;
     sal_uInt16 nWhich = pLegacy->GetWhich();
     auto pOld = pLegacy->m_pOld;
     auto pNew = pLegacy->m_pNew;
@@ -758,7 +757,7 @@ void SwSectionFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
             if( SfxItemState::SET == pNewSet->GetItemState(
                                         RES_PROTECT, false, &pItem ))
             {
-                ModifyBroadcast( pItem, pItem );
+                GetNotifier().Broadcast(sw::LegacyModifyHint(pItem, pItem));
                 pNewSet->ClearItem( RES_PROTECT );
                 pOldSet->ClearItem( RES_PROTECT );
             }
@@ -767,7 +766,7 @@ void SwSectionFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
             if( SfxItemState::SET == pNewSet->GetItemState(
                         RES_EDIT_IN_READONLY, false, &pItem ) )
             {
-                ModifyBroadcast( pItem, pItem );
+                GetNotifier().Broadcast(sw::LegacyModifyHint(pItem, pItem));
                 pNewSet->ClearItem( RES_EDIT_IN_READONLY );
                 pOldSet->ClearItem( RES_EDIT_IN_READONLY );
             }
@@ -775,14 +774,14 @@ void SwSectionFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
             if( SfxItemState::SET == pNewSet->GetItemState(
                                     RES_FTN_AT_TXTEND, false, &pItem ))
             {
-                ModifyBroadcast( &pOldSet->Get( RES_FTN_AT_TXTEND ), pItem );
+                GetNotifier().Broadcast(sw::LegacyModifyHint(pItem, pItem));
                 pNewSet->ClearItem( RES_FTN_AT_TXTEND );
                 pOldSet->ClearItem( RES_FTN_AT_TXTEND );
             }
             if( SfxItemState::SET == pNewSet->GetItemState(
                                     RES_END_AT_TXTEND, false, &pItem ))
             {
-                ModifyBroadcast( &pOldSet->Get( RES_END_AT_TXTEND ), pItem );
+                GetNotifier().Broadcast(sw::LegacyModifyHint(pItem, pItem));
                 pNewSet->ClearItem( RES_END_AT_TXTEND );
                 pOldSet->ClearItem( RES_END_AT_TXTEND );
             }
@@ -791,28 +790,22 @@ void SwSectionFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         }
         break;
 
-    case RES_FTN_AT_TXTEND:
-    case RES_END_AT_TXTEND : bClients = true;
-        [[fallthrough]];
     case RES_SECTION_HIDDEN:
     case RES_SECTION_NOT_HIDDEN:
         {
-            SwSection* pSect = GetSection();
-            if( pSect && ( bClients || ( RES_SECTION_HIDDEN == nWhich ?
-                            !pSect->IsHiddenFlag() : pSect->IsHiddenFlag() ) ) )
-            {
-                ModifyBroadcast( pOld, pNew );
-            }
+            auto pSect = GetSection();
+            if(!pSect || (RES_SECTION_HIDDEN == nWhich) == pSect->IsHiddenFlag()) // already at target state, skipping.
+                return;
         }
-        return ;
-
+        [[fallthrough]];
+    case RES_FTN_AT_TXTEND:
+    case RES_END_AT_TXTEND:
+        GetNotifier().Broadcast(sw::LegacyModifyHint(pOld, pNew));
+        return;
     case RES_PROTECT:
     case RES_EDIT_IN_READONLY: // edit in readonly sections
         // Pass through these Messages until the End of the tree!
-        if( HasWriterListeners() )
-        {
-            ModifyBroadcast( pOld, pNew );
-        }
+        GetNotifier().Broadcast(sw::LegacyModifyHint(pOld, pNew));
         return; // That's it!
 
     case RES_OBJECTDYING:

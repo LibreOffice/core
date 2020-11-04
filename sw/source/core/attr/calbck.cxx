@@ -181,7 +181,7 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
         return;
 
     LockModify();
-    ModifyBroadcast( pOldValue, pNewValue );
+    CallSwClientNotify( sw::LegacyModifyHint{ pOldValue, pNewValue } );
     UnlockModify();
 }
 

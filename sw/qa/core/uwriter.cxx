@@ -1817,7 +1817,7 @@ void SwDocTest::testIntrusiveRing()
 namespace
 {
     struct TestHint final : SfxHint {};
-    struct TestModify : SwModify
+    struct TestModify : sw::BroadcastingModify
     {
     };
     struct TestClient : SwClient
@@ -1880,12 +1880,12 @@ void SwDocTest::testClientModify()
     CPPUNIT_ASSERT(aMod.HasWriterListeners());
     CPPUNIT_ASSERT(!aMod.HasOnlyOneListener());
     // test broadcast
-    aMod.ModifyBroadcast(nullptr, nullptr);
+    aMod.CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
     CPPUNIT_ASSERT_EQUAL(1,aClient1.m_nModifyCount);
     CPPUNIT_ASSERT_EQUAL(1,aClient2.m_nModifyCount);
     CPPUNIT_ASSERT_EQUAL(0,aClient1.m_nNotifyCount);
     CPPUNIT_ASSERT_EQUAL(0,aClient2.m_nNotifyCount);
-    aMod.ModifyBroadcast(nullptr, nullptr);
+    aMod.CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
     CPPUNIT_ASSERT_EQUAL(2,aClient1.m_nModifyCount);
     CPPUNIT_ASSERT_EQUAL(2,aClient2.m_nModifyCount);
     CPPUNIT_ASSERT_EQUAL(0,aClient1.m_nNotifyCount);
@@ -1953,7 +1953,7 @@ void SwDocTest::testClientModify()
             CPPUNIT_ASSERT(false);
         }
     }
-    aMod.ModifyBroadcast(nullptr, nullptr);
+    aMod.CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
     CPPUNIT_ASSERT_EQUAL(2,aClient1.m_nModifyCount);
     CPPUNIT_ASSERT_EQUAL(2,aClient2.m_nModifyCount);
     CPPUNIT_ASSERT_EQUAL(1,aClient1.m_nNotifyCount);
@@ -1968,7 +1968,7 @@ void SwDocTest::testBroadcastingModify()
     aMod.Add(&aClient);
     aListener.StartListening(aMod.GetNotifier());
 
-    aMod.ModifyBroadcast(nullptr, nullptr);
+    aMod.CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
     CPPUNIT_ASSERT_EQUAL(1,aClient.m_nModifyCount);
     CPPUNIT_ASSERT_EQUAL(1,aClient.m_nModifyCount);
     CPPUNIT_ASSERT_EQUAL(1,aListener.m_nNotifyCount);
