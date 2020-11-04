@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f15cdfec_29179864",
+        "filename": "sc/qa/unit/copy_paste_test.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-11-04T10:12:18Z",
+      "side": 1,
+      "message": "Is this really necessary? It seemed for me previously, the test never fails with this.",
+      "range": {
+        "startLine": 815,
+        "startChar": 1,
+        "endLine": 815,
+        "endChar": 35
+      },
+      "revId": "df7129f7b9019ecce4626d1d6bb622957a1b58d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
