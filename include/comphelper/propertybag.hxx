@@ -21,17 +21,16 @@
 #define INCLUDED_COMPHELPER_PROPERTYBAG_HXX
 
 #include <config_options.h>
+#include <com/sun/star/uno/Any.h>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/propertycontainerhelper.hxx>
 
-#include <memory>
+#include <map>
 
 
 namespace comphelper
 {
 
-
-    struct PropertyBag_Impl;
 
     //= PropertyBag
 
@@ -42,9 +41,8 @@ namespace comphelper
     */
     class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) PropertyBag final : protected OPropertyContainerHelper
     {
-    private:
-        ::std::unique_ptr< PropertyBag_Impl > m_pImpl;
-
+        std::map< sal_Int32, css::uno::Any > aDefaults;
+        bool m_bAllowEmptyPropertyName;
     public:
         PropertyBag();
         virtual ~PropertyBag();

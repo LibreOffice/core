@@ -48,16 +48,8 @@ namespace comphelper
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    typedef std::map< sal_Int32, Any >    MapInt2Any;
-    struct PropertyBag_Impl
-    {
-        PropertyBag_Impl() : m_bAllowEmptyPropertyName(false) { }
-        MapInt2Any  aDefaults;
-        bool m_bAllowEmptyPropertyName;
-    };
-
     PropertyBag::PropertyBag()
-        :m_pImpl( new PropertyBag_Impl )
+        : m_bAllowEmptyPropertyName(false)
     {
     }
 
@@ -68,7 +60,7 @@ namespace comphelper
 
     void PropertyBag::setAllowEmptyPropertyName( bool i_isAllowed )
     {
-        m_pImpl->m_bAllowEmptyPropertyName = i_isAllowed;
+        m_bAllowEmptyPropertyName = i_isAllowed;
     }
 
 
@@ -117,7 +109,7 @@ namespace comphelper
                   );
 
         // check name/handle sanity
-        lcl_checkForEmptyName( m_pImpl->m_bAllowEmptyPropertyName, _rName );
+        lcl_checkForEmptyName( m_bAllowEmptyPropertyName, _rName );
         lcl_checkNameAndHandle_ElementExistException( _rName, _nHandle, *this );
 
         // register the property
@@ -125,7 +117,7 @@ namespace comphelper
         registerPropertyNoMember( _rName, _nHandle, _nAttributes | PropertyAttribute::MAYBEVOID, _rType, css::uno::Any() );
 
         // remember the default
-        m_pImpl->aDefaults.emplace( _nHandle, Any() );
+        aDefaults.emplace( _nHandle, Any() );
     }
 
 
@@ -140,7 +132,7 @@ namespace comphelper
                 nullptr );
 
         // check name/handle sanity
-        lcl_checkForEmptyName( m_pImpl->m_bAllowEmptyPropertyName, _rName );
+        lcl_checkForEmptyName( m_bAllowEmptyPropertyName, _rName );
         lcl_checkNameAndHandle_PropertyExistException( _rName, _nHandle, *this );
 
         // register the property
@@ -148,7 +140,7 @@ namespace comphelper
             _rInitialValue );
 
         // remember the default
-        m_pImpl->aDefaults.emplace( _nHandle, _rInitialValue );
+        aDefaults.emplace( _nHandle, _rInitialValue );
     }
 
 
@@ -162,7 +154,7 @@ namespace comphelper
 
         revokeProperty( nHandle );
 
-        m_pImpl->aDefaults.erase( nHandle );
+        aDefaults.erase( nHandle );
     }
 
 
@@ -199,9 +191,9 @@ namespace comphelper
         if ( !hasPropertyByHandle( _nHandle ) )
             throw UnknownPropertyException(OUString::number(_nHandle));
 
-        MapInt2Any::const_iterator pos = m_pImpl->aDefaults.find( _nHandle );
-        OSL_ENSURE( pos != m_pImpl->aDefaults.end(), "PropertyBag::getPropertyDefaultByHandle: inconsistency!" );
-        if ( pos != m_pImpl->aDefaults.end() )
+        auto pos = aDefaults.find( _nHandle );
+        OSL_ENSURE( pos != aDefaults.end(), "PropertyBag::getPropertyDefaultByHandle: inconsistency!" );
+        if ( pos != aDefaults.end() )
             _out_rValue = pos->second;
         else
             _out_rValue.clear();
