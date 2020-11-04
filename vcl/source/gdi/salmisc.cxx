@@ -284,7 +284,6 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
         IMPL_CASE_SET_FORMAT( N4BitMsnPal, 1 );
         IMPL_CASE_SET_FORMAT( N4BitLsnPal, 4 );
         IMPL_CASE_SET_FORMAT( N8BitPal, 8 );
-        IMPL_CASE_SET_FORMAT( N8BitTcMask, 8 );
         IMPL_CASE_SET_FORMAT( N24BitTcBgr, 24 );
         IMPL_CASE_SET_FORMAT( N24BitTcRgb, 24 );
         IMPL_CASE_SET_FORMAT( N32BitTcAbgr, 32 );
@@ -347,8 +346,7 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
         }
         pDstBuffer->maPalette = *pDstPal;
     }
-    else if( ( nDstScanlineFormat == ScanlineFormat::N8BitTcMask ) ||
-             ( nDstScanlineFormat == ScanlineFormat::N32BitTcMask ) )
+    else if(nDstScanlineFormat == ScanlineFormat::N32BitTcMask )
     {
         assert(pDstMask && "destination buffer requires color mask");
         if (!pDstMask)

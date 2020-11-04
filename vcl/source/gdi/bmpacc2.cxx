@@ -102,19 +102,6 @@ void BitmapReadAccess::SetPixelForN8BitPal(Scanline pScanline, tools::Long nX, c
     pScanline[ nX ] = rBitmapColor.GetIndex();
 }
 
-BitmapColor BitmapReadAccess::GetPixelForN8BitTcMask(ConstScanline pScanline, tools::Long nX, const ColorMask& rMask)
-{
-    BitmapColor aColor;
-    rMask.GetColorFor8Bit( aColor, pScanline + nX );
-    return aColor;
-}
-
-void BitmapReadAccess::SetPixelForN8BitTcMask(Scanline pScanline, tools::Long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask)
-{
-    rMask.SetColorFor8Bit( rBitmapColor, pScanline + nX );
-}
-
-
 BitmapColor BitmapReadAccess::GetPixelForN24BitTcBgr(ConstScanline pScanline, tools::Long nX, const ColorMask&)
 {
     BitmapColor aBitmapColor;

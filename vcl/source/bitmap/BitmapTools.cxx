@@ -662,16 +662,6 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, c
 
     switch( pAlphaReadAcc->GetScanlineFormat() )
     {
-        case ScanlineFormat::N8BitTcMask:
-            pReadScan = pAlphaReadAcc->GetScanline( nY );
-            for( nX = 0; nX < nWidth; nX++ )
-            {
-                nAlpha = data[ nOff ] = 255 - ( *pReadScan++ );
-                if( nAlpha != 255 )
-                    bIsAlpha = true;
-                nOff += 4;
-            }
-            break;
         case ScanlineFormat::N8BitPal:
             pReadScan = pAlphaReadAcc->GetScanline( nY );
             for( nX = 0; nX < nWidth; nX++ )

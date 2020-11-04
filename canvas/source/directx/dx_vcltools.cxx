@@ -191,8 +191,7 @@ namespace dxcanvas::tools
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unable to acquire read access to alpha" );
 
-                    ENSURE_OR_THROW( pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal ||
-                                      pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitTcMask,
+                    ENSURE_OR_THROW( pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unsupported alpha scanline format" );
 
@@ -275,7 +274,6 @@ namespace dxcanvas::tools
 
                             case ScanlineFormat::N1BitLsbPal:
                             case ScanlineFormat::N4BitLsnPal:
-                            case ScanlineFormat::N8BitTcMask:
                             case ScanlineFormat::N24BitTcRgb:
                             case ScanlineFormat::N32BitTcAbgr:
                             case ScanlineFormat::N32BitTcArgb:
@@ -410,7 +408,6 @@ namespace dxcanvas::tools
 
                             case ScanlineFormat::N1BitLsbPal:
                             case ScanlineFormat::N4BitLsnPal:
-                            case ScanlineFormat::N8BitTcMask:
                             case ScanlineFormat::N24BitTcRgb:
                             case ScanlineFormat::N32BitTcAbgr:
                             case ScanlineFormat::N32BitTcArgb:

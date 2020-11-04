@@ -133,8 +133,6 @@ FncGetPixel BitmapReadAccess::GetPixelFunction( ScanlineFormat nFormat )
             return GetPixelForN4BitLsnPal;
         case ScanlineFormat::N8BitPal:
             return GetPixelForN8BitPal;
-        case ScanlineFormat::N8BitTcMask:
-            return GetPixelForN8BitTcMask;
         case ScanlineFormat::N24BitTcBgr:
             return GetPixelForN24BitTcBgr;
         case ScanlineFormat::N24BitTcRgb:
@@ -181,8 +179,6 @@ FncSetPixel BitmapReadAccess::SetPixelFunction( ScanlineFormat nFormat )
             return SetPixelForN4BitLsnPal;
         case ScanlineFormat::N8BitPal:
             return SetPixelForN8BitPal;
-        case ScanlineFormat::N8BitTcMask:
-            return SetPixelForN8BitTcMask;
         case ScanlineFormat::N24BitTcBgr:
             return SetPixelForN24BitTcBgr;
         case ScanlineFormat::N24BitTcRgb:
@@ -378,8 +374,7 @@ void BitmapWriteAccess::CopyScanline( tools::Long nY, ConstScanline aSrcScanline
         if(ImplFastCopyScanline( nY, *ImplGetBitmapBuffer(), aSrcScanline, nSrcScanlineFormat, nSrcScanlineSize ))
             return;
 
-        DBG_ASSERT( nFormat != ScanlineFormat::N8BitTcMask &&
-                    nFormat != ScanlineFormat::N32BitTcMask,
+        DBG_ASSERT( nFormat != ScanlineFormat::N32BitTcMask,
                     "No support for pixel formats with color masks yet!" );
         FncGetPixel pFncGetPixel;
         switch( nFormat )
@@ -389,7 +384,6 @@ void BitmapWriteAccess::CopyScanline( tools::Long nY, ConstScanline aSrcScanline
             case ScanlineFormat::N4BitMsnPal:    pFncGetPixel = GetPixelForN4BitMsnPal; break;
             case ScanlineFormat::N4BitLsnPal:    pFncGetPixel = GetPixelForN4BitLsnPal; break;
             case ScanlineFormat::N8BitPal:        pFncGetPixel = GetPixelForN8BitPal; break;
-            case ScanlineFormat::N8BitTcMask:    pFncGetPixel = GetPixelForN8BitTcMask; break;
             case ScanlineFormat::N24BitTcBgr:    pFncGetPixel = GetPixelForN24BitTcBgr; break;
             case ScanlineFormat::N24BitTcRgb:    pFncGetPixel = GetPixelForN24BitTcRgb; break;
             case ScanlineFormat::N32BitTcAbgr:
