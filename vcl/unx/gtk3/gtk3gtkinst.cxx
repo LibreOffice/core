@@ -3917,6 +3917,17 @@ private:
         pThis->signal_toplevel_focus_changed();
     }
 
+    bool isPositioningAllowed() const
+    {
+        bool bPositioningAllowed = true;
+#if defined(GDK_WINDOWING_WAYLAND)
+        // no X/Y positioning under Wayland
+        GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
+        bPositioningAllowed = !DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay);
+#endif
+        return bPositioningAllowed;
+    }
+
 protected:
     void help();
 public:
@@ -4045,16 +4056,16 @@ public:
             else
                 gtk_window_unmaximize(m_pWindow);
         }
+
+        if (isPositioningAllowed() && (nMask & WindowStateMask::X && nMask & WindowStateMask::Y))
+        {
+            gtk_window_move(m_pWindow, aData.GetX(), aData.GetY());
+        }
     }
 
     virtual OString get_window_state(WindowStateMask nMask) const override
     {
-        bool bPositioningAllowed = true;
-#if defined(GDK_WINDOWING_WAYLAND)
-        // drop x/y when under wayland
-        GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
-        bPositioningAllowed = !DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay);
-#endif
+        bool bPositioningAllowed = isPositioningAllowed();
 
         WindowStateData aData;
         WindowStateMask nAvailable = WindowStateMask::State |
