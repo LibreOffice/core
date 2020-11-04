@@ -244,10 +244,17 @@ const SmElementDescr SmElementsControl::m_aOthersList[] =
 
 const SmElementDescr SmElementsControl::m_aExamplesList[] =
 {
+    {"{func e}^{i %pi} + 1 = 0", RID_EXAMPLE_EULER_IDENTITY_HELP},
     {"C=%pi cdot d = 2 cdot %pi cdot r", RID_EXAMPLE_CIRCUMFERENCE_HELP},
-    {"E=mc^2", RID_EXAMPLE_MASS_ENERGY_EQUIV_HELP},
     {"a^2 + b^2 = c^2", RID_EXAMPLE_PYTHAGOREAN_THEO_HELP},
-    {"f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}", RID_EXAMPLE_A_SIMPLE_SERIES_HELP},
+    {"F = m a", RID_EXAMPLE_2NEWTON},
+    {"E = m c^2", RID_EXAMPLE_MASS_ENERGY_EQUIV_HELP},
+    {"G_{%mu %nu} + %LAMBDA g_{%mu %nu}= frac{8 %pi G}{c^4} T_{%mu %nu}", RID_EXAMPLE_GENERAL_RELATIVITY_HELP},
+    {" %DELTA t' = { %DELTA T } over sqrt{ 1 - v^2 over c^2 } ", RID_EXAMPLE_SPECIAL_RELATIVITY_HELP },
+    { "d over dt left( {partial L}over{partial dot q} = {partial L}over{partial q} right)", RID_EXAMPLE_EULER_LAGRANGE_HELP },
+    {"int from a to b f'(x) dx = f(a) - f(b)", RID_EXAMPLE_FTC_HELP},
+    { "abs{ %delta Z(t) } approx e^{%lambda t} abs{ %delta Z(0) }", RID_EXAMPLE_CAOS_HELP},
+    {"f ( x ) = sum from { { n = 0 } } to { infinity } { {f^{(n)}(x_0)} over {n!} (x-x_0)^n}", RID_EXAMPLE_A_TAYLOR_SERIES_HELP},
     {"f ( x ) = {1} over {%sigma sqrt{2%pi} }func e^-{{(x-%mu)^2} over {2%sigma^2}}", RID_EXAMPLE_GAUSS_DISTRIBUTION_HELP},
 };
 
