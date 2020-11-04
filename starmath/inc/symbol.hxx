@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+/** This stuff is used to work with %charname.
+  *
+  * Will remember the char name, char code and font.
+  */
+
 #ifndef INCLUDED_STARMATH_INC_SYMBOL_HXX
 #define INCLUDED_STARMATH_INC_SYMBOL_HXX
 
