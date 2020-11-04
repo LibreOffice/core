@@ -16,6 +16,7 @@
 #include <boost/optional.hpp>
 
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
 #include <oox/mathml/importutils.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -637,13 +638,15 @@ public:
     RTFParserState& top()
     {
         if (m_Impl.empty())
-            throw std::out_of_range("empty rtf state stack");
+            throw css::io::WrongFormatException(
+                "Parser state is empty! Invalid usage of destination braces in RTF?", nullptr);
         return m_Impl.back();
     }
     void pop()
     {
         if (m_Impl.empty())
-            throw std::out_of_range("empty rtf state stack");
+            throw css::io::WrongFormatException(
+                "Parser state is empty! Invalid usage of destination braces in RTF?", nullptr);
         return m_Impl.pop_back();
     }
     void push(RTFParserState const& rState) { return m_Impl.push_back(rState); }
