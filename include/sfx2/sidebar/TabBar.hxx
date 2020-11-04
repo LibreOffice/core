@@ -109,7 +109,7 @@ private:
     PopupMenuProvider maPopupMenuProvider;
 
     VclPtr<RadioButton> CreateTabItem (const DeckDescriptor& rDeckDescriptor);
-    Image GetItemImage (const DeckDescriptor& rDeskDescriptor) const;
+    css::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;
     void Layout();
     void UpdateButtonIcons();
 

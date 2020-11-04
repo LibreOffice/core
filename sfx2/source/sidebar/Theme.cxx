@@ -954,7 +954,7 @@ void Theme::ProcessNewValue (
             OUString sURL;
             if (rValue >>= sURL)
             {
-                maImages[nIndex] = Tools::GetImage(sURL, nullptr);
+                maImages[nIndex] = Image(Tools::GetImage(sURL, nullptr));
             }
             break;
         }

@@ -36,12 +36,12 @@ namespace sfx2::sidebar {
 class Tools
 {
 public:
-    static Image GetImage (
+    static css::uno::Reference<css::graphic::XGraphic> GetImage(
         const OUString& rsImageURL,
         const OUString& rsHighContrastImageURL,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    static Image GetImage (
+    static css::uno::Reference<css::graphic::XGraphic> GetImage(
         const OUString& rsURL,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 

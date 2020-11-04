@@ -150,7 +150,7 @@ void TabBar::UpdateButtonIcons()
 
         if (xDeckDescriptor)
         {
-            aImage = GetItemImage(*xDeckDescriptor);
+            aImage = Image(GetItemImage(*xDeckDescriptor));
             item.mpButton->SetModeImage(aImage);
         }
     }
@@ -292,7 +292,7 @@ VclPtr<RadioButton> TabBar::CreateTabItem(const DeckDescriptor& rDeckDescriptor)
     return pItem;
 }
 
-Image TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
+css::uno::Reference<css::graphic::XGraphic> TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
 {
     return Tools::GetImage(
         rDeckDescriptor.msIconURL,

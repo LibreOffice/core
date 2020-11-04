@@ -36,7 +36,7 @@ public:
     void SetTitle (const OUString& rsTitle);
     const OUString& GetTitle() const {return msTitle; }
 
-    void SetIcon (const Image& rIcon);
+    void SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon);
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea) override;
