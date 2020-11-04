@@ -760,7 +760,7 @@ bool WW8Export::DisallowInheritingOutlineNumbering(const SwFormat &rFormat)
 void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, bool bChpFormat, bool bFlyFormat )
 {
     bool bCallOutSet = true;
-    const SwModify* pOldMod = m_pOutFormatNode;
+    const sw::BroadcastingModify* pOldMod = m_pOutFormatNode;
     m_pOutFormatNode = &rFormat;
 
     switch( rFormat.Which() )

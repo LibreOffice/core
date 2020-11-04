@@ -296,10 +296,10 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
 namespace
 {
 
-void lcl_LOKInvalidateFrames(const SwModify& rMod, const SwRootFrame* pLayout,
+void lcl_LOKInvalidateFrames(const sw::BroadcastingModify& rMod, const SwRootFrame* pLayout,
         SwFrameType const nFrameType, const Point* pPoint)
 {
-    SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(rMod);
+    SwIterator<SwFrame, sw::BroadcastingModify, sw::IteratorMode::UnwrapMulti> aIter(rMod);
 
     for (SwFrame* pTmpFrame = aIter.First(); pTmpFrame; pTmpFrame = aIter.Next() )
     {

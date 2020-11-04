@@ -499,7 +499,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bWriteCombChars)
 
     if ( !aExportItems.empty() )
     {
-        const SwModify* pOldMod = m_rExport.m_pOutFormatNode;
+        const sw::BroadcastingModify* pOldMod = m_rExport.m_pOutFormatNode;
         m_rExport.m_pOutFormatNode = &rNd;
         m_rExport.m_aCurrentCharPropStarts.push( nSwPos );
 
@@ -3060,7 +3060,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             {                                               // Para-Attrs
                 m_pStyAttr = &rNode.GetAnyFormatColl().GetAttrSet();
 
-                const SwModify* pOldMod = m_pOutFormatNode;
+                const sw::BroadcastingModify* pOldMod = m_pOutFormatNode;
                 m_pOutFormatNode = &rNode;
 
                 // Pap-Attrs, so script is not necessary

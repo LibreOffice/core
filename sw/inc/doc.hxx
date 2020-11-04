@@ -848,7 +848,7 @@ public:
     void ReplaceDocumentProperties(const SwDoc& rSource, bool mailMerge = false);
 
     // Query if style (paragraph- / character- / frame- / page-) is used.
-    bool IsUsed( const SwModify& ) const;
+    bool IsUsed( const sw::BroadcastingModify& ) const;
     /// Query if table style is used.
     bool IsUsed( const SwTableAutoFormat& ) const;
     static bool IsUsed( const SwNumRule& );

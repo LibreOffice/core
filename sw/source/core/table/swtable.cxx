@@ -1399,12 +1399,12 @@ SwTableBox* SwTable::GetTableBox( sal_uLong nSttIdx )
 
     if ( pCNd || pTableNd )
     {
-        SwModify* pModify = pCNd;
+        sw::BroadcastingModify* pModify = pCNd;
         // #144862# Better handling of table in table
         if ( pTableNd && pTableNd->GetTable().GetFrameFormat() )
             pModify = pTableNd->GetTable().GetFrameFormat();
 
-        SwFrame* pFrame = pModify ? SwIterator<SwFrame,SwModify>(*pModify).First() : nullptr;
+        SwFrame* pFrame = pModify ? SwIterator<SwFrame,sw::BroadcastingModify>(*pModify).First() : nullptr;
         while ( pFrame && !pFrame->IsCellFrame() )
             pFrame = pFrame->GetUpper();
         if ( pFrame )
@@ -1456,7 +1456,7 @@ SwTableLine::~SwTableLine()
         delete m_aBoxes[i];
     }
     // the TabelleLine can be deleted if it's the last client of the FrameFormat
-    SwModify* pMod = GetFrameFormat();
+    sw::BroadcastingModify* pMod = GetFrameFormat();
     pMod->Remove( this );               // remove,
     if( !pMod->HasWriterListeners() )
         delete pMod;    // and delete
@@ -1656,7 +1656,7 @@ SwTableBox::~SwTableBox()
     }
 
     // the TabelleBox can be deleted if it's the last client of the FrameFormat
-    SwModify* pMod = GetFrameFormat();
+    sw::BroadcastingModify* pMod = GetFrameFormat();
     pMod->Remove( this );               // remove,
     if( !pMod->HasWriterListeners() )
         delete pMod;    // and delete
