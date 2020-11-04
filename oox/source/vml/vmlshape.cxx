@@ -378,8 +378,16 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 }
 
                 OUString s_mso_next_textbox;
-                if( getTextBox() )
+                if (getTextBox())
+                {
                     s_mso_next_textbox = getTextBox()->msNextTextbox;
+                    const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+                    const auto& nLeft = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true);
+                    aShapeProp.setProperty(PROP_HoriOrientPosition, nLeft);
+                    const auto& nTop = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maMarginTop, 0, true, true);
+                    aShapeProp.setProperty(PROP_VertOrientPosition, nTop);
+                    aShapeProp.setProperty(PROP_TextBox, true);
+                }
                 if( s_mso_next_textbox.startsWith("#") )
                     s_mso_next_textbox = s_mso_next_textbox.copy(1);
 

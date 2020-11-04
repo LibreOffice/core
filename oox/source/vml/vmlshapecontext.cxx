@@ -500,13 +500,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
                 }
             }
 
-            if (getParentElement() != VML_TOKEN( group ))
-            {
-                // Custom shape in Writer with a textbox are transformed into a frame
-                dynamic_cast<SimpleShape&>( mrShape ).setService(
-                        "com.sun.star.text.TextFrame");
-            }
-            else if (getCurrentElement() == VML_TOKEN(rect) || nShapeType == ESCHER_ShpInst_TextBox)
+            if (getCurrentElement() == VML_TOKEN(rect) || nShapeType == ESCHER_ShpInst_TextBox)
                 // Transform only rectangles into a TextShape inside a groupshape.
                 dynamic_cast<SimpleShape&>(mrShape).setService("com.sun.star.drawing.TextShape");
             return new TextBoxContext( *this, mrShapeModel.createTextBox(mrShape.getTypeModel()), rAttribs,
