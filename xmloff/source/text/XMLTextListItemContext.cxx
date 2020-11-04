@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -41,37 +42,26 @@ using namespace ::xmloff::token;
 XMLTextListItemContext::XMLTextListItemContext(
                         SvXMLImport& rImport,
                         XMLTextImportHelper& rTxtImp,
-                        const sal_uInt16 nPrfx,
-                        const OUString& rLName,
-                        const Reference< xml::sax::XAttributeList > & xAttrList,
+                        sal_Int32 /*nElement*/,
+                        const Reference< xml::sax::XFastAttributeList > & xAttrList,
                         const bool bIsHeader )
-    : SvXMLImportContext( rImport, nPrfx, rLName ),
+    : SvXMLImportContext( rImport ),
       rTxtImport( rTxtImp ),
       nStartValue( -1 ),
       mnSubListCount( 0 ),
       mxNumRulesOverride()
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        if( !bIsHeader && XML_NAMESPACE_TEXT == nPrefix &&
-            IsXMLToken( aLocalName, XML_START_VALUE ) )
+        if( !bIsHeader && aIter.getToken() == XML_ELEMENT(TEXT, XML_START_VALUE) )
         {
-            sal_Int32 nTmp = rValue.toInt32();
+            sal_Int32 nTmp = aIter.toInt32();
             if( nTmp >= 0 && nTmp <= SHRT_MAX )
                 nStartValue = static_cast<sal_Int16>(nTmp);
         }
-        else if ( nPrefix == XML_NAMESPACE_TEXT &&
-                  IsXMLToken( aLocalName, XML_STYLE_OVERRIDE ) )
+        else if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_STYLE_OVERRIDE ) )
         {
-            const OUString& sListStyleOverrideName = rValue;
+            const OUString sListStyleOverrideName = aIter.toString();
             if ( !sListStyleOverrideName.isEmpty() )
             {
                 OUString sDisplayStyleName(
@@ -105,11 +95,12 @@ XMLTextListItemContext::XMLTextListItemContext(
                 }
             }
         }
-        else if ( (XML_NAMESPACE_XML == nPrefix) &&
-             IsXMLToken(aLocalName, XML_ID)   )
+        else if ( aIter.getToken() == XML_ELEMENT(XML, XML_ID)   )
         {
 //FIXME: there is no UNO API for list items
         }
+        else
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
     }
 
     // If this is a <text:list-item> element, then remember it as a sign
@@ -130,38 +121,38 @@ void XMLTextListItemContext::endFastElement(sal_Int32 )
     rTxtImport.GetTextListHelper().SetListItem( nullptr );
 }
 
-SvXMLImportContextRef XMLTextListItemContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextListItemContext::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    const SvXMLTokenMap& rTokenMap = rTxtImport.GetTextElemTokenMap();
     bool bHeading = false;
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-    case XML_TOK_TEXT_H:
+    case XML_ELEMENT(TEXT, XML_H):
         bHeading = true;
         [[fallthrough]];
-    case XML_TOK_TEXT_P:
-        pContext = new XMLParaContext( GetImport(),
-                                       nPrefix, rLocalName,
+    case XML_ELEMENT(TEXT, XML_P):
+    case XML_ELEMENT(LO_EXT, XML_P):
+    {
+        auto pContext = new XMLParaContext( GetImport(),
+                                       nElement,
                                        xAttrList, bHeading );
         if (rTxtImport.IsProgress())
             GetImport().GetProgressBarHelper()->Increment();
-
+        return pContext;
         break;
-    case XML_TOK_TEXT_LIST:
+    }
+    case XML_ELEMENT(TEXT, XML_LIST):
         ++mnSubListCount;
-        pContext = new XMLTextListBlockContext( GetImport(), rTxtImport,
-                                                nPrefix, rLocalName,
+        return new XMLTextListBlockContext( GetImport(), rTxtImport,
+                                                nElement,
                                                 xAttrList,
                                                 (mnSubListCount > 1) );
         break;
+    default:
+        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     }
-
-    return pContext;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

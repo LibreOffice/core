@@ -97,6 +97,7 @@ class XMLTableImportContext : public SvXMLImportContext
 {
 public:
     XMLTableImportContext( const rtl::Reference< XMLTableImport >& xThis, sal_uInt16 nPrfx, const OUString& rLName, Reference< XColumnRowRange > const & xColumnRowRange );
+    XMLTableImportContext( const rtl::Reference< XMLTableImport >& xThis, Reference< XColumnRowRange > const & xColumnRowRange );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 
@@ -137,7 +138,9 @@ public:
                           sal_uInt16 nPrfx, const OUString& rLName,
                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
@@ -233,6 +236,12 @@ SvXMLImportContext* XMLTableImport::CreateTableContext( sal_uInt16 nPrfx, const 
 {
     rtl::Reference< XMLTableImport > xThis( this );
     return new XMLTableImportContext( xThis, nPrfx, rLName, xColumnRowRange );
+}
+
+SvXMLImportContext* XMLTableImport::CreateTableContext( Reference< XColumnRowRange > const & xColumnRowRange )
+{
+    rtl::Reference< XMLTableImport > xThis( this );
+    return new XMLTableImportContext( xThis, xColumnRowRange );
 }
 
 SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_Int32 /*nElement*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
@@ -362,6 +371,16 @@ void XMLTableImport::finishStyles()
 
 XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImport >& xImporter, sal_uInt16 nPrfx, const OUString& rLName,  Reference< XColumnRowRange > const & xColumnRowRange )
 : SvXMLImportContext( xImporter->mrImport, nPrfx, rLName )
+, mxTable( xColumnRowRange, UNO_QUERY )
+, mxColumns( xColumnRowRange->getColumns() )
+, mxRows( xColumnRowRange->getRows() )
+, mnCurrentRow( -1 )
+, mnCurrentColumn( -1 )
+{
+}
+
+XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImport >& xImporter, Reference< XColumnRowRange > const & xColumnRowRange )
+: SvXMLImportContext( xImporter->mrImport)
 , mxTable( xColumnRowRange, UNO_QUERY )
 , mxColumns( xColumnRowRange->getColumns() )
 , mxRows( xColumnRowRange->getRows() )
@@ -691,7 +710,9 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
     }
 }
 
-SvXMLImportContextRef XMLCellImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLCellImportContext::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // create text cursor on demand
     if( !mxCursor.is() )
@@ -717,7 +738,7 @@ SvXMLImportContextRef XMLCellImportContext::CreateChildContext( sal_uInt16 nPref
     // if we have a text cursor, lets  try to import some text
     if( mxCursor.is() )
     {
-        pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
+        pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nElement, xAttrList );
     }
 
     return pContext;

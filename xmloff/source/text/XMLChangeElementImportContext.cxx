@@ -34,28 +34,24 @@ using ::xmloff::token::XML_CHANGE_INFO;
 
 XMLChangeElementImportContext::XMLChangeElementImportContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
+    sal_Int32 nElement,
     bool bAccContent,
     XMLChangedRegionImportContext& rParent) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
+        SvXMLImportContext(rImport),
         bAcceptContent(bAccContent),
-        rChangedRegion(rParent)
+        rChangedRegion(rParent),
+        mnElement(nElement)
 {
 }
 
-SvXMLImportContextRef XMLChangeElementImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList)
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangeElementImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
 
-    if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-         IsXMLToken( rLocalName, XML_CHANGE_INFO) )
+    if ( nElement == XML_ELEMENT(OFFICE, XML_CHANGE_INFO) )
     {
-        xContext = new XMLChangeInfoContext(GetImport(), nPrefix, rLocalName,
-                                            rChangedRegion, GetLocalName());
     }
     else
     {
@@ -63,7 +59,7 @@ SvXMLImportContextRef XMLChangeElementImportContext::CreateChildContext(
         rChangedRegion.UseRedlineText();
 
         xContext = GetImport().GetTextImport()->CreateTextChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList,
+            GetImport(), nElement, xAttrList,
             XMLTextType::ChangedRegion);
 
         if (!xContext)
@@ -74,10 +70,27 @@ SvXMLImportContextRef XMLChangeElementImportContext::CreateChildContext(
         }
     }
 
+    return xContext.get();
+}
+
+SvXMLImportContextRef XMLChangeElementImportContext::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const Reference<XAttributeList> & /*xAttrList*/)
+{
+    SvXMLImportContextRef xContext;
+
+    if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
+         IsXMLToken( rLocalName, XML_CHANGE_INFO) )
+    {
+        xContext = new XMLChangeInfoContext(GetImport(), nPrefix, rLocalName,
+                                            rChangedRegion, SvXMLImport::getNameFromToken(mnElement));
+    }
+
     return xContext;
 }
 
-void XMLChangeElementImportContext::StartElement( const Reference< XAttributeList >& )
+void XMLChangeElementImportContext::startFastElement( sal_Int32 , const Reference< css::xml::sax::XFastAttributeList >& )
 {
     if(bAcceptContent)
     {
