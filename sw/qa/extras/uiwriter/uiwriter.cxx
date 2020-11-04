@@ -214,6 +214,7 @@ public:
     void testBookmarkUndo();
     void testFdo85876();
     void testTdf79717();
+    void testTdf137532();
     void testFdo87448();
     void testTextCursorInvalidation();
     void testTdf68183();
@@ -442,6 +443,7 @@ public:
     CPPUNIT_TEST(testBookmarkUndo);
     CPPUNIT_TEST(testFdo85876);
     CPPUNIT_TEST(testTdf79717);
+    CPPUNIT_TEST(testTdf137532);
     CPPUNIT_TEST(testFdo87448);
     CPPUNIT_TEST(testTextCursorInvalidation);
     CPPUNIT_TEST(testTdf68183);
@@ -2020,11 +2022,11 @@ void SwUiWriterTest::testTdf79717()
     lcl_setWeight(pWrtShell, WEIGHT_BOLD);
     pWrtShell->Insert("bold");
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    // Select 'bol' and rewrite it
+    // Select 'bol' and replace it
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
     pWrtShell->Insert("bol");
 
-    // Without the fix in place, 'bol' would have been rewritten with normal font weight
+    // Without the fix in place, 'bol' would have been replaced with normal font weight
 
     auto xText = getParagraph(1)->getText();
     CPPUNIT_ASSERT(xText.is());
@@ -2040,6 +2042,67 @@ void SwUiWriterTest::testTdf79717()
         CPPUNIT_ASSERT_EQUAL(OUString("bold"), xCursor->getString());
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
     }
+
+    // Now select characters from both runs and replace them
+    pWrtShell->EndPara();
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    pWrtShell->Insert("new");
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("norma"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
+    }
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 2)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("new"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
+    }
+}
+
+void SwUiWriterTest::testTdf137532()
+{
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("test");
+
+    //Select the word and change it to bold
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+    lcl_setWeight(pWrtShell, WEIGHT_BOLD);
+
+    // Select first character and replace it
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Insert("x");
+
+    auto xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
+
+    CPPUNIT_ASSERT(xCursor.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("xest"), xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    xCursor.set(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
+    CPPUNIT_ASSERT(xCursor.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), xCursor->getString());
+
+    // Without the fix in place, this test would have failed in
+    // - Expected: 150
+    // - Actual  : 100
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    xCursor.set(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
+    CPPUNIT_ASSERT(xCursor.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
 }
 
 void SwUiWriterTest::testFdo87448()
