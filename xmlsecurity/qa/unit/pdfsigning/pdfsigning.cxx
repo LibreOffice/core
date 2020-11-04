@@ -427,6 +427,22 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testBadCertP1)
                          rInformation.nStatus);
 }
 
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testBadCertP3Stamp)
+{
+    std::vector<SignatureInformation> aInfos
+        = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad-cert-p3-stamp.pdf", 1,
+                 /*rExpectedSubFilter=*/OString());
+    CPPUNIT_ASSERT(!aInfos.empty());
+    SignatureInformation& rInformation = aInfos[0];
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0 (SecurityOperationStatus_UNKNOWN)
+    // - Actual  : 1 (SecurityOperationStatus_OPERATION_SUCCEEDED)
+    // i.e. adding a stamp annotation was not considered as a bad modification.
+    CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
+                         rInformation.nStatus);
+}
+
 /// Test writing a PAdES signature.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testSigningCertificateAttribute)
 {
