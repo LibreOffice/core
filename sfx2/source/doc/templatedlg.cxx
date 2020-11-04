@@ -10,6 +10,7 @@
 #include <sfx2/templatedlg.hxx>
 
 #include <sfx2/inputdlg.hxx>
+#include <sfx2/module.hxx>
 #include <templatesearchview.hxx>
 #include <templatesearchviewitem.hxx>
 
@@ -215,7 +216,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     mxMoveButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, MoveClickHdl));
     mxExportButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, ExportClickHdl));
     mxImportButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, ImportClickHdl));
-    mxMoreTemplatesButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, LinkClickHdl));
+    if ( !SfxModule::GetActiveModule() ) //hide button in start center
+        mxMoreTemplatesButton->set_visible(false);
+    else
+        mxMoreTemplatesButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, LinkClickHdl));
 
     mxSearchFilter->connect_changed(LINK(this, SfxTemplateManagerDlg, SearchUpdateHdl));
     mxSearchFilter->connect_focus_in(LINK( this, SfxTemplateManagerDlg, GetFocusHdl ));
