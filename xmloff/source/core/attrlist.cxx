@@ -31,90 +31,58 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-namespace {
-
-struct SvXMLTagAttribute_Impl
-{
-    SvXMLTagAttribute_Impl( const OUString &rName,
-                         const OUString &rValue )
-        : sName(rName),
-        sValue(rValue)
-    {
-    }
-
-    OUString sName;
-    OUString sValue;
-};
-
-}
-
-struct SvXMLAttributeList_Impl
-{
-    SvXMLAttributeList_Impl()
-    {
-        // performance improvement during adding
-        vecAttribute.reserve(20);
-    }
-
-    ::std::vector<struct SvXMLTagAttribute_Impl> vecAttribute;
-    typedef ::std::vector<struct SvXMLTagAttribute_Impl>::size_type size_type;
-};
-
-
 sal_Int16 SAL_CALL SvXMLAttributeList::getLength()
 {
-    return sal::static_int_cast< sal_Int16 >(m_pImpl->vecAttribute.size());
+    return sal::static_int_cast< sal_Int16 >(vecAttribute.size());
 }
 
 
 SvXMLAttributeList::SvXMLAttributeList( const SvXMLAttributeList &r ) :
     cppu::WeakImplHelper<css::xml::sax::XAttributeList, css::util::XCloneable, css::lang::XUnoTunnel>(r),
-    m_pImpl( new SvXMLAttributeList_Impl( *r.m_pImpl ) )
+    vecAttribute( r.vecAttribute )
 {
 }
 
-SvXMLAttributeList::SvXMLAttributeList( const uno::Reference<
-        xml::sax::XAttributeList> & rAttrList )
-    : m_pImpl( new SvXMLAttributeList_Impl),
-      sType( GetXMLToken(XML_CDATA) )
+SvXMLAttributeList::SvXMLAttributeList( const uno::Reference< xml::sax::XAttributeList> & rAttrList )
 {
-
     SvXMLAttributeList* pImpl =
         comphelper::getUnoTunnelImplementation<SvXMLAttributeList>( rAttrList );
 
     if( pImpl )
-        *m_pImpl = *(pImpl->m_pImpl);
+        vecAttribute = pImpl->vecAttribute;
     else
         AppendAttributeList( rAttrList );
 }
 
 OUString SAL_CALL SvXMLAttributeList::getNameByIndex(sal_Int16 i)
 {
-    return ( o3tl::make_unsigned( i ) < m_pImpl->vecAttribute.size() ) ? m_pImpl->vecAttribute[i].sName : OUString();
+    assert( o3tl::make_unsigned(i) < vecAttribute.size() );
+    return ( o3tl::make_unsigned( i ) < vecAttribute.size() ) ? vecAttribute[i].sName : OUString();
 }
 
 
 OUString SAL_CALL SvXMLAttributeList::getTypeByIndex(sal_Int16)
 {
-    return sType;
+    return "CDATA";
 }
 
 OUString SAL_CALL  SvXMLAttributeList::getValueByIndex(sal_Int16 i)
 {
-    return ( o3tl::make_unsigned( i ) < m_pImpl->vecAttribute.size() ) ? m_pImpl->vecAttribute[i].sValue : OUString();
+    assert( o3tl::make_unsigned(i) < vecAttribute.size() );
+    return ( o3tl::make_unsigned( i ) < vecAttribute.size() ) ? vecAttribute[i].sValue : OUString();
 }
 
 OUString SAL_CALL SvXMLAttributeList::getTypeByName( const OUString& )
 {
-    return sType;
+    return "CDATA";
 }
 
 OUString SAL_CALL SvXMLAttributeList::getValueByName(const OUString& sName)
 {
-    auto ii = std::find_if(m_pImpl->vecAttribute.begin(), m_pImpl->vecAttribute.end(),
-        [&sName](struct SvXMLTagAttribute_Impl& rAttr) { return rAttr.sName == sName; });
+    auto ii = std::find_if(vecAttribute.begin(), vecAttribute.end(),
+        [&sName](SvXMLTagAttribute_Impl& rAttr) { return rAttr.sName == sName; });
 
-    if (ii != m_pImpl->vecAttribute.end())
+    if (ii != vecAttribute.end())
         return (*ii).sValue;
 
     return OUString();
@@ -129,9 +97,8 @@ uno::Reference< css::util::XCloneable >  SvXMLAttributeList::createClone()
 
 
 SvXMLAttributeList::SvXMLAttributeList()
-    : m_pImpl( new SvXMLAttributeList_Impl ),
-      sType( GetXMLToken(XML_CDATA) )
 {
+    vecAttribute.reserve(20); // performance improvement during adding
 }
 
 
@@ -145,23 +112,21 @@ void SvXMLAttributeList::AddAttribute(  const OUString &sName ,
 {
     assert( !sName.isEmpty() && "empty attribute name is invalid");
     assert( std::count(sName.getStr(), sName.getStr() + sName.getLength(), u':') <= 1 && "too many colons");
-    m_pImpl->vecAttribute.emplace_back( sName , sValue );
+    vecAttribute.emplace_back( SvXMLTagAttribute_Impl { sName , sValue } );
 }
 
 void SvXMLAttributeList::Clear()
 {
-    m_pImpl->vecAttribute.clear();
-
-    OSL_ASSERT( ! getLength() );
+    vecAttribute.clear();
 }
 
 void SvXMLAttributeList::RemoveAttribute( const OUString& sName )
 {
-    auto ii = std::find_if(m_pImpl->vecAttribute.begin(), m_pImpl->vecAttribute.end(),
-        [&sName](struct SvXMLTagAttribute_Impl& rAttr) { return rAttr.sName == sName; });
+    auto ii = std::find_if(vecAttribute.begin(), vecAttribute.end(),
+        [&sName](SvXMLTagAttribute_Impl& rAttr) { return rAttr.sName == sName; });
 
-    if (ii != m_pImpl->vecAttribute.end())
-        m_pImpl->vecAttribute.erase( ii );
+    if (ii != vecAttribute.end())
+        vecAttribute.erase( ii );
 }
 
 void SvXMLAttributeList::AppendAttributeList( const uno::Reference< css::xml::sax::XAttributeList >  &r )
@@ -169,54 +134,53 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< css::xml::sa
     OSL_ASSERT( r.is() );
 
     sal_Int16 nMax = r->getLength();
-    SvXMLAttributeList_Impl::size_type nTotalSize =
-        m_pImpl->vecAttribute.size() + nMax;
-    m_pImpl->vecAttribute.reserve( nTotalSize );
+    sal_Int16 nTotalSize = vecAttribute.size() + nMax;
+    vecAttribute.reserve( nTotalSize );
 
     for( sal_Int16 i = 0 ; i < nMax ; ++i ) {
         OUString sName = r->getNameByIndex( i );
         assert( !sName.isEmpty() && "empty attribute name is invalid");
         assert( std::count(sName.getStr(), sName.getStr() + sName.getLength(), u':') <= 1 && "too many colons");
-        m_pImpl->vecAttribute.emplace_back(sName, r->getValueByIndex( i ));
+        vecAttribute.emplace_back(SvXMLTagAttribute_Impl { sName, r->getValueByIndex( i ) });
     }
 
-    OSL_ASSERT( nTotalSize == static_cast<SvXMLAttributeList_Impl::size_type>(getLength()));
+    OSL_ASSERT( nTotalSize == getLength() );
 }
 
 void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,
         const OUString& rValue )
 {
-    if( o3tl::make_unsigned( i )
-            < m_pImpl->vecAttribute.size() )
+    assert( o3tl::make_unsigned(i) < vecAttribute.size() );
+    if( o3tl::make_unsigned( i ) < vecAttribute.size() )
     {
-        m_pImpl->vecAttribute[i].sValue = rValue;
+        vecAttribute[i].sValue = rValue;
     }
 }
 
 void SvXMLAttributeList::RemoveAttributeByIndex( sal_Int16 i )
 {
-    if( o3tl::make_unsigned( i )
-            < m_pImpl->vecAttribute.size() )
-        m_pImpl->vecAttribute.erase( m_pImpl->vecAttribute.begin() + i );
+    assert( o3tl::make_unsigned(i) < vecAttribute.size() );
+    if( o3tl::make_unsigned( i ) < vecAttribute.size() )
+        vecAttribute.erase( vecAttribute.begin() + i );
 }
 
 void SvXMLAttributeList::RenameAttributeByIndex( sal_Int16 i,
                                                  const OUString& rNewName )
 {
-    if( o3tl::make_unsigned( i )
-            < m_pImpl->vecAttribute.size() )
+    assert( o3tl::make_unsigned(i) < vecAttribute.size() );
+    if( o3tl::make_unsigned( i ) < vecAttribute.size() )
     {
-        m_pImpl->vecAttribute[i].sName = rNewName;
+        vecAttribute[i].sName = rNewName;
     }
 }
 
 sal_Int16 SvXMLAttributeList::GetIndexByName( const OUString& rName ) const
 {
-    auto ii = std::find_if(m_pImpl->vecAttribute.begin(), m_pImpl->vecAttribute.end(),
-        [&rName](struct SvXMLTagAttribute_Impl& rAttr) { return rAttr.sName == rName; });
+    auto ii = std::find_if(vecAttribute.begin(), vecAttribute.end(),
+        [&rName](const SvXMLTagAttribute_Impl& rAttr) { return rAttr.sName == rName; });
 
-    if (ii != m_pImpl->vecAttribute.end())
-        return static_cast<sal_Int16>(std::distance(m_pImpl->vecAttribute.begin(), ii));
+    if (ii != vecAttribute.end())
+        return static_cast<sal_Int16>(std::distance(vecAttribute.begin(), ii));
 
     return -1;
 }
