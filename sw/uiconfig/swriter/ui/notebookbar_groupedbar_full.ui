@@ -13351,7 +13351,7 @@
                                 <property name="vexpand">True</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="colorbox3">
+                                  <object class="sfxlo-NotebookbarToolBox" id="colorbox3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">both-horiz</property>
@@ -13377,7 +13377,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="colorbox4">
+                                  <object class="sfxlo-NotebookbarToolBox" id="colorbox4">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">both-horiz</property>
@@ -13458,7 +13458,7 @@
                                 <property name="vexpand">True</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="colorbox5">
+                                  <object class="sfxlo-NotebookbarToolBox" id="colorbox5">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">both-horiz</property>
@@ -13484,7 +13484,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="colorbox6">
+                                  <object class="sfxlo-NotebookbarToolBox" id="colorbox6">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">both-horiz</property>
