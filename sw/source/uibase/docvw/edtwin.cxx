@@ -577,7 +577,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                                 SwOutlineNodes::size_type nOutlineNodesCount
                                         = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
                                 int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
-                                OUString sQuickHelp(SwResId(STR_ClICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY));
+                                OUString sQuickHelp(SwResId(STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY));
                                 if (nPos + 1 < nOutlineNodesCount
                                         && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos + 1) > nLevel)
                                     sQuickHelp += " (" + SwResId(STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT) + ")";
