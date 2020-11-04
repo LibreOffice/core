@@ -56,6 +56,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
     getComponent() = loadFromDesktop(aURL);
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer8");
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());

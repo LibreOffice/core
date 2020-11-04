@@ -113,6 +113,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
     utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> aProperties(
         comphelper::InitPropertySequence({ { "NoThumbnail", uno::makeAny(true) } }));
     osl::File::remove(aTempFile.GetURL());
