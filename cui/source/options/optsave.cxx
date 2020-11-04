@@ -375,7 +375,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
             {
                 for (sal_Int32 n = 0, nEntryCount = m_xDocTypeLB->get_count(); n < nEntryCount; ++n)
                 {
-                    int nData = m_xDocTypeLB->get_id(n).toInt32();
+                    unsigned int nData = m_xDocTypeLB->get_id(n).toUInt32();
                     OUString sCommand = "getSortedFilterList():module=%1:iflags=" +
                                OUString::number(static_cast<int>(SfxFilterFlags::IMPORT|SfxFilterFlags::EXPORT)) +
                                ":eflags=" +

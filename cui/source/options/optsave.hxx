@@ -21,14 +21,14 @@
 #include <memory>
 #include <sfx2/tabdlg.hxx>
 
-#define APP_WRITER              0
-#define APP_WRITER_WEB          1
-#define APP_WRITER_GLOBAL       2
-#define APP_CALC                3
-#define APP_IMPRESS             4
-#define APP_DRAW                5
-#define APP_MATH                6
-#define APP_COUNT               7
+#define APP_WRITER              0U
+#define APP_WRITER_WEB          1U
+#define APP_WRITER_GLOBAL       2U
+#define APP_CALC                3U
+#define APP_IMPRESS             4U
+#define APP_DRAW                5U
+#define APP_MATH                6U
+#define APP_COUNT               7U
 
 namespace com::sun::star::beans { struct PropertyValue; }
 
