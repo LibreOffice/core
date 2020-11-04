@@ -32,6 +32,8 @@
 #include <rtl/math.hxx>
 #include <tools/wintypes.hxx>
 #include <unotools/charclass.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <document.hxx>
 
@@ -1342,11 +1344,40 @@ void ScCheckListMenuControl::launch(const tools::Rectangle& rRect)
     StartPopupMode(aRect, FloatWinPopupFlags::Down);
 }
 
+void ScCheckListMenuControl::NotifyCloseLOK()
+{
+    VclPtr<vcl::Window> aNotifierWindow = mxFrame->GetParentWithLOKNotifier();
+    if (aNotifierWindow) {
+        try
+        {
+            const vcl::ILibreOfficeKitNotifier* pNotifier = aNotifierWindow->GetLOKNotifier();
+            if (pNotifier)
+            {
+                std::stringstream aStream;
+                boost::property_tree::ptree aTree;
+                aTree.put("jsontype", "dockingwindow");
+                aTree.put("action", "close");
+
+                boost::property_tree::write_json(aStream, aTree);
+                const std::string message = aStream.str();
+                pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+            }
+        }
+        catch (boost::property_tree::json_parser::json_parser_error& rError)
+        {
+            SAL_WARN("vcl", rError.message());
+        }
+    }
+}
+
 void ScCheckListMenuControl::close(bool bOK)
 {
     if (bOK && mxOKAction)
         mxOKAction->execute();
     EndPopupMode();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        NotifyCloseLOK();
 }
 
 void ScCheckListMenuControl::setExtendedData(std::unique_ptr<ExtendedData> p)
@@ -1374,6 +1405,9 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, PopupModeEndHdl, FloatingWindow*, void)
     clearSelectedMenuItem();
     if (mxPopupEndAction)
         mxPopupEndAction->execute();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        NotifyCloseLOK();
 }
 
 int ScCheckListMenuControl::GetTextWidth(const OUString& rsName) const

@@ -209,6 +209,8 @@ private:
 
     void CreateDropDown();
 
+    void NotifyCloseLOK();
+
     DECL_LINK(ButtonHdl, weld::Button&, void);
     DECL_LINK(TriStateHdl, weld::ToggleButton&, void);
 
