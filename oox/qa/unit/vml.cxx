@@ -16,6 +16,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <comphelper/sequenceashashmap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -63,9 +64,13 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testLayoutFlowAltAlone)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    sal_Int16 nWritingMode = 0;
-    xShape->getPropertyValue("WritingMode") >>= nWritingMode;
+    auto xShape = xDrawPage->getByIndex(0);
+    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aTextBoxInteropGrabBag{ xPropSet->getPropertyValue(
+        "TextBoxInteropGrabBag") };
+    CPPUNIT_ASSERT(aTextBoxInteropGrabBag.find("TextWritingMode") != aTextBoxInteropGrabBag.end());
+
+    const auto nWritingMode = aTextBoxInteropGrabBag["TextWritingMode"].get<sal_Int16>();
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 5 [ BTLR ]

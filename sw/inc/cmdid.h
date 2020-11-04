@@ -824,6 +824,7 @@
 #define FN_TEXT_BOX                     (FN_PARAM2+28) /* TextBox Property*/
 #define FN_BOOKMARK_HIDDEN              (FN_PARAM2+29) /* Hidden Property of bookmarks*/
 #define FN_BOOKMARK_CONDITION           (FN_PARAM2+30) /* Condition Property of bookmarks*/
+#define FN_TEXT_BOX_INTEROP_GRAB_BAG    (FN_PARAM2+31) /* Custom Properties for textbox in shape*/
 
 // Status: not more than 19!
 #define FN_STAT_PAGE                (FN_STAT + 1)

@@ -33,6 +33,7 @@
 #include <unoframe.hxx>
 #include <unoparagraph.hxx>
 #include <unotextrange.hxx>
+#include <unoprnms.hxx>
 #include <svx/svditer.hxx>
 #include <swunohelper.hxx>
 #include <textboxhelper.hxx>
@@ -926,7 +927,6 @@ SwXShape::SwXShape(
         lcl_addShapePropertyEventFactories( *pObj, *this );
         m_pImpl->bInitializedPropertyNotifier = true;
     }
-
 }
 
 void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
@@ -1169,6 +1169,11 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 else
                     SwTextBoxHelper::destroy(pFormat);
 
+            }
+            else if (pEntry->nWID == FN_TEXT_BOX_INTEROP_GRAB_BAG)
+            {
+                SwTextBoxHelper::syncProperty(pFormat, UNO_NAME_TEXT_BOX_INTEROP_GRAB_BAG, aValue);
+                dynamic_cast<SwDrawFrameFormat*>(pFormat)->SetTextboxGrabBagItem(aValue);
             }
             else if (pEntry->nWID == RES_CHAIN)
             {
@@ -1517,6 +1522,10 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 {
                     bool bValue = SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT);
                     aRet <<= bValue;
+                }
+                else if (pEntry->nWID == FN_TEXT_BOX_INTEROP_GRAB_BAG)
+                {
+                    dynamic_cast<SwDrawFrameFormat*>(pFormat)->GetTextboxGrabBagItem(aRet);
                 }
                 else if (pEntry->nWID == RES_CHAIN)
                 {

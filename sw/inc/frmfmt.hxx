@@ -37,6 +37,7 @@ class IMapObject;
 class SwRect;
 class SdrObject;
 class SwRootFrame;
+class SfxGrabBagItem;
 
 namespace sw
 {
@@ -363,6 +364,8 @@ class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
 
     bool mbPosAttrSet;
 
+    std::shared_ptr<SfxGrabBagItem> m_xTextboxGrabBagItem;  ///< 'Textbox in shape' InteropGrabBag
+
 protected:
     SwDrawFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrame )
@@ -398,6 +401,9 @@ public:
     void PosAttrSet() { mbPosAttrSet = true; }
 
     virtual OUString GetDescription() const override;
+
+    void GetTextboxGrabBagItem(css::uno::Any& rVal) const;
+    void SetTextboxGrabBagItem(const css::uno::Any& rVal);
 };
 
 namespace sw {

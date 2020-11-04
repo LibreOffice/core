@@ -90,6 +90,7 @@
 
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/grabbagitem.hxx>
 #include <wrtsh.hxx>
 #include <txtfld.hxx>
 
@@ -3477,6 +3478,22 @@ OUString SwDrawFrameFormat::GetDescription() const
         aResult = SwResId(STR_GRAPHIC);
 
     return aResult;
+}
+
+void SwDrawFrameFormat::GetTextboxGrabBagItem(uno::Any& rVal) const
+{
+    if (m_xTextboxGrabBagItem)
+        m_xTextboxGrabBagItem->QueryValue(rVal);
+    else
+        rVal <<= uno::Sequence<beans::PropertyValue>();
+}
+
+void SwDrawFrameFormat::SetTextboxGrabBagItem(const uno::Any& rVal)
+{
+    if (!m_xTextboxGrabBagItem)
+        m_xTextboxGrabBagItem = std::make_shared<SfxGrabBagItem>();
+
+    m_xTextboxGrabBagItem->PutValue(rVal, 0);
 }
 
 IMapObject* SwFrameFormat::GetIMapObject( const Point& rPoint,

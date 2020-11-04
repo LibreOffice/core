@@ -506,6 +506,17 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
         if (rValue >>= eMode)
             syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
     }
+    else if (rPropertyName == UNO_NAME_TEXT_BOX_INTEROP_GRAB_BAG)
+    {
+        // tdf#41466
+        auto aGrabBag = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(
+            rValue.get<uno::Sequence<beans::PropertyValue>>());
+        for (const auto& aProp : std::as_const(aGrabBag))
+        {
+            if (aProp.Name == "TextWritingMode")
+                syncProperty(pShape, RES_FRAMEDIR, 0, aProp.Value);
+        }
+    }
 }
 
 void SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,

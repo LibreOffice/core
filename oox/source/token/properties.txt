@@ -525,6 +525,7 @@ TargetFrame
 Text
 TextAutoGrowHeight
 TextBox
+TextBoxInteropGrabBag
 TextBreak
 TextCameraZRotateAngle
 TextColor
