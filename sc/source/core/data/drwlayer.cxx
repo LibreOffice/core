@@ -715,8 +715,7 @@ void lcl_SetLogicRectFromAnchor(SdrObject* pObj, ScDrawObjData& rAnchor, ScDocum
 } // namespace
 
 void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData& rData,
-                                           bool bUseLogicRect, bool bNegativePage, bool bCanResize,
-                                           bool bHiddenAsZero)
+                                           bool bUseLogicRect, bool bNegativePage, bool bCanResize)
 {
     tools::Rectangle aRect = bUseLogicRect ? pObj->GetLogicRect() : pObj->GetSnapRect();
     SCCOL nCol1 = rData.maStart.Col();
@@ -725,8 +724,8 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
     SCCOL nCol2 = rData.maEnd.Col();
     SCROW nRow2 = rData.maEnd.Row();
     SCTAB nTab2 = rData.maEnd.Tab();
-    Point aPos(pDoc->GetColOffset(nCol1, nTab1, bHiddenAsZero),
-               pDoc->GetRowOffset(nRow1, nTab1, bHiddenAsZero));
+    Point aPos(pDoc->GetColOffset(nCol1, nTab1, /*bHiddenAsZero*/true),
+               pDoc->GetRowOffset(nRow1, nTab1, /*bHiddenAsZero*/true));
     aPos.setX(TwipsToHmm(aPos.X()));
     aPos.setY(TwipsToHmm(aPos.Y()));
     aPos += lcl_calcAvailableDiff(*pDoc, nCol1, nRow1, nTab1, rData.maStartOffset);
@@ -745,8 +744,8 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
         // Also when the end point is set, we need to consider it.
         if (rData.mbWasInHiddenRow || aLastCellRect.IsEmpty() || nRow1 != nRow2 || nCol1 != nCol2)
         {
-            Point aEnd(pDoc->GetColOffset(nCol2, nTab2, bHiddenAsZero),
-                       pDoc->GetRowOffset(nRow2, nTab2, bHiddenAsZero));
+            Point aEnd(pDoc->GetColOffset(nCol2, nTab2, /*bHiddenAsZero*/true),
+                       pDoc->GetRowOffset(nRow2, nTab2, /*bHiddenAsZero*/true));
             aEnd.setX(TwipsToHmm(aEnd.X()));
             aEnd.setY(TwipsToHmm(aEnd.Y()));
             aEnd += lcl_calcAvailableDiff(*pDoc, nCol2, nRow2, nTab2, rData.maEndOffset);

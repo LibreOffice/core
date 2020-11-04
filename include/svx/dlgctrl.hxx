@@ -102,7 +102,7 @@ protected:
 
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
-    SvxRectCtl(SvxTabPage* pPage, RectPoint eRpt = RectPoint::MM, sal_uInt16 nBorder = 200);
+    SvxRectCtl(SvxTabPage* pPage);
     void SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder);
     virtual ~SvxRectCtl() override;
 

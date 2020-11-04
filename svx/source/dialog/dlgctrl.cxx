@@ -62,11 +62,11 @@ BitmapEx& SvxRectCtl::GetRectBitmap()
     return *pBitmap;
 }
 
-SvxRectCtl::SvxRectCtl(SvxTabPage* pPage, RectPoint eRpt, sal_uInt16 nBorder)
+SvxRectCtl::SvxRectCtl(SvxTabPage* pPage)
     : m_pPage(pPage)
-    , nBorderWidth(Application::GetDefaultDevice()->LogicToPixel(Size(nBorder, 0), MapMode(MapUnit::Map100thMM)).Width())
-    , eRP(eRpt)
-    , eDefRP(eRpt)
+    , nBorderWidth(Application::GetDefaultDevice()->LogicToPixel(Size(200, 0), MapMode(MapUnit::Map100thMM)).Width())
+    , eRP(RectPoint::MM)
+    , eDefRP(RectPoint::MM)
     , m_nState(CTL_STATE::NONE)
     , mbCompleteDisable(false)
 {
