@@ -630,6 +630,7 @@ int main( int argc, char* argv[] )
             int max_tiles = (argc > arg ? atoi(argv[arg++]) : -1);
             const bool dump = true;
 
+            // coverity[tainted_data] - we trust the contents of this variable
             testTile (pDocument.get(), max_parts, max_tiles, dump);
         }
         else if (!strcmp(mode, "--join"))
