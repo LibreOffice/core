@@ -36,23 +36,41 @@ using namespace css::uno;
 
 namespace sfx2::sidebar {
 
-const sal_Int32 gaLeftIconPadding (5);
-const sal_Int32 gaRightIconPadding (5);
-
 PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
                              vcl::Window* pParentWindow,
                              Panel* pPanel)
-    : TitleBar(rsTitle, pParentWindow, GetBackgroundPaintColor()),
-      mbIsLeftButtonDown(false),
+    : TitleBar(pParentWindow, "sfx/ui/paneltitlebar.ui", "PanelTitleBar",
+               Theme::Color_PanelTitleBarBackground),
+      mxExpander(m_xBuilder->weld_expander("expander")),
       mpPanel(pPanel),
       mxFrame(),
       msMoreOptionsCommand()
 {
-    OSL_ASSERT(mpPanel != nullptr);
+    mxExpander->set_label(rsTitle);
+    mxExpander->connect_expanded(LINK(this, PanelTitleBar, ExpandHdl));
+
+    assert(mpPanel);
+
+    UpdateExpandedState();
 
 #ifdef DEBUG
     SetText(OUString("PanelTitleBar"));
 #endif
+}
+
+void PanelTitleBar::SetTitle(const OUString& rsTitle)
+{
+    mxExpander->set_label(rsTitle);
+}
+
+OUString PanelTitleBar::GetTitle() const
+{
+    return mxExpander->get_label();
+}
+
+void PanelTitleBar::UpdateExpandedState()
+{
+    mxExpander->set_expanded(mpPanel->IsExpanded());
 }
 
 PanelTitleBar::~PanelTitleBar()
@@ -63,18 +81,18 @@ PanelTitleBar::~PanelTitleBar()
 void PanelTitleBar::dispose()
 {
     mpPanel.clear();
+    mxExpander.reset();
     TitleBar::dispose();
 }
 
 void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
-                                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                          const css::uno::Reference<css::frame::XController>& rxController)
+                                          const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (rsCommandName == msMoreOptionsCommand)
         return;
 
     if (msMoreOptionsCommand.getLength() > 0)
-        maToolBox->RemoveItem(maToolBox->GetItemPos(mnMenuItemIndex));
+        mxToolBox->set_item_visible("button", false);
 
     msMoreOptionsCommand = rsCommandName;
     mxFrame = rxFrame;
@@ -82,63 +100,15 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
     if (msMoreOptionsCommand.getLength() <= 0)
         return;
 
-    maToolBox->InsertItem(
-        mnMenuItemIndex,
-        Theme::GetImage(Theme::Image_PanelMenu));
-    Reference<frame::XToolbarController> xController (
-        ControllerFactory::CreateToolBoxController(
-            maToolBox.get(),
-            mnMenuItemIndex,
-            msMoreOptionsCommand,
-            rxFrame, rxController,
-            VCLUnoHelper::GetInterface(maToolBox.get()),
-            0, true));
-    maToolBox->SetController(mnMenuItemIndex, xController);
-    maToolBox->SetQuickHelpText(
-        mnMenuItemIndex,
+    mxToolBox->set_item_visible("button", true);
+    mxToolBox->set_item_icon_name("button", "sfx2/res/symphony/morebutton.png");
+    mxToolBox->set_item_tooltip_text(
+        "button",
         SfxResId(SFX_STR_SIDEBAR_MORE_OPTIONS));
 }
 
-tools::Rectangle PanelTitleBar::GetTitleArea (const tools::Rectangle& rTitleBarBox)
+void PanelTitleBar::HandleToolBoxItemClick()
 {
-    if (mpPanel != nullptr)
-    {
-        Image aImage (mpPanel->IsExpanded()
-            ? Theme::GetImage(Theme::Image_Expand)
-            : Theme::GetImage(Theme::Image_Collapse));
-        return tools::Rectangle(
-            aImage.GetSizePixel().Width() + gaLeftIconPadding + gaRightIconPadding,
-            rTitleBarBox.Top(),
-            rTitleBarBox.Right(),
-            rTitleBarBox.Bottom());
-    }
-    else
-        return rTitleBarBox;
-}
-
-void PanelTitleBar::PaintDecoration (vcl::RenderContext& rRenderContext)
-{
-    if (mpPanel != nullptr)
-    {
-        Image aImage (mpPanel->IsExpanded()
-            ? Theme::GetImage(Theme::Image_Collapse)
-            : Theme::GetImage(Theme::Image_Expand));
-        const Point aTopLeft(gaLeftIconPadding,
-                             (GetSizePixel().Height() - aImage.GetSizePixel().Height()) / 2);
-        rRenderContext.DrawImage(aTopLeft, aImage);
-    }
-}
-
-Color PanelTitleBar::GetBackgroundPaintColor()
-{
-    return Theme::GetColor(Theme::Color_PanelTitleBarBackground);
-}
-
-void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
-{
-    if (nItemIndex != mnMenuItemIndex)
-        return;
-
     if (msMoreOptionsCommand.getLength() <= 0)
         return;
 
@@ -155,48 +125,16 @@ void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
     }
 }
 
-Reference<accessibility::XAccessible> PanelTitleBar::CreateAccessible()
+IMPL_LINK(PanelTitleBar, ExpandHdl, weld::Expander&, rExpander, void)
 {
-    SetAccessibleName(msTitle);
-    SetAccessibleDescription(msTitle);
-    return TitleBar::CreateAccessible();
-}
-
-void PanelTitleBar::MouseButtonDown (const MouseEvent& rMouseEvent)
-{
-    if (rMouseEvent.IsLeft())
-    {
-        mbIsLeftButtonDown = true;
-        CaptureMouse();
-    }
-}
-
-void PanelTitleBar::MouseButtonUp (const MouseEvent& rMouseEvent)
-{
-    if (IsMouseCaptured())
-        ReleaseMouse();
-
-    if (rMouseEvent.IsLeft())
-    {
-        if (mbIsLeftButtonDown)
-        {
-            if (mpPanel != nullptr)
-            {
-                mpPanel->SetExpanded( ! mpPanel->IsExpanded());
-                Invalidate();
-                GrabFocus();
-            }
-        }
-    }
-    if (mbIsLeftButtonDown)
-        mbIsLeftButtonDown = false;
+    if (!mpPanel)
+        return;
+    mpPanel->SetExpanded(rExpander.get_expanded());
 }
 
 void PanelTitleBar::DataChanged (const DataChangedEvent& rEvent)
 {
-    maToolBox->SetItemImage(
-        mnMenuItemIndex,
-        Theme::GetImage(Theme::Image_PanelMenu));
+    mxToolBox->set_item_icon_name("button", "sfx2/res/symphony/morebutton.png");
     TitleBar::DataChanged(rEvent);
 }
 

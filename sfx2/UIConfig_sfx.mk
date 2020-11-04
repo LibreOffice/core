@@ -22,6 +22,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/cmisinfopage \
 	sfx2/uiconfig/ui/cmisline \
 	sfx2/uiconfig/ui/custominfopage \
+	sfx2/uiconfig/ui/decktitlebar \
 	sfx2/uiconfig/ui/descriptioninfopage \
 	sfx2/uiconfig/ui/dockingwindow \
 	sfx2/uiconfig/ui/documentfontspage \
@@ -50,6 +51,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/newstyle \
 	sfx2/uiconfig/ui/notebookbar \
 	sfx2/uiconfig/ui/optprintpage \
+	sfx2/uiconfig/ui/paneltitlebar \
 	sfx2/uiconfig/ui/password \
 	sfx2/uiconfig/ui/notebookbarpopup \
 	sfx2/uiconfig/ui/printeroptionsdialog \

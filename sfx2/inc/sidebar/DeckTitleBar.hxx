@@ -19,8 +19,11 @@
 #pragma once
 
 #include <sidebar/TitleBar.hxx>
+#include <vcl/customweld.hxx>
 
 namespace sfx2::sidebar {
+
+class GripWidget;
 
 class DeckTitleBar final : public TitleBar
 {
@@ -28,22 +31,28 @@ public:
     DeckTitleBar(const OUString& rsTitle,
                  vcl::Window* pParentWindow,
                  const std::function<void()>& rCloserAction);
+    virtual void dispose() override;
+    virtual ~DeckTitleBar() override;
+
+    virtual void SetTitle (const OUString& rsTitle) override;
+    virtual OUString GetTitle() const override;
 
     void SetCloserVisible(const bool bIsCloserVisible);
-    static tools::Rectangle GetDragArea();
+    tools::Rectangle GetDragArea();
 
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
-    virtual void MouseMove(const MouseEvent& rMouseEvent) override;
 
 private:
-    virtual tools::Rectangle GetTitleArea(const tools::Rectangle& rTitleBarBox) override;
-    virtual void PaintDecoration(vcl::RenderContext& rRenderContext) override;
-    virtual Color GetBackgroundPaintColor() override;
-    virtual void HandleToolBoxItemClick(const sal_uInt16 nItemIndex) override;
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual void HandleToolBoxItemClick() override;
 
-    static const sal_uInt16 mnCloserItemIndex = 1;
+    DECL_LINK(DrawGripHdl, weld::DrawingArea::draw_args, void);
+
+    std::unique_ptr<GripWidget> mxGripWidget;
+    std::unique_ptr<weld::CustomWeld> mxGripWeld;
+    std::unique_ptr<weld::Label> mxLabel;
+
     const std::function<void()> maCloserAction;
+    BitmapEx maGrip;
     bool mbIsCloserVisible;
 };
 

@@ -32,25 +32,26 @@ class PanelTitleBar final
 {
 public:
     PanelTitleBar(const OUString& rsTitle, vcl::Window* pParentWindow, Panel* pPanel);
-    virtual ~PanelTitleBar() override;
     virtual void dispose() override;
+    virtual ~PanelTitleBar() override;
+
+    virtual void SetTitle (const OUString& rsTitle) override;
+    virtual OUString GetTitle() const override;
 
     void SetMoreOptionsCommand(const OUString& rsCommandName,
-                               const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                               const css::uno::Reference<css::frame::XController>& rxController);
+                               const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+    void UpdateExpandedState();
 
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
-    virtual void MouseButtonDown(const MouseEvent& rMouseEvent) override;
-    virtual void MouseButtonUp(const MouseEvent& rMouseEvent) override;
 
 private:
-    virtual tools::Rectangle GetTitleArea(const tools::Rectangle& rTitleBarBox) override;
-    virtual void PaintDecoration(vcl::RenderContext& rRenderContext) override;
-    virtual Color GetBackgroundPaintColor() override;
-    virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex) override;
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual void HandleToolBoxItemClick() override;
 
-    bool mbIsLeftButtonDown;
+    DECL_LINK(ExpandHdl, weld::Expander&, void);
+
+    std::unique_ptr<weld::Expander> mxExpander;
+
     VclPtr<Panel> mpPanel;
     static const sal_uInt16 mnMenuItemIndex = 1;
     css::uno::Reference<css::frame::XFrame> mxFrame;

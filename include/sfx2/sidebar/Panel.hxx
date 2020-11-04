@@ -73,7 +73,6 @@ public:
 
 private:
     const OUString msPanelId;
-    VclPtr<PanelTitleBar> mpTitleBar;
     const bool mbIsTitleBarOptional;
     css::uno::Reference<css::ui::XUIElement> mxElement;
     css::uno::Reference<css::ui::XSidebarPanel> mxPanelComponent;
@@ -81,8 +80,8 @@ private:
     bool mbLurking;
     const std::function<void()> maDeckLayoutTrigger;
     const std::function<Context()> maContextAccess;
-
     const css::uno::Reference<css::frame::XFrame>& mxFrame;
+    VclPtr<PanelTitleBar> mpTitleBar;
 
 };
 typedef std::vector<VclPtr<Panel> > SharedPanelContainer;

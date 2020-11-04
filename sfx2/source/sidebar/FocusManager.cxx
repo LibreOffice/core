@@ -78,7 +78,6 @@ void FocusManager::ClearPanels()
         if (panel->GetTitleBar())
         {
             UnregisterWindow(*panel->GetTitleBar());
-            UnregisterWindow(panel->GetTitleBar()->GetToolBox());
         }
 
         panel->RemoveChildEventListener(LINK(this, FocusManager, ChildEventListener));
@@ -100,14 +99,12 @@ void FocusManager::SetDeckTitle (DeckTitleBar* pDeckTitleBar)
     if (mpDeckTitleBar != nullptr)
     {
         UnregisterWindow(*mpDeckTitleBar);
-        UnregisterWindow(mpDeckTitleBar->GetToolBox());
     }
     mpDeckTitleBar = pDeckTitleBar;
 
     if (mpDeckTitleBar != nullptr)
     {
         RegisterWindow(*mpDeckTitleBar);
-        RegisterWindow(mpDeckTitleBar->GetToolBox());
     }
 }
 
@@ -120,7 +117,6 @@ void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
         if (panel->GetTitleBar())
         {
             RegisterWindow(*panel->GetTitleBar());
-            RegisterWindow(panel->GetTitleBar()->GetToolBox());
         }
 
         // Register also as child event listener at the panel.
@@ -157,8 +153,6 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& r
     {
         if (mpDeckTitleBar == &rWindow)
             return FocusLocation(PC_DeckTitle, -1);
-        else if (&mpDeckTitleBar->GetToolBox() == &rWindow)
-            return FocusLocation(PC_DeckToolBox, -1);
     }
 
     // Search the panels.
@@ -169,8 +163,6 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& r
         VclPtr<TitleBar> pTitleBar = maPanels[nIndex]->GetTitleBar();
         if (pTitleBar == &rWindow)
             return FocusLocation(PC_PanelTitle, nIndex);
-        if (pTitleBar!=nullptr && &pTitleBar->GetToolBox()==&rWindow)
-            return FocusLocation(PC_PanelToolBox, nIndex);
     }
 
     // Search the buttons.
@@ -190,11 +182,10 @@ void FocusManager::FocusDeckTitle()
         {
             mpDeckTitleBar->GrabFocus();
         }
-        else if (mpDeckTitleBar->GetToolBox().GetItemCount() > 0)
+        else if (mpDeckTitleBar->GetToolBox().get_n_items() > 0)
         {
-            ToolBox& rToolBox = mpDeckTitleBar->GetToolBox();
-            rToolBox.GrabFocus();
-            rToolBox.Invalidate();
+            weld::Toolbar& rToolBox = mpDeckTitleBar->GetToolBox();
+            rToolBox.grab_focus();
         }
         else
             FocusPanel(0, false);
@@ -293,7 +284,6 @@ void FocusManager::RemoveWindow (vcl::Window& rWindow)
         if ((*iPanel)->GetTitleBar() != nullptr)
         {
             UnregisterWindow(*(*iPanel)->GetTitleBar());
-            UnregisterWindow((*iPanel)->GetTitleBar()->GetToolBox());
         }
         maPanels.erase(iPanel);
         return;
@@ -313,12 +303,12 @@ void FocusManager::MoveFocusInsidePanel (
     const sal_Int32 nDirection)
 {
     const bool bHasToolBoxItem (
-        maPanels[rFocusLocation.mnIndex]->GetTitleBar()->GetToolBox().GetItemCount() > 0);
+        maPanels[rFocusLocation.mnIndex]->GetTitleBar()->GetToolBox().get_n_items() > 0);
     switch (rFocusLocation.meComponent)
     {
         case  PC_PanelTitle:
             if (nDirection > 0 && bHasToolBoxItem)
-                maPanels[rFocusLocation.mnIndex]->GetTitleBar()->GetToolBox().GrabFocus();
+                maPanels[rFocusLocation.mnIndex]->GetTitleBar()->GetToolBox().grab_focus();
             else
                 FocusPanelContent(rFocusLocation.mnIndex);
             break;
@@ -343,14 +333,14 @@ void FocusManager::MoveFocusInsideDeckTitle (
     // is moved between a) deck title, b) deck closer and c) content
     // of panel 0.
     const bool bHasToolBoxItem (
-        mpDeckTitleBar->GetToolBox().GetItemCount() > 0);
+        mpDeckTitleBar->GetToolBox().get_n_items() > 0);
     switch (rFocusLocation.meComponent)
     {
         case  PC_DeckTitle:
             if (nDirection<0 && ! IsPanelTitleVisible(0))
                 FocusPanelContent(0);
             else if (bHasToolBoxItem)
-                mpDeckTitleBar->GetToolBox().GrabFocus();
+                mpDeckTitleBar->GetToolBox().grab_focus();
             break;
 
         case PC_DeckToolBox:

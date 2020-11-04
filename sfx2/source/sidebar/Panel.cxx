@@ -51,7 +51,6 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
             )
     : Window(pParentWindow)
     , msPanelId(rPanelDescriptor.msId)
-    , mpTitleBar(VclPtr<PanelTitleBar>::Create(rPanelDescriptor.msTitle, pParentWindow, this))
     , mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional)
     , mxElement()
     , mxPanelComponent()
@@ -60,6 +59,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , maDeckLayoutTrigger(rDeckLayoutTrigger)
     , maContextAccess(rContextAccess)
     , mxFrame(rxFrame)
+    , mpTitleBar(VclPtr<PanelTitleBar>::Create(rPanelDescriptor.msTitle, pParentWindow, this))
 {
     SetText(rPanelDescriptor.msTitle);
 }
@@ -134,6 +134,7 @@ void Panel::SetExpanded (const bool bIsExpanded)
         return;
 
     mbIsExpanded = bIsExpanded;
+    mpTitleBar->UpdateExpandedState();
     maDeckLayoutTrigger();
 
     if (maContextAccess && pSidebarController)
