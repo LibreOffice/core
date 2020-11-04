@@ -447,10 +447,7 @@ public:
     Size                        GetFirstPageSize() const;
     bool                        DoClose();
     std::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false ) const;
-    BitmapEx                    GetPreviewBitmap(
-                                    bool bFullContent = false,
-                                    BmpConversion nColorConversion = BmpConversion::N24Bit,
-                                    BmpScaleFlag nScaleFlag = BmpScaleFlag::BestQuality) const;
+    BitmapEx                    GetPreviewBitmap() const;
     virtual void                CancelTransfers();
 
     bool                        GenerateAndStoreThumbnail(

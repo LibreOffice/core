@@ -103,20 +103,19 @@ SfxObjectShell::GetPreviewMetaFile( bool bFullContent ) const
     return xFile;
 }
 
-BitmapEx SfxObjectShell::GetPreviewBitmap( bool bFullContent, BmpConversion nColorConversion,
-    BmpScaleFlag nScaleFlag) const
+BitmapEx SfxObjectShell::GetPreviewBitmap() const
 {
     ScopedVclPtrInstance< VirtualDevice > pDevice;
     pDevice->SetAntialiasing(AntialiasingFlags::Enable | pDevice->GetAntialiasing());
-    if(!CreatePreview_Impl(bFullContent, pDevice, nullptr))
+    if(!CreatePreview_Impl(/*bFullContent*/false, pDevice, nullptr))
         return BitmapEx();
     Size size = pDevice->GetOutputSizePixel();
     BitmapEx aBitmap = pDevice->GetBitmapEx( Point(), size);
     // Scale down the image to the desired size from the 4*size from CreatePreview_Impl().
     size = Size( size.Width() / 4, size.Height() / 4 );
-    aBitmap.Scale(size, nScaleFlag);
+    aBitmap.Scale(size, BmpScaleFlag::BestQuality);
     if (!aBitmap.IsEmpty())
-        aBitmap.Convert(nColorConversion);
+        aBitmap.Convert(BmpConversion::N24Bit);
     return aBitmap;
 }
 

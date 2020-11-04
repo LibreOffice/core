@@ -4,7 +4,7 @@ codemaker/source/javamaker/classfile.hxx:152
 codemaker/source/javamaker/classfile.hxx:167
     void codemaker::javamaker::ClassFile::addField(enum codemaker::javamaker::ClassFile::AccessFlags,const class rtl::OString &,const class rtl::OString &,unsigned short,const class rtl::OString &)
     enum codemaker::javamaker::ClassFile::AccessFlags accessFlags setBits=0x1
-dbaccess/source/filter/xml/xmlExport.hxx:165
+dbaccess/source/filter/xml/xmlExport.hxx:164
     void dbaxml::ODBExport::ODBExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nExportFlag setBits=0x400 clearBits=0x200
 include/basegfx/polygon/b2dpolygontools.hxx:145
@@ -13,7 +13,7 @@ include/basegfx/polygon/b2dpolygontools.hxx:145
 include/framework/framelistanalyzer.hxx:185
     void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
-include/sfx2/objsh.hxx:471
+include/sfx2/objsh.hxx:477
     void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
     enum SfxLoadedFlags nWhich setBits=0x1
 include/svtools/brwbox.hxx:511
@@ -28,7 +28,7 @@ sc/inc/rangelst.hxx:48
 sc/inc/rangeutl.hxx:162
     void ScRangeStringConverter::GetStringFromAddress(class rtl::OUString &,const class ScAddress &,const class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t,_Bool,enum ScRefFlags)
     enum ScRefFlags nFormatFlags setBits=0x8008 clearBits=0x7ff0
-sc/inc/xmlwrap.hxx:90
+sc/inc/xmlwrap.hxx:89
     _Bool ScXMLImportWrapper::Import(enum ImportFlags,class ErrCode &)
     enum ImportFlags nMode setBits=0x1
 sc/source/ui/view/cellsh1.cxx:103
@@ -40,7 +40,7 @@ sc/source/ui/view/cellsh1.cxx:126
 sw/source/core/view/viewsh.cxx:717
     void lcl_InvalidateAllContent(class SwViewShell &,enum SwInvalidateFlags)
     enum SwInvalidateFlags nInv setBits=0x2
-sw/source/filter/html/swhtml.hxx:678
+sw/source/filter/html/swhtml.hxx:687
     void SwHTMLParser::SetFrameFormatAttrs(class SfxItemSet &,enum HtmlFrameFormatFlags,class SfxItemSet &)
     enum HtmlFrameFormatFlags nFlags setBits=0x1
 sw/source/filter/ww8/wrtw8esh.cxx:1545

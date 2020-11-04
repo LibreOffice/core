@@ -4724,50 +4724,32 @@ sal_Int32 lcl_CompareMatrix2Query(
 /** returns the last item with the identical value as the original item
     value. */
 void lcl_GetLastMatch( SCSIZE& rIndex, const VectorMatrixAccessor& rMat,
-        SCSIZE nMatCount, bool bReverse)
+        SCSIZE nMatCount)
 {
     if (rMat.IsValue(rIndex))
     {
         double nVal = rMat.GetDouble(rIndex);
-        if (bReverse)
-            while (rIndex > 0 && rMat.IsValue(rIndex-1) &&
-                    nVal == rMat.GetDouble(rIndex-1))
-                --rIndex;
-        else
-            while (rIndex < nMatCount-1 && rMat.IsValue(rIndex+1) &&
-                    nVal == rMat.GetDouble(rIndex+1))
-                ++rIndex;
+        while (rIndex < nMatCount-1 && rMat.IsValue(rIndex+1) &&
+                nVal == rMat.GetDouble(rIndex+1))
+            ++rIndex;
     }
     // Order of IsEmptyPath, IsEmpty, IsStringOrEmpty is significant!
     else if (rMat.IsEmptyPath(rIndex))
     {
-        if (bReverse)
-            while (rIndex > 0 && rMat.IsEmptyPath(rIndex-1))
-                --rIndex;
-        else
-            while (rIndex < nMatCount-1 && rMat.IsEmptyPath(rIndex+1))
-                ++rIndex;
+        while (rIndex < nMatCount-1 && rMat.IsEmptyPath(rIndex+1))
+            ++rIndex;
     }
     else if (rMat.IsEmpty(rIndex))
     {
-        if (bReverse)
-            while (rIndex > 0 && rMat.IsEmpty(rIndex-1))
-                --rIndex;
-        else
-            while (rIndex < nMatCount-1 && rMat.IsEmpty(rIndex+1))
-                ++rIndex;
+        while (rIndex < nMatCount-1 && rMat.IsEmpty(rIndex+1))
+            ++rIndex;
     }
     else if (rMat.IsStringOrEmpty(rIndex))
     {
         OUString aStr( rMat.GetString(rIndex));
-        if (bReverse)
-            while (rIndex > 0 && rMat.IsStringOrEmpty(rIndex-1) &&
-                    aStr == rMat.GetString(rIndex-1))
-                --rIndex;
-        else
-            while (rIndex < nMatCount-1 && rMat.IsStringOrEmpty(rIndex+1) &&
-                    aStr == rMat.GetString(rIndex+1))
-                ++rIndex;
+        while (rIndex < nMatCount-1 && rMat.IsStringOrEmpty(rIndex+1) &&
+                aStr == rMat.GetString(rIndex+1))
+            ++rIndex;
     }
     else
     {
@@ -4982,7 +4964,7 @@ void ScInterpreter::ScMatch()
                 if (nCmp == 0)
                 {
                     // exact match.  find the last item with the same value.
-                    lcl_GetLastMatch( nMid, aMatAcc, nMatCount, false);
+                    lcl_GetLastMatch( nMid, aMatAcc, nMatCount);
                     PushDouble( nMid+1);
                     return;
                 }
@@ -6933,7 +6915,7 @@ void ScInterpreter::ScLookup()
             if (nCmp == 0)
             {
                 // exact match.  find the last item with the same value.
-                lcl_GetLastMatch( nMid, aMatAcc2, nLenMajor, false);
+                lcl_GetLastMatch( nMid, aMatAcc2, nLenMajor);
                 nDelta = nMid;
                 bFound = true;
                 break;
@@ -9926,18 +9908,17 @@ void ScInterpreter::ScErrorType_ODF()
         PushNA();
 }
 
-bool ScInterpreter::MayBeRegExp( const OUString& rStr, bool bIgnoreWildcards )
+bool ScInterpreter::MayBeRegExp( const OUString& rStr )
 {
     if ( rStr.isEmpty() || (rStr.getLength() == 1 && !rStr.startsWith(".")) )
         return false;   // single meta characters can not be a regexp
     // First two characters are wildcard '?' and '*' characters.
     static const sal_Unicode cre[] = { '?','*','+','.','[',']','^','$','\\','<','>','(',')','|', 0 };
-    const sal_Unicode* const pre = bIgnoreWildcards ? cre + 2 : cre;
     const sal_Unicode* p1 = rStr.getStr();
     sal_Unicode c1;
     while ( ( c1 = *p1++ ) != 0 )
     {
-        const sal_Unicode* p2 = pre;
+        const sal_Unicode* p2 = cre;
         while ( *p2 )
         {
             if ( c1 == *p2++ )

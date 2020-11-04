@@ -156,7 +156,7 @@ public:
     /// Could string be a regular expression?
     /// if regularExpressions are disabled the function returns false regardless
     /// of the string content.
-    static bool MayBeRegExp( const OUString& rStr, bool bIgnoreWildcards = false );
+    static bool MayBeRegExp( const OUString& rStr );
 
     /** Could string be a wildcard (*,?,~) expression?
         If wildcards are disabled the function returns false regardless of the

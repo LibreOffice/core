@@ -100,7 +100,7 @@ private:
     void            MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCCOL nDx,SCROW nDy, bool bUpdateNoteCaptionPos );
 
-    void            ResizeLastRectFromAnchor( const SdrObject* pObj, ScDrawObjData& rData, bool bUseLogicRect, bool bNegativePage, bool bCanResize, bool bHiddenAsZero = true );
+    void            ResizeLastRectFromAnchor( const SdrObject* pObj, ScDrawObjData& rData, bool bUseLogicRect, bool bNegativePage, bool bCanResize );
 
 public:
                     ScDrawLayer( ScDocument* pDocument, const OUString& rName );

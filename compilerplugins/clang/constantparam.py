@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import sys
 import re
@@ -13,9 +13,10 @@ def normalizeTypeParams( line ):
     return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
 
 # reading as binary (since we known it is pure ascii) is much faster than reading as unicode
-with io.open("workdir/loplugin.constantparam.log", "rb", buffering=1024*1024) as txt:
-    for line in txt:
-        try:
+with io.open("constantparam.1", "r") as txt:
+    line_no = 1;
+    try:
+        for line in txt:
             tokens = line.strip().split("\t")
             returnType = normalizeTypeParams(tokens[0])
             nameAndParams = normalizeTypeParams(tokens[1])
@@ -27,9 +28,10 @@ with io.open("workdir/loplugin.constantparam.log", "rb", buffering=1024*1024) as
             if not callInfo in callDict:
                 callDict[callInfo] = set()
             callDict[callInfo].add(callValue)
-        except IndexError:
-            print "problem with line " + line.strip()
-            raise
+            line_no += 1
+    except (IndexError,UnicodeDecodeError):
+        print("problem with line " + str(line_no))
+        raise
 
 def RepresentsInt(s):
     try:
@@ -44,7 +46,7 @@ tmp1list = list()
 tmp2list = list()
 tmp3list = list()
 tmp4list = list()
-for callInfo, callValues in callDict.iteritems():
+for callInfo, callValues in iter(callDict.items()):
     nameAndParams = callInfo[1]
     if len(callValues) != 1:
         continue
@@ -139,7 +141,7 @@ def negate(i):
     return (1 << 32) - 1 - i
 
 tmp2list = list()
-for callInfo, callValues in callDict.iteritems():
+for callInfo, callValues in iter(callDict.items()):
     nameAndParams = callInfo[1]
     if len(callValues) < 2:
         continue
