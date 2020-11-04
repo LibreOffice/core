@@ -162,7 +162,7 @@ void SwFormatFootnote::Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
 void SwFormatFootnote::InvalidateFootnote()
 {
     SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT,
-            &static_cast<SwModify&>(*this)); // cast to base class (void*)
+            &static_cast<sw::BroadcastingModify&>(*this)); // cast to base class (void*)
     NotifyClients(&item, &item);
 }
 

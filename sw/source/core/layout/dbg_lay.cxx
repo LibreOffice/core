@@ -517,8 +517,7 @@ static void lcl_FrameRect(OStringBuffer& rOut, const char* hint, const SwRect& r
 static OString lcl_TableInfo(const SwTabFrame* pTabFrame)
 {
     const SwTable* pTable = pTabFrame->GetTable();
-    const SwModify* pModify = pTable->GetRegisteredIn();
-    const SwFormat* pFormat = static_cast<const SwFormat*>(pModify);
+    const SwFormat* pFormat = static_cast<const SwFormat*>(pTable->GetRegisteredIn());
     const OUString& text = pFormat->GetName();
     return OUStringToOString(text, RTL_TEXTENCODING_ASCII_US);
 }

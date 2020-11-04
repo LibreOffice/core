@@ -35,6 +35,7 @@
 #include <msfilter.hxx>
 #include <expfld.hxx>
 #include "WW8TableInfo.hxx"
+#include <calbck.hxx>
 
 #include <vcl/graph.hxx>
 
@@ -82,7 +83,6 @@ class SwFormatContent;
 class SwFormatFootnote;
 class SwFrameFormat;
 class SwGrfNode;
-class SwModify;
 class SwNumFormat;
 class SwNumRule;
 class SwNumRuleTable;
@@ -528,7 +528,7 @@ public:
                                     // graphics inside tables
     std::unique_ptr<SwWW8WrGrf> m_pGrf;
     const SwAttrSet* m_pStyAttr;      // StyleAttr for Tabs
-    const SwModify* m_pOutFormatNode;    // write Format or Node
+    const sw::BroadcastingModify* m_pOutFormatNode;    // write Format or Node
     const SwFormat *m_pCurrentStyle;     // iff bStyDef=true, then this store the current style
 
     MainTextPlcDrawObj *m_pSdrObjs;   // Draw-/Fly-Objects

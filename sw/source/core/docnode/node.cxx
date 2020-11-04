@@ -681,7 +681,7 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
                 auto pPageDescItem = dynamic_cast<const SwFormatPageDesc*>(pItem);
                 if( pPageDescItem && pPageDescItem->GetDefinedIn() )
                 {
-                    const SwModify* pMod = pPageDescItem->GetDefinedIn();
+                    const sw::BroadcastingModify* pMod = pPageDescItem->GetDefinedIn();
                     if( auto pContentNode = dynamic_cast<const SwContentNode*>( pMod) )
                         aInfo.CheckNode( *pContentNode );
                     else if( auto pFormat = dynamic_cast<const SwFormat*>( pMod) )
@@ -1555,7 +1555,7 @@ bool SwContentNode::GetInfo( SfxPoolItem& rInfo ) const
         return false;
     }
 
-    return SwModify::GetInfo( rInfo );
+    return sw::BroadcastingModify::GetInfo( rInfo );
 }
 
 /// @param rAttr the attribute to set

@@ -535,7 +535,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     if( !rSet.Count() )
         return;
 
-    SwModify aCallMod;
+    sw::BroadcastingModify aCallMod;
     SwAttrSet aOld( GetAttrPool(), rSet.GetRanges() ),
             aNew( GetAttrPool(), rSet.GetRanges() );
     SfxItemIter aIter( rSet );
@@ -642,7 +642,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     }
 
     // remove the default formats from the object again
-    SwIterator<SwClient, SwModify> aClientIter(aCallMod);
+    SwIterator<SwClient, sw::BroadcastingModify> aClientIter(aCallMod);
     for(SwClient* pClient = aClientIter.First(); pClient; pClient = aClientIter.Next())
         aCallMod.Remove( pClient );
 

@@ -1489,7 +1489,7 @@ bool SwContentFrame::CalcLowers(SwLayoutFrame & rLay, SwLayoutFrame const& rDont
     // FME 2007-08-30 #i81146# new loop control
     int nLoopControlRuns = 0;
     const int nLoopControlMax = 10;
-    const SwModify* pLoopControlCond = nullptr;
+    const sw::BroadcastingModify* pLoopControlCond = nullptr;
 
     while (pCnt && rDontLeave.IsAnLower(pCnt))
     {
@@ -3799,7 +3799,7 @@ SwRowFrame::SwRowFrame(const SwTableLine &rLine, SwFrame* pSib, bool bInsertCont
 
 void SwRowFrame::DestroyImpl()
 {
-    SwModify* pMod = GetFormat();
+    sw::BroadcastingModify* pMod = GetFormat();
     if( pMod )
     {
         pMod->Remove( this );
@@ -4784,7 +4784,7 @@ SwCellFrame::SwCellFrame(const SwTableBox &rBox, SwFrame* pSib, bool bInsertCont
 
 void SwCellFrame::DestroyImpl()
 {
-    SwModify* pMod = GetFormat();
+    sw::BroadcastingModify* pMod = GetFormat();
     if( pMod )
     {
         // At this stage the lower frames aren't destroyed already,

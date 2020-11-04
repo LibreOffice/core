@@ -421,7 +421,7 @@ private:
 public:
     SwRegHistory( SwHistory* pHst );
     SwRegHistory( const SwNode& rNd, SwHistory* pHst );
-    SwRegHistory( SwModify* pRegIn, const SwNode& rNd, SwHistory* pHst );
+    SwRegHistory( sw::BroadcastingModify* pRegIn, const SwNode& rNd, SwHistory* pHst );
     virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
     /// @return true if at least 1 item was inserted
@@ -432,7 +432,7 @@ public:
 
     void AddHint( SwTextAttr* pHt, const bool bNew );
 
-    void RegisterInModify( SwModify* pRegIn, const SwNode& rNd );
+    void RegisterInModify( sw::BroadcastingModify* pRegIn, const SwNode& rNd );
     void ChangeNodeIndex( sal_uLong nNew ) { m_nNodeIndex = nNew; }
 };
 

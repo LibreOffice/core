@@ -1199,11 +1199,11 @@ static void lcl_ExtractFramePositions(FrameClientSortList_t& rFrames, sal_Int32 
         if (rFrame.nIndex > nCurrentIndex)
             break;
 
-        const SwModify* pFrame = rFrame.pFrameClient->GetRegisteredIn();
+        const auto pFrame = static_cast<const SwFrameFormat*>(rFrame.pFrameClient->GetRegisteredIn());
         if (!pFrame)
             continue;
 
-        auto& rFormat = *static_cast<SwFrameFormat*>(const_cast<SwModify*>(pFrame));
+        auto& rFormat = *const_cast<SwFrameFormat*>(pFrame);
         const SwFormatAnchor& rAnchor = rFormat.GetAnchor();
         const SwPosition* pPosition = rAnchor.GetContentAnchor();
         if (!pPosition)
@@ -1235,12 +1235,10 @@ static sal_Int32 lcl_ExportFrames(
     while (!i_rFrames.empty() && (i_rFrames.front().nIndex == i_nCurrentIndex))
     // do not check for i_nEnd here; this is done implicitly by lcl_MoveCursor
     {
-        const SwModify * const pFrame =
-            i_rFrames.front().pFrameClient->GetRegisteredIn();
+        auto pFrame = static_cast<SwFrameFormat*>(i_rFrames.front().pFrameClient->GetRegisteredIn());
         if (pFrame) // Frame could be disposed
         {
-            SwXTextPortion* pPortion = new SwXTextPortion(i_pUnoCursor, i_xParent,
-                *static_cast<SwFrameFormat*>( const_cast<SwModify*>( pFrame ) ) );
+            SwXTextPortion* pPortion = new SwXTextPortion(i_pUnoCursor, i_xParent, *pFrame );
             rPortions.emplace_back(pPortion);
         }
         i_rFrames.pop_front();

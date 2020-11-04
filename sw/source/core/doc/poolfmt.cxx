@@ -81,7 +81,7 @@ SvxFrameDirection GetDefaultFrameDirection(LanguageType nLanguage)
 }
 
 // See if the Paragraph/Character/Frame/Page style is in use
-bool SwDoc::IsUsed( const SwModify& rModify ) const
+bool SwDoc::IsUsed( const sw::BroadcastingModify& rModify ) const
 {
     // Check if we have dependent ContentNodes in the Nodes array
     // (also indirect ones for derived Formats)

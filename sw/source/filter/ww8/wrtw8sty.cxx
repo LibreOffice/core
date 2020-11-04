@@ -447,7 +447,7 @@ void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal
 
 void MSWordStyles::SetStyleDefaults( const SwFormat& rFormat, bool bPap )
 {
-    const SwModify* pOldMod = m_rExport.m_pOutFormatNode;
+    const sw::BroadcastingModify* pOldMod = m_rExport.m_pOutFormatNode;
     m_rExport.m_pOutFormatNode = &rFormat;
     bool aFlags[ RES_FRMATR_END - RES_CHRATR_BEGIN ];
     sal_uInt16 nStt, nEnd, n;
