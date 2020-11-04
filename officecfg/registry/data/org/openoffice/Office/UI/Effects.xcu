@@ -752,7 +752,7 @@
       </node>
       <node oor:name="ooo-motionpath-equal-triangle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Equal Triangle</value>
+          <value xml:lang="en-US">Regular Triangle</value>
         </prop>
       </node>
       <node oor:name="ooo-motionpath-oval" oor:op="replace">
