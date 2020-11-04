@@ -93,6 +93,25 @@ class tdf137617(UITestCase):
 
         self.assertEqual('Result4', get_state_as_dict(xPosWindow)['Text'])
 
+        # Change formula syntax back to "Calc A1"
+        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
+        xDialogOpt = self.xUITest.getTopFocusWindow()
+
+        xPages = xDialogOpt.getChild("pages")
+        xCalcEntry = xPages.getChild('3')
+        xCalcEntry.executeAction("EXPAND", tuple())
+        xCalcFormulaEntry = xCalcEntry.getChild('4')
+        xCalcFormulaEntry.executeAction("SELECT", tuple())
+
+        xFormulaSyntax = xDialogOpt.getChild('formulasyntax')
+
+        props = {"TEXT": "Calc A1"}
+        actionProps = mkPropertyValues(props)
+        xFormulaSyntax.executeAction("SELECT", actionProps)
+
+        xOKBtn = xDialogOpt.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
