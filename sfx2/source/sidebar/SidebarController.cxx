@@ -1575,7 +1575,7 @@ void SidebarController::FadeIn()
 tools::Rectangle SidebarController::GetDeckDragArea() const
 {
     tools::Rectangle aRect;
-
+#if 0
     if(mpCurrentDeck)
     {
         VclPtr<DeckTitleBar> pTitleBar(mpCurrentDeck->GetTitleBar());
@@ -1585,7 +1585,7 @@ tools::Rectangle SidebarController::GetDeckDragArea() const
             aRect = DeckTitleBar::GetDragArea();
         }
     }
-
+#endif
     return aRect;
 }
 
