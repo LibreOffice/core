@@ -17,6 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+/** Those are the starmath codes descriptions for ElementsDockingWindow.hxx.
+  *
+  * Those codes will be displayed as formulas on the ElementsDockingWindow.
+  * The user can then graphically inser them.
+  * When passing the mouse over them, those descriptions will be displayed.
+  */
+
 #ifndef INCLUDED_SM_INC_STRINGS_HRC
 #define INCLUDED_SM_INC_STRINGS_HRC
 
