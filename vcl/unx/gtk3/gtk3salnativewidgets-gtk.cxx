@@ -1198,13 +1198,6 @@ GtkStyleContext* GtkSalGraphics::createStyleContext(GtkControlPart ePart)
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
             return makeContext(path, mpWindowStyle);
         }
-        case GtkControlPart::SpinButtonEntry:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpSpinStyle));
-            gtk_widget_path_append_type(path, G_TYPE_NONE);
-            gtk_widget_path_iter_set_object_name(path, -1, "entry");
-            return makeContext(path, mpSpinStyle);
-        }
         case GtkControlPart::SpinButtonUpButton:
         case GtkControlPart::SpinButtonDownButton:
         {

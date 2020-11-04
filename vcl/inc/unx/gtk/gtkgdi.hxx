@@ -54,7 +54,6 @@ enum class GtkControlPart
     ListboxBoxButtonBox,
     ListboxBoxButtonBoxArrow,
     SpinButton,
-    SpinButtonEntry,
     SpinButtonUpButton,
     SpinButtonDownButton,
     ScrollbarVertical,
