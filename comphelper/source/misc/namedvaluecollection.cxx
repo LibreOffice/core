@@ -45,72 +45,27 @@ namespace comphelper
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 
-    typedef std::unordered_map< OUString, Any >    NamedValueRepository;
-
-    struct NamedValueCollection_Impl
-    {
-        NamedValueRepository    aValues;
-    };
-
-    NamedValueCollection::NamedValueCollection()
-        :m_pImpl( new NamedValueCollection_Impl )
-    {
-    }
-
-
-    NamedValueCollection::NamedValueCollection( const NamedValueCollection& _rCopySource )
-        :m_pImpl( new NamedValueCollection_Impl )
-    {
-        *this = _rCopySource;
-    }
-
-    NamedValueCollection::NamedValueCollection(NamedValueCollection&& _rCopySource) noexcept
-        :m_pImpl( std::move(_rCopySource.m_pImpl) )
-    {
-    }
-
-    NamedValueCollection& NamedValueCollection::operator=( const NamedValueCollection& i_rCopySource )
-    {
-        m_pImpl->aValues = i_rCopySource.m_pImpl->aValues;
-        return *this;
-    }
-
-    NamedValueCollection& NamedValueCollection::operator=(NamedValueCollection&& i_rCopySource) noexcept
-    {
-        m_pImpl = std::move(i_rCopySource.m_pImpl);
-        return *this;
-    }
-
     NamedValueCollection::NamedValueCollection( const Any& _rElements )
-        :m_pImpl( new NamedValueCollection_Impl )
     {
         impl_assign( _rElements );
     }
 
 
     NamedValueCollection::NamedValueCollection( const Sequence< Any >& _rArguments )
-        :m_pImpl( new NamedValueCollection_Impl )
     {
         impl_assign( _rArguments );
     }
 
 
     NamedValueCollection::NamedValueCollection( const Sequence< PropertyValue >& _rArguments )
-        :m_pImpl( new NamedValueCollection_Impl )
     {
         impl_assign( _rArguments );
     }
 
 
     NamedValueCollection::NamedValueCollection( const Sequence< NamedValue >& _rArguments )
-        :m_pImpl( new NamedValueCollection_Impl )
     {
         impl_assign( _rArguments );
-    }
-
-
-    NamedValueCollection::~NamedValueCollection()
-    {
     }
 
 
@@ -126,7 +81,7 @@ namespace comphelper
 
     NamedValueCollection& NamedValueCollection::merge( const NamedValueCollection& _rAdditionalValues, bool _bOverwriteExisting )
     {
-        for (auto const& value : _rAdditionalValues.m_pImpl->aValues)
+        for (auto const& value : _rAdditionalValues.maValues)
         {
             if ( _bOverwriteExisting || !impl_has( value.first ) )
                 impl_put( value.first, value.second );
@@ -138,20 +93,20 @@ namespace comphelper
 
     size_t NamedValueCollection::size() const
     {
-        return m_pImpl->aValues.size();
+        return maValues.size();
     }
 
 
     bool NamedValueCollection::empty() const
     {
-        return m_pImpl->aValues.empty();
+        return maValues.empty();
     }
 
 
     std::vector< OUString > NamedValueCollection::getNames() const
     {
         std::vector< OUString > aNames;
-        for (auto const& value : m_pImpl->aValues)
+        for (auto const& value : maValues)
         {
             aNames.push_back( value.first );
         }
@@ -181,10 +136,7 @@ namespace comphelper
 
     void NamedValueCollection::impl_assign( const Sequence< Any >& _rArguments )
     {
-        {
-            NamedValueRepository aEmpty;
-            m_pImpl->aValues.swap( aEmpty );
-        }
+        maValues.clear();
 
         PropertyValue aPropertyValue;
         NamedValue aNamedValue;
@@ -192,9 +144,9 @@ namespace comphelper
         for ( auto const & argument : _rArguments )
         {
             if ( argument >>= aPropertyValue )
-                m_pImpl->aValues[ aPropertyValue.Name ] = aPropertyValue.Value;
+                maValues[ aPropertyValue.Name ] = aPropertyValue.Value;
             else if ( argument >>= aNamedValue )
-                m_pImpl->aValues[ aNamedValue.Name ] = aNamedValue.Value;
+                maValues[ aNamedValue.Name ] = aNamedValue.Value;
             else
             {
                 SAL_WARN_IF(
@@ -209,32 +161,26 @@ namespace comphelper
 
     void NamedValueCollection::impl_assign( const Sequence< PropertyValue >& _rArguments )
     {
-        {
-            NamedValueRepository aEmpty;
-            m_pImpl->aValues.swap( aEmpty );
-        }
+        maValues.clear();
 
         for ( auto const & argument : _rArguments )
-            m_pImpl->aValues[ argument.Name ] = argument.Value;
+            maValues[ argument.Name ] = argument.Value;
     }
 
 
     void NamedValueCollection::impl_assign( const Sequence< NamedValue >& _rArguments )
     {
-        {
-            NamedValueRepository aEmpty;
-            m_pImpl->aValues.swap( aEmpty );
-        }
+        maValues.clear();
 
         for ( auto const & argument : _rArguments )
-            m_pImpl->aValues[ argument.Name ] = argument.Value;
+            maValues[ argument.Name ] = argument.Value;
     }
 
 
     bool NamedValueCollection::get_ensureType( const OUString& _rValueName, void* _pValueLocation, const Type& _rExpectedValueType ) const
     {
-        NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
-        if ( pos != m_pImpl->aValues.end() )
+        auto pos = maValues.find( _rValueName );
+        if ( pos != maValues.end() )
         {
             if ( uno_type_assignData(
                     _pValueLocation, _rExpectedValueType.getTypeLibType(),
@@ -266,8 +212,8 @@ namespace comphelper
 
     const Any& NamedValueCollection::impl_get( const OUString& _rValueName ) const
     {
-        NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
-        if ( pos != m_pImpl->aValues.end() )
+        auto pos = maValues.find( _rValueName );
+        if ( pos != maValues.end() )
             return pos->second;
 
         return theEmptyDefault::get();
@@ -276,34 +222,34 @@ namespace comphelper
 
     bool NamedValueCollection::impl_has( const OUString& _rValueName ) const
     {
-        NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
-        return ( pos != m_pImpl->aValues.end() );
+        auto pos = maValues.find( _rValueName );
+        return ( pos != maValues.end() );
     }
 
 
     bool NamedValueCollection::impl_put( const OUString& _rValueName, const Any& _rValue )
     {
         bool bHas = impl_has( _rValueName );
-        m_pImpl->aValues[ _rValueName ] = _rValue;
+        maValues[ _rValueName ] = _rValue;
         return bHas;
     }
 
 
     bool NamedValueCollection::impl_remove( const OUString& _rValueName )
     {
-        NamedValueRepository::iterator pos = m_pImpl->aValues.find( _rValueName );
-        if ( pos == m_pImpl->aValues.end() )
+        auto pos = maValues.find( _rValueName );
+        if ( pos == maValues.end() )
             return false;
-        m_pImpl->aValues.erase( pos );
+        maValues.erase( pos );
         return true;
     }
 
 
     sal_Int32 NamedValueCollection::operator >>= ( Sequence< PropertyValue >& _out_rValues ) const
     {
-        _out_rValues.realloc( m_pImpl->aValues.size() );
-        std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(),
-                [](const NamedValueRepository::value_type& _rValue)
+        _out_rValues.realloc( maValues.size() );
+        std::transform( maValues.begin(), maValues.end(), _out_rValues.getArray(),
+                [](const std::pair< OUString, css::uno::Any >& _rValue)
                     { return PropertyValue( _rValue.first, 0, _rValue.second, PropertyState_DIRECT_VALUE ); } );
         return _out_rValues.getLength();
     }
@@ -311,9 +257,9 @@ namespace comphelper
 
     sal_Int32 NamedValueCollection::operator >>= ( Sequence< NamedValue >& _out_rValues ) const
     {
-        _out_rValues.realloc( m_pImpl->aValues.size() );
-        std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(),
-                [](const NamedValueRepository::value_type& _rValue)
+        _out_rValues.realloc( maValues.size() );
+        std::transform( maValues.begin(), maValues.end(), _out_rValues.getArray(),
+                [](const std::pair< OUString, css::uno::Any >& _rValue)
                     { return NamedValue( _rValue.first, _rValue.second ); } );
         return _out_rValues.getLength();
     }
