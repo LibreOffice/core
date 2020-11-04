@@ -188,7 +188,7 @@ public:
     SvXMLImportContext * create3DLightContext( sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
 
     /** this should be called for each scene attribute */
-    void processSceneAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
+    void processSceneAttribute( sal_Int32 nElement, const OUString& rValue );
 
     /** this sets the scene attributes at this propertyset */
     void setSceneAttributes( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
@@ -204,8 +204,10 @@ protected:
 
 public:
     SvXMLShapeContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
-        const OUString& rLName, bool bTemporaryShape ) : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
-
+        const OUString& rLName, bool bTemporaryShape )
+        : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
+    SvXMLShapeContext( SvXMLImport& rImp, bool bTemporaryShape )
+        : SvXMLImportContext( rImp ), mbTemporaryShape(bTemporaryShape) {}
 
     const css::uno::Reference< css::drawing::XShape >& getShape() const { return mxShape; }
 
@@ -254,9 +256,9 @@ public:
 
     virtual ~XMLShapeImportHelper() override;
 
-    SvXMLShapeContext* CreateGroupChildContext(
-        SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+    static SvXMLShapeContext* CreateGroupChildContext(
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape = false);
 
@@ -265,13 +267,20 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xFrameAttrList);
+    static SvXMLShapeContext* CreateFrameChildContext(
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xFrameAttrList);
+    static css::uno::Reference< css::xml::sax::XFastContextHandler > CreateFrameChildContext(
+        SvXMLImportContext *pThisContext, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     static SvXMLImportContextRef CreateFrameChildContext(
         SvXMLImportContext *pThisContext, sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
-
-    SvXMLShapeContext* Create3DSceneChildContext(
-        SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+    static SvXMLShapeContext* Create3DSceneChildContext(
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
 
     const SvXMLTokenMap& GetGroupShapeElemTokenMap();
@@ -297,7 +306,7 @@ public:
     // shape to the given XShapes.
     virtual void addShape(
         css::uno::Reference< css::drawing::XShape >& rShape,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
 
     // this function is called whenever the implementation classes have finished importing
@@ -305,7 +314,7 @@ public:
     // all properties and styles are set.
     virtual void finishShape(
         css::uno::Reference< css::drawing::XShape >& rShape,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
 
     // tdf#127791 help function for group shape events

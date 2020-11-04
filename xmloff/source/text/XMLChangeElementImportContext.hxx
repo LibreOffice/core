@@ -37,7 +37,7 @@ class XMLChangedRegionImportContext;
  * Import <text:deletion> and <text:insertion> elements contained in a
  * <text:changed-region> element.
  */
-class XMLChangeElementImportContext : public SvXMLImportContext
+ class XMLChangeElementImportContext : public SvXMLImportContext
 {
     /**
      * accept text content (paragraphs) in element as redline content?
@@ -56,13 +56,14 @@ class XMLChangeElementImportContext : public SvXMLImportContext
     /// context of enclosing <text:changed-region> element
     XMLChangedRegionImportContext& rChangedRegion;
 
+    sal_Int32 mnElement;
+
 public:
 
 
     XMLChangeElementImportContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        sal_Int32 nElement,
         /// accept text content (paragraphs) in element as redline content?
         bool bAcceptContent,
         /// context of enclosing <text:changed-region> element
@@ -72,6 +73,9 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // Start- and EndElement are needed here to set the inside_deleted_section
     // flag at the corresponding TextImportHelper
