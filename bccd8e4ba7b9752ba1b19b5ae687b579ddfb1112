@@ -16,6 +16,24 @@
       "revId": "bccd8e4ba7b9752ba1b19b5ae687b579ddfb1112",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7519355f_f854648d",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2020-11-04T17:51:50Z",
+      "side": 1,
+      "message": "I will probably do this before the full patch",
+      "parentUuid": "18feeed4_ebe63f55",
+      "revId": "bccd8e4ba7b9752ba1b19b5ae687b579ddfb1112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
