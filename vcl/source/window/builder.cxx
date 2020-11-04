@@ -3052,7 +3052,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
                     if (name == "id")
                     {
                         name = reader.getAttributeValue(false);
-                        nId = OString(name.begin, name.length).toInt32();
+                        nId = OString(name.begin, name.length).toUInt32();
                     }
                     else if (nId == 0 && name == "translatable" && reader.getAttributeValue(false) == "yes")
                     {
