@@ -24,22 +24,20 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <comphelper/comphelperdllapi.h>
+#include <rtl/ref.hxx>
 #include <memory>
-
-namespace rtl { template <class reference_type> class Reference; }
 
 namespace comphelper
 {
 class PropertySetInfo;
 struct PropertyMapEntry;
-class PropertySetHelperImpl;
 
 class COMPHELPER_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet,
                           public css::beans::XPropertyState,
                           public css::beans::XMultiPropertySet
 {
 private:
-    std::unique_ptr<PropertySetHelperImpl> mpImpl;
+    rtl::Reference<PropertySetInfo> mxInfo;
 
 protected:
     /// @throws css::beans::UnknownPropertyException
