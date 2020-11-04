@@ -71,11 +71,10 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(weld::Container* pPage, SwMai
         //insert in reverse order
         m_xRecentDocLB->insert_text(0, rDoc);
     }
-    m_xRecentDocLB->set_active(0);
-    if(!rDocs.hasElements())
-    {
+    if (!rDocs.hasElements())
         m_xRecentDocRB->set_sensitive(false);
-    }
+    else
+        m_xRecentDocLB->set_active(0);
 }
 
 SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
