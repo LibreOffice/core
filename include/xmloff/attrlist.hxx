@@ -28,17 +28,19 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <memory>
-
-struct SvXMLAttributeList_Impl;
+#include <vector>
 
 class XMLOFF_DLLPUBLIC SvXMLAttributeList final : public ::cppu::WeakImplHelper<
         css::xml::sax::XAttributeList,
         css::util::XCloneable,
         css::lang::XUnoTunnel>
 {
-    std::unique_ptr<SvXMLAttributeList_Impl> m_pImpl;
-
+    struct SvXMLTagAttribute_Impl
+    {
+        OUString sName;
+        OUString sValue;
+    };
+    std::vector<SvXMLTagAttribute_Impl> vecAttribute;
 public:
     SvXMLAttributeList();
     SvXMLAttributeList( const SvXMLAttributeList& );
@@ -69,9 +71,6 @@ public:
     void RemoveAttributeByIndex( sal_Int16 i );
     void RenameAttributeByIndex( sal_Int16 i, const OUString& rNewName );
     sal_Int16 GetIndexByName( const OUString& rName ) const;
-
- private:
-    const OUString sType; // "CDATA"
 };
 
 
