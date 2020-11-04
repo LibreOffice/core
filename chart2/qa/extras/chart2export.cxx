@@ -181,6 +181,7 @@ public:
     void testTdf123647();
     void testTdf136267();
     void testDataLabelPlacementPieChart();
+    void testTdf137917();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -324,6 +325,7 @@ public:
     CPPUNIT_TEST(testTdf123647);
     CPPUNIT_TEST(testTdf136267);
     CPPUNIT_TEST(testDataLabelPlacementPieChart);
+    CPPUNIT_TEST(testTdf137917);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2967,6 +2969,19 @@ void Chart2ExportTest::testDataLabelPlacementPieChart()
     CPPUNIT_ASSERT(aAny >>= nLabelPlacement);
     CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::OUTSIDE, nLabelPlacement);
 
+}
+
+void Chart2ExportTest::testTdf137917()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf137917.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:baseTimeUnit", "val", "days");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:majorUnit", "val", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:majorTimeUnit", "val", "months");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:minorUnit", "val", "7");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:minorTimeUnit", "val", "days");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
