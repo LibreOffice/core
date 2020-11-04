@@ -27,8 +27,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <memory>
 #include <vector>
+#include <unordered_map>
 
 namespace comphelper
 {
@@ -36,22 +36,19 @@ namespace comphelper
 
     // = NamedValueCollection
 
-    struct NamedValueCollection_Impl;
     /** a collection of named values, packed in various formats.
     */
     class COMPHELPER_DLLPUBLIC NamedValueCollection
     {
-    private:
-        ::std::unique_ptr< NamedValueCollection_Impl >    m_pImpl;
-
+        std::unordered_map< OUString, css::uno::Any >  maValues;
     public:
-        NamedValueCollection();
+        NamedValueCollection() = default;
 
-        NamedValueCollection( const NamedValueCollection& _rCopySource );
-        NamedValueCollection(NamedValueCollection&& _rCopySource) noexcept;
+        NamedValueCollection( const NamedValueCollection& _rCopySource ) = default;
+        NamedValueCollection(NamedValueCollection&& _rCopySource) noexcept = default;
 
-        NamedValueCollection& operator=( const NamedValueCollection& i_rCopySource );
-        NamedValueCollection& operator=(NamedValueCollection&& i_rCopySource) noexcept;
+        NamedValueCollection& operator=( const NamedValueCollection& i_rCopySource ) = default;
+        NamedValueCollection& operator=(NamedValueCollection&& i_rCopySource) noexcept = default;
 
         /** constructs a collection
             @param  _rElements
@@ -78,8 +75,6 @@ namespace comphelper
                 a sequence of NamedValue's
         */
         NamedValueCollection( const css::uno::Sequence< css::beans::NamedValue >& _rArguments );
-
-        ~NamedValueCollection();
 
         void assign( const css::uno::Sequence< css::uno::Any >& _rArguments )
         {
