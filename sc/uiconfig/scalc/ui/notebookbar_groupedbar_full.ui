@@ -6285,7 +6285,7 @@
                                 <property name="vexpand">True</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="colorbox1">
+                                  <object class="sfxlo-NotebookbarToolBox" id="colorbox1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">both-horiz</property>
@@ -6324,7 +6324,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="colorbox2">
+                                  <object class="sfxlo-NotebookbarToolBox" id="colorbox2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="toolbar_style">both-horiz</property>

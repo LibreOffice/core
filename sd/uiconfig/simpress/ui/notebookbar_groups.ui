@@ -725,7 +725,7 @@
                         <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="font">
+                          <object class="sfxlo-NotebookbarToolBox" id="font">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
@@ -763,7 +763,7 @@
                         <property name="valign">center</property>
                         <property name="spacing">4</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="fontheight">
+                          <object class="sfxlo-NotebookbarToolBox" id="fontheight">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
@@ -788,7 +788,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="fontadjust">
+                          <object class="sfxlo-NotebookbarToolBox" id="fontadjust">
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="hexpand">True</property>
@@ -1024,7 +1024,7 @@
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="sfxlo-SidebarToolBox" id="backgroundbox">
+                      <object class="sfxlo-NotebookbarToolBox" id="backgroundbox">
                         <property name="height_request">26</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -1051,7 +1051,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-SidebarToolBox" id="highlightbox">
+                      <object class="sfxlo-NotebookbarToolBox" id="highlightbox">
                         <property name="height_request">26</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -1078,7 +1078,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-SidebarToolBox" id="colorbox">
+                      <object class="sfxlo-NotebookbarToolBox" id="colorbox">
                         <property name="height_request">26</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -1413,7 +1413,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="tablebox">
+                          <object class="sfxlo-NotebookbarToolBox" id="tablebox">
                             <property name="height_request">26</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -1438,7 +1438,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="shapesbox">
+                          <object class="sfxlo-NotebookbarToolBox" id="shapesbox">
                             <property name="height_request">26</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
