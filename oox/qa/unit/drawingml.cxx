@@ -88,6 +88,7 @@ void OoxDrawingmlTest::loadAndReload(const OUString& rURL, const OUString& rFilt
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= rFilterName;
     utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     mxComponent->dispose();
     validate(aTempFile.GetFileName(), test::OOXML);

@@ -1072,6 +1072,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
         = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument", aLoadProperties);
     xStorable.set(mxComponent, uno::UNO_QUERY);
     utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
     aStoreProperties = {
         comphelper::makePropertyValue("FilterName", OUString("writer8")),
     };

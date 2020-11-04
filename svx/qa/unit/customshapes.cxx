@@ -780,6 +780,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
     // Save and reload
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("draw8");
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
