@@ -49,8 +49,6 @@ public:
      */
     XMLChangeImportContext(
         SvXMLImport& rImport,
-        sal_Int16 nPrefix,
-        const OUString& rLocalName,
         Element eElement,
         /// true if change mark is encountered outside of a paragraph
         /// (usually before a section or table)
@@ -58,8 +56,9 @@ public:
 
     virtual ~XMLChangeImportContext() override;
 
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
 
 private:
     Element m_Element;

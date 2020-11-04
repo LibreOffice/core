@@ -66,9 +66,7 @@ public:
     XMLTextFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
-        const char* pService,               /// name of SO API service
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& rLocalName);     /// element name w/o prefix
+        const char* pService);                  /// name of SO API service
 
     /// process character data: will be collected in member sContentBuffer
     virtual void SAL_CALL characters( const OUString& sContent ) override;
@@ -86,9 +84,7 @@ public:
     static XMLTextFieldImportContext* CreateTextFieldImportContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,
-        sal_uInt16 nPrefix,
-        const OUString& rName,
-        sal_uInt16 nToken);
+        sal_Int32 nElement);
 
 protected:
     /// get helper
@@ -133,9 +129,7 @@ public:
 
     XMLSenderFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName);      /// element name w/o prefix
+        XMLTextImportHelper& rHlp);              /// Text import helper
 
 protected:
     /// start element
@@ -163,9 +157,7 @@ public:
 
     XMLAuthorFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName);      /// element name w/o prefix
+        XMLTextImportHelper& rHlp);              /// Text import helper
 
 private:
     /// start element
@@ -194,9 +186,7 @@ public:
 
     XMLPlaceholderFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName);     /// element name w/o prefix
+        XMLTextImportHelper& rHlp);              /// Text import helper
 
 private:
     /// process attribute values
@@ -232,9 +222,7 @@ public:
 
     XMLTimeFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName);     /// element name w/o prefix
+        XMLTextImportHelper& rHlp);              /// Text import helper
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -253,9 +241,7 @@ public:
 
     XMLDateFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName);     /// element name w/o prefix
+        XMLTextImportHelper& rHlp);              /// Text import helper
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -277,9 +263,7 @@ public:
 
     XMLPageContinuationImportContext(
         SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName);     /// element name w/o prefix
+        XMLTextImportHelper& rHlp);              /// Text import helper
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -308,9 +292,7 @@ public:
 
     XMLPageNumberImportContext(
         SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName);     /// element name w/o prefix
+        XMLTextImportHelper& rHlp);              /// Text import helper
 
 
     /// process attribute values
@@ -346,8 +328,6 @@ protected:
     XMLDatabaseFieldImportContext(SvXMLImport& rImport,
                                   XMLTextImportHelper& rHlp,
                                   const char* pServiceName,
-                                  sal_uInt16 nPrfx,
-                                  const OUString& sLocalName,
                                   bool bUseDisplay );
 
 public:
@@ -373,9 +353,7 @@ class XMLDatabaseNameImportContext final : public XMLDatabaseFieldImportContext
 public:
 
     XMLDatabaseNameImportContext(SvXMLImport& rImport,
-                                 XMLTextImportHelper& rHlp,
-                                 sal_uInt16 nPrfx,
-                                 const OUString& sLocalName);
+                                 XMLTextImportHelper& rHlp);
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -394,16 +372,12 @@ protected:
     // for use in child classes
     XMLDatabaseNextImportContext(SvXMLImport& rImport,
                                  XMLTextImportHelper& rHlp,
-                                 const char* pServiceName,
-                                 sal_uInt16 nPrfx,
-                                 const OUString& sLocalName);
+                                 const char* pServiceName);
 
 public:
 
     XMLDatabaseNextImportContext(SvXMLImport& rImport,
-                                 XMLTextImportHelper& rHlp,
-                                 sal_uInt16 nPrfx,
-                                 const OUString& sLocalName);
+                                 XMLTextImportHelper& rHlp);
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -424,9 +398,7 @@ class XMLDatabaseSelectImportContext final : public XMLDatabaseNextImportContext
 public:
 
     XMLDatabaseSelectImportContext(SvXMLImport& rImport,
-                                   XMLTextImportHelper& rHlp,
-                                   sal_uInt16 nPrfx,
-                                   const OUString& sLocalName);
+                                   XMLTextImportHelper& rHlp);
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -451,9 +423,7 @@ class XMLDatabaseNumberImportContext final : public XMLDatabaseFieldImportContex
 public:
 
     XMLDatabaseNumberImportContext(SvXMLImport& rImport,
-                                   XMLTextImportHelper& rHlp,
-                                   sal_uInt16 nPrfx,
-                                   const OUString& sLocalName);
+                                   XMLTextImportHelper& rHlp);
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -481,9 +451,7 @@ public:
 
     XMLSimpleDocInfoImportContext(SvXMLImport& rImport,
                                   XMLTextImportHelper& rHlp,
-                                  sal_uInt16 nPrfx,
-                                  const OUString& sLocalName,
-                                  sal_uInt16 nToken,
+                                  sal_Int32 nElementToken,
                                   bool bContent,
                                   bool bAuthor);
 
@@ -496,7 +464,7 @@ protected:
     virtual void PrepareField(
         const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 
-    static const char* MapTokenToServiceName(sal_uInt16 nToken);
+    static const char* MapTokenToServiceName(sal_Int32 nElementToken);
 };
 
 /** import docinfo fields with date or time attributes and numberformats */
@@ -516,9 +484,7 @@ public:
 
     XMLDateTimeDocInfoImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& sLocalName,
-                                    sal_uInt16 nToken);
+                                    sal_Int32 nElement);
 
 private:
     /// process attribute values
@@ -537,9 +503,7 @@ public:
 
     XMLRevisionDocInfoImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& sLocalName,
-                                    sal_uInt16 nToken);
+                                    sal_Int32 nElement);
 
 private:
     /// prepare XTextField for insertion into document
@@ -562,9 +526,7 @@ public:
 
     XMLUserDocInfoImportContext(SvXMLImport& rImport,
                                 XMLTextImportHelper& rHlp,
-                                sal_uInt16 nPrfx,
-                                const OUString& sLocalName,
-                                sal_uInt16 nToken);
+                                sal_Int32 nElement);
 
 private:
     /// process attribute values
@@ -586,9 +548,7 @@ class XMLHiddenParagraphImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLHiddenParagraphImportContext(SvXMLImport& rImport,
-                                    XMLTextImportHelper& rHlp,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& sLocalName);
+                                    XMLTextImportHelper& rHlp);
 
 private:
     /// process attribute values
@@ -618,9 +578,7 @@ class XMLConditionalTextImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLConditionalTextImportContext(SvXMLImport& rImport,
-                                    XMLTextImportHelper& rHlp,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& sLocalName);
+                                    XMLTextImportHelper& rHlp);
 
 private:
     /// process attribute values
@@ -649,9 +607,7 @@ class XMLHiddenTextImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLHiddenTextImportContext(SvXMLImport& rImport,
-                               XMLTextImportHelper& rHlp,
-                               sal_uInt16 nPrfx,
-                               const OUString& sLocalName);
+                               XMLTextImportHelper& rHlp);
 
 private:
     /// process attribute values
@@ -676,9 +632,7 @@ class XMLFileNameImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLFileNameImportContext(SvXMLImport& rImport,
-                             XMLTextImportHelper& rHlp,
-                             sal_uInt16 nPrfx,
-                             const OUString& sLocalName);
+                             XMLTextImportHelper& rHlp);
 
 private:
     /// process attribute values
@@ -700,9 +654,7 @@ class XMLTemplateNameImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLTemplateNameImportContext(SvXMLImport& rImport,
-                                 XMLTextImportHelper& rHlp,
-                                 sal_uInt16 nPrfx,
-                                 const OUString& sLocalName);
+                                 XMLTextImportHelper& rHlp);
 
 private:
     /// process attribute values
@@ -723,9 +675,7 @@ class XMLChapterImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLChapterImportContext(SvXMLImport& rImport,
-                            XMLTextImportHelper& rHlp,
-                            sal_uInt16 nPrfx,
-                            const OUString& sLocalName);
+                            XMLTextImportHelper& rHlp);
 
 private:
     /// process attribute values
@@ -751,9 +701,7 @@ public:
 
     XMLCountFieldImportContext(SvXMLImport& rImport,
                                XMLTextImportHelper& rHlp,
-                               sal_uInt16 nPrfx,
-                               const OUString& sLocalName,
-                               sal_uInt16 nToken);
+                               sal_Int32 nElement);
 
 private:
     /// process attribute values
@@ -764,7 +712,7 @@ private:
     virtual void PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 
-    static const char* MapTokenToServiceName(sal_uInt16 nToken);
+    static const char* MapTokenToServiceName(sal_Int32 nElement);
 };
 
 /** import page variable fields (<text:get-page-variable>) */
@@ -778,9 +726,7 @@ class XMLPageVarGetFieldImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLPageVarGetFieldImportContext(SvXMLImport& rImport,
-                                    XMLTextImportHelper& rHlp,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& sLocalName);
+                                    XMLTextImportHelper& rHlp);
 
 private:
     /// process attribute values
@@ -801,9 +747,7 @@ class XMLPageVarSetFieldImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLPageVarSetFieldImportContext(SvXMLImport& rImport,
-                                    XMLTextImportHelper& rHlp,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& sLocalName);
+                                    XMLTextImportHelper& rHlp);
 
 private:
     /// process attribute values
@@ -828,9 +772,7 @@ class XMLMacroFieldImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLMacroFieldImportContext(SvXMLImport& rImport,
-                               XMLTextImportHelper& rHlp,
-                               sal_uInt16 nPrfx,
-                               const OUString& sLocalName);
+                               XMLTextImportHelper& rHlp);
 
 private:
     /// for <office:events> children
@@ -853,7 +795,7 @@ class XMLReferenceFieldImportContext final : public XMLTextFieldImportContext
 {
     OUString sName;
     OUString sLanguage;
-    sal_uInt16 nElementToken;
+    sal_Int32 nElementToken;
     sal_Int16 nSource;
     sal_Int16 nType;
 
@@ -864,9 +806,7 @@ public:
 
     XMLReferenceFieldImportContext(SvXMLImport& rImport,
                                    XMLTextImportHelper& rHlp,
-                                   sal_uInt16 nToken,
-                                   sal_uInt16 nPrfx,
-                                   const OUString& sLocalName);
+                                   sal_Int32 nToken);
 
 private:
     /// start element
@@ -888,9 +828,7 @@ class XMLDdeFieldDeclsImportContext final : public SvXMLImportContext
 {
 public:
 
-    XMLDdeFieldDeclsImportContext(SvXMLImport& rImport,
-                                  sal_uInt16 nPrfx,
-                                  const OUString& sLocalName);
+    XMLDdeFieldDeclsImportContext(SvXMLImport& rImport);
 
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
@@ -922,9 +860,7 @@ class XMLDdeFieldImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLDdeFieldImportContext(SvXMLImport& rImport,
-                             XMLTextImportHelper& rHlp,
-                             sal_uInt16 nPrfx,
-                             const OUString& sLocalName);
+                             XMLTextImportHelper& rHlp);
 
 private:
     /// process attribute values
@@ -946,9 +882,7 @@ class XMLSheetNameImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLSheetNameImportContext(SvXMLImport& rImport,
-                              XMLTextImportHelper& rHlp,
-                              sal_uInt16 nPrfx,
-                              const OUString& sLocalName);
+                              XMLTextImportHelper& rHlp);
 
 private:
     /// no attributes -> empty method
@@ -967,9 +901,7 @@ public:
 
     XMLPageNameFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName);     /// element name w/o prefix
+        XMLTextImportHelper& rHlp);              /// Text import helper
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -990,9 +922,7 @@ class XMLUrlFieldImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLUrlFieldImportContext(SvXMLImport& rImport,
-                             XMLTextImportHelper& rHlp,
-                             sal_uInt16 nPrfx,
-                             const OUString& sLocalName);
+                             XMLTextImportHelper& rHlp);
 
 private:
     /// no attributes -> empty method
@@ -1012,9 +942,7 @@ class XMLBibliographyFieldImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLBibliographyFieldImportContext(SvXMLImport& rImport,
-                                      XMLTextImportHelper& rHlp,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& sLocalName);
+                                      XMLTextImportHelper& rHlp);
 
 private:
     /// process attributes (fill aValues)
@@ -1031,6 +959,7 @@ private:
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 
     static const char* MapBibliographyFieldName(const OUString& sName);
+    static const char* MapBibliographyFieldName(sal_Int32 nElement);
 };
 
 /** Import an annotation field (<text:annotation>) */
@@ -1047,15 +976,10 @@ class XMLAnnotationImportContext final : public XMLTextFieldImportContext
     css::uno::Reference < css::text::XTextCursor >  mxCursor;
     css::uno::Reference < css::text::XTextCursor >  mxOldCursor;
 
-    sal_uInt16 m_nToken;
-
 public:
 
     XMLAnnotationImportContext(SvXMLImport& rImport,
-                               XMLTextImportHelper& rHlp,
-                               sal_uInt16 nToken,
-                               sal_uInt16 nPrfx,
-                               const OUString& sLocalName);
+                               XMLTextImportHelper& rHlp);
 
 private:
     /// process attributes
@@ -1066,10 +990,9 @@ private:
     virtual void PrepareField(
         const css::uno::Reference< css::beans::XPropertySet > & xPropertySet) override;
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
@@ -1084,9 +1007,7 @@ class XMLScriptImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLScriptImportContext(SvXMLImport& rImport,
-                           XMLTextImportHelper& rHlp,
-                           sal_uInt16 nPrfx,
-                           const OUString& sLocalName);
+                           XMLTextImportHelper& rHlp);
 
 private:
     /// process attributes
@@ -1106,9 +1027,7 @@ class XMLMeasureFieldImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLMeasureFieldImportContext(SvXMLImport& rImport,
-                                    XMLTextImportHelper& rHlp,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& sLocalName);
+                                    XMLTextImportHelper& rHlp);
 
 private:
     /// process attribute values
@@ -1135,9 +1054,7 @@ class XMLDropDownFieldImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLDropDownFieldImportContext(SvXMLImport& rImport,
-                                    XMLTextImportHelper& rHlp,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& sLocalName);
+                                    XMLTextImportHelper& rHlp);
 
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
@@ -1161,9 +1078,7 @@ public:
 
     XMLHeaderFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName);     /// element name w/o prefix
+        XMLTextImportHelper& rHlp);              /// Text import helper
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -1181,9 +1096,7 @@ public:
 
     XMLFooterFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName);     /// element name w/o prefix
+        XMLTextImportHelper& rHlp);              /// Text import helper
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -1201,9 +1114,7 @@ public:
 
     XMLDateTimeFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName);     /// element name w/o prefix
+        XMLTextImportHelper& rHlp);              /// Text import helper
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,

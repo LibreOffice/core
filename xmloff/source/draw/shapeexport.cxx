@@ -2497,7 +2497,9 @@ void XMLShapeExport::ImpExportControlShape(
         SAL_WARN_IF( !xControlModel.is(), "xmloff", "Control shape has not XControlModel" );
         if( xControlModel.is() )
         {
-            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CONTROL, mrExport.GetFormExport()->getControlId( xControlModel ) );
+            OUString sControlId = mrExport.GetFormExport()->getControlId( xControlModel );
+            assert(!sControlId.isEmpty());
+            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CONTROL, sControlId );
         }
     }
 
