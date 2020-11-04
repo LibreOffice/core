@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+/** Parses the starmath code and creates the nodes.
+  *
+  */
+
 #ifndef INCLUDED_STARMATH_INC_PARSE_HXX
 #define INCLUDED_STARMATH_INC_PARSE_HXX
 
@@ -82,6 +87,7 @@ class SmParser
     SmParser(const SmParser&) = delete;
     SmParser& operator=(const SmParser&) = delete;
 
+    // Moves between tokens inside starmath code.
     void            NextToken();
     void            NextTokenColor();
     void            NextTokenFontSize();
