@@ -1614,9 +1614,10 @@ extern "C" VclBuilder::customMakeWidget lo_get_custom_widget_func(const char* na
 
 namespace
 {
-// Takes a string like "sfxlo-SidebarToolBox"
-VclBuilder::customMakeWidget GetCustomMakeWidget(const OString& name)
+// Takes a string like "sfxlo-NotebookbarToolBox"
+VclBuilder::customMakeWidget GetCustomMakeWidget(const OString& rName)
 {
+    const OString name = rName == "sfxlo-SidebarToolBox" ? "sfxlo-NotebookbarToolBox" : rName;
     VclBuilder::customMakeWidget pFunction = nullptr;
     if (sal_Int32 nDelim = name.indexOf('-'); nDelim != -1)
     {

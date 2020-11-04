@@ -717,9 +717,9 @@ custom_widgets = [
     'ContextVBox',
     'DropdownBox',
     'ManagedMenuButton',
+    'NotebookbarToolBox',
     'PriorityHBox',
     'PriorityMergedHBox',
-    'SidebarToolBox',
     ]
 
 def get_constructor_guard(constructor):
