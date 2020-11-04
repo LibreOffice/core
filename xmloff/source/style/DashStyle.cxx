@@ -36,24 +36,7 @@
 #include <xmloff/xmltkmap.hxx>
 
 using namespace ::com::sun::star;
-
 using namespace ::xmloff::token;
-
-namespace {
-
-enum SvXMLTokenMapAttrs
-{
-    XML_TOK_DASH_NAME,
-    XML_TOK_DASH_DISPLAY_NAME,
-    XML_TOK_DASH_STYLE,
-    XML_TOK_DASH_DOTS1,
-    XML_TOK_DASH_DOTS1LEN,
-    XML_TOK_DASH_DOTS2,
-    XML_TOK_DASH_DOTS2LEN,
-    XML_TOK_DASH_DISTANCE,
-};
-
-}
 
 SvXMLEnumMapEntry<drawing::DashStyle> const pXML_DashStyle_Enum[] =
 {

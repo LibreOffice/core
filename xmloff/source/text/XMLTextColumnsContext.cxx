@@ -44,26 +44,6 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
-namespace {
-
-enum SvXMLTokenMapAttrs
-{
-    XML_TOK_COLUMN_WIDTH,
-    XML_TOK_COLUMN_MARGIN_LEFT,
-    XML_TOK_COLUMN_MARGIN_RIGHT
-};
-
-enum SvXMLSepTokenMapAttrs
-{
-    XML_TOK_COLUMN_SEP_WIDTH,
-    XML_TOK_COLUMN_SEP_HEIGHT,
-    XML_TOK_COLUMN_SEP_COLOR,
-    XML_TOK_COLUMN_SEP_ALIGN,
-    XML_TOK_COLUMN_SEP_STYLE
-};
-
-}
-
 SvXMLEnumMapEntry<sal_Int8> const pXML_Sep_Style_Enum[] =
 {
     { XML_NONE,          0 },

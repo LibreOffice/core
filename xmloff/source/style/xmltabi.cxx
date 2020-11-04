@@ -32,30 +32,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-namespace {
-
-enum SvXMLTokenMapAttrs
-{
-    XML_TOK_TABSTOP_POSITION,
-    XML_TOK_TABSTOP_TYPE,
-    XML_TOK_TABSTOP_CHAR,
-    XML_TOK_TABSTOP_LEADER_STYLE,
-    XML_TOK_TABSTOP_LEADER_TEXT
-};
-
-}
-
-const SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
-{
-    { XML_NAMESPACE_STYLE, XML_POSITION,     XML_TOK_TABSTOP_POSITION },
-    { XML_NAMESPACE_STYLE, XML_TYPE,         XML_TOK_TABSTOP_TYPE },
-    { XML_NAMESPACE_STYLE, XML_CHAR,         XML_TOK_TABSTOP_CHAR },
-    { XML_NAMESPACE_STYLE, XML_LEADER_TEXT,  XML_TOK_TABSTOP_LEADER_TEXT },
-    { XML_NAMESPACE_STYLE, XML_LEADER_STYLE,  XML_TOK_TABSTOP_LEADER_STYLE },
-    XML_TOKEN_MAP_END
-};
-
-
 class SvxXMLTabStopContext_Impl : public SvXMLImportContext
 {
 private:

@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import sys
 import re
@@ -22,7 +22,7 @@ def parseFieldInfo( tokens ):
     else:
         return (normalizeTypeParams(tokens[1]), "")
 
-with io.open("workdir/loplugin.unusedenumconstants.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.unusedenumconstants.log", "r", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "definition:":
@@ -188,6 +188,8 @@ def is_ignore(srcLoc):
          "sc/inc/callform.hxx", # ParamType
          "include/i18nlangtag/applelangid.hxx", # AppleLanguageId
          "connectivity/source/drivers/firebird/Util.hxx", # firebird::BlobSubtype
+         "include/xmloff/xmltoken.hxx",
+         "writerfilter/source/rtftok/rtfcontrolwords.hxx",
          ]):
          return True
     if d[1] == "UNKNOWN" or d[1] == "LAST" or d[1].endswith("NONE") or d[1].endswith("None") or d[1].endswith("EQUAL_SIZE"):
@@ -233,11 +235,15 @@ for d in readSet:
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
+# sort by both the source-line and the datatype, so the output file ordering is stable
+# when we have multiple items on the same source line
+def v_sort_key(v):
+    return natural_sort_key(v[1]) + [v[0]]
 
 # sort results by name and line number
-tmp1list = sorted(untouchedSet, key=lambda v: natural_sort_key(v[1]))
-tmp2list = sorted(writeonlySet, key=lambda v: natural_sort_key(v[1]))
-tmp3list = sorted(readonlySet, key=lambda v: natural_sort_key(v[1]))
+tmp1list = sorted(untouchedSet, key=lambda v: v_sort_key(v))
+tmp2list = sorted(writeonlySet, key=lambda v: v_sort_key(v))
+tmp3list = sorted(readonlySet, key=lambda v: v_sort_key(v))
 
 # print out the results
 with open("compilerplugins/clang/unusedenumconstants.untouched.results", "wt") as f:

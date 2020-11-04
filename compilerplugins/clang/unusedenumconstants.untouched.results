@@ -1,14 +1,14 @@
-canvas/inc/rendering/icolorbuffer.hxx:38
+canvas/inc/rendering/icolorbuffer.hxx:37
     enum canvas::IColorBuffer::Format A8R8G8B8
-canvas/inc/rendering/icolorbuffer.hxx:41
+canvas/inc/rendering/icolorbuffer.hxx:40
     enum canvas::IColorBuffer::Format X8R8G8B8
 canvas/inc/rendering/irendermodule.hxx:54
     enum canvas::IRenderModule::PrimitiveType Unknown
 cui/source/options/optfltr.cxx:35
     enum MSFltrPg2_CheckBoxEntries InvalidCBEntry
 drawinglayer/source/tools/emfphelperdata.cxx:71
-    enum emfplushelper::(anonymous at /home/noel/libo2/drawinglayer/source/tools/emfphelperdata.cxx:65:5) WrapModeClamp
-drawinglayer/source/tools/emfpimage.hxx:31
+    enum emfplushelper::(anonymous at /home/noel/libo/drawinglayer/source/tools/emfphelperdata.cxx:65:5) WrapModeClamp
+drawinglayer/source/tools/emfpimage.hxx:30
     emfplushelper::ImageDataType ImageDataTypeUnknown
 framework/inc/xml/imagesdocumenthandler.hxx:43
     enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_EXTERNALIMAGES
@@ -33,13 +33,17 @@ framework/source/fwe/classes/actiontriggerseparatorpropertyset.cxx:44
 include/connectivity/dbtools.hxx:821
     enum connectivity::dbase::DBFType dBaseIVMemo
 include/desktop/exithelper.h:25
-    int EXITHELPER_NO_ERROR
-include/desktop/exithelper.h:25
     enum EExitCodes EXITHELPER_NO_ERROR
+include/desktop/exithelper.h:25
+    int EXITHELPER_NO_ERROR
 include/desktop/exithelper.h:27
     int EXITHELPER_FATAL_ERROR
-include/editeng/borderline.hxx:130
+include/editeng/borderline.hxx:131
     enum SvxBorderLineStyle BORDER_LINE_STYLE_MAX
+include/filter/msfilter/ww8fields.hxx:28
+    enum ww::eField ePOSSIBLEBOOKMARK
+include/filter/msfilter/ww8fields.hxx:112
+    enum ww::eField eUNKNOWN2
 include/i18nutil/transliteration.hxx:45
     enum TransliterationFlags NumToTextLower_zh_CN
 include/i18nutil/transliteration.hxx:47
@@ -60,7 +64,7 @@ include/i18nutil/transliteration.hxx:119
     enum TransliterationFlags largeToSmall_ja_JP
 include/LibreOfficeKit/LibreOfficeKitEnums.h:56
     LibreOfficeKitSelectionType LOK_SELTYPE_LARGE_TEXT
-include/LibreOfficeKit/LibreOfficeKitEnums.h:772
+include/LibreOfficeKit/LibreOfficeKitEnums.h:792
     LibreOfficeKitExtTextInputType LOK_EXT_TEXTINPUT_POS
 include/oox/ole/axfontdata.hxx:39
     enum AxFontFlags Disabled
@@ -70,117 +74,159 @@ include/unotools/eventcfg.hxx:29
     enum GlobalEventId STARTAPP
 include/unotools/eventcfg.hxx:30
     enum GlobalEventId CLOSEAPP
+include/unotools/extendedsecurityoptions.hxx:28
+    enum SvtExtendedSecurityOptions::OpenHyperlinkMode OPEN_WITHSECURITYCHECK
+include/unotools/sharedunocomponent.hxx:149
+    enum utl::SharedUNOComponent::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::beans::XPropertySet, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
-    enum utl::SharedUNOComponent<class com::sun::star::sdbc::XPreparedStatement, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
+    enum utl::SharedUNOComponent<class com::sun::star::embed::XStorage, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::sdb::XSingleSelectQueryComposer, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:149
+    enum utl::SharedUNOComponent<class com::sun::star::sdbc::XPreparedStatement, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::sdbc::XStatement, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::uno::XInterface, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
-include/unotools/sharedunocomponent.hxx:149
-    enum utl::SharedUNOComponent::AssignmentMode NoTakeOwnership
-include/unotools/sharedunocomponent.hxx:149
-    enum utl::SharedUNOComponent<class com::sun::star::embed::XStorage, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
-include/vcl/keycod.hxx:29
-    enum KeyFuncType OPEN
-include/vcl/keycod.hxx:29
-    enum KeyFuncType SAVE
-include/vcl/keycod.hxx:30
-    enum KeyFuncType SAVEAS
-include/vcl/keycod.hxx:30
-    enum KeyFuncType PRINT
-include/vcl/keycod.hxx:30
-    enum KeyFuncType CLOSE
-include/vcl/keycod.hxx:30
-    enum KeyFuncType QUIT
-include/vcl/keycod.hxx:32
-    enum KeyFuncType FIND
-include/vcl/keycod.hxx:33
-    enum KeyFuncType FINDBACKWARD
-include/vcl/keycod.hxx:33
-    enum KeyFuncType PROPERTIES
+include/vcl/pdf/PDFAnnotationMarker.hxx:57
+    enum vcl::pdf::PDFTextMarkerType Underline
+include/vcl/pdf/PDFAnnotationMarker.hxx:58
+    enum vcl::pdf::PDFTextMarkerType Squiggly
+include/vcl/pdf/PDFAnnotationMarker.hxx:59
+    enum vcl::pdf::PDFTextMarkerType StrikeOut
+include/vcl/pdf/PDFAnnotationSubType.hxx:17
+    enum vcl::pdf::PDFAnnotationSubType Unknown
+include/vcl/pdf/PDFAnnotationSubType.hxx:19
+    enum vcl::pdf::PDFAnnotationSubType Link
+include/vcl/pdf/PDFAnnotationSubType.hxx:25
+    enum vcl::pdf::PDFAnnotationSubType Polyline
+include/vcl/pdf/PDFAnnotationSubType.hxx:27
+    enum vcl::pdf::PDFAnnotationSubType Underline
+include/vcl/pdf/PDFAnnotationSubType.hxx:28
+    enum vcl::pdf::PDFAnnotationSubType Squiggly
+include/vcl/pdf/PDFAnnotationSubType.hxx:29
+    enum vcl::pdf::PDFAnnotationSubType Strikeout
+include/vcl/pdf/PDFAnnotationSubType.hxx:30
+    enum vcl::pdf::PDFAnnotationSubType Stamp
+include/vcl/pdf/PDFAnnotationSubType.hxx:31
+    enum vcl::pdf::PDFAnnotationSubType Caret
+include/vcl/pdf/PDFAnnotationSubType.hxx:34
+    enum vcl::pdf::PDFAnnotationSubType FileAttachment
+include/vcl/pdf/PDFAnnotationSubType.hxx:35
+    enum vcl::pdf::PDFAnnotationSubType Sound
+include/vcl/pdf/PDFAnnotationSubType.hxx:36
+    enum vcl::pdf::PDFAnnotationSubType Movie
+include/vcl/pdf/PDFAnnotationSubType.hxx:37
+    enum vcl::pdf::PDFAnnotationSubType Widget
+include/vcl/pdf/PDFAnnotationSubType.hxx:38
+    enum vcl::pdf::PDFAnnotationSubType Screen
+include/vcl/pdf/PDFAnnotationSubType.hxx:39
+    enum vcl::pdf::PDFAnnotationSubType Printermark
+include/vcl/pdf/PDFAnnotationSubType.hxx:40
+    enum vcl::pdf::PDFAnnotationSubType Trapnet
+include/vcl/pdf/PDFAnnotationSubType.hxx:41
+    enum vcl::pdf::PDFAnnotationSubType Watermark
+include/vcl/pdf/PDFAnnotationSubType.hxx:42
+    enum vcl::pdf::PDFAnnotationSubType Threed
+include/vcl/pdf/PDFAnnotationSubType.hxx:43
+    enum vcl::pdf::PDFAnnotationSubType Richmedia
+include/vcl/pdf/PDFAnnotationSubType.hxx:44
+    enum vcl::pdf::PDFAnnotationSubType XFAWidget
 include/vcl/toolkit/svtabbx.hxx:36
     enum SvTabJustify AdjustRight
 include/vcl/toolkit/svtabbx.hxx:37
     enum SvTabJustify AdjustLeft
-include/vcl/treelistbox.hxx:152
+include/vcl/toolkit/treelistbox.hxx:151
     enum DragDropMode APP_COPY
-include/vcl/vclenum.hxx:312
+include/vcl/toolkit/treelistbox.hxx:155
+    enum DragDropMode ALL
+include/vcl/vclenum.hxx:313
     enum WindowStateState FullScreen
 include/vcl/window.hxx:109
     enum TrackingEventFlags Focus
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:69
-    enum (anonymous at /home/noel/libo2/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:67:1) PROP_0
+include/xmloff/txtimp.hxx:321
+    enum XMLTextPageMasterElemTokens XML_TOK_TEXT_MP_HEADER
+include/xmloff/txtimp.hxx:322
+    enum XMLTextPageMasterElemTokens XML_TOK_TEXT_MP_FOOTER
+include/xmloff/txtimp.hxx:323
+    enum XMLTextPageMasterElemTokens XML_TOK_TEXT_MP_HEADER_LEFT
+include/xmloff/txtimp.hxx:324
+    enum XMLTextPageMasterElemTokens XML_TOK_TEXT_MP_FOOTER_LEFT
+include/xmloff/txtimp.hxx:325
+    enum XMLTextPageMasterElemTokens XML_TOK_TEXT_MP_HEADER_FIRST
+include/xmloff/txtimp.hxx:326
+    enum XMLTextPageMasterElemTokens XML_TOK_TEXT_MP_FOOTER_FIRST
+include/xmloff/xmlstyle.hxx:42
+    enum XMLStyleStylesElemTokens XML_TOK_STYLE_STYLE
+include/xmloff/xmlstyle.hxx:43
+    enum XMLStyleStylesElemTokens XML_TOK_STYLE_PAGE_MASTER
+include/xmloff/xmlstyle.hxx:44
+    enum XMLStyleStylesElemTokens XML_TOK_TEXT_LIST_STYLE
+include/xmloff/xmlstyle.hxx:45
+    enum XMLStyleStylesElemTokens XML_TOK_TEXT_OUTLINE
+include/xmloff/xmlstyle.hxx:46
+    enum XMLStyleStylesElemTokens XML_TOK_STYLES_GRADIENTSTYLES
+include/xmloff/xmlstyle.hxx:47
+    enum XMLStyleStylesElemTokens XML_TOK_STYLES_HATCHSTYLES
+include/xmloff/xmlstyle.hxx:48
+    enum XMLStyleStylesElemTokens XML_TOK_STYLES_BITMAPSTYLES
+include/xmloff/xmlstyle.hxx:49
+    enum XMLStyleStylesElemTokens XML_TOK_STYLES_TRANSGRADIENTSTYLES
+include/xmloff/xmlstyle.hxx:50
+    enum XMLStyleStylesElemTokens XML_TOK_STYLES_MARKERSTYLES
+include/xmloff/xmlstyle.hxx:51
+    enum XMLStyleStylesElemTokens XML_TOK_STYLES_DASHSTYLES
+include/xmloff/xmlstyle.hxx:52
+    enum XMLStyleStylesElemTokens XML_TOK_TEXT_NOTE_CONFIG
+include/xmloff/xmlstyle.hxx:53
+    enum XMLStyleStylesElemTokens XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG
+include/xmloff/xmlstyle.hxx:54
+    enum XMLStyleStylesElemTokens XML_TOK_TEXT_LINENUMBERING_CONFIG
+include/xmloff/xmlstyle.hxx:55
+    enum XMLStyleStylesElemTokens XML_TOK_STYLE_DEFAULT_STYLE
+include/xmloff/xmlstyle.hxx:56
+    enum XMLStyleStylesElemTokens XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:70
+    enum (anonymous at /home/noel/libo/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:68:1) PROP_0
 libreofficekit/source/gtk/lokdocview.cxx:296
-    enum (anonymous at /home/noel/libo2/libreofficekit/source/gtk/lokdocview.cxx:294:1) PROP_0
+    enum (anonymous at /home/noel/libo/libreofficekit/source/gtk/lokdocview.cxx:294:1) PROP_0
 reportdesign/source/filter/xml/xmlEnums.hxx:42
     enum rptxml::XMLReportToken XML_TOK_REPORT_ELEMENT
 sc/source/filter/excel/xiescher.cxx:473
-    enum (anonymous at /home/noel/libo2/sc/source/filter/excel/xiescher.cxx:473:17) eCreateFromOffice
+    enum (anonymous at /home/noel/libo/sc/source/filter/excel/xiescher.cxx:473:17) eCreateFromOffice
 sc/source/filter/inc/decl.h:24
     enum WKTYP eWK4
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+    enum ScRefHdlrControllerImpl::(anonymous at /home/noel/libo/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl<class SfxModelessDialogController, true>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+    enum ScRefHdlrControllerImpl<class SfxModelessDialogController, true>::(anonymous at /home/noel/libo/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl<class SfxTabDialogController, false>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
-sc/source/ui/inc/checklistmenu.hxx:173
-    enum ScCheckListMenuControl::SectionType WHOLE
-sc/source/ui/inc/checklistmenu.hxx:174
-    enum ScCheckListMenuControl::SectionType LISTBOX_AREA_OUTER
-sc/source/ui/inc/checklistmenu.hxx:175
-    enum ScCheckListMenuControl::SectionType LISTBOX_AREA_INNER
-sc/source/ui/inc/checklistmenu.hxx:176
-    enum ScCheckListMenuControl::SectionType SINGLE_BTN_AREA
-sc/source/ui/inc/checklistmenu.hxx:177
-    enum ScCheckListMenuControl::SectionType CHECK_TOGGLE_ALL
-sc/source/ui/inc/checklistmenu.hxx:178
-    enum ScCheckListMenuControl::SectionType BTN_SINGLE_SELECT
-sc/source/ui/inc/checklistmenu.hxx:179
-    enum ScCheckListMenuControl::SectionType BTN_SINGLE_UNSELECT
-sc/source/ui/inc/checklistmenu.hxx:180
-    enum ScCheckListMenuControl::SectionType BTN_OK
-sc/source/ui/inc/checklistmenu.hxx:181
-    enum ScCheckListMenuControl::SectionType BTN_CANCEL
-sc/source/ui/inc/checklistmenu.hxx:182
-    enum ScCheckListMenuControl::SectionType EDIT_SEARCH
-sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:97
+    enum ScRefHdlrControllerImpl<class SfxTabDialogController, false>::(anonymous at /home/noel/libo/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:101
     enum (anonymous namespace)::ScRegType LINEAR
-starmath/source/mathmlimport.hxx:111
-    enum SmXMLPresScriptEmptyElemTokenMap XML_TOK_MPRESCRIPTS
-svtools/source/control/valueset.cxx:61
-    enum (anonymous namespace)::(anonymous at /home/noel/libo2/svtools/source/control/valueset.cxx:53:1) SCRBAR_OFFSET
 svx/inc/sxmkitm.hxx:25
     enum SdrMeasureKind SDRMEASURE_RADIUS
 svx/source/inc/datanavi.hxx:59
     enum svxform::DataGroupType DGTUnknown
-svx/source/inc/fmexpl.hxx:381
-    enum svxform::NavigatorTree::DROP_ACTION DA_EXPANDNODE
-svx/source/inc/fmexpl.hxx:381
-    enum svxform::NavigatorTree::DROP_ACTION DA_SCROLLUP
-svx/source/inc/fmexpl.hxx:381
-    enum svxform::NavigatorTree::DROP_ACTION DA_SCROLLDOWN
 sw/inc/docary.hxx:68
     enum SwVectorModifyBase::DestructorPolicy KeepElements
+sw/inc/docary.hxx:68
+    enum SwVectorModifyBase<class SwCharFormat *>::DestructorPolicy KeepElements
 sw/inc/docary.hxx:68
     enum SwVectorModifyBase<class SwNumRule *>::DestructorPolicy KeepElements
 sw/inc/docary.hxx:68
     enum SwVectorModifyBase<class SwSectionFormat *>::DestructorPolicy KeepElements
-sw/inc/docary.hxx:68
-    enum SwVectorModifyBase<class SwCharFormat *>::DestructorPolicy KeepElements
 sw/inc/docary.hxx:69
     enum SwVectorModifyBase::DestructorPolicy FreeElements
 sw/inc/tblenum.hxx:34
     enum TableChgWidthHeightType InvalidPos
-sw/source/filter/ww8/ww8scan.hxx:381
+sw/source/filter/ww8/ww8scan.hxx:384
     enum ePLCFT SEP
-sw/source/filter/ww8/ww8struc.hxx:940
+sw/source/filter/ww8/ww8struc.hxx:950
     enum WW8_FSPA::FSPAOrient RelPgMargin
-sw/source/filter/ww8/ww8struc.hxx:940
+sw/source/filter/ww8/ww8struc.hxx:950
     enum WW8_FSPA::FSPAOrient RelText
 sw/source/ui/fldui/fldref.cxx:734
     enum (anonymous namespace)::FMT_REF_IDX FMT_REF_PAGE_IDX
@@ -194,29 +240,29 @@ sw/source/ui/fldui/fldref.cxx:739
     enum (anonymous namespace)::FMT_REF_IDX FMT_REF_ONLYNUMBER_IDX
 sw/source/ui/fldui/fldref.cxx:740
     enum (anonymous namespace)::FMT_REF_IDX FMT_REF_ONLYCAPTION_IDX
-sw/source/uibase/utlui/content.cxx:821
+sw/source/uibase/utlui/content.cxx:848
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_LEVEL
-sw/source/uibase/utlui/content.cxx:822
+sw/source/uibase/utlui/content.cxx:849
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DRAGMODE
-sw/source/uibase/utlui/content.cxx:824
+sw/source/uibase/utlui/content.cxx:851
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_LINK_REGION
-sw/source/uibase/utlui/content.cxx:825
+sw/source/uibase/utlui/content.cxx:852
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_COPY_REGION
-sw/source/uibase/utlui/content.cxx:826
+sw/source/uibase/utlui/content.cxx:853
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DISPLAY
-sw/source/uibase/utlui/content.cxx:830
+sw/source/uibase/utlui/content.cxx:857
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_INACTIVE
-sw/source/uibase/utlui/content.cxx:831
+sw/source/uibase/utlui/content.cxx:858
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_EDIT_ENTRY
-sw/source/uibase/utlui/content.cxx:832
+sw/source/uibase/utlui/content.cxx:859
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DELETE_ENTRY
-sw/source/uibase/utlui/content.cxx:833
+sw/source/uibase/utlui/content.cxx:860
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY
-sw/source/uibase/utlui/content.cxx:835
+sw/source/uibase/utlui/content.cxx:862
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_DEFAULT
-sw/source/uibase/utlui/content.cxx:836
+sw/source/uibase/utlui/content.cxx:863
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_FOCUS
-sw/source/uibase/utlui/content.cxx:837
+sw/source/uibase/utlui/content.cxx:864
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_OFF
 sw/source/uibase/utlui/glbltree.cxx:91
     enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE
@@ -248,45 +294,251 @@ ucbhelper/source/client/proxydecider.cxx:125
     enum ucbhelper::proxydecider_impl::InternetProxyDecider_Impl::ProxyType Manual
 vcl/inc/salptype.hxx:43
     enum SalPrinterError General
-vcl/inc/skia/gdiimpl.hxx:215
+vcl/inc/skia/gdiimpl.hxx:221
     enum SkiaSalGraphicsImpl::GlyphOrientation Ignore
 vcl/inc/unx/saldisp.hxx:62
     srv_vendor_t vendor_none
-vcl/source/app/svapp.cxx:1136
-    enum (anonymous at /home/noel/libo2/vcl/source/app/svapp.cxx:1136:1) hwAll
+vcl/source/app/svapp.cxx:1122
+    enum (anonymous at /home/noel/libo/vcl/source/app/svapp.cxx:1122:1) hwAll
 vcl/source/gdi/CommonSalLayout.cxx:134
     enum (anonymous namespace)::VerticalOrientation Rotated
-vcl/unx/gtk3/gtk3gtkinst.cxx:5161
-    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:5159:1) PROP_0
-vcl/unx/gtk3/gtk3gtkinst.cxx:5166
-    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:5159:1) PROP_SHADOW_TYPE
-writerfilter/source/ooxml/OOXMLFactory.hxx:31
+vcl/unx/gtk3/gtk3gtkinst.cxx:5205
+    enum (anonymous at /home/noel/libo/vcl/unx/gtk3/gtk3gtkinst.cxx:5203:1) PROP_0
+vcl/unx/gtk3/gtk3gtkinst.cxx:5210
+    enum (anonymous at /home/noel/libo/vcl/unx/gtk3/gtk3gtkinst.cxx:5203:1) PROP_SHADOW_TYPE
+writerfilter/source/ooxml/OOXMLFactory.hxx:30
     enum writerfilter::ooxml::ResourceType NoResource
-writerfilter/source/ooxml/OOXMLFactory.hxx:32
+writerfilter/source/ooxml/OOXMLFactory.hxx:31
     enum writerfilter::ooxml::ResourceType Table
-writerfilter/source/ooxml/OOXMLFactory.hxx:33
+writerfilter/source/ooxml/OOXMLFactory.hxx:32
     enum writerfilter::ooxml::ResourceType Stream
-writerfilter/source/ooxml/OOXMLFactory.hxx:36
+writerfilter/source/ooxml/OOXMLFactory.hxx:35
     enum writerfilter::ooxml::ResourceType Properties
-writerfilter/source/ooxml/OOXMLFactory.hxx:40
+writerfilter/source/ooxml/OOXMLFactory.hxx:39
     enum writerfilter::ooxml::ResourceType Shape
-writerfilter/source/ooxml/OOXMLFactory.hxx:42
+writerfilter/source/ooxml/OOXMLFactory.hxx:41
     enum writerfilter::ooxml::ResourceType Value
-writerfilter/source/ooxml/OOXMLFactory.hxx:43
+writerfilter/source/ooxml/OOXMLFactory.hxx:42
     enum writerfilter::ooxml::ResourceType XNote
-writerfilter/source/ooxml/OOXMLFactory.hxx:44
+writerfilter/source/ooxml/OOXMLFactory.hxx:43
     enum writerfilter::ooxml::ResourceType TextTableCell
-writerfilter/source/ooxml/OOXMLFactory.hxx:45
+writerfilter/source/ooxml/OOXMLFactory.hxx:44
     enum writerfilter::ooxml::ResourceType TextTableRow
-writerfilter/source/ooxml/OOXMLFactory.hxx:46
+writerfilter/source/ooxml/OOXMLFactory.hxx:45
     enum writerfilter::ooxml::ResourceType TextTable
-writerfilter/source/ooxml/OOXMLFactory.hxx:47
+writerfilter/source/ooxml/OOXMLFactory.hxx:46
     enum writerfilter::ooxml::ResourceType PropertyTable
-writerfilter/source/ooxml/OOXMLFactory.hxx:48
+writerfilter/source/ooxml/OOXMLFactory.hxx:47
     enum writerfilter::ooxml::ResourceType Math
-writerfilter/source/ooxml/OOXMLFactory.hxx:49
+writerfilter/source/ooxml/OOXMLFactory.hxx:48
     enum writerfilter::ooxml::ResourceType Any
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:203
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:202
     enum writerfilter::ooxml::OOXMLFastContextHandler::eMathParaJc INLINE
+xmloff/source/chart/XMLSymbolImageContext.cxx:38
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_SYMBOL_IMAGE_HREF
+xmloff/source/chart/XMLSymbolImageContext.cxx:39
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_SYMBOL_IMAGE_TYPE
+xmloff/source/chart/XMLSymbolImageContext.cxx:40
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_SYMBOL_IMAGE_ACTUATE
+xmloff/source/chart/XMLSymbolImageContext.cxx:41
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_SYMBOL_IMAGE_SHOW
+xmloff/source/draw/sdxmlimp_impl.hxx:35
+    enum SdXMLBodyElemTokenMap XML_TOK_BODY_PAGE
+xmloff/source/draw/sdxmlimp_impl.hxx:36
+    enum SdXMLBodyElemTokenMap XML_TOK_BODY_SETTINGS
+xmloff/source/draw/sdxmlimp_impl.hxx:37
+    enum SdXMLBodyElemTokenMap XML_TOK_BODY_HEADER_DECL
+xmloff/source/draw/sdxmlimp_impl.hxx:38
+    enum SdXMLBodyElemTokenMap XML_TOK_BODY_FOOTER_DECL
+xmloff/source/draw/sdxmlimp_impl.hxx:39
+    enum SdXMLBodyElemTokenMap XML_TOK_BODY_DATE_TIME_DECL
+xmloff/source/draw/sdxmlimp_impl.hxx:44
+    enum SdXMLStylesElemTokenMap XML_TOK_STYLES_STYLE
+xmloff/source/draw/sdxmlimp_impl.hxx:45
+    enum SdXMLStylesElemTokenMap XML_TOK_STYLES_PAGE_MASTER
+xmloff/source/draw/sdxmlimp_impl.hxx:46
+    enum SdXMLStylesElemTokenMap XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT
+xmloff/source/draw/sdxmlimp_impl.hxx:51
+    enum SdXMLMasterPageElemTokenMap XML_TOK_MASTERPAGE_STYLE
+xmloff/source/draw/sdxmlimp_impl.hxx:52
+    enum SdXMLMasterPageElemTokenMap XML_TOK_MASTERPAGE_NOTES
+xmloff/source/draw/sdxmlimp_impl.hxx:57
+    enum SdXMLPageMasterAttrTokenMap XML_TOK_PAGEMASTER_NAME
+xmloff/source/draw/sdxmlimp_impl.hxx:62
+    enum SdXMLPageMasterStyleAttrTokenMap XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP
+xmloff/source/draw/sdxmlimp_impl.hxx:63
+    enum SdXMLPageMasterStyleAttrTokenMap XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM
+xmloff/source/draw/sdxmlimp_impl.hxx:64
+    enum SdXMLPageMasterStyleAttrTokenMap XML_TOK_PAGEMASTERSTYLE_MARGIN_LEFT
+xmloff/source/draw/sdxmlimp_impl.hxx:65
+    enum SdXMLPageMasterStyleAttrTokenMap XML_TOK_PAGEMASTERSTYLE_MARGIN_RIGHT
+xmloff/source/draw/sdxmlimp_impl.hxx:66
+    enum SdXMLPageMasterStyleAttrTokenMap XML_TOK_PAGEMASTERSTYLE_PAGE_WIDTH
+xmloff/source/draw/sdxmlimp_impl.hxx:67
+    enum SdXMLPageMasterStyleAttrTokenMap XML_TOK_PAGEMASTERSTYLE_PAGE_HEIGHT
+xmloff/source/draw/sdxmlimp_impl.hxx:68
+    enum SdXMLPageMasterStyleAttrTokenMap XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION
+xmloff/source/draw/sdxmlimp_impl.hxx:74
+    enum SdXMLPresentationPlaceholderAttrTokenMap XML_TOK_PRESENTATIONPLACEHOLDER_OBJECTNAME
+xmloff/source/draw/sdxmlimp_impl.hxx:75
+    enum SdXMLPresentationPlaceholderAttrTokenMap XML_TOK_PRESENTATIONPLACEHOLDER_X
+xmloff/source/draw/sdxmlimp_impl.hxx:76
+    enum SdXMLPresentationPlaceholderAttrTokenMap XML_TOK_PRESENTATIONPLACEHOLDER_Y
+xmloff/source/draw/sdxmlimp_impl.hxx:77
+    enum SdXMLPresentationPlaceholderAttrTokenMap XML_TOK_PRESENTATIONPLACEHOLDER_WIDTH
+xmloff/source/draw/sdxmlimp_impl.hxx:78
+    enum SdXMLPresentationPlaceholderAttrTokenMap XML_TOK_PRESENTATIONPLACEHOLDER_HEIGHT
+xmloff/source/style/DashStyle.cxx:46
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_DASH_NAME
+xmloff/source/style/DashStyle.cxx:47
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_DASH_DISPLAY_NAME
+xmloff/source/style/DashStyle.cxx:48
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_DASH_STYLE
+xmloff/source/style/DashStyle.cxx:49
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_DASH_DOTS1
+xmloff/source/style/DashStyle.cxx:50
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_DASH_DOTS1LEN
+xmloff/source/style/DashStyle.cxx:51
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_DASH_DOTS2
+xmloff/source/style/DashStyle.cxx:52
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_DASH_DOTS2LEN
+xmloff/source/style/DashStyle.cxx:53
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_DASH_DISTANCE
+xmloff/source/style/GradientStyle.cxx:52
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_STARTCOLOR
+xmloff/source/style/GradientStyle.cxx:53
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_ENDCOLOR
+xmloff/source/style/GradientStyle.cxx:54
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_STARTINT
+xmloff/source/style/GradientStyle.cxx:55
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_ENDINT
+xmloff/source/style/HatchStyle.cxx:46
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_HATCH_NAME
+xmloff/source/style/HatchStyle.cxx:47
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_HATCH_DISPLAY_NAME
+xmloff/source/style/HatchStyle.cxx:48
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_HATCH_STYLE
+xmloff/source/style/HatchStyle.cxx:49
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_HATCH_COLOR
+xmloff/source/style/HatchStyle.cxx:50
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_HATCH_DISTANCE
+xmloff/source/style/HatchStyle.cxx:51
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_HATCH_ROTATION
 xmloff/source/style/HatchStyle.cxx:52
     enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_TABSTOP_END
+xmloff/source/style/ImageStyle.cxx:39
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_IMAGE_NAME
+xmloff/source/style/ImageStyle.cxx:40
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_IMAGE_DISPLAY_NAME
+xmloff/source/style/ImageStyle.cxx:41
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_IMAGE_URL
+xmloff/source/style/ImageStyle.cxx:42
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_IMAGE_TYPE
+xmloff/source/style/ImageStyle.cxx:43
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_IMAGE_SHOW
+xmloff/source/style/ImageStyle.cxx:44
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_IMAGE_ACTUATE
+xmloff/source/style/TransGradientStyle.cxx:47
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_NAME
+xmloff/source/style/TransGradientStyle.cxx:48
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_DISPLAY_NAME
+xmloff/source/style/TransGradientStyle.cxx:49
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_STYLE
+xmloff/source/style/TransGradientStyle.cxx:50
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_CX
+xmloff/source/style/TransGradientStyle.cxx:51
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_CY
+xmloff/source/style/TransGradientStyle.cxx:52
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_START
+xmloff/source/style/TransGradientStyle.cxx:53
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_END
+xmloff/source/style/TransGradientStyle.cxx:54
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_ANGLE
+xmloff/source/style/TransGradientStyle.cxx:55
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_GRADIENT_BORDER
+xmloff/source/style/xmlnumi.cxx:108
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_LEVEL
+xmloff/source/style/xmlnumi.cxx:109
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_STYLE_NAME
+xmloff/source/style/xmlnumi.cxx:110
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_BULLET_CHAR
+xmloff/source/style/xmlnumi.cxx:111
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_HREF
+xmloff/source/style/xmlnumi.cxx:112
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_TYPE
+xmloff/source/style/xmlnumi.cxx:113
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_SHOW
+xmloff/source/style/xmlnumi.cxx:114
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_ACTUATE
+xmloff/source/style/xmlnumi.cxx:115
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_NUM_FORMAT
+xmloff/source/style/xmlnumi.cxx:116
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_NUM_PREFIX
+xmloff/source/style/xmlnumi.cxx:117
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_NUM_SUFFIX
+xmloff/source/style/xmlnumi.cxx:118
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_NUM_LETTER_SYNC
+xmloff/source/style/xmlnumi.cxx:119
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_START_VALUE
+xmloff/source/style/xmlnumi.cxx:120
+    enum (anonymous namespace)::SvxXMLTextListLevelStyleAttrTokens XML_TOK_TEXT_LEVEL_ATTR_DISPLAY_LEVELS
+xmloff/source/style/xmlnumi.cxx:562
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_SPACE_BEFORE
+xmloff/source/style/xmlnumi.cxx:563
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_WIDTH
+xmloff/source/style/xmlnumi.cxx:564
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_DIST
+xmloff/source/style/xmlnumi.cxx:565
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_TEXT_ALIGN
+xmloff/source/style/xmlnumi.cxx:566
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_NAME
+xmloff/source/style/xmlnumi.cxx:567
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_FAMILY
+xmloff/source/style/xmlnumi.cxx:568
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_FAMILY_GENERIC
+xmloff/source/style/xmlnumi.cxx:569
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_STYLENAME
+xmloff/source/style/xmlnumi.cxx:570
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_PITCH
+xmloff/source/style/xmlnumi.cxx:571
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_CHARSET
+xmloff/source/style/xmlnumi.cxx:572
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_VERTICAL_POS
+xmloff/source/style/xmlnumi.cxx:573
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_VERTICAL_REL
+xmloff/source/style/xmlnumi.cxx:574
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_WIDTH
+xmloff/source/style/xmlnumi.cxx:575
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT
+xmloff/source/style/xmlnumi.cxx:576
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR
+xmloff/source/style/xmlnumi.cxx:577
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR
+xmloff/source/style/xmlnumi.cxx:578
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE
+xmloff/source/style/xmlnumi.cxx:579
+    enum (anonymous namespace)::SvxXMLStyleAttributesAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE
+xmloff/source/style/xmlnumi.cxx:843
+    enum (anonymous namespace)::SvxXMLStyleAttributesLabelAlignmentAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY
+xmloff/source/style/xmlnumi.cxx:844
+    enum (anonymous namespace)::SvxXMLStyleAttributesLabelAlignmentAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_LISTTAB_STOP_POSITION
+xmloff/source/style/xmlnumi.cxx:845
+    enum (anonymous namespace)::SvxXMLStyleAttributesLabelAlignmentAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_FIRST_LINE_INDENT
+xmloff/source/style/xmlnumi.cxx:846
+    enum (anonymous namespace)::SvxXMLStyleAttributesLabelAlignmentAttrTokens XML_TOK_STYLE_ATTRIBUTES_ATTR_INDENT_AT
+xmloff/source/text/XMLTextColumnsContext.cxx:51
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_COLUMN_WIDTH
+xmloff/source/text/XMLTextColumnsContext.cxx:52
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_COLUMN_MARGIN_LEFT
+xmloff/source/text/XMLTextColumnsContext.cxx:53
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_COLUMN_MARGIN_RIGHT
+xmloff/source/text/XMLTextColumnsContext.cxx:58
+    enum (anonymous namespace)::SvXMLSepTokenMapAttrs XML_TOK_COLUMN_SEP_WIDTH
+xmloff/source/text/XMLTextColumnsContext.cxx:59
+    enum (anonymous namespace)::SvXMLSepTokenMapAttrs XML_TOK_COLUMN_SEP_HEIGHT
+xmloff/source/text/XMLTextColumnsContext.cxx:60
+    enum (anonymous namespace)::SvXMLSepTokenMapAttrs XML_TOK_COLUMN_SEP_COLOR
+xmloff/source/text/XMLTextColumnsContext.cxx:61
+    enum (anonymous namespace)::SvXMLSepTokenMapAttrs XML_TOK_COLUMN_SEP_ALIGN
+xmloff/source/text/XMLTextColumnsContext.cxx:62
+    enum (anonymous namespace)::SvXMLSepTokenMapAttrs XML_TOK_COLUMN_SEP_STYLE

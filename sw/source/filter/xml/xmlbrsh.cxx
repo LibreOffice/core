@@ -39,40 +39,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-namespace {
-
-enum SvXMLTokenMapAttrs
-{
-    XML_TOK_BGIMG_HREF,
-    XML_TOK_BGIMG_TYPE,
-    XML_TOK_BGIMG_ACTUATE,
-    XML_TOK_BGIMG_SHOW,
-    XML_TOK_BGIMG_POSITION,
-    XML_TOK_BGIMG_REPEAT,
-    XML_TOK_BGIMG_FILTER,
-};
-
-}
-
-const SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
-{
-    { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },
-    { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE      },
-    { XML_NAMESPACE_XLINK, XML_ACTUATE,     XML_TOK_BGIMG_ACTUATE   },
-    { XML_NAMESPACE_XLINK, XML_SHOW,        XML_TOK_BGIMG_SHOW      },
-    { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION  },
-    { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT    },
-    { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER    },
-    XML_TOKEN_MAP_END
-};
-
-
 void SwXMLBrushItemImportContext::ProcessAttrs(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
         const SvXMLUnitConverter& rUnitConv )
 {
-    SvXMLTokenMap aTokenMap( aBGImgAttributesAttrTokenMap );
-
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
         const OUString sValue = aIter.toString();

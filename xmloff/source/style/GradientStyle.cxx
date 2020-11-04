@@ -37,28 +37,7 @@
 #include <xmloff/xmlement.hxx>
 
 using namespace ::com::sun::star;
-
 using namespace ::xmloff::token;
-
-namespace {
-
-enum SvXMLTokenMapAttrs
-{
-    XML_TOK_GRADIENT_NAME,
-    XML_TOK_GRADIENT_DISPLAY_NAME,
-    XML_TOK_GRADIENT_STYLE,
-    XML_TOK_GRADIENT_CX,
-    XML_TOK_GRADIENT_CY,
-    XML_TOK_GRADIENT_STARTCOLOR,
-    XML_TOK_GRADIENT_ENDCOLOR,
-    XML_TOK_GRADIENT_STARTINT,
-    XML_TOK_GRADIENT_ENDINT,
-    XML_TOK_GRADIENT_ANGLE,
-    XML_TOK_GRADIENT_BORDER,
-    XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
-};
-
-}
 
 SvXMLEnumMapEntry<awt::GradientStyle> const pXML_GradientStyle_Enum[] =
 {
