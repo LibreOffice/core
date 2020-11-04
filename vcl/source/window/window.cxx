@@ -2490,7 +2490,6 @@ void Window::EnableInput( bool bEnable, bool bChild )
     if (!mpWindowImpl)
         return;
 
-    bool bNotify = (bEnable != mpWindowImpl->mbInputDisabled);
     if ( mpWindowImpl->mpBorderWindow )
     {
         mpWindowImpl->mpBorderWindow->EnableInput( bEnable, false );
@@ -2538,13 +2537,6 @@ void Window::EnableInput( bool bEnable, bool bChild )
 
     if ( IsReallyVisible() )
         ImplGenerateMouseMove();
-
-    // #104827# notify parent
-    if ( bNotify && bEnable )
-    {
-        NotifyEvent aNEvt( MouseNotifyEvent::INPUTENABLE, this );
-        CompatNotify( aNEvt );
-    }
 }
 
 void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )

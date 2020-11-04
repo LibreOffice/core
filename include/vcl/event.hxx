@@ -284,8 +284,7 @@ enum class MouseNotifyEvent
     KEYUP            = 5,
     GETFOCUS         = 6,
     LOSEFOCUS        = 7,
-    COMMAND          = 8,
-    INPUTENABLE      = 10
+    COMMAND          = 8
 };
 
 class VCL_DLLPUBLIC NotifyEvent
