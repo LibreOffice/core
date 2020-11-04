@@ -838,7 +838,7 @@ inline void SwTextNode::TryDeleteSwpHints()
 
 inline SwTextFormatColl* SwTextNode::GetTextColl() const
 {
-    return static_cast<SwTextFormatColl*>(const_cast<SwModify*>(GetRegisteredIn()));
+    return const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(GetRegisteredIn()));
 }
 
 /// Inline methods from Node.hxx

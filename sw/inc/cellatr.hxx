@@ -51,7 +51,7 @@ public:
 
 class SAL_DLLPUBLIC_RTTI SwTableBoxFormula : public SfxPoolItem, public SwTableFormula
 {
-    SwModify* m_pDefinedIn;   // Modify object where the formula is located
+    sw::BroadcastingModify* m_pDefinedIn;   // Modify object where the formula is located
                             // can only be TableBoxFormat
 
 public:
@@ -61,9 +61,9 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwTableBoxFormula* Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    const SwModify* GetDefinedIn() const { return m_pDefinedIn; }
-    void ChgDefinedIn( const SwModify* pNew )
-                                            { m_pDefinedIn = const_cast<SwModify*>(pNew); }
+    const sw::BroadcastingModify* GetDefinedIn() const { return m_pDefinedIn; }
+    void ChgDefinedIn( const sw::BroadcastingModify* pNew )
+                                            { m_pDefinedIn = const_cast<sw::BroadcastingModify*>(pNew); }
     //  BoxAttribut -> BoxStartNode
     virtual const SwNode* GetNodeOfFormula() const override;
 

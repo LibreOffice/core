@@ -49,7 +49,7 @@ class IntlWrapper;
    via the Modify of SwFormatDrop. */
 class SW_DLLPUBLIC SwFormatDrop: public SfxPoolItem, public SwClient
 {
-    SwModify* m_pDefinedIn;       /**< Modify-Object, that contains DropCaps.
+    sw::BroadcastingModify* m_pDefinedIn;       /**< Modify-Object, that contains DropCaps.
                                   Can only be TextFormatCollection/TextNode. */
     sal_uInt16 m_nDistance;       ///< Distance to beginning of text.
     sal_uInt8  m_nLines;          ///< Line count.
@@ -102,9 +102,9 @@ public:
     virtual bool GetInfo( SfxPoolItem& ) const override;
 
     /// Get and set Modify pointer.
-    const SwModify* GetDefinedIn() const { return m_pDefinedIn; }
-    void ChgDefinedIn( const SwModify* pNew )
-    { m_pDefinedIn = const_cast<SwModify*>(pNew); }
+    const sw::BroadcastingModify* GetDefinedIn() const { return m_pDefinedIn; }
+    void ChgDefinedIn( const sw::BroadcastingModify* pNew )
+    { m_pDefinedIn = const_cast<sw::BroadcastingModify*>(pNew); }
 };
 
 class SwRegisterItem : public SfxBoolItem

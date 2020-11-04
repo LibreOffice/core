@@ -1831,7 +1831,7 @@ static void lcl_CopyHint(
             && pDest->GetpSwpHints()->Contains( pNewHt ) )
         {
             // ToXMarks that are copied to different SwDocs must register
-            // at their new ToX (SwModify).
+            // at their new ToX (sw::BroadcastingModify).
             static_txtattr_cast<SwTextTOXMark*>(pNewHt)->CopyTOXMark(*pOtherDoc);
         }
         break;

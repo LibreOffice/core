@@ -185,7 +185,7 @@ void SwTOXMark::Notify(const SfxHint& rHint)
 
 void SwTOXMark::InvalidateTOXMark()
 {
-    const SwPtrMsgPoolItem aMsgHint(RES_REMOVE_UNO_OBJECT, &static_cast<SwModify&>(*this));
+    const SwPtrMsgPoolItem aMsgHint(RES_REMOVE_UNO_OBJECT, &static_cast<sw::BroadcastingModify&>(*this));
     CallSwClientNotify(sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
 }
 
@@ -525,7 +525,7 @@ OUString SwForm::GetFormAuth()        {return "<A>";}
 
 SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
                      SwTOXElement nCreaType, const OUString& rTitle )
-    : SwClient(const_cast<SwModify*>(static_cast<SwModify const *>(pTyp)))
+    : SwClient(const_cast<sw::BroadcastingModify*>(static_cast<sw::BroadcastingModify const *>(pTyp)))
     , m_aForm(rForm)
     , m_aTitle(rTitle)
     , m_eLanguage(::GetAppLanguage())

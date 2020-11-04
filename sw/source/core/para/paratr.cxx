@@ -76,7 +76,7 @@ void SwFormatDrop::SwClientNotify(const SwModify&, const SfxHint&)
         return;
     if(dynamic_cast<const SwFormat*>(m_pDefinedIn) == nullptr)
     {
-        SwModify aMod;
+        sw::BroadcastingModify aMod;
         m_pDefinedIn->SwClientNotify(aMod, sw::LegacyModifyHint(this, this));
     }
     else if(m_pDefinedIn->HasWriterListeners() && !m_pDefinedIn->IsModifyLocked())

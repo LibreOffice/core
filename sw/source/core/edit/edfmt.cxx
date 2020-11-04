@@ -136,7 +136,7 @@ SwPageDesc* SwEditShell::GetPageDescFromPool( sal_uInt16 nId )
     return GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool( nId );
 }
 
-bool SwEditShell::IsUsed( const SwModify& rModify ) const
+bool SwEditShell::IsUsed( const sw::BroadcastingModify& rModify ) const
 {
     return mxDoc->IsUsed( rModify );
 }

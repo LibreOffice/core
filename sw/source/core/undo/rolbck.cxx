@@ -1368,7 +1368,7 @@ SwRegHistory::SwRegHistory( SwHistory* pHst )
     MakeSetWhichIds();
 }
 
-SwRegHistory::SwRegHistory( SwModify* pRegIn, const SwNode& rNd,
+SwRegHistory::SwRegHistory( sw::BroadcastingModify* pRegIn, const SwNode& rNd,
                             SwHistory* pHst )
     : SwClient( pRegIn )
     , m_pHistory( pHst )
@@ -1493,7 +1493,7 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
     return bInserted;
 }
 
-void SwRegHistory::RegisterInModify( SwModify* pRegIn, const SwNode& rNd )
+void SwRegHistory::RegisterInModify( sw::BroadcastingModify* pRegIn, const SwNode& rNd )
 {
     if ( m_pHistory && pRegIn )
     {

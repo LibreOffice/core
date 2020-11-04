@@ -33,7 +33,7 @@
  * assigned to a SectionFrame or to multiple ones due to nesting.
  *
  * This class is an interface between the method and a SwClientIter: it
- * chooses the right SwModify depending on the task, creates a SwClientIter
+ * chooses the right sw::BroadcastingModify depending on the task, creates a SwClientIter
  * and filters its iterations depending on the task.
  * The task is determined by the choice of class.
  *

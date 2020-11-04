@@ -242,7 +242,7 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     }
     else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
-        auto pNew = const_cast<SwModify*>(pModifyChangedHint->m_pNew);
+        auto pNew = const_cast<sw::BroadcastingModify*>(static_cast<const sw::BroadcastingModify*>(pModifyChangedHint->m_pNew));
         if(m_pAnchorFormat == &rModify)
             m_pAnchorFormat = static_cast<SwCharFormat*>(pNew);
         else if(m_pCharFormat == &rModify)

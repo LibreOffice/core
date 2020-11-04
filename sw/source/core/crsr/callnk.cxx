@@ -86,7 +86,7 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell & rShell)
     }
 
     SwFormatFrameSize aSize = pLine->GetFrameFormat()->GetFrameSize();
-    SwModify aMod;
+    sw::BroadcastingModify aMod;
     pRow->SwClientNotify(aMod, sw::LegacyModifyHint(nullptr, &aSize));
 }
 
