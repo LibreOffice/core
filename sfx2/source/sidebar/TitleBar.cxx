@@ -34,13 +34,17 @@ namespace sfx2::sidebar {
 TitleBar::TitleBar(const OUString& rsTitle,
                    vcl::Window* pParentWindow,
                    const sidebar::Paint& rInitialBackgroundPaint)
-    : Window(pParentWindow)
-    , maToolBox(VclPtr<SidebarToolBox>::Create(this))
-    , msTitle(rsTitle)
-    , maIcon()
+    : InterimItemWindow(pParentWindow, "sfx/ui/titlebar.ui", "TitleBar")
+    , mxDecoration(m_xBuilder->weld_image("decoration"))
+    , mxImage(m_xBuilder->weld_image("image"))
+    , mxLabel(m_xBuilder->weld_label("label"))
+    , mxToolBox(m_xBuilder->weld_toolbar("toolbar"))
     , maBackgroundPaint(rInitialBackgroundPaint)
 {
-    maToolBox->SetSelectHdl(LINK(this, TitleBar, SelectionHandler));
+    mxLabel->set_label(rsTitle);
+    mxImage->set_margin_left(gnLeftIconSpace);
+    mxImage->set_margin_right(gnRightIconSpace);
+//TODO    maToolBox->SetSelectHdl(LINK(this, TitleBar, SelectionHandler));
 }
 
 TitleBar::~TitleBar()
@@ -50,27 +54,39 @@ TitleBar::~TitleBar()
 
 void TitleBar::dispose()
 {
-    maToolBox.disposeAndClear();
-    vcl::Window::dispose();
+    mxToolBox.reset();
+    mxLabel.reset();
+    mxImage.reset();
+    mxDecoration.reset();
+    InterimItemWindow::dispose();
 }
 
 void TitleBar::SetTitle(const OUString& rsTitle)
 {
-    msTitle = rsTitle;
-    Invalidate();
+    mxLabel->set_label(rsTitle);
+//TODO    Invalidate();
+}
+
+OUString TitleBar::GetTitle() const
+{
+    return mxLabel->get_label();
 }
 
 void TitleBar::SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 {
-    maIcon = Image(rIcon);
-    Invalidate();
+    mxImage->set_image(rIcon);
+    mxImage->set_visible(rIcon.is());
+//TODO    Invalidate();
 }
 
+#if 0
 void TitleBar::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     rRenderContext.SetBackground(maBackgroundPaint.GetWallpaper());
 }
+#endif
 
+#if 0
 void TitleBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rUpdateArea*/)
 {
     // Paint title bar background.
@@ -98,8 +114,9 @@ void TitleBar::setPosSizePixel (tools::Long nX, tools::Long nY, tools::Long nWid
     maToolBox->setPosSizePixel(nWidth - nToolBoxWidth,0, nToolBoxWidth, nHeight);
     maToolBox->Show();
 }
+#endif
 
-void TitleBar::HandleToolBoxItemClick(const sal_uInt16 /*nItemIndex*/)
+void TitleBar::HandleToolBoxItemClick()
 {
     // Any real processing has to be done in derived class.
 }
@@ -110,6 +127,7 @@ css::uno::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible(
     return AccessibleTitleBar::Create(*this);
 }
 
+#if 0
 void TitleBar::PaintTitle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rTitleBox)
 {
     rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
@@ -132,9 +150,10 @@ void TitleBar::PaintTitle(vcl::RenderContext& rRenderContext, const tools::Recta
 
     // Paint title bar text.
     rRenderContext.SetTextColor(rRenderContext.GetTextColor());
-    rRenderContext.DrawText(aTitleBox, msTitle, DrawTextFlags::Left | DrawTextFlags::VCenter);
+    rRenderContext.DrawText(aTitleBox, GetTitle(), DrawTextFlags::Left | DrawTextFlags::VCenter);
     rRenderContext.Pop();
 }
+#endif
 
 void TitleBar::PaintFocus(vcl::RenderContext& rRenderContext, const tools::Rectangle& rFocusBox)
 {
@@ -144,7 +163,7 @@ void TitleBar::PaintFocus(vcl::RenderContext& rRenderContext, const tools::Recta
     aFont.SetWeight(WEIGHT_BOLD);
     rRenderContext.SetFont(aFont);
 
-    const tools::Rectangle aTextBox(rRenderContext.GetTextRect(rFocusBox, msTitle, DrawTextFlags::Left | DrawTextFlags::VCenter));
+    const tools::Rectangle aTextBox(rRenderContext.GetTextRect(rFocusBox, GetTitle(), DrawTextFlags::Left | DrawTextFlags::VCenter));
 
     const tools::Rectangle aLargerTextBox(aTextBox.Left() - 2,
                                    aTextBox.Top() - 2,
@@ -161,10 +180,7 @@ void TitleBar::PaintFocus(vcl::RenderContext& rRenderContext, const tools::Recta
 
 IMPL_LINK(TitleBar, SelectionHandler, ToolBox*, pToolBox, void)
 {
-    OSL_ASSERT(maToolBox.get()==pToolBox);
-    const sal_uInt16 nItemId (maToolBox->GetHighlightItemId());
-
-    HandleToolBoxItemClick(nItemId);
+    HandleToolBoxItemClick();
 }
 
 } // end of namespace sfx2::sidebar

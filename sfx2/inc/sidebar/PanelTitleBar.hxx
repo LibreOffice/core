@@ -39,20 +39,23 @@ public:
                                const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                const css::uno::Reference<css::frame::XController>& rxController);
 
+    void UpdateExpandedState();
+
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
     virtual void MouseButtonDown(const MouseEvent& rMouseEvent) override;
     virtual void MouseButtonUp(const MouseEvent& rMouseEvent) override;
 
 private:
-    virtual tools::Rectangle GetTitleArea(const tools::Rectangle& rTitleBarBox) override;
-    virtual void PaintDecoration(vcl::RenderContext& rRenderContext) override;
+//    virtual tools::Rectangle GetTitleArea(const tools::Rectangle& rTitleBarBox) override;
+//    virtual void PaintDecoration(vcl::RenderContext& rRenderContext) override;
     virtual sidebar::Paint GetBackgroundPaint() override;
-    virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex) override;
+    virtual void HandleToolBoxItemClick() override;
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     bool mbIsLeftButtonDown;
     VclPtr<Panel> mpPanel;
     static const sal_uInt16 mnMenuItemIndex = 1;
+    std::unique_ptr<ToolbarUnoDispatcher> mxToolbarDispatch;
     css::uno::Reference<css::frame::XFrame> mxFrame;
     OUString msMoreOptionsCommand;
 };

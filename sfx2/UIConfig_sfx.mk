@@ -64,6 +64,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/templatedlg \
 	sfx2/uiconfig/ui/templatecategorydlg \
 	sfx2/uiconfig/ui/templatepanel \
+	sfx2/uiconfig/ui/titlebar \
 	sfx2/uiconfig/ui/urlbox \
 	sfx2/uiconfig/ui/versionsofdialog \
 	sfx2/uiconfig/ui/versioncommentdialog \

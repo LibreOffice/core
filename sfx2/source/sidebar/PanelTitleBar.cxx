@@ -49,11 +49,24 @@ PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
       mxFrame(),
       msMoreOptionsCommand()
 {
-    OSL_ASSERT(mpPanel != nullptr);
+    assert(mpPanel);
+
+    UpdateExpandedState();
+
+    mxImage->set_margin_left(gaLeftIconPadding);
+    mxImage->set_margin_right(gaRightIconPadding);
 
 #ifdef DEBUG
     SetText(OUString("PanelTitleBar"));
 #endif
+}
+
+void PanelTitleBar::UpdateExpandedState()
+{
+    if (mpPanel->IsExpanded())
+        mxDecoration->set_from_icon_name("res/minus.png");
+    else
+        mxDecoration->set_from_icon_name("res/plus.png");
 }
 
 PanelTitleBar::~PanelTitleBar()
@@ -75,7 +88,7 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
         return;
 
     if (msMoreOptionsCommand.getLength() > 0)
-        maToolBox->RemoveItem(maToolBox->GetItemPos(mnMenuItemIndex));
+        mxToolBox->set_item_visible("button", false);
 
     msMoreOptionsCommand = rsCommandName;
     mxFrame = rxFrame;
@@ -83,23 +96,21 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
     if (msMoreOptionsCommand.getLength() <= 0)
         return;
 
-    maToolBox->InsertItem(
-        mnMenuItemIndex,
-        Theme::GetImage(Theme::Image_PanelMenu));
+    mxToolBox->set_item_visible("button", true);
+    mxToolBox->set_item_icon_name("button", "sfx2/res/symphony/morebutton.png");
+    mxToolbarDispatch.reset(new ToolbarUnoDispatcher(*mxToolBox, *m_xBuilder, rxFrame));
+#if 0
     Reference<frame::XToolbarController> xController (
         ControllerFactory::CreateToolBoxController(
-            maToolBox.get(),
-            mnMenuItemIndex,
-            msMoreOptionsCommand,
-            rxFrame, rxController,
-            VCLUnoHelper::GetInterface(maToolBox.get()),
-            0, true));
-    maToolBox->SetController(mnMenuItemIndex, xController);
-    maToolBox->SetQuickHelpText(
-        mnMenuItemIndex,
+            *mxToolBox, *m_xBuilder,
+            msMoreOptionsCommand, rxFrame, true));
+#endif
+    mxToolBox->set_item_tooltip_text(
+        "button",
         SfxResId(SFX_STR_SIDEBAR_MORE_OPTIONS));
 }
 
+#if 0
 tools::Rectangle PanelTitleBar::GetTitleArea (const tools::Rectangle& rTitleBarBox)
 {
     if (mpPanel != nullptr)
@@ -129,17 +140,15 @@ void PanelTitleBar::PaintDecoration (vcl::RenderContext& rRenderContext)
         rRenderContext.DrawImage(aTopLeft, aImage);
     }
 }
+#endif
 
 Paint PanelTitleBar::GetBackgroundPaint()
 {
     return Theme::GetPaint(Theme::Paint_PanelTitleBarBackground);
 }
 
-void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
+void PanelTitleBar::HandleToolBoxItemClick()
 {
-    if (nItemIndex != mnMenuItemIndex)
-        return;
-
     if (msMoreOptionsCommand.getLength() <= 0)
         return;
 
@@ -158,8 +167,10 @@ void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 
 Reference<accessibility::XAccessible> PanelTitleBar::CreateAccessible()
 {
+#if 0
     SetAccessibleName(msTitle);
     SetAccessibleDescription(msTitle);
+#endif
     return TitleBar::CreateAccessible();
 }
 
@@ -195,9 +206,7 @@ void PanelTitleBar::MouseButtonUp (const MouseEvent& rMouseEvent)
 
 void PanelTitleBar::DataChanged (const DataChangedEvent& rEvent)
 {
-    maToolBox->SetItemImage(
-        mnMenuItemIndex,
-        Theme::GetImage(Theme::Image_PanelMenu));
+    mxToolBox->set_item_icon_name("button", "sfx2/res/symphony/morebutton.png");
     TitleBar::DataChanged(rEvent);
 }
 

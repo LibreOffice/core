@@ -19,12 +19,13 @@
 #pragma once
 
 #include <sidebar/Paint.hxx>
-
 #include <sidebar/SidebarToolBox.hxx>
+#include <sfx2/weldutils.hxx>
+#include <vcl/InterimItemWindow.hxx>
 
 namespace sfx2::sidebar {
 
-class TitleBar : public vcl::Window
+class TitleBar : public InterimItemWindow
 {
 public:
     TitleBar (const OUString& rsTitle,
@@ -34,40 +35,44 @@ public:
     virtual void dispose() override;
 
     void SetTitle (const OUString& rsTitle);
-    const OUString& GetTitle() const {return msTitle; }
+    OUString GetTitle() const;
 
     void SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon);
 
+#if 0
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea) override;
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
     virtual void setPosSizePixel (tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
+#endif
 
-    ToolBox& GetToolBox()
+    weld::Toolbar& GetToolBox()
     {
-        return *maToolBox;
+        return *mxToolBox;
     }
-    const ToolBox& GetToolBox() const
+    const weld::Toolbar& GetToolBox() const
     {
-        return *maToolBox;
+        return *mxToolBox;
     }
 
 protected:
-    VclPtr<SidebarToolBox> maToolBox;
-    OUString msTitle;
+    std::unique_ptr<weld::Image> mxDecoration;
+    std::unique_ptr<weld::Image> mxImage;
+    std::unique_ptr<weld::Label> mxLabel;
+    std::unique_ptr<weld::Toolbar> mxToolBox;
+    std::unique_ptr<ToolbarUnoDispatcher> mxToolBoxController;
 
-    virtual tools::Rectangle GetTitleArea (const tools::Rectangle& rTitleBarBox) = 0;
-    virtual void PaintDecoration (vcl::RenderContext& rRenderContext) = 0;
+//    virtual tools::Rectangle GetTitleArea (const tools::Rectangle& rTitleBarBox) = 0;
+//    virtual void PaintDecoration (vcl::RenderContext& rRenderContext) = 0;
     void PaintFocus(vcl::RenderContext& rRenderContext, const tools::Rectangle& rFocusBox);
     virtual sidebar::Paint GetBackgroundPaint() = 0;
-    virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);
+    virtual void HandleToolBoxItemClick();
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
 private:
-    Image maIcon;
     sidebar::Paint maBackgroundPaint;
 
-    void PaintTitle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rTitleBox);
+//TODO    void PaintTitle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rTitleBox);
     DECL_LINK(SelectionHandler, ToolBox*, void);
 };
 
