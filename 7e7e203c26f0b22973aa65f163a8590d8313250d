@@ -22,6 +22,30 @@
       "revId": "7e7e203c26f0b22973aa65f163a8590d8313250d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cfa10ae_f2600a40",
+        "filename": "sc/qa/uitest/range_name/tdf119954.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-04T12:27:42Z",
+      "side": 1,
+      "message": "ah, just note \u003chttps://gerrit.libreoffice.org/c/core/+/105288\u003e \"uitest: reset formula syntax back to Calc A1\", which is presumably meant to address that deadlock",
+      "parentUuid": "9c1dadd9_b2a6b77a",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 56
+      },
+      "revId": "7e7e203c26f0b22973aa65f163a8590d8313250d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
