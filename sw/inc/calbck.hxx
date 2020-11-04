@@ -192,10 +192,6 @@ public:
     // broadcasting: send notifications to all clients
     // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
     void NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue );
-    // the same, but without setting m_bModifyLocked or checking for any of the flags
-    // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
-    void ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue)
-        { CallSwClientNotify( sw::LegacyModifyHint{ pOldValue, pNewValue } ); };
 
     // a more universal broadcasting mechanism
     virtual void CallSwClientNotify( const SfxHint& rHint ) const;
