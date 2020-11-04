@@ -18,28 +18,22 @@
  */
 
 #include <sidebar/TitleBar.hxx>
-#include <sidebar/AccessibleTitleBar.hxx>
-
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-
-namespace
-{
-    const sal_Int32 gnLeftIconSpace (3);
-    const sal_Int32 gnRightIconSpace (3);
-}
 
 namespace sfx2::sidebar {
 
-TitleBar::TitleBar(const OUString& rsTitle,
-                   vcl::Window* pParentWindow,
-                   const Color& rInitialBackgroundColor)
-    : Window(pParentWindow)
-    , maToolBox(VclPtr<SidebarToolBox>::Create(this))
-    , msTitle(rsTitle)
-    , maIcon()
-    , maBackgroundColor(rInitialBackgroundColor)
+TitleBar::TitleBar(vcl::Window* pParentWindow,
+                   const OUString& rUIXMLDescription, const OString& rID,
+                   Theme::ThemeItem eThemeItem)
+    : InterimItemWindow(pParentWindow, rUIXMLDescription, rID)
+    , mxAddonImage(m_xBuilder->weld_image("addonimage"))
+    , mxToolBox(m_xBuilder->weld_toolbar("toolbar"))
+    , meThemeItem(eThemeItem)
 {
-    maToolBox->SetSelectHdl(LINK(this, TitleBar, SelectionHandler));
+    Color aBgColor = Theme::GetColor(meThemeItem);
+    m_xContainer->set_background(aBgColor);
+    mxToolBox->set_background(aBgColor);
+
+    mxToolBox->connect_clicked(LINK(this, TitleBar, SelectionHandler));
 }
 
 TitleBar::~TitleBar()
@@ -49,121 +43,25 @@ TitleBar::~TitleBar()
 
 void TitleBar::dispose()
 {
-    maToolBox.disposeAndClear();
-    vcl::Window::dispose();
-}
-
-void TitleBar::SetTitle(const OUString& rsTitle)
-{
-    msTitle = rsTitle;
-    Invalidate();
+    mxToolBox.reset();
+    mxAddonImage.reset();
+    InterimItemWindow::dispose();
 }
 
 void TitleBar::SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 {
-    maIcon = Image(rIcon);
-    Invalidate();
-}
-
-void TitleBar::ApplySettings(vcl::RenderContext& rRenderContext)
-{
-    rRenderContext.SetBackground(maBackgroundColor);
-}
-
-void TitleBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rUpdateArea*/)
-{
-    // Paint title bar background.
-    Size aWindowSize (GetSizePixel());
-    tools::Rectangle aTitleBarBox(0,0, aWindowSize.Width(), aWindowSize.Height());
-
-    PaintDecoration(rRenderContext);
-    const tools::Rectangle aTitleBox(GetTitleArea(aTitleBarBox));
-    PaintTitle(rRenderContext, aTitleBox);
-    PaintFocus(rRenderContext, aTitleBox);
+    mxAddonImage->set_image(rIcon);
+    mxAddonImage->set_visible(rIcon.is());
 }
 
 void TitleBar::DataChanged (const DataChangedEvent& /*rEvent*/)
 {
-    maBackgroundColor = GetBackgroundPaintColor();
-    Invalidate();
+    m_xContainer->set_background(Theme::GetColor(meThemeItem));
 }
 
-void TitleBar::setPosSizePixel (tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags)
+IMPL_LINK_NOARG(TitleBar, SelectionHandler, const OString&, void)
 {
-    Window::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
-
-    // Place the toolbox.
-    const sal_Int32 nToolBoxWidth (maToolBox->GetItemPosRect(0).GetWidth());
-    maToolBox->setPosSizePixel(nWidth - nToolBoxWidth,0, nToolBoxWidth, nHeight);
-    maToolBox->Show();
-}
-
-void TitleBar::HandleToolBoxItemClick(const sal_uInt16 /*nItemIndex*/)
-{
-    // Any real processing has to be done in derived class.
-}
-
-css::uno::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible()
-{
-    SetAccessibleRole(css::accessibility::AccessibleRole::PANEL);
-    return AccessibleTitleBar::Create(*this);
-}
-
-void TitleBar::PaintTitle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rTitleBox)
-{
-    rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
-
-    tools::Rectangle aTitleBox(rTitleBox);
-
-    // When there is an icon then paint it at the left of the given
-    // box.
-    if (!!maIcon)
-    {
-        rRenderContext.DrawImage(Point(aTitleBox.Left() + gnLeftIconSpace,
-                                       aTitleBox.Top() + (aTitleBox.GetHeight() - maIcon.GetSizePixel().Height()) / 2),
-                                 maIcon);
-        aTitleBox.AdjustLeft(gnLeftIconSpace + maIcon.GetSizePixel().Width() + gnRightIconSpace );
-    }
-
-    vcl::Font aFont(rRenderContext.GetFont());
-    aFont.SetWeight(WEIGHT_BOLD);
-    rRenderContext.SetFont(aFont);
-
-    // Paint title bar text.
-    rRenderContext.SetTextColor(rRenderContext.GetTextColor());
-    rRenderContext.DrawText(aTitleBox, msTitle, DrawTextFlags::Left | DrawTextFlags::VCenter);
-    rRenderContext.Pop();
-}
-
-void TitleBar::PaintFocus(vcl::RenderContext& rRenderContext, const tools::Rectangle& rFocusBox)
-{
-    rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
-
-    vcl::Font aFont(rRenderContext.GetFont());
-    aFont.SetWeight(WEIGHT_BOLD);
-    rRenderContext.SetFont(aFont);
-
-    const tools::Rectangle aTextBox(rRenderContext.GetTextRect(rFocusBox, msTitle, DrawTextFlags::Left | DrawTextFlags::VCenter));
-
-    const tools::Rectangle aLargerTextBox(aTextBox.Left() - 2,
-                                   aTextBox.Top() - 2,
-                                   aTextBox.Right() + 2,
-                                   aTextBox.Bottom() + 2);
-
-    if (HasFocus())
-        Window::ShowFocus(aLargerTextBox);
-    else
-        Window::HideFocus();
-
-    rRenderContext.Pop();
-}
-
-IMPL_LINK(TitleBar, SelectionHandler, ToolBox*, pToolBox, void)
-{
-    OSL_ASSERT(maToolBox.get()==pToolBox);
-    const sal_uInt16 nItemId (maToolBox->GetHighlightItemId());
-
-    HandleToolBoxItemClick(nItemId);
+    HandleToolBoxItemClick();
 }
 
 } // end of namespace sfx2::sidebar

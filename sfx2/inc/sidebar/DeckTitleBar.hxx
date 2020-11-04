@@ -28,21 +28,26 @@ public:
     DeckTitleBar(const OUString& rsTitle,
                  vcl::Window* pParentWindow,
                  const std::function<void()>& rCloserAction);
+    virtual void dispose() override;
+    virtual ~DeckTitleBar() override;
+
+    virtual void SetTitle (const OUString& rsTitle) override;
+    virtual OUString GetTitle() const override;
 
     void SetCloserVisible(const bool bIsCloserVisible);
-    static tools::Rectangle GetDragArea();
+//    static tools::Rectangle GetDragArea();
 
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
+#if 0
     virtual void MouseMove(const MouseEvent& rMouseEvent) override;
+#endif
 
 private:
-    virtual tools::Rectangle GetTitleArea(const tools::Rectangle& rTitleBarBox) override;
-    virtual void PaintDecoration(vcl::RenderContext& rRenderContext) override;
-    virtual Color GetBackgroundPaintColor() override;
-    virtual void HandleToolBoxItemClick(const sal_uInt16 nItemIndex) override;
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual void HandleToolBoxItemClick() override;
 
-    static const sal_uInt16 mnCloserItemIndex = 1;
+    std::unique_ptr<weld::Image> mxGrip;
+    std::unique_ptr<weld::Label> mxLabel;
+
     const std::function<void()> maCloserAction;
     bool mbIsCloserVisible;
 };

@@ -11697,7 +11697,6 @@ sfx2/inc/notebookbar/NotebookbarTabControl.hxx
 sfx2/inc/preventduplicateinteraction.hxx
 sfx2/inc/recentdocsview.hxx
 sfx2/inc/sidebar/Accessible.hxx
-sfx2/inc/sidebar/AccessibleTitleBar.hxx
 sfx2/inc/sidebar/ContextChangeBroadcaster.hxx
 sfx2/inc/sidebar/ContextList.hxx
 sfx2/inc/sidebar/ControlFactory.hxx
@@ -11947,7 +11946,6 @@ sfx2/source/notify/hintpost.cxx
 sfx2/source/notify/openurlhint.cxx
 sfx2/source/safemode/safemode.cxx
 sfx2/source/sidebar/Accessible.cxx
-sfx2/source/sidebar/AccessibleTitleBar.cxx
 sfx2/source/sidebar/AsynchronousCall.cxx
 sfx2/source/sidebar/Context.cxx
 sfx2/source/sidebar/ContextChangeBroadcaster.cxx
