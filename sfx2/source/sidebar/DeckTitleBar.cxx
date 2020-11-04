@@ -32,20 +32,24 @@
 
 namespace sfx2::sidebar {
 
+#if 0
 namespace
 {
 const sal_Int32 gaLeftGripPadding (3);
 const sal_Int32 gaRightGripPadding (6);
 }
+#endif
 
 DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
                             vcl::Window* pParentWindow,
                             const std::function<void()>& rCloserAction)
-    : TitleBar(rsTitle, pParentWindow, GetBackgroundPaintColor())
+    : TitleBar(rsTitle, pParentWindow, Theme::Color_DeckTitleBarBackground)
     , maCloserAction(rCloserAction)
     , mbIsCloserVisible(false)
 {
     OSL_ASSERT(pParentWindow != nullptr);
+
+    mxDecoration->set_from_icon_name("sfx2/res/grip.png");
 
     if (maCloserAction)
         SetCloserVisible(true);
@@ -64,15 +68,26 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
 
     if (mbIsCloserVisible)
     {
-        maToolBox->InsertItem(mnCloserItemIndex,
+#if 0
+        mxToolBox->InsertItem(mnCloserItemIndex,
                               Theme::GetImage(Theme::Image_Closer));
-        maToolBox->SetQuickHelpText(mnCloserItemIndex,
+        mxToolBox->SetQuickHelpText(mnCloserItemIndex,
                                     SfxResId(SFX_STR_SIDEBAR_CLOSE_DECK));
+#else
+        mxToolBox->set_item_visible("button", true);
+        mxToolBox->set_item_icon_name("button", "sfx2/res/closedoc.png");
+        mxToolBox->set_item_tooltip_text("button",
+                                    SfxResId(SFX_STR_SIDEBAR_CLOSE_DECK));
+#endif
     }
     else
-        maToolBox->RemoveItem(maToolBox->GetItemPos(mnCloserItemIndex));
+    {
+        mxToolBox->set_item_visible("button", false);
+//TODO        mxToolBox->RemoveItem(mxToolBox->GetItemPos(mnCloserItemIndex));
+    }
 }
 
+#if 0
 tools::Rectangle DeckTitleBar::GetTitleArea (const tools::Rectangle& rTitleBarBox)
 {
     Image aGripImage (Theme::GetImage(Theme::Image_Grip));
@@ -99,34 +114,30 @@ void DeckTitleBar::PaintDecoration(vcl::RenderContext& rRenderContext)
                         (GetSizePixel().Height() - aImage.GetSizePixel().Height()) / 2);
    rRenderContext.DrawImage(aTopLeft, aImage);
 }
+#endif
 
-Color DeckTitleBar::GetBackgroundPaintColor()
+void DeckTitleBar::HandleToolBoxItemClick()
 {
-    return Theme::GetColor(Theme::Color_DeckTitleBarBackground);
-}
-
-void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
-{
-    if (nItemIndex == mnCloserItemIndex && maCloserAction)
+    if (maCloserAction)
         maCloserAction();
 }
 
 css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessible()
 {
+#if 0
     SetAccessibleName(msTitle);
     SetAccessibleDescription(msTitle);
+#endif
     return TitleBar::CreateAccessible();
 }
 
 void DeckTitleBar::DataChanged (const DataChangedEvent& rEvent)
 {
-    maToolBox->SetItemImage(
-        mnCloserItemIndex,
-        Theme::GetImage(Theme::Image_Closer));
+    mxToolBox->set_item_icon_name("button", "sfx2/res/closedoc.png");
     TitleBar::DataChanged(rEvent);
 }
 
-
+#if 0
 void DeckTitleBar::MouseMove (const MouseEvent& rMouseEvent)
 {
     tools::Rectangle aGrip = GetDragArea();
@@ -139,6 +150,7 @@ void DeckTitleBar::MouseMove (const MouseEvent& rMouseEvent)
 
     Window::MouseMove( rMouseEvent );
 }
+#endif
 
 } // end of namespace sfx2::sidebar
 
