@@ -1020,7 +1020,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="notes">
-                                        <property name="label" translatable="yes" context="findreplacedialog|notes">_Comments</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog|notes">Comme_nts</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
