@@ -25,6 +25,7 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
+#include <sal/log.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -82,7 +83,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEmbeddedObjectImpor
     sal_Int32 ,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    // we carry no state, so just re-use the same instance
+    // we have no state, so avoid allocation cost, and just use a single instance
     return this;
 }
 
@@ -139,34 +140,30 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
 }
 
 XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList >& xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const Reference< XFastAttributeList >& xAttrList ) :
+    SvXMLImportContext( rImport )
 {
     SvGlobalName aName;
 
-    if( nPrfx == XML_NAMESPACE_MATH &&
-        IsXMLToken( rLName, XML_MATH ) )
+    if( nElement == XML_ELEMENT(MATH, XML_MATH) )
     {
         sFilterService = XML_IMPORT_FILTER_MATH;
         aName = SvGlobalName(SO3_SM_CLASSID);
     }
-    else if( nPrfx == XML_NAMESPACE_OFFICE &&
-        IsXMLToken( rLName, XML_DOCUMENT ) )
+    else if( nElement == XML_ELEMENT(OFFICE, XML_DOCUMENT) )
     {
         OUString sMime;
 
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         {
-            const OUString& rAttrName = xAttrList->getNameByIndex( i );
-            OUString aLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-            if( nPrefix == XML_NAMESPACE_OFFICE &&
-                IsXMLToken( aLocalName, XML_MIMETYPE ) )
+            switch (aIter.getToken())
             {
-                sMime = xAttrList->getValueByIndex( i );
-                break;
+                case XML_ELEMENT(OFFICE, XML_MIMETYPE):
+                    sMime = aIter.toString();
+                    break;
+                default:
+                    XMLOFF_WARN_UNKNOWN("xmloff", aIter);
             }
         }
 

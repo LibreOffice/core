@@ -136,11 +136,13 @@ class SwXMLTableContext : public XMLTextTableContext
 public:
 
 
+    SwXMLTableContext( SwXMLImport& rImport,
+                       sal_Int32 nElement,
+                       const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
     SwXMLTableContext( SwXMLImport& rImport, sal_uInt16 nPrfx,
                        const OUString& rLName,
-                       const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
-    SwXMLTableContext( SwXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
+                       SwXMLTableContext *pTable );
+    SwXMLTableContext( SwXMLImport& rImport,
                        SwXMLTableContext *pTable );
 
     virtual ~SwXMLTableContext() override;

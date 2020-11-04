@@ -60,16 +60,14 @@ public:
 
 
     XMLParaContext( SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             bool bHeading );
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void SAL_CALL characters( const OUString& rChars ) override;
 
@@ -90,15 +88,14 @@ public:
 
 
     XMLNumberedParaContext( SvXMLImport& i_rImport,
-            sal_uInt16 i_nPrefix,
-            const OUString& i_rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & i_xAttrList );
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & i_xAttrList );
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 i_nPrefix,
-            const OUString& i_rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & i_xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     sal_Int16 GetLevel() const { return m_Level; }
     const css::uno::Reference< css::container::XIndexReplace >& GetNumRules() const

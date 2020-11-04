@@ -33,23 +33,21 @@ ScXMLTableShapesContext::~ScXMLTableShapesContext()
 {
 }
 
-SvXMLImportContextRef ScXMLTableShapesContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > ScXMLTableShapesContext::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-
     ScXMLImport& rXMLImport(GetScImport());
     uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
     if (xShapes.is())
     {
         XMLTableShapeImportHelper* pTableShapeImport(static_cast<XMLTableShapeImportHelper*>(rXMLImport.GetShapeImport().get()));
         pTableShapeImport->SetOnTable(true);
-        pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
-            rXMLImport, nPrefix, rLName, xAttrList, xShapes);
+        return XMLShapeImportHelper::CreateGroupChildContext(
+            rXMLImport, nElement, xAttrList, xShapes);
     }
-
-    return pContext;
+    SAL_WARN("sc", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

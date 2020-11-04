@@ -159,6 +159,18 @@ SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
 SchXMLBodyContext::~SchXMLBodyContext()
 {}
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLBodyContext::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >&  )
+{
+    // <chart:chart> element
+    if( nElement == XML_ELEMENT(CHART, XML_CHART) )
+    {
+        return mrImportHelper.CreateChartContext( GetImport(), GetImport().GetModel() );
+    }
+    return nullptr;
+}
+
 SvXMLImportContextRef SchXMLBodyContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
