@@ -64,9 +64,7 @@ namespace xmloff
     }
 
     SvXMLImportContext* OFormLayerXMLImport::createOfficeFormsContext(
-        SvXMLImport& _rImport,
-        sal_uInt16 /*_nPrefix*/,
-        const OUString& /*_rLocalName*/)
+        SvXMLImport& _rImport)
     {
         return OFormLayerXMLImport_Impl::createOfficeFormsContext(_rImport);
     }
