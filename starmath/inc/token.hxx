@@ -76,7 +76,7 @@ enum SmTokenType
     TPRECEDESEQUAL, TSUCCEEDSEQUAL, TPRECEDESEQUIV, TSUCCEEDSEQUIV, // Order eq
     TLEFTARROW,     TRIGHTARROW,    TUPARROW,       TDOWNARROW,     // Arrows
     TDRARROW,       TDLARROW,       TDLRARROW,      TDEF,           // Double arrows, definition
-    TPROP,          TNDIVIDES,      TDIVIDES,       TAPPROX,        // Proportions, approximisation
+    TPROP,          TNDIVIDES,      TDIVIDES,       TAPPROX,        // Proportions, approximation
     TLESLANT,       TGESLANT,       TTRANSL,        TTRANSR,        // <= >= corresponds
     // Tensors
     TOPLUS,         TOMINUS,        TOTIMES,        TODIVIDE,       TODOT,
@@ -111,7 +111,7 @@ enum SmTokenType
     TLANGLE,        TRANGLE,        TLBRACE,        TRBRACE,        // <x> {x}
     // Brackets Lines
     TLLINE,         TRLINE,         TLDLINE,        TRDLINE,        TMLINE,
-    // Differencial calculus
+    // Differential calculus
     TNABLA,         TPARTIAL,       TFOURIER,       TLAPLACE,       // Derivative, Transformation
     TINTD,          TINT,           TIINT,          TIIINT,         // Integral
     TLINT,          TLLINT,         TLLLINT,                        // Circuit integral
