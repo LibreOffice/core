@@ -38,6 +38,11 @@
 #include <svl/sigstruct.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/bitmap.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+
+#if HAVE_FEATURE_PDFIUM
+#include <fpdf_annot.h>
+#endif
 
 #ifdef XMLSEC_CRYPTO_NSS
 #include <cert.h>
@@ -167,8 +172,29 @@ bool IsCompleteSignature(SvStream& rStream, vcl::filter::PDFDocument& rDocument,
     return std::find(rAllEOFs.begin(), rAllEOFs.end(), nFileEnd) != rAllEOFs.end();
 }
 
+/**
+ * Contains checksums of a PDF page, which is rendered without annotations. It also contains
+ * the geometry of a few dangerous annotation types.
+ */
+struct PageChecksum
+{
+    BitmapChecksum m_nPageContent;
+    std::vector<basegfx::B2DRectangle> m_aAnnotations;
+    bool operator==(const PageChecksum& rChecksum) const;
+};
+
+bool PageChecksum::operator==(const PageChecksum& rChecksum) const
+{
+    if (m_nPageContent != rChecksum.m_nPageContent)
+    {
+        return false;
+    }
+
+    return m_aAnnotations == rChecksum.m_aAnnotations;
+}
+
 /// Collects the checksum of each page of one version of the PDF.
-void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<BitmapChecksum>& rPageChecksums,
+void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<PageChecksum>& rPageChecksums,
                              int nMDPPerm)
 {
 #if HAVE_FEATURE_PDFIUM
@@ -185,8 +211,35 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<BitmapChecksum
             return;
         }
 
-        BitmapChecksum nPageChecksum = pPdfPage->getChecksum(nMDPPerm);
-        rPageChecksums.push_back(nPageChecksum);
+        PageChecksum aPageChecksum;
+        aPageChecksum.m_nPageContent = pPdfPage->getChecksum(nMDPPerm);
+        for (int i = 0; i < FPDFPage_GetAnnotCount(pPdfPage->getPointer()); ++i)
+        {
+            FPDF_ANNOTATION pAnnotation = FPDFPage_GetAnnot(pPdfPage->getPointer(), i);
+            int nType = FPDFAnnot_GetSubtype(pAnnotation);
+            switch (nType)
+            {
+                case FPDF_ANNOT_UNKNOWN:
+                case FPDF_ANNOT_FREETEXT:
+                case FPDF_ANNOT_STAMP:
+                case FPDF_ANNOT_REDACT:
+                {
+                    basegfx::B2DRectangle aB2DRectangle;
+                    FS_RECTF aRect;
+                    if (FPDFAnnot_GetRect(pAnnotation, &aRect))
+                    {
+                        aB2DRectangle = basegfx::B2DRectangle(aRect.left, aRect.top, aRect.right,
+                                                              aRect.bottom);
+                    }
+                    aPageChecksum.m_aAnnotations.push_back(aB2DRectangle);
+                    break;
+                }
+                default:
+                    break;
+            }
+            FPDFPage_CloseAnnot(pAnnotation);
+        }
+        rPageChecksums.push_back(aPageChecksum);
     }
     FPDF_CloseDocument(pPdfDocument);
 #else
@@ -212,7 +265,7 @@ bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignatu
     aSignatureStream.WriteStream(rStream, nSignatureEOF);
     rStream.Seek(nPos);
     aSignatureStream.Seek(0);
-    std::vector<BitmapChecksum> aSignedPages;
+    std::vector<PageChecksum> aSignedPages;
     AnalyizeSignatureStream(aSignatureStream, aSignedPages, nMDPPerm);
 
     SvMemoryStream aFullStream;
@@ -221,7 +274,7 @@ bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignatu
     aFullStream.WriteStream(rStream);
     rStream.Seek(nPos);
     aFullStream.Seek(0);
-    std::vector<BitmapChecksum> aAllPages;
+    std::vector<PageChecksum> aAllPages;
     AnalyizeSignatureStream(aFullStream, aAllPages, nMDPPerm);
 
     // Fail if any page looks different after signing and at the end. Annotations/commenting doesn't
