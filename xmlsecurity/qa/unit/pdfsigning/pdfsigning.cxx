@@ -73,6 +73,7 @@ public:
     void testPartial();
     void testPartialInBetween();
     void testBadCertP1();
+    void testBadCertP3Stamp();
     /// Test writing a PAdES signature.
     void testSigningCertificateAttribute();
     /// Test that we accept files which are supposed to be good.
@@ -96,6 +97,7 @@ public:
     CPPUNIT_TEST(testPartial);
     CPPUNIT_TEST(testPartialInBetween);
     CPPUNIT_TEST(testBadCertP1);
+    CPPUNIT_TEST(testBadCertP3Stamp);
     CPPUNIT_TEST(testSigningCertificateAttribute);
     CPPUNIT_TEST(testGood);
     CPPUNIT_TEST(testTokenize);
@@ -415,6 +417,22 @@ void PDFSigningTest::testBadCertP1()
     // - Expected: 0 (SecurityOperationStatus_UNKNOWN)
     // - Actual  : 1 (SecurityOperationStatus_OPERATION_SUCCEEDED)
     // i.e. annotation after a P1 signature was not considered as a bad modification.
+    CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
+                         rInformation.nStatus);
+}
+
+void PDFSigningTest::testBadCertP3Stamp()
+{
+    std::vector<SignatureInformation> aInfos
+        = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad-cert-p3-stamp.pdf", 1,
+                 /*rExpectedSubFilter=*/OString());
+    CPPUNIT_ASSERT(!aInfos.empty());
+    SignatureInformation& rInformation = aInfos[0];
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0 (SecurityOperationStatus_UNKNOWN)
+    // - Actual  : 1 (SecurityOperationStatus_OPERATION_SUCCEEDED)
+    // i.e. adding a stamp annotation was not considered as a bad modification.
     CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
                          rInformation.nStatus);
 }
