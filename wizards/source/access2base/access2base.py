@@ -900,7 +900,7 @@ class Basic(object, metaclass = _Singleton):
     @classmethod
     def DateDiff(cls, add, date1, date2, weekstart = 1, yearstart = 1):
         if isinstance(date1, datetime.datetime): date1 = date1.isoformat()
-        if isinstance(date2, datetime.datetime): date2 = date1.isoformat()
+        if isinstance(date2, datetime.datetime): date2 = date2.isoformat()
         return cls.M('PyDateDiff', _WRAPPERMODULE, add, date1, date2, weekstart, yearstart)
 
     @classmethod
