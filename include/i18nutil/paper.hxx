@@ -29,7 +29,7 @@ namespace com::sun::star::lang { struct Locale; }
 //!! The values of the following enumerators must correspond to the array position
 //!! of the respective paper size in the file i18nutil/source/utility/paper.cxx
 //!! Thus don't reorder the enum values here without changing the code there as well.
-enum Paper
+enum Paper : unsigned
 {
     PAPER_A0,
     PAPER_A1,
