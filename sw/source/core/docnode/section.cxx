@@ -67,7 +67,7 @@ using namespace ::com::sun::star;
 
 namespace {
 
-    void lcl_SwClientNotify(SwModify& rModify, const SfxPoolItem* pOldNew)
+    void lcl_SwClientNotify(sw::BroadcastingModify& rModify, const SfxPoolItem* pOldNew)
     {
         const sw::LegacyModifyHint aHint(pOldNew, pOldNew);
         rModify.SwClientNotify(rModify, aHint);
@@ -872,7 +872,7 @@ bool SwSectionFormat::GetInfo( SfxPoolItem& rInfo ) const
         }
         return false;
     }
-    return SwModify::GetInfo( rInfo );
+    return sw::BroadcastingModify::GetInfo( rInfo );
 }
 
 static bool lcl_SectionCmpPos( const SwSection *pFirst, const SwSection *pSecond)
@@ -965,14 +965,14 @@ void SwSectionFormat::UpdateParent()
             if (!pProtect->IsContentProtected() !=
                 !pSection->IsProtectFlag())
             {
-                lcl_SwClientNotify(*static_cast<SwModify*>(pLast), static_cast<SfxPoolItem const *>(pProtect));
+                lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), static_cast<SfxPoolItem const *>(pProtect));
             }
 
             // edit in readonly sections
             if (!pEditInReadonly->GetValue() !=
                 !pSection->IsEditInReadonlyFlag())
             {
-                lcl_SwClientNotify(*static_cast<SwModify*>(pLast), static_cast<SfxPoolItem const *>(pEditInReadonly));
+                lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), static_cast<SfxPoolItem const *>(pEditInReadonly));
             }
 
             if( bIsHidden == pSection->IsHiddenFlag() )
@@ -980,7 +980,7 @@ void SwSectionFormat::UpdateParent()
                 SwMsgPoolItem aMsgItem( static_cast<sal_uInt16>(bIsHidden
                             ? RES_SECTION_HIDDEN
                             : RES_SECTION_NOT_HIDDEN ) );
-                lcl_SwClientNotify(*static_cast<SwModify*>(pLast), &aMsgItem);
+                lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), &aMsgItem);
             }
         }
         else if( !pSection &&

@@ -287,7 +287,7 @@ void SwPageDesc::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 
 static const SwFrame* lcl_GetFrameOfNode( const SwNode& rNd )
 {
-    const SwModify* pMod;
+    const sw::BroadcastingModify* pMod;
     SwFrameType nFrameType = FRM_CNTNT;
 
     if( rNd.IsContentNode() )

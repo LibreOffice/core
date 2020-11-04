@@ -1138,7 +1138,7 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
     if (aTextAtrArr.empty())
         return;
 
-    const SwModify* pOldMod = m_rExport.m_pOutFormatNode;
+    const sw::BroadcastingModify* pOldMod = m_rExport.m_pOutFormatNode;
     m_rExport.m_pOutFormatNode = nullptr;
 
     const SfxItemPool* pSrcPool = pEditPool;

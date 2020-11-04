@@ -35,8 +35,8 @@
  */
 class SwNode2LayImpl
 {
-    std::unique_ptr<SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti>> mpIter;
-    SwModify* mpMod;
+    std::unique_ptr<SwIterator<SwFrame, sw::BroadcastingModify, sw::IteratorMode::UnwrapMulti>> mpIter;
+    sw::BroadcastingModify* mpMod;
     std::vector<SwFrame*> mvUpperFrames; // To collect the Upper
     sal_uLong mnIndex;        // The Index of the to-be-inserted Nodes
     bool mbMaster    : 1; // true => only Master, false => only Frames without Follow
@@ -125,7 +125,7 @@ static SwNode* GoPreviousWithFrame(SwNodeIndex *pIdx)
 }
 
 /**
- * The main purpose of this ctor is to find the right SwModify to iterate over.
+ * The main purpose of this ctor is to find the right sw::BroadcastingModify to iterate over.
  *
  * @param bSearch true:     find the next Content or TableNode which contains
  *                          Frames (to collect the pUpper).
@@ -166,13 +166,13 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
     if( pNd )
     {
         if( pNd->IsContentNode() )
-            mpMod = const_cast<SwModify*>(static_cast<SwModify const *>(pNd->GetContentNode()));
+            mpMod = const_cast<sw::BroadcastingModify*>(static_cast<sw::BroadcastingModify const *>(pNd->GetContentNode()));
         else
         {
             assert(pNd->IsTableNode());
             mpMod = pNd->GetTableNode()->GetTable().GetFrameFormat();
         }
-        mpIter.reset(new SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti>(*mpMod));
+        mpIter.reset(new SwIterator<SwFrame, sw::BroadcastingModify, sw::IteratorMode::UnwrapMulti>(*mpMod));
     }
     else
     {

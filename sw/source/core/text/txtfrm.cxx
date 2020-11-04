@@ -1230,7 +1230,7 @@ SwTextFrame::MapViewToModel(TextFrameIndex const nIndex) const
     }
     else
     {
-        return std::make_pair(static_cast<SwTextNode*>(const_cast<SwModify*>(
+        return std::make_pair(static_cast<SwTextNode*>(const_cast<sw::BroadcastingModify*>(
                     SwFrame::GetDep())), sal_Int32(nIndex));
     }
 }
@@ -1251,7 +1251,7 @@ TextFrameIndex SwTextFrame::MapModelToView(SwTextNode const*const pNode, sal_Int
     }
     else
     {
-        assert(static_cast<SwTextNode*>(const_cast<SwModify*>(SwFrame::GetDep())) == pNode);
+        assert(static_cast<SwTextNode*>(const_cast<sw::BroadcastingModify*>(SwFrame::GetDep())) == pNode);
         return TextFrameIndex(nIndex);
     }
 }

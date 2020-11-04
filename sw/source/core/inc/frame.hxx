@@ -457,10 +457,12 @@ protected:
 
     /// use these so we can grep for SwFrame's GetRegisteredIn accesses
     /// beware that SwTextFrame may return sw::WriterMultiListener
-    SwModify        *GetDep()       { return GetRegisteredInNonConst(); }
-    const SwModify  *GetDep() const { return GetRegisteredIn(); }
+    sw::BroadcastingModify* GetDep()
+            { return static_cast<sw::BroadcastingModify*>(GetRegisteredInNonConst()); }
+    const sw::BroadcastingModify* GetDep() const
+            { return static_cast<const sw::BroadcastingModify*>(GetRegisteredIn()); }
 
-    SwFrame( SwModify*, SwFrame* );
+    SwFrame( sw::BroadcastingModify*, SwFrame* );
 
     void CheckDir( SvxFrameDirection nDir, bool bVert, bool bOnlyBiDi, bool bBrowse );
 

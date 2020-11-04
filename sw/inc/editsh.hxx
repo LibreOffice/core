@@ -156,7 +156,7 @@ class SW_DLLPUBLIC SwEditShell : public SwCursorShell
     SAL_DLLPRIVATE void SetSectionAttr_( SwSectionFormat& rSectFormat, const SfxItemSet& rSet );
 
     using SwViewShell::UpdateFields;
-    using SwModify::GetInfo;
+    using sw::BroadcastingModify::GetInfo;
 
 public:
     /// Edit (all selected ranges).
@@ -349,7 +349,7 @@ public:
     SwPageDesc* GetPageDescFromPool( sal_uInt16 nId );
 
     /// Query if the paragraph-/character-/frame-/page-style is used.
-    bool IsUsed( const SwModify& ) const;
+    bool IsUsed( const sw::BroadcastingModify& ) const;
 
     /// @return required automatic format.
     SwFrameFormat* GetFrameFormatFromPool( sal_uInt16 nId )

@@ -88,7 +88,7 @@ const SwNode* SwTableBoxFormula::GetNodeOfFormula() const
     const SwNode* pRet = nullptr;
     if( m_pDefinedIn )
     {
-        SwTableBox* pBox = SwIterator<SwTableBox,SwModify>( *m_pDefinedIn ).First();
+        SwTableBox* pBox = SwIterator<SwTableBox,sw::BroadcastingModify>( *m_pDefinedIn ).First();
         if( pBox )
             pRet = pBox->GetSttNd();
     }
@@ -99,7 +99,7 @@ SwTableBox* SwTableBoxFormula::GetTableBox()
 {
     SwTableBox* pBox = nullptr;
     if( m_pDefinedIn )
-        pBox = SwIterator<SwTableBox,SwModify>( *m_pDefinedIn ).First();
+        pBox = SwIterator<SwTableBox,sw::BroadcastingModify>( *m_pDefinedIn ).First();
     return pBox;
 }
 
