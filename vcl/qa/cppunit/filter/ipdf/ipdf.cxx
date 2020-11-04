@@ -161,6 +161,23 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testDictArrayDict)
     CPPUNIT_ASSERT(pKey);
 }
 
+CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testRealNumbers)
+{
+    // Load a file that has markup like this:
+    // 4 0 obj <<
+    //   /Test [.00 1.00 .00 1.00 .00 1.00]
+    // >>
+    OUString aSourceURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "real-numbers.pdf";
+    SvFileStream aFile(aSourceURL, StreamMode::READ);
+    vcl::filter::PDFDocument aDocument;
+
+    // Without the accompanying fix in place, this test would have failed, because the parser
+    // stopped when it saw an unexpected "." character.
+    CPPUNIT_ASSERT(aDocument.Read(aFile));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT(!aPages.empty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
