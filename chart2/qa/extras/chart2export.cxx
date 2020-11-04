@@ -176,6 +176,13 @@ public:
     void testTdf136267();
     void testTdf134255();
     void testTdf134977();
+<<<<<<< HEAD   (e4bc88 tdf#137625 sc: autofill user list sequences in merged cells)
+=======
+    void testTdf123647();
+    void testTdf136267();
+    void testDataLabelPlacementPieChart();
+    void testTdf137917();
+>>>>>>> CHANGE (e8a9d0 tdf#137917 Chart OOXML: fix export of TimeIncrement of Date )
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -315,6 +322,13 @@ public:
     CPPUNIT_TEST(testTdf136267);
     CPPUNIT_TEST(testTdf134255);
     CPPUNIT_TEST(testTdf134977);
+<<<<<<< HEAD   (e4bc88 tdf#137625 sc: autofill user list sequences in merged cells)
+=======
+    CPPUNIT_TEST(testTdf123647);
+    CPPUNIT_TEST(testTdf136267);
+    CPPUNIT_TEST(testDataLabelPlacementPieChart);
+    CPPUNIT_TEST(testTdf137917);
+>>>>>>> CHANGE (e8a9d0 tdf#137917 Chart OOXML: fix export of TimeIncrement of Date )
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2884,6 +2898,58 @@ void Chart2ExportTest::testTdf134977()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl/c:tx/c:rich/a:p/a:r/a:rPr", "sz", "900");
 }
 
+<<<<<<< HEAD   (e4bc88 tdf#137625 sc: autofill user list sequences in merged cells)
+=======
+void Chart2ExportTest::testTdf123647()
+{
+    load("/chart2/qa/extras/data/xlsx/", "empty_chart.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart", 1);
+}
+
+void Chart2ExportTest::testTdf136267()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf136267.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:cat/c:strRef/c:strCache/c:pt/c:v", "John");
+}
+
+void Chart2ExportTest::testDataLabelPlacementPieChart()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf134978.xlsx");
+    reload("calc8");
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, mxComponent),
+                                                     UNO_QUERY_THROW);
+    // test the placement of the manually positioned label
+    Reference<beans::XPropertySet>
+            xDataPointPropSet(xChartDoc->getDiagram()->getDataPointProperties(2, 0),
+                              uno::UNO_SET_THROW);
+    uno::Any aAny = xDataPointPropSet->getPropertyValue("LabelPlacement");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    sal_Int32 nLabelPlacement = 0;
+    CPPUNIT_ASSERT(aAny >>= nLabelPlacement);
+    CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::OUTSIDE, nLabelPlacement);
+
+}
+
+void Chart2ExportTest::testTdf137917()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf137917.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:baseTimeUnit", "val", "days");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:majorUnit", "val", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:majorTimeUnit", "val", "months");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:minorUnit", "val", "7");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:minorTimeUnit", "val", "days");
+}
+
+>>>>>>> CHANGE (e8a9d0 tdf#137917 Chart OOXML: fix export of TimeIncrement of Date )
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
