@@ -35,7 +35,7 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFormatPageDesc : public SfxPoolItem, public SwClient
 {
     ::std::optional<sal_uInt16> m_oNumOffset;          ///< Offset page number.
-    SwModify* m_pDefinedIn;       /**< Points to the object in which the
+    sw::BroadcastingModify* m_pDefinedIn;       /**< Points to the object in which the
                                  attribute was set (ContentNode/Format). */
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
@@ -66,8 +66,8 @@ public:
     void    SetNumOffset( const ::std::optional<sal_uInt16>& oNum ) { m_oNumOffset = oNum; }
 
     /// Query / set where attribute is anchored.
-    const SwModify* GetDefinedIn() const { return m_pDefinedIn; }
-    void ChgDefinedIn( const SwModify* pNew ) { m_pDefinedIn = const_cast<SwModify*>(pNew); }
+    const sw::BroadcastingModify* GetDefinedIn() const { return m_pDefinedIn; }
+    void ChgDefinedIn( const sw::BroadcastingModify* pNew ) { m_pDefinedIn = const_cast<sw::BroadcastingModify*>(pNew); }
     void RegisterToPageDesc( SwPageDesc& );
     bool KnowsPageDesc() const;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;

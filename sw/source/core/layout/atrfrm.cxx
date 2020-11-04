@@ -487,7 +487,7 @@ SwFormatHeader::SwFormatHeader( SwFrameFormat *pHeaderFormat )
 
 SwFormatHeader::SwFormatHeader( const SwFormatHeader &rCpy )
     : SfxPoolItem( RES_HEADER ),
-    SwClient( const_cast<SwModify*>(rCpy.GetRegisteredIn()) ),
+    SwClient( const_cast<sw::BroadcastingModify*>(static_cast<const sw::BroadcastingModify*>(rCpy.GetRegisteredIn())) ),
     m_bActive( rCpy.IsActive() )
 {
 }
@@ -532,7 +532,7 @@ SwFormatFooter::SwFormatFooter( SwFrameFormat *pFooterFormat )
 
 SwFormatFooter::SwFormatFooter( const SwFormatFooter &rCpy )
     : SfxPoolItem( RES_FOOTER ),
-    SwClient( const_cast<SwModify*>(rCpy.GetRegisteredIn()) ),
+    SwClient( const_cast<sw::BroadcastingModify*>(static_cast<const sw::BroadcastingModify*>(rCpy.GetRegisteredIn())) ),
     m_bActive( rCpy.IsActive() )
 {
 }
@@ -677,7 +677,7 @@ void SwFormatPageDesc::SwClientNotify( const SwModify& rModify, const SfxHint& r
     // mba: shouldn't that be broadcasted also?
     SwFormatPageDesc aDfltDesc( pHint->GetPageDesc() );
     SwPageDesc* pDesc = pHint->GetPageDesc();
-    const SwModify* pMod = GetDefinedIn();
+    const sw::BroadcastingModify* pMod = GetDefinedIn();
     if ( pMod )
     {
         if( auto pContentNode = dynamic_cast<const SwContentNode*>( pMod) )
@@ -686,7 +686,7 @@ void SwFormatPageDesc::SwClientNotify( const SwModify& rModify, const SfxHint& r
             const_cast<SwFormat*>(pFormat)->SetFormatAttr( aDfltDesc );
         else
         {
-            OSL_FAIL( "What kind of SwModify is this?" );
+            OSL_FAIL( "What kind of sw::BroadcastingModify is this?" );
             RegisterToPageDesc( *pDesc );
         }
     }
@@ -2905,7 +2905,7 @@ void SwFlyFrameFormat::MakeFrames()
     if( !GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
         return;
 
-    SwModify *pModify = nullptr;
+    sw::BroadcastingModify *pModify = nullptr;
     // OD 24.07.2003 #111032# - create local copy of anchor attribute for possible changes.
     SwFormatAnchor aAnchorAttr( GetAnchor() );
     switch( aAnchorAttr.GetAnchorId() )
@@ -3000,7 +3000,7 @@ void SwFlyFrameFormat::MakeFrames()
     if( !pModify )
         return;
 
-    SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(*pModify);
+    SwIterator<SwFrame, sw::BroadcastingModify, sw::IteratorMode::UnwrapMulti> aIter(*pModify);
     for( SwFrame *pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
     {
         bool bAdd = !pFrame->IsContentFrame() ||

@@ -206,7 +206,7 @@ const SwFrame * FindPage( const SwRect &rRect, const SwFrame *pPage );
       with care!
  */
 SwFrame* GetFrameOfModify( const SwRootFrame* pLayout,
-                       SwModify const&,
+                       sw::BroadcastingModify const&,
                        SwFrameType const nFrameType,
                        const SwPosition *pPos = nullptr,
                        std::pair<Point, bool> const* pViewPosAndCalcFrame = nullptr);
@@ -377,7 +377,7 @@ class SwBorderAttrs : public SwCacheObj
     void CalcLineSpacing_();
 
 public:
-    SwBorderAttrs( const SwModify *pOwner, const SwFrame *pConstructor );
+    SwBorderAttrs( const sw::BroadcastingModify *pOwner, const SwFrame *pConstructor );
     virtual ~SwBorderAttrs() override;
 
     const SwAttrSet      &GetAttrSet() const { return m_rAttrSet;  }
@@ -595,7 +595,7 @@ class SwDeletionChecker
 {
 private:
     const SwFrame* mpFrame;
-    const SwModify* mpRegIn;
+    const sw::BroadcastingModify* mpRegIn;
 
 public:
     SwDeletionChecker(const SwFrame* pFrame);

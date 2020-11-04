@@ -22,8 +22,8 @@
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include "swdllapi.h"
+#include "calbck.hxx"
 
-class SwModify;
 class SwDoc;
 class OutputDevice;
 class IDocumentSettingAccess;
@@ -190,7 +190,7 @@ public:
     SwAttrPool* GetPool() const { return static_cast<SwAttrPool*>(SfxItemSet::GetPool()); }
 
     // Copy attributes, if necessary across documents.
-    void CopyToModify( SwModify& rMod ) const;
+    void CopyToModify( sw::BroadcastingModify& rMod ) const;
 
     // Special treatment for some attributes.
     // Set Modify-pointer (the old pDefinedIn) at the following attributes:
@@ -198,7 +198,7 @@ public:
     //  - SwFormatPageDesc
     // (Is called at insert in formats/nodes.)
     // Second version is for the SwAttrSet handles of SwContentNode.
-    bool SetModifyAtAttr( const SwModify* pModify );
+    bool SetModifyAtAttr( const sw::BroadcastingModify* pModify );
 
     // Document is set at SwAttrPool. Therefore it is always accessible.
     const SwDoc *GetDoc() const { return GetPool()->GetDoc(); }

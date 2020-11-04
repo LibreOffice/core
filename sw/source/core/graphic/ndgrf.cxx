@@ -55,7 +55,7 @@ using namespace com::sun::star;
 
 namespace
 {
-    void lcl_SwClientNotify(SwModify& rModify, const SfxPoolItem& rOldNew)
+    void lcl_SwClientNotify(sw::BroadcastingModify& rModify, const SfxPoolItem& rOldNew)
     {
         const sw::LegacyModifyHint aHint(&rOldNew, &rOldNew);
         rModify.SwClientNotify(rModify, aHint);
@@ -378,8 +378,8 @@ void SwGrfNode::TriggerGraphicArrived()
     // RES_GRAPHIC_ARRIVED_PREP and RES_GRAPHIC_ARRIVED.
     LockModify();
     {
-        SwIterator<SwModify,SwGrfNode> aIter(*this);
-        for(SwModify* pLast = aIter.First(); pLast; pLast = aIter.Next())
+        SwIterator<sw::BroadcastingModify,SwGrfNode> aIter(*this);
+        for(sw::BroadcastingModify* pLast = aIter.First(); pLast; pLast = aIter.Next())
             if(dynamic_cast<const SwContentFrame*>(pLast) ==  nullptr)
                 pLast->SwClientNotify(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
     }

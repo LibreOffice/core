@@ -287,7 +287,7 @@ void TransformableSwFrame::transform(const basegfx::B2DHomMatrix& aTransform)
     maFramePrintAreaTransformation *= aTransform;
 }
 
-SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )
+SwFrame::SwFrame( sw::BroadcastingModify *pMod, SwFrame* pSib )
 :   SwFrameAreaDefinition(),
     SwClient( pMod ),
     SfxBroadcaster(),

@@ -2138,7 +2138,7 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
     bObjsDirect = true;
 }
 
-SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
+SwBorderAttrs::SwBorderAttrs(const sw::BroadcastingModify *pMod, const SwFrame *pConstructor)
     : SwCacheObj(pMod)
     , m_rAttrSet(pConstructor->IsContentFrame()
                     ? pConstructor->IsTextFrame()
@@ -2194,7 +2194,7 @@ SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrame *pConstructor)
 
 SwBorderAttrs::~SwBorderAttrs()
 {
-    const_cast<SwModify *>(static_cast<SwModify const *>(m_pOwner))->SetInCache( false );
+    const_cast<sw::BroadcastingModify *>(static_cast<sw::BroadcastingModify const *>(m_pOwner))->SetInCache( false );
 }
 
 /* All calc methods calculate a safety distance in addition to the values given by the attributes.
@@ -2533,14 +2533,14 @@ void SwBorderAttrs::CalcLineSpacing_()
     m_bLineSpacing = false;
 }
 
-static SwModify const* GetCacheOwner(SwFrame const& rFrame)
+static sw::BroadcastingModify const* GetCacheOwner(SwFrame const& rFrame)
 {
     return rFrame.IsContentFrame()
-        ? static_cast<SwModify const*>(rFrame.IsTextFrame()
+        ? static_cast<sw::BroadcastingModify const*>(rFrame.IsTextFrame()
         // sw_redlinehide: presumably this caches the border attrs at the model level and can be shared across different layouts so we want the ParaProps node here
             ? static_cast<const SwTextFrame&>(rFrame).GetTextNodeForParaProps()
             : static_cast<const SwNoTextFrame&>(rFrame).GetNode())
-        : static_cast<SwModify const*>(static_cast<const SwLayoutFrame&>(rFrame).GetFormat());
+        : static_cast<sw::BroadcastingModify const*>(static_cast<const SwLayoutFrame&>(rFrame).GetFormat());
 }
 
 SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrame *pFrame ) :
@@ -2553,8 +2553,8 @@ SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrame *pFrame ) 
 
 SwCacheObj *SwBorderAttrAccess::NewObj()
 {
-    const_cast<SwModify *>(static_cast<SwModify const *>(m_pOwner))->SetInCache( true );
-    return new SwBorderAttrs( static_cast<SwModify const *>(m_pOwner), m_pConstructor );
+    const_cast<sw::BroadcastingModify *>(static_cast<sw::BroadcastingModify const *>(m_pOwner))->SetInCache( true );
+    return new SwBorderAttrs( static_cast<sw::BroadcastingModify const *>(m_pOwner), m_pConstructor );
 }
 
 SwBorderAttrs *SwBorderAttrAccess::Get()
@@ -3662,7 +3662,7 @@ void SwFrameHolder::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-SwFrame* GetFrameOfModify(SwRootFrame const*const pLayout, SwModify const& rMod,
+SwFrame* GetFrameOfModify(SwRootFrame const*const pLayout, sw::BroadcastingModify const& rMod,
         SwFrameType const nFrameType, SwPosition const*const pPos,
         std::pair<Point, bool> const*const pViewPosAndCalcFrame)
 {
@@ -3671,7 +3671,7 @@ SwFrame* GetFrameOfModify(SwRootFrame const*const pLayout, SwModify const& rMod,
     SwRect aCalcRect;
     bool bClientIterChanged = false;
 
-    SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(rMod);
+    SwIterator<SwFrame, sw::BroadcastingModify, sw::IteratorMode::UnwrapMulti> aIter(rMod);
     do {
         pMinFrame = nullptr;
         aHolder.Reset();
@@ -3882,7 +3882,7 @@ bool SwDeletionChecker::HasBeenDeleted() const
     if ( !mpFrame || !mpRegIn )
         return false;
 
-    SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(*mpRegIn);
+    SwIterator<SwFrame, sw::BroadcastingModify, sw::IteratorMode::UnwrapMulti> aIter(*mpRegIn);
     SwFrame* pLast = aIter.First();
     while ( pLast )
     {

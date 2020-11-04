@@ -652,7 +652,7 @@ inline const ::sw::Meta* SwXMeta::Impl::GetMeta() const
     return m_pMeta;
 }
 
-// SwModify
+// sw::BroadcastingModify
 void SwXMeta::Impl::Notify(const SfxHint& rHint)
 {
     m_pTextPortions.reset(); // throw away cache (SwTextNode changed)

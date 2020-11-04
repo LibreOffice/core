@@ -34,7 +34,7 @@ namespace sw
 {
     struct FrameClient : public SwClient
     {
-        FrameClient(SwModify* pModify) : SwClient(pModify) {};
+        FrameClient(sw::BroadcastingModify* pModify) : SwClient(pModify) {};
     };
 }
 struct FrameClientSortListEntry

@@ -1827,7 +1827,7 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
 
         if ( pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
         {
-            const SwModify *pMod = pDesc->GetDefinedIn();
+            const sw::BroadcastingModify *pMod = pDesc->GetDefinedIn();
             SwVirtPageNumInfo aInfo( pPage );
             pMod->GetInfo( aInfo );
             if ( aInfo.GetPage() )

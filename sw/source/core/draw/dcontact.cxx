@@ -1787,7 +1787,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                 // anchor at first found frame the 'master' object and
                 // at the following frames 'virtual' drawing objects.
                 // Note: method is similar to <SwFlyFrameFormat::MakeFrames(..)>
-                SwModify *pModify = nullptr;
+                sw::BroadcastingModify *pModify = nullptr;
                 if( pAnch->GetContentAnchor() )
                 {
                     if ( pAnch->GetAnchorId() == RndStdIds::FLY_AT_FLY )
@@ -1827,7 +1827,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                     break;
                 }
 
-                SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti> aIter(*pModify);
+                SwIterator<SwFrame, sw::BroadcastingModify, sw::IteratorMode::UnwrapMulti> aIter(*pModify);
                 SwFrame* pAnchorFrameOfMaster = nullptr;
                 for( SwFrame *pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
                 {

@@ -247,7 +247,7 @@ void  SwAttrSet::Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew )
 
     (Is called at inserts into formats/nodes)
 */
-bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
+bool SwAttrSet::SetModifyAtAttr( const sw::BroadcastingModify* pModify )
 {
     bool bSet = false;
 
@@ -284,7 +284,7 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
     return bSet;
 }
 
-void SwAttrSet::CopyToModify( SwModify& rMod ) const
+void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
 {
     // copy attributes across multiple documents if needed
     SwContentNode* pCNd = dynamic_cast<SwContentNode*>( &rMod  );

@@ -2241,7 +2241,7 @@ bool  SwDocStyleSheet::IsUsed() const
     if( !bPhysical )
         return false;
 
-    const SwModify* pMod;
+    const sw::BroadcastingModify* pMod;
     switch( nFamily )
     {
     case SfxStyleFamily::Char : pMod = pCharFormat;   break;
@@ -2582,7 +2582,7 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
     }
 
     const bool bSearchUsed = ( n != SfxStyleSearchBits::All && n & SfxStyleSearchBits::Used );
-    const SwModify* pMod = nullptr;
+    const sw::BroadcastingModify* pMod = nullptr;
 
     mxStyleSheet->SetPhysical( false );
     mxStyleSheet->PresetName( rName );
