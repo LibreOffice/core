@@ -340,8 +340,6 @@ static bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
         case ScanlineFormat::N8BitPal:
             break;
 
-        case ScanlineFormat::N8BitTcMask:
-//            return ImplConvertToBitmap<ScanlineFormat::N8BitTcMask>( aSrcType, rDst, rSrc );
         case ScanlineFormat::N32BitTcMask:
 //            return ImplConvertToBitmap<ScanlineFormat::N32BitTcMask>( aSrcType, rDst, rSrc );
             break;
@@ -428,8 +426,6 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
         case ScanlineFormat::N4BitLsnPal:
             break;
 
-        case ScanlineFormat::N8BitTcMask:
-//            return ImplConvertFromBitmap<ScanlineFormat::N8BitTcMask>( rDst, rSrc );
         case ScanlineFormat::N32BitTcMask:
 //            return ImplConvertFromBitmap<ScanlineFormat::N32BitTcMask>( rDst, rSrc );
             break;
@@ -651,8 +647,6 @@ static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, c
         case ScanlineFormat::N8BitPal:
             break;
 
-        case ScanlineFormat::N8BitTcMask:
-//            return ImplBlendToBitmap<ScanlineFormat::N8BitTcMask>( aSrcType, rDst, rSrc, rMsk );
         case ScanlineFormat::N32BitTcMask:
 //            return ImplBlendToBitmap<ScanlineFormat::N32BitTcMask>( aSrcType, rDst, rSrc, rMsk );
             break;
@@ -745,8 +739,6 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
         case ScanlineFormat::N4BitLsnPal:
             break;
 
-        case ScanlineFormat::N8BitTcMask:
-//            return ImplBlendFromBitmap<ScanlineFormat::N8BitTcMask>( rDst, rSrc );
         case ScanlineFormat::N32BitTcMask:
 //            return ImplBlendFromBitmap<ScanlineFormat::N32BitTcMask>( rDst, rSrc );
             break;
@@ -802,7 +794,6 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
             nFillByte |= (nFillByte << 4);
             break;
         case ScanlineFormat::N8BitPal:
-        case ScanlineFormat::N8BitTcMask:
             nFillByte = rColor.GetIndex();
             break;
 

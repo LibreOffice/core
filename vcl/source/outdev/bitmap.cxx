@@ -989,8 +989,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     Bitmap::ScopedReadAccess pBitmapReadAccess(const_cast<Bitmap&>(rBitmap));
     AlphaMask::ScopedReadAccess pAlphaReadAccess(const_cast<AlphaMask&>(rAlpha));
 
-    DBG_ASSERT( pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal ||
-                pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitTcMask,
+    DBG_ASSERT( pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal,
                 "OutputDevice::ImplDrawAlpha(): non-8bit alpha no longer supported!" );
 
     // #i38887# reading from screen may sometimes fail

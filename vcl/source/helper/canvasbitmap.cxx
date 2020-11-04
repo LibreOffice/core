@@ -173,16 +173,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             m_aLayout.IsMsbFirst = false; // doesn't matter
             break;
 
-        case ScanlineFormat::N8BitTcMask:
-            m_bPalette           = false;
-            m_nBitsPerInputPixel = 8;
-            m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
-            m_aLayout.IsMsbFirst = false; // doesn't matter
-            setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
-                              m_pBmpAcc->GetColorMask().GetGreenMask(),
-                              m_pBmpAcc->GetColorMask().GetBlueMask() );
-            break;
-
         case ScanlineFormat::N24BitTcBgr:
             m_bPalette           = false;
             m_nBitsPerInputPixel = 24;
