@@ -7,6 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/** Those are the starmath codes for ElementsDockingWindow.hxx.
+  *
+  * Those codes will be displayed as formulas on the ElementsDockingWindow.
+  * The user can then graphically insert them.
+  */
+
 #ifndef INCLUDED_STARMATH_INC_STRINGS_HXX
 #define INCLUDED_STARMATH_INC_STRINGS_HXX
 

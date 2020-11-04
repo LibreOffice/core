@@ -16,6 +16,16 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+ /** The tokens cointain the information gathered by the parser.
+   *
+   * They contain:
+   *    the data type (~ mathematical operation).
+   *    The mathematical char.
+   *    The corresponding code or information to recreate it.
+   *    Location of the token in the starmath code.
+   */
+
 #ifndef INCLUDED_STARMATH_INC_TOKEN_HXX
 #define INCLUDED_STARMATH_INC_TOKEN_HXX
 
