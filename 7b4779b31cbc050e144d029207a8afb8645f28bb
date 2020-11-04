@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6023fb2_72770b6c",
+        "filename": "sw/inc/AccessibilityCheckStrings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-04T10:53:24Z",
+      "side": 1,
+      "message": "This message seems unclear to an unexpecting user. When you het such a message, pointing to a random heading in your text, will you instantly realize that it means the connection between the level of this heading and the previous one? I personally likely would be confused.\n\nSomething like \"The heading has unexpected level N: previous heading had level M\"?\n\nBy the way, what is the difference with STR_HEADINGS_NOT_IN_ORDER?",
+      "range": {
+        "startLine": 29,
+        "startChar": 66,
+        "endLine": 29,
+        "endChar": 95
+      },
+      "revId": "7b4779b31cbc050e144d029207a8afb8645f28bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e17c6f21_2ec629c0",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-04T10:53:24Z",
+      "side": 1,
+      "message": "The value is taken from and compared to the value returned by SwTextNode::GetAttrOutlineLevel, which is int. Why use a different type here? It\u0027s best to use matching types, to avoid any possible code analyzer warnings, even if you know that actual values would be in the range of that other type. The 2 to 6 bytes stack memory economy here is negligible, and there will be no performance improvement at all.",
+      "range": {
+        "startLine": 734,
+        "startChar": 4,
+        "endLine": 734,
+        "endChar": 9
+      },
+      "revId": "7b4779b31cbc050e144d029207a8afb8645f28bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1855159_a75d94f6",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-04T10:53:24Z",
+      "side": 1,
+      "message": "Please put private section after the public one. Interface should generally be the first thing you see in a class, and implementation bits should go last, as less useful to anyone except the author.",
+      "range": {
+        "startLine": 732,
+        "startChar": 0,
+        "endLine": 734,
+        "endChar": 26
+      },
+      "revId": "7b4779b31cbc050e144d029207a8afb8645f28bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a242e6bf_e5b10de5",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-04T10:53:24Z",
+      "side": 1,
+      "message": "The short vs int talk also applies to this.",
+      "range": {
+        "startLine": 748,
+        "startChar": 14,
+        "endLine": 748,
+        "endChar": 19
+      },
+      "revId": "7b4779b31cbc050e144d029207a8afb8645f28bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4d7678b_8556be50",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-04T10:53:24Z",
+      "side": 1,
+      "message": "What is the reason for this check? Can SwTextNode::GetAttrOutlineLevel return \u003e10? The \"10\" here is a magic constant; I would either remove the check for \u003c\u003d 10 completely, or use some named constant instead if that makes sense. (I assume it does not make sense, and anu non-0 return would mean some meaningful outline level, to which the test should apply?)",
+      "range": {
+        "startLine": 751,
+        "startChar": 28,
+        "endLine": 751,
+        "endChar": 46
+      },
+      "revId": "7b4779b31cbc050e144d029207a8afb8645f28bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2d2ef41_1683e2a4",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-04T10:53:24Z",
+      "side": 1,
+      "message": "This looks correct; yet, it needs mentioning that this code applies a restriction that the very first heading must be heading 1. This likely is wanted - but please check is it is.",
+      "range": {
+        "startLine": 754,
+        "startChar": 16,
+        "endLine": 754,
+        "endChar": 46
+      },
+      "revId": "7b4779b31cbc050e144d029207a8afb8645f28bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
