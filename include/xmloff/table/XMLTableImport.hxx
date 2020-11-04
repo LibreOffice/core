@@ -48,6 +48,7 @@ public:
 
     SvXMLImportContext* CreateTableContext( sal_uInt16 nPrfx, const OUString& rLName,
                                             css::uno::Reference< css::table::XColumnRowRange > const & xColumnRowRange );
+    SvXMLImportContext* CreateTableContext( css::uno::Reference< css::table::XColumnRowRange > const & xColumnRowRange );
 
     SvXMLStyleContext* CreateTableTemplateContext( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 

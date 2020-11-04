@@ -41,6 +41,7 @@ public:
     XFormsModelContext( SvXMLImport& rImport,
                         sal_uInt16 nPrfx,
                         const OUString& rLName );
+    XFormsModelContext( SvXMLImport& rImport );
 
     // implement SvXMLImportContext & TokenContext methods:
 

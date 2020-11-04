@@ -417,9 +417,9 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
 
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix, const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
@@ -592,32 +592,24 @@ inline void SwXMLTableCellContext_Impl::InsertContent(
     m_bHasTableContent = true;
 }
 
-SvXMLImportContextRef SwXMLTableCellContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLTableCellContext_Impl::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
     bool bSubTable = false;
-    if( XML_NAMESPACE_TABLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_TABLE ) )
+    if( nElement == XML_ELEMENT(TABLE, XML_TABLE) )
     {
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         {
-            const OUString& rAttrName = xAttrList->getNameByIndex( i );
-
-            OUString aLocalName;
-            const sal_uInt16 nPrefix2 =
-                GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                &aLocalName );
-            if( XML_NAMESPACE_TABLE == nPrefix2 &&
-                 IsXMLToken( aLocalName, XML_IS_SUB_TABLE ) &&
-                 IsXMLToken( xAttrList->getValueByIndex( i ), XML_TRUE ) )
+            if( aIter.getToken() == XML_ELEMENT(TABLE, XML_IS_SUB_TABLE) )
             {
-                bSubTable = true;
+                if ( IsXMLToken( aIter.toString(), XML_TRUE ) )
+                    bSubTable = true;
             }
+            else
+                XMLOFF_WARN_UNKNOWN("sw", aIter);
         //FIXME: RDFa
         }
     }
@@ -627,8 +619,7 @@ SvXMLImportContextRef SwXMLTableCellContext_Impl::CreateChildContext(
         if( !HasContent() )
         {
             SwXMLTableContext *pTableContext =
-                new SwXMLTableContext( GetSwImport(), nPrefix, rLocalName,
-                                       GetTable() );
+                new SwXMLTableContext( GetSwImport(), GetTable() );
             pContext = pTableContext;
             if( GetTable()->IsValid() )
                 InsertContent( pTableContext );
@@ -644,7 +635,7 @@ SvXMLImportContextRef SwXMLTableCellContext_Impl::CreateChildContext(
         if (!(m_bValueTypeIsString && m_bHasStringValue))
         {
             pContext = GetImport().GetTextImport()->CreateTextChildContext(
-                        GetImport(), nPrefix, rLocalName, xAttrList,
+                        GetImport(), nElement, xAttrList,
                         XMLTextType::Cell  );
         }
     }
@@ -1231,10 +1222,9 @@ SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
 
 
 SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList ) :
-    XMLTextTableContext( rImport, nPrfx, rLName ),
+        sal_Int32 /*nElement*/,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList ) :
+    XMLTextTableContext( rImport ),
     m_pRows( new SwXMLTableRows_Impl ),
     m_pTableNode( nullptr ),
     m_pBox1( nullptr ),
@@ -1256,31 +1246,28 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-
-        OUString aLocalName;
-        const sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-        if( XML_NAMESPACE_TABLE == nPrefix )
+        const OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
-                m_aStyleName = rValue;
-            else if( IsXMLToken( aLocalName, XML_NAME ) )
-                aName = rValue;
-            else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
-                m_aDfltCellStyleName = rValue;
-            else if( IsXMLToken( aLocalName, XML_TEMPLATE_NAME ) )
-                m_aTemplateName = rValue;
-        }
-        else if ( (XML_NAMESPACE_XML == nPrefix) &&
-                 IsXMLToken( aLocalName, XML_ID ) )
-        {
-            sXmlId = rValue;
+            case XML_ELEMENT(TABLE, XML_STYLE_NAME):
+                m_aStyleName = sValue;
+                break;
+            case XML_ELEMENT(TABLE, XML_NAME):
+                aName = sValue;
+                break;
+            case XML_ELEMENT(TABLE, XML_DEFAULT_CELL_STYLE_NAME):
+                m_aDfltCellStyleName = sValue;
+                break;
+            case XML_ELEMENT(TABLE, XML_TEMPLATE_NAME):
+                m_aTemplateName = sValue;
+                break;
+            case XML_ELEMENT(XML, XML_ID):
+                sXmlId = sValue;
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("sw", aIter);
         }
     }
 
@@ -1374,6 +1361,27 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         const OUString& rLName,
         SwXMLTableContext *pTable ) :
     XMLTextTableContext( rImport, nPrfx, rLName ),
+    m_pRows( new SwXMLTableRows_Impl ),
+    m_pTableNode( pTable->m_pTableNode ),
+    m_pBox1( nullptr ),
+    m_bOwnsBox1( false ),
+    m_pSttNd1( nullptr ),
+    m_pBoxFormat( nullptr ),
+    m_pLineFormat( nullptr ),
+    m_xParentTable( pTable ),
+    m_bFirstSection( false ),
+    m_bRelWidth( true ),
+    m_bHasSubTables( false ),
+    m_nHeaderRows( 0 ),
+    m_nCurRow( 0 ),
+    m_nCurCol( 0 ),
+    m_nWidth( 0 )
+{
+}
+
+SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
+        SwXMLTableContext *pTable ) :
+    XMLTextTableContext( rImport ),
     m_pRows( new SwXMLTableRows_Impl ),
     m_pTableNode( pTable->m_pTableNode ),
     m_pBox1( nullptr ),

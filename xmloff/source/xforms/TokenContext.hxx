@@ -47,6 +47,9 @@ public:
                   const OUString& rLocalName,
                   const SvXMLTokenMapEntry* pAttributes,
                   const SvXMLTokenMapEntry* pChildren );
+    TokenContext( SvXMLImport& rImport,
+                  const SvXMLTokenMapEntry* pAttributes,
+                  const SvXMLTokenMapEntry* pChildren );
 
     // implement SvXMLImportContext methods:
 

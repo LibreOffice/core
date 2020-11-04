@@ -47,6 +47,15 @@ TokenContext::TokenContext( SvXMLImport& rImport,
 {
 }
 
+TokenContext::TokenContext( SvXMLImport& rImport,
+                            const SvXMLTokenMapEntry* pAttributes,
+                            const SvXMLTokenMapEntry* pChildren )
+    : SvXMLImportContext( rImport ),
+      mpAttributes( pAttributes ),
+      mpChildren( pChildren )
+{
+}
+
 void TokenContext::StartElement(
     const Reference<XAttributeList>& xAttributeList )
 {

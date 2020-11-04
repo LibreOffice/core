@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
@@ -42,11 +43,10 @@ using namespace ::xmloff::token;
 XMLTextListBlockContext::XMLTextListBlockContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rTxtImp,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        sal_Int32 /*nElement*/,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList,
         const bool bRestartNumberingAtSubList )
-:   SvXMLImportContext( rImport, nPrfx, rLName )
+:   SvXMLImportContext( rImport )
 ,   mrTxtImport( rTxtImp )
 ,   msListStyleName()
 ,   mxParentListBlock( )
@@ -82,42 +82,36 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         msContinueListId = pParent->GetContinueListId();
     }
 
-    const SvXMLTokenMap& rTokenMap = mrTxtImport.GetTextListBlockAttrTokenMap();
-
     bool bIsContinueNumberingAttributePresent( false );
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-        case XML_TOK_TEXT_LIST_BLOCK_XMLID:
+        case XML_ELEMENT(XML, XML_ID):
 //FIXME: there is no UNO API for lists
             // xml:id is also the list ID (#i92221#)
             if ( mnLevel == 0 ) // root <list> element
             {
-                msListId = rValue;
+                msListId = sValue;
             }
             break;
-        case XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING:
-            mbRestartNumbering = !IsXMLToken(rValue, XML_TRUE);
+        case XML_ELEMENT(TEXT, XML_CONTINUE_NUMBERING):
+            mbRestartNumbering = !IsXMLToken(sValue, XML_TRUE);
             bIsContinueNumberingAttributePresent = true;
             break;
-        case XML_TOK_TEXT_LIST_BLOCK_STYLE_NAME:
-            msListStyleName = rValue;
+        case XML_ELEMENT(TEXT, XML_STYLE_NAME):
+            msListStyleName = sValue;
             break;
-        case XML_TOK_TEXT_LIST_BLOCK_CONTINUE_LIST:
+        case XML_ELEMENT(TEXT, XML_CONTINUE_LIST):
             if ( mnLevel == 0 ) // root <list> element
             {
-                msContinueListId = rValue;
+                msContinueListId = sValue;
             }
             break;
+        default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+
         }
     }
 
@@ -247,30 +241,26 @@ void XMLTextListBlockContext::endFastElement(sal_Int32 )
     mrTxtImport.GetTextListHelper().SetListItem( nullptr );
 }
 
-SvXMLImportContextRef XMLTextListBlockContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextListBlockContext::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    const SvXMLTokenMap& rTokenMap =
-                        mrTxtImport.GetTextListBlockElemTokenMap();
     bool bHeader = false;
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-    case XML_TOK_TEXT_LIST_HEADER:
+    case XML_ELEMENT(TEXT, XML_LIST_HEADER):
         bHeader = true;
         [[fallthrough]];
-    case XML_TOK_TEXT_LIST_ITEM:
-        pContext = new XMLTextListItemContext( GetImport(), mrTxtImport,
-                                                nPrefix, rLocalName,
-                                              xAttrList, bHeader );
+    case XML_ELEMENT(TEXT, XML_LIST_ITEM):
+        return new XMLTextListItemContext( GetImport(), mrTxtImport,
+                                            nElement,
+                                            xAttrList, bHeader );
         break;
+    default:
+        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     }
 
-
-    return pContext;
+    return nullptr;
 }
 
 

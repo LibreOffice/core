@@ -69,6 +69,12 @@ XFormsModelContext::XFormsModelContext( SvXMLImport& rImport,
 {
 }
 
+XFormsModelContext::XFormsModelContext( SvXMLImport& rImport ) :
+    TokenContext( rImport, aAttributes, aChildren ),
+    mxModel( xforms_createXFormsModel() )
+{
+}
+
 void XFormsModelContext::HandleAttribute(
     sal_uInt16 nToken,
     const OUString& rValue )
