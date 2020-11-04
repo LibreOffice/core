@@ -60,9 +60,9 @@ void TitleBar::SetTitle(const OUString& rsTitle)
     Invalidate();
 }
 
-void TitleBar::SetIcon(const Image& rIcon)
+void TitleBar::SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 {
-    maIcon = rIcon;
+    maIcon = Image(rIcon);
     Invalidate();
 }
 

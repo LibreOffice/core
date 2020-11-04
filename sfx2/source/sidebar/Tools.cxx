@@ -21,6 +21,7 @@
 
 #include <sfx2/sidebar/Theme.hxx>
 
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/gradient.hxx>
@@ -29,13 +30,14 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 
 using namespace css;
 using namespace css::uno;
 
 namespace sfx2::sidebar {
 
-Image Tools::GetImage (
+css::uno::Reference<css::graphic::XGraphic> Tools::GetImage(
     const OUString& rsImageURL,
     const OUString& rsHighContrastImageURL,
     const Reference<frame::XFrame>& rxFrame)
@@ -46,19 +48,25 @@ Image Tools::GetImage (
         return GetImage(rsImageURL, rxFrame);
 }
 
-Image Tools::GetImage (
+css::uno::Reference<css::graphic::XGraphic> Tools::GetImage(
     const OUString& rsURL,
     const Reference<frame::XFrame>& rxFrame)
 {
     if (rsURL.getLength() > 0)
     {
         if (rsURL.startsWith(".uno:"))
-            return vcl::CommandInfoProvider::GetImageForCommand(rsURL, rxFrame);
+            return vcl::CommandInfoProvider::GetXGraphicForCommand(rsURL, rxFrame);
 
         else
-            return Image(rsURL);
+        {
+             Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+             Reference<graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
+             ::comphelper::NamedValueCollection aMediaProperties;
+             aMediaProperties.put("URL", rsURL);
+             return xProvider->queryGraphic(aMediaProperties.getPropertyValues());
+        }
     }
-    return Image();
+    return nullptr;
 }
 
 css::awt::Gradient Tools::VclToAwtGradient (const Gradient& rVclGradient)
