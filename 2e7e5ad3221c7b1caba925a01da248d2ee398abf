@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8dcfedb2_70929238",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2768,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-11-04T15:57:53Z",
+      "side": 1,
+      "message": "The test doesn\u0027t handle correctly the regression/disabling the fix:\n\nAn uncaught exception of type com.sun.star.uno.RuntimeException\n- invalid attempt to assign an empty interface of type com.sun.star.drawing.XShape! /home/laci/libreoffice/include/com/sun/star/uno/Reference.hxx:101\n\nwithout the fix, there is no such shape named \"CID....\"?",
+      "range": {
+        "startLine": 2768,
+        "startChar": 8,
+        "endLine": 2768,
+        "endChar": 94
+      },
+      "revId": "2e7e5ad3221c7b1caba925a01da248d2ee398abf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
