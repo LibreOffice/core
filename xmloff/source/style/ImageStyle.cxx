@@ -32,20 +32,6 @@
 using namespace css;
 using namespace xmloff::token;
 
-namespace {
-
-enum SvXMLTokenMapAttrs
-{
-    XML_TOK_IMAGE_NAME,
-    XML_TOK_IMAGE_DISPLAY_NAME,
-    XML_TOK_IMAGE_URL,
-    XML_TOK_IMAGE_TYPE,
-    XML_TOK_IMAGE_SHOW,
-    XML_TOK_IMAGE_ACTUATE
-};
-
-}
-
 void XMLImageStyle::exportXML(OUString const & rStrName, uno::Any const & rValue, SvXMLExport& rExport)
 {
     if (rStrName.isEmpty())

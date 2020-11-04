@@ -31,18 +31,6 @@
 using namespace css;
 using namespace xmloff::token;
 
-namespace {
-
-enum SvXMLTokenMapAttrs
-{
-    XML_TOK_SYMBOL_IMAGE_HREF,
-    XML_TOK_SYMBOL_IMAGE_TYPE,
-    XML_TOK_SYMBOL_IMAGE_ACTUATE,
-    XML_TOK_SYMBOL_IMAGE_SHOW,
-};
-
-}
-
 XMLSymbolImageContext::XMLSymbolImageContext(
     SvXMLImport& rImport, sal_Int32 nElement,
     const XMLPropertyState& rProp,

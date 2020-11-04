@@ -38,27 +38,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
 
-namespace {
-
-enum SvXMLTokenMapDropAttrs
-{
-    XML_TOK_DROP_LINES,
-    XML_TOK_DROP_LENGTH,
-    XML_TOK_DROP_DISTANCE,
-    XML_TOK_DROP_STYLE
-};
-
-}
-
-const SvXMLTokenMapEntry aDropAttrTokenMap[] =
-{
-    { XML_NAMESPACE_STYLE, XML_LINES,       XML_TOK_DROP_LINES  },
-    { XML_NAMESPACE_STYLE, XML_LENGTH,      XML_TOK_DROP_LENGTH },
-    { XML_NAMESPACE_STYLE, XML_DISTANCE,    XML_TOK_DROP_DISTANCE   },
-    { XML_NAMESPACE_STYLE, XML_STYLE_NAME,  XML_TOK_DROP_STYLE  },
-    XML_TOKEN_MAP_END
-};
-
 void XMLTextDropCapImportContext::ProcessAttrs(
         const Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
