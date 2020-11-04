@@ -17,6 +17,48 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+/** The SmNode is the basic structure of formula data.
+  *
+  * Each token is stored in one node of specific kind.
+  * They can have SmNodeType. It allows to identify node type after abstraction.
+  * Here goes the subclasses tree:
+  *
+  * SmRect
+  *     SmNode
+  *         SmStructureNode                             Head of tree diagram
+  *             SmTableNode                             binom
+  *             SmLineNode                              A line
+  *                 SmExpressionNode                    { content }
+  *             SmUnHorNode                             unary opperators +-; -+; +x; -x; ...
+  *             SmRootNode                              Root structure
+  *             SmBinHorNode                            bynary opperators A + B
+  *             SmBinVerNode                            over; frac; ...
+  *             SmBinDiagonalNode                       wideslash
+  *             SmSubSupNode                            csub, csup, lsub, from, to, ...
+  *             SmBraceNode                             (); []; left lbrace right rbrace; ...
+  *             SmBracebodyNode                         ( content ); [ content ]; ...
+  *             SmVerticalBraceNode                     overbrace; underbrace;
+  *             SmOperNode                              sum from to; int from to;
+  *             SmAlignNode                             text alignment
+  *             SmAttributNode                          font attributtes; bold;
+  *             SmFontNode                              font serif; ...
+  *             SmMatrixNode                            matrix
+  *         SmVisibleNode                               drawable node
+  *             SmGraphicNode                           graphics display
+  *                 SmRectangleNode
+  *                 SmPolyLineNode                      overline; underline; widehat; ...
+  *                 SmBlankNode                         blank space; ~; ...
+  *             SmTextNode                              "text"; func functname; ...
+  *                 SmSpecialNode
+  *                     SmGlyphSpecialNode              %symbolname
+  *                     SmMathSymbolNode                math symbols
+  *                         SmMathIdentifierNode        variable
+  *                         SmRootSymbolNode            root symbol
+  *                         SmPlaceNode                 <?>
+  *                         SmErrorNode                 red ? for errores
+  *
+  */
+
 #ifndef INCLUDED_STARMATH_INC_NODE_HXX
 #define INCLUDED_STARMATH_INC_NODE_HXX
 
