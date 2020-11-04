@@ -40,7 +40,7 @@ public:
 
     static void SetLayer(const css::uno::Reference<css::drawing::XShape>& rShape, SdrLayerID nLayerID, const OUString& sType);
     virtual void finishShape(css::uno::Reference< css::drawing::XShape >& rShape,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
             css::uno::Reference< css::drawing::XShapes >& rShapes) override;
 
     void SetCell (const ScAddress& rAddress) { aStartCell = rAddress; }
