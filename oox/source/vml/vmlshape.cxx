@@ -419,38 +419,41 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 {
                     if( maTypeModel.maZIndex.toInt32() )
                     {
-                        uno::Sequence<beans::PropertyValue> aGrabBag;
                         uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
-                        propertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                        sal_Int32 length;
-
-                        length = aGrabBag.getLength();
-                        aGrabBag.realloc( length+1 );
-                        aGrabBag[length].Name = "VML-Z-ORDER";
-                        aGrabBag[length].Value <<= maTypeModel.maZIndex.toInt32();
-
-                        if( !s_mso_next_textbox.isEmpty() )
+                        if (propertySet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
                         {
+                            uno::Sequence<beans::PropertyValue> aGrabBag;
+                            propertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                            sal_Int32 length;
+
                             length = aGrabBag.getLength();
                             aGrabBag.realloc( length+1 );
-                            aGrabBag[length].Name = "mso-next-textbox";
-                            aGrabBag[length].Value <<= s_mso_next_textbox;
-                        }
+                            aGrabBag[length].Name = "VML-Z-ORDER";
+                            aGrabBag[length].Value <<= maTypeModel.maZIndex.toInt32();
 
-                        if( !sLinkChainName.isEmpty() )
-                        {
-                            length = aGrabBag.getLength();
-                            aGrabBag.realloc( length+4 );
-                            aGrabBag[length].Name   = "TxbxHasLink";
-                            aGrabBag[length].Value   <<= true;
-                            aGrabBag[length+1].Name = "Txbx-Id";
-                            aGrabBag[length+1].Value <<= id;
-                            aGrabBag[length+2].Name = "Txbx-Seq";
-                            aGrabBag[length+2].Value <<= seq;
-                            aGrabBag[length+3].Name = "LinkChainName";
-                            aGrabBag[length+3].Value <<= sLinkChainName;
+                            if( !s_mso_next_textbox.isEmpty() )
+                            {
+                                length = aGrabBag.getLength();
+                                aGrabBag.realloc( length+1 );
+                                aGrabBag[length].Name = "mso-next-textbox";
+                                aGrabBag[length].Value <<= s_mso_next_textbox;
+                            }
+
+                            if( !sLinkChainName.isEmpty() )
+                            {
+                                length = aGrabBag.getLength();
+                                aGrabBag.realloc( length+4 );
+                                aGrabBag[length].Name   = "TxbxHasLink";
+                                aGrabBag[length].Value   <<= true;
+                                aGrabBag[length+1].Name = "Txbx-Id";
+                                aGrabBag[length+1].Value <<= id;
+                                aGrabBag[length+2].Name = "Txbx-Seq";
+                                aGrabBag[length+2].Value <<= seq;
+                                aGrabBag[length+3].Name = "LinkChainName";
+                                aGrabBag[length+3].Value <<= sLinkChainName;
+                            }
+                            propertySet->setPropertyValue( "InteropGrabBag", uno::makeAny(aGrabBag) );
                         }
-                        propertySet->setPropertyValue( "InteropGrabBag", uno::makeAny(aGrabBag) );
                     }
                 }
                 Reference< XControlShape > xControlShape( xShape, uno::UNO_QUERY );
@@ -884,6 +887,19 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
 
     lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper );
 
+    // tdf#41466 This setting must be done here, because the position of textbox will be set as an
+    // effect of the PROP_TextBox property setting, and if we do this setting earlier (setting of
+    // properties of position and size) then the position of textbox will be set with wrong data.
+    if (getTextBox() && maService != "com.sun.star.drawing.TextFrame")
+    {
+        const auto& nLeft = ConversionHelper::decodeMeasureToHmm(
+            rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true);
+        aPropertySet.setProperty(PROP_HoriOrientPosition, nLeft);
+        const auto& nTop = ConversionHelper::decodeMeasureToHmm(
+            rGraphicHelper, maTypeModel.maMarginTop, 0, true, true);
+        aPropertySet.setProperty(PROP_VertOrientPosition, nTop);
+        aPropertySet.setProperty(PROP_TextBox, true);
+    }
     return xShape;
 }
 
