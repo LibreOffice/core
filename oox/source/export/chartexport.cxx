@@ -48,6 +48,10 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
+#include <com/sun/star/chart/TimeIncrement.hpp>
+#include <com/sun/star/chart/TimeInterval.hpp>
+#include <com/sun/star/chart/TimeUnit.hpp>
+
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -284,6 +288,51 @@ static sal_Int32 lcl_getCategoryAxisType( const Reference< chart2::XDiagram >& x
     }
 
     return nAxisType;
+}
+
+static OUString lclGetTimeUnitToken( sal_Int32 nTimeUnit )
+{
+    switch( nTimeUnit )
+    {
+        case cssc::TimeUnit::DAY:      return "days";
+        case cssc::TimeUnit::MONTH:    return "months";
+        case cssc::TimeUnit::YEAR:     return "years";
+        default:                       OSL_ENSURE(false, "lclGetTimeUnitToken - unexpected time unit");
+    }
+    return "days";
+}
+
+static cssc::TimeIncrement lcl_getDateTimeIncrement( const Reference< chart2::XDiagram >& xDiagram, sal_Int32 nAxisIndex )
+{
+    cssc::TimeIncrement aTimeIncrement;
+    try
+    {
+        Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
+            xDiagram, uno::UNO_QUERY_THROW);
+        const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
+            xCooSysCnt->getCoordinateSystems());
+        for( const auto& xCooSys : aCooSysSeq )
+        {
+            OSL_ASSERT(xCooSys.is());
+            if( 0 < xCooSys->getDimension() && nAxisIndex <= xCooSys->getMaximumAxisIndexByDimension(0) )
+            {
+                Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension(0, nAxisIndex);
+                OSL_ASSERT(xAxis.is());
+                if( xAxis.is() )
+                {
+                    chart2::ScaleData aScaleData = xAxis->getScaleData();
+                    aTimeIncrement = aScaleData.TimeIncrement;
+                    break;
+                }
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("oox");
+    }
+
+    return aTimeIncrement;
 }
 
 static bool lcl_isSeriesAttachedToFirstAxis(
@@ -3183,6 +3232,33 @@ void ChartExport::_exportAxis(
 
         // FIXME: seems not support? lblOffset
         pFS->singleElement(FSNS(XML_c, XML_lblOffset), XML_val, OString::number(100));
+
+        // export baseTimeUnit, majorTimeUnit, minorTimeUnit of Date axis
+        if( nAxisType == XML_dateAx )
+        {
+            sal_Int32 nAxisIndex = -1;
+            if( rAxisIdPair.nAxisType == AXIS_PRIMARY_X )
+                nAxisIndex = 0;
+            else if( rAxisIdPair.nAxisType == AXIS_SECONDARY_X )
+                nAxisIndex = 1;
+
+            cssc::TimeIncrement aTimeIncrement = lcl_getDateTimeIncrement( mxNewDiagram, nAxisIndex );
+            sal_Int32 nTimeResolution = css::chart::TimeUnit::DAY;
+            if( aTimeIncrement.TimeResolution >>= nTimeResolution )
+                pFS->singleElement(FSNS(XML_c, XML_baseTimeUnit), XML_val, lclGetTimeUnitToken(nTimeResolution));
+
+            cssc::TimeInterval aInterval;
+            if( aTimeIncrement.MajorTimeInterval >>= aInterval )
+            {
+                pFS->singleElement(FSNS(XML_c, XML_majorUnit), XML_val, OString::number(aInterval.Number));
+                pFS->singleElement(FSNS(XML_c, XML_majorTimeUnit), XML_val, lclGetTimeUnitToken(aInterval.TimeUnit));
+            }
+            if( aTimeIncrement.MinorTimeInterval >>= aInterval )
+            {
+                pFS->singleElement(FSNS(XML_c, XML_minorUnit), XML_val, OString::number(aInterval.Number));
+                pFS->singleElement(FSNS(XML_c, XML_minorTimeUnit), XML_val, lclGetTimeUnitToken(aInterval.TimeUnit));
+            }
+        }
 
         // FIXME: seems not support? noMultiLvlLbl
         pFS->singleElement(FSNS(XML_c, XML_noMultiLvlLbl), XML_val, OString::number(0));
