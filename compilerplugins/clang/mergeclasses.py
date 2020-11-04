@@ -70,7 +70,7 @@ with open("compilerplugins/clang/mergeclasses.results", "wt") as f:
             continue
         otherclazz = next(iter(parentChildDict[clazz]))
         if clazz == "svl::IUndoManager": print extractModuleName(clazz)
-        if clazz == "svl::IUndoManager": print extractModuleName(otherclazz)
+        if otherclazz == "svl::IUndoManager": print extractModuleName(otherclazz)
         # exclude combinations that span modules because we often use those to make cross-module dependencies more manageable.
         if extractModuleName(clazz) != extractModuleName(otherclazz):
             continue
