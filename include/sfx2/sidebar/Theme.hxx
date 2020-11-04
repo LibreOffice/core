@@ -56,12 +56,7 @@ public:
 
         AnyItem_ = Pre_Image_,
 
-        Image_Grip,
-        Image_Expand,
-        Image_Collapse,
         Image_TabBarMenu,
-        Image_PanelMenu,
-        Image_Closer,
         Image_CloseIndicator,
 
         Image_Color_,

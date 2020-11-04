@@ -734,7 +734,7 @@ void SidebarController::CreatePanels(const OUString& rDeckId, const Context& rCo
                     {
                         pTitleBar->SetMoreOptionsCommand(
                             rPanelContexDescriptor.msMenuCommand,
-                            mxFrame, xController);
+                            mxFrame);
                     }
                     ++nWriteIndex;
                 }
@@ -1575,17 +1575,15 @@ void SidebarController::FadeIn()
 tools::Rectangle SidebarController::GetDeckDragArea() const
 {
     tools::Rectangle aRect;
-
-    if(mpCurrentDeck)
+    if (mpCurrentDeck)
     {
         VclPtr<DeckTitleBar> pTitleBar(mpCurrentDeck->GetTitleBar());
 
-        if(pTitleBar)
+        if (pTitleBar)
         {
-            aRect = DeckTitleBar::GetDragArea();
+            aRect = pTitleBar->GetDragArea();
         }
     }
-
     return aRect;
 }
 

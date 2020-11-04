@@ -241,23 +241,8 @@ void Theme::UpdateTheme()
             maPropertyIdToNameMap[Color_VerticalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
         setPropertyValue(
-            maPropertyIdToNameMap[Image_Grip],
-            Any(OUString("private:graphicrepository/sfx2/res/grip.png")));
-        setPropertyValue(
-            maPropertyIdToNameMap[Image_Expand],
-            Any(OUString("private:graphicrepository/res/plus.png")));
-        setPropertyValue(
-            maPropertyIdToNameMap[Image_Collapse],
-            Any(OUString("private:graphicrepository/res/minus.png")));
-        setPropertyValue(
             maPropertyIdToNameMap[Image_TabBarMenu],
             Any(OUString("private:graphicrepository/sfx2/res/symphony/open_more.png")));
-        setPropertyValue(
-            maPropertyIdToNameMap[Image_PanelMenu],
-            Any(OUString("private:graphicrepository/sfx2/res/symphony/morebutton.png")));
-        setPropertyValue(
-            maPropertyIdToNameMap[Image_Closer],
-            Any(OUString("private:graphicrepository/sfx2/res/closedoc.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_CloseIndicator],
             Any(OUString("private:graphicrepository/cmd/lc_decrementlevel.png")));
@@ -532,23 +517,8 @@ void Theme::SetupPropertyMaps()
     maIntegers.resize(Int_Bool_ - Color_Int_ - 1);
     maBooleans.resize(Post_Bool_ - Int_Bool_ - 1);
 
-    maPropertyNameToIdMap["Image_Grip"]=Image_Grip;
-    maPropertyIdToNameMap[Image_Grip]="Image_Grip";
-
-    maPropertyNameToIdMap["Image_Expand"]=Image_Expand;
-    maPropertyIdToNameMap[Image_Expand]="Image_Expand";
-
-    maPropertyNameToIdMap["Image_Collapse"]=Image_Collapse;
-    maPropertyIdToNameMap[Image_Collapse]="Image_Collapse";
-
     maPropertyNameToIdMap["Image_TabBarMenu"]=Image_TabBarMenu;
     maPropertyIdToNameMap[Image_TabBarMenu]="Image_TabBarMenu";
-
-    maPropertyNameToIdMap["Image_PanelMenu"]=Image_PanelMenu;
-    maPropertyIdToNameMap[Image_PanelMenu]="Image_PanelMenu";
-
-    maPropertyNameToIdMap["Image_Closer"]=Image_Closer;
-    maPropertyIdToNameMap[Image_Closer]="Image_Closer";
 
     maPropertyNameToIdMap["Image_CloseIndicator"]=Image_CloseIndicator;
     maPropertyIdToNameMap[Image_CloseIndicator]="Image_CloseIndicator";
@@ -672,12 +642,7 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
 {
     switch(eItem)
     {
-        case Image_Grip:
-        case Image_Expand:
-        case Image_Collapse:
         case Image_TabBarMenu:
-        case Image_PanelMenu:
-        case Image_Closer:
         case Image_CloseIndicator:
             return PT_Image;
 
