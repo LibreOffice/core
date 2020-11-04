@@ -2797,12 +2797,13 @@ void DesktopLOKTest::testCalcSaveAs()
     Scheduler::ProcessEventsToIdle();
 
     // Save as a new file.
-    OUString aNewFileUrl = "file:///tmp/saveas.ods";
-    pDocument->pClass->saveAs(pDocument, aNewFileUrl.toUtf8().getStr(), nullptr, nullptr);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "ods", nullptr);
     closeDoc();
 
     // Load the new document and verify that the in-flight changes are saved.
-    pDocument = loadDocUrl(aNewFileUrl, LOK_DOCTYPE_SPREADSHEET);
+    pDocument = loadDocUrl(aTempFile.GetURL(), LOK_DOCTYPE_SPREADSHEET);
     CPPUNIT_ASSERT(pDocument);
 
     ViewCallback aView(pDocument);
