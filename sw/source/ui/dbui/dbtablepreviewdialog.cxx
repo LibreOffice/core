@@ -19,6 +19,8 @@
 
 #include "dbtablepreviewdialog.hxx"
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 
 using namespace ::com::sun::star;
@@ -27,6 +29,34 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+
+class DBTablePreviewFrame
+    : public cppu::WeakImplHelper<lang::XEventListener>
+{
+private:
+    css::uno::Reference<css::frame::XFrame2> m_xFrame;
+
+    virtual void SAL_CALL disposing(const lang::EventObject& /*Source*/) override
+    {
+        m_xFrame.clear();
+    }
+
+public:
+    DBTablePreviewFrame(css::uno::Reference<css::frame::XFrame2>& rFrame)
+        : m_xFrame(rFrame)
+    {
+    }
+
+    void cleanup()
+    {
+        if (m_xFrame.is())
+        {
+            m_xFrame->setComponent(nullptr, nullptr);
+            m_xFrame->dispose();
+            m_xFrame.clear();
+        }
+    }
+};
 
 SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, uno::Sequence< beans::PropertyValue> const & rValues)
     : SfxDialogController(pParent, "modules/swriter/ui/tablepreviewdialog.ui", "TablePreviewDialog")
@@ -47,22 +77,26 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, uno::Seque
         m_xDescriptionFI->set_label(sDescription.replaceFirst("%1", sTemp));
     }
 
+    css::uno::Reference<css::frame::XFrame2> xFrame;
     try
     {
         // create a frame wrapper for myself
-        m_xFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
-        m_xFrame->initialize(m_xBeamerWIN->CreateChildFrame());
+        xFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
+        xFrame->initialize(m_xBeamerWIN->CreateChildFrame());
     }
     catch (uno::Exception const &)
     {
-        m_xFrame.clear();
+        xFrame.clear();
     }
-    if (m_xFrame.is())
+    if (xFrame.is())
     {
+        m_xFrameListener.set(new DBTablePreviewFrame(xFrame));
+        xFrame->addEventListener(m_xFrameListener.get());
+
         util::URL aURL;
         aURL.Complete = ".component:DB/DataSourceBrowser";
-        uno::Reference<frame::XDispatch> xD = m_xFrame->queryDispatch(aURL, "", 0x0C);
-        if(xD.is())
+        uno::Reference<frame::XDispatch> xD = xFrame->queryDispatch(aURL, "", 0x0C);
+        if (xD.is())
         {
             xD->dispatch(aURL, rValues);
             m_xBeamerWIN->show();
@@ -72,11 +106,10 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, uno::Seque
 
 SwDBTablePreviewDialog::~SwDBTablePreviewDialog()
 {
-    if(m_xFrame.is())
+    if (m_xFrameListener)
     {
-        m_xFrame->setComponent(nullptr, nullptr);
-        m_xFrame->dispose();
-        m_xFrame.clear();
+        m_xFrameListener->cleanup();
+        m_xFrameListener.clear();
     }
 }
 

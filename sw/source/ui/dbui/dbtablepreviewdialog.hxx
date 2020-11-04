@@ -27,12 +27,14 @@ namespace com::sun::star{
     namespace frame{ class XFrame2;     }
 }
 
+class DBTablePreviewFrame;
+
 class SwDBTablePreviewDialog : public SfxDialogController
 {
     std::unique_ptr<weld::Label> m_xDescriptionFI;
     std::unique_ptr<weld::Container> m_xBeamerWIN;
 
-    css::uno::Reference< css::frame::XFrame2 >         m_xFrame;
+    rtl::Reference<DBTablePreviewFrame> m_xFrameListener;
 public:
     SwDBTablePreviewDialog(weld::Window* pParent,
             css::uno::Sequence< css::beans::PropertyValue> const & rValues  );
