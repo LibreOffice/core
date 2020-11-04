@@ -213,6 +213,7 @@ public:
     void testCreatePortions();
     void testBookmarkUndo();
     void testFdo85876();
+    void testTdf79717();
     void testFdo87448();
     void testTextCursorInvalidation();
     void testTdf68183();
@@ -440,6 +441,7 @@ public:
     CPPUNIT_TEST(testCreatePortions);
     CPPUNIT_TEST(testBookmarkUndo);
     CPPUNIT_TEST(testFdo85876);
+    CPPUNIT_TEST(testTdf79717);
     CPPUNIT_TEST(testFdo87448);
     CPPUNIT_TEST(testTextCursorInvalidation);
     CPPUNIT_TEST(testTdf68183);
@@ -2007,6 +2009,36 @@ void SwUiWriterTest::testFdo85876()
         xCursor->collapseToStart();
         // this used to be BOLD too with fdo#85876
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
+    }
+}
+
+void SwUiWriterTest::testTdf79717()
+{
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("normal");
+    lcl_setWeight(pWrtShell, WEIGHT_BOLD);
+    pWrtShell->Insert("bold");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    // Select 'bol' and rewrite it
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    pWrtShell->Insert("bol");
+
+    // Without the fix in place, 'bol' would have been rewritten with normal font weight
+
+    auto xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("normal"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
+    }
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 2)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("bold"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
     }
 }
 
