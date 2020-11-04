@@ -134,7 +134,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     OUString     msOrigFileName; // the original URL
     OUString     msFilterName;
     OUString     msImgFilterName;
-    std::unique_ptr<SvXMLNamespaceMap> mpNamespaceMap;    // the namepspace map
+    std::unique_ptr<SvXMLNamespaceMap> mpNamespaceMap;    // the namespace map
     SvXMLUnitConverter          maUnitConv;        // the unit converter
     std::unique_ptr<SvXMLNumFmtExport> mpNumExport;
     std::unique_ptr<ProgressBarHelper> mpProgressBarHelper;
