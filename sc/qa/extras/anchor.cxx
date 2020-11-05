@@ -43,6 +43,7 @@ public:
     void testTdf121963();
     void testTdf129552();
     void testTdf130556();
+    void testTdf134161();
 
     CPPUNIT_TEST_SUITE(ScAnchorTest);
     CPPUNIT_TEST(testUndoAnchor);
@@ -53,6 +54,7 @@ public:
     CPPUNIT_TEST(testTdf121963);
     CPPUNIT_TEST(testTdf129552);
     CPPUNIT_TEST(testTdf130556);
+    CPPUNIT_TEST(testTdf134161);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -406,6 +408,20 @@ void ScAnchorTest::testTdf130556()
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
+    Scheduler::ProcessEventsToIdle();
+
+    xComponent->dispose();
+}
+
+void ScAnchorTest::testTdf134161()
+{
+    OUString aFileURL;
+    createFileURL("tdf134161.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Without the accompanying fix in place, this test would have never returned due to an infinite
+    // invalidation loop
     Scheduler::ProcessEventsToIdle();
 
     xComponent->dispose();
