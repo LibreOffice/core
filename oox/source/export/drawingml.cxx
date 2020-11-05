@@ -1747,7 +1747,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
             xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
         // tdf#133037: restore original rotate angle before output
-        if (xPropertySetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
+        if (nRotation != 0 && xPropertySetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
         {
             uno::Sequence<beans::PropertyValue> aGrabBagProps;
             xPropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBagProps;
