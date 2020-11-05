@@ -72,6 +72,7 @@
 #include <svtools/ehdl.hxx>
 #include <vcl/help.hxx>
 #include <vcl/stdtext.hxx>
+#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
@@ -233,6 +234,26 @@ namespace
             SAL_INFO( "sfx.appl",
                       "trying to load bibliography database, caught " << e);
         }
+    }
+
+    ErrCode CallXScript(const Reference<XFrame>& rFrame, const OUString& sScriptURL)
+    {
+        Sequence< Any > args;
+        Sequence< sal_Int16 > outIndex;
+        Sequence< Any > outArgs;
+        Any ret;
+
+        Reference< XInterface > xScriptContext;
+
+        Reference< XController > xController;
+        if ( rFrame.is() )
+            xController = rFrame->getController();
+        if ( xController.is() )
+            xScriptContext = xController->getModel();
+        if ( !xScriptContext.is() )
+            xScriptContext = xController;
+
+        return SfxObjectShell::CallXScript( xScriptContext, sScriptURL, args, ret, outIndex, outArgs );
     }
 }
 /// Find the correct location of the document (CREDITS.fodt, etc.), and return
@@ -1537,9 +1558,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_RUNMACRO:
         {
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            SAL_INFO("sfx.appl", "SfxApplication::OfaExec_Impl: case ScriptOrg");
-
             Reference <XFrame> xFrame(GetRequestFrame(rReq));
             if ( !xFrame.is() )
             {
@@ -1547,6 +1565,25 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 if ( pViewFrame )
                     xFrame = pViewFrame->GetFrame().GetFrameInterface();
             }
+
+            const SfxStringItem* pStringItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            if (pStringItem)
+            {
+                OUString sScriptURL;
+                OUString sEncodedScriptURL(pStringItem->GetValue());
+                if (!sEncodedScriptURL.isEmpty())
+                {
+                    sScriptURL = ::rtl::Uri::decode(sEncodedScriptURL,
+                                                    rtl_UriDecodeStrict,
+                                                    rtl_UriCharClassNone);
+                    CallXScript(xFrame, sScriptURL);
+                    rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), OUString()));
+                    break;
+                }
+            }
+
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            SAL_INFO("sfx.appl", "SfxApplication::OfaExec_Impl: case ScriptOrg");
 
             do  // artificial loop for flow control
             {
@@ -1563,22 +1600,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     if ( !nDialogResult )
                         break;
 
-                    Sequence< Any > args;
-                    Sequence< sal_Int16 > outIndex;
-                    Sequence< Any > outArgs;
-                    Any ret;
-
-                    Reference< XInterface > xScriptContext;
-
-                    Reference< XController > xController;
-                    if ( xFrame.is() )
-                        xController = xFrame->getController();
-                    if ( xController.is() )
-                        xScriptContext = xController->getModel();
-                    if ( !xScriptContext.is() )
-                        xScriptContext = xController;
-
-                    SfxObjectShell::CallXScript( xScriptContext, pDlg->GetScriptURL(), args, ret, outIndex, outArgs );
+                    CallXScript(xFrame, pDlg->GetScriptURL());
                     rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), OUString()));
                 }
                 else
