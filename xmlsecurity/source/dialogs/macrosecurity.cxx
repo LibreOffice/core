@@ -32,6 +32,7 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <comphelper/sequence.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -76,6 +77,17 @@ MacroSecurity::MacroSecurity( vcl::Window* _pParent,
     m_pTabCtrl->SetCurPageId(m_nSecLevelId);
 
     m_pOkBtn->SetClickHdl( LINK( this, MacroSecurity, OkBtnHdl ) );
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        VclPtr<PushButton> aHelpBtn;
+
+        get(aHelpBtn, "help");
+
+        aHelpBtn.disposeAndClear();
+        m_pTabCtrl->RemovePage(m_nSecTrustId);
+        mpTrustSrcTP.disposeAndClear();
+    }
 }
 
 MacroSecurity::~MacroSecurity()
@@ -85,7 +97,9 @@ MacroSecurity::~MacroSecurity()
 
 void MacroSecurity::dispose()
 {
-    m_pTabCtrl->GetTabPage(m_nSecTrustId)->disposeOnce();
+    if (!comphelper::LibreOfficeKit::isActive())
+        m_pTabCtrl->GetTabPage(m_nSecTrustId)->disposeOnce();
+
     m_pTabCtrl->GetTabPage(m_nSecLevelId)->disposeOnce();
     m_pTabCtrl.clear();
     m_pOkBtn.clear();
