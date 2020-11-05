@@ -53,7 +53,7 @@ void SbiParser::Print()
     {
         if( !IsEoln( Peek() ) )
         {
-            std::unique_ptr<SbiExpression> pExpr(new SbiExpression( this ));
+            auto pExpr = std::make_unique<SbiExpression>(this);
             pExpr->Gen();
             pExpr.reset();
             Peek();
@@ -82,7 +82,7 @@ void SbiParser::Write()
 
     while( !bAbort )
     {
-        std::unique_ptr<SbiExpression> pExpr(new SbiExpression( this ));
+        auto pExpr = std::make_unique<SbiExpression>(this);
         pExpr->Gen();
         pExpr.reset();
         aGen.Gen( SbiOpcode::BWRITE_ );
@@ -130,7 +130,7 @@ void SbiParser::Line()
 void SbiParser::LineInput()
 {
     Channel( true );
-    std::unique_ptr<SbiExpression> pExpr(new SbiExpression( this, SbOPERAND ));
+    auto pExpr = std::make_unique<SbiExpression>( this, SbOPERAND );
     if( !pExpr->IsVariable() )
         Error( ERRCODE_BASIC_VAR_EXPECTED );
     if( pExpr->GetType() != SbxVARIANT && pExpr->GetType() != SbxSTRING )
@@ -147,7 +147,7 @@ void SbiParser::Input()
 {
     aGen.Gen( SbiOpcode::RESTART_ );
     Channel( true );
-    std::unique_ptr<SbiExpression> pExpr(new SbiExpression( this, SbOPERAND ));
+    auto pExpr = std::make_unique<SbiExpression>( this, SbOPERAND );
     while( !bAbort )
     {
         if( !pExpr->IsVariable() )
@@ -236,7 +236,7 @@ void SbiParser::Open()
     }
     TestToken( AS );
     // channel number
-    std::unique_ptr<SbiExpression> pChan(new SbiExpression( this ));
+    auto pChan = std::make_unique<SbiExpression>( this );
     std::unique_ptr<SbiExpression> pLen;
     if( Peek() == SYMBOL )
     {

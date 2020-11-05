@@ -952,7 +952,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                     bool bError2 = true;
                     if( bOptional && bCompatible && eTok == EQ )
                     {
-                        std::unique_ptr<SbiConstExpression> pDefaultExpr(new SbiConstExpression( this ));
+                        auto pDefaultExpr = std::make_unique<SbiConstExpression>(this);
                         SbxDataType eType2 = pDefaultExpr->GetType();
 
                         sal_uInt16 nStringId;
