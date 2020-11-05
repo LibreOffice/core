@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07d9759a_ece41c43",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-11-05T03:10:16Z",
+      "side": 1,
+      "message": "I just noticed the \u0027l\u0027 in ClICK is lower case. It should be upper. Also, there doesn\u0027t seem need for both STR_OUTLINE_CONTENT and STR_CLICK_OUTLINE_CONTENT defines if they are the same.",
+      "range": {
+        "startLine": 648,
+        "startChar": 12,
+        "endLine": 648,
+        "endChar": 17
+      },
+      "revId": "ab40d07e7d4eae0091f1d6922c6fc975d5bf2a5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
