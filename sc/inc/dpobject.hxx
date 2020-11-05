@@ -29,9 +29,9 @@
 #include "calcmacros.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <o3tl/sorted_vector.hxx>
 
 #include <memory>
-#include <set>
 #include <vector>
 #include <map>
 
@@ -305,7 +305,7 @@ public:
         SC_DLLPUBLIC ScDPCache* getExistingCache(const ScRange& rRange);
         SC_DLLPUBLIC const ScDPCache* getExistingCache(const ScRange& rRange) const;
 
-        void updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs);
+        void updateCache(const ScRange& rRange, o3tl::sorted_vector<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
 
         SC_DLLPUBLIC const std::vector<ScRange>& getAllRanges() const;
@@ -330,7 +330,7 @@ public:
         ScDPCache* getExistingCache(const OUString& rName);
 
         void updateCache(
-            const OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs);
+            const OUString& rName, const ScRange& rRange, o3tl::sorted_vector<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
     };
 
@@ -376,7 +376,7 @@ public:
 
         void updateCache(
             sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
-            std::set<ScDPObject*>& rRefs);
+            o3tl::sorted_vector<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
     };
 
@@ -384,8 +384,8 @@ public:
     ScDPCollection(const ScDPCollection& r);
     ~ScDPCollection();
 
-    const char* ReloadCache(const ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
-    bool ReloadGroupsInCache(const ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
+    const char* ReloadCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs);
+    bool ReloadGroupsInCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs);
     SC_DLLPUBLIC bool GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDimensionSaveData** pGroups) const;
 
     SC_DLLPUBLIC size_t GetCount() const;
@@ -433,11 +433,11 @@ private:
     /** Only to be called from ScDPCache::RemoveReference(). */
     void RemoveCache(const ScDPCache* pCache);
 
-    void GetAllTables(const ScRange& rSrcRange, std::set<ScDPObject*>& rRefs) const;
-    void GetAllTables(const OUString& rSrcName, std::set<ScDPObject*>& rRefs) const;
+    void GetAllTables(const ScRange& rSrcRange, o3tl::sorted_vector<ScDPObject*>& rRefs) const;
+    void GetAllTables(const OUString& rSrcName, o3tl::sorted_vector<ScDPObject*>& rRefs) const;
     void GetAllTables(
         sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
-        std::set<ScDPObject*>& rRefs) const;
+        o3tl::sorted_vector<ScDPObject*>& rRefs) const;
 
 private:
     typedef std::vector< std::unique_ptr<ScDPObject> > TablesType;

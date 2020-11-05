@@ -2884,7 +2884,7 @@ struct FindInvalidRange
     }
 };
 
-void setGroupItemsToCache( ScDPCache& rCache, const std::set<ScDPObject*>& rRefs )
+void setGroupItemsToCache( ScDPCache& rCache, const o3tl::sorted_vector<ScDPObject*>& rRefs )
 {
     // Go through all referencing pivot tables, and re-fill the group dimension info.
     for (const ScDPObject* pObj : rRefs)
@@ -3039,7 +3039,7 @@ void ScDPCollection::SheetCaches::updateReference(
     }
 }
 
-void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs)
+void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, o3tl::sorted_vector<ScDPObject*>& rRefs)
 {
     RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
     if (it == maRanges.end())
@@ -3063,7 +3063,7 @@ void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<Sc
     // Update the cache with new cell values. This will clear all group dimension info.
     rCache.InitFromDoc(mrDoc, rRange);
 
-    std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
+    o3tl::sorted_vector<ScDPObject*> aRefs(rCache.GetAllReferences());
     rRefs.swap(aRefs);
 
     // Make sure to re-populate the group dimension info.
@@ -3126,7 +3126,7 @@ size_t ScDPCollection::NameCaches::size() const
 }
 
 void ScDPCollection::NameCaches::updateCache(
-    const OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs)
+    const OUString& rName, const ScRange& rRange, o3tl::sorted_vector<ScDPObject*>& rRefs)
 {
     CachesType::iterator const itr = m_Caches.find(rName);
     if (itr == m_Caches.end())
@@ -3139,7 +3139,7 @@ void ScDPCollection::NameCaches::updateCache(
     // Update the cache with new cell values. This will clear all group dimension info.
     rCache.InitFromDoc(mrDoc, rRange);
 
-    std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
+    o3tl::sorted_vector<ScDPObject*> aRefs(rCache.GetAllReferences());
     rRefs.swap(aRefs);
 
     // Make sure to re-populate the group dimension info.
@@ -3275,7 +3275,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
 
 void ScDPCollection::DBCaches::updateCache(
     sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
-    std::set<ScDPObject*>& rRefs)
+    o3tl::sorted_vector<ScDPObject*>& rRefs)
 {
     DBType aType(nSdbType, rDBName, rCommand);
     CachesType::iterator const it = m_Caches.find(aType);
@@ -3309,7 +3309,7 @@ void ScDPCollection::DBCaches::updateCache(
     }
 
     comphelper::disposeComponent(xRowSet);
-    std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
+    o3tl::sorted_vector<ScDPObject*> aRefs(rCache.GetAllReferences());
     aRefs.swap(rRefs);
 
     // Make sure to re-populate the group dimension info.
@@ -3368,7 +3368,7 @@ public:
 
 }
 
-const char* ScDPCollection::ReloadCache(const ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)
+const char* ScDPCollection::ReloadCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs)
 {
     if (!pDPObj)
         return STR_ERR_DATAPILOTSOURCE;
@@ -3432,7 +3432,7 @@ const char* ScDPCollection::ReloadCache(const ScDPObject* pDPObj, std::set<ScDPO
     return nullptr;
 }
 
-bool ScDPCollection::ReloadGroupsInCache(const ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)
+bool ScDPCollection::ReloadGroupsInCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs)
 {
     if (!pDPObj)
         return false;
@@ -3844,9 +3844,9 @@ void ScDPCollection::RemoveCache(const ScDPCache* pCache)
         return;
 }
 
-void ScDPCollection::GetAllTables(const ScRange& rSrcRange, std::set<ScDPObject*>& rRefs) const
+void ScDPCollection::GetAllTables(const ScRange& rSrcRange, o3tl::sorted_vector<ScDPObject*>& rRefs) const
 {
-    std::set<ScDPObject*> aRefs;
+    o3tl::sorted_vector<ScDPObject*> aRefs;
     for (const auto& rxTable : maTables)
     {
         const ScDPObject& rObj = *rxTable;
@@ -3872,9 +3872,9 @@ void ScDPCollection::GetAllTables(const ScRange& rSrcRange, std::set<ScDPObject*
     rRefs.swap(aRefs);
 }
 
-void ScDPCollection::GetAllTables(const OUString& rSrcName, std::set<ScDPObject*>& rRefs) const
+void ScDPCollection::GetAllTables(const OUString& rSrcName, o3tl::sorted_vector<ScDPObject*>& rRefs) const
 {
-    std::set<ScDPObject*> aRefs;
+    o3tl::sorted_vector<ScDPObject*> aRefs;
     for (const auto& rxTable : maTables)
     {
         const ScDPObject& rObj = *rxTable;
@@ -3902,9 +3902,9 @@ void ScDPCollection::GetAllTables(const OUString& rSrcName, std::set<ScDPObject*
 
 void ScDPCollection::GetAllTables(
     sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
-    std::set<ScDPObject*>& rRefs) const
+    o3tl::sorted_vector<ScDPObject*>& rRefs) const
 {
-    std::set<ScDPObject*> aRefs;
+    o3tl::sorted_vector<ScDPObject*> aRefs;
     for (const auto& rxTable : maTables)
     {
         const ScDPObject& rObj = *rxTable;
