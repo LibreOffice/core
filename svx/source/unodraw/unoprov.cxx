@@ -38,7 +38,7 @@
 #include <svx/unoshprp.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svxids.hrc>
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/strings.hrc>
 #include <strings.hxx>
 #include <svx/svdobj.hxx>

@@ -391,7 +391,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
 void DialogWindow::ExecuteCommand( SfxRequest& rReq )
 {
     const sal_uInt16 nSlotId(rReq.GetSlot());
-    sal_uInt16 nInsertObj(0);
+    SdrObjKind nInsertObj(OBJ_NONE);
 
     switch ( nSlotId )
     {

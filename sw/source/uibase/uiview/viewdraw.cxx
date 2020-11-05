@@ -594,10 +594,9 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 }
 
 // Is a DrawTextObject selected?
-
 bool SwView::IsTextTool() const
 {
-    sal_uInt16  nId;
+    SdrObjKind nId;
     SdrInventor nInvent;
     SdrView *pSdrView = GetWrtShell().GetDrawView();
     OSL_ENSURE( pSdrView, "IsTextTool without DrawView?" );

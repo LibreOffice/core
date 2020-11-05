@@ -28,8 +28,6 @@ namespace drawinglayer::geometry { class ViewInformation2D; }
 class SwFlyFrame;
 class SwFrameFormat;
 
-const sal_uInt16 SwFlyDrawObjIdentifier = 0x0001;
-
 // DrawObjects for Flys
 class SwFlyDrawObj : public SdrObject
 {
@@ -50,7 +48,7 @@ public:
 
     // for instantiation of this class while loading (via factory)
     virtual SdrInventor GetObjInventor()     const override;
-    virtual sal_uInt16  GetObjIdentifier()   const override;
+    virtual SdrObjKind GetObjIdentifier()   const override;
     virtual bool IsTextBox() const override { return mbIsTextBox; }
     void SetTextBox(bool bIsTextBox) { mbIsTextBox = bIsTextBox; }
 };

@@ -243,9 +243,9 @@ void SdrMeasureObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = LineGeometryUsageIsNecessary();
 }
 
-sal_uInt16 SdrMeasureObj::GetObjIdentifier() const
+SdrObjKind SdrMeasureObj::GetObjIdentifier() const
 {
-    return sal_uInt16(OBJ_MEASURE);
+    return OBJ_MEASURE;
 }
 
 struct ImpMeasureRec : public SdrDragStatUserData

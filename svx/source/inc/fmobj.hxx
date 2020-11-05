@@ -75,7 +75,7 @@ public:
     virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
 
     SAL_DLLPRIVATE virtual SdrInventor GetObjInventor() const override;
-    SAL_DLLPRIVATE virtual sal_uInt16 GetObjIdentifier() const override;
+    SAL_DLLPRIVATE virtual SdrObjKind GetObjIdentifier() const override;
     SAL_DLLPRIVATE virtual void NbcReformatText() override;
 
     SAL_DLLPRIVATE virtual FmFormObj* CloneSdrObject(SdrModel& rTargetModel) const override;

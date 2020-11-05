@@ -21,7 +21,7 @@
 #include <svx/deflt3d.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdmodel.hxx>
@@ -101,7 +101,7 @@ void E3dLatheObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
     GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(rDefault.GetDefaultLatheCloseBack()));
 }
 
-sal_uInt16 E3dLatheObj::GetObjIdentifier() const
+SdrObjKind E3dLatheObj::GetObjIdentifier() const
 {
     return E3D_LATHEOBJ_ID;
 }

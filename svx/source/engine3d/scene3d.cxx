@@ -23,7 +23,7 @@
 #include <svx/svditer.hxx>
 
 #include <stdlib.h>
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/svdtrans.hxx>
@@ -261,7 +261,7 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
     return nNewOrdNum;
 }
 
-sal_uInt16 E3dScene::GetObjIdentifier() const
+SdrObjKind E3dScene::GetObjIdentifier() const
 {
     return E3D_SCENE_ID;
 }

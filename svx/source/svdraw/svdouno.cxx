@@ -205,9 +205,9 @@ void SdrUnoObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = false;
 }
 
-sal_uInt16 SdrUnoObj::GetObjIdentifier() const
+SdrObjKind SdrUnoObj::GetObjIdentifier() const
 {
-    return sal_uInt16(OBJ_UNO);
+    return OBJ_UNO;
 }
 
 void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )

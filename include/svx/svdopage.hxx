@@ -57,7 +57,7 @@ public:
     // #i96598#
     virtual void SetBoundRectDirty() override;
 
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrPageObj* CloneSdrObject(SdrModel& rTargetModel) const override;
     SdrPageObj& operator=(const SdrPageObj& rObj);

@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <svx/svdobjkind.hxx>
 #include "FeatureCommandDispatchBase.hxx"
 
 class SfxItemSet;
@@ -58,7 +59,7 @@ protected:
     virtual void describeSupportedFeatures() override;
 
 private:
-    void setInsertObj( sal_uInt16 eObj );
+    void setInsertObj(SdrObjKind eObj);
     SdrObject* createDefaultObject( const sal_uInt16 nID );
 
     bool parseCommandURL( const OUString& rCommandURL, sal_uInt16* pnFeatureId, OUString* pBaseCommand, OUString* pCustomShapeType );

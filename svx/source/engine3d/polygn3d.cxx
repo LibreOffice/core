@@ -18,7 +18,7 @@
  */
 
 #include <polygn3d.hxx>
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <sdr/contact/viewcontactofe3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
@@ -169,7 +169,7 @@ E3dPolygonObj::~E3dPolygonObj()
 {
 }
 
-sal_uInt16 E3dPolygonObj::GetObjIdentifier() const
+SdrObjKind E3dPolygonObj::GetObjIdentifier() const
 {
     return E3D_POLYGONOBJ_ID;
 }

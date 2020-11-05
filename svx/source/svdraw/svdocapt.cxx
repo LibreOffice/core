@@ -225,9 +225,9 @@ void SdrCaptionObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-sal_uInt16 SdrCaptionObj::GetObjIdentifier() const
+SdrObjKind SdrCaptionObj::GetObjIdentifier() const
 {
-    return sal_uInt16(OBJ_CAPTION);
+    return OBJ_CAPTION;
 }
 
 SdrCaptionObj* SdrCaptionObj::CloneSdrObject(SdrModel& rTargetModel) const

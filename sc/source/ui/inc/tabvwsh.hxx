@@ -94,7 +94,7 @@ class SC_DLLPUBLIC ScTabViewShell: public SfxViewShell, public ScDBFunc
 private:
     ObjectSelectionType     eCurOST;
     sal_uInt16              nDrawSfxId;
-    sal_uInt16              nFormSfxId;
+    SdrObjKind              eFormObjKind;
     OUString                sDrawCustom;                // current custom shape type
     std::unique_ptr<ScDrawShell>         pDrawShell;
     std::unique_ptr<ScDrawTextObjectBar> pDrawTextShell;

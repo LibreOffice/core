@@ -45,7 +45,7 @@ FuConstructUnoControl::FuConstructUnoControl (
     SfxRequest&     rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
     , nInventor(SdrInventor::Unknown)
-    , nIdentifier(0)
+    , nIdentifier(OBJ_NONE)
 {
 }
 
@@ -67,7 +67,7 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
     if( pInventorItem )
         nInventor = static_cast<SdrInventor>(pInventorItem->GetValue());
     if( pIdentifierItem )
-        nIdentifier = pIdentifierItem->GetValue();
+        nIdentifier = static_cast<SdrObjKind>(pIdentifierItem->GetValue());
 
     mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
         ToolBarManager::ToolBarGroup::Function,

@@ -114,7 +114,7 @@ public:
     // set flag to draw only selected
     void SetDrawOnlySelected(bool bNew) { bDrawOnlySelected = bNew; }
     bool GetDrawOnlySelected() const { return bDrawOnlySelected; }
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
 
     virtual void    NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void    NbcMove(const Size& rSize) override;

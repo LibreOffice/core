@@ -88,7 +88,7 @@ SdrInventor SdrVirtObj::GetObjInventor() const
     return rRefObj.GetObjInventor();
 }
 
-sal_uInt16 SdrVirtObj::GetObjIdentifier() const
+SdrObjKind SdrVirtObj::GetObjIdentifier() const
 {
     return rRefObj.GetObjIdentifier();
 }

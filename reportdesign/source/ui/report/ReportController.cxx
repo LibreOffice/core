@@ -600,23 +600,23 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             break;
         case SID_FM_FIXEDTEXT:
             aReturn.bEnabled = isEditable();
-            aReturn.bChecked = getDesignView()->GetInsertObj() == OBJ_DLG_FIXEDTEXT;
+            aReturn.bChecked = getDesignView()->GetInsertObj() == OBJ_RD_FIXEDTEXT;
             break;
         case SID_INSERT_HFIXEDLINE:
             aReturn.bEnabled = isEditable();
-            aReturn.bChecked = getDesignView()->GetInsertObj() == OBJ_DLG_HFIXEDLINE;
+            aReturn.bChecked = getDesignView()->GetInsertObj() == OBJ_RD_HFIXEDLINE;
             break;
         case SID_INSERT_VFIXEDLINE:
             aReturn.bEnabled = isEditable();
-            aReturn.bChecked = getDesignView()->GetInsertObj() == OBJ_DLG_VFIXEDLINE;
+            aReturn.bChecked = getDesignView()->GetInsertObj() == OBJ_RD_VFIXEDLINE;
             break;
         case SID_FM_EDIT:
             aReturn.bEnabled = isEditable();
-            aReturn.bChecked = getDesignView()->GetInsertObj() == OBJ_DLG_FORMATTEDFIELD;
+            aReturn.bChecked = getDesignView()->GetInsertObj() == OBJ_RD_FORMATTEDFIELD;
             break;
         case SID_FM_IMAGECONTROL:
             aReturn.bEnabled = isEditable();
-            aReturn.bChecked = getDesignView()->GetInsertObj() == OBJ_DLG_IMAGECONTROL;
+            aReturn.bChecked = getDesignView()->GetInsertObj() == OBJ_RD_IMAGECONTROL;
             break;
         case SID_DRAWTBX_CS_BASIC:
         case SID_DRAWTBX_CS_BASIC1:
@@ -1116,10 +1116,10 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             InvalidateFeature( SID_OBJECT_SELECT );
             break;
         case SID_SELECT_ALL_EDITS:
-            getDesignView()->SelectAll(OBJ_DLG_FORMATTEDFIELD);
+            getDesignView()->SelectAll(OBJ_RD_FORMATTEDFIELD);
             break;
         case SID_SELECT_ALL_LABELS:
-            getDesignView()->SelectAll(OBJ_DLG_FIXEDTEXT);
+            getDesignView()->SelectAll(OBJ_RD_FIXEDTEXT);
             break;
         case SID_TERMINATE_INPLACEACTIVATION:
             {
@@ -1200,31 +1200,31 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             break;
         case SID_FM_FIXEDTEXT:
             getDesignView()->SetMode( DlgEdMode::Insert );
-            getDesignView()->SetInsertObj( OBJ_DLG_FIXEDTEXT );
+            getDesignView()->SetInsertObj( OBJ_RD_FIXEDTEXT );
             createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_INSERT_HFIXEDLINE:
             getDesignView()->SetMode( DlgEdMode::Insert );
-            getDesignView()->SetInsertObj( OBJ_DLG_HFIXEDLINE );
+            getDesignView()->SetInsertObj( OBJ_RD_HFIXEDLINE );
             createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_INSERT_VFIXEDLINE:
             getDesignView()->SetMode( DlgEdMode::Insert );
-            getDesignView()->SetInsertObj( OBJ_DLG_VFIXEDLINE );
+            getDesignView()->SetInsertObj( OBJ_RD_VFIXEDLINE );
             createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_FM_EDIT:
             getDesignView()->SetMode( DlgEdMode::Insert );
-            getDesignView()->SetInsertObj( OBJ_DLG_FORMATTEDFIELD );
+            getDesignView()->SetInsertObj( OBJ_RD_FORMATTEDFIELD );
             createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_FM_IMAGECONTROL:
             getDesignView()->SetMode( DlgEdMode::Insert );
-            getDesignView()->SetInsertObj( OBJ_DLG_IMAGECONTROL );
+            getDesignView()->SetInsertObj( OBJ_RD_IMAGECONTROL );
             createDefaultControl(aArgs);
             InvalidateAll();
             break;
@@ -3012,7 +3012,7 @@ void OReportController::insertGraphic()
                     { PROPERTY_IMAGEURL, Any(aDialog.GetPath()) },
                     { PROPERTY_PRESERVEIRI, Any(bLink) }
                 }));
-            createControl(aArgs,xSection,OUString(),OBJ_DLG_IMAGECONTROL);
+            createControl(aArgs,xSection,OUString(),OBJ_RD_IMAGECONTROL);
         }
     }
     catch(const Exception&)
@@ -3099,7 +3099,7 @@ IMPL_LINK_NOARG( OReportController, OnExecuteReport, void*, void )
     executeReport();
 }
 
-void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,const uno::Reference< report::XSection>& _xSection,const OUString& _sFunction,sal_uInt16 _nObjectId)
+void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,const uno::Reference< report::XSection>& _xSection,const OUString& _sFunction,SdrObjKind _nObjectId)
 {
     SequenceAsHashMap aMap(_aArgs);
     getDesignView()->setMarked(_xSection, true);
@@ -3131,7 +3131,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         OReportSection::createDefault(sCustomShapeType,pNewControl);
         pNewControl->SetLogicRect(tools::Rectangle(3000,500,6000,3500)); // switch height and width
     }
-    else if ( _nObjectId == OBJ_OLE2 || OBJ_DLG_SUBREPORT == _nObjectId  )
+    else if ( _nObjectId == OBJ_OLE2 || OBJ_RD_SUBREPORT == _nObjectId  )
     {
         pNewControl = SdrObjFactory::MakeNewObject(
             *m_aReportModel,
@@ -3159,7 +3159,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             nullptr,
             _nObjectId,
             SdrInventor::ReportDesign,
-            OBJ_DLG_FIXEDTEXT,
+            OBJ_RD_FIXEDTEXT,
 
             // tdf#118963 Need a SdrModel for SdrObject creation. Dereferencing
             // m_aReportModel seems pretty safe, it's done in other places, initialized
@@ -3216,9 +3216,9 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
 
             pObj->CreateMediator(true);
 
-            if ( _nObjectId == OBJ_DLG_FIXEDTEXT ) // special case for fixed text
+            if ( _nObjectId == OBJ_RD_FIXEDTEXT ) // special case for fixed text
                 xUnoProp->setPropertyValue(PROPERTY_LABEL,uno::makeAny(OUnoObject::GetDefaultName(pObj)));
-            else if ( _nObjectId == OBJ_DLG_VFIXEDLINE )
+            else if ( _nObjectId == OBJ_RD_VFIXEDLINE )
             {
                 awt::Size aOlSize = xShapeProp->getSize();
                 xShapeProp->setSize(awt::Size(aOlSize.Height,aOlSize.Width)); // switch height and width
@@ -3427,7 +3427,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             if ( !xField.is() )
                 continue;
 
-            sal_uInt16 nOBJID = 0;
+            SdrObjKind nOBJID = OBJ_NONE;
             sal_Int32 nDataType = sdbc::DataType::BINARY;
             xField->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
             switch ( nDataType )
@@ -3435,10 +3435,10 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 case sdbc::DataType::BINARY:
                 case sdbc::DataType::VARBINARY:
                 case sdbc::DataType::LONGVARBINARY:
-                    nOBJID = OBJ_DLG_IMAGECONTROL;
+                    nOBJID = OBJ_RD_IMAGECONTROL;
                     break;
                 default:
-                    nOBJID = OBJ_DLG_FORMATTEDFIELD;
+                    nOBJID = OBJ_RD_FORMATTEDFIELD;
                     break;
             }
 
@@ -3466,7 +3466,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 xNumberFormats,
                 nOBJID,
                 SdrInventor::ReportDesign,
-                OBJ_DLG_FIXEDTEXT,
+                OBJ_RD_FIXEDTEXT,
 
                 // tdf#118963 Need a SdrModel for SdrObject creation. Dereferencing
                 // m_aReportModel seems pretty safe, it's done in other places, initialized
@@ -3537,7 +3537,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         xField->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
 
                     if (pSectionViews[0] != pSectionViews[1] &&
-                        nOBJID == OBJ_DLG_FORMATTEDFIELD) // we want this nice feature only at FORMATTEDFIELD
+                        nOBJID == OBJ_RD_FORMATTEDFIELD) // we want this nice feature only at FORMATTEDFIELD
                     {
                         uno::Reference< report::XReportComponent> xShapePropLabel(pObjs[0]->getUnoShape(),uno::UNO_QUERY_THROW);
                         uno::Reference< report::XReportComponent> xShapePropTextField(pObjs[1]->getUnoShape(),uno::UNO_QUERY_THROW);

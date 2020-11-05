@@ -27,6 +27,7 @@
 #include <o3tl/deleter.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
+#include <svx/svdobjkind.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
@@ -123,7 +124,7 @@ private:
     std::unique_ptr<DlgEdFunc>    pFunc;
     DialogWindowLayout& rLayout;
     Mode                eMode;
-    sal_uInt16          eActObj;
+    SdrObjKind          eActObj;
     bool                bFirstDraw;
     bool                bCreateOK;
     tools::Rectangle           aPaintRect;
@@ -184,7 +185,7 @@ public:
     bool            KeyInput( const KeyEvent& rKEvt );
 
     void            SetMode (Mode eMode);
-    void            SetInsertObj( sal_uInt16 eObj );
+    void            SetInsertObj(SdrObjKind eObj);
     void            CreateDefaultObject();
     Mode            GetMode() const { return eMode; }
     bool            IsCreateOK() const { return bCreateOK; }

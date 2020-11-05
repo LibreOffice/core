@@ -1450,10 +1450,9 @@ void SdrTableObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = false;
 }
 
-
-sal_uInt16 SdrTableObj::GetObjIdentifier() const
+SdrObjKind SdrTableObj::GetObjIdentifier() const
 {
-    return static_cast<sal_uInt16>(OBJ_TABLE);
+    return OBJ_TABLE;
 }
 
 void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText, tools::Rectangle* pAnchorRect, bool /*bLineWidth*/ ) const

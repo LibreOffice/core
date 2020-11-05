@@ -1478,7 +1478,7 @@ void SdImportTestSmartArt::testTdf131553()
     CPPUNIT_ASSERT(pObjGroup);
     const SdrObject *pObj = pObjGroup->GetSubList()->GetObj(1);
     CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(OBJ_OLE2, pObj->GetObjIdentifier());
 
     xDocShRef->DoClose();
 }

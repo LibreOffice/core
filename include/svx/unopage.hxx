@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <editeng/mutxhelp.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/svdobjkind.hxx>
 
 #include <cppuhelper/implbase7.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -83,7 +84,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper7< css::dr
     SdrObject *CreateSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape, bool bBeginning = false ) throw();
 
     // Determine Type and Inventor
-    static void GetTypeAndInventor( sal_uInt16& rType, SdrInventor& rInventor, const OUString& aName ) throw();
+    static void GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor, const OUString& aName ) throw();
 
     // Creating a SdrObject using it's Description.
     // Can be used by derived classes to support their owen Shapes (e.g. Controls).

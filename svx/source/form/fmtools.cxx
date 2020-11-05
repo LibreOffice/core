@@ -21,7 +21,7 @@
 #include <fmprop.hxx>
 #include <fmservs.hxx>
 #include <svx/fmtools.hxx>
-#include <svx/fmglob.hxx>
+#include <svx/svdobjkind.hxx>
 
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -73,7 +73,7 @@ public:
         const basegfx::B2DPolyPolygon& rPathPoly);
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
     virtual SdrPathObj* CloneSdrObject(SdrModel& rTargetModel) const override;
     SdrPathObj& operator=(const SdrPathObj& rObj);
