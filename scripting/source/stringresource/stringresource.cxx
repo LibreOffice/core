@@ -886,12 +886,11 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             Reference< io::XStream > xElementStream =
                     Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
 
-            OUString aPropName("MediaType");
-
             uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
             OSL_ENSURE( xProps.is(), "The StorageStream must implement XPropertySet interface!" );
             if ( xProps.is() )
             {
+                OUString aPropName("MediaType");
                 xProps->setPropertyValue( aPropName, uno::makeAny( OUString("text/plain") ) );
 
                 aPropName = "UseCommonStoragePasswordEncryption";

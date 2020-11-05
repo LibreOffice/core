@@ -192,7 +192,7 @@ namespace basprov
         }
 
         OUString sDocURL, sLibName, sModName;
-        sal_uInt16 nLine1 = 0, nLine2;
+        sal_uInt16 nLine1 = 0;
 
         if ( !m_bIsAppScript )
         {
@@ -215,6 +215,7 @@ namespace basprov
 
         if ( m_pMethod )
         {
+            sal_uInt16 nLine2;
             m_pMethod->GetLineRange( nLine1, nLine2 );
             SbModule* pModule = m_pMethod->GetModule();
             if ( pModule )
