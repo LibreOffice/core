@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "724272cf_33bdc116",
+        "filename": "sw/inc/cacheowner.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-05T08:11:21Z",
+      "side": 1,
+      "message": "Would be really nice to have a comment here explaining the purpose of this class :-)",
+      "revId": "75d3c97025a7bbe314968d181aeb34eef65ec81d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
