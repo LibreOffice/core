@@ -795,7 +795,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             source.sSystemId    = aFileName;
 
             // start parsing
-            std::unique_ptr< ::xmlscript::LibDescriptorArray> pLibArray(new ::xmlscript::LibDescriptorArray());
+            auto pLibArray = std::make_unique<::xmlscript::LibDescriptorArray> ( );
 
             try
             {
@@ -1845,7 +1845,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     int iArray = 0;
     pName = aNames.getConstArray();
     ::xmlscript::LibDescriptor aLibDescriptorForExtensionLibs;
-    std::unique_ptr< ::xmlscript::LibDescriptorArray > pLibArray(new ::xmlscript::LibDescriptorArray(nLibsToSave));
+    auto pLibArray = std::make_unique< ::xmlscript::LibDescriptorArray > ( nLibsToSave );
     for( ; pName != pNamesEnd; ++pName )
     {
         SfxLibrary* pImplLib = getImplLib( *pName );

@@ -324,7 +324,7 @@ void SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
     auto xStorage = tools::make_ref<SotStorage>( false, aFile );
     if( xStorage->GetError() == ERRCODE_NONE )
     {
-        std::unique_ptr<BasicManager> pBasicManager(new BasicManager( *xStorage, aFile ));
+        auto pBasicManager = std::make_unique<BasicManager> ( *xStorage, aFile );
 
         // Set info
         LibraryContainerInfo aInfo( this, nullptr, static_cast< OldBasicPassword* >( this ) );

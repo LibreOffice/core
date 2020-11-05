@@ -1714,7 +1714,7 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
     ErrorHdlResetter aErrHdl;
     SbxBase::ResetError();
 
-    std::unique_ptr<SbiParser> pParser(new SbiParser( static_cast<StarBASIC*>(GetParent()), this ));
+    auto pParser = std::make_unique<SbiParser>(static_cast<StarBASIC*>(GetParent()), this );
     pParser->SetCodeCompleting(true);
 
     while( pParser->Parse() ) {}
