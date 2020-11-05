@@ -134,8 +134,9 @@ public:
     virtual void SAL_CALL characters( const OUString& sContent ) override;
 
     /// parses attributes and calls ProcessAttribute
-    virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// create XTextField and insert into document; calls PrepareTextField
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
@@ -200,8 +201,9 @@ public:
 
 protected:
     /// start element
-    virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -230,8 +232,9 @@ public:
 
 private:
     /// start element
-    virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -930,8 +933,9 @@ public:
 
 private:
     /// start element
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -960,18 +964,16 @@ public:
 /** import dde field declaration (<text:dde-connection-decl>) */
 class XMLDdeFieldDeclImportContext final : public SvXMLImportContext
 {
-    const SvXMLTokenMap& rTokenMap;
-
 public:
 
     XMLDdeFieldDeclImportContext(SvXMLImport& rImport,
                                  sal_uInt16 nPrfx,
-                                 const OUString& sLocalName,
-                                 const SvXMLTokenMap& rMap);
+                                 const OUString& sLocalName);
 
     // create fieldmaster
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 };
 
 /** import dde fields (<text:dde-connection>) */
@@ -1079,10 +1081,11 @@ public:
 
 private:
     /// process attributes (fill aValues)
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
-    /// empty method; all attributes are handled in StartElement
+    /// empty method; all attributes are handled in startFastElement
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
 

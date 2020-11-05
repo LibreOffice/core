@@ -129,21 +129,13 @@ XMLTextFieldImportContext::XMLTextFieldImportContext(
     sServiceName = OUString::createFromAscii(pService);
 }
 
-void XMLTextFieldImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLTextFieldImportContext::startFastElement(
+        sal_Int32 /*nElement*/,
+        const Reference<XFastAttributeList> & xAttrList)
 {
     // process attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++) {
-
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        ProcessAttribute(rTextImportHelper.GetTextFieldAttrTokenMap().
-                             Get(nPrefix, sLocalName),
-                         xAttrList->getValueByIndex(i) );
-    }
+    for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
+        ProcessAttribute(aIter.getToken(), aIter.toString() );
 }
 
 OUString const & XMLTextFieldImportContext::GetContent()
@@ -550,8 +542,9 @@ XMLSenderFieldImportContext::XMLSenderFieldImportContext(
 {
 }
 
-void XMLSenderFieldImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLSenderFieldImportContext::startFastElement(
+        sal_Int32 nElement,
+        const Reference<XFastAttributeList> & xAttrList)
 {
     bValid = true;
     switch (nElementToken) {
@@ -606,7 +599,7 @@ void XMLSenderFieldImportContext::StartElement(
     }
 
     // process Attributes
-    XMLTextFieldImportContext::StartElement(xAttrList);
+    XMLTextFieldImportContext::startFastElement(nElement, xAttrList);
 }
 
 void XMLSenderFieldImportContext::ProcessAttribute(
@@ -669,14 +662,15 @@ XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
     SetServiceName(sAPI_author);
 }
 
-void XMLAuthorFieldImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList) {
-
+void XMLAuthorFieldImportContext::startFastElement(
+        sal_Int32 nElement,
+        const Reference<XFastAttributeList> & xAttrList)
+{
     bAuthorFullName = (XML_TOK_TEXT_AUTHOR_INITIALS != nElementToken);
     bValid = true;
 
     // process Attributes
-    XMLTextFieldImportContext::StartElement(xAttrList);
+    XMLTextFieldImportContext::startFastElement(nElement, xAttrList);
 }
 
 void XMLAuthorFieldImportContext::ProcessAttribute(sal_uInt16 nAttrToken, const OUString& sAttrValue)
@@ -2561,8 +2555,9 @@ SvXMLEnumMapEntry<sal_uInt16> const lcl_aReferenceTypeTokenMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-void XMLReferenceFieldImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLReferenceFieldImportContext::startFastElement(
+        sal_Int32 nElement,
+        const Reference<XFastAttributeList> & xAttrList)
 {
     bTypeOK = true;
     switch (nElementToken)
@@ -2585,7 +2580,7 @@ void XMLReferenceFieldImportContext::StartElement(
             break;
     }
 
-    XMLTextFieldImportContext::StartElement(xAttrList);
+    XMLTextFieldImportContext::startFastElement(nElement, xAttrList);
 }
 
 
@@ -2701,8 +2696,7 @@ SvXMLImportContextRef XMLDdeFieldDeclsImportContext::CreateChildContext(
          (IsXMLToken(rLocalName, XML_DDE_CONNECTION_DECL)) )
     {
         static const SvXMLTokenMap aTokenMap(aDdeDeclAttrTokenMap);
-        return new XMLDdeFieldDeclImportContext(GetImport(), nPrefix,
-                                                rLocalName, aTokenMap);
+        return new XMLDdeFieldDeclImportContext(GetImport(), nPrefix, rLocalName);
     }
     return nullptr;
 }
@@ -2713,16 +2707,16 @@ SvXMLImportContextRef XMLDdeFieldDeclsImportContext::CreateChildContext(
 
 XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx,
-    const OUString& sLocalName, const SvXMLTokenMap& rMap)
+    const OUString& sLocalName)
 :   SvXMLImportContext(rImport, nPrfx, sLocalName)
-,   rTokenMap(rMap)
 {
     DBG_ASSERT(XML_NAMESPACE_TEXT == nPrfx, "wrong prefix");
     DBG_ASSERT(IsXMLToken(sLocalName, XML_DDE_CONNECTION_DECL), "wrong name");
 }
 
-void XMLDdeFieldDeclImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLDdeFieldDeclImportContext::startFastElement(
+        sal_Int32 /*nElement*/,
+        const Reference<XFastAttributeList> & xAttrList)
 {
     OUString sName;
     OUString sCommandApplication;
@@ -2736,42 +2730,37 @@ void XMLDdeFieldDeclImportContext::StartElement(
     bool bCommandItemOK = false;
 
     // process attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++)
+    for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        switch (rTokenMap.Get(nPrefix, sLocalName))
+        switch (aIter.getToken())
         {
-            case XML_TOK_DDEFIELD_NAME:
-                sName = xAttrList->getValueByIndex(i);
+            case XML_ELEMENT(OFFICE, XML_NAME):
+                sName = aIter.toString();
                 bNameOK = true;
                 break;
-            case XML_TOK_DDEFIELD_APPLICATION:
-                sCommandApplication = xAttrList->getValueByIndex(i);
+            case XML_ELEMENT(OFFICE, XML_DDE_APPLICATION):
+                sCommandApplication = aIter.toString();
                 bCommandApplicationOK = true;
                 break;
-            case XML_TOK_DDEFIELD_TOPIC:
-                sCommandTopic = xAttrList->getValueByIndex(i);
+            case XML_ELEMENT(OFFICE, XML_DDE_TOPIC):
+                sCommandTopic = aIter.toString();
                 bCommandTopicOK = true;
                 break;
-            case XML_TOK_DDEFIELD_ITEM:
-                sCommandItem = xAttrList->getValueByIndex(i);
+            case XML_ELEMENT(OFFICE, XML_DDE_ITEM):
+                sCommandItem = aIter.toString();
                 bCommandItemOK = true;
                 break;
-            case XML_TOK_DDEFIELD_UPDATE:
+            case XML_ELEMENT(OFFICE, XML_AUTOMATIC_UPDATE):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(
-                    bTmp, xAttrList->getValueByIndex(i)) )
+                if (::sax::Converter::convertBool(bTmp, aIter.toString()) )
                 {
                     bUpdate = bTmp;
                 }
                 break;
             }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -3047,32 +3036,28 @@ SvXMLEnumMapEntry<sal_uInt16> const aBibliographyDataTypeMap[] =
 // we'll process attributes on our own and for fit the standard
 // textfield mechanism, because our attributes have zero overlap with
 // all the other textfields.
-void XMLBibliographyFieldImportContext::StartElement(
-        const Reference<XAttributeList> & xAttrList)
+void XMLBibliographyFieldImportContext::startFastElement(
+        sal_Int32 /*nElement*/,
+        const Reference<XFastAttributeList> & xAttrList)
 {
     // iterate over attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++) {
-
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        if (nPrefix == XML_NAMESPACE_TEXT)
+    for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
+    {
+        if (IsTokenInNamespace(aIter.getToken(), XML_NAMESPACE_TEXT))
         {
             PropertyValue aValue;
             aValue.Name = OUString::createFromAscii(
-                MapBibliographyFieldName(sLocalName));
+                MapBibliographyFieldName(SvXMLImport::getNameFromToken(aIter.getToken())));
             Any aAny;
 
             // special treatment for bibliography type
             // biblio vs bibilio: #96658#; also read old documents
-            if (IsXMLToken(sLocalName, XML_BIBILIOGRAPHIC_TYPE) ||
-                IsXMLToken(sLocalName, XML_BIBLIOGRAPHY_TYPE)    )
+            if ((aIter.getToken() & TOKEN_MASK) == XML_BIBILIOGRAPHIC_TYPE ||
+                (aIter.getToken() & TOKEN_MASK) == XML_BIBLIOGRAPHY_TYPE   )
             {
                 sal_uInt16 nTmp;
                 if (SvXMLUnitConverter::convertEnum(
-                    nTmp, xAttrList->getValueByIndex(i),
+                    nTmp, aIter.toString(),
                     aBibliographyDataTypeMap))
                 {
                     aAny <<= static_cast<sal_Int16>(nTmp);
@@ -3083,7 +3068,7 @@ void XMLBibliographyFieldImportContext::StartElement(
             }
             else
             {
-                aAny <<= xAttrList->getValueByIndex(i);
+                aAny <<= aIter.toString();
                 aValue.Value = aAny;
 
                 aValues.push_back(aValue);
