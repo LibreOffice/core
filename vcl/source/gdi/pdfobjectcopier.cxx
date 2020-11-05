@@ -41,6 +41,12 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
     SAL_INFO("vcl.pdfwriter", "PDFObjectCopier::copyExternalResource: " << rObject.GetObjectValue()
                                                                         << " -> " << nObject);
 
+    SvMemoryStream* pObjectStream = rObject.GetStreamBuffer();
+    if (!pObjectStream)
+    {
+        pObjectStream = &rDocBuffer;
+    }
+
     OStringBuffer aLine;
     aLine.append(nObject);
     aLine.append(" 0 obj\n");
@@ -71,7 +77,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
                     else
                         // Previous reference end -> reference start.
                         nOffset = nCopyStart;
-                    aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + nOffset,
+                    aLine.append(static_cast<const char*>(pObjectStream->GetData()) + nOffset,
                                  nReferenceStart - nOffset);
                     // Write the updated reference.
                     aLine.append(" ");
@@ -93,11 +99,11 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
             if (nLen < 0)
                 SAL_WARN("vcl.pdfwriter", "copyExternalResource() failed");
             else
-                aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + nCopyStart, nLen);
+                aLine.append(static_cast<const char*>(pObjectStream->GetData()) + nCopyStart, nLen);
         }
         else
             // Can copy it as-is.
-            aLine.append(static_cast<const char*>(rDocBuffer.GetData())
+            aLine.append(static_cast<const char*>(pObjectStream->GetData())
                              + rObject.GetDictionaryOffset(),
                          rObject.GetDictionaryLength());
 
@@ -141,7 +147,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
                     else
                         // Previous reference end -> reference start.
                         nOffset = nCopyStart;
-                    aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + nOffset,
+                    aLine.append(static_cast<const char*>(pObjectStream->GetData()) + nOffset,
                                  nReferenceStart - nOffset);
 
                     // Write the updated reference.
@@ -164,11 +170,12 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
             if (nLen < 0)
                 SAL_WARN("vcl.pdfwriter", "copyExternalResource() failed");
             else
-                aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + nCopyStart, nLen);
+                aLine.append(static_cast<const char*>(pObjectStream->GetData()) + nCopyStart, nLen);
         }
         else
             // Can copy it as-is.
-            aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + rObject.GetArrayOffset(),
+            aLine.append(static_cast<const char*>(pObjectStream->GetData())
+                             + rObject.GetArrayOffset(),
                          rObject.GetArrayLength());
 
         aLine.append("]\n");
@@ -177,7 +184,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
     // If the object has a number element outside a dictionary or array, copy that.
     if (filter::PDFNumberElement* pNumber = rObject.GetNumberElement())
     {
-        aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + pNumber->GetLocation(),
+        aLine.append(static_cast<const char*>(pObjectStream->GetData()) + pNumber->GetLocation(),
                      pNumber->GetLength());
         aLine.append("\n");
     }
