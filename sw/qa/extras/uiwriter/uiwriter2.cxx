@@ -3093,6 +3093,75 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf90069)
     CPPUNIT_ASSERT_EQUAL(OUString("Lohit Devanagari"), sFontName);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109266)
+{
+    // transliteration with redlining
+    SwDoc* pDoc = createDoc("lorem.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwTextNode* pTextNode = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum..."), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum..."), pTextNode->GetRedlineText());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToTitleCase", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem Ipsum..."), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem Ipsum..."), pTextNode->GetRedlineText());
+
+    //turn on red-lining and show changes
+    RedlineFlags const mode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    CPPUNIT_ASSERT(mode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
+    pWrtShell->SetRedlineFlags(mode);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToTitleCase", {});
+
+    // This was "Lorem Ipsum..." (missing redlining)
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsumIpsum..."), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem Ipsum..."), pTextNode->GetRedlineText());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToUpper", {});
+
+    // This was "LOREM IPSUM..." (missing redlining)
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum...LOREM IPSUM..."), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("LOREM IPSUM..."), pTextNode->GetRedlineText());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToLower", {});
+
+    // This was "lorem ipsum..." (missing redlining)
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum...lorem ipsum..."), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("lorem ipsum..."), pTextNode->GetRedlineText());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:ChangeCaseToToggleCase", {});
+
+    // This was "lOREM IPSUM..." (missing redlining)
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum...lOREM IPSUM..."), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("lOREM IPSUM..."), pTextNode->GetRedlineText());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129655)
 {
     createDoc("tdf129655-vtextbox.odt");
