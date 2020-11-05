@@ -134,8 +134,9 @@ public:
     virtual void SAL_CALL characters( const OUString& sContent ) override;
 
     /// parses attributes and calls ProcessAttribute
-    virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// create XTextField and insert into document; calls PrepareTextField
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
@@ -159,7 +160,7 @@ protected:
     OUString const & GetContent();
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) = 0;
 
     /// prepare XTextField for insertion into document
@@ -187,7 +188,6 @@ class XMLSenderFieldImportContext : public XMLTextFieldImportContext
 protected:
     // variables for access in subclass
     bool bFixed;
-    sal_uInt16 nElementToken;   /// token for this element field
 
 public:
 
@@ -195,16 +195,16 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName,      /// element name w/o prefix
-        sal_uInt16 nToken);                     /// element token
+        const OUString& sLocalName);      /// element name w/o prefix
 
 protected:
     /// start element
-    virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -225,16 +225,16 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& sLocalName,      /// element name w/o prefix
-        sal_uInt16 nToken);                     /// element token
+        const OUString& sLocalName);      /// element name w/o prefix
 
 private:
     /// start element
-    virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -260,7 +260,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -297,7 +297,7 @@ public:
         const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -318,7 +318,7 @@ public:
         const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 };
 
@@ -342,7 +342,7 @@ public:
         const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -374,7 +374,7 @@ public:
 
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -413,7 +413,7 @@ protected:
 public:
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -438,7 +438,7 @@ public:
                                  const OUString& sLocalName);
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 };
 
@@ -466,7 +466,7 @@ public:
                                  const OUString& sLocalName);
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -489,7 +489,7 @@ public:
                                    const OUString& sLocalName);
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -516,7 +516,7 @@ public:
                                    const OUString& sLocalName);
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -549,7 +549,7 @@ public:
 
 protected:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -582,7 +582,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -628,7 +628,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
     virtual void PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
@@ -652,7 +652,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -684,7 +684,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -715,7 +715,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -742,7 +742,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -766,7 +766,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -789,7 +789,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -817,7 +817,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -844,7 +844,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -867,7 +867,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -900,7 +900,7 @@ private:
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -930,11 +930,12 @@ public:
 
 private:
     /// start element
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -960,18 +961,16 @@ public:
 /** import dde field declaration (<text:dde-connection-decl>) */
 class XMLDdeFieldDeclImportContext final : public SvXMLImportContext
 {
-    const SvXMLTokenMap& rTokenMap;
-
 public:
 
     XMLDdeFieldDeclImportContext(SvXMLImport& rImport,
                                  sal_uInt16 nPrfx,
-                                 const OUString& sLocalName,
-                                 const SvXMLTokenMap& rMap);
+                                 const OUString& sLocalName);
 
     // create fieldmaster
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 };
 
 /** import dde fields (<text:dde-connection>) */
@@ -989,7 +988,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// create textfield, attach master, and insert into document
@@ -1013,7 +1012,7 @@ public:
 
 private:
     /// no attributes -> empty method
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// no attributes -> empty method
@@ -1033,7 +1032,7 @@ public:
         const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -1057,7 +1056,7 @@ public:
 
 private:
     /// no attributes -> empty method
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// no attributes -> empty method
@@ -1079,11 +1078,12 @@ public:
 
 private:
     /// process attributes (fill aValues)
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
-    /// empty method; all attributes are handled in StartElement
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    /// empty method; all attributes are handled in startFastElement
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// convert aValues into sequence and set property
@@ -1119,7 +1119,7 @@ public:
 
 private:
     /// process attributes
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// set properties
@@ -1150,7 +1150,7 @@ public:
 
 private:
     /// process attributes
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// set properties
@@ -1172,7 +1172,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -1206,7 +1206,7 @@ public:
 
 private:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -1226,7 +1226,7 @@ public:
         const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -1246,7 +1246,7 @@ public:
         const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -1266,7 +1266,7 @@ public:
         const OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
