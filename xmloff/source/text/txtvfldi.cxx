@@ -108,28 +108,28 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
 }
 
 void XMLVarFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
         {
-        case XML_TOK_TEXTFIELD_NAME:
+        case XML_ELEMENT(TEXT, XML_NAME):
             sName = sAttrValue;
             bValid = true;      // we assume: field with name is valid!
             break;
-        case XML_TOK_TEXTFIELD_DESCRIPTION:
+        case XML_ELEMENT(TEXT, XML_DESCRIPTION):
             sDescription = sAttrValue;
             bDescriptionOK = true;
             break;
-        case XML_TOK_TEXTFIELD_HELP:
+        case XML_ELEMENT(TEXT, XML_HELP):
             sHelp = sAttrValue;
             bHelpOK = true;
             break;
-        case XML_TOK_TEXTFIELD_HINT:
+        case XML_ELEMENT(TEXT, XML_HINT):
             sHint = sAttrValue;
             bHintOK = true;
             break;
-        case XML_TOK_TEXTFIELD_FORMULA:
+        case XML_ELEMENT(TEXT, XML_FORMULA):
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
@@ -143,7 +143,7 @@ void XMLVarFieldImportContext::ProcessAttribute(
                     sFormula = sAttrValue;
             }
             break;
-        case XML_TOK_TEXTFIELD_DISPLAY:
+        case XML_ELEMENT(TEXT, XML_DISPLAY):
             if (IsXMLToken(sAttrValue, XML_FORMULA))
             {
                 bDisplayFormula = true;
@@ -347,17 +347,17 @@ XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
 }
 
 void XMLSequenceFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_NUM_FORMAT:
+        case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
             sNumFormat = sAttrValue;
             break;
-        case XML_TOK_TEXTFIELD_NUM_LETTER_SYNC:
+        case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             sNumFormatSync = sAttrValue;
             break;
-        case XML_TOK_TEXTFIELD_REF_NAME:
+        case XML_ELEMENT(TEXT, XML_REF_NAME):
             sRefName = sAttrValue;
             bRefNameOK = true;
             break;
@@ -602,25 +602,26 @@ XMLTableFormulaImportContext::XMLTableFormulaImportContext(
 }
 
 void XMLTableFormulaImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_FORMULA:
+        case XML_ELEMENT(TEXT, XML_FORMULA):
             aValueHelper.ProcessAttribute( nAttrToken, sAttrValue );
             bValid = true;  // we need a formula!
             break;
 
-        case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
+        case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
             aValueHelper.ProcessAttribute( nAttrToken, sAttrValue );
             break;
-        case XML_TOK_TEXTFIELD_DISPLAY:
+        case XML_ELEMENT(TEXT, XML_DISPLAY):
             if ( sAttrValue == "formula" )
                  bIsShowFormula = true;
             break;
         default:
             // unknown attribute -> ignore
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
             break;
     }
 }
@@ -944,15 +945,15 @@ XMLDatabaseDisplayImportContext::XMLDatabaseDisplayImportContext(
 }
 
 void XMLDatabaseDisplayImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_COLUMN_NAME:
+        case XML_ELEMENT(TEXT, XML_COLUMN_NAME):
             sColumnName = sAttrValue;
             bColumnOK = true;
             break;
-        case XML_TOK_TEXTFIELD_DISPLAY:
+        case XML_ELEMENT(TEXT, XML_DISPLAY):
             {
                 bool bNone = IsXMLToken( sAttrValue, XML_NONE );
                 bool bValue = IsXMLToken( sAttrValue, XML_VALUE );
@@ -960,9 +961,9 @@ void XMLDatabaseDisplayImportContext::ProcessAttribute(
                 bDisplayOK = bNone || bValue;
             }
             break;
-        case XML_TOK_TEXTFIELD_DATABASE_NAME:
-        case XML_TOK_TEXTFIELD_TABLE_NAME:
-        case XML_TOK_TEXTFIELD_TABLE_TYPE:
+        case XML_ELEMENT(TEXT, XML_DATABASE_NAME):
+        case XML_ELEMENT(TEXT, XML_TABLE_NAME):
+        case XML_ELEMENT(TEXT, XML_TABLE_TYPE):
             // handled by super class
             XMLDatabaseFieldImportContext::ProcessAttribute(nAttrToken,
                                                             sAttrValue);
@@ -1110,11 +1111,12 @@ XMLValueImportHelper::XMLValueImportHelper(
 }
 
 void XMLValueImportHelper::ProcessAttribute(
-    sal_uInt16 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_VALUE_TYPE:
+        case XML_ELEMENT(TEXT, XML_VALUE_TYPE):
+        case XML_ELEMENT(OFFICE, XML_VALUE_TYPE):
         {
             // convert enum
             ValueType eValueType = XML_VALUE_TYPE_STRING;
@@ -1143,7 +1145,8 @@ void XMLValueImportHelper::ProcessAttribute(
             break;
         }
 
-        case XML_TOK_TEXTFIELD_VALUE:
+        case XML_ELEMENT(TEXT, XML_VALUE):
+        case XML_ELEMENT(OFFICE, XML_VALUE):
         {
             double fTmp;
             bool const bRet = ::sax::Converter::convertDouble(fTmp,sAttrValue);
@@ -1153,7 +1156,8 @@ void XMLValueImportHelper::ProcessAttribute(
             break;
         }
 
-        case XML_TOK_TEXTFIELD_TIME_VALUE:
+        case XML_ELEMENT(TEXT, XML_TIME_VALUE):
+        case XML_ELEMENT(OFFICE, XML_TIME_VALUE):
         {
             double fTmp;
             bool const bRet =
@@ -1164,7 +1168,8 @@ void XMLValueImportHelper::ProcessAttribute(
             break;
         }
 
-        case XML_TOK_TEXTFIELD_DATE_VALUE:
+        case XML_ELEMENT(TEXT, XML_DATE_VALUE):
+        case XML_ELEMENT(OFFICE, XML_DATE_VALUE):
         {
             double fTmp;
             bool bRet = rImport.GetMM100UnitConverter().
@@ -1175,7 +1180,7 @@ void XMLValueImportHelper::ProcessAttribute(
             break;
         }
 
-        case XML_TOK_TEXTFIELD_BOOL_VALUE:
+        case XML_ELEMENT(OFFICE, XML_BOOLEAN_VALUE):
         {
             bool bTmp(false);
             bool bRet = ::sax::Converter::convertBool(bTmp, sAttrValue);
@@ -1193,12 +1198,13 @@ void XMLValueImportHelper::ProcessAttribute(
             break;
         }
 
-        case XML_TOK_TEXTFIELD_STRING_VALUE:
+        case XML_ELEMENT(TEXT, XML_STRING_VALUE):
+        case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
             sValue = sAttrValue;
             bStringValueOK = true;
             break;
 
-        case XML_TOK_TEXTFIELD_FORMULA:
+        case  XML_ELEMENT(TEXT, XML_FORMULA):
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = rImport.GetNamespaceMap().
@@ -1213,7 +1219,7 @@ void XMLValueImportHelper::ProcessAttribute(
             }
             break;
 
-        case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
+        case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
         {
             sal_Int32 nKey = rHelper.GetDataStyleKey(
                                           sAttrValue, &bIsDefaultLanguage);
@@ -1224,6 +1230,8 @@ void XMLValueImportHelper::ProcessAttribute(
             }
             break;
         }
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     } // switch
 }
 
