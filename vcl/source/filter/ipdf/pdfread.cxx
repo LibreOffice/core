@@ -189,9 +189,8 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
         {
             BitmapScopedWriteAccess pWriteAccess(aBitmap);
             AlphaScopedWriteAccess pMaskAccess(aMask);
-            const auto pPdfBuffer
-                = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pPdfBitmap->getPointer()));
-            const int nStride = FPDFBitmap_GetStride(pPdfBitmap->getPointer());
+            ConstScanline pPdfBuffer = pPdfBitmap->getBuffer();
+            const int nStride = pPdfBitmap->getStride();
             std::vector<sal_uInt8> aScanlineAlpha(nPageWidth);
             for (size_t nRow = 0; nRow < nPageHeight; ++nRow)
             {

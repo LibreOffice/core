@@ -510,6 +510,13 @@ void PDFiumBitmap::renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY,
                           /*rotate=*/0, /*flags=*/0);
 }
 
+ConstScanline PDFiumBitmap::getBuffer()
+{
+    return static_cast<ConstScanline>(FPDFBitmap_GetBuffer(mpBitmap));
+}
+
+int PDFiumBitmap::getStride() { return FPDFBitmap_GetStride(mpBitmap); }
+
 PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
     : mpAnnotation(pAnnotation)
 {

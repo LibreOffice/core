@@ -26,6 +26,7 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <vcl/checksum.hxx>
+#include <vcl/Scanline.hxx>
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
 
 #include <fpdf_doc.h>
@@ -78,6 +79,8 @@ public:
     FPDF_BITMAP getPointer() { return mpBitmap; }
     void fillRect(int left, int top, int width, int height, sal_uInt32 nColor);
     void renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX, int nSizeY);
+    ConstScanline getBuffer();
+    int getStride();
 };
 
 class VCL_DLLPUBLIC PDFiumAnnotation final
