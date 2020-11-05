@@ -5198,8 +5198,8 @@ SfxVoidItem AutoCorrectDlg SID_AUTO_CORRECT_DLG
     GroupId = SfxGroupId::Options;
 ]
 
-SfxVoidItem OptionsTreeDialog SID_OPTIONS_TREEDIALOG
-()
+SfxStringItem OptionsTreeDialog SID_OPTIONS_TREEDIALOG
+(SfxStringItem Option FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
