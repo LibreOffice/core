@@ -62,8 +62,8 @@ public:
         bool bFormula);                     /// process formula (Prep.F.)
 
     /// process attribute values
-    void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue );
+    void ProcessAttribute( sal_Int32 nAttrToken,
+                           const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     void PrepareField(
@@ -155,7 +155,7 @@ public:
 
 protected:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -362,7 +362,7 @@ public:
 private:
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -440,7 +440,7 @@ public:
 private:
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -472,7 +472,7 @@ public:
 private:
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// create, prepare and insert database field master and database field
