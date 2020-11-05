@@ -140,3 +140,5 @@
 
 #define MARIADB_DEFAULT_CHARSET "latin1"
 
+#define HAVE_OPENSSL 1
+

@@ -29,6 +29,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,mariadb-connector-c,\
     external/mariadb-connector-c/clang-cl.patch.0 \
 ))
 
+$(eval $(call gb_StaticLibrary_use_external,mariadb-connector-c,openssl))
+
 # TODO are any "plugins" needed?
 $(eval $(call gb_UnpackedTarball_set_post_action,mariadb-connector-c, \
 	< libmariadb/ma_client_plugin.c.in sed \
