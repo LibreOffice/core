@@ -28,9 +28,9 @@
 
 #include <mdds/flat_segment_tree.hpp>
 #include <tools/long.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 #include <memory>
-#include <set>
 #include <unordered_set>
 #include <vector>
 
@@ -51,7 +51,7 @@ public:
     typedef std::unordered_set<OUString> StringSetType;
     typedef mdds::flat_segment_tree<SCROW, bool> EmptyRowsType;
     typedef std::vector<ScDPItemData> ScDPItemDataVec;
-    typedef std::set<ScDPObject*> ScDPObjectSet;
+    typedef o3tl::sorted_vector<ScDPObject*> ScDPObjectSet;
     typedef std::vector<SCROW> IndexArrayType;
 
     struct SAL_DLLPRIVATE GroupItems

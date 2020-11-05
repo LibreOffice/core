@@ -180,7 +180,7 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
 {
     // We need to first create group data in the cache, then the group data in
     // the object.
-    std::set<ScDPObject*> aRefs;
+    o3tl::sorted_vector<ScDPObject*> aRefs;
     bool bSuccess = pDPs->ReloadGroupsInCache(pDPObj, aRefs);
     CPPUNIT_ASSERT_MESSAGE("Failed to reload group data in cache.", bSuccess);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one table linked to this cache.", size_t(1), aRefs.size());
@@ -301,7 +301,7 @@ void Test::testPivotTable()
 
     // This time clear the cache to refresh the data from the source range.
     CPPUNIT_ASSERT_MESSAGE("This datapilot should be based on sheet data.", pDPObj2->IsSheetData());
-    std::set<ScDPObject*> aRefs;
+    o3tl::sorted_vector<ScDPObject*> aRefs;
     const char* pErrId = pDPs->ReloadCache(pDPObj2, aRefs);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cache reload failed.", static_cast<const char*>(nullptr), pErrId);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Reloading a cache shouldn't remove any cache.",
@@ -1527,7 +1527,7 @@ void Test::testPivotTableEmptyRows()
     // Modify the source to remove member 'A', then refresh the table.
     m_pDoc->SetString(1, 2, 0, "B");
 
-    std::set<ScDPObject*> aRefs;
+    o3tl::sorted_vector<ScDPObject*> aRefs;
     const char* pErr = pDPs->ReloadCache(pDPObj, aRefs);
     CPPUNIT_ASSERT_MESSAGE("Failed to reload cache.", !pErr);
     CPPUNIT_ASSERT_MESSAGE("There should only be one pivot table linked to this cache.",
