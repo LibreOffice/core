@@ -100,8 +100,6 @@ public:
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 
-    virtual void StartElement( const Reference< XAttributeList >& xAttrList ) override;
-
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     void InitColumns();
@@ -586,10 +584,6 @@ SvXMLImportContextRef XMLTableImportContext::CreateChildContext( sal_uInt16 nPre
     }
 
     return nullptr;
-}
-
-void XMLTableImportContext::StartElement( const Reference< XAttributeList >& /*xAttrList*/ )
-{
 }
 
 void XMLTableImportContext::endFastElement(sal_Int32 )
