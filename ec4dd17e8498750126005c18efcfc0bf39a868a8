@@ -16,6 +16,24 @@
       "revId": "ec4dd17e8498750126005c18efcfc0bf39a868a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adfef60e_81bc603a",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-05T19:51:42Z",
+      "side": 1,
+      "message": "Also, I note that we could end up reading and writing to/from m_aGtkTargets on different threads at the same time, which might be .... interesting.\n\nUsing\n    osl::ClearableMutexGuard aGuard( m_aMutex );\nin AsyncSetGtkClipboard would fix both problems.",
+      "parentUuid": "b176c3ab_b02beff1",
+      "revId": "ec4dd17e8498750126005c18efcfc0bf39a868a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
