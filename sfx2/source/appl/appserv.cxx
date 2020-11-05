@@ -31,6 +31,8 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/script/XDirectInvocation.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
@@ -1392,10 +1394,43 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
     {
         case SID_OPTIONS_TREEDIALOG:
         {
+            OUString sOption;
             OUString sPageURL;
+            const SfxStringItem* pOptionItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            if (pOptionItem)
+                sOption = pOptionItem->GetValue();
+
             const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(SID_OPTIONS_PAGEURL);
             if ( pURLItem )
                 sPageURL = pURLItem->GetValue();
+
+            if (!sOption.isEmpty())
+            {
+                try
+                {
+                    OUString sRet;
+                    css::uno::Any aRet;
+                    uno::Sequence< uno::Any > aParams;
+
+                    Reference< security::XDocumentDigitalSignatures > xDDS(security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext() ) );
+                    Reference< css::script::XDirectInvocation > xInvoke (xDDS, UNO_QUERY);
+
+                    if (xInvoke.is() && xInvoke->hasMember(sOption))
+                    {
+                        aRet = xInvoke->directInvoke(sOption, aParams);
+                        if ((aRet >>= sRet) && !sRet.isEmpty())
+                        {
+                            rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), sRet));
+                        }
+                    }
+                }
+                catch (const Exception& e)
+                {
+                    SAL_WARN( "sfx.appl", e);
+                }
+                break;
+            }
+
             Reference <XFrame> xFrame(GetRequestFrame(rReq));
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             VclPtr<VclAbstractDialog> pDlg =
