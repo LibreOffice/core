@@ -65,29 +65,23 @@ XMLFieldParamImportContext::XMLFieldParamImportContext(
 }
 
 
-void XMLFieldParamImportContext::StartElement(const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList)
+void XMLFieldParamImportContext::startFastElement(sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList)
 {
-    SvXMLImport& rImport = GetImport();
     OUString sName;
     OUString sValue;
 
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-
-        if ( (XML_NAMESPACE_FIELD == nPrefix) &&
-             IsXMLToken(sLocalName, XML_NAME)   )
+        switch (aIter.getToken())
         {
-            sName = xAttrList->getValueByIndex(nAttr);
-        }
-        if ( (XML_NAMESPACE_FIELD == nPrefix) &&
-             IsXMLToken(sLocalName, XML_VALUE)   )
-        {
-            sValue = xAttrList->getValueByIndex(nAttr);
+            case XML_ELEMENT(FIELD, XML_NAME):
+                sName = aIter.toString();
+                break;
+            case XML_ELEMENT(FIELD, XML_VALUE):
+                sValue = aIter.toString();
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
     if (rHelper.hasCurrentFieldCtx() && !sName.isEmpty()) {
