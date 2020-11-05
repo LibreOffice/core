@@ -37,7 +37,7 @@ def usage():
 
 def find_test_files(dir_path):
     valid_files = []
-    for f in os.listdir(dir_path):
+    for f in sorted(os.listdir(dir_path)):
         file_path = os.path.join(dir_path, f)
 
         # don't go through the sub-directories
