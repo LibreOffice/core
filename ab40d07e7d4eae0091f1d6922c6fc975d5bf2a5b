@@ -22,6 +22,30 @@
       "revId": "ab40d07e7d4eae0091f1d6922c6fc975d5bf2a5b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11643dba_00983918",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-05T11:08:27Z",
+      "side": 1,
+      "message": "Ok. I can \"repair\" the \"l\" problem. \n\nI also wondered about the two defines.  If the Ctrl (hand pointer) and Arrow have identical functionality (then it seems best to have identical tool tips). \n\nAs I understand, the two functions were developed independently, but now that the tooltips are coded separately, maybe there is an advantage to leave the duplication? -- for the eventual situation where they get different functionality? (naive speculation)",
+      "parentUuid": "07d9759a_ece41c43",
+      "range": {
+        "startLine": 648,
+        "startChar": 12,
+        "endLine": 648,
+        "endChar": 17
+      },
+      "revId": "ab40d07e7d4eae0091f1d6922c6fc975d5bf2a5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
