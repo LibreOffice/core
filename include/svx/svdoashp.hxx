@@ -164,7 +164,7 @@ public:
     };
     bool IsDefaultGeometry( const DefaultType eDefaultType ) const;
 
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
 
     virtual void Move(const Size& rSiz) override;

@@ -33,7 +33,7 @@
 #include <svx/svditer.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/fmglob.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
@@ -1239,7 +1239,7 @@ SdrObjectUniquePtr FmXFormView::implCreateFieldControl( const svx::ODataAccessDe
 
 
         // determine the control type by examining the data type of the bound column
-        sal_uInt16 nOBJID = 0;
+        SdrObjKind nOBJID = OBJ_NONE;
         bool bDateNTimeField = false;
 
         bool bIsCurrency = false;
@@ -1384,7 +1384,7 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
 
 
         // The service name decides which control should be created
-        sal_uInt16 nOBJID = OBJ_FM_EDIT;
+        SdrObjKind nOBJID = OBJ_FM_EDIT;
         if(_rDesc.szServiceName == FM_SUN_COMPONENT_NUMERICFIELD)
             nOBJID = OBJ_FM_NUMERICFIELD;
         if(_rDesc.szServiceName == FM_SUN_COMPONENT_CHECKBOX)
@@ -1434,7 +1434,7 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
             // create a button control
             const MapMode& eTargetMode( pOutDev->GetMapMode() );
             const MapMode eSourceMode(MapUnit::Map100thMM);
-            const sal_uInt16 nObjID = OBJ_FM_BUTTON;
+            const SdrObjKind nObjID = OBJ_FM_BUTTON;
             ::Size controlSize(4000, 500);
             FmFormObj *pControl = static_cast<FmFormObj*>(
                 SdrObjFactory::MakeNewObject(
@@ -1469,10 +1469,9 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
     return nullptr;
 }
 
-
 bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
         const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
-        sal_uInt16 _nControlObjectID, const OUString& _rFieldPostfix,
+        SdrObjKind _nControlObjectID, const OUString& _rFieldPostfix,
         std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel,
         std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpControl,
         const Reference< XDataSource >& _rxDataSource, const OUString& _rDataSourceName,
@@ -1517,8 +1516,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
 
 bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
     const Reference< XPropertySet >& _rxField,
-    const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
-    const OUString& _rFieldPostfix, SdrInventor _nInventor, sal_uInt16 _nLabelObjectID,
+    const Reference< XNumberFormats >& _rxNumberFormats, SdrObjKind _nControlObjectID,
+    const OUString& _rFieldPostfix, SdrInventor _nInventor, SdrObjKind _nLabelObjectID,
     SdrModel& _rModel,
     std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel, std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpControl)
 {

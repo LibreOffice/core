@@ -27,7 +27,7 @@
 #include <drawbase.hxx>
 #include <conform.hxx>
 
-ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView, sal_uInt16 eObjKind)
+ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView, SdrObjKind eObjKind)
     : SwDrawBase(pWrtShell, pEditWin, pSwView)
     , m_eObjKind(eObjKind)
 {
@@ -67,7 +67,7 @@ bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
         m_pWin->SetPointer(PointerStyle::DrawRect);
 
         m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
-        bReturn = m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), SdrInventor::FmForm, m_aStartPos);
+        bReturn = m_pSh->BeginCreate(m_pWin->GetSdrDrawMode(), SdrInventor::FmForm, m_aStartPos);
 
         if (bReturn)
             m_pWin->SetDrawAction(true);
@@ -80,7 +80,7 @@ bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 
 void ConstFormControl::Activate(const sal_uInt16 nSlotId)
 {
-    m_pWin->SetSdrDrawMode(static_cast<SdrObjKind>(m_eObjKind));
+    m_pWin->SetSdrDrawMode(m_eObjKind);
     SwDrawBase::Activate(nSlotId);
     m_pSh->GetDrawView()->SetCurrentObj(m_eObjKind);
 
@@ -101,7 +101,7 @@ void ConstFormControl::CreateDefaultObject()
 
     SdrView *pSdrView = m_pSh->GetDrawView();
     pSdrView->SetDesignMode();
-    m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), SdrInventor::FmForm, aStartPos);
+    m_pSh->BeginCreate(m_pWin->GetSdrDrawMode(), SdrInventor::FmForm, aStartPos);
     m_pSh->MoveCreate(aEndPos);
     m_pSh->EndCreate(SdrCreateCmd::ForceEnd);
 }

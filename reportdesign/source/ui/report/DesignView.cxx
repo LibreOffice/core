@@ -289,7 +289,7 @@ void ODesignView::SetMode( DlgEdMode _eNewMode )
     m_aScrollWindow->SetMode(_eNewMode);
 }
 
-void ODesignView::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
+void ODesignView::SetInsertObj( SdrObjKind eObj,const OUString& _sShapeType )
 {
     m_eActObj = eObj;
     m_aScrollWindow->SetInsertObj( eObj,_sShapeType );

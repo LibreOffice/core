@@ -829,6 +829,8 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
                         case OBJ_OUTLINETEXT:
                             bOutliner = true;
                             break;
+                        default:
+                            break;
                         }
                     }
                 }

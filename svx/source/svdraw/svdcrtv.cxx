@@ -328,7 +328,7 @@ bool SdrCreateView::IsMeasureTool() const
     return meEditMode==SdrViewEditMode::Create && nCurrentInvent==SdrInventor::Default && (nCurrentIdent==OBJ_MEASURE);
 }
 
-void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent)
+void SdrCreateView::SetCurrentObj(SdrObjKind nIdent, SdrInventor nInvent)
 {
     if (nCurrentInvent!=nInvent || nCurrentIdent!=nIdent)
     {
@@ -365,7 +365,7 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent)
     ImpSetGlueVisible3(IsEdgeTool());
 }
 
-bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
+bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, SdrObjKind nIdent, const Point& rPnt, OutputDevice* pOut,
     sal_Int16 nMinMov, const tools::Rectangle& rLogRect, SdrObject* pPreparedFactoryObject)
 {
     bool bRet=false;
@@ -498,7 +498,7 @@ bool SdrCreateView::BegCreateObj(const Point& rPnt, OutputDevice* pOut, short nM
 bool SdrCreateView::BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov, SdrObject* pPreparedFactoryObject)
 {
     SdrInventor nInvent(nCurrentInvent);
-    sal_uInt16 nIdent(nCurrentIdent);
+    SdrObjKind nIdent(nCurrentIdent);
 
     if(pPreparedFactoryObject)
     {

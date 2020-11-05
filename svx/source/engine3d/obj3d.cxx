@@ -23,7 +23,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/obj3d.hxx>
 #include <sdr/properties/e3dproperties.hxx>
@@ -88,7 +88,7 @@ SdrInventor E3dObject::GetObjInventor() const
     return SdrInventor::E3d;
 }
 
-sal_uInt16 E3dObject::GetObjIdentifier() const
+SdrObjKind E3dObject::GetObjIdentifier() const
 {
     return E3D_OBJECT_ID;
 }
@@ -542,7 +542,7 @@ void E3dCompoundObject::AddToHdlList(SdrHdlList& rHdlList) const
     }
 }
 
-sal_uInt16 E3dCompoundObject::GetObjIdentifier() const
+SdrObjKind E3dCompoundObject::GetObjIdentifier() const
 {
     return E3D_COMPOUNDOBJ_ID;
 }

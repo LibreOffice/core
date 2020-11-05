@@ -22,7 +22,7 @@
 #include <svx/deflt3d.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/sphere3d.hxx>
 
 #include <sdr/properties/e3dsphereproperties.hxx>
@@ -77,7 +77,7 @@ void E3dSphereObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
     aSize = rDefault.GetDefaultSphereSize();
 }
 
-sal_uInt16 E3dSphereObj::GetObjIdentifier() const
+SdrObjKind E3dSphereObj::GetObjIdentifier() const
 {
     return E3D_SPHEREOBJ_ID;
 }

@@ -31,7 +31,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ruler.hxx>
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <editeng/outliner.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/dispatch.hxx>

@@ -50,7 +50,7 @@ protected:
     sal_Int32                   nAutoCloseDistPix;
     sal_Int32                   nFreeHandMinDistPix;
     SdrInventor                 nCurrentInvent;     // set the current ones
-    sal_uInt16                  nCurrentIdent;      // Obj for re-creating
+    SdrObjKind                  nCurrentIdent;      // Obj for re-creating
 
     bool                        b1stPointAsCenter : 1;
     bool                        bUseIncompatiblePathCreateInterface : 1;
@@ -58,7 +58,7 @@ protected:
     void ImpClearConnectMarker();
 
 protected:
-    bool ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
+    bool ImpBegCreateObj(SdrInventor nInvent, SdrObjKind nIdent, const Point& rPnt, OutputDevice* pOut,
         sal_Int16 nMinMov, const tools::Rectangle& rLogRect, SdrObject* pPreparedFactoryObject);
 
     void ShowCreateObj(/*OutputDevice* pOut, bool bFull*/);
@@ -100,10 +100,10 @@ public:
     // Determine whether a measurement tool activated
     bool IsMeasureTool() const;
 
-    void SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent=SdrInventor::Default);
-    void TakeCurrentObj(sal_uInt16& nIdent, SdrInventor& nInvent) const  { nInvent=nCurrentInvent; nIdent=nCurrentIdent; }
+    void SetCurrentObj(SdrObjKind nIdent, SdrInventor nInvent=SdrInventor::Default);
+    void TakeCurrentObj(SdrObjKind& nIdent, SdrInventor& nInvent) const  { nInvent=nCurrentInvent; nIdent=nCurrentIdent; }
     SdrInventor GetCurrentObjInventor() const { return nCurrentInvent; }
-    sal_uInt16  GetCurrentObjIdentifier() const { return nCurrentIdent; }
+    SdrObjKind GetCurrentObjIdentifier() const { return nCurrentIdent; }
 
     // Beginning the regular Create
     bool BegCreateObj(const Point& rPnt, OutputDevice* pOut=nullptr, short nMinMov=-3);

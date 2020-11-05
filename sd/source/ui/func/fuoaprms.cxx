@@ -287,8 +287,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     {
         SdrObject* pObject1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
         SdrObject* pObject2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
-        SdrObjKind eKind1   = static_cast<SdrObjKind>(pObject1->GetObjIdentifier());
-        SdrObjKind eKind2   = static_cast<SdrObjKind>(pObject2->GetObjIdentifier());
+        SdrObjKind eKind1   = pObject1->GetObjIdentifier();
+        SdrObjKind eKind2   = pObject2->GetObjIdentifier();
         SdAnimationInfo* pInfo1 = SdDrawDocument::GetAnimationInfo(pObject1);
         SdAnimationInfo* pInfo2 = SdDrawDocument::GetAnimationInfo(pObject2);
         pInfo  = nullptr;
@@ -629,8 +629,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         DBG_ASSERT(nCount == 2, "This effect expects two selected objects");
         SdrObject* pObject1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
         SdrObject* pObject2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
-        SdrObjKind eKind1   = static_cast<SdrObjKind>(pObject1->GetObjIdentifier());
-        SdrObjKind eKind2   = static_cast<SdrObjKind>(pObject2->GetObjIdentifier());
+        SdrObjKind eKind1   = pObject1->GetObjIdentifier();
+        SdrObjKind eKind2   = pObject2->GetObjIdentifier();
         SdrObject* pRunningObj = nullptr;
 
         if (pObject1->GetObjInventor() == SdrInventor::Default &&

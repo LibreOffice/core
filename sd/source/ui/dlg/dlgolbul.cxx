@@ -68,7 +68,6 @@ OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAtt
             SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
             if( pObj->GetObjInventor() == SdrInventor::Default )
             {
-
                 switch(pObj->GetObjIdentifier())
                 {
                 case OBJ_TITLETEXT:
@@ -76,6 +75,8 @@ OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAtt
                     break;
                 case OBJ_OUTLINETEXT:
                     bOutliner = true;
+                    break;
+                default:
                     break;
                 }
             }

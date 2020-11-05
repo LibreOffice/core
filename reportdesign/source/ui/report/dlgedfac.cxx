@@ -48,29 +48,29 @@ IMPL_STATIC_LINK(
     {
         switch( aParams.nObjIdentifier )
         {
-            case OBJ_DLG_FIXEDTEXT:
+            case OBJ_RD_FIXEDTEXT:
                     pNewObj = new OUnoObject(aParams.rSdrModel, SERVICE_FIXEDTEXT
                                                         ,OUString("com.sun.star.form.component.FixedText")
-                                                        ,OBJ_DLG_FIXEDTEXT);
+                                                        ,OBJ_RD_FIXEDTEXT);
                     break;
-            case OBJ_DLG_IMAGECONTROL:
+            case OBJ_RD_IMAGECONTROL:
                     pNewObj = new OUnoObject(aParams.rSdrModel, SERVICE_IMAGECONTROL
                                                         ,OUString("com.sun.star.form.component.DatabaseImageControl")
-                                                        ,OBJ_DLG_IMAGECONTROL);
+                                                        ,OBJ_RD_IMAGECONTROL);
                     break;
-            case OBJ_DLG_FORMATTEDFIELD:
+            case OBJ_RD_FORMATTEDFIELD:
                     pNewObj = new OUnoObject(aParams.rSdrModel, SERVICE_FORMATTEDFIELD
                                                         ,OUString("com.sun.star.form.component.FormattedField")
-                                                        ,OBJ_DLG_FORMATTEDFIELD);
+                                                        ,OBJ_RD_FORMATTEDFIELD);
                     break;
-            case OBJ_DLG_VFIXEDLINE:
-            case OBJ_DLG_HFIXEDLINE:
+            case OBJ_RD_VFIXEDLINE:
+            case OBJ_RD_HFIXEDLINE:
                 {
                     OUnoObject* pObj = new OUnoObject(aParams.rSdrModel, SERVICE_FIXEDLINE
                                                         ,OUString("com.sun.star.awt.UnoControlFixedLineModel")
                                                         ,aParams.nObjIdentifier);
                     pNewObj = pObj;
-                    if ( aParams.nObjIdentifier == OBJ_DLG_HFIXEDLINE )
+                    if ( aParams.nObjIdentifier == OBJ_RD_HFIXEDLINE )
                     {
                         uno::Reference<beans::XPropertySet> xProp = pObj->getAwtComponent();
                         xProp->setPropertyValue( PROPERTY_ORIENTATION, uno::makeAny(sal_Int32(0)) );
@@ -80,8 +80,8 @@ IMPL_STATIC_LINK(
             case OBJ_CUSTOMSHAPE:
                 pNewObj = new OCustomShape(aParams.rSdrModel, SERVICE_SHAPE);
                 break;
-            case OBJ_DLG_SUBREPORT:
-                pNewObj = new OOle2Obj(aParams.rSdrModel, SERVICE_REPORTDEFINITION, OBJ_DLG_SUBREPORT);
+            case OBJ_RD_SUBREPORT:
+                pNewObj = new OOle2Obj(aParams.rSdrModel, SERVICE_REPORTDEFINITION, OBJ_RD_SUBREPORT);
                 break;
             case OBJ_OLE2:
                 pNewObj = new OOle2Obj(aParams.rSdrModel, "com.sun.star.chart2.ChartDocument", OBJ_OLE2);

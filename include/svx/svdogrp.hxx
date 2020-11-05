@@ -52,7 +52,7 @@ public:
     virtual SdrObjList* getChildrenOfSdrObject() const override;
 
     virtual void SetBoundRectDirty() override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrLayerID GetLayer() const override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;

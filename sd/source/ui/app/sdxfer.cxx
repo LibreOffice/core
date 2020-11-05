@@ -35,7 +35,7 @@
 #include <editeng/outlobj.hxx>
 #include <sot/storage.hxx>
 #include <editeng/editobj.hxx>
-#include <svx/fmglob.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <sot/formats.hxx>

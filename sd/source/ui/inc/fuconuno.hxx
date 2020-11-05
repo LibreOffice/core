@@ -57,7 +57,7 @@ private:
 
     OUString    aOldLayer;
     SdrInventor nInventor;
-    sal_uInt16  nIdentifier;
+    SdrObjKind nIdentifier;
 };
 
 } // end of namespace sd

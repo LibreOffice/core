@@ -347,7 +347,7 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
 
     SolarMutexGuard aGuard;
     m_pChartController->setDrawMode( eDrawMode );
-    setInsertObj( sal::static_int_cast< sal_uInt16 >( eKind ) );
+    setInsertObj(eKind);
     if ( bCreate )
     {
         pDrawViewWrapper->SetCreateMode();
@@ -397,7 +397,7 @@ void DrawCommandDispatch::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:StarShapes",        COMMAND_ID_DRAWTBX_CS_STAR,         CommandGroup::INSERT );
 }
 
-void DrawCommandDispatch::setInsertObj( sal_uInt16 eObj )
+void DrawCommandDispatch::setInsertObj(SdrObjKind eObj)
 {
     DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : nullptr );
     if ( pDrawViewWrapper )

@@ -21,7 +21,7 @@
 #include <svx/strings.hrc>
 #include <svx/deflt3d.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <extrud3d.hxx>
 
 #include <svx/svdopath.hxx>
@@ -96,7 +96,7 @@ void E3dExtrudeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
     GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(1));
 }
 
-sal_uInt16 E3dExtrudeObj::GetObjIdentifier() const
+SdrObjKind E3dExtrudeObj::GetObjIdentifier() const
 {
     return E3D_EXTRUDEOBJ_ID;
 }

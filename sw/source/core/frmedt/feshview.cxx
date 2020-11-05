@@ -1676,7 +1676,7 @@ bool SwFEShell::GotoObj( bool bNext, GotoObjFlags eType )
     return true;
 }
 
-bool SwFEShell::BeginCreate( sal_uInt16 /*SdrObjKind ?*/  eSdrObjectKind, const Point &rPos )
+bool SwFEShell::BeginCreate( SdrObjKind eSdrObjectKind, const Point &rPos )
 {
     bool bRet = false;
 
@@ -1700,7 +1700,7 @@ bool SwFEShell::BeginCreate( sal_uInt16 /*SdrObjKind ?*/  eSdrObjectKind, const 
     return bRet;
 }
 
-bool SwFEShell::BeginCreate( sal_uInt16 /*SdrObjKind ?*/  eSdrObjectKind, SdrInventor eObjInventor,
+bool SwFEShell::BeginCreate( SdrObjKind eSdrObjectKind, SdrInventor eObjInventor,
                              const Point &rPos )
 {
     bool bRet = false;
@@ -2938,7 +2938,7 @@ tools::Long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
     return 0;
 }
 
- void SwFEShell::CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const tools::Rectangle& rRect,
+void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rectangle& rRect,
                 sal_uInt16 nSlotId)
 {
     SdrView* pDrawView = GetDrawView();
@@ -3070,6 +3070,8 @@ tools::Long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
                     SetLineEnds(aAttr, *pObj, nSlotId);
                     pObj->SetMergedItemSet(aAttr);
                 }
+                break;
+                default:
                 break;
             }
 

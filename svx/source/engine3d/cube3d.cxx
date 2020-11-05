@@ -22,7 +22,7 @@
 #include <svx/deflt3d.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/cube3d.hxx>
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <sdr/contact/viewcontactofe3dcube.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -71,7 +71,7 @@ void E3dCubeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
     bPosIsCenter = rDefault.GetDefaultCubePosIsCenter();
 }
 
-sal_uInt16 E3dCubeObj::GetObjIdentifier() const
+SdrObjKind E3dCubeObj::GetObjIdentifier() const
 {
     return E3D_CUBEOBJ_ID;
 }

@@ -412,9 +412,9 @@ void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-sal_uInt16 SdrTextObj::GetObjIdentifier() const
+SdrObjKind SdrTextObj::GetObjIdentifier() const
 {
-    return sal_uInt16(eTextKind);
+    return eTextKind;
 }
 
 bool SdrTextObj::HasTextImpl( SdrOutliner const * pOutliner )

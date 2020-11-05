@@ -43,7 +43,7 @@
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>
@@ -1120,6 +1120,8 @@ static bool svx_needLogicRectHack( SdrObject const * pObj )
         case OBJ_PATHPLIN:
         case OBJ_MEASURE:
             return true;
+        default:
+            break;
         }
     }
     return false;
@@ -1960,6 +1962,8 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemProperty
                 break;
             case OBJ_SECT:          // sector
                 eKind = drawing::CircleKind_SECTION;
+                break;
+            default:
                 break;
             }
             aAny <<= eKind;

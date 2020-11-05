@@ -860,7 +860,7 @@ void SvxPositionSizeTabPage::Construct()
     if(1 == rMarkList.GetMarkCount())
     {
         const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        const SdrObjKind eKind(static_cast<SdrObjKind>(pObj->GetObjIdentifier()));
+        const SdrObjKind eKind(pObj->GetObjIdentifier());
 
         if((pObj->GetObjInventor() == SdrInventor::Default) &&
             (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind) &&

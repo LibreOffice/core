@@ -2592,7 +2592,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     SdrObject* pOurNewObject = nullptr;
     bool bReplaceable = false;
 
-    switch (SdrObjKind(pObject->GetObjIdentifier()))
+    switch (pObject->GetObjIdentifier())
     {
         case OBJ_GRAF:
             bReplaceable = true;
@@ -3108,7 +3108,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     }
 
     OUString aObjectName(rpObject->GetName());
-    if (OBJ_OLE2 == SdrObjKind(rpObject->GetObjIdentifier()))
+    if (OBJ_OLE2 == rpObject->GetObjIdentifier())
         pRetFrameFormat = InsertOle(*static_cast<SdrOle2Obj*>(rpObject), rFlySet, &aGrSet);
     else
     {
@@ -3145,7 +3145,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     {
         if( pRecord )
         {
-            if( OBJ_OLE2 != SdrObjKind(rpObject->GetObjIdentifier()) )
+            if( OBJ_OLE2 != rpObject->GetObjIdentifier() )
                 SetAttributesAtGrfNode( pRecord, pRetFrameFormat, pF );
         }
         // avoid multiple occurrences of the same graphic name

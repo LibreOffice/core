@@ -6609,7 +6609,6 @@ include/svx/flagsdef.hxx
 include/svx/float3d.hxx
 include/svx/fmdmod.hxx
 include/svx/fmdpage.hxx
-include/svx/fmglob.hxx
 include/svx/fmgridcl.hxx
 include/svx/fmgridif.hxx
 include/svx/fmmodel.hxx
@@ -6637,7 +6636,6 @@ include/svx/gallery1.hxx
 include/svx/galleryitem.hxx
 include/svx/galmisc.hxx
 include/svx/galtheme.hxx
-include/svx/globl3d.hxx
 include/svx/grafctrl.hxx
 include/svx/graphctl.hxx
 include/svx/graphichelper.hxx

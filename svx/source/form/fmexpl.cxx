@@ -22,7 +22,7 @@
 #include <fmexpl.hxx>
 
 #include <helpids.h>
-#include <svx/fmglob.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/fmtools.hxx>
 #include <fmexch.hxx>
 

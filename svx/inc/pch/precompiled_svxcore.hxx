@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:24:05 using:
+ Generated on 2020-11-05 12:52:18 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -65,6 +65,7 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
+#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -384,6 +385,7 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
@@ -392,6 +394,7 @@
 #include <tools/helpers.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
@@ -437,11 +440,11 @@
 #include <svx/gallery1.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/galtheme.hxx>
-#include <svx/globl3d.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
+#include <svx/sdasitm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
@@ -473,6 +476,7 @@
 #include <svx/svdmrkv.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/svdograf.hxx>

@@ -83,7 +83,7 @@ public:
         const Point& rPt2);
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
     virtual SdrMeasureObj* CloneSdrObject(SdrModel& rTargetModel) const override;
 

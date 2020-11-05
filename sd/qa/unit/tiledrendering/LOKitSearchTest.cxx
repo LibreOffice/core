@@ -621,7 +621,7 @@ void LOKitSearchTest::testSearchIn2MixedObjects()
         SdrObject* pObject = pPage->GetObj(0);
         CPPUNIT_ASSERT(pObject);
 
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_TEXT), pObject->GetObjIdentifier());
+        CPPUNIT_ASSERT_EQUAL(OBJ_TEXT, pObject->GetObjIdentifier());
     }
 
     // Check Object 2
@@ -629,7 +629,7 @@ void LOKitSearchTest::testSearchIn2MixedObjects()
         SdrObject* pObject = pPage->GetObj(1);
         CPPUNIT_ASSERT(pObject);
 
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_GRAF), pObject->GetObjIdentifier());
+        CPPUNIT_ASSERT_EQUAL(OBJ_GRAF, pObject->GetObjIdentifier());
 
         SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
         CPPUNIT_ASSERT(pGraphicObject);
@@ -709,14 +709,14 @@ void LOKitSearchTest::testSearchIn6MixedObjects()
     {
         SdrObject* pObject = pPage->GetObj(0);
         CPPUNIT_ASSERT(pObject);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_TEXT), pObject->GetObjIdentifier());
+        CPPUNIT_ASSERT_EQUAL(OBJ_TEXT, pObject->GetObjIdentifier());
     }
 
     // Check Object 2
     {
         SdrObject* pObject = pPage->GetObj(1);
         CPPUNIT_ASSERT(pObject);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_GRAF), pObject->GetObjIdentifier());
+        CPPUNIT_ASSERT_EQUAL(OBJ_GRAF, pObject->GetObjIdentifier());
         SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
         CPPUNIT_ASSERT(pGraphicObject);
         auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
@@ -729,21 +729,21 @@ void LOKitSearchTest::testSearchIn6MixedObjects()
     {
         SdrObject* pObject = pPage->GetObj(2);
         CPPUNIT_ASSERT(pObject);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_CUSTOMSHAPE), pObject->GetObjIdentifier());
+        CPPUNIT_ASSERT_EQUAL(OBJ_CUSTOMSHAPE, pObject->GetObjIdentifier());
     }
 
     // Check Object 4
     {
         SdrObject* pObject = pPage->GetObj(3);
         CPPUNIT_ASSERT(pObject);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_CUSTOMSHAPE), pObject->GetObjIdentifier());
+        CPPUNIT_ASSERT_EQUAL(OBJ_CUSTOMSHAPE, pObject->GetObjIdentifier());
     }
 
     // Check Object 5
     {
         SdrObject* pObject = pPage->GetObj(4);
         CPPUNIT_ASSERT(pObject);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_GRAF), pObject->GetObjIdentifier());
+        CPPUNIT_ASSERT_EQUAL(OBJ_GRAF, pObject->GetObjIdentifier());
         SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
         CPPUNIT_ASSERT(pGraphicObject);
         auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
@@ -756,7 +756,7 @@ void LOKitSearchTest::testSearchIn6MixedObjects()
     {
         SdrObject* pObject = pPage->GetObj(5);
         CPPUNIT_ASSERT(pObject);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_GRAF), pObject->GetObjIdentifier());
+        CPPUNIT_ASSERT_EQUAL(OBJ_GRAF, pObject->GetObjIdentifier());
         SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
         CPPUNIT_ASSERT(pGraphicObject);
         auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
