@@ -94,6 +94,8 @@ class VCL_DLLPUBLIC PDFObjectElement final : public PDFElement
     /// nested dictionaries.
     std::vector<PDFReferenceElement*> m_aDictionaryReferences;
 
+    void parseIfNecessary();
+
 public:
     PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
     bool Read(SvStream& rStream) override;
