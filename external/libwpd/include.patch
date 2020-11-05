@@ -1,0 +1,10 @@
+--- src/lib/WPXTable.h
++++ src/lib/WPXTable.h
+@@ -36,6 +36,7 @@
+ #ifndef _WPXTABLE_H
+ #define _WPXTABLE_H
+ 
++#include <stddef.h>
+ #include <vector>
+ 
+ struct WPXTableCell
