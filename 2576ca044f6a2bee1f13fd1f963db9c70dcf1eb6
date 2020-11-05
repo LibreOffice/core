@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba9f3e9c_d2be40fe",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-05T12:56:32Z",
+      "side": 1,
+      "message": "you could check both the SdrInventor id and the objIdentifier of the pObj, and then do a static_cast",
+      "revId": "2576ca044f6a2bee1f13fd1f963db9c70dcf1eb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
