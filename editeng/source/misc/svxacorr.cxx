@@ -2215,16 +2215,19 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                 aParserInput.aInputStream = new utl::OInputStreamWrapper( *xStrm );
 
                 // get filter
-                rtl::Reference< SvXMLExceptionListImport > xImport = new SvXMLExceptionListImport ( xContext, *rpLst );
+                uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SvXMLExceptionListImport ( xContext, *rpLst );
 
                 // connect parser and filter
+                uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create( xContext );
                 uno::Reference<xml::sax::XFastTokenHandler> xTokenHandler = new SvXMLAutoCorrectTokenHandler;
-                xImport->setTokenHandler( xTokenHandler );
+                xParser->setFastDocumentHandler( xFilter );
+                xParser->registerNamespace( "http://openoffice.org/2001/block-list", SvXMLAutoCorrectToken::NAMESPACE );
+                xParser->setTokenHandler( xTokenHandler );
 
                 // parse
                 try
                 {
-                    xImport->parseStream( aParserInput );
+                    xParser->parseStream( aParserInput );
                 }
                 catch( const xml::sax::SAXParseException& )
                 {
