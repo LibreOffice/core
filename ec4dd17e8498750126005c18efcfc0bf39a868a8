@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b176c3ab_b02beff1",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-05T11:53:48Z",
+      "side": 1,
+      "message": "if we call \"if (!m_pSetClipboardEvent)\" and the CPUs local copy of m_pSetClipboardEvent is slightly out of date, we skip posting an event\n\nBecause on another core, the machine is busy clearing m_pSetClipboardEvent in \n    IMPL_LINK_NOARG(VclGtkClipboard, AsyncSetGtkClipboard, void*, void)",
+      "revId": "ec4dd17e8498750126005c18efcfc0bf39a868a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
