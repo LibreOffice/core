@@ -56,6 +56,7 @@
 #include <svtools/imagemgr.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
+#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -836,6 +837,7 @@ void SfxConfigGroupListBox::FillScriptListAll(const css::uno::Reference< css::sc
             Image aImage;
             OUString sUri;
             OUString sName;
+            OUString sEncodedUri;
             OUString sDescription;
             SvTreeListEntry* pEntry;
 
@@ -876,8 +878,11 @@ void SfxConfigGroupListBox::FillScriptListAll(const css::uno::Reference< css::sc
                     if (xPropSetInfo->hasPropertyByName("Description"))
                         xPropSet->getPropertyValue("Description") >>= sDescription;
 
+                    sEncodedUri = ::rtl::Uri::encode(sUri, rtl_UriCharClassNone,
+                                                     rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
+
                     aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0 ));
-                       aArr.back()->sCommand = sUri;
+                       aArr.back()->sCommand = sEncodedUri;
                        aArr.back()->sHelpText = sDescription;
                        pEntry->SetUserData( aArr.back().get() );
                 }
