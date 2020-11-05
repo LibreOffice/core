@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77b07158_729a8520",
+        "filename": "connectivity/source/drivers/firebird/DatabaseMetaData.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2020-11-05T17:33:47Z",
+      "side": 1,
+      "message": "This should be moved to Tables::createStandardColumnPart, too.",
+      "revId": "656c18e538cfd34f4e9be7f26a259ad40970014e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
