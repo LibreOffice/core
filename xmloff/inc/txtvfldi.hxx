@@ -62,8 +62,8 @@ public:
         bool bFormula);                     /// process formula (Prep.F.)
 
     /// process attribute values
-    void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue );
+    void ProcessAttribute( sal_Int32 nAttrToken,
+                           const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     void PrepareField(
@@ -155,7 +155,7 @@ public:
 
 protected:
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -362,7 +362,7 @@ public:
 private:
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -390,10 +390,9 @@ public:
         const OUString& rLocalName,      /// element name w/o prefix
         enum VarType eVarType);                 /// variable type
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /**
@@ -408,9 +407,8 @@ public:
     XMLVariableDeclImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& rLocalName,      /// element name w/o prefix
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList,/// list of element attributes
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList,/// list of element attributes
         enum VarType eVarType);                 /// variable type
 
     /// get field master for name and rename if appropriate
@@ -440,7 +438,7 @@ public:
 private:
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
@@ -472,7 +470,7 @@ public:
 private:
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    const OUString& sAttrValue ) override;
 
     /// create, prepare and insert database field master and database field
