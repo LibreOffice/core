@@ -221,7 +221,7 @@ void SwOutlineContentVisibilityWin::MouseMove(const MouseEvent& rMEvt)
 
 void SwOutlineContentVisibilityWin::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    ToggleOutlineContentVisibility(rMEvt.IsRight() || rMEvt.IsMod1());
+    ToggleOutlineContentVisibility(rMEvt.IsRight());
 }
 
 IMPL_LINK_NOARG(SwOutlineContentVisibilityWin, DelayHandler, Timer*, void)
