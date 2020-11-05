@@ -94,12 +94,12 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( nNewId == SID_DRAW_SELECT )
         nNewId = SID_OBJECT_SELECT;
 
-    sal_uInt16 nNewFormId = 0;
+    SdrObjKind eNewFormObjKind = OBJ_NONE;
     if (nNewId == SID_FM_CREATE_CONTROL)
     {
         const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
         if (pIdentifierItem)
-            nNewFormId = pIdentifierItem->GetValue();
+            eNewFormObjKind = static_cast<SdrObjKind>(pIdentifierItem->GetValue());
     }
 
     OUString sStringItemValue;
@@ -128,12 +128,12 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         bEx = true;
     }
     else if ( nNewId == nDrawSfxId && ( nNewId != SID_FM_CREATE_CONTROL ||
-                                    nNewFormId == nFormSfxId || nNewFormId == 0 ) && !bSwitchCustom )
+                                    eNewFormObjKind == eFormObjKind || eNewFormObjKind == OBJ_NONE ) && !bSwitchCustom )
     {
         // #i52871# if a different custom shape is selected, the slot id can be the same,
         // so the custom shape type string has to be compared, too.
 
-        // SID_FM_CREATE_CONTROL with nNewFormId==0 (without parameter) comes
+        // SID_FM_CREATE_CONTROL with eNewFormObjKind==OBJ_NONE (without parameter) comes
         // from FuConstruct::SimpleMouseButtonUp when deactivating
         // Execute for the form shell, to deselect the controller
         if ( nNewId == SID_FM_CREATE_CONTROL )
@@ -265,7 +265,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_FM_CREATE_CONTROL:
             SetDrawFormShell(true);
             pTabView->SetDrawFuncPtr(new FuConstUnoControl(*this, pWin, pView, pDoc, aNewReq));
-            nFormSfxId = nNewFormId;
+            eFormObjKind = eNewFormObjKind;
             break;
 
         case SID_DRAWTBX_CS_BASIC :

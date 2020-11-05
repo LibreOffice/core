@@ -139,7 +139,7 @@ SdrInventor SwFlyDrawObj::GetObjInventor() const
     return SdrInventor::Swg;
 }
 
-sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const
+SdrObjKind SwFlyDrawObj::GetObjIdentifier() const
 {
     return SwFlyDrawObjIdentifier;
 }

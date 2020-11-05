@@ -528,13 +528,13 @@ public:
      or SdrCreateCmd::NextPoint for a polygon may be relevant.
      After RESTRAINTEND the object is created and selected.
      BreakCreate interrupts the process. In this case no object is selected. */
-    bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Point &rPos );
-    bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, SdrInventor eObjInventor, const Point &);
+    bool BeginCreate( SdrObjKind eSdrObjectKind, const Point &rPos );
+    bool BeginCreate( SdrObjKind eSdrObjectKind, SdrInventor eObjInventor, const Point &);
     void MoveCreate ( const Point &rPos );
     bool EndCreate  ( SdrCreateCmd eSdrCreateCmd );
     void BreakCreate();
     bool IsDrawCreate() const;
-    void CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const tools::Rectangle& rRect, sal_uInt16 nSlotId);
+    void CreateDefaultShape(SdrObjKind eSdrObjectKind, const tools::Rectangle& rRect, sal_uInt16 nSlotId);
 
     /// Functions for Rubberbox, ti select Draw-Objects
     bool BeginMark( const Point &rPos );

@@ -96,9 +96,6 @@ public:
  * Globals
  */
 
-const sal_Int16 OBJ_OLE2_APPLET = 100;
-const sal_Int16 OBJ_OLE2_PLUGIN = 101;
-
 #define E3D_INVENTOR_FLAG           (0x80000000)
 
 /**

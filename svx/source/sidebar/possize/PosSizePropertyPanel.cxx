@@ -181,7 +181,7 @@ namespace
         if(1 == rMarkList.GetMarkCount())
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            const SdrObjKind eKind(static_cast<SdrObjKind>(pObj->GetObjIdentifier()));
+            const SdrObjKind eKind(pObj->GetObjIdentifier());
 
             if((pObj->GetObjInventor() == SdrInventor::Default) && (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind))
             {
@@ -713,7 +713,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
         case 1:
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            const SdrObjKind eKind(static_cast<SdrObjKind>(pObj->GetObjIdentifier()));
+            const SdrObjKind eKind(pObj->GetObjIdentifier());
 
             if(((nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::Draw)
                || nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::TextObject)
@@ -737,7 +737,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             while(isNoEdge && rMarkList.GetMark(nMarkObj))
             {
                 const SdrObject* pObj = rMarkList.GetMark(nMarkObj)->GetMarkedSdrObj();
-                const SdrObjKind eKind(static_cast<SdrObjKind>(pObj->GetObjIdentifier()));
+                const SdrObjKind eKind(pObj->GetObjIdentifier());
 
                 if(((nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::Draw)
                   || nCombinedContext == CombinedEnumContext(Application::DrawImpress, Context::TextObject)

@@ -43,7 +43,7 @@
 #include <svx/unopage.hxx>
 #include "shapeimpl.hxx"
 #include <svx/dialmgr.hxx>
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoapi.hxx>
 #include <extrud3d.hxx>
@@ -498,7 +498,7 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
 
 SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xShape)
 {
-    sal_uInt16 nType = 0;
+    SdrObjKind nType = OBJ_NONE;
     SdrInventor nInventor;
 
     GetTypeAndInventor( nType, nInventor, xShape->getShapeType() );
@@ -566,7 +566,7 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     return pNewObj;
 }
 
-void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, SdrInventor& rInventor, const OUString& aName ) throw()
+void SvxDrawPage::GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor, const OUString& aName ) throw()
 {
     sal_uInt32 nTempType = UHashMap::getId( aName );
 
@@ -589,12 +589,12 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, SdrInventor& rInventor,
     else if(nTempType & E3D_INVENTOR_FLAG)
     {
         rInventor = SdrInventor::E3d;
-        rType = static_cast<sal_uInt16>(nTempType & ~E3D_INVENTOR_FLAG);
+        rType = static_cast<SdrObjKind>(nTempType & ~E3D_INVENTOR_FLAG);
     }
     else
     {
         rInventor = SdrInventor::Default;
-        rType = static_cast<sal_uInt16>(nTempType);
+        rType = static_cast<SdrObjKind>(nTempType);
 
         switch( rType )
         {
@@ -602,6 +602,8 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, SdrInventor& rInventor,
             case OBJ_OLE2_PLUGIN:
             case OBJ_OLE2_APPLET:
                 rType = OBJ_OLE2;
+                break;
+            default:
                 break;
         }
     }

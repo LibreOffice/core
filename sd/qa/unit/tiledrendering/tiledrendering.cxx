@@ -405,7 +405,7 @@ void SdTiledRenderingTest::testPostKeyEvent()
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(OBJ_TITLETEXT, pObject->GetObjIdentifier());
     SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
@@ -433,7 +433,7 @@ void SdTiledRenderingTest::testPostMouseEvent()
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject = pActualPage->GetObj(0);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(OBJ_TITLETEXT, pObject->GetObjIdentifier());
     SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
@@ -1084,7 +1084,7 @@ void SdTiledRenderingTest::testCursorVisibility_SingleClick()
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject1 = pActualPage->GetObj(0);
     CPPUNIT_ASSERT(pObject1 != nullptr);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject1->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(OBJ_TITLETEXT, pObject1->GetObjIdentifier());
     SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
 
     // Click once outside of the text (in the first quartile) => no editing.
@@ -1133,7 +1133,7 @@ void SdTiledRenderingTest::testCursorVisibility_DoubleClick()
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject1 = pActualPage->GetObj(0);
     CPPUNIT_ASSERT(pObject1 != nullptr);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject1->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(OBJ_TITLETEXT, pObject1->GetObjIdentifier());
     SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
 
     // Double-click outside the text to enter edit mode.
@@ -1165,7 +1165,7 @@ void SdTiledRenderingTest::testCursorVisibility_MultiView()
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject1 = pActualPage->GetObj(0);
     CPPUNIT_ASSERT(pObject1);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject1->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(OBJ_TITLETEXT, pObject1->GetObjIdentifier());
     SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
 
     // Make sure that cursor state is not changed just because we create a second view.
@@ -1213,7 +1213,7 @@ void SdTiledRenderingTest::testCursorVisibility_Escape()
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject1 = pActualPage->GetObj(0);
     CPPUNIT_ASSERT(pObject1 != nullptr);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject1->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(OBJ_TITLETEXT, pObject1->GetObjIdentifier());
     SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
 
     // Click once on the text to start editing.
@@ -1504,7 +1504,7 @@ void SdTiledRenderingTest::testTdf103083()
     SdPage* pActualPage = pViewShell->GetActualPage();
 
     SdrObject* pObject1 = pActualPage->GetObj(1);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_OUTLINETEXT), pObject1->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(OBJ_OUTLINETEXT, pObject1->GetObjIdentifier());
     SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
 
     SdrView* pView = pViewShell->GetView();
@@ -2280,7 +2280,7 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     CPPUNIT_ASSERT(pObject);
     SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
     CPPUNIT_ASSERT(pTextObj);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TEXT), pTextObj->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(OBJ_TEXT, pTextObj->GetObjIdentifier());
     // This test is unreliable: it gives alternating results for the following coordinates.
     // As a compromise, instead of disabling it altogether, we allow for both sets of values.
     const Point aPos = pTextObj->GetLastBoundRect().TopLeft();

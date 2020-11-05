@@ -296,6 +296,8 @@ const SfxPoolItem* FuBulletAndPosition::GetNumBulletItem(SfxItemSet& aNewAttr, s
                         case OBJ_OUTLINETEXT:
                             bOutliner = true;
                             break;
+                        default:
+                            break;
                         }
                     }
                 }

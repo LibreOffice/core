@@ -60,7 +60,7 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrInventor GetObjInventor() const override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrObjList* GetSubList() const override;
 
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;

@@ -67,7 +67,7 @@ public:
         const basegfx::B3DVector& r3DSize);
     E3dCubeObj(SdrModel& rSdrModel);
 
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual E3dCubeObj* CloneSdrObject(SdrModel& rTargetModel) const override;

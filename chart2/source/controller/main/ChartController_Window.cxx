@@ -1985,7 +1985,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
          ( !m_pDrawViewWrapper->IsMarkedHit( aMousePos ) || !m_aSelection.isDragableObjectSelected() ) )
     {
         PointerStyle ePointerStyle = PointerStyle::DrawRect;
-        SdrObjKind eKind = static_cast< SdrObjKind >( m_pDrawViewWrapper->GetCurrentObjIdentifier() );
+        SdrObjKind eKind = m_pDrawViewWrapper->GetCurrentObjIdentifier();
         switch ( eKind )
         {
             case OBJ_LINE:

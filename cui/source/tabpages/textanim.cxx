@@ -70,7 +70,7 @@ void SvxTextTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
             if (rMarkList.GetMarkCount() == 1)
             {
                 const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                eKind = static_cast<SdrObjKind>(pObj->GetObjIdentifier());
+                eKind = pObj->GetObjIdentifier();
             }
         }
     }

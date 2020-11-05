@@ -28,7 +28,7 @@ enum class SdrInventor : sal_uInt32;
 class FuConstUnoControl final : public FuConstruct
 {
     SdrInventor nInventor;
-    sal_uInt16  nIdentifier;
+    SdrObjKind nIdentifier;
 
 public:
     FuConstUnoControl(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,

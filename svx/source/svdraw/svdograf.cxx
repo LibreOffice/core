@@ -534,9 +534,9 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-sal_uInt16 SdrGrafObj::GetObjIdentifier() const
+SdrObjKind SdrGrafObj::GetObjIdentifier() const
 {
-    return sal_uInt16( OBJ_GRAF );
+    return OBJ_GRAF;
 }
 
 void SdrGrafObj::ImpSetLinkedGraphic( const Graphic& rGraphic )

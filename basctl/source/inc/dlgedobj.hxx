@@ -100,7 +100,7 @@ public:
     DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
 
     virtual SdrInventor GetObjInventor() const override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
 
     virtual DlgEdObj* CloneSdrObject(SdrModel& rTargetModel) const override;                                          // not working yet
     void clonedFrom(const DlgEdObj* _pSource);                          // not working yet

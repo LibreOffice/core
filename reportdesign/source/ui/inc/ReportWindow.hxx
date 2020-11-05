@@ -74,7 +74,7 @@ namespace rptui
         OScrollWindowHelper* getScrollWindow() const { return m_pParent; }
 
         void            SetMode( DlgEdMode m_eMode );
-        void            SetInsertObj( sal_uInt16 eObj, const OUString& _sShapeType);
+        void            SetInsertObj(SdrObjKind eObj, const OUString& _sShapeType);
         OUString const & GetInsertObjString() const;
         void            setGridSnap(bool bOn);
         void            setDragStripes(bool bOn);

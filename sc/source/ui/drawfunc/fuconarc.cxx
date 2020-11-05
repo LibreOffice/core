@@ -95,7 +95,7 @@ void FuConstArc::Activate()
             break;
     }
 
-    pView->SetCurrentObj( sal::static_int_cast<sal_uInt16>( aObjKind ) );
+    pView->SetCurrentObj(aObjKind);
 
     aOldPointer = pWindow->GetPointer();
     rViewShell.SetActivePointer( aNewPointer );

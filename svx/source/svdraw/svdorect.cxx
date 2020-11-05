@@ -161,10 +161,10 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-sal_uInt16 SdrRectObj::GetObjIdentifier() const
+SdrObjKind SdrRectObj::GetObjIdentifier() const
 {
-    if (IsTextFrame()) return sal_uInt16(eTextKind);
-    else return sal_uInt16(OBJ_RECT);
+    if (IsTextFrame()) return eTextKind;
+    else return OBJ_RECT;
 }
 
 void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const

@@ -102,9 +102,9 @@ void SdrMediaObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
     rInfo.bCanConvToPolyLineToArea = false;
 }
 
-sal_uInt16 SdrMediaObj::GetObjIdentifier() const
+SdrObjKind SdrMediaObj::GetObjIdentifier() const
 {
-    return sal_uInt16( OBJ_MEDIA );
+    return OBJ_MEDIA;
 }
 
 OUString SdrMediaObj::TakeObjNameSingul() const

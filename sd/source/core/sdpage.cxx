@@ -1508,7 +1508,7 @@ static void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDe
                 continue;
 
             bool bPresStyle = pObj->GetStyleSheet() && (pObj->GetStyleSheet()->GetFamily() == SfxStyleFamily::Page);
-            SdrObjKind eSdrObjKind = static_cast< SdrObjKind >( pObj->GetObjIdentifier() );
+            SdrObjKind eSdrObjKind = pObj->GetObjIdentifier();
 
             switch( eKind )
             {
@@ -1910,7 +1910,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
 
                 if (mbScaleObjects)
                 {
-                    SdrObjKind eObjKind = static_cast<SdrObjKind>(pObj->GetObjIdentifier());
+                    SdrObjKind eObjKind = pObj->GetObjIdentifier();
 
                     if (bIsPresObjOnMaster)
                     {
@@ -2191,6 +2191,7 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
         case OBJ_MEDIA: eObjKind = PresObjKind::Media; break;
         case OBJ_GRAF: eObjKind = PresObjKind::Graphic; break;
         case OBJ_OLE2: eObjKind = PresObjKind::Object; break;
+        default: break;
         }
     }
 

@@ -36,7 +36,7 @@
 #include <svx/svditer.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <svx/fmglob.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>

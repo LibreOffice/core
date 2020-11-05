@@ -148,7 +148,7 @@ namespace rptui
 
         bool     empty() const { return m_aSections.empty(); }
         void            SetMode( DlgEdMode m_eMode );
-        void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType);
+        void            SetInsertObj( SdrObjKind eObj,const OUString& _sShapeType);
         const OUString& GetInsertObjString() const { return m_sShapeType;}
         /** copies the current selection in this section
         */

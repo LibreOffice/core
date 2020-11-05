@@ -49,7 +49,7 @@
 #include <svx/svxids.hrc>
 #include <editeng/flditem.hxx>
 #include <svx/obj3d.hxx>
-#include <svx/fmglob.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/urlobj.hxx>

@@ -167,7 +167,7 @@ void SdrCircObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = !IsFontwork() && (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-sal_uInt16 SdrCircObj::GetObjIdentifier() const
+SdrObjKind SdrCircObj::GetObjIdentifier() const
 {
     switch (meCircleKind)
     {
