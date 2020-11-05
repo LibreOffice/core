@@ -129,21 +129,13 @@ XMLTextFieldImportContext::XMLTextFieldImportContext(
     sServiceName = OUString::createFromAscii(pService);
 }
 
-void XMLTextFieldImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLTextFieldImportContext::startFastElement(
+        sal_Int32 /*nElement*/,
+        const Reference<XFastAttributeList> & xAttrList)
 {
     // process attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++) {
-
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        ProcessAttribute(rTextImportHelper.GetTextFieldAttrTokenMap().
-                             Get(nPrefix, sLocalName),
-                         xAttrList->getValueByIndex(i) );
-    }
+    for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
+        ProcessAttribute(aIter.getToken(), aIter.toString() );
 }
 
 OUString const & XMLTextFieldImportContext::GetContent()
@@ -550,54 +542,56 @@ XMLSenderFieldImportContext::XMLSenderFieldImportContext(
 {
 }
 
-void XMLSenderFieldImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLSenderFieldImportContext::startFastElement(
+        sal_Int32 nElement,
+        const Reference<XFastAttributeList> & xAttrList)
 {
     bValid = true;
     switch (nElementToken) {
-    case XML_TOK_TEXT_SENDER_FIRSTNAME:
+    case XML_ELEMENT(TEXT, XML_SENDER_FIRSTNAME):
         nSubType = UserDataPart::FIRSTNAME;
         break;
-    case XML_TOK_TEXT_SENDER_LASTNAME:
+    case  XML_ELEMENT(TEXT, XML_SENDER_LASTNAME):
         nSubType = UserDataPart::NAME;
         break;
-    case XML_TOK_TEXT_SENDER_INITIALS:
+    case XML_ELEMENT(LO_EXT, XML_SENDER_INITIALS):
+    case XML_ELEMENT(TEXT,   XML_SENDER_INITIALS):
         nSubType = UserDataPart::SHORTCUT;
         break;
-    case XML_TOK_TEXT_SENDER_TITLE:
+    case XML_ELEMENT(TEXT, XML_SENDER_TITLE):
         nSubType = UserDataPart::TITLE;
         break;
-    case XML_TOK_TEXT_SENDER_POSITION:
+    case XML_ELEMENT(TEXT, XML_SENDER_POSITION):
         nSubType = UserDataPart::POSITION;
         break;
-    case XML_TOK_TEXT_SENDER_EMAIL:
+    case XML_ELEMENT(TEXT, XML_SENDER_EMAIL):
         nSubType = UserDataPart::EMAIL;
         break;
-    case XML_TOK_TEXT_SENDER_PHONE_PRIVATE:
+    case XML_ELEMENT(TEXT, XML_SENDER_PHONE_PRIVATE):
         nSubType = UserDataPart::PHONE_PRIVATE;
         break;
-    case XML_TOK_TEXT_SENDER_FAX:
+    case XML_ELEMENT(TEXT, XML_SENDER_FAX):
         nSubType = UserDataPart::FAX;
         break;
-    case XML_TOK_TEXT_SENDER_COMPANY:
+    case XML_ELEMENT(TEXT, XML_SENDER_COMPANY):
         nSubType = UserDataPart::COMPANY;
         break;
-    case XML_TOK_TEXT_SENDER_PHONE_WORK:
+    case  XML_ELEMENT(TEXT, XML_SENDER_PHONE_WORK):
         nSubType = UserDataPart::PHONE_COMPANY;
         break;
-    case XML_TOK_TEXT_SENDER_STREET:
+    case  XML_ELEMENT(TEXT, XML_SENDER_STREET):
         nSubType = UserDataPart::STREET;
         break;
-    case XML_TOK_TEXT_SENDER_CITY:
+    case XML_ELEMENT(TEXT, XML_SENDER_CITY):
         nSubType = UserDataPart::CITY;
         break;
-    case XML_TOK_TEXT_SENDER_POSTAL_CODE:
+    case XML_ELEMENT(TEXT, XML_SENDER_POSTAL_CODE):
         nSubType = UserDataPart::ZIP;
         break;
-    case XML_TOK_TEXT_SENDER_COUNTRY:
+    case XML_ELEMENT(TEXT, XML_SENDER_COUNTRY):
         nSubType = UserDataPart::COUNTRY;
         break;
-    case XML_TOK_TEXT_SENDER_STATE_OR_PROVINCE:
+    case  XML_ELEMENT(TEXT, XML_SENDER_STATE_OR_PROVINCE):
         nSubType = UserDataPart::STATE;
         break;
     default:
@@ -606,14 +600,14 @@ void XMLSenderFieldImportContext::StartElement(
     }
 
     // process Attributes
-    XMLTextFieldImportContext::StartElement(xAttrList);
+    XMLTextFieldImportContext::startFastElement(nElement, xAttrList);
 }
 
 void XMLSenderFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue)
 {
-    if (XML_TOK_TEXTFIELD_FIXED == nAttrToken) {
+    if (XML_ELEMENT(TEXT, XML_FIXED) == nAttrToken) {
 
         // set bVal
         bool bVal(false);
@@ -624,6 +618,8 @@ void XMLSenderFieldImportContext::ProcessAttribute(
             bFixed = bVal;
         }
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
 void XMLSenderFieldImportContext::PrepareField(
@@ -669,24 +665,27 @@ XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
     SetServiceName(sAPI_author);
 }
 
-void XMLAuthorFieldImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList) {
-
+void XMLAuthorFieldImportContext::startFastElement(
+        sal_Int32 nElement,
+        const Reference<XFastAttributeList> & xAttrList)
+{
     bAuthorFullName = (XML_TOK_TEXT_AUTHOR_INITIALS != nElementToken);
     bValid = true;
 
     // process Attributes
-    XMLTextFieldImportContext::StartElement(xAttrList);
+    XMLTextFieldImportContext::startFastElement(nElement, xAttrList);
 }
 
-void XMLAuthorFieldImportContext::ProcessAttribute(sal_uInt16 nAttrToken, const OUString& sAttrValue)
+void XMLAuthorFieldImportContext::ProcessAttribute(sal_Int32 nAttrToken, const OUString& sAttrValue)
 {
-    if(nAttrToken == XML_TOK_TEXTFIELD_FIXED)
+    if(nAttrToken == XML_ELEMENT(TEXT, XML_FIXED))
     {
         bool bTmp(false);
         if (::sax::Converter::convertBool(bTmp, sAttrValue))
             bFixed = bTmp;
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
 void XMLAuthorFieldImportContext::PrepareField(
@@ -742,11 +741,11 @@ XMLPageContinuationImportContext::XMLPageContinuationImportContext(
 }
 
 void XMLPageContinuationImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, const OUString& sAttrValue )
 {
     switch(nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_SELECT_PAGE:
+        case XML_ELEMENT(TEXT, XML_SELECT_PAGE):
         {
             PageNumberType nTmp;
             if (SvXMLUnitConverter::convertEnum(nTmp, sAttrValue,
@@ -757,10 +756,13 @@ void XMLPageContinuationImportContext::ProcessAttribute(
             }
             break;
         }
-        case XML_TOK_TEXTFIELD_STRING_VALUE:
+        case XML_ELEMENT(TEXT, XML_STRING_VALUE):
+        case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
             sString = sAttrValue;
             sStringOK = true;
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 }
 
@@ -798,23 +800,23 @@ XMLPageNumberImportContext::XMLPageNumberImportContext(
 }
 
 void XMLPageNumberImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_NUM_FORMAT:
+        case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
             sNumberFormat = sAttrValue;
             sNumberFormatOK = true;
             break;
-        case XML_TOK_TEXTFIELD_NUM_LETTER_SYNC:
+        case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             sNumberSync = sAttrValue;
             break;
-        case XML_TOK_TEXTFIELD_SELECT_PAGE:
+        case XML_ELEMENT(TEXT, XML_SELECT_PAGE):
             SvXMLUnitConverter::convertEnum(eSelectPage, sAttrValue,
                                                 lcl_aSelectPageAttrMap);
             break;
-        case XML_TOK_TEXTFIELD_PAGE_ADJUST:
+        case XML_ELEMENT(TEXT, XML_PAGE_ADJUST):
         {
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber(nTmp, sAttrValue))
@@ -823,6 +825,8 @@ void XMLPageNumberImportContext::ProcessAttribute(
             }
             break;
         }
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 }
 
@@ -892,14 +896,14 @@ XMLPlaceholderFieldImportContext::XMLPlaceholderFieldImportContext(
 
 /// process attribute values
 void XMLPlaceholderFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, const OUString& sAttrValue )
 {
     switch (nAttrToken) {
-    case XML_TOK_TEXTFIELD_DESCRIPTION:
+    case XML_ELEMENT(TEXT, XML_DESCRIPTION):
         sDescription = sAttrValue;
         break;
 
-    case XML_TOK_TEXTFIELD_PLACEHOLDER_TYPE:
+    case XML_ELEMENT(TEXT, XML_PLACEHOLDER_TYPE):
         bValid = true;
         if (IsXMLToken(sAttrValue, XML_TABLE))
         {
@@ -928,7 +932,8 @@ void XMLPlaceholderFieldImportContext::ProcessAttribute(
         break;
 
     default:
-        ; // ignore
+        // ignore
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 }
 
@@ -984,11 +989,12 @@ XMLTimeFieldImportContext::XMLTimeFieldImportContext(
 }
 
 void XMLTimeFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_TIME_VALUE:
+        case XML_ELEMENT(TEXT, XML_TIME_VALUE):
+        case XML_ELEMENT(OFFICE, XML_TIME_VALUE):
         {
             if (::sax::Converter::parseTimeOrDateTime(aDateTimeValue, sAttrValue))
             {
@@ -996,7 +1002,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
             }
             break;
         }
-        case XML_TOK_TEXTFIELD_FIXED:
+        case XML_ELEMENT(TEXT, XML_FIXED):
         {
             bool bTmp(false);
             if (::sax::Converter::convertBool(bTmp, sAttrValue))
@@ -1005,7 +1011,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
             }
             break;
         }
-        case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
+        case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
         {
             sal_Int32 nKey = GetImportHelper().GetDataStyleKey(
                                                sAttrValue, &bIsDefaultLanguage);
@@ -1016,7 +1022,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
             }
             break;
         }
-        case XML_TOK_TEXTFIELD_TIME_ADJUST:
+        case XML_ELEMENT(TEXT, XML_TIME_ADJUST):
         {
             double fTmp;
 
@@ -1027,6 +1033,8 @@ void XMLTimeFieldImportContext::ProcessAttribute(
             }
             break;
         }
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 }
 
@@ -1101,12 +1109,13 @@ XMLDateFieldImportContext::XMLDateFieldImportContext(
 }
 
 void XMLDateFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_DATE_VALUE:
+        case XML_ELEMENT(TEXT, XML_DATE_VALUE):
+        case XML_ELEMENT(OFFICE, XML_DATE_VALUE):
         {
             if (::sax::Converter::parseDateTime(aDateTimeValue, sAttrValue))
             {
@@ -1114,14 +1123,15 @@ void XMLDateFieldImportContext::ProcessAttribute(
             }
             break;
         }
-        case XML_TOK_TEXTFIELD_DATE_ADJUST:
+        case XML_ELEMENT(TEXT, XML_DATE_ADJUST):
             // delegate to superclass, pretending it was a time-adjust attr.
             XMLTimeFieldImportContext::ProcessAttribute(
                 XML_TOK_TEXTFIELD_TIME_ADJUST,
                 sAttrValue);
             break;
-        case XML_TOK_TEXTFIELD_TIME_VALUE:
-        case XML_TOK_TEXTFIELD_TIME_ADJUST:
+        case XML_ELEMENT(TEXT, XML_TIME_VALUE):
+        case XML_ELEMENT(OFFICE, XML_TIME_VALUE):
+        case XML_ELEMENT(TEXT, XML_TIME_ADJUST):
             ; // ignore time-adjust and time-value attributes
             break;
         default:
@@ -1160,20 +1170,20 @@ XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
 }
 
 void XMLDatabaseFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_DATABASE_NAME:
+        case XML_ELEMENT(TEXT, XML_DATABASE_NAME):
             m_sDatabaseName = sAttrValue;
             m_bDatabaseOK = true;
             m_bDatabaseNameOK = true;
             break;
-        case XML_TOK_TEXTFIELD_TABLE_NAME:
+        case XML_ELEMENT(TEXT, XML_TABLE_NAME):
             m_sTableName = sAttrValue;
             m_bTableOK = true;
             break;
-        case XML_TOK_TEXTFIELD_TABLE_TYPE:
+        case  XML_ELEMENT(TEXT, XML_TABLE_TYPE):
             if( IsXMLToken( sAttrValue, XML_TABLE ) )
             {
                 m_nCommandType = sdb::CommandType::TABLE;
@@ -1190,7 +1200,7 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
                 m_bCommandTypeOK = true;
             }
             break;
-        case XML_TOK_TEXTFIELD_DISPLAY:
+        case XML_ELEMENT(TEXT, XML_DISPLAY):
             if( IsXMLToken( sAttrValue, XML_NONE ) )
             {
                 m_bDisplay = false;
@@ -1202,6 +1212,8 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
                 m_bDisplayOK = true;
             }
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 }
 
@@ -1278,7 +1290,7 @@ XMLDatabaseNameImportContext::XMLDatabaseNameImportContext(
 }
 
 void XMLDatabaseNameImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, const OUString& sAttrValue )
 {
     // delegate to superclass and check for success
     XMLDatabaseFieldImportContext::ProcessAttribute(nAttrToken, sAttrValue);
@@ -1313,9 +1325,9 @@ XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
 }
 
 void XMLDatabaseNextImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, const OUString& sAttrValue )
 {
-    if (XML_TOK_TEXTFIELD_CONDITION == nAttrToken)
+    if (XML_ELEMENT(TEXT, XML_CONDITION) == nAttrToken)
     {
         OUString sTmp;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
@@ -1364,10 +1376,10 @@ XMLDatabaseSelectImportContext::XMLDatabaseSelectImportContext(
 }
 
 void XMLDatabaseSelectImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
-    if (XML_TOK_TEXTFIELD_ROW_NUMBER == nAttrToken)
+    if (XML_ELEMENT(TEXT, XML_ROW_NUMBER) == nAttrToken)
     {
         sal_Int32 nTmp;
         if (::sax::Converter::convertNumber( nTmp, sAttrValue
@@ -1413,18 +1425,19 @@ XMLDatabaseNumberImportContext::XMLDatabaseNumberImportContext(
 }
 
 void XMLDatabaseNumberImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_NUM_FORMAT:
+        case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
             sNumberFormat = sAttrValue;
             break;
-        case XML_TOK_TEXTFIELD_NUM_LETTER_SYNC:
+        case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             sNumberSync = sAttrValue;
             break;
-        case XML_TOK_TEXTFIELD_VALUE:
+        case XML_ELEMENT(TEXT, XML_VALUE_TYPE):
+        case XML_ELEMENT(OFFICE, XML_VALUE_TYPE):
         {
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber( nTmp, sAttrValue ))
@@ -1481,10 +1494,10 @@ XMLSimpleDocInfoImportContext::XMLSimpleDocInfoImportContext(
 }
 
 void XMLSimpleDocInfoImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
-    if (XML_TOK_TEXTFIELD_FIXED == nAttrToken)
+    if (XML_ELEMENT(TEXT, XML_FIXED) == nAttrToken)
     {
         bool bTmp(false);
         if (::sax::Converter::convertBool(bTmp, sAttrValue))
@@ -1492,6 +1505,8 @@ void XMLSimpleDocInfoImportContext::ProcessAttribute(
             bFixed = bTmp;
         }
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
 void XMLSimpleDocInfoImportContext::PrepareField(
@@ -1688,12 +1703,12 @@ XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
 }
 
 void XMLDateTimeDocInfoImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
+        case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
         {
             sal_Int32 nKey = GetImportHelper().GetDataStyleKey(
                                                sAttrValue, &bIsDefaultLanguage);
@@ -1704,7 +1719,7 @@ void XMLDateTimeDocInfoImportContext::ProcessAttribute(
             }
             break;
         }
-        case XML_TOK_TEXTFIELD_FIXED:
+        case XML_ELEMENT(TEXT, XML_FIXED):
             XMLSimpleDocInfoImportContext::ProcessAttribute(nAttrToken,
                                                             sAttrValue);
             break;
@@ -1761,12 +1776,12 @@ XMLUserDocInfoImportContext::XMLUserDocInfoImportContext(
 }
 
 void XMLUserDocInfoImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
+        case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
         {
             sal_Int32 nKey = GetImportHelper().GetDataStyleKey(
                                                sAttrValue, &bIsDefaultLanguage);
@@ -1777,7 +1792,7 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
             }
             break;
         }
-        case XML_TOK_TEXTFIELD_NAME:
+        case XML_ELEMENT(TEXT, XML_NAME):
         {
             if (!bValid)
             {
@@ -1837,10 +1852,10 @@ XMLHiddenParagraphImportContext::XMLHiddenParagraphImportContext(
 }
 
 void XMLHiddenParagraphImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
-    if (XML_TOK_TEXTFIELD_CONDITION == nAttrToken)
+    if ( XML_ELEMENT(TEXT, XML_CONDITION) == nAttrToken)
     {
         OUString sTmp;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
@@ -1853,7 +1868,7 @@ void XMLHiddenParagraphImportContext::ProcessAttribute(
         else
             sCondition = sAttrValue;
     }
-    else if (XML_TOK_TEXTFIELD_IS_HIDDEN == nAttrToken)
+    else if ( XML_ELEMENT(TEXT, XML_IS_HIDDEN) == nAttrToken)
     {
         bool bTmp(false);
         if (::sax::Converter::convertBool(bTmp, sAttrValue))
@@ -1861,6 +1876,8 @@ void XMLHiddenParagraphImportContext::ProcessAttribute(
             bIsHidden = bTmp;
         }
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
 void XMLHiddenParagraphImportContext::PrepareField(
@@ -1892,12 +1909,12 @@ XMLConditionalTextImportContext::XMLConditionalTextImportContext(
 }
 
 void XMLConditionalTextImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_CONDITION:
+        case XML_ELEMENT(TEXT, XML_CONDITION):
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
@@ -1911,15 +1928,15 @@ void XMLConditionalTextImportContext::ProcessAttribute(
                     sCondition = sAttrValue;
             }
             break;
-        case XML_TOK_TEXTFIELD_STRING_VALUE_IF_FALSE:
+        case XML_ELEMENT(TEXT, XML_STRING_VALUE_IF_FALSE):
             sFalseContent = sAttrValue;
             bFalseOK = true;
             break;
-        case XML_TOK_TEXTFIELD_STRING_VALUE_IF_TRUE:
+        case XML_ELEMENT(TEXT, XML_STRING_VALUE_IF_TRUE):
             sTrueContent = sAttrValue;
             bTrueOK = true;
             break;
-        case XML_TOK_TEXTFIELD_CURRENT_VALUE:
+        case XML_ELEMENT(TEXT, XML_CURRENT_VALUE):
         {
             bool bTmp(false);
             if (::sax::Converter::convertBool(bTmp, sAttrValue))
@@ -1928,6 +1945,8 @@ void XMLConditionalTextImportContext::ProcessAttribute(
             }
             break;
         }
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 
     bValid = bConditionOK && bFalseOK && bTrueOK;
@@ -1962,12 +1981,12 @@ XMLHiddenTextImportContext::XMLHiddenTextImportContext(
 }
 
 void XMLHiddenTextImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_CONDITION:
+        case XML_ELEMENT(TEXT, XML_CONDITION):
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
@@ -1981,11 +2000,12 @@ void XMLHiddenTextImportContext::ProcessAttribute(
                     sCondition = sAttrValue;
             }
             break;
-        case XML_TOK_TEXTFIELD_STRING_VALUE:
+        case XML_ELEMENT(TEXT, XML_STRING_VALUE):
+        case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
             sString = sAttrValue;
             bStringOK = true;
             break;
-        case XML_TOK_TEXTFIELD_IS_HIDDEN:
+        case XML_ELEMENT(TEXT, XML_IS_HIDDEN):
         {
             bool bTmp(false);
             if (::sax::Converter::convertBool(bTmp, sAttrValue))
@@ -1994,6 +2014,8 @@ void XMLHiddenTextImportContext::ProcessAttribute(
             }
             break;
         }
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 
     bValid = bConditionOK && bStringOK;
@@ -2036,12 +2058,12 @@ XMLFileNameImportContext::XMLFileNameImportContext(
 }
 
 void XMLFileNameImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_FIXED:
+        case XML_ELEMENT(TEXT, XML_FIXED):
         {
             bool bTmp(false);
             if (::sax::Converter::convertBool(bTmp, sAttrValue))
@@ -2050,7 +2072,7 @@ void XMLFileNameImportContext::ProcessAttribute(
             }
             break;
         }
-        case XML_TOK_TEXTFIELD_DISPLAY:
+        case XML_ELEMENT(TEXT, XML_DISPLAY):
         {
             sal_uInt16 nTmp;
             if (SvXMLUnitConverter::convertEnum(nTmp, sAttrValue,
@@ -2061,7 +2083,8 @@ void XMLFileNameImportContext::ProcessAttribute(
             break;
         }
         default:
-            ; // unknown attribute: ignore
+            // unknown attribute: ignore
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
             break;
     }
 }
@@ -2117,12 +2140,12 @@ XMLTemplateNameImportContext::XMLTemplateNameImportContext(
 }
 
 void XMLTemplateNameImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_DISPLAY:
+        case XML_ELEMENT(TEXT, XML_DISPLAY):
         {
             sal_uInt16 nTmp;
             if (SvXMLUnitConverter::convertEnum(nTmp, sAttrValue,
@@ -2133,7 +2156,8 @@ void XMLTemplateNameImportContext::ProcessAttribute(
             break;
         }
         default:
-            ; // unknown attribute: ignore
+            // unknown attribute: ignore
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
             break;
     }
 }
@@ -2173,12 +2197,12 @@ XMLChapterImportContext::XMLChapterImportContext(
 }
 
 void XMLChapterImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_DISPLAY:
+        case XML_ELEMENT(TEXT, XML_DISPLAY):
         {
             sal_uInt16 nTmp;
             if (SvXMLUnitConverter::convertEnum(nTmp, sAttrValue,
@@ -2188,7 +2212,7 @@ void XMLChapterImportContext::ProcessAttribute(
             }
             break;
         }
-        case XML_TOK_TEXTFIELD_OUTLINE_LEVEL:
+        case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
         {
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber(
@@ -2203,7 +2227,8 @@ void XMLChapterImportContext::ProcessAttribute(
             break;
         }
         default:
-            ; // unknown attribute: ignore
+            // unknown attribute: ignore
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
             break;
     }
 }
@@ -2234,18 +2259,20 @@ XMLCountFieldImportContext::XMLCountFieldImportContext(
 }
 
 void XMLCountFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_NUM_FORMAT:
+        case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
             sNumberFormat = sAttrValue;
             bNumberFormatOK = true;
             break;
-        case XML_TOK_TEXTFIELD_NUM_LETTER_SYNC:
+        case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             sLetterSync = sAttrValue;
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 }
 
@@ -2326,18 +2353,20 @@ XMLPageVarGetFieldImportContext::XMLPageVarGetFieldImportContext(
 }
 
 void XMLPageVarGetFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_NUM_FORMAT:
+        case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
             sNumberFormat = sAttrValue;
             bNumberFormatOK = true;
             break;
-        case XML_TOK_TEXTFIELD_NUM_LETTER_SYNC:
+        case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             sLetterSync = sAttrValue;
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 }
 
@@ -2376,12 +2405,12 @@ XMLPageVarSetFieldImportContext::XMLPageVarSetFieldImportContext(
 }
 
 void XMLPageVarSetFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-    case XML_TOK_TEXTFIELD_ACTIVE:
+    case XML_ELEMENT(TEXT, XML_ACTIVE):
     {
         bool bTmp(false);
         if (::sax::Converter::convertBool(bTmp, sAttrValue))
@@ -2390,7 +2419,7 @@ void XMLPageVarSetFieldImportContext::ProcessAttribute(
         }
         break;
     }
-    case XML_TOK_TEXTFIELD_PAGE_ADJUST:
+    case XML_ELEMENT(TEXT, XML_PAGE_ADJUST):
     {
         sal_Int32 nTmp(0);
         if (::sax::Converter::convertNumber(nTmp, sAttrValue))
@@ -2400,6 +2429,7 @@ void XMLPageVarSetFieldImportContext::ProcessAttribute(
         break;
     }
     default:
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
         break;
     }
 }
@@ -2445,19 +2475,21 @@ SvXMLImportContextRef XMLMacroFieldImportContext::CreateChildContext(
 }
 
 void XMLMacroFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_DESCRIPTION:
+        case XML_ELEMENT(TEXT, XML_DESCRIPTION):
             sDescription = sAttrValue;
             bDescriptionOK = true;
             break;
-        case XML_TOK_TEXTFIELD_NAME:
+        case XML_ELEMENT(TEXT, XML_NAME):
             sMacro = sAttrValue;
             bValid = true;
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 }
 
@@ -2561,22 +2593,23 @@ SvXMLEnumMapEntry<sal_uInt16> const lcl_aReferenceTypeTokenMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-void XMLReferenceFieldImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLReferenceFieldImportContext::startFastElement(
+        sal_Int32 nElement,
+        const Reference<XFastAttributeList> & xAttrList)
 {
     bTypeOK = true;
     switch (nElementToken)
     {
-        case XML_TOK_TEXT_REFERENCE_REF:
+        case XML_ELEMENT(TEXT, XML_REFERENCE_REF):
             nSource = ReferenceFieldSource::REFERENCE_MARK;
             break;
-        case XML_TOK_TEXT_BOOKMARK_REF:
+        case  XML_ELEMENT(TEXT, XML_BOOKMARK_REF):
             nSource = ReferenceFieldSource::BOOKMARK;
             break;
-        case XML_TOK_TEXT_NOTE_REF:
+        case XML_ELEMENT(TEXT, XML_NOTE_REF):
             nSource = ReferenceFieldSource::FOOTNOTE;
             break;
-        case XML_TOK_TEXT_SEQUENCE_REF:
+        case XML_ELEMENT(TEXT, XML_SEQUENCE_REF):
             nSource = ReferenceFieldSource::SEQUENCE_FIELD;
             break;
         default:
@@ -2585,25 +2618,25 @@ void XMLReferenceFieldImportContext::StartElement(
             break;
     }
 
-    XMLTextFieldImportContext::StartElement(xAttrList);
+    XMLTextFieldImportContext::startFastElement(nElement, xAttrList);
 }
 
 
 void XMLReferenceFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_NOTE_CLASS:
+        case XML_ELEMENT(TEXT, XML_NOTE_CLASS):
             if( IsXMLToken( sAttrValue, XML_ENDNOTE ) )
                 nSource = ReferenceFieldSource::ENDNOTE;
             break;
-        case XML_TOK_TEXTFIELD_REF_NAME:
+        case XML_ELEMENT(TEXT, XML_REF_NAME):
             sName = sAttrValue;
             bNameOK = true;
             break;
-        case XML_TOK_TEXTFIELD_REFERENCE_FORMAT:
+        case  XML_ELEMENT(TEXT, XML_REFERENCE_FORMAT):
         {
             sal_uInt16 nToken;
             if (SvXMLUnitConverter::convertEnum(nToken, sAttrValue,
@@ -2623,9 +2656,12 @@ void XMLReferenceFieldImportContext::ProcessAttribute(
 
             break;
         }
-        case XML_TOK_TEXTFIELD_REFERENCE_LANGUAGE:
+        case XML_ELEMENT(LO_EXT, XML_REFERENCE_LANGUAGE):
+        case XML_ELEMENT(TEXT, XML_REFERENCE_LANGUAGE):
             sLanguage = sAttrValue;
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 
     // bValid: we need proper element type and name
@@ -2700,9 +2736,7 @@ SvXMLImportContextRef XMLDdeFieldDeclsImportContext::CreateChildContext(
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
          (IsXMLToken(rLocalName, XML_DDE_CONNECTION_DECL)) )
     {
-        static const SvXMLTokenMap aTokenMap(aDdeDeclAttrTokenMap);
-        return new XMLDdeFieldDeclImportContext(GetImport(), nPrefix,
-                                                rLocalName, aTokenMap);
+        return new XMLDdeFieldDeclImportContext(GetImport(), nPrefix, rLocalName);
     }
     return nullptr;
 }
@@ -2713,16 +2747,16 @@ SvXMLImportContextRef XMLDdeFieldDeclsImportContext::CreateChildContext(
 
 XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx,
-    const OUString& sLocalName, const SvXMLTokenMap& rMap)
+    const OUString& sLocalName)
 :   SvXMLImportContext(rImport, nPrfx, sLocalName)
-,   rTokenMap(rMap)
 {
     DBG_ASSERT(XML_NAMESPACE_TEXT == nPrfx, "wrong prefix");
     DBG_ASSERT(IsXMLToken(sLocalName, XML_DDE_CONNECTION_DECL), "wrong name");
 }
 
-void XMLDdeFieldDeclImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLDdeFieldDeclImportContext::startFastElement(
+        sal_Int32 /*nElement*/,
+        const Reference<XFastAttributeList> & xAttrList)
 {
     OUString sName;
     OUString sCommandApplication;
@@ -2736,42 +2770,37 @@ void XMLDdeFieldDeclImportContext::StartElement(
     bool bCommandItemOK = false;
 
     // process attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++)
+    for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        switch (rTokenMap.Get(nPrefix, sLocalName))
+        switch (aIter.getToken())
         {
-            case XML_TOK_DDEFIELD_NAME:
-                sName = xAttrList->getValueByIndex(i);
+            case XML_ELEMENT(OFFICE, XML_NAME):
+                sName = aIter.toString();
                 bNameOK = true;
                 break;
-            case XML_TOK_DDEFIELD_APPLICATION:
-                sCommandApplication = xAttrList->getValueByIndex(i);
+            case XML_ELEMENT(OFFICE, XML_DDE_APPLICATION):
+                sCommandApplication = aIter.toString();
                 bCommandApplicationOK = true;
                 break;
-            case XML_TOK_DDEFIELD_TOPIC:
-                sCommandTopic = xAttrList->getValueByIndex(i);
+            case XML_ELEMENT(OFFICE, XML_DDE_TOPIC):
+                sCommandTopic = aIter.toString();
                 bCommandTopicOK = true;
                 break;
-            case XML_TOK_DDEFIELD_ITEM:
-                sCommandItem = xAttrList->getValueByIndex(i);
+            case XML_ELEMENT(OFFICE, XML_DDE_ITEM):
+                sCommandItem = aIter.toString();
                 bCommandItemOK = true;
                 break;
-            case XML_TOK_DDEFIELD_UPDATE:
+            case XML_ELEMENT(OFFICE, XML_AUTOMATIC_UPDATE):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(
-                    bTmp, xAttrList->getValueByIndex(i)) )
+                if (::sax::Converter::convertBool(bTmp, aIter.toString()) )
                 {
                     bUpdate = bTmp;
                 }
                 break;
             }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -2842,15 +2871,18 @@ XMLDdeFieldImportContext::XMLDdeFieldImportContext(
 }
 
 void XMLDdeFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
-    if (XML_TOK_TEXTFIELD_CONNECTION_NAME == nAttrToken)
+    if ( XML_ELEMENT(TEXT, XML_CONNECTION_NAME) == nAttrToken)
     {
         sName = sAttrValue;
         bValid = true;
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
+
 
 void XMLDdeFieldImportContext::endFastElement(sal_Int32 )
 {
@@ -2918,10 +2950,11 @@ XMLSheetNameImportContext::XMLSheetNameImportContext(
 }
 
 void XMLSheetNameImportContext::ProcessAttribute(
-    sal_uInt16,
-    const OUString& )
+    sal_Int32 nAttrToken,
+    const OUString& sAttrValue)
 {
     // no attributes -> nothing to be done
+    XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
 void XMLSheetNameImportContext::PrepareField(
@@ -2943,9 +2976,10 @@ XMLPageNameFieldImportContext::XMLPageNameFieldImportContext(
 }
 
 /// process attribute values
-void XMLPageNameFieldImportContext::ProcessAttribute( sal_uInt16,
-                                   const OUString& )
+void XMLPageNameFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken,
+                                   const OUString& sAttrValue )
 {
+    XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
 /// prepare XTextField for insertion into document
@@ -2970,21 +3004,22 @@ XMLUrlFieldImportContext::XMLUrlFieldImportContext(
 }
 
 void XMLUrlFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_HREF:
+        case XML_ELEMENT(XLINK, XML_HREF):
             sURL = GetImport().GetAbsoluteReference( sAttrValue );
             bValid = true;
             break;
-        case XML_TOK_TEXTFIELD_TARGET_FRAME:
+        case XML_ELEMENT(OFFICE, XML_TARGET_FRAME_NAME):
             sFrame = sAttrValue;
             bFrameOK = true;
             break;
         default:
             // ignore
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
             break;
     }
 }
@@ -3047,32 +3082,28 @@ SvXMLEnumMapEntry<sal_uInt16> const aBibliographyDataTypeMap[] =
 // we'll process attributes on our own and for fit the standard
 // textfield mechanism, because our attributes have zero overlap with
 // all the other textfields.
-void XMLBibliographyFieldImportContext::StartElement(
-        const Reference<XAttributeList> & xAttrList)
+void XMLBibliographyFieldImportContext::startFastElement(
+        sal_Int32 /*nElement*/,
+        const Reference<XFastAttributeList> & xAttrList)
 {
     // iterate over attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++) {
-
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        if (nPrefix == XML_NAMESPACE_TEXT)
+    for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
+    {
+        if (IsTokenInNamespace(aIter.getToken(), XML_NAMESPACE_TEXT))
         {
             PropertyValue aValue;
             aValue.Name = OUString::createFromAscii(
-                MapBibliographyFieldName(sLocalName));
+                MapBibliographyFieldName(SvXMLImport::getNameFromToken(aIter.getToken())));
             Any aAny;
 
             // special treatment for bibliography type
             // biblio vs bibilio: #96658#; also read old documents
-            if (IsXMLToken(sLocalName, XML_BIBILIOGRAPHIC_TYPE) ||
-                IsXMLToken(sLocalName, XML_BIBLIOGRAPHY_TYPE)    )
+            if ((aIter.getToken() & TOKEN_MASK) == XML_BIBILIOGRAPHIC_TYPE ||
+                (aIter.getToken() & TOKEN_MASK) == XML_BIBLIOGRAPHY_TYPE   )
             {
                 sal_uInt16 nTmp;
                 if (SvXMLUnitConverter::convertEnum(
-                    nTmp, xAttrList->getValueByIndex(i),
+                    nTmp, aIter.toString(),
                     aBibliographyDataTypeMap))
                 {
                     aAny <<= static_cast<sal_Int16>(nTmp);
@@ -3083,7 +3114,7 @@ void XMLBibliographyFieldImportContext::StartElement(
             }
             else
             {
-                aAny <<= xAttrList->getValueByIndex(i);
+                aAny <<= aIter.toString();
                 aValue.Value = aAny;
 
                 aValues.push_back(aValue);
@@ -3094,11 +3125,11 @@ void XMLBibliographyFieldImportContext::StartElement(
 }
 
 void XMLBibliographyFieldImportContext::ProcessAttribute(
-    sal_uInt16,
+    sal_Int32 ,
     const OUString& )
 {
     // attributes are handled in StartElement
-    OSL_FAIL("This should not have happened.");
+    assert(false && "This should not have happened.");
 }
 
 
@@ -3280,13 +3311,15 @@ XMLAnnotationImportContext::XMLAnnotationImportContext(
 }
 
 void XMLAnnotationImportContext::ProcessAttribute(
-    sal_uInt16 nToken,
-    const OUString& rValue )
+    sal_Int32 nAttrToken,
+    const OUString& sAttrValue )
 {
-    if (nToken == XML_TOK_TEXT_NAME)
-        aName = rValue;
-    if (nToken == XML_TOK_TEXT_RESOLVED)
-        aResolved = rValue;
+    if (nAttrToken == XML_ELEMENT(OFFICE, XML_NAME))
+        aName = sAttrValue;
+    else if (nAttrToken == XML_ELEMENT(LO_EXT, XML_RESOLVED))
+        aResolved = sAttrValue;
+    else
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
 SvXMLImportContextRef XMLAnnotationImportContext::CreateChildContext(
@@ -3497,22 +3530,23 @@ XMLScriptImportContext::XMLScriptImportContext(
 }
 
 void XMLScriptImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_HREF:
+        case XML_ELEMENT(XLINK, XML_HREF):
             sContent = GetImport().GetAbsoluteReference( sAttrValue );
             bContentOK = true;
             break;
 
-        case XML_TOK_TEXTFIELD_LANGUAGE:
+        case XML_ELEMENT(SCRIPT, XML_LANGUAGE):
             sScriptType = sAttrValue;
             break;
 
         default:
             // ignore
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
             break;
     }
 
@@ -3552,12 +3586,12 @@ XMLMeasureFieldImportContext::XMLMeasureFieldImportContext(
 }
 
 void XMLMeasureFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_MEASURE_KIND:
+        case XML_ELEMENT(TEXT, XML_KIND):
             if( IsXMLToken( sAttrValue, XML_VALUE ) )
             {
                 mnKind = 0; bValid = true;
@@ -3571,6 +3605,8 @@ void XMLMeasureFieldImportContext::ProcessAttribute(
                 mnKind = 2; bValid = true;
             }
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
 }
 
@@ -3654,15 +3690,15 @@ SvXMLImportContextRef XMLDropDownFieldImportContext::CreateChildContext(
 }
 
 void XMLDropDownFieldImportContext::ProcessAttribute(
-    sal_uInt16 nAttrToken,
+    sal_Int32 nAttrToken,
     const OUString& sAttrValue )
 {
-    if( nAttrToken == XML_TOK_TEXTFIELD_NAME )
+    if( nAttrToken == XML_ELEMENT(TEXT, XML_NAME))
     {
         sName = sAttrValue;
         bNameOK = true;
     }
-    else if (nAttrToken == XML_TOK_TEXTFIELD_HELP)
+    else if (nAttrToken ==  XML_ELEMENT(TEXT, XML_HELP))
     {
         sHelp = sAttrValue;
         bHelpOK = true;
@@ -3672,6 +3708,8 @@ void XMLDropDownFieldImportContext::ProcessAttribute(
         sHint = sAttrValue;
         bHintOK = true;
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
 void XMLDropDownFieldImportContext::PrepareField(
@@ -3725,8 +3763,9 @@ XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
 }
 
 /// process attribute values
-void XMLHeaderFieldImportContext::ProcessAttribute( sal_uInt16, const OUString& )
+void XMLHeaderFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken, const OUString& sAttrValue )
 {
+    XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
 /// prepare XTextField for insertion into document
@@ -3748,8 +3787,9 @@ XMLFooterFieldImportContext::XMLFooterFieldImportContext(
 }
 
 /// process attribute values
-void XMLFooterFieldImportContext::ProcessAttribute( sal_uInt16, const OUString& )
+void XMLFooterFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken, const OUString& sAttrValue)
 {
+    XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
 /// prepare XTextField for insertion into document
@@ -3772,9 +3812,10 @@ XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
 }
 
 /// process attribute values
-void XMLDateTimeFieldImportContext::ProcessAttribute( sal_uInt16,
-                                   const OUString& )
+void XMLDateTimeFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken,
+                                   const OUString& sAttrValue )
 {
+    XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
 /// prepare XTextField for insertion into document
