@@ -2344,7 +2344,7 @@ SfxBoolItem ShowLines SID_SHOWLINES
 
 
 SfxStringItem RunMacro SID_RUNMACRO
-()
+(SfxStringItem ScriptURL FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
