@@ -107,10 +107,10 @@ ScXMLAnnotationContext::~ScXMLAnnotationContext()
 {
 }
 
-void ScXMLAnnotationContext::StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList)
+void ScXMLAnnotationContext::startFastElement(sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList)
 {
     if (pShapeContext)
-        pShapeContext->StartElement(xAttrList);
+        pShapeContext->startFastElement(nElement, xAttrList);
 }
 
 SvXMLImportContextRef ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPrefix,
