@@ -214,7 +214,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     sal_uInt16          m_nDrawSfxId;
     OUString            m_sDrawCustom; //some drawing types are marked with strings!
     sal_uInt16          m_nFormSfxId;
-    sal_uInt16          m_eFormObjKind;
+    SdrObjKind          m_eFormObjKind;
     SotExchangeDest     m_nLastPasteDestination;
 
     // save the border distance status from SwView::StateTabWin to re-use it in SwView::ExecTabWin()
@@ -521,7 +521,7 @@ public:
     bool            EnterDrawTextMode(const Point& aDocPos);
     /// Same as EnterDrawTextMode(), but takes an SdrObject instead of guessing it by document position.
     bool EnterShapeDrawTextMode(SdrObject* pObject);
-    void            LeaveDrawCreate()   { m_nDrawSfxId = m_nFormSfxId = USHRT_MAX; m_sDrawCustom.clear(); m_eFormObjKind = 0; }
+    void            LeaveDrawCreate()   { m_nDrawSfxId = m_nFormSfxId = USHRT_MAX; m_sDrawCustom.clear(); m_eFormObjKind = OBJ_NONE; }
     bool            IsDrawMode() const  { return (m_nDrawSfxId != USHRT_MAX || m_nFormSfxId != USHRT_MAX); }
     bool            IsFormMode() const;
     bool            IsBezierEditMode() const;

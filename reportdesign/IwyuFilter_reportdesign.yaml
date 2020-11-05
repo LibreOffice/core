@@ -1,9 +1,6 @@
 ---
 assumeFilename: reportdesign/source/ui/report/ReportController.cxx
 excludelist:
-    reportdesign/inc/RptDef.hxx:
-    # Needed for macro define
-    - svx/fmglob.hxx
     reportdesign/source/core/api/FormatCondition.cxx:
     # Needed for COL_TRANSPARENT in REPORTCONTROLFORMAT_IMPL
     - tools/color.hxx

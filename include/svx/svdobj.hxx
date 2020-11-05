@@ -30,6 +30,7 @@
 #include <svl/typedwhich.hxx>
 #include <svx/DiagramDataInterface.hxx>
 #include <svx/svdtypes.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/shapeproperty.hxx>
 #include <tools/link.hxx>
@@ -113,42 +114,6 @@ struct SVXCORE_DLLPUBLIC SdrObjectFreeOp;
 // helper for constructing std::unique_ptr for SdrObjects where a
 // deleter is needed - here, SdrObject::Free needs to be used.
 typedef std::unique_ptr< SdrObject, SdrObjectFreeOp > SdrObjectUniquePtr;
-
-enum SdrObjKind {
-    OBJ_NONE       = 0,  /// abstract object (SdrObject)
-    OBJ_GRUP       = 1,  /// object group
-    OBJ_LINE       = 2,  /// line
-    OBJ_RECT       = 3,  /// rectangle (round corners optional)
-    OBJ_CIRC       = 4,  /// circle, ellipse
-    OBJ_SECT       = 5,  /// circle section
-    OBJ_CARC       = 6,  /// circle arc
-    OBJ_CCUT       = 7,  /// circle cut
-    OBJ_POLY       = 8,  /// polygon, PolyPolygon
-    OBJ_PLIN       = 9,  /// PolyLine
-    OBJ_PATHLINE   =10,  /// open Bezier-curve
-    OBJ_PATHFILL   =11,  /// closed Bezier-curve
-    OBJ_FREELINE   =12,  /// open free-hand line
-    OBJ_FREEFILL   =13,  /// closed free-hand line
-    OBJ_SPLNLINE   =14,  /// natural cubic Spline                  (ni)
-    OBJ_SPLNFILL   =15,  /// periodic cubic Spline                 (ni)
-    OBJ_TEXT       =16,  /// text object
-    OBJ_TITLETEXT  =20,  /// TitleText, special text object for StarDraw
-    OBJ_OUTLINETEXT=21,  /// OutlineText, special text object for StarDraw
-    OBJ_GRAF       =22,  /// foreign graphic (StarView Graphic)
-    OBJ_OLE2       =23,  /// OLE object
-    OBJ_EDGE       =24,  /// connector object
-    OBJ_CAPTION    =25,  /// caption object
-    OBJ_PATHPOLY   =26,  /// Polygon/PolyPolygon represented by SdrPathObj
-    OBJ_PATHPLIN   =27,  /// Polyline represented by SdrPathObj
-    OBJ_PAGE       =28,  /// object that represents a SdrPage
-    OBJ_MEASURE    =29,  /// measurement object
-    OBJ_FRAME      =31,  /// continuously activated OLE (PlugIn-Frame or similar)
-    OBJ_UNO        =32,  /// Universal Network Object packed into SvDraw object
-    OBJ_CUSTOMSHAPE=33,  /// custom shape
-    OBJ_MEDIA      =34,  /// media shape
-    OBJ_TABLE      =35,  /// table
-    OBJ_MAXI
-};
 
 enum class SdrInventor : sal_uInt32 {
     Unknown          = 0,
@@ -410,7 +375,7 @@ public:
     void AddReference(SdrVirtObj& rVrtObj);
     void DelReference(SdrVirtObj& rVrtObj);
     virtual SdrInventor GetObjInventor() const;
-    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual SdrObjKind GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
 
     // Layer interface
@@ -1048,7 +1013,7 @@ struct SVXCORE_DLLPUBLIC SdrObjectFreeOp
 struct SdrObjCreatorParams
 {
     SdrInventor nInventor;
-    sal_uInt16  nObjIdentifier;
+    SdrObjKind nObjIdentifier;
     SdrModel&   rSdrModel;
 };
 
@@ -1066,7 +1031,7 @@ public:
     static SdrObject* MakeNewObject(
         SdrModel& rSdrModel,
         SdrInventor nInventor,
-        sal_uInt16 nObjIdentifier,
+        SdrObjKind nObjIdentifier,
         const tools::Rectangle* pSnapRect = nullptr);
 
     static void InsertMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
@@ -1076,7 +1041,7 @@ private:
     static SVX_DLLPRIVATE SdrObject* CreateObjectFromFactory(
         SdrModel& rSdrModel,
         SdrInventor nInventor,
-        sal_uInt16 nIdentifier);
+        SdrObjKind nIdentifier);
 
     SdrObjFactory() = delete;
 };

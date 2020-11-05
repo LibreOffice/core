@@ -312,18 +312,15 @@ void FmFormObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     pNewFormPage->GetImpl().formObjectInserted( *this );
 }
 
-
 SdrInventor FmFormObj::GetObjInventor()   const
 {
     return SdrInventor::FmForm;
 }
 
-
-sal_uInt16 FmFormObj::GetObjIdentifier() const
+SdrObjKind FmFormObj::GetObjIdentifier() const
 {
     return OBJ_UNO;
 }
-
 
 void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 {

@@ -440,7 +440,7 @@ public:
     virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
 
     // needed to determine text anchor area
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const;

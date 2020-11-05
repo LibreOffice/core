@@ -367,9 +367,9 @@ void SdrEdgeObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-sal_uInt16 SdrEdgeObj::GetObjIdentifier() const
+SdrObjKind SdrEdgeObj::GetObjIdentifier() const
 {
-    return sal_uInt16(OBJ_EDGE);
+    return OBJ_EDGE;
 }
 
 const tools::Rectangle& SdrEdgeObj::GetCurrentBoundRect() const

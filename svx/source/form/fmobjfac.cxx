@@ -26,7 +26,7 @@
 
 #include <svx/fmobjfac.hxx>
 
-#include <svx/fmglob.hxx>
+#include <svx/svdobjkind.hxx>
 
 #include <fmobj.hxx>
 
@@ -205,6 +205,9 @@ IMPL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, Sdr
             case OBJ_FM_SPINBUTTON:
                 sServiceSpecifier = FM_SUN_COMPONENT_SPINBUTTON;
                 aInitialProperties.emplace_back( FM_PROP_BORDER, makeAny( sal_Int16(0) ) );
+                break;
+
+            default:
                 break;
         }
 

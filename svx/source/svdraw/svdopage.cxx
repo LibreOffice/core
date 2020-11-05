@@ -123,9 +123,9 @@ void SdrPageObj::SetBoundRectDirty()
     // not re-creatable view data
 }
 
-sal_uInt16 SdrPageObj::GetObjIdentifier() const
+SdrObjKind SdrPageObj::GetObjIdentifier() const
 {
-    return sal_uInt16(OBJ_PAGE);
+    return OBJ_PAGE;
 }
 
 void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const

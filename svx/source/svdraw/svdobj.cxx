@@ -555,9 +555,9 @@ SdrInventor SdrObject::GetObjInventor()   const
     return SdrInventor::Default;
 }
 
-sal_uInt16 SdrObject::GetObjIdentifier() const
+SdrObjKind SdrObject::GetObjIdentifier() const
 {
-    return sal_uInt16(OBJ_NONE);
+    return OBJ_NONE;
 }
 
 void SdrObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
@@ -3041,7 +3041,7 @@ void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
     SetName(sName);
 }
 
-SdrObject* SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, sal_uInt16 nObjIdentifier)
+SdrObject* SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, SdrObjKind nObjIdentifier)
 {
     SdrObjCreatorParams aParams { nInventor, nObjIdentifier, rSdrModel };
     for (const auto & i : ImpGetUserMakeObjHdl()) {
@@ -3056,7 +3056,7 @@ SdrObject* SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInvent
 SdrObject* SdrObjFactory::MakeNewObject(
     SdrModel& rSdrModel,
     SdrInventor nInventor,
-    sal_uInt16 nIdentifier,
+    SdrObjKind nIdentifier,
     const tools::Rectangle* pSnapRect)
 {
     SdrObject* pObj(nullptr);
@@ -3116,7 +3116,7 @@ SdrObject* SdrObjFactory::MakeNewObject(
                 {
                     pObj = new SdrRectObj(
                         rSdrModel,
-                        static_cast<SdrObjKind>(nIdentifier),
+                        nIdentifier,
                         *pSnapRect);
                     bSetSnapRect = false;
                 }
@@ -3124,7 +3124,7 @@ SdrObject* SdrObjFactory::MakeNewObject(
                 {
                     pObj = new SdrRectObj(
                         rSdrModel,
-                        static_cast<SdrObjKind>(nIdentifier));
+                        nIdentifier);
                 }
             }
             break;
@@ -3133,7 +3133,7 @@ SdrObject* SdrObjFactory::MakeNewObject(
             case OBJ_CARC:
             case OBJ_CCUT:
             {
-                SdrCircKind eCircKind = ToSdrCircKind(static_cast<SdrObjKind>(nIdentifier));
+                SdrCircKind eCircKind = ToSdrCircKind(nIdentifier);
                 if(nullptr != pSnapRect)
                 {
                     pObj = new SdrCircObj(rSdrModel, eCircKind, *pSnapRect);
@@ -3145,29 +3145,30 @@ SdrObject* SdrObjFactory::MakeNewObject(
                 }
             }
             break;
-            case sal_uInt16(OBJ_NONE       ): pObj=new SdrObject(rSdrModel);                   break;
-            case sal_uInt16(OBJ_GRUP       ): pObj=new SdrObjGroup(rSdrModel);                 break;
-            case sal_uInt16(OBJ_POLY       ): pObj=new SdrPathObj(rSdrModel, OBJ_POLY       ); break;
-            case sal_uInt16(OBJ_PLIN       ): pObj=new SdrPathObj(rSdrModel, OBJ_PLIN       ); break;
-            case sal_uInt16(OBJ_PATHLINE   ): pObj=new SdrPathObj(rSdrModel, OBJ_PATHLINE   ); break;
-            case sal_uInt16(OBJ_PATHFILL   ): pObj=new SdrPathObj(rSdrModel, OBJ_PATHFILL   ); break;
-            case sal_uInt16(OBJ_FREELINE   ): pObj=new SdrPathObj(rSdrModel, OBJ_FREELINE   ); break;
-            case sal_uInt16(OBJ_FREEFILL   ): pObj=new SdrPathObj(rSdrModel, OBJ_FREEFILL   ); break;
-            case sal_uInt16(OBJ_PATHPOLY   ): pObj=new SdrPathObj(rSdrModel, OBJ_POLY       ); break;
-            case sal_uInt16(OBJ_PATHPLIN   ): pObj=new SdrPathObj(rSdrModel, OBJ_PLIN       ); break;
-            case sal_uInt16(OBJ_EDGE       ): pObj=new SdrEdgeObj(rSdrModel);                  break;
-            case sal_uInt16(OBJ_RECT       ): pObj=new SdrRectObj(rSdrModel);                  break;
-            case sal_uInt16(OBJ_GRAF       ): pObj=new SdrGrafObj(rSdrModel);                  break;
-            case sal_uInt16(OBJ_OLE2       ): pObj=new SdrOle2Obj(rSdrModel);                  break;
-            case sal_uInt16(OBJ_FRAME      ): pObj=new SdrOle2Obj(rSdrModel, true);            break;
-            case sal_uInt16(OBJ_CAPTION    ): pObj=new SdrCaptionObj(rSdrModel);               break;
-            case sal_uInt16(OBJ_PAGE       ): pObj=new SdrPageObj(rSdrModel);                  break;
-            case sal_uInt16(OBJ_UNO        ): pObj=new SdrUnoObj(rSdrModel, OUString());       break;
-            case sal_uInt16(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape(rSdrModel);       break;
+            case OBJ_NONE       : pObj=new SdrObject(rSdrModel);                   break;
+            case OBJ_GRUP       : pObj=new SdrObjGroup(rSdrModel);                 break;
+            case OBJ_POLY       : pObj=new SdrPathObj(rSdrModel, OBJ_POLY       ); break;
+            case OBJ_PLIN       : pObj=new SdrPathObj(rSdrModel, OBJ_PLIN       ); break;
+            case OBJ_PATHLINE   : pObj=new SdrPathObj(rSdrModel, OBJ_PATHLINE   ); break;
+            case OBJ_PATHFILL   : pObj=new SdrPathObj(rSdrModel, OBJ_PATHFILL   ); break;
+            case OBJ_FREELINE   : pObj=new SdrPathObj(rSdrModel, OBJ_FREELINE   ); break;
+            case OBJ_FREEFILL   : pObj=new SdrPathObj(rSdrModel, OBJ_FREEFILL   ); break;
+            case OBJ_PATHPOLY   : pObj=new SdrPathObj(rSdrModel, OBJ_POLY       ); break;
+            case OBJ_PATHPLIN   : pObj=new SdrPathObj(rSdrModel, OBJ_PLIN       ); break;
+            case OBJ_EDGE       : pObj=new SdrEdgeObj(rSdrModel);                  break;
+            case OBJ_RECT       : pObj=new SdrRectObj(rSdrModel);                  break;
+            case OBJ_GRAF       : pObj=new SdrGrafObj(rSdrModel);                  break;
+            case OBJ_OLE2       : pObj=new SdrOle2Obj(rSdrModel);                  break;
+            case OBJ_FRAME      : pObj=new SdrOle2Obj(rSdrModel, true);            break;
+            case OBJ_CAPTION    : pObj=new SdrCaptionObj(rSdrModel);               break;
+            case OBJ_PAGE       : pObj=new SdrPageObj(rSdrModel);                  break;
+            case OBJ_UNO        : pObj=new SdrUnoObj(rSdrModel, OUString());       break;
+            case OBJ_CUSTOMSHAPE: pObj=new SdrObjCustomShape(rSdrModel);       break;
 #if HAVE_FEATURE_AVMEDIA
-            case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj(rSdrModel);               break;
+            case OBJ_MEDIA      : pObj=new SdrMediaObj(rSdrModel);               break;
 #endif
-            case sal_uInt16(OBJ_TABLE      ): pObj=new sdr::table::SdrTableObj(rSdrModel);   break;
+            case OBJ_TABLE      : pObj=new sdr::table::SdrTableObj(rSdrModel);   break;
+            default: break;
         }
     }
 

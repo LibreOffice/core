@@ -93,7 +93,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
 
             m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
 
-            bReturn = m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), m_aStartPos);
+            bReturn = m_pSh->BeginCreate(m_pWin->GetSdrDrawMode(), m_aStartPos);
 
             SetDrawPointer();
 
@@ -429,7 +429,7 @@ void SwDrawBase::Activate(const sal_uInt16 nSlot)
     SetSlotId(nSlot);
     SdrView *pSdrView = m_pSh->GetDrawView();
 
-    pSdrView->SetCurrentObj( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()) );
+    pSdrView->SetCurrentObj(m_pWin->GetSdrDrawMode());
     pSdrView->SetEditMode(false);
 
     SetDrawPointer();
@@ -518,7 +518,7 @@ void SwDrawBase::CreateDefaultObject()
     aEndPos.AdjustX(6 * MM50 );
     aEndPos.AdjustY(6 * MM50 );
     tools::Rectangle aRect(aStartPos, aEndPos);
-    m_pSh->CreateDefaultShape( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), aRect, m_nSlotId);
+    m_pSh->CreateDefaultShape(m_pWin->GetSdrDrawMode(), aRect, m_nSlotId);
 }
 
 Point  SwDrawBase::GetDefaultCenterPos() const

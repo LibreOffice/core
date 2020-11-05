@@ -84,7 +84,7 @@ namespace rptui
 
         // forwards
         void                    SetMode( DlgEdMode _eMode );
-        void                    SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType);
+        void                    SetInsertObj(SdrObjKind eObj, const OUString& _sShapeType);
         OUString const &        GetInsertObjString() const;
         void                    setGridSnap(bool bOn);
         void                    setDragStripes(bool bOn);

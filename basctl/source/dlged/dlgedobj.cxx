@@ -768,7 +768,7 @@ SdrInventor DlgEdObj::GetObjInventor()   const
     return SdrInventor::BasicDialog;
 }
 
-sal_uInt16 DlgEdObj::GetObjIdentifier() const
+SdrObjKind DlgEdObj::GetObjIdentifier() const
 {
     if ( supportsService( "com.sun.star.awt.UnoControlDialogModel" ))
     {

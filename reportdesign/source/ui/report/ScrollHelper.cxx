@@ -218,7 +218,7 @@ sal_uInt16 OScrollWindowHelper::getSectionCount() const
     return m_aReportWindow->getSectionCount();
 }
 
-void OScrollWindowHelper::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
+void OScrollWindowHelper::SetInsertObj(SdrObjKind eObj, const OUString& _sShapeType)
 {
     m_aReportWindow->SetInsertObj(eObj,_sShapeType);
 }

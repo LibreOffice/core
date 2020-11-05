@@ -81,12 +81,12 @@ void SwView::ExecDraw(SfxRequest& rReq)
     if(pArgs && SfxItemState::SET == pArgs->GetItemState(GetPool().GetWhich(nSlotId), false, &pItem))
         pStringItem = dynamic_cast< const SfxStringItem*>(pItem);
 
-    sal_uInt16 eNewFormObjKind = 0;
+    SdrObjKind eNewFormObjKind = OBJ_NONE;
     if (nSlotId == SID_FM_CREATE_CONTROL)
     {
         const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
         if (pIdentifierItem)
-            eNewFormObjKind = pIdentifierItem->GetValue();
+            eNewFormObjKind = static_cast<SdrObjKind>(pIdentifierItem->GetValue());
     }
 
     if (nSlotId == SID_OBJECT_SELECT && m_nFormSfxId == nSlotId)
@@ -95,7 +95,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     }
     else if (nSlotId == SID_FM_CREATE_CONTROL)
     {
-        if (eNewFormObjKind == m_eFormObjKind || eNewFormObjKind == 0)
+        if (eNewFormObjKind == m_eFormObjKind || eNewFormObjKind == OBJ_NONE)
         {
             bDeselect = true;
             GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button should popping out
@@ -595,10 +595,9 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 }
 
 // Is a DrawTextObject selected?
-
 bool SwView::IsTextTool() const
 {
-    sal_uInt16  nId;
+    SdrObjKind nId;
     SdrInventor nInvent;
     SdrView *pSdrView = GetWrtShell().GetDrawView();
     OSL_ENSURE( pSdrView, "IsTextTool without DrawView?" );

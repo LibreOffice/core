@@ -93,7 +93,7 @@ public:
     virtual void RecalcSnapRect() override;
 
     virtual SdrInventor GetObjInventor() const override;
-    virtual sal_uInt16  GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual void        TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual void        NbcMove(const Size& rSize) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
@@ -176,7 +176,7 @@ public:
     virtual sal_uInt32 GetHdlCount() const override;
     virtual void    AddToHdlList(SdrHdlList& rHdlList) const override;
 
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual void RecalcSnapRect() override;
 
     virtual E3dCompoundObject* CloneSdrObject(SdrModel& rTargetModel) const override;

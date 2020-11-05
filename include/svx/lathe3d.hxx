@@ -98,7 +98,7 @@ public:
     bool GetCloseBack() const
         { return GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK).GetValue(); }
 
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
 
     virtual E3dLatheObj* CloneSdrObject(SdrModel& rTargetModel) const override;
 

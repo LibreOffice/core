@@ -330,7 +330,7 @@ sal_uInt16 OViewsWindow::getSectionCount() const
     return static_cast<sal_uInt16>(m_aSections.size());
 }
 
-void OViewsWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
+void OViewsWindow::SetInsertObj( SdrObjKind eObj,const OUString& _sShapeType )
 {
     for (const auto& rxSection : m_aSections)
         rxSection->getReportSection().getSectionView().SetCurrentObj( eObj, SdrInventor::ReportDesign );

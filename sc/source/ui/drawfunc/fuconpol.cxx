@@ -150,7 +150,7 @@ void FuConstPolygon::Activate()
         break;
     }
 
-    pView->SetCurrentObj(sal::static_int_cast<sal_uInt16>(eKind));
+    pView->SetCurrentObj(eKind);
 
     pView->SetEditMode(SdrViewEditMode::Create);
 

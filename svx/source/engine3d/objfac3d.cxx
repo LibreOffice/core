@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/globl3d.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/cube3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <extrud3d.hxx>
@@ -64,6 +64,8 @@ IMPL_STATIC_LINK( E3dObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrOb
                 return new E3dLatheObj(aParams.rSdrModel);
             case E3D_COMPOUNDOBJ_ID:
                 return new E3dCompoundObject(aParams.rSdrModel);
+            default:
+                break;
         }
     }
     return nullptr;

@@ -114,7 +114,7 @@ public:
     static SdrObject* createObject(
         SdrModel& rTargetModel,
         const css::uno::Reference< css::report::XReportComponent>& _xComponent);
-    static sal_uInt16 getObjectType(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
+    static SdrObjKind getObjectType(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
 };
 
 // OCustomShape
@@ -139,7 +139,7 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent() override;
 
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
 
 private:
@@ -176,7 +176,7 @@ public:
     static OOle2Obj* Create(
         SdrModel& rSdrModel,
         const css::uno::Reference< css::report::XReportComponent>& _xComponent,
-        sal_uInt16 _nType)
+        SdrObjKind _nType)
     {
         return new OOle2Obj(rSdrModel, _xComponent, _nType);
     }
@@ -184,7 +184,7 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent() override;
 
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
     // Clone() should make a complete copy of the object.
     virtual OOle2Obj* CloneSdrObject(SdrModel& rTargetModel) const override;
@@ -198,11 +198,11 @@ private:
     OOle2Obj(
         SdrModel& rSdrModel,
         const css::uno::Reference< css::report::XReportComponent>& _xComponent,
-        sal_uInt16 _nType);
+        SdrObjKind _nType);
     OOle2Obj(
         SdrModel& rSdrModel,
         const OUString& _sComponentName,
-        sal_uInt16 _nType);
+        SdrObjKind _nType);
 
     virtual void NbcMove( const Size& rSize ) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
@@ -214,7 +214,7 @@ private:
     void impl_createDataProvider_nothrow( const css::uno::Reference< css::frame::XModel>& _xModel);
     virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
 
-    sal_uInt16 m_nType;
+    SdrObjKind m_nType;
     bool    m_bOnlyOnce;
 };
 
@@ -227,7 +227,7 @@ class REPORTDESIGN_DLLPUBLIC OUnoObject: public SdrUnoObj , public OObjectBase
     friend class OObjectBase;
     friend class DlgEdFactory;
 
-    sal_uInt16   m_nObjectType;
+    SdrObjKind m_nObjectType;
     // tdf#118730 remember if this object was created interactively (due to ::EndCreate being called)
     bool         m_bSetDefaultLabel;
 
@@ -235,12 +235,12 @@ protected:
     OUnoObject(SdrModel& rSdrModel,
         const OUString& _sComponentName,
         const OUString& rModelName,
-        sal_uInt16   _nObjectType);
+        SdrObjKind _nObjectType);
     OUnoObject(
         SdrModel& rSdrModel,
         const css::uno::Reference< css::report::XReportComponent>& _xComponent,
         const OUString& rModelName,
-        sal_uInt16 _nObjectType);
+        SdrObjKind _nObjectType);
 
     // protected destructor
     virtual ~OUnoObject() override;
@@ -266,7 +266,7 @@ public:
     static OUString GetDefaultName(const OUnoObject* _pObj);
 
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
     virtual OUnoObject* CloneSdrObject(SdrModel& rTargetModel) const override;
 

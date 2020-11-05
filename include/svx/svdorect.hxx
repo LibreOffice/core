@@ -86,7 +86,7 @@ public:
         const tools::Rectangle& rRect);
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
 
     virtual OUString TakeObjNameSingul() const override;
