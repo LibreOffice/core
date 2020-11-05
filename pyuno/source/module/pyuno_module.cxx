@@ -112,10 +112,10 @@ public:
         if (initialised[key])
         {
             OUStringBuffer buf;
-            buf.append( "pyuno._createUnoStructHelper: member '" + key + "'");
+            buf.append( "pyuno._createUnoStructHelper: member '").append(key).append("'");
             if ( pos >= 0 )
             {
-                buf.append( " at position " + OUString::number(pos));
+                buf.append( " at position ").append(OUString::number(pos));
             }
             buf.append( " initialised multiple times.");
             throw RuntimeException(buf.makeStringAndClear());

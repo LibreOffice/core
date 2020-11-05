@@ -166,10 +166,10 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
                     sDelim);
 
                 const application_info_impl* pAppInfo = getApplicationInfo( filter->maExportService );
-                sValue.append(pAppInfo->maXMLImporter +
-                    sDelim +
-                    pAppInfo->maXMLExporter +
-                    sDelim);
+                sValue.append(pAppInfo->maXMLImporter)
+                    .append(sDelim)
+                    .append(pAppInfo->maXMLExporter)
+                    .append(sDelim);
 
                 sValue.append(createRelativeURL( filter->maFilterName, filter->maImportXSLT ));
                 sValue.append(sDelim);

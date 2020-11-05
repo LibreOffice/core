@@ -185,8 +185,8 @@ OUString const & psp::getFontPath()
         if (!aInstallationRootPath.isEmpty())
         {
             // internal font resources, required for normal operation, like OpenSymbol
-            aPathBuffer.append(aInstallationRootPath
-                               + "/" LIBO_SHARE_RESOURCE_FOLDER "/common/fonts;");
+            aPathBuffer.append(aInstallationRootPath).append(
+                               "/" LIBO_SHARE_RESOURCE_FOLDER "/common/fonts;");
         }
         if( !aConfigPath.isEmpty() )
         {

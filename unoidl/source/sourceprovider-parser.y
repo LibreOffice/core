@@ -4029,7 +4029,7 @@ OUString SourceProviderType::getName() const {
     case unoidl::detail::SourceProviderType::TYPE_INSTANTIATED_POLYMORPHIC_STRUCT:
         {
             OUStringBuffer n(512);
-            n.append(name + "<");
+            n.append(name).append("<");
             for (auto i(subtypes.begin()); i != subtypes.end(); ++i) {
                 if (i != subtypes.begin()) {
                     n.append(",");
