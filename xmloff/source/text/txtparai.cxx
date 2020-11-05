@@ -767,8 +767,9 @@ public:
         XMLHints_Impl& i_rHints,
         bool & i_rIgnoreLeadingSpace );
 
-    virtual void StartElement(
-            const Reference<xml::sax::XAttributeList> & i_xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+            sal_Int32 nElement,
+            const Reference<xml::sax::XFastAttributeList> & i_xAttrList) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
@@ -778,8 +779,7 @@ public:
 
     virtual void SAL_CALL characters( const OUString& i_rChars ) override;
 
-    virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
-        OUString const & i_rLocalName, OUString const & i_rValue);
+    virtual void ProcessAttribute(sal_Int32 nAttributeToken, OUString const & i_rValue);
 
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange)
         = 0;
@@ -800,21 +800,12 @@ XMLMetaImportContextBase::XMLMetaImportContextBase(
 {
 }
 
-void XMLMetaImportContextBase::StartElement(
-        const Reference<xml::sax::XAttributeList> & i_xAttrList)
+void XMLMetaImportContextBase::startFastElement(
+        sal_Int32 /*nElement*/,
+        const Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
-    const sal_Int16 nAttrCount(i_xAttrList.is() ? i_xAttrList->getLength() : 0);
-    for ( sal_Int16 i = 0; i < nAttrCount; ++i )
-    {
-        const OUString& rAttrName( i_xAttrList->getNameByIndex( i ) );
-        const OUString& rValue( i_xAttrList->getValueByIndex( i ) );
-
-        OUString sLocalName;
-        const sal_uInt16 nPrefix(
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &sLocalName ));
-        ProcessAttribute(nPrefix, sLocalName, rValue);
-    }
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+        ProcessAttribute(aIter.getToken(), aIter.toString());
 }
 
 void XMLMetaImportContextBase::endFastElement(sal_Int32 )
@@ -851,13 +842,13 @@ void XMLMetaImportContextBase::characters( const OUString& i_rChars )
     GetImport().GetTextImport()->InsertString(i_rChars, m_rIgnoreLeadingSpace);
 }
 
-void XMLMetaImportContextBase::ProcessAttribute(sal_uInt16 const i_nPrefix,
-    OUString const & i_rLocalName, OUString const & i_rValue)
+void XMLMetaImportContextBase::ProcessAttribute(sal_Int32 nAttributeToken,
+    OUString const & i_rValue)
 {
-    if ( (XML_NAMESPACE_XML == i_nPrefix) && IsXMLToken(i_rLocalName, XML_ID) )
-    {
+    if ( nAttributeToken == XML_ELEMENT(XML, XML_ID) )
         m_XmlId = i_rValue;
-    }
+    else
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, i_rValue);
 }
 
 namespace {
@@ -881,8 +872,8 @@ public:
         XMLHints_Impl& i_rHints,
         bool & i_rIgnoreLeadingSpace );
 
-    virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
-        OUString const & i_rLocalName, OUString const & i_rValue) override;
+    virtual void ProcessAttribute(sal_Int32 nAttributeToken,
+        OUString const & i_rValue) override;
 
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) override;
 };
@@ -901,34 +892,28 @@ XMLMetaImportContext::XMLMetaImportContext(
 {
 }
 
-void XMLMetaImportContext::ProcessAttribute(sal_uInt16 const i_nPrefix,
-    OUString const & i_rLocalName, OUString const & i_rValue)
+void XMLMetaImportContext::ProcessAttribute(sal_Int32 nAttributeToken,
+    OUString const & i_rValue)
 {
-    if ( XML_NAMESPACE_XHTML == i_nPrefix )
+    switch (nAttributeToken)
     {
         // RDFa
-        if ( IsXMLToken( i_rLocalName, XML_ABOUT) )
-        {
+        case XML_ELEMENT(XHTML, XML_ABOUT):
             m_sAbout = i_rValue;
             m_bHaveAbout = true;
-        }
-        else if ( IsXMLToken( i_rLocalName, XML_PROPERTY) )
-        {
+            break;
+        case XML_ELEMENT(XHTML, XML_PROPERTY):
             m_sProperty = i_rValue;
-        }
-        else if ( IsXMLToken( i_rLocalName, XML_CONTENT) )
-        {
+            break;
+        case XML_ELEMENT(XHTML, XML_CONTENT):
             m_sContent = i_rValue;
-        }
-        else if ( IsXMLToken( i_rLocalName, XML_DATATYPE) )
-        {
+            break;
+        case XML_ELEMENT(XHTML, XML_DATATYPE):
             m_sDatatype = i_rValue;
-        }
-    }
-    else
-    {
-        XMLMetaImportContextBase::ProcessAttribute(
-            i_nPrefix, i_rLocalName, i_rValue);
+            break;
+        default:
+            XMLMetaImportContextBase::ProcessAttribute(
+                nAttributeToken, i_rValue);
     }
 }
 
@@ -976,8 +961,8 @@ public:
         XMLHints_Impl& i_rHints,
         bool & i_rIgnoreLeadingSpace );
 
-    virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
-        OUString const & i_rLocalName, OUString const & i_rValue) override;
+    virtual void ProcessAttribute(sal_Int32 nAttributeToken,
+        OUString const & i_rValue) override;
 
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) override;
 };
@@ -995,18 +980,17 @@ XMLMetaFieldImportContext::XMLMetaFieldImportContext(
 {
 }
 
-void XMLMetaFieldImportContext::ProcessAttribute(sal_uInt16 const i_nPrefix,
-    OUString const & i_rLocalName, OUString const & i_rValue)
+void XMLMetaFieldImportContext::ProcessAttribute(sal_Int32 nAttributeToken,
+    OUString const & i_rValue)
 {
-    if ( XML_NAMESPACE_STYLE == i_nPrefix &&
-         IsXMLToken( i_rLocalName, XML_DATA_STYLE_NAME ) )
+    switch (nAttributeToken)
     {
-        m_DataStyleName = i_rValue;
-    }
-    else
-    {
-        XMLMetaImportContextBase::ProcessAttribute(
-            i_nPrefix, i_rLocalName, i_rValue);
+        case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
+            m_DataStyleName = i_rValue;
+            break;
+        default:
+            XMLMetaImportContextBase::ProcessAttribute(
+                nAttributeToken, i_rValue);
     }
 }
 

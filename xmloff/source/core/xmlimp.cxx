@@ -2059,6 +2059,7 @@ void SvXMLImport::initializeNamespaceMaps()
         }
     };
 
+    mapTokenToNamespace( XML_NAMESPACE_XML,              XML_XML,              XML_N_XML              ); // implicit "xml" namespace prefix
     mapTokenToNamespace( XML_NAMESPACE_OFFICE,           XML_NP_OFFICE,        XML_N_OFFICE           );
     mapTokenToNamespace( XML_NAMESPACE_OFFICE_SO52,      XML_NP_OFFICE,        XML_N_OFFICE_OLD       );
     mapTokenToNamespace( XML_NAMESPACE_OFFICE_OOO,       XML_NP_OFFICE,        XML_N_OFFICE_OOO       );
