@@ -747,6 +747,7 @@ public:
     void ClipboardGet(GtkSelectionData *selection_data, guint info);
     void ClipboardClear();
     void OwnerPossiblyChanged(GtkClipboard *clipboard);
+    void SetGtkClipboard();
 };
 
 }
@@ -1032,6 +1033,14 @@ std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequenc
     return aGtkTargets;
 }
 
+void VclGtkClipboard::SetGtkClipboard()
+{
+    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    gtk_clipboard_set_with_data(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size(),
+                                ClipboardGetFunc, ClipboardClearFunc, this);
+    gtk_clipboard_set_can_store(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size());
+}
+
 void VclGtkClipboard::setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
@@ -1070,12 +1079,10 @@ void VclGtkClipboard::setContents(
             aEntry.info = 0;
             aGtkTargets.push_back(aEntry);
 
-            gtk_clipboard_set_with_data(clipboard, aGtkTargets.data(), aGtkTargets.size(),
-                                        ClipboardGetFunc, ClipboardClearFunc, this);
-            gtk_clipboard_set_can_store(clipboard, aGtkTargets.data(), aGtkTargets.size());
-        }
+            m_aGtkTargets = aGtkTargets;
 
-        m_aGtkTargets = aGtkTargets;
+            SetGtkClipboard();
+        }
     }
 
     aEv.Contents = getContents();
