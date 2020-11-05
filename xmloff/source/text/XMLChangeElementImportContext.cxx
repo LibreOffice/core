@@ -77,7 +77,7 @@ SvXMLImportContextRef XMLChangeElementImportContext::CreateChildContext(
     return xContext;
 }
 
-void XMLChangeElementImportContext::StartElement( const Reference< XAttributeList >& )
+void XMLChangeElementImportContext::startFastElement( sal_Int32, const Reference< css::xml::sax::XFastAttributeList >& )
 {
     if(bAcceptContent)
     {

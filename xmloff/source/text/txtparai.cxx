@@ -1076,12 +1076,12 @@ public:
         enum XMLTextPElemTokens nTok,
         XMLHints_Impl& rHints);
 
-    void StartElement(const Reference<xml::sax::XAttributeList> & xAttrList) override;
+    void SAL_CALL startFastElement(sal_Int32 nElement, const Reference<xml::sax::XFastAttributeList> & xAttrList) override;
 
 protected:
 
     /// process all attributes
-    void ProcessAttributes(const Reference<xml::sax::XAttributeList> & xAttrList,
+    void ProcessAttributes(const Reference<xml::sax::XFastAttributeList> & xAttrList,
                            Reference<beans::XPropertySet>& rPropSet);
 
     /**
@@ -1092,8 +1092,7 @@ protected:
      * This method tolerates an empty PropertySet; subclasses however
      * are not expected to.
      */
-    virtual void ProcessAttribute(sal_uInt16 nNamespace,
-                                  const OUString& sLocalName,
+    virtual void ProcessAttribute(sal_Int32 nAttributeToken,
                                   const OUString& sValue,
                                   Reference<beans::XPropertySet>& rPropSet);
 
@@ -1118,8 +1117,9 @@ XMLIndexMarkImportContext_Impl::XMLIndexMarkImportContext_Impl(
 {
 }
 
-void XMLIndexMarkImportContext_Impl::StartElement(
-    const Reference<xml::sax::XAttributeList> & xAttrList)
+void XMLIndexMarkImportContext_Impl::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
     // get Cursor position (needed for all cases)
     Reference<XTextRange> xPos(
@@ -1194,26 +1194,18 @@ void XMLIndexMarkImportContext_Impl::StartElement(
 }
 
 void XMLIndexMarkImportContext_Impl::ProcessAttributes(
-    const Reference<xml::sax::XAttributeList> & xAttrList,
+    const Reference<xml::sax::XFastAttributeList> & xAttrList,
     Reference<beans::XPropertySet>& rPropSet)
 {
     // process attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        ProcessAttribute(nPrefix, sLocalName,
-                         xAttrList->getValueByIndex(i),
-                         rPropSet);
+        ProcessAttribute(aIter.getToken(), aIter.toString(), rPropSet);
     }
 }
 
 void XMLIndexMarkImportContext_Impl::ProcessAttribute(
-    sal_uInt16 nNamespace,
-    const OUString& sLocalName,
+    sal_Int32 nAttributeToken,
     const OUString& sValue,
     Reference<beans::XPropertySet>& rPropSet)
 {
@@ -1225,8 +1217,7 @@ void XMLIndexMarkImportContext_Impl::ProcessAttribute(
         case XML_TOK_TEXT_TOC_MARK:
         case XML_TOK_TEXT_USER_INDEX_MARK:
         case XML_TOK_TEXT_ALPHA_INDEX_MARK:
-            if ( (XML_NAMESPACE_TEXT == nNamespace) &&
-                 IsXMLToken( sLocalName, XML_STRING_VALUE ) )
+            if ( nAttributeToken == XML_ELEMENT(TEXT, XML_STRING_VALUE) )
             {
                 rPropSet->setPropertyValue("AlternativeText", uno::makeAny(sValue));
             }
@@ -1239,8 +1230,7 @@ void XMLIndexMarkImportContext_Impl::ProcessAttribute(
         case XML_TOK_TEXT_TOC_MARK_END:
         case XML_TOK_TEXT_USER_INDEX_MARK_END:
         case XML_TOK_TEXT_ALPHA_INDEX_MARK_END:
-            if ( (XML_NAMESPACE_TEXT == nNamespace) &&
-                 IsXMLToken( sLocalName, XML_ID ) )
+            if ( nAttributeToken == XML_ELEMENT(TEXT, XML_ID) )
             {
                 sID = sValue;
             }
@@ -1327,8 +1317,7 @@ public:
 protected:
 
     /** process outline level */
-    virtual void ProcessAttribute(sal_uInt16 nNamespace,
-                                  const OUString& sLocalName,
+    virtual void ProcessAttribute(sal_Int32 nAttributeToken,
                                   const OUString& sValue,
                                   Reference<beans::XPropertySet>& rPropSet) override;
 };
@@ -1344,32 +1333,32 @@ XMLTOCMarkImportContext_Impl::XMLTOCMarkImportContext_Impl(
 }
 
 void XMLTOCMarkImportContext_Impl::ProcessAttribute(
-    sal_uInt16 nNamespace,
-    const OUString& sLocalName,
+    sal_Int32 nAttributeToken,
     const OUString& sValue,
     Reference<beans::XPropertySet>& rPropSet)
 {
     SAL_WARN_IF(!rPropSet.is(), "xmloff.text", "need PropertySet");
 
-    if ((XML_NAMESPACE_TEXT == nNamespace) &&
-        IsXMLToken( sLocalName, XML_OUTLINE_LEVEL ) )
+    switch (nAttributeToken)
     {
-        // ouline level: set Level property
-        sal_Int32 nTmp;
-        if (::sax::Converter::convertNumber( nTmp, sValue )
-             && nTmp >= 1
-             && nTmp < GetImport().GetTextImport()->
-                              GetChapterNumbering()->getCount() )
+        case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
         {
-            rPropSet->setPropertyValue("Level", uno::makeAny(static_cast<sal_Int16>(nTmp - 1)));
+            // ouline level: set Level property
+            sal_Int32 nTmp;
+            if (::sax::Converter::convertNumber( nTmp, sValue )
+                && nTmp >= 1
+                && nTmp < GetImport().GetTextImport()->
+                                GetChapterNumbering()->getCount() )
+            {
+                rPropSet->setPropertyValue("Level", uno::makeAny(static_cast<sal_Int16>(nTmp - 1)));
+            }
+            // else: value out of range -> ignore
+            break;
         }
-        // else: value out of range -> ignore
-    }
-    else
-    {
-        // else: delegate to superclass
-        XMLIndexMarkImportContext_Impl::ProcessAttribute(
-            nNamespace, sLocalName, sValue, rPropSet);
+        default:
+            // else: delegate to superclass
+            XMLIndexMarkImportContext_Impl::ProcessAttribute(
+                nAttributeToken, sValue, rPropSet);
     }
 }
 
@@ -1389,8 +1378,7 @@ public:
 protected:
 
     /** process index name */
-    virtual void ProcessAttribute(sal_uInt16 nNamespace,
-                                  const OUString& sLocalName,
+    virtual void ProcessAttribute(sal_Int32 nAttributeToken,
                                   const OUString& sValue,
                                   Reference<beans::XPropertySet>& rPropSet) override;
 };
@@ -1406,16 +1394,15 @@ XMLUserIndexMarkImportContext_Impl::XMLUserIndexMarkImportContext_Impl(
 }
 
 void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
-    sal_uInt16 nNamespace, const OUString& sLocalName, const OUString& sValue,
+    sal_Int32 nAttributeToken, const OUString& sValue,
     Reference<beans::XPropertySet>& rPropSet)
 {
-    if ( XML_NAMESPACE_TEXT == nNamespace )
+    switch (nAttributeToken)
     {
-        if ( IsXMLToken( sLocalName, XML_INDEX_NAME ) )
-        {
+        case XML_ELEMENT(TEXT, XML_INDEX_NAME):
             rPropSet->setPropertyValue("UserIndexName", uno::makeAny(sValue));
-        }
-        else if ( IsXMLToken( sLocalName, XML_OUTLINE_LEVEL ) )
+            break;
+        case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
         {
             // ouline level: set Level property
             sal_Int32 nTmp;
@@ -1426,19 +1413,12 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
                 rPropSet->setPropertyValue("Level", uno::makeAny(static_cast<sal_Int16>(nTmp - 1)));
             }
             // else: value out of range -> ignore
+            break;
         }
-        else
-        {
+        default:
             // else: unknown text property: delegate to super class
             XMLIndexMarkImportContext_Impl::ProcessAttribute(
-                nNamespace, sLocalName, sValue, rPropSet);
-        }
-    }
-    else
-    {
-        // else: unknown namespace: delegate to super class
-        XMLIndexMarkImportContext_Impl::ProcessAttribute(
-            nNamespace, sLocalName, sValue, rPropSet);
+                nAttributeToken, sValue, rPropSet);
     }
 }
 
@@ -1458,8 +1438,7 @@ public:
 protected:
 
     /** process primary + secondary keys */
-    virtual void ProcessAttribute(sal_uInt16 nNamespace,
-                                  const OUString& sLocalName,
+    virtual void ProcessAttribute(sal_Int32 nAttributeToken,
                                   const OUString& sValue,
                                   Reference<beans::XPropertySet>& rPropSet) override;
 };
@@ -1475,32 +1454,27 @@ XMLAlphaIndexMarkImportContext_Impl::XMLAlphaIndexMarkImportContext_Impl(
 }
 
 void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
-    sal_uInt16 nNamespace, const OUString& sLocalName, const OUString& sValue,
+    sal_Int32 nAttributeToken, const OUString& sValue,
     Reference<beans::XPropertySet>& rPropSet)
 {
-    if (XML_NAMESPACE_TEXT == nNamespace)
+    switch (nAttributeToken)
     {
-        if ( IsXMLToken( sLocalName, XML_KEY1 ) )
-        {
+        case XML_ELEMENT(TEXT, XML_KEY1):
             rPropSet->setPropertyValue("PrimaryKey", uno::makeAny(sValue));
-        }
-        else if ( IsXMLToken( sLocalName, XML_KEY2 ) )
-        {
+            break;
+        case XML_ELEMENT(TEXT, XML_KEY2):
             rPropSet->setPropertyValue("SecondaryKey", uno::makeAny(sValue));
-        }
-        else if ( IsXMLToken( sLocalName, XML_KEY1_PHONETIC ) )
-        {
+            break;
+        case XML_ELEMENT(TEXT, XML_KEY1_PHONETIC):
             rPropSet->setPropertyValue("PrimaryKeyReading", uno::makeAny(sValue));
-        }
-        else if ( IsXMLToken( sLocalName, XML_KEY2_PHONETIC ) )
-        {
+            break;
+        case XML_ELEMENT(TEXT, XML_KEY2_PHONETIC):
             rPropSet->setPropertyValue("SecondaryKeyReading", uno::makeAny(sValue));
-        }
-        else if ( IsXMLToken( sLocalName, XML_STRING_VALUE_PHONETIC ) )
-        {
+            break;
+        case XML_ELEMENT(TEXT, XML_STRING_VALUE_PHONETIC):
             rPropSet->setPropertyValue("TextReading", uno::makeAny(sValue));
-        }
-        else if ( IsXMLToken( sLocalName, XML_MAIN_ENTRY ) )
+            break;
+        case XML_ELEMENT(TEXT, XML_MAIN_ENTRY):
         {
             bool bMainEntry = false;
             bool bTmp(false);
@@ -1509,17 +1483,11 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
                 bMainEntry = bTmp;
 
             rPropSet->setPropertyValue("IsMainEntry", uno::makeAny(bMainEntry));
+            break;
         }
-        else
-        {
+        default:
             XMLIndexMarkImportContext_Impl::ProcessAttribute(
-                nNamespace, sLocalName, sValue, rPropSet);
-        }
-    }
-    else
-    {
-        XMLIndexMarkImportContext_Impl::ProcessAttribute(
-            nNamespace, sLocalName, sValue, rPropSet);
+                nAttributeToken, sValue, rPropSet);
     }
 }
 
