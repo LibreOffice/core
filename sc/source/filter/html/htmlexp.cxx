@@ -440,7 +440,7 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
     if ( !aHTMLStyle.bInitialized )
     {
         pStyleSheet = pStylePool->Find(
-                ScResId(STR_STYLENAME_STANDARD_CELL),
+                ScResId(STR_STYLENAME_STANDARD),
                 SfxStyleFamily::Para );
         OSL_ENSURE( pStyleSheet, "ParaStyle not found! :-(" );
         if (!pStyleSheet)

@@ -88,7 +88,7 @@ ScAutoFormatObj::ScAutoFormatObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XIndexAccess(16)
-    , XNamed("Default Cell Style")
+    , XNamed("Default")
     , XServiceInfo("ScAutoFormatObj", "com.sun.star.sheet.TableAutoFormat")
 {
 }
