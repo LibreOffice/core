@@ -1482,27 +1482,9 @@ void SdImportTest::testRowHeight()
     uno::Reference< css::table::XTableRows > xRows( xTable->getRows(), uno::UNO_SET_THROW);
     uno::Reference< beans::XPropertySet > xRefRow( xRows->getByIndex(0), uno::UNO_QUERY_THROW );
     xRefRow->getPropertyValue( "Height" ) >>= nHeight;
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(508), nHeight);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(507), nHeight);
 
     xDocShRef->DoClose();
-
-    sd::DrawDocShellRef xDocShRef2 = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tablescale.pptx"), PPTX );
-    const SdrPage *pPage2 = GetPage( 1, xDocShRef2 );
-
-    sdr::table::SdrTableObj *pTableObj2 = dynamic_cast<sdr::table::SdrTableObj*>(pPage2->GetObj(0));
-    CPPUNIT_ASSERT( pTableObj2 );
-
-    uno::Reference< css::table::XTable > xTable2(pTableObj2->getTable(), uno::UNO_SET_THROW);
-    uno::Reference< css::table::XTableRows > xRows2( xTable2->getRows(), uno::UNO_SET_THROW);
-
-    for(sal_Int32 nRow = 0; nRow < 7; ++nRow)
-    {
-        uno::Reference< beans::XPropertySet > xRefRow2( xRows2->getByIndex(nRow), uno::UNO_QUERY_THROW );
-        xRefRow2->getPropertyValue( "Height" ) >>= nHeight;
-        CPPUNIT_ASSERT_EQUAL( sal_Int32(800), nHeight);
-    }
-
-    xDocShRef2->DoClose();
 }
 
 void SdImportTest::testTdf93830()
