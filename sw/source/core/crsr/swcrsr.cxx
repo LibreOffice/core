@@ -1783,6 +1783,20 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
             beforeIndex = pFrame->MapModelToViewPos(*GetPoint());
         }
 
+        if (!bLeft && pLayout && pLayout->GetFieldmarkMode() == sw::FieldmarkMode::ShowResult)
+        {
+            SwTextNode const*const pNode(GetPoint()->nNode.GetNode().GetTextNode());
+            assert(pNode);
+            if (pNode->Len() != GetPoint()->nContent.GetIndex()
+                && pNode->GetText()[GetPoint()->nContent.GetIndex()] == CH_TXT_ATR_FIELDSTART)
+            {
+                IDocumentMarkAccess const& rIDMA(*GetDoc().getIDocumentMarkAccess());
+                sw::mark::IFieldmark const*const pMark(rIDMA.getFieldmarkAt(*GetPoint()));
+                assert(pMark);
+                *GetPoint() = sw::mark::FindFieldSep(*pMark);
+            }
+        }
+
         if ( !Move( fnMove, fnGo ) )
             break;
 
@@ -1810,6 +1824,20 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                 // assume iteration is stable & returns the same frame
                 assert(!pFrame->IsAnFollow(pNewFrame) && !pNewFrame->IsAnFollow(pFrame));
                 pFrame = pNewFrame;
+            }
+        }
+
+        if (bLeft && pLayout && pLayout->GetFieldmarkMode() == sw::FieldmarkMode::ShowCommand)
+        {
+            SwTextNode const*const pNode(GetPoint()->nNode.GetNode().GetTextNode());
+            assert(pNode);
+            if (pNode->Len() != GetPoint()->nContent.GetIndex()
+                && pNode->GetText()[GetPoint()->nContent.GetIndex()] == CH_TXT_ATR_FIELDEND)
+            {
+                IDocumentMarkAccess const& rIDMA(*GetDoc().getIDocumentMarkAccess());
+                sw::mark::IFieldmark const*const pMark(rIDMA.getFieldmarkAt(*GetPoint()));
+                assert(pMark);
+                *GetPoint() = sw::mark::FindFieldSep(*pMark);
             }
         }
 
