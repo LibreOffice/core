@@ -1644,7 +1644,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
             ScDPCollection* pDPs = rDoc.GetDPCollection();
             if (pDPs)
             {
-                std::set<ScDPObject*> aRefs;
+                o3tl::sorted_vector<ScDPObject*> aRefs;
                 // tdf#111305: Reload groups in cache after modifications.
                 pDPs->ReloadGroupsInCache(pDPObj, aRefs);
             } // pDPs

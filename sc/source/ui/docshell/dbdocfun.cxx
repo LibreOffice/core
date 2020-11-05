@@ -1611,7 +1611,7 @@ void ScDBDocFunc::RefreshPivotTables(const ScDPObject* pDPObj, bool bApi)
     if (!pDPs)
         return;
 
-    std::set<ScDPObject*> aRefs;
+    o3tl::sorted_vector<ScDPObject*> aRefs;
     const char* pErrId = pDPs->ReloadCache(pDPObj, aRefs);
     if (pErrId)
         return;
@@ -1644,7 +1644,7 @@ void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
     }
 
     // Update all linked tables, if this table is part of the cache (ScDPCollection)
-    std::set<ScDPObject*> aRefs;
+    o3tl::sorted_vector<ScDPObject*> aRefs;
     if (!pDPs->ReloadGroupsInCache(pDPObj, aRefs))
         return;
 
