@@ -32,9 +32,15 @@ $(eval $(call gb_UnpackedTarball_add_patches,mariadb-connector-c,\
 # TODO are any "plugins" needed?
 $(eval $(call gb_UnpackedTarball_set_post_action,mariadb-connector-c, \
 	< libmariadb/ma_client_plugin.c.in sed \
-		-e 's/@EXTERNAL_PLUGINS@/extern struct st_mysql_client_plugin pvio_socket_client_plugin;/' \
-		-e 's/@BUILTIN_PLUGINS@/(struct st_mysql_client_plugin *)\&pvio_socket_client_plugin$(COMMA)/' \
-		> libmariadb/ma_client_plugin.c  \
+		-e 's/@EXTERNAL_PLUGINS@/ \
+			extern struct st_mysql_client_plugin pvio_socket_client_plugin\; \
+			extern struct st_mysql_client_plugin caching_sha2_password_client_plugin\; \
+			/' \
+		-e 's/@BUILTIN_PLUGINS@/ \
+			(struct st_mysql_client_plugin *)\&pvio_socket_client_plugin$(COMMA) \
+			(struct st_mysql_client_plugin *)\&caching_sha2_password_client_plugin$(COMMA) \
+			/' \
+		> libmariadb/ma_client_plugin.c \
 ))
 
 
