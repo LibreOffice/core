@@ -46,6 +46,30 @@
       "revId": "ffdd41d72b8a72fada33326d7ffd7196fb19d40c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4787fa56_ced0141c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-05T08:28:53Z",
+      "side": 1,
+      "message": "What do you mean with \"AdditionsDialog obviously requries a module to show up\"?\n\nI think the issue is that for some reason dispatching that .uno:AdditionsDialog does not work in the Start Center.  So I would assume we fix that, instead of adding a dubious band aid of disabling buttons that happen to not work due to an unfixed error elsewhere.",
+      "parentUuid": "8740d322_d3b1c8c7",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "ffdd41d72b8a72fada33326d7ffd7196fb19d40c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
