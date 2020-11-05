@@ -22,6 +22,30 @@
       "revId": "ffdd41d72b8a72fada33326d7ffd7196fb19d40c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8740d322_d3b1c8c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-05T08:23:10Z",
+      "side": 1,
+      "message": "AdditionsDialog obviously requries a module to show up, and I don\u0027t think it\u0027s really required there. I intentionally do not hide the button because it becomes effective in the module.",
+      "parentUuid": "be6429b5_859251ac",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "ffdd41d72b8a72fada33326d7ffd7196fb19d40c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
