@@ -183,6 +183,12 @@ public:
     void testTdf127379();
     void testTdf98603();
     void testTdf79082();
+<<<<<<< HEAD   (e7b3b5 Bump version to 6.4-11)
+=======
+    void testTdf128213();
+    void testTdf129372();
+    void testShapeGlowEffect();
+>>>>>>> CHANGE (385c07 tdf#128213 Fix export rotation problem.)
     void testTdf119087();
     void testTdf131554();
     void testTdf132282();
@@ -287,6 +293,12 @@ public:
     CPPUNIT_TEST(testTdf127379);
     CPPUNIT_TEST(testTdf98603);
     CPPUNIT_TEST(testTdf79082);
+<<<<<<< HEAD   (e7b3b5 Bump version to 6.4-11)
+=======
+    CPPUNIT_TEST(testTdf128213);
+    CPPUNIT_TEST(testTdf129372);
+    CPPUNIT_TEST(testShapeGlowEffect);
+>>>>>>> CHANGE (385c07 tdf#128213 Fix export rotation problem.)
     CPPUNIT_TEST(testTdf119087);
     CPPUNIT_TEST(testTdf131554);
     CPPUNIT_TEST(testTdf132282);
@@ -2639,6 +2651,16 @@ void SdOOXMLExportTest2::testTdf98603()
     xPropSet->getPropertyValue("CharLocaleComplex") >>= aLocale;
     CPPUNIT_ASSERT_EQUAL(OUString("he"), aLocale.Language);
     CPPUNIT_ASSERT_EQUAL(OUString("IL"), aLocale.Country);
+}
+
+void SdOOXMLExportTest2::testTdf128213()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf128213.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX, &tempFile );
+
+    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPathNoAttribute(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm", "rot");
 }
 
 void SdOOXMLExportTest2::testTdf79082()
