@@ -1363,14 +1363,12 @@ static int PyUNO_contains( PyObject *self, PyObject *pKey )
 
 static PyObject* PyUNO_getattr (PyObject* self, char* name)
 {
-    PyUNO* me;
-
     try
     {
 
         Runtime runtime;
 
-        me = reinterpret_cast<PyUNO*>(self);
+        PyUNO* me = reinterpret_cast<PyUNO*>(self);
         if (strcmp (name, "__dict__") == 0)
         {
             Py_INCREF (Py_TYPE(me)->tp_dict);
