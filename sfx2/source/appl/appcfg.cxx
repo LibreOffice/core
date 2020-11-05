@@ -35,6 +35,7 @@
 #include <svl/undo.hxx>
 
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/securityitem.hxx>
 #include <sot/exchange.hxx>
 
 #include <svl/isethint.hxx>
