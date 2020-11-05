@@ -1823,7 +1823,7 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
                 rDocument.GetPool()->Remove(*mvData[nPos].pPattern);
                 pNewPattern->SetStyleSheet( static_cast<ScStyleSheet*>(
                     rDocument.GetStyleSheetPool()->
-                        Find( ScResId(STR_STYLENAME_STANDARD_CELL),
+                        Find( ScResId(STR_STYLENAME_STANDARD),
                               SfxStyleFamily::Para,
                               SfxStyleSearchBits::Auto | SfxStyleSearchBits::ScStandard ) ) );
                 mvData[nPos].pPattern = &rDocument.GetPool()->Put(*pNewPattern);

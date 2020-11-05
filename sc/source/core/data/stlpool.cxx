@@ -84,10 +84,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
         sal_uInt32 nCount = GetIndexedStyleSheets().GetNumberOfStyleSheets();
         for ( sal_uInt32 nAdd = 1; nAdd <= nCount; nAdd++ )
         {
-            OUString aNewName = ScResId(STR_STYLENAME_STANDARD_CELL) + OUString::number( nAdd );
-            if ( Find( aNewName, eFam ) == nullptr )
-                return SfxStyleSheetPool::Make(aNewName, eFam, mask);
-            aNewName = ScResId(STR_STYLENAME_STANDARD_PAGE) + OUString::number( nAdd );
+            OUString aNewName = ScResId(STR_STYLENAME_STANDARD) + OUString::number( nAdd );
             if ( Find( aNewName, eFam ) == nullptr )
                 return SfxStyleSheetPool::Make(aNewName, eFam, mask);
         }
@@ -104,8 +101,8 @@ SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
                                              SfxStyleSearchBits nMaskP )
 {
     ScStyleSheet* pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
-    if ( eFamily == SfxStyleFamily::Para && ScResId(STR_STYLENAME_STANDARD_CELL) != rName )
-        pSheet->SetParent( ScResId(STR_STYLENAME_STANDARD_CELL) );
+    if ( eFamily == SfxStyleFamily::Para && ScResId(STR_STYLENAME_STANDARD) != rName )
+        pSheet->SetParent( ScResId(STR_STYLENAME_STANDARD) );
 
     return pSheet;
 }
@@ -190,8 +187,8 @@ void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
 {
     //  Copy Default styles
 
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD_CELL),     SfxStyleFamily::Para );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD_PAGE),     SfxStyleFamily::Page );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SfxStyleFamily::Para );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SfxStyleFamily::Page );
     CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_REPORT),       SfxStyleFamily::Page );
 }
 
@@ -232,7 +229,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     SvxBoxItem      aBoxItem        ( ATTR_BORDER );
     SvxBoxInfoItem  aBoxInfoItem    ( ATTR_BORDER_INNER );
 
-    OUString  aStrStandard = ScResId(STR_STYLENAME_STANDARD_CELL);
+    OUString  aStrStandard = ScResId(STR_STYLENAME_STANDARD);
 
     // Cell format templates:
 
@@ -266,8 +263,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     // size is used for Thai in Calc for now.
 //    if ( eCtl == LANGUAGE_THAI )
 //        pSet->Put( SvxFontHeightItem( 300, 100, ATTR_CTL_FONT_HEIGHT ) );   // 15 pt
-
-    aStrStandard = ScResId(STR_STYLENAME_STANDARD_PAGE);
 
     // Page format template:
 
