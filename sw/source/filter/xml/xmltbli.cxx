@@ -1034,8 +1034,9 @@ public:
     SwXMLDDETableContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName);
 
-    virtual void StartElement(
-        const Reference<xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const Reference<xml::sax::XFastAttributeList> & xAttrList) override;
 
     OUString& GetConnectionName()   { return sConnectionName; }
     OUString& GetDDEApplication()   { return sDDEApplication; }
@@ -1056,47 +1057,38 @@ SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(
 {
 }
 
-void SwXMLDDETableContext_Impl::StartElement(
-    const Reference<xml::sax::XAttributeList> & xAttrList)
+void SwXMLDDETableContext_Impl::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-
-        OUString aLocalName;
-        const sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        if (XML_NAMESPACE_OFFICE == nPrefix)
+        OUString aValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            if ( IsXMLToken( aLocalName, XML_DDE_APPLICATION ) )
-            {
-                sDDEApplication = rValue;
-            }
-            else if ( IsXMLToken( aLocalName, XML_DDE_TOPIC ) )
-            {
-                sDDETopic = rValue;
-            }
-            else if ( IsXMLToken( aLocalName, XML_DDE_ITEM ) )
-            {
-                sDDEItem = rValue;
-            }
-            else if ( IsXMLToken( aLocalName, XML_NAME ) )
-            {
-                sConnectionName = rValue;
-            }
-            else if ( IsXMLToken( aLocalName, XML_AUTOMATIC_UPDATE ) )
+            case XML_ELEMENT(OFFICE, XML_DDE_APPLICATION):
+                sDDEApplication = aValue;
+                break;
+            case XML_ELEMENT(OFFICE, XML_DDE_TOPIC):
+                sDDETopic = aValue;
+                break;
+            case XML_ELEMENT(OFFICE, XML_DDE_ITEM):
+                sDDEItem = aValue;
+                break;
+            case XML_ELEMENT(OFFICE, XML_NAME):
+                sConnectionName = aValue;
+                break;
+            case XML_ELEMENT(OFFICE, XML_AUTOMATIC_UPDATE):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, rValue))
+                if (::sax::Converter::convertBool(bTmp, aValue))
                 {
                     bIsAutomaticUpdate = bTmp;
                 }
+                break;
             }
-            // else: unknown attribute
+            default:
+                XMLOFF_WARN_UNKNOWN("sw", aIter);
         }
         // else: unknown attribute namespace
     }
