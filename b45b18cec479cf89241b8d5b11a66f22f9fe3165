@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "195a16a0_d5781d52",
+        "filename": "include/vcl/event.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-05T08:28:31Z",
+      "side": 0,
+      "message": "A nice feature is C++ accepting trailing comma in last enum elements, allowing to not modify lines with elements unrelated to the change ;-)",
+      "range": {
+        "startLine": 287,
+        "startChar": 24,
+        "endLine": 287,
+        "endChar": 25
+      },
+      "revId": "b45b18cec479cf89241b8d5b11a66f22f9fe3165",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
