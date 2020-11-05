@@ -1520,7 +1520,8 @@ void SwRootFrame::AssertFlyPages()
     // what page targets the "last" Fly?
     // note the needed pages in a set
     sal_uInt16 nMaxPg(0);
-    std::set< sal_uInt16 > neededPages;
+    o3tl::sorted_vector< sal_uInt16 > neededPages;
+    neededPages.reserve(pTable->size());
 
     for ( size_t i = 0; i < pTable->size(); ++i )
     {
