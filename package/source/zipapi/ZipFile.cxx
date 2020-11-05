@@ -830,11 +830,11 @@ void ZipFile::readLOC( ZipEntry &rEntry )
 sal_Int32 ZipFile::findEND()
 {
     // this method is called in constructor only, no need for mutex
-    sal_Int32 nLength, nPos, nEnd;
+    sal_Int32 nPos, nEnd;
     Sequence < sal_Int8 > aBuffer;
     try
     {
-        nLength = static_cast <sal_Int32 > (aGrabber.getLength());
+        sal_Int32 nLength = static_cast <sal_Int32 > (aGrabber.getLength());
         if (nLength < ENDHDR)
             return -1;
         nPos = nLength - ENDHDR - ZIP_MAXNAMELEN;
@@ -874,12 +874,12 @@ sal_Int32 ZipFile::findEND()
 sal_Int32 ZipFile::readCEN()
 {
     // this method is called in constructor only, no need for mutex
-    sal_Int32 nCenPos = -1, nEndPos, nLocPos;
+    sal_Int32 nCenPos = -1, nLocPos;
     sal_uInt16 nCount;
 
     try
     {
-        nEndPos = findEND();
+        sal_Int32 nEndPos = findEND();
         if (nEndPos == -1)
             return -1;
         aGrabber.seek(nEndPos + ENDTOT);
