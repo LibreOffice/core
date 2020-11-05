@@ -693,12 +693,14 @@ class VclGtkClipboard :
     GdkAtom                                                  m_nSelection;
     osl::Mutex                                               m_aMutex;
     gulong                                                   m_nOwnerChangedSignalId;
+    ImplSVEvent*                                             m_pSetClipboardEvent;
     Reference<css::datatransfer::XTransferable>              m_aContents;
     Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::vector< Reference<css::datatransfer::clipboard::XClipboardListener> > m_aListeners;
     std::vector<GtkTargetEntry> m_aGtkTargets;
     VclToGtkHelper m_aConversionHelper;
 
+    DECL_LINK(AsyncSetGtkClipboard, void*, void);
 public:
 
     explicit VclGtkClipboard(GdkAtom nSelection);
@@ -747,6 +749,7 @@ public:
     void ClipboardGet(GtkSelectionData *selection_data, guint info);
     void ClipboardClear();
     void OwnerPossiblyChanged(GtkClipboard *clipboard);
+    void SetGtkClipboard();
 };
 
 }
@@ -878,6 +881,11 @@ void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard)
 
 void VclGtkClipboard::ClipboardClear()
 {
+    if (m_pSetClipboardEvent)
+    {
+        Application::RemoveUserEvent(m_pSetClipboardEvent);
+        m_pSetClipboardEvent = nullptr;
+    }
     for (auto &a : m_aGtkTargets)
         g_free(a.target);
     m_aGtkTargets.clear();
@@ -964,6 +972,7 @@ VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
                                     datatransfer::clipboard::XFlushableClipboard, XServiceInfo>
         (m_aMutex)
     , m_nSelection(nSelection)
+    , m_pSetClipboardEvent(nullptr)
 {
     GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
     m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
@@ -990,6 +999,7 @@ VclGtkClipboard::~VclGtkClipboard()
         gtk_clipboard_clear(clipboard);
         ClipboardClear();
     }
+    assert(!m_pSetClipboardEvent);
     assert(m_aGtkTargets.empty());
 }
 
@@ -1032,6 +1042,21 @@ std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequenc
     return aGtkTargets;
 }
 
+IMPL_LINK_NOARG(VclGtkClipboard, AsyncSetGtkClipboard, void*, void)
+{
+    osl::ClearableMutexGuard aGuard( m_aMutex );
+    m_pSetClipboardEvent = nullptr;
+    SetGtkClipboard();
+}
+
+void VclGtkClipboard::SetGtkClipboard()
+{
+    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    gtk_clipboard_set_with_data(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size(),
+                                ClipboardGetFunc, ClipboardClearFunc, this);
+    gtk_clipboard_set_can_store(clipboard, m_aGtkTargets.data(), m_aGtkTargets.size());
+}
+
 void VclGtkClipboard::setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
@@ -1070,12 +1095,11 @@ void VclGtkClipboard::setContents(
             aEntry.info = 0;
             aGtkTargets.push_back(aEntry);
 
-            gtk_clipboard_set_with_data(clipboard, aGtkTargets.data(), aGtkTargets.size(),
-                                        ClipboardGetFunc, ClipboardClearFunc, this);
-            gtk_clipboard_set_can_store(clipboard, aGtkTargets.data(), aGtkTargets.size());
-        }
+            m_aGtkTargets = aGtkTargets;
 
-        m_aGtkTargets = aGtkTargets;
+            if (!m_pSetClipboardEvent)
+                m_pSetClipboardEvent = Application::PostUserEvent(LINK(this, VclGtkClipboard, AsyncSetGtkClipboard));
+        }
     }
 
     aEv.Contents = getContents();
