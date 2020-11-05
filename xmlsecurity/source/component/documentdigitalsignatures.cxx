@@ -24,6 +24,7 @@
 #include <certificateviewer.hxx>
 #include <macrosecurity.hxx>
 #include <biginteger.hxx>
+#include <boost/property_tree/json_parser.hpp>
 #include <strings.hrc>
 #include <pdfsignaturehelper.hxx>
 #include <sax/tools/converter.hxx>
@@ -44,6 +45,7 @@
 #include <com/sun/star/security/CertificateKind.hpp>
 #include <comphelper/base64.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmlsechelper.hxx>
@@ -51,6 +53,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/script/XDirectInvocation.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
 using namespace css;
@@ -61,7 +64,8 @@ using namespace css::xml::crypto;
 
 class DocumentDigitalSignatures
     : public cppu::WeakImplHelper<css::security::XDocumentDigitalSignatures,
-                                  css::lang::XInitialization, css::lang::XServiceInfo>
+                                  css::lang::XInitialization, css::lang::XServiceInfo,
+                                  css::script::XDirectInvocation>
 {
 private:
     css::uno::Reference<css::uno::XComponentContext> mxCtx;
@@ -91,6 +95,8 @@ private:
     css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
     chooseCertificatesImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction,
                            const CertificateKind certificateKind=CertificateKind_NONE);
+
+    OUString ImplExecDialog();
 
 public:
     explicit DocumentDigitalSignatures(
@@ -174,6 +180,10 @@ public:
                             css::uno::Reference<css::security::XCertificate> const & xCertificate,
                             css::uno::Reference<css::embed::XStorage> const & xStoragexStorage,
                             css::uno::Reference<css::io::XStream> const & xStream) override;
+
+    // XDirectInvocation
+    virtual css::uno::Any SAL_CALL directInvoke( const OUString& aName, const css::uno::Sequence< css::uno::Any >& aParams ) override;
+    virtual sal_Bool SAL_CALL hasMember( const OUString& aName ) override;
 };
 
 DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponentContext >& rxCtx ):
@@ -424,6 +434,33 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     return bChanges;
 }
 
+OUString DocumentDigitalSignatures::ImplExecDialog()
+{
+    // MT: i45295
+    // SecEnv is only needed to display certificate information from trusted sources.
+    // Macro Security also has some options where no security environment is needed, so raise dialog anyway.
+    // Later I should change the code so the Dialog creates the SecEnv on demand...
+    OUString aRet;
+    Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv;
+
+    DocumentSignatureManager aSignatureManager(mxCtx, {});
+    if (aSignatureManager.init())
+        xSecEnv = aSignatureManager.getSecurityEnvironment();
+
+    ScopedVclPtrInstance< MacroSecurity > aDlg( nullptr, xSecEnv );
+
+    if (!comphelper::LibreOfficeKit::isActive())
+        aDlg->Execute();
+    else
+    {
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aDlg->DumpAsPropertyTree());
+        aRet = OStringToOUString(aStream.str().c_str(), RTL_TEXTENCODING_UTF8);
+    }
+
+    return aRet;
+}
+
 Sequence< css::security::DocumentSignatureInformation >
 DocumentDigitalSignatures::ImplVerifySignatures(
     const Reference< css::embed::XStorage >& rxStorage,
@@ -571,19 +608,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
 void DocumentDigitalSignatures::manageTrustedSources(  )
 {
-    // MT: i45295
-    // SecEnv is only needed to display certificate information from trusted sources.
-    // Macro Security also has some options where no security environment is needed, so raise dialog anyway.
-    // Later I should change the code so the Dialog creates the SecEnv on demand...
-
-    Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv;
-
-    DocumentSignatureManager aSignatureManager(mxCtx, {});
-    if (aSignatureManager.init())
-        xSecEnv = aSignatureManager.getSecurityEnvironment();
-
-    ScopedVclPtrInstance< MacroSecurity > aDlg( nullptr, xSecEnv );
-    aDlg->Execute();
+    ImplExecDialog();
 }
 
 void DocumentDigitalSignatures::showCertificate(
@@ -789,6 +814,23 @@ sal_Bool DocumentDigitalSignatures::signDocumentWithCertificate(
     }
 
     return true;
+}
+
+
+// XDirectInvocation
+uno::Any SAL_CALL DocumentDigitalSignatures::directInvoke( const OUString& aName, const uno::Sequence< uno::Any >& /*aParams*/ )
+{
+    uno::Any aRet;
+
+    if (aName == "MacroSecurity")
+        aRet <<= ImplExecDialog();
+
+    return aRet;
+}
+
+sal_Bool SAL_CALL DocumentDigitalSignatures::hasMember( const OUString& aName )
+{
+    return aName == "MacroSecurity";
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
