@@ -1898,6 +1898,7 @@ void SwTextNode::TransliterateText(
     // now apply the changes from end to start to leave the offsets of the
     // yet unchanged text parts remain the same.
     size_t nSum(0);
+    bool bIsRedlineOn(GetDoc().getIDocumentRedlineAccess().IsRedlineOn());
     for (size_t i = 0; i < aChanges.size(); ++i)
     {   // check this here since AddChanges cannot be moved below
         // call to ReplaceTextOnly
@@ -1910,9 +1911,24 @@ void SwTextNode::TransliterateText(
                     "node text with insertion > node capacity.");
             return;
         }
-        if (pUndo)
-            pUndo->AddChanges( *this, rData.nStart, rData.nLen, rData.aOffsets );
-        ReplaceTextOnly( rData.nStart, rData.nLen, rData.sChanged, rData.aOffsets );
+
+        if ( bIsRedlineOn )
+        {
+            // create SwPaM with mark & point spanning the attributed text
+            //SwPaM aCurPaM( *this, *this, nBegin, nBegin + nLen ); <-- wrong c-tor, does sth different
+            SwPaM aCurPaM( *this, rData.nStart );
+            aCurPaM.SetMark();
+            aCurPaM.GetPoint()->nContent = rData.nStart + rData.nLen;
+            // replace the changed words
+            if ( aCurPaM.GetText() != rData.sChanged )
+                GetDoc().getIDocumentContentOperations().ReplaceRange( aCurPaM, rData.sChanged, false );
+        }
+        else
+        {
+            if (pUndo)
+                pUndo->AddChanges( *this, rData.nStart, rData.nLen, rData.aOffsets );
+            ReplaceTextOnly( rData.nStart, rData.nLen, rData.sChanged, rData.aOffsets );
+        }
     }
 }
 
