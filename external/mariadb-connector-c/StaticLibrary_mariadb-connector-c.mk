@@ -21,8 +21,8 @@ $(eval $(call gb_StaticLibrary_set_include,mariadb-connector-c,\
 # This is needed for MSVC 2008: it somehow finds a dlopen somewhere
 # but the static library then contains unreferenced symbols.
 # This macro enables a re-definition to native Win32 APIs in my_global.h.
-## TODO missing enable: -DHAVE_OPENSSL -D HAVE_COMPRESS
-## (but then need to add "-lssl -lcrypto -lz" to mysqlcppconn linking)
+## TODO missing enable: -D HAVE_COMPRESS
+## (but then need to add "-lz" to mysqlcppconn linking)
 $(eval $(call gb_StaticLibrary_add_cflags,mariadb-connector-c,-DHAVE_DLOPEN -D ENABLED_LOCAL_INFILE -D LIBMARIADB -D THREAD -DSQLITE_ENABLE_COLUMN_METADATA=1))
 
 ifeq ($(OS),WNT)
@@ -31,6 +31,9 @@ $(eval $(call gb_StaticLibrary_set_include,mariadb-connector-c,\
 	$$(INCLUDE) \
 	-I$(call gb_UnpackedTarball_get_dir,mariadb-connector-c)/win-iconv \
 ))
+else
+$(eval $(call gb_StaticLibrary_use_external,mariadb-connector-c,openssl_headers))
+$(eval $(call gb_StaticLibrary_add_cflags,mariadb-connector-c,-DHAVE_OPENSSL))
 endif
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
@@ -69,7 +72,10 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
 	$(if $(filter $(OS),WNT), \
 		UnpackedTarball/mariadb-connector-c/libmariadb/win32_errmsg \
 		UnpackedTarball/mariadb-connector-c/libmariadb/secure/win_crypt \
-		UnpackedTarball/mariadb-connector-c/win-iconv/win_iconv) \
+		UnpackedTarball/mariadb-connector-c/win-iconv/win_iconv \
+		, \
+		UnpackedTarball/mariadb-connector-c/libmariadb/secure/openssl_crypt \
+	) \
 ))
 
 # vim: set noet sw=4 ts=4:
