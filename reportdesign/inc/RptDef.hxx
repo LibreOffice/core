@@ -28,7 +28,7 @@
 #include "dllapi.h"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <svx/fmglob.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/svdtypes.hxx>
 
 namespace com::sun::star {
@@ -44,15 +44,6 @@ namespace rptui
 constexpr SdrLayerID RPT_LAYER_FRONT  (0);
 constexpr SdrLayerID RPT_LAYER_BACK   (1);
 constexpr SdrLayerID RPT_LAYER_HIDDEN (2);
-
-
-
-#define OBJ_DLG_FIXEDTEXT       (sal_uInt16(OBJ_MAXI) + 1)
-#define OBJ_DLG_IMAGECONTROL    OBJ_FM_IMAGECONTROL
-#define OBJ_DLG_FORMATTEDFIELD  (sal_uInt16(OBJ_MAXI) + 3)
-#define OBJ_DLG_HFIXEDLINE      (sal_uInt16(OBJ_MAXI) + 4)
-#define OBJ_DLG_VFIXEDLINE      (sal_uInt16(OBJ_MAXI) + 5)
-#define OBJ_DLG_SUBREPORT       (sal_uInt16(OBJ_MAXI) + 6)
 
 // allows the alignment and resizing of controls
 enum class ControlModification

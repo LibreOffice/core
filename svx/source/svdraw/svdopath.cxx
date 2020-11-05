@@ -1248,11 +1248,11 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
     XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
     if (pView!=nullptr && pView->IsCreateMode()) {
         // switch to different CreateTool, if appropriate
-        sal_uInt16 nIdent;
+        SdrObjKind nIdent;
         SdrInventor nInvent;
         pView->TakeCurrentObj(nIdent,nInvent);
-        if (nInvent==SdrInventor::Default && pU->eCurrentKind!=static_cast<SdrObjKind>(nIdent)) {
-            SdrObjKind eNewKind=static_cast<SdrObjKind>(nIdent);
+        if (nInvent==SdrInventor::Default && pU->eCurrentKind != nIdent) {
+            SdrObjKind eNewKind = nIdent;
             switch (eNewKind) {
                 case OBJ_CARC:
                 case OBJ_CIRC:
@@ -1810,9 +1810,9 @@ void SdrPathObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = !IsFontwork() && (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-sal_uInt16 SdrPathObj::GetObjIdentifier() const
+SdrObjKind SdrPathObj::GetObjIdentifier() const
 {
-    return sal_uInt16(meKind);
+    return meKind;
 }
 
 SdrPathObj* SdrPathObj::CloneSdrObject(SdrModel& rTargetModel) const

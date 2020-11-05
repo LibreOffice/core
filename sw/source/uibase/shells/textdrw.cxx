@@ -21,7 +21,7 @@
 
 #include <svx/svdview.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/fmglob.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/svdouno.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

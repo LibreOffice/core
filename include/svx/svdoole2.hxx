@@ -134,7 +134,7 @@ public:
     virtual SdrObjectUniquePtr getFullDragClone() const override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 

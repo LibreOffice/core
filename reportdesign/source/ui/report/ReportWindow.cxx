@@ -89,7 +89,7 @@ void OReportWindow::dispose()
     vcl::Window::dispose();
 }
 
-void OReportWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
+void OReportWindow::SetInsertObj( SdrObjKind eObj,const OUString& _sShapeType )
 {
     m_aViewsWindow->SetInsertObj( eObj,_sShapeType);
 }

@@ -196,7 +196,7 @@ public:
 
     SdrObjConnection& GetConnection(bool bTail1) { return *(bTail1 ? &aCon1 : &aCon2); }
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetSnapRect() const override;
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const override;

@@ -91,9 +91,9 @@ public:
         sal_Int32 _nYOffsetMM,
         const css::uno::Reference< css::beans::XPropertySet >& _rxField,
         const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
-        sal_uInt16 _nControlObjectID,
+        SdrObjKind _nControlObjectID,
         SdrInventor _nInventor,
-        sal_uInt16 _nLabelObjectID,
+        SdrObjKind _nLabelObjectID,
 
         // tdf#118963 Need a SdrModel for SdrObject creation. To make the
         // demand clear, hand over a SdrMldel&

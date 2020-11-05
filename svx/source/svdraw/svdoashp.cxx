@@ -1347,9 +1347,9 @@ void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     }
 }
 
-sal_uInt16 SdrObjCustomShape::GetObjIdentifier() const
+SdrObjKind SdrObjCustomShape::GetObjIdentifier() const
 {
-    return sal_uInt16(OBJ_CUSTOMSHAPE);
+    return OBJ_CUSTOMSHAPE;
 }
 
 // #115391# This implementation is based on the TextFrame size of the CustomShape and the

@@ -58,32 +58,32 @@ using namespace reportdesign;
 using namespace container;
 using namespace report;
 
-sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportComponent>& _xComponent)
+SdrObjKind OObjectBase::getObjectType(const uno::Reference< report::XReportComponent>& _xComponent)
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( _xComponent , uno::UNO_QUERY );
     OSL_ENSURE(xServiceInfo.is(),"Who deletes the XServiceInfo interface!");
     if ( xServiceInfo.is() )
     {
         if ( xServiceInfo->supportsService( SERVICE_FIXEDTEXT ))
-            return OBJ_DLG_FIXEDTEXT;
+            return OBJ_RD_FIXEDTEXT;
         if ( xServiceInfo->supportsService( SERVICE_FIXEDLINE ))
         {
             uno::Reference< report::XFixedLine> xFixedLine(_xComponent,uno::UNO_QUERY);
-            return xFixedLine->getOrientation() ? OBJ_DLG_HFIXEDLINE : OBJ_DLG_VFIXEDLINE;
+            return xFixedLine->getOrientation() ? OBJ_RD_HFIXEDLINE : OBJ_RD_VFIXEDLINE;
         }
         if ( xServiceInfo->supportsService( SERVICE_IMAGECONTROL))
-            return OBJ_DLG_IMAGECONTROL;
+            return OBJ_RD_IMAGECONTROL;
         if ( xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ))
-            return OBJ_DLG_FORMATTEDFIELD;
+            return OBJ_RD_FORMATTEDFIELD;
         if ( xServiceInfo->supportsService("com.sun.star.drawing.OLE2Shape") )
             return OBJ_OLE2;
         if ( xServiceInfo->supportsService( SERVICE_SHAPE ))
             return OBJ_CUSTOMSHAPE;
         if ( xServiceInfo->supportsService( SERVICE_REPORTDEFINITION ) )
-            return OBJ_DLG_SUBREPORT;
+            return OBJ_RD_SUBREPORT;
         return OBJ_OLE2;
     }
-    return 0;
+    return OBJ_NONE;
 }
 
 SdrObject* OObjectBase::createObject(
@@ -91,16 +91,16 @@ SdrObject* OObjectBase::createObject(
     const uno::Reference< report::XReportComponent>& _xComponent)
 {
     SdrObject* pNewObj = nullptr;
-    sal_uInt16 nType = OObjectBase::getObjectType(_xComponent);
+    SdrObjKind nType = OObjectBase::getObjectType(_xComponent);
     switch( nType )
     {
-        case OBJ_DLG_FIXEDTEXT:
+        case OBJ_RD_FIXEDTEXT:
             {
                 OUnoObject* pUnoObj = new OUnoObject(
                     rTargetModel,
                     _xComponent,
                     OUString("com.sun.star.form.component.FixedText"),
-                    OBJ_DLG_FIXEDTEXT);
+                    OBJ_RD_FIXEDTEXT);
                 pNewObj = pUnoObj;
 
                 uno::Reference<beans::XPropertySet> xControlModel(pUnoObj->GetUnoControlModel(),uno::UNO_QUERY);
@@ -108,22 +108,22 @@ SdrObject* OObjectBase::createObject(
                     xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(true));
             }
             break;
-        case OBJ_DLG_IMAGECONTROL:
+        case OBJ_RD_IMAGECONTROL:
             pNewObj = new OUnoObject(
                 rTargetModel,
                 _xComponent,
                 OUString("com.sun.star.form.component.DatabaseImageControl"),
-                OBJ_DLG_IMAGECONTROL);
+                OBJ_RD_IMAGECONTROL);
             break;
-        case OBJ_DLG_FORMATTEDFIELD:
+        case OBJ_RD_FORMATTEDFIELD:
             pNewObj = new OUnoObject(
                 rTargetModel,
                 _xComponent,
                 OUString("com.sun.star.form.component.FormattedField"),
-                OBJ_DLG_FORMATTEDFIELD);
+                OBJ_RD_FORMATTEDFIELD);
             break;
-        case OBJ_DLG_HFIXEDLINE:
-        case OBJ_DLG_VFIXEDLINE:
+        case OBJ_RD_HFIXEDLINE:
+        case OBJ_RD_VFIXEDLINE:
             pNewObj = new OUnoObject(
                 rTargetModel,
                 _xComponent,
@@ -145,7 +145,7 @@ SdrObject* OObjectBase::createObject(
                 DBG_UNHANDLED_EXCEPTION("reportdesign");
             }
             break;
-        case OBJ_DLG_SUBREPORT:
+        case OBJ_RD_SUBREPORT:
         case OBJ_OLE2:
             pNewObj = OOle2Obj::Create(
                 rTargetModel,
@@ -227,7 +227,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
 {
     switch(_nObjectId)
     {
-        case OBJ_DLG_IMAGECONTROL:
+        case OBJ_RD_IMAGECONTROL:
             {
                 static TPropertyNamePair s_aNameMap = [&]()
                 {
@@ -241,7 +241,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 return s_aNameMap;
             }
 
-        case OBJ_DLG_FIXEDTEXT:
+        case OBJ_RD_FIXEDTEXT:
             {
                 static TPropertyNamePair s_aNameMap = [&]()
                 {
@@ -263,7 +263,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 }();
                 return s_aNameMap;
             }
-        case OBJ_DLG_FORMATTEDFIELD:
+        case OBJ_RD_FORMATTEDFIELD:
             {
                 static TPropertyNamePair s_aNameMap = [&]()
                 {
@@ -476,9 +476,9 @@ OCustomShape::~OCustomShape()
 {
 }
 
-sal_uInt16 OCustomShape::GetObjIdentifier() const
+SdrObjKind OCustomShape::GetObjIdentifier() const
 {
-    return sal_uInt16(OBJ_CUSTOMSHAPE);
+    return OBJ_CUSTOMSHAPE;
 }
 
 SdrInventor OCustomShape::GetObjInventor() const
@@ -574,7 +574,7 @@ OUnoObject::OUnoObject(
     SdrModel& rSdrModel,
     const OUString& _sComponentName,
     const OUString& rModelName,
-    sal_uInt16 _nObjectType)
+    SdrObjKind _nObjectType)
 :   SdrUnoObj(rSdrModel, rModelName)
     ,OObjectBase(_sComponentName)
     ,m_nObjectType(_nObjectType)
@@ -589,7 +589,7 @@ OUnoObject::OUnoObject(
     SdrModel& rSdrModel,
     const uno::Reference< report::XReportComponent>& _xComponent,
     const OUString& rModelName,
-    sal_uInt16 _nObjectType)
+    SdrObjKind _nObjectType)
 :   SdrUnoObj(rSdrModel, rModelName)
     ,OObjectBase(_xComponent)
     ,m_nObjectType(_nObjectType)
@@ -625,7 +625,7 @@ void OUnoObject::impl_initializeModel_nothrow()
     }
 }
 
-sal_uInt16 OUnoObject::GetObjIdentifier() const
+SdrObjKind OUnoObject::GetObjIdentifier() const
 {
     return m_nObjectType;
 }
@@ -907,7 +907,7 @@ OUnoObject& OUnoObject::operator=(const OUnoObject& rObj)
 OOle2Obj::OOle2Obj(
     SdrModel& rSdrModel,
     const uno::Reference< report::XReportComponent>& _xComponent,
-    sal_uInt16 _nType)
+    SdrObjKind _nType)
 :   SdrOle2Obj(rSdrModel)
     ,OObjectBase(_xComponent)
     ,m_nType(_nType)
@@ -920,7 +920,7 @@ OOle2Obj::OOle2Obj(
 OOle2Obj::OOle2Obj(
     SdrModel& rSdrModel,
     const OUString& _sComponentName,
-    sal_uInt16 _nType)
+    SdrObjKind _nType)
 :   SdrOle2Obj(rSdrModel)
     ,OObjectBase(_sComponentName)
     ,m_nType(_nType)
@@ -933,7 +933,7 @@ OOle2Obj::~OOle2Obj()
 {
 }
 
-sal_uInt16 OOle2Obj::GetObjIdentifier() const
+SdrObjKind OOle2Obj::GetObjIdentifier() const
 {
     return m_nType;
 }

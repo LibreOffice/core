@@ -66,7 +66,7 @@ public:
     sal_uInt32 GetVerticalSegments() const
         { return GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS).GetValue(); }
 
-    virtual sal_uInt16 GetObjIdentifier() const override;
+    virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual E3dSphereObj* CloneSdrObject(SdrModel& rTargetModel) const override;

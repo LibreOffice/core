@@ -19,48 +19,10 @@
 
 #pragma once
 
+#include <svx/svdobjkind.hxx>
+
 namespace basctl
 {
-
-enum
-{
-    OBJ_DLG_CONTROL         =  1,
-    OBJ_DLG_DIALOG          =  2,
-    OBJ_DLG_PUSHBUTTON      =  3,
-    OBJ_DLG_RADIOBUTTON     =  4,
-    OBJ_DLG_CHECKBOX        =  5,
-    OBJ_DLG_LISTBOX         =  6,
-    OBJ_DLG_COMBOBOX        =  7,
-    OBJ_DLG_GROUPBOX        =  8,
-    OBJ_DLG_EDIT            =  9,
-    OBJ_DLG_FIXEDTEXT       = 10,
-    OBJ_DLG_IMAGECONTROL    = 11,
-    OBJ_DLG_PROGRESSBAR     = 12,
-    OBJ_DLG_HSCROLLBAR      = 13,
-    OBJ_DLG_VSCROLLBAR      = 14,
-    OBJ_DLG_HFIXEDLINE      = 15,
-    OBJ_DLG_VFIXEDLINE      = 16,
-    OBJ_DLG_DATEFIELD       = 17,
-    OBJ_DLG_TIMEFIELD       = 18,
-    OBJ_DLG_NUMERICFIELD    = 19,
-    OBJ_DLG_CURRENCYFIELD   = 20,
-    OBJ_DLG_FORMATTEDFIELD  = 21,
-    OBJ_DLG_PATTERNFIELD    = 22,
-    OBJ_DLG_FILECONTROL     = 23,
-    OBJ_DLG_TREECONTROL     = 24,
-    OBJ_DLG_SPINBUTTON      = 25,
-    OBJ_DLG_GRIDCONTROL     = 26,
-    OBJ_DLG_HYPERLINKCONTROL = 27,
-
-    OBJ_DLG_FORMRADIO       = 28,
-    OBJ_DLG_FORMCHECK       = 29,
-    OBJ_DLG_FORMLIST        = 30,
-    OBJ_DLG_FORMCOMBO       = 31,
-    OBJ_DLG_FORMSPIN        = 32,
-    OBJ_DLG_FORMVSCROLL     = 33,
-    OBJ_DLG_FORMHSCROLL     = 34,
-
-};
 
 // control properties
 #define DLGED_PROP_BACKGROUNDCOLOR   "BackgroundColor"

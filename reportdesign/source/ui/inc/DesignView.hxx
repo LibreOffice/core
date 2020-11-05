@@ -61,7 +61,7 @@ namespace rptui
         std::shared_ptr<ONavigator>         m_xReportExplorer;
         Idle                                m_aMarkIdle;
         DlgEdMode                           m_eMode;
-        sal_uInt16                          m_eActObj;
+        SdrObjKind                          m_eActObj;
         Size                                m_aGridSizeCoarse;
         Size                                m_aGridSizeFine;
         bool                                m_bDeleted;
@@ -97,8 +97,8 @@ namespace rptui
         OReportController&   getController() const { return m_rReportController; }
 
         void            SetMode( DlgEdMode m_eMode );
-        void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType = OUString());
-        sal_uInt16          GetInsertObj() const { return m_eActObj;}
+        void            SetInsertObj( SdrObjKind eObj,const OUString& _sShapeType = OUString());
+        SdrObjKind      GetInsertObj() const { return m_eActObj;}
         OUString const &    GetInsertObjString() const;
         DlgEdMode       GetMode() const { return m_eMode; }
 

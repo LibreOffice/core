@@ -1132,6 +1132,7 @@ drawing::PolygonKind SvxShapePolyPolygon::GetPolygonKind() const
             case OBJ_PATHFILL:  aRetval = drawing::PolygonKind_PATHFILL; break;
             case OBJ_FREELINE:  aRetval = drawing::PolygonKind_FREELINE; break;
             case OBJ_FREEFILL:  aRetval = drawing::PolygonKind_FREEFILL; break;
+            default: break;
         }
     }
 

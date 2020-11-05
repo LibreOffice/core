@@ -42,7 +42,7 @@
 
 #include <svx/svxids.hrc>
 
-#include <svx/fmglob.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svl/eitem.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/svdpage.hxx>
@@ -354,7 +354,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
 
     // set the Identifier and Inventor of the Uno control
-    sal_uInt16 nIdentifier = 0;
+    SdrObjKind nIdentifier = OBJ_NONE;
     switch( nSlot )
     {
         case SID_FM_CHECKBOX:

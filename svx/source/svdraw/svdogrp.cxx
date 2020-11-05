@@ -121,18 +121,16 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     }
 }
 
-
 void SdrObjGroup::SetBoundRectDirty()
 {
     // avoid resetting aOutRect which in case of this object is model data,
     // not re-creatable view data
 }
 
-sal_uInt16 SdrObjGroup::GetObjIdentifier() const
+SdrObjKind SdrObjGroup::GetObjIdentifier() const
 {
-    return sal_uInt16(OBJ_GRUP);
+    return OBJ_GRUP;
 }
-
 
 SdrLayerID SdrObjGroup::GetLayer() const
 {

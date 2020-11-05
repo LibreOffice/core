@@ -910,16 +910,13 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
     const ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObj);
     if (aAnchorType == SCA_CELL_RESIZE)
     {
-        SdrPathObj* pLineObj = nullptr;
         if (pObj->GetObjIdentifier() == OBJ_LINE)
-            pLineObj = dynamic_cast<SdrPathObj*>(pObj);
-        if (pLineObj)
         {
             // Horizontal lines might have wrong start and end anchor because of erroneously applied
             // 180deg rotation (tdf#137446). Other lines have wrong end anchor. Coordinates in
             // object are correct. Use them for recreating the anchor.
             const basegfx::B2DPolygon aPoly(
-                pLineObj->GetPathPoly().getB2DPolygon(0));
+                static_cast<SdrPathObj*>(pObj)->GetPathPoly().getB2DPolygon(0));
             const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0));
             const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1));
             const Point aPointLT(FRound(std::min(aB2DPoint0.getX(), aB2DPoint1.getX())),

@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <tools/urlobj.hxx>
-#include <svx/fmglob.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/svdouno.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>

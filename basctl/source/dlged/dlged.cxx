@@ -601,7 +601,7 @@ void DlgEditor::SetMode (Mode eNewMode )
 }
 
 
-void DlgEditor::SetInsertObj( sal_uInt16 eObj )
+void DlgEditor::SetInsertObj(SdrObjKind eObj)
 {
     eActObj = eObj;
 
