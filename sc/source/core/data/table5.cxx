@@ -1156,7 +1156,7 @@ void ScTable::SetPageStyle( const OUString& rName )
 
     if ( !pNewStyle )
     {
-        aStrNew = ScResId(STR_STYLENAME_STANDARD_PAGE);
+        aStrNew = ScResId(STR_STYLENAME_STANDARD);
         pNewStyle = pStylePool->Find( aStrNew, SfxStyleFamily::Page );
     }
 

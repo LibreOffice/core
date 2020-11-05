@@ -675,7 +675,7 @@ ScAutoFormat::ScAutoFormat() :
 {
     //  create default autoformat
     std::unique_ptr<ScAutoFormatData> pData(new ScAutoFormatData);
-    OUString aName(ScResId(STR_STYLENAME_STANDARD_CELL));
+    OUString aName(ScResId(STR_STYLENAME_STANDARD));
     pData->SetName(aName);
 
     //  default font, default height
@@ -755,7 +755,7 @@ ScAutoFormat::ScAutoFormat() :
 
 bool DefaultFirstEntry::operator() (const OUString& left, const OUString& right) const
 {
-    OUString aStrStandard(ScResId(STR_STYLENAME_STANDARD_CELL));
+    OUString aStrStandard(ScResId(STR_STYLENAME_STANDARD));
     if (ScGlobal::GetpTransliteration()->isEqual( left, right ) )
         return false;
     if ( ScGlobal::GetpTransliteration()->isEqual( left, aStrStandard ) )
