@@ -348,7 +348,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
             }
         }
     }
-    std::unique_ptr<SbiExprNode> pNd(new SbiExprNode( *pDef, eType ));
+    auto pNd = std::make_unique<SbiExprNode>( *pDef, eType );
     if( !pPar )
     {
         pPar = SbiExprList::ParseParameters( pParser,false,false );
@@ -454,7 +454,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::ObjTerm( SbiSymDef& rObj )
         pDef->SetType( eType );
     }
 
-    std::unique_ptr<SbiExprNode> pNd(new SbiExprNode( *pDef, eType ));
+    auto pNd = std::make_unique<SbiExprNode>( *pDef, eType );
     pNd->aVar.pPar = pPar.release();
     pNd->aVar.pvMorePar = pvMoreParLcl;
     if( bObj )

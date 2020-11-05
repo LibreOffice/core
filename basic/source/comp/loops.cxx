@@ -67,7 +67,7 @@ void SbiParser::If()
             aGen.BackChain( nEndLbl );
 
             aGen.Statement();
-            std::unique_ptr<SbiExpression> pCond(new SbiExpression( this ));
+            auto pCond = std::make_unique<SbiExpression>( this );
             pCond->Gen();
             nEndLbl = aGen.Gen( SbiOpcode::JUMPF_, 0 );
             pCond.reset();

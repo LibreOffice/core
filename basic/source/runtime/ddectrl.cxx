@@ -100,7 +100,7 @@ ErrCode SbiDdeControl::Initiate( const OUString& rService, const OUString& rTopi
                                  size_t& rnHandle )
 {
     ErrCode nErr;
-    std::unique_ptr<DdeConnection> pConv(new DdeConnection( rService, rTopic ));
+    auto pConv = std::make_unique<DdeConnection> ( rService, rTopic );
     nErr = GetLastErr( pConv.get() );
     if( nErr )
     {

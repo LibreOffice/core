@@ -844,9 +844,8 @@ void BasicManager::Init()
 
 BasicLibInfo* BasicManager::CreateLibInfo()
 {
-    BasicLibInfo* pInf(new BasicLibInfo);
-    mpImpl->aLibs.push_back(std::unique_ptr<BasicLibInfo>(pInf));
-    return pInf;
+    mpImpl->aLibs.push_back(std::make_unique<BasicLibInfo>());
+    return mpImpl->aLibs.back().get();
 }
 
 bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage )
