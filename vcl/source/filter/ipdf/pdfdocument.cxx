@@ -2618,7 +2618,7 @@ PDFElement* PDFDictionaryElement::LookupElement(const OString& rDictionaryKey)
     return PDFDictionaryElement::Lookup(m_aItems, rDictionaryKey);
 }
 
-PDFElement* PDFObjectElement::Lookup(const OString& rDictionaryKey)
+void PDFObjectElement::parseIfNecessary()
 {
     if (m_aDictionary.empty())
     {
@@ -2629,7 +2629,11 @@ PDFElement* PDFObjectElement::Lookup(const OString& rDictionaryKey)
             // Normal object: elements are stored as members of the document itself.
             PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
     }
+}
 
+PDFElement* PDFObjectElement::Lookup(const OString& rDictionaryKey)
+{
+    parseIfNecessary();
     return PDFDictionaryElement::Lookup(m_aDictionary, rDictionaryKey);
 }
 
@@ -2655,9 +2659,7 @@ void PDFObjectElement::SetDictionaryOffset(sal_uInt64 nDictionaryOffset)
 
 sal_uInt64 PDFObjectElement::GetDictionaryOffset()
 {
-    if (m_aDictionary.empty())
-        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
-
+    parseIfNecessary();
     return m_nDictionaryOffset;
 }
 
@@ -2702,9 +2704,7 @@ void PDFObjectElement::SetDictionaryLength(sal_uInt64 nDictionaryLength)
 
 sal_uInt64 PDFObjectElement::GetDictionaryLength()
 {
-    if (m_aDictionary.empty())
-        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
-
+    parseIfNecessary();
     return m_nDictionaryLength;
 }
 
@@ -2714,8 +2714,7 @@ sal_uInt64 PDFObjectElement::GetArrayLength() const { return m_nArrayLength; }
 
 PDFDictionaryElement* PDFObjectElement::GetDictionary()
 {
-    if (m_aDictionary.empty())
-        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
+    parseIfNecessary();
     return m_pDictionaryElement;
 }
 
@@ -2743,9 +2742,7 @@ void PDFObjectElement::AddDictionaryReference(PDFReferenceElement* pReference)
 
 const std::map<OString, PDFElement*>& PDFObjectElement::GetDictionaryItems()
 {
-    if (m_aDictionary.empty())
-        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
-
+    parseIfNecessary();
     return m_aDictionary;
 }
 
