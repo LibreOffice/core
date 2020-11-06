@@ -675,7 +675,7 @@ OUString replaceOrigin(
     {
         //get the file name of the xcu and add it to the url of the temporary folder
         sal_Int32 i = url.lastIndexOf('/');
-        newUrl = destFolder + url.copy(i);
+        newUrl = destFolder + url.subView(i);
     }
 
     ucbhelper::Content(newUrl, xCmdEnv, xContext).writeStream(

@@ -436,7 +436,7 @@ OUString DataSupplier::assembleChildURL( const OUString& aName )
             aURL += "/";
 
         aURL += ::ucb_impl::urihelper::encodeSegment( aName ) +
-            aContURL.copy( nParam );
+            aContURL.subView( nParam );
     }
     else
     {

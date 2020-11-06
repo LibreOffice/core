@@ -392,7 +392,7 @@ void RemoteFilesDialog::AddFileExtension()
 
     if ( nDotPos == -1 )
     {
-        sFileName += sExt.copy( 1 ); // without '*'
+        sFileName += sExt.subView( 1 ); // without '*'
         m_xName_ed->set_text( sFileName );
     }
 }

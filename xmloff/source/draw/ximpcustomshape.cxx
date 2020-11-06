@@ -1209,9 +1209,9 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
                         EquationHashMap::iterator aHashIter( pH->find( aEquationName ) );
                         if ( aHashIter != pH->end() )
                             nIndex = (*aHashIter).second;
-                        OUString aNew = rEquation.copy( 0, nIndexOf + 1 ) +
+                        OUString aNew = rEquation.subView( 0, nIndexOf + 1 ) +
                             OUString::number( nIndex ) +
-                            rEquation.copy( nIndexOf + aEquationName.getLength() + 1 );
+                            rEquation.subView( nIndexOf + aEquationName.getLength() + 1 );
                         rEquation = aNew;
                     }
                     nIndexOf++;

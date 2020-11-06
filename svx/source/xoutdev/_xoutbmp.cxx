@@ -121,7 +121,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         {
             OUString aStr( OUString::number( rGraphic.GetChecksum(), 16 ) );
             if ( aStr[0] == '-' )
-                aStr = "m" + aStr.copy(1);
+                aStr = OUString::Concat("m") + aStr.subView(1);
             OUString aName = aURL.getBase() + "_" + aURL.getExtension() + "_" + aStr;
             aURL.setBase( aName );
         }

@@ -73,7 +73,7 @@ static OUString getExecutablePath()
     osl::Module::getUrlFromAddress(
         reinterpret_cast<oslGenericFunction>(&getExecutablePath), dirPath);
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') );
-    dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') + 1) +
+    dirPath = OUString::Concat(dirPath.subView( 0, dirPath.lastIndexOf('/') + 1)) +
         "Executable";
     return dirPath;
 }

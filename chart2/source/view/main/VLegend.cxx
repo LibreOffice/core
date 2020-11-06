@@ -424,7 +424,7 @@ awt::Size lcl_placeLegendEntries(
                         ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
                         for (sal_Int32 nNewLen = aLabelString.getLength() - sDots.getLength(); nNewLen > 0; nNewLen--)
                         {
-                            OUString aNewLabel = aLabelString.copy(0, nNewLen) + sDots;
+                            OUString aNewLabel = aLabelString.subView(0, nNewLen) + sDots;
                             Reference<drawing::XShape> xEntry = pShapeFactory->createText(
                                 xTarget, aNewLabel, rTextProperties.first, rTextProperties.second, uno::Any());
                             nSumHeight = xEntry->getSize().Height;
