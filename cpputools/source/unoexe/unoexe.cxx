@@ -98,7 +98,7 @@ static bool readOption( OUString * pValue, const char * pOpt,
     if (aArg.getLength() < aOpt.getLength())
         return false;
 
-    if (aOpt.equalsIgnoreAsciiCase( aArg.copy(1) ))
+    if (aOpt.equalsIgnoreAsciiCase( aArg.substr(1, aArg.getLength()-1) ))
     {
         // take next argument
         ++(*pnIndex);
