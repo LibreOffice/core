@@ -298,7 +298,7 @@ void lcl_SetStyleById(ScDocument* pDoc, SCTAB nTab,
 
         pStyle = static_cast<ScStyleSheet*>( &pStlPool->Make( aStyleName, SfxStyleFamily::Para,
                                                     SfxStyleSearchBits::UserDefined ) );
-        pStyle->SetParent( ScResId(STR_STYLENAME_STANDARD_CELL) );
+        pStyle->SetParent( ScResId(STR_STYLENAME_STANDARD) );
         SfxItemSet& rSet = pStyle->GetItemSet();
         if (strcmp(pStrId, STR_PIVOT_STYLENAME_RESULT) == 0 || strcmp(pStrId, STR_PIVOT_STYLENAME_TITLE) == 0){
             rSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
