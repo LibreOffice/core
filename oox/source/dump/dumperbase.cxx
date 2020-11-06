@@ -2380,7 +2380,7 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
         {
             while( (nPos < aElem.getLength()) && (aElem[ nPos ] >= 32) ) ++nPos;
             if( nPos < aElem.getLength() )
-                aElem = aElem.copy( 0, nPos ) + OUStringChar(' ') + aElem.copy( nPos ).trim();
+                aElem = aElem.subView( 0, nPos ) + OUStringChar(' ') + aElem.copy( nPos ).trim();
             ++nPos;
         }
 

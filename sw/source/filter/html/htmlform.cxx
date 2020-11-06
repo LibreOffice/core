@@ -824,14 +824,14 @@ static void lcl_html_getEvents( const OUString& rOption, const OUString& rValue,
 {
     if( rOption.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_sdevent ) )
     {
-        OUString aEvent = rOption.copy( strlen( OOO_STRING_SVTOOLS_HTML_O_sdevent ) ) +
-            "-" + rValue;
+        OUString aEvent = rOption.subView( strlen( OOO_STRING_SVTOOLS_HTML_O_sdevent ) ) +
+            OUString::Concat(u"-") + rValue;
         rUnoMacroTable.push_back(aEvent);
     }
     else if( rOption.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_sdaddparam ) )
     {
-        OUString aParam = rOption.copy( strlen( OOO_STRING_SVTOOLS_HTML_O_sdaddparam ) ) +
-            "-" + rValue;
+        OUString aParam = rOption.subView( strlen( OOO_STRING_SVTOOLS_HTML_O_sdaddparam ) ) +
+            OUString::Concat(u"-") + rValue;
         rUnoMacroParamTable.push_back(aParam);
     }
 }

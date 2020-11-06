@@ -524,7 +524,7 @@ std::vector<OUString>& SwDoc::FindUsedDBs( const std::vector<OUString>& rAllDBNa
             const sal_Int32 nEndPos = sFormula.indexOf('.', nPos);
             if( nEndPos>=0 )
             {
-                rUsedDBNames.emplace_back(sItem + OUStringChar(DB_DELIM) + sFormula.copy( nPos, nEndPos - nPos ));
+                rUsedDBNames.emplace_back(sItem + OUStringChar(DB_DELIM) + sFormula.subView( nPos, nEndPos - nPos ));
             }
         }
     }

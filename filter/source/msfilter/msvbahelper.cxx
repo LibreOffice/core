@@ -150,7 +150,7 @@ static SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
                         bDocNameNoPathMatch = xModel->getURL().copy( lastSlashIndex + 1 ) == aURL;
                         if ( !bDocNameNoPathMatch )
                         {
-                            OUString aTmpName = "'" + xModel->getURL().copy( lastSlashIndex + 1 ) + "'";
+                            OUString aTmpName = OUString::Concat(u"'") + xModel->getURL().subView( lastSlashIndex + 1 ) + "'";
                             bDocNameNoPathMatch = aTmpName == aURL;
                         }
                     }

@@ -153,7 +153,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( aURL.getBase().getLength() > 18 )
     {
-        aString += aURL.getBase().copy( 0, 15 ) + "...";
+        aString += aURL.getBase().subView( 0, 15 ) + OUString::Concat(u"...");
     }
     else
         aString += aURL.getBase();

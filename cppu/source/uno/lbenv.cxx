@@ -1078,7 +1078,7 @@ static uno_Environment * initDefaultEnvironment(
         if (!envPurpose.isEmpty())
         {
             OUString libStem(
-                envPurpose.copy(envPurpose.lastIndexOf(':') + 1) + "_uno_uno");
+                envPurpose.subView(envPurpose.lastIndexOf(':') + 1) + OUString::Concat(u"_uno_uno"));
             if(!loadEnv(libStem, pEnv))
             {
                 pEnv->release(pEnv);

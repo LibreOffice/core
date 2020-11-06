@@ -175,7 +175,7 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+2);
     OUString aDSN("DSN="), aUID, aPWD, aSysDrvSettings;
-    aDSN += url.copy(nLen+1);
+    aDSN += url.subView(nLen+1);
 
     sal_Int32 nTimeout = 20;
     bool bSilent = true;

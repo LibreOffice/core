@@ -298,7 +298,7 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditHdl, DetailsContainer*, void )
             if( nLength < 0 )
                 nLength = sUser.getLength();
 
-            sLabel = sLabel.replaceFirst( "$user$", sUser.copy( 0, nLength ) );
+            sLabel = sLabel.replaceFirst( "$user$", sUser.subView( 0, nLength ) );
             sLabel = sLabel.replaceFirst( "$service$", m_xLBServerType->get_active_text() );
 
             m_xEDServerName->set_text( sLabel );

@@ -120,7 +120,7 @@ protected:
 
         OUString sFileName = m_sTestFileName;
         assert(sFileName.lastIndexOf('.') < sFileName.getLength());
-        sFileName = sFileName.copy(0, sFileName.lastIndexOf('.')) + ".txt";
+        sFileName = sFileName.subView(0, sFileName.lastIndexOf('.')) + OUString::Concat(u".txt");
         if (!m_bDumpMode)
         {
             if (m_aReferenceFile.is_open())

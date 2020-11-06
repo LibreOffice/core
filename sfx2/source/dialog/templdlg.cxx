@@ -256,7 +256,7 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, QueryTooltipHdl, const weld::TreeIter&, 
             const sal_Int32 nMaxLen = 80;
             if (sUsedBy.getLength() > nMaxLen)
             {
-                sUsedBy = sUsedBy.copy(0, nMaxLen) + "...";
+                sUsedBy = sUsedBy.subView(0, nMaxLen) + OUString::Concat(u"...");
             }
 
             OUString aMessage = SfxResId(STR_STYLEUSEDBY);

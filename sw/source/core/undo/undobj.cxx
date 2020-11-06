@@ -1539,9 +1539,9 @@ OUString ShortenString(const OUString & rStr, sal_Int32 nLength, const OUString 
     const sal_Int32 nFrontLen = nLength - nLength / 2;
     const sal_Int32 nBackLen = nLength - nFrontLen;
 
-    return rStr.copy(0, nFrontLen)
+    return rStr.subView(0, nFrontLen)
            + rFillStr
-           + rStr.copy(rStr.getLength() - nBackLen);
+           + rStr.subView(rStr.getLength() - nBackLen);
 }
 
 static bool IsAtEndOfSection(SwPosition const& rAnchorPos)

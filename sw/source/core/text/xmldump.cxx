@@ -143,7 +143,7 @@ class XmlPortionDumper:public SwPortionHandler
                 BAD_CAST(m_rText.copy(sal_Int32(ofs), sal_Int32(nLength)).toUtf8().getStr()));
 
         xmlTextWriterEndElement( writer );
-        m_aLine += m_rText.copy(sal_Int32(ofs), sal_Int32(nLength));
+        m_aLine += m_rText.subView(sal_Int32(ofs), sal_Int32(nLength));
         ofs += nLength;
     }
 
