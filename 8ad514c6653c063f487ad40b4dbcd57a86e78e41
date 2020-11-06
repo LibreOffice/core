@@ -22,6 +22,30 @@
       "revId": "8ad514c6653c063f487ad40b4dbcd57a86e78e41",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f75a8226_27244310",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-06T06:03:28Z",
+      "side": 1,
+      "message": "Sorry, of course I\u0027m wrong. It would call default ctor of the std::unique_ptr (creating an empty smart ptr), not of its pointer type ... silly me :-)",
+      "parentUuid": "9b4a2d62_86c93013",
+      "range": {
+        "startLine": 847,
+        "startChar": 4,
+        "endLine": 847,
+        "endChar": 62
+      },
+      "revId": "8ad514c6653c063f487ad40b4dbcd57a86e78e41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
