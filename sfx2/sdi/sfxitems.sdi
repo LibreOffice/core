@@ -95,6 +95,12 @@
     };
     item SvxSearch SvxSearchItem;
 
+    struct SecurityOption
+    {
+        INT16       MacroSecurityLevel     MID_MACRO_SECURITYLEVEL;
+    };
+    item SecurityOption SfxOptionItem;
+
     struct SvxSize
     {
         INT32               Width           MID_SIZE_WIDTH;
