@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b4a2d62_86c93013",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-06T06:00:50Z",
+      "side": 1,
+      "message": "This may be further simplified to\n\n    mpImpl-\u003eaLibs.emplace_back()\n\n... which passes its (absent) arguments to the ctor of a new element - so here it will call the default ctor without arguments.",
+      "range": {
+        "startLine": 847,
+        "startChar": 4,
+        "endLine": 847,
+        "endChar": 62
+      },
+      "revId": "8ad514c6653c063f487ad40b4dbcd57a86e78e41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
