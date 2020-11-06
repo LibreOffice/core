@@ -359,7 +359,7 @@ TextAndReading SwTOXIndex::GetText_Impl(SwRootFrame const*const pLayout) const
     // if SwTOIOptions::InitialCaps is set, first character is to be capitalized
     if( SwTOIOptions::InitialCaps & nOpt && pTOXIntl && !aRet.sText.isEmpty())
     {
-        aRet.sText = pTOXIntl->ToUpper( aRet.sText, 0 ) + aRet.sText.copy(1);
+        aRet.sText = pTOXIntl->ToUpper( aRet.sText, 0 ) + aRet.sText.subView(1);
     }
 
     return aRet;
@@ -386,7 +386,7 @@ void SwTOXIndex::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16,
                                 : ExpandMode(0)));
         if(SwTOIOptions::InitialCaps & nOpt && pTOXIntl && !aRet.sText.isEmpty())
         {
-            aRet.sText = pTOXIntl->ToUpper( aRet.sText, 0 ) + aRet.sText.copy(1);
+            aRet.sText = pTOXIntl->ToUpper( aRet.sText, 0 ) + aRet.sText.subView(1);
         }
     }
     else

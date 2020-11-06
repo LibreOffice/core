@@ -114,7 +114,7 @@ void Breadcrumb::SetURL( const OUString& rURL )
         }
 
         m_aSegments[i]->m_xLink->set_label( sLabel );
-        m_aUris[m_aSegments[i]->m_xLink.get()] = sRootPath + sPath.copy(0, nEnd);
+        m_aUris[m_aSegments[i]->m_xLink.get()] = sRootPath + sPath.subView(0, nEnd);
         m_aSegments[i]->m_xLink->hide();
         m_aSegments[i]->m_xLink->set_sensitive(true);
 

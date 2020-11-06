@@ -134,7 +134,7 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
         sal_Unicode firstLetter = aDisplayName[0];
         if (rtl::isAsciiLowerCase(firstLetter))
         {
-            aDisplayName = OUStringChar(sal_Unicode(rtl::toAsciiUpperCase(firstLetter))) + aDisplayName.copy(1);
+            aDisplayName = OUStringChar(sal_Unicode(rtl::toAsciiUpperCase(firstLetter))) + aDisplayName.subView(1);
         }
     }
 

@@ -293,7 +293,7 @@ OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
         aUrl.match( aFilePrefix ) &&
         aUrl.match( aUncPrefix, nFilePrefixLen ) )
     {
-        return aFileSchema + aUrl.copy( nFilePrefixLen );
+        return aFileSchema + aUrl.subView( nFilePrefixLen );
     }
 
     /*  (5) handle URLs relative to current drive, e.g. the URL '/path1/file1'
@@ -303,7 +303,7 @@ OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
         mxImpl->maFileUrl.match( aFilePrefix ) &&
         lclIsDosDrive( mxImpl->maFileUrl, nFilePrefixLen ) )
     {
-        return mxImpl->maFileUrl.copy( 0, nFilePrefixLen + 3 ) + aUrl.copy( 1 );
+        return OUString::Concat(mxImpl->maFileUrl.subView( 0, nFilePrefixLen + 3 )) + aUrl.subView( 1 );
     }
 
     try

@@ -2131,7 +2131,7 @@ OUString getPageApiNameFromUiName( const OUString& rUIName )
 
     if( rUIName.startsWith( aDefPageName ) )
     {
-        aApiName = sEmptyPageName + rUIName.copy( aDefPageName.getLength() );
+        aApiName = OUString::Concat(sEmptyPageName) + rUIName.subView( aDefPageName.getLength() );
     }
     else
     {
@@ -2839,7 +2839,7 @@ void SdMasterPage::setBackground( const Any& rValue )
             if(pSSPool)
             {
                 OUString aLayoutName( static_cast< SdPage* >( SvxFmDrawPage::mpPage )->GetLayoutName() );
-                aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4) +
+                aLayoutName = OUString::Concat(aLayoutName.subView(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4)) +
                     STR_LAYOUT_BACKGROUND;
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SfxStyleFamily::Page );
 
@@ -2885,7 +2885,7 @@ void SdMasterPage::getBackground( Any& rValue )
             if(pSSPool)
             {
                 OUString aLayoutName( static_cast< SdPage* >(SvxFmDrawPage::mpPage)->GetLayoutName() );
-                aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4) +
+                aLayoutName = OUString::Concat(aLayoutName.subView(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4)) +
                     STR_LAYOUT_BACKGROUND;
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SfxStyleFamily::Page );
 

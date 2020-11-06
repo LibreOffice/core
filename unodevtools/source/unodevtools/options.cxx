@@ -40,13 +40,13 @@ bool readOption( OUString * pValue, const char * pOpt,
     if (aArg.getLength() < aOpt.getLength())
         return false;
 
-    if (aOpt.equalsIgnoreAsciiCase( aArg.copy(1) )) {
+    if (aOpt.equalsIgnoreAsciiCase( aArg.subView(1) )) {
         // take next argument
         ++(*pnIndex);
 
         rtl_getAppCommandArg(*pnIndex, &pValue->pData);
         if (*pnIndex >= rtl_getAppCommandArgCount() ||
-            pValue->copy(1) == dash)
+            pValue->subView(1) == dash)
         {
             throw CannotDumpException(
                 "incomplete option \"-" + aOpt + "\" given!");
@@ -70,8 +70,8 @@ bool readOption( const char * pOpt,
 {
     OUString aOpt = OUString::createFromAscii(pOpt);
 
-    if((aArg.startsWith("-") && aOpt.equalsIgnoreAsciiCase(aArg.copy(1))) ||
-       (aArg.startsWith("--") && aOpt.equalsIgnoreAsciiCase(aArg.copy(2))) )
+    if((aArg.startsWith("-") && aOpt.equalsIgnoreAsciiCase(aArg.subView(1))) ||
+       (aArg.startsWith("--") && aOpt.equalsIgnoreAsciiCase(aArg.subView(2))) )
     {
         ++(*pnIndex);
         SAL_INFO("unodevtools", "identified option --" << pOpt);

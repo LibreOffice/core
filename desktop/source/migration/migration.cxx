@@ -735,7 +735,7 @@ void MigrationImpl::copyFiles()
                 // LANGUAGE_DONTKNOW with the "[All]" autocorrection entry.
                 // As of LibreOffice 4.0 it is 'und' for LANGUAGE_UNDETERMINED
                 // so the file name is "acor_und.dat".
-                localName = localName.copy( 0, localName.getLength() - 4) + "und.dat";
+                localName = OUString::Concat(localName.subView( 0, localName.getLength() - 4)) + "und.dat";
             }
             destName = userInstall + localName;
             INetURLObject aURL(destName);
