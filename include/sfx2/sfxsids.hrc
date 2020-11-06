@@ -665,6 +665,9 @@ class SfxDocumentInfoItem;
 // SfxScriptOrganizerItem
 #define MID_SCRIPT_ORGANIZER_LANGUAGE       1 // Don't use zero for MID's. It's forbidden to do it!
 
+// SfxOptionItem
+#define MID_MACRO_SECURITYLEVEL             1
+
 #define SID_NEWSD                           (SID_SFX_START + 1686)
 #define FN_LABEL                            (SID_SW_START + 1051 )
 #define FN_BUSINESS_CARD                    (SID_SW_START + 1052)

@@ -4032,7 +4032,7 @@ SfxStringItem SendMailDocAsOOo SID_MAIL_SENDDOCASOOO
 
 
 SfxVoidItem SetOptions SID_SETOPTIONS
-()
+(SfxOptionItem Options SID_SETOPTIONS)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
