@@ -239,7 +239,7 @@ private:
     DECL_LINK(NewDelActionHdl, weld::Entry&, bool);
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
-    void            NewDelHdl(const weld::Widget*);
+    bool            NewDelHdl(const weld::Widget*);
                     /// Box filled with new language
     void            RefillReplaceBoxes(bool bFromReset,
                                         LanguageType eOldLanguage,
