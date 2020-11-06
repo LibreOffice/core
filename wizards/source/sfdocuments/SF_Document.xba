@@ -74,7 +74,7 @@ Private _CustomProperties		As Object		&apos;	Dictionary of custom properties
 
 REM ============================================================ MODULE CONSTANTS
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()

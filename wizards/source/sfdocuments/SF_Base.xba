@@ -62,7 +62,7 @@ Private _Database				As Object		&apos;	SFDatabases.Database service instance
 
 REM ============================================================ MODULE CONSTANTS
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()

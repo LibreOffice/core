@@ -220,7 +220,7 @@ Public Function _NewDialog(Optional ByVal pvArgs As Variant) As Object
 &apos;	Args:
 &apos;&apos;&apos;		Container: either &quot;GlobalScope&quot; or a WindowName. Default = the active window
 &apos;&apos;&apos;					see the definition of WindowName in the description of the UI service
-&apos;&apos;&apos;		Library: the name of the library hosting the dialog. Defailt = &quot;Standard&quot;
+&apos;&apos;&apos;		Library: the name of the library hosting the dialog. Default = &quot;Standard&quot;
 &apos;&apos;&apos;		DialogName: The name of the dialog
 &apos;&apos;&apos;			Library and dialog names are case-sensitive
 &apos;&apos;&apos;	Returns: the instance or Nothing
