@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b83a9ed_dcd6028c",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-11-06T09:33:04Z",
+      "side": 0,
+      "message": "Is this really needed? The fix works without this, too.",
+      "range": {
+        "startLine": 1026,
+        "startChar": 7,
+        "endLine": 1034,
+        "endChar": 46
+      },
+      "revId": "8c5ffecf1dbd3f93128910433da11d5315661680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
