@@ -31,20 +31,17 @@
 class VCLXAccessibleDropDownListBox final : public VCLXAccessibleBox
 {
 public:
-    VCLXAccessibleDropDownListBox (VCLXWindow* pVCLXindow);
+    VCLXAccessibleDropDownListBox(VCLXWindow* pVCLXindow);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     // Return drop down list box specific services.
-    virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     virtual ~VCLXAccessibleDropDownListBox() override = default;
 
     virtual bool IsValid() const override;
-
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
