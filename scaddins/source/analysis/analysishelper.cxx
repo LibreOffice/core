@@ -2058,7 +2058,7 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
     sal_Int32 nLen = rRef.getLength();
     sal_Int32 nIndex = rRef.lastIndexOf( '^' );
     if( nIndex > 0 && nIndex  == ( nLen - 2 ) )
-        aStr = aStr.copy( 0, nLen - 2 ) + OUStringChar( aStr[ nLen - 1 ] );
+        aStr = aStr.subView( 0, nLen - 2 ) + OUStringChar( aStr[ nLen - 1 ] );
     if( aName == aStr )
         return 0;
     else

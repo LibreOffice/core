@@ -72,7 +72,7 @@ SwASCWriter::SwASCWriter( const OUString& rFltNm )
                 break;
 
     default:
-        if( rFltNm.getLength() >= 4 && rFltNm.copy( 4 )=="_DLG" )
+        if( rFltNm.getLength() >= 4 && rFltNm.subView( 4 )==u"_DLG" )
         {
             // use the options
             aNewOpts = GetAsciiOptions();

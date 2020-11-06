@@ -392,7 +392,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
             OUString sLowerCaseFileName = fileName.toAsciiLowerCase();
             if ( fileName != sLowerCaseFileName )
             {
-                aFragmentPath = aFragmentPath.copy(0, nPathLen) + sLowerCaseFileName;
+                aFragmentPath = aFragmentPath.subView(0, nPathLen) + sLowerCaseFileName;
                 xInStrm = openInputStream(aFragmentPath);
             }
         }

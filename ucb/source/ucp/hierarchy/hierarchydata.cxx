@@ -277,7 +277,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                 OSL_ENSURE( nPos != -1,
                             "HierarchyEntry::setData - Wrong path!" );
 
-                aParentPath += m_aPath.copy( 0, nPos );
+                aParentPath += m_aPath.subView( 0, nPos );
                 bRoot = false;
             }
 
@@ -510,7 +510,7 @@ bool HierarchyEntry::move(
 
             OSL_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
 
-            aOldParentPath += m_aPath.copy( 0, nPos );
+            aOldParentPath += m_aPath.subView( 0, nPos );
             bOldRoot = false;
         }
 
@@ -523,7 +523,7 @@ bool HierarchyEntry::move(
 
             OSL_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
 
-            aNewParentPath += aNewPath.copy( 0, nPos );
+            aNewParentPath += aNewPath.subView( 0, nPos );
             bNewRoot = false;
         }
 
@@ -771,7 +771,7 @@ bool HierarchyEntry::remove()
                 OSL_ENSURE( nPos != -1,
                             "HierarchyEntry::remove - Wrong path!" );
 
-                aParentPath += m_aPath.copy( 0, nPos );
+                aParentPath += m_aPath.subView( 0, nPos );
                 bRoot = false;
             }
 

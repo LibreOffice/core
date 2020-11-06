@@ -1642,7 +1642,7 @@ void ScInputHandler::PasteFunctionData()
         const ScTypedStrData& rData = *miAutoPosFormula;
         OUString aInsert = rData.GetString();
         if (aInsert[aInsert.getLength()-1] == cParenthesesReplacement)
-            aInsert = aInsert.copy( 0, aInsert.getLength()-1) + "()";
+            aInsert = OUString::Concat(aInsert.subView( 0, aInsert.getLength()-1)) + "()";
         bool bParInserted = false;
 
         DataChanging(); // Cannot be new
@@ -1792,7 +1792,7 @@ void ScInputHandler::PasteManualTip()
     //  FIXME: Once we have matrix constants, we can change this
     sal_Int32 nTipLen = aManualTip.getLength();
     sal_uInt32 const nTipLen2(sal::static_int_cast<sal_uInt32>(nTipLen));
-    if ( nTipLen && ( nTipLen < 3 || aManualTip.copy( nTipLen2-3 ) != "..." ) )
+    if ( nTipLen && ( nTipLen < 3 || aManualTip.subView( nTipLen2-3 ) != u"..." ) )
     {
         DataChanging(); // Cannot be new
 

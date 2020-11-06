@@ -380,9 +380,9 @@ bool URLParameter::scheme()
             m_aExpr.copy(sal::static_int_cast<sal_uInt32>(nLen) - 6);
         if( aLastStr == "DbPAR=" )
         {
-            m_aExpr = m_aExpr.copy( 0, 20 ) +
+            m_aExpr = OUString::Concat(m_aExpr.subView( 0, 20 )) +
                 "shared" +
-                m_aExpr.copy( 20 ) +
+                m_aExpr.subView( 20 ) +
                 "shared";
         }
     }

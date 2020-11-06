@@ -613,7 +613,7 @@ bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& aSeg
                 bResult = true;
         }
 
-        if ( !bResult && nPathLen > nSegLen && aPath.copy( nPathLen - nSegLen - 1, nSegLen + 1 ) == aEndSegment )
+        if ( !bResult && nPathLen > nSegLen && aPath.subView( nPathLen - nSegLen - 1, nSegLen + 1 ) == aEndSegment )
             bResult = true;
     }
 

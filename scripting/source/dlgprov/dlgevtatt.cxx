@@ -512,10 +512,10 @@ namespace dlgprov
         sal_Int32 nIndex = sScriptCode.indexOf( ':' );
         if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
         {
-            sScriptURL = "vnd.sun.star.script:" +
-                sScriptCode.copy( nIndex + 1 ) +
+            sScriptURL = OUString::Concat("vnd.sun.star.script:") +
+                sScriptCode.subView( nIndex + 1 ) +
                 "?language=Basic&location=" +
-                sScriptCode.copy( 0, nIndex );
+                sScriptCode.subView( 0, nIndex );
         }
         ScriptEvent aSFScriptEvent( aScriptEvent );
         aSFScriptEvent.ScriptCode = sScriptURL;
@@ -612,9 +612,9 @@ namespace dlgprov
             sal_Int32 nIndex = aRes.indexOf( '%' );
 
             OUString aOUFinal =
-                aRes.copy( 0, nIndex ) +
+                aRes.subView( 0, nIndex ) +
                 aQuoteChar + aMethodName + aQuoteChar +
-                aRes.copy( nIndex + 2 );
+                aRes.subView( nIndex + 2 );
 
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
                                                       VclMessageType::Warning, VclButtonsType::Ok, aOUFinal));
