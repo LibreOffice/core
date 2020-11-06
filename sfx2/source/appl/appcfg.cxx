@@ -57,6 +57,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/securityitem.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sfxtypes.hxx>
 #include <sfx2/dispatch.hxx>
@@ -707,6 +708,16 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "SfxBoolItem expected");
         aSecurityOptions.SetConfirmationEnabled( static_cast<const SfxBoolItem *>(pItem)->GetValue() );
+    }
+    if ( SfxItemState::SET == rSet.GetItemState(SID_SETOPTIONS, true, &pItem))
+    {
+        sal_Int32 nValue;
+        css::uno::Any aValue;
+        DBG_ASSERT( dynamic_cast< const SfxSecurityItem *>( pItem ) !=  nullptr, "SfxSecurityItem expected" );
+        if (pItem->QueryValue(aValue, MID_MACRO_SECURITYLEVEL) && (aValue >>= nValue))
+        {
+            aSecurityOptions.SetMacroSecurityLevel( nValue );
+        }
     }
 
     // Store changed data

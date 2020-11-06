@@ -2769,6 +2769,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:BorderInner"),
         OUString(".uno:BorderOuter"),
         OUString(".uno:RunMacro"),
+        OUString(".uno:SetOptions"),
         OUString(".uno:OptionsTreeDialog")
     };
 

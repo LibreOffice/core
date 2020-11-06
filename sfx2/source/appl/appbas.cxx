@@ -64,6 +64,7 @@
 #include <sfx2/sfxhelp.hxx>
 #include <basic/basmgr.hxx>
 #include <unotools/configmgr.hxx>
+#include <sfx2/securityitem.hxx>
 #include <sorgitm.hxx>
 #include <appbaslib.hxx>
 #include <basic/basicmanagerrepository.hxx>
