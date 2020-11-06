@@ -730,6 +730,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
 {
     const sal_Int32 nColCount = getColumnCount();
     const sal_Int32 nRowCount = getRowCount();
+
     if( nRowCount == 0 )
         return;
 
@@ -746,10 +747,14 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
     sal_Int32 nCol, nRow;
     for( nRow = 0; nRow < nRowCount; ++nRow )
     {
+        Reference< XPropertySet > xRowSet( xRows->getByIndex(nRow), UNO_QUERY_THROW );
+        sal_Int32 nRowPropHeight = 0;
+        xRowSet->getPropertyValue( gsSize ) >>= nRowPropHeight;
         sal_Int32 nMinHeight = 0;
 
         bool bIsEmpty = true; // check if all cells in this row are merged
         bool bRowHasText = false;
+        bool bRowHasCellInEditMode = false;
 
         for( nCol = 0; nCol < nColCount; ++nCol )
         {
@@ -767,7 +772,12 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
                 else
                 {
                     bool bCellHasText = xCell->hasText();
-                    if (bRowHasText == bCellHasText)
+                    bool bCellInEditMode = xCell->IsTextEditActive();
+
+                    if (!bRowHasCellInEditMode && bCellInEditMode)
+                        bRowHasCellInEditMode = true;
+
+                    if ((bRowHasText == bCellHasText) || (bRowHasText && bCellInEditMode))
                     {
                         nMinHeight = std::max( nMinHeight, xCell->getMinimumHeight() );
                     }
@@ -775,6 +785,19 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
                     {
                         bRowHasText = true;
                         nMinHeight = xCell->getMinimumHeight();
+                    }
+
+                    // tdf#137949  We should consider "Heigth" property while calculating minimum height.
+                    // This control decides when we use "Heigth" property value instead of calculated minimum height
+                    //     Case 1: * Row has "Heigth" property
+                    //             * Calculated minimum heigth is smaller than Height propery value.
+                    //     Case 2: * Row has "Heigth" property
+                    //             * Calculated minimum heigth is bigger than Height propery value and
+                    //             * Row has not any text of any cell in edit mode in the row (means completely empty)
+                    if ((nMinHeight < nRowPropHeight && nRowPropHeight > 0 ) ||
+                        (nMinHeight > nRowPropHeight && nRowPropHeight > 0 && (!bRowHasText && !bRowHasCellInEditMode)))
+                    {
+                        nMinHeight = nRowPropHeight;
                     }
                 }
             }
@@ -789,7 +812,6 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
         else
         {
             sal_Int32 nRowHeight = 0;
-            Reference< XPropertySet > xRowSet( xRows->getByIndex(nRow), UNO_QUERY_THROW );
 
             bool bOptimal = false;
             xRowSet->getPropertyValue( sOptimalSize ) >>= bOptimal;

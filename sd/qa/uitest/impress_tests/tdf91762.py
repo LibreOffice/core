@@ -42,7 +42,7 @@ class tdf91762(UITestCase):
 
         # tdf#138011: Without the fix in place, this test would have failed with
         # AssertionError: 5504 != 3559
-        self.assertEqual(5504, document.DrawPages[0].getByIndex(1).BoundRect.Height)
+        self.assertEqual(5494, document.DrawPages[0].getByIndex(1).BoundRect.Height)
 
         self.ui_test.close_doc()
 
