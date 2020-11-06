@@ -930,6 +930,10 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	wizards_basicsrvgimmicks \
 	wizards_basicsrvimport \
 	wizards_basicsrvform \
+	wizards_basicsrvscriptforge \
+	wizards_basicsrvsfdatabases \
+	wizards_basicsrvsfdialogs \
+	wizards_basicsrvsfdocuments \
 	wizards_basicsrvstandard \
 	wizards_basicsrvtemplate \
 	wizards_basicsrvtools \

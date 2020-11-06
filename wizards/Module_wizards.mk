@@ -29,6 +29,10 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	Package_gimmicks \
 	Package_import \
 	Package_share \
+	Package_scriptforge \
+	Package_sfdatabases \
+	Package_sfdialogs \
+	Package_sfdocuments \
 	Package_standard \
 	Package_template \
 	Package_tools \
