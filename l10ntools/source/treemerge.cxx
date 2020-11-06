@@ -71,10 +71,10 @@ namespace
         const sal_Int32 nFirstSlash = sID.indexOf('/');
         // Update id attribute of topic
         {
-            OString sNewID =
-                sID.copy( 0, nFirstSlash + 1 ) +
-                rXhpRoot.copy( rXhpRoot.lastIndexOf('/') + 1 ) +
-                sID.copy( sID.indexOf( '/', nFirstSlash + 1 ) );
+            OString sNewID = OStringLiteral("") +
+                sID.copyView( 0, nFirstSlash + 1 ) +
+                rXhpRoot.copyView( rXhpRoot.lastIndexOf('/') + 1 ) +
+                sID.copyView( sID.indexOf( '/', nFirstSlash + 1 ) );
             xmlSetProp(
                 pReturn, reinterpret_cast<const xmlChar*>("id"),
                 reinterpret_cast<const xmlChar*>(sNewID.getStr()));
@@ -82,7 +82,7 @@ namespace
 
         const OString sXhpPath =
             rXhpRoot +
-            sID.copy(sID.indexOf('/', nFirstSlash + 1));
+            sID.copyView(sID.indexOf('/', nFirstSlash + 1));
         xmlDocPtr pXhpFile = xmlParseFile( sXhpPath.getStr() );
         // if xhpfile is missing than put this topic into comment
         if ( !pXhpFile )
