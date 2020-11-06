@@ -18,8 +18,6 @@
  */
 #pragma once
 
-#include <sidebar/Paint.hxx>
-
 #include <sidebar/SidebarToolBox.hxx>
 
 namespace sfx2::sidebar {
@@ -29,7 +27,7 @@ class TitleBar : public vcl::Window
 public:
     TitleBar (const OUString& rsTitle,
               vcl::Window* pParentWindow,
-              const sidebar::Paint& rInitialBackgroundPaint);
+              const Color& rInitialBackgroundColor);
     virtual ~TitleBar() override;
     virtual void dispose() override;
 
@@ -59,13 +57,13 @@ protected:
     virtual tools::Rectangle GetTitleArea (const tools::Rectangle& rTitleBarBox) = 0;
     virtual void PaintDecoration (vcl::RenderContext& rRenderContext) = 0;
     void PaintFocus(vcl::RenderContext& rRenderContext, const tools::Rectangle& rFocusBox);
-    virtual sidebar::Paint GetBackgroundPaint() = 0;
+    virtual Color GetBackgroundPaintColor() = 0;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
 private:
     Image maIcon;
-    sidebar::Paint maBackgroundPaint;
+    Color maBackgroundColor;
 
     void PaintTitle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rTitleBox);
     DECL_LINK(SelectionHandler, ToolBox*, void);

@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/sidebar/Theme.hxx>
-#include <sidebar/Paint.hxx>
 #include <sidebar/Tools.hxx>
 #include <sfx2/app.hxx>
 
@@ -42,7 +41,6 @@ Theme::Theme()
     : ThemeInterfaceBase(m_aMutex),
       maImages(),
       maColors(),
-      maPaints(),
       maIntegers(),
       maBooleans(),
       mbIsHighContrastMode(Application::GetSettings().GetStyleSettings().GetHighContrastMode()),
@@ -73,29 +71,13 @@ Image Theme::GetImage (const ThemeItem eItem)
 Color Theme::GetColor (const ThemeItem eItem)
 {
     const PropertyType eType (GetPropertyType(eItem));
-    OSL_ASSERT(eType==PT_Color || eType==PT_Paint);
+    OSL_ASSERT(eType==PT_Color);
     const sal_Int32 nIndex (GetIndex(eItem, eType));
     const Theme& rTheme (GetCurrentTheme());
     if (eType == PT_Color)
         return rTheme.maColors[nIndex];
-    else if (eType == PT_Paint)
-        return rTheme.maPaints[nIndex].GetColor();
     else
         return COL_WHITE;
-}
-
-const Paint& Theme::GetPaint (const ThemeItem eItem)
-{
-    const PropertyType eType (GetPropertyType(eItem));
-    OSL_ASSERT(eType==PT_Paint);
-    const sal_Int32 nIndex (GetIndex(eItem, eType));
-    const Theme& rTheme (GetCurrentTheme());
-    return rTheme.maPaints[nIndex];
-}
-
-Wallpaper Theme::GetWallpaper (const ThemeItem eItem)
-{
-    return GetPaint(eItem).GetWallpaper();
 }
 
 sal_Int32 Theme::GetInteger (const ThemeItem eItem)
@@ -160,11 +142,11 @@ void Theme::UpdateTheme()
         aSecondColor.DecreaseLuminance(15);
 
         setPropertyValue(
-            maPropertyIdToNameMap[Paint_DeckBackground],
+            maPropertyIdToNameMap[Color_DeckBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
 
         setPropertyValue(
-            maPropertyIdToNameMap[Paint_DeckTitleBarBackground],
+            maPropertyIdToNameMap[Color_DeckTitleBarBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Int_DeckSeparatorHeight],
@@ -179,11 +161,11 @@ void Theme::UpdateTheme()
                         26,
                         rStyle.GetFloatTitleHeight()))));
         setPropertyValue(
-            maPropertyIdToNameMap[Paint_PanelBackground],
+            maPropertyIdToNameMap[Color_PanelBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
 
         setPropertyValue(
-            maPropertyIdToNameMap[Paint_PanelTitleBarBackground],
+            maPropertyIdToNameMap[Color_PanelTitleBarBackground],
             Any(sal_Int32(aSecondColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Color_PanelTitleFont],
@@ -195,7 +177,7 @@ void Theme::UpdateTheme()
                         26,
                         rStyle.GetTitleHeight()))));
         setPropertyValue(
-            maPropertyIdToNameMap[Paint_TabBarBackground],
+            maPropertyIdToNameMap[Color_TabBarBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Int_TabBarLeftPadding],
@@ -231,7 +213,7 @@ void Theme::UpdateTheme()
             Any(sal_Int32(rStyle.GetActiveBorderColor().GetRGBColor())));
 
         setPropertyValue(
-            maPropertyIdToNameMap[Paint_DropDownBackground],
+            maPropertyIdToNameMap[Color_DropDownBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Color_DropDownBorder],
@@ -245,18 +227,18 @@ void Theme::UpdateTheme()
             Any(sal_Int32(rStyle.GetHighlightTextColor().GetRGBColor())));
 
         setPropertyValue(
-            maPropertyIdToNameMap[Paint_TabItemBackgroundNormal],
-            Any());
+            maPropertyIdToNameMap[Color_TabItemBackgroundNormal],
+            Any(sal_Int32(COL_TRANSPARENT)));
         setPropertyValue(
-            maPropertyIdToNameMap[Paint_TabItemBackgroundHighlight],
+            maPropertyIdToNameMap[Color_TabItemBackgroundHighlight],
             Any(sal_Int32(rStyle.GetActiveTabColor().GetRGBColor())));
 
         setPropertyValue(
-            maPropertyIdToNameMap[Paint_HorizontalBorder],
+            maPropertyIdToNameMap[Color_HorizontalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
 
         setPropertyValue(
-            maPropertyIdToNameMap[Paint_VerticalBorder],
+            maPropertyIdToNameMap[Color_VerticalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Image_Grip],
@@ -546,9 +528,8 @@ void Theme::SetupPropertyMaps()
 {
     maPropertyIdToNameMap.resize(Post_Bool_);
     maImages.resize(Image_Color_ - Pre_Image_ - 1);
-    maColors.resize(Color_Paint_ - Image_Color_ - 1);
-    maPaints.resize(Paint_Int_ - Color_Paint_ - 1);
-    maIntegers.resize(Int_Bool_ - Paint_Int_ - 1);
+    maColors.resize(Color_Int_ - Image_Color_ - 1);
+    maIntegers.resize(Int_Bool_ - Color_Int_ - 1);
     maBooleans.resize(Post_Bool_ - Int_Bool_ - 1);
 
     maPropertyNameToIdMap["Image_Grip"]=Image_Grip;
@@ -595,35 +576,35 @@ void Theme::SetupPropertyMaps()
     maPropertyIdToNameMap[Color_HighlightText]="Color_HighlightText";
 
 
-    maPropertyNameToIdMap["Paint_DeckBackground"]=Paint_DeckBackground;
-    maPropertyIdToNameMap[Paint_DeckBackground]="Paint_DeckBackground";
+    maPropertyNameToIdMap["Color_DeckBackground"]=Color_DeckBackground;
+    maPropertyIdToNameMap[Color_DeckBackground]="Color_DeckBackground";
 
-    maPropertyNameToIdMap["Paint_DeckTitleBarBackground"]=Paint_DeckTitleBarBackground;
-    maPropertyIdToNameMap[Paint_DeckTitleBarBackground]="Paint_DeckTitleBarBackground";
+    maPropertyNameToIdMap["Color_DeckTitleBarBackground"]=Color_DeckTitleBarBackground;
+    maPropertyIdToNameMap[Color_DeckTitleBarBackground]="Color_DeckTitleBarBackground";
 
-    maPropertyNameToIdMap["Paint_PanelBackground"]=Paint_PanelBackground;
-    maPropertyIdToNameMap[Paint_PanelBackground]="Paint_PanelBackground";
+    maPropertyNameToIdMap["Color_PanelBackground"]=Color_PanelBackground;
+    maPropertyIdToNameMap[Color_PanelBackground]="Color_PanelBackground";
 
-    maPropertyNameToIdMap["Paint_PanelTitleBarBackground"]=Paint_PanelTitleBarBackground;
-    maPropertyIdToNameMap[Paint_PanelTitleBarBackground]="Paint_PanelTitleBarBackground";
+    maPropertyNameToIdMap["Color_PanelTitleBarBackground"]=Color_PanelTitleBarBackground;
+    maPropertyIdToNameMap[Color_PanelTitleBarBackground]="Color_PanelTitleBarBackground";
 
-    maPropertyNameToIdMap["Paint_TabBarBackground"]=Paint_TabBarBackground;
-    maPropertyIdToNameMap[Paint_TabBarBackground]="Paint_TabBarBackground";
+    maPropertyNameToIdMap["Color_TabBarBackground"]=Color_TabBarBackground;
+    maPropertyIdToNameMap[Color_TabBarBackground]="Color_TabBarBackground";
 
-    maPropertyNameToIdMap["Paint_TabItemBackgroundNormal"]=Paint_TabItemBackgroundNormal;
-    maPropertyIdToNameMap[Paint_TabItemBackgroundNormal]="Paint_TabItemBackgroundNormal";
+    maPropertyNameToIdMap["Color_TabItemBackgroundNormal"]=Color_TabItemBackgroundNormal;
+    maPropertyIdToNameMap[Color_TabItemBackgroundNormal]="Color_TabItemBackgroundNormal";
 
-    maPropertyNameToIdMap["Paint_TabItemBackgroundHighlight"]=Paint_TabItemBackgroundHighlight;
-    maPropertyIdToNameMap[Paint_TabItemBackgroundHighlight]="Paint_TabItemBackgroundHighlight";
+    maPropertyNameToIdMap["Color_TabItemBackgroundHighlight"]=Color_TabItemBackgroundHighlight;
+    maPropertyIdToNameMap[Color_TabItemBackgroundHighlight]="Color_TabItemBackgroundHighlight";
 
-    maPropertyNameToIdMap["Paint_HorizontalBorder"]=Paint_HorizontalBorder;
-    maPropertyIdToNameMap[Paint_HorizontalBorder]="Paint_HorizontalBorder";
+    maPropertyNameToIdMap["Color_HorizontalBorder"]=Color_HorizontalBorder;
+    maPropertyIdToNameMap[Color_HorizontalBorder]="Color_HorizontalBorder";
 
-    maPropertyNameToIdMap["Paint_VerticalBorder"]=Paint_VerticalBorder;
-    maPropertyIdToNameMap[Paint_VerticalBorder]="Paint_VerticalBorder";
+    maPropertyNameToIdMap["Color_VerticalBorder"]=Color_VerticalBorder;
+    maPropertyIdToNameMap[Color_VerticalBorder]="Color_VerticalBorder";
 
-    maPropertyNameToIdMap["Paint_DropDownBackground"]=Paint_DropDownBackground;
-    maPropertyIdToNameMap[Paint_DropDownBackground]="Paint_DropDownBackground";
+    maPropertyNameToIdMap["Color_DropDownBackground"]=Color_DropDownBackground;
+    maPropertyIdToNameMap[Color_DropDownBackground]="Color_DropDownBackground";
 
 
     maPropertyNameToIdMap["Int_DeckTitleBarHeight"]=Int_DeckTitleBarHeight;
@@ -707,19 +688,17 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Color_DropDownBorder:
         case Color_Highlight:
         case Color_HighlightText:
+        case Color_DeckBackground:
+        case Color_DeckTitleBarBackground:
+        case Color_PanelBackground:
+        case Color_PanelTitleBarBackground:
+        case Color_TabBarBackground:
+        case Color_TabItemBackgroundNormal:
+        case Color_TabItemBackgroundHighlight:
+        case Color_HorizontalBorder:
+        case Color_VerticalBorder:
+        case Color_DropDownBackground:
             return PT_Color;
-
-        case Paint_DeckBackground:
-        case Paint_DeckTitleBarBackground:
-        case Paint_PanelBackground:
-        case Paint_PanelTitleBarBackground:
-        case Paint_TabBarBackground:
-        case Paint_TabItemBackgroundNormal:
-        case Paint_TabItemBackgroundHighlight:
-        case Paint_HorizontalBorder:
-        case Paint_VerticalBorder:
-        case Paint_DropDownBackground:
-            return PT_Paint;
 
         case Int_DeckTitleBarHeight:
         case Int_DeckBorderSize:
@@ -759,9 +738,6 @@ css::uno::Type const & Theme::GetCppuType (const PropertyType eType)
         case PT_Color:
             return cppu::UnoType<sal_uInt32>::get();
 
-        case PT_Paint:
-            return cppu::UnoType<void>::get();
-
         case PT_Integer:
             return cppu::UnoType<sal_Int32>::get();
 
@@ -782,10 +758,8 @@ sal_Int32 Theme::GetIndex (const ThemeItem eItem, const PropertyType eType)
             return eItem - Pre_Image_-1;
         case PT_Color:
             return eItem - Image_Color_-1;
-        case PT_Paint:
-            return eItem - Color_Paint_-1;
         case PT_Integer:
-            return eItem - Paint_Int_-1;
+            return eItem - Color_Int_-1;
         case PT_Boolean:
             return eItem - Int_Bool_-1;
         default:
@@ -897,11 +871,6 @@ void Theme::ProcessNewValue (
             {
                 maColors[nIndex] = Color(nColorValue);
             }
-            break;
-        }
-        case PT_Paint:
-        {
-            maPaints[nIndex] = Paint::Create(rValue);
             break;
         }
         case PT_Integer:

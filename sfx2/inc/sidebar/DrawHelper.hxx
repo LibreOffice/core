@@ -25,21 +25,19 @@ class SvBorder;
 
 namespace sfx2::sidebar {
 
-class Paint;
-
 /** Some convenience functions for painting backgrounds and borders.
 */
 class DrawHelper
 {
 public:
     static void DrawBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBox, const SvBorder& rBorderSize,
-                           const Paint& rHorizontalPaint, const Paint& rVerticalPaint);
+                           const Color& rHorizontalColor, const Color& rVerticalColor);
     static void DrawHorizontalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nLeft, const sal_Int32 nRight,
-                                   const sal_Int32 nY, const sal_Int32 nHeight, const Paint& rPaint);
+                                   const sal_Int32 nY, const sal_Int32 nHeight, const Color& rColor);
     static void DrawVerticalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nTop, const sal_Int32 nBottom,
-                                 const sal_Int32 nX, const sal_Int32 nWidth, const Paint& rPaint);
+                                 const sal_Int32 nX, const sal_Int32 nWidth, const Color& rColor);
     static void DrawRoundedRectangle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBox, const sal_Int32 nCornerRadius,
-                                     const Color& rBorderColor, const Paint& rFillPaint);
+                                     const Color& rBorderColor, const Color& rFillColor);
 };
 
 } // end of namespace sfx2::sidebar

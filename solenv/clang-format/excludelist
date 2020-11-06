@@ -11723,7 +11723,6 @@ sfx2/inc/sidebar/DeckLayouter.hxx
 sfx2/inc/sidebar/DeckTitleBar.hxx
 sfx2/inc/sidebar/DrawHelper.hxx
 sfx2/inc/sidebar/MenuButton.hxx
-sfx2/inc/sidebar/Paint.hxx
 sfx2/inc/sidebar/PanelDescriptor.hxx
 sfx2/inc/sidebar/PanelTitleBar.hxx
 sfx2/inc/sidebar/SidebarToolBox.hxx
@@ -11981,7 +11980,6 @@ sfx2/source/sidebar/FocusManager.cxx
 sfx2/source/sidebar/IContextChangeReceiver.cxx
 sfx2/source/sidebar/ILayoutableWindow.cxx
 sfx2/source/sidebar/MenuButton.cxx
-sfx2/source/sidebar/Paint.cxx
 sfx2/source/sidebar/Panel.cxx
 sfx2/source/sidebar/PanelDescriptor.cxx
 sfx2/source/sidebar/PanelLayout.cxx

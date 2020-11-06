@@ -23,7 +23,6 @@
 #include <sidebar/DrawHelper.hxx>
 #include <sidebar/DeckTitleBar.hxx>
 #include <sidebar/PanelTitleBar.hxx>
-#include <sidebar/Paint.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/lokhelper.hxx>
@@ -136,8 +135,8 @@ void Deck::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*r
     // Paint deck background outside the border.
     tools::Rectangle aBox(0, 0, aWindowSize.Width() - 1, aWindowSize.Height() - 1);
     DrawHelper::DrawBorder(rRenderContext, aBox, aPadding,
-                           Theme::GetPaint(Theme::Paint_DeckBackground),
-                           Theme::GetPaint(Theme::Paint_DeckBackground));
+                           Theme::GetColor(Theme::Color_DeckBackground),
+                           Theme::GetColor(Theme::Color_DeckBackground));
 
     // Paint the border.
     const int nBorderSize(Theme::GetInteger(Theme::Int_DeckBorderSize));
@@ -145,11 +144,11 @@ void Deck::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*r
     aBox.AdjustTop(aPadding.Top() );
     aBox.AdjustRight( -(aPadding.Right()) );
     aBox.AdjustBottom( -(aPadding.Bottom()) );
-    const sfx2::sidebar::Paint& rHorizontalBorderPaint(Theme::GetPaint(Theme::Paint_HorizontalBorder));
+    const Color nHorizontalBorderPaint(Theme::GetColor(Theme::Color_HorizontalBorder));
     DrawHelper::DrawBorder(rRenderContext, aBox,
                            SvBorder(nBorderSize, nBorderSize, nBorderSize, nBorderSize),
-                           rHorizontalBorderPaint,
-                           Theme::GetPaint(Theme::Paint_VerticalBorder));
+                           nHorizontalBorderPaint,
+                           Theme::GetColor(Theme::Color_VerticalBorder));
 }
 
 void Deck::DataChanged (const DataChangedEvent&)
@@ -421,11 +420,11 @@ void Deck::ScrollContainerWindow::Paint(vcl::RenderContext& rRenderContext, cons
     const sal_Int32 nSeparatorHeight(Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
     const sal_Int32 nLeft(0);
     const sal_Int32 nRight(GetSizePixel().Width() - 1);
-    const sfx2::sidebar::Paint& rHorizontalBorderPaint(Theme::GetPaint(Theme::Paint_HorizontalBorder));
+    const Color nHorizontalBorderPaint(Theme::GetColor(Theme::Color_HorizontalBorder));
     for (auto const& separator : maSeparators)
     {
         DrawHelper::DrawHorizontalLine(rRenderContext, nLeft, nRight, separator,
-                                       nSeparatorHeight, rHorizontalBorderPaint);
+                                       nSeparatorHeight, nHorizontalBorderPaint);
     }
 }
 

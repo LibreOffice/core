@@ -20,7 +20,6 @@
 #include <sidebar/TabItem.hxx>
 
 #include <sidebar/DrawHelper.hxx>
-#include <sidebar/Paint.hxx>
 
 #include <sfx2/sidebar/Theme.hxx>
 #include <vcl/event.hxx>
@@ -35,7 +34,7 @@ TabItem::TabItem (vcl::Window* pParentWindow)
     , mbIsLeftButtonDown(false)
 {
     SetStyle(GetStyle() | WB_TABSTOP | WB_DIALOGCONTROL | WB_NOPOINTERFOCUS);
-    SetBackground(Theme::GetPaint(Theme::Paint_TabBarBackground).GetWallpaper());
+    SetBackground(Theme::GetColor(Theme::Color_TabBarBackground));
 #ifdef DEBUG
     SetText(OUString("TabItem"));
 #endif
@@ -53,8 +52,8 @@ void TabItem::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& 
                     ? Theme::GetColor(Theme::Color_TabItemBorder)
                     : COL_TRANSPARENT,
                 bIsHighlighted
-                    ? Theme::GetPaint(Theme::Paint_TabItemBackgroundHighlight)
-                    : Theme::GetPaint(Theme::Paint_TabItemBackgroundNormal));
+                    ? Theme::GetColor(Theme::Color_TabItemBackgroundHighlight)
+                    : Theme::GetColor(Theme::Color_TabItemBackgroundNormal));
 
     const Image aIcon(Button::GetModeImage());
     const Size aIconSize (aIcon.GetSizePixel());

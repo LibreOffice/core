@@ -167,7 +167,7 @@ LayoutMenu::LayoutMenu (
 
     mxLayoutValueSet->SetStyle(mxLayoutValueSet->GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_TABSTOP);
 
-    mxLayoutValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Paint_PanelBackground));
+    mxLayoutValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
 
 #ifdef DEBUG
     SetText(OUString("sd:LayoutMenu"));
@@ -755,7 +755,7 @@ void LayoutMenu::DataChanged (const DataChangedEvent& /*rEvent*/)
 {
     Fill();
     mxLayoutValueSet->StyleUpdated();
-    mxLayoutValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Paint_PanelBackground));
+    mxLayoutValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
 }
 
 } // end of namespace ::sd::sidebar

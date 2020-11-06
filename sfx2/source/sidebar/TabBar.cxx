@@ -20,7 +20,6 @@
 #include <sfx2/sidebar/TabBar.hxx>
 #include <sidebar/ControlFactory.hxx>
 #include <sidebar/DeckDescriptor.hxx>
-#include <sidebar/Paint.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sidebar/Tools.hxx>
 #include <sfx2/sidebar/FocusManager.hxx>
@@ -59,7 +58,7 @@ TabBar::TabBar(vcl::Window* pParentWindow,
       pParentSidebarController(rParentSidebarController)
 {
 
-    SetBackground(Theme::GetPaint(Theme::Paint_TabBarBackground).GetWallpaper());
+    SetBackground(Wallpaper(Theme::GetColor(Theme::Color_TabBarBackground)));
 
     mpMenuButton->SetModeImage(Theme::GetImage(Theme::Image_TabBarMenu));
     mpMenuButton->SetClickHdl(LINK(this, TabBar, OnToolboxClicked));
@@ -223,7 +222,7 @@ void TabBar::RemoveDeckHighlight ()
 
 void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
 {
-    SetBackground(Theme::GetPaint(Theme::Paint_TabBarBackground).GetWallpaper());
+    SetBackground(Theme::GetColor(Theme::Color_TabBarBackground));
     UpdateButtonIcons();
 
     Window::DataChanged(rDataChangedEvent);

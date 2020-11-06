@@ -67,7 +67,7 @@ SidebarPanelBase::SidebarPanelBase (
     }
     if (mpControl != nullptr)
     {
-        mpControl->SetBackground(Theme::GetWallpaper(Theme::Paint_PanelBackground));
+        mpControl->SetBackground(Theme::GetColor(Theme::Color_PanelBackground));
         mpControl->Show();
     }
 }

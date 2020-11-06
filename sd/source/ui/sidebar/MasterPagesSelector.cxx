@@ -82,7 +82,7 @@ MasterPagesSelector::MasterPagesSelector (
     mxPreviewValueSet->SetPreviewSize(mpContainer->GetPreviewSizePixel());
     mxPreviewValueSet->Show();
 
-    mxPreviewValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Paint_PanelBackground));
+    mxPreviewValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
 
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->AddChangeListener(aChangeListener);

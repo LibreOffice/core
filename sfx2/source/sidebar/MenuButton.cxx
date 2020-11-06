@@ -49,8 +49,8 @@ void MenuButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
                     ? Theme::GetColor(Theme::Color_TabItemBorder)
                     : COL_TRANSPARENT),
                 (bIsHighlighted
-                    ? Theme::GetPaint(Theme::Paint_TabItemBackgroundHighlight)
-                    : Theme::GetPaint(Theme::Paint_TabItemBackgroundNormal)));
+                    ? Theme::GetColor(Theme::Color_TabItemBackgroundHighlight)
+                    : Theme::GetColor(Theme::Color_TabItemBackgroundNormal)));
 
     const Image aIcon(Button::GetModeImage());
     const Size aIconSize(aIcon.GetSizePixel());
