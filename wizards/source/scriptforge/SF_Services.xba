@@ -22,7 +22,7 @@ Option Explicit
 &apos;&apos;&apos;				Register for a library the list of services it implements
 &apos;&apos;&apos;				Each library in the framework must implement its own RegisterScriptServices method
 &apos;&apos;&apos;				This method consists in a series of invocations of next 2 methods
-&apos;&apos;&apos;			- ReisterService
+&apos;&apos;&apos;			- RegisterService
 &apos;&apos;&apos;				Register a single service
 &apos;&apos;&apos;			- RegisterEventManager
 &apos;&apos;&apos;				Register a single event manager
@@ -189,7 +189,7 @@ Public Function RegisterEventManager(Optional ByVal ServiceName As Variant _
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		ServiceName: the name of the service as a string. It the service exists
 &apos;&apos;&apos;			already for the library the method overwrites the existing entry
-&apos;&apos;&apos;		ServiceReference: the finction which will identify the source of the triggered event
+&apos;&apos;&apos;		ServiceReference: the function which will identify the source of the triggered event
 &apos;&apos;&apos;				something like: &quot;libraryname.modulename.function&quot;
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True if successful
@@ -278,7 +278,7 @@ Public Sub RegisterScriptServices() As Variant
 &apos;&apos;&apos;	Each library pertaining to the framework must implement its own version of this method
 &apos;&apos;&apos;	This method may be stored in any standard (i.e. not class-) module
 &apos;&apos;&apos;
-&apos;&apos;&apos;	Each individual service is reistered by calling the RegisterService() method
+&apos;&apos;&apos;	Each individual service is registered by calling the RegisterService() method
 &apos;&apos;&apos;
 &apos;&apos;&apos;	The current version is given as an example
 &apos;&apos;&apos;
@@ -344,7 +344,7 @@ Private Function _FindModuleFromMethod(ByVal psLibrary As String _
 &apos;&apos;&apos;		psLibrary: the name of the Basic library
 &apos;&apos;&apos;		psMethod: the method to locate
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The name of the module or a zero-lengt string if not found
+&apos;&apos;&apos;		The name of the module or a zero-length string if not found
 
 Dim vCategories As Variant				&apos;	&quot;user&quot; or &quot;share&quot; library categories
 Dim sCategory As String

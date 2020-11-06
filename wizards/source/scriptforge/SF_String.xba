@@ -25,7 +25,7 @@ Option Explicit
 &apos;&apos;&apos;			Space(32), HT(9), LF(10), VT(11), FF(12), CR(13), Next Line(133), No-break space(160),
 &apos;&apos;&apos;			Line separator(8232), Paragraph separator(8233)
 &apos;&apos;&apos;		A quoted string:
-&apos;&apos;&apos;			The quoting chararacter must be the double quote (&quot;)
+&apos;&apos;&apos;			The quoting character must be the double quote (&quot;)
 &apos;&apos;&apos;			To preserve a quoting character inside the quoted substring, use (\) or (&quot;) as escape character
 &apos;&apos;&apos;					=&gt; [str\&quot;i&quot;&quot;ng]  means [str&quot;i&quot;ng]
 &apos;&apos;&apos;		Escape sequences: symbolic name(Ascii number) = escape sequence
@@ -76,7 +76,7 @@ Const cstCHARSWITHACCENT	=	&quot;ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖÙ�
 Const cstCHARSWITHOUTACCENT =	&quot;AAAAAACEEEEIIIIDNOOOOOUUUUYaaaaaaceeeeiiiidnooooouuuuyySsYZz&quot; _
 								&amp; &quot;AaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYyd&quot;
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Public Function Dispose() As Variant
@@ -189,14 +189,14 @@ Public Function Count(Optional ByRef InputStr As Variant _
 								, Optional ByRef IsRegex As Variant _
 								, Optional ByVal CaseSensitive As Variant _
 								) As Long
-&apos;&apos;&apos;	Counts the number of occurrences of a substring or a regular exprsession within a string
+&apos;&apos;&apos;	Counts the number of occurrences of a substring or a regular expression within a string
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		InputStr: the input stringto examine
 &apos;&apos;&apos;		Substring: the substring to identify
 &apos;&apos;&apos;		IsRegex: True if Substring is a regular expression (default = False)
 &apos;&apos;&apos;		CaseSensitive: default = False
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The numer of occurrences as a Long
+&apos;&apos;&apos;		The number of occurrences as a Long
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		SF_String.Count(&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&quot;, &quot;\b[a-z]+\b&quot;, IsRegex := True, CaseSensitive := True)
 &apos;&apos;&apos;				returns 7 (the number of words in lower case)
@@ -1134,7 +1134,7 @@ Check:
 
 Try:
 	If Len(InputStr) &gt; 0 And Len(Pattern) &gt; 0 Then
-		&apos;	Substiture special chars by escaped chars
+		&apos;	Substitute special chars by escaped chars
 		sRegex = SF_String.ReplaceStr(Pattern, Split(cstSPecialChars, &quot;,&quot;), Split(cstEscapedChars, &quot;,&quot;))
 		bLike = SF_String.IsRegex(InputStr, sRegex, CaseSensitive)
 	End If
@@ -1405,7 +1405,7 @@ End Function	&apos;	ScriptForge.SF_String.IsUpper
 REM -----------------------------------------------------------------------------
 Public Function IsUrl(Optional ByRef InputStr As Variant) As Boolean
 &apos;&apos;&apos;	Return True if the string is a valid absolute URL (Uniform Resource Locator)
-&apos;&apos;&apos;	The parsing is done by the ParseStrict methof of the URLTransformer UNO service
+&apos;&apos;&apos;	The parsing is done by the ParseStrict method of the URLTransformer UNO service
 &apos;&apos;&apos;		https://api.libreoffice.org/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1util_1_1XURLTransformer.html
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		InputStr: the input string
@@ -2119,7 +2119,7 @@ Public Function SplitLines(Optional ByRef InputStr As Variant _
 								, Optional ByVal KeepBreaks As Variant _
 								) As Variant
 &apos;&apos;&apos;	Return an array of the lines in a string, breaking at line boundaries
-&apos;&apos;&apos;	Line boundariess include	LF(10), VT(12), CR(13), LF+CR, File separator(28), Group separator(29), Record separator(30), 
+&apos;&apos;&apos;	Line boundaries include	LF(10), VT(12), CR(13), LF+CR, File separator(28), Group separator(29), Record separator(30), 
 &apos;&apos;&apos;								Next Line(133), Line separator(8232), Paragraph separator(8233)
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		InputStr: the input string
@@ -2153,7 +2153,7 @@ Check:
 	End If
 
 Try:
-	&apos;	In next list CR + LF must preceede CR and LF
+	&apos;	In next list CR + LF must precede CR and LF
 	vLineBreaks = Array(SF_String.sfCRLF, SF_String.sfLF, Chr(12), SF_String.sfCR _
 						, Chr(28), Chr(29), Chr(30), Chr(133), Chr(8232), Chr(8233))
 
@@ -2192,7 +2192,7 @@ Public Function SplitNotQuoted(Optional ByRef InputStr As Variant _
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		InputStr: the input string
 &apos;&apos;&apos;			Might contain quoted substrings:
-&apos;&apos;&apos;				The quoting chararacter must be the double quote (&quot;)
+&apos;&apos;&apos;				The quoting character must be the double quote (&quot;)
 &apos;&apos;&apos;				To preserve a quoting character inside the quoted substring, use (\) or (&quot;) as escape character
 &apos;&apos;&apos;					=&gt; [str\&quot;i&quot;&quot;ng]  means [str&quot;i&quot;ng]
 &apos;&apos;&apos;		Delimiter: A string of one or more characters that is used to delimit the input string
@@ -2548,7 +2548,7 @@ Check:
 Try:
 	If Len(InputStr) &gt; 0 Then
 		sWrap = SF_String.Unescape(InputStr)			&apos;	Replace symbolic breaks
-		sWrap = SF_String.ExpandTabs(sWrap, TabSize)	&apos;	Interprete TABs to have a meaningful Width
+		sWrap = SF_String.ExpandTabs(sWrap, TabSize)	&apos;	Interpret TABs to have a meaningful Width
 		&apos;	First, split full string
 		vWrapLines = SF_String.SplitLines(sWrap, KeepBreaks := True)	&apos;	Keep pre-existing breaks
 		If UBound(vWrapLines) = 0 And Len(sWrap) &lt;= Width Then	&apos;	Output a single line
@@ -2608,7 +2608,7 @@ Private Function _Repr(ByRef pvString As String) As String
 &apos;&apos;&apos;		the converted string
 
 Dim sString As String	&apos;	Return value
-Dim sChar As String		&apos;	A single chararacter
+Dim sChar As String		&apos;	A single character
 Dim lAsc As Long		&apos;	Ascii value
 Dim lPos As Long		&apos;	Position in sString
 Dim i As Long
