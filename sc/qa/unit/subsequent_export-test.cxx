@@ -272,6 +272,7 @@ public:
     void testTdf76047_externalLink();
     void testTdf129969();
     void testTdf84874();
+    void testTdf136721_paper_size();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -442,6 +443,7 @@ public:
     CPPUNIT_TEST(testTdf76047_externalLink);
     CPPUNIT_TEST(testTdf129969);
     CPPUNIT_TEST(testTdf84874);
+    CPPUNIT_TEST(testTdf136721_paper_size);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5566,7 +5568,7 @@ void ScExportTest::testTdf84874()
 
     const ScValidationData* pData = rDoc.GetValidationEntry(1);
     OUString aTitle, aText;
-    pData->GetInput( aTitle, aText );
+    pData->GetInput(aTitle, aText);
     sal_uInt32 nPromptTitleLen = aTitle.getLength();
     sal_uInt32 nPromptTextLen = aText.getLength();
 
@@ -5574,7 +5576,7 @@ void ScExportTest::testTdf84874()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(255), nPromptTextLen);
 
     ScValidErrorStyle eErrStyle = SC_VALERR_STOP;
-    pData->GetErrMsg( aTitle, aText, eErrStyle );
+    pData->GetErrMsg(aTitle, aText, eErrStyle);
     sal_uInt32 nErrorTitleLen = aTitle.getLength();
     sal_uInt32 nErrorTextLen = aText.getLength();
 
@@ -5582,6 +5584,18 @@ void ScExportTest::testTdf84874()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(255), nErrorTextLen);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf136721_paper_size()
+{
+    ScDocShellRef xShell = loadDoc("tdf136721_letter_sized_paper.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:pageSetup", "paperSize", "70");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
