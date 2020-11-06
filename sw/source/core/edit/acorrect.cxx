@@ -409,9 +409,22 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         SwPaM aPam(aStartPos, aEndPos);
 
         // don't replace, if a redline starts or ends within the original text
-        if ( pDoc->getIDocumentRedlineAccess().HasRedline( aPam, RedlineType::Any, /*bStartOrEndInRange=*/true ) )
+        for ( SwRedlineTable::size_type nAct =
+                  pDoc->getIDocumentRedlineAccess().GetRedlinePos( m_rCursor.GetNode(), RedlineType::Any );
+                  nAct < pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++nAct )
         {
-            return bRet;
+            const SwRangeRedline* pRed = pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];
+
+            if ( pRed->Start()->nNode > pTextNd->GetIndex() )
+                break;
+
+            // redline over the original text
+            if ( aStartPos < *pRed->End() && *pRed->Start() < aEndPos &&
+                 // starting or ending within the original text
+                 ( aStartPos < *pRed->Start() || *pRed->End() < aEndPos ) )
+            {
+                return bRet;
+            }
         }
 
         if( pFnd->IsTextOnly() )

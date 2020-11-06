@@ -24,6 +24,7 @@ $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/sta
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/crdbus50.bau,user/autotext/en-US/crdbus50.bau))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/soffice.cfg/.dummy,empty-directory-dummy))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autocorr/acor_en-US.dat,user/autocorr/acor_fr.dat))
+$(eval $(call gb_Package_add_file,test_unittest,unittest/user/autocorr/acor_en-GB.dat,user/autocorr/acor_en-GB.dat))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/soffice.cfg/modules/scalc/popupmenu/draw.xml,user/config/soffice.cfg/modules/scalc/popupmenu/draw.xml))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/soffice.cfg/modules/scalc/popupmenu/anchor.xml,user/config/soffice.cfg/modules/scalc/popupmenu/anchor.xml))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/soffice.cfg/modules/swriter/popupmenu/text.xml,user/config/soffice.cfg/modules/swriter/popupmenu/text.xml))
