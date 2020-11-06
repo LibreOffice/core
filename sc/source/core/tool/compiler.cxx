@@ -5359,11 +5359,6 @@ bool ScCompiler::EnQuote( OUString& rStr )
     return true;
 }
 
-sal_Unicode ScCompiler::GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const
-{
-    return pConv->getSpecialSymbol(eType);
-}
-
 FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2 )
 {
     return extendRangeReference( rDoc.GetSheetLimits(), rTok1, rTok2, aPos, true/*bReuseDoubleRef*/ );

@@ -201,7 +201,6 @@ private:
     void                SetCaseMap_Impl( SvxCaseMap eCaseMap );
     void                ResetColor_Impl( const SfxItemSet& rSet );
     bool                FillItemSetColor_Impl( SfxItemSet& rSet );
-    Color               GetPreviewFontColor(const Color& rColor) const;
     void                EnableNoneFontColor();
 
     void SelectHdl_Impl(const weld::ComboBox*);
