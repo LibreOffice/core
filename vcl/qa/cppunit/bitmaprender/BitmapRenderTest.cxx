@@ -181,7 +181,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     Color aColor = aBitmap.GetPixelColor(1, 1);
-    CPPUNIT_ASSERT_EQUAL(Color(0xffffffff), aColor);
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, aColor);
 
     // Draw an opaque pixel to the VirDev
     pAlphaVirtualDevice->DrawPixel(Point(1, 1), Color(0x0022ff55));
