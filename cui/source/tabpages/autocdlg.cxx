@@ -1457,7 +1457,7 @@ IMPL_LINK(OfaAutocorrExceptPage, NewDelActionHdl, weld::Entry&, rEdit, bool)
 void OfaAutocorrExceptPage::NewDelHdl(const weld::Widget* pBtn)
 {
     if ((pBtn == m_xNewAbbrevPB.get() || pBtn == m_xAbbrevED.get())
-        && !m_xAbbrevED->get_text().isEmpty())
+        && !m_xAbbrevED->get_text().isEmpty() && m_xNewAbbrevPB->get_sensitive())
     {
         m_xAbbrevLB->append_text(m_xAbbrevED->get_text());
         ModifyHdl(*m_xAbbrevED);
@@ -1468,7 +1468,7 @@ void OfaAutocorrExceptPage::NewDelHdl(const weld::Widget* pBtn)
         ModifyHdl(*m_xAbbrevED);
     }
     else if((pBtn == m_xNewDoublePB.get() || pBtn == m_xDoubleCapsED.get() )
-            && !m_xDoubleCapsED->get_text().isEmpty())
+            && !m_xDoubleCapsED->get_text().isEmpty() && m_xNewDoublePB->get_sensitive())
     {
         m_xDoubleCapsLB->append_text(m_xDoubleCapsED->get_text());
         ModifyHdl(*m_xDoubleCapsED);
