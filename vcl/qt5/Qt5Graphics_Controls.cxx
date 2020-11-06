@@ -629,7 +629,9 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     }
     else if (type == ControlType::Frame)
     {
-        drawFrame(QStyle::PE_Frame, m_image.get(), rBackgroundColor,
+        // use QStyle::PE_FrameWindow; most Qt styles don't draw
+        // any border for QStyle::PE_Frame
+        drawFrame(QStyle::PE_FrameWindow, m_image.get(), rBackgroundColor,
                   vclStateValue2StateFlag(nControlState, value));
     }
     else if (type == ControlType::WindowBackground)
