@@ -822,6 +822,29 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
 
     SwSectionNode *const pSectNd =
             new SwSectionNode(aInsPos, rSectionFormat, pTOXBase);
+
+    if (lcl_IsTOXSection(rSectionData))
+    {
+        // We're inserting a ToX. Make sure that if a redline ends right before the ToX start, then
+        // that end now doesn't cross a section start node.
+        SwRedlineTable& rRedlines = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
+        for (SwRedlineTable::size_type nIndex = 0; nIndex < rRedlines.size(); ++nIndex)
+        {
+            SwRangeRedline* pRedline = rRedlines[nIndex];
+            if (!pRedline->HasMark() || pRedline->GetMark()->nNode != aInsPos)
+            {
+                continue;
+            }
+
+            // The redline ends at the new section content start, so it originally ended before the
+            // section start: move it back.
+            SwPaM aRedlineEnd(*pRedline->GetMark());
+            aRedlineEnd.Move(fnMoveBackward);
+            *pRedline->GetMark() = *aRedlineEnd.GetPoint();
+            break;
+        }
+    }
+
     if( pEnd )
     {
         // Special case for the Reader/Writer
