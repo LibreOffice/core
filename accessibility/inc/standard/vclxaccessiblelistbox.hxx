@@ -21,7 +21,6 @@
 
 #include <standard/vclxaccessiblebox.hxx>
 
-
 /** The accessible drop down combobox has one children.  It is the list
     containing all items and is represented by an object of the
     VCLXAccessibleListBoxList class which does support
@@ -30,19 +29,17 @@
 class VCLXAccessibleListBox final : public VCLXAccessibleBox
 {
 public:
-    VCLXAccessibleListBox (VCLXWindow* pVCLXindow);
+    VCLXAccessibleListBox(VCLXWindow* pVCLXindow);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     // Return list box specific services.
-    virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     virtual ~VCLXAccessibleListBox() override = default;
 
     virtual bool IsValid() const override;
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

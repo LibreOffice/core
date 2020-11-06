@@ -21,22 +21,18 @@
 
 #include <standard/vclxaccessibletextcomponent.hxx>
 
-
-
-
 class VCLXAccessibleFixedText final : public VCLXAccessibleTextComponent
 {
     virtual ~VCLXAccessibleFixedText() override = default;
 
-    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
+    virtual void FillAccessibleStateSet(utl::AccessibleStateSetHelper& rStateSet) override;
 
 public:
     using VCLXAccessibleTextComponent::VCLXAccessibleTextComponent;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
