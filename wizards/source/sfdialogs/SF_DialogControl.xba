@@ -80,7 +80,7 @@ Private Const CTLSCROLLBAR		= &quot;ScrollBar&quot;
 Private Const CTLTEXTFIELD		= &quot;TextField&quot;
 Private Const CTLTIMEFIELD		= &quot;TimeField&quot;
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()

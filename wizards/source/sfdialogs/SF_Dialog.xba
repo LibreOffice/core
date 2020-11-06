@@ -75,7 +75,7 @@ REM ============================================================ MODULE CONSTANT
 Private Const OKBUTTON		= 1
 Private Const CANCELBUTTON	= 0
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()

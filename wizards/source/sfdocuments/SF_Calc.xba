@@ -110,12 +110,12 @@ REM ============================================================ MODULE CONSTANT
 Private Const cstSHEET			= 1
 Private Const cstRANGE			= 2
 
-Private Const MAXCOLS			= 2^10					&apos;	Max number of colums in a sheet
+Private Const MAXCOLS			= 2^10					&apos;	Max number of columns in a sheet
 Private Const MAXROWS			= 2^20					&apos;	Max number of rows in a sheet
 
 Private Const CALCREFERENCE		= &quot;SF_CalcReference&quot;	&apos;	Object type of _Address
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()
@@ -1014,7 +1014,7 @@ Public Function ImportFromCSVFile(Optional ByVal FileName As Variant _
 								, Optional ByVal FilterOptions As Variant _
 								) As String
 &apos;&apos;&apos; Import the content of a CSV-formatted text file starting from a given cell
-&apos;&apos;&apos;	Beforehands the destination area will be cleared from any content and format
+&apos;&apos;&apos;	Beforehand the destination area will be cleared from any content and format
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: Identifies the file to open. It must follow the SF_FileSystem.FileNaming notation
 &apos;&apos;&apos;		DestinationCell: the destination of the copied range of cells, as a string
@@ -1090,7 +1090,7 @@ Public Sub ImportFromDatabase(Optional ByVal FileName As Variant _
 								)
 &apos;&apos;&apos; Import the content of a database table, query or resultset, i.e. the result of a SELECT SQL command,
 &apos;&apos;&apos;	starting from a given cell
-&apos;&apos;&apos;	Beforehands the destination area will be cleared from any content and format
+&apos;&apos;&apos;	Beforehand the destination area will be cleared from any content and format
 &apos;&apos;&apos;	The modified area depends only on the content of the source data
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: Identifies the file to open. It must follow the SF_FileSystem.FileNaming notation
@@ -2139,7 +2139,7 @@ REM ----------------------------------------------------------------------------
 Public Function _ConvertFromDataArray(ByRef pvDataArray As Variant) As Variant
 &apos;&apos;&apos;	Convert a data array to a scalar, a vector or a 2D array
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		pvDataArray: an array as returned by the XCellRange.getDatArray or .getFormulaArray methods
+&apos;&apos;&apos;		pvDataArray: an array as returned by the XCellRange.getDataArray or .getFormulaArray methods
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A scalar, a zero-based 1D array or a zero-based 2D array of strings and/or doubles
 &apos;&apos;&apos;		To convert doubles to dates, use the CDate builtin function
@@ -2502,7 +2502,7 @@ Private Function _ParseAddress(ByVal psAddress As String) As Object
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		An object of type _Address
 &apos;&apos;&apos;	Exceptions:
-&apos;&apos;&apos;		CALCADDRESSERROR		&apos;	Adrress could not be parsed to a valid address
+&apos;&apos;&apos;		CALCADDRESSERROR		&apos;	Address could not be parsed to a valid address
 
 Dim oAddress As _Address			&apos;	Return value
 Dim lStart As Long					&apos;	Position of found regex
