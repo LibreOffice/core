@@ -95,12 +95,11 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         nNewId = SID_OBJECT_SELECT;
 
     sal_uInt16 nNewFormId = 0;
-    if ( nNewId == SID_FM_CREATE_CONTROL && pArgs )
+    if (nNewId == SID_FM_CREATE_CONTROL)
     {
-        const SfxPoolItem* pItem;
-        if ( pArgs->GetItemState( SID_FM_CONTROL_IDENTIFIER, true, &pItem ) == SfxItemState::SET &&
-             dynamic_cast<const SfxUInt16Item*>( pItem) !=  nullptr )
-            nNewFormId = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
+        if (pIdentifierItem)
+            nNewFormId = pIdentifierItem->GetValue();
     }
 
     OUString sStringItemValue;
