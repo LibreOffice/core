@@ -24,30 +24,26 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/vclptr.hxx>
 
-
-
-
 class VCLXAccessibleTabPageWindow final : public VCLXAccessibleComponent
 {
 private:
-    VclPtr<TabControl>      m_pTabControl;
-    VclPtr<TabPage>         m_pTabPage;
-    sal_uInt16              m_nPageId;
+    VclPtr<TabControl> m_pTabControl;
+    VclPtr<TabPage> m_pTabPage;
+    sal_uInt16 m_nPageId;
 
     // OCommonAccessibleComponent
-    virtual css::awt::Rectangle implGetBounds(  ) override;
+    virtual css::awt::Rectangle implGetBounds() override;
 
     // XComponent
-    virtual void SAL_CALL   disposing() override;
+    virtual void SAL_CALL disposing() override;
 
 public:
-    VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindow );
+    VCLXAccessibleTabPageWindow(VCLXWindow* pVCLXWindow);
 
     // XAccessibleContext
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) override;
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getAccessibleParent() override;
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
 };
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

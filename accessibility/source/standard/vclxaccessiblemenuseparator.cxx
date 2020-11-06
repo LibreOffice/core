@@ -21,43 +21,30 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
-
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-
-
-
-VCLXAccessibleMenuSeparator::VCLXAccessibleMenuSeparator( Menu* pParent, sal_uInt16 nItemPos )
-    :OAccessibleMenuItemComponent( pParent, nItemPos, nullptr )
+VCLXAccessibleMenuSeparator::VCLXAccessibleMenuSeparator(Menu* pParent, sal_uInt16 nItemPos)
+    : OAccessibleMenuItemComponent(pParent, nItemPos, nullptr)
 {
 }
 
-
 // XServiceInfo
-
 
 OUString VCLXAccessibleMenuSeparator::getImplementationName()
 {
     return "com.sun.star.comp.toolkit.AccessibleMenuSeparator";
 }
 
-
-Sequence< OUString > VCLXAccessibleMenuSeparator::getSupportedServiceNames()
+Sequence<OUString> VCLXAccessibleMenuSeparator::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessibleMenuSeparator" };
 }
 
-
 // XAccessibleContext
 
-
-sal_Int16 VCLXAccessibleMenuSeparator::getAccessibleRole(  )
-{
-    return AccessibleRole::SEPARATOR;
-}
-
+sal_Int16 VCLXAccessibleMenuSeparator::getAccessibleRole() { return AccessibleRole::SEPARATOR; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

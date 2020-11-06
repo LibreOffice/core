@@ -27,58 +27,43 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::comphelper;
 
-
-
-
-bool VCLXAccessiblePopupMenu::IsFocused()
-{
-    return !IsChildHighlighted();
-}
-
+bool VCLXAccessiblePopupMenu::IsFocused() { return !IsChildHighlighted(); }
 
 // XServiceInfo
-
 
 OUString VCLXAccessiblePopupMenu::getImplementationName()
 {
     return "com.sun.star.comp.toolkit.AccessiblePopupMenu";
 }
 
-
-Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames()
+Sequence<OUString> VCLXAccessiblePopupMenu::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessiblePopupMenu" };
 }
 
-
 // XAccessibleContext
 
-
-sal_Int32 VCLXAccessiblePopupMenu::getAccessibleIndexInParent(  )
+sal_Int32 VCLXAccessiblePopupMenu::getAccessibleIndexInParent()
 {
-    OExternalLockGuard aGuard( this );
+    OExternalLockGuard aGuard(this);
 
     return 0;
 }
 
-
-sal_Int16 VCLXAccessiblePopupMenu::getAccessibleRole(  )
+sal_Int16 VCLXAccessiblePopupMenu::getAccessibleRole()
 {
-    OExternalLockGuard aGuard( this );
+    OExternalLockGuard aGuard(this);
 
     return AccessibleRole::POPUP_MENU;
 }
 
-
 // XAccessibleExtendedComponent
 
-
-sal_Int32 VCLXAccessiblePopupMenu::getBackground(  )
+sal_Int32 VCLXAccessiblePopupMenu::getBackground()
 {
-    OExternalLockGuard aGuard( this );
+    OExternalLockGuard aGuard(this);
 
     return sal_Int32(Application::GetSettings().GetStyleSettings().GetMenuColor());
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

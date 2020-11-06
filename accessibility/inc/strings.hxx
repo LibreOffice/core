@@ -9,13 +9,12 @@
 
 #pragma once
 
-#define RID_STR_ACC_ACTION_CLICK        "press"
-#define RID_STR_ACC_ACTION_TOGGLEPOPUP  "togglePopup"
-#define RID_STR_ACC_ACTION_SELECT       "select"
-#define RID_STR_ACC_ACTION_INCLINE      "incrementLine"
-#define RID_STR_ACC_ACTION_DECLINE      "decrementLine"
-#define RID_STR_ACC_ACTION_INCBLOCK     "incrementBlock"
-#define RID_STR_ACC_ACTION_DECBLOCK     "decrementBlock"
-
+#define RID_STR_ACC_ACTION_CLICK "press"
+#define RID_STR_ACC_ACTION_TOGGLEPOPUP "togglePopup"
+#define RID_STR_ACC_ACTION_SELECT "select"
+#define RID_STR_ACC_ACTION_INCLINE "incrementLine"
+#define RID_STR_ACC_ACTION_DECLINE "decrementLine"
+#define RID_STR_ACC_ACTION_INCBLOCK "incrementBlock"
+#define RID_STR_ACC_ACTION_DECBLOCK "decrementBlock"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

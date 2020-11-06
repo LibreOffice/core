@@ -23,8 +23,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-typedef ::cppu::ImplHelper1< css::accessibility::XAccessible > VCLXAccessible_BASE;
-
+typedef ::cppu::ImplHelper1<css::accessibility::XAccessible> VCLXAccessible_BASE;
 
 /** This class represents non editable text fields.  The object passed to
     the constructor is expected to be a list (a ListBox to be
@@ -32,13 +31,11 @@ typedef ::cppu::ImplHelper1< css::accessibility::XAccessible > VCLXAccessible_BA
     accessible by this class.  When the selected item changes then also the
     exported text changes.
 */
-class VCLXAccessibleTextField final :
-    public VCLXAccessibleTextComponent,
-    public VCLXAccessible_BASE
+class VCLXAccessibleTextField final : public VCLXAccessibleTextComponent, public VCLXAccessible_BASE
 {
 public:
-    VCLXAccessibleTextField (VCLXWindow* pVCLXindow,
-                             const css::uno::Reference< css::accessibility::XAccessible >& _xParent);
+    VCLXAccessibleTextField(VCLXWindow* pVCLXindow,
+                            const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
     // XInterface
     DECLARE_XINTERFACE()
@@ -47,22 +44,20 @@ public:
     DECLARE_XTYPEPROVIDER()
 
     // XAccessible
-    css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext() override;
+    css::uno::Reference<css::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override;
 
     // XAccessibleContext
     sal_Int32 SAL_CALL getAccessibleChildCount() override;
-    css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 i) override;
+    css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getAccessibleChild(sal_Int32 i) override;
     sal_Int16 SAL_CALL getAccessibleRole() override;
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-        getAccessibleParent(  ) override;
+    css::uno::Reference<css::accessibility::XAccessible> SAL_CALL getAccessibleParent() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     // Return text field specific services.
-    virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     virtual ~VCLXAccessibleTextField() override = default;
@@ -75,8 +70,7 @@ private:
     /** We need to save the accessible parent to return it in getAccessibleParent(),
         because this method of the base class returns the wrong parent.
     */
-    css::uno::Reference< css::accessibility::XAccessible >  m_xParent;
+    css::uno::Reference<css::accessibility::XAccessible> m_xParent;
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

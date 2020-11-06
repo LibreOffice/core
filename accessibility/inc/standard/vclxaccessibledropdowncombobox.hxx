@@ -31,20 +31,18 @@
 class VCLXAccessibleDropDownComboBox final : public VCLXAccessibleBox
 {
 public:
-    VCLXAccessibleDropDownComboBox (VCLXWindow* pVCLXindow);
+    VCLXAccessibleDropDownComboBox(VCLXWindow* pVCLXindow);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     // Return drop down combo box specific services.
-    virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     virtual ~VCLXAccessibleDropDownComboBox() override = default;
 
     virtual bool IsValid() const override;
-    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;
+    virtual void ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent) override;
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

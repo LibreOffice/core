@@ -34,66 +34,60 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
-VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar( VCLXWindow* pVCLWindow )
-    :VCLXAccessibleComponent( pVCLWindow )
+VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar(VCLXWindow* pVCLWindow)
+    : VCLXAccessibleComponent(pVCLWindow)
 {
-    m_pHeadBar = GetAs< HeaderBar >();
+    m_pHeadBar = GetAs<HeaderBar>();
 }
 
-
-VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar()
-{
-}
-
+VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar() {}
 
 // XServiceInfo
-
 
 OUString VCLXAccessibleHeaderBar::getImplementationName()
 {
     return "com.sun.star.comp.toolkit.AccessibleHeaderBar";
 }
 
-
-Sequence< OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames()
+Sequence<OUString> VCLXAccessibleHeaderBar::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessibleHeaderBar" };
 }
 
 // =======XAccessibleContext=======
 
-sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount(  )
+sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount()
 {
     SolarMutexGuard g;
 
     sal_Int32 nCount = 0;
-    if ( m_pHeadBar )
+    if (m_pHeadBar)
         nCount = m_pHeadBar->GetItemCount();
 
     return nCount;
 }
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-        VCLXAccessibleHeaderBar::getAccessibleChild( sal_Int32 i )
+css::uno::Reference<css::accessibility::XAccessible>
+    SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChild(sal_Int32 i)
 {
     SolarMutexGuard g;
 
-    if ( i < 0 || i >= getAccessibleChildCount() )
+    if (i < 0 || i >= getAccessibleChildCount())
         throw IndexOutOfBoundsException();
 
-    Reference< XAccessible > xChild;
+    Reference<XAccessible> xChild;
     // search for the child
-    if ( o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
-        xChild = CreateChild (i);
+    if (o3tl::make_unsigned(i) >= m_aAccessibleChildren.size())
+        xChild = CreateChild(i);
     else
     {
         xChild = m_aAccessibleChildren[i];
-        if ( !xChild.is() )
-            xChild = CreateChild (i);
+        if (!xChild.is())
+            xChild = CreateChild(i);
     }
     return xChild;
 }
 
-sal_Int16 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleRole(  )
+sal_Int16 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleRole()
 {
     return css::accessibility::AccessibleRole::LIST;
 }
@@ -106,12 +100,13 @@ void SAL_CALL VCLXAccessibleHeaderBar::disposing()
     VCLXAccessibleComponent::disposing();
 }
 
-css::uno::Reference< css::accessibility::XAccessible > VCLXAccessibleHeaderBar::CreateChild (sal_Int32 i)
+css::uno::Reference<css::accessibility::XAccessible>
+VCLXAccessibleHeaderBar::CreateChild(sal_Int32 i)
 {
     Reference<XAccessible> xChild;
 
     sal_uInt16 nPos = static_cast<sal_uInt16>(i);
-    if ( nPos >= m_aAccessibleChildren.size() )
+    if (nPos >= m_aAccessibleChildren.size())
     {
         m_aAccessibleChildren.resize(nPos + 1);
 
@@ -123,7 +118,7 @@ css::uno::Reference< css::accessibility::XAccessible > VCLXAccessibleHeaderBar::
     {
         xChild = m_aAccessibleChildren[nPos];
         // check if position is empty and can be used else we have to adjust all entries behind this
-        if ( !xChild.is() )
+        if (!xChild.is())
         {
             xChild = new VCLXAccessibleHeaderBarItem(m_pHeadBar, i);
             m_aAccessibleChildren[nPos] = xChild;
