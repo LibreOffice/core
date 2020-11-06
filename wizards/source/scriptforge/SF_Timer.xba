@@ -46,7 +46,7 @@ Private Const STATUSSTOPPED		= 3
 
 Private Const DSECOND As Double = 1 / (24 * 60 * 60)	&apos;	Duration of 1 second as compared to 1.0 = 1 day
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()
@@ -68,7 +68,7 @@ End Sub		&apos;	ScriptForge.SF_Timer Destructor
 
 REM -----------------------------------------------------------------------------
 Public Function Dispose() As Variant
-	Call Calss_Terminate()
+	Call Class_Terminate()
 	Set Dispose = Nothing
 End Function	&apos;	ScriptForge.SF_Timer Explicit destructor
 
