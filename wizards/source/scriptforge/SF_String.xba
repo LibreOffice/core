@@ -2528,7 +2528,7 @@ Dim sWrap As String						&apos;	Intermediate string
 Dim sLine As String						&apos;	Line after splitting on line breaks
 Dim lPos As Long						&apos;	Position in sLine already wrapped
 Dim lStart As Long						&apos;	Start position before and after regex search
-Dim sSpace As String					&apos;	Next whitepaces
+Dim sSpace As String					&apos;	Next whitespace
 Dim sChunk As String					&apos;	Next wrappable text chunk
 Const cstThisSub = &quot;String.Wrap&quot;
 Const cstSubArgs = &quot;InputStr, [Width=70], [TabSize=8]&quot;
