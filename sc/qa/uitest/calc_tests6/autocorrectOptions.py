@@ -31,6 +31,8 @@ class autocorrectOptions(UITestCase):
         xreset = xDialog.getChild("reset")
         nrRows = get_state_as_dict(xtabview)["VisibleCount"]
 
+        self.assertTrue(int(nrRows) > 0)
+
         #add new rule
         origtext.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         origtext.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
@@ -59,16 +61,19 @@ class autocorrectOptions(UITestCase):
         delabbrev = xDialog.getChild("delabbrev")
         abbrevlist = xDialog.getChild("abbrevlist")
 
-        nrRowsAbb = get_state_as_dict(abbrevlist)["Children"]
+        nrRowsAbb = get_state_as_dict(abbrevlist)["VisibleCount"]
+
+        self.assertTrue(int(nrRowsAbb) > 0)
+
         abbrev.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         abbrev.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
         abbrev.executeAction("TYPE", mkPropertyValues({"TEXT":"qqqqq"}))
         newabbrev.executeAction("CLICK", tuple())
-        nrRowsAbbNew = get_state_as_dict(abbrevlist)["Children"]
+        nrRowsAbbNew = get_state_as_dict(abbrevlist)["VisibleCount"]
         nrRowsAbbDiff = int(nrRowsAbbNew) - int(nrRowsAbb)
         self.assertEqual(nrRowsAbbDiff, 1)  #we have +1 rule
         delabbrev.executeAction("CLICK", tuple())
-        self.assertEqual(get_state_as_dict(abbrevlist)["Children"], nrRowsAbb)   #we have default nr of rules
+        self.assertEqual(get_state_as_dict(abbrevlist)["VisibleCount"], nrRowsAbb)   #we have default nr of rules
 
         #words with two initial capitals
         double = xDialog.getChild("double")
@@ -76,16 +81,19 @@ class autocorrectOptions(UITestCase):
         deldouble = xDialog.getChild("deldouble")
         doublelist = xDialog.getChild("doublelist")
 
-        nrRowsDouble = get_state_as_dict(doublelist)["Children"]
+        nrRowsDouble = get_state_as_dict(doublelist)["VisibleCount"]
+
+        self.assertTrue(int(nrRowsDouble) > 0)
+
         double.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         double.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
         double.executeAction("TYPE", mkPropertyValues({"TEXT":"QQqqq"}))
         newdouble.executeAction("CLICK", tuple())
-        nrRowsDoubleNew = get_state_as_dict(doublelist)["Children"]
+        nrRowsDoubleNew = get_state_as_dict(doublelist)["VisibleCount"]
         nrRowsDoubleDiff = int(nrRowsDoubleNew) - int(nrRowsDouble) #convert string and
         self.assertEqual(nrRowsDoubleDiff, 1)  #we have +1 rule
         deldouble.executeAction("CLICK", tuple())
-        self.assertEqual(get_state_as_dict(doublelist)["Children"], nrRowsDouble)   #we have default nr of rules
+        self.assertEqual(get_state_as_dict(doublelist)["VisibleCount"], nrRowsDouble)   #we have default nr of rules
 
         xCancelButton = xDialog.getChild("cancel")
         xCancelButton.executeAction("CLICK", tuple())
