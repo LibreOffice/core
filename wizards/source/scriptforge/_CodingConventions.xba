@@ -46,7 +46,7 @@ REM ============================================================================
 &apos;&apos;&apos;
 &apos;	Variable declarations
 &apos;	=====================
-&apos;		*	Variable names use only alpha characters, the undercore and digits (no accented characters).
+&apos;		*	Variable names use only alpha characters, the underscore and digits (no accented characters).
 &apos;			Exceptionally, names of private variables may be embraced with `[` and `]` if `Option Compatible` is present.
 &apos;		*	The Global, Dim and Const statements always start in the first column of the line.
 &apos;		*	The type (*Dim ... As ...*, *Function ... As ...*) is always declared explicitly, even if the type is Variant.

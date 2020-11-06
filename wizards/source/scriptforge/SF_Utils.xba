@@ -211,7 +211,7 @@ Public Sub _ExportScriptForgePOTFile(ByVal FileName As String)
 &apos;&apos;&apos;	Export the ScriptForge POT file related to its own user interface
 &apos;&apos;&apos;	Should be called only before issuing new ScriptForge releases only
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		FileName: the resulting file. It it exists, it is overwritten without warning
+&apos;&apos;&apos;		FileName: the resulting file. If it exists, is overwritten without warning
 
 Dim sHeader As String			&apos;	The specific header to insert
 
@@ -239,7 +239,7 @@ Public Function _GetPropertyValue(ByRef pvArgs As Variant, ByVal psName As Strin
 &apos;&apos;&apos;	Args
 &apos;&apos;&apos;		pvArgs: a zero_based array of PropertyValues
 &apos;&apos;&apos;		psName: the comparison is not case-sensitive
-&apos;&apos;&apos;	Retuns:
+&apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		Zero-length string if not found
 
 Dim vValue As Variant			&apos;	Return value
@@ -606,7 +606,7 @@ End Sub			&apos;	ScriptForge.SF_Utils._SetPropertyValue
 
 REM -----------------------------------------------------------------------------
 Private Function _TypeNames(Optional ByVal pvArgs As Variant) As String
-&apos;&apos;&apos;	Converts the array of VarTypes to a comma-sepatrated list of TypeNames
+&apos;&apos;&apos;	Converts the array of VarTypes to a comma-separated list of TypeNames
 
 Dim sTypes As String			&apos;	Return value
 Dim sType As String				&apos;	A single type
@@ -911,7 +911,7 @@ Try:
 						End Select
 					End With
 				End If
-				&apos;	Chech wildcards are only present in last component
+				&apos;	Check that wildcards are only present in last component
 				If bValid And pbWildCards Then
 					sFile = SF_FileSystem.GetParentFolderName(pvArgument)
 					bValid = ( InStr(sFile, &quot;*&quot;) + InStr(sFile, &quot;?&quot;) + InStr(sFile,&quot;%3F&quot;) = 0 )	&apos;	ConvertToUrl replaces ? by %3F
