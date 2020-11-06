@@ -21,7 +21,6 @@
 #include <sidebar/PanelTitleBar.hxx>
 #include <sidebar/PanelDescriptor.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <sidebar/Paint.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
@@ -79,7 +78,7 @@ void Panel::SetLurkMode(bool bLurk)
 
 void Panel::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    rRenderContext.SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
+    rRenderContext.SetBackground(Theme::GetColor(Theme::Color_PanelBackground));
 }
 
 void Panel::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)

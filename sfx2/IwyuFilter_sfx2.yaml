@@ -4,9 +4,6 @@ excludelist:
     sfx2/inc/sidebar/Accessible.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessible.hpp
-    sfx2/inc/sidebar/Paint.hxx:
-    # Needed for boost::variant
-    - vcl/gradient.hxx
     sfx2/inc/sidebar/UnoDeck.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/XDeck.hpp

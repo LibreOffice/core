@@ -46,7 +46,7 @@ public:
 private:
     virtual tools::Rectangle GetTitleArea(const tools::Rectangle& rTitleBarBox) override;
     virtual void PaintDecoration(vcl::RenderContext& rRenderContext) override;
-    virtual sidebar::Paint GetBackgroundPaint() override;
+    virtual Color GetBackgroundPaintColor() override;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex) override;
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 

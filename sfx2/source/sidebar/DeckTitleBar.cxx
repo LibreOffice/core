@@ -41,7 +41,7 @@ const sal_Int32 gaRightGripPadding (6);
 DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
                             vcl::Window* pParentWindow,
                             const std::function<void()>& rCloserAction)
-    : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint())
+    : TitleBar(rsTitle, pParentWindow, GetBackgroundPaintColor())
     , maCloserAction(rCloserAction)
     , mbIsCloserVisible(false)
 {
@@ -100,9 +100,9 @@ void DeckTitleBar::PaintDecoration(vcl::RenderContext& rRenderContext)
    rRenderContext.DrawImage(aTopLeft, aImage);
 }
 
-sidebar::Paint DeckTitleBar::GetBackgroundPaint()
+Color DeckTitleBar::GetBackgroundPaintColor()
 {
-    return Theme::GetPaint(Theme::Paint_DeckTitleBarBackground);
+    return Theme::GetColor(Theme::Color_DeckTitleBarBackground);
 }
 
 void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)

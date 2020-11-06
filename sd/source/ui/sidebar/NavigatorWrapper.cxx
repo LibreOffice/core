@@ -40,7 +40,7 @@ NavigatorWrapper::NavigatorWrapper (
     maNavigator->SetPosSizePixel(
         Point(0,0),
         GetSizePixel());
-    maNavigator->SetBackground(sfx2::sidebar::Theme::GetWallpaper(sfx2::sidebar::Theme::Paint_PanelBackground));
+    maNavigator->SetBackground(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
     maNavigator->Show();
 }
 

@@ -512,7 +512,7 @@ void SlideTransitionPane::DataChanged (const DataChangedEvent&)
 
 void SlideTransitionPane::UpdateLook()
 {
-    SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
+    SetBackground(::sfx2::sidebar::Theme::GetColor(::sfx2::sidebar::Theme::Color_PanelBackground));
 }
 
 void SlideTransitionPane::onSelectionChanged()

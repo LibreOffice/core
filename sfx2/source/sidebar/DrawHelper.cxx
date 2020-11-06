@@ -18,108 +18,58 @@
  */
 
 #include <sidebar/DrawHelper.hxx>
-#include <sidebar/Paint.hxx>
 
 #include <tools/svborder.hxx>
 
 namespace sfx2::sidebar {
 
 void DrawHelper::DrawBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBox, const SvBorder& rBorderSize,
-                            const Paint& rHorizontalPaint, const Paint& rVerticalPaint)
+                            const Color& rHorizontalColor, const Color& rVerticalColor)
 {
     // Draw top line.
     DrawHorizontalLine(rRenderContext, rBox.Left(), rBox.Right(),
-                       rBox.Top(), rBorderSize.Top(), rHorizontalPaint);
+                       rBox.Top(), rBorderSize.Top(), rHorizontalColor);
 
     // Draw bottom line.
     DrawHorizontalLine(rRenderContext, rBox.Left() + rBorderSize.Left(), rBox.Right(),
                        rBox.Bottom() - rBorderSize.Bottom() + 1, rBorderSize.Bottom(),
-                       rHorizontalPaint);
+                       rHorizontalColor);
     // Draw left line.
     DrawVerticalLine(rRenderContext, rBox.Top() + rBorderSize.Top(), rBox.Bottom(),
-                     rBox.Left(), rBorderSize.Left(), rVerticalPaint);
+                     rBox.Left(), rBorderSize.Left(), rVerticalColor);
     // Draw right line.
     DrawVerticalLine(rRenderContext, rBox.Top() + rBorderSize.Top(), rBox.Bottom() - rBorderSize.Bottom(),
-                     rBox.Right() - rBorderSize.Right() + 1, rBorderSize.Right(), rVerticalPaint);
+                     rBox.Right() - rBorderSize.Right() + 1, rBorderSize.Right(), rVerticalColor);
 }
 
 void DrawHelper::DrawHorizontalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nLeft, const sal_Int32 nRight,
-                                    const sal_Int32 nY, const sal_Int32 nHeight, const Paint& rPaint)
+                                    const sal_Int32 nY, const sal_Int32 nHeight, const Color& rColor)
 {
-    switch (rPaint.GetType())
+    rRenderContext.SetLineColor(rColor);
+    for (sal_Int32 nYOffset = 0; nYOffset < nHeight; ++nYOffset)
     {
-        case Paint::ColorPaint:
-        {
-            const Color aColor(rPaint.GetColor());
-            rRenderContext.SetLineColor(aColor);
-            for (sal_Int32 nYOffset = 0; nYOffset < nHeight; ++nYOffset)
-            {
-                rRenderContext.DrawLine(Point(nLeft, nY + nYOffset),
-                                        Point(nRight, nY + nYOffset));
-            }
-            break;
-        }
-        case Paint::GradientPaint:
-            rRenderContext.DrawGradient(tools::Rectangle(nLeft, nY, nRight, nY + nHeight - 1),
-                                        rPaint.GetGradient());
-            break;
-
-        case Paint::NoPaint:
-        default:
-            break;
+        rRenderContext.DrawLine(Point(nLeft, nY + nYOffset),
+                                Point(nRight, nY + nYOffset));
     }
 }
 
 void DrawHelper::DrawVerticalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nTop, const sal_Int32 nBottom,
-                                  const sal_Int32 nX, const sal_Int32 nWidth, const Paint& rPaint)
+                                  const sal_Int32 nX, const sal_Int32 nWidth, const Color& rColor)
 {
-    switch (rPaint.GetType())
+    rRenderContext.SetLineColor(rColor);
+    for (sal_Int32 nXOffset = 0; nXOffset < nWidth; ++nXOffset)
     {
-        case Paint::ColorPaint:
-        {
-            const Color aColor(rPaint.GetColor());
-            rRenderContext.SetLineColor(aColor);
-            for (sal_Int32 nXOffset = 0; nXOffset < nWidth; ++nXOffset)
-            {
-                rRenderContext.DrawLine(Point(nX + nXOffset, nTop),
-                                        Point(nX + nXOffset, nBottom));
-            }
-            break;
-        }
-        case Paint::GradientPaint:
-            rRenderContext.DrawGradient(tools::Rectangle(nX, nTop, nX + nWidth - 1, nBottom),
-                                        rPaint.GetGradient());
-            break;
-
-        case Paint::NoPaint:
-        default:
-            break;
+        rRenderContext.DrawLine(Point(nX + nXOffset, nTop),
+                                Point(nX + nXOffset, nBottom));
     }
 }
 
 void DrawHelper::DrawRoundedRectangle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBox, const sal_Int32 nCornerRadius,
-                                      const Color& rBorderColor, const Paint& rFillPaint)
+                                      const Color& rBorderColor, const Color& rFillColor)
 {
     rRenderContext.SetLineColor(rBorderColor);
-    switch (rFillPaint.GetType())
-    {
-        case Paint::ColorPaint:
-            rRenderContext.SetFillColor(rFillPaint.GetColor());
-            rRenderContext.DrawRect(rBox, nCornerRadius, nCornerRadius);
-            break;
-
-        case Paint::GradientPaint:
-            rRenderContext.DrawGradient(rBox, rFillPaint.GetGradient());
-            rRenderContext.SetFillColor();
-            rRenderContext.DrawRect(rBox, nCornerRadius, nCornerRadius);
-            break;
-
-        case Paint::NoPaint:
-        default:
-            rRenderContext.SetFillColor();
-            rRenderContext.DrawRect(rBox, nCornerRadius, nCornerRadius);
-            break;
-    }
+    rRenderContext.SetFillColor(rFillColor);
+    rRenderContext.DrawRect(rBox, nCornerRadius, nCornerRadius);
 }
 
 } // end of namespace sfx2::sidebar
