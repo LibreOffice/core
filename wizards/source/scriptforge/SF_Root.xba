@@ -65,7 +65,7 @@ Private ConfigurationProvider _
 							As Object	&apos; com.sun.star.configuration.ConfigurationProvider
 Private MailService			As Object	&apos; com.sun.star.system.SimpleCommandMail or com.sun.star.system.SimpleSystemMail
 
-&apos;	Specific psersistent services objects or properties
+&apos;	Specific persistent services objects or properties
 Private FileSystemNaming	As String	&apos; If &quot;SYS&quot;, file and folder naming is based on operating system notation
 Private PythonHelper		As String	&apos; File name of Python helper functions (stored in $(inst)/share/Scripts/python)
 Private Interface			As Object	&apos; ScriptForge own L10N service
@@ -612,7 +612,7 @@ Try:
 									&amp;	&quot;%3: An identifier\n&quot; _
 									&amp;	&quot;%4: A string&quot; _
 					)
-	&apos;	SF_Document._IsStllAlive
+	&apos;	SF_Document._IsStillAlive
 			.AddText(	Context := &quot;DOCUMENTDEAD&quot; _
 						, MsgId := &quot;The requested action could not be executed because the document was closed inadvertently.\n\n&quot; _
 									&amp; &quot;The concerned document is &apos;%1&apos;&quot; _
@@ -777,7 +777,7 @@ Try:
 						, MsgId := &quot;An SQL statement could not be interpreted or executed by the database system.\n&quot; _
 									&amp; &quot;Check its syntax, table and/or field names, ...\n\n&quot; _
 									&amp; &quot;SQL Statement : « %1 »&quot; _
-						, Comment :=	&quot;SF_Database cannot interprete SQL statement\n&quot; _
+						, Comment :=	&quot;SF_Database can't interpret SQL statement\n&quot; _
 									&amp;	&quot;%1: The statement&quot; _
 					)
 		End With

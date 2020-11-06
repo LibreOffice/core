@@ -63,7 +63,7 @@ Private _ForceBlankLine		As Boolean		&apos; Workaround: XTextInputStream misses 
 
 REM ============================================================ MODULE CONSTANTS
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()
@@ -312,7 +312,7 @@ Public Function ReadAll() As String
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		FILENOTOPENERROR		File not open or already closed
 &apos;&apos;&apos;		FILEOPENMODEERROR		File opened in write or append modes
-&apos;&apos;&apos;		ENDOFFILEERROR			Previous reads aleardy reached the end of the file
+&apos;&apos;&apos;		ENDOFFILEERROR			Previous reads already reached the end of the file
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		Dim a As String
 &apos;&apos;&apos;			a = myFile.ReadAll()
@@ -355,7 +355,7 @@ Public Function ReadLine() As String
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		FILENOTOPENERROR		File not open or already closed
 &apos;&apos;&apos;		FILEOPENMODEERROR		File opened in write or append modes
-&apos;&apos;&apos;		ENDOFFILEERROR			Previous reads aleardy reached the end of the file
+&apos;&apos;&apos;		ENDOFFILEERROR			Previous reads already reached the end of the file
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		Dim a As String
 &apos;&apos;&apos;			a = myFile.ReadLine()
@@ -459,7 +459,7 @@ Public Sub SkipLine()
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		FILENOTOPENERROR		File not open or already closed
 &apos;&apos;&apos;		FILEOPENMODEERROR		File opened in write or append modes
-&apos;&apos;&apos;		ENDOFFILEERROR			Previous reads aleardy reached the end of the file
+&apos;&apos;&apos;		ENDOFFILEERROR			Previous reads already reached the end of the file
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		myFile.SkipLine()
 

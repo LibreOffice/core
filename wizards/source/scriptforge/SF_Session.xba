@@ -52,7 +52,7 @@ Const cstSCRIPTISSHARED			= &quot;share&quot;					&apos; a library of LibreOffic
 Const cstSCRIPTISSHAROXT		= &quot;share:uno_packages&quot;		&apos; an extension for all users					(PYTHON)
 Const cstSCRIPTISOXT			= &quot;uno_packages&quot;			&apos; an extension but install params are unknown	(PYTHON)
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Public Function Dispose() As Variant
