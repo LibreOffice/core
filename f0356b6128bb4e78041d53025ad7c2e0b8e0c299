@@ -46,6 +46,30 @@
       "revId": "f0356b6128bb4e78041d53025ad7c2e0b8e0c299",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b68ca372_6b2fe320",
+        "filename": "filter/source/xsltdialog/typedetectionexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-06T07:22:06Z",
+      "side": 1,
+      "message": "Exactly.  There is OUStringBuffer(OUStringConcat\u0026\u0026) which should have kicked in here nicely.  I assume that (off by default) loplugin:stringbuffer is just not up to its job of identifying truly problematic OUStringBuffer uses (if there even are any).",
+      "parentUuid": "4631cb66_ab2c25cb",
+      "range": {
+        "startLine": 169,
+        "startChar": 16,
+        "endLine": 172,
+        "endChar": 36
+      },
+      "revId": "f0356b6128bb4e78041d53025ad7c2e0b8e0c299",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
