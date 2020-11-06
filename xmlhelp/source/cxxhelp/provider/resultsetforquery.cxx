@@ -298,7 +298,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     for( int r = 0 ; r < nResultCount ; ++r )
     {
         OUString aURL = aCompleteResultVector[r];
-        OUString aResultStr = replWith + aURL.copy(replIdx);
+        OUString aResultStr = replWith + aURL.subView(replIdx);
         m_aPath.push_back( aResultStr );
     }
 

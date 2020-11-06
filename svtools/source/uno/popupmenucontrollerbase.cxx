@@ -287,9 +287,9 @@ OUString PopupMenuControllerBase::determineBaseURL( const OUString& aURL )
     {
         sal_Int32 nQueryPart = aURL.indexOf( '?', nSchemePart );
         if ( nQueryPart > 0 )
-            aMainURL += aURL.copy( nSchemePart, nQueryPart-nSchemePart );
+            aMainURL += aURL.subView( nSchemePart, nQueryPart-nSchemePart );
         else if ( nQueryPart == -1 )
-            aMainURL += aURL.copy( nSchemePart+1 );
+            aMainURL += aURL.subView( nSchemePart+1 );
     }
 
     return aMainURL;

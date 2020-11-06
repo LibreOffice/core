@@ -645,7 +645,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
         ret = locale;
     else if( ( ( idx = locale.indexOf( '-' ) ) != -1 ||
                ( idx = locale.indexOf( '_' ) ) != -1 ) &&
-             osl::FileBase::E_None == osl::DirectoryItem::get( url + locale.copy( 0,idx ),
+             osl::FileBase::E_None == osl::DirectoryItem::get( url + locale.subView( 0,idx ),
                                                                aDirItem ) )
         ret = locale.copy( 0,idx );
     else

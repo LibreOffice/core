@@ -517,7 +517,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             OUString sURL(officecfg::Office::Common::Menus::SendFeedbackURL::get() + //officecfg/registry/data/org/openoffice/Office/Common.xcu => https://hub.libreoffice.org/send-feedback/
                 "?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
                 "&LOlocale=" + utl::ConfigManager::getUILocale() +
-                "&LOmodule=" + module.copy(module.lastIndexOf('.') + 1 )  );
+                "&LOmodule=" + module.subView(module.lastIndexOf('.') + 1 )  );
             sfx2::openUriExternally(sURL, false);
             break;
         }

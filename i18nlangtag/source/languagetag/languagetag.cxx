@@ -1957,7 +1957,7 @@ OUString LanguageTag::getGlibcLocaleString( const OUString & rEncoding ) const
         aRet = getImpl()->getGlibcLocaleString();
         sal_Int32 nAt = aRet.indexOf('@');
         if (nAt != -1)
-            aRet = aRet.copy(0, nAt) + rEncoding + aRet.copy(nAt);
+            aRet = aRet.subView(0, nAt) + rEncoding + aRet.subView(nAt);
         else
             aRet += rEncoding;
     }

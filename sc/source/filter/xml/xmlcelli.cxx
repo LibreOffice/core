@@ -1376,7 +1376,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
         // an error formula cell.
         if (aText.startsWithIgnoreAsciiCase("Err:") && aText.getLength() <= 9 &&
                 ((nError =
-                  GetScImport().GetFormulaErrorConstant( "#ERR" + aText.copy(4) + "!")) != FormulaError::NONE))
+                  GetScImport().GetFormulaErrorConstant( OUString::Concat("#ERR") + aText.subView(4) + "!")) != FormulaError::NONE))
         {
             pCode->SetCodeError(nError);
         }
