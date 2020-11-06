@@ -1029,7 +1029,7 @@ bool OfaAutocorrReplacePage::NewDelHdl(const weld::Widget* pBtn)
             DeleteEntry(m_xReplaceTLB->get_text(nEntry, 0), m_xReplaceTLB->get_text(nEntry, 1));
             m_xReplaceTLB->remove(nEntry);
             ModifyHdl(*m_xShortED);
-            return false;
+            return true;
         }
     }
 
@@ -1450,11 +1450,10 @@ IMPL_LINK(OfaAutocorrExceptPage, NewDelButtonHdl, weld::Button&, rBtn, void)
 
 IMPL_LINK(OfaAutocorrExceptPage, NewDelActionHdl, weld::Entry&, rEdit, bool)
 {
-    NewDelHdl(&rEdit);
-    return false;
+    return NewDelHdl(&rEdit);
 }
 
-void OfaAutocorrExceptPage::NewDelHdl(const weld::Widget* pBtn)
+bool OfaAutocorrExceptPage::NewDelHdl(const weld::Widget* pBtn)
 {
     if ((pBtn == m_xNewAbbrevPB.get() || pBtn == m_xAbbrevED.get())
         && !m_xAbbrevED->get_text().isEmpty() && m_xNewAbbrevPB->get_sensitive())
@@ -1478,6 +1477,14 @@ void OfaAutocorrExceptPage::NewDelHdl(const weld::Widget* pBtn)
         m_xDoubleCapsLB->remove_text(m_xDoubleCapsED->get_text());
         ModifyHdl(*m_xDoubleCapsED);
     }
+    else
+    {
+        // we didn't do anything, if this was because of 'activate' in an
+        // entry then let it continue to close the dialog like the replace
+        // page does
+        return false;
+    }
+    return true;
 }
 
 IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, weld::TreeView&, rBox, void)
