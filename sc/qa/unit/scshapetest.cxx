@@ -154,7 +154,7 @@ void ScShapeTest::testTdf115655_HideDetail()
 {
     // The document contains an image inside a cell anchored "To Cell (resize with cell)". The cell
     // belongs to a group. On loading the group is expanded.
-    // Error was, that after collapsing the group, save and reload, and exanding the group, the image
+    // Error was, that after collapsing the group, save and reload, and expanding the group, the image
     // was "lost". Actually is was resized to zero height.
     OUString aFileURL;
     createFileURL("tdf115655_HideDetail.ods", aFileURL);

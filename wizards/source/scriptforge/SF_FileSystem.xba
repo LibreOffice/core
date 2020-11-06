@@ -60,7 +60,7 @@ Const cstForReading				=	1
 Const cstForWriting				=	2
 Const cstForAppending			=	8
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Public Function Dispose() As Variant
@@ -621,7 +621,7 @@ Public Function DeleteFolder(Optional ByVal FolderName As Variant) As Boolean
 &apos;&apos;&apos;		NOTAFOLDERERROR				Argument is a file, not a folder
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		FSO.FileNaming = &quot;SYS&quot;
-&apos;&apos;&apos;		FSO.DeleteFolder(&quot;C:\Temp\*&quot;)		&apos;	Only solders are deleted, filesin the parent folder are not
+&apos;&apos;&apos;		FSO.DeleteFolder(&quot;C:\Temp\*&quot;)		&apos;	Only olders are deleted, files in the parent folder are not
 
 Dim bDelete As Boolean			&apos;	Return value
 
@@ -1441,7 +1441,7 @@ Public Function PickFile(Optional ByVal DefaultFile As Variant _
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The selected FileName in URL format or &quot;&quot; if the dialog was cancelled
 &apos;&apos;&apos;	Example:
-&apos;&apos;&apos;		FSO.FineNaming = &quot;SYS&quot;
+&apos;&apos;&apos;		FSO.FileNaming = &quot;SYS&quot;
 &apos;&apos;&apos;		FSO.PickFile(&quot;C:\&quot;, &quot;OPEN&quot;, &quot;txt&quot;)		&apos; Only *.txt files are displayed
 
 Dim oFileDialog As Object		&apos;	com.sun.star.ui.dialogs.FilePicker
@@ -1525,7 +1525,7 @@ Public Function PickFolder(Optional ByVal DefaultFolder As variant _
 &apos;&apos;&apos;		The selected FolderName in URL or operating system format
 &apos;&apos;&apos;		The zero-length string if the dialog was cancelled
 &apos;&apos;&apos;	Example:
-&apos;&apos;&apos;		FSO.FineNaming = &quot;SYS&quot;
+&apos;&apos;&apos;		FSO.FileNaming = &quot;SYS&quot;
 &apos;&apos;&apos;		FSO.PickFolder(&quot;C:\&quot;, &quot;Choose a folder or press Cancel&quot;)
 
 Dim oFolderDialog As Object		&apos;	com.sun.star.ui.dialogs.FolderPicker
@@ -1766,7 +1766,7 @@ Dim bFile As Boolean			&apos;	True if File, False if Folder
 Dim oSfa As Object				&apos;	com.sun.star.ucb.SimpleFileAccess
 Dim bWildCards As Boolean		&apos;	True if wildcards found in Source
 Dim bCreateFolder As Boolean	&apos;	True when the destination folder should be created
-Dim bDestExists As Boolean		&apos;	True if desination exists
+Dim bDestExists As Boolean		&apos;	True if destination exists
 Dim sSourceUrl As String		&apos;	Alias for Source
 Dim sDestinationUrl As String	&apos;	Alias for Destination
 Dim sDestinationFile As String	&apos;	Destination FileName

@@ -62,7 +62,7 @@ REM =============================================================== PRIVATE TYPE
 &apos;&apos;&apos;	The recognized elements of an entry in a PO file are (other elements are ignored) :
 &apos;&apos;&apos;		#. Extracted comments (given by the programmer to the translator)
 &apos;&apos;&apos;		#, flag (the kde-format flag when the string contains tokens)
-&apos;&apos;&apos;		msgctxt Context (to store an acronym associated with the message, this is a distorsion of the norm)
+&apos;&apos;&apos;		msgctxt Context (to store an acronym associated with the message, this is a distortion of the norm)
 &apos;&apos;&apos;		msgid untranslated-string
 &apos;&apos;&apos;		msgstr translated-string
 &apos;&apos;&apos;	NB: plural forms are not supported
@@ -91,7 +91,7 @@ Private _POFile				As String		&apos; PO file in URL format
 Private _Encoding			As String		&apos; Used to open the PO file, default = UTF-8
 Private _Dictionary			As Object		&apos; SF_Dictionary
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()
@@ -181,7 +181,7 @@ Public Function AddText(Optional ByVal Context As Variant _
 Dim bAdd As Boolean				&apos;   Output buffer
 Dim sKey As String				&apos;	The key part of the new entry in the dictionary
 Dim vItem As POEntry			&apos;	The item part of the new entry in the dictionary
-Const cstPipe = &quot;|&quot;				&apos;	Pipe forbedden in MsgId&apos;s
+Const cstPipe = &quot;|&quot;				&apos;	Pipe forbidden in MsgId&apos;s
 Const cstThisSub = &quot;L10N.AddText&quot;
 Const cstSubArgs = &quot;[Context=&quot;&quot;&quot;&quot;], MsgId, [Comment=&quot;&quot;&quot;&quot;]&quot;
 
@@ -234,8 +234,8 @@ Public Function ExportToPOTFile(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;		or by a successful invocation of the L10N service with the FolderName argument
 &apos;&apos;&apos;	The generated file should pass successfully the &quot;msgfmt --check &apos;the pofile&apos;&quot; GNU command
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		FileName: the complete file name to export to. It it exists, it will be overwritten without warning
-&apos;&apos;&apos;		Header: Comments that will appear on top of the generated file. Do not include any leadung &quot;#&quot;
+&apos;&apos;&apos;		FileName: the complete file name to export to. If it exists, is overwritten without warning
+&apos;&apos;&apos;		Header: Comments that will appear on top of the generated file. Do not include any leading &quot;#&quot;
 &apos;&apos;&apos;			If the string spans multiple lines, insert escape sequences (\n) where relevant
 &apos;&apos;&apos;			A standard header will be added anyway
 &apos;&apos;&apos;		Encoding: The character set that should be used
