@@ -23,11 +23,11 @@ Option Explicit
 &apos;&apos;&apos;			- one collection mapping keys and entries in the array
 &apos;&apos;&apos;			- one 1-column array: key + data
 &apos;&apos;&apos;
-&apos;&apos;&apos;		Why a Dictionay class beside the builtin Collection class ?
+&apos;&apos;&apos;		Why a Dictionary class beside the builtin Collection class ?
 &apos;&apos;&apos;			A standard Basic collection does not support the retrieval of the keys
 &apos;&apos;&apos;			Additionally it may contain only simple data (strings, numbers, ...)
 &apos;&apos;&apos;
-&apos;&apos;&apos;		Service instanciation example:
+&apos;&apos;&apos;		Service instantiation example:
 &apos;&apos;&apos;			Dim myDict As Variant
 &apos;&apos;&apos;			myDict = CreateScriptService(&quot;Dictionary&quot;)		&apos;	Once per dictionary
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
@@ -55,7 +55,7 @@ Private MapItems			As Variant		&apos; Array of ItemMaps
 Private _MapSize			As Long			&apos; Total number of entries in the dictionary
 Private _MapRemoved			As Long			&apos; Number of inactive entries in the dictionary
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()
@@ -480,7 +480,7 @@ Public Function ImportFromJson(Optional ByVal InputStr As Variant _
 &apos;&apos;&apos;			&amp; &quot;,&apos;children&apos;: [&apos;Q&apos;,&apos;M&apos;,&apos;G&apos;,&apos;T&apos;],&apos;spouse&apos;: null}&quot;
 &apos;&apos;&apos;		s = Replace(s, &quot;&apos;&quot;, &quot;&quot;&quot;&quot;)
 &apos;&apos;&apos;		myDict.ImportFromJson(s, OverWrite := True)
-&apos;&apos;&apos;			&apos;	The (sub)-dictionaries &quot;adress&quot; and &quot;phoneNumbers(0) and (1) are reduced to Empty	
+&apos;&apos;&apos;			&apos;	The (sub)-dictionaries &quot;address&quot; and &quot;phoneNumbers(0) and (1) are reduced to Empty	
 
 Dim bImport As Boolean			&apos;	Return value
 Dim vArray As Variant			&apos;	JSON string converted to array
