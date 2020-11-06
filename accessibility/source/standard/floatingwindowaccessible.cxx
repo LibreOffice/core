@@ -28,16 +28,20 @@ namespace uno = ::com::sun::star::uno;
 using ::com::sun::star::accessibility::AccessibleRelation;
 namespace AccessibleRelationType = ::com::sun::star::accessibility::AccessibleRelationType;
 
-void FloatingWindowAccessible::FillAccessibleRelationSet(utl::AccessibleRelationSetHelper& rRelationSet)
+void FloatingWindowAccessible::FillAccessibleRelationSet(
+    utl::AccessibleRelationSetHelper& rRelationSet)
 {
     VclPtr<vcl::Window> pWindow = GetWindow();
-    if ( pWindow )
+    if (pWindow)
     {
         vcl::Window* pParentWindow = pWindow->GetParent();
-        if( pParentWindow )
+        if (pParentWindow)
         {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pParentWindow->GetAccessible() };
-            rRelationSet.AddRelation( AccessibleRelation( AccessibleRelationType::SUB_WINDOW_OF, aSequence ) );
+            uno::Sequence<uno::Reference<uno::XInterface>> aSequence{
+                pParentWindow->GetAccessible()
+            };
+            rRelationSet.AddRelation(
+                AccessibleRelation(AccessibleRelationType::SUB_WINDOW_OF, aSequence));
         }
     }
 }

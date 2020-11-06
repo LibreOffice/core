@@ -21,23 +21,18 @@
 
 using namespace ::com::sun::star;
 
-
 // VCLXAccessibleFixedHyperlink
 
-
 // XServiceInfo
-
 
 OUString VCLXAccessibleFixedHyperlink::getImplementationName()
 {
     return "com.sun.star.comp.toolkit.AccessibleFixedHyperlink";
 }
 
-
-uno::Sequence< OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames()
+uno::Sequence<OUString> VCLXAccessibleFixedHyperlink::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessibleFixedHyperlink" };
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
