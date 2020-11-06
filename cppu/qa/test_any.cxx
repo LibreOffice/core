@@ -46,6 +46,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
+#include <o3tl/cppunittraitshelper.hxx>
 #include <osl/interlck.h>
 #include <rtl/ustring.hxx>
 
