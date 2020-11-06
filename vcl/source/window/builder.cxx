@@ -1623,7 +1623,7 @@ VclBuilder::customMakeWidget GetCustomMakeWidget(const OString& rName)
     VclBuilder::customMakeWidget pFunction = nullptr;
     if (sal_Int32 nDelim = name.indexOf('-'); nDelim != -1)
     {
-        const OString aFunction("make" + name.copy(nDelim + 1));
+        const OString aFunction(OString::Concat("make") + name.subView(nDelim + 1));
         const OUString sFunction(OStringToOUString(aFunction, RTL_TEXTENCODING_UTF8));
 
 #ifndef DISABLE_DYNLOADING

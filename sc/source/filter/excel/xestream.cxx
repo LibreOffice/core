@@ -1179,7 +1179,7 @@ void XclExpXmlStream::validateTabNames(std::vector<OUString>& aOriginalTabNames)
 
                 for (int i=rangeStart; i<rangeEnd && aNewName.isEmpty(); i++)
                 {
-                    aNewName = rOriginalName.copy(0, MAX_TAB_NAME_LENGTH - 1 - digits) + "-" + OUString::number(i);
+                    aNewName = OUString::Concat(rOriginalName.subView(0, MAX_TAB_NAME_LENGTH - 1 - digits)) + "-" + OUString::number(i);
                     if (aNewTabNames.end() != std::find(aNewTabNames.begin(), aNewTabNames.end(), aNewName) ||
                         aOriginalTabNames.end() != std::find(aOriginalTabNames.begin(), aOriginalTabNames.end(), aNewName))
                     {

@@ -103,7 +103,7 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
     sal_Int32 nIndex = sOldPathUrl.lastIndexOf( ';' );
     if( nIndex != -1 )
     {
-        sNewPathUrl = sOldPathUrl.copy( 0, nIndex + 1 ) + sNewPathUrl;
+        sNewPathUrl = sOldPathUrl.subView( 0, nIndex + 1 ) + sNewPathUrl;
     }
     xPathSettings->setPropertyValue( msDefaultFilePath, uno::makeAny( sNewPathUrl ) );
 }

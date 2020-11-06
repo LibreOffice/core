@@ -420,7 +420,7 @@ OUString SmOoxmlImport::handleFunc()
     OUString fname = readOMathArgInElement( M_TOKEN( fName ));
     // fix the various functions
     if( fname.startsWith( "lim csub {" ))
-        fname = "lim from {" + fname.copy( 10 );
+        fname = OUString::Concat("lim from {") + fname.subView( 10 );
     OUString ret = fname + " {" + readOMathArgInElement( M_TOKEN( e )) + "}";
     m_rStream.ensureClosingTag( M_TOKEN( func ));
     return ret;
@@ -435,9 +435,9 @@ OUString SmOoxmlImport::handleLimLowUpp( LimLowUpp_t limlowupp )
     m_rStream.ensureClosingTag( token );
     // fix up overbrace/underbrace  (use { }, as {} will be converted to a placeholder)
     if( limlowupp == LimUpp && e.endsWith( " overbrace { }" ))
-        return e.copy( 0, e.getLength() - 2 ) + lim + "}";
+        return e.subView( 0, e.getLength() - 2 ) + lim + "}";
     if( limlowupp == LimLow && e.endsWith( " underbrace { }" ))
-        return e.copy( 0, e.getLength() - 2 ) + lim + "}";
+        return e.subView( 0, e.getLength() - 2 ) + lim + "}";
     return e
         + ( limlowupp == LimLow ? OUStringLiteral( u" csub {" ) : OUStringLiteral( u" csup {" ))
         + lim + "}";

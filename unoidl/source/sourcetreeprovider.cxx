@@ -89,7 +89,7 @@ bool exists(OUString const & uri, bool directory) {
     return osl::DirectoryItem::get(uri, item) == osl::FileBase::E_None
         && item.getFileStatus(status) == osl::FileBase::E_None
         && (status.getFileType() == osl::FileStatus::Directory) == directory
-        && getFileName(uri, status) == uri.copy(uri.lastIndexOf('/') + 1);
+        && getFileName(uri, status) == uri.subView(uri.lastIndexOf('/') + 1);
 }
 
 class Cursor: public MapCursor {

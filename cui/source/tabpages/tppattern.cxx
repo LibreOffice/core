@@ -151,7 +151,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
 
     if( aURL.getBase().getLength() > 18 )
     {
-        aString += aURL.getBase().copy( 0, 15 ) + "...";
+        aString += OUString::Concat(aURL.getBase().subView( 0, 15 )) + "...";
     }
     else
         aString += aURL.getBase();

@@ -148,7 +148,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     if (pos != -1)
     {
         OSL_FAIL("DEPRECATED!\nPlease use new query format: 'matchByDocumentService=...'");
-        OUString sPatchedQuery("matchByDocumentService=" + sNewQuery.copy(7));
+        OUString sPatchedQuery(OUString::Concat("matchByDocumentService=") + sNewQuery.subView(7));
         sNewQuery = sPatchedQuery;
     }
 

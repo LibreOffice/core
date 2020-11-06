@@ -233,7 +233,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
             pEntrys->GetText( sNewText, sCur, true );
             if (helper::isWellFormedXML(XMLUtil::QuotHTML(sNewText)))
             {
-                sNewdata = sSourceText.copy(0,nPreSpaces) + sNewText;
+                sNewdata = sSourceText.subView(0,nPreSpaces) + sNewText;
             }
         }
     }

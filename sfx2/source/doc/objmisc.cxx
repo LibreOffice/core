@@ -798,7 +798,7 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
         {
             const OUString aComplete( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             if( aComplete.getLength() > nMaxLength )
-                return "..." + aComplete.copy( aComplete.getLength() - nMaxLength + 3, nMaxLength - 3 );
+                return OUString::Concat("...") + aComplete.subView( aComplete.getLength() - nMaxLength + 3, nMaxLength - 3 );
             return aComplete;
         }
         if ( nMaxLength == SFX_TITLE_FILENAME )

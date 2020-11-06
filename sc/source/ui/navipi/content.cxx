@@ -1507,10 +1507,10 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName like shown in
     OUString aRealName = rName;
     sal_Int32 nLen = rName.getLength();
     sal_Int32 nActiveStart = nLen - pParentWindow->aStrActive.getLength();
-    if ( rName.copy( nActiveStart ) == pParentWindow->aStrActive )
+    if ( rName.subView( nActiveStart ) == pParentWindow->aStrActive )
         aRealName = rName.copy( 0, nActiveStart );
     sal_Int32 nNotActiveStart = nLen - pParentWindow->aStrNotActive.getLength();
-    if ( rName.copy( nNotActiveStart ) == pParentWindow->aStrNotActive )
+    if ( rName.subView( nNotActiveStart ) == pParentWindow->aStrNotActive )
         aRealName = rName.copy( 0, nNotActiveStart );
 
     bool bLoaded = false;

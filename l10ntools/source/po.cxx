@@ -219,7 +219,7 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         {
             // assume there are no more than 10 plural forms...
             // and that plural strings are never split to multi-line in po
-            m_sMsgStrPlural.push_back(sLine.copy(0,10) + lcl_GenNormString(sLine.copy(10)));
+            m_sMsgStrPlural.push_back(sLine.subView(0,10) + lcl_GenNormString(sLine.copy(10)));
         }
         else if (sLine.startsWith("\"") && pLastMsg)
         {
