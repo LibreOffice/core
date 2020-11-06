@@ -22,6 +22,30 @@
       "revId": "aae5a01428f31d5c8ec4f31e31a8d982dc9b00f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb1bb58a_cd0f27d0",
+        "filename": "sw/source/core/layout/objectformattertxtfrm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-11-06T10:13:02Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "bc53ffe9_f20e1949",
+      "range": {
+        "startLine": 361,
+        "startChar": 0,
+        "endLine": 363,
+        "endChar": 79
+      },
+      "revId": "aae5a01428f31d5c8ec4f31e31a8d982dc9b00f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
