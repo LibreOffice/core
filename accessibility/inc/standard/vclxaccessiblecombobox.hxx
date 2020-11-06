@@ -21,30 +21,26 @@
 
 #include <standard/vclxaccessiblebox.hxx>
 
-
 /** The accessible combobox has two children.  The first is the text field
     represented by an object of the VCLXAccessibleEdit class.
     The second is the list containing all items and is represented by an
     object of the VCLXAccessibleList class which does not
     support selection at the moment.
 */
-class VCLXAccessibleComboBox final
-    : public VCLXAccessibleBox
+class VCLXAccessibleComboBox final : public VCLXAccessibleBox
 {
 public:
-    VCLXAccessibleComboBox (VCLXWindow* pVCLXindow);
+    VCLXAccessibleComboBox(VCLXWindow* pVCLXindow);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     // Return combo box specific services.
-    virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     virtual ~VCLXAccessibleComboBox() override = default;
 
     virtual bool IsValid() const override;
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

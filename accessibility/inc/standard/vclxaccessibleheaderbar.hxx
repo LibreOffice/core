@@ -22,36 +22,33 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
-
-typedef std::vector< css::uno::WeakReference< css::accessibility::XAccessible > >
-    ListItems;
+typedef std::vector<css::uno::WeakReference<css::accessibility::XAccessible>> ListItems;
 
 class VCLXAccessibleHeaderBar final : public VCLXAccessibleComponent
 {
+    VclPtr<HeaderBar> m_pHeadBar;
 
-    VclPtr<HeaderBar>  m_pHeadBar;
 public:
     virtual ~VCLXAccessibleHeaderBar() override;
 
-    VCLXAccessibleHeaderBar( VCLXWindow* pVCLXindow );
+    VCLXAccessibleHeaderBar(VCLXWindow* pVCLXindow);
 
     // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
-
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getAccessibleChild(sal_Int32 i) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 public:
     virtual void SAL_CALL disposing() override;
-    css::uno::Reference< css::accessibility::XAccessible > CreateChild(sal_Int32 i);
+    css::uno::Reference<css::accessibility::XAccessible> CreateChild(sal_Int32 i);
 
 private:
     ListItems m_aAccessibleChildren;
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
