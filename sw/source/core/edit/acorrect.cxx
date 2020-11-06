@@ -42,7 +42,10 @@
 #include <editeng/acorrcfg.hxx>
 #include <redline.hxx>
 #include <IDocumentRedlineAccess.hxx>
+<<<<<<< HEAD   (fe0d5b Fix 32 bit build options)
 #include <rootfrm.hxx>
+=======
+>>>>>>> CHANGE (5a9609 tdf#130546 sw autocorrect: don't replace redlining)
 
 using namespace ::com::sun::star;
 
@@ -409,9 +412,28 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         SwPaM aPam(aStartPos, aEndPos);
 
         // don't replace, if a redline starts or ends within the original text
+<<<<<<< HEAD   (fe0d5b Fix 32 bit build options)
         if ( pDoc->getIDocumentRedlineAccess().HasRedline( aPam, RedlineType::Any, /*bStartOrEndInRange=*/true ) )
         {
             return bRet;
+=======
+        for ( SwRedlineTable::size_type nAct =
+                  pDoc->getIDocumentRedlineAccess().GetRedlinePos( m_rCursor.GetNode(), RedlineType::Any );
+                  nAct < pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++nAct )
+        {
+            const SwRangeRedline* pRed = pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];
+
+            if ( pRed->Start()->nNode > pTextNd->GetIndex() )
+                break;
+
+            // redline over the original text
+            if ( aStartPos < *pRed->End() && *pRed->Start() < aEndPos &&
+                 // starting or ending within the original text
+                 ( aStartPos < *pRed->Start() || *pRed->End() < aEndPos ) )
+            {
+                return bRet;
+            }
+>>>>>>> CHANGE (5a9609 tdf#130546 sw autocorrect: don't replace redlining)
         }
 
         if( pFnd->IsTextOnly() )

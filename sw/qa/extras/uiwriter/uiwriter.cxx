@@ -395,7 +395,10 @@ public:
     void testSpellOnlineParameter();
     void testRedlineAutoCorrect();
     void testRedlineAutoCorrect2();
+<<<<<<< HEAD   (fe0d5b Fix 32 bit build options)
     void testEmojiAutoCorrect();
+=======
+>>>>>>> CHANGE (5a9609 tdf#130546 sw autocorrect: don't replace redlining)
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
 #endif
@@ -627,7 +630,10 @@ public:
     CPPUNIT_TEST(testSpellOnlineParameter);
     CPPUNIT_TEST(testRedlineAutoCorrect);
     CPPUNIT_TEST(testRedlineAutoCorrect2);
+<<<<<<< HEAD   (fe0d5b Fix 32 bit build options)
     CPPUNIT_TEST(testEmojiAutoCorrect);
+=======
+>>>>>>> CHANGE (5a9609 tdf#130546 sw autocorrect: don't replace redlining)
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7704,6 +7710,7 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     pWrtShell->Insert("tset");
     pWrtShell->AutoCorrect(corr, ' ');
     sReplaced = "tset test ";
+<<<<<<< HEAD   (fe0d5b Fix 32 bit build options)
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
@@ -7711,6 +7718,8 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     pWrtShell->Insert("end. word");
     pWrtShell->AutoCorrect(corr, ' ');
     sReplaced = "tset test end. Word ";
+=======
+>>>>>>> CHANGE (5a9609 tdf#130546 sw autocorrect: don't replace redlining)
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
@@ -7718,7 +7727,11 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
     pWrtShell->Insert("a");
     pWrtShell->AutoCorrect(corr, ' ');
+<<<<<<< HEAD   (fe0d5b Fix 32 bit build options)
     sReplaced = "A tset test end. Word ";
+=======
+    sReplaced = "A tset test ";
+>>>>>>> CHANGE (5a9609 tdf#130546 sw autocorrect: don't replace redlining)
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
@@ -7755,6 +7768,7 @@ void SwUiWriterTest::testRedlineAutoCorrect2()
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
+<<<<<<< HEAD   (fe0d5b Fix 32 bit build options)
 void SwUiWriterTest::testEmojiAutoCorrect()
 {
     SwDoc* pDoc = createDoc("redline-autocorrect2.fodt");
@@ -7788,6 +7802,8 @@ void SwUiWriterTest::testEmojiAutoCorrect()
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
+=======
+>>>>>>> CHANGE (5a9609 tdf#130546 sw autocorrect: don't replace redlining)
 void SwUiWriterTest::testTdf108423()
 {
     SwDoc* pDoc = createDoc();
