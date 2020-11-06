@@ -1080,7 +1080,7 @@ IMPL_LINK_NOARG(ColorPickerDialog, ColorModifyEditHdl, weld::Entry&, void)
 
     Color aColor = m_xEDHex->GetColor();
 
-    if (aColor != Color(0xffffffff) && aColor != GetColor())
+    if (aColor != COL_AUTO && aColor != GetColor())
     {
         mdRed = static_cast<double>(aColor.GetRed()) / 255.0;
         mdGreen = static_cast<double>(aColor.GetGreen()) / 255.0;

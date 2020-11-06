@@ -47,7 +47,7 @@ void MenuButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
                 3,
                 (bIsHighlighted || bIsSelected
                     ? Theme::GetColor(Theme::Color_TabItemBorder)
-                    : Color(0xffffffff)),
+                    : COL_TRANSPARENT),
                 (bIsHighlighted
                     ? Theme::GetPaint(Theme::Paint_TabItemBackgroundHighlight)
                     : Theme::GetPaint(Theme::Paint_TabItemBackgroundNormal)));

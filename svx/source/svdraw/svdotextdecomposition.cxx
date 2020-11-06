@@ -268,9 +268,9 @@ namespace
             // TextDecoratedPortionPrimitive2D needed, prepare some more data
             // get overline and underline color. If it's on automatic (0xffffffff) use FontColor instead
             const Color aUnderlineColor(rInfo.maTextLineColor);
-            const basegfx::BColor aBUnderlineColor((Color(0xffffffff) == aUnderlineColor) ? aBFontColor : aUnderlineColor.getBColor());
+            const basegfx::BColor aBUnderlineColor((aUnderlineColor == COL_AUTO) ? aBFontColor : aUnderlineColor.getBColor());
             const Color aOverlineColor(rInfo.maOverlineColor);
-            const basegfx::BColor aBOverlineColor((Color(0xffffffff) == aOverlineColor) ? aBFontColor : aOverlineColor.getBColor());
+            const basegfx::BColor aBOverlineColor((aOverlineColor == COL_AUTO) ? aBFontColor : aOverlineColor.getBColor());
 
             // prepare overline and underline data
             const drawinglayer::primitive2d::TextLine eFontOverline(

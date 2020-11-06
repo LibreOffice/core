@@ -43,14 +43,14 @@ namespace rptui
 
     FormattedFieldBeautifier::FormattedFieldBeautifier(const OReportController& _aController)
         :m_rReportController(_aController)
-        ,m_nTextColor(0xffffffff)
+        ,m_nTextColor(COL_AUTO)
     {
     }
 
 
     Color FormattedFieldBeautifier::getTextColor()
     {
-        if (m_nTextColor == Color(0xffffffff))
+        if (m_nTextColor == COL_AUTO)
         {
             svtools::ExtendedColorConfig aConfig;
             m_nTextColor = aConfig.GetColorValue(CFG_REPORTDESIGNER, DBTEXTBOXBOUNDCONTENT).getColor();

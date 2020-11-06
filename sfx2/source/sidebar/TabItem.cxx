@@ -51,7 +51,7 @@ void TabItem::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& 
                 Theme::GetInteger(Theme::Int_ButtonCornerRadius),
                 bIsHighlighted||bIsSelected
                     ? Theme::GetColor(Theme::Color_TabItemBorder)
-                    : Color(0xffffffff),
+                    : COL_TRANSPARENT,
                 bIsHighlighted
                     ? Theme::GetPaint(Theme::Paint_TabItemBackgroundHighlight)
                     : Theme::GetPaint(Theme::Paint_TabItemBackgroundNormal));

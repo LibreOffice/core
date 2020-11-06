@@ -629,7 +629,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         case XML_ELEMENT(STYLE, XML_USE_WINDOW_FONT_COLOR):
             {
                 if( IsXMLToken( sValue, XML_TRUE ) )
-                    rListLevel.SetColor( Color(0xffffffff) );
+                    rListLevel.SetColor(COL_AUTO);
             }
             break;
         case XML_ELEMENT(FO, XML_FONT_SIZE):
