@@ -2300,6 +2300,13 @@ public:
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    SAL_WARN_UNUSED_RESULT std::u16string_view substr( sal_Int32 beginIndex, sal_Int32 count ) const
+    {
+        return std::u16string_view(*this).substr(beginIndex, count);
+    }
+#endif
+
     /**
       Concatenates the specified string to the end of this string.
 
