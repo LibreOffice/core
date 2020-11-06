@@ -81,21 +81,24 @@ void SwView::ExecDraw(SfxRequest& rReq)
     if(pArgs && SfxItemState::SET == pArgs->GetItemState(GetPool().GetWhich(nSlotId), false, &pItem))
         pStringItem = dynamic_cast< const SfxStringItem*>(pItem);
 
+    sal_uInt16 eNewFormObjKind = 0;
+    if (nSlotId == SID_FM_CREATE_CONTROL)
+    {
+        const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
+        if (pIdentifierItem)
+            eNewFormObjKind = pIdentifierItem->GetValue();
+    }
+
     if (nSlotId == SID_OBJECT_SELECT && m_nFormSfxId == nSlotId)
     {
         bDeselect = true;
     }
     else if (nSlotId == SID_FM_CREATE_CONTROL)
     {
-        const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
-        if( pIdentifierItem )
+        if (eNewFormObjKind == m_eFormObjKind || eNewFormObjKind == 0)
         {
-            sal_uInt16 nNewId = pIdentifierItem->GetValue();
-            if (nNewId == m_nFormSfxId)
-            {
-                bDeselect = true;
-                GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button should popping out
-            }
+            bDeselect = true;
+            GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button should popping out
         }
     }
     else if (nSlotId == SID_FM_CREATE_FIELDCONTROL)
@@ -279,11 +282,9 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
         case SID_FM_CREATE_CONTROL:
         {
-            const SfxUInt16Item* pIdentifierItem = rReq.GetArg<SfxUInt16Item>(SID_FM_CONTROL_IDENTIFIER);
-            if( pIdentifierItem )
-                nSlotId = pIdentifierItem->GetValue();
-            pFuncPtr.reset( new ConstFormControl(m_pWrtShell.get(), m_pEditWin, this) );
+            pFuncPtr.reset(new ConstFormControl(m_pWrtShell.get(), m_pEditWin, this, eNewFormObjKind));
             m_nFormSfxId = nSlotId;
+            m_eFormObjKind = eNewFormObjKind;
         }
         break;
 

@@ -720,6 +720,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_nPageCnt(0),
     m_nDrawSfxId( USHRT_MAX ),
     m_nFormSfxId( USHRT_MAX ),
+    m_eFormObjKind(0),
     m_nLastPasteDestination( static_cast<SotExchangeDest>(0xFFFF) ),
     m_nLeftBorderDistance( 0 ),
     m_nRightBorderDistance( 0 ),

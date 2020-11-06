@@ -23,8 +23,11 @@
 
 class ConstFormControl : public SwDrawBase
 {
+private:
+    sal_uInt16 m_eObjKind;
+
 public:
-    ConstFormControl(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
+    ConstFormControl(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView, sal_uInt16 eObjKind);
 
                                        // Mouse- & Key-Events
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;

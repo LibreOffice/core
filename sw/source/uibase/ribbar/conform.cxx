@@ -27,8 +27,9 @@
 #include <drawbase.hxx>
 #include <conform.hxx>
 
-ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
-    SwDrawBase(pWrtShell, pEditWin, pSwView)
+ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView, sal_uInt16 eObjKind)
+    : SwDrawBase(pWrtShell, pEditWin, pSwView)
+    , m_eObjKind(eObjKind)
 {
     m_bInsForm = true;
 }
@@ -79,9 +80,9 @@ bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 
 void ConstFormControl::Activate(const sal_uInt16 nSlotId)
 {
-    m_pWin->SetSdrDrawMode( static_cast<SdrObjKind>(nSlotId) );
+    m_pWin->SetSdrDrawMode(static_cast<SdrObjKind>(m_eObjKind));
     SwDrawBase::Activate(nSlotId);
-    m_pSh->GetDrawView()->SetCurrentObj(nSlotId);
+    m_pSh->GetDrawView()->SetCurrentObj(m_eObjKind);
 
     m_pWin->SetPointer(PointerStyle::DrawRect);
 }
