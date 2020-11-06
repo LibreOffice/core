@@ -26,17 +26,20 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-typedef ::cppu::ImplHelper2<css::accessibility::XAccessibleAction,
-                            css::accessibility::XAccessibleValue>
-    VCLXAccessibleScrollBar_BASE;
+
+
+
+typedef ::cppu::ImplHelper2<
+    css::accessibility::XAccessibleAction,
+    css::accessibility::XAccessibleValue > VCLXAccessibleScrollBar_BASE;
 
 class VCLXAccessibleScrollBar final : public VCLXAccessibleComponent,
-                                      public VCLXAccessibleScrollBar_BASE
+                                public VCLXAccessibleScrollBar_BASE
 {
     virtual ~VCLXAccessibleScrollBar() override = default;
 
-    virtual void ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent) override;
-    virtual void FillAccessibleStateSet(utl::AccessibleStateSetHelper& rStateSet) override;
+    virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
+    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
 
 public:
     using VCLXAccessibleComponent::VCLXAccessibleComponent;
@@ -49,23 +52,24 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleAction
-    virtual sal_Int32 SAL_CALL getAccessibleActionCount() override;
-    virtual sal_Bool SAL_CALL doAccessibleAction(sal_Int32 nIndex) override;
-    virtual OUString SAL_CALL getAccessibleActionDescription(sal_Int32 nIndex) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleKeyBinding>
-        SAL_CALL getAccessibleActionKeyBinding(sal_Int32 nIndex) override;
+    virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) override;
+    virtual sal_Bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) override;
+    virtual OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
     // XAccessibleValue
-    virtual css::uno::Any SAL_CALL getCurrentValue() override;
-    virtual sal_Bool SAL_CALL setCurrentValue(const css::uno::Any& aNumber) override;
-    virtual css::uno::Any SAL_CALL getMaximumValue() override;
-    virtual css::uno::Any SAL_CALL getMinimumValue() override;
+    virtual css::uno::Any SAL_CALL getCurrentValue(  ) override;
+    virtual sal_Bool SAL_CALL setCurrentValue( const css::uno::Any& aNumber ) override;
+    virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
+    virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
 
     // XAccessibleContext
-    OUString SAL_CALL getAccessibleName() override;
+    OUString SAL_CALL getAccessibleName(  ) override;
+
 };
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

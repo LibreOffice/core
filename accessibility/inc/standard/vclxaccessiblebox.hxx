@@ -26,28 +26,30 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-typedef ::cppu::ImplHelper3<css::accessibility::XAccessible, css::accessibility::XAccessibleValue,
-                            css::accessibility::XAccessibleAction>
-    VCLXAccessibleBox_BASE;
+
+typedef ::cppu::ImplHelper3<
+    css::accessibility::XAccessible,
+    css::accessibility::XAccessibleValue,
+    css::accessibility::XAccessibleAction
+    > VCLXAccessibleBox_BASE;
+
 
 /** Base class for list- and combo boxes.  This class manages the box'
     children.  The classed derived from this one have only to implement the
     IsValid method and return the correct implementation name.
 */
-class VCLXAccessibleBox : public VCLXAccessibleComponent, public VCLXAccessibleBox_BASE
+class VCLXAccessibleBox
+    : public VCLXAccessibleComponent,
+      public VCLXAccessibleBox_BASE
 {
 public:
-    enum BoxType
-    {
-        COMBOBOX,
-        LISTBOX
-    };
+    enum BoxType {COMBOBOX, LISTBOX};
 
     /** The constructor is initialized with the box type which may be
         either COMBOBOX or LISTBOX and a flag
         indicating whether the box is a drop down box.
     */
-    VCLXAccessibleBox(VCLXWindow* pVCLXindow, BoxType aType, bool bIsDropDownBox);
+    VCLXAccessibleBox (VCLXWindow* pVCLXindow, BoxType aType, bool bIsDropDownBox);
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER()
@@ -55,10 +57,11 @@ public:
     // XInterface
     DECLARE_XINTERFACE()
 
+
     // XAccessible
 
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
+            getAccessibleContext(  ) override;
 
     // XAccessibleContext
 
@@ -71,8 +74,8 @@ public:
         VCLXAccessibleTextField, for combo boxes it is an
         editable VLCAccessibleEdit.
     */
-    css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleChild(sal_Int32 i) override;
+    css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+        getAccessibleChild (sal_Int32 i) override;
     /** The role is always AccessibleRole::COMBO_BOX.
     */
     sal_Int16 SAL_CALL getAccessibleRole() override;
@@ -85,26 +88,26 @@ public:
     /** The action for drop down boxes lets the user toggle the visibility of the
         popup menu.
     */
-    virtual sal_Bool SAL_CALL doAccessibleAction(sal_Int32 nIndex) override;
+    virtual sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex) override;
     /** The returned string is associated with resource
         RID_STR_ACC_ACTION_TOGGLEPOPUP.
     */
-    virtual OUString SAL_CALL getAccessibleActionDescription(sal_Int32 nIndex) override;
+    virtual OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex) override;
     /** No keybinding returned so far.
     */
-    virtual css::uno::Reference<css::accessibility::XAccessibleKeyBinding>
-        SAL_CALL getAccessibleActionKeyBinding(sal_Int32 nIndex) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL
+            getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
     // XAccessibleValue
 
-    virtual css::uno::Any SAL_CALL getCurrentValue() override;
+    virtual css::uno::Any SAL_CALL getCurrentValue( ) override;
 
-    virtual sal_Bool SAL_CALL setCurrentValue(const css::uno::Any& aNumber) override;
+    virtual sal_Bool SAL_CALL setCurrentValue(
+        const css::uno::Any& aNumber ) override;
 
-    virtual css::uno::Any SAL_CALL getMaximumValue() override;
+    virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
 
-    virtual css::uno::Any SAL_CALL getMinimumValue() override;
-
+    virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
 protected:
     /** Specifies whether the box is a combo box or a list box.  List boxes
         have multi selection.
@@ -115,10 +118,12 @@ protected:
     bool m_bIsDropDownBox;
 
     /// The child that represents the text field if there is one.
-    css::uno::Reference<css::accessibility::XAccessible> m_xText;
+    css::uno::Reference< css::accessibility::XAccessible>
+        m_xText;
 
     /// The child that contains the items of this box.
-    css::uno::Reference<css::accessibility::XAccessible> m_xList;
+    css::uno::Reference< css::accessibility::XAccessible>
+        m_xList;
 
     /** This flag specifies whether an object has a text field as child
         regardless of whether that child being currently instantiated or
@@ -140,12 +145,13 @@ protected:
     */
     virtual bool IsValid() const = 0;
 
-    virtual void ProcessWindowChildEvent(const VclWindowEvent& rVclWindowEvent) override;
-    virtual void ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent) override;
+    virtual void ProcessWindowChildEvent (const VclWindowEvent& rVclWindowEvent) override;
+    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;
 
-    virtual void FillAccessibleStateSet(utl::AccessibleStateSetHelper& rStateSet) override;
+    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
 
     sal_Int32 implGetAccessibleChildCount();
 };
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

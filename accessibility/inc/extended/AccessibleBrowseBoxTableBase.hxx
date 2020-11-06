@@ -17,23 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+
 #pragma once
 
 #include <extended/AccessibleBrowseBoxBase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 
-namespace accessibility
-{
-typedef ::cppu::ImplHelper1<css::accessibility::XAccessibleTable>
-    AccessibleBrowseBoxTableImplHelper;
+
+namespace accessibility {
+
+typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleTable >
+        AccessibleBrowseBoxTableImplHelper;
 
 /** The BrowseBox accessible table objects inherit from this base class. It
     implements basic functionality for the XAccessibleTable interface.
     BrowseBox table objects are: the data table, the column header bar and the
     row header bar. */
-class AccessibleBrowseBoxTableBase : public BrowseBoxAccessibleElement,
-                                     public AccessibleBrowseBoxTableImplHelper
+class AccessibleBrowseBoxTableBase :
+    public BrowseBoxAccessibleElement,
+    public AccessibleBrowseBoxTableImplHelper
 {
 public:
     /** Constructor sets specified name and description. If the constant of a
@@ -45,8 +48,9 @@ public:
         @param rBrowseBox       The BrowseBox control.
         @param eObjType         Type of BrowseBox object. */
     AccessibleBrowseBoxTableBase(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        ::vcl::IAccessibleTableProvider& rBrowseBox, ::vcl::AccessibleBrowseBoxObjType eObjType);
+        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        ::vcl::IAccessibleTableProvider& rBrowseBox,
+        ::vcl::AccessibleBrowseBoxObjType eObjType );
 
 protected:
     virtual ~AccessibleBrowseBoxTableBase() override = default;
@@ -79,28 +83,31 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleColumnCount() override;
 
     /** @return  The row extent of the specified cell (always 1). */
-    virtual sal_Int32 SAL_CALL getAccessibleRowExtentAt(sal_Int32 nRow, sal_Int32 nColumn) override;
+    virtual sal_Int32 SAL_CALL
+    getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  The column extent of the specified cell (always 1). */
-    virtual sal_Int32 SAL_CALL getAccessibleColumnExtentAt(sal_Int32 nRow,
-                                                           sal_Int32 nColumn) override;
+    virtual sal_Int32 SAL_CALL
+    getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  The caption cell of the table (not supported). */
-    virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleCaption() override;
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible > SAL_CALL
+    getAccessibleCaption() override;
 
     /** @return  The summary object of the table (not supported). */
-    virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleSummary() override;
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible > SAL_CALL
+    getAccessibleSummary() override;
 
     /** @return  The child index of the specified cell. */
-    virtual sal_Int32 SAL_CALL getAccessibleIndex(sal_Int32 nRow, sal_Int32 nColumn) override;
+    virtual sal_Int32 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  The row index of the specified child cell. */
-    virtual sal_Int32 SAL_CALL getAccessibleRow(sal_Int32 nChildIndex) override;
+    virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int32 nChildIndex ) override;
 
     /** @return  The column index of the specified child cell. */
-    virtual sal_Int32 SAL_CALL getAccessibleColumn(sal_Int32 nChildIndex) override;
+    virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex ) override;
 
     /*  Derived classes have to implement:
         -   getAccessibleRowDescription,
@@ -117,21 +124,21 @@ public:
     // XInterface
 
     /** Queries for a new interface. */
-    css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
 
     /** Acquires the object (calls acquire() on base class). */
-    virtual void SAL_CALL acquire() throw() override;
+    virtual void SAL_CALL acquire() throw () override;
 
     /** Releases the object (calls release() on base class). */
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL release() throw () override;
 
     // XTypeProvider
 
     /** @return  a sequence of possible types (received from base classes). */
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     /** @return  a unique implementation ID. */
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XServiceInfo
 
@@ -159,7 +166,7 @@ protected:
         @return
             the position of the column in VCL the Accessible world
     */
-    sal_uInt16 implToVCLColumnPos(sal_Int32 nColumn) const;
+    sal_uInt16 implToVCLColumnPos( sal_Int32 nColumn ) const;
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The number of cells of the table. */
@@ -167,28 +174,28 @@ protected:
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The row index of the specified cell index. */
-    sal_Int32 implGetRow(sal_Int32 nChildIndex) const;
+    sal_Int32 implGetRow( sal_Int32 nChildIndex ) const;
     /** @attention  This method requires locked mutex's and a living object.
         @return  The column index of the specified cell index. */
-    sal_Int32 implGetColumn(sal_Int32 nChildIndex) const;
+    sal_Int32 implGetColumn( sal_Int32 nChildIndex ) const;
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  TRUE, if the specified row is selected. */
-    bool implIsRowSelected(sal_Int32 nRow) const;
+    bool implIsRowSelected( sal_Int32 nRow ) const;
     /** @attention  This method requires locked mutex's and a living object.
         @return  TRUE, if the specified column is selected. */
-    bool implIsColumnSelected(sal_Int32 nColumn) const;
+    bool implIsColumnSelected( sal_Int32 nColumn ) const;
 
     /** Selects/deselects a row (tries to expand selection).
         @attention  This method requires locked mutex's and a living object.
         @param nRow     Row to select
         @param bSelect  TRUE = select, FALSE = deselect */
-    void implSelectRow(sal_Int32 nRow, bool bSelect);
+    void implSelectRow( sal_Int32 nRow, bool bSelect );
     /** Selects/deselects a column (tries to expand selection).
         @attention  This method requires locked mutex's and a living object.
         @param nColumnPos column number to select
         @param bSelect  TRUE = select, FALSE = deselect */
-    void implSelectColumn(sal_Int32 nColumnPos, bool bSelect);
+    void implSelectColumn( sal_Int32 nColumnPos, bool bSelect );
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The count of selected rows. */
@@ -200,30 +207,33 @@ protected:
     /** Fills a sequence with sorted indexes of completely selected rows.
         @attention  This method requires locked mutex's and a living object.
         @param rSeq  Out-parameter that takes the sorted row index list. */
-    void implGetSelectedRows(css::uno::Sequence<sal_Int32>& rSeq);
+    void implGetSelectedRows( css::uno::Sequence< sal_Int32 >& rSeq );
     /** Fills a sequence with sorted indexes of completely selected columns.
         @attention  This method requires locked mutex's and a living object.
         @param rSeq  Out-parameter that takes the sorted column index list. */
-    void implGetSelectedColumns(css::uno::Sequence<sal_Int32>& rSeq);
+    void implGetSelectedColumns( css::uno::Sequence< sal_Int32 >& rSeq );
 
     /** @attention  This method requires locked mutex's and a living object.
         @throws <type>IndexOutOfBoundsException</type>
         If the specified row index is invalid. */
-    void ensureIsValidRow(sal_Int32 nRow);
+    void ensureIsValidRow( sal_Int32 nRow );
     /** @attention  This method requires locked mutex's and a living object.
         @throws <type>IndexOutOfBoundsException</type>
         If the specified column index is invalid. */
-    void ensureIsValidColumn(sal_Int32 nColumn);
+    void ensureIsValidColumn( sal_Int32 nColumn );
     /** @attention  This method requires locked mutex's and a living object.
         @throws <type>IndexOutOfBoundsException</type>
         If the specified cell address is invalid. */
-    void ensureIsValidAddress(sal_Int32 nRow, sal_Int32 nColumn);
+    void ensureIsValidAddress( sal_Int32 nRow, sal_Int32 nColumn );
     /** @attention  This method requires locked mutex's and a living object.
         @throws <type>IndexOutOfBoundsException</type>
         If the specified child index is invalid. */
-    void ensureIsValidIndex(sal_Int32 nChildIndex);
+    void ensureIsValidIndex( sal_Int32 nChildIndex );
 };
 
+
 } // namespace accessibility
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,60 +30,65 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-VCLXAccessibleMenuBar::VCLXAccessibleMenuBar(Menu* pMenu)
-    : OAccessibleMenuComponent(pMenu)
+
+
+
+VCLXAccessibleMenuBar::VCLXAccessibleMenuBar( Menu* pMenu )
+    :OAccessibleMenuComponent( pMenu )
 {
-    if (pMenu)
+    if ( pMenu )
     {
         m_pWindow = pMenu->GetWindow();
 
-        if (m_pWindow)
-            m_pWindow->AddEventListener(LINK(this, VCLXAccessibleMenuBar, WindowEventListener));
+        if ( m_pWindow )
+            m_pWindow->AddEventListener( LINK( this, VCLXAccessibleMenuBar, WindowEventListener ) );
     }
 }
 
+
 VCLXAccessibleMenuBar::~VCLXAccessibleMenuBar()
 {
-    if (m_pWindow)
-        m_pWindow->RemoveEventListener(LINK(this, VCLXAccessibleMenuBar, WindowEventListener));
+    if ( m_pWindow )
+        m_pWindow->RemoveEventListener( LINK( this, VCLXAccessibleMenuBar, WindowEventListener ) );
 }
+
 
 bool VCLXAccessibleMenuBar::IsFocused()
 {
     bool bFocused = false;
 
-    if (m_pWindow && m_pWindow->HasFocus() && !IsChildHighlighted())
+    if ( m_pWindow && m_pWindow->HasFocus() && !IsChildHighlighted() )
         bFocused = true;
 
     return bFocused;
 }
 
-IMPL_LINK(VCLXAccessibleMenuBar, WindowEventListener, VclWindowEvent&, rEvent, void)
+
+IMPL_LINK( VCLXAccessibleMenuBar, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    OSL_ENSURE(rEvent.GetWindow(), "VCLXAccessibleMenuBar::WindowEventListener: no window!");
-    if (!rEvent.GetWindow()->IsAccessibilityEventsSuppressed()
-        || (rEvent.GetId() == VclEventId::ObjectDying))
+    OSL_ENSURE( rEvent.GetWindow(), "VCLXAccessibleMenuBar::WindowEventListener: no window!" );
+    if ( !rEvent.GetWindow()->IsAccessibilityEventsSuppressed() || ( rEvent.GetId() == VclEventId::ObjectDying ) )
     {
-        ProcessWindowEvent(rEvent);
+        ProcessWindowEvent( rEvent );
     }
 }
 
-void VCLXAccessibleMenuBar::ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent)
+
+void VCLXAccessibleMenuBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    switch (rVclWindowEvent.GetId())
+    switch ( rVclWindowEvent.GetId() )
     {
         case VclEventId::WindowGetFocus:
         case VclEventId::WindowLoseFocus:
         {
-            SetFocused(rVclWindowEvent.GetId() == VclEventId::WindowGetFocus);
+            SetFocused( rVclWindowEvent.GetId() == VclEventId::WindowGetFocus );
         }
         break;
         case VclEventId::ObjectDying:
         {
-            if (m_pWindow)
+            if ( m_pWindow )
             {
-                m_pWindow->RemoveEventListener(
-                    LINK(this, VCLXAccessibleMenuBar, WindowEventListener));
+                m_pWindow->RemoveEventListener( LINK( this, VCLXAccessibleMenuBar, WindowEventListener ) );
                 m_pWindow = nullptr;
             }
         }
@@ -95,51 +100,58 @@ void VCLXAccessibleMenuBar::ProcessWindowEvent(const VclWindowEvent& rVclWindowE
     }
 }
 
+
 // XComponent
+
 
 void VCLXAccessibleMenuBar::disposing()
 {
     OAccessibleMenuComponent::disposing();
 
-    if (m_pWindow)
+    if ( m_pWindow )
     {
-        m_pWindow->RemoveEventListener(LINK(this, VCLXAccessibleMenuBar, WindowEventListener));
+        m_pWindow->RemoveEventListener( LINK( this, VCLXAccessibleMenuBar, WindowEventListener ) );
         m_pWindow = nullptr;
     }
 }
 
+
 // XServiceInfo
+
 
 OUString VCLXAccessibleMenuBar::getImplementationName()
 {
     return "com.sun.star.comp.toolkit.AccessibleMenuBar";
 }
 
-Sequence<OUString> VCLXAccessibleMenuBar::getSupportedServiceNames()
+
+Sequence< OUString > VCLXAccessibleMenuBar::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessibleMenuBar" };
 }
 
+
 // XAccessibleContext
 
-sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent()
+
+sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  )
 {
-    OExternalLockGuard aGuard(this);
+    OExternalLockGuard aGuard( this );
 
     sal_Int32 nIndexInParent = -1;
 
-    if (m_pMenu)
+    if ( m_pMenu )
     {
         vcl::Window* pWindow = m_pMenu->GetWindow();
-        if (pWindow)
+        if ( pWindow )
         {
             vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
-            if (pParent)
+            if ( pParent )
             {
-                for (sal_uInt16 n = pParent->GetAccessibleChildWindowCount(); n;)
+                for ( sal_uInt16 n = pParent->GetAccessibleChildWindowCount(); n; )
                 {
-                    vcl::Window* pChild = pParent->GetAccessibleChildWindow(--n);
-                    if (pChild == pWindow)
+                    vcl::Window* pChild = pParent->GetAccessibleChildWindow( --n );
+                    if ( pChild == pWindow )
                     {
                         nIndexInParent = n;
                         break;
@@ -152,20 +164,24 @@ sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent()
     return nIndexInParent;
 }
 
-sal_Int16 VCLXAccessibleMenuBar::getAccessibleRole()
+
+sal_Int16 VCLXAccessibleMenuBar::getAccessibleRole(  )
 {
-    OExternalLockGuard aGuard(this);
+    OExternalLockGuard aGuard( this );
 
     return AccessibleRole::MENU_BAR;
 }
 
+
 // XAccessibleExtendedComponent
 
-sal_Int32 VCLXAccessibleMenuBar::getBackground()
+
+sal_Int32 VCLXAccessibleMenuBar::getBackground(  )
 {
-    OExternalLockGuard aGuard(this);
+    OExternalLockGuard aGuard( this );
 
     return sal_Int32(Application::GetSettings().GetStyleSettings().GetMenuBarColor());
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

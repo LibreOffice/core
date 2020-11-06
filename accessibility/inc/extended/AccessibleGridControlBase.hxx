@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+
 #pragma once
 
 #include <vcl/accessibletable.hxx>
@@ -34,36 +35,39 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/uno3.hxx>
 
-namespace vcl
-{
-class Window;
+
+namespace vcl { class Window; }
+
+namespace utl {
+    class AccessibleStateSetHelper;
 }
 
-namespace utl
-{
-class AccessibleStateSetHelper;
-}
 
-namespace accessibility
-{
+namespace accessibility {
+
 typedef ::cppu::WeakAggComponentImplHelper4<
-    css::accessibility::XAccessibleContext, css::accessibility::XAccessibleComponent,
-    css::accessibility::XAccessibleEventBroadcaster, css::lang::XServiceInfo>
-    AccessibleGridControlImplHelper;
+            css::accessibility::XAccessibleContext,
+            css::accessibility::XAccessibleComponent,
+            css::accessibility::XAccessibleEventBroadcaster,
+            css::lang::XServiceInfo >
+        AccessibleGridControlImplHelper;
 
 /** The GridControl accessible objects inherit from this base class. It
     implements basic functionality for various Accessibility interfaces and
     the event broadcaster and contains the osl::Mutex. */
-class AccessibleGridControlBase : public ::cppu::BaseMutex, public AccessibleGridControlImplHelper
+class AccessibleGridControlBase :
+    public ::cppu::BaseMutex,
+    public AccessibleGridControlImplHelper
 {
 public:
     /** Constructor sets specified name and description.
         @param rxParent  XAccessible interface of the parent object.
         @param rTable    The Table control.
         @param eObjType  Type of accessible table control. */
-    AccessibleGridControlBase(const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-                              ::vcl::table::IAccessibleTable& rTable,
-                              ::vcl::table::AccessibleTableControlObjType eObjType);
+    AccessibleGridControlBase(
+        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        ::vcl::table::IAccessibleTable& rTable,
+        ::vcl::table::AccessibleTableControlObjType  eObjType );
 
 protected:
     virtual ~AccessibleGridControlBase() override;
@@ -75,8 +79,8 @@ public:
     // XAccessibleContext
 
     /** @return  A reference to the parent accessible object. */
-    virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleParent() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    getAccessibleParent() override;
 
     /** @return  The index of this object among the parent's children. */
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
@@ -94,12 +98,12 @@ public:
     /** @return
             The relation set (the GridControl does not have one).
     */
-    virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet>
-        SAL_CALL getAccessibleRelationSet() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
+        getAccessibleRelationSet() override;
 
     /** @return  The set of current states. */
-    virtual css::uno::Reference<css::accessibility::XAccessibleStateSet>
-        SAL_CALL getAccessibleStateSet() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL
+        getAccessibleStateSet() override;
 
     /** @return  The parent's locale. */
     virtual css::lang::Locale SAL_CALL getLocale() override;
@@ -120,7 +124,7 @@ public:
 
     /** @return
         TRUE, if the point lies within the bounding box of this object. */
-    virtual sal_Bool SAL_CALL containsPoint(const css::awt::Point& rPoint) override;
+    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& rPoint ) override;
 
     /** @return  The bounding box of this object. */
     virtual css::awt::Rectangle SAL_CALL getBounds() override;
@@ -136,8 +140,9 @@ public:
     /** @return  The size of the bounding box. */
     virtual css::awt::Size SAL_CALL getSize() override;
 
-    virtual sal_Int32 SAL_CALL getForeground() override;
-    virtual sal_Int32 SAL_CALL getBackground() override;
+    virtual sal_Int32 SAL_CALL getForeground(  ) override;
+    virtual sal_Int32 SAL_CALL getBackground(  ) override;
+
 
     /*  Derived classes have to implement:
         -   getAccessibleAt,
@@ -146,33 +151,32 @@ public:
     /** @return
             The accessible child rendered under the given point.
     */
-    virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleAtPoint(const css::awt::Point& rPoint) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     // XAccessibleEventBroadcaster
 
     /** Adds a new event listener */
     virtual void SAL_CALL addAccessibleEventListener(
-        const css::uno::Reference<css::accessibility::XAccessibleEventListener>& rxListener)
-        override;
+            const css::uno::Reference< css::accessibility::XAccessibleEventListener>& rxListener ) override;
 
     /** Removes an event listener. */
     virtual void SAL_CALL removeAccessibleEventListener(
-        const css::uno::Reference<css::accessibility::XAccessibleEventListener>& rxListener)
-        override;
+            const css::uno::Reference< css::accessibility::XAccessibleEventListener>& rxListener ) override;
 
     // XTypeProvider
 
     /** @return  a unique implementation ID. */
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XServiceInfo
 
     /** @return  Whether the specified service is supported by this class. */
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
 
     /** @return  a list of all supported services. */
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
+    getSupportedServiceNames() override;
 
     /*  Derived classes have to implement:
         -   getImplementationName. */
@@ -183,8 +187,10 @@ public:
     inline ::vcl::table::AccessibleTableControlObjType getType() const;
 
     /** Commits an event to all listeners. */
-    void commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
-                     const css::uno::Any& rOldValue);
+    void commitEvent(
+            sal_Int16 nEventId,
+            const css::uno::Any& rNewValue,
+            const css::uno::Any& rOldValue );
     /** @return  TRUE, if the object is not disposed or disposing. */
     bool isAlive() const;
 
@@ -222,7 +228,7 @@ protected:
 
     /** Changes the name of the object (flat assignment, no notify).
         @attention  This method requires a locked mutex. */
-    inline void implSetName(const OUString& rName);
+    inline void implSetName( const OUString& rName );
 
     /** Locks all mutex's and calculates the bounding box relative to the
         parent window.
@@ -237,16 +243,13 @@ protected:
     tools::Rectangle getBoundingBoxOnScreen();
 
     ::comphelper::AccessibleEventNotifier::TClientId getClientId() const { return m_aClientId; }
-    void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId)
-    {
-        m_aClientId = _aNewClientId;
-    }
+    void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId) { m_aClientId = _aNewClientId; }
 
 protected:
     // members
 
     /** The parent accessible object. */
-    css::uno::Reference<css::accessibility::XAccessible> m_xParent;
+    css::uno::Reference< css::accessibility::XAccessible > m_xParent;
     /** The SVT Table control. */
     ::vcl::table::IAccessibleTable& m_aTable;
     /** The type of this object (for names, descriptions, state sets, ...). */
@@ -257,16 +260,19 @@ private:
     OUString m_aName;
     /** Localized description text. */
     OUString m_aDescription;
-    ::comphelper::AccessibleEventNotifier::TClientId m_aClientId;
+    ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
 };
+
 
 // a version of AccessibleGridControlBase which implements not only the XAccessibleContext,
 // but also the XAccessible
 
-typedef ::cppu::ImplHelper1<css::accessibility::XAccessible> GridControlAccessibleElement_Base;
+typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessible
+                            >   GridControlAccessibleElement_Base;
 
-class GridControlAccessibleElement : public AccessibleGridControlBase,
-                                     public GridControlAccessibleElement_Base
+class GridControlAccessibleElement
+            :public AccessibleGridControlBase
+            ,public GridControlAccessibleElement_Base
 {
 protected:
     /** Constructor sets specified name and description.
@@ -276,15 +282,15 @@ protected:
         @param eObjType    Type of table control
     */
     GridControlAccessibleElement(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::table::IAccessibleTable& rTable,
-        ::vcl::table::AccessibleTableControlObjType eObjType);
+        ::vcl::table::AccessibleTableControlObjType  eObjType );
 
 public:
     // XInterface
-    DECLARE_XINTERFACE()
+    DECLARE_XINTERFACE( )
     // XTypeProvider
-    DECLARE_XTYPEPROVIDER()
+    DECLARE_XTYPEPROVIDER( )
 
 protected:
     virtual ~GridControlAccessibleElement() override;
@@ -293,12 +299,12 @@ protected:
     // XAccessible
 
     /** @return  The XAccessibleContext interface of this object. */
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
+    getAccessibleContext() override;
 
 private:
-    GridControlAccessibleElement(const GridControlAccessibleElement&) = delete;
-    GridControlAccessibleElement& operator=(const GridControlAccessibleElement&) = delete;
+    GridControlAccessibleElement( const GridControlAccessibleElement& ) = delete;
+    GridControlAccessibleElement& operator=( const GridControlAccessibleElement& ) = delete;
 };
 
 // inlines
@@ -308,8 +314,15 @@ inline ::vcl::table::AccessibleTableControlObjType AccessibleGridControlBase::ge
     return m_eObjType;
 }
 
-inline void AccessibleGridControlBase::implSetName(const OUString& rName) { m_aName = rName; }
+inline void AccessibleGridControlBase::implSetName(
+        const OUString& rName )
+{
+    m_aName = rName;
+}
+
 
 } // namespace accessibility
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

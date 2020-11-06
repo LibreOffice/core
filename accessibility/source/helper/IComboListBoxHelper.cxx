@@ -11,7 +11,10 @@
 
 namespace accessibility
 {
-IComboListBoxHelper::~IComboListBoxHelper() {}
+
+IComboListBoxHelper::~IComboListBoxHelper()
+{
+}
 
 }
 

@@ -42,200 +42,214 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
+
 // VCLXAccessibleRadioButton
 
-void VCLXAccessibleRadioButton::ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent)
+
+void VCLXAccessibleRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    switch (rVclWindowEvent.GetId())
+    switch ( rVclWindowEvent.GetId() )
     {
         case VclEventId::RadiobuttonToggle:
         {
             Any aOldValue;
             Any aNewValue;
 
-            VCLXRadioButton* pVCLXRadioButton = static_cast<VCLXRadioButton*>(GetVCLXWindow());
-            if (pVCLXRadioButton && pVCLXRadioButton->getState())
+            VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
+            if ( pVCLXRadioButton && pVCLXRadioButton->getState() )
                 aNewValue <<= AccessibleStateType::CHECKED;
             else
                 aOldValue <<= AccessibleStateType::CHECKED;
 
-            NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         default:
-            VCLXAccessibleTextComponent::ProcessWindowEvent(rVclWindowEvent);
-    }
+            VCLXAccessibleTextComponent::ProcessWindowEvent( rVclWindowEvent );
+   }
 }
 
-void VCLXAccessibleRadioButton::FillAccessibleRelationSet(
-    utl::AccessibleRelationSetHelper& rRelationSet)
-{
-    VCLXAccessibleTextComponent::FillAccessibleRelationSet(rRelationSet);
 
-    VclPtr<RadioButton> pRadioButton = GetAsDynamic<RadioButton>();
-    if (!pRadioButton)
+void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
+{
+    VCLXAccessibleTextComponent::FillAccessibleRelationSet( rRelationSet );
+
+    VclPtr< RadioButton > pRadioButton = GetAsDynamic< RadioButton >();
+    if ( !pRadioButton )
         return;
 
-    std::vector<VclPtr<RadioButton>> aGroup(pRadioButton->GetRadioButtonGroup());
+    std::vector< VclPtr<RadioButton> > aGroup(pRadioButton->GetRadioButtonGroup());
     if (!aGroup.empty())
     {
-        std::vector<Reference<XInterface>> aVec;
+        std::vector< Reference< XInterface > > aVec;
         aVec.reserve(aGroup.size());
         std::transform(aGroup.begin(), aGroup.end(), std::back_inserter(aVec),
-                       [](const VclPtr<RadioButton>& rxItem) { return rxItem->GetAccessible(); });
-        rRelationSet.AddRelation(AccessibleRelation(AccessibleRelationType::MEMBER_OF,
-                                                    comphelper::containerToSequence(aVec)));
+            [](const VclPtr<RadioButton>& rxItem) { return rxItem->GetAccessible(); });
+        rRelationSet.AddRelation( AccessibleRelation( AccessibleRelationType::MEMBER_OF,
+                                                      comphelper::containerToSequence(aVec) ) );
     }
 }
 
-void VCLXAccessibleRadioButton::FillAccessibleStateSet(utl::AccessibleStateSetHelper& rStateSet)
+
+void VCLXAccessibleRadioButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
-    VCLXAccessibleTextComponent::FillAccessibleStateSet(rStateSet);
+    VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 
-    VCLXRadioButton* pVCLXRadioButton = static_cast<VCLXRadioButton*>(GetVCLXWindow());
-    if (pVCLXRadioButton)
+    VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
+    if ( pVCLXRadioButton )
     {
-        rStateSet.AddState(AccessibleStateType::FOCUSABLE);
-        if (pVCLXRadioButton->getState())
-            rStateSet.AddState(AccessibleStateType::CHECKED);
+        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+        if ( pVCLXRadioButton->getState() )
+            rStateSet.AddState( AccessibleStateType::CHECKED );
     }
 }
+
 
 // XInterface
 
-IMPLEMENT_FORWARD_XINTERFACE2(VCLXAccessibleRadioButton, VCLXAccessibleTextComponent,
-                              VCLXAccessibleRadioButton_BASE)
+
+IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleRadioButton, VCLXAccessibleTextComponent, VCLXAccessibleRadioButton_BASE )
+
 
 // XTypeProvider
 
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleRadioButton, VCLXAccessibleTextComponent,
-                                 VCLXAccessibleRadioButton_BASE)
+
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleRadioButton, VCLXAccessibleTextComponent, VCLXAccessibleRadioButton_BASE )
+
 
 // XServiceInfo
+
 
 OUString VCLXAccessibleRadioButton::getImplementationName()
 {
     return "com.sun.star.comp.toolkit.AccessibleRadioButton";
 }
 
-Sequence<OUString> VCLXAccessibleRadioButton::getSupportedServiceNames()
+
+Sequence< OUString > VCLXAccessibleRadioButton::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessibleRadioButton" };
 }
 
+
 // XAccessibleAction
 
-sal_Int32 VCLXAccessibleRadioButton::getAccessibleActionCount()
+
+sal_Int32 VCLXAccessibleRadioButton::getAccessibleActionCount( )
 {
-    OExternalLockGuard aGuard(this);
+    OExternalLockGuard aGuard( this );
 
     return 1;
 }
 
-sal_Bool VCLXAccessibleRadioButton::doAccessibleAction(sal_Int32 nIndex)
-{
-    OExternalLockGuard aGuard(this);
 
-    if (nIndex != 0)
+sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex )
+{
+    OExternalLockGuard aGuard( this );
+
+    if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
-    VCLXRadioButton* pVCLXRadioButton = static_cast<VCLXRadioButton*>(GetVCLXWindow());
-    if (pVCLXRadioButton && !pVCLXRadioButton->getState())
-        pVCLXRadioButton->setState(true);
+    VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
+    if ( pVCLXRadioButton && !pVCLXRadioButton->getState() )
+        pVCLXRadioButton->setState( true );
 
     return true;
 }
 
-OUString VCLXAccessibleRadioButton::getAccessibleActionDescription(sal_Int32 nIndex)
+OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 nIndex )
 {
-    OExternalLockGuard aGuard(this);
+    OExternalLockGuard aGuard( this );
 
-    if (nIndex != 0)
+    if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
     return RID_STR_ACC_ACTION_SELECT;
 }
 
-Reference<XAccessibleKeyBinding>
-VCLXAccessibleRadioButton::getAccessibleActionKeyBinding(sal_Int32 nIndex)
+Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActionKeyBinding( sal_Int32 nIndex )
 {
-    OExternalLockGuard aGuard(this);
+    OExternalLockGuard aGuard( this );
 
-    if (nIndex != 0)
+    if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
     OAccessibleKeyBindingHelper* pKeyBindingHelper = new OAccessibleKeyBindingHelper();
-    Reference<XAccessibleKeyBinding> xKeyBinding = pKeyBindingHelper;
+    Reference< XAccessibleKeyBinding > xKeyBinding = pKeyBindingHelper;
 
     VclPtr<vcl::Window> pWindow = GetWindow();
-    if (pWindow)
+    if ( pWindow )
     {
         KeyEvent aKeyEvent = pWindow->GetActivationKey();
         vcl::KeyCode aKeyCode = aKeyEvent.GetKeyCode();
-        if (aKeyCode.GetCode() != 0)
+        if ( aKeyCode.GetCode() != 0 )
         {
             awt::KeyStroke aKeyStroke;
             aKeyStroke.Modifiers = 0;
-            if (aKeyCode.IsShift())
+            if ( aKeyCode.IsShift() )
                 aKeyStroke.Modifiers |= awt::KeyModifier::SHIFT;
-            if (aKeyCode.IsMod1())
+            if ( aKeyCode.IsMod1() )
                 aKeyStroke.Modifiers |= awt::KeyModifier::MOD1;
-            if (aKeyCode.IsMod2())
+            if ( aKeyCode.IsMod2() )
                 aKeyStroke.Modifiers |= awt::KeyModifier::MOD2;
-            if (aKeyCode.IsMod3())
+            if ( aKeyCode.IsMod3() )
                 aKeyStroke.Modifiers |= awt::KeyModifier::MOD3;
             aKeyStroke.KeyCode = aKeyCode.GetCode();
             aKeyStroke.KeyChar = aKeyEvent.GetCharCode();
-            aKeyStroke.KeyFunc = static_cast<sal_Int16>(aKeyCode.GetFunction());
-            pKeyBindingHelper->AddKeyBinding(aKeyStroke);
+            aKeyStroke.KeyFunc = static_cast< sal_Int16 >( aKeyCode.GetFunction() );
+            pKeyBindingHelper->AddKeyBinding( aKeyStroke );
         }
     }
 
     return xKeyBinding;
 }
 
+
 // XAccessibleValue
 
-Any VCLXAccessibleRadioButton::getCurrentValue()
+
+Any VCLXAccessibleRadioButton::getCurrentValue(  )
 {
-    OExternalLockGuard aGuard(this);
+    OExternalLockGuard aGuard( this );
 
     Any aValue;
 
-    VCLXRadioButton* pVCLXRadioButton = static_cast<VCLXRadioButton*>(GetVCLXWindow());
-    if (pVCLXRadioButton)
+    VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
+    if ( pVCLXRadioButton )
         aValue <<= static_cast<sal_Int32>(pVCLXRadioButton->getState());
 
     return aValue;
 }
 
-sal_Bool VCLXAccessibleRadioButton::setCurrentValue(const Any& aNumber)
+
+sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber )
 {
-    OExternalLockGuard aGuard(this);
+    OExternalLockGuard aGuard( this );
 
     bool bReturn = false;
 
-    VCLXRadioButton* pVCLXRadioButton = static_cast<VCLXRadioButton*>(GetVCLXWindow());
-    if (pVCLXRadioButton)
+    VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
+    if ( pVCLXRadioButton )
     {
         sal_Int32 nValue = 0;
-        OSL_VERIFY(aNumber >>= nValue);
+        OSL_VERIFY( aNumber >>= nValue );
 
-        if (nValue < 0)
+        if ( nValue < 0 )
             nValue = 0;
-        else if (nValue > 1)
+        else if ( nValue > 1 )
             nValue = 1;
 
-        pVCLXRadioButton->setState(nValue == 1);
+        pVCLXRadioButton->setState( nValue == 1 );
         bReturn = true;
     }
 
     return bReturn;
 }
 
-Any VCLXAccessibleRadioButton::getMaximumValue()
+
+Any VCLXAccessibleRadioButton::getMaximumValue(  )
 {
-    OExternalLockGuard aGuard(this);
+    OExternalLockGuard aGuard( this );
 
     Any aValue;
     aValue <<= sal_Int32(1);
@@ -243,14 +257,16 @@ Any VCLXAccessibleRadioButton::getMaximumValue()
     return aValue;
 }
 
-Any VCLXAccessibleRadioButton::getMinimumValue()
+
+Any VCLXAccessibleRadioButton::getMinimumValue(  )
 {
-    OExternalLockGuard aGuard(this);
+    OExternalLockGuard aGuard( this );
 
     Any aValue;
     aValue <<= sal_Int32(0);
 
     return aValue;
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
