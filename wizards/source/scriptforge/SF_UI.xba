@@ -79,7 +79,7 @@ Const cstMACROEXECNORMAL		= 0		&apos;	Default, execution depends on user configu
 Const cstMACROEXECNEVER			= 1		&apos;	Macros are not executed
 Const cstMACROEXECALWAYS		= 2		&apos;	Macros are always executed
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Public Function Dispose() As Variant
@@ -208,7 +208,7 @@ Public Function CreateBaseDocument(Optional ByVal FileName As Variant _
 &apos;&apos;&apos; Create a new LibreOffice Base document embedding an empty database of the given type
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: Identifies the file to create. It must follow the SF_FileSystem.FileNaming notation
-&apos;&apos;&apos;			If the file altready exists, it is overwritten without warning
+&apos;&apos;&apos;			If the file already exists, it is overwritten without warning
 &apos;&apos;&apos;		EmbeddedDatabase: either &quot;HSQLDB&quot; (default) or &quot;FIREBIRD&quot;
 &apos;&apos;&apos;		RegistrationName: the name used to store the new database in the databases register
 &apos;&apos;&apos;			If &quot;&quot; (default), no registration takes place

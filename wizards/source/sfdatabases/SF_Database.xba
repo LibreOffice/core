@@ -67,7 +67,7 @@ Private	_MetaData				As Object		&apos; com.sun.star.sdbc.XDatabaseMetaData
 
 REM ============================================================ MODULE CONSTANTS
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()
@@ -609,7 +609,7 @@ Private Function _ExecuteSql(ByVal psSql As String _
 								, ByVal pbDirect As Boolean _
 								) As Variant
 &apos;&apos;&apos;	Return a read-only Resultset based on a SELECT SQL statement or execute the given action SQL (INSERT, CREATE TABLE, ...)
-&apos;&apos;&apos;	The method raises a fatal error when the SQL statement cannot be interpredted
+&apos;&apos;&apos;	The method raises a fatal error when the SQL statement cannot be interpreted
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		psSql : the SQL statement. Square brackets are replaced by the correct field surrounding character
 &apos;&apos;&apos;		pbDirect: when True, no syntax conversion is done by LO. Default = False

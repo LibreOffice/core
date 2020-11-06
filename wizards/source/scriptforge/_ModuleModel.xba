@@ -144,7 +144,7 @@ Check:
 	&apos;	_EnterFunction returns True when current method is invoked from a user script
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		&apos;	Check Arg1 is a string and Arg2 is a number.
-		&apos;	Validation rules for scalars and arrays are desribed in SF_Utils
+		&apos;	Validation rules for scalars and arrays are described in SF_Utils
 		If Not SF_Utils._Validate(Arg1, &quot;Arg1&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(Arg2, &quot;Arg2&quot;, V_NUMERIC) Then GoTo Finally
 		&apos;	Fatal error ?
