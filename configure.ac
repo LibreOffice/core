@@ -12980,7 +12980,7 @@ CFLAGS=$my_original_CFLAGS
 CXXFLAGS=$my_original_CXXFLAGS
 CPPFLAGS=$my_original_CPPFLAGS
 
-AC_LINK_FILES([include], [include])
+AC_CONFIG_LINKS([include:include])
 AC_CONFIG_FILES([config_host.mk
                  config_host_lang.mk
                  Makefile
