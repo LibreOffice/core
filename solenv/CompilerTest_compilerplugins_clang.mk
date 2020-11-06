@@ -82,7 +82,6 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/staticvar \
     compilerplugins/clang/test/stdfunction \
     compilerplugins/clang/test/stringadd \
-    compilerplugins/clang/test/stringbuffer \
     compilerplugins/clang/test/stringconcatauto \
     compilerplugins/clang/test/stringconcatliterals \
     compilerplugins/clang/test/stringconstant \
