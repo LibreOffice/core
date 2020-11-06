@@ -73,7 +73,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             printf("Code point 0x%lx exceeds MAX_ADDRESS 0x%x, Please increase MAX_ADDRESS", static_cast<long unsigned int>(nChar), MAX_ADDRESS);
             exit(1);
         }
-        OUString key=Ostr.copy(nPos)+sep;
+        OUString key=Ostr.subView(nPos)+sep;
         sal_Int32 idx = result.indexOf(key);
         if (key.getLength() > max) max=key.getLength();
         if (idx >= 0) {

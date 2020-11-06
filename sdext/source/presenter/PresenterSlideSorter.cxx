@@ -1610,7 +1610,7 @@ OUString PresenterSlideSorter::MouseOverManager::GetFittingText (
         const OUString sEllipses ("...");
         while (true)
         {
-            const OUString sCandidate (rsText.copy(0,nLength) + sEllipses);
+            const OUString sCandidate (rsText.subView(0,nLength) + sEllipses);
             const double nWidth (
                 PresenterCanvasHelper::GetTextSize(mpFont->mxFont, sCandidate).Width);
             if (nWidth > nMaximalWidth)

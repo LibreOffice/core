@@ -350,7 +350,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
                     if (catpos > 2)
                     {
                         // remove category name for affixation and casing
-                        catst = " " + sTerm.copy(catpos);
+                        catst = OUString::Concat(" ") + sTerm.subView(catpos);
                         sTerm = sTerm.copy(0, catpos);
                         sTerm = sTerm.trim();
                     }
@@ -429,15 +429,15 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
         sal_Int32 pos = aRTerm.lastIndexOf(' ');
         if (!pos)
             return noMeanings;
-        xTmpRes = xSpell->spell( "<?xml?><query type='stem'><word>" +
-            aRTerm.copy(pos + 1) + "</word></query>", static_cast<sal_uInt16>(nLanguage), rProperties );
+        xTmpRes = xSpell->spell( OUString::Concat("<?xml?><query type='stem'><word>") +
+            aRTerm.subView(pos + 1) + "</word></query>", static_cast<sal_uInt16>(nLanguage), rProperties );
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
             if (seq.hasElements())
             {
                 aPTerm = aRTerm.copy(pos + 1);
-                aRTerm = aRTerm.copy(0, pos + 1) + seq[0];
+                aRTerm = aRTerm.subView(0, pos + 1) + seq[0];
 #if  0
                 for (int i = 0; i < seq.getLength(); i++)
                 {

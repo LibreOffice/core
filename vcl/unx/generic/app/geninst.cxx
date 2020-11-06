@@ -68,7 +68,7 @@ OUString SalGenericInstance::getOSVersion()
             if (nTooDetailed < 1 || nTooDetailed > 8)
                 aKernelVer = "Linux (misparsed version)";
             else // "3.16.7-29-desktop ..."
-                aKernelVer = "Linux " + aVers.copy(0, nTooDetailed);
+                aKernelVer = OUString::Concat("Linux ") + aVers.subView(0, nTooDetailed);
         }
         fclose( pVersion );
     }
