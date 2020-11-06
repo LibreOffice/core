@@ -311,10 +311,18 @@ std::unique_ptr<SalPrinter> GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPri
  */
 thread_local std::stack<sal_uInt32> GtkYieldMutex::yieldCounts;
 
-void GtkYieldMutex::ThreadsEnter()
+/*
+ * If a system-GTK is call then always do a ThreadsEnter after that a
+ * ThreadsLeave, but in this case the lock counter is wrong when not 0
+ * This variable is used to handle this behavior when lock counter > 0.
+ * Cascading should not occur
+ */
+thread_local bool GtkYieldMutex::bRestoreInLeave = false;
+
+void GtkYieldMutex::RestoreLockCount()
 {
-    acquire();
-    if (!yieldCounts.empty()) {
+    if (!yieldCounts.empty())
+    {
         auto n = yieldCounts.top();
         yieldCounts.pop();
         assert(n > 0);
@@ -324,11 +332,31 @@ void GtkYieldMutex::ThreadsEnter()
     }
 }
 
+void GtkYieldMutex::ThreadsEnter()
+{
+    assert(!bRestoreInLeave);
+    acquire();
+    if(m_nCount > 1)
+    {
+        bRestoreInLeave = true;
+        yieldCounts.push(m_nCount);
+    }
+    else
+        RestoreLockCount();
+}
+
 void GtkYieldMutex::ThreadsLeave()
 {
     assert(m_nCount != 0);
-    yieldCounts.push(m_nCount);
+    sal_uInt32 memCnt = m_nCount;
     release(true);
+    if(bRestoreInLeave)
+    {
+        RestoreLockCount();
+        bRestoreInLeave = false;
+    }
+    else
+        yieldCounts.push(memCnt);
 }
 
 std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics *pG,
