@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8741d45_b036aecc",
+        "filename": "external/mariadb-connector-c/UnpackedTarball_mariadb-connector-c.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-11-06T11:13:15Z",
+      "side": 1,
+      "message": "this should go in StaticLibrary_mariadb-connector-c.mk\n\n... ah there\u0027s actually a separate openssl-headers, how non-obvious",
+      "revId": "e28a62b3297ac4405ce754b61218d55814715e05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92106b31_d946b823",
+        "filename": "external/mariadb-connector-c/configs/linux_my_config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-11-06T11:13:15Z",
+      "side": 1,
+      "message": "very surprisingly this doesn\u0027t work, becuase if HAVE_OPENSSL isn\u0027t defined, this header isn\u0027t includeed",
+      "revId": "e28a62b3297ac4405ce754b61218d55814715e05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
