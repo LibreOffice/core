@@ -41,8 +41,6 @@ typedef cppu::WeakComponentImplHelper <
     css::beans::XPropertySetInfo
     > ThemeInterfaceBase;
 
-class Paint;
-
 /** Simple collection of colors, gradients, fonts that define the
     look of the sidebar and its controls.
 */
@@ -75,21 +73,18 @@ public:
         Color_DropDownBorder,
         Color_Highlight,
         Color_HighlightText,
+        Color_DeckBackground,
+        Color_DeckTitleBarBackground,
+        Color_PanelBackground,
+        Color_PanelTitleBarBackground,
+        Color_TabBarBackground,
+        Color_TabItemBackgroundNormal,
+        Color_TabItemBackgroundHighlight,
+        Color_HorizontalBorder,
+        Color_VerticalBorder,
+        Color_DropDownBackground,
 
-        Color_Paint_,
-
-        Paint_DeckBackground,
-        Paint_DeckTitleBarBackground,
-        Paint_PanelBackground,
-        Paint_PanelTitleBarBackground,
-        Paint_TabBarBackground,
-        Paint_TabItemBackgroundNormal,
-        Paint_TabItemBackgroundHighlight,
-        Paint_HorizontalBorder,
-        Paint_VerticalBorder,
-        Paint_DropDownBackground,
-
-        Paint_Int_,
+        Color_Int_,
 
         Int_DeckTitleBarHeight,
         Int_DeckBorderSize,
@@ -120,8 +115,6 @@ public:
 
     static Image GetImage (const ThemeItem eItem);
     static Color GetColor (const ThemeItem eItem);
-    static const Paint& GetPaint (const ThemeItem eItem);
-    static Wallpaper GetWallpaper (const ThemeItem eItem);
     static sal_Int32 GetInteger (const ThemeItem eItem);
     static bool GetBoolean (const ThemeItem eItem);
 
@@ -170,7 +163,6 @@ private:
 
     std::vector<Image> maImages;
     std::vector<Color> maColors;
-    std::vector<Paint> maPaints;
     std::vector<sal_Int32> maIntegers;
     std::vector<bool> maBooleans;
     bool mbIsHighContrastMode;
@@ -194,7 +186,6 @@ private:
     {
         PT_Image,
         PT_Color,
-        PT_Paint,
         PT_Integer,
         PT_Boolean,
         PT_Invalid

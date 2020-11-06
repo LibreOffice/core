@@ -1465,7 +1465,7 @@ void SidebarController::UpdateCloseIndicator (const bool bCloseAfterDrag)
             const Image aImage (Theme::GetImage(Theme::Image_CloseIndicator));
             pFixedImage->SetImage(aImage);
             pFixedImage->SetSizePixel(aImage.GetSizePixel());
-            pFixedImage->SetBackground(Theme::GetWallpaper(Theme::Paint_DeckBackground));
+            pFixedImage->SetBackground(Theme::GetColor(Theme::Color_DeckBackground));
         }
 
         // Place and show the indicator.

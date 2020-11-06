@@ -18,7 +18,6 @@
  */
 
 #include <sidebar/TitleBar.hxx>
-#include <sidebar/Paint.hxx>
 #include <sidebar/AccessibleTitleBar.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -33,12 +32,12 @@ namespace sfx2::sidebar {
 
 TitleBar::TitleBar(const OUString& rsTitle,
                    vcl::Window* pParentWindow,
-                   const sidebar::Paint& rInitialBackgroundPaint)
+                   const Color& rInitialBackgroundColor)
     : Window(pParentWindow)
     , maToolBox(VclPtr<SidebarToolBox>::Create(this))
     , msTitle(rsTitle)
     , maIcon()
-    , maBackgroundPaint(rInitialBackgroundPaint)
+    , maBackgroundColor(rInitialBackgroundColor)
 {
     maToolBox->SetSelectHdl(LINK(this, TitleBar, SelectionHandler));
 }
@@ -68,7 +67,7 @@ void TitleBar::SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 
 void TitleBar::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    rRenderContext.SetBackground(maBackgroundPaint.GetWallpaper());
+    rRenderContext.SetBackground(maBackgroundColor);
 }
 
 void TitleBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rUpdateArea*/)
@@ -85,7 +84,7 @@ void TitleBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
 
 void TitleBar::DataChanged (const DataChangedEvent& /*rEvent*/)
 {
-    maBackgroundPaint = GetBackgroundPaint();
+    maBackgroundColor = GetBackgroundPaintColor();
     Invalidate();
 }
 

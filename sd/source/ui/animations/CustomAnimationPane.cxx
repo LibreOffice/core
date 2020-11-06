@@ -880,9 +880,9 @@ void CustomAnimationPane::DataChanged (const DataChangedEvent&)
 
 void CustomAnimationPane::UpdateLook()
 {
-    Wallpaper aBackground (
-        ::sfx2::sidebar::Theme::GetWallpaper(
-            ::sfx2::sidebar::Theme::Paint_PanelBackground));
+    Color aBackground (
+        ::sfx2::sidebar::Theme::GetColor(
+            ::sfx2::sidebar::Theme::Color_PanelBackground));
     SetBackground(aBackground);
 }
 

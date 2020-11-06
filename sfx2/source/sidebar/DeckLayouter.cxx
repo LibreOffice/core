@@ -616,7 +616,7 @@ void UpdateFiller (
     if (rBox.GetHeight() > 0)
     {
         // Show the filler.
-        rFiller.SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
+        rFiller.SetBackground(Theme::GetColor(Theme::Color_PanelBackground));
         rFiller.SetPosSizePixel(rBox.TopLeft(), rBox.GetSize());
         rFiller.Show();
     }

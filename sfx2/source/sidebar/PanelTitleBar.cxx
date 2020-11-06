@@ -20,7 +20,6 @@
 #include <sidebar/PanelTitleBar.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
-#include <sidebar/Paint.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sidebar/ControllerFactory.hxx>
@@ -43,7 +42,7 @@ const sal_Int32 gaRightIconPadding (5);
 PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
                              vcl::Window* pParentWindow,
                              Panel* pPanel)
-    : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint()),
+    : TitleBar(rsTitle, pParentWindow, GetBackgroundPaintColor()),
       mbIsLeftButtonDown(false),
       mpPanel(pPanel),
       mxFrame(),
@@ -130,9 +129,9 @@ void PanelTitleBar::PaintDecoration (vcl::RenderContext& rRenderContext)
     }
 }
 
-Paint PanelTitleBar::GetBackgroundPaint()
+Color PanelTitleBar::GetBackgroundPaintColor()
 {
-    return Theme::GetPaint(Theme::Paint_PanelTitleBarBackground);
+    return Theme::GetColor(Theme::Color_PanelTitleBarBackground);
 }
 
 void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
