@@ -40,6 +40,8 @@
 #include <svl/zformat.hxx>
 
 #include <editeng/acorrcfg.hxx>
+#include <redline.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -427,8 +429,28 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         const bool replaceLastChar = sFrameText.getLength() > nEndPos && pFnd->GetShort()[0] == ':'
                                      && pFnd->GetShort().endsWith(":");
 
-        SwPaM aPam(pFrame->MapViewToModelPos(TextFrameIndex(rSttPos)),
-                   pFrame->MapViewToModelPos(TextFrameIndex(nEndPos + (replaceLastChar ? 1 : 0))));
+        SwPosition aStartPos( pFrame->MapViewToModelPos(TextFrameIndex(rSttPos) ));
+        SwPosition aEndPos( pFrame->MapViewToModelPos(TextFrameIndex(nEndPos + (replaceLastChar ? 1 : 0))) );
+        SwPaM aPam(aStartPos, aEndPos);
+
+        // don't replace, if a redline starts or ends within the original text
+        for ( SwRedlineTable::size_type nAct =
+                  pDoc->getIDocumentRedlineAccess().GetRedlinePos( m_rCursor.GetNode(), RedlineType::Any );
+                  nAct < pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++nAct )
+        {
+            const SwRangeRedline* pRed = pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];
+
+            if ( pRed->Start()->nNode > pTextNd->GetIndex() )
+                break;
+
+            // redline over the original text
+            if ( aStartPos < *pRed->End() && *pRed->Start() < aEndPos &&
+                 // starting or ending within the original text
+                 ( aStartPos < *pRed->Start() || *pRed->End() < aEndPos ) )
+            {
+                return bRet;
+            }
+        }
 
         if( pFnd->IsTextOnly() )
         {
