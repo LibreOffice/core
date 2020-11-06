@@ -10,4 +10,8 @@
  <library:library library:name="Depot" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/Depot/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="ScriptBindingLibrary" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/ScriptBindingLibrary/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="Access2Base" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/Access2Base/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
+ <library:library library:name="ScriptForge" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/ScriptForge/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
+ <library:library library:name="SFDatabases" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/SFDatabases/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
+ <library:library library:name="SFDialogs" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/SFDialogs/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
+ <library:library library:name="SFDocuments" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/SFDocuments/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  </library:libraries>

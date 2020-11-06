@@ -265,6 +265,26 @@ Directory gid_Dir_Basic_Tools
     DosName = "Tools";
 End
 
+Directory gid_Dir_Basic_ScriptForge
+    ParentID = gid_Dir_Basic;
+    DosName = "ScriptForge";
+End
+
+Directory gid_Dir_Basic_SFDatabases
+    ParentID = gid_Dir_Basic;
+    DosName = "SFDatabases";
+End
+
+Directory gid_Dir_Basic_SFDialogs
+    ParentID = gid_Dir_Basic;
+    DosName = "SFDialogs";
+End
+
+Directory gid_Dir_Basic_SFDocuments
+    ParentID = gid_Dir_Basic;
+    DosName = "SFDocuments";
+End
+
 Directory gid_Dir_Basic_Importwiz
     ParentID = gid_Dir_Basic;
     DosName = "ImportWizard";
