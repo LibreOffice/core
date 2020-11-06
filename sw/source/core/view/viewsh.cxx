@@ -51,6 +51,7 @@
 #include <ptqueue.hxx>
 #include <docsh.hxx>
 #include <pagedesc.hxx>
+#include <bookmrk.hxx>
 #include <ndole.hxx>
 #include <ndindex.hxx>
 #include <accmap.hxx>
@@ -2143,6 +2144,45 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
         rSh.EndAction();
 }
 
+static bool
+IsCursorInFieldmarkHidden(SwPaM const& rCursor, sw::FieldmarkMode const eMode)
+{
+    if (eMode == sw::FieldmarkMode::ShowBoth)
+    {
+        return false;
+    }
+    IDocumentMarkAccess const& rIDMA(*rCursor.GetDoc().getIDocumentMarkAccess());
+    // iterate, for nested fieldmarks
+    for (auto iter = rIDMA.getFieldmarksBegin(); iter != rIDMA.getFieldmarksEnd(); ++iter)
+    {
+        if (*rCursor.GetPoint() <= (**iter).GetMarkStart())
+        {
+            return false;
+        }
+        if (*rCursor.GetPoint() < (**iter).GetMarkEnd())
+        {
+            SwPosition const sepPos(sw::mark::FindFieldSep(
+                        *dynamic_cast<sw::mark::IFieldmark*>(*iter)));
+            if (eMode == sw::FieldmarkMode::ShowResult)
+            {
+                if (*rCursor.GetPoint() <= sepPos
+                    && *rCursor.GetPoint() != (**iter).GetMarkStart())
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (sepPos < *rCursor.GetPoint())
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 {
     if (*mpOpt == rOpt)
@@ -2183,7 +2223,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     // ( - SwEndPortion must _no_ longer be generated. )
     // - Of course, the screen is something completely different than the printer ...
     bReformat = bReformat || mpOpt->IsFieldName() != rOpt.IsFieldName();
-    bool const isEnableFieldNames(mpOpt->IsFieldName() != rOpt.IsFieldName() && rOpt.IsFieldName());
+    bool const isToggleFieldNames(mpOpt->IsFieldName() != rOpt.IsFieldName());
 
     // The map mode is changed, minima/maxima will be attended by UI
     if( mpOpt->GetZoom() != rOpt.GetZoom() && !IsPreview() )
@@ -2271,14 +2311,16 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         EndAction();
     }
 
-    if (isEnableFieldNames)
+    if (isToggleFieldNames)
     {
         for(SwViewShell& rSh : GetRingContainer())
         {
             if (SwCursorShell *const pSh = dynamic_cast<SwCursorShell *>(&rSh))
             {
-                if (pSh->CursorInsideInputField())
-                {   // move cursor out of input field
+                if ((mpOpt->IsFieldName() && pSh->CursorInsideInputField())
+                    || IsCursorInFieldmarkHidden(*pSh->GetCursor(),
+                            pSh->GetLayout()->GetFieldmarkMode()))
+                {   // move cursor out of field
                     pSh->Left(1, CRSR_SKIP_CHARS);
                 }
             }
