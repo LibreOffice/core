@@ -279,40 +279,6 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Image_CloseIndicator],
             Any(OUString("private:graphicrepository/cmd/lc_decrementlevel.png")));
-
-        // Gradient style
-        Color aGradientStop2 (aBaseBackgroundColor);
-        aGradientStop2.IncreaseLuminance(17);
-        Color aToolBoxBorderColor (aBaseBackgroundColor);
-        aToolBoxBorderColor.DecreaseLuminance(12);
-        setPropertyValue(
-            maPropertyIdToNameMap[Paint_ToolBoxBackground],
-            Any(Tools::VclToAwtGradient(Gradient(
-                        GradientStyle::Linear,
-                        aBaseBackgroundColor.GetRGBColor(),
-                        aGradientStop2.GetRGBColor()
-                        ))));
-        setPropertyValue(
-            maPropertyIdToNameMap[Paint_ToolBoxBorderTopLeft],
-            mbIsHighContrastMode
-                ? Any(util::Color(sal_uInt32(0x00ff00)))
-                : Any(util::Color(aToolBoxBorderColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Paint_ToolBoxBorderCenterCorners],
-            mbIsHighContrastMode
-                ? Any(util::Color(sal_uInt32(0x00ff00)))
-                : Any(util::Color(aToolBoxBorderColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Paint_ToolBoxBorderBottomRight],
-            mbIsHighContrastMode
-                ? Any(util::Color(sal_uInt32(0x00ff00)))
-                : Any(util::Color(aToolBoxBorderColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Rect_ToolBoxPadding],
-            Any(awt::Rectangle(2,2,2,2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Rect_ToolBoxBorder],
-            Any(awt::Rectangle(1,1,1,1)));
     }
     catch(beans::UnknownPropertyException const &)
     {
@@ -578,13 +544,12 @@ sal_Bool SAL_CALL Theme::hasPropertyByName (const OUString& rsPropertyName)
 
 void Theme::SetupPropertyMaps()
 {
-    maPropertyIdToNameMap.resize(Post_Rect_);
+    maPropertyIdToNameMap.resize(Post_Bool_);
     maImages.resize(Image_Color_ - Pre_Image_ - 1);
     maColors.resize(Color_Paint_ - Image_Color_ - 1);
     maPaints.resize(Paint_Int_ - Color_Paint_ - 1);
     maIntegers.resize(Int_Bool_ - Paint_Int_ - 1);
-    maBooleans.resize(Bool_Rect_ - Int_Bool_ - 1);
-    maRectangles.resize(Post_Rect_ - Bool_Rect_ - 1);
+    maBooleans.resize(Post_Bool_ - Int_Bool_ - 1);
 
     maPropertyNameToIdMap["Image_Grip"]=Image_Grip;
     maPropertyIdToNameMap[Image_Grip]="Image_Grip";
@@ -657,18 +622,6 @@ void Theme::SetupPropertyMaps()
     maPropertyNameToIdMap["Paint_VerticalBorder"]=Paint_VerticalBorder;
     maPropertyIdToNameMap[Paint_VerticalBorder]="Paint_VerticalBorder";
 
-    maPropertyNameToIdMap["Paint_ToolBoxBackground"]=Paint_ToolBoxBackground;
-    maPropertyIdToNameMap[Paint_ToolBoxBackground]="Paint_ToolBoxBackground";
-
-    maPropertyNameToIdMap["Paint_ToolBoxBorderTopLeft"]=Paint_ToolBoxBorderTopLeft;
-    maPropertyIdToNameMap[Paint_ToolBoxBorderTopLeft]="Paint_ToolBoxBorderTopLeft";
-
-    maPropertyNameToIdMap["Paint_ToolBoxBorderCenterCorners"]=Paint_ToolBoxBorderCenterCorners;
-    maPropertyIdToNameMap[Paint_ToolBoxBorderCenterCorners]="Paint_ToolBoxBorderCenterCorners";
-
-    maPropertyNameToIdMap["Paint_ToolBoxBorderBottomRight"]=Paint_ToolBoxBorderBottomRight;
-    maPropertyIdToNameMap[Paint_ToolBoxBorderBottomRight]="Paint_ToolBoxBorderBottomRight";
-
     maPropertyNameToIdMap["Paint_DropDownBackground"]=Paint_DropDownBackground;
     maPropertyIdToNameMap[Paint_DropDownBackground]="Paint_DropDownBackground";
 
@@ -731,13 +684,6 @@ void Theme::SetupPropertyMaps()
     maPropertyNameToIdMap["Bool_IsHighContrastModeActive"]=Bool_IsHighContrastModeActive;
     maPropertyIdToNameMap[Bool_IsHighContrastModeActive]="Bool_IsHighContrastModeActive";
 
-
-    maPropertyNameToIdMap["Rect_ToolBoxPadding"]=Rect_ToolBoxPadding;
-    maPropertyIdToNameMap[Rect_ToolBoxPadding]="Rect_ToolBoxPadding";
-
-    maPropertyNameToIdMap["Rect_ToolBoxBorder"]=Rect_ToolBoxBorder;
-    maPropertyIdToNameMap[Rect_ToolBoxBorder]="Rect_ToolBoxBorder";
-
     maRawValues.resize(maPropertyIdToNameMap.size());
 }
 
@@ -772,10 +718,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Paint_TabItemBackgroundHighlight:
         case Paint_HorizontalBorder:
         case Paint_VerticalBorder:
-        case Paint_ToolBoxBackground:
-        case Paint_ToolBoxBorderTopLeft:
-        case Paint_ToolBoxBorderCenterCorners:
-        case Paint_ToolBoxBorderBottomRight:
         case Paint_DropDownBackground:
             return PT_Paint;
 
@@ -802,10 +744,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Bool_IsHighContrastModeActive:
             return PT_Boolean;
 
-        case Rect_ToolBoxBorder:
-        case Rect_ToolBoxPadding:
-            return PT_Rectangle;
-
         default:
             return PT_Invalid;
     }
@@ -830,9 +768,6 @@ css::uno::Type const & Theme::GetCppuType (const PropertyType eType)
         case PT_Boolean:
             return cppu::UnoType<sal_Bool>::get();
 
-        case PT_Rectangle:
-            return cppu::UnoType<awt::Rectangle>::get();
-
         case PT_Invalid:
         default:
             return cppu::UnoType<void>::get();
@@ -853,9 +788,6 @@ sal_Int32 Theme::GetIndex (const ThemeItem eItem, const PropertyType eType)
             return eItem - Paint_Int_-1;
         case PT_Boolean:
             return eItem - Int_Bool_-1;
-        case PT_Rectangle:
-            return eItem - Bool_Rect_-1;
-
         default:
             OSL_ASSERT(false);
             return 0;
@@ -997,19 +929,6 @@ void Theme::ProcessNewValue (
                 {
                     HandleDataChange();
                 }
-            }
-            break;
-        }
-        case PT_Rectangle:
-        {
-            awt::Rectangle aBox;
-            if (rValue >>= aBox)
-            {
-                maRectangles[nIndex] = tools::Rectangle(
-                    aBox.X,
-                    aBox.Y,
-                    aBox.Width,
-                    aBox.Height);
             }
             break;
         }
