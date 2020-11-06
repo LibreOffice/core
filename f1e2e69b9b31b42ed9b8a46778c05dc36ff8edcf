@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "523dd58b_5dce437c",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 13521,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-06T10:01:24Z",
+      "side": 1,
+      "message": "AC_LINK_FILES appears to be obsoleted by AC_CONFIG_LINKS for quite a while.  (Running `autoupdate` from the current Autoconf 2.69 suite results in\n\n  diff --git a/configure.ac b/configure.ac\n  index 03f36b9b8bc1..8e2b22387b5c 100644\n  --- a/configure.ac\n  +++ b/configure.ac\n  [...]\n  @@ -14053,7 +14053,17 @@ CFLAGS\u003d$my_original_CFLAGS\n   CXXFLAGS\u003d$my_original_CXXFLAGS\n   CPPFLAGS\u003d$my_original_CPPFLAGS\n   \n  -AC_LINK_FILES([include], [include])\n  +AC_DIAGNOSE([obsolete],[It is technically impossible to `autoupdate\u0027 cleanly from AC_LINK_FILES\n  +to AC_CONFIG_LINKS.  `autoupdate\u0027 provides a functional but inelegant\n  +update, you should probably tune the result yourself.])dnl\n  +ac_sources\u003d\"include\"\n  +ac_dests\u003d\"include\"\n  +while test -n \"$ac_sources\"; do\n  +  set $ac_dests; ac_dest\u003d$1; shift; ac_dests\u003d$*\n  +  set $ac_sources; ac_source\u003d$1; shift; ac_sources\u003d$*\n  +  ac_config_links_1\u003d\"$ac_config_links_1 $ac_dest:$ac_source\"\n  +done\n  +AC_CONFIG_LINKS([$ac_config_links_1])\n   \n   # Keep in sync with list of files far up, at AC_MSG_CHECKING([for\n   # BUILD platform configuration] - otherwise breaks cross building\n\nand running e.g. `git grep -lw AC_CONFIG_LINKS AUTOCONF-2.59^{}` on the \u003cgit://git.savannah.gnu.org/autoconf.git\u003e repo indicates that AC_CONFIG_LINKS was apparently already present in our\n\n  AC_PREREQ([2.59])\n\nbaseline.)\n\nCan you get this updated (so that future attempts at keeping up with Autoconf updates, e.g. the upcoming Autoconf 2.70, do not needlessly stumble over it)?",
+      "revId": "f1e2e69b9b31b42ed9b8a46778c05dc36ff8edcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
