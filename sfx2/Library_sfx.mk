@@ -219,6 +219,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/objcont \
     sfx2/source/doc/objembed \
     sfx2/source/doc/objitem \
+    sfx2/source/doc/optionitem \
     sfx2/source/doc/objmisc \
     sfx2/source/doc/objserv \
     sfx2/source/doc/objstor \
