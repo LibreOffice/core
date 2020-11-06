@@ -21,22 +21,17 @@
 
 #include <standard/accessiblemenuitemcomponent.hxx>
 
-
-
-
 class VCLXAccessibleMenuSeparator final : public OAccessibleMenuItemComponent
 {
 public:
-    VCLXAccessibleMenuSeparator( Menu* pParent, sal_uInt16 nItemPos );
+    VCLXAccessibleMenuSeparator(Menu* pParent, sal_uInt16 nItemPos);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 };
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

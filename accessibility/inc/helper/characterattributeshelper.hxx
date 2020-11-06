@@ -26,24 +26,19 @@
 #include <map>
 #include <vector>
 
-
-
-
 class CharacterAttributesHelper
 {
 private:
+    typedef std::map<OUString, css::uno::Any> AttributeMap;
 
-    typedef std::map< OUString, css::uno::Any > AttributeMap;
-
-    AttributeMap    m_aAttributeMap;
+    AttributeMap m_aAttributeMap;
 
 public:
+    CharacterAttributesHelper(const vcl::Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor);
 
-    CharacterAttributesHelper( const vcl::Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor );
-
-    std::vector< css::beans::PropertyValue > GetCharacterAttributes();
-    css::uno::Sequence< css::beans::PropertyValue > GetCharacterAttributes( const css::uno::Sequence< OUString >& aRequestedAttributes );
+    std::vector<css::beans::PropertyValue> GetCharacterAttributes();
+    css::uno::Sequence<css::beans::PropertyValue>
+    GetCharacterAttributes(const css::uno::Sequence<OUString>& aRequestedAttributes);
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

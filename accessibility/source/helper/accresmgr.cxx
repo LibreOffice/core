@@ -20,9 +20,6 @@
 #include <helper/accresmgr.hxx>
 #include <unotools/resmgr.hxx>
 
-OUString AccResId(const char* pId)
-{
-    return Translate::get(pId, Translate::Create("acc"));
-}
+OUString AccResId(const char* pId) { return Translate::get(pId, Translate::Create("acc")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

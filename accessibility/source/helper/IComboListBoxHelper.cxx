@@ -11,11 +11,7 @@
 
 namespace accessibility
 {
-
-IComboListBoxHelper::~IComboListBoxHelper()
-{
-}
-
+IComboListBoxHelper::~IComboListBoxHelper() {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
