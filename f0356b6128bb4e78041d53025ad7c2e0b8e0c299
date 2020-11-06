@@ -22,6 +22,30 @@
       "revId": "f0356b6128bb4e78041d53025ad7c2e0b8e0c299",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3919d84_5d8db036",
+        "filename": "filter/source/xsltdialog/typedetectionexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-06T07:20:17Z",
+      "side": 1,
+      "message": "And in fact, there\u0027s the template\u003c typename T1, typename T2 \u003e OUStringBuffer\u0026 append( OUStringConcat\u003c T1, T2 \u003e\u0026\u0026 c ) in include/rtl/ustrbuf.hxx:672.",
+      "parentUuid": "4631cb66_ab2c25cb",
+      "range": {
+        "startLine": 169,
+        "startChar": 16,
+        "endLine": 172,
+        "endChar": 36
+      },
+      "revId": "f0356b6128bb4e78041d53025ad7c2e0b8e0c299",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
