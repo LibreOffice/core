@@ -194,7 +194,7 @@ void prepareLink( const Reference < XSimpleRegistry > & xDest,
 
     if (pShortName)
     {
-        linkRefName += link.copy(pShortName - pTmpName + 1);
+        linkRefName += link.subView(pShortName - pTmpName + 1);
         linkName = link.copy(0, pShortName - pTmpName);
     }
 

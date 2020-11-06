@@ -538,11 +538,11 @@ void XMLFilterTestDialog::onImportBrowse()
         if( nLastIndex == -1 )
         {
 
-            aExtensions += m_xFilterInfo->maExtension.copy( nCurrentIndex );
+            aExtensions += m_xFilterInfo->maExtension.subView( nCurrentIndex );
         }
         else
         {
-            aExtensions += m_xFilterInfo->maExtension.copy( nCurrentIndex, nLastIndex - nCurrentIndex );
+            aExtensions += m_xFilterInfo->maExtension.subView( nCurrentIndex, nLastIndex - nCurrentIndex );
             nCurrentIndex = nLastIndex + 1;
             nLastIndex = nCurrentIndex;
         }

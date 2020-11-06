@@ -2365,7 +2365,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                     OUString newStreamURL = "vnd.sun.star.Package:";
                     if (sInternalURL[0] == '#')
                     {
-                        newStreamURL += sInternalURL.copy(1, sInternalURL.getLength() - 1);
+                        newStreamURL += sInternalURL.subView(1, sInternalURL.getLength() - 1);
                     }
                     else
                     {
@@ -3784,8 +3784,8 @@ static void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUStr
             nIndex = aStr.indexOf( '?', nIndex );
             if ( nIndex != -1 )
             {
-                aStr = aStr.copy(0, nIndex + 1) + "f"
-                    + aStr.copy(nIndex + 1, aStr.getLength() - nIndex - 1);
+                aStr = OUString::Concat(aStr.subView(0, nIndex + 1)) + "f"
+                    + aStr.subView(nIndex + 1, aStr.getLength() - nIndex - 1);
                 nIndex++;
             }
         } while( nIndex != -1 );

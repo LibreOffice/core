@@ -1471,7 +1471,7 @@ void SbRtl_Str(StarBASIC *, SbxArray & rPar, bool)
                 {
                     iZeroSearch += 1;
                 }
-                aStrNew += aStr.copy(iZeroSearch);
+                aStrNew += aStr.subView(iZeroSearch);
             }
             else
             {

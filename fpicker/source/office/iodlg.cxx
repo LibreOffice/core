@@ -149,7 +149,7 @@ namespace
         if (nDotPos>=0)
         {
             if (!rExtension.isEmpty())
-                rFile = rFile.copy(0, nDotPos) + rExtension; // replace old extension with new (not empty) one
+                rFile = rFile.subView(0, nDotPos) + rExtension; // replace old extension with new (not empty) one
             else if (nDotPos)
                 rFile = rFile.copy(0, nDotPos-1); // truncate extension (new one is empty)
             else

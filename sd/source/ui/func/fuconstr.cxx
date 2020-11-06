@@ -316,7 +316,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         ***********************************************/
         OUString aName( pPage->GetLayoutName() );
         sal_Int32 n = aName.indexOf(SD_LT_SEPARATOR) + strlen(SD_LT_SEPARATOR);
-        aName = aName.copy(0, n) + STR_LAYOUT_BACKGROUNDOBJECTS;
+        aName = OUString::Concat(aName.subView(0, n)) + STR_LAYOUT_BACKGROUNDOBJECTS;
         SfxStyleSheet* pSheet(
             static_cast< SfxStyleSheet* >(
                 pPage->getSdrModelFromSdrPage().GetStyleSheetPool()->Find(aName, SfxStyleFamily::Page)));

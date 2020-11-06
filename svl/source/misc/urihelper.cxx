@@ -179,7 +179,7 @@ OUString normalize(
     normalized = n == -1 ? uriReference : uriReference.copy(0, n);
     switch (normalizePrefix(broker, normalized, &normalized)) {
     case Success:
-        return n == -1 ? normalized : normalized + uriReference.copy(n);
+        return n == -1 ? normalized : normalized + uriReference.subView(n);
     case GeneralFailure:
         return uriReference;
     case SpecificFailure:

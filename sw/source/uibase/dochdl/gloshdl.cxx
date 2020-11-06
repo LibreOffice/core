@@ -436,7 +436,7 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
             const sal_Int32 nMaxLen = 50;
             if(pWrtShell->IsSelection() && aShortName.getLength() > nMaxLen)
             {
-                aShortName = aShortName.copy(0, nMaxLen) + " ...";
+                aShortName = OUString::Concat(aShortName.subView(0, nMaxLen)) + " ...";
             }
             OUString aTmp( SwResId(STR_NOGLOS));
             aTmp = aTmp.replaceFirst("%1", aShortName);

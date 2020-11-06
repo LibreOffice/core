@@ -459,7 +459,7 @@ OUString DXFRepresentation::ToOUString(const OString& s) const
         {
             char ch = static_cast<char>(asciiNum.toUInt32());
             OUString codePt(&ch, 1, mEnc);
-            result = result.replaceAll(result.copy(pos, 5), codePt, pos);
+            result = result.replaceAll(result.subView(pos, 5), codePt, pos);
         }
         pos = result.indexOf("%%", pos + 1);
     }
@@ -473,7 +473,7 @@ OUString DXFRepresentation::ToOUString(const OString& s) const
             lcl_isHex(codePtNum[3]))
         {
             OUString codePt(static_cast<sal_Unicode>(codePtNum.toUInt32(16)));
-            result = result.replaceAll(result.copy(pos, 7), codePt, pos);
+            result = result.replaceAll(result.subView(pos, 7), codePt, pos);
         }
         pos = result.indexOf("\\U+", pos + 1);
     }

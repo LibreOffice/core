@@ -1485,7 +1485,7 @@ static bool NormalizeW3URI( OUString& rName )
     {
         const OUString& sURISuffix = XML_URI_XFORMS_SUFFIX ;
         sal_Int32 nCompareFrom = rName.getLength() - sURISuffix.getLength();
-        if( rName.copy( nCompareFrom ) == sURISuffix )
+        if( rName.subView( nCompareFrom ) == sURISuffix )
         {
             // found W3 prefix, and xforms suffix
             rName = XML_N_XFORMS_1_0;
@@ -1568,9 +1568,9 @@ static bool NormalizeOasisURN( OUString& rName )
 
     // replace [tcid] with current TCID and version with current version.
 
-    rName = rName.copy( 0, nTCIdStart ) +
+    rName = rName.subView( 0, nTCIdStart ) +
             XML_OPENDOCUMENT +
-            rName.copy( nTCIdEnd, nVersionStart-nTCIdEnd ) +
+            rName.subView( nTCIdEnd, nVersionStart-nTCIdEnd ) +
             XML_1_0;
 
     return true;

@@ -1678,7 +1678,7 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
             sal_Int32 nClassNameDot = rClass.lastIndexOf( '.' );
             if( nClassNameDot >= 0 )
             {
-                aClassName += rClass.copy( 0, nClassNameDot + 1 ) + "X" + rClass.copy( nClassNameDot + 1 );
+                aClassName += OUString::Concat(rClass.subView( 0, nClassNameDot + 1 )) + "X" + rClass.subView( nClassNameDot + 1 );
             }
             else
             {
