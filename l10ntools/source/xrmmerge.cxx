@@ -422,7 +422,7 @@ void XRMResMerge::WorkOnDesc(
                         throw false; //TODO
                     }
                     OString sOutputDescFile(
-                        sOutputFile.copy(0, i + 1) + sLocDescFilename);
+                        sOutputFile.subView(0, i + 1) + sLocDescFilename);
                     ofstream file(sOutputDescFile.getStr());
                     if (file.is_open()) {
                         file << sText;

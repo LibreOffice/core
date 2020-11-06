@@ -1527,7 +1527,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                     if(aOriginalNewLayoutName != aTargetNewLayoutName)
                     {
                         const sal_Int32 nPos(aName.indexOf(SD_LT_SEPARATOR));
-                        aName = aTargetNewLayoutName + aName.copy(nPos);
+                        aName = aTargetNewLayoutName + aName.subView(nPos);
                     }
 
                     SfxStyleSheet* pMySheet = static_cast<SfxStyleSheet*>( mxStyleSheetPool->Find(aName, SfxStyleFamily::Page) );
@@ -1568,7 +1568,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                     // this new style
                     OUString aTemp(pMySheet->GetName());
                     const sal_Int32 nPos(aTemp.indexOf(SD_LT_SEPARATOR));
-                    aTemp = aOldLayoutName + aTemp.copy(nPos);
+                    aTemp = aOldLayoutName + aTemp.subView(nPos);
                     aReplData.aName = aTemp;
                     aReplList.push_back(aReplData);
                 }

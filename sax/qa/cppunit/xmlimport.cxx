@@ -108,7 +108,7 @@ OUString TestDocumentHandler::canonicalform(const OUString &sName, const OUStrin
         if ( nIndex >= 0 )
         {
             OUString sNamespace = getNamespace( sName.copy( 0, nIndex ) );
-            return sNamespace + sName.copy(nIndex);
+            return sNamespace + sName.subView(nIndex);
         }
         else
         {
@@ -231,7 +231,7 @@ OUString resolveNamespace( const OUString& aName )
         if ( aName.getLength() > index + 1 )
         {
             OUString aAttributeName = getNamespaceValue( aName.copy( 0, index ) ) +
-                ":" + aName.copy( index + 1 );
+                ":" + aName.subView( index + 1 );
             return aAttributeName;
         }
     }

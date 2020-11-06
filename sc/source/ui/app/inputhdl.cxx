@@ -1642,7 +1642,7 @@ void ScInputHandler::PasteFunctionData()
         const ScTypedStrData& rData = *miAutoPosFormula;
         OUString aInsert = rData.GetString();
         if (aInsert[aInsert.getLength()-1] == cParenthesesReplacement)
-            aInsert = aInsert.copy( 0, aInsert.getLength()-1) + "()";
+            aInsert = OUString::Concat(aInsert.subView( 0, aInsert.getLength()-1)) + "()";
         bool bParInserted = false;
 
         DataChanging(); // Cannot be new

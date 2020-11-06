@@ -542,8 +542,8 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
             sal_Int32 nDbo = sVal.lastIndexOf(".dbo.");
             if ( nSpace > 0 && nSpace < nDbo - 1 )
             {
-                m_pImpl->m_sCurrentDatabaseDataSource = sVal.copy(nSpace + 1, nDbo - nSpace - 1) +
-                            sVal.copy(nDbo + 4, sVal.getLength() - nDbo - 5);
+                m_pImpl->m_sCurrentDatabaseDataSource = OUString::Concat(sVal.subView(nSpace + 1, nDbo - nSpace - 1)) +
+                            sVal.subView(nDbo + 4, sVal.getLength() - nDbo - 5);
             }
         }
     }

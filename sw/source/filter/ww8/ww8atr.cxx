@@ -3179,11 +3179,11 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             + "\\o (\\s\\up "
             + OUString::number(nHeight/2)
             + "("
-            + pField->GetPar1().copy(0, nAbove)
+            + pField->GetPar1().subView(0, nAbove)
             + "), \\s\\do "
             + OUString::number(nHeight/5)
             + "("
-            + pField->GetPar1().copy(nAbove)
+            + pField->GetPar1().subView(nAbove)
             + "))";
         GetExport().OutputField(pField, ww::eEQ, sStr);
         }
