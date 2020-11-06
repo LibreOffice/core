@@ -391,6 +391,7 @@ public:
     void testInsertLongDateFormat();
     void testSpellOnlineParameter();
     void testRedlineAutoCorrect();
+    void testRedlineAutoCorrect2();
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
 #endif
@@ -618,6 +619,7 @@ public:
     CPPUNIT_TEST(testInsertLongDateFormat);
     CPPUNIT_TEST(testSpellOnlineParameter);
     CPPUNIT_TEST(testRedlineAutoCorrect);
+    CPPUNIT_TEST(testRedlineAutoCorrect2);
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7638,7 +7640,15 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     pWrtShell->Insert("et");
     pWrtShell->AutoCorrect(corr, ' ');
     // This was "Ttest" removing the tracked deletion silently.
-    sReplaced = "ttest ";
+    // Don't replace, if a redline starts or ends within the text.
+    sReplaced = "tset ";
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // Otherwise replace it
+    pWrtShell->Insert("tset");
+    pWrtShell->AutoCorrect(corr, ' ');
+    sReplaced = "tset test ";
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
@@ -7646,8 +7656,40 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
     pWrtShell->Insert("a");
     pWrtShell->AutoCorrect(corr, ' ');
-    sReplaced = "A ttest ";
+    sReplaced = "A tset test ";
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest::testRedlineAutoCorrect2()
+{
+    SwDoc* pDoc = createDoc("redline-autocorrect2.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+
+    // show tracked deletion
+    RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    CPPUNIT_ASSERT(nMode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
+    pWrtShell->SetRedlineFlags(nMode);
+    CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
+
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert("...");
+    pWrtShell->AutoCorrect(corr, ' ');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    // This was "LoremLorem,…," (duplicating the deleted comma, but without deletion)
+    // Don't replace, if a redline starts or ends within the text.
+    OUString sReplaced = "Lorem,... ";
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // Continue it:
+    pWrtShell->Insert("Lorem,...");
+    pWrtShell->AutoCorrect(corr, ' ');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced = u"Lorem,... Lorem,… ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
