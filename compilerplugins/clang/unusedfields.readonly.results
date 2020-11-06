@@ -345,9 +345,9 @@ include/vcl/opengl/OpenGLContext.hxx:48
 include/vcl/opengl/OpenGLContext.hxx:167
     OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
 io/source/stm/odata.cxx:559
-    io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
-io/source/stm/odata.cxx:559
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
+io/source/stm/odata.cxx:559
+    io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:47
     (anonymous namespace)::GtvLokDialogPrivate m_nChildKeyModifier guint32
 libreofficekit/source/gtk/lokdocview.cxx:86

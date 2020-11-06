@@ -765,8 +765,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     maNamespaceAttrList->Clear();
 
     maNamespaceHandler->addNSDeclAttributes( maNamespaceAttrList );
-    std::unique_ptr<SvXMLNamespaceMap> pRewindMap(
-            processNSAttributes( maNamespaceAttrList.get() ));
+    processNSAttributes( maNamespaceAttrList.get() );
 
     SvXMLImportContextRef xContext;
     const bool bRootContext = maContexts.empty();
@@ -831,9 +830,6 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
 
     // Call a startElement at the new context.
     xContext->startFastElement( Element, Attribs );
-
-    if (pRewindMap)
-        xContext->PutRewindMap(std::move(pRewindMap));
 
     // Push context on stack.
     maContexts.push(xContext);

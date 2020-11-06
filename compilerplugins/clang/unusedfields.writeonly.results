@@ -63,15 +63,15 @@ canvas/inc/rendering/irendermodule.hxx:35
 canvas/inc/rendering/irendermodule.hxx:35
     canvas::Vertex r float
 canvas/inc/rendering/irendermodule.hxx:36
-    canvas::Vertex v float
-canvas/inc/rendering/irendermodule.hxx:36
     canvas::Vertex u float
+canvas/inc/rendering/irendermodule.hxx:36
+    canvas::Vertex v float
 canvas/inc/rendering/irendermodule.hxx:37
     canvas::Vertex x float
 canvas/inc/rendering/irendermodule.hxx:37
-    canvas::Vertex z float
-canvas/inc/rendering/irendermodule.hxx:37
     canvas::Vertex y float
+canvas/inc/rendering/irendermodule.hxx:37
+    canvas::Vertex z float
 canvas/source/cairo/cairo_canvasbitmap.hxx:119
     cairocanvas::CanvasBitmap mpBufferCairo ::cairo::CairoSharedPtr
 canvas/source/cairo/cairo_spritedevicehelper.hxx:73
@@ -104,8 +104,6 @@ codemaker/source/javamaker/classfile.cxx:508
      floatBytes float
 codemaker/source/javamaker/classfile.cxx:540
      doubleBytes double
-comphelper/qa/container/comphelper_ifcontainer.cxx:44
-    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *const
 comphelper/qa/unit/parallelsorttest.cxx:44
     ParallelSortTest mnThreads size_t
 comphelper/source/misc/asyncnotification.cxx:86
@@ -180,6 +178,8 @@ cppu/source/uno/copy.hxx:38
     cppu::(anonymous namespace)::SequencePrefix nRefCount sal_Int32
 cppu/source/uno/copy.hxx:39
     cppu::(anonymous namespace)::SequencePrefix nElements sal_Int32
+cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx:45
+    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *
 cppuhelper/source/access_control.cxx:79
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:80
@@ -210,8 +210,6 @@ dbaccess/source/ui/app/AppDetailView.hxx:107
     dbaui::OApplicationDetailView m_aExternalMnemonics class MnemonicGenerator
 dbaccess/source/ui/browser/dbloader.cxx:62
     (anonymous namespace)::DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:237
-    DesktopLOKTest m_bModified _Bool
 desktop/source/app/app.cxx:1209
     desktop::(anonymous namespace)::ExecuteGlobals pLanguageOptions std::unique_ptr<SvtLanguageOptions>
 desktop/source/app/app.cxx:1210
@@ -233,9 +231,9 @@ desktop/source/deployment/manager/dp_managerfac.cxx:46
 desktop/source/deployment/manager/dp_managerfac.cxx:47
     dp_manager::factory::(anonymous namespace)::PackageManagerFactoryImpl m_xBakMgr Reference<deployment::XPackageManager>
 desktop/unx/source/splashx.c:371
-     flags unsigned long
-desktop/unx/source/splashx.c:371
      decorations unsigned long
+desktop/unx/source/splashx.c:371
+     flags unsigned long
 desktop/unx/source/splashx.c:371
      functions unsigned long
 desktop/unx/source/splashx.c:372
@@ -381,9 +379,9 @@ include/svx/svdograf.hxx:95
 include/svx/viewpt3d.hxx:62
     Viewport3D::(anonymous) H double
 include/svx/viewpt3d.hxx:62
-    Viewport3D::(anonymous) Y double
-include/svx/viewpt3d.hxx:62
     Viewport3D::(anonymous) X double
+include/svx/viewpt3d.hxx:62
+    Viewport3D::(anonymous) Y double
 include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet::PropsToTest constrained std::vector<OUString>
 include/unotools/fontcfg.hxx:159
@@ -415,21 +413,23 @@ include/vcl/textrectinfo.hxx:35
 include/vcl/vclenum.hxx:202
     ItalicMatrix xx double
 include/vcl/vclenum.hxx:202
-    ItalicMatrix yy double
-include/vcl/vclenum.hxx:202
     ItalicMatrix xy double
 include/vcl/vclenum.hxx:202
     ItalicMatrix yx double
+include/vcl/vclenum.hxx:202
+    ItalicMatrix yy double
 include/xmloff/shapeimport.hxx:180
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
 include/xmloff/shapeimport.hxx:181
     SdXML3DSceneAttributesHelper mbVPNUsed _Bool
 include/xmloff/shapeimport.hxx:182
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
-io/source/stm/odata.cxx:243
-    io_stm::(anonymous namespace)::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n2 sal_uInt32
+include/xmloff/xmlictxt.hxx:53
+    SvXMLImportContext m_pRewindMap std::unique_ptr<SvXMLNamespaceMap>
 io/source/stm/odata.cxx:243
     io_stm::(anonymous namespace)::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n1 sal_uInt32
+io/source/stm/odata.cxx:243
+    io_stm::(anonymous namespace)::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n2 sal_uInt32
 jvmfwk/inc/vendorbase.hxx:175
     jfw_plugin::VendorBase m_sArch class rtl::OUString
 l10ntools/inc/common.hxx:31
@@ -562,8 +562,6 @@ sc/source/ui/inc/drwtrans.hxx:45
     ScDrawTransferObj m_aDrawPersistRef SfxObjectShellRef
 sc/source/ui/inc/filtdlg.hxx:186
     ScSpecialFilterDlg pOptionsMgr std::unique_ptr<ScFilterOptionsMgr>
-sc/source/ui/inc/inputwin.hxx:145
-    ScTextWnd xAcc css::uno::WeakReference<css::accessibility::XAccessible>
 sc/source/ui/inc/instbdlg.hxx:57
     ScInsertTableDlg aDocShTablesRef SfxObjectShellRef
 sc/source/ui/inc/linkarea.hxx:38
@@ -656,8 +654,6 @@ sfx2/inc/notebookbar/NotebookbarTabControl.hxx:41
     NotebookbarTabControl m_pListener css::uno::Reference<css::ui::XUIConfigurationListener>
 sfx2/source/appl/fileobj.hxx:40
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
-sfx2/source/control/thumbnailviewacc.hxx:126
-    ThumbnailViewAcc mbIsFocused _Bool
 sfx2/source/doc/sfxbasemodel.cxx:448
     (anonymous namespace)::SfxSaveGuard m_pFramesLock std::unique_ptr<SfxOwnFramesLocker>
 sfx2/source/inc/appdata.hxx:71
@@ -994,10 +990,6 @@ vcl/inc/pdf/BitmapID.hxx:23
     vcl::pdf::BitmapID m_nChecksum BitmapChecksum
 vcl/inc/pdf/BitmapID.hxx:24
     vcl::pdf::BitmapID m_nMaskChecksum BitmapChecksum
-vcl/inc/qt5/Qt5Frame.hxx:97
-    Qt5Frame m_pSalMenu class Qt5Menu *
-vcl/inc/qt5/Qt5Graphics.hxx:53
-    Qt5Graphics m_pFontCollection class PhysicalFontCollection *
 vcl/inc/qt5/Qt5Instance.hxx:62
     Qt5Instance m_pQApplication std::unique_ptr<QApplication>
 vcl/inc/qt5/Qt5Instance.hxx:63
@@ -1046,10 +1038,6 @@ vcl/inc/unx/gtk/gtkframe.hxx:81
     GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
 vcl/inc/unx/gtk/gtkframe.hxx:82
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
-vcl/inc/unx/gtk/gtkframe.hxx:185
-    GtkSalFrame m_pCurrentCursor GdkCursor *
-vcl/inc/unx/salgdi.h:316
-    X11SalGraphics nTextPixel_ Pixel
 vcl/inc/WidgetThemeLibrary.hxx:20
     vcl::WidgetDrawStyle nSize uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:104
@@ -1073,11 +1061,11 @@ vcl/source/fontsubset/sft.cxx:92
 vcl/source/fontsubset/ttcr.cxx:350
     vcl::(anonymous namespace)::tdata_post ptr void *
 vcl/unx/generic/app/wmadaptor.cxx:1270
-    _mwmhints func unsigned long
+    _mwmhints deco unsigned long
 vcl/unx/generic/app/wmadaptor.cxx:1270
     _mwmhints flags unsigned long
 vcl/unx/generic/app/wmadaptor.cxx:1270
-    _mwmhints deco unsigned long
+    _mwmhints func unsigned long
 vcl/unx/generic/app/wmadaptor.cxx:1271
     _mwmhints input_mode tools::Long
 vcl/unx/generic/app/wmadaptor.cxx:1272
@@ -1098,9 +1086,7 @@ vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
 vcl/unx/gtk3/gtk3gtkinst.cxx:1613
      in char *
-vcl/unx/gtk3/gtk3gtkinst.cxx:7640
-    (anonymous namespace)::GtkInstanceMenuToggleButton m_pBox GtkBox *
-vcl/unx/gtk3/gtk3gtkinst.cxx:13965
+vcl/unx/gtk3/gtk3gtkinst.cxx:13964
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *
@@ -1140,3 +1126,7 @@ xmlsecurity/inc/certificateviewer.hxx:51
     CertificateViewer mxGeneralPage std::unique_ptr<CertificateViewerGeneralTP>
 xmlsecurity/inc/certificateviewer.hxx:52
     CertificateViewer mxDetailsPage std::unique_ptr<CertificateViewerDetailsTP>
+xmlsecurity/source/helper/pdfsignaturehelper.cxx:236
+    (anonymous namespace)::PageChecksum m_nPageContent BitmapChecksum
+xmlsecurity/source/helper/pdfsignaturehelper.cxx:237
+    (anonymous namespace)::PageChecksum m_aAnnotations std::vector<basegfx::B2DRectangle>

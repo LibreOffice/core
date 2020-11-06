@@ -50,12 +50,9 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public css::xml::sax::XFastContextHa
 
     SvXMLImport&                       mrImport;
     OUString                           maLocalName;
-    std::unique_ptr<SvXMLNamespaceMap> m_pRewindMap;
     oslInterlockedCount                m_nRefCount;
     sal_uInt16                         mnPrefix;
     bool                               mbPrefixAndLocalNameFilledIn;
-
-    SAL_DLLPRIVATE void PutRewindMap(std::unique_ptr<SvXMLNamespaceMap> p) { m_pRewindMap = std::move(p); }
 
 protected:
 
