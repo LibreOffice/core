@@ -3111,7 +3111,7 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
                 {
                     OUString aCellStr;
                     GetString(k, j, aCellStr);
-                    aStr.append(aCellStr).append(u"\x0001");
+                    aStr.append(aCellStr + u"\x0001");
                 }
 
                 bResult = aStrSet.insert(aStr.makeStringAndClear()).second; // unique if inserted.
