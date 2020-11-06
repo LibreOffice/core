@@ -589,7 +589,7 @@ void SwAnnotationWin::CheckMetaText()
     }
     else if (sMeta.getLength() > 23)
     {
-        sMeta = sMeta.copy(0, 20) + "...";
+        sMeta = OUString::Concat(sMeta.subView(0, 20)) + "...";
     }
     if ( mpMetadataAuthor->GetText() != sMeta )
     {

@@ -609,7 +609,7 @@ sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl() const
         for (int i = 0, nEntryCount = m_xAddressElementsLB->n_children(); i < nEntryCount; ++i)
         {
             const OUString sEntry = m_xAddressElementsLB->get_text(i);
-            if( sEntry == sSelected.copy( 1, sSelected.getLength() - 2 ) )
+            if( sEntry == sSelected.subView( 1, sSelected.getLength() - 2 ) )
             {
                 nRet = m_xAddressElementsLB->get_id(i).toInt32();
                 break;

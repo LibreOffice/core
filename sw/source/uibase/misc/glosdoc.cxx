@@ -310,7 +310,7 @@ std::vector<OUString> & SwGlossaries::GetNameList()
             SWUnoHelper::UCB_GetFileListOfFolder(m_PathArr[i], aFiles, &sExt);
             for (const OUString& aTitle : aFiles)
             {
-                const OUString sName( aTitle.copy( 0, aTitle.getLength() - sExt.getLength() )
+                const OUString sName( aTitle.subView( 0, aTitle.getLength() - sExt.getLength() )
                     + OUStringChar(GLOS_DELIM) + OUString::number( static_cast<sal_Int16>(i) ));
                 m_GlosArr.push_back(sName);
             }

@@ -302,11 +302,11 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
                     + OUStringChar(sfx2::cTokenSeparator);
                 if( nPos2 == -1 )
                 {
-                    aURL += aHRef.copy( nPos+1 );
+                    aURL += aHRef.subView( nPos+1 );
                 }
                 else
                 {
-                    aURL += aHRef.copy( nPos+1, nPos2 - (nPos+1) )
+                    aURL += aHRef.subView( nPos+1, nPos2 - (nPos+1) )
                         + OUStringChar(sfx2::cTokenSeparator)
                         + rtl::Uri::decode( aHRef.copy( nPos2+1 ),
                                               rtl_UriDecodeWithCharset,

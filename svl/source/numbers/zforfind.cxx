@@ -1256,7 +1256,7 @@ static bool lcl_IsSignedYearSep( const OUString& rStr, const OUString& rPat, sal
         if (nPat + nLen < rPat.getLength() && rPat[nPat+nLen] == 'Y')
         {
             // Signed year is possible.
-            bOk = (rPat.indexOf( rStr.copy( 0, nLen), nPat) == nPat);
+            bOk = (rPat.indexOf( rStr.subView( 0, nLen), nPat) == nPat);
         }
     }
     return bOk;

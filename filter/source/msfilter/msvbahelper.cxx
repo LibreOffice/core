@@ -147,10 +147,10 @@ static SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
                     sal_Int32 lastSlashIndex = xModel->getURL().lastIndexOf( '/' );
                     if ( lastSlashIndex > -1 )
                     {
-                        bDocNameNoPathMatch = xModel->getURL().copy( lastSlashIndex + 1 ) == aURL;
+                        bDocNameNoPathMatch = xModel->getURL().subView( lastSlashIndex + 1 ) == aURL;
                         if ( !bDocNameNoPathMatch )
                         {
-                            OUString aTmpName = "'" + xModel->getURL().copy( lastSlashIndex + 1 ) + "'";
+                            OUString aTmpName = OUString::Concat("'") + xModel->getURL().subView( lastSlashIndex + 1 ) + "'";
                             bDocNameNoPathMatch = aTmpName == aURL;
                         }
                     }

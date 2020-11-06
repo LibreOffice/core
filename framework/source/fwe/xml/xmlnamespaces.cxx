@@ -89,7 +89,7 @@ OUString XMLNamespaces::applyNSToAttributeName( const OUString& aName ) const
             // attribute with namespace but without name "namespace:" is not allowed!!
             throw SAXException( "Attribute has no name only preceding namespace!", Reference< XInterface >(), Any() );
         }
-        OUString aAttributeName = getNamespaceValue( aName.copy( 0, index )) + "^" + aName.copy( index+1);
+        OUString aAttributeName = getNamespaceValue( aName.copy( 0, index )) + "^" + aName.subView( index+1);
         return aAttributeName;
     }
 
@@ -123,7 +123,7 @@ OUString XMLNamespaces::applyNSToElementName( const OUString& aName ) const
             // attribute with namespace but without a name is not allowed (e.g. "cfg:" )
             throw SAXException( "Attribute has no name only preceding namespace!", Reference< XInterface >(), Any() );
         }
-        aElementName += aName.copy( index+1 );
+        aElementName += aName.subView( index+1 );
     }
     else
         aElementName += aName;

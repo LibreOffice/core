@@ -704,7 +704,7 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
         else if (bQuoted)
         {
             aResult = SwResId(STR_START_QUOTE) +
-                rStr.copy(nStart, nCount) +
+                rStr.subView(nStart, nCount) +
                 SwResId(STR_END_QUOTE);
         }
         else

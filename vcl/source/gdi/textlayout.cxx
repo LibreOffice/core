@@ -203,7 +203,7 @@ namespace vcl
             MetricVector aGlyphBounds;
             m_rReferenceDevice.GetGlyphBoundRects( _rStartPoint, _rText, _nStartIndex, _nLength, aGlyphBounds );
             _pVector->insert( _pVector->end(), aGlyphBounds.begin(), aGlyphBounds.end() );
-            *_pDisplayText += _rText.copy( _nStartIndex, _nLength );
+            *_pDisplayText += _rText.subView( _nStartIndex, _nLength );
             return;
         }
 

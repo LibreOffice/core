@@ -327,7 +327,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     sText = pRefField->GetExpandedTextOfReferencedTextNode(*rSh.GetLayout());
                                     if ( sText.getLength() > 80  )
                                     {
-                                        sText = sText.copy(0, 80) + "...";
+                                        sText = OUString::Concat(sText.subView(0, 80)) + "...";
                                     }
                                 }
                                 else

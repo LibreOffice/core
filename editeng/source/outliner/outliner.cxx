@@ -698,7 +698,7 @@ void Outliner::ImplSetLevelDependentStyleSheet( sal_Int32 nPara )
         nDepth = 0;
 
     OUString aNewStyleSheetName( pStyle->GetName() );
-    aNewStyleSheetName = aNewStyleSheetName.copy( 0, aNewStyleSheetName.getLength()-1 ) +
+    aNewStyleSheetName = aNewStyleSheetName.subView( 0, aNewStyleSheetName.getLength()-1 ) +
         OUString::number( nDepth+1 );
     SfxStyleSheet* pNewStyle = static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find( aNewStyleSheetName, pStyle->GetFamily() ));
     DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );

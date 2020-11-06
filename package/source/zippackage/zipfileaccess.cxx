@@ -133,8 +133,8 @@ bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
     sal_Int32 nBeginInd = aPattern[0].getLength();
     sal_Int32 nEndInd = aString.getLength() - aPattern[nInd].getLength();
     if ( nEndInd >= nBeginInd
-      && ( nEndInd == aString.getLength() || aString.copy( nEndInd ) == aPattern[nInd] )
-      && ( nBeginInd == 0 || aString.copy( 0, nBeginInd ) == aPattern[0] ) )
+      && ( nEndInd == aString.getLength() || aString.subView( nEndInd ) == aPattern[nInd] )
+      && ( nBeginInd == 0 || aString.subView( 0, nBeginInd ) == aPattern[0] ) )
     {
         for ( sal_Int32 nCurInd = aPattern.getLength() - 2; nCurInd > 0; nCurInd-- )
         {

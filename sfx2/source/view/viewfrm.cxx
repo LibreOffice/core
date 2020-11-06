@@ -2600,7 +2600,7 @@ static void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
         else
             nEndPos++;
 
-        rStr = rStr.copy( 0, nStartPos ) + rStr.copy( nEndPos );
+        rStr = OUString::Concat(rStr.subView( 0, nStartPos )) + rStr.subView( nEndPos );
     }
     // erase trailing lines
     if ( nStartPos != -1 )
@@ -2611,7 +2611,7 @@ static void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
             n++;
 
         if ( n > nStartPos )
-            rStr = rStr.copy( 0, nStartPos ) + rStr.copy( n );
+            rStr = OUString::Concat(rStr.subView( 0, nStartPos )) + rStr.subView( n );
     }
 }
 

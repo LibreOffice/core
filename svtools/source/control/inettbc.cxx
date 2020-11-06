@@ -755,7 +755,7 @@ bool SvtURLBox_Impl::TildeParsing(
             if( !aParseTilde.endsWith("/") )
                 aParseTilde += "/";
             if( aText.getLength() > 2 )
-                aParseTilde += aText.copy( 2 );
+                aParseTilde += aText.subView( 2 );
         }
 
         aText = aParseTilde;
