@@ -87,10 +87,6 @@ public:
         Paint_TabItemBackgroundHighlight,
         Paint_HorizontalBorder,
         Paint_VerticalBorder,
-        Paint_ToolBoxBackground,
-        Paint_ToolBoxBorderTopLeft,
-        Paint_ToolBoxBorderCenterCorners,
-        Paint_ToolBoxBorderBottomRight,
         Paint_DropDownBackground,
 
         Paint_Int_,
@@ -118,13 +114,8 @@ public:
         Bool_UseSystemColors,
         Bool_IsHighContrastModeActive,
 
-        Bool_Rect_,
-
-        Rect_ToolBoxPadding,
-        Rect_ToolBoxBorder,
-
-        Post_Rect_,
-        End_=Post_Rect_
+        Post_Bool_,
+        End_=Post_Bool_
     };
 
     static Image GetImage (const ThemeItem eItem);
@@ -182,7 +173,6 @@ private:
     std::vector<Paint> maPaints;
     std::vector<sal_Int32> maIntegers;
     std::vector<bool> maBooleans;
-    std::vector<tools::Rectangle> maRectangles;
     bool mbIsHighContrastMode;
     bool mbIsHighContrastModeSetManually;
 
@@ -207,7 +197,6 @@ private:
         PT_Paint,
         PT_Integer,
         PT_Boolean,
-        PT_Rectangle,
         PT_Invalid
     };
 
