@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6baf5e23_c4260b60",
+        "filename": "solenv/clang-format/remove_not_existent_files_from_clang_excludelist",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-11-06T16:03:44Z",
+      "side": 1,
+      "message": "I would suggest you exclude these not needed empty lines from the script. :-) Otherwise looks sane, thanks.",
+      "revId": "9e0dc566650ec682e4068ac3a3f4d610eafad97b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
