@@ -3468,13 +3468,45 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     if (rRg.aStart != rRg.aEnd)
     {
         bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
-        bool isRecreateEndNode(false);
         --aSavePos;
         SaveRedlEndPosForRestore aRedlRest( rInsPos, 0 );
 
         // insert behind the already copied start node
         m_rDoc.GetNodes().CopyNodes( rRg, rInsPos, false, true );
         aRedlRest.Restore();
+
+        if (bEndIsEqualEndPos)
+        {
+            const_cast<SwNodeIndex&>(rRg.aEnd) = SwNodeIndex(aSavePos, +1);
+        }
+    }
+
+    // Also copy all bookmarks
+    // guess this must be done before the DelDummyNodes below as that
+    // deletes nodes so would mess up the index arithmetic
+    // sw_fieldmarkhide: also needs to be done before making frames
+    if (m_rDoc.getIDocumentMarkAccess()->getAllMarksCount())
+    {
+        SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
+        SwPosition targetPos(SwNodeIndex(aSavePos,
+                                         rRg.aStart != rRg.aEnd ? +1 : 0));
+        if (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->nNode)
+        {
+            // there is 1 (partially selected, maybe) paragraph before
+            assert(SwNodeIndex(rRg.aStart, -1) == pCopiedPaM->first.Start()->nNode);
+            // only use the passed in target SwPosition if the source PaM point
+            // is on a different node; if it was the same node then the target
+            // position was likely moved along by the copy operation and now
+            // points to the end of the range!
+            targetPos = pCopiedPaM->second;
+        }
+
+        sw::CopyBookmarks(pCopiedPaM ? pCopiedPaM->first : aRgTmp, targetPos);
+    }
+
+    if (rRg.aStart != rRg.aEnd)
+    {
+        bool isRecreateEndNode(false);
         if (bMakeNewFrames) // tdf#130685 only after aRedlRest
         {   // recreate from previous node (could be merged now)
             if (SwTextNode *const pNode = aSavePos.GetNode().GetTextNode())
@@ -3528,10 +3560,6 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
                     ? 0 : +1);
             ::MakeFrames(&rDest, aSavePos, end);
         }
-        if (bEndIsEqualEndPos)
-        {
-            const_cast<SwNodeIndex&>(rRg.aEnd) = aSavePos;
-        }
     }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -3567,27 +3595,6 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     }
 
     SwNodeRange aCpyRange( aSavePos, rInsPos );
-
-    // Also copy all bookmarks
-    // guess this must be done before the DelDummyNodes below as that
-    // deletes nodes so would mess up the index arithmetic
-    if( m_rDoc.getIDocumentMarkAccess()->getAllMarksCount() )
-    {
-        SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
-        SwPaM aCpyPaM(aCpyRange.aStart, aCpyRange.aEnd);
-        if (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->nNode)
-        {
-            // there is 1 (partially selected, maybe) paragraph before
-            assert(SwNodeIndex(rRg.aStart, -1) == pCopiedPaM->first.Start()->nNode);
-            // only use the passed in target SwPosition if the source PaM point
-            // is on a different node; if it was the same node then the target
-            // position was likely moved along by the copy operation and now
-            // points to the end of the range!
-            *aCpyPaM.GetPoint() = pCopiedPaM->second;
-        }
-
-        sw::CopyBookmarks(pCopiedPaM ? pCopiedPaM->first : aRgTmp, *aCpyPaM.Start());
-    }
 
     if( bDelRedlines && ( RedlineFlags::DeleteRedlines & rDest.getIDocumentRedlineAccess().GetRedlineFlags() ))
         lcl_DeleteRedlines( rRg, aCpyRange );
