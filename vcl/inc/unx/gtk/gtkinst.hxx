@@ -46,6 +46,8 @@ class GenPspGraphics;
 class GtkYieldMutex final : public SalYieldMutex
 {
     thread_local static std::stack<sal_uInt32> yieldCounts;
+    thread_local static bool bRestoreInLeave;
+    void RestoreLockCount();
 
 public:
          GtkYieldMutex() {}
