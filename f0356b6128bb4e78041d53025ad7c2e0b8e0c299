@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4631cb66_ab2c25cb",
+        "filename": "filter/source/xsltdialog/typedetectionexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-06T07:18:51Z",
+      "side": 1,
+      "message": "This (and others) look unexpected. Why appending a StringConcat (which should, if not yet, be optimized for a single possible allocation and copying from the concat, without intermediate conversion to OUString) should be less efficient than a series of appends of partial strings, which could potentially trigger several reallocations of the string buffer?",
+      "range": {
+        "startLine": 169,
+        "startChar": 16,
+        "endLine": 172,
+        "endChar": 36
+      },
+      "revId": "f0356b6128bb4e78041d53025ad7c2e0b8e0c299",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
