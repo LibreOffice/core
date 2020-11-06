@@ -550,9 +550,9 @@ bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
 
     // replace [tcid] with current TCID and version with current version.
 
-    rName = rName.copy( 0, nTCIdStart ) +
+    rName = rName.subView( 0, nTCIdStart ) +
             GetXMLToken( XML_OPENDOCUMENT ) +
-            rName.copy( nTCIdEnd, nVersionStart-nTCIdEnd ) +
+            rName.subView( nTCIdEnd, nVersionStart-nTCIdEnd ) +
             GetXMLToken( XML_1_0 );
 
     return true;

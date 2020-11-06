@@ -331,15 +331,15 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                         // Replacement for place holders
                         if ( aItemText.startsWith("($1)") )
                         {
-                            aItemText = FwkResId(STR_UPDATEDOC) + " " + aItemText.copy( 4 );
+                            aItemText = FwkResId(STR_UPDATEDOC) + " " + aItemText.subView( 4 );
                         }
                         else if ( aItemText.startsWith("($2)") )
                         {
-                            aItemText = FwkResId(STR_CLOSEDOC_ANDRETURN) + aItemText.copy( 4 );
+                            aItemText = FwkResId(STR_CLOSEDOC_ANDRETURN) + aItemText.subView( 4 );
                         }
                         else if ( aItemText.startsWith("($3)") )
                         {
-                            aItemText = FwkResId(STR_SAVECOPYDOC) + aItemText.copy( 4 );
+                            aItemText = FwkResId(STR_SAVECOPYDOC) + aItemText.subView( 4 );
                         }
 
                         m_pVCLMenu->SetItemText( menuItemHandler->nItemId, aItemText );
@@ -1506,9 +1506,9 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
                 OUString aMainURL( "vnd.sun.star.popup:" );
                 sal_Int32 nQueryPart  = aMenuURL.indexOf( '?', nSchemePart );
                 if ( nQueryPart > 0 )
-                    aMainURL += aMenuURL.copy( nSchemePart, nQueryPart-nSchemePart );
+                    aMainURL += aMenuURL.subView( nSchemePart, nQueryPart-nSchemePart );
                 else if ( nQueryPart == -1 )
-                    aMainURL += aMenuURL.copy( nSchemePart+1 );
+                    aMainURL += aMenuURL.subView( nSchemePart+1 );
 
                 rPopupController.emplace( aMainURL, aPopupControllerEntry );
             }

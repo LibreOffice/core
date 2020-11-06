@@ -1633,7 +1633,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
             sal_Int32 nLastSlashInPath = rPath.lastIndexOf( '/', rPath.getLength() - 1 );
 
             *o_pExtensionRegistryPath = xPackage->getURL();
-            *o_pExtensionRegistryPath += rPath.copy( nLastSlashInPath);
+            *o_pExtensionRegistryPath += rPath.subView( nLastSlashInPath);
         }
     }
 

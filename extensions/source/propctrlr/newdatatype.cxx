@@ -48,7 +48,7 @@ namespace pcr
             }
         }
 
-        OUString sNameBase = _rNameBase.copy( 0, nStripUntil ? nStripUntil + 1 : 0 ) + " ";
+        OUString sNameBase = OUString::Concat(_rNameBase.subView( 0, nStripUntil ? nStripUntil + 1 : 0 )) + " ";
         OUString sInitialName;
         sal_Int32 nPostfixNumber = 1;
         do

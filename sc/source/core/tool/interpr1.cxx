@@ -3402,7 +3402,7 @@ void ScInterpreter::ScNumberValue()
             aTemporary = aTemporary.replaceAll( OUString( &nChar, 1 ), "" );
         }
         if ( nDecSep >= 0 )
-            aInputString = aTemporary + aInputString.copy( nDecSep );
+            aInputString = aTemporary + aInputString.subView( nDecSep );
         else
             aInputString = aTemporary;
     }
