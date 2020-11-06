@@ -29,32 +29,26 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 
-
 // VCLXAccessibleFixedText
 
-
-void VCLXAccessibleFixedText::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void VCLXAccessibleFixedText::FillAccessibleStateSet(utl::AccessibleStateSetHelper& rStateSet)
 {
-    VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
+    VCLXAccessibleTextComponent::FillAccessibleStateSet(rStateSet);
 
-    if ( GetWindow() && GetWindow()->GetStyle() & WB_WORDBREAK )
-        rStateSet.AddState( AccessibleStateType::MULTI_LINE );
+    if (GetWindow() && GetWindow()->GetStyle() & WB_WORDBREAK)
+        rStateSet.AddState(AccessibleStateType::MULTI_LINE);
 }
 
-
 // XServiceInfo
-
 
 OUString VCLXAccessibleFixedText::getImplementationName()
 {
     return "com.sun.star.comp.toolkit.AccessibleFixedText";
 }
 
-
-Sequence< OUString > VCLXAccessibleFixedText::getSupportedServiceNames()
+Sequence<OUString> VCLXAccessibleFixedText::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessibleFixedText" };
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

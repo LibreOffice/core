@@ -21,27 +21,23 @@
 
 #include <standard/accessiblemenucomponent.hxx>
 
-
-
-
 class VCLXAccessiblePopupMenu final : public OAccessibleMenuComponent
 {
-    virtual bool        IsFocused() override;
+    virtual bool IsFocused() override;
 
 public:
     using OAccessibleMenuComponent::OAccessibleMenuComponent;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 
     // XAccessibleExtendedComponent
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
+    virtual sal_Int32 SAL_CALL getBackground() override;
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
