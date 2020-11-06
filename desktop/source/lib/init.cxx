@@ -991,7 +991,7 @@ OUString desktop::extractParameter(OUString& rOptions, const OUString& rName)
         if (nComma >= 0)
         {
             aValue = rOptions.copy(nIndex + nLen, nComma - nIndex - nLen);
-            rOptions = rOptions.copy(0, nIndex) + rOptions.copy(nComma);
+            rOptions = OUStringLiteral(u"") + rOptions.copyView(0, nIndex) + rOptions.copyView(nComma);
         }
         else
         {
@@ -2563,19 +2563,15 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         if ((aIndex = aFilterOptions.indexOf(",Watermark=")) >= 0)
         {
             int bIndex = aFilterOptions.indexOf("WATERMARKEND");
-            watermarkText = aFilterOptions.copy(aIndex+11, bIndex-(aIndex+11));
-
-            OUString temp = aFilterOptions.copy(0, aIndex);
-            aFilterOptions = temp + aFilterOptions.copy(bIndex+12);
+            watermarkText = aFilterOptions.copyView(aIndex+11, bIndex-(aIndex+11));
+            aFilterOptions = OUStringLiteral(u"") + aFilterOptions.copyView(0, aIndex) + aFilterOptions.copyView(bIndex+12);
         }
 
         if ((aIndex = aFilterOptions.indexOf(",FullSheetPreview=")) >= 0)
         {
             int bIndex = aFilterOptions.indexOf("FULLSHEETPREVEND");
-            sFullSheetPreview = aFilterOptions.copy(aIndex+18, bIndex-(aIndex+18));
-
-            OUString temp = aFilterOptions.copy(0, aIndex);
-            aFilterOptions = temp + aFilterOptions.copy(bIndex+16);
+            sFullSheetPreview = aFilterOptions.copyView(aIndex+18, bIndex-(aIndex+18));
+            aFilterOptions = OUStringLiteral(u"") + aFilterOptions.copyView(0, aIndex) + aFilterOptions.copyView(bIndex+16);
         }
 
         bool bFullSheetPreview = sFullSheetPreview == "true";

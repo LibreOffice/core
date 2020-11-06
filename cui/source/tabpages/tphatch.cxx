@@ -153,7 +153,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
         if ( aURL.getBase().getLength() > 18 )
         {
-            aString += aURL.getBase().copy( 0, 15 ) + "...";
+            aString += aURL.getBase().copyView( 0, 15 ) + OUStringLiteral(u"...");
         }
         else
             aString += aURL.getBase();

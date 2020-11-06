@@ -1090,7 +1090,7 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
             {
                 OUString sFormula = aDlg.getCurrentFormula();
                 if ( sFormula[0] == '=' )
-                    _in_out_rFormula = "rpt:" + sFormula.copy(1);
+                    _in_out_rFormula = OUStringLiteral(u"rpt:") + sFormula.copyView(1);
                 else
                     _in_out_rFormula = "rpt:" + sFormula;
             }

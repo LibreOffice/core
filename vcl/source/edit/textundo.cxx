@@ -50,9 +50,9 @@ void Shorten (OUString& rString)
         iLast = nLen - 8; // not possible
     // finally:
     rString =
-        rString.copy(0, iFirst + 1) +
-        "..." +
-        rString.copy(iLast);
+        rString.copyView(0, iFirst + 1) +
+        OUStringLiteral(u"...") +
+        rString.copyView(iLast);
 }
 
 } // namespace

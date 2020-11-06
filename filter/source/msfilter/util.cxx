@@ -495,7 +495,7 @@ static EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
                                 if (nBegin != -1 && nEnd != -1)
                                 {
                                     sCombinedCharacters +=
-                                        sPart.copy(nBegin+1,nEnd-nBegin-1);
+                                        sPart.copyView(nBegin+1,nEnd-nBegin-1);
                                 }
                             }
                         }

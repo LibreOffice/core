@@ -240,15 +240,15 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
             // Replacement for place holders
             if ( aStrValue.startsWith("($1)") )
             {
-                aStrValue = FwkResId(STR_UPDATEDOC) + " " + aStrValue.copy( 4 );
+                aStrValue = FwkResId(STR_UPDATEDOC) + " " + aStrValue.copyView( 4 );
             }
             else if ( aStrValue.startsWith("($2)") )
             {
-                aStrValue = FwkResId(STR_CLOSEDOC_ANDRETURN) + aStrValue.copy( 4 );
+                aStrValue = FwkResId(STR_CLOSEDOC_ANDRETURN) + aStrValue.copyView( 4 );
             }
             else if ( aStrValue.startsWith("($3)") )
             {
-                aStrValue = FwkResId(STR_SAVECOPYDOC) + aStrValue.copy( 4 );
+                aStrValue = FwkResId(STR_SAVECOPYDOC) + aStrValue.copyView( 4 );
             }
             m_xToolbar->SetItemText( m_nID, aStrValue );
             // tdf#124267 strip mnemonic from tooltip

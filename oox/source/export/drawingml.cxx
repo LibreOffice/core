@@ -4863,7 +4863,7 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
         if (sExtension.equalsIgnoreAsciiCase(".WMF"))
             sContentType = "image/x-wmf";
         else
-            sContentType = "image/" + sExtension.copy(1);
+            sContentType = OUStringLiteral(u"image/") + sExtension.copyView(1);
         sRelId = sRelId.copy(3);
 
         StreamDataSequence dataSeq;

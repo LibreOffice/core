@@ -248,7 +248,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
                 --nLength;
             }
 
-            aText = aText.copy(0, nLineStart+nLength) + "...";
+            aText = aText.copyView(0, nLineStart+nLength) + OUStringLiteral(u"...");
             nLineLength = nLength + 3;
         }
 

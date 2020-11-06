@@ -961,7 +961,7 @@ OUString SdrTextObj::TakeObjNameSingul() const
 
             if(aStr2.getLength() > 10)
             {
-                aStr2 = aStr2.copy(0, 8) + "...";
+                aStr2 = aStr2.copyView(0, 8) + OUStringLiteral(u"...");
             }
 
             aStr += aStr2 + "\'";

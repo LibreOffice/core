@@ -742,7 +742,7 @@ OUString SwFormToken::GetString() const
             break;
     }
 
-    return sToken.copy(0, sToken.getLength()-1) + sData + sToken.copy(sToken.getLength()-1);
+    return sToken.copyView(0, sToken.getLength()-1) + sData + sToken.copyView(sToken.getLength()-1);
 }
 
 // -> #i21237#

@@ -223,13 +223,13 @@ namespace svgio::svgreader
                     if(nIndexTokenImportant > 0)
                     {
                         // copy content before token
-                        aNewOUTokenValue += aOUTokenValue.copy(0, nIndexTokenImportant);
+                        aNewOUTokenValue += aOUTokenValue.copyView(0, nIndexTokenImportant);
                     }
 
                     if(aOUTokenValue.getLength() > nIndexTokenImportant + aTokenImportant.getLength())
                     {
                         // copy content after token
-                        aNewOUTokenValue += aOUTokenValue.copy(nIndexTokenImportant + aTokenImportant.getLength());
+                        aNewOUTokenValue += aOUTokenValue.copyView(nIndexTokenImportant + aTokenImportant.getLength());
                     }
 
                     // remove spaces

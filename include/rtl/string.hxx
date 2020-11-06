@@ -1393,6 +1393,40 @@ public:
         return OString( pNew, SAL_NO_ACQUIRE );
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    /**
+      Returns a std::string_view that is a view of a substring of this string.
+
+      The substring begins at the specified beginIndex. If
+      beginIndex is negative or be greater than the length of
+      this string, behaviour is undefined.
+
+      @param     beginIndex   the beginning index, inclusive.
+      @return    the specified substring.
+    */
+    SAL_WARN_UNUSED_RESULT std::string_view copyView( sal_Int32 beginIndex ) const
+    {
+        return copyView(beginIndex, getLength() - beginIndex);
+    }
+
+    /**
+      Returns a std::string_view that is a view of a substring of this string.
+
+      The substring begins at the specified beginIndex and contains count
+      characters.  If either beginIndex or count are negative,
+      or beginIndex + count are greater than the length of this string
+      then behaviour is undefined.
+
+      @param     beginIndex   the beginning index, inclusive.
+      @param     count        the number of characters.
+      @return    the specified substring.
+    */
+    SAL_WARN_UNUSED_RESULT std::string_view copyView( sal_Int32 beginIndex, sal_Int32 count ) const
+    {
+        return std::string_view(*this).substr(beginIndex, count);
+    }
+#endif
+
     /**
       Concatenates the specified string to the end of this string.
 

@@ -2600,7 +2600,7 @@ static void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
         else
             nEndPos++;
 
-        rStr = rStr.copy( 0, nStartPos ) + rStr.copy( nEndPos );
+        rStr = OUStringLiteral(u"") + rStr.copyView( 0, nStartPos ) + rStr.copyView( nEndPos );
     }
     // erase trailing lines
     if ( nStartPos != -1 )
@@ -2611,7 +2611,7 @@ static void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
             n++;
 
         if ( n > nStartPos )
-            rStr = rStr.copy( 0, nStartPos ) + rStr.copy( n );
+            rStr = OUStringLiteral(u"") + rStr.copyView( 0, nStartPos ) + rStr.copyView( n );
     }
 }
 

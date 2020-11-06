@@ -42,12 +42,12 @@ namespace dbaui
             {
                 if ( !isCharOk( _sToCheck[i], i == 0, m_sAllowedChars ) )
                 {
-                    _rsCorrected += _sToCheck.copy(nMatch, i - nMatch);
+                    _rsCorrected += _sToCheck.copyView(nMatch, i - nMatch);
                     bCorrected = true;
                     nMatch = i + 1;
                 }
             }
-            _rsCorrected += _sToCheck.copy( nMatch );
+            _rsCorrected += _sToCheck.copyView( nMatch );
         }
         return bCorrected;
     }

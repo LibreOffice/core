@@ -766,12 +766,12 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
 
     if (lastIndex >= 0)
     {
-        sRelativKey += keyName.copy(lastIndex + 1);
+        sRelativKey += keyName.copyView(lastIndex + 1);
 
         if (sFullKeyName.getLength() > 1)
             sFullKeyName += keyName;
         else
-            sFullKeyName += keyName.copy(1);
+            sFullKeyName += keyName.copyView(1);
 
         sFullPath = sFullKeyName.copy(0, keyName.lastIndexOf('/') + 1);
     } else
