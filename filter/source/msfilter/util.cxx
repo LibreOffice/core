@@ -218,7 +218,9 @@ const ApiPaperSize spPaperSizeTable[] =
     { MM2MM100( 201 ),       MM2MM100( 276 )     },          // 65 - ISO B5 extra paper
     { MM2MM100( 420 ),       MM2MM100( 594 )     },          // 66 - A2 paper
     { MM2MM100( 297 ),       MM2MM100( 420 )     },          // 67 - A3 transverse paper
-    { MM2MM100( 322 ),       MM2MM100( 445 )     }           // 68 - A3 extra transverse paper
+    { MM2MM100( 322 ),       MM2MM100( 445 )     },          // 68 - A3 extra transverse paper
+    { 0, 0 },                                                // 69 - undefined
+    { MM2MM100( 105 ),       MM2MM100( 148 ),    },          // 70 - A6 paper
 };
 
 sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const css::awt::Size& rSize )
