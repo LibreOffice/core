@@ -131,7 +131,7 @@ REM ============================================================ MODULE CONSTANT
 Const RUNTIMEERRORS				=	2000			&apos; Upper limit of Basic run-time errors
 Const CONSOLENAME				=	&quot;ConsoleLines&quot;	&apos; Name of control in the console dialog
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Public Function Dispose() As Variant
@@ -339,7 +339,7 @@ Public Function ConsoleToFile(Optional ByVal FileName As Variant) As Boolean
 &apos;&apos;&apos; Export the content of the console to a text file
 &apos;&apos;&apos;	If the file exists and the console is not empty, it is overwritten without warning
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		FileName: the complete file name to export to. It it exists, it will be overwritten without warning
+&apos;&apos;&apos;		FileName: the complete file name to export to. If it exists, is overwritten without warning
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True if the file could be created
 &apos;&apos;&apos;	Examples:
@@ -728,7 +728,7 @@ Try:
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;UNKNOWNFOLDER&quot;, pvArgs(0), pvArgs(1))
-			Case NOTAFILEERROR			&apos;	SF_FileSystem.CopyFiler/MoveFile/DeleteFile(ArgName, Filename)
+			Case NOTAFILEERROR			&apos;	SF_FileSystem.CopyFile/MoveFile/DeleteFile(ArgName, Filename)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;NOTAFILE&quot;, pvArgs(0), pvArgs(1))

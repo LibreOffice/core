@@ -32,7 +32,7 @@ REM ============================================================ MODULE CONSTANT
 
 Const MAXREPR					= 50	&apos;	Maximum length to represent an array in the console
 
-REM ===================================================== CONSTRUCTOR/DESCTRUCTOR
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Public Function Dispose() As Variant
@@ -375,7 +375,7 @@ Public Function CountDims(Optional ByRef Array_ND As Variant) As Integer
 &apos;&apos;&apos;	Count the number of dimensions of an array - may be &gt; 2
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Array_ND: the array to be examined
-&apos;&apos;&apos;	Return: the number of dimensions: -1 = not array, 0 = unitialized array, else &gt;= 1
+&apos;&apos;&apos;	Return: the number of dimensions: -1 = not array, 0 = uninitialized array, else &gt;= 1
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		Dim a(1 To 10, -3 To 12, 5)
 &apos;&apos;&apos;		CountDims(a) returns 3
@@ -2387,7 +2387,7 @@ Dim lSwap As Long				&apos;	For index swaps
 	For i = (lMax + lMin) \ 2 To lMin Step -1
 		SF_Array._HeapSort1(pvArray, vIndexes, i, lMin, lMax, pbCaseSensitive)
 	Next i
-	&apos;	Next heapifies
+	&apos;	Next heapify
 	For i = lMax To lMin + 1 Step -1
 		&apos;	Only indexes as swapped, not the array items themselves
 		lSwap = vIndexes(i)
