@@ -27,6 +27,7 @@ $(eval $(call gb_Library_use_libraries,lwpft,\
 	i18nlangtag \
     sfx \
     sot \
+    svl \
     svt \
     svxcore \
     tl \

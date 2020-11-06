@@ -1433,7 +1433,7 @@ XFCell* LwpTableLayout::GetCellsMap(sal_uInt16 nRow, sal_uInt8 nCol)
     if (results.begin() == results.end())
        return nullptr;
     // return the last thing inserted for this position
-    return *std::prev(results.end());
+    return std::prev(results.end())->GetCell();
 }
 /**
  * @descr   Get row layout by row id

@@ -63,6 +63,8 @@
 
 #include "lwplayout.hxx"
 #include <xfilter/xftable.hxx>
+#include <svl/hint.hxx>
+#include <svl/lstner.hxx>
 
 #include <mdds/rtree.hpp>
 
@@ -93,6 +95,31 @@ struct TableConvertAttempt
     TableConvertAttempt(sal_uInt16 nStartRow, sal_uInt16 nEndRow, sal_uInt8 nStartCol, sal_uInt8 nEndCol)
         : mnStartRow(nStartRow), mnEndRow(nEndRow), mnStartCol(nStartCol), mnEndCol(nEndCol)
     {
+    }
+};
+
+class XFCellListener : public SfxListener
+{
+public:
+    XFCellListener(XFCell* pCell)
+        : m_pCell(pCell)
+    {
+        if (m_pCell)
+            StartListening(*m_pCell);
+    }
+
+    XFCell* GetCell()
+    {
+        return m_pCell;
+    }
+
+private:
+    XFCell* m_pCell;
+
+    virtual void Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint) override
+    {
+        if (rHint.GetId() == SfxHintId::Dying)
+            m_pCell = nullptr;
     }
 };
 
@@ -167,11 +194,12 @@ private:
     rtl::Reference<XFTable> m_pXFTable;
     bool m_bConverted;
 
-    using rt_type = mdds::rtree<int, XFCell*>;
+    using rt_type = mdds::rtree<int, XFCellListener>;
     rt_type m_CellsMap;
 
     void PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID);
 };
+
 /**
  * @brief
  * VO_SUPERTABLELAYOUT object
