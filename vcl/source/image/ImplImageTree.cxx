@@ -92,7 +92,7 @@ OUString convertLcTo32Path(OUString const & rPath)
         OUString sDir = rPath.copy(0, rPath.lastIndexOf('/'));
         if (!sFile.isEmpty() && sFile.startsWith("lc_"))
         {
-            aResult = sDir + "/32/" + sFile.copy(3);
+            aResult = sDir + "/32/" + sFile.subView(3);
         }
     }
     return aResult;
@@ -100,7 +100,7 @@ OUString convertLcTo32Path(OUString const & rPath)
 
 OUString createPath(OUString const & name, sal_Int32 pos, OUString const & locale)
 {
-    return name.copy(0, pos + 1) + locale + name.copy(pos);
+    return name.subView(0, pos + 1) + locale + name.subView(pos);
 }
 
 OUString getIconCacheUrl(OUString const & sVariant, ImageRequestParameters const & rParameters)

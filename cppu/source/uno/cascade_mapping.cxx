@@ -250,7 +250,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
                 return;
             }
 
-            uno_envDcp += rest.copy(0, index);
+            uno_envDcp += rest.subView(0, index);
         }
         else if (to_envPurpose == purpose)
         {
@@ -263,7 +263,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
                 return;
             }
 
-            uno_envDcp += rest.copy(0, index);
+            uno_envDcp += rest.subView(0, index);
         }
 
         uno_getEnvironment(&pInterm, uno_envDcp.pData, nullptr);

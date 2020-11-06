@@ -622,7 +622,7 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
     }
     OUString sResult = rItem;
     if (i != 0 && i < len)
-        sResult += rNumberString.copy(i);
+        sResult += rNumberString.subView(i);
     return sResult;
 }
 }

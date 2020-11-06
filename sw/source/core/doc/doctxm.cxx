@@ -1965,7 +1965,7 @@ Range SwTOXBaseSection::GetKeyRange(const OUString& rStr, const OUString& rStrRe
     if( SwTOIOptions::InitialCaps & GetOptions() )
     {
         aToCompare.sText = rIntl.ToUpper( aToCompare.sText, 0 )
-                         + aToCompare.sText.copy(1);
+                         + aToCompare.sText.subView(1);
     }
 
     OSL_ENSURE(rRange.Min() >= 0 && rRange.Max() >= 0, "Min Max < 0");

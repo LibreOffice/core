@@ -3072,7 +3072,7 @@ void SvxIconSelectorDialog::ImportGraphics(
     OUStringBuffer message;
     OUString fPath;
     if (rejectedCount > 1)
-          fPath = rPaths[0].copy(8) + "/";
+          fPath = OUString::Concat(rPaths[0].subView(8)) + "/";
     for ( sal_Int32 i = 0; i < rejectedCount; ++i )
     {
         message.append(fPath).append(rejected[i]).append("\n");

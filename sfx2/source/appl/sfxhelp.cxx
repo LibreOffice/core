@@ -707,7 +707,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
         return false;
 
     OUString aHelpLink = officecfg::Office::Common::Help::HelpRootURL::get();
-    OUString aTarget = "Target=" + rURL.copy(aInternal.getLength());
+    OUString aTarget = OUString::Concat("Target=") + rURL.subView(aInternal.getLength());
     aTarget = aTarget.replaceAll("%2F", "/").replaceAll("?", "&");
     aHelpLink += aTarget;
 
@@ -888,8 +888,8 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                         << "\" doesn't contain files segment");
                 throw Failure();
             }
-            path = path.copy(0, i1) + "/runtime/org.libreoffice.LibreOffice.Help/"
-                + path.copy(i2, i3 - i2) + sha + path.copy(i4);
+            path = path.subView(0, i1) + OUString::Concat("/runtime/org.libreoffice.LibreOffice.Help/")
+                + path.subView(i2, i3 - i2) + sha + path.subView(i4);
             // Turn <path> into a file URL:
             OUString url_;
             err = osl::FileBase::getFileURLFromSystemPath(path, url_);
@@ -930,7 +930,7 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     }
 
     OUString aHelpLink( aBaseInstallPath + "/index.html?" );
-    OUString aTarget = "Target=" + rURL.copy(RTL_CONSTASCII_LENGTH("vnd.sun.star.help://"));
+    OUString aTarget = OUString::Concat("Target=") + rURL.subView(RTL_CONSTASCII_LENGTH("vnd.sun.star.help://"));
     aTarget = aTarget.replaceAll("%2F","/").replaceAll("?","&");
     aHelpLink += aTarget;
 

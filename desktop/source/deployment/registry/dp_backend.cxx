@@ -216,7 +216,7 @@ OUString PackageRegistryBackend::createFolder(
     const OUString baseDir(sDataFolder);
     ::utl::TempFile aTemp(&baseDir, true);
     const OUString& url = aTemp.GetURL();
-    return sDataFolder + url.copy(url.lastIndexOf('/'));
+    return sDataFolder + url.subView(url.lastIndexOf('/'));
 }
 
 //folderURL can have the extension .tmp or .tmp_

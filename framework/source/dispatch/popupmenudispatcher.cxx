@@ -129,9 +129,9 @@ SAL_CALL PopupMenuDispatcher::queryDispatch(
                 {
                     sal_Int32 nQueryPart  = aURL.indexOf( '?', nSchemePart );
                     if ( nQueryPart > 0 )
-                        aBaseURL += aURL.copy( nSchemePart+1, nQueryPart-(nSchemePart+1) );
+                        aBaseURL += aURL.subView( nSchemePart+1, nQueryPart-(nSchemePart+1) );
                     else if ( nQueryPart == -1 )
-                        aBaseURL += aURL.copy( nSchemePart+1 );
+                        aBaseURL += aURL.subView( nSchemePart+1 );
                 }
 
                 css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider;
