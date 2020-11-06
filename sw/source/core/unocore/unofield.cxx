@@ -1034,7 +1034,7 @@ OUString SwXFieldMaster::LocalizeFormula(
         const OUString sDest = bQuery ? sProgName : sTypeName;
         if(rFormula.startsWith(sSource))
         {
-            return sDest + rFormula.copy(sSource.getLength());
+            return sDest + rFormula.subView(sSource.getLength());
         }
     }
     return rFormula;

@@ -116,7 +116,7 @@ OUString transformUrl(const OUString& _sUrl)
         sNewUrl = "sdbc:" + sNewUrl;
     else
     {
-        sNewUrl = "jdbc:mysql://" + sNewUrl.copy(5);
+        sNewUrl = OUString::Concat("jdbc:mysql://") + sNewUrl.subView(5);
     }
     return sNewUrl;
 }

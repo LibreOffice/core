@@ -258,7 +258,7 @@ static OUString lcl_createName(
         sal_Int32 nOffset = rLeadingChars.lastIndexOf("/");
         OUString aDirName;
         if (-1 != nOffset)
-            aDirName = aName + rLeadingChars.copy( 0, nOffset );
+            aDirName = aName + rLeadingChars.subView( 0, nOffset );
         else
             aDirName = aName;
         TempDirCreatedObserver observer;

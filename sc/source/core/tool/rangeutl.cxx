@@ -53,7 +53,7 @@ bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
 
     if ( nColonPos == -1  && nPointPos != -1 )
     {
-        aStrArea += ":" + rAreaStr.copy( nPointPos+1 ); // do not include '.' in copy
+        aStrArea += OUString::Concat(":") + rAreaStr.subView( nPointPos+1 ); // do not include '.' in copy
     }
 
     bSuccess = ConvertDoubleRef( rDoc, aStrArea, nTab, startPos, endPos, rDetails );

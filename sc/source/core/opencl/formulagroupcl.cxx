@@ -181,7 +181,7 @@ OUString LimitedString( const OUString& str )
     if( str.getLength() < 20 )
         return "\"" + str + "\"";
     else
-        return "\"" + str.copy( 0, 20 ) + "\"...";
+        return OUString::Concat("\"") + str.subView( 0, 20 ) + "\"...";
 }
 
 // Returns formatted contents of the data (possibly shortened), to be used in debug output.

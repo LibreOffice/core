@@ -381,7 +381,7 @@ void handleDirectory(
         if (aProject == "include" && nLevel > 1)
         {
             aProject = aPotDir.copy(aPotDir.lastIndexOf('/') + 1);
-            aPotDir = aPotDir.copy(0, aPotDir.lastIndexOf("include")) + aProject + "/messages";
+            aPotDir = aPotDir.subView(0, aPotDir.lastIndexOf("include")) + aProject + "/messages";
         }
         if (aProject != "include")
         {

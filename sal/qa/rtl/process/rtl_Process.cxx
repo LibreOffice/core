@@ -57,7 +57,7 @@ static OUString getModulePath()
 
     printUString(suDirPath, "modulePath:");
     suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') );
-    suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') + 1) + "bin";
+    suDirPath = OUString::Concat(suDirPath.subView( 0, suDirPath.lastIndexOf('/') + 1)) + "bin";
     return suDirPath;
 }
 
