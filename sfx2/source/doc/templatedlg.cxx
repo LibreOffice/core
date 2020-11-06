@@ -475,7 +475,11 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OString&, rIdent, void)
     else if (rIdent == MNI_ACTION_DELETE_FOLDER)
         OnCategoryDelete();
     else if (rIdent == MNI_ACTION_REFRESH)
+    {
         mxLocalView->reload();
+        if(mxSearchView->IsVisible())
+            SearchUpdateHdl(*mxSearchFilter);
+    }
     else if (rIdent != MNI_ACTION_DEFAULT)
         DefaultTemplateMenuSelectHdl(rIdent);
 }
@@ -486,7 +490,12 @@ void SfxTemplateManagerDlg::DefaultTemplateMenuSelectHdl(const OString& rIdent)
 
     OUString sPrevDefault = SfxObjectFactory::GetStandardTemplate( aServiceName );
     if(!sPrevDefault.isEmpty())
-        mxLocalView->RemoveDefaultTemplateIcon(sPrevDefault);
+    {
+        if(mxSearchView->IsVisible())
+            mxSearchView->RemoveDefaultTemplateIcon(sPrevDefault);
+        else
+            mxLocalView->RemoveDefaultTemplateIcon(sPrevDefault);
+    }
 
     SfxObjectFactory::SetStandardTemplate( aServiceName, OUString() );
 
@@ -702,8 +711,12 @@ IMPL_LINK(SfxTemplateManagerDlg, DefaultTemplateHdl, ThumbnailViewItem*, pItem, 
         {
             OUString sPrevDefault = SfxObjectFactory::GetStandardTemplate( aServiceName );
             if(!sPrevDefault.isEmpty())
-                mxLocalView->RemoveDefaultTemplateIcon(sPrevDefault);
-
+            {
+                if(mxSearchView->IsVisible())
+                    mxSearchView->RemoveDefaultTemplateIcon(sPrevDefault);
+                else
+                    mxLocalView->RemoveDefaultTemplateIcon(sPrevDefault);
+            }
             SfxObjectFactory::SetStandardTemplate(aServiceName,pViewItem->getPath());
             pViewItem->showDefaultIcon(true);
         }

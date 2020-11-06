@@ -240,6 +240,19 @@ BitmapEx TemplateSearchView::getDefaultThumbnail( const OUString& rPath )
     return aImg;
 }
 
+void TemplateSearchView::RemoveDefaultTemplateIcon(const OUString& rPath)
+{
+    for (const std::unique_ptr<ThumbnailViewItem>& pItem : mItemList)
+    {
+        TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem.get());
+        if (pViewItem && pViewItem->getPath().match(rPath))
+        {
+            pViewItem->showDefaultIcon(false);
+            Invalidate();
+            return;
+        }
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
 
