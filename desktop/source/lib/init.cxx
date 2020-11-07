@@ -2819,7 +2819,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:FreezePanes"),
         OUString(".uno:FreezePanesColumn"),
         OUString(".uno:FreezePanesRow"),
-        OUString(".uno:Sidebar")
+        OUString(".uno:Sidebar"),
+        OUString(".uno:SheetRightToLeft")
     };
 
     util::URL aCommandURL;
