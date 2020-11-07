@@ -621,7 +621,7 @@ Public Function DeleteFolder(Optional ByVal FolderName As Variant) As Boolean
 &apos;&apos;&apos;		NOTAFOLDERERROR				Argument is a file, not a folder
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		FSO.FileNaming = &quot;SYS&quot;
-&apos;&apos;&apos;		FSO.DeleteFolder(&quot;C:\Temp\*&quot;)		&apos;	Only olders are deleted, files in the parent folder are not
+&apos;&apos;&apos;		FSO.DeleteFolder(&quot;C:\Temp\*&quot;)		&apos;	Only folders are deleted, files in the parent folder are not
 
 Dim bDelete As Boolean			&apos;	Return value
 
