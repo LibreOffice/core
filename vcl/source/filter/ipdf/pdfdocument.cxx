@@ -49,6 +49,10 @@ class PDFCommentElement : public PDFElement
 public:
     explicit PDFCommentElement(PDFDocument& rDoc);
     bool Read(SvStream& rStream) override;
+    void writeString(OStringBuffer& /*rBuffer*/) override
+    {
+        printf("Unimplemented Comment Element\n");
+    }
 };
 }
 
@@ -66,6 +70,8 @@ public:
     PDFEndDictionaryElement();
     bool Read(SvStream& rStream) override;
     sal_uInt64 GetLocation() const;
+
+    void writeString(OStringBuffer& /*rBuffer*/) override { assert(false && "not implemented"); }
 };
 
 /// End of a stream: 'endstream' keyword.
@@ -73,6 +79,8 @@ class PDFEndStreamElement : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;
+
+    void writeString(OStringBuffer& /*rBuffer*/) override { assert(false && "not implemented"); }
 };
 
 /// End of an object: 'endobj' keyword.
@@ -80,6 +88,8 @@ class PDFEndObjectElement : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;
+
+    void writeString(OStringBuffer& /*rBuffer*/) override { assert(false && "not implemented"); }
 };
 
 /// End of an array: ']'.
@@ -92,14 +102,30 @@ public:
     PDFEndArrayElement();
     bool Read(SvStream& rStream) override;
     sal_uInt64 GetOffset() const;
+
+    void writeString(OStringBuffer& /*rBuffer*/) override
+    {
+        printf("Unimplemented EndArray Element\n");
+    }
 };
 
 /// Boolean object: a 'true' or a 'false'.
 class PDFBooleanElement : public PDFElement
 {
+    bool m_aValue;
+
 public:
-    explicit PDFBooleanElement(bool bValue);
+    explicit PDFBooleanElement(bool bValue)
+        : m_aValue(bValue)
+    {
+    }
+
     bool Read(SvStream& rStream) override;
+
+    void writeString(OStringBuffer& rBuffer) override
+    {
+        rBuffer.append(m_aValue ? "true" : "false");
+    }
 };
 
 /// Null object: the 'null' singleton.
@@ -107,6 +133,8 @@ class PDFNullElement : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;
+
+    void writeString(OStringBuffer& rBuffer) override { rBuffer.append("null"); }
 };
 }
 
@@ -123,6 +151,8 @@ public:
     bool Read(SvStream& rStream) override;
     PDFElement* Lookup(const OString& rDictionaryKey);
     sal_uInt64 GetLocation() const;
+
+    void writeString(OStringBuffer& /*rBuffer*/) override { assert(false && "not implemented"); }
 };
 
 XRefEntry::XRefEntry() = default;
@@ -2286,8 +2316,6 @@ bool PDFNumberElement::Read(SvStream& rStream)
 sal_uInt64 PDFNumberElement::GetLocation() const { return m_nOffset; }
 
 sal_uInt64 PDFNumberElement::GetLength() const { return m_nLength; }
-
-PDFBooleanElement::PDFBooleanElement(bool /*bValue*/) {}
 
 bool PDFBooleanElement::Read(SvStream& /*rStream*/) { return true; }
 
