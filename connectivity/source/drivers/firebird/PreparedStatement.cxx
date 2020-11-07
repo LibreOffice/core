@@ -240,6 +240,30 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
         setShort(nParameterIndex, int32Value);
         break;
     }
+    case SQL_LONG:
+    {
+        sal_Int32 int32Value = sInput.toInt32();
+        setInt(nParameterIndex, int32Value);
+        break;
+    }
+    case SQL_INT64:
+    {
+        sal_Int64 int64Value = sInput.toInt64();
+        setLong(nParameterIndex, int64Value);
+        break;
+    }
+    case SQL_FLOAT:
+    {
+        float floatValue = sInput.toFloat();
+        setFloat(nParameterIndex, floatValue);
+        break;
+    }
+    case SQL_BOOLEAN:
+    {
+        bool boolValue = sInput.toBoolean();
+        setBoolean(nParameterIndex, boolValue);
+        break;
+    }
     default:
         ::dbtools::throwSQLException(
             "Incorrect type for setString",
