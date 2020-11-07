@@ -17,6 +17,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/dllapi.h>
+#include <rtl/strbuf.hxx>
 
 #include <vcl/filter/pdfobjectcontainer.hxx>
 
@@ -59,6 +60,8 @@ public:
     bool alreadyVisiting() const { return m_bVisiting; }
     void setParsing(bool bParsing) { m_bParsing = bParsing; }
     bool alreadyParsing() const { return m_bParsing; }
+
+    virtual void writeString(OStringBuffer& rBuffer) = 0;
 };
 
 /// Indirect object: something with a unique ID.
@@ -129,6 +132,8 @@ public:
     SvMemoryStream* GetStreamBuffer() const;
     void SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer);
     PDFDocument& GetDocument();
+
+    void writeString(OStringBuffer& /*rBuffer*/) override { assert(false && "not implemented"); }
 };
 
 /// Array object: a list.
@@ -143,6 +148,17 @@ public:
     bool Read(SvStream& rStream) override;
     void PushBack(PDFElement* pElement);
     const std::vector<PDFElement*>& GetElements() const;
+
+    void writeString(OStringBuffer& rBuffer) override
+    {
+        rBuffer.append("[ ");
+        for (auto& rElement : m_aElements)
+        {
+            rElement->writeString(rBuffer);
+            rBuffer.append(" ");
+        }
+        rBuffer.append("]");
+    }
 };
 
 /// Reference object: something with a unique ID.
@@ -168,6 +184,14 @@ public:
     int GetGenerationValue() const;
     sal_uInt64 GetOffset() const;
     PDFNumberElement& GetObjectElement() const;
+
+    void writeString(OStringBuffer& rBuffer) override
+    {
+        rBuffer.append(sal_Int32(GetObjectValue()));
+        rBuffer.append(' ');
+        rBuffer.append(sal_Int32(GetGenerationValue()));
+        rBuffer.append(" R");
+    }
 };
 
 /// Stream object: a byte array with a known length.
@@ -183,6 +207,13 @@ public:
     bool Read(SvStream& rStream) override;
     sal_uInt64 GetOffset() const;
     SvMemoryStream& GetMemory();
+
+    void writeString(OStringBuffer& rBuffer) override
+    {
+        rBuffer.append("stream\n");
+        rBuffer.append(static_cast<const char*>(m_aMemory.GetData()), m_aMemory.GetSize());
+        rBuffer.append("\nendstream\n");
+    }
 };
 
 /// Name object: a key string.
@@ -198,6 +229,12 @@ public:
     const OString& GetValue() const;
     sal_uInt64 GetLocation() const;
     static sal_uInt64 GetLength() { return 0; }
+
+    void writeString(OStringBuffer& rBuffer) override
+    {
+        rBuffer.append("/");
+        rBuffer.append(m_aValue);
+    }
 };
 
 /// Dictionary object: a set key-value pairs.
@@ -229,6 +266,20 @@ public:
     PDFObjectElement* LookupObject(const OString& rDictionaryKey);
     /// Looks up an element which is contained in this dictionary.
     PDFElement* LookupElement(const OString& rDictionaryKey);
+
+    void writeString(OStringBuffer& rBuffer) override
+    {
+        rBuffer.append("<< ");
+        for (auto& rPair : m_aItems)
+        {
+            rBuffer.append("/");
+            rBuffer.append(rPair.first);
+            rBuffer.append(" ");
+            rPair.second->writeString(rBuffer);
+            rBuffer.append(" ");
+        }
+        rBuffer.append(">>");
+    }
 };
 
 enum class TokenizeMode
@@ -292,6 +343,13 @@ class VCL_DLLPUBLIC PDFHexStringElement final : public PDFElement
 public:
     bool Read(SvStream& rStream) override;
     const OString& GetValue() const;
+
+    void writeString(OStringBuffer& rBuffer) override
+    {
+        rBuffer.append("<");
+        rBuffer.append(m_aValue);
+        rBuffer.append(">");
+    }
 };
 
 /// Literal string: in (asdf) form.
@@ -302,6 +360,13 @@ class VCL_DLLPUBLIC PDFLiteralStringElement final : public PDFElement
 public:
     bool Read(SvStream& rStream) override;
     const OString& GetValue() const;
+
+    void writeString(OStringBuffer& rBuffer) override
+    {
+        rBuffer.append("(");
+        rBuffer.append(m_aValue);
+        rBuffer.append(")");
+    }
 };
 
 /// Numbering object: an integer or a real.
@@ -319,6 +384,8 @@ public:
     double GetValue() const;
     sal_uInt64 GetLocation() const;
     sal_uInt64 GetLength() const;
+
+    void writeString(OStringBuffer& rBuffer) override { rBuffer.append(m_fValue); }
 };
 
 /**
