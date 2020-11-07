@@ -16,6 +16,24 @@
       "revId": "d760bb8cd6328cd1019e1c44644414244befd5a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe5439f3_233d3770",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-11-07T19:19:39Z",
+      "side": 1,
+      "message": "Indeed, I hesitated between just to deal with this case so the patch is more straightforward or to try to deal with all the types.",
+      "parentUuid": "2c67f4d8_0f76ae10",
+      "revId": "d760bb8cd6328cd1019e1c44644414244befd5a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
