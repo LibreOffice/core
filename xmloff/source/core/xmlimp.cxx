@@ -421,7 +421,6 @@ SvXMLImport::SvXMLImport(
         bIsNSMapsInitialized = true;
     }
     registerNamespaces();
-    maNamespaceAttrList = new comphelper::AttributeList;
     maAttrList = new comphelper::AttributeList;
 }
 
@@ -722,6 +721,63 @@ std::unique_ptr<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
 }
 
 
+std::unique_ptr<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
+{
+    std::unique_ptr<SvXMLNamespaceMap> pRewindMap;
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+    {
+        if ( aIter.getToken() == XML_ELEMENT(OFFICE, XML_VERSION) && !mpImpl->mxODFVersion )
+        {
+            mpImpl->mxODFVersion = aIter.toString();
+
+            // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
+            if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( *mpImpl->mxODFVersion ) )
+            {
+                throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
+                        uno::Reference< uno::XInterface >(),
+                        uno::makeAny(
+                            packages::zip::ZipIOException("Inconsistent ODF versions in content.xml and manifest.xml!" ) ) );
+            }
+        }
+    }
+    const uno::Sequence< css::xml::Attribute > unknownAttribs = xAttrList->getUnknownAttributes();
+    for ( const auto& rUnknownAttrib : unknownAttribs )
+    {
+        const OUString& rAttrName = rUnknownAttrib.Name;
+        if( ( rAttrName.getLength() >= 5 ) &&
+            ( rAttrName.startsWith( GetXMLToken(XML_XMLNS) ) ) &&
+            ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
+        {
+            if( !pRewindMap )
+            {
+                pRewindMap = std::move(mpNamespaceMap);
+                mpNamespaceMap.reset(new SvXMLNamespaceMap(*pRewindMap));
+            }
+            const OUString& rAttrValue = rUnknownAttrib.Value;
+
+            OUString aPrefix( ( rAttrName.getLength() == 5 )
+                                 ? OUString()
+                                 : rAttrName.copy( 6 ) );
+            // Add namespace, but only if it is known.
+            sal_uInt16 nKey = mpNamespaceMap->AddIfKnown( aPrefix, rAttrValue );
+            // If namespace is unknown, try to match a name with similar
+            // TC Id and version
+            if( XML_NAMESPACE_UNKNOWN == nKey  )
+            {
+                OUString aTestName( rAttrValue );
+                if( SvXMLNamespaceMap::NormalizeURI( aTestName ) )
+                    nKey = mpNamespaceMap->AddIfKnown( aPrefix, aTestName );
+            }
+            // If that namespace is not known, too, add it as unknown
+            if( XML_NAMESPACE_UNKNOWN == nKey  )
+                mpNamespaceMap->Add( aPrefix, rAttrValue );
+
+        }
+    }
+    return pRewindMap;
+}
+
 void SAL_CALL SvXMLImport::characters( const OUString& rChars )
 {
     maContexts.top()->characters( rChars );
@@ -762,10 +818,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
         }
     }
 
-    maNamespaceAttrList->Clear();
-
-    maNamespaceHandler->addNSDeclAttributes( maNamespaceAttrList );
-    processNSAttributes( maNamespaceAttrList.get() );
+    std::unique_ptr<SvXMLNamespaceMap> pRewindMap = processNSAttributes( Attribs );
 
     SvXMLImportContextRef xContext;
     const bool bRootContext = maContexts.empty();
@@ -781,11 +834,9 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
             const OUString& rLocalName = SvXMLImport::getNameFromToken( Element );
             OUString aName = rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName;
             OUString aLocalName;
-            sal_uInt16 nPrefix =
-                mpNamespaceMap->GetKeyByAttrName( aName, &aLocalName );
+            sal_uInt16 nPrefix = mpNamespaceMap->GetKeyByAttrName( aName, &aLocalName );
 
             maAttrList->Clear();
-
             if ( Attribs.is() )
             {
                 for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
@@ -831,6 +882,9 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     // Call a startElement at the new context.
     xContext->startFastElement( Element, Attribs );
 
+    if (pRewindMap)
+        xContext->PutRewindMap(std::move(pRewindMap));
+
     // Push context on stack.
     maContexts.push(xContext);
 }
@@ -839,6 +893,9 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rNamespace, con
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
     SAL_INFO("xmloff.core", "startUnknownElement " << rNamespace << " " << rName);
+
+    std::unique_ptr<SvXMLNamespaceMap> pRewindMap = processNSAttributes( Attribs );
+
     SvXMLImportContextRef xContext;
     const bool bRootContext = maContexts.empty();
     if (!maContexts.empty())
@@ -853,8 +910,6 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rNamespace, con
             sal_uInt16 nPrefix = mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
 
             maAttrList->Clear();
-            maNamespaceHandler->addNSDeclAttributes( maAttrList );
-
             if ( Attribs.is() )
             {
                 for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
@@ -904,6 +959,11 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rNamespace, con
     }
 
     xContext->startUnknownElement( rNamespace, rName, Attribs );
+
+    if (pRewindMap)
+        xContext->PutRewindMap(std::move(pRewindMap));
+
+    // Push context on stack.
     maContexts.push(xContext);
 }
 
@@ -916,9 +976,21 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
         assert(false);
         return;
     }
-    SvXMLImportContextRef xContext = std::move(maContexts.top());
-    maContexts.pop();
-    xContext->endFastElement( Element );
+    std::unique_ptr<SvXMLNamespaceMap> pRewindMap;
+    {
+        SvXMLImportContextRef xContext = std::move(maContexts.top());
+        maContexts.pop();
+        xContext->endFastElement( Element );
+        // Get a namespace map to rewind.
+        pRewindMap = xContext->TakeRewindMap();
+        // note: delete xContext *before* rewinding namespace map!
+    }
+    // Rewind a namespace map.
+    if (pRewindMap)
+    {
+        mpNamespaceMap.reset();
+        mpNamespaceMap = std::move(pRewindMap);
+    }
 }
 
 void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OUString & rLocalName)
@@ -930,9 +1002,21 @@ void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OU
         assert(false);
         return;
     }
-    SvXMLImportContextRef xContext = std::move(maContexts.top());
-    maContexts.pop();
-    xContext->endUnknownElement( rPrefix, rLocalName );
+    std::unique_ptr<SvXMLNamespaceMap> pRewindMap;
+    {
+        SvXMLImportContextRef xContext = std::move(maContexts.top());
+        maContexts.pop();
+        xContext->endUnknownElement( rPrefix, rLocalName );
+        // Get a namespace map to rewind.
+        pRewindMap = xContext->TakeRewindMap();
+        // note: delete xContext *before* rewinding namespace map!
+    }
+    // Rewind a namespace map.
+    if (pRewindMap)
+    {
+        mpNamespaceMap.reset();
+        mpNamespaceMap = std::move(pRewindMap);
+    }
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
