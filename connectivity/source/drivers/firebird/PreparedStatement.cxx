@@ -240,6 +240,12 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
         setShort(nParameterIndex, int32Value);
         break;
     }
+    case SQL_LONG:
+    {
+        sal_Int32 int32Value = sInput.toInt32();
+        setInt(nParameterIndex, int32Value);
+        break;
+    }
     default:
         ::dbtools::throwSQLException(
             "Incorrect type for setString",
