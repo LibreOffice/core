@@ -229,7 +229,6 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     css::uno::Reference< css::xml::sax::XFastParser > mxParser;
     rtl::Reference< SvXMLImportFastNamespaceHandler > maNamespaceHandler;
     rtl::Reference < comphelper::AttributeList > maAttrList;
-    rtl::Reference < comphelper::AttributeList > maNamespaceAttrList;
     css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastDocumentHandler;
     static rtl::Reference< xmloff::token::FastTokenHandler > xTokenHandler;
     static std::unordered_map< sal_Int32, std::pair< OUString, OUString > > aNamespaceMap;
@@ -238,6 +237,8 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
 
     static void initializeNamespaceMaps();
     void registerNamespaces();
+    std::unique_ptr<SvXMLNamespaceMap> processNSAttributes(
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
     std::unique_ptr<SvXMLNamespaceMap> processNSAttributes(
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
 
