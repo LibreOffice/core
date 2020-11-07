@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "787d5165_db5ca423",
+        "filename": "starmath/inc/parse.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-07T15:46:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e2c867d_411c87ed",
+      "range": {
+        "startLine": 90,
+        "startChar": 15,
+        "endLine": 90,
+        "endChar": 16
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "63787a12_ca18ca66",
         "filename": "starmath/inc/strings.hrc",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bb749eb_2b73c3fd",
+        "filename": "starmath/inc/strings.hrc",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-07T15:46:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63787a12_ca18ca66",
+      "range": {
+        "startLine": 23,
+        "startChar": 39,
+        "endLine": 23,
+        "endChar": 40
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1483d770_82278fa6",
+        "filename": "starmath/inc/strings.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-07T15:46:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b10591d_73a3c1a2",
+      "range": {
+        "startLine": 13,
+        "startChar": 39,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2593f0a0_d8b3a692",
         "filename": "starmath/inc/token.hxx",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45e98496_a2456532",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-07T15:46:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2593f0a0_d8b3a692",
+      "range": {
+        "startLine": 20,
+        "startChar": 38,
+        "endLine": 20,
+        "endChar": 40
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +236,54 @@
     },
     {
       "key": {
+        "uuid": "4842c7bf_4ddf686f",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-07T15:46:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "502e2198_a9de710a",
+      "range": {
+        "startLine": 23,
+        "startChar": 40,
+        "endLine": 23,
+        "endChar": 41
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e61aa6e_0c02a9df",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-07T15:46:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c50ee968_e33b1905",
+      "range": {
+        "startLine": 23,
+        "startChar": 34,
+        "endLine": 23,
+        "endChar": 35
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3ed77bf_d2e072ea",
         "filename": "starmath/inc/visitors.hxx",
         "patchSetId": 7
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "fbcd2815_ceae9baa",
+        "filename": "starmath/inc/visitors.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-07T15:46:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3ed77bf_d2e072ea",
+      "range": {
+        "startLine": 10,
+        "startChar": 44,
+        "endLine": 10,
+        "endChar": 45
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b368e16_74fad78c",
         "filename": "starmath/inc/visitors.hxx",
         "patchSetId": 7
@@ -183,6 +351,30 @@
       "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69d66735_31ab5e7e",
+        "filename": "starmath/inc/visitors.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-07T15:46:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b368e16_74fad78c",
+      "range": {
+        "startLine": 12,
+        "startChar": 7,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
