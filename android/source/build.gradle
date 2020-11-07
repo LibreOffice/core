@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
+
 // buildhost settings - paths and the like
-apply from: 'liboSettings.gradle'
+apply from: findProperty("liboWorkdir") + "/android/liboSettings.gradle"
 
 project.ext.set("archivesBaseName", "LibreOfficeViewer")
 allprojects {
@@ -47,9 +48,9 @@ android {
         main.jniLibs.srcDirs = ["${liboJniLibsdir}"]
         main.jni.srcDirs = [] // don't attempt to build native-lib via gradle
         // the configuration data that might be stripped or not
-        fullUI.assets.srcDirs 'assets_fullUI'
-        strippedUI.assets.srcDirs 'assets_strippedUI'
-        strippedUIEditing.assets.srcDirs 'assets_strippedUI'
+        fullUI.assets.srcDirs "${liboWorkdir}/android/assets_fullUI"
+        strippedUI.assets.srcDirs "${liboWorkdir}/android/assets_strippedUI"
+        strippedUIEditing.assets.srcDirs "${liboWorkdir}/android/assets_strippedUI"
     }
     defaultConfig {
         minSdkVersion 16
@@ -104,7 +105,7 @@ extent)
 // understand "/assets" paths.
 task copyUnpackAssets(type: Copy) {
     description "copies assets that need to be extracted on the device"
-    into 'assets/unpack'
+    into "${liboWorkdir}/android/assets/unpack"
     into('program') {
         from("${liboInstdir}/${liboEtcFolder}/types") {
             includes = [
@@ -143,7 +144,7 @@ task copyUnpackAssets(type: Copy) {
 
 task copyAssets(type: Copy) {
     description "copies assets that can be accessed within the installed apk"
-    into 'assets'
+    into "${liboWorkdir}/android/assets"
 
     // include icons
     into ('share') {
@@ -200,20 +201,20 @@ task copyAppResources(type: Copy) {
 
 task createFullConfig(type: Copy) {
     // grab dir to clear whole hierarchy on clean target
-    outputs.dir "assets_fullUI"
-    into 'assets_fullUI/share/config/soffice.cfg'
+    outputs.dir "${liboWorkdir}/android/assets_fullUI"
+    into "${liboWorkdir}/android/assets_fullUI/share/config/soffice.cfg"
     from "${liboInstdir}/share/config/soffice.cfg"
 }
 
 task createStrippedConfig {
-    def preserveDir = file("assets_strippedUI/share/config/soffice.cfg/empty")
-    outputs.dir "assets_strippedUI"
-    outputs.dir "assets_strippedUI/share/registry/res"
+    def preserveDir = file("${liboWorkdir}/android/assets_strippedUI/share/config/soffice.cfg/empty")
+    outputs.dir "${liboWorkdir}/android/assets_strippedUI"
+    outputs.dir "${liboWorkdir}/android/assets_strippedUI/share/registry/res"
     outputs.file preserveDir
 
     doLast {
-        file('assets_strippedUI/share/registry/res').mkdirs()
-        file("assets_strippedUI/share/config/soffice.cfg").mkdirs()
+        file("${liboWorkdir}/android/assets_strippedUI/share/registry/res").mkdirs()
+        file("${liboWorkdir}/android/assets_strippedUI/share/config/soffice.cfg").mkdirs()
         // just empty file
         preserveDir.text = ""
     }
@@ -223,30 +224,30 @@ task createStrippedConfig {
 task createStrippedConfigMain(type: Exec) {
     dependsOn 'createStrippedConfig'
     inputs.files "${liboInstdir}/share/registry/main.xcd", "${liboSrcRoot}/android/mobile-config.py"
-    outputs.file "assets_strippedUI/share/registry/main.xcd"
+    outputs.file "${liboWorkdir}/android/assets_strippedUI/share/registry/main.xcd"
     executable "${liboSrcRoot}/android/mobile-config.py"
-    args = ["${liboInstdir}/share/registry/main.xcd", "assets_strippedUI/share/registry/main.xcd"]
+    args = ["${liboInstdir}/share/registry/main.xcd", "${liboWorkdir}/android/assets_strippedUI/share/registry/main.xcd"]
 }
 
 task createStrippedConfigRegistry(type: Exec) {
     dependsOn 'createStrippedConfig'
     inputs.files "${liboInstdir}/share/registry/res/registry_en-US.xcd", "${liboSrcRoot}/android/mobile-config.py"
-    outputs.file "assets_strippedUI/share/registry/res/registry_en-US.xcd"
+    outputs.file "${liboWorkdir}/android/assets_strippedUI/share/registry/res/registry_en-US.xcd"
     executable "${liboSrcRoot}/android/mobile-config.py"
-    args = ["${liboInstdir}/share/registry/res/registry_en-US.xcd", "assets_strippedUI/share/registry/res/registry_en-US.xcd"]
+    args = ["${liboInstdir}/share/registry/res/registry_en-US.xcd", "${liboWorkdir}/android/assets_strippedUI/share/registry/res/registry_en-US.xcd"]
     doFirst {
-        file('assets_strippedUI/share/registry/res').mkdirs()
+        file("${liboWorkdir}/android/assets_strippedUI/share/registry/res").mkdirs()
     }
 }
 
 task createRCfiles {
-    inputs.file "liboSettings.gradle"
+    inputs.file "${liboWorkdir}/android/liboSettings.gradle"
     dependsOn copyUnpackAssets, copyAssets
-    def sofficerc     = file('assets/unpack/program/sofficerc')
-    def fundamentalrc = file('assets/program/fundamentalrc')
-    def bootstraprc   = file('assets/program/bootstraprc')
-    def unorc         = file('assets/program/unorc')
-    def versionrc     = file('assets/program/versionrc')
+    def sofficerc     = file("${liboWorkdir}/android/assets/unpack/program/sofficerc")
+    def fundamentalrc = file("${liboWorkdir}/android/assets/program/fundamentalrc")
+    def bootstraprc   = file("${liboWorkdir}/android/assets/program/bootstraprc")
+    def unorc         = file("${liboWorkdir}/android/assets/program/unorc")
+    def versionrc     = file("${liboWorkdir}/android/assets/program/versionrc")
 
     outputs.files sofficerc, fundamentalrc, unorc, bootstraprc, versionrc
 

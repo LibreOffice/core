@@ -22,7 +22,7 @@ ifeq ($(ENABLE_JAVA),TRUE)
 # still looks for the .apk, and we want fresh daily builds to be uploaded.
 # Us "foo" instead of the old INPATH
 	mkdir -p $(BUILDDIR)/instsetoo_native/foo/bin; \
-	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then cp $(SRCDIR)/android/source/build/outputs/apk/strippedUI$(if $(ENABLE_ANDROID_EDITING),Editing)/$(if $(ENABLE_RELEASE_BUILD),release/*-release-unsigned.apk,debug/*-debug.apk) $(BUILDDIR)/instsetoo_native/foo/bin ; fi
+	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then cp $(WORKDIR)/gradle-build/outputs/apk/strippedUI/$(if $(ENABLE_ANDROID_EDITING),Editing)/$(if $(ENABLE_RELEASE_BUILD),release/*-release-unsigned.apk,debug/*-debug.apk) $(BUILDDIR)/instsetoo_native/foo/bin ; fi
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),MAK)
 endif
 

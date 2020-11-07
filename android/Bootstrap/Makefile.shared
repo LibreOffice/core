@@ -14,16 +14,16 @@
 # configurability on platforms like Android and iOS where apps based on LO
 # code are very much self-contained pre-packaged thingies.
 
-JNILIBSDIR=$(BUILDDIR)/android/jniLibs
+JNILIBSDIR=$(WORKDIR)/android/jniLibs
 SODEST=$(JNILIBSDIR)/$(ANDROID_APP_ABI)
-OBJLOCAL=$(BUILDDIR)/android/obj/local/$(ANDROID_APP_ABI)
+OBJLOCAL=$(WORKDIR)/android/obj/local/$(ANDROID_APP_ABI)
 
 #
 # Helpful rules ...
 #
 
-local.properties: $(BUILDDIR)/config_host.mk
-	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
+$(WORKDIR)/android/local.properties: $(BUILDDIR)/config_host.mk
+	echo sdk.dir=$(ANDROID_SDK_HOME) > $(WORKDIR)/android/local.properties
 
 #
 # Build / link the single .so for this app
@@ -57,10 +57,10 @@ WHOLELIBS = \
   -Wl,--no-whole-archive
 
 
-$(OBJLOCAL)/liblo-native-code.so : native-code.cxx $(ALL_STATIC_LIBS)
+$(OBJLOCAL)/liblo-native-code.so : $(WORKDIR)/android/native-code.cxx $(ALL_STATIC_LIBS)
 	@echo "Linking $@"
 	mkdir -p $(OBJLOCAL)
-	$(CXX) -fuse-ld=gold -Wl,--build-id=sha1 -Wl,--gc-sections -Wl,--version-script=../Bootstrap/version.map -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -Wl,-soname,liblo-native-code.so -o $(OBJLOCAL)/liblo-native-code.so -I$(BUILDDIR)/config_host -I$(SRCDIR)/include native-code.cxx -L$(INSTDIR)/$(LIBO_LIB_FOLDER) $(WHOLELIBS) $(LIBS) -lc++_static -lc++abi $(if $(filter-out arm64-v8a x86_64,$(ANDROID_APP_ABI)),-landroid_support) $(if $(filter armeabi-v7a,$(ANDROID_APP_ABI)),-lunwind) $(addprefix -l,$(NSSLIBS)) -lGLESv2 -landroid -ljnigraphics -llog -lz
+	$(CXX) -fuse-ld=gold -Wl,--build-id=sha1 -Wl,--gc-sections -Wl,--version-script=../Bootstrap/version.map -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -Wl,-soname,liblo-native-code.so -o $(OBJLOCAL)/liblo-native-code.so -I$(BUILDDIR)/config_host -I$(SRCDIR)/include $(WORKDIR)/android/native-code.cxx -L$(INSTDIR)/$(LIBO_LIB_FOLDER) $(WHOLELIBS) $(LIBS) -lc++_static -lc++abi $(if $(filter-out arm64-v8a x86_64,$(ANDROID_APP_ABI)),-landroid_support) $(if $(filter armeabi-v7a,$(ANDROID_APP_ABI)),-lunwind) $(addprefix -l,$(NSSLIBS)) -lGLESv2 -landroid -ljnigraphics -llog -lz
 
 $(SODEST)/liblo-native-code.so : $(OBJLOCAL)/liblo-native-code.so
 	mkdir -p $(SODEST)
@@ -75,7 +75,7 @@ $(SODEST)/libc++_shared.so : $(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/lib
 	mkdir -p $(SODEST)
 	cp $< $@
 
-link-so: $(SODEST)/liblo-native-code.so $(SODEST)/nss-libraries $(SODEST)/libc++_shared.so
+$(WORKDIR)/android/link-so: $(SODEST)/liblo-native-code.so $(SODEST)/nss-libraries $(SODEST)/libc++_shared.so
 
 # If you reinstall an app several times *on the emulator*, even if you
 # uninstall it between, disk space seems to leak that won't get recycled until
@@ -86,7 +86,8 @@ stop-start-cycle:
 	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell start && sleep 10
 
 # build-host specific stuff (build paths and the like) to keep build.gradle static
-liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk
+$(WORKDIR)/android/liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk
+	-@mkdir $(WORKDIR)/android
 	@echo "creating $@"
 	( \
 		echo "// created by Makefile.shared - your changes will be overridden" \
