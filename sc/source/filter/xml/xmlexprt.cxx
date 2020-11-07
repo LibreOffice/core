@@ -117,6 +117,9 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/unoapi.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -3472,23 +3475,45 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
     if( !(rMyCell.bHasShape && !rMyCell.aShapeList.empty() && pDoc) )
         return;
 
-    awt::Point aPoint;
-    // Hiding row or col does not change the shape geometry.
-    tools::Rectangle aRect = pDoc->GetMMRect(rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(),
+    tools::Rectangle aRectFull = pDoc->GetMMRect(rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(),
         rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab(),
         false /*bHiddenAsZero*/);
+    tools::Rectangle aRectReduced = pDoc->GetMMRect(rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(),
+        rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab(),
+        true /*bHiddenAsZero*/);
+
+    // Reference point
+    awt::Point aPoint;
     bool bNegativePage = pDoc->IsNegativePage(rMyCell.maCellAddress.Tab());
     if (bNegativePage)
-        aPoint.X = aRect.Right();
+        aPoint.X = aRectFull.Right();
     else
-        aPoint.X = aRect.Left();
-    aPoint.Y = aRect.Top();
+        aPoint.X = aRectFull.Left();
+    aPoint.Y = aRectFull.Top();
+
     for (const auto& rShape : rMyCell.aShapeList)
     {
         if (rShape.xShape.is())
         {
-            if (bNegativePage)
-                aPoint.X = 2 * rShape.xShape->getPosition().X + rShape.xShape->getSize().Width - aPoint.X;
+            basegfx::B2DPolyPolygon aPolyPolygonOrig;
+            basegfx::B2DHomMatrix aMatrixOrig;
+            bool bNeedsRestore = false;
+            SdrObject* pObj = GetSdrObjectFromXShape(rShape.xShape);
+
+            if (pObj && aRectFull != aRectReduced)
+            {
+                // There are hidden rows or columns above or before the start cell.
+                // The current object geometry is based on bHiddenAsZero=true, but ODF file format
+                // needs it as if there were no hidden rows or columns.
+                // We shift the object and restore it later.
+                bNeedsRestore = true;
+                pObj->TRGetBaseGeometry(aMatrixOrig, aPolyPolygonOrig);
+                basegfx::B2DHomMatrix aMatrixFull(aMatrixOrig);
+                aMatrixFull.translate(aRectFull.Left() - aRectReduced.Left(),
+                                      aRectFull.Top() - aRectReduced.Top());
+                pObj->TRSetBaseGeometry(aMatrixFull, aPolyPolygonOrig);
+            }
+            // ToDo: Adapt object shew and rotation to bHiddenAsZero=false, tdf#137033
 
             // We only write the end address if we want the shape to resize with the cell
             if ( rShape.bResizeWithCell &&
@@ -3505,7 +3530,15 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                         sBuffer, rShape.nEndY);
                 AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
             }
+
+            if (bNegativePage)
+                aPoint.X = 2 * rShape.xShape->getPosition().X + rShape.xShape->getSize().Width
+                           - aPoint.X;
             ExportShape(rShape.xShape, &aPoint);
+
+            // Restore object geometry
+            if (bNeedsRestore)
+                pObj->TRSetBaseGeometry(aMatrixOrig, aPolyPolygonOrig);
         }
     }
 }
