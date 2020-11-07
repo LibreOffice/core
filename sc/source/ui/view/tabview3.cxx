@@ -2103,8 +2103,8 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
             SCROW nScrY = aViewData.GetPosY( eVWhich );
 
             bool bPosVisible =
-                 ( nCol >= nScrX && nCol <= nScrX + aViewData.VisibleCellsX(eHWhich) + 1 &&
-                   nRow >= nScrY && nRow <= nScrY + aViewData.VisibleCellsY(eVWhich) + 1 );
+                 ( nCol >= nScrX && nCol <= nScrX + aViewData.VisibleCellsX(eHWhich) - 1 &&
+                   nRow >= nScrY && nRow <= nScrY + aViewData.VisibleCellsY(eVWhich) - 1 );
 
             //  for the active part, create edit view even if outside the visible area,
             //  so input isn't lost (and the edit view may be scrolled into the visible area)
