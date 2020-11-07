@@ -33,13 +33,14 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
-
+    void testTdf117948_CollapseBeforeShape();
     void testTdf137355_UndoHideRows();
     void testTdf115655_HideDetail();
     void testFitToCellSize();
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testTdf117948_CollapseBeforeShape);
     CPPUNIT_TEST(testTdf137355_UndoHideRows);
     CPPUNIT_TEST(testTdf115655_HideDetail);
     CPPUNIT_TEST(testFitToCellSize);
@@ -94,6 +95,83 @@ static void lcl_AssertRectEqualWithTolerance(const OString& sInfo,
            + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            labs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
+}
+
+void ScShapeTest::testTdf117948_CollapseBeforeShape()
+{
+    // The document contains a column group left from the image. The group is exanded. Collapse the
+    // group, save and reload. The original error was, that the line was on wrong position after reload.
+    // After the fix for 'resive with cell', the custom shape had wrong position and size too.
+    OUString aFileURL;
+    createFileURL("tdf117948_CollapseBeforeShape.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get ScDocShell
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get document and objects
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
+    SdrObject* pObj0 = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: custom shape not found", pObj0);
+    SdrObject* pObj1 = pPage->GetObj(1);
+    CPPUNIT_ASSERT_MESSAGE("Load: Vertical line not found", pObj1);
+
+    // Collapse the group
+    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScTabViewShell", pViewShell);
+    pViewShell->GetViewData().SetCurX(1);
+    pViewShell->GetViewData().SetCurY(0);
+    pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_HIDE);
+
+    // Check anchor and position of shape. The expected values are taken from UI before saving.
+    tools::Rectangle aSnapRect0Collapse = pObj0->GetSnapRect();
+    tools::Rectangle aExpectedRect0(Point(4672, 1334), Size(1787, 1723));
+    lcl_AssertRectEqualWithTolerance("Collapse: Custom shape", aExpectedRect0, aSnapRect0Collapse,
+                                     1);
+    tools::Rectangle aSnapRect1Collapse = pObj1->GetSnapRect();
+    tools::Rectangle aExpectedRect1(Point(5647, 4172), Size(21, 3441));
+    lcl_AssertRectEqualWithTolerance("Collape: Line", aExpectedRect1, aSnapRect1Collapse, 1);
+
+    // Save and reload
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get ScDocShell
+    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Reload: Failed to access document shell", pFoundShell);
+    pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get document and objects
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    pDrawLayer = rDoc2.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj0 = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: custom shape no longer exists", pObj0);
+    pObj1 = pPage->GetObj(1);
+    CPPUNIT_ASSERT_MESSAGE("Reload: custom shape no longer exists", pObj1);
+
+    // Assert objects size and position are not changed. Actual values differ a little bit
+    // because of cumulated Twips-Hmm conversion errors.
+    tools::Rectangle aSnapRect0Reload = pObj0->GetSnapRect();
+    lcl_AssertRectEqualWithTolerance("Reload: Custom shape geometry has changed.", aExpectedRect0,
+                                     aSnapRect0Reload, 2);
+
+    tools::Rectangle aSnapRect1Reload = pObj1->GetSnapRect();
+    lcl_AssertRectEqualWithTolerance("Reload: Line geometry has changed.", aExpectedRect1,
+                                     aSnapRect1Reload, 2);
+
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testTdf137355_UndoHideRows()
