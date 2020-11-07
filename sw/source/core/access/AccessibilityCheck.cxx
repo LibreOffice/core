@@ -35,6 +35,8 @@
 #include <svx/swframetypes.hxx>
 #include <fmtanchr.hxx>
 #include <dcontact.hxx>
+#include <svx/svdoashp.hxx>
+#include <svx/sdasitm.hxx>
 
 namespace sw
 {
@@ -875,6 +877,17 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
 {
     if (!pObject)
         return;
+
+    // Check for fontworks.
+    if (SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>(pObject))
+    {
+        const SdrCustomShapeGeometryItem& rGeometryItem
+            = pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+
+        if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type"))
+            if (pAny->get<OUString>().startsWith("fontwork-"))
+                lclAddIssue(m_aIssueCollection, SwResId(STR_FONTWORKS));
+    }
 
     // Checking if there is floating Writer text draw object and if so, throwing a warning.
     // (Floating objects with text create problems with reading order)
