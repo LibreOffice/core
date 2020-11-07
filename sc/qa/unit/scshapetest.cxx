@@ -13,6 +13,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdouno.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <docsh.hxx>
 #include <drwlayer.hxx>
@@ -29,14 +30,18 @@ class ScShapeTest : public CalcUnoApiTest
 {
 public:
     ScShapeTest();
+    void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
+                       const OUString& rFilter);
 
     virtual void tearDown() override;
 
+    void testTdf117948_CollapseBeforeShape();
     void testFitToCellSize();
     void testCustomShapeCellAnchoredRotatedShape();
     void testFormSizeWithHiddenCol();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testTdf117948_CollapseBeforeShape);
     CPPUNIT_TEST(testFitToCellSize);
     CPPUNIT_TEST(testCustomShapeCellAnchoredRotatedShape);
     CPPUNIT_TEST(testFormSizeWithHiddenCol);
@@ -49,6 +54,21 @@ private:
 ScShapeTest::ScShapeTest()
     : CalcUnoApiTest("sc/qa/unit/data/ods")
 {
+}
+
+void ScShapeTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
+                                const OUString& rFilter)
+{
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
+    aArgs[0].Name = "FilterName";
+    aArgs[0].Value <<= rFilter; // e.g. "calc8"
+    css::uno::Reference<css::frame::XStorable> xStorable(xComponent, css::uno::UNO_QUERY_THROW);
+    xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+    xComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
 }
 
 static OUString lcl_compareRectWithTolerance(const tools::Rectangle& rExpected,
@@ -72,6 +92,98 @@ static OUString lcl_compareRectWithTolerance(const tools::Rectangle& rExpected,
                    + OUString::number(rActual.GetHeight()) + " Tolerance "
                    + OUString::number(nTolerance);
     return sErrors;
+}
+
+static void lcl_AssertRectEqualWithTolerance(const OString& sInfo,
+                                             const tools::Rectangle& rExpected,
+                                             const tools::Rectangle& rActual,
+                                             const sal_Int32 nTolerance)
+{
+    // Left
+    OString sMsg = sInfo + " Left expected " + OString::number(rExpected.Left()) + " actual "
+                   + OString::number(rActual.Left()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), labs(rExpected.Left() - rActual.Left()) <= nTolerance);
+    // Top
+    sMsg = sInfo + " Top expected " + OString::number(rExpected.Top()) + " actual "
+           + OString::number(rActual.Top()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), labs(rExpected.Top() - rActual.Top()) <= nTolerance);
+    // Width
+    sMsg = sInfo + " Width expected " + OString::number(rExpected.GetWidth()) + " actual "
+           + OString::number(rActual.GetWidth()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
+                           labs(rExpected.GetWidth() - rActual.GetWidth()) <= nTolerance);
+    // Height
+    sMsg = sInfo + " Height expected " + OString::number(rExpected.GetHeight()) + " actual "
+           + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
+                           labs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
+}
+
+void ScShapeTest::testTdf117948_CollapseBeforeShape()
+{
+    // The document contains a column group left from the image. The group is exanded. Collapse the
+    // group, save and reload. The original error was, that the line was on wrong position after reload.
+    // After the fix for 'resive with cell', the custom shape had wrong position and size too.
+    OUString aFileURL;
+    createFileURL("tdf117948_CollapseBeforeShape.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+    // Get ScDocShell
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+    // Get document and objects
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
+    SdrObject* pObj0 = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: custom shape not found", pObj0);
+    SdrObject* pObj1 = pPage->GetObj(1);
+    CPPUNIT_ASSERT_MESSAGE("Load: Vertical line not found", pObj1);
+    // Collapse the group
+    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScTabViewShell", pViewShell);
+    pViewShell->GetViewData().SetCurX(1);
+    pViewShell->GetViewData().SetCurY(0);
+    pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_HIDE);
+    // Check anchor and position of shape. The expected values are taken from UI before saving.
+    tools::Rectangle aSnapRect0Collapse = pObj0->GetSnapRect();
+    tools::Rectangle aExpectedRect0(Point(4672, 1334), Size(1787, 1723));
+    lcl_AssertRectEqualWithTolerance("Collapse: Custom shape", aExpectedRect0, aSnapRect0Collapse,
+                                     1);
+    tools::Rectangle aSnapRect1Collapse = pObj1->GetSnapRect();
+    tools::Rectangle aExpectedRect1(Point(5647, 4172), Size(21, 3441));
+    lcl_AssertRectEqualWithTolerance("Collape: Line", aExpectedRect1, aSnapRect1Collapse, 1);
+    // Save and reload
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+    // Get ScDocShell
+    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Reload: Failed to access document shell", pFoundShell);
+    pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+    // Get document and objects
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    pDrawLayer = rDoc2.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj0 = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: custom shape no longer exists", pObj0);
+    pObj1 = pPage->GetObj(1);
+    CPPUNIT_ASSERT_MESSAGE("Reload: custom shape no longer exists", pObj1);
+    // Assert objects size and position are not changed. Actual values differ a little bit
+    // because of cumulated Twips-Hmm conversion errors.
+    tools::Rectangle aSnapRect0Reload = pObj0->GetSnapRect();
+    lcl_AssertRectEqualWithTolerance("Reload: Custom shape geometry has changed.", aExpectedRect0,
+                                     aSnapRect0Reload, 2);
+    tools::Rectangle aSnapRect1Reload = pObj1->GetSnapRect();
+    lcl_AssertRectEqualWithTolerance("Reload: Line geometry has changed.", aExpectedRect1,
+                                     aSnapRect1Reload, 2);
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testFitToCellSize()
