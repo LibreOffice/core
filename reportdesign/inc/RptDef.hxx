@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REPORTDESIGN_INC_RPTDEF_HXX
-#define INCLUDED_REPORTDESIGN_INC_RPTDEF_HXX
+#pragma once
 
 #include <memory>
 #include <map>
@@ -87,7 +86,5 @@ template < typename T> T getStyleProperty(const css::uno::Reference< css::report
 }
 
 }
-
-#endif // INCLUDED_REPORTDESIGN_INC_RPTDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
