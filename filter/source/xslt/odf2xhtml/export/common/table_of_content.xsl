@@ -156,7 +156,7 @@
     <!-- *** Create Table for Content Table Paragraph *** -->
     <!-- ************************************************ -->
 
-    <!-- Usually the paragraph in a content-table are ordered by tab-stops, which can not be displayed correctly by XHTML/CSS
+    <!-- Usually the paragraphs in a content-table are ordered by tab-stops, which can not be displayed correctly by XHTML/CSS
      Therefore they will be simulated by a table -->
     <xsl:template match="text:p" mode="content-table">
         <xsl:param name="globalData"/>
