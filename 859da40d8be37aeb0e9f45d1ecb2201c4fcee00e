@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e2c867d_411c87ed",
+        "filename": "starmath/inc/parse.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-07T11:29:41Z",
+      "side": 1,
+      "message": "remove extra \"e\"",
+      "range": {
+        "startLine": 90,
+        "startChar": 15,
+        "endLine": 90,
+        "endChar": 16
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63787a12_ca18ca66",
+        "filename": "starmath/inc/strings.hrc",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-07T11:29:41Z",
+      "side": 1,
+      "message": "add missing \"t\"",
+      "range": {
+        "startLine": 23,
+        "startChar": 39,
+        "endLine": 23,
+        "endChar": 40
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b10591d_73a3c1a2",
+        "filename": "starmath/inc/strings.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-07T11:29:41Z",
+      "side": 1,
+      "message": "add missing \"t\"",
+      "range": {
+        "startLine": 13,
+        "startChar": 39,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2593f0a0_d8b3a692",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-07T11:29:41Z",
+      "side": 1,
+      "message": "add missing \"n\"",
+      "range": {
+        "startLine": 20,
+        "startChar": 38,
+        "endLine": 20,
+        "endChar": 40
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c50ee968_e33b1905",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-07T11:29:41Z",
+      "side": 1,
+      "message": "change \"v\" to \"c\"",
+      "range": {
+        "startLine": 23,
+        "startChar": 34,
+        "endLine": 23,
+        "endChar": 35
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "502e2198_a9de710a",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-07T11:29:41Z",
+      "side": 1,
+      "message": "delete extra \"p\"",
+      "range": {
+        "startLine": 23,
+        "startChar": 40,
+        "endLine": 23,
+        "endChar": 41
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3ed77bf_d2e072ea",
+        "filename": "starmath/inc/visitors.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-07T11:29:41Z",
+      "side": 1,
+      "message": "delete extra \"p\"",
+      "range": {
+        "startLine": 10,
+        "startChar": 44,
+        "endLine": 10,
+        "endChar": 45
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b368e16_74fad78c",
+        "filename": "starmath/inc/visitors.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-07T11:29:41Z",
+      "side": 1,
+      "message": "\"available\"",
+      "range": {
+        "startLine": 12,
+        "startChar": 7,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "859da40d8be37aeb0e9f45d1ecb2201c4fcee00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
