@@ -1,6 +1,6 @@
 --- firebird.org/configure	2015-03-27 16:00:42.000000000 +0200
 +++ firebird/configure 2015-06-09 15:33:26.000000000 +0300
-@@ -2903,7 +2903,7 @@
+@@ -2909,7 +2909,7 @@
      ;;
  
    i*86-*-darwin*)
@@ -9,12 +9,12 @@
      MAKEFILE_POSTFIX=darwin
      PLATFORM=DARWIN
      INSTALL_PREFIX=darwin
-@@ -2913,7 +2913,7 @@
+@@ -2919,7 +2919,7 @@
  	LIBS="$LIBS -framework CoreFoundation"
      EDITLINE_FLG=Y
      SHRLIB_EXT=dylib
 -    CPU_TYPE=i386
 +    CPU_TYPE=x86_64
      EXPORT_SYMBOLS_STYLE=darwin
+     RAW_DEVICES_FLG=N
      ;;
- 
