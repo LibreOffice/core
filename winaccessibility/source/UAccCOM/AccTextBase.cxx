@@ -437,8 +437,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_selection(long selectionInde
 
     if( pRExtension.is() )
     {
-        *startOffset = pRExtension->getSeletedPositionStart(selectionIndex);
-        *endOffset = pRExtension->getSeletedPositionEnd(selectionIndex);
+        *startOffset = pRExtension->getSelectedPositionStart(selectionIndex);
+        *endOffset = pRExtension->getSelectedPositionEnd(selectionIndex);
         return S_OK;
     }
     else if(GetXInterface()->getSelectionEnd() > -1)

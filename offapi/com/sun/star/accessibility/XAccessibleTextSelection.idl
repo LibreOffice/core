@@ -33,9 +33,9 @@ interface XAccessibleTextSelection : ::com::sun::star::uno::XInterface
 
     long getSelectedPortionCount();
 
-    long getSeletedPositionStart ([in] long nSelectedPortionIndex) raises (::com::sun::star::lang::IndexOutOfBoundsException);
+    long getSelectedPositionStart ([in] long nSelectedPortionIndex) raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
-    long getSeletedPositionEnd ([in] long nSelectedPortionIndex) raises (::com::sun::star::lang::IndexOutOfBoundsException);
+    long getSelectedPositionEnd ([in] long nSelectedPortionIndex) raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
     long addSelection( [in] long selectionIndex, [in]long startOffset, [in] long endOffset) raises (::com::sun::star::lang::IndexOutOfBoundsException);
 

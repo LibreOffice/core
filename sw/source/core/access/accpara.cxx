@@ -3015,7 +3015,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
 
 }
 
-sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionStart( sal_Int32 nSelectedPortionIndex )
+sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPositionStart( sal_Int32 nSelectedPortionIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -3026,7 +3026,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionStart( sal_Int32 nSe
     return nStart;
 }
 
-sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionEnd( sal_Int32 nSelectedPortionIndex )
+sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPositionEnd( sal_Int32 nSelectedPortionIndex )
 {
     SolarMutexGuard aGuard;
 

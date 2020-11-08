@@ -363,10 +363,10 @@ public:
     // XAccessibleTextSelection
     virtual sal_Bool SAL_CALL scrollToPosition( const css::awt::Point& aPoint, sal_Bool isLeftTop ) override;
     virtual sal_Int32 SAL_CALL getSelectedPortionCount(  ) override;
-    virtual sal_Int32 SAL_CALL getSeletedPositionStart( sal_Int32 nSelectedPortionIndex ) override;
-    virtual sal_Int32 SAL_CALL getSeletedPositionEnd( sal_Int32 nSelectedPortionIndex ) override;
+    virtual sal_Int32 SAL_CALL getSelectedPositionStart( sal_Int32 nSelectedPortionIndex ) override;
+    virtual sal_Int32 SAL_CALL getSelectedPositionEnd( sal_Int32 nSelectedPortionIndex ) override;
     virtual sal_Bool SAL_CALL removeSelection( sal_Int32 selectionIndex ) override;
-    virtual sal_Int32 SAL_CALL  addSelection( sal_Int32 selectionIndex, sal_Int32 startOffset, sal_Int32 endOffset) override;
+    virtual sal_Int32 SAL_CALL addSelection( sal_Int32 selectionIndex, sal_Int32 startOffset, sal_Int32 endOffset ) override;
     // XAccessibleExtendedAttributes
     virtual css::uno::Any SAL_CALL getExtendedAttributes() override ;
     sal_Int32 GetRealHeadingLevel();
