@@ -288,8 +288,8 @@ do
 	# create spec file for the debug info package
 
 	cat $i | awk '
-		/^%product/ { print "%product Debug info package of "$0 ;next }
-		/^%description/ { print "%description Debug info package of "$0 ;next }
+		/^%product/ { print gensub("%product", "%product Debug info package of", "", $0);next }
+		/^%description/ { print gensub("%description", "%description Debug info package of", "", $0);next }
 		/^f .*[.](so|bin)([.].*)?$/ { print $1,$2,$3,$4,$5".dbg",$6".dbg"; next }
 		/^[cf] / { next }
 		{print}
