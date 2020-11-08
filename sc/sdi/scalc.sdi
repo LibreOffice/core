@@ -6043,7 +6043,7 @@ SfxVoidItem SelectArrayFormula SID_MARKARRAYFORMULA
 
 
 SfxBoolItem SheetRightToLeft FID_TAB_RTL
-
+(SfxBoolItem RightToLeft FID_TAB_RTL)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
