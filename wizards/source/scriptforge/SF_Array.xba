@@ -879,7 +879,7 @@ Try:
 				&apos;	Check type and copy all items of the line
 				For i = 0 To lCol
 					If Left(vLine(i), 1) = &quot;&quot;&quot;&quot; Then sItem = SF_String.Unquote(vLine(i)) Else sItem = vLine(i)	&apos; Unquote only when useful
-					&apos;	Interprete the individual line item
+					&apos;	Interpret the individual line item
 					Select Case True
 						Case IsNumeric(sItem)
 							If InStr(sItem, &quot;.&quot;) + InStr(1, sItem, &quot;e&quot;, 1) &gt; 0 Then vItem = Val(sItem) Else vItem = CLng(sItem)

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- /** The tokens cointain the information gathered by the parser.
+ /** The tokens contain the information gathered by the parser.
    *
    * They contain:
    *    the data type (~ mathematical operation).

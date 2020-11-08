@@ -29,9 +29,9 @@
   *             SmTableNode                             binom
   *             SmLineNode                              A line
   *                 SmExpressionNode                    { content }
-  *             SmUnHorNode                             unary opperators +-; -+; +x; -x; ...
+  *             SmUnHorNode                             unary operators +-; -+; +x; -x; ...
   *             SmRootNode                              Root structure
-  *             SmBinHorNode                            bynary opperators A + B
+  *             SmBinHorNode                            binary operators A + B
   *             SmBinVerNode                            over; frac; ...
   *             SmBinDiagonalNode                       wideslash
   *             SmSubSupNode                            csub, csup, lsub, from, to, ...
@@ -40,7 +40,7 @@
   *             SmVerticalBraceNode                     overbrace; underbrace;
   *             SmOperNode                              sum from to; int from to;
   *             SmAlignNode                             text alignment
-  *             SmAttributNode                          font attributtes; bold;
+  *             SmAttributNode                          font attributes; bold;
   *             SmFontNode                              font serif; ...
   *             SmMatrixNode                            matrix
   *         SmVisibleNode                               drawable node
@@ -55,7 +55,7 @@
   *                         SmMathIdentifierNode        variable
   *                         SmRootSymbolNode            root symbol
   *                         SmPlaceNode                 <?>
-  *                         SmErrorNode                 red ? for errores
+  *                         SmErrorNode                 red ? for errors
   *
   */
 
@@ -1369,15 +1369,15 @@ public:
           SmNode* Symbol()       { assert( GetNumSubNodes() == 3 ); return GetSubNode( 1 ); }
 
     /**
-     * Returns the node containing the data of the left opperand.
-     * @return left opperand data
+     * Returns the node containing the data of the left operand.
+     * @return left operand data
      */
     const SmNode* LeftOperand() const { return const_cast<SmBinHorNode *>(this)->LeftOperand(); }
           SmNode* LeftOperand()       { assert( GetNumSubNodes() == 3 ); return GetSubNode( 0 ); }
 
     /**
-     * Returns the node containing the data of the right opperand.
-     * @return right opperand data
+     * Returns the node containing the data of the right operand.
+     * @return right operand data
      */
     const SmNode* RightOperand() const { return const_cast<SmBinHorNode *>(this)->RightOperand(); }
           SmNode* RightOperand()       { assert( GetNumSubNodes() == 3 ); return GetSubNode( 2 ); }
