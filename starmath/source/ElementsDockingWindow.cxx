@@ -185,7 +185,7 @@ const SmElementDescr SmElementsControl::m_aAttributesList[] =
     {nullptr, nullptr},
     {RID_COLORX_BLACK, RID_COLORX_BLACK_HELP}, {RID_COLORX_BLUE, RID_COLORX_BLUE_HELP},
     {RID_COLORX_GREEN, RID_COLORX_GREEN_HELP}, {RID_COLORX_RED, RID_COLORX_RED_HELP},
-    {RID_COLORX_CYAN, RID_COLORX_CYAN_HELP}, {RID_COLORX_MAGENTA, RID_COLORX_MAGENTA_HELP},
+    {RID_COLORX_AQUA, RID_COLORX_AQUA_HELP}, {RID_COLORX_FUCHSIA, RID_COLORX_FUCHSIA_HELP},
     {RID_COLORX_YELLOW, RID_COLORX_YELLOW_HELP}, {RID_COLORX_GRAY, RID_COLORX_GRAY_HELP},
     {RID_COLORX_LIME, RID_COLORX_LIME_HELP}, {RID_COLORX_MAROON, RID_COLORX_MAROON_HELP},
     {RID_COLORX_NAVY, RID_COLORX_NAVY_HELP}, {RID_COLORX_OLIVE, RID_COLORX_OLIVE_HELP},
@@ -911,10 +911,10 @@ void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_u
                 addElement(aParser, "color green { \"" + SmResId(STR_GREEN) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_RED)
                 addElement(aParser, "color red { \"" + SmResId(STR_RED) + "\" }", aElement, SmResId(pElementHelp));
-            else if (aElement == RID_COLORX_CYAN)
-                addElement(aParser, "color cyan { \"" + SmResId(STR_CYAN) + "\" }", aElement, SmResId(pElementHelp));
-            else if (aElement == RID_COLORX_MAGENTA)
-                addElement(aParser, "color magenta { \"" + SmResId(STR_MAGENTA) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_AQUA)
+                addElement(aParser, "color aqua { \"" + SmResId(STR_AQUA) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_FUCHSIA)
+                addElement(aParser, "color fuchsia { \"" + SmResId(STR_FUCHSIA) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_YELLOW)
                 addElement(aParser, "color yellow { \"" + SmResId(STR_YELLOW) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_GRAY)
