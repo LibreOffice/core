@@ -34,7 +34,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/fileurl.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 
 #define DEBUG_TYPE_DETECTION 0

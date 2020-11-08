@@ -22,7 +22,6 @@
 #include <com/sun/star/embed/XInsertObjectDialog.hpp>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>

@@ -15,6 +15,12 @@ excludelist:
     framework/inc/uielement/toolbarmanager.hxx:
     #  Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx
+    framework/inc/statusbarconfiguration.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    framework/inc/toolboxconfiguration.hxx:
+    # Needed for css shortcut
+    - sal/types.h
     framework/source/uiconfiguration/imagemanagerimpl.hxx:
     #  Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx
@@ -57,6 +63,8 @@ excludelist:
     framework/source/services/substitutepathvars.cxx:
     #  Don't propose hxx -> h change in URE libs
     - osl/thread.hxx
+    # Needed for template
+    - com/sun/star/container/XNameAccess.hpp
     framework/source/uifactory/menubarfactory.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
@@ -77,15 +85,18 @@ excludelist:
     framework/source/uielement/dropdownboxtoolbarcontroller.cxx:
     # Actually used
     - com/sun/star/beans/PropertyValue.hpp
-    framework/source/uielement/comboboxtoolbarcontroller.cxx::
-    # Actually used
-    - com/sun/star/beans/PropertyValue.hpp
-    framework/source/uielement/edittoolbarcontroller.cxx:
-    # Actually used
-    - com/sun/star/beans/PropertyValue.hpp
     framework/source/uielement/comboboxtoolbarcontroller.cxx:
     # Actually used
     - com/sun/star/beans/PropertyValue.hpp
+    framework/source/uielement/controlmenucontroller.cxx:
+    # Needed for template
+    - com/sun/star/frame/XFrame.hpp
+    framework/source/uielement/edittoolbarcontroller.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    framework/source/uielement/fontmenucontroller.cxx:
+    # Needed for template
+    - com/sun/star/frame/XFrame.hpp
     framework/source/uielement/imagebuttontoolbarcontroller.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp

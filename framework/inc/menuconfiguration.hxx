@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <config_options.h>
-
 #include <cppuhelper/weakref.hxx>
 
 namespace com::sun::star::container { class XIndexAccess; }

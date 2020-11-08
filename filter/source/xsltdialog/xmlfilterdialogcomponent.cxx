@@ -22,7 +22,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/component.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -33,7 +32,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include "xmlfiltersettingsdialog.hxx"
 

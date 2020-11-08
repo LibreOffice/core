@@ -30,6 +30,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -41,7 +42,6 @@
 #include <fpicker/strings.hrc>
 #include <svtools/helpids.h>
 #include <strings.hrc>
-#include <bitmaps.hlst>
 #include "asyncfilepicker.hxx"
 #include "iodlgimp.hxx"
 #include <svtools/inettbc.hxx>
@@ -65,7 +65,6 @@
 
 #include <osl/file.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/settings.hxx>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>

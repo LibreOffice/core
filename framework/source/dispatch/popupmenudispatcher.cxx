@@ -26,7 +26,6 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>

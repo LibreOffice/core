@@ -25,7 +25,6 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>

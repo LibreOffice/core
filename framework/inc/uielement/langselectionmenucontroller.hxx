@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_LANGSELECTIONMENUCONTROLLER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_LANGSELECTIONMENUCONTROLLER_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 
 #include <svtools/popupmenucontrollerbase.hxx>

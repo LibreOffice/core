@@ -22,7 +22,6 @@
 
 #include <rtl/string.hxx>
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <tools/long.hxx>
 
 class SvStream;

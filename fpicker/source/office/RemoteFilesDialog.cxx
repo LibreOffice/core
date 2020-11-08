@@ -23,8 +23,9 @@
 #include <tools/debug.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <vcl/errinf.hxx>
-#include <bitmaps.hlst>
 #include <officecfg/Office/Common.hxx>
+
+using namespace ::svt;
 
 RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
     : SvtFileDialog_Base( pParent, "fps/ui/remotefilesdialog.ui", "RemoteFilesDialog" )

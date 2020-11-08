@@ -41,7 +41,7 @@
 #include <comphelper/string.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

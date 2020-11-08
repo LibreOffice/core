@@ -22,8 +22,6 @@
 */
 #include <vector>
 
-#include <stdio.h>
-
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <xml/saxnamespacefilter.hxx>

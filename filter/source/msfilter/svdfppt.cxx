@@ -126,7 +126,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <set>
 #include <utility>
 #include <rtl/strbuf.hxx>
 #include <tools/time.hxx>

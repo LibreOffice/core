@@ -31,7 +31,6 @@
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>

@@ -29,7 +29,6 @@
 #include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <comphelper/propertysequence.hxx>

@@ -26,7 +26,6 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <framework/fwkdllapi.h>
 
 #include <unordered_map>
 

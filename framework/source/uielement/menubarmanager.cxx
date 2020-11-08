@@ -35,14 +35,12 @@
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
-#include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/menuoptions.hxx>

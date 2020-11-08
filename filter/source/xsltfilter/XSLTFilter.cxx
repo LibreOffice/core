@@ -67,8 +67,6 @@
 #include <com/sun/star/xml/xslt/XSLT2Transformer.hpp>
 #include <com/sun/star/xml/xslt/XSLTTransformer.hpp>
 
-#include "LibXSLTTransformer.hxx"
-
 #define TRANSFORMATION_TIMEOUT_SEC 60
 
 using namespace ::cppu;

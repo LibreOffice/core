@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <vector>
-#include <framework/fwkdllapi.h>
 
 namespace framework
 {

@@ -22,7 +22,6 @@
 #include <osl/nlsupport.h>
 #include <unotools/defaultencoding.hxx>
 #include <unotools/wincodepage.hxx>
-#include <unotools/configmgr.hxx>
 
 //------------------DXFBoundingBox--------------------------------------------
 
