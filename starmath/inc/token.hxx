@@ -126,8 +126,8 @@ enum SmTokenType
     TSQRT,          TNROOT,         TFACT,          TABS,           // roots, n! |z|
     // Color
     TRGB,           TRGBA,          THEX,
-    TAQUA,          TBLACK,         TBLUE,          TCYAN,          TFUCHSIA,
-    TGRAY,          TGREEN,         TLIME,          TMAGENTA,       TMAROON,
+    TAQUA,          TBLACK,         TBLUE,          TAQUA,          TFUCHSIA,
+    TGRAY,          TGREEN,         TLIME,          TMAROON,
     TNAVY,          TOLIVE,         TPURPLE,        TRED,           TSILVER,
     TTEAL,          TWHITE,         TYELLOW
 };
