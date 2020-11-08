@@ -3243,7 +3243,7 @@ ILibreOfficeKitNotifier::~ILibreOfficeKitNotifier()
 
 const vcl::ILibreOfficeKitNotifier* Window::GetLOKNotifier() const
 {
-    return mpWindowImpl->mpLOKNotifier;
+    return mpWindowImpl ? mpWindowImpl->mpLOKNotifier : nullptr;
 }
 
 vcl::LOKWindowId Window::GetLOKWindowId() const
