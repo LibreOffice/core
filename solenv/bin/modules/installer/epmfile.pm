@@ -276,7 +276,7 @@ sub create_epm_header
 
     my $productnamestring = $onepackage->{'description'};
     installer::packagelist::resolve_packagevariables(\$productnamestring, $variableshashref, 0);
-    if ( $variableshashref->{'PRODUCTEXTENSION'} ) { $productnamestring = $productnamestring . " " . $variableshashref->{'PRODUCTEXTENSION'}; }
+    if ( $variableshashref->{'PRODUCTEXTENSION'} ) { $productnamestring = $productnamestring . $variableshashref->{'PRODUCTEXTENSION'}; }
 
     $line = "%product" . " " . $productnamestring . "\n";
     push(@epmheader, $line);
