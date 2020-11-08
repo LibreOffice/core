@@ -18,39 +18,94 @@
  */
 
 #include "token.hxx"
-#include "types.hxx"
 
 namespace starmathdatabase
 {
+
+// Variables containing color information.
+const SmColorTokenTableEntry aColorTokenTableParse;
+const SmColorTokenTableEntry aColorTokenTableHTML;
+const SmColorTokenTableEntry aColorTokenTableDVIPSNAMES;
+
 /**
-      * Identifies operator chars tokens for importing mathml.
-      * Identifies from char cChar
-      * @param cChar
-      * @return closing fences' token
-      */
+  * Identifies operator chars tokens for importing mathml.
+  * Identifies from char cChar
+  * @param cChar
+  * @return closing fences' token
+  */
 SmToken Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, bool bIsStretchy = true);
 
 /**
-      * Identifies opening / closing brace tokens for importing mathml.
-      * Identifies from char cChar
-      * @param cChar
-      * @return closing fences' token
-      */
+  * Identifies opening / closing brace tokens for importing mathml.
+  * Identifies from char cChar
+  * @param cChar
+  * @return closing fences' token
+  */
 SmToken Identify_PrefixPostfix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
 
 /**
-      * Identifies opening brace tokens for importing mathml.
-      * Identifies from char cChar
-      * @param cChar
-      * @return closing fences' token
-      */
+  * Identifies opening brace tokens for importing mathml.
+  * Identifies from char cChar
+  * @param cChar
+  * @return closing fences' token
+  */
 SmToken Identify_Prefix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
 
 /**
-      * Identifies closing brace tokens for importing mathml.
-      * Identifies from char cChar
-      * @param cChar
-      * @return closing fences' token
-      */
+  * Identifies closing brace tokens for importing mathml.
+  * Identifies from char cChar
+  * @param cChar
+  * @return closing fences' token
+  */
 SmToken Identify_Postfix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
+
+/**
+  * Identifies color from color code cColor.
+  * It will be returned with the parser syntax.
+  * @param cColor
+  * @param parser color
+  */
+SmColorTokenTableEntry * Identify_Color_Parser( sal_uInt32 cColor );
+
+/**
+  * Identifies color from color code cColor.
+  * It will be returned with the HTML syntax.
+  * @param cColor
+  * @param parser color
+  */
+SmColorTokenTableEntry * Identify_Color_HTML( sal_uInt32 cColor );
+
+/**
+  * Identifies color from color code cColor.
+  * It will be returned with the dvipsnames syntax.
+  * @param cColor
+  * @param parser color
+  */
+SmColorTokenTableEntry * Identify_Color_DVIPSNAMES( sal_uInt32 cColor );
+
+/**
+  * Identifies color from color name.
+  * It will be returned with the parser syntax.
+  * @param cColor
+  * @param parser color
+  */
+SmColorTokenTableEntry * Identify_ColorName_Parser( const OUString & colorname );
+
+/**
+  * Identifies color from color name.
+  * It will be returned with the HTML syntax.
+  * @param cColor
+  * @param parser color
+  */
+SmColorTokenTableEntry * Identify_ColorName_HTML( const OUString & colorname );
+
+/**
+  * Identifies color from color name.
+  * It will be returned with the dvipsnames syntax.
+  * @param cColor
+  * @param parser color
+  */
+SmColorTokenTableEntry * Identify_ColorName_DVIPSNAMES( const OUString & colorname );
 }
+
+

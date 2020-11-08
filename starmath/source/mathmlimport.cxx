@@ -711,17 +711,14 @@ void SmXMLContext_Helper::ApplyAttrs()
         pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
         rNodeStack.push_front(std::move(pFontNode));
     }
-    if (sColor.isEmpty())
-        return;
+    if (sColor.isEmpty()) return;
 
-    //Again we can only handle a small set of colours in
-    //StarMath for now.
-    const SvXMLTokenMap& rTokenMap =
-        rContext.GetSmImport().GetColorTokenMap();
-    sal_uInt16 tok = rTokenMap.Get(XML_NAMESPACE_MATH, sColor);
-    if (tok != XML_TOK_UNKNOWN)
+    SmColorTokenTableEntry * aSmColorTokenTableEntry;
+    aSmColorTokenTableEntry = starmathdatabase::Identify_ColorName_HTML( sColor );
+    if( aSmColorTokenTableEntry )
     {
-        aToken.eType = static_cast<SmTokenType>(tok);
+        aToken = aSmColorTokenTableEntry;
+        free(aSmColorTokenTableEntry);
         std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
         pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
         rNodeStack.push_front(std::move(pFontNode));
@@ -1978,35 +1975,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLFlatDocContext_Imp
         return SmXMLOfficeContext_Impl::createFastChildContext(
                     nElement, xAttrList );
     }
-}
-
-const SvXMLTokenMapEntry aColorTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_BLACK,        TBLACK},
-    { XML_NAMESPACE_MATH,   XML_WHITE,        TWHITE},
-    { XML_NAMESPACE_MATH,   XML_RED,          TRED},
-    { XML_NAMESPACE_MATH,   XML_GREEN,        TGREEN},
-    { XML_NAMESPACE_MATH,   XML_BLUE,         TBLUE},
-    { XML_NAMESPACE_MATH,   XML_AQUA,         TAQUA},
-    { XML_NAMESPACE_MATH,   XML_FUCHSIA,      TFUCHSIA},
-    { XML_NAMESPACE_MATH,   XML_YELLOW,       TYELLOW},
-    { XML_NAMESPACE_MATH,   XML_NAVY,         TNAVY},
-    { XML_NAMESPACE_MATH,   XML_TEAL,         TTEAL},
-    { XML_NAMESPACE_MATH,   XML_MAROON,       TMAROON},
-    { XML_NAMESPACE_MATH,   XML_PURPLE,       TPURPLE},
-    { XML_NAMESPACE_MATH,   XML_OLIVE,        TOLIVE},
-    { XML_NAMESPACE_MATH,   XML_GRAY,         TGRAY},
-    { XML_NAMESPACE_MATH,   XML_SILVER,       TSILVER},
-    { XML_NAMESPACE_MATH,   XML_LIME,         TLIME},
-    XML_TOKEN_MAP_END
-};
-
-
-const SvXMLTokenMap& SmXMLImport::GetColorTokenMap()
-{
-    if (!pColorTokenMap)
-        pColorTokenMap.reset(new SvXMLTokenMap(aColorTokenMap));
-    return *pColorTokenMap;
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SmXMLDocContext_Impl::createFastChildContext(

@@ -16,6 +16,7 @@
 #include <cursor.hxx>
 #include <cassert>
 #include "mathtype.hxx"
+#include <starmathdatabase.hxx>
 
 // SmDefaultingVisitor
 
@@ -2133,63 +2134,19 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
                 Separate( );
             }
             break;
-        case TBLACK:
-            Append( "color black " );
-            break;
-        case TWHITE:
-            Append( "color white " );
-            break;
-        case TRED:
-            Append( "color red " );
-            break;
-        case TGREEN:
-            Append( "color green " );
-            break;
-        case TBLUE:
-            Append( "color blue " );
-            break;
-        case TCYAN:
-            Append( "color cyan " );
-            break;
-        case TMAGENTA:
-            Append( "color magenta " );
-            break;
-        case TYELLOW:
-            Append( "color yellow " );
-            break;
-        case TGRAY:
-            Append( "color gray " );
-            break;
-        case TLIME:
-            Append( "color lime " );
-            break;
-        case TMAROON:
-            Append( "color maroon " );
-            break;
-        case TNAVY:
-            Append( "color navy " );
-            break;
-        case TOLIVE:
-            Append( "color olive " );
-            break;
-        case TPURPLE:
-            Append( "color purple " );
-            break;
-        case TSILVER:
-            Append( "color silver " );
-            break;
-        case TTEAL:
-            Append( "color teal " );
-            break;
-        case TAQUA:
-            Append( "color aqua " );
-            break;
-        case TFUCHSIA:
-            Append("color fuchsia ");
+        case THTMLCOL:
+        case TDVIPSNAMESCOL:
+        case TICONICCOL:
+            nc = pNode->GetToken().aText.toUInt32(16);
+            Append( "color " );
+            SmColorTokenTableEntry * aSmColorTokenTableEntry;
+            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
+            Append( aSmColorTokenTableEntry->pIdent );
+            free( aSmColorTokenTableEntry );
             break;
         case TRGB:
             Append( "color rgb " );
-            nc = pNode->GetToken().aText.toUInt32();
+            nc = pNode->GetToken().aText.toUInt32(16);
             nb = nc % 256;
             nc /= 256;
             ng = nc % 256;
@@ -2204,7 +2161,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             break;
         case TRGBA:
             Append( "color rgba " );
-            nc = pNode->GetToken().aText.toUInt32();
+            nc = pNode->GetToken().aText.toUInt32(16);
             nb = nc % 256;
             nc /= 256;
             ng = nc % 256;
@@ -2222,7 +2179,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             break;
         case THEX:
             Append( "color hex " );
-            nc = pNode->GetToken().aText.toUInt32();
+            nc = pNode->GetToken().aText.toUInt32(16);
             Append(OUString::number(nc,16));
             Separate();
             break;

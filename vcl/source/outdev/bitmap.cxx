@@ -879,11 +879,11 @@ public:
 
                 nAlpha  = (nAlphaLine1  + nMapFY * ((nAlphaLine2  >> 7) - (nAlphaLine1 >> 7))) >> 7;
 
-                *pDestScanline = ColorChannelMerge(*pDestScanline, nColor1, nAlpha);
+                *pDestScanline = color::ColorChannelMerge(*pDestScanline, nColor1, nAlpha);
                 pDestScanline++;
-                *pDestScanline = ColorChannelMerge(*pDestScanline, nColor2, nAlpha);
+                *pDestScanline = color::ColorChannelMerge(*pDestScanline, nColor2, nAlpha);
                 pDestScanline++;
-                *pDestScanline = ColorChannelMerge(*pDestScanline, nColor3, nAlpha);
+                *pDestScanline = color::ColorChannelMerge(*pDestScanline, nColor3, nAlpha);
                 pDestScanline++;
                 pDestScanline++;
             }
