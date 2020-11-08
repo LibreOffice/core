@@ -20,11 +20,9 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_CONFIGACCESS_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_CONFIGACCESS_HXX
 
-#include <config_options.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/ustring.hxx>
-#include <framework/fwkdllapi.h>
 
 namespace framework{
 

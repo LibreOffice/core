@@ -29,7 +29,6 @@
 #include <vcl/outdev.hxx>
 
 #include <editeng/adjustitem.hxx>
-#include <editeng/wghtitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/fhgtitem.hxx>

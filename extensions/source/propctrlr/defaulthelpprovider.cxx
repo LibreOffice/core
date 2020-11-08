@@ -20,10 +20,10 @@
 
 #include "defaulthelpprovider.hxx"
 #include "pcrcommon.hxx"
-#include "modulepcr.hxx"
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>

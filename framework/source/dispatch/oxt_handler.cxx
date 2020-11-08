@@ -18,7 +18,6 @@
  */
 
 #include <dispatch/oxt_handler.hxx>
-#include <services.h>
 #include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/frame/DispatchResultState.hpp>

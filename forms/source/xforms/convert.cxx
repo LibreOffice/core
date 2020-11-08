@@ -21,7 +21,6 @@
 #include "convert.hxx"
 
 #include <sstream>
-#include <o3tl/functional.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -37,7 +36,6 @@ using xforms::Convert;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using namespace std;
-using namespace o3tl;
 using namespace utl;
 
 Convert::Convert()

@@ -21,7 +21,6 @@
 #include "pdfdialog.hxx"
 #include "impdialog.hxx"
 #include <vcl/svapp.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

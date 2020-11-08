@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_PROTOCOLHANDLERCACHE_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_PROTOCOLHANDLERCACHE_HXX
 
-#include <config_options.h>
 #include <unordered_map>
 
 #include <com/sun/star/util/URL.hpp>

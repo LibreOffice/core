@@ -17,7 +17,6 @@ namespace com :: sun :: star :: ucb { class XCommandEnvironment; }
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
-using namespace ::svt;
 
 class FolderTree
 {

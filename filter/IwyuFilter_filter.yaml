@@ -10,6 +10,12 @@ excludelist:
     filter/source/msfilter/mscodec.cxx:
     # Actually used
     - com/sun/star/beans/NamedValue.hpp
+    filter/source/msfilter/msdffimp.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    filter/source/msfilter/mstoolbar.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     filter/source/msfilter/svdfppt.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h

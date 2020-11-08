@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_MACROSMENUCONTROLLER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_MACROSMENUCONTROLLER_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <vcl/menu.hxx>
 

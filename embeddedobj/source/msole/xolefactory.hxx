@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

@@ -25,7 +25,6 @@
 #include <svtools/querydelete.hxx>
 #include <svtools/strings.hrc>
 #include <bitmaps.hlst>
-#include <toolkit/helper/vclunohelper.hxx>
 #include "contentenumeration.hxx"
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>

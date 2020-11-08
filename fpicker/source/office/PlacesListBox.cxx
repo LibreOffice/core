@@ -10,7 +10,6 @@
 #include "PlacesListBox.hxx"
 #include <svtools/PlaceEditDialog.hxx>
 
-#include <vcl/event.hxx>
 #include <bitmaps.hlst>
 
 PlacesListBox::PlacesListBox(std::unique_ptr<weld::TreeView> xControl,

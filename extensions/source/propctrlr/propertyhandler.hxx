@@ -21,7 +21,6 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYHANDLER_HXX
 
 #include "pcrcommon.hxx"
-#include "modulepcr.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>

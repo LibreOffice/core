@@ -20,14 +20,12 @@
 #ifndef INCLUDED_FRAMEWORK_INC_XML_SAXNAMESPACEFILTER_HXX
 #define INCLUDED_FRAMEWORK_INC_XML_SAXNAMESPACEFILTER_HXX
 
-#include <config_options.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xml/xmlnamespaces.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <stack>
-#include <framework/fwkdllapi.h>
 
 namespace framework
 {

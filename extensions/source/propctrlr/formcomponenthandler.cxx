@@ -19,6 +19,7 @@
 
 
 #include "controltype.hxx"
+#include "modulepcr.hxx"
 #include <propctrlr.h>
 #include <helpids.h>
 #include "fontdialog.hxx"

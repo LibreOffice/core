@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/svapp.hxx>
-#include "modulepcr.hxx"
 #include "pcrunodialogs.hxx"
 #include "formstrings.hxx"
 #include "pcrstrings.hxx"
