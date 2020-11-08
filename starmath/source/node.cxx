@@ -26,6 +26,7 @@
 #include "mathtype.hxx"
 #include "tmpdevice.hxx"
 #include <visitors.hxx>
+#include <starmathdatabase.hxx>
 
 #include <comphelper/string.hxx>
 #include <tools/color.hxx>
@@ -1626,28 +1627,14 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TNBOLD :   ClearAttribut(FontAttribute::Bold);   break;
         case TNITALIC : ClearAttribut(FontAttribute::Italic); break;
 
-        case TBLACK :   SetColor(COL_BLACK);         break;
-        case TWHITE :   SetColor(COL_WHITE);         break;
-        case TRED :     SetColor(COL_LIGHTRED);      break;
-        case TGREEN :   SetColor(COL_GREEN);         break;
-        case TBLUE :    SetColor(COL_LIGHTBLUE);     break;
-        case TCYAN :    SetColor(COL_LIGHTCYAN);     break; // as in Calc
-        case TMAGENTA : SetColor(COL_LIGHTMAGENTA);  break; // as in Calc
-        case TYELLOW :  SetColor(COL_YELLOW);        break;
-        case TTEAL :    SetColor(COL_CYAN);          break;
-        case TSILVER :  SetColor(COL_LIGHTGRAY);     break;
-        case TGRAY :    SetColor(COL_GRAY);          break;
-        case TMAROON :  SetColor(COL_RED);           break;
-        case TPURPLE :  SetColor(COL_MAGENTA);       break;
-        case TLIME :    SetColor(COL_LIGHTGREEN);    break;
-        case TOLIVE :   SetColor(COL_BROWN);         break;
-        case TNAVY :    SetColor(COL_BLUE);          break;
-        case TAQUA :    SetColor(COL_LIGHTCYAN);     break;
-        case TFUCHSIA : SetColor(COL_LIGHTMAGENTA);  break;
+        // Using HTML CSS Level 1 standard
         case TRGB :
         case TRGBA :
+        case THTMLCOL :
+        case TDVIPSNAMESCOL:
+        case TICONICCOL :
         case THEX :
-            nc = GetToken().aText.toUInt32();
+            nc = GetToken().aText.toUInt32(16);
             SetColor(Color(nc));
             break;
 

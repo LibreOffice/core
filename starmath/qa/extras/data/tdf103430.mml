@@ -8,7 +8,9 @@
     <mi mathvariant="normal" mathcolor="blue">y</mi>
    </mrow>
    <mrow>
-     <mo fontstyle="italic" fontweight="bold" mathvariant="normal" form="prefix" rspace="0">d</mo>
+     <mstyle mathcolor="#ffb781">
+       <mo fontstyle="italic" fontweight="bold" mathvariant="normal" form="prefix" rspace="0">d</mo>
+     </mstyle>
      <mi fontfamily="serif" mathvariant="sans-serif-bold-italic" mathcolor="red">x</mi>
    </mrow>
   </mfrac>
