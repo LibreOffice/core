@@ -62,6 +62,8 @@ using namespace ::com::sun::star::io;
 using namespace com::sun::star;
 using namespace sax_fastparser;
 
+static void NormalizeURI( OUString& rName );
+
 namespace {
 
 struct Event;
@@ -1151,8 +1153,10 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             // namespaces[] is (prefix/URI)
             if( namespaces[ i ] != nullptr )
             {
-                DefineNamespace( OString( XML_CAST( namespaces[ i ] )),
-                    OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ));
+                OString aPrefix( XML_CAST( namespaces[ i ] ));
+                OUString namespaceURL( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 );
+                NormalizeURI( namespaceURL );
+                DefineNamespace(aPrefix, namespaceURL);
                 if( rEntity.mxNamespaceHandler.is() )
                     rEvent.mxDeclAttributes->addUnknown( OString( XML_CAST( namespaces[ i ] ) ), OString( XML_CAST( namespaces[ i + 1 ] ) ) );
             }
@@ -1160,6 +1164,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             {
                 // default namespace
                 sNamespace = OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 );
+                NormalizeURI( sNamespace );
                 nNamespaceToken = GetNamespaceToken( sNamespace );
                 if( rEntity.mxNamespaceHandler.is() )
                     rEvent.mxDeclAttributes->addUnknown( "", OString( XML_CAST( namespaces[ i + 1 ] ) ) );
@@ -1435,5 +1440,141 @@ com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation(
 {
     return cppu::acquire(new FastSaxParser);
 }
+
+// ----------------------------------------------------------
+// copy of the code in xmloff/source/core/namespace.cxx, which adds namespace aliases
+// for various dodgy namespace decls in the wild.
+
+static bool NormalizeW3URI( OUString& rName );
+static bool NormalizeOasisURN( OUString& rName );
+
+static void NormalizeURI( OUString& rName )
+{
+    // try OASIS + W3 URI normalization
+    bool bSuccess = NormalizeOasisURN( rName );
+    if( ! bSuccess )
+        bSuccess = NormalizeW3URI( rName );
+}
+
+const OUStringLiteral XML_URI_W3_PREFIX(u"http://www.w3.org/");
+const OUStringLiteral XML_URI_XFORMS_SUFFIX(u"/xforms");
+const OUStringLiteral XML_N_XFORMS_1_0(u"http://www.w3.org/2002/xforms");
+const OUStringLiteral XML_N_SVG(u"http://www.w3.org/2000/svg");
+const OUStringLiteral XML_N_SVG_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
+const OUStringLiteral XML_N_FO(u"http://www.w3.org/1999/XSL/Format");
+const OUStringLiteral XML_N_FO_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
+const OUStringLiteral XML_N_SMIL(u"http://www.w3.org/2001/SMIL20/");
+const OUStringLiteral XML_N_SMIL_OLD(u"http://www.w3.org/2001/SMIL20");
+const OUStringLiteral XML_N_SMIL_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
+const OUStringLiteral XML_URN_OASIS_NAMES_TC(u"urn:oasis:names:tc");
+const OUStringLiteral XML_XMLNS(u"xmlns");
+const OUStringLiteral XML_OPENDOCUMENT(u"opendocument");
+const OUStringLiteral XML_1_0(u"1.0");
+
+static bool NormalizeW3URI( OUString& rName )
+{
+    // check if URI matches:
+    // http://www.w3.org/[0-9]*/[:letter:]*
+    //                   (year)/(WG name)
+    // For the following WG/standards names:
+    // - xforms
+
+    bool bSuccess = false;
+    const OUString& sURIPrefix = XML_URI_W3_PREFIX;
+    if( rName.startsWith( sURIPrefix ) )
+    {
+        const OUString& sURISuffix = XML_URI_XFORMS_SUFFIX ;
+        sal_Int32 nCompareFrom = rName.getLength() - sURISuffix.getLength();
+        if( rName.copy( nCompareFrom ) == sURISuffix )
+        {
+            // found W3 prefix, and xforms suffix
+            rName = XML_N_XFORMS_1_0;
+            bSuccess = true;
+        }
+    }
+    return bSuccess;
+}
+
+static bool NormalizeOasisURN( OUString& rName )
+{
+    // #i38644#
+    // we exported the wrong namespace for smil, so we correct this here on load
+    // for older documents
+    if( rName == XML_N_SVG )
+    {
+        rName = XML_N_SVG_COMPAT;
+        return true;
+    }
+    else if( rName == XML_N_FO )
+    {
+        rName = XML_N_FO_COMPAT;
+        return true;
+    }
+    else if( rName == XML_N_SMIL || rName == XML_N_SMIL_OLD  )
+    {
+        rName = XML_N_SMIL_COMPAT;
+        return true;
+    }
+
+
+    // Check if URN matches
+    // :urn:oasis:names:tc:[^:]*:xmlns:[^:]*:1.[^:]*
+    //                     |---|       |---| |-----|
+    //                     TC-Id      Sub-Id Version
+
+    sal_Int32 nNameLen = rName.getLength();
+    // :urn:oasis:names:tc.*
+    const OUString& rOasisURN = XML_URN_OASIS_NAMES_TC;
+    if( !rName.startsWith( rOasisURN ) )
+        return false;
+
+    // :urn:oasis:names:tc:.*
+    sal_Int32 nPos = rOasisURN.getLength();
+    if( nPos >= nNameLen || rName[nPos] != ':' )
+        return false;
+
+    // :urn:oasis:names:tc:[^:]:.*
+    sal_Int32 nTCIdStart = nPos+1;
+    sal_Int32 nTCIdEnd = rName.indexOf( ':', nTCIdStart );
+    if( -1 == nTCIdEnd )
+        return false;
+
+    // :urn:oasis:names:tc:[^:]:xmlns.*
+    nPos = nTCIdEnd + 1;
+    OUString sTmp( rName.copy( nPos ) );
+    const OUString& rXMLNS = XML_XMLNS;
+    if( !sTmp.startsWith( rXMLNS ) )
+        return false;
+
+    // :urn:oasis:names:tc:[^:]:xmlns:.*
+    nPos += rXMLNS.getLength();
+    if( nPos >= nNameLen || rName[nPos] != ':' )
+        return false;
+
+    // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:.*
+    nPos = rName.indexOf( ':', nPos+1 );
+    if( -1 == nPos )
+        return false;
+
+    // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:[^:][^:][^:][^:]*
+    sal_Int32 nVersionStart = nPos+1;
+    if( nVersionStart+2 >= nNameLen ||
+        -1 != rName.indexOf( ':', nVersionStart ) )
+        return false;
+
+    // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:1\.[^:][^:]*
+    if( rName[nVersionStart] != '1' || rName[nVersionStart+1] != '.' )
+        return false;
+
+    // replace [tcid] with current TCID and version with current version.
+
+    rName = rName.copy( 0, nTCIdStart ) +
+            XML_OPENDOCUMENT +
+            rName.copy( nTCIdEnd, nVersionStart-nTCIdEnd ) +
+            XML_1_0;
+
+    return true;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
