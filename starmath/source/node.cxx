@@ -1626,24 +1626,23 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TNBOLD :   ClearAttribut(FontAttribute::Bold);   break;
         case TNITALIC : ClearAttribut(FontAttribute::Italic); break;
 
-        case TBLACK :   SetColor(COL_BLACK);         break;
-        case TWHITE :   SetColor(COL_WHITE);         break;
-        case TRED :     SetColor(COL_LIGHTRED);      break;
-        case TGREEN :   SetColor(COL_GREEN);         break;
-        case TBLUE :    SetColor(COL_LIGHTBLUE);     break;
-        case TCYAN :    SetColor(COL_LIGHTCYAN);     break; // as in Calc
-        case TMAGENTA : SetColor(COL_LIGHTMAGENTA);  break; // as in Calc
-        case TYELLOW :  SetColor(COL_YELLOW);        break;
-        case TTEAL :    SetColor(COL_CYAN);          break;
-        case TSILVER :  SetColor(COL_LIGHTGRAY);     break;
-        case TGRAY :    SetColor(COL_GRAY);          break;
-        case TMAROON :  SetColor(COL_RED);           break;
-        case TPURPLE :  SetColor(COL_MAGENTA);       break;
-        case TLIME :    SetColor(COL_LIGHTGREEN);    break;
-        case TOLIVE :   SetColor(COL_BROWN);         break;
-        case TNAVY :    SetColor(COL_BLUE);          break;
-        case TAQUA :    SetColor(COL_LIGHTCYAN);     break;
-        case TFUCHSIA : SetColor(COL_LIGHTMAGENTA);  break;
+        // Using HTML CSS Level 1 standar
+        case TBLACK :   SetColor(COL_SM_BLACK);         break;
+        case TWHITE :   SetColor(COL_SM_WHITE);         break;
+        case TRED :     SetColor(COL_SM_RED);           break;
+        case TGREEN :   SetColor(COL_SM_GREEN);         break;
+        case TBLUE :    SetColor(COL_SM_BLUE);          break;
+        case TAQUA :    SetColor(COL_SM_AQUA);          break;
+        case TFUCHSIA : SetColor(COL_SM_FUCHSIA);       break;
+        case TYELLOW :  SetColor(COL_SM_YELLOW);        break;
+        case TTEAL :    SetColor(COL_SM_TEAL);          break;
+        case TSILVER :  SetColor(COL_SM_SILVER);        break;
+        case TGRAY :    SetColor(COL_SM_GRAY);          break;
+        case TMAROON :  SetColor(COL_SM_MAROON);        break;
+        case TPURPLE :  SetColor(COL_SM_PURPLE);        break;
+        case TLIME :    SetColor(COL_SM_LIME);          break;
+        case TOLIVE :   SetColor(COL_SM_OLIVE);         break;
+        case TNAVY :    SetColor(COL_SM_NAVY);          break;
         case TRGB :
         case TRGBA :
         case THEX :
