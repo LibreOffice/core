@@ -18,11 +18,8 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <vcl/vclptr.hxx>
-
-#include <framework/fwkdllapi.h>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XFrame; }

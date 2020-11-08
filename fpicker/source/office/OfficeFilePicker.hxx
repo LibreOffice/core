@@ -27,7 +27,6 @@
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 
 #include "commonpicker.hxx"

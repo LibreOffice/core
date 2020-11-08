@@ -8,7 +8,6 @@
  */
 
 #include <comphelper/processfactory.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -17,6 +16,8 @@
 #include <bitmaps.hlst>
 
 using namespace ::com::sun::star::task;
+
+using namespace ::svt;
 
 FolderTree::FolderTree(std::unique_ptr<weld::TreeView> xTreeView, weld::Window* pTopLevel)
     : m_xTreeView(std::move(xTreeView))

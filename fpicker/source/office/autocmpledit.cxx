@@ -8,8 +8,6 @@
  */
 
 #include "autocmpledit.hxx"
-#include <vcl/svapp.hxx>
-#include <vcl/event.hxx>
 
 AutocompleteEdit::AutocompleteEdit(std::unique_ptr<weld::Entry> xEntry)
     : m_xEntry(std::move(xEntry))

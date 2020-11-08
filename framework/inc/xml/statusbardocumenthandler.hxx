@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <unordered_map>
-#include <framework/fwkdllapi.h>
 
 namespace framework{
 

@@ -18,7 +18,6 @@
  */
 
 #include "formcontroller.hxx"
-#include "modulepcr.hxx"
 #include "pcrcommon.hxx"
 #include "formstrings.hxx"
 #include "defaultforminspection.hxx"

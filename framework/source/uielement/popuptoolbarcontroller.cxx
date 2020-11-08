@@ -24,13 +24,11 @@
 #include <comphelper/propertyvalue.hxx>
 #include <menuconfiguration.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/miscopt.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
-#include <unotools/moduleoptions.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>

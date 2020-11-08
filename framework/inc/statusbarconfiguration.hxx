@@ -18,8 +18,7 @@
  */
 #pragma once
 
-#include <config_options.h>
-#include <framework/fwkdllapi.h>
+#include <sal/types.h>
 
 namespace com::sun::star::container { class XIndexAccess; }
 namespace com::sun::star::container { class XIndexContainer; }

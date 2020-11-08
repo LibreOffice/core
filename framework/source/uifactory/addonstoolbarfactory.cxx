@@ -28,7 +28,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star::uno;

@@ -37,7 +37,6 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
-#include <editeng/xmlcnitm.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editdata.hxx>
 #include <editeng/lrspitem.hxx>

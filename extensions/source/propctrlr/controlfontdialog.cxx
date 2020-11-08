@@ -24,7 +24,6 @@
 #include <vcl/svapp.hxx>
 #include "fontdialog.hxx"
 #include "formstrings.hxx"
-#include "modulepcr.hxx"
 #include "pcrcommon.hxx"
 
 namespace pcr

@@ -20,7 +20,6 @@
 #include "enumrepresentation.hxx"
 #include "genericpropertyhandler.hxx"
 #include "handlerhelper.hxx"
-#include "modulepcr.hxx"
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>

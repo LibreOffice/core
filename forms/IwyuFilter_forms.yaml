@@ -22,9 +22,15 @@ excludelist:
     - com/sun/star/io/XObjectInputStream.hpp
     - com/sun/star/io/XObjectOutputStream.hpp
     - tools/datetime.hxx
+    forms/source/component/ImageControl.cxx:
+    # Needed for template
+    - com/sun/star/ui/dialogs/XFilePicker3.hpp
     forms/source/component/imgprod.cxx:
     # Actually used
     - com/sun/star/io/XInputStream.hpp
+    forms/source/component/scrollbar.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     forms/source/richtext/parametrizedattributedispatcher.cxx:
     # Actually used
     - com/sun/star/beans/PropertyValue.hpp
@@ -33,6 +39,9 @@ excludelist:
     - com/sun/star/lang/Locale.hpp
     # Needed for macro defines to work
     - editeng/unoprnms.hxx
+    forms/source/runtime/formoperations.cxx:
+    # Needed for template
+    - com/sun/star/sdbc/XConnection.hpp
     forms/source/solar/component/navbarcontrol.cxx:
     # Actually used
     - com/sun/star/awt/XControlModel.hpp

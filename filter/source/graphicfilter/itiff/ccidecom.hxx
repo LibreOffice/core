@@ -21,7 +21,6 @@
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_CCIDECOM_HXX
 
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <array>
 #include <memory>
 

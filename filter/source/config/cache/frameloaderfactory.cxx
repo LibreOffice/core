@@ -21,7 +21,6 @@
 #include "frameloaderfactory.hxx"
 
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 
 

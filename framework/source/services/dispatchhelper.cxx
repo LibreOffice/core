@@ -18,7 +18,6 @@
  */
 
 #include <framework/dispatchhelper.hxx>
-#include <services.h>
 
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>

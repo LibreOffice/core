@@ -18,7 +18,6 @@
  */
 
 #include <classes/taskcreator.hxx>
-#include <loadenv/targethelper.hxx>
 #include <services.h>
 #include <taskcreatordefs.hxx>
 

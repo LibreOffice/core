@@ -23,7 +23,6 @@
 #include <tools/urlobj.hxx>
 #include <svtools/inettbc.hxx>
 #include "iodlg.hxx"
-#include <bitmaps.hlst>
 #include <svtools/imagemgr.hxx>
 #include <svl/svlresid.hxx>
 #include <svl/svl.hrc>

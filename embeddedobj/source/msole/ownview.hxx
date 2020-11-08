@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
