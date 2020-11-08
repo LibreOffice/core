@@ -30,8 +30,10 @@
 #define INCLUDED_STARMATH_INC_TOKEN_HXX
 
 #include <sal/types.h>
+#include "types.hxx"
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <tools/color.hxx>
 
 // TokenGroups
 enum class TG {
@@ -135,11 +137,91 @@ enum SmTokenType
     TASINH,         TACOSH,         TATANH,         TACOTH,         // Arctrigo hyperbolic
     TSQRT,          TNROOT,         TFACT,          TABS,           // roots, n! |z|
     // Color
-    TRGB,           TRGBA,          THEX,
-    TAQUA,          TBLACK,         TBLUE,          TCYAN,          TFUCHSIA,
-    TGRAY,          TGREEN,         TLIME,          TMAGENTA,       TMAROON,
-    TNAVY,          TOLIVE,         TPURPLE,        TRED,           TSILVER,
-    TTEAL,          TWHITE,         TYELLOW
+    TRGB,           TRGBA,          THEX,           THTMLCOL,       TDVIPSNAMESCOL,
+    TICONICCOL
+};
+
+struct SmTokenTableEntry
+{
+    const char*      pIdent;
+    SmTokenType      eType;
+    sal_Unicode      cMathChar;
+    TG               nGroup;
+    sal_uInt16       nLevel;
+};
+
+struct SmColorTokenTableEntry
+{
+    const char*      pIdent;
+    const char*      cIdent;
+    SmTokenType      eType;
+    Color            cColor;
+
+    SmColorTokenTableEntry()
+    : pIdent("")
+    , cIdent("")
+    , eType(TERROR)
+    , cColor()
+    {}
+
+    SmColorTokenTableEntry( const SmColorTokenTableEntry * amColorTokenTableEntry )
+    : pIdent(amColorTokenTableEntry->pIdent)
+    , cIdent(amColorTokenTableEntry->cIdent)
+    , eType(amColorTokenTableEntry->eType)
+    , cColor(amColorTokenTableEntry->cColor)
+    {}
+
+    SmColorTokenTableEntry( const std::unique_ptr<SmColorTokenTableEntry> amColorTokenTableEntry )
+    : pIdent(amColorTokenTableEntry->pIdent)
+    , cIdent(amColorTokenTableEntry->cIdent)
+    , eType(amColorTokenTableEntry->eType)
+    , cColor(amColorTokenTableEntry->cColor)
+    {}
+
+    SmColorTokenTableEntry( const char* name, const char* codename, SmTokenType ctype, Color ncolor)
+    : pIdent(name)
+    , cIdent(codename)
+    , eType(ctype)
+    , cColor(ncolor)
+    {}
+
+    SmColorTokenTableEntry( const char* name, const char* codename, SmTokenType ctype, sal_uInt32 ncolor)
+    : pIdent(name)
+    , cIdent(codename)
+    , eType(ctype)
+    , cColor(ncolor)
+    {}
+
+    bool operator == ( const OUString & colorname ) const
+    {
+        return colorname.compareToIgnoreAsciiCaseAscii( pIdent ) == 0;
+    }
+
+    bool operator == ( sal_uInt32 colorcode ) const
+    {
+        return colorcode == cColor.mValue;
+    }
+
+    bool operator == ( Color colorcode ) const
+    {
+        return colorcode == cColor;
+    }
+
+    bool equals( const OUString & colorname ) const
+    {
+        return colorname.compareToIgnoreAsciiCaseAscii( pIdent ) == 0;
+    }
+
+    bool equals( sal_uInt32 colorcode ) const
+    {
+        return colorcode == cColor.mValue;
+    }
+
+    bool equals( Color colorcode ) const
+    {
+        return colorcode == cColor;
+    }
+
 };
 
 struct SmToken
@@ -177,15 +259,63 @@ struct SmToken
         , nLevel(nTokenLevel)
         , nRow(0)
         , nCol(0){}
-};
 
-struct SmTokenTableEntry
-{
-    const char* pIdent;
-    SmTokenType      eType;
-    sal_Unicode      cMathChar;
-    TG               nGroup;
-    sal_uInt16       nLevel;
+    void operator = (const SmTokenTableEntry & aTokenTableEntry)
+    {
+        aText = OUString::createFromAscii(aTokenTableEntry.pIdent);
+        eType = aTokenTableEntry.eType;
+        cMathChar = aTokenTableEntry.cMathChar;
+        nGroup = aTokenTableEntry.nGroup;
+        nLevel = aTokenTableEntry.nLevel;
+        nRow = 0;
+        nCol = 0;
+    }
+
+    void operator = (const SmTokenTableEntry * aTokenTableEntry)
+    {
+        aText = OUString::createFromAscii(aTokenTableEntry->pIdent);
+        eType = aTokenTableEntry->eType;
+        cMathChar = aTokenTableEntry->cMathChar;
+        nGroup = aTokenTableEntry->nGroup;
+        nLevel = aTokenTableEntry->nLevel;
+        nRow = 0;
+        nCol = 0;
+    }
+
+    void operator = (const SmColorTokenTableEntry & aTokenTableEntry)
+    {
+        aText = OUString::number(aTokenTableEntry.cColor.mValue, 16);
+        eType = aTokenTableEntry.eType;
+        cMathChar = MS_NULLCHAR;
+        nGroup = TG::Color;
+        nLevel = 0;
+        nRow = 0;
+        nCol = 0;
+    }
+
+    void operator = (const SmColorTokenTableEntry * aTokenTableEntry)
+    {
+        aText = OUString::number(aTokenTableEntry->cColor.mValue, 16);
+        eType = aTokenTableEntry->eType;
+        cMathChar = MS_NULLCHAR;
+        nGroup = TG::Color;
+        nLevel = 0;
+        nRow = 0;
+        nCol = 0;
+    }
+
+    void operator = (const std::unique_ptr<SmColorTokenTableEntry> & aTokenTableEntry)
+    {
+        aText = OUString::number(aTokenTableEntry->cColor.mValue, 16);
+        eType = aTokenTableEntry->eType;
+        cMathChar = MS_NULLCHAR;
+        nGroup = TG::Color;
+        nLevel = 0;
+        nRow = 0;
+        nCol = 0;
+    }
+
+
 };
 
 #endif

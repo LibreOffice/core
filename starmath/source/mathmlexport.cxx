@@ -64,6 +64,7 @@
 #include <document.hxx>
 #include <utility.hxx>
 #include "cfgitem.hxx"
+#include <starmathdatabase.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
@@ -1139,6 +1140,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
     int nItalic = -1;   // for the following variables: -1 = yet undefined; 0 = false; 1 = true;
     int nSansSerifFixed   = -1;
     SmTokenType eNodeType = TUNKNOWN;
+
     for (;;)
     {
         eNodeType = pNode->GetToken().eType;
@@ -1168,64 +1170,36 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             break;
     }
 
+    sal_uInt32 nc;
     switch (pNode->GetToken().eType)
     {
         case TPHANTOM:
             // No attribute needed. An <mphantom> element will be used below.
             break;
-        case TBLACK:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_BLACK);
+        case THTMLCOL:
+        {
+            std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
+            nc = pNode->GetToken().aText.toUInt32(16);
+            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_HTML( nc );
+            OUString sssStr = OUString::createFromAscii( aSmColorTokenTableEntry->cIdent );
+            AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, sssStr);
+        }
             break;
-        case TWHITE:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_WHITE);
-            break;
-        case TRED:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_RED);
-            break;
-        case TGREEN:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_GREEN);
-            break;
-        case TBLUE:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_BLUE);
-            break;
-        case TCYAN:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_AQUA);
-            break;
-        case TMAGENTA:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_FUCHSIA);
-            break;
-        case TYELLOW:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_YELLOW);
-            break;
-        case TSILVER:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_SILVER);
-            break;
-        case TGRAY:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_GRAY);
-            break;
-        case TMAROON:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_MAROON);
-            break;
-        case TOLIVE:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_OLIVE);
-            break;
-        case TLIME:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_LIME);
-            break;
-        case TAQUA:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_AQUA);
-            break;
-        case TTEAL:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_TEAL);
-            break;
-        case TNAVY:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_NAVY);
-            break;
-        case TFUCHSIA:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_FUCHSIA);
-            break;
-        case TPURPLE:
-            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_PURPLE);
+        case TRGB:
+        case TRGBA:
+        case THEX:
+        case TDVIPSNAMESCOL:
+        case TICONICCOL:
+        {
+            OUStringBuffer sStrBuf;
+            sStrBuf.append('#');
+            std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
+            nc = pNode->GetToken().aText.toUInt32(16);
+            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_HTML( nc );
+            sStrBuf.append( aSmColorTokenTableEntry->cColor.AsRGBHexString() );
+            OUString ssStr(sStrBuf.makeStringAndClear());
+            AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, ssStr);
+        }
             break;
         case TSIZE:
             {

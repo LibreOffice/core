@@ -148,7 +148,7 @@ void Test::testtdf99556()
 void Test::testTdf103430()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf103430.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("frac { { nitalic d ^ 2 nitalic color blue y } } { { nitalic d font sans bold italic color red x } }"),
+    CPPUNIT_ASSERT_EQUAL(OUString("frac { { nitalic d ^ 2 nitalic color blue y } } { { color apricot nitalic d font sans bold italic color red x } }"),
                          mxDocShell->GetText());
 }
 

@@ -33,6 +33,7 @@ enum SmPrintSize { PRINT_SIZE_NORMAL, PRINT_SIZE_SCALED, PRINT_SIZE_ZOOMED };
 //!     (see %alpha ... %gamma for example)
 
 sal_Unicode const MS_NONE = '\0';
+sal_Unicode const MS_NULLCHAR = '\0';
 sal_Unicode const MS_FACT = 0x0021;
 sal_Unicode const MS_INFINITY = 0x221E;
 sal_Unicode const MS_SLASH = 0x002F;

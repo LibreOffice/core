@@ -35,6 +35,7 @@
 #include "cfgitem.hxx"
 #include <cassert>
 #include <stack>
+#include <starmathdatabase.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -261,32 +262,6 @@ const SmTokenTableEntry aTokenTable[] =
     { "wp" , TWP, MS_WP, TG::Standalone, 5}
 };
 
-//Definition of color keywords
-const SmTokenTableEntry aColorTokenTable[] =
-{
-    { "aqua", TAQUA, '\0', TG::Color, 0},
-    { "black", TBLACK, '\0', TG::Color, 0},
-    { "blue", TBLUE, '\0', TG::Color, 0},
-    { "cyan", TCYAN, '\0', TG::Color, 0},
-    { "fuchsia", TFUCHSIA, '\0', TG::Color, 0},
-    { "gray", TGRAY, '\0', TG::Color, 0},
-    { "green", TGREEN, '\0', TG::Color, 0},
-    { "hex" , THEX, '\0', TG::Color, 0},
-    { "lime", TLIME, '\0', TG::Color, 0},
-    { "magenta", TMAGENTA, '\0', TG::Color, 0},
-    { "maroon", TMAROON, '\0', TG::Color, 0},
-    { "navy", TNAVY, '\0', TG::Color, 0},
-    { "olive", TOLIVE, '\0', TG::Color, 0},
-    { "purple", TPURPLE, '\0', TG::Color, 0},
-    { "red", TRED, '\0', TG::Color, 0},
-    { "rgb", TRGB, '\0', TG::Color, 0},
-    //{ "rgba", TRGBA, '\0', TG::Color, 0},
-    { "silver", TSILVER, '\0', TG::Color, 0},
-    { "teal", TTEAL, '\0', TG::Color, 0},
-    { "white", TWHITE, '\0', TG::Color, 0},
-    { "yellow", TYELLOW, '\0', TG::Color, 0}
-};
-
 // First character may be any alphabetic
 const sal_Int32 coStartFlags = KParseTokens::ANY_LETTER | KParseTokens::IGNORE_LEADING_WS;
 
@@ -332,18 +307,6 @@ static const SmTokenTableEntry * GetTokenTableEntry( const OUString &rName )
     return nullptr; //not found
 }
 
-//Returns the SmTokenTableEntry for a keyword
-static const SmTokenTableEntry * GetColorTokenTableEntry( const OUString &rName )
-{
-    if (rName.isEmpty())return nullptr; //avoid null pointer exceptions
-    //Looks for the first keyword after or equal to rName in alphabetical order.
-    auto findIter = std::lower_bound( std::begin(aColorTokenTable),
-                                      std::end(aColorTokenTable), rName, findCompare );
-    if ( findIter != std::end(aColorTokenTable)
-                     && rName.equalsIgnoreAsciiCaseAscii( findIter->pIdent ))
-        return &*findIter; //check is equal
-    return nullptr; //not found
-}
 static bool IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
 {   // returns 'true' iff cChar is '\0' or a delimiter
 
@@ -1044,16 +1007,21 @@ void SmParser::NextTokenColor()
         sal_Int32 n = aRes.EndPos - nRealStart;
         assert(n >= 0);
         OUString aName( m_aBufferString.copy( nRealStart, n ) );
-        const SmTokenTableEntry *pEntry = GetColorTokenTableEntry( aName );
-        if (pEntry)
-        {
-            m_aCurToken.eType      = pEntry->eType;
-            m_aCurToken.cMathChar  = pEntry->cMathChar;
-            m_aCurToken.nGroup     = pEntry->nGroup;
-            m_aCurToken.nLevel     = pEntry->nLevel;
-            m_aCurToken.aText      = OUString::createFromAscii( pEntry->pIdent );
-        }
+        std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
+        aSmColorTokenTableEntry = starmathdatabase::Identify_ColorName_Parser( aName );
+        if ( aSmColorTokenTableEntry ) m_aCurToken = aSmColorTokenTableEntry;
         else m_aCurToken.eType     = TNONE;
+    }
+    else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
+    {
+        if( m_aBufferString[ nRealStart ] == '#' && !m_aBufferString.match("##", nRealStart) )
+        {
+            m_aCurToken.eType    = THEX;
+            m_aCurToken.cMathChar = '\0';
+            m_aCurToken.nGroup       = TG::Color;
+            m_aCurToken.nLevel       = 0;
+            m_aCurToken.aText = "hex";
+        }
     }
     else m_aCurToken.eType         = TNONE;
     if (TEND != m_aCurToken.eType) m_nBufferIndex = aRes.EndPos;
@@ -2142,7 +2110,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoColor()
             nb = m_aCurToken.aText.toUInt32();
             if( nb > 255 )return DoError(SmParseError::ColorExpected);
             nc = nb | ng << 8 | nr << 16 | sal_uInt32(0) << 24;
-            aToken.aText = OUString::number(nc);
+            aToken.aText = OUString::number(nc, 16);
         }
         else if( m_aCurToken.eType == TRGBA ) //loads r, g and b
         {
@@ -2168,7 +2136,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoColor()
             na = m_aCurToken.aText.toUInt32();
             if( na > 255 )return DoError(SmParseError::ColorExpected);
             nc = nb | ng << 8 | nr << 16 | na << 24;
-            aToken.aText = OUString::number(nc);
+            aToken.aText = OUString::number(nc, 16);
         }
         else if( m_aCurToken.eType == THEX ) //loads hex code
         {
@@ -2177,7 +2145,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoColor()
             if( lcl_IsNotWholeNumber16(m_aCurToken.aText) )
                 return DoError(SmParseError::ColorExpected);
             nc = m_aCurToken.aText.toUInt32(16);
-            aToken.aText = OUString::number(nc);
+            aToken.aText = OUString::number(nc, 16);
         }
         NextToken();
     }

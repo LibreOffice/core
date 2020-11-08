@@ -56,16 +56,6 @@ void Color::DecreaseContrast(sal_uInt8 nContDec)
     }
 }
 
-bool Color::IsDark() const
-{
-    return GetLuminance() <= 60;
-}
-
-bool Color::IsBright() const
-{
-    return GetLuminance() >= 245;
-}
-
 // color space conversion
 
 void Color::RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const
