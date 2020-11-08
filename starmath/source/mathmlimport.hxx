@@ -89,8 +89,6 @@ public:
         const css::uno::Reference<
         css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    const SvXMLTokenMap &GetColorTokenMap();
-
     SmNodeStack & GetNodeStack()    { return aNodeStack; }
 
     bool GetSuccess() const              { return bSuccess; }

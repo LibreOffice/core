@@ -595,9 +595,9 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                         }
                                         if( ( *pRScan & cBit ) == cBlack )
                                         {
-                                            pWScan[ 0 ] = ColorChannelMerge( pWScan[ 0 ], nB, cTrans );
-                                            pWScan[ 1 ] = ColorChannelMerge( pWScan[ 1 ], nG, cTrans );
-                                            pWScan[ 2 ] = ColorChannelMerge( pWScan[ 2 ], nR, cTrans );
+                                            pWScan[ 0 ] = color::ColorChannelMerge( pWScan[ 0 ], nB, cTrans );
+                                            pWScan[ 1 ] = color::ColorChannelMerge( pWScan[ 1 ], nG, cTrans );
+                                            pWScan[ 2 ] = color::ColorChannelMerge( pWScan[ 2 ], nR, cTrans );
                                         }
                                     }
                                 }
