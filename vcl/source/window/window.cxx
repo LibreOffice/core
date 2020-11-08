@@ -3236,12 +3236,12 @@ void Window::ReleaseLOKNotifier()
 
 const vcl::ILibreOfficeKitNotifier* Window::GetLOKNotifier() const
 {
-    return mpWindowImpl->mpLOKNotifier;
+    return mpWindowImpl ? mpWindowImpl->mpLOKNotifier : nullptr;
 }
 
 vcl::LOKWindowId Window::GetLOKWindowId() const
 {
-    return mpWindowImpl->mnLOKWindowId;
+    return mpWindowImpl ? mpWindowImpl->mnLOKWindowId : 0;
 }
 
 VclPtr<vcl::Window> Window::GetParentWithLOKNotifier()
