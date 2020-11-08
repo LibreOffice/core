@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc88503f_46baa10b",
+        "filename": "starmath/source/mathmlimport.cxx",
+        "patchSetId": 27
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-08T19:06:26Z",
+      "side": 1,
+      "message": "Stechy -\u003e Stretchy\nno -\u003e not",
+      "revId": "e05fbf81cce2780281a2ddce0822e5a652538f81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
