@@ -35,11 +35,10 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <svx/unoshape.hxx>
-#include <svx/svdograf.hxx>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/style/NumberingType.hpp>

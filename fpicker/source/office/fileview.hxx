@@ -21,7 +21,6 @@
 
 #include <memory>
 #include <com/sun/star/uno/Sequence.h>
-#include <vcl/errinf.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
-
 #include <xml/statusbardocumenthandler.hxx>
 
 #include <com/sun/star/xml/sax/SAXException.hpp>

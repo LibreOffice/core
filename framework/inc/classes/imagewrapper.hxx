@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/image.hxx>
-#include <framework/fwkdllapi.h>
 
 namespace framework
 {

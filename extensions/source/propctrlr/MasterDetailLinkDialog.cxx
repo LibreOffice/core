@@ -18,12 +18,10 @@
  */
 
 #include <sal/log.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/svapp.hxx>
 #include "MasterDetailLinkDialog.hxx"
 #include "formlinkdialog.hxx"
-#include "modulepcr.hxx"
 
 namespace pcr
 {

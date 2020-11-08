@@ -48,7 +48,6 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 #include "svgfilter.hxx"
-#include "svgwriter.hxx"
 
 #include <svx/unopage.hxx>
 #include <vcl/graphicfilter.hxx>

@@ -32,7 +32,6 @@
 #include <editeng/editview.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/txtrange.hxx>
-#include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -54,7 +53,6 @@
 
 #include <unotools/configmgr.hxx>
 
-#include <set>
 #include <math.h>
 #include <vcl/metric.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -70,7 +68,6 @@
 #include <o3tl/sorted_vector.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/string.hxx>
-#include <comphelper/lok.hxx>
 #include <memory>
 
 #include <vcl/outdev/ScopedStates.hxx>

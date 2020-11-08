@@ -31,7 +31,6 @@
 #include <comphelper/seqstream.hxx>
 #include <filter/msfilter/classids.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
 
 #if defined(_WIN32)
 #include "olecomponent.hxx"

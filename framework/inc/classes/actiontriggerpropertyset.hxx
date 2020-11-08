@@ -28,7 +28,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <framework/fwkdllapi.h>
 
 #define SERVICENAME_ACTIONTRIGGER "com.sun.star.ui.ActionTrigger"
 #define IMPLEMENTATIONNAME_ACTIONTRIGGER "com.sun.star.comp.ui.ActionTrigger"

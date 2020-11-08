@@ -21,7 +21,6 @@
 #include "convert.hxx"
 
 #include <sstream>
-#include <o3tl/functional.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>

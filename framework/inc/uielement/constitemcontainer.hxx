@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
 
-#include <config_options.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -32,7 +31,6 @@
 #include <cppuhelper/propshlp.hxx>
 
 #include <vector>
-#include <framework/fwkdllapi.h>
 
 namespace framework
 {

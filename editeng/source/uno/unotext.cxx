@@ -31,8 +31,6 @@
 #include <rtl/instance.hxx>
 #include <tools/debug.hxx>
 
-#include <editeng/fontitem.hxx>
-#include <editeng/tstpitem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unotext.hxx>
 #include <editeng/unoedsrc.hxx>

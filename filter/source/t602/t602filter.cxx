@@ -31,6 +31,7 @@
 #include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/character.hxx>

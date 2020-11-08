@@ -23,7 +23,6 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <uielement/complextoolbarcontroller.hxx>
-#include <vcl/event.hxx>
 
 class ToolBox;
 

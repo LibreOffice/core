@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <editeng/editengdllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

@@ -18,9 +18,9 @@
  */
 
 #include <services/mediatypedetectionhelper.hxx>
-#include <services.h>
 #include <svl/inettype.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace framework
 {

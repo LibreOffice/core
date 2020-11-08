@@ -20,7 +20,6 @@
 #include <uielement/comboboxtoolbarcontroller.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/util/Color.hpp>
 
 #include <vcl/InterimItemWindow.hxx>
 #include <svtools/toolboxcontroller.hxx>

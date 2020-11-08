@@ -24,8 +24,6 @@
 
 #include <uielement/complextoolbarcontroller.hxx>
 
-#include <vcl/event.hxx>
-
 namespace framework
 {
 

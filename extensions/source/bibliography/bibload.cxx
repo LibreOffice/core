@@ -23,7 +23,6 @@
 #include <svl/itemprop.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/factory.hxx>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
@@ -32,13 +31,12 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/text/BibliographyDataField.hpp>
-#include <com/sun/star/form/XLoadListener.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/window.hxx>

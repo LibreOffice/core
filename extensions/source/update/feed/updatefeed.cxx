@@ -21,7 +21,6 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/Property.hpp>
