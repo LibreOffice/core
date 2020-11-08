@@ -13,8 +13,6 @@
 #include <sal/types.h>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <sax/fastattribs.hxx>
 

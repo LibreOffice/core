@@ -19,7 +19,6 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/IntrospectionException.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
@@ -34,7 +33,6 @@
 
 // InvocationToAllListenerMapper
 #include <com/sun/star/script/XInvocation.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>

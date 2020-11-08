@@ -10,7 +10,6 @@
 #include <vector>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>

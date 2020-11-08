@@ -18,7 +18,6 @@
  */
 
 #include <recording/dispatchrecordersupplier.hxx>
-#include <services.h>
 
 #include <com/sun/star/frame/XRecordableDispatch.hpp>
 

@@ -18,7 +18,6 @@
  */
 
 #include <services/uriabbreviation.hxx>
-#include <services.h>
 
 #include <sal/config.h>
 

@@ -35,7 +35,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/interfacecontainer.h>
 
 namespace framework{
 

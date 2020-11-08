@@ -66,7 +66,6 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
 #include <osl/diagnose.h>
-#include <sfx2/lokhelper.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <sfx2/dispatch.hxx>
 

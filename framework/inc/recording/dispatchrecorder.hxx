@@ -30,7 +30,6 @@
 #include <com/sun/star/frame/XDispatchRecorder.hpp>
 #include <com/sun/star/frame/DispatchStatement.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>

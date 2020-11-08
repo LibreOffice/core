@@ -31,6 +31,8 @@ excludelist:
     extensions/source/update/check/updatecheck.cxx:
     # Needed on WIN32 for WNT_hasInternetConnection
     - onlinecheck.hxx
+    # Actually used 
+    - comphelper/scopeguard.hxx
     extensions/source/update/check/updatecheckconfig.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
@@ -46,6 +48,11 @@ excludelist:
     extensions/source/propctrlr/formcomponenthandler.cxx:
     # Actually used
     - com/sun/star/inspection/XObjectInspectorUI.hpp
+    # Needed for template
+    - com/sun/star/ui/dialogs/XFilePicker3.hpp
+    extensions/source/propctrlr/formlinkdialog.cxx:
+    # Needed for template
+    - com/sun/star/sdb/XSingleSelectQueryComposer.hpp
     extensions/source/propctrlr/formgeometryhandler.cxx:
     # Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx

@@ -24,7 +24,6 @@
 #include <tools/urlobj.hxx>
 #include "XmlFilterAdaptor.hxx"
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XImportFilter2.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
@@ -33,7 +32,6 @@
 #include <com/sun/star/style/XStyleLoader.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/fileurl.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

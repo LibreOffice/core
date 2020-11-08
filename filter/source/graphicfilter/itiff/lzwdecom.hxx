@@ -21,7 +21,6 @@
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_LZWDECOM_HXX
 
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <array>
 
 #define MAX_TABLE_SIZE 4096

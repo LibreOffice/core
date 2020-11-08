@@ -22,7 +22,6 @@
 #include "constant.hxx"
 
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <officecfg/Setup.hxx>
