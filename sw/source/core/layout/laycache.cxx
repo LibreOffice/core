@@ -455,14 +455,14 @@ SwLayoutCache::~SwLayoutCache()
 SwActualSection::SwActualSection( SwActualSection *pUp,
                                   SwSectionFrame    *pSect,
                                   SwSectionNode   *pNd ) :
-    pUpper( pUp ),
-    pSectFrame( pSect ),
-    pSectNode( pNd )
+    m_pUpper( pUp ),
+    m_pSectFrame( pSect ),
+    m_pSectNode( pNd )
 {
-    if ( !pSectNode )
+    if ( !m_pSectNode )
     {
         const SwNodeIndex *pIndex = pSect->GetFormat()->GetContent().GetContentIdx();
-        pSectNode = pIndex->GetNode().FindSectionNode();
+        m_pSectNode = pIndex->GetNode().FindSectionNode();
     }
 }
 
