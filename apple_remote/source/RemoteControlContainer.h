@@ -31,12 +31,13 @@
 
 #import <apple_remote/RemoteControl.h>
 
-@interface RemoteControlContainer : RemoteControl {
+@interface RemoteControlContainer : RemoteControl
+{
     NSMutableArray* remoteControls;
 }
 
-- (BOOL) instantiateAndAddRemoteControlDeviceWithClass: (Class) clazz;
-- (unsigned int) count;
+- (BOOL)instantiateAndAddRemoteControlDeviceWithClass:(Class)clazz;
+- (unsigned int)count;
 
 @end
 

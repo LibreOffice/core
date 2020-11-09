@@ -33,23 +33,23 @@
 
 #import <Carbon/Carbon.h>
 
-
 /*
  This class registers for a number of global keyboard shortcuts to simulate a remote control
  */
 
-@interface GlobalKeyboardDevice : RemoteControl {
-
+@interface GlobalKeyboardDevice : RemoteControl
+{
     NSMutableDictionary* hotKeyRemoteEventMapping;
     EventHandlerRef eventHandlerRef;
-
 }
 
-- (void) mapRemoteButton: (RemoteControlEventIdentifier) remoteButtonIdentifier defaultKeycode: (unsigned int) defaultKeycode defaultModifiers: (unsigned int) defaultModifiers;
+- (void)mapRemoteButton:(RemoteControlEventIdentifier)remoteButtonIdentifier
+         defaultKeycode:(unsigned int)defaultKeycode
+       defaultModifiers:(unsigned int)defaultModifiers;
 
-- (BOOL)registerHotKeyCode: (unsigned int) keycode modifiers: (unsigned int) modifiers remoteEventIdentifier: (RemoteControlEventIdentifier) identifier;
-
-
+- (BOOL)registerHotKeyCode:(unsigned int)keycode
+                 modifiers:(unsigned int)modifiers
+     remoteEventIdentifier:(RemoteControlEventIdentifier)identifier;
 
 @end
 
