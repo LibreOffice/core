@@ -3603,11 +3603,11 @@ const char* SC_OPCODE_IFS_MS_ARY[] =
 // -=*# Resource for function SWITCH #*=-
 const char* SC_OPCODE_SWITCH_MS_ARY[] =
 {
-    NC_("SC_OPCODE_SWITCH_MS", "Checks 1 or more values and returns a result corresponding to the first value equal to the given expression."),
+    NC_("SC_OPCODE_SWITCH_MS", "Compares expression against list of value/result pairs, and returns result for first value that matches the expression.  If expression does not match any value, a default result is returned, if it is placed as final item in parameter list without a value."),
     NC_("SC_OPCODE_SWITCH_MS", "Expression"),
-    NC_("SC_OPCODE_SWITCH_MS", "Value that will be compared against value1-valueN."),
+    NC_("SC_OPCODE_SWITCH_MS", "Value to be compared against value1…valueN (N ≤ 127)"),
     NC_("SC_OPCODE_SWITCH_MS", "Value"),
-    NC_("SC_OPCODE_SWITCH_MS", "Value that will be compared against expression."),
+    NC_("SC_OPCODE_SWITCH_MS", "Value to compare against expression. If no result is given, then value is returned as default result."),
     NC_("SC_OPCODE_SWITCH_MS", "Result"),
     NC_("SC_OPCODE_SWITCH_MS", "Value to return when corresponding value argument matches expression.")
 };
