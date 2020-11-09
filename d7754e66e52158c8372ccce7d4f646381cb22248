@@ -16,6 +16,24 @@
       "revId": "d7754e66e52158c8372ccce7d4f646381cb22248",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86b3ebf4_e2e4f943",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1002172
+      },
+      "writtenOn": "2020-11-09T18:53:50Z",
+      "side": 1,
+      "message": "In general the code should just proof, that changing the system locale multiple(!) times to different language has no influence on the number conversion, which was not the case before the commit. So it is changing de-DE-\u003een-BG-\u003ede-DE and checking in each step, if the numbers are still the same. When you execute this test case without the path, it will fail.",
+      "parentUuid": "f04d75d9_f86491c4",
+      "revId": "d7754e66e52158c8372ccce7d4f646381cb22248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
