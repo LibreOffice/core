@@ -3821,6 +3821,11 @@ public:
         thaw();
     }
 
+    virtual int get_most_right() const override
+    {
+        return m_xTreeView->pImpl->m_nMostRight;
+    }
+
     virtual void set_font_color(int pos, const Color& rColor) override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);

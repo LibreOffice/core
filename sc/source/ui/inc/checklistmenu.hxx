@@ -131,6 +131,8 @@ public:
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
     void addMember(const OUString& rName, bool bVisible);
     size_t initMembers(int nMaxMemberWidth = -1);
+    int getWidth();
+
     void setConfig(const Config& rConfig);
 
     bool isAllSelected() const;

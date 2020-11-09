@@ -1179,17 +1179,24 @@ namespace
     }
 }
 
+int ScCheckListMenuControl::getWidth()
+{
+    return mpChecks->get_most_right();
+}
+
 size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
 {
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
 
-    if (nMaxMemberWidth == -1)
-        nMaxMemberWidth = mnCheckWidthReq;
-
     if (!mpChecks->n_children() && !mbHasDates)
     {
+        if (nMaxMemberWidth == -1)
+            nMaxMemberWidth = mnCheckWidthReq;
         std::vector<int> aFixedWidths { nMaxMemberWidth };
+        std::vector<int>* pFixedWidths = nullptr;
+        if (nMaxMemberWidth != 0)
+            pFixedWidths = &aFixedWidths;
         // tdf#134038 insert in the fastest order, this might be backwards so only do it for
         // the !mbHasDates case where no entry depends on another to exist before getting
         // inserted. We cannot retain pre-existing treeview content, only clear and fill it.
@@ -1198,7 +1205,7 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
             insertMember(*mpChecks, rIter, maMembers[i]);
             if (maMembers[i].mbVisible)
                 ++nVisMemCount;
-        }, &aFixedWidths);
+        }, pFixedWidths);
     }
     else
     {

@@ -1078,6 +1078,7 @@ public:
                                       const std::function<void(TreeIter&, int nSourceIndex)>& func,
                                       const std::vector<int>* pFixedWidths = nullptr)
         = 0;
+    virtual int get_most_right() const = 0;
 
     void connect_expanding(const Link<const TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
     void connect_collapsing(const Link<const TreeIter&, bool>& rLink) { m_aCollapsingHdl = rLink; }
