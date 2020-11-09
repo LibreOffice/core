@@ -63,6 +63,7 @@ private:
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
     DECL_LINK(OnAsyncGetFocus, void*, void);
 
+    void FocusIn();
     void ActivateFind(bool bShift);
 };
 
