@@ -25,7 +25,6 @@
 #include <viewopt.hxx>
 #include <comphelper/lok.hxx>
 
-#define ROW_COL_PROD 16384
 
 void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                                 SwInsertTableOptions& rInsTableOpts, OUString& rAutoName,
@@ -33,8 +32,8 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
 {
     SwInsertTableFlags nInsMode = SwInsertTableFlags::NONE;
     rName = m_xNameEdit->get_text();
-    rRow = m_xRowNF->get_value();
-    rCol = m_xColNF->get_value();
+    rRow = m_xRowSpinButton->get_value();
+    rCol = m_xColSpinButton->get_value();
 
     if (m_xHeaderCB->get_active())
         nInsMode |= SwInsertTableFlags::Headline;
@@ -66,8 +65,9 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     , pTAutoFormat(nullptr)
     , nEnteredValRepeatHeaderNF(-1)
     , m_xNameEdit(m_xBuilder->weld_entry("nameedit"))
-    , m_xColNF(m_xBuilder->weld_spin_button("colspin"))
-    , m_xRowNF(m_xBuilder->weld_spin_button("rowspin"))
+    , m_xWarning(m_xBuilder->weld_label("lbwarning"))
+    , m_xColSpinButton(m_xBuilder->weld_spin_button("colspin"))
+    , m_xRowSpinButton(m_xBuilder->weld_spin_button("rowspin"))
     , m_xHeaderCB(m_xBuilder->weld_check_button("headercb"))
     , m_xRepeatHeaderCB(m_xBuilder->weld_check_button("repeatcb"))
     , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button("repeatheaderspin"))
@@ -89,11 +89,8 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     m_xNameEdit->connect_insert_text(LINK(this, SwInsTableDlg, TextFilterHdl));
     m_xNameEdit->set_text(pShell->GetUniqueTableName());
     m_xNameEdit->connect_changed(LINK(this, SwInsTableDlg, ModifyName));
-    m_xColNF->connect_value_changed(LINK(this, SwInsTableDlg, ModifyRowCol));
-    m_xRowNF->connect_value_changed(LINK(this, SwInsTableDlg, ModifyRowCol));
-
-    m_xRowNF->set_max(ROW_COL_PROD/m_xColNF->get_value());
-    m_xColNF->set_max(ROW_COL_PROD/m_xRowNF->get_value());
+    m_xRowSpinButton->connect_changed(LINK(this, SwInsTableDlg, ModifyRowCol));
+    m_xColSpinButton->connect_changed(LINK(this, SwInsTableDlg, ModifyRowCol));
 
     m_xInsertBtn->connect_clicked(LINK(this, SwInsTableDlg, OKHdl));
 
@@ -116,7 +113,7 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     RepeatHeaderCheckBoxHdl(*m_xRepeatHeaderCB);
     CheckBoxHdl(*m_xHeaderCB);
 
-    sal_Int64 nMax = m_xRowNF->get_value();
+    sal_Int64 nMax = m_xRowSpinButton->get_value();
     if( nMax <= 1 )
         nMax = 1;
     else
@@ -124,6 +121,7 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     m_xRepeatHeaderNF->set_max( nMax );
 
     InitAutoTableFormat();
+    m_xWarning->set_label_type(weld::LabelType::Warning);
 }
 
 void SwInsTableDlg::InitAutoTableFormat()
@@ -227,21 +225,44 @@ IMPL_LINK( SwInsTableDlg, ModifyName, weld::Entry&, rEdit, void )
     m_xInsertBtn->set_sensitive(pShell->GetTableStyle(sTableName) == nullptr);
 }
 
-IMPL_LINK( SwInsTableDlg, ModifyRowCol, weld::SpinButton&, rEdit, void )
+// We use weld::Entry's "changed" notification here, not weld::SpinButton's "value_changed", because
+// the latter only fires after the control looses focus; so the notification would not fire during
+// typing a big number, so that user typing it and immediately clicking "Insert" would not see the
+// warning.
+// Since the notification is called in weld::Entry context, we can only rely on what's available for
+// used weld::Entry's notification; specifically, we have to call spin buttons' get_text() instead
+// of get_value(), because the latter is not guaranteed to return an up-to-date value at this point
+// (depends on vcl plugin used).
+IMPL_LINK( SwInsTableDlg, ModifyRowCol, weld::Entry&, rEdit, void )
 {
-    if(&rEdit == m_xColNF.get())
+    sal_Int64 nRow = m_xRowSpinButton->get_text().toInt64();
+    sal_Int64 nCol = m_xColSpinButton->get_text().toInt64();
+    if (nRow > 255)
     {
-        sal_Int64 nCol = m_xColNF->get_value();
-        if(!nCol)
-            nCol = 1;
-        m_xRowNF->set_max(ROW_COL_PROD/nCol);
+        m_xRowSpinButton->set_message_type(weld::EntryMessageType::Warning);
+        m_xWarning->set_visible(true);
     }
     else
     {
-        sal_Int64 nRow = m_xRowNF->get_value();
+        m_xRowSpinButton->set_message_type(weld::EntryMessageType::Normal);
+    }
+    if (nCol > 63)
+    {
+        m_xColSpinButton->set_message_type(weld::EntryMessageType::Warning);
+        m_xWarning->set_visible(true);
+    }
+    else
+    {
+        m_xColSpinButton->set_message_type(weld::EntryMessageType::Normal);
+    }
+    if (nRow <= 255 && nCol <= 63)
+    {
+        m_xWarning->set_visible(false);
+    }
+    if (&rEdit != m_xColSpinButton.get())
+    {
         if(!nRow)
             nRow = 1;
-        m_xColNF->set_max(ROW_COL_PROD/nRow);
 
         // adjust depending NF for repeated rows
         sal_Int64 nMax = ( nRow == 1 )? 1 : nRow - 1 ;
