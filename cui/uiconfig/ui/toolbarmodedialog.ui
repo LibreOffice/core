@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="imgApply">
@@ -11,6 +11,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="ToolbarmodeDialog|Name">Select Your Preferred User Interface</property>
+    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
@@ -320,20 +321,33 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="lbInfo">
+                          <object class="GtkScrolledWindow">
+                            <property name="height_request">100</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="valign">start</property>
-                            <property name="vexpand">True</property>
-                            <property name="label">Information:</property>
-                            <property name="wrap">True</property>
-                            <property name="wrap_mode">word-char</property>
-                            <property name="max_width_chars">50</property>
-                            <property name="xalign">0</property>
+                            <property name="can_focus">True</property>
+                            <child>
+                              <object class="GtkViewport">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="lbInfo">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="valign">start</property>
+                                    <property name="vexpand">True</property>
+                                    <property name="label">Information:</property>
+                                    <property name="wrap">True</property>
+                                    <property name="wrap_mode">word-char</property>
+                                    <property name="max_width_chars">50</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -376,8 +390,5 @@
       <action-widget response="-5">btnApply</action-widget>
       <action-widget response="-7">btnClose</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
 </interface>
