@@ -23,7 +23,6 @@
 #include <drawingml/textbodycontext.hxx>
 #include <drawingml/chart/datasourcecontext.hxx>
 #include <drawingml/chart/titlemodel.hxx>
-#include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

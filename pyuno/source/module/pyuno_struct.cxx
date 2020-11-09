@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <rtl/strbuf.hxx>
-
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>

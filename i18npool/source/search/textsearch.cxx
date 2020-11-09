@@ -19,8 +19,6 @@
 
 #include "textsearch.hxx"
 #include "levdis.hxx"
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
@@ -30,7 +28,6 @@
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/Transliteration.hpp>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <i18nutil/transliteration.hxx>

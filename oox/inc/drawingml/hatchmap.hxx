@@ -10,6 +10,8 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <oox/token/tokens.hxx>
 
+#include <tools/color.hxx>
+
 using namespace com::sun::star;
 using namespace oox;
 

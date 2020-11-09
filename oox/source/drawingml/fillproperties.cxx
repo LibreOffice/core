@@ -31,7 +31,6 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <oox/helper/graphichelper.hxx>

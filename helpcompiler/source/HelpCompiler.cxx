@@ -27,8 +27,6 @@
 #include <string.h>
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
-#include <osl/thread.hxx>
-#include <chrono>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
 

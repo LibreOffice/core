@@ -16,17 +16,10 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/packages/XPackageEncryption.hpp>
 #include <oox/ole/olestorage.hxx>
 #include <oox/helper/binaryinputstream.hxx>
-#include <filter/msfilter/mscodec.hxx>
-
-#include <com/sun/star/task/PasswordRequestMode.hpp>
-#include <comphelper/docpasswordrequest.hxx>
-#include <comphelper/stillreadwriteinteraction.hxx>
-#include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/task/PasswordContainer.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <sal/log.hxx>
 

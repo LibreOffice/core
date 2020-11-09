@@ -42,8 +42,6 @@
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
-#include "defs.hxx"
-
 #include <algorithm>
 
 

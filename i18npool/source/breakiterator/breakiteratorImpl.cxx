@@ -22,7 +22,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unicode/uchar.h>
 #include <i18nutil/unicode.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/i18n/CharType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>

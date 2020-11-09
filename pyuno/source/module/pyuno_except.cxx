@@ -18,8 +18,6 @@
  */
 #include "pyuno_impl.hxx"
 
-#include <rtl/ustrbuf.hxx>
-
 #include <typelib/typedescription.hxx>
 #include <com/sun/star/script/CannotConvertException.hpp>
 

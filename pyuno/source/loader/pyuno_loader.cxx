@@ -31,7 +31,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>

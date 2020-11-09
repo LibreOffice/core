@@ -14,7 +14,6 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <iostream>
 #include <mutex>
 #include <boost/property_tree/json_parser.hpp>
 

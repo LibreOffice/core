@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <optional>
+#include <vector>
 
 #include <rtl/ustring.hxx>
 #include "libxmlutil.hxx"

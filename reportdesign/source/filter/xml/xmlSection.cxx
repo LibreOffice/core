@@ -24,7 +24,6 @@
 #include "xmlHelper.hxx"
 #include <com/sun/star/report/ReportPrintOption.hpp>
 #include "xmlTable.hxx"
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 

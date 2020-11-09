@@ -36,7 +36,6 @@
 #include <unotools/datetime.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <rtl/math.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #define TYPE_DATE       1

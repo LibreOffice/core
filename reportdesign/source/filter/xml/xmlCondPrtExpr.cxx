@@ -21,7 +21,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <strings.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 namespace rptxml

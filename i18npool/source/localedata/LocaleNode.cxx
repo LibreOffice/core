@@ -21,7 +21,6 @@
 #include <string.h>
 #include <algorithm>
 #include <memory>
-#include <set>
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
 

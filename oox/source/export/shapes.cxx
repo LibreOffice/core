@@ -72,7 +72,6 @@
 #include <svx/unoapi.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/mathml/export.hxx>
-#include <drawingml/presetgeometrynames.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
 using namespace ::css;
