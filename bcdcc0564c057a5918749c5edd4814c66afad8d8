@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14acf8e1_42c9f0cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-09T08:54:47Z",
+      "side": 1,
+      "message": "Just two nitpicks that caught my eye now and are not too relevant, but which you might want to take into account for similar future changes in other modules:\n\n\"file\" -\u003e \"files\"\n\"clang\" -\u003e \"clang-format\"",
+      "revId": "bcdcc0564c057a5918749c5edd4814c66afad8d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
