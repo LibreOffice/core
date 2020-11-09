@@ -105,6 +105,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133334_followPgStyle, "tdf133334_followPgStyle.o
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf137850_compat14ZOrder, "tdf137850_compat14ZOrder.docx")
+{
+    // The file contains 2 shapes which have a different value of behindDoc.
+    // Test that the textbox is hidden behind the arrow (for Word <= 2010/compatibilityMode==14)
+    uno::Reference<text::XText> xShape(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("2015"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox is in the background", false, getProperty<bool>(xShape, "Opaque"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf137850_compat15ZOrder, "tdf137850_compat15ZOrder.docx")
+{
+    // The file contains 2 shapes which have a different value of behindDoc.
+    // Test that the textbox is not hidden behind the arrow (for Word >= 2013/compatibilityMode==15)
+    uno::Reference<text::XText> xShape(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("2015"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox is in the foreground", true, getProperty<bool>(xShape, "Opaque"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf88126, "tdf88126.docx")
 {
     // Without the fix in place, this test would have hung

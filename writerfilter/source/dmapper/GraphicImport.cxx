@@ -1136,6 +1136,20 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                 m_pImpl->m_aInteropGrabBag["EG_WrapType"] <<= OUString("wrapTight");
             else if (nSprmId == NS_ooxml::LN_EG_WrapType_wrapThrough)
                 m_pImpl->m_aInteropGrabBag["EG_WrapType"] <<= OUString("wrapThrough");
+
+            switch (nSprmId)
+            {
+                case NS_ooxml::LN_EG_WrapType_wrapSquare:
+                case NS_ooxml::LN_EG_WrapType_wrapThrough:
+                case NS_ooxml::LN_EG_WrapType_wrapTight:
+                {
+                    // tdf#137850: Word >= 2013 seems to ignore bBehindDoc except for wrapNone, but older versions honour it.
+                    if (m_pImpl->bBehindDoc && m_pImpl->rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() > 14)
+                        m_pImpl->bOpaque = true;
+                }
+                break;
+            }
+
         }
         break;
         case NS_ooxml::LN_CT_WrapTight_wrapPolygon:
@@ -1247,6 +1261,9 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
             m_pImpl->nBottomMargin = 0;
         break;
         case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;
+            // tdf#137850: Word >= 2013 seems to ignore bBehindDoc except for wrapNone, but older versions honour it.
+            if (m_pImpl->bBehindDoc && m_pImpl->rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() > 14)
+                 m_pImpl->bOpaque = true;
             m_pImpl->nWrap = text::WrapTextMode_NONE;
         break;
         case NS_ooxml::LN_CT_GraphicalObject_graphicData:// 90660;
