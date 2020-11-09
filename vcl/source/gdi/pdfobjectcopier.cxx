@@ -26,14 +26,62 @@ PDFObjectCopier::PDFObjectCopier(PDFObjectContainer& rContainer)
 {
 }
 
+void PDFObjectCopier::copyRecursively(OStringBuffer& rLine, filter::PDFElement* pInputElement,
+                                      SvMemoryStream& rDocBuffer,
+                                      std::map<sal_Int32, sal_Int32>& rCopiedResources)
+{
+    if (auto pReference = dynamic_cast<filter::PDFReferenceElement*>(pInputElement))
+    {
+        filter::PDFObjectElement* pReferenced = pReference->LookupObject();
+        if (pReferenced)
+        {
+            // Copy the referenced object.
+            sal_Int32 nRef = copyExternalResource(rDocBuffer, *pReferenced, rCopiedResources);
+
+            // Write the updated reference.
+            rLine.append(nRef);
+            rLine.append(" 0 R");
+        }
+    }
+    else if (auto pInputArray = dynamic_cast<filter::PDFArrayElement*>(pInputElement))
+    {
+        rLine.append("[ ");
+        for (auto const& pElement : pInputArray->GetElements())
+        {
+            copyRecursively(rLine, pElement, rDocBuffer, rCopiedResources);
+            rLine.append(" ");
+        }
+        rLine.append("] ");
+    }
+    else if (auto pInputDictionary = dynamic_cast<filter::PDFDictionaryElement*>(pInputElement))
+    {
+        rLine.append("<< ");
+        for (auto const& pPair : pInputDictionary->GetItems())
+        {
+            rLine.append("/");
+            rLine.append(pPair.first);
+            rLine.append(" ");
+            copyRecursively(rLine, pPair.second, rDocBuffer, rCopiedResources);
+            rLine.append(" ");
+        }
+        rLine.append(">> ");
+    }
+    else
+    {
+        pInputElement->writeString(rLine);
+    }
+}
+
 sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
                                                 filter::PDFObjectElement& rObject,
                                                 std::map<sal_Int32, sal_Int32>& rCopiedResources)
 {
     auto it = rCopiedResources.find(rObject.GetObjectValue());
     if (it != rCopiedResources.end())
+    {
         // This resource was already copied once, nothing to do.
         return it->second;
+    }
 
     sal_Int32 nObject = m_rContainer.createObject();
     // Remember what is the ID of this object in our output.
@@ -50,62 +98,19 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
     OStringBuffer aLine;
     aLine.append(nObject);
     aLine.append(" 0 obj\n");
+
     if (rObject.GetDictionary())
     {
-        aLine.append("<<");
+        aLine.append("<< ");
 
-        // Complex case: can't copy the dictionary byte array as is, as it may contain references.
-        bool bDone = false;
-        sal_uInt64 nCopyStart = 0;
-        for (auto pReference : rObject.GetDictionaryReferences())
+        for (auto const& rPair : rObject.GetDictionaryItems())
         {
-            if (pReference)
-            {
-                filter::PDFObjectElement* pReferenced = pReference->LookupObject();
-                if (pReferenced)
-                {
-                    // Copy the referenced object.
-                    sal_Int32 nRef
-                        = copyExternalResource(rDocBuffer, *pReferenced, rCopiedResources);
-
-                    sal_uInt64 nReferenceStart = pReference->GetObjectElement().GetLocation();
-                    sal_uInt64 nReferenceEnd = pReference->GetOffset();
-                    sal_uInt64 nOffset = 0;
-                    if (nCopyStart == 0)
-                        // Dict start -> reference start.
-                        nOffset = rObject.GetDictionaryOffset();
-                    else
-                        // Previous reference end -> reference start.
-                        nOffset = nCopyStart;
-                    aLine.append(static_cast<const char*>(pObjectStream->GetData()) + nOffset,
-                                 nReferenceStart - nOffset);
-                    // Write the updated reference.
-                    aLine.append(" ");
-                    aLine.append(nRef);
-                    aLine.append(" 0 R");
-                    // Start copying here next time.
-                    nCopyStart = nReferenceEnd;
-
-                    bDone = true;
-                }
-            }
+            aLine.append("/");
+            aLine.append(rPair.first);
+            aLine.append(" ");
+            copyRecursively(aLine, rPair.second, rDocBuffer, rCopiedResources);
+            aLine.append(" ");
         }
-
-        if (bDone)
-        {
-            // Copy the last part here, in the complex case.
-            sal_uInt64 nDictEnd = rObject.GetDictionaryOffset() + rObject.GetDictionaryLength();
-            const sal_Int32 nLen = nDictEnd - nCopyStart;
-            if (nLen < 0)
-                SAL_WARN("vcl.pdfwriter", "copyExternalResource() failed");
-            else
-                aLine.append(static_cast<const char*>(pObjectStream->GetData()) + nCopyStart, nLen);
-        }
-        else
-            // Can copy it as-is.
-            aLine.append(static_cast<const char*>(pObjectStream->GetData())
-                             + rObject.GetDictionaryOffset(),
-                         rObject.GetDictionaryLength());
 
         aLine.append(">>\n");
     }
@@ -120,64 +125,15 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
 
     if (filter::PDFArrayElement* pArray = rObject.GetArray())
     {
-        aLine.append("[");
+        aLine.append("[ ");
 
         const std::vector<filter::PDFElement*>& rElements = pArray->GetElements();
-        bool bDone = false;
-        // Complex case: can't copy the array byte array as is, as it may contain references.
-        sal_uInt64 nCopyStart = 0;
-        for (const auto pElement : rElements)
+
+        for (auto const& pElement : rElements)
         {
-            auto pReference = dynamic_cast<filter::PDFReferenceElement*>(pElement);
-            if (pReference)
-            {
-                filter::PDFObjectElement* pReferenced = pReference->LookupObject();
-                if (pReferenced)
-                {
-                    // Copy the referenced object.
-                    sal_Int32 nRef
-                        = copyExternalResource(rDocBuffer, *pReferenced, rCopiedResources);
-
-                    sal_uInt64 nReferenceStart = pReference->GetObjectElement().GetLocation();
-                    sal_uInt64 nReferenceEnd = pReference->GetOffset();
-                    sal_uInt64 nOffset = 0;
-                    if (nCopyStart == 0)
-                        // Array start -> reference start.
-                        nOffset = rObject.GetArrayOffset();
-                    else
-                        // Previous reference end -> reference start.
-                        nOffset = nCopyStart;
-                    aLine.append(static_cast<const char*>(pObjectStream->GetData()) + nOffset,
-                                 nReferenceStart - nOffset);
-
-                    // Write the updated reference.
-                    aLine.append(" ");
-                    aLine.append(nRef);
-                    aLine.append(" 0 R");
-                    // Start copying here next time.
-                    nCopyStart = nReferenceEnd;
-
-                    bDone = true;
-                }
-            }
+            copyRecursively(aLine, pElement, rDocBuffer, rCopiedResources);
+            aLine.append(" ");
         }
-
-        if (bDone)
-        {
-            // Copy the last part here, in the complex case.
-            sal_uInt64 nArrEnd = rObject.GetArrayOffset() + rObject.GetArrayLength();
-            const sal_Int32 nLen = nArrEnd - nCopyStart;
-            if (nLen < 0)
-                SAL_WARN("vcl.pdfwriter", "copyExternalResource() failed");
-            else
-                aLine.append(static_cast<const char*>(pObjectStream->GetData()) + nCopyStart, nLen);
-        }
-        else
-            // Can copy it as-is.
-            aLine.append(static_cast<const char*>(pObjectStream->GetData())
-                             + rObject.GetArrayOffset(),
-                         rObject.GetArrayLength());
-
         aLine.append("]\n");
     }
 
