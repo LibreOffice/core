@@ -24,6 +24,7 @@ excludelist:
     jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
+    - string_view
     # Don't replace with URE impl. detail
     - osl/thread.hxx
     # Don't replace with bits/types, needed for sig_atomic_t
@@ -31,3 +32,5 @@ excludelist:
     jvmfwk/plugins/sunmajor/pluginlib/util.cxx:
     # Needed on MACOSX
     - config_folders.h
+    # Don't replace with URE impl. detail
+    - osl/module.hxx

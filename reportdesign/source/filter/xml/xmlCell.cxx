@@ -29,7 +29,6 @@
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <strings.hxx>
 #include "xmlTable.hxx"

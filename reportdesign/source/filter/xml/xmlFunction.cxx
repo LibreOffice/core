@@ -20,7 +20,6 @@
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 namespace rptxml

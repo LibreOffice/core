@@ -22,7 +22,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <com/sun/star/uno/Reference.h>

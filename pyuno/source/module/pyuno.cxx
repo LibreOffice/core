@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <cassert>
 
-#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <typelib/typedescription.hxx>

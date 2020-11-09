@@ -12,7 +12,6 @@
 #include <cppunit/TestFixture.h>
 
 #include <oox/ole/vbaexport.hxx>
-#include <algorithm>
 
 class TestVbaEncryption : public CppUnit::TestFixture
 {

@@ -21,7 +21,6 @@
 #include <calendar_gregorian.hxx>
 #include <localedata.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>

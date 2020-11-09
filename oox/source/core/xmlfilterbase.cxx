@@ -20,7 +20,6 @@
 #include <oox/core/xmlfilterbase.hxx>
 
 #include <cstdio>
-#include <set>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/Pair.hpp>

@@ -27,6 +27,7 @@
 #include <com/sun/star/report/XSection.hpp>
 
 #include <memory>
+#include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 #include "dllapi.h"
 #include "RptPage.hxx"

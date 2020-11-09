@@ -40,13 +40,11 @@
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/text/XFlatParagraphIterator.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/conditn.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <i18nlangtag/languagetag.hxx>

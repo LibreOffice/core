@@ -28,7 +28,6 @@
 #include <i18nlangtag/lang.h>
 
 #include <memory>
-#include <set>
 #include <unordered_map>
 
 // text conversion dictionary extension

@@ -21,7 +21,6 @@
 #include <localedata.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/LocaleData2.hpp>
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <numeric>
 

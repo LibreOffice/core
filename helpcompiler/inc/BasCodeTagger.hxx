@@ -15,7 +15,6 @@
 #include <vector>
 #include <libxml/parser.h>
 #include <comphelper/syntaxhighlight.hxx>
-#include <helpcompiler/dllapi.h>
 
 class LibXmlTreeWalker;
 

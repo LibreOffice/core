@@ -28,6 +28,8 @@ excludelist:
     - config_folders.h
     # Needed for direct member access
     - com/sun/star/container/XHierarchicalNameAccess.hpp
+    # Needed for template
+    - com/sun/star/script/XInvocation2.hpp
     pyuno/zipcore/python.cxx:
     # Needed on WIN32
     - tools/pathutils.hxx

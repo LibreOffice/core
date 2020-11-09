@@ -32,7 +32,6 @@
 #include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
@@ -41,7 +40,6 @@
 #include <unotools/resmgr.hxx>
 #include <sal/log.hxx>
 
-#include "defs.hxx"
 #include "dlistimp.hxx"
 #include "dicimp.hxx"
 #include "lngopt.hxx"

@@ -7,6 +7,9 @@ excludelist:
     oox/source/core/filterbase.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
+    oox/source/core/fragmenthandler2.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     oox/source/core/xmlfilterbase.cxx:
     # Actually used
     - com/sun/star/xml/sax/XFastSAXSerializable.hpp
@@ -50,6 +53,9 @@ excludelist:
     # Actually used
     - com/sun/star/graphic/XGraphic.hpp
     - com/sun/star/style/ParagraphAdjust.hpp
+    oox/source/drawingml/textrun.cxx:
+    # Actually used
+    - com/sun/star/frame/XModel.hpp
     oox/source/drawingml/chart/axisconverter.cxx:
     # Actually used
     - com/sun/star/chart2/XCoordinateSystem.hpp
@@ -135,9 +141,25 @@ excludelist:
     oox/source/ppt/pptimport.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
+    oox/source/ppt/pptshape.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    - com/sun/star/drawing/XDrawPage.hpp
+    oox/source/ppt/presPropsfragmenthandler.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    oox/source/ppt/slidepersist.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     oox/source/ppt/slidetransition.cxx:
     # Actually used
     - com/sun/star/animations/XTransitionFilter.hpp
+    oox/source/shape/ShapeFilterBase.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    oox/qa/unit/shape.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     oox/source/shape/ShapeContextHandler.cxx:
     # Actually used
     - com/sun/star/xml/dom/XDocument.hpp

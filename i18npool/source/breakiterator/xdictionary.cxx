@@ -22,7 +22,6 @@
 #include <osl/file.h>
 #include <osl/module.h>
 #include <osl/mutex.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>

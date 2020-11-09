@@ -25,7 +25,6 @@
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <sal/log.hxx>
 #include "xmlEnums.hxx"
 #include "xmlCell.hxx"
 #include "xmlTable.hxx"

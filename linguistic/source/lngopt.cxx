@@ -29,7 +29,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 using namespace utl;
 using namespace osl;

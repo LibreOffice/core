@@ -45,8 +45,6 @@
 #include <osl/diagnose.h>
 #include <tools/color.hxx>
 
-#include <iterator>
-
 #define DEFAULT_LINE_WIDTH 2
 
 namespace rptxml

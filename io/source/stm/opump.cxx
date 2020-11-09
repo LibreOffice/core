@@ -18,8 +18,6 @@
  */
 
 
-#include <sal/log.hxx>
-
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
