@@ -3633,6 +3633,16 @@ private:
         return static_cast<SvLBoxString&>(rItem).IsEmphasized();
     }
 
+    void set_header_item_width(const std::vector<int>& rWidths)
+    {
+        LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
+        {
+            for (size_t i = 0; i < rWidths.size(); ++i)
+                pHeaderBar->SetItemSize(pHeaderBar->GetItemId(i), rWidths[i]);
+        }
+    }
+
 public:
     SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, pBuilder, bTakeOwnership)
@@ -3725,12 +3735,7 @@ public:
         for (size_t i = 0; i < rWidths.size(); ++i)
             aTabPositions.push_back(aTabPositions[i] + rWidths[i]);
         m_xTreeView->SetTabs(aTabPositions.size(), aTabPositions.data(), MapUnit::MapPixel);
-        LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
-        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
-        {
-            for (size_t i = 0; i < rWidths.size(); ++i)
-                pHeaderBar->SetItemSize(pHeaderBar->GetItemId(i), rWidths[i]);
-        }
+        set_header_item_width(rWidths);
         // call Resize to recalculate based on the new tabs
         m_xTreeView->Resize();
     }
@@ -3838,7 +3843,7 @@ public:
         m_xTreeView->nTreeFlags |= SvTreeFlags::MANINS;
 
         if (pFixedWidths)
-            set_column_fixed_widths(*pFixedWidths);
+            set_header_item_width(*pFixedWidths);
 
         bool bHasAutoCheckButton(m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN);
         size_t nExtraCols = bHasAutoCheckButton ? 2 : 1;
