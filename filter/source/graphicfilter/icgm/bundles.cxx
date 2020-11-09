@@ -28,56 +28,10 @@ void Bundle::SetColor( sal_uInt32 nColor )
     mnColor = nColor;
 }
 
-FontEntry::FontEntry() :
-    nFontType       ( 0 )
+CGMFList::CGMFList()
+    : nFontNameCount(0)
+    , nCharSetCount(0)
 {
-}
-
-FontEntry::~FontEntry()
-{
-}
-
-CGMFList::CGMFList() :
-    nFontNameCount      ( 0 ),
-    nCharSetCount       ( 0 ),
-    nFontsAvailable     ( 0 )
-{
-    aFontEntryList.clear();
-}
-
-CGMFList::~CGMFList()
-{
-    ImplDeleteList();
-}
-
-CGMFList& CGMFList::operator=( const CGMFList& rSource )
-{
-    if (this != &rSource)
-    {
-        ImplDeleteList();
-        nFontsAvailable = rSource.nFontsAvailable;
-        nFontNameCount  = rSource.nFontNameCount;
-        nCharSetCount   = rSource.nCharSetCount;
-        for (auto const & pPtr : rSource.aFontEntryList)
-        {
-            std::unique_ptr<FontEntry> pCFontEntry(new FontEntry);
-            if ( pPtr->pFontName )
-            {
-                sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pFontName.get()) ) + 1;
-                pCFontEntry->pFontName.reset( new sal_Int8[ nSize ] );
-                memcpy( pCFontEntry->pFontName.get(), pPtr->pFontName.get(), nSize );
-            }
-            if ( pPtr->pCharSetValue )
-            {
-                sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pCharSetValue.get()) ) + 1;
-                pCFontEntry->pCharSetValue.reset( new sal_Int8[ nSize ] );
-                memcpy( pCFontEntry->pCharSetValue.get(), pPtr->pCharSetValue.get(), nSize );
-            }
-            pCFontEntry->nFontType = pPtr->nFontType;
-            aFontEntryList.push_back( std::move(pCFontEntry) );
-        }
-    }
-    return *this;
 }
 
 FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
@@ -85,9 +39,8 @@ FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
     sal_uInt32 nInd = nIndex;
     if ( nInd )
         nInd--;
-    return ( nInd < aFontEntryList.size() ) ? aFontEntryList[ nInd ].get() : nullptr;
+    return ( nInd < aFontEntryList.size() ) ? &aFontEntryList[nInd] : nullptr;
 }
-
 
 static sal_Int8* ImplSearchEntry( sal_Int8* pSource, sal_Int8 const * pDest, sal_uInt32 nComp, sal_uInt32 nSize )
 {
@@ -109,24 +62,26 @@ static sal_Int8* ImplSearchEntry( sal_Int8* pSource, sal_Int8 const * pDest, sal
 void CGMFList::InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize )
 {
     FontEntry* pFontEntry;
-    if ( nFontsAvailable == nFontNameCount )
+    if (nFontNameCount == aFontEntryList.size())
     {
-        nFontsAvailable++;
-        pFontEntry = new FontEntry;
-        aFontEntryList.push_back( std::unique_ptr<FontEntry>(pFontEntry) );
+        aFontEntryList.push_back(FontEntry());
+        pFontEntry = &aFontEntryList.back();
     }
     else
     {
-        pFontEntry = aFontEntryList[ nFontNameCount ].get();
+        pFontEntry = &aFontEntryList[nFontNameCount];
     }
     nFontNameCount++;
-    std::unique_ptr<sal_Int8[]> pBuf(new sal_Int8[ nSize ]);
-    memcpy( pBuf.get(), pSource, nSize );
-    sal_Int8* pFound = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_Int8 const *>("ITALIC"), nSize, 6 );
-    if ( pFound )
+
+    if (nSize == 0)
+        return;
+
+    std::vector<sal_Int8> aBuf(pSource, pSource + nSize);
+    sal_Int8* pFound = ImplSearchEntry(aBuf.data(), reinterpret_cast<sal_Int8 const *>("ITALIC"), nSize, 6);
+    if (pFound)
     {
         pFontEntry->nFontType |= 1;
-        sal_uInt32 nPrev = pFound - pBuf.get();
+        sal_uInt32 nPrev = pFound - aBuf.data();
         sal_uInt32 nToCopyOfs = 6;
         if ( nPrev && ( pFound[ -1 ] == '-' || pFound[ -1 ] == ' ' ) )
         {
@@ -141,12 +96,12 @@ void CGMFList::InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize )
         }
         nSize -= nToCopyOfs;
     }
-    pFound = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_Int8 const *>("BOLD"), nSize, 4 );
+    pFound = ImplSearchEntry(aBuf.data(), reinterpret_cast<sal_Int8 const *>("BOLD"), nSize, 4);
     if ( pFound )
     {
         pFontEntry->nFontType |= 2;
 
-        sal_uInt32 nPrev = pFound - pBuf.get();
+        sal_uInt32 nPrev = pFound - aBuf.data();
         sal_uInt32 nToCopyOfs = 4;
         if ( nPrev && ( pFound[ -1 ] == '-' || pFound[ -1 ] == ' ' ) )
         {
@@ -161,35 +116,27 @@ void CGMFList::InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize )
         }
         nSize -= nToCopyOfs;
     }
-    pFontEntry->pFontName.reset( new sal_Int8[ nSize + 1 ] );
-    pFontEntry->pFontName[ nSize ] = 0;
-    memcpy( pFontEntry->pFontName.get(), pBuf.get(), nSize );
+    pFontEntry->aFontName.assign(aBuf.data(), aBuf.data() + nSize);
 }
-
 
 void CGMFList::InsertCharSet( sal_uInt8 const * pSource, sal_uInt32 nSize )
 {
     FontEntry* pFontEntry;
-    if ( nFontsAvailable == nCharSetCount )
+    if (nCharSetCount == aFontEntryList.size())
     {
-        nFontsAvailable++;
-        pFontEntry = new FontEntry;
-        aFontEntryList.push_back( std::unique_ptr<FontEntry>(pFontEntry) );
+        aFontEntryList.push_back(FontEntry());
+        pFontEntry = &aFontEntryList.back();
     }
     else
     {
-        pFontEntry = aFontEntryList[ nCharSetCount ].get();
+        pFontEntry = &aFontEntryList[nCharSetCount];
     }
     nCharSetCount++;
-    pFontEntry->pCharSetValue.reset( new sal_Int8[ nSize + 1 ] );
-    pFontEntry->pCharSetValue[ nSize ] = 0;
-    memcpy( pFontEntry->pCharSetValue.get(), pSource, nSize );
-}
 
+    if (nSize == 0)
+        return;
 
-void CGMFList::ImplDeleteList()
-{
-    aFontEntryList.clear();
+    pFontEntry->aCharSetValue.assign(pSource, pSource + nSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

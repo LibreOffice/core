@@ -363,7 +363,9 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
     if ( pFontEntry )
     {
         nFontType = pFontEntry->nFontType;
-        aFontDescriptor.Name = OUString::createFromAscii( reinterpret_cast<char*>(pFontEntry->pFontName.get()) );
+        aFontDescriptor.Name = OUString(reinterpret_cast<char*>(pFontEntry->aFontName.data()),
+                                        pFontEntry->aFontName.size(),
+                                        RTL_TEXTENCODING_ASCII_US);
     }
     aFontDescriptor.Height = sal_Int16( mpCGM->pElement->nCharacterHeight * 1.50 );
     if ( nFontType & 1 )
