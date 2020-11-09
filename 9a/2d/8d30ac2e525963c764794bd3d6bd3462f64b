@@ -1,0 +1,8 @@
+Verified+1: Jenkins
+Code-Review+2: Michael Stahl <michael.stahl@cib.de>
+Code-Review-1: Jan-Marek Glogowski <glogow@fbihome.de>
+Submitted-by: Michael Stahl <michael.stahl@cib.de>
+Submitted-at: Mon, 09 Nov 2020 12:03:24 +0100
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/105431
+Project: core
+Branch: refs/heads/master
