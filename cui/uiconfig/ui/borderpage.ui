@@ -93,6 +93,7 @@
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">framesel</property>
                     <property name="xalign">0</property>
+                    <property name="tooltip_text" translatable="yes" context="borderpage|userdefft">Click edge or corner to cycle through three states: set, unchanged, remove.</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -538,6 +539,7 @@
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">distancemf</property>
                     <property name="xalign">0</property>
+                    <property name="tooltip_text" translatable="yes" context="borderpage|distanceft">Width of shadow</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
