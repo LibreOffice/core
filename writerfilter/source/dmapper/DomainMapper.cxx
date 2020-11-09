@@ -84,6 +84,7 @@
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <tools/UnitConversion.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -417,7 +418,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "before", OUString::number(nIntValue));
             if (m_pImpl->GetTopContext())
                 // Don't overwrite NS_ooxml::LN_CT_Spacing_beforeAutospacing.
-                m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ), false);
+                m_pImpl->GetTopContext()->Insert(
+                    PROP_PARA_TOP_MARGIN,
+                    uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(nIntValue))), false);
             break;
         case NS_ooxml::LN_CT_Spacing_beforeLines:
                 m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "beforeLines", OUString::number(nIntValue));
