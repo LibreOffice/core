@@ -7652,11 +7652,18 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
+    // Including capitalization
+    pWrtShell->Insert("end. word");
+    pWrtShell->AutoCorrect(corr, ' ');
+    sReplaced = "tset test end. Word ";
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
     // tracked deletions after the correction point doesn't affect autocorrect
     dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
     pWrtShell->Insert("a");
     pWrtShell->AutoCorrect(corr, ' ');
-    sReplaced = "A tset test ";
+    sReplaced = "A tset test end. Word ";
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
