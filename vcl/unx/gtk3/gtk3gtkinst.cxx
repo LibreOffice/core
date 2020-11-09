@@ -8449,8 +8449,9 @@ public:
 
         GtkToolItem* pToolButton = m_aMap.find(rIdent)->second;
 
-        assert(GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton) || GTK_IS_MENU_TOOL_BUTTON(pToolButton) || !bActive);
-        if (GTK_IS_MENU_TOOL_BUTTON(pToolButton))
+        if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
+            gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton), bActive);
+        else
         {
             GtkButton* pButton = nullptr;
             // there is no GtkMenuToggleToolButton so abuse the CHECKED state of the GtkMenuToolButton button
@@ -8464,8 +8465,6 @@ public:
                 gtk_widget_set_state_flags(GTK_WIDGET(pButton), static_cast<GtkStateFlags>(eState), true);
             }
         }
-        else if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
-            gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton), bActive);
 
         enable_item_notify_events();
     }
@@ -8474,8 +8473,9 @@ public:
     {
         GtkToolItem* pToolButton = m_aMap.find(rIdent)->second;
 
-        assert(GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton) || GTK_IS_MENU_TOOL_BUTTON(pToolButton));
-        if (GTK_IS_MENU_TOOL_BUTTON(pToolButton))
+        if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
+            return gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton));
+        else
         {
             GtkButton* pButton = nullptr;
             // there is no GtkMenuToggleToolButton so abuse the CHECKED state of the GtkMenuToolButton button
@@ -8486,8 +8486,6 @@ public:
                 return gtk_widget_get_state_flags(GTK_WIDGET(pButton)) & GTK_STATE_FLAG_CHECKED;
             }
         }
-        else if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
-            return gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton));
 
         return false;
     }
