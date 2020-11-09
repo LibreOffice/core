@@ -138,38 +138,30 @@ public:
 };
 
 
-class FontEntry
+struct FontEntry
 {
-public:
-    std::unique_ptr<sal_Int8[]>
-                        pFontName;
-    std::unique_ptr<sal_Int8[]>
-                        pCharSetValue;
+    std::vector<sal_Int8> aFontName;
+    std::vector<sal_Int8> aCharSetValue;
     sal_uInt32          nFontType;          // bit 0 = 1 -> Italic,
                                             // bit 1 = 1 -> Bold
-
-                        FontEntry();
-                        ~FontEntry();
+    FontEntry()
+        : nFontType(0)
+    {
+    }
 };
 
 class CGMFList
 {
     sal_uInt32      nFontNameCount;
     sal_uInt32      nCharSetCount;
-    ::std::vector< std::unique_ptr<FontEntry> >
-                    aFontEntryList;
-    sal_uInt32      nFontsAvailable;
-
-    void            ImplDeleteList();
+    std::vector<FontEntry> aFontEntryList;
 
 public:
-                    CGMFList();
-                    ~CGMFList();
+    CGMFList();
 
     FontEntry*      GetFontEntry( sal_uInt32 );
     void            InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize );
     void            InsertCharSet( sal_uInt8 const * pSource, sal_uInt32 nSize );
-    CGMFList&       operator=( const CGMFList& rFontList );
 };
 
 #endif
