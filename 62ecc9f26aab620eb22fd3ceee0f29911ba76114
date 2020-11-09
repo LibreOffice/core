@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9b73fa1_84b42927",
+        "filename": "vcl/source/app/salvtables.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-11-09T17:53:16Z",
+      "side": 1,
+      "message": "See also these",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 1
+      },
+      "revId": "62ecc9f26aab620eb22fd3ceee0f29911ba76114",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
