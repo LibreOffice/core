@@ -11,6 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,vcl_pdfium_library_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_pdfium_library_test, \
     vcl/qa/cppunit/PDFiumLibraryTest \
+    vcl/qa/cppunit/PDFDocumentTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_pdfium_library_test))
