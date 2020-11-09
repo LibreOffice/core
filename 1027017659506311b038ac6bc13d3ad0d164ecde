@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e7a9001_59142270",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1681,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-09T10:52:39Z",
+      "side": 1,
+      "message": "Here and elsewhere:\n* O[U]String::Concat was meant to be applied to the first summand (though the current implementation does not verify that).\n* When wrapping \"X\" in OUString::Concat, it can remain a plain string literal, without u.",
+      "revId": "1027017659506311b038ac6bc13d3ad0d164ecde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43cd2709_a98b680d",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-09T10:52:39Z",
+      "side": 1,
+      "message": "* check for `count \u003e\u003d 0` is missing\n* better reformulate `beginIndex \u003c\u003d getLength() - count` as `count \u003c\u003d getLength() - beginIndex` to avoid UB",
+      "revId": "1027017659506311b038ac6bc13d3ad0d164ecde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
