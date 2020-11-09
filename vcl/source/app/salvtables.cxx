@@ -3828,9 +3828,6 @@ public:
 
         m_xTreeView->nTreeFlags |= SvTreeFlags::MANINS;
 
-        if (pFixedWidths)
-            set_column_fixed_widths(*pFixedWidths);
-
         bool bHasAutoCheckButton(m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN);
         size_t nExtraCols = bHasAutoCheckButton ? 2 : 1;
 
