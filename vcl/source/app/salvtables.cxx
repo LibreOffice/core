@@ -3184,7 +3184,9 @@ static SalInstanceTreeView* g_DragSource;
 
 namespace
 {
-    class UpdateGuard
+    // tdf#131581 if the TreeView is hidden then there are possibly additional
+    // optimizations available
+    class UpdateGuardIfHidden
     {
     private:
         SvTabListBox& m_rTreeView;
@@ -3192,10 +3194,11 @@ namespace
         bool m_bOrigEnableInvalidate;
 
     public:
-        UpdateGuard(SvTabListBox& rTreeView)
+        UpdateGuardIfHidden(SvTabListBox& rTreeView)
             : m_rTreeView(rTreeView)
-            , m_bOrigUpdate(m_rTreeView.IsUpdateMode())
-            // tdf#137432 only do the EnableInvalidate(false) optimization if the widget is currently hidden
+            // tdf#136962 only do SetUpdateMode(false) optimization if the widget is currently hidden
+            , m_bOrigUpdate(!m_rTreeView.IsVisible() && m_rTreeView.IsUpdateMode())
+            // tdf#137432 only do EnableInvalidate(false) optimization if the widget is currently hidden
             , m_bOrigEnableInvalidate(!m_rTreeView.IsVisible() && m_rTreeView.GetModel()->IsEnableInvalidate())
         {
             if (m_bOrigUpdate)
@@ -3204,7 +3207,7 @@ namespace
                 m_rTreeView.GetModel()->EnableInvalidate(false);
         }
 
-        ~UpdateGuard()
+        ~UpdateGuardIfHidden()
         {
             if (m_bOrigEnableInvalidate)
                 m_rTreeView.GetModel()->EnableInvalidate(true);
@@ -4342,7 +4345,7 @@ public:
 
     virtual void all_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
-        UpdateGuard aGuard(*m_xTreeView);
+        UpdateGuardIfHidden aGuard(*m_xTreeView);
 
         SalInstanceTreeIter aVclIter(m_xTreeView->First());
         while (aVclIter.iter)
