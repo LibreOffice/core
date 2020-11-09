@@ -187,25 +187,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="colspin">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="activates_default">True</property>
-                            <property name="shadow_type">none</property>
-                            <property name="adjustment">adjustment1</property>
-                            <property name="value">2</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="colspin-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|colspin">Enter the number of columns that you want in the table.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkLabel" id="4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -220,16 +201,46 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkLabel" id="lbwarning">
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Warning : Large tables may adversely affect performance and compatibility</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                            <property name="width">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="colspin">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
+                            <property name="shadow_type">none</property>
+                            <property name="adjustment">adjustment2</property>
+                            <property name="value">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="colspin-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="inserttable|extended_tip|colspin">Enter the number of columns that you want in the table.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkSpinButton" id="rowspin">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
-                            <property name="shadow_type">out</property>
+                            <property name="shadow_type">none</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="value">2</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="rowspin-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|rowspin">Enter the number of rows that you want in the table.</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="inserttable|extended_tip|rowspin">Enter the number of rows that you want in the table.</property>
                               </object>
                             </child>
                           </object>
@@ -537,10 +548,5 @@
       </object>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <widgets>
-      <widget name="colspin"/>
-      <widget name="rowspin"/>
-    </widgets>
-  </object>
+  <object class="GtkSizeGroup" id="sizegroup1"/>
 </interface>
