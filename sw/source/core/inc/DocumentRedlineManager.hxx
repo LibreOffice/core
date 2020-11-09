@@ -76,6 +76,11 @@ public:
         /*[in]*/const SwNode& rNode,
         /*[in]*/RedlineType nType) const override;
 
+    virtual bool HasRedline(
+        /*[in]*/const SwPaM& rPam,
+        /*[in]*/RedlineType nType,
+        /*[in]*/bool bStartOrEndInRange) const override;
+
     virtual void CompressRedlines() override;
 
     virtual const SwRangeRedline* GetRedline(

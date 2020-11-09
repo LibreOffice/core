@@ -7538,8 +7538,14 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     pWrtShell->Insert("et");
     pWrtShell->AutoCorrect(corr, ' ');
     // This was "Ttest" removing the tracked deletion silently.
-    // FIXME The second patch from bug #83419 is missing from backport
-    sReplaced = "tstest ";
+    sReplaced = "tset ";
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // Including capitalization
+    pWrtShell->Insert("end. word");
+    pWrtShell->AutoCorrect(corr, ' ');
+    sReplaced = "tset end. Word ";
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
@@ -7547,8 +7553,7 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
     pWrtShell->Insert("a");
     pWrtShell->AutoCorrect(corr, ' ');
-    // FIXME The second patch from bug #83419 is missing from backport
-    sReplaced = "A tstest ";
+    sReplaced = "A tset end. Word ";
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
