@@ -18,26 +18,23 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_INSTABLE_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_INSTABLE_HXX
-
 #include <sfx2/basedlgs.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/textfilter.hxx>
-
 #include "wrtsh.hxx"
 #include "autoformatpreview.hxx"
 #include <view.hxx>
 #include <tblafmt.hxx>
 #include <itabenum.hxx>
-
 class SwInsTableDlg : public SfxDialogController
 {
     TextFilter      m_aTextFilter;
 
-    SwWrtShell*     pShell;
+    SwWrtShell* pShell;
     SwTableAutoFormatTable* pTableTable;
-    SwTableAutoFormat*      pTAutoFormat;
+    SwTableAutoFormat* pTAutoFormat;
 
     sal_uInt8       lbIndex;
     sal_uInt8       tbIndex;
@@ -46,10 +43,7 @@ class SwInsTableDlg : public SfxDialogController
     sal_Int64       nEnteredValRepeatHeaderNF;
 
     AutoFormatPreview m_aWndPreview;
-
     std::unique_ptr<weld::Entry> m_xNameEdit;
-    std::unique_ptr<weld::SpinButton> m_xColNF;
-    std::unique_ptr<weld::SpinButton> m_xRowNF;
     std::unique_ptr<weld::CheckButton> m_xHeaderCB;
     std::unique_ptr<weld::CheckButton> m_xRepeatHeaderCB;
     std::unique_ptr<weld::SpinButton> m_xRepeatHeaderNF;
@@ -59,16 +53,17 @@ class SwInsTableDlg : public SfxDialogController
     std::unique_ptr<weld::TreeView> m_xLbFormat;
     std::unique_ptr<weld::CustomWeld> m_xWndPreview;
     std::unique_ptr<weld::Frame> m_xStyleFrame;
-
+    std::unique_ptr<weld::Label> m_xWarning;
+    std::unique_ptr<weld::Entry> m_xRowSpinButton;
+    std::unique_ptr<weld::Entry> m_xColSpinButton;
     // Returns 255 if mapping is not possible.
     // This means there cannot be more than 255 autotable style.
     sal_uInt8 lbIndexToTableIndex( const sal_uInt8 listboxIndex );
     void InitAutoTableFormat();
-
     DECL_LINK(TextFilterHdl, OUString&, bool);
     DECL_LINK(SelFormatHdl, weld::TreeView&, void);
     DECL_LINK(ModifyName, weld::Entry&, void);
-    DECL_LINK(ModifyRowCol, weld::SpinButton&, void);
+    DECL_LINK(ModifyRowCol, weld::Entry&, void);
     DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
     DECL_LINK(RepeatHeaderCheckBoxHdl, weld::ToggleButton&, void);
@@ -77,11 +72,10 @@ class SwInsTableDlg : public SfxDialogController
 public:
     SwInsTableDlg(SwView& rView);
 
+   
     void GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                     SwInsertTableOptions& rInsTableOpts, OUString& rTableAutoFormatName,
                     std::unique_ptr<SwTableAutoFormat>& prTAFormat );
 };
-
 #endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
