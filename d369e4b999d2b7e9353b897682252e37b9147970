@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "822b1551_8c1f8d7e",
+        "filename": "cui/source/tabpages/border.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-11-09T11:08:24Z",
+      "side": 1,
+      "message": "That breaks on 6.4 branch - used to be MetricField::ConvertDoubleValue() FWICT",
+      "revId": "d369e4b999d2b7e9353b897682252e37b9147970",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
