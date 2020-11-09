@@ -25,12 +25,17 @@ class PDFObjectContainer;
 namespace filter
 {
 class PDFObjectElement;
+class PDFElement;
 }
 
 /// Copies objects from one PDF file into another one.
 class PDFObjectCopier
 {
     PDFObjectContainer& m_rContainer;
+
+    void copyRecursively(OStringBuffer& rLine, filter::PDFElement* pInputElement,
+                         SvMemoryStream& rDocBuffer,
+                         std::map<sal_Int32, sal_Int32>& rCopiedResources);
 
 public:
     PDFObjectCopier(PDFObjectContainer& rContainer);
