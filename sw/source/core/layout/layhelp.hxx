@@ -83,19 +83,19 @@ public:
 // by controlling nested sections.
 class SwActualSection
 {
-    SwActualSection *pUpper;
-    SwSectionFrame    *pSectFrame;
-    SwSectionNode   *pSectNode;
+    SwActualSection *m_pUpper;
+    SwSectionFrame    *m_pSectFrame;
+    SwSectionNode   *m_pSectNode;
 public:
     SwActualSection( SwActualSection *pUpper,
                      SwSectionFrame    *pSect,
                      SwSectionNode   *pNd );
 
-    SwSectionFrame    *GetSectionFrame()                    { return pSectFrame; }
-    void             SetSectionFrame( SwSectionFrame *p )   { pSectFrame = p; }
-    SwSectionNode   *GetSectionNode()                   { return pSectNode;}
-    void             SetUpper(SwActualSection *p)       { pUpper = p; }
-    SwActualSection *GetUpper()                         { return pUpper; }
+    SwSectionFrame    *GetSectionFrame()                    { return m_pSectFrame; }
+    void             SetSectionFrame( SwSectionFrame *p )   { m_pSectFrame = p; }
+    SwSectionNode   *GetSectionNode()                   { return m_pSectNode;}
+    void             SetUpper(SwActualSection *p)       { m_pUpper = p; }
+    SwActualSection *GetUpper()                         { return m_pUpper; }
 };
 
 /// Helps during the InsertCnt_ function to create new pages.

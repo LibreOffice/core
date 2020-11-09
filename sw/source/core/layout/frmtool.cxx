@@ -82,8 +82,8 @@ bool bObjsDirect = true;
 bool bDontCreateObjects = false;
 bool bSetCompletePaintOnInvalidate = false;
 
-sal_uInt8 StackHack::nCnt = 0;
-bool StackHack::bLocked = false;
+sal_uInt8 StackHack::s_nCnt = 0;
+bool StackHack::s_bLocked = false;
 
 SwFrameNotify::SwFrameNotify( SwFrame *pF ) :
     mpFrame( pF ),
@@ -3621,44 +3621,48 @@ namespace {
 
 class SwFrameHolder : private SfxListener
 {
-    SwFrame* pFrame;
-    bool bSet;
+    SwFrame* m_pFrame;
+    bool m_bSet;
     virtual void Notify(  SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 public:
-    SwFrameHolder() : pFrame(nullptr), bSet(false) {}
+    SwFrameHolder()
+        : m_pFrame(nullptr)
+        , m_bSet(false)
+    {
+    }
     void SetFrame( SwFrame* pHold );
-    SwFrame* GetFrame() { return pFrame; }
+    SwFrame* GetFrame() { return m_pFrame; }
     void Reset();
-    bool IsSet() const { return bSet; }
+    bool IsSet() const { return m_bSet; }
 };
 
 }
 
 void SwFrameHolder::SetFrame( SwFrame* pHold )
 {
-    bSet = true;
-    if (pFrame != pHold)
+    m_bSet = true;
+    if (m_pFrame != pHold)
     {
-        if (pFrame)
-            EndListening(*pFrame);
+        if (m_pFrame)
+            EndListening(*m_pFrame);
         StartListening(*pHold);
-        pFrame = pHold;
+        m_pFrame = pHold;
     }
 }
 
 void SwFrameHolder::Reset()
 {
-    if (pFrame)
-        EndListening(*pFrame);
-    bSet = false;
-    pFrame = nullptr;
+    if (m_pFrame)
+        EndListening(*m_pFrame);
+    m_bSet = false;
+    m_pFrame = nullptr;
 }
 
 void SwFrameHolder::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.GetId() == SfxHintId::Dying && &rBC == pFrame )
+    if (rHint.GetId() == SfxHintId::Dying && &rBC == m_pFrame)
     {
-        pFrame = nullptr;
+        m_pFrame = nullptr;
     }
 }
 

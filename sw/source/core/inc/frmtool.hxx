@@ -449,23 +449,23 @@ public:
 
 class StackHack
 {
-    static sal_uInt8 nCnt;
-    static bool bLocked;
+    static sal_uInt8 s_nCnt;
+    static bool s_bLocked;
 
 public:
     StackHack()
     {
-        if ( ++StackHack::nCnt > 50 )
-            StackHack::bLocked = true;
+        if ( ++StackHack::s_nCnt > 50 )
+            StackHack::s_bLocked = true;
     }
     ~StackHack()
     {
-        if ( --StackHack::nCnt < 5 )
-            StackHack::bLocked = false;
+        if ( --StackHack::s_nCnt < 5 )
+            StackHack::s_bLocked = false;
     }
 
-    static bool IsLocked()  { return StackHack::bLocked; }
-    static sal_uInt8 Count()        { return StackHack::nCnt; }
+    static bool IsLocked()  { return StackHack::s_bLocked; }
+    static sal_uInt8 Count()        { return StackHack::s_nCnt; }
 };
 
 // Should upper (or lower) border be evaluated for this frame?

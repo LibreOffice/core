@@ -206,11 +206,11 @@ namespace {
 // #i3317# - re-factoring of the position stack
 class SwOszControl
 {
-    static const SwFlyFrame* m_pStack1;
-    static const SwFlyFrame* m_pStack2;
-    static const SwFlyFrame* m_pStack3;
-    static const SwFlyFrame* m_pStack4;
-    static const SwFlyFrame* m_pStack5;
+    static const SwFlyFrame* s_pStack1;
+    static const SwFlyFrame* s_pStack2;
+    static const SwFlyFrame* s_pStack3;
+    static const SwFlyFrame* s_pStack4;
+    static const SwFlyFrame* s_pStack5;
 
     const SwFlyFrame* m_pFly;
     std::vector<Point> maObjPositions;
@@ -224,54 +224,54 @@ public:
 
 }
 
-const SwFlyFrame* SwOszControl::m_pStack1 = nullptr;
-const SwFlyFrame* SwOszControl::m_pStack2 = nullptr;
-const SwFlyFrame* SwOszControl::m_pStack3 = nullptr;
-const SwFlyFrame* SwOszControl::m_pStack4 = nullptr;
-const SwFlyFrame* SwOszControl::m_pStack5 = nullptr;
+const SwFlyFrame* SwOszControl::s_pStack1 = nullptr;
+const SwFlyFrame* SwOszControl::s_pStack2 = nullptr;
+const SwFlyFrame* SwOszControl::s_pStack3 = nullptr;
+const SwFlyFrame* SwOszControl::s_pStack4 = nullptr;
+const SwFlyFrame* SwOszControl::s_pStack5 = nullptr;
 
 SwOszControl::SwOszControl(const SwFlyFrame* pFrame)
     : m_pFly(pFrame)
 {
-    if (!SwOszControl::m_pStack1)
-        SwOszControl::m_pStack1 = m_pFly;
-    else if (!SwOszControl::m_pStack2)
-        SwOszControl::m_pStack2 = m_pFly;
-    else if (!SwOszControl::m_pStack3)
-        SwOszControl::m_pStack3 = m_pFly;
-    else if (!SwOszControl::m_pStack4)
-        SwOszControl::m_pStack4 = m_pFly;
-    else if (!SwOszControl::m_pStack5)
-        SwOszControl::m_pStack5 = m_pFly;
+    if (!SwOszControl::s_pStack1)
+        SwOszControl::s_pStack1 = m_pFly;
+    else if (!SwOszControl::s_pStack2)
+        SwOszControl::s_pStack2 = m_pFly;
+    else if (!SwOszControl::s_pStack3)
+        SwOszControl::s_pStack3 = m_pFly;
+    else if (!SwOszControl::s_pStack4)
+        SwOszControl::s_pStack4 = m_pFly;
+    else if (!SwOszControl::s_pStack5)
+        SwOszControl::s_pStack5 = m_pFly;
 }
 
 SwOszControl::~SwOszControl()
 {
-    if (SwOszControl::m_pStack1 == m_pFly)
-        SwOszControl::m_pStack1 = nullptr;
-    else if (SwOszControl::m_pStack2 == m_pFly)
-        SwOszControl::m_pStack2 = nullptr;
-    else if (SwOszControl::m_pStack3 == m_pFly)
-        SwOszControl::m_pStack3 = nullptr;
-    else if (SwOszControl::m_pStack4 == m_pFly)
-        SwOszControl::m_pStack4 = nullptr;
-    else if (SwOszControl::m_pStack5 == m_pFly)
-        SwOszControl::m_pStack5 = nullptr;
+    if (SwOszControl::s_pStack1 == m_pFly)
+        SwOszControl::s_pStack1 = nullptr;
+    else if (SwOszControl::s_pStack2 == m_pFly)
+        SwOszControl::s_pStack2 = nullptr;
+    else if (SwOszControl::s_pStack3 == m_pFly)
+        SwOszControl::s_pStack3 = nullptr;
+    else if (SwOszControl::s_pStack4 == m_pFly)
+        SwOszControl::s_pStack4 = nullptr;
+    else if (SwOszControl::s_pStack5 == m_pFly)
+        SwOszControl::s_pStack5 = nullptr;
     // #i3317#
     maObjPositions.clear();
 }
 
 bool SwOszControl::IsInProgress( const SwFlyFrame *pFly )
 {
-    if (SwOszControl::m_pStack1 && !pFly->IsLowerOf(SwOszControl::m_pStack1))
+    if (SwOszControl::s_pStack1 && !pFly->IsLowerOf(SwOszControl::s_pStack1))
         return true;
-    if (SwOszControl::m_pStack2 && !pFly->IsLowerOf(SwOszControl::m_pStack2))
+    if (SwOszControl::s_pStack2 && !pFly->IsLowerOf(SwOszControl::s_pStack2))
         return true;
-    if (SwOszControl::m_pStack3 && !pFly->IsLowerOf(SwOszControl::m_pStack3))
+    if (SwOszControl::s_pStack3 && !pFly->IsLowerOf(SwOszControl::s_pStack3))
         return true;
-    if (SwOszControl::m_pStack4 && !pFly->IsLowerOf(SwOszControl::m_pStack4))
+    if (SwOszControl::s_pStack4 && !pFly->IsLowerOf(SwOszControl::s_pStack4))
         return true;
-    if (SwOszControl::m_pStack5 && !pFly->IsLowerOf(SwOszControl::m_pStack5))
+    if (SwOszControl::s_pStack5 && !pFly->IsLowerOf(SwOszControl::s_pStack5))
         return true;
     return false;
 }
