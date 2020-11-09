@@ -33,7 +33,6 @@ class tdf91762(UITestCase):
         self.assertEqual(1400, document.DrawPages[0].getByIndex(1).Position.X)
         self.assertEqual(3685, document.DrawPages[0].getByIndex(1).Position.Y)
 
-        #The table is selected, use esc to start editing
         xDoc = self.xUITest.getTopFocusWindow()
         xEdit = xDoc.getChild("impress_win")
         for i in range(5):
@@ -41,6 +40,7 @@ class tdf91762(UITestCase):
             xEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
         # tdf#138011: Without the fix in place, this test would have failed with
+        # AssertionError: 5494 != 3559
         self.assertEqual(5494, document.DrawPages[0].getByIndex(1).BoundRect.Height)
 
         self.ui_test.close_doc()
