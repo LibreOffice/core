@@ -132,12 +132,6 @@ accessibility/source/standard/vclxaccessibletextfield.cxx
 accessibility/source/standard/vclxaccessibletoolbox.cxx
 accessibility/source/standard/vclxaccessibletoolboxitem.cxx
 animations/source/animcore/animcore.cxx
-apple_remote/source/AppleRemote.h
-apple_remote/source/GlobalKeyboardDevice.h
-apple_remote/source/HIDRemoteControlDevice.h
-apple_remote/source/KeyspanFrontRowControl.h
-apple_remote/source/MultiClickRemoteBehavior.h
-apple_remote/source/RemoteControlContainer.h
 avmedia/inc/helpids.h
 avmedia/inc/mediacontrol.hxx
 avmedia/source/avmediadummy.cxx

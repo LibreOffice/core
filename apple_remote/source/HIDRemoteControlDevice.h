@@ -36,12 +36,13 @@
 /*
     Base class for HID based remote control devices
  */
-@interface HIDRemoteControlDevice : RemoteControl {
+@interface HIDRemoteControlDevice : RemoteControl
+{
     IOHIDDeviceInterface** hidDeviceInterface; // see IOKit/hid/IOHIDLib.h
-    IOHIDQueueInterface**  queue;  // IOKit/hid/IOHIDLib.h
-    NSMutableArray*        allCookies;
-    NSMutableDictionary*   cookieToButtonMapping;
-    CFRunLoopSourceRef     eventSource;
+    IOHIDQueueInterface** queue; // IOKit/hid/IOHIDLib.h
+    NSMutableArray* allCookies;
+    NSMutableDictionary* cookieToButtonMapping;
+    CFRunLoopSourceRef eventSource;
 
     BOOL fixSecureEventInputBug;
     BOOL openInExclusiveMode;
@@ -54,15 +55,15 @@
 // may already be received which are put on a backlog. As soon as your main thread
 // has some spare time this backlog is processed and may flood your delegate with calls.
 // Backlog processing is turned off by default.
-- (BOOL) processesBacklog;
-- (void) setProcessesBacklog: (BOOL) value;
+- (BOOL)processesBacklog;
+- (void)setProcessesBacklog:(BOOL)value;
 
 // methods that should be overwritten by subclasses
-- (void) setCookieMappingInDictionary: (NSMutableDictionary*) cookieToButtonMapping;
+- (void)setCookieMappingInDictionary:(NSMutableDictionary*)cookieToButtonMapping;
 
-- (void) sendRemoteButtonEvent: (RemoteControlEventIdentifier) event pressedDown: (BOOL) pressedDown;
+- (void)sendRemoteButtonEvent:(RemoteControlEventIdentifier)event pressedDown:(BOOL)pressedDown;
 
-+ (BOOL) isRemoteAvailable;
++ (BOOL)isRemoteAvailable;
 
 @end
 
