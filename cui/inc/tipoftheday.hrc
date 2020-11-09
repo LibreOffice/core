@@ -256,7 +256,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Include a paragraph that is not a title in the table of contents by changing Outline & Numbering in the paragraph settings to an outline level."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Apart from table of contents, %PRODUCTNAME can create Alphabetical, Illustrations, Tables, Objects, Bibliography, User-Defined indexes."), "modules/swriter/ui/tocdialog/TocDialog", "tipoftheday_w.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/indices_toc.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Unable to modify or delete a custom cell style? Check all sheets, none should be protected."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "You need to fill a serie? Select the cell range and Sheet ▸ Fill Cells ▸ Fill Series and choose between Linear, Growth, Date and AutoFill."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/guide/calc_series.html", "tipoftheday_c.png"}, //local help missing
+     { NC_("RID_CUI_TIPOFTHEDAY", "You need to fill a series? Select the cell range and Sheet ▸ Fill Cells ▸ Fill Series and choose between Linear, Growth, Date and AutoFill."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/guide/calc_series.html", "tipoftheday_c.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to know if a cell is referred in formulas of other cells? Tools ▸ Detective ▸ Trace Dependents (Shift+F5)."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "In the replace input field of auto correct options you can use the wildcards .*"), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to duplicate the above line? Press %MOD1+D or use Sheet ▸ Fill Cells ▸ Fill Down."), "", "tipoftheday_c.png"},
@@ -268,6 +268,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Drag a formatted object to the Styles and Formatting window. A dialog box opens, just enter the name of the new style."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "New versions of %PRODUCTNAME provide new features, bug fixes, and security patches. Keep your software updated!"), "SFX2_HID_DLG_CHECKFORONLINEUPDATE", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Developing new XSLT and XML filters?"), "http://fridrich.blogspot.com.tr/2013/08/extending-swiss-army-knife-overview.html", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Press Shift+F1 to see any available extended tooltips in dialog boxes, when \"Extended tips\" is not enabled in Tools ▸ Options ▸ %PRODUCTNAME ▸ General."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/05/00000120.html", ""},
 };
 
 #define STR_HELP_LINK                   NC_("STR_HELP_LINK", "%PRODUCTNAME Help")
