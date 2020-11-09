@@ -782,12 +782,12 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
                         nMinHeight = xCell->getMinimumHeight();
                     }
 
-                    // tdf#137949  We should consider "Heigth" property while calculating minimum height.
-                    // This control decides when we use "Heigth" property value instead of calculated minimum height
-                    //     Case 1: * Row has "Heigth" property
-                    //             * Calculated minimum heigth is smaller than Height propery value.
-                    //     Case 2: * Row has "Heigth" property
-                    //             * Calculated minimum heigth is bigger than Height propery value and
+                    // tdf#137949  We should consider "Height" property while calculating minimum height.
+                    // This control decides when we use "Height" property value instead of calculated minimum height
+                    //     Case 1: * Row has "Height" property
+                    //             * Calculated minimum height is smaller than Height property value.
+                    //     Case 2: * Row has "Height" property
+                    //             * Calculated minimum height is bigger than Height property value and
                     //             * Row has not any text of any cell in edit mode in the row (means completely empty)
                     if ((nMinHeight < nRowPropHeight && nRowPropHeight > 0 ) ||
                         (nMinHeight > nRowPropHeight && nRowPropHeight > 0 && (!bRowHasText && !bRowHasCellInEditMode)))
