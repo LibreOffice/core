@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb655a52_4f555b4e",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-09T14:40:47Z",
+      "side": 1,
+      "message": "Unfortunately not in hid2file.js, so could not give a .uri",
+      "range": {
+        "startLine": 271,
+        "startChar": 190,
+        "endLine": 271,
+        "endChar": 278
+      },
+      "revId": "b06c8a0d9938143194ab76cb06b44d9d9e1f192d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f50ed8d3_1494048c",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-09T14:40:47Z",
+      "side": 1,
+      "message": "While I believe extended help is not (yet) universal again, there are (working) \"extended tips\" in the .ui -- so added \"dialog boxes\" to keep expectations appropriate.",
+      "range": {
+        "startLine": 271,
+        "startChar": 89,
+        "endLine": 271,
+        "endChar": 104
+      },
+      "revId": "b06c8a0d9938143194ab76cb06b44d9d9e1f192d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
