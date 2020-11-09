@@ -200,6 +200,8 @@ FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent,
     m_xContext(xContext),
     m_pAcc(svt::AcceleratorExecute::createAcceleratorHelper())
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->set_entry_placeholder_text(SvxResId(RID_SVXSTR_FINDBAR_FIND));
     m_xWidget->set_entry_completion(true, true);
     m_pAcc->init(m_xContext, m_xFrame);
@@ -340,12 +342,20 @@ IMPL_LINK_NOARG(FindTextFieldControl, OnAsyncGetFocus, void*, void)
     m_xWidget->select_entry_region(0, -1);
 }
 
-IMPL_LINK_NOARG(FindTextFieldControl, FocusInHdl, weld::Widget&, void)
+void FindTextFieldControl::FocusIn()
 {
-    if (m_nAsyncGetFocusId)
+    if (m_nAsyncGetFocusId || !m_xWidget)
         return;
+
     // do it async to defeat entry in combobox having its own ideas about the focus
     m_nAsyncGetFocusId = Application::PostUserEvent(LINK(this, FindTextFieldControl, OnAsyncGetFocus));
+
+    GrabFocus(); // tdf#137993 ensure the toplevel vcl::Window is activated so SfxViewFrame::Current is valid
+}
+
+IMPL_LINK_NOARG(FindTextFieldControl, FocusInHdl, weld::Widget&, void)
+{
+    FocusIn();
 }
 
 void FindTextFieldControl::dispose()
@@ -397,12 +407,8 @@ void FindTextFieldControl::set_entry_message_type(weld::EntryMessageType eType)
 
 void FindTextFieldControl::GetFocus()
 {
-    if (m_xWidget)
-    {
-        m_xWidget->grab_focus();
-        FocusInHdl(*m_xWidget);
-    }
     InterimItemWindow::GetFocus();
+    FocusIn();
 }
 
 namespace {
