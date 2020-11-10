@@ -665,7 +665,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
                 if ( !pPara->mbFixedLineSpacing && rPortion.mnCharHeight > static_cast<sal_uInt16>( static_cast<double>(-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
                     nLineSpacing = nNormalSpacing;
                 else
-                    nLineSpacing = static_cast<sal_Int16>( convertTwipToMasterUnit(nLineSpacing) );
+                    nLineSpacing = static_cast<sal_Int16>( convertMm100ToMasterUnit(nLineSpacing) );
             }
             if ( ( pPara->meLineSpacing == css::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_LineFeed, nLineSpacing ) ) )
@@ -1210,7 +1210,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         const sal_uInt32 nDefaultTabSize = MapSize( awt::Size( nDefaultTabSizeSrc, 1 ) ).Width;
         sal_uInt32  nDefaultTabs = std::abs( maRect.GetWidth() ) / nDefaultTabSize;
         if ( nTabs )
-            nDefaultTabs -= static_cast<sal_Int32>( convertTwipToMasterUnit(rTabStops[ nTabs - 1 ].Position) / nDefaultTabSize );
+            nDefaultTabs -= static_cast<sal_Int32>( convertMm100ToMasterUnit(rTabStops[ nTabs - 1 ].Position) / nDefaultTabSize );
         if ( static_cast<sal_Int32>(nDefaultTabs) < 0 )
             nDefaultTabs = 0;
 
@@ -1239,7 +1239,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                 pRuleOut->WriteUInt16( nTabCount );
                 for ( const css::style::TabStop& rTabStop : rTabStops )
                 {
-                    sal_uInt16 nPosition = static_cast<sal_uInt16>( convertTwipToMasterUnit(rTabStop.Position) );
+                    sal_uInt16 nPosition = static_cast<sal_uInt16>( convertMm100ToMasterUnit(rTabStop.Position) );
                     sal_uInt16 nType;
                     switch ( rTabStop.Alignment )
                     {
@@ -1256,7 +1256,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 
                 sal_uInt32 nWidth = 1;
                 if ( nTabs )
-                    nWidth += static_cast<sal_Int32>( convertTwipToMasterUnit(rTabStops[ nTabs - 1 ].Position) / nDefaultTabSize );
+                    nWidth += static_cast<sal_Int32>( convertMm100ToMasterUnit(rTabStops[ nTabs - 1 ].Position) / nDefaultTabSize );
                 nWidth *= nDefaultTabSize;
                 for ( i = 0; i < nDefaultTabs; i++, nWidth += nDefaultTabSize )
                     pRuleOut->WriteUInt32( nWidth );
