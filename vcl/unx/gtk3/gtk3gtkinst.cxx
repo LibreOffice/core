@@ -16143,6 +16143,7 @@ class GtkInstanceExpander : public GtkInstanceContainer, public virtual weld::Ex
 private:
     GtkExpander* m_pExpander;
     gulong m_nSignalId;
+    gulong m_nButtonPressEventSignalId;
 
     static void signalExpanded(GtkExpander* pExpander, GParamSpec*, gpointer widget)
     {
@@ -16174,11 +16175,20 @@ private:
         pThis->signal_expanded();
     }
 
+    static gboolean signalButton(GtkWidget*, GdkEventButton*, gpointer)
+    {
+        // don't let button press get to parent window, for the case of the
+        // an expander in a sidebar where otherwise single click to expand
+        // doesn't work
+        return true;
+    }
+
 public:
     GtkInstanceExpander(GtkExpander* pExpander, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pExpander), pBuilder, bTakeOwnership)
         , m_pExpander(pExpander)
         , m_nSignalId(g_signal_connect(m_pExpander, "notify::expanded", G_CALLBACK(signalExpanded), this))
+        , m_nButtonPressEventSignalId(g_signal_connect_after(m_pExpander, "button-press-event", G_CALLBACK(signalButton), this))
     {
     }
 
@@ -16194,6 +16204,7 @@ public:
 
     virtual ~GtkInstanceExpander() override
     {
+        g_signal_handler_disconnect(m_pExpander, m_nButtonPressEventSignalId);
         g_signal_handler_disconnect(m_pExpander, m_nSignalId);
     }
 };
