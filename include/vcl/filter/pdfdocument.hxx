@@ -71,7 +71,6 @@ class VCL_DLLPUBLIC PDFObjectElement final : public PDFElement
     PDFDocument& m_rDoc;
     double m_fObjectValue;
     double m_fGenerationValue;
-    std::map<OString, PDFElement*> m_aDictionary;
     /// If set, the object contains this number element (outside any dictionary/array).
     PDFNumberElement* m_pNumberElement;
     /// Position after the '<<' token.
@@ -96,6 +95,8 @@ class VCL_DLLPUBLIC PDFObjectElement final : public PDFElement
     /// List of all reference elements inside this object's dictionary and
     /// nested dictionaries.
     std::vector<PDFReferenceElement*> m_aDictionaryReferences;
+
+    bool m_bParsed;
 
     void parseIfNecessary();
 
@@ -125,7 +126,7 @@ public:
     sal_uInt64 GetArrayOffset() const;
     void SetArrayLength(sal_uInt64 nArrayLength);
     sal_uInt64 GetArrayLength() const;
-    PDFArrayElement* GetArray() const;
+    PDFArrayElement* GetArray();
     /// Parse objects stored in this object stream.
     void ParseStoredObjects();
     std::vector<std::unique_ptr<PDFElement>>& GetStoredElements();
@@ -148,6 +149,7 @@ public:
     bool Read(SvStream& rStream) override;
     void PushBack(PDFElement* pElement);
     const std::vector<PDFElement*>& GetElements() const;
+    PDFElement* GetElement(size_t nIndex) const { return m_aElements[nIndex]; }
 
     void writeString(OStringBuffer& rBuffer) override
     {
@@ -226,9 +228,10 @@ class VCL_DLLPUBLIC PDFNameElement final : public PDFElement
 public:
     PDFNameElement();
     bool Read(SvStream& rStream) override;
+    void SetValue(const OString& rValue) { m_aValue = rValue; }
     const OString& GetValue() const;
     sal_uInt64 GetLocation() const;
-    static sal_uInt64 GetLength() { return 0; }
+    sal_uInt64 GetLength() { return m_aValue.getLength(); }
 
     void writeString(OStringBuffer& rBuffer) override
     {
@@ -253,8 +256,6 @@ public:
     PDFDictionaryElement();
     bool Read(SvStream& rStream) override;
 
-    static size_t Parse(const std::vector<std::unique_ptr<PDFElement>>& rElements,
-                        PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary);
     static PDFElement* Lookup(const std::map<OString, PDFElement*>& rDictionary,
                               const OString& rKey);
     void SetKeyOffset(const OString& rKey, sal_uInt64 nOffset);
@@ -266,6 +267,11 @@ public:
     PDFObjectElement* LookupObject(const OString& rDictionaryKey);
     /// Looks up an element which is contained in this dictionary.
     PDFElement* LookupElement(const OString& rDictionaryKey);
+    sal_uInt64 GetLocation() const { return m_nLocation; }
+    void insert(OString const& rKey, PDFElement* pPDFElement)
+    {
+        m_aItems.emplace(rKey, pPDFElement);
+    }
 
     void writeString(OStringBuffer& rBuffer) override
     {
@@ -382,10 +388,98 @@ public:
     PDFNumberElement();
     bool Read(SvStream& rStream) override;
     double GetValue() const;
+    void SetValue(double fValue) { m_fValue = fValue; }
+
     sal_uInt64 GetLocation() const;
     sal_uInt64 GetLength() const;
 
     void writeString(OStringBuffer& rBuffer) override { rBuffer.append(m_fValue); }
+};
+
+/// A one-liner comment.
+class VCL_DLLPUBLIC PDFCommentElement : public PDFElement
+{
+    PDFDocument& m_rDoc;
+    OString m_aComment;
+
+public:
+    explicit PDFCommentElement(PDFDocument& rDoc);
+    bool Read(SvStream& rStream) override;
+    void writeString(OStringBuffer& /*rBuffer*/) override {}
+};
+
+/// End of a dictionary: '>>'.
+class VCL_DLLPUBLIC PDFEndDictionaryElement : public PDFElement
+{
+    /// Offset before the '>>' token.
+    sal_uInt64 m_nLocation = 0;
+
+public:
+    PDFEndDictionaryElement();
+    bool Read(SvStream& rStream) override;
+    sal_uInt64 GetLocation() const;
+
+    void writeString(OStringBuffer& /*rBuffer*/) override {}
+};
+
+/// End of a stream: 'endstream' keyword.
+class VCL_DLLPUBLIC PDFEndStreamElement : public PDFElement
+{
+public:
+    bool Read(SvStream& rStream) override;
+
+    void writeString(OStringBuffer& /*rBuffer*/) override {}
+};
+
+/// End of an object: 'endobj' keyword.
+class VCL_DLLPUBLIC PDFEndObjectElement : public PDFElement
+{
+public:
+    bool Read(SvStream& rStream) override;
+
+    void writeString(OStringBuffer& /*rBuffer*/) override {}
+};
+
+/// End of an array: ']'.
+class VCL_DLLPUBLIC PDFEndArrayElement : public PDFElement
+{
+    /// Location before the ']' token.
+    sal_uInt64 m_nOffset = 0;
+
+public:
+    PDFEndArrayElement();
+    bool Read(SvStream& rStream) override;
+    sal_uInt64 GetOffset() const;
+
+    void writeString(OStringBuffer& /*rBuffer*/) override {}
+};
+
+/// Boolean object: a 'true' or a 'false'.
+class VCL_DLLPUBLIC PDFBooleanElement : public PDFElement
+{
+    bool m_aValue;
+
+public:
+    explicit PDFBooleanElement(bool bValue)
+        : m_aValue(bValue)
+    {
+    }
+
+    bool Read(SvStream& rStream) override;
+
+    void writeString(OStringBuffer& rBuffer) override
+    {
+        rBuffer.append(m_aValue ? "true" : "false");
+    }
+};
+
+/// Null object: the 'null' singleton.
+class VCL_DLLPUBLIC PDFNullElement : public PDFElement
+{
+public:
+    bool Read(SvStream& rStream) override;
+
+    void writeString(OStringBuffer& rBuffer) override { rBuffer.append("null"); }
 };
 
 /**
@@ -500,6 +594,43 @@ public:
     bool updateObject(sal_Int32 n) override;
     /// See vcl::PDFObjectContainer::writeBuffer().
     bool writeBuffer(const void* pBuffer, sal_uInt64 nBytes) override;
+};
+
+/// The trailer singleton is at the end of the doc.
+class VCL_DLLPUBLIC PDFTrailerElement : public PDFElement
+{
+    PDFDocument& m_rDoc;
+    PDFDictionaryElement* m_pDictionaryElement;
+    /// Location of the end of the trailer token.
+    sal_uInt64 m_nOffset = 0;
+
+public:
+    explicit PDFTrailerElement(PDFDocument& rDoc);
+    bool Read(SvStream& rStream) override;
+    PDFElement* Lookup(const OString& rDictionaryKey);
+    sal_uInt64 GetLocation() const;
+
+    void SetDictionary(PDFDictionaryElement* pDictionaryElement)
+    {
+        m_pDictionaryElement = pDictionaryElement;
+    }
+
+    PDFDictionaryElement* GetDictionary() { return m_pDictionaryElement; }
+
+    void writeString(OStringBuffer& /*rBuffer*/) override { assert(false && "not implemented"); }
+};
+
+class VCL_DLLPUBLIC PDFObjectParser final
+{
+    const std::vector<std::unique_ptr<PDFElement>>& mrElements;
+
+public:
+    PDFObjectParser(std::vector<std::unique_ptr<PDFElement>> const& rElements)
+        : mrElements(rElements)
+    {
+    }
+
+    size_t parse(PDFElement* pParsingElement, size_t nStartIndex = 0, int nCurrentDepth = 0);
 };
 
 } // namespace vcl::filter
