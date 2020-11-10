@@ -246,7 +246,7 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
     LanguageTag aCharClassLanguage = pCharClass->getLanguageTag();
     LanguageTag aContentLang(m_aContentLang);
 
-    // for the call of calulate we need the language that was used for putting/setting
+    // for the call of calculate we need the language that was used for putting/setting
     // the m_aContent string, otherwise the aContent could be interpreted wrongly,
 
     bool bSwitchLanguage = m_aContentLang != aCharClassLanguage.getBcp47();
@@ -256,7 +256,7 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
 
     m_nValue = rCalc.Calculate( m_aContent ).GetDouble();
 
-    // we than have to set the propper char class languageTag again
+    // we than have to set the proper char class languageTag again
 
     if (bSwitchLanguage)
         pCharClass->setLanguageTag(aCharClassLanguage);

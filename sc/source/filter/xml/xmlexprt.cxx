@@ -3513,7 +3513,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                                       aRectFull.Top() - aRectReduced.Top());
                 pObj->TRSetBaseGeometry(aMatrixFull, aPolyPolygonOrig);
             }
-            // ToDo: Adapt object shew and rotation to bHiddenAsZero=false, tdf#137033
+            // ToDo: Adapt object skew and rotation to bHiddenAsZero=false, tdf#137033
 
             // We only write the end address if we want the shape to resize with the cell
             if ( rShape.bResizeWithCell &&

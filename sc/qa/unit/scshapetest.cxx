@@ -129,7 +129,7 @@ void ScShapeTest::testLoadVerticalFlip()
 
 void ScShapeTest::testTdf117948_CollapseBeforeShape()
 {
-    // The document contains a column group left from the image. The group is exanded. Collapse the
+    // The document contains a column group left from the image. The group is expanded. Collapse the
     // group, save and reload. The original error was, that the line was on wrong position after reload.
     // After the fix for 'resive with cell', the custom shape had wrong position and size too.
     OUString aFileURL;
@@ -168,7 +168,7 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
                                      1);
     tools::Rectangle aSnapRect1Collapse = pObj1->GetSnapRect();
     tools::Rectangle aExpectedRect1(Point(5647, 4172), Size(21, 3441));
-    lcl_AssertRectEqualWithTolerance("Collape: Line", aExpectedRect1, aSnapRect1Collapse, 1);
+    lcl_AssertRectEqualWithTolerance("Collapse: Line", aExpectedRect1, aSnapRect1Collapse, 1);
 
     // Save and reload
     saveAndReload(xComponent, "calc8");
