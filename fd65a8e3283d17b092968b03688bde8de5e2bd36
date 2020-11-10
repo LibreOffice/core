@@ -46,6 +46,30 @@
       "revId": "fd65a8e3283d17b092968b03688bde8de5e2bd36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "283a4b48_3d9e0e53",
+        "filename": "cui/uiconfig/ui/borderpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-10T09:02:15Z",
+      "side": 1,
+      "message": "Whether ad hoc or post facto, any sane reasoning is welcome. Fix the semicolon and let\u0027s submit this.",
+      "parentUuid": "121f229f_c649a383",
+      "range": {
+        "startLine": 96,
+        "startChar": 173,
+        "endLine": 96,
+        "endChar": 174
+      },
+      "revId": "fd65a8e3283d17b092968b03688bde8de5e2bd36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
