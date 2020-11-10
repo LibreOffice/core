@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72776b1f_9b962b9f",
+        "filename": "svx/source/dialog/docrecovery.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-10T08:07:58Z",
+      "side": 1,
+      "message": "This !\u003d\u003d0 fails the build with \"error: logical negation of comparison operator, can be simplified by inverting operator\". Guess !\u003d0 does the trick.",
+      "range": {
+        "startLine": 1025,
+        "startChar": 8,
+        "endLine": 1025,
+        "endChar": 58
+      },
+      "revId": "05acc479ca2bcf4a0d6a2ae79d731b8abd8ab473",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
