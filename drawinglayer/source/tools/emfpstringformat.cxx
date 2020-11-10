@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <rtl/ustrbuf.hxx>
 #include "emfpstringformat.hxx"
 
 namespace emfplushelper
@@ -43,78 +44,78 @@ namespace emfplushelper
 
     static OUString StringFormatFlags(sal_uInt32 flag)
     {
-        OUString sFlags;
+        OUStringBuffer sFlags;
 
         if (flag & StringFormatDirectionRightToLeft)
-            sFlags = sFlags.concat("StringFormatDirectionRightToLeft");
+            sFlags.append("StringFormatDirectionRightToLeft");
 
         if (flag & StringFormatDirectionRightToLeft)
         {
             if (!sFlags.isEmpty())
-                sFlags = sFlags.concat(", ");
+                sFlags.append(", ");
 
-            sFlags = sFlags.concat("StringFormatDirectionRightToLeft");
+            sFlags.append("StringFormatDirectionRightToLeft");
         }
 
         if (flag & StringFormatNoFitBlackBox)
         {
             if (!sFlags.isEmpty())
-                sFlags = sFlags.concat(", ");
+                sFlags.append(", ");
 
-            sFlags = sFlags.concat("StringFormatNoFitBlackBox");
+            sFlags.append("StringFormatNoFitBlackBox");
         }
 
         if (flag & StringFormatDisplayFormatControl)
         {
             if (!sFlags.isEmpty())
-                sFlags = sFlags.concat(", ");
+                sFlags.append(", ");
 
-            sFlags = sFlags.concat("StringFormatDisplayFormatControl");
+            sFlags.append("StringFormatDisplayFormatControl");
         }
         if (flag & StringFormatNoFontFallback)
         {
             if (!sFlags.isEmpty())
-                sFlags = sFlags.concat(", ");
+                sFlags.append(", ");
 
-            sFlags = sFlags.concat("StringFormatNoFontFallback");
+            sFlags.append("StringFormatNoFontFallback");
         }
         if (flag & StringFormatMeasureTrailingSpaces)
         {
             if (!sFlags.isEmpty())
-                sFlags = sFlags.concat(", ");
+                sFlags.append(", ");
 
-            sFlags = sFlags.concat("StringFormatMeasureTrailingSpaces");
+            sFlags.append("StringFormatMeasureTrailingSpaces");
         }
         if (flag & StringFormatNoWrap)
         {
             if (!sFlags.isEmpty())
-                sFlags = sFlags.concat(", ");
+                sFlags.append(", ");
 
-            sFlags = sFlags.concat("StringFormatNoWrap");
+            sFlags.append("StringFormatNoWrap");
         }
         if (flag & StringFormatLineLimit)
         {
             if (!sFlags.isEmpty())
-                sFlags = sFlags.concat(", ");
+                sFlags.append(", ");
 
-            sFlags = sFlags.concat("StringFormatLineLimit");
+            sFlags.append("StringFormatLineLimit");
         }
         if (flag & StringFormatNoClip)
         {
             if (!sFlags.isEmpty())
-                sFlags = sFlags.concat(", ");
+                sFlags.append(", ");
 
-            sFlags = sFlags.concat("StringFormatNoClip");
+            sFlags.append("StringFormatNoClip");
         }
         if (flag & StringFormatBypassGDI)
         {
             if (!sFlags.isEmpty())
-                sFlags = sFlags.concat(", ");
+                sFlags.append(", ");
 
-            sFlags = sFlags.concat("StringFormatBypassGDI");
+            sFlags.append("StringFormatBypassGDI");
         }
 
-        return sFlags;
+        return sFlags.makeStringAndClear();
     }
 
     static OUString StringAlignmentString(sal_uInt32 nAlignment)

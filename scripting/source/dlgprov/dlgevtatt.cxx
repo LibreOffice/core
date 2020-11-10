@@ -139,7 +139,7 @@ namespace dlgprov
             return;
 
         ScriptEvent aScriptEventCopy( aScriptEvent );
-        aScriptEventCopy.ScriptCode = msDialogLibName.concat( "." ).concat( msDialogCodeName );
+        aScriptEventCopy.ScriptCode = msDialogLibName + "." + msDialogCodeName;
         try
         {
             mxListener->firing( aScriptEventCopy );

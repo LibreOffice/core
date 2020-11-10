@@ -260,7 +260,7 @@ void InformationDialog::InitDialog()
         xURLTransformer->parseSmart( aURL, OUString() );
 
         const OUString sFileProtocol( "file:///" );
-        aPresentationURL.Complete = sFileProtocol.concat( aURL.Name );
+        aPresentationURL.Complete = sFileProtocol + aURL.Name;
         aTitle = xURLTransformer->getPresentation( aPresentationURL, false );
 
         if ( aTitle.match( sFileProtocol ) )

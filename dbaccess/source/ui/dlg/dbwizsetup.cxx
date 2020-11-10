@@ -751,7 +751,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             createUniqueFolderName(&aDBPathURL);
             sUrl = aDBPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE);
             xSimpleFileAccess->createFolder(sUrl);
-            sUrl = eType.concat(sUrl);
+            sUrl = eType + sUrl;
         }
         m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));
         m_pImpl->saveChanges(*m_pOutSet);
@@ -817,7 +817,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             if (bFolderExists)
             {
                 i++;
-                pURL->setName(sLastSegmentName.concat(OUString::number(i)));
+                pURL->setName(sLastSegmentName + OUString::number(i));
             }
         }
     }
@@ -835,7 +835,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             bElementExists = xSimpleFileAccess->exists( aExistenceCheck.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             if ( bElementExists )
             {
-                aExistenceCheck.setBase( BaseName.concat( OUString::number( i ) ) );
+                aExistenceCheck.setBase( BaseName + OUString::number( i ) );
                 ++i;
             }
         }
