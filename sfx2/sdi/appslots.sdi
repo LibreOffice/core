@@ -28,6 +28,7 @@ interface Application
     SID_SETOPTIONS
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
     SID_QUITAPP // ole(req) api(final/play)
     [
