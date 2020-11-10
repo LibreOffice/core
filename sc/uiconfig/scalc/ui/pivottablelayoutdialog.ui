@@ -588,6 +588,7 @@
               <object class="GtkExpander" id="options">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="resize_toplevel">True</property>
                 <child>
                   <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
@@ -741,6 +742,7 @@
               <object class="GtkExpander" id="more">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="resize_toplevel">True</property>
                 <child>
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>

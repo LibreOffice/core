@@ -342,6 +342,7 @@
               <object class="GtkExpander" id="more">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="resize_toplevel">True</property>
                 <child>
                   <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>

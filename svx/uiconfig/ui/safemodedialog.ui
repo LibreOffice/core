@@ -379,6 +379,7 @@ You can make one or more of the following changes to your user profile to return
           <object class="GtkExpander" id="expander1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="resize_toplevel">True</property>
             <child>
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
