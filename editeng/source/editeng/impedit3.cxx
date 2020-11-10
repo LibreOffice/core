@@ -759,7 +759,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     ImplInitLayoutMode( GetRefDevice(), nPara, nIndex );
 
-    std::unique_ptr<long[]> pBuf(new long[ pNode->Len() ]);
+    std::unique_ptr<tools::Long[]> pBuf(new tools::Long[ pNode->Len() ]);
 
     bool bSameLineAgain = false;    // For TextRanger, if the height changes.
     TabInfo aCurrentTab;
@@ -1050,7 +1050,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         OUString aFieldValue = static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
                         // get size, but also DXArray to allow length information in line breaking below
                         const sal_Int32 nLength(aFieldValue.getLength());
-                        std::unique_ptr<long[]> pTmpDXArray(new long[nLength]);
+                        std::unique_ptr<tools::Long[]> pTmpDXArray(new tools::Long[nLength]);
                         pPortion->GetSize() = aTmpFont.QuickGetTextSize(GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), pTmpDXArray.get());
 
                         // So no scrolling for oversized fields
@@ -3176,7 +3176,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
                                 const tools::Long* pDXArray = nullptr;
-                                std::unique_ptr<long[]> pTmpDXArray;
+                                std::unique_ptr<tools::Long[]> pTmpDXArray;
 
                                 if ( rTextPortion.GetKind() == PortionKind::TEXT )
                                 {
@@ -3363,7 +3363,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                         }
                                     }
 
-                                    pTmpDXArray.reset(new long[ aText.getLength() ]);
+                                    pTmpDXArray.reset(new tools::Long[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
                                     aTmpFont.SetPhysFont( GetRefDevice() );
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, pTmpDXArray.get() );
@@ -3390,7 +3390,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     nTextLen = aText.getLength();
 
                                     // crash when accessing 0 pointer in pDXArray
-                                    pTmpDXArray.reset(new long[ aText.getLength() ]);
+                                    pTmpDXArray.reset(new tools::Long[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
                                     aTmpFont.SetPhysFont( GetRefDevice() );
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), pTmpDXArray.get() );

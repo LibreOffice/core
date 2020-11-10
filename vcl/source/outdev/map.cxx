@@ -37,9 +37,9 @@
 
 // we don't actually handle units beyond, hence the zeros in the arrays
 const MapUnit s_MaxValidUnit = MapUnit::MapPixel;
-const o3tl::enumarray<MapUnit,long> aImplNumeratorAry =
+const o3tl::enumarray<MapUnit,tools::Long> aImplNumeratorAry =
      {    1,   1,   5,  50,    1,   1,  1, 1,  1,    1, 1, 0, 0, 0 };
-const o3tl::enumarray<MapUnit,long> aImplDenominatorAry =
+const o3tl::enumarray<MapUnit,tools::Long> aImplDenominatorAry =
      { 2540, 254, 127, 127, 1000, 100, 10, 1, 72, 1440, 1, 0, 0, 0 };
 
 /*

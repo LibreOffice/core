@@ -66,8 +66,8 @@ BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx) const
         {
             const tools::Long nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
             const tools::Long nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
-            std::unique_ptr<long[]> pColm(new long[nWidth2]);
-            std::unique_ptr<long[]> pRows(new long[nHeight2]);
+            std::unique_ptr<tools::Long[]> pColm(new tools::Long[nWidth2]);
+            std::unique_ptr<tools::Long[]> pRows(new tools::Long[nHeight2]);
             std::unique_ptr<BitmapColor[]> pColRow1(new BitmapColor[nWidth2]);
             std::unique_ptr<BitmapColor[]> pColRow2(new BitmapColor[nWidth2]);
             std::unique_ptr<BitmapColor[]> pColRow3(new BitmapColor[nWidth2]);

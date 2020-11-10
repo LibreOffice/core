@@ -872,8 +872,8 @@ bool Bitmap::Dither()
             tools::Long nW2 = nW - 3;
             tools::Long nRErr, nGErr, nBErr;
             tools::Long nRC, nGC, nBC;
-            std::unique_ptr<long[]> p1(new long[ nW ]);
-            std::unique_ptr<long[]> p2(new long[ nW ]);
+            std::unique_ptr<tools::Long[]> p1(new tools::Long[ nW ]);
+            std::unique_ptr<tools::Long[]> p2(new tools::Long[ nW ]);
             tools::Long* p1T = p1.get();
             tools::Long* p2T = p2.get();
             tools::Long* pTmp;
@@ -991,7 +991,7 @@ bool Bitmap::Dither()
     return bRet;
 }
 
-void Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, const Link<long,void>* pProgress )
+void Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, const Link<tools::Long,void>* pProgress )
 {
     ImplVectorizer::ImplVectorize( *this, rMtf, cReduce, pProgress );
 }

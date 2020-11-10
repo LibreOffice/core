@@ -40,7 +40,7 @@
 #define VECT_POLY_OUTLINE_INNER 4UL
 #define VECT_POLY_OUTLINE_OUTER 8UL
 
-static void VECT_MAP( const std::unique_ptr<long []> & pMapIn, const std::unique_ptr<long []>& pMapOut, tools::Long nVal )
+static void VECT_MAP( const std::unique_ptr<tools::Long []> & pMapIn, const std::unique_ptr<tools::Long []>& pMapOut, tools::Long nVal )
 {
     pMapIn[nVal] = (nVal * 4) + 1;
     pMapOut[nVal] = pMapIn[nVal] + 5;
@@ -49,7 +49,7 @@ static constexpr tools::Long BACK_MAP( tools::Long _def_nVal )
 {
     return ((_def_nVal + 2) >> 2) - 1;
 }
-static void VECT_PROGRESS( const Link<long, void>* pProgress, tools::Long _def_nVal )
+static void VECT_PROGRESS( const Link<tools::Long, void>* pProgress, tools::Long _def_nVal )
 {
     if(pProgress)
       pProgress->Call(_def_nVal);
@@ -642,7 +642,7 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
 namespace ImplVectorizer {
 
 bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                    sal_uInt8 cReduce, const Link<long,void>* pProgress )
+                    sal_uInt8 cReduce, const Link<tools::Long,void>* pProgress )
 {
     bool bRet = false;
 
@@ -788,8 +788,8 @@ ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )
         const tools::Long          nNewWidth = ( nOldWidth << 2 ) + 4;
         const tools::Long          nNewHeight = ( nOldHeight << 2 ) + 4;
         const BitmapColor   aTest( pRAcc->GetBestMatchingColor( rColor ) );
-        std::unique_ptr<long[]> pMapIn(new long[ std::max( nOldWidth, nOldHeight ) ]);
-        std::unique_ptr<long[]> pMapOut(new long[ std::max( nOldWidth, nOldHeight ) ]);
+        std::unique_ptr<tools::Long[]> pMapIn(new tools::Long[ std::max( nOldWidth, nOldHeight ) ]);
+        std::unique_ptr<tools::Long[]> pMapOut(new tools::Long[ std::max( nOldWidth, nOldHeight ) ]);
         tools::Long                nX, nY, nTmpX, nTmpY;
 
         pMap = new ImplVectMap( nNewWidth, nNewHeight );

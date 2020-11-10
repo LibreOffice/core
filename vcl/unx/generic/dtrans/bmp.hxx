@@ -45,14 +45,14 @@ class PixmapHolder
     int             m_nRedShift;
     int             m_nGreenShift;
     int             m_nBlueShift;
-    unsigned long   m_nBlueShift2Mask, m_nRedShift2Mask, m_nGreenShift2Mask;
+    tools::ULong    m_nBlueShift2Mask, m_nRedShift2Mask, m_nGreenShift2Mask;
 
     // these expect data pointers to bitmapinfo header
     void setBitmapDataTC( const sal_uInt8* pData, XImage* pImage );
     void setBitmapDataTCDither( const sal_uInt8* pData, XImage* pImage );
     void setBitmapDataPalette( const sal_uInt8* pData, XImage* pImage );
 
-    unsigned long getTCPixel( sal_uInt8 r, sal_uInt8 g, sal_uInt8 b ) const;
+    tools::ULong getTCPixel( sal_uInt8 r, sal_uInt8 g, sal_uInt8 b ) const;
 public:
     PixmapHolder( Display* pDisplay );
     ~PixmapHolder();

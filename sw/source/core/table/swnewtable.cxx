@@ -378,7 +378,7 @@ std::unique_ptr<SwBoxSelection> SwTable::CollectBoxSelection( const SwPaM& rPam 
     tools::Long nMid = ( nMin + nMax ) / 2;
 
     auto pRet(std::make_unique<SwBoxSelection>());
-    std::vector< std::pair< SwTableBox*, long > > aNewWidthVector;
+    std::vector< std::pair< SwTableBox*, tools::Long > > aNewWidthVector;
     size_t nCheckBottom = nBottom;
     tools::Long nLeftSpan = 0;
     tools::Long nRightSpan = 0;

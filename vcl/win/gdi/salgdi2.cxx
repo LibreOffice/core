@@ -57,9 +57,9 @@ void WinSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraph
     mpImpl->copyBits( rPosAry, pSrcGraphics );
 }
 
-void WinSalGraphics::copyArea( long nDestX, long nDestY,
-                            long nSrcX, long nSrcY,
-                            long nSrcWidth, long nSrcHeight,
+void WinSalGraphics::copyArea( tools::Long nDestX, tools::Long nDestY,
+                            tools::Long nSrcX, tools::Long nSrcY,
+                            tools::Long nSrcWidth, tools::Long nSrcHeight,
                             bool bWindowInvalidate )
 {
     mpImpl->copyArea( nDestX, nDestY, nSrcX, nSrcY,
@@ -77,9 +77,9 @@ public:
     int mnComponentSize;
     int mnComponentExchangeIndex;
 
-    long mnScanlineSize;
+    tools::Long mnScanlineSize;
 
-    ColorScanlineConverter(ScanlineFormat eSourceFormat, int nComponentSize, long nScanlineSize)
+    ColorScanlineConverter(ScanlineFormat eSourceFormat, int nComponentSize, tools::Long nScanlineSize)
         : meSourceFormat(eSourceFormat)
         , mnComponentSize(nComponentSize)
         , mnComponentExchangeIndex(0)
@@ -94,7 +94,7 @@ public:
 
     void convertScanline(sal_uInt8* pSource, sal_uInt8* pDestination)
     {
-        for (long x = 0; x < mnScanlineSize; x += mnComponentSize)
+        for (tools::Long x = 0; x < mnScanlineSize; x += mnComponentSize)
         {
             for (int i = 0; i < mnComponentSize; ++i)
             {
@@ -126,7 +126,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 
     sal_uInt8* pSource(pRead->mpBits);
     sal_uInt8* pDestination(pWrite->mpBits);
-    long readRowChange = pRead->mnScanlineSize;
+    tools::Long readRowChange = pRead->mnScanlineSize;
     if(pRead->mnFormat & ScanlineFormat::TopDown)
     {
         pSource += pRead->mnScanlineSize * (pRead->mnHeight - 1);
@@ -143,7 +143,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
                                                     4, pRead->mnScanlineSize));
     if (pConverter)
     {
-        for (long y = 0; y < pRead->mnHeight; y++)
+        for (tools::Long y = 0; y < pRead->mnHeight; y++)
         {
             pConverter->convertScanline(pSource, pDestination);
             pSource += readRowChange;
@@ -152,7 +152,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
     }
     else
     {
-        for (long y = 0; y < pRead->mnHeight; y++)
+        for (tools::Long y = 0; y < pRead->mnHeight; y++)
         {
             memcpy(pDestination, pSource, pRead->mnScanlineSize);
             pSource += readRowChange;
@@ -212,8 +212,8 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
     }
 }
 
-bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
-                                    long nHeight, sal_uInt8 nTransparency )
+bool WinSalGraphics::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                    tools::Long nHeight, sal_uInt8 nTransparency )
 {
     return mpImpl->drawAlphaRect( nX, nY, nWidth, nHeight, nTransparency );
 }
@@ -225,17 +225,17 @@ void WinSalGraphics::drawMask( const SalTwoRect& rPosAry,
     mpImpl->drawMask( rPosAry, rSSalBitmap, nMaskColor );
 }
 
-std::shared_ptr<SalBitmap> WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
+std::shared_ptr<SalBitmap> WinSalGraphics::getBitmap( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
 {
     return mpImpl->getBitmap( nX, nY, nDX, nDY );
 }
 
-Color WinSalGraphics::getPixel( long nX, long nY )
+Color WinSalGraphics::getPixel( tools::Long nX, tools::Long nY )
 {
     return mpImpl->getPixel( nX, nY );
 }
 
-void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+void WinSalGraphics::invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, SalInvert nFlags )
 {
     mpImpl->invert( nX, nY, nWidth, nHeight, nFlags );
 }

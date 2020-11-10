@@ -375,7 +375,7 @@ void SfxSplitWindow::Split()
 
     SplitWindow::Split();
 
-    std::vector< std::pair< sal_uInt16, long > > aNewOrgSizes;
+    std::vector< std::pair< sal_uInt16, tools::Long > > aNewOrgSizes;
 
     sal_uInt16 nCount = maDockArr.size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
@@ -409,7 +409,7 @@ void SfxSplitWindow::Split()
     // apply FIXED item size as 'original' item size to improve layouting of undock-dock-cycle of a window
     {
         DeactivateUpdateMode aDeactivateUpdateMode( *this );
-        for (const std::pair< sal_uInt16, long > & rNewOrgSize : aNewOrgSizes)
+        for (const std::pair< sal_uInt16, tools::Long > & rNewOrgSize : aNewOrgSizes)
         {
             SetItemSize( rNewOrgSize.first, rNewOrgSize.second );
         }
@@ -733,7 +733,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl const * pDock,
     // workaround insufficiency of <SplitWindow> regarding dock layouting:
     // apply FIXED item size as 'original' item size to improve layouting of undock-dock-cycle of a window
     {
-        std::vector< std::pair< sal_uInt16, long > > aNewOrgSizes;
+        std::vector< std::pair< sal_uInt16, tools::Long > > aNewOrgSizes;
         // get FIXED item sizes
         sal_uInt16 nCount = maDockArr.size();
         for ( sal_uInt16 n=0; n<nCount; ++n )
@@ -748,7 +748,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl const * pDock,
         }
         // apply new item sizes
         DeactivateUpdateMode aDeactivateUpdateMode( *this );
-        for (const std::pair< sal_uInt16, long > & rNewOrgSize : aNewOrgSizes)
+        for (const std::pair< sal_uInt16, tools::Long > & rNewOrgSize : aNewOrgSizes)
         {
             SetItemSize( rNewOrgSize.first, rNewOrgSize.second );
         }

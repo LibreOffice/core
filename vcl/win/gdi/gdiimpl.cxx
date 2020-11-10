@@ -247,7 +247,7 @@ void WinSalGraphicsImpl::freeResources()
 {
 }
 
-bool WinSalGraphicsImpl::drawEPS(long, long, long, long, void*, sal_uInt32)
+bool WinSalGraphicsImpl::drawEPS(tools::Long, tools::Long, tools::Long, tools::Long, void*, sal_uInt32)
 {
     return false;
 }
@@ -332,9 +332,9 @@ void ImplCalcOutSideRgn( const RECT& rSrcRect,
 
 } // namespace
 
-void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
-                            long nSrcX, long nSrcY,
-                            long nSrcWidth, long nSrcHeight,
+void WinSalGraphicsImpl::copyArea( tools::Long nDestX, tools::Long nDestY,
+                            tools::Long nSrcX, tools::Long nSrcY,
+                            tools::Long nSrcWidth, tools::Long nSrcHeight,
                             bool bWindowInvalidate )
 {
     bool    bRestoreClipRgn = false;
@@ -735,8 +735,8 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
     BitBlt( hDC, nDstX, nDstY, nDstWidth, nDstHeight, hMemDC.get(), 0, 0, SRCCOPY );
 }
 
-bool WinSalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
-                                    long nHeight, sal_uInt8 nTransparency )
+bool WinSalGraphicsImpl::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                    tools::Long nHeight, sal_uInt8 nTransparency )
 {
     if( mbPen || !mbBrush || mbXORMode )
         return false; // can only perform solid fills without XOR.
@@ -859,7 +859,7 @@ HBRUSH Get50PercentBrush()
 
 } // namespace
 
-void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+void WinSalGraphicsImpl::invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, SalInvert nFlags )
 {
     if ( nFlags & SalInvert::TrackFrame )
     {
@@ -1171,13 +1171,13 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 
         for (auto const& rectangle : aRectangles)
         {
-            const long nW(rectangle.GetWidth());
-            const long nH(rectangle.GetHeight());
+            const tools::Long nW(rectangle.GetWidth());
+            const tools::Long nH(rectangle.GetHeight());
 
             if(nW && nH)
             {
-                const long nRight(rectangle.Left() + nW);
-                const long nBottom(rectangle.Top() + nH);
+                const tools::Long nRight(rectangle.Left() + nW);
+                const tools::Long nBottom(rectangle.Top() + nH);
 
                 if(bFirstClipRect)
                 {
@@ -1560,7 +1560,7 @@ void WinSalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
     SetFillColor( ImplGetROPColor( nROPColor ) );
 }
 
-void WinSalGraphicsImpl::DrawPixelImpl( long nX, long nY, COLORREF crColor )
+void WinSalGraphicsImpl::DrawPixelImpl( tools::Long nX, tools::Long nY, COLORREF crColor )
 {
     const HDC hDC = mrParent.getHDC();
 
@@ -1574,12 +1574,12 @@ void WinSalGraphicsImpl::DrawPixelImpl( long nX, long nY, COLORREF crColor )
     PatBlt(hDC, static_cast<int>(nX), static_cast<int>(nY), int(1), int(1), PATINVERT);
 }
 
-void WinSalGraphicsImpl::drawPixel( long nX, long nY )
+void WinSalGraphicsImpl::drawPixel( tools::Long nX, tools::Long nY )
 {
     DrawPixelImpl( nX, nY, mnPenColor );
 }
 
-void WinSalGraphicsImpl::drawPixel( long nX, long nY, Color nColor )
+void WinSalGraphicsImpl::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
 {
     COLORREF nCol = PALETTERGB( nColor.GetRed(),
                                 nColor.GetGreen(),
@@ -1604,7 +1604,7 @@ void WinSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
         DrawPixelImpl( nX2, nY2, mnPenColor );
 }
 
-void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
+void WinSalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     if ( !mbPen )
     {
@@ -2505,10 +2505,10 @@ static void paintToGdiPlus(
 
 static void setInterpolationMode(
     Gdiplus::Graphics& rGraphics,
-    long rSrcWidth,
-    long rDestWidth,
-    long rSrcHeight,
-    long rDestHeight)
+    tools::Long rSrcWidth,
+    tools::Long rDestWidth,
+    tools::Long rSrcHeight,
+    tools::Long rDestHeight)
 {
     const bool bSameWidth(rSrcWidth == rDestWidth);
     const bool bSameHeight(rSrcHeight == rDestHeight);
@@ -2632,13 +2632,13 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
 
     if(aARGB)
     {
-        const long nSrcWidth(aARGB->GetWidth());
-        const long nSrcHeight(aARGB->GetHeight());
+        const tools::Long nSrcWidth(aARGB->GetWidth());
+        const tools::Long nSrcHeight(aARGB->GetHeight());
 
         if(nSrcWidth && nSrcHeight)
         {
-            const long nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
-            const long nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
+            const tools::Long nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
+            const tools::Long nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
 
             if(nDestWidth && nDestHeight)
             {

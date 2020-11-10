@@ -121,7 +121,7 @@ class ScPositionHelper
 {
 public:
     typedef SCCOLROW index_type;
-    typedef std::pair<index_type, long> value_type;
+    typedef std::pair<index_type, tools::Long> value_type;
     static_assert(std::numeric_limits<index_type>::is_signed, "ScPositionCache: index type is not signed");
 
 private:

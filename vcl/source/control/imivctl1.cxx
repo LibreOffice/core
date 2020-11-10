@@ -502,7 +502,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const too
         rRenderContext.DrawLine(aStart, aEnd);
     }
 
-    for (long nDX = nGridDX; nDX <= aXSize.Width(); nDX += nGridDX)
+    for (tools::Long nDX = nGridDX; nDX <= aXSize.Width(); nDX += nGridDX)
     {
         Point aStart( nDX+LROFFS_WINBORDER, 0 );
         Point aEnd( nDX+LROFFS_WINBORDER, aXSize.Height());
@@ -510,7 +510,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const too
         aEnd -= aOffs;
         rRenderContext.DrawLine(aStart, aEnd);
     }
-    for (long nDY = nGridDY; nDY <= aXSize.Height(); nDY += nGridDY)
+    for (tools::Long nDY = nGridDY; nDY <= aXSize.Height(); nDY += nGridDY)
     {
         Point aStart(0, nDY + TBOFFS_WINBORDER);
         Point aEnd(aXSize.Width(), nDY + TBOFFS_WINBORDER);

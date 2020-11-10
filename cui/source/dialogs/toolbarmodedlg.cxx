@@ -101,7 +101,7 @@ ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
     Link<weld::ToggleButton&, void> aLink = LINK(this, ToolbarmodeDialog, SelectToolbarmode);
 
     const OUString sCurrentMode = GetCurrentMode();
-    for (unsigned long i = 0; i < SAL_N_ELEMENTS(m_pRadioButtons); i++)
+    for (tools::ULong i = 0; i < SAL_N_ELEMENTS(m_pRadioButtons); i++)
     {
         m_pRadioButtons[i]->connect_toggled(aLink);
         if (sCurrentMode == std::get<1>(TOOLBARMODES_ARRAY[i]))
@@ -133,7 +133,7 @@ static bool file_exists(const OUString& fileName)
 
 int ToolbarmodeDialog::GetActiveRadioButton()
 {
-    for (unsigned long i = 0; i < SAL_N_ELEMENTS(m_pRadioButtons); i++)
+    for (tools::ULong i = 0; i < SAL_N_ELEMENTS(m_pRadioButtons); i++)
     {
         if (m_pRadioButtons[i]->get_active())
             return i;

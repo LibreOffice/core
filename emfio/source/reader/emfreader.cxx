@@ -1821,17 +1821,17 @@ namespace emfio
                             SAL_INFO("emfio", "\t\tText: " << aText);
                             SAL_INFO("emfio", "\t\tDxBuffer:");
 
-                            std::unique_ptr<long[]> pDXAry, pDYAry;
+                            std::unique_ptr<tools::Long[]> pDXAry, pDYAry;
 
                             sal_Int32 nDxSize;
                             bool bOverflow = o3tl::checked_multiply<sal_Int32>(nLen, (nOptions & ETO_PDY) ? 8 : 4, nDxSize);
                             if (!bOverflow && offDx && ((nCurPos + offDx + nDxSize) <= nNextPos ) && nNextPos <= mnEndPos)
                             {
                                 mpInputStream->Seek( nCurPos + offDx );
-                                pDXAry.reset( new long[aText.getLength()] );
+                                pDXAry.reset( new tools::Long[aText.getLength()] );
                                 if (nOptions & ETO_PDY)
                                 {
-                                    pDYAry.reset( new long[aText.getLength()] );
+                                    pDYAry.reset( new tools::Long[aText.getLength()] );
                                 }
 
                                 for (sal_Int32 i = 0; i < aText.getLength(); ++i)

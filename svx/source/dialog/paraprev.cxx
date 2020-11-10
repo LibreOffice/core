@@ -136,7 +136,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 
         if (3 <= i && 5 >= i)
         {
-            tools::Long nLW = long();
+            tools::Long nLW = tools::Long();
             switch (i)
             {
                 case 3:

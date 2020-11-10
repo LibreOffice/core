@@ -163,9 +163,9 @@ bool SfxObjectShell::CreatePreview_Impl( bool bFullContent, VirtualDevice* pDevi
         // determine size that has the same aspect ratio as image size and
         // fits into the rectangle determined by nMaximumExtent
         if ( aSizePix.Width() && aSizePix.Height()
-          && ( sal::static_int_cast< unsigned long >(aSizePix.Width()) >
+          && ( sal::static_int_cast< tools::ULong >(aSizePix.Width()) >
                    nMaximumExtent ||
-               sal::static_int_cast< unsigned long >(aSizePix.Height()) >
+               sal::static_int_cast< tools::ULong >(aSizePix.Height()) >
                    nMaximumExtent ) )
         {
             double      fWH = static_cast< double >( aSizePix.Width() ) / aSizePix.Height();

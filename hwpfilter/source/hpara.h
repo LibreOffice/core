@@ -23,6 +23,7 @@
 #include "hwplib.h"
 #include "hwpfile.h"
 #include "hinfo.h"
+#include <tools/long.hxx>
 #include <map>
 #include <memory>
 #include <vector>
@@ -103,7 +104,7 @@ class DLLEXPORT HWPPara
 /**
  * Checks the special characters in the paragraph
  */
-        unsigned long     ctrlflag;
+        tools::ULong      ctrlflag;
         unsigned char     pstyno;
         std::shared_ptr<CharShape> cshape;                     /* When characters are all the same shape */
         std::shared_ptr<ParaShape> pshape;                     /* if reuse flag is 0, */

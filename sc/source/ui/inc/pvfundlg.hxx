@@ -194,7 +194,7 @@ private:
     DECL_LINK(DblClickHdl, weld::TreeView&, bool);
 
 private:
-    typedef std::unordered_map<OUString, long> DimNameIndexMap;
+    typedef std::unordered_map<OUString, tools::Long> DimNameIndexMap;
     DimNameIndexMap     maNameIndexMap;
     ScDPObject&         mrDPObj;
 

@@ -662,12 +662,12 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         tools::Long        nR;
         tools::Long        nG;
         tools::Long        nB;
-        std::unique_ptr<long[]> pMinR(new long[nCount]);
-        std::unique_ptr<long[]> pMaxR(new long[nCount]);
-        std::unique_ptr<long[]> pMinG(new long[nCount]);
-        std::unique_ptr<long[]> pMaxG(new long[nCount]);
-        std::unique_ptr<long[]> pMinB(new long[nCount]);
-        std::unique_ptr<long[]> pMaxB(new long[nCount]);
+        std::unique_ptr<tools::Long[]> pMinR(new tools::Long[nCount]);
+        std::unique_ptr<tools::Long[]> pMaxR(new tools::Long[nCount]);
+        std::unique_ptr<tools::Long[]> pMinG(new tools::Long[nCount]);
+        std::unique_ptr<tools::Long[]> pMaxG(new tools::Long[nCount]);
+        std::unique_ptr<tools::Long[]> pMinB(new tools::Long[nCount]);
+        std::unique_ptr<tools::Long[]> pMaxB(new tools::Long[nCount]);
         sal_uInt16      i;
 
         aMtf.SetPrefSize( rMtf.GetPrefSize() );

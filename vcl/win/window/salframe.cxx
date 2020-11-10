@@ -126,7 +126,7 @@ bool WinSalFrame::mbInReparent = false;
 
 // Macros for support of WM_UNICHAR & Keyman 6.0
 //#define Uni_UTF32ToSurrogate1(ch)   (((unsigned long) (ch) - 0x10000) / 0x400 + 0xD800)
-#define Uni_UTF32ToSurrogate2(ch)   ((static_cast<unsigned long>(ch) - 0x10000) % 0x400 + 0xDC00)
+#define Uni_UTF32ToSurrogate2(ch)   ((static_cast<tools::ULong>(ch) - 0x10000) % 0x400 + 0xDC00)
 #define Uni_SupplementaryPlanesStart    0x10000
 
 static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
@@ -160,10 +160,10 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
                 RECT aRect2 = aRect;
                 AdjustWindowRectEx( &aRect2, GetWindowStyle( pFrame->mhWnd ),
                                     FALSE,  GetWindowExStyle( pFrame->mhWnd ) );
-                long nTopDeco = abs( aRect.top - aRect2.top );
-                long nLeftDeco = abs( aRect.left - aRect2.left );
-                long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
-                long nRightDeco = abs( aRect.right - aRect2.right );
+                tools::Long nTopDeco = abs( aRect.top - aRect2.top );
+                tools::Long nLeftDeco = abs( aRect.left - aRect2.left );
+                tools::Long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
+                tools::Long nRightDeco = abs( aRect.right - aRect2.right );
 
                 pFrame->maState.mnX      = aRect.left + nLeftDeco;
                 pFrame->maState.mnY      = aRect.top + nTopDeco;
@@ -180,10 +180,10 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
             RECT aRect2 = aRect;
             AdjustWindowRectEx( &aRect2, GetWindowStyle( pFrame->mhWnd ),
                             FALSE,     GetWindowExStyle( pFrame->mhWnd ) );
-            long nTopDeco = abs( aRect.top - aRect2.top );
-            long nLeftDeco = abs( aRect.left - aRect2.left );
-            long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
-            long nRightDeco = abs( aRect.right - aRect2.right );
+            tools::Long nTopDeco = abs( aRect.top - aRect2.top );
+            tools::Long nLeftDeco = abs( aRect.left - aRect2.left );
+            tools::Long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
+            tools::Long nRightDeco = abs( aRect.right - aRect2.right );
 
             pFrame->maState.mnState &= ~WindowStateState(WindowStateState::Minimized | WindowStateState::Maximized);
             // subtract decoration
@@ -1214,13 +1214,13 @@ void WinSalFrame::Show( bool bVisible, bool bNoActivate )
         ImplSalShow( mhWnd, bVisible, bNoActivate );
 }
 
-void WinSalFrame::SetMinClientSize( long nWidth, long nHeight )
+void WinSalFrame::SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     mnMinWidth  = nWidth;
     mnMinHeight = nHeight;
 }
 
-void WinSalFrame::SetMaxClientSize( long nWidth, long nHeight )
+void WinSalFrame::SetMaxClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     mnMaxWidth  = nWidth;
     mnMaxHeight = nHeight;
@@ -1578,7 +1578,7 @@ void WinSalFrame::GetWorkArea( tools::Rectangle &rRect )
     rRect.SetBottom( aRect.bottom-1 );
 }
 
-void WinSalFrame::GetClientSize( long& rWidth, long& rHeight )
+void WinSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
 {
     rWidth  = maGeometry.nWidth;
     rHeight = maGeometry.nHeight;
@@ -1614,10 +1614,10 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
     RECT aRect2 = aWinRect;
     AdjustWindowRectEx( &aRect2, GetWindowStyle( mhWnd ),
                     FALSE,     GetWindowExStyle( mhWnd ) );
-    long nTopDeco = abs( aWinRect.top - aRect2.top );
-    long nLeftDeco = abs( aWinRect.left - aRect2.left );
-    long nBottomDeco = abs( aWinRect.bottom - aRect2.bottom );
-    long nRightDeco = abs( aWinRect.right - aRect2.right );
+    tools::Long nTopDeco = abs( aWinRect.top - aRect2.top );
+    tools::Long nLeftDeco = abs( aWinRect.left - aRect2.left );
+    tools::Long nBottomDeco = abs( aWinRect.bottom - aRect2.bottom );
+    tools::Long nRightDeco = abs( aWinRect.right - aRect2.right );
 
     // adjust window position/size to fit the screen
     if ( !(pState->mnMask & (WindowStateMask::X | WindowStateMask::Y)) )
@@ -2176,7 +2176,7 @@ void WinSalFrame::CaptureMouse( bool bCapture )
     SendMessageW( mhWnd, nMsg, 0, 0 );
 }
 
-void WinSalFrame::SetPointerPos( long nX, long nY )
+void WinSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
 {
     POINT aPt;
     aPt.x = static_cast<int>(nX);
@@ -2578,7 +2578,7 @@ static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, vcl::Fon
     }
 }
 
-static long ImplW2I( const wchar_t* pStr )
+static tools::Long ImplW2I( const wchar_t* pStr )
 {
     long    n = 0;
     int     nSign = 1;
@@ -2607,8 +2607,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aMouseSettings.SetDoubleClickTime( GetDoubleClickTime() );
     aMouseSettings.SetDoubleClickWidth( GetSystemMetrics( SM_CXDOUBLECLK ) );
     aMouseSettings.SetDoubleClickHeight( GetSystemMetrics( SM_CYDOUBLECLK ) );
-    long nDragWidth = GetSystemMetrics( SM_CXDRAG );
-    long nDragHeight = GetSystemMetrics( SM_CYDRAG );
+    tools::Long nDragWidth = GetSystemMetrics( SM_CXDRAG );
+    tools::Long nDragHeight = GetSystemMetrics( SM_CYDRAG );
     if ( nDragWidth )
         aMouseSettings.SetStartDragWidth( nDragWidth );
     if ( nDragHeight )
@@ -2927,7 +2927,7 @@ void WinSalFrame::BeginSetClipRegion( sal_uInt32 nRects )
     mbFirstClipRect       = true;
 }
 
-void WinSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void WinSalFrame::UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     if( ! mpClipRgnData )
         return;

@@ -361,7 +361,7 @@ struct ExtraPortionInfo
     bool    bFirstCharIsRightPunktuation;
     bool    bCompressed;
 
-    std::unique_ptr<long[]>    pOrgDXArray;
+    std::unique_ptr<tools::Long[]> pOrgDXArray;
     std::vector< sal_Int32 > lineBreaksList;
 
 

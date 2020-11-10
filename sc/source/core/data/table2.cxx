@@ -3955,7 +3955,7 @@ sal_uLong ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
 
         n = GetTotalRowHeight(0, nRow-1, bHiddenAsZero);
 #if OSL_DEBUG_LEVEL > 0
-        if (n == ::std::numeric_limits<unsigned long>::max())
+        if (n == ::std::numeric_limits<tools::ULong>::max())
             OSL_FAIL("ScTable::GetRowOffset: row heights overflow");
 #endif
     }

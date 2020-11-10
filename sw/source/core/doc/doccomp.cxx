@@ -226,7 +226,7 @@ private:
     {
         CompareData &m_rData1, &m_rData2;
         const MovedData &m_rMoved1, &m_rMoved2;
-        std::unique_ptr<long[]> m_pMemory;
+        std::unique_ptr<tools::Long[]> m_pMemory;
         tools::Long *m_pFDiag, *m_pBDiag;
 
         void Compare( sal_uLong nStt1, sal_uLong nEnd1, sal_uLong nStt2, sal_uLong nEnd2 );

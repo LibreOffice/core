@@ -199,7 +199,7 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase,
         return pResult;
 
     const SwFormatFrameSize &rSize = pFormat->GetFrameSize();
-    unsigned long nTableSz = static_cast<unsigned long>(rSize.GetWidth());
+    tools::ULong nTableSz = static_cast<tools::ULong>(rSize.GetWidth());
 
     tools::Long nPageSize = 0;
     bool bRelBoxSize = false;

@@ -726,19 +726,19 @@ namespace
 
 struct LinearScaleContext
 {
-    std::unique_ptr<long[]> mpMapX;
-    std::unique_ptr<long[]> mpMapY;
+    std::unique_ptr<tools::Long[]> mpMapX;
+    std::unique_ptr<tools::Long[]> mpMapY;
 
-    std::unique_ptr<long[]> mpMapXOffset;
-    std::unique_ptr<long[]> mpMapYOffset;
+    std::unique_ptr<tools::Long[]> mpMapXOffset;
+    std::unique_ptr<tools::Long[]> mpMapYOffset;
 
     LinearScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle const & aBitmapRect,
                  Size const & aOutSize, tools::Long nOffX, tools::Long nOffY)
 
-        : mpMapX(new long[aDstRect.GetWidth()])
-        , mpMapY(new long[aDstRect.GetHeight()])
-        , mpMapXOffset(new long[aDstRect.GetWidth()])
-        , mpMapYOffset(new long[aDstRect.GetHeight()])
+        : mpMapX(new tools::Long[aDstRect.GetWidth()])
+        , mpMapY(new tools::Long[aDstRect.GetHeight()])
+        , mpMapXOffset(new tools::Long[aDstRect.GetWidth()])
+        , mpMapYOffset(new tools::Long[aDstRect.GetHeight()])
     {
         const tools::Long nSrcWidth = aBitmapRect.GetWidth();
         const tools::Long nSrcHeight = aBitmapRect.GetHeight();
@@ -893,14 +893,14 @@ public:
 
 struct TradScaleContext
 {
-    std::unique_ptr<long[]> mpMapX;
-    std::unique_ptr<long[]> mpMapY;
+    std::unique_ptr<tools::Long[]> mpMapX;
+    std::unique_ptr<tools::Long[]> mpMapY;
 
     TradScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle const & aBitmapRect,
                  Size const & aOutSize, tools::Long nOffX, tools::Long nOffY)
 
-        : mpMapX(new long[aDstRect.GetWidth()])
-        , mpMapY(new long[aDstRect.GetHeight()])
+        : mpMapX(new tools::Long[aDstRect.GetWidth()])
+        , mpMapY(new tools::Long[aDstRect.GetHeight()])
     {
         const tools::Long nSrcWidth = aBitmapRect.GetWidth();
         const tools::Long nSrcHeight = aBitmapRect.GetHeight();

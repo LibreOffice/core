@@ -50,8 +50,8 @@ struct LibreOfficeDeviceEvaluationIO
     std::vector<double> input2;
     std::vector<double> input3;
     std::vector<double> output;
-    unsigned long inputSize;
-    unsigned long outputSize;
+    tools::ULong inputSize;
+    tools::ULong outputSize;
 };
 
 const char* source = STRINGIFY(
@@ -126,7 +126,7 @@ void populateInput(std::unique_ptr<LibreOfficeDeviceEvaluationIO> const & testDa
     double* input1 = testData->input1.data();
     double* input2 = testData->input2.data();
     double* input3 = testData->input3.data();
-    for (unsigned long i = 0; i < testData->inputSize; i++)
+    for (tools::ULong i = 0; i < testData->inputSize; i++)
     {
         input0[i] = random(0, i);
         input1[i] = random(0, i);
@@ -276,13 +276,13 @@ ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOffice
         SAL_INFO("opencl.device", "Device: \"CPU\" (Native) evaluation...");
         sal_uInt64 kernelTime = tools::Time::GetMonotonicTicks();
 
-        unsigned long j;
+        tools::ULong j;
         for (j = 0; j < testData->outputSize; j++)
         {
             double fAverage = 0.0f;
             double fMin = DBL_MAX;
             double fSoP = 0.0f;
-            for (unsigned long i = 0; i < testData->inputSize; i++)
+            for (tools::ULong i = 0; i < testData->inputSize; i++)
             {
                 fAverage += testData->input0[i];
                 fMin = std::min(fMin, testData->input1[i]);

@@ -178,11 +178,11 @@ void ImplInitSalGDI()
         if( bDither16 )
         {
             // create DIBPattern for 16Bit dithering
-            long n;
+            tools::Long n;
 
             pSalData->mhDitherDIB = GlobalAlloc( GMEM_FIXED, sizeof( BITMAPINFOHEADER ) + 192 );
             pSalData->mpDitherDIB = static_cast<BYTE*>(GlobalLock( pSalData->mhDitherDIB ));
-            pSalData->mpDitherDiff = new long[ 256 ];
+            pSalData->mpDitherDiff = new tools::Long[ 256 ];
             pSalData->mpDitherLow = new BYTE[ 256 ];
             pSalData->mpDitherHigh = new BYTE[ 256 ];
             pSalData->mpDitherDIBData = pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER );
@@ -251,12 +251,12 @@ void ImplInitSalGDI()
         if( pSalData->mhDitherPal )
         {
             // create DIBPattern for 8Bit dithering
-            long const nSize = sizeof( BITMAPINFOHEADER ) + ( 256 * sizeof( short ) ) + 64;
-            long n;
+            tools::Long const nSize = sizeof( BITMAPINFOHEADER ) + ( 256 * sizeof( short ) ) + 64;
+            tools::Long n;
 
             pSalData->mhDitherDIB = GlobalAlloc( GMEM_FIXED, nSize );
             pSalData->mpDitherDIB = static_cast<BYTE*>(GlobalLock( pSalData->mhDitherDIB ));
-            pSalData->mpDitherDiff = new long[ 256 ];
+            pSalData->mpDitherDiff = new tools::Long[ 256 ];
             pSalData->mpDitherLow = new BYTE[ 256 ];
             pSalData->mpDitherHigh = new BYTE[ 256 ];
             pSalData->mpDitherDIBData = pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER ) + ( 256 * sizeof( short ) );
@@ -714,7 +714,7 @@ sal_uInt16 WinSalGraphics::GetBitCount() const
     return mpImpl->GetBitCount();
 }
 
-long WinSalGraphics::GetGraphicsWidth() const
+tools::Long WinSalGraphics::GetGraphicsWidth() const
 {
     return mpImpl->GetGraphicsWidth();
 }
@@ -770,12 +770,12 @@ void WinSalGraphics::SetROPFillColor( SalROPColor nROPColor )
     mpImpl->SetROPFillColor( nROPColor );
 }
 
-void WinSalGraphics::drawPixel( long nX, long nY )
+void WinSalGraphics::drawPixel( tools::Long nX, tools::Long nY )
 {
     mpImpl->drawPixel( nX, nY );
 }
 
-void WinSalGraphics::drawPixel( long nX, long nY, Color nColor )
+void WinSalGraphics::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
 {
     mpImpl->drawPixel( nX, nY, nColor );
 }
@@ -913,7 +913,7 @@ static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
 
 #define POSTSCRIPT_BUFSIZE 0x4000           // MAXIMUM BUFSIZE EQ 0xFFFF
 
-bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uInt32 nSize )
+bool WinSalGraphics::drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize )
 {
     bool bRetValue = false;
 

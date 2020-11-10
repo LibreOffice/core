@@ -497,8 +497,8 @@ void ExtraPortionInfo::SaveOrgDXArray( const tools::Long* pDXArray, sal_Int32 nL
 {
     if (pDXArray)
     {
-        pOrgDXArray.reset(new long[nLen]);
-        memcpy( pOrgDXArray.get(), pDXArray, nLen * sizeof(long) );
+        pOrgDXArray.reset(new tools::Long[nLen]);
+        memcpy( pOrgDXArray.get(), pDXArray, nLen * sizeof(tools::Long) );
     }
     else
         pOrgDXArray.reset();
