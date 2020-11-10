@@ -289,6 +289,7 @@ public:
     void testTextLengthDataValidityXLSX();
     void testDeleteCircles();
     void testDrawCircleInMergeCells();
+    void testDeleteCirclesInRowAndCol();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -465,6 +466,7 @@ public:
     CPPUNIT_TEST(testTextLengthDataValidityXLSX);
     CPPUNIT_TEST(testDeleteCircles);
     CPPUNIT_TEST(testDrawCircleInMergeCells);
+    CPPUNIT_TEST(testDeleteCirclesInRowAndCol);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5159,6 +5161,35 @@ void ScFiltersTest::testDrawCircleInMergeCells()
     CPPUNIT_ASSERT_EQUAL(aEndRecalcCell1.X(), aEndRecalcCircle.X());
     CPPUNIT_ASSERT_EQUAL(aStartRecalcCell.Y(), aStartRecalcCircle.Y());
     CPPUNIT_ASSERT_EQUAL(aEndRecalcCell1.Y(), aEndRecalcCircle.Y());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testDeleteCirclesInRowAndCol()
+{
+    ScDocShellRef xDocSh = loadDoc("deleteCirclesInRowAndCol.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load deleteCirclesInRowAndCol.ods", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+
+    // There should be 6 circle objects!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), pPage->GetObjCount());
+
+    // Delete first row (1023 = MAXCOLS)
+    pDrawLayer->DeleteObjectsInArea(0,0,0,1023,0,true);
+
+    // There should be 3 circle objects!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pPage->GetObjCount());
+
+    // Delete first col (1048575 = MAXROWS)
+    pDrawLayer->DeleteObjectsInArea(0,0,0,0,1048575,true);
+
+    // There should not be a circle object!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
 
     xDocSh->DoClose();
 }
