@@ -71,8 +71,13 @@ public:
 
     bool VisitCXXMethodDecl(const CXXMethodDecl*);
     bool VisitCXXMemberCallExpr(const CXXMemberCallExpr*);
+    bool VisitBinaryOperator(const BinaryOperator*);
+    bool VisitSwitchStmt(const SwitchStmt*);
 
 private:
+    bool isXmlTokEnum(const Expr*);
+    bool isUInt16(const Expr*);
+
     std::unordered_map<const CXXRecordDecl*, const CXXMethodDecl*> startFastElementSet;
     std::unordered_map<const CXXRecordDecl*, const CXXMethodDecl*> StartElementSet;
     std::unordered_map<const CXXRecordDecl*, const CXXMethodDecl*> endFastElementSet;
@@ -257,6 +262,82 @@ bool XmlImport::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr)
             << callExpr->getSourceRange();
     }
     return true;
+}
+
+bool XmlImport::VisitBinaryOperator(const BinaryOperator* binaryOp)
+{
+    auto beginLoc = compat::getBeginLoc(binaryOp);
+    if (!beginLoc.isValid() || ignoreLocation(binaryOp))
+        return true;
+    auto op = binaryOp->getOpcode();
+    if (op != BO_EQ && op != BO_NE)
+        return true;
+    auto check2 = [&](const Expr* expr) -> void {
+        if (!isUInt16(expr))
+            report(DiagnosticsEngine::Warning,
+                   "comparing XML_TOK enum to 'sal_uInt32', expected sal_uInt16",
+                   compat::getBeginLoc(binaryOp))
+                << binaryOp->getSourceRange();
+    };
+    if (isXmlTokEnum(binaryOp->getLHS()))
+        check2(binaryOp->getRHS());
+    else if (isXmlTokEnum(binaryOp->getRHS()))
+        check2(binaryOp->getLHS());
+    return true;
+}
+
+bool XmlImport::VisitSwitchStmt(const SwitchStmt* switchStmt)
+{
+    auto beginLoc = compat::getBeginLoc(switchStmt);
+    if (!beginLoc.isValid() || ignoreLocation(switchStmt))
+        return true;
+    if (isUInt16(switchStmt->getCond()))
+        return true;
+    // if the condition is an enum type, ignore this switch
+    auto condEnumType = compat::IgnoreImplicit(switchStmt->getCond())
+                            ->getType()
+                            ->getUnqualifiedDesugaredType()
+                            ->getAs<EnumType>();
+    if (condEnumType)
+        return true;
+    auto switchCaseStmt = switchStmt->getSwitchCaseList();
+    for (; switchCaseStmt != nullptr; switchCaseStmt = switchCaseStmt->getNextSwitchCase())
+    {
+        auto caseStmt = dyn_cast<CaseStmt>(switchCaseStmt);
+        if (!caseStmt)
+            continue;
+        if (!isXmlTokEnum(caseStmt->getLHS()))
+            continue;
+        report(DiagnosticsEngine::Warning,
+               "comparing XML_TOK enum to 'sal_uInt32', expected sal_uInt16",
+               compat::getBeginLoc(caseStmt))
+            << caseStmt->getSourceRange();
+    }
+    return true;
+}
+
+bool XmlImport::isXmlTokEnum(const Expr* expr)
+{
+    expr = compat::IgnoreImplicit(expr);
+    // check that we have an unscoped enum type
+    auto condEnumType = expr->getType()->getUnqualifiedDesugaredType()->getAs<EnumType>();
+    if (!condEnumType || condEnumType->getDecl()->isScoped())
+        return false;
+    auto declRefExpr = dyn_cast<DeclRefExpr>(expr);
+    if (!declRefExpr)
+        return false;
+    auto enumConstant = dyn_cast<EnumConstantDecl>(declRefExpr->getDecl());
+    if (!enumConstant)
+        return false;
+    return enumConstant->getIdentifier() && enumConstant->getName().startswith("XML_TOK_");
+}
+
+bool XmlImport::isUInt16(const Expr* expr)
+{
+    expr = compat::IgnoreImplicit(expr);
+    if (expr->getType()->isSpecificBuiltinType(BuiltinType::UShort))
+        return true;
+    return bool(loplugin::TypeCheck(expr->getType()).Typedef("sal_uInt16"));
 }
 
 loplugin::Plugin::Registration<XmlImport> xmlimport("xmlimport");
