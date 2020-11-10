@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_DIALOGS_RESOURCEMANAGER_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_DIALOGS_RESOURCEMANAGER_HXX
+#pragma once
 
 #include <unotools/resmgr.hxx>
 
 inline OUString XsResId(const char* pId) { return Translate::get(pId, Translate::Create("xsc")); }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

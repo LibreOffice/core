@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_CERTIFICATECHOOSER_HXX
-#define INCLUDED_XMLSECURITY_INC_CERTIFICATECHOOSER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/weld.hxx>
@@ -92,7 +91,5 @@ public:
 
     static OUString UsageInClearText(int bits);
 };
-
-#endif // INCLUDED_XMLSECURITY_INC_CERTIFICATECHOOSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
