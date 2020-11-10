@@ -12,8 +12,7 @@ SmCaretPosGraph::SmCaretPosGraph() = default;
 
 SmCaretPosGraph::~SmCaretPosGraph() = default;
 
-SmCaretPosGraphEntry* SmCaretPosGraph::Add(SmCaretPos pos,
-                                           SmCaretPosGraphEntry* left)
+SmCaretPosGraphEntry* SmCaretPosGraph::Add(SmCaretPos pos, SmCaretPosGraphEntry* left)
 {
     assert(pos.nIndex >= 0);
     auto entry = std::make_unique<SmCaretPosGraphEntry>(pos, left, nullptr);

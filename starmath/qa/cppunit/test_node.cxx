@@ -22,8 +22,8 @@
 
 #include <memory>
 
-namespace {
-
+namespace
+{
 using namespace ::com::sun::star;
 
 typedef tools::SvRef<SmDocShell> SmDocShellRef;
@@ -50,9 +50,9 @@ void NodeTest::setUp()
 {
     BootstrapFixture::setUp();
     SmGlobals::ensure();
-    mxDocShell = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT |
-                                SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-                                SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    mxDocShell
+        = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 }
 
 void NodeTest::tearDown()
@@ -85,30 +85,32 @@ void NodeTest::testTdf47813()
     tools::Long nWidthC = pNodeC->GetRect().GetWidth();
     tools::Long nWidthL = pNodeL->GetRect().GetWidth();
     tools::Long nWidthR = pNodeR->GetRect().GetWidth();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthC/static_cast<double>(nWidthA), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthC / static_cast<double>(nWidthA), 0.01);
     // these values appear to change slightly with display scaling
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthL/static_cast<double>(nWidthA), 0.03);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthR/static_cast<double>(nWidthA), 0.03);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthL / static_cast<double>(nWidthA), 0.03);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthR / static_cast<double>(nWidthA), 0.03);
 }
 
 void NodeTest::testTdf52225()
 {
-#define CHECK_GREEK_SYMBOL(text, code, bItalic) do {                    \
-        mxDocShell->SetText(text);                                      \
-        const SmTableNode *pTree= mxDocShell->GetFormulaTree();         \
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pTree->GetNumSubNodes());       \
-        const SmNode *pLine = pTree->GetSubNode(0);                     \
-        CPPUNIT_ASSERT(pLine);                                          \
-        CPPUNIT_ASSERT_EQUAL(SmNodeType::Line, pLine->GetType());       \
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pLine->GetNumSubNodes());       \
-        const SmNode *pNode = pLine->GetSubNode(0);                     \
-        CPPUNIT_ASSERT(pNode);                                          \
-        CPPUNIT_ASSERT_EQUAL(SmNodeType::Special, pNode->GetType());    \
-        const SmSpecialNode *pSn = static_cast<const SmSpecialNode *>(pNode); \
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pSn->GetText().getLength()); \
-        CPPUNIT_ASSERT_EQUAL(code, pSn->GetText()[0]);     \
-        CPPUNIT_ASSERT_EQUAL(OUString(text), pSn->GetToken().aText);    \
-        CPPUNIT_ASSERT_EQUAL(bItalic, IsItalic(pSn->GetFont()));        \
+#define CHECK_GREEK_SYMBOL(text, code, bItalic)                                                    \
+    do                                                                                             \
+    {                                                                                              \
+        mxDocShell->SetText(text);                                                                 \
+        const SmTableNode* pTree = mxDocShell->GetFormulaTree();                                   \
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pTree->GetNumSubNodes());                                  \
+        const SmNode* pLine = pTree->GetSubNode(0);                                                \
+        CPPUNIT_ASSERT(pLine);                                                                     \
+        CPPUNIT_ASSERT_EQUAL(SmNodeType::Line, pLine->GetType());                                  \
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pLine->GetNumSubNodes());                                  \
+        const SmNode* pNode = pLine->GetSubNode(0);                                                \
+        CPPUNIT_ASSERT(pNode);                                                                     \
+        CPPUNIT_ASSERT_EQUAL(SmNodeType::Special, pNode->GetType());                               \
+        const SmSpecialNode* pSn = static_cast<const SmSpecialNode*>(pNode);                       \
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pSn->GetText().getLength());                            \
+        CPPUNIT_ASSERT_EQUAL(code, pSn->GetText()[0]);                                             \
+        CPPUNIT_ASSERT_EQUAL(OUString(text), pSn->GetToken().aText);                               \
+        CPPUNIT_ASSERT_EQUAL(bItalic, IsItalic(pSn->GetFont()));                                   \
     } while (false)
 
     SmFormat aFormat = mxDocShell->GetFormat();
@@ -138,7 +140,6 @@ void NodeTest::testTdf52225()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(NodeTest);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

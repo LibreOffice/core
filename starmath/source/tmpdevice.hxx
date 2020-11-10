@@ -25,7 +25,7 @@
 
 class SmTmpDevice
 {
-    OutputDevice &rOutDev;
+    OutputDevice& rOutDev;
 
     SmTmpDevice(const SmTmpDevice&) = delete;
     SmTmpDevice& operator=(const SmTmpDevice&) = delete;
@@ -33,15 +33,15 @@ class SmTmpDevice
     Color GetTextColor(const Color& rTextColor);
 
 public:
-    SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm);
+    SmTmpDevice(OutputDevice& rTheDev, bool bUseMap100th_mm);
     ~SmTmpDevice() COVERITY_NOEXCEPT_FALSE { rOutDev.Pop(); }
 
-    void SetFont(const vcl::Font &rNewFont);
+    void SetFont(const vcl::Font& rNewFont);
 
     void SetLineColor(const Color& rColor) { rOutDev.SetLineColor(GetTextColor(rColor)); }
     void SetFillColor(const Color& rColor) { rOutDev.SetFillColor(GetTextColor(rColor)); }
 
-    operator OutputDevice & () { return rOutDev; }
+    operator OutputDevice&() { return rOutDev; }
 };
 
 #endif

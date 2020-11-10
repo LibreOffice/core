@@ -19,10 +19,11 @@
 /** Factor to multiple the squared horizontal distance with
  * Used for Up and Down movement.
  */
-#define HORIZONTICAL_DISTANCE_FACTOR        10
+#define HORIZONTICAL_DISTANCE_FACTOR 10
 
 /** Enum of direction for movement */
-enum SmMovementDirection{
+enum SmMovementDirection
+{
     MoveUp,
     MoveDown,
     MoveLeft,
@@ -30,7 +31,8 @@ enum SmMovementDirection{
 };
 
 /** Enum of elements that can inserted into a formula */
-enum SmFormulaElement{
+enum SmFormulaElement
+{
     BlankElement,
     FactorialElement,
     PlusElement,
@@ -43,7 +45,8 @@ enum SmFormulaElement{
 };
 
 /** Bracket types that can be inserted */
-enum class SmBracketType {
+enum class SmBracketType
+{
     /** Round brackets, left command "(" */
     Round,
     /**Square brackets, left command "[" */
@@ -65,7 +68,8 @@ class SmDocShell;
  * a formula programmatically.
  * @remarks This class is a very intimate friend of SmDocShell.
  */
-class SmCursor{
+class SmCursor
+{
 public:
     SmCursor(SmNode* tree, SmDocShell* pShell)
         : mpAnchor(nullptr)
@@ -159,7 +163,8 @@ public:
     /** Copy the current selection */
     void Copy();
     /** Cut the current selection */
-    void Cut(){
+    void Cut()
+    {
         Copy();
         Delete();
     }
@@ -189,8 +194,7 @@ public:
 private:
     friend class SmDocShell;
 
-    SmCaretPosGraphEntry    *mpAnchor,
-                            *mpPosition;
+    SmCaretPosGraphEntry *mpAnchor, *mpPosition;
     /** Formula tree */
     SmNode* mpTree;
     /** Owner of the formula tree */
@@ -207,7 +211,7 @@ private:
      *
      * These are SmExpression, SmBinHorNode, SmUnHorNode etc.
      */
-    static bool IsLineCompositionNode(SmNode const * pNode);
+    static bool IsLineCompositionNode(SmNode const* pNode);
 
     /** Count number of selected nodes, excluding line composition nodes
      *
@@ -231,21 +235,24 @@ private:
      * This method sets pNode = NULL and remove it from its parent.
      * (Assuming it has a parent, and is a child of it).
      */
-    static void NodeToList(SmNode*& rpNode, SmNodeList& rList){
+    static void NodeToList(SmNode*& rpNode, SmNodeList& rList)
+    {
         //Remove from parent and NULL rpNode
         SmNode* pNode = rpNode;
-        if(rpNode && rpNode->GetParent()){    //Don't remove this, correctness relies on it
+        if (rpNode && rpNode->GetParent())
+        { //Don't remove this, correctness relies on it
             int index = rpNode->GetParent()->IndexOfSubNode(rpNode);
             assert(index >= 0);
             rpNode->GetParent()->SetSubNode(index, nullptr);
         }
         rpNode = nullptr;
         //Create line from node
-        if(pNode && IsLineCompositionNode(pNode)){
+        if (pNode && IsLineCompositionNode(pNode))
+        {
             LineToList(static_cast<SmStructureNode*>(pNode), rList);
             return;
         }
-        if(pNode)
+        if (pNode)
             rList.push_front(pNode);
     }
 
@@ -272,7 +279,7 @@ private:
     void AnnotateSelection();
 
     /** Clone list of nodes in a clipboard (creates a deep clone) */
-    static std::unique_ptr<SmNodeList> CloneList(SmClipboard &rClipboard);
+    static std::unique_ptr<SmNodeList> CloneList(SmClipboard& rClipboard);
 
     /** Find an iterator pointing to the node in pLineList following rCaretPos
      *
@@ -299,7 +306,7 @@ private:
      * @returns A caret position equivalent to one selecting the node before aIter, the method returns
      *          an invalid SmCaretPos to indicate placement in front of the line.
      */
-     static SmCaretPos PatchLineList(SmNodeList* pLineList, SmNodeList::iterator aIter);
+    static SmCaretPos PatchLineList(SmNodeList* pLineList, SmNodeList::iterator aIter);
 
     /** Take selected nodes from a list
      *
@@ -311,11 +318,11 @@ private:
      *
      * @returns An iterator pointing to the element following the selection taken.
      */
-    static SmNodeList::iterator TakeSelectedNodesFromList(SmNodeList *pLineList,
-                                                         SmNodeList *pSelectedNodes = nullptr);
+    static SmNodeList::iterator TakeSelectedNodesFromList(SmNodeList* pLineList,
+                                                          SmNodeList* pSelectedNodes = nullptr);
 
     /** Create an instance of SmMathSymbolNode usable for brackets */
-    static SmNode *CreateBracket(SmBracketType eBracketType, bool bIsLeft);
+    static SmNode* CreateBracket(SmBracketType eBracketType, bool bIsLeft);
 
     /** The number of times BeginEdit have been called
      * Used to allow nesting of BeginEdit() and EndEdit() sections
@@ -342,11 +349,8 @@ private:
      * @param pStartLine    Line to take first position in, if PosAfterEdit cannot be found,
      *                      leave it NULL for pLineList.
      */
-    void FinishEdit(std::unique_ptr<SmNodeList> pLineList,
-                    SmStructureNode* pParent,
-                    int nParentIndex,
-                    SmCaretPos PosAfterEdit,
-                    SmNode* pStartLine = nullptr);
+    void FinishEdit(std::unique_ptr<SmNodeList> pLineList, SmStructureNode* pParent,
+                    int nParentIndex, SmCaretPos PosAfterEdit, SmNode* pStartLine = nullptr);
     /** Request the formula is repainted */
     void RequestRepaint();
 };
@@ -369,44 +373,47 @@ private:
  * Postfix      -> node [!]*
  * \endcode
  */
-class SmNodeListParser{
+class SmNodeListParser
+{
 public:
     /** Create an instance of SmNodeListParser */
-    SmNodeListParser(){
-        pList = nullptr;
-    }
+    SmNodeListParser() { pList = nullptr; }
     /** Parse a list of nodes to an expression.
      *
      * Old error nodes will be deleted.
      */
     SmNode* Parse(SmNodeList* list);
     /** True, if the token is an operator */
-    static bool IsOperator(const SmToken &token);
+    static bool IsOperator(const SmToken& token);
     /** True, if the token is a relation operator */
-    static bool IsRelationOperator(const SmToken &token);
+    static bool IsRelationOperator(const SmToken& token);
     /** True, if the token is a sum operator */
-    static bool IsSumOperator(const SmToken &token);
+    static bool IsSumOperator(const SmToken& token);
     /** True, if the token is a product operator */
-    static bool IsProductOperator(const SmToken &token);
+    static bool IsProductOperator(const SmToken& token);
     /** True, if the token is a unary operator */
-    static bool IsUnaryOperator(const SmToken &token);
+    static bool IsUnaryOperator(const SmToken& token);
     /** True, if the token is a postfix operator */
-    static bool IsPostfixOperator(const SmToken &token);
+    static bool IsPostfixOperator(const SmToken& token);
+
 private:
     SmNodeList* pList;
     /** Get the current terminal */
-    SmNode* Terminal(){
+    SmNode* Terminal()
+    {
         if (!pList->empty())
             return pList->front();
         return nullptr;
     }
     /** Move to next terminal */
-    SmNode* Next(){
+    SmNode* Next()
+    {
         pList->pop_front();
         return Terminal();
     }
     /** Take the current terminal */
-    SmNode* Take(){
+    SmNode* Take()
+    {
         SmNode* pRetVal = Terminal();
         Next();
         return pRetVal;
@@ -419,7 +426,6 @@ private:
     SmNode* Postfix();
     static SmNode* Error();
 };
-
 
 #endif // INCLUDED_STARMATH_INC_CURSOR_HXX
 

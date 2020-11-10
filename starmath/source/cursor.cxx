@@ -16,9 +16,10 @@
 #include <osl/diagnose.h>
 #include <cassert>
 
-void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){
+void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor)
+{
     SmCaretPosGraphEntry* NewPos = nullptr;
-    switch(direction)
+    switch (direction)
     {
         case MoveLeft:
             if (mpPosition)
@@ -36,44 +37,53 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
         case MoveDown:
             if (mpPosition)
             {
-                SmCaretLine from_line = SmCaretPos2LineVisitor(pDev, mpPosition->CaretPos).GetResult(),
-                            best_line,  //Best approximated line found so far
-                            curr_line;  //Current line
-                tools::Long dbp_sq = 0;        //Distance squared to best line
-                for(const auto &pEntry : *mpGraph)
+                SmCaretLine from_line
+                    = SmCaretPos2LineVisitor(pDev, mpPosition->CaretPos).GetResult(),
+                    best_line, //Best approximated line found so far
+                    curr_line; //Current line
+                tools::Long dbp_sq = 0; //Distance squared to best line
+                for (const auto& pEntry : *mpGraph)
                 {
                     //Reject it if it's the current position
-                    if(pEntry->CaretPos == mpPosition->CaretPos) continue;
+                    if (pEntry->CaretPos == mpPosition->CaretPos)
+                        continue;
                     //Compute caret line
                     curr_line = SmCaretPos2LineVisitor(pDev, pEntry->CaretPos).GetResult();
                     //Reject anything above if we're moving down
-                    if(curr_line.GetTop() <= from_line.GetTop() && direction == MoveDown) continue;
+                    if (curr_line.GetTop() <= from_line.GetTop() && direction == MoveDown)
+                        continue;
                     //Reject anything below if we're moving up
-                    if(curr_line.GetTop() + curr_line.GetHeight() >= from_line.GetTop() + from_line.GetHeight()
-                            && direction == MoveUp) continue;
+                    if (curr_line.GetTop() + curr_line.GetHeight()
+                            >= from_line.GetTop() + from_line.GetHeight()
+                        && direction == MoveUp)
+                        continue;
                     //Compare if it to what we have, if we have anything yet
-                    if(NewPos){
+                    if (NewPos)
+                    {
                         //Compute distance to current line squared, multiplied with a horizontal factor
-                        tools::Long dp_sq = curr_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR +
-                                     curr_line.SquaredDistanceY(from_line);
+                        tools::Long dp_sq
+                            = curr_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR
+                              + curr_line.SquaredDistanceY(from_line);
                         //Discard current line if best line is closer
-                        if(dbp_sq <= dp_sq) continue;
+                        if (dbp_sq <= dp_sq)
+                            continue;
                     }
                     //Take current line as the best
                     best_line = curr_line;
                     NewPos = pEntry.get();
                     //Update distance to best line
-                    dbp_sq = best_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR +
-                             best_line.SquaredDistanceY(from_line);
+                    dbp_sq = best_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR
+                             + best_line.SquaredDistanceY(from_line);
                 }
             }
             break;
         default:
             assert(false);
     }
-    if(NewPos){
+    if (NewPos)
+    {
         mpPosition = NewPos;
-        if(bMoveAnchor)
+        if (bMoveAnchor)
             mpAnchor = NewPos;
         RequestRepaint();
     }
@@ -82,41 +92,47 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
 void SmCursor::MoveTo(OutputDevice* pDev, const Point& pos, bool bMoveAnchor)
 {
     SmCaretPosGraphEntry* NewPos = nullptr;
-    tools::Long dp_sq = 0,     //Distance to current line squared
-         dbp_sq = 1;    //Distance to best line squared
-    for(const auto &pEntry : *mpGraph)
+    tools::Long dp_sq = 0, //Distance to current line squared
+        dbp_sq = 1; //Distance to best line squared
+    for (const auto& pEntry : *mpGraph)
     {
-        OSL_ENSURE(pEntry->CaretPos.IsValid(), "The caret position graph may not have invalid positions!");
+        OSL_ENSURE(pEntry->CaretPos.IsValid(),
+                   "The caret position graph may not have invalid positions!");
         //Compute current line
         SmCaretLine curr_line = SmCaretPos2LineVisitor(pDev, pEntry->CaretPos).GetResult();
         //Compute squared distance to current line
         dp_sq = curr_line.SquaredDistanceX(pos) + curr_line.SquaredDistanceY(pos);
         //If we have a position compare to it
-        if(NewPos){
+        if (NewPos)
+        {
             //If best line is closer, reject current line
-            if(dbp_sq <= dp_sq) continue;
+            if (dbp_sq <= dp_sq)
+                continue;
         }
         //Accept current position as the best
         NewPos = pEntry.get();
         //Update distance to best line
         dbp_sq = dp_sq;
     }
-    if(NewPos){
+    if (NewPos)
+    {
         mpPosition = NewPos;
-        if(bMoveAnchor)
+        if (bMoveAnchor)
             mpAnchor = NewPos;
         RequestRepaint();
     }
 }
 
-void SmCursor::BuildGraph(){
+void SmCursor::BuildGraph()
+{
     //Save the current anchor and position
     SmCaretPos _anchor, _position;
     //Release mpGraph if allocated
-    if(mpGraph){
-        if(mpAnchor)
+    if (mpGraph)
+    {
+        if (mpAnchor)
             _anchor = mpAnchor->CaretPos;
-        if(mpPosition)
+        if (mpPosition)
             _position = mpPosition->CaretPos;
         mpGraph.reset();
         //Reset anchor and position as they point into an old graph
@@ -128,21 +144,22 @@ void SmCursor::BuildGraph(){
     mpGraph.reset(SmCaretPosGraphBuildingVisitor(mpTree).takeGraph());
 
     //Restore anchor and position pointers
-    if(_anchor.IsValid() || _position.IsValid()){
-        for(const auto &pEntry : *mpGraph)
+    if (_anchor.IsValid() || _position.IsValid())
+    {
+        for (const auto& pEntry : *mpGraph)
         {
-            if(_anchor == pEntry->CaretPos)
+            if (_anchor == pEntry->CaretPos)
                 mpAnchor = pEntry.get();
-            if(_position == pEntry->CaretPos)
+            if (_position == pEntry->CaretPos)
                 mpPosition = pEntry.get();
         }
     }
     //Set position and anchor to first caret position
     auto it = mpGraph->begin();
     assert(it != mpGraph->end());
-    if(!mpPosition)
+    if (!mpPosition)
         mpPosition = it->get();
-    if(!mpAnchor)
+    if (!mpAnchor)
         mpAnchor = mpPosition;
 
     assert(mpPosition);
@@ -151,10 +168,11 @@ void SmCursor::BuildGraph(){
     OSL_ENSURE(mpAnchor->CaretPos.IsValid(), "Anchor must be valid");
 }
 
-bool SmCursor::SetCaretPosition(SmCaretPos pos){
-    for(const auto &pEntry : *mpGraph)
+bool SmCursor::SetCaretPosition(SmCaretPos pos)
+{
+    for (const auto& pEntry : *mpGraph)
     {
-        if(pEntry->CaretPos == pos)
+        if (pEntry->CaretPos == pos)
         {
             mpPosition = pEntry.get();
             mpAnchor = pEntry.get();
@@ -164,18 +182,22 @@ bool SmCursor::SetCaretPosition(SmCaretPos pos){
     return false;
 }
 
-void SmCursor::AnnotateSelection(){
+void SmCursor::AnnotateSelection()
+{
     //TODO: Manage a state, reset it upon modification and optimize this call
     SmSetSelectionVisitor(mpAnchor->CaretPos, mpPosition->CaretPos, mpTree);
 }
 
-void SmCursor::Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible){
+void SmCursor::Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible)
+{
     SmCaretDrawingVisitor(pDev, GetPosition(), Offset, isCaretVisible);
 }
 
-void SmCursor::DeletePrev(OutputDevice* pDev){
+void SmCursor::DeletePrev(OutputDevice* pDev)
+{
     //Delete only a selection if there's a selection
-    if(HasSelection()){
+    if (HasSelection())
+    {
         Delete();
         return;
     }
@@ -186,19 +208,21 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
     assert(nLineOffsetIdx >= 0);
 
     //If we're in front of a node who's parent is a TABLE
-    if (pLineParent->GetType() == SmNodeType::Table && mpPosition->CaretPos.nIndex == 0 && nLineOffsetIdx > 0)
+    if (pLineParent->GetType() == SmNodeType::Table && mpPosition->CaretPos.nIndex == 0
+        && nLineOffsetIdx > 0)
     {
         size_t nLineOffset = nLineOffsetIdx;
         //Now we can merge with nLineOffset - 1
         BeginEdit();
         //Line to merge things into, so we can delete pLine
-        SmNode* pMergeLine = pLineParent->GetSubNode(nLineOffset-1);
+        SmNode* pMergeLine = pLineParent->GetSubNode(nLineOffset - 1);
         OSL_ENSURE(pMergeLine, "pMergeLine cannot be NULL!");
         SmCaretPos PosAfterDelete;
         //Convert first line to list
         std::unique_ptr<SmNodeList> pLineList(new SmNodeList);
         NodeToList(pMergeLine, *pLineList);
-        if(!pLineList->empty()){
+        if (!pLineList->empty())
+        {
             //Find iterator to patch
             SmNodeList::iterator patchPoint = pLineList->end();
             --patchPoint;
@@ -211,15 +235,15 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
             pLine = SmNodeListParser().Parse(pLineList.get());
         }
         pLineList.reset();
-        pLineParent->SetSubNode(nLineOffset-1, pLine);
+        pLineParent->SetSubNode(nLineOffset - 1, pLine);
         //Delete the removed line slot
-        SmNodeArray lines(pLineParent->GetNumSubNodes()-1);
+        SmNodeArray lines(pLineParent->GetNumSubNodes() - 1);
         for (size_t i = 0; i < pLineParent->GetNumSubNodes(); ++i)
         {
-            if(i < nLineOffset)
+            if (i < nLineOffset)
                 lines[i] = pLineParent->GetSubNode(i);
-            else if(i > nLineOffset)
-                lines[i-1] = pLineParent->GetSubNode(i);
+            else if (i > nLineOffset)
+                lines[i - 1] = pLineParent->GetSubNode(i);
         }
         pLineParent->SetSubNodes(std::move(lines));
         //Rebuild graph
@@ -228,13 +252,13 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
         BuildGraph();
         AnnotateSelection();
         //Set caret position
-        if(!SetCaretPosition(PosAfterDelete))
+        if (!SetCaretPosition(PosAfterDelete))
             SetCaretPosition(SmCaretPos(pLine, 0));
         //Finish editing
         EndEdit();
 
-    //TODO: If we're in an empty (sub/super/*) script
-    /*}else if(pLineParent->GetType() == SmNodeType::SubSup &&
+        //TODO: If we're in an empty (sub/super/*) script
+        /*}else if(pLineParent->GetType() == SmNodeType::SubSup &&
              nLineOffset != 0 &&
              pLine->GetType() == SmNodeType::Expression &&
              pLine->GetNumSubNodes() == 0){
@@ -243,17 +267,20 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
     //TODO: Handle case where we delete a limit
     */
 
-    //Else move select, and delete if not complex
-    }else{
+        //Else move select, and delete if not complex
+    }
+    else
+    {
         Move(pDev, MoveLeft, false);
-        if(!HasComplexSelection())
+        if (!HasComplexSelection())
             Delete();
     }
 }
 
-void SmCursor::Delete(){
+void SmCursor::Delete()
+{
     //Return if we don't have a selection to delete
-    if(!HasSelection())
+    if (!HasSelection())
         return;
 
     //Enter edit section
@@ -292,8 +319,10 @@ void SmCursor::Delete(){
     FinishEdit(std::move(pLineList), pLineParent, nLineOffset, PosAfterDelete);
 }
 
-void SmCursor::InsertNodes(std::unique_ptr<SmNodeList> pNewNodes){
-    if(pNewNodes->empty()){
+void SmCursor::InsertNodes(std::unique_ptr<SmNodeList> pNewNodes)
+{
+    if (pNewNodes->empty())
+    {
         return;
     }
 
@@ -320,11 +349,12 @@ void SmCursor::InsertNodes(std::unique_ptr<SmNodeList> pNewNodes){
 
     //Insert all new nodes
     SmNodeList::iterator newIt,
-                         patchIt = it, // (pointless default value, fixes compiler warnings)
-                         insIt;
-    for(newIt = pNewNodes->begin(); newIt != pNewNodes->end(); ++newIt){
+        patchIt = it, // (pointless default value, fixes compiler warnings)
+        insIt;
+    for (newIt = pNewNodes->begin(); newIt != pNewNodes->end(); ++newIt)
+    {
         insIt = pLineList->insert(it, *newIt);
-        if(newIt == pNewNodes->begin())
+        if (newIt == pNewNodes->begin())
             patchIt = insIt;
     }
     //Patch the places we've changed stuff
@@ -341,13 +371,14 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList,
                                                       const SmCaretPos& rCaretPos)
 {
     //Find iterator for position
-    SmNodeList::iterator it = std::find(pLineList->begin(), pLineList->end(), rCaretPos.pSelectedNode);
+    SmNodeList::iterator it
+        = std::find(pLineList->begin(), pLineList->end(), rCaretPos.pSelectedNode);
     if (it != pLineList->end())
     {
-        if((*it)->GetType() == SmNodeType::Text)
+        if ((*it)->GetType() == SmNodeType::Text)
         {
             //Split textnode if needed
-            if(rCaretPos.nIndex > 0)
+            if (rCaretPos.nIndex > 0)
             {
                 SmTextNode* pText = static_cast<SmTextNode*>(rCaretPos.pSelectedNode);
                 if (rCaretPos.nIndex == pText->GetText().getLength())
@@ -362,7 +393,8 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList,
                 pNewText->ChangeText(str2);
                 it = pLineList->insert(it, pNewText);
             }
-        }else
+        }
+        else
             ++it;
         //it now pointer to the node following pos, so pLineList->insert(it, ...) will insert correctly
         return it;
@@ -371,27 +403,24 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList,
     return pLineList->begin();
 }
 
-SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator aIter) {
+SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator aIter)
+{
     //The nodes we should consider merging
-    SmNode *prev = nullptr,
-           *next = nullptr;
-    if(aIter != pLineList->end())
+    SmNode *prev = nullptr, *next = nullptr;
+    if (aIter != pLineList->end())
         next = *aIter;
-    if(aIter != pLineList->begin()) {
+    if (aIter != pLineList->begin())
+    {
         --aIter;
         prev = *aIter;
         ++aIter;
     }
 
     //Check if there's textnodes to merge
-    if( prev &&
-        next &&
-        prev->GetType() == SmNodeType::Text &&
-        next->GetType() == SmNodeType::Text &&
-        ( prev->GetToken().eType != TNUMBER ||
-          next->GetToken().eType == TNUMBER) ){
-        SmTextNode *pText = static_cast<SmTextNode*>(prev),
-                   *pOldN = static_cast<SmTextNode*>(next);
+    if (prev && next && prev->GetType() == SmNodeType::Text && next->GetType() == SmNodeType::Text
+        && (prev->GetToken().eType != TNUMBER || next->GetToken().eType == TNUMBER))
+    {
+        SmTextNode *pText = static_cast<SmTextNode*>(prev), *pOldN = static_cast<SmTextNode*>(next);
         SmCaretPos retval(pText, pText->GetText().getLength());
         OUString newText = pText->GetText() + pOldN->GetText();
         pText->ChangeText(newText);
@@ -401,100 +430,116 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
     }
 
     //Check if there's a SmPlaceNode to remove:
-    if(prev && next && prev->GetType() == SmNodeType::Place && !SmNodeListParser::IsOperator(next->GetToken())){
+    if (prev && next && prev->GetType() == SmNodeType::Place
+        && !SmNodeListParser::IsOperator(next->GetToken()))
+    {
         --aIter;
         aIter = pLineList->erase(aIter);
         delete prev;
         //Return caret pos in front of aIter
-        if(aIter != pLineList->begin())
+        if (aIter != pLineList->begin())
             --aIter; //Thus find node before aIter
-        if(aIter == pLineList->begin())
+        if (aIter == pLineList->begin())
             return SmCaretPos();
         return SmCaretPos::GetPosAfter(*aIter);
     }
-    if(prev && next && next->GetType() == SmNodeType::Place && !SmNodeListParser::IsOperator(prev->GetToken())){
+    if (prev && next && next->GetType() == SmNodeType::Place
+        && !SmNodeListParser::IsOperator(prev->GetToken()))
+    {
         aIter = pLineList->erase(aIter);
         delete next;
         return SmCaretPos::GetPosAfter(prev);
     }
 
     //If we didn't do anything return
-    if(!prev) //return an invalid to indicate we're in front of line
+    if (!prev) //return an invalid to indicate we're in front of line
         return SmCaretPos();
     return SmCaretPos::GetPosAfter(prev);
 }
 
-SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
-                                                         SmNodeList *pSelectedNodes) {
+SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList* pLineList,
+                                                         SmNodeList* pSelectedNodes)
+{
     SmNodeList::iterator retval;
     SmNodeList::iterator it = pLineList->begin();
-    while(it != pLineList->end()){
-        if((*it)->IsSelected()){
+    while (it != pLineList->end())
+    {
+        if ((*it)->IsSelected())
+        {
             //Split text nodes
-            if((*it)->GetType() == SmNodeType::Text) {
+            if ((*it)->GetType() == SmNodeType::Text)
+            {
                 SmTextNode* pText = static_cast<SmTextNode*>(*it);
                 OUString aText = pText->GetText();
                 //Start and lengths of the segments, 2 is the selected segment
-                int start2 = pText->GetSelectionStart(),
-                    start3 = pText->GetSelectionEnd(),
-                    len1 = start2 - 0,
-                    len2 = start3 - start2,
-                    len3 = aText.getLength() - start3;
+                int start2 = pText->GetSelectionStart(), start3 = pText->GetSelectionEnd(),
+                    len1 = start2 - 0, len2 = start3 - start2, len3 = aText.getLength() - start3;
                 SmToken aToken = pText->GetToken();
                 sal_uInt16 eFontDesc = pText->GetFontDesc();
                 //If we need make segment 1
-                if(len1 > 0) {
+                if (len1 > 0)
+                {
                     OUString str = aText.copy(0, len1);
                     pText->ChangeText(str);
                     ++it;
-                } else {//Remove it if not needed
+                }
+                else
+                { //Remove it if not needed
                     it = pLineList->erase(it);
                     delete pText;
                 }
                 //Set retval to be right after the selection
                 retval = it;
                 //if we need make segment 3
-                if(len3 > 0) {
+                if (len3 > 0)
+                {
                     OUString str = aText.copy(start3, len3);
                     SmTextNode* pSeg3 = new SmTextNode(aToken, eFontDesc);
                     pSeg3->ChangeText(str);
                     retval = pLineList->insert(it, pSeg3);
                 }
                 //If we need to save the selected text
-                if(pSelectedNodes && len2 > 0) {
+                if (pSelectedNodes && len2 > 0)
+                {
                     OUString str = aText.copy(start2, len2);
                     SmTextNode* pSeg2 = new SmTextNode(aToken, eFontDesc);
                     pSeg2->ChangeText(str);
                     pSelectedNodes->push_back(pSeg2);
                 }
-            } else { //if it's not textnode
+            }
+            else
+            { //if it's not textnode
                 SmNode* pNode = *it;
                 retval = it = pLineList->erase(it);
-                if(pSelectedNodes)
+                if (pSelectedNodes)
                     pSelectedNodes->push_back(pNode);
                 else
                     delete pNode;
             }
-        } else
+        }
+        else
             ++it;
     }
     return retval;
 }
 
-void SmCursor::InsertSubSup(SmSubSup eSubSup) {
+void SmCursor::InsertSubSup(SmSubSup eSubSup)
+{
     AnnotateSelection();
 
     //Find line
-    SmNode *pLine;
-    if(HasSelection()) {
-        SmNode *pSNode = FindSelectedNode(mpTree);
+    SmNode* pLine;
+    if (HasSelection())
+    {
+        SmNode* pSNode = FindSelectedNode(mpTree);
         assert(pSNode);
         pLine = FindTopMostNodeInLine(pSNode, true);
-    } else
+    }
+    else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
 
     //Find Parent and offset in parent
-    SmStructureNode *pLineParent = pLine->GetParent();
+    SmStructureNode* pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
     assert(nParentIndex >= 0);
 
@@ -511,7 +556,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     //Take the selection, and/or find iterator for current position
     std::unique_ptr<SmNodeList> pSelectedNodesList(new SmNodeList);
     SmNodeList::iterator it;
-    if(HasSelection())
+    if (HasSelection())
         it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList.get());
     else
         it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
@@ -519,50 +564,57 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     //Find node that this should be applied to
     SmNode* pSubject;
     bool bPatchLine = !pSelectedNodesList->empty(); //If the line should be patched later
-    if(it != pLineList->begin()) {
+    if (it != pLineList->begin())
+    {
         --it;
         pSubject = *it;
         ++it;
-    } else {
+    }
+    else
+    {
         //Create a new place node
         pSubject = new SmPlaceNode();
         pSubject->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
         it = pLineList->insert(it, pSubject);
         ++it;
-        bPatchLine = true;  //We've modified the line it should be patched later.
+        bPatchLine = true; //We've modified the line it should be patched later.
     }
 
     //Wrap the subject in a SmSubSupNode
     SmSubSupNode* pSubSup;
-    if(pSubject->GetType() != SmNodeType::SubSup){
+    if (pSubject->GetType() != SmNodeType::SubSup)
+    {
         SmToken token;
         token.nGroup = TG::Power;
         pSubSup = new SmSubSupNode(token);
         pSubSup->SetBody(pSubject);
         *(--it) = pSubSup;
         ++it;
-    }else
+    }
+    else
         pSubSup = static_cast<SmSubSupNode*>(pSubject);
     //pSubject shouldn't be referenced anymore, pSubSup is the SmSubSupNode in pLineList we wish to edit.
     //and it pointer to the element following pSubSup in pLineList.
     pSubject = nullptr;
 
     //Patch the line if we noted that was needed previously
-    if(bPatchLine)
+    if (bPatchLine)
         PatchLineList(pLineList.get(), it);
 
     //Convert existing, if any, sub-/superscript line to list
-    SmNode *pScriptLine = pSubSup->GetSubSup(eSubSup);
+    SmNode* pScriptLine = pSubSup->GetSubSup(eSubSup);
     std::unique_ptr<SmNodeList> pScriptLineList(new SmNodeList);
     NodeToList(pScriptLine, *pScriptLineList);
 
     //Add selection to pScriptLineList
     unsigned int nOldSize = pScriptLineList->size();
-    pScriptLineList->insert(pScriptLineList->end(), pSelectedNodesList->begin(), pSelectedNodesList->end());
+    pScriptLineList->insert(pScriptLineList->end(), pSelectedNodesList->begin(),
+                            pSelectedNodesList->end());
     pSelectedNodesList.reset();
 
     //Patch pScriptLineList if needed
-    if(0 < nOldSize && nOldSize < pScriptLineList->size()) {
+    if (0 < nOldSize && nOldSize < pScriptLineList->size())
+    {
         SmNodeList::iterator iPatchPoint = pScriptLineList->begin();
         std::advance(iPatchPoint, nOldSize);
         PatchLineList(pScriptLineList.get(), iPatchPoint);
@@ -584,22 +636,25 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     FinishEdit(std::move(pLineList), pLineParent, nParentIndex, PosAfterScript, pScriptLine);
 }
 
-void SmCursor::InsertBrackets(SmBracketType eBracketType) {
+void SmCursor::InsertBrackets(SmBracketType eBracketType)
+{
     BeginEdit();
 
     AnnotateSelection();
 
     //Find line
-    SmNode *pLine;
-    if(HasSelection()) {
-        SmNode *pSNode = FindSelectedNode(mpTree);
+    SmNode* pLine;
+    if (HasSelection())
+    {
+        SmNode* pSNode = FindSelectedNode(mpTree);
         assert(pSNode);
         pLine = FindTopMostNodeInLine(pSNode, true);
-    } else
+    }
+    else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
 
     //Find parent and offset in parent
-    SmStructureNode *pLineParent = pLine->GetParent();
+    SmStructureNode* pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
     assert(nParentIndex >= 0);
 
@@ -610,7 +665,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     //Take the selection, and/or find iterator for current position
     std::unique_ptr<SmNodeList> pSelectedNodesList(new SmNodeList);
     SmNodeList::iterator it;
-    if(HasSelection())
+    if (HasSelection())
         it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList.get());
     else
         it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
@@ -618,20 +673,22 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     //If there's no selected nodes, create a place node
     std::unique_ptr<SmNode> pBodyNode;
     SmCaretPos PosAfterInsert;
-    if(pSelectedNodesList->empty()) {
+    if (pSelectedNodesList->empty())
+    {
         pBodyNode.reset(new SmPlaceNode());
         PosAfterInsert = SmCaretPos(pBodyNode.get(), 1);
-    } else
+    }
+    else
         pBodyNode.reset(SmNodeListParser().Parse(pSelectedNodesList.get()));
 
     pSelectedNodesList.reset();
 
     //Create SmBraceNode
     SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
-    SmBraceNode *pBrace = new SmBraceNode(aTok);
+    SmBraceNode* pBrace = new SmBraceNode(aTok);
     pBrace->SetScaleMode(SmScaleMode::Height);
-    std::unique_ptr<SmNode> pLeft( CreateBracket(eBracketType, true) ),
-                            pRight( CreateBracket(eBracketType, false) );
+    std::unique_ptr<SmNode> pLeft(CreateBracket(eBracketType, true)),
+        pRight(CreateBracket(eBracketType, false));
     std::unique_ptr<SmBracebodyNode> pBody(new SmBracebodyNode(SmToken()));
     pBody->SetSubNodes(std::move(pBodyNode), nullptr);
     pBrace->SetSubNodes(std::move(pLeft), std::move(pBody), std::move(pRight));
@@ -641,17 +698,20 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     pLineList->insert(it, pBrace);
     //Patch line (I think this is good enough)
     SmCaretPos aAfter = PatchLineList(pLineList.get(), it);
-    if( !PosAfterInsert.IsValid() )
+    if (!PosAfterInsert.IsValid())
         PosAfterInsert = aAfter;
 
     //Finish editing
     FinishEdit(std::move(pLineList), pLineParent, nParentIndex, PosAfterInsert);
 }
 
-SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
+SmNode* SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft)
+{
     SmToken aTok;
-    if(bIsLeft){
-        switch(eBracketType){
+    if (bIsLeft)
+    {
+        switch (eBracketType)
+        {
             case SmBracketType::Round:
                 aTok = SmToken(TLPARENT, MS_LPARENT, "(", TG::LBrace, 5);
                 break;
@@ -662,8 +722,11 @@ SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
                 aTok = SmToken(TLBRACE, MS_LBRACE, "lbrace", TG::LBrace, 5);
                 break;
         }
-    } else {
-        switch(eBracketType) {
+    }
+    else
+    {
+        switch (eBracketType)
+        {
             case SmBracketType::Round:
                 aTok = SmToken(TRPARENT, MS_RPARENT, ")", TG::RBrace, 5);
                 break;
@@ -680,43 +743,46 @@ SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
     return pRetVal;
 }
 
-bool SmCursor::InsertRow() {
+bool SmCursor::InsertRow()
+{
     AnnotateSelection();
 
     //Find line
-    SmNode *pLine;
-    if(HasSelection()) {
-        SmNode *pSNode = FindSelectedNode(mpTree);
+    SmNode* pLine;
+    if (HasSelection())
+    {
+        SmNode* pSNode = FindSelectedNode(mpTree);
         assert(pSNode);
         pLine = FindTopMostNodeInLine(pSNode, true);
-    } else
+    }
+    else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
 
     //Find parent and offset in parent
-    SmStructureNode *pLineParent = pLine->GetParent();
+    SmStructureNode* pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
     assert(nParentIndex >= 0);
 
     //Discover the context of this command
-    SmTableNode  *pTable  = nullptr;
-    SmMatrixNode *pMatrix = nullptr;
+    SmTableNode* pTable = nullptr;
+    SmMatrixNode* pMatrix = nullptr;
     int nTableIndex = nParentIndex;
-    if(pLineParent->GetType() == SmNodeType::Table)
+    if (pLineParent->GetType() == SmNodeType::Table)
         pTable = static_cast<SmTableNode*>(pLineParent);
     //If it's wrapped in a SmLineNode, we can still insert a newline
-    else if(pLineParent->GetType() == SmNodeType::Line &&
-            pLineParent->GetParent() &&
-            pLineParent->GetParent()->GetType() == SmNodeType::Table) {
+    else if (pLineParent->GetType() == SmNodeType::Line && pLineParent->GetParent()
+             && pLineParent->GetParent()->GetType() == SmNodeType::Table)
+    {
         //NOTE: This hack might give problems if we stop ignoring SmAlignNode
         pTable = static_cast<SmTableNode*>(pLineParent->GetParent());
         nTableIndex = pTable->IndexOfSubNode(pLineParent);
         assert(nTableIndex >= 0);
     }
-    if(pLineParent->GetType() == SmNodeType::Matrix)
+    if (pLineParent->GetType() == SmNodeType::Matrix)
         pMatrix = static_cast<SmMatrixNode*>(pLineParent);
 
     //If we're not in a context that supports InsertRow, return sal_False
-    if(!pTable && !pMatrix)
+    if (!pTable && !pMatrix)
         return false;
 
     //Now we start editing
@@ -728,65 +794,73 @@ bool SmCursor::InsertRow() {
 
     //Find position in line
     SmNodeList::iterator it;
-    if(HasSelection()) {
+    if (HasSelection())
+    {
         //Take the selected nodes and delete them...
         it = TakeSelectedNodesFromList(pLineList.get());
-    } else
+    }
+    else
         it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
 
     //New caret position after inserting the newline/row in whatever context
     SmCaretPos PosAfterInsert;
 
     //If we're in the context of a table
-    if(pTable) {
+    if (pTable)
+    {
         std::unique_ptr<SmNodeList> pNewLineList(new SmNodeList);
         //Move elements from pLineList to pNewLineList
         SmNodeList& rLineList = *pLineList;
         pNewLineList->splice(pNewLineList->begin(), rLineList, it, rLineList.end());
         //Make sure it is valid again
         it = pLineList->end();
-        if(it != pLineList->begin())
+        if (it != pLineList->begin())
             --it;
-        if(pNewLineList->empty())
+        if (pNewLineList->empty())
             pNewLineList->push_front(new SmPlaceNode());
         //Parse new line
         std::unique_ptr<SmNode> pNewLine(SmNodeListParser().Parse(pNewLineList.get()));
         pNewLineList.reset();
         //Wrap pNewLine in SmLineNode if needed
-        if(pLineParent->GetType() == SmNodeType::Line) {
-            std::unique_ptr<SmLineNode> pNewLineNode(new SmLineNode(SmToken(TNEWLINE, '\0', "newline")));
+        if (pLineParent->GetType() == SmNodeType::Line)
+        {
+            std::unique_ptr<SmLineNode> pNewLineNode(
+                new SmLineNode(SmToken(TNEWLINE, '\0', "newline")));
             pNewLineNode->SetSubNodes(std::move(pNewLine), nullptr);
             pNewLine = std::move(pNewLineNode);
         }
         //Get position
         PosAfterInsert = SmCaretPos(pNewLine.get(), 0);
         //Move other nodes if needed
-        for( int i = pTable->GetNumSubNodes(); i > nTableIndex + 1; i--)
-            pTable->SetSubNode(i, pTable->GetSubNode(i-1));
+        for (int i = pTable->GetNumSubNodes(); i > nTableIndex + 1; i--)
+            pTable->SetSubNode(i, pTable->GetSubNode(i - 1));
 
         //Insert new line
         pTable->SetSubNode(nTableIndex + 1, pNewLine.release());
 
         //Check if we need to change token type:
-        if(pTable->GetNumSubNodes() > 2 && pTable->GetToken().eType == TBINOM) {
+        if (pTable->GetNumSubNodes() > 2 && pTable->GetToken().eType == TBINOM)
+        {
             SmToken tok = pTable->GetToken();
             tok.eType = TSTACK;
             pTable->SetToken(tok);
         }
     }
     //If we're in the context of a matrix
-    else {
+    else
+    {
         //Find position after insert and patch the list
         PosAfterInsert = PatchLineList(pLineList.get(), it);
         //Move other children
         sal_uInt16 rows = pMatrix->GetNumRows();
         sal_uInt16 cols = pMatrix->GetNumCols();
         int nRowStart = (nParentIndex - nParentIndex % cols) + cols;
-        for( int i = pMatrix->GetNumSubNodes() + cols - 1; i >= nRowStart + cols; i--)
+        for (int i = pMatrix->GetNumSubNodes() + cols - 1; i >= nRowStart + cols; i--)
             pMatrix->SetSubNode(i, pMatrix->GetSubNode(i - cols));
-        for( int i = nRowStart; i < nRowStart + cols; i++) {
-            SmPlaceNode *pNewLine = new SmPlaceNode();
-            if(i == nParentIndex + cols)
+        for (int i = nRowStart; i < nRowStart + cols; i++)
+        {
+            SmPlaceNode* pNewLine = new SmPlaceNode();
+            if (i == nParentIndex + cols)
                 PosAfterInsert = SmCaretPos(pNewLine, 0);
             pMatrix->SetSubNode(i, pNewLine);
         }
@@ -801,20 +875,23 @@ bool SmCursor::InsertRow() {
     return true;
 }
 
-void SmCursor::InsertFraction() {
+void SmCursor::InsertFraction()
+{
     AnnotateSelection();
 
     //Find line
-    SmNode *pLine;
-    if(HasSelection()) {
-        SmNode *pSNode = FindSelectedNode(mpTree);
+    SmNode* pLine;
+    if (HasSelection())
+    {
+        SmNode* pSNode = FindSelectedNode(mpTree);
         assert(pSNode);
         pLine = FindTopMostNodeInLine(pSNode, true);
-    } else
+    }
+    else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
 
     //Find Parent and offset in parent
-    SmStructureNode *pLineParent = pLine->GetParent();
+    SmStructureNode* pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
     assert(nParentIndex >= 0);
 
@@ -828,21 +905,20 @@ void SmCursor::InsertFraction() {
     //Take the selection, and/or find iterator for current position
     std::unique_ptr<SmNodeList> pSelectedNodesList(new SmNodeList);
     SmNodeList::iterator it;
-    if(HasSelection())
+    if (HasSelection())
         it = TakeSelectedNodesFromList(pLineList.get(), pSelectedNodesList.get());
     else
         it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
 
     //Create pNum, and pDenom
     bool bEmptyFraction = pSelectedNodesList->empty();
-    std::unique_ptr<SmNode> pNum( bEmptyFraction
-        ? new SmPlaceNode()
-        : SmNodeListParser().Parse(pSelectedNodesList.get()) );
+    std::unique_ptr<SmNode> pNum(
+        bEmptyFraction ? new SmPlaceNode() : SmNodeListParser().Parse(pSelectedNodesList.get()));
     std::unique_ptr<SmNode> pDenom(new SmPlaceNode());
     pSelectedNodesList.reset();
 
     //Create new fraction
-    SmBinVerNode *pFrac = new SmBinVerNode(SmToken(TOVER, '\0', "over", TG::Product, 0));
+    SmBinVerNode* pFrac = new SmBinVerNode(SmToken(TOVER, '\0', "over", TG::Product, 0));
     std::unique_ptr<SmNode> pRect(new SmRectangleNode(SmToken()));
     pFrac->SetSubNodes(std::move(pNum), std::move(pRect), std::move(pDenom));
 
@@ -852,7 +928,7 @@ void SmCursor::InsertFraction() {
     PatchLineList(pLineList.get(), it);
 
     //Finish editing
-    SmNode *pSelectedNode = bEmptyFraction ? pFrac->GetSubNode(0) : pFrac->GetSubNode(2);
+    SmNode* pSelectedNode = bEmptyFraction ? pFrac->GetSubNode(0) : pFrac->GetSubNode(2);
     FinishEdit(std::move(pLineList), pLineParent, nParentIndex, SmCaretPos(pSelectedNode, 1));
 }
 
@@ -881,14 +957,16 @@ void SmCursor::InsertText(const OUString& aString)
     EndEdit();
 }
 
-void SmCursor::InsertElement(SmFormulaElement element){
+void SmCursor::InsertElement(SmFormulaElement element)
+{
     BeginEdit();
 
     Delete();
 
     //Create new node
     SmNode* pNewNode = nullptr;
-    switch(element){
+    switch (element)
+    {
         case BlankElement:
         {
             SmToken token;
@@ -898,12 +976,14 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmBlankNode* pBlankNode = new SmBlankNode(token);
             pBlankNode->IncreaseBy(token);
             pNewNode = pBlankNode;
-        }break;
+        }
+        break;
         case FactorialElement:
         {
             SmToken token(TFACT, MS_FACT, "fact", TG::UnOper, 5);
             pNewNode = new SmMathSymbolNode(token);
-        }break;
+        }
+        break;
         case PlusElement:
         {
             SmToken token;
@@ -913,7 +993,8 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.nLevel = 5;
             token.aText = "+";
             pNewNode = new SmMathSymbolNode(token);
-        }break;
+        }
+        break;
         case MinusElement:
         {
             SmToken token;
@@ -923,7 +1004,8 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.nLevel = 5;
             token.aText = "-";
             pNewNode = new SmMathSymbolNode(token);
-        }break;
+        }
+        break;
         case CDotElement:
         {
             SmToken token;
@@ -932,7 +1014,8 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.nGroup = TG::Product;
             token.aText = "cdot";
             pNewNode = new SmMathSymbolNode(token);
-        }break;
+        }
+        break;
         case EqualElement:
         {
             SmToken token;
@@ -941,7 +1024,8 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.nGroup = TG::Relation;
             token.aText = "=";
             pNewNode = new SmMathSymbolNode(token);
-        }break;
+        }
+        break;
         case LessThanElement:
         {
             SmToken token;
@@ -950,7 +1034,8 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.nGroup = TG::Relation;
             token.aText = "<";
             pNewNode = new SmMathSymbolNode(token);
-        }break;
+        }
+        break;
         case GreaterThanElement:
         {
             SmToken token;
@@ -959,7 +1044,8 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.nGroup = TG::Relation;
             token.aText = ">";
             pNewNode = new SmMathSymbolNode(token);
-        }break;
+        }
+        break;
         case PercentElement:
         {
             SmToken token;
@@ -968,7 +1054,8 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.nGroup = TG::NONE;
             token.aText = "\"%\"";
             pNewNode = new SmMathSymbolNode(token);
-        }break;
+        }
+        break;
     }
     assert(pNewNode);
 
@@ -1010,7 +1097,8 @@ void SmCursor::InsertSpecial(const OUString& _aString)
     EndEdit();
 }
 
-void SmCursor::InsertCommandText(const OUString& aCommandText) {
+void SmCursor::InsertCommandText(const OUString& aCommandText)
+{
     //Parse the sub expression
     auto xSubExpr = SmParser().ParseExpression(aCommandText);
 
@@ -1033,8 +1121,9 @@ void SmCursor::InsertCommandText(const OUString& aCommandText) {
     EndEdit();
 }
 
-void SmCursor::Copy(){
-    if(!HasSelection())
+void SmCursor::Copy()
+{
+    if (!HasSelection())
         return;
 
     AnnotateSelection();
@@ -1047,19 +1136,24 @@ void SmCursor::Copy(){
 
     //Clone selected nodes
     SmClipboard aClipboard;
-    if(IsLineCompositionNode(pLine))
+    if (IsLineCompositionNode(pLine))
         CloneLineToClipboard(static_cast<SmStructureNode*>(pLine), &aClipboard);
-    else{
+    else
+    {
         //Special care to only clone selected text
-        if(pLine->GetType() == SmNodeType::Text) {
-            SmTextNode *pText = static_cast<SmTextNode*>(pLine);
-            std::unique_ptr<SmTextNode> pClone(new SmTextNode( pText->GetToken(), pText->GetFontDesc() ));
-            int start  = pText->GetSelectionStart(),
+        if (pLine->GetType() == SmNodeType::Text)
+        {
+            SmTextNode* pText = static_cast<SmTextNode*>(pLine);
+            std::unique_ptr<SmTextNode> pClone(
+                new SmTextNode(pText->GetToken(), pText->GetFontDesc()));
+            int start = pText->GetSelectionStart(),
                 length = pText->GetSelectionEnd() - pText->GetSelectionStart();
             pClone->ChangeText(pText->GetText().copy(start, length));
             pClone->SetScaleMode(pText->GetScaleMode());
             aClipboard.push_front(std::move(pClone));
-        } else {
+        }
+        else
+        {
             SmCloningVisitor aCloneFactory;
             aClipboard.push_front(std::unique_ptr<SmNode>(aCloneFactory.Clone(pLine)));
         }
@@ -1070,7 +1164,8 @@ void SmCursor::Copy(){
         maClipboard = std::move(aClipboard);
 }
 
-void SmCursor::Paste() {
+void SmCursor::Paste()
+{
     BeginEdit();
     Delete();
 
@@ -1080,19 +1175,22 @@ void SmCursor::Paste() {
     EndEdit();
 }
 
-std::unique_ptr<SmNodeList> SmCursor::CloneList(SmClipboard &rClipboard){
+std::unique_ptr<SmNodeList> SmCursor::CloneList(SmClipboard& rClipboard)
+{
     SmCloningVisitor aCloneFactory;
     std::unique_ptr<SmNodeList> pClones(new SmNodeList);
 
-    for(auto &xNode : rClipboard){
-        SmNode *pClone = aCloneFactory.Clone(xNode.get());
+    for (auto& xNode : rClipboard)
+    {
+        SmNode* pClone = aCloneFactory.Clone(xNode.get());
         pClones->push_back(pClone);
     }
 
     return pClones;
 }
 
-SmNode* SmCursor::FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected){
+SmNode* SmCursor::FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected)
+{
     assert(pSNode);
     //Move up parent until we find a node who's
     //parent is NULL or isn't selected and not a type of:
@@ -1102,37 +1200,39 @@ SmNode* SmCursor::FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected){
     //      SmUnHorNode
     //      SmAlignNode
     //      SmFontNode
-    while(pSNode->GetParent() &&
-          ((MoveUpIfSelected &&
-            pSNode->GetParent()->IsSelected()) ||
-           IsLineCompositionNode(pSNode->GetParent())))
+    while (pSNode->GetParent()
+           && ((MoveUpIfSelected && pSNode->GetParent()->IsSelected())
+               || IsLineCompositionNode(pSNode->GetParent())))
         pSNode = pSNode->GetParent();
     //Now we have the selection line node
     return pSNode;
 }
 
-SmNode* SmCursor::FindSelectedNode(SmNode* pNode){
-    if(pNode->GetNumSubNodes() == 0)
+SmNode* SmCursor::FindSelectedNode(SmNode* pNode)
+{
+    if (pNode->GetNumSubNodes() == 0)
         return nullptr;
-    for(auto pChild : *static_cast<SmStructureNode*>(pNode))
+    for (auto pChild : *static_cast<SmStructureNode*>(pNode))
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        if(pChild->IsSelected())
+        if (pChild->IsSelected())
             return pChild;
         SmNode* pRetVal = FindSelectedNode(pChild);
-        if(pRetVal)
+        if (pRetVal)
             return pRetVal;
     }
     return nullptr;
 }
 
-void SmCursor::LineToList(SmStructureNode* pLine, SmNodeList& list){
-    for(auto pChild : *pLine)
+void SmCursor::LineToList(SmStructureNode* pLine, SmNodeList& list)
+{
+    for (auto pChild : *pLine)
     {
         if (!pChild)
             continue;
-        switch(pChild->GetType()){
+        switch (pChild->GetType())
+        {
             case SmNodeType::Line:
             case SmNodeType::UnHor:
             case SmNodeType::Expression:
@@ -1152,32 +1252,39 @@ void SmCursor::LineToList(SmStructureNode* pLine, SmNodeList& list){
     delete pLine;
 }
 
-void SmCursor::CloneLineToClipboard(SmStructureNode* pLine, SmClipboard* pClipboard){
+void SmCursor::CloneLineToClipboard(SmStructureNode* pLine, SmClipboard* pClipboard)
+{
     SmCloningVisitor aCloneFactory;
-    for(auto pChild : *pLine)
+    for (auto pChild : *pLine)
     {
         if (!pChild)
             continue;
-        if( IsLineCompositionNode( pChild ) )
-            CloneLineToClipboard( static_cast<SmStructureNode*>(pChild), pClipboard );
-        else if( pChild->IsSelected() && pChild->GetType() != SmNodeType::Error ) {
+        if (IsLineCompositionNode(pChild))
+            CloneLineToClipboard(static_cast<SmStructureNode*>(pChild), pClipboard);
+        else if (pChild->IsSelected() && pChild->GetType() != SmNodeType::Error)
+        {
             //Only clone selected text from SmTextNode
-            if(pChild->GetType() == SmNodeType::Text) {
-                SmTextNode *pText = static_cast<SmTextNode*>(pChild);
-                std::unique_ptr<SmTextNode> pClone(new SmTextNode( pChild->GetToken(), pText->GetFontDesc() ));
+            if (pChild->GetType() == SmNodeType::Text)
+            {
+                SmTextNode* pText = static_cast<SmTextNode*>(pChild);
+                std::unique_ptr<SmTextNode> pClone(
+                    new SmTextNode(pChild->GetToken(), pText->GetFontDesc()));
                 int start = pText->GetSelectionStart(),
                     length = pText->GetSelectionEnd() - pText->GetSelectionStart();
                 pClone->ChangeText(pText->GetText().copy(start, length));
                 pClone->SetScaleMode(pText->GetScaleMode());
                 pClipboard->push_back(std::move(pClone));
-            } else
+            }
+            else
                 pClipboard->push_back(std::unique_ptr<SmNode>(aCloneFactory.Clone(pChild)));
         }
     }
 }
 
-bool SmCursor::IsLineCompositionNode(SmNode const * pNode){
-    switch(pNode->GetType()){
+bool SmCursor::IsLineCompositionNode(SmNode const* pNode)
+{
+    switch (pNode->GetType())
+    {
         case SmNodeType::Line:
         case SmNodeType::UnHor:
         case SmNodeType::Expression:
@@ -1190,34 +1297,34 @@ bool SmCursor::IsLineCompositionNode(SmNode const * pNode){
     }
 }
 
-int SmCursor::CountSelectedNodes(SmNode* pNode){
-    if(pNode->GetNumSubNodes() == 0)
+int SmCursor::CountSelectedNodes(SmNode* pNode)
+{
+    if (pNode->GetNumSubNodes() == 0)
         return 0;
     int nCount = 0;
-    for(auto pChild : *static_cast<SmStructureNode*>(pNode))
+    for (auto pChild : *static_cast<SmStructureNode*>(pNode))
     {
         if (!pChild)
             continue;
-        if(pChild->IsSelected() && !IsLineCompositionNode(pChild))
+        if (pChild->IsSelected() && !IsLineCompositionNode(pChild))
             nCount++;
         nCount += CountSelectedNodes(pChild);
     }
     return nCount;
 }
 
-bool SmCursor::HasComplexSelection(){
-    if(!HasSelection())
+bool SmCursor::HasComplexSelection()
+{
+    if (!HasSelection())
         return false;
     AnnotateSelection();
 
     return CountSelectedNodes(mpTree) > 1;
 }
 
-void SmCursor::FinishEdit(std::unique_ptr<SmNodeList> pLineList,
-                          SmStructureNode* pParent,
-                          int nParentIndex,
-                          SmCaretPos PosAfterEdit,
-                          SmNode* pStartLine) {
+void SmCursor::FinishEdit(std::unique_ptr<SmNodeList> pLineList, SmStructureNode* pParent,
+                          int nParentIndex, SmCaretPos PosAfterEdit, SmNode* pStartLine)
+{
     //Store number of nodes in line for later
     int entries = pLineList->size();
 
@@ -1227,15 +1334,14 @@ void SmCursor::FinishEdit(std::unique_ptr<SmNodeList> pLineList,
     pLineList.reset();
 
     //Check if we're making the body of a subsup node bigger than one
-    if(pParent->GetType() == SmNodeType::SubSup &&
-       nParentIndex == 0 &&
-       entries > 1) {
+    if (pParent->GetType() == SmNodeType::SubSup && nParentIndex == 0 && entries > 1)
+    {
         //Wrap pLine in scalable round brackets
         SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
         std::unique_ptr<SmBraceNode> pBrace(new SmBraceNode(aTok));
         pBrace->SetScaleMode(SmScaleMode::Height);
-        std::unique_ptr<SmNode> pLeft(  CreateBracket(SmBracketType::Round, true) ),
-                                pRight( CreateBracket(SmBracketType::Round, false) );
+        std::unique_ptr<SmNode> pLeft(CreateBracket(SmBracketType::Round, true)),
+            pRight(CreateBracket(SmBracketType::Round, false));
         std::unique_ptr<SmBracebodyNode> pBody(new SmBracebodyNode(SmToken()));
         pBody->SetSubNodes(std::move(pLine), nullptr);
         pBrace->SetSubNodes(std::move(pLeft), std::move(pBody), std::move(pRight));
@@ -1256,7 +1362,7 @@ void SmCursor::FinishEdit(std::unique_ptr<SmNodeList> pLineList,
     }
 
     //Set pStartLine if NULL
-    if(!pStartLine)
+    if (!pStartLine)
         pStartLine = pLine.get();
 
     //Insert it back into the parent
@@ -1269,31 +1375,35 @@ void SmCursor::FinishEdit(std::unique_ptr<SmNodeList> pLineList,
     AnnotateSelection(); //Update selection annotation!
 
     //Set caret position
-    if(!SetCaretPosition(PosAfterEdit))
+    if (!SetCaretPosition(PosAfterEdit))
         SetCaretPosition(SmCaretPos(pStartLine, 0));
 
     //End edit section
     EndEdit();
 }
 
-void SmCursor::BeginEdit(){
-    if(mnEditSections++ > 0) return;
+void SmCursor::BeginEdit()
+{
+    if (mnEditSections++ > 0)
+        return;
 
     mbIsEnabledSetModifiedSmDocShell = mpDocShell->IsEnableSetModified();
-    if( mbIsEnabledSetModifiedSmDocShell )
-        mpDocShell->EnableSetModified( false );
+    if (mbIsEnabledSetModifiedSmDocShell)
+        mpDocShell->EnableSetModified(false);
 }
 
-void SmCursor::EndEdit(){
-    if(--mnEditSections > 0) return;
+void SmCursor::EndEdit()
+{
+    if (--mnEditSections > 0)
+        return;
 
     mpDocShell->SetFormulaArranged(false);
     //Okay, I don't know what this does... :)
     //It's used in SmDocShell::SetText and with places where everything is modified.
     //I think it does some magic, with sfx, but everything is totally undocumented so
     //it's kinda hard to tell...
-    if ( mbIsEnabledSetModifiedSmDocShell )
-        mpDocShell->EnableSetModified( mbIsEnabledSetModifiedSmDocShell );
+    if (mbIsEnabledSetModifiedSmDocShell)
+        mpDocShell->EnableSetModified(mbIsEnabledSetModifiedSmDocShell);
     //I think this notifies people around us that we've modified this document...
     mpDocShell->SetModified();
     //I think SmDocShell uses this value when it sends an update graphics event
@@ -1302,7 +1412,7 @@ void SmCursor::EndEdit(){
 
     //TODO: Consider copying the update accessibility code from SmDocShell::SetText in here...
     //This somehow updates the size of SmGraphicView if it is running in embedded mode
-    if( mpDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
+    if (mpDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
         mpDocShell->OnDocumentPrinterChanged(nullptr);
 
     //Request a repaint...
@@ -1312,14 +1422,17 @@ void SmCursor::EndEdit(){
     OUString formula;
     SmNodeToTextVisitor(mpTree, formula);
     mpDocShell->maText = formula;
-    mpDocShell->GetEditEngine().QuickInsertText( formula, ESelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL ) );
+    mpDocShell->GetEditEngine().QuickInsertText(formula,
+                                                ESelection(0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL));
     mpDocShell->GetEditEngine().QuickFormatDoc();
 }
 
-void SmCursor::RequestRepaint(){
-    SmViewShell *pViewSh = SmGetActiveView();
-    if( pViewSh ) {
-        if ( SfxObjectCreateMode::EMBEDDED == mpDocShell->GetCreateMode() )
+void SmCursor::RequestRepaint()
+{
+    SmViewShell* pViewSh = SmGetActiveView();
+    if (pViewSh)
+    {
+        if (SfxObjectCreateMode::EMBEDDED == mpDocShell->GetCreateMode())
             mpDocShell->Repaint();
         else
             pViewSh->GetGraphicWindow().Invalidate();
@@ -1329,66 +1442,94 @@ void SmCursor::RequestRepaint(){
 bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType) const
 {
     const SmCaretPos pos = GetPosition();
-    if (!pos.IsValid()) {
+    if (!pos.IsValid())
+    {
         return false;
     }
 
     SmNode* pNode = pos.pSelectedNode;
 
-    if (pNode->GetType() == SmNodeType::Text) {
+    if (pNode->GetType() == SmNodeType::Text)
+    {
         SmTextNode* pTextNode = static_cast<SmTextNode*>(pNode);
-        if (pos.nIndex < pTextNode->GetText().getLength()) {
+        if (pos.nIndex < pTextNode->GetText().getLength())
+        {
             // The cursor is on a text node and at the middle of it.
             return false;
         }
-    } else {
-        if (pos.nIndex < 1) {
+    }
+    else
+    {
+        if (pos.nIndex < 1)
+        {
             return false;
         }
     }
 
-    while (true) {
+    while (true)
+    {
         SmStructureNode* pParentNode = pNode->GetParent();
-        if (!pParentNode) {
+        if (!pParentNode)
+        {
             // There's no brace body node in the ancestors.
             return false;
         }
 
         int index = pParentNode->IndexOfSubNode(pNode);
         assert(index >= 0);
-        if (static_cast<size_t>(index + 1) != pParentNode->GetNumSubNodes()) {
+        if (static_cast<size_t>(index + 1) != pParentNode->GetNumSubNodes())
+        {
             // The cursor is not at the tail at one of ancestor nodes.
             return false;
         }
 
         pNode = pParentNode;
-        if (pNode->GetType() == SmNodeType::Bracebody) {
+        if (pNode->GetType() == SmNodeType::Bracebody)
+        {
             // Found the brace body node.
             break;
         }
     }
 
     SmStructureNode* pBraceNodeTmp = pNode->GetParent();
-    if (!pBraceNodeTmp || pBraceNodeTmp->GetType() != SmNodeType::Brace) {
+    if (!pBraceNodeTmp || pBraceNodeTmp->GetType() != SmNodeType::Brace)
+    {
         // Brace node is invalid.
         return false;
     }
 
     SmBraceNode* pBraceNode = static_cast<SmBraceNode*>(pBraceNodeTmp);
     SmMathSymbolNode* pClosingNode = pBraceNode->ClosingBrace();
-    if (!pClosingNode) {
+    if (!pClosingNode)
+    {
         // Couldn't get closing symbol node.
         return false;
     }
 
     // Check if the closing brace matches eBracketType.
     SmTokenType eClosingTokenType = pClosingNode->GetToken().eType;
-    switch (eBracketType) {
-    case SmBracketType::Round:        if (eClosingTokenType != TRPARENT)   { return false; } break;
-    case SmBracketType::Square:       if (eClosingTokenType != TRBRACKET)  { return false; } break;
-    case SmBracketType::Curly:        if (eClosingTokenType != TRBRACE)    { return false; } break;
-    default:
-        return false;
+    switch (eBracketType)
+    {
+        case SmBracketType::Round:
+            if (eClosingTokenType != TRPARENT)
+            {
+                return false;
+            }
+            break;
+        case SmBracketType::Square:
+            if (eClosingTokenType != TRBRACKET)
+            {
+                return false;
+            }
+            break;
+        case SmBracketType::Curly:
+            if (eClosingTokenType != TRBRACE)
+            {
+                return false;
+            }
+            break;
+        default:
+            return false;
     }
 
     return true;
@@ -1396,16 +1537,20 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType) const
 
 /////////////////////////////////////// SmNodeListParser
 
-SmNode* SmNodeListParser::Parse(SmNodeList* list){
+SmNode* SmNodeListParser::Parse(SmNodeList* list)
+{
     pList = list;
     //Delete error nodes
     SmNodeList::iterator it = pList->begin();
-    while(it != pList->end()) {
-        if((*it)->GetType() == SmNodeType::Error){
+    while (it != pList->end())
+    {
+        if ((*it)->GetType() == SmNodeType::Error)
+        {
             //Delete and erase
             delete *it;
             it = pList->erase(it);
-        }else
+        }
+        else
             ++it;
     }
     SmNode* retval = Expression();
@@ -1413,10 +1558,11 @@ SmNode* SmNodeListParser::Parse(SmNodeList* list){
     return retval;
 }
 
-SmNode* SmNodeListParser::Expression(){
+SmNode* SmNodeListParser::Expression()
+{
     SmNodeArray NodeArray;
     //Accept as many relations as there is
-    while(Terminal())
+    while (Terminal())
         NodeArray.push_back(Relation());
 
     //Create SmExpressionNode, I hope SmToken() will do :)
@@ -1425,11 +1571,13 @@ SmNode* SmNodeListParser::Expression(){
     return pExpr;
 }
 
-SmNode* SmNodeListParser::Relation(){
+SmNode* SmNodeListParser::Relation()
+{
     //Read a sum
     std::unique_ptr<SmNode> pLeft(Sum());
     //While we have tokens and the next is a relation
-    while(Terminal() && IsRelationOperator(Terminal()->GetToken())){
+    while (Terminal() && IsRelationOperator(Terminal()->GetToken()))
+    {
         //Take the operator
         std::unique_ptr<SmNode> pOper(Take());
         //Find the right side of the relation
@@ -1442,11 +1590,13 @@ SmNode* SmNodeListParser::Relation(){
     return pLeft.release();
 }
 
-SmNode* SmNodeListParser::Sum(){
+SmNode* SmNodeListParser::Sum()
+{
     //Read a product
     std::unique_ptr<SmNode> pLeft(Product());
     //While we have tokens and the next is a sum
-    while(Terminal() && IsSumOperator(Terminal()->GetToken())){
+    while (Terminal() && IsSumOperator(Terminal()->GetToken()))
+    {
         //Take the operator
         std::unique_ptr<SmNode> pOper(Take());
         //Find the right side of the sum
@@ -1459,11 +1609,13 @@ SmNode* SmNodeListParser::Sum(){
     return pLeft.release();
 }
 
-SmNode* SmNodeListParser::Product(){
+SmNode* SmNodeListParser::Product()
+{
     //Read a Factor
     std::unique_ptr<SmNode> pLeft(Factor());
     //While we have tokens and the next is a product
-    while(Terminal() && IsProductOperator(Terminal()->GetToken())){
+    while (Terminal() && IsProductOperator(Terminal()->GetToken()))
+    {
         //Take the operator
         std::unique_ptr<SmNode> pOper(Take());
         //Find the right side of the operation
@@ -1476,18 +1628,18 @@ SmNode* SmNodeListParser::Product(){
     return pLeft.release();
 }
 
-SmNode* SmNodeListParser::Factor(){
+SmNode* SmNodeListParser::Factor()
+{
     //Read unary operations
-    if(!Terminal())
+    if (!Terminal())
         return Error();
     //Take care of unary operators
-    else if(IsUnaryOperator(Terminal()->GetToken()))
+    else if (IsUnaryOperator(Terminal()->GetToken()))
     {
-        SmStructureNode *pUnary = new SmUnHorNode(SmToken());
-        std::unique_ptr<SmNode> pOper(Terminal()),
-                                pArg;
+        SmStructureNode* pUnary = new SmUnHorNode(SmToken());
+        std::unique_ptr<SmNode> pOper(Terminal()), pArg;
 
-        if(Next())
+        if (Next())
             pArg.reset(Factor());
         else
             pArg.reset(Error());
@@ -1498,18 +1650,20 @@ SmNode* SmNodeListParser::Factor(){
     return Postfix();
 }
 
-SmNode* SmNodeListParser::Postfix(){
-    if(!Terminal())
+SmNode* SmNodeListParser::Postfix()
+{
+    if (!Terminal())
         return Error();
     std::unique_ptr<SmNode> pArg;
-    if(IsPostfixOperator(Terminal()->GetToken()))
+    if (IsPostfixOperator(Terminal()->GetToken()))
         pArg.reset(Error());
-    else if(IsOperator(Terminal()->GetToken()))
+    else if (IsOperator(Terminal()->GetToken()))
         return Error();
     else
         pArg.reset(Take());
-    while(Terminal() && IsPostfixOperator(Terminal()->GetToken())) {
-        std::unique_ptr<SmStructureNode> pUnary(new SmUnHorNode(SmToken()) );
+    while (Terminal() && IsPostfixOperator(Terminal()->GetToken()))
+    {
+        std::unique_ptr<SmStructureNode> pUnary(new SmUnHorNode(SmToken()));
         std::unique_ptr<SmNode> pOper(Take());
         pUnary->SetSubNodes(std::move(pArg), std::move(pOper));
         pArg = std::move(pUnary);
@@ -1517,47 +1671,34 @@ SmNode* SmNodeListParser::Postfix(){
     return pArg.release();
 }
 
-SmNode* SmNodeListParser::Error(){
-    return new SmErrorNode(SmToken());
+SmNode* SmNodeListParser::Error() { return new SmErrorNode(SmToken()); }
+
+bool SmNodeListParser::IsOperator(const SmToken& token)
+{
+    return IsRelationOperator(token) || IsSumOperator(token) || IsProductOperator(token)
+           || IsUnaryOperator(token) || IsPostfixOperator(token);
 }
 
-bool SmNodeListParser::IsOperator(const SmToken &token) {
-    return  IsRelationOperator(token) ||
-            IsSumOperator(token) ||
-            IsProductOperator(token) ||
-            IsUnaryOperator(token) ||
-            IsPostfixOperator(token);
-}
-
-bool SmNodeListParser::IsRelationOperator(const SmToken &token) {
+bool SmNodeListParser::IsRelationOperator(const SmToken& token)
+{
     return bool(token.nGroup & TG::Relation);
 }
 
-bool SmNodeListParser::IsSumOperator(const SmToken &token) {
-    return bool(token.nGroup & TG::Sum);
+bool SmNodeListParser::IsSumOperator(const SmToken& token) { return bool(token.nGroup & TG::Sum); }
+
+bool SmNodeListParser::IsProductOperator(const SmToken& token)
+{
+    return token.nGroup & TG::Product && token.eType != TWIDESLASH && token.eType != TWIDEBACKSLASH
+           && token.eType != TUNDERBRACE && token.eType != TOVERBRACE && token.eType != TOVER;
 }
 
-bool SmNodeListParser::IsProductOperator(const SmToken &token) {
-    return token.nGroup & TG::Product &&
-           token.eType != TWIDESLASH &&
-           token.eType != TWIDEBACKSLASH &&
-           token.eType != TUNDERBRACE &&
-           token.eType != TOVERBRACE &&
-           token.eType != TOVER;
+bool SmNodeListParser::IsUnaryOperator(const SmToken& token)
+{
+    return token.nGroup & TG::UnOper
+           && (token.eType == TPLUS || token.eType == TMINUS || token.eType == TPLUSMINUS
+               || token.eType == TMINUSPLUS || token.eType == TNEG || token.eType == TUOPER);
 }
 
-bool SmNodeListParser::IsUnaryOperator(const SmToken &token) {
-    return  token.nGroup & TG::UnOper &&
-            (token.eType == TPLUS ||
-             token.eType == TMINUS ||
-             token.eType == TPLUSMINUS ||
-             token.eType == TMINUSPLUS ||
-             token.eType == TNEG ||
-             token.eType == TUOPER);
-}
-
-bool SmNodeListParser::IsPostfixOperator(const SmToken &token) {
-    return token.eType == TFACT;
-}
+bool SmNodeListParser::IsPostfixOperator(const SmToken& token) { return token.eType == TFACT; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

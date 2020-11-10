@@ -40,49 +40,48 @@
 
 namespace
 {
-    class SmDLL
-    {
-    public:
-        SmDLL();
-    };
+class SmDLL
+{
+public:
+    SmDLL();
+};
 
-    SmDLL::SmDLL()
-    {
-        if ( SfxApplication::GetModule(SfxToolsModule::Math) )    // Module already active
-            return;
+SmDLL::SmDLL()
+{
+    if (SfxApplication::GetModule(SfxToolsModule::Math)) // Module already active
+        return;
 
-        SfxObjectFactory& rFactory = SmDocShell::Factory();
+    SfxObjectFactory& rFactory = SmDocShell::Factory();
 
-        auto pUniqueModule = std::make_unique<SmModule>(&rFactory);
-        SmModule* pModule = pUniqueModule.get();
-        SfxApplication::SetModule(SfxToolsModule::Math, std::move(pUniqueModule));
+    auto pUniqueModule = std::make_unique<SmModule>(&rFactory);
+    SmModule* pModule = pUniqueModule.get();
+    SfxApplication::SetModule(SfxToolsModule::Math, std::move(pUniqueModule));
 
-        rFactory.SetDocumentServiceName( "com.sun.star.formula.FormulaProperties" );
+    rFactory.SetDocumentServiceName("com.sun.star.formula.FormulaProperties");
 
-        SmModule::RegisterInterface(pModule);
-        SmDocShell::RegisterInterface(pModule);
-        SmViewShell::RegisterInterface(pModule);
+    SmModule::RegisterInterface(pModule);
+    SmDocShell::RegisterInterface(pModule);
+    SmViewShell::RegisterInterface(pModule);
 
-        SmViewShell::RegisterFactory(SFX_INTERFACE_SFXAPP);
+    SmViewShell::RegisterFactory(SFX_INTERFACE_SFXAPP);
 
-        SvxZoomStatusBarControl::RegisterControl(SID_ATTR_ZOOM, pModule);
-        SvxZoomSliderControl::RegisterControl(SID_ATTR_ZOOMSLIDER, pModule);
-        SvxModifyControl::RegisterControl(SID_TEXTSTATUS, pModule);
-        XmlSecStatusBarControl::RegisterControl(SID_SIGNATURE, pModule);
+    SvxZoomStatusBarControl::RegisterControl(SID_ATTR_ZOOM, pModule);
+    SvxZoomSliderControl::RegisterControl(SID_ATTR_ZOOMSLIDER, pModule);
+    SvxModifyControl::RegisterControl(SID_TEXTSTATUS, pModule);
+    XmlSecStatusBarControl::RegisterControl(SID_SIGNATURE, pModule);
 
-        SmCmdBoxWrapper::RegisterChildWindow(true);
-        SmElementsDockingWindowWrapper::RegisterChildWindow(true);
-    }
+    SmCmdBoxWrapper::RegisterChildWindow(true);
+    SmElementsDockingWindowWrapper::RegisterChildWindow(true);
+}
 
-    struct theSmDLLInstance : public rtl::Static<SmDLL, theSmDLLInstance> {};
+struct theSmDLLInstance : public rtl::Static<SmDLL, theSmDLLInstance>
+{
+};
 }
 
 namespace SmGlobals
 {
-    void ensure()
-    {
-        theSmDLLInstance::get();
-    }
+void ensure() { theSmDLLInstance::get(); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

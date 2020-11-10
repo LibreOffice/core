@@ -36,9 +36,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-StarmathDialogsTest::StarmathDialogsTest()
-{
-}
+StarmathDialogsTest::StarmathDialogsTest() {}
 
 void StarmathDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {

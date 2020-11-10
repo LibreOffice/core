@@ -38,55 +38,52 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using utl::MediaDescriptor;
 
-SmFilterDetect::SmFilterDetect()
-{
-}
+SmFilterDetect::SmFilterDetect() {}
 
-SmFilterDetect::~SmFilterDetect()
-{
-}
+SmFilterDetect::~SmFilterDetect() {}
 
-OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor )
+OUString SAL_CALL SmFilterDetect::detect(Sequence<PropertyValue>& lDescriptor)
 {
-    MediaDescriptor aMediaDesc( lDescriptor );
-    uno::Reference< io::XInputStream > xInStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY );
-    if ( !xInStream.is() )
+    MediaDescriptor aMediaDesc(lDescriptor);
+    uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()],
+                                               uno::UNO_QUERY);
+    if (!xInStream.is())
         return OUString();
 
     SfxMedium aMedium;
-    aMedium.UseInteractionHandler( false );
-    aMedium.setStreamToLoadFrom( xInStream, true );
+    aMedium.UseInteractionHandler(false);
+    aMedium.setStreamToLoadFrom(xInStream, true);
 
-    SvStream *pInStrm = aMedium.GetInStream();
-    if ( !pInStrm || pInStrm->GetError() )
+    SvStream* pInStrm = aMedium.GetInStream();
+    if (!pInStrm || pInStrm->GetError())
         return OUString();
 
     // Do not attempt to create an SotStorage on a
     // 0-length stream as that would create the compound
     // document header on the stream and effectively write to
     // disk!
-    pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
-    if ( pInStrm->remainingSize() == 0 )
+    pInStrm->Seek(STREAM_SEEK_TO_BEGIN);
+    if (pInStrm->remainingSize() == 0)
         return OUString();
 
     bool bStorageOk = false;
     try
     {
-        tools::SvRef<SotStorage> aStorage = new SotStorage( pInStrm, false );
+        tools::SvRef<SotStorage> aStorage = new SotStorage(pInStrm, false);
         bStorageOk = !aStorage->GetError();
         if (bStorageOk)
         {
-            if ( aStorage->IsStream("Equation Native") )
+            if (aStorage->IsStream("Equation Native"))
             {
                 sal_uInt8 nVersion;
-                if ( GetMathTypeVersion( aStorage.get(), nVersion ) && nVersion <=3 )
+                if (GetMathTypeVersion(aStorage.get(), nVersion) && nVersion <= 3)
                     return "math_MathType_3x";
             }
         }
     }
-    catch (const css::ucb::ContentCreationException &)
+    catch (const css::ucb::ContentCreationException&)
     {
-        TOOLS_WARN_EXCEPTION("starmath", "SmFilterDetect::detect caught" );
+        TOOLS_WARN_EXCEPTION("starmath", "SmFilterDetect::detect caught");
     }
 
     if (!bStorageOk)
@@ -95,25 +92,24 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         // version, encoding and !DOCTYPE
         // stuff I hope?
         static const sal_uInt16 nBufferSize = 200;
-        char aBuffer[nBufferSize+1];
-        pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
-        pInStrm->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW ); // avoid BOM marker
-        auto nBytesRead = pInStrm->ReadBytes( aBuffer, nBufferSize );
+        char aBuffer[nBufferSize + 1];
+        pInStrm->Seek(STREAM_SEEK_TO_BEGIN);
+        pInStrm->StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW); // avoid BOM marker
+        auto nBytesRead = pInStrm->ReadBytes(aBuffer, nBufferSize);
         if (nBytesRead >= 6)
         {
             aBuffer[nBytesRead] = 0;
             bool bIsMathType = false;
-            if (0 == strncmp( "<?xml", aBuffer, 5))
-                bIsMathType = (strstr( aBuffer, "<math>" ) ||
-                               strstr( aBuffer, "<math " ) ||
-                               strstr( aBuffer, "<math:math " ));
+            if (0 == strncmp("<?xml", aBuffer, 5))
+                bIsMathType = (strstr(aBuffer, "<math>") || strstr(aBuffer, "<math ")
+                               || strstr(aBuffer, "<math:math "));
             else
                 // this is the old <math tag to MathML in the beginning of the XML file
-                bIsMathType = (0 == strncmp( "<math ", aBuffer, 6) ||
-                               0 == strncmp( "<math> ", aBuffer, 7) ||
-                               0 == strncmp( "<math:math> ", aBuffer, 12));
+                bIsMathType
+                    = (0 == strncmp("<math ", aBuffer, 6) || 0 == strncmp("<math> ", aBuffer, 7)
+                       || 0 == strncmp("<math:math> ", aBuffer, 12));
 
-            if ( bIsMathType )
+            if (bIsMathType)
                 return "math_MathML_XML_Math";
         }
     }
@@ -128,13 +124,13 @@ OUString SAL_CALL SmFilterDetect::getImplementationName()
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SmFilterDetect::supportsService( const OUString& sServiceName )
+sal_Bool SAL_CALL SmFilterDetect::supportsService(const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL SmFilterDetect::getSupportedServiceNames()
 {
     return { "com.sun.star.frame.ExtendedTypeDetection" };
 }

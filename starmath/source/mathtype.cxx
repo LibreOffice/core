@@ -45,26 +45,25 @@ void MathType::Init()
     stored in the document
     */
     MathTypeFont aFont;
-    for(sal_uInt8 i=1;i<=11;i++)
+    for (sal_uInt8 i = 1; i <= 11; i++)
     {
-        aFont.nTface = i+128;
+        aFont.nTface = i + 128;
         switch (i)
         {
             default:
-                aFont.nStyle=0;
+                aFont.nStyle = 0;
                 break;
             case 3:
             case 4:
-                aFont.nStyle=1;
+                aFont.nStyle = 1;
                 break;
             case 7:
-                aFont.nStyle=2;
+                aFont.nStyle = 2;
                 break;
         }
         aUserStyles.insert(aFont);
     }
 }
-
 
 /*ToDo replace with table rather than switch, returns
  sal_True in the case that the char is just a char, and
@@ -79,12 +78,12 @@ void MathType::Init()
  between math symbols and ordinary text e.g. 1=2 rather
  than 1 = 2
  */
-bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVersion,
-    sal_uInt8 nTypeFace)
+bool MathType::LookupChar(sal_Unicode nChar, OUStringBuffer& rRet, sal_uInt8 nVersion,
+                          sal_uInt8 nTypeFace)
 {
-    bool bRet=false;
-    const char *pC = nullptr;
-    switch(nChar)
+    bool bRet = false;
+    const char* pC = nullptr;
+    switch (nChar)
     {
         case 0x0000:
             pC = " none ";
@@ -116,56 +115,56 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             else
             {
                 rRet.append(OUStringChar(nChar));
-                bRet=true;
+                bRet = true;
             }
             break;
         case 0x00fb:
             if ((nVersion < 3) && (nTypeFace == 0x81))
                 nChar = 0xDF;
             rRet.append(OUStringChar(nChar));
-            bRet=true;
+            bRet = true;
             break;
         case 'a':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b1;
             rRet.append(OUStringChar(nChar));
-            bRet=true;
+            bRet = true;
             break;
         case 'b':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b2;
             rRet.append(OUStringChar(nChar));
-            bRet=true;
+            bRet = true;
             break;
         case 'l':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bb;
             rRet.append(OUStringChar(nChar));
-            bRet=true;
+            bRet = true;
             break;
         case 'n':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bd;
             rRet.append(OUStringChar(nChar));
-            bRet=true;
+            bRet = true;
             break;
         case 'r':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3c1;
             rRet.append(OUStringChar(nChar));
-            bRet=true;
+            bRet = true;
             break;
         case 'D':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x394;
             rRet.append(OUStringChar(nChar));
-            bRet=true;
+            bRet = true;
             break;
         case 0xa9:
             if ((nVersion < 3) && (nTypeFace == 0x82))
                 nChar = '\'';
             rRet.append(OUStringChar(nChar));
-            bRet=true;
+            bRet = true;
             break;
         case 0x00f1:
             if ((nVersion < 3) && (nTypeFace == 0x86))
@@ -173,7 +172,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             else
             {
                 rRet.append(OUStringChar(nChar));
-                bRet=true;
+                bRet = true;
             }
             break;
         case 0x00a3:
@@ -182,7 +181,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             else
             {
                 rRet.append(OUStringChar(nChar));
-                bRet=true;
+                bRet = true;
             }
             break;
         case 0x00de:
@@ -191,7 +190,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             else
             {
                 rRet.append(OUStringChar(nChar));
-                bRet=true;
+                bRet = true;
             }
             break;
         case 0x0057:
@@ -200,7 +199,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             else
             {
                 rRet.append(OUStringChar(nChar));
-                bRet=true;
+                bRet = true;
             }
             break;
         case 0x007b:
@@ -468,7 +467,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             break;
         case 0xe083:
             rRet.append("+");
-            bRet=true;
+            bRet = true;
             break;
         case '^':
         case 0xe091:
@@ -486,17 +485,17 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
         case 0xE425:
             pC = " leslant ";
             break;
-        case 0xeb01:    //no space
-        case 0xeb08:    //normal space
-            bRet=true;
+        case 0xeb01: //no space
+        case 0xeb08: //normal space
+            bRet = true;
             break;
-        case 0xef04:    //tiny space
-        case 0xef05:    //tiny space
-        case 0xeb02:    //small space
-        case 0xeb04:    //medium space
+        case 0xef04: //tiny space
+        case 0xef05: //tiny space
+        case 0xeb02: //small space
+        case 0xeb04: //medium space
             rRet.append("`");
             break;
-        case 0xeb05:    //large space
+        case 0xeb05: //large space
             rRet.append("~");
             break;
         case 0x3a9:
@@ -504,7 +503,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             break;
         default:
             rRet.append(OUStringChar(nChar));
-            bRet=true;
+            bRet = true;
             break;
     }
     if (pC)
@@ -512,9 +511,9 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
     return bRet;
 }
 
-void MathTypeFont::AppendStyleToText(OUString &rRet)
+void MathTypeFont::AppendStyleToText(OUString& rRet)
 {
-    const char *pC = nullptr;
+    const char* pC = nullptr;
     switch (nStyle)
     {
         default:
@@ -531,10 +530,10 @@ void MathTypeFont::AppendStyleToText(OUString &rRet)
             break;
     }
     if (pC)
-        rRet += OUString::createFromAscii( pC );
+        rRet += OUString::createFromAscii(pC);
 }
 
-void MathType::TypeFaceToString(OUString &rTxt,sal_uInt8 nFace)
+void MathType::TypeFaceToString(OUString& rTxt, sal_uInt8 nFace)
 {
     MathTypeFont aFont(nFace);
     MathTypeFontSet::iterator aItr = aUserStyles.find(aFont);
@@ -543,12 +542,11 @@ void MathType::TypeFaceToString(OUString &rTxt,sal_uInt8 nFace)
     aFont.AppendStyleToText(rTxt);
 }
 
-bool MathType::Parse(SotStorage *pStor)
+bool MathType::Parse(SotStorage* pStor)
 {
-    tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream(
-        "Equation Native",
-        StreamMode::STD_READ);
-    if ( (!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
+    tools::SvRef<SotStorageStream> xSrc
+        = pStor->OpenSotStream("Equation Native", StreamMode::STD_READ);
+    if ((!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
         return false;
     return Parse(xSrc.get());
 }
@@ -556,7 +554,7 @@ bool MathType::Parse(SotStorage *pStor)
 bool MathType::Parse(SvStream* pStream)
 {
     pS = pStream;
-    pS->SetEndian( SvStreamEndian::LITTLE );
+    pS->SetEndian(SvStreamEndian::LITTLE);
 
     EQNOLEFILEHDR aHdr;
     aHdr.Read(pS);
@@ -564,13 +562,13 @@ bool MathType::Parse(SvStream* pStream)
     sal_uInt8 nProdSubVersion;
     sal_uInt8 nPlatform;
     sal_uInt8 nProduct;
-    pS->ReadUChar( nVersion );
-    pS->ReadUChar( nPlatform );
-    pS->ReadUChar( nProduct );
-    pS->ReadUChar( nProdVersion );
-    pS->ReadUChar( nProdSubVersion );
+    pS->ReadUChar(nVersion);
+    pS->ReadUChar(nPlatform);
+    pS->ReadUChar(nProduct);
+    pS->ReadUChar(nProdVersion);
+    pS->ReadUChar(nProdSubVersion);
 
-    if (nVersion > 3)   // allow only supported versions of MathType to be parsed
+    if (nVersion > 3) // allow only supported versions of MathType to be parsed
         return false;
 
     bool bRet = HandleRecords(0);
@@ -583,79 +581,77 @@ bool MathType::Parse(SvStream* pStream)
     return bRet;
 }
 
-static void lcl_PrependDummyTerm(OUStringBuffer &rRet, sal_Int32 &rTextStart)
+static void lcl_PrependDummyTerm(OUStringBuffer& rRet, sal_Int32& rTextStart)
 {
-    if ((rTextStart < rRet.getLength()) &&
-        (rRet[rTextStart] == '=') &&
-        ((rTextStart == 0) || (rRet[ rTextStart-1 ] == '{'))
-       )
+    if ((rTextStart < rRet.getLength()) && (rRet[rTextStart] == '=')
+        && ((rTextStart == 0) || (rRet[rTextStart - 1] == '{')))
     {
         rRet.insert(rTextStart, " {}");
-        rTextStart+=3;
+        rTextStart += 3;
     }
 }
 
-static void lcl_AppendDummyTerm(OUStringBuffer &rRet)
+static void lcl_AppendDummyTerm(OUStringBuffer& rRet)
 {
-    bool bOk=false;
-    for(int nI=rRet.getLength()-1;nI >= 0; nI--)
+    bool bOk = false;
+    for (int nI = rRet.getLength() - 1; nI >= 0; nI--)
     {
-        sal_Int32 nIdx = sal::static_int_cast< sal_Int32 >(nI);
+        sal_Int32 nIdx = sal::static_int_cast<sal_Int32>(nI);
         sal_Unicode nChar = rRet[nIdx];
         if (nChar == ' ')
             continue;
         if (rRet[nIdx] != '{')
-            bOk=true;
+            bOk = true;
         break;
     }
-    if (!bOk)   //No term, use dummy
+    if (!bOk) //No term, use dummy
         rRet.append(" {}");
 }
 
 void MathType::HandleNudge()
 {
     sal_uInt8 nXNudge;
-    pS->ReadUChar( nXNudge );
+    pS->ReadUChar(nXNudge);
     sal_uInt8 nYNudge;
-    pS->ReadUChar( nYNudge );
+    pS->ReadUChar(nYNudge);
     if (nXNudge == 128 && nYNudge == 128)
     {
         sal_uInt16 nXLongNudge;
         sal_uInt16 nYLongNudge;
-        pS->ReadUInt16( nXLongNudge );
-        pS->ReadUInt16( nYLongNudge );
+        pS->ReadUInt16(nXLongNudge);
+        pS->ReadUInt16(nYLongNudge);
     }
 }
 
 /* Fabulously complicated as many tokens have to be reordered and generally
  * moved around from mathtypes paradigm to starmaths. */
-bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
-    sal_uInt8 nVariation, int nMatrixRows, int nMatrixCols)
+bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation, int nMatrixRows,
+                             int nMatrixCols)
 {
     //depth-protect
     if (nLevel > 1024)
         return false;
 
-    sal_uInt8 nTag,nRecord;
-    sal_uInt8 nTabType,nTabStops;
+    sal_uInt8 nTag, nRecord;
+    sal_uInt8 nTabType, nTabStops;
     sal_uInt16 nTabOffset;
-    int i, newline=0;
-    bool bSilent=false;
-    int nPart=0;
-    OUString sPush,sMainTerm;
-    int nSetSize=0,nSetAlign=0;
-    int nCurRow=0,nCurCol=0;
-    bool bOpenString=false;
+    int i, newline = 0;
+    bool bSilent = false;
+    int nPart = 0;
+    OUString sPush, sMainTerm;
+    int nSetSize = 0, nSetAlign = 0;
+    int nCurRow = 0, nCurCol = 0;
+    bool bOpenString = false;
     sal_Int32 nTextStart = 0;
     sal_Int32 nSubSupStartPos = 0;
-    sal_Int32 nLastTemplateBracket=-1;
+    sal_Int32 nLastTemplateBracket = -1;
     bool bRet = true;
 
     do
     {
         nTag = 0;
-        pS->ReadUChar( nTag );
-        nRecord = nTag&0x0F;
+        pS->ReadUChar(nTag);
+        nRecord = nTag & 0x0F;
 
         /*MathType strings can of course include words which
          *are StarMath keywords, the simplest solution is
@@ -669,24 +665,24 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
          */
         if ((nRecord == CHAR) && (!bOpenString))
         {
-            bOpenString=true;
+            bOpenString = true;
             nTextStart = rRet.getLength();
         }
         else if ((nRecord != CHAR) && bOpenString)
         {
-            bOpenString=false;
+            bOpenString = false;
             if ((rRet.getLength() - nTextStart) > 1)
             {
                 OUString aStr;
-                TypeFaceToString(aStr,nTypeFace);
+                TypeFaceToString(aStr, nTypeFace);
                 aStr += "\"";
-                rRet.insert(nTextStart,aStr);
+                rRet.insert(nTextStart, aStr);
                 rRet.append("\"");
             }
             else if (nRecord == END && !rRet.isEmpty())
             {
                 sal_Unicode cChar = 0;
-                sal_Int32 nI = rRet.getLength()-1;
+                sal_Int32 nI = rRet.getLength() - 1;
                 while (nI)
                 {
                     cChar = rRet[nI];
@@ -699,41 +695,41 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
             }
         }
 
-        switch(nRecord)
+        switch (nRecord)
         {
             case LINE:
-                {
-                    if (xfLMOVE(nTag))
-                        HandleNudge();
+            {
+                if (xfLMOVE(nTag))
+                    HandleNudge();
 
-                    if (newline>0)
-                        rRet.append("\nnewline\n");
-                    if (!(xfNULL(nTag)))
+                if (newline > 0)
+                    rRet.append("\nnewline\n");
+                if (!(xfNULL(nTag)))
+                {
+                    switch (nSelector)
                     {
-                        switch (nSelector)
-                        {
                         case tmANGLE:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" langle ");
-                            else if (nVariation==1)
+                            else if (nVariation == 1)
                                 rRet.append(" \\langle ");
                             break;
                         case tmPAREN:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" left (");
-                            else if (nVariation==1)
+                            else if (nVariation == 1)
                                 rRet.append("\\(");
                             break;
                         case tmBRACE:
-                            if ((nVariation==0) || (nVariation==1))
+                            if ((nVariation == 0) || (nVariation == 1))
                                 rRet.append(" left lbrace ");
                             else
                                 rRet.append(" left none ");
                             break;
                         case tmBRACK:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" left [");
-                            else if (nVariation==1)
+                            else if (nVariation == 1)
                                 rRet.append("\\[");
                             break;
                         case tmLBLB:
@@ -741,15 +737,15 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             rRet.append(" \\[");
                             break;
                         case tmBAR:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" lline ");
-                            else if (nVariation==1)
+                            else if (nVariation == 1)
                                 rRet.append(" \\lline ");
                             break;
                         case tmDBAR:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" ldline ");
-                            else if (nVariation==1)
+                            else if (nVariation == 1)
                                 rRet.append(" \\ldline ");
                             break;
                         case tmFLOOR:
@@ -759,9 +755,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.append(" left none ");
                             break;
                         case tmCEILING:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" lceil ");
-                            else if (nVariation==1)
+                            else if (nVariation == 1)
                                 rRet.append(" \\lceil ");
                             break;
                         case tmRBRB:
@@ -788,21 +784,18 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             if (nPart == 0)
                                 rRet.append(" { ");
 
-
                             if (nPart == 1)
                                 rRet.append(" over ");
                             rRet.append(" {");
                             break;
                         case tmSCRIPT:
                             nSubSupStartPos = rRet.getLength();
-                            if ((nVariation == 0) ||
-                                    ((nVariation == 2) && (nPart==1)))
+                            if ((nVariation == 0) || ((nVariation == 2) && (nPart == 1)))
                             {
                                 lcl_AppendDummyTerm(rRet);
                                 rRet.append(" rSup");
                             }
-                            else if ((nVariation == 1) ||
-                                    ((nVariation == 2) && (nPart==0)))
+                            else if ((nVariation == 1) || ((nVariation == 2) && (nPart == 0)))
                             {
                                 lcl_AppendDummyTerm(rRet);
                                 rRet.append(" rSub");
@@ -827,9 +820,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet.append(" widevec ");//left arrow above
+                                    rRet.append(" widevec "); //left arrow above
                                 else if (nVariation == 1)
-                                    rRet.append(" widevec ");//left arrow below
+                                    rRet.append(" widevec "); //left arrow below
                                 rRet.append(" {");
                             }
                             break;
@@ -837,9 +830,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet.append(" widevec ");//right arrow above
+                                    rRet.append(" widevec "); //right arrow above
                                 else if (nVariation == 1)
-                                    rRet.append(" widevec ");//right arrow below
+                                    rRet.append(" widevec "); //right arrow below
                                 rRet.append(" {");
                             }
                             break;
@@ -847,9 +840,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet.append(" widevec ");//double arrow above
+                                    rRet.append(" widevec "); //double arrow above
                                 else if (nVariation == 1)
-                                    rRet.append(" widevec ");//double arrow below
+                                    rRet.append(" widevec "); //double arrow below
                                 rRet.append(" {");
                             }
                             break;
@@ -860,17 +853,16 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     rRet.append(" lInt");
                                 else
                                     rRet.append(" Int");
-                                if ( (nVariation != 0) && (nVariation != 3))
+                                if ((nVariation != 0) && (nVariation != 3))
                                 {
                                     sPush = rRet.makeStringAndClear();
                                 }
                             }
-                            if (((nVariation == 1) ||
-                                    (nVariation == 4)) && (nPart==1))
+                            if (((nVariation == 1) || (nVariation == 4)) && (nPart == 1))
                                 rRet.append(" rSub");
-                            else if ((nVariation == 2) && (nPart==2))
+                            else if ((nVariation == 2) && (nPart == 2))
                                 rRet.append(" rSup");
-                            else if ((nVariation == 2) && (nPart==1))
+                            else if ((nVariation == 2) && (nPart == 1))
                                 rRet.append(" rSub");
                             rRet.append(" {");
                             break;
@@ -881,13 +873,12 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     rRet.append(" llInt");
                                 else
                                     rRet.append(" iInt");
-                                if ( (nVariation != 0) && (nVariation != 2))
+                                if ((nVariation != 0) && (nVariation != 2))
                                 {
                                     sPush = rRet.makeStringAndClear();
                                 }
                             }
-                            if (((nVariation == 1) ||
-                                    (nVariation == 3)) && (nPart==1))
+                            if (((nVariation == 1) || (nVariation == 3)) && (nPart == 1))
                                 rRet.append(" rSub");
                             rRet.append(" {");
                             break;
@@ -898,13 +889,12 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     rRet.append(" lllInt");
                                 else
                                     rRet.append(" iiInt");
-                                if ( (nVariation != 0) && (nVariation != 2))
+                                if ((nVariation != 0) && (nVariation != 2))
                                 {
                                     sPush = rRet.makeStringAndClear();
                                 }
                             }
-                            if (((nVariation == 1) ||
-                                    (nVariation == 3)) && (nPart==1))
+                            if (((nVariation == 1) || (nVariation == 3)) && (nPart == 1))
                                 rRet.append(" rSub");
                             rRet.append(" {");
                             break;
@@ -917,12 +907,11 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     rRet.append(" Int");
                                 sPush = rRet.makeStringAndClear();
                             }
-                            if (((nVariation == 1) ||
-                                    (nVariation == 2)) && (nPart==1))
+                            if (((nVariation == 1) || (nVariation == 2)) && (nPart == 1))
                                 rRet.append(" cSub");
-                            else if ((nVariation == 0) && (nPart==2))
+                            else if ((nVariation == 0) && (nPart == 2))
                                 rRet.append(" cSup");
-                            else if ((nVariation == 0) && (nPart==1))
+                            else if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" cSub");
                             rRet.append(" {");
                             break;
@@ -935,7 +924,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     rRet.append(" iInt");
                                 sPush = rRet.makeStringAndClear();
                             }
-                            if (nPart==1)
+                            if (nPart == 1)
                                 rRet.append(" cSub");
                             rRet.append(" {");
                             break;
@@ -948,7 +937,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     rRet.append(" iiInt");
                                 sPush = rRet.makeStringAndClear();
                             }
-                            if (nPart==1)
+                            if (nPart == 1)
                                 rRet.append(" cSub");
                             rRet.append(" {");
                             break;
@@ -965,11 +954,11 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     sPush = rRet.makeStringAndClear();
                                 }
                             }
-                            if ((nVariation == 0) && (nPart==1))
+                            if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" cSub");
-                            else if ((nVariation == 1) && (nPart==2))
+                            else if ((nVariation == 1) && (nPart == 2))
                                 rRet.append(" cSup");
-                            else if ((nVariation == 1) && (nPart==1))
+                            else if ((nVariation == 1) && (nPart == 1))
                                 rRet.append(" cSub");
                             rRet.append(" {");
                             break;
@@ -979,11 +968,11 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.append(" Sum");
                                 sPush = rRet.makeStringAndClear();
                             }
-                            if ((nVariation == 0) && (nPart==1))
+                            if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" rSub");
-                            else if ((nVariation == 1) && (nPart==2))
+                            else if ((nVariation == 1) && (nPart == 2))
                                 rRet.append(" rSup");
-                            else if ((nVariation == 1) && (nPart==1))
+                            else if ((nVariation == 1) && (nPart == 1))
                                 rRet.append(" rSub");
                             rRet.append(" {");
                             break;
@@ -996,11 +985,11 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     sPush = rRet.makeStringAndClear();
                                 }
                             }
-                            if ((nVariation == 0) && (nPart==1))
+                            if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" cSub");
-                            else if ((nVariation == 1) && (nPart==2))
+                            else if ((nVariation == 1) && (nPart == 2))
                                 rRet.append(" cSup");
-                            else if ((nVariation == 1) && (nPart==1))
+                            else if ((nVariation == 1) && (nPart == 1))
                                 rRet.append(" cSub");
                             rRet.append(" {");
                             break;
@@ -1010,11 +999,11 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.append(" Prod");
                                 sPush = rRet.makeStringAndClear();
                             }
-                            if ((nVariation == 0) && (nPart==1))
+                            if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" rSub");
-                            else if ((nVariation == 1) && (nPart==2))
+                            else if ((nVariation == 1) && (nPart == 2))
                                 rRet.append(" rSup");
-                            else if ((nVariation == 1) && (nPart==1))
+                            else if ((nVariation == 1) && (nPart == 1))
                                 rRet.append(" rSub");
                             rRet.append(" {");
                             break;
@@ -1027,11 +1016,11 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     sPush = rRet.makeStringAndClear();
                                 }
                             }
-                            if ((nVariation == 0) && (nPart==1))
+                            if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" cSub");
-                            else if ((nVariation == 1) && (nPart==2))
+                            else if ((nVariation == 1) && (nPart == 2))
                                 rRet.append(" cSup");
-                            else if ((nVariation == 1) && (nPart==1))
+                            else if ((nVariation == 1) && (nPart == 1))
                                 rRet.append(" cSub");
                             rRet.append(" {");
                             break;
@@ -1041,11 +1030,11 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.append(" coProd");
                                 sPush = rRet.makeStringAndClear();
                             }
-                            if ((nVariation == 0) && (nPart==1))
+                            if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" rSub");
-                            else if ((nVariation == 1) && (nPart==2))
+                            else if ((nVariation == 1) && (nPart == 2))
                                 rRet.append(" rSup");
-                            else if ((nVariation == 1) && (nPart==1))
+                            else if ((nVariation == 1) && (nPart == 1))
                                 rRet.append(" rSub");
                             rRet.append(" {");
                             break;
@@ -1058,11 +1047,11 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     sPush = rRet.makeStringAndClear();
                                 }
                             }
-                            if ((nVariation == 0) && (nPart==1))
+                            if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" cSub");
-                            else if ((nVariation == 1) && (nPart==2))
+                            else if ((nVariation == 1) && (nPart == 2))
                                 rRet.append(" cSup");
-                            else if ((nVariation == 1) && (nPart==1))
+                            else if ((nVariation == 1) && (nPart == 1))
                                 rRet.append(" cSub");
                             rRet.append(" {");
                             break;
@@ -1072,11 +1061,11 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.append(" union"); //union
                                 sPush = rRet.makeStringAndClear();
                             }
-                            if ((nVariation == 0) && (nPart==1))
+                            if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" rSub");
-                            else if ((nVariation == 1) && (nPart==2))
+                            else if ((nVariation == 1) && (nPart == 2))
                                 rRet.append(" rSup");
-                            else if ((nVariation == 1) && (nPart==1))
+                            else if ((nVariation == 1) && (nPart == 1))
                                 rRet.append(" rSub");
                             rRet.append(" {");
                             break;
@@ -1089,11 +1078,11 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                     sPush = rRet.makeStringAndClear();
                                 }
                             }
-                            if ((nVariation == 0) && (nPart==1))
+                            if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" cSub");
-                            else if ((nVariation == 1) && (nPart==2))
+                            else if ((nVariation == 1) && (nPart == 2))
                                 rRet.append(" cSup");
-                            else if ((nVariation == 1) && (nPart==1))
+                            else if ((nVariation == 1) && (nPart == 1))
                                 rRet.append(" cSub");
                             rRet.append(" {");
                             break;
@@ -1103,22 +1092,22 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.append(" intersect"); //intersect
                                 sPush = rRet.makeStringAndClear();
                             }
-                            if ((nVariation == 0) && (nPart==1))
+                            if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" rSub");
-                            else if ((nVariation == 1) && (nPart==2))
+                            else if ((nVariation == 1) && (nPart == 2))
                                 rRet.append(" rSup");
-                            else if ((nVariation == 1) && (nPart==1))
+                            else if ((nVariation == 1) && (nPart == 1))
                                 rRet.append(" rSub");
                             rRet.append(" {");
                             break;
                         case tmLIM:
-                            if ((nVariation == 0) && (nPart==1))
+                            if ((nVariation == 0) && (nPart == 1))
                                 rRet.append(" cSup");
-                            else if ((nVariation == 1) && (nPart==1))
+                            else if ((nVariation == 1) && (nPart == 1))
                                 rRet.append(" cSub");
-                            else if ((nVariation == 2) && (nPart==1))
+                            else if ((nVariation == 2) && (nPart == 1))
                                 rRet.append(" cSub");
-                            else if ((nVariation == 2) && (nPart==2))
+                            else if ((nVariation == 2) && (nPart == 2))
                                 rRet.append(" cSup");
                             rRet.append(" {");
                             break;
@@ -1149,13 +1138,13 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             {
                                 sPush = rRet.makeStringAndClear();
                             }
-                            if ((nVariation == 0) && (nPart==0))
+                            if ((nVariation == 0) && (nPart == 0))
                                 rRet.append(" rSup");
-                            else if ((nVariation == 2) && (nPart==1))
+                            else if ((nVariation == 2) && (nPart == 1))
                                 rRet.append(" rSup");
-                            else if ((nVariation == 1) && (nPart==0))
+                            else if ((nVariation == 1) && (nPart == 0))
                                 rRet.append(" rSub");
-                            else if ((nVariation == 2) && (nPart==0))
+                            else if ((nVariation == 2) && (nPart == 0))
                                 rRet.append(" rSub");
                             rRet.append(" {");
                             break;
@@ -1164,39 +1153,37 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             {
                                 sPush = rRet.makeStringAndClear();
                             }
-                            if ((nVariation == 0) && (nPart==0))
+                            if ((nVariation == 0) && (nPart == 0))
                                 rRet.append(" cSup");
-                            else if ((nVariation == 2) && (nPart==1))
+                            else if ((nVariation == 2) && (nPart == 1))
                                 rRet.append(" cSup");
-                            else if ((nVariation == 1) && (nPart==0))
+                            else if ((nVariation == 1) && (nPart == 0))
                                 rRet.append(" cSub");
-                            else if ((nVariation == 2) && (nPart==0))
+                            else if ((nVariation == 2) && (nPart == 0))
                                 rRet.append(" cSub");
                             rRet.append(" {");
                             break;
                         case tmLSCRIPT:
                             if (nPart == 0)
                                 rRet.append("\"\"");
-                            if ((nVariation == 0)
-                                    || ((nVariation == 2) && (nPart==1)))
+                            if ((nVariation == 0) || ((nVariation == 2) && (nPart == 1)))
                                 rRet.append(" lSup");
-                            else if ((nVariation == 1)
-                                    || ((nVariation == 2) && (nPart==0)))
+                            else if ((nVariation == 1) || ((nVariation == 2) && (nPart == 0)))
                                 rRet.append(" lSub");
                             rRet.append(" {");
                             break;
                         case tmDIRAC:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                             {
                                 if (nPart == 0)
                                     rRet.append(" langle ");
                             }
-                            else if (nVariation==1)
+                            else if (nVariation == 1)
                             {
                                 rRet.append(" \\langle ");
                                 newline--;
                             }
-                            else if (nVariation==2)
+                            else if (nVariation == 2)
                             {
                                 rRet.append(" \\lline ");
                                 newline--;
@@ -1204,93 +1191,91 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             break;
                         case tmUARROW:
                             if (nVariation == 0)
-                                rRet.append(" widevec ");//left below
+                                rRet.append(" widevec "); //left below
                             else if (nVariation == 1)
-                                rRet.append(" widevec ");//right below
+                                rRet.append(" widevec "); //right below
                             else if (nVariation == 2)
-                                rRet.append(" widevec ");//double headed below
+                                rRet.append(" widevec "); //double headed below
                             rRet.append(" {");
                             break;
                         case tmOARROW:
                             if (nVariation == 0)
-                                rRet.append(" widevec ");//left above
+                                rRet.append(" widevec "); //left above
                             else if (nVariation == 1)
-                                rRet.append(" widevec ");//right above
+                                rRet.append(" widevec "); //right above
                             else if (nVariation == 2)
-                                rRet.append(" widevec ");//double headed above
+                                rRet.append(" widevec "); //double headed above
                             rRet.append(" {");
                             break;
                         default:
                             break;
-                        }
-                        sal_Int16 nOldCurSize=nCurSize;
-                        sal_Int32 nSizeStartPos = rRet.getLength();
-                        HandleSize( nLSize, nDSize, nSetSize );
-                        bRet = HandleRecords( nLevel+1 );
-                        while (nSetSize)
+                    }
+                    sal_Int16 nOldCurSize = nCurSize;
+                    sal_Int32 nSizeStartPos = rRet.getLength();
+                    HandleSize(nLSize, nDSize, nSetSize);
+                    bRet = HandleRecords(nLevel + 1);
+                    while (nSetSize)
+                    {
+                        bool bOk = false;
+                        sal_Int32 nI = rRet.lastIndexOf('{');
+                        if (nI != -1)
                         {
-                            bool bOk=false;
-                            sal_Int32 nI = rRet.lastIndexOf('{');
-                            if (nI != -1)
-                            {
-                                for(nI=nI+1;nI<rRet.getLength();nI++)
-                                    if (rRet[nI] != ' ')
-                                    {
-                                        bOk=true;
-                                        break;
-                                    }
-                            }
-                            else
-                                bOk=true;
-
-                            if (bOk)
-                                rRet.append("} ");
-                            else if (rRet.getLength() > nSizeStartPos)
-                                rRet = rRet.truncate(nSizeStartPos);
-                            nSetSize--;
-                            nCurSize=nOldCurSize;
+                            for (nI = nI + 1; nI < rRet.getLength(); nI++)
+                                if (rRet[nI] != ' ')
+                                {
+                                    bOk = true;
+                                    break;
+                                }
                         }
+                        else
+                            bOk = true;
 
+                        if (bOk)
+                            rRet.append("} ");
+                        else if (rRet.getLength() > nSizeStartPos)
+                            rRet = rRet.truncate(nSizeStartPos);
+                        nSetSize--;
+                        nCurSize = nOldCurSize;
+                    }
 
-                        HandleMatrixSeparator(nMatrixRows,nMatrixCols,
-                            nCurCol,nCurRow);
+                    HandleMatrixSeparator(nMatrixRows, nMatrixCols, nCurCol, nCurRow);
 
-                        switch (nSelector)
-                        {
+                    switch (nSelector)
+                    {
                         case tmANGLE:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" rangle ");
-                            else if (nVariation==2)
+                            else if (nVariation == 2)
                                 rRet.append(" \\rangle ");
                             break;
                         case tmPAREN:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" right )");
-                            else if (nVariation==2)
+                            else if (nVariation == 2)
                                 rRet.append("\\)");
                             break;
                         case tmBRACE:
-                            if ((nVariation==0) || (nVariation==2))
+                            if ((nVariation == 0) || (nVariation == 2))
                                 rRet.append(" right rbrace ");
                             else
                                 rRet.append(" right none ");
                             break;
                         case tmBRACK:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" right ]");
-                            else if (nVariation==2)
+                            else if (nVariation == 2)
                                 rRet.append("\\]");
                             break;
                         case tmBAR:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" rline ");
-                            else if (nVariation==2)
+                            else if (nVariation == 2)
                                 rRet.append(" \\rline ");
                             break;
                         case tmDBAR:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" rdline ");
-                            else if (nVariation==2)
+                            else if (nVariation == 2)
                                 rRet.append(" \\rdline ");
                             break;
                         case tmFLOOR:
@@ -1300,9 +1285,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.append(" right none ");
                             break;
                         case tmCEILING:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                                 rRet.append(" rceil ");
-                            else if (nVariation==2)
+                            else if (nVariation == 2)
                                 rRet.append(" \\rceil ");
                             break;
                         case tmLBLB:
@@ -1349,35 +1334,33 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             nPart++;
                             break;
                         case tmSCRIPT:
-                            {
-                            if ((nPart == 0) &&
-                                    ((nVariation == 2) || (nVariation == 1)))
+                        {
+                            if ((nPart == 0) && ((nVariation == 2) || (nVariation == 1)))
                                 newline--;
 
-                            bool bOk=false;
+                            bool bOk = false;
                             sal_Int32 nI = rRet.lastIndexOf('{');
                             if (nI != -1)
                             {
-                                for(nI=nI+1;nI<rRet.getLength();nI++)
+                                for (nI = nI + 1; nI < rRet.getLength(); nI++)
                                     if (rRet[nI] != ' ')
                                     {
-                                        bOk=true;
+                                        bOk = true;
                                         break;
                                     }
                             }
                             else
-                                bOk=true;
+                                bOk = true;
 
                             if (bOk)
                                 rRet.append("} ");
                             else if (rRet.getLength() > nSubSupStartPos)
                                 rRet = rRet.truncate(nSubSupStartPos);
                             nPart++;
-                            }
-                            break;
+                        }
+                        break;
                         case tmLSCRIPT:
-                            if ((nPart == 0) &&
-                                    ((nVariation == 2) || (nVariation == 1)))
+                            if ((nPart == 0) && ((nVariation == 2) || (nVariation == 1)))
                                 newline--;
                             rRet.append("} ");
                             nPart++;
@@ -1419,10 +1402,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             nPart++;
                             break;
                         case tmLIM:
-                            if (nPart==0)
+                            if (nPart == 0)
                                 newline--;
-                            else if ((nPart==1) &&
-                                    ((nVariation == 2) || (nVariation == 1)))
+                            else if ((nPart == 1) && ((nVariation == 2) || (nVariation == 1)))
                                 newline--;
                             rRet.append("} ");
                             nPart++;
@@ -1454,12 +1436,12 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 newline--;
                                 switch (nVariation)
                                 {
-                                case 1:
-                                    rRet.append("slash");
-                                    break;
-                                default:
-                                    rRet.append("wideslash");
-                                    break;
+                                    case 1:
+                                        rRet.append("slash");
+                                        break;
+                                    default:
+                                        rRet.append("wideslash");
+                                        break;
                                 }
                             }
                             nPart++;
@@ -1513,8 +1495,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 }
                                 newline--;
                             }
-                            else if ((nPart == 1) &&
-                                    ((nVariation == 1) || (nVariation==4)))
+                            else if ((nPart == 1) && ((nVariation == 1) || (nVariation == 4)))
                             {
                                 rRet.insert(0, sPush);
                                 rRet.append(sMainTerm);
@@ -1545,8 +1526,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 }
                                 newline--;
                             }
-                            else if ((nPart == 1) &&
-                                    ((nVariation == 1) || (nVariation==3)))
+                            else if ((nPart == 1) && ((nVariation == 1) || (nVariation == 3)))
                             {
                                 rRet.insert(0, sPush);
                                 rRet.append(sMainTerm);
@@ -1563,8 +1543,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 sMainTerm = rRet.makeStringAndClear();
                                 newline--;
                             }
-                            else if ((nPart == 1) &&
-                                    ((nVariation == 1) || (nVariation==2)))
+                            else if ((nPart == 1) && ((nVariation == 1) || (nVariation == 2)))
                             {
                                 rRet.insert(0, sPush);
                                 rRet.append(sMainTerm);
@@ -1606,8 +1585,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                         case tmSUMOP:
                             rRet.append("} ");
 
-                            if ((nPart == 0) &&
-                                    ((nVariation == 0) || (nVariation == 1)))
+                            if ((nPart == 0) && ((nVariation == 0) || (nVariation == 1)))
                             {
                                 sMainTerm = rRet.makeStringAndClear();
                                 newline--;
@@ -1619,8 +1597,8 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 sMainTerm = rRet.makeStringAndClear();
                                 newline--;
                             }
-                            else if ((nPart == 2) || ((nPart == 1) &&
-                                    (nVariation == 0 || nVariation == 1)))
+                            else if ((nPart == 2)
+                                     || ((nPart == 1) && (nVariation == 0 || nVariation == 1)))
                             {
                                 rRet.insert(0, sPush);
                                 rRet.append(sMainTerm);
@@ -1630,7 +1608,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             nPart++;
                             break;
                         case tmDIRAC:
-                            if (nVariation==0)
+                            if (nVariation == 0)
                             {
                                 if (nPart == 0)
                                 {
@@ -1640,47 +1618,48 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 else
                                     rRet.append(" rangle ");
                             }
-                            else if (nVariation==1)
+                            else if (nVariation == 1)
                                 rRet.append(" \\lline ");
-                            else if (nVariation==2)
+                            else if (nVariation == 2)
                                 rRet.append(" \\rangle ");
                             nPart++;
                             break;
                         default:
                             break;
-                        }
-                        bSilent = true; //Skip the optional brackets and/or
-                                        //symbols that follow some of these
-                                        //records. Foo Data.
-
-                        /*In matrices and piles we cannot separate equation
-                         *lines with the newline keyword*/
-                        if (nMatrixCols==0)
-                            newline++;
                     }
+                    bSilent = true; //Skip the optional brackets and/or
+                        //symbols that follow some of these
+                        //records. Foo Data.
+
+                    /*In matrices and piles we cannot separate equation
+                         *lines with the newline keyword*/
+                    if (nMatrixCols == 0)
+                        newline++;
                 }
-                break;
+            }
+            break;
             case CHAR:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                bRet = HandleChar( nTextStart, nSetSize, nLevel, nTag, nSelector, nVariation, bSilent );
+                bRet = HandleChar(nTextStart, nSetSize, nLevel, nTag, nSelector, nVariation,
+                                  bSilent);
                 break;
             case TMPL:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                bRet = HandleTemplate( nLevel, nSelector, nVariation, nLastTemplateBracket );
+                bRet = HandleTemplate(nLevel, nSelector, nVariation, nLastTemplateBracket);
                 break;
             case PILE:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                bRet = HandlePile( nSetAlign, nLevel, nSelector, nVariation );
-                HandleMatrixSeparator( nMatrixRows, nMatrixCols, nCurCol, nCurRow );
+                bRet = HandlePile(nSetAlign, nLevel, nSelector, nVariation);
+                HandleMatrixSeparator(nMatrixRows, nMatrixCols, nCurCol, nCurRow);
                 break;
             case MATRIX:
                 if (xfLMOVE(nTag))
                     HandleNudge();
-                bRet = HandleMatrix( nLevel, nSelector, nVariation );
-                HandleMatrixSeparator( nMatrixRows, nMatrixCols, nCurCol, nCurRow );
+                bRet = HandleMatrix(nLevel, nSelector, nVariation);
+                HandleMatrixSeparator(nMatrixRows, nMatrixCols, nCurCol, nCurRow);
                 break;
             case EMBEL:
                 if (xfLMOVE(nTag))
@@ -1688,36 +1667,36 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                 HandleEmblishments();
                 break;
             case RULER:
-                pS->ReadUChar( nTabStops );
-                for (i=0;i<nTabStops;i++)
+                pS->ReadUChar(nTabStops);
+                for (i = 0; i < nTabStops; i++)
                 {
-                    pS->ReadUChar( nTabType );
-                    pS->ReadUInt16( nTabOffset );
+                    pS->ReadUChar(nTabType);
+                    pS->ReadUInt16(nTabOffset);
                 }
                 SAL_WARN("starmath", "Not seen in the wild Equation Ruler Field");
                 break;
             case FONT:
-                {
-                    MathTypeFont aFont;
-                    pS->ReadUChar( aFont.nTface );
-                    /*
+            {
+                MathTypeFont aFont;
+                pS->ReadUChar(aFont.nTface);
+                /*
                     The typeface number is the negative (which makes it
                     positive) of the typeface value (unbiased) that appears in
                     CHAR records that might follow a given FONT record
                     */
-                    aFont.nTface = 128-aFont.nTface;
-                    pS->ReadUChar( aFont.nStyle );
-                    aUserStyles.insert(aFont);
-                    // read font name
-                    while(true)
-                    {
-                        char nChar8(0);
-                        pS->ReadChar( nChar8 );
-                        if (nChar8 == 0)
-                            break;
-                    }
+                aFont.nTface = 128 - aFont.nTface;
+                pS->ReadUChar(aFont.nStyle);
+                aUserStyles.insert(aFont);
+                // read font name
+                while (true)
+                {
+                    char nChar8(0);
+                    pS->ReadChar(nChar8);
+                    if (nChar8 == 0)
+                        break;
                 }
-                break;
+            }
+            break;
             case SIZE:
                 HandleSetSize();
                 break;
@@ -1726,14 +1705,13 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
             case 12:
             case 13:
             case 14:
-                nLSize=nRecord-10;
+                nLSize = nRecord - 10;
                 break;
             case END:
             default:
                 break;
         }
-    }
-    while (nRecord != END && !pS->eof());
+    } while (nRecord != END && !pS->eof());
     while (nSetSize)
     {
         rRet.append("}");
@@ -1749,26 +1727,25 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
  of a pile, so we must strip the last separator of a pile after this
  is detected in the PILE handler
  */
-void MathType::HandleMatrixSeparator(int nMatrixRows,int nMatrixCols,
-    int &rCurCol,int &rCurRow)
+void MathType::HandleMatrixSeparator(int nMatrixRows, int nMatrixCols, int& rCurCol, int& rCurRow)
 {
-    if (nMatrixRows==0)
+    if (nMatrixRows == 0)
         return;
 
-    if (rCurCol == nMatrixCols-1)
+    if (rCurCol == nMatrixCols - 1)
     {
-        if (rCurRow != nMatrixRows-1)
+        if (rCurRow != nMatrixRows - 1)
             rRet.append(" {} ##\n");
-        if (nMatrixRows!=-1)
+        if (nMatrixRows != -1)
         {
-            rCurCol=0;
+            rCurCol = 0;
             rCurRow++;
         }
     }
     else
     {
         rRet.append(" {} # ");
-        if (nMatrixRows!=-1)
+        if (nMatrixRows != -1)
             rCurCol++;
         else
             rRet.append("\n");
@@ -1777,50 +1754,50 @@ void MathType::HandleMatrixSeparator(int nMatrixRows,int nMatrixCols,
 
 /* set the alignment of the following term, but starmath currently
  * cannot handle vertical alignment */
-void MathType::HandleAlign(sal_uInt8 nHorAlign, int &rSetAlign)
+void MathType::HandleAlign(sal_uInt8 nHorAlign, int& rSetAlign)
 {
-    switch(nHorAlign)
+    switch (nHorAlign)
     {
-    case 1:
-    default:
-        rRet.append("alignl {");
-        break;
-    case 2:
-        rRet.append("alignc {");
-        break;
-    case 3:
-        rRet.append("alignr {");
-        break;
+        case 1:
+        default:
+            rRet.append("alignl {");
+            break;
+        case 2:
+            rRet.append("alignc {");
+            break;
+        case 3:
+            rRet.append("alignr {");
+            break;
     }
     rSetAlign++;
 }
 
 /* set size of text, complexity due to overuse of signedness as a flag
  * indicator by mathtype file format*/
-bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
+bool MathType::HandleSize(sal_Int16 nLstSize, sal_Int16 nDefSize, int& rSetSize)
 {
-    bool bRet=false;
+    bool bRet = false;
     if (nLstSize < 0)
     {
         const sal_Int16 nDefaultSize = 12;
-        if ((-nLstSize/32 != nDefaultSize) && (-nLstSize/32 != nCurSize))
+        if ((-nLstSize / 32 != nDefaultSize) && (-nLstSize / 32 != nCurSize))
         {
             if (rSetSize)
             {
                 rSetSize--;
                 rRet.append("}");
-                bRet=true;
+                bRet = true;
             }
-            if (-nLstSize/32 != nLastSize)
+            if (-nLstSize / 32 != nLastSize)
             {
                 nLastSize = nCurSize;
                 rRet.append(" size ");
-                rRet.append(OUString::number(-nLstSize/32));
+                rRet.append(OUString::number(-nLstSize / 32));
                 rRet.append("{");
-                bRet=true;
+                bRet = true;
                 rSetSize++;
             }
-            nCurSize = -nLstSize/32;
+            nCurSize = -nLstSize / 32;
         }
     }
     else
@@ -1838,7 +1815,7 @@ bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
             {
                 rSetSize--;
                 rRet.append("}");
-                bRet=true;
+                bRet = true;
             }
             if (nLstSize != nLastSize)
             {
@@ -1846,7 +1823,7 @@ bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
                 rRet.append(" size ");
                 rRet.append(OUString::number(nLstSize));
                 rRet.append("{");
-                bRet=true;
+                bRet = true;
                 rSetSize++;
             }
             nCurSize = nLstSize;
@@ -1855,69 +1832,61 @@ bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
     return bRet;
 }
 
-bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
+bool MathType::ConvertFromStarMath(SfxMedium& rMedium)
 {
     if (!pTree)
         return false;
 
-    SvStream *pStream = rMedium.GetOutStream();
-    if ( pStream )
+    SvStream* pStream = rMedium.GetOutStream();
+    if (pStream)
     {
-        tools::SvRef<SotStorage> pStor = new SotStorage( pStream, false );
+        tools::SvRef<SotStorage> pStor = new SotStorage(pStream, false);
 
         SvGlobalName aGName(MSO_EQUATION3_CLASSID);
-        pStor->SetClass( aGName, SotClipboardFormatId::NONE, "Microsoft Equation 3.0");
+        pStor->SetClass(aGName, SotClipboardFormatId::NONE, "Microsoft Equation 3.0");
 
-        static sal_uInt8 const aCompObj[] = {
-            0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
-            0xFF, 0xFF, 0xFF, 0xFF, 0x02, 0xCE, 0x02, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x46, 0x17, 0x00, 0x00, 0x00,
-            0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
-            0x74, 0x20, 0x45, 0x71, 0x75, 0x61, 0x74, 0x69,
-            0x6F, 0x6E, 0x20, 0x33, 0x2E, 0x30, 0x00, 0x0C,
-            0x00, 0x00, 0x00, 0x44, 0x53, 0x20, 0x45, 0x71,
-            0x75, 0x61, 0x74, 0x69, 0x6F, 0x6E, 0x00, 0x0B,
-            0x00, 0x00, 0x00, 0x45, 0x71, 0x75, 0x61, 0x74,
-            0x69, 0x6F, 0x6E, 0x2E, 0x33, 0x00, 0xF4, 0x39,
-            0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-        };
-        tools::SvRef<SotStorageStream> xStor( pStor->OpenSotStream("\1CompObj"));
+        static sal_uInt8 const aCompObj[]
+            = { 0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x02,
+                0xCE, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x46, 0x17, 0x00, 0x00, 0x00, 0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F,
+                0x66, 0x74, 0x20, 0x45, 0x71, 0x75, 0x61, 0x74, 0x69, 0x6F, 0x6E, 0x20, 0x33,
+                0x2E, 0x30, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x44, 0x53, 0x20, 0x45, 0x71, 0x75,
+                0x61, 0x74, 0x69, 0x6F, 0x6E, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x45, 0x71, 0x75,
+                0x61, 0x74, 0x69, 0x6F, 0x6E, 0x2E, 0x33, 0x00, 0xF4, 0x39, 0xB2, 0x71, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+        tools::SvRef<SotStorageStream> xStor(pStor->OpenSotStream("\1CompObj"));
         xStor->WriteBytes(aCompObj, sizeof(aCompObj));
 
-        static sal_uInt8 const aOle[] = {
-            0x01, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00
-            };
-        tools::SvRef<SotStorageStream> xStor2( pStor->OpenSotStream("\1Ole"));
+        static sal_uInt8 const aOle[]
+            = { 0x01, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+        tools::SvRef<SotStorageStream> xStor2(pStor->OpenSotStream("\1Ole"));
         xStor2->WriteBytes(aOle, sizeof(aOle));
         xStor.clear();
         xStor2.clear();
 
         tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream("Equation Native");
-        if ( (!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
+        if ((!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
             return false;
 
         pS = xSrc.get();
-        pS->SetEndian( SvStreamEndian::LITTLE );
+        pS->SetEndian(SvStreamEndian::LITTLE);
 
         pS->SeekRel(EQNOLEFILEHDR_SIZE); //Skip 28byte Header and fill it in later
-        pS->WriteUChar( 0x03 );
-        pS->WriteUChar( 0x01 );
-        pS->WriteUChar( 0x01 );
-        pS->WriteUChar( 0x03 );
-        pS->WriteUChar( 0x00 );
+        pS->WriteUChar(0x03);
+        pS->WriteUChar(0x01);
+        pS->WriteUChar(0x01);
+        pS->WriteUChar(0x03);
+        pS->WriteUChar(0x00);
         sal_uInt32 nSize = pS->Tell();
-        nPendingAttributes=0;
+        nPendingAttributes = 0;
 
         HandleNodes(pTree, 0);
-        pS->WriteUChar( END );
+        pS->WriteUChar(END);
 
-        nSize = pS->Tell()-nSize;
+        nSize = pS->Tell() - nSize;
         pS->Seek(0);
-        EQNOLEFILEHDR aHdr(nSize+4+1);
+        EQNOLEFILEHDR aHdr(nSize + 4 + 1);
         aHdr.Write(pS);
 
         pStor->Commit();
@@ -1926,164 +1895,160 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
     return true;
 }
 
-
-void MathType::HandleNodes(SmNode *pNode,int nLevel)
+void MathType::HandleNodes(SmNode* pNode, int nLevel)
 {
-    switch(pNode->GetType())
+    switch (pNode->GetType())
     {
         case SmNodeType::Attribut:
-            HandleAttributes(pNode,nLevel);
+            HandleAttributes(pNode, nLevel);
             break;
         case SmNodeType::Text:
             HandleText(pNode);
             break;
         case SmNodeType::VerticalBrace:
-            HandleVerticalBrace(pNode,nLevel);
+            HandleVerticalBrace(pNode, nLevel);
             break;
         case SmNodeType::Brace:
-            HandleBrace(pNode,nLevel);
+            HandleBrace(pNode, nLevel);
             break;
         case SmNodeType::Oper:
-            HandleOperator(pNode,nLevel);
+            HandleOperator(pNode, nLevel);
             break;
         case SmNodeType::BinVer:
-            HandleFractions(pNode,nLevel);
+            HandleFractions(pNode, nLevel);
             break;
         case SmNodeType::Root:
-            HandleRoot(pNode,nLevel);
+            HandleRoot(pNode, nLevel);
             break;
         case SmNodeType::Special:
-            {
-            SmTextNode *pText = static_cast<SmTextNode *>(pNode);
+        {
+            SmTextNode* pText = static_cast<SmTextNode*>(pNode);
             //if the token str and the result text are the same then this
             //is to be seen as text, else assume it's a mathchar
             if (pText->GetText() == pText->GetToken().aText)
                 HandleText(pText);
             else
                 HandleMath(pText);
-            }
-            break;
+        }
+        break;
         case SmNodeType::Math:
         case SmNodeType::MathIdent:
             HandleMath(pNode);
             break;
         case SmNodeType::SubSup:
-            HandleSubSupScript(pNode,nLevel);
+            HandleSubSupScript(pNode, nLevel);
             break;
         case SmNodeType::Expression:
         {
             size_t nSize = pNode->GetNumSubNodes();
             for (size_t i = 0; i < nSize; ++i)
             {
-                if (SmNode *pTemp = pNode->GetSubNode(i))
-                    HandleNodes(pTemp,nLevel+1);
+                if (SmNode* pTemp = pNode->GetSubNode(i))
+                    HandleNodes(pTemp, nLevel + 1);
             }
             break;
         }
         case SmNodeType::Table:
             //Root Node, PILE equivalent, i.e. vertical stack
-            HandleTable(pNode,nLevel);
+            HandleTable(pNode, nLevel);
             break;
         case SmNodeType::Matrix:
-            HandleSmMatrix(static_cast<SmMatrixNode *>(pNode),nLevel);
+            HandleSmMatrix(static_cast<SmMatrixNode*>(pNode), nLevel);
             break;
         case SmNodeType::Line:
         {
-            pS->WriteUChar( 0x0a );
-            pS->WriteUChar( LINE );
+            pS->WriteUChar(0x0a);
+            pS->WriteUChar(LINE);
             size_t nSize = pNode->GetNumSubNodes();
             for (size_t i = 0; i < nSize; ++i)
             {
-                if (SmNode *pTemp = pNode->GetSubNode(i))
-                    HandleNodes(pTemp,nLevel+1);
+                if (SmNode* pTemp = pNode->GetSubNode(i))
+                    HandleNodes(pTemp, nLevel + 1);
             }
-            pS->WriteUChar( END );
+            pS->WriteUChar(END);
             break;
         }
         case SmNodeType::Align:
-            HandleMAlign(pNode,nLevel);
+            HandleMAlign(pNode, nLevel);
             break;
         case SmNodeType::Blank:
-            pS->WriteUChar( CHAR );
-            pS->WriteUChar( 0x98 );
+            pS->WriteUChar(CHAR);
+            pS->WriteUChar(0x98);
             if (pNode->GetToken().eType == TSBLANK)
-                pS->WriteUInt16( 0xEB04 );
+                pS->WriteUInt16(0xEB04);
             else
-                pS->WriteUInt16( 0xEB05 );
+                pS->WriteUInt16(0xEB05);
             break;
         default:
         {
             size_t nSize = pNode->GetNumSubNodes();
             for (size_t i = 0; i < nSize; ++i)
             {
-                if (SmNode *pTemp = pNode->GetSubNode(i))
-                    HandleNodes(pTemp,nLevel+1);
+                if (SmNode* pTemp = pNode->GetSubNode(i))
+                    HandleNodes(pTemp, nLevel + 1);
             }
             break;
         }
     }
 }
 
-
-int MathType::StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation)
+int MathType::StartTemplate(sal_uInt16 nSelector, sal_uInt16 nVariation)
 {
-    int nOldPending=nPendingAttributes;
-    pS->WriteUChar( TMPL ); //Template
-    pS->WriteUChar( nSelector ); //selector
-    pS->WriteUChar( nVariation ); //variation
-    pS->WriteUChar( 0x00 ); //options
-    pS->WriteUChar( LINE );
+    int nOldPending = nPendingAttributes;
+    pS->WriteUChar(TMPL); //Template
+    pS->WriteUChar(nSelector); //selector
+    pS->WriteUChar(nVariation); //variation
+    pS->WriteUChar(0x00); //options
+    pS->WriteUChar(LINE);
     //there's just no way we can now handle any character
     //attributes (from mathtypes perspective) centered
     //over an expression but above template attribute
     //such as widevec and similar constructs
     //we have to drop them
-    nPendingAttributes=0;
+    nPendingAttributes = 0;
     return nOldPending;
 }
 
 void MathType::EndTemplate(int nOldPendingAttributes)
 {
-    pS->WriteUChar( END ); //end line
-    pS->WriteUChar( END ); //end template
-    nPendingAttributes=nOldPendingAttributes;
+    pS->WriteUChar(END); //end line
+    pS->WriteUChar(END); //end template
+    nPendingAttributes = nOldPendingAttributes;
 }
 
-
-void MathType::HandleSmMatrix(SmMatrixNode *pMatrix,int nLevel)
+void MathType::HandleSmMatrix(SmMatrixNode* pMatrix, int nLevel)
 {
-    pS->WriteUChar( MATRIX );
-    pS->WriteUChar( 0x00 ); //vAlign ?
-    pS->WriteUChar( 0x00 ); //h_just
-    pS->WriteUChar( 0x00 ); //v_just
-    pS->WriteUChar( pMatrix->GetNumRows() ); //v_just
-    pS->WriteUChar( pMatrix->GetNumCols() ); //v_just
-    int nBytes=(pMatrix->GetNumRows()+1)*2/8;
-    if (((pMatrix->GetNumRows()+1)*2)%8)
+    pS->WriteUChar(MATRIX);
+    pS->WriteUChar(0x00); //vAlign ?
+    pS->WriteUChar(0x00); //h_just
+    pS->WriteUChar(0x00); //v_just
+    pS->WriteUChar(pMatrix->GetNumRows()); //v_just
+    pS->WriteUChar(pMatrix->GetNumCols()); //v_just
+    int nBytes = (pMatrix->GetNumRows() + 1) * 2 / 8;
+    if (((pMatrix->GetNumRows() + 1) * 2) % 8)
         nBytes++;
     for (int j = 0; j < nBytes; j++)
-        pS->WriteUChar( 0x00 ); //row_parts
-    nBytes=(pMatrix->GetNumCols()+1)*2/8;
-    if (((pMatrix->GetNumCols()+1)*2)%8)
+        pS->WriteUChar(0x00); //row_parts
+    nBytes = (pMatrix->GetNumCols() + 1) * 2 / 8;
+    if (((pMatrix->GetNumCols() + 1) * 2) % 8)
         nBytes++;
     for (int k = 0; k < nBytes; k++)
-        pS->WriteUChar( 0x00 ); //col_parts
+        pS->WriteUChar(0x00); //col_parts
     size_t nSize = pMatrix->GetNumSubNodes();
     for (size_t i = 0; i < nSize; ++i)
     {
-        if (SmNode *pTemp = pMatrix->GetSubNode(i))
+        if (SmNode* pTemp = pMatrix->GetSubNode(i))
         {
-            pS->WriteUChar( LINE ); //line
-            HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( END ); //end line
+            pS->WriteUChar(LINE); //line
+            HandleNodes(pTemp, nLevel + 1);
+            pS->WriteUChar(END); //end line
         }
     }
-    pS->WriteUChar( END );
+    pS->WriteUChar(END);
 }
 
-
 //Root Node, PILE equivalent, i.e. vertical stack
-void MathType::HandleTable(SmNode *pNode,int nLevel)
+void MathType::HandleTable(SmNode* pNode, int nLevel)
 {
     size_t nSize = pNode->GetNumSubNodes();
     //The root of the starmath is a table, if
@@ -2094,115 +2059,112 @@ void MathType::HandleTable(SmNode *pNode,int nLevel)
     //without bound in a multi step conversion
 
     if (nLevel == 0)
-        pS->WriteUChar( 0x0A ); //initial size
+        pS->WriteUChar(0x0A); //initial size
 
-    if ( nLevel || (nSize >1))
+    if (nLevel || (nSize > 1))
     {
-        pS->WriteUChar( PILE );
-        pS->WriteUChar( nHAlign ); //vAlign ?
-        pS->WriteUChar( 0x01 ); //hAlign
+        pS->WriteUChar(PILE);
+        pS->WriteUChar(nHAlign); //vAlign ?
+        pS->WriteUChar(0x01); //hAlign
     }
 
     for (size_t i = 0; i < nSize; ++i)
     {
-        if (SmNode *pTemp = pNode->GetSubNode(i))
+        if (SmNode* pTemp = pNode->GetSubNode(i))
         {
-            pS->WriteUChar( LINE );
-            HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( END );
+            pS->WriteUChar(LINE);
+            HandleNodes(pTemp, nLevel + 1);
+            pS->WriteUChar(END);
         }
     }
-    if (nLevel || (nSize>1))
-        pS->WriteUChar( END );
+    if (nLevel || (nSize > 1))
+        pS->WriteUChar(END);
 }
 
-
-void MathType::HandleRoot(SmNode *pNode,int nLevel)
+void MathType::HandleRoot(SmNode* pNode, int nLevel)
 {
-    SmNode *pTemp;
-    pS->WriteUChar( TMPL ); //Template
-    pS->WriteUChar( 0x0D ); //selector
+    SmNode* pTemp;
+    pS->WriteUChar(TMPL); //Template
+    pS->WriteUChar(0x0D); //selector
     if (pNode->GetSubNode(0))
-        pS->WriteUChar( 0x01 ); //variation
+        pS->WriteUChar(0x01); //variation
     else
-        pS->WriteUChar( 0x00 ); //variation
-    pS->WriteUChar( 0x00 ); //options
+        pS->WriteUChar(0x00); //variation
+    pS->WriteUChar(0x00); //options
 
     if (nullptr != (pTemp = pNode->GetSubNode(2)))
     {
-        pS->WriteUChar( LINE ); //line
-        HandleNodes(pTemp,nLevel+1);
-        pS->WriteUChar( END );
+        pS->WriteUChar(LINE); //line
+        HandleNodes(pTemp, nLevel + 1);
+        pS->WriteUChar(END);
     }
 
     if (nullptr != (pTemp = pNode->GetSubNode(0)))
     {
-        pS->WriteUChar( LINE ); //line
-        HandleNodes(pTemp,nLevel+1);
-        pS->WriteUChar( END );
+        pS->WriteUChar(LINE); //line
+        HandleNodes(pTemp, nLevel + 1);
+        pS->WriteUChar(END);
     }
     else
-        pS->WriteUChar( LINE|0x10 ); //dummy line
+        pS->WriteUChar(LINE | 0x10); //dummy line
 
-
-    pS->WriteUChar( END );
+    pS->WriteUChar(END);
 }
 
-sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
-    sal_uInt64 *pPos,bool bTest)
+sal_uInt8 MathType::HandleCScript(SmNode* pNode, SmNode* pContent, int nLevel, sal_uInt64* pPos,
+                                  bool bTest)
 {
-    sal_uInt8 nVariation2=0xff;
+    sal_uInt8 nVariation2 = 0xff;
 
-    if (bTest && pNode->GetSubNode(CSUP+1))
+    if (bTest && pNode->GetSubNode(CSUP + 1))
     {
-        nVariation2=0;
-        if (pNode->GetSubNode(CSUB+1))
-            nVariation2=2;
+        nVariation2 = 0;
+        if (pNode->GetSubNode(CSUB + 1))
+            nVariation2 = 2;
     }
-    else if (pNode->GetSubNode(CSUB+1))
-        nVariation2=1;
+    else if (pNode->GetSubNode(CSUB + 1))
+        nVariation2 = 1;
 
-    if (nVariation2!=0xff)
+    if (nVariation2 != 0xff)
     {
         if (pPos)
             *pPos = pS->Tell();
-        pS->WriteUChar( TMPL ); //Template
-        pS->WriteUChar( 0x2B ); //selector
-        pS->WriteUChar( nVariation2 );
-        pS->WriteUChar( 0x00 ); //options
+        pS->WriteUChar(TMPL); //Template
+        pS->WriteUChar(0x2B); //selector
+        pS->WriteUChar(nVariation2);
+        pS->WriteUChar(0x00); //options
 
         if (pContent)
         {
-            pS->WriteUChar( LINE ); //line
-            HandleNodes(pContent,nLevel+1);
-            pS->WriteUChar( END ); //line
+            pS->WriteUChar(LINE); //line
+            HandleNodes(pContent, nLevel + 1);
+            pS->WriteUChar(END); //line
         }
         else
-            pS->WriteUChar( LINE|0x10 );
+            pS->WriteUChar(LINE | 0x10);
 
-        pS->WriteUChar( 0x0B );
+        pS->WriteUChar(0x0B);
 
-        SmNode *pTemp;
-        if (nullptr != (pTemp = pNode->GetSubNode(CSUB+1)))
+        SmNode* pTemp;
+        if (nullptr != (pTemp = pNode->GetSubNode(CSUB + 1)))
         {
-            pS->WriteUChar( LINE ); //line
-            HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( END ); //line
+            pS->WriteUChar(LINE); //line
+            HandleNodes(pTemp, nLevel + 1);
+            pS->WriteUChar(END); //line
         }
         else
-            pS->WriteUChar( LINE|0x10 );
-        if (bTest && nullptr != (pTemp = pNode->GetSubNode(CSUP+1)))
+            pS->WriteUChar(LINE | 0x10);
+        if (bTest && nullptr != (pTemp = pNode->GetSubNode(CSUP + 1)))
         {
-            pS->WriteUChar( LINE ); //line
-            HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( END ); //line
+            pS->WriteUChar(LINE); //line
+            HandleNodes(pTemp, nLevel + 1);
+            pS->WriteUChar(END); //line
         }
         else
-            pS->WriteUChar( LINE|0x10 );
+            pS->WriteUChar(LINE | 0x10);
     }
     return nVariation2;
 }
-
 
 /*
  Sub and Sup scripts and another problem area, StarMath
@@ -2210,237 +2172,233 @@ sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
  Mathtype cannot. The ordering of the nodes for each system
  is quite different as well leading to some complexity
  */
-void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
+void MathType::HandleSubSupScript(SmNode* pNode, int nLevel)
 {
-    sal_uInt8 nVariation=0xff;
-    if (pNode->GetSubNode(LSUP+1))
+    sal_uInt8 nVariation = 0xff;
+    if (pNode->GetSubNode(LSUP + 1))
     {
-        nVariation=0;
-        if (pNode->GetSubNode(LSUB+1))
-            nVariation=2;
+        nVariation = 0;
+        if (pNode->GetSubNode(LSUB + 1))
+            nVariation = 2;
     }
-    else if ( nullptr != pNode->GetSubNode(LSUB+1) )
-        nVariation=1;
+    else if (nullptr != pNode->GetSubNode(LSUB + 1))
+        nVariation = 1;
 
-    SmNode *pTemp;
-    if (nVariation!=0xff)
+    SmNode* pTemp;
+    if (nVariation != 0xff)
     {
-        pS->WriteUChar( TMPL ); //Template
-        pS->WriteUChar( 0x2c ); //selector
-        pS->WriteUChar( nVariation );
-        pS->WriteUChar( 0x00 ); //options
-        pS->WriteUChar( 0x0B );
+        pS->WriteUChar(TMPL); //Template
+        pS->WriteUChar(0x2c); //selector
+        pS->WriteUChar(nVariation);
+        pS->WriteUChar(0x00); //options
+        pS->WriteUChar(0x0B);
 
-        if (nullptr != (pTemp = pNode->GetSubNode(LSUB+1)))
+        if (nullptr != (pTemp = pNode->GetSubNode(LSUB + 1)))
         {
-            pS->WriteUChar( LINE ); //line
-            HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( END ); //line
+            pS->WriteUChar(LINE); //line
+            HandleNodes(pTemp, nLevel + 1);
+            pS->WriteUChar(END); //line
         }
         else
-            pS->WriteUChar( LINE|0x10 );
-        if (nullptr != (pTemp = pNode->GetSubNode(LSUP+1)))
+            pS->WriteUChar(LINE | 0x10);
+        if (nullptr != (pTemp = pNode->GetSubNode(LSUP + 1)))
         {
-            pS->WriteUChar( LINE ); //line
-            HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( END ); //line
+            pS->WriteUChar(LINE); //line
+            HandleNodes(pTemp, nLevel + 1);
+            pS->WriteUChar(END); //line
         }
         else
-            pS->WriteUChar( LINE|0x10 );
-        pS->WriteUChar( END );
-        nVariation=0xff;
+            pS->WriteUChar(LINE | 0x10);
+        pS->WriteUChar(END);
+        nVariation = 0xff;
     }
 
-
-    sal_uInt8 nVariation2=HandleCScript(pNode,nullptr,nLevel);
+    sal_uInt8 nVariation2 = HandleCScript(pNode, nullptr, nLevel);
 
     if (nullptr != (pTemp = pNode->GetSubNode(0)))
     {
-        HandleNodes(pTemp,nLevel+1);
+        HandleNodes(pTemp, nLevel + 1);
     }
 
     if (nVariation2 != 0xff)
-        pS->WriteUChar( END );
+        pS->WriteUChar(END);
 
-    if (nullptr != (pNode->GetSubNode(RSUP+1)))
+    if (nullptr != (pNode->GetSubNode(RSUP + 1)))
     {
-        nVariation=0;
-        if (pNode->GetSubNode(RSUB+1))
-            nVariation=2;
+        nVariation = 0;
+        if (pNode->GetSubNode(RSUB + 1))
+            nVariation = 2;
     }
-    else if (nullptr != pNode->GetSubNode(RSUB+1))
-        nVariation=1;
+    else if (nullptr != pNode->GetSubNode(RSUB + 1))
+        nVariation = 1;
 
-    if (nVariation!=0xff)
+    if (nVariation != 0xff)
     {
-        pS->WriteUChar( TMPL ); //Template
-        pS->WriteUChar( 0x0F ); //selector
-        pS->WriteUChar( nVariation );
-        pS->WriteUChar( 0x00 ); //options
-        pS->WriteUChar( 0x0B );
+        pS->WriteUChar(TMPL); //Template
+        pS->WriteUChar(0x0F); //selector
+        pS->WriteUChar(nVariation);
+        pS->WriteUChar(0x00); //options
+        pS->WriteUChar(0x0B);
 
-        if (nullptr != (pTemp = pNode->GetSubNode(RSUB+1)))
+        if (nullptr != (pTemp = pNode->GetSubNode(RSUB + 1)))
         {
-            pS->WriteUChar( LINE ); //line
-            HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( END ); //line
+            pS->WriteUChar(LINE); //line
+            HandleNodes(pTemp, nLevel + 1);
+            pS->WriteUChar(END); //line
         }
         else
-            pS->WriteUChar( LINE|0x10 );
-        if (nullptr != (pTemp = pNode->GetSubNode(RSUP+1)))
+            pS->WriteUChar(LINE | 0x10);
+        if (nullptr != (pTemp = pNode->GetSubNode(RSUP + 1)))
         {
-            pS->WriteUChar( LINE ); //line
-            HandleNodes(pTemp,nLevel+1);
-            pS->WriteUChar( END ); //line
+            pS->WriteUChar(LINE); //line
+            HandleNodes(pTemp, nLevel + 1);
+            pS->WriteUChar(END); //line
         }
         else
-            pS->WriteUChar( LINE|0x10 );
-        pS->WriteUChar( END ); //line
+            pS->WriteUChar(LINE | 0x10);
+        pS->WriteUChar(END); //line
     }
 
     //After subscript mathtype will keep the size of
     //normal text at the subscript size, sigh.
-    pS->WriteUChar( 0x0A );
+    pS->WriteUChar(0x0A);
 }
 
-
-void MathType::HandleFractions(SmNode *pNode,int nLevel)
+void MathType::HandleFractions(SmNode* pNode, int nLevel)
 {
-    SmNode *pTemp;
-    pS->WriteUChar( TMPL ); //Template
-    pS->WriteUChar( 0x0E ); //selector
-    pS->WriteUChar( 0x00 ); //variation
-    pS->WriteUChar( 0x00 ); //options
+    SmNode* pTemp;
+    pS->WriteUChar(TMPL); //Template
+    pS->WriteUChar(0x0E); //selector
+    pS->WriteUChar(0x00); //variation
+    pS->WriteUChar(0x00); //options
 
-    pS->WriteUChar( 0x0A );
-    pS->WriteUChar( LINE ); //line
+    pS->WriteUChar(0x0A);
+    pS->WriteUChar(LINE); //line
     if (nullptr != (pTemp = pNode->GetSubNode(0)))
-        HandleNodes(pTemp,nLevel+1);
-    pS->WriteUChar( END );
+        HandleNodes(pTemp, nLevel + 1);
+    pS->WriteUChar(END);
 
-    pS->WriteUChar( 0x0A );
-    pS->WriteUChar( LINE ); //line
+    pS->WriteUChar(0x0A);
+    pS->WriteUChar(LINE); //line
     if (nullptr != (pTemp = pNode->GetSubNode(2)))
-        HandleNodes(pTemp,nLevel+1);
-    pS->WriteUChar( END );
+        HandleNodes(pTemp, nLevel + 1);
+    pS->WriteUChar(END);
 
-    pS->WriteUChar( END );
+    pS->WriteUChar(END);
 }
 
-
-void MathType::HandleBrace(SmNode *pNode,int nLevel)
+void MathType::HandleBrace(SmNode* pNode, int nLevel)
 {
-    SmNode *pTemp;
-    SmNode *pLeft=pNode->GetSubNode(0);
-    SmNode *pRight=pNode->GetSubNode(2);
+    SmNode* pTemp;
+    SmNode* pLeft = pNode->GetSubNode(0);
+    SmNode* pRight = pNode->GetSubNode(2);
 
-    pS->WriteUChar( TMPL ); //Template
-    bIsReInterpBrace=false;
-    sal_uInt8 nBSpec=0x10;
+    pS->WriteUChar(TMPL); //Template
+    bIsReInterpBrace = false;
+    sal_uInt8 nBSpec = 0x10;
     auto nLoc = pS->Tell();
     if (pLeft)
     {
         switch (pLeft->GetToken().eType)
         {
             case TLANGLE:
-                pS->WriteUChar( tmANGLE ); //selector
-                pS->WriteUChar( 0 ); //variation
-                pS->WriteUChar( 0 ); //options
+                pS->WriteUChar(tmANGLE); //selector
+                pS->WriteUChar(0); //variation
+                pS->WriteUChar(0); //options
                 break;
             case TLBRACE:
-                pS->WriteUChar( tmBRACE ); //selector
-                pS->WriteUChar( 0 ); //variation
-                pS->WriteUChar( 0 ); //options
-                nBSpec+=3;
+                pS->WriteUChar(tmBRACE); //selector
+                pS->WriteUChar(0); //variation
+                pS->WriteUChar(0); //options
+                nBSpec += 3;
                 break;
             case TLBRACKET:
-                pS->WriteUChar( tmBRACK ); //selector
-                pS->WriteUChar( 0 ); //variation
-                pS->WriteUChar( 0 ); //options
-                nBSpec+=3;
+                pS->WriteUChar(tmBRACK); //selector
+                pS->WriteUChar(0); //variation
+                pS->WriteUChar(0); //options
+                nBSpec += 3;
                 break;
             case TLFLOOR:
-                pS->WriteUChar( tmFLOOR ); //selector
-                pS->WriteUChar( 0 ); //variation
-                pS->WriteUChar( 0 ); //options
+                pS->WriteUChar(tmFLOOR); //selector
+                pS->WriteUChar(0); //variation
+                pS->WriteUChar(0); //options
                 break;
             case TLLINE:
-                pS->WriteUChar( tmBAR ); //selector
-                pS->WriteUChar( 0 ); //variation
-                pS->WriteUChar( 0 ); //options
-                nBSpec+=3;
+                pS->WriteUChar(tmBAR); //selector
+                pS->WriteUChar(0); //variation
+                pS->WriteUChar(0); //options
+                nBSpec += 3;
                 break;
             case TLDLINE:
-                pS->WriteUChar( tmDBAR ); //selector
-                pS->WriteUChar( 0 ); //variation
-                pS->WriteUChar( 0 ); //options
+                pS->WriteUChar(tmDBAR); //selector
+                pS->WriteUChar(0); //variation
+                pS->WriteUChar(0); //options
                 break;
             default:
-                pS->WriteUChar( tmPAREN ); //selector
-                pS->WriteUChar( 0 ); //variation
-                pS->WriteUChar( 0 ); //options
-                nBSpec+=3;
+                pS->WriteUChar(tmPAREN); //selector
+                pS->WriteUChar(0); //variation
+                pS->WriteUChar(0); //options
+                nBSpec += 3;
                 break;
         }
     }
 
     if (nullptr != (pTemp = pNode->GetSubNode(1)))
     {
-        pS->WriteUChar( LINE ); //line
-        HandleNodes(pTemp,nLevel+1);
-        pS->WriteUChar( END ); //options
+        pS->WriteUChar(LINE); //line
+        HandleNodes(pTemp, nLevel + 1);
+        pS->WriteUChar(END); //options
     }
-    nSpec=nBSpec;
+    nSpec = nBSpec;
     if (pLeft)
-        HandleNodes(pLeft,nLevel+1);
+        HandleNodes(pLeft, nLevel + 1);
     if (bIsReInterpBrace)
     {
         auto nLoc2 = pS->Tell();
         pS->Seek(nLoc);
-        pS->WriteUChar( 0x2D );
+        pS->WriteUChar(0x2D);
         pS->Seek(nLoc2);
-        pS->WriteUChar( CHAR );
-        pS->WriteUChar( 0x96 );
-        pS->WriteUInt16( 0xEC07 );
-        bIsReInterpBrace=false;
+        pS->WriteUChar(CHAR);
+        pS->WriteUChar(0x96);
+        pS->WriteUInt16(0xEC07);
+        bIsReInterpBrace = false;
     }
     if (pRight)
-        HandleNodes(pRight,nLevel+1);
-    nSpec=0x0;
-    pS->WriteUChar( END );
+        HandleNodes(pRight, nLevel + 1);
+    nSpec = 0x0;
+    pS->WriteUChar(END);
 }
 
-
-void MathType::HandleVerticalBrace(SmNode *pNode,int nLevel)
+void MathType::HandleVerticalBrace(SmNode* pNode, int nLevel)
 {
-    SmNode *pTemp;
-    pS->WriteUChar( TMPL ); //Template
+    SmNode* pTemp;
+    pS->WriteUChar(TMPL); //Template
     if (pNode->GetToken().eType == TUNDERBRACE)
-        pS->WriteUChar( tmLHBRACE ); //selector
+        pS->WriteUChar(tmLHBRACE); //selector
     else
-        pS->WriteUChar( tmUHBRACE ); //selector
-    pS->WriteUChar( 0 ); //variation
-    pS->WriteUChar( 0 ); //options
+        pS->WriteUChar(tmUHBRACE); //selector
+    pS->WriteUChar(0); //variation
+    pS->WriteUChar(0); //options
 
     if (nullptr != (pTemp = pNode->GetSubNode(0)))
     {
-        pS->WriteUChar( LINE ); //line
-        HandleNodes(pTemp,nLevel+1);
-        pS->WriteUChar( END ); //options
+        pS->WriteUChar(LINE); //line
+        HandleNodes(pTemp, nLevel + 1);
+        pS->WriteUChar(END); //options
     }
 
     if (nullptr != (pTemp = pNode->GetSubNode(2)))
     {
-        pS->WriteUChar( LINE ); //line
-        HandleNodes(pTemp,nLevel+1);
-        pS->WriteUChar( END ); //options
+        pS->WriteUChar(LINE); //line
+        HandleNodes(pTemp, nLevel + 1);
+        pS->WriteUChar(END); //options
     }
-    pS->WriteUChar( END );
+    pS->WriteUChar(END);
 }
 
-void MathType::HandleOperator(SmNode *pNode,int nLevel)
+void MathType::HandleOperator(SmNode* pNode, int nLevel)
 {
-    if (HandleLim(pNode,nLevel))
+    if (HandleLim(pNode, nLevel))
         return;
 
     sal_uInt64 nPos;
@@ -2453,26 +2411,25 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
         case TLINT:
         case TLLINT:
         case TLLLINT:
-            nVariation=HandleCScript(pNode->GetSubNode(0),
-                pNode->GetSubNode(1),nLevel,&nPos,false);
+            nVariation
+                = HandleCScript(pNode->GetSubNode(0), pNode->GetSubNode(1), nLevel, &nPos, false);
             break;
         default:
-            nVariation=HandleCScript(pNode->GetSubNode(0),
-                pNode->GetSubNode(1),nLevel,&nPos);
+            nVariation = HandleCScript(pNode->GetSubNode(0), pNode->GetSubNode(1), nLevel, &nPos);
             break;
     }
 
-    sal_uInt8 nOldVariation=nVariation;
-    sal_uInt8 nIntVariation=nVariation;
+    sal_uInt8 nOldVariation = nVariation;
+    sal_uInt8 nIntVariation = nVariation;
 
-    sal_uInt64 nPos2=0;
+    sal_uInt64 nPos2 = 0;
     if (nVariation != 0xff)
     {
         nPos2 = pS->Tell();
         pS->Seek(nPos);
         if (nVariation == 2)
         {
-            nIntVariation=0;
+            nIntVariation = 0;
             nVariation = 1;
         }
         else if (nVariation == 0)
@@ -2483,160 +2440,159 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
     else
     {
         nVariation = 2;
-        nIntVariation=0;
+        nIntVariation = 0;
     }
-    pS->WriteUChar( TMPL );
-    switch(pNode->GetToken().eType)
+    pS->WriteUChar(TMPL);
+    switch (pNode->GetToken().eType)
     {
-    case TINT:
-    case TINTD:
-        if (nOldVariation != 0xff)
-            pS->WriteUChar( 0x18 ); //selector
-        else
-            pS->WriteUChar( 0x15 ); //selector
-        pS->WriteUChar( nIntVariation ); //variation
-        break;
-    case TIINT:
-        if (nOldVariation != 0xff)
-        {
-            pS->WriteUChar( 0x19 );
-            pS->WriteUChar( 0x01 );
-        }
-        else
-        {
-            pS->WriteUChar( 0x16 );
-            pS->WriteUChar( 0x00 );
-        }
-        break;
-    case TIIINT:
-        if (nOldVariation != 0xff)
-        {
-            pS->WriteUChar( 0x1a );
-            pS->WriteUChar( 0x01 );
-        }
-        else
-        {
-            pS->WriteUChar( 0x17 );
-            pS->WriteUChar( 0x00 );
-        }
-        break;
-    case TLINT:
-        if (nOldVariation != 0xff)
-        {
-            pS->WriteUChar( 0x18 );
-            pS->WriteUChar( 0x02 );
-        }
-        else
-        {
-            pS->WriteUChar( 0x15 );
-            pS->WriteUChar( 0x03 );
-        }
-        break;
-    case TLLINT:
-        if (nOldVariation != 0xff)
-        {
-            pS->WriteUChar( 0x19 );
-            pS->WriteUChar( 0x00 );
-        }
-        else
-        {
-            pS->WriteUChar( 0x16 );
-            pS->WriteUChar( 0x02 );
-        }
-        break;
-    case TLLLINT:
-        if (nOldVariation != 0xff)
-        {
-            pS->WriteUChar( 0x1a );
-            pS->WriteUChar( 0x00 );
-        }
-        else
-        {
-            pS->WriteUChar( 0x17 );
-            pS->WriteUChar( 0x02 );
-        }
-        break;
-    case TSUM:
-    default:
-        pS->WriteUChar( 0x1d );
-        pS->WriteUChar( nVariation );
-        break;
-    case TPROD:
-        pS->WriteUChar( 0x1f );
-        pS->WriteUChar( nVariation );
-        break;
-    case TCOPROD:
-        pS->WriteUChar( 0x21 );
-        pS->WriteUChar( nVariation );
-        break;
+        case TINT:
+        case TINTD:
+            if (nOldVariation != 0xff)
+                pS->WriteUChar(0x18); //selector
+            else
+                pS->WriteUChar(0x15); //selector
+            pS->WriteUChar(nIntVariation); //variation
+            break;
+        case TIINT:
+            if (nOldVariation != 0xff)
+            {
+                pS->WriteUChar(0x19);
+                pS->WriteUChar(0x01);
+            }
+            else
+            {
+                pS->WriteUChar(0x16);
+                pS->WriteUChar(0x00);
+            }
+            break;
+        case TIIINT:
+            if (nOldVariation != 0xff)
+            {
+                pS->WriteUChar(0x1a);
+                pS->WriteUChar(0x01);
+            }
+            else
+            {
+                pS->WriteUChar(0x17);
+                pS->WriteUChar(0x00);
+            }
+            break;
+        case TLINT:
+            if (nOldVariation != 0xff)
+            {
+                pS->WriteUChar(0x18);
+                pS->WriteUChar(0x02);
+            }
+            else
+            {
+                pS->WriteUChar(0x15);
+                pS->WriteUChar(0x03);
+            }
+            break;
+        case TLLINT:
+            if (nOldVariation != 0xff)
+            {
+                pS->WriteUChar(0x19);
+                pS->WriteUChar(0x00);
+            }
+            else
+            {
+                pS->WriteUChar(0x16);
+                pS->WriteUChar(0x02);
+            }
+            break;
+        case TLLLINT:
+            if (nOldVariation != 0xff)
+            {
+                pS->WriteUChar(0x1a);
+                pS->WriteUChar(0x00);
+            }
+            else
+            {
+                pS->WriteUChar(0x17);
+                pS->WriteUChar(0x02);
+            }
+            break;
+        case TSUM:
+        default:
+            pS->WriteUChar(0x1d);
+            pS->WriteUChar(nVariation);
+            break;
+        case TPROD:
+            pS->WriteUChar(0x1f);
+            pS->WriteUChar(nVariation);
+            break;
+        case TCOPROD:
+            pS->WriteUChar(0x21);
+            pS->WriteUChar(nVariation);
+            break;
     }
-    pS->WriteUChar( 0 ); //options
+    pS->WriteUChar(0); //options
 
     if (nPos2)
         pS->Seek(nPos2);
     else
     {
-        pS->WriteUChar( LINE ); //line
-        HandleNodes(pNode->GetSubNode(1),nLevel+1);
-        pS->WriteUChar( END ); //line
-        pS->WriteUChar( LINE|0x10 );
-        pS->WriteUChar( LINE|0x10 );
+        pS->WriteUChar(LINE); //line
+        HandleNodes(pNode->GetSubNode(1), nLevel + 1);
+        pS->WriteUChar(END); //line
+        pS->WriteUChar(LINE | 0x10);
+        pS->WriteUChar(LINE | 0x10);
     }
 
-    pS->WriteUChar( 0x0D );
-    switch(pNode->GetToken().eType)
+    pS->WriteUChar(0x0D);
+    switch (pNode->GetToken().eType)
     {
-    case TSUM:
-    default:
-        pS->WriteUChar( CHAR );
-        pS->WriteUChar( 0x86 );
-        pS->WriteUInt16( 0x2211 );
-        break;
-    case TPROD:
-        pS->WriteUChar( CHAR );
-        pS->WriteUChar( 0x86 );
-        pS->WriteUInt16( 0x220F );
-        break;
-    case TCOPROD:
-        pS->WriteUChar( CHAR );
-        pS->WriteUChar( 0x8B );
-        pS->WriteUInt16( 0x2210 );
-        break;
-    case TIIINT:
-    case TLLLINT:
-        pS->WriteUChar( CHAR );
-        pS->WriteUChar( 0x86 );
-        pS->WriteUInt16( 0x222B );
-        [[fallthrough]];
-    case TIINT:
-    case TLLINT:
-        pS->WriteUChar( CHAR );
-        pS->WriteUChar( 0x86 );
-        pS->WriteUInt16( 0x222B );
-        [[fallthrough]];
-    case TINT:
-    case TINTD:
-    case TLINT:
-        pS->WriteUChar( CHAR );
-        pS->WriteUChar( 0x86 );
-        pS->WriteUInt16( 0x222B );
-        break;
+        case TSUM:
+        default:
+            pS->WriteUChar(CHAR);
+            pS->WriteUChar(0x86);
+            pS->WriteUInt16(0x2211);
+            break;
+        case TPROD:
+            pS->WriteUChar(CHAR);
+            pS->WriteUChar(0x86);
+            pS->WriteUInt16(0x220F);
+            break;
+        case TCOPROD:
+            pS->WriteUChar(CHAR);
+            pS->WriteUChar(0x8B);
+            pS->WriteUInt16(0x2210);
+            break;
+        case TIIINT:
+        case TLLLINT:
+            pS->WriteUChar(CHAR);
+            pS->WriteUChar(0x86);
+            pS->WriteUInt16(0x222B);
+            [[fallthrough]];
+        case TIINT:
+        case TLLINT:
+            pS->WriteUChar(CHAR);
+            pS->WriteUChar(0x86);
+            pS->WriteUInt16(0x222B);
+            [[fallthrough]];
+        case TINT:
+        case TINTD:
+        case TLINT:
+            pS->WriteUChar(CHAR);
+            pS->WriteUChar(0x86);
+            pS->WriteUInt16(0x222B);
+            break;
     }
-    pS->WriteUChar( END );
-    pS->WriteUChar( 0x0A );
+    pS->WriteUChar(END);
+    pS->WriteUChar(0x0A);
 }
 
-
-bool MathType::HandlePile(int &rSetAlign, int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation)
+bool MathType::HandlePile(int& rSetAlign, int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation)
 {
     sal_uInt8 nVAlign;
-    pS->ReadUChar( nHAlign );
-    pS->ReadUChar( nVAlign );
+    pS->ReadUChar(nHAlign);
+    pS->ReadUChar(nVAlign);
 
     HandleAlign(nHAlign, rSetAlign);
 
     rRet.append(" stack {\n");
-    bool bRet = HandleRecords( nLevel+1, nSelector, nVariation, -1, -1 );
+    bool bRet = HandleRecords(nLevel + 1, nSelector, nVariation, -1, -1);
     int nRemoveFrom = rRet.getLength() >= 3 ? rRet.getLength() - 3 : 0;
     rRet.remove(nRemoveFrom, 2);
     rRet.append("} ");
@@ -2651,66 +2607,66 @@ bool MathType::HandlePile(int &rSetAlign, int nLevel, sal_uInt8 nSelector, sal_u
 
 bool MathType::HandleMatrix(int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation)
 {
-    sal_uInt8 nH_just,nV_just,nRows,nCols,nVAlign;
-    pS->ReadUChar( nVAlign );
-    pS->ReadUChar( nH_just );
-    pS->ReadUChar( nV_just );
-    pS->ReadUChar( nRows );
-    pS->ReadUChar( nCols );
-    int nBytes = ((nRows+1)*2)/8;
-    if (((nRows+1)*2)%8)
+    sal_uInt8 nH_just, nV_just, nRows, nCols, nVAlign;
+    pS->ReadUChar(nVAlign);
+    pS->ReadUChar(nH_just);
+    pS->ReadUChar(nV_just);
+    pS->ReadUChar(nRows);
+    pS->ReadUChar(nCols);
+    int nBytes = ((nRows + 1) * 2) / 8;
+    if (((nRows + 1) * 2) % 8)
         nBytes++;
     pS->SeekRel(nBytes);
-    nBytes = ((nCols+1)*2)/8;
-    if (((nCols+1)*2)%8)
+    nBytes = ((nCols + 1) * 2) / 8;
+    if (((nCols + 1) * 2) % 8)
         nBytes++;
     pS->SeekRel(nBytes);
     rRet.append(" matrix {\n");
-    bool bRet = HandleRecords( nLevel+1, nSelector, nVariation, nRows, nCols );
+    bool bRet = HandleRecords(nLevel + 1, nSelector, nVariation, nRows, nCols);
 
     sal_Int32 nI = rRet.lastIndexOf('#');
     if (nI > 0)
-        if (rRet[nI-1] != '#')  //missing column
+        if (rRet[nI - 1] != '#') //missing column
             rRet.append("{}");
 
     rRet.append("\n} ");
     return bRet;
 }
 
-bool MathType::HandleTemplate(int nLevel, sal_uInt8 &rSelector,
-    sal_uInt8 &rVariation, sal_Int32 &rLastTemplateBracket)
+bool MathType::HandleTemplate(int nLevel, sal_uInt8& rSelector, sal_uInt8& rVariation,
+                              sal_Int32& rLastTemplateBracket)
 {
     sal_uInt8 nOption; //This appears utterly unused
-    pS->ReadUChar( rSelector );
-    pS->ReadUChar( rVariation );
-    pS->ReadUChar( nOption );
-    OSL_ENSURE(rSelector < 48,"Selector out of range");
-    if ((rSelector >= 21) && (rSelector <=26))
+    pS->ReadUChar(rSelector);
+    pS->ReadUChar(rVariation);
+    pS->ReadUChar(nOption);
+    OSL_ENSURE(rSelector < 48, "Selector out of range");
+    if ((rSelector >= 21) && (rSelector <= 26))
     {
-        OSL_ENSURE(nOption < 2,"Option out of range");
+        OSL_ENSURE(nOption < 2, "Option out of range");
     }
     else if (rSelector <= 12)
     {
-        OSL_ENSURE(nOption < 3,"Option out of range");
+        OSL_ENSURE(nOption < 3, "Option out of range");
     }
 
     //For the (broken) case where one subscript template ends, and there is
     //another one after it, mathtype handles it as if the second one was
     //inside the first one and renders it as sub of sub
-    bool bRemove=false;
-    if ( (rSelector == 0xf) && (rLastTemplateBracket != -1) )
+    bool bRemove = false;
+    if ((rSelector == 0xf) && (rLastTemplateBracket != -1))
     {
-        bRemove=true;
-        for (sal_Int32 nI = rLastTemplateBracket+1; nI < rRet.getLength(); nI++ )
+        bRemove = true;
+        for (sal_Int32 nI = rLastTemplateBracket + 1; nI < rRet.getLength(); nI++)
             if (rRet[nI] != ' ')
             {
-                bRemove=false;
+                bRemove = false;
                 break;
             }
     }
 
     //suborderlist
-    bool bRet = HandleRecords( nLevel+1, rSelector, rVariation );
+    bool bRet = HandleRecords(nLevel + 1, rSelector, rVariation);
 
     if (bRemove)
     {
@@ -2724,7 +2680,7 @@ bool MathType::HandleTemplate(int nLevel, sal_uInt8 &rSelector,
     else
         rLastTemplateBracket = -1;
 
-    rSelector = sal::static_int_cast< sal_uInt8 >(-1);
+    rSelector = sal::static_int_cast<sal_uInt8>(-1);
     return bRet;
 }
 
@@ -2733,128 +2689,128 @@ void MathType::HandleEmblishments()
     sal_uInt8 nEmbel;
     do
     {
-        pS->ReadUChar( nEmbel );
+        pS->ReadUChar(nEmbel);
         if (!pS->good())
             break;
         switch (nEmbel)
         {
-        case 0x02:
-            rRet.append(" dot ");
-            break;
-        case 0x03:
-            rRet.append(" ddot ");
-            break;
-        case 0x04:
-            rRet.append(" dddot ");
-            break;
-        case 0x05:
-            if (!nPostSup)
-            {
-                sPost.append(" sup {}");
-                nPostSup = sPost.getLength();
-            }
-            sPost.insert(nPostSup-1," ' ");
-            nPostSup += 3;
-            break;
-        case 0x06:
-            if (!nPostSup)
-            {
-                sPost.append(" sup {}");
-                nPostSup = sPost.getLength();
-            }
-            sPost.insert(nPostSup-1," '' ");
-            nPostSup += 4;
-            break;
-        case 0x07:
-            if (!nPostlSup)
-            {
-                sPost.append(" lsup {}");
-                nPostlSup = sPost.getLength();
-            }
-            sPost.insert(nPostlSup-1," ' ");
-            nPostlSup += 3;
-            break;
-        case 0x08:
-            rRet.append(" tilde ");
-            break;
-        case 0x09:
-            rRet.append(" hat ");
-            break;
-        case 0x0b:
-            rRet.append(" vec ");
-            break;
-        case 0x10:
-            rRet.append(" overstrike ");
-            break;
-        case 0x11:
-            rRet.append(" bar ");
-            break;
-        case 0x12:
-            if (!nPostSup)
-            {
-                sPost.append(" sup {}");
-                nPostSup = sPost.getLength();
-            }
-            sPost.insert(nPostSup-1," ''' ");
-            nPostSup += 5;
-            break;
-        case 0x14:
-            rRet.append(" breve ");
-            break;
-        default:
-            OSL_ENSURE(nEmbel < 21,"Embel out of range");
-            break;
+            case 0x02:
+                rRet.append(" dot ");
+                break;
+            case 0x03:
+                rRet.append(" ddot ");
+                break;
+            case 0x04:
+                rRet.append(" dddot ");
+                break;
+            case 0x05:
+                if (!nPostSup)
+                {
+                    sPost.append(" sup {}");
+                    nPostSup = sPost.getLength();
+                }
+                sPost.insert(nPostSup - 1, " ' ");
+                nPostSup += 3;
+                break;
+            case 0x06:
+                if (!nPostSup)
+                {
+                    sPost.append(" sup {}");
+                    nPostSup = sPost.getLength();
+                }
+                sPost.insert(nPostSup - 1, " '' ");
+                nPostSup += 4;
+                break;
+            case 0x07:
+                if (!nPostlSup)
+                {
+                    sPost.append(" lsup {}");
+                    nPostlSup = sPost.getLength();
+                }
+                sPost.insert(nPostlSup - 1, " ' ");
+                nPostlSup += 3;
+                break;
+            case 0x08:
+                rRet.append(" tilde ");
+                break;
+            case 0x09:
+                rRet.append(" hat ");
+                break;
+            case 0x0b:
+                rRet.append(" vec ");
+                break;
+            case 0x10:
+                rRet.append(" overstrike ");
+                break;
+            case 0x11:
+                rRet.append(" bar ");
+                break;
+            case 0x12:
+                if (!nPostSup)
+                {
+                    sPost.append(" sup {}");
+                    nPostSup = sPost.getLength();
+                }
+                sPost.insert(nPostSup - 1, " ''' ");
+                nPostSup += 5;
+                break;
+            case 0x14:
+                rRet.append(" breve ");
+                break;
+            default:
+                OSL_ENSURE(nEmbel < 21, "Embel out of range");
+                break;
         }
         if (nVersion < 3)
             break;
-    }while (nEmbel);
+    } while (nEmbel);
 }
 
 void MathType::HandleSetSize()
 {
     sal_uInt8 nTemp;
-    pS->ReadUChar( nTemp );
+    pS->ReadUChar(nTemp);
     switch (nTemp)
     {
         case 101:
-            pS->ReadInt16( nLSize );
+            pS->ReadInt16(nLSize);
             nLSize = -nLSize;
             break;
         case 100:
-            pS->ReadUChar( nTemp );
+            pS->ReadUChar(nTemp);
             nLSize = nTemp;
-            pS->ReadInt16( nDSize );
+            pS->ReadInt16(nDSize);
             break;
         default:
             nLSize = nTemp;
-            pS->ReadUChar( nTemp );
-            nDSize = nTemp-128;
+            pS->ReadUChar(nTemp);
+            nDSize = nTemp - 128;
             break;
     }
 }
 
-bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
-    sal_uInt8 nTag, sal_uInt8 nSelector, sal_uInt8 nVariation, bool bSilent)
+bool MathType::HandleChar(sal_Int32& rTextStart, int& rSetSize, int nLevel, sal_uInt8 nTag,
+                          sal_uInt8 nSelector, sal_uInt8 nVariation, bool bSilent)
 {
     sal_Unicode nChar(0);
     bool bRet = true;
 
     if (xfAUTO(nTag))
     {
-    //This is a candidate for function recognition, whatever
-    //that is!
+        //This is a candidate for function recognition, whatever
+        //that is!
     }
 
     sal_uInt8 nOldTypeFace = nTypeFace;
-    pS->ReadUChar( nTypeFace );
+    pS->ReadUChar(nTypeFace);
     if (nVersion < 3)
     {
         sal_uInt8 nChar8(0);
-        pS->ReadUChar( nChar8 );
+        pS->ReadUChar(nChar8);
         nChar = nChar8;
     }
     else
-        pS->ReadUtf16( nChar );
+        pS->ReadUtf16(nChar);
 
     /*
     bad character, old mathtype < 3 has these
@@ -2875,22 +2831,22 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
         //collated together
         sPost = "";
         nPostSup = nPostlSup = 0;
-        int nOriglen=rRet.getLength()-rTextStart;
-        rRet.append(" {");  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
+        int nOriglen = rRet.getLength() - rTextStart;
+        rRet.append(" {"); // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
         if ((!bSilent) && (nOriglen > 1))
             rRet.append("\"");
-        bRet = HandleRecords( nLevel+1, nSelector, nVariation );
+        bRet = HandleRecords(nLevel + 1, nSelector, nVariation);
         if (!bSilent)
         {
             if (nOriglen > 1)
             {
                 OUString aStr;
-                TypeFaceToString(aStr,nOldTypeFace);
+                TypeFaceToString(aStr, nOldTypeFace);
                 aStr += "\"";
                 rRet.insert(std::min(rTextStart, rRet.getLength()), aStr);
 
                 aStr.clear();
-                TypeFaceToString(aStr,nTypeFace);
+                TypeFaceToString(aStr, nTypeFace);
                 rRet.append(aStr).append("{");
             }
             else
@@ -2902,29 +2858,26 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
     if (!bSilent)
     {
         sal_Int32 nOldLen = rRet.getLength();
-        if (
-            HandleSize(nLSize,nDSize,rSetSize) ||
-            (nOldTypeFace != nTypeFace)
-           )
+        if (HandleSize(nLSize, nDSize, rSetSize) || (nOldTypeFace != nTypeFace))
         {
             if ((nOldLen - rTextStart) > 1)
             {
                 rRet.insert(nOldLen, "\"");
                 OUString aStr;
-                TypeFaceToString(aStr,nOldTypeFace);
+                TypeFaceToString(aStr, nOldTypeFace);
                 aStr += "\"";
-                rRet.insert(rTextStart,aStr);
+                rRet.insert(rTextStart, aStr);
             }
             rTextStart = rRet.getLength();
         }
         nOldLen = rRet.getLength();
-        if (!LookupChar(nChar,rRet,nVersion,nTypeFace))
+        if (!LookupChar(nChar, rRet, nVersion, nTypeFace))
         {
             if (nOldLen - rTextStart > 1)
             {
                 rRet.insert(nOldLen, "\"");
                 OUString aStr;
-                TypeFaceToString(aStr,nOldTypeFace);
+                TypeFaceToString(aStr, nOldTypeFace);
                 aStr += "\"";
                 rRet.insert(rTextStart, aStr);
             }
@@ -2935,146 +2888,139 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
 
     if ((xfEMBELL(nTag)) && (!bSilent))
     {
-        rRet.append("}}").append(sPost);  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
+        rRet.append("}}").append(
+            sPost); // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
         rTextStart = rRet.getLength();
     }
     return bRet;
 }
 
-bool MathType::HandleLim(SmNode *pNode,int nLevel)
+bool MathType::HandleLim(SmNode* pNode, int nLevel)
 {
-    bool bRet=false;
+    bool bRet = false;
     //Special case for the "lim" option in StarMath
-    if ((pNode->GetToken().eType == TLIM)
-        || (pNode->GetToken().eType == TLIMSUP)
-        || (pNode->GetToken().eType == TLIMINF)
-        )
+    if ((pNode->GetToken().eType == TLIM) || (pNode->GetToken().eType == TLIMSUP)
+        || (pNode->GetToken().eType == TLIMINF))
     {
         if (pNode->GetSubNode(1))
         {
-            sal_uInt8 nVariation2=HandleCScript(pNode->GetSubNode(0),nullptr,
-                nLevel);
+            sal_uInt8 nVariation2 = HandleCScript(pNode->GetSubNode(0), nullptr, nLevel);
 
-            pS->WriteUChar( 0x0A );
-            pS->WriteUChar( LINE ); //line
-            pS->WriteUChar( CHAR|0x10 );
-            pS->WriteUChar( 0x82 );
-            pS->WriteUInt16( 'l' );
-            pS->WriteUChar( CHAR|0x10 );
-            pS->WriteUChar( 0x82 );
-            pS->WriteUInt16( 'i' );
-            pS->WriteUChar( CHAR|0x10 );
-            pS->WriteUChar( 0x82 );
-            pS->WriteUInt16( 'm' );
+            pS->WriteUChar(0x0A);
+            pS->WriteUChar(LINE); //line
+            pS->WriteUChar(CHAR | 0x10);
+            pS->WriteUChar(0x82);
+            pS->WriteUInt16('l');
+            pS->WriteUChar(CHAR | 0x10);
+            pS->WriteUChar(0x82);
+            pS->WriteUInt16('i');
+            pS->WriteUChar(CHAR | 0x10);
+            pS->WriteUChar(0x82);
+            pS->WriteUInt16('m');
 
             if (pNode->GetToken().eType == TLIMSUP)
             {
-                pS->WriteUChar( CHAR ); //some space
-                pS->WriteUChar( 0x98 );
-                pS->WriteUInt16( 0xEB04 );
+                pS->WriteUChar(CHAR); //some space
+                pS->WriteUChar(0x98);
+                pS->WriteUInt16(0xEB04);
 
-                pS->WriteUChar( CHAR|0x10 );
-                pS->WriteUChar( 0x82 );
-                pS->WriteUInt16( 's' );
-                pS->WriteUChar( CHAR|0x10 );
-                pS->WriteUChar( 0x82 );
-                pS->WriteUInt16( 'u' );
-                pS->WriteUChar( CHAR|0x10 );
-                pS->WriteUChar( 0x82 );
-                pS->WriteUInt16( 'p' );
+                pS->WriteUChar(CHAR | 0x10);
+                pS->WriteUChar(0x82);
+                pS->WriteUInt16('s');
+                pS->WriteUChar(CHAR | 0x10);
+                pS->WriteUChar(0x82);
+                pS->WriteUInt16('u');
+                pS->WriteUChar(CHAR | 0x10);
+                pS->WriteUChar(0x82);
+                pS->WriteUInt16('p');
             }
             else if (pNode->GetToken().eType == TLIMINF)
             {
-                pS->WriteUChar( CHAR ); //some space
-                pS->WriteUChar( 0x98 );
-                pS->WriteUInt16( 0xEB04 );
+                pS->WriteUChar(CHAR); //some space
+                pS->WriteUChar(0x98);
+                pS->WriteUInt16(0xEB04);
 
-                pS->WriteUChar( CHAR|0x10 );
-                pS->WriteUChar( 0x82 );
-                pS->WriteUInt16( 'i' );
-                pS->WriteUChar( CHAR|0x10 );
-                pS->WriteUChar( 0x82 );
-                pS->WriteUInt16( 'n' );
-                pS->WriteUChar( CHAR|0x10 );
-                pS->WriteUChar( 0x82 );
-                pS->WriteUInt16( 'f' );
+                pS->WriteUChar(CHAR | 0x10);
+                pS->WriteUChar(0x82);
+                pS->WriteUInt16('i');
+                pS->WriteUChar(CHAR | 0x10);
+                pS->WriteUChar(0x82);
+                pS->WriteUInt16('n');
+                pS->WriteUChar(CHAR | 0x10);
+                pS->WriteUChar(0x82);
+                pS->WriteUInt16('f');
             }
 
-
-            pS->WriteUChar( CHAR ); //some space
-            pS->WriteUChar( 0x98 );
-            pS->WriteUInt16( 0xEB04 );
+            pS->WriteUChar(CHAR); //some space
+            pS->WriteUChar(0x98);
+            pS->WriteUInt16(0xEB04);
 
             if (nVariation2 != 0xff)
             {
-                pS->WriteUChar( END );
-                pS->WriteUChar( END );
+                pS->WriteUChar(END);
+                pS->WriteUChar(END);
             }
-            HandleNodes(pNode->GetSubNode(1),nLevel+1);
+            HandleNodes(pNode->GetSubNode(1), nLevel + 1);
             bRet = true;
         }
     }
     return bRet;
 }
 
-void MathType::HandleMAlign(SmNode *pNode,int nLevel)
+void MathType::HandleMAlign(SmNode* pNode, int nLevel)
 {
-    sal_uInt8 nPushedHAlign=nHAlign;
-    switch(pNode->GetToken().eType)
+    sal_uInt8 nPushedHAlign = nHAlign;
+    switch (pNode->GetToken().eType)
     {
         case TALIGNC:
-            nHAlign=2;
+            nHAlign = 2;
             break;
         case TALIGNR:
-            nHAlign=3;
+            nHAlign = 3;
             break;
         default:
-            nHAlign=1;
+            nHAlign = 1;
             break;
     }
     size_t nSize = pNode->GetNumSubNodes();
     for (size_t i = 0; i < nSize; ++i)
     {
-        if (SmNode *pTemp = pNode->GetSubNode(i))
-            HandleNodes(pTemp,nLevel+1);
+        if (SmNode* pTemp = pNode->GetSubNode(i))
+            HandleNodes(pTemp, nLevel + 1);
     }
-    nHAlign=nPushedHAlign;
+    nHAlign = nPushedHAlign;
 }
 
-void MathType::HandleMath(SmNode *pNode)
+void MathType::HandleMath(SmNode* pNode)
 {
     if (pNode->GetToken().eType == TMLINE)
     {
-        pS->WriteUChar( END );
-        pS->WriteUChar( LINE );
-        bIsReInterpBrace=true;
+        pS->WriteUChar(END);
+        pS->WriteUChar(LINE);
+        bIsReInterpBrace = true;
         return;
     }
-    SmMathSymbolNode *pTemp = static_cast<SmMathSymbolNode *>(pNode);
-    for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
+    SmMathSymbolNode* pTemp = static_cast<SmMathSymbolNode*>(pNode);
+    for (sal_Int32 i = 0; i < pTemp->GetText().getLength(); i++)
     {
         sal_Unicode nArse = SmTextNode::ConvertSymbolToUnicode(pTemp->GetText()[i]);
-        if ((nArse == 0x2224) || (nArse == 0x2288) || (nArse == 0x2285) ||
-            (nArse == 0x2289))
+        if ((nArse == 0x2224) || (nArse == 0x2288) || (nArse == 0x2285) || (nArse == 0x2289))
         {
-            pS->WriteUChar( CHAR|0x20 );
+            pS->WriteUChar(CHAR | 0x20);
         }
-        else if (nPendingAttributes &&
-                (i == ((pTemp->GetText().getLength()+1)/2)-1))
-            {
-                pS->WriteUChar( 0x22 );
-            }
+        else if (nPendingAttributes && (i == ((pTemp->GetText().getLength() + 1) / 2) - 1))
+        {
+            pS->WriteUChar(0x22);
+        }
         else
-            pS->WriteUChar( CHAR ); //char without formula recognition
+            pS->WriteUChar(CHAR); //char without formula recognition
         //The typeface seems to be MTEXTRA for unicode characters,
         //though how to determine when mathtype chooses one over
         //the other is unknown. This should do the trick
         //nevertheless.
         sal_uInt8 nBias;
-        if ( (nArse == 0x2213) || (nArse == 0x2218) ||
-            (nArse == 0x210F) || (
-                (nArse >= 0x22EE) && (nArse <= 0x22FF)
-            ))
+        if ((nArse == 0x2213) || (nArse == 0x2218) || (nArse == 0x210F)
+            || ((nArse >= 0x22EE) && (nArse <= 0x22FF)))
         {
             nBias = 0xB; //typeface
         }
@@ -3089,111 +3035,110 @@ void MathType::HandleMath(SmNode *pNode)
         else
             nBias = 0x3; //typeface
 
-        pS->WriteUChar( nSpec+nBias+128 ); //typeface
+        pS->WriteUChar(nSpec + nBias + 128); //typeface
 
         if (nArse == 0x2224)
         {
-            pS->WriteUInt16( 0x7C );
-            pS->WriteUChar( EMBEL );
-            pS->WriteUChar( 0x0A );
-            pS->WriteUChar( END ); //end embel
-            pS->WriteUChar( END ); //end embel
+            pS->WriteUInt16(0x7C);
+            pS->WriteUChar(EMBEL);
+            pS->WriteUChar(0x0A);
+            pS->WriteUChar(END); //end embel
+            pS->WriteUChar(END); //end embel
         }
         else if (nArse == 0x2225)
-            pS->WriteUInt16( 0xEC09 );
+            pS->WriteUInt16(0xEC09);
         else if (nArse == 0xE421)
-            pS->WriteUInt16( 0x2265 );
+            pS->WriteUInt16(0x2265);
         else if (nArse == 0x230A)
-            pS->WriteUInt16( 0xF8F0 );
+            pS->WriteUInt16(0xF8F0);
         else if (nArse == 0x230B)
-            pS->WriteUInt16( 0xF8FB );
+            pS->WriteUInt16(0xF8FB);
         else if (nArse == 0xE425)
-            pS->WriteUInt16( 0x2264 );
+            pS->WriteUInt16(0x2264);
         else if (nArse == 0x226A)
         {
-            pS->WriteUInt16( 0x3C );
-            pS->WriteUChar( CHAR );
-            pS->WriteUChar( 0x98 );
-            pS->WriteUInt16( 0xEB01 );
-            pS->WriteUChar( CHAR );
-            pS->WriteUChar( 0x86 );
-            pS->WriteUInt16( 0x3c );
+            pS->WriteUInt16(0x3C);
+            pS->WriteUChar(CHAR);
+            pS->WriteUChar(0x98);
+            pS->WriteUInt16(0xEB01);
+            pS->WriteUChar(CHAR);
+            pS->WriteUChar(0x86);
+            pS->WriteUInt16(0x3c);
         }
         else if (nArse == 0x2288)
         {
-            pS->WriteUInt16( 0x2286 );
-            pS->WriteUChar( EMBEL );
-            pS->WriteUChar( 0x0A );
-            pS->WriteUChar( END ); //end embel
-            pS->WriteUChar( END ); //end embel
+            pS->WriteUInt16(0x2286);
+            pS->WriteUChar(EMBEL);
+            pS->WriteUChar(0x0A);
+            pS->WriteUChar(END); //end embel
+            pS->WriteUChar(END); //end embel
         }
         else if (nArse == 0x2289)
         {
-            pS->WriteUInt16( 0x2287 );
-            pS->WriteUChar( EMBEL );
-            pS->WriteUChar( 0x0A );
-            pS->WriteUChar( END ); //end embel
-            pS->WriteUChar( END ); //end embel
+            pS->WriteUInt16(0x2287);
+            pS->WriteUChar(EMBEL);
+            pS->WriteUChar(0x0A);
+            pS->WriteUChar(END); //end embel
+            pS->WriteUChar(END); //end embel
         }
         else if (nArse == 0x2285)
         {
-            pS->WriteUInt16( 0x2283 );
-            pS->WriteUChar( EMBEL );
-            pS->WriteUChar( 0x0A );
-            pS->WriteUChar( END ); //end embel
-            pS->WriteUChar( END ); //end embel
+            pS->WriteUInt16(0x2283);
+            pS->WriteUChar(EMBEL);
+            pS->WriteUChar(0x0A);
+            pS->WriteUChar(END); //end embel
+            pS->WriteUChar(END); //end embel
         }
         else
-            pS->WriteUInt16( nArse );
+            pS->WriteUInt16(nArse);
     }
     nPendingAttributes = 0;
 }
 
-void MathType::HandleAttributes(SmNode *pNode,int nLevel)
+void MathType::HandleAttributes(SmNode* pNode, int nLevel)
 {
     int nOldPending = 0;
-    SmNode *pTemp       = nullptr;
-    SmTextNode *pIsText = nullptr;
+    SmNode* pTemp = nullptr;
+    SmTextNode* pIsText = nullptr;
 
     if (nullptr != (pTemp = pNode->GetSubNode(0)))
     {
-        pIsText = static_cast<SmTextNode *>(pNode->GetSubNode(1));
+        pIsText = static_cast<SmTextNode*>(pNode->GetSubNode(1));
 
         switch (pTemp->GetToken().eType)
         {
-        case TWIDEVEC:
-            //there's just no way we can now handle any character
-            //attributes (from mathtypes perspective) centered
-            //over an expression but above template attributes
-            //such as widevec and similar constructs
-            //we have to drop them
-            nOldPending = StartTemplate(0x2f,0x01);
-            break;
-        case TCHECK: //Not Exportable
-        case TACUTE: //Not Exportable
-        case TGRAVE: //Not Exportable
-        case TCIRCLE: //Not Exportable
-        case TWIDEHARPOON: //Not Exportable
-        case TWIDETILDE: //Not Exportable
-        case TWIDEHAT: //Not Exportable
-            break;
-        case TUNDERLINE:
-            nOldPending = StartTemplate(0x10);
-            break;
-        case TOVERLINE: //If the next node is not text
-                        //or text with more than one char
-            if ((pIsText->GetToken().eType != TTEXT) ||
-                (pIsText->GetText().getLength() > 1))
-                nOldPending = StartTemplate(0x11);
-            break;
-        default:
-            nPendingAttributes++;
-            break;
+            case TWIDEVEC:
+                //there's just no way we can now handle any character
+                //attributes (from mathtypes perspective) centered
+                //over an expression but above template attributes
+                //such as widevec and similar constructs
+                //we have to drop them
+                nOldPending = StartTemplate(0x2f, 0x01);
+                break;
+            case TCHECK: //Not Exportable
+            case TACUTE: //Not Exportable
+            case TGRAVE: //Not Exportable
+            case TCIRCLE: //Not Exportable
+            case TWIDEHARPOON: //Not Exportable
+            case TWIDETILDE: //Not Exportable
+            case TWIDEHAT: //Not Exportable
+                break;
+            case TUNDERLINE:
+                nOldPending = StartTemplate(0x10);
+                break;
+            case TOVERLINE: //If the next node is not text
+                //or text with more than one char
+                if ((pIsText->GetToken().eType != TTEXT) || (pIsText->GetText().getLength() > 1))
+                    nOldPending = StartTemplate(0x11);
+                break;
+            default:
+                nPendingAttributes++;
+                break;
         }
     }
 
     if (pIsText)
-        HandleNodes(pIsText,nLevel+1);
+        HandleNodes(pIsText, nLevel + 1);
 
     switch (pTemp->GetToken().eType)
     {
@@ -3202,8 +3147,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
             EndTemplate(nOldPending);
             break;
         case TOVERLINE:
-            if ((pIsText->GetToken().eType != TTEXT) ||
-                (pIsText->GetText().getLength() > 1))
+            if ((pIsText->GetToken().eType != TTEXT) || (pIsText->GetText().getLength() > 1))
                 EndTemplate(nOldPending);
             break;
         default:
@@ -3221,81 +3165,80 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
             auto nPos = pS->Tell();
             nInsertion--;
             pS->Seek(nInsertion);
-            switch(pTemp->GetToken().eType)
+            switch (pTemp->GetToken().eType)
             {
-            case TACUTE: //Not Exportable
-            case TGRAVE: //Not Exportable
-            case TCIRCLE: //Not Exportable
-                break;
-            case TCDOT:
-                pS->WriteUChar( 2 );
-                break;
-            case TDDOT:
-                pS->WriteUChar( 3 );
-                break;
-            case TDDDOT:
-                pS->WriteUChar( 4 );
-                break;
-            case TTILDE:
-                pS->WriteUChar( 8 );
-                break;
-            case THAT:
-                pS->WriteUChar( 9 );
-                break;
-            case TVEC:
-                pS->WriteUChar( 11 );
-                break;
-            case TOVERSTRIKE:
-                pS->WriteUChar( 16 );
-                break;
-            case TOVERLINE:
-                if ((pIsText->GetToken().eType == TTEXT) &&
-                    (pIsText->GetText().getLength() == 1))
-                    pS->WriteUChar( 17 );
-                break;
-            case TBREVE:
-                pS->WriteUChar( 20 );
-                break;
-            case TWIDEVEC:
-            case TWIDEHARPOON:
-            case TUNDERLINE:
-            case TWIDETILDE:
-            case TWIDEHAT:
-                break;
-            case TBAR:
-                pS->WriteUChar( 17 );
-                break;
-            default:
-                pS->WriteUChar( 2 );
-                break;
+                case TACUTE: //Not Exportable
+                case TGRAVE: //Not Exportable
+                case TCIRCLE: //Not Exportable
+                    break;
+                case TCDOT:
+                    pS->WriteUChar(2);
+                    break;
+                case TDDOT:
+                    pS->WriteUChar(3);
+                    break;
+                case TDDDOT:
+                    pS->WriteUChar(4);
+                    break;
+                case TTILDE:
+                    pS->WriteUChar(8);
+                    break;
+                case THAT:
+                    pS->WriteUChar(9);
+                    break;
+                case TVEC:
+                    pS->WriteUChar(11);
+                    break;
+                case TOVERSTRIKE:
+                    pS->WriteUChar(16);
+                    break;
+                case TOVERLINE:
+                    if ((pIsText->GetToken().eType == TTEXT)
+                        && (pIsText->GetText().getLength() == 1))
+                        pS->WriteUChar(17);
+                    break;
+                case TBREVE:
+                    pS->WriteUChar(20);
+                    break;
+                case TWIDEVEC:
+                case TWIDEHARPOON:
+                case TUNDERLINE:
+                case TWIDETILDE:
+                case TWIDEHAT:
+                    break;
+                case TBAR:
+                    pS->WriteUChar(17);
+                    break;
+                default:
+                    pS->WriteUChar(2);
+                    break;
             }
             pS->Seek(nPos);
         }
     }
 }
 
-void MathType::HandleText(SmNode *pNode)
+void MathType::HandleText(SmNode* pNode)
 {
-    SmTextNode *pTemp = static_cast<SmTextNode *>(pNode);
-    for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
+    SmTextNode* pTemp = static_cast<SmTextNode*>(pNode);
+    for (sal_Int32 i = 0; i < pTemp->GetText().getLength(); i++)
     {
-        if (nPendingAttributes &&
-            (i == ((pTemp->GetText().getLength()+1)/2)-1))
+        if (nPendingAttributes && (i == ((pTemp->GetText().getLength() + 1) / 2) - 1))
         {
-            pS->WriteUChar( 0x22 );     //char, with attributes right
-                                //after the character
+            pS->WriteUChar(0x22); //char, with attributes right
+                //after the character
         }
         else
-            pS->WriteUChar( CHAR );
+            pS->WriteUChar(CHAR);
 
         sal_uInt8 nFace = 0x1;
         if (pNode->GetFont().GetItalic() == ITALIC_NORMAL)
             nFace = 0x3;
         else if (pNode->GetFont().GetWeight() == WEIGHT_BOLD)
             nFace = 0x7;
-        pS->WriteUChar( nFace+128 ); //typeface
+        pS->WriteUChar(nFace + 128); //typeface
         sal_uInt16 nChar = pTemp->GetText()[i];
-        pS->WriteUInt16( SmTextNode::ConvertSymbolToUnicode(nChar) );
+        pS->WriteUInt16(SmTextNode::ConvertSymbolToUnicode(nChar));
 
         //Mathtype can only have these sort of character
         //attributes on a single character, starmath can put them
@@ -3309,25 +3252,24 @@ void MathType::HandleText(SmNode *pNode)
         //possible for starmath to place character attributes on
         //entities which cannot occur in mathtype e.g. a Summation
         //symbol so these attributes may be lost
-        if (nPendingAttributes &&
-            (i == ((pTemp->GetText().getLength()+1)/2)-1))
+        if (nPendingAttributes && (i == ((pTemp->GetText().getLength() + 1) / 2) - 1))
         {
-            pS->WriteUChar( EMBEL );
+            pS->WriteUChar(EMBEL);
             while (nPendingAttributes)
             {
-                pS->WriteUChar( 2 );
+                pS->WriteUChar(2);
                 //wedge the attributes in here and clear
                 //the pending stack
                 nPendingAttributes--;
             }
-            nInsertion=pS->Tell();
-            pS->WriteUChar( END ); //end embel
-            pS->WriteUChar( END ); //end embel
+            nInsertion = pS->Tell();
+            pS->WriteUChar(END); //end embel
+            pS->WriteUChar(END); //end embel
         }
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMathType(SvStream &rStream)
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMathType(SvStream& rStream)
 {
     OUStringBuffer sText;
     MathType aEquation(sText);

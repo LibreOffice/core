@@ -20,26 +20,23 @@
 #include "eqnolefilehdr.hxx"
 #include <sot/storage.hxx>
 
-
-bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
+bool GetMathTypeVersion(SotStorage* pStor, sal_uInt8& nVersion)
 {
     sal_uInt8 nVer = 0;
     bool bSuccess = false;
 
-
     // code snippet copied from MathType::Parse
 
-    tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream(
-        "Equation Native",
-        StreamMode::STD_READ);
-    if ( (!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
+    tools::SvRef<SotStorageStream> xSrc
+        = pStor->OpenSotStream("Equation Native", StreamMode::STD_READ);
+    if ((!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
         return bSuccess;
-    SotStorageStream *pS = xSrc.get();
-    pS->SetEndian( SvStreamEndian::LITTLE );
+    SotStorageStream* pS = xSrc.get();
+    pS->SetEndian(SvStreamEndian::LITTLE);
 
     EQNOLEFILEHDR aHdr;
     aHdr.Read(pS);
-    pS->ReadUChar( nVer );
+    pS->ReadUChar(nVer);
 
     if (!pS->GetError())
     {
@@ -48,6 +45,5 @@ bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
     }
     return bSuccess;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

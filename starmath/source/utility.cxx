@@ -27,26 +27,22 @@
 // return 0 instead.
 //!! Since this method is based on the current focus it is somewhat
 //!! unreliable and may return unexpected 0 pointers!
-SmViewShell * SmGetActiveView()
+SmViewShell* SmGetActiveView()
 {
-    SfxViewShell *pView = SfxViewShell::Current();
-    return  dynamic_cast<SmViewShell*>( pView);
+    SfxViewShell* pView = SfxViewShell::Current();
+    return dynamic_cast<SmViewShell*>(pView);
 }
-
 
 /**************************************************************************/
 
-void SmFontPickList::Clear()
-{
-    aFontVec.clear();
-}
+void SmFontPickList::Clear() { aFontVec.clear(); }
 
-SmFontPickList& SmFontPickList::operator = (const SmFontPickList& rList)
+SmFontPickList& SmFontPickList::operator=(const SmFontPickList& rList)
 {
     Clear();
     nMaxItems = rList.nMaxItems;
-    for (const auto & nPos : rList.aFontVec)
-        aFontVec.push_back( nPos );
+    for (const auto& nPos : rList.aFontVec)
+        aFontVec.push_back(nPos);
 
     return *this;
 }
@@ -56,27 +52,27 @@ vcl::Font SmFontPickList::Get(sal_uInt16 nPos) const
     return nPos < aFontVec.size() ? aFontVec[nPos] : vcl::Font();
 }
 
-namespace {
-
-bool lcl_CompareItem(const vcl::Font & rFirstFont, const vcl::Font & rSecondFont)
+namespace
 {
-  return rFirstFont.GetFamilyName() == rSecondFont.GetFamilyName() &&
-         rFirstFont.GetFamilyType() == rSecondFont.GetFamilyType() &&
-         rFirstFont.GetCharSet()    == rSecondFont.GetCharSet()    &&
-         rFirstFont.GetWeight()     == rSecondFont.GetWeight()     &&
-         rFirstFont.GetItalic()     == rSecondFont.GetItalic();
+bool lcl_CompareItem(const vcl::Font& rFirstFont, const vcl::Font& rSecondFont)
+{
+    return rFirstFont.GetFamilyName() == rSecondFont.GetFamilyName()
+           && rFirstFont.GetFamilyType() == rSecondFont.GetFamilyType()
+           && rFirstFont.GetCharSet() == rSecondFont.GetCharSet()
+           && rFirstFont.GetWeight() == rSecondFont.GetWeight()
+           && rFirstFont.GetItalic() == rSecondFont.GetItalic();
 }
 
-OUString lcl_GetStringItem(const vcl::Font &rFont)
+OUString lcl_GetStringItem(const vcl::Font& rFont)
 {
     OUStringBuffer aString(rFont.GetFamilyName());
 
-    if (IsItalic( rFont ))
+    if (IsItalic(rFont))
     {
         aString.append(", ");
         aString.append(SmResId(RID_FONTITALIC));
     }
-    if (IsBold( rFont ))
+    if (IsBold(rFont))
     {
         aString.append(", ");
         aString.append(SmResId(RID_FONTBOLD));
@@ -84,19 +80,18 @@ OUString lcl_GetStringItem(const vcl::Font &rFont)
 
     return aString.makeStringAndClear();
 }
-
 }
 
-void SmFontPickList::Insert(const vcl::Font &rFont)
+void SmFontPickList::Insert(const vcl::Font& rFont)
 {
     for (size_t nPos = 0; nPos < aFontVec.size(); nPos++)
-        if (lcl_CompareItem( aFontVec[nPos], rFont))
+        if (lcl_CompareItem(aFontVec[nPos], rFont))
         {
-            aFontVec.erase( aFontVec.begin() + nPos );
+            aFontVec.erase(aFontVec.begin() + nPos);
             break;
         }
 
-    aFontVec.push_front( rFont );
+    aFontVec.push_front(rFont);
 
     if (aFontVec.size() > nMaxItems)
     {
@@ -104,16 +99,9 @@ void SmFontPickList::Insert(const vcl::Font &rFont)
     }
 }
 
-void SmFontPickList::ReadFrom(const SmFontDialog& rDialog)
-{
-    Insert(rDialog.GetFont());
-}
+void SmFontPickList::ReadFrom(const SmFontDialog& rDialog) { Insert(rDialog.GetFont()); }
 
-void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
-{
-    rDialog.SetFont(Get());
-}
-
+void SmFontPickList::WriteTo(SmFontDialog& rDialog) const { rDialog.SetFont(Get()); }
 
 /**************************************************************************/
 
@@ -140,7 +128,7 @@ IMPL_LINK_NOARG(SmFontPickListBox, SelectHdl, weld::ComboBox&, void)
 
 SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
 {
-    *static_cast<SmFontPickList *>(this) = rList;
+    *static_cast<SmFontPickList*>(this) = rList;
 
     for (decltype(aFontVec)::size_type nPos = 0; nPos < aFontVec.size(); nPos++)
         m_xWidget->insert_text(nPos, lcl_GetStringItem(aFontVec[nPos]));
@@ -151,7 +139,7 @@ SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
     return *this;
 }
 
-void SmFontPickListBox::Insert(const vcl::Font &rFont)
+void SmFontPickListBox::Insert(const vcl::Font& rFont)
 {
     SmFontPickList::Insert(rFont);
 
@@ -166,38 +154,36 @@ void SmFontPickListBox::Insert(const vcl::Font &rFont)
         m_xWidget->remove(m_xWidget->get_count() - 1);
 }
 
-bool IsItalic( const vcl::Font &rFont )
+bool IsItalic(const vcl::Font& rFont)
 {
     FontItalic eItalic = rFont.GetItalic();
     // the code below leaves only _NONE and _DONTKNOW as not italic
-    return eItalic == ITALIC_OBLIQUE  ||  eItalic == ITALIC_NORMAL;
+    return eItalic == ITALIC_OBLIQUE || eItalic == ITALIC_NORMAL;
 }
 
-
-bool IsBold( const vcl::Font &rFont )
+bool IsBold(const vcl::Font& rFont)
 {
     FontWeight eWeight = rFont.GetWeight();
     return eWeight > WEIGHT_NORMAL;
 }
 
-
 void SmFace::Impl_Init()
 {
-    SetSize( GetFontSize() );
-    SetTransparent( true );
-    SetAlignment( ALIGN_BASELINE );
-    SetColor( COL_AUTO );
+    SetSize(GetFontSize());
+    SetTransparent(true);
+    SetAlignment(ALIGN_BASELINE);
+    SetColor(COL_AUTO);
 }
 
 void SmFace::SetSize(const Size& rSize)
 {
-    Size  aSize (rSize);
+    Size aSize(rSize);
 
     // check the requested size against minimum value
-    static int const    nMinVal = SmPtsTo100th_mm(2);
+    static int const nMinVal = SmPtsTo100th_mm(2);
 
     if (aSize.Height() < nMinVal)
-        aSize.setHeight( nMinVal );
+        aSize.setHeight(nMinVal);
 
     //! we don't force a maximum value here because this may prevent eg the
     //! parentheses in "left ( ... right )" from matching up with large
@@ -207,7 +193,6 @@ void SmFace::SetSize(const Size& rSize)
     Font::SetFontSize(aSize);
 }
 
-
 tools::Long SmFace::GetBorderWidth() const
 {
     if (nBorderWidth < 0)
@@ -216,22 +201,22 @@ tools::Long SmFace::GetBorderWidth() const
         return nBorderWidth;
 }
 
-SmFace & SmFace::operator = (const SmFace &rFace)
+SmFace& SmFace::operator=(const SmFace& rFace)
 {
-    Font::operator = (rFace);
+    Font::operator=(rFace);
     nBorderWidth = -1;
     return *this;
 }
 
+SmFace& operator*=(SmFace& rFace, const Fraction& rFrac)
+// scales the width and height of 'rFace' by 'rFrac' and returns a
+// reference to 'rFace'.
+// It's main use is to make scaling fonts look easier.
+{
+    const Size& rFaceSize = rFace.GetFontSize();
 
-SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
-    // scales the width and height of 'rFace' by 'rFrac' and returns a
-    // reference to 'rFace'.
-    // It's main use is to make scaling fonts look easier.
-{   const Size &rFaceSize = rFace.GetFontSize();
-
-    rFace.SetSize(Size(tools::Long(rFaceSize.Width() * rFrac),
-                       tools::Long(rFaceSize.Height() * rFrac)));
+    rFace.SetSize(
+        Size(tools::Long(rFaceSize.Width() * rFrac), tools::Long(rFaceSize.Height() * rFrac)));
     return rFace;
 }
 

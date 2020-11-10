@@ -36,16 +36,12 @@
 #include <svx/modctrl.hxx>
 #include <svtools/colorcfg.hxx>
 
-
 #define ShellClass_SmModule
 #include <smslots.hxx>
 
-OUString SmResId(const char* pId)
-{
-    return Translate::get(pId, SM_MOD()->GetResLocale());
-}
+OUString SmResId(const char* pId) { return Translate::get(pId, SM_MOD()->GetResLocale()); }
 
-OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportName )
+OUString SmLocalizedSymbolData::GetUiSymbolName(const OUString& rExportName)
 {
     OUString aRes;
 
@@ -61,7 +57,7 @@ OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportName )
     return aRes;
 }
 
-OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiName )
+OUString SmLocalizedSymbolData::GetExportSymbolName(const OUString& rUiName)
 {
     OUString aRes;
 
@@ -69,7 +65,7 @@ OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiName )
     {
         if (rUiName == SmResId(RID_UI_SYMBOL_NAMES[i]))
         {
-            const char *pKey = strchr(RID_UI_SYMBOL_NAMES[i], '\004') + 1;
+            const char* pKey = strchr(RID_UI_SYMBOL_NAMES[i], '\004') + 1;
             aRes = OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
             break;
         }
@@ -78,7 +74,7 @@ OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiName )
     return aRes;
 }
 
-OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExportName )
+OUString SmLocalizedSymbolData::GetUiSymbolSetName(const OUString& rExportName)
 {
     OUString aRes;
 
@@ -94,7 +90,7 @@ OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExportName 
     return aRes;
 }
 
-OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rUiName )
+OUString SmLocalizedSymbolData::GetExportSymbolSetName(const OUString& rUiName)
 {
     OUString aRes;
 
@@ -102,7 +98,7 @@ OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rUiName 
     {
         if (rUiName == SmResId(RID_UI_SYMBOLSET_NAMES[i]))
         {
-            const char *pKey = strchr(RID_UI_SYMBOLSET_NAMES[i], '\004') + 1;
+            const char* pKey = strchr(RID_UI_SYMBOLSET_NAMES[i], '\004') + 1;
             aRes = OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
             break;
         }
@@ -119,7 +115,7 @@ void SmModule::InitInterface_Impl()
 }
 
 SmModule::SmModule(SfxObjectFactory* pObjFact)
-    : SfxModule("sm", {pObjFact})
+    : SfxModule("sm", { pObjFact })
 {
     SetName("StarMath");
 
@@ -133,9 +129,9 @@ SmModule::~SmModule()
     mpVirtualDev.disposeAndClear();
 }
 
-svtools::ColorConfig & SmModule::GetColorConfig()
+svtools::ColorConfig& SmModule::GetColorConfig()
 {
-    if(!mpColorConfig)
+    if (!mpColorConfig)
     {
         mpColorConfig.reset(new svtools::ColorConfig);
         mpColorConfig->AddListener(this);
@@ -154,64 +150,60 @@ void SmModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
         // FIXME: What if pViewShell is for a different document,
         // but OTOH Math is presumably never used through
         // LibreOfficeKit, so maybe an irrelevant concern?
-        if (dynamic_cast<const SmViewShell *>(pViewShell) != nullptr)
+        if (dynamic_cast<const SmViewShell*>(pViewShell) != nullptr)
             pViewShell->GetWindow()->Invalidate();
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
 
-SmMathConfig * SmModule::GetConfig()
+SmMathConfig* SmModule::GetConfig()
 {
-    if(!mpConfig)
+    if (!mpConfig)
         mpConfig.reset(new SmMathConfig);
     return mpConfig.get();
 }
 
-SmSymbolManager & SmModule::GetSymbolManager()
-{
-    return GetConfig()->GetSymbolManager();
-}
+SmSymbolManager& SmModule::GetSymbolManager() { return GetConfig()->GetSymbolManager(); }
 
 const SvtSysLocale& SmModule::GetSysLocale()
 {
-    if( !mpSysLocale )
+    if (!mpSysLocale)
         mpSysLocale.reset(new SvtSysLocale);
     return *mpSysLocale;
 }
 
-VirtualDevice &SmModule::GetDefaultVirtualDev()
+VirtualDevice& SmModule::GetDefaultVirtualDev()
 {
     if (!mpVirtualDev)
     {
-        mpVirtualDev.reset( VclPtr<VirtualDevice>::Create() );
-        mpVirtualDev->SetReferenceDevice( VirtualDevice::RefDevMode::MSO1 );
+        mpVirtualDev.reset(VclPtr<VirtualDevice>::Create());
+        mpVirtualDev->SetReferenceDevice(VirtualDevice::RefDevMode::MSO1);
     }
     return *mpVirtualDev;
 }
 
-void SmModule::GetState(SfxItemSet &rSet)
+void SmModule::GetState(SfxItemSet& rSet)
 {
     SfxWhichIter aIter(rSet);
 
     for (sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich())
         switch (nWh)
         {
-            case SID_CONFIGEVENT :
+            case SID_CONFIGEVENT:
                 rSet.DisableItem(SID_CONFIGEVENT);
                 break;
         }
 }
 
-std::unique_ptr<SfxItemSet> SmModule::CreateItemSet( sal_uInt16 nId )
+std::unique_ptr<SfxItemSet> SmModule::CreateItemSet(sal_uInt16 nId)
 {
     std::unique_ptr<SfxItemSet> pRet;
-    if(nId == SID_SM_EDITOPTIONS)
+    if (nId == SID_SM_EDITOPTIONS)
     {
         pRet = std::make_unique<SfxItemSet>(
             GetPool(),
             svl::Items< //TP_SMPRINT
-                SID_PRINTTITLE, SID_PRINTZOOM,
-                SID_NO_RIGHT_SPACES, SID_SAVE_ONLY_USED_SYMBOLS,
+                SID_PRINTTITLE, SID_PRINTZOOM, SID_NO_RIGHT_SPACES, SID_SAVE_ONLY_USED_SYMBOLS,
                 SID_AUTO_CLOSE_BRACKETS, SID_AUTO_CLOSE_BRACKETS>{});
 
         GetConfig()->ConfigToItemSet(*pRet);
@@ -219,15 +211,17 @@ std::unique_ptr<SfxItemSet> SmModule::CreateItemSet( sal_uInt16 nId )
     return pRet;
 }
 
-void SmModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
+void SmModule::ApplyItemSet(sal_uInt16 nId, const SfxItemSet& rSet)
 {
-    if(nId == SID_SM_EDITOPTIONS)
+    if (nId == SID_SM_EDITOPTIONS)
     {
         GetConfig()->ItemSetToConfig(rSet);
     }
 }
 
-std::unique_ptr<SfxTabPage> SmModule::CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet )
+std::unique_ptr<SfxTabPage> SmModule::CreateTabPage(sal_uInt16 nId, weld::Container* pPage,
+                                                    weld::DialogController* pController,
+                                                    const SfxItemSet& rSet)
 {
     std::unique_ptr<SfxTabPage> xRet;
     if (nId == SID_SM_TP_PRINTOPTIONS)

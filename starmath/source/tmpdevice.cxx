@@ -32,32 +32,31 @@
 // functions.
 // Usually a MapMode of 1/100th mm will be used.
 
-SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
-    rOutDev(rTheDev)
+SmTmpDevice::SmTmpDevice(OutputDevice& rTheDev, bool bUseMap100th_mm)
+    : rOutDev(rTheDev)
 {
-    rOutDev.Push(PushFlags::FONT | PushFlags::MAPMODE |
-                 PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTCOLOR);
-    if (bUseMap100th_mm  &&  MapUnit::Map100thMM != rOutDev.GetMapMode().GetMapUnit())
+    rOutDev.Push(PushFlags::FONT | PushFlags::MAPMODE | PushFlags::LINECOLOR | PushFlags::FILLCOLOR
+                 | PushFlags::TEXTCOLOR);
+    if (bUseMap100th_mm && MapUnit::Map100thMM != rOutDev.GetMapMode().GetMapUnit())
     {
         SAL_WARN("starmath", "incorrect MapMode?");
         rOutDev.SetMapMode(MapMode(MapUnit::Map100thMM)); // format for 100% always
     }
 }
 
-
 Color SmTmpDevice::GetTextColor(const Color& rTextColor)
 {
     if (rTextColor == COL_AUTO)
     {
-        Color aConfigFontColor = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+        Color aConfigFontColor
+            = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
         return rOutDev.GetReadableFontColor(aConfigFontColor, rOutDev.GetBackgroundColor());
     }
 
     return rTextColor;
 }
 
-
-void SmTmpDevice::SetFont(const vcl::Font &rNewFont)
+void SmTmpDevice::SetFont(const vcl::Font& rNewFont)
 {
     rOutDev.SetFont(rNewFont);
     rOutDev.SetTextColor(GetTextColor(rNewFont.GetColor()));

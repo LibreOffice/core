@@ -19,8 +19,8 @@
 
 #include <memory>
 
-namespace {
-
+namespace
+{
 using namespace ::com::sun::star;
 
 typedef tools::SvRef<SmDocShell> SmDocShellRef;
@@ -47,9 +47,9 @@ void ParseTest::setUp()
 {
     BootstrapFixture::setUp();
     SmGlobals::ensure();
-    mxDocShell = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT |
-                                SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-                                SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    mxDocShell
+        = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 }
 
 void ParseTest::tearDown()
@@ -67,29 +67,29 @@ void ParseTest::testMinus()
 {
     auto pNode = SmParser().Parse("-1.2");
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNode->GetNumSubNodes());
-    const SmNode *pNode0 = pNode->GetSubNode(0);
+    const SmNode* pNode0 = pNode->GetSubNode(0);
     CPPUNIT_ASSERT(pNode0);
     CPPUNIT_ASSERT_EQUAL(SmNodeType::Line, pNode0->GetType());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNode0->GetNumSubNodes());
-    const SmNode *pNode00 = pNode0->GetSubNode(0);
+    const SmNode* pNode00 = pNode0->GetSubNode(0);
     CPPUNIT_ASSERT(pNode00);
     CPPUNIT_ASSERT_EQUAL(SmNodeType::UnHor, pNode00->GetType());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pNode00->GetNumSubNodes());
-    const SmNode *pNode000 = pNode00->GetSubNode(0);
+    const SmNode* pNode000 = pNode00->GetSubNode(0);
     CPPUNIT_ASSERT(pNode000);
     CPPUNIT_ASSERT_EQUAL(SmNodeType::Math, pNode000->GetType());
     // GetText() vs GetToken().aText
     CPPUNIT_ASSERT_EQUAL(OUString(MS_MINUS),
-                         static_cast<const SmMathSymbolNode *>(pNode000)->GetText());
+                         static_cast<const SmMathSymbolNode*>(pNode000)->GetText());
     CPPUNIT_ASSERT_EQUAL(OUString("-"),
-                         static_cast<const SmMathSymbolNode *>(pNode000)->GetToken().aText);
-    const SmNode *pNode001 = pNode00->GetSubNode(1);
+                         static_cast<const SmMathSymbolNode*>(pNode000)->GetToken().aText);
+    const SmNode* pNode001 = pNode00->GetSubNode(1);
     CPPUNIT_ASSERT(pNode001);
     CPPUNIT_ASSERT_EQUAL(SmNodeType::Text, pNode001->GetType());
     // GetText() vs GetToken().aText
-    CPPUNIT_ASSERT(static_cast<const SmTextNode *>(pNode001)->GetText().isEmpty());
+    CPPUNIT_ASSERT(static_cast<const SmTextNode*>(pNode001)->GetText().isEmpty());
     CPPUNIT_ASSERT_EQUAL(OUString("1.2"),
-                         static_cast<const SmTextNode *>(pNode001)->GetToken().aText);
+                         static_cast<const SmTextNode*>(pNode001)->GetToken().aText);
 }
 
 /*
@@ -100,29 +100,28 @@ void ParseTest::testNospace()
 {
     auto pNode = SmParser().Parse("nospace{ nitalic d {F(x) G(x)} }");
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNode->GetNumSubNodes());
-    const SmNode *pNode0 = pNode->GetSubNode(0);
+    const SmNode* pNode0 = pNode->GetSubNode(0);
     CPPUNIT_ASSERT(pNode0);
     CPPUNIT_ASSERT_EQUAL(SmNodeType::Line, pNode0->GetType());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNode0->GetNumSubNodes());
-    const SmNode *pNode00 = pNode0->GetSubNode(0);
+    const SmNode* pNode00 = pNode0->GetSubNode(0);
     CPPUNIT_ASSERT(pNode00);
     CPPUNIT_ASSERT_EQUAL(SmNodeType::Expression, pNode00->GetType());
-    CPPUNIT_ASSERT(!static_cast<const SmExpressionNode *>(pNode00)->IsUseExtraSpaces());
+    CPPUNIT_ASSERT(!static_cast<const SmExpressionNode*>(pNode00)->IsUseExtraSpaces());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pNode00->GetNumSubNodes());
-    const SmNode *pNode000 = pNode00->GetSubNode(0);
+    const SmNode* pNode000 = pNode00->GetSubNode(0);
     CPPUNIT_ASSERT(pNode000);
     CPPUNIT_ASSERT_EQUAL(SmNodeType::Font, pNode000->GetType());
     CPPUNIT_ASSERT_EQUAL(OUString("nitalic"),
-                         static_cast<const SmFontNode *>(pNode000)->GetToken().aText);
-    const SmNode *pNode001 = pNode00->GetSubNode(1);
+                         static_cast<const SmFontNode*>(pNode000)->GetToken().aText);
+    const SmNode* pNode001 = pNode00->GetSubNode(1);
     CPPUNIT_ASSERT(pNode001);
     CPPUNIT_ASSERT_EQUAL(SmNodeType::Expression, pNode001->GetType());
-    CPPUNIT_ASSERT(static_cast<const SmExpressionNode *>(pNode001)->IsUseExtraSpaces());
+    CPPUNIT_ASSERT(static_cast<const SmExpressionNode*>(pNode001)->IsUseExtraSpaces());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pNode00->GetNumSubNodes());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ParseTest);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

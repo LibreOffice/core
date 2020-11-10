@@ -37,26 +37,33 @@ class MathTypeFont
 public:
     sal_uInt8 nTface;
     sal_uInt8 nStyle;
-    MathTypeFont() : nTface(0),nStyle(0) {}
-    explicit MathTypeFont(sal_uInt8 nFace) : nTface(nFace),nStyle(0) {}
-    void AppendStyleToText(OUString &rS);
+    MathTypeFont()
+        : nTface(0)
+        , nStyle(0)
+    {
+    }
+    explicit MathTypeFont(sal_uInt8 nFace)
+        : nTface(nFace)
+        , nStyle(0)
+    {
+    }
+    void AppendStyleToText(OUString& rS);
 };
 
 struct LessMathTypeFont
 {
-    bool operator() (const MathTypeFont &rValue1,
-        const MathTypeFont &rValue2) const
+    bool operator()(const MathTypeFont& rValue1, const MathTypeFont& rValue2) const
     {
         return rValue1.nTface < rValue2.nTface;
     }
 };
 
-typedef ::std::set< MathTypeFont, LessMathTypeFont > MathTypeFontSet;
+typedef ::std::set<MathTypeFont, LessMathTypeFont> MathTypeFontSet;
 
 class MathType
 {
 public:
-    explicit MathType(OUStringBuffer &rIn)
+    explicit MathType(OUStringBuffer& rIn)
         : nVersion(0)
         , pS(nullptr)
         , rRet(rIn)
@@ -77,7 +84,7 @@ public:
         Init();
     }
 
-    MathType(OUStringBuffer &rIn,SmNode *pIn)
+    MathType(OUStringBuffer& rIn, SmNode* pIn)
         : nVersion(0)
         , pS(nullptr)
         , rRet(rIn)
@@ -100,58 +107,58 @@ public:
 
     bool Parse(SotStorage* pStor);
     bool Parse(SvStream* pStream);
-    bool ConvertFromStarMath( SfxMedium& rMedium );
+    bool ConvertFromStarMath(SfxMedium& rMedium);
 
 private:
-/*Ver 2 Header*/
+    /*Ver 2 Header*/
     sal_uInt8 nVersion;
 
     SvStream* pS;
 
     void Init();
 
-    bool HandleRecords(int nLevel, sal_uInt8 nSelector =0xFF,
-        sal_uInt8 nVariation =0xFF, int nRows =0, int nCols =0);
-    bool HandleSize(sal_Int16 nLSize, sal_Int16 nDSize, int &rSetSize);
-    void HandleAlign(sal_uInt8 nHAlign, int &rSetAlign);
-    bool HandlePile(int &rSetAlign, int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation);
+    bool HandleRecords(int nLevel, sal_uInt8 nSelector = 0xFF, sal_uInt8 nVariation = 0xFF,
+                       int nRows = 0, int nCols = 0);
+    bool HandleSize(sal_Int16 nLSize, sal_Int16 nDSize, int& rSetSize);
+    void HandleAlign(sal_uInt8 nHAlign, int& rSetAlign);
+    bool HandlePile(int& rSetAlign, int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation);
     bool HandleMatrix(int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariarion);
-    void HandleMatrixSeparator(int nMatrixRows, int nMatrixCols, int &rCurCol, int &rCurRow);
-    bool HandleTemplate(int nLevel, sal_uInt8 &rSelector, sal_uInt8 &rVariation,
-        sal_Int32 &rLastTemplateBracket);
+    void HandleMatrixSeparator(int nMatrixRows, int nMatrixCols, int& rCurCol, int& rCurRow);
+    bool HandleTemplate(int nLevel, sal_uInt8& rSelector, sal_uInt8& rVariation,
+                        sal_Int32& rLastTemplateBracket);
     void HandleEmblishments();
     void HandleSetSize();
-    bool HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
-        sal_uInt8 nTag, sal_uInt8 nSelector, sal_uInt8 nVariation, bool bSilent);
+    bool HandleChar(sal_Int32& rTextStart, int& rSetSize, int nLevel, sal_uInt8 nTag,
+                    sal_uInt8 nSelector, sal_uInt8 nVariation, bool bSilent);
     void HandleNudge();
 
-    static int xfLMOVE(sal_uInt8 nTest) {return nTest&0x80;}
-    static int xfAUTO(sal_uInt8 nTest) {return nTest&0x10;}
-    static int xfEMBELL(sal_uInt8 nTest) {return nTest&0x20;}
-    static int xfNULL(sal_uInt8 nTest) {return nTest&0x10;}
+    static int xfLMOVE(sal_uInt8 nTest) { return nTest & 0x80; }
+    static int xfAUTO(sal_uInt8 nTest) { return nTest & 0x10; }
+    static int xfEMBELL(sal_uInt8 nTest) { return nTest & 0x20; }
+    static int xfNULL(sal_uInt8 nTest) { return nTest & 0x10; }
 
-    void HandleNodes(SmNode *pNode,int nLevel);
-    int StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation=0);
+    void HandleNodes(SmNode* pNode, int nLevel);
+    int StartTemplate(sal_uInt16 nSelector, sal_uInt16 nVariation = 0);
     void EndTemplate(int nOldPendingAttributes);
-    void HandleSmMatrix(SmMatrixNode *pMatrix,int nLevel);
-    void HandleTable(SmNode *pNode,int nLevel);
-    void HandleRoot(SmNode *pNode,int nLevel);
-    void HandleSubSupScript(SmNode *pNode,int nLevel);
-    sal_uInt8 HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
-        sal_uInt64 *pPos=nullptr,bool bTest=true);
-    void HandleFractions(SmNode *pNode,int nLevel);
-    void HandleBrace(SmNode *pNode,int nLevel);
-    void HandleVerticalBrace(SmNode *pNode,int nLevel);
-    void HandleOperator(SmNode *pNode,int nLevel);
-    bool HandleLim(SmNode *pNode,int nLevel);
-    void HandleMAlign(SmNode *pNode,int nLevel);
-    void HandleMath(SmNode *pNode);
-    void HandleText(SmNode *pNode);
-    void HandleAttributes(SmNode *pNode,int nLevel);
-    void TypeFaceToString(OUString &rRet,sal_uInt8 nFace);
+    void HandleSmMatrix(SmMatrixNode* pMatrix, int nLevel);
+    void HandleTable(SmNode* pNode, int nLevel);
+    void HandleRoot(SmNode* pNode, int nLevel);
+    void HandleSubSupScript(SmNode* pNode, int nLevel);
+    sal_uInt8 HandleCScript(SmNode* pNode, SmNode* pContent, int nLevel, sal_uInt64* pPos = nullptr,
+                            bool bTest = true);
+    void HandleFractions(SmNode* pNode, int nLevel);
+    void HandleBrace(SmNode* pNode, int nLevel);
+    void HandleVerticalBrace(SmNode* pNode, int nLevel);
+    void HandleOperator(SmNode* pNode, int nLevel);
+    bool HandleLim(SmNode* pNode, int nLevel);
+    void HandleMAlign(SmNode* pNode, int nLevel);
+    void HandleMath(SmNode* pNode);
+    void HandleText(SmNode* pNode);
+    void HandleAttributes(SmNode* pNode, int nLevel);
+    void TypeFaceToString(OUString& rRet, sal_uInt8 nFace);
 
-    OUStringBuffer &rRet;
-    SmNode *pTree;
+    OUStringBuffer& rRet;
+    SmNode* pTree;
 
     sal_uInt8 nHAlign;
 
@@ -164,29 +171,83 @@ private:
     sal_Int16 nCurSize;
     sal_Int16 nLastSize;
     sal_uInt8 nSpec;
-    bool  bIsReInterpBrace;
+    bool bIsReInterpBrace;
     OUStringBuffer sPost;
     sal_Int32 nPostSup;
     sal_Int32 nPostlSup;
     sal_uInt8 nTypeFace;
     MathTypeFontSet aUserStyles;
 
-    enum MTOKENS {END,LINE,CHAR,TMPL,PILE,MATRIX,EMBEL,RULER,FONT,SIZE};
+    enum MTOKENS
+    {
+        END,
+        LINE,
+        CHAR,
+        TMPL,
+        PILE,
+        MATRIX,
+        EMBEL,
+        RULER,
+        FONT,
+        SIZE
+    };
     enum MTEMPLATES
     {
-        tmANGLE,tmPAREN,tmBRACE,tmBRACK,tmBAR,tmDBAR,tmFLOOR,tmCEILING,
-        tmLBLB,tmRBRB,tmRBLB,tmLBRP,tmLPRB,tmROOT,tmFRACT,tmSCRIPT,tmUBAR,
-        tmOBAR,tmLARROW,tmRARROW,tmBARROW,tmSINT,tmDINT,tmTINT,tmSSINT,
-        tmDSINT,tmTSINT,tmUHBRACE,tmLHBRACE,tmSUM,tmISUM,tmPROD,tmIPROD,
-        tmCOPROD,tmICOPROD,tmUNION,tmIUNION,tmINTER,tmIINTER,tmLIM,tmLDIV,
-        tmSLFRACT,tmINTOP,tmSUMOP,tmLSCRIPT,tmDIRAC,tmUARROW,tmOARROW,
+        tmANGLE,
+        tmPAREN,
+        tmBRACE,
+        tmBRACK,
+        tmBAR,
+        tmDBAR,
+        tmFLOOR,
+        tmCEILING,
+        tmLBLB,
+        tmRBRB,
+        tmRBLB,
+        tmLBRP,
+        tmLPRB,
+        tmROOT,
+        tmFRACT,
+        tmSCRIPT,
+        tmUBAR,
+        tmOBAR,
+        tmLARROW,
+        tmRARROW,
+        tmBARROW,
+        tmSINT,
+        tmDINT,
+        tmTINT,
+        tmSSINT,
+        tmDSINT,
+        tmTSINT,
+        tmUHBRACE,
+        tmLHBRACE,
+        tmSUM,
+        tmISUM,
+        tmPROD,
+        tmIPROD,
+        tmCOPROD,
+        tmICOPROD,
+        tmUNION,
+        tmIUNION,
+        tmINTER,
+        tmIINTER,
+        tmLIM,
+        tmLDIV,
+        tmSLFRACT,
+        tmINTOP,
+        tmSUMOP,
+        tmLSCRIPT,
+        tmDIRAC,
+        tmUARROW,
+        tmOARROW,
         tmOARC
     };
-public:
-    static bool LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,
-        sal_uInt8 nVersion,sal_uInt8 nTypeFace=0);
-};
 
+public:
+    static bool LookupChar(sal_Unicode nChar, OUStringBuffer& rRet, sal_uInt8 nVersion,
+                           sal_uInt8 nTypeFace = 0);
+};
 
 #endif
 

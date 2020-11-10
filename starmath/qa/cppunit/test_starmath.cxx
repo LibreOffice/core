@@ -35,8 +35,8 @@ typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
 using namespace ::com::sun::star;
 
-namespace {
-
+namespace
+{
 class Test : public test::BootstrapFixture
 {
 public:
@@ -101,7 +101,7 @@ private:
     VclPtr<SmCmdBoxWindow> m_pSmCmdBoxWindow;
     VclPtr<SmEditWindow> m_pEditWindow;
     SmDocShellRef m_xDocShRef;
-    SmViewShell *m_pViewShell;
+    SmViewShell* m_pViewShell;
 };
 
 Test::Test()
@@ -115,13 +115,12 @@ void Test::setUp()
 
     SmGlobals::ensure();
 
-    m_xDocShRef = new SmDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    m_xDocShRef
+        = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
     m_xDocShRef->DoInitNew();
 
-    SfxViewFrame *pViewFrame = SfxViewFrame::LoadHiddenDocument(*m_xDocShRef, SFX_INTERFACE_NONE);
+    SfxViewFrame* pViewFrame = SfxViewFrame::LoadHiddenDocument(*m_xDocShRef, SFX_INTERFACE_NONE);
 
     CPPUNIT_ASSERT_MESSAGE("Should have a SfxViewFrame", pViewFrame);
 
@@ -221,7 +220,8 @@ void Test::editMarker()
 
         m_pEditWindow->Flush();
         OUString sFinalText = m_pEditWindow->GetText();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a under b under c", OUString("a under b under c"), sFinalText);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a under b under c", OUString("a under b under c"),
+                                     sFinalText);
     }
 
     {
@@ -234,147 +234,147 @@ void Test::editFailure()
 {
     m_xDocShRef->SetText("color a b over {a/}");
 
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
 
     CPPUNIT_ASSERT_MESSAGE("Should be a SmParseError::ColorExpected",
-        pErrorDesc && pErrorDesc->m_eType == SmParseError::ColorExpected);
+                           pErrorDesc && pErrorDesc->m_eType == SmParseError::ColorExpected);
 
     pErrorDesc = m_xDocShRef->GetParser().PrevError();
 
     CPPUNIT_ASSERT_MESSAGE("Should be a SmParseError::UnexpectedChar",
-        pErrorDesc && pErrorDesc->m_eType == SmParseError::UnexpectedChar);
+                           pErrorDesc && pErrorDesc->m_eType == SmParseError::UnexpectedChar);
 
     pErrorDesc = m_xDocShRef->GetParser().PrevError();
 
     CPPUNIT_ASSERT_MESSAGE("Should be a SmParseError::RgroupExpected",
-        pErrorDesc && pErrorDesc->m_eType == SmParseError::RgroupExpected);
+                           pErrorDesc && pErrorDesc->m_eType == SmParseError::RgroupExpected);
 
-    const SmErrorDesc *pLastErrorDesc = m_xDocShRef->GetParser().PrevError();
+    const SmErrorDesc* pLastErrorDesc = m_xDocShRef->GetParser().PrevError();
 
     CPPUNIT_ASSERT_MESSAGE("Should be three syntax errors",
-        pLastErrorDesc && pLastErrorDesc == pErrorDesc);
+                           pLastErrorDesc && pLastErrorDesc == pErrorDesc);
 }
 
 void Test::ParseErrorUnexpectedToken()
 {
     m_xDocShRef->SetText("\\foo");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::UnexpectedToken expected",
-                           SmParseError::UnexpectedToken, pErrorDesc->m_eType);
+                                 SmParseError::UnexpectedToken, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorPoundExpected()
 {
     m_xDocShRef->SetText("matrix {1#2##a##b#c}");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::PoundExpected expected",
-                           SmParseError::PoundExpected, pErrorDesc->m_eType);
+                                 SmParseError::PoundExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorColorExpected()
 {
     m_xDocShRef->SetText("color 42 x");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::ColorExpected expected",
-                           SmParseError::ColorExpected, pErrorDesc->m_eType);
+                                 SmParseError::ColorExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorLgroupExpected()
 {
     m_xDocShRef->SetText("stack 42");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::LgroupExpected expected",
-                           SmParseError::LgroupExpected, pErrorDesc->m_eType);
+                                 SmParseError::LgroupExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorRgroupExpected()
 {
     m_xDocShRef->SetText("stack {a#b#c)");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::RgroupExpected expected",
-                           SmParseError::RgroupExpected, pErrorDesc->m_eType);
+                                 SmParseError::RgroupExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorLbraceExpected()
 {
     m_xDocShRef->SetText("left 42");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::LbraceExpected expected",
-                           SmParseError::LbraceExpected, pErrorDesc->m_eType);
+                                 SmParseError::LbraceExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorRbraceExpected()
 {
     m_xDocShRef->SetText("left ( foo right x");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::RbraceExpected expected",
-                           SmParseError::RbraceExpected, pErrorDesc->m_eType);
+                                 SmParseError::RbraceExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorParentMismatch()
 {
     m_xDocShRef->SetText("lbrace foo rceil");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::ParentMismatch expected",
-                           SmParseError::ParentMismatch, pErrorDesc->m_eType);
+                                 SmParseError::ParentMismatch, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorRightExpected()
 {
     m_xDocShRef->SetText("left ( x mline y )");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::RightExpected expected",
-                           SmParseError::RightExpected, pErrorDesc->m_eType);
+                                 SmParseError::RightExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorFontExpected()
 {
     m_xDocShRef->SetText("font small bar");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::FontExpected expected",
-                           SmParseError::FontExpected, pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::FontExpected expected", SmParseError::FontExpected,
+                                 pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorSizeExpected()
 {
     m_xDocShRef->SetText("size small baz");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::SizeExpected expected",
-                           SmParseError::SizeExpected, pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::SizeExpected expected", SmParseError::SizeExpected,
+                                 pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorDoubleAlign()
 {
     m_xDocShRef->SetText("alignl alignc x");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::DoubleAlign expected",
-                           SmParseError::DoubleAlign, pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::DoubleAlign expected", SmParseError::DoubleAlign,
+                                 pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorDoubleSubsupscript()
 {
     m_xDocShRef->SetText("x_y_z");
-    const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
+    const SmErrorDesc* pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::DoubleSubsupscript expected",
-                           SmParseError::DoubleSubsupscript, pErrorDesc->m_eType);
+                                 SmParseError::DoubleSubsupscript, pErrorDesc->m_eType);
 }
 
 void Test::editUndoRedo()
 {
-    EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
+    EditEngine& rEditEngine = m_xDocShRef->GetEditEngine();
 
     OUString sStringOne("a under b");
     {
@@ -423,7 +423,6 @@ void Test::editUndoRedo()
         OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Must be empty", sFinalText.isEmpty());
     }
-
 }
 
 void Test::replacePlaceholder()
@@ -441,7 +440,7 @@ void Test::viewZoom()
 {
     sal_uInt16 nOrigZoom, nFinalZoom;
 
-    EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
+    EditEngine& rEditEngine = m_xDocShRef->GetEditEngine();
 
     {
         OUString sStringOne("a under b");
@@ -451,7 +450,7 @@ void Test::viewZoom()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Strings must match", sFinalText, sStringOne);
     }
 
-    SmGraphicWindow &rGraphicWindow = m_pViewShell->GetGraphicWindow();
+    SmGraphicWindow& rGraphicWindow = m_pViewShell->GetGraphicWindow();
     rGraphicWindow.SetSizePixel(Size(1024, 800));
     nOrigZoom = rGraphicWindow.GetZoom();
 
@@ -469,7 +468,7 @@ void Test::viewZoom()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be equal", nOrigZoom, nFinalZoom);
     }
 
-    sal_uInt16 nOptimalZoom=0;
+    sal_uInt16 nOptimalZoom = 0;
 
     {
         SfxRequest aZoom(SID_ZOOM_OPTIMAL, SfxCallMode::SYNCHRON, m_pViewShell->GetPool());
@@ -539,7 +538,8 @@ void Test::viewZoom()
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);
         nFinalZoom = rGraphicWindow.GetZoom();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be Clipped to 25%", static_cast<sal_uInt16>(25), nFinalZoom);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be Clipped to 25%", static_cast<sal_uInt16>(25),
+                                     nFinalZoom);
     }
 
     {
@@ -548,13 +548,12 @@ void Test::viewZoom()
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);
         nFinalZoom = rGraphicWindow.GetZoom();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be Clipped to 800%", static_cast<sal_uInt16>(800), nFinalZoom);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be Clipped to 800%", static_cast<sal_uInt16>(800),
+                                     nFinalZoom);
     }
-
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

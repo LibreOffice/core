@@ -31,79 +31,77 @@
 
 #include "utility.hxx"
 
-
-#define SYMBOL_NONE     0xFFFF
+#define SYMBOL_NONE 0xFFFF
 
 class SmSym
 {
 private:
-    SmFace              m_aFace;
-    OUString            m_aName;
-    OUString            m_aExportName;
-    OUString            m_aSetName;
-    sal_UCS4            m_cChar;
-    bool                m_bPredefined;
+    SmFace m_aFace;
+    OUString m_aName;
+    OUString m_aExportName;
+    OUString m_aSetName;
+    sal_UCS4 m_cChar;
+    bool m_bPredefined;
 
 public:
     SmSym();
-    SmSym(const OUString& rName, const vcl::Font& rFont, sal_UCS4 cChar,
-          const OUString& rSet, bool bIsPredefined = false);
+    SmSym(const OUString& rName, const vcl::Font& rFont, sal_UCS4 cChar, const OUString& rSet,
+          bool bIsPredefined = false);
     SmSym(const SmSym& rSymbol);
 
-    SmSym&      operator = (const SmSym& rSymbol);
+    SmSym& operator=(const SmSym& rSymbol);
 
-    const vcl::Font&  GetFace() const { return m_aFace; }
-    sal_UCS4        GetCharacter() const { return m_cChar; }
-    const OUString&   GetName() const { return m_aName; }
+    const vcl::Font& GetFace() const { return m_aFace; }
+    sal_UCS4 GetCharacter() const { return m_cChar; }
+    const OUString& GetName() const { return m_aName; }
 
-    bool            IsPredefined() const        { return m_bPredefined; }
-    const OUString& GetSymbolSetName() const    { return m_aSetName; }
-    const OUString& GetExportName() const       { return m_aExportName; }
-    void            SetExportName( const OUString &rName )        { m_aExportName = rName; }
+    bool IsPredefined() const { return m_bPredefined; }
+    const OUString& GetSymbolSetName() const { return m_aSetName; }
+    const OUString& GetExportName() const { return m_aExportName; }
+    void SetExportName(const OUString& rName) { m_aExportName = rName; }
 
     // true if rSymbol has the same name, font and character
-    bool            IsEqualInUI( const SmSym& rSymbol ) const;
+    bool IsEqualInUI(const SmSym& rSymbol) const;
 };
 
 // type of the actual container to hold the symbols
-typedef std::map< OUString, SmSym >    SymbolMap_t;
+typedef std::map<OUString, SmSym> SymbolMap_t;
 
 // vector of pointers to the actual symbols in the above container
-typedef std::vector< const SmSym * >            SymbolPtrVec_t;
-
+typedef std::vector<const SmSym*> SymbolPtrVec_t;
 
 class SmSymbolManager
 {
 private:
-    SymbolMap_t         m_aSymbols;
-    bool                m_bModified;
+    SymbolMap_t m_aSymbols;
+    bool m_bModified;
 
 public:
     SmSymbolManager();
     SmSymbolManager(const SmSymbolManager& rSymbolSetManager);
     ~SmSymbolManager();
 
-    SmSymbolManager &   operator = (const SmSymbolManager& rSymbolSetManager);
+    SmSymbolManager& operator=(const SmSymbolManager& rSymbolSetManager);
 
     // symbol sets are for UI purpose only, thus we assemble them here
-    std::set< OUString >      GetSymbolSetNames() const;
-    SymbolPtrVec_t          GetSymbolSet(  const OUString& rSymbolSetName );
+    std::set<OUString> GetSymbolSetNames() const;
+    SymbolPtrVec_t GetSymbolSet(const OUString& rSymbolSetName);
 
-    SymbolPtrVec_t          GetSymbols() const;
-    bool                    AddOrReplaceSymbol( const SmSym & rSymbol, bool bForceChange = false );
-    void                    RemoveSymbol( const OUString & rSymbolName );
+    SymbolPtrVec_t GetSymbols() const;
+    bool AddOrReplaceSymbol(const SmSym& rSymbol, bool bForceChange = false);
+    void RemoveSymbol(const OUString& rSymbolName);
 
-    SmSym       *   GetSymbolByName(const OUString& rSymbolName);
-    const SmSym *   GetSymbolByName(const OUString& rSymbolName) const
+    SmSym* GetSymbolByName(const OUString& rSymbolName);
+    const SmSym* GetSymbolByName(const OUString& rSymbolName) const
     {
-        return const_cast<SmSymbolManager *>(this)->GetSymbolByName(rSymbolName);
+        return const_cast<SmSymbolManager*>(this)->GetSymbolByName(rSymbolName);
     }
 
-    bool        IsModified() const          { return m_bModified; }
-    void        SetModified(bool bModify)   { m_bModified = bModify; }
+    bool IsModified() const { return m_bModified; }
+    void SetModified(bool bModify) { m_bModified = bModify; }
 
-    void        Load();
-    void        Save();
+    void Load();
+    void Save();
 };
 
 #endif

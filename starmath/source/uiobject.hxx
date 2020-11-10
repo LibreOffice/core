@@ -19,17 +19,14 @@ class ElementUIObject : public UIObject
 {
 private:
     SmElementsControl* mpElementsSelector;
-    OUString           maID;
+    OUString maID;
 
 public:
-
-    ElementUIObject(SmElementsControl* pElementSelector,
-            const OUString& rID);
+    ElementUIObject(SmElementsControl* pElementSelector, const OUString& rID);
 
     virtual StringMap get_state() override;
 
-    virtual void execute(const OUString& rAction,
-            const StringMap& rParameters) override;
+    virtual void execute(const OUString& rAction, const StringMap& rParameters) override;
 
 private:
     SmElement* get_element();
@@ -41,7 +38,6 @@ private:
     SmElementsControl* mpElementsSelector;
 
 public:
-
     explicit ElementSelectorUIObject(vcl::Window* pElementSelectorWindow);
 
     virtual StringMap get_state() override;
@@ -53,7 +49,6 @@ public:
     virtual std::set<OUString> get_children() const override;
 
 protected:
-
     virtual OUString get_name() const override;
 };
 

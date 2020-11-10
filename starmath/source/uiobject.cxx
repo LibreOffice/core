@@ -11,10 +11,9 @@
 #include "uiobject.hxx"
 #include <ElementsDockingWindow.hxx>
 
-ElementUIObject::ElementUIObject(SmElementsControl* pElementSelector,
-        const OUString& rID):
-    mpElementsSelector(pElementSelector),
-    maID(rID)
+ElementUIObject::ElementUIObject(SmElementsControl* pElementSelector, const OUString& rID)
+    : mpElementsSelector(pElementSelector)
+    , maID(rID)
 {
 }
 
@@ -40,8 +39,7 @@ StringMap ElementUIObject::get_state()
     return aMap;
 }
 
-void ElementUIObject::execute(const OUString& rAction,
-        const StringMap& /*rParameters*/)
+void ElementUIObject::execute(const OUString& rAction, const StringMap& /*rParameters*/)
 {
     if (rAction == "SELECT")
     {
@@ -98,9 +96,6 @@ std::unique_ptr<UIObject> ElementSelectorUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new ElementSelectorUIObject(pWindow));
 }
 
-OUString ElementSelectorUIObject::get_name() const
-{
-    return "SmElementSelector";
-}
+OUString ElementSelectorUIObject::get_name() const { return "SmElementSelector"; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

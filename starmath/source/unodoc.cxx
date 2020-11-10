@@ -27,20 +27,18 @@
 using namespace ::com::sun::star;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_FormulaDocument_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& args)
+Math_FormulaDocument_get_implementation(css::uno::XComponentContext*,
+                                        css::uno::Sequence<css::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
     SmGlobals::ensure();
-    css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
-        [&](SfxModelFlags _nCreationFlags)
-        {
-            SfxObjectShell* pShell = new SmDocShell( _nCreationFlags );
-            return pShell->GetModel();
-        });
+    css::uno::Reference<css::uno::XInterface> xInterface
+        = sfx2::createSfxModelInstance(args, [&](SfxModelFlags _nCreationFlags) {
+              SfxObjectShell* pShell = new SmDocShell(_nCreationFlags);
+              return pShell->GetModel();
+          });
     xInterface->acquire();
     return xInterface.get();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

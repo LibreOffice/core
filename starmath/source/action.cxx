@@ -21,33 +21,23 @@
 #include <document.hxx>
 #include <strings.hxx>
 
-SmFormatAction::SmFormatAction(SmDocShell *pDocSh,
-                               const SmFormat& rOldFormat,
-                               const SmFormat& rNewFormat) :
-    pDoc( pDocSh ),
-    aOldFormat( rOldFormat ),
-    aNewFormat( rNewFormat )
+SmFormatAction::SmFormatAction(SmDocShell* pDocSh, const SmFormat& rOldFormat,
+                               const SmFormat& rNewFormat)
+    : pDoc(pDocSh)
+    , aOldFormat(rOldFormat)
+    , aNewFormat(rNewFormat)
 {
 }
 
-void SmFormatAction::Undo()
-{
-    pDoc->SetFormat(aOldFormat);
-}
+void SmFormatAction::Undo() { pDoc->SetFormat(aOldFormat); }
 
-void SmFormatAction::Redo()
-{
-    pDoc->SetFormat(aNewFormat);
-}
+void SmFormatAction::Redo() { pDoc->SetFormat(aNewFormat); }
 
 void SmFormatAction::Repeat(SfxRepeatTarget& rDocSh)
 {
-    dynamic_cast< SmDocShell & >(rDocSh).SetFormat(aNewFormat);
+    dynamic_cast<SmDocShell&>(rDocSh).SetFormat(aNewFormat);
 }
 
-OUString SmFormatAction::GetComment() const
-{
-    return RID_UNDOFORMATNAME;
-}
+OUString SmFormatAction::GetComment() const { return RID_UNDOFORMATNAME; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

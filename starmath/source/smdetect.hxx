@@ -26,22 +26,26 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+namespace com::sun::star::beans
+{
+struct PropertyValue;
+}
 
-namespace com::sun::star::beans { struct PropertyValue; }
-
-class SmFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
+class SmFilterDetect : public ::cppu::WeakImplHelper<css::document::XExtendedFilterDetection,
+                                                     css::lang::XServiceInfo>
 {
 public:
     explicit SmFilterDetect();
-    virtual                 ~SmFilterDetect() override;
+    virtual ~SmFilterDetect() override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XExtendedFilterDetect
-    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) override;
+    virtual OUString SAL_CALL
+    detect(css::uno::Sequence<css::beans::PropertyValue>& lDescriptor) override;
 };
 
 #endif
