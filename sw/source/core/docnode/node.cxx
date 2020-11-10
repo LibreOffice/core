@@ -1106,11 +1106,7 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
 {
     if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        const sal_uInt16 nWhich = pLegacyHint->m_pOld
-                ? pLegacyHint->m_pOld->Which()
-                : pLegacyHint->m_pNew
-                ? pLegacyHint->m_pNew->Which()
-                : 0 ;
+        const sal_uInt16 nWhich = pLegacyHint->GetWhich();
 
         bool bSetParent = false;
         bool bCalcHidden = false;
