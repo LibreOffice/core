@@ -2155,7 +2155,7 @@ void SdTiledRenderingTest::testIMESupport()
     ESelection aWordSelection(0, 0, 0, 3); // start para, start char, end para, end char.
     rEditView.SetSelection(aWordSelection);
     // content contains only the last IME composition, not all
-    CPPUNIT_ASSERT_EQUAL(OUString("x").concat(aInputs[aInputs.size() - 1]), rEditView.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(OUString("x" + aInputs[aInputs.size() - 1]), rEditView.GetSelected());
 }
 
 void SdTiledRenderingTest::testTdf115783()
