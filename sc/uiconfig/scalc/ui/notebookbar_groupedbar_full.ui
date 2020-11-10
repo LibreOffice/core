@@ -2650,7 +2650,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Header1">Header 1</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Header1">Heading 1</property>
       </object>
     </child>
     <child>
@@ -2658,7 +2658,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Header2">Header 2</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Header2">Heading 2</property>
       </object>
     </child>
     <child>
