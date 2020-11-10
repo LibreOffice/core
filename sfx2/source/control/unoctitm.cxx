@@ -268,6 +268,24 @@ void SfxOfficeDispatch::SetMasterUnoCommand( bool bSet )
         pImpl->setMasterSlaveCommand( bSet );
 }
 
+// XDirectInvocation
+uno::Any SAL_CALL SfxOfficeDispatch::directInvoke( const OUString& aName, const uno::Sequence< uno::Any >& /*aParams*/ )
+{
+    uno::Any aRet;
+    const OUString sId("Id");
+
+    if (pImpl && aName == sId)
+        aRet <<= pImpl->GetId();
+
+    return aRet;
+}
+
+sal_Bool SAL_CALL SfxOfficeDispatch::hasMember( const OUString& aName )
+{
+    const OUString sId("Id");
+    return aName == sId;
+}
+
 // Determine if URL contains a master/slave command which must be handled a little bit different
 bool SfxOfficeDispatch::IsMasterUnoCommand( const css::util::URL& aURL )
 {
