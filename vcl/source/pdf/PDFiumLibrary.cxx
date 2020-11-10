@@ -26,6 +26,19 @@
 
 #include <bitmapwriteaccess.hxx>
 
+static_assert(static_cast<int>(vcl::pdf::PDFPageObjectType::Unknown) == FPDF_PAGEOBJ_UNKNOWN,
+              "PDFPageObjectType::Unknown value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFPageObjectType::Text) == FPDF_PAGEOBJ_TEXT,
+              "PDFPageObjectType::Text value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFPageObjectType::Path) == FPDF_PAGEOBJ_PATH,
+              "PDFPageObjectType::Path value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFPageObjectType::Image) == FPDF_PAGEOBJ_IMAGE,
+              "PDFPageObjectType::Image value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFPageObjectType::Shading) == FPDF_PAGEOBJ_SHADING,
+              "PDFPageObjectType::Shading value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFPageObjectType::Form) == FPDF_PAGEOBJ_FORM,
+              "PDFPageObjectType::Form value mismatch");
+
 namespace
 {
 /// Callback class to be used with FPDF_SaveWithVersion().
@@ -310,13 +323,12 @@ OUString PDFiumPageObject::getText(std::unique_ptr<PDFiumTextPage> const& pTextP
     return sReturnText;
 }
 
-int PDFiumPageObject::getType() { return FPDFPageObj_GetType(mpPageObject); }
-
-int PDFiumPageObject::getFormObjectCount()
+PDFPageObjectType PDFiumPageObject::getType()
 {
-    return FPDFFormObj_CountObjects(mpPageObject);
-    ;
+    return static_cast<PDFPageObjectType>(FPDFPageObj_GetType(mpPageObject));
 }
+
+int PDFiumPageObject::getFormObjectCount() { return FPDFFormObj_CountObjects(mpPageObject); }
 
 std::unique_ptr<PDFiumPageObject> PDFiumPageObject::getFormObject(int nIndex)
 {

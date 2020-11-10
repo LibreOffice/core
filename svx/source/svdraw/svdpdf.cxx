@@ -669,27 +669,27 @@ void ImpSdrPdfImport::ImportPdfObject(
     if (!pPageObject)
         return;
 
-    const int nPageObjectType = pPageObject->getType();
-    switch (nPageObjectType)
+    const vcl::pdf::PDFPageObjectType ePageObjectType = pPageObject->getType();
+    switch (ePageObjectType)
     {
-        case FPDF_PAGEOBJ_TEXT:
+        case vcl::pdf::PDFPageObjectType::Text:
             ImportText(pPageObject, pTextPage, nPageObjectIndex);
             break;
-        case FPDF_PAGEOBJ_PATH:
+        case vcl::pdf::PDFPageObjectType::Path:
             ImportPath(pPageObject, nPageObjectIndex);
             break;
-        case FPDF_PAGEOBJ_IMAGE:
+        case vcl::pdf::PDFPageObjectType::Image:
             ImportImage(pPageObject, nPageObjectIndex);
             break;
-        case FPDF_PAGEOBJ_SHADING:
+        case vcl::pdf::PDFPageObjectType::Shading:
             SAL_WARN("sd.filter", "Got page object SHADING: " << nPageObjectIndex);
             break;
-        case FPDF_PAGEOBJ_FORM:
+        case vcl::pdf::PDFPageObjectType::Form:
             ImportForm(pPageObject, pTextPage, nPageObjectIndex);
             break;
         default:
-            SAL_WARN("sd.filter", "Unknown PDF page object #" << nPageObjectIndex
-                                                              << " of type: " << nPageObjectType);
+            SAL_WARN("sd.filter", "Unknown PDF page object #" << nPageObjectIndex << " of type: "
+                                                              << static_cast<int>(ePageObjectType));
             break;
     }
 }

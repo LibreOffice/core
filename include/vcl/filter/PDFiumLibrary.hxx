@@ -28,6 +28,7 @@
 #include <vcl/checksum.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
 
 #include <fpdf_doc.h>
 
@@ -149,7 +150,7 @@ public:
 
     FPDF_PAGEOBJECT getPointer() { return mpPageObject; }
 
-    int getType();
+    PDFPageObjectType getType();
     OUString getText(std::unique_ptr<PDFiumTextPage> const& pTextPage);
 
     int getFormObjectCount();

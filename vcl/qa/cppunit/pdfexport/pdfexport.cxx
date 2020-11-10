@@ -257,7 +257,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105461)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPdfPageObject = pPdfPage->getObject(i);
-        if (pPdfPageObject->getType() != FPDF_PAGEOBJ_PATH)
+        if (pPdfPageObject->getType() != vcl::pdf::PDFPageObjectType::Path)
             continue;
 
         if (pPdfPageObject->getFillColor() == COL_YELLOW)
@@ -313,7 +313,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPdfPageObject = pPdfPage->getObject(i);
-        if (pPdfPageObject->getType() != FPDF_PAGEOBJ_PATH)
+        if (pPdfPageObject->getType() != vcl::pdf::PDFPageObjectType::Path)
             continue;
 
         if (pPdfPageObject->getFillColor() == COL_WHITE)
@@ -577,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPdfPageObject = pPdfPage->getObject(i);
-        CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_TEXT, pPdfPageObject->getType());
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Text, pPdfPageObject->getType());
         haveText = true;
         double const size = pPdfPageObject->getFontSize();
         CPPUNIT_ASSERT_DOUBLES_EQUAL(11.05, size, 1E-06);
@@ -819,7 +819,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPdfPageObject = pPdfPage->getObject(i);
-        if (pPdfPageObject->getType() != FPDF_PAGEOBJ_PATH)
+        if (pPdfPageObject->getType() != vcl::pdf::PDFPageObjectType::Path)
             continue;
 
         if (pPdfPageObject->getFillColor() == COL_YELLOW)
@@ -1445,7 +1445,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
-        if (pPageObject->getType() != FPDF_PAGEOBJ_IMAGE)
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Image)
             continue;
 
         std::unique_ptr<vcl::pdf::PDFiumBitmap> pBitmap = pPageObject->getImageBitmap();
@@ -1479,7 +1479,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106702)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
-        if (pPageObject->getType() != FPDF_PAGEOBJ_IMAGE)
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Image)
             continue;
 
         float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
@@ -1496,7 +1496,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106702)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
-        if (pPageObject->getType() != FPDF_PAGEOBJ_IMAGE)
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Image)
             continue;
 
         float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
@@ -1537,7 +1537,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
-        if (pPageObject->getType() != FPDF_PAGEOBJ_IMAGE)
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Image)
             continue;
 
         float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
@@ -1554,7 +1554,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
-        if (pPageObject->getType() != FPDF_PAGEOBJ_IMAGE)
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Image)
             continue;
 
         float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
@@ -1602,11 +1602,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
         float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
         FPDFPageObj_GetBounds(pPageObject->getPointer(), &fLeft, &fBottom, &fRight, &fTop);
 
-        if (pPageObject->getType() == FPDF_PAGEOBJ_IMAGE)
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Image)
         {
             nFirstImageTop = fTop;
         }
-        else if (pPageObject->getType() == FPDF_PAGEOBJ_TEXT)
+        else if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
         {
             OUString sText = pPageObject->getText(pTextPage);
             if (sText == "400")
@@ -1637,7 +1637,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121962)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
-        if (pPageObject->getType() != FPDF_PAGEOBJ_TEXT)
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Text)
             continue;
         OUString sText = pPageObject->getText(pTextPage);
         CPPUNIT_ASSERT(sText != "** Expression is faulty **");
@@ -1664,7 +1664,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
-        if (pPageObject->getType() != FPDF_PAGEOBJ_TEXT)
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Text)
             continue;
         OUString sChar = pPageObject->getText(pTextPage);
         sText += sChar.trim();
@@ -1785,7 +1785,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceSmallImage)
     CPPUNIT_ASSERT(pPdfPage);
     CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(0);
-    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, pPageObject->getType());
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Image, pPageObject->getType());
 
     // Make sure we don't scale down a tiny bitmap.
     std::unique_ptr<vcl::pdf::PDFiumBitmap> pBitmap = pPageObject->getImageBitmap();
@@ -1840,7 +1840,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceImage)
     CPPUNIT_ASSERT(pPdfPage);
     CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(0);
-    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, pPageObject->getType());
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Image, pPageObject->getType());
 
     // Make sure we don't scale down a bitmap.
     std::unique_ptr<vcl::pdf::PDFiumBitmap> pBitmap = pPageObject->getImageBitmap();
@@ -1947,27 +1947,25 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageResourceInlineXObjectRef)
     CPPUNIT_ASSERT(pPdfPage);
     CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(0);
-    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, pPageObject->getType());
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Form, pPageObject->getType());
     // 2: white background and the actual object.
-    CPPUNIT_ASSERT_EQUAL(2, FPDFFormObj_CountObjects(pPageObject->getPointer()));
-    FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetObject(pPageObject->getPointer(), 1);
-    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pFormObject));
+    CPPUNIT_ASSERT_EQUAL(2, pPageObject->getFormObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pFormObject = pPageObject->getFormObject(1);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Form, pFormObject->getType());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
     // i.e. the sub-form was missing its image.
-    CPPUNIT_ASSERT_EQUAL(1, FPDFFormObj_CountObjects(pFormObject));
+    CPPUNIT_ASSERT_EQUAL(1, pFormObject->getFormObjectCount());
 
     // Check if the inner form object (original page object in the pdf image) has the correct
     // rotation.
-    FPDF_PAGEOBJECT pInnerFormObject = FPDFFormObj_GetObject(pFormObject, 0);
-    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pInnerFormObject));
-    CPPUNIT_ASSERT_EQUAL(1, FPDFFormObj_CountObjects(pInnerFormObject));
-    FPDF_PAGEOBJECT pImage = FPDFFormObj_GetObject(pInnerFormObject, 0);
-    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, FPDFPageObj_GetType(pImage));
-    FS_MATRIX aMatrix;
-    FPDFFormObj_GetMatrix(pInnerFormObject, &aMatrix);
-    basegfx::B2DHomMatrix aMat{ aMatrix.a, aMatrix.c, aMatrix.e, aMatrix.b, aMatrix.d, aMatrix.f };
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pInnerFormObject = pFormObject->getFormObject(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Form, pInnerFormObject->getType());
+    CPPUNIT_ASSERT_EQUAL(1, pInnerFormObject->getFormObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pImage = pInnerFormObject->getFormObject(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Image, pImage->getType());
+    basegfx::B2DHomMatrix aMat = pInnerFormObject->getMatrix();
     basegfx::B2DTuple aScale;
     basegfx::B2DTuple aTranslate;
     double fRotate = 0;
