@@ -860,7 +860,7 @@ static void generateMethodBodies(std::ostream& o,
         OString const & comphelpernamespace,
         OUString const & propertyhelper)
 {
-    OString name(classname.concat("::"));
+    OString name = classname + "::";
     codemaker::GeneratedTypeSet generated;
     for (const auto& rIface : interfaces) {
         if ( rIface == "com.sun.star.lang.XServiceInfo" ) {

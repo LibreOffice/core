@@ -422,7 +422,7 @@ namespace emfio
                         break;
 
                     sal_Unicode cUniChar = static_cast<sal_Unicode>(cChar);
-                    aDesc = aDesc.concat(OUString(cUniChar));
+                    aDesc = aDesc + OUStringChar(cUniChar);
                 }
 
                 SAL_INFO("emfio", "\t\tDescription: " << aDesc);
