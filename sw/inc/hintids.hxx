@@ -429,7 +429,6 @@ constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_PIECE_ARRIVED (175);
 constexpr TypedWhichId<SwMsgPoolItem> RES_HIDDENPARA_PRINT (176);
 constexpr TypedWhichId<SwVirtPageNumInfo> RES_VIRTPAGENUM_INFO (178);
 constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REMOVE_UNO_OBJECT (179);
-constexpr TypedWhichId<SwMsgPoolItem> RES_GRF_REREAD_AND_INCACHE (180);
 // empty
 constexpr TypedWhichId<SwFindNearestNode> RES_FINDNEARESTNODE (182);
 constexpr TypedWhichId<SwPtrMsgPoolItem> RES_CONTENT_VISIBLE (183);

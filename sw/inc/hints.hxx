@@ -135,6 +135,10 @@ public:
     const SwTextFormatColl& m_rColl;
     CondCollCondChg(const SwTextFormatColl& rColl) : m_rColl(rColl) {};
 };
+
+class GrfRereadAndInCacheHint final : public SfxHint
+{
+};
 }
 
 class SwUpdateAttr final : public SwMsgPoolItem

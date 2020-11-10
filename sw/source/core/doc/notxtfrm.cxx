@@ -722,6 +722,15 @@ void SwNoTextFrame::ClearCache()
 
 void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
+    if(dynamic_cast<const sw::GrfRereadAndInCacheHint*>(&rHint))
+    {
+        if(SwNodeType::Grf != GetNode()->GetNodeType())
+        {
+            InvalidatePrt();
+            SetCompletePaint();
+        }
+        return;
+    }
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
         return;
@@ -731,7 +740,6 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
     // no <SwContentFrame::Modify(..)> for RES_LINKED_GRAPHIC_STREAM_ARRIVED
     if ( RES_GRAPHIC_PIECE_ARRIVED != nWhich &&
          RES_GRAPHIC_ARRIVED != nWhich &&
-         RES_GRF_REREAD_AND_INCACHE != nWhich &&
          RES_LINKED_GRAPHIC_STREAM_ARRIVED != nWhich )
     {
         SwContentFrame::SwClientNotify(rModify, rHint);
@@ -742,14 +750,6 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
     switch( nWhich )
     {
     case RES_OBJECTDYING:
-        break;
-
-    case RES_GRF_REREAD_AND_INCACHE:
-        if( SwNodeType::Grf == GetNode()->GetNodeType() )
-        {
-            // TODO: Remove - due to GraphicObject refactoring
-            bComplete = false;
-        }
         break;
 
     case RES_UPDATE_ATTR:
