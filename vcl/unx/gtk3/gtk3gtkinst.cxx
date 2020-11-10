@@ -16195,6 +16195,11 @@ public:
     {
     }
 
+    virtual void set_label(const OUString& rText) override
+    {
+        ::set_label(GTK_LABEL(gtk_expander_get_label_widget(m_pExpander)), rText);
+    }
+
     virtual bool get_expanded() const override
     {
         return gtk_expander_get_expanded(m_pExpander);
