@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84ad3334_1bb441b0",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-10T14:38:24Z",
+      "side": 1,
+      "message": "if these are specific to starmath, then they should be in some header in the starmath module please",
+      "revId": "fef1916b363a50187540ad52d41b065130e5092a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6383648d_bac196b6",
+        "filename": "starmath/inc/strings.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-10T14:38:24Z",
+      "side": 1,
+      "message": "the name of the constant now does not match the definition?",
+      "revId": "fef1916b363a50187540ad52d41b065130e5092a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d40d5e39_6fbf1c62",
+        "filename": "starmath/source/mathmlexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-10T14:38:24Z",
+      "side": 1,
+      "message": "these are small enough to just pass around by value, rather than pointers that need free\u0027ing\n\nEither that or return using std::unique_ptr",
+      "revId": "fef1916b363a50187540ad52d41b065130e5092a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdc3e592_a6120113",
+        "filename": "starmath/source/node.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1630,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-10T14:38:24Z",
+      "side": 1,
+      "message": "standar -\u003e standard",
+      "revId": "fef1916b363a50187540ad52d41b065130e5092a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
