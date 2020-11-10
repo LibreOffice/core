@@ -164,7 +164,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 {
     sal_uInt16 nItemId = maCtlFavorites.GetSelectedItemId();
 
-    if( nItemId <= 0 )
+    if (nItemId == 0)
         return;
 
     std::unique_ptr<FmFormModel> pModel(new FmFormModel());
