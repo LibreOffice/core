@@ -115,6 +115,7 @@ namespace vcl
         std::shared_ptr<PrinterController>      maPController;
 
         std::unique_ptr<weld::Notebook>         mxTabCtrl;
+        std::unique_ptr<weld::ScrolledWindow>   mxScrolledWindow;
         std::unique_ptr<weld::Frame>            mxPageLayoutFrame;
         std::unique_ptr<weld::ComboBox>         mxPrinters;
         std::unique_ptr<weld::Label>            mxStatusTxt;

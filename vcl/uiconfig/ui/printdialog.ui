@@ -348,7 +348,7 @@
                 <property name="margin_left">6</property>
                 <property name="vexpand">True</property>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="GtkScrolledWindow" id="scrolledwindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">never</property>
@@ -635,7 +635,6 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="hexpand">True</property>
-                                            <property name="resize_toplevel">True</property>
                                             <child>
                                               <object class="GtkGrid" id="gdCopiesExtra">
                                                 <property name="visible">True</property>
@@ -982,7 +981,6 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="hexpand">True</property>
-                                            <property name="resize_toplevel">True</property>
                                             <child>
                                               <object class="GtkGrid" id="expandpagegrid">
                                                 <property name="visible">True</property>

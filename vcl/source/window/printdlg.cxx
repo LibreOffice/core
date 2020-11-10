@@ -491,6 +491,7 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     : GenericDialogController(i_pWindow, "vcl/ui/printdialog.ui", "PrintDialog")
     , maPController( i_rController )
     , mxTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
+    , mxScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow"))
     , mxPageLayoutFrame(m_xBuilder->weld_frame("layoutframe"))
     , mxPrinters(m_xBuilder->weld_combo_box("printersbox"))
     , mxStatusTxt(m_xBuilder->weld_label("status"))
@@ -678,6 +679,11 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     mxLayoutExpander->connect_expanded(LINK( this, PrintDialog, ExpandHdl));
 
     updateNupFromPages();
+
+    // lock the dialog height, regardless of later expander state
+    mxScrolledWindow->set_size_request(
+        mxScrolledWindow->get_preferred_size().Width() + mxScrolledWindow->get_vscroll_width(),
+        mxScrolledWindow->get_preferred_size().Height());
 }
 
 IMPL_LINK_NOARG(PrintDialog, ExpandHdl, weld::Expander&, void)
