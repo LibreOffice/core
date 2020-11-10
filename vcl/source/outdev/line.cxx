@@ -107,6 +107,8 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     if ( mbInitLineColor )
         InitLineColor();
 
+    bool bDrawn = false;
+
     // #i101598# support AA and snap for lines, too
     if( mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
         && RasterOp::OverPaint == GetRasterOp()
@@ -123,7 +125,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
         const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-        if( mpGraphics->DrawPolyLine(
+        bDrawn = mpGraphics->DrawPolyLine(
             basegfx::B2DHomMatrix(),
             aB2DPolyLine,
             0.0,
@@ -133,16 +135,14 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             css::drawing::LineCap_BUTT,
             basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
             bPixelSnapHairline,
-            this))
-        {
-            return;
-        }
+            this);
     }
-
-    const Point aStartPt(ImplLogicToDevicePixel(rStartPt));
-    const Point aEndPt(ImplLogicToDevicePixel(rEndPt));
-
-    mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
+    if(!bDrawn)
+    {
+        const Point aStartPt(ImplLogicToDevicePixel(rStartPt));
+        const Point aEndPt(ImplLogicToDevicePixel(rEndPt));
+        mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
+    }
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawLine( rStartPt, rEndPt );

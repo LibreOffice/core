@@ -67,7 +67,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
     const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
     const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-    if(mpGraphics->DrawPolyLine(
+    bool bDrawn = mpGraphics->DrawPolyLine(
         aTransform,
         aB2DPolyLine,
         0.0,
@@ -77,28 +77,28 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
         css::drawing::LineCap_BUTT,
         basegfx::deg2rad(15.0) /*default fMiterMinimumAngle, not used*/,
         bPixelSnapHairline,
-        this))
-    {
-        return;
-    }
+        this);
 
-    tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
-    SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aPoly.GetPointAry());
-
-    // #100127# Forward beziers to sal, if any
-    if( aPoly.HasFlags() )
+    if(!bDrawn)
     {
-        const PolyFlags* pFlgAry = aPoly.GetConstFlagAry();
-        if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
+        tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
+        SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aPoly.GetPointAry());
+
+        // #100127# Forward beziers to sal, if any
+        if( aPoly.HasFlags() )
         {
-            aPoly = tools::Polygon::SubdivideBezier(aPoly);
-            pPtAry = reinterpret_cast<SalPoint*>(aPoly.GetPointAry());
-            mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, this );
+            const PolyFlags* pFlgAry = aPoly.GetConstFlagAry();
+            if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
+            {
+                aPoly = tools::Polygon::SubdivideBezier(aPoly);
+                pPtAry = reinterpret_cast<SalPoint*>(aPoly.GetPointAry());
+                mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, this );
+            }
         }
-    }
-    else
-    {
-        mpGraphics->DrawPolyLine( nPoints, pPtAry, this );
+        else
+        {
+            mpGraphics->DrawPolyLine( nPoints, pPtAry, this );
+        }
     }
 
     if( mpAlphaVDev )
