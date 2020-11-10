@@ -719,8 +719,7 @@ bool ThumbnailView::KeyInput( const KeyEvent& rKEvt )
 
                     pCurItem->setSelection(!pCurItem->isSelected());
 
-                    if (pCurItem->isVisible())
-                        DrawItem(pCurItem);
+                    DrawItem(pCurItem);
 
                     maItemStateHdl.Call(pCurItem);
                 }
@@ -834,8 +833,7 @@ bool ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                 {
                     pCurItem->setSelection(false);
 
-                    if (pCurItem->isVisible())
-                        DrawItem(pCurItem);
+                    DrawItem(pCurItem);
 
                     maItemStateHdl.Call(pCurItem);
                 }
@@ -857,8 +855,7 @@ bool ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                     {
                         pCurItem->setSelection(true);
 
-                        if (pCurItem->isVisible())
-                            DrawItem(pCurItem);
+                        DrawItem(pCurItem);
 
                         maItemStateHdl.Call(pCurItem);
                     }
