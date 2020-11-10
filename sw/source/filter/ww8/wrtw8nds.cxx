@@ -2233,7 +2233,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             if ( pBox->IsFormulaOrValueBox() == RES_BOXATR_FORMULA &&
                  GetExportFormat() == MSWordExportBase::ExportFormat::DOCX )
             {
-                SwTableBoxFormula* pFormula = pBox->GetFrameFormat()->GetTableBoxFormula().Clone();
+                std::unique_ptr<SwTableBoxFormula> pFormula(pBox->GetFrameFormat()->GetTableBoxFormula().Clone());
                 pFormula->PtrToBoxNm( &pTableNode->GetTable() );
                 OutputField( nullptr, ww::eEquals, " =" + pFormula->GetFormula(),
                     FieldFlags::Start | FieldFlags::CmdStart | FieldFlags::CmdEnd | FieldFlags::Close );
