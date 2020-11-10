@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d56e62b_2e751315",
+        "filename": "include/tools/UnitConversion.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-10T08:42:21Z",
+      "side": 1,
+      "message": "This seems to be misleading. The formula takes a number (in \"master units\"?), and divides by 576. According to your description, a master unit is 1/576th of an inch; then the division produces number of inches. Then you multiply by 2540 - and that gives mm/100ths, not twips!\n\nShould it be \"convertMasterUnitToMm100\"? (And same for \"convertTwipToMasterUnit\")",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 43
+      },
+      "revId": "9c4048b1883f1dc9fdd621ffa2bb06ff9fe19d14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
