@@ -58,6 +58,7 @@
 #include <svtools/restartdialog.hxx>
 #include <svl/visitem.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <tools/svlibrary.h>
@@ -100,6 +101,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/optionitem.hxx>
 #include <sfx2/hintpost.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfac.hxx>
@@ -1259,6 +1261,16 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                        rSet.DisableItem( SID_SAFE_MODE );
                     break;
                 }
+
+                case SID_SETOPTIONS:
+                {
+                    SvtSecurityOptions aSecOptions;
+                    SfxOptionItem aOptItem(SID_SETOPTIONS);
+
+                    aOptItem.PutValue(makeAny(aSecOptions.GetMacroSecurityLevel()), MID_MACRO_SECURITYLEVEL);
+                    rSet.Put(aOptItem);
+                }
+                break;
 
                 default:
                     break;
