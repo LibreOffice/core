@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d0d4dbb_ecbe45c2",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-10T07:52:33Z",
+      "side": 1,
+      "message": "So you can use the Shift+F1 trick only when the option is off. Guess you mean \"even if not enabled\", right?",
+      "range": {
+        "startLine": 271,
+        "startChar": 129,
+        "endLine": 271,
+        "endChar": 143
+      },
+      "revId": "fce1a955931acf9896499710eb217fcadb6b730e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
