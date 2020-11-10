@@ -148,6 +148,7 @@ OString ConvertColor( const Color &rColor )
 #define IN2MM100( v )    static_cast< sal_Int32 >( (v) * 2540.0 + 0.5 )
 #define MM2MM100( v )    static_cast< sal_Int32 >( (v) * 100.0 + 0.5 )
 
+// see XclPaperSize pPaperSizeTable in calc and aDinTab in i18nutil
 const ApiPaperSize spPaperSizeTable[] =
 {
     { 0, 0 },                                                //  0 - (undefined)
@@ -162,8 +163,12 @@ const ApiPaperSize spPaperSizeTable[] =
     { MM2MM100( 210 ),       MM2MM100( 297 )     },          //  9 - A4 paper
     { MM2MM100( 210 ),       MM2MM100( 297 )     },          // 10 - A4 small paper
     { MM2MM100( 148 ),       MM2MM100( 210 )     },          // 11 - A5 paper
-    { MM2MM100( 250 ),       MM2MM100( 353 )     },          // 12 - B4 paper
-    { MM2MM100( 176 ),       MM2MM100( 250 )     },          // 13 - B5 paper
+    /* for JIS vs ISO B confusion see:
+       https://docs.microsoft.com/en-us/windows/win32/intl/paper-sizes
+       http://wiki.openoffice.org/wiki/DefaultPaperSize comments
+       http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf */
+    { MM2MM100( 257 ),       MM2MM100( 364 )     },          // 12 - B4 (JIS) paper
+    { MM2MM100( 182 ),       MM2MM100( 257 )     },          // 13 - B5 (JIS) paper
     { IN2MM100( 8.5 ),       IN2MM100( 13 )      },          // 14 - Folio paper
     { MM2MM100( 215 ),       MM2MM100( 275 )     },          // 15 - Quarto paper
     { IN2MM100( 10 ),        IN2MM100( 14 )      },          // 16 - Standard paper
@@ -200,13 +205,14 @@ const ApiPaperSize spPaperSizeTable[] =
     { MM2MM100( 220 ),       MM2MM100( 220 )     },          // 47 - Invite envelope
     { 0, 0 },                                                // 48 - (undefined)
     { 0, 0 },                                                // 49 - (undefined)
-    { IN2MM100( 9.275 ),     IN2MM100( 12 )      },          // 50 - Letter extra paper
-    { IN2MM100( 9.275 ),     IN2MM100( 15 )      },          // 51 - Legal extra paper
+    /* See: https://docs.microsoft.com/en-us/windows/win32/intl/paper-sizes */
+    { IN2MM100( 9.5 ),       IN2MM100( 12 )      },          // 50 - Letter extra paper
+    { IN2MM100( 9.5 ),       IN2MM100( 15 )      },          // 51 - Legal extra paper
     { IN2MM100( 11.69 ),     IN2MM100( 18 )      },          // 52 - Tabloid extra paper
-    { MM2MM100( 236 ),       MM2MM100( 322 )     },          // 53 - A4 extra paper
-    { IN2MM100( 8.275 ),     IN2MM100( 11 )      },          // 54 - Letter transverse paper
+    { MM2MM100( 235 ),       MM2MM100( 322 )     },          // 53 - A4 extra paper
+    { IN2MM100( 8.5 ),       IN2MM100( 11 )      },          // 54 - Letter transverse paper
     { MM2MM100( 210 ),       MM2MM100( 297 )     },          // 55 - A4 transverse paper
-    { IN2MM100( 9.275 ),     IN2MM100( 12 )      },          // 56 - Letter extra transverse paper
+    { IN2MM100( 9.5 ),       IN2MM100( 12 )      },          // 56 - Letter extra transverse paper
     { MM2MM100( 227 ),       MM2MM100( 356 )     },          // 57 - SuperA/SuperA/A4 paper
     { MM2MM100( 305 ),       MM2MM100( 487 )     },          // 58 - SuperB/SuperB/A3 paper
     { IN2MM100( 8.5 ),       IN2MM100( 12.69 )   },          // 59 - Letter plus paper
@@ -219,8 +225,28 @@ const ApiPaperSize spPaperSizeTable[] =
     { MM2MM100( 420 ),       MM2MM100( 594 )     },          // 66 - A2 paper
     { MM2MM100( 297 ),       MM2MM100( 420 )     },          // 67 - A3 transverse paper
     { MM2MM100( 322 ),       MM2MM100( 445 )     },          // 68 - A3 extra transverse paper
-    { 0, 0 },                                                // 69 - undefined
+    { MM2MM100( 200 ),       MM2MM100( 148 )     },          // 69 - Japanese double postcard
     { MM2MM100( 105 ),       MM2MM100( 148 ),    },          // 70 - A6 paper
+    { 0, 0 },                                                // 71 - Japanese Envelope Kaku #2
+    { 0, 0 },                                                // 72 - Japanese Envelope Kaku #3
+    { 0, 0 },                                                // 73 - Japanese Envelope Chou #3
+    { 0, 0 },                                                // 74 - Japanese Envelope Chou #4
+    { IN2MM100( 11 ),        IN2MM100( 8.5 )     },          // 75 - Letter Rotated
+    { MM2MM100( 420 ),       MM2MM100( 297 )     },          // 76 - A3 Rotated
+    { MM2MM100( 297 ),       MM2MM100( 210 )     },          // 77 - A4 Rotated
+    { MM2MM100( 210 ),       MM2MM100( 148 )     },          // 78 - A5 Rotated
+    { MM2MM100( 364 ),       MM2MM100( 257 )     },          // 79 - B4 (JIS) Rotated
+    { MM2MM100( 257 ),       MM2MM100( 182 )     },          // 80 - B5 (JIS) Rotated
+    { MM2MM100( 148 ),       MM2MM100( 100 )     },          // 81 - Japanese Postcard Rotated
+    { MM2MM100( 148 ),       MM2MM100( 200 )     },          // 82 - Double Japanese Postcard Rotated
+    { MM2MM100( 148 ),       MM2MM100( 105 )     },          // 83 - A6 Rotated
+    { 0, 0 },                                                // 84 - Japanese Envelope Kaku #2 Rotated
+    { 0, 0 },                                                // 85 - Japanese Envelope Kaku #3 Rotated
+    { 0, 0 },                                                // 86 - Japanese Envelope Chou #3 Rotated
+    { 0, 0 },                                                // 87 - Japanese Envelope Chou #4 Rotated
+    { MM2MM100( 128 ),       MM2MM100( 182 )     },          // 88 - B6 (JIS)
+    { MM2MM100( 182 ),       MM2MM100( 128 )     },          // 89 - B6 (JIS) Rotated
+    { IN2MM100( 12 ),        IN2MM100( 11 )      }           // 90 - 12x11
 };
 
 sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const css::awt::Size& rSize )

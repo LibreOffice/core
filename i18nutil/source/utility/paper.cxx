@@ -68,6 +68,7 @@ struct PageDesc
 
 //!! The order of these entries must correspond to enum Paper in <i18nutil/paper.hxx>
 
+// see XclPaperSize pPaperSizeTable in calc and ApiPaperSize in filter
 const PageDesc aDinTab[] =
 {
     { MM2MM100( 841 ),   MM2MM100( 1189 ),   "A0",  nullptr },
