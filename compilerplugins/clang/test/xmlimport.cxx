@@ -192,4 +192,36 @@ public:
     virtual SvXMLImportContextRef CreateChildContext() override { return nullptr; }
 };
 
+enum XmlTokens
+{
+    XML_TOK_1
+};
+
+void test20(sal_uInt32 p, sal_uInt16 q, XmlTokens e)
+{
+    // expected-error@+1 {{comparing XML_TOK enum to 'sal_uInt32', expected sal_uInt16 [loplugin:xmlimport]}}
+    if (p == XML_TOK_1)
+        ;
+    // no warning expected
+    if (q == XML_TOK_1)
+        ;
+    switch (p)
+    {
+        // expected-error@+1 {{comparing XML_TOK enum to 'sal_uInt32', expected sal_uInt16 [loplugin:xmlimport]}}
+        case XML_TOK_1:
+            break;
+    }
+    switch (q)
+    {
+        // no warning expected
+        case XML_TOK_1:
+            break;
+    }
+    switch (e)
+    {
+        // no warning expected
+        case XML_TOK_1:
+            break;
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
