@@ -236,7 +236,7 @@ SwFormat::~SwFormat()
             SAL_INFO("sw.core", "reparenting " << typeid(*pClient).name() << " at " << pClient << " from " << typeid(*this).name() << " at " << this << " to "  << typeid(*pParentFormat).name() << " at " << pParentFormat);
             pParentFormat->Add( pClient );
             const sw::LegacyModifyHint aHint(&aOldFormat, &aNewFormat);
-            pClient->SwClientNotify(*this, aHint);
+            pClient->SwClientNotifyCall(*this, aHint);
         }
     }
 }

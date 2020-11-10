@@ -87,7 +87,7 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell & rShell)
 
     SwFormatFrameSize aSize = pLine->GetFrameFormat()->GetFrameSize();
     sw::BroadcastingModify aMod;
-    pRow->SwClientNotify(aMod, sw::LegacyModifyHint(nullptr, &aSize));
+    pRow->SwClientNotifyCall(aMod, sw::LegacyModifyHint(nullptr, &aSize));
 }
 
 SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
