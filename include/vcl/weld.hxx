@@ -2026,6 +2026,7 @@ protected:
     void signal_expanded() { m_aExpandedHdl.Call(*this); }
 
 public:
+    virtual void set_label(const OUString& rText) = 0;
     virtual bool get_expanded() const = 0;
     virtual void set_expanded(bool bExpand) = 0;
 

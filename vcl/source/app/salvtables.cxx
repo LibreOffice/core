@@ -5795,6 +5795,8 @@ public:
         m_xExpander->SetExpandedHdl(LINK(this, SalInstanceExpander, ExpandedHdl));
     }
 
+    virtual void set_label(const OUString& rText) override { m_xExpander->set_label(rText); }
+
     virtual bool get_expanded() const override { return m_xExpander->get_expanded(); }
 
     virtual void set_expanded(bool bExpand) override { m_xExpander->set_expanded(bExpand); }
