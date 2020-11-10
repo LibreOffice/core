@@ -16,6 +16,24 @@
       "revId": "3521b08ef76a38054c8e4a4e0d0723a8e7861ea1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47120f7c_71d1a5e5",
+        "filename": "cui/uiconfig/ui/borderpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-10T14:06:14Z",
+      "side": 1,
+      "message": "Tried to see dark UI, by using dark theme (using Options - Personlization) and \"Black\" for document and application background in \"Application Colors\" -- but there was no change in the dialog box. It looks the same. This was with Windows.  (Did I do it wrong to see dark UI? and/or are there also \"sys\" differences?)\n\nDoes \"blank, dotted, plain\" refer to how the border line appears in your UI?  \n\nIs there a color difference between \"blank\" and \"plain\"?   (or what is difference)?\nNo color difference between \"dotted\" and \"plain\"?\n\nAdditional problem... the cycle does not always start with \"unselected...but is adapted to the current state of a border edge.\n\nHeiko? Adolfo?",
+      "parentUuid": "23ca0f9c_70c0c805",
+      "revId": "3521b08ef76a38054c8e4a4e0d0723a8e7861ea1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
