@@ -31,7 +31,7 @@ constexpr sal_Int64 convertPointToMm100(sal_Int64 nNumber)
 
 constexpr double convertPointToTwip(double fNumber) { return fNumber * 20.0; }
 
-constexpr double convertPointToMm100(double fNumber) { return fNumber * 35.27777777778; }
+constexpr double convertPointToMm100(double fNumber) { return fNumber * (2540.0 / 72.0); }
 
 // Convert PPT's "master unit" (1/576 inch) to twips
 constexpr sal_Int64 convertMasterUnitToTwip(sal_Int64 n) { return n * 2540.0 / 576.0; }
