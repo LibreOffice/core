@@ -1623,7 +1623,7 @@ public:
 
 VclExpander::VclExpander(vcl::Window *pParent)
     : VclBin(pParent)
-    , m_bResizeTopLevel(true)
+    , m_bResizeTopLevel(false)
     , m_pDisclosureButton(VclPtr<DisclosureButton>::Create(this))
 {
     m_pDisclosureButton->SetToggleHdl(LINK(this, VclExpander, ClickHdl));
