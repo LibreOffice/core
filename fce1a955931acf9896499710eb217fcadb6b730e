@@ -22,6 +22,30 @@
       "revId": "fce1a955931acf9896499710eb217fcadb6b730e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f3de4e0_f148eda8",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-10T09:03:42Z",
+      "side": 1,
+      "message": "No. I meant what I wrote.\n\nTechnically you are correct.  Can use Shift+F1, regardless of setting in Options.\nPractically, however, there is no need to use Shift+F1 if \"extended tip\" is set in Options.\n\nFor me in 7.1 -- \n\nIf \"extended\" tip is enabled in Options, then extended tooltip is always shown immediately (even if there was also a tooltip available). (i.e., no need to use Shift+F1).\n\nIf \"extended tip\" is not enabled in Options, then \"tooltip\" alone shown.  Shift+F1 makes it possible to \"scan\" the dialog box for extended tips -- without having to enable \"extended tips\" in Options.   (therefore:  \"when Extended tips is not enabled\" ...)\n\nA good tip, I think.  (-:",
+      "parentUuid": "7d0d4dbb_ecbe45c2",
+      "range": {
+        "startLine": 271,
+        "startChar": 129,
+        "endLine": 271,
+        "endChar": 143
+      },
+      "revId": "fce1a955931acf9896499710eb217fcadb6b730e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
