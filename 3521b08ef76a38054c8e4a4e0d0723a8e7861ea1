@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23ca0f9c_70c0c805",
+        "filename": "cui/uiconfig/ui/borderpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2020-11-10T10:37:28Z",
+      "side": 1,
+      "message": "The colors suggested depends on the user interface. On a dark UI and it looks blank/dotted/plain. \n\nI suggest (...) to cycle through three states: unselected, unchanged, selected.",
+      "revId": "3521b08ef76a38054c8e4a4e0d0723a8e7861ea1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
