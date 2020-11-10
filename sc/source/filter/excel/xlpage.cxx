@@ -47,6 +47,7 @@ constexpr tools::Long twips2mm(tools::Long n_twips)
     return static_cast<tools::Long>((static_cast<double>(n_twips) - 0.5) / EXC_TWIPS_PER_INCH * CM_PER_INCH * 10.0);
 }
 
+// see ApiPaperSize spPaperSizeTable in filter and aDinTab in i18nutil
 constexpr XclPaperSize pPaperSizeTable[] =
 {
 /*  0*/ { PAPER_USER,       0,                  0                   },  // undefined
@@ -61,23 +62,10 @@ constexpr XclPaperSize pPaperSizeTable[] =
         { PAPER_A4,         mm2twips( 210 ),    mm2twips( 297 )     },  // A4
 /* 10*/ { PAPER_USER,       mm2twips( 210 ),    mm2twips( 297 )     },  // A4 Small
         { PAPER_A5,         mm2twips( 148 ),    mm2twips( 210 )     },  // A5
-        //See: http://wiki.openoffice.org/wiki/DefaultPaperSize comments
-        //near DMPAPER_B4 in vcl
-        //i.e.
-        //http://msdn.microsoft.com/en-us/library/bb241398.aspx makes the claim:
-        //xlPaperB4 12  B4 (250 mm x 354 mm)
-        //xlPaperB5 13  A5 (148 mm x 210 mm)
-        //but, a paper enum called B5 is surely not actually "A5", and furthermore
-        //the XlPaperSize enumeration otherwise follows the DMPAPER values
-        //http://msdn.microsoft.com/en-us/library/ms776398(VS.85).aspx
-        //which has
-        //DMPAPER_B4    12  B4 (JIS) 250 x 354
-        //DMPAPER_B5    13  B5 (JIS) 182 x 257 mm
-    //which claim them to be the JIS sizes. Though that document then gives
-    //"B4 (JIS)" an *ISO* B4 size in the text, but
-        //http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf
-        //claims that the MS DMPAPER_B4 and DMPAPER_B5 truly are the JIS sizes
-        //which at least makes some sort of sense. (cmc)
+        /* for JIS vs ISO B confusion see:
+           https://docs.microsoft.com/en-us/windows/win32/intl/paper-sizes
+           http://wiki.openoffice.org/wiki/DefaultPaperSize comments
+           http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf */
         { PAPER_B4_JIS,     mm2twips( 257 ),    mm2twips( 364 )     },  // B4 (JIS)
         { PAPER_B5_JIS,     mm2twips( 182 ),    mm2twips( 257 )     },  // B5 (JIS)
         { PAPER_USER,       in2twips( 8.5 ),    in2twips( 13 )      },  // Folio
@@ -116,6 +104,7 @@ constexpr XclPaperSize pPaperSizeTable[] =
         { PAPER_ENV_INVITE,     mm2twips( 220 ),    mm2twips( 220 )     },  // Envelope Invite
         { PAPER_USER,       0,                  0                   },  // undefined
         { PAPER_USER,       0,                  0                   },  // undefined
+        /* See: https://docs.microsoft.com/en-us/windows/win32/intl/paper-sizes */
 /* 50*/ { PAPER_USER,       in2twips( 9.5 ),    in2twips( 12 )      },  // Letter Extra
         { PAPER_USER,       in2twips( 9.5 ),    in2twips( 15 )      },  // Legal Extra
         { PAPER_USER,       in2twips( 11.69 ),  in2twips( 18 )      },  // Tabloid Extra
@@ -137,10 +126,10 @@ constexpr XclPaperSize pPaperSizeTable[] =
         { PAPER_USER,       mm2twips( 322 ),    mm2twips( 445 )     },  // A3 Extra Transverse
         { PAPER_DOUBLEPOSTCARD_JP,       mm2twips( 200 ),    mm2twips( 148 )     },  // Double Japanese Postcard
 /* 70*/ { PAPER_A6,         mm2twips( 105 ),    mm2twips( 148 )     },  // A6
-        { PAPER_USER,       0,                  0                   },  // undefined
-        { PAPER_USER,       0,                  0                   },  // undefined
-        { PAPER_USER,       0,                  0                   },  // undefined
-        { PAPER_USER,       0,                  0                   },  // undefined
+        { PAPER_USER,       0,                  0                   },  // Japanese Envelope Kaku #2
+        { PAPER_USER,       0,                  0                   },  // Japanese Envelope Kaku #3
+        { PAPER_USER,       0,                  0                   },  // Japanese Envelope Chou #3
+        { PAPER_USER,       0,                  0                   },  // Japanese Envelope Chou #4
 /* 75*/ { PAPER_USER,       in2twips( 11 ),     in2twips( 8.5 )     },  // Letter Rotated
         { PAPER_USER,       mm2twips( 420 ),    mm2twips( 297 )     },  // A3 Rotated
         { PAPER_USER,       mm2twips( 297 ),    mm2twips( 210 )     },  // A4 Rotated
@@ -150,10 +139,10 @@ constexpr XclPaperSize pPaperSizeTable[] =
         { PAPER_USER,       mm2twips( 148 ),    mm2twips( 100 )     },  // Japanese Postcard Rotated
         { PAPER_USER,       mm2twips( 148 ),    mm2twips( 200 )     },  // Double Japanese Postcard Rotated
         { PAPER_USER,       mm2twips( 148 ),    mm2twips( 105 )     },  // A6 Rotated
-        { PAPER_USER,       0,                  0                   },  // undefined
-/* 85*/ { PAPER_USER,       0,                  0                   },  // undefined
-        { PAPER_USER,       0,                  0                   },  // undefined
-        { PAPER_USER,       0,                  0                   },  // undefined
+        { PAPER_USER,       0,                  0                   },  // Japanese Envelope Kaku #2 Rotated
+/* 85*/ { PAPER_USER,       0,                  0                   },  // Japanese Envelope Kaku #3 Rotated
+        { PAPER_USER,       0,                  0                   },  // Japanese Envelope Chou #3 Rotated
+        { PAPER_USER,       0,                  0                   },  // Japanese Envelope Chou #4 Rotated
         { PAPER_B6_JIS,     mm2twips( 128 ),    mm2twips( 182 )     },  // B6 (JIS)
         { PAPER_USER,       mm2twips( 182 ),    mm2twips( 128 )     },  // B6 (JIS) Rotated
 /* 90*/ { PAPER_12x11,      in2twips( 12 ),     in2twips( 11 )      }   // 12x11
