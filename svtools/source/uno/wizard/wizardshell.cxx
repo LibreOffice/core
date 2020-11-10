@@ -175,7 +175,7 @@ namespace svt::uno
                 : BuilderPage(pParent, pController, "svt/ui/emptypage.ui", "EmptyPage")
             {
                 m_xContainer->set_size_request(m_xContainer->get_approximate_digit_width() * 70,
-                                               m_xContainer->get_text_height() * 45);
+                                               m_xContainer->get_text_height() * 10);
             }
             weld::Container* GetContainer() const { return m_xContainer.get(); }
         };
