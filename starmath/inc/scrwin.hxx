@@ -29,40 +29,41 @@ class ScrollBarBox;
 class ScrollableWindow : public vcl::Window
 {
 private:
-    Point           aPixOffset;         // offset to virtual window (pixel)
-    Size            aTotPixSz;          // total size of virtual window (pixel)
-    tools::Long            nLinePixH;          // size of a line/column (pixel)
-    tools::Long            nColumnPixW;
+    Point aPixOffset; // offset to virtual window (pixel)
+    Size aTotPixSz; // total size of virtual window (pixel)
+    tools::Long nLinePixH; // size of a line/column (pixel)
+    tools::Long nColumnPixW;
 
-    VclPtr<ScrollBar>    aVScroll;      // the scrollbars
-    VclPtr<ScrollBar>    aHScroll;
-    VclPtr<ScrollBarBox> aCornerWin;    // window in the bottom right corner
-    bool            bScrolling:1;       // user controlled scrolling
+    VclPtr<ScrollBar> aVScroll; // the scrollbars
+    VclPtr<ScrollBar> aHScroll;
+    VclPtr<ScrollBarBox> aCornerWin; // window in the bottom right corner
+    bool bScrolling : 1; // user controlled scrolling
 
-    DECL_LINK( ScrollHdl, ScrollBar *, void );
-    DECL_LINK( EndScrollHdl, ScrollBar *, void );
+    DECL_LINK(ScrollHdl, ScrollBar*, void);
+    DECL_LINK(EndScrollHdl, ScrollBar*, void);
 
 public:
-                    ScrollableWindow( vcl::Window* pParent );
-    virtual         ~ScrollableWindow() override;
-    virtual void    dispose() override;
+    ScrollableWindow(vcl::Window* pParent);
+    virtual ~ScrollableWindow() override;
+    virtual void dispose() override;
 
-    virtual void    Resize() override;
-    virtual void    Command( const CommandEvent& rCEvt ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDEvt ) override;
+    virtual void Resize() override;
+    virtual void Command(const CommandEvent& rCEvt) override;
+    virtual void DataChanged(const DataChangedEvent& rDEvt) override;
 
     using OutputDevice::SetMapMode;
-    virtual void    SetMapMode( const MapMode& rNewMapMode ) override;
+    virtual void SetMapMode(const MapMode& rNewMapMode) override;
     MapMode GetMapMode() const;
 
-    void            SetTotalSize( const Size& rNewSize );
-    Size            GetTotalSize() const { return PixelToLogic( aTotPixSz ); }
+    void SetTotalSize(const Size& rNewSize);
+    Size GetTotalSize() const { return PixelToLogic(aTotPixSz); }
 
     using Window::Scroll;
-    virtual void    Scroll( tools::Long nDeltaX, tools::Long nDeltaY, ScrollFlags nFlags = ScrollFlags::NONE ) override;
+    virtual void Scroll(tools::Long nDeltaX, tools::Long nDeltaY,
+                        ScrollFlags nFlags = ScrollFlags::NONE) override;
 
 private:
-    Size         GetOutputSizePixel() const;
+    Size GetOutputSizePixel() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,12 +37,12 @@ class SmParser;
 class SmElement
 {
     std::unique_ptr<SmNode> mpNode;
-    OUString                maText;
-    OUString                maHelpText;
+    OUString maText;
+    OUString maHelpText;
 
 public:
     Point mBoxLocation;
-    Size  mBoxSize;
+    Size mBoxSize;
 
     SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, const OUString& aHelpText);
     virtual ~SmElement();
@@ -92,22 +92,23 @@ class SmElementsControl : public weld::CustomWidgetController
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
-    SmDocShell*   mpDocShell;
-    SmFormat      maFormat;
-    OString       msCurrentSetId;
-    sal_uInt16    m_nCurrentElement;
-    sal_uInt16    m_nCurrentRolloverElement;
+    SmDocShell* mpDocShell;
+    SmFormat maFormat;
+    OString msCurrentSetId;
+    sal_uInt16 m_nCurrentElement;
+    sal_uInt16 m_nCurrentRolloverElement;
     sal_uInt16 m_nCurrentOffset;
-    Link<SmElement&,void> maSelectHdlLink;
+    Link<SmElement&, void> maSelectHdlLink;
 
-    std::vector< std::unique_ptr<SmElement> > maElementList;
-    Size          maMaxElementDimensions;
-    bool          mbVerticalMode;
+    std::vector<std::unique_ptr<SmElement>> maElementList;
+    Size maMaxElementDimensions;
+    bool mbVerticalMode;
     std::unique_ptr<weld::ScrolledWindow> mxScroll;
     bool m_bFirstPaintAfterLayout;
     rtl::Reference<AccessibleSmElementsControl> m_xAccessible;
 
-    void addElement(SmParser &rParser, const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
+    void addElement(SmParser& rParser, const OUString& aElementVisual,
+                    const OUString& aElementSource, const OUString& aHelpText);
     void addElements(const SmElementDescr aElementsArray[], sal_uInt16 size);
     SmElement* current() const;
     void setCurrentElement(sal_uInt16);
@@ -148,9 +149,9 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void );
+    DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
 
-    void SetSelectHdl(const Link<SmElement&,void>& rLink) { maSelectHdlLink = rLink; }
+    void SetSelectHdl(const Link<SmElement&, void>& rLink) { maSelectHdlLink = rLink; }
 
     rtl::Reference<AccessibleSmElementsControl> GetAccessible() const { return m_xAccessible; }
     static Color GetTextColor();
@@ -172,14 +173,12 @@ class SmElementsDockingWindow final : public SfxDockingWindow
     DECL_LINK(ElementSelectedHandle, weld::ComboBox&, void);
 
 public:
-
-    SmElementsDockingWindow( SfxBindings* pBindings,
-                             SfxChildWindow* pChildWindow,
-                             vcl::Window* pParent );
+    SmElementsDockingWindow(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
+                            vcl::Window* pParent);
     virtual ~SmElementsDockingWindow() override;
     virtual void dispose() override;
 
-    virtual void EndDocking( const tools::Rectangle& rReactangle, bool bFloatMode) override;
+    virtual void EndDocking(const tools::Rectangle& rReactangle, bool bFloatMode) override;
     virtual void ToggleFloatingMode() override;
 };
 
@@ -187,10 +186,8 @@ class SmElementsDockingWindowWrapper final : public SfxChildWindow
 {
     SFX_DECL_CHILDWINDOW_WITHID(SmElementsDockingWindowWrapper);
 
-    SmElementsDockingWindowWrapper( vcl::Window* pParentWindow,
-                                    sal_uInt16 nId,
-                                    SfxBindings* pBindings,
-                                    SfxChildWinInfo* pInfo );
+    SmElementsDockingWindowWrapper(vcl::Window* pParentWindow, sal_uInt16 nId,
+                                   SfxBindings* pBindings, SfxChildWinInfo* pInfo);
     virtual ~SmElementsDockingWindowWrapper() override;
 };
 

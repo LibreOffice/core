@@ -24,15 +24,14 @@
 
 class SmDocShell;
 
-
 class SmFormatAction final : public SfxUndoAction
 {
-    SmDocShell  *pDoc;
-    SmFormat    aOldFormat;
-    SmFormat    aNewFormat;
+    SmDocShell* pDoc;
+    SmFormat aOldFormat;
+    SmFormat aNewFormat;
 
 public:
-    SmFormatAction(SmDocShell *pDocSh, const SmFormat& rOldFormat, const SmFormat& rNewFormat);
+    SmFormatAction(SmDocShell* pDocSh, const SmFormat& rOldFormat, const SmFormat& rNewFormat);
 
     virtual void Undo() override;
     virtual void Redo() override;

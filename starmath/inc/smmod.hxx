@@ -27,7 +27,10 @@
 #include <unotools/options.hxx>
 #include <memory>
 
-namespace svtools { class ColorConfig; }
+namespace svtools
+{
+class ColorConfig;
+}
 
 class SfxObjectFactory;
 class SmSymbolManager;
@@ -48,7 +51,6 @@ class SmMathConfig;
 class SvtSysLocale;
 class VirtualDevice;
 
-
 OUString SmResId(const char* pId);
 
 class SmLocalizedSymbolData
@@ -56,11 +58,11 @@ class SmLocalizedSymbolData
 public:
     SmLocalizedSymbolData() = delete;
 
-    static OUString GetUiSymbolName( const OUString &rExportName );
-    static OUString GetExportSymbolName( const OUString &rUiName );
+    static OUString GetUiSymbolName(const OUString& rExportName);
+    static OUString GetExportSymbolName(const OUString& rUiName);
 
-    static OUString GetUiSymbolSetName( const OUString &rExportName );
-    static OUString GetExportSymbolSetName( const OUString &rUiName );
+    static OUString GetUiSymbolSetName(const OUString& rExportName);
+    static OUString GetExportSymbolSetName(const OUString& rUiName);
 };
 
 class SmModule final : public SfxModule, public utl::ConfigurationListener
@@ -69,7 +71,7 @@ class SmModule final : public SfxModule, public utl::ConfigurationListener
     std::unique_ptr<SmMathConfig> mpConfig;
     std::unique_ptr<SmLocalizedSymbolData> mpLocSymbolData;
     std::unique_ptr<SvtSysLocale> mpSysLocale;
-    VclPtr<VirtualDevice>    mpVirtualDev;
+    VclPtr<VirtualDevice> mpVirtualDev;
 
 public:
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START + SfxInterfaceId(0))
@@ -82,26 +84,28 @@ public:
     explicit SmModule(SfxObjectFactory* pObjFact);
     virtual ~SmModule() override;
 
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
+    virtual void ConfigurationChanged(utl::ConfigurationBroadcaster*, ConfigurationHints) override;
 
-    svtools::ColorConfig &  GetColorConfig();
+    svtools::ColorConfig& GetColorConfig();
 
-    SmMathConfig *          GetConfig();
-    SmSymbolManager &       GetSymbolManager();
+    SmMathConfig* GetConfig();
+    SmSymbolManager& GetSymbolManager();
 
     static void GetState(SfxItemSet&);
 
     const SvtSysLocale& GetSysLocale();
 
-    VirtualDevice &     GetDefaultVirtualDev();
+    VirtualDevice& GetDefaultVirtualDev();
 
     //virtual methods for options dialog
-    virtual std::unique_ptr<SfxItemSet> CreateItemSet( sal_uInt16 nId ) override;
-    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) override;
-    virtual std::unique_ptr<SfxTabPage> CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet ) override;
+    virtual std::unique_ptr<SfxItemSet> CreateItemSet(sal_uInt16 nId) override;
+    virtual void ApplyItemSet(sal_uInt16 nId, const SfxItemSet& rSet) override;
+    virtual std::unique_ptr<SfxTabPage> CreateTabPage(sal_uInt16 nId, weld::Container* pPage,
+                                                      weld::DialogController* pController,
+                                                      const SfxItemSet& rSet) override;
 };
 
-#define SM_MOD() ( static_cast<SmModule*>(SfxApplication::GetModule(SfxToolsModule::Math)) )
+#define SM_MOD() (static_cast<SmModule*>(SfxApplication::GetModule(SfxToolsModule::Math)))
 
 #endif // INCLUDED_STARMATH_INC_SMMOD_HXX
 
