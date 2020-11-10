@@ -18,27 +18,28 @@
  */
 
 #include <sal/log.hxx>
+#include <rtl/ustrbuf.hxx>
 #include "emfpfont.hxx"
 
 namespace emfplushelper
 {
     static OUString FontStyleToString(sal_uInt32 style)
     {
-        OUString sStyle;
+        OUStringBuffer sStyle;
 
         if (style & FontStyleBold)
             sStyle = "\n\t\t\tFontStyleBold";
 
         if (style & FontStyleItalic)
-            sStyle = sStyle.concat("\n\t\t\tFontStyleItalic");
+            sStyle.append("\n\t\t\tFontStyleItalic");
 
         if (style & FontStyleUnderline)
-            sStyle = sStyle.concat("\n\t\t\tFontStyleUnderline");
+            sStyle.append("\n\t\t\tFontStyleUnderline");
 
         if (style & FontStyleStrikeout)
-            sStyle = sStyle.concat("\n\t\t\tFontStyleStrikeout");
+            sStyle.append("\n\t\t\tFontStyleStrikeout");
 
-        return sStyle;
+        return sStyle.makeStringAndClear();
     }
 
     void EMFPFont::Read(SvMemoryStream &s)

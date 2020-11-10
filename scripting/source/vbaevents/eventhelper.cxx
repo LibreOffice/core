@@ -877,10 +877,9 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
             break;
         }
 
-        OUString sTemp = sName.concat( rTxInfo.sVBAName );
         // see if we have a match for the handlerextension
         // where ScriptCode is methodname_handlerextension
-        OUString sToResolve = sMacroLoc.concat( sTemp );
+        OUString sToResolve = sMacroLoc + sName + rTxInfo.sVBAName;
 
         ooo::vba::MacroResolvedInfo aMacroResolvedInfo = ooo::vba::resolveVBAMacro( mpShell, sToResolve );
         if ( aMacroResolvedInfo.mbFound )

@@ -127,7 +127,7 @@ ScriptingFrameworkURIHelper::initBaseURI()
     }
     else if (m_sLocation.startsWith("vnd.sun.star.tdoc"))
     {
-        m_sBaseURI = m_sLocation.concat( SCRIPTS_PART );
+        m_sBaseURI = m_sLocation + SCRIPTS_PART;
         m_sLocation = "document";
         return true;
     }
@@ -153,7 +153,7 @@ ScriptingFrameworkURIHelper::initBaseURI()
     {
         if ( bAppendScriptsPart )
         {
-            m_sBaseURI = pChild->concat( SCRIPTS_PART );
+            m_sBaseURI = *pChild + SCRIPTS_PART;
         }
         else
         {

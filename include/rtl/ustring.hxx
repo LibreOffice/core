@@ -2300,6 +2300,7 @@ public:
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
+#ifndef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
       Concatenates the specified string to the end of this string.
 
@@ -2314,6 +2315,7 @@ public:
         rtl_uString_newConcat( &pNew, pData, str.pData );
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
+#endif
 
 #ifndef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     friend OUString operator+( const OUString& rStr1, const OUString& rStr2  )
