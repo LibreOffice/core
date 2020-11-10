@@ -21,6 +21,7 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include "emfppen.hxx"
 #include "emfpcustomlinecap.hxx"
@@ -75,48 +76,48 @@ namespace emfplushelper
 
     static OUString PenDataFlagsToString(sal_uInt32 flags)
     {
-        OUString sFlags;
+        rtl::OUStringBuffer sFlags;
 
         if (flags & EmfPlusPenDataTransform)
-            sFlags = "\nEMF+\t\t\tEmfPlusPenDataTransform";
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataTransform");
 
         if (flags & EmfPlusPenDataStartCap)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataStartCap");
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataStartCap");
 
         if (flags & EmfPlusPenDataEndCap)
-             sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataEndCap");
+             sFlags.append("\nEMF+\t\t\tEmfPlusPenDataEndCap");
 
         if (flags & EmfPlusPenDataJoin)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataJoin");
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataJoin");
 
         if (flags & EmfPlusPenDataMiterLimit)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataMiterLimit");
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataMiterLimit");
 
         if (flags & EmfPlusPenDataLineStyle)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataLineStyle");
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataLineStyle");
 
         if (flags & EmfPlusPenDataDashedLineCap)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataDashedLineCap");
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataDashedLineCap");
 
         if (flags & EmfPlusPenDataDashedLineOffset)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataDashedLineOffset");
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataDashedLineOffset");
 
         if (flags & EmfPlusPenDataDashedLine)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataDashedLine");
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataDashedLine");
 
         if (flags & EmfPlusPenDataAlignment)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataAlignment");
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataAlignment");
 
         if (flags & EmfPlusPenDataCompoundLine)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataCompoundLine");
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataCompoundLine");
 
         if (flags & EmfPlusPenDataCustomStartCap)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataCustomStartCap");
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataCustomStartCap");
 
         if (flags & EmfPlusPenDataCustomEndCap)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataCustomEndCap");
+            sFlags.append("\nEMF+\t\t\tEmfPlusPenDataCustomEndCap");
 
-        return sFlags;
+        return sFlags.makeStringAndClear();
     }
 
     static OUString LineCapTypeToString(sal_uInt32 linecap)

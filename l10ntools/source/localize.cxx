@@ -211,7 +211,7 @@ bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rP
                 if (commands[i].executable == "uiex" || commands[i].executable == "hrcex")
                     sOutPath = gDestRoot + "/" + rProject + "/messages.pot";
                 else
-                    sOutPath = rPotDir.concat(".pot");
+                    sOutPath = rPotDir + ".pot";
 
                 if (!fileExists(sOutPath))
                     InitPoFile(rProject, sInPath, rPotDir, sOutPath);
@@ -363,11 +363,11 @@ void handleDirectory(
         {
             case 0: // a root directory
                 if (stat.getFileType() == osl::FileStatus::Directory && includeProject(sDirName))
-                    aSubDirs[stat.getFileURL()][sDirName] = rPotDir.concat("/").concat(sDirName);
+                    aSubDirs[stat.getFileURL()][sDirName] = rPotDir + "/" + sDirName;
                 break;
             default:
                 if (stat.getFileType() == osl::FileStatus::Directory)
-                    aSubDirs[stat.getFileURL()][rProject] = rPotDir.concat("/").concat(sDirName);
+                    aSubDirs[stat.getFileURL()][rProject] = rPotDir + "/" + sDirName;
                 else
                     aFileNames.push_back(stat.getFileURL());
                 break;

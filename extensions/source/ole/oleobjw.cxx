@@ -472,7 +472,7 @@ Any SAL_CALL IUnknownWrapper::getValue( const OUString& aPropertyName )
                         if ( SUCCEEDED( pTypeLib->GetDocumentation( -1, &sName, nullptr, nullptr, nullptr  ) ) )
                         {
                             OUString sLibName( o3tl::toU(LPCOLESTR(sName)));
-                            m_sTypeName = sLibName.concat( "." ).concat( sTmp );
+                            m_sTypeName = sLibName + "." + sTmp;
 
                         }
                     }
