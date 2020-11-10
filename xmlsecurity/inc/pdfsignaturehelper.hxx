@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_PDFSIGNATUREHELPER_HXX
-#define INCLUDED_XMLSECURITY_INC_PDFSIGNATUREHELPER_HXX
+#pragma once ///Replaced
 
 #include "xmlsecuritydllapi.h"
 
@@ -71,6 +70,6 @@ public:
                                 sal_uInt16 nPosition);
 };
 
-#endif // INCLUDED_XMLSECURITY_INC_PDFSIGNATUREHELPER_HXX
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
