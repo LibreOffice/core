@@ -136,7 +136,7 @@ void PDFiumLibraryTest::testPageObjects()
     auto pPageObject = pPage->getObject(0);
     auto pTextPage = pPage->getTextPage();
 
-    CPPUNIT_ASSERT_EQUAL(1, pPageObject->getType()); // FPDF_PAGEOBJ_TEXT
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Text, pPageObject->getType());
 
     CPPUNIT_ASSERT_EQUAL(OUString("The quick, brown fox jumps over a lazy dog. DJs flock by when "
                                   "MTV ax quiz prog. Junk MTV quiz "),
