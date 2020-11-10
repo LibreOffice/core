@@ -29,6 +29,12 @@ class chartArea(UITestCase):
 
     change_measurement_unit(self, "Centimeter")
 
+    xArea = document.Sheets[0].Charts[0].getEmbeddedObject().Area
+    self.assertEqual(xArea.LineWidth, 0)
+    self.assertEqual(xArea.LineTransparence, 0)
+    self.assertEqual(hex(xArea.FillColor), '0xffffff')
+    self.assertEqual(xArea.FillTransparence, 0)
+
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
     gridwin.executeAction("ACTIVATE", tuple())
     xChartMainTop = self.xUITest.getTopFocusWindow()
@@ -48,6 +54,11 @@ class chartArea(UITestCase):
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
+
+    self.assertEqual(xArea.LineWidth, 100)
+    self.assertEqual(xArea.LineTransparence, 5)
+    self.assertEqual(hex(xArea.FillColor), '0xffffff')
+    self.assertEqual(xArea.FillTransparence, 0)
 
     #reopen and verify tab "Borders".
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -93,6 +104,11 @@ class chartArea(UITestCase):
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
 
+    self.assertEqual(xArea.LineWidth, 100)
+    self.assertEqual(xArea.LineTransparence, 5)
+    self.assertEqual(hex(xArea.FillColor), '0x23a9d3')
+    self.assertEqual(xArea.FillTransparence, 0)
+
     #reopen and verify tab "Area".
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
     gridwin.executeAction("ACTIVATE", tuple())
@@ -124,6 +140,11 @@ class chartArea(UITestCase):
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
 
+    self.assertEqual(xArea.LineWidth, 100)
+    self.assertEqual(xArea.LineTransparence, 5)
+    self.assertEqual(hex(xArea.FillColor), '0x23a9d3')
+    self.assertEqual(xArea.FillTransparence, 51)
+
     #reopen and verify tab "Transparency"
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
     gridwin.executeAction("ACTIVATE", tuple())
@@ -144,6 +165,11 @@ class chartArea(UITestCase):
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
+
+    self.assertEqual(xArea.LineWidth, 100)
+    self.assertEqual(xArea.LineTransparence, 5)
+    self.assertEqual(hex(xArea.FillColor), '0x23a9d3')
+    self.assertEqual(xArea.FillTransparence, 51)
 
     self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
