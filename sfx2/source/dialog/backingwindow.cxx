@@ -421,6 +421,10 @@ void BackingWindow::setOwningFrame( const css::uno::Reference< css::frame::XFram
         mxDropTarget->addDropTargetListener(mxDropTargetListener);
         mxDropTarget->setActive(true);
     }
+
+    css::uno::Reference<XFramesSupplier> xFramesSupplier(mxDesktopDispatchProvider, UNO_QUERY);
+    if (xFramesSupplier)
+        xFramesSupplier->setActiveFrame(mxFrame);
 }
 
 IMPL_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, rButton, void)
