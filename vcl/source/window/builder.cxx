@@ -782,6 +782,8 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
         {
             FixedText *pLabelWidget = static_cast<FixedText*>(pLabel);
             elem->set_label(pLabelWidget->GetText());
+            if (pLabelWidget->IsControlFont())
+                elem->get_label_widget()->SetControlFont(pLabelWidget->GetControlFont());
             delete_by_window(pLabel);
         }
     }

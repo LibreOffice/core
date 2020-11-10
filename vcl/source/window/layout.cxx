@@ -1773,6 +1773,17 @@ void VclExpander::StateChanged(StateChangedType nType)
     }
 }
 
+const vcl::Window *VclExpander::get_label_widget() const
+{
+    return m_pDisclosureButton;
+}
+
+vcl::Window *VclExpander::get_label_widget()
+{
+    return const_cast<vcl::Window*>(const_cast<const VclExpander*>(this)->get_label_widget());
+}
+
+
 IMPL_LINK( VclExpander, ClickHdl, CheckBox&, rBtn, void )
 {
     vcl::Window *pChild = get_child();
