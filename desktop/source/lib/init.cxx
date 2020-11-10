@@ -468,6 +468,98 @@ static StringMap jsonToStringMap(const char* pJSON)
     return aArgs;
 }
 
+static void unoAnyToPropertyTree2(boost::property_tree::ptree& aTree, const std::string& aKey, uno::Any& aValue)
+{
+    switch (aValue.getValueTypeClass())
+    {
+    case uno::TypeClass_VOID:
+        aTree.put(aKey, "");
+        break;
+
+    case uno::TypeClass_BOOLEAN:
+        aTree.put(aKey, aValue.get<bool>());
+        break;
+
+    case uno::TypeClass_BYTE:
+    case uno::TypeClass_SHORT:
+    case uno::TypeClass_LONG:
+    case uno::TypeClass_HYPER:
+    case uno::TypeClass_UNSIGNED_SHORT:
+    case uno::TypeClass_UNSIGNED_LONG:
+    case uno::TypeClass_UNSIGNED_HYPER:
+        aTree.put(aKey, aValue.get<sal_Int64>());
+        break;
+
+    case uno::TypeClass_FLOAT:
+    case uno::TypeClass_DOUBLE:
+        aTree.put(aKey, aValue.get<double>());
+        break;
+
+    case uno::TypeClass_CHAR:
+        aTree.put(aKey, aValue.get<sal_Unicode>());
+        break;
+
+    case uno::TypeClass_STRING:
+        aTree.put(aKey, aValue.get<rtl::OUString>().toUtf8().getStr());
+        break;
+
+    case uno::TypeClass_TYPE:
+        aTree.put(aKey, aValue.get<css::uno::Type>().getTypeName());
+        break;
+
+    case uno::TypeClass_SEQUENCE:
+    {
+        uno::Sequence<uno::Any> aSeq;
+        boost::property_tree::ptree aSubTree, aChild;
+
+        if (aValue >>= aSeq)
+        {
+            for (auto it = 0; it < aSeq.getLength(); ++it)
+            {
+                aChild.clear();
+                unoAnyToPropertyTree2(aChild, "", aSeq[it]);
+                aSubTree.push_back(std::make_pair("", aChild));
+            }
+        }
+
+        if (!aKey.empty())
+            aTree.add_child(aKey, aSubTree);
+        else
+            aTree.push_back(std::make_pair("", aSubTree));
+    }
+        break;
+
+    case uno::TypeClass_ENUM:
+        aTree.put(aKey, *static_cast< const sal_Int32* >(aValue.getValue()));
+        break;
+
+    case uno::TypeClass_STRUCT:
+    {
+        uno::Any aSubAny;
+        uno::Reference< reflection::XIdlField > xField;
+        uno::Sequence< uno::Reference< reflection::XIdlField > > xFields;
+        uno::Reference< css::reflection::XIdlReflection > xIdlRef =
+            css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext());
+        uno::Reference< reflection:: XIdlClass > xIdlClass(xIdlRef->forName(aValue.getValueTypeName()));
+
+        if (xIdlClass.is())
+        {
+            xFields = xIdlClass->getFields();
+
+            for (sal_Int32 itField = 0; itField < xFields.getLength(); ++itField)
+            {
+                xField = xFields[itField];
+                aSubAny = xField->get(aValue);
+                unoAnyToPropertyTree2(aTree, std::string(xField->getName().toUtf8().getStr()), aSubAny);
+            }
+        }
+    }
+        break;
+
+    default:
+        break;
+    }
+}
 
 static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
 {
