@@ -22,6 +22,29 @@
       "revId": "38b1497dded22a6e4176f103256b27d7f5917aba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c973d9fc_60549f5f",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-11-10T22:52:55Z",
+      "side": 0,
+      "message": "Diff shows you have removed this line, as well as many others, and have made many formatting changes that do not directly relate to this patch. Please changes these back. \n\nAs has been mentioned by myself in a past comment in an abandoned go at this patch, and recently by Mike, these formatting changes increase difficulty in reviewing.",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 42
+      },
+      "revId": "38b1497dded22a6e4176f103256b27d7f5917aba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
