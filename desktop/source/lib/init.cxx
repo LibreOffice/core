@@ -62,6 +62,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/script/XDirectInvocation.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -4052,6 +4053,76 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     else if (gImpl && aCommand == ".uno:SidebarHide")
     {
         hideSidebar();
+        return;
+    }
+    else if (gImpl && aCommand.startsWith(".uno:QueryState"))
+    {
+        util::URL aURL;
+        sal_uInt16 nSID;
+        css::uno::Any aAny;
+        const OUString sId("Id");
+        css::beans::PropertyValue aProp;
+        boost::property_tree::ptree aTree;
+        std::unique_ptr<SfxPoolItem> pState;
+        css::uno::Sequence< ::css::uno::Any > aParams;
+        css::uno::Reference< css::frame::XDispatch > xDisp;
+        css::uno::Reference< css::script::XDirectInvocation > xInvoke;
+
+        SfxBindings& rBind = SfxViewFrame::Current()->GetBindings();
+        css::uno::Reference< css::frame::XFrame > xFrame(rBind.GetActiveFrame());
+        css::uno::Reference< css::frame::XDispatchProvider > xProvider(xFrame, UNO_QUERY);
+        css::uno::Reference< util::XURLTransformer > xParser(util::URLTransformer::create(xContext));
+
+        if (!xProvider.is() || !xParser.is())
+        {
+            SAL_WARN("lok", "failed to execute QueryState");
+            return;
+        }
+
+        aTree.put("commandName", pCommand);
+
+        for (auto it = aPropertyValuesVector.begin(); it != aPropertyValuesVector.end(); ++it)
+        {
+            if (!it->Name.isEmpty() && (it->Value >>= aProp))
+            {
+                if (!aProp.Name.isEmpty())
+                {
+                    if (!(aProp.Value >>= nSID))
+                    {
+                        aURL.Complete = aProp.Name;
+                        xParser->parseStrict(aURL);
+                        xDisp = xProvider->queryDispatch(aURL, OUString(), 0);
+                        xInvoke.set(xDisp, UNO_QUERY);
+                        if (xInvoke.is() && xInvoke->hasMember(sId))
+                        {
+                            aAny = xInvoke->directInvoke(sId, aParams);
+                            if (!(aAny >>= nSID))
+                            {
+                                SAL_WARN("lok", "invalid SID -> " << aProp.Name);
+                                continue;
+                            }
+                        }
+                    }
+
+                    rBind.QueryState(nSID, pState);
+                    aTree.put(sId.toUtf8().getStr(), nSID);
+                }
+
+                if (pState)
+                {
+                    pState->QueryValue(aAny);
+                    unoAnyToPropertyTree2(aTree, std::string(it->Name.toUtf8().getStr()), aAny);
+                }
+
+                pState.reset();
+                aAny.clear();
+             }
+        }
+
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        OString aPayload = aStream.str().c_str();
+        pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aPayload.getStr());
         return;
     }
 
