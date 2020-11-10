@@ -1093,6 +1093,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
                            std::vector<std::unique_ptr<PDFElement>>& rElements,
                            PDFObjectElement* pObjectElement)
 {
+    printf("Begin Tokenize\n");
     // Last seen object token.
     PDFObjectElement* pObject = pObjectElement;
     PDFNameElement* pObjectKey = nullptr;
@@ -1101,13 +1102,12 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
     // The next number will be an xref offset.
     bool bInStartXRef = false;
     // Dictionary depth, so we know when we're outside any dictionaries.
-    int nDictionaryDepth = 0;
-    // Array depth, only the offset/length of the toplevel array is tracked.
-    int nArrayDepth = 0;
+    int nDepth = 0;
     // Last seen array token that's outside any dictionaries.
     PDFArrayElement* pArray = nullptr;
     // If we're inside an obj/endobj pair.
     bool bInObject = false;
+
     while (true)
     {
         char ch;
@@ -1144,7 +1144,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
                 if (ch == '<')
                 {
                     rElements.push_back(std::unique_ptr<PDFElement>(new PDFDictionaryElement()));
-                    ++nDictionaryDepth;
+                    ++nDepth;
                 }
                 else
                     rElements.push_back(std::unique_ptr<PDFElement>(new PDFHexStringElement));
@@ -1159,7 +1159,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
             case '>':
             {
                 rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndDictionaryElement()));
-                --nDictionaryDepth;
+                --nDepth;
                 rStream.SeekRel(-1);
                 if (!rElements.back()->Read(rStream))
                 {
@@ -1171,9 +1171,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
             }
             case '[':
             {
+                printf("Token: Begin Array\n");
                 auto pArr = new PDFArrayElement(pObject);
                 rElements.push_back(std::unique_ptr<PDFElement>(pArr));
-                if (nDictionaryDepth == 0 && nArrayDepth == 0)
+                if (nDepth == 0)
                 {
                     // The array is attached directly, inform the object.
                     pArray = pArr;
@@ -1183,7 +1184,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
                         pObject->SetArrayOffset(rStream.Tell());
                     }
                 }
-                ++nArrayDepth;
+                ++nDepth;
                 rStream.SeekRel(-1);
                 if (!rElements.back()->Read(rStream))
                 {
@@ -1194,12 +1195,11 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
             }
             case ']':
             {
+                printf("Token: End Array\n");
                 rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndArrayElement()));
-                --nArrayDepth;
-                if (nArrayDepth == 0)
-                    pArray = nullptr;
+                --nDepth;
                 rStream.SeekRel(-1);
-                if (nDictionaryDepth == 0 && nArrayDepth == 0)
+                if (nDepth == 0)
                 {
                     if (pObject)
                     {
@@ -1224,6 +1224,8 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
                     SAL_WARN("vcl.filter", "PDFDocument::Tokenize: PDFNameElement::Read() failed");
                     return false;
                 }
+                printf("Token: Name %s\n", pNameElement->GetValue().getStr());
+
                 if (pObject && pObjectKey && pObjectKey->GetValue() == "Type"
                     && pNameElement->GetValue() == "ObjStm")
                     pObjectStream = pObject;
@@ -1267,7 +1269,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
                         if (it != m_aOffsetObjects.end())
                             m_pXRefStream = it->second;
                     }
-                    else if (bInObject && !nDictionaryDepth && !nArrayDepth && pObject)
+                    else if (bInObject && nDepth > 0 && pObject)
                         // Number element inside an object, but outside a
                         // dictionary / array: remember it.
                         pObject->SetNumberElement(pNumberElement);
@@ -1302,6 +1304,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
 
                         if (bObj)
                         {
+                            printf("Tokenize: Start Object\n");
                             pObject = new PDFObjectElement(*this, pObjectNumber->GetValue(),
                                                            pGenerationNumber->GetValue());
                             rElements.push_back(std::unique_ptr<PDFElement>(pObject));
@@ -1314,10 +1317,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
                             auto pReference = new PDFReferenceElement(*this, *pObjectNumber,
                                                                       *pGenerationNumber);
                             rElements.push_back(std::unique_ptr<PDFElement>(pReference));
-                            if (pArray)
-                                // Reference is part of a direct (non-dictionary) array, inform the array.
-                                pArray->PushBack(rElements.back().get());
-                            if (bInObject && nDictionaryDepth > 0 && pObject)
+                            if (bInObject && nDepth > 0 && pObject)
                                 // Inform the object about a new in-dictionary reference.
                                 pObject->AddDictionaryReference(pReference);
                         }
@@ -1388,6 +1388,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
                     }
                     else if (aKeyword == "endobj")
                     {
+                        printf("Tokenize: End Object\n");
                         rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndObjectElement));
                         if (!rElements.back()->Read(rStream))
                         {
@@ -2407,8 +2408,10 @@ bool PDFTrailerElement::Read(SvStream& rStream)
 PDFElement* PDFTrailerElement::Lookup(const OString& rDictionaryKey)
 {
     if (m_aDictionary.empty())
-        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
-
+    {
+        PDFObjectParser aParser(m_rDoc.GetElements());
+        aParser.parse(this);
+    }
     return PDFDictionaryElement::Lookup(m_aDictionary, rDictionaryKey);
 }
 
@@ -2439,257 +2442,6 @@ bool PDFObjectElement::Read(SvStream& /*rStream*/)
 }
 
 PDFDictionaryElement::PDFDictionaryElement() = default;
-
-size_t PDFDictionaryElement::Parse(const std::vector<std::unique_ptr<PDFElement>>& rElements,
-                                   PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary)
-{
-    // The index of last parsed element, in case of nested dictionaries.
-    size_t nRet = 0;
-
-    if (!rDictionary.empty())
-        return nRet;
-
-    pThis->setParsing(true);
-
-    auto pThisObject = dynamic_cast<PDFObjectElement*>(pThis);
-    // This is set to non-nullptr here for nested dictionaries only.
-    auto pThisDictionary = dynamic_cast<PDFDictionaryElement*>(pThis);
-
-    // Find out where the dictionary for this object starts.
-    size_t nIndex = 0;
-    for (size_t i = 0; i < rElements.size(); ++i)
-    {
-        if (rElements[i].get() == pThis)
-        {
-            nIndex = i;
-            break;
-        }
-    }
-
-    OString aName;
-    sal_uInt64 nNameOffset = 0;
-    std::vector<PDFNumberElement*> aNumbers;
-    // The array value we're in -- if any.
-    PDFArrayElement* pArray = nullptr;
-    sal_uInt64 nDictionaryOffset = 0;
-    int nDictionaryDepth = 0;
-    // Toplevel dictionary found (not inside an array).
-    bool bDictionaryFound = false;
-    // Toplevel array found (not inside a dictionary).
-    bool bArrayFound = false;
-    for (size_t i = nIndex; i < rElements.size(); ++i)
-    {
-        // Dictionary tokens can be nested, track enter/leave.
-        if (auto pDictionary = dynamic_cast<PDFDictionaryElement*>(rElements[i].get()))
-        {
-            bDictionaryFound = true;
-            if (++nDictionaryDepth == 1)
-            {
-                // First dictionary start, track start offset.
-                nDictionaryOffset = pDictionary->m_nLocation;
-                if (pThisObject)
-                {
-                    if (!bArrayFound)
-                        // Then the toplevel dictionary of the object.
-                        pThisObject->SetDictionary(pDictionary);
-                    pThisDictionary = pDictionary;
-                    pThisObject->SetDictionaryOffset(nDictionaryOffset);
-                }
-            }
-            else if (!pDictionary->alreadyParsing())
-            {
-                // Nested dictionary.
-                const size_t nexti
-                    = PDFDictionaryElement::Parse(rElements, pDictionary, pDictionary->m_aItems);
-                if (nexti >= i) // ensure we go forwards and not endlessly loop
-                {
-                    i = nexti;
-                    if (pArray)
-                    {
-                        // Dictionary value inside an array.
-                        pArray->PushBack(pDictionary);
-                    }
-                    else
-                    {
-                        // Dictionary toplevel value.
-                        rDictionary[aName] = pDictionary;
-                        aName.clear();
-                    }
-                }
-            }
-        }
-
-        if (auto pEndDictionary = dynamic_cast<PDFEndDictionaryElement*>(rElements[i].get()))
-        {
-            if (--nDictionaryDepth == 0)
-            {
-                // Last dictionary end, track length and stop parsing.
-                if (pThisObject)
-                    pThisObject->SetDictionaryLength(pEndDictionary->GetLocation()
-                                                     - nDictionaryOffset);
-                nRet = i;
-                break;
-            }
-        }
-
-        auto pName = dynamic_cast<PDFNameElement*>(rElements[i].get());
-        if (pName)
-        {
-            if (!aNumbers.empty())
-            {
-                PDFNumberElement* pNumber = aNumbers.back();
-                rDictionary[aName] = pNumber;
-                if (pThisDictionary)
-                {
-                    pThisDictionary->SetKeyOffset(aName, nNameOffset);
-                    pThisDictionary->SetKeyValueLength(
-                        aName, pNumber->GetLocation() + pNumber->GetLength() - nNameOffset);
-                }
-                aName.clear();
-                aNumbers.clear();
-            }
-
-            if (aName.isEmpty())
-            {
-                // Remember key.
-                aName = pName->GetValue();
-                nNameOffset = pName->GetLocation();
-            }
-            else
-            {
-                if (pArray)
-                {
-                    if (bDictionaryFound)
-                        // Array inside dictionary.
-                        pArray->PushBack(pName);
-                }
-                else
-                {
-                    // Name-name key-value.
-                    rDictionary[aName] = pName;
-                    if (pThisDictionary)
-                    {
-                        pThisDictionary->SetKeyOffset(aName, nNameOffset);
-                        pThisDictionary->SetKeyValueLength(aName, pName->GetLocation()
-                                                                      + PDFNameElement::GetLength()
-                                                                      - nNameOffset);
-                    }
-                    aName.clear();
-                }
-            }
-            continue;
-        }
-
-        auto pArr = dynamic_cast<PDFArrayElement*>(rElements[i].get());
-        if (pArr)
-        {
-            bArrayFound = true;
-            pArray = pArr;
-            continue;
-        }
-
-        auto pEndArr = dynamic_cast<PDFEndArrayElement*>(rElements[i].get());
-        if (pArray && pEndArr)
-        {
-            for (auto& pNumber : aNumbers)
-                pArray->PushBack(pNumber);
-            aNumbers.clear();
-            rDictionary[aName] = pArray;
-            if (pThisDictionary)
-            {
-                pThisDictionary->SetKeyOffset(aName, nNameOffset);
-                // Include the ending ']' in the length of the key - (array)value pair length.
-                pThisDictionary->SetKeyValueLength(aName, pEndArr->GetOffset() - nNameOffset + 1);
-            }
-            aName.clear();
-            pArray = nullptr;
-            continue;
-        }
-
-        auto pReference = dynamic_cast<PDFReferenceElement*>(rElements[i].get());
-        if (pReference)
-        {
-            if (!pArray)
-            {
-                rDictionary[aName] = pReference;
-                if (pThisDictionary)
-                {
-                    pThisDictionary->SetKeyOffset(aName, nNameOffset);
-                    pThisDictionary->SetKeyValueLength(aName,
-                                                       pReference->GetOffset() - nNameOffset);
-                }
-                aName.clear();
-            }
-            else
-            {
-                if (bDictionaryFound)
-                    // Array inside dictionary.
-                    pArray->PushBack(pReference);
-            }
-            aNumbers.clear();
-            continue;
-        }
-
-        auto pLiteralString = dynamic_cast<PDFLiteralStringElement*>(rElements[i].get());
-        if (pLiteralString)
-        {
-            rDictionary[aName] = pLiteralString;
-            if (pThisDictionary)
-                pThisDictionary->SetKeyOffset(aName, nNameOffset);
-            aName.clear();
-            continue;
-        }
-
-        auto pBoolean = dynamic_cast<PDFBooleanElement*>(rElements[i].get());
-        if (pBoolean)
-        {
-            rDictionary[aName] = pBoolean;
-            if (pThisDictionary)
-                pThisDictionary->SetKeyOffset(aName, nNameOffset);
-            aName.clear();
-            continue;
-        }
-
-        auto pHexString = dynamic_cast<PDFHexStringElement*>(rElements[i].get());
-        if (pHexString)
-        {
-            if (!pArray)
-            {
-                rDictionary[aName] = pHexString;
-                if (pThisDictionary)
-                    pThisDictionary->SetKeyOffset(aName, nNameOffset);
-                aName.clear();
-            }
-            else
-            {
-                pArray->PushBack(pHexString);
-            }
-            continue;
-        }
-
-        if (dynamic_cast<PDFEndObjectElement*>(rElements[i].get()))
-            break;
-
-        // Just remember this, so that in case it's not a reference parameter,
-        // we can handle it later.
-        auto pNumber = dynamic_cast<PDFNumberElement*>(rElements[i].get());
-        if (pNumber)
-            aNumbers.push_back(pNumber);
-    }
-
-    if (!aNumbers.empty())
-    {
-        rDictionary[aName] = aNumbers.back();
-        if (pThisDictionary)
-            pThisDictionary->SetKeyOffset(aName, nNameOffset);
-        aName.clear();
-        aNumbers.clear();
-    }
-
-    pThis->setParsing(false);
-
-    return nRet;
-}
 
 PDFElement* PDFDictionaryElement::Lookup(const std::map<OString, PDFElement*>& rDictionary,
                                          const OString& rKey)
@@ -2726,11 +2478,17 @@ void PDFObjectElement::parseIfNecessary()
     if (m_aDictionary.empty())
     {
         if (!m_aElements.empty())
+        {
             // This is a stored object in an object stream.
-            PDFDictionaryElement::Parse(m_aElements, this, m_aDictionary);
+            PDFObjectParser aParser(m_aElements);
+            aParser.parse(this);
+        }
         else
+        {
             // Normal object: elements are stored as members of the document itself.
-            PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
+            PDFObjectParser aParser(m_rDoc.GetElements());
+            aParser.parse(this);
+        }
     }
 }
 
@@ -2858,7 +2616,11 @@ void PDFObjectElement::SetStream(PDFStreamElement* pStreamElement)
 
 PDFStreamElement* PDFObjectElement::GetStream() const { return m_pStreamElement; }
 
-PDFArrayElement* PDFObjectElement::GetArray() const { return m_pArrayElement; }
+PDFArrayElement* PDFObjectElement::GetArray()
+{
+    parseIfNecessary();
+    return m_pArrayElement;
+}
 
 void PDFObjectElement::ParseStoredObjects()
 {
@@ -3292,6 +3054,349 @@ bool PDFEndArrayElement::Read(SvStream& rStream)
 }
 
 sal_uInt64 PDFEndArrayElement::GetOffset() const { return m_nOffset; }
+
+// PDFObjectParser
+
+size_t PDFObjectParser::parse(PDFElement* pParsingElement)
+{
+    // The index of last parsed element
+    size_t nReturnIndex = 0;
+
+    pParsingElement->setParsing(true);
+
+    comphelper::ScopeGuard aGuard([pParsingElement]() { pParsingElement->setParsing(false); });
+
+    // Current object, if root is an object, else nullptr
+    auto pParsingObject = dynamic_cast<PDFObjectElement*>(pParsingElement);
+
+    // Current dictionary, if root is an dictionary, else nullptr
+    auto pParsingDictionary = dynamic_cast<PDFDictionaryElement*>(pParsingElement);
+
+    // Current parsing array, if root is an array, else nullptr
+    auto pParsingArray = dynamic_cast<PDFArrayElement*>(pParsingElement);
+
+    // Find out where the dictionary for this object starts.
+    size_t nIndex = 0;
+    for (size_t i = 0; i < mrElements.size(); ++i)
+    {
+        if (mrElements[i].get() == pParsingElement)
+        {
+            nIndex = i;
+            break;
+        }
+    }
+
+    OString aName;
+    sal_uInt64 nNameOffset = 0;
+    std::vector<PDFNumberElement*> aNumbers;
+
+    sal_uInt64 nDictionaryOffset = 0;
+
+    // Current depth; 1 is current
+    int nDepth = 0;
+
+    for (size_t i = nIndex; i < mrElements.size(); ++i)
+    {
+        auto* pCurrentElement = mrElements[i].get();
+
+        // Dictionary tokens can be nested, track enter/leave.
+        if (auto pDictionary = dynamic_cast<PDFDictionaryElement*>(pCurrentElement))
+        {
+            printf("Enter Dictionary\n");
+
+            nDepth++;
+            if (nDepth == 1) // pParsingDictionary is the current one
+            {
+                // First dictionary start, track start offset.
+                nDictionaryOffset = pDictionary->GetLocation();
+                if (pParsingObject)
+                {
+                    // Then the toplevel dictionary of the object.
+                    pParsingObject->SetDictionary(pDictionary);
+                    pParsingObject->SetDictionaryOffset(nDictionaryOffset);
+                    pParsingDictionary = pDictionary;
+                }
+            }
+            else if (!pDictionary->alreadyParsing())
+            {
+                // Nested dictionary.
+                const size_t nNextElementIndex = parse(pDictionary);
+                if (nNextElementIndex >= i) // ensure we go forwards and not endlessly loop
+                {
+                    i = nNextElementIndex;
+                    if (pParsingArray)
+                    {
+                        pParsingArray->PushBack(pDictionary);
+                    }
+                    else
+                    {
+                        // Dictionary toplevel value.
+                        pParsingDictionary->insert(aName, pDictionary);
+                        aName.clear();
+                    }
+                }
+            }
+        }
+        else if (auto pEndDictionary = dynamic_cast<PDFEndDictionaryElement*>(pCurrentElement))
+        {
+            printf("End Dictionary %d\n", nDepth);
+
+            // Handle previous elements
+            if (pParsingDictionary)
+            {
+                if (!aNumbers.empty())
+                {
+                    PDFNumberElement* pNumber = aNumbers.back();
+                    pParsingDictionary->insert(aName, pNumber);
+                    pParsingDictionary->SetKeyOffset(aName, nNameOffset);
+                    pParsingDictionary->SetKeyValueLength(
+                        aName, pNumber->GetLocation() + pNumber->GetLength() - nNameOffset);
+                }
+                aName.clear();
+                aNumbers.clear();
+            }
+
+            if (nDepth == 1) // did the pParsing ended
+            {
+                // Last dictionary end, track length and stop parsing.
+                if (pParsingObject)
+                {
+                    sal_uInt64 nDictionaryLength
+                        = pEndDictionary->GetLocation() - nDictionaryOffset;
+                    pParsingObject->SetDictionaryLength(nDictionaryLength);
+                }
+                nReturnIndex = i;
+                break;
+            }
+
+            nDepth--;
+        }
+        else if (auto pCurrentName = dynamic_cast<PDFNameElement*>(pCurrentElement))
+        {
+            printf("Name\n");
+
+            // Handle previously stored number
+            if (!aNumbers.empty())
+            {
+                if (pParsingDictionary)
+                {
+                    PDFNumberElement* pNumber = aNumbers.back();
+                    pParsingDictionary->insert(aName, pNumber);
+                    pParsingDictionary->SetKeyOffset(aName, nNameOffset);
+                    pParsingDictionary->SetKeyValueLength(
+                        aName, pNumber->GetLocation() + pNumber->GetLength() - nNameOffset);
+                }
+                else if (pParsingArray)
+                {
+                    for (auto& pNumber : aNumbers)
+                        pParsingArray->PushBack(pNumber);
+                }
+                aName.clear();
+                aNumbers.clear();
+            }
+
+            if (pParsingArray)
+            {
+                // if we are in an array, just push the name to array
+                pParsingArray->PushBack(pCurrentName);
+            }
+            else if (pParsingDictionary)
+            {
+                // if we are in a dictionary, we need to store the name as a possible key
+                if (aName.isEmpty())
+                {
+                    aName = pCurrentName->GetValue();
+                    nNameOffset = pCurrentName->GetLocation();
+                }
+                else
+                {
+                    pParsingDictionary->insert(aName, pCurrentName);
+                    pParsingDictionary->SetKeyOffset(aName, nNameOffset);
+                    pParsingDictionary->SetKeyValueLength(aName, pCurrentName->GetLocation()
+                                                                     + pCurrentName->GetLength()
+                                                                     - nNameOffset);
+                }
+            }
+        }
+        else if (auto pCurrentArray = dynamic_cast<PDFArrayElement*>(pCurrentElement))
+        {
+            nDepth++;
+            if (nDepth == 1) // pParsingDictionary is the current one
+            {
+                if (pParsingObject)
+                {
+                    pParsingObject->SetArray(pCurrentArray);
+                    pParsingArray = pCurrentArray;
+                }
+            }
+            else if (!pCurrentArray->alreadyParsing())
+            {
+                const size_t nNextElementIndex = parse(pCurrentArray);
+                if (nNextElementIndex >= i) // ensure we go forwards and not endlessly loop
+                {
+                    i = nNextElementIndex;
+                    if (pParsingArray)
+                    {
+                        // Array is toplevel
+                        pParsingArray->PushBack(pCurrentArray);
+                    }
+                    else if (pParsingDictionary)
+                    {
+                        // Dictionary toplevel value.
+                        pParsingDictionary->insert(aName, pCurrentArray);
+                        aName.clear();
+                    }
+                }
+            }
+        }
+        else if (auto pCurrentEndArray = dynamic_cast<PDFEndArrayElement*>(pCurrentElement))
+        {
+            printf("End Array\n");
+
+            if (nDepth == 1) // did the pParsing ended
+            {
+                if (!aNumbers.empty())
+                {
+                    for (auto& pNumber : aNumbers)
+                        pParsingArray->PushBack(pNumber);
+                    aNumbers.clear();
+                }
+
+                // Last array end, track length and stop parsing.
+                if (pParsingObject)
+                {
+                    sal_uInt64 nDictionaryLength
+                        = pEndDictionary->GetLocation() - nDictionaryOffset;
+                    pParsingObject->SetDictionaryLength(nDictionaryLength);
+                }
+                nReturnIndex = i;
+                break;
+            }
+            else
+            {
+                if (pParsingDictionary)
+                {
+                    pParsingDictionary->SetKeyOffset(aName, nNameOffset);
+                    // Include the ending ']' in the length of the key - (array)value pair length.
+                    pParsingDictionary->SetKeyValueLength(aName, pCurrentEndArray->GetOffset()
+                                                                     - nNameOffset + 1);
+                    aName.clear();
+                }
+            }
+            nDepth--;
+        }
+        else if (auto pReference = dynamic_cast<PDFReferenceElement*>(pCurrentElement))
+        {
+            printf("Reference\n");
+
+            if (pParsingArray)
+            {
+                pParsingArray->PushBack(pReference);
+            }
+            else if (pParsingDictionary)
+            {
+                pParsingDictionary->insert(aName, pReference);
+                sal_uInt64 nLength = pReference->GetOffset() - nNameOffset;
+                pParsingDictionary->SetKeyOffset(aName, nNameOffset);
+                pParsingDictionary->SetKeyValueLength(aName, nLength);
+                aName.clear();
+            }
+            else
+            {
+                SAL_INFO("vcl.filter", "neither Dictionary or Array available");
+            }
+            aNumbers.clear();
+        }
+        else if (auto pLiteralString = dynamic_cast<PDFLiteralStringElement*>(pCurrentElement))
+        {
+            if (pParsingArray)
+            {
+                pParsingArray->PushBack(pLiteralString);
+            }
+            else if (pParsingDictionary)
+            {
+                pParsingDictionary->insert(aName, pLiteralString);
+                pParsingDictionary->SetKeyOffset(aName, nNameOffset);
+                aName.clear();
+            }
+            else
+            {
+                SAL_INFO("vcl.filter", "neither Dictionary or Array available");
+            }
+        }
+        else if (auto pBoolean = dynamic_cast<PDFBooleanElement*>(pCurrentElement))
+        {
+            if (pParsingArray)
+            {
+                pParsingArray->PushBack(pBoolean);
+            }
+            else if (pParsingDictionary)
+            {
+                pParsingDictionary->insert(aName, pBoolean);
+                pParsingDictionary->SetKeyOffset(aName, nNameOffset);
+                aName.clear();
+            }
+            else
+            {
+                SAL_INFO("vcl.filter", "neither Dictionary or Array available");
+            }
+        }
+        else if (auto pHexString = dynamic_cast<PDFHexStringElement*>(pCurrentElement))
+        {
+            if (pParsingArray)
+            {
+                pParsingArray->PushBack(pHexString);
+            }
+            else if (pParsingDictionary)
+            {
+                pParsingDictionary->insert(aName, pHexString);
+                pParsingDictionary->SetKeyOffset(aName, nNameOffset);
+                aName.clear();
+            }
+        }
+        else if (dynamic_cast<PDFEndObjectElement*>(pCurrentElement))
+        {
+            printf("End Object\n");
+
+            if (!aNumbers.empty())
+            {
+                if (pParsingArray)
+                {
+                    for (auto& pNumber : aNumbers)
+                        pParsingArray->PushBack(pNumber);
+                }
+                else if (pParsingDictionary)
+                {
+                    PDFNumberElement* pNumber = aNumbers.back();
+                    pParsingDictionary->insert(aName, pNumber);
+                    pParsingDictionary->SetKeyOffset(aName, nNameOffset);
+                    pParsingDictionary->SetKeyValueLength(
+                        aName, pNumber->GetLocation() + pNumber->GetLength() - nNameOffset);
+                }
+                else
+                {
+                    SAL_INFO("vcl.filter", "neither Dictionary or Array available");
+                }
+                aName.clear();
+                aNumbers.clear();
+            }
+            // parsing of the object is finished
+            break;
+        }
+        else if (auto pNumber = dynamic_cast<PDFNumberElement*>(pCurrentElement))
+        {
+            // Just remember this, so that in case it's not a reference parameter,
+            // we can handle it later.
+            aNumbers.push_back(pNumber);
+        }
+        else
+        {
+            printf("Unhandeled\n");
+        }
+    }
+
+    return nReturnIndex;
+}
 
 } // namespace vcl
 

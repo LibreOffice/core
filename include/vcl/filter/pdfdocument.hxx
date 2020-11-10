@@ -125,7 +125,7 @@ public:
     sal_uInt64 GetArrayOffset() const;
     void SetArrayLength(sal_uInt64 nArrayLength);
     sal_uInt64 GetArrayLength() const;
-    PDFArrayElement* GetArray() const;
+    PDFArrayElement* GetArray();
     /// Parse objects stored in this object stream.
     void ParseStoredObjects();
     std::vector<std::unique_ptr<PDFElement>>& GetStoredElements();
@@ -253,8 +253,6 @@ public:
     PDFDictionaryElement();
     bool Read(SvStream& rStream) override;
 
-    static size_t Parse(const std::vector<std::unique_ptr<PDFElement>>& rElements,
-                        PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary);
     static PDFElement* Lookup(const std::map<OString, PDFElement*>& rDictionary,
                               const OString& rKey);
     void SetKeyOffset(const OString& rKey, sal_uInt64 nOffset);
@@ -266,6 +264,11 @@ public:
     PDFObjectElement* LookupObject(const OString& rDictionaryKey);
     /// Looks up an element which is contained in this dictionary.
     PDFElement* LookupElement(const OString& rDictionaryKey);
+    sal_uInt64 GetLocation() const { return m_nLocation; }
+    void insert(OString const& rKey, PDFElement* pPDFElement)
+    {
+        m_aItems.emplace(rKey, pPDFElement);
+    }
 
     void writeString(OStringBuffer& rBuffer) override
     {
@@ -507,6 +510,19 @@ public:
     bool updateObject(sal_Int32 n) override;
     /// See vcl::PDFObjectContainer::writeBuffer().
     bool writeBuffer(const void* pBuffer, sal_uInt64 nBytes) override;
+};
+
+class VCL_DLLPUBLIC PDFObjectParser final
+{
+    const std::vector<std::unique_ptr<PDFElement>>& mrElements;
+
+public:
+    PDFObjectParser(std::vector<std::unique_ptr<PDFElement>> const& rElements)
+        : mrElements(rElements)
+    {
+    }
+
+    size_t parse(PDFElement* pParsingElement);
 };
 
 } // namespace vcl::filter
