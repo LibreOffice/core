@@ -368,6 +368,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="resize_toplevel">True</property>
                 <child>
                   <object class="GtkGrid">
                     <property name="visible">True</property>

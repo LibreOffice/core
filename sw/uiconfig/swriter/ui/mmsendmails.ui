@@ -224,6 +224,7 @@
                           <object class="GtkExpander" id="details">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="resize_toplevel">True</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="visible">True</property>

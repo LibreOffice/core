@@ -698,6 +698,7 @@
                     <property name="margin_bottom">1</property>
                     <property name="hexpand">True</property>
                     <property name="label_fill">True</property>
+                    <property name="resize_toplevel">True</property>
                     <child>
                       <object class="GtkAlignment" id="alignment5">
                         <property name="visible">True</property>
