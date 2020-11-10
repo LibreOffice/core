@@ -40,7 +40,7 @@
 #define VECT_POLY_OUTLINE_INNER 4UL
 #define VECT_POLY_OUTLINE_OUTER 8UL
 
-static void VECT_MAP( const std::unique_ptr<long []> & pMapIn, const std::unique_ptr<long []>& pMapOut, tools::Long nVal )
+static void VECT_MAP( const std::unique_ptr<tools::Long []> & pMapIn, const std::unique_ptr<tools::Long []>& pMapOut, tools::Long nVal )
 {
     pMapIn[nVal] = (nVal * 4) + 1;
     pMapOut[nVal] = pMapIn[nVal] + 5;
@@ -788,8 +788,8 @@ ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )
         const tools::Long          nNewWidth = ( nOldWidth << 2 ) + 4;
         const tools::Long          nNewHeight = ( nOldHeight << 2 ) + 4;
         const BitmapColor   aTest( pRAcc->GetBestMatchingColor( rColor ) );
-        std::unique_ptr<long[]> pMapIn(new long[ std::max( nOldWidth, nOldHeight ) ]);
-        std::unique_ptr<long[]> pMapOut(new long[ std::max( nOldWidth, nOldHeight ) ]);
+        std::unique_ptr<tools::Long[]> pMapIn(new tools::Long[ std::max( nOldWidth, nOldHeight ) ]);
+        std::unique_ptr<tools::Long[]> pMapOut(new tools::Long[ std::max( nOldWidth, nOldHeight ) ]);
         tools::Long                nX, nY, nTmpX, nTmpY;
 
         pMap = new ImplVectMap( nNewWidth, nNewHeight );

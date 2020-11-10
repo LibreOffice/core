@@ -48,7 +48,7 @@ struct SwLayoutInfo
 
     SwRect mPageFrame;
     SwRect mPagePrtArea;
-    unsigned long mnPageNumber;
+    tools::ULong mnPageNumber;
 
     sw::sidebarwindows::SidebarPosition meSidebarPosition;
 
@@ -88,7 +88,7 @@ namespace SwPostItHelper
 
     tools::Long getLayoutHeight( const SwRootFrame* pRoot );
     void setSidebarChanged( SwRootFrame* pRoot, bool bBrowseMode );
-    unsigned long getPageInfo( SwRect& rPageFrame, const SwRootFrame* , const Point& );
+    tools::ULong getPageInfo( SwRect& rPageFrame, const SwRootFrame* , const Point& );
 }
 
 class SAL_DLLPUBLIC_RTTI SwSidebarItem

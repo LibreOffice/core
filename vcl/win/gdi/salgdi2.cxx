@@ -77,9 +77,9 @@ public:
     int mnComponentSize;
     int mnComponentExchangeIndex;
 
-    long mnScanlineSize;
+    tools::Long mnScanlineSize;
 
-    ColorScanlineConverter(ScanlineFormat eSourceFormat, int nComponentSize, long nScanlineSize)
+    ColorScanlineConverter(ScanlineFormat eSourceFormat, int nComponentSize, tools::Long nScanlineSize)
         : meSourceFormat(eSourceFormat)
         , mnComponentSize(nComponentSize)
         , mnComponentExchangeIndex(0)
@@ -94,7 +94,7 @@ public:
 
     void convertScanline(sal_uInt8* pSource, sal_uInt8* pDestination)
     {
-        for (long x = 0; x < mnScanlineSize; x += mnComponentSize)
+        for (tools::Long x = 0; x < mnScanlineSize; x += mnComponentSize)
         {
             for (int i = 0; i < mnComponentSize; ++i)
             {
@@ -126,7 +126,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 
     sal_uInt8* pSource(pRead->mpBits);
     sal_uInt8* pDestination(pWrite->mpBits);
-    long readRowChange = pRead->mnScanlineSize;
+    tools::Long readRowChange = pRead->mnScanlineSize;
     if(pRead->mnFormat & ScanlineFormat::TopDown)
     {
         pSource += pRead->mnScanlineSize * (pRead->mnHeight - 1);
@@ -143,7 +143,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
                                                     4, pRead->mnScanlineSize));
     if (pConverter)
     {
-        for (long y = 0; y < pRead->mnHeight; y++)
+        for (tools::Long y = 0; y < pRead->mnHeight; y++)
         {
             pConverter->convertScanline(pSource, pDestination);
             pSource += readRowChange;
@@ -152,7 +152,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
     }
     else
     {
-        for (long y = 0; y < pRead->mnHeight; y++)
+        for (tools::Long y = 0; y < pRead->mnHeight; y++)
         {
             memcpy(pDestination, pSource, pRead->mnScanlineSize);
             pSource += readRowChange;

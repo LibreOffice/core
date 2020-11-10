@@ -926,12 +926,12 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
 
     if (pAcc)
     {
-        std::unique_ptr<long[]> pMinR(new long[nColorCount]);
-        std::unique_ptr<long[]> pMaxR(new long[nColorCount]);
-        std::unique_ptr<long[]> pMinG(new long[nColorCount]);
-        std::unique_ptr<long[]> pMaxG(new long[nColorCount]);
-        std::unique_ptr<long[]> pMinB(new long[nColorCount]);
-        std::unique_ptr<long[]> pMaxB(new long[nColorCount]);
+        std::unique_ptr<tools::Long[]> pMinR(new tools::Long[nColorCount]);
+        std::unique_ptr<tools::Long[]> pMaxR(new tools::Long[nColorCount]);
+        std::unique_ptr<tools::Long[]> pMinG(new tools::Long[nColorCount]);
+        std::unique_ptr<tools::Long[]> pMaxG(new tools::Long[nColorCount]);
+        std::unique_ptr<tools::Long[]> pMinB(new tools::Long[nColorCount]);
+        std::unique_ptr<tools::Long[]> pMaxB(new tools::Long[nColorCount]);
 
         if (pTols)
         {

@@ -1022,10 +1022,10 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
 
     // If the rows should get the same (min) height, we first have
     // to store the old row heights before deleting the frames
-    std::unique_ptr<long[]> pRowHeights;
+    std::unique_ptr<tools::Long[]> pRowHeights;
     if ( bSameHeight )
     {
-        pRowHeights.reset(new long[ rBoxes.size() ]);
+        pRowHeights.reset(new tools::Long[ rBoxes.size() ]);
         for (size_t n = 0; n < rBoxes.size(); ++n)
         {
             SwTableBox* pSelBox = rBoxes[n];
@@ -2581,7 +2581,7 @@ void CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
             CheckBoxWidth( *pLn, nBoxW );
     }
 
-    if (sal::static_int_cast< unsigned long >(std::abs(nCurrentSize - nSize)) >
+    if (sal::static_int_cast< tools::ULong >(std::abs(nCurrentSize - nSize)) >
         (COLFUZZY * rBoxes.size()))
     {
         OSL_FAIL( "Line's Boxes are too small or too large" );

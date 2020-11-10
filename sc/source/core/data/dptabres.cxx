@@ -3906,7 +3906,7 @@ void ScDPResultVisibilityData::addVisibleMember(const OUString& rDimName, const 
 
 void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criterion>& rFilters) const
 {
-    typedef std::unordered_map<OUString, long> FieldNameMapType;
+    typedef std::unordered_map<OUString, tools::Long> FieldNameMapType;
     FieldNameMapType aFieldNames;
     ScDPTableData* pData = mpSource->GetData();
     sal_Int32 nColumnCount = pData->GetColumnCount();

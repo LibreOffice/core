@@ -178,11 +178,11 @@ void ImplInitSalGDI()
         if( bDither16 )
         {
             // create DIBPattern for 16Bit dithering
-            long n;
+            tools::Long n;
 
             pSalData->mhDitherDIB = GlobalAlloc( GMEM_FIXED, sizeof( BITMAPINFOHEADER ) + 192 );
             pSalData->mpDitherDIB = static_cast<BYTE*>(GlobalLock( pSalData->mhDitherDIB ));
-            pSalData->mpDitherDiff = new long[ 256 ];
+            pSalData->mpDitherDiff = new tools::Long[ 256 ];
             pSalData->mpDitherLow = new BYTE[ 256 ];
             pSalData->mpDitherHigh = new BYTE[ 256 ];
             pSalData->mpDitherDIBData = pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER );
@@ -251,12 +251,12 @@ void ImplInitSalGDI()
         if( pSalData->mhDitherPal )
         {
             // create DIBPattern for 8Bit dithering
-            long const nSize = sizeof( BITMAPINFOHEADER ) + ( 256 * sizeof( short ) ) + 64;
-            long n;
+            tools::Long const nSize = sizeof( BITMAPINFOHEADER ) + ( 256 * sizeof( short ) ) + 64;
+            tools::Long n;
 
             pSalData->mhDitherDIB = GlobalAlloc( GMEM_FIXED, nSize );
             pSalData->mpDitherDIB = static_cast<BYTE*>(GlobalLock( pSalData->mhDitherDIB ));
-            pSalData->mpDitherDiff = new long[ 256 ];
+            pSalData->mpDitherDiff = new tools::Long[ 256 ];
             pSalData->mpDitherLow = new BYTE[ 256 ];
             pSalData->mpDitherHigh = new BYTE[ 256 ];
             pSalData->mpDitherDIBData = pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER ) + ( 256 * sizeof( short ) );

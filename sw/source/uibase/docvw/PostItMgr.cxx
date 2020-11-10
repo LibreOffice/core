@@ -603,12 +603,12 @@ bool SwPostItMgr::CalcRects()
                 }
             }
 
-            const unsigned long aPageNum = pItem->maLayoutInfo.mnPageNumber;
+            const tools::ULong aPageNum = pItem->maLayoutInfo.mnPageNumber;
             if (aPageNum > mPages.size())
             {
-                const unsigned long nNumberOfPages = mPages.size();
+                const tools::ULong nNumberOfPages = mPages.size();
                 mPages.reserve(aPageNum);
-                for (unsigned long j=0; j<aPageNum - nNumberOfPages; ++j)
+                for (tools::ULong j=0; j<aPageNum - nNumberOfPages; ++j)
                     mPages.emplace_back( new SwPostItPageItem());
             }
             mPages[aPageNum-1]->mvSidebarItems.push_back(pItem.get());
@@ -699,7 +699,7 @@ void SwPostItMgr::LayoutPostIts()
             if (!pPage->mvSidebarItems.empty())
             {
                 std::vector<SwAnnotationWin*> aVisiblePostItList;
-                unsigned long           lNeededHeight = 0;
+                tools::ULong                  lNeededHeight = 0;
                 tools::Long                    mlPageBorder = 0;
                 tools::Long                    mlPageEnd = 0;
 
@@ -933,7 +933,7 @@ void SwPostItMgr::LayoutPostIts()
         mpEditWin->EnableMapMode(false);
 }
 
-bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
+bool SwPostItMgr::BorderOverPageBorder(tools::ULong aPage) const
 {
     if ( mPages[aPage-1]->mvSidebarItems.empty() )
     {
@@ -995,7 +995,7 @@ void SwPostItMgr::PaintTile(OutputDevice& rRenderContext)
     }
 }
 
-void SwPostItMgr::Scroll(const tools::Long lScroll,const unsigned long aPage)
+void SwPostItMgr::Scroll(const tools::Long lScroll,const tools::ULong aPage)
 {
     OSL_ENSURE((lScroll % GetScrollSize() )==0,"SwPostItMgr::Scroll: scrolling by wrong value");
     // do not scroll more than necessary up or down
@@ -1047,7 +1047,7 @@ void SwPostItMgr::Scroll(const tools::Long lScroll,const unsigned long aPage)
     }
 }
 
-void SwPostItMgr::AutoScroll(const SwAnnotationWin* pPostIt,const unsigned long aPage )
+void SwPostItMgr::AutoScroll(const SwAnnotationWin* pPostIt,const tools::ULong aPage )
 {
     // otherwise all notes are visible
     if (!mPages[aPage-1]->bScrollbar)
@@ -1093,7 +1093,7 @@ void SwPostItMgr::MakeVisible(const SwAnnotationWin* pPostIt )
         mpWrtShell->MakeVisible(SwRect(mpEditWin->PixelToLogic(aNoteRect)));
 }
 
-bool SwPostItMgr::ArrowEnabled(sal_uInt16 aDirection,unsigned long aPage) const
+bool SwPostItMgr::ArrowEnabled(sal_uInt16 aDirection,tools::ULong aPage) const
 {
     switch (aDirection)
     {
@@ -1109,7 +1109,7 @@ bool SwPostItMgr::ArrowEnabled(sal_uInt16 aDirection,unsigned long aPage) const
     }
 }
 
-Color SwPostItMgr::GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) const
+Color SwPostItMgr::GetArrowColor(sal_uInt16 aDirection,tools::ULong aPage) const
 {
     if (ArrowEnabled(aDirection,aPage))
     {
@@ -1921,7 +1921,7 @@ void SwPostItMgr::PrepareView(bool bIgnoreCount)
     }
 }
 
-bool SwPostItMgr::ShowScrollbar(const unsigned long aPage) const
+bool SwPostItMgr::ShowScrollbar(const tools::ULong aPage) const
 {
     if (mPages.size() > aPage-1)
         return (mPages[aPage-1]->bScrollbar && !mbWaitingForCalcRects);
@@ -1936,7 +1936,7 @@ bool SwPostItMgr::IsHit(const Point &aPointPixel)
         const Point aPoint = mpEditWin->PixelToLogic(aPointPixel);
         const SwRootFrame* pLayout = mpWrtShell->GetLayout();
         SwRect aPageFrame;
-        const unsigned long nPageNum = SwPostItHelper::getPageInfo( aPageFrame, pLayout, aPoint );
+        const tools::ULong nPageNum = SwPostItHelper::getPageInfo( aPageFrame, pLayout, aPoint );
         if( nPageNum )
         {
             tools::Rectangle aRect;
@@ -1988,7 +1988,7 @@ vcl::Window* SwPostItMgr::IsHitSidebarWindow(const Point& rPointLogic)
     return pRet;
 }
 
-tools::Rectangle SwPostItMgr::GetBottomScrollRect(const unsigned long aPage) const
+tools::Rectangle SwPostItMgr::GetBottomScrollRect(const tools::ULong aPage) const
 {
     SwRect aPageRect = mPages[aPage-1]->mPageRect;
     Point aPointBottom = mPages[aPage-1]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
@@ -1998,7 +1998,7 @@ tools::Rectangle SwPostItMgr::GetBottomScrollRect(const unsigned long aPage) con
     return tools::Rectangle(aPointBottom,aSize);
 }
 
-tools::Rectangle SwPostItMgr::GetTopScrollRect(const unsigned long aPage) const
+tools::Rectangle SwPostItMgr::GetTopScrollRect(const tools::ULong aPage) const
 {
     SwRect aPageRect = mPages[aPage-1]->mPageRect;
     Point aPointTop = mPages[aPage-1]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
@@ -2009,7 +2009,7 @@ tools::Rectangle SwPostItMgr::GetTopScrollRect(const unsigned long aPage) const
 }
 
 //IMPORTANT: if you change the rects here, also change SwPageFrame::PaintNotesSidebar()
-bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
+bool SwPostItMgr::ScrollbarHit(const tools::ULong aPage,const Point &aPoint)
 {
     SwRect aPageRect = mPages[aPage-1]->mPageRect;
     Point aPointBottom = mPages[aPage-1]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
@@ -2101,7 +2101,7 @@ bool SwPostItMgr::HasNotes() const
     return !mvPostItFields.empty();
 }
 
-unsigned long SwPostItMgr::GetSidebarWidth(bool bPx) const
+tools::ULong SwPostItMgr::GetSidebarWidth(bool bPx) const
 {
     bool bEnableMapMode = !mpWrtShell->GetOut()->IsMapModeEnabled();
     sal_uInt16 nZoom = mpWrtShell->GetViewOptions()->GetZoom();
@@ -2111,7 +2111,7 @@ unsigned long SwPostItMgr::GetSidebarWidth(bool bPx) const
         double fScaleX = double(mpWrtShell->GetOut()->GetMapMode().GetScaleX());
         nZoom = fScaleX * 100;
     }
-    unsigned long aWidth = static_cast<unsigned long>(nZoom * 1.8);
+    tools::ULong aWidth = static_cast<tools::ULong>(nZoom * 1.8);
 
     if (bPx)
         return aWidth;
@@ -2127,7 +2127,7 @@ unsigned long SwPostItMgr::GetSidebarWidth(bool bPx) const
     }
 }
 
-unsigned long SwPostItMgr::GetSidebarBorderWidth(bool bPx) const
+tools::ULong SwPostItMgr::GetSidebarBorderWidth(bool bPx) const
 {
     if (bPx)
         return 2;

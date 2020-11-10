@@ -52,8 +52,8 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                 const tools::Long nWidth1 = pReadAcc->Width() - 1;
                 const double fRevScaleX = static_cast<double>(nWidth1) / nNewWidth1;
 
-                std::unique_ptr<long[]> pLutInt(new long[nNewWidth]);
-                std::unique_ptr<long[]> pLutFrac(new long[nNewWidth]);
+                std::unique_ptr<tools::Long[]> pLutInt(new tools::Long[nNewWidth]);
+                std::unique_ptr<tools::Long[]> pLutFrac(new tools::Long[nNewWidth]);
 
                 for (tools::Long nX = 0, nTemp = nWidth - 2; nX < nNewWidth; nX++)
                 {
@@ -148,8 +148,8 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                     const tools::Long nHeight1 = pReadAcc->Height() - 1;
                     const double fRevScaleY = static_cast<double>(nHeight1) / nNewHeight1;
 
-                    std::unique_ptr<long[]> pLutInt(new long[nNewHeight]);
-                    std::unique_ptr<long[]> pLutFrac(new long[nNewHeight]);
+                    std::unique_ptr<tools::Long[]> pLutInt(new tools::Long[nNewHeight]);
+                    std::unique_ptr<tools::Long[]> pLutFrac(new tools::Long[nNewHeight]);
 
                     for (tools::Long nY = 0, nTemp = nHeight - 2; nY < nNewHeight; nY++)
                     {

@@ -307,7 +307,7 @@ private:
     OUString        maCharBuffer;
     VclPtr< ::sd::Window>   mpOldActiveWindow;
     Link<StarBASIC*,bool>   maStarBASICGlobalErrorHdl;
-    unsigned long   mnChildMask;
+    ::tools::ULong    mnChildMask;
     bool            mbDisposed;
     bool            mbAutoSaveWasOn;
     bool            mbRehearseTimings;

@@ -359,7 +359,7 @@ void SwPageBreakWin::UpdatePosition(const std::optional<Point>& xEvtPt)
     tools::Long nPgLeft = aFrameRect.Left();
     tools::Long nPgRight = aFrameRect.Right();
 
-    unsigned long nSidebarWidth = 0;
+    tools::ULong nSidebarWidth = 0;
     const SwPostItMgr* pPostItMngr = GetEditWin()->GetView().GetWrtShell().GetPostItMgr();
     if ( pPostItMngr && pPostItMngr->HasNotes() && pPostItMngr->ShowNotes() )
         nSidebarWidth = pPostItMngr->GetSidebarBorderWidth( true ) + pPostItMngr->GetSidebarWidth( true );

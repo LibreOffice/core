@@ -2978,7 +2978,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                         nRightSpacing = nRightLine +
                                         ( ( (nWishRight+nLeftOffset) < 0 ) ?
                                             (nWishRight+nLeftOffset) :
-                                            std::max( 0L, nWishRight ) );
+                                            std::max( SwTwips(0), nWishRight ) );
                     }
                 }
                 break;
@@ -3009,7 +3009,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                         nLeftSpacing = nLeftLine +
                                        ( ( (nWishLeft+nRightOffset) < 0 ) ?
                                            (nWishLeft+nRightOffset) :
-                                           std::max( 0L, nWishLeft ) );
+                                           std::max( SwTwips(0), nWishLeft ) );
                     }
                 }
                 break;

@@ -1092,7 +1092,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
     if( rAction.mpDXAry )
     {
         mpDXAry.reset( new tools::Long[ mnLen ] );
-        memcpy( mpDXAry.get(), rAction.mpDXAry.get(), mnLen * sizeof( long ) );
+        memcpy( mpDXAry.get(), rAction.mpDXAry.get(), mnLen * sizeof( tools::Long ) );
     }
 }
 
@@ -1112,7 +1112,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
     if (nAryLen > 0)
     {
         mpDXAry.reset( new tools::Long[ nAryLen ] );
-        memcpy( mpDXAry.get(), pDXAry, nAryLen * sizeof(long) );
+        memcpy( mpDXAry.get(), pDXAry, nAryLen * sizeof(tools::Long) );
     }
 }
 

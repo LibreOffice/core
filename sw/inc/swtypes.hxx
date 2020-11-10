@@ -48,7 +48,7 @@ class CharClass;
 class CollatorWrapper;
 class LanguageTag;
 
-typedef long SwTwips;
+typedef tools::Long SwTwips;
 #define INVALID_TWIPS   LONG_MAX
 #define TWIPS_MAX       (LONG_MAX - 1)
 

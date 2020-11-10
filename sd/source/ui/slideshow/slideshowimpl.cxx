@@ -2335,7 +2335,7 @@ void SlideshowImpl::hideChildWindows()
         if( pViewFrame->GetChildWindow( nId ) )
         {
             pViewFrame->SetChildWindow( nId, false );
-            mnChildMask |= 1 << i;
+            mnChildMask |= ::tools::ULong(1) << i;
         }
     }
 }
@@ -2349,7 +2349,7 @@ void SlideshowImpl::showChildWindows()
         {
             for( sal_uLong i = 0; i < SAL_N_ELEMENTS(aShowChildren); i++ )
             {
-                if( mnChildMask & ( 1 << i ) )
+                if( mnChildMask & ( ::tools::ULong(1) << i ) )
                     pViewFrame->SetChildWindow( ( *aShowChildren[ i ] )(), true );
             }
         }

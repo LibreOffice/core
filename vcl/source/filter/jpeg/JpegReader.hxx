@@ -36,11 +36,11 @@ enum ReadState
 
 struct JPEGCreateBitmapParam
 {
-    unsigned long nWidth;
-    unsigned long nHeight;
-    unsigned long density_unit;
-    unsigned long X_density;
-    unsigned long Y_density;
+    tools::ULong nWidth;
+    tools::ULong nHeight;
+    tools::ULong density_unit;
+    tools::ULong X_density;
+    tools::ULong Y_density;
 
     bool bGray;
 };

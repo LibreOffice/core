@@ -319,7 +319,7 @@ tools::Rectangle SwCommentRuler::GetCommentControlRegion()
     if (!pPostItMgr)
         return tools::Rectangle();
 
-    const unsigned long nSidebarWidth = pPostItMgr->GetSidebarWidth(true);
+    const tools::ULong nSidebarWidth = pPostItMgr->GetSidebarWidth(true);
 
     //FIXME When the page width is larger then screen, the ruler is misplaced by one pixel
     tools::Long nLeft = GetPageOffset();

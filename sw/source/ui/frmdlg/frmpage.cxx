@@ -1837,10 +1837,10 @@ void SwFramePage::RangeModifyHdl()
 
     if (aVal.bAutoHeight && (m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog"))
     {
-        SwTwips nTmp = std::min(nWidth * nMaxHeight / std::max(nHeight, 1L), nMaxHeight);
+        SwTwips nTmp = std::min(nWidth * nMaxHeight / std::max(nHeight, SwTwips(1)), nMaxHeight);
         m_xWidthED->set_max(m_xWidthED->NormalizePercent(nTmp), FieldUnit::TWIP);
 
-        nTmp = std::min(nHeight * nMaxWidth / std::max(nWidth, 1L), nMaxWidth);
+        nTmp = std::min(nHeight * nMaxWidth / std::max(nWidth, SwTwips(1)), nMaxWidth);
         m_xHeightED->set_max(m_xWidthED->NormalizePercent(nTmp), FieldUnit::TWIP);
     }
     else

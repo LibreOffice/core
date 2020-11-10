@@ -67,7 +67,7 @@ using namespace vcl;
 
 static FIXED FixedFromDouble( double d )
 {
-    const long l = static_cast<tools::Long>( d * 65536. );
+    const tools::Long l = static_cast<tools::Long>( d * 65536. );
     return *reinterpret_cast<FIXED const *>(&l);
 }
 
@@ -593,10 +593,10 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
         rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
         rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
 
-        long nFontHeight = rLogFont.lfHeight;
+        tools::Long nFontHeight = rLogFont.lfHeight;
         if ( nFontHeight < 0 )
             nFontHeight = -nFontHeight;
-        long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
+        tools::Long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
         if( !nDPIY )
             nDPIY = 600;
         nFontHeight *= 72;
@@ -1344,8 +1344,8 @@ bool WinFontInstance::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& 
         // of previous segment
         sal_uInt16 nPnt = 0;
 
-        long nX = IntTimes256FromFixed( pHeader->pfxStart.x );
-        long nY = IntTimes256FromFixed( pHeader->pfxStart.y );
+        tools::Long nX = IntTimes256FromFixed( pHeader->pfxStart.x );
+        tools::Long nY = IntTimes256FromFixed( pHeader->pfxStart.y );
         pPoints[ nPnt ] = Point( nX, nY );
         pFlags[ nPnt++ ] = PolyFlags::Normal;
 

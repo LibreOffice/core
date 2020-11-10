@@ -116,7 +116,7 @@ class CellInfo
 {
     SwRect m_aRect;
     WW8TableNodeInfo * m_pNodeInfo;
-    unsigned long m_nFormatFrameWidth;
+    tools::ULong m_nFormatFrameWidth;
 
 public:
     CellInfo(const SwRect & aRect, WW8TableNodeInfo * pNodeInfo);
@@ -139,12 +139,12 @@ public:
     const SwRect& getRect() const { return m_aRect; }
     WW8TableNodeInfo * getTableNodeInfo() const
     { return m_pNodeInfo; }
-    unsigned long getFormatFrameWidth() const
+    tools::ULong getFormatFrameWidth() const
     {
         return m_nFormatFrameWidth;
     }
 
-    void setFormatFrameWidth(unsigned long nFormatFrameWidth)
+    void setFormatFrameWidth(tools::ULong nFormatFrameWidth)
     {
         m_nFormatFrameWidth = nFormatFrameWidth;
     }
@@ -256,7 +256,7 @@ public:
 class WW8TableCellGrid
 {
     typedef std::set<tools::Long> RowTops_t;
-    typedef std::map<long, WW8TableCellGridRow::Pointer_t> Rows_t;
+    typedef std::map<tools::Long, WW8TableCellGridRow::Pointer_t> Rows_t;
 
     RowTops_t m_aRowTops;
     Rows_t m_aRows;
@@ -274,7 +274,7 @@ public:
     ~WW8TableCellGrid();
 
     void insert(const SwRect & rRect, WW8TableNodeInfo * pNodeInfo,
-                unsigned long const * pFormatFrameWidth = nullptr);
+                tools::ULong const * pFormatFrameWidth = nullptr);
     void addShadowCells();
     WW8TableNodeInfo *connectCells(RowEndInners_t &rLastRowEnds);
 

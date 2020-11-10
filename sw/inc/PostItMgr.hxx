@@ -147,15 +147,15 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         void            AddPostIts(bool bCheckExistence = true,bool bFocus = true);
         void            RemoveSidebarWin();
         void            PreparePageContainer();
-        void            Scroll(const tools::Long lScroll,const unsigned long aPage );
-        void            AutoScroll(const sw::annotation::SwAnnotationWin* pPostIt,const unsigned long aPage );
-        bool            ScrollbarHit(const unsigned long aPage,const Point &aPoint);
+        void            Scroll(const tools::Long lScroll,const tools::ULong aPage );
+        void            AutoScroll(const sw::annotation::SwAnnotationWin* pPostIt,const tools::ULong aPage );
+        bool            ScrollbarHit(const tools::ULong aPage,const Point &aPoint);
         bool            LayoutByPage( std::vector<sw::annotation::SwAnnotationWin*> &aVisiblePostItList,
                                       const tools::Rectangle& rBorder,
                                       tools::Long lNeededHeight);
         void            CheckForRemovedPostIts();
-        bool            ArrowEnabled(sal_uInt16 aDirection,unsigned long aPage) const;
-        bool            BorderOverPageBorder(unsigned long aPage) const;
+        bool            ArrowEnabled(sal_uInt16 aDirection,tools::ULong aPage) const;
+        bool            BorderOverPageBorder(tools::ULong aPage) const;
         bool            HasScrollbars() const;
         void            Focus(SfxBroadcaster& rBC);
 
@@ -185,12 +185,12 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
 
         void MakeVisible( const sw::annotation::SwAnnotationWin* pPostIt);
 
-        bool ShowScrollbar(const unsigned long aPage) const;
+        bool ShowScrollbar(const tools::ULong aPage) const;
         bool HasNotes() const ;
         bool ShowNotes() const;
         bool IsShowAnchor() const { return mbIsShowAnchor;}
-        unsigned long GetSidebarWidth(bool bPx = false) const;
-        unsigned long GetSidebarBorderWidth(bool bPx = false) const;
+        tools::ULong GetSidebarWidth(bool bPx = false) const;
+        tools::ULong GetSidebarBorderWidth(bool bPx = false) const;
 
         void PrepareView(bool bIgnoreCount = false);
 
@@ -215,13 +215,13 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
 
         void Rescale();
 
-        tools::Rectangle GetBottomScrollRect(const unsigned long aPage) const;
-        tools::Rectangle GetTopScrollRect(const unsigned long aPage) const;
+        tools::Rectangle GetBottomScrollRect(const tools::ULong aPage) const;
+        tools::Rectangle GetTopScrollRect(const tools::ULong aPage) const;
 
         bool IsHit(const Point &aPointPixel);
         /// Get the matching window that is responsible for handling mouse events of rPointLogic, if any.
         vcl::Window* IsHitSidebarWindow(const Point& rPointLogic);
-        Color GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) const;
+        Color GetArrowColor(sal_uInt16 aDirection, tools::ULong aPage) const;
 
         sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pField) const;
         sw::annotation::SwAnnotationWin* GetAnnotationWin(const sal_uInt32 nPostItId) const;

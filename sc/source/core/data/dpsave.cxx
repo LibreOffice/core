@@ -1213,7 +1213,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
         return;
 
     // First, build a dimension name-to-index map.
-    typedef std::unordered_map<OUString, long> NameIndexMap;
+    typedef std::unordered_map<OUString, tools::Long> NameIndexMap;
     NameIndexMap aMap;
     tools::Long nColCount = pData->GetColumnCount();
     for (tools::Long i = 0; i < nColCount; ++i)
@@ -1255,7 +1255,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
 
 void ScDPSaveData::SyncAllDimensionMembers(ScDPTableData* pData)
 {
-    typedef std::unordered_map<OUString, long> NameIndexMap;
+    typedef std::unordered_map<OUString, tools::Long> NameIndexMap;
 
     // First, build a dimension name-to-index map.
     NameIndexMap aMap;

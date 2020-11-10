@@ -199,7 +199,7 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase,
         return pResult;
 
     const SwFormatFrameSize &rSize = pFormat->GetFrameSize();
-    unsigned long nTableSz = static_cast<unsigned long>(rSize.GetWidth());
+    tools::ULong nTableSz = static_cast<tools::ULong>(rSize.GetWidth());
 
     tools::Long nPageSize = 0;
     bool bRelBoxSize = false;
@@ -1076,7 +1076,7 @@ CellInfoMultiSet::const_iterator WW8TableCellGrid::getCellsEnd(tools::Long nTop)
 
 void WW8TableCellGrid::insert(const SwRect & rRect,
                               WW8TableNodeInfo * pNodeInfo,
-                              const unsigned long * pFormatFrameWidth)
+                              const tools::ULong * pFormatFrameWidth)
 {
     CellInfo aCellInfo(rRect, pNodeInfo);
 
@@ -1117,7 +1117,7 @@ void WW8TableCellGrid::addShadowCells()
                     *aRowSpanIt < aCellIt->bottom())
                 {
                     aRect.Top(*aRowSpanIt);
-                    unsigned long nFormatFrameWidth = aCellIt->getFormatFrameWidth();
+                    tools::ULong nFormatFrameWidth = aCellIt->getFormatFrameWidth();
                     insert(aRect, nullptr, &nFormatFrameWidth);
 
                     bVertMerge = true;

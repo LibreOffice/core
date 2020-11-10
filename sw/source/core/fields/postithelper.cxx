@@ -222,9 +222,9 @@ void SwPostItHelper::setSidebarChanged( SwRootFrame* pRoot, bool bBrowseMode )
     }
 }
 
-unsigned long SwPostItHelper::getPageInfo( SwRect& rPageFrame, const SwRootFrame* pRoot, const Point& rPoint )
+tools::ULong SwPostItHelper::getPageInfo( SwRect& rPageFrame, const SwRootFrame* pRoot, const Point& rPoint )
 {
-    unsigned long nRet = 0;
+    tools::ULong nRet = 0;
     const SwFrame* pPage = pRoot->GetPageAtPos( rPoint, nullptr, true );
     if( pPage )
     {

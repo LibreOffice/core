@@ -200,7 +200,7 @@ void MysqlTestDriver::testIntegerInsertAndQuery()
     Reference<XColumnLocate> xColumnLocate(xResultSet, UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("cannot extract row from result set!", xRow.is());
 
-    for (long i = 0; i < ROW_COUNT; ++i)
+    for (tools::Long i = 0; i < ROW_COUNT; ++i)
     {
         bool hasRow = xResultSet->next();
         CPPUNIT_ASSERT_MESSAGE("not enough result after query", hasRow);

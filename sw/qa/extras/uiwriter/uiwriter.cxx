@@ -1286,7 +1286,7 @@ void SwUiWriterTest::testWatermarkPosition()
     const int aAdditionalPagesCount[] = {    0,     0,    1,     1,    5,     5,   20,    20 };
     const bool aChangeHeader[]        = { true, false, true, false, true, false, true, false };
 
-    for (unsigned long i = 0; i < sizeof(aAdditionalPagesCount) / sizeof(int); ++i)
+    for (tools::ULong i = 0; i < sizeof(aAdditionalPagesCount) / sizeof(int); ++i)
     {
         int aPages = aPagesInDocument + aAdditionalPagesCount[i];
 

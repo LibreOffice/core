@@ -20,11 +20,12 @@
 #ifndef INCLUDED_SW_INC_SWNUMBERTREETYPES_HXX
 #define INCLUDED_SW_INC_SWNUMBERTREETYPES_HXX
 
+#include <tools/long.hxx>
 #include <vector>
 
 namespace SwNumberTree
 {
-    typedef long tSwNumTreeNumber;
+    typedef tools::Long tSwNumTreeNumber;
     typedef std::vector<tSwNumTreeNumber> tNumberVector;
 }
 

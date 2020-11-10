@@ -862,7 +862,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
                 const tools::Long nRead = aCodec.Read(*pMemStm, aData.data() + nDataPos, sal_uInt32(nToRead));
                 if (nRead > 0)
                 {
-                    nDataPos += static_cast<unsigned long>(nRead);
+                    nDataPos += static_cast<tools::ULong>(nRead);
                     // we haven't read everything yet: resize buffer and continue
                     if (nDataPos < nUncodedSize)
                         aData.resize(aData.size() + nSizeInc);

@@ -64,8 +64,7 @@ static void GetAddonNotebookBarItem(const css::uno::Sequence<css::beans::Propert
 static void CreateNotebookBarToolBox(vcl::Window* pNotebookbarToolBox,
                                      const css::uno::Reference<css::frame::XFrame>& m_xFrame,
                                      const AddonNotebookBarItem& aAddonNotebookBarItem,
-                                     const std::vector<Image>& aImageVec,
-                                     const unsigned long& nIter)
+                                     const std::vector<Image>& aImageVec, const tools::ULong& nIter)
 {
     sal_uInt16 nItemId = 0;
     ToolBox* pToolbox = dynamic_cast<ToolBox*>(pNotebookbarToolBox);
@@ -111,7 +110,7 @@ void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWi
                             VclBuilder::stringmap& rMap)
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
-    unsigned long nIter = 0;
+    tools::ULong nIter = 0;
     sal_uInt16 nPriorityIdx = aImageVec.size();
     css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension;
     for (std::size_t nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
@@ -147,7 +146,7 @@ void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OStri
                                 NotebookBarAddonsItem& aNotebookBarAddonsItem)
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
-    unsigned long nIter = 0;
+    tools::ULong nIter = 0;
     css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension;
     for (std::size_t nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
     {
