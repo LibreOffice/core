@@ -112,6 +112,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="spellmenu|accept">Accept Change</property>
         <property name="use_underline">True</property>
+        <property name="action_name">.uno:AcceptTrackedChange</property>
       </object>
     </child>
     <child>
@@ -120,6 +121,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="spellmenu|reject">Reject Change</property>
         <property name="use_underline">True</property>
+        <property name="action_name">.uno:RejectTrackedChange</property>
       </object>
     </child>
     <child>
@@ -128,6 +130,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="spellmenu|next">Next Change</property>
         <property name="use_underline">True</property>
+        <property name="action_name">.uno:NextTrackedChange</property>
       </object>
     </child>
     <child>
@@ -136,6 +139,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="spellmenu|prev">Previous Change</property>
         <property name="use_underline">True</property>
+        <property name="action_name">.uno:PreviousTrackedChange</property>
       </object>
     </child>
   </object>
