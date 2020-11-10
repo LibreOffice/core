@@ -6538,13 +6538,6 @@ if test "$build_os" = "cygwin"; then
 fi
 
 dnl ===================================================================
-dnl Check if stdc headers are available excluding MSVC.
-dnl ===================================================================
-if test "$_os" != "WINNT"; then
-    AC_HEADER_STDC
-fi
-
-dnl ===================================================================
 dnl Testing for C++ compiler and version...
 dnl ===================================================================
 
