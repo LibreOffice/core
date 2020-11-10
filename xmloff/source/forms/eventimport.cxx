@@ -32,8 +32,8 @@ namespace xmloff
     using namespace ::com::sun::star::container;
 
     //= OFormEventsImportContext
-    OFormEventsImportContext::OFormEventsImportContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rLocalName, IEventAttacher& _rEventAttacher)
-        :XMLEventsImportContext(_rImport, _nPrefix, _rLocalName)
+    OFormEventsImportContext::OFormEventsImportContext(SvXMLImport& _rImport, IEventAttacher& _rEventAttacher)
+        :XMLEventsImportContext(_rImport)
         ,m_rEventAttacher(_rEventAttacher)
     {
     }

@@ -137,6 +137,9 @@ algorithm
 align
 all
 allow-empty-cell
+allow-deletes
+allow-inserts
+allow-updates
 alphabetical-index
 alphabetical-index-auto-mark-file
 alphabetical-index-entry-template
@@ -285,6 +288,7 @@ button2
 button3
 button4
 buttons
+button-type
 bvar
 c
 calculation-settings
@@ -408,6 +412,7 @@ contrast
 control
 conversion-mode
 conversion-type
+convert-empty-to-null
 copy-back
 copy-formulas
 copy-outline-levels
@@ -532,6 +537,7 @@ decorate-words-only
 decorative
 deep
 default
+default-button
 default-cell-style-name
 default-style
 default-style-name
@@ -604,6 +610,7 @@ drawpool
 dropdown
 drop-cap
 dynamic
+echo-char
 edge-rounding
 editable
 editing-cycles
@@ -622,6 +629,7 @@ empty-line-refresh
 enable-numbering
 enabled
 encoding
+enctype
 end
 end-angle
 end-cell-address
@@ -729,6 +737,7 @@ floating-frame
 floor
 fn
 focal-length
+focus-on-click
 font-char-width
 font-charset
 font-charset-asian
@@ -800,6 +809,7 @@ footnote-ref
 footnote-sep
 footnotes-configuration
 footnotes-position
+for
 forall
 force-manual
 foreground
@@ -937,6 +947,7 @@ identify-categories
 ideograph-alpha
 ignore-case
 ignore-empty-rows
+ignore-result
 ignore-selected-page
 illustration-index
 illustration-index-entry-template
@@ -971,6 +982,7 @@ index-title-template
 information
 initial-creator
 inproceedings
+input-required
 insert-columns
 insert-rows
 insertion
@@ -994,6 +1006,7 @@ is-hidden
 is-selection
 isbn
 italic
+item
 iteration
 journal
 justified
@@ -1218,6 +1231,8 @@ mtd
 mtext
 mtr
 multi-deletion-spanned
+multi-line
+multiple
 munder
 munderover
 name
@@ -1225,6 +1240,7 @@ name-and-extension
 named-expression
 named-expressions
 named-range
+navigation-mode
 navy
 negative-color
 neq
@@ -1332,6 +1348,7 @@ page-name
 page-number
 page-number-visible
 page-start-margin
+page-step-size
 page-style-name
 page-thumbnail
 page-usage
@@ -1685,6 +1702,7 @@ start-shape
 start-table
 start-value
 start-with-navigator
+state
 statistics
 status
 stay-on-top
@@ -1739,6 +1757,8 @@ symbol-image-name
 symbol-width
 system
 tab-color
+tab-cycle
+tab-index
 tab-stop
 tab-stop-distance
 tab-stops
@@ -1846,6 +1866,7 @@ to-upper-right
 toc-mark
 toc-mark-end
 toc-mark-start
+toggle
 top
 top-left
 TOP_PERCENT_DUMMY
@@ -1928,6 +1949,7 @@ user-index-mark-start
 user-index-source
 user-transformed
 username
+validation
 value
 value-type
 values-cell-range-address
@@ -1967,6 +1989,7 @@ visible-area-left
 visible-area-top
 visible-area-width
 visited-style-name
+visual-effect
 volatile
 volume
 vpn
