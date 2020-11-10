@@ -11,6 +11,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <o3tl/cppunittraitshelper.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 
 #include <unicode/uvernum.h>
