@@ -16150,26 +16150,29 @@ private:
         GtkInstanceExpander* pThis = static_cast<GtkInstanceExpander*>(widget);
         SolarMutexGuard aGuard;
 
-        GtkWidget *pToplevel = gtk_widget_get_toplevel(GTK_WIDGET(pExpander));
-
-        // https://gitlab.gnome.org/GNOME/gtk/issues/70
-        // I imagine at some point a release with a fix will be available in which
-        // case this can be avoided depending on version number
-        if (pToplevel && GTK_IS_WINDOW(pToplevel) && gtk_widget_get_realized(pToplevel))
+        if (gtk_expander_get_resize_toplevel(pExpander))
         {
-            int nToplevelWidth, nToplevelHeight;
-            int nChildHeight;
+            GtkWidget *pToplevel = gtk_widget_get_toplevel(GTK_WIDGET(pExpander));
 
-            GtkWidget* child = gtk_bin_get_child(GTK_BIN(pExpander));
-            gtk_widget_get_preferred_height(child, &nChildHeight, nullptr);
-            gtk_window_get_size(GTK_WINDOW(pToplevel), &nToplevelWidth, &nToplevelHeight);
+            // https://gitlab.gnome.org/GNOME/gtk/issues/70
+            // I imagine at some point a release with a fix will be available in which
+            // case this can be avoided depending on version number
+            if (pToplevel && GTK_IS_WINDOW(pToplevel) && gtk_widget_get_realized(pToplevel))
+            {
+                int nToplevelWidth, nToplevelHeight;
+                int nChildHeight;
 
-            if (pThis->get_expanded())
-                nToplevelHeight += nChildHeight;
-            else
-                nToplevelHeight -= nChildHeight;
+                GtkWidget* child = gtk_bin_get_child(GTK_BIN(pExpander));
+                gtk_widget_get_preferred_height(child, &nChildHeight, nullptr);
+                gtk_window_get_size(GTK_WINDOW(pToplevel), &nToplevelWidth, &nToplevelHeight);
 
-            gtk_window_resize(GTK_WINDOW(pToplevel), nToplevelWidth, nToplevelHeight);
+                if (pThis->get_expanded())
+                    nToplevelHeight += nChildHeight;
+                else
+                    nToplevelHeight -= nChildHeight;
+
+                gtk_window_resize(GTK_WINDOW(pToplevel), nToplevelWidth, nToplevelHeight);
+            }
         }
 
         pThis->signal_expanded();
