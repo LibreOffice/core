@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "182e535f_dfc6814e",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-10T17:27:51Z",
+      "side": 1,
+      "message": "Moved around.",
+      "parentUuid": "84ad3334_1bb441b0",
+      "revId": "fef1916b363a50187540ad52d41b065130e5092a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6383648d_bac196b6",
         "filename": "starmath/inc/strings.hxx",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "fef1916b363a50187540ad52d41b065130e5092a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5073d772_1d5dc754",
+        "filename": "starmath/inc/strings.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-10T17:27:51Z",
+      "side": 1,
+      "message": "Didn\u0027t changed because it is the same color in html standar.\nUsed that name instead beccause is yhe one that appears in MDN documentation.\nThat\u0027s why I didn\u0027t wanted to break translations.",
+      "parentUuid": "6383648d_bac196b6",
+      "revId": "fef1916b363a50187540ad52d41b065130e5092a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "87b6b9b7_696b048e",
+        "filename": "starmath/source/mathmlexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-10T17:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d40d5e39_6fbf1c62",
+      "revId": "fef1916b363a50187540ad52d41b065130e5092a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fdc3e592_a6120113",
         "filename": "starmath/source/node.cxx",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "fef1916b363a50187540ad52d41b065130e5092a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c93356d1_a17b8bd4",
+        "filename": "starmath/source/node.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1630,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-10T17:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdc3e592_a6120113",
+      "revId": "fef1916b363a50187540ad52d41b065130e5092a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
