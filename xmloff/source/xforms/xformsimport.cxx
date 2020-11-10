@@ -62,6 +62,12 @@ SvXMLImportContext* createXFormsModelContext(
     return new XFormsModelContext( rImport, nPrefix, rLocalName );
 }
 
+SvXMLImportContext* createXFormsModelContext(
+    SvXMLImport& rImport )
+{
+    return new XFormsModelContext( rImport );
+}
+
 void bindXFormsValueBinding(Reference<XModel> const& xModel,
                             const pair<Reference<XPropertySet>, OUString>& aPair)
 {

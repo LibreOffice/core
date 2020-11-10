@@ -38,7 +38,7 @@ namespace xmloff
         IEventAttacher& m_rEventAttacher;
 
     public:
-        OFormEventsImportContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rLocalName,
+        OFormEventsImportContext(SvXMLImport& _rImport,
             IEventAttacher& _rEventAttacher);
 
     protected:
