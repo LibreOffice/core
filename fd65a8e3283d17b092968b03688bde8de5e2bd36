@@ -22,6 +22,30 @@
       "revId": "fd65a8e3283d17b092968b03688bde8de5e2bd36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "121f229f_c649a383",
+        "filename": "cui/uiconfig/ui/borderpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-10T08:53:13Z",
+      "side": 1,
+      "message": "No opinion. Would have expected Adolfo to object if a problem. \nIf little \"g\", then probably also little \"b\" with black.   \n\nProbably just an intuitive idea that by putting a period after each item, then need to \"start\" sentence with upper case.  (general UI style with \"sentence\" case.)  And also with \"upper case\" then the \"important\" or \"relevant\" information that appears visually in UI is highlighted in tooltip.  (post facto explanations)\n\nWhat do you think?",
+      "parentUuid": "588dbff4_d029eaea",
+      "range": {
+        "startLine": 96,
+        "startChar": 173,
+        "endLine": 96,
+        "endChar": 174
+      },
+      "revId": "fd65a8e3283d17b092968b03688bde8de5e2bd36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
