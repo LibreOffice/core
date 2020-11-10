@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
+#include <com/sun/star/script/XDirectInvocation.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -65,7 +66,9 @@ public:
 
 class SfxSlotServer;
 class SfxDispatchController_Impl;
-class SfxOfficeDispatch : public cppu::ImplInheritanceHelper<SfxStatusDispatcher, css::lang::XUnoTunnel>
+class SfxOfficeDispatch : public cppu::ImplInheritanceHelper<SfxStatusDispatcher,
+                                                             css::lang::XUnoTunnel,
+                                                             css::script::XDirectInvocation>
 {
 friend class SfxDispatchController_Impl;
     std::unique_ptr<SfxDispatchController_Impl>  pImpl;
@@ -90,6 +93,10 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override ;
     static const css::uno::Sequence< sal_Int8 >& impl_getStaticIdentifier();
+
+    // XDirectInvocation
+    virtual css::uno::Any SAL_CALL directInvoke( const OUString& aName, const css::uno::Sequence< css::uno::Any >& aParams ) override;
+    virtual sal_Bool SAL_CALL hasMember( const OUString& aName ) override;
 
     static bool             IsMasterUnoCommand( const css::util::URL& aURL );
     static OUString         GetMasterUnoCommand( const css::util::URL& aURL );
