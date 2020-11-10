@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83f3dea0_73d94f99",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-10T14:40:45Z",
+      "side": 0,
+      "message": "Additionally to the changed ends of lines which you need to revert, you also should *not* make formatting changes to the lines otherwise unaffected by your patch. E.g., here you removed whitespaces in the function definition that is otherwise unchanged. The unrelated formatting edits make reviewing difficult.\n\nIf you intend to re-format something, please use a separate dedicated commit for that.\n\nThe lines that you should change back are (numbered by new version):\n\n30-32; 47; 49; 60-61; 92; 102-104; 108; 112; 126; ... I hope you get the idea.\n\nSame for the hxx.",
+      "range": {
+        "startLine": 30,
+        "startChar": 30,
+        "endLine": 30,
+        "endChar": 31
+      },
+      "revId": "38b1497dded22a6e4176f103256b27d7f5917aba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
