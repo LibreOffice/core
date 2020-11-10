@@ -33,10 +33,10 @@ constexpr double convertPointToTwip(double fNumber) { return fNumber * 20.0; }
 
 constexpr double convertPointToMm100(double fNumber) { return fNumber * (2540.0 / 72.0); }
 
-// Convert PPT's "master unit" (1/576 inch) to twips
-constexpr sal_Int64 convertMasterUnitToTwip(sal_Int64 n) { return n * 2540.0 / 576.0; }
+// Convert PPT's "master unit" (1/576 inch) to mm/100
+constexpr sal_Int64 convertMasterUnitToMm100(sal_Int64 n) { return n * (2540.0 / 576.0); }
 
-// Convert twips to PPT's "master unit"
-constexpr sal_Int64 convertTwipToMasterUnit(sal_Int64 n) { return n / (2540.0 / 576.0); }
+// Convert mm/100 to PPT's "master unit"
+constexpr sal_Int64 convertMm100ToMasterUnit(sal_Int64 n) { return n / (2540.0 / 576.0); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

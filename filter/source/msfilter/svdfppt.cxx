@@ -6307,7 +6307,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
                 case 3 :    eTabAdjust = SvxTabAdjust::Decimal; break;
                 default :   eTabAdjust = SvxTabAdjust::Left;
             }
-            aTabItem.Insert(SvxTabStop(convertMasterUnitToTwip(nTab), eTabAdjust));
+            aTabItem.Insert(SvxTabStop(convertMasterUnitToMm100(nTab), eTabAdjust));
         }
         nLatestManTab = nTab;
     }
@@ -6320,7 +6320,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
         nTab = nDefaultTab * ( 1 + nTab );
         for ( i = 0; ( i < 20 ) && ( nTab < 0x1b00 ); i++ )
         {
-            aTabItem.Insert( SvxTabStop( convertMasterUnitToTwip(nTab)));
+            aTabItem.Insert( SvxTabStop( convertMasterUnitToMm100(nTab)));
             nTab += nDefaultTab;
         }
     }
