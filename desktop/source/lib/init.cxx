@@ -324,8 +324,9 @@ static uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
     const std::string& rType = aTree.get<std::string>("type", "");
     const std::string& rValue = aTree.get<std::string>("value", "");
     uno::Sequence< uno::Reference< reflection::XIdlField > > aFields;
-    uno::Reference< reflection:: XIdlClass > xIdlClass =
-        css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext())->forName(OUString::fromUtf8(rType.c_str()));
+    uno::Reference< css::reflection::XIdlReflection > xIdlRef =
+            css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext());
+    uno::Reference< reflection:: XIdlClass > xIdlClass(xIdlRef->forName(OUString::fromUtf8(rType.c_str())));
     if (xIdlClass.is())
     {
         aTypeClass = xIdlClass->getTypeClass();
@@ -379,6 +380,9 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
     if (pJSON && pJSON[0] != '\0')
     {
         boost::property_tree::ptree aTree, aNodeNull, aNodeValue;
+        css::uno::Reference< css::reflection::XIdlReflection > xIdlRef =
+            css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext());
+
         std::stringstream aStream(pJSON);
         boost::property_tree::read_json(aStream, aTree);
 
@@ -433,6 +437,10 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
                         aSeq[itSeq++] = jsonToUnoAny(rSeqPair.second);
                     aValue.Value <<= aSeq;
                 }
+            }
+            else if (xIdlRef.is() && xIdlRef->forName(OUString::fromUtf8(rType.c_str())).is())
+            {
+                aValue.Value = jsonToUnoAny(rPair.second);
             }
             else
                 SAL_WARN("desktop.lib", "jsonToPropertyValuesVector: unhandled type '"<<rType<<"'");
