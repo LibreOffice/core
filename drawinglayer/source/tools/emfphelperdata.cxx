@@ -214,14 +214,10 @@ namespace emfplushelper
 
     static OUString BrushIDToString(sal_uInt16 flags, sal_uInt32 brushid)
     {
-        OUString sBrushId;
-
         if (IsBrush(flags))
-            sBrushId = sBrushId.concat("EmfPlusBrush ID: ").concat(OUString::number(brushid));
+            return "EmfPlusBrush ID: " + OUString::number(brushid);
         else
-            sBrushId = sBrushId.concat("ARGB: 0x").concat(OUString::number(brushid, 16));
-
-        return sBrushId;
+            return "ARGB: 0x" + OUString::number(brushid, 16);
     }
 
     EMFPObject::~EMFPObject()

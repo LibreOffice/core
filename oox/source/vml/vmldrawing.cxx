@@ -189,7 +189,7 @@ void Drawing::convertAndInsert() const
     }
     for ( const auto& BoxItr : GroupBoxMap )
     {
-        const uno::Any aGroup( OUString("autoGroup_").concat(BoxItr.first) );
+        const uno::Any aGroup( "autoGroup_" + BoxItr.first );
         for ( auto RadioItr = RadioButtonMap.begin(); RadioItr != RadioButtonMap.end(); )
         {
             if ( BoxItr.second.IsInside(RadioItr->second) )
