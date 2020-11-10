@@ -72,7 +72,7 @@ CBenTOCReader::ReadLabelAndTOC()
 {
     BenError Err;
 
-    unsigned long TOCOffset;
+    tools::ULong TOCOffset;
     if ((Err = ReadLabel(&TOCOffset, &cTOCSize)) != BenErr_OK)
         return Err;
 
@@ -97,7 +97,7 @@ CBenTOCReader::ReadLabelAndTOC()
 }
 
 BenError
-CBenTOCReader::ReadLabel(unsigned long * pTOCOffset, unsigned long * pTOCSize)
+CBenTOCReader::ReadLabel(tools::ULong * pTOCOffset, tools::ULong * pTOCSize)
 {
     // If seek fails, then probably because stream is smaller than
     // BEN_LABEL_SIZE and thus can't be Bento container
@@ -503,7 +503,7 @@ CBenTOCReader::GetCode()
 }
 
 BenError
-CBenTOCReader::GetData(void * pBuffer, unsigned long Amt)
+CBenTOCReader::GetData(void * pBuffer, tools::ULong Amt)
 {
     if (! CanGetData(Amt))
         return BenErr_ReadPastEndOfTOC;

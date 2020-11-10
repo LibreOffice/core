@@ -29,9 +29,9 @@ struct SalFrameGeometry {
     // screen position of upper left corner of drawable area in pixel
     tools::Long                nX, nY;
     // dimensions of the drawable area in pixel
-    unsigned long       nWidth, nHeight;
+    tools::ULong        nWidth, nHeight;
     // thickness of the decoration in pixel
-    unsigned long       nLeftDecoration,
+    tools::ULong        nLeftDecoration,
                         nTopDecoration,
                         nRightDecoration,
                         nBottomDecoration;

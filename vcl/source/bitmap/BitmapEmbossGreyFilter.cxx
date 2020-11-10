@@ -47,8 +47,8 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
                 tools::Long nGrey31, nGrey32, nGrey33;
                 double fAzim = basegfx::deg2rad(mnAzimuthAngle100 * 0.01);
                 double fElev = basegfx::deg2rad(mnElevationAngle100 * 0.01);
-                std::unique_ptr<long[]> pHMap(new long[nWidth + 2]);
-                std::unique_ptr<long[]> pVMap(new long[nHeight + 2]);
+                std::unique_ptr<tools::Long[]> pHMap(new tools::Long[nWidth + 2]);
+                std::unique_ptr<tools::Long[]> pVMap(new tools::Long[nHeight + 2]);
                 tools::Long nX, nY, nNx, nNy, nDotL;
                 const tools::Long nLx = FRound(cos(fAzim) * cos(fElev) * 255.0);
                 const tools::Long nLy = FRound(sin(fAzim) * cos(fElev) * 255.0);

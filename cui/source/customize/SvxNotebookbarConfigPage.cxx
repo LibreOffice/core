@@ -412,7 +412,7 @@ void SvxNotebookbarConfigPage::SelectElement()
             m_xTopLevelListBox->append(aCategoryList[nIdx].sUIItemId,
                                        aCategoryList[nIdx].sDisplayName);
     }
-    unsigned long nStart = 0;
+    tools::ULong nStart = 0;
     if (aEntries[nStart].sClassId == "sfxlo-PriorityHBox"
         || aEntries[nStart].sClassId == "sfxlo-PriorityMergedHBox")
         nStart = 1;

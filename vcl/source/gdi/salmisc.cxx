@@ -53,9 +53,9 @@ static tools::Long ImplIndexFromColor( const BitmapColor& rCol )
 
 #elif TC_TO_PAL_COLORS == 32768
 
-    return( ( ( (long) rCol.GetBlue() >> 3) << 10 ) |
-            ( ( (long) rCol.GetGreen() >> 3 ) << 5 ) |
-            ( (long) rCol.GetRed() >> 3 ) );
+    return( ( ( (tools::Long) rCol.GetBlue() >> 3) << 10 ) |
+            ( ( (tools::Long) rCol.GetGreen() >> 3 ) << 5 ) |
+            ( (tools::Long) rCol.GetRed() >> 3 ) );
 
 #endif
 }

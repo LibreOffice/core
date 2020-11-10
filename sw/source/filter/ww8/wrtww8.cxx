@@ -179,10 +179,10 @@ public:
     WW8_FC GetStartFc() const       { return nStartFc; }
 };
 
-typedef std::map<OUString,long> BKMKNames;
+typedef std::map<OUString,tools::Long> BKMKNames;
 typedef std::pair<bool,OUString> BKMK;
-typedef std::pair<long,BKMK> BKMKCP;
-typedef std::multimap<long,BKMKCP*> BKMKCPs;
+typedef std::pair<tools::Long,BKMK> BKMKCP;
+typedef std::multimap<tools::Long,BKMKCP*> BKMKCPs;
 typedef BKMKCPs::iterator CPItr;
 
 class WW8_WrtBookmarks
@@ -223,12 +223,12 @@ WW8_WrtBookmarks::~WW8_WrtBookmarks()
 
 void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm)
 {
-    std::pair<BKMKNames::iterator, bool> aResult = maSwBkmkNms.insert(std::pair<OUString,long>(rNm,0L));
+    std::pair<BKMKNames::iterator, bool> aResult = maSwBkmkNms.insert(std::pair<OUString,tools::Long>(rNm,0L));
     if (aResult.second)
     {
         BKMK aBK(false,rNm);
         BKMKCP* pBKCP = new BKMKCP(static_cast<tools::Long>(nStartCp),aBK);
-        aSttCps.insert(std::pair<long,BKMKCP*>(nStartCp,pBKCP));
+        aSttCps.insert(std::pair<tools::Long,BKMKCP*>(nStartCp,pBKCP));
         aResult.first->second = static_cast<tools::Long>(nStartCp);
     }
     else
@@ -261,7 +261,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
     {
         if (rEntry.second)
         {
-            aEndCps.insert(std::pair<long,BKMKCP*>(rEntry.second->first, rEntry.second));
+            aEndCps.insert(std::pair<tools::Long,BKMKCP*>(rEntry.second->first, rEntry.second));
             aNames.push_back(rEntry.second->second.second);
             SwWW8Writer::WriteLong(aTempStrm1, rEntry.first);
         }
@@ -312,7 +312,7 @@ void WW8_WrtBookmarks::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
                 aItr->second->second.first = true;
                 aItr->second->first = nTo;
             }
-            aSttCps.insert(std::pair<long,BKMKCP*>(nTo,aItr->second));
+            aSttCps.insert(std::pair<tools::Long,BKMKCP*>(nTo,aItr->second));
             aItr->second = nullptr;
             aRange = aSttCps.equal_range(nFrom);
             aItr = aRange.first;
@@ -2450,7 +2450,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner const * p
     if ( (pFormat->GetHoriOrient().GetHoriOrient() == text::HoriOrientation::FULL) || bManualAligned )
         nWidthPercent = 100;
     bool bRelBoxSize = nWidthPercent != 0;
-    unsigned long nTableSz = static_cast<unsigned long>(rSize.GetWidth());
+    tools::ULong nTableSz = static_cast<tools::ULong>(rSize.GetWidth());
     if (nTableSz > USHRT_MAX/2 && !bRelBoxSize)
     {
         OSL_ENSURE(bRelBoxSize, "huge table width but not relative, suspicious");

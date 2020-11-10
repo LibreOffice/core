@@ -892,7 +892,7 @@ void SwAnnotationWin::DoResize()
 {
     tools::Long aTextHeight    =  LogicToPixel( mpOutliner->CalcTextSize()).Height();
     tools::Long aHeight        =  GetSizePixel().Height();
-    unsigned long aWidth    =  GetSizePixel().Width();
+    tools::ULong aWidth    =  GetSizePixel().Width();
 
     aHeight -= GetMetaHeight();
     mpMetadataAuthor->Show();

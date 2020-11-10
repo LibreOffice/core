@@ -58,8 +58,8 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
                 {
                     const double nWidth = pReadAcc->Width();
                     const double nHeight = pReadAcc->Height();
-                    std::unique_ptr<long[]> pLutX(new long[nNewWidth]);
-                    std::unique_ptr<long[]> pLutY(new long[nNewHeight]);
+                    std::unique_ptr<tools::Long[]> pLutX(new tools::Long[nNewWidth]);
+                    std::unique_ptr<tools::Long[]> pLutY(new tools::Long[nNewHeight]);
 
                     for (tools::Long nX = 0; nX < nNewWidth; nX++)
                     {

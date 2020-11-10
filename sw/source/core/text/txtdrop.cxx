@@ -784,7 +784,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
         tools::Long nMax = USHRT_MAX;
         tools::Long nMin = 0;
 #if OSL_DEBUG_LEVEL > 1
-        long nGrow = 0;
+        tools::Long nGrow = 0;
 #endif
 
         bool bWinUsed = false;

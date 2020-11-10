@@ -639,7 +639,7 @@ public:
 void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterion>& rCriteria)
 {
     // Build dimension ID to object map for group dimensions.
-    typedef std::unordered_map<long, const ScDPGroupDimension*> GroupFieldMapType;
+    typedef std::unordered_map<tools::Long, const ScDPGroupDimension*> GroupFieldMapType;
     GroupFieldMapType aGroupFieldIds;
 
     for (const auto& rGroup : aGroups)

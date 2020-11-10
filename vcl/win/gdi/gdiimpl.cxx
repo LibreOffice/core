@@ -1171,13 +1171,13 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 
         for (auto const& rectangle : aRectangles)
         {
-            const long nW(rectangle.GetWidth());
-            const long nH(rectangle.GetHeight());
+            const tools::Long nW(rectangle.GetWidth());
+            const tools::Long nH(rectangle.GetHeight());
 
             if(nW && nH)
             {
-                const long nRight(rectangle.Left() + nW);
-                const long nBottom(rectangle.Top() + nH);
+                const tools::Long nRight(rectangle.Left() + nW);
+                const tools::Long nBottom(rectangle.Top() + nH);
 
                 if(bFirstClipRect)
                 {
@@ -1560,7 +1560,7 @@ void WinSalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
     SetFillColor( ImplGetROPColor( nROPColor ) );
 }
 
-void WinSalGraphicsImpl::DrawPixelImpl( long nX, long nY, COLORREF crColor )
+void WinSalGraphicsImpl::DrawPixelImpl( tools::Long nX, tools::Long nY, COLORREF crColor )
 {
     const HDC hDC = mrParent.getHDC();
 
@@ -2505,10 +2505,10 @@ static void paintToGdiPlus(
 
 static void setInterpolationMode(
     Gdiplus::Graphics& rGraphics,
-    long rSrcWidth,
-    long rDestWidth,
-    long rSrcHeight,
-    long rDestHeight)
+    tools::Long rSrcWidth,
+    tools::Long rDestWidth,
+    tools::Long rSrcHeight,
+    tools::Long rDestHeight)
 {
     const bool bSameWidth(rSrcWidth == rDestWidth);
     const bool bSameHeight(rSrcHeight == rDestHeight);
@@ -2632,13 +2632,13 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
 
     if(aARGB)
     {
-        const long nSrcWidth(aARGB->GetWidth());
-        const long nSrcHeight(aARGB->GetHeight());
+        const tools::Long nSrcWidth(aARGB->GetWidth());
+        const tools::Long nSrcHeight(aARGB->GetHeight());
 
         if(nSrcWidth && nSrcHeight)
         {
-            const long nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
-            const long nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
+            const tools::Long nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
+            const tools::Long nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
 
             if(nDestWidth && nDestHeight)
             {

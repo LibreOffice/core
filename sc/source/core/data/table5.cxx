@@ -236,9 +236,9 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         if ( bStartOfPage && bRepeatRow && nY>nRepeatStartY && !bRowFound )
         {
             // subtract size of repeat rows from page size
-            unsigned long nHeights = GetTotalRowHeight(nRepeatStartY, nRepeatEndY);
+            tools::ULong nHeights = GetTotalRowHeight(nRepeatStartY, nRepeatEndY);
 #if OSL_DEBUG_LEVEL > 0
-            if (nHeights == ::std::numeric_limits<unsigned long>::max())
+            if (nHeights == ::std::numeric_limits<tools::ULong>::max())
                 OSL_FAIL("ScTable::UpdatePageBreaks: row heights overflow");
 #endif
             nPageSizeY -= nHeights;
