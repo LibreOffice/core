@@ -33,6 +33,7 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
+    void testLoadVerticalFlip();
     void testTdf117948_CollapseBeforeShape();
     void testTdf137355_UndoHideRows();
     void testTdf115655_HideDetail();
@@ -40,6 +41,7 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testLoadVerticalFlip);
     CPPUNIT_TEST(testTdf117948_CollapseBeforeShape);
     CPPUNIT_TEST(testTdf137355_UndoHideRows);
     CPPUNIT_TEST(testTdf115655_HideDetail);
@@ -95,6 +97,34 @@ static void lcl_AssertRectEqualWithTolerance(const OString& sInfo,
            + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            labs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
+}
+
+void ScShapeTest::testLoadVerticalFlip()
+{
+    // The document has a cell anchored custom shape with vertical flip. Error was, that the
+    // flip was lost on loading.
+    OUString aFileURL;
+    createFileURL("loadVerticalFlip.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get the shape and check that it is flipped
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+    SdrObjCustomShape* pObj = dynamic_cast<SdrObjCustomShape*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pObj);
+    CPPUNIT_ASSERT_MESSAGE("Load: Object should be vertically flipped", pObj->IsMirroredY());
+
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testTdf117948_CollapseBeforeShape()

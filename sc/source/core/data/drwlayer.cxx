@@ -673,7 +673,8 @@ void lcl_SetLogicRectFromAnchor(SdrObject* pObj, ScDrawObjData& rAnchor, ScDocum
     // set the logic rectangle, and apply flip again. You cannot simple use a 180deg-rotated
     // rectangle, because custom shape mirroring is internally applied after the other
     // transformations.
-    if (lcl_NeedsMirrorYCorrection(pObj))
+    const bool bNeedsMirrorYCorrection = lcl_NeedsMirrorYCorrection(pObj); // remember state
+    if (bNeedsMirrorYCorrection)
     {
         const tools::Rectangle aRect(pObj->GetSnapRect());
         const Point aLeft(aRect.Left(), (aRect.Top() + aRect.Bottom()) >> 1);
@@ -703,7 +704,7 @@ void lcl_SetLogicRectFromAnchor(SdrObject* pObj, ScDrawObjData& rAnchor, ScDocum
         pObj->NbcSetLogicRect(lcl_makeSafeRectangle(aNewRectangle));
 
     // The shape has the correct logical rectangle now. Reapply the above removed mirroring.
-    if (lcl_NeedsMirrorYCorrection(pObj))
+    if (bNeedsMirrorYCorrection)
     {
         const tools::Rectangle aRect(pObj->GetSnapRect());
         const Point aLeft(aRect.Left(), (aRect.Top() + aRect.Bottom()) >> 1);
