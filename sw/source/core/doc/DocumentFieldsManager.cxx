@@ -182,7 +182,7 @@ namespace
     void lcl_SwClientNotify(sw::BroadcastingModify& rModify, const SfxPoolItem* pNew)
     {
         const sw::LegacyModifyHint aHint(nullptr, pNew);
-        rModify.SwClientNotify(rModify, aHint);
+        rModify.SwClientNotifyCall(rModify, aHint);
     }
 }
 

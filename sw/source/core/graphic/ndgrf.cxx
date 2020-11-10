@@ -58,7 +58,7 @@ namespace
     void lcl_SwClientNotify(sw::BroadcastingModify& rModify, const SfxPoolItem& rOldNew)
     {
         const sw::LegacyModifyHint aHint(&rOldNew, &rOldNew);
-        rModify.SwClientNotify(rModify, aHint);
+        rModify.SwClientNotifyCall(rModify, aHint);
     }
 }
 SwGrfNode::SwGrfNode(
@@ -381,12 +381,12 @@ void SwGrfNode::TriggerGraphicArrived()
         SwIterator<sw::BroadcastingModify,SwGrfNode> aIter(*this);
         for(sw::BroadcastingModify* pLast = aIter.First(); pLast; pLast = aIter.Next())
             if(dynamic_cast<const SwContentFrame*>(pLast) ==  nullptr)
-                pLast->SwClientNotify(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
+                pLast->SwClientNotifyCall(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
     }
     {
         SwIterator<SwContentFrame,SwGrfNode> aIter(*this);
         for(SwContentFrame* pLast = aIter.First(); pLast; pLast = aIter.Next())
-            pLast->SwClientNotify(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
+            pLast->SwClientNotifyCall(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
     }
     UnlockModify();
 }

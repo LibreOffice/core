@@ -46,7 +46,7 @@ namespace sw
             {
                 auto pModifyChanged = CheckRegistration(pLegacyHint->m_pOld);
                 if (pModifyChanged)
-                    m_pToTell->SwClientNotify(rModify, *pModifyChanged);
+                    m_pToTell->SwClientNotifyCall(rModify, *pModifyChanged);
             }
             else if (m_pToTell)
                 m_pToTell->SwClientNotifyCall(rModify, rHint);
@@ -378,6 +378,6 @@ void sw::ClientNotifyAttrChg(SwModify& rModify, const SwAttrSet& aSet, SwAttrSet
     const SwAttrSetChg aChgOld(aSet, aOld);
     const SwAttrSetChg aChgNew(aSet, aNew);
     const sw::LegacyModifyHint aHint(&aChgOld, &aChgNew);
-    rModify.SwClientNotify(rModify, aHint);
+    rModify.SwClientNotifyCall(rModify, aHint);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

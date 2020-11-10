@@ -136,6 +136,9 @@ protected:
     // write access to pRegisteredIn shall be granted only to the object itself (protected access)
     SwModify* GetRegisteredInNonConst() const { return m_pRegisteredIn; }
 
+    // when overriding this, you MUST call SwClient::SwClientModify() in the override!
+    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
+
 public:
     SwClient() : m_pRegisteredIn(nullptr) {}
     SwClient(SwClient&&) noexcept;
@@ -145,13 +148,16 @@ public:
     // mba: IMHO this method should be pure virtual
     // DO NOT USE IN NEW CODE! use SwClientNotify instead.
     virtual void Modify(const SfxPoolItem*, const SfxPoolItem*);
-    // when overriding this, you MUST call SwClient::SwClientModify() in the override!
-    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
+
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
     // its SwClient objects can decide to get registered to the latter instead by calling this method
     std::unique_ptr<sw::ModifyChangedHint> CheckRegistration( const SfxPoolItem* pOldValue );
 
+    // DO NOT USE IN NEW CODE! Used to directly call the event handler from
+    // outside the class. It is generally wrong to call the message handler
+    // directly: either it should be a proper stand-alone member function
+    // or by the observed object sending the hint properly itself.
     void SwClientNotifyCall( const SwModify& rModify, const SfxHint& rHint ) { SwClientNotify( rModify, rHint ); }
 
     const SwModify* GetRegisteredIn() const { return m_pRegisteredIn; }

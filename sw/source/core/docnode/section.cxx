@@ -70,7 +70,7 @@ namespace {
     void lcl_SwClientNotify(sw::BroadcastingModify& rModify, const SfxPoolItem* pOldNew)
     {
         const sw::LegacyModifyHint aHint(pOldNew, pOldNew);
-        rModify.SwClientNotify(rModify, aHint);
+        rModify.SwClientNotifyCall(rModify, aHint);
     }
 
     class SwIntrnlSectRefLink : public SwBaseLink
