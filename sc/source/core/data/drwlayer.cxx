@@ -1372,37 +1372,53 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
     pPage->RecalcObjOrdNums();
 
     const size_t nObjCount = pPage->GetObjCount();
-    if (nObjCount)
+    if (!nObjCount)
+        return;
+
+    size_t nDelCount = 0;
+    tools::Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
+    tools::Rectangle aDelCircle = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
+    aDelCircle.AdjustLeft(-250);
+    aDelCircle.AdjustRight(250);
+    aDelCircle.AdjustTop(-70);
+    aDelCircle.AdjustBottom(70);
+
+    std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
+
+    SdrObjListIter aIter( pPage, SdrIterMode::Flat );
+    SdrObject* pObject = aIter.Next();
+    while (pObject)
     {
-        size_t nDelCount = 0;
-        tools::Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
-
-        std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
-
-        SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
+        // do not delete note caption, they are always handled by the cell note
+        // TODO: detective objects are still deleted, is this desired?
+        if (!IsNoteCaption( pObject ))
         {
-            // do not delete note caption, they are always handled by the cell note
-            // TODO: detective objects are still deleted, is this desired?
-            if (!IsNoteCaption( pObject ))
+            tools::Rectangle aObjRect;
+            ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObject);
+            if (pObjData && pObjData->meType == ScDrawObjData::ValidationCircle)
             {
-                tools::Rectangle aObjRect = pObject->GetCurrentBoundRect();
+                aObjRect = pObject->GetLogicRect();
+                if(aDelCircle.IsInside(aObjRect))
+                   ppObj[nDelCount++] = pObject;
+            }
+            else
+            {
+                aObjRect = pObject->GetCurrentBoundRect();
                 if (aDelRect.IsInside(aObjRect))
                 {
                     if (bAnchored)
                     {
                         ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObject);
-                        if(aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
+                        if (aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
                             ppObj[nDelCount++] = pObject;
                     }
-                    else
-                        ppObj[nDelCount++] = pObject;
+                   else
+                       ppObj[nDelCount++] = pObject;
                 }
             }
-
-            pObject = aIter.Next();
         }
+        pObject = aIter.Next();
+    }
 
         if (bRecording)
             for (size_t i=1; i<=nDelCount; ++i)
@@ -1410,7 +1426,6 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
 
         for (size_t i=1; i<=nDelCount; ++i)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
-    }
 }
 
 void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
