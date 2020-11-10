@@ -1372,7 +1372,26 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
     pPage->RecalcObjOrdNums();
 
     const size_t nObjCount = pPage->GetObjCount();
+<<<<<<< HEAD   (31a192 tdf#137624 sc: autofill mixed sequences in merged cells)
     if (nObjCount)
+=======
+    if (!nObjCount)
+        return;
+
+    size_t nDelCount = 0;
+    tools::Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
+    tools::Rectangle aDelCircle = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
+    aDelCircle.AdjustLeft(-250);
+    aDelCircle.AdjustRight(250);
+    aDelCircle.AdjustTop(-70);
+    aDelCircle.AdjustBottom(70);
+
+    std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
+
+    SdrObjListIter aIter( pPage, SdrIterMode::Flat );
+    SdrObject* pObject = aIter.Next();
+    while (pObject)
+>>>>>>> CHANGE (d6d8b9 tdf#41845 sc: delete row/column with validation circles)
     {
         size_t nDelCount = 0;
         tools::Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
@@ -1383,17 +1402,37 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
+<<<<<<< HEAD   (31a192 tdf#137624 sc: autofill mixed sequences in merged cells)
             // do not delete note caption, they are always handled by the cell note
             // TODO: detective objects are still deleted, is this desired?
             if (!IsNoteCaption( pObject ))
+=======
+            tools::Rectangle aObjRect;
+            ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObject);
+            if (pObjData && pObjData->meType == ScDrawObjData::ValidationCircle)
+>>>>>>> CHANGE (d6d8b9 tdf#41845 sc: delete row/column with validation circles)
             {
+<<<<<<< HEAD   (31a192 tdf#137624 sc: autofill mixed sequences in merged cells)
                 tools::Rectangle aObjRect = pObject->GetCurrentBoundRect();
+=======
+                aObjRect = pObject->GetLogicRect();
+                if(aDelCircle.IsInside(aObjRect))
+                   ppObj[nDelCount++] = pObject;
+            }
+            else
+            {
+                aObjRect = pObject->GetCurrentBoundRect();
+>>>>>>> CHANGE (d6d8b9 tdf#41845 sc: delete row/column with validation circles)
                 if (aDelRect.IsInside(aObjRect))
                 {
                     if (bAnchored)
                     {
                         ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObject);
+<<<<<<< HEAD   (31a192 tdf#137624 sc: autofill mixed sequences in merged cells)
                         if(aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
+=======
+                        if (aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
+>>>>>>> CHANGE (d6d8b9 tdf#41845 sc: delete row/column with validation circles)
                             ppObj[nDelCount++] = pObject;
                     }
                     else
