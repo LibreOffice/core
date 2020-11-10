@@ -853,7 +853,7 @@ void OptimizerDialog::InitPage4()
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
     do
     {
-        OUString aTemp( aDefault.concat( OUString::number( nSession++ ) ) );
+        OUString aTemp = aDefault + OUString::number( nSession++ );
         for ( i = 1; i < rList.size(); i++ )
         {
             if ( rList[ i ].maName == aTemp )
