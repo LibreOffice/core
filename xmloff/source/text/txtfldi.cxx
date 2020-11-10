@@ -3700,7 +3700,7 @@ void XMLDropDownFieldImportContext::ProcessAttribute(
         sHelp = sAttrValue;
         bHelpOK = true;
     }
-    else if (nAttrToken == XML_TOK_TEXTFIELD_HINT)
+    else if (nAttrToken ==  XML_ELEMENT(TEXT, XML_HINT))
     {
         sHint = sAttrValue;
         bHintOK = true;
