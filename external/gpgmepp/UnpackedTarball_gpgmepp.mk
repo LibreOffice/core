@@ -13,6 +13,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,gpgmepp,$(GPGME_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,gpgmepp,0))
 
+# * external/gpgmepp/configure.patch: see
+#   <https://lists.gnu.org/archive/html/autoconf/2020-11/msg00004.html> "Fallout from
+#   _AC_UNDECLARED_WARNING in autoconf 2.70beta" for upstream discussion
 $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/find-libgpg-error-libassuan.patch \
     external/gpgmepp/fix-autoconf-macros.patch \
@@ -30,5 +33,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/ubsan.patch \
     external/gpgmepp/c++20.patch \
     external/gpgmepp/clang-cl.patch \
+    external/gpgmepp/configure.patch \
 ))
 # vim: set noet sw=4 ts=4:

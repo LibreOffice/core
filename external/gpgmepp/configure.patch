@@ -1,0 +1,34 @@
+--- configure.ac
++++ configure.ac
+@@ -619,6 +619,15 @@
+ AC_SUBST(API__SSIZE_T)
+ AM_SUBST_NOTMAKE(API__SSIZE_T)
+ 
++# Try to find a thread-safe version of ttyname().
++gnupg_REPLACE_TTYNAME_R
++if test "$ac_cv_func_ttyname_r" != yes; then
++  AC_MSG_WARN([
++***
++*** ttyname() is not thread-safe and ttyname_r() does not exist
++***])
++fi
++
+ # Checks for compiler features.
+ if test "$GCC" = yes; then
+     CFLAGS="$CFLAGS -Wall -Wcast-align -Wshadow -Wstrict-prototypes"
+@@ -679,15 +679,6 @@
+ 
+ AC_FUNC_FSEEKO
+ 
+-# Try to find a thread-safe version of ttyname().
+-gnupg_REPLACE_TTYNAME_R
+-if test "$ac_cv_func_ttyname_r" != yes; then
+-  AC_MSG_WARN([
+-***
+-*** ttyname() is not thread-safe and ttyname_r() does not exist
+-***])
+-fi
+-
+ # Try to find a thread-safe version of getenv().
+ have_thread_safe_getenv=no
+ jm_GLIBC21
