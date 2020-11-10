@@ -214,8 +214,7 @@ bool SwGrfNode::ReRead(
             {
                 if( getLayoutFrame( GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) )
                 {
-                    SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
-                    lcl_SwClientNotify(*this, aMsgHint);
+                    CallSwClientNotify(sw::GrfRereadAndInCacheHint());
                 }
                 else if ( bNewGrf )
                 {
