@@ -247,6 +247,24 @@
       "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "668a05ae_3341bd25",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-11T12:06:30Z",
+      "side": 1,
+      "message": "How about\n    https://gerrit.libreoffice.org/c/core/+/105584 make the tools::Long define logic more obvious",
+      "parentUuid": "035fc891_b05404ef",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
