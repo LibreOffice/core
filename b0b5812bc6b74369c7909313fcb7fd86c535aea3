@@ -34,6 +34,24 @@
       "revId": "b0b5812bc6b74369c7909313fcb7fd86c535aea3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29b3a3f5_cf1bd453",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-11-11T10:36:11Z",
+      "side": 1,
+      "message": "I was thinking\nSwTableBoxFormula aFormula \u003d pBox-\u003eGetFrameFormat()-\u003eGetTableBoxFormula();\nlike sw/source/core/unocore/unotbl.cxx does\nbut I see it won\u0027t link, SwTableBoxFormula would need to be changed to SAL_DLLPUBLIC, so might as well leave it alone after all",
+      "parentUuid": "d4bf2566_2076fb7c",
+      "revId": "b0b5812bc6b74369c7909313fcb7fd86c535aea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
