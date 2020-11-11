@@ -28,6 +28,8 @@
 #include <svdata.hxx>
 #include <salwtype.hxx>
 
+#include <tools/long.hxx>
+
 #include <win/wincomp.hxx>
 
 #include <set>
@@ -86,7 +88,7 @@ public:
     HGLOBAL                 mhDitherDIB;            // dither memory handle
     BYTE*                   mpDitherDIB;            // dither memory
     BYTE*                   mpDitherDIBData;        // beginning of DIB data
-    long*                   mpDitherDiff;           // Dither mapping table
+    tools::Long*            mpDitherDiff;           // Dither mapping table
     BYTE*                   mpDitherLow;            // Dither mapping table
     BYTE*                   mpDitherHigh;           // Dither mapping table
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject

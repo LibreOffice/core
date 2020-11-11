@@ -58,6 +58,7 @@
 
 #include "bento.hxx"
 #include <memory>
+#include <tools/long.hxx>
 
 namespace OpenStormBento
 {
@@ -74,23 +75,23 @@ public: // Methods
     BenError ReadLabelAndTOC();
 
 private: // Methods
-    BenError ReadLabel(unsigned long * pTOCOffset, unsigned long * pTOCSize);
+    BenError ReadLabel(tools::ULong* pTOCOffset, tools::ULong* pTOCSize);
     BenError SearchForLabel(BenByte * pLabel);
     BenError ReadTOC();
     BenError ReadSegments(CBenValue * pValue, BenByte * pLookAhead);
     BenError ReadSegment(CBenValue * pValue, BenByte * pLookAhead);
-    bool CanGetData(unsigned long Amt);
+    bool CanGetData(tools::ULong Amt);
     BenError GetByte(BenByte * pByte);
     BenError GetDWord(BenDWord * pDWord);
     BenByte GetCode();
-    BenError GetData(void * pBuffer, unsigned long Amt);
+    BenError GetData(void* pBuffer, tools::ULong Amt);
 
 private: // Data
     LtcBenContainer * cpContainer;
     std::unique_ptr<BenByte[]> cpTOC;
-    unsigned long cBlockSize;
-    unsigned long cCurr;
-    unsigned long cTOCSize;
+    tools::ULong cBlockSize;
+    tools::ULong cCurr;
+    tools::ULong cTOCSize;
 };
 }//end namespace OpenStormBento
 #endif
