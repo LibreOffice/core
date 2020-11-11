@@ -1978,7 +1978,12 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             bool bBool = {};
             if (aValue >>= bBool)
             { // HACK: writerfilter has to use API to set this :(
-              pDoc->SetInWriterfilterImport(bBool);
+                bool bOld = pDoc->IsInWriterfilterImport();
+                pDoc->SetInWriterfilterImport(bBool);
+                if (bOld && !bBool)
+                {
+                    pDoc->getIDocumentFieldsAccess().SetFieldsDirty(false, nullptr, 0);
+                }
             }
         }
         break;
