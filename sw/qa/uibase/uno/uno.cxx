@@ -11,6 +11,10 @@
 
 #include <com/sun/star/util/XCloseable.hpp>
 
+#include <vcl/scheduler.hxx>
+
+char const DATA_DIRECTORY[] = "/sw/qa/uibase/uno/data/";
+
 /// Covers sw/source/uibase/uno/ fixes.
 class SwUibaseUnoTest : public SwModelTestBase
 {
@@ -29,6 +33,18 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testLockControllers)
     }
     // Without the accompanying fix in place, this test would have crashed.
     mxComponent.clear();
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCondFieldCachedValue)
+{
+    load(DATA_DIRECTORY, "cond-field-cached-value.docx");
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  :
+    // i.e. the conditional field lost its cached content.
+    getParagraph(2, "1");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
