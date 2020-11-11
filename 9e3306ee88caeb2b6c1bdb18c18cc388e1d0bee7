@@ -71,6 +71,75 @@
     },
     {
       "key": {
+        "uuid": "57232595_ae6113dd",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T07:11:27Z",
+      "side": 1,
+      "message": "I don\u0027t see why this change shows a warning on *row* count. The bug is about *column* count.",
+      "range": {
+        "startLine": 233,
+        "startChar": 8,
+        "endLine": 233,
+        "endChar": 18
+      },
+      "revId": "9e3306ee88caeb2b6c1bdb18c18cc388e1d0bee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "841c3eee_1f682c8b",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T07:11:27Z",
+      "side": 1,
+      "message": "This, and ln245, would better move to the \"if\" at ln251. Unless, of course, you remove the warning from row count, in which case it all simplifies.",
+      "range": {
+        "startLine": 236,
+        "startChar": 8,
+        "endLine": 236,
+        "endChar": 38
+      },
+      "revId": "9e3306ee88caeb2b6c1bdb18c18cc388e1d0bee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14e0da78_f47edb7e",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T07:11:27Z",
+      "side": 1,
+      "message": "The indent of this line is wrong",
+      "range": {
+        "startLine": 240,
+        "startChar": 5,
+        "endLine": 240,
+        "endChar": 16
+      },
+      "revId": "9e3306ee88caeb2b6c1bdb18c18cc388e1d0bee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1e88325_1b52d95e",
         "filename": "sw/source/ui/table/instable.cxx",
         "patchSetId": 15
