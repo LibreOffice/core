@@ -112,7 +112,6 @@ sed -i \
     export PRODUCTVERSION=
     export KDEMAINDIR=$PREFIXDIR
     export PREFIXDIR=${PREFIXDIR}
-    export GNOMEDIR=$PREFIXDIR
     export GNOME_MIME_THEME=hicolor
     export APPDATA_SOURCE_DIR="${SRCDIR?}"/sysui/desktop/appstream-appdata
     bash ./create_tree.sh
@@ -139,9 +138,7 @@ cd -
 # put the stuff installed by create_tree.sh into the right file lists
 # desktop files will be added by the corresponding add_wrapper command
 if test -f $DESTDIR/gid_Module_Root_Brand ; then
-    for dir in $PREFIXDIR/share/application-registry \
-               $PREFIXDIR/share/mime/packages \
-               $PREFIXDIR/share/mime-info \
+    for dir in $PREFIXDIR/share/mime/packages \
                $PREFIXDIR/share/icons ; do
         find "$DESTDIR$dir" \( -type f -o -type l \) -printf "$dir/%P\n" >>$DESTDIR/gid_Module_Root_Brand
     done
