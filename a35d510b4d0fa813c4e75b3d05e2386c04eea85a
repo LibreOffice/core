@@ -229,6 +229,24 @@
       "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "035fc891_b05404ef",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-11T11:48:03Z",
+      "side": 1,
+      "message": "I understand that, but it IMO makes the code opaque and non-obvious.  There is no obvious link between sizeof(void*) and the right choice of integer type to use throughout tools/gen.hxx (let along between sizeof(void*) and the need for e.g. a BigInt::operator tools::Long).",
+      "parentUuid": "77125f14_c2b1e26c",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
