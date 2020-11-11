@@ -575,9 +575,7 @@ InternetProxyServer GetPACProxy(const OUString& rProtocol, const OUString& rHost
 
 // Read the settings from the OS which are stored in env vars
 //
-InternetProxyServer GetUnixSystemProxy(const OUString & rProtocol,
-                                            const OUString & /*rHost*/,
-                                            sal_Int32 /*nPort*/)
+InternetProxyServer GetUnixSystemProxy(const OUString & rProtocol)
 {
     // TODO this could be improved to read the "no_proxy" env variable
     InternetProxyServer aProxy;
@@ -624,7 +622,7 @@ InternetProxyServer InternetProxyDecider_Impl::getProxy(
 #ifdef _WIN32
         InternetProxyServer aProxy(GetPACProxy(rProtocol, rHost, nPort));
 #else
-        InternetProxyServer aProxy(GetUnixSystemProxy(rProtocol, rHost, nPort));
+        InternetProxyServer aProxy(GetUnixSystemProxy(rProtocol));
 #endif // _WIN32
         if (!aProxy.aName.isEmpty())
             return aProxy;
