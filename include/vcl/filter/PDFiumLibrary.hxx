@@ -250,6 +250,7 @@ public:
     bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion);
 
     std::unique_ptr<PDFiumPage> openPage(int nIndex);
+    FPDF_DOCUMENT getPointer() { return mpPdfDocument; }
 };
 
 struct PDFiumLibrary final : public rtl::StaticWithInit<std::shared_ptr<PDFium>, PDFiumLibrary>
