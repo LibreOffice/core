@@ -62,6 +62,7 @@ class SW_DLLPUBLIC SwAsciiOptions
     LanguageType m_nLanguage;
     LineEnd m_eCRLF_Flag;
     bool m_bIncludeBOM;   // Whether to include a byte-order-mark in the output.
+    bool m_bIncludeHidden; // Whether to include hidden paragraphs and text.
 
 public:
 
@@ -80,6 +81,9 @@ public:
     bool GetIncludeBOM() const { return m_bIncludeBOM; }
     void SetIncludeBOM( bool bVal ) { m_bIncludeBOM = bVal; }
 
+    bool GetIncludeHidden() const { return m_bIncludeHidden; }
+    void SetIncludeHidden( bool bVal ) { m_bIncludeHidden = bVal; }
+
     void Reset()
     {
         m_sFont.clear();
@@ -87,6 +91,7 @@ public:
         m_eCharSet = ::osl_getThreadTextEncoding();
         m_nLanguage = LANGUAGE_SYSTEM;
         m_bIncludeBOM = true;
+        m_bIncludeHidden = true;
     }
     // for the automatic conversion (mail/news/...)
     void ReadUserData( const OUString& );
