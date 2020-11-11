@@ -182,7 +182,7 @@ public:
         return mValue & 0x00FFFFFF;
     }
 
-    /* Comparation and operators */
+    /* Comparison and operators */
 
     /** Check if the color RGB value is equal than rColor.
       * @param rColor
@@ -308,7 +308,7 @@ public:
     }
 
     /** Merges color with rMergeColor.
-      * Allows to get resulting color when supperposing another.
+      * Allows to get resulting color when superposing another.
       * @param rMergeColor
       * @param cTransparency
       */
