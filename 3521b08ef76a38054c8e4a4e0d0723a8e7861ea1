@@ -88,6 +88,24 @@
       "revId": "3521b08ef76a38054c8e4a4e0d0723a8e7861ea1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b49aa551_35af2275",
+        "filename": "cui/uiconfig/ui/borderpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-11T10:35:35Z",
+      "side": 1,
+      "message": "Will leave new ticket to someone else -- now that tooltip has avoided colour reference.\n(could see tiny black line after magnifying to 240%)",
+      "parentUuid": "9287c926_b05d4aec",
+      "revId": "3521b08ef76a38054c8e4a4e0d0723a8e7861ea1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
