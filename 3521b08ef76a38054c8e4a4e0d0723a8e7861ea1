@@ -70,6 +70,24 @@
       "revId": "3521b08ef76a38054c8e4a4e0d0723a8e7861ea1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9287c926_b05d4aec",
+        "filename": "cui/uiconfig/ui/borderpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-11T09:17:21Z",
+      "side": 1,
+      "message": "Middle line (and vertical) is set and shown as tiny black line. We should make it white on dark backgrounds or keep the background white -\u003e new ticket.",
+      "parentUuid": "f17caca1_ea215741",
+      "revId": "3521b08ef76a38054c8e4a4e0d0723a8e7861ea1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
