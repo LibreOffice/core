@@ -31,17 +31,6 @@ if [ "${KDEMAINDIR}" ]; then
 
 fi
 
-if [ "${GNOMEDIR}" ]; then
-  mkdir -p "${DESTDIR}/${GNOMEDIR}/share/mime-info"
-  cp openoffice.mime "${DESTDIR}/${GNOMEDIR}/share/mime-info/${PREFIX}.mime"
-  cp openoffice.keys "${DESTDIR}/${GNOMEDIR}/share/mime-info/${PREFIX}.keys"
-  chmod 0644 "${DESTDIR}/${GNOMEDIR}/share/mime-info/${PREFIX}".*
-
-  mkdir -p "${DESTDIR}/${GNOMEDIR}/share/application-registry"
-  cp openoffice.applications "${DESTDIR}/${GNOMEDIR}/share/application-registry/${PREFIX}.applications"
-  chmod 0644 "${DESTDIR}/${GNOMEDIR}/share/application-registry/${PREFIX}".*
-fi
-
 mkdir -p "${DESTDIR}/${BINDIR}"
 
 test -n "${OFFICE_PREFIX}" && office_prefix="${OFFICE_PREFIX}" || office_prefix=/opt

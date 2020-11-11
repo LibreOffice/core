@@ -59,16 +59,13 @@ export DESTDIR=$RPM_BUILD_ROOT
 export KDEMAINDIR=/usr
 export PREFIXDIR=/usr
 export BINDIR=/usr/bin
-export GNOMEDIR=%{gnome_dir}
 
 ./create_tree.sh
 
 cd $RPM_BUILD_ROOT
 
 # freedesktop-based desktop-environments don't need/use this.
-rm -rf usr/share/application-registry
 rm -rf usr/share/applications.flag
-rm -rf usr/share/mime-info
 rm -rf usr/share/applnk-redhat
 #find usr/share/icons -name '*.png' -exec chmod g+w {} \;
 
