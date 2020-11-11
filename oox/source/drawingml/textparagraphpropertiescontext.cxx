@@ -22,6 +22,9 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <svx/unopage.hxx>
 #include <sal/log.hxx>
@@ -43,8 +46,32 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::graphic;
 
 namespace oox::drawingml {
+namespace {
+
+double  lclGetGraphicAspectRatio( const Reference< XGraphic >& rxGraphic )
+{
+    double fRatio = 1.0;
+    Reference< com::sun::star::beans::XPropertySet > xGraphicPropertySet( rxGraphic, UNO_QUERY_THROW );
+    css::awt::Size aSizeHmm( 0, 0 );
+    xGraphicPropertySet->getPropertyValue( "Size100thMM" ) >>= aSizeHmm;
+
+    if( aSizeHmm.Width > 0 && aSizeHmm.Height > 0)
+        return double(aSizeHmm.Width)/double(aSizeHmm.Height);
+    else
+    {
+        css::awt::Size aSourceSizePixel( 0, 0 );
+        xGraphicPropertySet->getPropertyValue( "SizePixel" ) >>= aSourceSizePixel;
+
+        if( aSourceSizePixel.Width > 0 && aSourceSizePixel.Height > 0 )
+            return double(aSourceSizePixel.Width)/double(aSourceSizePixel.Height);
+    }
+    return fRatio;
+}
+
+} //namespace
 
 // CT_TextParagraphProperties
 TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2Helper const & rParent,
@@ -153,7 +180,10 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
     }
 
     if (mxBlipProps && mxBlipProps->mxFillGraphic.is())
-        mrBulletList.setGraphic(mxBlipProps->mxFillGraphic);
+    {
+        mrBulletList.setGraphic( mxBlipProps->mxFillGraphic );
+        mrBulletList.setBulletAspectRatio( lclGetGraphicAspectRatio(mxBlipProps->mxFillGraphic) );
+    }
 
     if( mrBulletList.is() )
         rPropertyMap.setProperty( PROP_IsNumbering, true);
