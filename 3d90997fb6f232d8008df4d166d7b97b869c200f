@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83563a1c_d3416b7b",
+        "filename": "include/vcl/salgtype.hxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-11-11T15:46:53Z",
+      "side": 1,
+      "message": "there are places reinterpret_cast-ing to SalPoint in vcl, which seems to be why the gen menubar has turned black",
+      "revId": "3d90997fb6f232d8008df4d166d7b97b869c200f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
