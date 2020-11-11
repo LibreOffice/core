@@ -568,7 +568,7 @@ tools::Long BigMulDiv(tools::Long nVal, tools::Long nMul, tools::Long nDiv)
     if(nDiv)
     {
         aVal/=nDiv;
-        return tools::Long(aVal);
+        return sal_Int32(aVal);
     }
     return 0x7fffffff;
 }

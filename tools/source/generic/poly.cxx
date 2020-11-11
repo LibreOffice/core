@@ -774,7 +774,7 @@ Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
                 else
                     ady += mn/2;
             ady /= mn;
-            nNewX = static_cast<tools::Long>(ady) + lx;
+            nNewX = static_cast<sal_Int32>(ady) + lx;
         }
     }
     else
@@ -800,7 +800,7 @@ Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
                 else
                     adx += md/2;
             adx /= md;
-            nNewY = static_cast<tools::Long>(adx) + ly;
+            nNewY = static_cast<sal_Int32>(adx) + ly;
         }
     }
 

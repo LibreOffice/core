@@ -88,9 +88,6 @@ public:
     operator        sal_Int32() const;
     operator        sal_uInt32() const;
     operator        double() const;
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    operator        tools::Long() const;
-#endif
 
     bool            IsSet() const { return bIsSet; }
     bool            IsNeg() const;
@@ -155,17 +152,6 @@ inline BigInt::operator sal_uInt32() const
     assert(false && "out of range");
     return 0;
 }
-
-#if SAL_TYPES_SIZEOFPOINTER == 8
-inline BigInt::operator tools::Long() const
-{
-    // Clamp to int32 since long is int32 on Windows.
-    if (!bIsBig)
-        return nVal;
-    assert(false && "out of range");
-    return 0;
-}
-#endif
 
 inline BigInt& BigInt::operator =( sal_Int32 nValue )
 {

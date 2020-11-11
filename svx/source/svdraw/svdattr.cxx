@@ -855,7 +855,7 @@ void SdrMetricItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
         aVal*=nMul;
         aVal+=nDiv/2; // to round accurately
         aVal/=nDiv;
-        SetValue(tools::Long(aVal));
+        SetValue(sal_Int32(aVal));
     }
 }
 

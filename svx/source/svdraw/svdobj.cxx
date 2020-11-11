@@ -1236,12 +1236,12 @@ tools::Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
         if (bEcke) { // corner point handles
             bool bUseX=(aXFact<aYFact) != bBigOrtho;
             if (bUseX) {
-                tools::Long nNeed=tools::Long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
+                tools::Long nNeed=sal_Int32(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
                 if (bYNeg) nNeed=-nNeed;
                 if (bTop) aTmpRect.SetTop(aTmpRect.Bottom()-nNeed );
                 if (bBtm) aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
             } else {
-                tools::Long nNeed=tools::Long(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
+                tools::Long nNeed=sal_Int32(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
                 if (bXNeg) nNeed=-nNeed;
                 if (bLft) aTmpRect.SetLeft(aTmpRect.Right()-nNeed );
                 if (bRgt) aTmpRect.SetRight(aTmpRect.Left()+nNeed );
@@ -1249,13 +1249,13 @@ tools::Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
         } else { // apex handles
             if ((bLft || bRgt) && nXDiv!=0) {
                 tools::Long nHgt0b=aRect.Bottom()-aRect.Top();
-                tools::Long nNeed=tools::Long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
+                tools::Long nNeed=sal_Int32(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
                 aTmpRect.AdjustTop( -((nNeed-nHgt0b)/2) );
                 aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
             }
             if ((bTop || bBtm) && nYDiv!=0) {
                 tools::Long nWdt0b=aRect.Right()-aRect.Left();
-                tools::Long nNeed=tools::Long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
+                tools::Long nNeed=sal_Int32(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
                 aTmpRect.AdjustLeft( -((nNeed-nWdt0b)/2) );
                 aTmpRect.SetRight(aTmpRect.Left()+nNeed );
             }

@@ -402,8 +402,8 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     nSizX *= aDstFr.GetDenominator();
     nSizY *= double(aMapFact.Y() * rMap.GetScaleY());
     nSizY /= aDstFr.GetNumerator();
-    tools::Long xs=nSizX;
-    tools::Long ys=nSizY;
+    tools::Long xs=sal_Int32(nSizX);
+    tools::Long ys=sal_Int32(nSizY);
     Point aPos(rCenter.X()-xs/2,rCenter.Y()-ys/2);
     tools::Rectangle aR(aPos.X(),aPos.Y(),aPos.X()+xs,aPos.Y()+ys);
     pObj->SetLogicRect(aR);
