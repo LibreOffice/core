@@ -457,7 +457,7 @@ CBenTOCReader::ReadSegment(CBenValue * pValue, BenByte * pLookAhead)
 }
 
 bool
-CBenTOCReader::CanGetData(unsigned long Amt)
+CBenTOCReader::CanGetData(tools::ULong Amt)
 {
     return cCurr + Amt <= cTOCSize;
 }

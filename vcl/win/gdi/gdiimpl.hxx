@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_WIN_GDI_GDIIMPL_HXX
 
 #include <salgdiimpl.hxx>
+#include <tools/long.hxx>
 #include <win/salgdi.h>
 #include <win/wingdiimpl.hxx>
 
@@ -51,7 +52,7 @@ private:
     Color                maFillColor;
 
     bool TryDrawBitmapGDIPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap);
-    void DrawPixelImpl(long nX, long nY, COLORREF crColor);
+    void DrawPixelImpl(tools::Long nX, tools::Long nY, COLORREF crColor);
 
     HPEN SearchStockPen(COLORREF nPenColor);
     HPEN MakePen(Color nColor);
