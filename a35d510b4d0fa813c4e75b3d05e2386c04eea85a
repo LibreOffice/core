@@ -211,6 +211,24 @@
       "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77125f14_c2b1e26c",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-11T11:37:05Z",
+      "side": 1,
+      "message": "Sorry if this is unclear.\n\nThis is effectively Windows only, since on other platforms, 64-bit implies sizeof(long) \u003d\u003d 8, only on Windows does a 64-bit build, have sizeof(long) \u003d\u003d 4.\n\nFor the same reason,\n   SAL_TYPES_SIZEOFPOINTER \u003d\u003d 8\nis the most useful discriminant, since what we want here is to make all 64-bit platforms have similar behaviour with respect to the tools::(U)Long types.",
+      "parentUuid": "e53f2b73_046a4189",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
