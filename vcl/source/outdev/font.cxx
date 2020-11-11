@@ -278,32 +278,32 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
         PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control
     };
 
-    static const tools::Long aAccentPos[48] =
+    static const Point aAccentPos[24] =
     {
-         78,      0,
-        348,     79,
-        599,    235,
-        843,    469,
-        938,    574,
-        990,    669,
-        990,    773,
-        990,    843,
-        964,    895,
-        921,    947,
-        886,    982,
-        860,    999,
-        825,    999,
-        764,    999,
-        721,    964,
-        686,    895,
-        625,    791,
-        556,    660,
-        469,    504,
-        400,    400,
-        261,    252,
-         61,     61,
-          0,     27,
-          9,      0
+        {  78,    0 },
+        { 348,   79 },
+        { 599,  235 },
+        { 843,  469 },
+        { 938,  574 },
+        { 990,  669 },
+        { 990,  773 },
+        { 990,  843 },
+        { 964,  895 },
+        { 921,  947 },
+        { 886,  982 },
+        { 860,  999 },
+        { 825,  999 },
+        { 764,  999 },
+        { 721,  964 },
+        { 686,  895 },
+        { 625,  791 },
+        { 556,  660 },
+        { 469,  504 },
+        { 400,  400 },
+        { 261,  252 },
+        {  61,   61 },
+        {   0,   27 },
+        {   9,    0 }
     };
 
     rWidth      = 0;
@@ -396,8 +396,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             }
             else
             {
-                tools::Polygon aPoly( SAL_N_ELEMENTS( aAccentPos ) / 2,
-                                      reinterpret_cast<const Point*>(aAccentPos),
+                tools::Polygon aPoly( SAL_N_ELEMENTS(aAccentPos), aAccentPos,
                                       aAccentPolyFlags );
                 double dScale = static_cast<double>(nDotSize)/1000.0;
                 aPoly.Scale( dScale, dScale );
