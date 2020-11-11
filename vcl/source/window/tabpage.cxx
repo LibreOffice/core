@@ -37,35 +37,41 @@ void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     Window::ImplInit( pParent, nStyle, nullptr );
 
-    ImplInitSettings();
-
-    m_pVScroll.set(VclPtr<ScrollBar>::Create(this, ((nStyle & WB_VSCROLL) ? WB_HIDE : 0) | WB_VSCROLL | WB_DRAG));
-    m_pHScroll.set(VclPtr<ScrollBar>::Create(this, ((nStyle & WB_HSCROLL) ? WB_HIDE : 0) | WB_HSCROLL | WB_DRAG));
-    m_aScrollBarBox.set(
-        VclPtr<ScrollBarBox>::Create(this,
-                                     ((nStyle & (WB_VSCROLL|WB_HSCROLL)) ? WB_HIDE : 0)));
     mbHasHoriBar = false;
     mbHasVertBar = false;
-    ScrollBarVisibility aVis = None;
+
+    Link<ScrollBar*,void> aLink( LINK( this, TabPage, ScrollBarHdl ) );
 
     if ( nStyle & ( WB_AUTOHSCROLL | WB_AUTOVSCROLL ) )
     {
         if ( nStyle & WB_AUTOHSCROLL )
-            aVis = Hori;
+        {
+            mbHasHoriBar = true;
+            m_pHScroll.set(VclPtr<ScrollBar>::Create(this, (WB_HSCROLL | WB_DRAG)));
+            m_pHScroll->Show();
+            m_pHScroll->SetScrollHdl(aLink);
+        }
         if ( nStyle &  WB_AUTOVSCROLL )
         {
-            if ( aVis == Hori )
-                aVis = Both;
-            else
-                aVis = Vert;
+            mbHasVertBar = true;
+            m_pVScroll.set(VclPtr<ScrollBar>::Create(this, (WB_VSCROLL | WB_DRAG)));
+            m_pVScroll->Show();
+            m_pVScroll->SetScrollHdl(aLink);
         }
     }
-    setScrollVisibility( aVis );
+
+    if ( mbHasHoriBar || mbHasVertBar )
+    {
+        m_aScrollBarBox.set(
+            VclPtr<ScrollBarBox>::Create(this,
+                                         ((nStyle & (WB_VSCROLL|WB_HSCROLL)) ? WB_HIDE : 0)));
+        m_aScrollBarBox->Show();
+        SetStyle( GetStyle() | WB_CLIPCHILDREN );
+    }
+
     mnScrWidth = Application::GetSettings().GetStyleSettings().GetScrollBarSize();
 
-    Link<ScrollBar*,void> aLink( LINK( this, TabPage, ScrollBarHdl ) );
-    m_pVScroll->SetScrollHdl(aLink);
-    m_pHScroll->SetScrollHdl(aLink);
+    ImplInitSettings();
 
     // if the tabpage is drawn (ie filled) by a native widget, make sure all controls will have transparent background
     // otherwise they will paint with a wrong background
@@ -244,23 +250,6 @@ void TabPage::SetPosPixel(const Point& rAllocPos)
     }
 }
 
-void TabPage::setScrollVisibility( ScrollBarVisibility rVisState )
-{
-    maScrollVis = rVisState;
-    if (  maScrollVis == Hori || maScrollVis == Both )
-    {
-        mbHasHoriBar = true;
-        m_pHScroll->Show();
-    }
-    if ( maScrollVis == Vert || maScrollVis == Both )
-    {
-        mbHasVertBar = true;
-        m_pVScroll->Show();
-    }
-    if ( mbHasHoriBar || mbHasVertBar )
-        SetStyle( GetStyle() | WB_CLIPCHILDREN );
-}
-
 void TabPage::lcl_Scroll( long nX, long nY )
 {
     long nXScroll = mnScrollPos.X() - nX;
@@ -332,14 +321,19 @@ void TabPage::ResetScrollBars()
     Point aVPos( aOutSz.Width() - mnScrWidth, 0 );
     Point aHPos( 0, aOutSz.Height() - mnScrWidth );
 
-    m_pVScroll->SetPosSizePixel( aVPos, Size( mnScrWidth,  GetSizePixel().Height() - mnScrWidth ) );
-    m_pHScroll->SetPosSizePixel( aHPos, Size(  GetSizePixel().Width() - mnScrWidth, mnScrWidth ) );
+    if( m_pVScroll )
+    {
+        m_pVScroll->SetPosSizePixel( aVPos, Size( mnScrWidth,  GetSizePixel().Height() - mnScrWidth ) );
+        m_pVScroll->SetRangeMax( maScrollArea.Height() + mnScrWidth );
+        m_pVScroll->SetVisibleSize( GetSizePixel().Height() );
+    }
 
-    m_pHScroll->SetRangeMax( maScrollArea.Width() + mnScrWidth  );
-    m_pHScroll->SetVisibleSize( GetSizePixel().Width() );
-
-    m_pVScroll->SetRangeMax( maScrollArea.Height() + mnScrWidth );
-    m_pVScroll->SetVisibleSize( GetSizePixel().Height() );
+    if( m_pHScroll )
+    {
+        m_pHScroll->SetPosSizePixel( aHPos, Size(  GetSizePixel().Width() - mnScrWidth, mnScrWidth ) );
+        m_pHScroll->SetRangeMax( maScrollArea.Width() + mnScrWidth  );
+        m_pHScroll->SetVisibleSize( GetSizePixel().Width() );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
