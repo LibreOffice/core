@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18c2833e_b35e2d98",
+        "filename": "vcl/uiconfig/ui/printdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-11T07:04:15Z",
+      "side": 0,
+      "message": "Confusing to need height_request per code and this. \"resize_toplevel\" sounds as if this attribute does exactly what happened before, resizing the parent. Never consciously seen this option in Glade.",
+      "range": {
+        "startLine": 638,
+        "startChar": 44,
+        "endLine": 638,
+        "endChar": 92
+      },
+      "revId": "f88c03b1d115cd09e3271b278b39bf600e21f6cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
