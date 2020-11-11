@@ -23,12 +23,12 @@
  */
 namespace tools
 {
-#if SAL_TYPES_SIZEOFPOINTER == 8
+#if defined _WIN64
 typedef sal_Int64 Long;
 typedef sal_uInt64 ULong;
 #else
-typedef sal_Int32 Long;
-typedef sal_uInt32 ULong;
+typedef long Long;
+typedef unsigned long ULong;
 #endif
 }
 
