@@ -232,16 +232,18 @@ namespace pcr
             }
         }
 
-        void implEnable(weld::Widget* pWindow, sal_uInt16 nEnabledBits, sal_uInt16 nMatchBits)
-        {
-            if (pWindow)
-                pWindow->set_sensitive((nEnabledBits & nMatchBits) == nMatchBits);
-        }
-
         void implEnable(weld::Widget* pWindow, bool bEnable)
         {
-            if (pWindow)
+            // tdf#138131 get_sensitive comparison as bodge for
+            // vcl's recursive Enable behavior
+            if (pWindow && pWindow->get_sensitive() != bEnable)
                 pWindow->set_sensitive(bEnable);
+        }
+
+        void implEnable(weld::Widget* pWindow, sal_uInt16 nEnabledBits, sal_uInt16 nMatchBits)
+        {
+            bool bEnable = ((nEnabledBits & nMatchBits) == nMatchBits);
+            implEnable(pWindow, bEnable);
         }
     }
 
