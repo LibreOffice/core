@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "1e2d5f36_04fdd0a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-11-11T16:59:44Z",
+      "side": 1,
+      "message": "Indeed, that commit was mostly an automatic rewrite, so it just moved the class itself and updated its users, nothing else.",
+      "parentUuid": "9a226291_61f1d505",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43ba3515_999a3fd1",
         "filename": "avmedia/source/viewer/mediawindow_impl.cxx",
         "patchSetId": 15
