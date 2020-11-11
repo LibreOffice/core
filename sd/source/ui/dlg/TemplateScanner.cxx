@@ -65,7 +65,7 @@ public:
 /** Use a heuristic based on the URL of a top-level template folder to
     assign a priority that is used to sort the folders.
 */
-int Classify (const OUString&, const OUString& rsURL)
+int Classify (const OUString& rsURL)
 {
     int nPriority (0);
 
@@ -248,13 +248,12 @@ TemplateScanner::State TemplateScanner::GatherFolderList()
             Reference<sdbc::XRow> xRow (mxFolderResultSet, UNO_QUERY);
             if (xRow.is())
             {
-                OUString sTitle (xRow->getString (1));
                 OUString sTargetDir (xRow->getString (2));
                 OUString aId = xContentAccess->queryContentIdentifierString();
 
                 mpFolderDescriptors->insert(
                     FolderDescriptor(
-                        Classify(sTitle,sTargetDir),
+                        Classify(sTargetDir),
                         aId,
                         mxFolderEnvironment));
             }
