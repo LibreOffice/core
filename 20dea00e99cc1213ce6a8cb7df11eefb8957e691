@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b629081f_59862e0e",
+        "filename": "sw/source/filter/basflt/fltini.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T13:26:51Z",
+      "side": 1,
+      "message": "We have a policy to not exceed 100 characters per line. Please either shorten the comment, or move it above. Consistency here is of lesser importance.",
+      "range": {
+        "startLine": 570,
+        "startChar": 100,
+        "endLine": 570,
+        "endChar": 101
+      },
+      "revId": "20dea00e99cc1213ce6a8cb7df11eefb8957e691",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8978fbe_437d062e",
+        "filename": "sw/source/filter/basflt/fltini.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T13:26:51Z",
+      "side": 1,
+      "message": "This seems copy-pasted :-)",
+      "range": {
+        "startLine": 615,
+        "startChar": 10,
+        "endLine": 615,
+        "endChar": 44
+      },
+      "revId": "20dea00e99cc1213ce6a8cb7df11eefb8957e691",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d25d6ac3_929f7dba",
+        "filename": "sw/source/filter/basflt/fltini.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T13:26:51Z",
+      "side": 1,
+      "message": "Also please remove the spaces inside the parens - that is also against out code formatting rules.",
+      "range": {
+        "startLine": 616,
+        "startChar": 7,
+        "endLine": 616,
+        "endChar": 8
+      },
+      "revId": "20dea00e99cc1213ce6a8cb7df11eefb8957e691",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
