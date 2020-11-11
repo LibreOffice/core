@@ -33,6 +33,7 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
+    void testTdf138138_MoveCellWithRotatedShape();
     void testLoadVerticalFlip();
     void testTdf117948_CollapseBeforeShape();
     void testTdf137355_UndoHideRows();
@@ -41,6 +42,7 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testTdf138138_MoveCellWithRotatedShape);
     CPPUNIT_TEST(testLoadVerticalFlip);
     CPPUNIT_TEST(testTdf117948_CollapseBeforeShape);
     CPPUNIT_TEST(testTdf137355_UndoHideRows);
@@ -97,6 +99,75 @@ static void lcl_AssertRectEqualWithTolerance(const OString& sInfo,
            + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            labs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
+}
+
+void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
+{
+    // The document contains a 90deg rotated, cell-anchored rectangle in column D. Insert 2 columns
+    // after column B, save and reload. The shape was not correctly moved to column F.
+    OUString aFileURL;
+    createFileURL("tdf138138_MoveCellWithRotatedShape.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get ScDocShell
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get document and object
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: custom shape not found", pObj);
+
+    // Check anchor and position of shape. The expected values are taken from UI.
+    tools::Rectangle aSnapRect = pObj->GetSnapRect();
+    tools::Rectangle aExpectedRect(Point(10000, 3000), Size(1000, 7500));
+    lcl_AssertRectEqualWithTolerance("Load original: ", aExpectedRect, aSnapRect, 1);
+
+    // Insert two columns after column B
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("ToPoint", OUString("$A$1:$B$1")),
+    };
+    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
+    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT_MESSAGE("No ScTabViewShell", pViewShell);
+    pViewShell->GetViewData().GetDispatcher().Execute(FID_INS_COLUMNS_AFTER);
+    aExpectedRect = tools::Rectangle(Point(16000, 3000), Size(1000, 7500)); // col width 3000
+    aSnapRect = pObj->GetSnapRect();
+    lcl_AssertRectEqualWithTolerance("Shift: Wrong after insert of columns ", aExpectedRect,
+                                     aSnapRect, 1);
+
+    // Save and reload
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get ScDocShell
+    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Reload: Failed to access document shell", pFoundShell);
+    pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get document and object
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    pDrawLayer = rDoc2.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: custom shape no longer exists", pObj);
+
+    // Assert objects size is unchanged, position is shifted.
+    aSnapRect = pObj->GetSnapRect();
+    lcl_AssertRectEqualWithTolerance("Reload: Shape geometry has changed.", aExpectedRect,
+                                     aSnapRect, 1);
+
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testLoadVerticalFlip()
