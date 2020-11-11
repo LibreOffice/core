@@ -52,6 +52,24 @@
       "revId": "3521b08ef76a38054c8e4a4e0d0723a8e7861ea1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f17caca1_ea215741",
+        "filename": "cui/uiconfig/ui/borderpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-11T08:36:58Z",
+      "side": 1,
+      "message": "Thanks for screenshot, Heiko. Does it show an example of \"set\"? I could only see \"gray\" and \"blank\"?\n\nI think there must be a \"sys\" difference.  Tried Breeze Dark (with 6.3.6 and 7.1).  While the UI changes to dark, the dialog boxes (in Win) do not (i.e., still show black, grey, white lines).",
+      "parentUuid": "f0a21801_0b196133",
+      "revId": "3521b08ef76a38054c8e4a4e0d0723a8e7861ea1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
