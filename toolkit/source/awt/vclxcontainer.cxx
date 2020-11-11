@@ -26,6 +26,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vcl/tabpage.hxx>
 #include <tools/debug.hxx>
 #include <helper/scrollabledialog.hxx>
 #include <toolkit/helper/property.hxx>
@@ -251,7 +252,8 @@ void SAL_CALL VCLXContainer::setProperty(
             VclPtr<vcl::Window> pWindow = GetWindow();
             MapMode aMode( MapUnit::MapAppFont );
             toolkit::ScrollableDialog* pScrollable = dynamic_cast< toolkit::ScrollableDialog* >( pWindow.get() );
-            if ( pWindow && pScrollable )
+            TabPage* pScrollTabPage = dynamic_cast< TabPage* >( pWindow.get() );
+            if ( pWindow && (pScrollable || pScrollTabPage) )
             {
                 OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
                 if ( !pDev )
@@ -265,16 +267,20 @@ void SAL_CALL VCLXContainer::setProperty(
                 switch ( nPropType )
                 {
                     case BASEPROPERTY_SCROLLHEIGHT:
-                        pScrollable->SetScrollHeight( aSize.Height() );
+                        pScrollable ? pScrollable->SetScrollHeight( aSize.Height() ) : (void)0;
+                        pScrollTabPage ? pScrollTabPage->SetScrollHeight( aSize.Height() ) : (void)0;
                         break;
                     case BASEPROPERTY_SCROLLWIDTH:
-                        pScrollable->SetScrollWidth( aSize.Width() );
+                        pScrollable ? pScrollable->SetScrollWidth( aSize.Width() ) : (void)0;
+                        pScrollTabPage ? pScrollTabPage->SetScrollWidth( aSize.Width() ) : (void)0;
                         break;
                     case BASEPROPERTY_SCROLLTOP:
-                        pScrollable->SetScrollTop( aSize.Height() );
+                        pScrollable ? pScrollable->SetScrollTop( aSize.Height() ) : (void)0;
+                        pScrollTabPage ? pScrollTabPage->SetScrollTop( aSize.Height() ) : (void)0;
                         break;
                     case BASEPROPERTY_SCROLLLEFT:
-                        pScrollable->SetScrollLeft( aSize.Width() );
+                        pScrollable ? pScrollable->SetScrollLeft( aSize.Width() ) : (void)0;
+                        pScrollTabPage ? pScrollTabPage->SetScrollLeft( aSize.Width() ) : (void)0;
                         break;
                     default:
                         break;
