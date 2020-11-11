@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "565ba5a0_b95fd625",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T12:22:00Z",
+      "side": 1,
+      "message": "I had read the message of 3d90997fb6f232d8008df4d166d7b97b869c200f - but out of curiosity, what are the actual problems if you just make it unconditional, and remove the #else block? (in case you tried)",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "d55153f311ac6008ba8b074a7dcc5fb71a0fe2d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
