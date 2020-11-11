@@ -45,6 +45,29 @@
       "revId": "01f0e6794fe8f14ec7f76b7fa6ff2fc7fe69ef5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ad4d287_0ea3b9a5",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-11-11T17:09:17Z",
+      "side": 1,
+      "message": "Take for example a table having 1 row and 64 columns. This would display the warning message. Is a table having 1 row and 64 columns really considered a large table?",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 253,
+        "endChar": 5
+      },
+      "revId": "01f0e6794fe8f14ec7f76b7fa6ff2fc7fe69ef5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
