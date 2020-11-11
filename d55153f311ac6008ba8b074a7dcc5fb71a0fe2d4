@@ -22,6 +22,30 @@
       "revId": "d55153f311ac6008ba8b074a7dcc5fb71a0fe2d4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8981d108_1515222d",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-11T12:27:54Z",
+      "side": 1,
+      "message": "I did not. It would mean that 32-bit builds (on all platforms) would have some fairly common data structures double in size.",
+      "parentUuid": "565ba5a0_b95fd625",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "d55153f311ac6008ba8b074a7dcc5fb71a0fe2d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
