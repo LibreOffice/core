@@ -16,6 +16,24 @@
       "revId": "b0b5812bc6b74369c7909313fcb7fd86c535aea3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4bf2566_2076fb7c",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-11-11T10:15:29Z",
+      "side": 1,
+      "message": "It looks like PtrToBoxNm() is non-const, so we have to work on a copy. Or did I miss something?",
+      "parentUuid": "d2929c8b_4ec6fc9b",
+      "revId": "b0b5812bc6b74369c7909313fcb7fd86c535aea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
