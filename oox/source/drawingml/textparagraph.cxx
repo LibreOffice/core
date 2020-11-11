@@ -144,11 +144,23 @@ void TextParagraph::insertAt(
             {
                 tools::Long nFirstCharHeightMm = TransformMetric(nCharHeightFirst > 0 ? nCharHeightFirst : 1200, FieldUnit::POINT, FieldUnit::MM);
                 float fBulletSizeRel = 1.f;
+                double fBulletAspectRatio = 1.0;
+
                 if( aParaProp.getBulletList().mnSize.hasValue() )
                     fBulletSizeRel = aParaProp.getBulletList().mnSize.get<sal_Int16>() / 100.f;
 
+                if( aParaProp.getBulletList().mnAspectRatio.hasValue() )
+                    fBulletAspectRatio = aParaProp.getBulletList().mnAspectRatio.get<double>();
+
                 css::awt::Size aBulletSize;
-                aBulletSize.Width = aBulletSize.Height = std::lround(fBulletSizeRel * nFirstCharHeightMm * OOX_BULLET_LIST_SCALE_FACTOR);
+                if( fBulletAspectRatio != 1.0 )
+                {
+                    aBulletSize.Height = std::lround(fBulletSizeRel * nFirstCharHeightMm * OOX_BULLET_LIST_SCALE_FACTOR);
+                    aBulletSize.Width = aBulletSize.Height * fBulletAspectRatio;
+                }
+                else
+                    aBulletSize.Width = aBulletSize.Height = std::lround(fBulletSizeRel * nFirstCharHeightMm * OOX_BULLET_LIST_SCALE_FACTOR);
+
                 aioBulletList.setProperty( PROP_GraphicSize, aBulletSize);
             }
 
