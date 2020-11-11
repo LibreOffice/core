@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9a226291_61f1d505",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-11T15:13:01Z",
+      "side": 1,
+      "message": "I cannot reproduce that with my local buidl, but anyway, when \u003chttps://git.libreoffice.org/core/+/a5a571307fb3306b74ab46b085cde6388270a770%5E!/\u003e \"tdf#82580 tools: rename Rectangle to tools::Rectangle\" moved Rectangle to namespace tools, it should have moved that operator\u003c\u003c as well, to let it still be found via ADL.  Presumably was an oversight back then.",
+      "parentUuid": "d2ecd6b0_8736d337",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43ba3515_999a3fd1",
         "filename": "avmedia/source/viewer/mediawindow_impl.cxx",
         "patchSetId": 15
