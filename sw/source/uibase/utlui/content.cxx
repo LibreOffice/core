@@ -2028,11 +2028,11 @@ void SwContentTree::Display( bool bActive )
         m_bIsLastReadOnly = bReadOnly;
         bool bDisable =  pShell == nullptr || bReadOnly;
         SwNavigationPI* pNavi = GetParentWindow();
-        pNavi->m_xContent3ToolBox->set_item_sensitive("chapterup", !bDisable);
-        pNavi->m_xContent3ToolBox->set_item_sensitive("chapterdown", !bDisable);
-        pNavi->m_xContent3ToolBox->set_item_sensitive("promote", !bDisable);
-        pNavi->m_xContent3ToolBox->set_item_sensitive("demote", !bDisable);
-        pNavi->m_xContent2ToolBox->set_item_sensitive("reminder", !bDisable);
+        pNavi->m_xContent6ToolBox->set_item_sensitive("chapterup", !bDisable);
+        pNavi->m_xContent6ToolBox->set_item_sensitive("chapterdown", !bDisable);
+        pNavi->m_xContent6ToolBox->set_item_sensitive("promote", !bDisable);
+        pNavi->m_xContent6ToolBox->set_item_sensitive("demote", !bDisable);
+        pNavi->m_xContent5ToolBox->set_item_sensitive("reminder", !bDisable);
     }
 
     if (pShell)
@@ -2403,7 +2403,7 @@ void SwContentTree::ToggleToRoot()
         Display(State::HIDDEN != m_eState);
     }
     m_pConfig->SetRootType( m_nRootType );
-    weld::Toolbar* pBox = GetParentWindow()->m_xContent2ToolBox.get();
+    weld::Toolbar* pBox = GetParentWindow()->m_xContent5ToolBox.get();
     pBox->set_item_active("root", m_bIsRoot);
 }
 
@@ -4006,10 +4006,10 @@ void SwContentTree::Select()
         }
     }
     SwNavigationPI* pNavi = GetParentWindow();
-    pNavi->m_xContent3ToolBox->set_item_sensitive("chapterup",  bEnable);
-    pNavi->m_xContent3ToolBox->set_item_sensitive("chapterdown", bEnable);
-    pNavi->m_xContent3ToolBox->set_item_sensitive("promote", bEnable);
-    pNavi->m_xContent3ToolBox->set_item_sensitive("demote", bEnable);
+    pNavi->m_xContent6ToolBox->set_item_sensitive("chapterup",  bEnable);
+    pNavi->m_xContent6ToolBox->set_item_sensitive("chapterdown", bEnable);
+    pNavi->m_xContent6ToolBox->set_item_sensitive("promote", bEnable);
+    pNavi->m_xContent6ToolBox->set_item_sensitive("demote", bEnable);
 }
 
 void SwContentTree::SetRootType(ContentTypeId nType)

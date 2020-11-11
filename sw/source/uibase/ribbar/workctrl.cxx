@@ -721,12 +721,6 @@ IMPL_LINK(NavElementBox_Base, SelectHdl, weld::ComboBox&, rComboBox, void)
     SwView::SetMoveType( nMoveType );
 
     css::uno::Sequence< css::beans::PropertyValue > aArgs;
-
-    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
-        This instance may be deleted in the meantime (i.e. when a dialog is opened
-        while in Dispatch()), accessing members will crash in this case. */
-    ReleaseFocus_Impl();
-
     m_pCtrl->dispatchCommand( aArgs );
 }
 
@@ -767,14 +761,10 @@ bool NavElementBox_Base::DoKeyInput(const KeyEvent& rKEvt)
         }
         case KEY_RETURN:
         {
-            bHandled = true;
+            m_bRelease = false;
             SelectHdl(*m_xWidget);
             break;
         }
-        case KEY_ESCAPE:
-            ReleaseFocus_Impl();
-            bHandled = true;
-            break;
     }
 
     return bHandled;
@@ -782,6 +772,11 @@ bool NavElementBox_Base::DoKeyInput(const KeyEvent& rKEvt)
 
 bool NavElementBox_Impl::DoKeyInput(const KeyEvent& rKEvt)
 {
+    if (KEY_ESCAPE == rKEvt.GetKeyCode().GetCode())
+    {
+        ReleaseFocus_Impl();
+        return true;
+    }
     return NavElementBox_Base::DoKeyInput(rKEvt) || ChildKeyInput(rKEvt);
 }
 

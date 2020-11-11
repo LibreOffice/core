@@ -58,7 +58,11 @@ class SwNavigationPI : public PanelLayout
     std::unique_ptr<weld::Toolbar> m_xContent1ToolBox;
     std::unique_ptr<weld::Toolbar> m_xContent2ToolBox;
     std::unique_ptr<weld::Toolbar> m_xContent3ToolBox;
-    std::unique_ptr<ToolbarUnoDispatcher> m_xContent1Dispatch;
+    std::unique_ptr<weld::Toolbar> m_xContent4ToolBox;
+    std::unique_ptr<weld::Toolbar> m_xContent5ToolBox;
+    std::unique_ptr<weld::Toolbar> m_xContent6ToolBox;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xContent2Dispatch;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xContent3Dispatch;
     std::unique_ptr<weld::Menu> m_xHeadingsMenu;
     std::unique_ptr<weld::Menu> m_xDragModeMenu;
     std::unique_ptr<weld::Menu> m_xUpdateMenu;
@@ -98,8 +102,8 @@ class SwNavigationPI : public PanelLayout
     DECL_LINK( DocListBoxSelectHdl, weld::ComboBox&, void );
     DECL_LINK( ToolBoxSelectHdl, const OString&, void );
     DECL_LINK( ToolBoxClickHdl, const OString&, void );
-    DECL_LINK( ToolBox2DropdownClickHdl, const OString&, void );
-    DECL_LINK( ToolBox3DropdownClickHdl, const OString&, void );
+    DECL_LINK( ToolBox5DropdownClickHdl, const OString&, void );
+    DECL_LINK( ToolBox6DropdownClickHdl, const OString&, void );
     DECL_LINK( DoneLink, SfxPoolItem const *, void );
     DECL_LINK( DropModeMenuSelectHdl, const OString&, void );
     DECL_LINK( HeadingsMenuSelectHdl, const OString&, void );
