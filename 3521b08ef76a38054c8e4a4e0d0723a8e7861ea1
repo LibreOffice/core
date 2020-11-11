@@ -34,6 +34,24 @@
       "revId": "3521b08ef76a38054c8e4a4e0d0723a8e7861ea1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0a21801_0b196133",
+        "filename": "cui/uiconfig/ui/borderpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-11T07:13:12Z",
+      "side": 1,
+      "message": "https://i.imgur.com/L3lvPn8.png - v6.4 with Breeze Dark, horizontal lines from top to bottom: no change, set, unset.",
+      "parentUuid": "47120f7c_71d1a5e5",
+      "revId": "3521b08ef76a38054c8e4a4e0d0723a8e7861ea1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
