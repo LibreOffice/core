@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "61fbed51_3b1a07d5",
+        "filename": "svx/source/dialog/frmsel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-11T18:17:50Z",
+      "side": 1,
+      "message": "It\u0027s actually light grey and the closest to previous 0x80/0xC0. Screenshot with Breeze Dark is on the ticket (should double check with gen too).",
+      "parentUuid": "ba4e0ab0_7d19d4f5",
+      "range": {
+        "startLine": 304,
+        "startChar": 4,
+        "endLine": 305,
+        "endChar": 76
+      },
+      "revId": "aef65d428f17e2d86c2079be7ca658f742000f32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e54ae1e_6618b5e9",
         "filename": "svx/source/dialog/frmsel.cxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-11-11T14:56:46Z",
       "side": 1,
       "message": "Shouldn\u0027t it also be dependent on the \"lightness\" of the background, so that it would be automatically white if one uses dark document background? As you did in the previous patch?",
+      "range": {
+        "startLine": 306,
+        "startChar": 18,
+        "endLine": 306,
+        "endChar": 27
+      },
+      "revId": "aef65d428f17e2d86c2079be7ca658f742000f32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6028a4f1_62999f73",
+        "filename": "svx/source/dialog/frmsel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-11T18:17:50Z",
+      "side": 1,
+      "message": "FrameSelectorImpl::GetDrawLineColor inverts if maBackCol\u003dmaHCLineCol",
+      "parentUuid": "2e54ae1e_6618b5e9",
       "range": {
         "startLine": 306,
         "startChar": 18,
