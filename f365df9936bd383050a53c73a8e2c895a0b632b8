@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cca0b112_10d0392a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-11T14:04:19Z",
+      "side": 1,
+      "message": "If there is an explicit operator sal_Int32, why should any call site need an explicit operator long (-\u003e changed to tools::Long -\u003e now changed to sal_Int64) but which also only returns an actual sal_Int32 value?  IMO, this looks like some cruft that should better have been cleaned up before the tools::Long changes hit master.",
+      "range": {
+        "startLine": 11,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 16
+      },
+      "revId": "f365df9936bd383050a53c73a8e2c895a0b632b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6d80050_70200f07",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-11T14:04:19Z",
+      "side": 1,
+      "message": "But that operator long (-\u003e changed to tools::Long -\u003e now changed to sal_Int64) only returns an actual sal_Int32 value and fires an assert otherwise (whether or not you remove the \"Clamp to int32 since long is int32 on Windows\" comment), so your rationale for the existence of that operator seems wrong.  IMO, this looks like some cruft that should better have been cleaned up before the tools::Long changes hit master.",
+      "range": {
+        "startLine": 16,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 65
+      },
+      "revId": "f365df9936bd383050a53c73a8e2c895a0b632b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
