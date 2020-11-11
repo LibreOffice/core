@@ -73,7 +73,7 @@ OUString cppu::getUnoIniUri() {
     // looking for the latter one here. I think...
     if (uri.endsWith( "/" LIBO_LIB_FOLDER ) )
     {
-        uri = uri.copy( 0, uri.getLength() - (sizeof(LIBO_LIB_FOLDER)-1) ) + LIBO_URE_ETC_FOLDER;
+        uri = OUString::Concat(uri.subView( 0, uri.getLength() - (sizeof(LIBO_LIB_FOLDER)-1) )) + LIBO_URE_ETC_FOLDER;
     }
 #endif
 #endif
