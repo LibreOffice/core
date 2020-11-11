@@ -557,8 +557,10 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
                 ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData( pObj );
                 if ( pNoRotatedAnchor )
                 {
-                    pNoRotatedAnchor->maStart = pData->maStart;
-                    pNoRotatedAnchor->maEnd = pData->maEnd;
+                    pNoRotatedAnchor->maStart.IncCol(nDx);
+                    pNoRotatedAnchor->maStart.IncRow(nDy);
+                    pNoRotatedAnchor->maEnd.IncCol(nDx);
+                    pNoRotatedAnchor->maEnd.IncRow(nDy);
                 }
 
                 AddCalcUndo( std::make_unique<ScUndoObjData>( pObj, aOldStt, aOldEnd, pData->maStart, pData->maEnd ) );
