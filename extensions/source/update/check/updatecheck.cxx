@@ -117,7 +117,7 @@ OUString getImageFromFileName(const OUString& aFile)
         sal_uInt32 lastIndex = aUnpackPath.lastIndexOf('/');
         if ( lastIndex > 0 )
         {
-            aUnpackPath = aUnpackPath.copy( 0, lastIndex+1 ) +
+            aUnpackPath = OUString::Concat(aUnpackPath.subView( 0, lastIndex+1 )) +
                 "unpack_update";
         }
 
