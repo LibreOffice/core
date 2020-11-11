@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "4e6278a8_332184c2",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-11-11T07:06:31Z",
+      "side": 1,
+      "message": "It doesn\u0027t seem necessary to change these. I understand why get_text().toInt64() is used to get the spinbutton edit control text instead of the current stored value in IMPL_LINK( SwInsTableDlg, ModifyRowCol, weld::Entry\u0026, rEdit, void ) but don\u0027t see a reason to do it here as the GetValues function is not used by this patch.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 50
+      },
+      "revId": "9e3306ee88caeb2b6c1bdb18c18cc388e1d0bee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bbf6ae9a_f5516f31",
         "filename": "sw/source/ui/table/instable.cxx",
         "patchSetId": 15
