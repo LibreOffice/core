@@ -22,6 +22,30 @@
       "revId": "f88c03b1d115cd09e3271b278b39bf600e21f6cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fce77691_98b6c682",
+        "filename": "vcl/uiconfig/ui/printdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-11-11T08:56:44Z",
+      "side": 0,
+      "message": "its tricky, even with resize_toplevel of false, on change of the dialog layout the gen ScrolledWindow will be asked its size and by default it will report the size needed to fully contain its children and the dialog will expand to fit that size, so easiest solution is to lock it to the smallest pre expand size (plus width for scrollbar) and it works out ok",
+      "parentUuid": "18c2833e_b35e2d98",
+      "range": {
+        "startLine": 638,
+        "startChar": 44,
+        "endLine": 638,
+        "endChar": 92
+      },
+      "revId": "f88c03b1d115cd09e3271b278b39bf600e21f6cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
