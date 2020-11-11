@@ -343,7 +343,7 @@ sal_uInt16 SwWriteTable::GetRelWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) con
 {
     tools::Long nWidth = GetRawWidth( nCol, nColSpan );
 
-    return static_cast<sal_uInt16>(static_cast<tools::Long>(Fraction( nWidth*256 + GetBaseWidth()/2,
+    return static_cast<sal_uInt16>(static_cast<sal_Int32>(Fraction( nWidth*256 + GetBaseWidth()/2,
                                    GetBaseWidth() )));
 }
 
@@ -353,7 +353,7 @@ sal_uInt16 SwWriteTable::GetPercentWidth( sal_uInt16 nCol, sal_uInt16 nColSpan )
 
     // Looks funny, but is nothing more than
     // [(100 * nWidth) + .5] without rounding errors
-    return static_cast<sal_uInt16>(static_cast<tools::Long>(Fraction( nWidth*100 + GetBaseWidth()/2,
+    return static_cast<sal_uInt16>(static_cast<sal_Int32>(Fraction( nWidth*100 + GetBaseWidth()/2,
                                    GetBaseWidth() )));
 }
 

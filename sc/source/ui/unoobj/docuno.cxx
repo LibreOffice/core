@@ -2261,10 +2261,10 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                         Fraction aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
                         Fraction aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
 
-                        tools::Long nX1 = aLocationPixel.Left() + static_cast<tools::Long>( Fraction( aTargetRect.Left() - aLocationMM.Left(), 1 ) * aScaleX );
-                        tools::Long nX2 = aLocationPixel.Left() + static_cast<tools::Long>( Fraction( aTargetRect.Right() - aLocationMM.Left(), 1 ) * aScaleX );
-                        tools::Long nY1 = aLocationPixel.Top() + static_cast<tools::Long>( Fraction( aTargetRect.Top() - aLocationMM.Top(), 1 ) * aScaleY );
-                        tools::Long nY2 = aLocationPixel.Top() + static_cast<tools::Long>( Fraction( aTargetRect.Bottom() - aLocationMM.Top(), 1 ) * aScaleY );
+                        tools::Long nX1 = aLocationPixel.Left() + static_cast<sal_Int32>( Fraction( aTargetRect.Left() - aLocationMM.Left(), 1 ) * aScaleX );
+                        tools::Long nX2 = aLocationPixel.Left() + static_cast<sal_Int32>( Fraction( aTargetRect.Right() - aLocationMM.Left(), 1 ) * aScaleX );
+                        tools::Long nY1 = aLocationPixel.Top() + static_cast<sal_Int32>( Fraction( aTargetRect.Top() - aLocationMM.Top(), 1 ) * aScaleY );
+                        tools::Long nY2 = aLocationPixel.Top() + static_cast<sal_Int32>( Fraction( aTargetRect.Bottom() - aLocationMM.Top(), 1 ) * aScaleY );
 
                         if ( nX1 > aLocationPixel.Right() ) nX1 = aLocationPixel.Right();
                         if ( nX2 > aLocationPixel.Right() ) nX2 = aLocationPixel.Right();

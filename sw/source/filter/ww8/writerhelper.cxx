@@ -682,7 +682,7 @@ namespace sw
             const Size &rSize = pNd->GetTwipSize();
             Fraction aMoveHack(ww::nWrap100Percent, rSize.Width());
             aMoveHack *= Fraction(15, 1);
-            tools::Long nMove(aMoveHack);
+            sal_Int32 nMove(aMoveHack);
 
             Fraction aHackX(ww::nWrap100Percent + nMove,
                     ww::nWrap100Percent);
