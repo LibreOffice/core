@@ -54,6 +54,7 @@ public:
     void setSuffixNone();
     void setSuffixMinusRight();
     void setBulletSize(sal_Int16 nSize);
+    void setBulletAspectRatio(double nAspectRatio);
     void setFontSize(sal_Int16 nSize);
     void setStyleName( const OUString& rStyleName ) { maStyleName <<= rStyleName; }
     void setGraphic( css::uno::Reference< css::graphic::XGraphic > const & rXGraphic );
@@ -68,6 +69,7 @@ public:
     css::uno::Any               msNumberingPrefix;
     css::uno::Any               msNumberingSuffix;
     css::uno::Any               mnSize;
+    css::uno::Any               mnAspectRatio; // Width/Height
     css::uno::Any               mnFontSize;
     css::uno::Any               maStyleName;
     css::uno::Any               maGraphic;
