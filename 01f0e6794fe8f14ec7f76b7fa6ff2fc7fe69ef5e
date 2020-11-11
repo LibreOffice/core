@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "800981fd_96f37533",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-11-11T10:30:43Z",
+      "side": 1,
+      "message": "please see comment made about this in Patchset 15",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 50
+      },
+      "revId": "01f0e6794fe8f14ec7f76b7fa6ff2fc7fe69ef5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0e7c64e_c5b3c989",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-11-11T10:30:43Z",
+      "side": 1,
+      "message": "I don\u0027t see the need for this change.",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 60
+      },
+      "revId": "01f0e6794fe8f14ec7f76b7fa6ff2fc7fe69ef5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
