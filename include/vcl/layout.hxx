@@ -484,6 +484,7 @@ public:
     bool get_expanded() const;
     void set_expanded(bool bExpanded);
     void set_label(const OUString& rLabel);
+    OUString get_label() const;
     vcl::Window *get_label_widget();
     const vcl::Window *get_label_widget() const;
     virtual void StateChanged(StateChangedType nType) override;
