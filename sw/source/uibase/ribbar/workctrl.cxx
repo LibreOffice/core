@@ -771,10 +771,6 @@ bool NavElementBox_Base::DoKeyInput(const KeyEvent& rKEvt)
             SelectHdl(*m_xWidget);
             break;
         }
-        case KEY_ESCAPE:
-            ReleaseFocus_Impl();
-            bHandled = true;
-            break;
     }
 
     return bHandled;
@@ -782,6 +778,11 @@ bool NavElementBox_Base::DoKeyInput(const KeyEvent& rKEvt)
 
 bool NavElementBox_Impl::DoKeyInput(const KeyEvent& rKEvt)
 {
+    if (KEY_ESCAPE == rKEvt.GetKeyCode().GetCode())
+    {
+        ReleaseFocus_Impl();
+        return true;
+    }
     return NavElementBox_Base::DoKeyInput(rKEvt) || ChildKeyInput(rKEvt);
 }
 
