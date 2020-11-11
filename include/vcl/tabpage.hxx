@@ -48,8 +48,6 @@ private:
     bool                 mbHasVertBar;
     Point                mnScrollPos;
     long                 mnScrWidth;
-    enum ScrollBarVisibility { None, Vert, Hori, Both };
-    ScrollBarVisibility  maScrollVis;
 
 public:
     explicit        TabPage( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -78,7 +76,6 @@ public:
     void    SetScrollHeight( long nHeight );
     void    SetScrollLeft( long nLeft );
     void    SetScrollTop( long Top );
-    void    setScrollVisibility( ScrollBarVisibility rState );
     void    ResetScrollBars();
 };
 
