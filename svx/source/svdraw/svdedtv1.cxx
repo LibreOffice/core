@@ -131,10 +131,10 @@ void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
                 } else {
                     t=0; b=h1;
                 }
-                aR1.SetLeft(tools::Long(l) );
-                aR1.SetRight(tools::Long(r) );
-                aR1.SetTop(tools::Long(t) );
-                aR1.SetBottom(tools::Long(b) );
+                aR1.SetLeft(sal_Int32(l) );
+                aR1.SetRight(sal_Int32(r) );
+                aR1.SetTop(sal_Int32(t) );
+                aR1.SetBottom(sal_Int32(b) );
                 aR1.Move(x1,y1);
             }
             pO->SetSnapRect(aR1);

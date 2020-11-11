@@ -279,7 +279,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
                 aX += BigInt(nXNumerator / 2);
         }
         aX /= BigInt(nXNumerator);
-        rMapRes.mnMapOfsX = static_cast<tools::Long>(aX) + aOrigin.X();
+        rMapRes.mnMapOfsX = static_cast<sal_Int32>(aX) + aOrigin.X();
         BigInt aY( rMapRes.mnMapOfsY );
         aY *= BigInt( aScaleY.GetDenominator() );
         if( rMapRes.mnMapOfsY >= 0 )
@@ -297,7 +297,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
                 aY += BigInt(nYNumerator / 2);
         }
         aY /= BigInt(nYNumerator);
-        rMapRes.mnMapOfsY = static_cast<tools::Long>(aY) + aOrigin.Y();
+        rMapRes.mnMapOfsY = static_cast<sal_Int32>(aY) + aOrigin.Y();
     }
 
     // calculate scaling factor according to MapMode
@@ -1560,7 +1560,7 @@ static tools::Long fn5( const tools::Long n1,
 
             a7 /= n8;
         } // of else
-        return static_cast<tools::Long>(a7);
+        return static_cast<sal_Int32>(a7);
     } // of if
     else
     {
@@ -1596,7 +1596,7 @@ static tools::Long fn5( const tools::Long n1,
 
                 a7 /= n8;
             } // of else
-            return static_cast<tools::Long>(a7);
+            return static_cast<sal_Int32>(a7);
         } // of if
         else
         {
@@ -1616,7 +1616,7 @@ static tools::Long fn5( const tools::Long n1,
                     a7 += a9;
 
                 a7 /= a8;
-                return static_cast<tools::Long>(a7);
+                return static_cast<sal_Int32>(a7);
             } // of if
             else
             {
@@ -1653,7 +1653,7 @@ static tools::Long fn3( const tools::Long n1, const tools::Long n2, const tools:
             a4 += n3 / 2;
 
         a4 /= n3;
-        return static_cast<tools::Long>(a4);
+        return static_cast<sal_Int32>(a4);
     } // of if
     else
     {

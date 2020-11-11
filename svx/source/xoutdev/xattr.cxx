@@ -103,7 +103,7 @@ static tools::Long ScaleMetricValue( tools::Long nVal, tools::Long nMul, tools::
 
     aVal/=nDiv;
 
-    return tools::Long( aVal );
+    return sal_Int32( aVal );
 }
 
 NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, sal_Int32 nIndex) :

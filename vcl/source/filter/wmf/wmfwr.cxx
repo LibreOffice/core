@@ -1412,7 +1412,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                             else
                                 aX += BigInt( aScaleX.GetNumerator()/2 );
                         aX /= BigInt( aScaleX.GetNumerator() );
-                        aOrigin.setX( static_cast<tools::Long>(aX) + aMM.GetOrigin().X() );
+                        aOrigin.setX( static_cast<sal_Int32>(aX) + aMM.GetOrigin().X() );
                         BigInt aY( aOrigin.Y() );
                         aY *= BigInt( aScaleY.GetDenominator() );
                         if( aOrigin.Y() >= 0 )
@@ -1426,7 +1426,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                             else
                                 aY += BigInt( aScaleY.GetNumerator()/2 );
                         aY /= BigInt( aScaleY.GetNumerator() );
-                        aOrigin.setY( static_cast<tools::Long>(aY) + aMM.GetOrigin().Y() );
+                        aOrigin.setY( static_cast<sal_Int32>(aY) + aMM.GetOrigin().Y() );
                         aSrcMapMode.SetOrigin( aOrigin );
 
                         aScaleX *= aSrcMapMode.GetScaleX();
