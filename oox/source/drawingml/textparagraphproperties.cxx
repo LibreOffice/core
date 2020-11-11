@@ -246,6 +246,11 @@ void BulletList::setBulletSize(sal_Int16 nSize)
     mnSize <<= nSize;
 }
 
+void BulletList::setBulletAspectRatio(double nAspectRatio)
+{
+    mnAspectRatio <<= nAspectRatio;
+}
+
 void BulletList::setFontSize(sal_Int16 nSize)
 {
     mnFontSize <<= nSize;
@@ -272,6 +277,8 @@ void BulletList::apply( const BulletList& rSource )
         msNumberingSuffix = rSource.msNumberingSuffix;
     if ( rSource.mnSize.hasValue() )
         mnSize = rSource.mnSize;
+    if ( rSource.mnAspectRatio.hasValue() )
+        mnAspectRatio = rSource.mnAspectRatio;
     if ( rSource.mnFontSize.hasValue() )
         mnFontSize = rSource.mnFontSize;
     if ( rSource.maStyleName.hasValue() )
