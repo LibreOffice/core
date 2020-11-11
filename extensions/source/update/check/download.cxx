@@ -344,7 +344,7 @@ Download::start(const OUString& rURL, const OUString& rFile, const OUString& rDe
 
         // extract file name last '/'
         sal_Int32 nIndex = aURL.lastIndexOf('/');
-        aFile = rDestinationDir + aURL.copy( nIndex );
+        aFile = rDestinationDir + aURL.subView( nIndex );
 
         // check for existing file
         oslFileError rc = osl_openFile( aFile.pData, &out.FileHandle, osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
