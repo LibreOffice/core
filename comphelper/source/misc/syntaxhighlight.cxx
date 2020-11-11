@@ -433,6 +433,8 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                 }
                 reType = TokenType::Comment;
             }
+            else
+                reType = TokenType::Operator;
         }
         else if ((c=='/') && (aLanguage == HighlighterLanguage::SQL))
         {
@@ -447,6 +449,8 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                 }
                 reType = TokenType::Comment;
             }
+            else
+                reType = TokenType::Operator;
         }
         else
         {
