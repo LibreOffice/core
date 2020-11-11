@@ -543,6 +543,7 @@ OUString NameFromCharSet(rtl_TextEncoding nChrSet)
 //      3. Fontname
 //      4. Language
 //      5. Whether to include byte-order-mark - as true/false
+//      6. Whether to include hidden paragraphs and text - as true/false
 // the delimiter character is ","
 
 void SwAsciiOptions::ReadUserData( const OUString& rStr )
@@ -566,6 +567,8 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
         m_nLanguage = LanguageTag::convertToLanguageTypeWithFallback(sToken);
     if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 5. Include BOM?
         m_bIncludeBOM = !(sToken.equalsIgnoreAsciiCase("FALSE"));
+    if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 6. Include hidden text
+        m_bIncludeHidden = !(sToken.equalsIgnoreAsciiCase("FALSE"));
 }
 
 void SwAsciiOptions::WriteUserData(OUString& rStr)
@@ -600,6 +603,17 @@ void SwAsciiOptions::WriteUserData(OUString& rStr)
 
     // 5. Whether to include byte-order-mark
     if( m_bIncludeBOM )
+    {
+        rStr += "true";
+    }
+    else
+    {
+        rStr += "false";
+    }
+    rStr += ",";
+
+    // 6. Whether to include byte-order-mark
+    if( m_bIncludeHidden )
     {
         rStr += "true";
     }
