@@ -68,6 +68,29 @@
       "revId": "9e3306ee88caeb2b6c1bdb18c18cc388e1d0bee7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b457dfc_2bb3e13f",
+        "filename": "sw/source/uibase/inc/instable.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T06:10:51Z",
+      "side": 1,
+      "message": "These used to be *spin buttons*, and had names like \"fooNF\". You changed these to be *Entry*, and renamed to end with \"SpinButton\" - that looks inconsistent! Is this some thinko or maybe a result of an intermediate experiment?",
+      "range": {
+        "startLine": 52,
+        "startChar": 39,
+        "endLine": 52,
+        "endChar": 49
+      },
+      "revId": "9e3306ee88caeb2b6c1bdb18c18cc388e1d0bee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
