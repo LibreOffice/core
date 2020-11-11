@@ -65,8 +65,10 @@ public:
     virtual void Hide() { m_pDrawingArea->hide(); }
     void GrabFocus()
     {
+        bool bHadFocus = m_pDrawingArea->has_focus();
         m_pDrawingArea->grab_focus();
-        if (m_pDrawingArea->has_focus())
+        // tdf#138078 only call GetFocus if we gained focus from an unfocused state
+        if (!bHadFocus && m_pDrawingArea->has_focus())
             GetFocus();
     }
     bool HasFocus() const { return m_pDrawingArea->has_focus(); }
