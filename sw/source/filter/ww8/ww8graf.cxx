@@ -2050,7 +2050,7 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(SvxMSDffImportRec const * pRecord,
             */
             Fraction aMoveHack(ww::nWrap100Percent, rSize.Width());
             aMoveHack *= Fraction(15, 1);
-            tools::Long nMove(aMoveHack);
+            sal_Int32 nMove(aMoveHack);
             aPoly.Move(nMove, 0);
 
             Fraction aHackX(ww::nWrap100Percent, ww::nWrap100Percent + nMove);

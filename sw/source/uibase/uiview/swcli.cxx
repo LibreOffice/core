@@ -67,8 +67,8 @@ void SwOleClient::RequestNewObjectArea( tools::Rectangle& aLogRect )
         MapMode aObjectMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) ) );
         MapMode aClientMap( GetEditWin()->GetMapMode().GetMapUnit() );
 
-        Size aNewObjSize( tools::Long( aLogRect.GetWidth() / GetScaleWidth() ),
-                          tools::Long( aLogRect.GetHeight() / GetScaleHeight() ) );
+        Size aNewObjSize( sal_Int32( aLogRect.GetWidth() / GetScaleWidth() ),
+                          sal_Int32( aLogRect.GetHeight() / GetScaleHeight() ) );
 
         // convert to logical coordinates of the embedded object
         Size aNewSize = GetEditWin()->LogicToLogic( aNewObjSize, &aClientMap, &aObjectMap );
@@ -141,8 +141,8 @@ void SwOleClient::ViewChanged()
     const MapMode aObjMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) ) );
     aVisSize = OutputDevice::LogicToLogic( aVisSize, aObjMap, aMyMap );
 
-    aVisSize.setWidth( tools::Long(aVisSize.Width() * GetScaleWidth()) );
-    aVisSize.setHeight( tools::Long(aVisSize.Height() * GetScaleHeight()) );
+    aVisSize.setWidth( sal_Int32(aVisSize.Width() * GetScaleWidth()) );
+    aVisSize.setHeight( sal_Int32(aVisSize.Height() * GetScaleHeight()) );
 
     SwRect aRect( Point( LONG_MIN, LONG_MIN ), aVisSize );
     rSh.LockView( true );   // Prevent scrolling in the EndAction

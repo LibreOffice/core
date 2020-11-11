@@ -227,7 +227,7 @@ void OSectionWindow::Resize()
     Window::Resize();
 
     Size aOutputSize = GetOutputSizePixel();
-    tools::Long nEndWidth = tools::Long(REPORT_ENDMARKER_WIDTH * GetMapMode().GetScaleX());
+    tools::Long nEndWidth = sal_Int32(REPORT_ENDMARKER_WIDTH * GetMapMode().GetScaleX());
 
     const Point aThumbPos = m_pParent->getView()->getThumbPos();
     aOutputSize.AdjustWidth( -(aThumbPos.X()) );
@@ -242,7 +242,7 @@ void OSectionWindow::Resize()
     {
         const bool bShowEndMarker = m_pParent->getView()->GetTotalWidth() <= (aThumbPos.X() +  aOutputSize.Width() );
 
-        tools::Long nStartWidth = tools::Long(REPORT_STARTMARKER_WIDTH * GetMapMode().GetScaleX());
+        tools::Long nStartWidth = sal_Int32(REPORT_STARTMARKER_WIDTH * GetMapMode().GetScaleX());
 
         // set start marker
         m_aStartMarker->SetPosSizePixel(Point(0,0),Size(nStartWidth,aOutputSize.Height()));

@@ -634,21 +634,21 @@ void SwAnnotationWin::Rescale()
     if ( mpMetadataAuthor )
     {
         vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetLabelFont() );
-        sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
+        sal_Int32 nHeight = sal_Int32(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
         mpMetadataAuthor->SetControlFont( aFont );
     }
     if ( mpMetadataDate )
     {
         vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
-        sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
+        sal_Int32 nHeight = sal_Int32(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
         mpMetadataDate->SetControlFont( aFont );
     }
     if ( mpMetadataResolved )
     {
         vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetLabelFont() );
-        sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
+        sal_Int32 nHeight = sal_Int32(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
         mpMetadataResolved->SetControlFont( aFont );
     }
@@ -959,10 +959,10 @@ void SwAnnotationWin::DoResize()
     const Fraction& fy( GetMapMode().GetScaleY() );
 
     const Point aPos( mpMetadataAuthor->GetPosPixel());
-    mpMenuButton->setPosSizePixel( tools::Long(aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx),
-                                   tools::Long(aPos.Y()+5*fy),
-                                   tools::Long(METABUTTON_WIDTH*fx),
-                                   tools::Long(METABUTTON_HEIGHT*fy) );
+    mpMenuButton->setPosSizePixel( sal_Int32(aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx),
+                                   sal_Int32(aPos.Y()+5*fy),
+                                   sal_Int32(METABUTTON_WIDTH*fx),
+                                   sal_Int32(METABUTTON_HEIGHT*fy) );
 }
 
 void SwAnnotationWin::SetSizePixel( const Size& rNewSize )
@@ -1426,14 +1426,14 @@ sal_Int32 SwAnnotationWin::GetScrollbarWidth() const
 sal_Int32 SwAnnotationWin::GetMetaButtonAreaWidth() const
 {
     const Fraction& f( GetMapMode().GetScaleX() );
-    return tools::Long(METABUTTON_AREA_WIDTH * f);
+    return sal_Int32(METABUTTON_AREA_WIDTH * f);
 }
 
 sal_Int32 SwAnnotationWin::GetMetaHeight() const
 {
     const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
     const int fields = GetNumFields();
-    return tools::Long(fields*POSTIT_META_FIELD_HEIGHT*f);
+    return sal_Int32(fields*POSTIT_META_FIELD_HEIGHT*f);
 }
 
 sal_Int32 SwAnnotationWin::GetNumFields() const
@@ -1449,7 +1449,7 @@ sal_Int32 SwAnnotationWin::GetMinimumSizeWithMeta() const
 sal_Int32 SwAnnotationWin::GetMinimumSizeWithoutMeta() const
 {
     const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
-    return tools::Long(POSTIT_MINIMUMSIZE_WITHOUT_META * f);
+    return sal_Int32(POSTIT_MINIMUMSIZE_WITHOUT_META * f);
 }
 
 void SwAnnotationWin::SetSpellChecking()

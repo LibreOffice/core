@@ -201,7 +201,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     // width
     Fraction aTmp( 100, 1 );
     aTmp *= pFootnoteInfo->GetWidth();
-    m_xLineLengthEdit->set_value(static_cast<tools::Long>(aTmp), FieldUnit::PERCENT);
+    m_xLineLengthEdit->set_value(static_cast<sal_Int32>(aTmp), FieldUnit::PERCENT);
 
     // gap footnote area
     m_xDistEdit->set_value(m_xDistEdit->normalize(pFootnoteInfo->GetTopDist()), FieldUnit::TWIP);

@@ -416,8 +416,8 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
 
     // apply scaling to object area and convert to pixels
     tools::Rectangle aRealObjArea( m_aObjArea );
-    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_aScaleWidth),
-                                tools::Long( aRealObjArea.GetHeight() * m_aScaleHeight) ) );
+    aRealObjArea.SetSize( Size( sal_Int32( aRealObjArea.GetWidth() * m_aScaleWidth),
+                                sal_Int32( aRealObjArea.GetHeight() * m_aScaleHeight) ) );
 
     // In Writer and Impress the map mode is disabled. So when a chart is
     // activated (for in place editing) we get the chart win size in 100th mm
@@ -451,8 +451,8 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
 
     // currently(?) same as placement
     tools::Rectangle aRealObjArea( m_aObjArea );
-    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_aScaleWidth),
-                                tools::Long( aRealObjArea.GetHeight() * m_aScaleHeight) ) );
+    aRealObjArea.SetSize( Size( sal_Int32( aRealObjArea.GetWidth() * m_aScaleWidth),
+                                sal_Int32( aRealObjArea.GetHeight() * m_aScaleHeight) ) );
 
     // See comment for SfxInPlaceClient_Impl::getPlacement.
     if (comphelper::LibreOfficeKit::isActive())
@@ -522,8 +522,8 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
         SfxBooleanFlagGuard aGuard( m_bResizeNoScale );
 
         // new size of the object area without scaling
-        Size aNewObjSize( tools::Long( aNewLogicRect.GetWidth()  / m_aScaleWidth ),
-                          tools::Long( aNewLogicRect.GetHeight() / m_aScaleHeight ) );
+        Size aNewObjSize( sal_Int32( aNewLogicRect.GetWidth()  / m_aScaleWidth ),
+                          sal_Int32( aNewLogicRect.GetHeight() / m_aScaleHeight ) );
 
         // now remove scaling from new placement and keep this at the new object area
         aNewLogicRect.SetSize( aNewObjSize );
@@ -760,8 +760,8 @@ const tools::Rectangle& SfxInPlaceClient::GetObjArea() const
 tools::Rectangle SfxInPlaceClient::GetScaledObjArea() const
 {
     tools::Rectangle aRealObjArea( m_xImp->m_aObjArea );
-    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth()  * m_xImp->m_aScaleWidth ),
-                                tools::Long( aRealObjArea.GetHeight() * m_xImp->m_aScaleHeight ) ) );
+    aRealObjArea.SetSize( Size( sal_Int32( aRealObjArea.GetWidth()  * m_xImp->m_aScaleWidth ),
+                                sal_Int32( aRealObjArea.GetHeight() * m_xImp->m_aScaleHeight ) ) );
     return aRealObjArea;
 }
 
@@ -815,8 +815,8 @@ void SfxInPlaceClient::Invalidate()
 
     // the object area is provided in logical coordinates of the window but without scaling applied
     tools::Rectangle aRealObjArea( m_xImp->m_aObjArea );
-    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth()  * m_xImp->m_aScaleWidth ),
-                                tools::Long( aRealObjArea.GetHeight() * m_xImp->m_aScaleHeight ) ) );
+    aRealObjArea.SetSize( Size( sal_Int32( aRealObjArea.GetWidth()  * m_xImp->m_aScaleWidth ),
+                                sal_Int32( aRealObjArea.GetHeight() * m_xImp->m_aScaleHeight ) ) );
     m_pEditWin->Invalidate( aRealObjArea );
 
     ViewChanged();

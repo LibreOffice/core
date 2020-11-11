@@ -183,7 +183,7 @@ void Window::SetMaxZoom (::tools::Long nMax)
 {
     if( GetMapMode().GetScaleX().GetDenominator() )
     {
-        return ::tools::Long(GetMapMode().GetScaleX() * 100);
+        return sal_Int32(GetMapMode().GetScaleX() * 100);
     }
     else
     {

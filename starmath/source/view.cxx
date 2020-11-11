@@ -906,7 +906,7 @@ void SmViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const
 void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 {
     const Fraction &rFrac = std::min(rX, rY);
-    GetGraphicWindow().SetZoom(sal::static_int_cast<sal_uInt16>(tools::Long(rFrac * Fraction( 100, 1 ))));
+    GetGraphicWindow().SetZoom(sal::static_int_cast<sal_uInt16>(sal_Int32(rFrac * Fraction( 100, 1 ))));
 
     //To avoid rounding errors base class regulates crooked values too
     //if necessary
@@ -1190,8 +1190,8 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
                 Size     OutputSize (rOutDev.LogicToPixel(Size(aOutRect.GetWidth(),
                                                             aOutRect.GetHeight()), MapMode(MapUnit::Map100thMM)));
                 Size     GraphicSize (rOutDev.LogicToPixel(aSize, MapMode(MapUnit::Map100thMM)));
-                sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(tools::Long(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
-                                                                          tools::Long(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
+                sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(sal_Int32(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
+                                                                          sal_Int32(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
                 nZ -= 10;
                 Fraction aFraction (std::max(MINZOOM, std::min(MAXZOOM, nZ)), 100);
 
@@ -2012,8 +2012,8 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
             Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
                                                               OutputRect.GetHeight()), aMap));
             Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
-            sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(tools::Long(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
-                                                                      tools::Long(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
+            sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(sal_Int32(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
+                                                                      sal_Int32(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
             mpGraphic->SetZoom (nZ);
             break;
         }

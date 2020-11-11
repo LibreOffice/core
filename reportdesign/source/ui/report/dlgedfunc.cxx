@@ -73,7 +73,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     Fraction aStartWidth(tools::Long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= m_pParent->GetMapMode().GetScaleX();
 
-    aOut.AdjustWidth( -static_cast<tools::Long>(aStartWidth) );
+    aOut.AdjustWidth( -static_cast<sal_Int32>(aStartWidth) );
     aOut.setHeight( m_pParent->GetOutputSizePixel().Height() );
 
     Point aPos = pScrollWindow->getThumbPos();
@@ -82,7 +82,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     tools::Rectangle aOutRect( aPos, aOut );
     aOutRect = m_pParent->PixelToLogic( aOutRect );
     tools::Rectangle aWorkArea(Point(), pScrollWindow->getTotalSize());
-    aWorkArea.AdjustRight( -static_cast<tools::Long>(aStartWidth) );
+    aWorkArea.AdjustRight( -static_cast<sal_Int32>(aStartWidth) );
     aWorkArea = pScrollWindow->PixelToLogic( aWorkArea );
     if( !aOutRect.IsInside( rPos ) && aWorkArea.IsInside( rPos ) )
     {
