@@ -24,6 +24,9 @@
 #include <vcl/window.hxx>
 #include <vcl/IContext.hxx>
 
+class ScrollBar;
+class ScrollBarBox;
+
 class VCL_DLLPUBLIC TabPage
     : public vcl::Window
     , public vcl::IContext
@@ -32,10 +35,22 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
+    void    lcl_Scroll( tools::Long nX, tools::Long nY );
+    DECL_LINK( ScrollBarHdl, ScrollBar*, void );
+
+    VclPtr<ScrollBar>    m_pVScroll;
+    VclPtr<ScrollBar>    m_pHScroll;
+    VclPtr<ScrollBarBox> m_aScrollBarBox;
+    Size                 maScrollArea;
+    bool                 mbHasHoriBar;
+    bool                 mbHasVertBar;
+    Point                mnScrollPos;
+    tools::Long          mnScrWidth;
 
 public:
     explicit        TabPage( vcl::Window* pParent, WinBits nStyle = 0 );
     virtual         ~TabPage() override;
+    virtual void    dispose() override;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
@@ -48,6 +63,15 @@ public:
     virtual void    SetPosPixel(const Point& rNewPos) override;
     virtual void    SetSizePixel(const Size& rNewSize) override;
     virtual Size    GetOptimalSize() const override;
+
+    // for scrollable tabpage
+    virtual void Resize() override;
+
+    void    SetScrollWidth( tools::Long nWidth );
+    void    SetScrollHeight( tools::Long nHeight );
+    void    SetScrollLeft( tools::Long nLeft );
+    void    SetScrollTop( tools::Long Top );
+    void    ResetScrollBars();
 };
 
 #endif // INCLUDED_VCL_TABPAGE_HXX
