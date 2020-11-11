@@ -193,6 +193,24 @@
       "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e53f2b73_046a4189",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-11T11:31:05Z",
+      "side": 1,
+      "message": "* The above comment, even in the submitted patch set 19, still mentions \"windows\" unconditionally.  (And should probably be updated now that whatever plan has apparently been carried out, anyway.)\n\n* \"I\u0027m puzzled why SAL_TYPES_SIZEOFPOINTER would be a useful way to discriminate here (and elsewhere in this patchset)\":  This has apparently not been addressed in the submitted patch set 19.  But I still think it is too opaque, at least without further comments about all the places that newly discriminate based on SAL_TYEPES_SIZEOFPOINTER.",
+      "parentUuid": "add98069_09fd74dd",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
