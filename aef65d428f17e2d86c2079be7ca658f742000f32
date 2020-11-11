@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba4e0ab0_7d19d4f5",
+        "filename": "svx/source/dialog/frmsel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T14:56:46Z",
+      "side": 1,
+      "message": "These produce unexpectedly light colors, and these are semantically not related to arrows/marks in this control ...",
+      "range": {
+        "startLine": 304,
+        "startChar": 4,
+        "endLine": 305,
+        "endChar": 76
+      },
+      "revId": "aef65d428f17e2d86c2079be7ca658f742000f32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e54ae1e_6618b5e9",
+        "filename": "svx/source/dialog/frmsel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T14:56:46Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it also be dependent on the \"lightness\" of the background, so that it would be automatically white if one uses dark document background? As you did in the previous patch?",
+      "range": {
+        "startLine": 306,
+        "startChar": 18,
+        "endLine": 306,
+        "endChar": 27
+      },
+      "revId": "aef65d428f17e2d86c2079be7ca658f742000f32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
