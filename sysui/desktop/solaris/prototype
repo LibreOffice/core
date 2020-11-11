@@ -12,8 +12,6 @@ d none usr/share 0755 root sys
 d none usr/share/applications 0755 root other
 d none usr/share/mime 0755 root root
 d none usr/share/mime/packages 0755 root root
-d none usr/share/application-registry 0755 root other
-d none usr/share/mime-info 0755 root other
 d none usr/share/pixmaps 0755 root other
 d none share/mime 0755 root other
 d none share/mime/packages 0755 root other
@@ -21,15 +19,12 @@ d none share/mime/packages 0755 root other
 e build etc/mime.types=./mime.types
 e build etc/mailcap=mailcap
 f none usr/share/mime/packages/%PREFIX.xml=%SOURCE/openoffice.org.xml
-f none usr/share/application-registry/%PREFIX.applications=%SOURCE/openoffice.applications
 s none usr/share/applications/%PREFIX-writer.desktop=../../../opt/%PREFIX/share/xdg/writer.desktop
 s none usr/share/applications/%PREFIX-calc.desktop=../../../opt/%PREFIX/share/xdg/calc.desktop
 s none usr/share/applications/%PREFIX-draw.desktop=../../../opt/%PREFIX/share/xdg/draw.desktop
 s none usr/share/applications/%PREFIX-impress.desktop=../../../opt/%PREFIX/share/xdg/impress.desktop
 s none usr/share/applications/%PREFIX-math.desktop=../../../opt/%PREFIX/share/xdg/math.desktop
 s none usr/share/applications/%PREFIX-base.desktop=../../../opt/%PREFIX/share/xdg/base.desktop
-f none usr/share/mime-info/%PREFIX.keys=%SOURCE/openoffice.keys
-f none usr/share/mime-info/%PREFIX.mime=%SOURCE/openoffice.mime
 f none usr/share/pixmaps/%ICONPREFIX-writer.png=../icons/hicolor/48x48/apps/writer.png
 f none usr/share/pixmaps/%ICONPREFIX-calc.png=../icons/hicolor/48x48/apps/calc.png
 f none usr/share/pixmaps/%ICONPREFIX-draw.png=../icons/hicolor/48x48/apps/draw.png

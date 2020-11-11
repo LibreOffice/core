@@ -108,7 +108,6 @@ share_ICONS := $(foreach size,16x16 32x32 48x48,\
 	$(foreach mime,$(MIMEICONLIST),\
 	$(share_SRCDIR)/icons/$(contrast)/$(size)/mimetypes/$(mime).png)))
 
-MIMEKEYS := $(foreach mime,$(MIMELIST),$(share_SRCDIR)/mimetypes/$(mime).keys)
 MIMEDESKTOPS := $(foreach mime,$(MIMELIST),$(share_SRCDIR)/mimetypes/$(mime).desktop)
 ULFS := documents.ulf \
 	launcher_comment.ulf \
@@ -122,9 +121,6 @@ $(eval $(call gb_CustomTarget_register_targets,sysui/share,\
 	$(foreach product,$(PRODUCTLIST),\
 		$(product)/build.flag \
 		$(product)/openoffice.org.xml \
-		$(product)/openoffice.mime \
-		$(product)/openoffice.applications \
-		$(product)/openoffice.keys \
 		$(product)/openoffice.sh \
 		$(product)/create_tree.sh \
 		$(if $(INTROSPECTION_SCANNER),\
@@ -139,28 +135,6 @@ $(share_WORKDIR)/%/openoffice.org.xml: $(share_WORKDIR)/documents.ulf $(MIMEDESK
 	$(PERL) $(share_SRCDIR)/share/create_mime_xml.pl $< > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
-$(share_WORKDIR)/%/openoffice.keys:  \
-	$(share_SRCDIR)/mimetypes/openoffice.mime $(MIMEKEYS) $(share_SRCDIR)/share/brand.pl \
-	$(share_TRANSLATE)  $(share_WORKDIR)/documents.ulf \
-	$(call gb_ExternalExecutable_get_dependencies,python)
-	mkdir -p $(dir $@)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
-	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
-	$(PERL) $(share_SRCDIR)/share/brand.pl -p $* -u $(UNIXFILENAME.$*) \
-		--iconprefix $(UNIXFILENAME.$*)- $(MIMEKEYS) $(share_WORKDIR)/$*
-	$(call gb_ExternalExecutable_get_command,python) $(share_TRANSLATE) \
-		-p $* -d $(share_WORKDIR)/$* \
-		--ext "keys" --key "description" $(share_WORKDIR)/documents.ulf
-	cat $(MIMEKEYS) > $@
-	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
-
-$(share_WORKDIR)/%/openoffice.mime: $(share_SRCDIR)/mimetypes/openoffice.mime
-	mkdir -p $(dir $@)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CAT,1)
-	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),CAT)
-	cat $< | tr -d "\015" > $@
-	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CAT)
-
 $(share_WORKDIR)/%/openoffice.sh: $(share_SRCDIR)/share/openoffice.sh
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CAT,1)
@@ -169,8 +143,7 @@ $(share_WORKDIR)/%/openoffice.sh: $(share_SRCDIR)/share/openoffice.sh
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CAT)
 
 $(share_WORKDIR)/%/create_tree.sh: $(share_SRCDIR)/share/create_tree.sh \
-	$(share_WORKDIR)/%/openoffice.org.xml $(share_WORKDIR)/%/openoffice.applications $(share_WORKDIR)/%/openoffice.mime \
-	$(share_WORKDIR)/%/openoffice.keys $(share_WORKDIR)/%/launcherlist
+	$(share_WORKDIR)/%/openoffice.org.xml $(share_WORKDIR)/%/launcherlist
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CAT,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),CAT)
@@ -217,13 +190,6 @@ $(share_WORKDIR)/%/launcherlist: $(LAUNCHERS)
 	echo "$(addsuffix .desktop,$(LAUNCHERLIST))" > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
-
-$(share_WORKDIR)/%/openoffice.applications: $(share_SRCDIR)/mimetypes/openoffice.applications
-	mkdir -p $(dir $@)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CAT,1)
-	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),CAT)
-	cat $< | tr -d "\015" | sed -e "s/OFFICENAME/$(UNIXFILENAME.$*)/" -e "s/%PRODUCTNAME/$(PRODUCTNAME.$*) $(PRODUCTVERSION.$*)/" > $@
-	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CAT)
 
 # these .desktop files are written by brand.pl below
 # need to have a rule for these because they are targets in Package_share
