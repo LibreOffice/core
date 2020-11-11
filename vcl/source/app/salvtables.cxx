@@ -5797,6 +5797,8 @@ public:
 
     virtual void set_label(const OUString& rText) override { m_xExpander->set_label(rText); }
 
+    virtual OUString get_label() const override { return m_xExpander->get_label(); }
+
     virtual bool get_expanded() const override { return m_xExpander->get_expanded(); }
 
     virtual void set_expanded(bool bExpand) override { m_xExpander->set_expanded(bExpand); }

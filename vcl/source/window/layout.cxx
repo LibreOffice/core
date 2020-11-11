@@ -1650,6 +1650,11 @@ void VclExpander::set_label(const OUString& rLabel)
     m_pDisclosureButton->SetText(rLabel);
 }
 
+OUString VclExpander::get_label() const
+{
+    return m_pDisclosureButton->GetText();
+}
+
 void VclExpander::dispose()
 {
     m_pDisclosureButton.disposeAndClear();

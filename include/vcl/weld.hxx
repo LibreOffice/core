@@ -2027,6 +2027,7 @@ protected:
 
 public:
     virtual void set_label(const OUString& rText) = 0;
+    virtual OUString get_label() const = 0;
     virtual bool get_expanded() const = 0;
     virtual void set_expanded(bool bExpand) = 0;
 
