@@ -24,6 +24,7 @@
 #include <vcl/event.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include <algorithm>
 #include <math.h>
@@ -297,11 +298,12 @@ void FrameSelectorImpl::Initialize( FrameSelFlags nFlags )
 void FrameSelectorImpl::InitColors()
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    maBackCol = rSettings.GetFieldColor();
+    svtools::ColorConfig aColorConfig;
+    maBackCol = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
     mbHCMode = rSettings.GetHighContrastMode();
-    maArrowCol = rSettings.GetFieldTextColor();
-    maMarkCol.operator=(maBackCol).Merge(maArrowCol, mbHCMode ? 0x80 : 0xC0);
-    maHCLineCol = rSettings.GetLabelTextColor();
+    maArrowCol = aColorConfig.GetColorValue(svtools::DOCBOUNDARIES).nColor;
+    maMarkCol = aColorConfig.GetColorValue(svtools::TABLEBOUNDARIES).nColor;
+    maHCLineCol = COL_BLACK;
 }
 
 const std::u16string_view aImageIds[] =
