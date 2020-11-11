@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb5783f9_af94b18a",
+        "filename": "sw/source/filter/basflt/fltini.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T13:47:31Z",
+      "side": 1,
+      "message": "This comment still seems off :-)",
+      "range": {
+        "startLine": 616,
+        "startChar": 10,
+        "endLine": 616,
+        "endChar": 44
+      },
+      "revId": "9ea3df1f9bf3066ee353f9cb7234383afe04dd9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
