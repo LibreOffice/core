@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a3842a4_54ed136f",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T04:34:10Z",
+      "side": 1,
+      "message": "Please remove the line. We don\u0027t comment out the code in the codebase; if needed, we have commit log for the reference.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "9e3306ee88caeb2b6c1bdb18c18cc388e1d0bee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbf6ae9a_f5516f31",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T04:34:10Z",
+      "side": 1,
+      "message": "Please remove this added line with trailing whitespace.",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 4
+      },
+      "revId": "9e3306ee88caeb2b6c1bdb18c18cc388e1d0bee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1e88325_1b52d95e",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T04:34:10Z",
+      "side": 1,
+      "message": "Please remove this line, which is a leftover from removing the old code, but you kept the trailing whitespace",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 266,
+        "endChar": 8
+      },
+      "revId": "9e3306ee88caeb2b6c1bdb18c18cc388e1d0bee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
