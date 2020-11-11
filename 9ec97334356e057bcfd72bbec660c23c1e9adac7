@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "917da3a1_6ec4c45e",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T07:49:49Z",
+      "side": 1,
+      "message": "Please just remove this line altogether, instead of removing everything from it, but keeping the empty line.",
+      "revId": "9ec97334356e057bcfd72bbec660c23c1e9adac7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e8e7ebf_69d83a6c",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T07:49:49Z",
+      "side": 1,
+      "message": "\"r\" means \"reference\". In the codebase, we use the convention to prefix names of references to values (like \"sal_Int64\u0026\" - note the \"\u0026\") with the \"r\". But when you declare simple values, not references - like here - you should use other prefixes. E.g., for all integer types, we use \"n\". So this must be \"nRow\" here.",
+      "range": {
+        "startLine": 230,
+        "startChar": 14,
+        "endLine": 230,
+        "endChar": 15
+      },
+      "revId": "9ec97334356e057bcfd72bbec660c23c1e9adac7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89b3bb85_c285ca57",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-11T07:49:49Z",
+      "side": 1,
+      "message": "Here you see the *reddish* hint - please pay attention to the hints you see. It means \"this line ends with whitespace - it\u0027s suspicious, because we have a convention to forbid trailing whitespaces in the code\". Please remove the spaces (but keep the line), and it will minimize the difference.",
+      "revId": "9ec97334356e057bcfd72bbec660c23c1e9adac7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
