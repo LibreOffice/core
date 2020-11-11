@@ -157,14 +157,14 @@ bool AquaSalGraphics::CheckContext()
             const int nBytesPerRow = (nBitmapDepth * nScaledWidth) / 8;
             int nFlags = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host;
             maBGContextHolder.set(CGBitmapContextCreate(
-                NULL, nScaledWidth, nScaledHeight, 8, nBytesPerRow, GetSalData()->mxRGBSpace, nFlags));
+                nullptr, nScaledWidth, nScaledHeight, 8, nBytesPerRow, GetSalData()->mxRGBSpace, nFlags));
 
             maLayer.set(CGLayerCreateWithContext(maBGContextHolder.get(), aLayerSize, nullptr));
             maLayer.setScale(fScale);
 
             nFlags = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Host;
             maCSContextHolder.set(CGBitmapContextCreate(
-                NULL, nScaledWidth, nScaledHeight, 8, nBytesPerRow, GetSalData()->mxRGBSpace, nFlags));
+                nullptr, nScaledWidth, nScaledHeight, 8, nBytesPerRow, GetSalData()->mxRGBSpace, nFlags));
 
             CGContextRef xDrawContext = CGLayerGetContext(maLayer.get());
             maContextHolder = xDrawContext;
