@@ -200,13 +200,15 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
 
     int nFuncId = 0;
     bool bFocusToDoc = false;
-    if (rCommand == ".uno:ScrollToPrevious")
+    if (rCommand == ".uno:ScrollToPrevious" || rCommand == ".uno:ScrollToNext")
     {
-        rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SCROLL_PREV, SfxCallMode::ASYNCHRON);
-    }
-    else if (rCommand == ".uno:ScrollToNext")
-    {
-        rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SCROLL_NEXT, SfxCallMode::ASYNCHRON);
+        bool *pbNext = new bool(true);
+        if (rCommand == ".uno:ScrollToPrevious")
+            *pbNext = false;
+        const bool bEnabled = pView->GetEditWin().IsEnabled();
+        pView->GetEditWin().Enable(false); // prevent edit window from grabbing focus
+        pView->MoveNavigationHdl(pbNext);
+        pView->GetEditWin().Enable(bEnabled);
     }
     else if (rCommand == "root")
     {
@@ -296,7 +298,7 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
         {
             // Standard: sublevels are taken
             // do not take sublevels with Ctrl
-            bool bOutlineWithChildren = (KEY_MOD1 != m_xContent3ToolBox->get_modifier_state());
+            bool bOutlineWithChildren = (KEY_MOD1 != m_xContent6ToolBox->get_modifier_state());
             m_xContentTree->ExecCommand(rCommand, bOutlineWithChildren);
         }
     }
@@ -315,9 +317,9 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
         m_xGlobalToolBox->set_item_active(rCommand, !bSave);
     }
     else if (rCommand == "dragmode")
-        m_xContent3ToolBox->set_menu_item_active("dragmode", !m_xContent3ToolBox->get_menu_item_active("dragmode"));
+        m_xContent6ToolBox->set_menu_item_active("dragmode", !m_xContent6ToolBox->get_menu_item_active("dragmode"));
     else if (rCommand == "headings")
-        m_xContent2ToolBox->set_menu_item_active("headings", !m_xContent2ToolBox->get_menu_item_active("headings"));
+        m_xContent5ToolBox->set_menu_item_active("headings", !m_xContent5ToolBox->get_menu_item_active("headings"));
     else if (rCommand == "update")
         m_xGlobalToolBox->set_menu_item_active("update", !m_xGlobalToolBox->get_menu_item_active("update"));
     else if (rCommand == "insert")
@@ -341,9 +343,9 @@ IMPL_LINK(SwNavigationPI, ToolBoxClickHdl, const OString&, rCommand, void)
         m_xGlobalTree->TbxMenuHdl(rCommand, *m_xInsertMenu);
 }
 
-IMPL_LINK(SwNavigationPI, ToolBox3DropdownClickHdl, const OString&, rCommand, void)
+IMPL_LINK(SwNavigationPI, ToolBox6DropdownClickHdl, const OString&, rCommand, void)
 {
-    if (!m_xContent3ToolBox->get_menu_item_active(rCommand))
+    if (!m_xContent6ToolBox->get_menu_item_active(rCommand))
         return;
 
     if (rCommand != "dragmode")
@@ -378,9 +380,9 @@ IMPL_LINK(SwNavigationPI, GlobalMenuSelectHdl, const OString&, rIdent, void)
     m_xGlobalTree->ExecuteContextMenuAction(rIdent);
 }
 
-IMPL_LINK(SwNavigationPI, ToolBox2DropdownClickHdl, const OString&, rCommand, void)
+IMPL_LINK(SwNavigationPI, ToolBox5DropdownClickHdl, const OString&, rCommand, void)
 {
-    if (!m_xContent2ToolBox->get_menu_item_active(rCommand))
+    if (!m_xContent5ToolBox->get_menu_item_active(rCommand))
         return;
 
     if (rCommand == "headings")
@@ -445,7 +447,7 @@ void SwNavigationPI::ZoomOut()
 
     m_xContentTree->Select(); // Enable toolbox
     m_pConfig->SetSmall(false);
-    m_xContent3ToolBox->set_item_active("listbox", true);
+    m_xContent6ToolBox->set_item_active("listbox", true);
 }
 
 void SwNavigationPI::ZoomIn()
@@ -474,7 +476,7 @@ void SwNavigationPI::ZoomIn()
     m_xContentTree->Select(); // Enable toolbox
 
     m_pConfig->SetSmall(true);
-    m_xContent3ToolBox->set_item_active("listbox", false);
+    m_xContent6ToolBox->set_item_active("listbox", false);
 }
 
 namespace {
@@ -510,7 +512,11 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     , m_xContent1ToolBox(m_xBuilder->weld_toolbar("content1"))
     , m_xContent2ToolBox(m_xBuilder->weld_toolbar("content2"))
     , m_xContent3ToolBox(m_xBuilder->weld_toolbar("content3"))
-    , m_xContent1Dispatch(new ToolbarUnoDispatcher(*m_xContent1ToolBox, *m_xBuilder, rxFrame))
+    , m_xContent4ToolBox(m_xBuilder->weld_toolbar("content4"))
+    , m_xContent5ToolBox(m_xBuilder->weld_toolbar("content5"))
+    , m_xContent6ToolBox(m_xBuilder->weld_toolbar("content6"))
+    , m_xContent2Dispatch(new ToolbarUnoDispatcher(*m_xContent2ToolBox, *m_xBuilder, rxFrame))
+    , m_xContent3Dispatch(new ToolbarUnoDispatcher(*m_xContent3ToolBox, *m_xBuilder, rxFrame))
     , m_xHeadingsMenu(m_xBuilder->weld_menu("headingsmenu"))
     , m_xDragModeMenu(m_xBuilder->weld_menu("dragmodemenu"))
     , m_xUpdateMenu(m_xBuilder->weld_menu("updatemenu"))
@@ -539,6 +545,9 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     m_xContent1ToolBox->set_help_id(HID_NAVIGATOR_TOOLBOX);
     m_xContent2ToolBox->set_help_id(HID_NAVIGATOR_TOOLBOX);
     m_xContent3ToolBox->set_help_id(HID_NAVIGATOR_TOOLBOX);
+    m_xContent4ToolBox->set_help_id(HID_NAVIGATOR_TOOLBOX);
+    m_xContent5ToolBox->set_help_id(HID_NAVIGATOR_TOOLBOX);
+    m_xContent6ToolBox->set_help_id(HID_NAVIGATOR_TOOLBOX);
     m_xGlobalToolBox->set_help_id(HID_NAVIGATOR_GLOBAL_TOOLBOX);
     m_xDocListBox->set_help_id(HID_NAVIGATOR_LISTBOX);
     m_xDocListBox->set_size_request(42, -1); // set a nominal width so it takes width of surroundings
@@ -583,8 +592,8 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
 
     m_xContentTree->set_selection_mode(SelectionMode::Single);
     m_xContentTree->ShowTree();
-    m_xContent3ToolBox->set_item_active("listbox", true);
-    m_xContent3ToolBox->set_item_sensitive("listbox", bFloatingNavigator);
+    m_xContent6ToolBox->set_item_active("listbox", true);
+    m_xContent6ToolBox->set_item_sensitive("listbox", bFloatingNavigator);
 
 //  TreeListBox for global document
     m_xGlobalTree->set_selection_mode(SelectionMode::Multiple);
@@ -592,16 +601,17 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
 //  Handler
     Link<const OString&, void> aLk = LINK(this, SwNavigationPI, ToolBoxSelectHdl);
     m_xContent1ToolBox->connect_clicked(aLk);
-    m_xContent2ToolBox->connect_clicked(aLk);
     m_xContent3ToolBox->connect_clicked(aLk);
+    m_xContent5ToolBox->connect_clicked(aLk);
+    m_xContent6ToolBox->connect_clicked(aLk);
     m_xGlobalToolBox->connect_clicked(aLk);
     m_xDocListBox->connect_changed(LINK(this, SwNavigationPI, DocListBoxSelectHdl));
-    m_xContent2ToolBox->set_item_menu("headings", m_xHeadingsMenu.get());
+    m_xContent5ToolBox->set_item_menu("headings", m_xHeadingsMenu.get());
     m_xHeadingsMenu->connect_activate(LINK(this, SwNavigationPI, HeadingsMenuSelectHdl));
-    m_xContent2ToolBox->connect_menu_toggled(LINK(this, SwNavigationPI, ToolBox2DropdownClickHdl));
-    m_xContent3ToolBox->set_item_menu("dragmode", m_xDragModeMenu.get());
+    m_xContent5ToolBox->connect_menu_toggled(LINK(this, SwNavigationPI, ToolBox5DropdownClickHdl));
+    m_xContent6ToolBox->set_item_menu("dragmode", m_xDragModeMenu.get());
     m_xDragModeMenu->connect_activate(LINK(this, SwNavigationPI, DropModeMenuSelectHdl));
-    m_xContent3ToolBox->connect_menu_toggled(LINK(this, SwNavigationPI, ToolBox3DropdownClickHdl));
+    m_xContent6ToolBox->connect_menu_toggled(LINK(this, SwNavigationPI, ToolBox6DropdownClickHdl));
     m_xGlobalToolBox->set_item_menu("update", m_xUpdateMenu.get());
     m_xUpdateMenu->connect_activate(LINK(this, SwNavigationPI, GlobalMenuSelectHdl));
     m_xGlobalToolBox->set_item_menu("insert", m_xInsertMenu.get());
@@ -610,7 +620,10 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     m_xGlobalToolBox->set_item_active("globaltoggle", true);
 
 //  set toolbar of both modes to widest of each
-    m_xGlobalToolBox->set_size_request(m_xContent1ToolBox->get_preferred_size().Width(), -1);
+    m_xGlobalToolBox->set_size_request(m_xContent1ToolBox->get_preferred_size().Width() +
+                                       m_xContent2ToolBox->get_preferred_size().Width() +
+                                       m_xContent3ToolBox->get_preferred_size().Width() +
+                                       m_xContent4ToolBox->get_preferred_size().Width(), -1);
 
     StartListening(*SfxGetpApp());
 
@@ -672,10 +685,14 @@ void SwNavigationPI::dispose()
     m_xDragModeMenu.reset();
     m_xUpdateMenu.reset();
     m_xInsertMenu.reset();
-    m_xContent1Dispatch.reset();
+    m_xContent2Dispatch.reset();
+    m_xContent3Dispatch.reset();
     m_xContent1ToolBox.reset();
     m_xContent2ToolBox.reset();
     m_xContent3ToolBox.reset();
+    m_xContent4ToolBox.reset();
+    m_xContent5ToolBox.reset();
+    m_xContent6ToolBox.reset();
 
     m_aPageChgIdle.Stop();
 
@@ -733,7 +750,7 @@ void SwNavigationPI::StateChanged(StateChangedType nStateChange)
         // the sidebar or is otherwise docked. While the navigator could change
         // its size, the sidebar can not, and the navigator would just waste
         // space. Therefore disable this button.
-        m_xContent3ToolBox->set_item_sensitive("listbox", SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
+        m_xContent6ToolBox->set_item_sensitive("listbox", SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
         // show content if docked
         if (SfxChildWindowContext::GetFloatingWindow(GetParent()) == nullptr && IsZoomedIn())
             ZoomOut();
@@ -990,7 +1007,7 @@ void SwNavigationPI::SetRegionDropMode(RegionMode nNewMode)
             sImageId = RID_BMP_DROP_COPY;
             break;
     }
-    m_xContent3ToolBox->set_item_icon_name("dragmode", sImageId);
+    m_xContent6ToolBox->set_item_icon_name("dragmode", sImageId);
 }
 
 void SwNavigationPI::ToggleTree()
@@ -1009,6 +1026,9 @@ void SwNavigationPI::ToggleTree()
         m_xContent1ToolBox->hide();
         m_xContent2ToolBox->hide();
         m_xContent3ToolBox->hide();
+        m_xContent4ToolBox->hide();
+        m_xContent5ToolBox->hide();
+        m_xContent6ToolBox->hide();
         m_xDocListBox->hide();
         SetGlobalMode(true);
         SetUpdateMode(true);
@@ -1025,6 +1045,9 @@ void SwNavigationPI::ToggleTree()
             m_xContent1ToolBox->show();
             m_xContent2ToolBox->show();
             m_xContent3ToolBox->show();
+            m_xContent4ToolBox->show();
+            m_xContent5ToolBox->show();
+            m_xContent6ToolBox->show();
             m_xDocListBox->show();
         }
         SetGlobalMode(false);
@@ -1104,7 +1127,7 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
     if( nRootType != ContentTypeId::UNKNOWN )
     {
         pNavi->m_xContentTree->SetRootType(nRootType);
-        pNavi->m_xContent2ToolBox->set_item_active("root", true);
+        pNavi->m_xContent5ToolBox->set_item_active("root", true);
         if (nRootType == ContentTypeId::OUTLINE)
         {
             pNavi->m_xContentTree->set_selection_mode(SelectionMode::Multiple);
