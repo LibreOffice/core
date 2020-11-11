@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2929c8b_4ec6fc9b",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-11-11T10:08:31Z",
+      "side": 1,
+      "message": "I wonder why bother to clone it at all.",
+      "revId": "b0b5812bc6b74369c7909313fcb7fd86c535aea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
