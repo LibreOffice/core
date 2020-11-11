@@ -48,6 +48,29 @@
     },
     {
       "key": {
+        "uuid": "dcd75e38_09dd183d",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-11-11T22:10:47Z",
+      "side": 1,
+      "message": "Perhaps using numeric variable naming convention of nName would be better here.",
+      "range": {
+        "startLine": 230,
+        "startChar": 3,
+        "endLine": 231,
+        "endChar": 60
+      },
+      "revId": "01f0e6794fe8f14ec7f76b7fa6ff2fc7fe69ef5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6ad4d287_0ea3b9a5",
         "filename": "sw/source/ui/table/instable.cxx",
         "patchSetId": 19
@@ -88,6 +111,53 @@
         "startChar": 0,
         "endLine": 253,
         "endChar": 5
+      },
+      "revId": "01f0e6794fe8f14ec7f76b7fa6ff2fc7fe69ef5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f735f41_44bf47cf",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-11-11T22:10:47Z",
+      "side": 1,
+      "message": "Thanks, that works for me.",
+      "parentUuid": "8969da71_983a30c4",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 253,
+        "endChar": 5
+      },
+      "revId": "01f0e6794fe8f14ec7f76b7fa6ff2fc7fe69ef5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76e1b3ea_02421396",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-11-11T22:10:47Z",
+      "side": 1,
+      "message": "why?",
+      "range": {
+        "startLine": 256,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 21
       },
       "revId": "01f0e6794fe8f14ec7f76b7fa6ff2fc7fe69ef5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
