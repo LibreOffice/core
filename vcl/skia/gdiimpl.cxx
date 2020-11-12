@@ -767,30 +767,30 @@ void SkiaSalGraphicsImpl::drawRect(tools::Long nX, tools::Long nY, tools::Long n
     privateDrawAlphaRect(nX, nY, nWidth, nHeight, 0.0, true);
 }
 
-void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
+void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
 {
     basegfx::B2DPolygon aPolygon;
-    aPolygon.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+    aPolygon.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
     for (sal_uInt32 i = 1; i < nPoints; ++i)
-        aPolygon.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
+        aPolygon.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
     aPolygon.setClosed(false);
 
     drawPolyLine(basegfx::B2DHomMatrix(), aPolygon, 0.0, 1.0, nullptr, basegfx::B2DLineJoin::Miter,
                  css::drawing::LineCap_BUTT, basegfx::deg2rad(15.0) /*default*/, false);
 }
 
-void SkiaSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
+void SkiaSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
 {
     basegfx::B2DPolygon aPolygon;
-    aPolygon.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+    aPolygon.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
     for (sal_uInt32 i = 1; i < nPoints; ++i)
-        aPolygon.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
+        aPolygon.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
 
     drawPolyPolygon(basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aPolygon), 0.0);
 }
 
 void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                          PCONSTSALPOINT* pPtAry)
+                                          const Point** pPtAry)
 {
     basegfx::B2DPolyPolygon aPolyPolygon;
     for (sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
@@ -798,11 +798,12 @@ void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pP
         sal_uInt32 nPoints = pPoints[nPolygon];
         if (nPoints)
         {
-            PCONSTSALPOINT pSalPoints = pPtAry[nPolygon];
+            const Point* pSubPoints = pPtAry[nPolygon];
             basegfx::B2DPolygon aPolygon;
-            aPolygon.append(basegfx::B2DPoint(pSalPoints->mnX, pSalPoints->mnY), nPoints);
+            aPolygon.append(basegfx::B2DPoint(pSubPoints->getX(), pSubPoints->getY()), nPoints);
             for (sal_uInt32 i = 1; i < nPoints; ++i)
-                aPolygon.setB2DPoint(i, basegfx::B2DPoint(pSalPoints[i].mnX, pSalPoints[i].mnY));
+                aPolygon.setB2DPoint(i,
+                                     basegfx::B2DPoint(pSubPoints[i].getX(), pSubPoints[i].getY()));
 
             aPolyPolygon.append(aPolygon);
         }
@@ -1116,18 +1117,18 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     return true;
 }
 
-bool SkiaSalGraphicsImpl::drawPolyLineBezier(sal_uInt32, const SalPoint*, const PolyFlags*)
+bool SkiaSalGraphicsImpl::drawPolyLineBezier(sal_uInt32, const Point*, const PolyFlags*)
 {
     return false;
 }
 
-bool SkiaSalGraphicsImpl::drawPolygonBezier(sal_uInt32, const SalPoint*, const PolyFlags*)
+bool SkiaSalGraphicsImpl::drawPolygonBezier(sal_uInt32, const Point*, const PolyFlags*)
 {
     return false;
 }
 
-bool SkiaSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32*,
-                                                const SalPoint* const*, const PolyFlags* const*)
+bool SkiaSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32*, const Point* const*,
+                                                const PolyFlags* const*)
 {
     return false;
 }
@@ -1472,13 +1473,13 @@ void SkiaSalGraphicsImpl::invert(tools::Long nX, tools::Long nY, tools::Long nWi
     invert(aRect, eFlags);
 }
 
-void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const SalPoint* pPointArray, SalInvert eFlags)
+void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const Point* pPointArray, SalInvert eFlags)
 {
     basegfx::B2DPolygon aPolygon;
-    aPolygon.append(basegfx::B2DPoint(pPointArray[0].mnX, pPointArray[0].mnY), nPoints);
+    aPolygon.append(basegfx::B2DPoint(pPointArray[0].getX(), pPointArray[0].getY()), nPoints);
     for (sal_uInt32 i = 1; i < nPoints; ++i)
     {
-        aPolygon.setB2DPoint(i, basegfx::B2DPoint(pPointArray[i].mnX, pPointArray[i].mnY));
+        aPolygon.setB2DPoint(i, basegfx::B2DPoint(pPointArray[i].getX(), pPointArray[i].getY()));
     }
     aPolygon.setClosed(true);
 

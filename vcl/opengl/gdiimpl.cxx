@@ -712,7 +712,7 @@ void OpenGLSalGraphicsImpl::UseLine(GLfloat fLineWidth, bool bUseAA)
     mpProgram->SetBlendMode(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, bool blockAA )
+void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const Point* pPtAry, bool blockAA )
 {
     OpenGLZone aZone;
 
@@ -721,8 +721,8 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
 
     for( i = 0, j = 0; i < nPoints; i++, j += 2 )
     {
-        aVertices[j]   = GLfloat(pPtAry[i].mnX);
-        aVertices[j+1] = GLfloat(pPtAry[i].mnY);
+        aVertices[j]   = GLfloat(pPtAry[i].getX());
+        aVertices[j+1] = GLfloat(pPtAry[i].getY());
     }
 
     ApplyProgramMatrices();
@@ -747,9 +747,9 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
     {
         for( i = 0; i < nPoints; ++i )
         {
-            const SalPoint& rPt1 = pPtAry[ i ];
-            const SalPoint& rPt2 = pPtAry[ ( i + 1 ) % nPoints ];
-            DrawLineSegment(rPt1.mnX, rPt1.mnY, rPt2.mnX, rPt2.mnY);
+            const Point& rPt1 = pPtAry[ i ];
+            const Point& rPt2 = pPtAry[ ( i + 1 ) % nPoints ];
+            DrawLineSegment(rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
         }
         UseSolid( lastSolidColor, lastSolidTransparency );
     }
@@ -858,7 +858,7 @@ void OpenGLSalGraphicsImpl::DrawRect( tools::Long nX, tools::Long nY, tools::Lon
     tools::Long nY1( nY );
     tools::Long nX2( nX + nWidth );
     tools::Long nY2( nY + nHeight );
-    const SalPoint aPoints[] = { { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY2) }, { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY1) },
+    const Point aPoints[] = { { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY2) }, { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY1) },
                                  { static_cast<sal_Int32>(nX2), static_cast<sal_Int32>(nY1) }, { static_cast<sal_Int32>(nX2), static_cast<sal_Int32>(nY2) }};
 
     DrawConvexPolygon( 4, aPoints, true );
@@ -870,18 +870,18 @@ void OpenGLSalGraphicsImpl::DrawRect( const tools::Rectangle& rRect )
     tools::Long nY1( rRect.Top() );
     tools::Long nX2( rRect.Right() );
     tools::Long nY2( rRect.Bottom() );
-    const SalPoint aPoints[] = { { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY2) }, { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY1) },
+    const Point aPoints[] = { { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY2) }, { static_cast<sal_Int32>(nX1), static_cast<sal_Int32>(nY1) },
                                  { static_cast<sal_Int32>(nX2), static_cast<sal_Int32>(nY1) }, { static_cast<sal_Int32>(nX2), static_cast<sal_Int32>(nY2) }};
 
     DrawConvexPolygon( 4, aPoints, true );
 }
 
-void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
 {
     basegfx::B2DPolygon aPolygon;
 
     for( sal_uInt32 i = 0; i < nPoints; i++ )
-        aPolygon.append( basegfx::B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
+        aPolygon.append( basegfx::B2DPoint( pPtAry[i].getX(), pPtAry[i].getY() ) );
     aPolygon.setClosed( true );
 
     if( basegfx::utils::isConvex( aPolygon ) )
@@ -1547,13 +1547,13 @@ void OpenGLSalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Lon
     PostBatchDraw();
 }
 
-void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry )
 {
     VCL_GL_INFO("::drawPolyLine legacy -> redirecting to drawPolyLine");
     basegfx::B2DPolygon aPoly;
-    aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+    aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
     for (sal_uInt32 i = 1; i < nPoints; ++i)
-        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
     aPoly.setClosed(false);
 
     drawPolyLine(
@@ -1568,13 +1568,13 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
         false);
 }
 
-void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
 {
     VCL_GL_INFO("::drawPolygon legacy -> redirecting to drawPolyPolygon with transparency");
     basegfx::B2DPolygon aPoly;
-    aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+    aPoly.append(basegfx::B2DPoint(pPtAry->getX(), pPtAry->getY()), nPoints);
     for (sal_uInt32 i = 1; i < nPoints; ++i)
-        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].getX(), pPtAry[i].getY()));
 
     drawPolyPolygon(
         basegfx::B2DHomMatrix(),
@@ -1582,7 +1582,7 @@ void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
         0.0);
 }
 
-void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPointCounts, PCONSTSALPOINT* pPtAry )
+void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPointCounts, const Point** pPtAry )
 {
     VCL_GL_INFO("::drawPolyPolygon legacy -> redirecting to drawPolyPolygon with transparency");
     basegfx::B2DPolyPolygon aPolyPoly;
@@ -1591,11 +1591,11 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
         sal_uInt32 nPoints = pPointCounts[nPolygon];
         if (nPoints)
         {
-            PCONSTSALPOINT pPoints = pPtAry[nPolygon];
+            const Point* pPoints = pPtAry[nPolygon];
             basegfx::B2DPolygon aPoly;
-            aPoly.append( basegfx::B2DPoint(pPoints->mnX, pPoints->mnY), nPoints);
+            aPoly.append( basegfx::B2DPoint(pPoints->getX(), pPoints->getY()), nPoints);
             for (sal_uInt32 i = 1; i < nPoints; ++i)
-                aPoly.setB2DPoint(i, basegfx::B2DPoint( pPoints[i].mnX, pPoints[i].mnY));
+                aPoly.setB2DPoint(i, basegfx::B2DPoint( pPoints[i].getX(), pPoints[i].getY()));
 
             aPolyPoly.append(aPoly);
         }
@@ -1712,7 +1712,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
 
 bool OpenGLSalGraphicsImpl::drawPolyLineBezier(
             sal_uInt32 /*nPoints*/,
-            const SalPoint* /*pPtAry*/,
+            const Point* /*pPtAry*/,
             const PolyFlags* /*pFlgAry*/ )
 {
     return false;
@@ -1720,7 +1720,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLineBezier(
 
 bool OpenGLSalGraphicsImpl::drawPolygonBezier(
             sal_uInt32 /*nPoints*/,
-            const SalPoint* /*pPtAry*/,
+            const Point* /*pPtAry*/,
             const PolyFlags* /*pFlgAry*/ )
 {
     return false;
@@ -1729,7 +1729,7 @@ bool OpenGLSalGraphicsImpl::drawPolygonBezier(
 bool OpenGLSalGraphicsImpl::drawPolyPolygonBezier(
             sal_uInt32 /*nPoly*/,
             const sal_uInt32* /*pPoints*/,
-            const SalPoint* const* /*pPtAry*/,
+            const Point* const* /*pPtAry*/,
             const PolyFlags* const* /*pFlgAry*/ )
 {
     return false;
@@ -1892,7 +1892,7 @@ void OpenGLSalGraphicsImpl::invert(
     PostDraw();
 }
 
-void OpenGLSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags )
+void OpenGLSalGraphicsImpl::invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags )
 {
     PreDraw();
 
@@ -1905,26 +1905,26 @@ void OpenGLSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, 
             // can't be used. Draw the edge of the polygon as polygons instead.
             for (size_t nPoint = 0; nPoint < nPoints; ++nPoint)
             {
-                const SalPoint& rFrom = pPtAry[nPoint];
-                const SalPoint& rTo = pPtAry[(nPoint + 1) % nPoints];
-                if (rFrom.mnX == rTo.mnX)
+                const Point& rFrom = pPtAry[nPoint];
+                const Point& rTo = pPtAry[(nPoint + 1) % nPoints];
+                if (rFrom.getX() == rTo.getX())
                 {
                     // Extend to the right, comments assuming "to" is above
                     // "from":
-                    const SalPoint aPoints[] = { { rFrom.mnX + 1, rFrom.mnY }, // bottom right
-                                                 { rFrom.mnX, rFrom.mnY }, // bottom left
-                                                 { rTo.mnX, rTo.mnY }, // top left
-                                                 { rTo.mnX + 1, rTo.mnY } }; // top right
+                    const Point aPoints[] = { { rFrom.getX() + 1, rFrom.getY() }, // bottom right
+                                                 { rFrom.getX(), rFrom.getY() }, // bottom left
+                                                 { rTo.getX(), rTo.getY() }, // top left
+                                                 { rTo.getX() + 1, rTo.getY() } }; // top right
                     DrawConvexPolygon(4, aPoints, true);
                 }
                 else
                 {
                     // Otherwise can extend downwards, comments assuming "to"
                     // is above and on the right of "from":
-                    const SalPoint aPoints[] = { { rFrom.mnX, rFrom.mnY + 1 }, // bottom left
-                                                 { rFrom.mnX, rFrom.mnY }, // top left
-                                                 { rTo.mnX, rTo.mnY }, // top right
-                                                 { rTo.mnX, rTo.mnY + 1 } }; // bottom right
+                    const Point aPoints[] = { { rFrom.getX(), rFrom.getY() + 1 }, // bottom left
+                                                 { rFrom.getX(), rFrom.getY() }, // top left
+                                                 { rTo.getX(), rTo.getY() }, // top right
+                                                 { rTo.getX(), rTo.getY() + 1 } }; // bottom right
                     DrawConvexPolygon(4, aPoints, true);
                 }
             }
