@@ -17,44 +17,48 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editeng/forbiddencharacterstable.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 
-SvxForbiddenCharactersTable::SvxForbiddenCharactersTable(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+SvxForbiddenCharactersTable::SvxForbiddenCharactersTable(
+    const css::uno::Reference<css::uno::XComponentContext>& rxContext)
     : m_xContext(rxContext)
 {
 }
 
-std::shared_ptr<SvxForbiddenCharactersTable> SvxForbiddenCharactersTable::makeForbiddenCharactersTable(const css::uno::Reference< css::uno::XComponentContext>& rxContext)
+std::shared_ptr<SvxForbiddenCharactersTable>
+SvxForbiddenCharactersTable::makeForbiddenCharactersTable(
+    const css::uno::Reference<css::uno::XComponentContext>& rxContext)
 {
     return std::shared_ptr<SvxForbiddenCharactersTable>(new SvxForbiddenCharactersTable(rxContext));
 }
 
-const css::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( LanguageType nLanguage, bool bGetDefault )
+const css::i18n::ForbiddenCharacters*
+SvxForbiddenCharactersTable::GetForbiddenCharacters(LanguageType nLanguage, bool bGetDefault)
 {
     css::i18n::ForbiddenCharacters* pForbiddenCharacters = nullptr;
-    Map::iterator it = maMap.find( nLanguage );
-    if ( it != maMap.end() )
+    Map::iterator it = maMap.find(nLanguage);
+    if (it != maMap.end())
         pForbiddenCharacters = &(it->second);
-    else if ( bGetDefault && m_xContext.is() )
+    else if (bGetDefault && m_xContext.is())
     {
-        LocaleDataWrapper aWrapper( m_xContext, LanguageTag( nLanguage ) );
-        maMap[ nLanguage ] = aWrapper.getForbiddenCharacters();
-        pForbiddenCharacters = &maMap[ nLanguage ];
+        LocaleDataWrapper aWrapper(m_xContext, LanguageTag(nLanguage));
+        maMap[nLanguage] = aWrapper.getForbiddenCharacters();
+        pForbiddenCharacters = &maMap[nLanguage];
     }
     return pForbiddenCharacters;
 }
 
-void SvxForbiddenCharactersTable::SetForbiddenCharacters( LanguageType nLanguage, const css::i18n::ForbiddenCharacters& rForbiddenChars )
+void SvxForbiddenCharactersTable::SetForbiddenCharacters(
+    LanguageType nLanguage, const css::i18n::ForbiddenCharacters& rForbiddenChars)
 {
-    maMap[ nLanguage ] = rForbiddenChars;
+    maMap[nLanguage] = rForbiddenChars;
 }
 
-void SvxForbiddenCharactersTable::ClearForbiddenCharacters( LanguageType nLanguage )
+void SvxForbiddenCharactersTable::ClearForbiddenCharacters(LanguageType nLanguage)
 {
-    maMap.erase( nLanguage );
+    maMap.erase(nLanguage);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

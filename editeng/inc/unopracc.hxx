@@ -21,7 +21,6 @@
 
 #include <editeng/unotext.hxx>
 
-
 class SvxEditSource;
 
 /** Wraps SvxUnoTextRangeBase and provides us with the text properties
@@ -31,27 +30,27 @@ class SvxEditSource;
     required text range and return a reference to a XPropertySet.
  */
 class SvxAccessibleTextPropertySet final : public SvxUnoTextRangeBase,
-                                     public css::lang::XTypeProvider,
-                                     public ::cppu::OWeakObject
+                                           public css::lang::XTypeProvider,
+                                           public ::cppu::OWeakObject
 {
 public:
-    SvxAccessibleTextPropertySet( const SvxEditSource*, const SvxItemPropertySet* );
+    SvxAccessibleTextPropertySet(const SvxEditSource*, const SvxItemPropertySet*);
     virtual ~SvxAccessibleTextPropertySet() throw() override;
 
     // XTextRange
-    virtual css::uno::Reference< css::text::XText > SAL_CALL getText() override;
+    virtual css::uno::Reference<css::text::XText> SAL_CALL getText() override;
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
 
     // lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString&) override;
 
     // lang::XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
