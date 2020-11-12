@@ -26,7 +26,7 @@
 
 #ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 #include <winldap.h>
@@ -38,28 +38,27 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-namespace extensions::config::ldap {
-
-namespace uno = css::uno ;
-namespace lang = css::lang ;
-namespace ldap = css::ldap ;
+namespace extensions::config::ldap
+{
+namespace uno = css::uno;
+namespace lang = css::lang;
+namespace ldap = css::ldap;
 
 struct LdapUserProfile;
-
 
 /** Struct containing the information on LDAP connection */
 struct LdapDefinition
 {
     /** LDAP server name */
-    OUString mServer ;
+    OUString mServer;
     /** LDAP server port number */
-    sal_Int32 mPort ;
+    sal_Int32 mPort;
     /** Repository base DN */
-    OUString mBaseDN ;
+    OUString mBaseDN;
     /** DN to use for "anonymous" connection */
-    OUString mAnonUser ;
+    OUString mAnonUser;
     /** Credentials to use for "anonymous" connection */
-    OUString mAnonCredentials ;
+    OUString mAnonCredentials;
     /** User Entity Object Class */
     OUString mUserObjectClass;
     /** User Entity Unique Attribute */
@@ -71,23 +70,27 @@ struct LdapDefinition
     }
 };
 
-typedef std::map< OUString, OUString > LdapData; // key/value pairs
+typedef std::map<OUString, OUString> LdapData; // key/value pairs
 
 /** Class encapsulating all LDAP functionality */
 class LdapConnection
 {
     friend struct LdapMessageHolder;
-public:
 
+public:
     /** Default constructor */
-    LdapConnection() : mConnection(nullptr),mLdapDefinition() {}
+    LdapConnection()
+        : mConnection(nullptr)
+        , mLdapDefinition()
+    {
+    }
     /** Destructor, releases the connection */
-    ~LdapConnection() ;
+    ~LdapConnection();
     /** Make connection to LDAP server
         @throws ldap::LdapConnectionException
         @throws ldap::LdapGenericException
     */
-    void  connectSimple(const LdapDefinition& aDefinition);
+    void connectSimple(const LdapDefinition& aDefinition);
 
     /**
         Gets LdapUserProfile from LDAP repository for specified user
@@ -98,7 +101,7 @@ public:
          @throws css::ldap::LdapGenericException
                   if an LDAP error occurs.
     */
-    void getUserProfile(const OUString& aUser, LdapData * data);
+    void getUserProfile(const OUString& aUser, LdapData* data);
 
     /** finds DN of user
         @return  DN of User
@@ -116,18 +119,16 @@ private:
       Indicates whether the connection is in a valid state.
       @return   sal_True if connection is valid, sal_False otherwise
       */
-    bool isValid() const { return mConnection != nullptr ; }
+    bool isValid() const { return mConnection != nullptr; }
 
     /// @throws ldap::LdapConnectionException
     /// @throws ldap::LdapGenericException
-    void  connectSimple();
+    void connectSimple();
 
     /** LDAP connection object */
-    LDAP* mConnection ;
+    LDAP* mConnection;
     LdapDefinition mLdapDefinition;
-} ;
-
-
+};
 }
 
 #endif // EXTENSIONS_CONFIG_LDAP_LDAPUSERPROFILE_HXX_

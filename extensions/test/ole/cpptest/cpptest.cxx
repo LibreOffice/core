@@ -19,11 +19,10 @@
 
 // cpptest.cpp : Defines the entry point for the console application.
 
-
 #ifdef _MSC_VER
 #pragma once
 #endif
-#pragma warning(disable: 4917)
+#pragma warning(disable : 4917)
 #include <comdef.h>
 #include <atlbase.h>
 #include <atlcom.h>
@@ -33,17 +32,17 @@ HRESULT doTest();
 int main(int /*argc*/, char** /*argv*/)
 {
     HRESULT hr;
-    if( FAILED( hr=CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
+    if (FAILED(hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
     {
         printf("CoInitializeEx failed \n");
         return -1;
     }
 
-    if( FAILED(hr=doTest()))
+    if (FAILED(hr = doTest()))
     {
-        _com_error err( hr);
-        const CHAR * errMsg= err.ErrorMessage();
-        MessageBoxA( NULL, errMsg, "Test failed", MB_ICONERROR);
+        _com_error err(hr);
+        const CHAR* errMsg = err.ErrorMessage();
+        MessageBoxA(NULL, errMsg, "Test failed", MB_ICONERROR);
     }
 
     CoUninitialize();
@@ -55,13 +54,12 @@ HRESULT doTest()
     HRESULT hr;
     CComPtr<IUnknown> spUnkMgr;
 
-
-    if( FAILED(hr= spUnkMgr.CoCreateInstance(L"com.sun.star.ServiceManager")))
+    if (FAILED(hr = spUnkMgr.CoCreateInstance(L"com.sun.star.ServiceManager")))
         return hr;
 
     IDispatchPtr starManager;
     //    var starManager=new ActiveXObject("com.sun.star.ServiceManager");
-    if (FAILED(hr= starManager.CreateInstance(_T("com.sun.star.ServiceManager"))))
+    if (FAILED(hr = starManager.CreateInstance(_T("com.sun.star.ServiceManager"))))
     {
         fprintf(stderr, "creating ServiceManager failed\n");
         return hr;
@@ -70,9 +68,9 @@ HRESULT doTest()
     _variant_t varP1(L"com.sun.star.frame.Desktop");
     _variant_t varRet;
     CComDispatchDriver dispMgr(starManager);
-    if (FAILED(hr=  dispMgr.Invoke1(L"createInstance", &varP1, &varRet)))
+    if (FAILED(hr = dispMgr.Invoke1(L"createInstance", &varP1, &varRet)))
     {
-        fprintf(stderr,"createInstance of Desktop failed\n");
+        fprintf(stderr, "createInstance of Desktop failed\n");
         return hr;
     }
     CComDispatchDriver dispDesk(varRet.pdispVal);
@@ -83,22 +81,21 @@ HRESULT doTest()
     //    var noArgs=new Array();
     //    var oDoc=starDesktop.loadComponentFromURL("private:factory/swriter", "Test", 40, noArgs);
     IDispatchPtr oDoc;
-    SAFEARRAY* ar= SafeArrayCreateVector(VT_DISPATCH, 0, 0);
+    SAFEARRAY* ar = SafeArrayCreateVector(VT_DISPATCH, 0, 0);
     _variant_t args[4];
-    args[3]= _variant_t(L"private:factory/swriter");
-    args[2]= _variant_t(L"Test");
-    args[1]= _variant_t((long) 40);
-    args[0].vt= VT_ARRAY | VT_DISPATCH;
-    args[0].parray= ar;
-    if (FAILED(hr= dispDesk.InvokeN(L"loadComponentFromURL", args, 4, &varRet)))
+    args[3] = _variant_t(L"private:factory/swriter");
+    args[2] = _variant_t(L"Test");
+    args[1] = _variant_t((long)40);
+    args[0].vt = VT_ARRAY | VT_DISPATCH;
+    args[0].parray = ar;
+    if (FAILED(hr = dispDesk.InvokeN(L"loadComponentFromURL", args, 4, &varRet)))
     {
-        fprintf(stderr,"loadComponentFromURL failed\n");
+        fprintf(stderr, "loadComponentFromURL failed\n");
         return hr;
     }
     CComDispatchDriver dispDoc(varRet.pdispVal);
     varRet.Clear();
     return S_OK;
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

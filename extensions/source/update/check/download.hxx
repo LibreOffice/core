@@ -50,12 +50,13 @@ protected:
     virtual ~DownloadInteractionHandler() override {}
 };
 
-
 class Download
 {
 public:
-    Download(const css::uno::Reference< css::uno::XComponentContext >& xContext,
-             const rtl::Reference< DownloadInteractionHandler >& rHandler) : m_xContext(xContext), m_aHandler(rHandler) {};
+    Download(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+             const rtl::Reference<DownloadInteractionHandler>& rHandler)
+        : m_xContext(xContext)
+        , m_aHandler(rHandler){};
 
     // returns true when the content of rURL was successfully written to rLocalFile
     bool start(const OUString& rURL, const OUString& rFile, const OUString& rDestinationDir);
@@ -64,14 +65,13 @@ public:
     void stop();
 
 protected:
-
     // Determines the appropriate proxy settings for the given URL. Returns true if a proxy should be used
     void getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort) const;
 
 private:
     osl::Condition m_aCondition;
-    const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
-    const rtl::Reference< DownloadInteractionHandler > m_aHandler;
+    const css::uno::Reference<css::uno::XComponentContext>& m_xContext;
+    const rtl::Reference<DownloadInteractionHandler> m_aHandler;
 };
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_DOWNLOAD_HXX

@@ -19,10 +19,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface OOoSpotlightImporter : NSObject {
+@interface OOoSpotlightImporter : NSObject
+{
 }
 
-- (BOOL)importDocument:(NSString*)pathToFile contentType:(NSString*)contentTypeUTI attributes:(NSMutableDictionary*)attributes;
+- (BOOL)importDocument:(NSString*)pathToFile
+           contentType:(NSString*)contentTypeUTI
+            attributes:(NSMutableDictionary*)attributes;
 
 - (NSFileHandle*)openZipFileAtPath:(NSString*)pathToFile;
 
