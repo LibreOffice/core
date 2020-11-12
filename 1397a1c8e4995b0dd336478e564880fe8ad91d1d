@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "17443839_29261750",
+        "filename": "include/editeng/itemtype.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-12T07:36:53Z",
+      "side": 1,
+      "message": "Here and potentially also elsewhere in this change:\n\nI think we have painted ourselves into an unfortunate corner here.  This function used to be (long,long,long)-\u003elong (which it more or less still is, with tools::Long equating long more or less), and before \u003chttps://git.libreoffice.org/core/+/adf0738d2dbfa742d0e9ef130954fb4638a8e90d%5E!/\u003e \"long-\u003esal_Int32 in BigInt\", BitInt\u0027s non-big representation was long.  So back then, this function succeeded if the result was representable as long (aka tools::Long); but now this function only succeeds if the result is representable as sal_Int32, which is potentially smaller.",
+      "revId": "1397a1c8e4995b0dd336478e564880fe8ad91d1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f81f6bb4_db017dff",
         "filename": "include/tools/bigint.hxx",
         "patchSetId": 2
