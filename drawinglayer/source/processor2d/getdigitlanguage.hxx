@@ -13,11 +13,10 @@
 
 #include <i18nlangtag/lang.h>
 
-namespace drawinglayer::detail {
-
+namespace drawinglayer::detail
+{
 /// Get digit language derived from SvtCTLOptions
 LanguageType getDigitLanguage();
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
