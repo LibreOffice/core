@@ -174,11 +174,11 @@ namespace fileaccess {
     OUString newName(
         const OUString& aNewPrefix,
         const OUString& aOldPrefix,
-        const OUString& old_Name )
+        std::u16string_view old_Name )
     {
         sal_Int32 srcL = aOldPrefix.getLength();
 
-        return aNewPrefix + old_Name.subView( srcL );
+        return aNewPrefix + old_Name.substr( srcL );
     }
 
 

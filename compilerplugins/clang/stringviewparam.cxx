@@ -131,7 +131,7 @@ DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
     else if (auto const i = d->getIdentifier())
     {
         auto const n = i->getName();
-        if (n == "isEmpty")
+        if (n == "isEmpty" || n == "subView")
         {
             good = true;
         }
