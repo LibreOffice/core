@@ -3263,26 +3263,6 @@ IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
 
 IMPL_LINK_NOARG(SalInstanceEntry, ActivateHdl, Edit&, bool) { return m_aActivateHdl.Call(*this); }
 
-namespace
-{
-struct SalInstanceTreeIter : public weld::TreeIter
-{
-    SalInstanceTreeIter(const SalInstanceTreeIter* pOrig)
-        : iter(pOrig ? pOrig->iter : nullptr)
-    {
-    }
-    SalInstanceTreeIter(SvTreeListEntry* pIter)
-        : iter(pIter)
-    {
-    }
-    virtual bool equal(const TreeIter& rOther) const override
-    {
-        return iter == static_cast<const SalInstanceTreeIter&>(rOther).iter;
-    }
-    SvTreeListEntry* iter;
-};
-}
-
 class SalInstanceTreeView;
 
 static SalInstanceTreeView* g_DragSource;
