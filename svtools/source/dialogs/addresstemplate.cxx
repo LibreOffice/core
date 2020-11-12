@@ -686,7 +686,7 @@ void AssignmentPersistentData::ImplCommit()
             catch(const Exception&) { }
             if (!m_xDatabaseContext.is())
             {
-                ShowServiceNotAvailableError(m_xDialog.get(), "com.sun.star.sdb.DatabaseContext", false);
+                ShowServiceNotAvailableError(m_xDialog.get(), u"com.sun.star.sdb.DatabaseContext", false);
                 return;
             }
         }
@@ -731,7 +731,7 @@ void AssignmentPersistentData::ImplCommit()
         catch(const Exception&) { }
         if (!xHandler.is())
         {
-            ShowServiceNotAvailableError(m_xDialog.get(), "com.sun.star.task.InteractionHandler", true);
+            ShowServiceNotAvailableError(m_xDialog.get(), u"com.sun.star.task.InteractionHandler", true);
             return;
         }
 
@@ -1074,7 +1074,7 @@ void AssignmentPersistentData::ImplCommit()
         catch(const Exception&) { }
         if (!xAdminDialog.is())
         {
-            ShowServiceNotAvailableError(m_xDialog.get(), "com.sun.star.ui.dialogs.AddressBookSourcePilot", true);
+            ShowServiceNotAvailableError(m_xDialog.get(), u"com.sun.star.ui.dialogs.AddressBookSourcePilot", true);
             return;
         }
 

@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SFX2_QUERYSAVEDOCUMENT_HXX
 #define INCLUDED_SFX2_QUERYSAVEDOCUMENT_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 
@@ -31,7 +35,7 @@ namespace weld { class Widget; }
         The title of the document.
 */
 SFX2_DLLPUBLIC short ExecuteQuerySaveDocument(
-    weld::Widget* _pParent, const OUString& _rTitle);
+    weld::Widget* _pParent, std::u16string_view _rTitle);
 
 #endif // INCLUDED_SFX2_QUERYSAVEDOCUMENT_HXX
 

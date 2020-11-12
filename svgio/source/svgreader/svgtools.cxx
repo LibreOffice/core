@@ -272,7 +272,7 @@ namespace svgio::svgreader
             return basegfx::fTools::moreOrEqual(mfNumber, 0.0);
         }
 
-        void skip_char(const OUString& rCandidate, sal_Unicode nChar, sal_Int32& nPos, const sal_Int32 nLen)
+        void skip_char(std::u16string_view rCandidate, sal_Unicode nChar, sal_Int32& nPos, const sal_Int32 nLen)
         {
             while(nPos < nLen && nChar == rCandidate[nPos])
             {
@@ -280,7 +280,7 @@ namespace svgio::svgreader
             }
         }
 
-        void skip_char(const OUString& rCandidate, sal_Unicode nCharA, sal_Unicode nCharB, sal_Int32& nPos, const sal_Int32 nLen)
+        void skip_char(std::u16string_view rCandidate, sal_Unicode nCharA, sal_Unicode nCharB, sal_Int32& nPos, const sal_Int32 nLen)
         {
             while(nPos < nLen && (nCharA == rCandidate[nPos] || nCharB == rCandidate[nPos]))
             {
@@ -288,7 +288,7 @@ namespace svgio::svgreader
             }
         }
 
-        void copySign(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
+        void copySign(std::u16string_view rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
             if(nPos < nLen)
             {
@@ -302,7 +302,7 @@ namespace svgio::svgreader
             }
         }
 
-        void copyNumber(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
+        void copyNumber(std::u16string_view rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
             bool bOnNumber(true);
 
@@ -320,7 +320,7 @@ namespace svgio::svgreader
             }
         }
 
-        void copyHex(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
+        void copyHex(std::u16string_view rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
             bool bOnHex(true);
 
@@ -340,7 +340,7 @@ namespace svgio::svgreader
             }
         }
 
-        void copyString(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
+        void copyString(std::u16string_view rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
             bool bOnChar(true);
 
@@ -360,7 +360,7 @@ namespace svgio::svgreader
             }
         }
 
-        void copyToLimiter(const OUString& rCandidate, sal_Unicode nLimiter, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
+        void copyToLimiter(std::u16string_view rCandidate, sal_Unicode nLimiter, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
             while(nPos < nLen && nLimiter != rCandidate[nPos])
             {
@@ -369,7 +369,7 @@ namespace svgio::svgreader
             }
         }
 
-        bool readNumber(const OUString& rCandidate, sal_Int32& nPos, double& fNum, const sal_Int32 nLen)
+        bool readNumber(std::u16string_view rCandidate, sal_Int32& nPos, double& fNum, const sal_Int32 nLen)
         {
             if(nPos < nLen)
             {
@@ -421,7 +421,7 @@ namespace svgio::svgreader
             return false;
         }
 
-        SvgUnit readUnit(const OUString& rCandidate, sal_Int32& nPos, const sal_Int32 nLen)
+        SvgUnit readUnit(std::u16string_view rCandidate, sal_Int32& nPos, const sal_Int32 nLen)
         {
             SvgUnit aRetval(Unit_px);
 
@@ -524,7 +524,7 @@ namespace svgio::svgreader
             return aRetval;
         }
 
-        bool readNumberAndUnit(const OUString& rCandidate, sal_Int32& nPos, SvgNumber& aNum, const sal_Int32 nLen)
+        bool readNumberAndUnit(std::u16string_view rCandidate, sal_Int32& nPos, SvgNumber& aNum, const sal_Int32 nLen)
         {
             double fNum(0.0);
 

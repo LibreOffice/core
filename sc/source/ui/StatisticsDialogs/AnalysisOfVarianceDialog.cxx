@@ -9,6 +9,7 @@
  */
 
 #include <memory>
+#include <string_view>
 
 #include <rangelst.hxx>
 #include <reffact.hxx>
@@ -48,11 +49,11 @@ const char* lclAnovaLabels[] =
     nullptr
 };
 
-const char strWildcardRange[] = "%RANGE%";
+const OUStringLiteral strWildcardRange = u"%RANGE%";
 
 OUString lclCreateMultiParameterFormula(
             ScRangeList&        aRangeList, const OUString& aFormulaTemplate,
-            const OUString&     aWildcard,  const ScDocument& rDocument,
+            std::u16string_view aWildcard,  const ScDocument& rDocument,
             const ScAddress::Details& aAddressDetails)
 {
     OUStringBuffer aResult;

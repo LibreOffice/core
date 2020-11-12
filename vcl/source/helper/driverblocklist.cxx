@@ -596,7 +596,8 @@ DriverInfo::DriverInfo(OperatingSystem os, const OUString& vendor, VersionCompar
 }
 
 bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos, VersionType versionType,
-                                 OUString const& sDriverVersion, OUString const& sAdapterVendorID,
+                                 OUString const& sDriverVersion,
+                                 std::u16string_view sAdapterVendorID,
                                  OUString const& sAdapterDeviceID, OperatingSystem system,
                                  const OUString& blocklistURL)
 {
@@ -700,7 +701,7 @@ bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos, VersionT
 }
 
 bool IsDeviceBlocked(const OUString& blocklistURL, VersionType versionType,
-                     const OUString& driverVersion, const OUString& vendorId,
+                     const OUString& driverVersion, std::u16string_view vendorId,
                      const OUString& deviceId)
 {
     std::vector<DriverInfo> driverList;

@@ -11,6 +11,7 @@
 #include <config_options.h>
 
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
@@ -76,9 +77,9 @@
 #include <dlfcn.h>
 #endif
 
-static bool toBool(const OString &rValue)
+static bool toBool(std::string_view rValue)
 {
-    return (!rValue.isEmpty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
+    return (!rValue.empty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
 }
 
 namespace

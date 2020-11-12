@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 #define INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <connectivity/dbexception.hxx>
 #include <comphelper/stl_types.hxx>
 #include <unotools/sharedunocomponent.hxx>
@@ -619,7 +623,7 @@ namespace dbtools
     OUString createStandardCreateStatement(  const css::uno::Reference< css::beans::XPropertySet >& descriptor,
                                                     const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                                                     ISQLStatementHelper* _pHelper,
-                                                    const OUString& _sCreatePattern);
+                                                    std::u16string_view _sCreatePattern);
 
     /** creates the standard sql statement for the key part of a create table statement.
         @param  descriptor
@@ -642,7 +646,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     OUString createStandardTypePart(     const css::uno::Reference< css::beans::XPropertySet >& descriptor
                                                 ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection
-                                                ,const OUString& _sCreatePattern = OUString());
+                                                ,std::u16string_view _sCreatePattern = {});
 
     /** creates the standard sql statement for the column part of a create table statement.
         @param  _pHelper
@@ -658,7 +662,7 @@ namespace dbtools
     OUString createStandardColumnPart(   const css::uno::Reference< css::beans::XPropertySet >& descriptor
                                                 ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection
                                                 ,ISQLStatementHelper* _pHelper = nullptr
-                                                ,const OUString& _sCreatePattern = OUString());
+                                                ,std::u16string_view _sCreatePattern = {});
 
     /** creates a SQL CREATE TABLE statement
 

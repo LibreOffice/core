@@ -19,6 +19,10 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMERGER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMERGER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
@@ -45,7 +49,7 @@ typedef ::std::vector< AddonStatusbarItem > AddonStatusbarItemContainer;
 
 namespace StatusbarMerger
 {
-    bool IsCorrectContext( const OUString& aContext );
+    bool IsCorrectContext( std::u16string_view aContext );
 
     bool ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
                                        AddonStatusbarItemContainer& rContainer );

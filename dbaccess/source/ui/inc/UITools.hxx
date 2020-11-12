@@ -26,6 +26,7 @@
 #include <connectivity/dbtools.hxx>
 
 #include <memory>
+#include <string_view>
 
 #define RET_ALL     100
 
@@ -309,7 +310,7 @@ namespace dbaui
         @return
             RET_YES, RET_NO, RET_ALL
     */
-    sal_Int32 askForUserAction(weld::Window* pParent, const char* pTitle, const char* pText, bool bAll, const OUString& rName);
+    sal_Int32 askForUserAction(weld::Window* pParent, const char* pTitle, const char* pText, bool bAll, std::u16string_view rName);
 
     /** creates a new view from a query or table
         @param  _sName

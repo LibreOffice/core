@@ -24,6 +24,8 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/menu.hxx>
+
+#include <string_view>
 #include <vector>
 
 namespace framework
@@ -58,7 +60,8 @@ struct ReferencePathInfo
 
 namespace MenuBarMerger
 {
-        bool       IsCorrectContext( const OUString& aContext, const OUString& aModuleIdentifier );
+        bool       IsCorrectContext(
+            const OUString& aContext, std::u16string_view aModuleIdentifier );
 
         void       RetrieveReferencePath( const OUString&,
                                                  std::vector< OUString >& aReferencePath );
@@ -81,7 +84,7 @@ namespace MenuBarMerger
                                                     const OUString&                  rMergeCommand,
                                                     const OUString&                  rMergeFallback,
                                                     const ::std::vector< OUString >& rReferencePath,
-                                                    const OUString&                  rModuleIdentifier,
+                                                    std::u16string_view              rModuleIdentifier,
                                                     const AddonMenuContainer&               rAddonMenuItems );
         bool       MergeMenuItems( Menu*                     pMenu,
                                           sal_uInt16                nPos,

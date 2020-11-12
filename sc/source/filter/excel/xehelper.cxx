@@ -890,7 +890,7 @@ namespace {
 /** Encodes special parts of the URL, i.e. directory separators and volume names.
     @param pTableName  Pointer to a table name to be encoded in this URL, or 0. */
 OUString lclEncodeDosUrl(
-    XclBiff eBiff, const OUString& rUrl, const OUString& rBase, const OUString* pTableName)
+    XclBiff eBiff, const OUString& rUrl, std::u16string_view rBase, const OUString* pTableName)
 {
     OUStringBuffer aBuf;
 
@@ -908,7 +908,7 @@ OUString lclEncodeDosUrl(
         else if ( aOldUrl.getLength() > 2 && aOldUrl.match(":\\", 1) )
         {
             // drive letter
-            sal_Unicode cThisDrive = rBase.isEmpty() ? ' ' : rBase[0];
+            sal_Unicode cThisDrive = rBase.empty() ? ' ' : rBase[0];
             sal_Unicode cDrive = aOldUrl[0];
             if (cThisDrive == cDrive)
                 // This document and the referenced document are under the same drive.

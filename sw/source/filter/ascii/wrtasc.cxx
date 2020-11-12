@@ -203,7 +203,8 @@ ErrCode SwASCWriter::WriteStream()
     return ERRCODE_NONE;
 }
 
-void GetASCWriter( const OUString& rFltNm, const OUString& /*rBaseURL*/, WriterRef& xRet )
+void GetASCWriter(
+    const OUString& rFltNm, [[maybe_unused]] const OUString& /*rBaseURL*/, WriterRef& xRet )
 {
   xRet = new SwASCWriter( rFltNm );
 }

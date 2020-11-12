@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <uielement/addonstoolbarwrapper.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -79,12 +83,12 @@ AddonsToolBarFactory::AddonsToolBarFactory(
 {
 }
 
-bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
+bool IsCorrectContext( std::u16string_view rModuleIdentifier, const OUString& aContextList )
 {
     if ( aContextList.isEmpty() )
         return true;
 
-    if ( !rModuleIdentifier.isEmpty() )
+    if ( !rModuleIdentifier.empty() )
     {
         sal_Int32 nIndex = aContextList.indexOf( rModuleIdentifier );
         return ( nIndex >= 0 );

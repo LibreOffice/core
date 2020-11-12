@@ -54,6 +54,7 @@
 
 #include <memory>
 #include <string.h>
+#include <string_view>
 
 #include <connectivity/dbconversion.hxx>
 
@@ -133,13 +134,13 @@ static bool isOperator( char c )
     return *w != 0;
 }
 
-static bool isNamedParameterStart( const OString & o , int index )
+static bool isNamedParameterStart( std::string_view o , int index )
 {
     return o[index] == ':' && (
         isWhitespace( o[index-1] ) || isOperator(o[index-1]) );
 }
 
-static bool isQuoted( const OString & str )
+static bool isQuoted( std::string_view str )
 {
     return str[0] == '"' || str[0] == '\'';
 }

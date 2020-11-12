@@ -152,9 +152,9 @@ bool lcl_RemoveItems( StatusBar* pStatusbar,
 }
 
 bool StatusbarMerger::IsCorrectContext(
-    const OUString& rContext )
+    std::u16string_view rContext )
 {
-    return rContext.isEmpty();
+    return rContext.empty();
 }
 
 bool StatusbarMerger::ConvertSeqSeqToVector(

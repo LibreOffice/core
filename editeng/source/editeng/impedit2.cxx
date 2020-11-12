@@ -66,7 +66,7 @@
 #include <unicode/ubidi.h>
 #include <algorithm>
 #include <memory>
-
+#include <string_view>
 #include <fstream>
 
 using namespace ::com::sun::star;
@@ -1597,7 +1597,7 @@ bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, const Ed
     return bIsSequenceChecking;
 }
 
-static  bool lcl_HasStrongLTR ( const OUString& rTxt, sal_Int32 nStart, sal_Int32 nEnd )
+static  bool lcl_HasStrongLTR ( std::u16string_view rTxt, sal_Int32 nStart, sal_Int32 nEnd )
  {
      for( sal_Int32 nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
      {

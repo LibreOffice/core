@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <editsh.hxx>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -277,7 +281,7 @@ std::map<OUString, OUString> lcl_getRDFStatements(const uno::Reference<frame::XM
 /// Returns RDF (key, value) pair associated with the field, if any.
 std::pair<OUString, OUString> lcl_getFieldRDFByPrefix(const uno::Reference<frame::XModel>& xModel,
                                                       const uno::Reference<css::text::XTextField>& xField,
-                                                      const OUString& sPrefix)
+                                                      std::u16string_view sPrefix)
 {
     for (const auto& pair : lcl_getRDFStatements(xModel, xField))
     {
@@ -705,7 +709,7 @@ static void insertFieldToDocument(uno::Reference<lang::XMultiServiceFactory> con
     rxText->insertTextContent(rxParagraphCursor, xTextContent, false);
 }
 
-static void removeAllClassificationFields(OUString const & rPolicy, uno::Reference<text::XText> const & rxText)
+static void removeAllClassificationFields(std::u16string_view rPolicy, uno::Reference<text::XText> const & rxText)
 {
     uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(rxText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();

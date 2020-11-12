@@ -1318,9 +1318,9 @@ void VclGrid::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("type", "grid");
 }
 
-bool toBool(const OUString &rValue)
+bool toBool(std::u16string_view rValue)
 {
-    return (!rValue.isEmpty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
+    return (!rValue.empty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
 }
 
 bool VclGrid::set_property(const OString &rKey, const OUString &rValue)
