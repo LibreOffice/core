@@ -22,21 +22,21 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox::drawingml {
-
+namespace oox::drawingml
+{
 class TextSpacing;
 
 class TextSpacingContext : public ::oox::core::ContextHandler2
 {
 public:
-    TextSpacingContext( ::oox::core::ContextHandler2Helper const & rParent, TextSpacing & aSpacing );
+    TextSpacingContext(::oox::core::ContextHandler2Helper const& rParent, TextSpacing& aSpacing);
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef
+    onCreateContext(::sal_Int32 Element, const ::oox::AttributeList& rAttribs) override;
 
 private:
-    TextSpacing&        maSpacing;
+    TextSpacing& maSpacing;
 };
-
 }
 
 #endif

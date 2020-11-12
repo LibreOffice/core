@@ -19,12 +19,9 @@
 
 #include <drawingml/table/tablestyle.hxx>
 
-namespace oox::drawingml::table {
-
-TableStyle::TableStyle()
+namespace oox::drawingml::table
 {
-}
-
+TableStyle::TableStyle() {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

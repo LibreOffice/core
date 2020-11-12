@@ -23,13 +23,13 @@
 
 #include <sal/log.hxx>
 
-namespace {
-
+namespace
+{
 void lcl_getListOfStreams(oox::StorageBase* pStorage, std::vector<OUString>& rElementNames)
 {
-    std::vector< OUString > oElementNames;
+    std::vector<OUString> oElementNames;
     pStorage->getElementNames(oElementNames);
-    for (const auto & sName : oElementNames)
+    for (const auto& sName : oElementNames)
     {
         oox::StorageRef rSubStorage = pStorage->openSubStorage(sName, false);
         if (rSubStorage && rSubStorage->isStorage())
@@ -45,39 +45,39 @@ void lcl_getListOfStreams(oox::StorageBase* pStorage, std::vector<OUString>& rEl
         }
     }
 }
-
 }
 
-namespace oox::crypto {
-
+namespace oox::crypto
+{
 using namespace css;
 
-DocumentDecryption::DocumentDecryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-    oox::ole::OleStorage& rOleStorage) :
-    mxContext(rxContext),
-    mrOleStorage(rOleStorage)
+DocumentDecryption::DocumentDecryption(
+    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    oox::ole::OleStorage& rOleStorage)
+    : mxContext(rxContext)
+    , mrOleStorage(rOleStorage)
 {
     // Get OLE streams into sequences for later use in CryptoEngine
-    std::vector< OUString > aStreamNames;
+    std::vector<OUString> aStreamNames;
     lcl_getListOfStreams(&mrOleStorage, aStreamNames);
 
     comphelper::SequenceAsHashMap aStreamsData;
-    for (const auto & sStreamName : aStreamNames)
+    for (const auto& sStreamName : aStreamNames)
     {
         uno::Reference<io::XInputStream> xStream = mrOleStorage.openInputStream(sStreamName);
         if (!xStream.is())
-            throw io::IOException( "Cannot open OLE input stream for " + sStreamName + "!" );
+            throw io::IOException("Cannot open OLE input stream for " + sStreamName + "!");
 
         BinaryXInputStream aBinaryInputStream(xStream, true);
 
-        css::uno::Sequence< sal_Int8 > oData;
+        css::uno::Sequence<sal_Int8> oData;
         sal_Int32 nStreamSize = aBinaryInputStream.size();
         sal_Int32 nReadBytes = aBinaryInputStream.readData(oData, nStreamSize);
 
         if (nStreamSize != nReadBytes)
         {
             SAL_WARN("oox", "OLE stream invalid content");
-            throw io::IOException( "OLE stream invalid content for " + sStreamName + "!" );
+            throw io::IOException("OLE stream invalid content for " + sStreamName + "!");
         }
 
         aStreamsData[sStreamName] <<= oData;
@@ -98,7 +98,8 @@ bool DocumentDecryption::readEncryptionInfo()
         return false;
 
     // Read 0x6DataSpaces/DataSpaceMap
-    uno::Reference<io::XInputStream> xDataSpaceMap = mrOleStorage.openInputStream("\006DataSpaces/DataSpaceMap");
+    uno::Reference<io::XInputStream> xDataSpaceMap
+        = mrOleStorage.openInputStream("\006DataSpaces/DataSpaceMap");
     OUString sDataSpaceName;
 
     if (xDataSpaceMap.is())
@@ -107,9 +108,11 @@ bool DocumentDecryption::readEncryptionInfo()
 
         BinaryXInputStream aDataSpaceStream(xDataSpaceMap, true);
         sal_uInt32 aHeaderLength = aDataSpaceStream.readuInt32();
-        SAL_WARN_IF(aHeaderLength != 8, "oox", "DataSpaceMap length != 8 is not supported. Some content may be skipped");
+        SAL_WARN_IF(aHeaderLength != 8, "oox",
+                    "DataSpaceMap length != 8 is not supported. Some content may be skipped");
         sal_uInt32 aEntryCount = aDataSpaceStream.readuInt32();
-        SAL_WARN_IF(aEntryCount != 1, "oox", "DataSpaceMap contains more than one entry. Some content may be skipped");
+        SAL_WARN_IF(aEntryCount != 1, "oox",
+                    "DataSpaceMap contains more than one entry. Some content may be skipped");
 
         // Read each DataSpaceMapEntry (MS-OFFCRYPTO 2.1.6.1)
         for (sal_uInt32 i = 0; i < aEntryCount && !bBroken; i++)
@@ -132,7 +135,8 @@ bool DocumentDecryption::readEncryptionInfo()
                     break;
                 }
                 aDataSpaceStream.readUnicodeArray(aReferenceComponentNameLength / 2);
-                aDataSpaceStream.skip((4 - (aReferenceComponentNameLength & 3)) & 3);  // Skip padding
+                aDataSpaceStream.skip((4 - (aReferenceComponentNameLength & 3))
+                                      & 3); // Skip padding
 
                 bBroken |= aDataSpaceStream.isEof();
             }
@@ -144,7 +148,7 @@ bool DocumentDecryption::readEncryptionInfo()
                 break;
             }
             sDataSpaceName = aDataSpaceStream.readUnicodeArray(aDataSpaceNameLength / 2);
-            aDataSpaceStream.skip((4 - (aDataSpaceNameLength & 3)) & 3);  // Skip padding
+            aDataSpaceStream.skip((4 - (aDataSpaceNameLength & 3)) & 3); // Skip padding
 
             bBroken |= aDataSpaceStream.isEof();
         }
@@ -163,10 +167,11 @@ bool DocumentDecryption::readEncryptionInfo()
         sDataSpaceName = "StrongEncryptionDataSpace";
     }
 
-    uno::Sequence< uno::Any > aArguments;
+    uno::Sequence<uno::Any> aArguments;
     mxPackageEncryption.set(
         mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.oox.crypto." + sDataSpaceName, aArguments, mxContext), css::uno::UNO_QUERY);
+            "com.sun.star.comp.oox.crypto." + sDataSpaceName, aArguments, mxContext),
+        css::uno::UNO_QUERY);
 
     if (!mxPackageEncryption.is())
     {
@@ -196,7 +201,8 @@ bool DocumentDecryption::decrypt(const uno::Reference<io::XStream>& xDocumentStr
         return false;
 
     // open the required input streams in the encrypted package
-    uno::Reference<io::XInputStream> xEncryptedPackage = mrOleStorage.openInputStream("EncryptedPackage");
+    uno::Reference<io::XInputStream> xEncryptedPackage
+        = mrOleStorage.openInputStream("EncryptedPackage");
 
     // create temporary file for unencrypted package
     uno::Reference<io::XOutputStream> xDecryptedPackage = xDocumentStream->getOutputStream();
