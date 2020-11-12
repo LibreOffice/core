@@ -17,22 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "jvmargs.hxx"
 #include <rtl/ustring.hxx>
 
-namespace stoc_javavm {
-
-JVM::JVM() throw()//: _enabled(sal_False)
+namespace stoc_javavm
+{
+JVM::JVM() throw() //: _enabled(sal_False)
 {
 }
 
-void JVM::pushProp(const OUString & property)
-{
-    _props.push_back(property);
-}
-
-
+void JVM::pushProp(const OUString& property) { _props.push_back(property); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
