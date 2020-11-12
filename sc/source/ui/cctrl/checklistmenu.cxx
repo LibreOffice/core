@@ -136,8 +136,8 @@ void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
 
 void ScCheckListMenuControl::addSeparator()
 {
-    MenuItemData aItem;
-    maMenuItems.emplace_back(std::move(aItem));
+    //MenuItemData aItem;
+    //maMenuItems.emplace_back(std::move(aItem));
 
     //mxMenu->append_separator("separator" + OUString::number(maMenuItems.size()));
 }

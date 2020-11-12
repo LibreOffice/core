@@ -80,7 +80,7 @@ class AutofilterTest(UITestCase):
         xFloatWindow = self.xUITest.getFloatWindow()
         xCheckListMenu = xFloatWindow.getChild("check_list_menu")
 
-        xTreeList = xCheckListMenu.getChild("check_list_box")
+        xTreeList = xCheckListMenu.getChild("check_tree_box")
 
         self.assertEqual(2, len(xTreeList.getChildren()))
         self.assertTrue(get_state_as_dict(xTreeList.getChild('0'))['IsSelected'])
