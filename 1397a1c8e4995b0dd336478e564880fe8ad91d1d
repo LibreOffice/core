@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e499bd3_e9963599",
+        "filename": "include/tools/bigint.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-12T07:10:19Z",
+      "side": 1,
+      "message": "Interesting why is this conditional thing needed?",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 29
+      },
+      "revId": "1397a1c8e4995b0dd336478e564880fe8ad91d1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0caf6ca_9e5d2601",
+        "filename": "tools/source/generic/bigint.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-12T07:10:19Z",
+      "side": 1,
+      "message": "Unless I miss something, this will turn \"-1\" into a BigInt with bIsBig \u003d false, bIsNeg \u003d false, and nVal \u003d -1...",
+      "range": {
+        "startLine": 509,
+        "startChar": 4,
+        "endLine": 510,
+        "endChar": 21
+      },
+      "revId": "1397a1c8e4995b0dd336478e564880fe8ad91d1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0f4a17f_f2f2a2b0",
+        "filename": "tools/source/generic/bigint.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-12T07:10:19Z",
+      "side": 1,
+      "message": "... and this will turn sal_Int64(-1) into a BigInt with bIsBig \u003d false, bIsNeg \u003d true, and nVal \u003d -1\n\nSo these two are \"same\"? - but with different bIsNeg. What is the intended bIsNeg value for non-bit negative values?",
+      "range": {
+        "startLine": 582,
+        "startChar": 4,
+        "endLine": 582,
+        "endChar": 24
+      },
+      "revId": "1397a1c8e4995b0dd336478e564880fe8ad91d1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
