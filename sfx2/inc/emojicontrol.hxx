@@ -14,7 +14,10 @@
 #include <svtools/toolbarmenu.hxx>
 #include <vcl/customweld.hxx>
 
-namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame
+{
+class XFrame;
+}
 
 class EmojiPopup;
 class EmojiView;

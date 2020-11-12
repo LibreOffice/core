@@ -22,10 +22,10 @@
 
 namespace SystemPath
 {
-bool GetUserTemplateLocation( sal_Unicode* pFolder, int nSize )
+bool GetUserTemplateLocation(sal_Unicode* pFolder, int nSize)
 {
 #ifdef _WIN32
-    return ::GetUserTemplateLocation( pFolder, nSize );
+    return ::GetUserTemplateLocation(pFolder, nSize);
 #else
     (void)pFolder;
     (void)nSize;

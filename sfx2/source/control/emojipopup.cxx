@@ -25,7 +25,7 @@ EmojiPopup::EmojiPopup(const css::uno::Reference<css::uno::XComponentContext>& r
 {
 }
 
-void EmojiPopup::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+void EmojiPopup::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
 {
     PopupWindowController::initialize(rArguments);
 
@@ -35,18 +35,17 @@ void EmojiPopup::initialize( const css::uno::Sequence< css::uno::Any >& rArgumen
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
 
-EmojiPopup::~EmojiPopup()
-{
-}
+EmojiPopup::~EmojiPopup() {}
 
 std::unique_ptr<WeldToolbarPopup> EmojiPopup::weldPopupWindow()
 {
     return std::make_unique<SfxEmojiControl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> EmojiPopup::createVclPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> EmojiPopup::createVclPopupWindow(vcl::Window* pParent)
 {
-    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(
+        getFrameInterface(), pParent,
         std::make_unique<SfxEmojiControl>(this, pParent->GetFrameWeld()));
 
     mxInterimPopover->Show();
@@ -64,10 +63,9 @@ css::uno::Sequence<OUString> EmojiPopup::getSupportedServiceNames()
     return { "com.sun.star.frame.ToolbarController" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sfx2_InsertEmojiToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::XComponentContext* rContext, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new EmojiPopup(rContext));
 }

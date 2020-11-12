@@ -22,30 +22,27 @@
 #include <sfx2/request.hxx>
 #include <vcl/svapp.hxx>
 
-
-SfxHintPoster::SfxHintPoster(const std::function<void (std::unique_ptr<SfxRequest>)>& rLink)
+SfxHintPoster::SfxHintPoster(const std::function<void(std::unique_ptr<SfxRequest>)>& rLink)
     : m_Link(rLink)
 {
 }
 
-SfxHintPoster::~SfxHintPoster()
-{
-}
+SfxHintPoster::~SfxHintPoster() {}
 
-void SfxHintPoster::Post( std::unique_ptr<SfxRequest> pHintToPost )
+void SfxHintPoster::Post(std::unique_ptr<SfxRequest> pHintToPost)
 {
-    Application::PostUserEvent( ( LINK(this, SfxHintPoster, DoEvent_Impl) ), pHintToPost.release() );
+    Application::PostUserEvent((LINK(this, SfxHintPoster, DoEvent_Impl)), pHintToPost.release());
     AddFirstRef();
 }
 
-IMPL_LINK( SfxHintPoster, DoEvent_Impl, void *, pPostedHint, void )
+IMPL_LINK(SfxHintPoster, DoEvent_Impl, void*, pPostedHint, void)
 {
     if (m_Link)
-        m_Link( std::unique_ptr<SfxRequest>(static_cast<SfxRequest*>(pPostedHint)) );
+        m_Link(std::unique_ptr<SfxRequest>(static_cast<SfxRequest*>(pPostedHint)));
     ReleaseRef();
 }
 
-void SfxHintPoster::SetEventHdl(const std::function<void (std::unique_ptr<SfxRequest>)>& rLink)
+void SfxHintPoster::SetEventHdl(const std::function<void(std::unique_ptr<SfxRequest>)>& rLink)
 {
     m_Link = rLink;
 }

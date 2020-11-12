@@ -23,9 +23,9 @@
 #include <svl/hint.hxx>
 #include <rtl/ustring.hxx>
 
-class SfxOpenUrlHint: public SfxHint
+class SfxOpenUrlHint : public SfxHint
 {
-    OUString  msDocumentURL;
+    OUString msDocumentURL;
 
 public:
     SfxOpenUrlHint(const OUString& sDocumentURL);

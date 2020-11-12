@@ -21,20 +21,19 @@
 #include <sidebar/TitleBar.hxx>
 #include <vcl/customweld.hxx>
 
-namespace sfx2::sidebar {
-
+namespace sfx2::sidebar
+{
 class GripWidget;
 
 class DeckTitleBar final : public TitleBar
 {
 public:
-    DeckTitleBar(const OUString& rsTitle,
-                 vcl::Window* pParentWindow,
+    DeckTitleBar(const OUString& rsTitle, vcl::Window* pParentWindow,
                  const std::function<void()>& rCloserAction);
     virtual void dispose() override;
     virtual ~DeckTitleBar() override;
 
-    virtual void SetTitle (const OUString& rsTitle) override;
+    virtual void SetTitle(const OUString& rsTitle) override;
     virtual OUString GetTitle() const override;
 
     void SetCloserVisible(const bool bIsCloserVisible);

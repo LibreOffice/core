@@ -36,19 +36,14 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-Sfx2DialogsTest::Sfx2DialogsTest()
-{
-}
+Sfx2DialogsTest::Sfx2DialogsTest() {}
 
 void Sfx2DialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
     // fill map of known dialogs
 }
 
-VclPtr<VclAbstractDialog> Sfx2DialogsTest::createDialogByID(sal_uInt32 /*nID*/)
-{
-    return nullptr;
-}
+VclPtr<VclAbstractDialog> Sfx2DialogsTest::createDialogByID(sal_uInt32 /*nID*/) { return nullptr; }
 
 void Sfx2DialogsTest::openAnyDialog()
 {
