@@ -405,12 +405,6 @@ OUString SvXMLNamespaceMap::GetAttrNameByIndex( sal_uInt16 nIdx ) const
     return GetAttrNameByKey( nIdx );
 }
 
-OUString SvXMLNamespaceMap::GetQNameByIndex( sal_uInt16 nIdx,
-                                           const OUString& rLocalName ) const
-{
-    return GetQNameByKey( nIdx, rLocalName );
-}
-
 const OUString& SvXMLNamespaceMap::GetPrefixByIndex( sal_uInt16 nIdx ) const
 {
     NameSpaceMap::const_iterator aIter = aNameMap.find (nIdx);

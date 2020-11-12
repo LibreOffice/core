@@ -22,7 +22,6 @@
 #include <xmloff/namespacemap.hxx>
 #include "strings.hxx"
 #include "callbacks.hxx"
-#include "attriblistmerge.hxx"
 #include <xmloff/xmlnamespace.hxx>
 #include "eventimport.hxx"
 #include <xmloff/txtstyli.hxx>
@@ -99,20 +98,6 @@ namespace xmloff
         sal_Int32 nAsInt = static_cast<sal_Int32>(e);
         _e = static_cast<OControlElement::ElementType>( ++nAsInt );
         return _e;
-    }
-
-    OControlElement::ElementType OElementNameMap::getElementType(const OUString& _rName)
-    {
-        if ( s_sElementTranslations.empty() )
-        {   // initialize
-            for (ElementType eType=ElementType(0); eType<UNKNOWN; ++eType)
-                s_sElementTranslations[OUString::createFromAscii(getElementName(eType))] = eType;
-        }
-        MapString2Element::const_iterator aPos = s_sElementTranslations.find(_rName);
-        if (s_sElementTranslations.end() != aPos)
-            return aPos->second;
-
-        return UNKNOWN;
     }
 
     OControlElement::ElementType OElementNameMap::getElementType(sal_Int32 nElement)
@@ -480,56 +465,6 @@ namespace xmloff
                 return m_xInfo->hasPropertyByName( prop->propertyName );
             });
         });
-    }
-
-    bool OElementImport::tryGenericAttribute( sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue )
-    {
-        // the generic approach (which I hope all props will be migrated to, on the medium term): property handlers
-        const AttributeDescription attribute( metadata::getAttributeDescription( _nNamespaceKey, _rLocalName ) );
-        if ( attribute.attributeToken != XML_TOKEN_INVALID )
-        {
-            PropertyGroups propertyGroups;
-            metadata::getPropertyGroupList( attribute, propertyGroups );
-            const PropertyGroups::const_iterator pos = impl_matchPropertyGroup( propertyGroups );
-            if ( pos == propertyGroups.end() )
-                return false;
-
-            do
-            {
-                const PropertyDescriptionList& rProperties( *pos );
-                const PropertyDescription* first = *rProperties.begin();
-                if ( !first )
-                {
-                    SAL_WARN( "xmloff.forms", "OElementImport::handleAttribute: invalid property description!" );
-                    break;
-                }
-
-                const PPropertyHandler handler = (*first->factory)( first->propertyId );
-                if ( !handler )
-                {
-                    SAL_WARN( "xmloff.forms", "OElementImport::handleAttribute: invalid property handler!" );
-                    break;
-                }
-
-                PropertyValues aValues;
-                for ( const auto& propDesc : rProperties )
-                {
-                    aValues[ propDesc->propertyId ] = Any();
-                }
-                if ( handler->getPropertyValues( _rValue, aValues ) )
-                {
-                    for ( const auto& propDesc : rProperties )
-                    {
-                        implPushBackPropertyValue( propDesc->propertyName, aValues[ propDesc->propertyId ] );
-                    }
-                }
-            }
-            while ( false );
-
-            // handled
-            return true;
-        }
-        return false;
     }
 
     bool OElementImport::tryGenericAttribute( sal_Int32 nElement, const OUString& _rValue )

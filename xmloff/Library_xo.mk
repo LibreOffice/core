@@ -154,7 +154,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/draw/ximpshap \
     xmloff/source/draw/ximpshow \
     xmloff/source/draw/ximpstyl \
-    xmloff/source/forms/attriblistmerge \
     xmloff/source/forms/controlelement \
     xmloff/source/forms/controlpropertyhdl \
     xmloff/source/forms/controlpropertymap \

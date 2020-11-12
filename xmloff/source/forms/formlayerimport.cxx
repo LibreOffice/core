@@ -71,12 +71,6 @@ namespace xmloff
         return OFormLayerXMLImport_Impl::createOfficeFormsContext(_rImport);
     }
 
-    SvXMLImportContext* OFormLayerXMLImport::createOfficeFormsContext(
-        SvXMLImport& _rImport)
-    {
-        return OFormLayerXMLImport_Impl::createOfficeFormsContext(_rImport);
-    }
-
     SvXMLImportContext* OFormLayerXMLImport::createContext(sal_Int32 nElement,
         const Reference< xml::sax::XFastAttributeList >& _rxAttribs)
     {
