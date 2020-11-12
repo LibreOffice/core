@@ -80,6 +80,7 @@ static void assign( TestElement & rData,
                     sal_Int64 nHyper, sal_uInt64 nUHyper,
                     float fFloat, double fDouble,
                     TestEnum eEnum, const OUString& rStr,
+                    sal_Int8 nByte2, sal_Int16 nShort2,
                     const css::uno::Reference< css::uno::XInterface >& xTest,
                     const css::uno::Any& rAny )
 {
@@ -96,6 +97,8 @@ static void assign( TestElement & rData,
     rData.Double = fDouble;
     rData.Enum = eEnum;
     rData.String = rStr;
+    rData.Byte2 = nByte2;
+    rData.Short2 = nShort2;
     rData.Interface = xTest;
     rData.Any = rAny;
 }
@@ -107,13 +110,14 @@ static void assign( TestData & rData,
                     sal_Int64 nHyper, sal_uInt64 nUHyper,
                     float fFloat, double fDouble,
                     TestEnum eEnum, const OUString& rStr,
+                    sal_Int8 nByte2, sal_Int16 nShort2,
                     const css::uno::Reference< css::uno::XInterface >& xTest,
                     const css::uno::Any& rAny,
                     const css::uno::Sequence< TestElement >& rSequence )
 {
     assign( static_cast<TestElement &>(rData),
             bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
-            eEnum, rStr, xTest, rAny );
+            eEnum, rStr, nByte2, nShort2, xTest, rAny );
     rData.Sequence = rSequence;
 }
 
@@ -182,6 +186,8 @@ public:
                                      double fDouble,
                                      TestEnum eEnum,
                                      const OUString& rStr,
+                                     sal_Int8 nByte2,
+                                     sal_Int16 nShort2,
                                      const css::uno::Reference< css::uno::XInterface >& xTest,
                                      const css::uno::Any& rAny,
                                      const css::uno::Sequence<TestElement >& rSequence,
@@ -200,6 +206,8 @@ public:
                                                                                  double& fDouble,
                                                                                  TestEnum& eEnum,
                                                                                  OUString& rStr,
+                                                                                 sal_Int8& nByte2,
+                                                                                 sal_Int16& nShort2,
                                                                                  css::uno::Reference< css::uno::XInterface >& xTest,
                                                                                  css::uno::Any& rAny,
                                                                                  css::uno::Sequence<TestElement >& rSequence,
@@ -218,6 +226,8 @@ public:
                                                                                 double& fDouble,
                                                                                 TestEnum& eEnum,
                                                                                 OUString& rStr,
+                                                                                sal_Int8& nByte2,
+                                                                                sal_Int16& nShort2,
                                                                                 css::uno::Reference< css::uno::XInterface >& xTest,
                                                                                 css::uno::Any& rAny,
                                                                                 css::uno::Sequence< TestElement >& rSequence,
@@ -269,6 +279,10 @@ public:
         { return _aData.Enum; }
     virtual OUString SAL_CALL getString() override
         { return _aData.String; }
+    virtual sal_Int8 SAL_CALL getByte2() override
+        { return _aData.Byte2; }
+    virtual sal_Int16 SAL_CALL getShort2() override
+        { return _aData.Short2; }
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getInterface(  ) override
         { return _aData.Interface; }
     virtual css::uno::Any SAL_CALL getAny() override
@@ -304,6 +318,10 @@ public:
         { _aData.Enum = _enum; }
     virtual void SAL_CALL setString( const OUString& _string ) override
         { _aData.String = _string; }
+    virtual void SAL_CALL setByte2( sal_Int8 _byte ) override
+        { _aData.Byte2 = _byte; }
+    virtual void SAL_CALL setShort2( sal_Int16 _short ) override
+        { _aData.Short2 = _short; }
     virtual void SAL_CALL setInterface( const css::uno::Reference< css::uno::XInterface >& _interface ) override
         { _aData.Interface = _interface; }
     virtual void SAL_CALL setAny( const css::uno::Any& _any ) override
@@ -570,6 +588,8 @@ void Test_Impl::setValues( sal_Bool bBool,
                            double fDouble,
                            TestEnum eEnum,
                            const OUString& rStr,
+                           sal_Int8 nByte2,
+                           sal_Int16 nShort2,
                            const css::uno::Reference< css::uno::XInterface >& xTest,
                            const css::uno::Any& rAny,
                            const css::uno::Sequence<TestElement >& rSequence,
@@ -577,7 +597,7 @@ void Test_Impl::setValues( sal_Bool bBool,
 {
     assign( _aData,
             bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
-            eEnum, rStr, xTest, rAny, rSequence );
+            eEnum, rStr, nByte2, nShort2, xTest, rAny, rSequence );
     _aStructData = rStruct;
 }
 
@@ -594,6 +614,8 @@ void Test_Impl::setValues( sal_Bool bBool,
                                                                        double& fDouble,
                                                                        TestEnum& eEnum,
                                                                        OUString& rStr,
+                                                                       sal_Int8& nByte2,
+                                                                       sal_Int16& nShort2,
                                                                        css::uno::Reference< css::uno::XInterface >& xTest,
                                                                        css::uno::Any& rAny,
                                                                        css::uno::Sequence<TestElement >& rSequence,
@@ -601,7 +623,7 @@ void Test_Impl::setValues( sal_Bool bBool,
 {
     assign( _aData,
             bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
-            eEnum, rStr, xTest, rAny, rSequence );
+            eEnum, rStr, nByte2, nShort2, xTest, rAny, rSequence );
     _aStructData = rStruct;
 
     TestElement elem = rSequence[ 0 ];
@@ -624,6 +646,8 @@ void Test_Impl::setValues( sal_Bool bBool,
                                                                       double& fDouble,
                                                                       TestEnum& eEnum,
                                                                       OUString& rStr,
+                                                                      sal_Int8& nByte2,
+                                                                      sal_Int16& nShort2,
                                                                       css::uno::Reference< css::uno::XInterface >& xTest,
                                                                       css::uno::Any& rAny,
                                                                       css::uno::Sequence<TestElement >& rSequence,
@@ -642,6 +666,8 @@ void Test_Impl::setValues( sal_Bool bBool,
     fDouble = _aData.Double;
     eEnum = _aData.Enum;
     rStr = _aData.String;
+    nByte2 = _aData.Byte2;
+    nShort2 = _aData.Short2;
     xTest = _aData.Interface;
     rAny = _aData.Any;
     rSequence = _aData.Sequence;
