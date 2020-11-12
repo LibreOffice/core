@@ -27,7 +27,7 @@ using namespace com::sun::star;
 using namespace cppu;
 using namespace osl;
 
-ModuleSizeExceeded::ModuleSizeExceeded( const std::vector< OUString >& sModules )
+ModuleSizeExceeded::ModuleSizeExceeded(const std::vector<OUString>& sModules)
 {
     script::ModuleSizeExceededRequest aReq;
     aReq.Names = comphelper::containerToSequence(sModules);
@@ -36,24 +36,23 @@ ModuleSizeExceeded::ModuleSizeExceeded( const std::vector< OUString >& sModules 
 
     m_xAbort = new comphelper::OInteractionAbort;
     m_xApprove = new comphelper::OInteractionApprove;
-    m_lContinuations.realloc( 2 );
-    m_lContinuations[0] =  m_xApprove;
+    m_lContinuations.realloc(2);
+    m_lContinuations[0] = m_xApprove;
     m_lContinuations[1] = m_xAbort;
 }
 
-bool
-ModuleSizeExceeded::isAbort() const
+bool ModuleSizeExceeded::isAbort() const
 {
-    comphelper::OInteractionAbort* pBase = static_cast< comphelper::OInteractionAbort* >( m_xAbort.get() );
+    comphelper::OInteractionAbort* pBase
+        = static_cast<comphelper::OInteractionAbort*>(m_xAbort.get());
     return pBase->wasSelected();
 }
 
-bool
-ModuleSizeExceeded::isApprove() const
+bool ModuleSizeExceeded::isApprove() const
 {
-    comphelper::OInteractionApprove* pBase = static_cast< comphelper::OInteractionApprove* >( m_xApprove.get() );
+    comphelper::OInteractionApprove* pBase
+        = static_cast<comphelper::OInteractionApprove*>(m_xApprove.get());
     return pBase->wasSelected();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

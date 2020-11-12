@@ -24,15 +24,15 @@
 
 #include <cppuhelper/implbase.hxx>
 
-class ComEnumerationWrapper : public ::cppu::WeakImplHelper< css::container::XEnumeration >
+class ComEnumerationWrapper : public ::cppu::WeakImplHelper<css::container::XEnumeration>
 {
-    css::uno::Reference< css::script::XInvocation > m_xInvocation;
+    css::uno::Reference<css::script::XInvocation> m_xInvocation;
     sal_Int32 m_nCurInd;
 
 public:
-    explicit ComEnumerationWrapper( const css::uno::Reference< css::script::XInvocation >& xInvocation )
-    : m_xInvocation( xInvocation )
-    , m_nCurInd( 0 )
+    explicit ComEnumerationWrapper(const css::uno::Reference<css::script::XInvocation>& xInvocation)
+        : m_xInvocation(xInvocation)
+        , m_nCurInd(0)
     {
     }
 

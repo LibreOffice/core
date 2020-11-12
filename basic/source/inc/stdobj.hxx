@@ -30,12 +30,13 @@ class SbiStdObject : public SbxObject
 
     virtual ~SbiStdObject() override;
     using SbxVariable::GetInfo;
-    static SbxInfo* GetInfo( short );
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+    static SbxInfo* GetInfo(short);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+
 public:
-    SbiStdObject( const OUString&, StarBASIC* );
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
-    virtual void SetModified( bool ) override;
+    SbiStdObject(const OUString&, StarBASIC*);
+    virtual SbxVariable* Find(const OUString&, SbxClassType) override;
+    virtual void SetModified(bool) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

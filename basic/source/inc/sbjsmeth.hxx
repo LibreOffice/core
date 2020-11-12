@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #pragma once
 
 #include <basic/sbmeth.hxx>
@@ -29,11 +28,10 @@
 class SbJScriptMethod : public SbMethod
 {
 public:
-    SbJScriptMethod( SbxDataType );
+    SbJScriptMethod(SbxDataType);
     virtual ~SbJScriptMethod() override;
 
-    SBX_DECL_PERSIST_NODATA(SBXID_JSCRIPTMETH,2);
+    SBX_DECL_PERSIST_NODATA(SBXID_JSCRIPTMETH, 2);
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
