@@ -64,7 +64,6 @@
 #include <toolkit/helper/convert.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/svborder.hxx>
 

@@ -86,7 +86,7 @@ void FocusManager::ClearPanels()
 
 void FocusManager::ClearButtons()
 {
-    std::vector<VclPtr<Button> > aButtons;
+    std::vector<weld::Widget*> aButtons;
     aButtons.swap(maButtons);
     for (auto const& button : aButtons)
     {
@@ -126,7 +126,7 @@ void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
     }
 }
 
-void FocusManager::SetButtons (const ::std::vector<Button*>& rButtons)
+void FocusManager::SetButtons(const std::vector<weld::Widget*>& rButtons)
 {
     ClearButtons();
     for (auto const& button : rButtons)
@@ -144,6 +144,16 @@ void FocusManager::RegisterWindow (vcl::Window& rWindow)
 void FocusManager::UnregisterWindow (vcl::Window& rWindow)
 {
     rWindow.RemoveEventListener(LINK(this, FocusManager, WindowEventListener));
+}
+
+void FocusManager::RegisterWindow(weld::Widget& rWidget)
+{
+    rWidget.connect_key_press(LINK(this, FocusManager, KeyInputHdl));
+}
+
+void FocusManager::UnregisterWindow(weld::Widget& rWidget)
+{
+    rWidget.connect_key_press(Link<const KeyEvent&, bool>());
 }
 
 FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& rWindow) const
@@ -165,10 +175,15 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& r
             return FocusLocation(PC_PanelTitle, nIndex);
     }
 
+    return FocusLocation(PC_None, -1);
+}
+
+FocusManager::FocusLocation FocusManager::GetFocusLocation() const
+{
     // Search the buttons.
     for (size_t nIndex=0; nIndex < maButtons.size(); ++nIndex)
     {
-        if (maButtons[nIndex] == &rWindow)
+        if (maButtons[nIndex]->has_focus())
             return FocusLocation(PC_TabBar, nIndex);
     }
     return FocusLocation(PC_None, -1);
@@ -259,12 +274,12 @@ void FocusManager::FocusPanelContent (const sal_Int32 nPanelIndex)
 
 void FocusManager::FocusButton (const sal_Int32 nButtonIndex)
 {
-    maButtons[nButtonIndex]->GrabFocus();
-    maButtons[nButtonIndex]->Invalidate();
+    maButtons[nButtonIndex]->grab_focus();
 }
 
-void FocusManager::ClickButton (const sal_Int32 nButtonIndex)
+void FocusManager::ClickButton (const sal_Int32 /*nButtonIndex*/)
 {
+#if 0
     if (mbIsDeckOpenFunctor)
     {
         if (!mbIsDeckOpenFunctor(-1) || !mbIsDeckOpenFunctor(nButtonIndex-1))
@@ -272,7 +287,7 @@ void FocusManager::ClickButton (const sal_Int32 nButtonIndex)
     }
     if (nButtonIndex > 0)
         FocusPanel(0, true);
-    maButtons[nButtonIndex]->GetParent()->Invalidate();
+#endif
 }
 
 void FocusManager::RemoveWindow (vcl::Window& rWindow)
@@ -286,14 +301,6 @@ void FocusManager::RemoveWindow (vcl::Window& rWindow)
             UnregisterWindow(*(*iPanel)->GetTitleBar());
         }
         maPanels.erase(iPanel);
-        return;
-    }
-
-    auto iButton (::std::find(maButtons.begin(), maButtons.end(), &rWindow));
-    if (iButton != maButtons.end())
-    {
-        UnregisterWindow(rWindow);
-        maButtons.erase(iButton);
         return;
     }
 }
@@ -354,11 +361,11 @@ void FocusManager::MoveFocusInsideDeckTitle (
     }
 }
 
-void FocusManager::HandleKeyEvent (
+bool FocusManager::HandleKeyEvent(
     const vcl::KeyCode& rKeyCode,
-    const vcl::Window& rWindow)
+    const FocusLocation& aLocation)
 {
-    const FocusLocation aLocation (GetFocusLocation(rWindow));
+    bool bConsumed = false;
 
     switch (rKeyCode.GetCode())
     {
@@ -373,14 +380,17 @@ void FocusManager::HandleKeyEvent (
                 {
                     vcl::Window* pFocusWin = Application::GetFocusWindow();
                     if (pFocusWin)
+                    {
                         pFocusWin->GrabFocusToDocument();
+                        bConsumed = true;
+                    }
                     break;
                 }
 
                 default:
                     break;
             }
-            return;
+            return bConsumed;
 
         case KEY_SPACE:
             switch (aLocation.meComponent)
@@ -388,35 +398,38 @@ void FocusManager::HandleKeyEvent (
                 case PC_PanelTitle:
                     // Toggle panel between expanded and collapsed.
                     maPanels[aLocation.mnIndex]->SetExpanded( ! maPanels[aLocation.mnIndex]->IsExpanded());
-                    maPanels[aLocation.mnIndex]->GetTitleBar()->Invalidate();
+                    bConsumed = true;
                     break;
 
                 default:
                     break;
             }
-            return;
+            return bConsumed;
 
         case KEY_RETURN:
             switch (aLocation.meComponent)
             {
                 case PC_DeckToolBox:
                     FocusButton(0);
+                    bConsumed = true;
                     break;
 
                 case PC_PanelTitle:
                     // Enter the panel.
                     FocusPanelContent(aLocation.mnIndex);
+                    bConsumed = true;
                     break;
 
                 case PC_TabBar:
                     // Activate the button.
                     ClickButton(aLocation.mnIndex);
+                    bConsumed = true;
                     break;
 
                 default:
                     break;
             }
-            return;
+            return bConsumed;
 
         case KEY_TAB:
         {
@@ -430,11 +443,13 @@ void FocusManager::HandleKeyEvent (
                 case PC_PanelToolBox:
                 case PC_PanelContent:
                     MoveFocusInsidePanel(aLocation, nDirection);
+                    bConsumed = true;
                     break;
 
                 case PC_DeckTitle:
                 case PC_DeckToolBox:
                     MoveFocusInsideDeckTitle(aLocation, nDirection);
+                    bConsumed = true;
                     break;
 
                 default:
@@ -459,9 +474,10 @@ void FocusManager::HandleKeyEvent (
                     {
                         // Focus the last button.
                         sal_Int32 nIndex(maButtons.size()-1);
-                        while(!maButtons[nIndex]->IsVisible() && --nIndex > 0);
+                        while(!maButtons[nIndex]->get_visible() && --nIndex > 0);
                         FocusButton(nIndex);
                     }
+                    bConsumed = true;
                     break;
 
                 case PC_DeckTitle:
@@ -469,8 +485,9 @@ void FocusManager::HandleKeyEvent (
                 {
                     // Focus the last button.
                     sal_Int32 nIndex(maButtons.size()-1);
-                    while(!maButtons[nIndex]->IsVisible() && --nIndex > 0);
+                    while(!maButtons[nIndex]->get_visible() && --nIndex > 0);
                     FocusButton(nIndex);
+                    bConsumed = true;
                     break;
                 }
 
@@ -481,9 +498,10 @@ void FocusManager::HandleKeyEvent (
                     else
                     {
                         sal_Int32 nIndex((aLocation.mnIndex + maButtons.size() - 1) % maButtons.size());
-                        while(!maButtons[nIndex]->IsVisible() && --nIndex > 0);
+                        while(!maButtons[nIndex]->get_visible() && --nIndex > 0);
                         FocusButton(nIndex);
                     }
+                    bConsumed = true;
                     break;
 
                 default:
@@ -503,6 +521,7 @@ void FocusManager::HandleKeyEvent (
                         FocusPanel(aLocation.mnIndex+1, false);
                     else
                         FocusButton(0);
+                    bConsumed = true;
                     break;
 
                 case PC_DeckTitle:
@@ -512,6 +531,7 @@ void FocusManager::HandleKeyEvent (
                         FocusPanel(0, false);
                     else
                         FocusButton(0);
+                    bConsumed = true;
                     break;
 
                 case PC_TabBar:
@@ -519,7 +539,7 @@ void FocusManager::HandleKeyEvent (
                     if (aLocation.mnIndex < static_cast<sal_Int32>(maButtons.size())-1)
                     {
                         sal_Int32 nIndex(aLocation.mnIndex + 1);
-                        while(!maButtons[nIndex]->IsVisible() && ++nIndex < static_cast<sal_Int32>(maButtons.size()));
+                        while(!maButtons[nIndex]->get_visible() && ++nIndex < static_cast<sal_Int32>(maButtons.size()));
                         if (nIndex < static_cast<sal_Int32>(maButtons.size()))
                         {
                             FocusButton(nIndex);
@@ -530,6 +550,7 @@ void FocusManager::HandleKeyEvent (
                         FocusDeckTitle();
                     else
                         FocusPanel(0, true);
+                    bConsumed = true;
                     break;
 
                 default:
@@ -537,6 +558,7 @@ void FocusManager::HandleKeyEvent (
             }
             break;
     }
+    return bConsumed;
 }
 
 IMPL_LINK(FocusManager, WindowEventListener, VclWindowEvent&, rWindowEvent, void)
@@ -549,8 +571,9 @@ IMPL_LINK(FocusManager, WindowEventListener, VclWindowEvent&, rWindowEvent, void
     {
         case VclEventId::WindowKeyInput:
         {
+            const FocusLocation aLocation (GetFocusLocation(*pSource));
             KeyEvent* pKeyEvent = static_cast<KeyEvent*>(rWindowEvent.GetData());
-            HandleKeyEvent(pKeyEvent->GetKeyCode(), *pSource);
+            HandleKeyEvent(pKeyEvent->GetKeyCode(), aLocation);
             break;
         }
 
@@ -558,14 +581,14 @@ IMPL_LINK(FocusManager, WindowEventListener, VclWindowEvent&, rWindowEvent, void
             RemoveWindow(*pSource);
             break;
 
-        case VclEventId::WindowGetFocus:
-        case VclEventId::WindowLoseFocus:
-            pSource->Invalidate();
-            break;
-
         default:
             break;
     }
+}
+
+IMPL_LINK(FocusManager, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
+{
+    return HandleKeyEvent(rKeyEvent.GetKeyCode(), GetFocusLocation());
 }
 
 IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
