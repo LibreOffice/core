@@ -204,7 +204,14 @@ static FieldContextPtr GetParentFieldContext(const std::deque<FieldContextPtr>& 
 /// Decides if the pInner field inside pOuter is allowed in Writer core, depending on their type.
 static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldContextPtr& pInner)
 {
-    if (!pOuter->GetFieldId())
+    boost::optional<FieldId> oOuterFieldId = pOuter->GetFieldId();
+    if (!oOuterFieldId && pOuter->GetCommand().startsWith(" IF "))
+    {
+        // This will be FIELD_IF once the command is closed.
+        oOuterFieldId = FIELD_IF;
+    }
+
+    if (!oOuterFieldId)
     {
         return true;
     }
@@ -214,12 +221,15 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
         return true;
     }
 
-    switch (pOuter->GetFieldId().get())
+    switch (oOuterFieldId.get())
     {
         case FIELD_IF:
         {
             switch (pInner->GetFieldId().get())
             {
+                case FIELD_DOCVARIABLE:
+                case FIELD_FORMULA:
+                case FIELD_IF:
                 case FIELD_MERGEFIELD:
                 {
                     return false;
@@ -5067,14 +5077,18 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_DOCVARIABLE  :
                     {
-                        //create a user field and type
-                        uno::Reference< beans::XPropertySet > xMaster =
-                            FindOrCreateFieldMaster("com.sun.star.text.FieldMaster.User", sFirstParam);
-                        uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
-                        xDependentField->attachTextFieldMaster( xMaster );
-                        m_bSetUserFieldContent = true;
+                        if (bCreateField)
+                        {
+                            //create a user field and type
+                            uno::Reference<beans::XPropertySet> xMaster = FindOrCreateFieldMaster(
+                                "com.sun.star.text.FieldMaster.User", sFirstParam);
+                            uno::Reference<text::XDependentTextField> xDependentField(
+                                xFieldInterface, uno::UNO_QUERY_THROW);
+                            xDependentField->attachTextFieldMaster( xMaster );
+                            m_bSetUserFieldContent = true;
+                        }
+                        break;
                     }
-                    break;
                     case FIELD_EDITTIME     :
                         //it's a numbering type, no number format! SetNumberFormat( pContext->GetCommand(), xFieldProperties );
                     break;
@@ -5143,7 +5157,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_FILESIZE     : break;
                     case FIELD_FORMULA :
-                        handleFieldFormula(pContext, xFieldProperties);
+                        if (bCreateField)
+                        {
+                            handleFieldFormula(pContext, xFieldProperties);
+                        }
                     break;
                     case FIELD_FORMCHECKBOX :
                     case FIELD_FORMDROPDOWN :
@@ -5694,8 +5711,8 @@ bool DomainMapper_Impl::IsFieldResultAsString()
         {
             if (!IsFieldNestingAllowed(pOuter, m_aFieldStack.back()))
             {
-                // Child field has no backing SwField, but the parent has: append is still possible.
-                bRet = pOuter->GetTextField().is();
+                // If nesting is not allowed, then the result can only be a string.
+                bRet = true;
             }
         }
     }
@@ -5714,8 +5731,11 @@ void DomainMapper_Impl::AppendFieldResult(OUString const& rString)
         {
             if (!IsFieldNestingAllowed(pOuter, pContext))
             {
-                // Child can't host the field result, forward to parent.
-                pOuter->AppendResult(rString);
+                if (pOuter->IsCommandCompleted())
+                {
+                    // Child can't host the field result, forward to parent.
+                    pOuter->AppendResult(rString);
+                }
                 return;
             }
         }
