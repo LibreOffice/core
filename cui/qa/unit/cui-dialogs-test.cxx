@@ -44,9 +44,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-CuiDialogsTest::CuiDialogsTest()
-{
-}
+CuiDialogsTest::CuiDialogsTest() {}
 
 void CuiDialogsTest::initialize()
 {
@@ -67,19 +65,17 @@ VclPtr<VclAbstractDialog> CuiDialogsTest::createDialogByID(sal_uInt32 nID)
 {
     VclPtr<VclAbstractDialog> pReturnDialog;
 
-    switch ( nID )
+    switch (nID)
     {
         case 0: // "cui/ui/formatcellsdialog.ui"
         {
-            pReturnDialog = mpFact->CreateSvxFormatCellsDialog(
-                nullptr, mxAttr.get(), *mxModel);
+            pReturnDialog = mpFact->CreateSvxFormatCellsDialog(nullptr, mxAttr.get(), *mxModel);
             break;
         }
 
         case 1: // "cui/ui/textdialog.ui"
         {
-            pReturnDialog = mpFact->CreateTextTabDialog(
-                nullptr, mxAttr.get(), nullptr);
+            pReturnDialog = mpFact->CreateTextTabDialog(nullptr, mxAttr.get(), nullptr);
             break;
         }
 

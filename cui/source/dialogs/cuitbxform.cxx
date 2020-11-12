@@ -19,15 +19,13 @@
 
 #include <cuitbxform.hxx>
 
-FmInputRecordNoDialog::FmInputRecordNoDialog(weld::Window * pParent)
+FmInputRecordNoDialog::FmInputRecordNoDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/recordnumberdialog.ui", "RecordNumberDialog")
     , m_xRecordNo(m_xBuilder->weld_spin_button("entry"))
 {
     m_xRecordNo->set_range(1, 0x7FFFFFFF);
 }
 
-FmInputRecordNoDialog::~FmInputRecordNoDialog()
-{
-}
+FmInputRecordNoDialog::~FmInputRecordNoDialog() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

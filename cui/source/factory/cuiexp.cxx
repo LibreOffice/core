@@ -22,19 +22,15 @@
 
 namespace cui
 {
-    static AbstractDialogFactory_Impl* GetFactory()
-    {
-        static AbstractDialogFactory_Impl* pFactory = new AbstractDialogFactory_Impl;
-        return pFactory;
-    }
+static AbstractDialogFactory_Impl* GetFactory()
+{
+    static AbstractDialogFactory_Impl* pFactory = new AbstractDialogFactory_Impl;
+    return pFactory;
+}
 }
 
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT VclAbstractDialogFactory* CreateDialogFactory()
-    {
-        return ::cui::GetFactory();
-    }
+extern "C" {
+SAL_DLLPUBLIC_EXPORT VclAbstractDialogFactory* CreateDialogFactory() { return ::cui::GetFactory(); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

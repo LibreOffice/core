@@ -28,8 +28,8 @@ private:
     std::unique_ptr<weld::Label> m_xFtDescription;
     std::unique_ptr<weld::Button> m_xBtnOK;
 
-    Link<SvxNameDialog&,bool> m_aCheckNameHdl;
-    Link<SvxNameDialog&,OUString> m_aCheckNameTooltipHdl;
+    Link<SvxNameDialog&, bool> m_aCheckNameHdl;
+    Link<SvxNameDialog&, OUString> m_aCheckNameTooltipHdl;
 
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 
@@ -53,20 +53,20 @@ public:
         @todo Remove the parameter bCheckImmediately and incorporate the 'true'
               behaviour as default.
      */
-    void SetCheckNameHdl(const Link<SvxNameDialog&,bool>& rLink, bool bCheckImmediately)
+    void SetCheckNameHdl(const Link<SvxNameDialog&, bool>& rLink, bool bCheckImmediately)
     {
         m_aCheckNameHdl = rLink;
         if (bCheckImmediately)
             m_xBtnOK->set_sensitive(rLink.Call(*this));
     }
 
-    void SetCheckNameTooltipHdl(const Link<SvxNameDialog&,OUString>& rLink)
+    void SetCheckNameTooltipHdl(const Link<SvxNameDialog&, OUString>& rLink)
     {
         m_aCheckNameTooltipHdl = rLink;
         m_xBtnOK->set_tooltip_text(rLink.Call(*this));
     }
 
-    void SetEditHelpId(const OString& aHelpId) { m_xEdtName->set_help_id(aHelpId);}
+    void SetEditHelpId(const OString& aHelpId) { m_xEdtName->set_help_id(aHelpId); }
 };
 
 /** #i68101#
@@ -82,7 +82,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnOK;
 
     // callback link for name uniqueness
-    Link<SvxObjectNameDialog&,bool> aCheckNameHdl;
+    Link<SvxObjectNameDialog&, bool> aCheckNameHdl;
 
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 
@@ -94,10 +94,7 @@ public:
     OUString GetName() const { return m_xEdtName->get_text(); }
 
     // set handler
-    void SetCheckNameHdl(const Link<SvxObjectNameDialog&,bool>& rLink)
-    {
-        aCheckNameHdl = rLink;
-    }
+    void SetCheckNameHdl(const Link<SvxObjectNameDialog&, bool>& rLink) { aCheckNameHdl = rLink; }
 };
 
 /** #i68101#

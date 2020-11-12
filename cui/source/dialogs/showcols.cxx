@@ -25,28 +25,29 @@
 #include <tools/debug.hxx>
 
 #define CUIFM_PROP_HIDDEN "Hidden"
-#define CUIFM_PROP_LABEL  "Label"
+#define CUIFM_PROP_LABEL "Label"
 
 FmShowColsDialog::FmShowColsDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/showcoldialog.ui", "ShowColDialog")
     , m_xList(m_xBuilder->weld_tree_view("treeview"))
     , m_xOK(m_xBuilder->weld_button("ok"))
 {
-    m_xList->set_size_request(m_xList->get_approximate_digit_width() * 40, m_xList->get_height_rows(8));
+    m_xList->set_size_request(m_xList->get_approximate_digit_width() * 40,
+                              m_xList->get_height_rows(8));
     m_xList->set_selection_mode(SelectionMode::Multiple);
     m_xOK->connect_clicked(LINK(this, FmShowColsDialog, OnClickedOk));
 }
 
-FmShowColsDialog::~FmShowColsDialog()
-{
-}
+FmShowColsDialog::~FmShowColsDialog() {}
 
 IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, weld::Button&, void)
 {
-    DBG_ASSERT(m_xColumns.is(), "FmShowColsDialog::OnClickedOk : you should call SetColumns before executing the dialog !");
+    DBG_ASSERT(
+        m_xColumns.is(),
+        "FmShowColsDialog::OnClickedOk : you should call SetColumns before executing the dialog !");
     if (m_xColumns.is())
     {
-        css::uno::Reference< css::beans::XPropertySet > xCol;
+        css::uno::Reference<css::beans::XPropertySet> xCol;
         auto nSelectedRows = m_xList->get_selected_rows();
         for (auto i : nSelectedRows)
         {
@@ -57,7 +58,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, weld::Button&, void)
                 {
                     xCol->setPropertyValue(CUIFM_PROP_HIDDEN, css::uno::Any(false));
                 }
-                catch(...)
+                catch (...)
                 {
                     OSL_FAIL("FmShowColsDialog::OnClickedOk Exception occurred!");
                 }
@@ -68,7 +69,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-void FmShowColsDialog::SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols)
+void FmShowColsDialog::SetColumns(const css::uno::Reference<css::container::XIndexContainer>& xCols)
 {
     DBG_ASSERT(xCols.is(), "FmShowColsDialog::SetColumns : invalid columns !");
     if (!xCols.is())
@@ -77,9 +78,9 @@ void FmShowColsDialog::SetColumns(const css::uno::Reference< css::container::XIn
 
     m_xList->clear();
 
-    css::uno::Reference< css::beans::XPropertySet>  xCurCol;
+    css::uno::Reference<css::beans::XPropertySet> xCurCol;
     OUString sCurName;
-    for (sal_Int32 i=0; i<xCols->getCount(); ++i)
+    for (sal_Int32 i = 0; i < xCols->getCount(); ++i)
     {
         sCurName.clear();
         xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
@@ -93,7 +94,7 @@ void FmShowColsDialog::SetColumns(const css::uno::Reference< css::container::XIn
             xCurCol->getPropertyValue(CUIFM_PROP_LABEL) >>= sName;
             sCurName = sName;
         }
-        catch(...)
+        catch (...)
         {
             OSL_FAIL("FmShowColsDialog::SetColumns Exception occurred!");
         }

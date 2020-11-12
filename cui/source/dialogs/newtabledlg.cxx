@@ -28,12 +28,12 @@ SvxNewTableDialog::SvxNewTableDialog(weld::Window* pWindow)
 
 sal_Int32 SvxNewTableDialog::getRows() const
 {
-    return sal::static_int_cast< sal_Int32 >( mxNumRows->get_value() );
+    return sal::static_int_cast<sal_Int32>(mxNumRows->get_value());
 }
 
 sal_Int32 SvxNewTableDialog::getColumns() const
 {
-    return sal::static_int_cast< sal_Int32 >( mxNumColumns->get_value() );
+    return sal::static_int_cast<sal_Int32>(mxNumColumns->get_value());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

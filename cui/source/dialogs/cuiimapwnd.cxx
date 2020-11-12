@@ -38,10 +38,10 @@ URLDlg::URLDlg(weld::Widget* pWindow, const OUString& rURL, const OUString& rAlt
     m_xEdtDescription->set_size_request(m_xEdtDescription->get_approximate_digit_width() * 51,
                                         m_xEdtDescription->get_height_rows(5));
 
-    m_xEdtURL->set_text( rURL );
-    m_xEdtAlternativeText->set_text( rAlternativeText );
-    m_xEdtDescription->set_text( rDescription );
-    m_xEdtName->set_text( rName );
+    m_xEdtURL->set_text(rURL);
+    m_xEdtAlternativeText->set_text(rAlternativeText);
+    m_xEdtDescription->set_text(rDescription);
+    m_xEdtName->set_text(rName);
 
     for (const OUString& a : rTargetList)
         m_xCbbTargets->append_text(a);
@@ -52,8 +52,6 @@ URLDlg::URLDlg(weld::Widget* pWindow, const OUString& rURL, const OUString& rAlt
         m_xCbbTargets->set_entry_text(rTarget);
 }
 
-URLDlg::~URLDlg()
-{
-}
+URLDlg::~URLDlg() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

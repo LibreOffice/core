@@ -26,8 +26,9 @@
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 
-namespace svxform {
-    class FmSearchConfigItem;
+namespace svxform
+{
+class FmSearchConfigItem;
 }
 
 struct FmSearchProgress;
@@ -39,13 +40,14 @@ class FmSearchDialog final : public weld::GenericDialogController
 {
     friend class FmSearchEngine;
 
-    OUString        m_sSearch;
-    OUString        m_sCancel;
+    OUString m_sSearch;
+    OUString m_sCancel;
 
-    Link<FmFoundRecordInformation&,void>  m_lnkFoundHandler;          ///< Handler for "found"
-    Link<FmFoundRecordInformation&,void>  m_lnkCanceledNotFoundHdl;   ///< Handler for Positioning the Cursors
+    Link<FmFoundRecordInformation&, void> m_lnkFoundHandler; ///< Handler for "found"
+    Link<FmFoundRecordInformation&, void>
+        m_lnkCanceledNotFoundHdl; ///< Handler for Positioning the Cursors
 
-    Link<FmSearchContext&,sal_uInt32>  m_lnkContextSupplier;       ///< for search in contexts
+    Link<FmSearchContext&, sal_uInt32> m_lnkContextSupplier; ///< for search in contexts
 
     /// memorize the currently selected field for every context
     std::vector<OUString> m_arrContextFields;
@@ -53,7 +55,7 @@ class FmSearchDialog final : public weld::GenericDialogController
     std::unique_ptr<FmSearchEngine> m_pSearchEngine;
 
     // see EnableSearchUI
-    std::unique_ptr<::svxform::FmSearchConfigItem>      m_pConfig;
+    std::unique_ptr<::svxform::FmSearchConfigItem> m_pConfig;
 
     // my all Controls
     std::unique_ptr<weld::RadioButton> m_prbSearchForText;
@@ -98,8 +100,9 @@ public:
         (of course needed : the string number i in strUsedFields of a context must correspond with the interface number i in the
         arrFields of the context)
     */
-    FmSearchDialog(weld::Window* pParent, const OUString& strInitialText, const std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
-        const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier);
+    FmSearchDialog(weld::Window* pParent, const OUString& strInitialText,
+                   const std::vector<OUString>& _rContexts, sal_Int16 nInitialContext,
+                   const Link<FmSearchContext&, sal_uInt32>& lnkContextSupplier);
 
     virtual short run() override;
 
@@ -111,7 +114,10 @@ public:
         This handler MUST be set.
         Furthermore, it should be considered, that during the handler the search-dialog is still modal.
     */
-    void SetFoundHandler(const Link<FmFoundRecordInformation&,void>& lnk) { m_lnkFoundHandler = lnk; }
+    void SetFoundHandler(const Link<FmFoundRecordInformation&, void>& lnk)
+    {
+        m_lnkFoundHandler = lnk;
+    }
     /**
         If the search has been cancelled or has been finished without success, the current data set is always displayed in the
         search dialog. This handler exists to make this synchronous with the possible display of the caller (it does not
@@ -119,7 +125,10 @@ public:
         The pointer that is passed to the handler points to a FmFoundRecordInformation-structure, for which aPosition and
         possibly (in a search with contexts) nContext are valid.
     */
-    void SetCanceledNotFoundHdl(const Link<FmFoundRecordInformation&,void>& lnk) { m_lnkCanceledNotFoundHdl = lnk; }
+    void SetCanceledNotFoundHdl(const Link<FmFoundRecordInformation&, void>& lnk)
+    {
+        m_lnkCanceledNotFoundHdl = lnk;
+    }
 
     inline void SetActiveField(const OUString& strField);
 
@@ -139,23 +148,23 @@ private:
     void SaveParams() const;
 
     // Handler for the Controls
-    DECL_LINK( OnClickedFieldRadios, weld::Button&, void );
-    DECL_LINK( OnClickedSearchAgain, weld::Button&, void );
-    DECL_LINK( OnClickedSpecialSettings, weld::Button&, void );
+    DECL_LINK(OnClickedFieldRadios, weld::Button&, void);
+    DECL_LINK(OnClickedSearchAgain, weld::Button&, void);
+    DECL_LINK(OnClickedSpecialSettings, weld::Button&, void);
 
-    DECL_LINK( OnSearchTextModified, weld::ComboBox&, void );
+    DECL_LINK(OnSearchTextModified, weld::ComboBox&, void);
 
-    DECL_LINK( OnPositionSelected, weld::ComboBox&, void );
-    DECL_LINK( OnFieldSelected, weld::ComboBox&, void );
+    DECL_LINK(OnPositionSelected, weld::ComboBox&, void);
+    DECL_LINK(OnFieldSelected, weld::ComboBox&, void);
 
-    DECL_LINK( OnFocusGrabbed, weld::Widget&, void );
-    DECL_LINK( OnCheckBoxToggled, weld::ToggleButton&, void );
+    DECL_LINK(OnFocusGrabbed, weld::Widget&, void);
+    DECL_LINK(OnCheckBoxToggled, weld::ToggleButton&, void);
 
-    DECL_LINK( OnContextSelection, weld::ComboBox&, void );
+    DECL_LINK(OnContextSelection, weld::ComboBox&, void);
 
-    DECL_LINK( OnSearchProgress, const FmSearchProgress*, void );
+    DECL_LINK(OnSearchProgress, const FmSearchProgress*, void);
 
-    void initCommon( const css::uno::Reference< css::sdbc::XResultSet >& _rxCursor );
+    void initCommon(const css::uno::Reference<css::sdbc::XResultSet>& _rxCursor);
 };
 
 inline void FmSearchDialog::SetActiveField(const OUString& strField)

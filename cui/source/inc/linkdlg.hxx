@@ -27,8 +27,8 @@
 *************************************************************************/
 namespace sfx2
 {
-    class LinkManager;
-    class SvBaseLink;
+class LinkManager;
+class SvBaseLink;
 }
 
 enum class SfxLinkUpdateMode;
@@ -41,7 +41,7 @@ class SvBaseLinksDlg : public weld::GenericDialogController
     OUString aStrCloselinkmsg;
     OUString aStrCloselinkmsgMulti;
     OUString aStrWaitinglink;
-    sfx2::LinkManager*  pLinkMgr;
+    sfx2::LinkManager* pLinkMgr;
     Idle aUpdateIdle;
 
     std::unique_ptr<weld::TreeView> m_xTbLinks;
@@ -56,27 +56,27 @@ class SvBaseLinksDlg : public weld::GenericDialogController
 
     ScopedVclPtr<VirtualDevice> m_xVirDev;
 
-    DECL_LINK( LinksSelectHdl, weld::TreeView&, void );
-    DECL_LINK( LinksDoubleClickHdl, weld::TreeView&, bool );
-    DECL_LINK( AutomaticClickHdl, weld::Button&, void );
-    DECL_LINK( ManualClickHdl, weld::Button&, void );
-    DECL_LINK( UpdateNowClickHdl, weld::Button&, void);
-    DECL_LINK( ChangeSourceClickHdl, weld::Button&, void );
-    DECL_LINK( BreakLinkClickHdl, weld::Button&, void );
-    DECL_LINK( UpdateWaitingHdl, Timer *, void );
-    DECL_LINK( EndEditHdl, sfx2::SvBaseLink&, void );
+    DECL_LINK(LinksSelectHdl, weld::TreeView&, void);
+    DECL_LINK(LinksDoubleClickHdl, weld::TreeView&, bool);
+    DECL_LINK(AutomaticClickHdl, weld::Button&, void);
+    DECL_LINK(ManualClickHdl, weld::Button&, void);
+    DECL_LINK(UpdateNowClickHdl, weld::Button&, void);
+    DECL_LINK(ChangeSourceClickHdl, weld::Button&, void);
+    DECL_LINK(BreakLinkClickHdl, weld::Button&, void);
+    DECL_LINK(UpdateWaitingHdl, Timer*, void);
+    DECL_LINK(EndEditHdl, sfx2::SvBaseLink&, void);
     void LinksSelectHdl(weld::TreeView* pTreeView);
     sfx2::SvBaseLink* GetSelEntry(int* pPos);
-    OUString ImplGetStateStr( const sfx2::SvBaseLink& );
+    OUString ImplGetStateStr(const sfx2::SvBaseLink&);
     void SetType(sfx2::SvBaseLink& rLink, int nPos, SfxLinkUpdateMode nType);
     void InsertEntry(const sfx2::SvBaseLink& rLink, int nPos = -1, bool bSelect = false);
 
-    void SetManager( sfx2::LinkManager* );
+    void SetManager(sfx2::LinkManager*);
 
 public:
-    SvBaseLinksDlg(weld::Window * pParent, sfx2::LinkManager*, bool bHtml);
+    SvBaseLinksDlg(weld::Window* pParent, sfx2::LinkManager*, bool bHtml);
     virtual ~SvBaseLinksDlg() override;
-    void SetActLink( sfx2::SvBaseLink const * pLink );
+    void SetActLink(sfx2::SvBaseLink const* pLink);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
