@@ -25,24 +25,25 @@
 
 #include <vector>
 
-namespace vcl { class Window; }
+namespace vcl
+{
+class Window;
+}
 
-namespace dp_gui {
-
+namespace dp_gui
+{
 class DependencyDialog : public weld::GenericDialogController
 {
 public:
-    DependencyDialog(
-        weld::Window* parent, std::vector< OUString > const & dependencies);
+    DependencyDialog(weld::Window* parent, std::vector<OUString> const& dependencies);
     virtual ~DependencyDialog() override;
 
 private:
-    DependencyDialog(DependencyDialog const &) = delete;
-    DependencyDialog& operator =(DependencyDialog const &) = delete;
+    DependencyDialog(DependencyDialog const&) = delete;
+    DependencyDialog& operator=(DependencyDialog const&) = delete;
 
     std::unique_ptr<weld::TreeView> m_xList;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

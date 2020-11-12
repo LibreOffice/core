@@ -23,8 +23,8 @@
 
 namespace desktop
 {
-    void displayCmdlineHelp( OUString const & unknown );
-    void displayVersion();
+void displayCmdlineHelp(OUString const& unknown);
+void displayVersion();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

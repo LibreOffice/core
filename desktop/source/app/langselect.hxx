@@ -21,10 +21,9 @@
 
 #include <sal/config.h>
 
-namespace desktop::langselect {
-
+namespace desktop::langselect
+{
 bool prepareLocale();
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

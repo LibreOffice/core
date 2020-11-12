@@ -22,17 +22,20 @@
 #include <rtl/ustring.hxx>
 #include <dp_backenddb.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno
+{
+class XComponentContext;
+}
 
-namespace dp_registry::backend::executable {
-
+namespace dp_registry::backend::executable
+{
 /* The XML file stores the extensions which are currently registered.
    They will be removed when they are revoked.
    The format looks like this:
 
 <?xml version="1.0"?>
  */
-class ExecutableBackendDb: public dp_registry::backend::RegisteredDb
+class ExecutableBackendDb : public dp_registry::backend::RegisteredDb
 {
 protected:
     virtual OUString getDbNSName() override;
@@ -44,14 +47,9 @@ protected:
     virtual OUString getKeyElementName() override;
 
 public:
-
-    ExecutableBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
-                        OUString const & url);
-
+    ExecutableBackendDb(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                        OUString const& url);
 };
-
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

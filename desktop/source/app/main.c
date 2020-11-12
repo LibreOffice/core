@@ -29,7 +29,7 @@
 static int g_Exiting = 0;
 
 /* HACK: detect calls to xmlCleanupParser, which causes hard to debug crashes */
-__attribute__ ((visibility("default"))) void xmlCleanupParser(void)
+__attribute__((visibility("default"))) void xmlCleanupParser(void)
 {
     /* there are libraries that register xmlCleanupParser as an atexit handler,
        which is not entirely sound (another atexit handler could want to
@@ -44,7 +44,8 @@ __attribute__ ((visibility("default"))) void xmlCleanupParser(void)
 #endif
 #endif
 
-SAL_IMPLEMENT_MAIN() {
+SAL_IMPLEMENT_MAIN()
+{
     int ret = soffice_main();
 #ifdef DBG_UTIL
 #ifdef __gnu_linux__
@@ -53,6 +54,5 @@ SAL_IMPLEMENT_MAIN() {
 #endif
     return ret;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

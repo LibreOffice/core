@@ -25,9 +25,7 @@
 
 namespace dp_misc
 {
-
-typedef std::unordered_map<
-    OString, OString > t_string2string_map;
+typedef std::unordered_map<OString, OString> t_string2string_map;
 
 // Class to read obsolete registered extensions
 // should be removed for LibreOffice 4.0
@@ -41,23 +39,22 @@ class PersistentMap final
 
 public:
     ~PersistentMap();
-    PersistentMap( OUString const & url );
+    PersistentMap(OUString const& url);
     /** in mem db */
     PersistentMap();
 
-    bool has( OString const & key ) const;
-    bool get( OString * value, OString const & key ) const;
+    bool has(OString const& key) const;
+    bool get(OString* value, OString const& key) const;
     const t_string2string_map& getEntries() const { return m_entries; }
-    void put( OString const & key, OString const & value );
-    bool erase( OString const & key );
+    void put(OString const& key, OString const& value);
+    bool erase(OString const& key);
 
 private:
     void open();
     void readAll();
-    void add( OString const & key, OString const & value );
+    void add(OString const& key, OString const& value);
     void flush();
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

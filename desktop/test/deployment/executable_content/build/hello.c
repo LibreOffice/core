@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 
-int main(int argc , char** argv, char** envp)
+int main(int argc, char** argv, char** envp)
 {
     //prevent warning about unused parameters
     //we need to provide parameter names in C
@@ -28,9 +27,8 @@ int main(int argc , char** argv, char** envp)
     (void)argv;
     (void)envp;
 
-    fprintf(stdout,"Hello world!\n");
+    fprintf(stdout, "Hello world!\n");
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

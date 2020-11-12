@@ -23,14 +23,17 @@
 #include <optional>
 #include <dp_backenddb.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno
+{
+class XComponentContext;
+}
 
-namespace dp_registry::backend::help {
-
+namespace dp_registry::backend::help
+{
 /* The XML file stores the extensions which are currently registered.
    They will be removed when they are revoked.
  */
-class HelpBackendDb: public dp_registry::backend::BackendDb
+class HelpBackendDb : public dp_registry::backend::BackendDb
 {
 protected:
     virtual OUString getDbNSName() override;
@@ -47,25 +50,19 @@ public:
         /* the URL to the folder containing the compiled help files, etc.
          */
         OUString dataUrl;
-
     };
 
 public:
+    HelpBackendDb(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                  OUString const& url);
 
-    HelpBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
-                        OUString const & url);
+    void addEntry(OUString const& url, Data const& data);
 
-    void addEntry(OUString const & url, Data const & data);
-
-    ::std::optional<Data> getEntry(OUString const & url);
+    ::std::optional<Data> getEntry(OUString const& url);
     //must also return the data urls for entries with @active="false". That is,
     //those are currently revoked.
-    std::vector< OUString> getAllDataUrls();
-
+    std::vector<OUString> getAllDataUrls();
 };
-
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

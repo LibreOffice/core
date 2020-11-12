@@ -21,8 +21,6 @@
 
 #include "unopkg_main.h"
 
-SAL_IMPLEMENT_MAIN() {
-    return unopkg_main();
-}
+SAL_IMPLEMENT_MAIN() { return unopkg_main(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

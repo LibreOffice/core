@@ -26,14 +26,17 @@
 
 #include <dp_backenddb.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno
+{
+class XComponentContext;
+}
 
-namespace dp_registry::backend::bundle {
-
+namespace dp_registry::backend::bundle
+{
 /* The XML file stores the extensions which are currently registered.
    They will be removed when they are revoked.
  */
-class ExtensionBackendDb: public dp_registry::backend::BackendDb
+class ExtensionBackendDb : public dp_registry::backend::BackendDb
 {
 protected:
     virtual OUString getDbNSName() override;
@@ -44,23 +47,20 @@ protected:
 public:
     struct Data
     {
-         /* every element consists of a pair of the url to the item (jar,rdb, etc)
+        /* every element consists of a pair of the url to the item (jar,rdb, etc)
            and the media type
          */
-        std::vector< std::pair< OUString, OUString> > items;
+        std::vector<std::pair<OUString, OUString>> items;
     };
 
 public:
-    ExtensionBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
-                        OUString const & url);
+    ExtensionBackendDb(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                       OUString const& url);
 
-    void addEntry(OUString const & url, Data const & data);
+    void addEntry(OUString const& url, Data const& data);
 
-    Data getEntry(OUString const & url);
-
+    Data getEntry(OUString const& url);
 };
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
