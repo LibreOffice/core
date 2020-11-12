@@ -202,7 +202,7 @@ void SalGraphics::mirror( tools::Long& x, tools::Long nWidth, const OutputDevice
         x = w-nWidth-x;
 }
 
-bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev ) const
+bool SalGraphics::mirror( sal_uInt32 nPoints, const Point *pPtAry, Point *pPtAry2, const OutputDevice *pOutDev ) const
 {
     const tools::Long w = GetDeviceWidth(pOutDev);
     if( w )
@@ -218,8 +218,8 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
                 tools::Long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
                 for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
                 {
-                    pPtAry2[j].mnX = devX + (pPtAry[i].mnX - pOutDevRef->GetOutOffXPixel());
-                    pPtAry2[j].mnY = pPtAry[i].mnY;
+                    pPtAry2[j].setX( devX + (pPtAry[i].getX() - pOutDevRef->GetOutOffXPixel()) );
+                    pPtAry2[j].setY( pPtAry[i].getY() );
                 }
             }
             else
@@ -227,8 +227,8 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
                 tools::Long devX = pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
                 for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
                 {
-                    pPtAry2[j].mnX = pOutDevRef->GetOutputWidthPixel() - (pPtAry[i].mnX - devX) + pOutDevRef->GetOutOffXPixel() - 1;
-                    pPtAry2[j].mnY = pPtAry[i].mnY;
+                    pPtAry2[j].setX( pOutDevRef->GetOutputWidthPixel() - (pPtAry[i].getX() - devX) + pOutDevRef->GetOutOffXPixel() - 1 );
+                    pPtAry2[j].setY( pPtAry[i].getY() );
                 }
             }
         }
@@ -236,8 +236,8 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
         {
             for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
             {
-                pPtAry2[j].mnX = w-1-pPtAry[i].mnX;
-                pPtAry2[j].mnY = pPtAry[i].mnY;
+                pPtAry2[j].setX( w-1-pPtAry[i].getX() );
+                pPtAry2[j].setY( pPtAry[i].getY() );
             }
         }
         return true;
@@ -400,11 +400,11 @@ void SalGraphics::DrawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, 
     drawRect( nX, nY, nWidth, nHeight );
 }
 
-void SalGraphics::DrawPolyLine( sal_uInt32 nPoints, SalPoint const * pPtAry, const OutputDevice *pOutDev )
+void SalGraphics::DrawPolyLine( sal_uInt32 nPoints, Point const * pPtAry, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        std::unique_ptr<SalPoint[]> pPtAry2(new SalPoint[nPoints]);
+        std::unique_ptr<Point[]> pPtAry2(new Point[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
         drawPolyLine( nPoints, bCopied ? pPtAry2.get() : pPtAry );
     }
@@ -412,11 +412,11 @@ void SalGraphics::DrawPolyLine( sal_uInt32 nPoints, SalPoint const * pPtAry, con
         drawPolyLine( nPoints, pPtAry );
 }
 
-void SalGraphics::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
+void SalGraphics::DrawPolygon( sal_uInt32 nPoints, const Point* pPtAry, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        std::unique_ptr<SalPoint[]> pPtAry2(new SalPoint[nPoints]);
+        std::unique_ptr<Point[]> pPtAry2(new Point[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
         drawPolygon( nPoints, bCopied ? pPtAry2.get() : pPtAry );
     }
@@ -424,21 +424,21 @@ void SalGraphics::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const
         drawPolygon( nPoints, pPtAry );
 }
 
-void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry, const OutputDevice *pOutDev )
+void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
         // TODO: optimize, reduce new/delete calls
-        std::unique_ptr<SalPoint*[]> pPtAry2( new SalPoint*[nPoly] );
+        std::unique_ptr<Point*[]> pPtAry2( new Point*[nPoly] );
         sal_uLong i;
         for(i=0; i<nPoly; i++)
         {
             sal_uLong nPoints = pPoints[i];
-            pPtAry2[i] = new SalPoint[ nPoints ];
+            pPtAry2[i] = new Point[ nPoints ];
             mirror( nPoints, pPtAry[i], pPtAry2[i], pOutDev );
         }
 
-        drawPolyPolygon( nPoly, pPoints, const_cast<PCONSTSALPOINT*>(pPtAry2.get()) );
+        drawPolyPolygon( nPoly, pPoints, const_cast<const Point**>(pPtAry2.get()) );
 
         for(i=0; i<nPoly; i++)
             delete [] pPtAry2[i];
@@ -486,12 +486,12 @@ bool SalGraphics::DrawPolyPolygon(
         i_fTransparency);
 }
 
-bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry, const OutputDevice* pOutDev )
+bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry, const OutputDevice* pOutDev )
 {
     bool bResult = false;
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        std::unique_ptr<SalPoint[]> pPtAry2(new SalPoint[nPoints]);
+        std::unique_ptr<Point[]> pPtAry2(new Point[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
         bResult = drawPolyLineBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
     }
@@ -500,12 +500,12 @@ bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry
     return bResult;
 }
 
-bool SalGraphics::DrawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry, const OutputDevice* pOutDev )
+bool SalGraphics::DrawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry, const OutputDevice* pOutDev )
 {
     bool bResult = false;
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        std::unique_ptr<SalPoint[]> pPtAry2(new SalPoint[nPoints]);
+        std::unique_ptr<Point[]> pPtAry2(new Point[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
         bResult = drawPolygonBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
     }
@@ -515,22 +515,22 @@ bool SalGraphics::DrawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry,
 }
 
 bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i_pPoints,
-                                         const SalPoint* const* i_pPtAry, const PolyFlags* const* i_pFlgAry, const OutputDevice* i_pOutDev )
+                                         const Point* const* i_pPtAry, const PolyFlags* const* i_pFlgAry, const OutputDevice* i_pOutDev )
 {
     bool bRet = false;
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
     {
         // TODO: optimize, reduce new/delete calls
-        std::unique_ptr<SalPoint*[]> pPtAry2( new SalPoint*[i_nPoly] );
+        std::unique_ptr<Point*[]> pPtAry2( new Point*[i_nPoly] );
         sal_uLong i;
         for(i=0; i<i_nPoly; i++)
         {
             sal_uLong nPoints = i_pPoints[i];
-            pPtAry2[i] = new SalPoint[ nPoints ];
+            pPtAry2[i] = new Point[ nPoints ];
             mirror( nPoints, i_pPtAry[i], pPtAry2[i], i_pOutDev );
         }
 
-        bRet = drawPolyPolygonBezier( i_nPoly, i_pPoints, const_cast<PCONSTSALPOINT const *>(pPtAry2.get()), i_pFlgAry );
+        bRet = drawPolyPolygonBezier( i_nPoly, i_pPoints, const_cast<const Point* const *>(pPtAry2.get()), i_pFlgAry );
 
         for(i=0; i<i_nPoly; i++)
             delete [] pPtAry2[i];
@@ -690,11 +690,11 @@ void SalGraphics::Invert( tools::Long nX, tools::Long nY, tools::Long nWidth, to
     invert( nX, nY, nWidth, nHeight, nFlags );
 }
 
-void SalGraphics::Invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags, const OutputDevice *pOutDev )
+void SalGraphics::Invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        std::unique_ptr<SalPoint[]> pPtAry2(new SalPoint[nPoints]);
+        std::unique_ptr<Point[]> pPtAry2(new Point[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
         invert( nPoints, bCopied ? pPtAry2.get() : pPtAry, nFlags );
     }
