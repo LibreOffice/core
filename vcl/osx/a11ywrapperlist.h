@@ -25,7 +25,7 @@
 @interface AquaA11yWrapperList : AquaA11yWrapper
 {
 }
--(NSArray *)accessibilityAttributeNames;
+- (NSArray*)accessibilityAttributeNames;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YWRAPPERLIST_H

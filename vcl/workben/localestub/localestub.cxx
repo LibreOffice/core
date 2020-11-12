@@ -15,11 +15,11 @@ extern "C" const sal_Unicode* getSTC_CharData_S2V() { return nullptr; }
 extern "C" const sal_uInt16* getSTC_CharIndex_S2V() { return nullptr; }
 extern "C" const sal_Unicode* getSTC_CharData_S2T() { return nullptr; }
 extern "C" const sal_uInt16* getSTC_CharIndex_S2T() { return nullptr; }
-extern "C" const sal_Unicode *getSTC_WordData(sal_Int32&) { return nullptr; }
-extern "C" const sal_uInt16 *getSTC_WordIndex_T2S(sal_Int32&) { return nullptr; }
-extern "C" const sal_uInt16 *getSTC_WordEntry_T2S() { return nullptr; }
-extern "C" const sal_uInt16 *getSTC_WordIndex_S2T(sal_Int32&) { return nullptr; }
-extern "C" const sal_uInt16 *getSTC_WordEntry_S2T() { return nullptr; }
+extern "C" const sal_Unicode* getSTC_WordData(sal_Int32&) { return nullptr; }
+extern "C" const sal_uInt16* getSTC_WordIndex_T2S(sal_Int32&) { return nullptr; }
+extern "C" const sal_uInt16* getSTC_WordEntry_T2S() { return nullptr; }
+extern "C" const sal_uInt16* getSTC_WordIndex_S2T(sal_Int32&) { return nullptr; }
+extern "C" const sal_uInt16* getSTC_WordEntry_S2T() { return nullptr; }
 extern "C" sal_uInt16** get_zh_zhuyin() { return nullptr; }
 extern "C" sal_uInt16** get_zh_pinyin() { return nullptr; }
 extern "C" const sal_Unicode* getHangul2HanjaData() { return nullptr; }

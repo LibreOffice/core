@@ -26,26 +26,22 @@
 
 #include <atk/atk.h>
 
-AtkAttributeSet*
-attribute_set_new_from_property_values(
-    const css::uno::Sequence< css::beans::PropertyValue >& rAttributeList,
-    bool run_attributes_only,
-    AtkText *text);
+AtkAttributeSet* attribute_set_new_from_property_values(
+    const css::uno::Sequence<css::beans::PropertyValue>& rAttributeList, bool run_attributes_only,
+    AtkText* text);
 
-AtkAttributeSet*
-attribute_set_new_from_extended_attributes(
-    const css::uno::Reference< css::accessibility::XAccessibleExtendedAttributes >& rExtendedAttributes );
+AtkAttributeSet* attribute_set_new_from_extended_attributes(
+    const css::uno::Reference<css::accessibility::XAccessibleExtendedAttributes>&
+        rExtendedAttributes);
 
-bool
-attribute_set_map_to_property_values(
-    AtkAttributeSet* attribute_set,
-    css::uno::Sequence< css::beans::PropertyValue >& rValueList );
+bool attribute_set_map_to_property_values(
+    AtkAttributeSet* attribute_set, css::uno::Sequence<css::beans::PropertyValue>& rValueList);
 
-AtkAttributeSet* attribute_set_prepend_misspelled( AtkAttributeSet* attribute_set );
+AtkAttributeSet* attribute_set_prepend_misspelled(AtkAttributeSet* attribute_set);
 // #i92232#
-AtkAttributeSet* attribute_set_prepend_tracked_change_insertion( AtkAttributeSet* attribute_set );
-AtkAttributeSet* attribute_set_prepend_tracked_change_deletion( AtkAttributeSet* attribute_set );
-AtkAttributeSet* attribute_set_prepend_tracked_change_formatchange( AtkAttributeSet* attribute_set );
+AtkAttributeSet* attribute_set_prepend_tracked_change_insertion(AtkAttributeSet* attribute_set);
+AtkAttributeSet* attribute_set_prepend_tracked_change_deletion(AtkAttributeSet* attribute_set);
+AtkAttributeSet* attribute_set_prepend_tracked_change_formatchange(AtkAttributeSet* attribute_set);
 
 #endif
 

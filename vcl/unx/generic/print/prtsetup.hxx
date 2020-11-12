@@ -33,7 +33,7 @@ class RTSDialog : public weld::GenericDialogController
     friend class RTSPaperPage;
     friend class RTSDevicePage;
 
-    ::psp::PrinterInfo      m_aJobData;
+    ::psp::PrinterInfo m_aJobData;
 
     bool m_bDataModified;
 
@@ -43,21 +43,22 @@ class RTSDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xCancelButton;
 
     // pages
-    std::unique_ptr<RTSPaperPage>  m_xPaperPage;
+    std::unique_ptr<RTSPaperPage> m_xPaperPage;
     std::unique_ptr<RTSDevicePage> m_xDevicePage;
 
-    DECL_LINK(ActivatePage, const OString&, void );
-    DECL_LINK(ClickButton, weld::Button&, void );
+    DECL_LINK(ActivatePage, const OString&, void);
+    DECL_LINK(ClickButton, weld::Button&, void);
 
     // helper functions
     void insertAllPPDValues(weld::ComboBox&, const psp::PPDParser*, const psp::PPDKey*);
+
 public:
     RTSDialog(const ::psp::PrinterInfo& rJobData, weld::Window* pParent);
     virtual ~RTSDialog() override;
 
     const ::psp::PrinterInfo& getSetup() const { return m_aJobData; }
 
-    void SetDataModified( bool bModified ) { m_bDataModified = bModified; }
+    void SetDataModified(bool bModified) { m_bDataModified = bModified; }
     bool GetDataModified() const { return m_bDataModified; }
 };
 
@@ -66,7 +67,7 @@ class RTSPaperPage
 private:
     std::unique_ptr<weld::Builder> m_xBuilder;
 
-    RTSDialog*                 m_pParent;
+    RTSDialog* m_pParent;
 
     std::unique_ptr<weld::Widget> m_xContainer;
 
@@ -86,6 +87,7 @@ private:
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+
 public:
     RTSPaperPage(weld::Widget* pPage, RTSDialog* pDialog);
     ~RTSPaperPage();
@@ -101,7 +103,7 @@ private:
     std::unique_ptr<weld::Builder> m_xBuilder;
 
     const psp::PPDValue* m_pCustomValue;
-    RTSDialog*                 m_pParent;
+    RTSDialog* m_pParent;
 
     std::unique_ptr<weld::Widget> m_xContainer;
     std::unique_ptr<weld::TreeView> m_xPPDKeyBox;
@@ -112,14 +114,15 @@ private:
     std::unique_ptr<weld::ComboBox> m_xSpaceBox;
     std::unique_ptr<weld::ComboBox> m_xDepthBox;
 
-    void FillValueBox( const ::psp::PPDKey* );
-    void ValueBoxChanged( const ::psp::PPDKey* );
+    void FillValueBox(const ::psp::PPDKey*);
+    void ValueBoxChanged(const ::psp::PPDKey*);
 
     Idle m_aReselectCustomIdle;
 
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(ImplHandleReselectHdl, Timer*, void);
+
 public:
     RTSDevicePage(weld::Widget* pPage, RTSDialog* pDialog);
     ~RTSDevicePage();

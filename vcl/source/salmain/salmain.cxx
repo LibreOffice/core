@@ -26,7 +26,8 @@
 #include <vcl/vclmain.hxx>
 #include <vcl/svmain.hxx>
 
-SAL_IMPLEMENT_MAIN() {
+SAL_IMPLEMENT_MAIN()
+{
     fire_glxtest_process();
     tools::extendApplicationEnvironment();
     vclmain::createApplication();

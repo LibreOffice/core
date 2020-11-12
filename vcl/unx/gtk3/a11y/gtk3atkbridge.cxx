@@ -27,8 +27,6 @@ bool InitAtkBridge()
     return true;
 }
 
-void DeInitAtkBridge()
-{
-}
+void DeInitAtkBridge() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

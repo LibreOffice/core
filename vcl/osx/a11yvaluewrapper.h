@@ -27,12 +27,12 @@
 @interface AquaA11yValueWrapper : NSObject
 {
 }
-+(id)valueAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(id)minValueAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(id)maxValueAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(void)addAttributeNamesTo:(NSMutableArray *)attributeNames;
-+(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
-+(void)setValueAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
++ (id)valueAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (id)minValueAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (id)maxValueAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (void)addAttributeNamesTo:(NSMutableArray*)attributeNames;
++ (BOOL)isAttributeSettable:(NSString*)attribute forElement:(AquaA11yWrapper*)wrapper;
++ (void)setValueAttributeForElement:(AquaA11yWrapper*)wrapper to:(id)value;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YVALUEWRAPPER_H

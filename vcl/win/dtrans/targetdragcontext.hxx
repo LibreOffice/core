@@ -30,7 +30,7 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-class TargetDragContext: public WeakImplHelper<XDropTargetDragContext>
+class TargetDragContext : public WeakImplHelper<XDropTargetDragContext>
 {
     // some calls to the functions of XDropTargetDragContext are delegated
     // to non-interface functions of m_pDropTarget
@@ -39,11 +39,11 @@ class TargetDragContext: public WeakImplHelper<XDropTargetDragContext>
 public:
     explicit TargetDragContext(DropTarget* pTarget);
     ~TargetDragContext() override;
-    TargetDragContext( const TargetDragContext&) = delete;
-    TargetDragContext &operator= ( const TargetDragContext&) = delete;
+    TargetDragContext(const TargetDragContext&) = delete;
+    TargetDragContext& operator=(const TargetDragContext&) = delete;
 
-    virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) override;
-    virtual void SAL_CALL rejectDrag(  ) override;
+    virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) override;
+    virtual void SAL_CALL rejectDrag() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

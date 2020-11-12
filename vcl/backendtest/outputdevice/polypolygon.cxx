@@ -10,23 +10,21 @@
 
 #include <test/outputdevice.hxx>
 
-
-namespace vcl::test {
-
+namespace vcl::test
+{
 namespace
 {
-
-tools::Polygon createPolygonOffset(tools::Rectangle const & rRect, int nOffset, int nFix = 0)
+tools::Polygon createPolygonOffset(tools::Rectangle const& rRect, int nOffset, int nFix = 0)
 {
     // Note: According to https://lists.freedesktop.org/archives/libreoffice/2019-November/083709.html
     // filling polygons always skips the right-most and bottom-most pixels, in order to avoid
     // overlaps when drawing adjacent polygons. Specifying nFix = 1 allows to visually compensate
     // for this by making the polygon explicitly larger.
     tools::Polygon aPolygon(4);
-    aPolygon.SetPoint(Point(rRect.Left()  + nOffset, rRect.Top()    + nOffset), 0);
-    aPolygon.SetPoint(Point(rRect.Right() - nOffset + nFix, rRect.Top()    + nOffset), 1);
+    aPolygon.SetPoint(Point(rRect.Left() + nOffset, rRect.Top() + nOffset), 0);
+    aPolygon.SetPoint(Point(rRect.Right() - nOffset + nFix, rRect.Top() + nOffset), 1);
     aPolygon.SetPoint(Point(rRect.Right() - nOffset + nFix, rRect.Bottom() - nOffset + nFix), 2);
-    aPolygon.SetPoint(Point(rRect.Left()  + nOffset, rRect.Bottom() - nOffset + nFix), 3);
+    aPolygon.SetPoint(Point(rRect.Left() + nOffset, rRect.Bottom() - nOffset + nFix), 3);
     aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
     return aPolygon;
 }
@@ -53,7 +51,7 @@ Bitmap OutputDeviceTestPolyPolygon::setupFilledRectangle(bool useLineColor)
 {
     initialSetup(13, 13, constBackgroundColor);
 
-    if(useLineColor)
+    if (useLineColor)
         mpVirtualDevice->SetLineColor(constLineColor);
     else
         mpVirtualDevice->SetLineColor();

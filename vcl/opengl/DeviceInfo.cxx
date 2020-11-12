@@ -9,8 +9,6 @@
 
 #include <opengl/DeviceInfo.hxx>
 
-OpenGLDeviceInfo::~OpenGLDeviceInfo()
-{
-}
+OpenGLDeviceInfo::~OpenGLDeviceInfo() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
