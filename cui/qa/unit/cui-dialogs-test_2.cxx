@@ -36,19 +36,14 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-CuiDialogsTest2::CuiDialogsTest2()
-{
-}
+CuiDialogsTest2::CuiDialogsTest2() {}
 
 void CuiDialogsTest2::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
     // leave empty should be in CuiDialogTest if any
 }
 
-VclPtr<VclAbstractDialog> CuiDialogsTest2::createDialogByID(sal_uInt32 /*nID*/)
-{
-    return nullptr;
-}
+VclPtr<VclAbstractDialog> CuiDialogsTest2::createDialogByID(sal_uInt32 /*nID*/) { return nullptr; }
 
 void CuiDialogsTest2::openAnyDialog()
 {

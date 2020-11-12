@@ -9,6 +9,6 @@
 
 #pragma once
 
-#define RID_SVXSTR_KEY_BASIC_PATH   "BASIC"
+#define RID_SVXSTR_KEY_BASIC_PATH "BASIC"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

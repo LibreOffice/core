@@ -48,10 +48,11 @@ IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl, weld::Entry&, void)
         bEnable = !m_xEdtName->get_text().isEmpty();
     m_xBtnOK->set_sensitive(bEnable);
     // tdf#129032: feedback on reason to disabled controls
-    m_xEdtName->set_message_type(bEnable ? weld::EntryMessageType::Normal : weld::EntryMessageType::Error);
+    m_xEdtName->set_message_type(bEnable ? weld::EntryMessageType::Normal
+                                         : weld::EntryMessageType::Error);
     OUString rTip = "";
     if (!bEnable && m_aCheckNameTooltipHdl.IsSet())
-       rTip = m_aCheckNameTooltipHdl.Call(*this);
+        rTip = m_aCheckNameTooltipHdl.Call(*this);
     m_xBtnOK->set_tooltip_text(rTip);
     m_xEdtName->set_tooltip_text(rTip);
 }

@@ -28,14 +28,15 @@ TSAURLsDialog::TSAURLsDialog(weld::Window* pParent)
                                     m_xURLListBox->get_height_rows(8));
     m_xOKBtn->set_sensitive(false);
 
-    m_xAddBtn->connect_clicked( LINK( this, TSAURLsDialog, AddHdl_Impl ) );
-    m_xDeleteBtn->connect_clicked( LINK( this, TSAURLsDialog, DeleteHdl_Impl ) );
-    m_xOKBtn->connect_clicked( LINK( this, TSAURLsDialog, OKHdl_Impl ) );
-    m_xURLListBox->connect_changed( LINK( this, TSAURLsDialog, SelectHdl ) );
+    m_xAddBtn->connect_clicked(LINK(this, TSAURLsDialog, AddHdl_Impl));
+    m_xDeleteBtn->connect_clicked(LINK(this, TSAURLsDialog, DeleteHdl_Impl));
+    m_xOKBtn->connect_clicked(LINK(this, TSAURLsDialog, OKHdl_Impl));
+    m_xURLListBox->connect_changed(LINK(this, TSAURLsDialog, SelectHdl));
 
     try
     {
-        std::optional<css::uno::Sequence<OUString>> aUserSetTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
+        std::optional<css::uno::Sequence<OUString>> aUserSetTSAURLs(
+            officecfg::Office::Common::Security::Scripting::TSAURLs::get());
         if (aUserSetTSAURLs)
         {
             const css::uno::Sequence<OUString>& rUserSetTSAURLs = *aUserSetTSAURLs;
@@ -45,7 +46,7 @@ TSAURLsDialog::TSAURLsDialog(weld::Window* pParent)
             }
         }
     }
-    catch (const uno::Exception &)
+    catch (const uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("cui.options", "TSAURLsDialog::TSAURLsDialog()");
     }
@@ -58,17 +59,17 @@ TSAURLsDialog::TSAURLsDialog(weld::Window* pParent)
 
 IMPL_LINK_NOARG(TSAURLsDialog, OKHdl_Impl, weld::Button&, void)
 {
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
 
-    officecfg::Office::Common::Security::Scripting::TSAURLs::set(comphelper::containerToSequence(m_aURLs), batch);
+    officecfg::Office::Common::Security::Scripting::TSAURLs::set(
+        comphelper::containerToSequence(m_aURLs), batch);
     batch->commit();
 
     m_xDialog->response(RET_OK);
 }
 
-TSAURLsDialog::~TSAURLsDialog()
-{
-}
+TSAURLsDialog::~TSAURLsDialog() {}
 
 void TSAURLsDialog::AddTSAURL(const OUString& rURL)
 {
@@ -91,7 +92,8 @@ IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl, weld::Button&, void)
     OUString aDesc(m_xEnterAUrl->get_label());
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(m_xDialog.get(), aURL, aDesc));
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(
+        pFact->CreateSvxNameDialog(m_xDialog.get(), aURL, aDesc));
 
     if (pDlg->Execute() == RET_OK)
     {

@@ -26,10 +26,10 @@ class ScreenshotAnnotationDlg_Impl;
 class ScreenshotAnnotationDlg : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr< ScreenshotAnnotationDlg_Impl >  m_pImpl;
+    std::unique_ptr<ScreenshotAnnotationDlg_Impl> m_pImpl;
 
-    ScreenshotAnnotationDlg(const ScreenshotAnnotationDlg &) = delete;
-    ScreenshotAnnotationDlg& operator=(const ScreenshotAnnotationDlg &) = delete;
+    ScreenshotAnnotationDlg(const ScreenshotAnnotationDlg&) = delete;
+    ScreenshotAnnotationDlg& operator=(const ScreenshotAnnotationDlg&) = delete;
 
 public:
     ScreenshotAnnotationDlg(weld::Dialog& rParentDialog);

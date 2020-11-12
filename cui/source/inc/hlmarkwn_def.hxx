@@ -19,8 +19,8 @@
 
 #pragma once
 
-#define LERR_NOERROR        0
-#define LERR_NOENTRIES      1
-#define LERR_DOCNOTOPEN     2
+#define LERR_NOERROR 0
+#define LERR_NOENTRIES 1
+#define LERR_DOCNOTOPEN 2
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

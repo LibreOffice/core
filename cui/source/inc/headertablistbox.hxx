@@ -25,15 +25,13 @@ class MacroEventListBox final
 {
 private:
     std::unique_ptr<weld::TreeView> m_xTreeView;
+
 public:
     MacroEventListBox(std::unique_ptr<weld::TreeView> xTreeView);
     void set_sensitive(bool bSensitive) { m_xTreeView->set_sensitive(bSensitive); }
     void show() { m_xTreeView->show(); }
 
-    weld::TreeView& GetListBox()
-    {
-        return *m_xTreeView;
-    }
+    weld::TreeView& GetListBox() { return *m_xTreeView; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
