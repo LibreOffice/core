@@ -1266,7 +1266,7 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
  */
 static bool ConsiderNextPortionForCursorOffset(const SwLinePortion* pPor, sal_uInt16 nWidth30, sal_uInt16 nX)
 {
-    if (!pPor->GetNextPortion())
+    if (!pPor->GetNextPortion() || pPor->IsBreakPortion())
     {
         return false;
     }
@@ -1275,10 +1275,14 @@ static bool ConsiderNextPortionForCursorOffset(const SwLinePortion* pPor, sal_uI
     // Exception: don't stop the iteration between as-char fly portions and their comments.
     if (nWidth30 >= nX && (!pPor->IsFlyCntPortion() || !pPor->GetNextPortion()->IsPostItsPortion()))
     {
-        return false;
+        // Normally returns false.
+
+        // Another exception: If the cursor is at the very end of the portion, and the next portion is a comment,
+        // then place the cursor after the zero-width comment. This is primarily to benefit the very end of a line.
+        return nWidth30 == nX && pPor->GetNextPortion()->IsPostItsPortion();
     }
 
-    return !pPor->IsBreakPortion();
+    return true;
 }
 
 // Return: Offset in String
