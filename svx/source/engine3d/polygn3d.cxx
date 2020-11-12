@@ -30,11 +30,9 @@ std::unique_ptr<sdr::contact::ViewContact> E3dPolygonObj::CreateObjectSpecificVi
     return std::make_unique<sdr::contact::ViewContactOfE3dPolygon>(*this);
 }
 
-E3dPolygonObj::E3dPolygonObj(
-    SdrModel& rSdrModel,
-    const basegfx::B3DPolyPolygon& rPolyPoly3D)
-:   E3dCompoundObject(rSdrModel),
-    bLineOnly(true)
+E3dPolygonObj::E3dPolygonObj(SdrModel& rSdrModel, const basegfx::B3DPolyPolygon& rPolyPoly3D)
+    : E3dCompoundObject(rSdrModel)
+    , bLineOnly(true)
 {
     // Set geometry
     SetPolyPolygon3D(rPolyPoly3D);
@@ -47,8 +45,8 @@ E3dPolygonObj::E3dPolygonObj(
 }
 
 E3dPolygonObj::E3dPolygonObj(SdrModel& rSdrModel)
-:   E3dCompoundObject(rSdrModel),
-    bLineOnly(false)
+    : E3dCompoundObject(rSdrModel)
+    , bLineOnly(false)
 {
     // Create no geometry
 }
@@ -58,7 +56,7 @@ void E3dPolygonObj::CreateDefaultNormals()
     basegfx::B3DPolyPolygon aPolyNormals;
 
     // Create a complete tools::PolyPolygon with the plane normal
-    for(sal_uInt32 a(0); a < aPolyPoly3D.count(); a++)
+    for (sal_uInt32 a(0); a < aPolyPoly3D.count(); a++)
     {
         // Find source polygon
         const basegfx::B3DPolygon aPolygon(aPolyPoly3D.getB3DPolygon(a));
@@ -70,7 +68,7 @@ void E3dPolygonObj::CreateDefaultNormals()
         basegfx::B3DVector aNormal(-aPolygon.getNormal());
 
         // Fill new polygon
-        for(sal_uInt32 b(0); b < aPolygon.count(); b++)
+        for (sal_uInt32 b(0); b < aPolygon.count(); b++)
         {
             aNormals.append(aNormal);
         }
@@ -89,7 +87,7 @@ void E3dPolygonObj::CreateDefaultTexture()
     // Create a complete tools::PolyPolygon with the texture coordinates
     // The texture coordinates extend over X,Y and Z
     // on the whole extreme values in the range 0.0 .. 1.0
-    for(sal_uInt32 a(0); a < aPolyPoly3D.count(); a++)
+    for (sal_uInt32 a(0); a < aPolyPoly3D.count(); a++)
     {
         // Find source polygon
         const basegfx::B3DPolygon& aPolygon(aPolyPoly3D.getB3DPolygon(a));
@@ -107,9 +105,9 @@ void E3dPolygonObj::CreateDefaultTexture()
         sal_uInt16 nSourceMode = 0;
 
         // Determine the greatest degree of freedom
-        if(aNormal.getX() <= aNormal.getY() || aNormal.getX() <= aNormal.getZ())
+        if (aNormal.getX() <= aNormal.getY() || aNormal.getX() <= aNormal.getZ())
         {
-            if(aNormal.getY() > aNormal.getZ())
+            if (aNormal.getY() > aNormal.getZ())
             {
                 // Y is the largest, use X,Z as mapping
                 nSourceMode = 1;
@@ -125,31 +123,31 @@ void E3dPolygonObj::CreateDefaultTexture()
         basegfx::B2DPolygon aTexture;
 
         // Fill new polygon
-        for(sal_uInt32 b(0); b < aPolygon.count(); b++)
+        for (sal_uInt32 b(0); b < aPolygon.count(); b++)
         {
             basegfx::B2DPoint aTex;
             const basegfx::B3DPoint aCandidate(aPolygon.getB3DPoint(b));
 
-            switch(nSourceMode)
+            switch (nSourceMode)
             {
                 case 0: //Source is Y,Z
-                    if(aVolume.getHeight())
+                    if (aVolume.getHeight())
                         aTex.setX((aCandidate.getY() - aVolume.getMinY()) / aVolume.getHeight());
-                    if(aVolume.getDepth())
+                    if (aVolume.getDepth())
                         aTex.setY((aCandidate.getZ() - aVolume.getMinZ()) / aVolume.getDepth());
                     break;
 
                 case 1: // Source is X,Z
-                    if(aVolume.getWidth())
+                    if (aVolume.getWidth())
                         aTex.setX((aCandidate.getX() - aVolume.getMinX()) / aVolume.getWidth());
-                    if(aVolume.getDepth())
+                    if (aVolume.getDepth())
                         aTex.setY((aCandidate.getZ() - aVolume.getMinZ()) / aVolume.getDepth());
                     break;
 
                 case 2: // Source is X,Y
-                    if(aVolume.getWidth())
+                    if (aVolume.getWidth())
                         aTex.setX((aCandidate.getX() - aVolume.getMinX()) / aVolume.getWidth());
-                    if(aVolume.getHeight())
+                    if (aVolume.getHeight())
                         aTex.setY((aCandidate.getY() - aVolume.getMinY()) / aVolume.getHeight());
                     break;
             }
@@ -165,18 +163,13 @@ void E3dPolygonObj::CreateDefaultTexture()
     SetPolyTexture2D(aPolyTexture);
 }
 
-E3dPolygonObj::~E3dPolygonObj()
-{
-}
+E3dPolygonObj::~E3dPolygonObj() {}
 
-SdrObjKind E3dPolygonObj::GetObjIdentifier() const
-{
-    return E3D_POLYGONOBJ_ID;
-}
+SdrObjKind E3dPolygonObj::GetObjIdentifier() const { return E3D_POLYGONOBJ_ID; }
 
 void E3dPolygonObj::SetPolyPolygon3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D)
 {
-    if ( aPolyPoly3D != rNewPolyPoly3D )
+    if (aPolyPoly3D != rNewPolyPoly3D)
     {
         // New PolyPolygon; copying
         aPolyPoly3D = rNewPolyPoly3D;
@@ -188,7 +181,7 @@ void E3dPolygonObj::SetPolyPolygon3D(const basegfx::B3DPolyPolygon& rNewPolyPoly
 
 void E3dPolygonObj::SetPolyNormals3D(const basegfx::B3DPolyPolygon& rNewPolyNormals3D)
 {
-    if ( aPolyNormals3D != rNewPolyNormals3D )
+    if (aPolyNormals3D != rNewPolyNormals3D)
     {
         // New PolyPolygon; copying
         aPolyNormals3D = rNewPolyNormals3D;
@@ -200,7 +193,7 @@ void E3dPolygonObj::SetPolyNormals3D(const basegfx::B3DPolyPolygon& rNewPolyNorm
 
 void E3dPolygonObj::SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyTexture2D)
 {
-    if ( aPolyTexture2D != rNewPolyTexture2D )
+    if (aPolyTexture2D != rNewPolyTexture2D)
     {
         // New PolyPolygon; copying
         aPolyTexture2D = rNewPolyTexture2D;
@@ -219,12 +212,12 @@ SdrObjectUniquePtr E3dPolygonObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bA
 
 E3dPolygonObj* E3dPolygonObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dPolygonObj >(rTargetModel);
+    return CloneHelper<E3dPolygonObj>(rTargetModel);
 }
 
 E3dPolygonObj& E3dPolygonObj::operator=(const E3dPolygonObj& rObj)
 {
-    if( this == &rObj )
+    if (this == &rObj)
         return *this;
     E3dCompoundObject::operator=(rObj);
 
@@ -238,7 +231,7 @@ E3dPolygonObj& E3dPolygonObj::operator=(const E3dPolygonObj& rObj)
 
 void E3dPolygonObj::SetLineOnly(bool bNew)
 {
-    if(bNew != bLineOnly)
+    if (bNew != bLineOnly)
     {
         bLineOnly = bNew;
         ActionChanged();

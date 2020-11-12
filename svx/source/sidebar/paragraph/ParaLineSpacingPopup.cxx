@@ -24,14 +24,15 @@
 
 using namespace svx;
 
-SvxLineSpacingToolBoxControl::SvxLineSpacingToolBoxControl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+SvxLineSpacingToolBoxControl::SvxLineSpacingToolBoxControl(
+    const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }
 
 SvxLineSpacingToolBoxControl::~SvxLineSpacingToolBoxControl() {}
 
-void SvxLineSpacingToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+void SvxLineSpacingToolBoxControl::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
 {
     PopupWindowController::initialize(rArguments);
 
@@ -67,9 +68,10 @@ std::unique_ptr<WeldToolbarPopup> SvxLineSpacingToolBoxControl::weldPopupWindow(
     return std::make_unique<ParaLineSpacingControl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> SvxLineSpacingToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SvxLineSpacingToolBoxControl::createVclPopupWindow(vcl::Window* pParent)
 {
-    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(
+        getFrameInterface(), pParent,
         std::make_unique<ParaLineSpacingControl>(this, pParent->GetFrameWeld()));
 
     mxInterimPopover->Show();
@@ -87,12 +89,11 @@ css::uno::Sequence<OUString> SvxLineSpacingToolBoxControl::getSupportedServiceNa
     return { "com.sun.star.frame.ToolbarController" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_LineSpacingToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::XComponentContext* rContext, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire( new SvxLineSpacingToolBoxControl( rContext ) );
+    return cppu::acquire(new SvxLineSpacingToolBoxControl(rContext));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

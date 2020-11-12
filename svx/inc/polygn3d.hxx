@@ -29,7 +29,7 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) E3dPolygonObj final : public E3dCompou
     basegfx::B3DPolyPolygon aPolyPoly3D;
     basegfx::B3DPolyPolygon aPolyNormals3D;
     basegfx::B2DPolyPolygon aPolyTexture2D;
-    bool            bLineOnly;
+    bool bLineOnly;
 
     SVX_DLLPRIVATE void CreateDefaultNormals();
     SVX_DLLPRIVATE void CreateDefaultTexture();
@@ -44,9 +44,7 @@ public:
     void SetPolyNormals3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D);
     void SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyPoly2D);
 
-    E3dPolygonObj(
-        SdrModel& rSdrModel,
-        const basegfx::B3DPolyPolygon& rPolyPoly3D);
+    E3dPolygonObj(SdrModel& rSdrModel, const basegfx::B3DPolyPolygon& rPolyPoly3D);
     E3dPolygonObj(SdrModel& rSdrModel);
 
     const basegfx::B3DPolyPolygon& GetPolyPolygon3D() const { return aPolyPoly3D; }

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <DescriptionGenerator.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -34,23 +33,16 @@
 
 using namespace ::com::sun::star;
 
-
-namespace accessibility {
-
-
-DescriptionGenerator::DescriptionGenerator (
-    const uno::Reference<drawing::XShape>& xShape)
-    : mxShape (xShape),
-      mxSet (mxShape, uno::UNO_QUERY),
-      mbIsFirstProperty (true)
+namespace accessibility
+{
+DescriptionGenerator::DescriptionGenerator(const uno::Reference<drawing::XShape>& xShape)
+    : mxShape(xShape)
+    , mxSet(mxShape, uno::UNO_QUERY)
+    , mbIsFirstProperty(true)
 {
 }
 
-
-DescriptionGenerator::~DescriptionGenerator()
-{
-}
-
+DescriptionGenerator::~DescriptionGenerator() {}
 
 void DescriptionGenerator::Initialize(const char* pResourceId)
 {
@@ -62,11 +54,10 @@ void DescriptionGenerator::Initialize(const char* pResourceId)
     }
 
     // Forward the call with the resulting string.
-    Initialize (sPrefix);
+    Initialize(sPrefix);
 }
 
-
-void DescriptionGenerator::Initialize (const OUString& sPrefix)
+void DescriptionGenerator::Initialize(const OUString& sPrefix)
 {
     msDescription = sPrefix;
     if (!mxSet.is())
@@ -79,7 +70,7 @@ void DescriptionGenerator::Initialize (const OUString& sPrefix)
         msDescription.append(SvxResId(RID_SVXSTR_A11Y_WITH));
         msDescription.append(' ');
 
-        msDescription.append(SvxResId (RID_SVXSTR_A11Y_STYLE));
+        msDescription.append(SvxResId(RID_SVXSTR_A11Y_STYLE));
         msDescription.append('=');
     }
 
@@ -87,41 +78,38 @@ void DescriptionGenerator::Initialize (const OUString& sPrefix)
     {
         if (mxSet.is())
         {
-            uno::Any aValue = mxSet->getPropertyValue ("Style");
-            uno::Reference<container::XNamed> xStyle (aValue, uno::UNO_QUERY);
+            uno::Any aValue = mxSet->getPropertyValue("Style");
+            uno::Reference<container::XNamed> xStyle(aValue, uno::UNO_QUERY);
             if (xStyle.is())
-                msDescription.append (xStyle->getName());
+                msDescription.append(xStyle->getName());
         }
         else
-            msDescription.append ("<no style>");
+            msDescription.append("<no style>");
     }
-    catch (const css::beans::UnknownPropertyException &)
+    catch (const css::beans::UnknownPropertyException&)
     {
-        msDescription.append ("<unknown>");
+        msDescription.append("<unknown>");
     }
 }
 
-
-OUString DescriptionGenerator::operator() ()
+OUString DescriptionGenerator::operator()()
 {
     msDescription.append('.');
     return msDescription.makeStringAndClear();
 }
 
-
-void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
-    PropertyType aType)
+void DescriptionGenerator::AddProperty(const OUString& sPropertyName, PropertyType aType)
 {
-    uno::Reference<beans::XPropertyState> xState (mxShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertyState> xState(mxShape, uno::UNO_QUERY);
     if (!xState.is()
-        || xState->getPropertyState(sPropertyName)==beans::PropertyState_DEFAULT_VALUE)
+        || xState->getPropertyState(sPropertyName) == beans::PropertyState_DEFAULT_VALUE)
         return;
 
     if (!mxSet.is())
         return;
 
     // Append a separator from previous Properties.
-    if ( ! mbIsFirstProperty)
+    if (!mbIsFirstProperty)
         msDescription.append(',');
     else
     {
@@ -137,48 +125,41 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
     switch (aType)
     {
         case PropertyType::Color:
-            AddColor (sPropertyName);
+            AddColor(sPropertyName);
             break;
         case PropertyType::Integer:
-            AddInteger (sPropertyName);
+            AddInteger(sPropertyName);
             break;
     }
 }
 
-
-void DescriptionGenerator::AppendString (const OUString& sString)
-{
-    msDescription.append (sString);
-}
-
+void DescriptionGenerator::AppendString(const OUString& sString) { msDescription.append(sString); }
 
 /** Search for the given color in the global color table.  If found append
     its name to the description.  Otherwise append its RGB tuple.
 */
-void DescriptionGenerator::AddColor (const OUString& sPropertyName)
+void DescriptionGenerator::AddColor(const OUString& sPropertyName)
 {
     msDescription.append('=');
 
     try
     {
-
         tools::Long nValue(0);
         if (mxSet.is())
         {
-            uno::Any aValue = mxSet->getPropertyValue (sPropertyName);
+            uno::Any aValue = mxSet->getPropertyValue(sPropertyName);
             aValue >>= nValue;
         }
 
-        msDescription.append (lookUpColorName(nValue));
+        msDescription.append(lookUpColorName(nValue));
     }
-    catch (const css::beans::UnknownPropertyException &)
+    catch (const css::beans::UnknownPropertyException&)
     {
-        msDescription.append ("<unknown>");
+        msDescription.append("<unknown>");
     }
 }
 
-
-void DescriptionGenerator::AddInteger (const OUString& sPropertyName)
+void DescriptionGenerator::AddInteger(const OUString& sPropertyName)
 {
     msDescription.append('=');
 
@@ -186,15 +167,15 @@ void DescriptionGenerator::AddInteger (const OUString& sPropertyName)
     {
         if (mxSet.is())
         {
-            uno::Any aValue = mxSet->getPropertyValue (sPropertyName);
+            uno::Any aValue = mxSet->getPropertyValue(sPropertyName);
             tools::Long nValue = 0;
             aValue >>= nValue;
-            msDescription.append (nValue);
+            msDescription.append(nValue);
         }
     }
-    catch (const css::beans::UnknownPropertyException &)
+    catch (const css::beans::UnknownPropertyException&)
     {
-        msDescription.append ("<unknown>");
+        msDescription.append("<unknown>");
     }
 }
 

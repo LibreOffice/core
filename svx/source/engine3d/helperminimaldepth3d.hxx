@@ -20,11 +20,9 @@
 #ifndef INCLUDED_SVX_SOURCE_ENGINE3D_HELPERMINIMALDEPTH3D_HXX
 #define INCLUDED_SVX_SOURCE_ENGINE3D_HELPERMINIMALDEPTH3D_HXX
 
-
 // predefines
 
 class E3dCompoundObject;
-
 
 /** support extracting the minimal depth of a 3d object in its scene
 
@@ -41,7 +39,6 @@ class E3dCompoundObject;
 // support extracting the minimal depth of a 3d object in its scene
 
 double getMinimalDepthInViewCoordinates(const E3dCompoundObject& rObject);
-
 
 #endif // INCLUDED_SVX_SOURCE_ENGINE3D_HELPERMINIMALDEPTH3D_HXX
 

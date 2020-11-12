@@ -24,17 +24,18 @@
 #include <svx/svdtrans.hxx>
 #include <vcl/fieldvalues.hxx>
 
-inline OUString GetUnitString( tools::Long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
+inline OUString GetUnitString(tools::Long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep)
 {
-    OUStringBuffer aVal = OUString::number(
-        vcl::ConvertValue(nVal_100, 2, MapUnit::Map100thMM, eFieldUnit));
+    OUStringBuffer aVal
+        = OUString::number(vcl::ConvertValue(nVal_100, 2, MapUnit::Map100thMM, eFieldUnit));
 
-    while( aVal.getLength() < 3 )
-        aVal.insert( 0, "0" );
+    while (aVal.getLength() < 3)
+        aVal.insert(0, "0");
 
-    aVal.insert( aVal.getLength() - 2, cSep );
+    aVal.insert(aVal.getLength() - 2, cSep);
     OUString aSuffix = SdrFormatter::GetUnitStr(eFieldUnit);
-    if (eFieldUnit != FieldUnit::NONE && eFieldUnit != FieldUnit::DEGREE && eFieldUnit != FieldUnit::INCH)
+    if (eFieldUnit != FieldUnit::NONE && eFieldUnit != FieldUnit::DEGREE
+        && eFieldUnit != FieldUnit::INCH)
         aVal.append(" ");
     if (eFieldUnit == FieldUnit::INCH)
     {

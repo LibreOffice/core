@@ -24,10 +24,9 @@
 
 namespace svx
 {
-    typedef sal_uInt16 SfxSlotId;
+typedef sal_uInt16 SfxSlotId;
 }
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

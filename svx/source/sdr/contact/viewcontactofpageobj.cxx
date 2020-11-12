@@ -25,29 +25,28 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
-namespace sdr::contact {
-
-ViewObjectContact& ViewContactOfPageObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+namespace sdr::contact
+{
+ViewObjectContact&
+ViewContactOfPageObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
     ViewObjectContact* pRetval = new ViewObjectContactOfPageObj(rObjectContact, *this);
     return *pRetval;
 }
 
 ViewContactOfPageObj::ViewContactOfPageObj(SdrPageObj& rPageObj)
-:   ViewContactOfSdrObj(rPageObj)
+    : ViewContactOfSdrObj(rPageObj)
 {
 }
 
-ViewContactOfPageObj::~ViewContactOfPageObj()
-{
-}
+ViewContactOfPageObj::~ViewContactOfPageObj() {}
 
 // #i35972# React on changes of the object of this ViewContact
 void ViewContactOfPageObj::ActionChanged()
 {
     static bool bIsInActionChange(false);
 
-    if(!bIsInActionChange)
+    if (!bIsInActionChange)
     {
         // set recursion flag, see description in *.hxx
         bIsInActionChange = true;
@@ -60,7 +59,8 @@ void ViewContactOfPageObj::ActionChanged()
     }
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageObj::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer
+ViewContactOfPageObj::createViewIndependentPrimitive2DSequence() const
 {
     // create graphical visualisation data. Since this is the view-independent version which should not be used,
     // create a replacement graphic visualisation here. Use GetLastBoundRect to access the model data directly
@@ -69,11 +69,11 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageObj::createView
     const basegfx::B2DRange aModelRange = vcl::unotools::b2DRectangleFromRectangle(aModelRectangle);
     const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aModelRange));
     const basegfx::BColor aYellow(1.0, 1.0, 0.0);
-    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));
+    const drawinglayer::primitive2d::Primitive2DReference xReference(
+        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));
 
-    return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+    return drawinglayer::primitive2d::Primitive2DContainer{ xReference };
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

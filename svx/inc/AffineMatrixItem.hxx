@@ -27,7 +27,7 @@ class SfxItemPool;
 class AffineMatrixItem final : public SfxPoolItem
 {
 private:
-    css::geometry::AffineMatrix2D        maMatrix;
+    css::geometry::AffineMatrix2D maMatrix;
 
 public:
     AffineMatrixItem(const css::geometry::AffineMatrix2D* pMatrix);
@@ -35,10 +35,10 @@ public:
     virtual ~AffineMatrixItem() override;
 
     virtual bool operator==(const SfxPoolItem&) const override;
-    virtual AffineMatrixItem* Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual AffineMatrixItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

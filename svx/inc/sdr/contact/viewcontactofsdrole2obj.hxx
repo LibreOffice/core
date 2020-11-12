@@ -26,8 +26,8 @@
 
 class Graphic;
 
-namespace sdr::contact {
-
+namespace sdr::contact
+{
 class ViewContactOfSdrOle2Obj final : public ViewContactOfSdrRectObj
 {
 private:
@@ -36,14 +36,12 @@ private:
 
     // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual ViewObjectContact&
+    CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
 public:
     // access to SdrOle2Obj
-    const SdrOle2Obj& GetOle2Obj() const
-    {
-        return static_cast<const SdrOle2Obj&>(GetSdrObject());
-    }
+    const SdrOle2Obj& GetOle2Obj() const { return static_cast<const SdrOle2Obj&>(GetSdrObject()); }
 
     /// helper to create transformation from SdrObject
     basegfx::B2DHomMatrix createObjectTransform() const;
@@ -61,16 +59,16 @@ public:
     // #i123539# get rid of buffered chart content (if there) on change
     virtual void ActionChanged() override;
 
-    virtual basegfx::B2DRange getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const override;
+    virtual basegfx::B2DRange
+    getRange(const drawinglayer::geometry::ViewInformation2D& rViewInfo2D) const override;
 
 private:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data, just wraps to call createPrimitive2DSequenceWithParameters(false)
-    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer
+    createViewIndependentPrimitive2DSequence() const override;
 };
-
 }
-
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDROLE2OBJ_HXX
 

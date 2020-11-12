@@ -29,36 +29,32 @@
 using namespace ::com::sun::star;
 using namespace ::cppu;
 
-namespace {
-
+namespace
+{
 class SvxUnoDashTable : public SvxUnoNameItemTable
 {
 public:
-    explicit SvxUnoDashTable( SdrModel* pModel ) throw();
+    explicit SvxUnoDashTable(SdrModel* pModel) throw();
 
     virtual NameOrIndex* createItem() const override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override;
+    virtual uno::Type SAL_CALL getElementType() override;
 };
-
 }
 
-SvxUnoDashTable::SvxUnoDashTable( SdrModel* pModel ) throw()
-: SvxUnoNameItemTable( pModel, XATTR_LINEDASH, MID_LINEDASH )
+SvxUnoDashTable::SvxUnoDashTable(SdrModel* pModel) throw()
+    : SvxUnoNameItemTable(pModel, XATTR_LINEDASH, MID_LINEDASH)
 {
 }
 
-OUString SAL_CALL SvxUnoDashTable::getImplementationName()
-{
-    return "SvxUnoDashTable";
-}
+OUString SAL_CALL SvxUnoDashTable::getImplementationName() { return "SvxUnoDashTable"; }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoDashTable::getSupportedServiceNames(  )
+uno::Sequence<OUString> SAL_CALL SvxUnoDashTable::getSupportedServiceNames()
 {
     return { "com.sun.star.drawing.DashTable" };
 }
@@ -66,12 +62,12 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDashTable::getSupportedServiceNames(  )
 NameOrIndex* SvxUnoDashTable::createItem() const
 {
     XLineDashItem* pNewItem = new XLineDashItem();
-    pNewItem->SetWhich( XATTR_LINEDASH ); // set which id for pooling
+    pNewItem->SetWhich(XATTR_LINEDASH); // set which id for pooling
     return pNewItem;
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoDashTable::getElementType(  )
+uno::Type SAL_CALL SvxUnoDashTable::getElementType()
 {
     return cppu::UnoType<drawing::LineDash>::get();
 }
@@ -79,10 +75,9 @@ uno::Type SAL_CALL SvxUnoDashTable::getElementType(  )
 /**
  * Create a gradienttable
  */
-uno::Reference< uno::XInterface > SvxUnoDashTable_createInstance( SdrModel* pModel )
+uno::Reference<uno::XInterface> SvxUnoDashTable_createInstance(SdrModel* pModel)
 {
     return *new SvxUnoDashTable(pModel);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,8 +26,9 @@ class ImpChainLinkProperties;
 class SdrTextObj;
 class SdrModel;
 
-namespace rtl {
-    class OUString;
+namespace rtl
+{
+class OUString;
 }
 
 typedef OUString ChainLinkId;
@@ -45,11 +46,12 @@ class ImpChainLinkProperties
 protected:
     friend class TextChain;
 
-    ImpChainLinkProperties() {
+    ImpChainLinkProperties()
+    {
         aNilChainingEvent = false;
         aCursorEvent = CursorChainingEvent::NULL_EVENT;
-        aPreChainingSel = ESelection(0,0,0,0);
-        aPostChainingSel = ESelection(0,0,0,0);
+        aPreChainingSel = ESelection(0, 0, 0, 0);
+        aPostChainingSel = ESelection(0, 0, 0, 0);
         aIsPartOfLastParaInNextLink = false; // XXX: Should come from file
         aSwitchingToNextBox = false;
     }
@@ -64,40 +66,39 @@ private:
     bool aSwitchingToNextBox;
 };
 
-
 class TextChain
 {
 public:
     ~TextChain();
 
-    ImpChainLinkProperties *GetLinkProperties(const SdrTextObj *);
+    ImpChainLinkProperties* GetLinkProperties(const SdrTextObj*);
 
     // Specific Link Properties
-    CursorChainingEvent const & GetCursorEvent(const SdrTextObj *);
-    void SetCursorEvent(const SdrTextObj *, CursorChainingEvent const &);
+    CursorChainingEvent const& GetCursorEvent(const SdrTextObj*);
+    void SetCursorEvent(const SdrTextObj*, CursorChainingEvent const&);
 
-    bool GetNilChainingEvent(const SdrTextObj *);
-    void SetNilChainingEvent(const SdrTextObj *, bool);
+    bool GetNilChainingEvent(const SdrTextObj*);
+    void SetNilChainingEvent(const SdrTextObj*, bool);
 
-    ESelection const & GetPreChainingSel(const SdrTextObj *);
-    void SetPreChainingSel(const SdrTextObj *, ESelection const &);
+    ESelection const& GetPreChainingSel(const SdrTextObj*);
+    void SetPreChainingSel(const SdrTextObj*, ESelection const&);
 
-    ESelection const & GetPostChainingSel(const SdrTextObj *);
-    void SetPostChainingSel(const SdrTextObj *, ESelection const &);
+    ESelection const& GetPostChainingSel(const SdrTextObj*);
+    void SetPostChainingSel(const SdrTextObj*, ESelection const&);
 
     // return whether a paragraph is split between this box and the next
-    bool GetIsPartOfLastParaInNextLink(const SdrTextObj *);
-    void SetIsPartOfLastParaInNextLink(const SdrTextObj *, bool );
+    bool GetIsPartOfLastParaInNextLink(const SdrTextObj*);
+    void SetIsPartOfLastParaInNextLink(const SdrTextObj*, bool);
 
     // return whether we are currently moving the cursor to the next box (useful to know whether we should prevent SetOutlinerParaObject invocations in SdrTextObj::EndTextEdit)
-    bool GetSwitchingToNextBox(const SdrTextObj *);
-    void SetSwitchingToNextBox(const SdrTextObj *, bool);
+    bool GetSwitchingToNextBox(const SdrTextObj*);
+    void SetSwitchingToNextBox(const SdrTextObj*, bool);
 
 protected:
     TextChain();
 
 private:
-    std::map< ChainLinkId, ImpChainLinkProperties *> maLinkPropertiesMap;
+    std::map<ChainLinkId, ImpChainLinkProperties*> maLinkPropertiesMap;
 
     friend class SdrModel;
 };

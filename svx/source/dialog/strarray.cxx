@@ -24,10 +24,7 @@
 #include <fieldunit.hrc>
 #include <numberingtype.hrc>
 
-sal_uInt32 SvxFieldUnitTable::Count()
-{
-    return SAL_N_ELEMENTS(RID_SVXSTR_FIELDUNIT_TABLE);
-}
+sal_uInt32 SvxFieldUnitTable::Count() { return SAL_N_ELEMENTS(RID_SVXSTR_FIELDUNIT_TABLE); }
 
 OUString SvxFieldUnitTable::GetString(sal_uInt32 nPos)
 {
@@ -50,10 +47,7 @@ OUString SvxAttrNameTable::GetString(sal_uInt32 nPos)
     return OUString();
 }
 
-sal_uInt32 SvxAttrNameTable::Count()
-{
-    return SAL_N_ELEMENTS(RID_ATTR_NAMES);
-}
+sal_uInt32 SvxAttrNameTable::Count() { return SAL_N_ELEMENTS(RID_ATTR_NAMES); }
 
 sal_uInt32 SvxAttrNameTable::FindIndex(int nValue)
 {
@@ -72,10 +66,7 @@ OUString SvxNumberingTypeTable::GetString(sal_uInt32 nPos)
     return OUString();
 }
 
-sal_uInt32 SvxNumberingTypeTable::Count()
-{
-    return SAL_N_ELEMENTS(RID_SVXSTRARY_NUMBERINGTYPE);
-}
+sal_uInt32 SvxNumberingTypeTable::Count() { return SAL_N_ELEMENTS(RID_SVXSTRARY_NUMBERINGTYPE); }
 
 int SvxNumberingTypeTable::GetValue(sal_uInt32 nPos)
 {
@@ -93,6 +84,5 @@ sal_uInt32 SvxNumberingTypeTable::FindIndex(int nValue)
     }
     return RESARRAY_INDEX_NOTFOUND;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

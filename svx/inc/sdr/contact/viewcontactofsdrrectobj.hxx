@@ -22,16 +22,13 @@
 #include <sdr/contact/viewcontactoftextobj.hxx>
 #include <svx/svdorect.hxx>
 
-namespace sdr::contact {
-
+namespace sdr::contact
+{
 class ViewContactOfSdrRectObj : public ViewContactOfTextObj
 {
 protected:
     // internal access to SdrRectObj
-    const SdrRectObj& GetRectObj() const
-    {
-        return static_cast<const SdrRectObj&>(GetSdrObject());
-    }
+    const SdrRectObj& GetRectObj() const { return static_cast<const SdrRectObj&>(GetSdrObject()); }
 
 public:
     // basic constructor, used from SdrObject.
@@ -41,9 +38,9 @@ public:
 protected:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
-    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer
+    createViewIndependentPrimitive2DSequence() const override;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,17 +20,14 @@
 #include <sdr/contact/viewcontactoftextobj.hxx>
 #include <svx/svdotext.hxx>
 
-namespace sdr::contact {
-
+namespace sdr::contact
+{
 ViewContactOfTextObj::ViewContactOfTextObj(SdrTextObj& rTextObj)
-:   ViewContactOfSdrObj(rTextObj)
+    : ViewContactOfSdrObj(rTextObj)
 {
 }
 
-ViewContactOfTextObj::~ViewContactOfTextObj()
-{
-}
-
+ViewContactOfTextObj::~ViewContactOfTextObj() {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

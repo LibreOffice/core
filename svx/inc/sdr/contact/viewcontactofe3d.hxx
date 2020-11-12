@@ -23,14 +23,18 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 
-namespace drawinglayer::attribute { class SdrLineAttribute; }
-namespace basegfx {
-    class BColor;
-    class B3DHomMatrix;
+namespace drawinglayer::attribute
+{
+class SdrLineAttribute;
+}
+namespace basegfx
+{
+class BColor;
+class B3DHomMatrix;
 }
 
-namespace sdr::contact {
-
+namespace sdr::contact
+{
 class ViewContactOfE3dScene;
 
 class ViewContactOfE3d : public ViewContactOfSdrObj
@@ -38,7 +42,8 @@ class ViewContactOfE3d : public ViewContactOfSdrObj
 protected:
     // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual ViewObjectContact&
+    CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
 public:
     // basic constructor, used from E3dObject.
@@ -46,15 +51,11 @@ public:
     virtual ~ViewContactOfE3d() override;
 
     // access to E3dObject
-    const E3dObject& GetE3dObject() const
-    {
-        return static_cast<const E3dObject&>(GetSdrObject());
-    }
+    const E3dObject& GetE3dObject() const { return static_cast<const E3dObject&>(GetSdrObject()); }
 
     // public helpers
     drawinglayer::primitive2d::Primitive2DContainer impCreateWithGivenPrimitive3DContainer(
         const drawinglayer::primitive3d::Primitive3DContainer& rxContent3D) const;
-
 
     // primitive stuff
 
@@ -62,22 +63,24 @@ public:
     // for the graphical visualisation and needs to be supported by all 3D VCs which
     // can be visualized. It does NOT contain the object transformation to be able to
     // buffer for all possible usages
-    drawinglayer::primitive3d::Primitive3DContainer              mxViewIndependentPrimitive3DContainer;
+    drawinglayer::primitive3d::Primitive3DContainer mxViewIndependentPrimitive3DContainer;
 
 protected:
     // This method is responsible for creating the graphical visualisation data which is
     // stored in mxViewIndependentPrimitive3DContainer, but without object transformation
-    virtual drawinglayer::primitive3d::Primitive3DContainer createViewIndependentPrimitive3DContainer() const = 0;
+    virtual drawinglayer::primitive3d::Primitive3DContainer
+    createViewIndependentPrimitive3DContainer() const = 0;
 
     // This method is responsible for creating the graphical visualisation data derived ONLY from
     // the model data. The default implementation will try to create a 3D to 2D embedding (will work
     // when scene is known) which can then be used for 2D processing concerning ranges
-    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer
+    createViewIndependentPrimitive2DSequence() const override;
 
 public:
     // access to the local primitive without the object's local 3D transform. This is e.g. needed
     // to get the not-yet transformed BoundVolume for e.g. interactions
-    drawinglayer::primitive3d::Primitive3DContainer const & getVIP3DSWithoutObjectTransform() const;
+    drawinglayer::primitive3d::Primitive3DContainer const& getVIP3DSWithoutObjectTransform() const;
 
     // access to the local primitive. This will ensure that the list is
     // current in comparing the local list content with a fresh created incarnation. It will
@@ -85,8 +88,6 @@ public:
     // local 3d transform is used
     drawinglayer::primitive3d::Primitive3DContainer getViewIndependentPrimitive3DContainer() const;
 };
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

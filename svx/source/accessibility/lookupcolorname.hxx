@@ -24,8 +24,8 @@
 
 #include <rtl/ustring.hxx>
 
-namespace accessibility {
-
+namespace accessibility
+{
 /** This is a color name lookup targeted to be used by the accessibility
     <type>DescriptionGenerator</type> class.  It encapsulates a
     <type>com.sun.star.drawing.ColorTable</type> and provides an inverse look
@@ -49,7 +49,6 @@ namespace accessibility {
     digits for each color component.
 */
 OUString lookUpColorName(tools::Long color);
-
 }
 
 #endif

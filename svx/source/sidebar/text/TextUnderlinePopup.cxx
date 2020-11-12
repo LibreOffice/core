@@ -22,16 +22,15 @@
 
 using namespace svx;
 
-TextUnderlinePopup::TextUnderlinePopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+TextUnderlinePopup::TextUnderlinePopup(
+    const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }
 
-TextUnderlinePopup::~TextUnderlinePopup()
-{
-}
+TextUnderlinePopup::~TextUnderlinePopup() {}
 
-void TextUnderlinePopup::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+void TextUnderlinePopup::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
 {
     PopupWindowController::initialize(rArguments);
 
@@ -52,9 +51,10 @@ std::unique_ptr<WeldToolbarPopup> TextUnderlinePopup::weldPopupWindow()
     return std::make_unique<TextUnderlineControl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> TextUnderlinePopup::createVclPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> TextUnderlinePopup::createVclPopupWindow(vcl::Window* pParent)
 {
-    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(
+        getFrameInterface(), pParent,
         std::make_unique<TextUnderlineControl>(this, pParent->GetFrameWeld()));
 
     mxInterimPopover->Show();
@@ -72,10 +72,9 @@ css::uno::Sequence<OUString> TextUnderlinePopup::getSupportedServiceNames()
     return { "com.sun.star.frame.ToolbarController" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_UnderlineToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::XComponentContext* rContext, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new TextUnderlinePopup(rContext));
 }

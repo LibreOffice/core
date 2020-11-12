@@ -25,10 +25,9 @@
 
 using vcl::EnumContext;
 
-
-namespace svx::sidebar {
-
-EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMarkList& rMarkList)
+namespace svx::sidebar
+{
+EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC(const SdrMarkList& rMarkList)
 {
     EnumContext::Context eContext = EnumContext::Context::Unknown;
 
@@ -42,14 +41,15 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMark
         case 1:
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if ( dynamic_cast<const SdrTextObj*>( pObj) != nullptr && static_cast<SdrTextObj*>(pObj)->IsInEditMode() )
+            if (dynamic_cast<const SdrTextObj*>(pObj) != nullptr
+                && static_cast<SdrTextObj*>(pObj)->IsInEditMode())
             {
                 eContext = EnumContext::Context::DrawText;
             }
             else
             {
-                const SdrInventor nInv   = pObj->GetObjInventor();
-                const sal_uInt16  nObjId = pObj->GetObjIdentifier();
+                const SdrInventor nInv = pObj->GetObjInventor();
+                const sal_uInt16 nObjId = pObj->GetObjIdentifier();
                 if (nInv == SdrInventor::Default)
                     eContext = GetContextForObjectId_SC(nObjId);
                 else if (nInv == SdrInventor::FmForm)
@@ -65,7 +65,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMark
             {
                 case SdrInventor::Default:
                 {
-                    const sal_uInt16 nObjId (GetObjectTypeFromMark(rMarkList));
+                    const sal_uInt16 nObjId(GetObjectTypeFromMark(rMarkList));
                     if (nObjId == 0)
                         eContext = EnumContext::Context::MultiObject;
                     else
@@ -81,7 +81,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMark
                     eContext = EnumContext::Context::MultiObject;
                     break;
 
-                default: break;
+                default:
+                    break;
             }
         }
     }
@@ -89,10 +90,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMark
     return eContext;
 }
 
-
-EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
-    const SdrMarkList& rMarkList,
-    const ViewType eViewType)
+EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD(const SdrMarkList& rMarkList,
+                                                                  const ViewType eViewType)
 {
     EnumContext::Context eContext = EnumContext::Context::Unknown;
 
@@ -101,7 +100,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
     switch (rMarkList.GetMarkCount())
     {
         case 0:
-            switch(eViewType)
+            switch (eViewType)
             {
                 case ViewType::Standard:
                     eContext = EnumContext::Context::DrawPage;
@@ -121,7 +120,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
         case 1:
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if (dynamic_cast<const SdrTextObj*>( pObj) != nullptr && static_cast<SdrTextObj*>(pObj)->IsInEditMode())
+            if (dynamic_cast<const SdrTextObj*>(pObj) != nullptr
+                && static_cast<SdrTextObj*>(pObj)->IsInEditMode())
             {
                 if (pObj->GetObjIdentifier() == OBJ_TABLE)
                 {
@@ -135,8 +135,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
             }
             else
             {
-                const SdrInventor nInv   = pObj->GetObjInventor();
-                sal_uInt16        nObjId = pObj->GetObjIdentifier();
+                const SdrInventor nInv = pObj->GetObjInventor();
+                sal_uInt16 nObjId = pObj->GetObjIdentifier();
                 if (nInv == SdrInventor::Default)
                 {
                     if (nObjId == OBJ_GRUP)
@@ -185,7 +185,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
                     eContext = EnumContext::Context::MultiObject;
                     break;
 
-                default: break;
+                default:
+                    break;
             }
             break;
         }
@@ -194,8 +195,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
     return eContext;
 }
 
-
-EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC (const sal_uInt16 nObjectId)
+EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC(const sal_uInt16 nObjectId)
 {
     switch (nObjectId)
     {
@@ -238,10 +238,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC (const sal_uInt
     }
 }
 
-
-EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
-    const sal_uInt16 nObjectId,
-    const ViewType eViewType)
+EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD(const sal_uInt16 nObjectId,
+                                                                 const ViewType eViewType)
 {
     switch (nObjectId)
     {
@@ -299,10 +297,9 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
     }
 }
 
-
-SdrInventor SelectionAnalyzer::GetInventorTypeFromMark (const SdrMarkList& rMarkList)
+SdrInventor SelectionAnalyzer::GetInventorTypeFromMark(const SdrMarkList& rMarkList)
 {
-    const size_t nMarkCount (rMarkList.GetMarkCount());
+    const size_t nMarkCount(rMarkList.GetMarkCount());
 
     if (nMarkCount < 1)
         return SdrInventor::Unknown;
@@ -311,11 +308,11 @@ SdrInventor SelectionAnalyzer::GetInventorTypeFromMark (const SdrMarkList& rMark
     SdrObject* pObj = pMark->GetMarkedSdrObj();
     const SdrInventor nFirstInv = pObj->GetObjInventor();
 
-    for (size_t nIndex=1; nIndex<nMarkCount; ++nIndex)
+    for (size_t nIndex = 1; nIndex < nMarkCount; ++nIndex)
     {
         pMark = rMarkList.GetMark(nIndex);
         pObj = pMark->GetMarkedSdrObj();
-        const SdrInventor nInv (pObj->GetObjInventor());
+        const SdrInventor nInv(pObj->GetObjInventor());
 
         if (nInv != nFirstInv)
             return SdrInventor::Unknown;
@@ -324,15 +321,14 @@ SdrInventor SelectionAnalyzer::GetInventorTypeFromMark (const SdrMarkList& rMark
     return nFirstInv;
 }
 
-
-sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup (const SdrObject* pObj)
+sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup(const SdrObject* pObj)
 {
     SdrObjList* pObjList = pObj->GetSubList();
     if (pObjList)
     {
-        const size_t nSubObjCount (pObjList->GetObjCount());
+        const size_t nSubObjCount(pObjList->GetObjCount());
 
-        if (nSubObjCount>0)
+        if (nSubObjCount > 0)
         {
             SdrObject* pSubObj = pObjList->GetObj(0);
             sal_uInt16 nResultType = pSubObj->GetObjIdentifier();
@@ -346,12 +342,12 @@ sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup (const SdrObject* pObj)
             if (IsTextObjType(nResultType))
                 nResultType = OBJ_TEXT;
 
-            for (size_t nIndex=1; nIndex<nSubObjCount; ++nIndex)
+            for (size_t nIndex = 1; nIndex < nSubObjCount; ++nIndex)
             {
                 pSubObj = pObjList->GetObj(nIndex);
-                sal_uInt16 nType (pSubObj->GetObjIdentifier());
+                sal_uInt16 nType(pSubObj->GetObjIdentifier());
 
-                if(nType == OBJ_GRUP)
+                if (nType == OBJ_GRUP)
                     nType = GetObjectTypeFromGroup(pSubObj);
 
                 if (IsShapeType(nType))
@@ -377,10 +373,9 @@ sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup (const SdrObject* pObj)
     return 0;
 }
 
-
-sal_uInt16  SelectionAnalyzer::GetObjectTypeFromMark (const SdrMarkList& rMarkList)
+sal_uInt16 SelectionAnalyzer::GetObjectTypeFromMark(const SdrMarkList& rMarkList)
 {
-    const size_t nMarkCount (rMarkList.GetMarkCount());
+    const size_t nMarkCount(rMarkList.GetMarkCount());
 
     if (nMarkCount < 1)
         return 0;
@@ -389,7 +384,7 @@ sal_uInt16  SelectionAnalyzer::GetObjectTypeFromMark (const SdrMarkList& rMarkLi
     SdrObject* pObj = pMark->GetMarkedSdrObj();
     sal_uInt16 nResultType = pObj->GetObjIdentifier();
 
-    if(nResultType == OBJ_GRUP)
+    if (nResultType == OBJ_GRUP)
         nResultType = GetObjectTypeFromGroup(pObj);
 
     if (IsShapeType(nResultType))
@@ -398,13 +393,13 @@ sal_uInt16  SelectionAnalyzer::GetObjectTypeFromMark (const SdrMarkList& rMarkLi
     if (IsTextObjType(nResultType))
         nResultType = OBJ_TEXT;
 
-    for (size_t nIndex=1; nIndex<nMarkCount; ++nIndex)
+    for (size_t nIndex = 1; nIndex < nMarkCount; ++nIndex)
     {
         pMark = rMarkList.GetMark(nIndex);
         pObj = pMark->GetMarkedSdrObj();
         sal_uInt16 nType = pObj->GetObjIdentifier();
 
-        if(nType == OBJ_GRUP)
+        if (nType == OBJ_GRUP)
             nType = GetObjectTypeFromGroup(pObj);
 
         if (IsShapeType(nType))
@@ -426,8 +421,7 @@ sal_uInt16  SelectionAnalyzer::GetObjectTypeFromMark (const SdrMarkList& rMarkLi
     return nResultType;
 }
 
-
-bool SelectionAnalyzer::IsShapeType (const sal_uInt16 nType)
+bool SelectionAnalyzer::IsShapeType(const sal_uInt16 nType)
 {
     switch (nType)
     {
@@ -458,10 +452,9 @@ bool SelectionAnalyzer::IsShapeType (const sal_uInt16 nType)
     }
 }
 
-
-bool SelectionAnalyzer::IsTextObjType (const sal_uInt16 nType)
+bool SelectionAnalyzer::IsTextObjType(const sal_uInt16 nType)
 {
-    switch(nType)
+    switch (nType)
     {
         case OBJ_TEXT:
         case OBJ_TITLETEXT:
@@ -472,7 +465,6 @@ bool SelectionAnalyzer::IsTextObjType (const sal_uInt16 nType)
             return false;
     }
 }
-
 
 } // end of namespace svx::sidebar
 

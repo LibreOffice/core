@@ -30,7 +30,7 @@ using namespace css::style;
 
 Reference<XDefaultNumberingProvider> SvxNumOptionsTabPageHelper::GetNumberingProvider()
 {
-    Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
+    Reference<XComponentContext> xContext(::comphelper::getProcessComponentContext());
     Reference<XDefaultNumberingProvider> xRet = text::DefaultNumberingProvider::create(xContext);
     return xRet;
 }
@@ -44,19 +44,19 @@ void SvxNumOptionsTabPageHelper::GetI18nNumbering(weld::ComboBox& rFmtLB, sal_uI
     // the i18n framework per configuration must be removed from the listbox.
     // Do not remove a special entry matching nDoNotRemove.
     const sal_uInt16 nDontRemove = SAL_MAX_UINT16;
-    ::std::vector< sal_uInt16> aRemove( rFmtLB.get_count(), nDontRemove);
-    for (size_t i=0; i<aRemove.size(); ++i)
+    ::std::vector<sal_uInt16> aRemove(rFmtLB.get_count(), nDontRemove);
+    for (size_t i = 0; i < aRemove.size(); ++i)
     {
         sal_uInt16 nEntryData = rFmtLB.get_id(i).toInt32();
         if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N && nEntryData != nDoNotRemove)
             aRemove[i] = nEntryData;
     }
-    if(xInfo.is())
+    if (xInfo.is())
     {
-        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
-        for(const sal_Int16 nCurrent : aTypes)
+        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes();
+        for (const sal_Int16 nCurrent : aTypes)
         {
-            if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+            if (nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
             {
                 bool bInsert = true;
                 for (int nEntry = 0; nEntry < rFmtLB.get_count(); ++nEntry)
@@ -69,9 +69,9 @@ void SvxNumOptionsTabPageHelper::GetI18nNumbering(weld::ComboBox& rFmtLB, sal_uI
                         break;
                     }
                 }
-                if(bInsert)
+                if (bInsert)
                 {
-                    OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
+                    OUString aIdent = xInfo->getNumberingIdentifier(nCurrent);
                     rFmtLB.append(OUString::number(nCurrent), aIdent);
                 }
             }

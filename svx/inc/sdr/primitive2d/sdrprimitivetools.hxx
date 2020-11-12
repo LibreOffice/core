@@ -22,22 +22,20 @@
 
 #include <vcl/bitmapex.hxx>
 
-
 // predefines
 
-namespace basegfx {
-    class BColor;
+namespace basegfx
+{
+class BColor;
 }
-
 
 // helper methods
 
 namespace drawinglayer::primitive2d
-    {
-        // create a 3x3 cross in given color as BitmapEx
-        BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor);
+{
+// create a 3x3 cross in given color as BitmapEx
+BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor);
 } // end of namespace drawinglayer::primitive2d
-
 
 #endif // INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRPRIMITIVETOOLS_HXX
 

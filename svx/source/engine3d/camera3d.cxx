@@ -20,9 +20,9 @@
 #include <svx/camera3d.hxx>
 
 Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
-                   double fFocalLen) :
-    fBankAngle(0),
-    bAutoAdjustProjection(true)
+                   double fFocalLen)
+    : fBankAngle(0)
+    , bAutoAdjustProjection(true)
 {
     SetPosition(rPos);
     SetLookAt(rLookAt);
@@ -41,13 +41,13 @@ Camera3D::Camera3D()
 void Camera3D::SetViewWindow(double fX, double fY, double fW, double fH)
 {
     Viewport3D::SetViewWindow(fX, fY, fW, fH);
-    if ( bAutoAdjustProjection )
+    if (bAutoAdjustProjection)
         SetFocalLength(fFocalLength);
 }
 
 void Camera3D::SetPosition(const basegfx::B3DPoint& rNewPos)
 {
-    if ( rNewPos != aPosition )
+    if (rNewPos != aPosition)
     {
         aPosition = rNewPos;
         SetVRP(aPosition);
@@ -58,7 +58,7 @@ void Camera3D::SetPosition(const basegfx::B3DPoint& rNewPos)
 
 void Camera3D::SetLookAt(const basegfx::B3DPoint& rNewLookAt)
 {
-    if ( rNewLookAt != aLookAt )
+    if (rNewLookAt != aLookAt)
     {
         aLookAt = rNewLookAt;
         SetVPN(aPosition - aLookAt);
@@ -69,7 +69,7 @@ void Camera3D::SetLookAt(const basegfx::B3DPoint& rNewLookAt)
 void Camera3D::SetPosAndLookAt(const basegfx::B3DPoint& rNewPos,
                                const basegfx::B3DPoint& rNewLookAt)
 {
-    if ( rNewPos != aPosition || rNewLookAt != aLookAt )
+    if (rNewPos != aPosition || rNewLookAt != aLookAt)
     {
         aPosition = rNewPos;
         aLookAt = rNewLookAt;
@@ -86,15 +86,15 @@ void Camera3D::SetBankAngle(double fAngle)
     basegfx::B3DVector aPrj(aDiff);
     fBankAngle = fAngle;
 
-    if ( aDiff.getY() == 0 )
+    if (aDiff.getY() == 0)
     {
         aPrj.setY(-1.0);
     }
     else
-    {   // aPrj = Projection from aDiff on the XZ-plane
+    { // aPrj = Projection from aDiff on the XZ-plane
         aPrj.setY(0.0);
 
-        if ( aDiff.getY() < 0.0 )
+        if (aDiff.getY() < 0.0)
         {
             aPrj = -aPrj;
         }
@@ -110,7 +110,7 @@ void Camera3D::SetBankAngle(double fAngle)
     basegfx::B3DHomMatrix aTf;
     const double fV(sqrt(aDiff.getY() * aDiff.getY() + aDiff.getZ() * aDiff.getZ()));
 
-    if ( fV != 0.0 )
+    if (fV != 0.0)
     {
         basegfx::B3DHomMatrix aTemp;
         const double fSin(aDiff.getY() / fV);
@@ -152,7 +152,7 @@ void Camera3D::SetBankAngle(double fAngle)
         aTf *= aTemp;
     }
 
-    if ( fV != 0.0 )
+    if (fV != 0.0)
     {
         basegfx::B3DHomMatrix aTemp;
         const double fSin(-aDiff.getY() / fV);
@@ -171,7 +171,7 @@ void Camera3D::SetBankAngle(double fAngle)
 
 void Camera3D::SetFocalLength(double fLen)
 {
-    if ( fLen < 5 )
+    if (fLen < 5)
         fLen = 5;
     SetPRP(basegfx::B3DPoint(0.0, 0.0, fLen / 35.0 * aViewWin.W));
     fFocalLength = fLen;
