@@ -383,28 +383,66 @@ static bool performTest(
         aSetData.Sequence[0] = *static_cast<TestElement const *>(&aSetData);
         // aSetData.Sequence[1] is empty
         xLBT->setValues(
-            aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short,
-            aSetData.UShort, aSetData.Long, aSetData.ULong, aSetData.Hyper,
-            aSetData.UHyper, aSetData.Float, aSetData.Double, aSetData.Enum,
-            aSetData.String, aSetData.Interface, aSetData.Any,
-            aSetData.Sequence, aSetData);
+            aSetData.Bool,
+            aSetData.Char,
+            aSetData.Byte,
+            aSetData.Short,
+            aSetData.UShort,
+            aSetData.Long,
+            aSetData.ULong,
+            aSetData.Hyper,
+            aSetData.UHyper,
+            aSetData.Float,
+            aSetData.Double,
+            aSetData.Enum,
+            aSetData.String,
+            aSetData.Interface,
+            aSetData.Any,
+            aSetData.Sequence,
+            aSetData);
         {
             TestData aRet;
             TestData aRet2;
             xLBT->getValues(
-                aRet.Bool, aRet.Char, aRet.Byte, aRet.Short, aRet.UShort,
-                aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float,
-                aRet.Double, aRet.Enum, aRet.String, aRet.Interface, aRet.Any,
-                aRet.Sequence, aRet2);
+                aRet.Bool,
+                aRet.Char,
+                aRet.Byte,
+                aRet.Short,
+                aRet.UShort,
+                aRet.Long,
+                aRet.ULong,
+                aRet.Hyper,
+                aRet.UHyper,
+                aRet.Float,
+                aRet.Double,
+                aRet.Enum,
+                aRet.String,
+                aRet.Interface,
+                aRet.Any,
+                aRet.Sequence,
+                aRet2);
             bRet &= check(
                 equals(aData, aRet) && equals(aData, aRet2), "getValues test");
             // Set last retrieved values:
             TestData aSV2ret(
                 xLBT->setValues2(
-                    aRet.Bool, aRet.Char, aRet.Byte, aRet.Short, aRet.UShort,
-                    aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float,
-                    aRet.Double, aRet.Enum, aRet.String, aRet.Interface,
-                    aRet.Any, aRet.Sequence, aRet2));
+                    aRet.Bool,
+                    aRet.Char,
+                    aRet.Byte,
+                    aRet.Short,
+                    aRet.UShort,
+                    aRet.Long,
+                    aRet.ULong,
+                    aRet.Hyper,
+                    aRet.UHyper,
+                    aRet.Float,
+                    aRet.Double,
+                    aRet.Enum,
+                    aRet.String,
+                    aRet.Interface,
+                    aRet.Any,
+                    aRet.Sequence,
+                    aRet2));
             // Check inout sequence order (=> inout sequence parameter was
             // switched by test objects):
             TestElement temp(aRet.Sequence[0]);
@@ -439,10 +477,23 @@ static bool performTest(
             TestData aRet2;
             TestData aGVret(
                 xLBT->getValues(
-                    aRet.Bool, aRet.Char, aRet.Byte, aRet.Short, aRet.UShort,
-                    aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float,
-                    aRet.Double, aRet.Enum, aRet.String, aRet.Interface,
-                    aRet.Any, aRet.Sequence, aRet2));
+                    aRet.Bool,
+                    aRet.Char,
+                    aRet.Byte,
+                    aRet.Short,
+                    aRet.UShort,
+                    aRet.Long,
+                    aRet.ULong,
+                    aRet.Hyper,
+                    aRet.UHyper,
+                    aRet.Float,
+                    aRet.Double,
+                    aRet.Enum,
+                    aRet.String,
+                    aRet.Interface,
+                    aRet.Any,
+                    aRet.Sequence,
+                    aRet2));
             bRet &= check(
                 (equals(aData, aRet) && equals(aData, aRet2) &&
                  equals(aData, aGVret)),
