@@ -844,7 +844,8 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     SfxItemPool* pPool = rCoreAttrs->GetPool();
 
-    if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::TLBR))
+    if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::TLBR) &&
+        m_aFrameSel.GetFrameBorderState(svx::FrameBorderType::TLBR) != svx::FrameBorderState::DontCare)
     {
         SvxLineItem aLineItem(*static_cast<const SvxLineItem*>(GetOldItem(*rCoreAttrs, SID_ATTR_BORDER_DIAG_TLBR)));
         aLineItem.SetLine(m_aFrameSel.GetFrameBorderStyle(svx::FrameBorderType::TLBR));
@@ -852,7 +853,8 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         bAttrsChanged = true;
     }
 
-    if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::BLTR))
+    if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::BLTR) &&
+        m_aFrameSel.GetFrameBorderState(svx::FrameBorderType::BLTR) != svx::FrameBorderState::DontCare)
     {
         SvxLineItem aLineItem(*static_cast<const SvxLineItem*>(GetOldItem(*rCoreAttrs, SID_ATTR_BORDER_DIAG_BLTR)));
         aLineItem.SetLine(m_aFrameSel.GetFrameBorderStyle(svx::FrameBorderType::BLTR));
