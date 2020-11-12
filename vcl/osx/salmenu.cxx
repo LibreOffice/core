@@ -25,7 +25,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
-
+#include <tools/long.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/window.hxx>
@@ -843,11 +843,11 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aRect.origin.x -= i_pReferenceFrame->maGeometry.nX;
     aRect.origin.y -= i_pReferenceFrame->maGeometry.nY + aRect.size.height;
 
-    return tools::Rectangle( Point(static_cast<long int>(aRect.origin.x),
-                static_cast<long int>(aRect.origin.y)
+    return tools::Rectangle( Point(static_cast<tools::Long>(aRect.origin.x),
+                static_cast<tools::Long>(aRect.origin.y)
                 ),
-              Size( static_cast<long int>(aRect.size.width),
-                static_cast<long int>(aRect.size.height)
+              Size( static_cast<tools::Long>(aRect.size.width),
+                static_cast<tools::Long>(aRect.size.height)
               )
             );
 }

@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_INC_OSX_SALPRN_H
 #define INCLUDED_VCL_INC_OSX_SALPRN_H
 
+#include <sal/config.h>
+
+#include <tools/long.hxx>
+
 #include <osx/osxvcltypes.h>
 
 #include <salprn.hxx>
@@ -72,7 +76,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     virtual bool                SetPrinterData( ImplJobSetup* pSetupData ) override;
     virtual bool                SetData( JobSetFlags i_nFlags, ImplJobSetup* i_pSetupData ) override;
     virtual void                GetPageInfo( const ImplJobSetup* i_pSetupData,
-                                             long& o_rOutWidth, long& o_rOutHeight,
+                                             tools::Long& o_rOutWidth, tools::Long& o_rOutHeight,
                                              Point& rPageOffset,
                                              Size& rPaperSize ) override;
     virtual sal_uInt32          GetCapabilities( const ImplJobSetup* i_pSetupData, PrinterCapType i_nType ) override;
@@ -102,8 +106,9 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     sal_Int32 getCurPageRangeCount() const { return mnCurPageRangeCount; }
 
     // match width/height against known paper formats, possibly switching orientation
-    const PaperInfo* matchPaper( long i_nWidth, long i_nHeight, Orientation& o_rOrientation ) const;
-    void setPaperSize( long i_nWidth, long i_nHeight, Orientation i_eSetOrientation );
+    const PaperInfo* matchPaper(
+        tools::Long i_nWidth, tools::Long i_nHeight, Orientation& o_rOrientation ) const;
+    void setPaperSize( tools::Long i_nWidth, tools::Long i_nHeight, Orientation i_eSetOrientation );
 
     private:
     AquaSalInfoPrinter( const AquaSalInfoPrinter& ) = delete;

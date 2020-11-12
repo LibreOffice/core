@@ -21,7 +21,7 @@
 
 #include <sal/macros.h>
 #include <tools/helpers.hxx>
-
+#include <tools/long.hxx>
 #include <vcl/event.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/settings.hxx>
@@ -613,8 +613,8 @@ static AquaSalFrame* getMouseContainerFrame()
 
         SalMouseEvent aEvent;
         aEvent.mnTime   = pDispatchFrame->mnLastEventTime;
-        aEvent.mnX      = static_cast<long>(aPt.x) - pDispatchFrame->maGeometry.nX;
-        aEvent.mnY      = static_cast<long>(aPt.y) - pDispatchFrame->maGeometry.nY;
+        aEvent.mnX      = static_cast<tools::Long>(aPt.x) - pDispatchFrame->maGeometry.nX;
+        aEvent.mnY      = static_cast<tools::Long>(aPt.y) - pDispatchFrame->maGeometry.nY;
         aEvent.mnButton = nButton;
         aEvent.mnCode   =  aEvent.mnButton | nModMask;
 
@@ -773,8 +773,8 @@ static AquaSalFrame* getMouseContainerFrame()
 
         SalWheelMouseEvent aEvent;
         aEvent.mnTime           = mpFrame->mnLastEventTime;
-        aEvent.mnX              = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY              = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnX              = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.nX;
+        aEvent.mnY              = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.nY;
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mnCode           |= KEY_MOD1; // we want zooming, no scrolling
         aEvent.mbDeltaIsPixel   = true;
@@ -833,8 +833,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
         SalWheelMouseEvent aEvent;
         aEvent.mnTime           = mpFrame->mnLastEventTime;
-        aEvent.mnX              = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY              = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnX              = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.nX;
+        aEvent.mnY              = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.nY;
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mbDeltaIsPixel   = true;
 
@@ -843,7 +843,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
         if( dX != 0.0 )
         {
-            aEvent.mnDelta = static_cast<long>(floor(dX));
+            aEvent.mnDelta = static_cast<tools::Long>(floor(dX));
             aEvent.mnNotchDelta = (dX < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -853,7 +853,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         }
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ))
         {
-            aEvent.mnDelta = static_cast<long>(floor(dY));
+            aEvent.mnDelta = static_cast<tools::Long>(floor(dY));
             aEvent.mnNotchDelta = (dY < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -895,8 +895,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
         SalWheelMouseEvent aEvent;
         aEvent.mnTime         = mpFrame->mnLastEventTime;
-        aEvent.mnX            = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY            = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnX            = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.nX;
+        aEvent.mnY            = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.nY;
         aEvent.mnCode         = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mbDeltaIsPixel = false;
 
@@ -905,7 +905,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
         if( dX != 0.0 )
         {
-            aEvent.mnDelta = static_cast<long>(floor(dX));
+            aEvent.mnDelta = static_cast<tools::Long>(floor(dX));
             aEvent.mnNotchDelta = (dX < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -919,7 +919,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         }
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ) )
         {
-            aEvent.mnDelta = static_cast<long>(floor(dY));
+            aEvent.mnDelta = static_cast<tools::Long>(floor(dY));
             aEvent.mnNotchDelta = (dY < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
