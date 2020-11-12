@@ -37,15 +37,12 @@ END_OBJECT_MAP()
 
 // DLL Entry Point
 
-
 #include <syswinwrapper.hxx>
 #include <docholder.hxx>
 
-
 HINSTANCE DocumentHolder::m_hInstance;
 
-extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 {
     DocumentHolder::m_hInstance = hInstance;
     if (!winwrap::HatchWindowRegister(hInstance))
@@ -60,7 +57,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     {
         _Module.Term();
     }
-    return TRUE;    // ok
+    return TRUE; // ok
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

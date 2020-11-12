@@ -3741,12 +3741,9 @@ embeddedobj/test/mtexecutor/mainthreadexecutor.hxx
 embeddedobj/test/mtexecutor/mteregister.cxx
 embedserv/source/embed/docholder.cxx
 embedserv/source/embed/ed_idataobj.cxx
-embedserv/source/embed/ed_iinplace.cxx
 embedserv/source/embed/ed_ioleobject.cxx
 embedserv/source/embed/ed_ipersiststr.cxx
-embedserv/source/embed/esdll.cxx
 embedserv/source/embed/guid.cxx
-embedserv/source/embed/guid.hxx
 embedserv/source/embed/iipaobj.cxx
 embedserv/source/embed/intercept.cxx
 embedserv/source/embed/servprov.cxx
@@ -3756,13 +3753,11 @@ embedserv/source/inc/common.h
 embedserv/source/inc/docholder.hxx
 embedserv/source/inc/embeddoc.hxx
 embedserv/source/inc/embeddocaccess.hxx
-embedserv/source/inc/embservconst.h
 embedserv/source/inc/iipaobj.hxx
 embedserv/source/inc/intercept.hxx
 embedserv/source/inc/servprov.hxx
 embedserv/source/inc/syswinwrapper.hxx
 embedserv/source/inprocserv/advisesink.cxx
-embedserv/source/inprocserv/advisesink.hxx
 embedserv/source/inprocserv/dllentry.cxx
 embedserv/source/inprocserv/inprocembobj.cxx
 embedserv/source/inprocserv/inprocembobj.h
