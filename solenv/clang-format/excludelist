@@ -12520,9 +12520,6 @@ svtools/inc/table/tablerenderer.hxx
 svtools/inc/table/tablesort.hxx
 svtools/inc/table/tabletypes.hxx
 svtools/langsupport/langsupport.cxx
-svtools/qa/unit/GraphicObjectTest.cxx
-svtools/qa/unit/svtools-dialogs-test.cxx
-svtools/qa/unit/testHtmlWriter.cxx
 svtools/source/brwbox/brwbox1.cxx
 svtools/source/brwbox/brwbox2.cxx
 svtools/source/brwbox/brwbox3.cxx
@@ -12552,7 +12549,6 @@ svtools/source/config/test/test.cxx
 svtools/source/control/accessibleruler.cxx
 svtools/source/control/accessibleruler.hxx
 svtools/source/control/asynclink.cxx
-svtools/source/control/collatorres.cxx
 svtools/source/control/ctrlbox.cxx
 svtools/source/control/ctrltool.cxx
 svtools/source/control/indexentryres.cxx
@@ -12584,7 +12580,6 @@ svtools/source/hatchwindow/hatchwindowfactory.cxx
 svtools/source/hatchwindow/ipwin.cxx
 svtools/source/hatchwindow/ipwin.hxx
 svtools/source/inc/hatchwindow.hxx
-svtools/source/inc/unoiface.hxx
 svtools/source/java/javacontext.cxx
 svtools/source/java/javainteractionhandler.cxx
 svtools/source/misc/acceleratorexecute.cxx
@@ -12602,7 +12597,6 @@ svtools/source/misc/langtab.cxx
 svtools/source/misc/openfiledroptargetlistener.cxx
 svtools/source/misc/sampletext.cxx
 svtools/source/misc/stringtransfer.cxx
-svtools/source/misc/svtresid.cxx
 svtools/source/misc/templatefoldercache.cxx
 svtools/source/misc/unitconv.cxx
 svtools/source/svhtml/HtmlWriter.cxx

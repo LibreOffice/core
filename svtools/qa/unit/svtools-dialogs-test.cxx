@@ -39,9 +39,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-SvtoolsDialogsTest::SvtoolsDialogsTest()
-{
-}
+SvtoolsDialogsTest::SvtoolsDialogsTest() {}
 
 void SvtoolsDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {

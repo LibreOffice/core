@@ -21,10 +21,8 @@ using namespace css;
 
 namespace
 {
-
-class GraphicObjectTest: public test::BootstrapFixture, public unotest::MacrosTest
+class GraphicObjectTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
-
 public:
     void testTdf88836();
 
@@ -32,7 +30,8 @@ public:
     {
         test::BootstrapFixture::setUp();
 
-        mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
+        mxDesktop.set(
+            css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
     }
 
 private:
@@ -40,7 +39,6 @@ private:
     CPPUNIT_TEST(testTdf88836);
     CPPUNIT_TEST_SUITE_END();
 };
-
 
 void GraphicObjectTest::testTdf88836()
 {
@@ -52,7 +50,6 @@ void GraphicObjectTest::testTdf88836()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(GraphicObjectTest);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

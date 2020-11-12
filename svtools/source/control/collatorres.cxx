@@ -38,8 +38,7 @@ CollatorResource::CollatorResource()
     m_aData.emplace_back("phonetic (alphanumeric last)", SvtResId(STR_SVT_COLLATE_PHONETIC_L));
 }
 
-const OUString&
-CollatorResource::GetTranslation(const OUString &r_Algorithm)
+const OUString& CollatorResource::GetTranslation(const OUString& r_Algorithm)
 {
     sal_Int32 nIndex = r_Algorithm.indexOf('.');
     OUString aLocaleFreeAlgorithm;
