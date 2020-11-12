@@ -213,17 +213,18 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     // sigma and equal buttons
     if (!bIsLOKMobilePhone)
     {
-        SetItemText (SID_INPUT_SUM, ScResId( SCSTR_QHELP_BTNSUM ) );
         SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUMME);
-
-        SetItemText (SID_INPUT_EQUAL, ScResId( SCSTR_QHELP_BTNEQUAL ) );
         SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
+        SetHelpId   (SID_INPUT_CANCEL, HID_INSWIN_CANCEL);
+        SetHelpId   (SID_INPUT_OK, HID_INSWIN_OK);
 
-        SetItemText ( SID_INPUT_CANCEL, ScResId( SCSTR_QHELP_BTNCANCEL ) );
-        SetHelpId   ( SID_INPUT_CANCEL, HID_INSWIN_CANCEL );
-
-        SetItemText ( SID_INPUT_OK, ScResId( SCSTR_QHELP_BTNOK ) );
-        SetHelpId   ( SID_INPUT_OK, HID_INSWIN_OK );
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            SetItemText ( SID_INPUT_SUM, ScResId( SCSTR_QHELP_BTNSUM ) );
+            SetItemText ( SID_INPUT_EQUAL, ScResId( SCSTR_QHELP_BTNEQUAL ) );
+            SetItemText ( SID_INPUT_CANCEL, ScResId( SCSTR_QHELP_BTNCANCEL ) );
+            SetItemText ( SID_INPUT_OK, ScResId( SCSTR_QHELP_BTNOK ) );
+        }
 
         EnableItem( SID_INPUT_CANCEL, false );
         EnableItem( SID_INPUT_OK, false );
@@ -880,8 +881,11 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     mxButtonUp->connect_clicked(LINK(this, ScInputBarGroup, ClickHdl));
     mxButtonDown->connect_clicked(LINK(this, ScInputBarGroup, ClickHdl));
 
-    mxButtonUp->set_tooltip_text(ScResId( SCSTR_QHELP_COLLAPSE_FORMULA));
-    mxButtonDown->set_tooltip_text(ScResId(SCSTR_QHELP_EXPAND_FORMULA));
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        mxButtonUp->set_tooltip_text(ScResId( SCSTR_QHELP_COLLAPSE_FORMULA));
+        mxButtonDown->set_tooltip_text(ScResId(SCSTR_QHELP_EXPAND_FORMULA));
+    }
 
     int nHeight = mxTextWndGroup->GetPixelHeightForLines(1);
     mxButtonUp->set_size_request(-1, nHeight);
