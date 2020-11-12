@@ -24,10 +24,10 @@ typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
 using namespace ::com::sun::star;
 
-namespace {
-
-class Test : public test::BootstrapFixture {
-
+namespace
+{
+class Test : public test::BootstrapFixture
+{
 public:
     // init
     virtual void setUp() override;
@@ -96,7 +96,7 @@ void Test::testCopySelectPaste()
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
     // go to the right end
-    for (int i=0;i<5;i++)
+    for (int i = 0; i < 5; i++)
         aCursor.Move(pOutputDevice, MoveRight);
     // select "b + c" and then copy
     aCursor.Move(pOutputDevice, MoveLeft, false);
@@ -144,7 +144,7 @@ void Test::testCutSelectPaste()
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
     // go to the right end
-    for (int i=0;i<5;i++)
+    for (int i = 0; i < 5; i++)
         aCursor.Move(pOutputDevice, MoveRight);
     // select "b + c" and then cut
     aCursor.Move(pOutputDevice, MoveLeft, false);
@@ -162,7 +162,6 @@ void Test::testCutSelectPaste()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

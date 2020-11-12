@@ -23,26 +23,26 @@ class SmOoxmlExport : public SmWordExportBase
 {
 public:
     SmOoxmlExport(const SmNode* pIn, oox::core::OoxmlVersion version,
-            oox::drawingml::DocumentType documentType);
-    void ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& m_pSerializer, const sal_Int8 );
+                  oox::drawingml::DocumentType documentType);
+    void ConvertFromStarMath(const ::sax_fastparser::FSHelperPtr& m_pSerializer, const sal_Int8);
+
 private:
-    void HandleVerticalStack( const SmNode* pNode, int nLevel ) override;
-    void HandleText( const SmNode* pNode, int nLevel ) override;
-    void HandleFractions( const SmNode* pNode, int nLevel, const char* type ) override;
-    void HandleRoot( const SmRootNode* pNode, int nLevel ) override;
-    void HandleAttribute( const SmAttributNode* pNode, int nLevel ) override;
-    void HandleOperator( const SmOperNode* pNode, int nLevel ) override;
-    void HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel, int flags ) override;
-    void HandleMatrix( const SmMatrixNode* pNode, int nLevel ) override;
-    void HandleBrace( const SmBraceNode* pNode, int nLevel ) override;
-    void HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel ) override;
+    void HandleVerticalStack(const SmNode* pNode, int nLevel) override;
+    void HandleText(const SmNode* pNode, int nLevel) override;
+    void HandleFractions(const SmNode* pNode, int nLevel, const char* type) override;
+    void HandleRoot(const SmRootNode* pNode, int nLevel) override;
+    void HandleAttribute(const SmAttributNode* pNode, int nLevel) override;
+    void HandleOperator(const SmOperNode* pNode, int nLevel) override;
+    void HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLevel, int flags) override;
+    void HandleMatrix(const SmMatrixNode* pNode, int nLevel) override;
+    void HandleBrace(const SmBraceNode* pNode, int nLevel) override;
+    void HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLevel) override;
     void HandleBlank() override;
     ::sax_fastparser::FSHelperPtr m_pSerializer;
     oox::core::OoxmlVersion version;
     /// needed to determine markup for nested run properties
     oox::drawingml::DocumentType const m_DocumentType;
 };
-
 
 #endif
 

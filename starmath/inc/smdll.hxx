@@ -23,7 +23,7 @@
 
 namespace SmGlobals
 {
-    SM_DLLPUBLIC void ensure();
+SM_DLLPUBLIC void ensure();
 }
 
 #endif

@@ -21,11 +21,14 @@
 #define INCLUDED_STARMATH_INC_TYPES_HXX
 
 #include <sal/types.h>
-#define FONTNAME_MATH   "OpenSymbol"
+#define FONTNAME_MATH "OpenSymbol"
 
-
-enum SmPrintSize { PRINT_SIZE_NORMAL, PRINT_SIZE_SCALED, PRINT_SIZE_ZOOMED };
-
+enum SmPrintSize
+{
+    PRINT_SIZE_NORMAL,
+    PRINT_SIZE_SCALED,
+    PRINT_SIZE_ZOOMED
+};
 
 // definitions for characters from the 'StarSymbol' font
 // (some chars have more than one alias!)
