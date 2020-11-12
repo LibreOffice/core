@@ -24,13 +24,12 @@
 
 namespace writerfilter::dmapper
 {
-
 /// Class to process all text effects like glow, textOutline, ...
 class TextEffectsHandler : public LoggedProperties
 {
 private:
-    std::optional<PropertyIds>         maPropertyId;
-    OUString                             maElementName;
+    std::optional<PropertyIds> maPropertyId;
+    OUString maElementName;
     std::unique_ptr<oox::GrabBagStack> mpGrabBagStack;
 
     void convertElementIdToPropertyId(sal_Int32 aElementId);
@@ -43,7 +42,7 @@ public:
     explicit TextEffectsHandler(sal_uInt32 aElementId);
     virtual ~TextEffectsHandler() override;
 
-    const std::optional<PropertyIds>& getGrabBagPropertyId() const { return maPropertyId;}
+    const std::optional<PropertyIds>& getGrabBagPropertyId() const { return maPropertyId; }
 
     css::beans::PropertyValue getInteropGrabBag();
 
@@ -65,9 +64,7 @@ public:
     static OUString getNumSpacingString(sal_Int32 nType);
 
     static sal_uInt8 GetTextFillSolidFillAlpha(const css::beans::PropertyValue& rValue);
-
 };
-
 }
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX

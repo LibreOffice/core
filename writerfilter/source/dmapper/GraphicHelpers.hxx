@@ -27,19 +27,20 @@
 
 namespace writerfilter::dmapper
 {
-
-class PositionHandler: public LoggedProperties
+class PositionHandler : public LoggedProperties
 {
 public:
-    PositionHandler( std::pair<OUString, OUString>& rPositionOffsets, std::pair<OUString, OUString>& rAligns );
-    virtual ~PositionHandler( ) override;
+    PositionHandler(std::pair<OUString, OUString>& rPositionOffsets,
+                    std::pair<OUString, OUString>& rAligns);
+    virtual ~PositionHandler() override;
     sal_Int16 orientation() const;
-    sal_Int16 relation() const { return m_nRelation;}
-    sal_Int32 position() const { return m_nPosition;}
+    sal_Int16 relation() const { return m_nRelation; }
+    sal_Int32 position() const { return m_nPosition; }
     bool GetPageToggle() const { return m_bPageToggle; }
- private:
-    virtual void lcl_attribute( Id aName, Value& rVal ) override;
-    virtual void lcl_sprm( Sprm& rSprm ) override;
+
+private:
+    virtual void lcl_attribute(Id aName, Value& rVal) override;
+    virtual void lcl_sprm(Sprm& rSprm) override;
     sal_Int16 m_nOrient;
     sal_Int16 m_nRelation;
     sal_Int32 m_nPosition;
@@ -48,17 +49,17 @@ public:
     bool m_bPageToggle = false;
 };
 
-class WrapHandler: public LoggedProperties
+class WrapHandler : public LoggedProperties
 {
 public:
-    WrapHandler( );
-    virtual ~WrapHandler( ) override;
+    WrapHandler();
+    virtual ~WrapHandler() override;
 
-    css::text::WrapTextMode getWrapMode( ) const;
+    css::text::WrapTextMode getWrapMode() const;
 
- private:
-    virtual void lcl_attribute( Id aName, Value& rVal ) override;
-    virtual void lcl_sprm( Sprm& rSprm ) override;
+private:
+    virtual void lcl_attribute(Id aName, Value& rVal) override;
+    virtual void lcl_sprm(Sprm& rSprm) override;
 
     sal_Int32 m_nType;
     sal_Int32 m_nSide;
@@ -74,7 +75,6 @@ public:
     /// Name a graphic based on rTemplate.
     OUString NameGraphic(const OUString& rTemplate);
 };
-
 }
 
 #endif

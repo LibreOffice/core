@@ -19,21 +19,20 @@
 
 #include <oox/token/propertynames.hxx>
 
-namespace oox {
-
+namespace oox
+{
 PropertyNameVector::PropertyNameVector()
 {
-    static const char* sppcPropertyNames[] =
-    {
-        // include auto-generated C array with property names as C strings
+    static const char* sppcPropertyNames[] = {
+    // include auto-generated C array with property names as C strings
 #include <propertynames.inc>
         ""
     };
 
     size_t nArraySize = SAL_N_ELEMENTS(sppcPropertyNames) - 1;
-    reserve( nArraySize );
-    for( size_t nIndex = 0; nIndex < nArraySize; ++nIndex )
-        push_back( OUString::createFromAscii( sppcPropertyNames[ nIndex ] ) );
+    reserve(nArraySize);
+    for (size_t nIndex = 0; nIndex < nArraySize; ++nIndex)
+        push_back(OUString::createFromAscii(sppcPropertyNames[nIndex]));
 }
 
 } // namespace oox

@@ -25,12 +25,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-namespace oox::drawingml::table {
-
-TableStylePart::TableStylePart()
+namespace oox::drawingml::table
 {
-}
-
+TableStylePart::TableStylePart() {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

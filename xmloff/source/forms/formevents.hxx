@@ -23,11 +23,10 @@
 struct XMLEventNameTranslation;
 namespace xmloff
 {
+//= event translation table
+extern const XMLEventNameTranslation* g_pFormsEventTranslation;
 
-    //= event translation table
-    extern const XMLEventNameTranslation* g_pFormsEventTranslation;
-
-}   // namespace xmloff
+} // namespace xmloff
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_FORMEVENTS_HXX
 

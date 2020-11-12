@@ -21,7 +21,8 @@
 #include "LoggedResources.hxx"
 #include <rtl/ustring.hxx>
 #include <vector>
-namespace writerfilter::dmapper {
+namespace writerfilter::dmapper
+{
 class FFDataHandler : public LoggedProperties
 {
 public:
@@ -35,41 +36,41 @@ public:
     virtual ~FFDataHandler() override;
 
     // member: name
-    const OUString & getName() const { return m_sName;}
+    const OUString& getName() const { return m_sName; }
 
     // member: helpText
-    const OUString & getHelpText() const { return m_sHelpText;}
+    const OUString& getHelpText() const { return m_sHelpText; }
 
     // member: statusText
-    const OUString & getStatusText() const { return m_sStatusText;}
+    const OUString& getStatusText() const { return m_sStatusText; }
 
-    const OUString & getEntryMacro() const { return m_sEntryMacro;}
-    const OUString & getExitMacro() const { return m_sExitMacro;}
+    const OUString& getEntryMacro() const { return m_sEntryMacro; }
+    const OUString& getExitMacro() const { return m_sExitMacro; }
 
     // member: checkboxHeight
-    sal_uInt32 getCheckboxHeight() const { return m_nCheckboxHeight;}
+    sal_uInt32 getCheckboxHeight() const { return m_nCheckboxHeight; }
 
     // member: checkboxAutoHeight
-    bool getCheckboxAutoHeight() const { return m_bCheckboxAutoHeight;}
+    bool getCheckboxAutoHeight() const { return m_bCheckboxAutoHeight; }
 
     // member: checkboxChecked or checkboxDefault (if the previous is not set)
     bool getCheckboxChecked() const;
 
     // member: dropDownResult
-    const OUString & getDropDownResult() const { return m_sDropDownResult;}
+    const OUString& getDropDownResult() const { return m_sDropDownResult; }
 
     // member: dropDownEntries
-    const DropDownEntries_t & getDropDownEntries() const { return m_DropDownEntries;}
+    const DropDownEntries_t& getDropDownEntries() const { return m_DropDownEntries; }
 
     // member: textDefault
-    const OUString & getTextDefault() const { return m_sTextDefault;}
+    const OUString& getTextDefault() const { return m_sTextDefault; }
 
-    const OUString & getTextType() const { return m_sTextType; }
-    const OUString & getTextFormat() const { return m_sTextFormat; }
+    const OUString& getTextType() const { return m_sTextType; }
+    const OUString& getTextFormat() const { return m_sTextFormat; }
     sal_uInt16 getTextMaxLength() const { return m_nTextMaxLength; }
 
     // sprm
-    void resolveSprm(Sprm & r_sprm);
+    void resolveSprm(Sprm& r_sprm);
 
 private:
     OUString m_sName;
@@ -89,13 +90,11 @@ private:
     sal_uInt16 m_nTextMaxLength;
 
     // sprm
-    void lcl_sprm(Sprm & r_sprm) override;
+    void lcl_sprm(Sprm& r_sprm) override;
 
     // attribute
-    void lcl_attribute(Id name, Value & val) override;
+    void lcl_attribute(Id name, Value& val) override;
 };
-
-
 }
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FFDATAHANDLER_HXX
 

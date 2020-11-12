@@ -21,10 +21,9 @@
 #include <ooxml/resourceids.hxx>
 #include <osl/diagnose.h>
 
-namespace writerfilter::dmapper {
-
+namespace writerfilter::dmapper
+{
 using namespace ::com::sun::star;
-
 
 SectionColumnHandler::SectionColumnHandler()
     : LoggedProperties("SectionColumnHandler")
@@ -36,20 +35,18 @@ SectionColumnHandler::SectionColumnHandler()
     m_aTempColumn.nWidth = m_aTempColumn.nSpace = 0;
 }
 
-SectionColumnHandler::~SectionColumnHandler()
-{
-}
+SectionColumnHandler::~SectionColumnHandler() {}
 
-void SectionColumnHandler::lcl_attribute(Id rName, Value & rVal)
+void SectionColumnHandler::lcl_attribute(Id rName, Value& rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
-    switch( rName )
+    switch (rName)
     {
         case NS_ooxml::LN_CT_Columns_equalWidth:
             m_bEqualWidth = (nIntValue != 0);
             break;
         case NS_ooxml::LN_CT_Columns_space:
-            m_nSpace = ConversionHelper::convertTwipToMM100( nIntValue );
+            m_nSpace = ConversionHelper::convertTwipToMM100(nIntValue);
             break;
         case NS_ooxml::LN_CT_Columns_num:
             m_nNum = nIntValue;
@@ -59,25 +56,25 @@ void SectionColumnHandler::lcl_attribute(Id rName, Value & rVal)
             break;
 
         case NS_ooxml::LN_CT_Column_w:
-            m_aTempColumn.nWidth = ConversionHelper::convertTwipToMM100( nIntValue );
+            m_aTempColumn.nWidth = ConversionHelper::convertTwipToMM100(nIntValue);
             break;
         case NS_ooxml::LN_CT_Column_space:
-            m_aTempColumn.nSpace = ConversionHelper::convertTwipToMM100( nIntValue );
+            m_aTempColumn.nSpace = ConversionHelper::convertTwipToMM100(nIntValue);
             break;
         default:
-            OSL_FAIL( "SectionColumnHandler: unknown attribute");
+            OSL_FAIL("SectionColumnHandler: unknown attribute");
     }
 }
 
-void SectionColumnHandler::lcl_sprm(Sprm & rSprm)
+void SectionColumnHandler::lcl_sprm(Sprm& rSprm)
 {
-    switch( rSprm.getId())
+    switch (rSprm.getId())
     {
         case NS_ooxml::LN_CT_Columns_col:
         {
             m_aTempColumn.nWidth = m_aTempColumn.nSpace = 0;
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if( pProperties )
+            if (pProperties)
             {
                 pProperties->resolve(*this);
                 m_aCols.push_back(m_aTempColumn);
@@ -85,7 +82,7 @@ void SectionColumnHandler::lcl_sprm(Sprm & rSprm)
         }
         break;
         default:
-            OSL_FAIL( "SectionColumnHandler: unknown sprm");
+            OSL_FAIL("SectionColumnHandler: unknown sprm");
     }
 }
 } //namespace writerfilter::dmapper

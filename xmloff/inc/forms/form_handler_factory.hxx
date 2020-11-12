@@ -24,13 +24,12 @@
 
 namespace xmloff
 {
-
-    //= FormHandlerFactory
-    class FormHandlerFactory
-    {
-    public:
-        static PPropertyHandler getFormPropertyHandler( const PropertyId i_propertyId );
-    };
+//= FormHandlerFactory
+class FormHandlerFactory
+{
+public:
+    static PPropertyHandler getFormPropertyHandler(const PropertyId i_propertyId);
+};
 
 } // namespace xmloff
 

@@ -25,8 +25,7 @@
 
 namespace writerfilter::ooxml
 {
-class OOXMLBinaryObjectReference :
-        public writerfilter::Reference<BinaryObj>
+class OOXMLBinaryObjectReference : public writerfilter::Reference<BinaryObj>
 {
     OOXMLStream::Pointer_t mpStream;
     std::vector<sal_Int8> mSequence;
@@ -35,10 +34,10 @@ class OOXMLBinaryObjectReference :
     void read();
 
 public:
-    explicit OOXMLBinaryObjectReference(OOXMLStream::Pointer_t const & pStream);
+    explicit OOXMLBinaryObjectReference(OOXMLStream::Pointer_t const& pStream);
     virtual ~OOXMLBinaryObjectReference() override;
 
-    virtual void resolve(BinaryObj & rHandler) override;
+    virtual void resolve(BinaryObj& rHandler) override;
 };
 }
 

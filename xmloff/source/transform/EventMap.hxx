@@ -25,8 +25,8 @@
 struct XMLTransformerEventMapEntry
 {
     sal_uInt16 const m_nOASISPrefix;
-    const char *m_pOASISName;
-    const char *m_pOOoName;
+    const char* m_pOASISName;
+    const char* m_pOOoName;
 };
 
 extern XMLTransformerEventMapEntry const aTransformerEventMap[];

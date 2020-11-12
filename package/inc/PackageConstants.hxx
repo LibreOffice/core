@@ -30,22 +30,22 @@ const sal_Int32 n_ConstDigestLength = 1024;
 const sal_Int32 n_ConstDigestDecrypt = 1056; // 1024 + 32
 
 // the constants related to the manifest.xml entries
-#define PKG_MNFST_FULLPATH    0 //FullPath (Put full-path property first for MBA)
-#define PKG_MNFST_VERSION     1 //Version
-#define PKG_MNFST_MEDIATYPE   2 //MediaType
+#define PKG_MNFST_FULLPATH 0 //FullPath (Put full-path property first for MBA)
+#define PKG_MNFST_VERSION 1 //Version
+#define PKG_MNFST_MEDIATYPE 2 //MediaType
 
-#define PKG_MNFST_INIVECTOR   3 //InitialisationVector
-#define PKG_MNFST_SALT        4 //Salt
-#define PKG_MNFST_ITERATION   5 //IterationCount
-#define PKG_MNFST_UCOMPSIZE   6 //Size
-#define PKG_MNFST_DIGEST      7 //Digest
-#define PKG_MNFST_ENCALG      8 //EncryptionAlgorithm
-#define PKG_MNFST_STARTALG    9 //StartKeyAlgorithm
-#define PKG_MNFST_DIGESTALG  10 //DigestAlgorithm
+#define PKG_MNFST_INIVECTOR 3 //InitialisationVector
+#define PKG_MNFST_SALT 4 //Salt
+#define PKG_MNFST_ITERATION 5 //IterationCount
+#define PKG_MNFST_UCOMPSIZE 6 //Size
+#define PKG_MNFST_DIGEST 7 //Digest
+#define PKG_MNFST_ENCALG 8 //EncryptionAlgorithm
+#define PKG_MNFST_STARTALG 9 //StartKeyAlgorithm
+#define PKG_MNFST_DIGESTALG 10 //DigestAlgorithm
 #define PKG_MNFST_DERKEYSIZE 11 //DerivedKeySize
 
 #define PKG_SIZE_NOENCR_MNFST 3
-#define PKG_SIZE_ENCR_MNFST   12
+#define PKG_SIZE_ENCR_MNFST 12
 
 // the properties related constants
 #define ENCRYPTION_KEY_PROPERTY "EncryptionKey"

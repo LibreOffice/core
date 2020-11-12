@@ -25,7 +25,6 @@
 
 namespace rptui
 {
-
 // OReportExchange
 
 /** \class OReportExchange
@@ -37,14 +36,14 @@ namespace rptui
 class OReportExchange : public TransferableHelper
 {
 public:
-    typedef css::uno::Sequence< css::beans::NamedValue > TSectionElements;
+    typedef css::uno::Sequence<css::beans::NamedValue> TSectionElements;
 
     /** Constructs a new exchange object with section elements
     *
     * \param _rCopyElements the elements to copy. Each section is one entry. The value must be a sequence of elements.
     * \return
     */
-    OReportExchange( const TSectionElements& _rCopyElements);
+    OReportExchange(const TSectionElements& _rCopyElements);
 
     /** checks whether or not a descriptor can be extracted from the data flavor vector given
     *
@@ -52,7 +51,7 @@ public:
             available flavors
     * \return
     */
-    static bool         canExtract(const DataFlavorExVector& _rFlavors);
+    static bool canExtract(const DataFlavorExVector& _rFlavors);
 
     /** extract the section elements
     *
@@ -69,10 +68,12 @@ public:
 
 protected:
     // TransferableHelper overridables
-    virtual void        AddSupportedFormats() override;
-    virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+    virtual void AddSupportedFormats() override;
+    virtual bool GetData(const css::datatransfer::DataFlavor& rFlavor,
+                         const OUString& rDestDoc) override;
+
 private:
-    TSectionElements    m_aCopyElements;
+    TSectionElements m_aCopyElements;
 };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDCLIP_HXX

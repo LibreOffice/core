@@ -6,7 +6,7 @@
 #include "updatelogging.h"
 
 BOOL PathAppendSafe(LPWSTR base, LPCWSTR extra);
-BOOL VerifySameFiles(LPCWSTR file1Path, LPCWSTR file2Path, BOOL &sameContent);
+BOOL VerifySameFiles(LPCWSTR file1Path, LPCWSTR file2Path, BOOL& sameContent);
 
 // 32KiB for comparing files at a time seems reasonable.
 // The bigger the better for speed, but this will be used
@@ -17,6 +17,5 @@ BOOL VerifySameFiles(LPCWSTR file1Path, LPCWSTR file2Path, BOOL &sameContent);
 // Mozilla application as an updater.  Before the maintenance service will
 // execute the updater it must have this updater identity string in its string
 // table.  No other signed Mozilla product will have this string table value.
-#define UPDATER_IDENTITY_STRING \
-  "libreoffice-updater.exe-7bab28a0-0599-4f37-9efe-f7f8b71f05e3"
+#define UPDATER_IDENTITY_STRING "libreoffice-updater.exe-7bab28a0-0599-4f37-9efe-f7f8b71f05e3"
 #define IDS_UPDATER_IDENTITY 1006

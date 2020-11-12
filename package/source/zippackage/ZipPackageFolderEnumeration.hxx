@@ -24,28 +24,25 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <HashMaps.hxx>
 
-class ZipPackageFolderEnumeration final : public cppu::WeakImplHelper
-<
-    css::container::XEnumeration,
-    css::lang::XServiceInfo
->
+class ZipPackageFolderEnumeration final
+    : public cppu::WeakImplHelper<css::container::XEnumeration, css::lang::XServiceInfo>
 {
     ContentHash& rContents;
     ContentHash::const_iterator aIterator;
+
 public:
     //ZipPackageFolderEnumeration (unordered_map < OUString, css::uno::Reference < css::container::XNamed >, hashFunc, eqFunc > &rInput);
-    ZipPackageFolderEnumeration (ContentHash &rInput);
+    ZipPackageFolderEnumeration(ContentHash& rInput);
     virtual ~ZipPackageFolderEnumeration() override;
 
     // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
-    virtual css::uno::Any SAL_CALL nextElement(  ) override;
+    virtual sal_Bool SAL_CALL hasMoreElements() override;
+    virtual css::uno::Any SAL_CALL nextElement() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 #endif
 

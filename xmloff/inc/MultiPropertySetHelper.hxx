@@ -23,13 +23,21 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <memory>
 
-
-namespace com::sun::star {
-    namespace beans { class XMultiPropertySet; }
-    namespace beans { class XPropertySet; }
-    namespace beans { class XPropertySetInfo; }
+namespace com::sun::star
+{
+namespace beans
+{
+class XMultiPropertySet;
 }
-
+namespace beans
+{
+class XPropertySet;
+}
+namespace beans
+{
+class XPropertySetInfo;
+}
+}
 
 /**
  * The MultiPropertySetHelper performs the following functions:
@@ -62,14 +70,14 @@ class MultiPropertySetHelper
 
     /// the sequence of property names that the current (multi)
     /// property set implementation supports
-    css::uno::Sequence< OUString > aPropertySequence;
+    css::uno::Sequence<OUString> aPropertySequence;
 
     /// an array of indices that maps from pPropertyNames indices to
     /// aPropertySequence indices
     std::unique_ptr<sal_Int16[]> pSequenceIndex;
 
     /// the last set of values retrieved by getValues
-    css::uno::Sequence< css::uno::Any > aValues;
+    css::uno::Sequence<css::uno::Any> aValues;
 
     /// result of aValues.getConstArray()
     const css::uno::Any* pValues;
@@ -78,18 +86,15 @@ class MultiPropertySetHelper
     css::uno::Any aEmptyAny;
 
 public:
-
-    MultiPropertySetHelper( const char** pNames );
+    MultiPropertySetHelper(const char** pNames);
 
     ~MultiPropertySetHelper();
-
 
     /**
      * Call hasPropertiesByName for the provided XPropertySetInfo and build
      * list of allowed properties.
      */
-    void hasProperties( const css::uno::Reference<css::beans::XPropertySetInfo> & );
-
+    void hasProperties(const css::uno::Reference<css::beans::XPropertySetInfo>&);
 
     /**
      * Return whether hasProperties was called
@@ -103,7 +108,7 @@ public:
      * May only be called after hasProperties() was called for the
      * appropriate XPropertySetInfo.
      */
-    void getValues( const css::uno::Reference<css::beans::XMultiPropertySet> & );
+    void getValues(const css::uno::Reference<css::beans::XMultiPropertySet>&);
 
     /**
      * Get values from the XPropertySet. This can be much slower than
@@ -113,22 +118,21 @@ public:
      * May only be called after hasProperties() was called for the
      * appropriate XPropertySetInfo.
      */
-    void getValues( const css::uno::Reference<css::beans::XPropertySet> & );
-
+    void getValues(const css::uno::Reference<css::beans::XPropertySet>&);
 
     /**
      * Get a value from the values array.
      *
      * May only be called after getValues() was called.
      */
-    inline const css::uno::Any& getValue( sal_Int16 nIndex );
+    inline const css::uno::Any& getValue(sal_Int16 nIndex);
 
     /**
      * Find out if this property is supported.
      *
      * May only be called after hasProperties() was called.
      */
-    inline bool hasProperty( sal_Int16 nIndex );
+    inline bool hasProperty(sal_Int16 nIndex);
 
     /**
      * Get a value from the XPropertySet on demand.
@@ -140,9 +144,9 @@ public:
      * bTryMult is set, the XMultiPropertySet is used to get the values.
      *
      */
-    const css::uno::Any& getValue( sal_Int16 nIndex,
-                        const css::uno::Reference<css::beans::XPropertySet> &,
-                        bool bTryMulti = false );
+    const css::uno::Any& getValue(sal_Int16 nIndex,
+                                  const css::uno::Reference<css::beans::XPropertySet>&,
+                                  bool bTryMulti = false);
 
     /**
      * Get a value from the XMultiPropertySet on demand.
@@ -154,32 +158,30 @@ public:
      * XMultiPropertySet is used to get the values.
      *
      */
-    const css::uno::Any& getValue( sal_Int16 nIndex,
-                        const css::uno::Reference<css::beans::XMultiPropertySet> & );
+    const css::uno::Any& getValue(sal_Int16 nIndex,
+                                  const css::uno::Reference<css::beans::XMultiPropertySet>&);
 
     void resetValues() { pValues = nullptr; }
 };
 
-
 // inline implementations of the often-called methods getValue and hasProperty:
 
-const css::uno::Any& MultiPropertySetHelper::getValue(
-    sal_Int16 nValueNo )
+const css::uno::Any& MultiPropertySetHelper::getValue(sal_Int16 nValueNo)
 {
     assert(pValues && "called getValue() without calling getValues()");
     assert(pSequenceIndex && "called getValue() without calling hasProperties()");
     assert(nValueNo < nLength);
 
-    sal_Int16 nIndex = pSequenceIndex[ nValueNo ];
-    return ( nIndex != -1 ) ? pValues[ nIndex ] : aEmptyAny;
+    sal_Int16 nIndex = pSequenceIndex[nValueNo];
+    return (nIndex != -1) ? pValues[nIndex] : aEmptyAny;
 }
 
-bool MultiPropertySetHelper::hasProperty( sal_Int16 nValueNo )
+bool MultiPropertySetHelper::hasProperty(sal_Int16 nValueNo)
 {
     assert(pSequenceIndex && "called hasProperty() without calling hasProperties()");
     assert(nValueNo < nLength);
 
-    return pSequenceIndex[ nValueNo ] != -1;
+    return pSequenceIndex[nValueNo] != -1;
 }
 
 #endif

@@ -51,11 +51,10 @@
    the handler.
 */
 
-
 typedef sal_uInt32 Id;
 
-namespace writerfilter {
-
+namespace writerfilter
+{
 /**
     Reference to a resource that generates events and sends them to a
     handler.
@@ -76,8 +75,7 @@ namespace writerfilter {
     sending these events to a stream handler.
 */
 
-template <class T>
-class SAL_DLLPUBLIC_TEMPLATE Reference : public virtual SvRefBase
+template <class T> class SAL_DLLPUBLIC_TEMPLATE Reference : public virtual SvRefBase
 {
 public:
     /**
@@ -86,7 +84,7 @@ public:
         @attention The ownership of a reference is transferred when
         the reference is passed.
     */
-    typedef tools::SvRef< Reference<T> > Pointer_t;
+    typedef tools::SvRef<Reference<T>> Pointer_t;
 
     /**
        Resolves the reference.
@@ -96,13 +94,13 @@ public:
 
        @param rHandler         handler which receives the events
      */
-    virtual void resolve(T & rHandler) = 0;
+    virtual void resolve(T& rHandler) = 0;
 
     Reference() = default;
-    Reference(Reference const &) = default;
-    Reference(Reference &&) = default;
-    Reference & operator =(Reference const &) = default;
-    Reference & operator =(Reference &&) = default;
+    Reference(Reference const&) = default;
+    Reference(Reference&&) = default;
+    Reference& operator=(Reference const&) = default;
+    Reference& operator=(Reference&&) = default;
 
 protected:
     ~Reference() override {}
@@ -123,14 +121,14 @@ public:
        @param name     name of the attribute
        @param val      value of the attribute
      */
-    virtual void attribute(Id name, Value & val) = 0;
+    virtual void attribute(Id name, Value& val) = 0;
 
     /**
        Receives a SPRM.
 
        @param  sprm      the SPRM received
     */
-    virtual void sprm(Sprm & sprm) = 0;
+    virtual void sprm(Sprm& sprm) = 0;
 
 protected:
     ~Properties() override {}
@@ -184,7 +182,6 @@ const sal_uInt8 cFieldEnd = 0x15;
 class Stream : public virtual SvRefBase
 {
 public:
-
     /**
        Pointer to this stream.
      */
@@ -201,7 +198,7 @@ public:
     virtual void endSectionGroup() = 0;
 
     /// The current section is the last one in this body text.
-    virtual void markLastSectionGroup( ) { };
+    virtual void markLastSectionGroup(){};
 
     /**
        Receives start mark for group with the same paragraph properties.
@@ -213,7 +210,7 @@ public:
      */
     virtual void endParagraphGroup() = 0;
 
-    virtual void markLastParagraphInSection( ) { };
+    virtual void markLastParagraphInSection(){};
 
     /**
        Receives start mark for group with the same character properties.
@@ -230,7 +227,7 @@ public:
      */
     virtual void startShape(css::uno::Reference<css::drawing::XShape> const& xShape) = 0;
 
-    virtual void endShape( ) = 0;
+    virtual void endShape() = 0;
 
     /**
        Receives 8-bit per character text.
@@ -238,7 +235,7 @@ public:
        @param data  buffer containing the text
        @param len   number of characters in the text
      */
-    virtual void text(const sal_uInt8 * data, size_t len) = 0;
+    virtual void text(const sal_uInt8* data, size_t len) = 0;
 
     /**
        Receives 16-bit per character text.
@@ -246,7 +243,7 @@ public:
        @param data    buffer containing the text
        @param len     number of characters in the text.
      */
-    virtual void utext(const sal_uInt8 * data, size_t len) = 0;
+    virtual void utext(const sal_uInt8* data, size_t len) = 0;
 
     /**
      * Offset in EMUs for a shape.
@@ -277,8 +274,7 @@ public:
        @param name     name of the table
        @param ref      reference to the table
      */
-    virtual void table(Id name,
-                       writerfilter::Reference<Table>::Pointer_t ref) = 0;
+    virtual void table(Id name, writerfilter::Reference<Table>::Pointer_t ref) = 0;
 
     /**
         Receives a substream.
@@ -286,15 +282,14 @@ public:
         @param name    name of the substream
         @param ref     reference to the substream
     */
-    virtual void substream(Id name,
-                           writerfilter::Reference<Stream>::Pointer_t ref) = 0;
+    virtual void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) = 0;
 
     /**
        Debugging: Receives information about current point in stream.
 
        @param info     the information
      */
-    virtual void info(const std::string & info) = 0;
+    virtual void info(const std::string& info) = 0;
 
     /// Receives start mark for glossary document entry.
     virtual void startGlossaryEntry() = 0;
@@ -398,7 +393,6 @@ protected:
 };
 
 typedef sal_Int32 Token_t;
-
 }
 
 #endif // INCLUDED_WRITERFILTER_INC_DMAPPER_RESOURCEMODEL_HXX
