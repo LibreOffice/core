@@ -1413,7 +1413,6 @@ chart2/workbench/addin/sampleaddin.hxx
 cli_ure/source/climaker/climaker_app.cxx
 cli_ure/source/climaker/climaker_emit.cxx
 cli_ure/source/climaker/climaker_share.h
-cli_ure/source/native/assembly.cxx
 cli_ure/source/native/native_bootstrap.cxx
 cli_ure/source/native/native_share.h
 cli_ure/source/native/path.cxx
@@ -1422,7 +1421,6 @@ cli_ure/source/uno_bridge/cli_bridge.cxx
 cli_ure/source/uno_bridge/cli_bridge.h
 cli_ure/source/uno_bridge/cli_data.cxx
 cli_ure/source/uno_bridge/cli_environment.cxx
-cli_ure/source/uno_bridge/cli_environment.h
 cli_ure/source/uno_bridge/cli_proxy.cxx
 cli_ure/source/uno_bridge/cli_proxy.h
 cli_ure/source/uno_bridge/cli_uno.cxx
