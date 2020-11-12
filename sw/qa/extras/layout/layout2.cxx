@@ -1881,6 +1881,36 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testImageComment)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aPosition.nContent.GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testCommentCursorPosition)
+{
+    // Load a document that has "aaa" in it, followed by three comments.
+    SwDoc* pDoc = createDoc("endOfLineComments.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    SwRootFrame* pRoot = pWrtShell->GetLayout();
+    CPPUNIT_ASSERT(pRoot->GetLower()->IsPageFrame());
+    SwPageFrame* pPage = static_cast<SwPageFrame*>(pRoot->GetLower());
+    CPPUNIT_ASSERT(pPage->GetLower()->IsBodyFrame());
+    SwBodyFrame* pBody = static_cast<SwBodyFrame*>(pPage->GetLower());
+    CPPUNIT_ASSERT(pBody->GetLower()->IsTextFrame());
+    SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pBody->GetLower());
+
+    // Set a point in the whitespace past the end of the first line.
+    Point aPoint = pWrtShell->getShellCursor(false)->GetSttPos();
+    aPoint.setX(aPoint.getX() + 10000);
+
+    // Ask for the doc model pos of this layout point.
+    SwPosition aPosition(*pTextFrame->GetTextNodeForFirstText());
+    pTextFrame->GetModelPositionForViewPoint(&aPosition, aPoint);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4 (six would be even better...)
+    // - Actual  : 3
+    // i.e. the cursor got positioned before the first comment,
+    // so typing extended the comment instead of adding content after the comment.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aPosition.nContent.GetIndex());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf64222)
 {
     createDoc("tdf64222.docx");
