@@ -32,24 +32,24 @@ class AccObjectManagerAgent;
  * procedure of all the event handling and provides the basic support for some simple
  * methods.
  */
-class AccEventListener
-    : public ::cppu::WeakImplHelper<
-        css::accessibility::XAccessibleEventListener>
+class AccEventListener : public ::cppu::WeakImplHelper<css::accessibility::XAccessibleEventListener>
 {
 protected:
     //accessible owner's pointer
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     //agent pointer for objects' manager
     AccObjectManagerAgent* pAgent;
+
 public:
-    AccEventListener( css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
+    AccEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccEventListener() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
+    virtual void SAL_CALL
+    notifyEvent(const css::accessibility::AccessibleEventObject& aEvent) override;
 
     //for name changed event
     virtual void HandleNameChangedEvent(css::uno::Any name);
@@ -58,8 +58,7 @@ public:
     virtual void HandleDescriptionChangedEvent(css::uno::Any desc);
 
     //for state changed event
-    virtual void HandleStateChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleStateChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
     virtual void SetComponentState(short state, bool enable);
     virtual void FireStatePropertyChange(short state, bool set);
     virtual void FireStateFocusedChange(bool enable);

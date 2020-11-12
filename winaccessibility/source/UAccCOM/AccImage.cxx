@@ -24,7 +24,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
-#include  <UAccCOM.h>
+#include <UAccCOM.h>
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
@@ -43,7 +43,7 @@ using namespace css::uno;
    * @param description Variant to get description.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR * description)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR* description)
 {
     SolarMutexGuard g;
 
@@ -52,7 +52,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR * description)
     // #CHECK#
     if (description == nullptr)
         return E_INVALIDARG;
-    if( !pRXImg.is() )
+    if (!pRXImg.is())
         return E_FAIL;
 
     OUString ouStr = GetXInterface()->getAccessibleImageDescription();
@@ -66,15 +66,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR * description)
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_imagePosition(
     /* [in] */ enum IA2CoordinateType,
-    /* [out] */ long __RPC_FAR *,
-    /* [retval][out] */ long __RPC_FAR *)
+    /* [out] */ long __RPC_FAR*,
+    /* [retval][out] */ long __RPC_FAR*)
 {
     return E_NOTIMPL;
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_imageSize(
-    /* [out] */ long __RPC_FAR *,
-    /* [retval][out] */ long __RPC_FAR *)
+    /* [out] */ long __RPC_FAR*,
+    /* [retval][out] */ long __RPC_FAR*)
 {
     return E_NOTIMPL;
 }
@@ -92,16 +92,16 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::put_XInterface(hyper pXInterface)
 
     CUNOXWrapper::put_XInterface(pXInterface);
     //special query.
-    if(pUNOInterface == nullptr)
+    if (pUNOInterface == nullptr)
         return E_FAIL;
 
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-    if( !pRContext.is() )
+    if (!pRContext.is())
     {
         return E_FAIL;
     }
-    Reference<XAccessibleImage> pRXI(pRContext,UNO_QUERY);
-    if( !pRXI.is() )
+    Reference<XAccessibleImage> pRXI(pRContext, UNO_QUERY);
+    if (!pRXI.is())
         pRXImg = nullptr;
     else
         pRXImg = pRXI.get();

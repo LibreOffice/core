@@ -46,33 +46,32 @@ AccEventListener::AccEventListener(css::accessibility::XAccessible* pAcc,
                                    AccObjectManagerAgent* Agent)
     : m_xAccessible(pAcc)
     , pAgent(Agent)
-{}
-
-AccEventListener::~AccEventListener()
 {
 }
+
+AccEventListener::~AccEventListener() {}
 
 /**
  *  Uno's event notifier when event is captured
  *  @param AccessibleEventObject    the event object which contains information about event
  */
-void  AccEventListener::notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
+void AccEventListener::notifyEvent(const css::accessibility::AccessibleEventObject& aEvent)
 {
     SolarMutexGuard g;
 
     switch (aEvent.EventId)
     {
-    case AccessibleEventId::NAME_CHANGED:
-        HandleNameChangedEvent(aEvent.NewValue);
-        break;
-    case AccessibleEventId::DESCRIPTION_CHANGED:
-        HandleDescriptionChangedEvent(aEvent.NewValue);
-        break;
-    case AccessibleEventId::STATE_CHANGED:
-        HandleStateChangedEvent(aEvent.OldValue, aEvent.NewValue);
-        break;
-    default:
-        break;
+        case AccessibleEventId::NAME_CHANGED:
+            HandleNameChangedEvent(aEvent.NewValue);
+            break;
+        case AccessibleEventId::DESCRIPTION_CHANGED:
+            HandleDescriptionChangedEvent(aEvent.NewValue);
+            break;
+        case AccessibleEventId::STATE_CHANGED:
+            HandleStateChangedEvent(aEvent.OldValue, aEvent.NewValue);
+            break;
+        default:
+            break;
     }
 }
 
@@ -85,7 +84,7 @@ void AccEventListener::HandleNameChangedEvent(Any name)
     if (pAgent->IsTopWinAcc(m_xAccessible.get()))
     {
         XAccessible* pAccDoc = pAgent->GetAccDocByAccTopWin(m_xAccessible.get());
-        if ( pAccDoc )
+        if (pAccDoc)
         {
             pAgent->UpdateAccName(pAccDoc);
             pAgent->NotifyAccEvent(UM_EVENT_OBJECT_NAMECHANGE, pAccDoc);
@@ -132,7 +131,7 @@ void AccEventListener::HandleVisibleDataChangedEvent()
 void AccEventListener::HandleStateChangedEvent(Any oldValue, Any newValue)
 {
     short newV, oldV;
-    if( newValue >>= newV)
+    if (newValue >>= newV)
     {
         SetComponentState(newV, true);
     }
@@ -147,16 +146,16 @@ void AccEventListener::HandleStateChangedEvent(Any oldValue, Any newValue)
  *  @param  state       new state id
  *  @param  enable      true if state is set, false if state is unset
  */
-void AccEventListener::SetComponentState(short state, bool enable )
+void AccEventListener::SetComponentState(short state, bool enable)
 {
     switch (state)
     {
-    case AccessibleStateType::FOCUSED:
-        FireStateFocusedChange(enable);
-        break;
-    default:
-        FireStatePropertyChange(state, enable);
-        break;
+        case AccessibleStateType::FOCUSED:
+            FireStateFocusedChange(enable);
+            break;
+        default:
+            FireStatePropertyChange(state, enable);
+            break;
     }
 }
 
@@ -166,7 +165,7 @@ void AccEventListener::SetComponentState(short state, bool enable )
  */
 void AccEventListener::FireStateFocusedChange(bool enable)
 {
-    if(enable)
+    if (enable)
     {
         pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
         pAgent->NotifyAccEvent(UM_EVENT_STATE_FOCUSED, m_xAccessible.get());
@@ -177,15 +176,14 @@ void AccEventListener::FireStateFocusedChange(bool enable)
     }
 }
 
-
 /**
  *  fire the MSAA state changed event
  *  @param state    the state id
  *  @param set      true if state is set, false if state is unset
  */
-void AccEventListener::FireStatePropertyChange(short /*state*/, bool set )
+void AccEventListener::FireStatePropertyChange(short /*state*/, bool set)
 {
-    if( set )
+    if (set)
     {
         //get new state
     }
@@ -200,9 +198,9 @@ void AccEventListener::FireStatePropertyChange(short /*state*/, bool set )
  */
 short AccEventListener::GetRole()
 {
-    css::uno::Reference<css::accessibility::XAccessibleContext> const
-        xContext(m_xAccessible->getAccessibleContext());
-    if(xContext.is())
+    css::uno::Reference<css::accessibility::XAccessibleContext> const xContext(
+        m_xAccessible->getAccessibleContext());
+    if (xContext.is())
     {
         return xContext->getAccessibleRole();
     }
@@ -234,7 +232,7 @@ void AccEventListener::RemoveMeFromBroadcaster()
         try
         {
             css::uno::Reference<XAccessibleEventBroadcaster> const xBroadcaster(
-                    m_xAccessible->getAccessibleContext(), UNO_QUERY);
+                m_xAccessible->getAccessibleContext(), UNO_QUERY);
             if (xBroadcaster.is())
             {
                 //remove the lister from accessible object
@@ -242,22 +240,21 @@ void AccEventListener::RemoveMeFromBroadcaster()
             }
         }
         catch (Exception const&)
-        {   // may throw if it's already disposed - ignore that
+        { // may throw if it's already disposed - ignore that
         }
         pAgent->NotifyDestroy(m_xAccessible.get());
         m_xAccessible.clear(); // release cyclic reference
     }
-    catch(...)
+    catch (...)
     {
         return;
     }
-
 }
 
 /**
  *  this method is invoked before listener is disposed
  */
-void AccEventListener::disposing( const css::lang::EventObject& /*Source*/ )
+void AccEventListener::disposing(const css::lang::EventObject& /*Source*/)
 {
     SolarMutexGuard g;
 

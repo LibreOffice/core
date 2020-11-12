@@ -19,7 +19,6 @@
 
 // AccObjectContainerEventListener.cpp: implementation of the AccContainerEventListener class.
 
-
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -33,12 +32,12 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccObjectContainerEventListener::AccObjectContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
-        :AccContainerEventListener(pAcc, Agent)
-{}
-AccObjectContainerEventListener::~AccObjectContainerEventListener()
+AccObjectContainerEventListener::AccObjectContainerEventListener(
+    css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
+    : AccContainerEventListener(pAcc, Agent)
 {
 }
+AccObjectContainerEventListener::~AccObjectContainerEventListener() {}
 
 /**
  *  handle the STATE_CHANGED event
@@ -48,7 +47,7 @@ void AccObjectContainerEventListener::HandleStateChangedEvent(Any oldValue, Any 
     //set the accessible name before process for there is no NAME_CHANGED event when change
     //the text in drawing objects.
     short newV;
-    if( newValue >>= newV)
+    if (newValue >>= newV)
     {
         if (newV == AccessibleStateType::FOCUSED)
         {

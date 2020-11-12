@@ -20,11 +20,12 @@
 #ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCESSIBLEKEYSTROKE_H
 #define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCESSIBLEKEYSTROKE_H
 
-struct ACCESSIBLE_KEYSTROKE {
-  short modifiers;
-  short keyCode;
-  char keyChar;
-  short keyFunc;
+struct ACCESSIBLE_KEYSTROKE
+{
+    short modifiers;
+    short keyCode;
+    char keyChar;
+    short keyFunc;
 };
 
 const short MODIFIER_SHIFT = 1;

@@ -26,7 +26,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
-#include  <UAccCOM.h>
+#include <UAccCOM.h>
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
@@ -34,7 +34,7 @@
 #if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wextra-tokens"
-    // "#endif !_MIDL_USE_GUIDDEF_" in midl-generated code
+// "#endif !_MIDL_USE_GUIDDEF_" in midl-generated code
 #endif
 #include <UAccCOM_i.c>
 #include <ia2_api_all_i.c>
@@ -55,7 +55,6 @@
 #include "AccTable.h"
 #include "AccHyperLink.h"
 #include "AccHypertext.h"
-
 
 CComModule _Module;
 
@@ -83,8 +82,7 @@ END_OBJECT_MAP()
 
 // DLL Entry Point
 
-extern "C"
-    BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -93,17 +91,12 @@ extern "C"
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
-    return TRUE;    // ok
+    return TRUE; // ok
 }
-
 
 // Used to determine whether the DLL can be unloaded by OLE
 
-STDAPI DllCanUnloadNow()
-{
-    return (_Module.GetLockCount()==0) ? S_OK : E_FAIL;
-}
-
+STDAPI DllCanUnloadNow() { return (_Module.GetLockCount() == 0) ? S_OK : E_FAIL; }
 
 // Returns a class factory to create an object of the requested type
 
@@ -112,10 +105,9 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-
-IMAccessible * UAccCOMCreateInstance()
+IMAccessible* UAccCOMCreateInstance()
 {
-    IMAccessible * pIMA = nullptr;
+    IMAccessible* pIMA = nullptr;
     HRESULT hr = createInstance<CMAccessible>(IID_IMAccessible, &pIMA);
     return (S_OK == hr) ? pIMA : nullptr;
 }

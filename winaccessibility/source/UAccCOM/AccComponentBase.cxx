@@ -27,16 +27,11 @@
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 
-
 // Construction/Destruction
 
+CAccComponentBase::CAccComponentBase() {}
 
-CAccComponentBase::CAccComponentBase()
-{}
-
-CAccComponentBase::~CAccComponentBase()
-{}
-
+CAccComponentBase::~CAccComponentBase() {}
 
 /**
  * Returns the location of the upper left corner of the object's bounding
@@ -44,7 +39,7 @@ CAccComponentBase::~CAccComponentBase()
  *
  * @param    Location    the upper left corner of the object's bounding box.
  */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationInParent(long *x, long *y)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationInParent(long* x, long* y)
 {
     SolarMutexGuard g;
 
@@ -53,7 +48,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationInParent(long *
         if (x == nullptr || y == nullptr)
             return E_INVALIDARG;
         // #CHECK XInterface#
-        if(!pRXComp.is())
+        if (!pRXComp.is())
             return E_FAIL;
 
         const css::awt::Point& pt = GetXInterface()->getLocation();
@@ -61,7 +56,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationInParent(long *
         *y = pt.Y;
         return S_OK;
     }
-    catch(...)
+    catch (...)
     {
         return E_FAIL;
     }
@@ -74,7 +69,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationInParent(long *
  * @param    Location    the upper left corner of the object's bounding
  *                       box in screen coordinates.
  */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *x, long *y)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationOnScreen(long* x, long* y)
 {
     SolarMutexGuard g;
 
@@ -83,16 +78,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *
         if (x == nullptr || y == nullptr)
             return E_INVALIDARG;
         // #CHECK XInterface#
-        if(!pRXComp.is())
+        if (!pRXComp.is())
             return E_FAIL;
 
         const css::awt::Point& pt = GetXInterface()->getLocationOnScreen();
         *x = pt.X;
         *y = pt.Y;
         return S_OK;
-
     }
-    catch(...)
+    catch (...)
     {
         return E_FAIL;
     }
@@ -103,7 +97,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *
  *
  * @param    success    the boolean result to be returned.
  */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::grabFocus(boolean * success)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::grabFocus(boolean* success)
 {
     SolarMutexGuard g;
 
@@ -112,7 +106,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::grabFocus(boolean * success
     if (success == nullptr)
         return E_INVALIDARG;
     // #CHECK XInterface#
-    if(!pRXComp.is())
+    if (!pRXComp.is())
     {
         return E_FAIL;
     }
@@ -129,7 +123,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::grabFocus(boolean * success
  *
  * @param    Color    the color of foreground.
  */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * foreground)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_foreground(IA2Color* foreground)
 {
     SolarMutexGuard g;
 
@@ -138,7 +132,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * f
     if (foreground == nullptr)
         return E_INVALIDARG;
     // #CHECK XInterface#
-    if(!pRXComp.is())
+    if (!pRXComp.is())
     {
         return E_FAIL;
     }
@@ -154,7 +148,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * f
  *
  * @param    Color    the color of background.
  */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_background(IA2Color * background)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_background(IA2Color* background)
 {
     SolarMutexGuard g;
 
@@ -163,7 +157,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_background(IA2Color * b
     if (background == nullptr)
         return E_INVALIDARG;
     // #CHECK XInterface#
-    if(!pRXComp.is())
+    if (!pRXComp.is())
     {
         return E_FAIL;
     }
@@ -187,15 +181,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::put_XInterface(hyper pXInte
 
     CUNOXWrapper::put_XInterface(pXInterface);
     //special query.
-    if(pUNOInterface == nullptr)
+    if (pUNOInterface == nullptr)
         return E_FAIL;
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-    if( !pRContext.is() )
+    if (!pRContext.is())
     {
         return E_FAIL;
     }
-    Reference<XAccessibleComponent> pRXI(pRContext,UNO_QUERY);
-    if( !pRXI.is() )
+    Reference<XAccessibleComponent> pRXI(pRContext, UNO_QUERY);
+    if (!pRXI.is())
         pRXComp = nullptr;
     else
         pRXComp = pRXI.get();

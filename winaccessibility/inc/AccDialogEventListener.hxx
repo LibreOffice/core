@@ -31,22 +31,21 @@
  * It defines the procedure of specific event handling related with dialogs and provides
  * the detailed support for some related methods.
  */
-class AccDialogEventListener: public AccEventListener
+class AccDialogEventListener : public AccEventListener
 {
 public:
     AccDialogEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccDialogEventListener() override;
 
     //AccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
+    virtual void SAL_CALL
+    notifyEvent(const css::accessibility::AccessibleEventObject& aEvent) override;
 
     //for child changed event
-    virtual void HandleChildChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleChildChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
 
     //state changed
     virtual void SetComponentState(short state, bool enable) override;
-
 };
 
 #endif // INCLUDED_WINACCESSIBILITY_INC_ACCDIALOGEVENTLISTENER_HXX

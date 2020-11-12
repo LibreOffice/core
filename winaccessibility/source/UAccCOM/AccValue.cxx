@@ -25,7 +25,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
-#include  <UAccCOM.h>
+#include <UAccCOM.h>
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
@@ -44,7 +44,7 @@ using namespace com::sun::star::uno;
    * @return Result.
    */
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_currentValue(VARIANT * currentValue)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_currentValue(VARIANT* currentValue)
 {
     SolarMutexGuard g;
 
@@ -52,11 +52,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_currentValue(VARIANT * currentV
 
     if (currentValue == nullptr)
         return E_INVALIDARG;
-    if ( !pRXVal.is() )
+    if (!pRXVal.is())
         return E_FAIL;
 
     // Get Any type value from UNO.
-    css::uno::Any  anyVal = GetXInterface()->getCurrentValue();
+    css::uno::Any anyVal = GetXInterface()->getCurrentValue();
     // Convert Any to VARIANT.
     CMAccessible::ConvertAnyToVariant(anyVal, currentValue);
 
@@ -77,57 +77,57 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
 
     ENTER_PROTECTED_BLOCK
 
-    if ( !pRXVal.is() )
+    if (!pRXVal.is())
         return E_FAIL;
 
     HRESULT hRet = S_OK;
     css::uno::Any anyVal;
 
     // Set value according to value type.
-    switch(value.vt)
+    switch (value.vt)
     {
-    case VT_UI1:
+        case VT_UI1:
         {
             anyVal <<= sal_Unicode(value.bVal);
         }
         break;
 
-    case VT_BOOL:
+        case VT_BOOL:
         {
-            css::uno::Type     typeInfo(TypeClass_BOOLEAN, "bool");
+            css::uno::Type typeInfo(TypeClass_BOOLEAN, "bool");
             anyVal.setValue(&value.boolVal, typeInfo);
         }
         break;
 
-    case VT_I2:
+        case VT_I2:
         {
-            css::uno::Type     typeInfo(TypeClass_SHORT, "short");
+            css::uno::Type typeInfo(TypeClass_SHORT, "short");
             anyVal.setValue(&value.iVal, typeInfo);
         }
         break;
 
-    case VT_I4:
+        case VT_I4:
         {
-            css::uno::Type     typeInfo(TypeClass_LONG, "long");
+            css::uno::Type typeInfo(TypeClass_LONG, "long");
             anyVal.setValue(&value.lVal, typeInfo);
         }
         break;
 
-    case VT_R4:
+        case VT_R4:
         {
-            css::uno::Type     typeInfo(TypeClass_FLOAT, "float");
+            css::uno::Type typeInfo(TypeClass_FLOAT, "float");
             anyVal.setValue(&value.fltVal, typeInfo);
         }
         break;
 
-    case VT_R8:
+        case VT_R8:
         {
-            css::uno::Type     typeInfo(TypeClass_DOUBLE, "double");
+            css::uno::Type typeInfo(TypeClass_DOUBLE, "double");
             anyVal.setValue(&value.dblVal, typeInfo);
         }
         break;
 
-    default:
+        default:
         {
             // Unsupported type conversion.
             hRet = E_FAIL;
@@ -135,9 +135,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
         break;
     }
 
-    if(hRet == S_OK)
+    if (hRet == S_OK)
     {
-        hRet = pRXVal->setCurrentValue(anyVal) ? S_OK : E_FAIL ;
+        hRet = pRXVal->setCurrentValue(anyVal) ? S_OK : E_FAIL;
     }
 
     return hRet;
@@ -150,7 +150,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
    * @param  maximumValue Variant that accepts maximum value.
    * @return Result.
    */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumValue)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_maximumValue(VARIANT* maximumValue)
 {
     SolarMutexGuard g;
 
@@ -158,11 +158,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumVa
 
     if (maximumValue == nullptr)
         return E_INVALIDARG;
-    if ( !pRXVal.is() )
+    if (!pRXVal.is())
         return E_FAIL;
 
     // Get Any type value from UNO.
-    css::uno::Any  anyVal = GetXInterface()->getMaximumValue();
+    css::uno::Any anyVal = GetXInterface()->getMaximumValue();
     // Convert Any to VARIANT.
     CMAccessible::ConvertAnyToVariant(anyVal, maximumValue);
 
@@ -176,7 +176,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumVa
    * @param  minimumValue Variant that accepts minimum value.
    * @return Result.
    */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT *minimumValue)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT* minimumValue)
 {
     SolarMutexGuard g;
 
@@ -184,11 +184,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT *minimumVa
 
     if (minimumValue == nullptr)
         return E_FAIL;
-    if ( !pRXVal.is() )
+    if (!pRXVal.is())
         return E_FAIL;
 
     // Get Any type value from UNO.
-    css::uno::Any  anyVal = GetXInterface()->getMinimumValue();
+    css::uno::Any anyVal = GetXInterface()->getMinimumValue();
     // Convert Any to VARIANT.
     CMAccessible::ConvertAnyToVariant(anyVal, minimumValue);
 
@@ -210,15 +210,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::put_XInterface(hyper pXInterface)
 
     CUNOXWrapper::put_XInterface(pXInterface);
     //special query.
-    if(pUNOInterface == nullptr)
+    if (pUNOInterface == nullptr)
         return E_FAIL;
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-    if( !pRContext.is() )
+    if (!pRContext.is())
     {
         return E_FAIL;
     }
-    Reference<XAccessibleValue> pRXI(pRContext,UNO_QUERY);
-    if( !pRXI.is() )
+    Reference<XAccessibleValue> pRXI(pRContext, UNO_QUERY);
+    if (!pRXI.is())
         pRXVal = nullptr;
     else
         pRXVal = pRXI.get();
