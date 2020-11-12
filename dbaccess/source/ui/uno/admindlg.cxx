@@ -25,24 +25,23 @@ using namespace dbaui;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbu_ODatasourceAdministrationDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new ODataSourcePropertyDialog(context));
 }
 
 namespace dbaui
 {
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
-
-ODataSourcePropertyDialog::ODataSourcePropertyDialog(const Reference< XComponentContext >& _rxORB)
-    :ODatabaseAdministrationDialog(_rxORB)
+ODataSourcePropertyDialog::ODataSourcePropertyDialog(const Reference<XComponentContext>& _rxORB)
+    : ODatabaseAdministrationDialog(_rxORB)
 {
 }
 
-Sequence<sal_Int8> SAL_CALL ODataSourcePropertyDialog::getImplementationId(  )
+Sequence<sal_Int8> SAL_CALL ODataSourcePropertyDialog::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -57,9 +56,9 @@ css::uno::Sequence<OUString> SAL_CALL ODataSourcePropertyDialog::getSupportedSer
     return { "com.sun.star.sdb.DatasourceAdministrationDialog" };
 }
 
-Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetInfo()
+Reference<XPropertySetInfo> SAL_CALL ODataSourcePropertyDialog::getPropertySetInfo()
 {
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo> xInfo(createPropertySetInfo(getInfoHelper()));
     return xInfo;
 }
 
@@ -68,24 +67,26 @@ Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetI
     return *getArrayHelper();
 }
 
-::cppu::IPropertyArrayHelper* ODataSourcePropertyDialog::createArrayHelper( ) const
+::cppu::IPropertyArrayHelper* ODataSourcePropertyDialog::createArrayHelper() const
 {
-    Sequence< Property > aProps;
+    Sequence<Property> aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-std::unique_ptr<weld::DialogController> ODataSourcePropertyDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController>
+ODataSourcePropertyDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    std::unique_ptr<ODbAdminDialog> xDialog(new ODbAdminDialog(Application::GetFrameWeld(rParent), m_pDatasourceItems.get(), m_aContext));
+    std::unique_ptr<ODbAdminDialog> xDialog(new ODbAdminDialog(
+        Application::GetFrameWeld(rParent), m_pDatasourceItems.get(), m_aContext));
 
     // the initial selection
-    if ( m_aInitialSelection.hasValue() )
+    if (m_aInitialSelection.hasValue())
         xDialog->selectDataSource(m_aInitialSelection);
 
     return xDialog;
 }
 
-}   // namespace dbaui
+} // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

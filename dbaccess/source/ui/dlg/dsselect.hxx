@@ -28,7 +28,6 @@
 class SfxItemSet;
 namespace dbaui
 {
-
 // ODatasourceSelector
 class ODatasourceSelectDialog final : public weld::GenericDialogController
 {
@@ -43,17 +42,13 @@ class ODatasourceSelectDialog final : public weld::GenericDialogController
 public:
     ODatasourceSelectDialog(weld::Window* pParent, const std::set<OUString>& rDatasources);
     virtual ~ODatasourceSelectDialog() override;
-    OUString GetSelected() const {
-        return m_xDatasource->get_selected_text();
-    }
-    void     Select( const OUString& _rEntry ) {
-        m_xDatasource->select_text(_rEntry);
-    }
+    OUString GetSelected() const { return m_xDatasource->get_selected_text(); }
+    void Select(const OUString& _rEntry) { m_xDatasource->select_text(_rEntry); }
 
     virtual short run() override;
 
 private:
-    DECL_LINK( ListDblClickHdl, weld::TreeView&, bool );
+    DECL_LINK(ListDblClickHdl, weld::TreeView&, bool);
 #ifdef HAVE_ODBC_ADMINISTRATION
     DECL_LINK(ManageClickHdl, weld::Button&, void);
     DECL_LINK(ManageProcessFinished, void*, void);
@@ -61,6 +56,6 @@ private:
     void fillListBox(const std::set<OUString>& _rDatasources);
 };
 
-}   // namespace dbaui
+} // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

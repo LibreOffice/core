@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#define WIZARD_PAGE_X       56
-#define WIZARD_PAGE_Y       30
+#define WIZARD_PAGE_X 56
+#define WIZARD_PAGE_Y 30
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

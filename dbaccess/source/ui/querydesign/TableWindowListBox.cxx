@@ -40,11 +40,11 @@ OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox)
 {
 }
 
-OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
+OTableWindowListBox::OTableWindowListBox(OTableWindow* pParent)
     : InterimItemWindow(pParent, "dbaccess/ui/tablelistbox.ui", "TableListBox")
     , m_xTreeView(m_xBuilder->weld_tree_view("treeview"))
     , m_xDragDropTargetHelper(new TableWindowListBoxHelper(*this, m_xTreeView->get_drop_target()))
-    , m_pTabWin( pParent )
+    , m_pTabWin(pParent)
     , m_nDropEvent(nullptr)
     , m_nUiEvent(nullptr)
 {
@@ -57,20 +57,19 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     m_xTreeView->connect_drag_begin(LINK(this, OTableWindowListBox, DragBeginHdl));
 }
 
-void OTableWindowListBox::dragFinished( )
+void OTableWindowListBox::dragFinished()
 {
     // first show the error msg when existing
-    m_pTabWin->getDesignView()->getController().showError(m_pTabWin->getDesignView()->getController().clearOccurredError());
+    m_pTabWin->getDesignView()->getController().showError(
+        m_pTabWin->getDesignView()->getController().clearOccurredError());
     // second look for ui activities which should happen after d&d
     if (m_nUiEvent)
         Application::RemoveUserEvent(m_nUiEvent);
-    m_nUiEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, LookForUiHdl), nullptr, true);
+    m_nUiEvent
+        = Application::PostUserEvent(LINK(this, OTableWindowListBox, LookForUiHdl), nullptr, true);
 }
 
-OTableWindowListBox::~OTableWindowListBox()
-{
-    disposeOnce();
-}
+OTableWindowListBox::~OTableWindowListBox() { disposeOnce(); }
 
 void OTableWindowListBox::dispose()
 {
@@ -84,7 +83,7 @@ void OTableWindowListBox::dispose()
     InterimItemWindow::dispose();
 }
 
-int OTableWindowListBox::GetEntryFromText( const OUString& rEntryText )
+int OTableWindowListBox::GetEntryFromText(const OUString& rEntryText)
 {
     // iterate through the list
     OJoinDesignView* pView = m_pTabWin->getDesignView();
@@ -94,19 +93,20 @@ int OTableWindowListBox::GetEntryFromText( const OUString& rEntryText )
     {
         bool bCase = false;
         const Reference<XConnection>& xConnection = rController.getConnection();
-        if(xConnection.is())
+        if (xConnection.is())
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-            if(xMeta.is())
+            if (xMeta.is())
                 bCase = xMeta->supportsMixedCaseQuotedIdentifiers();
         }
         for (int nEntry = 0, nCount = m_xTreeView->n_children(); nEntry < nCount; ++nEntry)
         {
-            if (bCase ? rEntryText == m_xTreeView->get_text(nEntry) : rEntryText.equalsIgnoreAsciiCase(m_xTreeView->get_text(nEntry)))
+            if (bCase ? rEntryText == m_xTreeView->get_text(nEntry)
+                      : rEntryText.equalsIgnoreAsciiCase(m_xTreeView->get_text(nEntry)))
                 return nEntry;
         }
     }
-    catch(SQLException&)
+    catch (SQLException&)
     {
     }
 
@@ -129,7 +129,8 @@ IMPL_LINK(OTableWindowListBox, DragBeginHdl, bool&, rUnsetDragIcon, bool)
     }
 
     OJoinTableView* pCont = m_pTabWin->getTableView();
-    if (!pCont->getDesignView()->getController().isReadOnly() && pCont->getDesignView()->getController().isConnected())
+    if (!pCont->getDesignView()->getController().isReadOnly()
+        && pCont->getDesignView()->getController().isConnected())
     {
         // asterisk was not allowed to be copied to selection browsebox
         bool bFirstNotAllowed = m_xTreeView->is_selected(0) && m_pTabWin->GetData()->IsShowAll();
@@ -144,7 +145,7 @@ IMPL_LINK(OTableWindowListBox, DragBeginHdl, bool&, rUnsetDragIcon, bool)
     return true;
 }
 
-sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
+sal_Int8 OTableWindowListBox::AcceptDrop(const AcceptDropEvent& _rEvt)
 {
     // to enable the autoscroll when we're close to the edges
     std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
@@ -152,9 +153,11 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 
     sal_Int8 nDND_Action = DND_ACTION_NONE;
     // check the format
-    if ( !OJoinExchObj::isFormatAvailable(m_xDragDropTargetHelper->GetDataFlavorExVector(),SotClipboardFormatId::SBA_TABID) // this means that the first entry is to be dragged
-        && OJoinExchObj::isFormatAvailable(m_xDragDropTargetHelper->GetDataFlavorExVector()) )
-    {   // don't drop into the window if it's the drag source itself
+    if (!OJoinExchObj::isFormatAvailable(
+            m_xDragDropTargetHelper->GetDataFlavorExVector(),
+            SotClipboardFormatId::SBA_TABID) // this means that the first entry is to be dragged
+        && OJoinExchObj::isFormatAvailable(m_xDragDropTargetHelper->GetDataFlavorExVector()))
+    { // don't drop into the window if it's the drag source itself
 
         // remove the selection if the dragging operation is leaving the window
         if (_rEvt.mbLeaving)
@@ -169,48 +172,51 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
             m_xTreeView->select(*xEntry);
 
             // one cannot drop on the first (*) entry
-            if(!( m_pTabWin->GetData()->IsShowAll() && (m_xTreeView->get_iter_index_in_parent(*xEntry) == 0) ))
+            if (!(m_pTabWin->GetData()->IsShowAll()
+                  && (m_xTreeView->get_iter_index_in_parent(*xEntry) == 0)))
                 nDND_Action = DND_ACTION_LINK;
         }
     }
     return nDND_Action;
 }
 
-IMPL_LINK_NOARG( OTableWindowListBox, LookForUiHdl, void*, void )
+IMPL_LINK_NOARG(OTableWindowListBox, LookForUiHdl, void*, void)
 {
     m_nUiEvent = nullptr;
     m_pTabWin->getTableView()->lookForUiActivities();
 }
 
-IMPL_LINK_NOARG( OTableWindowListBox, DropHdl, void*, void )
+IMPL_LINK_NOARG(OTableWindowListBox, DropHdl, void*, void)
 {
     // create the connection
     m_nDropEvent = nullptr;
-    OSL_ENSURE(m_pTabWin,"No TableWindow!");
+    OSL_ENSURE(m_pTabWin, "No TableWindow!");
     try
     {
         OJoinTableView* pCont = m_pTabWin->getTableView();
-        OSL_ENSURE(pCont,"No QueryTableView!");
+        OSL_ENSURE(pCont, "No QueryTableView!");
         pCont->AddConnection(m_aDropInfo.aSource, m_aDropInfo.aDest);
     }
-    catch(const SQLException& e)
+    catch (const SQLException& e)
     {
         // remember the exception so that we can show them later when d&d is finished
-        m_pTabWin->getDesignView()->getController().setErrorOccurred(::dbtools::SQLExceptionInfo(e));
+        m_pTabWin->getDesignView()->getController().setErrorOccurred(
+            ::dbtools::SQLExceptionInfo(e));
     }
 }
 
-sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
+sal_Int8 OTableWindowListBox::ExecuteDrop(const ExecuteDropEvent& _rEvt)
 {
     TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
-    if ( OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
-    {   // don't drop into the window if it's the drag source itself
+    if (OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
+    { // don't drop into the window if it's the drag source itself
         m_aDropInfo.aSource = OJoinExchangeData(this);
-        m_aDropInfo.aDest   = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
+        m_aDropInfo.aDest = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
 
         if (m_nDropEvent)
             Application::RemoveUserEvent(m_nDropEvent);
-        m_nDropEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, DropHdl), nullptr, true);
+        m_nDropEvent
+            = Application::PostUserEvent(LINK(this, OTableWindowListBox, DropHdl), nullptr, true);
 
         dragFinished();
 

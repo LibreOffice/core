@@ -24,9 +24,8 @@
 
 namespace dbaccess
 {
-
-    css::uno::Reference< css::uno::XAggregation >
-        createDataSourceRegistrations( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
+css::uno::Reference<css::uno::XAggregation>
+createDataSourceRegistrations(const css::uno::Reference<css::uno::XComponentContext>& _rxContext);
 
 } // namespace dbaccess
 

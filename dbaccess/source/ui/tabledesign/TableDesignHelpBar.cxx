@@ -22,7 +22,7 @@
 
 using namespace dbaui;
 
-#define DETAILS_MIN_HELP_WIDTH          200
+#define DETAILS_MIN_HELP_WIDTH 200
 
 OTableDesignHelpBar::OTableDesignHelpBar(std::unique_ptr<weld::TextView> xTextWin)
     : m_xTextWin(std::move(xTextWin))
@@ -31,7 +31,7 @@ OTableDesignHelpBar::OTableDesignHelpBar(std::unique_ptr<weld::TextView> xTextWi
     m_xTextWin->set_help_id(HID_TAB_DESIGN_HELP_TEXT_FRAME);
 }
 
-void OTableDesignHelpBar::SetHelpText( const OUString& rText )
+void OTableDesignHelpBar::SetHelpText(const OUString& rText)
 {
     if (!m_xTextWin)
         return;
@@ -44,19 +44,11 @@ bool OTableDesignHelpBar::isCopyAllowed()
     return m_xTextWin && m_xTextWin->get_selection_bounds(mStartPos, nEndPos);
 }
 
-bool OTableDesignHelpBar::isCutAllowed()
-{
-    return false;
-}
+bool OTableDesignHelpBar::isCutAllowed() { return false; }
 
-bool OTableDesignHelpBar::isPasteAllowed()
-{
-    return false;
-}
+bool OTableDesignHelpBar::isPasteAllowed() { return false; }
 
-void OTableDesignHelpBar::cut()
-{
-}
+void OTableDesignHelpBar::cut() {}
 
 void OTableDesignHelpBar::copy()
 {
@@ -65,8 +57,6 @@ void OTableDesignHelpBar::copy()
     m_xTextWin->copy_clipboard();
 }
 
-void OTableDesignHelpBar::paste()
-{
-}
+void OTableDesignHelpBar::paste() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
