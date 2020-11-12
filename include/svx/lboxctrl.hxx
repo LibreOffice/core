@@ -29,22 +29,22 @@ class SvxPopupWindowListBox;
 
 class SvxUndoRedoControl final : public svt::PopupWindowController
 {
-    std::vector< OUString > aUndoRedoList;
-    OUString                aDefaultTooltip;
+    std::vector<OUString> aUndoRedoList;
+    OUString aDefaultTooltip;
 
 public:
     SvxUndoRedoControl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~SvxUndoRedoControl() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
-    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 

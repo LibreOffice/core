@@ -22,7 +22,8 @@
 #include <svx/sdooitm.hxx>
 #include <svx/svddef.hxx>
 
-inline SdrOnOffItem makeSdrShadowItem(bool bShadow) {
+inline SdrOnOffItem makeSdrShadowItem(bool bShadow)
+{
     return SdrOnOffItem(SDRATTR_SHADOW, bShadow);
 }
 

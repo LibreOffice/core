@@ -29,16 +29,16 @@ class SVX_DLLPUBLIC SvxSelectionModeControl final : public SfxStatusBarControl
 public:
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SvxSelectionModeControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
+    SvxSelectionModeControl(sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb);
 
-    virtual void     StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                   const SfxPoolItem* pState ) override;
-    virtual bool     MouseButtonDown( const MouseEvent& rEvt ) override;
-    virtual void     Paint( const UserDrawEvent& rEvt ) override;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+                              const SfxPoolItem* pState) override;
+    virtual bool MouseButtonDown(const MouseEvent& rEvt) override;
+    virtual void Paint(const UserDrawEvent& rEvt) override;
 
 private:
-    sal_uInt16  mnState;
-    Image       maImage;
+    sal_uInt16 mnState;
+    Image maImage;
 };
 
 #endif

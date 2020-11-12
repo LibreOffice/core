@@ -14,12 +14,10 @@
 
 namespace basegfx::zoomtools
 {
-
 /** This namespace provides functions for optimized geometric zooming
 */
 BASEGFX_DLLPUBLIC tools::Long zoomOut(tools::Long nCurrent);
 BASEGFX_DLLPUBLIC tools::Long zoomIn(tools::Long nCurrent);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

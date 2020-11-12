@@ -24,13 +24,13 @@
 #include <o3tl/typed_flags_set.hxx>
 
 /// defines the type of a registry handle used in the C API.
-typedef void*       RegHandle;
+typedef void* RegHandle;
 
 /// defines the type of a registry key handle used in the C API.
-typedef void*       RegKeyHandle;
+typedef void* RegKeyHandle;
 
 /// defines the type of a registry key value handle used in the C API.
-typedef void*       RegValue;
+typedef void* RegValue;
 
 /** defines the open/access mode of the registry.
 
@@ -40,12 +40,14 @@ typedef void*       RegValue;
  */
 enum class RegAccessMode
 {
-    READONLY        = 0x0001, /// This mode allows readonly access.
-    READWRITE       = 0x0002  /// This mode allows read and write access.
+    READONLY = 0x0001, /// This mode allows readonly access.
+    READWRITE = 0x0002 /// This mode allows read and write access.
 };
 namespace o3tl
 {
-    template<> struct typed_flags<RegAccessMode> : is_typed_flags<RegAccessMode, 0x03> {};
+template <> struct typed_flags<RegAccessMode> : is_typed_flags<RegAccessMode, 0x03>
+{
+};
 }
 
 /** defines the type of a key value.
@@ -132,7 +134,7 @@ enum class SAL_DLLPUBLIC_RTTI RegError
 };
 
 /// specify the calling convention for the registry API
-#define REGISTRY_CALLTYPE   SAL_CALL
+#define REGISTRY_CALLTYPE SAL_CALL
 
 #endif
 

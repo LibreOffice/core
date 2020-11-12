@@ -24,7 +24,6 @@
 
 class GDIMetaFile;
 
-
 // #i121267# Added tooling to be able to support old exporters which are based on
 // metafiles as graphic content, but do not implement using the contained clip
 // regions.
@@ -36,7 +35,6 @@ class GDIMetaFile;
 // information.
 
 void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource);
-
 
 // Allow to check if a Metafile contains clipping or not
 
@@ -51,7 +49,6 @@ public:
     virtual void accessMetafile(GDIMetaFile& rTargetMetafile) const = 0;
     virtual ~MetafileAccessor();
 };
-
 
 #endif // INCLUDED_VCL_GDIMETAFILETOOLS_HXX
 

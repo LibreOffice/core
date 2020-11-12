@@ -24,7 +24,10 @@
 #include <rtl/string.hxx>
 #include <tools/long.hxx>
 
-namespace com::sun::star::lang { struct Locale; }
+namespace com::sun::star::lang
+{
+struct Locale;
+}
 
 //!! The values of the following enumerators must correspond to the array position
 //!! of the respective paper size in the file i18nutil/source/utility/paper.cxx
@@ -116,14 +119,13 @@ enum Paper : unsigned
 };
 
 // defined for 'equal size' test with the implementation array
-#define NUM_PAPER_ENTRIES   (PAPER_16K_197x273 - PAPER_A0 + 1)
-
+#define NUM_PAPER_ENTRIES (PAPER_16K_197x273 - PAPER_A0 + 1)
 
 class I18NUTIL_DLLPUBLIC PaperInfo
 {
     Paper m_eType;
-    tools::Long m_nPaperWidth;     // width in 100thMM
-    tools::Long m_nPaperHeight;    // height in 100thMM
+    tools::Long m_nPaperWidth; // width in 100thMM
+    tools::Long m_nPaperHeight; // height in 100thMM
 public:
     PaperInfo(Paper eType);
     PaperInfo(tools::Long nPaperWidth, tools::Long nPaperHeight);
@@ -131,13 +133,13 @@ public:
     Paper getPaper() const { return m_eType; }
     tools::Long getWidth() const { return m_nPaperWidth; }
     tools::Long getHeight() const { return m_nPaperHeight; }
-    bool sloppyEqual(const PaperInfo &rOther) const;
+    bool sloppyEqual(const PaperInfo& rOther) const;
     void doSloppyFit();
 
     static PaperInfo getSystemDefaultPaper();
-    static PaperInfo getDefaultPaperForLocale(const css::lang::Locale & rLocale);
+    static PaperInfo getDefaultPaperForLocale(const css::lang::Locale& rLocale);
 
-    static Paper fromPSName(const OString &rName);
+    static Paper fromPSName(const OString& rName);
     static OString toPSName(Paper eType);
 
     static tools::Long sloppyFitPageDimension(tools::Long nDimension);

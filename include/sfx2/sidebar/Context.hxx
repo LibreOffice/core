@@ -20,8 +20,8 @@
 
 #include <rtl/ustring.hxx>
 
-namespace sfx2::sidebar {
-
+namespace sfx2::sidebar
+{
 class Context
 {
 public:
@@ -29,9 +29,7 @@ public:
     OUString msContext;
 
     Context();
-    Context (
-        const OUString& rsApplication,
-        const OUString& rsContext);
+    Context(const OUString& rsApplication, const OUString& rsContext);
 
     /** When two contexts are matched against each other, then
         application or context name may have the wildcard value 'any'.
@@ -47,10 +45,10 @@ public:
         between two contexts is.
         Smaller values represent better matches.
     */
-    sal_Int32 EvaluateMatch (const Context& rOther) const;
+    sal_Int32 EvaluateMatch(const Context& rOther) const;
 
-    bool operator== (const Context& rOther) const;
-    bool operator!= (const Context& rOther) const;
+    bool operator==(const Context& rOther) const;
+    bool operator!=(const Context& rOther) const;
 };
 
 } // end of namespace sfx2::sidebar

@@ -16,14 +16,14 @@
 
 #include <comphelper/crashzone.hxx>
 
-class OPENCL_DLLPUBLIC OpenCLZone : public CrashZone< OpenCLZone >
+class OPENCL_DLLPUBLIC OpenCLZone : public CrashZone<OpenCLZone>
 {
 public:
     static void hardDisable();
 };
 
 // Used during initial testing of OpenCL.
-class OPENCL_DLLPUBLIC OpenCLInitialZone : public CrashZone< OpenCLInitialZone >
+class OPENCL_DLLPUBLIC OpenCLInitialZone : public CrashZone<OpenCLInitialZone>
 {
 };
 

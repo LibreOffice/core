@@ -24,7 +24,7 @@ using htmlDocUniquePtr = xmlDocUniquePtr;
 class OOO_DLLPUBLIC_TEST HtmlTestTools
 {
 protected:
-    static htmlDocUniquePtr parseHtml(utl::TempFile const & aTempFile);
+    static htmlDocUniquePtr parseHtml(utl::TempFile const& aTempFile);
     static htmlDocUniquePtr parseHtmlStream(SvStream* pStream);
 };
 

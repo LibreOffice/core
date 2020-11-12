@@ -24,8 +24,8 @@
 
 class ScrollBar;
 
-namespace sfx2::sidebar {
-
+namespace sfx2::sidebar
+{
 class DeckDescriptor;
 class DeckTitleBar;
 
@@ -38,20 +38,19 @@ class DeckTitleBar;
 class Deck final : public vcl::Window
 {
 public:
-    Deck(const DeckDescriptor& rDeckDescriptor,
-         vcl::Window* pParentWindow,
+    Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
          const std::function<void()>& rCloserAction);
     virtual ~Deck() override;
     virtual void dispose() override;
 
     const OUString& GetId() const { return msId; }
 
-    VclPtr<DeckTitleBar> const & GetTitleBar() const;
+    VclPtr<DeckTitleBar> const& GetTitleBar() const;
     tools::Rectangle GetContentArea() const;
-    void ResetPanels (const SharedPanelContainer& rPanels);
-    const SharedPanelContainer& GetPanels() const  { return maPanels; }
+    void ResetPanels(const SharedPanelContainer& rPanels);
+    const SharedPanelContainer& GetPanels() const { return maPanels; }
 
-    Panel* GetPanel(OUString const & panelId);
+    Panel* GetPanel(OUString const& panelId);
 
     void RequestLayout();
     vcl::Window* GetPanelParentWindow();
@@ -60,17 +59,18 @@ public:
         When the whole panel does not fit then make its top visible
         and it off at the bottom.
     */
-    void ShowPanel (const Panel& rPanel);
+    void ShowPanel(const Panel& rPanel);
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea) override;
-    virtual void DataChanged (const DataChangedEvent& rEvent) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext,
+                       const tools::Rectangle& rUpdateArea) override;
+    virtual void DataChanged(const DataChangedEvent& rEvent) override;
     virtual bool EventNotify(NotifyEvent& rEvent) override;
     virtual void Resize() override;
 
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 
-    static void PrintWindowSubTree (vcl::Window* pRoot, int nIndentation);
+    static void PrintWindowSubTree(vcl::Window* pRoot, int nIndentation);
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
 
@@ -78,8 +78,10 @@ public:
     {
     public:
         ScrollContainerWindow(vcl::Window* pParentWindow);
-        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea) override;
+        virtual void Paint(vcl::RenderContext& rRenderContext,
+                           const tools::Rectangle& rUpdateArea) override;
         void SetSeparators(const ::std::vector<sal_Int32>& rSeparators);
+
     private:
         std::vector<sal_Int32> maSeparators;
     };
@@ -99,8 +101,7 @@ private:
     VclPtr<ScrollBar> mpVerticalScrollBar;
 
     DECL_LINK(HandleVerticalScrollBarChange, ScrollBar*, void);
-    bool ProcessWheelEvent(CommandEvent const * pCommandEvent);
-
+    bool ProcessWheelEvent(CommandEvent const* pCommandEvent);
 };
 
 } // end of namespace sfx2::sidebar

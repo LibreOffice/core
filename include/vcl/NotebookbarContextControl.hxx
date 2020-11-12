@@ -16,7 +16,7 @@ class NotebookbarContextControl
 {
 public:
     virtual ~NotebookbarContextControl() {}
-    virtual void SetContext( vcl::EnumContext::Context eContext ) = 0;
+    virtual void SetContext(vcl::EnumContext::Context eContext) = 0;
 };
 
 #endif

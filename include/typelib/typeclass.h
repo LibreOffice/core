@@ -23,8 +23,7 @@
 
 /** This type class enum is binary compatible with the IDL enum com.sun.star.uno.TypeClass.
 */
-typedef enum _typelib_TypeClass
-{
+typedef enum _typelib_TypeClass {
     /** type class of void */
     typelib_TypeClass_VOID = 0,
     /** type class of char */

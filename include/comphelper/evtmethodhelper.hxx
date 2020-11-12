@@ -24,9 +24,9 @@
 
 namespace comphelper
 {
-    COMPHELPER_DLLPUBLIC css::uno::Sequence< OUString> getEventMethodsForType(const css::uno::Type& type);
+COMPHELPER_DLLPUBLIC css::uno::Sequence<OUString>
+getEventMethodsForType(const css::uno::Type& type);
 
-
-}   // namespace comphelper
+} // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

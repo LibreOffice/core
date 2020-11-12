@@ -22,9 +22,8 @@
 #include <sal/types.h>
 #include <com/sun/star/ui/LayoutSize.hpp>
 
-namespace sfx2::sidebar {
-
-
+namespace sfx2::sidebar
+{
 class SFX2_DLLPUBLIC ILayoutableWindow
 {
 public:
@@ -33,9 +32,8 @@ public:
     /** Return the preferred height with the constraint, that the
         window will be set to the given width.
     */
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) = 0;
+    virtual css::ui::LayoutSize GetHeightForWidth(const sal_Int32 nWidth) = 0;
 };
-
 
 } // end of namespace ::sd::sidebar
 

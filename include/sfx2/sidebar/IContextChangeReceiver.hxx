@@ -20,18 +20,19 @@
 
 #include <sfx2/dllapi.h>
 
-namespace vcl { class EnumContext; }
+namespace vcl
+{
+class EnumContext;
+}
 
-
-namespace sfx2::sidebar {
-
-
+namespace sfx2::sidebar
+{
 class SFX2_DLLPUBLIC IContextChangeReceiver
 {
 public:
-    virtual ~IContextChangeReceiver ();
+    virtual ~IContextChangeReceiver();
 
-    virtual void HandleContextChange (const vcl::EnumContext& rContext) = 0;
+    virtual void HandleContextChange(const vcl::EnumContext& rContext) = 0;
 };
 
 } // end of namespace ::sd::sidebar

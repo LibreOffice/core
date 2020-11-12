@@ -30,18 +30,17 @@
 //... namespace utl .......................................................
 namespace utl
 {
-
 /** @descr
         This base class provides an implementation of the
         <code>AccessibleStateSet</code> service.
 */
 class UNOTOOLS_DLLPUBLIC AccessibleStateSetHelper final
-    :   public cppu::WeakImplHelper< css::accessibility::XAccessibleStateSet >
+    : public cppu::WeakImplHelper<css::accessibility::XAccessibleStateSet>
 {
 public:
     //=====  internal  ========================================================
 
-    AccessibleStateSetHelper ();
+    AccessibleStateSetHelper();
     /** constructs an object with some states initially set
 
         <p>This ctor is compatible with
@@ -51,13 +50,14 @@ public:
             is a bit mask. Every bit 2^n means that the state number n (as got from the
             AccessibleStateType constants) should be set initially.
     */
-    AccessibleStateSetHelper ( const sal_Int64 _nInitialStates );
+    AccessibleStateSetHelper(const sal_Int64 _nInitialStates);
 
-    AccessibleStateSetHelper ( const AccessibleStateSetHelper& rHelper );
+    AccessibleStateSetHelper(const AccessibleStateSetHelper& rHelper);
+
 private:
     virtual ~AccessibleStateSetHelper() override;
-public:
 
+public:
     //=====  XAccessibleStateSet  ==============================================
 
     /** Checks whether the current state set is empty.
@@ -66,7 +66,7 @@ public:
             Returns <TRUE/> if there is no state in this state set and
             <FALSE/> if there is at least one state set in it.
     */
-    virtual sal_Bool SAL_CALL isEmpty () override;
+    virtual sal_Bool SAL_CALL isEmpty() override;
 
     /** Checks if the given state is a member of the state set of this
         object.
@@ -79,7 +79,7 @@ public:
             Returns <TRUE/> if the given state is a member of this object's
             state set and <FALSE/> otherwise.
     */
-    virtual sal_Bool SAL_CALL contains (sal_Int16 aState) override;
+    virtual sal_Bool SAL_CALL contains(sal_Int16 aState) override;
 
     /** Checks if all of the given states are in this object's state
         set.
@@ -96,8 +96,7 @@ public:
             one of the states in the given state is not a member of this
             object's state set.
     */
-    virtual sal_Bool SAL_CALL containsAll (
-        const css::uno::Sequence<sal_Int16>& rStateSet) override;
+    virtual sal_Bool SAL_CALL containsAll(const css::uno::Sequence<sal_Int16>& rStateSet) override;
 
     /** Returns a sequence of all states.
     */
@@ -107,25 +106,23 @@ public:
 
         @throws css::uno::RuntimeException
     */
-    void    AddState(sal_Int16 aState);
+    void AddState(sal_Int16 aState);
 
     /** Removes a state from the set if the set contains the state, otherwise nothing is done.
 
         @throws css::uno::RuntimeException
     */
-    void    RemoveState(sal_Int16 aState);
+    void RemoveState(sal_Int16 aState);
 
     //=====  XTypeProvider  ===================================================
 
     /** Returns a sequence of all supported interfaces.
     */
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
-        getTypes() override;
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
 
     /** Returns an implementation id.
     */
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId() override;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
 private:
     /// Mutex guarding this object.
@@ -133,7 +130,6 @@ private:
     /// The implementation of this helper interface.
     sal_uInt64 maStates;
 };
-
 }
 //... namespace utl .......................................................
 #endif

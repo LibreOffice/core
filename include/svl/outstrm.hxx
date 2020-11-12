@@ -24,18 +24,18 @@
 #include <com/sun/star/uno/Reference.h>
 #include <tools/stream.hxx>
 
-namespace com::sun::star::io {
-    class XOutputStream;
+namespace com::sun::star::io
+{
+class XOutputStream;
 }
-
 
 class SVL_DLLPUBLIC SvOutputStream final : public SvStream
 {
-    css::uno::Reference< css::io::XOutputStream > m_xStream;
+    css::uno::Reference<css::io::XOutputStream> m_xStream;
 
-    SVL_DLLPRIVATE virtual std::size_t GetData(void *, std::size_t) override;
+    SVL_DLLPRIVATE virtual std::size_t GetData(void*, std::size_t) override;
 
-    SVL_DLLPRIVATE virtual std::size_t PutData(void const * pData, std::size_t nSize) override;
+    SVL_DLLPRIVATE virtual std::size_t PutData(void const* pData, std::size_t nSize) override;
 
     SVL_DLLPRIVATE virtual sal_uInt64 SeekPos(sal_uInt64) override;
 
@@ -44,7 +44,7 @@ class SVL_DLLPUBLIC SvOutputStream final : public SvStream
     SVL_DLLPRIVATE virtual void SetSize(sal_uInt64) override;
 
 public:
-    SvOutputStream(css::uno::Reference< css::io::XOutputStream > const & rTheStream);
+    SvOutputStream(css::uno::Reference<css::io::XOutputStream> const& rTheStream);
 
     virtual ~SvOutputStream() override;
 };

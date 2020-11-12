@@ -26,8 +26,8 @@
 
 class AbstractSpellDialog;
 
-namespace svx {
-
+namespace svx
+{
 /** The child window wrapper of the actual spelling dialog.  To use the
     spelling dialog in an application you have to do the usual things:
     <ol>
@@ -41,17 +41,14 @@ namespace svx {
     description of the view shell.</li>
     </ol>
 */
-class SVX_DLLPUBLIC SpellDialogChildWindow
-    : public SfxChildWindow
+class SVX_DLLPUBLIC SpellDialogChildWindow : public SfxChildWindow
 {
     friend class SpellDialog;
     VclPtr<AbstractSpellDialog> m_xAbstractSpellDialog;
+
 public:
-    SpellDialogChildWindow (
-        vcl::Window*pParent,
-        sal_uInt16 nId,
-        SfxBindings* pBindings);
-    virtual ~SpellDialogChildWindow () override;
+    SpellDialogChildWindow(vcl::Window* pParent, sal_uInt16 nId, SfxBindings* pBindings);
+    virtual ~SpellDialogChildWindow() override;
 
 protected:
     /** This abstract method has to be defined by a derived class.  It
@@ -59,7 +56,7 @@ protected:
         @return
             returns an empty vector if no error could be found
     */
-    virtual SpellPortions GetNextWrongSentence (bool bRecheck) = 0;
+    virtual SpellPortions GetNextWrongSentence(bool bRecheck) = 0;
 
     /** This abstract method applies the changes made in the spelling dialog
      to the document.
@@ -71,13 +68,14 @@ protected:
      manual changes in the edit field, and in order to not miss the still following errors
      in that sentence.
     */
-    virtual void ApplyChangedSentence(const SpellPortions& rChanged, bool bRecheck ) = 0;
+    virtual void ApplyChangedSentence(const SpellPortions& rChanged, bool bRecheck) = 0;
     /** This methods determines whether the application supports AutoCorrection
      */
     virtual bool HasAutoCorrection();
     /** This method adds a word pair to the AutoCorrection - if available
      */
-    virtual void AddAutoCorrection(const OUString& rOld, const OUString& rNew, LanguageType eLanguage);
+    virtual void AddAutoCorrection(const OUString& rOld, const OUString& rNew,
+                                   LanguageType eLanguage);
     /** Return the sfx bindings for this child window. They are
         retrieved from the dialog so they do not have to be stored in
         this class as well.  The bindings may be necessary to be used
@@ -99,15 +97,15 @@ protected:
         current state which results in disabling most of the dialog controls and presenting
         a "Resume" button that initiates a reinitialization.
      */
-    void    InvalidateSpellDialog();
+    void InvalidateSpellDialog();
     /** Notifies the ChildWindow about the get focus event. The ChildWindow should no check if
         the spelling dialog should be set to the 'Resume' state by calling InvalidateSpellDialog()
      */
-    virtual void    GetFocus() = 0;
+    virtual void GetFocus() = 0;
     /** Notifies the ChildWindow about the lose focus event. The ChildWindow should use it to save
         the current selection/state.
      */
-    virtual void    LoseFocus() = 0;
+    virtual void LoseFocus() = 0;
 };
 
 } // end of namespace ::svx

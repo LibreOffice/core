@@ -26,15 +26,16 @@
 
 /// @HTML
 
-namespace codemaker {
-
+namespace codemaker
+{
 /**
    A simple class to track which types have already been processed by a code
    maker.
 
    <p>This class is not multi-thread&ndash;safe.</p>
  */
-class GeneratedTypeSet {
+class GeneratedTypeSet
+{
 public:
     GeneratedTypeSet() {}
 
@@ -45,7 +46,7 @@ public:
 
        @param type a UNO type registry name
      */
-    void add(OString const & type) { m_set.insert(type); }
+    void add(OString const& type) { m_set.insert(type); }
 
     /**
        Checks whether a given type has already been generated.
@@ -54,16 +55,14 @@ public:
 
        @return true iff the given type has already been generated
      */
-    bool contains(OString const & type) const
-    { return m_set.find(type) != m_set.end(); }
+    bool contains(OString const& type) const { return m_set.find(type) != m_set.end(); }
 
 private:
-    GeneratedTypeSet(GeneratedTypeSet const &) = delete;
-    GeneratedTypeSet& operator =(GeneratedTypeSet const &) = delete;
+    GeneratedTypeSet(GeneratedTypeSet const&) = delete;
+    GeneratedTypeSet& operator=(GeneratedTypeSet const&) = delete;
 
-    std::unordered_set< OString > m_set;
+    std::unordered_set<OString> m_set;
 };
-
 }
 
 #endif // INCLUDED_CODEMAKER_GENERATEDTYPESET_HXX

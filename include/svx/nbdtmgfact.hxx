@@ -21,8 +21,9 @@
 
 #include <svx/nbdtmg.hxx>
 
-namespace svx::sidebar::NBOutlineTypeMgrFact {
-    SVX_DLLPUBLIC NBOTypeMgrBase* CreateInstance(const NBOType aType);
+namespace svx::sidebar::NBOutlineTypeMgrFact
+{
+SVX_DLLPUBLIC NBOTypeMgrBase* CreateInstance(const NBOType aType);
 }
 
 #endif

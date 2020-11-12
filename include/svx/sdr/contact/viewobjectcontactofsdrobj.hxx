@@ -26,8 +26,8 @@ class SdrObject;
 class SdrLayerIDSet;
 class OutputDevice;
 
-namespace sdr::contact {
-
+namespace sdr::contact
+{
 class SVXCORE_DLLPUBLIC ViewObjectContactOfSdrObj : public ViewObjectContact
 {
     /** Test whether the primitive is visible on any layer from @c aLayers
@@ -57,7 +57,6 @@ public:
     */
     const OutputDevice* getPageViewOutputDevice() const;
 };
-
 }
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFSDROBJ_HXX

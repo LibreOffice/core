@@ -10,18 +10,17 @@
 #ifndef INCLUDED_TEST_SHEET_XSHEETOPERATION_HXX
 #define INCLUDED_TEST_SHEET_XSHEETOPERATION_HXX
 
-
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XSheetOperation
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void testComputeFunction();
     void testClearContents();
@@ -29,7 +28,6 @@ public:
 protected:
     ~XSheetOperation() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XSHEETOPERATION_HXX

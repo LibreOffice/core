@@ -11,18 +11,23 @@
 
 #include <sfx2/dllapi.h>
 
-namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::frame
+{
+class XModel;
+}
+namespace com::sun::star::uno
+{
+template <typename> class Reference;
+}
 
-namespace sfx2::sidebar {
-
+namespace sfx2::sidebar
+{
 class SFX2_DLLPUBLIC SidebarModelUpdate
 {
 public:
     virtual ~SidebarModelUpdate();
     virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) = 0;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

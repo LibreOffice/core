@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 #ifndef INCLUDED_UNOIDL_DETAIL_DLLAPI_HXX
 #define INCLUDED_UNOIDL_DETAIL_DLLAPI_HXX
 

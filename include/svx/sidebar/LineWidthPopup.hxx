@@ -27,8 +27,8 @@
 
 class ValueSet;
 
-namespace svx::sidebar {
-
+namespace svx::sidebar
+{
 class LinePropertyPanelBase;
 class LineWidthValueSet;
 
@@ -38,19 +38,19 @@ public:
     LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rParent);
     ~LineWidthPopup();
 
-    void SetWidthSelect (tools::Long lValue, bool bValuable, MapUnit eMapUnit);
+    void SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit eMapUnit);
 
     weld::Container* getTopLevel() const { return m_xTopLevel.get(); }
 
 private:
     LinePropertyPanelBase& m_rParent;
-    std::array<OUString,9> maStrUnits;
+    std::array<OUString, 9> maStrUnits;
     OUString m_sPt;
     MapUnit m_eMapUnit;
     bool m_bVSFocus;
     bool m_bCustom;
     tools::Long m_nCustomWidth;
-    Image  m_aIMGCus;
+    Image m_aIMGCus;
     Image m_aIMGCusGray;
 
     std::unique_ptr<weld::Builder> m_xBuilder;

@@ -14,12 +14,12 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XSubTotalField
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void testGetSetGroupColumn();
     void testGetSetTotalColumns();
@@ -27,7 +27,6 @@ public:
 protected:
     ~XSubTotalField() {}
 };
-
 }
 #endif // INCLUDED_TEST_SHEET_XSUBTOTALFIELD_HXX
 

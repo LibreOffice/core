@@ -15,8 +15,8 @@
 
 class EditTextObject;
 
-namespace editeng {
-
+namespace editeng
+{
 class FieldUpdaterImpl;
 
 /**
@@ -28,7 +28,7 @@ class EDITENG_DLLPUBLIC FieldUpdater
     std::unique_ptr<FieldUpdaterImpl> mpImpl;
 
 public:
-    FieldUpdater(EditTextObject const & rObj);
+    FieldUpdater(EditTextObject const& rObj);
     FieldUpdater(const FieldUpdater& r);
     ~FieldUpdater();
 
@@ -39,7 +39,6 @@ public:
      */
     void updateTableFields(int nTab);
 };
-
 }
 
 #endif

@@ -19,12 +19,13 @@
 #include <unordered_map>
 #include <vector>
 
-namespace svl {
-
+namespace svl
+{
 /** Function object to check whether a style sheet a fulfills specific criteria.
  * Derive from this class and override the Check() method.
  */
-struct StyleSheetPredicate {
+struct StyleSheetPredicate
+{
     virtual bool Check(const SfxStyleSheetBase& styleSheet) = 0;
     virtual ~StyleSheetPredicate() {}
 };
@@ -32,7 +33,8 @@ struct StyleSheetPredicate {
 /** Function object for cleanup-Strategy for IndexedSfxStyleSheets::Clear().
  * Derive from it and do what is necessary to dispose of a style sheet in Dispose().
  */
-struct StyleSheetDisposer {
+struct StyleSheetDisposer
+{
     virtual void Dispose(rtl::Reference<SfxStyleSheetBase> styleSheet) = 0;
     virtual ~StyleSheetDisposer() {}
 };
@@ -40,7 +42,8 @@ struct StyleSheetDisposer {
 /** Function object to apply a method on all style sheets.
  * Derive from it and do whatever you want to with the style sheet in the DoIt() method.
  */
-struct StyleSheetCallback {
+struct StyleSheetCallback
+{
     virtual void DoIt(const SfxStyleSheetBase& styleSheet) = 0;
     virtual ~StyleSheetCallback() {}
 };
@@ -81,24 +84,19 @@ public:
      *
      * If the style sheet is already contained, this call has no effect.
      */
-    void
-    AddStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style);
+    void AddStyleSheet(const rtl::Reference<SfxStyleSheetBase>& style);
 
     /** Removes a style sheet. */
-    bool
-    RemoveStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style);
+    bool RemoveStyleSheet(const rtl::Reference<SfxStyleSheetBase>& style);
 
     /** Check whether a specified style sheet is stored. */
-    bool
-    HasStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style) const;
+    bool HasStyleSheet(const rtl::Reference<SfxStyleSheetBase>& style) const;
 
     /** Obtain the number of style sheets which are held */
-    sal_Int32
-    GetNumberOfStyleSheets() const;
+    sal_Int32 GetNumberOfStyleSheets() const;
 
     /** Obtain the number of style sheets for which a certain condition holds */
-    sal_Int32
-    GetNumberOfStyleSheetsWithPredicate(StyleSheetPredicate& predicate) const;
+    sal_Int32 GetNumberOfStyleSheetsWithPredicate(StyleSheetPredicate& predicate) const;
 
     /** Return the stylesheet by its position.
      * You can obtain the position by, e.g., FindStyleSheetPosition()
@@ -111,43 +109,41 @@ public:
      *
      * @throws std::runtime_error if the style has not been found.
      */
-    sal_Int32
-    FindStyleSheetPosition(const SfxStyleSheetBase& style) const;
+    sal_Int32 FindStyleSheetPosition(const SfxStyleSheetBase& style) const;
 
     /** Obtain the positions of all styles which have a given name
      */
-    std::vector<sal_Int32>
-    FindPositionsByName(const OUString& name) const;
+    std::vector<sal_Int32> FindPositionsByName(const OUString& name) const;
 
-    enum class SearchBehavior { ReturnAll, ReturnFirst };
+    enum class SearchBehavior
+    {
+        ReturnAll,
+        ReturnFirst
+    };
     /** Obtain the positions of all styles which have a certain name and fulfill a certain condition.
      *
      * This method is fast because it can use the name-based index
      */
     std::vector<sal_Int32>
     FindPositionsByNameAndPredicate(const OUString& name, StyleSheetPredicate& predicate,
-            SearchBehavior behavior = SearchBehavior::ReturnAll) const;
+                                    SearchBehavior behavior = SearchBehavior::ReturnAll) const;
 
     /** Obtain the positions of all styles which fulfill a certain condition.
      *
      * This method is slow because it cannot use the name-based index
      */
-    std::vector<sal_Int32>
-    FindPositionsByPredicate(StyleSheetPredicate& predicate) const;
+    std::vector<sal_Int32> FindPositionsByPredicate(StyleSheetPredicate& predicate) const;
 
     /** Execute a callback on all style sheets */
-    void
-    ApplyToAllStyleSheets(StyleSheetCallback& callback) const;
+    void ApplyToAllStyleSheets(StyleSheetCallback& callback) const;
 
     /** Clear the contents of the index.
      * The StyleSheetDisposer::Dispose() method is called on each style sheet, e.g., if you want to broadcast
      * changes.
      */
-    void
-    Clear(StyleSheetDisposer& cleanup);
+    void Clear(StyleSheetDisposer& cleanup);
 
-    void
-    Reindex();
+    void Reindex();
 
     /** Warning: counting for n starts at 0, i.e., the 0th style sheet is the first that is found. */
     SfxStyleSheetBase* GetNthStyleSheetThatMatchesPredicate(sal_Int32 n,
@@ -156,14 +152,13 @@ public:
 
     /** Get the positions of the style sheets which belong to a certain family.
      */
-    const std::vector<sal_Int32>&
-    GetStyleSheetPositionsByFamily(SfxStyleFamily) const;
+    const std::vector<sal_Int32>& GetStyleSheetPositionsByFamily(SfxStyleFamily) const;
 
 private:
     /** Register the position of a styleName in the index */
     void Register(const SfxStyleSheetBase& style, sal_Int32 pos);
 
-    typedef std::vector<rtl::Reference<SfxStyleSheetBase> > VectorType;
+    typedef std::vector<rtl::Reference<SfxStyleSheetBase>> VectorType;
     /** Vector with the stylesheets to allow for index-based access.
      */
     VectorType mStyleSheets;

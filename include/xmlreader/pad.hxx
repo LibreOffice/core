@@ -29,17 +29,16 @@
 #include <xmlreader/detail/xmlreaderdllapi.hxx>
 #include <xmlreader/span.hxx>
 
-namespace xmlreader {
-
-class SAL_WARN_UNUSED OOO_DLLPUBLIC_XMLREADER Pad {
+namespace xmlreader
+{
+class SAL_WARN_UNUSED OOO_DLLPUBLIC_XMLREADER Pad
+{
 public:
-    void add(char const * begin, sal_Int32 length);
+    void add(char const* begin, sal_Int32 length);
 
-    template< std::size_t N > void add(char const (& literal)[N]) {
-        add(literal, N - 1);
-    }
+    template <std::size_t N> void add(char const (&literal)[N]) { add(literal, N - 1); }
 
-    void addEphemeral(char const * begin, sal_Int32 length);
+    void addEphemeral(char const* begin, sal_Int32 length);
 
     void clear();
 
@@ -49,9 +48,8 @@ private:
     SAL_DLLPRIVATE void flushSpan();
 
     Span span_;
-    OStringBuffer buffer_ {256};
+    OStringBuffer buffer_{ 256 };
 };
-
 }
 
 #endif

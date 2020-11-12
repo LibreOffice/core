@@ -26,7 +26,10 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 
-namespace weld { class Widget; }
+namespace weld
+{
+class Widget;
+}
 
 /** Opens the general query save document dialog.
     @param  _pParent
@@ -34,8 +37,7 @@ namespace weld { class Widget; }
     @_rTitle
         The title of the document.
 */
-SFX2_DLLPUBLIC short ExecuteQuerySaveDocument(
-    weld::Widget* _pParent, std::u16string_view _rTitle);
+SFX2_DLLPUBLIC short ExecuteQuerySaveDocument(weld::Widget* _pParent, std::u16string_view _rTitle);
 
 #endif // INCLUDED_SFX2_QUERYSAVEDOCUMENT_HXX
 

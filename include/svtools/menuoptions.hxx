@@ -24,65 +24,67 @@
 #include <unotools/options.hxx>
 #include <memory>
 
-namespace osl { class Mutex; }
+namespace osl
+{
+class Mutex;
+}
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
-*//*-*************************************************************************************************************/
+**-***********************************************************************************************************/
 
 class SvtMenuOptions_Impl;
 
 /*-************************************************************************************************************
     @short          collect information about menu features
     @devstatus      ready to use
-*//*-*************************************************************************************************************/
+**-***********************************************************************************************************/
 
 class SAL_WARN_UNUSED SVT_DLLPUBLIC SvtMenuOptions final : public utl::detail::Options
 {
-    public:
-         SvtMenuOptions();
-        virtual ~SvtMenuOptions() override;
+public:
+    SvtMenuOptions();
+    virtual ~SvtMenuOptions() override;
 
-        /*-****************************************************************************************************
-            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Menu/..."
-            @descr      These options describe internal states to enable/disable features of installed office.
+    /*-****************************************************************************************************
+        @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Menu/..."
+        @descr      These options describe internal states to enable/disable features of installed office.
 
-                        IsEntryHidingEnabled()
-                        SetEntryHidingState()   =>  Activate this field for viewing all deactivated menu entries.
-                                                    Menu commands that are normally not necessary are hidden by default.
-                                                    Default=false
+                    IsEntryHidingEnabled()
+                    SetEntryHidingState()   =>  Activate this field for viewing all deactivated menu entries.
+                                                Menu commands that are normally not necessary are hidden by default.
+                                                Default=false
 
-                        IsFollowMouseEnabled()
-                        SetFollowMouseState()   =>  Automatic selection while moving the mouse on a menu.
-                                                    Default=true
+                    IsFollowMouseEnabled()
+                    SetFollowMouseState()   =>  Automatic selection while moving the mouse on a menu.
+                                                Default=true
 
-            @seealso    configuration package "org.openoffice.Office.Common/View/Menu"
-        *//*-*****************************************************************************************************/
+        @seealso    configuration package "org.openoffice.Office.Common/View/Menu"
+    **-***************************************************************************************************/
 
-        bool IsEntryHidingEnabled() const;
-        TriState GetMenuIconsState() const;
-        void SetMenuIconsState(TriState eState);
-        TriState GetContextMenuShortcuts() const;
-        void SetContextMenuShortcuts(TriState eState);
+    bool IsEntryHidingEnabled() const;
+    TriState GetMenuIconsState() const;
+    void SetMenuIconsState(TriState eState);
+    TriState GetContextMenuShortcuts() const;
+    void SetContextMenuShortcuts(TriState eState);
 
-    private:
+private:
+    /*-****************************************************************************************************
+        @short      return a reference to a static mutex
+        @descr      These class is partially threadsafe (for de-/initialization only).
+                    All access methods aren't safe!
+                    We create a static mutex only for one ime and use at different times.
+        @return     A reference to a static mutex member.
+    **-***************************************************************************************************/
 
-        /*-****************************************************************************************************
-            @short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
-                        All access methods aren't safe!
-                        We create a static mutex only for one ime and use at different times.
-            @return     A reference to a static mutex member.
-        *//*-*****************************************************************************************************/
+    SVT_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
-        SVT_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
+private:
+    std::shared_ptr<SvtMenuOptions_Impl> m_pImpl;
 
-    private:
-        std::shared_ptr<SvtMenuOptions_Impl> m_pImpl;
-
-};      // class SvtMenuOptions
+}; // class SvtMenuOptions
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

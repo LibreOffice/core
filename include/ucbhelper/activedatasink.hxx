@@ -27,9 +27,11 @@
 
 namespace ucbhelper
 {
-
 // workaround for incremental linking bugs in MSVC2015
-class SAL_DLLPUBLIC_TEMPLATE ActiveDataSink_Base : public cppu::WeakImplHelper< css::io::XActiveDataSink > {};
+class SAL_DLLPUBLIC_TEMPLATE ActiveDataSink_Base
+    : public cppu::WeakImplHelper<css::io::XActiveDataSink>
+{
+};
 
 /**
   * This class implements the interface css::io::XActiveDataSink.
@@ -38,13 +40,14 @@ class SAL_DLLPUBLIC_TEMPLATE ActiveDataSink_Base : public cppu::WeakImplHelper< 
   */
 class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) ActiveDataSink final : public ActiveDataSink_Base
 {
-    css::uno::Reference< css::io::XInputStream > m_xStream;
+    css::uno::Reference<css::io::XInputStream> m_xStream;
 
 public:
     // XActiveDataSink methods.
-    virtual void SAL_CALL setInputStream( const css::uno::Reference< css::io::XInputStream >& aStream ) override;
+    virtual void SAL_CALL
+    setInputStream(const css::uno::Reference<css::io::XInputStream>& aStream) override;
 
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream() override;
+    virtual css::uno::Reference<css::io::XInputStream> SAL_CALL getInputStream() override;
 };
 
 } /* namespace ucbhelper */

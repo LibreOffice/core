@@ -21,10 +21,10 @@
 
 enum class ZoomButtonId
 {
-    NONE        = 0x0000,
-    OPTIMAL     = 0x0001,
-    PAGEWIDTH   = 0x0002,
-    WHOLEPAGE   = 0x0004,
+    NONE = 0x0000,
+    OPTIMAL = 0x0001,
+    PAGEWIDTH = 0x0002,
+    WHOLEPAGE = 0x0004,
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

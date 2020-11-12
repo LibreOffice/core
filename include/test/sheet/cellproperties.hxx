@@ -14,12 +14,12 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST CellProperties
 {
 public:
-    virtual css::uno::Reference < css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void testVertJustify();
     void testRotateReference();
@@ -27,7 +27,6 @@ public:
 protected:
     ~CellProperties() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_CELLPROPERTIES_HXX

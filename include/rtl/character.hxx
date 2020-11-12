@@ -29,7 +29,6 @@
 
 namespace rtl
 {
-
 /** Check for Unicode code point.
 
     @param code  An integer.
@@ -38,10 +37,7 @@ namespace rtl
 
     @since LibreOffice 5.2
 */
-inline bool isUnicodeCodePoint(sal_uInt32 code)
-{
-    return code <= 0x10FFFF;
-}
+inline bool isUnicodeCodePoint(sal_uInt32 code) { return code <= 0x10FFFF; }
 
 /** Check for ASCII character.
 
@@ -60,8 +56,7 @@ inline bool isAscii(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAscii(char) = delete;
 bool isAscii(signed char) = delete;
-template<typename T> inline bool isAscii(T code)
-{ return isAscii(sal_uInt32(code)); }
+template <typename T> inline bool isAscii(T code) { return isAscii(sal_uInt32(code)); }
 #endif
 
 /** Check for ASCII lower case character.
@@ -82,8 +77,10 @@ inline bool isAsciiLowerCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiLowerCase(char) = delete;
 bool isAsciiLowerCase(signed char) = delete;
-template<typename T> inline bool isAsciiLowerCase(T code)
-{ return isAsciiLowerCase(sal_uInt32(code)); }
+template <typename T> inline bool isAsciiLowerCase(T code)
+{
+    return isAsciiLowerCase(sal_uInt32(code));
+}
 #endif
 
 /** Check for ASCII upper case character.
@@ -104,8 +101,10 @@ inline bool isAsciiUpperCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiUpperCase(char) = delete;
 bool isAsciiUpperCase(signed char) = delete;
-template<typename T> inline bool isAsciiUpperCase(T code)
-{ return isAsciiUpperCase(sal_uInt32(code)); }
+template <typename T> inline bool isAsciiUpperCase(T code)
+{
+    return isAsciiUpperCase(sal_uInt32(code));
+}
 #endif
 
 /** Check for ASCII alphabetic character.
@@ -126,8 +125,7 @@ inline bool isAsciiAlpha(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiAlpha(char) = delete;
 bool isAsciiAlpha(signed char) = delete;
-template<typename T> inline bool isAsciiAlpha(T code)
-{ return isAsciiAlpha(sal_uInt32(code)); }
+template <typename T> inline bool isAsciiAlpha(T code) { return isAsciiAlpha(sal_uInt32(code)); }
 #endif
 
 /** Check for ASCII digit character.
@@ -148,8 +146,7 @@ inline bool isAsciiDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiDigit(char) = delete;
 bool isAsciiDigit(signed char) = delete;
-template<typename T> inline bool isAsciiDigit(T code)
-{ return isAsciiDigit(sal_uInt32(code)); }
+template <typename T> inline bool isAsciiDigit(T code) { return isAsciiDigit(sal_uInt32(code)); }
 #endif
 
 /** Check for ASCII alphanumeric character.
@@ -170,8 +167,10 @@ inline bool isAsciiAlphanumeric(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiAlphanumeric(char) = delete;
 bool isAsciiAlphanumeric(signed char) = delete;
-template<typename T> inline bool isAsciiAlphanumeric(T code)
-{ return isAsciiAlphanumeric(sal_uInt32(code)); }
+template <typename T> inline bool isAsciiAlphanumeric(T code)
+{
+    return isAsciiAlphanumeric(sal_uInt32(code));
+}
 #endif
 
 /** Check for ASCII canonic hexadecimal digit character.
@@ -192,8 +191,10 @@ inline bool isAsciiCanonicHexDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiCanonicHexDigit(char) = delete;
 bool isAsciiCanonicHexDigit(signed char) = delete;
-template<typename T> inline bool isAsciiCanonicHexDigit(T code)
-{ return isAsciiCanonicHexDigit(sal_uInt32(code)); }
+template <typename T> inline bool isAsciiCanonicHexDigit(T code)
+{
+    return isAsciiCanonicHexDigit(sal_uInt32(code));
+}
 #endif
 
 /** Check for ASCII hexadecimal digit character.
@@ -214,8 +215,10 @@ inline bool isAsciiHexDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiHexDigit(char) = delete;
 bool isAsciiHexDigit(signed char) = delete;
-template<typename T> inline bool isAsciiHexDigit(T code)
-{ return isAsciiHexDigit(sal_uInt32(code)); }
+template <typename T> inline bool isAsciiHexDigit(T code)
+{
+    return isAsciiHexDigit(sal_uInt32(code));
+}
 #endif
 
 /** Check for ASCII octal digit character.
@@ -235,8 +238,10 @@ inline bool isAsciiOctalDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiOctalDigit(char) = delete;
 bool isAsciiOctalDigit(signed char) = delete;
-template<typename T> inline bool isAsciiOctalDigit(T code)
-{ return isAsciiOctalDigit(sal_uInt32(code)); }
+template <typename T> inline bool isAsciiOctalDigit(T code)
+{
+    return isAsciiOctalDigit(sal_uInt32(code));
+}
 #endif
 
 /** Check for ASCII white space character.
@@ -251,15 +256,17 @@ template<typename T> inline bool isAsciiOctalDigit(T code)
 inline bool isAsciiWhiteSpace(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
-    return code == ' ' || code == '\f' || code == '\n' || code == '\r'
-        || code == '\t' || code == '\v';
+    return code == ' ' || code == '\f' || code == '\n' || code == '\r' || code == '\t'
+           || code == '\v';
 }
 
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiWhiteSpace(char) = delete;
 bool isAsciiWhiteSpace(signed char) = delete;
-template<typename T> inline bool isAsciiWhiteSpace(T code)
-{ return isAsciiWhiteSpace(sal_uInt32(code)); }
+template <typename T> inline bool isAsciiWhiteSpace(T code)
+{
+    return isAsciiWhiteSpace(sal_uInt32(code));
+}
 #endif
 
 /** Convert a character, if ASCII, to upper case.
@@ -279,8 +286,10 @@ inline sal_uInt32 toAsciiUpperCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 sal_uInt32 toAsciiUpperCase(char) = delete;
 sal_uInt32 toAsciiUpperCase(signed char) = delete;
-template<typename T> inline sal_uInt32 toAsciiUpperCase(T code)
-{ return toAsciiUpperCase(sal_uInt32(code)); }
+template <typename T> inline sal_uInt32 toAsciiUpperCase(T code)
+{
+    return toAsciiUpperCase(sal_uInt32(code));
+}
 #endif
 
 /** Convert a character, if ASCII, to lower case.
@@ -300,8 +309,10 @@ inline sal_uInt32 toAsciiLowerCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 sal_uInt32 toAsciiLowerCase(char) = delete;
 sal_uInt32 toAsciiLowerCase(signed char) = delete;
-template<typename T> inline sal_uInt32 toAsciiLowerCase(T code)
-{ return toAsciiLowerCase(sal_uInt32(code)); }
+template <typename T> inline sal_uInt32 toAsciiLowerCase(T code)
+{
+    return toAsciiLowerCase(sal_uInt32(code));
+}
 #endif
 
 /** Compare two characters ignoring ASCII case.
@@ -321,17 +332,16 @@ inline sal_Int32 compareIgnoreAsciiCase(sal_uInt32 code1, sal_uInt32 code2)
     assert(isUnicodeCodePoint(code1));
     assert(isUnicodeCodePoint(code2));
     return static_cast<sal_Int32>(toAsciiLowerCase(code1))
-        - static_cast<sal_Int32>(toAsciiLowerCase(code2));
+           - static_cast<sal_Int32>(toAsciiLowerCase(code2));
 }
 
 /// @cond INTERNAL
-namespace detail {
-
+namespace detail
+{
 sal_uInt32 const surrogatesHighFirst = 0xD800;
 sal_uInt32 const surrogatesHighLast = 0xDBFF;
 sal_uInt32 const surrogatesLowFirst = 0xDC00;
 sal_uInt32 const surrogatesLowLast = 0xDFFF;
-
 }
 /// @endcond
 
@@ -343,10 +353,10 @@ sal_uInt32 const surrogatesLowLast = 0xDFFF;
 
     @since LibreOffice 6.0
 */
-inline bool isSurrogate(sal_uInt32 code) {
+inline bool isSurrogate(sal_uInt32 code)
+{
     assert(isUnicodeCodePoint(code));
-    return code >= detail::surrogatesHighFirst
-        && code <= detail::surrogatesLowLast;
+    return code >= detail::surrogatesHighFirst && code <= detail::surrogatesLowLast;
 }
 
 /** Check for high surrogate.
@@ -357,10 +367,10 @@ inline bool isSurrogate(sal_uInt32 code) {
 
     @since LibreOffice 5.0
 */
-inline bool isHighSurrogate(sal_uInt32 code) {
+inline bool isHighSurrogate(sal_uInt32 code)
+{
     assert(isUnicodeCodePoint(code));
-    return code >= detail::surrogatesHighFirst
-        && code <= detail::surrogatesHighLast;
+    return code >= detail::surrogatesHighFirst && code <= detail::surrogatesHighLast;
 }
 
 /** Check for low surrogate.
@@ -371,10 +381,10 @@ inline bool isHighSurrogate(sal_uInt32 code) {
 
     @since LibreOffice 5.0
 */
-inline bool isLowSurrogate(sal_uInt32 code) {
+inline bool isLowSurrogate(sal_uInt32 code)
+{
     assert(isUnicodeCodePoint(code));
-    return code >= detail::surrogatesLowFirst
-        && code <= detail::surrogatesLowLast;
+    return code >= detail::surrogatesLowFirst && code <= detail::surrogatesLowLast;
 }
 
 /** Get high surrogate half of a non-BMP Unicode code point.
@@ -385,7 +395,8 @@ inline bool isLowSurrogate(sal_uInt32 code) {
 
     @since LibreOffice 5.0
  */
-inline sal_Unicode getHighSurrogate(sal_uInt32 code) {
+inline sal_Unicode getHighSurrogate(sal_uInt32 code)
+{
     assert(isUnicodeCodePoint(code));
     assert(code >= 0x10000);
     return static_cast<sal_Unicode>(((code - 0x10000) >> 10) | detail::surrogatesHighFirst);
@@ -399,7 +410,8 @@ inline sal_Unicode getHighSurrogate(sal_uInt32 code) {
 
     @since LibreOffice 5.0
  */
-inline sal_Unicode getLowSurrogate(sal_uInt32 code) {
+inline sal_Unicode getLowSurrogate(sal_uInt32 code)
+{
     assert(isUnicodeCodePoint(code));
     assert(code >= 0x10000);
     return static_cast<sal_Unicode>(((code - 0x10000) & 0x3FF) | detail::surrogatesLowFirst);
@@ -415,11 +427,12 @@ inline sal_Unicode getLowSurrogate(sal_uInt32 code) {
 
     @since LibreOffice 5.0
 */
-inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low) {
+inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low)
+{
     assert(isHighSurrogate(high));
     assert(isLowSurrogate(low));
-    return ((high - detail::surrogatesHighFirst) << 10)
-        + (low - detail::surrogatesLowFirst) + 0x10000;
+    return ((high - detail::surrogatesHighFirst) << 10) + (low - detail::surrogatesLowFirst)
+           + 0x10000;
 }
 
 /** Split a Unicode code point into UTF-16 code units.
@@ -434,13 +447,17 @@ inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low) {
 
     @since LibreOffice 5.3
 */
-inline std::size_t splitSurrogates(sal_uInt32 code, sal_Unicode * output) {
+inline std::size_t splitSurrogates(sal_uInt32 code, sal_Unicode* output)
+{
     assert(isUnicodeCodePoint(code));
     assert(output != NULL);
-    if (code < 0x10000) {
+    if (code < 0x10000)
+    {
         output[0] = code;
         return 1;
-    } else {
+    }
+    else
+    {
         output[0] = getHighSurrogate(code);
         output[1] = getLowSurrogate(code);
         return 2;
@@ -459,7 +476,6 @@ inline bool isUnicodeScalarValue(sal_uInt32 code)
 {
     return isUnicodeCodePoint(code) && !isSurrogate(code);
 }
-
 }
 
 #endif

@@ -14,8 +14,8 @@
 
 #include <vector>
 
-namespace editeng {
-
+namespace editeng
+{
 struct MisspellRange
 {
     size_t mnStart;
@@ -31,7 +31,6 @@ struct MisspellRanges
 
     MisspellRanges(sal_Int32 nParagraph, const std::vector<MisspellRange>& rRanges);
 };
-
 }
 
 #endif

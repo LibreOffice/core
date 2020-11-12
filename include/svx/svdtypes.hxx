@@ -26,9 +26,9 @@
 // commands for EndCreate()
 enum class SdrCreateCmd
 {
-    NextPoint,     // next traverse station, segment of a circle: next coordinate
-    NextObject,    // next polygon in PolyPolygon
-    ForceEnd       // forced end
+    NextPoint, // next traverse station, segment of a circle: next coordinate
+    NextObject, // next polygon in PolyPolygon
+    ForceEnd // forced end
 };
 
 enum class SdrDragMode
@@ -48,8 +48,6 @@ enum class SdrDragMode
     Crop
 };
 
-
-
 /*
  * Layer
  */
@@ -65,12 +63,13 @@ constexpr SdrLayerID SDRLAYER_NOTFOUND(0xff);
 /*
  * Repeat
  */
-enum class SdrRepeatFunc {
+enum class SdrRepeatFunc
+{
     NONE,
     // with parameter
-    Move,         // distance
-    Resize,       // factor, reference(%) related to MarkRect
-    Rotate,       // rotation angle, reference(%) related to MarkRect
+    Move, // distance
+    Resize, // factor, reference(%) related to MarkRect
+    Rotate, // rotation angle, reference(%) related to MarkRect
     // Without parameter
     Delete,
     CombinePolyPoly,

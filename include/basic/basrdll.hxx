@@ -34,8 +34,8 @@ public:
 
     static void BasicBreak();
 
-    static void EnableBreak( bool bEnable );
-    static void SetDebugMode( bool bDebugMode );
+    static void EnableBreak(bool bEnable);
+    static void SetDebugMode(bool bDebugMode);
 };
 
 #endif // INCLUDED_BASIC_BASRDLL_HXX

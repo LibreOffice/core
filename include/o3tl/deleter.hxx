@@ -17,15 +17,15 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <sal/log.hxx>
 
-namespace o3tl {
-
+namespace o3tl
+{
 /** To markup std::unique_ptr that coverity warns might throw exceptions
     which won't throw in practice, or where std::terminate is
     an acceptable response if they do
 */
-template<typename T> struct default_delete
+template <typename T> struct default_delete
 {
-    void operator() (T* p) noexcept
+    void operator()(T* p) noexcept
     {
 #if defined(__COVERITY__)
         try
@@ -53,7 +53,7 @@ struct free_delete
     void operator()(void* p) { std::free(p); }
 };
 
-template<typename uniqueptr> void reset_preserve_ptr_during(uniqueptr& ptr)
+template <typename uniqueptr> void reset_preserve_ptr_during(uniqueptr& ptr)
 {
     // HACK: for the case where the dtor of the obj held by ptr will trigger
     // functions which expect ptr to still be set during the dtor.
@@ -62,7 +62,6 @@ template<typename uniqueptr> void reset_preserve_ptr_during(uniqueptr& ptr)
     delete ptr.get();
     (void)ptr.release();
 }
-
 }
 
 #endif

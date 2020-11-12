@@ -22,7 +22,8 @@
 #include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
 
-inline SdrPercentItem makeSdrShadowTransparenceItem(sal_uInt16 nTransp) {
+inline SdrPercentItem makeSdrShadowTransparenceItem(sal_uInt16 nTransp)
+{
     return SdrPercentItem(SDRATTR_SHADOWTRANSPARENCE, nTransp);
 }
 

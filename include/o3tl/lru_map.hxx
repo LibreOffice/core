@@ -17,7 +17,6 @@
 
 namespace o3tl
 {
-
 /** LRU map
  *
  * Similar to unordered_map (it actually uses it) with additionally functionality
@@ -31,7 +30,8 @@ namespace o3tl
  * for most of the operations with a combination unordered map and linked list.
  *
  **/
-template<typename Key, typename Value, class KeyHash = std::hash<Key>, class KeyEqual = std::equal_to<Key>>
+template <typename Key, typename Value, class KeyHash = std::hash<Key>,
+          class KeyEqual = std::equal_to<Key>>
 class lru_map final
 {
 public:
@@ -68,7 +68,8 @@ public:
     // a size of 0 effectively disables the LRU cleanup code
     lru_map(size_t nMaxSize)
         : mMaxSize(nMaxSize ? nMaxSize : std::min(mLruMap.max_size(), mLruList.max_size()))
-    {}
+    {
+    }
     ~lru_map()
     {
         // Some code .e.g. SalBitmap likes to remove itself from a cache during it's destructor, which means we
@@ -139,8 +140,7 @@ public:
     }
 
     // reverse-iterates the list removing all items matching the predicate
-    template<class UnaryPredicate>
-    void remove_if(UnaryPredicate pred)
+    template <class UnaryPredicate> void remove_if(UnaryPredicate pred)
     {
         auto it = mLruList.rbegin();
         while (it != mLruList.rend())
@@ -155,15 +155,9 @@ public:
         }
     }
 
-    list_const_iterator_t begin() const
-    {
-        return mLruList.cbegin();
-    }
+    list_const_iterator_t begin() const { return mLruList.cbegin(); }
 
-    list_const_iterator_t end() const
-    {
-        return mLruList.cend();
-    }
+    list_const_iterator_t end() const { return mLruList.cend(); }
 
     size_t size() const
     {
@@ -177,7 +171,6 @@ public:
         mLruList.clear();
     }
 };
-
 }
 
 #endif /* INCLUDED_O3TL_LRU_MAP_HXX */
