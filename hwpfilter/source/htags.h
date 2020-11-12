@@ -22,7 +22,7 @@
 
 #include <memory>
 #ifdef _WIN32
-#  include <objidl.h>
+#include <objidl.h>
 #endif
 
 class HWPFile;
@@ -32,8 +32,8 @@ class HWPFile;
 struct EmPicture
 {
     size_t size;
-    char  name[16];
-    char  type[16];
+    char name[16];
+    char type[16];
     std::unique_ptr<uchar[]> data;
 
     explicit EmPicture(size_t size);
@@ -48,7 +48,7 @@ struct HyperText
 {
     kchar filename[256];
     hchar bookmark[16];
-    char  macro[325];
+    char macro[325];
     uchar type;
     char reserve[3];
     bool Read(HWPFile& hwpf);
@@ -58,10 +58,10 @@ struct HyperText
  */
 struct OlePicture
 {
-    int   size;
+    int size;
     uint signature;
 #ifdef _WIN32
-    IStorage *pis;
+    IStorage* pis;
 #endif
     explicit OlePicture(int tsize);
     ~OlePicture(void);

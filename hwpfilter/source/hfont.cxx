@@ -32,13 +32,9 @@ HWPFont::HWPFont()
     }
 }
 
+HWPFont::~HWPFont() {}
 
-HWPFont::~HWPFont()
-{
-}
-
-
-void HWPFont::AddFont(int lang, const char *font)
+void HWPFont::AddFont(int lang, const char* font)
 {
     int nfonts;
 
@@ -53,8 +49,7 @@ void HWPFont::AddFont(int lang, const char *font)
     nFonts[lang]++;
 }
 
-
-const char *HWPFont::GetFontName(int lang, int id)
+const char* HWPFont::GetFontName(int lang, int id)
 {
     if (lang < 0 || lang >= NLanguage)
         return nullptr;
@@ -63,16 +58,15 @@ const char *HWPFont::GetFontName(int lang, int id)
     return fontnames[lang].get() + id * FONTNAMELEN;
 }
 
-
 static char buffer[FONTNAMELEN];
 
-void HWPFont::Read(HWPFile & hwpf)
+void HWPFont::Read(HWPFile& hwpf)
 {
     int lang = 0;
     short nfonts = 0;
 
-//printf("HWPFont::Read : lang = %d\n",NLanguage);
-    for(lang = 0; lang < NLanguage; lang++)
+    //printf("HWPFont::Read : lang = %d\n",NLanguage);
+    for (lang = 0; lang < NLanguage; lang++)
     {
         hwpf.Read2b(&nfonts, 1);
         if (nfonts <= 0 || nfonts >= MAXFONTS)

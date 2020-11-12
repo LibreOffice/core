@@ -26,19 +26,20 @@
 #include "hstyle.h"
 
 enum
-{ MAXSTYLENAME = 20 };
+{
+    MAXSTYLENAME = 20
+};
 
-#define DATA static_cast<StyleData *>(style)
+#define DATA static_cast<StyleData*>(style)
 
-namespace {
-
+namespace
+{
 struct StyleData
 {
     char name[MAXSTYLENAME + 1];
     CharShape cshape;
     ParaShape pshape;
 };
-
 }
 
 static char buffer[MAXSTYLENAME + 1];
@@ -49,23 +50,20 @@ HWPStyle::HWPStyle()
     style = nullptr;
 }
 
-
 HWPStyle::~HWPStyle()
 {
-    delete[]DATA;
+    delete[] DATA;
     nstyles = 0;
 }
 
-
-char *HWPStyle::GetName(int n) const
+char* HWPStyle::GetName(int n) const
 {
     if (n < 0 || n >= nstyles)
         return nullptr;
     return DATA[n].name;
 }
 
-
-void HWPStyle::SetName(int n, char const *name)
+void HWPStyle::SetName(int n, char const* name)
 {
     if (n < 0 || n >= nstyles)
         return;
@@ -87,16 +85,14 @@ void HWPStyle::SetName(int n, char const *name)
         DATA[n].name[0] = 0;
 }
 
-
-CharShape *HWPStyle::GetCharShape(int n) const
+CharShape* HWPStyle::GetCharShape(int n) const
 {
     if (n < 0 || n >= nstyles)
         return nullptr;
     return &DATA[n].cshape;
 }
 
-
-void HWPStyle::SetCharShape(int n, CharShape const * cshapep)
+void HWPStyle::SetCharShape(int n, CharShape const* cshapep)
 {
     if (n >= 0 && n < nstyles)
     {
@@ -107,16 +103,14 @@ void HWPStyle::SetCharShape(int n, CharShape const * cshapep)
     }
 }
 
-
-ParaShape *HWPStyle::GetParaShape(int n) const
+ParaShape* HWPStyle::GetParaShape(int n) const
 {
     if (n < 0 || n >= nstyles)
         return nullptr;
     return &DATA[n].pshape;
 }
 
-
-void HWPStyle::SetParaShape(int n, ParaShape const * pshapep)
+void HWPStyle::SetParaShape(int n, ParaShape const* pshapep)
 {
     if (n >= 0 && n < nstyles)
     {
@@ -127,8 +121,7 @@ void HWPStyle::SetParaShape(int n, ParaShape const * pshapep)
     }
 }
 
-
-void HWPStyle::Read(HWPFile & hwpf)
+void HWPStyle::Read(HWPFile& hwpf)
 {
     CharShape cshape;
     ParaShape pshape;
