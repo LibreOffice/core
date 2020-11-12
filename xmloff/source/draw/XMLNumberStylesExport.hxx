@@ -31,11 +31,11 @@ const sal_Int16 SdXMLTimeFormatCount = 7;
 class SdXMLNumberStylesExporter
 {
 public:
-    static void exportTimeStyle( SdXMLExport& rExport, sal_Int32 nStyle );
-    static void exportDateStyle( SdXMLExport& rExport, sal_Int32 nStyle );
+    static void exportTimeStyle(SdXMLExport& rExport, sal_Int32 nStyle);
+    static void exportDateStyle(SdXMLExport& rExport, sal_Int32 nStyle);
 
-    static OUString getTimeStyleName(const sal_Int32 nTimeFormat );
-    static OUString getDateStyleName(const sal_Int32 nDateFormat );
+    static OUString getTimeStyleName(const sal_Int32 nTimeFormat);
+    static OUString getDateStyleName(const sal_Int32 nDateFormat);
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XMLNUMBERSTYLESEXPORT_HXX

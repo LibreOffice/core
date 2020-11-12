@@ -22,15 +22,20 @@
 
 #include <xsecxmlsecdllapi.h>
 
-namespace com::sun::star::xml::crypto { class XUriBinding; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::xml::crypto
+{
+class XUriBinding;
+}
+namespace com::sun::star::uno
+{
+template <typename> class Reference;
+}
 
-int xmlEnableStreamInputCallbacks() ;
-void xmlDisableStreamInputCallbacks() ;
+int xmlEnableStreamInputCallbacks();
+void xmlDisableStreamInputCallbacks();
 int xmlRegisterStreamInputCallbacks(
-    css::uno::Reference< css::xml::crypto::XUriBinding > const & aUriBinding
-);
-int xmlUnregisterStreamInputCallbacks() ;
+    css::uno::Reference<css::xml::crypto::XUriBinding> const& aUriBinding);
+int xmlUnregisterStreamInputCallbacks();
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
 

@@ -23,10 +23,9 @@
 
 namespace writerfilter::dmapper
 {
-
 using namespace ::com::sun::star;
 
-void lcl_DumpTableColumnSeparators(const uno::Any & rTableColumnSeparators)
+void lcl_DumpTableColumnSeparators(const uno::Any& rTableColumnSeparators)
 {
 #ifdef DBG_UTIL
     uno::Sequence<text::TableColumnSeparator> aSeq;
@@ -47,16 +46,16 @@ void lcl_DumpTableColumnSeparators(const uno::Any & rTableColumnSeparators)
 
     TagLogger::getInstance().endElement();
 #else
-    (void) rTableColumnSeparators;
+    (void)rTableColumnSeparators;
 #endif // DBG_UTIL
 }
 
 #ifdef DBG_UTIL
-void lcl_DumpPropertyValues(beans::PropertyValues const & rValues)
+void lcl_DumpPropertyValues(beans::PropertyValues const& rValues)
 {
     TagLogger::getInstance().startElement("propertyValues");
 
-    for (beans::PropertyValue const & propVal : rValues)
+    for (beans::PropertyValue const& propVal : rValues)
     {
         TagLogger::getInstance().startElement("propertyValue");
 
@@ -72,7 +71,7 @@ void lcl_DumpPropertyValues(beans::PropertyValues const & rValues)
         {
         }
 
-        if ( propVal.Name == "TableColumnSeparators" )
+        if (propVal.Name == "TableColumnSeparators")
         {
             lcl_DumpTableColumnSeparators(propVal.Value);
         }
@@ -82,11 +81,11 @@ void lcl_DumpPropertyValues(beans::PropertyValues const & rValues)
     TagLogger::getInstance().endElement();
 }
 
-void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> const & rPropValSeq)
+void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> const& rPropValSeq)
 {
     TagLogger::getInstance().startElement("PropertyValueSeq");
 
-    for (auto const & propVal : rPropValSeq)
+    for (auto const& propVal : rPropValSeq)
     {
         lcl_DumpPropertyValues(propVal);
     }
@@ -94,7 +93,6 @@ void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> con
     TagLogger::getInstance().endElement();
 }
 #endif // DBG_UTIL
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,13 +27,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox::ppt {
-
+namespace oox::ppt
+{
 // ST_TLTime
-Any GetTime(  const OUString & val )
+Any GetTime(const OUString& val)
 {
     Any aDuration;
-    if( val == "indefinite" )
+    if (val == "indefinite")
     {
         aDuration <<= Timing_INDEFINITE;
     }
@@ -45,10 +45,10 @@ Any GetTime(  const OUString & val )
 }
 
 // ST_TLTimeAnimateValueTime
-Any GetTimeAnimateValueTime( const OUString & val )
+Any GetTimeAnimateValueTime(const OUString& val)
 {
     Any aPercent;
-    if( val == "indefinite" )
+    if (val == "indefinite")
     {
         aPercent <<= Timing_INDEFINITE;
     }
@@ -58,7 +58,6 @@ Any GetTimeAnimateValueTime( const OUString & val )
     }
     return aPercent;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

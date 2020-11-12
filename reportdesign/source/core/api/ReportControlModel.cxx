@@ -26,48 +26,50 @@ using namespace com::sun::star;
 using namespace comphelper;
 
 // XContainer
-void OReportControlModel::addContainerListener( const uno::Reference< container::XContainerListener >& xListener )
+void OReportControlModel::addContainerListener(
+    const uno::Reference<container::XContainerListener>& xListener)
 {
     aContainerListeners.addInterface(xListener);
 }
 
-void OReportControlModel::removeContainerListener( const uno::Reference< container::XContainerListener >& xListener )
+void OReportControlModel::removeContainerListener(
+    const uno::Reference<container::XContainerListener>& xListener)
 {
     aContainerListeners.removeInterface(xListener);
 }
 
-bool OReportControlModel::hasElements(  )
+bool OReportControlModel::hasElements()
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return !m_aFormatConditions.empty();
 }
 
 // XIndexContainer
-void OReportControlModel::insertByIndex( ::sal_Int32 Index, const uno::Any& Element )
+void OReportControlModel::insertByIndex(::sal_Int32 Index, const uno::Any& Element)
 {
-    uno::Reference<report::XFormatCondition> xElement(Element,uno::UNO_QUERY);
-    if ( !xElement.is() )
+    uno::Reference<report::XFormatCondition> xElement(Element, uno::UNO_QUERY);
+    if (!xElement.is())
         throw lang::IllegalArgumentException();
 
-    uno::Reference< container::XContainer > xBroadcaster;
+    uno::Reference<container::XContainer> xBroadcaster;
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         xBroadcaster = m_pOwner;
-        if ( Index > static_cast<sal_Int32>(m_aFormatConditions.size()) )
+        if (Index > static_cast<sal_Int32>(m_aFormatConditions.size()))
             throw lang::IndexOutOfBoundsException();
 
-        m_aFormatConditions.insert(m_aFormatConditions.begin() + Index,xElement);
+        m_aFormatConditions.insert(m_aFormatConditions.begin() + Index, xElement);
     }
 
     // notify our container listeners
     container::ContainerEvent aEvent(xBroadcaster, uno::makeAny(Index), Element, uno::Any());
-    aContainerListeners.notifyEach(&container::XContainerListener::elementInserted,aEvent);
+    aContainerListeners.notifyEach(&container::XContainerListener::elementInserted, aEvent);
 }
 
-void OReportControlModel::removeByIndex( ::sal_Int32 Index )
+void OReportControlModel::removeByIndex(::sal_Int32 Index)
 {
     uno::Any Element;
-    uno::Reference< container::XContainer > xBroadcaster;
+    uno::Reference<container::XContainer> xBroadcaster;
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         xBroadcaster = m_pOwner;
@@ -76,16 +78,16 @@ void OReportControlModel::removeByIndex( ::sal_Int32 Index )
         m_aFormatConditions.erase(m_aFormatConditions.begin() + Index);
     }
     container::ContainerEvent aEvent(xBroadcaster, uno::makeAny(Index), Element, uno::Any());
-    aContainerListeners.notifyEach(&container::XContainerListener::elementRemoved,aEvent);
+    aContainerListeners.notifyEach(&container::XContainerListener::elementRemoved, aEvent);
 }
 
 // XIndexReplace
-void OReportControlModel::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element )
+void OReportControlModel::replaceByIndex(::sal_Int32 Index, const uno::Any& Element)
 {
-    uno::Reference<report::XFormatCondition> xElement(Element,uno::UNO_QUERY);
-    if ( !xElement.is() )
+    uno::Reference<report::XFormatCondition> xElement(Element, uno::UNO_QUERY);
+    if (!xElement.is())
         throw lang::IllegalArgumentException();
-    uno::Reference< container::XContainer > xBroadcaster;
+    uno::Reference<container::XContainer> xBroadcaster;
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         xBroadcaster = m_pOwner;
@@ -93,17 +95,17 @@ void OReportControlModel::replaceByIndex( ::sal_Int32 Index, const uno::Any& Ele
         m_aFormatConditions[Index] = xElement;
     }
     container::ContainerEvent aEvent(xBroadcaster, uno::makeAny(Index), Element, uno::Any());
-    aContainerListeners.notifyEach(&container::XContainerListener::elementReplaced,aEvent);
+    aContainerListeners.notifyEach(&container::XContainerListener::elementReplaced, aEvent);
 }
 
 // XIndexAccess
-::sal_Int32 OReportControlModel::getCount(  )
+::sal_Int32 OReportControlModel::getCount()
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_aFormatConditions.size();
 }
 
-uno::Any OReportControlModel::getByIndex( ::sal_Int32 Index )
+uno::Any OReportControlModel::getByIndex(::sal_Int32 Index)
 {
     uno::Any aElement;
     {
@@ -116,13 +118,14 @@ uno::Any OReportControlModel::getByIndex( ::sal_Int32 Index )
 
 void OReportControlModel::checkIndex(sal_Int32 _nIndex)
 {
-    if ( _nIndex < 0 || static_cast<sal_Int32>(m_aFormatConditions.size()) <= _nIndex )
+    if (_nIndex < 0 || static_cast<sal_Int32>(m_aFormatConditions.size()) <= _nIndex)
         throw lang::IndexOutOfBoundsException();
 }
 
 bool OReportControlModel::isInterfaceForbidden(const uno::Type& _rType)
 {
-    return (_rType == cppu::UnoType<beans::XPropertyState>::get()|| _rType == cppu::UnoType<beans::XMultiPropertySet>::get());
+    return (_rType == cppu::UnoType<beans::XPropertyState>::get()
+            || _rType == cppu::UnoType<beans::XMultiPropertySet>::get());
 }
 
 } // reportdesign

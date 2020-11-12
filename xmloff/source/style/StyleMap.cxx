@@ -22,13 +22,9 @@
 using namespace css::uno;
 using namespace css::lang;
 
-StyleMap::StyleMap()
-{
-}
+StyleMap::StyleMap() {}
 
-StyleMap::~StyleMap()
-{
-}
+StyleMap::~StyleMap() {}
 
 // XUnoTunnel & co
 UNO3_GETIMPLEMENTATION_IMPL(StyleMap);

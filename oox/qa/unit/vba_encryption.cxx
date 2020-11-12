@@ -16,7 +16,6 @@
 class TestVbaEncryption : public CppUnit::TestFixture
 {
 public:
-
 #if 0
     // an initial test for the encryption taken from the spec
     void testSimple1();

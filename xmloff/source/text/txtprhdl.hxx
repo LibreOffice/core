@@ -19,16 +19,14 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TEXT_TXTPRHDL_HXX
 #define INCLUDED_XMLOFF_SOURCE_TEXT_TXTPRHDL_HXX
 
-
 #include <xmloff/prhdlfac.hxx>
 
 class XMLTextPropertyHandlerFactory : public XMLPropertyHandlerFactory
 {
 public:
-
     XMLTextPropertyHandlerFactory();
 
-    virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const override ;
+    virtual const XMLPropertyHandler* GetPropertyHandler(sal_Int32 nType) const override;
 };
 
 #endif

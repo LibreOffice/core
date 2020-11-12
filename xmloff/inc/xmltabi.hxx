@@ -35,17 +35,16 @@ private:
     std::unique_ptr<SvxXMLTabStopArray_Impl> mpTabStops;
 
 public:
+    SvxXMLTabStopImportContext(SvXMLImport& rImport, sal_Int32 nElement,
+                               const XMLPropertyState& rProp,
+                               ::std::vector<XMLPropertyState>& rProps);
 
-    SvxXMLTabStopImportContext( SvXMLImport& rImport, sal_Int32 nElement,
-                                const XMLPropertyState& rProp,
-                                 ::std::vector< XMLPropertyState > &rProps );
-
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
-
 
 #endif // INCLUDED_XMLOFF_INC_XMLTABI_HXX
 

@@ -24,19 +24,16 @@
 
 struct SampleLib_Api
 {
-    sal_Int32 (*funcA)( sal_Int32 );
-    double (*funcB)( double );
+    sal_Int32 (*funcA)(sal_Int32);
+    double (*funcB)(double);
 };
-
 
 typedef SampleLib_Api* (*InitSampleLib_Api)(void);
 
 #define SAMPLELIB_INIT_FUNCTION_NAME "initSampleLibApi"
 
-
-sal_Int32 SAL_CALL funcA( sal_Int32 a);
-double SAL_CALL funcB( double a);
-
+sal_Int32 SAL_CALL funcA(sal_Int32 a);
+double SAL_CALL funcB(double a);
 
 #endif
 

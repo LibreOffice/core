@@ -27,40 +27,37 @@
 
 #include <vector>
 
-
-namespace writerfilter::dmapper {
-
+namespace writerfilter::dmapper
+{
 class PgBorder
 {
 public:
     css::table::BorderLine2 m_rLine;
-    sal_Int32   m_nDistance;
+    sal_Int32 m_nDistance;
     BorderPosition m_ePos;
     bool m_bShadow;
 
-    PgBorder( );
+    PgBorder();
 };
 
 class PageBordersHandler : public LoggedProperties
 {
 private:
-
     // See implementation of SectionPropertyMap::ApplyBorderToPageStyles
     SectionPropertyMap::BorderApply m_eBorderApply;
     SectionPropertyMap::BorderOffsetFrom m_eOffsetFrom;
     std::vector<PgBorder> m_aBorders;
 
     // Properties
-    virtual void lcl_attribute( Id eName, Value& rVal ) override;
-    virtual void lcl_sprm( Sprm& rSprm ) override;
+    virtual void lcl_attribute(Id eName, Value& rVal) override;
+    virtual void lcl_sprm(Sprm& rSprm) override;
 
 public:
-    PageBordersHandler( );
-    virtual ~PageBordersHandler( ) override;
+    PageBordersHandler();
+    virtual ~PageBordersHandler() override;
 
-    void SetBorders( SectionPropertyMap* pSectContext );
+    void SetBorders(SectionPropertyMap* pSectContext);
 };
-
 }
 
 #endif

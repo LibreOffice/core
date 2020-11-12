@@ -39,8 +39,8 @@ class MeasureHandler : public LoggedProperties
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) override;
-    virtual void lcl_sprm(Sprm & sprm) override;
+    virtual void lcl_attribute(Id Name, Value& val) override;
+    virtual void lcl_sprm(Sprm& sprm) override;
 
 public:
     MeasureHandler();
@@ -51,12 +51,11 @@ public:
     sal_Int32 getValue() const { return m_nMeasureValue; }
     sal_Int32 getUnit() const { return m_nUnit; }
 
-    sal_Int16 GetRowHeightSizeType() const { return m_nRowHeightSizeType;}
+    sal_Int16 GetRowHeightSizeType() const { return m_nRowHeightSizeType; }
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag();
 };
-typedef tools::SvRef
-    < MeasureHandler >  MeasureHandlerPtr;
+typedef tools::SvRef<MeasureHandler> MeasureHandlerPtr;
 }
 
 #endif

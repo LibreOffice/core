@@ -20,27 +20,25 @@ XMLSecurityContextGpg::XMLSecurityContextGpg()
 {
 }
 
-XMLSecurityContextGpg::~XMLSecurityContextGpg()
-{
-}
+XMLSecurityContextGpg::~XMLSecurityContextGpg() {}
 
 sal_Int32 SAL_CALL XMLSecurityContextGpg::addSecurityEnvironment(
-    const Reference< XSecurityEnvironment >& aSecurityEnvironment)
+    const Reference<XSecurityEnvironment>& aSecurityEnvironment)
 {
-    if(!aSecurityEnvironment.is())
+    if (!aSecurityEnvironment.is())
         throw RuntimeException("Invalid SecurityEnvironment given!");
 
     m_vSecurityEnvironments.push_back(aSecurityEnvironment);
-    return m_vSecurityEnvironments.size() - 1 ;
+    return m_vSecurityEnvironments.size() - 1;
 }
-
 
 sal_Int32 SAL_CALL XMLSecurityContextGpg::getSecurityEnvironmentNumber()
 {
     return m_vSecurityEnvironments.size();
 }
 
-Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContextGpg::getSecurityEnvironmentByIndex(sal_Int32 index)
+Reference<XSecurityEnvironment>
+    SAL_CALL XMLSecurityContextGpg::getSecurityEnvironmentByIndex(sal_Int32 index)
 {
     if (index < 0 || index >= static_cast<sal_Int32>(m_vSecurityEnvironments.size()))
         throw RuntimeException("Invalid index");
@@ -48,9 +46,10 @@ Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContextGpg::getSecurityEnv
     return m_vSecurityEnvironments[index];
 }
 
-Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContextGpg::getSecurityEnvironment()
+Reference<XSecurityEnvironment> SAL_CALL XMLSecurityContextGpg::getSecurityEnvironment()
 {
-    if (m_nDefaultEnvIndex < 0 || m_nDefaultEnvIndex >= static_cast<sal_Int32>(m_vSecurityEnvironments.size()))
+    if (m_nDefaultEnvIndex < 0
+        || m_nDefaultEnvIndex >= static_cast<sal_Int32>(m_vSecurityEnvironments.size()))
         throw RuntimeException("Invalid index");
 
     return getSecurityEnvironmentByIndex(m_nDefaultEnvIndex);
@@ -58,7 +57,7 @@ Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContextGpg::getSecurityEnv
 
 sal_Int32 SAL_CALL XMLSecurityContextGpg::getDefaultSecurityEnvironmentIndex()
 {
-    return m_nDefaultEnvIndex ;
+    return m_nDefaultEnvIndex;
 }
 
 void SAL_CALL XMLSecurityContextGpg::setDefaultSecurityEnvironmentIndex(sal_Int32 nDefaultEnvIndex)
@@ -67,17 +66,20 @@ void SAL_CALL XMLSecurityContextGpg::setDefaultSecurityEnvironmentIndex(sal_Int3
 }
 
 /* XServiceInfo */
-OUString SAL_CALL XMLSecurityContextGpg::getImplementationName() {
+OUString SAL_CALL XMLSecurityContextGpg::getImplementationName()
+{
     return "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl";
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSecurityContextGpg::supportsService( const OUString& serviceName) {
+sal_Bool SAL_CALL XMLSecurityContextGpg::supportsService(const OUString& serviceName)
+{
     return cppu::supportsService(this, serviceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLSecurityContextGpg::getSupportedServiceNames() {
+Sequence<OUString> SAL_CALL XMLSecurityContextGpg::getSupportedServiceNames()
+{
     return { OUString("com.sun.star.xml.crypto.XMLSecurityContext") };
 }
 

@@ -36,9 +36,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-ReportdesignDialogsTest::ReportdesignDialogsTest()
-{
-}
+ReportdesignDialogsTest::ReportdesignDialogsTest() {}
 
 void ReportdesignDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {

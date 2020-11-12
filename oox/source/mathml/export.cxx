@@ -11,10 +11,7 @@
 
 namespace oox
 {
-
-FormulaExportBase::FormulaExportBase()
-{
-}
+FormulaExportBase::FormulaExportBase() {}
 
 } // namespace
 

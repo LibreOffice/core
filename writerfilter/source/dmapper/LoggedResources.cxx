@@ -25,65 +25,55 @@ using namespace ::com::sun::star;
 
 namespace writerfilter
 {
-
 #ifdef DBG_UTIL
 
-LoggedResourcesHelper::LoggedResourcesHelper(const std::string & sPrefix)
-: msPrefix(sPrefix)
+LoggedResourcesHelper::LoggedResourcesHelper(const std::string& sPrefix)
+    : msPrefix(sPrefix)
 {
 }
 
-LoggedResourcesHelper::~LoggedResourcesHelper()
-{
-}
+LoggedResourcesHelper::~LoggedResourcesHelper() {}
 
-void LoggedResourcesHelper::startElement(const std::string & sElement)
+void LoggedResourcesHelper::startElement(const std::string& sElement)
 {
     TagLogger::getInstance().startElement(msPrefix + "." + sElement);
 }
 
-void LoggedResourcesHelper::endElement()
-{
-    TagLogger::getInstance().endElement();
-}
+void LoggedResourcesHelper::endElement() { TagLogger::getInstance().endElement(); }
 
-void LoggedResourcesHelper::chars(const OUString & rChars)
+void LoggedResourcesHelper::chars(const OUString& rChars)
 {
     TagLogger::getInstance().chars(rChars);
 }
 
-void LoggedResourcesHelper::chars(const std::string & rChars)
+void LoggedResourcesHelper::chars(const std::string& rChars)
 {
     TagLogger::getInstance().chars(rChars);
 }
 
-void LoggedResourcesHelper::attribute(const std::string & rName, const std::string & rValue)
+void LoggedResourcesHelper::attribute(const std::string& rName, const std::string& rValue)
 {
     TagLogger::getInstance().attribute(rName, rValue);
 }
 
-void LoggedResourcesHelper::attribute(const std::string & rName, sal_uInt32 nValue)
+void LoggedResourcesHelper::attribute(const std::string& rName, sal_uInt32 nValue)
 {
     TagLogger::getInstance().attribute(rName, nValue);
 }
 
 #endif
 
-
 LoggedStream::LoggedStream(
 #ifdef DBG_UTIL
-    const std::string & sPrefix
-) : mHelper(sPrefix)
+    const std::string& sPrefix)
+    : mHelper(sPrefix)
 #else
-    const std::string&
-)
+    const std::string&)
 #endif
 {
 }
 
-LoggedStream::~LoggedStream()
-{
-}
+LoggedStream::~LoggedStream() {}
 
 void LoggedStream::startSectionGroup()
 {
@@ -121,7 +111,6 @@ void LoggedStream::endParagraphGroup()
 #endif
 }
 
-
 void LoggedStream::startCharacterGroup()
 {
 #ifdef DBG_UTIL
@@ -158,12 +147,12 @@ void LoggedStream::endShape()
 #endif
 }
 
-void LoggedStream::text(const sal_uInt8 * data, size_t len)
+void LoggedStream::text(const sal_uInt8* data, size_t len)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("text");
 
-    OUString sText( reinterpret_cast<const char*>(data), len, RTL_TEXTENCODING_MS_1252 );
+    OUString sText(reinterpret_cast<const char*>(data), len, RTL_TEXTENCODING_MS_1252);
 
     mHelper.startElement("data");
     LoggedResourcesHelper::chars(sText);
@@ -177,13 +166,13 @@ void LoggedStream::text(const sal_uInt8 * data, size_t len)
 #endif
 }
 
-void LoggedStream::utext(const sal_uInt8 * data, size_t len)
+void LoggedStream::utext(const sal_uInt8* data, size_t len)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("utext");
     mHelper.startElement("data");
 
-    OUString sText( reinterpret_cast<const sal_Unicode *>(data), len);
+    OUString sText(reinterpret_cast<const sal_Unicode*>(data), len);
 
     LoggedResourcesHelper::chars(sText);
 
@@ -282,7 +271,7 @@ void LoggedStream::substream(Id name, writerfilter::Reference<Stream>::Pointer_t
 #endif
 }
 
-void LoggedStream::info(const std::string & _info)
+void LoggedStream::info(const std::string& _info)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("info");
@@ -324,20 +313,17 @@ void LoggedStream::endGlossaryEntry()
 
 LoggedProperties::LoggedProperties(
 #ifdef DBG_UTIL
-    const std::string & sPrefix
-) : mHelper(sPrefix)
+    const std::string& sPrefix)
+    : mHelper(sPrefix)
 #else
-    const std::string&
-)
+    const std::string&)
 #endif
 {
 }
 
-LoggedProperties::~LoggedProperties()
-{
-}
+LoggedProperties::~LoggedProperties() {}
 
-void LoggedProperties::attribute(Id name, Value & val)
+void LoggedProperties::attribute(Id name, Value& val)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("attribute");
@@ -349,7 +335,7 @@ void LoggedProperties::attribute(Id name, Value & val)
     lcl_attribute(name, val);
 }
 
-void LoggedProperties::sprm(Sprm & rSprm)
+void LoggedProperties::sprm(Sprm& rSprm)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("sprm");
@@ -366,18 +352,15 @@ void LoggedProperties::sprm(Sprm & rSprm)
 
 LoggedTable::LoggedTable(
 #ifdef DBG_UTIL
-    const std::string & sPrefix
-) : mHelper(sPrefix)
+    const std::string& sPrefix)
+    : mHelper(sPrefix)
 #else
-    const std::string&
-)
+    const std::string&)
 #endif
 {
 }
 
-LoggedTable::~LoggedTable()
-{
-}
+LoggedTable::~LoggedTable() {}
 
 void LoggedTable::entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref)
 {
@@ -394,7 +377,6 @@ void LoggedTable::entry(int pos, writerfilter::Reference<Properties>::Pointer_t 
     LoggedResourcesHelper::endElement();
 #endif
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

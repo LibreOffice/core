@@ -17,7 +17,7 @@
 #endif
 
 // Called to perform any initialization of the widget toolkit
-int InitProgressUI(int *argc, NS_tchar ***argv);
+int InitProgressUI(int* argc, NS_tchar*** argv);
 
 #if defined(_WIN32)
 // Called on the main thread at startup
@@ -33,4 +33,4 @@ void QuitProgressUI();
 // May be called from any thread: progress is a number between 0 and 100
 void UpdateProgressUI(float progress);
 
-#endif  // PROGRESSUI_H__
+#endif // PROGRESSUI_H__

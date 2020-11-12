@@ -23,22 +23,21 @@
 #include <oox/core/contexthandler2.hxx>
 #include <drawingml/table/tablecell.hxx>
 
-namespace oox::drawingml::table {
-
+namespace oox::drawingml::table
+{
 class TableCellContext : public ::oox::core::ContextHandler2
 {
 public:
-    TableCellContext( ::oox::core::ContextHandler2Helper const & rParent,
-        const ::oox::AttributeList& rAttribs, TableCell& rTableCell );
+    TableCellContext(::oox::core::ContextHandler2Helper const& rParent,
+                     const ::oox::AttributeList& rAttribs, TableCell& rTableCell);
     virtual ~TableCellContext() override;
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef
+    onCreateContext(::sal_Int32 Element, const ::oox::AttributeList& rAttribs) override;
 
 private:
-
     TableCell& mrTableCell;
 };
-
 }
 
 #endif
