@@ -22,16 +22,18 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 
-namespace osl { class Directory; }
+namespace osl
+{
+class Directory;
+}
 
-namespace cppu {
-
+namespace cppu
+{
 OUString getUnoIniUri();
 
-bool nextDirectoryItem(osl::Directory & directory, OUString * url);
+bool nextDirectoryItem(osl::Directory& directory, OUString* url);
 
-void decodeRdbUri(OUString * uri, bool * optional, bool * directory);
-
+void decodeRdbUri(OUString* uri, bool* optional, bool* directory);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

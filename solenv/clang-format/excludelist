@@ -2587,13 +2587,11 @@ cppuhelper/source/loadsharedlibcomponentfactory.hxx
 cppuhelper/source/macro_expander.cxx
 cppuhelper/source/macro_expander.hxx
 cppuhelper/source/paths.cxx
-cppuhelper/source/paths.hxx
 cppuhelper/source/propertysetmixin.cxx
 cppuhelper/source/propshlp.cxx
 cppuhelper/source/servicemanager.cxx
 cppuhelper/source/servicemanager.hxx
 cppuhelper/source/shlib.cxx
-cppuhelper/source/supportsservice.cxx
 cppuhelper/source/tdmgr.cxx
 cppuhelper/source/typemanager.cxx
 cppuhelper/source/typemanager.hxx
