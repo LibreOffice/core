@@ -17,16 +17,18 @@
 
 #include <o3tl/safeint.hxx>
 
-namespace {
-
-class Test: public CppUnit::TestFixture {
+namespace
+{
+class Test : public CppUnit::TestFixture
+{
 private:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSignedSaturatingAdd);
     CPPUNIT_TEST(testUnsignedSaturatingAdd);
     CPPUNIT_TEST_SUITE_END();
 
-    void testSignedSaturatingAdd() {
+    void testSignedSaturatingAdd()
+    {
         auto const min = std::numeric_limits<int>::min();
         auto const max = std::numeric_limits<int>::max();
 
@@ -87,7 +89,8 @@ private:
         CPPUNIT_ASSERT_EQUAL(max, o3tl::saturating_add(max, max));
     }
 
-    void testUnsignedSaturatingAdd() {
+    void testUnsignedSaturatingAdd()
+    {
         auto const max = std::numeric_limits<unsigned int>::max();
 
         CPPUNIT_ASSERT_EQUAL(0U, o3tl::saturating_add(0U, 0U));
@@ -113,7 +116,6 @@ private:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
