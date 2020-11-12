@@ -23,25 +23,25 @@
 #include <iostream>
 #include <memory>
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+{
     std::vector<std::string> args;
     for (int i = 1; i < argc; ++i)
         args.push_back(std::string(argv[i]));
     try
     {
         std::unique_ptr<HelpLinker> pHelpLinker(new HelpLinker());
-        pHelpLinker->main( args );
+        pHelpLinker->main(args);
     }
-    catch( const HelpProcessingException& e )
+    catch (const HelpProcessingException& e)
     {
         std::cerr << e.m_aErrorMsg;
         exit(1);
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what();
         exit(1);
     }
     return 0;
 }
-

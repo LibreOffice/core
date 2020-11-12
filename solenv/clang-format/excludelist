@@ -4809,10 +4809,7 @@ helpcompiler/source/HelpCompiler.cxx
 helpcompiler/source/HelpIndexer.cxx
 helpcompiler/source/HelpIndexer_main.cxx
 helpcompiler/source/HelpLinker.cxx
-helpcompiler/source/HelpLinker_main.cxx
 helpcompiler/source/HelpSearch.cxx
-helpcompiler/source/LuceneHelper.cxx
-helpcompiler/source/LuceneHelper.hxx
 hwpfilter/qa/cppunit/test_hwpfilter.cxx
 hwpfilter/source/attributes.cxx
 hwpfilter/source/attributes.hxx
