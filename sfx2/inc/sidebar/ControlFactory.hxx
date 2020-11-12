@@ -23,10 +23,13 @@
 #include <vcl/vclptr.hxx>
 
 class RadioButton;
-namespace vcl { class Window; }
+namespace vcl
+{
+class Window;
+}
 
-namespace sfx2::sidebar {
-
+namespace sfx2::sidebar
+{
 /** Factory for controls used in sidebar panels.
     The reason to use this factory instead of creating the controls
     directly is that this way the sidebar has a little more control
@@ -37,11 +40,10 @@ class ControlFactory
 public:
     /** Create the menu button for the task bar.
     */
-    static VclPtr<RadioButton> CreateMenuButton (vcl::Window* pParentWindow);
+    static VclPtr<RadioButton> CreateMenuButton(vcl::Window* pParentWindow);
 
-    static VclPtr<RadioButton> CreateTabItem (vcl::Window* pParentWindow);
+    static VclPtr<RadioButton> CreateTabItem(vcl::Window* pParentWindow);
 };
-
 
 } // end of namespace sfx2::sidebar
 

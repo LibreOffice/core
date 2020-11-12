@@ -20,8 +20,8 @@
 
 #include <sidebar/ContextList.hxx>
 
-namespace sfx2::sidebar {
-
+namespace sfx2::sidebar
+{
 class PanelDescriptor
 {
 public:
@@ -41,7 +41,7 @@ public:
     OUString msNodeName; // some impress panel nodes names are different from their Id
 
     PanelDescriptor();
-    PanelDescriptor (const PanelDescriptor& rPanelDescriptor);
+    PanelDescriptor(const PanelDescriptor& rPanelDescriptor);
     ~PanelDescriptor();
 };
 

@@ -29,7 +29,8 @@ short ExecuteQuerySaveDocument(weld::Widget* _pParent, std::u16string_view _rTit
         return RET_NO;
     }
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(_pParent, "sfx/ui/querysavedialog.ui"));
+    std::unique_ptr<weld::Builder> xBuilder(
+        Application::CreateBuilder(_pParent, "sfx/ui/querysavedialog.ui"));
     std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QuerySaveDialog"));
     xQBox->set_primary_text(xQBox->get_primary_text().replaceFirst("$(DOC)", _rTitle));
     return xQBox->run();

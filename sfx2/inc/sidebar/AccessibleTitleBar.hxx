@@ -16,35 +16,31 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
-#include <hintpost.hxx>
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
-#include <sfx2/request.hxx>
-#include <vcl/svapp.hxx>
-
-SfxHintPoster::SfxHintPoster(const std::function<void(std::unique_ptr<SfxRequest>)>& rLink)
-    : m_Link(rLink)
+namespace com::sun::star::accessibility
 {
+class XAccessible;
 }
 
-SfxHintPoster::~SfxHintPoster() {}
-
-void SfxHintPoster::Post(std::unique_ptr<SfxRequest> pHintToPost)
+namespace sfx2::sidebar
 {
-    Application::PostUserEvent((LINK(this, SfxHintPoster, DoEvent_Impl)), pHintToPost.release());
-    AddFirstRef();
-}
+class TitleBar;
 
-IMPL_LINK(SfxHintPoster, DoEvent_Impl, void*, pPostedHint, void)
+class AccessibleTitleBar final : public VCLXAccessibleComponent
 {
-    if (m_Link)
-        m_Link(std::unique_ptr<SfxRequest>(static_cast<SfxRequest*>(pPostedHint)));
-    ReleaseRef();
-}
+public:
+    static css::uno::Reference<css::accessibility::XAccessible> Create(TitleBar& rTitleBar);
 
-void SfxHintPoster::SetEventHdl(const std::function<void(std::unique_ptr<SfxRequest>)>& rLink)
-{
-    m_Link = rLink;
-}
+private:
+    virtual void FillAccessibleStateSet(utl::AccessibleStateSetHelper& rStateSet) override;
+
+    explicit AccessibleTitleBar(VCLXWindow* pWindow);
+    virtual ~AccessibleTitleBar() override;
+};
+
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

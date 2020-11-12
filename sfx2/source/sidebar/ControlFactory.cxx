@@ -21,14 +21,14 @@
 #include <sidebar/MenuButton.hxx>
 #include <sidebar/TabItem.hxx>
 
-namespace sfx2::sidebar {
-
-VclPtr<RadioButton> ControlFactory::CreateMenuButton (vcl::Window* pParentWindow)
+namespace sfx2::sidebar
+{
+VclPtr<RadioButton> ControlFactory::CreateMenuButton(vcl::Window* pParentWindow)
 {
     return VclPtr<MenuButton>::Create(pParentWindow);
 }
 
-VclPtr<RadioButton> ControlFactory::CreateTabItem (vcl::Window* pParentWindow)
+VclPtr<RadioButton> ControlFactory::CreateTabItem(vcl::Window* pParentWindow)
 {
     return VclPtr<TabItem>::Create(pParentWindow);
 }

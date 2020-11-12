@@ -18,14 +18,13 @@
 
 #include <vcl/svapp.hxx>
 
-
 using namespace css;
 using namespace ::sfx2::sidebar;
 
 using ::com::sun::star::uno::RuntimeException;
 
-SfxUnoSidebar::SfxUnoSidebar(const uno::Reference<frame::XFrame>& rFrame):
-xFrame(rFrame)
+SfxUnoSidebar::SfxUnoSidebar(const uno::Reference<frame::XFrame>& rFrame)
+    : xFrame(rFrame)
 {
 }
 
@@ -34,7 +33,7 @@ SidebarController* SfxUnoSidebar::getSidebarController()
     return SidebarController::GetSidebarControllerForFrame(xFrame);
 }
 
-void SAL_CALL SfxUnoSidebar::showDecks ( const sal_Bool bVisible )
+void SAL_CALL SfxUnoSidebar::showDecks(const sal_Bool bVisible)
 {
     SolarMutexGuard aGuard;
 
@@ -49,20 +48,19 @@ void SAL_CALL SfxUnoSidebar::showDecks ( const sal_Bool bVisible )
     }
 }
 
-void SAL_CALL SfxUnoSidebar::setVisible ( const sal_Bool bVisible )
+void SAL_CALL SfxUnoSidebar::setVisible(const sal_Bool bVisible)
 {
     SolarMutexGuard aGuard;
 
     SidebarController* pSidebarController = getSidebarController();
 
-    if ( (bVisible && !pSidebarController) || (!bVisible && pSidebarController) )
+    if ((bVisible && !pSidebarController) || (!bVisible && pSidebarController))
     {
-        const util::URL aURL (Tools::GetURL(".uno:Sidebar"));
-        uno::Reference<frame::XDispatch> xDispatch (Tools::GetDispatch(xFrame, aURL));
+        const util::URL aURL(Tools::GetURL(".uno:Sidebar"));
+        uno::Reference<frame::XDispatch> xDispatch(Tools::GetDispatch(xFrame, aURL));
         if (xDispatch.is())
-                xDispatch->dispatch(aURL, uno::Sequence<beans::PropertyValue>());
+            xDispatch->dispatch(aURL, uno::Sequence<beans::PropertyValue>());
     }
-
 }
 
 sal_Bool SAL_CALL SfxUnoSidebar::isVisible()
@@ -78,7 +76,7 @@ uno::Reference<frame::XFrame> SAL_CALL SfxUnoSidebar::getFrame()
 {
     SolarMutexGuard aGuard;
 
-    if (! xFrame.is() )
+    if (!xFrame.is())
         throw uno::RuntimeException();
 
     return xFrame;
@@ -92,10 +90,6 @@ uno::Reference<ui::XDecks> SAL_CALL SfxUnoSidebar::getDecks()
     return decks;
 }
 
-uno::Reference<ui::XSidebar> SAL_CALL SfxUnoSidebar::getSidebar()
-{
-    return getSidebarController();
-}
-
+uno::Reference<ui::XSidebar> SAL_CALL SfxUnoSidebar::getSidebar() { return getSidebarController(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

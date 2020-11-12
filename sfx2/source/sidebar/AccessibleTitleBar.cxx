@@ -16,37 +16,42 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#pragma once
 
-#include <sidebar/ContextList.hxx>
+#include <sidebar/AccessibleTitleBar.hxx>
+#include <sidebar/Accessible.hxx>
+#include <sidebar/TitleBar.hxx>
 
-#include <sfx2/sidebar/Deck.hxx>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+
+#include <unotools/accessiblestatesethelper.hxx>
+
+using namespace css;
+using namespace css::uno;
 
 namespace sfx2::sidebar
 {
-class DeckDescriptor
+Reference<accessibility::XAccessible> AccessibleTitleBar::Create(TitleBar& rTitleBar)
 {
-public:
-    OUString msTitle;
-    OUString msId;
-    OUString msIconURL;
-    OUString msHighContrastIconURL;
-    OUString msTitleBarIconURL;
-    OUString msHighContrastTitleBarIconURL;
-    OUString msHelpText;
-    ContextList maContextList;
-    bool mbIsEnabled;
-    sal_Int32 mnOrderIndex;
-    bool mbExperimental;
+    rTitleBar.GetComponentInterface();
+    VCLXWindow* pWindow = rTitleBar.GetWindowPeer();
+    if (pWindow != nullptr)
+        return new Accessible(new AccessibleTitleBar(pWindow));
+    else
+        return nullptr;
+}
 
-    OUString msNodeName; // some impress deck nodes names are different from their Id
+AccessibleTitleBar::AccessibleTitleBar(VCLXWindow* pWindow)
+    : VCLXAccessibleComponent(pWindow)
+{
+}
 
-    VclPtr<Deck> mpDeck;
+AccessibleTitleBar::~AccessibleTitleBar() {}
 
-    DeckDescriptor();
-    DeckDescriptor(const DeckDescriptor& rOther);
-    ~DeckDescriptor();
-};
+void AccessibleTitleBar::FillAccessibleStateSet(utl::AccessibleStateSetHelper& rStateSet)
+{
+    VCLXAccessibleComponent::FillAccessibleStateSet(rStateSet);
+    rStateSet.AddState(accessibility::AccessibleStateType::FOCUSABLE);
+}
 
 } // end of namespace sfx2::sidebar
 

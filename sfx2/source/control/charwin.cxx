@@ -32,7 +32,7 @@ using namespace com::sun::star;
 SvxCharView::SvxCharView(const VclPtr<VirtualDevice>& rVirDev)
     : mxVirDev(rVirDev)
     , mnY(0)
-    , maPosition(0,0)
+    , maPosition(0, 0)
     , maHasInsert(true)
 {
 }
@@ -51,21 +51,15 @@ void SvxCharView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     mxVirDev->Pop();
 }
 
-void SvxCharView::GetFocus()
-{
-    Invalidate();
-}
+void SvxCharView::GetFocus() { Invalidate(); }
 
-void SvxCharView::LoseFocus()
-{
-    Invalidate();
-}
+void SvxCharView::LoseFocus() { Invalidate(); }
 
 bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    if ( rMEvt.IsLeft() )
+    if (rMEvt.IsLeft())
     {
-        if ( !(rMEvt.GetClicks() % 2) && maHasInsert )
+        if (!(rMEvt.GetClicks() % 2) && maHasInsert)
         {
             InsertCharToDoc();
         }
@@ -118,9 +112,11 @@ void SvxCharView::InsertCharToDoc()
 void SvxCharView::createContextMenu()
 {
     weld::DrawingArea* pDrawingArea = GetDrawingArea();
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDrawingArea, "sfx/ui/charviewmenu.ui"));
+    std::unique_ptr<weld::Builder> xBuilder(
+        Application::CreateBuilder(pDrawingArea, "sfx/ui/charviewmenu.ui"));
     std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu("charviewmenu"));
-    ContextMenuSelect(xItemMenu->popup_at_rect(pDrawingArea, tools::Rectangle(maPosition, Size(1,1))));
+    ContextMenuSelect(
+        xItemMenu->popup_at_rect(pDrawingArea, tools::Rectangle(maPosition, Size(1, 1))));
     Invalidate();
 }
 
@@ -157,7 +153,7 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
     for (tools::Long nFontHeight = aFontSize.Height(); nFontHeight > 0; nFontHeight -= 1)
     {
-        if (!rRenderContext.GetTextBoundRect( aBoundRect, aText ) || aBoundRect.IsEmpty())
+        if (!rRenderContext.GetTextBoundRect(aBoundRect, aText) || aBoundRect.IsEmpty())
         {
             bGotBoundary = false;
             break;
@@ -168,7 +164,7 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         if (nAvailWidth > nTextWidth)
             break;
         vcl::Font aFont(aOrigFont);
-        aFontSize.setHeight( nFontHeight );
+        aFontSize.setHeight(nFontHeight);
         aFont.SetFontSize(aFontSize);
         rRenderContext.SetFont(aFont);
         mnY = (nWinHeight - rRenderContext.GetTextHeight()) / 2;
@@ -178,7 +174,7 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     Point aPoint(2, mnY);
 
     if (!bGotBoundary)
-        aPoint.setX( (aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2 );
+        aPoint.setX((aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2);
     else
     {
         // adjust position
@@ -187,13 +183,13 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         // vertical adjustment
         int nYLDelta = aBoundRect.Top();
         int nYHDelta = aSize.Height() - aBoundRect.Bottom();
-        if( nYLDelta <= 0 )
-            aPoint.AdjustY( -(nYLDelta - 1) );
-        else if( nYHDelta <= 0 )
-            aPoint.AdjustY(nYHDelta - 1 );
+        if (nYLDelta <= 0)
+            aPoint.AdjustY(-(nYLDelta - 1));
+        else if (nYHDelta <= 0)
+            aPoint.AdjustY(nYHDelta - 1);
 
         // centrally align glyph
-        aPoint.setX( -aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2 );
+        aPoint.setX(-aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2);
     }
 
     if (HasFocus())
@@ -219,22 +215,22 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         rRenderContext.SetFont(aOrigFont);
 }
 
-void SvxCharView::setMouseClickHdl(const Link<SvxCharView*,void> &rLink)
+void SvxCharView::setMouseClickHdl(const Link<SvxCharView*, void>& rLink)
 {
     maMouseClickHdl = rLink;
 }
 
-void SvxCharView::setClearClickHdl(const Link<SvxCharView*,void> &rLink)
+void SvxCharView::setClearClickHdl(const Link<SvxCharView*, void>& rLink)
 {
     maClearClickHdl = rLink;
 }
 
-void SvxCharView::setClearAllClickHdl(const Link<SvxCharView*,void> &rLink)
+void SvxCharView::setClearAllClickHdl(const Link<SvxCharView*, void>& rLink)
 {
     maClearAllClickHdl = rLink;
 }
 
-void SvxCharView::SetFont( const vcl::Font& rFont )
+void SvxCharView::SetFont(const vcl::Font& rFont)
 {
     tools::Long nWinHeight = GetOutputSizePixel().Height();
     maFont = rFont;
@@ -253,18 +249,15 @@ void SvxCharView::SetFont( const vcl::Font& rFont )
 
 void SvxCharView::Resize()
 {
-    SetFont(GetFont());  //force recalculation of size
+    SetFont(GetFont()); //force recalculation of size
 }
 
-void SvxCharView::SetText( const OUString& rText )
+void SvxCharView::SetText(const OUString& rText)
 {
     m_sText = rText;
     Invalidate();
 }
 
-void SvxCharView::SetHasInsert( bool bInsert )
-{
-    maHasInsert = bInsert;
-}
+void SvxCharView::SetHasInsert(bool bInsert) { maHasInsert = bInsert; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

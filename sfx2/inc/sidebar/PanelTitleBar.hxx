@@ -21,22 +21,27 @@
 #include <sidebar/TitleBar.hxx>
 #include <com/sun/star/frame/XToolbarController.hpp>
 
-namespace com::sun::star::frame { class XController; }
-namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame
+{
+class XController;
+}
+namespace com::sun::star::frame
+{
+class XFrame;
+}
 
-namespace sfx2::sidebar {
-
+namespace sfx2::sidebar
+{
 class Panel;
 
-class PanelTitleBar final
-    : public TitleBar
+class PanelTitleBar final : public TitleBar
 {
 public:
     PanelTitleBar(const OUString& rsTitle, vcl::Window* pParentWindow, Panel* pPanel);
     virtual void dispose() override;
     virtual ~PanelTitleBar() override;
 
-    virtual void SetTitle (const OUString& rsTitle) override;
+    virtual void SetTitle(const OUString& rsTitle) override;
     virtual OUString GetTitle() const override;
 
     void SetMoreOptionsCommand(const OUString& rsCommandName,

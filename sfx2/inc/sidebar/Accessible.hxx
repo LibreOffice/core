@@ -23,33 +23,32 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-namespace com::sun::star::accessibility { class XAccessibleContext; }
+namespace com::sun::star::accessibility
+{
+class XAccessibleContext;
+}
 
-typedef cppu::WeakComponentImplHelper <
-    css::accessibility::XAccessible
-    > AccessibleInterfaceBase;
+typedef cppu::WeakComponentImplHelper<css::accessibility::XAccessible> AccessibleInterfaceBase;
 
-namespace sfx2::sidebar {
-
-
+namespace sfx2::sidebar
+{
 /** Simple implementation of the XAccessible interface.
     Its getAccessibleContext() method returns a context object given
     to its constructor.
 */
-class Accessible final
-    : private ::cppu::BaseMutex,
-      public AccessibleInterfaceBase
+class Accessible final : private ::cppu::BaseMutex, public AccessibleInterfaceBase
 {
 public:
-    explicit Accessible (
+    explicit Accessible(
         const css::uno::Reference<css::accessibility::XAccessibleContext>& rxContext);
     virtual ~Accessible() override;
     Accessible(const Accessible&) = delete;
-    Accessible& operator=( const Accessible& ) = delete;
+    Accessible& operator=(const Accessible&) = delete;
 
     virtual void SAL_CALL disposing() override;
     // XAccessible
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext() override;
+    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override;
 
 private:
     css::uno::Reference<css::accessibility::XAccessibleContext> mxContext;

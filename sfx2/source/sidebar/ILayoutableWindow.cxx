@@ -18,11 +18,9 @@
  */
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 
-namespace sfx2::sidebar {
-
-ILayoutableWindow::~ILayoutableWindow()
+namespace sfx2::sidebar
 {
-}
+ILayoutableWindow::~ILayoutableWindow() {}
 
 } // end of namespace ::sfx2::sidebar
 

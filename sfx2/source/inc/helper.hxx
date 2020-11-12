@@ -28,15 +28,14 @@
 class SfxContentHelper
 {
 public:
-    static std::vector< OUString > GetResultSet( const OUString& rURL );
-    static std::vector< OUString > GetHelpTreeViewContents( const OUString& rURL );
-    static OUString GetActiveHelpString( const OUString& rURL );
-    static bool IsHelpErrorDocument( const OUString& rURL );
+    static std::vector<OUString> GetResultSet(const OUString& rURL);
+    static std::vector<OUString> GetHelpTreeViewContents(const OUString& rURL);
+    static OUString GetActiveHelpString(const OUString& rURL);
+    static bool IsHelpErrorDocument(const OUString& rURL);
 
-    static sal_Int64 GetSize( const OUString& rContent );
+    static sal_Int64 GetSize(const OUString& rContent);
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_HELPER_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

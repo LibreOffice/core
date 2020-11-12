@@ -18,11 +18,9 @@
  */
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
-namespace sfx2::sidebar {
-
-IContextChangeReceiver::~IContextChangeReceiver()
+namespace sfx2::sidebar
 {
-}
+IContextChangeReceiver::~IContextChangeReceiver() {}
 
 } // end of namespace ::sfx2::sidebar
 
