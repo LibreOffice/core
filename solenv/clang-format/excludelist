@@ -156,7 +156,6 @@ avmedia/source/gstreamer/gstplayer.cxx
 avmedia/source/gstreamer/gstplayer.hxx
 avmedia/source/gstreamer/gstwindow.cxx
 avmedia/source/gstreamer/gstwindow.hxx
-avmedia/source/inc/mediamisc.hxx
 avmedia/source/macavf/framegrabber.hxx
 avmedia/source/macavf/macavfcommon.hxx
 avmedia/source/macavf/manager.hxx
