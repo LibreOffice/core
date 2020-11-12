@@ -19,7 +19,6 @@
 
 namespace sc
 {
-
 struct ArraySumFunctor
 {
 private:
@@ -33,7 +32,7 @@ public:
     {
     }
 
-    double operator() ()
+    double operator()()
     {
         const static bool hasSSE2 = cpuid::hasSSE2();
 
@@ -43,12 +42,12 @@ public:
 
         if (hasSSE2)
         {
-            while ( i < mnSize && !simd::isAligned<double, 16>(pCurrent))
+            while (i < mnSize && !simd::isAligned<double, 16>(pCurrent))
             {
                 fSum += *pCurrent++;
                 i++;
             }
-            if( i < mnSize )
+            if (i < mnSize)
             {
                 fSum += executeSSE2(i, pCurrent);
             }
@@ -65,7 +64,7 @@ public:
         // Re-calculate, carefully
         if (!std::isfinite(fSum))
         {
-            sal_uInt32 nErr = reinterpret_cast< sal_math_Double * >(&fSum)->nan_parts.fraction_lo;
+            sal_uInt32 nErr = reinterpret_cast<sal_math_Double*>(&fSum)->nan_parts.fraction_lo;
             if (nErr & 0xffff0000)
             {
                 fSum = 0;
@@ -73,7 +72,8 @@ public:
                 {
                     if (!std::isfinite(mpArray[i]))
                     {
-                        nErr = reinterpret_cast< const sal_math_Double * >(&mpArray[i])->nan_parts.fraction_lo;
+                        nErr = reinterpret_cast<const sal_math_Double*>(&mpArray[i])
+                                   ->nan_parts.fraction_lo;
                         if (!(nErr & 0xffff0000))
                             fSum += mpArray[i]; // Let errors encoded as NaNs propagate ???
                     }
@@ -86,7 +86,6 @@ public:
     }
 
 private:
-
     double executeSSE2(size_t& i, const double* pCurrent) const;
     double executeUnrolled(size_t& i, const double* pCurrent) const
     {

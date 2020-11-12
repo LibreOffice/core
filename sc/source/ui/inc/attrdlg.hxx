@@ -22,7 +22,10 @@
 
 #include <sfx2/tabdlg.hxx>
 
-namespace weld { class Window; }
+namespace weld
+{
+class Window;
+}
 class SfxItemSet;
 
 class ScAttrDlg : public SfxTabDialogController
@@ -30,6 +33,7 @@ class ScAttrDlg : public SfxTabDialogController
 public:
     ScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs);
     virtual ~ScAttrDlg() override;
+
 protected:
     virtual void PageCreated(const OString& rPageId, SfxTabPage& rTabPage) override;
 };

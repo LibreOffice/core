@@ -19,8 +19,14 @@
 #include <vector>
 #include <unordered_map>
 
-namespace com::sun::star::uno { template <typename > class Sequence; }
-namespace com::sun::star::sheet { struct DataPilotFieldFilter; }
+namespace com::sun::star::uno
+{
+template <typename> class Sequence;
+}
+namespace com::sun::star::sheet
+{
+struct DataPilotFieldFilter;
+}
 
 struct ScDPResultFilter
 {
@@ -28,8 +34,8 @@ struct ScDPResultFilter
     OUString maValueName;
     OUString maValue;
 
-    bool mbHasValue:1;
-    bool mbDataLayout:1;
+    bool mbHasValue : 1;
+    bool mbDataLayout : 1;
 
     ScDPResultFilter(const OUString& rDimName, bool bDataLayout);
 };
@@ -54,9 +60,8 @@ public:
     typedef std::vector<double> ValuesType;
 
 private:
-
     struct MemberNode;
-    typedef std::map<OUString, std::shared_ptr<MemberNode> > MembersType;
+    typedef std::map<OUString, std::shared_ptr<MemberNode>> MembersType;
 
     struct DimensionNode
     {
@@ -92,7 +97,7 @@ private:
 
     struct NamePairHash
     {
-        size_t operator() (const NamePairType& rPair) const;
+        size_t operator()(const NamePairType& rPair) const;
     };
     typedef std::unordered_map<NamePairType, double, NamePairHash> LeafValuesType;
     LeafValuesType maLeafValues;
@@ -101,7 +106,6 @@ private:
     std::unique_ptr<MemberNode> mpRoot;
 
 public:
-
     ScDPResultTree();
     ScDPResultTree(const ScDPResultTree&) = delete;
     const ScDPResultTree& operator=(const ScDPResultTree&) = delete;
@@ -120,8 +124,8 @@ public:
     bool empty() const;
     void clear();
 
-    const ValuesType* getResults(
-        const css::uno::Sequence< css::sheet::DataPilotFieldFilter>& rFilters) const;
+    const ValuesType*
+    getResults(const css::uno::Sequence<css::sheet::DataPilotFieldFilter>& rFilters) const;
 
     double getLeafResult(const css::sheet::DataPilotFieldFilter& rFilter) const;
 

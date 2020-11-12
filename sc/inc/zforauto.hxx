@@ -31,18 +31,18 @@ class ScNumFormatAbbrev
     OUString sFormatstring;
     LanguageType eLanguage;
     LanguageType eSysLanguage;
+
 public:
     ScNumFormatAbbrev();
     ScNumFormatAbbrev(sal_uInt32 nFormat, const SvNumberFormatter& rFormatter);
-    void Load( SvStream& rStream, rtl_TextEncoding eByteStrSet );            // loading of the numberformats
-    void Save( SvStream& rStream, rtl_TextEncoding eByteStrSet ) const;   // saving of the numberformats
+    void Load(SvStream& rStream, rtl_TextEncoding eByteStrSet); // loading of the numberformats
+    void Save(SvStream& rStream, rtl_TextEncoding eByteStrSet) const; // saving of the numberformats
     void PutFormatIndex(sal_uInt32 nFormat, const SvNumberFormatter& rFormatter);
-    sal_uInt32 GetFormatIndex( SvNumberFormatter& rFormatter);
+    sal_uInt32 GetFormatIndex(SvNumberFormatter& rFormatter);
     bool operator==(const ScNumFormatAbbrev& rNumFormat) const
     {
-        return ((sFormatstring == rNumFormat.sFormatstring)
-            && (eLanguage == rNumFormat.eLanguage)
-            && (eSysLanguage == rNumFormat.eSysLanguage));
+        return ((sFormatstring == rNumFormat.sFormatstring) && (eLanguage == rNumFormat.eLanguage)
+                && (eSysLanguage == rNumFormat.eSysLanguage));
     }
     LanguageType GetLanguage() const { return eLanguage; }
 };

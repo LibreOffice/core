@@ -21,9 +21,9 @@
 
 #include <inscldlg.hxx>
 
-static sal_uInt8 nInsItemChecked=0;
+static sal_uInt8 nInsItemChecked = 0;
 
-ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent,bool bDisallowCellMove)
+ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove)
     : GenericDialogController(pParent, "modules/scalc/ui/insertcells.ui", "InsertCellsDialog")
     , m_xBtnCellsDown(m_xBuilder->weld_radio_button("down"))
     , m_xBtnCellsRight(m_xBuilder->weld_radio_button("right"))
@@ -69,9 +69,7 @@ ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent,bool bDisallowCellMove)
     }
 }
 
-ScInsertCellDlg::~ScInsertCellDlg()
-{
-}
+ScInsertCellDlg::~ScInsertCellDlg() {}
 
 InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
 {
@@ -79,22 +77,22 @@ InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
 
     if (m_xBtnCellsDown->get_active())
     {
-        nInsItemChecked=0;
+        nInsItemChecked = 0;
         nReturn = INS_CELLSDOWN;
     }
     else if (m_xBtnCellsRight->get_active())
     {
-        nInsItemChecked=1;
+        nInsItemChecked = 1;
         nReturn = INS_CELLSRIGHT;
     }
     else if (m_xBtnInsRow->get_active())
     {
-        nInsItemChecked=2;
+        nInsItemChecked = 2;
         nReturn = INS_INSROWS_BEFORE;
     }
     else if (m_xBtnInsCol->get_active())
     {
-        nInsItemChecked=3;
+        nInsItemChecked = 3;
         nReturn = INS_INSCOLS_BEFORE;
     }
 

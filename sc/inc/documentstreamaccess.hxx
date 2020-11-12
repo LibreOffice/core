@@ -17,8 +17,8 @@ class ScDocument;
 class ScAddress;
 class ScRange;
 
-namespace sc {
-
+namespace sc
+{
 struct DocumentStreamAccessImpl;
 
 /**
@@ -30,11 +30,11 @@ class DocumentStreamAccess
     std::unique_ptr<DocumentStreamAccessImpl> mpImpl;
 
 public:
-    DocumentStreamAccess( ScDocument& rDoc );
+    DocumentStreamAccess(ScDocument& rDoc);
     ~DocumentStreamAccess();
 
-    void setNumericCell( const ScAddress& rPos, double fVal );
-    void setStringCell( const ScAddress& rPos, const OUString& rStr );
+    void setNumericCell(const ScAddress& rPos, double fVal);
+    void setStringCell(const ScAddress& rPos, const OUString& rStr);
 
     /**
      * Clear its internal state, and more importantly all the block position
@@ -46,15 +46,14 @@ public:
      * Pop the top row inside specified range, shift all the other rows up by
      * one, then set the bottom row empty.
      */
-    void shiftRangeUp( const ScRange& rRange );
+    void shiftRangeUp(const ScRange& rRange);
 
     /**
      * Top the bottom row inside specified range, shift all the other rows
      * above downward by one by inserting an empty row at the top.
      */
-    void shiftRangeDown( const ScRange& rRange );
+    void shiftRangeDown(const ScRange& rRange);
 };
-
 }
 
 #endif

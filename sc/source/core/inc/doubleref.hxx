@@ -71,12 +71,13 @@ public:
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const = 0;
     virtual SCCOL findFieldColumn(const OUString& rStr, FormulaError* pErr = nullptr) const = 0;
-    virtual std::unique_ptr<ScDBQueryParamBase> createQueryParam(const ScDBRangeBase* pQueryRef) const = 0;
+    virtual std::unique_ptr<ScDBQueryParamBase>
+    createQueryParam(const ScDBRangeBase* pQueryRef) const = 0;
     virtual bool isRangeEqual(const ScRange& rRange) const = 0;
 
 protected:
     ScDBRangeBase(ScDocument* pDoc);
-    ScDocument* getDoc() const { return mpDoc;}
+    ScDocument* getDoc() const { return mpDoc; }
 
     /**
      * Populate query options that are always the same for all database
@@ -94,7 +95,7 @@ public:
     explicit ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange);
     virtual ~ScDBInternalRange() override;
 
-    const ScRange& getRange() const { return maRange;}
+    const ScRange& getRange() const { return maRange; }
 
     virtual SCCOL getColSize() const override;
     virtual SCROW getRowSize() const override;
@@ -121,8 +122,10 @@ public:
      * @return 0-based column index
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const override;
-    virtual SCCOL findFieldColumn(const OUString& rStr, FormulaError* pErr = nullptr) const override;
-    virtual std::unique_ptr<ScDBQueryParamBase> createQueryParam(const ScDBRangeBase* pQueryRef) const override;
+    virtual SCCOL findFieldColumn(const OUString& rStr,
+                                  FormulaError* pErr = nullptr) const override;
+    virtual std::unique_ptr<ScDBQueryParamBase>
+    createQueryParam(const ScDBRangeBase* pQueryRef) const override;
     virtual bool isRangeEqual(const ScRange& rRange) const override;
 
 private:
@@ -161,8 +164,10 @@ public:
      * @return 0-based column index
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const override;
-    virtual SCCOL findFieldColumn(const OUString& rStr, FormulaError* pErr = nullptr) const override;
-    virtual std::unique_ptr<ScDBQueryParamBase> createQueryParam(const ScDBRangeBase* pQueryRef) const override;
+    virtual SCCOL findFieldColumn(const OUString& rStr,
+                                  FormulaError* pErr = nullptr) const override;
+    virtual std::unique_ptr<ScDBQueryParamBase>
+    createQueryParam(const ScDBRangeBase* pQueryRef) const override;
     virtual bool isRangeEqual(const ScRange& rRange) const override;
 
 private:

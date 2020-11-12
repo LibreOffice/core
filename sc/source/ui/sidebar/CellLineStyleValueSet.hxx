@@ -23,13 +23,14 @@
 
 #define CELL_LINE_STYLE_ENTRIES 9
 
-namespace sc::sidebar {
-
+namespace sc::sidebar
+{
 class CellLineStyleValueSet : public ValueSet
 {
 private:
-    sal_uInt16      nSelItem;
-    OUString        maStrUnit[CELL_LINE_STYLE_ENTRIES];
+    sal_uInt16 nSelItem;
+    OUString maStrUnit[CELL_LINE_STYLE_ENTRIES];
+
 public:
     CellLineStyleValueSet();
     virtual ~CellLineStyleValueSet() override;
@@ -37,7 +38,7 @@ public:
     void SetUnit(const OUString* str);
     void SetSelItem(sal_uInt16 nSel);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual void UserDraw( const UserDrawEvent& rUDEvt ) override;
+    virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
 };
 
 } // end of namespace svx::sidebar

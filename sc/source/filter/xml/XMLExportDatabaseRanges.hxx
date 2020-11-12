@@ -27,12 +27,13 @@ class ScXMLExport;
 class ScDocument;
 class ScMyEmptyDatabaseRangesContainer;
 
-void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& aRange, const ScDocument* mpDoc);
+void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& aRange,
+               const ScDocument* mpDoc);
 
 class ScXMLExportDatabaseRanges
 {
-    ScXMLExport&    rExport;
-    ScDocument*     pDoc;
+    ScXMLExport& rExport;
+    ScDocument* pDoc;
 
 public:
     explicit ScXMLExportDatabaseRanges(ScXMLExport& rExport);

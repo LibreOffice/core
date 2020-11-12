@@ -27,7 +27,8 @@
 #include <sc.hrc>
 
 ScNumberFormat::ScNumberFormat(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "modules/scalc/ui/numberbox.ui", "NumberBox", reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
+    : InterimItemWindow(pParent, "modules/scalc/ui/numberbox.ui", "NumberBox",
+                        reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , m_xWidget(m_xBuilder->weld_combo_box("numbertype"))
 {
     m_xWidget->append_text(ScResId(STR_GENERAL));
@@ -53,10 +54,7 @@ void ScNumberFormat::dispose()
     InterimItemWindow::dispose();
 }
 
-ScNumberFormat::~ScNumberFormat()
-{
-    disposeOnce();
-}
+ScNumberFormat::~ScNumberFormat() { disposeOnce(); }
 
 void ScNumberFormat::GetFocus()
 {
@@ -76,8 +74,7 @@ IMPL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, weld::ComboBox&, rBox, void
     {
         const sal_Int32 nVal = rBox.get_active();
         SfxUInt16Item aItem(SID_NUMBER_TYPE_FORMAT, nVal);
-        pDisp->ExecuteList(SID_NUMBER_TYPE_FORMAT,
-                SfxCallMode::RECORD, {&aItem});
+        pDisp->ExecuteList(SID_NUMBER_TYPE_FORMAT, SfxCallMode::RECORD, { &aItem });
 
         pCurSh->GetWindow().GrabFocus();
     }

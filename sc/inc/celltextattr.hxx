@@ -13,16 +13,15 @@
 #include <sal/types.h>
 #include <svl/languageoptions.hxx>
 
-namespace sc {
-
+namespace sc
+{
 struct CellTextAttr
 {
-    sal_uInt16    mnTextWidth;
+    sal_uInt16 mnTextWidth;
     SvtScriptType mnScriptType;
 
     CellTextAttr();
 };
-
 }
 
 #endif

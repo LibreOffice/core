@@ -29,15 +29,15 @@ public:
         ScRange maSrcRange;
     };
 
-    XclExpXmlPivotCaches( const XclExpRoot& rRoot );
-    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
+    XclExpXmlPivotCaches(const XclExpRoot& rRoot);
+    virtual void SaveXml(XclExpXmlStream& rStrm) override;
 
-    void SetCaches( const std::vector<Entry>& rCaches );
+    void SetCaches(const std::vector<Entry>& rCaches);
     bool HasCaches() const;
-    const Entry* GetCache( sal_Int32 nCacheId ) const;
+    const Entry* GetCache(sal_Int32 nCacheId) const;
 
 private:
-    void SavePivotCacheXml( XclExpXmlStream& rStrm, const Entry& rEntry, sal_Int32 nCacheId );
+    void SavePivotCacheXml(XclExpXmlStream& rStrm, const Entry& rEntry, sal_Int32 nCacheId);
 
 private:
     std::vector<Entry> maCaches;
@@ -51,7 +51,7 @@ class XclExpXmlPivotTables : public XclExpRecordBase, protected XclExpRoot
         sal_Int32 mnCacheId;
         sal_Int32 mnPivotId; /// used as [n] in pivotTable[n].xml part name.
 
-        Entry( const ScDPObject* pTable, sal_Int32 nCacheId, sal_Int32 nPivotId );
+        Entry(const ScDPObject* pTable, sal_Int32 nCacheId, sal_Int32 nPivotId);
     };
 
     const XclExpXmlPivotCaches& mrCaches;
@@ -59,27 +59,28 @@ class XclExpXmlPivotTables : public XclExpRecordBase, protected XclExpRoot
     TablesType maTables;
 
 public:
-    XclExpXmlPivotTables( const XclExpRoot& rRoot, const XclExpXmlPivotCaches& rCaches );
+    XclExpXmlPivotTables(const XclExpRoot& rRoot, const XclExpXmlPivotCaches& rCaches);
 
-    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
+    virtual void SaveXml(XclExpXmlStream& rStrm) override;
 
-    void AppendTable( const ScDPObject* pTable, sal_Int32 nCacheId, sal_Int32 nPivotId );
+    void AppendTable(const ScDPObject* pTable, sal_Int32 nCacheId, sal_Int32 nPivotId);
 
 private:
-    void SavePivotTableXml( XclExpXmlStream& rStrm, const ScDPObject& rObj, sal_Int32 nCacheId );
+    void SavePivotTableXml(XclExpXmlStream& rStrm, const ScDPObject& rObj, sal_Int32 nCacheId);
 };
 
 class XclExpXmlPivotTableManager : protected XclExpRoot
 {
     typedef std::map<SCTAB, std::unique_ptr<XclExpXmlPivotTables>> TablesType;
     typedef std::unordered_map<const ScDPObject*, sal_Int32> CacheIdMapType;
+
 public:
-    XclExpXmlPivotTableManager( const XclExpRoot& rRoot );
+    XclExpXmlPivotTableManager(const XclExpRoot& rRoot);
 
     void Initialize();
 
     XclExpXmlPivotCaches& GetCaches();
-    XclExpXmlPivotTables* GetTablesBySheet( SCTAB nTab );
+    XclExpXmlPivotTables* GetTablesBySheet(SCTAB nTab);
 
 private:
     XclExpXmlPivotCaches maCaches;

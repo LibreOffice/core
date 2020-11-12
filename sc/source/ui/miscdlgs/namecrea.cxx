@@ -21,22 +21,20 @@
 
 #include <namecrea.hxx>
 
-ScNameCreateDlg::ScNameCreateDlg(weld::Window * pParent, CreateNameFlags nFlags)
+ScNameCreateDlg::ScNameCreateDlg(weld::Window* pParent, CreateNameFlags nFlags)
     : GenericDialogController(pParent, "modules/scalc/ui/createnamesdialog.ui", "CreateNamesDialog")
     , m_xTopBox(m_xBuilder->weld_check_button("top"))
     , m_xLeftBox(m_xBuilder->weld_check_button("left"))
     , m_xBottomBox(m_xBuilder->weld_check_button("bottom"))
     , m_xRightBox(m_xBuilder->weld_check_button("right"))
 {
-    m_xTopBox->set_active( bool(nFlags & CreateNameFlags::Top) );
-    m_xLeftBox->set_active( bool(nFlags & CreateNameFlags::Left) );
-    m_xBottomBox->set_active( bool(nFlags & CreateNameFlags::Bottom) );
-    m_xRightBox->set_active( bool(nFlags & CreateNameFlags::Right) );
+    m_xTopBox->set_active(bool(nFlags & CreateNameFlags::Top));
+    m_xLeftBox->set_active(bool(nFlags & CreateNameFlags::Left));
+    m_xBottomBox->set_active(bool(nFlags & CreateNameFlags::Bottom));
+    m_xRightBox->set_active(bool(nFlags & CreateNameFlags::Right));
 }
 
-ScNameCreateDlg::~ScNameCreateDlg()
-{
-}
+ScNameCreateDlg::~ScNameCreateDlg() {}
 
 CreateNameFlags ScNameCreateDlg::GetFlags() const
 {

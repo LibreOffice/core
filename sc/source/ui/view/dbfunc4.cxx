@@ -27,7 +27,7 @@
 
 using namespace com::sun::star;
 
-sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument& rDoc, bool bAllCharts )
+sal_uInt16 ScDBFunc::DoUpdateCharts(const ScAddress& rPos, ScDocument& rDoc, bool bAllCharts)
 {
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
     if (!pModel)
@@ -36,30 +36,30 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument& rDoc, bo
     sal_uInt16 nFound = 0;
 
     sal_uInt16 nPageCount = pModel->GetPageCount();
-    for (sal_uInt16 nPageNo=0; nPageNo<nPageCount; nPageNo++)
+    for (sal_uInt16 nPageNo = 0; nPageNo < nPageCount; nPageNo++)
     {
         SdrPage* pPage = pModel->GetPage(nPageNo);
-        OSL_ENSURE(pPage,"Page ?");
+        OSL_ENSURE(pPage, "Page ?");
 
-        SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
+        SdrObjListIter aIter(pPage, SdrIterMode::DeepNoGroups);
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart( pObject ) )
+            if (pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart(pObject))
             {
                 OUString aName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
                 bool bHit = true;
-                if ( !bAllCharts )
+                if (!bAllCharts)
                 {
                     ScRangeList aRanges;
                     bool bColHeaders = false;
                     bool bRowHeaders = false;
-                    rDoc.GetOldChartParameters( aName, aRanges, bColHeaders, bRowHeaders );
-                    bHit = aRanges.In( rPos );
+                    rDoc.GetOldChartParameters(aName, aRanges, bColHeaders, bRowHeaders);
+                    bHit = aRanges.In(rPos);
                 }
-                if ( bHit )
+                if (bHit)
                 {
-                    rDoc.UpdateChart( aName );
+                    rDoc.UpdateChart(aName);
                     ++nFound;
                 }
             }

@@ -15,8 +15,8 @@
 #include <map>
 class ScTokenArray;
 
-namespace sc {
-
+namespace sc
+{
 class SharedFormulaGroupEntry
 {
 private:
@@ -41,12 +41,11 @@ private:
     StoreType m_Store;
 
 public:
-    void set( size_t nSharedId, std::unique_ptr<ScTokenArray> pArray );
-    void set( size_t nSharedId, std::unique_ptr<ScTokenArray> pArray, const ScAddress& rOrigin );
-    const ScTokenArray* get( size_t nSharedId ) const;
-    const SharedFormulaGroupEntry* getEntry( size_t nSharedId ) const;
+    void set(size_t nSharedId, std::unique_ptr<ScTokenArray> pArray);
+    void set(size_t nSharedId, std::unique_ptr<ScTokenArray> pArray, const ScAddress& rOrigin);
+    const ScTokenArray* get(size_t nSharedId) const;
+    const SharedFormulaGroupEntry* getEntry(size_t nSharedId) const;
 };
-
 }
 
 #endif

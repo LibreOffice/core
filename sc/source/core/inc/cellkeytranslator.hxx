@@ -26,20 +26,23 @@
 #include <memory>
 #include <unordered_map>
 
-namespace com::sun::star::lang { struct Locale; }
+namespace com::sun::star::lang
+{
+struct Locale;
+}
 
 struct TransItem;
 
 struct ScCellKeyword
 {
     const char* mpName;
-    OpCode      meOpCode;
+    OpCode meOpCode;
     const css::lang::Locale& mrLocale;
 
     ScCellKeyword(const char* pName, OpCode eOpCode, const css::lang::Locale& rLocale);
 };
 
-typedef std::unordered_map< OUString, ::std::vector<ScCellKeyword> > ScCellKeywordHashMap;
+typedef std::unordered_map<OUString, ::std::vector<ScCellKeyword>> ScCellKeywordHashMap;
 
 /** Translate cell function keywords.
 
@@ -69,8 +72,7 @@ private:
     ScCellKeywordTranslator();
 
     void init();
-    void addToMap(const OUString& rKey, const char* pName,
-                  const css::lang::Locale& rLocale,
+    void addToMap(const OUString& rKey, const char* pName, const css::lang::Locale& rLocale,
                   OpCode eOpCode);
     void addToMap(const TransItem* pItems, const css::lang::Locale& rLocale);
 

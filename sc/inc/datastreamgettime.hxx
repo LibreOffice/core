@@ -22,9 +22,10 @@
 
 #include <sal/config.h>
 
-namespace sc {
-
-enum class DebugTime {
+namespace sc
+{
+enum class DebugTime
+{
     Import,
     Recalc,
     Render,
@@ -32,7 +33,6 @@ enum class DebugTime {
 };
 
 double datastream_get_time(DebugTime nIdx);
-
 }
 
 #endif

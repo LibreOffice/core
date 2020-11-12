@@ -26,17 +26,17 @@ class SvStream;
 
 struct LotusContext;
 
-typedef void ( *OPCODE_FKT )(LotusContext &rContext, SvStream &rStream, sal_uInt16 nLength);
+typedef void (*OPCODE_FKT)(LotusContext& rContext, SvStream& rStream, sal_uInt16 nLength);
 
-#define FKT_LIMIT   101
+#define FKT_LIMIT 101
 
-#define FKT_LIMIT123    101
+#define FKT_LIMIT123 101
 
-#define LOTUS_EOF   0x01
+#define LOTUS_EOF 0x01
 
 #define LOTUS_FILEPASSWD 0x4b
 
-#define LOTUS_PATTERN   0x284
+#define LOTUS_PATTERN 0x284
 
 #define LOTUS_FORMAT_INDEX 0x800
 

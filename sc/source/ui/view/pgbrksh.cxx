@@ -27,7 +27,6 @@
 #define ShellClass_ScPageBreakShell
 #include <scslots.hxx>
 
-
 SFX_IMPL_INTERFACE(ScPageBreakShell, SfxShell)
 
 void ScPageBreakShell::InitInterface_Impl()
@@ -35,22 +34,20 @@ void ScPageBreakShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu("pagebreak");
 }
 
-ScPageBreakShell::ScPageBreakShell( ScTabViewShell* pViewSh ) :
-    SfxShell(pViewSh)
+ScPageBreakShell::ScPageBreakShell(ScTabViewShell* pViewSh)
+    : SfxShell(pViewSh)
 {
-    SetPool( &pViewSh->GetPool() );
+    SetPool(&pViewSh->GetPool());
     ScViewData& rViewData = pViewSh->GetViewData();
     SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
-    SetUndoManager( pMgr );
-    if ( !rViewData.GetDocument().IsUndoEnabled() )
+    SetUndoManager(pMgr);
+    if (!rViewData.GetDocument().IsUndoEnabled())
     {
-        pMgr->SetMaxUndoActionCount( 0 );
+        pMgr->SetMaxUndoActionCount(0);
     }
     SetName("PageBreak");
 }
 
-ScPageBreakShell::~ScPageBreakShell()
-{
-}
+ScPageBreakShell::~ScPageBreakShell() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

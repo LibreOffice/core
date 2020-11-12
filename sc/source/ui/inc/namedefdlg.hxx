@@ -22,11 +22,11 @@ class ScViewData;
 class ScNameDefDlg : public ScAnyRefDlgController
 {
 private:
-    bool        mbUndo; //if true we need to add an undo action after creating a range name
+    bool mbUndo; //if true we need to add an undo action after creating a range name
     ScDocument& mrDoc;
     ScDocShell* mpDocShell;
 
-    ScAddress      maCursorPos;
+    ScAddress maCursorPos;
     OUString maStrInfoDefault;
     const OUString maGlobalNameStr;
     const OUString maErrInvalidNameStr;
@@ -63,28 +63,28 @@ private:
     bool IsNameValid();
     bool IsFormulaValid();
 
-    DECL_LINK( CancelBtnHdl, weld::Button&, void );
-    DECL_LINK( AddBtnHdl, weld::Button&, void );
-    DECL_LINK( NameModifyHdl, weld::Entry&, void );
-    DECL_LINK( AssignGetFocusHdl, formula::RefEdit&, void );
+    DECL_LINK(CancelBtnHdl, weld::Button&, void);
+    DECL_LINK(AddBtnHdl, weld::Button&, void);
+    DECL_LINK(NameModifyHdl, weld::Entry&, void);
+    DECL_LINK(AssignGetFocusHdl, formula::RefEdit&, void);
 
 protected:
-    virtual void    RefInputDone( bool bForced = false ) override;
+    virtual void RefInputDone(bool bForced = false) override;
 
 public:
-    ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-                    const ScViewData& rViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
-                    const ScAddress& aCursorPos, const bool bUndo);
+    ScNameDefDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                 const ScViewData& rViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
+                 const ScAddress& aCursorPos, const bool bUndo);
 
     virtual ~ScNameDefDlg() override;
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
-    virtual bool    IsRefInputMode() const override;
+    virtual void SetReference(const ScRange& rRef, ScDocument& rDoc) override;
+    virtual bool IsRefInputMode() const override;
 
-    virtual void    SetActive() override;
-    virtual void    Close() override;
+    virtual void SetActive() override;
+    virtual void Close() override;
 
-    void GetNewData( OUString& rName, OUString& rScope );
+    void GetNewData(OUString& rName, OUString& rScope);
 };
 
 #endif

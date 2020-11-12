@@ -10,7 +10,7 @@
 
 #include <mergecellsdialog.hxx>
 
-ScMergeCellsDialog::ScMergeCellsDialog(weld::Window * pParent)
+ScMergeCellsDialog::ScMergeCellsDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "modules/scalc/ui/mergecellsdialog.ui", "MergeCellsDialog")
     , m_xRBMoveContent(m_xBuilder->weld_radio_button("move-cells-radio"))
     , m_xRBKeepContent(m_xBuilder->weld_radio_button("keep-content-radio"))
@@ -19,17 +19,15 @@ ScMergeCellsDialog::ScMergeCellsDialog(weld::Window * pParent)
     m_xRBKeepContent->set_active(true);
 }
 
-ScMergeCellsDialog::~ScMergeCellsDialog()
-{
-}
+ScMergeCellsDialog::~ScMergeCellsDialog() {}
 
 ScMergeCellsOption ScMergeCellsDialog::GetMergeCellsOption() const
 {
-    if ( m_xRBMoveContent->get_active() )
+    if (m_xRBMoveContent->get_active())
         return MoveContentHiddenCells;
-    if ( m_xRBKeepContent->get_active() )
+    if (m_xRBKeepContent->get_active())
         return KeepContentHiddenCells;
-    if ( m_xRBEmptyContent->get_active() )
+    if (m_xRBEmptyContent->get_active())
         return EmptyContentHiddenCells;
     assert(!"Unknown selection for merge cells.");
     return KeepContentHiddenCells; // default value

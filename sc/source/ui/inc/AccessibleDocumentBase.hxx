@@ -22,13 +22,12 @@
 
 #include "AccessibleContextBase.hxx"
 
-class ScAccessibleDocumentBase
-    :   public ScAccessibleContextBase
+class ScAccessibleDocumentBase : public ScAccessibleContextBase
 {
 public:
     //=====  internal  ========================================================
-    ScAccessibleDocumentBase(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
+    ScAccessibleDocumentBase(const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
+
 protected:
     virtual ~ScAccessibleDocumentBase() override;
 };

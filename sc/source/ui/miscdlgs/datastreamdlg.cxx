@@ -15,9 +15,9 @@
 #include <docsh.hxx>
 #include <datastream.hxx>
 
-namespace sc {
-
-DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, weld::Window* pParent)
+namespace sc
+{
+DataStreamDlg::DataStreamDlg(ScDocShell* pDocShell, weld::Window* pParent)
     : GenericDialogController(pParent, "modules/scalc/ui/datastreams.ui", "DataStreamDialog")
     , m_pDocShell(pDocShell)
     , m_xCbUrl(new SvtURLBox(m_xBuilder->weld_combo_box("url")))
@@ -36,44 +36,33 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, weld::Window* pParent)
     , m_xVclFrameLimit(m_xBuilder->weld_frame("framelimit"))
     , m_xVclFrameMove(m_xBuilder->weld_frame("framemove"))
 {
-    m_xCbUrl->connect_changed( LINK( this, DataStreamDlg, UpdateComboBoxHdl ) );
-    m_xRBAddressValue->connect_toggled( LINK( this, DataStreamDlg, UpdateClickHdl ) );
+    m_xCbUrl->connect_changed(LINK(this, DataStreamDlg, UpdateComboBoxHdl));
+    m_xRBAddressValue->connect_toggled(LINK(this, DataStreamDlg, UpdateClickHdl));
     m_xRBAddressValue->set_sensitive(false);
     m_xRBNoMove->hide();
-    m_xRBValuesInLine->connect_toggled( LINK( this, DataStreamDlg, UpdateClickHdl ) );
-    m_xEdRange->connect_changed( LINK( this, DataStreamDlg, UpdateHdl ) );
-    m_xBtnBrowse->connect_clicked( LINK( this, DataStreamDlg, BrowseHdl ) );
+    m_xRBValuesInLine->connect_toggled(LINK(this, DataStreamDlg, UpdateClickHdl));
+    m_xEdRange->connect_changed(LINK(this, DataStreamDlg, UpdateHdl));
+    m_xBtnBrowse->connect_clicked(LINK(this, DataStreamDlg, BrowseHdl));
     UpdateEnable();
 }
 
-DataStreamDlg::~DataStreamDlg()
-{
-}
+DataStreamDlg::~DataStreamDlg() {}
 
 IMPL_LINK_NOARG(DataStreamDlg, BrowseHdl, weld::Button&, void)
 {
     sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, m_xDialog.get());
-    if ( aFileDialog.Execute() != ERRCODE_NONE )
+    if (aFileDialog.Execute() != ERRCODE_NONE)
         return;
 
     m_xCbUrl->set_entry_text(aFileDialog.GetPath());
     UpdateEnable();
 }
 
-IMPL_LINK_NOARG(DataStreamDlg, UpdateClickHdl, weld::ToggleButton&, void)
-{
-    UpdateEnable();
-}
+IMPL_LINK_NOARG(DataStreamDlg, UpdateClickHdl, weld::ToggleButton&, void) { UpdateEnable(); }
 
-IMPL_LINK_NOARG(DataStreamDlg, UpdateComboBoxHdl, weld::ComboBox&, void)
-{
-    UpdateEnable();
-}
+IMPL_LINK_NOARG(DataStreamDlg, UpdateComboBoxHdl, weld::ComboBox&, void) { UpdateEnable(); }
 
-IMPL_LINK_NOARG(DataStreamDlg, UpdateHdl, weld::Entry&, void)
-{
-    UpdateEnable();
-}
+IMPL_LINK_NOARG(DataStreamDlg, UpdateHdl, weld::Entry&, void) { UpdateEnable(); }
 
 void DataStreamDlg::UpdateEnable()
 {
@@ -98,7 +87,7 @@ void DataStreamDlg::UpdateEnable()
         }
     }
     m_xBtnOk->set_sensitive(bOk);
-//    setOptimalLayoutSize();
+    //    setOptimalLayoutSize();
 }
 
 ScRange DataStreamDlg::GetStartRange()
@@ -107,7 +96,7 @@ ScRange DataStreamDlg::GetStartRange()
     ScDocument& rDoc = m_pDocShell->GetDocument();
     ScRange aRange;
     ScRefFlags nRes = aRange.Parse(aStr, rDoc, rDoc.GetAddressConvention());
-    if ( ((nRes & ScRefFlags::VALID) == ScRefFlags::ZERO) || !aRange.IsValid())
+    if (((nRes & ScRefFlags::VALID) == ScRefFlags::ZERO) || !aRange.IsValid())
     {
         // Invalid range.
         aRange.SetInvalid();
@@ -121,7 +110,7 @@ ScRange DataStreamDlg::GetStartRange()
     return aRange;
 }
 
-void DataStreamDlg::Init( const DataStream& rStrm )
+void DataStreamDlg::Init(const DataStream& rStrm)
 {
     m_xCbUrl->set_entry_text(rStrm.GetURL());
     ScDocument& rDoc = m_pDocShell->GetDocument();
@@ -146,14 +135,13 @@ void DataStreamDlg::Init( const DataStream& rStrm )
     {
         case DataStream::MOVE_DOWN:
             m_xRBDataDown->set_active(true);
-        break;
+            break;
         case DataStream::RANGE_DOWN:
             m_xRBRangeDown->set_active(true);
-        break;
+            break;
         case DataStream::MOVE_UP:
         case DataStream::NO_MOVE:
-        default:
-            ;
+        default:;
     }
 
     m_xCBRefreshOnEmpty->set_active(rStrm.IsRefreshOnEmptyLine());
@@ -174,17 +162,16 @@ void DataStreamDlg::StartStream()
     OUString rURL = m_xCbUrl->get_active_text();
     sal_uInt32 nSettings = 0;
     if (m_xRBValuesInLine->get_active())
-       nSettings |= DataStream::VALUES_IN_LINE;
+        nSettings |= DataStream::VALUES_IN_LINE;
 
-    DataStream::MoveType eMove =
-        m_xRBRangeDown->get_active() ? DataStream::RANGE_DOWN : DataStream::MOVE_DOWN;
+    DataStream::MoveType eMove
+        = m_xRBRangeDown->get_active() ? DataStream::RANGE_DOWN : DataStream::MOVE_DOWN;
 
     DataStream* pStream = DataStream::Set(m_pDocShell, rURL, aStartRange, nLimit, eMove, nSettings);
     pStream->SetRefreshOnEmptyLine(m_xCBRefreshOnEmpty->get_active());
     DataStream::MakeToolbarVisible();
     pStream->StartImport();
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

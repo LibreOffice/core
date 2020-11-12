@@ -18,10 +18,11 @@
 class ScPivotLayoutTreeListLabel : public ScPivotLayoutTreeListBase
 {
 private:
-    std::vector<std::unique_ptr<ScItemValue> > maItemValues;
+    std::vector<std::unique_ptr<ScItemValue>> maItemValues;
     SCCOL maDataItem;
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+
 public:
     ScPivotLayoutTreeListLabel(std::unique_ptr<weld::TreeView> xControl);
     virtual ~ScPivotLayoutTreeListLabel() override;

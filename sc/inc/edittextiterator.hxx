@@ -17,8 +17,8 @@ class ScTable;
 class ScDocument;
 class EditTextObject;
 
-namespace sc {
-
+namespace sc
+{
 /**
  * Iterate through all edit text cells in a given sheet.  The caller must
  * check the validity of the sheet index passed to its constructor.
@@ -46,12 +46,11 @@ class EditTextIterator
     void init();
 
 public:
-    EditTextIterator( const ScDocument& rDoc, SCTAB nTab );
+    EditTextIterator(const ScDocument& rDoc, SCTAB nTab);
 
     const EditTextObject* first();
     const EditTextObject* next();
 };
-
 }
 
 #endif

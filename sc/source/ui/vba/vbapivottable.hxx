@@ -23,14 +23,16 @@
 #include <ooo/vba/excel/XPivotTable.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceWeakImpl< ov::excel::XPivotTable >  PivotTableImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl<ov::excel::XPivotTable> PivotTableImpl_BASE;
 
 class ScVbaPivotTable : public PivotTableImpl_BASE
 {
-    css::uno::Reference< css::sheet::XDataPilotTable > m_xTable;
+    css::uno::Reference<css::sheet::XDataPilotTable> m_xTable;
+
 public:
-    ScVbaPivotTable( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );
-    virtual css::uno::Reference< ov::excel::XPivotCache > SAL_CALL PivotCache(  ) override;
+    ScVbaPivotTable(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                    const css::uno::Reference<css::sheet::XDataPilotTable>& xTable);
+    virtual css::uno::Reference<ov::excel::XPivotCache> SAL_CALL PivotCache() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

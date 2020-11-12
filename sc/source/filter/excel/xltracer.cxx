@@ -25,66 +25,61 @@
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;
 
-XclTracer::XclTracer( const OUString& rDocUrl )
+XclTracer::XclTracer(const OUString& rDocUrl)
     : mbEnabled(false)
-    , maFirstTimes(eTraceLength,true)
+    , maFirstTimes(eTraceLength, true)
 {
-    Sequence< PropertyValue > aConfigData( 1 );
-    aConfigData[ 0 ].Name = "DocumentURL";
-    aConfigData[ 0 ].Value <<= rDocUrl;
+    Sequence<PropertyValue> aConfigData(1);
+    aConfigData[0].Name = "DocumentURL";
+    aConfigData[0].Value <<= rDocUrl;
 }
 
-XclTracer::~XclTracer()
-{
-}
+XclTracer::~XclTracer() {}
 
 void XclTracer::ProcessTraceOnce(XclTracerId eProblem)
 {
-    if( mbEnabled && maFirstTimes[eProblem])
+    if (mbEnabled && maFirstTimes[eProblem])
     {
         maFirstTimes[eProblem] = false;
     }
 }
 
-void XclTracer::TraceInvalidAddress( const ScAddress& rPos, const ScAddress& rMaxPos )
+void XclTracer::TraceInvalidAddress(const ScAddress& rPos, const ScAddress& rMaxPos)
 {
     TraceInvalidRow(rPos.Row(), rMaxPos.Row());
     TraceInvalidTab(rPos.Tab(), rMaxPos.Tab());
 }
 
-void XclTracer::TraceInvalidRow( sal_uInt32 nRow, sal_uInt32 nMaxRow )
+void XclTracer::TraceInvalidRow(sal_uInt32 nRow, sal_uInt32 nMaxRow)
 {
-    if(nRow > nMaxRow)
+    if (nRow > nMaxRow)
         ProcessTraceOnce(eRowLimitExceeded);
 }
 
-void XclTracer::TraceInvalidTab( SCTAB nTab, SCTAB nMaxTab )
+void XclTracer::TraceInvalidTab(SCTAB nTab, SCTAB nMaxTab)
 {
-    if(nTab > nMaxTab)
+    if (nTab > nMaxTab)
         ProcessTraceOnce(eTabLimitExceeded);
 }
 
-void XclTracer::TracePrintRange()
-{
-    ProcessTraceOnce( ePrintRange);
-}
+void XclTracer::TracePrintRange() { ProcessTraceOnce(ePrintRange); }
 
-void XclTracer::TraceDates( sal_uInt16 nNumFmt)
+void XclTracer::TraceDates(sal_uInt16 nNumFmt)
 {
     // Short Date = 14 and Short Date+Time = 22
-    if(nNumFmt == 14 || nNumFmt == 22)
+    if (nNumFmt == 14 || nNumFmt == 22)
         ProcessTraceOnce(eShortDate);
 }
 
-void XclTracer::TraceBorderLineStyle( bool bBorderLineStyle)
+void XclTracer::TraceBorderLineStyle(bool bBorderLineStyle)
 {
-    if(bBorderLineStyle)
+    if (bBorderLineStyle)
         ProcessTraceOnce(eBorderLineStyle);
 }
 
-void XclTracer::TraceFillPattern( bool bFillPattern)
+void XclTracer::TraceFillPattern(bool bFillPattern)
 {
-    if(bFillPattern)
+    if (bFillPattern)
         ProcessTraceOnce(eFillPattern);
 }
 
@@ -94,9 +89,9 @@ void XclTracer::TraceFormulaMissingArg()
     ProcessTraceOnce(eFormulaMissingArg);
 }
 
-void XclTracer::TracePivotDataSource( bool bExternal)
+void XclTracer::TracePivotDataSource(bool bExternal)
 {
-    if(bExternal)
+    if (bExternal)
         ProcessTraceOnce(ePivotDataSource);
 }
 
@@ -106,15 +101,9 @@ void XclTracer::TracePivotChartExists()
     ProcessTraceOnce(ePivotChartExists);
 }
 
-void XclTracer::TraceChartUnKnownType()
-{
-    ProcessTraceOnce(eChartUnKnownType);
-}
+void XclTracer::TraceChartUnKnownType() { ProcessTraceOnce(eChartUnKnownType); }
 
-void XclTracer::TraceChartOnlySheet()
-{
-    ProcessTraceOnce(eChartOnlySheet);
-}
+void XclTracer::TraceChartOnlySheet() { ProcessTraceOnce(eChartOnlySheet); }
 
 void XclTracer::TraceChartDataTable()
 {
@@ -135,15 +124,12 @@ void XclTracer::TraceUnsupportedObjects()
     ProcessTraceOnce(eUnsupportedObject);
 }
 
-void XclTracer::TraceObjectNotPrintable()
-{
-    ProcessTraceOnce(eObjectNotPrintable);
-}
+void XclTracer::TraceObjectNotPrintable() { ProcessTraceOnce(eObjectNotPrintable); }
 
-void XclTracer::TraceDVType(  bool bType)
+void XclTracer::TraceDVType(bool bType)
 {
     // Custom types work if 'Data->validity dialog' is not OKed.
-    if(bType)
+    if (bType)
         ProcessTraceOnce(eDVType);
 }
 

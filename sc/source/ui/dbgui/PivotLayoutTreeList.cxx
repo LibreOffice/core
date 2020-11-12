@@ -24,9 +24,7 @@ ScPivotLayoutTreeList::ScPivotLayoutTreeList(std::unique_ptr<weld::TreeView> xCo
     mxControl->connect_row_activated(LINK(this, ScPivotLayoutTreeList, DoubleClickHdl));
 }
 
-ScPivotLayoutTreeList::~ScPivotLayoutTreeList()
-{
-}
+ScPivotLayoutTreeList::~ScPivotLayoutTreeList() {}
 
 void ScPivotLayoutTreeList::Setup(ScPivotLayoutDialog* pParent, SvPivotTreeListType eType)
 {
@@ -40,7 +38,8 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeList, DoubleClickHdl, weld::TreeView&, bool)
     if (nEntry == -1)
         return true;
 
-    ScItemValue* pCurrentItemValue = reinterpret_cast<ScItemValue*>(mxControl->get_id(nEntry).toInt64());
+    ScItemValue* pCurrentItemValue
+        = reinterpret_cast<ScItemValue*>(mxControl->get_id(nEntry).toInt64());
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
 
     if (mpParent->IsDataElement(rCurrentFunctionData.mnCol))
@@ -55,7 +54,8 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeList, DoubleClickHdl, weld::TreeView&, bool)
     mpParent->PushDataFieldNames(aDataFieldNames);
 
     ScopedVclPtr<AbstractScDPSubtotalDlg> pDialog(
-        pFactory->CreateScDPSubtotalDlg(mxControl.get(), mpParent->maPivotTableObject, rCurrentLabelData, rCurrentFunctionData, aDataFieldNames));
+        pFactory->CreateScDPSubtotalDlg(mxControl.get(), mpParent->maPivotTableObject,
+                                        rCurrentLabelData, rCurrentFunctionData, aDataFieldNames));
 
     if (pDialog->Execute() == RET_OK)
     {
@@ -73,8 +73,8 @@ void ScPivotLayoutTreeList::FillFields(ScPivotFieldVector& rFieldVector)
 
     for (const ScPivotField& rField : rFieldVector)
     {
-        OUString aLabel = mpParent->GetItem( rField.nCol )->maName;
-        ScItemValue* pItemValue = new ScItemValue( aLabel, rField.nCol, rField.nFuncMask );
+        OUString aLabel = mpParent->GetItem(rField.nCol)->maName;
+        ScItemValue* pItemValue = new ScItemValue(aLabel, rField.nCol, rField.nFuncMask);
         maItemValues.push_back(std::unique_ptr<ScItemValue>(pItemValue));
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pItemValue)));
         mxControl->append(sId, pItemValue->maName);
@@ -87,7 +87,7 @@ void ScPivotLayoutTreeList::InsertEntryForSourceTarget(weld::TreeView& rSource, 
     ScItemValue* pOriginalItemValue = pItemValue->mpOriginalItemValue;
 
     // Don't allow to add "Data" element to page fields
-    if(meType == PAGE_LIST && mpParent->IsDataElement(pItemValue->maFunctionData.mnCol))
+    if (meType == PAGE_LIST && mpParent->IsDataElement(pItemValue->maFunctionData.mnCol))
         return;
 
     mpParent->ItemInserted(pOriginalItemValue, meType);
@@ -97,7 +97,7 @@ void ScPivotLayoutTreeList::InsertEntryForSourceTarget(weld::TreeView& rSource, 
 
 void ScPivotLayoutTreeList::InsertEntryForItem(const ScItemValue* pItemValue, int nPosition)
 {
-    ScItemValue *pListItemValue = new ScItemValue(pItemValue);
+    ScItemValue* pListItemValue = new ScItemValue(pItemValue);
     maItemValues.push_back(std::unique_ptr<ScItemValue>(pListItemValue));
     OUString sName = pListItemValue->maName;
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pListItemValue)));

@@ -35,9 +35,10 @@ private:
     const ScDocument& mrDoc;
     formula::FormulaTokenArrayPlainIterator maIter;
     ScAddress aPos;
+
 public:
-                ScDetectiveRefIter( const ScDocument& rDoc, ScFormulaCell* pCell );
-    bool        GetNextRef( ScRange& rRange );
+    ScDetectiveRefIter(const ScDocument& rDoc, ScFormulaCell* pCell);
+    bool GetNextRef(ScRange& rRange);
     formula::FormulaToken* GetNextRefToken();
 };
 

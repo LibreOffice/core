@@ -63,7 +63,7 @@ bool SubTotal::SafeDiv(double& fVal1, double fVal2)
     return bOk;
 }
 
-void ScFunctionData::update( double fNewVal )
+void ScFunctionData::update(double fNewVal)
 {
     if (mbError)
         return;
@@ -73,53 +73,53 @@ void ScFunctionData::update( double fNewVal )
         case SUBTOTAL_FUNC_SUM:
             if (!SubTotal::SafePlus(getValueRef(), fNewVal))
                 mbError = true;
-        break;
+            break;
         case SUBTOTAL_FUNC_PROD:
-            if (getCountRef() == 0)    // copy first value (nVal is initialized to 0)
+            if (getCountRef() == 0) // copy first value (nVal is initialized to 0)
             {
                 getValueRef() = fNewVal;
-                getCountRef() = 1;     // don't care about further count
+                getCountRef() = 1; // don't care about further count
             }
             else if (!SubTotal::SafeMult(getValueRef(), fNewVal))
                 mbError = true;
-        break;
+            break;
         case SUBTOTAL_FUNC_CNT:
         case SUBTOTAL_FUNC_CNT2:
             ++getCountRef();
-        break;
+            break;
         case SUBTOTAL_FUNC_SELECTION_COUNT:
             getCountRef() += fNewVal;
-        break;
+            break;
         case SUBTOTAL_FUNC_AVE:
             if (!SubTotal::SafePlus(getValueRef(), fNewVal))
                 mbError = true;
             else
                 ++getCountRef();
-        break;
+            break;
         case SUBTOTAL_FUNC_MAX:
-            if (getCountRef() == 0)    // copy first value (nVal is initialized to 0)
+            if (getCountRef() == 0) // copy first value (nVal is initialized to 0)
             {
                 getValueRef() = fNewVal;
-                getCountRef() = 1;     // don't care about further count
+                getCountRef() = 1; // don't care about further count
             }
             else if (fNewVal > getValueRef())
                 getValueRef() = fNewVal;
-        break;
+            break;
         case SUBTOTAL_FUNC_MIN:
-            if (getCountRef() == 0)    // copy first value (nVal is initialized to 0)
+            if (getCountRef() == 0) // copy first value (nVal is initialized to 0)
             {
                 getValueRef() = fNewVal;
-                getCountRef() = 1;     // don't care about further count
+                getCountRef() = 1; // don't care about further count
             }
             else if (fNewVal < getValueRef())
                 getValueRef() = fNewVal;
-        break;
+            break;
         case SUBTOTAL_FUNC_VAR:
         case SUBTOTAL_FUNC_STD:
         case SUBTOTAL_FUNC_VARP:
         case SUBTOTAL_FUNC_STDP:
-            maWelford.update( fNewVal);
-        break;
+            maWelford.update(fNewVal);
+            break;
         default:
             // unhandled unknown
             mbError = true;
@@ -138,23 +138,23 @@ double ScFunctionData::getResult()
         case SUBTOTAL_FUNC_CNT2:
         case SUBTOTAL_FUNC_SELECTION_COUNT:
             fRet = getCountRef();
-        break;
+            break;
         case SUBTOTAL_FUNC_SUM:
         case SUBTOTAL_FUNC_MAX:
         case SUBTOTAL_FUNC_MIN:
             // Note that nVal is 0.0 for MAX and MIN if nCount==0, that's also
             // how it is defined in ODFF.
             fRet = getValueRef();
-        break;
+            break;
         case SUBTOTAL_FUNC_PROD:
             fRet = (getCountRef() > 0) ? getValueRef() : 0.0;
-        break;
+            break;
         case SUBTOTAL_FUNC_AVE:
             if (getCountRef() == 0)
                 mbError = true;
             else
                 fRet = getValueRef() / getCountRef();
-        break;
+            break;
         case SUBTOTAL_FUNC_VAR:
         case SUBTOTAL_FUNC_STD:
             if (maWelford.getCount() < 2)
@@ -165,9 +165,9 @@ double ScFunctionData::getResult()
                 if (fRet < 0.0)
                     mbError = true;
                 else if (meFunc == SUBTOTAL_FUNC_STD)
-                    fRet = sqrt( fRet);
+                    fRet = sqrt(fRet);
             }
-        break;
+            break;
         case SUBTOTAL_FUNC_VARP:
         case SUBTOTAL_FUNC_STDP:
             if (maWelford.getCount() < 1)
@@ -180,20 +180,20 @@ double ScFunctionData::getResult()
                 if (fRet < 0.0)
                     mbError = true;
                 else if (meFunc == SUBTOTAL_FUNC_STDP)
-                    fRet = sqrt( fRet);
+                    fRet = sqrt(fRet);
             }
-        break;
+            break;
         default:
             assert(!"unhandled unknown");
             mbError = true;
-        break;
+            break;
     }
     if (mbError)
         fRet = 0.0;
     return fRet;
 }
 
-void WelfordRunner::update( double fVal )
+void WelfordRunner::update(double fVal)
 {
     ++mnCount;
     const double fDelta = fVal - mfMean;
