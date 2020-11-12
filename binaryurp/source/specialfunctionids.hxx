@@ -21,9 +21,10 @@
 
 #include <sal/config.h>
 
-namespace binaryurp {
-
-enum SpecialFunctionIds {
+namespace binaryurp
+{
+enum SpecialFunctionIds
+{
     SPECIAL_FUNCTION_ID_QUERY_INTERFACE = 0,
 
     SPECIAL_FUNCTION_ID_RESERVED = 1,
@@ -34,7 +35,6 @@ enum SpecialFunctionIds {
 
     SPECIAL_FUNCTION_ID_COMMIT_CHANGE = 5
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
