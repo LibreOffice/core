@@ -37,9 +37,9 @@ BitmapEx BitmapColorizeFilter::execute(BitmapEx const& rBitmapEx) const
 
     for (nX = 0; nX < 256; ++nX)
     {
-        aMapR[nX] = MinMax((nX + cR) / 2, 0, 255);
-        aMapG[nX] = MinMax((nX + cG) / 2, 0, 255);
-        aMapB[nX] = MinMax((nX + cB) / 2, 0, 255);
+        aMapR[nX] = std::clamp<sal_uInt8>((nX + cR) / 2, 0, 255);
+        aMapG[nX] = std::clamp<sal_uInt8>((nX + cG) / 2, 0, 255);
+        aMapB[nX] = std::clamp<sal_uInt8>((nX + cB) / 2, 0, 255);
     }
 
     if (pWriteAccess->HasPalette())

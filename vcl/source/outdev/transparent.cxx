@@ -482,7 +482,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
         {
             ScopedVclPtrInstance< VirtualDevice > aVDev(*this, DeviceFormat::BITMASK);
             const Size aDstSz( aDstRect.GetSize() );
-            const sal_uInt8 cTrans = static_cast<sal_uInt8>(MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 ));
+            const sal_uInt8 cTrans = std::clamp<sal_uInt8>( FRound( nTransparencePercent * 2.55 ), 0, 255 );
 
             if( aDstRect.Left() || aDstRect.Top() )
                 aPolyPoly.Move( -aDstRect.Left(), -aDstRect.Top() );

@@ -90,7 +90,7 @@ struct ScaleContext
             double fTemp = i * fRevScale;
             if (bMirrored)
                 fTemp = nTempX - fTemp;
-            rMapIX[i] = MinMax(tools::Long(fTemp), 0, nTemp);
+            rMapIX[i] = std::clamp<tools::Long>(fTemp, 0, nTemp);
             rMapFX[i] = BilinearWeightType((fTemp - rMapIX[i]) * (BilinearWeightType(1) << MAP_PRECISION));
         }
     }

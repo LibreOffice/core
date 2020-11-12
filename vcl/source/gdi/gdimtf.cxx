@@ -49,7 +49,7 @@
 
 using namespace com::sun::star;
 
-#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
+#define GAMMA( _def_cVal, _def_InvGamma )   (std::clamp<sal_uInt8>(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255))
 
 namespace {
 
@@ -2092,15 +2092,15 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
 
     // calculate slope
     if( nContrastPercent >= 0 )
-        fM = 128.0 / ( 128.0 - 1.27 * MinMax( nContrastPercent, 0, 100 ) );
+        fM = 128.0 / ( 128.0 - 1.27 * std::clamp<sal_Int8>( nContrastPercent, 0, 100 ) );
     else
-        fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100, 0 ) ) / 128.0;
+        fM = ( 128.0 + 1.27 * std::clamp<sal_Int8>( nContrastPercent, -100, 0 ) ) / 128.0;
 
     if(!msoBrightness)
         // total offset = luminance offset + contrast offset
-        fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55 + 128.0 - fM * 128.0;
+        fOff = std::clamp<sal_Int8>( nLuminancePercent, -100, 100 ) * 2.55 + 128.0 - fM * 128.0;
     else
-        fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55;
+        fOff = std::clamp<sal_Int8>( nLuminancePercent, -100, 100 ) * 2.55;
 
     // channel offset = channel offset  + total offset
     fROff = nChannelRPercent * 2.55 + fOff;
@@ -2116,15 +2116,15 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
     {
         if(!msoBrightness)
         {
-            aColParam.pMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fROff ), 0, 255 ));
-            aColParam.pMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fGOff ), 0, 255 ));
-            aColParam.pMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fBOff ), 0, 255 ));
+            aColParam.pMapR[ nX ] = std::clamp<sal_uInt8>( FRound( nX * fM + fROff ), 0, 255 );
+            aColParam.pMapG[ nX ] = std::clamp<sal_uInt8>( FRound( nX * fM + fGOff ), 0, 255 );
+            aColParam.pMapB[ nX ] = std::clamp<sal_uInt8>( FRound( nX * fM + fBOff ), 0, 255 );
         }
         else
         {
-            aColParam.pMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 ));
-            aColParam.pMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 ));
-            aColParam.pMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 ));
+            aColParam.pMapR[ nX ] = std::clamp<sal_uInt8>( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 );
+            aColParam.pMapG[ nX ] = std::clamp<sal_uInt8>( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 );
+            aColParam.pMapB[ nX ] = std::clamp<sal_uInt8>( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 );
         }
         if( bGamma )
         {
