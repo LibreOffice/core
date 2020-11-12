@@ -28,34 +28,34 @@ namespace jfw
 class CXPathObjectPtr
 {
     xmlXPathObject* _object;
-    CXPathObjectPtr & operator = (const CXPathObjectPtr&) = delete;
+    CXPathObjectPtr& operator=(const CXPathObjectPtr&) = delete;
     CXPathObjectPtr(const CXPathObjectPtr&) = delete;
+
 public:
     CXPathObjectPtr();
     CXPathObjectPtr(xmlXPathObject*);
     ~CXPathObjectPtr();
     /** Takes ownership of xmlXPathObject
      */
-    CXPathObjectPtr & operator = (xmlXPathObject* pObj);
-    xmlXPathObject* operator -> () { return _object;}
-    operator xmlXPathObject* () const { return _object;}
+    CXPathObjectPtr& operator=(xmlXPathObject* pObj);
+    xmlXPathObject* operator->() { return _object; }
+    operator xmlXPathObject*() const { return _object; }
 };
-
 
 class CXPathContextPtr
 {
     xmlXPathContext* _object;
 
     CXPathContextPtr(const jfw::CXPathContextPtr&) = delete;
-    CXPathContextPtr & operator = (const CXPathContextPtr&) = delete;
+    CXPathContextPtr& operator=(const CXPathContextPtr&) = delete;
+
 public:
     CXPathContextPtr();
     CXPathContextPtr(xmlXPathContextPtr aContext);
-    CXPathContextPtr & operator = (xmlXPathContextPtr pObj);
+    CXPathContextPtr& operator=(xmlXPathContextPtr pObj);
     ~CXPathContextPtr();
-    operator xmlXPathContext* () const { return _object;}
+    operator xmlXPathContext*() const { return _object; }
 };
-
 
 class CXmlDocPtr
 {
@@ -64,35 +64,33 @@ class CXmlDocPtr
     CXmlDocPtr(const CXmlDocPtr&) = delete;
 
 public:
-    CXmlDocPtr & operator = (const CXmlDocPtr&);
+    CXmlDocPtr& operator=(const CXmlDocPtr&);
     CXmlDocPtr();
     CXmlDocPtr(xmlDoc* aDoc);
     /** Takes ownership of xmlDoc
      */
-    CXmlDocPtr & operator = (xmlDoc* pObj);
+    CXmlDocPtr& operator=(xmlDoc* pObj);
     ~CXmlDocPtr();
-    operator xmlDoc* () const { return _object;}
+    operator xmlDoc*() const { return _object; }
 };
-
 
 class CXmlCharPtr
 {
     xmlChar* _object;
 
     CXmlCharPtr(const CXmlCharPtr&) = delete;
-    CXmlCharPtr & operator = (const CXmlCharPtr&) = delete;
+    CXmlCharPtr& operator=(const CXmlCharPtr&) = delete;
+
 public:
     CXmlCharPtr();
     CXmlCharPtr(xmlChar* aDoc);
-    explicit CXmlCharPtr(const OUString &);
+    explicit CXmlCharPtr(const OUString&);
     ~CXmlCharPtr();
-    CXmlCharPtr & operator = (xmlChar* pObj);
-    operator xmlChar* () const { return _object;}
-    operator OUString ();
-    operator OString () { return reinterpret_cast<char*>(_object);}
+    CXmlCharPtr& operator=(xmlChar* pObj);
+    operator xmlChar*() const { return _object; }
+    operator OUString();
+    operator OString() { return reinterpret_cast<char*>(_object); }
 };
-
-
 }
 #endif
 

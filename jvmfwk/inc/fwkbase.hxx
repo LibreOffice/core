@@ -28,7 +28,6 @@
 
 namespace jfw
 {
-
 struct VersionInfo;
 
 class VendorSettings
@@ -39,14 +38,13 @@ class VendorSettings
 public:
     VendorSettings();
 
-    std::optional<VersionInfo> getVersionInformation(const OUString & sVendor) const;
+    std::optional<VersionInfo> getVersionInformation(const OUString& sVendor) const;
 };
 
 /* The class offers functions to retrieve verified bootstrap parameters.
  */
-namespace  BootParams
+namespace BootParams
 {
-
 /* Gets the file URL to the JRE which has been determined by the
    bootstrap parameter UNO_JAVA_JFW_JREHOME or UNO_JAVA_JFW_ENV_JREHOME.
 
@@ -54,7 +52,7 @@ namespace  BootParams
 */
 OUString getJREHome();
 
-::std::vector< OString> getVMParameters();
+::std::vector<OString> getVMParameters();
 
 OUString getUserData();
 
@@ -73,7 +71,6 @@ OUString getClasspathUrls();
 
 } //end namespace
 
-
 enum JFW_MODE
 {
     JFW_MODE_APPLICATION,
@@ -86,9 +83,9 @@ JFW_MODE getMode();
 /** creates the -Djava.class.path option with the complete classpath, including
     the paths which are set by UNO_JAVA_JFW_CLASSPATH_URLS.
  */
-OString makeClassPathOption(OUString const & sUserClassPath);
+OString makeClassPathOption(OUString const& sUserClassPath);
 
-OString getSettingsPath( const OUString & sURL);
+OString getSettingsPath(const OUString& sURL);
 
 /** Get the system path to the javasettings.xml
     Converts the URL returned from getUserSettingsURL to a

@@ -36,7 +36,6 @@ struct JavaInfo;
 
 namespace jfw
 {
-
 /** gets the value of the updated element from the javavendors.xml.
  */
 OString getElementUpdated();
@@ -47,9 +46,7 @@ OString getElementUpdated();
     [out]If true then the respective structure of elements was added and the
     document needs to be saved.
  */
-void createSettingsStructure(
-    xmlDoc * document, bool * bNeedsSave);
-
+void createSettingsStructure(xmlDoc* document, bool* bNeedsSave);
 
 /** represents the settings saved in the /java/javaInfo element.
     It is used within class NodeJava which determines the settings
@@ -91,12 +88,12 @@ public:
         If javaInfo@xsi:nil = true then member bNil is set to true
         and no further elements are read.
      */
-    void loadFromNode(xmlDoc * pDoc,xmlNode * pJavaInfo);
+    void loadFromNode(xmlDoc* pDoc, xmlNode* pJavaInfo);
     /** The attribute nil will be set to false. The function gets the value
         javaSettings/updated from the javavendors.xml and writes it to
         javaInfo@vendorUpdate in javasettings.xml
      */
-    void writeToNode(xmlDoc * pDoc, xmlNode * pJavaInfo) const;
+    void writeToNode(xmlDoc* pDoc, xmlNode* pJavaInfo) const;
 
     /** returns NULL if javaInfo is nil.
      */
@@ -116,9 +113,13 @@ public:
 class NodeJava
 {
 public:
-    enum Layer { USER, SHARED };
-private:
+    enum Layer
+    {
+        USER,
+        SHARED
+    };
 
+private:
     /** creates settings file and fills it with default values.
 
         When this function is called then it creates the
@@ -147,7 +148,7 @@ private:
 
     /** Verifies if the respective settings file exist.
      */
-    static jfw::FileStatus checkSettingsFileStatus(OUString const & sURL);
+    static jfw::FileStatus checkSettingsFileStatus(OUString const& sURL);
 
     /** Determines the layer for which the instance the loads and writes the
         data.
@@ -164,7 +165,7 @@ private:
         If /java/userClassPath@xsi:nil == true then the value is uninitialized
         after a call to load().
     */
-    std::optional< OUString> m_userClassPath;
+    std::optional<OUString> m_userClassPath;
     /** User configurable option.  /java/javaInfo
         If /java/javaInfo@xsi:nil == true then the value is uninitialized
         after a call to load.
@@ -174,15 +175,14 @@ private:
         If /java/vmParameters@xsi:nil == true then the value is uninitialized
         after a call to load.
     */
-    std::optional< ::std::vector< OUString> > m_vmParameters;
+    std::optional<::std::vector<OUString>> m_vmParameters;
     /** User configurable option. /java/jreLocations
         If /java/jreLocations@xsi:nil == true then the value is uninitialized
         after a call to load.
     */
-    std::optional< ::std::vector< OUString> > m_JRELocations;
+    std::optional<::std::vector<OUString>> m_JRELocations;
 
 public:
-
     explicit NodeJava(Layer theLayer);
 
     /** sets m_enabled.
@@ -192,14 +192,14 @@ public:
 
     /** sets m_sUserClassPath. See setEnabled.
      */
-    void setUserClassPath(const OUString & sClassPath);
+    void setUserClassPath(const OUString& sClassPath);
 
     /** sets m_aInfo. See setEnabled.
         @param bAutoSelect
         true- called by jfw_setSelectedJRE
         false called by jfw_findAndSelectJRE
      */
-    void setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect);
+    void setJavaInfo(const JavaInfo* pInfo, bool bAutoSelect);
 
     /** sets the /java/vmParameters/param elements.
         When this method all previous values are removed and replaced
@@ -207,12 +207,12 @@ public:
         /java/vmParameters@xsi:nil will be set to true when write() is
         called.
      */
-    void setVmParameters(std::vector<OUString> const & arParameters);
+    void setVmParameters(std::vector<OUString> const& arParameters);
 
     /** adds a location to the already existing locations.
         Note: call load() before, then add the location and then call write().
     */
-    void addJRELocation(OUString const & sLocation);
+    void addJRELocation(OUString const& sLocation);
 
     /** writes the data to user settings.
      */
@@ -224,22 +224,22 @@ public:
 
     /** returns the value of the element /java/enabled
      */
-    const std::optional<sal_Bool> & getEnabled() const { return m_enabled;}
+    const std::optional<sal_Bool>& getEnabled() const { return m_enabled; }
     /** returns the value of the element /java/userClassPath.
      */
-    const std::optional< OUString> & getUserClassPath() const { return m_userClassPath;}
+    const std::optional<OUString>& getUserClassPath() const { return m_userClassPath; }
 
     /** returns the value of the element /java/javaInfo.
      */
-    const std::optional<CNodeJavaInfo> & getJavaInfo() const { return m_javaInfo;}
+    const std::optional<CNodeJavaInfo>& getJavaInfo() const { return m_javaInfo; }
 
     /** returns the parameters from the element /java/vmParameters/param.
      */
-    const std::optional< ::std::vector< OUString> > & getVmParameters() const { return m_vmParameters;}
+    const std::optional<::std::vector<OUString>>& getVmParameters() const { return m_vmParameters; }
 
     /** returns the parameters from the element /java/jreLocations/location.
      */
-    const std::optional< ::std::vector< OUString> > & getJRELocations() const { return m_JRELocations;}
+    const std::optional<::std::vector<OUString>>& getJRELocations() const { return m_JRELocations; }
 };
 
 /** merges the settings for shared, user and installation during construction.
@@ -265,18 +265,18 @@ public:
 class MergedSettings final
 {
 private:
-    MergedSettings& operator = (MergedSettings const &) = delete;
-    MergedSettings(MergedSettings const &) = delete;
+    MergedSettings& operator=(MergedSettings const&) = delete;
+    MergedSettings(MergedSettings const&) = delete;
 
-    void merge(const NodeJava & share, const NodeJava & user);
+    void merge(const NodeJava& share, const NodeJava& user);
 
     bool m_bEnabled;
 
     OUString m_sClassPath;
 
-    ::std::vector< OUString> m_vmParams;
+    ::std::vector<OUString> m_vmParams;
 
-    ::std::vector< OUString> m_JRELocations;
+    ::std::vector<OUString> m_JRELocations;
 
     CNodeJavaInfo m_javaInfo;
 
@@ -286,11 +286,11 @@ public:
 
     /** the default is true.
      */
-    bool getEnabled() const { return m_bEnabled;}
+    bool getEnabled() const { return m_bEnabled; }
 
-    const OUString & getUserClassPath() const { return m_sClassPath;}
+    const OUString& getUserClassPath() const { return m_sClassPath; }
 
-    ::std::vector< OString> getVmParametersUtf8() const;
+    ::std::vector<OString> getVmParametersUtf8() const;
     /** returns a JavaInfo structure representing the node
         /java/javaInfo. Every time a new JavaInfo structure is created
         which needs to be freed by the caller.
@@ -300,7 +300,7 @@ public:
 
     /** returns the value of the attribute /java/javaInfo[@vendorUpdate].
      */
-    OString const & getJavaInfoAttrVendorUpdate() const { return m_javaInfo.sAttrVendorUpdate;}
+    OString const& getJavaInfoAttrVendorUpdate() const { return m_javaInfo.sAttrVendorUpdate; }
 
 #ifdef _WIN32
     /** returns the javaInfo@autoSelect attribute.
@@ -311,15 +311,14 @@ public:
     bool getJavaInfoAttrAutoSelect() const;
 #endif
 
-    void getVmParametersArray(std::vector<OUString> * parParameters) const;
+    void getVmParametersArray(std::vector<OUString>* parParameters) const;
 
-    const ::std::vector< OUString> & getJRELocations() const { return m_JRELocations;}
+    const ::std::vector<OUString>& getJRELocations() const { return m_JRELocations; }
 };
-
 
 struct VersionInfo
 {
-    ::std::vector< OUString> vecExcludeVersions;
+    ::std::vector<OUString> vecExcludeVersions;
     OUString sMinVersion;
     OUString sMaxVersion;
 };

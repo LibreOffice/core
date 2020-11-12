@@ -24,26 +24,23 @@
 
 namespace jfw_plugin
 {
-
-class GnuInfo: public VendorBase
+class GnuInfo : public VendorBase
 {
 private:
     OUString m_sJavaHome;
+
 public:
-    static char const* const* getJavaExePaths(int * size);
+    static char const* const* getJavaExePaths(int* size);
 
     static rtl::Reference<VendorBase> createInstance();
 
-    virtual char const* const* getRuntimePaths(int * size) override;
+    virtual char const* const* getRuntimePaths(int* size) override;
 
     virtual char const* const* getLibraryPaths(int* size) override;
 
-    virtual bool initialize(
-        std::vector<std::pair<OUString, OUString> > props) override;
+    virtual bool initialize(std::vector<std::pair<OUString, OUString>> props) override;
     virtual int compareVersions(const OUString& sSecond) const override;
-
 };
-
 }
 #endif
 
