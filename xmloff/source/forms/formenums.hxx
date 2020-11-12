@@ -31,27 +31,26 @@
 
 namespace xmloff
 {
-
 extern const SvXMLEnumMapEntry<css::form::FormSubmitEncoding> aSubmitEncodingMap[];
-extern const SvXMLEnumMapEntry<css::form::FormSubmitMethod>   aSubmitMethodMap[];
-extern const SvXMLEnumMapEntry<sal_Int32>                     aCommandTypeMap[];
-extern const SvXMLEnumMapEntry<css::form::NavigationBarMode>  aNavigationTypeMap[];
-extern const SvXMLEnumMapEntry<css::form::TabulatorCycle>     aTabulatorCycleMap[];
-extern const SvXMLEnumMapEntry<css::form::FormButtonType>     aFormButtonTypeMap[];
-extern const SvXMLEnumMapEntry<css::form::ListSourceType>     aListSourceTypeMap[];
-extern const SvXMLEnumMapEntry<TriState>   aCheckStateMap[];
-extern const SvXMLEnumMapEntry<sal_Int16>  aTextAlignMap[];
+extern const SvXMLEnumMapEntry<css::form::FormSubmitMethod> aSubmitMethodMap[];
+extern const SvXMLEnumMapEntry<sal_Int32> aCommandTypeMap[];
+extern const SvXMLEnumMapEntry<css::form::NavigationBarMode> aNavigationTypeMap[];
+extern const SvXMLEnumMapEntry<css::form::TabulatorCycle> aTabulatorCycleMap[];
+extern const SvXMLEnumMapEntry<css::form::FormButtonType> aFormButtonTypeMap[];
+extern const SvXMLEnumMapEntry<css::form::ListSourceType> aListSourceTypeMap[];
+extern const SvXMLEnumMapEntry<TriState> aCheckStateMap[];
+extern const SvXMLEnumMapEntry<sal_Int16> aTextAlignMap[];
 extern const SvXMLEnumMapEntry<sal_uInt16> aBorderTypeMap[];
 extern const SvXMLEnumMapEntry<sal_uInt16> aFontEmphasisMap[];
 extern const SvXMLEnumMapEntry<sal_uInt16> aFontReliefMap[];
-extern const SvXMLEnumMapEntry<sal_Int16>  aListLinkageMap[];
-extern const SvXMLEnumMapEntry<sal_Int32>  aOrientationMap[];
-extern const SvXMLEnumMapEntry<sal_Int16>  aVisualEffectMap[];
-extern const SvXMLEnumMapEntry<sal_Int16>  aImagePositionMap[];
+extern const SvXMLEnumMapEntry<sal_Int16> aListLinkageMap[];
+extern const SvXMLEnumMapEntry<sal_Int32> aOrientationMap[];
+extern const SvXMLEnumMapEntry<sal_Int16> aVisualEffectMap[];
+extern const SvXMLEnumMapEntry<sal_Int16> aImagePositionMap[];
 extern const SvXMLEnumMapEntry<sal_uInt16> aImageAlignMap[];
 extern const SvXMLEnumMapEntry<sal_uInt16> aScaleModeMap[];
 
-}   // namespace xmloff
+} // namespace xmloff
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_FORMENUMS_HXX
 

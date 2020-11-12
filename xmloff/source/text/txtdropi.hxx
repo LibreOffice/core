@@ -22,24 +22,20 @@
 
 #include <XMLElementPropertyContext.hxx>
 
-
-class XMLTextDropCapImportContext :public XMLElementPropertyContext
+class XMLTextDropCapImportContext : public XMLElementPropertyContext
 {
     XMLPropertyState aWholeWordProp;
     OUString sStyleName;
 
 private:
-    void ProcessAttrs(
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
+    void ProcessAttrs(const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
 
 public:
-
     XMLTextDropCapImportContext(
         SvXMLImport& rImport, sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
-        const XMLPropertyState& rProp,
-        sal_Int32 nWholeWOrdIdx,
-        ::std::vector< XMLPropertyState > &rProps );
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+        const XMLPropertyState& rProp, sal_Int32 nWholeWOrdIdx,
+        ::std::vector<XMLPropertyState>& rProps);
 
     virtual ~XMLTextDropCapImportContext() override;
 
@@ -47,7 +43,6 @@ public:
 
     const OUString& GetStyleName() const { return sStyleName; }
 };
-
 
 #endif
 

@@ -24,18 +24,18 @@
 class XMLLabelSeparatorContext : public XMLElementPropertyContext
 {
 public:
-
-    XMLLabelSeparatorContext( SvXMLImport& rImport, sal_Int32 nElement,
-                           const XMLPropertyState& rProp,
-                           ::std::vector< XMLPropertyState > &rProps );
+    XMLLabelSeparatorContext(SvXMLImport& rImport, sal_Int32 nElement,
+                             const XMLPropertyState& rProp,
+                             ::std::vector<XMLPropertyState>& rProps);
     virtual ~XMLLabelSeparatorContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
 private:
-    OUString         m_aSeparator;
+    OUString m_aSeparator;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_XMLLABELSEPARATORCONTEXT_HXX

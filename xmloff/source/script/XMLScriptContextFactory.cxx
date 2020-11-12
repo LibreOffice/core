@@ -24,7 +24,6 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 
-
 using namespace ::xmloff::token;
 
 using ::com::sun::star::xml::sax::XAttributeList;
@@ -36,19 +35,13 @@ constexpr OUStringLiteral gsEventType(u"EventType");
 constexpr OUStringLiteral gsScript(u"Script");
 constexpr OUStringLiteral gsURL(u"Script");
 
-XMLScriptContextFactory::XMLScriptContextFactory()
-{
-}
+XMLScriptContextFactory::XMLScriptContextFactory() {}
 
-XMLScriptContextFactory::~XMLScriptContextFactory()
-{
-}
+XMLScriptContextFactory::~XMLScriptContextFactory() {}
 
-SvXMLImportContext * XMLScriptContextFactory::CreateContext
-(SvXMLImport & rImport,
- const Reference<XAttributeList> & xAttrList,
- XMLEventsImportContext * rEvents,
- const OUString & rApiEventName)
+SvXMLImportContext* XMLScriptContextFactory::CreateContext(
+    SvXMLImport& rImport, const Reference<XAttributeList>& xAttrList,
+    XMLEventsImportContext* rEvents, const OUString& rApiEventName)
 {
     OUString sURLVal;
 
@@ -56,8 +49,8 @@ SvXMLImportContext * XMLScriptContextFactory::CreateContext
     for (sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
     {
         OUString sLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-            GetKeyByAttrName(xAttrList->getNameByIndex(nAttr), &sLocalName);
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
+            xAttrList->getNameByIndex(nAttr), &sLocalName);
 
         if (XML_NAMESPACE_XLINK == nPrefix)
         {
@@ -84,6 +77,5 @@ SvXMLImportContext * XMLScriptContextFactory::CreateContext
     // return dummy context
     return new SvXMLImportContext(rImport);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

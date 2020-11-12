@@ -30,13 +30,14 @@
 class XMLAnimationsContext final : public SvXMLImportContext
 {
 public:
-    css::uno::Reference< css::beans::XPropertySet > mxLastShape;
+    css::uno::Reference<css::beans::XPropertySet> mxLastShape;
     OUString maLastShapeId;
 
-    XMLAnimationsContext( SvXMLImport& rImport);
+    XMLAnimationsContext(SvXMLImport& rImport);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
 };
 
 #endif // INCLUDED_XMLOFF_INC_ANIMIMP_HXX

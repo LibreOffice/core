@@ -24,11 +24,10 @@
 #include <xmloff/xmltoken.hxx>
 #include <unordered_map>
 
-class XMLTransformerTokenMap :
-    public std::unordered_map< OUString, ::xmloff::token::XMLTokenEnum >
+class XMLTransformerTokenMap : public std::unordered_map<OUString, ::xmloff::token::XMLTokenEnum>
 {
 public:
-    explicit XMLTransformerTokenMap( ::xmloff::token::XMLTokenEnum const *pInit );
+    explicit XMLTransformerTokenMap(::xmloff::token::XMLTokenEnum const* pInit);
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERTOKENMAP_HXX

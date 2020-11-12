@@ -24,8 +24,8 @@
 class SchXMLEnumConverter
 {
 public:
-    static XMLEnumPropertyHdl& getLegendPositionConverter();//returns a singleton
-    static XMLEnumPropertyHdl& getLegendExpansionConverter();//returns a singleton
+    static XMLEnumPropertyHdl& getLegendPositionConverter(); //returns a singleton
+    static XMLEnumPropertyHdl& getLegendExpansionConverter(); //returns a singleton
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLENUMCONVERTER_HXX

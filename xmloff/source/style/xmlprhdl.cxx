@@ -22,10 +22,10 @@
 
 XMLPropertyHandler::~XMLPropertyHandler()
 {
-     // does nothing
+    // does nothing
 }
 
-bool XMLPropertyHandler::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
+bool XMLPropertyHandler::equals(const css::uno::Any& r1, const css::uno::Any& r2) const
 {
     return (r1 == r2);
 }

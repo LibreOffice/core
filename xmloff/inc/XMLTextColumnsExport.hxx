@@ -21,22 +21,23 @@
 
 #include <sal/types.h>
 
-namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno
+{
+class Any;
+}
 class SvXMLExport;
 
 class XMLTextColumnsExport
 {
-    SvXMLExport&        rExport;
+    SvXMLExport& rExport;
 
     SvXMLExport& GetExport() { return rExport; }
 
 public:
+    XMLTextColumnsExport(SvXMLExport& rExport);
 
-    XMLTextColumnsExport( SvXMLExport& rExport );
-
-    void exportXML( const css::uno::Any& rAny );
+    void exportXML(const css::uno::Any& rAny);
 };
-
 
 #endif
 
