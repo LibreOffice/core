@@ -28,23 +28,25 @@
 
 namespace framework
 {
-
-class UriAbbreviation final : public ::cppu::WeakImplHelper< css::util::XStringAbbreviation, css::lang::XServiceInfo>
+class UriAbbreviation final
+    : public ::cppu::WeakImplHelper<css::util::XStringAbbreviation, css::lang::XServiceInfo>
 {
 public:
-    explicit UriAbbreviation(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit UriAbbreviation(css::uno::Reference<css::uno::XComponentContext> const& context);
 
     /* interface XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // css::util::XStringAbbreviation:
-    virtual OUString SAL_CALL abbreviateString(const css::uno::Reference< css::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString) override;
+    virtual OUString SAL_CALL
+    abbreviateString(const css::uno::Reference<css::util::XStringWidth>& xStringWidth,
+                     ::sal_Int32 nWidth, const OUString& aString) override;
 
 private:
-    UriAbbreviation(UriAbbreviation const &) = delete;
-    UriAbbreviation& operator =(UriAbbreviation const &) = delete;
+    UriAbbreviation(UriAbbreviation const&) = delete;
+    UriAbbreviation& operator=(UriAbbreviation const&) = delete;
 
     virtual ~UriAbbreviation() override {}
 };

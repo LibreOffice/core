@@ -22,12 +22,12 @@
 
 #include <com/sun/star/util/URL.hpp>
 
-namespace framework {
-
-inline bool isStartModuleDispatch(css::util::URL const & url) {
+namespace framework
+{
+inline bool isStartModuleDispatch(css::util::URL const& url)
+{
     return url.Complete == ".uno:ShowStartModule";
 }
-
 }
 
 #endif

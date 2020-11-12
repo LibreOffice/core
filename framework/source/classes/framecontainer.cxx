@@ -25,8 +25,8 @@
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 
-namespace framework{
-
+namespace framework
+{
 /**-***************************************************************************************************************
     @short      initialize an empty container
     @descr      The container will be empty then - special features (e.g. the async quit mechanism) are disabled.
@@ -64,12 +64,12 @@ FrameContainer::~FrameContainer()
 
     @threadsafe yes
  *****************************************************************************************************************/
-void FrameContainer::append( const css::uno::Reference< css::frame::XFrame >& xFrame )
+void FrameContainer::append(const css::uno::Reference<css::frame::XFrame>& xFrame)
 {
-    if (xFrame.is() && ! exist(xFrame))
+    if (xFrame.is() && !exist(xFrame))
     {
         SolarMutexGuard g;
-        m_aContainer.push_back( xFrame );
+        m_aContainer.push_back(xFrame);
     }
 }
 
@@ -84,17 +84,18 @@ void FrameContainer::append( const css::uno::Reference< css::frame::XFrame >& xF
 
     @threadsafe yes
  *****************************************************************************************************************/
-void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xFrame )
+void FrameContainer::remove(const css::uno::Reference<css::frame::XFrame>& xFrame)
 {
     SolarMutexGuard g;
 
-    TFrameContainer::iterator aSearchedItem = ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame );
-    if (aSearchedItem!=m_aContainer.end())
+    TFrameContainer::iterator aSearchedItem
+        = ::std::find(m_aContainer.begin(), m_aContainer.end(), xFrame);
+    if (aSearchedItem != m_aContainer.end())
     {
-        m_aContainer.erase( aSearchedItem );
+        m_aContainer.erase(aSearchedItem);
 
         // If removed frame was the current active frame - reset state variable.
-        if (m_xActiveFrame==xFrame)
+        if (m_xActiveFrame == xFrame)
             m_xActiveFrame.clear();
     }
 }
@@ -109,10 +110,10 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
 
     @threadsafe yes
  *****************************************************************************************************************/
-bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
+bool FrameContainer::exist(const css::uno::Reference<css::frame::XFrame>& xFrame) const
 {
     SolarMutexGuard g;
-    return( ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame ) != m_aContainer.end() );
+    return (::std::find(m_aContainer.begin(), m_aContainer.end(), xFrame) != m_aContainer.end());
 }
 
 /**-***************************************************************************************************************
@@ -157,22 +158,21 @@ sal_uInt32 FrameContainer::getCount() const
 
     @threadsafe yes
  *****************************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32 nIndex ) const
+css::uno::Reference<css::frame::XFrame> FrameContainer::operator[](sal_uInt32 nIndex) const
 {
-
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    css::uno::Reference<css::frame::XFrame> xFrame;
     try
     {
         // Get element form container WITH automatic test of ranges!
         // If index not valid, an out_of_range exception is thrown.
         SolarMutexGuard g;
-        xFrame = m_aContainer.at( nIndex );
+        xFrame = m_aContainer.at(nIndex);
     }
-    catch( const std::out_of_range& )
+    catch (const std::out_of_range&)
     {
         // The index is not valid for current container-content - we must handle this case!
         // We can return the default value ...
-        SAL_INFO( "fwk", "FrameContainer::operator[]: Exception caught: std::out_of_range" );
+        SAL_INFO("fwk", "FrameContainer::operator[]: Exception caught: std::out_of_range");
     }
     return xFrame;
 }
@@ -185,7 +185,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
 
     @threadsafe yes
  *****************************************************************************************************************/
-css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > FrameContainer::getAllElements() const
+css::uno::Sequence<css::uno::Reference<css::frame::XFrame>> FrameContainer::getAllElements() const
 {
     SolarMutexGuard g;
     return comphelper::containerToSequence(m_aContainer);
@@ -201,9 +201,9 @@ css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > FrameContainer::
 
     @threadsafe yes
  *****************************************************************************************************************/
-void FrameContainer::setActive( const css::uno::Reference< css::frame::XFrame >& xFrame )
+void FrameContainer::setActive(const css::uno::Reference<css::frame::XFrame>& xFrame)
 {
-    if ( !xFrame.is() || exist(xFrame) )
+    if (!xFrame.is() || exist(xFrame))
     {
         SolarMutexGuard g;
         m_xActiveFrame = xFrame;
@@ -220,7 +220,7 @@ void FrameContainer::setActive( const css::uno::Reference< css::frame::XFrame >&
 
     @threadsafe yes
  *****************************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
+css::uno::Reference<css::frame::XFrame> FrameContainer::getActive() const
 {
     SolarMutexGuard g;
     return m_xActiveFrame;
@@ -237,22 +237,23 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
 
     @threadsafe yes
  *****************************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( const OUString& sName ) const
+css::uno::Reference<css::frame::XFrame>
+FrameContainer::searchOnAllChildrens(const OUString& sName) const
 {
     SolarMutexGuard g;
     // Step over all child frames. But if direct child isn't the right one search on his children first - before
     // you go to next direct child of this container!
-    css::uno::Reference< css::frame::XFrame > xSearchedFrame;
+    css::uno::Reference<css::frame::XFrame> xSearchedFrame;
     for (auto const& container : m_aContainer)
     {
-        if (container->getName()==sName)
+        if (container->getName() == sName)
         {
             xSearchedFrame = container;
             break;
         }
         else
         {
-            xSearchedFrame = container->findFrame( sName, css::frame::FrameSearchFlag::CHILDREN );
+            xSearchedFrame = container->findFrame(sName, css::frame::FrameSearchFlag::CHILDREN);
             if (xSearchedFrame.is())
                 break;
         }
@@ -271,13 +272,14 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( 
 
     @threadsafe yes
  *****************************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildrens( const OUString& sName ) const
+css::uno::Reference<css::frame::XFrame>
+FrameContainer::searchOnDirectChildrens(const OUString& sName) const
 {
     SolarMutexGuard g;
-    css::uno::Reference< css::frame::XFrame > xSearchedFrame;
+    css::uno::Reference<css::frame::XFrame> xSearchedFrame;
     for (auto const& container : m_aContainer)
     {
-        if (container->getName()==sName)
+        if (container->getName() == sName)
         {
             xSearchedFrame = container;
             break;

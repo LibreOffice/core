@@ -35,13 +35,12 @@ using namespace ::com::sun::star::container;
 
 namespace framework
 {
-
 bool ToolBoxConfiguration::LoadToolBox(
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-    const css::uno::Reference< css::io::XInputStream >& rInputStream,
-    const css::uno::Reference< css::container::XIndexContainer >& rToolbarConfiguration )
+    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    const css::uno::Reference<css::io::XInputStream>& rInputStream,
+    const css::uno::Reference<css::container::XIndexContainer>& rToolbarConfiguration)
 {
-    Reference< XParser > xParser = Parser::create(rxContext);
+    Reference<XParser> xParser = Parser::create(rxContext);
 
     // connect stream to input stream to the parser
     InputSource aInputSource;
@@ -49,60 +48,59 @@ bool ToolBoxConfiguration::LoadToolBox(
     aInputSource.aInputStream = rInputStream;
 
     // create namespace filter and set menudocument handler inside to support xml namespaces
-    Reference< XDocumentHandler > xDocHandler( new OReadToolBoxDocumentHandler( rToolbarConfiguration ));
-    Reference< XDocumentHandler > xFilter( new SaxNamespaceFilter( xDocHandler ));
+    Reference<XDocumentHandler> xDocHandler(new OReadToolBoxDocumentHandler(rToolbarConfiguration));
+    Reference<XDocumentHandler> xFilter(new SaxNamespaceFilter(xDocHandler));
 
     // connect parser and filter
-    xParser->setDocumentHandler( xFilter );
+    xParser->setDocumentHandler(xFilter);
 
     try
     {
-        xParser->parseStream( aInputSource );
+        xParser->parseStream(aInputSource);
         return true;
     }
-    catch ( const RuntimeException& )
+    catch (const RuntimeException&)
     {
         return false;
     }
-    catch( const SAXException& )
+    catch (const SAXException&)
     {
         return false;
     }
-    catch( const css::io::IOException& )
+    catch (const css::io::IOException&)
     {
         return false;
     }
 }
 
 bool ToolBoxConfiguration::StoreToolBox(
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-    const css::uno::Reference< css::io::XOutputStream >& rOutputStream,
-    const css::uno::Reference< css::container::XIndexAccess >& rToolbarConfiguration )
+    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    const css::uno::Reference<css::io::XOutputStream>& rOutputStream,
+    const css::uno::Reference<css::container::XIndexAccess>& rToolbarConfiguration)
 {
-    Reference< XWriter > xWriter = Writer::create(rxContext);
-    xWriter->setOutputStream( rOutputStream );
+    Reference<XWriter> xWriter = Writer::create(rxContext);
+    xWriter->setOutputStream(rOutputStream);
 
     try
     {
-        Reference< XDocumentHandler > xHandler( xWriter, UNO_QUERY_THROW );
-        OWriteToolBoxDocumentHandler aWriteToolBoxDocumentHandler( rToolbarConfiguration, xHandler );
+        Reference<XDocumentHandler> xHandler(xWriter, UNO_QUERY_THROW);
+        OWriteToolBoxDocumentHandler aWriteToolBoxDocumentHandler(rToolbarConfiguration, xHandler);
         aWriteToolBoxDocumentHandler.WriteToolBoxDocument();
         return true;
     }
-    catch ( const RuntimeException& )
+    catch (const RuntimeException&)
     {
         return false;
     }
-    catch ( const SAXException& )
+    catch (const SAXException&)
     {
         return false;
     }
-    catch ( const css::io::IOException& )
+    catch (const css::io::IOException&)
     {
         return false;
     }
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

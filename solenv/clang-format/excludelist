@@ -4555,12 +4555,10 @@ framework/inc/helper/titlebarupdate.hxx
 framework/inc/helper/uiconfigelementwrapperbase.hxx
 framework/inc/helper/uielementwrapperbase.hxx
 framework/inc/helper/vclstatusindicator.hxx
-framework/inc/helper/wakeupthread.hxx
 framework/inc/interaction/quietinteraction.hxx
 framework/inc/jobs/configaccess.hxx
 framework/inc/jobs/helponstartup.hxx
 framework/inc/jobs/job.hxx
-framework/inc/jobs/jobconst.hxx
 framework/inc/jobs/jobdata.hxx
 framework/inc/jobs/jobresult.hxx
 framework/inc/jobs/joburl.hxx
@@ -4573,7 +4571,6 @@ framework/inc/recording/dispatchrecordersupplier.hxx
 framework/inc/services.h
 framework/inc/services/layoutmanager.hxx
 framework/inc/services/mediatypedetectionhelper.hxx
-framework/inc/services/uriabbreviation.hxx
 framework/inc/statusbarconfiguration.hxx
 framework/inc/stdtypes.h
 framework/inc/targets.h
@@ -4645,14 +4642,12 @@ framework/source/accelerators/keymapping.cxx
 framework/source/accelerators/moduleacceleratorconfiguration.cxx
 framework/source/accelerators/presethandler.cxx
 framework/source/accelerators/storageholder.cxx
-framework/source/classes/framecontainer.cxx
 framework/source/classes/taskcreator.cxx
 framework/source/dispatch/closedispatcher.cxx
 framework/source/dispatch/dispatchdisabler.cxx
 framework/source/dispatch/dispatchinformationprovider.cxx
 framework/source/dispatch/dispatchprovider.cxx
 framework/source/dispatch/interceptionhelper.cxx
-framework/source/dispatch/isstartmoduledispatch.hxx
 framework/source/dispatch/loaddispatcher.cxx
 framework/source/dispatch/mailtodispatcher.cxx
 framework/source/dispatch/oxt_handler.cxx
@@ -4667,7 +4662,6 @@ framework/source/fwe/classes/actiontriggerseparatorpropertyset.cxx
 framework/source/fwe/classes/addonmenu.cxx
 framework/source/fwe/classes/addonsoptions.cxx
 framework/source/fwe/classes/framelistanalyzer.cxx
-framework/source/fwe/classes/fwkresid.cxx
 framework/source/fwe/classes/imagewrapper.cxx
 framework/source/fwe/classes/rootactiontriggercontainer.cxx
 framework/source/fwe/classes/sfxhelperfunctions.cxx
@@ -4683,13 +4677,11 @@ framework/source/fwe/xml/menudocumenthandler.cxx
 framework/source/fwe/xml/saxnamespacefilter.cxx
 framework/source/fwe/xml/statusbarconfiguration.cxx
 framework/source/fwe/xml/statusbardocumenthandler.cxx
-framework/source/fwe/xml/toolboxconfiguration.cxx
 framework/source/fwe/xml/toolboxdocumenthandler.cxx
 framework/source/fwe/xml/xmlnamespaces.cxx
 framework/source/fwi/classes/converter.cxx
 framework/source/fwi/classes/protocolhandlercache.cxx
 framework/source/fwi/helper/mischelper.cxx
-framework/source/fwi/helper/shareablemutex.cxx
 framework/source/fwi/jobs/configaccess.cxx
 framework/source/fwi/threadhelp/transactionmanager.cxx
 framework/source/fwi/uielement/constitemcontainer.cxx
@@ -4700,7 +4692,6 @@ framework/source/helper/ocomponentaccess.cxx
 framework/source/helper/ocomponentenumeration.cxx
 framework/source/helper/oframes.cxx
 framework/source/helper/persistentwindowstate.cxx
-framework/source/helper/statusindicator.cxx
 framework/source/helper/statusindicatorfactory.cxx
 framework/source/helper/tagwindowasmodified.cxx
 framework/source/helper/titlebarupdate.cxx
@@ -4728,7 +4719,6 @@ framework/source/jobs/job.cxx
 framework/source/jobs/jobdata.cxx
 framework/source/jobs/jobdispatch.cxx
 framework/source/jobs/jobexecutor.cxx
-framework/source/jobs/jobresult.cxx
 framework/source/jobs/joburl.cxx
 framework/source/jobs/shelljob.cxx
 framework/source/layoutmanager/helpers.cxx
@@ -4754,7 +4744,6 @@ framework/source/services/taskcreatorsrv.cxx
 framework/source/services/uriabbreviation.cxx
 framework/source/services/urltransformer.cxx
 framework/source/uiconfiguration/CommandImageResolver.cxx
-framework/source/uiconfiguration/CommandImageResolver.hxx
 framework/source/uiconfiguration/ImageList.cxx
 framework/source/uiconfiguration/ImageList.hxx
 framework/source/uiconfiguration/globalsettings.cxx
@@ -4821,7 +4810,6 @@ framework/source/uifactory/uielementfactorymanager.cxx
 framework/source/uifactory/windowcontentfactorymanager.cxx
 framework/source/xml/acceleratorconfigurationreader.cxx
 framework/source/xml/acceleratorconfigurationwriter.cxx
-framework/source/xml/imagesconfiguration.cxx
 framework/source/xml/imagesdocumenthandler.cxx
 helpcompiler/inc/BasCodeTagger.hxx
 helpcompiler/inc/HelpCompiler.hxx

@@ -35,13 +35,11 @@ using namespace ::com::sun::star::io;
 
 namespace framework
 {
-
 bool ImagesConfiguration::LoadImages(
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-    const css::uno::Reference< css::io::XInputStream >& rInputStream,
-    ImageItemDescriptorList& rItems )
+    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    const css::uno::Reference<css::io::XInputStream>& rInputStream, ImageItemDescriptorList& rItems)
 {
-    Reference< XParser > xParser = Parser::create( rxContext );
+    Reference<XParser> xParser = Parser::create(rxContext);
 
     // connect stream to input stream to the parser
     InputSource aInputSource;
@@ -49,59 +47,58 @@ bool ImagesConfiguration::LoadImages(
     aInputSource.aInputStream = rInputStream;
 
     // create namespace filter and set document handler inside to support xml namespaces
-    Reference< XDocumentHandler > xDocHandler( new OReadImagesDocumentHandler( rItems ));
-    Reference< XDocumentHandler > xFilter( new SaxNamespaceFilter( xDocHandler ));
+    Reference<XDocumentHandler> xDocHandler(new OReadImagesDocumentHandler(rItems));
+    Reference<XDocumentHandler> xFilter(new SaxNamespaceFilter(xDocHandler));
 
     // connect parser and filter
-    xParser->setDocumentHandler( xFilter );
+    xParser->setDocumentHandler(xFilter);
 
     try
     {
-        xParser->parseStream( aInputSource );
+        xParser->parseStream(aInputSource);
         return true;
     }
-    catch ( const RuntimeException& )
+    catch (const RuntimeException&)
     {
         return false;
     }
-    catch( const SAXException& )
+    catch (const SAXException&)
     {
         return false;
     }
-    catch( const css::io::IOException& )
+    catch (const css::io::IOException&)
     {
         return false;
     }
 }
 
 bool ImagesConfiguration::StoreImages(
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-    const css::uno::Reference< css::io::XOutputStream >& rOutputStream,
-    const ImageItemDescriptorList& rItems )
+    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    const css::uno::Reference<css::io::XOutputStream>& rOutputStream,
+    const ImageItemDescriptorList& rItems)
 {
-    Reference< XWriter > xWriter = Writer::create(rxContext);
-    xWriter->setOutputStream( rOutputStream );
+    Reference<XWriter> xWriter = Writer::create(rxContext);
+    xWriter->setOutputStream(rOutputStream);
 
     try
     {
-        OWriteImagesDocumentHandler aWriteImagesDocumentHandler( rItems, xWriter );
+        OWriteImagesDocumentHandler aWriteImagesDocumentHandler(rItems, xWriter);
         aWriteImagesDocumentHandler.WriteImagesDocument();
         return true;
     }
-    catch ( const RuntimeException& )
+    catch (const RuntimeException&)
     {
         return false;
     }
-    catch ( const SAXException& )
+    catch (const SAXException&)
     {
         return false;
     }
-    catch ( const css::io::IOException& )
+    catch (const css::io::IOException&)
     {
         return false;
     }
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,8 +24,8 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
 
-namespace framework{
-
+namespace framework
+{
 /**
     @short      special ctor
     @descr      It initialize this new instance with a pure job execution result
@@ -69,7 +69,7 @@ namespace framework{
     @param      aResult
                     the job result
 */
-JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
+JobResult::JobResult(/*IN*/ const css::uno::Any& aResult)
 {
     // reset the flag mask!
     // It will reset the accessible state of this object.
@@ -78,10 +78,11 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
 
     // analyze the result and update our other members
     ::comphelper::SequenceAsHashMap aProtocol(aResult);
-    if ( aProtocol.empty() )
+    if (aProtocol.empty())
         return;
 
-    ::comphelper::SequenceAsHashMap::const_iterator pIt = aProtocol.find(JobConst::ANSWER_DEACTIVATE_JOB);
+    ::comphelper::SequenceAsHashMap::const_iterator pIt
+        = aProtocol.find(JobConst::ANSWER_DEACTIVATE_JOB);
     if (pIt != aProtocol.end())
     {
         /**
@@ -116,10 +117,10 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
 /**
     @short      copy dtor
 */
-JobResult::JobResult( const JobResult& rCopy )
+JobResult::JobResult(const JobResult& rCopy)
 {
-    m_eParts          = rCopy.m_eParts;
-    m_lArguments      = rCopy.m_lArguments;
+    m_eParts = rCopy.m_eParts;
+    m_lArguments = rCopy.m_lArguments;
     m_aDispatchResult = rCopy.m_aDispatchResult;
 }
 
@@ -139,11 +140,11 @@ JobResult::~JobResult()
     @param      rCopy
                     reference to the other instance, which should be used for copying.
 */
-JobResult& JobResult::operator=( const JobResult& rCopy )
+JobResult& JobResult::operator=(const JobResult& rCopy)
 {
     SolarMutexGuard g;
-    m_eParts          = rCopy.m_eParts;
-    m_lArguments      = rCopy.m_lArguments;
+    m_eParts = rCopy.m_eParts;
+    m_lArguments = rCopy.m_lArguments;
     m_aDispatchResult = rCopy.m_aDispatchResult;
     return *this;
 }
@@ -160,7 +161,7 @@ JobResult& JobResult::operator=( const JobResult& rCopy )
 
     @return     We return true only, if any set flag of the given mask match.
 */
-bool JobResult::existPart( sal_uInt32 eParts ) const
+bool JobResult::existPart(sal_uInt32 eParts) const
 {
     SolarMutexGuard g;
     return ((m_eParts & eParts) == eParts);
@@ -174,7 +175,7 @@ bool JobResult::existPart( sal_uInt32 eParts ) const
     @return     It returns the state of the internal member
                 without any checks!
 */
-std::vector< css::beans::NamedValue > JobResult::getArguments() const
+std::vector<css::beans::NamedValue> JobResult::getArguments() const
 {
     SolarMutexGuard g;
     return m_lArguments;

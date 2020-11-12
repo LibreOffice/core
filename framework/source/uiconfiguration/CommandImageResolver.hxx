@@ -23,11 +23,10 @@
 
 namespace vcl
 {
-
 class CommandImageResolver final
 {
 private:
-    typedef std::unordered_map<OUString, OUString > CommandToImageNameMap;
+    typedef std::unordered_map<OUString, OUString> CommandToImageNameMap;
 
     CommandToImageNameMap m_aCommandToImageNameMap;
     std::vector<OUString> m_aImageCommandNameVector;
@@ -45,10 +44,7 @@ public:
     void registerCommands(css::uno::Sequence<OUString>& aCommandSequence);
     Image getImageFromCommandURL(ImageType nImageType, const OUString& rCommandURL);
 
-    std::vector<OUString>& getCommandNames()
-    {
-        return m_aImageCommandNameVector;
-    }
+    std::vector<OUString>& getCommandNames() { return m_aImageCommandNameVector; }
 
     bool hasImage(const OUString& rCommandURL);
 };
