@@ -224,4 +224,10 @@ void test20(sal_uInt32 p, sal_uInt16 q, XmlTokens e)
             break;
     }
 }
+void callInt32(sal_Int32);
+void test21()
+{
+    // expected-error@+1 {{passing XML_TOK enum to 'sal_Int32', wrong param or XML token type [loplugin:xmlimport]}}
+    callInt32(XML_TOK_1);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

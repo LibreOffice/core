@@ -73,10 +73,12 @@ public:
     bool VisitCXXMemberCallExpr(const CXXMemberCallExpr*);
     bool VisitBinaryOperator(const BinaryOperator*);
     bool VisitSwitchStmt(const SwitchStmt*);
+    bool VisitCallExpr(const CallExpr*);
 
 private:
     bool isXmlTokEnum(const Expr*);
     bool isUInt16(const Expr*);
+    bool isUInt16(QualType);
 
     std::unordered_map<const CXXRecordDecl*, const CXXMethodDecl*> startFastElementSet;
     std::unordered_map<const CXXRecordDecl*, const CXXMethodDecl*> StartElementSet;
@@ -316,6 +318,42 @@ bool XmlImport::VisitSwitchStmt(const SwitchStmt* switchStmt)
     return true;
 }
 
+bool XmlImport::VisitCallExpr(const CallExpr* callExpr)
+{
+    auto beginLoc = compat::getBeginLoc(callExpr);
+    if (!beginLoc.isValid() || ignoreLocation(callExpr))
+        return true;
+
+    const FunctionDecl* functionDecl;
+    if (isa<CXXMemberCallExpr>(callExpr))
+        functionDecl = dyn_cast<CXXMemberCallExpr>(callExpr)->getMethodDecl();
+    else
+        functionDecl = callExpr->getDirectCallee();
+    if (!functionDecl)
+        return true;
+    for (unsigned i = 0; i != callExpr->getNumArgs(); ++i)
+    {
+        auto argExpr = compat::IgnoreImplicit(callExpr->getArg(i));
+        if (!isXmlTokEnum(argExpr))
+            continue;
+        // if the condition is an enum type, ignore this switch
+        auto condEnumType = functionDecl->getParamDecl(i)
+                                ->getType()
+                                ->getUnqualifiedDesugaredType()
+                                ->getAs<EnumType>();
+        if (condEnumType)
+            continue;
+        if (isUInt16(functionDecl->getParamDecl(i)->getType()))
+            return true;
+        report(DiagnosticsEngine::Warning,
+               "passing XML_TOK enum to 'sal_Int32', wrong param or XML token type",
+               compat::getBeginLoc(callExpr))
+            << callExpr->getSourceRange();
+    }
+
+    return true;
+}
+
 bool XmlImport::isXmlTokEnum(const Expr* expr)
 {
     expr = compat::IgnoreImplicit(expr);
@@ -335,9 +373,14 @@ bool XmlImport::isXmlTokEnum(const Expr* expr)
 bool XmlImport::isUInt16(const Expr* expr)
 {
     expr = compat::IgnoreImplicit(expr);
-    if (expr->getType()->isSpecificBuiltinType(BuiltinType::UShort))
+    return isUInt16(expr->getType());
+}
+
+bool XmlImport::isUInt16(QualType qt)
+{
+    if (qt->isSpecificBuiltinType(BuiltinType::UShort))
         return true;
-    return bool(loplugin::TypeCheck(expr->getType()).Typedef("sal_uInt16"));
+    return bool(loplugin::TypeCheck(qt).Typedef("sal_uInt16"));
 }
 
 loplugin::Plugin::Registration<XmlImport> xmlimport("xmlimport");
