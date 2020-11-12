@@ -25,22 +25,23 @@
 #include "parametricpolypolygon.hxx"
 #include "transitiontools.hxx"
 
-
-namespace slideshow::internal {
-
+namespace slideshow::internal
+{
 /// Generate a barn door wipe or double barn door wipe:
 class BarnDoorWipe : public ParametricPolyPolygon
 {
 public:
-    explicit BarnDoorWipe( bool doubled = false )
-        : m_unitRect( createUnitRect() ), m_doubled(doubled) {}
-    virtual ::basegfx::B2DPolyPolygon operator()( double x ) override;
+    explicit BarnDoorWipe(bool doubled = false)
+        : m_unitRect(createUnitRect())
+        , m_doubled(doubled)
+    {
+    }
+    virtual ::basegfx::B2DPolyPolygon operator()(double x) override;
+
 private:
     const ::basegfx::B2DPolygon m_unitRect;
     const bool m_doubled;
 };
-
-
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_BARNDOORWIPE_HXX

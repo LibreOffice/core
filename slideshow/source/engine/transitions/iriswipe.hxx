@@ -24,20 +24,21 @@
 #include "parametricpolypolygon.hxx"
 #include "transitiontools.hxx"
 
-
-namespace slideshow::internal {
-
+namespace slideshow::internal
+{
 /// Generate an iris wipe
 class IrisWipe : public ParametricPolyPolygon
 {
 public:
-    IrisWipe() : m_unitRect( createUnitRect() ) {}
-    virtual ::basegfx::B2DPolyPolygon operator()( double x ) override;
+    IrisWipe()
+        : m_unitRect(createUnitRect())
+    {
+    }
+    virtual ::basegfx::B2DPolyPolygon operator()(double x) override;
+
 private:
     const ::basegfx::B2DPolyPolygon m_unitRect;
 };
-
-
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_IRISWIPE_HXX

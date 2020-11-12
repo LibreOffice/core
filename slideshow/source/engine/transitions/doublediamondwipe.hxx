@@ -24,18 +24,15 @@
 
 #include "parametricpolypolygon.hxx"
 
-
-namespace slideshow::internal {
-
+namespace slideshow::internal
+{
 /// Generates a double diamond wipe:
 class DoubleDiamondWipe : public ParametricPolyPolygon
 {
 public:
     DoubleDiamondWipe() {}
-    virtual ::basegfx::B2DPolyPolygon operator()( double x ) override;
+    virtual ::basegfx::B2DPolyPolygon operator()(double x) override;
 };
-
-
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_DOUBLEDIAMONDWIPE_HXX

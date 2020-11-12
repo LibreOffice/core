@@ -23,20 +23,16 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-
-namespace slideshow::internal {
-
+namespace slideshow::internal
+{
 /// Create a unit rect.
 ::basegfx::B2DPolygon createUnitRect();
 
 /// Flips on X-axis:
-::basegfx::B2DPolyPolygon flipOnXAxis(
-    ::basegfx::B2DPolyPolygon const & polypoly );
+::basegfx::B2DPolyPolygon flipOnXAxis(::basegfx::B2DPolyPolygon const& polypoly);
 
 /// Flips on Y-axis:
-::basegfx::B2DPolyPolygon flipOnYAxis(
-    ::basegfx::B2DPolyPolygon const & polypoly );
-
+::basegfx::B2DPolyPolygon flipOnYAxis(::basegfx::B2DPolyPolygon const& polypoly);
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_TRANSITIONTOOLS_HXX
