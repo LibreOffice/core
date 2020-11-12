@@ -926,12 +926,12 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
 
     if (pAcc)
     {
-        std::unique_ptr<tools::Long[]> pMinR(new tools::Long[nColorCount]);
-        std::unique_ptr<tools::Long[]> pMaxR(new tools::Long[nColorCount]);
-        std::unique_ptr<tools::Long[]> pMinG(new tools::Long[nColorCount]);
-        std::unique_ptr<tools::Long[]> pMaxG(new tools::Long[nColorCount]);
-        std::unique_ptr<tools::Long[]> pMinB(new tools::Long[nColorCount]);
-        std::unique_ptr<tools::Long[]> pMaxB(new tools::Long[nColorCount]);
+        std::unique_ptr<sal_Int8[]> pMinR(new sal_Int8[nColorCount]);
+        std::unique_ptr<sal_Int8[]> pMaxR(new sal_Int8[nColorCount]);
+        std::unique_ptr<sal_Int8[]> pMinG(new sal_Int8[nColorCount]);
+        std::unique_ptr<sal_Int8[]> pMaxG(new sal_Int8[nColorCount]);
+        std::unique_ptr<sal_Int8[]> pMinB(new sal_Int8[nColorCount]);
+        std::unique_ptr<sal_Int8[]> pMaxB(new sal_Int8[nColorCount]);
 
         if (pTols)
         {
@@ -940,12 +940,12 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
                 const Color& rCol = pSearchColors[i];
                 const sal_uInt8 nTol = pTols[i];
 
-                pMinR[i] = MinMax<tools::Long>(rCol.GetRed() - nTol, 0, 255);
-                pMaxR[i] = MinMax<tools::Long>(rCol.GetRed() + nTol, 0, 255);
-                pMinG[i] = MinMax<tools::Long>(rCol.GetGreen() - nTol, 0, 255);
-                pMaxG[i] = MinMax<tools::Long>(rCol.GetGreen() + nTol, 0, 255);
-                pMinB[i] = MinMax<tools::Long>(rCol.GetBlue() - nTol, 0, 255);
-                pMaxB[i] = MinMax<tools::Long>(rCol.GetBlue() + nTol, 0, 255);
+                pMinR[i] = std::clamp(rCol.GetRed() - nTol, 0, 255);
+                pMaxR[i] = std::clamp(rCol.GetRed() + nTol, 0, 255);
+                pMinG[i] = std::clamp(rCol.GetGreen() - nTol, 0, 255);
+                pMaxG[i] = std::clamp(rCol.GetGreen() + nTol, 0, 255);
+                pMinB[i] = std::clamp(rCol.GetBlue() - nTol, 0, 255);
+                pMaxB[i] = std::clamp(rCol.GetBlue() + nTol, 0, 255);
             }
         }
         else

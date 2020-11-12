@@ -45,8 +45,8 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
             BitmapColor* pRowTmp3 = pColRow3.get();
             BitmapColor* pColor;
             tools::Long nY, nX, i, nSumR, nSumG, nSumB, nMatrixVal, nTmp;
-            std::array<std::array<tools::Long, 256>, 9> aKoeff;
-            tools::Long* pTmp;
+            std::array<std::array<sal_Int32, 256>, 9> aKoeff;
+            sal_Int32* pTmp;
 
             // create LUT of products of matrix value and possible color component values
             for (nY = 0; nY < 9; nY++)
@@ -199,7 +199,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
     return BitmapEx();
 }
 
-const tools::Long g_SharpenMatrix[] = { -1, -1, -1, -1, 16, -1, -1, -1, -1 };
+const sal_Int32 g_SharpenMatrix[] = { -1, -1, -1, -1, 16, -1, -1, -1, -1 };
 
 BitmapSharpenFilter::BitmapSharpenFilter()
     : BitmapConvolutionMatrixFilter(g_SharpenMatrix)
