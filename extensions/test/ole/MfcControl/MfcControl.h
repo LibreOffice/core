@@ -25,12 +25,11 @@
 
 // MfcControl.h : main header file for MFCCONTROL.DLL
 
-#if !defined( __AFXCTL_H__ )
-    #error include 'afxctl.h' before including this file
+#if !defined(__AFXCTL_H__)
+#error include 'afxctl.h' before including this file
 #endif
 
 #include "resource.h"
-
 
 // CMfcControlApp : See MfcControl.cpp for implementation.
 

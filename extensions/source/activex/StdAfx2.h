@@ -28,9 +28,9 @@
 #define _ATL_APARTMENT_THREADED
 #define _ATL_STATIC_REGISTRY
 
-#pragma warning (push)
-#pragma warning (disable:4189)
-    //  local variable is initialized but not referenced - in atlctl.h
+#pragma warning(push)
+// local variable is initialized but not referenced - in atlctl.h
+#pragma warning(disable : 4189)
 #if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wall"
@@ -49,7 +49,7 @@
 #pragma clang diagnostic ignored "-Wtypename-missing"
 #endif
 
-#define min(a, b)  (((a) < (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
 #include <atlbase.h>
 
 //You may derive a class from CComModule and use it if you want to override
@@ -61,7 +61,7 @@ extern CComModule _Module;
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
-#pragma warning (pop)
+#pragma warning(pop)
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

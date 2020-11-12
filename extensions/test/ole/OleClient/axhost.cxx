@@ -21,24 +21,19 @@
 
 HostWin::HostWin(LPWSTR progid)
 {
-    controlName= progid;
-    RECT rcPos={0,0,200,200};
+    controlName = progid;
+    RECT rcPos = { 0, 0, 200, 200 };
     Create(0, rcPos, _T("HostWin"));
 }
-HostWin::~HostWin()
-{
-    DestroyWindow();
-}
-
+HostWin::~HostWin() { DestroyWindow(); }
 
 LRESULT HostWin::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
     CAxWindow wnd(m_hWnd);
 
-    HRESULT hr= wnd.CreateControlEx( controlName, NULL, NULL,&spControl.p);
+    HRESULT hr = wnd.CreateControlEx(controlName, NULL, NULL, &spControl.p);
 
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
