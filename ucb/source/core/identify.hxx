@@ -23,12 +23,10 @@
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <cppuhelper/implbase.hxx>
 
-
-class ContentIdentifier : public cppu::WeakImplHelper <
-    css::ucb::XContentIdentifier >
+class ContentIdentifier : public cppu::WeakImplHelper<css::ucb::XContentIdentifier>
 {
 public:
-    explicit ContentIdentifier( const OUString& ContentId );
+    explicit ContentIdentifier(const OUString& ContentId);
     virtual ~ContentIdentifier() override;
 
     // XContentIdentifier

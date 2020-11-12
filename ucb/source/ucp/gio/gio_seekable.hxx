@@ -31,24 +31,22 @@
 
 namespace gio
 {
-
-class Seekable : public css::io::XTruncate,
-    public css::io::XSeekable,
-    public ::cppu::OWeakObject
+class Seekable : public css::io::XTruncate, public css::io::XSeekable, public ::cppu::OWeakObject
 {
 private:
-    GSeekable *mpStream;
+    GSeekable* mpStream;
+
 public:
-    explicit Seekable( GSeekable *pStream );
+    explicit Seekable(GSeekable* pStream);
     virtual ~Seekable() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type & type ) override;
-    virtual void SAL_CALL acquire() throw () override { OWeakObject::acquire(); }
+    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& type) override;
+    virtual void SAL_CALL acquire() throw() override { OWeakObject::acquire(); }
     virtual void SAL_CALL release() throw() override { OWeakObject::release(); }
 
     // XSeekable
-    virtual void SAL_CALL seek( sal_Int64 location ) override;
+    virtual void SAL_CALL seek(sal_Int64 location) override;
 
     virtual sal_Int64 SAL_CALL getPosition() override;
 

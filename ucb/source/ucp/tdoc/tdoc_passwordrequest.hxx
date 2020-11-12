@@ -24,9 +24,9 @@
 
 #include <ucbhelper/interactionrequest.hxx>
 
-namespace tdoc_ucp {
-
-    /*
+namespace tdoc_ucp
+{
+/*
         @usage:
 
         uno::Reference< ucb::XCommandEnvironment > Environment = ...;
@@ -77,13 +77,11 @@ namespace tdoc_ucp {
 
     */
 
-    class DocumentPasswordRequest : public ucbhelper::InteractionRequest
-    {
-    public:
-        DocumentPasswordRequest(
-            css::task::PasswordRequestMode eMode,
-            const OUString & rDocumentName );
-    };
+class DocumentPasswordRequest : public ucbhelper::InteractionRequest
+{
+public:
+    DocumentPasswordRequest(css::task::PasswordRequestMode eMode, const OUString& rDocumentName);
+};
 
 } // namespace tdoc_ucp
 

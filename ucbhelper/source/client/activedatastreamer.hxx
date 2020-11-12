@@ -25,23 +25,20 @@
 
 namespace ucbhelper
 {
-
-
 /**
   * This class implements the interface css::io::XActiveDataStreamer.
   * Instances of this class can be passed with the parameters of an
   * "open" command.
   */
 
-class ActiveDataStreamer final :
-        public cppu::WeakImplHelper< css::io::XActiveDataStreamer >
+class ActiveDataStreamer final : public cppu::WeakImplHelper<css::io::XActiveDataStreamer>
 {
-    css::uno::Reference< css::io::XStream > m_xStream;
+    css::uno::Reference<css::io::XStream> m_xStream;
 
 public:
     // XActiveDataStreamer methods.
-    virtual void SAL_CALL setStream( const css::uno::Reference< css::io::XStream >& xStream ) override;
-    virtual css::uno::Reference< css::io::XStream > SAL_CALL getStream() override;
+    virtual void SAL_CALL setStream(const css::uno::Reference<css::io::XStream>& xStream) override;
+    virtual css::uno::Reference<css::io::XStream> SAL_CALL getStream() override;
 };
 
 } /* namespace ucbhelper */
