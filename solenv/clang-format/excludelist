@@ -440,7 +440,6 @@ binaryurp/source/bridgefactory.cxx
 binaryurp/source/bridgefactory.hxx
 binaryurp/source/cache.hxx
 binaryurp/source/currentcontext.cxx
-binaryurp/source/currentcontext.hxx
 binaryurp/source/incomingreply.hxx
 binaryurp/source/incomingrequest.cxx
 binaryurp/source/incomingrequest.hxx
@@ -450,13 +449,9 @@ binaryurp/source/marshal.cxx
 binaryurp/source/marshal.hxx
 binaryurp/source/outgoingrequest.hxx
 binaryurp/source/outgoingrequests.cxx
-binaryurp/source/outgoingrequests.hxx
 binaryurp/source/proxy.cxx
 binaryurp/source/proxy.hxx
 binaryurp/source/reader.cxx
-binaryurp/source/reader.hxx
-binaryurp/source/readerstate.hxx
-binaryurp/source/specialfunctionids.hxx
 binaryurp/source/unmarshal.cxx
 binaryurp/source/unmarshal.hxx
 binaryurp/source/writer.cxx

@@ -27,12 +27,14 @@
 
 #include "cache.hxx"
 
-namespace binaryurp {
-
-struct ReaderState {
+namespace binaryurp
+{
+struct ReaderState
+{
 private:
     ReaderState(const ReaderState&) = delete;
     ReaderState& operator=(const ReaderState&) = delete;
+
 public:
     ReaderState() {}
 
@@ -40,7 +42,6 @@ public:
     OUString oidCache[cache::size];
     rtl::ByteSequence tidCache[cache::size];
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

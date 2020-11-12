@@ -26,33 +26,39 @@
 
 #include <osl/mutex.hxx>
 
-namespace binaryurp { struct OutgoingRequest; }
-namespace rtl { class ByteSequence; }
+namespace binaryurp
+{
+struct OutgoingRequest;
+}
+namespace rtl
+{
+class ByteSequence;
+}
 
-namespace binaryurp {
-
-class OutgoingRequests {
+namespace binaryurp
+{
+class OutgoingRequests
+{
 public:
     OutgoingRequests();
 
     ~OutgoingRequests();
 
-    void push(rtl::ByteSequence const & tid, OutgoingRequest const & request);
+    void push(rtl::ByteSequence const& tid, OutgoingRequest const& request);
 
-    OutgoingRequest top(rtl::ByteSequence const & tid);
+    OutgoingRequest top(rtl::ByteSequence const& tid);
 
-    void pop(rtl::ByteSequence const & tid) throw ();
+    void pop(rtl::ByteSequence const& tid) throw();
 
 private:
     OutgoingRequests(const OutgoingRequests&) = delete;
     OutgoingRequests& operator=(const OutgoingRequests&) = delete;
 
-    typedef std::map< rtl::ByteSequence, std::vector< OutgoingRequest > > Map;
+    typedef std::map<rtl::ByteSequence, std::vector<OutgoingRequest>> Map;
 
     osl::Mutex mutex_;
     Map map_;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

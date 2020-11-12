@@ -30,35 +30,36 @@
 
 #include "readerstate.hxx"
 
-namespace binaryurp {
-    class Bridge;
-    class Unmarshal;
+namespace binaryurp
+{
+class Bridge;
+class Unmarshal;
 }
 
-namespace binaryurp {
-
-class Reader: public salhelper::Thread {
+namespace binaryurp
+{
+class Reader : public salhelper::Thread
+{
 public:
-    explicit Reader(rtl::Reference< Bridge > const & bridge);
+    explicit Reader(rtl::Reference<Bridge> const& bridge);
 
 private:
     virtual ~Reader() override;
 
     virtual void execute() override;
 
-    void readMessage(Unmarshal & unmarshal);
+    void readMessage(Unmarshal& unmarshal);
 
-    void readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1);
+    void readReplyMessage(Unmarshal& unmarshal, sal_uInt8 flags1);
 
-    rtl::ByteSequence getTid(Unmarshal & unmarshal, bool newTid) const;
+    rtl::ByteSequence getTid(Unmarshal& unmarshal, bool newTid) const;
 
-    rtl::Reference< Bridge > bridge_;
+    rtl::Reference<Bridge> bridge_;
     com::sun::star::uno::TypeDescription lastType_;
     OUString lastOid_;
     rtl::ByteSequence lastTid_;
     ReaderState state_;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
