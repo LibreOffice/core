@@ -24,13 +24,12 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
-#include  <UAccCOM.h>
+#include <UAccCOM.h>
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
 
 using namespace ::com::sun::star;
-
 
 // CUNOXWrapper
 
@@ -40,9 +39,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CUNOXWrapper::put_XInterface(hyper nXInterface
     return S_OK;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CUNOXWrapper::put_XSubInterface(hyper)
-{
-    return S_OK;
-}
+COM_DECLSPEC_NOTHROW STDMETHODIMP CUNOXWrapper::put_XSubInterface(hyper) { return S_OK; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

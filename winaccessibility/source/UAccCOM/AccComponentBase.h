@@ -37,32 +37,28 @@ public:
 
     // Returns the location of the upper left corner of the object's bounding
     // box relative to the parent.
-    STDMETHOD(get_locationInParent)(long *x, long *y);
+    STDMETHOD(get_locationInParent)(long* x, long* y);
 
     // Returns the location of the upper left corner of the object's bounding
     // box in screen.
-    STDMETHOD(get_locationOnScreen)(long *x, long *y);
+    STDMETHOD(get_locationOnScreen)(long* x, long* y);
 
     // Grabs the focus to this object.
-    STDMETHOD(grabFocus)(boolean * success);
+    STDMETHOD(grabFocus)(boolean* success);
 
     // Returns the foreground color of this object.
-    STDMETHOD(get_foreground)(IA2Color * foreground);
+    STDMETHOD(get_foreground)(IA2Color* foreground);
 
     // Returns the background color of this object.
-    STDMETHOD(get_background)(IA2Color * background);
+    STDMETHOD(get_background)(IA2Color* background);
 
     // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface) override;
 
 protected:
-
     css::uno::Reference<css::accessibility::XAccessibleComponent> pRXComp;
 
-    css::accessibility::XAccessibleComponent* GetXInterface()
-    {
-        return pRXComp.get();
-    }
+    css::accessibility::XAccessibleComponent* GetXInterface() { return pRXComp.get(); }
 };
 
 #endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMPONENTBASE_H

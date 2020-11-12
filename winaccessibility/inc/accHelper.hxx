@@ -24,16 +24,16 @@
 
 enum DIRECTION
 {
-    FIRST_CHILD=0,
-    LAST_CHILD=-1,
-    BEFORE_CHILD=1 ,
-    AFTER_CHILD=2
+    FIRST_CHILD = 0,
+    LAST_CHILD = -1,
+    BEFORE_CHILD = 1,
+    AFTER_CHILD = 2
 };
 
-#define UNO_MSAA_UNMAPPING       0x00000000
+#define UNO_MSAA_UNMAPPING 0x00000000
 
 struct IMAccessible;
-UACCCOM_DLLPUBLIC IMAccessible * UAccCOMCreateInstance();
+UACCCOM_DLLPUBLIC IMAccessible* UAccCOMCreateInstance();
 
 #endif // INCLUDED_WINACCESSIBILITY_INC_ACCHELPER_HXX
 

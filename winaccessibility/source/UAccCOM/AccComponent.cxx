@@ -27,7 +27,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
-#include  <UAccCOM.h>
+#include <UAccCOM.h>
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
@@ -38,10 +38,9 @@
  *
  * @param    Location    the upper left corner of the object's bounding box.
  */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_locationInParent(long *x, long *y)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_locationInParent(long* x, long* y)
 {
-
-    return CAccComponentBase::get_locationInParent(x,y);
+    return CAccComponentBase::get_locationInParent(x, y);
 }
 
 /**
@@ -49,9 +48,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_locationInParent(long *x, l
  *
  * @param    Color    the color of foreground.
  */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_foreground(IA2Color * foreground)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_foreground(IA2Color* foreground)
 {
-
     return CAccComponentBase::get_foreground(foreground);
 }
 
@@ -60,9 +58,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_foreground(IA2Color * foreg
  *
  * @param    Color    the color of background.
  */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_background(IA2Color * background)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponent::get_background(IA2Color* background)
 {
-
     return CAccComponentBase::get_background(background);
 }
 

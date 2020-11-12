@@ -26,7 +26,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include  "AccObjectManagerAgent.hxx"
+#include "AccObjectManagerAgent.hxx"
 
 /**
  * AccEventListener is the general event listener for all top windows. The top windows defined
@@ -35,30 +35,31 @@
  * In this method, all the accessible objects (including COM object and Uno objects) are created and
  * cached into bridge managers, and they are monitored by listeners for later accessible event handling.
  */
-class AccTopWindowListener
-    : public ::cppu::WeakImplHelper<css::awt::XTopWindowListener>
+class AccTopWindowListener : public ::cppu::WeakImplHelper<css::awt::XTopWindowListener>
 {
 private:
     AccObjectManagerAgent accManagerAgent;
+
 public:
     AccTopWindowListener();
     virtual ~AccTopWindowListener() override;
 
     // XTopWindowListener
-    virtual void SAL_CALL windowOpened( const css::lang::EventObject& e ) override;
-    virtual void SAL_CALL windowClosing( const css::lang::EventObject& e ) override;
-    virtual void SAL_CALL windowClosed( const css::lang::EventObject& e ) override;
-    virtual void SAL_CALL windowMinimized( const css::lang::EventObject& e ) override;
-    virtual void SAL_CALL windowNormalized( const css::lang::EventObject& e ) override;
-    virtual void SAL_CALL windowActivated( const css::lang::EventObject& e ) override;
-    virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& e ) override;
+    virtual void SAL_CALL windowOpened(const css::lang::EventObject& e) override;
+    virtual void SAL_CALL windowClosing(const css::lang::EventObject& e) override;
+    virtual void SAL_CALL windowClosed(const css::lang::EventObject& e) override;
+    virtual void SAL_CALL windowMinimized(const css::lang::EventObject& e) override;
+    virtual void SAL_CALL windowNormalized(const css::lang::EventObject& e) override;
+    virtual void SAL_CALL windowActivated(const css::lang::EventObject& e) override;
+    virtual void SAL_CALL windowDeactivated(const css::lang::EventObject& e) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
-    virtual void AddAllListeners(css::accessibility::XAccessible* pAccessible,css::accessibility::XAccessible* pParentXAcc,HWND pWND );
+    virtual void AddAllListeners(css::accessibility::XAccessible* pAccessible,
+                                 css::accessibility::XAccessible* pParentXAcc, HWND pWND);
     //for On-Demand load.
-    virtual void HandleWindowOpened( css::accessibility::XAccessible* pAccessible );
+    virtual void HandleWindowOpened(css::accessibility::XAccessible* pAccessible);
 
     sal_Int64 GetMSComPtr(sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam);
 };

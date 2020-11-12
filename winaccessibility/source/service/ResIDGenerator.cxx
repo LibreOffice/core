@@ -21,9 +21,7 @@
 
 #include <cassert>
 
-ResIDGenerator::~ResIDGenerator()
-{
-}
+ResIDGenerator::~ResIDGenerator() {}
 
 /**
    * SubList stores those IDs that were ever generated and deleted, the method
