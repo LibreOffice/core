@@ -114,7 +114,7 @@ public:
     TOOLS_DLLPUBLIC friend          bool operator==( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   bool operator!=( const BigInt& rVal1, const BigInt& rVal2 );
     TOOLS_DLLPUBLIC friend          bool operator< ( const BigInt& rVal1, const BigInt& rVal2 );
-    TOOLS_DLLPUBLIC friend          bool operator> ( const BigInt& rVal1, const BigInt& rVal2 );
+    friend inline   bool operator> ( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   bool operator<=( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   bool operator>=( const BigInt& rVal1, const BigInt& rVal2 );
 
@@ -225,6 +225,8 @@ inline bool operator!=( const BigInt& rVal1, const BigInt& rVal2 )
 {
     return !(rVal1 == rVal2);
 }
+
+inline bool operator>(const BigInt& rVal1, const BigInt& rVal2) { return rVal2 < rVal1; }
 
 inline bool operator<=( const BigInt& rVal1, const BigInt& rVal2 )
 {

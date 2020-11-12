@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include <tools/bigint.hxx>
 
-
+#include <algorithm>
 #include <string.h>
 
 /**
@@ -822,90 +822,32 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
 
 bool operator==( const BigInt& rVal1, const BigInt& rVal2 )
 {
-    if ( rVal1.bIsBig || rVal2.bIsBig )
-    {
-        BigInt nA, nB;
-        nA.MakeBigInt( rVal1 );
-        nB.MakeBigInt( rVal2 );
-        if ( nA.bIsNeg == nB.bIsNeg )
-        {
-            if ( nA.nLen == nB.nLen )
-            {
-                int i;
-                for ( i = nA.nLen - 1; i > 0 && nA.nNum[i] == nB.nNum[i]; i-- )
-                {
-                }
+    if (!rVal1.bIsBig && !rVal2.bIsBig)
+        return rVal1.nVal == rVal2.nVal;
 
-                return nA.nNum[i] == nB.nNum[i];
-            }
-            return false;
-        }
-        return false;
-    }
-    return rVal1.nVal == rVal2.nVal;
+    BigInt nA, nB;
+    nA.MakeBigInt(rVal1);
+    nB.MakeBigInt(rVal2);
+    return nA.bIsNeg == nB.bIsNeg && nA.nLen == nB.nLen
+           && std::equal(nA.nNum, nA.nNum + nA.nLen, nB.nNum);
 }
 
 bool operator<( const BigInt& rVal1, const BigInt& rVal2 )
 {
-    if ( rVal1.bIsBig || rVal2.bIsBig )
-    {
-        BigInt nA, nB;
-        nA.MakeBigInt( rVal1 );
-        nB.MakeBigInt( rVal2 );
-        if ( nA.bIsNeg == nB.bIsNeg )
-        {
-            if ( nA.nLen == nB.nLen )
-            {
-                int i;
-                for ( i = nA.nLen - 1; i > 0 && nA.nNum[i] == nB.nNum[i]; i-- )
-                {
-                }
+    if (!rVal1.bIsBig && !rVal2.bIsBig)
+        return rVal1.nVal < rVal2.nVal;
 
-                if ( nA.bIsNeg )
-                    return nA.nNum[i] > nB.nNum[i];
-                else
-                    return nA.nNum[i] < nB.nNum[i];
-            }
-            if ( nA.bIsNeg )
-                return nA.nLen > nB.nLen;
-            else
-                return nA.nLen < nB.nLen;
-        }
+    BigInt nA, nB;
+    nA.MakeBigInt(rVal1);
+    nB.MakeBigInt(rVal2);
+    if (nA.bIsNeg != nB.bIsNeg)
         return !nB.bIsNeg;
-    }
-    return rVal1.nVal < rVal2.nVal;
-}
-
-bool operator >(const BigInt& rVal1, const BigInt& rVal2 )
-{
-    if ( rVal1.bIsBig || rVal2.bIsBig )
-    {
-        BigInt nA, nB;
-        nA.MakeBigInt( rVal1 );
-        nB.MakeBigInt( rVal2 );
-        if ( nA.bIsNeg == nB.bIsNeg )
-        {
-            if ( nA.nLen == nB.nLen )
-            {
-                int i;
-                for ( i = nA.nLen - 1; i > 0 && nA.nNum[i] == nB.nNum[i]; i-- )
-                {
-                }
-
-                if ( nA.bIsNeg )
-                    return nA.nNum[i] < nB.nNum[i];
-                else
-                    return nA.nNum[i] > nB.nNum[i];
-            }
-            if ( nA.bIsNeg )
-                return nA.nLen < nB.nLen;
-            else
-                return nA.nLen > nB.nLen;
-        }
-        return !nA.bIsNeg;
-    }
-
-    return rVal1.nVal > rVal2.nVal;
+    if (nA.nLen != nB.nLen)
+        return nA.bIsNeg ? (nA.nLen > nB.nLen) : (nA.nLen < nB.nLen);
+    int i = nA.nLen - 1;
+    while (i > 0 && nA.nNum[i] == nB.nNum[i])
+        --i;
+    return nA.bIsNeg ? (nA.nNum[i] > nB.nNum[i]) : (nA.nNum[i] < nB.nNum[i]);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
