@@ -393,27 +393,67 @@ bool performTest(XBridgeTest xLBT)
     aSetData.Sequence[1] = new TestElement(); // empty struct
 
     xLBT.setValues(
-        aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short, aSetData.UShort,
-        aSetData.Long, aSetData.ULong, aSetData.Hyper, aSetData.UHyper, aSetData.Float, aSetData.Double,
-        aSetData.Enum, aSetData.String, aSetData.Interface, aSetData.Any, aSetData.Sequence, aSetData );
+        aSetData.Bool,
+	aSetData.Char,
+	aSetData.Byte,
+	aSetData.Short,
+	aSetData.UShort,
+        aSetData.Long,
+	aSetData.ULong,
+	aSetData.Hyper,
+	aSetData.UHyper,
+	aSetData.Float,
+	aSetData.Double,
+        aSetData.Enum,
+	aSetData.String,
+	aSetData.Interface,
+	aSetData.Any,
+	aSetData.Sequence,
+	aSetData );
 
     {
 		TestDataElements aRet = new TestDataElements();
         TestDataElements aRet2 = new TestDataElements();
 		xLBT.getValues(
-			out aRet.Bool, out aRet.Char, out aRet.Byte, out aRet.Short, out aRet.UShort,
-			out aRet.Long, out aRet.ULong, out aRet.Hyper, out aRet.UHyper,
-            out aRet.Float, out aRet.Double, out aRet.Enum, out aRet.String,
-            out aRet.Interface, out aRet.Any, out aRet.Sequence, out aRet2 );
+			out aRet.Bool,
+			out aRet.Char,
+			out aRet.Byte,
+			out aRet.Short,
+			out aRet.UShort,
+			out aRet.Long,
+			out aRet.ULong,
+			out aRet.Hyper,
+			out aRet.UHyper,
+			out aRet.Float,
+			out aRet.Double,
+			out aRet.Enum,
+			out aRet.String,
+			out aRet.Interface,
+			out aRet.Any,
+			out aRet.Sequence,
+			out aRet2 );
 
 		bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) , "getValues test") && bRet;
 
 		// set last retrieved values
 		TestDataElements aSV2ret = xLBT.setValues2(
-			ref aRet.Bool, ref aRet.Char, ref aRet.Byte, ref aRet.Short, ref aRet.UShort,
-			ref aRet.Long, ref aRet.ULong, ref aRet.Hyper, ref aRet.UHyper, ref aRet.Float,
-            ref aRet.Double, ref aRet.Enum, ref aRet.String, ref aRet.Interface, ref aRet.Any,
-            ref aRet.Sequence, ref aRet2 );
+			ref aRet.Bool,
+			ref aRet.Char,
+			ref aRet.Byte,
+			ref aRet.Short,
+			ref aRet.UShort,
+			ref aRet.Long,
+			ref aRet.ULong,
+			ref aRet.Hyper,
+			ref aRet.UHyper,
+			ref aRet.Float,
+			ref aRet.Double,
+			ref aRet.Enum,
+			ref aRet.String,
+			ref aRet.Interface,
+			ref aRet.Any,
+			ref aRet.Sequence,
+			ref aRet2 );
 
         // check inout sequence order
         // => inout sequence parameter was switched by test objects
@@ -429,11 +469,23 @@ bool performTest(XBridgeTest xLBT)
 		TestDataElements aRet = new TestDataElements();
         TestDataElements aRet2 = new TestDataElements();
 		TestDataElements aGVret = xLBT.getValues(
-			out aRet.Bool, out aRet.Char, out aRet.Byte, out aRet.Short,
-            out aRet.UShort, out aRet.Long, out aRet.ULong, out aRet.Hyper,
-            out aRet.UHyper, out aRet.Float, out aRet.Double, out aRet.Enum,
-            out aRet.String, out aRet.Interface, out aRet.Any, out aRet.Sequence,
-            out aRet2 );
+			out aRet.Bool,
+			out aRet.Char,
+			out aRet.Byte,
+			out aRet.Short,
+			out aRet.UShort,
+			out aRet.Long,
+			out aRet.ULong,
+			out aRet.Hyper,
+			out aRet.UHyper,
+			out aRet.Float,
+			out aRet.Double,
+			out aRet.Enum,
+			out aRet.String,
+			out aRet.Interface,
+			out aRet.Any,
+			out aRet.Sequence,
+			out aRet2 );
 
 		bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) && compareData( aData, aGVret ), "getValues test" ) && bRet;
 
