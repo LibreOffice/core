@@ -23,29 +23,26 @@
 
 namespace chart
 {
-
 using namespace ::com::sun::star;
 
-TimerTriggeredControllerLock::TimerTriggeredControllerLock( const uno::Reference< frame::XModel >& xModel )
-    : m_xModel( xModel )
+TimerTriggeredControllerLock::TimerTriggeredControllerLock(
+    const uno::Reference<frame::XModel>& xModel)
+    : m_xModel(xModel)
     , m_apControllerLockGuard()
     , m_aTimer()
 {
-    m_aTimer.SetTimeout( 4*EDIT_UPDATEDATA_TIMEOUT );
-    m_aTimer.SetInvokeHandler( LINK( this, TimerTriggeredControllerLock, TimerTimeout ) );
+    m_aTimer.SetTimeout(4 * EDIT_UPDATEDATA_TIMEOUT);
+    m_aTimer.SetInvokeHandler(LINK(this, TimerTriggeredControllerLock, TimerTimeout));
 }
-TimerTriggeredControllerLock::~TimerTriggeredControllerLock()
-{
-    m_aTimer.Stop();
-}
+TimerTriggeredControllerLock::~TimerTriggeredControllerLock() { m_aTimer.Stop(); }
 
 void TimerTriggeredControllerLock::startTimer()
 {
     if (!m_apControllerLockGuard)
-        m_apControllerLockGuard.reset( new  ControllerLockGuardUNO(m_xModel) );
+        m_apControllerLockGuard.reset(new ControllerLockGuardUNO(m_xModel));
     m_aTimer.Start();
 }
-IMPL_LINK_NOARG(TimerTriggeredControllerLock, TimerTimeout, Timer *, void)
+IMPL_LINK_NOARG(TimerTriggeredControllerLock, TimerTimeout, Timer*, void)
 {
     m_apControllerLockGuard.reset();
 }

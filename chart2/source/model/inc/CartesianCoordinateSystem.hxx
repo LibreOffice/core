@@ -22,12 +22,11 @@
 
 namespace chart
 {
-
 class CartesianCoordinateSystem : public BaseCoordinateSystem
 {
 public:
-    explicit CartesianCoordinateSystem( sal_Int32 nDimensionCount );
-    explicit CartesianCoordinateSystem( const CartesianCoordinateSystem & rSource );
+    explicit CartesianCoordinateSystem(sal_Int32 nDimensionCount);
+    explicit CartesianCoordinateSystem(const CartesianCoordinateSystem& rSource);
     virtual ~CartesianCoordinateSystem() override;
 
     // ____ XCoordinateSystem ____
@@ -35,12 +34,12 @@ public:
     virtual OUString SAL_CALL getViewServiceName() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 class CartesianCoordinateSystem2d : public CartesianCoordinateSystem
@@ -51,8 +50,8 @@ public:
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 class CartesianCoordinateSystem3d : public CartesianCoordinateSystem
@@ -63,10 +62,10 @@ public:
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
-}  // namespace chart
+} // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,18 +22,18 @@
 
 namespace chart
 {
-
 class WrappedTextRotationProperty final : public WrappedProperty
 {
 public:
-    explicit WrappedTextRotationProperty( bool bDirectState=false );
+    explicit WrappedTextRotationProperty(bool bDirectState = false);
     virtual ~WrappedTextRotationProperty() override;
 
-    virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual css::beans::PropertyState getPropertyState(
+        const css::uno::Reference<css::beans::XPropertyState>& xInnerPropertyState) const override;
 
 private:
-    virtual css::uno::Any convertInnerToOuterValue( const css::uno::Any& rInnerValue ) const override;
-    virtual css::uno::Any convertOuterToInnerValue( const css::uno::Any& rOuterValue ) const override;
+    virtual css::uno::Any convertInnerToOuterValue(const css::uno::Any& rInnerValue) const override;
+    virtual css::uno::Any convertOuterToInnerValue(const css::uno::Any& rOuterValue) const override;
 
     bool m_bDirectState;
 };

@@ -19,9 +19,10 @@
 
 #pragma once
 
-namespace chart {
-
-enum LabelAlignment {
+namespace chart
+{
+enum LabelAlignment
+{
     LABEL_ALIGN_CENTER,
     LABEL_ALIGN_LEFT,
     LABEL_ALIGN_TOP,
@@ -32,7 +33,6 @@ enum LabelAlignment {
     LABEL_ALIGN_RIGHT_TOP,
     LABEL_ALIGN_RIGHT_BOTTOM
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

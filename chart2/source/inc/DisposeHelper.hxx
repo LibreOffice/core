@@ -23,26 +23,22 @@
 
 namespace chart::DisposeHelper
 {
-
-template<class T>
-void Dispose(const T & xInterface)
+template <class T> void Dispose(const T& xInterface)
 {
     css::uno::Reference<css::lang::XComponent> xComponent(xInterface, css::uno::UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
 }
 
-template<class T>
-void DisposeAndClear(css::uno::Reference<T> & rInterface)
+template <class T> void DisposeAndClear(css::uno::Reference<T>& rInterface)
 {
     Dispose<css::uno::Reference<T>>(rInterface);
     rInterface.set(nullptr);
 }
 
-template<class Container>
-void DisposeAllElements(Container & rContainer)
+template <class Container> void DisposeAllElements(Container& rContainer)
 {
-    for (const auto & rElement : rContainer)
+    for (const auto& rElement : rContainer)
     {
         Dispose<typename Container::value_type>(rElement);
     }

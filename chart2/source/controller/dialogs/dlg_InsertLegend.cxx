@@ -22,23 +22,22 @@
 
 namespace chart
 {
-
 using namespace ::com::sun::star;
 
-SchLegendDlg::SchLegendDlg(weld::Window* pWindow, const uno::Reference< uno::XComponentContext>& xCC)
+SchLegendDlg::SchLegendDlg(weld::Window* pWindow, const uno::Reference<uno::XComponentContext>& xCC)
     : GenericDialogController(pWindow, "modules/schart/ui/dlg_InsertLegend.ui", "dlg_InsertLegend")
     , m_xLegendPositionResources(new LegendPositionResources(*m_xBuilder, xCC))
 {
 }
 
-void SchLegendDlg::init( const uno::Reference< frame::XModel >& xChartModel )
+void SchLegendDlg::init(const uno::Reference<frame::XModel>& xChartModel)
 {
-    m_xLegendPositionResources->writeToResources( xChartModel );
+    m_xLegendPositionResources->writeToResources(xChartModel);
 }
 
-void SchLegendDlg::writeToModel( const uno::Reference< frame::XModel >& xChartModel ) const
+void SchLegendDlg::writeToModel(const uno::Reference<frame::XModel>& xChartModel) const
 {
-    m_xLegendPositionResources->writeToModel( xChartModel );
+    m_xLegendPositionResources->writeToModel(xChartModel);
 }
 
 } //namespace chart

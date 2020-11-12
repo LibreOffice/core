@@ -21,7 +21,10 @@
 #include <vcl/weld.hxx>
 #include <ControllerLockGuard.hxx>
 
-namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::frame
+{
+class XModel;
+}
 
 namespace chart
 {
@@ -32,7 +35,7 @@ class ThreeD_SceneIllumination_TabPage;
 class View3DDialog : public weld::GenericDialogController
 {
 public:
-    View3DDialog(weld::Window* pWindow, const css::uno::Reference<css::frame::XModel> & xChartModel);
+    View3DDialog(weld::Window* pWindow, const css::uno::Reference<css::frame::XModel>& xChartModel);
     virtual ~View3DDialog() override;
 
     virtual short run() override;
@@ -40,7 +43,7 @@ public:
 private:
     DECL_LINK(ActivatePageHdl, const OString&, void);
 
-    ControllerLockHelper                m_aControllerLocker;
+    ControllerLockHelper m_aControllerLocker;
 
     static sal_uInt16 m_nLastPageId;
 

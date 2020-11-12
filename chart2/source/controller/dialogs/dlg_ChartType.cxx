@@ -21,30 +21,25 @@
 #include "tp_ChartType.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-
 namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 ChartTypeDialog::ChartTypeDialog(weld::Window* pParent,
-                                 const uno::Reference< frame::XModel >& xChartModel)
+                                 const uno::Reference<frame::XModel>& xChartModel)
     : GenericDialogController(pParent, "modules/schart/ui/charttypedialog.ui", "ChartTypeDialog")
     , m_xChartModel(xChartModel)
     , m_xContentArea(m_xDialog->weld_content_area())
 {
     m_xChartTypeTabPage = std::make_unique<ChartTypeTabPage>(
-        m_xContentArea.get(), this,
-        uno::Reference<XChartDocument>::query(m_xChartModel),
-        false/*don't show title description*/);
+        m_xContentArea.get(), this, uno::Reference<XChartDocument>::query(m_xChartModel),
+        false /*don't show title description*/);
 
     m_xChartTypeTabPage->initializePage();
 }
 
-ChartTypeDialog::~ChartTypeDialog()
-{
-    m_xChartTypeTabPage.reset();
-}
+ChartTypeDialog::~ChartTypeDialog() { m_xChartTypeTabPage.reset(); }
 
 } //namespace chart
 

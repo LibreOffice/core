@@ -20,17 +20,19 @@
 
 #include <vcl/weld.hxx>
 
-namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::frame
+{
+class XModel;
+}
 
 namespace chart
 {
-
 class ChartTypeTabPage;
 class ChartTypeDialog : public weld::GenericDialogController
 {
 public:
     ChartTypeDialog(weld::Window* pWindow,
-                    const css::uno::Reference< css::frame::XModel >& xChartModel);
+                    const css::uno::Reference<css::frame::XModel>& xChartModel);
     virtual ~ChartTypeDialog() override;
 
 private:

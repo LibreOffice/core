@@ -22,33 +22,35 @@
 #include <vcl/vclptr.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 
-namespace vcl { class Window; }
+namespace vcl
+{
+class Window;
+}
 
 namespace chart
 {
-
 class AccessibleChartView;
 
 class AccessibleViewForwarder : public ::accessibility::IAccessibleViewForwarder
 {
 public:
-    AccessibleViewForwarder( AccessibleChartView* pAccChartView, vcl::Window* pWindow );
+    AccessibleViewForwarder(AccessibleChartView* pAccChartView, vcl::Window* pWindow);
     virtual ~AccessibleViewForwarder() override;
 
     // ________ IAccessibleViewforwarder ________
     virtual tools::Rectangle GetVisibleArea() const override;
-    virtual Point LogicToPixel( const Point& rPoint ) const override;
-    virtual Size LogicToPixel( const Size& rSize ) const override;
+    virtual Point LogicToPixel(const Point& rPoint) const override;
+    virtual Size LogicToPixel(const Size& rSize) const override;
 
 private:
-    AccessibleViewForwarder( AccessibleViewForwarder const & ) = delete;
-    AccessibleViewForwarder& operator=( AccessibleViewForwarder const & ) = delete;
+    AccessibleViewForwarder(AccessibleViewForwarder const&) = delete;
+    AccessibleViewForwarder& operator=(AccessibleViewForwarder const&) = delete;
 
     AccessibleChartView* m_pAccChartView;
     VclPtr<vcl::Window> m_pWindow;
     MapMode m_aMapMode;
 };
 
-}  // namespace chart
+} // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

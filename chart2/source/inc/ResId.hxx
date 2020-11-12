@@ -23,8 +23,7 @@
 
 namespace chart
 {
-
-OUString OOO_DLLPUBLIC_CHARTTOOLS SchResId(const char *pId);
+OUString OOO_DLLPUBLIC_CHARTTOOLS SchResId(const char* pId);
 
 } //  namespace chart
 

@@ -21,12 +21,17 @@
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/uno/Reference.h>
 
-namespace chart { class ChartModel; }
-namespace com::sun::star::frame { class XModel; }
+namespace chart
+{
+class ChartModel;
+}
+namespace com::sun::star::frame
+{
+class XModel;
+}
 
 namespace chart
 {
-
 /** This guard calls lockControllers at the given Model in the CTOR and
     unlockControllers in the DTOR.  Using this ensures that controllers do not
     remain locked when leaving a function even in case an exception is thrown.
@@ -34,17 +39,17 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockGuardUNO
 {
 public:
-    explicit ControllerLockGuardUNO( const css::uno::Reference< css::frame::XModel > & xModel );
+    explicit ControllerLockGuardUNO(const css::uno::Reference<css::frame::XModel>& xModel);
     ~ControllerLockGuardUNO();
 
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    css::uno::Reference<css::frame::XModel> mxModel;
 };
 
 class ControllerLockGuard
 {
 public:
-    explicit ControllerLockGuard( ChartModel& rModel );
+    explicit ControllerLockGuard(ChartModel& rModel);
     ~ControllerLockGuard();
 
 private:
@@ -60,15 +65,14 @@ private:
 class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockHelper
 {
 public:
-    explicit ControllerLockHelper(
-        const css::uno::Reference< css::frame::XModel > & xModel );
+    explicit ControllerLockHelper(const css::uno::Reference<css::frame::XModel>& xModel);
     ~ControllerLockHelper();
 
     SAL_DLLPRIVATE void lockControllers();
     SAL_DLLPRIVATE void unlockControllers();
 
 private:
-    css::uno::Reference< css::frame::XModel > m_xModel;
+    css::uno::Reference<css::frame::XModel> m_xModel;
 };
 
 /** This guard calls lockControllers at the given ControllerLockHelper in the
@@ -79,11 +83,11 @@ private:
 class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockHelperGuard
 {
 public:
-    explicit ControllerLockHelperGuard( ControllerLockHelper & rHelper );
+    explicit ControllerLockHelperGuard(ControllerLockHelper& rHelper);
     ~ControllerLockHelperGuard();
 
 private:
-    ControllerLockHelper & m_rHelper;
+    ControllerLockHelper& m_rHelper;
 };
 
 } //  namespace chart

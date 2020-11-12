@@ -23,17 +23,16 @@
 
 namespace chart
 {
-
-AccessibleBase* ChartElementFactory::CreateChartElement( const AccessibleElementInfo& rAccInfo )
+AccessibleBase* ChartElementFactory::CreateChartElement(const AccessibleElementInfo& rAccInfo)
 {
-    ObjectIdentifier aOID( rAccInfo.m_aOID );
-    ObjectType eType( aOID.getObjectType() );
+    ObjectIdentifier aOID(rAccInfo.m_aOID);
+    ObjectType eType(aOID.getObjectType());
 
-    switch( eType )
+    switch (eType)
     {
         case OBJECTTYPE_DATA_POINT:
         case OBJECTTYPE_LEGEND_ENTRY:
-            return new AccessibleChartElement( rAccInfo, false );
+            return new AccessibleChartElement(rAccInfo, false);
         case OBJECTTYPE_PAGE:
         case OBJECTTYPE_TITLE:
         case OBJECTTYPE_LEGEND:
@@ -56,7 +55,7 @@ AccessibleBase* ChartElementFactory::CreateChartElement( const AccessibleElement
         case OBJECTTYPE_DATA_STOCK_LOSS:
         case OBJECTTYPE_DATA_STOCK_GAIN:
         case OBJECTTYPE_DATA_CURVE_EQUATION:
-            return new AccessibleChartElement( rAccInfo, true );
+            return new AccessibleChartElement(rAccInfo, true);
         case OBJECTTYPE_UNKNOWN:
             break;
         default:

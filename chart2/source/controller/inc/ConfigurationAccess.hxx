@@ -23,7 +23,7 @@
 
 namespace chart::ConfigurationAccess
 {
-    /** @descr Retrieve the FieldUnit to be used for the UI.  This unit is retrieved
+/** @descr Retrieve the FieldUnit to be used for the UI.  This unit is retrieved
     from the registry settings of the Calc application.
 
     If this setting can not be found there is a fallback to cm which is the most
@@ -31,7 +31,7 @@ namespace chart::ConfigurationAccess
 
     @return the FieldUnit enum.  See <vcl/fldunit.hxx> for definition
     */
-    FieldUnit getFieldUnit();
+FieldUnit getFieldUnit();
 
 } //namespace chart
 

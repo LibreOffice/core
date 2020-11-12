@@ -22,15 +22,14 @@
 
 namespace chart
 {
-
 #define CHART_3DOBJECT_SEGMENTCOUNT (sal_Int32(32))
 //There needs to be a little distance between grid lines and walls in 3D, otherwise the lines are partly hidden by the walls
 #define GRID_TO_WALL_DISTANCE (1.0)
 
-const double    ZDIRECTION = 1.0;
-const sal_Int32 AXIS2D_TICKLENGTH = 150;//value like in old chart
-const sal_Int32 AXIS2D_TICKLABELSPACING = 100;//value like in old chart
+const double ZDIRECTION = 1.0;
+const sal_Int32 AXIS2D_TICKLENGTH = 150; //value like in old chart
+const sal_Int32 AXIS2D_TICKLABELSPACING = 100; //value like in old chart
 
-}//end namespace chart
+} //end namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

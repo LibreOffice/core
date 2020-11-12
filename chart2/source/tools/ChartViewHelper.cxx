@@ -30,23 +30,23 @@ namespace chart
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
-void ChartViewHelper::setViewToDirtyState( const uno::Reference< frame::XModel >& xChartModel )
+void ChartViewHelper::setViewToDirtyState(const uno::Reference<frame::XModel>& xChartModel)
 {
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xFact( xChartModel, uno::UNO_QUERY );
-        if( xFact.is() )
+        uno::Reference<lang::XMultiServiceFactory> xFact(xChartModel, uno::UNO_QUERY);
+        if (xFact.is())
         {
-            Reference< util::XModifyListener > xModifyListener(
-                    xFact->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
-            if( xModifyListener.is() )
+            Reference<util::XModifyListener> xModifyListener(
+                xFact->createInstance(CHART_VIEW_SERVICE_NAME), uno::UNO_QUERY);
+            if (xModifyListener.is())
             {
-                lang::EventObject aEvent( xChartModel );
-                xModifyListener->modified( aEvent );
+                lang::EventObject aEvent(xChartModel);
+                xModifyListener->modified(aEvent);
             }
         }
     }
-    catch( const uno::Exception & )
+    catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }

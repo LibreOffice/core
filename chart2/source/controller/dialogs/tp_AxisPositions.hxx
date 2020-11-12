@@ -22,38 +22,39 @@
 
 namespace chart
 {
-
 class AxisPositionsTabPage : public SfxTabPage
 {
 public:
-    AxisPositionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
+    AxisPositionsTabPage(weld::Container* pPage, weld::DialogController* pController,
+                         const SfxItemSet& rInAttrs);
     virtual ~AxisPositionsTabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs );
-    virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
-    virtual void Reset( const SfxItemSet* rInAttrs ) override;
-    virtual DeactivateRC DeactivatePage( SfxItemSet* pItemSet ) override;
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs);
+    virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
+    virtual void Reset(const SfxItemSet* rInAttrs) override;
+    virtual DeactivateRC DeactivatePage(SfxItemSet* pItemSet) override;
 
-    void SetNumFormatter( SvNumberFormatter* pFormatter );
+    void SetNumFormatter(SvNumberFormatter* pFormatter);
 
-    void SetCrossingAxisIsCategoryAxis( bool bCrossingAxisIsCategoryAxis );
-    void SetCategories( const css::uno::Sequence< OUString >& rCategories );
+    void SetCrossingAxisIsCategoryAxis(bool bCrossingAxisIsCategoryAxis);
+    void SetCategories(const css::uno::Sequence<OUString>& rCategories);
 
-    void SupportAxisPositioning( bool bSupportAxisPositioning );
-    void SupportCategoryPositioning( bool bSupportCategoryPositioning );
+    void SupportAxisPositioning(bool bSupportAxisPositioning);
+    void SupportCategoryPositioning(bool bSupportCategoryPositioning);
 
 private: //methods:
     DECL_LINK(CrossesAtSelectHdl, weld::ComboBox&, void);
     DECL_LINK(PlaceLabelsSelectHdl, weld::ComboBox&, void);
 
 private: //member:
-    SvNumberFormatter*  m_pNumFormatter;
+    SvNumberFormatter* m_pNumFormatter;
 
-    bool    m_bCrossingAxisIsCategoryAxis;
-    css::uno::Sequence< OUString > m_aCategories;
+    bool m_bCrossingAxisIsCategoryAxis;
+    css::uno::Sequence<OUString> m_aCategories;
 
-    bool    m_bSupportAxisPositioning;
-    bool    m_bSupportCategoryPositioning;
+    bool m_bSupportAxisPositioning;
+    bool m_bSupportCategoryPositioning;
 
     std::unique_ptr<weld::Frame> m_xFL_AxisLine;
     std::unique_ptr<weld::ComboBox> m_xLB_CrossesAt;

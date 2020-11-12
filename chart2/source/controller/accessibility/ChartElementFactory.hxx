@@ -20,7 +20,6 @@
 
 namespace chart
 {
-
 class AccessibleBase;
 struct AccessibleElementInfo;
 
@@ -30,9 +29,9 @@ public:
     /** @return a newly created object (using the new operator) that corresponds
                 to the given unique id
      */
-    static AccessibleBase* CreateChartElement( const AccessibleElementInfo& rAccInfo );
+    static AccessibleBase* CreateChartElement(const AccessibleElementInfo& rAccInfo);
 };
 
-}  // namespace chart
+} // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,11 +23,10 @@
 
 namespace chart
 {
-
 struct InsertAxisOrGridDialogData
 {
-    css::uno::Sequence< sal_Bool > aPossibilityList;
-    css::uno::Sequence< sal_Bool > aExistenceList;
+    css::uno::Sequence<sal_Bool> aPossibilityList;
+    css::uno::Sequence<sal_Bool> aExistenceList;
 
     InsertAxisOrGridDialogData();
 };
@@ -48,8 +47,9 @@ protected:
     std::unique_ptr<weld::CheckButton> m_xCbSecondaryZ;
 
 public:
-    SchAxisDlg(weld::Window* pParent, const InsertAxisOrGridDialogData& rInput, bool bAxisDlg = true);
-    void getResult( InsertAxisOrGridDialogData& rOutput );
+    SchAxisDlg(weld::Window* pParent, const InsertAxisOrGridDialogData& rInput,
+               bool bAxisDlg = true);
+    void getResult(InsertAxisOrGridDialogData& rOutput);
 };
 
 /*************************************************************************

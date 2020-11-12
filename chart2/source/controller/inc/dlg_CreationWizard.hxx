@@ -26,15 +26,20 @@
 
 #include <memory>
 
-namespace com::sun::star::chart2 { class XChartDocument; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::chart2
+{
+class XChartDocument;
+}
+namespace com::sun::star::uno
+{
+class XComponentContext;
+}
 
 using vcl::WizardTypes::WizardState;
 using vcl::WizardTypes::CommitPageReason;
 
 namespace chart
 {
-
 class DialogModel;
 class ChartTypeTemplateProvider;
 
@@ -42,18 +47,18 @@ class CreationWizard : public vcl::RoadmapWizardMachine, public TabPageNotifiabl
 {
 public:
     CreationWizard(weld::Window* pParent,
-        const css::uno::Reference<css::frame::XModel>& xChartModel,
-        const css::uno::Reference<css::uno::XComponentContext>& xContext);
+                   const css::uno::Reference<css::frame::XModel>& xChartModel,
+                   const css::uno::Reference<css::uno::XComponentContext>& xContext);
 
     CreationWizard() = delete;
     virtual ~CreationWizard() override;
 
     // TabPageNotifiable
-    virtual void setInvalidPage(BuilderPage * pTabPage) override;
-    virtual void setValidPage(BuilderPage * pTabPage) override;
+    virtual void setInvalidPage(BuilderPage* pTabPage) override;
+    virtual void setValidPage(BuilderPage* pTabPage) override;
 
 protected:
-    virtual bool leaveState( WizardState _nState ) override;
+    virtual bool leaveState(WizardState _nState) override;
     virtual WizardState determineNextState(WizardState nCurrentState) const override;
     virtual void enterState(WizardState nState) override;
 

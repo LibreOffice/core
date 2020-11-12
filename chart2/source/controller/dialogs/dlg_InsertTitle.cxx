@@ -23,18 +23,17 @@
 
 namespace chart
 {
-
 SchTitleDlg::SchTitleDlg(weld::Window* pWindow, const TitleDialogData& rInput)
     : GenericDialogController(pWindow, "modules/schart/ui/inserttitledlg.ui", "InsertTitleDialog")
     , m_xTitleResources(new TitleResources(*m_xBuilder, true))
 {
     m_xDialog->set_title(ObjectNameProvider::getName(OBJECTTYPE_TITLE, true));
-    m_xTitleResources->writeToResources( rInput );
+    m_xTitleResources->writeToResources(rInput);
 }
 
-void SchTitleDlg::getResult( TitleDialogData& rOutput )
+void SchTitleDlg::getResult(TitleDialogData& rOutput)
 {
-    m_xTitleResources->readFromResources( rOutput );
+    m_xTitleResources->readFromResources(rOutput);
 }
 
 } //namespace chart

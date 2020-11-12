@@ -14,14 +14,12 @@ using namespace css;
 
 namespace chart
 {
-
 PopupRequest::PopupRequest()
     : impl::PopupRequest_Base(m_aMutex)
 {
 }
 
-PopupRequest::~PopupRequest()
-{}
+PopupRequest::~PopupRequest() {}
 
 // ____ XRequestCallback ____
 
@@ -33,9 +31,7 @@ void SAL_CALL PopupRequest::addCallback(const uno::Reference<awt::XCallback>& xC
 
 // ____ WeakComponentImplHelperBase ____
 // is called when dispose() is called at this component
-void SAL_CALL PopupRequest::disposing()
-{
-}
+void SAL_CALL PopupRequest::disposing() {}
 
 } //  namespace chart
 

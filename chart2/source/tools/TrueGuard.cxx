@@ -21,17 +21,13 @@
 
 namespace chart
 {
-
-TrueGuard::TrueGuard( bool& rbTrueDuringGuardedTime )
-    : m_rbTrueDuringGuardedTime( rbTrueDuringGuardedTime )
+TrueGuard::TrueGuard(bool& rbTrueDuringGuardedTime)
+    : m_rbTrueDuringGuardedTime(rbTrueDuringGuardedTime)
 {
     m_rbTrueDuringGuardedTime = true;
 }
 
-TrueGuard::~TrueGuard()
-{
-    m_rbTrueDuringGuardedTime = false;
-}
+TrueGuard::~TrueGuard() { m_rbTrueDuringGuardedTime = false; }
 
 } //  namespace chart
 

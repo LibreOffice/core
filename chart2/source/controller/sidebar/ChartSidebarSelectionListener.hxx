@@ -16,8 +16,8 @@
 
 #include <vector>
 
-namespace chart::sidebar {
-
+namespace chart::sidebar
+{
 class ChartSidebarSelectionListenerParent
 {
 public:
@@ -26,10 +26,10 @@ public:
     virtual void selectionChanged(bool bSelected) = 0;
 };
 
-class ChartSidebarSelectionListener : public cppu::WeakImplHelper<css::view::XSelectionChangeListener>
+class ChartSidebarSelectionListener
+    : public cppu::WeakImplHelper<css::view::XSelectionChangeListener>
 {
 public:
-
     // listen to all chart selection changes
     explicit ChartSidebarSelectionListener(ChartSidebarSelectionListenerParent* pParent);
     // only listen to the changes of eType
@@ -47,7 +47,6 @@ private:
 
     std::vector<ObjectType> maTypes;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

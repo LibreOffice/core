@@ -23,17 +23,14 @@
 
 namespace chart
 {
-
-class OOO_DLLPUBLIC_CHARTTOOLS WrappedDirectStateProperty :
-        public WrappedProperty
+class OOO_DLLPUBLIC_CHARTTOOLS WrappedDirectStateProperty : public WrappedProperty
 {
 public:
-    explicit WrappedDirectStateProperty(
-        const OUString& rOuterName, const OUString& rInnerName );
+    explicit WrappedDirectStateProperty(const OUString& rOuterName, const OUString& rInnerName);
     virtual ~WrappedDirectStateProperty() override;
 
     virtual css::beans::PropertyState getPropertyState(
-        const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+        const css::uno::Reference<css::beans::XPropertyState>& xInnerPropertyState) const override;
 };
 
 } //  namespace chart

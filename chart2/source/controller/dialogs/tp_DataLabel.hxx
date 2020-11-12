@@ -25,21 +25,22 @@ class SvNumberFormatter;
 
 namespace chart
 {
-
 class DataLabelsTabPage : public SfxTabPage
 {
 public:
-    DataLabelsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
+    DataLabelsTabPage(weld::Container* pPage, weld::DialogController* pController,
+                      const SfxItemSet& rInAttrs);
 
-    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs);
 
-    void SetNumberFormatter( SvNumberFormatter* pFormatter );
+    void SetNumberFormatter(SvNumberFormatter* pFormatter);
 
     virtual void Reset(const SfxItemSet* rInAttrs) override;
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;
 
 private:
-    DataLabelResources  m_aDataLabelResources;
+    DataLabelResources m_aDataLabelResources;
 };
 
 } //namespace chart

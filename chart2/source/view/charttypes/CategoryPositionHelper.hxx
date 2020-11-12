@@ -21,33 +21,33 @@
 
 namespace chart
 {
-
 class CategoryPositionHelper
 {
 public:
-    CategoryPositionHelper( double fSeriesCount, double CategoryWidth = 1.0);
+    CategoryPositionHelper(double fSeriesCount, double CategoryWidth = 1.0);
     virtual ~CategoryPositionHelper();
 
-    CategoryPositionHelper(CategoryPositionHelper const &) = default;
-    CategoryPositionHelper(CategoryPositionHelper &&) = default;
-    CategoryPositionHelper & operator =(CategoryPositionHelper const &) = default;
-    CategoryPositionHelper & operator =(CategoryPositionHelper &&) = default;
+    CategoryPositionHelper(CategoryPositionHelper const&) = default;
+    CategoryPositionHelper(CategoryPositionHelper&&) = default;
+    CategoryPositionHelper& operator=(CategoryPositionHelper const&) = default;
+    CategoryPositionHelper& operator=(CategoryPositionHelper&&) = default;
 
     double getScaledSlotWidth() const;
-    virtual double getScaledSlotPos( double fCategoryX, double fSeriesNumber ) const;
-    void setCategoryWidth( double fCategoryWidth );
+    virtual double getScaledSlotPos(double fCategoryX, double fSeriesNumber) const;
+    void setCategoryWidth(double fCategoryWidth);
 
     //Distance between two neighboring bars in same category, seen relative to width of the bar
-    void setInnerDistance( double fInnerDistance );
+    void setInnerDistance(double fInnerDistance);
 
     //Distance between two neighboring bars in different category, seen relative to width of the bar:
-    void setOuterDistance( double fOuterDistance );
+    void setOuterDistance(double fOuterDistance);
 
 protected:
     double m_fSeriesCount;
     double m_fCategoryWidth;
     //Distance between two neighboring bars in same category, seen relative to width of the bar:
-    double m_fInnerDistance; //[-1,1] m_fInnerDistance=1 --> distance == width; m_fInnerDistance=-1-->all rects are painted on the same position
+    double
+        m_fInnerDistance; //[-1,1] m_fInnerDistance=1 --> distance == width; m_fInnerDistance=-1-->all rects are painted on the same position
     //Distance between two neighboring bars in different category, seen relative to width of the bar:
     double m_fOuterDistance; //>=0 m_fOuterDistance=1 --> distance == width
 };
