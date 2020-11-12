@@ -227,15 +227,23 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     /**
      * in parameter test, tests by calls reference also (complex types)
      */
-    void setValues( [in] boolean bBool, [in] char cChar, [in] byte nByte,
-                             [in] short nShort, [in] unsigned short nUShort,
-                             [in] long nLong, [in] unsigned long nULong,
-                             [in] hyper nHyper, [in] unsigned hyper nUHyper,
-                             [in] float fFloat, [in] double fDouble,
-                             [in] TestEnum eEnum, [in] string aString,
-                             [in] com::sun::star::uno::XInterface xInterface, [in] any aAny,
-                             [in] sequence< TestElement > aSequence,
-                             [in] TestData aStruct );
+    void setValues( [in] boolean bBool,
+                    [in] char cChar,
+                    [in] byte nByte,
+                    [in] short nShort,
+                    [in] unsigned short nUShort,
+                    [in] long nLong,
+                    [in] unsigned long nULong,
+                    [in] hyper nHyper,
+                    [in] unsigned hyper nUHyper,
+                    [in] float fFloat,
+                    [in] double fDouble,
+                    [in] TestEnum eEnum,
+                    [in] string aString,
+                    [in] com::sun::star::uno::XInterface xInterface,
+                    [in] any aAny,
+                    [in] sequence< TestElement > aSequence,
+                    [in] TestData aStruct );
     /**
      * inout parameter test
      *
@@ -243,26 +251,42 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
      *         by setValues or (if not called before) default constructed values.
      *
      */
-    TestData setValues2( [inout] boolean bBool, [inout] char cChar, [inout] byte nByte,
-                         [inout] short nShort, [inout] unsigned short nUShort,
-                         [inout] long nLong, [inout] unsigned long nULong,
-                         [inout] hyper nHyper, [inout] unsigned hyper nUHyper,
-                         [inout] float fFloat, [inout] double fDouble,
-                         [inout] TestEnum eEnum, [inout] string aString,
-                         [inout] com::sun::star::uno::XInterface xInterface, [inout] any aAny,
+    TestData setValues2( [inout] boolean bBool,
+                         [inout] char cChar,
+                         [inout] byte nByte,
+                         [inout] short nShort,
+                         [inout] unsigned short nUShort,
+                         [inout] long nLong,
+                         [inout] unsigned long nULong,
+                         [inout] hyper nHyper,
+                         [inout] unsigned hyper nUHyper,
+                         [inout] float fFloat,
+                         [inout] double fDouble,
+                         [inout] TestEnum eEnum,
+                         [inout] string aString,
+                         [inout] com::sun::star::uno::XInterface xInterface,
+                         [inout] any aAny,
                          [inout] sequence< TestElement > aSequence,
                          [inout] TestData aStruct );
 
     /**
      * out parameter test
      */
-    TestData getValues( [out] boolean bBool, [out] char cChar, [out] byte nByte,
-                        [out] short nShort, [out] unsigned short nUShort,
-                        [out] long nLong, [out] unsigned long nULong,
-                        [out] hyper nHyper, [out] unsigned hyper nUHyper,
-                        [out] float fFloat, [out] double fDouble,
-                        [out] TestEnum eEnum, [out] string aString,
-                        [out] com::sun::star::uno::XInterface xInterface, [out] any aAny,
+    TestData getValues( [out] boolean bBool,
+                        [out] char cChar,
+                        [out] byte nByte,
+                        [out] short nShort,
+                        [out] unsigned short nUShort,
+                        [out] long nLong,
+                        [out] unsigned long nULong,
+                        [out] hyper nHyper,
+                        [out] unsigned hyper nUHyper,
+                        [out] float fFloat,
+                        [out] double fDouble,
+                        [out] TestEnum eEnum,
+                        [out] string aString,
+                        [out] com::sun::star::uno::XInterface xInterface,
+                        [out] any aAny,
                         [out] sequence< TestElement > aSequence,
                         [out] TestData aStruct );
 

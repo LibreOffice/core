@@ -67,17 +67,47 @@ class SampleUnoComponent( XBridgeTestBase,XServiceInfo ):
       def raiseRuntimeExceptionOneway(self, Message, Context ):
           raise RuntimeException( Message, Context )
 
-      def setValues( self, bBool, cChar, nByte, nShort, nUShort, nLong,\
-                     nULong, nHyper, nUHyper, fFloat, fDouble, eEnum, \
-                     aString, xInterface, aAny, aSequence, aStruct ):
+      def setValues( self, \
+                     bBool, \
+                     cChar, \
+                     nByte, \
+                     nShort, \
+                     nUShort, \
+                     nLong, \
+                     nULong, \
+                     nHyper, \
+                     nUHyper, \
+                     fFloat, \
+                     fDouble, \
+                     eEnum, \
+                     aString, \
+                     xInterface, \
+                     aAny, \
+                     aSequence, \
+                     aStruct ):
          self.__dict__["data"] = TestDataElements( bBool, cChar, nByte, nShort, nUShort, nLong,
                           nULong, nHyper, nUHyper, fFloat, fDouble, eEnum, aStruct, xInterface,
                           aAny, aSequence )
          self.__dict__["Struct"] = aStruct
 
-      def setValues2( self, bBool, cChar, nByte, nShort, nUShort, nLong, nULong,\
-                      nHyper, nUHyper, fFloat, fDouble, eEnum,          \
-                      aString, xInterface, aAny, aSequence, aStruct ):
+      def setValues2( self, \
+                      bBool, \
+                      cChar, \
+                      nByte, \
+                      nShort, \
+                      nUShort, \
+                      nLong, \
+                      nULong,\
+                      nHyper, \
+                      nUHyper, \
+                      fFloat, \
+                      fDouble, \
+                      eEnum, \
+                      aString, \
+                      xInterface, \
+                      aAny, \
+                      aSequence, \
+                      aStruct ):
           self.__dict__["Struct"] = TestData( cChar, nByte, nShort, nUShort, nLong, nULong, nHyper,\
                                               nUHyper, fFloat, fDouble, eEnum, aStruct, xInterface,\
                                               aAny, aSequence )
@@ -86,7 +116,21 @@ class SampleUnoComponent( XBridgeTestBase,XServiceInfo ):
                  nHyper, nUHyper, fFloat, fDouble, eEnum, aStruct, xInterface, aAny,           \
                  (aSequence[1],aSequence[0]), aStruct
 
-      def getValues(self, a,b,c,d,e,f,g,h, i,j,k,l,m,n):
+      def getValues(self, \
+                    a, \
+                    b, \
+                    c, \
+                    d, \
+                    e, \
+                    f, \
+                    g, \
+                    h, \
+                    i, \
+                    j, \
+                    k, \
+                    l, \
+                    m, \
+                    n):
           v = self.__dict__["data"]
           return self.__dict__["Struct"],v.Bool, v.Char, v.Byte, v.Short, v.UShort, v.Long,     \
                  v.ULong, v.Hyper, v.UHyper, v.Float, v.Double, v.Enum, v.String, v.Interface,  \

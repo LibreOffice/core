@@ -588,35 +588,68 @@ Public Class BridgeTest
         aSetData.Sequence(1) = New TestElement ' empty struct
 
 		xLBT.setValues( _
-				aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short, _
-                aSetData.UShort, aSetData.Long, aSetData.ULong, _
-                aSetData.Hyper, aSetData.UHyper, aSetData.Float, _
-                aSetData.Double, aSetData.Enum, aSetData.String, _
-                aSetData.Interface, aSetData.Any, aSetData.Sequence, _
-                aSetData )
+			aSetData.Bool, _
+			aSetData.Char, _
+			aSetData.Byte, _
+			aSetData.Short, _
+			aSetData.UShort, _
+			aSetData.Long, _
+			aSetData.ULong, _
+			aSetData.Hyper, _
+			aSetData.UHyper, _
+			aSetData.Float, _
+			aSetData.Double, _
+			aSetData.Enum, _
+			aSetData.String, _
+			aSetData.Interface, _
+			aSetData.Any, _
+			aSetData.Sequence, _
+			aSetData )
 		
 		
 		Dim aRet As New TestDataElements
         Dim aRet2 As New TestDataElements
 		xLBT.getValues( _
-			aRet.Bool, aRet.Char, aRet.Byte, aRet.Short, _
-            aRet.UShort, aRet.Long, aRet.ULong, _
-            aRet.Hyper, aRet.UHyper, aRet.Float, _
-            aRet.Double, aRet.Enum, aRet.String, _
-            aRet.Interface, aRet.Any, aRet.Sequence, _
-            aRet2 )
+			aRet.Bool, _
+			aRet.Char, _
+			aRet.Byte, _
+			aRet.Short, _
+			aRet.UShort, _
+			aRet.Long, _
+			aRet.ULong, _
+			aRet.Hyper, _
+			aRet.UHyper, _
+			aRet.Float, _
+			aRet.Double, _
+			aRet.Enum, _
+			aRet.String, _
+			aRet.Interface, _
+			aRet.Any, _
+			aRet.Sequence, _
+			aRet2 )
 		
 		bRet = check( compareData( aData, aRet ) And _
                       compareData( aData, aRet2 ) , "getValues test") And bRet
         
 		' set last retrieved values
 		Dim  aSV2ret As TestDataElements= xLBT.setValues2( _
-			aRet.Bool, aRet.Char, aRet.Byte, _
-            aRet.Short, aRet.UShort, aRet.Long, _
-            aRet.ULong, aRet.Hyper, aRet.UHyper, _
-            aRet.Float, aRet.Double, aRet.Enum, _
-            aRet.String, aRet.Interface, aRet.Any, _
-            aRet.Sequence, aRet2 )
+			aRet.Bool, _
+			aRet.Char, _
+			aRet.Byte, _
+			aRet.Short, _
+			aRet.UShort, _
+			aRet.Long, _
+			aRet.ULong, _
+			aRet.Hyper, _
+			aRet.UHyper, _
+			aRet.Float, _
+			aRet.Double, _
+			aRet.Enum, _
+			aRet.String, _
+			aRet.Interface, _
+			aRet.Any, _
+			aRet.Sequence, _
+			aRet2 )
 		
         ' check inout sequence order
         ' => inout sequence parameter was switched by test objects
@@ -632,12 +665,23 @@ Public Class BridgeTest
 		aRet = New TestDataElements
         aRet2 = New TestDataElements
 		Dim  aGVret As TestDataElements= xLBT.getValues( _
-			aRet.Bool, aRet.Char, aRet.Byte, _ 
-            aRet.Short, aRet.UShort, aRet.Long, _
-            aRet.ULong, aRet.Hyper, aRet.UHyper, _
-            aRet.Float, aRet.Double, aRet.Enum, _
-            aRet.String, aRet.Interface, aRet.Any, _
-            aRet.Sequence, aRet2 )
+			aRet.Bool, _
+			aRet.Char, _
+			aRet.Byte, _
+			aRet.Short, _
+			aRet.UShort, _
+			aRet.Long, _
+			aRet.ULong, _
+			aRet.Hyper, _
+			aRet.UHyper, _
+			aRet.Float, _
+			aRet.Double, _
+			aRet.Enum, _
+			aRet.String, _
+			aRet.Interface, _
+			aRet.Any, _
+			aRet.Sequence, _
+			aRet2 )
 		
 		bRet = check( compareData( aData, aRet ) And _
                       compareData( aData, aRet2 ) And _ 

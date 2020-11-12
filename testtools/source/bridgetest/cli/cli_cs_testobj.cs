@@ -88,22 +88,22 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
 
 
     public void setValues(
-        bool          bBool,
+        bool             bBool,
         char             cChar,
         byte             nByte,
         short            nShort,
-        ushort            nUShort,
+        ushort           nUShort,
         int              nLong,
-        uint              nULong,
+        uint             nULong,
         long             nHyper,
-        ulong             nUHyper,
+        ulong            nUHyper,
         float            fFloat,
         double           fDouble,
         TestEnum         testEnum,
         String           str,
         Object           xInterface,
         Any              any,
-        TestElement []      testElements,
+        TestElement []   testElements,
         TestDataElements testDataElements )
     {
          Debug.WriteLine( "##### " + GetType().FullName + ".setValues:" + any );
@@ -128,21 +128,21 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     }
 
     public TestDataElements setValues2(
-        /*INOUT*/ref bool          io_bool,
+        /*INOUT*/ref bool             io_bool,
         /*INOUT*/ref char             io_char,
         /*INOUT*/ref byte             io_byte,
         /*INOUT*/ref short            io_short,
-        /*INOUT*/ref ushort            io_ushort,
+        /*INOUT*/ref ushort           io_ushort,
         /*INOUT*/ref int              io_long,
-        /*INOUT*/ref uint              io_ulong,
+        /*INOUT*/ref uint             io_ulong,
         /*INOUT*/ref long             io_hyper,
-        /*INOUT*/ref ulong             io_uhyper,
+        /*INOUT*/ref ulong            io_uhyper,
         /*INOUT*/ref float            io_float,
         /*INOUT*/ref double           io_double,
         /*INOUT*/ref TestEnum         io_testEnum,
         /*INOUT*/ref String           io_string,
         /*INOUT*/ref Object           io_xInterface,
-        /*INOUT*/ref Any           io_any,
+        /*INOUT*/ref Any              io_any,
         /*INOUT*/ref TestElement[]    io_testElements,
         /*INOUT*/ref TestDataElements io_testDataElements )
     {
@@ -174,21 +174,21 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     }
 
     public TestDataElements getValues(
-        /*OUT*/out bool          o_bool,
+        /*OUT*/out bool             o_bool,
         /*OUT*/out char             o_char,
         /*OUT*/out byte             o_byte,
         /*OUT*/out short            o_short,
-        /*OUT*/out ushort            o_ushort,
+        /*OUT*/out ushort           o_ushort,
         /*OUT*/out int              o_long,
-        /*OUT*/out uint              o_ulong,
+        /*OUT*/out uint             o_ulong,
         /*OUT*/out long             o_hyper,
-        /*OUT*/out ulong             o_uhyper,
+        /*OUT*/out ulong            o_uhyper,
         /*OUT*/out float            o_float,
         /*OUT*/out double           o_double,
         /*OUT*/out TestEnum         o_testEnum,
         /*OUT*/out String           o_string,
         /*OUT*/out Object           o_xInterface,
-        /*OUT*/out Any           o_any,
+        /*OUT*/out Any              o_any,
         /*OUT*/out TestElement[]    o_testElements,
         /*OUT*/out TestDataElements o_testDataElements )
     {
