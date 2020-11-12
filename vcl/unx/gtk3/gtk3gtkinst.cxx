@@ -16497,6 +16497,47 @@ private:
         GtkInstanceBuilder* pThis = static_cast<GtkInstanceBuilder*>(user_data);
         pThis->postprocess_widget(GTK_WIDGET(pObject));
     }
+
+    void DisallowCycleFocusOut()
+    {
+        assert(!m_bAllowCycleFocusOut); // we only expect this to be called when this holds
+
+        GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pParentWidget);
+        assert(pTopLevel);
+        GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
+        assert(pFrame);
+        // unhook handler and let gtk cycle its own way through this widget's
+        // children because it has no non-gtk siblings
+        pFrame->DisallowCycleFocusOut();
+    }
+
+    static void signalMap(GtkWidget*, gpointer user_data)
+    {
+        GtkInstanceBuilder* pThis = static_cast<GtkInstanceBuilder*>(user_data);
+        // tdf#138047 wait until map to do this because the final SalFrame may
+        // not be the same as at ctor time
+        pThis->DisallowCycleFocusOut();
+    }
+
+    void AllowCycleFocusOut()
+    {
+        assert(!m_bAllowCycleFocusOut); // we only expect this to be called when this holds
+
+        GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pParentWidget);
+        assert(pTopLevel);
+        GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
+        assert(pFrame);
+        // rehook handler and let vcl cycle its own way through this widget's
+        // children
+        pFrame->AllowCycleFocusOut();
+    }
+
+    static void signalUnmap(GtkWidget*, gpointer user_data)
+    {
+        GtkInstanceBuilder* pThis = static_cast<GtkInstanceBuilder*>(user_data);
+        pThis->AllowCycleFocusOut();
+    }
+
 public:
     GtkInstanceBuilder(GtkWidget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                        SystemChildWindow* pInterimGlue, bool bAllowCycleFocusOut)
@@ -16540,13 +16581,8 @@ public:
 
             if (!m_bAllowCycleFocusOut)
             {
-                GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pParentWidget);
-                assert(pTopLevel);
-                GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
-                assert(pFrame);
-                // unhook handler and let gtk cycle its own way through this widget's
-                // children because it has no non-gtk siblings
-                pFrame->DisallowCycleFocusOut();
+                g_signal_connect(G_OBJECT(m_pParentWidget), "map", G_CALLBACK(signalMap), this);
+                g_signal_connect(G_OBJECT(m_pParentWidget), "unmap", G_CALLBACK(signalUnmap), this);
             }
         }
     }
@@ -16610,15 +16646,7 @@ public:
         g_object_unref(m_pBuilder);
 
         if (m_xInterimGlue && !m_bAllowCycleFocusOut)
-        {
-            GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pParentWidget);
-            assert(pTopLevel);
-            GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
-            assert(pFrame);
-            // rehook handler and let vcl cycle its own way through this widget's
-            // children
-            pFrame->AllowCycleFocusOut();
-        }
+            AllowCycleFocusOut();
 
         m_xInterimGlue.disposeAndClear();
     }
