@@ -7554,7 +7554,6 @@ odk/source/unoapploader/win/unoapploader.c
 odk/source/unowinreg/win/unowinreg.cxx
 officecfg/qa/cppheader.cxx
 onlineupdate/inc/Char16.h
-onlineupdate/inc/bspatch.h
 onlineupdate/source/libmar/sign/mar_sign.c
 onlineupdate/source/libmar/sign/nss_secutil.c
 onlineupdate/source/libmar/sign/nss_secutil.h
@@ -7575,13 +7574,10 @@ onlineupdate/source/service/registrycertificates.cxx
 onlineupdate/source/service/registrycertificates.hxx
 onlineupdate/source/service/resource.hxx
 onlineupdate/source/service/servicebase.cxx
-onlineupdate/source/service/servicebase.hxx
 onlineupdate/source/service/serviceinstall.cxx
 onlineupdate/source/service/serviceinstall.hxx
 onlineupdate/source/service/windowsHelper.hxx
 onlineupdate/source/service/workmonitor.cxx
-onlineupdate/source/service/workmonitor.hxx
-onlineupdate/source/update/common/errors.h
 onlineupdate/source/update/common/pathhash.cxx
 onlineupdate/source/update/common/pathhash.h
 onlineupdate/source/update/common/readstrings.cxx
@@ -7593,13 +7589,11 @@ onlineupdate/source/update/common/updatehelper.cxx
 onlineupdate/source/update/common/updatehelper.h
 onlineupdate/source/update/common/updatelogging.cxx
 onlineupdate/source/update/common/updatelogging.h
-onlineupdate/source/update/common/win_dirent.h
 onlineupdate/source/update/updater/archivereader.cxx
 onlineupdate/source/update/updater/archivereader.h
 onlineupdate/source/update/updater/bspatch.cxx
 onlineupdate/source/update/updater/loaddlls.cxx
 onlineupdate/source/update/updater/progressui-unused/progressui_gonk.cxx
-onlineupdate/source/update/updater/progressui.h
 onlineupdate/source/update/updater/progressui_gtk.cxx
 onlineupdate/source/update/updater/progressui_gtk_icon.h
 onlineupdate/source/update/updater/progressui_null.cxx
@@ -7607,7 +7601,6 @@ onlineupdate/source/update/updater/progressui_win.cxx
 onlineupdate/source/update/updater/resource.h
 onlineupdate/source/update/updater/updater.cxx
 onlineupdate/source/update/updater/win_dirent.cxx
-onlineupdate/source/update/updater/xpcom/glue/nsVersionComparator.cxx
 onlineupdate/source/update/updater/xpcom/glue/nsVersionComparator.h
 oox/inc/drawingml/ThemeOverrideFragmentHandler.hxx
 oox/inc/drawingml/chart/axiscontext.hxx
