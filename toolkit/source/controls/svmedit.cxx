@@ -20,20 +20,19 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <controls/svmedit.hxx>
 
-MultiLineEdit::MultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
-    : VclMultiLineEdit( pParent,nWinStyle )
+MultiLineEdit::MultiLineEdit(vcl::Window* pParent, WinBits nWinStyle)
+    : VclMultiLineEdit(pParent, nWinStyle)
 {
 }
 
 // virtual
-css::uno::Reference< css::awt::XWindowPeer >
-MultiLineEdit::GetComponentInterface(bool bCreate)
+css::uno::Reference<css::awt::XWindowPeer> MultiLineEdit::GetComponentInterface(bool bCreate)
 {
-    css::uno::Reference< css::awt::XWindowPeer > xPeer(
+    css::uno::Reference<css::awt::XWindowPeer> xPeer(
         VclMultiLineEdit::GetComponentInterface(false));
     if (!xPeer.is() && bCreate)
     {
-        rtl::Reference< VCLXMultiLineEdit > xVCLMEdit(new VCLXMultiLineEdit);
+        rtl::Reference<VCLXMultiLineEdit> xVCLMEdit(new VCLXMultiLineEdit);
         xVCLMEdit->SetWindow(this);
         xPeer = xVCLMEdit.get();
         SetComponentInterface(xPeer);

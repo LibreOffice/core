@@ -15153,7 +15153,6 @@ toolkit/inc/controls/eventcontainer.hxx
 toolkit/inc/controls/filectrl.hxx
 toolkit/inc/controls/formattedcontrol.hxx
 toolkit/inc/controls/geometrycontrolmodel.hxx
-toolkit/inc/controls/geometrycontrolmodel_impl.hxx
 toolkit/inc/controls/roadmapcontrol.hxx
 toolkit/inc/controls/roadmapentry.hxx
 toolkit/inc/controls/stdtabcontroller.hxx
@@ -15169,7 +15168,6 @@ toolkit/inc/helper/accessibilityclient.hxx
 toolkit/inc/helper/btndlg.hxx
 toolkit/inc/helper/imagealign.hxx
 toolkit/inc/helper/scrollabledialog.hxx
-toolkit/inc/helper/tkresmgr.hxx
 toolkit/inc/helper/unopropertyarrayhelper.hxx
 toolkit/inc/helper/unowrapper.hxx
 toolkit/source/awt/animatedimagespeer.cxx
@@ -15193,9 +15191,7 @@ toolkit/source/awt/vclxtabpagecontainer.cxx
 toolkit/source/awt/vclxtoolkit.cxx
 toolkit/source/awt/vclxtopwindow.cxx
 toolkit/source/awt/vclxwindow.cxx
-toolkit/source/awt/vclxwindow1.cxx
 toolkit/source/awt/vclxwindows.cxx
-toolkit/source/awt/vclxwindows_internal.hxx
 toolkit/source/controls/accessiblecontrolcontext.cxx
 toolkit/source/controls/animatedimages.cxx
 toolkit/source/controls/controlmodelcontainerbase.cxx
@@ -15218,13 +15214,11 @@ toolkit/source/controls/roadmapentry.cxx
 toolkit/source/controls/spinningprogress.cxx
 toolkit/source/controls/stdtabcontroller.cxx
 toolkit/source/controls/stdtabcontrollermodel.cxx
-toolkit/source/controls/svmedit.cxx
 toolkit/source/controls/tabpagecontainer.cxx
 toolkit/source/controls/tabpagemodel.cxx
 toolkit/source/controls/tkscrollbar.cxx
 toolkit/source/controls/tkspinbutton.cxx
 toolkit/source/controls/tree/treecontrol.cxx
-toolkit/source/controls/tree/treecontrol.hxx
 toolkit/source/controls/tree/treecontrolpeer.cxx
 toolkit/source/controls/tree/treedatamodel.cxx
 toolkit/source/controls/unocontrol.cxx
@@ -15239,7 +15233,6 @@ toolkit/source/helper/formpdfexport.cxx
 toolkit/source/helper/imagealign.cxx
 toolkit/source/helper/listenermultiplexer.cxx
 toolkit/source/helper/property.cxx
-toolkit/source/helper/tkresmgr.cxx
 toolkit/source/helper/unopropertyarrayhelper.cxx
 toolkit/source/helper/unowrapper.cxx
 toolkit/source/helper/vclunohelper.cxx
