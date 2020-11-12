@@ -976,7 +976,7 @@ Size SmViewShell::GetTextSize(OutputDevice const & rDevice, const OUString& rTex
                 aLine = aLine.replaceAt(0, m, "");
                 aSize = GetTextLineSize(rDevice, aText);
                 aTextSize.AdjustHeight(aSize.Height() );
-                aTextSize.setWidth( std::max(aTextSize.Width(), std::min(aSize.Width(), MaxWidth)) );
+                aTextSize.setWidth( std::clamp(aSize.Width(), aTextSize.Width(), MaxWidth) );
 
                 aLine = comphelper::string::stripStart(aLine, ' ');
                 aLine = comphelper::string::stripStart(aLine, '\t');
@@ -1193,7 +1193,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
                 sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(tools::Long(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
                                                                           tools::Long(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
                 nZ -= 10;
-                Fraction aFraction (std::max(MINZOOM, std::min(MAXZOOM, nZ)), 100);
+                Fraction aFraction (std::clamp(nZ, MINZOOM, sal_uInt16(100)));
 
                 OutputMapMode = MapMode(MapUnit::Map100thMM, Point(), aFraction, aFraction);
             }

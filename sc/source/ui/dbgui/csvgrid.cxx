@@ -929,7 +929,7 @@ bool ScCsvGrid::MouseMove( const MouseEvent& rMEvt )
 
     sal_Int32 nPos = (rMEvt.GetPosPixel().X() - GetFirstX()) / GetCharWidth() + GetFirstVisPos();
     // on mouse tracking: keep position valid
-    nPos = std::max( std::min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 0 ) );
+    nPos = std::clamp( nPos, sal_Int32(0), GetPosCount() - 1 );
     Execute( CSVCMD_MAKEPOSVISIBLE, nPos );
 
     sal_uInt32 nColIx = GetColumnFromPos( nPos );

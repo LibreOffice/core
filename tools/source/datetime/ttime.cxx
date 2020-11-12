@@ -306,7 +306,7 @@ void tools::Time::GetClock( double fTimeInDays,
     if (fAbsTimeInDays >= 1.0)
     {
         const int nDig = static_cast<int>(ceil( log10( fAbsTimeInDays)));
-        nDec = std::max( std::min( 10 - nDig, 9), 2);
+        nDec = std::clamp( 10 - nDig, 2, 9 );
     }
     double fSeconds = rtl::math::round( fRawSeconds, nDec);
 
