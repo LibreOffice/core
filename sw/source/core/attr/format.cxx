@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx> //For SwFmt::getIDocumentSettingAccess()
 #include <IDocumentTimerAccess.hxx>
@@ -228,16 +229,17 @@ SwFormat::~SwFormat()
     }
     else
     {
-        SwFormatChg aOldFormat( this );
-        SwFormatChg aNewFormat( pParentFormat );
-        SwIterator<SwClient,SwFormat> aIter(*this);
-        for(SwClient* pClient = aIter.First(); pClient && pParentFormat; pClient = aIter.Next())
+        SwFormatChg aOldFormat(this);
+        SwFormatChg aNewFormat(pParentFormat);
+        const sw::LegacyModifyHint aHint(&aOldFormat, &aNewFormat);
+        SwIterator<SwFormat,SwFormat> aIter(*this);
+        for(SwFormat* pFormat = aIter.First(); pFormat; pFormat = aIter.Next())
         {
-            SAL_INFO("sw.core", "reparenting " << typeid(*pClient).name() << " at " << pClient << " from " << typeid(*this).name() << " at " << this << " to "  << typeid(*pParentFormat).name() << " at " << pParentFormat);
-            pParentFormat->Add( pClient );
-            const sw::LegacyModifyHint aHint(&aOldFormat, &aNewFormat);
-            pClient->SwClientNotifyCall(*this, aHint);
+            SAL_INFO("sw.core", "reparenting " << typeid(*pFormat).name() << " at " << pFormat << " from " << typeid(*this).name() << " at " << this << " to "  << typeid(*pParentFormat).name() << " at " << pParentFormat);
+            pParentFormat->Add(pFormat);
+            pFormat->SwClientNotify(*this, aHint);
         }
+        assert(!HasWriterListeners() && "Format has remaining clients after reparenting all client format in dying format");
     }
 }
 
