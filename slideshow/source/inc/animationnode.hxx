@@ -24,11 +24,10 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <memory>
 
-
-namespace slideshow::internal {
-
+namespace slideshow::internal
+{
 class AnimationNode;
-typedef ::std::shared_ptr< AnimationNode > AnimationNodeSharedPtr;
+typedef ::std::shared_ptr<AnimationNode> AnimationNodeSharedPtr;
 
 /** This interface is used to mirror every XAnimateNode object
     in the presentation core.
@@ -38,26 +37,26 @@ class AnimationNode : public Disposable
 public:
     /** The current state of this AnimationNode
      */
-    enum NodeState {
+    enum NodeState
+    {
         /// Invalid state, node is disposed or otherwise invalid
-        INVALID      =0,
+        INVALID = 0,
         /// Unresolved start time
-        UNRESOLVED   =1,
+        UNRESOLVED = 1,
         /// Resolved start time, node will start eventually
-        RESOLVED     =2,
+        RESOLVED = 2,
         /// Node is active
-        ACTIVE       =4,
+        ACTIVE = 4,
         /// Node is frozen (no longer active, but changes remain in place)
-        FROZEN       =8,
+        FROZEN = 8,
         /// Node has completed an active lifecycle,
         /// and any effect is removed from the document
-        ENDED       =16
+        ENDED = 16
     };
 
     /** Query the corresponding XAnimationNode.
      */
-    virtual css::uno::Reference< css::animations::XAnimationNode >
-    getXAnimationNode() const = 0;
+    virtual css::uno::Reference<css::animations::XAnimationNode> getXAnimationNode() const = 0;
 
     /** Init this node
 
@@ -125,15 +124,13 @@ public:
 
         @param rNotifee AnimationNode to notify
     */
-    virtual bool registerDeactivatingListener(
-        const AnimationNodeSharedPtr& rNotifee ) = 0;
+    virtual bool registerDeactivatingListener(const AnimationNodeSharedPtr& rNotifee) = 0;
 
     /** Called to notify another AnimationNode's deactivation
 
         @param rNotifier The instance who calls this method.
     */
-    virtual void notifyDeactivating(
-        const AnimationNodeSharedPtr& rNotifier ) = 0;
+    virtual void notifyDeactivating(const AnimationNodeSharedPtr& rNotifier) = 0;
 
     /** Called by the container to remove the animation effect
         to make the painted shape correct if it restart because

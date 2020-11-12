@@ -24,14 +24,17 @@
 #include <memory>
 #include <vector>
 
-namespace slideshow::internal {
-
+namespace slideshow::internal
+{
 /** Definition of Event interface
  */
 class Event : public Disposable
 {
 public:
-    Event (const OUString& rsDescription) : msDescription(rsDescription) {}
+    Event(const OUString& rsDescription)
+        : msDescription(rsDescription)
+    {
+    }
 
     /** Execute the event.
 
@@ -61,7 +64,7 @@ public:
         @return the time instant in seconds, on which this
         event is to be fired.
     */
-    virtual double getActivationTime( double nCurrentTime ) const = 0;
+    virtual double getActivationTime(double nCurrentTime) const = 0;
 
     const OUString& GetDescription() const { return msDescription; }
 
@@ -69,8 +72,8 @@ private:
     const OUString msDescription;
 };
 
-typedef ::std::shared_ptr< Event > EventSharedPtr;
-typedef ::std::vector< EventSharedPtr > VectorOfEvents;
+typedef ::std::shared_ptr<Event> EventSharedPtr;
+typedef ::std::vector<EventSharedPtr> VectorOfEvents;
 
 } // namespace presentation::internal
 

@@ -22,8 +22,8 @@
 
 #include <sal/types.h>
 
-namespace slideshow::internal {
-
+namespace slideshow::internal
+{
 /** Some frame rate related data.
 */
 class FrameRate

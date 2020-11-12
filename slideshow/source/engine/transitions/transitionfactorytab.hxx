@@ -24,15 +24,13 @@
 
 #include <sal/types.h>
 
-namespace slideshow::internal {
-
+namespace slideshow::internal
+{
 struct TransitionInfo;
 
-TransitionInfo const * getTransitionInfo(
-    sal_Int16 nTransitionType, sal_Int16 nTransitionSubType);
+TransitionInfo const* getTransitionInfo(sal_Int16 nTransitionType, sal_Int16 nTransitionSubType);
 
-TransitionInfo const * getRandomTransitionInfo();
-
+TransitionInfo const* getRandomTransitionInfo();
 }
 
 #endif
