@@ -15828,12 +15828,8 @@ unoxml/source/xpath/xpathapi.hxx
 unoxml/source/xpath/xpathobject.cxx
 unoxml/source/xpath/xpathobject.hxx
 uui/inc/ids.hxx
-uui/qa/unit/uui-dialogs-test.cxx
 uui/source/alreadyopen.cxx
-uui/source/alreadyopen.hxx
-uui/source/authfallbackdlg.cxx
 uui/source/filechanged.cxx
-uui/source/fltdlg.cxx
 uui/source/fltdlg.hxx
 uui/source/getcontinuations.hxx
 uui/source/iahndl-authentication.cxx
@@ -15852,11 +15848,9 @@ uui/source/logindlg.hxx
 uui/source/loginerr.hxx
 uui/source/masterpasscrtdlg.cxx
 uui/source/masterpassworddlg.cxx
-uui/source/masterpassworddlg.hxx
 uui/source/nameclashdlg.cxx
 uui/source/nameclashdlg.hxx
 uui/source/openlocked.cxx
-uui/source/openlocked.hxx
 uui/source/passwordcontainer.cxx
 uui/source/passwordcontainer.hxx
 uui/source/passworddlg.cxx
@@ -15866,10 +15860,7 @@ uui/source/requeststringresolver.hxx
 uui/source/secmacrowarnings.cxx
 uui/source/secmacrowarnings.hxx
 uui/source/sslwarndlg.cxx
-uui/source/sslwarndlg.hxx
 uui/source/trylater.cxx
-uui/source/trylater.hxx
-uui/source/unknownauthdlg.cxx
 uui/source/unknownauthdlg.hxx
 vbahelper/source/msforms/vbabutton.cxx
 vbahelper/source/msforms/vbabutton.hxx

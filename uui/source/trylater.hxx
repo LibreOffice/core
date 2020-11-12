@@ -25,8 +25,10 @@ class TryLaterQueryBox
 {
 private:
     std::unique_ptr<weld::MessageDialog> m_xQueryBox;
+
 public:
-    TryLaterQueryBox(weld::Window* pParent, const std::locale& rLocale, const OUString& aMessage, bool bEnableOverride);
+    TryLaterQueryBox(weld::Window* pParent, const std::locale& rLocale, const OUString& aMessage,
+                     bool bEnableOverride);
     short run() { return m_xQueryBox->run(); }
 };
 

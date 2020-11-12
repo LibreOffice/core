@@ -25,8 +25,10 @@ class AlreadyOpenQueryBox
 {
 private:
     std::unique_ptr<weld::MessageDialog> m_xQueryBox;
+
 public:
-    AlreadyOpenQueryBox(weld::Window* pParent, const std::locale& rResLocale, const OUString& aMessage, bool bIsStoring);
+    AlreadyOpenQueryBox(weld::Window* pParent, const std::locale& rResLocale,
+                        const OUString& aMessage, bool bIsStoring);
     short run() { return m_xQueryBox->run(); }
 };
 
