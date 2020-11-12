@@ -21,13 +21,15 @@
     Generally a mistake when people meant to use | or operator|
 */
 
-namespace {
-
-class ExpressionAlwaysZero:
-    public loplugin::FilteringPlugin<ExpressionAlwaysZero>
+namespace
+{
+class ExpressionAlwaysZero : public loplugin::FilteringPlugin<ExpressionAlwaysZero>
 {
 public:
-    explicit ExpressionAlwaysZero(loplugin::InstantiationData const & data): FilteringPlugin(data) {}
+    explicit ExpressionAlwaysZero(loplugin::InstantiationData const& data)
+        : FilteringPlugin(data)
+    {
+    }
 
     virtual void run() override
     {
@@ -57,15 +59,16 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
-    bool VisitBinaryOperator(BinaryOperator const *);
-    bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const *);
-    bool TraverseStaticAssertDecl(StaticAssertDecl *);
+    bool VisitBinaryOperator(BinaryOperator const*);
+    bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const*);
+    bool TraverseStaticAssertDecl(StaticAssertDecl*);
+
 private:
     // note, abusing std::unique_ptr as a std::optional lookalike
     std::unique_ptr<APSInt> getExprValue(const Expr* arg);
 };
 
-bool ExpressionAlwaysZero::VisitBinaryOperator( BinaryOperator const * binaryOperator )
+bool ExpressionAlwaysZero::VisitBinaryOperator(BinaryOperator const* binaryOperator)
 {
     if (ignoreLocation(binaryOperator))
         return true;
@@ -86,16 +89,14 @@ bool ExpressionAlwaysZero::VisitBinaryOperator( BinaryOperator const * binaryOpe
         ; // ok
     else
         return true;
-    report(
-        DiagnosticsEngine::Warning, "expression always evaluates to zero, lhs=%0 rhs=%1",
-        compat::getBeginLoc(binaryOperator))
+    report(DiagnosticsEngine::Warning, "expression always evaluates to zero, lhs=%0 rhs=%1",
+           compat::getBeginLoc(binaryOperator))
         << (lhsValue ? lhsValue->toString(10) : "unknown")
-        << (rhsValue ? rhsValue->toString(10) : "unknown")
-        << binaryOperator->getSourceRange();
+        << (rhsValue ? rhsValue->toString(10) : "unknown") << binaryOperator->getSourceRange();
     return true;
 }
 
-bool ExpressionAlwaysZero::VisitCXXOperatorCallExpr( CXXOperatorCallExpr const * cxxOperatorCallExpr )
+bool ExpressionAlwaysZero::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOperatorCallExpr)
 {
     if (ignoreLocation(cxxOperatorCallExpr))
         return true;
@@ -103,7 +104,7 @@ bool ExpressionAlwaysZero::VisitCXXOperatorCallExpr( CXXOperatorCallExpr const *
         return true;
 
     auto op = cxxOperatorCallExpr->getOperator();
-    if ( !(op == OO_Amp || op == OO_AmpEqual || op == OO_AmpAmp))
+    if (!(op == OO_Amp || op == OO_AmpEqual || op == OO_AmpAmp))
         return true;
 
     if (cxxOperatorCallExpr->getNumArgs() != 2)
@@ -118,20 +119,19 @@ bool ExpressionAlwaysZero::VisitCXXOperatorCallExpr( CXXOperatorCallExpr const *
         ; // ok
     else
         return true;
-    report(
-        DiagnosticsEngine::Warning, "expression always evaluates to zero, lhs=%0 rhs=%1",
-        compat::getBeginLoc(cxxOperatorCallExpr))
+    report(DiagnosticsEngine::Warning, "expression always evaluates to zero, lhs=%0 rhs=%1",
+           compat::getBeginLoc(cxxOperatorCallExpr))
         << (lhsValue ? lhsValue->toString(10) : "unknown")
-        << (rhsValue ? rhsValue->toString(10) : "unknown")
-        << cxxOperatorCallExpr->getSourceRange();
+        << (rhsValue ? rhsValue->toString(10) : "unknown") << cxxOperatorCallExpr->getSourceRange();
     return true;
 }
 
-std::unique_ptr<APSInt> ExpressionAlwaysZero::getExprValue(Expr const * expr)
+std::unique_ptr<APSInt> ExpressionAlwaysZero::getExprValue(Expr const* expr)
 {
     expr = expr->IgnoreParenCasts();
     // ignore this, it seems to trigger an infinite recursion
-    if (isa<UnaryExprOrTypeTraitExpr>(expr)) {
+    if (isa<UnaryExprOrTypeTraitExpr>(expr))
+    {
         return std::unique_ptr<APSInt>();
     }
     APSInt x1;
@@ -141,13 +141,9 @@ std::unique_ptr<APSInt> ExpressionAlwaysZero::getExprValue(Expr const * expr)
 }
 
 // these will often evaluate to zero harmlessly
-bool ExpressionAlwaysZero::TraverseStaticAssertDecl( StaticAssertDecl * )
-{
-    return true;
-}
+bool ExpressionAlwaysZero::TraverseStaticAssertDecl(StaticAssertDecl*) { return true; }
 
-loplugin::Plugin::Registration< ExpressionAlwaysZero > X("expressionalwayszero", false);
-
+loplugin::Plugin::Registration<ExpressionAlwaysZero> X("expressionalwayszero", false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
