@@ -1114,13 +1114,13 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     }
                     if (nStrPos == 0)               // ok
                     {
-                        // e.g. Thai T speciality
+                        // e.g. Thai T specialty
                         if (pSc->GetNatNumModifier() && !NumFor[nIndex].GetNatNum().IsSet())
                         {
                             sStr = "[NatNum"  + OUString::number( pSc->GetNatNumModifier()) + "]" + sStr;
                             NumFor[nIndex].SetNatNumNum( pSc->GetNatNumModifier(), false );
                         }
-                        // #i53826# #i42727# For the Thai T speciality we need
+                        // #i53826# #i42727# For the Thai T specialty we need
                         // to freeze the locale and immunize it against
                         // conversions during exports, just in case we want to
                         // save to Xcl. This disables the feature of being able
