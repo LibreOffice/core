@@ -21,13 +21,13 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void XSubTotalDescriptor::testAddNew()
 {
-    uno::Reference< sheet::XSubTotalDescriptor > xSTD(init(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSubTotalDescriptor> xSTD(init(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence< sheet::SubTotalColumn > xCols;
+    uno::Sequence<sheet::SubTotalColumn> xCols;
     xCols.realloc(1);
     xCols[0].Column = 5;
     xCols[0].Function = sheet::GeneralFunction_SUM;
@@ -37,11 +37,10 @@ void XSubTotalDescriptor::testAddNew()
 
 void XSubTotalDescriptor::testClear()
 {
-    uno::Reference< sheet::XSubTotalDescriptor > xSTD(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSubTotalDescriptor> xSTD(init(), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to clear XSubTotalDescriptor", xSTD->clear());
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

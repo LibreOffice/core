@@ -19,26 +19,25 @@
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void XSheetOperation::testClearContents()
 {
-    uno::Reference< sheet::XSheetOperation > xSheetOperation(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetOperation> xSheetOperation(init(), UNO_QUERY_THROW);
 
-    xSheetOperation->clearContents( sheet::CellFlags::VALUE | sheet::CellFlags::FORMULA );
+    xSheetOperation->clearContents(sheet::CellFlags::VALUE | sheet::CellFlags::FORMULA);
 
-    double sum = xSheetOperation->computeFunction( sheet::GeneralFunction_SUM );
+    double sum = xSheetOperation->computeFunction(sheet::GeneralFunction_SUM);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to clean contents", 0.0, sum);
 }
 
 void XSheetOperation::testComputeFunction()
 {
-    uno::Reference< sheet::XSheetOperation > xSheetOperation(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetOperation> xSheetOperation(init(), UNO_QUERY_THROW);
 
-    double count = xSheetOperation->computeFunction( sheet::GeneralFunction_COUNT );
+    double count = xSheetOperation->computeFunction(sheet::GeneralFunction_COUNT);
     CPPUNIT_ASSERT_MESSAGE("Unable to compute function", count >= 0.0);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

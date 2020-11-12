@@ -20,17 +20,17 @@
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void XNamed::testGetName()
 {
-    uno::Reference< container::XNamed > xNamed(init(), UNO_QUERY_THROW);
+    uno::Reference<container::XNamed> xNamed(init(), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(m_aTestName, xNamed->getName());
 }
 
 void XNamed::testSetName()
 {
-    uno::Reference< container::XNamed > xNamed(init(), UNO_QUERY_THROW);
+    uno::Reference<container::XNamed> xNamed(init(), UNO_QUERY_THROW);
     OUString aTestName("NewName");
 
     xNamed->setName(aTestName);

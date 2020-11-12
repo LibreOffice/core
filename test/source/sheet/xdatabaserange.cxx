@@ -26,14 +26,14 @@
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 /**
  * tests setDataArea and getDataArea
  */
 void XDatabaseRange::testDataArea()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<sheet::XDatabaseRange> xDBRange(init("DataArea"), UNO_QUERY_THROW);
 
     table::CellRangeAddress aCellAddress;
     aCellAddress.Sheet = 0;
@@ -43,24 +43,24 @@ void XDatabaseRange::testDataArea()
     aCellAddress.EndRow = 5;
     xDBRange->setDataArea(aCellAddress);
     table::CellRangeAddress aValue = xDBRange->getDataArea();
-    CPPUNIT_ASSERT_EQUAL( aCellAddress.Sheet, aValue.Sheet );
-    CPPUNIT_ASSERT_EQUAL( aCellAddress.StartRow, aValue.StartRow );
-    CPPUNIT_ASSERT_EQUAL( aCellAddress.EndRow, aValue.EndRow );
-    CPPUNIT_ASSERT_EQUAL( aCellAddress.StartColumn, aValue.StartColumn );
-    CPPUNIT_ASSERT_EQUAL( aCellAddress.EndColumn, aValue.EndColumn );
+    CPPUNIT_ASSERT_EQUAL(aCellAddress.Sheet, aValue.Sheet);
+    CPPUNIT_ASSERT_EQUAL(aCellAddress.StartRow, aValue.StartRow);
+    CPPUNIT_ASSERT_EQUAL(aCellAddress.EndRow, aValue.EndRow);
+    CPPUNIT_ASSERT_EQUAL(aCellAddress.StartColumn, aValue.StartColumn);
+    CPPUNIT_ASSERT_EQUAL(aCellAddress.EndColumn, aValue.EndColumn);
 }
 
 void XDatabaseRange::testGetSubtotalDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange(init("SubtotalDescriptor"), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSubTotalDescriptor> xSubtotalDescr = xDBRange->getSubTotalDescriptor();
+    uno::Reference<sheet::XDatabaseRange> xDBRange(init("SubtotalDescriptor"), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSubTotalDescriptor> xSubtotalDescr = xDBRange->getSubTotalDescriptor();
     CPPUNIT_ASSERT(xSubtotalDescr.is());
 }
 
 void XDatabaseRange::testGetSortDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange(init("SortDescriptor"), UNO_QUERY_THROW);
-    const uno::Sequence< beans::PropertyValue > xSortDescr = xDBRange->getSortDescriptor();
+    uno::Reference<sheet::XDatabaseRange> xDBRange(init("SortDescriptor"), UNO_QUERY_THROW);
+    const uno::Sequence<beans::PropertyValue> xSortDescr = xDBRange->getSortDescriptor();
     for (const beans::PropertyValue& aProp : xSortDescr)
     {
         //std::cout << "Prop " << i << " Name: " << OUString(aProp.Name) << std::endl;
@@ -82,11 +82,9 @@ void XDatabaseRange::testGetSortDescriptor()
             sal_Int32 nMaxFieldCount = 0;
             aProp.Value >>= nMaxFieldCount;
             std::cout << "Value: " << nMaxFieldCount << std::endl;
-
         }
         else if (aProp.Name == "SortFields")
         {
-
         }
         else if (aProp.Name == "BindFormatsToContent")
         {
@@ -102,14 +100,12 @@ void XDatabaseRange::testGetSortDescriptor()
         }
         else if (aProp.Name == "OutputPosition")
         {
-
         }
         else if (aProp.Name == "IsUserListEnabled")
         {
-            bool bIsUserListEnabled  = true;
+            bool bIsUserListEnabled = true;
             aProp.Value >>= bIsUserListEnabled;
             CPPUNIT_ASSERT(!bIsUserListEnabled);
-
         }
         else if (aProp.Name == "UserListIndex")
         {
@@ -122,39 +118,39 @@ void XDatabaseRange::testGetSortDescriptor()
 
 void XDatabaseRange::testGetFilterDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange( init("FilterDescriptor"), UNO_QUERY_THROW);
-    uno::Reference< uno::XInterface > xFilterDescr( xDBRange->getFilterDescriptor(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XDatabaseRange> xDBRange(init("FilterDescriptor"), UNO_QUERY_THROW);
+    uno::Reference<uno::XInterface> xFilterDescr(xDBRange->getFilterDescriptor(), UNO_QUERY_THROW);
 }
 
 void XDatabaseRange::testGetImportDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange( init("ImportDescriptor"), UNO_QUERY_THROW);
-    uno::Sequence< beans::PropertyValue > xImportDescr = xDBRange->getImportDescriptor();
-    (void) xImportDescr;
+    uno::Reference<sheet::XDatabaseRange> xDBRange(init("ImportDescriptor"), UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> xImportDescr = xDBRange->getImportDescriptor();
+    (void)xImportDescr;
 }
 
 void XDatabaseRange::testRefresh()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange( init("Refresh"), UNO_QUERY_THROW);
+    uno::Reference<sheet::XDatabaseRange> xDBRange(init("Refresh"), UNO_QUERY_THROW);
 
     const sal_Int32 nCol = 0;
     OUString aHidden("IsVisible");
-    uno::Reference< sheet::XCellRangeReferrer > xCellRangeReferrer(xDBRange, UNO_QUERY_THROW);
-    uno::Reference< table::XCellRange > xCellRange = xCellRangeReferrer->getReferredCells();
+    uno::Reference<sheet::XCellRangeReferrer> xCellRangeReferrer(xDBRange, UNO_QUERY_THROW);
+    uno::Reference<table::XCellRange> xCellRange = xCellRangeReferrer->getReferredCells();
 
     for (sal_Int32 i = 1; i < 5; ++i)
     {
-        uno::Reference< table::XCell > xCell = xCellRange->getCellByPosition(nCol, i);
+        uno::Reference<table::XCell> xCell = xCellRange->getCellByPosition(nCol, i);
         xCell->setValue(0);
     }
 
     for (sal_Int32 i = 2; i < 5; ++i)
     {
-        uno::Reference< table::XColumnRowRange > xColRowRange(xCellRange, UNO_QUERY_THROW);
-        uno::Reference< table::XTableRows > xRows = xColRowRange->getRows();
-        uno::Reference< table::XCellRange > xRow(xRows->getByIndex(i), UNO_QUERY_THROW);
-        uno::Reference< beans::XPropertySet > xPropRow(xRow, UNO_QUERY_THROW);
-        Any aAny = xPropRow->getPropertyValue( aHidden );
+        uno::Reference<table::XColumnRowRange> xColRowRange(xCellRange, UNO_QUERY_THROW);
+        uno::Reference<table::XTableRows> xRows = xColRowRange->getRows();
+        uno::Reference<table::XCellRange> xRow(xRows->getByIndex(i), UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropRow(xRow, UNO_QUERY_THROW);
+        Any aAny = xPropRow->getPropertyValue(aHidden);
 
         CPPUNIT_ASSERT(aAny.get<bool>());
     }
@@ -164,18 +160,15 @@ void XDatabaseRange::testRefresh()
 
     for (sal_Int32 i = 1; i < 5; ++i)
     {
-        uno::Reference< table::XColumnRowRange > xColRowRange(xCellRange, UNO_QUERY_THROW);
-        uno::Reference< table::XTableRows > xRows = xColRowRange->getRows();
-        uno::Reference< table::XCellRange > xRow(xRows->getByIndex(i), UNO_QUERY_THROW);
-        uno::Reference< beans::XPropertySet > xPropRow(xRow, UNO_QUERY_THROW);
-        Any aAny = xPropRow->getPropertyValue( aHidden );
+        uno::Reference<table::XColumnRowRange> xColRowRange(xCellRange, UNO_QUERY_THROW);
+        uno::Reference<table::XTableRows> xRows = xColRowRange->getRows();
+        uno::Reference<table::XCellRange> xRow(xRows->getByIndex(i), UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropRow(xRow, UNO_QUERY_THROW);
+        Any aAny = xPropRow->getPropertyValue(aHidden);
 
         CPPUNIT_ASSERT(!aAny.get<bool>());
     }
-
-
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

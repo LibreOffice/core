@@ -20,11 +20,11 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void DatabaseRange::testMoveCells()
 {
-    uno::Reference< beans::XPropertySet > xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
     const OUString propName("MoveCells");
 
@@ -41,7 +41,7 @@ void DatabaseRange::testMoveCells()
 
 void DatabaseRange::testKeepFormats()
 {
-    uno::Reference< beans::XPropertySet > xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
     const OUString propName("KeepFormats");
 
@@ -58,7 +58,7 @@ void DatabaseRange::testKeepFormats()
 
 void DatabaseRange::testStripData()
 {
-    uno::Reference< beans::XPropertySet > xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
     const OUString propName("StripData");
 
@@ -75,7 +75,7 @@ void DatabaseRange::testStripData()
 
 void DatabaseRange::testAutoFilter()
 {
-    uno::Reference< beans::XPropertySet > xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
     const OUString propName("AutoFilter");
 
@@ -92,60 +92,64 @@ void DatabaseRange::testAutoFilter()
 
 void DatabaseRange::testUseFilterCriteriaSource()
 {
-    uno::Reference< beans::XPropertySet > xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
     const OUString propName("UseFilterCriteriaSource");
 
     bool bUseFilterCriteriaSource = true;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bUseFilterCriteriaSource);
-    CPPUNIT_ASSERT_MESSAGE("Default UseFilterCriteriaSource already changed", !bUseFilterCriteriaSource);
+    CPPUNIT_ASSERT_MESSAGE("Default UseFilterCriteriaSource already changed",
+                           !bUseFilterCriteriaSource);
 
     uno::Any aNewUseFilterCriteriaSource;
     aNewUseFilterCriteriaSource <<= true;
     xDatabaseRange->setPropertyValue(propName, aNewUseFilterCriteriaSource);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bUseFilterCriteriaSource);
-    CPPUNIT_ASSERT_MESSAGE("Value of UseFilterCriteriaSource wasn't changed", bUseFilterCriteriaSource);
+    CPPUNIT_ASSERT_MESSAGE("Value of UseFilterCriteriaSource wasn't changed",
+                           bUseFilterCriteriaSource);
 }
 
 void DatabaseRange::testFilterCriteriaSource()
 {
-    uno::Reference< beans::XPropertySet > xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
     const OUString propName("FilterCriteriaSource");
 
     table::CellRangeAddress cellRangeAddress;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= cellRangeAddress);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default RefreshPeriod already changed",
-                                 table::CellRangeAddress(0,0,0,0,0), cellRangeAddress);
+                                 table::CellRangeAddress(0, 0, 0, 0, 0), cellRangeAddress);
 
     uno::Any aFilterCriteriaSource;
-    aFilterCriteriaSource <<= table::CellRangeAddress(1,1,1,1,1);
+    aFilterCriteriaSource <<= table::CellRangeAddress(1, 1, 1, 1, 1);
     xDatabaseRange->setPropertyValue(propName, aFilterCriteriaSource);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= cellRangeAddress);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Value of FilterCriteriaSource wasn't changed",
-                                 table::CellRangeAddress(1,1,1,1,1), cellRangeAddress);
+                                 table::CellRangeAddress(1, 1, 1, 1, 1), cellRangeAddress);
 }
 
 void DatabaseRange::testRefreshPeriod()
 {
-    uno::Reference< beans::XPropertySet > xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
     const OUString propName("RefreshPeriod");
 
     sal_Int32 aRefreshPeriod = 1;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= aRefreshPeriod);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default RefreshPeriod already changed", sal_Int32(0), aRefreshPeriod);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default RefreshPeriod already changed", sal_Int32(0),
+                                 aRefreshPeriod);
 
     uno::Any aNewRefreshPeriod;
     aNewRefreshPeriod <<= static_cast<sal_Int32>(42);
     xDatabaseRange->setPropertyValue(propName, aNewRefreshPeriod);
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= aRefreshPeriod);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value of RefreshPeriod wasn't changed", sal_Int32(42), aRefreshPeriod);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value of RefreshPeriod wasn't changed", sal_Int32(42),
+                                 aRefreshPeriod);
 }
 
 void DatabaseRange::testFromSelection()
 {
-    uno::Reference< beans::XPropertySet > xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
     const OUString propName("FromSelection");
 
@@ -162,7 +166,7 @@ void DatabaseRange::testFromSelection()
 
 void DatabaseRange::testTokenIndex()
 {
-    uno::Reference< beans::XPropertySet > xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
     const OUString propName("TokenIndex");
 
@@ -179,7 +183,7 @@ void DatabaseRange::testTokenIndex()
 
 void DatabaseRange::testTotalsRow()
 {
-    uno::Reference< beans::XPropertySet > xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
     const OUString propName("TotalsRow");
 
@@ -196,7 +200,7 @@ void DatabaseRange::testTotalsRow()
 
 void DatabaseRange::testContainsHeader()
 {
-    uno::Reference< beans::XPropertySet > xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
     const OUString propName("ContainsHeader");
 
@@ -210,7 +214,6 @@ void DatabaseRange::testContainsHeader()
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bContainsHeader);
     CPPUNIT_ASSERT_MESSAGE("Value of ContainsHeader wasn't changed", !bContainsHeader);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

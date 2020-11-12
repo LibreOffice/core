@@ -18,12 +18,11 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void DataPilotItem::testProperties()
 {
-    uno::Reference< beans::XPropertySet > xItem(init(), UNO_QUERY_THROW);
-
+    uno::Reference<beans::XPropertySet> xItem(init(), UNO_QUERY_THROW);
 
     const OUString propNameIS("IsHidden");
 
@@ -37,7 +36,6 @@ void DataPilotItem::testProperties()
     CPPUNIT_ASSERT(xItem->getPropertyValue(propNameIS) >>= bIsHidden);
     CPPUNIT_ASSERT_MESSAGE("Value of IsHidden wasn't changed", !bIsHidden);
 
-
     const OUString propNameSD("ShowDetail");
 
     bool bShowDetail = false;
@@ -50,7 +48,6 @@ void DataPilotItem::testProperties()
     CPPUNIT_ASSERT(xItem->getPropertyValue(propNameSD) >>= bShowDetail);
     CPPUNIT_ASSERT_MESSAGE("Value of ShowDetail wasn't changed", bShowDetail);
 
-
     sal_Int32 nPosition = 42;
     CPPUNIT_ASSERT(xItem->getPropertyValue("Position") >>= nPosition);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default Position already changed", sal_Int32(0), nPosition);
@@ -62,7 +59,6 @@ void DataPilotItem::testProperties()
     //CPPUNIT_ASSERT(xItem->getPropertyValue(propNameP) >>= nPosition);
     //CPPUNIT_ASSERT_EQUAL_MESSAGE("Value of Position wasn't changed", sal_Int32(42), nPosition);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

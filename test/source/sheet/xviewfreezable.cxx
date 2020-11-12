@@ -16,18 +16,17 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void XViewFreezable::testFreeze()
 {
-    uno::Reference< sheet::XViewFreezable > xViewFreezable(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XViewFreezable> xViewFreezable(init(), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_MESSAGE("View has already frozen panes", !xViewFreezable->hasFrozenPanes());
 
-    xViewFreezable->freezeAtPosition(1,1);
+    xViewFreezable->freezeAtPosition(1, 1);
     CPPUNIT_ASSERT_MESSAGE("Unable to freeze pane", xViewFreezable->hasFrozenPanes());
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

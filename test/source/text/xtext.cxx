@@ -12,8 +12,8 @@
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 XText::~XText() {}
 
 void XText::testInsertRemoveTextContent()
@@ -24,7 +24,6 @@ void XText::testInsertRemoveTextContent()
     xText->insertTextContent(xCursor, getTextContent(), false);
     xText->removeTextContent(getTextContent());
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

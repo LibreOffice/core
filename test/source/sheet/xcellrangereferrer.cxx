@@ -19,14 +19,14 @@
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void XCellRangeReferrer::testGetReferredCells()
 {
-    uno::Reference< sheet::XCellRangeReferrer > xReferrer(init(), UNO_QUERY_THROW);
-    uno::Reference< table::XCellRange > xReferredRange = xReferrer->getReferredCells();
+    uno::Reference<sheet::XCellRangeReferrer> xReferrer(init(), UNO_QUERY_THROW);
+    uno::Reference<table::XCellRange> xReferredRange = xReferrer->getReferredCells();
 
-    uno::Reference< sheet::XCellRangeAddressable > xAddressable( xReferredRange, UNO_QUERY_THROW );
+    uno::Reference<sheet::XCellRangeAddressable> xAddressable(xReferredRange, UNO_QUERY_THROW);
     table::CellRangeAddress aCellRange = xAddressable->getRangeAddress();
 
     CPPUNIT_ASSERT_EQUAL(aCellRange, getCellRange());

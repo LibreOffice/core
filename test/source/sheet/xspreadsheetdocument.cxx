@@ -16,18 +16,17 @@
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void XSpreadsheetDocument::testGetSheets()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xSpreadsheetDoc(init(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheets > xSheets = xSpreadsheetDoc->getSheets();
+    uno::Reference<sheet::XSpreadsheetDocument> xSpreadsheetDoc(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadsheetDoc->getSheets();
     CPPUNIT_ASSERT(xSheets.is());
 
-    uno::Reference< container::XIndexAccess > xIA(xSheets, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL( mnSheets, xIA->getCount() );
+    uno::Reference<container::XIndexAccess> xIA(xSheets, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(mnSheets, xIA->getCount());
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
