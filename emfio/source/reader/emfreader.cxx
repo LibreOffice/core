@@ -618,8 +618,11 @@ namespace emfio
     tools::Polygon EmfReader::ReadPolygonWithSkip(const bool skipFirst, sal_uInt32 nNextPos)
     {
         sal_uInt32 nPoints(0), nStartIndex(0);
-        mpInputStream->SeekRel( 16 );
+        sal_Int32 nLeft, nTop, nRight, nBottom;
+        mpInputStream->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
         mpInputStream->ReadUInt32( nPoints );
+        SAL_INFO("emfio", "\t\tBounds: " << nLeft << ", " << nTop << ", " << nRight << ", " << nBottom << " in device units, Count: " << nPoints);
+
         if (skipFirst)
         {
             nPoints ++;
@@ -661,7 +664,7 @@ namespace emfio
             T nX, nY;
             *mpInputStream >> nX >> nY;
 
-            SAL_INFO("emfio", "\t\t\tPoint " << i << " of " << nPoints - 1 << ": " << nX << ", " << nY);
+            SAL_INFO("emfio", "\t\t\tPoint " << i + 1 << " of " << nPoints << ": " << nX << ", " << nY);
 
             if (!mpInputStream->good())
             {
@@ -1060,7 +1063,7 @@ namespace emfio
                     case EMR_MOVETOEX :
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 );
-                        SAL_INFO("emfio", "\t\tPoint: (" << nX32 << ", " << nY32 << ")");
+                        SAL_INFO("emfio", "\t\tPoint: (" << nX32 << ", " << nY32 << ") - logical unit");
                         MoveTo( Point( nX32, nY32 ), mbRecordPath);
                     }
                     break;
@@ -1107,6 +1110,8 @@ namespace emfio
                     case EMR_SELECTOBJECT :
                     {
                         mpInputStream->ReadUInt32( nIndex );
+
+                        SAL_INFO("emfio", "\t\tIndex: " << nIndex);
                         SelectObject( nIndex );
                     }
                     break;
@@ -1119,18 +1124,32 @@ namespace emfio
 
                             LineInfo    aLineInfo;
                             sal_uInt32      nStyle;
-                            Size        aSize;
                             // #fdo39428 Remove SvStream operator>>(long&)
-                            sal_Int32 nTmpW(0), nTmpH(0);
+                            sal_Int32 nPenWidth(0), nIgnored(0);
 
-                            mpInputStream->ReadUInt32( nStyle ).ReadInt32( nTmpW ).ReadInt32( nTmpH );
-                            aSize.setWidth( nTmpW );
-                            aSize.setHeight( nTmpH );
+                            mpInputStream->ReadUInt32( nStyle ).ReadInt32( nPenWidth ).ReadInt32( nIgnored );
 
-                            if ( aSize.Width() )
-                                aLineInfo.SetWidth( aSize.Width() );
+                            SAL_INFO("emfio", "\t\tIndex: " << nIndex << " nStyle: 0x" << std::hex << nStyle << std::dec << " nPenWidth: " << nPenWidth);
+                            // PS_COSMETIC - line with a width of one logical unit and a style that is a solid color
+                            if ( !nStyle )
+                            {
+                                nPenWidth = 5 * (nPenWidth + 1);
+                                SAL_INFO("emfio", "\t\tline with a width of one logical unit and a style that is a solid color.");
+                            }
+                            if ( nPenWidth )
+                                aLineInfo.SetWidth( nPenWidth );
 
                             bool bTransparent = false;
+                            if ( nStyle & PS_GEOMETRIC )
+                            {
+                                SAL_INFO("emfio", "\t\tPen width is measured in logical units");
+                            }
+                            else
+                            {
+
+                                SAL_INFO("emfio", "\t\tPen width is measured in device units");
+
+                            }
                             switch( nStyle & PS_STYLE_MASK )
                             {
                                 case PS_DASHDOTDOT :
@@ -1165,14 +1184,14 @@ namespace emfio
                             switch( nStyle & PS_ENDCAP_STYLE_MASK )
                             {
                                 case PS_ENDCAP_ROUND :
-                                    if ( aSize.Width() )
+                                    if ( nPenWidth )
                                     {
                                         aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
                                         break;
                                     }
                                     [[fallthrough]];
                                 case PS_ENDCAP_SQUARE :
-                                    if ( aSize.Width() )
+                                    if ( nPenWidth )
                                     {
                                         aLineInfo.SetLineCap( css::drawing::LineCap_SQUARE );
                                         break;
@@ -1365,6 +1384,7 @@ namespace emfio
                     case EMR_LINETO :
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 );
+                        SAL_INFO("emfio", "\t\tPoint: (" << nX32 << ", " << nY32 << ")");
                         LineTo( Point( nX32, nY32 ), mbRecordPath);
                     }
                     break;
@@ -1770,13 +1790,14 @@ namespace emfio
                         [[fallthrough]];
                     case EMR_EXTTEXTOUTW :
                     {
-                        sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
+                        sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode;
+                        float       nXScale, nYScale;
                         sal_uInt32  nOffString, nOptions, offDx;
                         sal_Int32   nLen;
 
                         nCurPos = mpInputStream->Tell() - 8;
 
-                        mpInputStream->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom ).ReadInt32( nGfxMode ).ReadInt32( nXScale ).ReadInt32( nYScale )
+                        mpInputStream->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom ).ReadInt32( nGfxMode ).ReadFloat( nXScale ).ReadFloat( nYScale )
                            .ReadInt32( ptlReferenceX ).ReadInt32( ptlReferenceY ).ReadInt32( nLen ).ReadUInt32( nOffString ).ReadUInt32( nOptions );
 
                         SAL_INFO("emfio", "\t\tBounds: " << nLeft << ", " << nTop << ", " << nRight << ", " << nBottom);

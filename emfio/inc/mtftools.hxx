@@ -185,6 +185,9 @@ namespace emfio
 #define PS_JOIN_MITER       0x2000
 #define PS_JOIN_STYLE_MASK  0xF000
 
+#define PS_COSMETIC     0x00000000
+#define PS_GEOMETRIC    0x00010000
+
 #define ANSI_CHARSET            0
 #define DEFAULT_CHARSET         1
 #define SYMBOL_CHARSET          2
