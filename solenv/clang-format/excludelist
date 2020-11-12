@@ -7442,7 +7442,6 @@ jvmfwk/source/framework.hxx
 jvmfwk/source/fwkbase.cxx
 jvmfwk/source/fwkutil.cxx
 jvmfwk/source/libxmlutil.cxx
-l10ntools/inc/cfglex.hxx
 l10ntools/inc/cfgmerge.hxx
 l10ntools/inc/common.hxx
 l10ntools/inc/export.hxx
@@ -7462,7 +7461,6 @@ l10ntools/source/helper.cxx
 l10ntools/source/helpex.cxx
 l10ntools/source/helpmerge.cxx
 l10ntools/source/idxdict/idxdict.cxx
-l10ntools/source/lngex.cxx
 l10ntools/source/lngmerge.cxx
 l10ntools/source/localize.cxx
 l10ntools/source/merge.cxx

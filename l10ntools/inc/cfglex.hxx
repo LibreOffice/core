@@ -24,10 +24,10 @@
 
 #include <stdio.h>
 
-extern "C" void workOnTokenSet( int, char* );
-extern "C" FILE * init(int, char **);
+extern "C" void workOnTokenSet(int, char*);
+extern "C" FILE* init(int, char**);
 
-void yyerror(char const *);
+void yyerror(char const*);
 
 #endif
 
