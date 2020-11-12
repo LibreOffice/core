@@ -19,7 +19,7 @@
 
 #include <mergetbl.hxx>
 
-SwMergeTableDlg::SwMergeTableDlg(weld::Window *pParent, bool& rWithPrev)
+SwMergeTableDlg::SwMergeTableDlg(weld::Window* pParent, bool& rWithPrev)
     : GenericDialogController(pParent, "modules/swriter/ui/mergetabledialog.ui", "MergeTableDialog")
     , m_rMergePrev(rWithPrev)
     , m_xMergePrevRB(m_xBuilder->weld_radio_button("prev"))
@@ -27,10 +27,7 @@ SwMergeTableDlg::SwMergeTableDlg(weld::Window *pParent, bool& rWithPrev)
     m_xMergePrevRB->set_active(true);
 }
 
-void SwMergeTableDlg::Apply()
-{
-    m_rMergePrev = m_xMergePrevRB->get_active();
-}
+void SwMergeTableDlg::Apply() { m_rMergePrev = m_xMergePrevRB->get_active(); }
 
 short SwMergeTableDlg::run()
 {

@@ -23,13 +23,13 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextContent.hpp>
 
-typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XBookmark > SwVbaBookmark_BASE;
+typedef InheritedHelperInterfaceWeakImpl<ooo::vba::word::XBookmark> SwVbaBookmark_BASE;
 
 class SwVbaBookmark : public SwVbaBookmark_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::text::XTextContent > mxBookmark;
+    css::uno::Reference<css::frame::XModel> mxModel;
+    css::uno::Reference<css::text::XTextContent> mxBookmark;
     OUString maBookmarkName;
     bool mbValid;
 
@@ -39,13 +39,14 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaBookmark( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        const css::uno::Reference< css::frame::XModel >& rModel, const OUString& rName );
+    SwVbaBookmark(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
+                  const css::uno::Reference<css::uno::XComponentContext>& rContext,
+                  const css::uno::Reference<css::frame::XModel>& rModel, const OUString& rName);
     virtual ~SwVbaBookmark() override;
 
-   // Methods
+    // Methods
     virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName( const OUString& ) override;
+    virtual void SAL_CALL setName(const OUString&) override;
     virtual void SAL_CALL Delete() override;
     virtual void SAL_CALL Select() override;
     virtual css::uno::Any SAL_CALL Range() override;

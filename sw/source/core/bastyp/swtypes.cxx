@@ -49,22 +49,16 @@ Size GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
     return aSize;
 }
 
-uno::Reference< linguistic2::XSpellChecker1 >  GetSpellChecker()
+uno::Reference<linguistic2::XSpellChecker1> GetSpellChecker()
 {
     return LinguMgr::GetSpellChecker();
 }
 
-uno::Reference< linguistic2::XHyphenator >  GetHyphenator()
-{
-    return LinguMgr::GetHyphenator();
-}
+uno::Reference<linguistic2::XHyphenator> GetHyphenator() { return LinguMgr::GetHyphenator(); }
 
-uno::Reference< linguistic2::XThesaurus >  GetThesaurus()
-{
-    return LinguMgr::GetThesaurus();
-}
+uno::Reference<linguistic2::XThesaurus> GetThesaurus() { return LinguMgr::GetThesaurus(); }
 
-uno::Reference< linguistic2::XLinguProperties >  GetLinguPropertySet()
+uno::Reference<linguistic2::XLinguProperties> GetLinguPropertySet()
 {
     return LinguMgr::GetLinguPropertySet();
 }

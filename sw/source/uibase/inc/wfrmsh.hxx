@@ -22,7 +22,7 @@
 
 #include "frmsh.hxx"
 
-class SwWebFrameShell: public SwFrameShell
+class SwWebFrameShell : public SwFrameShell
 {
 public:
     SFX_DECL_INTERFACE(SW_WEBFRAMESHELL)
@@ -32,7 +32,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-             SwWebFrameShell(SwView &rView);
+    SwWebFrameShell(SwView& rView);
     virtual ~SwWebFrameShell() override;
 };
 

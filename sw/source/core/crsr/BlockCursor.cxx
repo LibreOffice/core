@@ -20,13 +20,8 @@
 #include <viscrs.hxx>
 #include "BlockCursor.hxx"
 
-SwBlockCursor::~SwBlockCursor()
-{
-}
+SwBlockCursor::~SwBlockCursor() {}
 
-SwShellCursor& SwBlockCursor::getShellCursor()
-{
-    return maCursor;
-}
+SwShellCursor& SwBlockCursor::getShellCursor() { return maCursor; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

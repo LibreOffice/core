@@ -30,8 +30,8 @@ class SW_DLLPUBLIC ConditionEditDropTarget : public DropTargetHelper
 private:
     ConditionEdit& m_rEdit;
 
-    SAL_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    SAL_DLLPRIVATE virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+    SAL_DLLPRIVATE virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
+    SAL_DLLPRIVATE virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override;
 
 public:
     ConditionEditDropTarget(ConditionEdit& rEdit);
@@ -53,7 +53,10 @@ public:
     void save_value() { m_xControl->save_value(); }
     bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
-    void connect_changed(const Link<weld::Entry&, void>& rLink) { m_xControl->connect_changed(rLink); }
+    void connect_changed(const Link<weld::Entry&, void>& rLink)
+    {
+        m_xControl->connect_changed(rLink);
+    }
     void replace_selection(const OUString& rText) { m_xControl->replace_selection(rText); }
     void hide() { m_xControl->hide(); }
     weld::Entry& get_widget() { return *m_xControl; }

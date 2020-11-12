@@ -22,7 +22,7 @@
 
 #include "textsh.hxx"
 
-class SwWebTextShell: public SwTextShell
+class SwWebTextShell : public SwTextShell
 {
 public:
     SFX_DECL_INTERFACE(SW_WEBTEXTSHELL)
@@ -32,7 +32,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-             SwWebTextShell(SwView &rView);
+    SwWebTextShell(SwView& rView);
     virtual ~SwWebTextShell() override;
 };
 

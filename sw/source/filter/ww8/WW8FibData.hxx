@@ -35,8 +35,8 @@ public:
     void setReadOnlyRecommended(bool bReadOnlyRecommended);
     void setWriteReservation(bool bWriteReservation);
 
-    bool getReadOnlyRecommended() const { return m_bReadOnlyRecommended;}
-    bool getWriteReservation() const { return m_bWriteReservation;}
+    bool getReadOnlyRecommended() const { return m_bReadOnlyRecommended; }
+    bool getWriteReservation() const { return m_bWriteReservation; }
 };
 }
 

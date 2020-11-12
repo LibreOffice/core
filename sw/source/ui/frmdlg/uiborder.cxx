@@ -35,22 +35,20 @@ SwBorderDlg::SwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes 
     m_xDialog->set_title(SwResId(STR_FRMUI_BORDER));
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER );
+    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER);
 
     if (fnCreatePage)
     {
         std::unique_ptr<SfxTabPage> xNewPage = (*fnCreatePage)(get_content_area(), this, &rSet);
         SfxAllItemSet aSet(*(rSet.GetPool()));
-        aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE, static_cast<sal_uInt16>(nType)));
-        if(SwBorderModes::TABLE == nType)
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_HIDESHADOWCTL));
+        aSet.Put(SfxUInt16Item(SID_SWMODE_TYPE, static_cast<sal_uInt16>(nType)));
+        if (SwBorderModes::TABLE == nType)
+            aSet.Put(SfxUInt32Item(SID_FLAG_TYPE, SVX_HIDESHADOWCTL));
         xNewPage->PageCreated(aSet);
         SetTabPage(std::move(xNewPage));
     }
 }
 
-SwBorderDlg::~SwBorderDlg()
-{
-}
+SwBorderDlg::~SwBorderDlg() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

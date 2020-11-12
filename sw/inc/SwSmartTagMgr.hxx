@@ -28,17 +28,17 @@ class SwSmartTagMgr final : public SmartTagMgr
 private:
     static SwSmartTagMgr* spTheSwSmartTagMgr;
 
-    SwSmartTagMgr( const OUString& rModuleName );
+    SwSmartTagMgr(const OUString& rModuleName);
     virtual ~SwSmartTagMgr() override;
 
 public:
     static SwSmartTagMgr& Get();
 
     // css::util::XModifyListener
-    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;
 
     // css::util::XChangesListener
-      virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) override;
+    virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& Event) override;
 };
 
 #endif

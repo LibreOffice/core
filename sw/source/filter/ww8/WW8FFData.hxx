@@ -27,7 +27,6 @@ class SvStream;
 
 namespace sw
 {
-
 class WW8FFData final
 {
 private:
@@ -60,9 +59,9 @@ private:
     OUString msMacroEnter;
     OUString msMacroExit;
 
-    std::vector< OUString > msListEntries;
+    std::vector<OUString> msListEntries;
 
-    static void WriteOUString(SvStream * pStream, const OUString & rStr, bool bAddZero);
+    static void WriteOUString(SvStream* pStream, const OUString& rStr, bool bAddZero);
 
 public:
     WW8FFData();
@@ -72,15 +71,15 @@ public:
 
     void setResult(sal_uInt8 nResult) { mnResult = nResult; }
 
-    void setName(const OUString & rName) { msName = rName; }
+    void setName(const OUString& rName) { msName = rName; }
 
-    void setHelp(const OUString & rHelp);
+    void setHelp(const OUString& rHelp);
 
-    void setStatus(const OUString & rStatus);
+    void setStatus(const OUString& rStatus);
 
-    void addListboxEntry(const OUString & rEntry);
+    void addListboxEntry(const OUString& rEntry);
 
-    void Write(SvStream * pDataStrm);
+    void Write(SvStream* pDataStrm);
 };
 }
 

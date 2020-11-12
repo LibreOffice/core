@@ -30,7 +30,6 @@ class SwDoc;
 
 namespace sw
 {
-
 class DocumentTimerManager : public IDocumentTimerAccess
 {
 public:
@@ -43,7 +42,7 @@ public:
         Fields,
     };
 
-    DocumentTimerManager( SwDoc& i_rSwdoc );
+    DocumentTimerManager(SwDoc& i_rSwdoc);
     virtual ~DocumentTimerManager() override;
 
     void StartIdling() override;
@@ -62,9 +61,9 @@ private:
 
     /// Delay starting idle jobs to allow for post-load activity.
     /// Used by LOK only.
-    DECL_LINK( FireIdleJobsTimeout, Timer *, void );
+    DECL_LINK(FireIdleJobsTimeout, Timer*, void);
 
-    DECL_LINK( DoIdleJobs, Timer *, void );
+    DECL_LINK(DoIdleJobs, Timer*, void);
 
     IdleJob GetNextIdleJob() const;
 
@@ -81,7 +80,6 @@ inline bool DocumentTimerManager::IsDocIdle() const
 {
     return ((0 == m_nIdleBlockCount) && (GetNextIdleJob() != IdleJob::Busy));
 }
-
 }
 
 #endif

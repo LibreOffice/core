@@ -64,23 +64,23 @@ class SwSortDlg : public weld::GenericDialogController
     OUString aRowText;
     OUString aNumericText;
 
-    SwWrtShell          &rSh;
+    SwWrtShell& rSh;
     std::unique_ptr<CollatorResource> m_xColRes;
 
     sal_uInt16 nX;
     sal_uInt16 nY;
 
     void Apply();
-    sal_Unicode         GetDelimChar() const;
+    sal_Unicode GetDelimChar() const;
 
     DECL_LINK(CheckHdl, weld::ToggleButton&, void);
-    DECL_LINK(DelimHdl, weld::ToggleButton&, void );
+    DECL_LINK(DelimHdl, weld::ToggleButton&, void);
     DECL_LINK(LanguageListBoxHdl, weld::ComboBox&, void);
     void LanguageHdl(weld::ComboBox const*);
-    DECL_LINK(DelimCharHdl, weld::Button&,void);
+    DECL_LINK(DelimCharHdl, weld::Button&, void);
 
 public:
-    SwSortDlg(weld::Window * pParent, SwWrtShell &rSh);
+    SwSortDlg(weld::Window* pParent, SwWrtShell& rSh);
     virtual short run() override;
 };
 

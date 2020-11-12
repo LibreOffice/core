@@ -30,7 +30,6 @@ class SvxSearchItem;
 class IDocumentDrawModelAccess
 {
 public:
-
     /** Draw Model and id accessors
      */
     virtual const SwDrawModel* GetDrawModel() const = 0;
@@ -45,7 +44,7 @@ public:
     virtual SdrLayerID GetInvisibleControlsId() const = 0;
 
     /** method to notify drawing page view about the invisible layers */
-    virtual void NotifyInvisibleLayers( SdrPageView& _rSdrPageView ) = 0;
+    virtual void NotifyInvisibleLayers(SdrPageView& _rSdrPageView) = 0;
 
     /** method to determine, if a layer ID belongs to the visible ones.
         Note: If given layer ID is unknown, method asserts and returns <false>.
@@ -56,7 +55,7 @@ public:
 
         @return bool, indicating, if given layer ID belongs to the visible ones.
     */
-    virtual bool IsVisibleLayerId( SdrLayerID _nLayerId ) const = 0;
+    virtual bool IsVisibleLayerId(SdrLayerID _nLayerId) const = 0;
 
     /** method to determine, if the corresponding invisible layer ID for a visible one.
 
@@ -69,14 +68,13 @@ public:
 
         @return sal_Int8, invisible layer ID corresponding to given layer ID
     */
-    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( SdrLayerID _nVisibleLayerId ) = 0;
+    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne(SdrLayerID _nVisibleLayerId) = 0;
 
     /// Searches text in shapes anchored inside rPaM.
     virtual bool Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem) = 0;
 
 protected:
-
-    virtual ~IDocumentDrawModelAccess() {};
+    virtual ~IDocumentDrawModelAccess(){};
 };
 
 #endif

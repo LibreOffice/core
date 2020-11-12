@@ -25,72 +25,72 @@ class SwLayoutFrame;
 
 namespace objectpositioning
 {
-    class SwEnvironmentOfAnchoredObject
-    {
-    private:
-        const bool mbFollowTextFlow;
+class SwEnvironmentOfAnchoredObject
+{
+private:
+    const bool mbFollowTextFlow;
 
-    public:
-        /** constructor
+public:
+    /** constructor
 
-            @param _bFollowTextFlow
-            input parameter - indicates, if the anchored object, for which
-            this environment is instantiated, follow the text flow or not
-        */
-        SwEnvironmentOfAnchoredObject( const bool _bFollowTextFlow );
+        @param _bFollowTextFlow
+        input parameter - indicates, if the anchored object, for which
+        this environment is instantiated, follow the text flow or not
+    */
+    SwEnvironmentOfAnchoredObject(const bool _bFollowTextFlow);
 
-        /** destructor
-        */
-        ~SwEnvironmentOfAnchoredObject();
+    /** destructor
+    */
+    ~SwEnvironmentOfAnchoredObject();
 
-        /** determine environment layout frame for possible horizontal object
-            positions respectively for alignment to 'page areas'
+    /** determine environment layout frame for possible horizontal object
+        positions respectively for alignment to 'page areas'
 
-            this is, if object has to follow the text flow:
-            - cell frame, if anchored inside a cell
-            - fly frame, if anchored inside a fly frame
-            otherwise it's the page frame
+        this is, if object has to follow the text flow:
+        - cell frame, if anchored inside a cell
+        - fly frame, if anchored inside a fly frame
+        otherwise it's the page frame
 
-            this is, if object hasn't to follow the text flow:
-            - page frame.
-            - no exception any more. Thus remove
-            parameter <_bForPageAlignment>
+        this is, if object hasn't to follow the text flow:
+        - page frame.
+        - no exception any more. Thus remove
+        parameter <_bForPageAlignment>
 
-            @param _rHoriOrientFrame
-            input parameter - frame, at which the horizontal position is
-            oriented at (typically it's the anchor frame).
-            starting point for the search of the layout frame.
+        @param _rHoriOrientFrame
+        input parameter - frame, at which the horizontal position is
+        oriented at (typically it's the anchor frame).
+        starting point for the search of the layout frame.
 
-            @return reference to the layout frame, which determines the
-            horizontal environment the object has to be positioned in.
-        */
-        const SwLayoutFrame& GetHoriEnvironmentLayoutFrame( const SwFrame& _rHoriOrientFrame ) const;
+        @return reference to the layout frame, which determines the
+        horizontal environment the object has to be positioned in.
+    */
+    const SwLayoutFrame& GetHoriEnvironmentLayoutFrame(const SwFrame& _rHoriOrientFrame) const;
 
-        /** determine environment layout frame for possible vertical object
-            positions respectively for alignments to 'page areas'
+    /** determine environment layout frame for possible vertical object
+        positions respectively for alignments to 'page areas'
 
-            this is, if object has to follow the text flow:
-            - cell frame, if anchored inside a cell
-            - fly frame, if anchored inside a fly frame
-            - header/footer frame, if anchored inside page header/footer
-            - footnote frame, if anchored inside footnote
-            otherwise it's the document body frame
+        this is, if object has to follow the text flow:
+        - cell frame, if anchored inside a cell
+        - fly frame, if anchored inside a fly frame
+        - header/footer frame, if anchored inside page header/footer
+        - footnote frame, if anchored inside footnote
+        otherwise it's the document body frame
 
-            this is, if object hasn't to follow the text flow:
-            - page frame.
-            - no exception any more. Thus remove
-            parameter <_bForPageAlignment>
+        this is, if object hasn't to follow the text flow:
+        - page frame.
+        - no exception any more. Thus remove
+        parameter <_bForPageAlignment>
 
-            @param _rVertOrientFrame
-            input parameter - frame, at which the vertical position is
-            oriented at (typically it's the anchor frame).
-            starting point for the search of the layout frame.
+        @param _rVertOrientFrame
+        input parameter - frame, at which the vertical position is
+        oriented at (typically it's the anchor frame).
+        starting point for the search of the layout frame.
 
-            @return reference to the layout frame, which determines the
-            vertical environment the object has to be positioned in.
-        */
-        const SwLayoutFrame& GetVertEnvironmentLayoutFrame( const SwFrame& _rVertOrientFrame ) const;
-    };
+        @return reference to the layout frame, which determines the
+        vertical environment the object has to be positioned in.
+    */
+    const SwLayoutFrame& GetVertEnvironmentLayoutFrame(const SwFrame& _rVertOrientFrame) const;
+};
 }
 
 #endif

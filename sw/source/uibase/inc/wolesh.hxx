@@ -21,7 +21,7 @@
 
 #include "olesh.hxx"
 
-class SwWebOleShell: public SwOleShell
+class SwWebOleShell : public SwOleShell
 {
 public:
     SFX_DECL_INTERFACE(SW_WEBOLESHELL)
@@ -31,7 +31,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    SwWebOleShell(SwView &rView);
+    SwWebOleShell(SwView& rView);
     virtual ~SwWebOleShell() override;
 };
 

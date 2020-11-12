@@ -33,7 +33,7 @@ public:
     virtual ~SwDrawModel() override;
 
     const SwDoc& GetDoc() const { return m_rDoc; }
-          SwDoc& GetDoc()       { return m_rDoc; }
+    SwDoc& GetDoc() { return m_rDoc; }
     /// Put needed items for XPropertyList entries from the DrawModel.
     void PutAreaListItems(SfxItemSet& rSet) const;
 
@@ -43,7 +43,7 @@ public:
 
 private:
     /// override of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
-    virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
+    virtual css::uno::Reference<css::uno::XInterface> createUnoModel() override;
 };
 
 #endif

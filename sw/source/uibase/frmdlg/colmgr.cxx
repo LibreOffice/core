@@ -35,17 +35,17 @@
 void FitToActualSize(SwFormatCol& rCol, sal_uInt16 nWidth)
 {
     const sal_uInt16 nCount = rCol.GetColumns().size();
-    for(sal_uInt16 i = 0; i < nCount; ++i)
+    for (sal_uInt16 i = 0; i < nCount; ++i)
     {
         const sal_uInt16 nTmp = rCol.CalcColWidth(i, nWidth);
-        auto & col = rCol.GetColumns()[i];
+        auto& col = rCol.GetColumns()[i];
         col.SetWishWidth(nTmp);
         // If necessary, shrink borders (as equally as possible) to keep up the invariant that
         // GetWishWidth() >= GetLeft() + GetRight():
         sal_uInt32 const borders = col.GetLeft() + col.GetRight();
         if (borders > nTmp)
         {
-            auto const shrink =  borders - nTmp;
+            auto const shrink = borders - nTmp;
             auto const half = shrink / 2; // rounds down
             if (col.GetLeft() < col.GetRight())
             {
@@ -67,34 +67,34 @@ void FitToActualSize(SwFormatCol& rCol, sal_uInt16 nWidth)
 // public methods
 
 // set column quantity and Gutterwidth
-void SwColMgr::SetCount(sal_uInt16 nCount, sal_uInt16  nGutterWidth)
+void SwColMgr::SetCount(sal_uInt16 nCount, sal_uInt16 nGutterWidth)
 {
     aFormatCol.Init(nCount, nGutterWidth, nWidth);
     aFormatCol.SetWishWidth(nWidth);
     aFormatCol.SetGutterWidth(nGutterWidth, nWidth);
 }
 
-sal_uInt16 SwColMgr::GetGutterWidth( sal_uInt16 nPos ) const
+sal_uInt16 SwColMgr::GetGutterWidth(sal_uInt16 nPos) const
 {
     sal_uInt16 nRet;
-    if(nPos == USHRT_MAX )
+    if (nPos == USHRT_MAX)
         nRet = GetCount() > 1 ? aFormatCol.GetGutterWidth() : DEF_GUTTER_WIDTH;
     else
     {
-        OSL_ENSURE(nPos < GetCount() - 1, "column overindexed" );
+        OSL_ENSURE(nPos < GetCount() - 1, "column overindexed");
         const SwColumns& rCols = aFormatCol.GetColumns();
         nRet = rCols[nPos].GetRight() + rCols[nPos + 1].GetLeft();
     }
     return nRet;
 }
 
-void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
+void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos)
 {
-    if(nPos == USHRT_MAX)
+    if (nPos == USHRT_MAX)
         aFormatCol.SetGutterWidth(nGutterWidth, nWidth);
     else
     {
-        OSL_ENSURE(nPos < GetCount() - 1, "column overindexed" );
+        OSL_ENSURE(nPos < GetCount() - 1, "column overindexed");
         SwColumns& rCols = aFormatCol.GetColumns();
         sal_uInt16 nGutterWidth2 = nGutterWidth / 2;
         rCols[nPos].SetRight(nGutterWidth2);
@@ -124,7 +124,6 @@ void SwColMgr::SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWd)
 {
     OSL_ENSURE(nIdx < GetCount(), "Column array overindexed.");
     aFormatCol.GetColumns()[nIdx].SetWishWidth(nWd);
-
 }
 
 // newly set size
@@ -135,21 +134,19 @@ void SwColMgr::SetActualWidth(sal_uInt16 nW)
 }
 
 // ctor
-SwColMgr::SwColMgr(const SfxItemSet& rSet) :
-    aFormatCol(rSet.Get(RES_COL))
+SwColMgr::SwColMgr(const SfxItemSet& rSet)
+    : aFormatCol(rSet.Get(RES_COL))
 {
     nWidth = static_cast<sal_uInt16>(rSet.Get(RES_FRM_SIZE).GetWidth());
     if (nWidth < MINLAY)
         nWidth = USHRT_MAX;
-    const SvxLRSpaceItem &rLR = rSet.Get(RES_LR_SPACE);
+    const SvxLRSpaceItem& rLR = rSet.Get(RES_LR_SPACE);
     nWidth = nWidth - static_cast<sal_uInt16>(rLR.GetLeft());
     nWidth = nWidth - static_cast<sal_uInt16>(rLR.GetRight());
     ::FitToActualSize(aFormatCol, nWidth);
 }
 
-SwColMgr::~SwColMgr()
-{
-}
+SwColMgr::~SwColMgr() {}
 
 void SwColMgr::SetLineWidthAndColor(SvxBorderLineStyle eStyle, sal_uLong nLWidth, const Color& rCol)
 {

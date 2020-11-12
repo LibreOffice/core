@@ -48,8 +48,8 @@ void SwPercentField::SetRefValue(int nValue)
 
 void SwPercentField::ShowPercent(bool bPercent)
 {
-    if ((bPercent && m_pField->get_unit() == FieldUnit::PERCENT) ||
-        (!bPercent && m_pField->get_unit() != FieldUnit::PERCENT))
+    if ((bPercent && m_pField->get_unit() == FieldUnit::PERCENT)
+        || (!bPercent && m_pField->get_unit() != FieldUnit::PERCENT))
         return;
 
     int nOldValue;
@@ -112,9 +112,10 @@ void SwPercentField::set_value(int nNewValue, FieldUnit eInUnit)
     {
         // Overwrite output value, do not restore later
         int nPercent, nCurrentWidth;
-        if(eInUnit == FieldUnit::TWIP)
+        if (eInUnit == FieldUnit::TWIP)
         {
-            nCurrentWidth = vcl::ConvertValue(nNewValue, 0, nOldDigits, FieldUnit::TWIP, FieldUnit::TWIP);
+            nCurrentWidth
+                = vcl::ConvertValue(nNewValue, 0, nOldDigits, FieldUnit::TWIP, FieldUnit::TWIP);
         }
         else
         {
@@ -168,7 +169,7 @@ int SwPercentField::DenormalizePercent(int nValue)
     else
     {
         int nFactor = ImpPower10(nOldDigits);
-        nValue = ((nValue+(nFactor/2)) / nFactor);
+        nValue = ((nValue + (nFactor / 2)) / nFactor);
     }
     return nValue;
 }
@@ -177,7 +178,7 @@ int SwPercentField::ImpPower10(sal_uInt16 n)
 {
     int nValue = 1;
 
-    for (sal_uInt16 i=0; i < n; ++i)
+    for (sal_uInt16 i = 0; i < n; ++i)
         nValue *= 10;
 
     return nValue;
@@ -193,9 +194,8 @@ int SwPercentField::GetRealValue(FieldUnit eOutUnit)
 
 int SwPercentField::Convert(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
 {
-    if (eInUnit == eOutUnit ||
-        (eInUnit == FieldUnit::NONE && eOutUnit == m_pField->get_unit()) ||
-        (eOutUnit == FieldUnit::NONE && eInUnit == m_pField->get_unit()))
+    if (eInUnit == eOutUnit || (eInUnit == FieldUnit::NONE && eOutUnit == m_pField->get_unit())
+        || (eOutUnit == FieldUnit::NONE && eInUnit == m_pField->get_unit()))
         return nValue;
 
     if (eInUnit == FieldUnit::PERCENT)
@@ -206,7 +206,8 @@ int SwPercentField::Convert(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
         if (eOutUnit == FieldUnit::TWIP) // Only convert if necessary
             return NormalizePercent(nTwipValue);
         else
-            return vcl::ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FieldUnit::TWIP, eOutUnit);
+            return vcl::ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FieldUnit::TWIP,
+                                     eOutUnit);
     }
 
     if (eOutUnit == FieldUnit::PERCENT)
@@ -215,7 +216,7 @@ int SwPercentField::Convert(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
         int nCurrentWidth;
         nValue = DenormalizePercent(nValue);
 
-        if (eInUnit == FieldUnit::TWIP)  // Only convert if necessary
+        if (eInUnit == FieldUnit::TWIP) // Only convert if necessary
             nCurrentWidth = nValue;
         else
             nCurrentWidth = vcl::ConvertValue(nValue, 0, nOldDigits, eInUnit, FieldUnit::TWIP);

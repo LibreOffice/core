@@ -22,11 +22,10 @@
 
 #include <IDocumentExternalData.hxx>
 
-namespace sw {
-
+namespace sw
+{
 class DocumentExternalDataManager : public IDocumentExternalData
 {
-
 private:
     DocumentExternalDataManager(DocumentExternalDataManager const&) = delete;
     DocumentExternalDataManager& operator=(DocumentExternalDataManager const&) = delete;
@@ -34,13 +33,12 @@ private:
 public:
     DocumentExternalDataManager() = default;
 
-    void setExternalData( ::sw::tExternalDataType eType, ::sw::tExternalDataPointer pPayload) override;
+    void setExternalData(::sw::tExternalDataType eType,
+                         ::sw::tExternalDataPointer pPayload) override;
     ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType) override;
 };
-
 }
 
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-

@@ -30,4 +30,3 @@ SwPageFrame const* sw_getPage(SwRootFrame const& rLayout, sal_Int32 const nPage)
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-

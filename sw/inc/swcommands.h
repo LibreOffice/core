@@ -19,9 +19,8 @@
 #ifndef INCLUDED_SW_INC_SWCOMMANDS_H
 #define INCLUDED_SW_INC_SWCOMMANDS_H
 
-#define CMD_FN_READONLY_SELECTION_MODE              ".uno:SelectTextMode"
+#define CMD_FN_READONLY_SELECTION_MODE ".uno:SelectTextMode"
 
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-

@@ -29,24 +29,26 @@ class SwNodeIndex;
 
 // the special readers
 
-class HTMLReader: public Reader
+class HTMLReader : public Reader
 {
     // we don't want to have the streams/storages open
     virtual bool SetStrmStgPtr() override;
-    virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
+    virtual ErrCode Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
     virtual OUString GetTemplateName(SwDoc& rDoc) const override;
 
     /// Parse FilterOptions passed to the importer.
     void SetupFilterOptions();
 
     OUString m_aNamespace;
+
 public:
     HTMLReader();
 };
 
 class XMLReader : public Reader
 {
-    virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
+    virtual ErrCode Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
+
 public:
     virtual SwReaderType GetReaderType() override;
 
@@ -54,17 +56,17 @@ public:
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
-    virtual size_t GetSectionList( SfxMedium& rMedium,
-                                   std::vector<OUString>& rStrings) const override;
+    virtual size_t GetSectionList(SfxMedium& rMedium,
+                                  std::vector<OUString>& rStrings) const override;
 };
 
 // the special writers
 
-void GetWW8Writer( const OUString&, const OUString&, WriterRef& );
+void GetWW8Writer(const OUString&, const OUString&, WriterRef&);
 
 // Get size of fly (if 'automatic' in WW) and check if not too small
 SW_DLLPUBLIC void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
-    SwTwips nPageWidth);
+                                   SwTwips nPageWidth);
 
 #endif
 

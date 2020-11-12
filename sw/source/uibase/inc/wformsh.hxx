@@ -24,7 +24,7 @@
 class SwWebDrawFormShell : public SwDrawFormShell
 {
 public:
-    SwWebDrawFormShell(SwView &rShell);
+    SwWebDrawFormShell(SwView& rShell);
     virtual ~SwWebDrawFormShell() override;
 
     SFX_DECL_INTERFACE(SW_WEBDRAWFORMSHELL)

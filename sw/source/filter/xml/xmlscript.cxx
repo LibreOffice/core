@@ -24,13 +24,13 @@
 
 using namespace ::com::sun::star;
 
-SvXMLImportContext *SwXMLImport::CreateScriptContext()
+SvXMLImportContext* SwXMLImport::CreateScriptContext()
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContext* pContext = nullptr;
 
-    if( !(IsStylesOnlyMode() || IsInsertMode()) )
+    if (!(IsStylesOnlyMode() || IsInsertMode()))
     {
-        pContext = new XMLScriptContext( *this, GetModel() );
+        pContext = new XMLScriptContext(*this, GetModel());
     }
 
     return pContext;
