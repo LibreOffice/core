@@ -154,7 +154,7 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
     {
         Fraction  aVal (SmPtsTo100th_mm(rSize.GetNumerator()),
                         rSize.GetDenominator());
-        tools::Long      nHeight = static_cast<sal_Int32>(aVal);
+        tools::Long      nHeight = static_cast<tools::Long>(aVal);
 
         aFntSize = GetFont().GetFontSize();
         aFntSize.setWidth( 0 );
@@ -173,12 +173,12 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
                 break;
 
             case FontSizeType::MULTIPLY:
-                aFntSize.setHeight( static_cast<sal_Int32>(Fraction(aFntSize.Height()) * rSize) );
+                aFntSize.setHeight( static_cast<tools::Long>(Fraction(aFntSize.Height()) * rSize) );
                 break;
 
             case FontSizeType::DIVIDE:
                 if (rSize != Fraction(0))
-                    aFntSize.setHeight( static_cast<sal_Int32>(Fraction(aFntSize.Height()) / rSize) );
+                    aFntSize.setHeight( static_cast<tools::Long>(Fraction(aFntSize.Height()) / rSize) );
                 break;
             default:
                 break;

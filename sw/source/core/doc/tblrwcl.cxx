@@ -2940,7 +2940,7 @@ static void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewH
         Fraction aTmp( nMyOldH );
         aTmp *= Fraction( nNewHeight, nOldHeight );
         aTmp += Fraction( 1, 2 );       // round up if needed
-        nMyNewH = sal_Int32(aTmp);
+        nMyNewH = tools::Long(aTmp);
     }
 
     SwFrameSize eSize = SwFrameSize::Minimum;

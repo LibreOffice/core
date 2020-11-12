@@ -408,7 +408,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, weld::MetricSpinButton&, v
         tools::Long lX = GetCoreValue( *mxMtrPosX, mePoolUnit );
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        lX = sal_Int32( lX * aUIScale );
+        lX = tools::Long( lX * aUIScale );
 
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_uInt32>(lX));
 
@@ -424,7 +424,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, weld::MetricSpinButton&, v
         tools::Long lY = GetCoreValue( *mxMtrPosY, mePoolUnit );
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        lY = sal_Int32( lY * aUIScale );
+        lY = tools::Long( lY * aUIScale );
 
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_uInt32>(lY));
 
@@ -519,7 +519,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pWidthItem)
                 {
-                    tools::Long lOldWidth1 = sal_Int32( pWidthItem->GetValue() / maUIScale );
+                    tools::Long lOldWidth1 = tools::Long( pWidthItem->GetValue() / maUIScale );
                     SetFieldUnit( *mxMtrWidth, meDlgUnit, true );
                     SetMetricValue( *mxMtrWidth, lOldWidth1, mePoolUnit );
                     limitWidth(*mxMtrWidth);
@@ -539,7 +539,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pHeightItem)
                 {
-                    tools::Long nTmp = sal_Int32( pHeightItem->GetValue() / maUIScale);
+                    tools::Long nTmp = tools::Long( pHeightItem->GetValue() / maUIScale);
                     SetFieldUnit( *mxMtrHeight, meDlgUnit, true );
                     SetMetricValue( *mxMtrHeight, nTmp, mePoolUnit );
                     limitWidth(*mxMtrHeight);
@@ -559,7 +559,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    tools::Long nTmp = sal_Int32(pItem->GetValue() / maUIScale);
+                    tools::Long nTmp = tools::Long(pItem->GetValue() / maUIScale);
                     SetFieldUnit( *mxMtrPosX, meDlgUnit, true );
                     SetMetricValue( *mxMtrPosX, nTmp, mePoolUnit );
                     limitWidth(*mxMtrPosX);
@@ -578,7 +578,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    tools::Long nTmp = sal_Int32(pItem->GetValue() / maUIScale);
+                    tools::Long nTmp = tools::Long(pItem->GetValue() / maUIScale);
                     SetFieldUnit( *mxMtrPosY, meDlgUnit, true );
                     SetMetricValue( *mxMtrPosY, nTmp, mePoolUnit );
                     limitWidth(*mxMtrPosY);
@@ -598,7 +598,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     mlRotX = pItem->GetValue();
-                    mlRotX = sal_Int32( mlRotX / maUIScale );
+                    mlRotX = tools::Long( mlRotX / maUIScale );
                 }
             }
             break;
@@ -611,7 +611,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     mlRotY = pItem->GetValue();
-                    mlRotY = sal_Int32( mlRotY / maUIScale );
+                    mlRotY = tools::Long( mlRotY / maUIScale );
                 }
             }
             break;

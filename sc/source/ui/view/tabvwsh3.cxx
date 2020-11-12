@@ -698,7 +698,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 SvxZoomType eOldZoomType = GetZoomType();
                 SvxZoomType eNewZoomType = eOldZoomType;
                 const Fraction& rOldY = GetViewData().GetZoomY();  // Y is shown
-                sal_uInt16 nOldZoom = static_cast<sal_uInt16>(sal_Int32( rOldY * 100 ));
+                sal_uInt16 nOldZoom = static_cast<sal_uInt16>(tools::Long( rOldY * 100 ));
                 sal_uInt16 nZoom = nOldZoom;
                 bool bCancel = false;
 

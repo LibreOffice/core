@@ -493,7 +493,7 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
                 Size   aSize = rRenderContext.PixelToLogic( Size( 400, 300 ) );
 
                 // align with grid
-                Size aGridSize_(sal_Int32(pDlgEdView->GetSnapGridWidthX()), sal_Int32(pDlgEdView->GetSnapGridWidthY()));
+                Size aGridSize_(tools::Long(pDlgEdView->GetSnapGridWidthX()), tools::Long(pDlgEdView->GetSnapGridWidthY()));
                 aSize.AdjustWidth( -(aSize.Width()  % aGridSize_.Width()) );
                 aSize.AdjustHeight( -(aSize.Height() % aGridSize_.Height()) );
 

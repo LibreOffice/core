@@ -257,7 +257,7 @@ void OViewsWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     rRenderContext.SetTextFillColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
 
     Size aOut(GetOutputSizePixel());
-    tools::Long nStartWidth = sal_Int32(REPORT_STARTMARKER_WIDTH * rRenderContext.GetMapMode().GetScaleX());
+    tools::Long nStartWidth = tools::Long(REPORT_STARTMARKER_WIDTH * rRenderContext.GetMapMode().GetScaleX());
 
     aOut.AdjustWidth( -nStartWidth );
     aOut = rRenderContext.PixelToLogic(aOut);
@@ -1633,7 +1633,7 @@ void OViewsWindow::zoom(const Fraction& _aZoom)
     Resize();
 
     Size aOut = GetOutputSizePixel();
-    aOut.setWidth( sal_Int32(aStartWidth) );
+    aOut.setWidth( tools::Long(aStartWidth) );
     aOut = PixelToLogic(aOut);
 
     tools::Rectangle aRect(PixelToLogic(Point(0,0)),aOut);

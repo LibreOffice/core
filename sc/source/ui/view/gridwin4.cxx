@@ -141,7 +141,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
 
     ScDDComboBoxButton aComboButton(pDev);
     aComboButton.SetOptSizePixel();
-    tools::Long nBWidth  = sal_Int32(aComboButton.GetSizePixel().Width() * rZoomY);
+    tools::Long nBWidth  = tools::Long(aComboButton.GetSizePixel().Width() * rZoomY);
     tools::Long nBHeight = nVer + aTextSize.Height() + 1;
     Size aButSize( nBWidth, nBHeight );
     tools::Long nButtonPos = bLayoutRTL ? aOuter.Left() : aOuter.Right()-nBWidth+1;

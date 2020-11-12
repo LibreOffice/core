@@ -172,8 +172,8 @@ Size OScrollWindowHelper::ResizeScrollBars()
     // resize scrollbars and set their ranges
     {
         Fraction aStartWidth(tools::Long(REPORT_STARTMARKER_WIDTH*m_pParent->getController().getZoomValue()),100);
-        const sal_Int32 nNewWidth = aOutPixSz.Width() - aOffset.X() - static_cast<sal_Int32>(aStartWidth);
-        lcl_setScrollBar(nNewWidth,Point( static_cast<sal_Int32>(aStartWidth) + aOffset.X(), aOutPixSz.Height() ), Size( nNewWidth, nScrSize ), *m_aHScroll);
+        const sal_Int32 nNewWidth = aOutPixSz.Width() - aOffset.X() - static_cast<tools::Long>(aStartWidth);
+        lcl_setScrollBar(nNewWidth,Point( static_cast<tools::Long>(aStartWidth) + aOffset.X(), aOutPixSz.Height() ), Size( nNewWidth, nScrSize ), *m_aHScroll);
     }
     {
         const sal_Int32 nNewHeight = aOutPixSz.Height() - m_aReportWindow->getRulerHeight();

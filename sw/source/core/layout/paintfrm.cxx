@@ -5263,7 +5263,7 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
     SwTwips nPrtWidth = aRectFnSet.GetWidth(getFramePrintArea());
     Fraction aFract( nPrtWidth, 1 );
     aFract *= rInf.GetWidth();
-    const SwTwips nWidth = static_cast<sal_Int32>(aFract);
+    const SwTwips nWidth = static_cast<tools::Long>(aFract);
 
     SwTwips nX = aRectFnSet.GetPrtLeft(*this);
     switch ( rInf.GetAdj() )

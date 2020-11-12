@@ -600,8 +600,8 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         Point aPos = GetActiveWindow()->PixelToLogic(maMousePos);
         pPageView->LogicToPagePos(aPos);
         Fraction aUIScale(GetDoc()->GetUIScale());
-        aPos.setX( sal_Int32(aPos.X() / aUIScale) );
-        aPos.setY( sal_Int32(aPos.Y() / aUIScale) );
+        aPos.setX( ::tools::Long(aPos.X() / aUIScale) );
+        aPos.setY( ::tools::Long(aPos.Y() / aUIScale) );
 
         // position- and size items
         if ( mpDrawView->IsAction() )
@@ -615,12 +615,12 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             {
                 pPageView->LogicToPagePos(aRect);
                 aPos = aRect.TopLeft();
-                aPos.setX( sal_Int32(aPos.X() / aUIScale) );
-                aPos.setY( sal_Int32(aPos.Y() / aUIScale) );
+                aPos.setX( ::tools::Long(aPos.X() / aUIScale) );
+                aPos.setY( ::tools::Long(aPos.Y() / aUIScale) );
                 rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos) );
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                aSize.setHeight( sal_Int32(aSize.Height() / aUIScale) );
-                aSize.setWidth( sal_Int32(aSize.Width()  / aUIScale) );
+                aSize.setHeight( ::tools::Long(aSize.Height() / aUIScale) );
+                aSize.setWidth( ::tools::Long(aSize.Width()  / aUIScale) );
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
             }
         }
@@ -633,13 +633,13 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
                 // Show the position of the selected shape(s)
                 Point aShapePosition (aRect.TopLeft());
-                aShapePosition.setX( sal_Int32(aShapePosition.X() / aUIScale) );
-                aShapePosition.setY( sal_Int32(aShapePosition.Y() / aUIScale) );
+                aShapePosition.setX( ::tools::Long(aShapePosition.X() / aUIScale) );
+                aShapePosition.setY( ::tools::Long(aShapePosition.Y() / aUIScale) );
                 rSet.Put (SfxPointItem(SID_ATTR_POSITION, aShapePosition));
 
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                aSize.setHeight( sal_Int32(aSize.Height() / aUIScale) );
-                aSize.setWidth( sal_Int32(aSize.Width()  / aUIScale) );
+                aSize.setHeight( ::tools::Long(aSize.Height() / aUIScale) );
+                aSize.setWidth( ::tools::Long(aSize.Width()  / aUIScale) );
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
             }
             else

@@ -38,8 +38,8 @@
 #include <sal/log.hxx>
 
 
-#define SCALEPOINT(aPT,aFracX,aFracY) (aPT).setX(sal_Int32((aPT).X()*aFracX));  \
-                                      (aPT).setY(sal_Int32((aPT).Y()*aFracY));
+#define SCALEPOINT(aPT,aFracX,aFracY) (aPT).setX(tools::Long((aPT).X()*aFracX));  \
+                                      (aPT).setY(tools::Long((aPT).Y()*aFracY));
 
 
 /******************************************************************************/

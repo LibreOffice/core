@@ -101,7 +101,7 @@ sal_Int32 OStartMarker::getMinHeight() const
 {
     Fraction aExtraWidth(tools::Long(2 * REPORT_EXTRA_SPACE));
     aExtraWidth *= GetMapMode().GetScaleX();
-    return LogicToPixel(Size(0, m_aText->GetTextHeight())).Height() + sal_Int32(aExtraWidth);
+    return LogicToPixel(Size(0, m_aText->GetTextHeight())).Height() + tools::Long(aExtraWidth);
 }
 
 void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
@@ -236,7 +236,7 @@ void OStartMarker::Resize()
     aImageSize.setWidth( tools::Long(aImageSize.Width() * static_cast<double>(rMapMode.GetScaleX())) );
     aImageSize.setHeight( tools::Long(aImageSize.Height() * static_cast<double>(rMapMode.GetScaleY())) );
 
-    tools::Long nExtraWidth = sal_Int32(REPORT_EXTRA_SPACE * rMapMode.GetScaleX());
+    tools::Long nExtraWidth = tools::Long(REPORT_EXTRA_SPACE * rMapMode.GetScaleX());
 
     Point aPos(aImageSize.Width() + (nExtraWidth * 2), nExtraWidth);
     const tools::Long nHeight = ::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText->GetTextHeight())).Height());
