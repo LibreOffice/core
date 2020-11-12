@@ -179,18 +179,6 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Color_TabBarBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_TabBarLeftPadding],
-            Any(sal_Int32(2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_TabBarTopPadding],
-            Any(sal_Int32(2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_TabBarRightPadding],
-            Any(sal_Int32(2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_TabBarBottomPadding],
-            Any(sal_Int32(2)));
 
         setPropertyValue(
             maPropertyIdToNameMap[Int_TabMenuPadding],
@@ -203,21 +191,8 @@ void Theme::UpdateTheme()
             Any(sal_Int32(3)));
 
         setPropertyValue(
-            maPropertyIdToNameMap[Int_TabItemWidth],
-            Any(sal_Int32(32)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_TabItemHeight],
-            Any(sal_Int32(32)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Color_TabItemBorder],
-            Any(sal_Int32(rStyle.GetActiveBorderColor().GetRGBColor())));
-
-        setPropertyValue(
             maPropertyIdToNameMap[Color_DropDownBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Color_DropDownBorder],
-            Any(sal_Int32(rStyle.GetActiveBorderColor().GetRGBColor())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_Highlight],
@@ -227,22 +202,12 @@ void Theme::UpdateTheme()
             Any(sal_Int32(rStyle.GetHighlightTextColor().GetRGBColor())));
 
         setPropertyValue(
-            maPropertyIdToNameMap[Color_TabItemBackgroundNormal],
-            Any(sal_Int32(COL_TRANSPARENT)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Color_TabItemBackgroundHighlight],
-            Any(sal_Int32(rStyle.GetActiveTabColor().GetRGBColor())));
-
-        setPropertyValue(
             maPropertyIdToNameMap[Color_HorizontalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_VerticalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Image_TabBarMenu],
-            Any(OUString("private:graphicrepository/sfx2/res/symphony/open_more.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_CloseIndicator],
             Any(OUString("private:graphicrepository/cmd/lc_decrementlevel.png")));
@@ -517,9 +482,6 @@ void Theme::SetupPropertyMaps()
     maIntegers.resize(Int_Bool_ - Color_Int_ - 1);
     maBooleans.resize(Post_Bool_ - Int_Bool_ - 1);
 
-    maPropertyNameToIdMap["Image_TabBarMenu"]=Image_TabBarMenu;
-    maPropertyIdToNameMap[Image_TabBarMenu]="Image_TabBarMenu";
-
     maPropertyNameToIdMap["Image_CloseIndicator"]=Image_CloseIndicator;
     maPropertyIdToNameMap[Image_CloseIndicator]="Image_CloseIndicator";
 
@@ -532,12 +494,6 @@ void Theme::SetupPropertyMaps()
 
     maPropertyNameToIdMap["Color_TabMenuSeparator"]=Color_TabMenuSeparator;
     maPropertyIdToNameMap[Color_TabMenuSeparator]="Color_TabMenuSeparator";
-
-    maPropertyNameToIdMap["Color_TabItemBorder"]=Color_TabItemBorder;
-    maPropertyIdToNameMap[Color_TabItemBorder]="Color_TabItemBorder";
-
-    maPropertyNameToIdMap["Color_DropDownBorder"]=Color_DropDownBorder;
-    maPropertyIdToNameMap[Color_DropDownBorder]="Color_DropDownBorder";
 
     maPropertyNameToIdMap["Color_Highlight"]=Color_Highlight;
     maPropertyIdToNameMap[Color_Highlight]="Color_Highlight";
@@ -560,12 +516,6 @@ void Theme::SetupPropertyMaps()
 
     maPropertyNameToIdMap["Color_TabBarBackground"]=Color_TabBarBackground;
     maPropertyIdToNameMap[Color_TabBarBackground]="Color_TabBarBackground";
-
-    maPropertyNameToIdMap["Color_TabItemBackgroundNormal"]=Color_TabItemBackgroundNormal;
-    maPropertyIdToNameMap[Color_TabItemBackgroundNormal]="Color_TabItemBackgroundNormal";
-
-    maPropertyNameToIdMap["Color_TabItemBackgroundHighlight"]=Color_TabItemBackgroundHighlight;
-    maPropertyIdToNameMap[Color_TabItemBackgroundHighlight]="Color_TabItemBackgroundHighlight";
 
     maPropertyNameToIdMap["Color_HorizontalBorder"]=Color_HorizontalBorder;
     maPropertyIdToNameMap[Color_HorizontalBorder]="Color_HorizontalBorder";
@@ -595,12 +545,6 @@ void Theme::SetupPropertyMaps()
     maPropertyNameToIdMap["Int_TabMenuSeparatorPadding"]=Int_TabMenuSeparatorPadding;
     maPropertyIdToNameMap[Int_TabMenuSeparatorPadding]="Int_TabMenuSeparatorPadding";
 
-    maPropertyNameToIdMap["Int_TabItemWidth"]=Int_TabItemWidth;
-    maPropertyIdToNameMap[Int_TabItemWidth]="Int_TabItemWidth";
-
-    maPropertyNameToIdMap["Int_TabItemHeight"]=Int_TabItemHeight;
-    maPropertyIdToNameMap[Int_TabItemHeight]="Int_TabItemHeight";
-
     maPropertyNameToIdMap["Int_DeckLeftPadding"]=Int_DeckLeftPadding;
     maPropertyIdToNameMap[Int_DeckLeftPadding]="Int_DeckLeftPadding";
 
@@ -612,21 +556,6 @@ void Theme::SetupPropertyMaps()
 
     maPropertyNameToIdMap["Int_DeckBottomPadding"]=Int_DeckBottomPadding;
     maPropertyIdToNameMap[Int_DeckBottomPadding]="Int_DeckBottomPadding";
-
-    maPropertyNameToIdMap["Int_TabBarLeftPadding"]=Int_TabBarLeftPadding;
-    maPropertyIdToNameMap[Int_TabBarLeftPadding]="Int_TabBarLeftPadding";
-
-    maPropertyNameToIdMap["Int_TabBarTopPadding"]=Int_TabBarTopPadding;
-    maPropertyIdToNameMap[Int_TabBarTopPadding]="Int_TabBarTopPadding";
-
-    maPropertyNameToIdMap["Int_TabBarRightPadding"]=Int_TabBarRightPadding;
-    maPropertyIdToNameMap[Int_TabBarRightPadding]="Int_TabBarRightPadding";
-
-    maPropertyNameToIdMap["Int_TabBarBottomPadding"]=Int_TabBarBottomPadding;
-    maPropertyIdToNameMap[Int_TabBarBottomPadding]="Int_TabBarBottomPadding";
-
-    maPropertyNameToIdMap["Int_ButtonCornerRadius"]=Int_ButtonCornerRadius;
-    maPropertyIdToNameMap[Int_ButtonCornerRadius]="Int_ButtonCornerRadius";
 
 
     maPropertyNameToIdMap["Bool_UseSystemColors"]=Bool_UseSystemColors;
@@ -642,15 +571,12 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
 {
     switch(eItem)
     {
-        case Image_TabBarMenu:
         case Image_CloseIndicator:
             return PT_Image;
 
         case Color_DeckTitleFont:
         case Color_PanelTitleFont:
         case Color_TabMenuSeparator:
-        case Color_TabItemBorder:
-        case Color_DropDownBorder:
         case Color_Highlight:
         case Color_HighlightText:
         case Color_DeckBackground:
@@ -658,8 +584,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Color_PanelBackground:
         case Color_PanelTitleBarBackground:
         case Color_TabBarBackground:
-        case Color_TabItemBackgroundNormal:
-        case Color_TabItemBackgroundHighlight:
         case Color_HorizontalBorder:
         case Color_VerticalBorder:
         case Color_DropDownBackground:
@@ -671,17 +595,10 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Int_PanelTitleBarHeight:
         case Int_TabMenuPadding:
         case Int_TabMenuSeparatorPadding:
-        case Int_TabItemWidth:
-        case Int_TabItemHeight:
         case Int_DeckLeftPadding:
         case Int_DeckTopPadding:
         case Int_DeckRightPadding:
         case Int_DeckBottomPadding:
-        case Int_TabBarLeftPadding:
-        case Int_TabBarTopPadding:
-        case Int_TabBarRightPadding:
-        case Int_TabBarBottomPadding:
-        case Int_ButtonCornerRadius:
             return PT_Integer;
 
         case Bool_UseSystemColors:
