@@ -1353,8 +1353,8 @@ void AquaSalGraphics::initResolution(NSWindow* nsWindow)
                     // Apple suggest to do it this way
                     const CGDirectDisplayID nDisplayID = static_cast<CGDirectDisplayID>([pVal longValue]);
                     const CGSize aSize = CGDisplayScreenSize( nDisplayID ); // => result is in millimeters
-                    mnRealDPIX = static_cast<long>((CGDisplayPixelsWide( nDisplayID ) * 25.4) / aSize.width);
-                    mnRealDPIY = static_cast<long>((CGDisplayPixelsHigh( nDisplayID ) * 25.4) / aSize.height);
+                    mnRealDPIX = static_cast<sal_Int32>((CGDisplayPixelsWide( nDisplayID ) * 25.4) / aSize.width);
+                    mnRealDPIY = static_cast<sal_Int32>((CGDisplayPixelsHigh( nDisplayID ) * 25.4) / aSize.height);
                 }
                 else
                 {

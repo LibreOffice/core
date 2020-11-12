@@ -1189,7 +1189,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     return aRet;
 }
 
-static vcl::Font getFont( NSFont* pFont, long nDPIY, const vcl::Font& rDefault )
+static vcl::Font getFont( NSFont* pFont, sal_Int32 nDPIY, const vcl::Font& rDefault )
 {
     vcl::Font aResult( rDefault );
     if( pFont )

@@ -40,7 +40,7 @@ void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
     mbVirDev = false;
 }
 
-void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, long nDPIY )
+void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, sal_Int32 nDPIX, sal_Int32 nDPIY )
 {
     mbWindow = false;
     mbPrinter = true;
