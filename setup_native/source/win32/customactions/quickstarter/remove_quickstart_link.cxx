@@ -21,19 +21,19 @@
 
 #include <shlobj.h>
 
-extern "C" __declspec(dllexport) UINT __stdcall RemoveQuickstarterLink( MSIHANDLE hMSI )
+extern "C" __declspec(dllexport) UINT __stdcall RemoveQuickstarterLink(MSIHANDLE hMSI)
 {
-    WCHAR    szStartupPath[MAX_PATH];
+    WCHAR szStartupPath[MAX_PATH];
 
-    if ( SHGetSpecialFolderPathW( nullptr, szStartupPath, CSIDL_STARTUP, FALSE ) )
+    if (SHGetSpecialFolderPathW(nullptr, szStartupPath, CSIDL_STARTUP, FALSE))
     {
         std::wstring sQuickstartLinkPath = szStartupPath;
 
         sQuickstartLinkPath += L"\\";
-        sQuickstartLinkPath += GetQuickstarterLinkNameW( hMSI );
+        sQuickstartLinkPath += GetQuickstarterLinkNameW(hMSI);
         sQuickstartLinkPath += L".lnk";
 
-        DeleteFileW( sQuickstartLinkPath.c_str() );
+        DeleteFileW(sQuickstartLinkPath.c_str());
     }
 
     return ERROR_SUCCESS;

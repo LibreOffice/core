@@ -37,7 +37,7 @@ extern "C" __declspec(dllexport) UINT __stdcall CheckInstallDirectory(MSIHANDLE 
 
     // unsetting all properties
 
-    UnsetMsiPropertyW( handle, L"DIRECTORY_NOT_EMPTY" );
+    UnsetMsiPropertyW(handle, L"DIRECTORY_NOT_EMPTY");
 
     // 1. Searching for file setup.ini
 
@@ -49,11 +49,11 @@ extern "C" __declspec(dllexport) UINT __stdcall CheckInstallDirectory(MSIHANDLE 
     // std::wstring mystr = L"Searching for " + sSetupIniPath;
     // MessageBoxW(NULL, mystr.c_str(), L"DEBUG", MB_OK);
 
-    if ( IsValidHandle(hdl) )
+    if (IsValidHandle(hdl))
     {
         // setup.ini found -> directory cannot be used for installation.
-        SetMsiPropertyW( handle, L"DIRECTORY_NOT_EMPTY", L"1" );
-        SetMsiErrorCode( MSI_ERROR_DIRECTORY_NOT_EMPTY );
+        SetMsiPropertyW(handle, L"DIRECTORY_NOT_EMPTY", L"1");
+        SetMsiErrorCode(MSI_ERROR_DIRECTORY_NOT_EMPTY);
         // std::wstring notEmptyStr = L"Directory is not empty. Please choose another installation directory.";
         // std::wstring notEmptyTitle = L"Directory not empty";
         // MessageBoxW(NULL, notEmptyStr.c_str(), notEmptyTitle.c_str(), MB_OK);
