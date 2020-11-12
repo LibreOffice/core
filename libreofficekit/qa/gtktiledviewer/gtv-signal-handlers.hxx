@@ -22,19 +22,19 @@ void createView(GtkWidget* pButton, gpointer /*pItem*/);
 
 void getRulerState(GtkWidget* pButton, gpointer /*pItem*/);
 
-void recentUnoChanged( GtkWidget* pSelector, gpointer /* pItem */ );
+void recentUnoChanged(GtkWidget* pSelector, gpointer /* pItem */);
 
 void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */);
 
 void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/);
 
-void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ );
+void changePartMode(GtkWidget* pSelector, gpointer /* pItem */);
 
-void changePart( GtkWidget* pSelector, gpointer /*pItem*/ );
+void changePart(GtkWidget* pSelector, gpointer /*pItem*/);
 
-void openLokDialog( GtkWidget* pSelector, gpointer /*pItem*/ );
+void openLokDialog(GtkWidget* pSelector, gpointer /*pItem*/);
 
-void changeZoom( GtkWidget* pButton, gpointer /* pItem */ );
+void changeZoom(GtkWidget* pButton, gpointer /* pItem */);
 
 void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/);
 

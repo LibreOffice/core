@@ -7282,13 +7282,10 @@ libreofficekit/qa/gtktiledviewer/gtv-lokdocview-signal-handlers.hxx
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.cxx
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.cxx
-libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx
 libreofficekit/qa/tilebench/tilebench.cxx
-libreofficekit/qa/unit/compile_test.c
 libreofficekit/qa/unit/tiledrendering.cxx
 libreofficekit/source/gtk/lokdocview.cxx
 libreofficekit/source/gtk/tilebuffer.cxx
-libreofficekit/source/gtk/tilebuffer.hxx
 lingucomponent/source/hyphenator/hyphen/hyphenimp.cxx
 lingucomponent/source/hyphenator/hyphen/hyphenimp.hxx
 lingucomponent/source/languageguessing/guess.cxx
