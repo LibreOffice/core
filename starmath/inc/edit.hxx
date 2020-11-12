@@ -38,9 +38,12 @@ class SmEditAccessible;
 class CommandEvent;
 class Timer;
 
-namespace svtools { class ColorConfig; }
+namespace svtools
+{
+class ColorConfig;
+}
 
-void SmGetLeftSelectionPart(const ESelection &rSelection, sal_Int32 &nPara, sal_uInt16 &nPos);
+void SmGetLeftSelectionPart(const ESelection& rSelection, sal_Int32& nPara, sal_uInt16& nPos);
 
 class SmEditWindow final : public vcl::Window, public DropTargetHelper
 {
@@ -58,22 +61,22 @@ class SmEditWindow final : public vcl::Window, public DropTargetHelper
     virtual void KeyInput(const KeyEvent& rKEvt) override;
     virtual void Command(const CommandEvent& rCEvt) override;
 
-    DECL_LINK(ModifyTimerHdl, Timer *, void);
-    DECL_LINK(CursorMoveTimerHdl, Timer *, void);
+    DECL_LINK(ModifyTimerHdl, Timer*, void);
+    DECL_LINK(CursorMoveTimerHdl, Timer*, void);
 
     virtual void ApplySettings(vcl::RenderContext&) override;
-    virtual void DataChanged( const DataChangedEvent& ) override;
+    virtual void DataChanged(const DataChangedEvent&) override;
     virtual void Resize() override;
-    virtual void MouseMove(const MouseEvent &rEvt) override;
-    virtual void MouseButtonUp(const MouseEvent &rEvt) override;
-    virtual void MouseButtonDown(const MouseEvent &rEvt) override;
+    virtual void MouseMove(const MouseEvent& rEvt) override;
+    virtual void MouseButtonUp(const MouseEvent& rEvt) override;
+    virtual void MouseButtonDown(const MouseEvent& rEvt) override;
 
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;
     virtual bool DeleteSurroundingText(const Selection& rSelection) override;
 
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
+    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
     DECL_LINK(EditStatusHdl, EditStatus&, void);
@@ -114,10 +117,10 @@ public:
     void Delete();
     void SelectAll();
     void InsertText(const OUString& rText);
-    void MarkError(const Point &rPos);
+    void MarkError(const Point& rPos);
     void SelNextMark();
     void SelPrevMark();
-    static bool HasMark(const OUString &rText);
+    static bool HasMark(const OUString& rText);
 
     void Flush() override;
     void DeleteEditView();
@@ -131,7 +134,6 @@ public:
 
     using Window::GetAccessible;
 };
-
 
 #endif
 

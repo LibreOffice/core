@@ -26,10 +26,10 @@ typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
 using namespace ::com::sun::star;
 
-namespace {
-
-class Test : public test::BootstrapFixture {
-
+namespace
+{
+class Test : public test::BootstrapFixture
+{
 public:
     // init
     virtual void setUp() override;
@@ -78,9 +78,9 @@ public:
 
 private:
     SmDocShellRef xDocShRef;
-    void parseandparseagain(const char *input, const char *test_name);
-    void ParseAndCheck(const char *input, const char *expected, const char *test_name);
-    void ParseAndCompare(const char *formula1, const char *formula2, const char *test_name);
+    void parseandparseagain(const char* input, const char* test_name);
+    void ParseAndCheck(const char* input, const char* expected, const char* test_name);
+    void ParseAndCompare(const char* formula1, const char* formula2, const char* test_name);
 };
 
 void Test::setUp()
@@ -226,9 +226,13 @@ void Test::SimpleOperators()
     parseandparseagain("sum{a}", "Sum");
     parseandparseagain("prod{a}", "Product");
     parseandparseagain("coprod{a}", "Coproduct");
-    parseandparseagain("int from {r_0} to {r_t} a", "Upper and lower bounds shown with integral (from & to)");
-    ParseAndCheck("int csup {r_0} csub {r_t} a", "int csup { r _ 0 } csub { r _ t } a", "Upper and lower bounds shown with integral (csub & csup)");
-    ParseAndCheck("sum csup { size 8 { x - 1 } } csub { size 8 a } b", "sum csup { size 8 { x - 1 } } csub { size 8 a } b", "Sum with sized upper and lower bounds");
+    parseandparseagain("int from {r_0} to {r_t} a",
+                       "Upper and lower bounds shown with integral (from & to)");
+    ParseAndCheck("int csup {r_0} csub {r_t} a", "int csup { r _ 0 } csub { r _ t } a",
+                  "Upper and lower bounds shown with integral (csub & csup)");
+    ParseAndCheck("sum csup { size 8 { x - 1 } } csub { size 8 a } b",
+                  "sum csup { size 8 { x - 1 } } csub { size 8 a } b",
+                  "Sum with sized upper and lower bounds");
     parseandparseagain("int{a}", "Integral");
     parseandparseagain("intd_{1}^{2}{x dx}", "Dynamically-sized integral");
     parseandparseagain("iint{a}", "Double integral");
@@ -345,8 +349,10 @@ void Test::SimpleFormats()
     parseandparseagain("binom{a}{b}", "Vertical stack of 2");
     parseandparseagain("stack{a # b # z}", "Vertical stack, more than 2");
     parseandparseagain("matrix{a # b ## c # d}", "Matrix");
-    parseandparseagain("matrix{a # \"=\" # alignl{b} ## {} # \"=\" # alignl{c+1}}", "Equations aligned at '=' (using 'matrix') ");
-    parseandparseagain("stack{alignl{a} = b # alignl{phantom{a} = c+1}}", "Equations aligned at '=' (using 'phantom') ");
+    parseandparseagain("matrix{a # \"=\" # alignl{b} ## {} # \"=\" # alignl{c+1}}",
+                       "Equations aligned at '=' (using 'matrix') ");
+    parseandparseagain("stack{alignl{a} = b # alignl{phantom{a} = c+1}}",
+                       "Equations aligned at '=' (using 'phantom') ");
     parseandparseagain("asldkfjo newline sadkfj", "New line");
     parseandparseagain("stuff `stuff", "Small gap (grave)");
     parseandparseagain("stuff~stuff", "Large gap (tilde)");
@@ -430,7 +436,7 @@ void Test::SimpleSpecialChars()
  * Doing this doesn't prove that it is correct, but it should prove that the
  * meaning of the original command is not being changed.
  */
-void Test::parseandparseagain(const char *formula, const char *test_name)
+void Test::parseandparseagain(const char* formula, const char* test_name)
 {
     OUString output1, output2;
 
@@ -446,9 +452,7 @@ void Test::parseandparseagain(const char *formula, const char *test_name)
     SmNodeToTextVisitor(pNode2.get(), output2);
 
     // compare
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name,
-        output1,
-        output2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name, output1, output2);
 
     // auxiliary test for Accept()
     std::unique_ptr<MockVisitor> mv(new MockVisitor);
@@ -456,7 +460,7 @@ void Test::parseandparseagain(const char *formula, const char *test_name)
     pNode2->Accept(mv.get());
 }
 
-void Test::ParseAndCheck(const char *formula, const char * expected, const char *test_name)
+void Test::ParseAndCheck(const char* formula, const char* expected, const char* test_name)
 {
     OUString sOutput;
 
@@ -468,9 +472,7 @@ void Test::ParseAndCheck(const char *formula, const char * expected, const char 
 
     // compare
     OUString sExpected = OUString::createFromAscii(expected);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name,
-        sExpected,
-        sOutput);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name, sExpected, sOutput);
 
     // auxiliary test for Accept()
     std::unique_ptr<MockVisitor> mv(new MockVisitor);
@@ -478,7 +480,7 @@ void Test::ParseAndCheck(const char *formula, const char * expected, const char 
 }
 
 // Parse two formula commands and verify that they give the same output
-void Test::ParseAndCompare(const char *formula1, const char *formula2, const char *test_name)
+void Test::ParseAndCompare(const char* formula1, const char* formula2, const char* test_name)
 {
     OUString sOutput1, sOutput2;
 
@@ -512,7 +514,7 @@ void Test::testBinomInBinHor()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(pTree.get(), xDocShRef.get());
-    ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
+    ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
     // move forward (more than) enough places to be at the end
     int i;
@@ -537,7 +539,7 @@ void Test::testBinVerInUnary()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(pTree.get(), xDocShRef.get());
-    ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
+    ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
     // move forward (more than) enough places to be at the end
     int i;
@@ -552,7 +554,8 @@ void Test::testBinVerInUnary()
     aCursor.InsertText("2");
 
     sExpected += "- { 1 over 2 }";
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected, xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected,
+                                 xDocShRef->GetText());
 }
 
 void Test::testBinHorInSubSup()
@@ -562,7 +565,7 @@ void Test::testBinHorInSubSup()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(pTree.get(), xDocShRef.get());
-    ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
+    ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
     // Insert an RSup expression with a BinHor for the exponent
     aCursor.InsertText("a");
@@ -576,7 +579,8 @@ void Test::testBinHorInSubSup()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", OUString("{ a ^ { b + c } + d }"), xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", OUString("{ a ^ { b + c } + d }"),
+                                 xDocShRef->GetText());
 }
 
 void Test::testUnaryInMixedNumberAsNumerator()
@@ -586,7 +590,7 @@ void Test::testUnaryInMixedNumberAsNumerator()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(pTree.get(), xDocShRef.get());
-    ScopedVclPtrInstance< VirtualDevice > pOutputDevice;
+    ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
     // move forward (more than) enough places to be at the end
     for (size_t i = 0; i < 3; ++i)
@@ -615,7 +619,8 @@ void Test::testUnaryInMixedNumberAsNumerator()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("4");
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", OUString("{ 2 { - 1 over 2 } + 4 }"), xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator",
+                                 OUString("{ 2 { - 1 over 2 } + 4 }"), xDocShRef->GetText());
 }
 
 void Test::testMiscEquivalent()
@@ -637,7 +642,8 @@ void Test::testMiscEquivalent()
     ParseAndCompare("{ \xf0\x9d\x91\x8e }", "\xf0\x9d\x91\x8e", "non-BMP variable in brace");
 
     // tdf#88320
-    ParseAndCompare("A_1,B_2", "A_{1},B_2", "Comma between a digit and non-digit delimits subscript");
+    ParseAndCompare("A_1,B_2", "A_{1},B_2",
+                    "Comma between a digit and non-digit delimits subscript");
 
     //tdf#97164
     ParseAndCompare("100 %", "100\"%\"", "Percent symbol at the end");
@@ -653,8 +659,6 @@ void Test::testParser()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

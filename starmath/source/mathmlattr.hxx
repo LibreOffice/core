@@ -21,7 +21,8 @@
 // MathML 3: 2.1.5.2 Length Valued Attributes
 // <https://www.w3.org/TR/MathML/chapter2.html#fund.units>
 
-enum class MathMLLengthUnit {
+enum class MathMLLengthUnit
+{
     None,
     Em,
     Ex,
@@ -44,13 +45,13 @@ struct MathMLAttributeLengthValue
     }
 };
 
-sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeLengthValue& rV);
-
+sal_Int32 ParseMathMLAttributeLengthValue(const OUString& rStr, MathMLAttributeLengthValue& rV);
 
 // MathML 3: 3.2.2 Mathematics style attributes common to token elements
 // <https://www.w3.org/TR/MathML3/chapter3.html#presm.commatt>
 
-enum class MathMLMathvariantValue {
+enum class MathMLMathvariantValue
+{
     Normal,
     Bold,
     Italic,
@@ -71,7 +72,7 @@ enum class MathMLMathvariantValue {
     Stretched
 };
 
-bool GetMathMLMathvariantValue(const OUString &rStr, MathMLMathvariantValue& rV);
+bool GetMathMLMathvariantValue(const OUString& rStr, MathMLMathvariantValue& rV);
 
 #endif
 

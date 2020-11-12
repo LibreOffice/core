@@ -18,7 +18,8 @@
 #include <vector>
 
 /** Representation of caret position with an equation */
-struct SmCaretPos{
+struct SmCaretPos
+{
     SmCaretPos(SmNode* selectedNode = nullptr, int iIndex = 0)
         : pSelectedNode(selectedNode)
         , nIndex(iIndex)
@@ -43,7 +44,8 @@ struct SmCaretPos{
 
     /** True, if this is a valid caret position */
     bool IsValid() const { return pSelectedNode != nullptr; }
-    bool operator==(const SmCaretPos &pos) const {
+    bool operator==(const SmCaretPos& pos) const
+    {
         return pos.pSelectedNode == pSelectedNode && nIndex == pos.nIndex;
     }
     /** Get the caret position after pNode, regardless of pNode
@@ -51,48 +53,56 @@ struct SmCaretPos{
      * Gets the caret position following pNode, this is SmCaretPos(pNode, 1).
      * Unless pNode is an instance of SmTextNode, then the index is the text length.
      */
-    static SmCaretPos GetPosAfter(SmNode* pNode) {
-        if(pNode && pNode->GetType() == SmNodeType::Text)
+    static SmCaretPos GetPosAfter(SmNode* pNode)
+    {
+        if (pNode && pNode->GetType() == SmNodeType::Text)
             return SmCaretPos(pNode, static_cast<SmTextNode*>(pNode)->GetText().getLength());
         return SmCaretPos(pNode, 1);
     }
 };
 
 /** A line that represents a caret */
-class SmCaretLine{
+class SmCaretLine
+{
 public:
-    SmCaretLine(tools::Long left = 0, tools::Long top = 0, tools::Long height = 0) {
+    SmCaretLine(tools::Long left = 0, tools::Long top = 0, tools::Long height = 0)
+    {
         _top = top;
         _left = left;
         _height = height;
     }
-    tools::Long GetTop() const {return _top;}
-    tools::Long GetLeft() const {return _left;}
-    tools::Long GetHeight() const {return _height;}
-    tools::Long SquaredDistanceX(const SmCaretLine& line) const{
+    tools::Long GetTop() const { return _top; }
+    tools::Long GetLeft() const { return _left; }
+    tools::Long GetHeight() const { return _height; }
+    tools::Long SquaredDistanceX(const SmCaretLine& line) const
+    {
         return (GetLeft() - line.GetLeft()) * (GetLeft() - line.GetLeft());
     }
-    tools::Long SquaredDistanceX(const Point &pos) const{
+    tools::Long SquaredDistanceX(const Point& pos) const
+    {
         return (GetLeft() - pos.X()) * (GetLeft() - pos.X());
     }
-    tools::Long SquaredDistanceY(const SmCaretLine& line) const{
+    tools::Long SquaredDistanceY(const SmCaretLine& line) const
+    {
         tools::Long d = GetTop() - line.GetTop();
-        if(d < 0)
+        if (d < 0)
             d = (d * -1) - GetHeight();
         else
             d = d - line.GetHeight();
-        if(d < 0)
+        if (d < 0)
             return 0;
         return d * d;
     }
-    tools::Long SquaredDistanceY(const Point &pos) const{
+    tools::Long SquaredDistanceY(const Point& pos) const
+    {
         tools::Long d = GetTop() - pos.Y();
-        if(d < 0)
+        if (d < 0)
             d = (d * -1) - GetHeight();
-        if(d < 0)
+        if (d < 0)
             return 0;
         return d * d;
     }
+
 private:
     tools::Long _top;
     tools::Long _left;
@@ -102,11 +112,12 @@ private:
 // SmCaretPosGraph
 
 /** An entry in SmCaretPosGraph */
-struct SmCaretPosGraphEntry{
+struct SmCaretPosGraphEntry
+{
     SmCaretPosGraphEntry(SmCaretPos pos, SmCaretPosGraphEntry* left, SmCaretPosGraphEntry* right)
-        : CaretPos{pos}
-        , Left{left}
-        , Right{right}
+        : CaretPos{ pos }
+        , Left{ left }
+        , Right{ right }
     {
     }
     /** Caret position */
@@ -115,18 +126,15 @@ struct SmCaretPosGraphEntry{
     SmCaretPosGraphEntry* Left;
     /** Entry to the right visually */
     SmCaretPosGraphEntry* Right;
-    void SetRight(SmCaretPosGraphEntry* right){
-        Right = right;
-    }
-    void SetLeft(SmCaretPosGraphEntry* left){
-        Left = left;
-    }
+    void SetRight(SmCaretPosGraphEntry* right) { Right = right; }
+    void SetLeft(SmCaretPosGraphEntry* left) { Left = left; }
 };
 
 /** A graph over all caret positions
  * @remarks Graphs can only grow, entries cannot be removed!
  */
-class SmCaretPosGraph{
+class SmCaretPosGraph
+{
 public:
     SmCaretPosGraph();
 
@@ -135,18 +143,14 @@ public:
     /** Add a caret position
      *  @remarks If left is NULL, they will point back to the entry.
      */
-    SmCaretPosGraphEntry* Add(SmCaretPos pos,
-                            SmCaretPosGraphEntry* left = nullptr);
+    SmCaretPosGraphEntry* Add(SmCaretPos pos, SmCaretPosGraphEntry* left = nullptr);
 
     std::vector<std::unique_ptr<SmCaretPosGraphEntry>>::iterator begin()
     {
         return mvEntries.begin();
     }
 
-    std::vector<std::unique_ptr<SmCaretPosGraphEntry>>::iterator end()
-    {
-        return mvEntries.end();
-    }
+    std::vector<std::unique_ptr<SmCaretPosGraphEntry>>::iterator end() { return mvEntries.end(); }
 
 private:
     std::vector<std::unique_ptr<SmCaretPosGraphEntry>> mvEntries;
