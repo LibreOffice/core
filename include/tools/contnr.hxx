@@ -21,8 +21,8 @@
 
 #include <limits.h>
 
-#define TREELIST_APPEND             (ULONG_MAX)
-#define TREELIST_ENTRY_NOTFOUND     (ULONG_MAX)
+#define TREELIST_APPEND (ULONG_MAX)
+#define TREELIST_ENTRY_NOTFOUND (ULONG_MAX)
 
 #endif
 

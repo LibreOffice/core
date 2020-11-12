@@ -13,10 +13,9 @@
 #include <memory>
 #include <functional>
 
-namespace vcl {
-
+namespace vcl
+{
 class Window;
-
 }
 
 class UIObject;

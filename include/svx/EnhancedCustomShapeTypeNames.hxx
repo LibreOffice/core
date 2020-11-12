@@ -25,9 +25,9 @@
 
 namespace EnhancedCustomShapeTypeNames
 {
-    SVXCORE_DLLPUBLIC MSO_SPT Get( const OUString& );
-    SVXCORE_DLLPUBLIC OUString Get( const MSO_SPT );
-    SVXCORE_DLLPUBLIC OUString GetAccName( const OUString& );
+SVXCORE_DLLPUBLIC MSO_SPT Get(const OUString&);
+SVXCORE_DLLPUBLIC OUString Get(const MSO_SPT);
+SVXCORE_DLLPUBLIC OUString GetAccName(const OUString&);
 }
 
 #endif

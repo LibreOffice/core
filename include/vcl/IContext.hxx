@@ -16,14 +16,10 @@
 
 namespace vcl
 {
-
 class VCL_DLLPUBLIC IContext
 {
 protected:
-    IContext()
-    {
-        maContext.push_back( vcl::EnumContext::Context::Any );
-    }
+    IContext() { maContext.push_back(vcl::EnumContext::Context::Any); }
 
 public:
     void SetContext(const std::vector<vcl::EnumContext::Context>& aContext)
@@ -31,7 +27,7 @@ public:
         maContext = aContext;
     }
 
-    bool HasContext( const vcl::EnumContext::Context eContext ) const
+    bool HasContext(const vcl::EnumContext::Context eContext) const
     {
         auto aFind = std::find(maContext.begin(), maContext.end(), eContext);
         if (aFind == maContext.end())

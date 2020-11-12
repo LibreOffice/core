@@ -30,17 +30,17 @@ class Timer;
 class SVX_DLLPUBLIC SvxModifyControl final : public SfxStatusBarControl
 {
 public:
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) override;
-    virtual void    Paint( const UserDrawEvent& rUsrEvt ) override;
-    virtual void    Click() override;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+                              const SfxPoolItem* pState) override;
+    virtual void Paint(const UserDrawEvent& rUsrEvt) override;
+    virtual void Click() override;
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SvxModifyControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
+    SvxModifyControl(sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb);
 
 private: // Links
-    DECL_LINK( OnTimer, Timer *, void );
+    DECL_LINK(OnTimer, Timer*, void);
 
 private: // Functions
     void _repaint();

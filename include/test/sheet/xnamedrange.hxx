@@ -14,12 +14,12 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XNamedRange
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     // XNamedRange
     void testGetContent();
@@ -32,9 +32,8 @@ public:
 protected:
     ~XNamedRange() {}
 
-    virtual css::uno::Reference< css::sheet::XNamedRange> getNamedRange(const OUString&) = 0;
+    virtual css::uno::Reference<css::sheet::XNamedRange> getNamedRange(const OUString&) = 0;
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XNAMEDRANGE_HXX

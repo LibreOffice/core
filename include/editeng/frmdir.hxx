@@ -58,5 +58,4 @@ const char* getFrmDirResId(size_t nIndex);
 
 #endif // INCLUDED_EDITENG_FRMDIR_HXX
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

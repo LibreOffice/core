@@ -22,7 +22,8 @@
 #include <svx/xcolit.hxx>
 #include <svx/svddef.hxx>
 
-inline XColorItem makeSdrShadowColorItem(const Color& rTheColor) {
+inline XColorItem makeSdrShadowColorItem(const Color& rTheColor)
+{
     return XColorItem(SDRATTR_SHADOWCOLOR, rTheColor);
 }
 

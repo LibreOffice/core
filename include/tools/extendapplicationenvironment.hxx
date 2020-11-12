@@ -22,12 +22,11 @@
 #include <sal/config.h>
 #include <tools/toolsdllapi.h>
 
-namespace tools {
-
+namespace tools
+{
 // Extend the environment of the process in a platform specific way as necessary
 // for OOo-related applications; must be called first thing in main:
 TOOLS_DLLPUBLIC void extendApplicationEnvironment();
-
 }
 
 #endif

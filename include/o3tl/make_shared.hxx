@@ -14,14 +14,13 @@
 #include <memory>
 #include <type_traits>
 
-namespace o3tl {
-
+namespace o3tl
+{
 /** Allocate an array stored in a shared_ptr, calling operator delete[].
     Note that this is only allowed for arithmetic types because shared_ptr
     implicitly converts to sub-types.
  */
-template<typename T>
-std::shared_ptr<T> make_shared_array(size_t const size)
+template <typename T> std::shared_ptr<T> make_shared_array(size_t const size)
 {
     static_assert(std::is_arithmetic<T>::value, "only arrays of arithmetic types allowed");
     return std::shared_ptr<T>(new T[size], std::default_delete<T[]>());
@@ -31,8 +30,7 @@ std::shared_ptr<T> make_shared_array(size_t const size)
     which won't throw in practice, or where std::terminate is
     an acceptable response if they do
 */
-template<class T, class... Args>
-std::shared_ptr<T> make_shared(Args&&... args)
+template <class T, class... Args> std::shared_ptr<T> make_shared(Args&&... args)
 {
 #if defined(__COVERITY__)
     return std::shared_ptr<T>(new T(std::forward<Args>(args)...), o3tl::default_delete<T>());

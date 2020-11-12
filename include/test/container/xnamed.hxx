@@ -18,13 +18,13 @@
 
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XNamed
 {
 public:
     XNamed(const OUString& rTestName)
-      : m_aTestName(rTestName)
+        : m_aTestName(rTestName)
     {
     }
 
@@ -34,7 +34,7 @@ public:
     void testSetNameByScSheetLinkObj();
     void testSetNameThrowsException();
 
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
 protected:
     ~XNamed() {}
@@ -42,7 +42,6 @@ protected:
 private:
     OUString m_aTestName;
 };
-
 }
 
 #endif // INCLUDED_TEST_CONTAINER_XNAMED_HXX

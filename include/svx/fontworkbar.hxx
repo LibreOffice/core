@@ -31,8 +31,7 @@ class SdrView;
 
 namespace svx
 {
-
-bool SVXCORE_DLLPUBLIC checkForSelectedFontWork( SdrView const * pSdrView, sal_uInt32& nCheckStatus );
+bool SVXCORE_DLLPUBLIC checkForSelectedFontWork(SdrView const* pSdrView, sal_uInt32& nCheckStatus);
 
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontworkBar final : public SfxShell
 {
@@ -47,10 +46,9 @@ public:
     FontworkBar(SfxViewShell* pViewShell);
     virtual ~FontworkBar() override;
 
-    static void execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindings& rBindings );
-    static void getState( SdrView const * pSdrView, SfxItemSet& rSet );
+    static void execute(SdrView& rSdrView, SfxRequest const& rReq, SfxBindings& rBindings);
+    static void getState(SdrView const* pSdrView, SfxItemSet& rSet);
 };
-
 }
 
 #endif // INCLUDED_SVX_FONTWORKBAR_HXX

@@ -14,8 +14,8 @@
 
 #include <desktop/dllapi.h>
 
-namespace crashreport {
-
+namespace crashreport
+{
 // when response = nullptr only make test
 /** Read+Send, Test and send info from the Dump.ini .
 
@@ -27,8 +27,7 @@ namespace crashreport {
         @retval false      Read+Send, Test is a error
 */
 
-CRASHREPORT_DLLPUBLIC bool readConfig(const std::string& iniPath, std::string * response);
-
+CRASHREPORT_DLLPUBLIC bool readConfig(const std::string& iniPath, std::string* response);
 }
 
 #endif

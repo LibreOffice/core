@@ -26,12 +26,21 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <framework/fwkdllapi.h>
 
-namespace com::sun::star::task { class XInteractionContinuation; }
-namespace com::sun::star::task { class XInteractionRequest; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::task
+{
+class XInteractionContinuation;
+}
+namespace com::sun::star::task
+{
+class XInteractionRequest;
+}
+namespace com::sun::star::uno
+{
+template <class E> class Sequence;
+}
 
-namespace framework{
-
+namespace framework
+{
 /*-************************************************************************************************************
     @short          special request for interaction to ask user for right filter
     @descr          These helper can be used to ask user for right filter, if filter detection failed.
@@ -51,22 +60,22 @@ namespace framework{
 
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
-*//*-*************************************************************************************************************/
+*/ /*-*************************************************************************************************************/
 class RequestFilterSelect_Impl;
 class UNLESS_MERGELIBS(FWK_DLLPUBLIC) RequestFilterSelect
 {
     rtl::Reference<RequestFilterSelect_Impl> mxImpl;
 
 public:
-    RequestFilterSelect( const OUString& sURL );
+    RequestFilterSelect(const OUString& sURL);
     ~RequestFilterSelect();
 
-    RequestFilterSelect& operator=(RequestFilterSelect const &) = delete; // MSVC2019 workaround
-    RequestFilterSelect(RequestFilterSelect const &) = delete; // MSVC2019 workaround
+    RequestFilterSelect& operator=(RequestFilterSelect const&) = delete; // MSVC2019 workaround
+    RequestFilterSelect(RequestFilterSelect const&) = delete; // MSVC2019 workaround
 
-    bool     isAbort  () const;
+    bool isAbort() const;
     OUString getFilter() const;
-    css::uno::Reference < css::task::XInteractionRequest > GetRequest();
+    css::uno::Reference<css::task::XInteractionRequest> GetRequest();
 };
 
 /*-************************************************************************************************************
@@ -79,18 +88,18 @@ public:
 
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
-*//*-*************************************************************************************************************/
+*/ /*-*************************************************************************************************************/
 class FWK_DLLPUBLIC InteractionRequest
 {
 public:
-    static css::uno::Reference < css::task::XInteractionRequest > CreateRequest(
+    static css::uno::Reference<css::task::XInteractionRequest> CreateRequest(
         const css::uno::Any& aRequest,
-        const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations );
+        const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>>&
+            lContinuations);
 };
 
+} //  namespace framework
 
-}       //  namespace framework
-
-#endif  // #define INCLUDED_FRAMEWORK_INTERACTION_HXX
+#endif // #define INCLUDED_FRAMEWORK_INTERACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,10 +27,20 @@
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 
-namespace com::sun::star {
-    namespace accessibility { class XAccessible; }
-    namespace accessibility { class XAccessibleEventListener; }
-    namespace awt { struct Point; }
+namespace com::sun::star
+{
+namespace accessibility
+{
+class XAccessible;
+}
+namespace accessibility
+{
+class XAccessibleEventListener;
+}
+namespace awt
+{
+struct Point;
+}
 }
 
 class Point;
@@ -38,10 +48,9 @@ class SvxEditSource;
 
 namespace accessibility
 {
+class AccessibleTextHelper_Impl;
 
-    class AccessibleTextHelper_Impl;
-
-    /** Helper class for objects containing EditEngine/Outliner text
+/** Helper class for objects containing EditEngine/Outliner text
 
         This class provides the methods from the XAccessibleContext,
         XAccessibleEventBroadcaster and XAccessibleComponent
@@ -107,13 +116,12 @@ namespace accessibility
         @see SvxViewForwarder
         @see SvxEditViewForwarder
     */
-    class SVX_DLLPUBLIC AccessibleTextHelper final
-    {
+class SVX_DLLPUBLIC AccessibleTextHelper final
+{
+public:
+    typedef ::std::vector<sal_Int16> VectorOfStates;
 
-    public:
-        typedef ::std::vector< sal_Int16 > VectorOfStates;
-
-        /** Create accessible text object for given edit source
+    /** Create accessible text object for given edit source
 
             @param pEditSource
             The edit source to use. Object ownership is transferred
@@ -123,14 +131,14 @@ namespace accessibility
             model) contained in the given SvxEditSource.
 
         */
-        explicit AccessibleTextHelper( ::std::unique_ptr< SvxEditSource > && pEditSource );
+    explicit AccessibleTextHelper(::std::unique_ptr<SvxEditSource>&& pEditSource);
 
-        ~AccessibleTextHelper();
+    ~AccessibleTextHelper();
 
-        AccessibleTextHelper( const AccessibleTextHelper& ) = delete;
-        AccessibleTextHelper& operator= ( const AccessibleTextHelper& ) = delete;
+    AccessibleTextHelper(const AccessibleTextHelper&) = delete;
+    AccessibleTextHelper& operator=(const AccessibleTextHelper&) = delete;
 
-        /** Query the current edit source
+    /** Query the current edit source
 
             @attention This method returns by reference, so you are
             responsible for serialization (typically, you acquired the
@@ -138,9 +146,9 @@ namespace accessibility
             should only be called from the main office thread.
 
          */
-        const SvxEditSource& GetEditSource() const;
+    const SvxEditSource& GetEditSource() const;
 
-        /** Set the current edit source
+    /** Set the current edit source
 
             @attention Might fire state change events, therefore,
             don't hold any mutex except solar mutex, which you are
@@ -180,9 +188,9 @@ namespace accessibility
             The new edit source to set. Object ownership is transferred
             from the caller to the callee.
         */
-        void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
+    void SetEditSource(::std::unique_ptr<SvxEditSource>&& pEditSource);
 
-        /** Set the event source
+    /** Set the event source
 
             You should set the event source before registering any
             event listener and before requesting any child. Children
@@ -198,9 +206,9 @@ namespace accessibility
             The interface that should be set as the source for
             accessibility events sent by this object.
          */
-        void SetEventSource( const css::uno::Reference< css::accessibility::XAccessible >& rInterface );
+    void SetEventSource(const css::uno::Reference<css::accessibility::XAccessible>& rInterface);
 
-        /** Set offset of EditEngine/Outliner from parent
+    /** Set offset of EditEngine/Outliner from parent
 
             If the origin of the underlying EditEngine/Outliner does
             not correspond to the upper left corner of the object
@@ -214,9 +222,9 @@ namespace accessibility
             @param rPoint
             The offset in screen coordinates (i.e. pixel)
         */
-        void SetOffset( const Point& rPoint );
+    void SetOffset(const Point& rPoint);
 
-        /** Set offset the object adds to all children's indices
+    /** Set offset the object adds to all children's indices
 
             This can be used if the owner of this object has children
             handled by itself. Setting an offset different from 0
@@ -233,15 +241,15 @@ namespace accessibility
             @param nOffset
             The offset to add to every children's index.
         */
-        void SetStartIndex( sal_Int32 nOffset );
+    void SetStartIndex(sal_Int32 nOffset);
 
-        /** Query offset the object adds to all children's indices
+    /** Query offset the object adds to all children's indices
 
             @return the offset to add to every children's index.
         */
-        sal_Int32 GetStartIndex() const;
+    sal_Int32 GetStartIndex() const;
 
-        /** Sets a vector of additional accessible states.
+    /** Sets a vector of additional accessible states.
 
             The states are passed to every created child object
             (text paragraph). The state values are defined in
@@ -250,9 +258,9 @@ namespace accessibility
             This function has to be called before querying for
             any children (e.g. with GetChild()).
          */
-        void SetAdditionalChildStates( const VectorOfStates& rChildStates );
+    void SetAdditionalChildStates(const VectorOfStates& rChildStates);
 
-        /** Update the visible children
+    /** Update the visible children
 
             @attention Might fire state change events, therefore,
             don't hold any mutex except solar mutex, which you are
@@ -266,9 +274,9 @@ namespace accessibility
             (e.g. via SfxHintId::TextViewScrolled). Normally, there should
             not be a need to call this method.
         */
-        void UpdateChildren();
+    void UpdateChildren();
 
-        /** Drop all references and enter disposed state
+    /** Drop all references and enter disposed state
 
             This method drops all references to external objects (also
             the event source reference set via SetEventSource()) and
@@ -276,9 +284,9 @@ namespace accessibility
             return default values or throw a uno::DisposedException
             exception).
          */
-        void Dispose();
+    void Dispose();
 
-        /** Set the focus state of the accessibility object
+    /** Set the focus state of the accessibility object
 
             Since this class handles children which also might get the
             focus, the user of this class is encouraged to delegate
@@ -301,9 +309,9 @@ namespace accessibility
 
             @see HaveFocus()
          */
-        void SetFocus( bool bHaveFocus = true );
+    void SetFocus(bool bHaveFocus = true);
 
-        /** Query the focus state of the surrounding object
+    /** Query the focus state of the surrounding object
 
             If focus handling is delegated to this class, determine
             focus state with this method. Be prepared that even if you
@@ -313,51 +321,51 @@ namespace accessibility
 
             @return the state of the focus ownership
          */
-        bool HaveFocus();
+    bool HaveFocus();
 
-        // XAccessibleContext child handling methods
+    // XAccessibleContext child handling methods
 
-        /** Implements getAccessibleChildCount
-
-            @attention Don't call with locked mutexes. You may hold
-            the solar mutex, but this method acquires it anyway.
-        */
-        sal_Int32 GetChildCount() const;
-        /** Implements getAccessibleChild
+    /** Implements getAccessibleChildCount
 
             @attention Don't call with locked mutexes. You may hold
             the solar mutex, but this method acquires it anyway.
         */
-        css::uno::Reference< css::accessibility::XAccessible > GetChild( sal_Int32 i );
+    sal_Int32 GetChildCount() const;
+    /** Implements getAccessibleChild
 
-        // XAccessibleEventBroadcaster child related methods
+            @attention Don't call with locked mutexes. You may hold
+            the solar mutex, but this method acquires it anyway.
+        */
+    css::uno::Reference<css::accessibility::XAccessible> GetChild(sal_Int32 i);
 
-        /** Implements addEventListener
+    // XAccessibleEventBroadcaster child related methods
+
+    /** Implements addEventListener
 
             @attention Don't call with locked mutexes
         */
-        void AddEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener );
-        /** Implements removeEventListener
+    void AddEventListener(
+        const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener);
+    /** Implements removeEventListener
 
             @attention Don't call with locked mutexes
         */
-        void RemoveEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener );
+    void RemoveEventListener(
+        const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener);
 
-        // XAccessibleComponent child related methods
+    // XAccessibleComponent child related methods
 
-        /** Implements getAccessibleAt
+    /** Implements getAccessibleAt
 
             @attention Don't call with locked mutexes. You may hold
             the solar mutex, but this method acquires it anyway.
         */
-        css::uno::Reference< css::accessibility::XAccessible > GetAt( const css::awt::Point& aPoint );
+    css::uno::Reference<css::accessibility::XAccessible> GetAt(const css::awt::Point& aPoint);
 
-    private:
-
-        /// @dyn
-        const std::unique_ptr< AccessibleTextHelper_Impl > mpImpl;
-
-    };
+private:
+    /// @dyn
+    const std::unique_ptr<AccessibleTextHelper_Impl> mpImpl;
+};
 
 } // end of namespace accessibility
 

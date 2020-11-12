@@ -22,24 +22,31 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-class SdrEdgeLineDeltaCountItem: public SfxUInt16Item {
+class SdrEdgeLineDeltaCountItem : public SfxUInt16Item
+{
 public:
-    SdrEdgeLineDeltaCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_EDGELINEDELTACOUNT,nVal) {}
+    SdrEdgeLineDeltaCountItem(sal_uInt16 nVal = 0)
+        : SfxUInt16Item(SDRATTR_EDGELINEDELTACOUNT, nVal)
+    {
+    }
     virtual SdrEdgeLineDeltaCountItem* Clone(SfxItemPool*) const override
     {
         return new SdrEdgeLineDeltaCountItem(*this);
     }
 };
 
-inline SdrMetricItem makeSdrEdgeLine1DeltaItem(tools::Long nVal) {
+inline SdrMetricItem makeSdrEdgeLine1DeltaItem(tools::Long nVal)
+{
     return SdrMetricItem(SDRATTR_EDGELINE1DELTA, nVal);
 }
 
-inline SdrMetricItem makeSdrEdgeLine2DeltaItem(tools::Long nVal) {
+inline SdrMetricItem makeSdrEdgeLine2DeltaItem(tools::Long nVal)
+{
     return SdrMetricItem(SDRATTR_EDGELINE2DELTA, nVal);
 }
 
-inline SdrMetricItem makeSdrEdgeLine3DeltaItem(tools::Long nVal) {
+inline SdrMetricItem makeSdrEdgeLine3DeltaItem(tools::Long nVal)
+{
     return SdrMetricItem(SDRATTR_EDGELINE3DELTA, nVal);
 }
 

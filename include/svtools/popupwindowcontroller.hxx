@@ -29,7 +29,10 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/vclptr.hxx>
 
-namespace vcl { class Window; }
+namespace vcl
+{
+class Window;
+}
 
 class InterimToolbarPopup;
 class ToolbarPopupContainer;
@@ -40,8 +43,8 @@ namespace svt
 class PopupWindowControllerImpl;
 
 //HACK to avoid duplicate ImplInheritanceHelper symbols with MSVC:
-class SAL_DLLPUBLIC_TEMPLATE PopupWindowController_Base:
-    public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
+class SAL_DLLPUBLIC_TEMPLATE PopupWindowController_Base
+    : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
     using ImplInheritanceHelper::ImplInheritanceHelper;
 };
@@ -49,30 +52,30 @@ class SAL_DLLPUBLIC_TEMPLATE PopupWindowController_Base:
 class SVT_DLLPUBLIC PopupWindowController : public PopupWindowController_Base
 {
 public:
-    PopupWindowController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                           const css::uno::Reference< css::frame::XFrame >& xFrame,
-                           const OUString& aCommandURL );
+    PopupWindowController(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+                          const css::uno::Reference<css::frame::XFrame>& xFrame,
+                          const OUString& aCommandURL);
 
     virtual ~PopupWindowController() override;
 
     void EndPopupMode();
 
-    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) = 0;
+    virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) = 0;
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override = 0;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override = 0;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
 
     // XComponent
     virtual void SAL_CALL dispose() override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
     // XToolbarController
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
+    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createPopupWindow() override;
     virtual void SAL_CALL click() override;
 
 protected:
@@ -80,7 +83,8 @@ protected:
     VclPtr<InterimToolbarPopup> mxInterimPopover;
 
 private:
-    std::unique_ptr<PopupWindowControllerImpl, o3tl::default_delete<PopupWindowControllerImpl>>  mxImpl;
+    std::unique_ptr<PopupWindowControllerImpl, o3tl::default_delete<PopupWindowControllerImpl>>
+        mxImpl;
 };
 
 } // namespace svt

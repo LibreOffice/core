@@ -25,25 +25,28 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 
-namespace com::sun::star::task { class XStatusIndicator; }
+namespace com::sun::star::task
+{
+class XStatusIndicator;
+}
 
 namespace utl
 {
-
-class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) ProgressHandlerWrap final : public ::cppu::WeakImplHelper< css::ucb::XProgressHandler >
+class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) ProgressHandlerWrap final
+    : public ::cppu::WeakImplHelper<css::ucb::XProgressHandler>
 {
-    css::uno::Reference< css::task::XStatusIndicator > m_xStatusIndicator;
+    css::uno::Reference<css::task::XStatusIndicator> m_xStatusIndicator;
 
 public:
-    ProgressHandlerWrap( css::uno::Reference< css::task::XStatusIndicator > const & xSI );
+    ProgressHandlerWrap(css::uno::Reference<css::task::XStatusIndicator> const& xSI);
 
     // XProgressHandler
-    virtual void SAL_CALL push( const css::uno::Any& Status ) override;
-    virtual void SAL_CALL update( const css::uno::Any& Status ) override;
+    virtual void SAL_CALL push(const css::uno::Any& Status) override;
+    virtual void SAL_CALL update(const css::uno::Any& Status) override;
     virtual void SAL_CALL pop() override;
 };
 
-}   // namespace utl
+} // namespace utl
 
 #endif // INCLUDED_UNOTOOLS_PROGRESSHANDLERWRAP_HXX
 

@@ -30,9 +30,11 @@ private:
     class CollatorResourceData
     {
         friend class CollatorResource;
+
     private:
         OUString m_aName;
         OUString m_aTranslation;
+
     public:
         CollatorResourceData(const OUString& rAlgorithm, const OUString& rTranslation)
             : m_aName(rAlgorithm)
@@ -43,6 +45,7 @@ private:
         const OUString& GetTranslation() const { return m_aTranslation; }
     };
     std::vector<CollatorResourceData> m_aData;
+
 public:
     CollatorResource();
     const OUString& GetTranslation(const OUString& rAlgorithm);

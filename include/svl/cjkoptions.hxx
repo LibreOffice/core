@@ -30,10 +30,9 @@ class SvtCJKOptions_Impl;
 class SVL_DLLPUBLIC SvtCJKOptions final : public utl::detail::Options
 {
 private:
-    std::shared_ptr<SvtCJKOptions_Impl>    pImpl;
+    std::shared_ptr<SvtCJKOptions_Impl> pImpl;
 
 public:
-
     enum EOption
     {
         E_CJKFONT,
@@ -45,7 +44,7 @@ public:
         E_DOUBLELINES,
         E_EMPHASISMARKS,
         E_VERTICALCALLOUT,
-        E_ALL               // special one for IsAnyEnabled()/SetAll() functionality
+        E_ALL // special one for IsAnyEnabled()/SetAll() functionality
     };
 
     // bDontLoad is for referencing purposes only
@@ -60,9 +59,9 @@ public:
     bool IsChangeCaseMapEnabled() const;
     bool IsDoubleLinesEnabled() const;
 
-    void        SetAll(bool bSet);
-    bool    IsAnyEnabled() const;
-    bool    IsReadOnly(EOption eOption) const;
+    void SetAll(bool bSet);
+    bool IsAnyEnabled() const;
+    bool IsReadOnly(EOption eOption) const;
 };
 
 #endif // INCLUDED_SVL_CJKOPTIONS_HXX

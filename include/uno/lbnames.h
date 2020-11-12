@@ -30,7 +30,7 @@
 #ifdef CPPU_ENV
 
 /** Name for C++ compiler/ platform, e.g. "gcc3", "msci" */
-#define CPPU_CURRENT_LANGUAGE_BINDING_NAME SAL_STRINGIFY( CPPU_ENV )
+#define CPPU_CURRENT_LANGUAGE_BINDING_NAME SAL_STRINGIFY(CPPU_ENV)
 
 #else
 

@@ -16,7 +16,10 @@
 
 class DateTime;
 class LocaleDataWrapper;
-namespace vcl { class Window; }
+namespace vcl
+{
+class Window;
+}
 class OutputDevice;
 
 //when two tab pages both have the same basic layout with a preview on the

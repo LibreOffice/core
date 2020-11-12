@@ -44,8 +44,8 @@ public:
     bool IsInClose() const { return bInClose; }
 
 private:
-    SotObject & operator= (const SotObject &) = delete;
-    SotObject(const SotObject &) = delete;
+    SotObject& operator=(const SotObject&) = delete;
+    SotObject(const SotObject&) = delete;
 };
 
 #endif

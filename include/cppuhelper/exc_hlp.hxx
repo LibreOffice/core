@@ -25,7 +25,6 @@
 
 namespace cppu
 {
-
 /** This function throws the exception given by rExc.  The given value has to
     be of typeclass EXCEPTION and must be derived from or of
     type com.sun.star.uno.Exception.
@@ -33,7 +32,7 @@ namespace cppu
     @param rExc
            exception to be thrown.
 */
-CPPUHELPER_DLLPUBLIC void SAL_CALL throwException( const css::uno::Any & rExc );
+CPPUHELPER_DLLPUBLIC void SAL_CALL throwException(const css::uno::Any& rExc);
 
 /** Use this function to get the dynamic type of a caught C++-UNO exception;
     completes the above function throwing exceptions generically.
@@ -85,7 +84,6 @@ CPPUHELPER_DLLPUBLIC void SAL_CALL throwException( const css::uno::Any & rExc );
               same C++ compiler (and linking against one runtime library).
 */
 CPPUHELPER_DLLPUBLIC css::uno::Any SAL_CALL getCaughtException();
-
 }
 
 #endif

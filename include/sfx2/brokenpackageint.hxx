@@ -26,31 +26,36 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::task { class XInteractionRequest; }
+namespace com::sun::star::task
+{
+class XInteractionRequest;
+}
 
 class RequestPackageReparation_Impl;
 class SFX2_DLLPUBLIC RequestPackageReparation
 {
     rtl::Reference<RequestPackageReparation_Impl> mxImpl;
+
 public:
-    RequestPackageReparation( const OUString& aName );
+    RequestPackageReparation(const OUString& aName);
     ~RequestPackageReparation();
-    RequestPackageReparation( const RequestPackageReparation&) = delete;
-    RequestPackageReparation& operator=( const RequestPackageReparation&) = delete;
-    bool    isApproved() const;
-    css::uno::Reference < css::task::XInteractionRequest > GetRequest();
+    RequestPackageReparation(const RequestPackageReparation&) = delete;
+    RequestPackageReparation& operator=(const RequestPackageReparation&) = delete;
+    bool isApproved() const;
+    css::uno::Reference<css::task::XInteractionRequest> GetRequest();
 };
 
 class NotifyBrokenPackage_Impl;
 class SFX2_DLLPUBLIC NotifyBrokenPackage
 {
     rtl::Reference<NotifyBrokenPackage_Impl> mxImpl;
+
 public:
-    NotifyBrokenPackage( const OUString& aName );
+    NotifyBrokenPackage(const OUString& aName);
     ~NotifyBrokenPackage();
-    NotifyBrokenPackage( const NotifyBrokenPackage&) = delete;
-    NotifyBrokenPackage& operator=( const NotifyBrokenPackage&) = delete;
-    css::uno::Reference < css::task::XInteractionRequest > GetRequest();
+    NotifyBrokenPackage(const NotifyBrokenPackage&) = delete;
+    NotifyBrokenPackage& operator=(const NotifyBrokenPackage&) = delete;
+    css::uno::Reference<css::task::XInteractionRequest> GetRequest();
 };
 
 #endif // INCLUDED_SFX2_BROKENPACKAGEINT_HXX

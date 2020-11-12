@@ -22,7 +22,8 @@
 #include <svx/sdooitm.hxx>
 #include <svx/svddef.hxx>
 
-inline SdrOnOffItem makeSdrTextContourFrameItem(bool bOn) {
+inline SdrOnOffItem makeSdrTextContourFrameItem(bool bOn)
+{
     return SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME, bOn);
 }
 

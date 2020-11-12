@@ -26,21 +26,21 @@
 // that are only of importance for interfaces (SwDoc).
 enum class RndStdIds
 {
-    UNKNOWN = -1,       // return value used by SwFEShell::GetAnchorId
+    UNKNOWN = -1, // return value used by SwFEShell::GetAnchorId
 
     // the following 5 values are deliberately the same as the values in css::text::TextContentAnchorType
-    FLY_AT_PARA = int(css::text::TextContentAnchorType_AT_PARAGRAPH),  // Anchored at paragraph.
-    FLY_AS_CHAR = int(css::text::TextContentAnchorType_AS_CHARACTER),  // Anchored as character.
-    FLY_AT_PAGE = int(css::text::TextContentAnchorType_AT_PAGE),       // Anchored at page.
-    FLY_AT_FLY  = int(css::text::TextContentAnchorType_AT_FRAME),      // Anchored at frame.
-    FLY_AT_CHAR = int(css::text::TextContentAnchorType_AT_CHARACTER),  // Anchored at character.
+    FLY_AT_PARA = int(css::text::TextContentAnchorType_AT_PARAGRAPH), // Anchored at paragraph.
+    FLY_AS_CHAR = int(css::text::TextContentAnchorType_AS_CHARACTER), // Anchored as character.
+    FLY_AT_PAGE = int(css::text::TextContentAnchorType_AT_PAGE), // Anchored at page.
+    FLY_AT_FLY = int(css::text::TextContentAnchorType_AT_FRAME), // Anchored at frame.
+    FLY_AT_CHAR = int(css::text::TextContentAnchorType_AT_CHARACTER), // Anchored at character.
 
     HEADER,
     FOOTER,
     HEADERL,
     HEADERR,
 
-    DRAW_OBJECT     // A draw-Object! For the SwDoc-interface only!
+    DRAW_OBJECT // A draw-Object! For the SwDoc-interface only!
 };
 
 #endif

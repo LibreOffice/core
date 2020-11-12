@@ -25,7 +25,6 @@
 #include <tools/weakbase.hxx>
 #include <memory>
 
-
 class OutlinerParaObject;
 class SdrOutliner;
 class SdrTextObj;
@@ -33,8 +32,9 @@ class SdrModel;
 class SfxItemSet;
 enum class OutlinerMode;
 
-namespace sdr::properties {
-    class TextProperties;
+namespace sdr::properties
+{
+class TextProperties;
 }
 
 /** This class stores information about one text inside a shape.
@@ -44,15 +44,15 @@ class SfxStyleSheet;
 class SVXCORE_DLLPUBLIC SdrText : public tools::WeakBase
 {
 public:
-    explicit SdrText( SdrTextObj& rObject );
+    explicit SdrText(SdrTextObj& rObject);
     virtual ~SdrText() override;
 
-    void ForceOutlinerParaObject( OutlinerMode nOutlMode );
+    void ForceOutlinerParaObject(OutlinerMode nOutlMode);
 
-    virtual void SetOutlinerParaObject( std::unique_ptr<OutlinerParaObject> pTextObject );
+    virtual void SetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject);
     OutlinerParaObject* GetOutlinerParaObject() const;
 
-    void CheckPortionInfo( SdrOutliner& rOutliner );
+    void CheckPortionInfo(SdrOutliner& rOutliner);
     void ReformatText();
 
     // default uses GetObjectItemSet, but may be overridden to

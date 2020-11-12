@@ -21,7 +21,7 @@
 
 #include "sal/types.h"
 
-#if defined( _WIN32)
+#if defined(_WIN32)
 #pragma pack(push, 8)
 #endif
 
@@ -31,15 +31,15 @@
 */
 typedef struct _typelib_Uik
 {
-    sal_uInt32  m_Data1;
-    sal_uInt16  m_Data2;
-    sal_uInt16  m_Data3;
-    sal_uInt32  m_Data4;
-    sal_uInt32  m_Data5;
+    sal_uInt32 m_Data1;
+    sal_uInt16 m_Data2;
+    sal_uInt16 m_Data3;
+    sal_uInt32 m_Data4;
+    sal_uInt32 m_Data5;
 } typelib_Uik;
 
-#if defined( _WIN32)
-#   pragma pack(pop)
+#if defined(_WIN32)
+#pragma pack(pop)
 #endif
 
 #endif

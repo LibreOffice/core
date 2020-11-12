@@ -25,50 +25,50 @@
 #include <svx/svdomedia.hxx>
 #include <tools/gen.hxx>
 
-namespace avmedia { class MediaItem; }
+namespace avmedia
+{
+class MediaItem;
+}
 
-namespace sdr::contact {
-
+namespace sdr::contact
+{
 class SVXCORE_DLLPUBLIC ViewContactOfSdrMediaObj : public ViewContactOfSdrObj
 {
     friend class ViewObjectContactOfSdrMediaObj;
 
 public:
-
     // basic constructor, used from SdrObject.
-    explicit ViewContactOfSdrMediaObj( SdrMediaObj& rMediaObj );
+    explicit ViewContactOfSdrMediaObj(SdrMediaObj& rMediaObj);
     virtual ~ViewContactOfSdrMediaObj() override;
 
 public:
-
     // access to SdrMediaObj
     const SdrMediaObj& GetSdrMediaObj() const
     {
         return static_cast<const SdrMediaObj&>(GetSdrObject());
     }
 
-    Size    getPreferredSize() const;
+    Size getPreferredSize() const;
 
-    void    updateMediaItem( ::avmedia::MediaItem& rItem ) const;
-    void    executeMediaItem( const ::avmedia::MediaItem& rItem );
+    void updateMediaItem(::avmedia::MediaItem& rItem) const;
+    void executeMediaItem(const ::avmedia::MediaItem& rItem);
 
 protected:
-
     // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual ViewObjectContact&
+    CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
     // get notified if some properties have changed
-    void mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
+    void mediaPropertiesChanged(const ::avmedia::MediaItem& rNewState);
 
 protected:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
-    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer
+    createViewIndependentPrimitive2DSequence() const override;
 };
-
 }
-
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDRMEDIAOBJ_HXX
 

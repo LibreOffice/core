@@ -22,11 +22,13 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 
-inline SdrMetricItem makeSdrShadowXDistItem(tools::Long nDist) {
+inline SdrMetricItem makeSdrShadowXDistItem(tools::Long nDist)
+{
     return SdrMetricItem(SDRATTR_SHADOWXDIST, nDist);
 }
 
-inline SdrMetricItem makeSdrShadowYDistItem(tools::Long nDist) {
+inline SdrMetricItem makeSdrShadowYDistItem(tools::Long nDist)
+{
     return SdrMetricItem(SDRATTR_SHADOWYDIST, nDist);
 }
 

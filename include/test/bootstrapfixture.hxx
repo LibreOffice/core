@@ -24,8 +24,8 @@
 #include <unotest/bootstrapfixturebase.hxx>
 #include <test/testdllapi.hxx>
 
-namespace test {
-
+namespace test
+{
 enum ValidationFormat
 {
     OOXML,
@@ -42,23 +42,22 @@ enum ValidationFormat
 // run of unit tests ...
 class OOO_DLLPUBLIC_TEST BootstrapFixture : public BootstrapFixtureBase
 {
-  bool m_bNeedUCB;
-  bool m_bAssertOnDialog;
+    bool m_bNeedUCB;
+    bool m_bAssertOnDialog;
 
 protected:
-  css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
+    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 
 public:
-  DECL_STATIC_LINK( BootstrapFixture, ImplInitFilterHdl, ConvertData&, bool );
+    DECL_STATIC_LINK(BootstrapFixture, ImplInitFilterHdl, ConvertData&, bool);
 
-  BootstrapFixture( bool bAssertOnDialog = true, bool bNeedUCB = true );
-  virtual ~BootstrapFixture() override;
+    BootstrapFixture(bool bAssertOnDialog = true, bool bNeedUCB = true);
+    virtual ~BootstrapFixture() override;
 
-  virtual void setUp() override;
+    virtual void setUp() override;
 
-  void validate(const OUString& rURL, ValidationFormat) const;
+    void validate(const OUString& rURL, ValidationFormat) const;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

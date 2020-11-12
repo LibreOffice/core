@@ -26,10 +26,10 @@
 
 namespace comphelper
 {
-
 class COMPHELPER_DLLPUBLIC RefCountedMutex final : public salhelper::SimpleReferenceObject
 {
     osl::Mutex m_aMutex;
+
 public:
     ~RefCountedMutex() override;
 

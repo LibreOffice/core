@@ -15,7 +15,10 @@
 #include <vcl/metaactiontypes.hxx>
 #include <o3tl/enumarray.hxx>
 
-namespace tools { class XmlWriter; }
+namespace tools
+{
+class XmlWriter;
+}
 class GDIMetaFile;
 class SvStream;
 
