@@ -115,11 +115,11 @@ public:
 
     virtual void drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
 
-    virtual void drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
+    virtual void drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
 
-    virtual void drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
+    virtual void drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
 
-    virtual void drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) override;
+    virtual void drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry ) override;
 
     virtual bool drawPolyPolygon(
                 const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -139,18 +139,18 @@ public:
 
     virtual bool drawPolyLineBezier(
                 sal_uInt32 nPoints,
-                const SalPoint* pPtAry,
+                const Point* pPtAry,
                 const PolyFlags* pFlgAry ) override;
 
     virtual bool drawPolygonBezier(
                 sal_uInt32 nPoints,
-                const SalPoint* pPtAry,
+                const Point* pPtAry,
                 const PolyFlags* pFlgAry ) override;
 
     virtual bool drawPolyPolygonBezier(
                 sal_uInt32 nPoly,
                 const sal_uInt32* pPoints,
-                const SalPoint* const* pPtAry,
+                const Point* const* pPtAry,
                 const PolyFlags* const* pFlgAry ) override;
 
     // CopyArea --> No RasterOp, but ClipRegion
@@ -185,7 +185,7 @@ public:
                 tools::Long nWidth, tools::Long nHeight,
                 SalInvert nFlags) override;
 
-    virtual void invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) override;
+    virtual void invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) override;
 
     virtual bool drawEPS(
                 tools::Long nX, tools::Long nY,
