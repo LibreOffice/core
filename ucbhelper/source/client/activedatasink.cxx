@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -33,17 +32,13 @@ namespace ucbhelper
 // XActiveDataSink methods.
 
 // virtual
-void SAL_CALL ActiveDataSink::setInputStream( const uno::Reference< io::XInputStream >& aStream )
+void SAL_CALL ActiveDataSink::setInputStream(const uno::Reference<io::XInputStream>& aStream)
 {
     m_xStream = aStream;
 }
 
-
 // virtual
-uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
-{
-    return m_xStream;
-}
+uno::Reference<io::XInputStream> SAL_CALL ActiveDataSink::getInputStream() { return m_xStream; }
 
 } // namespace ucbhelper
 

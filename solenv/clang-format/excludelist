@@ -15593,9 +15593,6 @@ ucb/source/ucp/webdav/webdavresponseparser.hxx
 ucb/source/ucp/webdav/webdavresultset.cxx
 ucb/source/ucp/webdav/webdavresultset.hxx
 ucb/source/ucp/webdav/webdavservices.cxx
-ucbhelper/source/client/activedatasink.cxx
-ucbhelper/source/client/activedatastreamer.cxx
-ucbhelper/source/client/activedatastreamer.hxx
 ucbhelper/source/client/commandenvironment.cxx
 ucbhelper/source/client/content.cxx
 ucbhelper/source/client/interceptedinteraction.cxx

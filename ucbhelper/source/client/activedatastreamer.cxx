@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -34,16 +33,13 @@ namespace ucbhelper
 // XActiveDataStreamer methods.
 
 // virtual
-void SAL_CALL ActiveDataStreamer::setStream( const uno::Reference< io::XStream >& xStream )
+void SAL_CALL ActiveDataStreamer::setStream(const uno::Reference<io::XStream>& xStream)
 {
     m_xStream = xStream;
 }
 
 // virtual
-uno::Reference< io::XStream > SAL_CALL ActiveDataStreamer::getStream()
-{
-    return m_xStream;
-}
+uno::Reference<io::XStream> SAL_CALL ActiveDataStreamer::getStream() { return m_xStream; }
 
 } // namespace ucbhelper
 
