@@ -26,66 +26,65 @@ namespace reportdesign
 using namespace com::sun::star;
 
 OReportVisitor::OReportVisitor(ITraverseReport* _pTraverseReport)
-                       :m_pTraverseReport(_pTraverseReport)
+    : m_pTraverseReport(_pTraverseReport)
 {
-    OSL_ENSURE(m_pTraverseReport,"ReportDefinition must be not NULL!");
+    OSL_ENSURE(m_pTraverseReport, "ReportDefinition must be not NULL!");
 }
 
-void OReportVisitor::start(const uno::Reference< report::XReportDefinition>& _xReportDefinition)
+void OReportVisitor::start(const uno::Reference<report::XReportDefinition>& _xReportDefinition)
 {
-    OSL_ENSURE(_xReportDefinition.is(),"ReportDefinition is NULL!");
-    if ( !_xReportDefinition.is() )
+    OSL_ENSURE(_xReportDefinition.is(), "ReportDefinition is NULL!");
+    if (!_xReportDefinition.is())
         return;
 
     m_pTraverseReport->traverseReport(_xReportDefinition);
     m_pTraverseReport->traverseReportFunctions(_xReportDefinition->getFunctions());
-    if ( _xReportDefinition->getPageHeaderOn() )
+    if (_xReportDefinition->getPageHeaderOn())
         m_pTraverseReport->traversePageHeader(_xReportDefinition->getPageHeader());
-    if ( _xReportDefinition->getReportHeaderOn() )
+    if (_xReportDefinition->getReportHeaderOn())
         m_pTraverseReport->traverseReportHeader(_xReportDefinition->getReportHeader());
 
-    uno::Reference< report::XGroups > xGroups = _xReportDefinition->getGroups();
+    uno::Reference<report::XGroups> xGroups = _xReportDefinition->getGroups();
     m_pTraverseReport->traverseGroups(xGroups);
     const sal_Int32 nCount = xGroups->getCount();
     sal_Int32 i = 0;
-    for (;i<nCount ; ++i)
+    for (; i < nCount; ++i)
     {
-        uno::Reference< report::XGroup > xGroup(xGroups->getByIndex(i),uno::UNO_QUERY);
+        uno::Reference<report::XGroup> xGroup(xGroups->getByIndex(i), uno::UNO_QUERY);
         m_pTraverseReport->traverseGroup(xGroup);
         m_pTraverseReport->traverseGroupFunctions(xGroup->getFunctions());
-        if ( xGroup->getHeaderOn() )
+        if (xGroup->getHeaderOn())
             m_pTraverseReport->traverseGroupHeader(xGroup->getHeader());
     }
 
     m_pTraverseReport->traverseDetail(_xReportDefinition->getDetail());
 
-    for (i = 0;i<nCount ; ++i)
+    for (i = 0; i < nCount; ++i)
     {
-        uno::Reference< report::XGroup > xGroup(xGroups->getByIndex(i),uno::UNO_QUERY);
-        if ( xGroup->getFooterOn() )
+        uno::Reference<report::XGroup> xGroup(xGroups->getByIndex(i), uno::UNO_QUERY);
+        if (xGroup->getFooterOn())
             m_pTraverseReport->traverseGroupFooter(xGroup->getFooter());
     }
 
-    if ( _xReportDefinition->getPageFooterOn() )
+    if (_xReportDefinition->getPageFooterOn())
         m_pTraverseReport->traversePageFooter(_xReportDefinition->getPageFooter());
-    if ( _xReportDefinition->getReportFooterOn() )
+    if (_xReportDefinition->getReportFooterOn())
         m_pTraverseReport->traverseReportFooter(_xReportDefinition->getReportFooter());
 }
 
-void OReportVisitor::start(const uno::Reference< report::XGroup>& _xGroup)
+void OReportVisitor::start(const uno::Reference<report::XGroup>& _xGroup)
 {
-    OSL_ENSURE(_xGroup.is(),"Group is NULL!");
-    if ( !_xGroup.is() )
+    OSL_ENSURE(_xGroup.is(), "Group is NULL!");
+    if (!_xGroup.is())
         return;
     m_pTraverseReport->traverseGroup(_xGroup);
     m_pTraverseReport->traverseGroupFunctions(_xGroup->getFunctions());
-    if ( _xGroup->getHeaderOn() )
+    if (_xGroup->getHeaderOn())
         m_pTraverseReport->traverseGroupHeader(_xGroup->getHeader());
-    if ( _xGroup->getFooterOn() )
+    if (_xGroup->getFooterOn())
         m_pTraverseReport->traverseGroupFooter(_xGroup->getFooter());
 }
 
 } // namespace reportdesign
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

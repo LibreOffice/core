@@ -32,12 +32,11 @@ class ORptPageDialog : public SfxTabDialogController
 {
 private:
     ORptPageDialog(const ORptPageDialog&) = delete;
-    void operator =(const ORptPageDialog&) = delete;
+    void operator=(const ORptPageDialog&) = delete;
 
 public:
-
-    ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, const OUString &rDialog);
-    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, const OUString& rDialog);
+    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 };
 
 } // namespace rptui
