@@ -16,6 +16,8 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 
 using namespace ::com::sun::star;
 
@@ -157,6 +159,26 @@ CPPUNIT_TEST_FIXTURE(Test, testAltChunk)
     // content was lost.
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("inner doc, first para"), xPara->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFieldIfInsideIf)
+{
+    // Load a document with a field in a table cell: it contains an IF field with various nested
+    // fields.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "field-if-inside-if.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<text::XTextTablesSupplier> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextDocument->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // Get the result of the topmost field.
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0** Expression is faulty **2
+    // i.e. some of the inner fields escaped outside the outer field.
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), xCell->getString());
 }
 }
 
