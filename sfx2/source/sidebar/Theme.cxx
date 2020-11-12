@@ -179,18 +179,6 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Color_TabBarBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_TabBarLeftPadding],
-            Any(sal_Int32(2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_TabBarTopPadding],
-            Any(sal_Int32(2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_TabBarRightPadding],
-            Any(sal_Int32(2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_TabBarBottomPadding],
-            Any(sal_Int32(2)));
 
         setPropertyValue(
             maPropertyIdToNameMap[Int_TabMenuPadding],
@@ -240,9 +228,6 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Color_VerticalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Image_TabBarMenu],
-            Any(OUString("private:graphicrepository/sfx2/res/symphony/open_more.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_CloseIndicator],
             Any(OUString("private:graphicrepository/cmd/lc_decrementlevel.png")));
@@ -517,9 +502,6 @@ void Theme::SetupPropertyMaps()
     maIntegers.resize(Int_Bool_ - Color_Int_ - 1);
     maBooleans.resize(Post_Bool_ - Int_Bool_ - 1);
 
-    maPropertyNameToIdMap["Image_TabBarMenu"]=Image_TabBarMenu;
-    maPropertyIdToNameMap[Image_TabBarMenu]="Image_TabBarMenu";
-
     maPropertyNameToIdMap["Image_CloseIndicator"]=Image_CloseIndicator;
     maPropertyIdToNameMap[Image_CloseIndicator]="Image_CloseIndicator";
 
@@ -613,18 +595,6 @@ void Theme::SetupPropertyMaps()
     maPropertyNameToIdMap["Int_DeckBottomPadding"]=Int_DeckBottomPadding;
     maPropertyIdToNameMap[Int_DeckBottomPadding]="Int_DeckBottomPadding";
 
-    maPropertyNameToIdMap["Int_TabBarLeftPadding"]=Int_TabBarLeftPadding;
-    maPropertyIdToNameMap[Int_TabBarLeftPadding]="Int_TabBarLeftPadding";
-
-    maPropertyNameToIdMap["Int_TabBarTopPadding"]=Int_TabBarTopPadding;
-    maPropertyIdToNameMap[Int_TabBarTopPadding]="Int_TabBarTopPadding";
-
-    maPropertyNameToIdMap["Int_TabBarRightPadding"]=Int_TabBarRightPadding;
-    maPropertyIdToNameMap[Int_TabBarRightPadding]="Int_TabBarRightPadding";
-
-    maPropertyNameToIdMap["Int_TabBarBottomPadding"]=Int_TabBarBottomPadding;
-    maPropertyIdToNameMap[Int_TabBarBottomPadding]="Int_TabBarBottomPadding";
-
     maPropertyNameToIdMap["Int_ButtonCornerRadius"]=Int_ButtonCornerRadius;
     maPropertyIdToNameMap[Int_ButtonCornerRadius]="Int_ButtonCornerRadius";
 
@@ -642,7 +612,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
 {
     switch(eItem)
     {
-        case Image_TabBarMenu:
         case Image_CloseIndicator:
             return PT_Image;
 
@@ -677,10 +646,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Int_DeckTopPadding:
         case Int_DeckRightPadding:
         case Int_DeckBottomPadding:
-        case Int_TabBarLeftPadding:
-        case Int_TabBarTopPadding:
-        case Int_TabBarRightPadding:
-        case Int_TabBarBottomPadding:
         case Int_ButtonCornerRadius:
             return PT_Integer;
 
