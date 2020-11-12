@@ -53,12 +53,11 @@ Implementation Name
 
 */
 
-
 #ifndef INCLUDED_I18NPOOL_INC_SERVICENAME_HXX
 #define INCLUDED_I18NPOOL_INC_SERVICENAME_HXX
 
 #define TRLT_SERVICELNAME "com.sun.star.i18n.Transliteration"
-#define TRLT_SERVICELNAME_L10N  TRLT_SERVICELNAME ".l10n"
+#define TRLT_SERVICELNAME_L10N TRLT_SERVICELNAME ".l10n"
 
 #define TRLT_IMPLNAME_PREFIX "com.sun.star.i18n.Transliteration."
 //                1...5...901...5...901...5...901..4  --> 34

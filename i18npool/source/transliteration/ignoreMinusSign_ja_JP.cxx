@@ -19,12 +19,12 @@
 
 #include <transliteration_Ignore.hxx>
 
-namespace i18npool {
-
-static sal_Unicode
-ignoreMinusSign_ja_JP_translator (const sal_Unicode c)
+namespace i18npool
 {
-    switch (c) {
+static sal_Unicode ignoreMinusSign_ja_JP_translator(const sal_Unicode c)
+{
+    switch (c)
+    {
         case 0x2212: // MINUS SIGN
         case 0x002d: // HYPHEN-MINUS
         case 0x2010: // HYPHEN
@@ -35,7 +35,7 @@ ignoreMinusSign_ja_JP_translator (const sal_Unicode c)
         case 0x2015: // HORIZONTAL BAR
         case 0xff0d: // FULLWIDTH HYPHEN-MINUS
         case 0xff70: // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
-        return 0x30fc; // KATAKANA-HIRAGANA PROLONGED SOUND MARK
+            return 0x30fc; // KATAKANA-HIRAGANA PROLONGED SOUND MARK
     }
     return c;
 }
@@ -48,7 +48,6 @@ ignoreMinusSign_ja_JP::ignoreMinusSign_ja_JP()
     transliterationName = "ignoreMinusSign_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreMinusSign_ja_JP";
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

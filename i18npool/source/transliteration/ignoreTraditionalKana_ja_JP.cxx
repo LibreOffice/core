@@ -19,23 +19,22 @@
 
 #include <transliteration_Ignore.hxx>
 
-namespace i18npool {
-
-static sal_Unicode
-ignoreTraditionalKana_ja_JP_translator (const sal_Unicode c)
+namespace i18npool
 {
-
-    switch (c) {
-        case 0x3090:     // HIRAGANA LETTER WI
+static sal_Unicode ignoreTraditionalKana_ja_JP_translator(const sal_Unicode c)
+{
+    switch (c)
+    {
+        case 0x3090: // HIRAGANA LETTER WI
             return 0x3044; // HIRAGANA LETTER I
 
-        case 0x3091:     // HIRAGANA LETTER WE
+        case 0x3091: // HIRAGANA LETTER WE
             return 0x3048; // HIRAGANA LETTER E
 
-        case 0x30F0:     // KATAKANA LETTER WI
+        case 0x30F0: // KATAKANA LETTER WI
             return 0x30A4; // KATAKANA LETTER I
 
-        case 0x30F1:     // KATAKANA LETTER WE
+        case 0x30F1: // KATAKANA LETTER WE
             return 0x30A8; // KATAKANA LETTER E
     }
     return c;
@@ -49,7 +48,6 @@ ignoreTraditionalKana_ja_JP::ignoreTraditionalKana_ja_JP()
     transliterationName = "ignoreTraditionalKana_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreTraditionalKana_ja_JP";
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

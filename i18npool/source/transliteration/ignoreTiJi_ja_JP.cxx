@@ -22,8 +22,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-namespace i18npool {
-
+namespace i18npool
+{
 const transliteration_Ignore::Mapping TiJi[] = {
     // TU + I --> TI
     { 0x30C4, 0x30A3, 0x30C1, true },
@@ -49,7 +49,6 @@ ignoreTiJi_ja_JP::ignoreTiJi_ja_JP()
     transliterationName = "ignoreTiJi_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreTiJi_ja_JP";
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
