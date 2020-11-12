@@ -1366,7 +1366,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
 
     sal_uInt16 nWidth30;
     if ( pPor->IsPostItsPortion() )
-        nWidth30 = 30 + pPor->GetViewWidth( GetInfo() ) / 2;
+        nWidth30 = 0;
     else
         nWidth30 = ! nWidth && pPor->GetLen() && pPor->InToxRefOrFieldGrp() ?
                      30 :
@@ -1410,7 +1410,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
         }
 
         if ( pPor->IsPostItsPortion() )
-            nWidth30 = 30 +  pPor->GetViewWidth( GetInfo() ) / 2;
+            nWidth30 = 0;
         else
             nWidth30 = ! nWidth && pPor->GetLen() && pPor->InToxRefOrFieldGrp() ?
                          30 :
