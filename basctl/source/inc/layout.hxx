@@ -31,24 +31,22 @@ class SfxItemSet;
 
 namespace basctl
 {
-
 class DockingWindow;
 class BaseWindow;
-
 
 // Layout -- the common base of ModulLayout and DialogLayout.
 // Handles the splitting lines and the dockable windows.
 
-class Layout: public vcl::Window
+class Layout : public vcl::Window
 {
 public:
-    void ArrangeWindows ();
+    void ArrangeWindows();
 
-    virtual void Activating (BaseWindow&);
-    virtual void Deactivating ();
-    virtual void ExecuteGlobal (SfxRequest&) { }
-    virtual void GetState (SfxItemSet&, unsigned nWhich) = 0;
-    virtual void UpdateDebug (bool bBasicStopped ) = 0;
+    virtual void Activating(BaseWindow&);
+    virtual void Deactivating();
+    virtual void ExecuteGlobal(SfxRequest&) {}
+    virtual void GetState(SfxItemSet&, unsigned nWhich) = 0;
+    virtual void UpdateDebug(bool bBasicStopped) = 0;
 
     virtual ~Layout() override;
     virtual void dispose() override;
@@ -56,16 +54,16 @@ public:
 protected:
     explicit Layout(vcl::Window* pParent);
 
-    void AddToLeft   (DockingWindow* pWin, Size const& rSize) { aLeftSide.Add(pWin, rSize); }
-    void AddToBottom (DockingWindow* pWin, Size const& rSize) { aBottomSide.Add(pWin, rSize); }
-    void Remove (DockingWindow*);
-    bool HasSize () const { return !bFirstSize; }
+    void AddToLeft(DockingWindow* pWin, Size const& rSize) { aLeftSide.Add(pWin, rSize); }
+    void AddToBottom(DockingWindow* pWin, Size const& rSize) { aBottomSide.Add(pWin, rSize); }
+    void Remove(DockingWindow*);
+    bool HasSize() const { return !bFirstSize; }
 
     // Window:
-    virtual void Resize () override;
-    virtual void DataChanged (DataChangedEvent const& rDCEvt) override;
+    virtual void Resize() override;
+    virtual void DataChanged(DataChangedEvent const& rDCEvt) override;
     // new:
-    virtual void OnFirstSize (tools::Long nWidth, tools::Long nHeight) = 0;
+    virtual void OnFirstSize(tools::Long nWidth, tools::Long nHeight) = 0;
 
 private:
     // the main child window (either ModulWindow or DialogWindow)
@@ -78,13 +76,17 @@ private:
     class SplittedSide
     {
     public:
-        enum class Side {Left, Bottom};
-        SplittedSide (Layout*, Side);
-        void Add (DockingWindow*, Size const&);
-        void Remove (DockingWindow*);
-        bool IsEmpty () const;
-        tools::Long GetSize () const;
-        void ArrangeIn (tools::Rectangle const&);
+        enum class Side
+        {
+            Left,
+            Bottom
+        };
+        SplittedSide(Layout*, Side);
+        void Add(DockingWindow*, Size const&);
+        void Remove(DockingWindow*);
+        bool IsEmpty() const;
+        tools::Long GetSize() const;
+        void ArrangeIn(tools::Rectangle const&);
         void dispose();
 
     private:
@@ -117,12 +119,12 @@ private:
         };
         std::vector<Item> vItems;
 
-        Point MakePoint (tools::Long, tools::Long) const;
-        Size MakeSize (tools::Long, tools::Long) const;
-        static bool IsDocking (DockingWindow const&);
+        Point MakePoint(tools::Long, tools::Long) const;
+        Size MakeSize(tools::Long, tools::Long) const;
+        static bool IsDocking(DockingWindow const&);
         DECL_LINK(SplitHdl, Splitter*, void);
-        void CheckMarginsFor (Splitter*);
-        void InitSplitter (Splitter&);
+        void CheckMarginsFor(Splitter*);
+        void InitSplitter(Splitter&);
     } aLeftSide, aBottomSide;
 };
 

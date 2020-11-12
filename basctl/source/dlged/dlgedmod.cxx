@@ -22,20 +22,14 @@
 
 namespace basctl
 {
-
 DlgEdModel::DlgEdModel()
-:   SdrModel()
+    : SdrModel()
 {
 }
 
-DlgEdModel::~DlgEdModel()
-{
-}
+DlgEdModel::~DlgEdModel() {}
 
-SdrPage* DlgEdModel::AllocPage(bool bMasterPage)
-{
-    return new DlgEdPage(*this, bMasterPage);
-}
+SdrPage* DlgEdModel::AllocPage(bool bMasterPage) { return new DlgEdPage(*this, bMasterPage); }
 
 } // namespace basctl
 

@@ -17,19 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #pragma once
 
 #include <sfx2/module.hxx>
 
 namespace basctl
 {
-
 class Module : public SfxModule
 {
 public:
-    Module(const OString& rResName, SfxObjectFactory *pObjFact)
-        : SfxModule(rResName, {pObjFact})
+    Module(const OString& rResName, SfxObjectFactory* pObjFact)
+        : SfxModule(rResName, { pObjFact })
     {
     }
 };

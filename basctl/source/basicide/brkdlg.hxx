@@ -24,10 +24,9 @@
 
 namespace basctl
 {
-
 class BreakPointDialog final : public weld::GenericDialogController
 {
-    BreakPointList & m_rOriginalBreakPointList;
+    BreakPointList& m_rOriginalBreakPointList;
     BreakPointList m_aModifiedBreakPointList;
 
     std::unique_ptr<weld::EntryTreeView> m_xComboBox;
@@ -37,21 +36,20 @@ class BreakPointDialog final : public weld::GenericDialogController
     std::unique_ptr<weld::CheckButton> m_xCheckBox;
     std::unique_ptr<weld::SpinButton> m_xNumericField;
 
-    void            CheckButtons();
+    void CheckButtons();
     DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
     DECL_LINK(EditModifyHdl, weld::ComboBox&, void);
     DECL_LINK(FieldModifyHdl, weld::SpinButton&, void);
     DECL_LINK(ButtonHdl, weld::Button&, void);
     DECL_LINK(TreeModifyHdl, weld::TreeView&, bool);
-    void            UpdateFields( BreakPoint const & rBrk );
-    BreakPoint*     GetSelectedBreakPoint();
-
+    void UpdateFields(BreakPoint const& rBrk);
+    BreakPoint* GetSelectedBreakPoint();
 
 public:
     BreakPointDialog(weld::Window* pParent, BreakPointList& rBrkList);
     virtual ~BreakPointDialog() override;
 
-    void    SetCurrentBreakPoint( BreakPoint const & rBrk );
+    void SetCurrentBreakPoint(BreakPoint const& rBrk);
 };
 
 } // namespace basctl

@@ -24,16 +24,15 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::awt {
-    class XWindowPeer;
+namespace com::sun::star::awt
+{
+class XWindowPeer;
 }
 class TextView;
 
-namespace basctl {
-
-css::uno::Reference<css::awt::XWindowPeer> createTextWindowPeer(
-    TextView & view);
-
+namespace basctl
+{
+css::uno::Reference<css::awt::XWindowPeer> createTextWindowPeer(TextView& view);
 }
 
 #endif
