@@ -511,6 +511,29 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testUnknownSubFilter)
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 }
 
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGoodCustomMagic)
+{
+    // Tokenize the bugdoc.
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
+        = xml::crypto::SEInitializer::create(mxComponentContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
+        = xSEInitializer->createSecurityContext(OUString());
+    std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(
+        m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-custom-magic.pdf",
+        StreamMode::STD_READ);
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    aManager.setSignatureStream(xStream);
+    aManager.read(/*bUseTempStream=*/false);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1 (SecurityOperationStatus_OPERATION_SUCCEEDED)
+    // - Actual  : 0 (SecurityOperationStatus_UNKNOWN)
+    // i.e. no signatures were found due to a custom non-comment magic after the header.
+    std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
