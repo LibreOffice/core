@@ -16484,10 +16484,8 @@ xmloff/inc/DomBuilderContext.hxx
 xmloff/inc/DomExport.hxx
 xmloff/inc/EnhancedCustomShapeToken.hxx
 xmloff/inc/MetaExportComponent.hxx
-xmloff/inc/MultiPropertySetHelper.hxx
 xmloff/inc/PageMasterImportContext.hxx
 xmloff/inc/PageMasterStyleMap.hxx
-xmloff/inc/PropertySetMerger.hxx
 xmloff/inc/RDFaExportHelper.hxx
 xmloff/inc/RDFaImportHelper.hxx
 xmloff/inc/SchXMLAutoStylePoolP.hxx
@@ -16526,13 +16524,10 @@ xmloff/inc/XMLStarBasicContextFactory.hxx
 xmloff/inc/XMLStarBasicExportHandler.hxx
 xmloff/inc/XMLStringBufferImportContext.hxx
 xmloff/inc/XMLTextColumnsContext.hxx
-xmloff/inc/XMLTextColumnsExport.hxx
 xmloff/inc/XMLTextColumnsPropertyHandler.hxx
 xmloff/inc/XMLTextHeaderFooterContext.hxx
 xmloff/inc/animationimport.hxx
-xmloff/inc/animimp.hxx
 xmloff/inc/fasttokenhandler.hxx
-xmloff/inc/forms/form_handler_factory.hxx
 xmloff/inc/forms/property_handler.hxx
 xmloff/inc/forms/property_ids.hxx
 xmloff/inc/propimp0.hxx
@@ -16544,7 +16539,6 @@ xmloff/inc/xexptran.hxx
 xmloff/inc/xmlmultiimagehelper.hxx
 xmloff/inc/xmlsdtypes.hxx
 xmloff/inc/xmltabe.hxx
-xmloff/inc/xmltabi.hxx
 xmloff/inc/xmlversion.hxx
 xmloff/qa/unit/tokenmap-test.cxx
 xmloff/qa/unit/uxmloff.cxx
@@ -16561,7 +16555,6 @@ xmloff/source/chart/SchXMLCalculationSettingsContext.hxx
 xmloff/source/chart/SchXMLChartContext.cxx
 xmloff/source/chart/SchXMLChartContext.hxx
 xmloff/source/chart/SchXMLEnumConverter.cxx
-xmloff/source/chart/SchXMLEnumConverter.hxx
 xmloff/source/chart/SchXMLExport.cxx
 xmloff/source/chart/SchXMLImport.cxx
 xmloff/source/chart/SchXMLLegendContext.cxx
@@ -16589,11 +16582,9 @@ xmloff/source/chart/XMLChartPropertyContext.cxx
 xmloff/source/chart/XMLChartPropertyContext.hxx
 xmloff/source/chart/XMLChartStyleContext.cxx
 xmloff/source/chart/XMLErrorBarStylePropertyHdl.cxx
-xmloff/source/chart/XMLErrorBarStylePropertyHdl.hxx
 xmloff/source/chart/XMLErrorIndicatorPropertyHdl.cxx
 xmloff/source/chart/XMLErrorIndicatorPropertyHdl.hxx
 xmloff/source/chart/XMLLabelSeparatorContext.cxx
-xmloff/source/chart/XMLLabelSeparatorContext.hxx
 xmloff/source/chart/XMLSymbolImageContext.cxx
 xmloff/source/chart/XMLSymbolImageContext.hxx
 xmloff/source/chart/XMLSymbolTypePropertyHdl.cxx
@@ -16641,7 +16632,6 @@ xmloff/source/draw/XMLGraphicsDefaultStyle.cxx
 xmloff/source/draw/XMLImageMapContext.cxx
 xmloff/source/draw/XMLImageMapExport.cxx
 xmloff/source/draw/XMLNumberStyles.cxx
-xmloff/source/draw/XMLNumberStylesExport.hxx
 xmloff/source/draw/XMLReplacementImageContext.cxx
 xmloff/source/draw/XMLShapePropertySetContext.cxx
 xmloff/source/draw/XMLShapeStyleContext.cxx
@@ -16680,7 +16670,6 @@ xmloff/source/draw/ximpgrp.cxx
 xmloff/source/draw/ximpgrp.hxx
 xmloff/source/draw/ximplink.cxx
 xmloff/source/draw/ximplink.hxx
-xmloff/source/draw/ximpnote.cxx
 xmloff/source/draw/ximpnote.hxx
 xmloff/source/draw/ximppage.cxx
 xmloff/source/draw/ximppage.hxx
@@ -16711,9 +16700,7 @@ xmloff/source/forms/formattributes.hxx
 xmloff/source/forms/formcellbinding.cxx
 xmloff/source/forms/formcellbinding.hxx
 xmloff/source/forms/formenums.cxx
-xmloff/source/forms/formenums.hxx
 xmloff/source/forms/formevents.cxx
-xmloff/source/forms/formevents.hxx
 xmloff/source/forms/formlayerexport.cxx
 xmloff/source/forms/formlayerimport.cxx
 xmloff/source/forms/gridcolumnproptranslator.cxx
@@ -16749,7 +16736,6 @@ xmloff/source/meta/xmlversion.cxx
 xmloff/source/script/XMLEventExport.cxx
 xmloff/source/script/XMLEventImportHelper.cxx
 xmloff/source/script/XMLEventsImportContext.cxx
-xmloff/source/script/XMLScriptContextFactory.cxx
 xmloff/source/script/XMLScriptExportHandler.cxx
 xmloff/source/script/XMLStarBasicContextFactory.cxx
 xmloff/source/script/XMLStarBasicExportHandler.cxx
@@ -16782,7 +16768,6 @@ xmloff/source/style/PageMasterStyleMap.cxx
 xmloff/source/style/PagePropertySetContext.cxx
 xmloff/source/style/PagePropertySetContext.hxx
 xmloff/source/style/SinglePropertySetInfoCache.cxx
-xmloff/source/style/StyleMap.cxx
 xmloff/source/style/TransGradientStyle.cxx
 xmloff/source/style/WordWrapPropertyHdl.cxx
 xmloff/source/style/XMLBackgroundImageContext.cxx
@@ -16861,7 +16846,6 @@ xmloff/source/style/xmlnumfe.cxx
 xmloff/source/style/xmlnumfi.cxx
 xmloff/source/style/xmlnumi.cxx
 xmloff/source/style/xmlprcon.cxx
-xmloff/source/style/xmlprhdl.cxx
 xmloff/source/style/xmlprmap.cxx
 xmloff/source/style/xmlstyle.cxx
 xmloff/source/style/xmltabe.cxx
@@ -16875,7 +16859,6 @@ xmloff/source/text/XMLAutoTextContainerEventImport.cxx
 xmloff/source/text/XMLAutoTextContainerEventImport.hxx
 xmloff/source/text/XMLAutoTextEventExport.cxx
 xmloff/source/text/XMLAutoTextEventExport.hxx
-xmloff/source/text/XMLAutoTextEventImport.cxx
 xmloff/source/text/XMLAutoTextEventImport.hxx
 xmloff/source/text/XMLCalculationSettingsContext.cxx
 xmloff/source/text/XMLCalculationSettingsContext.hxx
@@ -16983,7 +16966,6 @@ xmloff/source/text/XMLTrackedChangesImportContext.hxx
 xmloff/source/text/txtdrope.cxx
 xmloff/source/text/txtdrope.hxx
 xmloff/source/text/txtdropi.cxx
-xmloff/source/text/txtdropi.hxx
 xmloff/source/text/txtexppr.cxx
 xmloff/source/text/txtexppr.hxx
 xmloff/source/text/txtflde.cxx
@@ -16997,7 +16979,6 @@ xmloff/source/text/txtparai.cxx
 xmloff/source/text/txtparai.hxx
 xmloff/source/text/txtparaimphint.hxx
 xmloff/source/text/txtprhdl.cxx
-xmloff/source/text/txtprhdl.hxx
 xmloff/source/text/txtprmap.cxx
 xmloff/source/text/txtsecte.cxx
 xmloff/source/text/txtstyle.cxx
@@ -17023,10 +17004,8 @@ xmloff/source/transform/DeepTContext.hxx
 xmloff/source/transform/DlgOASISTContext.cxx
 xmloff/source/transform/DlgOASISTContext.hxx
 xmloff/source/transform/DocumentTContext.cxx
-xmloff/source/transform/DocumentTContext.hxx
 xmloff/source/transform/ElemTransformerAction.hxx
 xmloff/source/transform/EventMap.cxx
-xmloff/source/transform/EventMap.hxx
 xmloff/source/transform/EventOASISTContext.cxx
 xmloff/source/transform/EventOASISTContext.hxx
 xmloff/source/transform/EventOOoTContext.cxx
@@ -17080,7 +17059,6 @@ xmloff/source/transform/TransformerBase.hxx
 xmloff/source/transform/TransformerContext.cxx
 xmloff/source/transform/TransformerContext.hxx
 xmloff/source/transform/TransformerTokenMap.cxx
-xmloff/source/transform/TransformerTokenMap.hxx
 xmloff/source/xforms/SchemaContext.cxx
 xmloff/source/xforms/SchemaContext.hxx
 xmloff/source/xforms/SchemaRestrictionContext.cxx

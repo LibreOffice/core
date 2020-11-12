@@ -41,24 +41,21 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::xmloff::token::XML_AUTO_TEXT_EVENTS;
 
 XMLAutoTextEventImport::XMLAutoTextEventImport(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext)
-:   SvXMLImport(xContext, "")
+    const css::uno::Reference<css::uno::XComponentContext>& xContext)
+    : SvXMLImport(xContext, "")
 {
 }
 
-XMLAutoTextEventImport::~XMLAutoTextEventImport() throw()
-{
-}
+XMLAutoTextEventImport::~XMLAutoTextEventImport() throw() {}
 
-void XMLAutoTextEventImport::initialize(
-    const Sequence<Any> & rArguments )
+void XMLAutoTextEventImport::initialize(const Sequence<Any>& rArguments)
 {
     // The events may come as either an XNameReplace or XEventsSupplier.
 
-    for( const auto& rArgument : rArguments )
+    for (const auto& rArgument : rArguments)
     {
         const Type& rType = rArgument.getValueType();
-        if ( rType == cppu::UnoType<XEventsSupplier>::get())
+        if (rType == cppu::UnoType<XEventsSupplier>::get())
         {
             Reference<XEventsSupplier> xSupplier;
             rArgument >>= xSupplier;
@@ -77,12 +74,10 @@ void XMLAutoTextEventImport::initialize(
     SvXMLImport::initialize(rArguments);
 }
 
-
 SvXMLImportContext* XMLAutoTextEventImport::CreateFastContext(
-    sal_Int32 nElement,
-    const Reference<css::xml::sax::XFastAttributeList> & /*xAttrList*/ )
+    sal_Int32 nElement, const Reference<css::xml::sax::XFastAttributeList>& /*xAttrList*/)
 {
-    if ( xEvents.is() && nElement == XML_ELEMENT(OOO, XML_AUTO_TEXT_EVENTS) )
+    if (xEvents.is() && nElement == XML_ELEMENT(OOO, XML_AUTO_TEXT_EVENTS))
     {
         return new XMLAutoTextContainerEventImport(*this, xEvents);
     }

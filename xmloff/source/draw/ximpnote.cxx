@@ -23,17 +23,17 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXMLGenericPageContext( rImport, xAttrList, rShapes )
+SdXMLNotesContext::SdXMLNotesContext(
+    SdXMLImport& rImport, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    uno::Reference<drawing::XShapes> const& rShapes)
+    : SdXMLGenericPageContext(rImport, xAttrList, rShapes)
 {
     OUString sStyleName, sPageMasterName;
 
-    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+    for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
         OUString sValue = aIter.toString();
-        switch(aIter.getToken())
+        switch (aIter.getToken())
         {
             case XML_ELEMENT(STYLE, XML_PAGE_LAYOUT_NAME):
             {
@@ -49,47 +49,44 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
             case XML_ELEMENT(PRESENTATION_SO52, XML_USE_HEADER_NAME):
             case XML_ELEMENT(PRESENTATION_OOO, XML_USE_HEADER_NAME):
             {
-                maUseHeaderDeclName =  sValue;
+                maUseHeaderDeclName = sValue;
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_USE_FOOTER_NAME):
             case XML_ELEMENT(PRESENTATION_SO52, XML_USE_FOOTER_NAME):
             case XML_ELEMENT(PRESENTATION_OOO, XML_USE_FOOTER_NAME):
             {
-                maUseFooterDeclName =  sValue;
+                maUseFooterDeclName = sValue;
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_USE_DATE_TIME_NAME):
             case XML_ELEMENT(PRESENTATION_SO52, XML_USE_DATE_TIME_NAME):
             case XML_ELEMENT(PRESENTATION_OOO, XML_USE_DATE_TIME_NAME):
             {
-                maUseDateTimeDeclName =  sValue;
+                maUseDateTimeDeclName = sValue;
                 break;
             }
-
         }
     }
 
-    SetStyle( sStyleName );
+    SetStyle(sStyleName);
 
     // now delete all up-to-now contained shapes from this notes page
-    uno::Reference< drawing::XShape > xShape;
-    while(rShapes->getCount())
+    uno::Reference<drawing::XShape> xShape;
+    while (rShapes->getCount())
     {
         rShapes->getByIndex(0) >>= xShape;
-        if(xShape.is())
+        if (xShape.is())
             rShapes->remove(xShape);
     }
 
     // set page-master?
-    if(!sPageMasterName.isEmpty())
+    if (!sPageMasterName.isEmpty())
     {
-        SetPageMaster( sPageMasterName );
+        SetPageMaster(sPageMasterName);
     }
 }
 
-SdXMLNotesContext::~SdXMLNotesContext()
-{
-}
+SdXMLNotesContext::~SdXMLNotesContext() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

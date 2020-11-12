@@ -24,10 +24,11 @@
 class XMLErrorBarStylePropertyHdl : public XMLEnumPropertyHdl
 {
 public:
-    XMLErrorBarStylePropertyHdl( const SvXMLEnumMapEntry<sal_Int32>* pEnumMap );
+    XMLErrorBarStylePropertyHdl(const SvXMLEnumMapEntry<sal_Int32>* pEnumMap);
     virtual ~XMLErrorBarStylePropertyHdl() override;
 
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML(OUString& rStrExpValue, const css::uno::Any& rValue,
+                           const SvXMLUnitConverter& rUnitConverter) const override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_XMLERRORBARSTYLEPROPERTYHDL_HXX
