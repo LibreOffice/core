@@ -92,20 +92,20 @@ public:
     /**
      * @descr   Set cell data format style name.
      */
-    void    SetDataStyle(const OUString& style);
+    void SetDataStyle(const OUString& style);
 
     /**
      * @descr:  Set the padding of the paragraph.This is the distance
                 between the border and the top of the text.
      * @param:  indent value of the padding.
      */
-    void    SetPadding(double left, double right, double top, double bottom);
+    void SetPadding(double left, double right, double top, double bottom);
 
     /**
      * @descr:  Set alignment property of the cell.
      * @param:  eAlign alignment type,left,right,center or justify.
      */
-    void    SetAlignType(enumXFAlignType hori, enumXFAlignType vert);
+    void SetAlignType(enumXFAlignType hori, enumXFAlignType vert);
 
     /**
      * @descr:  The borders are complex, so you have to create one before use.
@@ -113,37 +113,37 @@ public:
                 we can save much memory.
      * @param:  pBorders borders of the paragraph, please reference the XFBorders.
      */
-    void    SetBorders(XFBorders *pBorders);
+    void SetBorders(XFBorders* pBorders);
 
     /**
      * @descr:  Set background color of the cell.
      * @param:  color value of the back color.
      */
-    void    SetBackColor(XFColor const & color);
+    void SetBackColor(XFColor const& color);
 
     /**
      * descr:   set cell background image.
      */
-    void    SetBackImage(std::unique_ptr<XFBGImage>& rImage);
+    void SetBackImage(std::unique_ptr<XFBGImage>& rImage);
 
     virtual enumXFStyle GetStyleFamily() override;
 
-    virtual bool Equal(IXFStyle *pStyle) override;
+    virtual bool Equal(IXFStyle* pStyle) override;
 
-    virtual void ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    OUString   m_strDataStyle;
+    OUString m_strDataStyle;
     enumXFAlignType m_eHoriAlign;
     enumXFAlignType m_eVertAlign;
 
-    XFColor     m_aBackColor;
+    XFColor m_aBackColor;
     std::unique_ptr<XFBGImage> m_xBackImage;
-    XFMargins   m_aMargin;
-    XFPadding   m_aPadding;
+    XFMargins m_aMargin;
+    XFPadding m_aPadding;
     rtl::Reference<XFFont> m_pFont;
-    XFShadow    m_aShadow;
-    std::unique_ptr<XFBorders>  m_pBorders;
+    XFShadow m_aShadow;
+    std::unique_ptr<XFBorders> m_pBorders;
 };
 
 inline void XFCellStyle::SetAlignType(enumXFAlignType hori, enumXFAlignType vert)
@@ -152,10 +152,7 @@ inline void XFCellStyle::SetAlignType(enumXFAlignType hori, enumXFAlignType vert
     m_eVertAlign = vert;
 }
 
-inline void XFCellStyle::SetDataStyle(const OUString& style)
-{
-    m_strDataStyle = style;
-}
+inline void XFCellStyle::SetDataStyle(const OUString& style) { m_strDataStyle = style; }
 
 #endif
 

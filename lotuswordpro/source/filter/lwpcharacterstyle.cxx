@@ -68,12 +68,15 @@
 #include <xfilter/xffont.hxx>
 #include <xfilter/xftextstyle.hxx>
 
-
 /*class LwpTextStyle*/
-LwpTextStyle::LwpTextStyle(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
-    : LwpDLNFPVList(objHdr, pStrm),
-    m_nFontID(0), m_nFinalFontID(0), m_nCSFlags(0), m_nUseCount(0),
-    m_nStyleDefinition(0), m_nKey(0)
+LwpTextStyle::LwpTextStyle(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpDLNFPVList(objHdr, pStrm)
+    , m_nFontID(0)
+    , m_nFinalFontID(0)
+    , m_nCSFlags(0)
+    , m_nUseCount(0)
+    , m_nStyleDefinition(0)
+    , m_nKey(0)
 {
 }
 
@@ -83,9 +86,7 @@ void LwpTextStyle::Read()
     ReadCommon();
 }
 
-LwpTextStyle::~LwpTextStyle()
-{
-}
+LwpTextStyle::~LwpTextStyle() {}
 
 void LwpTextStyle::ReadCommon()
 {
@@ -133,7 +134,6 @@ void LwpTextStyle::ReadCommon()
             m_pObjStrm->SkipExtra();
         }
     }
-
 }
 
 void LwpTextStyle::RegisterStyle()
@@ -160,18 +160,14 @@ void LwpTextStyle::RegisterStyle()
     //Add style
     LwpStyleManager* pStyleMgr = m_pFoundry->GetStyleManager();
     pStyleMgr->AddStyle(GetObjectID(), std::move(pStyle));
-
 }
 
 /*class LwpCharacterStyle*/
-LwpCharacterStyle::LwpCharacterStyle(LwpObjectHeader const & objHdr, LwpSvStream* pStrm) :
-LwpTextStyle(objHdr, pStrm)
+LwpCharacterStyle::LwpCharacterStyle(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpTextStyle(objHdr, pStrm)
 {
 }
 
-void LwpCharacterStyle::Read()
-{
-    LwpTextStyle::Read();
-}
+void LwpCharacterStyle::Read() { LwpTextStyle::Read(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

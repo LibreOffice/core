@@ -61,42 +61,36 @@
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/ixfattrlist.hxx>
 
-XFSection::XFSection()
-{
-    m_strSectionName = XFGlobal::GenSectionName();
-}
+XFSection::XFSection() { m_strSectionName = XFGlobal::GenSectionName(); }
 
-XFSection::~XFSection()
-{
-}
+XFSection::~XFSection() {}
 
-void    XFSection::ToXml(IXFStream *pStrm)
+void XFSection::ToXml(IXFStream* pStrm)
 {
-    assert(!m_strSectionName.isEmpty() );
+    assert(!m_strSectionName.isEmpty());
 
-    IXFAttrList     *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     OUString style = GetStyleName();
-    if( !style.isEmpty() )
-        pAttrList->AddAttribute( "text:style-name", style);
+    if (!style.isEmpty())
+        pAttrList->AddAttribute("text:style-name", style);
     //section name
-    if( !m_strSectionName.isEmpty() )
-        pAttrList->AddAttribute( "text:name", m_strSectionName);
+    if (!m_strSectionName.isEmpty())
+        pAttrList->AddAttribute("text:name", m_strSectionName);
 
-    pStrm->StartElement( "text:section" );
-    if( !m_strSourceLink.isEmpty() )
+    pStrm->StartElement("text:section");
+    if (!m_strSourceLink.isEmpty())
     {
         pAttrList->Clear();
-        pAttrList->AddAttribute( "xlink:href", m_strSourceLink);
-        pAttrList->AddAttribute( "text:filter-name", "wordpro");
-        pStrm->StartElement( "text:section-source" );
-        pStrm->EndElement( "text:section-source" );
+        pAttrList->AddAttribute("xlink:href", m_strSourceLink);
+        pAttrList->AddAttribute("text:filter-name", "wordpro");
+        pStrm->StartElement("text:section-source");
+        pStrm->EndElement("text:section-source");
     }
 
     XFContentContainer::ToXml(pStrm);
 
-    pStrm->EndElement( "text:section" );
-
+    pStrm->EndElement("text:section");
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

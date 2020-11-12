@@ -66,16 +66,16 @@
 class XFLineBreak : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 };
 
-inline void XFLineBreak::ToXml(IXFStream *pStrm)
+inline void XFLineBreak::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pStrm->StartElement( "text:line-break" );
-    pStrm->EndElement( "text:line-break" );
+    pStrm->StartElement("text:line-break");
+    pStrm->EndElement("text:line-break");
 }
 
 #endif

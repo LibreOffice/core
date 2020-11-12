@@ -66,7 +66,7 @@
  * @brief
  * Column style, it has only one property-the column width.
  */
-class   XFColStyle : public XFStyle
+class XFColStyle : public XFStyle
 {
 public:
     XFColStyle();
@@ -77,33 +77,27 @@ public:
     /**
      * @descr   Set column width.
      */
-    void    SetWidth(double width);
+    void SetWidth(double width);
 
     /**
      * @descr   return column width.
      */
-    double  GetWidth() const;
+    double GetWidth() const;
 
     virtual enumXFStyle GetStyleFamily() override;
 
     /**
      * @descr   output column style as an xml node.
      */
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    double      m_fWidth;
+    double m_fWidth;
 };
 
-inline void XFColStyle::SetWidth(double width)
-{
-    m_fWidth = width;
-}
+inline void XFColStyle::SetWidth(double width) { m_fWidth = width; }
 
-inline double XFColStyle::GetWidth() const
-{
-    return m_fWidth;
-}
+inline double XFColStyle::GetWidth() const { return m_fWidth; }
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

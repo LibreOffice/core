@@ -70,16 +70,14 @@
 class XFFooter : public XFContentContainer
 {
 public:
-    XFFooter()
+    XFFooter() {}
+    virtual void ToXml(IXFStream* pStrm) override
     {
-    }
-    virtual void ToXml(IXFStream *pStrm) override
-    {
-        IXFAttrList *pAttrList = pStrm->GetAttrList();
+        IXFAttrList* pAttrList = pStrm->GetAttrList();
         pAttrList->Clear();
-        pStrm->StartElement( "style:footer" );
+        pStrm->StartElement("style:footer");
         XFContentContainer::ToXml(pStrm);
-        pStrm->EndElement( "style:footer" );
+        pStrm->EndElement("style:footer");
     }
 };
 

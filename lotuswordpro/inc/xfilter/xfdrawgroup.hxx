@@ -72,7 +72,7 @@
 class XFDrawGroup : public XFDrawObject
 {
 public:
-    XFDrawGroup(){}
+    XFDrawGroup() {}
 
 public:
     using XFDrawObject::Add;
@@ -80,36 +80,35 @@ public:
     /**
      * @descr   Add a drawing object to the group.
      */
-    void    Add(XFFrame *pFrame);
+    void Add(XFFrame* pFrame);
 
     /**
      * @descr   Output group object and all its children.
      */
-    virtual void ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    rtl::Reference<XFContentContainer>  m_aChildren;
+    rtl::Reference<XFContentContainer> m_aChildren;
 };
 
-inline void XFDrawGroup::Add(XFFrame *pFrame)
+inline void XFDrawGroup::Add(XFFrame* pFrame)
 {
-    if( pFrame )
+    if (pFrame)
         m_aChildren->Add(pFrame);
 }
 
-inline void XFDrawGroup::ToXml(IXFStream *pStrm)
+inline void XFDrawGroup::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     XFDrawObject::ToXml(pStrm);
 
-    pStrm->StartElement( "draw:g" );
+    pStrm->StartElement("draw:g");
 
     m_aChildren->ToXml(pStrm);
 
-    pStrm->EndElement( "draw:g" );
-
+    pStrm->EndElement("draw:g");
 }
 
 #endif

@@ -63,9 +63,10 @@
 #include "lwpdlvlist.hxx"
 #include "lwpsection.hxx"
 
-LwpOrderedObject::LwpOrderedObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpOrderedObject::LwpOrderedObject(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpDLNFVList(objHdr, pStrm)
-{}
+{
+}
 
 /**
  * @descr: read object information
@@ -80,15 +81,13 @@ void LwpOrderedObject::Read()
     m_pObjStrm->SkipExtra();
 }
 
-LwpSection::LwpSection(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
+LwpSection::LwpSection(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpOrderedObject(objHdr, pStrm)
     , m_Flags(0)
-{}
-
-LwpSection::~LwpSection()
 {
-
 }
+
+LwpSection::~LwpSection() {}
 
 /**
  * @descr: read object information
@@ -108,20 +107,16 @@ void LwpSection::Read()
  * @descr: do nothing
  *
  */
-void LwpSection::Parse(IXFStream * /*pOutputStream*/)
-{
+void LwpSection::Parse(IXFStream* /*pOutputStream*/) {}
 
-}
-
-LwpIndexSection::LwpIndexSection(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
+LwpIndexSection::LwpIndexSection(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpSection(objHdr, pStrm)
     , m_nForm(0)
     , m_nFlags(0)
-{}
-
-LwpIndexSection::~LwpIndexSection()
 {
 }
+
+LwpIndexSection::~LwpIndexSection() {}
 
 /**
  * @descr: read object information
@@ -139,16 +134,8 @@ void LwpIndexSection::Read()
     m_pObjStrm->SkipExtra();
 }
 
-bool LwpIndexSection::IsFormatRunin() const
-{
-    return (m_nFlags & RUN_IN) != 0;
+bool LwpIndexSection::IsFormatRunin() const { return (m_nFlags & RUN_IN) != 0; }
 
-}
-
-bool LwpIndexSection::IsFormatSeparator() const
-{
-    return (m_nFlags & SEPARATORS) != 0;
-
-}
+bool LwpIndexSection::IsFormatSeparator() const { return (m_nFlags & SEPARATORS) != 0; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,16 +60,15 @@
 
 #include "lwpuidoc.hxx"
 
-LwpUIDocument::LwpUIDocument(LwpObjectStream *pStrm)
+LwpUIDocument::LwpUIDocument(LwpObjectStream* pStrm)
     : m_nFlags(DOC_LOCKED)
 {
     Read(pStrm);
 }
 
-LwpUIDocument::~LwpUIDocument()
-{}
+LwpUIDocument::~LwpUIDocument() {}
 
-void LwpUIDocument::Read(LwpObjectStream *pStrm)
+void LwpUIDocument::Read(LwpObjectStream* pStrm)
 {
     LwpNamedProperties::Read(pStrm);
     m_ARMacroOpts.Read(pStrm);
@@ -77,9 +76,9 @@ void LwpUIDocument::Read(LwpObjectStream *pStrm)
     m_SheetFullPath.ReadPathAtom(pStrm);
 
     sal_uInt16 saved_flags = pStrm->QuickReaduInt16();
-    m_nFlags  |= saved_flags;
+    m_nFlags |= saved_flags;
 
-    if(pStrm->CheckExtra())
+    if (pStrm->CheckExtra())
     {
         m_InitialSaveAsType.Read(pStrm);
         pStrm->SkipExtra();
@@ -88,7 +87,7 @@ void LwpUIDocument::Read(LwpObjectStream *pStrm)
 /**
  * @descr       Read macro options from object stream
  **/
-void LwpNamedProperties::Read(LwpObjectStream *pStrm)
+void LwpNamedProperties::Read(LwpObjectStream* pStrm)
 {
     sal_uInt16 numEntries = pStrm->QuickReaduInt16();
 
@@ -100,7 +99,7 @@ void LwpNamedProperties::Read(LwpObjectStream *pStrm)
 /**
  * @descr       Read macro options from object stream
  **/
-void LwpAutoRunMacroOptions::Read(LwpObjectStream *pStrm)
+void LwpAutoRunMacroOptions::Read(LwpObjectStream* pStrm)
 {
     m_OpenName.ReadPathAtom(pStrm);
     m_CloseName.ReadPathAtom(pStrm);
@@ -111,7 +110,7 @@ void LwpAutoRunMacroOptions::Read(LwpObjectStream *pStrm)
 /**
  * @descr       Read merge options from object stream
  **/
-void LwpMergeOptions::Read(LwpObjectStream *pStrm)
+void LwpMergeOptions::Read(LwpObjectStream* pStrm)
 {
     m_RecordFile.ReadPathAtom(pStrm);
     m_DescriptionFile.ReadPathAtom(pStrm);

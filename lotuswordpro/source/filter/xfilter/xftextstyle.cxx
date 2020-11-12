@@ -63,68 +63,58 @@
 #include <xfilter/ixfstream.hxx>
 #include <xfilter/xffont.hxx>
 
-XFTextStyle::XFTextStyle()
-{
-}
+XFTextStyle::XFTextStyle() {}
 
-XFTextStyle::~XFTextStyle()
-{
-}
+XFTextStyle::~XFTextStyle() {}
 
-void    XFTextStyle::SetFont(rtl::Reference<XFFont> const & font)
-{
-    m_pFont = font;
-}
+void XFTextStyle::SetFont(rtl::Reference<XFFont> const& font) { m_pFont = font; }
 
-bool    XFTextStyle::Equal(IXFStyle *pStyle)
+bool XFTextStyle::Equal(IXFStyle* pStyle)
 {
-    if( !pStyle || pStyle->GetStyleFamily() != enumXFStyleText )
+    if (!pStyle || pStyle->GetStyleFamily() != enumXFStyleText)
     {
         return false;
     }
 
-    XFTextStyle *pOther = dynamic_cast<XFTextStyle*>(pStyle);
-    if( !pOther )
+    XFTextStyle* pOther = dynamic_cast<XFTextStyle*>(pStyle);
+    if (!pOther)
     {
         return false;
     }
 
-    if( m_pFont.is() )
+    if (m_pFont.is())
     {
-        if( !pOther->m_pFont.is() )
+        if (!pOther->m_pFont.is())
             return false;
-        if( *m_pFont != *pOther->m_pFont )
+        if (*m_pFont != *pOther->m_pFont)
             return false;
     }
-    else if( pOther->m_pFont.is() )
+    else if (pOther->m_pFont.is())
         return false;
 
     return true;
 }
 
-enumXFStyle XFTextStyle::GetStyleFamily()
-{
-    return enumXFStyleText;
-}
+enumXFStyle XFTextStyle::GetStyleFamily() { return enumXFStyleText; }
 
-void    XFTextStyle::ToXml(IXFStream *strm)
+void XFTextStyle::ToXml(IXFStream* strm)
 {
-    IXFAttrList *pAttrList = strm->GetAttrList();
+    IXFAttrList* pAttrList = strm->GetAttrList();
     OUString style = GetStyleName();
 
     pAttrList->Clear();
-    if( !style.isEmpty() )
+    if (!style.isEmpty())
         pAttrList->AddAttribute("style:name", GetStyleName());
-    if( !GetParentStyleName().isEmpty() )
+    if (!GetParentStyleName().isEmpty())
         pAttrList->AddAttribute("style:parent-style-name", GetParentStyleName());
 
-    pAttrList->AddAttribute("style:family", "text" );
+    pAttrList->AddAttribute("style:family", "text");
     strm->StartElement("style:style");
 
     //Font properties:
     pAttrList->Clear();
     //font name:
-    if( m_pFont.is() )
+    if (m_pFont.is())
         m_pFont->ToXml(strm);
 
     strm->StartElement("style:properties");

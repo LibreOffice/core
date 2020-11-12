@@ -15,9 +15,6 @@ LwpTabOverride::LwpTabOverride(LwpTabOverride const& rOther)
 {
 }
 
-LwpTabOverride* LwpTabOverride::clone() const
-{
-    return new LwpTabOverride(*this);
-}
+LwpTabOverride* LwpTabOverride::clone() const { return new LwpTabOverride(*this); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

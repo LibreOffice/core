@@ -77,7 +77,7 @@
 #include <sal/log.hxx>
 #include <vcl/print.hxx>
 
-LwpPageLayout::LwpPageLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpPageLayout::LwpPageLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpLayout(objHdr, pStrm)
     , m_nPrinterBin(0)
     , m_nBdroffset(0)
@@ -85,9 +85,7 @@ LwpPageLayout::LwpPageLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
 {
 }
 
-LwpPageLayout::~LwpPageLayout()
-{
-}
+LwpPageLayout::~LwpPageLayout() {}
 void LwpPageLayout::Read()
 {
     LwpLayout::Read();
@@ -108,17 +106,16 @@ void LwpPageLayout::Read()
         m_PaperName.Read(m_pObjStrm.get());
         m_pObjStrm->SkipExtra();
     }
-
 }
 
 void LwpPageLayout::Parse(IXFStream* pOutputStream)
 {
     //Only parse this layout
     rtl::Reference<LwpObject> pStory = m_Content.obj();
-    if(pStory.is())
+    if (pStory.is())
     {
         pStory->SetFoundry(m_pFoundry);
-        pStory->DoParse(pOutputStream);   //Do not parse the next story
+        pStory->DoParse(pOutputStream); //Do not parse the next story
     }
 }
 
@@ -128,13 +125,12 @@ void LwpPageLayout::Parse(IXFStream* pOutputStream)
 */
 void LwpPageLayout::ParseMargins(XFPageMaster* pm1)
 {
-    double fLeft    = GetMarginsValue(MARGIN_LEFT);
-    double fRight   = GetMarginsValue(MARGIN_RIGHT);
+    double fLeft = GetMarginsValue(MARGIN_LEFT);
+    double fRight = GetMarginsValue(MARGIN_RIGHT);
     double fTop = GetMarginsValue(MARGIN_TOP);
-    double fBottom  = GetMarginsValue(MARGIN_BOTTOM);
+    double fBottom = GetMarginsValue(MARGIN_BOTTOM);
 
-    pm1->SetMargins( fLeft, fRight, fTop, fBottom );
-
+    pm1->SetMargins(fLeft, fRight, fTop, fBottom);
 }
 
 /**
@@ -151,18 +147,18 @@ void LwpPageLayout::ParseGeometry(XFPageMaster* pm1)
         pm1->SetPageWidth( GetGeometryWidth() );
     }
     */
-    double fWidth =0;
+    double fWidth = 0;
     double fHeight = 0;
     GetWidthAndHeight(fWidth, fHeight);
-    pm1->SetPageWidth( fWidth );
-    pm1->SetPageHeight( fHeight );
+    pm1->SetPageWidth(fWidth);
+    pm1->SetPageHeight(fHeight);
 }
 
 /**
 * @descr:   set page watermark
 *
 */
-void LwpPageLayout::ParseWaterMark(XFPageMaster *pm1)
+void LwpPageLayout::ParseWaterMark(XFPageMaster* pm1)
 {
     std::unique_ptr<XFBGImage> xXFBGImage(GetXFBGImage());
     if (xXFBGImage)
@@ -175,10 +171,10 @@ void LwpPageLayout::ParseWaterMark(XFPageMaster *pm1)
 * @descr:   set page columns
 *
 */
-void LwpPageLayout::ParseColumns(XFPageMaster * pm1)
+void LwpPageLayout::ParseColumns(XFPageMaster* pm1)
 {
     XFColumns* pColumns = GetXFColumns();
-    if(pColumns)
+    if (pColumns)
     {
         pm1->SetColumns(pColumns);
     }
@@ -188,10 +184,10 @@ void LwpPageLayout::ParseColumns(XFPageMaster * pm1)
 * @descr:   set page borders
 *
 */
-void LwpPageLayout::ParseBorders(XFPageMaster *pm1)
+void LwpPageLayout::ParseBorders(XFPageMaster* pm1)
 {
     std::unique_ptr<XFBorders> pBordres = GetXFBorders();
-    if(pBordres)
+    if (pBordres)
     {
         pm1->SetBorders(std::move(pBordres));
     }
@@ -201,10 +197,10 @@ void LwpPageLayout::ParseBorders(XFPageMaster *pm1)
 * @descr:   set page shadow
 *
 */
-void LwpPageLayout::ParseShadow(XFPageMaster *pm1)
+void LwpPageLayout::ParseShadow(XFPageMaster* pm1)
 {
     XFShadow* pXFShadow = GetXFShadow();
-    if(pXFShadow)
+    if (pXFShadow)
     {
         pm1->SetShadow(pXFShadow);
     }
@@ -245,7 +241,7 @@ void LwpPageLayout::ParseBackGround(XFPageMaster* pm1)
 void LwpPageLayout::ParseBackColor(XFPageMaster* pm1)
 {
     LwpColor* pColor = GetBackColor();
-    if(pColor)
+    if (pColor)
     {
         pm1->SetBackColor(XFColor(pColor->To24Color()));
     }
@@ -255,7 +251,7 @@ void LwpPageLayout::ParseBackColor(XFPageMaster* pm1)
 * @descr:   set page footnote separator information
 *
 */
-void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
+void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster* pm1)
 {
     //Get the footnoteoptions for the root document
     LwpDocument* pDocument = m_pFoundry ? m_pFoundry->GetDocument() : nullptr;
@@ -264,25 +260,27 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
 
     LwpObjectID* pFontnodeId = pDocument->GetValidFootnoteOpts();
 
-    LwpFootnoteOptions* pFootnoteOpts = pFontnodeId ? dynamic_cast<LwpFootnoteOptions*>(pFontnodeId->obj().get()) : nullptr;
-    if(!pFootnoteOpts)
+    LwpFootnoteOptions* pFootnoteOpts
+        = pFontnodeId ? dynamic_cast<LwpFootnoteOptions*>(pFontnodeId->obj().get()) : nullptr;
+    if (!pFootnoteOpts)
         return;
 
     LwpFootnoteSeparatorOptions& rFootnoteSep = pFootnoteOpts->GetFootnoteSeparator();
     //set length
     sal_uInt32 nLengthPercent = 100;
     double fWidth = 0;
-    if(rFootnoteSep.HasSeparator())
+    if (rFootnoteSep.HasSeparator())
     {
         fWidth = rFootnoteSep.GetTopBorderWidth();
     }
-    if(rFootnoteSep.HasCustomLength())
+    if (rFootnoteSep.HasCustomLength())
     {
         const double fMarginWidth = GetMarginWidth();
         if (fMarginWidth == 0.0)
             throw o3tl::divide_by_zero();
 
-        nLengthPercent =  static_cast<sal_uInt32>(100*LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetLength()) / fMarginWidth);
+        nLengthPercent = static_cast<sal_uInt32>(
+            100 * LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetLength()) / fMarginWidth);
         if (nLengthPercent > 100)
             nLengthPercent = 100;
     }
@@ -290,21 +288,22 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
     double fBelow = LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetBelow());
     LwpColor aColor = rFootnoteSep.GetTopBorderColor();
     enumXFAlignType eAlignType = enumXFAlignStart;
-    if(rFootnoteSep.GetIndent() > 0)
+    if (rFootnoteSep.GetIndent() > 0)
     {
         const double fMarginWidth = GetMarginWidth();
         if (fMarginWidth == 0.0)
             throw o3tl::divide_by_zero();
 
         //SODC don't support indent
-        sal_uInt32 nIndentPercent =  static_cast<sal_uInt32>(100*LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetIndent()) / fMarginWidth);
+        sal_uInt32 nIndentPercent = static_cast<sal_uInt32>(
+            100 * LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetIndent()) / fMarginWidth);
         if (nIndentPercent + nLengthPercent >= 100)
             eAlignType = enumXFAlignEnd;
     }
-    if(aColor.IsValidColor())
+    if (aColor.IsValidColor())
     {
         XFColor aXFColor(aColor.To24Color());
-        pm1->SetFootNoteSeparator(eAlignType,fWidth, nLengthPercent, fAbove, fBelow, aXFColor);
+        pm1->SetFootNoteSeparator(eAlignType, fWidth, nLengthPercent, fAbove, fBelow, aXFColor);
     }
 }
 
@@ -328,14 +327,15 @@ void LwpPageLayout::RegisterStyle()
     xpm1->SetTextDir(GetTextDirection());
 
     LwpUseWhen* pUseWhen = GetUseWhen();
-    if(IsComplex() ||( pUseWhen && pUseWhen->IsUseOnAllOddPages()))
+    if (IsComplex() || (pUseWhen && pUseWhen->IsUseOnAllOddPages()))
     {
         xpm1->SetPageUsage(enumXFPageUsageMirror);
     }
 
     //Add the page master to stylemanager
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    XFPageMaster* pm1 = static_cast<XFPageMaster*>(pXFStyleManager->AddStyle(std::move(xpm1)).m_pStyle);
+    XFPageMaster* pm1
+        = static_cast<XFPageMaster*>(pXFStyleManager->AddStyle(std::move(xpm1)).m_pStyle);
     m_pXFPageMaster = pm1;
     OUString pmname = pm1->GetStyleName();
 
@@ -343,12 +343,13 @@ void LwpPageLayout::RegisterStyle()
     std::unique_ptr<XFMasterPage> p1(new XFMasterPage);
     p1->SetStyleName(GetName().str());
     p1->SetPageMaster(pmname);
-    XFMasterPage* p1_added = static_cast<XFMasterPage*>(pXFStyleManager->AddStyle(std::move(p1)).m_pStyle);
+    XFMasterPage* p1_added
+        = static_cast<XFMasterPage*>(pXFStyleManager->AddStyle(std::move(p1)).m_pStyle);
     m_StyleName = p1_added->GetStyleName();
 
     //Set footer style
     LwpFooterLayout* pLayoutFooter = GetFooterLayout();
-    if(pLayoutFooter)
+    if (pLayoutFooter)
     {
         pLayoutFooter->SetFoundry(m_pFoundry);
         pLayoutFooter->RegisterStyle(pm1);
@@ -357,7 +358,7 @@ void LwpPageLayout::RegisterStyle()
 
     //Set header style
     LwpHeaderLayout* pLayoutHeader = GetHeaderLayout();
-    if(pLayoutHeader)
+    if (pLayoutHeader)
     {
         pLayoutHeader->SetFoundry(m_pFoundry);
         pLayoutHeader->RegisterStyle(pm1);
@@ -385,14 +386,15 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
     pm1->SetTextDir(GetTextDirection());
 
     LwpUseWhen* pUseWhen = GetUseWhen();
-    if(IsComplex() ||( pUseWhen && pUseWhen->IsUseOnAllOddPages()))
+    if (IsComplex() || (pUseWhen && pUseWhen->IsUseOnAllOddPages()))
     {
         pm1->SetPageUsage(enumXFPageUsageMirror);
     }
 
     //Add the page master to stylemanager
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_pXFPageMaster = static_cast<XFPageMaster*>(pXFStyleManager->AddStyle(std::move(pm1)).m_pStyle);
+    m_pXFPageMaster
+        = static_cast<XFPageMaster*>(pXFStyleManager->AddStyle(std::move(pm1)).m_pStyle);
     OUString pmname = m_pXFPageMaster->GetStyleName();
 
     //Add master page
@@ -402,7 +404,7 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
 
     //Set footer style
     LwpFooterLayout* pLayoutFooter = GetFooterLayout();
-    if(pLayoutFooter)
+    if (pLayoutFooter)
     {
         pLayoutFooter->SetFoundry(m_pFoundry);
         pLayoutFooter->RegisterStyle(m_pXFPageMaster);
@@ -411,7 +413,7 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
 
     //Set header style
     LwpHeaderLayout* pLayoutHeader = GetHeaderLayout();
-    if(pLayoutHeader)
+    if (pLayoutHeader)
     {
         pLayoutHeader->SetFoundry(m_pFoundry);
         pLayoutHeader->RegisterStyle(m_pXFPageMaster);
@@ -424,33 +426,32 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
 * @descr:   Whether current page layout has columns
 *
 */
-bool LwpPageLayout::HasColumns()
-{
-    return GetNumCols() > 1;
-}
+bool LwpPageLayout::HasColumns() { return GetNumCols() > 1; }
 
 /**
 * @descr:   Whether has filler page text in current page layout
 *
 */
-bool LwpPageLayout::HasFillerPageText(LwpFoundry const * pFoundry)
+bool LwpPageLayout::HasFillerPageText(LwpFoundry const* pFoundry)
 {
-    if(!pFoundry) return false;
+    if (!pFoundry)
+        return false;
 
     bool bFillerPage = false;
     LwpLayout::UseWhenType eWhenType = GetUseWhenType();
-    if(eWhenType==LwpLayout::StartOnOddPage||eWhenType==LwpLayout::StartOnEvenPage)
+    if (eWhenType == LwpLayout::StartOnOddPage || eWhenType == LwpLayout::StartOnEvenPage)
     {
         //get the page number that current page layout inserted
-        sal_Int32 nPageNumber = GetPageNumber(FIRST_LAYOUTPAGENO)-1;
+        sal_Int32 nPageNumber = GetPageNumber(FIRST_LAYOUTPAGENO) - 1;
 
-        if(nPageNumber>0)
+        if (nPageNumber > 0)
         {
-            if((eWhenType==LwpLayout::StartOnOddPage)&&(LwpTools::IsOddNumber(nPageNumber)))
+            if ((eWhenType == LwpLayout::StartOnOddPage) && (LwpTools::IsOddNumber(nPageNumber)))
             {
                 bFillerPage = true;
             }
-            else if((eWhenType==LwpLayout::StartOnEvenPage)&&(LwpTools::IsEvenNumber(nPageNumber)))
+            else if ((eWhenType == LwpLayout::StartOnEvenPage)
+                     && (LwpTools::IsEvenNumber(nPageNumber)))
             {
                 bFillerPage = true;
             }
@@ -470,16 +471,17 @@ bool LwpPageLayout::HasFillerPageText(LwpFoundry const * pFoundry)
 */
 void LwpPageLayout::ConvertFillerPageText(XFContentContainer* pCont)
 {
-    if(!HasFillerPageText(m_pFoundry))
+    if (!HasFillerPageText(m_pFoundry))
         return;
 
     //get fillerpage story from division info
     LwpDocument* pDoc = m_pFoundry->GetDocument();
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pDoc->GetDivInfoID().obj().get());
-    LwpStory* pStory = pDivInfo ? dynamic_cast<LwpStory*>(pDivInfo->GetFillerPageTextID().obj().get()) : nullptr;
+    LwpStory* pStory
+        = pDivInfo ? dynamic_cast<LwpStory*>(pDivInfo->GetFillerPageTextID().obj().get()) : nullptr;
 
     //parse fillerpage story
-    if(pStory)
+    if (pStory)
     {
         pStory->XFConvert(pCont);
     }
@@ -490,7 +492,7 @@ void LwpPageLayout::ConvertFillerPageText(XFContentContainer* pCont)
 */
 void LwpPageLayout::ResetXFColumns()
 {
-    if(m_pXFPageMaster)
+    if (m_pXFPageMaster)
     {
         m_pXFPageMaster->SetColumns(nullptr);
     }
@@ -498,12 +500,14 @@ void LwpPageLayout::ResetXFColumns()
 
 LwpHeaderLayout* LwpPageLayout::GetHeaderLayout()
 {
-    rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    rtl::Reference<LwpVirtualLayout> xLay(
+        dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
     while (xLay.is())
     {
         if (xLay->GetLayoutType() == LWP_HEADER_LAYOUT)
             return dynamic_cast<LwpHeaderLayout*>(xLay.get());
-        rtl::Reference<LwpVirtualLayout> xNext(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xNext(
+            dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
         if (xNext == xLay)
         {
             SAL_WARN("lwp", "loop in layout");
@@ -516,12 +520,14 @@ LwpHeaderLayout* LwpPageLayout::GetHeaderLayout()
 
 LwpFooterLayout* LwpPageLayout::GetFooterLayout()
 {
-    rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    rtl::Reference<LwpVirtualLayout> xLay(
+        dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
     while (xLay.is())
     {
         if (xLay->GetLayoutType() == LWP_FOOTER_LAYOUT)
             return dynamic_cast<LwpFooterLayout*>(xLay.get());
-        rtl::Reference<LwpVirtualLayout> xNext(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xNext(
+            dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
         if (xNext == xLay)
         {
             SAL_WARN("lwp", "loop in layout");
@@ -538,16 +544,17 @@ LwpFooterLayout* LwpPageLayout::GetFooterLayout()
 */
 LwpPageLayout* LwpPageLayout::GetOddChildLayout()
 {
-    if(IsComplex())
+    if (IsComplex())
     {
-        rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xLay(
+            dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
         while (xLay.is())
         {
             if (xLay->GetLayoutType() == LWP_PAGE_LAYOUT)
             {
                 LwpPageLayout* pPageLayout = static_cast<LwpPageLayout*>(xLay.get());
                 LwpUseWhen* pUseWhen = pPageLayout->GetUseWhen();
-                if(pUseWhen && pUseWhen->IsUseOnAllOddPages())
+                if (pUseWhen && pUseWhen->IsUseOnAllOddPages())
                 {
                     return pPageLayout;
                 }
@@ -586,43 +593,44 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
     if (!pFoundry)
         return nPageNumber;
     LwpDocument* pDoc = pFoundry->GetDocument();
-    LwpDLVListHeadTailHolder* pHeadTail = dynamic_cast<LwpDLVListHeadTailHolder*>(pDoc->GetPageHintsID().obj().get());
-    if(!pHeadTail) return nPageNumber;
+    LwpDLVListHeadTailHolder* pHeadTail
+        = dynamic_cast<LwpDLVListHeadTailHolder*>(pDoc->GetPageHintsID().obj().get());
+    if (!pHeadTail)
+        return nPageNumber;
 
     //get first pagehint
     LwpPageHint* pPageHint = dynamic_cast<LwpPageHint*>(pHeadTail->GetHead().obj().get());
-    while(pPageHint)
+    while (pPageHint)
     {
-        if(GetObjectID() == pPageHint->GetPageLayoutID())
+        if (GetObjectID() == pPageHint->GetPageLayoutID())
         {
             sal_uInt16 nNumber = pPageHint->GetPageNumber();
-            if(nLayoutNumber==FIRST_LAYOUTPAGENO && pPageHint->GetLayoutPageNumber()==1)
+            if (nLayoutNumber == FIRST_LAYOUTPAGENO && pPageHint->GetLayoutPageNumber() == 1)
             {
                 //get the first page number
                 nPageNumber = nNumber;
                 break;
             }
-            else if( nLayoutNumber ==LAST_LAYOUTPAGENO && nNumber >nPageNumber )
+            else if (nLayoutNumber == LAST_LAYOUTPAGENO && nNumber > nPageNumber)
             {
                 //get the last page number
                 nPageNumber = nNumber;
-                if(pPageHint->GetNext().IsNull())
+                if (pPageHint->GetNext().IsNull())
                 {
                     //if is last page number of entire document, return directly
                     return nPageNumber + pDoc->GetNumberOfPagesBefore();
                 }
             }
-            else if(nLayoutNumber > 0 && pPageHint->GetLayoutPageNumber() == nLayoutNumber)
+            else if (nLayoutNumber > 0 && pPageHint->GetLayoutPageNumber() == nLayoutNumber)
             {
                 //get specified page number
                 nPageNumber = nNumber;
                 break;
             }
-
         }
         pPageHint = dynamic_cast<LwpPageHint*>(pPageHint->GetNext().obj().get());
     }
-    if(nPageNumber>=0)
+    if (nPageNumber >= 0)
     {
         return nPageNumber + 1 + pDoc->GetNumberOfPagesBefore();
     }
@@ -637,23 +645,23 @@ void LwpPageLayout::GetWidthAndHeight(double& fWidth, double& fHeight)
 {
     //use customized size
     LwpLayoutGeometry* pLayoutGeo = GetGeometry();
-    if(pLayoutGeo)
+    if (pLayoutGeo)
     {
         fWidth = GetGeometryWidth();
         fHeight = GetGeometryHeight();
     }
 
-    if(GetUsePrinterSettings())
+    if (GetUsePrinterSettings())
     {
         //replaced by printer paper size
-        ScopedVclPtrInstance< Printer > pPrinter;
+        ScopedVclPtrInstance<Printer> pPrinter;
         bool bScreen = pPrinter->IsDisplayPrinter();
-        if (!bScreen)//Printer available
+        if (!bScreen) //Printer available
         {
             Size aPaperSize = pPrinter->GetPaperSize();
-            aPaperSize = pPrinter->PixelToLogic( aPaperSize, MapMode( MapUnit::Map10thMM ) );
-            fWidth = static_cast<double>(aPaperSize.Width())/100;   //cm unit
-            fHeight = static_cast<double>(aPaperSize.Height())/100;
+            aPaperSize = pPrinter->PixelToLogic(aPaperSize, MapMode(MapUnit::Map10thMM));
+            fWidth = static_cast<double>(aPaperSize.Width()) / 100; //cm unit
+            fHeight = static_cast<double>(aPaperSize.Height()) / 100;
         }
     }
 
@@ -673,7 +681,7 @@ void LwpPageLayout::GetWidthAndHeight(double& fWidth, double& fHeight)
 */
 double LwpPageLayout::GetWidth()
 {
-    double fWidth =0, fHeight = 0;
+    double fWidth = 0, fHeight = 0;
     GetWidthAndHeight(fWidth, fHeight);
     return fWidth;
 }
@@ -684,7 +692,7 @@ double LwpPageLayout::GetWidth()
 */
 double LwpPageLayout::GetHeight()
 {
-    double fWidth =0, fHeight = 0;
+    double fWidth = 0, fHeight = 0;
     GetWidthAndHeight(fWidth, fHeight);
     return fHeight;
 }
@@ -696,9 +704,9 @@ bool LwpPageLayout::operator<(LwpPageLayout& Other)
 {
     LwpPara* pThisPara = GetPagePosition();
     LwpPara* pOtherPara = Other.GetPagePosition();
-    if(pThisPara && pOtherPara)
+    if (pThisPara && pOtherPara)
     {
-        if(pThisPara == pOtherPara)
+        if (pThisPara == pOtherPara)
         {
             //If the two layouts in the same para, compare which layout is earlied according to frib order
             return pThisPara->ComparePagePosition(this, &Other);
@@ -719,37 +727,35 @@ bool LwpPageLayout::operator<(LwpPageLayout& Other)
 LwpPara* LwpPageLayout::GetPagePosition()
 {
     LwpPara* pPara = dynamic_cast<LwpPara*>(GetPosition().obj().get());
-    if(pPara)
+    if (pPara)
         return pPara;
     //Get the position from its related section
     LwpFoundry* pFoundry = GetFoundry();
-    if(pFoundry)
+    if (pFoundry)
     {
         LwpSection* pSection = nullptr;
-        while( (pSection = pFoundry->EnumSections(pSection)) )
+        while ((pSection = pFoundry->EnumSections(pSection)))
         {
-            if(pSection->GetPageLayout() == this)
+            if (pSection->GetPageLayout() == this)
                 return dynamic_cast<LwpPara*>(pSection->GetPosition().obj().get());
         }
     }
 
     return nullptr;
 }
-LwpHeaderLayout::LwpHeaderLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm )
+LwpHeaderLayout::LwpHeaderLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)
     , m_nBorderOffset(0)
 {
 }
 
-LwpHeaderLayout::~LwpHeaderLayout()
-{
-}
+LwpHeaderLayout::~LwpHeaderLayout() {}
 
 void LwpHeaderLayout::Read()
 {
     LwpPlacableLayout::Read();
 
-    if(LwpFileHeader::m_nFileRevision >= 0x000E)
+    if (LwpFileHeader::m_nFileRevision >= 0x000E)
         m_nBorderOffset = m_pObjStrm->QuickReadInt32();
     else
         m_nBorderOffset = 0;
@@ -779,7 +785,7 @@ void LwpHeaderLayout::RegisterStyle(XFPageMaster* pm1)
 void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
 {
     //Set height: from top of header to top of body, including the spacing between header and body
-    double height = GetGeometryHeight()- GetMarginsValue(MARGIN_TOP);
+    double height = GetGeometryHeight() - GetMarginsValue(MARGIN_TOP);
     if (GetIsAutoGrowDown())
     {
         ph1->SetMinHeight(height);
@@ -790,20 +796,22 @@ void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
     }
 
     //Set left,right,bottom margins
-    LwpMiddleLayout* parent = dynamic_cast<LwpMiddleLayout*> (GetParent().obj().get());
+    LwpMiddleLayout* parent = dynamic_cast<LwpMiddleLayout*>(GetParent().obj().get());
     //left margin in SODC: the space from the left edge of body to the left edge of header
-    double left = GetMarginsValue(MARGIN_LEFT) - (parent ? parent->GetMarginsValue(MARGIN_LEFT) : 0);
-    if(left<=0) //The left margin in SODC can not be minus value
+    double left
+        = GetMarginsValue(MARGIN_LEFT) - (parent ? parent->GetMarginsValue(MARGIN_LEFT) : 0);
+    if (left <= 0) //The left margin in SODC can not be minus value
     {
         left = -1;
     }
     //left margin in SODC: the space from the right edge of header to the right edge of body
-    double right = GetMarginsValue(MARGIN_RIGHT) - (parent ? parent->GetMarginsValue(MARGIN_RIGHT) : 0);
-    if(right<=0)//The right margin in SODC can not be minus value
+    double right
+        = GetMarginsValue(MARGIN_RIGHT) - (parent ? parent->GetMarginsValue(MARGIN_RIGHT) : 0);
+    if (right <= 0) //The right margin in SODC can not be minus value
     {
         right = -1;
     }
-    ph1->SetMargins( left, right, GetMarginsValue(MARGIN_BOTTOM));
+    ph1->SetMargins(left, right, GetMarginsValue(MARGIN_BOTTOM));
 
     //Word Pro has no dynamic spacing, should be set to false
     ph1->SetDynamicSpace(false);
@@ -812,7 +820,7 @@ void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
 void LwpHeaderLayout::ParseBorder(XFHeaderStyle* pHeaderStyle)
 {
     std::unique_ptr<XFBorders> pBordres = GetXFBorders();
-    if(pBordres)
+    if (pBordres)
     {
         pHeaderStyle->SetBorders(std::move(pBordres));
     }
@@ -821,7 +829,7 @@ void LwpHeaderLayout::ParseBorder(XFHeaderStyle* pHeaderStyle)
 void LwpHeaderLayout::ParseShadow(XFHeaderStyle* pHeaderStyle)
 {
     XFShadow* pXFShadow = GetXFShadow();
-    if(pXFShadow)
+    if (pXFShadow)
     {
         pHeaderStyle->SetShadow(pXFShadow);
     }
@@ -858,13 +866,13 @@ void LwpHeaderLayout::ParseBackGround(XFHeaderStyle* pHeaderStyle)
 void LwpHeaderLayout::ParseBackColor(XFHeaderStyle* pHeaderStyle)
 {
     LwpColor* pColor = GetBackColor();
-    if(pColor)
+    if (pColor)
     {
         pHeaderStyle->SetBackColor(XFColor(pColor->To24Color()));
     }
 }
 
-void LwpHeaderLayout::ParseWaterMark(XFHeaderStyle * pHeaderStyle)
+void LwpHeaderLayout::ParseWaterMark(XFHeaderStyle* pHeaderStyle)
 {
     std::unique_ptr<XFBGImage> xXFBGImage(GetXFBGImage());
     if (xXFBGImage)
@@ -878,7 +886,7 @@ void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
 {
     rtl::Reference<XFHeader> xHeader(new XFHeader);
     rtl::Reference<LwpObject> pStory = m_Content.obj();
-    if(pStory.is())
+    if (pStory.is())
     {
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
@@ -899,21 +907,19 @@ void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
     mp1->SetHeader(xHeader);
 }
 
-LwpFooterLayout::LwpFooterLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm )
-    : LwpPlacableLayout( objHdr, pStrm )
+LwpFooterLayout::LwpFooterLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpPlacableLayout(objHdr, pStrm)
     , m_nBorderOffset(0)
 {
 }
 
-LwpFooterLayout::~LwpFooterLayout()
-{
-}
+LwpFooterLayout::~LwpFooterLayout() {}
 
 void LwpFooterLayout::Read()
 {
     LwpPlacableLayout::Read();
 
-    if(LwpFileHeader::m_nFileRevision >= 0x000E)
+    if (LwpFileHeader::m_nFileRevision >= 0x000E)
         m_nBorderOffset = m_pObjStrm->QuickReadInt32();
     else
         m_nBorderOffset = 0;
@@ -941,10 +947,9 @@ void LwpFooterLayout::RegisterStyle(XFPageMaster* pm1)
 
 void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
 {
-
     //Set height: from top of header to top of body, including the spacing between header and body
     double height = GetGeometryHeight() - GetMarginsValue(MARGIN_BOTTOM);
-    if( IsAutoGrowUp() )
+    if (IsAutoGrowUp())
     {
         pFooterStyle->SetMinHeight(height);
     }
@@ -954,18 +959,20 @@ void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
     }
 
     //Set left,right,top margins
-    LwpMiddleLayout* parent = dynamic_cast<LwpMiddleLayout*> (GetParent().obj().get());
-    double left = GetMarginsValue(MARGIN_LEFT) - (parent ? parent->GetMarginsValue(MARGIN_LEFT) : 0);
-    if(left<=0) //The left margin in SODC can not be minus value
+    LwpMiddleLayout* parent = dynamic_cast<LwpMiddleLayout*>(GetParent().obj().get());
+    double left
+        = GetMarginsValue(MARGIN_LEFT) - (parent ? parent->GetMarginsValue(MARGIN_LEFT) : 0);
+    if (left <= 0) //The left margin in SODC can not be minus value
     {
         left = -1;
     }
-    double right = GetMarginsValue(MARGIN_RIGHT) - (parent ? parent->GetMarginsValue(MARGIN_RIGHT) : 0);
-    if(right<=0)//The left margin in SODC can not be minus value
+    double right
+        = GetMarginsValue(MARGIN_RIGHT) - (parent ? parent->GetMarginsValue(MARGIN_RIGHT) : 0);
+    if (right <= 0) //The left margin in SODC can not be minus value
     {
         right = -1;
     }
-    pFooterStyle->SetMargins( left, right, GetMarginsValue(MARGIN_TOP));
+    pFooterStyle->SetMargins(left, right, GetMarginsValue(MARGIN_TOP));
 
     //Word Pro has no dynamic spacing, should be set to false
     pFooterStyle->SetDynamicSpace(false);
@@ -974,7 +981,7 @@ void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
 void LwpFooterLayout::ParseBorder(XFFooterStyle* pFooterStyle)
 {
     std::unique_ptr<XFBorders> pBordres = GetXFBorders();
-    if(pBordres)
+    if (pBordres)
     {
         pFooterStyle->SetBorders(std::move(pBordres));
     }
@@ -983,7 +990,7 @@ void LwpFooterLayout::ParseBorder(XFFooterStyle* pFooterStyle)
 void LwpFooterLayout::ParseShadow(XFFooterStyle* pFooterStyle)
 {
     XFShadow* pXFShadow = GetXFShadow();
-    if(pXFShadow)
+    if (pXFShadow)
     {
         pFooterStyle->SetShadow(pXFShadow);
     }
@@ -1019,7 +1026,7 @@ void LwpFooterLayout::ParseBackGround(XFFooterStyle* pFooterStyle)
 void LwpFooterLayout::ParseBackColor(XFFooterStyle* pFooterStyle)
 {
     LwpColor* pColor = GetBackColor();
-    if(pColor)
+    if (pColor)
     {
         pFooterStyle->SetBackColor(XFColor(pColor->To24Color()));
     }
@@ -1030,7 +1037,7 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
     rtl::Reference<XFFooter> xFooter(new XFFooter);
     rtl::Reference<LwpObject> pStory = m_Content.obj(VO_STORY);
     //Call the RegisterStyle first to register the styles in footer paras, and then XFConvert()
-    if(pStory.is())
+    if (pStory.is())
     {
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
@@ -1050,7 +1057,7 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
     mp1->SetFooter(xFooter);
 }
 
-void LwpFooterLayout::ParseWaterMark(XFFooterStyle * pFooterStyle)
+void LwpFooterLayout::ParseWaterMark(XFFooterStyle* pFooterStyle)
 {
     std::unique_ptr<XFBGImage> xXFBGImage(GetXFBGImage());
     if (xXFBGImage)

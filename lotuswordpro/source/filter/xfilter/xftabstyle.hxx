@@ -68,42 +68,33 @@ public:
     XFTabStyle();
 
 public:
-    void    SetTabType(enumXFTab type);
+    void SetTabType(enumXFTab type);
 
-    void    SetLength(double len);
+    void SetLength(double len);
 
-    void    SetDelimiter(sal_Unicode delimiter);
+    void SetDelimiter(sal_Unicode delimiter);
 
-    void    SetLeaderChar(sal_Unicode leader);
+    void SetLeaderChar(sal_Unicode leader);
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    enumXFTab   m_eType;
-    double      m_fLength;
-    OUString   m_strDelimiter;
-    OUString   m_strLeader;
+    enumXFTab m_eType;
+    double m_fLength;
+    OUString m_strDelimiter;
+    OUString m_strLeader;
 };
 
-inline void XFTabStyle::SetTabType(enumXFTab type)
-{
-    m_eType = type;
-}
+inline void XFTabStyle::SetTabType(enumXFTab type) { m_eType = type; }
 
-inline void XFTabStyle::SetLength(double len)
-{
-    m_fLength = len;
-}
+inline void XFTabStyle::SetLength(double len) { m_fLength = len; }
 
 inline void XFTabStyle::SetDelimiter(sal_Unicode delimiter)
 {
     m_strDelimiter = OUString(delimiter);
 }
 
-inline void XFTabStyle::SetLeaderChar(sal_Unicode leader)
-{
-    m_strLeader = OUString(leader);
-}
+inline void XFTabStyle::SetLeaderChar(sal_Unicode leader) { m_strLeader = OUString(leader); }
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

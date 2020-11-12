@@ -68,32 +68,26 @@ public:
     XFImageStyle();
 
 public:
-    void    SetBrightness(sal_Int32 brightness);
+    void SetBrightness(sal_Int32 brightness);
 
-    void    SetContrast(sal_Int32 contrast);
+    void SetContrast(sal_Int32 contrast);
 
-    void    SetClip(double left, double right, double top, double bottom);
+    void SetClip(double left, double right, double top, double bottom);
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    sal_Int32   m_nBrightness;
-    sal_Int32   m_nContrast;
-    double      m_fClipLeft;
-    double      m_fClipRight;
-    double      m_fClipTop;
-    double      m_fClipBottom;
+    sal_Int32 m_nBrightness;
+    sal_Int32 m_nContrast;
+    double m_fClipLeft;
+    double m_fClipRight;
+    double m_fClipTop;
+    double m_fClipBottom;
 };
 
-inline void XFImageStyle::SetBrightness(sal_Int32 brightness)
-{
-    m_nBrightness = brightness;
-}
+inline void XFImageStyle::SetBrightness(sal_Int32 brightness) { m_nBrightness = brightness; }
 
-inline void XFImageStyle::SetContrast(sal_Int32 contrast)
-{
-    m_nContrast = contrast;
-}
+inline void XFImageStyle::SetContrast(sal_Int32 contrast) { m_nContrast = contrast; }
 
 inline void XFImageStyle::SetClip(double left, double right, double top, double bottom)
 {

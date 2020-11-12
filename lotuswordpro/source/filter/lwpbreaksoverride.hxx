@@ -67,7 +67,6 @@ class LwpObjectStream;
 class LwpAtomHolder;
 class LwpBreaksOverride final : public LwpOverride
 {
-
 public:
     LwpBreaksOverride();
     virtual ~LwpBreaksOverride() override;
@@ -76,18 +75,19 @@ public:
 
     enum
     {
-        BO_PAGEBEFORE   = 0x01, // page break before this style
-        BO_PAGEAFTER    = 0x02, // page break after this style
+        BO_PAGEBEFORE = 0x01, // page break before this style
+        BO_PAGEAFTER = 0x02, // page break after this style
         BO_KEEPTOGETHER = 0x04,
-        BO_COLBEFORE    = 0x08, // col break before this style
-        BO_COLAFTER     = 0x10, // col break after this style
-        BO_KEEPPREV     = 0x20, // not with-PAGE BEF, COL BEF or WITHIN
-        BO_KEEPNEXT     = 0x40, // not with-PAGE AFT, COL AFT or WITHIN
+        BO_COLBEFORE = 0x08, // col break before this style
+        BO_COLAFTER = 0x10, // col break after this style
+        BO_KEEPPREV = 0x20, // not with-PAGE BEF, COL BEF or WITHIN
+        BO_KEEPNEXT = 0x40, // not with-PAGE AFT, COL AFT or WITHIN
         BO_USENEXTSTYLE = 0x80, // use next style name
-        BO_NEXTSTYLE    = 0x100 // next style name
+        BO_NEXTSTYLE = 0x100 // next style name
     };
+
 public:
-    virtual void Read(LwpObjectStream *pStrm) override;
+    virtual void Read(LwpObjectStream* pStrm) override;
 
     void Override(LwpBreaksOverride* pOther);
 
@@ -131,7 +131,7 @@ private:
     LwpBreaksOverride(LwpBreaksOverride const& rOther);
     LwpBreaksOverride& operator=(const LwpBreaksOverride& rOther) = delete;
 
-    std::unique_ptr<LwpAtomHolder>  m_pNextStyle;
+    std::unique_ptr<LwpAtomHolder> m_pNextStyle;
 };
 
 inline bool LwpBreaksOverride::IsPageBreakBefore() const
@@ -155,10 +155,7 @@ inline bool LwpBreaksOverride::IsColumnBreakAfter() const
 {
     return ((m_nValues & BO_COLAFTER) != 0);
 }
-inline bool LwpBreaksOverride::IsKeepWithNext() const
-{
-    return ((m_nValues & BO_KEEPNEXT) != 0);
-}
+inline bool LwpBreaksOverride::IsKeepWithNext() const { return ((m_nValues & BO_KEEPNEXT) != 0); }
 inline bool LwpBreaksOverride::IsKeepWithPrevious() const
 {
     return ((m_nValues & BO_KEEPPREV) != 0);
@@ -170,35 +167,35 @@ inline bool LwpBreaksOverride::IsUseNextStyle() const
 
 inline bool LwpBreaksOverride::IsPageBreakBeforeOverridden() const
 {
-    return ((m_nOverride& BO_PAGEBEFORE) != 0);
+    return ((m_nOverride & BO_PAGEBEFORE) != 0);
 }
 inline bool LwpBreaksOverride::IsPageBreakAfterOverridden() const
 {
-    return ((m_nOverride& BO_PAGEAFTER) != 0);
+    return ((m_nOverride & BO_PAGEAFTER) != 0);
 }
 inline bool LwpBreaksOverride::IsPageBreakWithinOverridden() const
 {
-    return ((m_nOverride& BO_KEEPTOGETHER) != 0);
+    return ((m_nOverride & BO_KEEPTOGETHER) != 0);
 }
 inline bool LwpBreaksOverride::IsColumnBreakBeforeOverridden() const
 {
-    return ((m_nOverride& BO_COLBEFORE) != 0);
+    return ((m_nOverride & BO_COLBEFORE) != 0);
 }
 inline bool LwpBreaksOverride::IsColumnBreakAfterOverridden() const
 {
-    return ((m_nOverride& BO_COLAFTER) != 0);
+    return ((m_nOverride & BO_COLAFTER) != 0);
 }
 inline bool LwpBreaksOverride::IsKeepWithNextOverridden() const
 {
-    return ((m_nOverride& BO_KEEPNEXT) != 0);
+    return ((m_nOverride & BO_KEEPNEXT) != 0);
 }
 inline bool LwpBreaksOverride::IsKeepWithPreviousOverridden() const
 {
-    return ((m_nOverride& BO_KEEPPREV) != 0);
+    return ((m_nOverride & BO_KEEPPREV) != 0);
 }
 inline bool LwpBreaksOverride::IsUseNextStyleOverridden() const
 {
-    return ((m_nOverride& BO_USENEXTSTYLE) != 0);
+    return ((m_nOverride & BO_USENEXTSTYLE) != 0);
 }
 
 inline void LwpBreaksOverride::RevertPageBreakBefore()

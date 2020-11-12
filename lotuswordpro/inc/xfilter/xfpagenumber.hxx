@@ -70,28 +70,25 @@
 class XFPageNumber : public XFContent
 {
 public:
-    void    SetNumFmt(const OUString& fmt);
+    void SetNumFmt(const OUString& fmt);
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    XFNumFmt    m_aNumFmt;
+    XFNumFmt m_aNumFmt;
 };
 
-inline void XFPageNumber::SetNumFmt(const OUString& fmt)
-{
-    m_aNumFmt.SetFormat(fmt);
-}
+inline void XFPageNumber::SetNumFmt(const OUString& fmt) { m_aNumFmt.SetFormat(fmt); }
 
-inline void XFPageNumber::ToXml(IXFStream *pStrm)
+inline void XFPageNumber::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     m_aNumFmt.ToXml(pStrm);
-    pAttrList->AddAttribute( "text:select-page", "current" );
-    pStrm->StartElement( "text:page-number" );
-    pStrm->EndElement( "text:page-number" );
+    pAttrList->AddAttribute("text:select-page", "current");
+    pStrm->StartElement("text:page-number");
+    pStrm->EndElement("text:page-number");
 }
 
 #endif

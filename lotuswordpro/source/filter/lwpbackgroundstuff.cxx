@@ -85,9 +85,9 @@ void LwpBackgroundStuff::GetPattern(sal_uInt16 btPttnIndex, sal_uInt8 (&pPttnArr
     }
     assert((2 < btPttnIndex) && (btPttnIndex < 72));
     const sal_uInt8* pTempArray = s_pLwpPatternTab[btPttnIndex];
-    for(sal_uInt8 i = 0; i < 8; i++)
+    for (sal_uInt8 i = 0; i < 8; i++)
     {
-        pPttnArray[i] = pTempArray[7-i];
+        pPttnArray[i] = pTempArray[7 - i];
     }
 }
 
@@ -114,31 +114,31 @@ std::unique_ptr<XFBGImage> LwpBackgroundStuff::GetFillPattern()
     GetPattern(m_nID, aPttnArray);
 
     // create bitmap object from the pattern array
-    BitmapEx aBmp = vcl::bitmap::CreateFromData( aPttnArray, 8, 8, 1, 1 );
+    BitmapEx aBmp = vcl::bitmap::CreateFromData(aPttnArray, 8, 8, 1, 1);
 
     // create XOBitmap object from bitmap object
-    XOBitmap aXOBitmap( aBmp );
+    XOBitmap aXOBitmap(aBmp);
     aXOBitmap.Bitmap2Array();
 
     // set back/fore-ground colors
     if (m_aFillColor.IsValidColor() && m_aPatternColor.IsValidColor())
     {
         Color aBackColor(static_cast<sal_uInt8>(m_aFillColor.GetRed()),
-            static_cast<sal_uInt8>(m_aFillColor.GetGreen()),
-            static_cast<sal_uInt8>(m_aFillColor.GetBlue()));
+                         static_cast<sal_uInt8>(m_aFillColor.GetGreen()),
+                         static_cast<sal_uInt8>(m_aFillColor.GetBlue()));
         Color aForeColor(static_cast<sal_uInt8>(m_aPatternColor.GetRed()),
-            static_cast<sal_uInt8>(m_aPatternColor.GetGreen()),
-            static_cast<sal_uInt8>(m_aPatternColor.GetBlue()));
+                         static_cast<sal_uInt8>(m_aPatternColor.GetGreen()),
+                         static_cast<sal_uInt8>(m_aPatternColor.GetBlue()));
 
-        if( aXOBitmap.GetBackgroundColor() == COL_BLACK )
+        if (aXOBitmap.GetBackgroundColor() == COL_BLACK)
         {
-            aXOBitmap.SetPixelColor( aBackColor );
-            aXOBitmap.SetBackgroundColor( aForeColor );
+            aXOBitmap.SetPixelColor(aBackColor);
+            aXOBitmap.SetBackgroundColor(aForeColor);
         }
         else
         {
-            aXOBitmap.SetPixelColor( aForeColor );
-            aXOBitmap.SetBackgroundColor( aBackColor );
+            aXOBitmap.SetPixelColor(aForeColor);
+            aXOBitmap.SetBackgroundColor(aBackColor);
         }
     }
 
@@ -147,7 +147,7 @@ std::unique_ptr<XFBGImage> LwpBackgroundStuff::GetFillPattern()
     aXOBitmap.Array2Bitmap();
     WriteDIB(aXOBitmap.GetBitmap(), aPicMemStream);
     sal_uInt32 nSize = aPicMemStream.GetEndOfData();
-    std::unique_ptr<sal_uInt8[]> pImageBuff(new sal_uInt8 [nSize]);
+    std::unique_ptr<sal_uInt8[]> pImageBuff(new sal_uInt8[nSize]);
     memcpy(pImageBuff.get(), aPicMemStream.GetData(), nSize);
 
     // create XFBGImage object.

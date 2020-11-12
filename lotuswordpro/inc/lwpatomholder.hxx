@@ -66,22 +66,20 @@ class LwpAtomHolder
 {
 public:
     LwpAtomHolder();
+
 private:
-    sal_Int32   m_nAtom;
-    sal_Int32   m_nAssocAtom;
+    sal_Int32 m_nAtom;
+    sal_Int32 m_nAssocAtom;
     OUString m_String;
     //OUString m_UniString;         //no use temporarily
 public:
-    void Read(LwpObjectStream *pStrm);
-    void ReadPathAtom(LwpObjectStream *pStrm);
-    void Skip(LwpObjectStream *pStrm);
-    const OUString& str() const {return m_String;}
+    void Read(LwpObjectStream* pStrm);
+    void ReadPathAtom(LwpObjectStream* pStrm);
+    void Skip(LwpObjectStream* pStrm);
+    const OUString& str() const { return m_String; }
     inline bool HasValue() const;
 };
-inline bool LwpAtomHolder::HasValue() const
-{
-    return (m_nAtom != BAD_ATOM);
-}
+inline bool LwpAtomHolder::HasValue() const { return (m_nAtom != BAD_ATOM); }
 
 #endif
 

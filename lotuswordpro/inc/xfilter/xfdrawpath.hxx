@@ -76,22 +76,20 @@ public:
     /**
      * @descr   Set svg path command,L for line,M for move,...
      */
-    void    SetCommand(const OUString& cmd);
+    void SetCommand(const OUString& cmd);
 
     /**
      * @descr   Set svg path point.
      */
-    void    AddPoint(const XFPoint& pt)
-    {
-        m_aPoints.push_back(pt);
-    }
+    void AddPoint(const XFPoint& pt) { m_aPoints.push_back(pt); }
 
     OUString ToString();
 
     friend class XFDrawPath;
+
 private:
-    OUString   m_strCommand;
-    std::vector<XFPoint>    m_aPoints;
+    OUString m_strCommand;
+    std::vector<XFPoint> m_aPoints;
 };
 
 /**
@@ -107,33 +105,30 @@ public:
     /**
      * @descr   Move command.
      */
-    void    MoveTo(XFPoint pt);
+    void MoveTo(XFPoint pt);
 
     /**
      * @descr   Line command.
      */
-    void    LineTo(XFPoint pt);
+    void LineTo(XFPoint pt);
 
     /**
      * @descr   Curve command.
      */
-    void    CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2);
+    void CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2);
 
     /**
      * @descr   Close path command.
      */
-    void    ClosePath();
+    void ClosePath();
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
     std::vector<XFSvgPathEntry> m_aPaths;
 };
 
-inline void XFSvgPathEntry::SetCommand(const OUString& cmd)
-{
-    m_strCommand = cmd;
-}
+inline void XFSvgPathEntry::SetCommand(const OUString& cmd) { m_strCommand = cmd; }
 
 #endif
 

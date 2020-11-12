@@ -70,22 +70,27 @@ class XFIndex;
 class LwpTocSuperLayout final : public LwpSuperTableLayout
 {
 public:
-    LwpTocSuperLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpTocSuperLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual ~LwpTocSuperLayout() override;
     void RegisterStyle() override;
     virtual void XFConvert(XFContentContainer* pCont) override;
-    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_TOC_SUPERTABLE_LAYOUT;}
-    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) override;
+    virtual LWP_LAYOUT_TYPE GetLayoutType() override { return LWP_TOC_SUPERTABLE_LAYOUT; }
+    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0,
+                                bool bAll = false) override;
+
 private:
     void Read() override;
     bool GetRightAlignPageNumber(sal_uInt16 index);
     bool GetUsePageNumber(sal_uInt16 index);
     sal_uInt16 GetSeparatorType(sal_uInt16 index);
-    LwpTocLevelData * GetSearchLevelPtr(sal_uInt16 index);
-    static LwpTocLevelData * GetNextSearchLevelPtr(sal_uInt16 index, LwpTocLevelData * pCurData);
-    void AddSourceStyle(XFIndex* pToc, LwpTocLevelData * pLevel,  LwpFoundry * pFoundry);
+    LwpTocLevelData* GetSearchLevelPtr(sal_uInt16 index);
+    static LwpTocLevelData* GetNextSearchLevelPtr(sal_uInt16 index, LwpTocLevelData* pCurData);
+    void AddSourceStyle(XFIndex* pToc, LwpTocLevelData* pLevel, LwpFoundry* pFoundry);
 
-    enum {MAX_LEVELS = 9};
+    enum
+    {
+        MAX_LEVELS = 9
+    };
     enum
     {
         TS_NOLEADERS = 0x01,
@@ -118,10 +123,10 @@ private:
         CURRENTSECTION = 5
     };
 
-    LwpAtomHolder m_TextMarker;         /* for selected text */
-    LwpAtomHolder m_ParentName;     /* for currentleveldivision */
-    LwpAtomHolder m_DivisionName;       /* for currentdivision&currentsection */
-    LwpAtomHolder m_SectionName;        /* for currentsection */
+    LwpAtomHolder m_TextMarker; /* for selected text */
+    LwpAtomHolder m_ParentName; /* for currentleveldivision */
+    LwpAtomHolder m_DivisionName; /* for currentdivision&currentsection */
+    LwpAtomHolder m_SectionName; /* for currentsection */
     sal_uInt16 m_nFrom;
     LwpDLVListHeadTail m_SearchItems;
     LwpAtomHolder m_DestName[MAX_LEVELS];
@@ -144,13 +149,14 @@ public:
         USETEXT = 0x01,
         USENUMBER = 0x02
     };
-    LwpTocLevelData(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpTocLevelData(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     void RegisterStyle() override;
     virtual void XFConvert(XFContentContainer* pCont) override;
-    sal_uInt16 GetLevel() const {return m_nLevel;}
-    bool GetUseText() const {   return (m_nFlags & USETEXT) != 0;}
-    OUString const & GetSearchStyle() const {return m_SearchName.str();}
-    bool GetUseLeadingText() const {    return (m_nFlags & USENUMBER) != 0;}
+    sal_uInt16 GetLevel() const { return m_nLevel; }
+    bool GetUseText() const { return (m_nFlags & USETEXT) != 0; }
+    OUString const& GetSearchStyle() const { return m_SearchName.str(); }
+    bool GetUseLeadingText() const { return (m_nFlags & USENUMBER) != 0; }
+
 private:
     virtual ~LwpTocLevelData() override;
 

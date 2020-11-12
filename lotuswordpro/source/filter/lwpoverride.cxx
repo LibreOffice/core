@@ -103,7 +103,7 @@ void LwpOverride::Override(sal_uInt16 nBits, STATE eState)
         {
             m_nValues |= nBits;
         }
-        else    /* State == STATE_OFF */
+        else /* State == STATE_OFF */
         {
             m_nValues &= ~nBits;
         }
@@ -132,7 +132,6 @@ void LwpTextLanguageOverride::Read(LwpObjectStream* pStrm)
     }
 
     pStrm->SkipExtra();
-
 }
 
 /*class LwpTextAttributeOverride*/
@@ -162,10 +161,7 @@ void LwpTextAttributeOverride::Read(LwpObjectStream* pStrm)
     pStrm->SkipExtra();
 }
 
-bool LwpTextAttributeOverride::IsHighlight() const
-{
-    return (m_nValues & TAO_HIGHLIGHT) != 0;
-}
+bool LwpTextAttributeOverride::IsHighlight() const { return (m_nValues & TAO_HIGHLIGHT) != 0; }
 
 /*class LwpKinsokuOptsOverride*/
 LwpKinsokuOptsOverride::LwpKinsokuOptsOverride(LwpKinsokuOptsOverride const& rOther)
@@ -198,16 +194,13 @@ LwpBulletOverride::LwpBulletOverride(LwpBulletOverride const& rOther)
 {
 }
 
-LwpBulletOverride* LwpBulletOverride::clone() const
-{
-    return new LwpBulletOverride(*this);
-}
+LwpBulletOverride* LwpBulletOverride::clone() const { return new LwpBulletOverride(*this); }
 
-void LwpBulletOverride::Read(LwpObjectStream * pStrm)
+void LwpBulletOverride::Read(LwpObjectStream* pStrm)
 {
     if (pStrm->QuickReadBool())
     {
-        m_bIsNull= false;
+        m_bIsNull = false;
         ReadCommon(pStrm);
         m_SilverBullet.ReadIndexed(pStrm);
     }
@@ -230,13 +223,13 @@ void LwpBulletOverride::OverrideSkip(bool bOver)
 
 void LwpBulletOverride::OverrideRightAligned(bool bOver)
 {
-    if(bOver)
+    if (bOver)
     {
-        LwpOverride::Override(BO_RIGHTALIGN,STATE_ON);
+        LwpOverride::Override(BO_RIGHTALIGN, STATE_ON);
     }
     else
     {
-        LwpOverride::Override(BO_RIGHTALIGN,STATE_OFF);
+        LwpOverride::Override(BO_RIGHTALIGN, STATE_OFF);
     }
 }
 
@@ -247,7 +240,7 @@ void LwpBulletOverride::OverrideSilverBullet(LwpObjectID aID)
         m_SilverBullet = aID;
     }
 
-    LwpOverride::Override(BO_SILVERBULLET,STATE_ON);
+    LwpOverride::Override(BO_SILVERBULLET, STATE_ON);
 }
 
 void LwpBulletOverride::Override(LwpBulletOverride* pOther)
@@ -287,7 +280,6 @@ void LwpBulletOverride::Override(LwpBulletOverride* pOther)
             pOther->RevertRightAligned();
         }
     }
-
 }
 
 /*class LwpAlignmentOverride*/
@@ -304,7 +296,7 @@ LwpAlignmentOverride* LwpAlignmentOverride::clone() const
     return new LwpAlignmentOverride(*this);
 }
 
-void LwpAlignmentOverride::Read(LwpObjectStream * pStrm)
+void LwpAlignmentOverride::Read(LwpObjectStream* pStrm)
 {
     if (pStrm->QuickReadBool())
     {
@@ -351,31 +343,26 @@ void LwpSpacingCommonOverride::Read(LwpObjectStream* pStrm)
 }
 
 /*class LwpSpacingOverride*/
-LwpSpacingOverride::LwpSpacingOverride() :
-m_pSpacing(new LwpSpacingCommonOverride),
-m_pAboveLineSpacing(new LwpSpacingCommonOverride),
-m_pParaSpacingAbove(new LwpSpacingCommonOverride),
-m_pParaSpacingBelow(new LwpSpacingCommonOverride)
+LwpSpacingOverride::LwpSpacingOverride()
+    : m_pSpacing(new LwpSpacingCommonOverride)
+    , m_pAboveLineSpacing(new LwpSpacingCommonOverride)
+    , m_pParaSpacingAbove(new LwpSpacingCommonOverride)
+    , m_pParaSpacingBelow(new LwpSpacingCommonOverride)
 {
 }
 
-LwpSpacingOverride::~LwpSpacingOverride()
-{
-}
+LwpSpacingOverride::~LwpSpacingOverride() {}
 
 LwpSpacingOverride::LwpSpacingOverride(LwpSpacingOverride const& rOther)
     : LwpOverride(rOther)
 {
-    m_pSpacing.reset( ::clone(rOther.m_pSpacing.get()) );
-    m_pAboveLineSpacing.reset( ::clone(rOther.m_pAboveLineSpacing.get()) );
-    m_pParaSpacingAbove.reset( ::clone(rOther.m_pParaSpacingAbove.get()) );
-    m_pParaSpacingBelow.reset( ::clone(rOther.m_pParaSpacingBelow.get()) );
+    m_pSpacing.reset(::clone(rOther.m_pSpacing.get()));
+    m_pAboveLineSpacing.reset(::clone(rOther.m_pAboveLineSpacing.get()));
+    m_pParaSpacingAbove.reset(::clone(rOther.m_pParaSpacingAbove.get()));
+    m_pParaSpacingBelow.reset(::clone(rOther.m_pParaSpacingBelow.get()));
 }
 
-LwpSpacingOverride* LwpSpacingOverride::clone() const
-{
-    return new LwpSpacingOverride(*this);
-}
+LwpSpacingOverride* LwpSpacingOverride::clone() const { return new LwpSpacingOverride(*this); }
 
 void LwpSpacingOverride::Read(LwpObjectStream* pStrm)
 {
@@ -404,10 +391,7 @@ LwpIndentOverride::LwpIndentOverride(LwpIndentOverride const& rOther)
 {
 }
 
-LwpIndentOverride* LwpIndentOverride::clone() const
-{
-    return new LwpIndentOverride(*this);
-}
+LwpIndentOverride* LwpIndentOverride::clone() const { return new LwpIndentOverride(*this); }
 
 void LwpIndentOverride::Read(LwpObjectStream* pStrm)
 {
@@ -425,14 +409,13 @@ void LwpIndentOverride::Read(LwpObjectStream* pStrm)
 }
 
 /*class LwpAmikakeOverride*/
-LwpAmikakeOverride::LwpAmikakeOverride() :
-m_pBackgroundStuff(new LwpBackgroundStuff), m_nType(AMIKAKE_NONE)
+LwpAmikakeOverride::LwpAmikakeOverride()
+    : m_pBackgroundStuff(new LwpBackgroundStuff)
+    , m_nType(AMIKAKE_NONE)
 {
 }
 
-LwpAmikakeOverride::~LwpAmikakeOverride()
-{
-}
+LwpAmikakeOverride::~LwpAmikakeOverride() {}
 
 LwpAmikakeOverride::LwpAmikakeOverride(LwpAmikakeOverride const& rOther)
     : LwpOverride(rOther)
@@ -441,10 +424,7 @@ LwpAmikakeOverride::LwpAmikakeOverride(LwpAmikakeOverride const& rOther)
 {
 }
 
-LwpAmikakeOverride* LwpAmikakeOverride::clone() const
-{
-    return new LwpAmikakeOverride(*this);
-}
+LwpAmikakeOverride* LwpAmikakeOverride::clone() const { return new LwpAmikakeOverride(*this); }
 
 void LwpAmikakeOverride::Read(LwpObjectStream* pStrm)
 {
@@ -485,15 +465,15 @@ void LwpAlignmentOverride::OverrideAlignment(AlignType val)
 
 void LwpIndentOverride::Override(LwpIndentOverride* other)
 {
-    if(m_nOverride & IO_ALL)
+    if (m_nOverride & IO_ALL)
         other->OverrideIndentAll(m_nAll);
-    if(m_nOverride & IO_FIRST)
+    if (m_nOverride & IO_FIRST)
         other->OverrideIndentFirst(m_nFirst);
-    if(m_nOverride & IO_RIGHT)
+    if (m_nOverride & IO_RIGHT)
         other->OverrideIndentRight(m_nRight);
-    if(m_nOverride & IO_REST)
+    if (m_nOverride & IO_REST)
         other->OverrideIndentRest(m_nRest);
-    if(m_nOverride & IO_USE_RELATIVE)
+    if (m_nOverride & IO_USE_RELATIVE)
         other->OverrideUseRelative(IsUseRelative());
     if (m_nOverride & IO_REL_FLAGS)
         other->OverrideRelative(GetRelative());
@@ -508,10 +488,7 @@ sal_uInt16 LwpIndentOverride::GetRelative() const
     return RELATIVE_REST;
 }
 
-bool LwpIndentOverride::IsUseRelative() const
-{
-    return (m_nValues & IO_USE_RELATIVE) != 0;
-}
+bool LwpIndentOverride::IsUseRelative() const { return (m_nValues & IO_USE_RELATIVE) != 0; }
 
 void LwpIndentOverride::OverrideIndentAll(sal_Int32 val)
 {
@@ -534,8 +511,8 @@ void LwpIndentOverride::OverrideIndentRight(sal_Int32 val)
 void LwpIndentOverride::OverrideIndentRest(sal_Int32 val)
 {
     m_nRest = val;
-//    m_nAll = val;
-//    m_nFirst = 0-val;
+    //    m_nAll = val;
+    //    m_nFirst = 0-val;
     m_nOverride |= IO_REST;
 }
 

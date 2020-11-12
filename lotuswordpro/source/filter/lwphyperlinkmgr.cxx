@@ -60,18 +60,9 @@
 
 #include "lwphyperlinkmgr.hxx"
 
-LwpHyperlinkMgr::LwpHyperlinkMgr()
-{
-    m_bIsHyperlink = false;
-}
+LwpHyperlinkMgr::LwpHyperlinkMgr() { m_bIsHyperlink = false; }
 
-LwpHyperlinkMgr::~LwpHyperlinkMgr()
-{
-}
+LwpHyperlinkMgr::~LwpHyperlinkMgr() {}
 
-
-void LwpHyperlinkMgr::SetHyperlink(const OUString& hyperlink)
-{
-    m_Hyperlink = hyperlink;
-}
+void LwpHyperlinkMgr::SetHyperlink(const OUString& hyperlink) { m_Hyperlink = hyperlink; }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

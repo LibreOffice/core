@@ -55,20 +55,18 @@
  ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UT_HXX
-# include <sal/types.h>
+#include <sal/types.h>
 
 namespace OpenStormBento
 {
+inline sal_uInt16 UtGetIntelWord(sal_uInt8 const* pData) { return pData[0] | pData[1] << 8; }
 
-inline sal_uInt16 UtGetIntelWord(sal_uInt8 const * pData)
-{ return pData[0] | pData[1] << 8; }
+inline sal_uInt32 UtGetIntelDWord(sal_uInt8 const* pData)
+{
+    return pData[0] | pData[1] << 8 | pData[2] << 16 | pData[3] << 24;
+}
 
-inline sal_uInt32 UtGetIntelDWord(sal_uInt8 const * pData)
-{ return pData[0] | pData[1] << 8 | pData[2] << 16 | pData[3] << 24; }
-
-inline sal_uInt8 UtGetIntelByte(sal_uInt8 const * pData)
-{ return * pData; }
-
+inline sal_uInt8 UtGetIntelByte(sal_uInt8 const* pData) { return *pData; }
 }
 #endif
 

@@ -56,14 +56,11 @@
 #include <lwpglobalmgr.hxx>
 #include "lwplnopts.hxx"
 
-LwpLineNumberOptions::LwpLineNumberOptions(LwpObjectStream* pStrm)
-{
-    Read(pStrm);
-}
+LwpLineNumberOptions::LwpLineNumberOptions(LwpObjectStream* pStrm) { Read(pStrm); }
 /**
  * @descr       Read LwpLineNumberOptions from object stream
  */
-void LwpLineNumberOptions::Read(LwpObjectStream *pStrm)
+void LwpLineNumberOptions::Read(LwpObjectStream* pStrm)
 {
     m_nType = pStrm->QuickReaduInt16();
     m_nFlags = pStrm->QuickReaduInt16();

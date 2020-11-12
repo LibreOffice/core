@@ -62,13 +62,13 @@
 #include <lwpobjid.hxx>
 #include "lwptblcell.hxx"
 
- LwpCellList::LwpCellList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
-     : LwpDLVList(objHdr, pStrm)
-     , cColumn(0)
-{}
+LwpCellList::LwpCellList(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpDLVList(objHdr, pStrm)
+    , cColumn(0)
+{
+}
 
-LwpCellList::~LwpCellList()
-{}
+LwpCellList::~LwpCellList() {}
 
 void LwpCellList::Read()
 {
@@ -88,53 +88,47 @@ void LwpCellList::Read()
     LwpObjectID cDependent;
     cDependent.ReadIndexed(m_pObjStrm.get());
 
-    cColumn = static_cast<sal_uInt8>(m_pObjStrm->QuickReaduInt16());        // written as a sal_uInt16
-//  sal_uInt8 cCellFlags = (sal_uInt8) m_pObjStrm->QuickReaduInt16();   // written as a sal_uInt16
-    m_pObjStrm->SeekRel(2);//CellFlags
+    cColumn = static_cast<sal_uInt8>(m_pObjStrm->QuickReaduInt16()); // written as a sal_uInt16
+    //  sal_uInt8 cCellFlags = (sal_uInt8) m_pObjStrm->QuickReaduInt16();   // written as a sal_uInt16
+    m_pObjStrm->SeekRel(2); //CellFlags
     m_pObjStrm->SkipExtra();
-
 }
 
-void  LwpCellList::Parse(IXFStream* /*pOutputStream*/)
-{
-}
+void LwpCellList::Parse(IXFStream* /*pOutputStream*/) {}
 
-void LwpCellList::Convert(XFCell * pCell, LwpTableLayout* /*pCellsMap*/)
+void LwpCellList::Convert(XFCell* pCell, LwpTableLayout* /*pCellsMap*/)
 {
     LwpObjectID aValueID = cValue;
     LwpNumericValue* pValue = dynamic_cast<LwpNumericValue*>(aValueID.obj().get());
     if (pValue)
     {
-        pCell->SetValue( pValue->GetValue() );
+        pCell->SetValue(pValue->GetValue());
     }
 }
 
-LwpNumericValue::LwpNumericValue(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpNumericValue::LwpNumericValue(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
     , cNumber(0)
-{}
+{
+}
 
-LwpNumericValue::~LwpNumericValue()
-{}
+LwpNumericValue::~LwpNumericValue() {}
 
 void LwpNumericValue::Read()
 {
     cNumber = m_pObjStrm->QuickReadDouble();
     m_pObjStrm->SkipExtra();
-
 }
 
-void  LwpNumericValue::Parse(IXFStream* /*pOutputStream*/)
+void LwpNumericValue::Parse(IXFStream* /*pOutputStream*/) {}
+
+LwpRowList::LwpRowList(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpDLVList(objHdr, pStrm)
+    , cRowID(0)
 {
 }
 
-LwpRowList::LwpRowList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
-    : LwpDLVList(objHdr, pStrm)
-    , cRowID(0)
-{}
-
-LwpRowList::~LwpRowList()
-{}
+LwpRowList::~LwpRowList() {}
 
 void LwpRowList::Read()
 {
@@ -151,16 +145,14 @@ void LwpRowList::Read()
 
     m_pObjStrm->SkipExtra();
 }
- void  LwpRowList::Parse(IXFStream* /*pOutputStream*/)
+void LwpRowList::Parse(IXFStream* /*pOutputStream*/) {}
+
+LwpTableRange::LwpTableRange(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpDLVList(objHdr, pStrm)
 {
 }
 
-LwpTableRange::LwpTableRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
-    :LwpDLVList(objHdr, pStrm)
-{}
-
-LwpTableRange::~LwpTableRange()
-{}
+LwpTableRange::~LwpTableRange() {}
 
 void LwpTableRange::Read()
 {
@@ -171,15 +163,14 @@ void LwpTableRange::Read()
     m_pObjStrm->SkipExtra();
 }
 
-void  LwpTableRange::Parse(IXFStream* /*pOutputStream*/)
+void LwpTableRange::Parse(IXFStream* /*pOutputStream*/) {}
+
+LwpCellRange::LwpCellRange(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpObject(objHdr, pStrm)
 {
 }
 
- LwpCellRange::LwpCellRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpObject(objHdr, pStrm)
-{}
-
-LwpCellRange::~LwpCellRange()
-{}
+LwpCellRange::~LwpCellRange() {}
 
 void LwpCellRange::Read()
 {
@@ -187,15 +178,14 @@ void LwpCellRange::Read()
     m_pObjStrm->SkipExtra();
 }
 
-void  LwpCellRange::Parse(IXFStream* /*pOutputStream*/)
+void LwpCellRange::Parse(IXFStream* /*pOutputStream*/) {}
+
+LwpFolder::LwpFolder(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpDLVList(objHdr, pStrm)
 {
 }
 
- LwpFolder::LwpFolder(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
-{}
-
-LwpFolder::~LwpFolder()
-{}
+LwpFolder::~LwpFolder() {}
 
 void LwpFolder::Read()
 {
@@ -212,18 +202,16 @@ void LwpFolder::Read()
     m_pObjStrm->SkipExtra();
 }
 
-void  LwpFolder::Parse(IXFStream* /*pOutputStream*/)
-{
-}
+void LwpFolder::Parse(IXFStream* /*pOutputStream*/) {}
 
-LwpDependent::LwpDependent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpDependent::LwpDependent(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpDLVList(objHdr, pStrm)
     , cReferenceOffset(0)
     , cFlags(0)
-{}
+{
+}
 
-LwpDependent::~LwpDependent()
-{}
+LwpDependent::~LwpDependent() {}
 
 void LwpDependent::Read()
 {
@@ -231,27 +219,25 @@ void LwpDependent::Read()
 
     cFormulaInfo.ReadIndexed(m_pObjStrm.get());
     cReferenceOffset = m_pObjStrm->QuickReaduInt16();
-    cFlags = static_cast<sal_uInt8>(m_pObjStrm->QuickReaduInt16());  // Written as lushort.
+    cFlags = static_cast<sal_uInt8>(m_pObjStrm->QuickReaduInt16()); // Written as lushort.
 
     m_pObjStrm->SkipExtra();
 }
 
-void  LwpDependent::Parse(IXFStream* /*pOutputStream*/)
-{
-}
+void LwpDependent::Parse(IXFStream* /*pOutputStream*/) {}
 
-void LwpRowSpecifier::QuickRead(LwpObjectStream *pStrm)
+void LwpRowSpecifier::QuickRead(LwpObjectStream* pStrm)
 {
     cRow = pStrm->QuickReaduInt16();
     cQualifier.QuickRead(pStrm);
 }
-void LwpColumnSpecifier::QuickRead(LwpObjectStream *pStrm)
+void LwpColumnSpecifier::QuickRead(LwpObjectStream* pStrm)
 {
     cColumn = static_cast<sal_uInt8>(pStrm->QuickReaduInt16());
     cQualifier.QuickRead(pStrm);
 }
 
-void LwpRowColumnQualifier::QuickRead(LwpObjectStream *pStrm)
+void LwpRowColumnQualifier::QuickRead(LwpObjectStream* pStrm)
 {
     // written as lushort for future flags
     cFlags = static_cast<sal_uInt8>(pStrm->QuickReaduInt16());

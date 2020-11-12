@@ -84,7 +84,7 @@ struct IXFStyleRet
 class XFStyleContainer
 {
 public:
-    XFStyleContainer(){}
+    XFStyleContainer() {}
 
     explicit XFStyleContainer(const OUString& strStyleNamePrefix);
 
@@ -99,27 +99,27 @@ public:
      * @descr   Add style to container.
      *          If the same style has exist, then pStyle will be deleted, and the same style will be return.
      */
-    IXFStyleRet     AddStyle(std::unique_ptr<IXFStyle> pStyle);
+    IXFStyleRet AddStyle(std::unique_ptr<IXFStyle> pStyle);
 
     /**
      * @descr   Find the same style.
      */
-    IXFStyle*       FindSameStyle(IXFStyle *pStyle);
+    IXFStyle* FindSameStyle(IXFStyle* pStyle);
 
     /**
      * @descr   get style by name.
      */
-    IXFStyle*       FindStyle(const OUString& name);
+    IXFStyle* FindStyle(const OUString& name);
 
     /**
      * @descr   clear container.
      */
-    void            Reset();
+    void Reset();
 
     /**
      * @descr   get count of styles in the container.
      */
-    size_t      GetCount() const;
+    size_t GetCount() const;
 
     /**
      * @descr   get style by index.
@@ -129,21 +129,20 @@ public:
     /**
      * @descr   Output all style.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void ToXml(IXFStream* pStrm);
 
     friend bool operator==(XFStyleContainer& b1, XFStyleContainer& b2);
     friend bool operator!=(XFStyleContainer& b1, XFStyleContainer& b2);
+
 private:
-    static void     ManageStyleFont(IXFStyle *pStyle);
+    static void ManageStyleFont(IXFStyle* pStyle);
+
 private:
-    std::vector<std::unique_ptr<IXFStyle>>  m_aStyles;
-    OUString   m_strStyleNamePrefix;
+    std::vector<std::unique_ptr<IXFStyle>> m_aStyles;
+    OUString m_strStyleNamePrefix;
 };
 
-inline size_t XFStyleContainer::GetCount() const
-{
-    return m_aStyles.size();
-}
+inline size_t XFStyleContainer::GetCount() const { return m_aStyles.size(); }
 
 #endif
 

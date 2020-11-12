@@ -56,23 +56,20 @@
 #include "lwpprtinfo.hxx"
 #include <lwpatomholder.hxx>
 
-LwpPrinterInfo::LwpPrinterInfo(LwpObjectStream* pStrm)
-{
-    Skip(pStrm);
-}
+LwpPrinterInfo::LwpPrinterInfo(LwpObjectStream* pStrm) { Skip(pStrm); }
 /**
  * @descr  skip printer info in VO_DOCUMENT
   */
-void LwpPrinterInfo::Skip(LwpObjectStream *pStrm)
+void LwpPrinterInfo::Skip(LwpObjectStream* pStrm)
 {
-    /*sal_uInt16 platform =*/ pStrm->QuickReaduInt16();
+    /*sal_uInt16 platform =*/pStrm->QuickReaduInt16();
 
     //Skip the size and the buffer
     sal_uInt32 size = pStrm->QuickReaduInt32();
     pStrm->SeekRel(static_cast<sal_uInt16>(size));
 
     //Skip other printer info
-    pStrm->SeekRel(6*sizeof(sal_uInt16)+sizeof(sal_uInt32)+sizeof(sal_uInt16));
+    pStrm->SeekRel(6 * sizeof(sal_uInt16) + sizeof(sal_uInt32) + sizeof(sal_uInt16));
 
     //Skip the next five LwpAtomHolder
     {
@@ -87,7 +84,7 @@ void LwpPrinterInfo::Skip(LwpObjectStream *pStrm)
     sal_uInt16 count = pStrm->QuickReaduInt16();
     //Skip each selected division
     LwpAtomHolder toSkip;
-    while(count--)
+    while (count--)
     {
         toSkip.Skip(pStrm);
         pStrm->SkipExtra();

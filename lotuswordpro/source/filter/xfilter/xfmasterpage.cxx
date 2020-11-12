@@ -61,38 +61,26 @@
 #include <xfilter/xffooter.hxx>
 #include <xfilter/xfheader.hxx>
 
-void XFMasterPage::SetHeader(rtl::Reference<XFHeader> const & rHeader)
-{
-    m_xHeader = rHeader;
-}
+void XFMasterPage::SetHeader(rtl::Reference<XFHeader> const& rHeader) { m_xHeader = rHeader; }
 
-void XFMasterPage::SetFooter(rtl::Reference<XFFooter> const & rFooter)
-{
-    m_xFooter = rFooter;
-}
+void XFMasterPage::SetFooter(rtl::Reference<XFFooter> const& rFooter) { m_xFooter = rFooter; }
 
-enumXFStyle XFMasterPage::GetStyleFamily()
-{
-    return enumXFStyleMasterPage;
-}
+enumXFStyle XFMasterPage::GetStyleFamily() { return enumXFStyleMasterPage; }
 
-void    XFMasterPage::SetPageMaster(const OUString& pm)
-{
-    m_strPageMaster = pm;
-}
+void XFMasterPage::SetPageMaster(const OUString& pm) { m_strPageMaster = pm; }
 
-void    XFMasterPage::ToXml(IXFStream *pStrm)
+void XFMasterPage::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList     *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:name", m_strStyleName );
-    pAttrList->AddAttribute( "style:page-master-name", m_strPageMaster );
-    pStrm->StartElement( "style:master-page" );
+    pAttrList->AddAttribute("style:name", m_strStyleName);
+    pAttrList->AddAttribute("style:page-master-name", m_strPageMaster);
+    pStrm->StartElement("style:master-page");
     if (m_xHeader)
         m_xHeader->ToXml(pStrm);
     if (m_xFooter)
         m_xFooter->ToXml(pStrm);
-    pStrm->EndElement( "style:master-page" );
+    pStrm->EndElement("style:master-page");
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

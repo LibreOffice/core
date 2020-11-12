@@ -73,45 +73,45 @@ public:
 
     virtual ~XFStyle() override;
 
-    XFStyle(XFStyle const &) = default;
-    XFStyle(XFStyle &&) = default;
-    XFStyle & operator =(XFStyle const &) = default;
-    XFStyle & operator =(XFStyle &&) = default;
+    XFStyle(XFStyle const&) = default;
+    XFStyle(XFStyle&&) = default;
+    XFStyle& operator=(XFStyle const&) = default;
+    XFStyle& operator=(XFStyle&&) = default;
 
 public:
     /**
      * @descr   get style name.
      */
-    virtual OUString   GetStyleName() override;
+    virtual OUString GetStyleName() override;
 
     /**
      * @descr   set style name.
      */
-    virtual void            SetStyleName(const OUString& styleName) override;
+    virtual void SetStyleName(const OUString& styleName) override;
 
     /**
      * @descr   set parent style name.
      */
-    virtual OUString   GetParentStyleName() override;
+    virtual OUString GetParentStyleName() override;
 
     /**
      * @descr   return parent style name.
      */
-    virtual void            SetParentStyleName(const OUString& styleName) override;
+    virtual void SetParentStyleName(const OUString& styleName) override;
 
     /**
      * @descr   get style family.
      */
-    virtual enumXFStyle     GetStyleFamily() override;
+    virtual enumXFStyle GetStyleFamily() override;
 
     /**
      * @descr   decide whether two style are equal.
      */
-    virtual bool             Equal(IXFStyle *pStyle) override;
+    virtual bool Equal(IXFStyle* pStyle) override;
 
 protected:
-    OUString   m_strStyleName;
-    OUString   m_strParentStyleName;
+    OUString m_strStyleName;
+    OUString m_strParentStyleName;
 };
 
 #endif

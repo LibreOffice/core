@@ -60,13 +60,12 @@
 
 #include "lwpfnlayout.hxx"
 
-LwpFootnoteLayout::LwpFootnoteLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
-    :LwpTableLayout(objHdr, pStrm)
+LwpFootnoteLayout::LwpFootnoteLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpTableLayout(objHdr, pStrm)
 {
 }
 
-LwpFootnoteLayout::~LwpFootnoteLayout()
-{}
+LwpFootnoteLayout::~LwpFootnoteLayout() {}
 
 /**
  * @descr  Read object info
@@ -80,24 +79,19 @@ void LwpFootnoteLayout::Read()
 /**
  * @descr  Do nothing
  */
-void LwpFootnoteLayout::RegisterStyle()
-{
-}
+void LwpFootnoteLayout::RegisterStyle() {}
 
 /**
  * @descr  Do nothing
  */
-void LwpFootnoteLayout::XFConvert(XFContentContainer * /*pCont*/)
+void LwpFootnoteLayout::XFConvert(XFContentContainer* /*pCont*/) {}
+
+LwpFnRowLayout::LwpFnRowLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpRowLayout(objHdr, pStrm)
 {
 }
 
-LwpFnRowLayout::LwpFnRowLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
-    :LwpRowLayout(objHdr, pStrm)
-{
-}
-
-LwpFnRowLayout::~LwpFnRowLayout()
-{}
+LwpFnRowLayout::~LwpFnRowLayout() {}
 
 /**
  * @descr  Read object info
@@ -115,31 +109,28 @@ void LwpFnRowLayout::RegisterStyle()
 {
     // register cells' style
     LwpObjectID* pCellID = &GetChildHead();
-    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
+    LwpCellLayout* pCellLayout = dynamic_cast<LwpCellLayout*>(pCellID->obj().get());
 
-    while(pCellLayout)
+    while (pCellLayout)
     {
         pCellLayout->SetFoundry(m_pFoundry);
         pCellLayout->RegisterStyle();
         pCellID = &pCellLayout->GetNext();
-        pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
+        pCellLayout = dynamic_cast<LwpCellLayout*>(pCellID->obj().get());
     }
 }
 
 /**
  * @descr  Do nothing
  */
-void LwpFnRowLayout::XFConvert(XFContentContainer * /*pCont*/)
+void LwpFnRowLayout::XFConvert(XFContentContainer* /*pCont*/) {}
+
+LwpFnCellLayout::LwpFnCellLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpCellLayout(objHdr, pStrm)
 {
 }
 
-LwpFnCellLayout::LwpFnCellLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
-    :LwpCellLayout(objHdr, pStrm)
-{
-}
-
-LwpFnCellLayout::~LwpFnCellLayout()
-{}
+LwpFnCellLayout::~LwpFnCellLayout() {}
 
 /**
  * @descr  Read object info
@@ -167,17 +158,14 @@ void LwpFnCellLayout::RegisterStyle()
 /**
  * @descr  Do nothing
  */
-void LwpFnCellLayout::XFConvert(XFContentContainer * /*pCont*/)
+void LwpFnCellLayout::XFConvert(XFContentContainer* /*pCont*/) {}
+
+LwpEndnoteLayout::LwpEndnoteLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpTableLayout(objHdr, pStrm)
 {
 }
 
-LwpEndnoteLayout::LwpEndnoteLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
-    :LwpTableLayout(objHdr, pStrm)
-{
-}
-
-LwpEndnoteLayout::~LwpEndnoteLayout()
-{}
+LwpEndnoteLayout::~LwpEndnoteLayout() {}
 
 /**
  * @descr  Read object info
@@ -195,31 +183,28 @@ void LwpEndnoteLayout::RegisterStyle()
 {
     // register style of rows
     LwpObjectID* pRowID = &GetChildHead();
-    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
+    LwpRowLayout* pRowLayout = dynamic_cast<LwpRowLayout*>(pRowID->obj().get());
     while (pRowLayout)
     {
         pRowLayout->SetFoundry(m_pFoundry);
         pRowLayout->RegisterStyle();
 
         pRowID = &pRowLayout->GetNext();
-        pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
+        pRowLayout = dynamic_cast<LwpRowLayout*>(pRowID->obj().get());
     }
 }
 
 /**
  * @descr  Do nothing
  */
-void LwpEndnoteLayout::XFConvert(XFContentContainer * /*pCont*/)
+void LwpEndnoteLayout::XFConvert(XFContentContainer* /*pCont*/) {}
+
+LwpEnSuperTableLayout::LwpEnSuperTableLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpSuperTableLayout(objHdr, pStrm)
 {
 }
 
-LwpEnSuperTableLayout::LwpEnSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
-    :LwpSuperTableLayout(objHdr, pStrm)
-{
-}
-
-LwpEnSuperTableLayout::~LwpEnSuperTableLayout()
-{}
+LwpEnSuperTableLayout::~LwpEnSuperTableLayout() {}
 
 /**
  * @descr  Read object info
@@ -244,9 +229,7 @@ void LwpEnSuperTableLayout::RegisterStyle()
 /**
  * @descr  Do nothing
  */
-void LwpEnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
-{
-}
+void LwpEnSuperTableLayout::XFConvert(XFContentContainer* /*pCont*/) {}
 
 /**
  * @short   Get child endnote layout
@@ -254,10 +237,10 @@ void LwpEnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
  */
 LwpVirtualLayout* LwpEnSuperTableLayout::GetMainTableLayout()
 {
-    LwpObjectID *pID = &GetChildTail();
+    LwpObjectID* pID = &GetChildTail();
 
-    LwpVirtualLayout *pPrevLayout = nullptr;
-    while(!pID->IsNull())
+    LwpVirtualLayout* pPrevLayout = nullptr;
+    while (!pID->IsNull())
     {
         LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(pID->obj().get());
         if (!pLayout || pLayout == pPrevLayout)
@@ -275,13 +258,12 @@ LwpVirtualLayout* LwpEnSuperTableLayout::GetMainTableLayout()
     return nullptr;
 }
 
-LwpFnSuperTableLayout::LwpFnSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
-    :LwpEnSuperTableLayout(objHdr, pStrm)
+LwpFnSuperTableLayout::LwpFnSuperTableLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpEnSuperTableLayout(objHdr, pStrm)
 {
 }
 
-LwpFnSuperTableLayout::~LwpFnSuperTableLayout()
-{}
+LwpFnSuperTableLayout::~LwpFnSuperTableLayout() {}
 
 /**
  * @descr  Read object info
@@ -295,16 +277,12 @@ void LwpFnSuperTableLayout::Read()
 /**
  * @descr  Do nothing
  */
-void LwpFnSuperTableLayout::RegisterStyle()
-{
-}
+void LwpFnSuperTableLayout::RegisterStyle() {}
 
 /**
  * @descr  Do nothing
  */
-void LwpFnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
-{
-}
+void LwpFnSuperTableLayout::XFConvert(XFContentContainer* /*pCont*/) {}
 
 /**
  * @short   Get child footnote layout
@@ -312,12 +290,12 @@ void LwpFnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
  */
 LwpVirtualLayout* LwpFnSuperTableLayout::GetMainTableLayout()
 {
-    LwpObjectID *pID = &GetChildTail();
+    LwpObjectID* pID = &GetChildTail();
 
-    while(pID && !pID->IsNull())
+    while (pID && !pID->IsNull())
     {
-        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout *>(pID->obj().get());
-        if(!pLayout)
+        LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(pID->obj().get());
+        if (!pLayout)
         {
             break;
         }
@@ -331,13 +309,12 @@ LwpVirtualLayout* LwpFnSuperTableLayout::GetMainTableLayout()
     return nullptr;
 }
 
-LwpContFromLayout::LwpContFromLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
-    :LwpPlacableLayout(objHdr, pStrm)
+LwpContFromLayout::LwpContFromLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpPlacableLayout(objHdr, pStrm)
 {
 }
 
-LwpContFromLayout::~LwpContFromLayout()
-{}
+LwpContFromLayout::~LwpContFromLayout() {}
 
 /**
  * @descr  Read object info
@@ -351,24 +328,19 @@ void LwpContFromLayout::Read()
 /**
  * @descr  Do nothing
  */
-void LwpContFromLayout::RegisterStyle()
-{
-}
+void LwpContFromLayout::RegisterStyle() {}
 
 /**
  * @descr  Do nothing
  */
-void LwpContFromLayout::XFConvert(XFContentContainer * /*pCont*/)
+void LwpContFromLayout::XFConvert(XFContentContainer* /*pCont*/) {}
+
+LwpContOnLayout::LwpContOnLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpPlacableLayout(objHdr, pStrm)
 {
 }
 
-LwpContOnLayout::LwpContOnLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
-    :LwpPlacableLayout(objHdr, pStrm)
-{
-}
-
-LwpContOnLayout::~LwpContOnLayout()
-{}
+LwpContOnLayout::~LwpContOnLayout() {}
 
 /**
  * @descr  Read object info
@@ -382,15 +354,11 @@ void LwpContOnLayout::Read()
 /**
  * @descr  Do nothing
  */
-void LwpContOnLayout::RegisterStyle()
-{
-}
+void LwpContOnLayout::RegisterStyle() {}
 
 /**
  * @descr  Do nothing
  */
-void LwpContOnLayout::XFConvert(XFContentContainer * /*pCont*/)
-{
-}
+void LwpContOnLayout::XFConvert(XFContentContainer* /*pCont*/) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

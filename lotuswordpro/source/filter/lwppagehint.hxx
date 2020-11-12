@@ -68,8 +68,9 @@
 class LwpSLVListHead
 {
 public:
-    LwpSLVListHead(){}
+    LwpSLVListHead() {}
     void Read(LwpObjectStream* pObjStrm);
+
 private:
     LwpObjectID m_ListHead;
 };
@@ -77,8 +78,9 @@ private:
 class LwpContentHintHead
 {
 public:
-    LwpContentHintHead(){}
+    LwpContentHintHead() {}
     void Read(LwpObjectStream* pObjStrm);
+
 private:
     LwpSLVListHead m_ListHead;
 };
@@ -86,8 +88,9 @@ private:
 class LwpFootnoteSeenHead
 {
 public:
-    LwpFootnoteSeenHead(){}
+    LwpFootnoteSeenHead() {}
     void Read(LwpObjectStream* pObjStrm);
+
 private:
     LwpSLVListHead m_ListHead;
 };
@@ -95,12 +98,13 @@ private:
 class LwpPageHint : public LwpDLVList
 {
 public:
-    LwpPageHint(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpPageHint(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     void Read() override;
     void Parse(IXFStream* pOutputStream) override;
-    sal_uInt16 GetPageNumber() const {return m_nPageNumber;}
-    LwpObjectID& GetPageLayoutID(){ return m_PageLayout;}
-    sal_uInt16 GetLayoutPageNumber() const { return m_nLayoutPageNumber;}
+    sal_uInt16 GetPageNumber() const { return m_nPageNumber; }
+    LwpObjectID& GetPageLayoutID() { return m_PageLayout; }
+    sal_uInt16 GetLayoutPageNumber() const { return m_nLayoutPageNumber; }
+
 private:
     virtual ~LwpPageHint() override {}
 

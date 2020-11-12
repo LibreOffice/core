@@ -55,15 +55,15 @@
  ************************************************************************/
 #include <lwpglobalmgr.hxx>
 #include <osl/thread.hxx>
-std::map< sal_uInt32,LwpGlobalMgr* > LwpGlobalMgr::m_ThreadMap;
+std::map<sal_uInt32, LwpGlobalMgr*> LwpGlobalMgr::m_ThreadMap;
 LwpGlobalMgr::LwpGlobalMgr(LwpSvStream* pSvStream)
 {
     if (pSvStream)
-        m_pObjFactory.reset( new LwpObjectFactory(pSvStream) );
-    m_pBookmarkMgr.reset( new LwpBookmarkMgr );
-    m_pChangeMgr.reset( new LwpChangeMgr );
-    m_pXFFontFactory.reset( new XFFontFactory );
-    m_pXFStyleManager.reset( new XFStyleManager );
+        m_pObjFactory.reset(new LwpObjectFactory(pSvStream));
+    m_pBookmarkMgr.reset(new LwpBookmarkMgr);
+    m_pChangeMgr.reset(new LwpChangeMgr);
+    m_pXFFontFactory.reset(new XFFontFactory);
+    m_pXFStyleManager.reset(new XFStyleManager);
 }
 
 LwpGlobalMgr::~LwpGlobalMgr()
@@ -121,12 +121,12 @@ XFColor LwpGlobalMgr::GetHighlightColor(sal_uInt8 nID)
     if (iter != m_EditorAttrMap.end())
     {
         LwpColor aLwpColor = iter->second->cHiLiteColor;
-        XFColor aColor(aLwpColor.GetRed(),aLwpColor.GetGreen(),aLwpColor.GetBlue());
+        XFColor aColor(aLwpColor.GetRed(), aLwpColor.GetGreen(), aLwpColor.GetBlue());
         return aColor;
     }
     else
     {
-        XFColor aColor(255,255,0);//yellow
+        XFColor aColor(255, 255, 0); //yellow
         return aColor;
     }
 }

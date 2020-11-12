@@ -76,39 +76,36 @@ public:
     virtual ~XFTableStyle() override;
 
 public:
-    void    SetWidth(double width);
+    void SetWidth(double width);
 
-    void    SetAlign(enumXFAlignType eAlign, double offset = 0);
+    void SetAlign(enumXFAlignType eAlign, double offset = 0);
 
-    void    SetShadow(enumXFShadowPos pos, double offset, XFColor color );
+    void SetShadow(enumXFShadowPos pos, double offset, XFColor color);
 
-    void    SetBackColor(XFColor const & color);
+    void SetBackColor(XFColor const& color);
 
-    void    SetBackImage(std::unique_ptr<XFBGImage>& rImage);
+    void SetBackImage(std::unique_ptr<XFBGImage>& rImage);
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
     virtual enumXFStyle GetStyleFamily() override;
 
 private:
-    double  m_fWidth;
+    double m_fWidth;
     XFColor m_aBackColor;
     std::unique_ptr<XFBGImage> m_pBGImage;
-    XFShadow    m_aShadow;
-    XFMargins   m_aMargins;
-    XFBreaks    m_aBreaks;
+    XFShadow m_aShadow;
+    XFMargins m_aMargins;
+    XFBreaks m_aBreaks;
     enumXFAlignType m_eAlign;
 };
 
-inline void XFTableStyle::SetWidth(double width)
-{
-    m_fWidth = width;
-}
+inline void XFTableStyle::SetWidth(double width) { m_fWidth = width; }
 
 inline void XFTableStyle::SetAlign(enumXFAlignType eAlign, double offset)
 {
     m_eAlign = eAlign;
-    if( m_eAlign == enumXFAlignStart )
+    if (m_eAlign == enumXFAlignStart)
     {
         m_aMargins.SetLeft(offset);
         m_aMargins.SetRight(0);
@@ -124,10 +121,7 @@ inline void XFTableStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor 
     m_aShadow.SetPosition(pos);
 }
 
-inline void XFTableStyle::SetBackColor(XFColor const & color)
-{
-    m_aBackColor = color;
-}
+inline void XFTableStyle::SetBackColor(XFColor const& color) { m_aBackColor = color; }
 
 #endif
 

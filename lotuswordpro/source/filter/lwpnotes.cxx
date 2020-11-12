@@ -65,14 +65,15 @@
 #include <localtime.hxx>
 #include <lwptools.hxx>
 
- LwpFribNote::LwpFribNote(LwpPara* pPara ):LwpFrib(pPara)
+LwpFribNote::LwpFribNote(LwpPara* pPara)
+    : LwpFrib(pPara)
 {
 }
 
 /**
  * @descr  read  frib information
  */
-void LwpFribNote::Read(LwpObjectStream *pObjStrm, sal_uInt16 /*len*/)
+void LwpFribNote::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_Layout.ReadIndexed(pObjStrm);
 }
@@ -83,7 +84,7 @@ void LwpFribNote::Read(LwpObjectStream *pObjStrm, sal_uInt16 /*len*/)
 void LwpFribNote::RegisterNewStyle()
 {
     rtl::Reference<LwpObject> pLayout = m_Layout.obj();
-    if(pLayout.is())
+    if (pLayout.is())
     {
         //register font style
         LwpFrib::RegisterStyle(m_pPara->GetFoundry());
@@ -99,22 +100,22 @@ void LwpFribNote::RegisterNewStyle()
 void LwpFribNote::XFConvert(XFContentContainer* pCont)
 {
     LwpNoteLayout* pLayout = dynamic_cast<LwpNoteLayout*>(m_Layout.obj().get());
-    if(!pLayout)
+    if (!pLayout)
         return;
 
     XFAnnotation* pXFNote = new XFAnnotation;
     pXFNote->SetAuthor(pLayout->GetAuthor());
     LtTm aTm;
     tools::Long nTime = pLayout->GetTime();
-    if(LtgLocalTime(nTime, aTm))
+    if (LtgLocalTime(nTime, aTm))
     {
         pXFNote->SetDate(LwpTools::DateTimeToOUString(aTm));
     }
 
     pLayout->XFConvert(pXFNote);
-    if(m_pModifiers)
+    if (m_pModifiers)
     {
-        XFTextSpan *pSpan = new XFTextSpan();
+        XFTextSpan* pSpan = new XFTextSpan();
         pSpan->SetStyleName(GetStyleName());
         pSpan->Add(pXFNote);
         pCont->Add(pSpan);
@@ -123,19 +124,15 @@ void LwpFribNote::XFConvert(XFContentContainer* pCont)
     {
         pCont->Add(pXFNote);
     }
-
 }
 
-LwpNoteLayout::LwpNoteLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpNoteLayout::LwpNoteLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpFrameLayout(objHdr, pStrm)
     , m_nTime(0)
 {
 }
 
-LwpNoteLayout::~LwpNoteLayout()
-{
-
-}
+LwpNoteLayout::~LwpNoteLayout() {}
 
 /**
  * @descr read note layout object
@@ -166,7 +163,7 @@ void LwpNoteLayout::Read()
 void LwpNoteLayout::RegisterStyle()
 {
     LwpVirtualLayout* pTextLayout = GetTextLayout();
-    if(pTextLayout)
+    if (pTextLayout)
     {
         pTextLayout->SetFoundry(GetFoundry());
         pTextLayout->DoRegisterStyle();
@@ -176,10 +173,10 @@ void LwpNoteLayout::RegisterStyle()
 /**
  * @descr  convert note
  */
-void LwpNoteLayout::XFConvert(XFContentContainer * pCont)
+void LwpNoteLayout::XFConvert(XFContentContainer* pCont)
 {
     LwpVirtualLayout* pTextLayout = GetTextLayout();
-    if(pTextLayout)
+    if (pTextLayout)
     {
         pTextLayout->DoXFConvert(pCont);
     }
@@ -191,7 +188,7 @@ void LwpNoteLayout::XFConvert(XFContentContainer * pCont)
 LwpVirtualLayout* LwpNoteLayout::GetTextLayout()
 {
     LwpVirtualLayout* pLayout = FindChildByType(LWP_VIEWPORT_LAYOUT);
-    if(pLayout)
+    if (pLayout)
     {
         return pLayout->FindChildByType(LWP_NOTETEXT_LAYOUT);
     }
@@ -203,22 +200,23 @@ LwpVirtualLayout* LwpNoteLayout::GetTextLayout()
  */
 OUString LwpNoteLayout::GetAuthor()
 {
-    if(m_UserName.HasValue())
+    if (m_UserName.HasValue())
     {
-        if(m_UserName.str() != " ")
+        if (m_UserName.str() != " ")
         {
             return m_UserName.str();
         }
     }
     //if username is null or writerspace, get username from noteheaderlayout
-    LwpNoteHeaderLayout* pTextLayout = static_cast<LwpNoteHeaderLayout*>(FindChildByType(LWP_NOTEHEADER_LAYOUT));
-    if(pTextLayout)
+    LwpNoteHeaderLayout* pTextLayout
+        = static_cast<LwpNoteHeaderLayout*>(FindChildByType(LWP_NOTEHEADER_LAYOUT));
+    if (pTextLayout)
     {
         LwpStory* pStory = dynamic_cast<LwpStory*>(pTextLayout->GetContent().obj().get());
-        if(pStory)
+        if (pStory)
         {
             LwpPara* pFirst = dynamic_cast<LwpPara*>(pStory->GetFirstPara().obj().get());
-            if(pFirst)
+            if (pFirst)
                 return pFirst->GetContentText(true);
         }
     }
@@ -226,14 +224,12 @@ OUString LwpNoteLayout::GetAuthor()
     return m_UserName.str();
 }
 
-LwpNoteHeaderLayout::LwpNoteHeaderLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpNoteHeaderLayout::LwpNoteHeaderLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpFrameLayout(objHdr, pStrm)
 {
 }
 
-LwpNoteHeaderLayout::~LwpNoteHeaderLayout()
-{
-}
+LwpNoteHeaderLayout::~LwpNoteHeaderLayout() {}
 
 /**
  * @descr read note layout object
@@ -245,22 +241,16 @@ void LwpNoteHeaderLayout::Read()
     m_pObjStrm->SkipExtra();
 }
 
-void LwpNoteHeaderLayout::RegisterStyle()
-{
-}
+void LwpNoteHeaderLayout::RegisterStyle() {}
 
-void LwpNoteHeaderLayout::XFConvert(XFContentContainer * /*pCont*/)
-{
-}
+void LwpNoteHeaderLayout::XFConvert(XFContentContainer* /*pCont*/) {}
 
-LwpNoteTextLayout::LwpNoteTextLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpNoteTextLayout::LwpNoteTextLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpFrameLayout(objHdr, pStrm)
 {
 }
 
-LwpNoteTextLayout::~LwpNoteTextLayout()
-{
-}
+LwpNoteTextLayout::~LwpNoteTextLayout() {}
 
 /**
  * @descr read note layout object
@@ -278,30 +268,28 @@ void LwpNoteTextLayout::Read()
 void LwpNoteTextLayout::RegisterStyle()
 {
     rtl::Reference<LwpObject> pContent = m_Content.obj();
-    if(pContent.is())
+    if (pContent.is())
     {
         pContent->SetFoundry(GetFoundry());
         pContent->DoRegisterStyle();
     }
 }
 
-void LwpNoteTextLayout::XFConvert(XFContentContainer * pCont)
+void LwpNoteTextLayout::XFConvert(XFContentContainer* pCont)
 {
     rtl::Reference<LwpObject> pContent = m_Content.obj();
-    if(pContent.is())
+    if (pContent.is())
     {
         pContent->DoXFConvert(pCont);
     }
 }
 
-LwpViewportLayout::LwpViewportLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpViewportLayout::LwpViewportLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)
 {
 }
 
-LwpViewportLayout::~LwpViewportLayout()
-{
-}
+LwpViewportLayout::~LwpViewportLayout() {}
 
 /**
  * @descr read note layout object
@@ -313,12 +301,8 @@ void LwpViewportLayout::Read()
     m_pObjStrm->SkipExtra();
 }
 
-void LwpViewportLayout::RegisterStyle()
-{
-}
+void LwpViewportLayout::RegisterStyle() {}
 
-void LwpViewportLayout::XFConvert(XFContentContainer * /*pCont*/)
-{
-}
+void LwpViewportLayout::XFConvert(XFContentContainer* /*pCont*/) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

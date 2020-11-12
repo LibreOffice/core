@@ -74,28 +74,29 @@ class XFTextSpan : public XFContent
 {
 public:
     XFTextSpan();
-    XFTextSpan(const OUString& text, const OUString& style );
+    XFTextSpan(const OUString& text, const OUString& style);
 
     virtual ~XFTextSpan() override;
 
-    void            Add(XFContent *pContent);
-    void            Add(const OUString& text);
+    void Add(XFContent* pContent);
+    void Add(const OUString& text);
 
     virtual enumXFContent GetContentType() override;
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
+
 protected:
-    std::vector< rtl::Reference<XFContent> > m_aContents;
+    std::vector<rtl::Reference<XFContent>> m_aContents;
 };
 
 class XFTextSpanStart : public XFTextSpan //for adding style of power field
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 };
 class XFTextSpanEnd : public XFTextSpan //for adding style of power field
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 };
 
 #endif

@@ -68,20 +68,14 @@ public:
     XFDrawRect();
 
 public:
-    void SetStartPoint(const XFPoint& pt)
-    {
-        m_aRect.SetStartPoint(pt);
-    }
+    void SetStartPoint(const XFPoint& pt) { m_aRect.SetStartPoint(pt); }
 
-    void    SetSize(double width, double height);
+    void SetSize(double width, double height);
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 };
 
-inline void XFDrawRect::SetSize(double width, double height)
-{
-    m_aRect.SetSize(width,height);
-}
+inline void XFDrawRect::SetSize(double width, double height) { m_aRect.SetSize(width, height); }
 
 #endif
 

@@ -66,16 +66,16 @@
 class XFTabStop : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 };
 
-inline void XFTabStop::ToXml(IXFStream *pStrm)
+inline void XFTabStop::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pStrm->StartElement( "text:tab-stop" );
-    pStrm->EndElement( "text:tab-stop" );
+    pStrm->StartElement("text:tab-stop");
+    pStrm->EndElement("text:tab-stop");
 }
 
 #endif

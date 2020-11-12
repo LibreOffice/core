@@ -68,13 +68,14 @@
  * @brief       TAG_NOTE_FRIB object
  *
  */
-class LwpFribNote: public LwpFrib
+class LwpFribNote : public LwpFrib
 {
 public:
-    explicit LwpFribNote(LwpPara* pPara );
+    explicit LwpFribNote(LwpPara* pPara);
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     void RegisterNewStyle();
     void XFConvert(XFContentContainer* pCont);
+
 private:
     LwpObjectID m_Layout;
 };
@@ -86,12 +87,12 @@ private:
 class LwpNoteLayout final : public LwpFrameLayout
 {
 public:
-    LwpNoteLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpNoteLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual ~LwpNoteLayout() override;
-    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_NOTE_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType() override { return LWP_NOTE_LAYOUT; }
     virtual void RegisterStyle() override;
     virtual void XFConvert(XFContentContainer* pCont) override;
-    sal_uInt32 GetTime() const { return m_nTime;}
+    sal_uInt32 GetTime() const { return m_nTime; }
     OUString GetAuthor();
 
 private:
@@ -106,12 +107,12 @@ private:
  * @brief       VO_NOTEHEADERLAYOUT object
  *
  */
-class LwpNoteHeaderLayout: public LwpFrameLayout
+class LwpNoteHeaderLayout : public LwpFrameLayout
 {
 public:
-    LwpNoteHeaderLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpNoteHeaderLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual ~LwpNoteHeaderLayout() override;
-    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_NOTEHEADER_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType() override { return LWP_NOTEHEADER_LAYOUT; }
     virtual void RegisterStyle() override;
     virtual void XFConvert(XFContentContainer* pCont) override;
 
@@ -123,12 +124,12 @@ protected:
  * @brief       VO_NOTETEXTLAYOUT object
  *
  */
-class LwpNoteTextLayout: public LwpFrameLayout
+class LwpNoteTextLayout : public LwpFrameLayout
 {
 public:
-    LwpNoteTextLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpNoteTextLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual ~LwpNoteTextLayout() override;
-    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_NOTETEXT_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType() override { return LWP_NOTETEXT_LAYOUT; }
     virtual void RegisterStyle() override;
     virtual void XFConvert(XFContentContainer* pCont) override;
 
@@ -140,12 +141,12 @@ protected:
  * @brief       VO_VPLAYOUT object
  *
  */
-class LwpViewportLayout: public LwpPlacableLayout
+class LwpViewportLayout : public LwpPlacableLayout
 {
 public:
-    LwpViewportLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpViewportLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual ~LwpViewportLayout() override;
-    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_VIEWPORT_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType() override { return LWP_VIEWPORT_LAYOUT; }
     virtual void RegisterStyle() override;
     virtual void XFConvert(XFContentContainer* pCont) override;
 

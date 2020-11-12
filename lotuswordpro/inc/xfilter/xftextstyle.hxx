@@ -67,8 +67,8 @@
 
 #include <xfilter/xfstyle.hxx>
 
-class   IXFStream;
-class   XFFont;
+class IXFStream;
+class XFFont;
 
 class XFTextStyle : public XFStyle
 {
@@ -77,24 +77,24 @@ public:
 
     virtual ~XFTextStyle() override;
 
-    XFTextStyle(XFTextStyle const &) = default;
-    XFTextStyle(XFTextStyle &&) = default;
-    XFTextStyle & operator =(XFTextStyle const &) = default;
-    XFTextStyle & operator =(XFTextStyle &&) = default;
+    XFTextStyle(XFTextStyle const&) = default;
+    XFTextStyle(XFTextStyle&&) = default;
+    XFTextStyle& operator=(XFTextStyle const&) = default;
+    XFTextStyle& operator=(XFTextStyle&&) = default;
 
 public:
     /**
      * @descr:  set the font for the text span.
      */
-    void    SetFont(rtl::Reference<XFFont> const & font);
+    void SetFont(rtl::Reference<XFFont> const& font);
 
     const rtl::Reference<XFFont>& GetFont() const { return m_pFont; }
 
     virtual enumXFStyle GetStyleFamily() override;
 
-    virtual bool        Equal(IXFStyle *pStyle) override;
+    virtual bool Equal(IXFStyle* pStyle) override;
 
-    virtual void        ToXml(IXFStream *strm) override;
+    virtual void ToXml(IXFStream* strm) override;
 
 private:
     rtl::Reference<XFFont> m_pFont;

@@ -72,7 +72,7 @@ public:
         , m_eAlign(enumXFRubyLeft)
     {
     }
-    virtual void ToXml(IXFStream *strm) override;
+    virtual void ToXml(IXFStream* strm) override;
     void SetPosition(enumXFRubyPosition ePosition);
     void SetAlignment(enumXFRubyPosition eAlignment);
     enumXFStyle GetStyleFamily() override;
@@ -82,25 +82,16 @@ private:
     enumXFRubyPosition m_eAlign;
 };
 
-void XFRubyStyle::SetPosition(enumXFRubyPosition ePosition)
+void XFRubyStyle::SetPosition(enumXFRubyPosition ePosition) { m_ePos = ePosition; }
+void XFRubyStyle::SetAlignment(enumXFRubyPosition eAlignment) { m_eAlign = eAlignment; }
+enumXFStyle XFRubyStyle::GetStyleFamily() { return enumXFStyleRuby; }
+void XFRubyStyle::ToXml(IXFStream* pStrm)
 {
-    m_ePos = ePosition;
-}
-void XFRubyStyle::SetAlignment(enumXFRubyPosition eAlignment)
-{
-    m_eAlign = eAlignment;
-}
-enumXFStyle XFRubyStyle::GetStyleFamily()
-{
-    return enumXFStyleRuby;
-}
-void XFRubyStyle::ToXml(IXFStream *pStrm)
-{
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     OUString style = GetStyleName();
 
     pAttrList->Clear();
-    if( !style.isEmpty() )
+    if (!style.isEmpty())
         pAttrList->AddAttribute("style:name", GetStyleName());
     pAttrList->AddAttribute("style:family", "ruby");
     pStrm->StartElement("style:style");
@@ -110,13 +101,13 @@ void XFRubyStyle::ToXml(IXFStream *pStrm)
     OUString sPos;
     if (m_eAlign == enumXFRubyLeft)
     {
-        sPos ="left";
+        sPos = "left";
     }
-    else if(m_eAlign == enumXFRubyRight)
+    else if (m_eAlign == enumXFRubyRight)
     {
         sPos = "right";
     }
-    else if(m_eAlign == enumXFRubyCenter)
+    else if (m_eAlign == enumXFRubyCenter)
     {
         sPos = "center";
     }
@@ -128,7 +119,7 @@ void XFRubyStyle::ToXml(IXFStream *pStrm)
     {
         sAlign = "above";
     }
-    else if(m_ePos == enumXFRubyBottom)
+    else if (m_ePos == enumXFRubyBottom)
     {
         sAlign = "below";
     }

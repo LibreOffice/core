@@ -66,17 +66,18 @@
 class XFFooterStyle : public XFHeaderStyle
 {
 public:
-    XFFooterStyle() : XFHeaderStyle(true)
+    XFFooterStyle()
+        : XFHeaderStyle(true)
     {
     }
 
-    void    SetMargins(double left, double right, double top)
+    void SetMargins(double left, double right, double top)
     {
-        if( left != -1 )
+        if (left != -1)
             m_aMargin.SetLeft(left);
-        if( right != -1 )
+        if (right != -1)
             m_aMargin.SetRight(right);
-        if( top != -1 )
+        if (top != -1)
             m_aMargin.SetTop(top);
     }
 };

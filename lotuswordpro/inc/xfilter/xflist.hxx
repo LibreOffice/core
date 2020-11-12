@@ -68,7 +68,7 @@ class XFListItem;
  * @brief
  * list object for order-list and unordered-list.
  */
-class   XFList : public XFContentContainer
+class XFList : public XFContentContainer
 {
 public:
     XFList();
@@ -79,32 +79,26 @@ public:
     /**
      * @descr   Set whether it's an ordered list or an unordered list.
      */
-    void    SetOrdered(bool ordered);
+    void SetOrdered(bool ordered);
 
     /**
      * @descr   Set whether to continue to number list.
      */
-    void    SetContinueNumber(bool bContinueNumber);
+    void SetContinueNumber(bool bContinueNumber);
 
     /**
      * @descr   Output list object.
      */
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    bool    m_bOrdered;
-    bool    m_bContinueNumber;
+    bool m_bOrdered;
+    bool m_bContinueNumber;
 };
 
-inline void XFList::SetOrdered(bool ordered)
-{
-    m_bOrdered = ordered;
-}
+inline void XFList::SetOrdered(bool ordered) { m_bOrdered = ordered; }
 
-inline void XFList::SetContinueNumber(bool bContinueNumber)
-{
-    m_bContinueNumber = bContinueNumber;
-}
+inline void XFList::SetContinueNumber(bool bContinueNumber) { m_bContinueNumber = bContinueNumber; }
 
 #endif
 

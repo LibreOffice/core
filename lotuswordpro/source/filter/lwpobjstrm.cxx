@@ -64,9 +64,12 @@
 /**
  * @descr  ctor() from LwpSvStream
  */
-LwpObjectStream::LwpObjectStream(LwpSvStream *pStrm, bool isCompressed, sal_uInt16 size)
-    :m_pContentBuf(nullptr), m_nBufSize(size), m_nReadPos(0),
-    m_pStrm(pStrm), m_bCompressed(isCompressed)
+LwpObjectStream::LwpObjectStream(LwpSvStream* pStrm, bool isCompressed, sal_uInt16 size)
+    : m_pContentBuf(nullptr)
+    , m_nBufSize(size)
+    , m_nReadPos(0)
+    , m_pStrm(pStrm)
+    , m_bCompressed(isCompressed)
 {
     if (size >= IO_BUFFERSIZE)
         throw std::range_error("bad Object size");
@@ -84,7 +87,7 @@ void LwpObjectStream::Read2Buffer()
 
     m_nReadPos = 0;
 
-    if( m_bCompressed )
+    if (m_bCompressed)
     {
         std::unique_ptr<sal_uInt8[]> xCompressBuf(new sal_uInt8[m_nBufSize]);
 
@@ -94,7 +97,7 @@ void LwpObjectStream::Read2Buffer()
 
         sal_uInt8 pTempDst[IO_BUFFERSIZE];
         m_nBufSize = DecompressBuffer(pTempDst, pCompressBuffer, m_nBufSize);
-        assert( m_nBufSize < IO_BUFFERSIZE);
+        assert(m_nBufSize < IO_BUFFERSIZE);
 
         m_pContentBuf = AllocBuffer(m_nBufSize);
         memcpy(m_pContentBuf, pTempDst, m_nBufSize);
@@ -110,7 +113,7 @@ void LwpObjectStream::Read2Buffer()
  */
 sal_uInt8* LwpObjectStream::AllocBuffer(sal_uInt16 size)
 {
-    if (size<=100)
+    if (size <= 100)
     {
         return m_SmallBuffer;
     }
@@ -120,15 +123,9 @@ sal_uInt8* LwpObjectStream::AllocBuffer(sal_uInt16 size)
 /**
  * @descr  signal complete to release object buffer
  */
-void LwpObjectStream::ReadComplete()
-{
-    ReleaseBuffer();
-}
+void LwpObjectStream::ReadComplete() { ReleaseBuffer(); }
 
-LwpObjectStream::~LwpObjectStream()
-{
-    ReleaseBuffer();
-}
+LwpObjectStream::~LwpObjectStream() { ReleaseBuffer(); }
 /**
  * @descr  release object buffer
  */
@@ -138,10 +135,7 @@ void LwpObjectStream::ReleaseBuffer()
     m_pContentBuf = nullptr;
 }
 
-sal_uInt16 LwpObjectStream::remainingSize() const
-{
-    return m_nBufSize - m_nReadPos;
-}
+sal_uInt16 LwpObjectStream::remainingSize() const { return m_nBufSize - m_nReadPos; }
 
 /**
  * @descr  read len bytes from object stream to buffer
@@ -149,13 +143,13 @@ sal_uInt16 LwpObjectStream::remainingSize() const
 sal_uInt16 LwpObjectStream::QuickRead(void* buf, sal_uInt16 len)
 {
     memset(buf, 0, len);
-    if( len > m_nBufSize - m_nReadPos )
+    if (len > m_nBufSize - m_nReadPos)
     {
         len = m_nBufSize - m_nReadPos;
     }
-    if( m_pContentBuf && len)
+    if (m_pContentBuf && len)
     {
-        memcpy(buf, m_pContentBuf+m_nReadPos, len);
+        memcpy(buf, m_pContentBuf + m_nReadPos, len);
         m_nReadPos += len;
     }
     return len;
@@ -165,14 +159,14 @@ sal_uInt16 LwpObjectStream::QuickRead(void* buf, sal_uInt16 len)
  */
 void LwpObjectStream::SeekRel(sal_uInt16 pos)
 {
-    if( pos > m_nBufSize - m_nReadPos)
+    if (pos > m_nBufSize - m_nReadPos)
         pos = m_nBufSize - m_nReadPos;
-    m_nReadPos +=pos;
+    m_nReadPos += pos;
 }
 /**
  * @descr  Seek to pos in object buffer/buffer
  */
-void LwpObjectStream::Seek( sal_uInt16 pos)
+void LwpObjectStream::Seek(sal_uInt16 pos)
 {
     if (pos < m_nBufSize)
     {
@@ -185,16 +179,16 @@ void LwpObjectStream::Seek( sal_uInt16 pos)
  */
 bool LwpObjectStream::QuickReadBool()
 {
-    SVBT16 aValue = {0};
+    SVBT16 aValue = { 0 };
     QuickRead(aValue, sizeof(aValue));
     return static_cast<bool>(SVBT16ToUInt16(aValue));
 }
 /**
  * @descr  Quick read sal_uInt32
  */
-sal_uInt32 LwpObjectStream::QuickReaduInt32(bool *pFailure)
+sal_uInt32 LwpObjectStream::QuickReaduInt32(bool* pFailure)
 {
-    SVBT32 aValue = {0};
+    SVBT32 aValue = { 0 };
     sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
     if (pFailure)
         *pFailure = (nRead != sizeof(aValue));
@@ -203,9 +197,9 @@ sal_uInt32 LwpObjectStream::QuickReaduInt32(bool *pFailure)
 /**
  * @descr  Quick read sal_uInt32
  */
-sal_uInt16 LwpObjectStream::QuickReaduInt16(bool *pFailure)
+sal_uInt16 LwpObjectStream::QuickReaduInt16(bool* pFailure)
 {
-    SVBT16 aValue = {0};
+    SVBT16 aValue = { 0 };
     sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
     if (pFailure)
         *pFailure = (nRead != sizeof(aValue));
@@ -216,7 +210,7 @@ sal_uInt16 LwpObjectStream::QuickReaduInt16(bool *pFailure)
  */
 sal_Int32 LwpObjectStream::QuickReadInt32()
 {
-    SVBT32 aValue = {0};
+    SVBT32 aValue = { 0 };
     QuickRead(aValue, sizeof(aValue));
     return static_cast<sal_Int32>(SVBT32ToUInt32(aValue));
 }
@@ -225,7 +219,7 @@ sal_Int32 LwpObjectStream::QuickReadInt32()
  */
 sal_Int16 LwpObjectStream::QuickReadInt16()
 {
-    SVBT16 aValue = {0};
+    SVBT16 aValue = { 0 };
     QuickRead(aValue, sizeof(aValue));
 
     return static_cast<sal_Int16>(SVBT16ToUInt16(aValue));
@@ -233,7 +227,7 @@ sal_Int16 LwpObjectStream::QuickReadInt16()
 /**
  * @descr  Quick read sal_uInt8
  */
-sal_uInt8 LwpObjectStream::QuickReaduInt8(bool *pFailure)
+sal_uInt8 LwpObjectStream::QuickReaduInt8(bool* pFailure)
 {
     sal_uInt8 aValue = 0;
     sal_uInt16 nRead = QuickRead(&aValue, sizeof(aValue));
@@ -246,8 +240,7 @@ sal_uInt8 LwpObjectStream::QuickReaduInt8(bool *pFailure)
  */
 double LwpObjectStream::QuickReadDouble()
 {
-    union
-    {
+    union {
         double d;
         sal_uInt8 c[8];
     } s;
@@ -255,7 +248,7 @@ double LwpObjectStream::QuickReadDouble()
     QuickRead(s.c, sizeof(s.c));
 #if defined(OSL_BIGENDIAN)
     for (size_t i = 0; i < 4; ++i)
-        std::swap(s.c[i], s.c[7-i]);
+        std::swap(s.c[i], s.c[7 - i]);
 #endif
     return s.d;
 }
@@ -271,10 +264,7 @@ void LwpObjectStream::SkipExtra()
 /**
  * @descr  check if extra bytes
  */
-sal_uInt16 LwpObjectStream::CheckExtra()
-{
-    return QuickReaduInt16();
-}
+sal_uInt16 LwpObjectStream::CheckExtra() { return QuickReaduInt16(); }
 /**
  * @descr  decompress data buffer from pSrc to pDst
  *        Refer to the CAmiPro40File::DecompressObject(~) in LWP
@@ -294,7 +284,7 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
                 // where zzzzzz is the count - 1 of compressed 0 bytes
 
                 Cnt = (*pSrc++ & 0x3F) + 1;
-                if (DstSize+Cnt >= IO_BUFFERSIZE)
+                if (DstSize + Cnt >= IO_BUFFERSIZE)
                     throw BadDecompress();
                 memset(pDst, 0, Cnt);
                 pDst += Cnt;
@@ -309,7 +299,7 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
                 // and nnn is the count - 1 of following non-zero bytes
 
                 Cnt = ((*pSrc & 0x38) >> 3) + 1;
-                if (DstSize+Cnt >= IO_BUFFERSIZE)
+                if (DstSize + Cnt >= IO_BUFFERSIZE)
                     throw BadDecompress();
                 memset(pDst, 0, Cnt);
                 pDst += Cnt;
@@ -318,7 +308,7 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
                 if (Size < Cnt + 1)
                     throw BadDecompress();
                 Size -= Cnt + 1;
-                if (DstSize+Cnt >= IO_BUFFERSIZE)
+                if (DstSize + Cnt >= IO_BUFFERSIZE)
                     throw BadDecompress();
                 memcpy(pDst, pSrc, Cnt);
                 pDst += Cnt;
@@ -345,7 +335,7 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
                 if (Size < Cnt + 1)
                     throw BadDecompress();
                 Size -= Cnt + 1;
-                if (DstSize+Cnt >= IO_BUFFERSIZE)
+                if (DstSize + Cnt >= IO_BUFFERSIZE)
                     throw BadDecompress();
                 memcpy(pDst, pSrc, Cnt);
                 pDst += Cnt;
@@ -356,7 +346,6 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
         assert(DstSize < IO_BUFFERSIZE);
         if (DstSize >= IO_BUFFERSIZE)
             throw BadDecompress();
-
     }
     return static_cast<sal_uInt16>(DstSize);
 }
@@ -373,7 +362,7 @@ OUString LwpObjectStream::QuickReadStringPtr()
     OUString str;
     if (diskSize < sizeof diskSize)
         throw std::range_error("Too small size");
-    LwpTools::QuickReadUnicode(this, str, diskSize-sizeof(diskSize), RTL_TEXTENCODING_MS_1252);
+    LwpTools::QuickReadUnicode(this, str, diskSize - sizeof(diskSize), RTL_TEXTENCODING_MS_1252);
     return str;
 }
 
