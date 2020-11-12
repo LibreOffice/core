@@ -70,11 +70,142 @@ void call(
     sal_Int32 ngpr = 1;
     sal_Int32 nfpr = 0;
     sal_Int32 sp = 0;
+#ifdef MACOSX
+    sal_Int32 subsp = 0;
+#endif
     for (sal_Int32 i = 0; i != count; ++i) {
         if (!parameters[i].bOut
             && bridges::cpp_uno::shared::isSimpleType(parameters[i].pTypeRef))
         {
             switch (parameters[i].pTypeRef->eTypeClass) {
+#ifdef MACOSX
+            case typelib_TypeClass_BOOLEAN:
+            case typelib_TypeClass_BYTE:
+                if (ngpr < 8)
+                {
+                    args[i] = gpr + ngpr;
+                    ngpr++;
+                }
+                else
+                {
+                    args[i] = reinterpret_cast<void **>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
+                    subsp += 1;
+                    if (subsp == 8)
+                    {
+                        sp++;
+                        subsp = 0;
+                    }
+                }
+                break;
+            case typelib_TypeClass_SHORT:
+            case typelib_TypeClass_UNSIGNED_SHORT:
+            case typelib_TypeClass_CHAR:
+                if (ngpr < 8)
+                {
+                    args[i] = gpr + ngpr;
+                    ngpr++;
+                }
+                else
+                {
+                    subsp = (subsp + 1) & ~0x1;
+                    if (subsp == 8)
+                    {
+                        sp++;
+                        subsp = 0;
+                    }
+                    args[i] = reinterpret_cast<void **>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
+                    subsp += 2;
+                    if (subsp == 8)
+                    {
+                        sp++;
+                        subsp = 0;
+                    }
+                }
+                break;
+            case typelib_TypeClass_LONG:
+            case typelib_TypeClass_UNSIGNED_LONG:
+            case typelib_TypeClass_ENUM:
+                if (ngpr < 8)
+                {
+                    args[i] = gpr + ngpr;
+                    ngpr++;
+                }
+                else
+                {
+                    subsp = (subsp + 3) & ~0x3;
+                    if (subsp == 8)
+                    {
+                        sp++;
+                        subsp = 0;
+                    }
+                    args[i] = reinterpret_cast<void **>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
+                    subsp += 4;
+                    if (subsp == 8)
+                    {
+                        sp++;
+                        subsp = 0;
+                    }
+                }
+                break;
+            case typelib_TypeClass_HYPER:
+            case typelib_TypeClass_UNSIGNED_HYPER:
+                if (ngpr < 8)
+                {
+                    args[i] = gpr + ngpr;
+                    ngpr++;
+                }
+                else
+                {
+                    if (subsp > 0)
+                    {
+                        sp++;
+                        subsp = 0;
+                    }
+                    args[i] = stack + sp;
+                    sp++;
+                }
+                break;
+            case typelib_TypeClass_FLOAT:
+                if (nfpr < 8)
+                {
+                    args[i] = fpr + nfpr;
+                    nfpr++;
+                }
+                else
+                {
+                    subsp = (subsp + 3) & ~0x3;
+                    if (subsp == 8)
+                    {
+                        sp++;
+                        subsp = 0;
+                    }
+                    args[i] = reinterpret_cast<void **>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
+                    subsp += 4;
+                    if (subsp == 8)
+                    {
+                        sp++;
+                        subsp = 0;
+                    }
+                }
+                break;
+            case typelib_TypeClass_DOUBLE:
+                if (nfpr < 8)
+                {
+                    args[i] = fpr + nfpr;
+                    nfpr++;
+                }
+                else
+                {
+                    if (subsp > 0)
+                    {
+                        sp++;
+                        subsp = 0;
+                    }
+                    args[i] = stack + sp;
+                    sp++;
+                }
+                break;
+#else
             case typelib_TypeClass_BOOLEAN:
             case typelib_TypeClass_BYTE:
             case typelib_TypeClass_SHORT:
@@ -91,11 +222,19 @@ void call(
             case typelib_TypeClass_DOUBLE:
                 args[i] = nfpr == 8 ? stack + sp++ : fpr + nfpr++;
                 break;
+#endif
             default:
                 assert(false);
             }
             argtds[i] = 0;
         } else {
+#ifdef MACOSX
+            if (subsp > 0)
+            {
+                sp++;
+                subsp = 0;
+            }
+#endif
             cppArgs[i] = reinterpret_cast<void *>(
                 ngpr == 8 ? stack[sp++] : gpr[ngpr++]);
             typelib_TypeDescription * ptd = 0;
