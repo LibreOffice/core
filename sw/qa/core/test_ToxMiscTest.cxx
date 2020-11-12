@@ -14,7 +14,8 @@
 
 using namespace sw;
 
-class ToxMiscTest : public CppUnit::TestFixture {
+class ToxMiscTest : public CppUnit::TestFixture
+{
 public:
     void testTdf73162();
     CPPUNIT_TEST_SUITE(ToxMiscTest);
@@ -25,7 +26,9 @@ public:
 void ToxMiscTest::testTdf73162()
 {
     //create Tokens with the help of input string
-    SwFormTokensHelper tokensHelper("<LS Index Link,65535,><E# ,65535,0,10><X ,65535,\001.\001><ET ,65535,><T ,65535,0,5,.,1><# ,65535,><LE ,65535,>"); //input token string
+    SwFormTokensHelper tokensHelper(
+        "<LS Index Link,65535,><E# ,65535,0,10><X ,65535,\001.\001><ET ,65535,><T "
+        ",65535,0,5,.,1><# ,65535,><LE ,65535,>"); //input token string
     SwFormTokens formTokens = tokensHelper.GetTokens();
 
     //check the size of token vector / count of tokens

@@ -26,7 +26,10 @@
 #include <memory>
 
 class SvxForbiddenCharactersTable;
-namespace com::sun::star::i18n { struct ForbiddenCharacters; }
+namespace com::sun::star::i18n
+{
+struct ForbiddenCharacters;
+}
 enum class CharCompressType;
 
 enum class DocumentSettingId
@@ -111,11 +114,11 @@ enum class DocumentSettingId
     FRAME_AUTOWIDTH_WITH_MORE_PARA,
 };
 
- /** Provides access to settings of a document
+/** Provides access to settings of a document
  */
- class IDocumentSettingAccess
- {
- public:
+class IDocumentSettingAccess
+{
+public:
     /** Return the specified document setting.
 
        @param id
@@ -151,7 +154,7 @@ enum class DocumentSettingId
        a list of forbidden characters.
     */
     virtual const css::i18n::ForbiddenCharacters*
-        getForbiddenCharacters(/*[in]*/ LanguageType nLang, /*[in]*/ bool bLocaleData ) const = 0;
+    getForbiddenCharacters(/*[in]*/ LanguageType nLang, /*[in]*/ bool bLocaleData) const = 0;
 
     /** Set the forbidden characters.
 
@@ -161,8 +164,10 @@ enum class DocumentSettingId
        @param rForbiddenCharacters
        [in] the new list of forbidden characters for language lang.
     */
-    virtual void setForbiddenCharacters(/*[in]*/ LanguageType nLang,
-                                        /*[in]*/ const css::i18n::ForbiddenCharacters& rForbiddenCharacters ) = 0;
+    virtual void
+    setForbiddenCharacters(/*[in]*/ LanguageType nLang,
+                           /*[in]*/ const css::i18n::ForbiddenCharacters& rForbiddenCharacters)
+        = 0;
 
     /** Get the forbidden character table and creates one if necessary.
 
@@ -176,7 +181,8 @@ enum class DocumentSettingId
        @returns
        the forbidden characters table.
     */
-    virtual const std::shared_ptr<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const = 0;
+    virtual const std::shared_ptr<SvxForbiddenCharactersTable>&
+    getForbiddenCharacterTable() const = 0;
 
     /** Get the current link update mode.
 
@@ -187,14 +193,14 @@ enum class DocumentSettingId
        @returns
        the current link update mode.
     */
-    virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const = 0;
+    virtual sal_uInt16 getLinkUpdateMode(/*[in]*/ bool bGlobalSettings) const = 0;
 
     /** Set the current link update mode.
 
        @param nMode
        [in] the new link update mode.
     */
-    virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode ) = 0;
+    virtual void setLinkUpdateMode(/*[in]*/ sal_uInt16 nMode) = 0;
 
     /** Get the current field update mode.
 
@@ -205,14 +211,14 @@ enum class DocumentSettingId
        @returns
        the current field update mode.
     */
-    virtual SwFieldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const = 0;
+    virtual SwFieldUpdateFlags getFieldUpdateFlags(/*[in]*/ bool bGlobalSettings) const = 0;
 
     /** Set the current field update mode.
 
        @param nMode
        [in] the new field update mode.
     */
-    virtual void setFieldUpdateFlags( /*[in]*/ SwFieldUpdateFlags nMode )  = 0;
+    virtual void setFieldUpdateFlags(/*[in]*/ SwFieldUpdateFlags nMode) = 0;
 
     /** Get the character compression type for Asian characters.
 
@@ -226,7 +232,7 @@ enum class DocumentSettingId
        @param nMode
        [in] the new character compression type.
     */
-    virtual void setCharacterCompressionType( /*[in]*/CharCompressType nType ) = 0;
+    virtual void setCharacterCompressionType(/*[in]*/ CharCompressType nType) = 0;
 
     /** Get the n32DummyCompatibilityOptions1
     */
@@ -234,7 +240,7 @@ enum class DocumentSettingId
 
     /** Set the n32DummyCompatibilityOptions1
     */
-    virtual void Setn32DummyCompatibilityOptions1( const sal_uInt32 CompatibilityOptions1 ) = 0;
+    virtual void Setn32DummyCompatibilityOptions1(const sal_uInt32 CompatibilityOptions1) = 0;
 
     /** Get the n32DummyCompatibilityOptions2
     */
@@ -242,11 +248,11 @@ enum class DocumentSettingId
 
     /** Set the n32DummyCompatibilityOptions2
     */
-    virtual void Setn32DummyCompatibilityOptions2( const sal_uInt32 CompatibilityOptions2 ) = 0;
+    virtual void Setn32DummyCompatibilityOptions2(const sal_uInt32 CompatibilityOptions2) = 0;
 
 protected:
-    virtual ~IDocumentSettingAccess() {};
- };
+    virtual ~IDocumentSettingAccess(){};
+};
 
 #endif // INCLUDED_SW_INC_IDOCUMENTSETTINGACCESS_HXX
 

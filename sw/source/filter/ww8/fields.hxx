@@ -25,7 +25,7 @@
 
 namespace ww
 {
-    /** Find the English Field Name from a winword index
+/** Find the English Field Name from a winword index
 
         See OpenOffice.org issue 12831
         (https://bz.apache.org/ooo/show_bug.cgi?id=12831) and MS
@@ -40,7 +40,7 @@ namespace ww
         @return 0 if not found, otherwise the fieldname as a C style ASCII
         string
     */
-    const char *GetEnglishFieldName(eField eIndex) throw();
+const char* GetEnglishFieldName(eField eIndex) throw();
 }
 
 #endif

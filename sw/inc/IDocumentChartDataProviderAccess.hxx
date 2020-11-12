@@ -29,25 +29,24 @@ class SwChartLockController_Helper;
 class IDocumentChartDataProviderAccess
 {
 public:
-
     /**
         returns or creates the data-provider for chart
     */
-    virtual SwChartDataProvider * GetChartDataProvider( bool bCreate = false ) const = 0;
+    virtual SwChartDataProvider* GetChartDataProvider(bool bCreate = false) const = 0;
 
     /**
         calls createInternalDataProvider for all charts using the specified table
     */
-    virtual void CreateChartInternalDataProviders( const SwTable *pTable ) = 0;
+    virtual void CreateChartInternalDataProviders(const SwTable* pTable) = 0;
 
     /**
         returns chart controller helper that is used to lock/unlock all
         charts when relevant parts of tables are changed
     */
-    virtual SwChartLockController_Helper & GetChartControllerHelper() = 0;
+    virtual SwChartLockController_Helper& GetChartControllerHelper() = 0;
 
 protected:
-    virtual ~IDocumentChartDataProviderAccess() {};
+    virtual ~IDocumentChartDataProviderAccess(){};
 };
 
 #endif // INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX

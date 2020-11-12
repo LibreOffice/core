@@ -36,7 +36,7 @@ SwGotoPageDlg::SwGotoPageDlg(weld::Window* pParent, SfxBindings* _pBindings)
 {
     sal_uInt16 nTotalPage = GetPageInfo();
 
-    if(nTotalPage)
+    if (nTotalPage)
     {
         OUString sStr = mxPageNumberLbl->get_label();
         mxPageNumberLbl->set_label(sStr.replaceFirst("$1", OUString::number(nTotalPage)));
@@ -55,21 +55,21 @@ IMPL_LINK_NOARG(SwGotoPageDlg, PageModifiedHdl, weld::Entry&, void)
 
         if (page_value <= 0)
             mxMtrPageCtrl->set_text(OUString::number(1));
-        else if(page_value > mnMaxPageCnt)
+        else if (page_value > mnMaxPageCnt)
             mxMtrPageCtrl->set_text(OUString::number(mnMaxPageCnt));
 
         mxMtrPageCtrl->set_position(-1);
     }
 }
 
-SwView*  SwGotoPageDlg::GetCreateView() const
+SwView* SwGotoPageDlg::GetCreateView() const
 {
-    if(!m_pCreateView)
+    if (!m_pCreateView)
     {
         SwView* pView = SwModule::GetFirstView();
-        while(pView)
+        while (pView)
         {
-            if(&pView->GetViewFrame()->GetBindings() == m_rBindings)
+            if (&pView->GetViewFrame()->GetBindings() == m_rBindings)
             {
                 const_cast<SwGotoPageDlg*>(this)->m_pCreateView = pView;
                 break;
@@ -85,8 +85,8 @@ SwView*  SwGotoPageDlg::GetCreateView() const
 
 sal_uInt16 SwGotoPageDlg::GetPageInfo()
 {
-    SwView *pView = GetCreateView();
-    SwWrtShell *pSh = pView ? &pView->GetWrtShell() : nullptr;
+    SwView* pView = GetCreateView();
+    SwWrtShell* pSh = pView ? &pView->GetWrtShell() : nullptr;
     mxMtrPageCtrl->set_text(OUString::number(1));
     if (pSh)
     {

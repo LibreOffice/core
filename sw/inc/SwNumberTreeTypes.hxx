@@ -24,8 +24,8 @@
 
 namespace SwNumberTree
 {
-    typedef long tSwNumTreeNumber;
-    typedef std::vector<tSwNumTreeNumber> tNumberVector;
+typedef long tSwNumTreeNumber;
+typedef std::vector<tSwNumTreeNumber> tNumberVector;
 }
 
 #endif // INCLUDED_SW_INC_SWNUMBERTREETYPES_HXX

@@ -14,20 +14,23 @@
 
 #include <fmtpdsc.hxx>
 
-namespace vcl { class Window; }
+namespace vcl
+{
+class Window;
+}
 class SwWrtShell;
 class SwPageDesc;
 
 class SwTitlePageDlg : public SfxDialogController
 {
 private:
-    SwWrtShell *mpSh;
+    SwWrtShell* mpSh;
 
     std::unique_ptr<const SwFormatPageDesc> mpPageFormatDesc;
 
-    SwPageDesc *mpTitleDesc;
-    const SwPageDesc *mpIndexDesc;
-    const SwPageDesc *mpNormalDesc;
+    SwPageDesc* mpTitleDesc;
+    const SwPageDesc* mpIndexDesc;
+    const SwPageDesc* mpNormalDesc;
 
     std::unique_ptr<weld::RadioButton> m_xUseExistingPagesRB;
     std::unique_ptr<weld::SpinButton> m_xPageCountNF;
@@ -52,8 +55,9 @@ private:
     DECL_LINK(SetPageNumberHdl, weld::ToggleButton&, void);
     DECL_LINK(ValueChangeHdl, weld::SpinButton&, void);
     DECL_LINK(StartPageHdl, weld::ToggleButton&, void);
+
 public:
-    SwTitlePageDlg(weld::Window *pParent);
+    SwTitlePageDlg(weld::Window* pParent);
     virtual ~SwTitlePageDlg() override;
 };
 

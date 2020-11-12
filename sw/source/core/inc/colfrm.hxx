@@ -22,17 +22,17 @@
 
 #include "ftnboss.hxx"
 
-class SwColumnFrame: public SwFootnoteBossFrame
+class SwColumnFrame : public SwFootnoteBossFrame
 {
 private:
     virtual void DestroyImpl() override;
     virtual ~SwColumnFrame() override;
 
 public:
-    SwColumnFrame( SwFrameFormat*, SwFrame* );
+    SwColumnFrame(SwFrameFormat*, SwFrame*);
 
     virtual void PaintBreak() const override;
-    virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
+    virtual void PaintSubsidiaryLines(const SwPageFrame*, const SwRect&) const override;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_COLFRM_HXX

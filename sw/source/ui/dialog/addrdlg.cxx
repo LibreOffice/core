@@ -25,8 +25,8 @@ SwAddrDlg::SwAddrDlg(weld::Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialogController(pParent, &rSet)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SFXPAGE_GENERAL );
-    if ( fnCreatePage )
+    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc(RID_SFXPAGE_GENERAL);
+    if (fnCreatePage)
     {
         // create TabPage
         SetTabPage(fnCreatePage(get_content_area(), this, &rSet));

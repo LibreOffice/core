@@ -27,10 +27,10 @@
 */
 
 SwPauseThreadStarting::SwPauseThreadStarting()
-    : mbPausedThreadStarting( false )
+    : mbPausedThreadStarting(false)
 {
-    if ( SwThreadManager::ExistsThreadManager() &&
-         !SwThreadManager::GetThreadManager().StartingOfThreadsSuspended() )
+    if (SwThreadManager::ExistsThreadManager()
+        && !SwThreadManager::GetThreadManager().StartingOfThreadsSuspended())
     {
         SwThreadManager::GetThreadManager().SuspendStartingOfThreads();
         mbPausedThreadStarting = true;
@@ -39,7 +39,7 @@ SwPauseThreadStarting::SwPauseThreadStarting()
 
 SwPauseThreadStarting::~SwPauseThreadStarting() COVERITY_NOEXCEPT_FALSE
 {
-    if ( mbPausedThreadStarting )
+    if (mbPausedThreadStarting)
     {
         SwThreadManager::GetThreadManager().ResumeStartingOfThreads();
     }

@@ -39,7 +39,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
 SwSelectDBTableDialog::SwSelectDBTableDialog(weld::Window* pParent,
-        const uno::Reference< sdbc::XConnection>& rConnection)
+                                             const uno::Reference<sdbc::XConnection>& rConnection)
     : SfxDialogController(pParent, "modules/swriter/ui/selecttabledialog.ui", "SelectTableDialog")
     , m_xConnection(rConnection)
     , m_xTable(m_xBuilder->weld_tree_view("table"))
@@ -83,9 +83,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(weld::Window* pParent,
     }
 }
 
-SwSelectDBTableDialog::~SwSelectDBTableDialog()
-{
-}
+SwSelectDBTableDialog::~SwSelectDBTableDialog() {}
 
 IMPL_LINK_NOARG(SwSelectDBTableDialog, PreviewHdl, weld::Button&, void)
 {
@@ -98,7 +96,7 @@ IMPL_LINK_NOARG(SwSelectDBTableDialog, PreviewHdl, weld::Button&, void)
 
     OUString sDataSourceName;
     Reference<XChild> xChild(m_xConnection, UNO_QUERY);
-    if(xChild.is())
+    if (xChild.is())
     {
         Reference<XDataSource> xSource(xChild->getParent(), UNO_QUERY);
         Reference<XPropertySet> xPrSet(xSource, UNO_QUERY);
@@ -138,8 +136,7 @@ void SwSelectDBTableDialog::SetSelectedTable(const OUString& rTable, bool bIsTab
 {
     for (int i = 0, nCount = m_xTable->n_children(); i < nCount; ++i)
     {
-        if (m_xTable->get_text(i, 0) == rTable &&
-            m_xTable->get_id(i).isEmpty() == bIsTable)
+        if (m_xTable->get_text(i, 0) == rTable && m_xTable->get_id(i).isEmpty() == bIsTable)
         {
             m_xTable->select(i);
             break;

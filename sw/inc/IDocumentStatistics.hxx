@@ -27,7 +27,6 @@ struct SwDocStat;
 class IDocumentStatistics
 {
 public:
-
     /** DocInfo has changed (notify via DocShell):
         make required fields update.
     */
@@ -36,7 +35,7 @@ public:
     /** Document - Statistics
     */
     /// Returns a reference to the existing document statistics
-    virtual const SwDocStat &GetDocStat() const = 0;
+    virtual const SwDocStat& GetDocStat() const = 0;
 
     /**
       * Updates the document statistics if the document has been
@@ -45,7 +44,7 @@ public:
       * and potentially trigger a timeout to complete the work.
       * \param bFields if stat. fields should be updated
       */
-    virtual const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync, bool bFields) = 0;
+    virtual const SwDocStat& GetUpdatedDocStat(bool bCompleteAsync, bool bFields) = 0;
 
     /// Set the document statistics
     virtual void SetDocStat(const SwDocStat& rStat) = 0;
@@ -59,7 +58,7 @@ public:
     virtual void UpdateDocStat(bool bCompleteAsync, bool bFields) = 0;
 
 protected:
-    virtual ~IDocumentStatistics() {};
+    virtual ~IDocumentStatistics(){};
 };
 
 #endif // INCLUDED_SW_INC_IDOCUMENTSTATISTICS_HXX

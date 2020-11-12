@@ -33,12 +33,12 @@ class SwASCWriter : public Writer
     virtual ErrCode WriteStream() override;
 
 public:
-    SwASCWriter( const OUString& rFilterName );
+    SwASCWriter(const OUString& rFilterName);
     virtual ~SwASCWriter() override;
 
     const OUString& GetLineEnd() const { return m_sLineEnd; }
 };
 
-#endif  //  _ INCLUDED_SW_SOURCE_FILTER_ASCII_WRTASC_HXX
+#endif //  _ INCLUDED_SW_SOURCE_FILTER_ASCII_WRTASC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

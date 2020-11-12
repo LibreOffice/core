@@ -23,8 +23,7 @@
 class SwFlyFrame;
 class SfxItemSet;
 
-bool sw_ChkAndSetNewAnchor( const SwFlyFrame& rFly, SfxItemSet& rSet );
-
+bool sw_ChkAndSetNewAnchor(const SwFlyFrame& rFly, SfxItemSet& rSet);
 
 #endif
 

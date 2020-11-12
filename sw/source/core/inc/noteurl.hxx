@@ -25,7 +25,7 @@ class SwNoteURL
 };
 
 // globale Variable, in NoteURL.Cxx angelegt
-extern SwNoteURL *pNoteURL;
+extern SwNoteURL* pNoteURL;
 
 #endif
 

@@ -205,7 +205,6 @@ extern const char* const sCSS1_PV_landscape;
 //extern const char* const sCSS1_PV_crop;
 //extern const char* const sCSS1_PV_cross;
 
-
 extern const char* const sCSS1_P_so_language;
 extern const char* const sCSS1_P_direction;
 extern const char* const sCSS1_PV_ltr;

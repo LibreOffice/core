@@ -15,7 +15,7 @@
 #include "basesh.hxx"
 #include <shellid.hxx>
 
-class SwNavigationShell: public SwBaseShell
+class SwNavigationShell : public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_NAVIGATIONSHELL)
@@ -25,10 +25,10 @@ private:
     static void InitInterface_Impl();
 
 public:
-    SwNavigationShell(SwView &rView);
+    SwNavigationShell(SwView& rView);
 
-    void GetState(SfxItemSet &);
-    void Execute(SfxRequest const &);
+    void GetState(SfxItemSet&);
+    void Execute(SfxRequest const&);
 };
 
 #endif

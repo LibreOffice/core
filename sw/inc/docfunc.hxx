@@ -24,22 +24,22 @@ class SwDoc;
 // namespace <docfunc> for functions and procedures working on a Writer document.
 namespace docfunc
 {
-    /** method to check, if given Writer document contains at least one drawing object
+/** method to check, if given Writer document contains at least one drawing object
 
         @param p_rDoc
         input parameter - reference to the Writer document, which is investigated.
     */
-    bool ExistsDrawObjs( SwDoc& p_rDoc );
+bool ExistsDrawObjs(SwDoc& p_rDoc);
 
-    /** method to check, if given Writer document contains only drawing objects,
+/** method to check, if given Writer document contains only drawing objects,
         which are completely on its page.
 
         @param p_rDoc
         input parameter - reference to the Writer document, which is investigated.
     */
-    bool AllDrawObjsOnPage( SwDoc& p_rDoc );
+bool AllDrawObjsOnPage(SwDoc& p_rDoc);
 
-    /** method to check, if the outline style has to written as a normal list style
+/** method to check, if the outline style has to written as a normal list style
 
         #i69627#
         The outline style has to written as a normal list style, if a parent
@@ -54,9 +54,9 @@ namespace docfunc
         @return boolean
         indicating, if the outline style has to written as a normal list style
     */
-    bool HasOutlineStyleToBeWrittenAsNormalListStyle( SwDoc& rDoc );
+bool HasOutlineStyleToBeWrittenAsNormalListStyle(SwDoc& rDoc);
 }
 
-#endif  //_DOCFUNC_HXX
+#endif //_DOCFUNC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

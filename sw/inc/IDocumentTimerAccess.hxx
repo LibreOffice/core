@@ -66,7 +66,7 @@ public:
     virtual bool IsDocIdle() const = 0;
 
 protected:
-    virtual ~IDocumentTimerAccess() {};
+    virtual ~IDocumentTimerAccess(){};
 };
 
 #endif // INCLUDED_SW_INC_IDOCUMENTTIMERACCESS_HXX

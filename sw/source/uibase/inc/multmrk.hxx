@@ -28,14 +28,14 @@ class SwTOXMgr;
 class SwMultiTOXMarkDlg : public weld::GenericDialogController
 {
     DECL_LINK(SelectHdl, weld::TreeView&, void);
-    SwTOXMgr&          m_rMgr;
-    sal_uInt16         m_nPos;
+    SwTOXMgr& m_rMgr;
+    sal_uInt16 m_nPos;
 
     std::unique_ptr<weld::Label> m_xTextFT;
     std::unique_ptr<weld::TreeView> m_xTOXLB;
 
 public:
-    SwMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr);
+    SwMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr& rTOXMgr);
     virtual ~SwMultiTOXMarkDlg() override;
     virtual short run() override;
 };

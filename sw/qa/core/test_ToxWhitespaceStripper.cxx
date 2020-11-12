@@ -21,17 +21,13 @@ using namespace sw;
 
 class ToxWhitespaceStripperTest : public CppUnit::TestFixture
 {
-    void
-    MappingCharactersToVariousStrippedStringsWorks();
+    void MappingCharactersToVariousStrippedStringsWorks();
 
-    void
-    StrippingWhitespacesFromVariousStringsWorks();
+    void StrippingWhitespacesFromVariousStringsWorks();
 
-    void
-    PositionAfterStringCanBeRequested();
+    void PositionAfterStringCanBeRequested();
 
-    void
-    InvalidPositionIsMappedToLastEntry();
+    void InvalidPositionIsMappedToLastEntry();
 
     CPPUNIT_TEST_SUITE(ToxWhitespaceStripperTest);
     CPPUNIT_TEST(MappingCharactersToVariousStrippedStringsWorks);
@@ -40,11 +36,9 @@ class ToxWhitespaceStripperTest : public CppUnit::TestFixture
     CPPUNIT_TEST(InvalidPositionIsMappedToLastEntry);
 
     CPPUNIT_TEST_SUITE_END();
-
 };
 
-void
-ToxWhitespaceStripperTest::MappingCharactersToVariousStrippedStringsWorks()
+void ToxWhitespaceStripperTest::MappingCharactersToVariousStrippedStringsWorks()
 {
     {
         ToxWhitespaceStripper sut("abc\n");
@@ -89,8 +83,7 @@ ToxWhitespaceStripperTest::MappingCharactersToVariousStrippedStringsWorks()
     }
 }
 
-void
-ToxWhitespaceStripperTest::StrippingWhitespacesFromVariousStringsWorks()
+void ToxWhitespaceStripperTest::StrippingWhitespacesFromVariousStringsWorks()
 {
     {
         ToxWhitespaceStripper sut("abc\n");
@@ -118,8 +111,7 @@ ToxWhitespaceStripperTest::StrippingWhitespacesFromVariousStringsWorks()
     }
 }
 
-void
-ToxWhitespaceStripperTest::PositionAfterStringCanBeRequested()
+void ToxWhitespaceStripperTest::PositionAfterStringCanBeRequested()
 {
     OUString const test("abc");
     ToxWhitespaceStripper sut(test);
@@ -127,12 +119,12 @@ ToxWhitespaceStripperTest::PositionAfterStringCanBeRequested()
     CPPUNIT_ASSERT_EQUAL(expected, sut.GetPositionInStrippedString(test.getLength()));
 }
 
-void
-ToxWhitespaceStripperTest::InvalidPositionIsMappedToLastEntry()
+void ToxWhitespaceStripperTest::InvalidPositionIsMappedToLastEntry()
 {
     ToxWhitespaceStripper sut("ab  c");
     sal_Int32 const expected = 4; // the length of the string after merging the two whitespaces
-    sal_Int32 result = sut.GetPositionInStrippedString(40); // a value past the original string length
+    sal_Int32 result
+        = sut.GetPositionInStrippedString(40); // a value past the original string length
     CPPUNIT_ASSERT_EQUAL(expected, result);
 }
 

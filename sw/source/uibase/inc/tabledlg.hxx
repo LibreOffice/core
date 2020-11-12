@@ -30,6 +30,7 @@ class SwTableTabDlg : public SfxTabDialogController
     SwWrtShell* pShell;
 
     virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
+
 public:
     SwTableTabDlg(weld::Window* pParent, const SfxItemSet* pItemSet, SwWrtShell* pSh);
 };

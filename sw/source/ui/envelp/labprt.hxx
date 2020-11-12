@@ -28,31 +28,33 @@ class SwLabItem;
 
 class SwLabPrtPage : public SfxTabPage
 {
-    VclPtr<Printer>      pPrinter; // for the shaft setting - unfortunately
+    VclPtr<Printer> pPrinter; // for the shaft setting - unfortunately
 
-    std::unique_ptr<weld::RadioButton>  m_xPageButton;
-    std::unique_ptr<weld::RadioButton>  m_xSingleButton;
+    std::unique_ptr<weld::RadioButton> m_xPageButton;
+    std::unique_ptr<weld::RadioButton> m_xSingleButton;
     std::unique_ptr<weld::Widget> m_xSingleGrid;
     std::unique_ptr<weld::Widget> m_xPrinterFrame;
     std::unique_ptr<weld::SpinButton> m_xColField;
     std::unique_ptr<weld::SpinButton> m_xRowField;
-    std::unique_ptr<weld::CheckButton>  m_xSynchronCB;
-    std::unique_ptr<weld::Label>  m_xPrinterInfo;
+    std::unique_ptr<weld::CheckButton> m_xSynchronCB;
+    std::unique_ptr<weld::Label> m_xPrinterInfo;
     std::unique_ptr<weld::Button> m_xPrtSetup;
 
-    DECL_LINK( CountHdl, weld::Button&, void );
+    DECL_LINK(CountHdl, weld::Button&, void);
 
-    SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetDialogController());}
+    SwLabDlg* GetParentSwLabDlg() { return static_cast<SwLabDlg*>(GetDialogController()); }
 
 public:
-    SwLabPrtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    SwLabPrtPage(weld::Container* pPage, weld::DialogController* pController,
+                 const SfxItemSet& rSet);
     virtual ~SwLabPrtPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
-            void FillItem(SwLabItem& rItem);
+    void FillItem(SwLabItem& rItem);
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
     Printer* GetPrt() { return pPrinter; }

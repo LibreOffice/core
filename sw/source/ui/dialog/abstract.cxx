@@ -26,9 +26,7 @@ SwInsertAbstractDlg::SwInsertAbstractDlg(weld::Window* pParent)
 {
 }
 
-SwInsertAbstractDlg::~SwInsertAbstractDlg()
-{
-}
+SwInsertAbstractDlg::~SwInsertAbstractDlg() {}
 
 sal_uInt8 SwInsertAbstractDlg::GetLevel() const
 {

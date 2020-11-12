@@ -23,8 +23,8 @@
 
 class SwDoc;
 
-namespace sw {
-
+namespace sw
+{
 /**
  * An Idle, which is just ready to be scheduled for idle documents.
  *
@@ -36,15 +36,14 @@ namespace sw {
 class SwDocIdle final : public Idle
 {
 private:
-    SwDoc &m_rDoc;
+    SwDoc& m_rDoc;
 
-    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nTimeNow ) const override;
+    virtual sal_uInt64 UpdateMinPeriod(sal_uInt64 nTimeNow) const override;
 
 public:
-    SwDocIdle( SwDoc &doc );
+    SwDocIdle(SwDoc& doc);
     virtual ~SwDocIdle() override;
 };
-
 }
 
 #endif

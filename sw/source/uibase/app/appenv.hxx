@@ -15,8 +15,7 @@
 class SwWrtShell;
 class SwFieldMgr;
 
-OUString InsertLabEnvText( SwWrtShell& , SwFieldMgr& , const OUString& );
-
+OUString InsertLabEnvText(SwWrtShell&, SwFieldMgr&, const OUString&);
 
 #endif
 

@@ -26,19 +26,19 @@ enum class SelectionType : sal_Int32;
 
 class SwToolbarConfigItem : public utl::ConfigItem
 {
-    sal_Int32            aTbxIdArray[5];
+    sal_Int32 aTbxIdArray[5];
 
     static css::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() override;
 
 public:
-    SwToolbarConfigItem( bool bWeb );
+    SwToolbarConfigItem(bool bWeb);
     virtual ~SwToolbarConfigItem() override;
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify(const css::uno::Sequence<OUString>& aPropertyNames) override;
 
-    void        SetTopToolbar(SelectionType nSelType, ToolbarId eBarId);
+    void SetTopToolbar(SelectionType nSelType, ToolbarId eBarId);
 };
 
 #endif

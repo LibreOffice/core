@@ -36,9 +36,8 @@ static int nSaveButtonState = -1; // 0: tab, 1: semicolon, 2: paragraph, 3: othe
 static bool bIsKeepColumn = true;
 static sal_Unicode uOther = ',';
 
-void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
-                                    SwInsertTableOptions& rInsTableOpts,
-                                    SwTableAutoFormat const*& prTAFormat )
+void SwConvertTableDlg::GetValues(sal_Unicode& rDelim, SwInsertTableOptions& rInsTableOpts,
+                                  SwTableAutoFormat const*& prTAFormat)
 {
     if (m_xTabBtn->get_active())
     {
@@ -86,8 +85,8 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 }
 
 SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
-    : SfxDialogController(rView.GetFrameWeld(),
-            "modules/swriter/ui/converttexttable.ui", "ConvertTextTableDialog")
+    : SfxDialogController(rView.GetFrameWeld(), "modules/swriter/ui/converttexttable.ui",
+                          "ConvertTextTableDialog")
     , m_xTabBtn(m_xBuilder->weld_radio_button("tabs"))
     , m_xSemiBtn(m_xBuilder->weld_radio_button("semicolons"))
     , m_xParaBtn(m_xBuilder->weld_radio_button("paragraph"))
@@ -121,11 +120,10 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
                 m_xOtherBtn->set_active(true);
                 if (uOther)
                     m_xOtherEd->set_text(OUString(uOther));
-            break;
+                break;
         }
-
     }
-    if( bToTable )
+    if (bToTable)
     {
         m_xDialog->set_title(SwResId(STR_CONVERT_TEXT_TABLE));
         m_xAutoFormatBtn->connect_clicked(LINK(this, SwConvertTableDlg, AutoFormatHdl));
@@ -140,7 +138,7 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     }
     m_xKeepColumn->save_state();
 
-    Link<weld::Button&,void> aLk( LINK(this, SwConvertTableDlg, BtnHdl) );
+    Link<weld::Button&, void> aLk(LINK(this, SwConvertTableDlg, BtnHdl));
     m_xTabBtn->connect_clicked(aLk);
     m_xSemiBtn->connect_clicked(aLk);
     m_xParaBtn->connect_clicked(aLk);
@@ -149,7 +147,7 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
 
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
+    bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell()) & HTMLMODE_ON);
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(bHTMLMode);
     SwInsertTableFlags nInsTableFlags = aInsOpts.mnInsMode;
@@ -168,7 +166,8 @@ IMPL_LINK_NOARG(SwConvertTableDlg, AutoFormatHdl, weld::Button&, void)
 {
     SwAbstractDialogFactory& rFact = swui::GetFactory();
 
-    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(rFact.CreateSwAutoFormatDlg(m_xDialog.get(), pShell, false, mxTAutoFormat.get()));
+    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(
+        rFact.CreateSwAutoFormatDlg(m_xDialog.get(), pShell, false, mxTAutoFormat.get()));
     if (RET_OK == pDlg->Execute())
         mxTAutoFormat = pDlg->FillAutoFormatOfIndex();
 }

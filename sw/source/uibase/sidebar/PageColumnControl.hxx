@@ -24,8 +24,8 @@
 
 class PageColumnPopup;
 
-namespace sw::sidebar {
-
+namespace sw::sidebar
+{
 class PageColumnControl final : public WeldToolbarPopup
 {
 public:
@@ -43,10 +43,10 @@ private:
 
     rtl::Reference<PageColumnPopup> m_xControl;
 
-    static void ExecuteColumnChange( const sal_uInt16 nColumnType );
+    static void ExecuteColumnChange(const sal_uInt16 nColumnType);
 
-    DECL_LINK( ColumnButtonClickHdl_Impl, weld::Button&, void );
-    DECL_LINK( MoreButtonClickHdl_Impl, weld::Button&, void );
+    DECL_LINK(ColumnButtonClickHdl_Impl, weld::Button&, void);
+    DECL_LINK(MoreButtonClickHdl_Impl, weld::Button&, void);
 };
 
 } // end of namespace sw::sidebar

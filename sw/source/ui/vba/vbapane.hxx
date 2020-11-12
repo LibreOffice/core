@@ -22,22 +22,23 @@
 #include <ooo/vba/word/XPane.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XPane > SwVbaPane_BASE;
+typedef InheritedHelperInterfaceWeakImpl<ooo::vba::word::XPane> SwVbaPane_BASE;
 
 class SwVbaPane : public SwVbaPane_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    css::uno::Reference<css::frame::XModel> mxModel;
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaPane( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        const css::uno::Reference< css::frame::XModel >& xModel );
+    SwVbaPane(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
+              const css::uno::Reference<css::uno::XComponentContext>& rContext,
+              const css::uno::Reference<css::frame::XModel>& xModel);
     virtual ~SwVbaPane() override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL View(  ) override;
-    virtual void SAL_CALL Close(  ) override;
+    virtual css::uno::Any SAL_CALL View() override;
+    virtual void SAL_CALL Close() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

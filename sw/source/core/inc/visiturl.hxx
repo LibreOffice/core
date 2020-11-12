@@ -27,11 +27,12 @@ class SwDoc;
 class SwURLStateChanged : public SfxListener
 {
     SwDoc& m_rDoc;
+
 public:
-    SwURLStateChanged( SwDoc& rD );
+    SwURLStateChanged(SwDoc& rD);
     virtual ~SwURLStateChanged() override;
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 };
 
 #endif

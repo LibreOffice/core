@@ -25,7 +25,7 @@
 class IStyleAccess;
 class SfxItemSet;
 
-std::unique_ptr<IStyleAccess> createStyleManager( SfxItemSet const * pIgnorableParagraphItems );
+std::unique_ptr<IStyleAccess> createStyleManager(SfxItemSet const* pIgnorableParagraphItems);
 
 #endif // INCLUDED_SW_SOURCE_CORE_DOC_SWSTYLEMANAGER_HXX
 

@@ -21,27 +21,25 @@
 
 SFX_IMPL_INTERFACE(SwNavigationShell, SwBaseShell)
 
-void SwNavigationShell::InitInterface_Impl()
-{
-}
+void SwNavigationShell::InitInterface_Impl() {}
 
-SwNavigationShell::SwNavigationShell(SwView &_rView)
-    : SwBaseShell( _rView )
+SwNavigationShell::SwNavigationShell(SwView& _rView)
+    : SwBaseShell(_rView)
 {
     SetName("Navigation");
 }
 
-void SwNavigationShell::Execute(SfxRequest const &rReq)
+void SwNavigationShell::Execute(SfxRequest const& rReq)
 {
-    SwWrtShell *pSh = &GetShell();
+    SwWrtShell* pSh = &GetShell();
     SdrView* pSdrView = pSh->GetDrawView();
-    const SfxItemSet *pArgs = rReq.GetArgs();
+    const SfxItemSet* pArgs = rReq.GetArgs();
     const sal_uInt16 nSlotId = rReq.GetSlot();
     bool bChanged = pSdrView->GetModel()->IsChanged();
     pSdrView->GetModel()->SetChanged(false);
     SwNavigationMgr& aSwNavigationMgr = pSh->GetNavigationMgr();
     const SfxPoolItem* pItem;
-    if(pArgs)
+    if (pArgs)
         pArgs->GetItemState(nSlotId, false, &pItem);
     switch (nSlotId)
     {
@@ -63,15 +61,15 @@ void SwNavigationShell::Execute(SfxRequest const &rReq)
 
 // determine if the buttons should be enabled/disabled
 
-void SwNavigationShell::GetState(SfxItemSet &rSet)
+void SwNavigationShell::GetState(SfxItemSet& rSet)
 {
-    SwWrtShell *pSh = &GetShell();
-    SfxWhichIter aIter( rSet );
+    SwWrtShell* pSh = &GetShell();
+    SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
     SwNavigationMgr& aNavigationMgr = pSh->GetNavigationMgr();
-    while( nWhich )
+    while (nWhich)
     {
-        switch( nWhich )
+        switch (nWhich)
         {
             case FN_NAVIGATION_BACK:
                 if (!aNavigationMgr.backEnabled())

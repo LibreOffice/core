@@ -26,13 +26,16 @@ class SwVbaInformationHelper
 {
 public:
     /// @throws css::uno::RuntimeException
-    static sal_Int32 handleWdActiveEndPageNumber( const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor );
+    static sal_Int32
+    handleWdActiveEndPageNumber(const css::uno::Reference<css::text::XTextViewCursor>& xTVCursor);
     /// @throws css::uno::RuntimeException
-    static sal_Int32 handleWdNumberOfPagesInDocument( const css::uno::Reference< css::frame::XModel >& xModel );
+    static sal_Int32
+    handleWdNumberOfPagesInDocument(const css::uno::Reference<css::frame::XModel>& xModel);
     /// @throws css::uno::RuntimeException
-    static double handleWdVerticalPositionRelativeToPage( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor );
+    static double handleWdVerticalPositionRelativeToPage(
+        const css::uno::Reference<css::frame::XModel>& xModel,
+        const css::uno::Reference<css::text::XTextViewCursor>& xTVCursor);
     //static double verticalPositionRelativeToPageBoundary( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor, const css::uno::Reference< css::beans::XPropertySet >& xStyleProps ) throw( css::uno::RuntimeException );
-
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAINFORMATIONHELPER_HXX
 

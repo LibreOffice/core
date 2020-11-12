@@ -21,15 +21,21 @@
 
 #include <sal/types.h>
 
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
-namespace com::sun::star::util { class XJobManager; }
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
+namespace com::sun::star::util
+{
+class XJobManager;
+}
 
 /** Testing */
 namespace SwThreadJoiner
 {
-    css::uno::Reference< css::util::XJobManager >& GetThreadJoiner();
+css::uno::Reference<css::util::XJobManager>& GetThreadJoiner();
 
-    void ReleaseThreadJoiner();
+void ReleaseThreadJoiner();
 }
 #endif
 

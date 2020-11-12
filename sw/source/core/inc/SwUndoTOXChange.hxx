@@ -35,12 +35,12 @@ private:
     sal_uLong const m_nNodeIndex;
 
 public:
-    SwUndoTOXChange(const SwDoc& rDoc, SwTOXBaseSection const& rTOX, const SwTOXBase & rNew);
+    SwUndoTOXChange(const SwDoc& rDoc, SwTOXBaseSection const& rTOX, const SwTOXBase& rNew);
     virtual ~SwUndoTOXChange() override;
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
-    virtual void RepeatImpl( ::sw::RepeatContext & ) override;
+    virtual void UndoImpl(::sw::UndoRedoContext&) override;
+    virtual void RedoImpl(::sw::UndoRedoContext&) override;
+    virtual void RepeatImpl(::sw::RepeatContext&) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SWUNDOTOXCHANGE_HXX

@@ -36,12 +36,12 @@ class SwBreakDlg : public weld::GenericDialogController
     std::unique_ptr<weld::SpinButton> m_xPageNumEdit;
     std::unique_ptr<weld::Button> m_xOkBtn;
 
-    SwWrtShell     &rSh;
-    OUString        m_aTemplate;
-    sal_uInt16      nKind;
-    ::std::optional<sal_uInt16>      oPgNum;
+    SwWrtShell& rSh;
+    OUString m_aTemplate;
+    sal_uInt16 nKind;
+    ::std::optional<sal_uInt16> oPgNum;
 
-    bool            bHtmlMode;
+    bool bHtmlMode;
 
     DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
     DECL_LINK(ChangeHdl, weld::ComboBox&, void);
@@ -53,10 +53,10 @@ class SwBreakDlg : public weld::GenericDialogController
     void rememberResult();
 
 public:
-    SwBreakDlg(weld::Window *pParent, SwWrtShell &rSh);
+    SwBreakDlg(weld::Window* pParent, SwWrtShell& rSh);
     const OUString& GetTemplateName() const { return m_aTemplate; }
     sal_uInt16 GetKind() const { return nKind; }
-    const ::std::optional<sal_uInt16>&  GetPageNumber() const { return oPgNum; }
+    const ::std::optional<sal_uInt16>& GetPageNumber() const { return oPgNum; }
 };
 
 #endif

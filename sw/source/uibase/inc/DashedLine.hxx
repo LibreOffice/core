@@ -18,10 +18,10 @@ class SwDashedLine : public Control
     Color& (*m_pColorFn)();
 
 public:
-    SwDashedLine( vcl::Window* pParent, Color& ( *pColorFn )() );
-    virtual ~SwDashedLine( ) override;
+    SwDashedLine(vcl::Window* pParent, Color& (*pColorFn)());
+    virtual ~SwDashedLine() override;
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 };
 
 #endif

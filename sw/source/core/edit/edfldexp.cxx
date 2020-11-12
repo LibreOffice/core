@@ -30,24 +30,25 @@ using namespace com::sun::star;
 
 bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
 {
-    const SwFieldTypes * pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
-    uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+    const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
     uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
     std::vector<SwFormatField*> vFields;
-    for(const auto& pFieldType : *pFieldTypes)
+    for (const auto& pFieldType : *pFieldTypes)
     {
-        if(IsUsed(*pFieldType) && pFieldType->Which() == SwFieldIds::Database)
+        if (IsUsed(*pFieldType) && pFieldType->Which() == SwFieldIds::Database)
             pFieldType->GatherFields(vFields);
     }
-    if(!vFields.size())
+    if (!vFields.size())
         return true;
 
-    const SwDBData& rData = static_cast<SwDBFieldType*>(vFields.front()->GetField()->GetTyp())->GetDBData();
+    const SwDBData& rData
+        = static_cast<SwDBFieldType*>(vFields.front()->GetField()->GetTyp())->GetDBData();
     try
     {
         return xDBContext->getByName(rData.sDataSource).hasValue();
     }
-    catch(uno::Exception const &)
+    catch (uno::Exception const&)
     {
         rUsedDataSource = rData.sDataSource;
         return false;

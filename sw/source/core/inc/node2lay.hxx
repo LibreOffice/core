@@ -54,26 +54,28 @@ class Point;
 class SwNode2Layout
 {
     std::unique_ptr<SwNode2LayImpl> m_pImpl;
+
 public:
     /// Use this ctor for inserting before/after rNd
     /// @param nIdx is the index of the to-be-inserted Node
-    SwNode2Layout( const SwNode& rNd, sal_uLong nIdx );
+    SwNode2Layout(const SwNode& rNd, sal_uLong nIdx);
     ~SwNode2Layout();
     SwFrame* NextFrame();
-    SwLayoutFrame* UpperFrame( SwFrame* &rpFrame, const SwNode& rNode );
+    SwLayoutFrame* UpperFrame(SwFrame*& rpFrame, const SwNode& rNode);
 
-    SwFrame *GetFrame( const Point* pDocPos ) const;
+    SwFrame* GetFrame(const Point* pDocPos) const;
 };
 
 class SwNode2LayoutSaveUpperFrames
 {
     std::unique_ptr<SwNode2LayImpl> m_pImpl;
+
 public:
     /// Use this ctor for collecting the UpperFrames
-    SwNode2LayoutSaveUpperFrames( const SwNode& rNd );
+    SwNode2LayoutSaveUpperFrames(const SwNode& rNd);
     ~SwNode2LayoutSaveUpperFrames();
 
-    void RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
+    void RestoreUpperFrames(SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd);
 };
 
 #endif

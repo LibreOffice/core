@@ -24,16 +24,15 @@
 #include <IDocumentDrawModelAccess.hxx>
 
 SwSvxUnoDrawPool::SwSvxUnoDrawPool(SwDoc& rDoc)
-    : SvxUnoDrawPool(rDoc.getIDocumentDrawModelAccess().GetDrawModel(), SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER)
+    : SvxUnoDrawPool(rDoc.getIDocumentDrawModelAccess().GetDrawModel(),
+                     SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER)
     , m_rDoc(rDoc)
 {
 }
 
-SwSvxUnoDrawPool::~SwSvxUnoDrawPool() throw()
-{
-}
+SwSvxUnoDrawPool::~SwSvxUnoDrawPool() throw() {}
 
-SfxItemPool* SwSvxUnoDrawPool::getModelPool( bool /*bReadOnly*/ ) throw()
+SfxItemPool* SwSvxUnoDrawPool::getModelPool(bool /*bReadOnly*/) throw()
 {
     // DVO, OD 01.10.2003 #i18732# - return item pool of writer document;
     // it contains draw model item pool as secondary pool.

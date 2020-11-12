@@ -23,14 +23,14 @@
 
 #include <swdllapi.h>
 
-class PrintMonitor: public weld::GenericDialogController
+class PrintMonitor : public weld::GenericDialogController
 {
 public:
     std::unique_ptr<weld::Label> m_xDocName;
     std::unique_ptr<weld::Label> m_xPrinter;
     std::unique_ptr<weld::Label> m_xPrintInfo;
 
-    PrintMonitor(weld::Window *pParent);
+    PrintMonitor(weld::Window* pParent);
     virtual ~PrintMonitor() override;
 };
 
@@ -41,26 +41,26 @@ public:
     std::unique_ptr<weld::Label> m_xPrinter;
     std::unique_ptr<weld::Label> m_xPrintInfo;
 
-    SaveMonitor(weld::Window *pParent);
+    SaveMonitor(weld::Window* pParent);
     virtual ~SaveMonitor() override;
 };
 
 class CreateMonitor : public weld::GenericDialogController
 {
 public:
-    CreateMonitor(weld::Window *pParent);
+    CreateMonitor(weld::Window* pParent);
     virtual ~CreateMonitor() override;
 
-    void SetTotalCount( sal_Int32 nTotal );
-    void SetCurrentPosition( sal_Int32 nCurrent );
+    void SetTotalCount(sal_Int32 nTotal);
+    void SetCurrentPosition(sal_Int32 nCurrent);
 
 private:
     void UpdateCountingText();
 
 private:
-    OUString        m_sCountingPattern;
-    sal_Int32       m_nTotalCount;
-    sal_Int32       m_nCurrentPosition;
+    OUString m_sCountingPattern;
+    sal_Int32 m_nTotalCount;
+    sal_Int32 m_nCurrentPosition;
 
     std::unique_ptr<weld::Label> m_xCounting;
 };

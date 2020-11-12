@@ -26,8 +26,8 @@
 #include <drawbase.hxx>
 #include <dselect.hxx>
 
-DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
-                SwDrawBase(pWrtShell, pEditWin, pSwView)
+DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
+    : SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
     m_bCreateObj = false;
 }
@@ -35,7 +35,7 @@ DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView*
 void DrawSelection::Activate(const sal_uInt16 nSlotId)
 {
     m_pWin->SetSdrDrawMode(OBJ_NONE);
-    m_pWin->SetObjectSelect( true );
+    m_pWin->SetObjectSelect(true);
     SwDrawBase::Activate(nSlotId);
 
     m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);

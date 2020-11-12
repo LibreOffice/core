@@ -26,9 +26,9 @@
 
 class SwLabPage : public SfxTabPage
 {
-    SwDBManager*   pDBManager;
-    OUString      sActDBName;
-    SwLabItem     aItem;
+    SwDBManager* pDBManager;
+    OUString sActDBName;
+    SwLabItem aItem;
 
     std::unique_ptr<weld::Widget> m_xAddressFrame;
     std::unique_ptr<weld::CheckButton> m_xAddrBox;
@@ -45,13 +45,13 @@ class SwLabPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xFormatInfo;
 
     DECL_LINK(AddrHdl, weld::ToggleButton&, void);
-    DECL_LINK(DatabaseHdl, weld::ComboBox&, void );
+    DECL_LINK(DatabaseHdl, weld::ComboBox&, void);
     DECL_LINK(FieldHdl, weld::Button&, void);
     DECL_LINK(PageHdl, weld::ToggleButton&, void);
     DECL_LINK(MakeHdl, weld::ComboBox&, void);
     DECL_LINK(TypeHdl, weld::ComboBox&, void);
 
-    void DisplayFormat  ();
+    void DisplayFormat();
     SwLabRec* GetSelectedEntryPos();
 
 public:
@@ -59,17 +59,18 @@ public:
 
     virtual ~SwLabPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
-            void FillItem(SwLabItem& rItem);
+    void FillItem(SwLabItem& rItem);
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 
-    SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetDialogController());}
+    SwLabDlg* GetParentSwLabDlg() { return static_cast<SwLabDlg*>(GetDialogController()); }
 
-    void    SetToBusinessCard();
+    void SetToBusinessCard();
 
     void InitDatabaseBox();
     void SetDBManager(SwDBManager* pDBManager_) { pDBManager = pDBManager_; }
@@ -98,10 +99,12 @@ class SwPrivateDataPage : public SfxTabPage
     std::unique_ptr<weld::Entry> m_xMailED;
 
 public:
-    SwPrivateDataPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    SwPrivateDataPage(weld::Container* pPage, weld::DialogController* pController,
+                      const SfxItemSet& rSet);
     virtual ~SwPrivateDataPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
@@ -127,10 +130,12 @@ class SwBusinessDataPage : public SfxTabPage
     std::unique_ptr<weld::Entry> m_xMailED;
 
 public:
-    SwBusinessDataPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    SwBusinessDataPage(weld::Container* pPage, weld::DialogController* pController,
+                       const SfxItemSet& rSet);
     virtual ~SwBusinessDataPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;

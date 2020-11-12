@@ -22,10 +22,10 @@
 #include <swdllapi.h>
 #include <view.hxx>
 
-class SW_DLLPUBLIC SwWebView: public SwView
+class SW_DLLPUBLIC SwWebView : public SwView
 {
 protected:
-    virtual void    SelectShell() override;
+    virtual void SelectShell() override;
 
 public:
     SFX_DECL_VIEWFACTORY(SwWebView);

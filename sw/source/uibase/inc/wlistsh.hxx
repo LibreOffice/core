@@ -21,7 +21,7 @@
 
 #include "listsh.hxx"
 
-class SwWebListShell: public SwListShell
+class SwWebListShell : public SwListShell
 {
 public:
     SFX_DECL_INTERFACE(SW_WEBLISTSHELL)
@@ -31,8 +31,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-
-    SwWebListShell(SwView &rView);
+    SwWebListShell(SwView& rView);
     virtual ~SwWebListShell() override;
 };
 

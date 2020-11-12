@@ -21,11 +21,11 @@
 
 #include "grfsh.hxx"
 
-class SwWebGrfShell: public SwGrfShell
+class SwWebGrfShell : public SwGrfShell
 {
 public:
-    SwWebGrfShell(SwView &rShell);
-    virtual     ~SwWebGrfShell() override;
+    SwWebGrfShell(SwView& rShell);
+    virtual ~SwWebGrfShell() override;
 
     SFX_DECL_INTERFACE(SW_WEBGRFSHELL)
 

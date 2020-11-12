@@ -35,32 +35,35 @@
 
 class SwGrammarMarkUp : public SwWrongList
 {
-    std::vector< sal_Int32 > maSentence;
+    std::vector<sal_Int32> maSentence;
 
 public:
-    SwGrammarMarkUp() : SwWrongList( WRONGLIST_GRAMMAR ) {}
+    SwGrammarMarkUp()
+        : SwWrongList(WRONGLIST_GRAMMAR)
+    {
+    }
 
     virtual ~SwGrammarMarkUp() override;
     virtual SwWrongList* Clone() override;
-    virtual void CopyFrom( const SwWrongList& rCopy ) override;
+    virtual void CopyFrom(const SwWrongList& rCopy) override;
 
     /* SwWrongList::Move() + handling of maSentence */
-    void MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff );
+    void MoveGrammar(sal_Int32 nPos, sal_Int32 nDiff);
     /* SwWrongList::SplitList() + handling of maSentence */
-    SwGrammarMarkUp* SplitGrammarList( sal_Int32 nSplitPos );
+    SwGrammarMarkUp* SplitGrammarList(sal_Int32 nSplitPos);
     /* SwWrongList::JoinList() + handling of maSentence */
-    void JoinGrammarList( SwGrammarMarkUp* pNext, sal_Int32 nInsertPos );
+    void JoinGrammarList(SwGrammarMarkUp* pNext, sal_Int32 nInsertPos);
     /* SwWrongList::ClearList() + handling of maSentence */
-    void ClearGrammarList( sal_Int32 nSentenceEnd = COMPLETE_STRING );
+    void ClearGrammarList(sal_Int32 nSentenceEnd = COMPLETE_STRING);
     /* setSentence to define the start position of a sentence,
        at the moment the end position is given by the next start position */
-    void setSentence( sal_Int32 nStart );
+    void setSentence(sal_Int32 nStart);
     /* getSentenceStart returns the last start position of a sentence
        which is lower or equal to the given parameter */
-    sal_Int32 getSentenceStart( sal_Int32 nPos );
+    sal_Int32 getSentenceStart(sal_Int32 nPos);
     /* getSentenceEnd returns the first start position of a sentence
        which is greater than the given parameter */
-    sal_Int32 getSentenceEnd( sal_Int32 nPos );
+    sal_Int32 getSentenceEnd(sal_Int32 nPos);
 };
 
 #endif

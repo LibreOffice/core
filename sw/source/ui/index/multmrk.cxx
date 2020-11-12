@@ -22,7 +22,8 @@
 #include <wrtsh.hxx>
 
 SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr& rTOXMgr)
-    : GenericDialogController(pParent, "modules/swriter/ui/selectindexdialog.ui", "SelectIndexDialog")
+    : GenericDialogController(pParent, "modules/swriter/ui/selectindexdialog.ui",
+                              "SelectIndexDialog")
     , m_rMgr(rTOXMgr)
     , m_nPos(0)
     , m_xTextFT(m_xBuilder->weld_label("type"))
@@ -34,14 +35,14 @@ SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr& rTOXMgr)
     m_xTOXLB->connect_changed(LINK(this, SwMultiTOXMarkDlg, SelectHdl));
 
     sal_uInt16 nSize = m_rMgr.GetTOXMarkCount();
-    for(sal_uInt16 i=0; i < nSize; ++i)
+    for (sal_uInt16 i = 0; i < nSize; ++i)
         m_xTOXLB->append_text(m_rMgr.GetTOXMark(i)->GetText(m_rMgr.GetShell()->GetLayout()));
 
     m_xTOXLB->select(0);
     m_xTextFT->set_label(m_rMgr.GetTOXMark(0)->GetTOXType()->GetTypeName());
 }
 
-IMPL_LINK( SwMultiTOXMarkDlg, SelectHdl, weld::TreeView&, rBox, void )
+IMPL_LINK(SwMultiTOXMarkDlg, SelectHdl, weld::TreeView&, rBox, void)
 {
     if (rBox.get_selected_index() != -1)
     {
@@ -59,8 +60,6 @@ short SwMultiTOXMarkDlg::run()
     return nRet;
 }
 
-SwMultiTOXMarkDlg::~SwMultiTOXMarkDlg()
-{
-}
+SwMultiTOXMarkDlg::~SwMultiTOXMarkDlg() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

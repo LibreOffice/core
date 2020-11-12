@@ -31,16 +31,16 @@
 class CancellableJob : public ::cppu::WeakImplHelper<css::util::XCancellable>
 {
 public:
-    explicit CancellableJob( const ::rtl::Reference< ObservableThread >& rThread );
+    explicit CancellableJob(const ::rtl::Reference<ObservableThread>& rThread);
 
     // css::util::XCancellable:
     virtual void SAL_CALL cancel() override;
 
 private:
-    CancellableJob( CancellableJob const & ) = delete;
-    void operator =( CancellableJob const & ) = delete;
+    CancellableJob(CancellableJob const&) = delete;
+    void operator=(CancellableJob const&) = delete;
 
-    ::rtl::Reference< ObservableThread > mrThread;
+    ::rtl::Reference<ObservableThread> mrThread;
 };
 #endif
 

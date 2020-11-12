@@ -16,7 +16,10 @@
 
 #include <memory>
 
-namespace sw { class Filters; }
+namespace sw
+{
+class Filters;
+}
 
 class SvxAutoCorrCfg;
 
@@ -30,14 +33,14 @@ public:
     SwDLL();
     ~SwDLL() COVERITY_NOEXCEPT_FALSE;
 
-    sw::Filters & getFilters();
+    sw::Filters& getFilters();
 
 private:
     SwDLL(SwDLL const&) = delete;
     SwDLL& operator=(SwDLL const&) = delete;
 
-    std::unique_ptr< sw::Filters > filters_;
-    SvxAutoCorrCfg *m_pAutoCorrCfg;
+    std::unique_ptr<sw::Filters> filters_;
+    SvxAutoCorrCfg* m_pAutoCorrCfg;
 };
 
 #endif

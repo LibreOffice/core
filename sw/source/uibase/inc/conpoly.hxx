@@ -30,7 +30,7 @@ public:
     // Mouse- & Key-Events
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
 
-    virtual void Activate(const sal_uInt16 nSlotId) override;    // activate function
+    virtual void Activate(const sal_uInt16 nSlotId) override; // activate function
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_CONPOLY_HXX

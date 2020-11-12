@@ -29,12 +29,12 @@ public:
     virtual SwReaderType GetReaderType() override;
 
     virtual bool HasGlossaries() const override;
-    virtual bool ReadGlossaries( SwTextBlocks& rBlocks, bool bSaveRelFiles ) const override;
+    virtual bool ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const override;
 
 private:
-    virtual ErrCode Read( SwDoc&, const OUString&, SwPaM&, const OUString& ) override;
+    virtual ErrCode Read(SwDoc&, const OUString&, SwPaM&, const OUString&) override;
 
-    static bool MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks );
+    static bool MakeEntries(SwDoc* pD, SwTextBlocks& rBlocks);
 };
 
 #endif

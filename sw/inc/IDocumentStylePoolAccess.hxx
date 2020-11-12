@@ -34,38 +34,37 @@ class SwPageDesc;
 class IDocumentStylePoolAccess
 {
 public:
-
     /** Return "Auto-Collection with ID.
         Create, if it does not yet exist.
         If string pointer is defined request only description
         of attributes, do not create style sheet!
     */
-    virtual SwTextFormatColl* GetTextCollFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) = 0;
+    virtual SwTextFormatColl* GetTextCollFromPool(sal_uInt16 nId, bool bRegardLanguage = true) = 0;
 
     /** Return required automatic format base class.
     */
-    virtual SwFormat* GetFormatFromPool( sal_uInt16 nId ) = 0;
+    virtual SwFormat* GetFormatFromPool(sal_uInt16 nId) = 0;
 
     /** Return required automatic format.
      */
-    virtual SwFrameFormat* GetFrameFormatFromPool( sal_uInt16 nId ) = 0;
+    virtual SwFrameFormat* GetFrameFormatFromPool(sal_uInt16 nId) = 0;
 
-    virtual SwCharFormat* GetCharFormatFromPool( sal_uInt16 nId ) = 0;
+    virtual SwCharFormat* GetCharFormatFromPool(sal_uInt16 nId) = 0;
 
     /** Return required automatic page style.
      */
-    virtual SwPageDesc* GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) = 0;
+    virtual SwPageDesc* GetPageDescFromPool(sal_uInt16 nId, bool bRegardLanguage = true) = 0;
 
-    virtual SwNumRule* GetNumRuleFromPool( sal_uInt16 nId ) = 0;
+    virtual SwNumRule* GetNumRuleFromPool(sal_uInt16 nId) = 0;
 
     /** Check whether this "auto-collection" is used in document.
      */
-    virtual bool IsPoolTextCollUsed( sal_uInt16 nId ) const = 0;
-    virtual bool IsPoolFormatUsed( sal_uInt16 nId ) const = 0;
-    virtual bool IsPoolPageDescUsed( sal_uInt16 nId ) const = 0;
+    virtual bool IsPoolTextCollUsed(sal_uInt16 nId) const = 0;
+    virtual bool IsPoolFormatUsed(sal_uInt16 nId) const = 0;
+    virtual bool IsPoolPageDescUsed(sal_uInt16 nId) const = 0;
 
 protected:
-    virtual ~IDocumentStylePoolAccess() {};
+    virtual ~IDocumentStylePoolAccess(){};
 };
 
 #endif // INCLUDED_SW_INC_IDOCUMENTSTYLEPOOLACCESS_HXX

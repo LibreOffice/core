@@ -25,25 +25,25 @@ class SwLayoutFrame;
 
 namespace objectpositioning
 {
-    class SwEnvironmentOfAnchoredObject
-    {
-    private:
-        const bool mbFollowTextFlow;
+class SwEnvironmentOfAnchoredObject
+{
+private:
+    const bool mbFollowTextFlow;
 
-    public:
-        /** constructor
+public:
+    /** constructor
 
             @param _bFollowTextFlow
             input parameter - indicates, if the anchored object, for which
             this environment is instantiated, follow the text flow or not
         */
-        SwEnvironmentOfAnchoredObject( const bool _bFollowTextFlow );
+    SwEnvironmentOfAnchoredObject(const bool _bFollowTextFlow);
 
-        /** destructor
+    /** destructor
         */
-        ~SwEnvironmentOfAnchoredObject();
+    ~SwEnvironmentOfAnchoredObject();
 
-        /** determine environment layout frame for possible horizontal object
+    /** determine environment layout frame for possible horizontal object
             positions respectively for alignment to 'page areas'
 
             this is, if object has to follow the text flow:
@@ -64,9 +64,9 @@ namespace objectpositioning
             @return reference to the layout frame, which determines the
             horizontal environment the object has to be positioned in.
         */
-        const SwLayoutFrame& GetHoriEnvironmentLayoutFrame( const SwFrame& _rHoriOrientFrame ) const;
+    const SwLayoutFrame& GetHoriEnvironmentLayoutFrame(const SwFrame& _rHoriOrientFrame) const;
 
-        /** determine environment layout frame for possible vertical object
+    /** determine environment layout frame for possible vertical object
             positions respectively for alignments to 'page areas'
 
             this is, if object has to follow the text flow:
@@ -89,8 +89,8 @@ namespace objectpositioning
             @return reference to the layout frame, which determines the
             vertical environment the object has to be positioned in.
         */
-        const SwLayoutFrame& GetVertEnvironmentLayoutFrame( const SwFrame& _rVertOrientFrame ) const;
-    };
+    const SwLayoutFrame& GetVertEnvironmentLayoutFrame(const SwFrame& _rVertOrientFrame) const;
+};
 }
 
 #endif
