@@ -464,10 +464,8 @@ binaryurp/source/writer.hxx
 binaryurp/source/writerstate.hxx
 bridges/inc/bridge.hxx
 bridges/inc/cppinterfaceproxy.hxx
-bridges/inc/types.hxx
 bridges/inc/unointerfaceproxy.hxx
 bridges/inc/vtablefactory.hxx
-bridges/inc/vtables.hxx
 bridges/source/cpp_uno/gcc3_aix_powerpc/cpp2uno.cxx
 bridges/source/cpp_uno/gcc3_aix_powerpc/except.cxx
 bridges/source/cpp_uno/gcc3_aix_powerpc/share.hxx
@@ -553,7 +551,6 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.hxx
 bridges/source/cpp_uno/gcc3_linux_x86-64/cpp2uno.cxx
 bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx
 bridges/source/cpp_uno/gcc3_linux_x86-64/rtti.cxx
-bridges/source/cpp_uno/gcc3_linux_x86-64/rtti.hxx
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx
 bridges/source/cpp_uno/gcc3_linux_x86-64/uno2cpp.cxx
 bridges/source/cpp_uno/gcc3_macosx_x86-64/abi.cxx
@@ -580,7 +577,6 @@ bridges/source/cpp_uno/msvc_win32_intel/cpp2uno.cxx
 bridges/source/cpp_uno/msvc_win32_intel/except.cxx
 bridges/source/cpp_uno/msvc_win32_intel/uno2cpp.cxx
 bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx
-bridges/source/cpp_uno/msvc_win32_x86-64/except.cxx
 bridges/source/cpp_uno/msvc_win32_x86-64/uno2cpp.cxx
 bridges/source/cpp_uno/shared/bridge.cxx
 bridges/source/cpp_uno/shared/component.cxx

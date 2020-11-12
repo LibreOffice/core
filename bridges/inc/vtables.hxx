@@ -22,8 +22,8 @@
 #include <sal/types.h>
 #include <typelib/typedescription.h>
 
-namespace bridges::cpp_uno::shared {
-
+namespace bridges::cpp_uno::shared
+{
 /**
  * Calculate the number of local functions of an interface type.
  *
@@ -37,7 +37,7 @@ namespace bridges::cpp_uno::shared {
  *     executed
  * @return the number of local functions of the given interface type
  */
-sal_Int32 getLocalFunctions(typelib_InterfaceTypeDescription const * type);
+sal_Int32 getLocalFunctions(typelib_InterfaceTypeDescription const* type);
 
 /**
  * Calculate the number of primary functions of an interface type.
@@ -51,12 +51,13 @@ sal_Int32 getLocalFunctions(typelib_InterfaceTypeDescription const * type);
  * @return the number of primary functions of the given interface type, or zero
  *     if the given interface type is null
  */
-sal_Int32 getPrimaryFunctions(typelib_InterfaceTypeDescription * type);
+sal_Int32 getPrimaryFunctions(typelib_InterfaceTypeDescription* type);
 
 /**
  * Represents a vtable slot of a C++ class.
  */
-struct VtableSlot {
+struct VtableSlot
+{
     /**
      * The offset of the vtable.
      *
@@ -82,8 +83,7 @@ struct VtableSlot {
  *     description
  * @return the vtable slot associated with the given interface member
  */
-VtableSlot getVtableSlot(
-    typelib_InterfaceAttributeTypeDescription const * ifcMember);
+VtableSlot getVtableSlot(typelib_InterfaceAttributeTypeDescription const* ifcMember);
 
 /**
  * Calculates the vtable slot associated with an interface method member.
@@ -91,9 +91,7 @@ VtableSlot getVtableSlot(
  * @param ifcMember a non-null pointer to an interface method member description
  * @return the vtable slot associated with the given interface member
  */
-VtableSlot getVtableSlot(
-    typelib_InterfaceMethodTypeDescription const * ifcMember);
-
+VtableSlot getVtableSlot(typelib_InterfaceMethodTypeDescription const* ifcMember);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

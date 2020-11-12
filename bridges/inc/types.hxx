@@ -22,8 +22,8 @@
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 
-namespace bridges::cpp_uno::shared {
-
+namespace bridges::cpp_uno::shared
+{
 /**
  * Determines whether a type is a "simple" type (VOID, BOOLEAN, BYTE, SHORT,
  * UNSIGNED SHORT, LONG, UNSIGNED LONG, HYPER, UNSIGNED HYPER, FLOAT, DOUBLE,
@@ -42,7 +42,7 @@ bool isSimpleType(typelib_TypeClass typeClass);
  * @param type a non-null pointer to a type description reference
  * @return true if the given type is "simple"
  */
-bool isSimpleType(typelib_TypeDescriptionReference const * type);
+bool isSimpleType(typelib_TypeDescriptionReference const* type);
 
 /**
  * Determines whether a type is a "simple" type (VOID, BOOLEAN, BYTE, SHORT,
@@ -52,7 +52,7 @@ bool isSimpleType(typelib_TypeDescriptionReference const * type);
  * @param type a non-null pointer to a type description
  * @return true if the given type is "simple"
  */
-bool isSimpleType(typelib_TypeDescription const * type);
+bool isSimpleType(typelib_TypeDescription const* type);
 
 /**
  * Determines whether a type relates to an interface type (is itself an
@@ -61,8 +61,7 @@ bool isSimpleType(typelib_TypeDescription const * type);
  * @param type a non-null pointer to a type description
  * @return true if the given type relates to an interface type
  */
-bool relatesToInterfaceType(typelib_TypeDescription const * type);
-
+bool relatesToInterfaceType(typelib_TypeDescription const* type);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

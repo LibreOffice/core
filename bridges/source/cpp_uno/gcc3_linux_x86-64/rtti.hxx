@@ -25,10 +25,9 @@
 
 #include <typelib/typedescription.h>
 
-namespace x86_64 {
-
-std::type_info * getRtti(typelib_TypeDescription const & type);
-
+namespace x86_64
+{
+std::type_info* getRtti(typelib_TypeDescription const& type);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
