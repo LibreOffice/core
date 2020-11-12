@@ -8002,8 +8002,6 @@ registry/source/regkey.hxx
 registry/test/regdiagnose.h
 registry/test/testmerge.cxx
 registry/test/testregcpp.cxx
-registry/tools/fileurl.cxx
-registry/tools/fileurl.hxx
 registry/tools/options.cxx
 registry/tools/options.hxx
 registry/tools/regmerge.cxx
