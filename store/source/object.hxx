@@ -25,7 +25,6 @@
 
 namespace store
 {
-
 class OStoreObject : public virtual salhelper::SimpleReferenceObject
 {
 public:
@@ -35,7 +34,7 @@ public:
 
     /** Replaces dynamic_cast type checking.
      */
-    virtual bool isKindOf (sal_uInt32 nTypeId);
+    virtual bool isKindOf(sal_uInt32 nTypeId);
 
 protected:
     /** Destruction.
@@ -46,15 +45,14 @@ private:
     /** The IStoreHandle TypeId.
      */
     static const sal_uInt32 m_nTypeId;
-    OStoreObject (const OStoreObject&) = delete;
-    OStoreObject& operator= (const OStoreObject&) = delete;
+    OStoreObject(const OStoreObject&) = delete;
+    OStoreObject& operator=(const OStoreObject&) = delete;
 };
 
 /** Template helper function as dynamic_cast replacement.
  */
-template<class store_handle_type>
-store_handle_type * SAL_CALL query (
-    OStoreObject * pHandle, store_handle_type *);
+template <class store_handle_type>
+store_handle_type* SAL_CALL query(OStoreObject* pHandle, store_handle_type*);
 
 } // namespace store
 
