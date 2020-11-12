@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <numberformatsbuffer.hxx>
 #include <biffhelper.hxx>
 
@@ -1871,7 +1875,7 @@ NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
     OSL_ENSURE( mxNumFmts.is(), "NumberFormatFinalizer::NumberFormatFinalizer - cannot get number formats" );
 }
 
-sal_Int32 lclPosToken ( const OUString& sFormat, const OUString& sSearch, sal_Int32 nStartPos )
+sal_Int32 lclPosToken ( const OUString& sFormat, std::u16string_view sSearch, sal_Int32 nStartPos )
 {
     sal_Int32 nLength = sFormat.getLength();
     for ( sal_Int32 i = nStartPos; i < nLength && i >= 0 ; i++ )
@@ -1912,7 +1916,7 @@ void NumberFormat::setFormatCode( const OUString& rFmtCode )
     sal_Int32 nLastIndex = rFmtCode.getLength() - 1;
     OUStringBuffer sFormat = rFmtCode;
 
-    while ( ( nPosEscape = lclPosToken( rFmtCode, "\\ ", nPosEscape ) ) > 0 )
+    while ( ( nPosEscape = lclPosToken( rFmtCode, u"\\ ", nPosEscape ) ) > 0 )
     {
         sal_Int32 nPos = nPosEscape + 2;
         while ( nPos < nLastIndex && ( rFmtCode[nPos] == '?' || rFmtCode[nPos] == '#' || rFmtCode[nPos] == '0' ) )
@@ -1922,7 +1926,7 @@ void NumberFormat::setFormatCode( const OUString& rFmtCode )
             sFormat.remove(nPosEscape - nErase, 1);
             nErase ++;
         }  // tdf#81939 preserve other escape characters
-        nPosEscape = lclPosToken( rFmtCode, ";", nPosEscape ); // skip to next format
+        nPosEscape = lclPosToken( rFmtCode, u";", nPosEscape ); // skip to next format
     }
     maModel.maFmtCode = sFormat.makeStringAndClear();
 }

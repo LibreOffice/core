@@ -76,6 +76,7 @@
 #include <vector>
 #include <memory>
 #include <limits>
+#include <string_view>
 
 const sal_uInt64 n2power48 = SAL_CONST_UINT64( 281474976710656); // 2^48
 
@@ -9038,7 +9039,7 @@ static bool IsDBCS(sal_Unicode currentChar)
     bRet = (i < SAL_N_ELEMENTS(scriptList) && block >= scriptList[i].from);
     return bRet;
 }
-static sal_Int32 lcl_getLengthB( const OUString &str, sal_Int32 nPos )
+static sal_Int32 lcl_getLengthB( std::u16string_view str, sal_Int32 nPos )
 {
     sal_Int32 index = 0;
     sal_Int32 length = 0;

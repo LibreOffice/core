@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_DRAWINGMLTYPES_HXX
 
 #include <memory>
+#include <string_view>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -103,22 +104,22 @@ css::geometry::IntegerRectangle2D GetRelativeRect( const css::uno::Reference< cs
 sal_Int32 GetCoordinate( sal_Int32 nValue );
 
 /** converts an emu string into 1/100th mmm */
-sal_Int32 GetCoordinate( const OUString& sValue );
+sal_Int32 GetCoordinate( std::u16string_view sValue );
 
 /** converts 1/100mm to EMU */
 sal_Int32 GetPointFromCoordinate( sal_Int32 nValue );
 
 /** converts a ST_Percentage % string into 1/1000th of % */
-sal_Int32 GetPercent( const OUString& sValue );
+sal_Int32 GetPercent( std::u16string_view sValue );
 
 /** Converts a ST_PositiveFixedPercentage to a float. 1.0 == 100% */
 double GetPositiveFixedPercentage( const OUString& sValue );
 
 /** converts the ST_TextFontSize to point */
-float GetTextSize( const OUString& rValue );
+float GetTextSize( std::u16string_view rValue );
 
 /** converts the ST_TextSpacingPoint to 1/100mm */
-sal_Int32 GetTextSpacingPoint(  const OUString& sValue );
+sal_Int32 GetTextSpacingPoint(  std::u16string_view sValue );
 sal_Int32 GetTextSpacingPoint(  const sal_Int32 nValue );
 
 /** */

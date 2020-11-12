@@ -29,6 +29,10 @@
   printer job functions.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 // For spawning PDF and FAX generation
 #include <unistd.h>
 #include <sys/wait.h>
@@ -340,7 +344,7 @@ static std::vector<OUString> getFaxNumbers()
     return aFaxNumbers;
 }
 
-static bool createPdf( const OUString& rToFile, const OUString& rFromFile, const OUString& rCommandLine )
+static bool createPdf( std::u16string_view rToFile, const OUString& rFromFile, const OUString& rCommandLine )
 {
     return passFileToCommandLine( rFromFile, rCommandLine.replaceAll("(OUTFILE)", rToFile) );
 }

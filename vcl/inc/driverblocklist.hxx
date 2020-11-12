@@ -26,7 +26,7 @@ enum class VersionType
 };
 
 VCL_DLLPUBLIC bool IsDeviceBlocked(const OUString& blocklistURL, VersionType versionType,
-                                   const OUString& driverVersion, const OUString& vendorId,
+                                   const OUString& driverVersion, std::u16string_view vendorId,
                                    const OUString& deviceId);
 
 #ifdef _WIN32
@@ -144,7 +144,7 @@ OUString VCL_DLLPUBLIC GetVendorId(DeviceVendor id);
 
 bool VCL_DLLPUBLIC FindBlocklistedDeviceInList(
     std::vector<DriverInfo>& aDeviceInfos, VersionType versionType, OUString const& sDriverVersion,
-    OUString const& sAdapterVendorID, OUString const& sAdapterDeviceID, OperatingSystem system,
+    std::u16string_view sAdapterVendorID, OUString const& sAdapterDeviceID, OperatingSystem system,
     const OUString& blocklistURL = OUString());
 
 #define GFX_DRIVER_VERSION(a, b, c, d)                                                             \

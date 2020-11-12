@@ -61,7 +61,7 @@ namespace abp
         try
         {
             // the service name of the administration dialog
-            static const char s_sAdministrationServiceName[] = "com.sun.star.sdb.DatasourceAdministrationDialog";
+            static const char16_t s_sAdministrationServiceName[] = u"com.sun.star.sdb.DatasourceAdministrationDialog";
             static const char s_sDataSourceTypeChangeDialog[] = "com.sun.star.sdb.DataSourceTypeChangeDialog";
 
             // the parameters for the call

@@ -19,6 +19,10 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_RESOURCEHELPER_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_RESOURCEHELPER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 
 namespace xforms
@@ -27,12 +31,12 @@ namespace xforms
     OUString getResource(const char*);
 
     // overloaded: get a resource string, and substitute parameters
-    OUString getResource(const char*, const OUString&);
-    OUString getResource(const char*, const OUString&,
-                                           const OUString&);
-    OUString getResource(const char*, const OUString&,
-                                           const OUString&,
-                                           const OUString&);
+    OUString getResource(const char*, std::u16string_view);
+    OUString getResource(const char*, std::u16string_view,
+                                           std::u16string_view);
+    OUString getResource(const char*, std::u16string_view,
+                                           std::u16string_view,
+                                           std::u16string_view);
 
 } // namespace
 

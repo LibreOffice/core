@@ -64,7 +64,7 @@ namespace dbtools
     using namespace connectivity;
     using namespace comphelper;
 
-OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection,const OUString& _sCreatePattern)
+OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection,std::u16string_view _sCreatePattern)
 {
 
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
@@ -141,10 +141,10 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         if ( nPrecision > 0 && nDataType != DataType::TIMESTAMP )
         {
             aSql.append(nPrecision);
-            if ( (nScale > 0) || (!_sCreatePattern.isEmpty() && sCreateParams.indexOf(_sCreatePattern) != -1) )
+            if ( (nScale > 0) || (!_sCreatePattern.empty() && sCreateParams.indexOf(_sCreatePattern) != -1) )
                 aSql.append(",");
         }
-        if ( (nScale > 0) || ( !_sCreatePattern.isEmpty() && sCreateParams.indexOf(_sCreatePattern) != -1 ) || nDataType == DataType::TIMESTAMP )
+        if ( (nScale > 0) || ( !_sCreatePattern.empty() && sCreateParams.indexOf(_sCreatePattern) != -1 ) || nDataType == DataType::TIMESTAMP )
             aSql.append(nScale);
 
         if ( nParenPos == -1 )
@@ -170,7 +170,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
     return aSql.makeStringAndClear();
 }
 
-OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const OUString& _sCreatePattern)
+OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,std::u16string_view _sCreatePattern)
 {
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
 
@@ -208,7 +208,7 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
 }
 
 
-OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const OUString& _sCreatePattern)
+OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,std::u16string_view _sCreatePattern)
 {
     OUStringBuffer aSql("CREATE TABLE ");
     OUString sCatalog,sSchema,sTable,sComposedName;

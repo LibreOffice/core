@@ -172,7 +172,7 @@ void writeValueContent_(TempFile &handle, double value) {
     handle.writeString(OString::number(value));
 }
 
-void writeValueContent_(TempFile &handle, const OUString& value) {
+void writeValueContent_(TempFile &handle, std::u16string_view value) {
     writeValueContent(handle, value);
 }
 

@@ -33,7 +33,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <memory>
-
+#include <string_view>
 
 namespace dbtools
 {
@@ -59,12 +59,13 @@ namespace dbtools
     using ::connectivity::OSQLParseNode;
 
 
-    static sal_Unicode lcl_getSeparatorChar( const OUString& _rSeparator, sal_Unicode _nFallback )
+    static sal_Unicode lcl_getSeparatorChar(
+        std::u16string_view _rSeparator, sal_Unicode _nFallback )
     {
-        OSL_ENSURE( !_rSeparator.isEmpty(), "::lcl_getSeparatorChar: invalid separator string!" );
+        OSL_ENSURE( !_rSeparator.empty(), "::lcl_getSeparatorChar: invalid separator string!" );
 
         sal_Unicode nReturn( _nFallback );
-        if ( !_rSeparator.isEmpty() )
+        if ( !_rSeparator.empty() )
             nReturn = _rSeparator[0];
         return nReturn;
     }

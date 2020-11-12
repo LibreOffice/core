@@ -25,7 +25,7 @@
 #include <svdata.hxx>
 
 void ShowServiceNotAvailableError(weld::Widget* pParent,
-    const OUString& rServiceName, bool bError)
+    std::u16string_view rServiceName, bool bError)
 {
     OUString aText = VclResId(SV_STDTEXT_SERVICENOTAVAILABLE).replaceAll("%s", rServiceName);
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,

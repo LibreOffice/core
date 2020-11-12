@@ -535,7 +535,7 @@ namespace abp
         if (!xInteractions.is())
         {
             if ( _pMessageParent )
-                ShowServiceNotAvailableError( _pMessageParent, "com.sun.star.task.InteractionHandler", true );
+                ShowServiceNotAvailableError( _pMessageParent, u"com.sun.star.task.InteractionHandler", true );
             return false;
         }
 

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "porlay.hxx"
 #include "itrform2.hxx"
 #include "porglue.hxx"
@@ -157,7 +161,7 @@ static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
     return bRet;
 }
 
-static  bool lcl_HasStrongLTR ( const OUString& rText, sal_Int32 nStart, sal_Int32 nEnd )
+static  bool lcl_HasStrongLTR ( std::u16string_view rText, sal_Int32 nStart, sal_Int32 nEnd )
  {
      for( sal_Int32 nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
      {
@@ -313,7 +317,7 @@ void SwLineLayout::CreateSpaceAdd( const tools::Long nInit )
 }
 
 // Returns true if there are only blanks in [nStt, nEnd[
-static bool lcl_HasOnlyBlanks(const OUString& rText, TextFrameIndex nStt, TextFrameIndex nEnd)
+static bool lcl_HasOnlyBlanks(std::u16string_view rText, TextFrameIndex nStt, TextFrameIndex nEnd)
 {
     bool bBlankOnly = true;
     while ( nStt < nEnd )

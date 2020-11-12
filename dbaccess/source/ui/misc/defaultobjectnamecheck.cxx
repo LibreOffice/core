@@ -36,6 +36,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <memory>
+#include <string_view>
 
 namespace dbaui
 {
@@ -57,7 +58,7 @@ namespace dbaui
     // helper
     namespace
     {
-        void lcl_fillNameExistsError( const OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay )
+        void lcl_fillNameExistsError( std::u16string_view _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay )
         {
             SQLException aError;
             OUString sErrorMessage = DBA_RES(STR_NAMED_OBJECT_ALREADY_EXISTS);

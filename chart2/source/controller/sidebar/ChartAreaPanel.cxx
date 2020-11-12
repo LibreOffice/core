@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "ChartAreaPanel.hxx"
 
 #include <ChartController.hxx>
@@ -189,7 +193,7 @@ XHatch getXHatchFromName(const css::uno::Reference<css::frame::XModel>& xModel,
 }
 
 GraphicObject getXBitmapFromName(const css::uno::Reference<css::frame::XModel>& xModel,
-        const OUString& rName)
+        std::u16string_view rName)
 {
     try
     {

@@ -43,6 +43,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <set>
+#include <string_view>
 
 using namespace com::sun::star;
 
@@ -66,7 +67,7 @@ namespace
         return aTempl;
     }
 
-    OUString lcl_Image( const OUString& rScreenshotId, const Size& rSize )
+    OUString lcl_Image( std::u16string_view rScreenshotId, const Size& rSize )
     {
         OUString aTempl("<image id=\"%1\" src=\"media/screenshots/%2.png\""
                            " width=\"%3cm\"  height=\"%4cm\">"
@@ -81,7 +82,7 @@ namespace
         return aTempl;
     }
 
-    OUString lcl_ParagraphWithImage( const OUString& rScreenshotId, const Size& rSize )
+    OUString lcl_ParagraphWithImage( std::u16string_view rScreenshotId, const Size& rSize )
     {
         OUString aTempl( "<paragraph id=\"%1\" role=\"paragraph\">%2"
                          "</paragraph>"  SAL_NEWLINE_STRING );
@@ -91,7 +92,7 @@ namespace
         return aTempl;
     }
 
-    OUString lcl_Bookmark( const OUString& rWidgetId )
+    OUString lcl_Bookmark( std::u16string_view rWidgetId )
     {
         OUString aTempl = "<!-- Bookmark for widget %1 -->" SAL_NEWLINE_STRING
                           "<bookmark branch=\"hid/%2\" id=\"%3\" localize=\"false\"/>" SAL_NEWLINE_STRING;

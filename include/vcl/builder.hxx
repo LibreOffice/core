@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <map>
+#include <string_view>
 #include <vector>
 #ifdef check
 #  //some problem with MacOSX and a check define
@@ -492,7 +493,7 @@ protected:
 /*
  * @return true if rValue is "True", "true", "1", etc.
  */
-bool toBool(const OUString &rValue);
+bool toBool(std::u16string_view rValue);
 
 #endif
 

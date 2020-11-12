@@ -55,7 +55,8 @@ namespace framework
      description of css::frame::XModuleManager.
 
 */
-bool MenuBarMerger::IsCorrectContext( const OUString& rContext, const OUString& rModuleIdentifier )
+bool MenuBarMerger::IsCorrectContext(
+    const OUString& rContext, std::u16string_view rModuleIdentifier )
 {
     return ( rContext.isEmpty() || ( rContext.indexOf( rModuleIdentifier ) >= 0 ));
 }
@@ -309,7 +310,7 @@ bool MenuBarMerger::ProcessFallbackOperation(
     const OUString&                  rMergeCommand,
     const OUString&                  rMergeFallback,
     const ::std::vector< OUString >& rReferencePath,
-    const OUString&                  rModuleIdentifier,
+    const std::u16string_view        rModuleIdentifier,
     const AddonMenuContainer&               rAddonMenuItems )
 {
     if (( rMergeFallback == MERGEFALLBACK_IGNORE ) ||

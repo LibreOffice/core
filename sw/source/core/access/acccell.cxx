@@ -39,6 +39,7 @@
 #include "acccell.hxx"
 
 #include <cfloat>
+#include <string_view>
 
 #include <editeng/brushitem.hxx>
 #include <swatrset.hxx>
@@ -364,7 +365,7 @@ uno::Any SwAccessibleCell::getMinimumValue(  )
     return uno::Any(-DBL_MAX);
 }
 
-static OUString ReplaceOneChar(const OUString& oldOUString, const OUString& replacedChar, const OUString& replaceStr)
+static OUString ReplaceOneChar(const OUString& oldOUString, std::u16string_view replacedChar, const OUString& replaceStr)
 {
     int iReplace = oldOUString.lastIndexOf(replacedChar);
     OUString aRet = oldOUString;
@@ -378,11 +379,11 @@ static OUString ReplaceOneChar(const OUString& oldOUString, const OUString& repl
 
 static OUString ReplaceFourChar(const OUString& oldOUString)
 {
-    OUString aRet = ReplaceOneChar(oldOUString,"\\","\\\\");
-    aRet = ReplaceOneChar(aRet,";","\\;");
-    aRet = ReplaceOneChar(aRet,"=","\\=");
-    aRet = ReplaceOneChar(aRet,",","\\,");
-    aRet = ReplaceOneChar(aRet,":","\\:");
+    OUString aRet = ReplaceOneChar(oldOUString,u"\\","\\\\");
+    aRet = ReplaceOneChar(aRet,u";","\\;");
+    aRet = ReplaceOneChar(aRet,u"=","\\=");
+    aRet = ReplaceOneChar(aRet,u",","\\,");
+    aRet = ReplaceOneChar(aRet,u":","\\:");
     return aRet;
 }
 

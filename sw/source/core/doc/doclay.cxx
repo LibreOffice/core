@@ -85,6 +85,7 @@
 
 #include <sortedobjs.hxx>
 
+#include <string_view>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -1273,7 +1274,7 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     return pNewFormat;
 }
 
-static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 nNmLen, const OUString& rName, const OUString& rCmpName)
+static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 nNmLen, const OUString& rName, std::u16string_view rCmpName)
 {
     if (rName.startsWith(rCmpName))
     {

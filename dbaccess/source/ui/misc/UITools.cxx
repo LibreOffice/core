@@ -1150,7 +1150,7 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     return pTypeInfo;
 }
 
-sal_Int32 askForUserAction(weld::Window* pParent, const char* pTitle, const char* pText, bool _bAll, const OUString& _sName)
+sal_Int32 askForUserAction(weld::Window* pParent, const char* pTitle, const char* pText, bool _bAll, std::u16string_view _sName)
 {
     SolarMutexGuard aGuard;
     OUString aMsg = DBA_RES(pText);

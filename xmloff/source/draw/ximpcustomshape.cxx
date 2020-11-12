@@ -45,6 +45,7 @@
 #include <sax/tools/converter.hxx>
 #include <comphelper/sequence.hxx>
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 
 using namespace ::com::sun::star;
@@ -85,7 +86,7 @@ static void GetBool( std::vector< css::beans::PropertyValue >& rDest,
 }
 
 static void GetInt32( std::vector< css::beans::PropertyValue >& rDest,
-                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        std::u16string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nAttrNumber;
     if (::sax::Converter::convertNumber( nAttrNumber, rValue ))
