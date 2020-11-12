@@ -749,7 +749,12 @@ void JSTreeView::set_toggle(int pos, TriState eState, int col)
         pEntry = m_xTreeView->Next(pEntry);
 
     if (pEntry)
+    {
         SalInstanceTreeView::set_toggle(pEntry, eState, col);
+        signal_toggled(iter_col(SalInstanceTreeIter(pEntry), col));
+
+        notifyDialogState();
+    }
 }
 
 void JSTreeView::select(int pos)
