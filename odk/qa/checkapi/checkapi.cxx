@@ -23,15 +23,12 @@
 
 #ifdef _MSC_VER
 // deprecation warnings do not matter here
-#pragma warning (disable : 4996)
+#pragma warning(disable : 4996)
 #endif
 
 #include <allheaders.hxx>
 
 CPPUNIT_PLUGIN_IMPLEMENT();
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool firstfunc(sal_Bool)
-{
-   return true;
-}
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool firstfunc(sal_Bool) { return true; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

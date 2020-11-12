@@ -40,19 +40,15 @@
 #include "SOComWindowPeer.h"
 #include <sal/macros.h>
 
-
-
-
 STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID* arr[] =
-    {
+    static const IID* arr[] = {
         &IID_ISOComWindowPeer,
     };
 
-    for (int i=0;i<SAL_N_ELEMENTS(arr);i++)
+    for (int i = 0; i < SAL_N_ELEMENTS(arr); i++)
     {
-        if (InlineIsEqualGUID(*arr[i],riid))
+        if (InlineIsEqualGUID(*arr[i], riid))
             return S_OK;
     }
     return S_FALSE;
