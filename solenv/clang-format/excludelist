@@ -11808,10 +11808,8 @@ smoketest/smoketest.cxx
 solenv/bin/concat-deps.c
 solenv/gbuildtojson/gbuildtojson.cxx
 solenv/gcc-wrappers/wrapper.cxx
-soltools/cpp/_cpp.c
 soltools/cpp/_eval.c
 soltools/cpp/_getopt.c
-soltools/cpp/_getopt.h
 soltools/cpp/_include.c
 soltools/cpp/_lex.c
 soltools/cpp/_macro.c

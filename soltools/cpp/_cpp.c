@@ -24,13 +24,13 @@
 #include <stdarg.h>
 #include "cpp.h"
 
-#define OUTS    16384
+#define OUTS 16384
 static char outbuf[OUTS];
-char *outptr = outbuf;
-Source *cursource;
+char* outptr = outbuf;
+Source* cursource;
 static int nerrs;
-struct token nltoken = {NL, 0, 1, (uchar *) "\n", 0};
-char *curtime;
+struct token nltoken = { NL, 0, 1, (uchar*)"\n", 0 };
+char* curtime;
 int incdepth;
 int ifdepth;
 int ifsatisfied[NIF];
@@ -38,11 +38,10 @@ int skipping;
 
 int
 #ifdef _WIN32
-__cdecl
+    __cdecl
 #endif // _WIN32
-    main(int argc, char **argv)
+    main(int argc, char** argv)
 {
-
     Tokenrow tr;
     time_t t;
     char ebuf[BUFSIZ];
@@ -63,8 +62,7 @@ __cdecl
     exit(nerrs > 0);
 }
 
-void
-    process(Tokenrow * trp)
+void process(Tokenrow* trp)
 {
     int anymacros = 0;
 
@@ -83,8 +81,7 @@ void
             if (--incdepth >= 0)
             {
                 if (cursource->ifdepth)
-                    error(ERROR,
-                          "Unterminated conditional in #include");
+                    error(ERROR, "Unterminated conditional in #include");
                 unsetsource();
                 cursource->line += cursource->lineinc;
                 trp->tp = trp->lp;
@@ -101,9 +98,8 @@ void
             trp->tp += 1;
             control(trp);
         }
-        else
-            if (!skipping && anymacros)
-                expandrow(trp, NULL);
+        else if (!skipping && anymacros)
+            expandrow(trp, NULL);
         if (skipping)
             setempty(trp);
         puttokens(trp);
@@ -114,11 +110,10 @@ void
     }
 }
 
-void
-    control(Tokenrow * trp)
+void control(Tokenrow* trp)
 {
-    Nlist *np;
-    Token *tp;
+    Nlist* np;
+    Token* tp;
 
     tp = trp->tp;
     if (tp->type != NAME)
@@ -127,7 +122,7 @@ void
             goto kline;
         if (tp->type != NL)
             error(ERROR, "Unidentifiable control line");
-        return;                         /* else empty line */
+        return; /* else empty line */
     }
     np = lookup(tp, 0);
     if (np == NULL || ((np->flag & ISKW) == 0 && !skipping))
@@ -267,20 +262,19 @@ void
             trp->tp = tp + 1;
             expandrow(trp, "<line>");
             tp = trp->bp + 2;
-    kline:
+        kline:
             if (tp + 1 >= trp->lp || tp->type != NUMBER || tp + 3 < trp->lp
-                || (tp + 3 == trp->lp
-                    && ((tp + 1)->type != STRING || *(tp + 1)->t == 'L')))
+                || (tp + 3 == trp->lp && ((tp + 1)->type != STRING || *(tp + 1)->t == 'L')))
             {
                 error(ERROR, "Syntax error in #line");
                 return;
             }
-            cursource->line = atol((char *) tp->t) - 1;
+            cursource->line = atol((char*)tp->t) - 1;
             if (cursource->line < 0 || cursource->line >= 32768)
                 error(WARNING, "#line specifies number out of range");
             tp = tp + 1;
             if (tp + 1 < trp->lp)
-                cursource->filename = (char *) newstring(tp->t + 1, tp->len - 2, 0);
+                cursource->filename = (char*)newstring(tp->t + 1, tp->len - 2, 0);
             return;
 
         case KDEFINED:
@@ -314,30 +308,24 @@ void
     return;
 }
 
-void *
-    domalloc(size_t size)
+void* domalloc(size_t size)
 {
-    void *p = malloc(size);
+    void* p = malloc(size);
 
     if (p == NULL)
         error(FATAL, "Out of memory from malloc");
     return p;
 }
 
-void
-    dofree(void *p)
-{
-    free(p);
-}
+void dofree(void* p) { free(p); }
 
-void
-    error(enum errtype type, char *string,...)
+void error(enum errtype type, char* string, ...)
 {
     va_list ap;
     char c, *cp, *ep;
-    Token *tp;
-    Tokenrow *trp;
-    Source *s;
+    Token* tp;
+    Tokenrow* trp;
+    Source* s;
     int i;
 
     fprintf(stderr, "cpp: ");
@@ -351,14 +339,13 @@ void
         {
             switch (*++ep)
             {
-
                 case 'c':
-                    c = (char) va_arg(ap, int);
+                    c = (char)va_arg(ap, int);
                     fprintf(stderr, "%c", c);
                     break;
 
                 case 's':
-                    cp = va_arg(ap, char *);
+                    cp = va_arg(ap, char*);
                     fprintf(stderr, "%s", cp);
                     break;
 
@@ -368,12 +355,12 @@ void
                     break;
 
                 case 't':
-                    tp = va_arg(ap, Token *);
+                    tp = va_arg(ap, Token*);
                     fprintf(stderr, "%.*s", (int)tp->len, tp->t);
                     break;
 
                 case 'r':
-                    trp = va_arg(ap, Tokenrow *);
+                    trp = va_arg(ap, Tokenrow*);
                     for (tp = trp->tp; tp < trp->lp && tp->type != NL; tp++)
                     {
                         if (tp > trp->tp && tp->wslen)
