@@ -102,17 +102,21 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
     if (rObject.GetDictionary())
     {
         aLine.append("<< ");
-
+        bool bFirst = true;
         for (auto const& rPair : rObject.GetDictionaryItems())
         {
+            if (bFirst)
+                bFirst = false;
+            else
+                aLine.append(" ");
+
             aLine.append("/");
             aLine.append(rPair.first);
             aLine.append(" ");
             copyRecursively(aLine, rPair.second, rDocBuffer, rCopiedResources);
-            aLine.append(" ");
         }
 
-        aLine.append(">>\n");
+        aLine.append(" >>\n");
     }
 
     if (filter::PDFStreamElement* pStream = rObject.GetStream())
@@ -129,10 +133,14 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
 
         const std::vector<filter::PDFElement*>& rElements = pArray->GetElements();
 
+        bool bFirst = true;
         for (auto const& pElement : rElements)
         {
+            if (bFirst)
+                bFirst = false;
+            else
+                aLine.append(" ");
             copyRecursively(aLine, pElement, rDocBuffer, rCopiedResources);
-            aLine.append(" ");
         }
         aLine.append("]\n");
     }
@@ -140,8 +148,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
     // If the object has a number element outside a dictionary or array, copy that.
     if (filter::PDFNumberElement* pNumber = rObject.GetNumberElement())
     {
-        aLine.append(static_cast<const char*>(pObjectStream->GetData()) + pNumber->GetLocation(),
-                     pNumber->GetLength());
+        pNumber->writeString(aLine);
         aLine.append("\n");
     }
 
