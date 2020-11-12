@@ -16,24 +16,23 @@ using namespace css::uno;
 
 namespace apitest
 {
-
 void XDataPilotTable::testGetOutputRange()
 {
-    uno::Reference< sheet::XDataPilotTable > xDPTable(init(),UNO_QUERY_THROW);
+    uno::Reference<sheet::XDataPilotTable> xDPTable(init(), UNO_QUERY_THROW);
 
     table::CellRangeAddress aRange = xDPTable->getOutputRange();
-    CPPUNIT_ASSERT_EQUAL( sal_Int16(0), aRange.Sheet );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(7), aRange.StartColumn );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(8), aRange.StartRow );
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aRange.Sheet);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aRange.StartColumn);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aRange.StartRow);
 }
 
 void XDataPilotTable::testRefresh()
 {
-    uno::Reference< sheet::XDataPilotTable > xDPTable(init(),UNO_QUERY_THROW);
+    uno::Reference<sheet::XDataPilotTable> xDPTable(init(), UNO_QUERY_THROW);
     std::cout << "xCellForChange: Old Value: " << xCellForChange->getValue() << std::endl;
     std::cout << "xCellForCheck: Old Value: " << xCellForCheck->getValue() << std::endl;
     double aOldData = xCellForCheck->getValue();
-    xCellForChange->setValue( 5 );
+    xCellForChange->setValue(5);
 
     xDPTable->refresh();
     xDPTable->refresh();
@@ -43,10 +42,7 @@ void XDataPilotTable::testRefresh()
     CPPUNIT_ASSERT_MESSAGE("value needs to change", aOldData != aNewData);
 }
 
-XDataPilotTable::~XDataPilotTable()
-{
-}
-
+XDataPilotTable::~XDataPilotTable() {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

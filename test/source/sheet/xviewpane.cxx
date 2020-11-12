@@ -16,12 +16,12 @@
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void XViewPane::testFirstVisibleColumn()
 {
     sal_Int32 nCol = 5;
-    uno::Reference < sheet::XViewPane > xViewPane(init(),UNO_QUERY_THROW);
+    uno::Reference<sheet::XViewPane> xViewPane(init(), UNO_QUERY_THROW);
     xViewPane->setFirstVisibleColumn(nCol);
     CPPUNIT_ASSERT_EQUAL(xViewPane->getFirstVisibleColumn(), nCol);
 }
@@ -29,7 +29,7 @@ void XViewPane::testFirstVisibleColumn()
 void XViewPane::testFirstVisibleRow()
 {
     sal_Int32 nRow = 3;
-    uno::Reference < sheet::XViewPane > xViewPane(init(),UNO_QUERY_THROW);
+    uno::Reference<sheet::XViewPane> xViewPane(init(), UNO_QUERY_THROW);
     xViewPane->setFirstVisibleRow(nRow);
     CPPUNIT_ASSERT_EQUAL(xViewPane->getFirstVisibleRow(), nRow);
 }
@@ -38,7 +38,7 @@ void XViewPane::testVisibleRange()
 {
     constexpr sal_Int32 nCol = 5;
     constexpr sal_Int32 nRow = 3;
-    uno::Reference < sheet::XViewPane > xViewPane(init(),UNO_QUERY_THROW);
+    uno::Reference<sheet::XViewPane> xViewPane(init(), UNO_QUERY_THROW);
     xViewPane->setFirstVisibleColumn(nCol);
     xViewPane->setFirstVisibleRow(nRow);
 
@@ -47,7 +47,6 @@ void XViewPane::testVisibleRange()
     CPPUNIT_ASSERT_EQUAL(nRow, aCellRangeAddress.StartRow);
     CPPUNIT_ASSERT_EQUAL(nCol, aCellRangeAddress.StartColumn);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

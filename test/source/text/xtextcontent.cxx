@@ -16,21 +16,21 @@
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void XTextContent::testGetAnchor()
 {
-    uno::Reference< text::XTextContent > xTextContent(init(), UNO_QUERY_THROW);
-    uno::Reference< uno::XInterface > xAnchor(xTextContent->getAnchor());
+    uno::Reference<text::XTextContent> xTextContent(init(), UNO_QUERY_THROW);
+    uno::Reference<uno::XInterface> xAnchor(xTextContent->getAnchor());
     CPPUNIT_ASSERT(xAnchor.is());
 }
 
 void XTextContent::testAttach()
 {
-    uno::Reference< text::XTextContent > xTextContent(init(), UNO_QUERY_THROW);
+    uno::Reference<text::XTextContent> xTextContent(init(), UNO_QUERY_THROW);
 
-    uno::Reference< text::XTextContent > xContent(getTextContent(), UNO_SET_THROW);
-    uno::Reference< text::XTextRange > xRange(getTextRange(), UNO_SET_THROW);
+    uno::Reference<text::XTextContent> xContent(getTextContent(), UNO_SET_THROW);
+    uno::Reference<text::XTextRange> xRange(getTextRange(), UNO_SET_THROW);
 
     try
     {
@@ -52,7 +52,6 @@ void XTextContent::testAttach()
             CPPUNIT_ASSERT(false);
     }
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

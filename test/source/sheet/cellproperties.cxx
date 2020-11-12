@@ -17,11 +17,11 @@
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void CellProperties::testVertJustify()
 {
-    uno::Reference< beans::XPropertySet > xCellRangeBase(init(),UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xCellRangeBase(init(), UNO_QUERY_THROW);
     OUString aVertJustify("VertJustify");
     uno::Any aOldVertJustify = xCellRangeBase->getPropertyValue(aVertJustify);
     sal_Int32 aValue = 0;
@@ -39,7 +39,7 @@ void CellProperties::testVertJustify()
 
 void CellProperties::testRotateReference()
 {
-    uno::Reference< beans::XPropertySet > xCellRangeBase(init(),UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xCellRangeBase(init(), UNO_QUERY_THROW);
     OUString aRotateReference("RotateReference");
     uno::Any aOldRotateReference = xCellRangeBase->getPropertyValue(aRotateReference);
     sal_Int32 aValue = 0;
@@ -54,7 +54,6 @@ void CellProperties::testRotateReference()
     std::cout << "New RotateReference value: " << aValue << std::endl;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("value has not been changed", sal_Int32(3), aValue);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

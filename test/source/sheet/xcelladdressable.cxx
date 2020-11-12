@@ -18,18 +18,17 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void XCellAddressable::testGetCellAddress()
 {
-    uno::Reference< sheet::XCellAddressable > xCellAddressable(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XCellAddressable> xCellAddressable(init(), UNO_QUERY_THROW);
     table::CellAddress xCellAddress = xCellAddressable->getCellAddress();
     table::CellAddress defaultCellAddress(0, 2, 3);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("getCellAddress() didn't returned default cell address",
                                  defaultCellAddress, xCellAddress);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

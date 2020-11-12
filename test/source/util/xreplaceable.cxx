@@ -21,27 +21,29 @@
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
-
+namespace apitest
+{
 void XReplaceable::testCreateReplaceDescriptor()
 {
-    uno::Reference< util::XReplaceable > xReplaceable(init(), UNO_QUERY_THROW);
-    uno::Reference< util::XReplaceDescriptor> xReplaceDescr = xReplaceable->createReplaceDescriptor();
+    uno::Reference<util::XReplaceable> xReplaceable(init(), UNO_QUERY_THROW);
+    uno::Reference<util::XReplaceDescriptor> xReplaceDescr
+        = xReplaceable->createReplaceDescriptor();
     CPPUNIT_ASSERT(xReplaceDescr.is());
 }
 
 void XReplaceable::testReplaceAll()
 {
     std::cout << "testReplaceAll" << std::endl;
-    uno::Reference< util::XReplaceable > xReplaceable(init(), UNO_QUERY_THROW);
-    uno::Reference< util::XReplaceDescriptor> xReplaceDescr = xReplaceable->createReplaceDescriptor();
+    uno::Reference<util::XReplaceable> xReplaceable(init(), UNO_QUERY_THROW);
+    uno::Reference<util::XReplaceDescriptor> xReplaceDescr
+        = xReplaceable->createReplaceDescriptor();
     CPPUNIT_ASSERT(xReplaceDescr.is());
 
-    uno::Reference< util::XSearchDescriptor > xSearchDescr = xReplaceable->createSearchDescriptor();
+    uno::Reference<util::XSearchDescriptor> xSearchDescr = xReplaceable->createSearchDescriptor();
     xSearchDescr->setSearchString(maSearchString);
 
     //check that at least one object is there that will be replaced
-    uno::Reference< uno::XInterface > xElement = xReplaceable->findFirst(xSearchDescr);
+    uno::Reference<uno::XInterface> xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(xElement.is());
 
     //check that there is none object with the replace string
@@ -53,7 +55,8 @@ void XReplaceable::testReplaceAll()
     xReplaceDescr->setReplaceString(maReplaceString);
 
     callgrindStart();
-    xReplaceable->replaceAll(uno::Reference< util::XSearchDescriptor >(xReplaceDescr, UNO_QUERY_THROW));
+    xReplaceable->replaceAll(
+        uno::Reference<util::XSearchDescriptor>(xReplaceDescr, UNO_QUERY_THROW));
     callgrindDump("test:replace_all");
 
     //check that now at least one element is found
@@ -68,7 +71,8 @@ void XReplaceable::testReplaceAll()
     xReplaceDescr->setSearchString(maReplaceString);
     xReplaceDescr->setReplaceString(maSearchString);
 
-    xReplaceable->replaceAll(uno::Reference< util::XSearchDescriptor >(xReplaceDescr, UNO_QUERY_THROW));
+    xReplaceable->replaceAll(
+        uno::Reference<util::XSearchDescriptor>(xReplaceDescr, UNO_QUERY_THROW));
 
     //check that it works
     xElement = xReplaceable->findFirst(xSearchDescr);
@@ -79,7 +83,6 @@ void XReplaceable::testReplaceAll()
     xElement = xReplaceable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(!xElement.is());
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
