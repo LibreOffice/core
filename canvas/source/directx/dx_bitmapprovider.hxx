@@ -24,11 +24,11 @@
 
 namespace dxcanvas
 {
-    struct BitmapProvider
-    {
-        virtual ~BitmapProvider() {}
-        virtual IBitmapSharedPtr getBitmap() const = 0;
-    };
+struct BitmapProvider
+{
+    virtual ~BitmapProvider() {}
+    virtual IBitmapSharedPtr getBitmap() const = 0;
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
