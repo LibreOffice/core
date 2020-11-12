@@ -23,19 +23,17 @@
 using namespace vcl;
 
 SolarThreadExecutor::SolarThreadExecutor()
-    :m_aStart()
-    ,m_aFinish()
-    ,m_bTimeout( false )
+    : m_aStart()
+    , m_aFinish()
+    , m_bTimeout(false)
 {
 }
 
-SolarThreadExecutor::~SolarThreadExecutor()
-{
-}
+SolarThreadExecutor::~SolarThreadExecutor() {}
 
 IMPL_LINK_NOARG(SolarThreadExecutor, worker, void*, void)
 {
-    if ( !m_bTimeout )
+    if (!m_bTimeout)
     {
         m_aStart.set();
         doIt();
@@ -45,7 +43,7 @@ IMPL_LINK_NOARG(SolarThreadExecutor, worker, void*, void)
 
 void SolarThreadExecutor::execute()
 {
-    if( Application::IsMainThread() )
+    if (Application::IsMainThread())
     {
         m_aStart.set();
         doIt();
@@ -56,11 +54,11 @@ void SolarThreadExecutor::execute()
         m_aStart.reset();
         m_aFinish.reset();
         SolarMutexReleaser aReleaser;
-        ImplSVEvent * nEvent = Application::PostUserEvent( LINK( this, SolarThreadExecutor, worker ) );
+        ImplSVEvent* nEvent = Application::PostUserEvent(LINK(this, SolarThreadExecutor, worker));
         if (m_aStart.wait() == osl::Condition::result_timeout)
         {
             m_bTimeout = true;
-            Application::RemoveUserEvent( nEvent );
+            Application::RemoveUserEvent(nEvent);
         }
         else
         {

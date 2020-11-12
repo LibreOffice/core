@@ -60,7 +60,7 @@
  of course not all keysyms can be mapped to a unicode code point
 */
 
-sal_Unicode KeysymToUnicode (KeySym nKeySym);
+sal_Unicode KeysymToUnicode(KeySym nKeySym);
 
 #endif // INCLUDED_VCL_INC_UNX_I18N_KEYSYM_HXX
 

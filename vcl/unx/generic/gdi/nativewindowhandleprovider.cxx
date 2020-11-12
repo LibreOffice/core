@@ -9,9 +9,6 @@
 
 #include <unx/nativewindowhandleprovider.hxx>
 
-NativeWindowHandleProvider::~NativeWindowHandleProvider()
-{
-}
-
+NativeWindowHandleProvider::~NativeWindowHandleProvider() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

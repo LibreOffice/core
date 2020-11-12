@@ -22,8 +22,10 @@
 
 #include <tools/long.hxx>
 
-inline tools::Long Divide( tools::Long nDividend, tools::Long nDivisor )
-{ return (nDividend + nDivisor/2) / nDivisor; }
+inline tools::Long Divide(tools::Long nDividend, tools::Long nDivisor)
+{
+    return (nDividend + nDivisor / 2) / nDivisor;
+}
 
 #endif
 

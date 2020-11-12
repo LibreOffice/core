@@ -30,7 +30,10 @@
 #include <oleidl.h>
 #include "globals.hxx"
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno
+{
+class XComponentContext;
+}
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -46,8 +49,8 @@ using namespace ::com::sun::star::datatransfer::dnd;
 // If the service calls OleInitialize then it also calls OleUnitialize when
 // it is destroyed. Therefore no second instance may exist which was
 // created in the same thread and still needs OLE.
-class DropTarget: public MutexDummy,
-                  public WeakComponentImplHelper< XInitialization, XDropTarget, XServiceInfo>
+class DropTarget : public MutexDummy,
+                   public WeakComponentImplHelper<XInitialization, XDropTarget, XServiceInfo>
 
 {
 private:
@@ -79,7 +82,7 @@ private:
     // If m_bActive == sal_True then events are fired to XDropTargetListener s,
     // none otherwise. The default value is sal_True.
     bool m_bActive;
-    sal_Int8    m_nDefaultActions;
+    sal_Int8 m_nDefaultActions;
 
     // This value is set when a XDropTargetListener calls accept or reject on
     // the XDropTargetDropContext or  XDropTargetDragContext.
@@ -91,7 +94,7 @@ private:
     Reference<XTransferable> m_currentData;
     // The current action is used to determine if the USER
     // action has changed (dropActionChanged)
-//  sal_Int8 m_userAction;
+    //  sal_Int8 m_userAction;
     // Set by listeners when they call XDropTargetDropContext::dropComplete
     bool m_bDropComplete;
     Reference<XDropTargetDragContext> m_currentDragContext;
@@ -100,75 +103,75 @@ private:
 public:
     explicit DropTarget(const Reference<XComponentContext>& rxContext);
     virtual ~DropTarget() override;
-    DropTarget(DropTarget const &) = delete;
-    DropTarget &operator= (DropTarget const &) = delete;
+    DropTarget(DropTarget const&) = delete;
+    DropTarget& operator=(DropTarget const&) = delete;
 
     // Overrides WeakComponentImplHelper::disposing which is called by
     // WeakComponentImplHelper::dispose
     // Must be called.
     virtual void SAL_CALL disposing() override;
-   // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    // XInitialization
+    virtual void SAL_CALL initialize(const Sequence<Any>& aArguments) override;
 
     // XDropTarget
-    virtual void SAL_CALL addDropTargetListener( const Reference< XDropTargetListener >& dtl ) override;
-    virtual void SAL_CALL removeDropTargetListener( const Reference< XDropTargetListener >& dtl ) override;
+    virtual void SAL_CALL addDropTargetListener(const Reference<XDropTargetListener>& dtl) override;
+    virtual void SAL_CALL
+    removeDropTargetListener(const Reference<XDropTargetListener>& dtl) override;
     // Default is not active
-    virtual sal_Bool SAL_CALL isActive(  ) override;
-    virtual void SAL_CALL setActive( sal_Bool isActive ) override;
-    virtual sal_Int8 SAL_CALL getDefaultActions(  ) override;
-    virtual void SAL_CALL setDefaultActions( sal_Int8 actions ) override;
+    virtual sal_Bool SAL_CALL isActive() override;
+    virtual void SAL_CALL setActive(sal_Bool isActive) override;
+    virtual sal_Int8 SAL_CALL getDefaultActions() override;
+    virtual void SAL_CALL setDefaultActions(sal_Int8 actions) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // Functions called from the IDropTarget implementation ( m_pDropTarget)
     virtual HRESULT DragEnter(
-            /* [unique][in] */ IDataObject *pDataObj,
-            /* [in] */ DWORD grfKeyState,
-            /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD *pdwEffect);
+        /* [unique][in] */ IDataObject* pDataObj,
+        /* [in] */ DWORD grfKeyState,
+        /* [in] */ POINTL pt,
+        /* [out][in] */ DWORD* pdwEffect);
 
     virtual HRESULT STDMETHODCALLTYPE DragOver(
-            /* [in] */ DWORD grfKeyState,
-            /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD *pdwEffect);
+        /* [in] */ DWORD grfKeyState,
+        /* [in] */ POINTL pt,
+        /* [out][in] */ DWORD* pdwEffect);
 
-    virtual HRESULT STDMETHODCALLTYPE DragLeave( ) ;
+    virtual HRESULT STDMETHODCALLTYPE DragLeave();
 
     virtual HRESULT STDMETHODCALLTYPE Drop(
-            /* [unique][in] */ IDataObject *pDataObj,
-            /* [in] */ DWORD grfKeyState,
-            /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD *pdwEffect);
+        /* [unique][in] */ IDataObject* pDataObj,
+        /* [in] */ DWORD grfKeyState,
+        /* [in] */ POINTL pt,
+        /* [out][in] */ DWORD* pdwEffect);
 
-// Non - interface functions --------------------------------------------------
-// XDropTargetDropContext delegated from DropContext
+    // Non - interface functions --------------------------------------------------
+    // XDropTargetDropContext delegated from DropContext
 
-    void _acceptDrop( sal_Int8 dropOperation, const Reference<XDropTargetDropContext>& context);
-    void _rejectDrop( const Reference<XDropTargetDropContext>& context);
-    void _dropComplete( bool success, const Reference<XDropTargetDropContext>& context);
+    void _acceptDrop(sal_Int8 dropOperation, const Reference<XDropTargetDropContext>& context);
+    void _rejectDrop(const Reference<XDropTargetDropContext>& context);
+    void _dropComplete(bool success, const Reference<XDropTargetDropContext>& context);
 
-// XDropTargetDragContext delegated from DragContext
-    void _acceptDrag( sal_Int8 dragOperation, const Reference<XDropTargetDragContext>& context);
-    void _rejectDrag( const Reference<XDropTargetDragContext>& context);
+    // XDropTargetDragContext delegated from DragContext
+    void _acceptDrag(sal_Int8 dragOperation, const Reference<XDropTargetDragContext>& context);
+    void _rejectDrag(const Reference<XDropTargetDragContext>& context);
 
 protected:
     // Gets the current action dependent on the pressed modifiers, the effects
     // supported by the drop source (IDropSource) and the default actions of the
     // drop target (XDropTarget, this class))
-    inline sal_Int8 getFilteredActions( DWORD grfKeyState, DWORD sourceActions);
+    inline sal_Int8 getFilteredActions(DWORD grfKeyState, DWORD sourceActions);
     // Only filters with the default actions
-    inline sal_Int8 getFilteredActions( DWORD grfKeyState);
+    inline sal_Int8 getFilteredActions(DWORD grfKeyState);
 
-    void fire_drop( const DropTargetDropEvent& dte);
-    void fire_dragEnter( const DropTargetDragEnterEvent& dtde );
-    void fire_dragExit( const DropTargetEvent& dte );
-    void fire_dragOver( const DropTargetDragEvent& dtde );
-    void fire_dropActionChanged( const DropTargetDragEvent& dtde );
-
+    void fire_drop(const DropTargetDropEvent& dte);
+    void fire_dragEnter(const DropTargetDragEnterEvent& dtde);
+    void fire_dragExit(const DropTargetEvent& dte);
+    void fire_dragOver(const DropTargetDragEvent& dtde);
+    void fire_dropActionChanged(const DropTargetDragEvent& dtde);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

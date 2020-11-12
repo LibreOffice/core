@@ -11,7 +11,7 @@
 
 namespace vcl
 {
-    const char* getLangBoost();
+const char* getLangBoost();
 }
 
 #endif

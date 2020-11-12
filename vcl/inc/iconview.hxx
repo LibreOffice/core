@@ -25,13 +25,14 @@
 class IconView final : public SvTreeListBox
 {
 public:
-    IconView( vcl::Window* pParent, WinBits nBits );
+    IconView(vcl::Window* pParent, WinBits nBits);
 
     virtual void Resize() override;
 
     virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, tools::Long nEntryPos) override;
 
-    void PaintEntry( SvTreeListEntry&, tools::Long nX, tools::Long nY, vcl::RenderContext& rRenderContext);
+    void PaintEntry(SvTreeListEntry&, tools::Long nX, tools::Long nY,
+                    vcl::RenderContext& rRenderContext);
 };
 
 #endif

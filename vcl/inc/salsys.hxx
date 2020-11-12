@@ -25,12 +25,12 @@
 #include <rtl/ustring.hxx>
 
 // Button identifier for ShowNativeMessageBox
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK     = 1;
+const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK = 1;
 
 class VCL_PLUGIN_PUBLIC SalSystem
 {
 public:
-            SalSystem() {}
+    SalSystem() {}
     virtual ~SalSystem();
 
     // get info about the display
@@ -63,7 +63,7 @@ public:
                            else position relative to whole display
                  size: size of the screen
     */
-    virtual tools::Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) = 0;
+    virtual tools::Rectangle GetDisplayScreenPosSizePixel(unsigned int nScreen) = 0;
 
     /*  Shows a native message box with the specified title, message and button
         combination.
@@ -78,9 +78,7 @@ public:
         See button identifier above. If the function fails the
         return value is 0.
     */
-    virtual int ShowNativeMessageBox( const OUString& rTitle,
-                                      const OUString& rMessage ) = 0;
-
+    virtual int ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) = 0;
 };
 
 VCL_DLLPUBLIC SalSystem* ImplGetSalSystem();

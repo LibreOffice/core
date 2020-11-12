@@ -27,11 +27,11 @@
 @interface AquaA11yTableWrapper : AquaA11yWrapper
 {
 }
-+(id)childrenAttributeForElement:(AquaA11yTableWrapper *)wrapper;
-+(void)addAttributeNamesTo: (NSMutableArray *)attributeNames object: (AquaA11yWrapper*)pObject;
++ (id)childrenAttributeForElement:(AquaA11yTableWrapper*)wrapper;
++ (void)addAttributeNamesTo:(NSMutableArray*)attributeNames object:(AquaA11yWrapper*)pObject;
 
--(id)rowsAttribute;
--(id)columnsAttribute;
+- (id)rowsAttribute;
+- (id)columnsAttribute;
 @end
 #endif // INCLUDED_VCL_OSX_A11YTABLEWRAPPER_H
 

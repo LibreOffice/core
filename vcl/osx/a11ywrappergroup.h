@@ -25,8 +25,8 @@
 @interface AquaA11yWrapperGroup : AquaA11yWrapper
 {
 }
--(id)titleUIElementAttribute;
--(NSArray *)accessibilityAttributeNames;
+- (id)titleUIElementAttribute;
+- (NSArray*)accessibilityAttributeNames;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YWRAPPERGROUP_H

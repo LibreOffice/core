@@ -26,12 +26,11 @@
 #include <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-bool ImageToPNG( css::uno::Sequence<sal_Int8> const & rImgData,
-                 css::uno::Sequence<sal_Int8>& rPngData);
+bool ImageToPNG(css::uno::Sequence<sal_Int8> const& rImgData,
+                css::uno::Sequence<sal_Int8>& rPngData);
 
-bool PNGToImage( css::uno::Sequence<sal_Int8> const & rPngData,
-                 css::uno::Sequence<sal_Int8>& rImgData,
-                 NSBitmapImageFileType eOutFormat);
+bool PNGToImage(css::uno::Sequence<sal_Int8> const& rPngData,
+                css::uno::Sequence<sal_Int8>& rImgData, NSBitmapImageFileType eOutFormat);
 
 #endif // INCLUDED_VCL_OSX_PICTTOBMPFLT_HXX
 

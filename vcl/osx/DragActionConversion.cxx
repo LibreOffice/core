@@ -28,24 +28,24 @@ using namespace com::sun::star::datatransfer::dnd;
  */
 unsigned int OfficeToSystemDragActions(sal_Int8 dragActions)
 {
-  unsigned int actions = NSDragOperationNone;
+    unsigned int actions = NSDragOperationNone;
 
-  if (dragActions & DNDConstants::ACTION_COPY)
+    if (dragActions & DNDConstants::ACTION_COPY)
     {
-      actions |= NSDragOperationCopy;
+        actions |= NSDragOperationCopy;
     }
 
-  if (dragActions & DNDConstants::ACTION_MOVE)
+    if (dragActions & DNDConstants::ACTION_MOVE)
     {
-      actions |= NSDragOperationMove;
+        actions |= NSDragOperationMove;
     }
 
-  if (dragActions & DNDConstants::ACTION_LINK)
+    if (dragActions & DNDConstants::ACTION_LINK)
     {
-      actions |= NSDragOperationLink;
+        actions |= NSDragOperationLink;
     }
 
-  return actions;
+    return actions;
 }
 
 /* Convert system conform drag actions into office conform
@@ -54,31 +54,31 @@ unsigned int OfficeToSystemDragActions(sal_Int8 dragActions)
  */
 sal_Int8 SystemToOfficeDragActions(unsigned int dragActions)
 {
-  sal_Int8 actions = DNDConstants::ACTION_NONE;
+    sal_Int8 actions = DNDConstants::ACTION_NONE;
 
-  if (dragActions & NSDragOperationCopy)
+    if (dragActions & NSDragOperationCopy)
     {
-      actions |= DNDConstants::ACTION_COPY;
+        actions |= DNDConstants::ACTION_COPY;
     }
 
-  if (dragActions & NSDragOperationMove)
+    if (dragActions & NSDragOperationMove)
     {
-      actions |= DNDConstants::ACTION_MOVE;
+        actions |= DNDConstants::ACTION_MOVE;
     }
 
-  if (dragActions & NSDragOperationLink)
+    if (dragActions & NSDragOperationLink)
     {
-      actions |= DNDConstants::ACTION_LINK;
+        actions |= DNDConstants::ACTION_LINK;
     }
 
-  // We map NSDragOperationGeneric to ACTION_DEFAULT to
-  // signal that we have to decide for a drag action
-  if (dragActions & NSDragOperationGeneric)
+    // We map NSDragOperationGeneric to ACTION_DEFAULT to
+    // signal that we have to decide for a drag action
+    if (dragActions & NSDragOperationGeneric)
     {
-      actions |= DNDConstants::ACTION_DEFAULT;
+        actions |= DNDConstants::ACTION_DEFAULT;
     }
 
-  return actions;
+    return actions;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

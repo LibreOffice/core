@@ -23,9 +23,9 @@
 
 const OUString TEXTPLAIN_PARAM_CHARSET("charset");
 
-const OUString PRE_WINDOWS_CODEPAGE ("windows");
-const OUString PRE_OEM_CODEPAGE     ("cp");
-const OUString CHARSET_UTF16        ("utf-16");
-const OUString CHARSET_UNICODE      ("unicode");
+const OUString PRE_WINDOWS_CODEPAGE("windows");
+const OUString PRE_OEM_CODEPAGE("cp");
+const OUString CHARSET_UTF16("utf-16");
+const OUString CHARSET_UNICODE("unicode");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
