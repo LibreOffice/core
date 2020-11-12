@@ -19,16 +19,16 @@
 #include <tools/svborder.hxx>
 #include <tools/gen.hxx>
 
-tools::Rectangle & operator += ( tools::Rectangle & rRect, const SvBorder & rBorder )
+tools::Rectangle& operator+=(tools::Rectangle& rRect, const SvBorder& rBorder)
 {
     // call GetSize first due to Empty-Rect
-    Size aS( rRect.GetSize() );
-    aS.AdjustWidth(rBorder.Left() + rBorder.Right() );
-    aS.AdjustHeight(rBorder.Top() + rBorder.Bottom() );
+    Size aS(rRect.GetSize());
+    aS.AdjustWidth(rBorder.Left() + rBorder.Right());
+    aS.AdjustHeight(rBorder.Top() + rBorder.Bottom());
 
-    rRect.AdjustLeft( -(rBorder.Left()) );
-    rRect.AdjustTop( -(rBorder.Top()) );
-    rRect.SetSize( aS );
+    rRect.AdjustLeft(-(rBorder.Left()));
+    rRect.AdjustTop(-(rBorder.Top()));
+    rRect.SetSize(aS);
     return rRect;
 }
 

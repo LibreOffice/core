@@ -20,13 +20,11 @@
 #include <tools/ref.hxx>
 #include <tools/weakbase.hxx>
 
-SvRefBase::~SvRefBase() COVERITY_NOEXCEPT_FALSE
-{
-}
+SvRefBase::~SvRefBase() COVERITY_NOEXCEPT_FALSE {}
 
 tools::WeakBase::~WeakBase()
 {
-    if( mpWeakConnection.is() )
+    if (mpWeakConnection.is())
         mpWeakConnection->mpReference = nullptr;
 }
 
