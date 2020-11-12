@@ -1379,11 +1379,6 @@ OUString SwDoc::GetUniqueFrameName() const
     return lcl_GetUniqueFlyName(*this, STR_FRAME_DEFNAME, RES_FLYFRMFMT);
 }
 
-OUString SwDoc::GetUniqueShapeName() const
-{
-    return lcl_GetUniqueFlyName(*this, STR_SHAPE_DEFNAME, RES_DRAWFRMFMT);
-}
-
 OUString SwDoc::GetUniqueDrawObjectName() const
 {
     return lcl_GetUniqueFlyName(*this, "DrawObject", RES_DRAWFRMFMT);

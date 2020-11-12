@@ -270,7 +270,6 @@
 #define STR_GRAPHIC_DEFNAME                     NC_("STR_GRAPHIC_DEFNAME", "Image")
 #define STR_OBJECT_DEFNAME                      NC_("STR_OBJECT_DEFNAME", "Object")
 #define STR_FRAME_DEFNAME                       NC_("STR_FRAME_DEFNAME", "Frame")
-#define STR_SHAPE_DEFNAME                       NC_("STR_SHAPE_DEFNAME", "Shape")
 #define STR_REGION_DEFNAME                      NC_("STR_REGION_DEFNAME", "Section")
 #define STR_NUMRULE_DEFNAME                     NC_("STR_NUMRULE_DEFNAME", "Numbering")
 #define STR_EMPTYPAGE                           NC_("STR_EMPTYPAGE", "blank page")

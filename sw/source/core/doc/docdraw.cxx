@@ -323,7 +323,8 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                     for ( size_t i2 = 0; i2 < pLst->GetObjCount(); ++i2 )
                     {
                         SdrObject* pSubObj = pLst->GetObj( i2 );
-                        SwDrawFrameFormat *pFormat = MakeDrawFrameFormat( GetUniqueShapeName(),
+                        pSubObj->MakeNameUnique();
+                        SwDrawFrameFormat *pFormat = MakeDrawFrameFormat( pSubObj->GetName(),
                                                             GetDfltFrameFormat() );
                         pFormat->SetFormatAttr( aAnch );
                         // #i36010# - set layout direction of the position
