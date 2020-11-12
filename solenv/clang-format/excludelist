@@ -17152,7 +17152,6 @@ xmlhelp/source/cxxhelp/provider/resultsetforroot.cxx
 xmlhelp/source/cxxhelp/provider/resultsetforroot.hxx
 xmlhelp/source/cxxhelp/provider/urlparameter.cxx
 xmlhelp/source/cxxhelp/provider/urlparameter.hxx
-xmlhelp/source/cxxhelp/test/abidebug.hxx
 xmlhelp/source/cxxhelp/test/searchdemo.cxx
 xmlhelp/source/treeview/tvfactory.cxx
 xmlhelp/source/treeview/tvread.cxx
