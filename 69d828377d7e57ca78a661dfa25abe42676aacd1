@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c580116d_60430d8d",
+        "filename": "configmgr/source/groupnode.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-12T21:34:05Z",
+      "side": 1,
+      "message": "changes like this are the problematic ones I warned about at \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d123936#c8\u003e: it is no longer obvious whether the comment appertains to the preceding or the following declaration",
+      "revId": "69d828377d7e57ca78a661dfa25abe42676aacd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
