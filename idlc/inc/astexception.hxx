@@ -24,9 +24,10 @@
 class AstException final : public AstStruct
 {
 public:
-    AstException(const OString& name, AstException const * pBaseType, AstScope* pScope)
+    AstException(const OString& name, AstException const* pBaseType, AstScope* pScope)
         : AstStruct(NT_exception, name, pBaseType, pScope)
-        {}
+    {
+    }
 };
 
 #endif // INCLUDED_IDLC_INC_ASTEXCEPTION_HXX

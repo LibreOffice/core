@@ -31,17 +31,13 @@ public:
     AstScope(NodeType nodeType);
     virtual ~AstScope();
 
-    NodeType getScopeNodeType() const
-        { return m_nodeType; }
+    NodeType getScopeNodeType() const { return m_nodeType; }
 
     AstDeclaration* addDeclaration(AstDeclaration* pDecl);
 
-    sal_uInt32 nMembers() const
-        { return static_cast<sal_uInt32>(m_declarations.size()); }
-    DeclList::const_iterator getIteratorBegin() const
-        { return m_declarations.begin(); }
-    DeclList::const_iterator getIteratorEnd() const
-        { return m_declarations.end(); }
+    sal_uInt32 nMembers() const { return static_cast<sal_uInt32>(m_declarations.size()); }
+    DeclList::const_iterator getIteratorBegin() const { return m_declarations.begin(); }
+    DeclList::const_iterator getIteratorEnd() const { return m_declarations.end(); }
     sal_uInt16 getNodeCount(NodeType nType) const;
 
     // Name look up mechanism
@@ -54,15 +50,14 @@ public:
     // Look up a predefined type by its ExprType
     AstDeclaration* lookupPrimitiveType(ExprType type);
 
-    AstDeclaration* lookupForAdd(AstDeclaration const * pDecl) const;
+    AstDeclaration* lookupForAdd(AstDeclaration const* pDecl) const;
 
 protected:
-    AstDeclaration const * getLast() const
-    { return m_declarations.back(); }
+    AstDeclaration const* getLast() const { return m_declarations.back(); }
 
 private:
-    DeclList    m_declarations;
-    NodeType    m_nodeType;
+    DeclList m_declarations;
+    NodeType m_nodeType;
 };
 
 #endif // INCLUDED_IDLC_INC_ASTSCOPE_HXX

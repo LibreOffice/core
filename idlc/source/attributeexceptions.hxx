@@ -22,10 +22,12 @@
 
 #include <rtl/ustring.hxx>
 
-struct AttributeExceptions {
-    struct Part {
-        OUString const * documentation;
-        DeclList const * exceptions;
+struct AttributeExceptions
+{
+    struct Part
+    {
+        OUString const* documentation;
+        DeclList const* exceptions;
     };
     Part get;
     Part set;

@@ -30,7 +30,7 @@ public:
     AstStack();
     ~AstStack();
 
-    sal_uInt32 depth() const { return m_stack.size();}
+    sal_uInt32 depth() const { return m_stack.size(); }
     AstScope* top();
     AstScope* bottom();
     AstScope* nextToTop();
@@ -40,7 +40,7 @@ public:
     void clear();
 
 private:
-    std::vector<AstScope*>  m_stack;
+    std::vector<AstScope*> m_stack;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

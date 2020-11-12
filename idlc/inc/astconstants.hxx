@@ -26,7 +26,8 @@ class AstConstants final : public AstModule
 public:
     AstConstants(const OString& name, AstScope* pScope)
         : AstModule(NT_constants, name, pScope)
-    {}
+    {
+    }
 };
 
 #endif // INCLUDED_IDLC_INC_ASTCONSTANTS_HXX
