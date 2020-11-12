@@ -14,7 +14,7 @@
 
 #include <rtl/locale.h>
 
-void imp_getProcessLocale(rtl_Locale ** ppLocale);
+void imp_getProcessLocale(rtl_Locale** ppLocale);
 
 #endif
 

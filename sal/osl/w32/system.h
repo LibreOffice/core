@@ -18,7 +18,7 @@
  */
 
 #if OSL_DEBUG_LEVEL <= 3
-#    define NO_DEBUG_CRT
+#define NO_DEBUG_CRT
 #endif
 
 #include <stdio.h>
@@ -48,7 +48,7 @@
 #include <ws2tcpip.h>
 #include <shlobj.h>
 #ifndef NO_DEBUG_CRT
-    #include <crtdbg.h>
+#include <crtdbg.h>
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

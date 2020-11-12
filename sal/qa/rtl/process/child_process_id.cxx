@@ -22,20 +22,20 @@
 #include <rtl/process.h>
 #include <rtl_Process_Const.h>
 
-void printUuid( sal_uInt8 *pNode )
+void printUuid(sal_uInt8* pNode)
 {
-    for( sal_Int32 i1 = 0 ; i1 < 4 ; i1++ )
+    for (sal_Int32 i1 = 0; i1 < 4; i1++)
     {
-        for( sal_Int32 i2 = 0 ; i2 < 4 ; i2++ )
+        for (sal_Int32 i2 = 0; i2 < 4; i2++)
         {
-            sal_uInt8 nValue = pNode[i1*4 +i2];
+            sal_uInt8 nValue = pNode[i1 * 4 + i2];
             if (nValue < 16)
             {
-                printf( "0");
+                printf("0");
             }
-            printf( "%02x" ,nValue );
+            printf("%02x", nValue);
         }
-        if( i1 == 3 )
+        if (i1 == 3)
             break;
         //printf( "-" );
     }
@@ -46,8 +46,8 @@ void printUuid( sal_uInt8 *pNode )
 SAL_IMPLEMENT_MAIN()
 {
     sal_uInt8 pTargetUUID[16];
-    rtl_getGlobalProcessId( pTargetUUID );
-    printUuid( pTargetUUID );
+    rtl_getGlobalProcessId(pTargetUUID);
+    printUuid(pTargetUUID);
     return 1;
 }
 

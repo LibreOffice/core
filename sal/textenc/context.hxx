@@ -26,10 +26,10 @@ struct ImplUnicodeToTextContext
     sal_Unicode m_nHighSurrogate;
 };
 
-void * ImplCreateUnicodeToTextContext();
+void* ImplCreateUnicodeToTextContext();
 
-void ImplResetUnicodeToTextContext(void * pContext);
+void ImplResetUnicodeToTextContext(void* pContext);
 
-void ImplDestroyUnicodeToTextContext(void * pContext);
+void ImplDestroyUnicodeToTextContext(void* pContext);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

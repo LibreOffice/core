@@ -33,9 +33,9 @@
 
 oslMutex SAL_CALL osl_createMutex(void)
 {
-    CRITICAL_SECTION *pMutexImpl;
+    CRITICAL_SECTION* pMutexImpl;
 
-    pMutexImpl = static_cast<CRITICAL_SECTION *>(calloc(sizeof(CRITICAL_SECTION), 1));
+    pMutexImpl = static_cast<CRITICAL_SECTION*>(calloc(sizeof(CRITICAL_SECTION), 1));
 
     OSL_ASSERT(pMutexImpl); /* alloc successful? */
 
@@ -46,7 +46,7 @@ oslMutex SAL_CALL osl_createMutex(void)
 
 void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
+    CRITICAL_SECTION* pMutexImpl = reinterpret_cast<CRITICAL_SECTION*>(Mutex);
 
     if (pMutexImpl)
     {
@@ -57,7 +57,7 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 
 sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
+    CRITICAL_SECTION* pMutexImpl = reinterpret_cast<CRITICAL_SECTION*>(Mutex);
 
     OSL_ASSERT(Mutex);
 
@@ -68,7 +68,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
+    CRITICAL_SECTION* pMutexImpl = reinterpret_cast<CRITICAL_SECTION*>(Mutex);
 
     OSL_ASSERT(Mutex);
 
@@ -77,7 +77,7 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 
 sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
+    CRITICAL_SECTION* pMutexImpl = reinterpret_cast<CRITICAL_SECTION*>(Mutex);
 
     OSL_ASSERT(Mutex);
 
@@ -89,9 +89,6 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 /* initialized in dllentry.c */
 oslMutex g_Mutex;
 
-oslMutex * SAL_CALL osl_getGlobalMutex(void)
-{
-    return &g_Mutex;
-}
+oslMutex* SAL_CALL osl_getGlobalMutex(void) { return &g_Mutex; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

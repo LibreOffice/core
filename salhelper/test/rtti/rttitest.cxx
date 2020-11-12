@@ -23,14 +23,14 @@
 int main()
 {
     MyClassB b;
-    MyClassA* pA= &b;
+    MyClassA* pA = &b;
     // test the virtual function
     pA->funcA();
 
-    if( typeid( b) == typeid( pA))
+    if (typeid(b) == typeid(pA))
         printf("\nsame types");
 
-    MyClassB* pB= dynamic_cast<MyClassB* >( pA);
+    MyClassB* pB = dynamic_cast<MyClassB*>(pA);
     pB->funcA();
     return 0;
 }
