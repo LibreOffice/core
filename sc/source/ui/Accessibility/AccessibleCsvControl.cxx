@@ -391,7 +391,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getIndexAtPoint( const css::awt::Point&
     ensureAlive();
     ScCsvRuler& rRuler = implGetRuler();
     // use object's coordinate system, convert to API position
-    return lcl_GetApiPos( ::std::min( ::std::max( rRuler.GetPosFromX( rPoint.X ), static_cast<sal_Int32>(0) ), rRuler.GetPosCount() ) );
+    return lcl_GetApiPos( ::std::clamp( rRuler.GetPosFromX( rPoint.X ), sal_Int32(0), rRuler.GetPosCount() ) );
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::getSelectedText()

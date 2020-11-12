@@ -86,7 +86,7 @@ PointerStyle TableEdgeHdl::GetPointer() const
 
 sal_Int32 TableEdgeHdl::GetValidDragOffset( const SdrDragStat& rDrag ) const
 {
-    return std::min( std::max( static_cast<sal_Int32>(mbHorizontal ? rDrag.GetDY() : rDrag.GetDX()), mnMin ), mnMax );
+    return std::clamp( static_cast<sal_Int32>(mbHorizontal ? rDrag.GetDY() : rDrag.GetDX()), mnMin, mnMax );
 }
 
 basegfx::B2DPolyPolygon TableEdgeHdl::getSpecialDragPoly(const SdrDragStat& rDrag) const
