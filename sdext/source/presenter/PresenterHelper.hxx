@@ -23,23 +23,23 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 
-namespace sdext::presenter {
-
+namespace sdext::presenter
+{
 /** Collection of helper functions that do not fit in anywhere else.
     Provide access to frequently used strings of the drawing framework.
 */
 namespace PresenterHelper
 {
-    extern const OUString msCenterPaneURL;
-    extern const OUString msFullScreenPaneURL;
+extern const OUString msCenterPaneURL;
+extern const OUString msFullScreenPaneURL;
 
-    /** Return the slide show controller of a running presentation that has
-        the same document as the given framework controller.
-        @return
-            When no presentation is running this method returns an empty reference.
-    */
-    css::uno::Reference<css::presentation::XSlideShowController> GetSlideShowController (
-        const css::uno::Reference<css::frame::XController>& rxController);
+/** Return the slide show controller of a running presentation that has
+    the same document as the given framework controller.
+    @return
+        When no presentation is running this method returns an empty reference.
+*/
+css::uno::Reference<css::presentation::XSlideShowController>
+GetSlideShowController(const css::uno::Reference<css::frame::XController>& rxController);
 }
 
 } // end of namespace presenter

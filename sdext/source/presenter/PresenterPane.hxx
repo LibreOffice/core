@@ -25,8 +25,8 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <rtl/ref.hxx>
 
-namespace sdext::presenter {
-
+namespace sdext::presenter
+{
 /** Pane used by the presenter screen.  Pane objects are stored in the
     PresenterPaneContainer.  Sizes and positions are controlled
     by the PresenterWindowManager.  Interactive positioning and resizing is
@@ -36,9 +36,8 @@ namespace sdext::presenter {
 class PresenterPane : public PresenterPaneBase
 {
 public:
-    PresenterPane (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const ::rtl::Reference<PresenterController>& rpPresenterController);
+    PresenterPane(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+                  const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPane() override;
 
     // XPane
@@ -49,17 +48,17 @@ public:
 
     // XWindowListener
 
-    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent) override;
+    virtual void SAL_CALL windowResized(const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent) override;
+    virtual void SAL_CALL windowMoved(const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent) override;
+    virtual void SAL_CALL windowShown(const css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent) override;
+    virtual void SAL_CALL windowHidden(const css::lang::EventObject& rEvent) override;
 
     // XPaintListener
 
-    virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent) override;
+    virtual void SAL_CALL windowPaint(const css::awt::PaintEvent& rEvent) override;
 
 private:
     /** Store the bounding box so that when the window is resized or moved
@@ -67,11 +66,10 @@ private:
     */
     css::awt::Rectangle maBoundingBox;
 
-    virtual void CreateCanvases (
+    virtual void CreateCanvases(
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxParentCanvas) override;
 
-    void Invalidate (
-        const css::awt::Rectangle& rRepaintBox);
+    void Invalidate(const css::awt::Rectangle& rRepaintBox);
     void UpdateBoundingBox();
 };
 
