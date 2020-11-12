@@ -19,22 +19,22 @@
 
 namespace
 {
-  struct Symbol
-  {
+struct Symbol
+{
     sal_uInt16 line;
     sal_uInt16 col1;
     OUString text;
     double number;
     SbxDataType type;
     bool ws;
-  };
+};
 
-  /**
+/**
    * Perform tests on Scanner.
    */
-  class ScannerTest : public CppUnit::TestFixture
-  {
-  private:
+class ScannerTest : public CppUnit::TestFixture
+{
+private:
     void testBlankLines();
     void testOperators();
     void testAlphanum();
@@ -67,44 +67,44 @@ namespace
 
     // End of test suite definition
     CPPUNIT_TEST_SUITE_END();
-  };
+};
 
-  const OUString cr = "\n";
-  const OUString rem = "REM";
-  const OUString asdf = "asdf";
-  const OUString dot = ".";
-  const OUString goto_ = "goto";
-  const OUString excl = "!";
+const OUString cr = "\n";
+const OUString rem = "REM";
+const OUString asdf = "asdf";
+const OUString dot = ".";
+const OUString goto_ = "goto";
+const OUString excl = "!";
 
-  std::vector<Symbol> getSymbols(const OUString& source, sal_Int32& errors, bool bCompatible = false)
-  {
+std::vector<Symbol> getSymbols(const OUString& source, sal_Int32& errors, bool bCompatible = false)
+{
     std::vector<Symbol> symbols;
     SbiScanner scanner(source);
     scanner.EnableErrors();
     scanner.SetCompatible(bCompatible);
-    while(scanner.NextSym())
+    while (scanner.NextSym())
     {
-      Symbol symbol;
-      symbol.line = scanner.GetLine();
-      symbol.col1 = scanner.GetCol1();
-      symbol.text = scanner.GetSym();
-      symbol.number = scanner.GetDbl();
-      symbol.type = scanner.GetType();
-      symbol.ws = scanner.WhiteSpace();
-      symbols.push_back(symbol);
+        Symbol symbol;
+        symbol.line = scanner.GetLine();
+        symbol.col1 = scanner.GetCol1();
+        symbol.text = scanner.GetSym();
+        symbol.number = scanner.GetDbl();
+        symbol.type = scanner.GetType();
+        symbol.ws = scanner.WhiteSpace();
+        symbols.push_back(symbol);
     }
     errors = scanner.GetErrors();
     return symbols;
-  }
+}
 
-  std::vector<Symbol> getSymbols(const OUString& source, bool bCompatible = false)
-  {
+std::vector<Symbol> getSymbols(const OUString& source, bool bCompatible = false)
+{
     sal_Int32 i;
     return getSymbols(source, i, bCompatible);
-  }
+}
 
-  void ScannerTest::testBlankLines()
-  {
+void ScannerTest::testBlankLines()
+{
     std::vector<Symbol> symbols;
     symbols = getSymbols("");
     CPPUNIT_ASSERT(symbols.empty());
@@ -156,10 +156,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(size_t(1), symbols.size());
     CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
-  }
+}
 
-  void ScannerTest::testOperators()
-  {
+void ScannerTest::testOperators()
+{
     const OUString sourceE("=");
     const OUString sourceLT("<");
     const OUString sourceGT(">");
@@ -235,10 +235,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
-  }
+}
 
-  void ScannerTest::testAlphanum()
-  {
+void ScannerTest::testAlphanum()
+{
     const OUString source1("asdfghefg");
     const OUString source3("AdfsaAUdsl10987");
     const OUString source4("asdfa_mnvcnm");
@@ -359,10 +359,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[2].type);
-  }
+}
 
-  void ScannerTest::testComments()
-  {
+void ScannerTest::testComments()
+{
     std::vector<Symbol> symbols;
 
     symbols = getSymbols("REM asdf");
@@ -417,10 +417,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[2].type);
     CPPUNIT_ASSERT_EQUAL(rem, symbols[3].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[3].type);
-  }
+}
 
-  void ScannerTest::testGoto()
-  {
+void ScannerTest::testGoto()
+{
     std::vector<Symbol> symbols;
 
     symbols = getSymbols("goto");
@@ -449,10 +449,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[2].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[3].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[3].type);
-  }
+}
 
-  void ScannerTest::testGotoCompatible()
-  {
+void ScannerTest::testGotoCompatible()
+{
     std::vector<Symbol> symbols;
 
     symbols = getSymbols("goto", true);
@@ -471,10 +471,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(OUString("to"), symbols[2].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[3].text);
-  }
+}
 
-  void ScannerTest::testExclamation()
-  {
+void ScannerTest::testExclamation()
+{
     std::vector<Symbol> symbols;
 
     symbols = getSymbols("asdf!asdf");
@@ -513,10 +513,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(excl, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
-  }
+}
 
-  void ScannerTest::testNumbers()
-  {
+void ScannerTest::testNumbers()
+{
     std::vector<Symbol> symbols;
     sal_Int32 errors;
 
@@ -642,7 +642,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[5].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols("1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", errors);
+    symbols = getSymbols("1."
+                         "0000000000000000000000000000000000000000000000000000000000000000000000000"
+                         "000000000000000000000000000000000000000000000000000",
+                         errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
@@ -652,13 +655,13 @@ namespace
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors)); // HACK
 
     double fInf = 0.0;
-    rtl::math::setInf( &fInf, false);
+    rtl::math::setInf(&fInf, false);
     symbols = getSymbols("10e308", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(fInf, symbols[0].number);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
-    CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors));    // math error, overflow
+    CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors)); // math error, overflow
 
     // trailing data type character % = SbxINTEGER
     symbols = getSymbols("1.23%");
@@ -709,10 +712,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     // ERRCODE_BASIC_SYNTAX
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors));
-  }
+}
 
-  void ScannerTest::testDataType()
-  {
+void ScannerTest::testDataType()
+{
     std::vector<Symbol> symbols;
 
     symbols = getSymbols("asdf%");
@@ -749,10 +752,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
-  }
+}
 
-  void ScannerTest::testHexOctal()
-  {
+void ScannerTest::testHexOctal()
+{
     sal_Int32 errors;
     std::vector<Symbol> symbols;
 
@@ -1031,10 +1034,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     // ERRCODE_BASIC_MATH_OVERFLOW
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors));
-  }
+}
 
-  void ScannerTest::testTdf103104()
-  {
+void ScannerTest::testTdf103104()
+{
     std::vector<Symbol> symbols;
 
     symbols = getSymbols("asdf _\n asdf");
@@ -1061,10 +1064,10 @@ namespace
     CPPUNIT_ASSERT_EQUAL(asdf, symbols[2].text);
     CPPUNIT_ASSERT(!symbols[2].ws);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[3].text);
-  }
+}
 
-  void ScannerTest::testTdf136032()
-  {
+void ScannerTest::testTdf136032()
+{
     std::vector<Symbol> symbols;
     sal_Int32 errors;
 
@@ -1076,10 +1079,10 @@ namespace
     symbols = getSymbols("Print #i, \"A#B\"", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(5), symbols.size());
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
-  }
+}
 
-  // Put the test suite in the registry
-  CPPUNIT_TEST_SUITE_REGISTRATION(ScannerTest);
+// Put the test suite in the registry
+CPPUNIT_TEST_SUITE_REGISTRATION(ScannerTest);
 } // namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

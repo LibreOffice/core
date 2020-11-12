@@ -9,8 +9,9 @@
 
 #pragma once
 
-namespace utl {
-    class TransliterationWrapper;
+namespace utl
+{
+class TransliterationWrapper;
 }
 
 class SbGlobal

@@ -27,12 +27,12 @@
 
 class SbJScriptModule : public SbModule
 {
-    virtual bool LoadData( SvStream&, sal_uInt16 ) override;
-    virtual bool StoreData( SvStream& ) const override;
-public:
-    SBX_DECL_PERSIST_NODATA(SBXID_JSCRIPTMOD,1);
-    SbJScriptModule();       // hand through
-};
+    virtual bool LoadData(SvStream&, sal_uInt16) override;
+    virtual bool StoreData(SvStream&) const override;
 
+public:
+    SBX_DECL_PERSIST_NODATA(SBXID_JSCRIPTMOD, 1);
+    SbJScriptModule(); // hand through
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

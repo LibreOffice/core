@@ -21,21 +21,20 @@
 #include "sbunoobj.hxx"
 #include <ooo/vba/XErrObject.hpp>
 
-
 class SbxErrObject : public SbUnoObject
 {
     class ErrObject* m_pErrObject;
-    css::uno::Reference< ooo::vba::XErrObject > m_xErr;
+    css::uno::Reference<ooo::vba::XErrObject> m_xErr;
 
-    SbxErrObject( const OUString& aName_, const css::uno::Any& aUnoObj_ );
+    SbxErrObject(const OUString& aName_, const css::uno::Any& aUnoObj_);
     virtual ~SbxErrObject() override;
 
 public:
-    static SbxVariableRef const & getErrObject();
-    static css::uno::Reference< ooo::vba::XErrObject > const & getUnoErrObject();
+    static SbxVariableRef const& getErrObject();
+    static css::uno::Reference<ooo::vba::XErrObject> const& getUnoErrObject();
 
     /// @throws css::uno::RuntimeException
-    void setNumberAndDescription( ::sal_Int32 _number, const OUString& _description );
+    void setNumberAndDescription(::sal_Int32 _number, const OUString& _description);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

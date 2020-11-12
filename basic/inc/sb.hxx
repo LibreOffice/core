@@ -22,8 +22,8 @@
 #include <basic/sbxobj.hxx>
 
 // create object from user-type  (+StringID+StringID)
-SbxObject* createUserTypeImpl( const OUString& rClassName );
+SbxObject* createUserTypeImpl(const OUString& rClassName);
 
-SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
+SbxObject* cloneTypeObjectImpl(const SbxObject& rTypeObj);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

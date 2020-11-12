@@ -35,15 +35,15 @@ class SbxBasicFormater;
 // AppData structure for SBX:
 struct SbxAppData
 {
-    ErrCode             eErrCode;  // Error code
-    SbxVariableRef      m_aGlobErr; // Global error object
+    ErrCode eErrCode; // Error code
+    SbxVariableRef m_aGlobErr; // Global error object
     std::vector<SbxFactory*> m_Factories; // these are owned by fields in SbiGlobals
-    tools::SvRef<SvRefBase>  mrImplRepository;
+    tools::SvRef<SvRefBase> mrImplRepository;
 
     // Pointer to Format()-Command helper class
-    std::unique_ptr<SbxBasicFormater>   pBasicFormater;
+    std::unique_ptr<SbxBasicFormater> pBasicFormater;
 
-    LanguageType        eBasicFormaterLangType;
+    LanguageType eBasicFormaterLangType;
     // It might be useful to store this class 'global' because some string resources are saved here
 
     SbxAppData();
