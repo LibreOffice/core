@@ -82,7 +82,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
     if(!bDrawn)
     {
         tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
-        SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aPoly.GetPointAry());
+        Point* pPtAry = aPoly.GetPointAry();
 
         // #100127# Forward beziers to sal, if any
         if( aPoly.HasFlags() )
@@ -91,7 +91,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
             if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
             {
                 aPoly = tools::Polygon::SubdivideBezier(aPoly);
-                pPtAry = reinterpret_cast<SalPoint*>(aPoly.GetPointAry());
+                pPtAry = aPoly.GetPointAry();
                 mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, this );
             }
         }
@@ -280,7 +280,7 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
             nPoints = aPoly.GetSize();
         }
 
-        mpGraphics->DrawPolyLine(nPoints, reinterpret_cast<SalPoint*>(aPoly.GetPointAry()), this);
+        mpGraphics->DrawPolyLine(nPoints, aPoly.GetPointAry(), this);
     }
 
     if( mpAlphaVDev )

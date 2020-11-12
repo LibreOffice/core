@@ -207,7 +207,7 @@ public:
     [[nodiscard]]
     tools::Long                        mirror2( tools::Long nX, const OutputDevice *pOutDev ) const;
     void                        mirror( tools::Long& nX, tools::Long nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
-    bool                        mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev ) const;
+    bool                        mirror( sal_uInt32 nPoints, const Point *pPtAry, Point *pPtAry2, const OutputDevice *pOutDev ) const;
     void                        mirror( tools::Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
     void                        mirror( vcl::Region& rRgn, const OutputDevice *pOutDev ) const;
     void                        mirror( ImplControlValue&, const OutputDevice* ) const;
@@ -226,14 +226,14 @@ public:
 
     void                        DrawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, const OutputDevice *pOutDev );
 
-    void                        DrawPolyLine( sal_uInt32 nPoints, SalPoint const * pPtAry, const OutputDevice *pOutDev );
+    void                        DrawPolyLine( sal_uInt32 nPoints, Point const * pPtAry, const OutputDevice *pOutDev );
 
-    void                        DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
+    void                        DrawPolygon( sal_uInt32 nPoints, const Point* pPtAry, const OutputDevice *pOutDev );
 
     void                        DrawPolyPolygon(
                                     sal_uInt32 nPoly,
                                     const sal_uInt32* pPoints,
-                                    PCONSTSALPOINT* pPtAry,
+                                    const Point** pPtAry,
                                     const OutputDevice *pOutDev );
 
     bool                        DrawPolyPolygon(
@@ -256,20 +256,20 @@ public:
 
     bool                        DrawPolyLineBezier(
                                     sal_uInt32 nPoints,
-                                    const SalPoint* pPtAry,
+                                    const Point* pPtAry,
                                     const PolyFlags* pFlgAry,
                                     const OutputDevice *pOutDev );
 
     bool                        DrawPolygonBezier(
                                     sal_uInt32 nPoints,
-                                    const SalPoint* pPtAry,
+                                    const Point* pPtAry,
                                     const PolyFlags* pFlgAry,
                                     const OutputDevice *pOutDev );
 
     bool                        DrawPolyPolygonBezier(
                                     sal_uInt32 nPoly,
                                     const sal_uInt32* pPoints,
-                                    const SalPoint* const* pPtAry,
+                                    const Point* const* pPtAry,
                                     const PolyFlags* const* pFlgAry,
                                     const OutputDevice *pOutDev );
 
@@ -330,7 +330,7 @@ public:
 
     void                        Invert(
                                     sal_uInt32 nPoints,
-                                    const SalPoint* pPtAry,
+                                    const Point* pPtAry,
                                     SalInvert nFlags,
                                     const OutputDevice *pOutDev );
 
@@ -450,11 +450,11 @@ protected:
 
     virtual void                drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) = 0;
 
-    virtual void                drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void                drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) = 0;
 
-    virtual void                drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void                drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) = 0;
 
-    virtual void                drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
+    virtual void                drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry ) = 0;
 
     virtual bool                drawPolyPolygon(
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -474,18 +474,18 @@ protected:
 
     virtual bool                drawPolyLineBezier(
                                     sal_uInt32 nPoints,
-                                    const SalPoint* pPtAry,
+                                    const Point* pPtAry,
                                     const PolyFlags* pFlgAry ) = 0;
 
     virtual bool                drawPolygonBezier(
                                     sal_uInt32 nPoints,
-                                    const SalPoint* pPtAry,
+                                    const Point* pPtAry,
                                     const PolyFlags* pFlgAry ) = 0;
 
     virtual bool                drawPolyPolygonBezier(
                                     sal_uInt32 nPoly,
                                     const sal_uInt32* pPoints,
-                                    const SalPoint* const* pPtAry,
+                                    const Point* const* pPtAry,
                                     const PolyFlags* const* pFlgAry ) = 0;
 
     virtual bool                drawGradient(
@@ -531,7 +531,7 @@ protected:
                                     tools::Long nWidth, tools::Long nHeight,
                                     SalInvert nFlags) = 0;
 
-    virtual void                invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) = 0;
+    virtual void                invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) = 0;
 
     virtual bool                drawEPS(
                                     tools::Long nX, tools::Long nY,

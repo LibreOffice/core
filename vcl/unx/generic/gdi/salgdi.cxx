@@ -433,41 +433,41 @@ void X11SalGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nDX, 
     mxImpl->drawRect( nX, nY, nDX, nDY );
 }
 
-void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
+void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry )
 {
     mxImpl->drawPolyLine( nPoints, pPtAry );
 }
 
-void X11SalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void X11SalGraphics::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
 {
     mxImpl->drawPolygon( nPoints, pPtAry );
 }
 
 void X11SalGraphics::drawPolyPolygon( sal_uInt32 nPoly,
                                    const sal_uInt32    *pPoints,
-                                   PCONSTSALPOINT  *pPtAry )
+                                   const Point*  *pPtAry )
 {
     mxImpl->drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
 
-bool X11SalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
+bool X11SalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
 {
     return mxImpl->drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
 }
 
-bool X11SalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
+bool X11SalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
 {
     return mxImpl->drawPolygonBezier( nPoints, pPtAry, pFlgAry );
 }
 
 bool X11SalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoints, const sal_uInt32* pPoints,
-                                                const SalPoint* const* pPtAry, const PolyFlags* const* pFlgAry)
+                                                const Point* const* pPtAry, const PolyFlags* const* pFlgAry)
 {
     return mxImpl->drawPolyPolygonBezier( nPoints, pPoints, pPtAry, pFlgAry );
 }
 
 void X11SalGraphics::invert( sal_uInt32 nPoints,
-                             const SalPoint* pPtAry,
+                             const Point* pPtAry,
                              SalInvert nFlags )
 {
     mxImpl->invert( nPoints, pPtAry, nFlags );

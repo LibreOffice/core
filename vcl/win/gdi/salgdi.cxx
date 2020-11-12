@@ -790,34 +790,34 @@ void WinSalGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nWidt
     mpImpl->drawRect( nX, nY, nWidth, nHeight );
 }
 
-void WinSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void WinSalGraphics::drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry )
 {
     mpImpl->drawPolyLine( nPoints, pPtAry );
 }
 
-void WinSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void WinSalGraphics::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
 {
     mpImpl->drawPolygon( nPoints, pPtAry );
 }
 
 void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                   PCONSTSALPOINT* pPtAry )
+                                   const Point** pPtAry )
 {
     mpImpl->drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
 
-bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
+bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
 {
     return mpImpl->drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
 }
 
-bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
+bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
 {
     return mpImpl->drawPolygonBezier( nPoints, pPtAry, pFlgAry );
 }
 
 bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                             const SalPoint* const* pPtAry, const PolyFlags* const* pFlgAry )
+                                             const Point* const* pPtAry, const PolyFlags* const* pFlgAry )
 {
     return mpImpl->drawPolyPolygonBezier( nPoly, pPoints, pPtAry, pFlgAry );
 }
