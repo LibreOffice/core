@@ -101,7 +101,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
         if( mpPrintInfo )
         {
             // FIXME: get printer resolution
-            long nDPIX = 720, nDPIY = 720;
+            sal_Int32 nDPIX = 720, nDPIY = 720;
             NSSize aPaperSize = [mpPrintInfo paperSize];
 
             NSRect aImageRect = [mpPrintInfo imageablePageBounds];

@@ -143,8 +143,8 @@ class AquaSalGraphics : public SalGraphics
     int                                     mnHeight;
     int                                     mnBitmapDepth;  // zero unless bitmap
     /// device resolution of this graphics
-    long                                    mnRealDPIX;
-    long                                    mnRealDPIY;
+    sal_Int32                               mnRealDPIX;
+    sal_Int32                               mnRealDPIY;
 
     /// path representing current clip region
     CGMutablePathRef                        mxClipPath;
@@ -190,7 +190,8 @@ public:
     bool                    IsBrushVisible() const  { return maFillColor.IsVisible(); }
 
     void                    SetWindowGraphics( AquaSalFrame* pFrame );
-    void                    SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY );
+    void                    SetPrinterGraphics(
+        CGContextRef, sal_Int32 nRealDPIX, sal_Int32 nRealDPIY );
     void                    SetVirDevGraphics(CGLayerHolder const & rLayer, CGContextRef, int nBitDepth = 0);
 #ifdef MACOSX
     void                    initResolution( NSWindow* );
