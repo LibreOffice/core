@@ -40,8 +40,8 @@
 #endif
 struct sockaddr_rc
 {
-  sa_family_t rc_family;
-  bdaddr_t rc_bdaddr;
-  uint8_t rc_channel;
+    sa_family_t rc_family;
+    bdaddr_t rc_bdaddr;
+    uint8_t rc_channel;
 };
 #endif
