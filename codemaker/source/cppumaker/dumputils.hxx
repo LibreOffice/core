@@ -21,19 +21,19 @@
 
 #include <sal/config.h>
 
-namespace rtl { class OUString; }
+namespace rtl
+{
+class OUString;
+}
 class FileStream;
 
-namespace codemaker::cppumaker {
+namespace codemaker::cppumaker
+{
+bool dumpNamespaceOpen(FileStream& out, rtl::OUString const& entityName, bool fullModuleType);
 
-bool dumpNamespaceOpen(
-    FileStream & out, rtl::OUString const & entityName, bool fullModuleType);
+bool dumpNamespaceClose(FileStream& out, rtl::OUString const& entityName, bool fullModuleType);
 
-bool dumpNamespaceClose(
-    FileStream & out, rtl::OUString const & entityName, bool fullModuleType);
-
-void dumpTypeIdentifier(FileStream & out, rtl::OUString const & entityName);
-
+void dumpTypeIdentifier(FileStream& out, rtl::OUString const& entityName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
