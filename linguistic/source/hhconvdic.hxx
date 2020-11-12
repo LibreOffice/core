@@ -22,26 +22,23 @@
 
 #include "convdic.hxx"
 
-
-class HHConvDic :
-    public ConvDic
+class HHConvDic : public ConvDic
 {
-    HHConvDic(const HHConvDic &) = delete;
-    HHConvDic & operator = (const HHConvDic &) = delete;
+    HHConvDic(const HHConvDic&) = delete;
+    HHConvDic& operator=(const HHConvDic&) = delete;
 
 public:
-    HHConvDic( const OUString &rName, const OUString &rMainURL );
+    HHConvDic(const OUString& rName, const OUString& rMainURL);
     virtual ~HHConvDic() override;
 
     // XConversionDictionary
-    virtual void SAL_CALL addEntry( const OUString& aLeftText, const OUString& aRightText ) override;
+    virtual void SAL_CALL addEntry(const OUString& aLeftText, const OUString& aRightText) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
-
 
 #endif
 

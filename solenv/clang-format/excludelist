@@ -7526,7 +7526,6 @@ linguistic/source/dlistimp.hxx
 linguistic/source/gciterator.cxx
 linguistic/source/gciterator.hxx
 linguistic/source/hhconvdic.cxx
-linguistic/source/hhconvdic.hxx
 linguistic/source/hyphdsp.cxx
 linguistic/source/hyphdsp.hxx
 linguistic/source/hyphdta.cxx
