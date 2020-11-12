@@ -23,29 +23,23 @@ using namespace connectivity;
 
 //************ Class: java.lang.String
 
-
 jclass java_lang_String::theClass = nullptr;
 
-java_lang_String::~java_lang_String()
-{}
+java_lang_String::~java_lang_String() {}
 
-jclass java_lang_String::getMyClass() const
-{
-    return st_getMyClass();
-}
+jclass java_lang_String::getMyClass() const { return st_getMyClass(); }
 jclass java_lang_String::st_getMyClass()
 {
     // the class needs to be fetched only once, that is why it is static
-    if( !theClass )
+    if (!theClass)
         theClass = findMyClass("java/lang/String");
     return theClass;
 }
 
-
 java_lang_String::operator OUString()
 {
     SDBThreadAttach t;
-    if(!t.pEnv)
+    if (!t.pEnv)
         return OUString();
     return JavaString2String(t.pEnv, static_cast<jstring>(object));
 }

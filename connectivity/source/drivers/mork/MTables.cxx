@@ -31,22 +31,22 @@ using namespace ::com::sun::star::sdbc;
 
 sdbcx::ObjectType OTables::createObject(const OUString& _rName)
 {
-    OUString aName,aSchema;
+    OUString aName, aSchema;
     aSchema = "%";
     aName = _rName;
 
-    Sequence< OUString > aTypes { "%" };
+    Sequence<OUString> aTypes{ "%" };
 
-    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
+    Reference<XResultSet> xResult = m_xMetaData->getTables(Any(), aSchema, aName, aTypes);
 
     sdbcx::ObjectType xRet;
-    if(xResult.is())
+    if (xResult.is())
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        if(xResult->next()) // there can be only one table with this name
+        Reference<XRow> xRow(xResult, UNO_QUERY);
+        if (xResult->next()) // there can be only one table with this name
         {
-            OTable* pRet = new OTable(  this, static_cast<OCatalog&>(m_rParent).getConnection(),
-                                        aName,xRow->getString(4),xRow->getString(5));
+            OTable* pRet = new OTable(this, static_cast<OCatalog&>(m_rParent).getConnection(),
+                                      aName, xRow->getString(4), xRow->getString(5));
             xRet = pRet;
         }
     }
@@ -55,16 +55,12 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
     return xRet;
 }
 
-void OTables::impl_refresh(  )
-{
-    static_cast<OCatalog&>(m_rParent).refreshTables();
-}
+void OTables::impl_refresh() { static_cast<OCatalog&>(m_rParent).refreshTables(); }
 
 void OTables::disposing()
 {
     m_xMetaData.clear();
     OCollection::disposing();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

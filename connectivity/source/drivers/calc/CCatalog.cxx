@@ -29,36 +29,34 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-
 using namespace connectivity::calc;
 
-OCalcCatalog::OCalcCatalog(OCalcConnection* _pCon) : file::OFileCatalog(_pCon)
+OCalcCatalog::OCalcCatalog(OCalcConnection* _pCon)
+    : file::OFileCatalog(_pCon)
 {
 }
 
 void OCalcCatalog::refreshTables()
 {
-    ::std::vector< OUString> aVector;
-    Sequence< OUString > aTypes;
+    ::std::vector<OUString> aVector;
+    Sequence<OUString> aTypes;
     OCalcConnection::ODocHolder aDocHolder(static_cast<OCalcConnection*>(m_pConnection));
-    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        "%", "%", aTypes);
+    Reference<XResultSet> xResult = m_xMetaData->getTables(Any(), "%", "%", aTypes);
 
-    if(xResult.is())
+    if (xResult.is())
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
+        Reference<XRow> xRow(xResult, UNO_QUERY);
+        while (xResult->next())
             aVector.push_back(xRow->getString(3));
     }
-    if(m_pTables)
+    if (m_pTables)
         m_pTables->reFill(aVector);
     else
-        m_pTables.reset( new OCalcTables(m_xMetaData,*this,m_aMutex,aVector) );
+        m_pTables.reset(new OCalcTables(m_xMetaData, *this, m_aMutex, aVector));
 
     // this avoids that the document will be loaded a 2nd time when one table will be accessed.
     //if ( m_pTables && m_pTables->hasElements() )
     //    m_pTables->getByIndex(0);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

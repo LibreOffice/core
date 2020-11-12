@@ -29,31 +29,29 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-
 using namespace connectivity::dbase;
 
-ODbaseCatalog::ODbaseCatalog(ODbaseConnection* _pCon) : file::OFileCatalog(_pCon)
+ODbaseCatalog::ODbaseCatalog(ODbaseConnection* _pCon)
+    : file::OFileCatalog(_pCon)
 {
 }
 
 void ODbaseCatalog::refreshTables()
 {
-    ::std::vector< OUString> aVector;
-    Sequence< OUString > aTypes;
-    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        "%", "%", aTypes);
+    ::std::vector<OUString> aVector;
+    Sequence<OUString> aTypes;
+    Reference<XResultSet> xResult = m_xMetaData->getTables(Any(), "%", "%", aTypes);
 
-    if(xResult.is())
+    if (xResult.is())
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
+        Reference<XRow> xRow(xResult, UNO_QUERY);
+        while (xResult->next())
             aVector.push_back(xRow->getString(3));
     }
-    if(m_pTables)
+    if (m_pTables)
         m_pTables->reFill(aVector);
     else
-        m_pTables.reset( new ODbaseTables(m_xMetaData,*this,m_aMutex,aVector) );
+        m_pTables.reset(new ODbaseTables(m_xMetaData, *this, m_aMutex, aVector));
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

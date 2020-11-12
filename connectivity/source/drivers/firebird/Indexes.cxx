@@ -18,7 +18,7 @@ using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 
-Indexes::Indexes(Table* pTable, Mutex& rMutex, const vector< OUString>& rVector)
+Indexes::Indexes(Table* pTable, Mutex& rMutex, const vector<OUString>& rVector)
     : OIndexesHelper(pTable, rMutex, rVector)
     , m_pTable(pTable)
 {
@@ -27,6 +27,6 @@ Indexes::Indexes(Table* pTable, Mutex& rMutex, const vector< OUString>& rVector)
 // XDrop
 void Indexes::dropObject(sal_Int32 /*nPosition*/, const OUString& sIndexName)
 {
-    OUString sSql("DROP INDEX \"" + sIndexName +"\"");
+    OUString sSql("DROP INDEX \"" + sIndexName + "\"");
     m_pTable->getConnection()->createStatement()->execute(sSql);
 }

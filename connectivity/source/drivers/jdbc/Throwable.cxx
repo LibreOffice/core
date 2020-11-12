@@ -23,43 +23,36 @@ using namespace connectivity;
 
 //************ Class: java.lang.Throwable
 
-
 jclass java_lang_Throwable::theClass = nullptr;
 
-java_lang_Throwable::~java_lang_Throwable()
-{}
+java_lang_Throwable::~java_lang_Throwable() {}
 
-jclass java_lang_Throwable::getMyClass() const
-{
-    return st_getMyClass();
-}
+jclass java_lang_Throwable::getMyClass() const { return st_getMyClass(); }
 jclass java_lang_Throwable::st_getMyClass()
 {
     // the class needs to be fetched only once, that is why it is static
-    if( !theClass )
+    if (!theClass)
         theClass = findMyClass("java/lang/Throwable");
     return theClass;
 }
 
-
 OUString java_lang_Throwable::getMessage() const
 {
     static jmethodID mID(nullptr);
-    return callStringMethod("getMessage",mID);
+    return callStringMethod("getMessage", mID);
 }
-
 
 OUString java_lang_Throwable::getLocalizedMessage() const
 {
     static jmethodID mID(nullptr);
-    return callStringMethod("getLocalizedMessage",mID);
+    return callStringMethod("getLocalizedMessage", mID);
 }
 
 #if OSL_DEBUG_LEVEL > 0
 void java_lang_Throwable::printStackTrace() const
 {
     static jmethodID mID(nullptr);
-    return callVoidMethod_ThrowSQL("printStackTrace",mID);
+    return callVoidMethod_ThrowSQL("printStackTrace", mID);
 }
 #endif
 

@@ -22,16 +22,14 @@ using namespace connectivity;
 
 //************ Class: java.lang.Exception
 
-
 jclass java_lang_Exception::theClass = nullptr;
 
-java_lang_Exception::~java_lang_Exception()
-{}
+java_lang_Exception::~java_lang_Exception() {}
 
 jclass java_lang_Exception::getMyClass() const
 {
     // the class must be fetched only once, therefore static
-    if( !theClass )
+    if (!theClass)
         theClass = findMyClass("java/lang/Exception");
     return theClass;
 }

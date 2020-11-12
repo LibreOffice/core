@@ -22,22 +22,17 @@ using namespace connectivity;
 
 //************ Class: java.lang.Boolean
 
-
 jclass java_lang_Boolean::theClass = nullptr;
 
-java_lang_Boolean::~java_lang_Boolean()
-{}
+java_lang_Boolean::~java_lang_Boolean() {}
 jclass java_lang_Boolean::st_getMyClass()
 {
     // the class must be fetched only once, therefore static
-    if( !theClass )
+    if (!theClass)
         theClass = findMyClass("java/lang/Boolean");
     return theClass;
 }
 
-jclass java_lang_Boolean::getMyClass() const
-{
-    return st_getMyClass();
-}
+jclass java_lang_Boolean::getMyClass() const { return st_getMyClass(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

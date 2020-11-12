@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <flat/EPreparedStatement.hxx>
 #include <flat/EResultSet.hxx>
 
@@ -27,9 +26,10 @@ using namespace ::com::sun::star::uno;
 
 OResultSet* OFlatPreparedStatement::createResultSet()
 {
-    return new OFlatResultSet(this,m_aSQLIterator);
+    return new OFlatResultSet(this, m_aSQLIterator);
 }
 
-IMPLEMENT_SERVICE_INFO(OFlatPreparedStatement,"com.sun.star.sdbc.driver.flat.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
+IMPLEMENT_SERVICE_INFO(OFlatPreparedStatement, "com.sun.star.sdbc.driver.flat.PreparedStatement",
+                       "com.sun.star.sdbc.PreparedStatement");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,6 @@
 
 namespace connectivity
 {
-
 enum class ExpressionFunct
 {
     Equation,
@@ -40,15 +39,16 @@ enum class ExpressionFunct
 class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE ExpressionNode
 {
 public:
-    virtual ~ExpressionNode(){}
+    virtual ~ExpressionNode() {}
 
     /** Operator to calculate function value.
 
         This method calculates the function value.
     */
-    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const = 0;
+    virtual ORowSetValueDecoratorRef
+    evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow) const = 0;
 
-    virtual void fill(const ODatabaseMetaDataResultSet::ORow& _aRow ) const = 0;
+    virtual void fill(const ODatabaseMetaDataResultSet::ORow& _aRow) const = 0;
 };
 
 /** This exception is thrown, when the arithmetic expression
@@ -56,13 +56,12 @@ public:
     */
 struct OOO_DLLPUBLIC_DBTOOLS ParseError
 {
-    ParseError( const char* ) {}
+    ParseError(const char*) {}
 };
 
 class FunctionParser
 {
 public:
-
     /** Parse a string
 
         The following grammar is accepted by this method:
@@ -96,16 +95,15 @@ public:
         @return the generated function object.
        */
 
-    static std::shared_ptr<ExpressionNode> const & parseFunction( const OUString& _sFunction);
+    static std::shared_ptr<ExpressionNode> const& parseFunction(const OUString& _sFunction);
 
 private:
     // disabled constructor/destructor, since this is
     // supposed to be a singleton
     FunctionParser() = delete;
     FunctionParser(const FunctionParser&) = delete;
-    FunctionParser& operator=( const FunctionParser& ) = delete;
+    FunctionParser& operator=(const FunctionParser&) = delete;
 };
-
 
 } // namespace connectivity
 

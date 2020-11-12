@@ -26,9 +26,10 @@ using namespace com::sun::star::uno;
 
 OResultSet* OComponentStatement::createResultSet()
 {
-    return new connectivity::component::OComponentResultSet(this,m_aSQLIterator);
+    return new connectivity::component::OComponentResultSet(this, m_aSQLIterator);
 }
 
-IMPLEMENT_SERVICE_INFO(OComponentStatement,"com.sun.star.sdbc.driver.component.Statement","com.sun.star.sdbc.Statement");
+IMPLEMENT_SERVICE_INFO(OComponentStatement, "com.sun.star.sdbc.driver.component.Statement",
+                       "com.sun.star.sdbc.Statement");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

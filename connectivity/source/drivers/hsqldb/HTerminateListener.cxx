@@ -17,36 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "HTerminateListener.hxx"
 #include <hsqldb/HDriver.hxx>
 
-
 namespace connectivity
 {
-
-    using namespace hsqldb;
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
+using namespace hsqldb;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 
 // XEventListener
-void SAL_CALL OConnectionController::disposing( const EventObject& /*Source*/ )
-{
-}
+void SAL_CALL OConnectionController::disposing(const EventObject& /*Source*/) {}
 
 // XTerminateListener
-void SAL_CALL OConnectionController::queryTermination( const EventObject& /*aEvent*/ )
+void SAL_CALL OConnectionController::queryTermination(const EventObject& /*aEvent*/)
 {
     m_pDriver->flushConnections();
 }
 
-void SAL_CALL OConnectionController::notifyTermination( const EventObject& /*aEvent*/ )
+void SAL_CALL OConnectionController::notifyTermination(const EventObject& /*aEvent*/)
 {
     m_pDriver->shutdownConnections();
 }
 
-
-}   // namespace connectivity
-
+} // namespace connectivity
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
