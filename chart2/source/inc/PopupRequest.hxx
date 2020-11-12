@@ -17,12 +17,9 @@
 
 namespace chart
 {
-
 namespace impl
 {
-
 typedef cppu::WeakComponentImplHelper<css::awt::XRequestCallback> PopupRequest_Base;
-
 }
 
 class OOO_DLLPUBLIC_CHARTTOOLS PopupRequest : public MutexContainer, public impl::PopupRequest_Base
@@ -31,14 +28,11 @@ public:
     explicit PopupRequest();
     virtual ~PopupRequest() override;
 
-    css::uno::Reference<css::awt::XCallback> const & getCallback() const
-    {
-        return m_xCallback;
-    }
+    css::uno::Reference<css::awt::XCallback> const& getCallback() const { return m_xCallback; }
 
 protected:
     // ____ XRequestCallback ____
-    virtual void SAL_CALL addCallback(const css::uno::Reference< ::css::awt::XCallback >& xCallback,
+    virtual void SAL_CALL addCallback(const css::uno::Reference<::css::awt::XCallback>& xCallback,
                                       const css::uno::Any& aData) override;
 
     // ____ WeakComponentImplHelperBase ____

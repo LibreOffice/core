@@ -24,29 +24,31 @@
 
 #include "res_ErrorBar.hxx"
 
-namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::frame
+{
+class XModel;
+}
 
 namespace chart
 {
-
 class InsertErrorBarsDialog : public weld::GenericDialogController
 {
 public:
     InsertErrorBarsDialog(weld::Window* pParent, const SfxItemSet& rMyAttrs,
-                          const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
+                          const css::uno::Reference<css::chart2::XChartDocument>& xChartDocument,
                           ErrorBarResources::tErrorBarType eType);
 
-    void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
+    void SetAxisMinorStepWidthForErrorBarDecimals(double fMinorStepWidth);
 
     static double getAxisMinorStepWidthForErrorBarDecimals(
-        const css::uno::Reference< css::frame::XModel >& xChartModel,
-        const css::uno::Reference< css::uno::XInterface >& xChartView,
-        const OUString& rSelectedObjectCID );
+        const css::uno::Reference<css::frame::XModel>& xChartModel,
+        const css::uno::Reference<css::uno::XInterface>& xChartView,
+        const OUString& rSelectedObjectCID);
 
-    void FillItemSet( SfxItemSet& rOutAttrs );
+    void FillItemSet(SfxItemSet& rOutAttrs);
 
 private:
-    std::unique_ptr< ErrorBarResources >    m_apErrorBarResources;
+    std::unique_ptr<ErrorBarResources> m_apErrorBarResources;
 };
 
 } //namespace chart

@@ -22,42 +22,41 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/sheet/XRangeSelectionListener.hpp>
 
-namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::frame
+{
+class XModel;
+}
 
 namespace chart
 {
-
 class RangeSelectionListenerParent
 {
 public:
-    virtual void listeningFinished( const OUString & rNewRange ) = 0;
+    virtual void listeningFinished(const OUString& rNewRange) = 0;
     virtual void disposingRangeSelection() = 0;
 
 protected:
     ~RangeSelectionListenerParent() {}
 };
 
-class RangeSelectionListener : public
-    ::cppu::WeakImplHelper<
-        css::sheet::XRangeSelectionListener >
+class RangeSelectionListener : public ::cppu::WeakImplHelper<css::sheet::XRangeSelectionListener>
 {
 public:
     explicit RangeSelectionListener(
-        RangeSelectionListenerParent & rParent,
-        const OUString & rInitialRange,
-        const css::uno::Reference< css::frame::XModel >& xModelToLockController );
+        RangeSelectionListenerParent& rParent, const OUString& rInitialRange,
+        const css::uno::Reference<css::frame::XModel>& xModelToLockController);
     virtual ~RangeSelectionListener() override;
 
 protected:
     // ____ XRangeSelectionListener ____
-    virtual void SAL_CALL done( const css::sheet::RangeSelectionEvent& aEvent ) override;
-    virtual void SAL_CALL aborted( const css::sheet::RangeSelectionEvent& aEvent ) override;
+    virtual void SAL_CALL done(const css::sheet::RangeSelectionEvent& aEvent) override;
+    virtual void SAL_CALL aborted(const css::sheet::RangeSelectionEvent& aEvent) override;
 
     // ____ XEventListener ____
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
 private:
-    RangeSelectionListenerParent & m_rParent;
+    RangeSelectionListenerParent& m_rParent;
     OUString m_aRange;
     ControllerLockGuardUNO m_aControllerLockGuard;
 };

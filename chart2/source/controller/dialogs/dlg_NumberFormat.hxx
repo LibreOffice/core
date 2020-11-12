@@ -20,19 +20,21 @@
 
 #include <sfx2/basedlgs.hxx>
 
-namespace weld { class Window; }
+namespace weld
+{
+class Window;
+}
 class SfxItemSet;
 class SfxItemPool;
 
 namespace chart
 {
-
 class NumberFormatDialog : public SfxSingleTabDialogController
 {
 public:
     NumberFormatDialog(weld::Window* pParent, SfxItemSet& rSet);
 
-    static SfxItemSet CreateEmptyItemSetForNumberFormatDialog( SfxItemPool& rItemPool );
+    static SfxItemSet CreateEmptyItemSetForNumberFormatDialog(SfxItemPool& rItemPool);
 };
 
 } //namespace chart

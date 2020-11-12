@@ -22,7 +22,6 @@
 class Chart2XShapeTest : public ChartTest, public XmlTestTools
 {
 public:
-
     void testFdo75075();
     void testPropertyMappingBarChart();
     void testPieChartLabels1();
@@ -45,31 +44,29 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-
     void compareAgainstReference(const OUString& rReferenceFile, bool bCreateReference = false);
     OUString getXShapeDumpString();
     xmlDocUniquePtr getXShapeDumpXmlDoc();
 };
 
-namespace {
-
-bool checkDumpAgainstFile( const OUString& rDump, const OUString& aFilePath)
+namespace
+{
+bool checkDumpAgainstFile(const OUString& rDump, const OUString& aFilePath)
 {
     OString aOFile = OUStringToOString(aFilePath, RTL_TEXTENCODING_UTF8);
 
     CPPUNIT_ASSERT_MESSAGE("dump is empty", !rDump.isEmpty());
 
     OString aDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
-    return doXMLDiff(aOFile.getStr(), aDump.getStr(),
-            static_cast<int>(rDump.getLength()), nullptr);
+    return doXMLDiff(aOFile.getStr(), aDump.getStr(), static_cast<int>(rDump.getLength()), nullptr);
 }
-
 }
 
 OUString Chart2XShapeTest::getXShapeDumpString()
 {
-    uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
-    uno::Reference< qa::XDumper > xDumper( xChartDoc, UNO_QUERY_THROW );
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, mxComponent),
+                                                    UNO_QUERY_THROW);
+    uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
     return xDumper->dump();
 }
 
@@ -80,12 +77,14 @@ xmlDocUniquePtr Chart2XShapeTest::getXShapeDumpXmlDoc()
     return xmlDocUniquePtr(xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr())));
 }
 
-void Chart2XShapeTest::compareAgainstReference(const OUString& rReferenceFile, bool bCreateReference)
+void Chart2XShapeTest::compareAgainstReference(const OUString& rReferenceFile,
+                                               bool bCreateReference)
 {
     OUString aDump = getXShapeDumpString();
 
-    OUString aReference = m_directories.getPathFromSrc("/chart2/qa/extras/xshape/data/reference/") + rReferenceFile;
-    if(bCreateReference)
+    OUString aReference
+        = m_directories.getPathFromSrc("/chart2/qa/extras/xshape/data/reference/") + rReferenceFile;
+    if (bCreateReference)
     {
         OString aOFile = OUStringToOString(aReference, RTL_TEXTENCODING_UTF8);
         OString aODump = OUStringToOString(aDump, RTL_TEXTENCODING_UTF8);
@@ -183,14 +182,14 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
 void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
 {
     load("chart2/qa/extras/xshape/data/pptx/", "tdf88154_LabelRotatedLayout.pptx");
-    uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromDrawImpress(0,6);
-    uno::Reference< qa::XDumper > xDumper( xChartDoc, UNO_QUERY_THROW );
+    uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 6);
+    uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
     OUString rDump = xDumper->dump();
     OString aXmlDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr())));
 
     {
-        OString aPath( "//XShape[@text='Oct-12']/Transformation" );
+        OString aPath("//XShape[@text='Oct-12']/Transformation");
         assertXPath(pXmlDoc, aPath, 1);
         double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
         double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
@@ -201,7 +200,7 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
     }
     {
-        OString aPath( "//XShape[@text='Nov-12']/Transformation" );
+        OString aPath("//XShape[@text='Nov-12']/Transformation");
         assertXPath(pXmlDoc, aPath, 1);
         double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
         double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
@@ -212,7 +211,7 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
     }
     {
-        OString aPath( "//XShape[@text='Dec-12']/Transformation" );
+        OString aPath("//XShape[@text='Dec-12']/Transformation");
         assertXPath(pXmlDoc, aPath, 1);
         double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
         double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
@@ -223,7 +222,7 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
     }
     {
-        OString aPath( "//XShape[@text='May-13']/Transformation" );
+        OString aPath("//XShape[@text='May-13']/Transformation");
         assertXPath(pXmlDoc, aPath, 1);
         double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
         double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
@@ -234,7 +233,7 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
     }
     {
-        OString aPath( "//XShape[@text='Jan-14']/Transformation" );
+        OString aPath("//XShape[@text='Jan-14']/Transformation");
         assertXPath(pXmlDoc, aPath, 1);
         double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
         double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();

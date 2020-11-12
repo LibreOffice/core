@@ -23,17 +23,22 @@
 #include <memory>
 #include <vector>
 
-namespace chart { class WrappedProperty; }
-namespace com::sun::star::beans { struct Property; }
+namespace chart
+{
+class WrappedProperty;
+}
+namespace com::sun::star::beans
+{
+struct Property;
+}
 
 namespace chart::wrapper
 {
-
 class WrappedAutomaticPositionProperties
 {
 public:
-    static void addProperties( std::vector< css::beans::Property >& rOutProperties );
-    static void addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList );
+    static void addProperties(std::vector<css::beans::Property>& rOutProperties);
+    static void addWrappedProperties(std::vector<std::unique_ptr<WrappedProperty>>& rList);
 };
 
 } //namespace chart::wrapper

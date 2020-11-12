@@ -32,28 +32,29 @@ using namespace ::com::sun::star;
 VLineProperties::VLineProperties()
 {
     Color <<= sal_Int32(0x000000); //type sal_Int32 UNO_NAME_LINECOLOR
-    LineStyle <<= drawing::LineStyle_SOLID; //type drawing::LineStyle for property UNO_NAME_LINESTYLE
-    Transparence <<= sal_Int16(0);//type sal_Int16 for property UNO_NAME_LINETRANSPARENCE
-    Width <<= sal_Int32(0);//type sal_Int32 for property UNO_NAME_LINEWIDTH
+    LineStyle
+        <<= drawing::LineStyle_SOLID; //type drawing::LineStyle for property UNO_NAME_LINESTYLE
+    Transparence <<= sal_Int16(0); //type sal_Int16 for property UNO_NAME_LINETRANSPARENCE
+    Width <<= sal_Int32(0); //type sal_Int32 for property UNO_NAME_LINEWIDTH
     LineCap <<= drawing::LineCap_BUTT; //type drawing::LineCap for property UNO_NAME_LINECAP
 }
 
-void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
+void VLineProperties::initFromPropertySet(const uno::Reference<beans::XPropertySet>& xProp)
 {
-    if(xProp.is())
+    if (xProp.is())
     {
         try
         {
-            Color = xProp->getPropertyValue( "LineColor" );
-            LineStyle = xProp->getPropertyValue( "LineStyle" );
-            Transparence = xProp->getPropertyValue( "LineTransparence" );
-            Width = xProp->getPropertyValue( "LineWidth" );
-            DashName = xProp->getPropertyValue( "LineDashName" );
-            LineCap = xProp->getPropertyValue( "LineCap" );
+            Color = xProp->getPropertyValue("LineColor");
+            LineStyle = xProp->getPropertyValue("LineStyle");
+            Transparence = xProp->getPropertyValue("LineTransparence");
+            Width = xProp->getPropertyValue("LineWidth");
+            DashName = xProp->getPropertyValue("LineDashName");
+            LineCap = xProp->getPropertyValue("LineCap");
         }
-        catch( const uno::Exception& )
+        catch (const uno::Exception&)
         {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
+            TOOLS_WARN_EXCEPTION("chart2", "");
         }
     }
     else
@@ -66,11 +67,11 @@ bool VLineProperties::isLineVisible() const
 
     drawing::LineStyle aLineStyle(drawing::LineStyle_SOLID);
     LineStyle >>= aLineStyle;
-    if( aLineStyle != drawing::LineStyle_NONE )
+    if (aLineStyle != drawing::LineStyle_NONE)
     {
-        sal_Int16 nLineTransparence=0;
+        sal_Int16 nLineTransparence = 0;
         Transparence >>= nLineTransparence;
-        if(nLineTransparence!=100)
+        if (nLineTransparence != 100)
         {
             bRet = true;
         }

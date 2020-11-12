@@ -12,8 +12,8 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace chart::sidebar {
-
+namespace chart::sidebar
+{
 class ChartSidebarModifyListenerParent
 {
 public:
@@ -27,7 +27,6 @@ public:
 class ChartSidebarModifyListener : public cppu::WeakImplHelper<css::util::XModifyListener>
 {
 public:
-
     explicit ChartSidebarModifyListener(ChartSidebarModifyListenerParent* pParent);
     virtual ~ChartSidebarModifyListener() override;
 
@@ -38,7 +37,6 @@ public:
 private:
     ChartSidebarModifyListenerParent* mpParent;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

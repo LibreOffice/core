@@ -22,28 +22,24 @@
 
 namespace chart
 {
-
 class FilledNetChartType final : public NetChartType_Base
 {
 public:
     explicit FilledNetChartType();
     virtual ~FilledNetChartType() override;
 
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-    virtual sal_Bool SAL_CALL
-        supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-    explicit FilledNetChartType( const FilledNetChartType & rOther );
+    explicit FilledNetChartType(const FilledNetChartType& rOther);
 
     // ____ XChartType ____
     virtual OUString SAL_CALL getChartType() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
 };
 
 } //  namespace chart

@@ -23,14 +23,16 @@
 #include <vcl/weld.hxx>
 #include <svx/dlgctl3d.hxx>
 
-namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::beans
+{
+class XPropertySet;
+}
 
 class ColorListBox;
 class LightButton;
 
 namespace chart
 {
-
 struct LightSourceInfo;
 
 class ThreeD_SceneIllumination_TabPage
@@ -38,32 +40,32 @@ class ThreeD_SceneIllumination_TabPage
 public:
     ThreeD_SceneIllumination_TabPage(
         weld::Container* pParent, weld::Window* pTopLevel,
-        const css::uno::Reference< css::beans::XPropertySet > & xSceneProperties,
-        const css::uno::Reference< css::frame::XModel >& xChartModel );
+        const css::uno::Reference<css::beans::XPropertySet>& xSceneProperties,
+        const css::uno::Reference<css::frame::XModel>& xChartModel);
     ~ThreeD_SceneIllumination_TabPage();
 
 private:
-    DECL_LINK( ClickLightSourceButtonHdl, weld::Button&, void );
-    DECL_LINK( SelectColorHdl, ColorListBox&, void );
-    DECL_LINK( ColorDialogHdl, weld::Button&, void );
-    DECL_LINK( PreviewChangeHdl, SvxLightCtl3D*, void );
-    DECL_LINK( PreviewSelectHdl, SvxLightCtl3D*, void );
+    DECL_LINK(ClickLightSourceButtonHdl, weld::Button&, void);
+    DECL_LINK(SelectColorHdl, ColorListBox&, void);
+    DECL_LINK(ColorDialogHdl, weld::Button&, void);
+    DECL_LINK(PreviewChangeHdl, SvxLightCtl3D*, void);
+    DECL_LINK(PreviewSelectHdl, SvxLightCtl3D*, void);
 
     void updatePreview();
 
 private:
-    DECL_LINK(fillControlsFromModel, void *, void);
+    DECL_LINK(fillControlsFromModel, void*, void);
 
-    void applyLightSourceToModel( sal_uInt32 nLightNumber );
+    void applyLightSourceToModel(sal_uInt32 nLightNumber);
     void applyLightSourcesToModel();
 
     std::unique_ptr<LightSourceInfo[]> m_pLightSourceInfoList;
 
-    css::uno::Reference< css::beans::XPropertySet > m_xSceneProperties;
+    css::uno::Reference<css::beans::XPropertySet> m_xSceneProperties;
 
-    TimerTriggeredControllerLock    m_aTimerTriggeredControllerLock;
+    TimerTriggeredControllerLock m_aTimerTriggeredControllerLock;
 
-    bool            m_bInCommitToModel;
+    bool m_bInCommitToModel;
 
     ModifyListenerCallBack m_aModelChangeListener;
     css::uno::Reference<css::frame::XModel> m_xChartModel;

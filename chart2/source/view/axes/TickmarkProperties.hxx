@@ -23,11 +23,11 @@
 
 namespace chart
 {
-
 struct TickmarkProperties
 {
-    sal_Int32 RelativePos;//Position in screen values relative to the axis where the tickmark line starts
-    sal_Int32 Length;//Length of the tickmark line in screen values
+    sal_Int32
+        RelativePos; //Position in screen values relative to the axis where the tickmark line starts
+    sal_Int32 Length; //Length of the tickmark line in screen values
 
     VLineProperties aLineProperties;
 };

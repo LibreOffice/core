@@ -26,7 +26,6 @@
 
 namespace chart
 {
-
 using namespace css;
 
 VButton::VButton()
@@ -37,7 +36,7 @@ VButton::VButton()
 }
 
 void VButton::init(const uno::Reference<drawing::XShapes>& xTargetPage,
-                  const uno::Reference<lang::XMultiServiceFactory>& xFactory)
+                   const uno::Reference<lang::XMultiServiceFactory>& xFactory)
 {
     m_xTarget = xTargetPage;
     m_xShapeFactory = xFactory;
@@ -46,7 +45,8 @@ void VButton::init(const uno::Reference<drawing::XShapes>& xTargetPage,
 uno::Reference<drawing::XShape> VButton::createTriangle(awt::Size aSize)
 {
     uno::Reference<drawing::XShape> xShape;
-    xShape.set(m_xShapeFactory->createInstance("com.sun.star.drawing.PolyPolygonShape"), uno::UNO_QUERY);
+    xShape.set(m_xShapeFactory->createInstance("com.sun.star.drawing.PolyPolygonShape"),
+               uno::UNO_QUERY);
 
     if (!xShape.is())
         return xShape;
@@ -83,7 +83,8 @@ uno::Reference<drawing::XShape> VButton::createTriangle(awt::Size aSize)
     pInnerSequenceZ[2] = 0.0;
 
     xproperties->setPropertyValue("Name", uno::makeAny(m_sCID));
-    xproperties->setPropertyValue(UNO_NAME_POLYPOLYGON, uno::Any(PolyToPointSequence(aPolyPolygon)));
+    xproperties->setPropertyValue(UNO_NAME_POLYPOLYGON,
+                                  uno::Any(PolyToPointSequence(aPolyPolygon)));
     xproperties->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
     xproperties->setPropertyValue("FillColor", uno::makeAny(m_nArrowColor));
 
@@ -125,8 +126,8 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
 
     PropertyMapper::getMultiPropertyListsFromValueMap(*pPropNames, *pPropValues, aTextValueMap);
 
-    uno::Reference<drawing::XShape> xEntry = pShapeFactory->createText(
-        xContainer, m_sLabel, *pPropNames, *pPropValues, uno::Any());
+    uno::Reference<drawing::XShape> xEntry
+        = pShapeFactory->createText(xContainer, m_sLabel, *pPropNames, *pPropValues, uno::Any());
 
     if (xEntry.is())
     {
@@ -137,14 +138,15 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
     if (!m_bShowArrow)
         return;
 
-    awt::Size aPolySize {280, 180};
+    awt::Size aPolySize{ 280, 180 };
 
     uno::Reference<drawing::XShape> xPoly = createTriangle(aPolySize);
     if (xPoly.is())
     {
         xPoly->setSize(aPolySize);
-        xPoly->setPosition({ sal_Int32(m_aPosition.X + m_aSize.Width - aPolySize.Width - 100),
-                             sal_Int32(m_aPosition.Y + (m_aSize.Height / 2.0) - (aPolySize.Height / 2.0)) });
+        xPoly->setPosition(
+            { sal_Int32(m_aPosition.X + m_aSize.Width - aPolySize.Width - 100),
+              sal_Int32(m_aPosition.Y + (m_aSize.Height / 2.0) - (aPolySize.Height / 2.0)) });
         xContainer->add(xPoly);
     }
 }

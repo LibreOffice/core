@@ -25,11 +25,13 @@
 #include <tools/date.hxx>
 #include <vector>
 
-namespace com::sun::star::chart2 { class XScaling; }
+namespace com::sun::star::chart2
+{
+class XScaling;
+}
 
 namespace chart
 {
-
 /** This structure contains the explicit values for a scale like Minimum and Maximum.
     See also css::chart2::ScaleData.
 */
@@ -41,14 +43,14 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitScaleData
     double Maximum;
     double Origin;
 
-    css::chart2::AxisOrientation     Orientation;
+    css::chart2::AxisOrientation Orientation;
 
-    css::uno::Reference< css::chart2::XScaling > Scaling;
+    css::uno::Reference<css::chart2::XScaling> Scaling;
 
-    sal_Int32   AxisType;//see css::chart2::AxisType
-    bool        ShiftedCategoryPosition;
-    sal_Int32   TimeResolution; //constant of type <type>css::chart::TimeUnit</type>
-    Date        NullDate;
+    sal_Int32 AxisType; //see css::chart2::AxisType
+    bool ShiftedCategoryPosition;
+    sal_Int32 TimeResolution; //constant of type <type>css::chart::TimeUnit</type>
+    Date NullDate;
 };
 
 struct ExplicitSubIncrement
@@ -77,8 +79,8 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitIncrementData
 
     /** the following two members are only for date-time axis
     */
-    css::chart::TimeInterval   MajorTimeInterval;
-    css::chart::TimeInterval   MinorTimeInterval;
+    css::chart::TimeInterval MajorTimeInterval;
+    css::chart::TimeInterval MinorTimeInterval;
 
     /** the other members are for *not* date-time axis
     */
@@ -103,7 +105,7 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitIncrementData
     <p><member>PostEquidistant</member> rules whether the <member>Distance</member>
     is meant to be a value before or after scaling.</p>
     */
-    double      Distance;
+    double Distance;
 
     /**
     <member>PostEquidistant</member> rules whether the member <member>Distance</member>
@@ -115,7 +117,7 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitIncrementData
     If <member>PostEquidistant</member> equals <FALSE/> <member>Distance</member>
     is given in values before <type>XScaling</type> is applied.</p>
     */
-    bool        PostEquidistant;
+    bool PostEquidistant;
 
     /** The <member>BaseValue</member> gives a starting point on the scale
     to which all further main tickmarks are relatively positioned.
@@ -133,7 +135,7 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitIncrementData
     And setting BaseValue to 2, -2, 4, -4 etc. in this example
     leads to the same result as BaseValue=0.</p>
     */
-    double      BaseValue;
+    double BaseValue;
 
     /** <member>SubIncrements</member> describes the positioning of further
     sub tickmarks on the scale of an axis.
@@ -144,7 +146,7 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitIncrementData
     positions of subsequent tickmarks in relation to their parent tickmarks
     given by the preceding SubIncrement.</p>
     */
-    std::vector< ExplicitSubIncrement > SubIncrements;
+    std::vector<ExplicitSubIncrement> SubIncrements;
 };
 
 } //namespace chart

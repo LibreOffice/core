@@ -18,8 +18,8 @@
  */
 #pragma once
 
-namespace chart {
-
+namespace chart
+{
 #define CHART2_SERVICE_NAME_CHARTTYPE_AREA "com.sun.star.chart2.AreaChartType"
 #define CHART2_SERVICE_NAME_CHARTTYPE_BAR "com.sun.star.chart2.BarChartType"
 #define CHART2_SERVICE_NAME_CHARTTYPE_COLUMN "com.sun.star.chart2.ColumnChartType"

@@ -24,26 +24,31 @@
 
 #include <memory>
 
-namespace com::sun::star::frame { class XModel; }
-namespace chart { class ControllerLockGuardUNO; }
+namespace com::sun::star::frame
+{
+class XModel;
+}
+namespace chart
+{
+class ControllerLockGuardUNO;
+}
 
 namespace chart
 {
-
 class TimerTriggeredControllerLock final
 {
 public:
-    TimerTriggeredControllerLock( const css::uno::Reference< css::frame::XModel >& xModel );
+    TimerTriggeredControllerLock(const css::uno::Reference<css::frame::XModel>& xModel);
     ~TimerTriggeredControllerLock();
 
     void startTimer();
 
 private:
-    css::uno::Reference< css::frame::XModel > m_xModel;
-    std::unique_ptr< ControllerLockGuardUNO > m_apControllerLockGuard;
-    AutoTimer       m_aTimer;
+    css::uno::Reference<css::frame::XModel> m_xModel;
+    std::unique_ptr<ControllerLockGuardUNO> m_apControllerLockGuard;
+    AutoTimer m_aTimer;
 
-    DECL_LINK( TimerTimeout, Timer*, void );
+    DECL_LINK(TimerTimeout, Timer*, void);
 };
 
 } //namespace chart

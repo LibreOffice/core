@@ -23,7 +23,6 @@
 
 namespace chart
 {
-
 BarGeometryResources::BarGeometryResources(weld::Builder* pBuilder)
     : m_xFT_Geometry(pBuilder->weld_label("shapeft"))
     , m_xLB_Geometry(pBuilder->weld_tree_view("shape"))
@@ -33,21 +32,21 @@ BarGeometryResources::BarGeometryResources(weld::Builder* pBuilder)
     m_xLB_Geometry->set_size_request(-1, m_xLB_Geometry->get_height_rows(4));
 }
 
-void BarGeometryResources::connect_changed(const Link<weld::TreeView&,void>& rLink)
+void BarGeometryResources::connect_changed(const Link<weld::TreeView&, void>& rLink)
 {
     m_xLB_Geometry->connect_changed(rLink);
 }
 
-void BarGeometryResources::set_visible( bool bShow )
+void BarGeometryResources::set_visible(bool bShow)
 {
-    m_xFT_Geometry->set_visible( bShow );
-    m_xLB_Geometry->set_visible( bShow );
+    m_xFT_Geometry->set_visible(bShow);
+    m_xLB_Geometry->set_visible(bShow);
 }
 
-void BarGeometryResources::set_sensitive( bool bEnable )
+void BarGeometryResources::set_sensitive(bool bEnable)
 {
-    m_xFT_Geometry->set_sensitive( bEnable );
-    m_xLB_Geometry->set_sensitive( bEnable );
+    m_xFT_Geometry->set_sensitive(bEnable);
+    m_xLB_Geometry->set_sensitive(bEnable);
 }
 
 sal_Int32 BarGeometryResources::get_selected_index() const

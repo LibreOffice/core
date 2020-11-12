@@ -25,8 +25,8 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include "charttoolsdllapi.hxx"
 
-namespace chart {
-
+namespace chart
+{
 /** Use this class as a member if you want to listen on a XModifyBroadcaster
 without becoming a XModifyListener yourself
  */
@@ -36,19 +36,21 @@ class ModifyListenerCallBack_impl;
 class OOO_DLLPUBLIC_CHARTTOOLS ModifyListenerCallBack
 {
 public:
-    explicit ModifyListenerCallBack( const Link<void*,void>& rCallBack );
+    explicit ModifyListenerCallBack(const Link<void*, void>& rCallBack);
 
     virtual ~ModifyListenerCallBack();
 
-    void startListening( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster >& xBroadcaster );
+    void startListening(
+        const ::com::sun::star::uno::Reference<::com::sun::star::util::XModifyBroadcaster>&
+            xBroadcaster);
     SAL_DLLPRIVATE void stopListening();
 
 private: //methods
-    ModifyListenerCallBack( const ModifyListenerCallBack& ) = delete;
+    ModifyListenerCallBack(const ModifyListenerCallBack&) = delete;
 
 private: //member
     ModifyListenerCallBack_impl* pModifyListener_impl;
-    css::uno::Reference< css::util::XModifyListener >   m_xModifyListener;
+    css::uno::Reference<css::util::XModifyListener> m_xModifyListener;
 };
 
 } // namespace chart

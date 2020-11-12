@@ -27,12 +27,11 @@ class BuilderPage;
 
 namespace chart
 {
-
 class TabPageNotifiable
 {
 public:
-    virtual void setInvalidPage( BuilderPage * pTabPage ) = 0;
-    virtual void setValidPage( BuilderPage * pTabPage ) = 0;
+    virtual void setInvalidPage(BuilderPage* pTabPage) = 0;
+    virtual void setValidPage(BuilderPage* pTabPage) = 0;
 
 protected:
     ~TabPageNotifiable() {}

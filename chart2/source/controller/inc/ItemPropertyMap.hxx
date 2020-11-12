@@ -24,11 +24,11 @@
 
 #include <map>
 
-namespace chart::wrapper {
-
-typedef std::map< ItemConverter::tWhichIdType, std::pair< ItemConverter::tPropertyNameType, ItemConverter::tMemberIdType > >
+namespace chart::wrapper
+{
+typedef std::map<ItemConverter::tWhichIdType,
+                 std::pair<ItemConverter::tPropertyNameType, ItemConverter::tMemberIdType>>
     ItemPropertyMapType;
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
