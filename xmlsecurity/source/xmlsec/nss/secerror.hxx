@@ -25,11 +25,9 @@
 #include <certt.h>
 #include <prerror.h>
 
-const char *
-getCertError(PRErrorCode errNum);
+const char* getCertError(PRErrorCode errNum);
 
-void
-printChainFailure(CERTVerifyLog *log);
+void printChainFailure(CERTVerifyLog* log);
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_SECERROR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,12 +13,13 @@ using namespace css;
 using namespace css::uno;
 using namespace css::lang;
 
-Sequence< sal_Int8 > SAL_CALL CipherContext::convertWithCipherContext( const Sequence< sal_Int8 >& /*aData*/ )
+Sequence<sal_Int8>
+    SAL_CALL CipherContext::convertWithCipherContext(const Sequence<sal_Int8>& /*aData*/)
 {
     return Sequence<sal_Int8>();
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL CipherContext::finalizeCipherContextAndDispose()
+uno::Sequence<sal_Int8> SAL_CALL CipherContext::finalizeCipherContextAndDispose()
 {
     return Sequence<sal_Int8>();
 }

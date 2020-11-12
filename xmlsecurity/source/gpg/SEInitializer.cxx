@@ -14,7 +14,10 @@
 
 #include <global.h>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno
+{
+class XComponentContext;
+}
 
 using namespace css;
 using namespace css::lang;
@@ -27,43 +30,39 @@ SEInitializerGpg::SEInitializerGpg()
     GpgME::initializeLibrary();
 }
 
-SEInitializerGpg::~SEInitializerGpg()
-{
-}
+SEInitializerGpg::~SEInitializerGpg() {}
 
 /* XSEInitializer */
-Reference< XXMLSecurityContext > SAL_CALL SEInitializerGpg::createSecurityContext( const OUString& )
+Reference<XXMLSecurityContext> SAL_CALL SEInitializerGpg::createSecurityContext(const OUString&)
 {
     try
     {
         /* Build XML Security Context */
-        Reference< XXMLSecurityContext > xSecCtx(new XMLSecurityContextGpg());
+        Reference<XXMLSecurityContext> xSecCtx(new XMLSecurityContextGpg());
 
-        Reference< XSecurityEnvironment > xSecEnv(new SecurityEnvironmentGpg());
+        Reference<XSecurityEnvironment> xSecEnv(new SecurityEnvironmentGpg());
         sal_Int32 n = xSecCtx->addSecurityEnvironment(xSecEnv);
         //originally the SecurityEnvironment with the internal slot was set as default
-        xSecCtx->setDefaultSecurityEnvironmentIndex( n );
+        xSecCtx->setDefaultSecurityEnvironmentIndex(n);
         return xSecCtx;
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception&)
     {
         return nullptr;
     }
 }
 
-void SAL_CALL SEInitializerGpg::freeSecurityContext( const uno::Reference< XXMLSecurityContext >& )
-{
-}
+void SAL_CALL SEInitializerGpg::freeSecurityContext(const uno::Reference<XXMLSecurityContext>&) {}
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SEInitializerGpg::supportsService( const OUString& rServiceName )
+sal_Bool SAL_CALL SEInitializerGpg::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SEInitializerGpg::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL SEInitializerGpg::getSupportedServiceNames()
 {
-    return {"com.sun.star.xml.crypto.GPGSEInitializer"};
+    return { "com.sun.star.xml.crypto.GPGSEInitializer" };
 }
 
 OUString SAL_CALL SEInitializerGpg::getImplementationName()

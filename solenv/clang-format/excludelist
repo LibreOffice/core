@@ -17103,7 +17103,6 @@ xmlscript/source/xmlmod_imexp/imp_share.hxx
 xmlscript/source/xmlmod_imexp/xmlmod_export.cxx
 xmlscript/source/xmlmod_imexp/xmlmod_import.cxx
 xmlscript/test/imexp.cxx
-xmlsecurity/inc/biginteger.hxx
 xmlsecurity/inc/certificatechooser.hxx
 xmlsecurity/inc/certificateviewer.hxx
 xmlsecurity/inc/digitalsignaturesdialog.hxx
@@ -17119,12 +17118,10 @@ xmlsecurity/inc/gpg/xmlsignature_gpgimpl.hxx
 xmlsecurity/inc/macrosecurity.hxx
 xmlsecurity/inc/xmlsec/saxhelper.hxx
 xmlsecurity/inc/xmlsec/xmldocumentwrapper_xmlsecimpl.hxx
-xmlsecurity/inc/xmlsec/xmlstreamio.hxx
 xmlsecurity/inc/xmlsignaturehelper.hxx
 xmlsecurity/inc/xmlsignaturehelper2.hxx
 xmlsecurity/inc/xsecctl.hxx
 xmlsecurity/qa/certext/SanCertExt.cxx
-xmlsecurity/qa/unit/xmlsecurity-dialogs-test.cxx
 xmlsecurity/source/component/certificatecontainer.cxx
 xmlsecurity/source/component/documentdigitalsignatures.cxx
 xmlsecurity/source/dialogs/certificatechooser.cxx
@@ -17132,11 +17129,9 @@ xmlsecurity/source/dialogs/certificateviewer.cxx
 xmlsecurity/source/dialogs/digitalsignaturesdialog.cxx
 xmlsecurity/source/dialogs/macrosecurity.cxx
 xmlsecurity/source/framework/buffernode.cxx
-xmlsecurity/source/framework/buffernode.hxx
 xmlsecurity/source/framework/elementcollector.cxx
 xmlsecurity/source/framework/elementcollector.hxx
 xmlsecurity/source/framework/elementmark.cxx
-xmlsecurity/source/framework/elementmark.hxx
 xmlsecurity/source/framework/saxeventkeeperimpl.cxx
 xmlsecurity/source/framework/securityengine.cxx
 xmlsecurity/source/framework/signaturecreatorimpl.cxx
@@ -17145,16 +17140,10 @@ xmlsecurity/source/framework/signatureverifierimpl.cxx
 xmlsecurity/source/framework/xmlsignaturetemplateimpl.cxx
 xmlsecurity/source/gpg/CertificateImpl.cxx
 xmlsecurity/source/gpg/CertificateImpl.hxx
-xmlsecurity/source/gpg/CipherContext.cxx
-xmlsecurity/source/gpg/CipherContext.hxx
-xmlsecurity/source/gpg/DigestContext.cxx
-xmlsecurity/source/gpg/DigestContext.hxx
-xmlsecurity/source/gpg/SEInitializer.cxx
 xmlsecurity/source/gpg/SecurityEnvironment.cxx
 xmlsecurity/source/gpg/SecurityEnvironment.hxx
 xmlsecurity/source/gpg/XMLEncryption.cxx
 xmlsecurity/source/gpg/XMLEncryption.hxx
-xmlsecurity/source/gpg/XMLSecurityContext.cxx
 xmlsecurity/source/gpg/XMLSecurityContext.hxx
 xmlsecurity/source/gpg/xmlsignature_gpgimpl.cxx
 xmlsecurity/source/helper/documentsignaturehelper.cxx
@@ -17169,7 +17158,6 @@ xmlsecurity/source/helper/xsecsign.cxx
 xmlsecurity/source/helper/xsecverify.cxx
 xmlsecurity/source/xmlsec/biginteger.cxx
 xmlsecurity/source/xmlsec/certificateextension_certextn.cxx
-xmlsecurity/source/xmlsec/certificateextension_certextn.hxx
 xmlsecurity/source/xmlsec/certificateextension_xmlsecimpl.hxx
 xmlsecurity/source/xmlsec/errorcallback.cxx
 xmlsecurity/source/xmlsec/mscrypt/akmngr.cxx
@@ -17195,7 +17183,6 @@ xmlsecurity/source/xmlsec/nss/nssinitializer.hxx
 xmlsecurity/source/xmlsec/nss/sanextension_nssimpl.cxx
 xmlsecurity/source/xmlsec/nss/sanextension_nssimpl.hxx
 xmlsecurity/source/xmlsec/nss/secerror.cxx
-xmlsecurity/source/xmlsec/nss/secerror.hxx
 xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.cxx
 xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl.hxx
 xmlsecurity/source/xmlsec/nss/seinitializer_nssimpl.cxx
