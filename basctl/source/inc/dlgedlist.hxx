@@ -25,54 +25,48 @@
 
 namespace basctl
 {
-
 class DlgEdObj;
-
 
 // DlgEdPropListenerImpl
 
+typedef ::cppu::WeakImplHelper<css::beans::XPropertyChangeListener> PropertyChangeListenerHelper;
 
-typedef ::cppu::WeakImplHelper< css::beans::XPropertyChangeListener > PropertyChangeListenerHelper;
-
-class DlgEdPropListenerImpl: public PropertyChangeListenerHelper
+class DlgEdPropListenerImpl : public PropertyChangeListenerHelper
 {
 private:
     DlgEdObj& rDlgEdObj;
 
 public:
-    explicit DlgEdPropListenerImpl (DlgEdObj&);
+    explicit DlgEdPropListenerImpl(DlgEdObj&);
     virtual ~DlgEdPropListenerImpl() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
-
+    virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 };
-
 
 // DlgEdEvtContListenerImpl
 
+typedef ::cppu::WeakImplHelper<css::container::XContainerListener> ContainerListenerHelper;
 
-typedef ::cppu::WeakImplHelper< css::container::XContainerListener > ContainerListenerHelper;
-
-class DlgEdEvtContListenerImpl: public ContainerListenerHelper
+class DlgEdEvtContListenerImpl : public ContainerListenerHelper
 {
 private:
     DlgEdObj& rDlgEdObj;
 
 public:
-    explicit DlgEdEvtContListenerImpl (DlgEdObj&);
+    explicit DlgEdEvtContListenerImpl(DlgEdObj&);
     virtual ~DlgEdEvtContListenerImpl() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
     // XContainerListener
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
+    virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& Event) override;
+    virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& Event) override;
+    virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& Event) override;
 };
 
 } // namespace basctl

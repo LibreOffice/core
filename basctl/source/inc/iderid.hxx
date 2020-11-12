@@ -23,8 +23,7 @@
 
 namespace basctl
 {
-
-OUString IDEResId(const char *pId);
+OUString IDEResId(const char* pId);
 
 } // namespace basctl
 

@@ -16,21 +16,17 @@
 
 namespace basctl
 {
-
-LineNumberWindow::LineNumberWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
-    Window(pParent, WB_BORDER),
-    m_pModulWindow(pModulWindow),
-    m_nCurYOffset(0)
+LineNumberWindow::LineNumberWindow(vcl::Window* pParent, ModulWindow* pModulWindow)
+    : Window(pParent, WB_BORDER)
+    , m_pModulWindow(pModulWindow)
+    , m_nCurYOffset(0)
 {
     SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetFieldColor()));
     m_nBaseWidth = GetTextWidth("8");
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
 }
 
-LineNumberWindow::~LineNumberWindow()
-{
-    disposeOnce();
-}
+LineNumberWindow::~LineNumberWindow() { disposeOnce(); }
 
 void LineNumberWindow::dispose()
 {
@@ -38,9 +34,9 @@ void LineNumberWindow::dispose()
     Window::dispose();
 }
 
-void LineNumberWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void LineNumberWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    if(SyncYOffset())
+    if (SyncYOffset())
         return;
 
     ExtTextEngine* txtEngine = m_pModulWindow->GetEditEngine();
@@ -86,7 +82,7 @@ void LineNumberWindow::Paint( vcl::RenderContext& rRenderContext, const tools::R
         rRenderContext.DrawText(Point(0, y - m_nCurYOffset), OUString::number(n));
 }
 
-void LineNumberWindow::DataChanged(DataChangedEvent const & rDCEvt)
+void LineNumberWindow::DataChanged(DataChangedEvent const& rDCEvt)
 {
     Window::DataChanged(rDCEvt);
     if (rDCEvt.GetType() == DataChangedEventType::SETTINGS
@@ -108,7 +104,6 @@ void LineNumberWindow::DoScroll(tools::Long nVertScroll)
     Window::Scroll(0, nVertScroll);
 }
 
-
 bool LineNumberWindow::SyncYOffset()
 {
     TextView* pView = m_pModulWindow->GetEditView();
@@ -123,7 +118,6 @@ bool LineNumberWindow::SyncYOffset()
     Invalidate();
     return true;
 }
-
 
 } // namespace basctl
 

@@ -23,25 +23,21 @@
 
 namespace basctl
 {
-
-
 // DlgEdModel
-
 
 class DlgEdModel : public SdrModel
 {
     friend class DlgEdPage;
 
 private:
-    DlgEdModel( const DlgEdModel& ) = delete;
+    DlgEdModel(const DlgEdModel&) = delete;
     void operator=(const DlgEdModel& rSrcModel) = delete;
 
 public:
-
     DlgEdModel();
     virtual ~DlgEdModel() override;
 
-    virtual SdrPage*  AllocPage(bool bMasterPage) override;
+    virtual SdrPage* AllocPage(bool bMasterPage) override;
 };
 
 } // namespace basctl

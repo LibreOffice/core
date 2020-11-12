@@ -199,13 +199,11 @@ avmedia/source/win/player.hxx
 avmedia/source/win/window.cxx
 avmedia/source/win/window.hxx
 basctl/inc/helpids.h
-basctl/inc/iderdll.hxx
 basctl/inc/strings.hxx
 basctl/source/accessibility/accessibledialogcontrolshape.cxx
 basctl/source/accessibility/accessibledialogwindow.cxx
 basctl/source/basicide/basdoc.cxx
 basctl/source/basicide/basdoc.hxx
-basctl/source/basicide/basicmod.hxx
 basctl/source/basicide/basicrenderable.cxx
 basctl/source/basicide/basicrenderable.hxx
 basctl/source/basicide/baside2.cxx
@@ -223,8 +221,6 @@ basctl/source/basicide/bastype2.cxx
 basctl/source/basicide/bastype3.cxx
 basctl/source/basicide/bastypes.cxx
 basctl/source/basicide/breakpoint.cxx
-basctl/source/basicide/brkdlg.cxx
-basctl/source/basicide/brkdlg.hxx
 basctl/source/basicide/doceventnotifier.cxx
 basctl/source/basicide/docsignature.cxx
 basctl/source/basicide/documentenumeration.cxx
@@ -232,8 +228,6 @@ basctl/source/basicide/documentenumeration.hxx
 basctl/source/basicide/iderdll.cxx
 basctl/source/basicide/iderdll2.hxx
 basctl/source/basicide/layout.cxx
-basctl/source/basicide/linenumberwindow.cxx
-basctl/source/basicide/linenumberwindow.hxx
 basctl/source/basicide/localizationmgr.cxx
 basctl/source/basicide/macrodlg.cxx
 basctl/source/basicide/macrodlg.hxx
@@ -242,7 +236,6 @@ basctl/source/basicide/moduldlg.cxx
 basctl/source/basicide/moduldlg.hxx
 basctl/source/basicide/sbxitem.cxx
 basctl/source/basicide/scriptdocument.cxx
-basctl/source/basicide/textwindowpeer.hxx
 basctl/source/basicide/textwindowpeer.cxx
 basctl/source/basicide/unomodel.cxx
 basctl/source/basicide/unomodel.hxx
@@ -251,7 +244,6 @@ basctl/source/dlged/dlgedclip.cxx
 basctl/source/dlged/dlgedfac.cxx
 basctl/source/dlged/dlgedfunc.cxx
 basctl/source/dlged/dlgedlist.cxx
-basctl/source/dlged/dlgedmod.cxx
 basctl/source/dlged/dlgedobj.cxx
 basctl/source/dlged/dlgedpage.cxx
 basctl/source/dlged/dlgedview.cxx
@@ -268,17 +260,10 @@ basctl/source/inc/bastypes.hxx
 basctl/source/inc/dlged.hxx
 basctl/source/inc/dlgedclip.hxx
 basctl/source/inc/dlgeddef.hxx
-basctl/source/inc/dlgedfac.hxx
-basctl/source/inc/dlgedfunc.hxx
-basctl/source/inc/dlgedlist.hxx
-basctl/source/inc/dlgedmod.hxx
 basctl/source/inc/dlgedobj.hxx
-basctl/source/inc/dlgedpage.hxx
 basctl/source/inc/dlgedview.hxx
 basctl/source/inc/doceventnotifier.hxx
 basctl/source/inc/docsignature.hxx
-basctl/source/inc/iderid.hxx
-basctl/source/inc/layout.hxx
 basctl/source/inc/localizationmgr.hxx
 basctl/source/inc/managelang.hxx
 basctl/source/inc/propbrw.hxx

@@ -26,62 +26,54 @@
 
 namespace basctl
 {
-
 class DlgEditor;
 
-
 // DlgEdFunc
-
 
 class DlgEdFunc /* : public LinkHdl */
 {
 protected:
     DlgEditor& rParent;
-    Timer      aScrollTimer;
+    Timer aScrollTimer;
 
-    DECL_LINK( ScrollTimeout, Timer *, void );
-    void    ForceScroll( const Point& rPos );
+    DECL_LINK(ScrollTimeout, Timer*, void);
+    void ForceScroll(const Point& rPos);
 
 public:
-    explicit DlgEdFunc (DlgEditor& rParent);
+    explicit DlgEdFunc(DlgEditor& rParent);
     virtual ~DlgEdFunc();
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
-    virtual bool MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void MouseMove( const MouseEvent& rMEvt );
-    bool KeyInput( const KeyEvent& rKEvt );
+    virtual void MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual void MouseMove(const MouseEvent& rMEvt);
+    bool KeyInput(const KeyEvent& rKEvt);
 };
 
-
 // DlgEdFuncInsert
-
 
 class DlgEdFuncInsert : public DlgEdFunc
 {
 public:
-    explicit DlgEdFuncInsert (DlgEditor& rParent);
-    virtual ~DlgEdFuncInsert () override;
+    explicit DlgEdFuncInsert(DlgEditor& rParent);
+    virtual ~DlgEdFuncInsert() override;
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual void MouseMove(const MouseEvent& rMEvt) override;
 };
 
-
 // DlgEdFuncSelect
-
 
 class DlgEdFuncSelect : public DlgEdFunc
 {
 public:
-    explicit DlgEdFuncSelect (DlgEditor& rParent);
-    virtual ~DlgEdFuncSelect () override;
+    explicit DlgEdFuncSelect(DlgEditor& rParent);
+    virtual ~DlgEdFuncSelect() override;
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual void MouseMove(const MouseEvent& rMEvt) override;
 };
-
 
 } // namespace basctl
 

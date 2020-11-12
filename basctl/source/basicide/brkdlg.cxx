@@ -28,22 +28,19 @@
 
 namespace basctl
 {
-
 // FIXME  Why does BreakPointDialog allow only sal_uInt16 for break-point line
 // numbers, whereas BreakPoint supports sal_uLong?
 
 namespace
 {
-
-bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
+bool lcl_ParseText(OUString const& rText, size_t& rLineNr)
 {
     // aText should look like "# n" where
     // n > 0 && n < std::numeric_limits< sal_uInt16 >::max().
     // All spaces are ignored, so there can even be spaces within the
     // number n.  (Maybe it would be better to ignore all whitespace instead
     // of just spaces.)
-    OUString aText(
-        rText.replaceAll(" ", ""));
+    OUString aText(rText.replaceAll(" ", ""));
     if (aText.isEmpty())
         return false;
     sal_Unicode cFirst = aText[0];
@@ -53,16 +50,17 @@ bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
         aText = aText.copy(1);
     // XXX Assumes that sal_uInt16 is contained within sal_Int32:
     sal_Int32 n = aText.toInt32();
-    if ( n <= 0 )
+    if (n <= 0)
         return false;
-    rLineNr = static_cast< size_t >(n);
+    rLineNr = static_cast<size_t>(n);
     return true;
 }
 
 } // namespace
 
 BreakPointDialog::BreakPointDialog(weld::Window* pParent, BreakPointList& rBrkPntList)
-    : GenericDialogController(pParent, "modules/BasicIDE/ui/managebreakpoints.ui", "ManageBreakpointsDialog")
+    : GenericDialogController(pParent, "modules/BasicIDE/ui/managebreakpoints.ui",
+                              "ManageBreakpointsDialog")
     , m_rOriginalBreakPointList(rBrkPntList)
     , m_aModifiedBreakPointList(rBrkPntList)
     , m_xComboBox(m_xBuilder->weld_entry_tree_view("entriesgrid", "entries", "entrieslist"))
@@ -76,10 +74,10 @@ BreakPointDialog::BreakPointDialog(weld::Window* pParent, BreakPointList& rBrkPn
     m_xComboBox->set_height_request_by_rows(12);
 
     m_xComboBox->freeze();
-    for ( size_t i = 0, n = m_aModifiedBreakPointList.size(); i < n; ++i )
+    for (size_t i = 0, n = m_aModifiedBreakPointList.size(); i < n; ++i)
     {
-        BreakPoint& rBrk = m_aModifiedBreakPointList.at( i );
-        OUString aEntryStr( "# " + OUString::number(rBrk.nLine) );
+        BreakPoint& rBrk = m_aModifiedBreakPointList.at(i);
+        OUString aEntryStr("# " + OUString::number(rBrk.nLine));
         m_xComboBox->append_text(aEntryStr);
     }
     m_xComboBox->thaw();
@@ -101,20 +99,18 @@ BreakPointDialog::BreakPointDialog(weld::Window* pParent, BreakPointList& rBrkPn
         m_xComboBox->set_active(0);
 
     if (m_aModifiedBreakPointList.size())
-        UpdateFields( m_aModifiedBreakPointList.at( 0 ) );
+        UpdateFields(m_aModifiedBreakPointList.at(0));
 
     CheckButtons();
 }
 
-BreakPointDialog::~BreakPointDialog()
-{
-}
+BreakPointDialog::~BreakPointDialog() {}
 
-void BreakPointDialog::SetCurrentBreakPoint( BreakPoint const & rBrk )
+void BreakPointDialog::SetCurrentBreakPoint(BreakPoint const& rBrk)
 {
-    OUString aStr( "# " + OUString::number(rBrk.nLine) );
+    OUString aStr("# " + OUString::number(rBrk.nLine));
     m_xComboBox->set_entry_text(aStr);
-    UpdateFields( rBrk );
+    UpdateFields(rBrk);
 }
 
 void BreakPointDialog::CheckButtons()
@@ -156,8 +152,8 @@ IMPL_LINK(BreakPointDialog, EditModifyHdl, weld::ComboBox&, rBox, void)
     int nEntry = rBox.find_text(rBox.get_active_text());
     if (nEntry == -1)
         return;
-    BreakPoint& rBrk = m_aModifiedBreakPointList.at( nEntry );
-    UpdateFields( rBrk );
+    BreakPoint& rBrk = m_aModifiedBreakPointList.at(nEntry);
+    UpdateFields(rBrk);
 }
 
 IMPL_LINK(BreakPointDialog, FieldModifyHdl, weld::SpinButton&, rEdit, void)
@@ -186,17 +182,17 @@ IMPL_LINK(BreakPointDialog, ButtonHdl, weld::Button&, rButton, void)
         // keep checkbox in mind!
         OUString aText(m_xComboBox->get_active_text());
         size_t nLine;
-        bool bValid = lcl_ParseText( aText, nLine );
-        if ( bValid )
+        bool bValid = lcl_ParseText(aText, nLine);
+        if (bValid)
         {
-            BreakPoint aBrk( nLine );
+            BreakPoint aBrk(nLine);
             aBrk.bEnabled = m_xCheckBox->get_active();
             aBrk.nStopAfter = static_cast<size_t>(m_xNumericField->get_value());
-            m_aModifiedBreakPointList.InsertSorted( aBrk );
-            OUString aEntryStr( "# " + OUString::number(aBrk.nLine) );
+            m_aModifiedBreakPointList.InsertSorted(aBrk);
+            OUString aEntryStr("# " + OUString::number(aBrk.nLine));
             m_xComboBox->append_text(aEntryStr);
             if (SfxDispatcher* pDispatcher = GetDispatcher())
-                pDispatcher->Execute( SID_BASICIDE_BRKPNTSCHANGED );
+                pDispatcher->Execute(SID_BASICIDE_BRKPNTSCHANGED);
         }
         else
         {
@@ -216,13 +212,13 @@ IMPL_LINK(BreakPointDialog, ButtonHdl, weld::Button&, rButton, void)
                 nEntry--;
             m_xComboBox->set_active_text(m_xComboBox->get_text(nEntry));
             if (SfxDispatcher* pDispatcher = GetDispatcher())
-                pDispatcher->Execute( SID_BASICIDE_BRKPNTSCHANGED );
+                pDispatcher->Execute(SID_BASICIDE_BRKPNTSCHANGED);
             CheckButtons();
         }
     }
 }
 
-void BreakPointDialog::UpdateFields( BreakPoint const & rBrk )
+void BreakPointDialog::UpdateFields(BreakPoint const& rBrk)
 {
     m_xCheckBox->set_active(rBrk.bEnabled);
     m_xNumericField->set_value(rBrk.nStopAfter);
@@ -233,7 +229,7 @@ BreakPoint* BreakPointDialog::GetSelectedBreakPoint()
     int nEntry = m_xComboBox->find_text(m_xComboBox->get_active_text());
     if (nEntry == -1)
         return nullptr;
-    return &m_aModifiedBreakPointList.at( nEntry );
+    return &m_aModifiedBreakPointList.at(nEntry);
 }
 
 } // namespace basctl

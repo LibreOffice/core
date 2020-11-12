@@ -21,15 +21,14 @@
 
 namespace basctl
 {
-
 class Shell;
 class ExtraData;
 
-void EnsureIde ();
+void EnsureIde();
 
-void ShellCreated (Shell* pShell);
+void ShellCreated(Shell* pShell);
 Shell* GetShell();
-void ShellDestroyed (Shell const * pShell);
+void ShellDestroyed(Shell const* pShell);
 
 ExtraData* GetExtraData();
 

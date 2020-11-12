@@ -23,10 +23,7 @@
 
 namespace basctl
 {
-
-
 // DlgEdPage
-
 
 class DlgEdModel;
 class DlgEdForm;
@@ -36,17 +33,16 @@ class DlgEdPage final : public SdrPage
     DlgEdPage& operator=(const DlgEdPage&) = delete;
     DlgEdPage(const DlgEdPage&) = delete;
 
-    DlgEdForm*      pDlgEdForm;
+    DlgEdForm* pDlgEdForm;
 
 public:
-
-    explicit DlgEdPage( DlgEdModel& rModel, bool bMasterPage = false );
+    explicit DlgEdPage(DlgEdModel& rModel, bool bMasterPage = false);
     virtual ~DlgEdPage() override;
 
     virtual SdrPage* CloneSdrPage(SdrModel& rTargetModel) const override;
 
-    void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
-    DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
+    void SetDlgEdForm(DlgEdForm* pForm) { pDlgEdForm = pForm; }
+    DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
 
     virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum) override;
 };

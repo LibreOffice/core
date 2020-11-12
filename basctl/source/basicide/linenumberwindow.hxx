@@ -13,7 +13,6 @@
 
 namespace basctl
 {
-
 class ModulWindow;
 
 class LineNumberWindow : public vcl::Window
@@ -23,22 +22,22 @@ private:
     int m_nWidth;
     tools::Long m_nCurYOffset;
     int m_nBaseWidth;
-    virtual void DataChanged (DataChangedEvent const& rDCEvt) override;
+    virtual void DataChanged(DataChangedEvent const& rDCEvt) override;
 
 protected:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
-    LineNumberWindow (vcl::Window* pParent, ModulWindow* pModulWin);
+    LineNumberWindow(vcl::Window* pParent, ModulWindow* pModulWin);
     virtual ~LineNumberWindow() override;
     virtual void dispose() override;
 
-    void DoScroll( tools::Long nVertScroll );
+    void DoScroll(tools::Long nVertScroll);
 
     bool SyncYOffset();
-    tools::Long& GetCurYOffset() { return m_nCurYOffset;}
+    tools::Long& GetCurYOffset() { return m_nCurYOffset; }
 
-    int GetWidth() const { return m_nWidth;}
+    int GetWidth() const { return m_nWidth; }
 };
 
 } // namespace basctl

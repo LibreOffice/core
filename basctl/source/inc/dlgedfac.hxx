@@ -25,19 +25,17 @@
 
 namespace basctl
 {
-
-
 // DlgEdFactory
-
 
 class DlgEdFactory
 {
-    const css::uno::Reference< css::frame::XModel > mxModel;
+    const css::uno::Reference<css::frame::XModel> mxModel;
+
 public:
-    DlgEdFactory( const css::uno::Reference< css::frame::XModel >& xModel );
+    DlgEdFactory(const css::uno::Reference<css::frame::XModel>& xModel);
     ~DlgEdFactory() COVERITY_NOEXCEPT_FALSE;
 
-    DECL_LINK( MakeObject, SdrObjCreatorParams, SdrObject* );
+    DECL_LINK(MakeObject, SdrObjCreatorParams, SdrObject*);
 };
 
 } // namespace basctl
