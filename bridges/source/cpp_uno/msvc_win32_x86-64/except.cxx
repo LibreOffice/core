@@ -233,7 +233,6 @@ void
 
 #endif // 0
 
-
 #include <sal/config.h>
 
 #include <memory>
@@ -256,18 +255,14 @@ void
 
 using namespace ::com::sun::star;
 
-static void * __cdecl copyConstruct(
-    void * pExcThis,
-    void * pSource,
-    typelib_TypeDescription * pTD ) throw ()
+static void* __cdecl copyConstruct(void* pExcThis, void* pSource,
+                                   typelib_TypeDescription* pTD) throw()
 {
     ::uno_copyData(pExcThis, pSource, pTD, uno::cpp_acquire);
     return pExcThis;
 }
 
-static void * __cdecl destruct(
-    void * pExcThis,
-    typelib_TypeDescription * pTD ) throw ()
+static void* __cdecl destruct(void* pExcThis, typelib_TypeDescription* pTD) throw()
 {
     ::uno_destructData(pExcThis, pTD, uno::cpp_release);
     return pExcThis;
@@ -275,48 +270,56 @@ static void * __cdecl destruct(
 
 const int codeSnippetSize = 40;
 
-static void GenerateConstructorTrampoline(
-    unsigned char * code,
-    typelib_TypeDescription * pTD ) throw ()
+static void GenerateConstructorTrampoline(unsigned char* code, typelib_TypeDescription* pTD) throw()
 {
-    unsigned char *p = code;
+    unsigned char* p = code;
 
     // mov r8, pTD
-    *p++ = 0x49; *p++ = 0xB8;
-    *reinterpret_cast<void **>(p) = pTD; p += 8;
+    *p++ = 0x49;
+    *p++ = 0xB8;
+    *reinterpret_cast<void**>(p) = pTD;
+    p += 8;
 
     // mov r11, copyConstruct
-    *p++ = 0x49; *p++ = 0xBB;
-    *reinterpret_cast<void **>(p) = reinterpret_cast<void *>(&copyConstruct); p += 8;
+    *p++ = 0x49;
+    *p++ = 0xBB;
+    *reinterpret_cast<void**>(p) = reinterpret_cast<void*>(&copyConstruct);
+    p += 8;
 
     // jmp r11
-    *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
+    *p++ = 0x41;
+    *p++ = 0xFF;
+    *p++ = 0xE3;
 
-    assert( p < code + codeSnippetSize );
+    assert(p < code + codeSnippetSize);
 }
 
-static void GenerateDestructorTrampoline(
-    unsigned char * code,
-    typelib_TypeDescription * pTD ) throw ()
+static void GenerateDestructorTrampoline(unsigned char* code, typelib_TypeDescription* pTD) throw()
 {
-    unsigned char *p = code;
+    unsigned char* p = code;
 
     // mov rdx, pTD
-    *p++ = 0x48; *p++ = 0xBA;
-    *reinterpret_cast<void **>(p) = pTD; p += 8;
+    *p++ = 0x48;
+    *p++ = 0xBA;
+    *reinterpret_cast<void**>(p) = pTD;
+    p += 8;
 
     // mov r11, destruct
-    *p++ = 0x49; *p++ = 0xBB;
-    *reinterpret_cast<void **>(p) = reinterpret_cast<void *>(&destruct); p += 8;
+    *p++ = 0x49;
+    *p++ = 0xBB;
+    *reinterpret_cast<void**>(p) = reinterpret_cast<void*>(&destruct);
+    p += 8;
 
     // jmp r11
-    *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
+    *p++ = 0x41;
+    *p++ = 0xFF;
+    *p++ = 0xE3;
 
-    assert( p < code + codeSnippetSize );
+    assert(p < code + codeSnippetSize);
 }
 
-ExceptionType::ExceptionType(unsigned char * pCode, sal_uInt64 pCodeBase,
-                             typelib_TypeDescription * pTD) throw ()
+ExceptionType::ExceptionType(unsigned char* pCode, sal_uInt64 pCodeBase,
+                             typelib_TypeDescription* pTD) throw()
     : _n0(0)
     , _n1(0)
     , _n2(-1)
@@ -352,20 +355,20 @@ ExceptionType::ExceptionType(unsigned char * pCode, sal_uInt64 pCodeBase,
 * is also member of ExceptionType and can be referenced via 32 bit offset.
 */
 
-RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
+RaiseInfo::RaiseInfo(typelib_TypeDescription* pTD) throw()
     : _n0(0)
     , _n2(0)
     , _pTD(pTD)
 {
-    typelib_CompoundTypeDescription * pCompTD;
+    typelib_CompoundTypeDescription* pCompTD;
 
     // Count how many trampolines we need
     int codeSize = codeSnippetSize;
 
     // Info count
     int nLen = 0;
-    for (pCompTD = reinterpret_cast<typelib_CompoundTypeDescription*>(pTD);
-        pCompTD; pCompTD = pCompTD->pBaseTypeDescription)
+    for (pCompTD = reinterpret_cast<typelib_CompoundTypeDescription*>(pTD); pCompTD;
+         pCompTD = pCompTD->pBaseTypeDescription)
     {
         ++nLen;
         codeSize += codeSnippetSize;
@@ -380,8 +383,8 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
     auto exceptionTypeSizeArray = std::make_unique<int[]>(nLen);
 
     nLen = 0;
-    for (pCompTD = reinterpret_cast<typelib_CompoundTypeDescription*>(pTD);
-        pCompTD; pCompTD = pCompTD->pBaseTypeDescription)
+    for (pCompTD = reinterpret_cast<typelib_CompoundTypeDescription*>(pTD); pCompTD;
+         pCompTD = pCompTD->pBaseTypeDescription)
     {
         int typeInfoLen;
         RTTInfos::get(pCompTD->aBase.pTypeName, &typeInfoLen);
@@ -390,7 +393,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
         {
             int n = typeInfoLen / 4;
             n++;
-            typeInfoLen = n*4;
+            typeInfoLen = n * 4;
         }
         exceptionTypeSizeArray[nLen++] = typeInfoLen + sizeof(ExceptionType);
     }
@@ -405,24 +408,22 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
     // Allocate mem for code and all dynamic data in one chunk to guarantee
     // 32 bit offsets
     const int totalSize = codeSize + typeInfoArraySize + excTypeAddLen;
-    unsigned char * pCode = _code =
-        static_cast<unsigned char *>(std::malloc(totalSize));
+    unsigned char* pCode = _code = static_cast<unsigned char*>(std::malloc(totalSize));
     int pCodeOffset = 0;
 
     // New base of types array, starts after Trampoline D-Tor / C-Tors
-    DWORD * types = reinterpret_cast<DWORD *>(pCode + codeSize);
+    DWORD* types = reinterpret_cast<DWORD*>(pCode + codeSize);
 
     // New base of ExceptionType array, starts after types array
-    unsigned char *etMem = pCode + codeSize + typeInfoArraySize;
+    unsigned char* etMem = pCode + codeSize + typeInfoArraySize;
     int etMemOffset = 0;
 
     _codeBase = reinterpret_cast<sal_uInt64>(pCode)
-        & ~static_cast<sal_uInt64>(ExceptionInfos::allocationGranularity - 1);
+                & ~static_cast<sal_uInt64>(ExceptionInfos::allocationGranularity - 1);
 
     DWORD old_protect;
-    bool success =
-        VirtualProtect(pCode, codeSize, PAGE_EXECUTE_READWRITE, &old_protect);
-    (void) success;
+    bool success = VirtualProtect(pCode, codeSize, PAGE_EXECUTE_READWRITE, &old_protect);
+    (void)success;
     assert(success && "VirtualProtect() failed!");
 
     ::typelib_typedescription_acquire(pTD);
@@ -434,18 +435,17 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
 
     // Info count accompanied by type info ptrs: type, base type, base base type, ...
     // Keep offset of types_array
-    _types = static_cast<sal_Int32>(
-        reinterpret_cast<sal_uInt64>(types)-_codeBase);
+    _types = static_cast<sal_Int32>(reinterpret_cast<sal_uInt64>(types) - _codeBase);
     // Fill types: (nLen, _offset to ExceptionType1, ...ExceptionType2, ...)
     types[0] = nLen;
 
     int nPos = 1;
-    for (pCompTD = reinterpret_cast<typelib_CompoundTypeDescription*>(pTD);
-        pCompTD; pCompTD = pCompTD->pBaseTypeDescription)
+    for (pCompTD = reinterpret_cast<typelib_CompoundTypeDescription*>(pTD); pCompTD;
+         pCompTD = pCompTD->pBaseTypeDescription)
     {
         // Create instance in mem block with placement new
-        ExceptionType * et = new(etMem + etMemOffset)ExceptionType(
-            pCode + pCodeOffset, _codeBase, reinterpret_cast<typelib_TypeDescription *>(pCompTD));
+        ExceptionType* et = new (etMem + etMemOffset) ExceptionType(
+            pCode + pCodeOffset, _codeBase, reinterpret_cast<typelib_TypeDescription*>(pCompTD));
 
         // Next trampoline entry offset
         pCodeOffset += codeSnippetSize;
@@ -453,8 +453,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
         etMemOffset += exceptionTypeSizeArray[nPos - 1];
 
         // Keep offset of addresses of ET for D-Tor call in ~RaiseInfo
-        types[nPos++]
-            = static_cast<DWORD>(reinterpret_cast<sal_uInt64>(et)-_codeBase);
+        types[nPos++] = static_cast<DWORD>(reinterpret_cast<sal_uInt64>(et) - _codeBase);
     }
     // Final check: end of address calculation must be end of mem
     assert(etMem + etMemOffset == pCode + totalSize);
