@@ -22,17 +22,15 @@
 #include <sfx2//dllapi.h>
 #include <sfx2/sidebar/ResourceManager.hxx>
 
-#include <vcl/button.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/window.hxx>
 
 #include <functional>
 
-class Button;
-class CheckBox;
-class RadioButton;
-
 namespace svt { class AcceleratorExecute; }
+
+namespace weld { class Toolbar; }
 
 namespace sfx2::sidebar {
 
@@ -41,7 +39,7 @@ class SidebarController;
 
 /** The tab bar is the container for the individual tabs.
 */
-class TabBar final : public vcl::Window
+class TabBar final : public InterimItemWindow
 {
 public:
     /** DeckMenuData has entries for display name, and a flag:
@@ -57,7 +55,7 @@ public:
         bool mbIsEnabled;
     };
     typedef ::std::function<void (
-            const tools::Rectangle&,
+            weld::Menu& rMainMenu, weld::Menu& rSubMenu,
             const ::std::vector<DeckMenuData>& rMenuData)> PopupMenuProvider;
     TabBar (
         vcl::Window* pParentWindow,
@@ -65,6 +63,8 @@ public:
         const ::std::function<void (const OUString& rsDeckId)>& rDeckActivationFunctor,
         const PopupMenuProvider& rPopupMenuProvider,
         SidebarController* rParentSidebarController);
+
+    weld::Container* GetContainer() { return m_xContainer.get(); }
 
     virtual ~TabBar() override;
     virtual void dispose() override;
@@ -90,29 +90,44 @@ public:
 
 private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    VclPtr<RadioButton> mpMenuButton;
+
+    // This unusual auxillary builder is because without a toplevel GtkWindow
+    // gtk will warn on loading a .ui with an accelerator defined, so use a
+    // temporary toplevel to suppress that and move the contents after load
+    std::unique_ptr<weld::Builder> mxAuxBuilder;
+    std::unique_ptr<weld::Container> mxTempToplevel;
+    std::unique_ptr<weld::Widget> mxContents;
+
+    std::unique_ptr<weld::MenuButton> mxMenuButton;
+    std::unique_ptr<weld::Menu> mxMainMenu;
+    std::unique_ptr<weld::Menu> mxSubMenu;
+    std::unique_ptr<weld::Widget> mxMeasureBox;
     class Item
     {
+    private:
+        TabBar& mrTabBar;
+        std::unique_ptr<weld::Builder> mxBuilder;
     public:
-        DECL_LINK(HandleClick, Button*, void);
-        VclPtr<RadioButton> mpButton;
+        Item(TabBar& rTabBar);
+        ~Item();
+        DECL_LINK(HandleClick, const OString&, void);
+        std::unique_ptr<weld::Toolbar> mxButton;
         OUString msDeckId;
         ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
         bool mbIsHidden;
         bool mbIsHiddenByDefault;
     };
-    typedef ::std::vector<Item> ItemContainer;
+    typedef ::std::vector<std::unique_ptr<Item>> ItemContainer;
     ItemContainer maItems;
     const ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
     sal_Int32 mnMenuSeparatorY;
     PopupMenuProvider maPopupMenuProvider;
 
-    VclPtr<RadioButton> CreateTabItem (const DeckDescriptor& rDeckDescriptor);
+    static void CreateTabItem(weld::Toolbar& rButton, const DeckDescriptor& rDeckDescriptor);
     css::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;
-    void Layout();
     void UpdateButtonIcons();
 
-    DECL_LINK(OnToolboxClicked, Button*, void);
+    DECL_LINK(OnToolboxClicked, weld::ToggleButton&, void);
 
     SidebarController* pParentSidebarController;
     std::unique_ptr<svt::AcceleratorExecute> mpAccel;

@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/sidebar/TabBar.hxx>
-#include <sidebar/ControlFactory.hxx>
 #include <sidebar/DeckDescriptor.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sidebar/Tools.hxx>
@@ -30,16 +29,16 @@
 
 #include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
-#include <vcl/button.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/svborder.hxx>
 #include <svtools/acceleratorexecute.hxx>
 
 using namespace css;
 using namespace css::uno;
+
+static int gDefaultWidth;
 
 namespace sfx2::sidebar {
 
@@ -49,21 +48,30 @@ TabBar::TabBar(vcl::Window* pParentWindow,
                const PopupMenuProvider& rPopupMenuProvider,
                SidebarController* rParentSidebarController
               )
-    : Window(pParentWindow, WB_DIALOGCONTROL),
-      mxFrame(rxFrame),
-      mpMenuButton(ControlFactory::CreateMenuButton(this)),
-      maItems(),
-      maDeckActivationFunctor(rDeckActivationFunctor),
-      maPopupMenuProvider(rPopupMenuProvider),
-      pParentSidebarController(rParentSidebarController)
+    : InterimItemWindow(pParentWindow, "sfx/ui/tabbar.ui", "TabBar")
+    , mxFrame(rxFrame)
+    , mxAuxBuilder(Application::CreateBuilder(m_xContainer.get(), "sfx/ui/tabbarcontents.ui"))
+    , mxTempToplevel(mxAuxBuilder->weld_container("toplevel"))
+    , mxContents(mxAuxBuilder->weld_widget("TabBarContents"))
+    , mxMenuButton(mxAuxBuilder->weld_menu_button("menubutton"))
+    , mxMainMenu(mxAuxBuilder->weld_menu("mainmenu"))
+    , mxSubMenu(mxAuxBuilder->weld_menu("submenu"))
+    , mxMeasureBox(mxAuxBuilder->weld_widget("measure"))
+    , maItems()
+    , maDeckActivationFunctor(rDeckActivationFunctor)
+    , maPopupMenuProvider(rPopupMenuProvider)
+    , pParentSidebarController(rParentSidebarController)
 {
+    mxTempToplevel->move(mxContents.get(), m_xContainer.get());
+
+    gDefaultWidth = m_xContainer->get_preferred_size().Width();
+
+    // we have this widget just so we can measure best width for static TabBar::GetDefaultWidth
+    mxMeasureBox->hide();
 
     SetBackground(Wallpaper(Theme::GetColor(Theme::Color_TabBarBackground)));
 
-    mpMenuButton->SetModeImage(Theme::GetImage(Theme::Image_TabBarMenu));
-    mpMenuButton->SetClickHdl(LINK(this, TabBar, OnToolboxClicked));
-    mpMenuButton->SetQuickHelpText(SfxResId(SFX_STR_SIDEBAR_SETTINGS));
-    Layout();
+    mxMenuButton->connect_toggled(LINK(this, TabBar, OnToolboxClicked));
 
 #ifdef DEBUG
     SetText(OUString("TabBar"));
@@ -77,16 +85,19 @@ TabBar::~TabBar()
 
 void TabBar::dispose()
 {
-    for (auto & item : maItems)
-        item.mpButton.disposeAndClear();
+    m_xContainer->move(mxContents.get(), mxTempToplevel.get());
     maItems.clear();
-    mpMenuButton.disposeAndClear();
-    vcl::Window::dispose();
+    mxMeasureBox.reset();
+    mxSubMenu.reset();
+    mxMainMenu.reset();
+    mxMenuButton.reset();
+    mxAuxBuilder.reset();
+    InterimItemWindow::dispose();
 }
 
 void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea)
 {
-    Window::Paint(rRenderContext, rUpdateArea);
+    InterimItemWindow::Paint(rRenderContext, rUpdateArea);
 
     const sal_Int32 nHorizontalPadding(Theme::GetInteger(Theme::Int_TabMenuSeparatorPadding));
     rRenderContext.SetLineColor(Theme::GetColor(Theme::Color_TabMenuSeparator));
@@ -96,23 +107,19 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
 
 sal_Int32 TabBar::GetDefaultWidth()
 {
-    return Theme::GetInteger(Theme::Int_TabItemWidth)
-        + Theme::GetInteger(Theme::Int_TabBarLeftPadding)
-        + Theme::GetInteger(Theme::Int_TabBarRightPadding);
+    if (!gDefaultWidth)
+    {
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "sfx/ui/tabbarcontents.ui"));
+        std::unique_ptr<weld::Widget> xContainer(xBuilder->weld_widget("TabBarContents"));
+        gDefaultWidth = xContainer->get_preferred_size().Width();
+    }
+    return gDefaultWidth;
 }
 
 void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDecks)
 {
     // Remove the current buttons.
-    {
-        for (auto & item : maItems)
-        {
-            item.mpButton.disposeAndClear();
-        }
-        maItems.clear();
-    }
-    maItems.resize(rDecks.size());
-    sal_Int32 nIndex (0);
+    maItems.clear();
     for (auto const& deck : rDecks)
     {
         std::shared_ptr<DeckDescriptor> xDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(deck.msId);
@@ -122,110 +129,50 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
             continue;
         }
 
-        Item& rItem (maItems[nIndex++]);
-        rItem.msDeckId = xDescriptor->msId;
-        rItem.mpButton.disposeAndClear();
-        rItem.mpButton = CreateTabItem(*xDescriptor);
-        rItem.mpButton->SetClickHdl(LINK(&rItem, TabBar::Item, HandleClick));
-        rItem.maDeckActivationFunctor = maDeckActivationFunctor;
-        rItem.mbIsHidden = ! xDescriptor->mbIsEnabled;
-        rItem.mbIsHiddenByDefault = rItem.mbIsHidden; // the default is the state while creating
+        maItems.emplace_back(std::make_unique<Item>(*this));
+        auto& xItem(maItems.back());
+        xItem->msDeckId = xDescriptor->msId;
+        CreateTabItem(*xItem->mxButton, *xDescriptor);
+        xItem->mxButton->connect_clicked(LINK(xItem.get(), TabBar::Item, HandleClick));
+        xItem->maDeckActivationFunctor = maDeckActivationFunctor;
+        xItem->mbIsHidden = !xDescriptor->mbIsEnabled;
+        xItem->mbIsHiddenByDefault = xItem->mbIsHidden; // the default is the state while creating
 
-        rItem.mpButton->Enable(deck.mbIsEnabled);
+        xItem->mxButton->set_sensitive(deck.mbIsEnabled);
     }
 
     UpdateButtonIcons();
-    Layout();
 }
 
 void TabBar::UpdateButtonIcons()
 {
-    Image aImage = Theme::GetImage(Theme::Image_TabBarMenu);
-    mpMenuButton->SetModeImage(aImage);
-
     for (auto const& item : maItems)
     {
-        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item.msDeckId);
-
-        if (xDeckDescriptor)
-        {
-            aImage = Image(GetItemImage(*xDeckDescriptor));
-            item.mpButton->SetModeImage(aImage);
-        }
-    }
-
-    Invalidate();
-}
-
-void TabBar::Layout()
-{
-    const SvBorder aPadding (
-        Theme::GetInteger(Theme::Int_TabBarLeftPadding),
-        Theme::GetInteger(Theme::Int_TabBarTopPadding),
-        Theme::GetInteger(Theme::Int_TabBarRightPadding),
-        Theme::GetInteger(Theme::Int_TabBarBottomPadding));
-    sal_Int32 nX (aPadding.Top());
-    sal_Int32 nY (aPadding.Left());
-    const Size aTabItemSize (
-        Theme::GetInteger(Theme::Int_TabItemWidth) * GetDPIScaleFactor(),
-        Theme::GetInteger(Theme::Int_TabItemHeight) * GetDPIScaleFactor());
-
-    // Place the menu button and the separator.
-    if (mpMenuButton != nullptr)
-    {
-        mpMenuButton->SetPosSizePixel(
-            Point(nX,nY),
-            aTabItemSize);
-        mpMenuButton->Show();
-        nY += mpMenuButton->GetSizePixel().Height() + 1 + Theme::GetInteger(Theme::Int_TabMenuPadding);
-        mnMenuSeparatorY = nY - Theme::GetInteger(Theme::Int_TabMenuPadding)/2 - 1;
-    }
-
-    // Place the deck selection buttons.
-    for (auto const& item : maItems)
-    {
-        Button& rButton (*item.mpButton);
-        rButton.Show( ! item.mbIsHidden);
-
-        if (item.mbIsHidden)
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item->msDeckId);
+        if (!xDeckDescriptor)
             continue;
-
-        // Place and size the icon.
-        rButton.SetPosSizePixel(
-            Point(nX,nY),
-            aTabItemSize);
-        rButton.Show();
-
-        nY += rButton.GetSizePixel().Height() + 1 + aPadding.Bottom();
+        item->mxButton->set_item_image("toggle", GetItemImage(*xDeckDescriptor));
     }
-    Invalidate();
 }
 
-void TabBar::HighlightDeck (const OUString& rsDeckId)
+void TabBar::HighlightDeck(const OUString& rsDeckId)
 {
     for (auto const& item : maItems)
-    {
-        if (item.msDeckId == rsDeckId)
-            item.mpButton->Check();
-        else
-            item.mpButton->Check(false);
-    }
+        item->mxButton->set_item_active("toggle", item->msDeckId == rsDeckId);
 }
 
-void TabBar::RemoveDeckHighlight ()
+void TabBar::RemoveDeckHighlight()
 {
     for (auto const& item : maItems)
-    {
-        item.mpButton->Check(false);
-    }
+        item->mxButton->set_item_active("toggle", false);
 }
 
-void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
+void TabBar::DataChanged(const DataChangedEvent& rDataChangedEvent)
 {
     SetBackground(Theme::GetColor(Theme::Color_TabBarBackground));
     UpdateButtonIcons();
 
-    Window::DataChanged(rDataChangedEvent);
+    InterimItemWindow::DataChanged(rDataChangedEvent);
 }
 
 bool TabBar::EventNotify(NotifyEvent& rEvent)
@@ -242,7 +189,7 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
         const OUString aCommand(mpAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode)));
         if (".uno:Sidebar" == aCommand ||
                 (rKeyCode.IsMod1() && rKeyCode.IsShift() && rKeyCode.GetCode() == KEY_F10))
-            return vcl::Window::EventNotify(rEvent);
+            return InterimItemWindow::EventNotify(rEvent);
         return true;
     }
     else if(MouseNotifyEvent::COMMAND == nType)
@@ -254,7 +201,7 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
             if(!pData->GetModifier() && (pData->GetMode() == CommandWheelMode::SCROLL))
             {
                 auto pItem = std::find_if(maItems.begin(), maItems.end(),
-                    [] (Item const& rItem) { return rItem.mpButton->IsChecked(); });
+                    [] (const auto& item) { return item->mxButton->get_item_active("toggle"); });
                 if(pItem == maItems.end())
                     return true;
                 if(pData->GetNotchDelta()<0)
@@ -271,7 +218,7 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
                 }
                 try
                 {
-                    pItem->maDeckActivationFunctor(pItem->msDeckId);
+                    (*pItem)->maDeckActivationFunctor((*pItem)->msDeckId);
                 }
                 catch(const css::uno::Exception&) {};
                 return true;
@@ -281,14 +228,11 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
     return false;
 }
 
-VclPtr<RadioButton> TabBar::CreateTabItem(const DeckDescriptor& rDeckDescriptor)
+void TabBar::CreateTabItem(weld::Toolbar& rItem, const DeckDescriptor& rDeckDescriptor)
 {
-    VclPtr<RadioButton> pItem = ControlFactory::CreateTabItem(this);
-    pItem->SetAccessibleName(rDeckDescriptor.msTitle);
-    pItem->SetAccessibleDescription(rDeckDescriptor.msHelpText);
-    pItem->SetHelpText(rDeckDescriptor.msHelpText);
-    pItem->SetQuickHelpText(rDeckDescriptor.msHelpText);
-    return pItem;
+    rItem.set_accessible_name(rDeckDescriptor.msTitle);
+    rItem.set_accessible_description(rDeckDescriptor.msHelpText);
+    rItem.set_tooltip_text(rDeckDescriptor.msHelpText);
 }
 
 css::uno::Reference<css::graphic::XGraphic> TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
@@ -299,10 +243,22 @@ css::uno::Reference<css::graphic::XGraphic> TabBar::GetItemImage(const DeckDescr
         mxFrame);
 }
 
-IMPL_LINK_NOARG(TabBar::Item, HandleClick, Button*, void)
+TabBar::Item::Item(TabBar& rTabBar)
+    : mrTabBar(rTabBar)
+    , mxBuilder(Application::CreateBuilder(rTabBar.GetContainer(), "sfx/ui/tabbutton.ui"))
+    , mxButton(mxBuilder->weld_toolbar("button"))
 {
-    vcl::Window* pFocusWin = Application::GetFocusWindow();
-    pFocusWin->GrabFocusToDocument();
+}
+
+TabBar::Item::~Item()
+{
+    mrTabBar.GetContainer()->move(mxButton.get(), nullptr);
+}
+
+
+IMPL_LINK_NOARG(TabBar::Item, HandleClick, const OString&, void)
+{
+    mrTabBar.GrabFocusToDocument();
     try
     {
         maDeckActivationFunctor(msDeckId);
@@ -315,7 +271,7 @@ OUString const & TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
 {
     if (nIndex<0 || o3tl::make_unsigned(nIndex)>=maItems.size())
         throw RuntimeException();
-    return maItems[nIndex].msDeckId;
+    return maItems[nIndex]->msDeckId;
 }
 
 void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
@@ -323,12 +279,12 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
     if (nIndex<0 || o3tl::make_unsigned(nIndex) >= maItems.size())
         throw RuntimeException();
 
-    maItems[nIndex].mbIsHidden = ! maItems[nIndex].mbIsHidden;
+    maItems[nIndex]->mbIsHidden = ! maItems[nIndex]->mbIsHidden;
 
-    std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(maItems[nIndex].msDeckId);
+    std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(maItems[nIndex]->msDeckId);
     if (xDeckDescriptor)
     {
-        xDeckDescriptor->mbIsEnabled = ! maItems[nIndex].mbIsHidden;
+        xDeckDescriptor->mbIsEnabled = ! maItems[nIndex]->mbIsHidden;
 
         Context aContext;
         aContext.msApplication = pParentSidebarController->GetCurrentContext().msApplication;
@@ -338,77 +294,76 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
         xDeckDescriptor->maContextList.ToggleVisibilityForContext(
             aContext, xDeckDescriptor->mbIsEnabled );
     }
-
-    Layout();
 }
 
 void TabBar::RestoreHideFlags()
 {
-    bool bNeedsLayout(false);
     for (auto & item : maItems)
     {
-        if (item.mbIsHidden != item.mbIsHiddenByDefault)
+        if (item->mbIsHidden != item->mbIsHiddenByDefault)
         {
-            item.mbIsHidden = item.mbIsHiddenByDefault;
-            bNeedsLayout = true;
-
-            std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item.msDeckId);
+            item->mbIsHidden = item->mbIsHiddenByDefault;
+            std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item->msDeckId);
             if (xDeckDescriptor)
-                xDeckDescriptor->mbIsEnabled = ! item.mbIsHidden;
+                xDeckDescriptor->mbIsEnabled = !item->mbIsHidden;
 
         }
     }
-    if (bNeedsLayout)
-        Layout();
 }
 
 void TabBar::UpdateFocusManager(FocusManager& rFocusManager)
 {
-    std::vector<Button*> aButtons;
+    std::vector<weld::Widget*> aButtons;
     aButtons.reserve(maItems.size()+1);
-
-    aButtons.push_back(mpMenuButton.get());
+    aButtons.push_back(mxMenuButton.get());
     for (auto const& item : maItems)
     {
-        aButtons.push_back(item.mpButton.get());
+        aButtons.push_back(item->mxButton.get());
     }
     rFocusManager.SetButtons(aButtons);
 }
 
-IMPL_LINK_NOARG(TabBar, OnToolboxClicked, Button*, void)
+IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::ToggleButton&, void)
 {
-    if (!mpMenuButton)
+    if (!mxMenuButton->get_active())
         return;
 
     std::vector<DeckMenuData> aMenuData;
 
     for (auto const& item : maItems)
     {
-        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item.msDeckId);
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item->msDeckId);
 
-        if (xDeckDescriptor)
-        {
-            DeckMenuData aData;
-            aData.msDisplayName = xDeckDescriptor->msTitle;
-            aData.mbIsCurrentDeck = item.mpButton->IsChecked();
-            aData.mbIsActive = !item.mbIsHidden;
-            aData.mbIsEnabled = item.mpButton->IsEnabled();
+        if (!xDeckDescriptor)
+            continue;
 
-            aMenuData.push_back(aData);
-        }
+        DeckMenuData aData;
+        aData.msDisplayName = xDeckDescriptor->msTitle;
+        aData.mbIsCurrentDeck = item->mxButton->get_item_active("toggle");
+        aData.mbIsActive = !item->mbIsHidden;
+        aData.mbIsEnabled = item->mxButton->get_sensitive();
+        aMenuData.push_back(aData);
     }
 
-    maPopupMenuProvider(
-        tools::Rectangle(
-            mpMenuButton->GetPosPixel(),
-            mpMenuButton->GetSizePixel()),
-        aMenuData);
-    mpMenuButton->Check(false);
+    for (int i = mxMainMenu->n_children() - 1; i >= 0; --i)
+    {
+        OString sIdent = mxMainMenu->get_id(i);
+        if (sIdent.startsWith("select"))
+            mxMainMenu->remove(sIdent);
+    }
+    for (int i = mxSubMenu->n_children() - 1; i >= 0; --i)
+    {
+        OString sIdent = mxSubMenu->get_id(i);
+        if (sIdent.indexOf("customize") != -1)
+            mxSubMenu->remove(sIdent);
+    }
+
+    maPopupMenuProvider(*mxMainMenu, *mxSubMenu, aMenuData);
 }
 
 void TabBar::EnableMenuButton(const bool bEnable)
 {
-    mpMenuButton->Enable(bEnable);
+    mxMenuButton->set_sensitive(bEnable);
 }
 
 } // end of namespace sfx2::sidebar

@@ -55,7 +55,6 @@ public:
 
         AnyItem_ = Pre_Image_,
 
-        Image_TabBarMenu,
         Image_CloseIndicator,
 
         Image_Color_,
@@ -63,8 +62,6 @@ public:
         Color_DeckTitleFont,
         Color_PanelTitleFont,
         Color_TabMenuSeparator,
-        Color_TabItemBorder,
-        Color_DropDownBorder,
         Color_Highlight,
         Color_HighlightText,
         Color_DeckBackground,
@@ -72,8 +69,6 @@ public:
         Color_PanelBackground,
         Color_PanelTitleBarBackground,
         Color_TabBarBackground,
-        Color_TabItemBackgroundNormal,
-        Color_TabItemBackgroundHighlight,
         Color_HorizontalBorder,
         Color_VerticalBorder,
         Color_DropDownBackground,
@@ -86,17 +81,10 @@ public:
         Int_PanelTitleBarHeight,
         Int_TabMenuPadding,
         Int_TabMenuSeparatorPadding,
-        Int_TabItemWidth,
-        Int_TabItemHeight,
         Int_DeckLeftPadding,
         Int_DeckTopPadding,
         Int_DeckRightPadding,
         Int_DeckBottomPadding,
-        Int_TabBarLeftPadding,
-        Int_TabBarTopPadding,
-        Int_TabBarRightPadding,
-        Int_TabBarBottomPadding,
-        Int_ButtonCornerRadius,
 
         Int_Bool_,
 

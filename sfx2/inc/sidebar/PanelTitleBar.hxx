@@ -45,6 +45,11 @@ public:
 
     void UpdateExpandedState();
 
+    weld::Expander& GetExpander()
+    {
+        return *mxExpander;
+    }
+
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
 
 private:
