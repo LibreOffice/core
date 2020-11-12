@@ -33,9 +33,6 @@
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-
-
-
 class SalAquaPicker
 {
 public:
@@ -46,24 +43,22 @@ public:
     int run();
     int runandwaitforresult();
 
-    OUString const & getDisplayDirectory() { return m_sDisplayDirectory; }
+    OUString const& getDisplayDirectory() { return m_sDisplayDirectory; }
 
-    ControlHelper* getControlHelper() const {
-        return m_pControlHelper;
-    }
+    ControlHelper* getControlHelper() const { return m_pControlHelper; }
 
 protected:
-
     OUString m_sDisplayDirectory;
 
-    NSSavePanel *m_pDialog;
+    NSSavePanel* m_pDialog;
 
-    ControlHelper *m_pControlHelper;
+    ControlHelper* m_pControlHelper;
 
     osl::Mutex m_rbHelperMtx;
 
     // The type of dialog
-    enum NavigationServices_DialogType {
+    enum NavigationServices_DialogType
+    {
         NAVIGATIONSERVICES_OPEN,
         NAVIGATIONSERVICES_SAVE,
         NAVIGATIONSERVICES_DIRECTORY
@@ -72,17 +67,16 @@ protected:
     NavigationServices_DialogType m_nDialogType;
 
     /// @throws css::uno::RuntimeException
-    void implsetTitle( const OUString& aTitle );
+    void implsetTitle(const OUString& aTitle);
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void implsetDisplayDirectory( const OUString& rDirectory );
+    void implsetDisplayDirectory(const OUString& rDirectory);
 
     /// @throws css::uno::RuntimeException
-    OUString const & implgetDisplayDirectory(  );
+    OUString const& implgetDisplayDirectory();
 
-    void implInitialize( );
-
+    void implInitialize();
 };
 
 #endif

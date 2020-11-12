@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_FPICKER_SOURCE_WIN32_MISC_WINIMPLHELPER_HXX
 #define INCLUDED_FPICKER_SOURCE_WIN32_MISC_WINIMPLHELPER_HXX
 
@@ -25,7 +24,7 @@
 #include <rtl/ustring.hxx>
 
 #if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 
@@ -38,7 +37,7 @@
 // '~'  -> '&'
 // '~~' -> '~'
 // '&'  -> '&&'
-OUString SOfficeToWindowsLabel( const OUString& aSOLabel );
+OUString SOfficeToWindowsLabel(const OUString& aSOLabel);
 
 // converts a windows label to a soffice label
 // the following rules for character replacements
@@ -46,7 +45,7 @@ OUString SOfficeToWindowsLabel( const OUString& aSOLabel );
 // '&'  -> '~'
 // '&&' -> '&'
 // '~'  -> '~~'
-OUString WindowsToSOfficeLabel( const OUString& aWinLabel );
+OUString WindowsToSOfficeLabel(const OUString& aWinLabel);
 
 #endif
 

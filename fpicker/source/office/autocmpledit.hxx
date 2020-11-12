@@ -19,15 +19,15 @@ class AutocompleteEdit
 private:
     std::unique_ptr<weld::Entry> m_xEntry;
 
-    std::vector< OUString > m_aEntries;
-    std::vector< OUString > m_aMatching;
+    std::vector<OUString> m_aEntries;
+    std::vector<OUString> m_aMatching;
     Idle m_aChangedIdle;
     Link<weld::Entry&, void> m_aChangeHdl;
 
     DECL_LINK(ChangedHdl, weld::Entry&, void);
     DECL_LINK(TryAutoComplete, Timer*, void);
 
-    bool Match( const OUString& rText );
+    bool Match(const OUString& rText);
 
 public:
     AutocompleteEdit(std::unique_ptr<weld::Entry> xEntry);
@@ -40,9 +40,12 @@ public:
     void select_region(int nStartPos, int nEndPos) { m_xEntry->select_region(nStartPos, nEndPos); }
 
     void connect_changed(const Link<weld::Entry&, void>& rLink) { m_aChangeHdl = rLink; }
-    void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xEntry->connect_focus_in(rLink); }
+    void connect_focus_in(const Link<weld::Widget&, void>& rLink)
+    {
+        m_xEntry->connect_focus_in(rLink);
+    }
 
-    void AddEntry( const OUString& rEntry );
+    void AddEntry(const OUString& rEntry);
     void ClearEntries();
 };
 

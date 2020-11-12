@@ -11,10 +11,7 @@
 
 #include <unotools/resmgr.hxx>
 
-inline OUString FpsResId(const char* pId)
-{
-    return Translate::get(pId, Translate::Create("fps"));
-};
+inline OUString FpsResId(const char* pId) { return Translate::get(pId, Translate::Create("fps")); };
 
 #endif
 

@@ -27,12 +27,12 @@ private:
     std::unique_ptr<weld::Entry> m_xNameEdit;
     std::unique_ptr<weld::Button> m_xOKBtn;
 
-    DECL_LINK( OKHdl, weld::Button&, void );
-    DECL_LINK( NameHdl, weld::Entry&, void );
+    DECL_LINK(OKHdl, weld::Button&, void);
+    DECL_LINK(NameHdl, weld::Entry&, void);
 
 public:
     QueryFolderNameDialog(weld::Window* _pParent, const OUString& rTitle,
-        const OUString& rDefaultText);
+                          const OUString& rDefaultText);
     virtual ~QueryFolderNameDialog() override;
     OUString GetName() const { return m_xNameEdit->get_text(); }
 };

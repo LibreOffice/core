@@ -27,8 +27,8 @@
 
 //for Cocoa types
 @interface NSString (OOoAdditions)
-+ (id) stringWithOUString:(const OUString&)ouString;
-- (OUString) OUString;
++ (id)stringWithOUString:(const OUString&)ouString;
+- (OUString)OUString;
 @end
 
 #endif // INCLUDED_FPICKER_SOURCE_AQUA_NSSTRING_OOOADDITIONS_HXX
