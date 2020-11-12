@@ -20,23 +20,16 @@
 #include "xmlPropertyHandler.hxx"
 #include <xmloff/txtimp.hxx>
 
-
 namespace rptxml
 {
+using namespace ::com::sun::star;
+using namespace xmloff;
+using namespace ::com::sun::star::uno;
 
-    using namespace ::com::sun::star;
-    using namespace xmloff;
-    using namespace ::com::sun::star::uno;
+OXMLRptPropHdlFactory::OXMLRptPropHdlFactory() {}
 
-OXMLRptPropHdlFactory::OXMLRptPropHdlFactory()
-{
-}
+OXMLRptPropHdlFactory::~OXMLRptPropHdlFactory() {}
 
-OXMLRptPropHdlFactory::~OXMLRptPropHdlFactory()
-{
-}
-
-}// rptxml
-
+} // rptxml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

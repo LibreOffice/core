@@ -20,13 +20,11 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFAC_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFAC_HXX
 
-
 #include <svx/svdobj.hxx>
 #include <tools/link.hxx>
 
 namespace rptui
 {
-
 // DlgEdFactory
 
 class DlgEdFactory
@@ -35,7 +33,7 @@ public:
     DlgEdFactory();
     ~DlgEdFactory() COVERITY_NOEXCEPT_FALSE;
 
-    DECL_STATIC_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, SdrObject* );
+    DECL_STATIC_LINK(DlgEdFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
 };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFAC_HXX

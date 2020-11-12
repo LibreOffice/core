@@ -8031,11 +8031,9 @@ reportdesign/inc/RptPage.hxx
 reportdesign/inc/UndoActions.hxx
 reportdesign/inc/UndoEnv.hxx
 reportdesign/inc/conditionalexpression.hxx
-reportdesign/inc/dllapi.h
 reportdesign/inc/helpids.h
 reportdesign/inc/reportformula.hxx
 reportdesign/inc/strings.hxx
-reportdesign/qa/unit/reportdesign-dialogs-test.cxx
 reportdesign/source/core/api/FixedLine.cxx
 reportdesign/source/core/api/FixedText.cxx
 reportdesign/source/core/api/FormatCondition.cxx
@@ -8046,10 +8044,8 @@ reportdesign/source/core/api/Group.cxx
 reportdesign/source/core/api/Groups.cxx
 reportdesign/source/core/api/ImageControl.cxx
 reportdesign/source/core/api/ReportComponent.cxx
-reportdesign/source/core/api/ReportControlModel.cxx
 reportdesign/source/core/api/ReportDefinition.cxx
 reportdesign/source/core/api/ReportEngineJFree.cxx
-reportdesign/source/core/api/ReportVisitor.cxx
 reportdesign/source/core/api/Section.cxx
 reportdesign/source/core/api/Shape.cxx
 reportdesign/source/core/api/Tools.cxx
@@ -8076,7 +8072,6 @@ reportdesign/source/core/inc/conditionupdater.hxx
 reportdesign/source/core/misc/conditionalexpression.cxx
 reportdesign/source/core/misc/conditionupdater.cxx
 reportdesign/source/core/misc/reportformula.cxx
-reportdesign/source/core/resource/core_resource.cxx
 reportdesign/source/core/sdr/PropertyForward.cxx
 reportdesign/source/core/sdr/ReportDrawPage.cxx
 reportdesign/source/core/sdr/ReportUndoFactory.cxx
@@ -8125,7 +8120,6 @@ reportdesign/source/filter/xml/xmlImportDocumentHandler.cxx
 reportdesign/source/filter/xml/xmlImportDocumentHandler.hxx
 reportdesign/source/filter/xml/xmlMasterFields.cxx
 reportdesign/source/filter/xml/xmlMasterFields.hxx
-reportdesign/source/filter/xml/xmlPropertyHandler.cxx
 reportdesign/source/filter/xml/xmlPropertyHandler.hxx
 reportdesign/source/filter/xml/xmlReport.cxx
 reportdesign/source/filter/xml/xmlReport.hxx
@@ -8189,10 +8183,7 @@ reportdesign/source/ui/inc/SectionWindow.hxx
 reportdesign/source/ui/inc/StartMarker.hxx
 reportdesign/source/ui/inc/UITools.hxx
 reportdesign/source/ui/inc/ViewsWindow.hxx
-reportdesign/source/ui/inc/dlgedclip.hxx
-reportdesign/source/ui/inc/dlgedfac.hxx
 reportdesign/source/ui/inc/dlgedfunc.hxx
-reportdesign/source/ui/inc/dlgpage.hxx
 reportdesign/source/ui/inc/metadata.hxx
 reportdesign/source/ui/inc/propbrw.hxx
 reportdesign/source/ui/inc/statusbarcontroller.hxx
