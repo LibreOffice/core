@@ -22,14 +22,14 @@ class DetailsContainer;
 class UNLESS_MERGELIBS(SVT_DLLPUBLIC) PlaceEditDialog final : public weld::GenericDialogController
 {
 private:
-    std::shared_ptr< DetailsContainer > m_xCurrentDetails;
+    std::shared_ptr<DetailsContainer> m_xCurrentDetails;
     /** Vector holding the details UI control for each server type.
 
         The elements in this vector need to match the order in the type listbox, e.g.
         the m_aDetailsContainer[0] will be shown for the type corresponding to entry 0
         in the listbox.
       */
-    std::vector< std::shared_ptr< DetailsContainer > > m_aDetailsContainers;
+    std::vector<std::shared_ptr<DetailsContainer>> m_aDetailsContainers;
 
     sal_Int32 m_nCurrentType;
 
@@ -70,7 +70,7 @@ public:
 
 public:
     PlaceEditDialog(weld::Window* pParent);
-    PlaceEditDialog(weld::Window* pParent, const std::shared_ptr<Place> &rPlace );
+    PlaceEditDialog(weld::Window* pParent, const std::shared_ptr<Place>& rPlace);
     virtual ~PlaceEditDialog() override;
 
     // Returns a place instance with given information
@@ -80,23 +80,21 @@ public:
     OUString GetServerUrl();
     OUString GetPassword() const { return m_xEDPassword->get_text(); };
     OUString GetUser() const { return m_xEDUsername->get_text(); };
-    bool     IsRememberChecked() const { return m_xCBPassword->get_active(); }
+    bool IsRememberChecked() const { return m_xCBPassword->get_active(); }
 
     void ShowPasswordControl() { m_bShowPassword = true; }
 
 private:
+    void InitDetails();
 
-    void InitDetails( );
-
-    DECL_LINK ( OKHdl, weld::Button&, void );
-    DECL_LINK ( DelHdl, weld::Button&, void );
-    DECL_LINK ( EditHdl, DetailsContainer*, void );
-    DECL_LINK ( ModifyHdl, weld::Entry&, void );
+    DECL_LINK(OKHdl, weld::Button&, void);
+    DECL_LINK(DelHdl, weld::Button&, void);
+    DECL_LINK(EditHdl, DetailsContainer*, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
     void SelectType(bool bSkipSeparator);
-    DECL_LINK ( SelectTypeHdl, weld::ComboBox&, void );
-    DECL_LINK ( EditLabelHdl, weld::Entry&, void );
-    DECL_LINK ( EditUsernameHdl, weld::Entry&, void );
-
+    DECL_LINK(SelectTypeHdl, weld::ComboBox&, void);
+    DECL_LINK(EditLabelHdl, weld::Entry&, void);
+    DECL_LINK(EditUsernameHdl, weld::Entry&, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

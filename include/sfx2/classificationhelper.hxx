@@ -17,8 +17,14 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/infobar.hxx>
 
-namespace com::sun::star::beans { class XPropertyContainer; }
-namespace com::sun::star::document { class XDocumentProperties; }
+namespace com::sun::star::beans
+{
+class XPropertyContainer;
+}
+namespace com::sun::star::document
+{
+class XDocumentProperties;
+}
 
 class SfxViewFrame;
 
@@ -46,14 +52,18 @@ class SFX2_DLLPUBLIC SfxClassificationHelper
 
 public:
     /// Does the document have any BAILS properties?
-    static bool IsClassified(const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties);
+    static bool IsClassified(
+        const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties);
     /// Checks if pasting from xSource to xDestination would leak information.
-    static SfxClassificationCheckPasteResult CheckPaste(const css::uno::Reference<css::document::XDocumentProperties>& xSource,
-            const css::uno::Reference<css::document::XDocumentProperties>& xDestination);
+    static SfxClassificationCheckPasteResult
+    CheckPaste(const css::uno::Reference<css::document::XDocumentProperties>& xSource,
+               const css::uno::Reference<css::document::XDocumentProperties>& xDestination);
     /// Wrapper around CheckPaste(): informs the user if necessary and finds out if the paste can be continued or not.
     static bool ShowPasteInfo(SfxClassificationCheckPasteResult eResult);
 
-    SfxClassificationHelper(const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties, bool bUseLocalizedPolicy = true);
+    SfxClassificationHelper(
+        const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties,
+        bool bUseLocalizedPolicy = true);
     ~SfxClassificationHelper();
     /// Get the currently selected category for eType.
     const OUString& GetBACName(SfxClassificationPolicyType eType) const;
@@ -85,9 +95,9 @@ public:
     bool HasDocumentFooter();
     void UpdateInfobar(SfxViewFrame& rViewFrame);
 
-    std::vector<OUString> const & GetMarkings() const;
-    std::vector<OUString> const & GetIntellectualPropertyParts() const;
-    std::vector<OUString> const & GetIntellectualPropertyPartNumbers() const;
+    std::vector<OUString> const& GetMarkings() const;
+    std::vector<OUString> const& GetIntellectualPropertyParts() const;
+    std::vector<OUString> const& GetIntellectualPropertyPartNumbers() const;
 
     /// Does a best-effort conversion of rType to SfxClassificationPolicyType.
     static SfxClassificationPolicyType stringToPolicyType(const OUString& rType);
@@ -108,7 +118,6 @@ public:
 
 namespace sfx
 {
-
 /// Specifies the origin: either defined by the BAF policy or manual via. the advanced classification dialog
 enum class ClassificationCreationOrigin
 {
@@ -126,10 +135,8 @@ private:
     sal_Int32 m_nIPPartNumber;
     sal_Int32 m_nMarkingNumber;
 
-    OUString const & getPolicyKey() const
-    {
-        return m_sPolicy;
-    }
+    OUString const& getPolicyKey() const { return m_sPolicy; }
+
 public:
     ClassificationKeyCreator(SfxClassificationPolicyType ePolicyType)
         : m_ePolicyType(ePolicyType)
@@ -137,29 +144,24 @@ public:
         , m_nTextNumber(1)
         , m_nIPPartNumber(1)
         , m_nMarkingNumber(1)
-    {}
-
-    OUString makeTextKey() const
     {
-        return getPolicyKey() + "Custom:Text";
     }
+
+    OUString makeTextKey() const { return getPolicyKey() + "Custom:Text"; }
 
     OUString makeNumberedTextKey()
     {
         return makeTextKey() + ":n" + OUString::number(m_nTextNumber++);
     }
 
-    bool isMarkingTextKey(OUString const & aKey) const
-    {
-        return aKey.startsWith(makeTextKey());
-    }
+    bool isMarkingTextKey(OUString const& aKey) const { return aKey.startsWith(makeTextKey()); }
 
     OUString makeCategoryNameKey() const
     {
         return getPolicyKey() + "BusinessAuthorizationCategory:Name";
     }
 
-    bool isCategoryNameKey(OUString const & aKey) const
+    bool isCategoryNameKey(OUString const& aKey) const
     {
         return aKey.startsWith(makeCategoryNameKey());
     }
@@ -169,25 +171,19 @@ public:
         return getPolicyKey() + "BusinessAuthorizationCategory:Identifier";
     }
 
-    bool isCategoryIdentifierKey(OUString const & aKey) const
+    bool isCategoryIdentifierKey(OUString const& aKey) const
     {
         return aKey.startsWith(makeCategoryIdentifierKey());
     }
 
-    OUString makeMarkingKey() const
-    {
-        return getPolicyKey() + "Custom:Marking";
-    }
+    OUString makeMarkingKey() const { return getPolicyKey() + "Custom:Marking"; }
 
     OUString makeNumberedMarkingKey()
     {
         return makeMarkingKey() + ":n" + OUString::number(m_nMarkingNumber++);
     }
 
-    bool isMarkingKey(OUString const & aKey) const
-    {
-        return aKey.startsWith(makeMarkingKey());
-    }
+    bool isMarkingKey(OUString const& aKey) const { return aKey.startsWith(makeMarkingKey()); }
 
     OUString makeIntellectualPropertyPartKey() const
     {
@@ -199,7 +195,7 @@ public:
         return makeIntellectualPropertyPartKey() + ":n" + OUString::number(m_nIPPartNumber++);
     }
 
-    bool isIntellectualPropertyPartKey(OUString const & aKey) const
+    bool isIntellectualPropertyPartKey(OUString const& aKey) const
     {
         return aKey.startsWith(makeIntellectualPropertyPartKey());
     }
@@ -210,16 +206,12 @@ public:
     }
 
     /// Classification creation origin key
-    OUString makeCreationOriginKey() const
-    {
-        return getPolicyKey() + "CreationOrigin";
-    }
+    OUString makeCreationOriginKey() const { return getPolicyKey() + "CreationOrigin"; }
 };
 
 SFX2_DLLPUBLIC sfx::ClassificationCreationOrigin getCreationOriginProperty(
-    css::uno::Reference<css::beans::XPropertyContainer> const & rxPropertyContainer,
-    sfx::ClassificationKeyCreator const & rKeyCreator);
-
+    css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
+    sfx::ClassificationKeyCreator const& rKeyCreator);
 }
 
 #endif

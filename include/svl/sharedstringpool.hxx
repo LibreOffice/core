@@ -16,8 +16,8 @@
 
 class CharClass;
 
-namespace svl {
-
+namespace svl
+{
 class SharedString;
 
 /**
@@ -30,11 +30,11 @@ class SVL_DLLPUBLIC SharedStringPool
     struct Impl;
     std::unique_ptr<Impl> mpImpl;
 
-    SharedStringPool( const SharedStringPool& ) = delete;
-    SharedStringPool& operator=( const SharedStringPool& ) = delete;
+    SharedStringPool(const SharedStringPool&) = delete;
+    SharedStringPool& operator=(const SharedStringPool&) = delete;
 
 public:
-    SharedStringPool( const CharClass& rCharClass );
+    SharedStringPool(const CharClass& rCharClass);
     ~SharedStringPool();
 
     /**
@@ -45,7 +45,7 @@ public:
      * @return a pointer to the string object stored inside the pool, or NULL
      *         if the insertion fails.
      */
-    SharedString intern( const OUString& rStr );
+    SharedString intern(const OUString& rStr);
 
     /**
      * Go through all string objects in the pool, and clear those that are no
@@ -57,7 +57,6 @@ public:
 
     size_t getCountIgnoreCase() const;
 };
-
 }
 
 #endif

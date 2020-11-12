@@ -26,8 +26,8 @@
 
 #include <jni.h>
 
-namespace jvmaccess {
-
+namespace jvmaccess
+{
 /** An encapsulating wrapper around a Java virtual machine.
  */
 class JVMACCESS_DLLPUBLIC VirtualMachine final : public salhelper::SimpleReferenceObject
@@ -53,11 +53,11 @@ public:
         public:
             CreationException();
 
-            CreationException(CreationException const &);
+            CreationException(CreationException const&);
 
             ~CreationException();
 
-            CreationException & operator =(CreationException const &);
+            CreationException& operator=(CreationException const&);
         };
 
         /** Attach the current thread to a virtual machine.
@@ -68,7 +68,7 @@ public:
             @exception CreationException
             Thrown in case attaching fails (due to a JNI problem).
          */
-        explicit AttachGuard(rtl::Reference< VirtualMachine > const & rMachine);
+        explicit AttachGuard(rtl::Reference<VirtualMachine> const& rMachine);
 
         /** Detach the current thread from the virtual machine again.
          */
@@ -79,14 +79,14 @@ public:
             @return
             A valid JNI environment pointer.  Will never be null.
          */
-        JNIEnv * getEnvironment() const { return m_pEnvironment; }
+        JNIEnv* getEnvironment() const { return m_pEnvironment; }
 
     private:
-        AttachGuard(AttachGuard const &) = delete;
-        AttachGuard& operator =(AttachGuard const &) = delete;
+        AttachGuard(AttachGuard const&) = delete;
+        AttachGuard& operator=(AttachGuard const&) = delete;
 
-        rtl::Reference< VirtualMachine > m_xMachine;
-        JNIEnv * m_pEnvironment;
+        rtl::Reference<VirtualMachine> m_xMachine;
+        JNIEnv* m_pEnvironment;
         bool m_bDetach;
     };
 
@@ -124,26 +124,24 @@ public:
         anyway).  This parameter is currently unused (but may be used again in
         the future).
      */
-    VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
-                   JNIEnv const * pMainThreadEnv);
+    VirtualMachine(JavaVM* pVm, int nVersion, bool bDestroy, JNIEnv const* pMainThreadEnv);
 
 private:
-    VirtualMachine(VirtualMachine const &) = delete;
-    VirtualMachine& operator =(VirtualMachine const & ) = delete;
+    VirtualMachine(VirtualMachine const&) = delete;
+    VirtualMachine& operator=(VirtualMachine const&) = delete;
 
     virtual ~VirtualMachine() override;
 
-    JNIEnv * attachThread(bool * pAttached) const;
+    JNIEnv* attachThread(bool* pAttached) const;
 
     void detachThread() const;
 
-    JavaVM * m_pVm;
+    JavaVM* m_pVm;
     jint m_nVersion;
     bool m_bDestroy;
 
     friend class AttachGuard; // to access attachThread, detachThread
 };
-
 }
 
 #endif // INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX

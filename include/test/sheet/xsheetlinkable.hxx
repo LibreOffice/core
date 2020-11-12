@@ -10,26 +10,24 @@
 #ifndef INCLUDED_TEST_SHEET_XSHEETLINKABLE_HXX
 #define INCLUDED_TEST_SHEET_XSHEETLINKABLE_HXX
 
-
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XSheetLinkable
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() =0;
-    virtual OUString getFileURL() =0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual OUString getFileURL() = 0;
 
     void testSheetLinkable();
 
 protected:
     ~XSheetLinkable() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XSHEETLINKABLE_HXX

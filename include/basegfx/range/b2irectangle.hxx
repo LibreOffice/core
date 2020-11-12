@@ -23,11 +23,11 @@
 
 namespace basegfx
 {
-    // syntactic sugar: a B2IRange exactly models a Rectangle, thus,
-    // for interface clarity, we provide an alias name
+// syntactic sugar: a B2IRange exactly models a Rectangle, thus,
+// for interface clarity, we provide an alias name
 
-    /// Alias name for interface clarity (not everybody is aware of the identity)
-    typedef B2IRange B2IRectangle;
+/// Alias name for interface clarity (not everybody is aware of the identity)
+typedef B2IRange B2IRectangle;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

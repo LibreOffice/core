@@ -14,12 +14,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XDatabaseRange
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init(const OUString& rDBName) = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init(const OUString& rDBName) = 0;
 
     void testDataArea();
     void testGetSortDescriptor();
@@ -31,7 +31,6 @@ public:
 protected:
     ~XDatabaseRange() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XDATABASERANGE_HXX

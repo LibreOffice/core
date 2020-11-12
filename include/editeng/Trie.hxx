@@ -17,7 +17,6 @@
 
 namespace editeng
 {
-
 struct TrieNode;
 
 class EDITENG_DLLPUBLIC Trie final
@@ -33,7 +32,6 @@ public:
     void findSuggestions(const OUString& sWordPart, std::vector<OUString>& rSuggestionList) const;
     size_t size() const;
 };
-
 }
 
 #endif // INCLUDED_EDITENG_TRIE_HXX

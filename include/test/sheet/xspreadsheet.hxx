@@ -14,20 +14,19 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XSpreadsheet
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void testCreateCursor();
     void testCreateCursorByRange();
 
 protected:
-    ~XSpreadsheet(){}
+    ~XSpreadsheet() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XSPREADSHEET_HXX

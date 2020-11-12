@@ -23,12 +23,21 @@
 #include <svx/svxdllapi.h>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 
-namespace com::sun::star::ui { class XContextChangeEventMultiplexer; }
-namespace com::sun::star::ui { struct ContextChangeEventObject; }
-namespace vcl { class Window; }
+namespace com::sun::star::ui
+{
+class XContextChangeEventMultiplexer;
+}
+namespace com::sun::star::ui
+{
+struct ContextChangeEventObject;
+}
+namespace vcl
+{
+class Window;
+}
 
-namespace svx {
-
+namespace svx
+{
 class ParaULSpacingControl : public SfxToolBoxControl
 {
 public:
@@ -58,8 +67,7 @@ public:
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
 };
 
-class ParaLRSpacingControl : public SfxToolBoxControl,
-                                    public css::ui::XContextChangeEventListener
+class ParaLRSpacingControl : public SfxToolBoxControl, public css::ui::XContextChangeEventListener
 {
 public:
     ParaLRSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
@@ -72,15 +80,16 @@ public:
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override = 0;
 
     // XContextChangeEventListener
-    virtual void SAL_CALL notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent) override;
+    virtual void SAL_CALL
+    notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent) override;
 
     virtual ::css::uno::Any SAL_CALL queryInterface(const ::css::uno::Type& aType) override;
 
-    virtual void SAL_CALL acquire() throw () override;
+    virtual void SAL_CALL acquire() throw() override;
 
     virtual void SAL_CALL disposing(const ::css::lang::EventObject&) override;
 
-    virtual void SAL_CALL release() throw () override;
+    virtual void SAL_CALL release() throw() override;
 
 private:
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> m_xMultiplexer;
@@ -112,10 +121,8 @@ public:
     ParaFirstLineSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
 };
-
 }
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

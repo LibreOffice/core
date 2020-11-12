@@ -23,12 +23,18 @@
 #include <svx/svxdllapi.h>
 #include <vcl/weld.hxx>
 
-enum class SpacingType { SPACING_INCH, MARGINS_INCH, SPACING_CM, MARGINS_CM };
+enum class SpacingType
+{
+    SPACING_INCH,
+    MARGINS_INCH,
+    SPACING_CM,
+    MARGINS_CM
+};
 
 /// Custom Widget ListBox to hold entries for Spacing & Margin settings of Header/Footer
 namespace SpacingListBox
 {
-    void SVXCORE_DLLPUBLIC Fill(SpacingType eType, weld::ComboBox&);
+void SVXCORE_DLLPUBLIC Fill(SpacingType eType, weld::ComboBox&);
 }
 
 #endif

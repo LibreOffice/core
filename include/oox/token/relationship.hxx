@@ -14,8 +14,8 @@
 
 #include <rtl/ustring.hxx>
 
-namespace oox {
-
+namespace oox
+{
 enum class Relationship
 {
     ACTIVEXCONTROLBINARY,
@@ -66,7 +66,6 @@ enum class Relationship
 };
 
 OUString OOX_DLLPUBLIC getRelationship(Relationship eRelationship);
-
 }
 
 #endif // INCLUDED_OOX_TOKEN_RELATIONSHIP_HXX

@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_SVX_F3DCHILD_HXX
 #define INCLUDED_SVX_F3DCHILD_HXX
-
 
 #include <sfx2/childwin.hxx>
 #include <svx/svxdllapi.h>
@@ -33,8 +31,8 @@
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DChildWindow final : public SfxChildWindow
 {
- public:
-    Svx3DChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
+public:
+    Svx3DChildWindow(vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
 
     SFX_DECL_CHILDWINDOW_WITHID(Svx3DChildWindow);
 };

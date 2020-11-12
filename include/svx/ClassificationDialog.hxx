@@ -17,11 +17,17 @@
 #include <sfx2/classificationhelper.hxx>
 #include <svx/ClassificationField.hxx>
 
-namespace svx { class ClassificationEditView; }
-namespace weld { class CustomWeld; }
+namespace svx
+{
+class ClassificationEditView;
+}
+namespace weld
+{
+class CustomWeld;
+}
 
-namespace svx {
-
+namespace svx
+{
 class SVX_DLLPUBLIC ClassificationDialog final : public weld::GenericDialogController
 {
 private:
@@ -66,20 +72,22 @@ private:
     DECL_STATIC_LINK(ClassificationDialog, KeyInput, const KeyEvent&, bool);
     DECL_LINK(OnAsyncExpandHdl, void*, void);
 
-    void insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString, OUString const & rIdentifier = OUString());
+    void insertField(ClassificationType eType, OUString const& rString, OUString const& rFullString,
+                     OUString const& rIdentifier = OUString());
     void insertCategoryField(sal_Int32 nID);
 
-    void readIn(std::vector<ClassificationResult> const & rInput);
+    void readIn(std::vector<ClassificationResult> const& rInput);
     void readRecentlyUsed();
     void writeRecentlyUsed();
     void toggleWidgetsDependingOnCategory();
 
 public:
-    ClassificationDialog(weld::Window* pParent, bool bPerParagraph, const std::function<void()>& rParagraphSignHandler = [](){});
+    ClassificationDialog(weld::Window* pParent, bool bPerParagraph,
+                         const std::function<void()>& rParagraphSignHandler = []() {});
     ~ClassificationDialog() override;
 
     std::vector<ClassificationResult> getResult();
-    void setupValues(std::vector<ClassificationResult> const & rInput);
+    void setupValues(std::vector<ClassificationResult> const& rInput);
 };
 
 } // end svx namespace

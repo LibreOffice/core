@@ -30,10 +30,9 @@ private:
     SAL_DLLPRIVATE void ImplInitIntroWindowData();
 
 public:
-                 IntroWindow();
-    virtual      ~IntroWindow() override;
+    IntroWindow();
+    virtual ~IntroWindow() override;
     virtual void dispose() override;
-
 };
 
 #endif // INCLUDED_VCL_INTROWIN_HXX

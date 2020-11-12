@@ -13,12 +13,12 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XCellRangesQuery
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     //Testcases
     void testQueryColumnDifference();
@@ -32,7 +32,6 @@ public:
 protected:
     ~XCellRangesQuery() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XCELLRANGESQUERY_HXX

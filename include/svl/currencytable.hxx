@@ -31,8 +31,8 @@ public:
 
     iterator begin();
 
-    NfCurrencyEntry& operator[] ( size_t i );
-    const NfCurrencyEntry& operator[] ( size_t i ) const;
+    NfCurrencyEntry& operator[](size_t i);
+    const NfCurrencyEntry& operator[](size_t i) const;
 
     size_t size() const;
 

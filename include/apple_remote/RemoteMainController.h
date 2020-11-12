@@ -42,15 +42,16 @@
 
 //static void sendTheEvent( unichar, int );
 
-SAL_DLLPUBLIC_EXPORT @interface AppleRemoteMainController : NSObject {
+SAL_DLLPUBLIC_EXPORT @interface AppleRemoteMainController : NSObject
+{
 @public // else remoteControl is not reachable from GetSalData()->mpMainController
     RemoteControl* remoteControl;
 @private
     MultiClickRemoteBehavior* remoteControlBehavior;
 }
-- (RemoteControl*) remoteControl;
-- (MultiClickRemoteBehavior*) remoteBehavior;
+- (RemoteControl*)remoteControl;
+- (MultiClickRemoteBehavior*)remoteBehavior;
 
 @end
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+    /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,20 +27,20 @@
 /// return an encoding which has more defined Characters as the given
 /// encoding, but have the same definition for the defined characters
 /// e.g.: windows-1252 for iso-8859-1 or windows-1254 for iso-8859-9
-TOOLS_DLLPUBLIC rtl_TextEncoding GetExtendedCompatibilityTextEncoding( rtl_TextEncoding eEncoding );
+TOOLS_DLLPUBLIC rtl_TextEncoding GetExtendedCompatibilityTextEncoding(rtl_TextEncoding eEncoding);
 
 /// return an encoding which has more defined Characters as the given
 /// encoding. The encodings could be different.
 /// e.g.: windows-1251 for iso-8859-5
-TOOLS_DLLPUBLIC rtl_TextEncoding GetExtendedTextEncoding( rtl_TextEncoding eEncoding );
+TOOLS_DLLPUBLIC rtl_TextEncoding GetExtendedTextEncoding(rtl_TextEncoding eEncoding);
 
 /// if the given encoding is an multi-byte encoding (which allows more than
 /// one byte per char, e.g. UTF-8 or Shift-JIS), a one-byte encoding
 /// is returned (normally windows-1252).
-rtl_TextEncoding GetOneByteTextEncoding( rtl_TextEncoding eEncoding );
+rtl_TextEncoding GetOneByteTextEncoding(rtl_TextEncoding eEncoding);
 
-TOOLS_DLLPUBLIC rtl_TextEncoding GetSOLoadTextEncoding( rtl_TextEncoding eEncoding );
-TOOLS_DLLPUBLIC rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncoding );
+TOOLS_DLLPUBLIC rtl_TextEncoding GetSOLoadTextEncoding(rtl_TextEncoding eEncoding);
+TOOLS_DLLPUBLIC rtl_TextEncoding GetSOStoreTextEncoding(rtl_TextEncoding eEncoding);
 
 /**
  * Given a Unicode character, return a legacy Microsoft Encoding which

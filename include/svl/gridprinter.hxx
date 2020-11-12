@@ -14,8 +14,8 @@
 #include <svl/svldllapi.h>
 #include <memory>
 
-namespace svl {
-
+namespace svl
+{
 /**
  * Print 2-dimensional data in a nice and pleasant fashion.  Useful when
  * debugging grid layout data.
@@ -26,12 +26,11 @@ class SVL_DLLPUBLIC GridPrinter
     std::unique_ptr<Impl> mpImpl;
 
 public:
-    GridPrinter( size_t nRows, size_t nCols, bool bPrint );
+    GridPrinter(size_t nRows, size_t nCols, bool bPrint);
     ~GridPrinter();
-    void set( size_t nRow, size_t nCol, const OUString& rStr );
-    void print( const char* pHeader ) const;
+    void set(size_t nRow, size_t nCol, const OUString& rStr);
+    void print(const char* pHeader) const;
 };
-
 }
 
 #endif

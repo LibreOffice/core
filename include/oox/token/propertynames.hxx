@@ -25,15 +25,18 @@
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 
-namespace oox {
-
-
+namespace oox
+{
 /** A vector that contains all predefined property names used in the filters. */
-struct PropertyNameVector : public ::std::vector< OUString > { PropertyNameVector(); };
+struct PropertyNameVector : public ::std::vector<OUString>
+{
+    PropertyNameVector();
+};
 
 /** Thread-save singleton of a vector of all supported property names. */
-struct StaticPropertyNameVector : public ::rtl::Static< PropertyNameVector, StaticPropertyNameVector > {};
-
+struct StaticPropertyNameVector : public ::rtl::Static<PropertyNameVector, StaticPropertyNameVector>
+{
+};
 
 } // namespace oox
 

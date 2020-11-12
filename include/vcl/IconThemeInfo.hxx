@@ -21,14 +21,13 @@ class IconThemeInfoTest;
 class IconThemeSelectorTest;
 class IconThemeScannerTest;
 
-namespace vcl {
-
+namespace vcl
+{
 /** This class provides information about an icon theme.
  */
-class VCL_DLLPUBLIC IconThemeInfo {
-
+class VCL_DLLPUBLIC IconThemeInfo
+{
 public:
-
     /** The name of the icon theme to use for high contrast mode */
     static constexpr OUStringLiteral HIGH_CONTRAST_ID = u"sifr";
 
@@ -38,7 +37,7 @@ public:
      */
     IconThemeInfo(const OUString& urlToFile);
 
-    const OUString& GetDisplayName() const {return mDisplayName;}
+    const OUString& GetDisplayName() const { return mDisplayName; }
 
     const OUString& GetThemeId() const { return mThemeId; }
 
@@ -61,8 +60,8 @@ public:
     FindIconThemeById(const std::vector<vcl::IconThemeInfo>& themes, const OUString& themeId);
 
     /** Check whether a theme with a specified id is in a vector of IconThemeInfo */
-    static bool
-    IconThemeIsInVector(const std::vector<vcl::IconThemeInfo>& themes, const OUString& themeId);
+    static bool IconThemeIsInVector(const std::vector<vcl::IconThemeInfo>& themes,
+                                    const OUString& themeId);
 
 private:
     /** private constructor for testing purposes only */
@@ -94,6 +93,5 @@ private:
 };
 
 } // namespace vcl
-
 
 #endif // INCLUDED_VCL_ICONTHEMEINFO_HXX

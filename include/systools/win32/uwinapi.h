@@ -29,14 +29,14 @@
 
 inline bool IsValidHandle(HANDLE handle)
 {
-    return  handle != INVALID_HANDLE_VALUE && handle != NULL;
+    return handle != INVALID_HANDLE_VALUE && handle != NULL;
 }
 
-#else   /* __cplusplus */
+#else /* __cplusplus */
 
-#define IsValidHandle(Handle)   ((DWORD_PTR)(Handle) + 1 > 1)
+#define IsValidHandle(Handle) ((DWORD_PTR)(Handle) + 1 > 1)
 
-#endif  /* __cplusplus */
+#endif /* __cplusplus */
 
 #endif // INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
 

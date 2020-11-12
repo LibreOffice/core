@@ -29,15 +29,15 @@
 // The compiled code is not part of the tl dynamic library, but is delivered as
 // pathutils-obj and pathutils-slo objects (it is linked into special
 // executables and dynamic libraries that do not link against OOo libraries):
-namespace tools {
-
+namespace tools
+{
 /** Determine the filename part of a path.
     @param path
         A non-NULL pointer to a null-terminated path.
     @return
         A pointer to the trailing filename part of the given path.
 */
-WCHAR * filename(WCHAR * path);
+WCHAR* filename(WCHAR* path);
 
 /** Concatenate two paths.
 
@@ -62,10 +62,8 @@ WCHAR * filename(WCHAR * path);
         A pointer to the terminating null character of the concatenation, or NULL
         if a failure occurred.
 */
-WCHAR * buildPath(
-    WCHAR * path, WCHAR const * frontBegin, WCHAR const * frontEnd,
-    WCHAR const * backBegin, std::size_t backLength);
-
+WCHAR* buildPath(WCHAR* path, WCHAR const* frontBegin, WCHAR const* frontEnd,
+                 WCHAR const* backBegin, std::size_t backLength);
 }
 
 #endif

@@ -32,22 +32,22 @@
 //... namespace utl .......................................................
 namespace utl
 {
-
 /** @descr
         This base class provides an implementation of the
         <code>AccessibleRelationSet</code> service.
 */
 class UNOTOOLS_DLLPUBLIC AccessibleRelationSetHelper final
-    :   public cppu::WeakImplHelper< css::accessibility::XAccessibleRelationSet >
+    : public cppu::WeakImplHelper<css::accessibility::XAccessibleRelationSet>
 {
 public:
     //=====  internal  ========================================================
-    AccessibleRelationSetHelper ();
-    AccessibleRelationSetHelper (const AccessibleRelationSetHelper& rHelper);
+    AccessibleRelationSetHelper();
+    AccessibleRelationSetHelper(const AccessibleRelationSetHelper& rHelper);
+
 private:
     virtual ~AccessibleRelationSetHelper() override;
-public:
 
+public:
     //=====  XAccessibleRelationSet  ==========================================
 
     /** Returns the number of relations in this relation set.
@@ -55,7 +55,7 @@ public:
         @return
             Returns the number of relations or zero if there are none.
     */
-    virtual sal_Int32 SAL_CALL getRelationCount(  ) override;
+    virtual sal_Int32 SAL_CALL getRelationCount() override;
 
     /** Returns the relation of this relation set that is specified by
         the given index.
@@ -70,8 +70,7 @@ public:
             has the type INVALID.
 
     */
-    virtual css::accessibility::AccessibleRelation SAL_CALL
-        getRelation( sal_Int32 nIndex ) override;
+    virtual css::accessibility::AccessibleRelation SAL_CALL getRelation(sal_Int32 nIndex) override;
 
     /** Tests whether the relation set contains a relation matching the
         specified key.
@@ -85,7 +84,7 @@ public:
             Returns <TRUE/> if there is a (at least one) relation of the
             given type and <FALSE/> if there is no such relation in the set.
     */
-    virtual sal_Bool SAL_CALL containsRelation( sal_Int16 aRelationType ) override;
+    virtual sal_Bool SAL_CALL containsRelation(sal_Int16 aRelationType) override;
 
     /** Retrieve and return the relation with the given relation type.
 
@@ -99,23 +98,20 @@ public:
             type INVALID is returned.
     */
     virtual css::accessibility::AccessibleRelation SAL_CALL
-        getRelationByType( sal_Int16 aRelationType ) override;
+    getRelationByType(sal_Int16 aRelationType) override;
 
     /// @throws uno::RuntimeException
-    void AddRelation(
-        const css::accessibility::AccessibleRelation& rRelation);
+    void AddRelation(const css::accessibility::AccessibleRelation& rRelation);
 
     //=====  XTypeProvider  ===================================================
 
     /** Returns a sequence of all supported interfaces.
     */
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
-        getTypes() override;
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
 
     /** Returns an implementation id.
     */
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId() override;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
 private:
     /// Mutex guarding this object.
@@ -123,7 +119,6 @@ private:
     /// The implementation of this helper interface.
     std::vector<css::accessibility::AccessibleRelation> maRelations;
 };
-
 }
 //... namespace utl .......................................................
 #endif

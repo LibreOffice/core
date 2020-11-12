@@ -8,7 +8,7 @@
  */
 
 #ifndef SVLIBRARY
-#define SVLIBRARY( Base ) SAL_MODULENAME( Base "lo" )
+#define SVLIBRARY(Base) SAL_MODULENAME(Base "lo")
 #include <osl/module.h>
 #endif
 

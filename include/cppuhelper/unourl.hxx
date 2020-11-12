@@ -24,10 +24,13 @@
 
 #include "cppuhelper/cppuhelperdllapi.h"
 
-namespace rtl { class OUString; }
+namespace rtl
+{
+class OUString;
+}
 
-namespace cppu {
-
+namespace cppu
+{
 /** A descriptor as part of a UNO URL (connection descriptor or protocol
     descriptor).
 
@@ -48,13 +51,13 @@ public:
         @exception rtl::MalformedUriException
         Thrown when the given string representation is invalid.
      */
-    explicit UnoUrlDescriptor(rtl::OUString const & rDescriptor);
+    explicit UnoUrlDescriptor(rtl::OUString const& rDescriptor);
 
-    UnoUrlDescriptor(UnoUrlDescriptor const & rOther);
+    UnoUrlDescriptor(UnoUrlDescriptor const& rOther);
 
     ~UnoUrlDescriptor();
 
-    UnoUrlDescriptor & operator =(UnoUrlDescriptor const & rOther);
+    UnoUrlDescriptor& operator=(UnoUrlDescriptor const& rOther);
 
     /** Return the string representation of the descriptor.
 
@@ -63,7 +66,7 @@ public:
         descriptor, without any modifications.  The reference is valid for the
         lifetime of this URL object.
      */
-    rtl::OUString const & getDescriptor() const;
+    rtl::OUString const& getDescriptor() const;
 
     /** Return the name component of the descriptor.
 
@@ -71,7 +74,7 @@ public:
         A reference to the (case insensitive) name, in lower case form.  The
         reference is valid for the lifetime of this URL object.
      */
-    rtl::OUString const & getName() const;
+    rtl::OUString const& getName() const;
 
     /** Test whether the parameters contain a key.
 
@@ -81,7 +84,7 @@ public:
         @return
         True if the parameters contain a matching key/value pair.
      */
-    bool hasParameter(rtl::OUString const & rKey) const;
+    bool hasParameter(rtl::OUString const& rKey) const;
 
     /** Return the parameter value for a key.
 
@@ -92,10 +95,10 @@ public:
         The (case sensitive) value associated with the given key, or an empty
         string if there is no matching key/value pair.
      */
-    rtl::OUString getParameter(rtl::OUString const & rKey) const;
+    rtl::OUString getParameter(rtl::OUString const& rKey) const;
 
 private:
-    Impl * m_pImpl;
+    Impl* m_pImpl;
 };
 
 /** Parse UNO URLs into their components.
@@ -137,13 +140,13 @@ public:
         @exception rtl::MalformedUriException
         Thrown when the given string representation is invalid.
      */
-    explicit UnoUrl(rtl::OUString const & rUrl);
+    explicit UnoUrl(rtl::OUString const& rUrl);
 
-    UnoUrl(UnoUrl const & rOther);
+    UnoUrl(UnoUrl const& rOther);
 
     ~UnoUrl();
 
-    UnoUrl & operator =(UnoUrl const & rOther);
+    UnoUrl& operator=(UnoUrl const& rOther);
 
     /** Return the connection descriptor component of the URL.
 
@@ -151,7 +154,7 @@ public:
         A reference to the connection descriptor.  The reference is valid for
         the lifetime of this URL object.
      */
-    UnoUrlDescriptor const & getConnection() const;
+    UnoUrlDescriptor const& getConnection() const;
 
     /** Return the protocol descriptor component of the URL.
 
@@ -159,7 +162,7 @@ public:
         A reference to the protocol descriptor.  The reference is valid for the
         lifetime of this URL object.
      */
-    UnoUrlDescriptor const & getProtocol() const;
+    UnoUrlDescriptor const& getProtocol() const;
 
     /** Return the object-name component of the URL.
 
@@ -167,14 +170,13 @@ public:
         A reference to the (case sensitive) object-name.  The reference is valid
         for the lifetime of this URL object.
      */
-    rtl::OUString const & getObjectName() const;
+    rtl::OUString const& getObjectName() const;
 
 private:
     class Impl;
 
-    Impl * m_pImpl;
+    Impl* m_pImpl;
 };
-
 }
 
 #endif // INCLUDED_RTL_UNOURL_HXX

@@ -23,23 +23,27 @@
 #include <svl/itemset.hxx>
 #include <editeng/editengdllapi.h>
 
-namespace com::sun::star::awt { struct FontDescriptor; }
-namespace vcl { class Font; }
+namespace com::sun::star::awt
+{
+struct FontDescriptor;
+}
+namespace vcl
+{
+class Font;
+}
 
 class EDITENG_DLLPUBLIC SvxUnoFontDescriptor
 {
 public:
-    static void ConvertToFont( const css::awt::FontDescriptor& rDesc, vcl::Font& rFont );
-    static void ConvertFromFont( const vcl::Font& rFont, css::awt::FontDescriptor& rDesc );
+    static void ConvertToFont(const css::awt::FontDescriptor& rDesc, vcl::Font& rFont);
+    static void ConvertFromFont(const vcl::Font& rFont, css::awt::FontDescriptor& rDesc);
 
-    static void FillItemSet( const css::awt::FontDescriptor& rDesc, SfxItemSet& rSet );
-    static void FillFromItemSet( const SfxItemSet& rSet, css::awt::FontDescriptor& rDesc );
+    static void FillItemSet(const css::awt::FontDescriptor& rDesc, SfxItemSet& rSet);
+    static void FillFromItemSet(const SfxItemSet& rSet, css::awt::FontDescriptor& rDesc);
 
-    static void setPropertyToDefault( SfxItemSet& rSet );
-    static css::uno::Any getPropertyDefault( SfxItemPool* pPool );
-
+    static void setPropertyToDefault(SfxItemSet& rSet);
+    static css::uno::Any getPropertyDefault(SfxItemPool* pPool);
 };
-
 
 #endif
 

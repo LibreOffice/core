@@ -26,13 +26,13 @@ class SfxPoolItem;
 
 class SVL_DLLPUBLIC SfxItemIter
 {
-    const SfxItemSet&   m_rSet;
+    const SfxItemSet& m_rSet;
     sal_uInt16 m_nStart;
     sal_uInt16 m_nEnd;
     sal_uInt16 m_nCurrent;
 
 public:
-    SfxItemIter( const SfxItemSet& rSet );
+    SfxItemIter(const SfxItemSet& rSet);
     ~SfxItemIter();
 
     /// get item, or null if no items
@@ -42,15 +42,14 @@ public:
     }
     const SfxPoolItem* NextItem() { return (m_nCurrent < m_nEnd) ? ImplNextItem() : nullptr; }
 
-    bool       IsAtEnd()     const { return m_nCurrent == m_nEnd; }
+    bool IsAtEnd() const { return m_nCurrent == m_nEnd; }
 
-    sal_uInt16 GetCurPos()   const { return m_nCurrent; }
+    sal_uInt16 GetCurPos() const { return m_nCurrent; }
     sal_uInt16 GetFirstPos() const { return m_nStart; }
-    sal_uInt16 GetLastPos()  const { return m_nEnd; }
+    sal_uInt16 GetLastPos() const { return m_nEnd; }
 
 private:
     const SfxPoolItem* ImplNextItem();
-
 };
 
 #endif

@@ -22,13 +22,11 @@
 
 namespace comphelper
 {
-
 namespace ProfileRecording
 {
-
 COMPHELPER_DLLPUBLIC void startRecording(bool bRecording);
 
-COMPHELPER_DLLPUBLIC long long addRecording(const char * aProfileId, long long aCreateTime);
+COMPHELPER_DLLPUBLIC long long addRecording(const char* aProfileId, long long aCreateTime);
 
 COMPHELPER_DLLPUBLIC css::uno::Sequence<OUString> getRecordingAndClear();
 
@@ -37,11 +35,12 @@ COMPHELPER_DLLPUBLIC css::uno::Sequence<OUString> getRecordingAndClear();
 class COMPHELPER_DLLPUBLIC ProfileZone
 {
 private:
-    const char * m_sProfileId;
+    const char* m_sProfileId;
     long long m_aCreateTime;
     bool m_bConsole;
     void startConsole();
     void stopConsole();
+
 public:
     static std::atomic<bool> g_bRecording; // true during recording
 
@@ -60,10 +59,10 @@ public:
      * Similar to the DEBUG macro in sal/log.hxx, don't forget to remove these lines before
      * committing.
      */
-    ProfileZone(const char *sProfileId, bool bConsole = false)
-        : m_sProfileId(sProfileId),
-          m_aCreateTime(g_bRecording ? ProfileRecording::addRecording(sProfileId, 0) : 0),
-          m_bConsole(bConsole)
+    ProfileZone(const char* sProfileId, bool bConsole = false)
+        : m_sProfileId(sProfileId)
+        , m_aCreateTime(g_bRecording ? ProfileRecording::addRecording(sProfileId, 0) : 0)
+        , m_bConsole(bConsole)
     {
         if (m_bConsole)
         {
@@ -82,7 +81,6 @@ public:
 };
 
 } // namespace comphelper
-
 
 #endif // INCLUDED_COMPHELPER_PROFILEZONE_HXX
 

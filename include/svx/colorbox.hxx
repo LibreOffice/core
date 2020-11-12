@@ -20,8 +20,8 @@ class ListBoxColorWrapper
 {
 public:
     ListBoxColorWrapper(ColorListBox* pControl);
-    void operator()(const OUString& rCommand, const NamedColor& rColor);
-        // ColorSelectFunction signature
+    void operator()(const OUString& rCommand,
+                    const NamedColor& rColor); // ColorSelectFunction signature
 private:
     ColorListBox* mpControl;
 };
@@ -55,15 +55,12 @@ public:
     ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pTopLevelWindow);
     ~ColorListBox();
 
-    void SetSelectHdl(const Link<ColorListBox&, void>& rLink)
-    {
-        m_aSelectedLink = rLink;
-    }
+    void SetSelectHdl(const Link<ColorListBox&, void>& rLink) { m_aSelectedLink = rLink; }
 
     void SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton = false);
 
-    Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
-    NamedColor const & GetSelectedEntry() const { return m_aSelectedColor; }
+    Color const& GetSelectEntryColor() const { return m_aSelectedColor.first; }
+    NamedColor const& GetSelectedEntry() const { return m_aSelectedColor; }
 
     void SelectEntry(const NamedColor& rColor);
     void SelectEntry(const Color& rColor);
@@ -71,9 +68,9 @@ public:
     void SetNoSelection() { getColorWindow()->SetNoSelection(); }
     bool IsNoSelection() const { return getColorWindow()->IsNoSelection(); }
 
-    void SetAutoDisplayColor(const Color &rColor) { m_aAutoDisplayColor = rColor; }
+    void SetAutoDisplayColor(const Color& rColor) { m_aAutoDisplayColor = rColor; }
 
-    void ShowPreview(const NamedColor &rColor);
+    void ShowPreview(const NamedColor& rColor);
     void EnsurePaletteManager();
 
     void SaveValue() { m_aSaveColor = GetSelectEntryColor(); }
@@ -85,8 +82,14 @@ public:
     void hide() { m_xButton->hide(); }
     void set_visible(bool bShow) { m_xButton->set_visible(bShow); }
     void set_help_id(const OString& rHelpId) { m_xButton->set_help_id(rHelpId); }
-    void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xButton->connect_focus_in(rLink); }
-    void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_xButton->connect_focus_out(rLink); }
+    void connect_focus_in(const Link<weld::Widget&, void>& rLink)
+    {
+        m_xButton->connect_focus_in(rLink);
+    }
+    void connect_focus_out(const Link<weld::Widget&, void>& rLink)
+    {
+        m_xButton->connect_focus_out(rLink);
+    }
     weld::MenuButton& get_widget() { return *m_xButton; }
 };
 

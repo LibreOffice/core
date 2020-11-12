@@ -19,22 +19,21 @@
 #include "salhelper/salhelperdllapi.h"
 #include "salhelper/simplereferenceobject.hxx"
 
-namespace salhelper {
-
+namespace salhelper
+{
 /**
    A safe encapsulation of ::osl::Thread.
 
    @since LibreOffice 3.6
 */
-class SALHELPER_DLLPUBLIC Thread:
-    public salhelper::SimpleReferenceObject, private osl::Thread
+class SALHELPER_DLLPUBLIC Thread : public salhelper::SimpleReferenceObject, private osl::Thread
 {
 public:
     /**
        @param name the thread name, see ::osl_setThreadName; must be a non-null
        null terminated string
      */
-    Thread(char const * name);
+    Thread(char const* name);
 
     /**
        Launch the thread.
@@ -62,11 +61,12 @@ public:
     using osl::Thread::wait;
     using osl::Thread::yield;
 
-    static void * operator new(std::size_t size)
-    { return SimpleReferenceObject::operator new(size); }
+    static void* operator new(std::size_t size)
+    {
+        return SimpleReferenceObject::operator new(size);
+    }
 
-    static void operator delete(void * pointer)
-    { SimpleReferenceObject::operator delete(pointer); }
+    static void operator delete(void* pointer) { SimpleReferenceObject::operator delete(pointer); }
 
 protected:
     virtual ~Thread() SAL_OVERRIDE;
@@ -83,9 +83,8 @@ private:
 
     virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
-    char const * name_;
+    char const* name_;
 };
-
 }
 
 #endif

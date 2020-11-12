@@ -30,19 +30,22 @@ private:
     class IndexEntryResourceData
     {
         friend class IndexEntryResource;
+
     private:
         OUString m_aName;
         OUString m_aTranslation;
+
     public:
         IndexEntryResourceData(const OUString& rAlgorithm, const OUString& rTranslation)
             : m_aName(rAlgorithm)
             , m_aTranslation(rTranslation)
         {
         }
-        const OUString& GetAlgorithm () const { return m_aName; }
-        const OUString& GetTranslation () const { return m_aTranslation; }
+        const OUString& GetAlgorithm() const { return m_aName; }
+        const OUString& GetTranslation() const { return m_aTranslation; }
     };
     std::vector<IndexEntryResourceData> m_aData;
+
 public:
     IndexEntryResource();
     const OUString& GetTranslation(const OUString& rAlgorithm);

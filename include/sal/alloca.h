@@ -20,21 +20,22 @@
 #ifndef INCLUDED_SAL_ALLOCA_H
 #define INCLUDED_SAL_ALLOCA_H
 
-#if defined (__sun) || defined (LINUX) || defined(AIX) || defined(ANDROID) || defined(HAIKU) || defined(MACOSX) || defined(IOS)
+#if defined(__sun) || defined(LINUX) || defined(AIX) || defined(ANDROID) || defined(HAIKU)         \
+    || defined(MACOSX) || defined(IOS)
 
 #ifndef INCLUDED_ALLOCA_H
 #include <alloca.h>
 #define INCLUDED_ALLOCA_H
 #endif
 
-#elif defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
+#elif defined(FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
 
 #ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>
 #define INCLUDED_STDLIB_H
 #endif
 
-#elif defined (_WIN32)
+#elif defined(_WIN32)
 
 #ifndef INCLUDED_MALLOC_H
 #include <malloc.h>
@@ -47,6 +48,6 @@
 
 #endif
 
-#endif  /* INCLUDED_SAL_ALLOCA_H */
+#endif /* INCLUDED_SAL_ALLOCA_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

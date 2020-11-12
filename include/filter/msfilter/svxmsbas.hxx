@@ -43,27 +43,29 @@ class SfxObjectShell;
  * probably what the user expects to see when viewing the code
  */
 
-
 class MSFILTER_DLLPUBLIC SvxImportMSVBasic
 {
 public:
-    SvxImportMSVBasic( SfxObjectShell &rDocS, SotStorage &rRoot )
-        :   xRoot(&rRoot), rDocSh(rDocS)
-        {}
+    SvxImportMSVBasic(SfxObjectShell& rDocS, SotStorage& rRoot)
+        : xRoot(&rRoot)
+        , rDocSh(rDocS)
+    {
+    }
     // only for the export - copy or delete the saved VBA-macro-storage
     // form the ObjectShell
     // - returns a warning code if a modified basic exist, in all other
     //   cases return ERRCODE_NONE.
-    ErrCode SaveOrDelMSVBAStorage( bool bSaveInto, const OUString& rStorageName );
+    ErrCode SaveOrDelMSVBAStorage(bool bSaveInto, const OUString& rStorageName);
 
     // check if the MS-VBA-Storage exist in the RootStorage of the DocShell.
     // If it exist, then return the WarningId for losing the information.
-    static ErrCode GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
+    static ErrCode GetSaveWarningOfMSVBAStorage(SfxObjectShell& rDocS);
 
     static OUString GetMSBasicStorageName();
+
 private:
     tools::SvRef<SotStorage> xRoot;
-    SfxObjectShell &rDocSh;
+    SfxObjectShell& rDocSh;
 };
 
 #endif

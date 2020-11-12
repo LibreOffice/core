@@ -23,7 +23,6 @@
 #include <svx/svxdllapi.h>
 #include <tools/link.hxx>
 
-
 /*************************************************************************
 |*
 |* Factory for chart-specific objects
@@ -41,7 +40,6 @@ public:
 
     DECL_STATIC_LINK(E3dObjFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
 };
-
 
 #endif // INCLUDED_SVX_OBJFAC3D_HXX
 
