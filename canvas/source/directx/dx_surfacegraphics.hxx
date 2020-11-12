@@ -23,14 +23,14 @@
 
 namespace dxcanvas
 {
-    /** Container providing a Gdiplus::Graphics for a Surface
+/** Container providing a Gdiplus::Graphics for a Surface
 
-        This wrapper class transparently handles allocation and
-        release of surface resources the RAII way (the
-        GraphicsSharedPtr returned has a deleter that does all the
-        necessary DX cleanup work).
-     */
-    GraphicsSharedPtr createSurfaceGraphics(const COMReference<surface_type>& rSurface );
+    This wrapper class transparently handles allocation and
+    release of surface resources the RAII way (the
+    GraphicsSharedPtr returned has a deleter that does all the
+    necessary DX cleanup work).
+*/
+GraphicsSharedPtr createSurfaceGraphics(const COMReference<surface_type>& rSurface);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

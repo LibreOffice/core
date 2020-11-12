@@ -641,7 +641,6 @@ canvas/source/directx/dx_bitmap.cxx
 canvas/source/directx/dx_bitmap.hxx
 canvas/source/directx/dx_bitmapcanvashelper.cxx
 canvas/source/directx/dx_bitmapcanvashelper.hxx
-canvas/source/directx/dx_bitmapprovider.hxx
 canvas/source/directx/dx_canvas.cxx
 canvas/source/directx/dx_canvas.hxx
 canvas/source/directx/dx_canvasbitmap.cxx
@@ -678,7 +677,6 @@ canvas/source/directx/dx_spritehelper.hxx
 canvas/source/directx/dx_surfacebitmap.cxx
 canvas/source/directx/dx_surfacebitmap.hxx
 canvas/source/directx/dx_surfacegraphics.cxx
-canvas/source/directx/dx_surfacegraphics.hxx
 canvas/source/directx/dx_textlayout.cxx
 canvas/source/directx/dx_textlayout.hxx
 canvas/source/directx/dx_textlayout_drawhelper.cxx
