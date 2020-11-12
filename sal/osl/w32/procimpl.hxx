@@ -22,9 +22,10 @@
 
 #include <osl/process.h>
 
-struct oslProcessImpl {
+struct oslProcessImpl
+{
     HANDLE m_hProcess;
-    DWORD  m_IdProcess;
+    DWORD m_IdProcess;
 };
 
 #endif

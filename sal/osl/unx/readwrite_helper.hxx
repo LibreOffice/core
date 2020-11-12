@@ -14,12 +14,12 @@
 
 #include <cstddef>
 
-bool safeWrite( int fd, void* data, std::size_t dataSize );
+bool safeWrite(int fd, void* data, std::size_t dataSize);
 
 // This function *will* read |count| bytes from |fd|, busy looping
 // if needed. Don't use it when you don't know if you can request enough
 // data. It will return sal_False for any partial transfer or error.
-bool safeRead( int fd, void* buffer, std::size_t count );
+bool safeRead(int fd, void* buffer, std::size_t count);
 
 #endif
 

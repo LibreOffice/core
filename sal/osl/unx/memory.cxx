@@ -14,7 +14,7 @@
 #include <malloc.h>
 #endif
 
-void* osl_aligned_alloc( sal_Size align, sal_Size size )
+void* osl_aligned_alloc(sal_Size align, sal_Size size)
 {
     if (size == 0)
     {
@@ -30,9 +30,6 @@ void* osl_aligned_alloc( sal_Size align, sal_Size size )
 #endif
 }
 
-void osl_aligned_free( void* p )
-{
-    free(p);
-}
+void osl_aligned_free(void* p) { free(p); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

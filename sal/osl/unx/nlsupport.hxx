@@ -24,9 +24,12 @@
 
 #include <rtl/locale.h>
 
-namespace rtl { class OUString; }
+namespace rtl
+{
+class OUString;
+}
 
-void imp_getProcessLocale( rtl_Locale ** );
+void imp_getProcessLocale(rtl_Locale**);
 
 #if defined IOS || defined MACOSX
 OUString macosx_getLocale();

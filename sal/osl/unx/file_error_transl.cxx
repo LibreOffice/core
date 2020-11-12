@@ -26,7 +26,7 @@
 
 oslFileError oslTranslateFileError(int Errno)
 {
-    switch(Errno)
+    switch (Errno)
     {
         case EPERM:
             return osl_File_E_PERM;
@@ -138,7 +138,7 @@ oslFileError oslTranslateFileError(int Errno)
 #if EOPNOTSUPP != ENOTSUP
         case EOPNOTSUPP:
 #endif
-           return osl_File_E_NOSYS;
+            return osl_File_E_NOSYS;
 
 #if !defined(AIX) || !(defined(_ALL_SOURCE) && !defined(_LINUX_SOURCE_COMPAT))
         case ENOTEMPTY:
@@ -148,7 +148,8 @@ oslFileError oslTranslateFileError(int Errno)
         case ELOOP:
             return osl_File_E_LOOP;
 
-#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY))
+#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD)                   \
+      || defined(DRAGONFLY))
         case EILSEQ:
             return osl_File_E_ILSEQ;
 

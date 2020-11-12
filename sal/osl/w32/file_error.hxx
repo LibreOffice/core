@@ -22,7 +22,7 @@
 
 #include <osl/file.h>
 
-oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError);
+oslFileError oslTranslateFileError(/*DWORD*/ unsigned long dwError);
 
 #endif
 

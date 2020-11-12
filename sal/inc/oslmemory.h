@@ -17,9 +17,9 @@
 extern "C" {
 #endif
 
-void* osl_aligned_alloc( sal_Size align, sal_Size size );
+void* osl_aligned_alloc(sal_Size align, sal_Size size);
 
-void osl_aligned_free( void* p );
+void osl_aligned_free(void* p);
 
 #if defined __cplusplus
 }

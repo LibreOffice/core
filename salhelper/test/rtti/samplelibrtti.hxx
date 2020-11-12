@@ -23,20 +23,21 @@
 class MyClassA
 {
 public:
-    virtual void  funcA();
-    virtual void  funcB();
+    virtual void funcA();
+    virtual void funcB();
+
 protected:
-    virtual void  funcC();
+    virtual void funcC();
 };
 
-
-class MyClassB: public MyClassA
+class MyClassB : public MyClassA
 {
 public:
-    virtual void  funcA();
-    virtual void  funcB();
+    virtual void funcA();
+    virtual void funcB();
+
 protected:
-    virtual void  funcC();
+    virtual void funcC();
 };
 
 #endif

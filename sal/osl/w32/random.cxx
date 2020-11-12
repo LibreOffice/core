@@ -21,15 +21,15 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
     unsigned int val;
 
     /* if unaligned fill to alignment */
-    if(reinterpret_cast<uintptr_t>(buffer) & 3)
+    if (reinterpret_cast<uintptr_t>(buffer) & 3)
     {
         size_t len = 4 - (reinterpret_cast<size_t>(buffer) & 3);
 
-        if(len > desired_len)
+        if (len > desired_len)
         {
             len = desired_len;
         }
-        if(rand_s(&val))
+        if (rand_s(&val))
         {
             return 0;
         }
@@ -38,9 +38,9 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
         desired_len -= len;
     }
     /* fill directly into the buffer as long as we can */
-    while(desired_len >= 4)
+    while (desired_len >= 4)
     {
-        if(rand_s(reinterpret_cast<unsigned int*>(buffer)))
+        if (rand_s(reinterpret_cast<unsigned int*>(buffer)))
         {
             return 0;
         }
@@ -51,9 +51,9 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
         }
     }
     /* deal with the partial int reminder to fill */
-    if(desired_len)
+    if (desired_len)
     {
-        if(rand_s(&val))
+        if (rand_s(&val))
         {
             return 0;
         }
@@ -61,6 +61,5 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
     }
     return 1;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

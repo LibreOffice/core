@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_QA_OSL_SECURITY_OSL_SECURITY_CONST_H
 #define INCLUDED_SAL_QA_OSL_SECURITY_OSL_SECURITY_CONST_H
 
-#if defined(_WIN32)                     // Windows
+#if defined(_WIN32) // Windows
 #include <io.h>
 #endif
 
@@ -32,7 +32,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#if ( defined UNX )
+#if (defined UNX)
 #include <unistd.h>
 #include <pwd.h>
 #endif

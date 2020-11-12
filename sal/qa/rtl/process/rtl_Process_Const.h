@@ -23,8 +23,7 @@
 #include <rtl/ustring.hxx>
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 OUString suParam0("-join");

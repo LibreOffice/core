@@ -21,23 +21,22 @@
 
 #include "context.hxx"
 
-void * ImplCreateUnicodeToTextContext()
+void* ImplCreateUnicodeToTextContext()
 {
-    ImplUnicodeToTextContext * pContext = new ImplUnicodeToTextContext;
+    ImplUnicodeToTextContext* pContext = new ImplUnicodeToTextContext;
     pContext->m_nHighSurrogate = 0;
     return pContext;
 }
 
-void ImplResetUnicodeToTextContext(void * pContext)
+void ImplResetUnicodeToTextContext(void* pContext)
 {
     if (pContext)
-        static_cast< ImplUnicodeToTextContext * >(pContext)->m_nHighSurrogate =
-            0;
+        static_cast<ImplUnicodeToTextContext*>(pContext)->m_nHighSurrogate = 0;
 }
 
-void ImplDestroyUnicodeToTextContext(void * pContext)
+void ImplDestroyUnicodeToTextContext(void* pContext)
 {
-    delete static_cast< ImplUnicodeToTextContext * >(pContext);
+    delete static_cast<ImplUnicodeToTextContext*>(pContext);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

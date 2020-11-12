@@ -25,7 +25,6 @@
 
 #include "tenchelp.hxx"
 
-ImplTextEncodingData const *
-Impl_getTextEncodingData(rtl_TextEncoding nEncoding);
+ImplTextEncodingData const* Impl_getTextEncodingData(rtl_TextEncoding nEncoding);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
