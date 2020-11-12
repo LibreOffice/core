@@ -27,15 +27,16 @@
 #include "node.hxx"
 #include "nodemap.hxx"
 
-namespace configmgr {
-
-class GroupNode: public Node {
+namespace configmgr
+{
+class GroupNode : public Node
+{
 public:
-    GroupNode(int layer, bool extensible, OUString const & templateName);
+    GroupNode(int layer, bool extensible, OUString const& templateName);
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const override;
+    virtual rtl::Reference<Node> clone(bool keepTemplateName) const override;
 
-    virtual NodeMap & getMembers() override;
+    virtual NodeMap& getMembers() override;
 
     virtual OUString getTemplateName() const override;
 
@@ -43,10 +44,10 @@ public:
 
     virtual int getMandatory() const override;
 
-    bool isExtensible() const { return extensible_;}
+    bool isExtensible() const { return extensible_; }
 
 private:
-    GroupNode(GroupNode const & other, bool keepTemplateName);
+    GroupNode(GroupNode const& other, bool keepTemplateName);
 
     virtual ~GroupNode() override;
 
@@ -54,11 +55,9 @@ private:
 
     bool extensible_;
     NodeMap members_;
-    OUString templateName_;
-        // non-empty if this node is a template, free node, or set member
+    OUString templateName_; // non-empty if this node is a template, free node, or set member
     int mandatory_;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,10 +25,10 @@
 
 #include <vector>
 
-namespace configmgr {
+namespace configmgr
+{
 // Additions is a list of configuration node paths
-typedef std::vector< std::vector<OUString> > Additions;
-
+typedef std::vector<std::vector<OUString>> Additions;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

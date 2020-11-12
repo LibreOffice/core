@@ -19,7 +19,7 @@
 
 struct LengthContentsCompare
 {
-    bool operator()( const OUString &a, const OUString &b ) const
+    bool operator()(const OUString& a, const OUString& b) const
     {
         if (a.getLength() == b.getLength())
             return a < b;
@@ -28,7 +28,9 @@ struct LengthContentsCompare
     }
 };
 
-template< class T > struct config_map : public std::map< OUString, T, LengthContentsCompare > { };
+template <class T> struct config_map : public std::map<OUString, T, LengthContentsCompare>
+{
+};
 
 #endif // CONFIG_MAP_HXX
 
