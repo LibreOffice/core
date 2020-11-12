@@ -16657,7 +16657,7 @@ public:
     //gtk impl emulate this by doing this implicitly at weld time
     void auto_add_parentless_widgets_to_container(GtkWidget* pWidget)
     {
-        if (gtk_widget_get_toplevel(pWidget) == pWidget && !GTK_IS_POPOVER(pWidget))
+        if (m_pParentWidget && gtk_widget_get_toplevel(pWidget) == pWidget && !GTK_IS_POPOVER(pWidget))
             gtk_container_add(GTK_CONTAINER(m_pParentWidget), pWidget);
     }
 
