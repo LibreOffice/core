@@ -28,22 +28,29 @@
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::ucb {
-    class XContent;
-    class XCommandEnvironment;
+namespace com::sun::star::ucb
+{
+class XContent;
+class XCommandEnvironment;
 }
 
-namespace com::sun::star::sdbc { class XResultSet; }
+namespace com::sun::star::sdbc
+{
+class XResultSet;
+}
 
-namespace sd {
-
+namespace sd
+{
 /** Representation of a template or layout file.
 */
 class TemplateEntry
 {
 public:
-    TemplateEntry   (const OUString& rsTitle, const OUString& rsPath)
-        :   msTitle(rsTitle), msPath(rsPath) {}
+    TemplateEntry(const OUString& rsTitle, const OUString& rsPath)
+        : msTitle(rsTitle)
+        , msPath(rsPath)
+    {
+    }
 
     OUString msTitle;
     OUString msPath;
@@ -86,13 +93,17 @@ public:
             <nullptr/> is returned either before the template scanning is
             started or after it has ended.
     */
-    const TemplateEntry* GetLastAddedEntry() const { return mpTemplateEntries.empty()?nullptr:mpTemplateEntries.back().get();}
+    const TemplateEntry* GetLastAddedEntry() const
+    {
+        return mpTemplateEntries.empty() ? nullptr : mpTemplateEntries.back().get();
+    }
 
 private:
     /** The current state determines which step will be executed next by
         RunNextStep().
     */
-    enum State {
+    enum State
+    {
         INITIALIZE_SCANNING,
         INITIALIZE_FOLDER_SCANNING,
         GATHER_FOLDER_LIST,
@@ -105,7 +116,7 @@ private:
     State meState;
 
     ::ucbhelper::Content maFolderContent;
-    ::std::vector< std::unique_ptr<TemplateEntry> > mpTemplateEntries;
+    ::std::vector<std::unique_ptr<TemplateEntry>> mpTemplateEntries;
 
     /** The folders that are collected by GatherFolderList().
     */

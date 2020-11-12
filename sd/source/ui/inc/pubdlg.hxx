@@ -35,8 +35,14 @@ class SdHtmlAttrPreview;
 class SdPublishingDesign;
 class ButtonSet;
 
-namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::beans
+{
+struct PropertyValue;
+}
+namespace com::sun::star::uno
+{
+template <class E> class Sequence;
+}
 
 // *********************************************************************
 // Html-Export Autopilot
@@ -141,17 +147,17 @@ private:
     std::unique_ptr<SdHtmlAttrPreview> m_xPage6_Preview;
     std::unique_ptr<weld::CustomWeld> m_xPage6_PreviewWnd;
 
-    std::unique_ptr< ButtonSet > m_xButtonSet;
+    std::unique_ptr<ButtonSet> m_xButtonSet;
 
     // standard controls
     std::unique_ptr<weld::Button> m_xLastPageButton;
     std::unique_ptr<weld::Button> m_xNextPageButton;
     std::unique_ptr<weld::Button> m_xFinishButton;
 
-    Assistent       aAssistentFunc;
+    Assistent aAssistentFunc;
 
-    bool            m_bImpress;
-    bool            m_bButtonsDirty;
+    bool m_bImpress;
+    bool m_bButtonsDirty;
 
     void SetDefaults();
     void CreatePages();
@@ -159,41 +165,41 @@ private:
     Color m_aBackColor, m_aTextColor, m_aLinkColor;
     Color m_aVLinkColor, m_aALinkColor;
 
-    void    ChangePage();
-    void    UpdatePage();
+    void ChangePage();
+    void UpdatePage();
 
-    std::vector<SdPublishingDesign>   m_aDesignList;
-    bool    m_bDesignListDirty;
+    std::vector<SdPublishingDesign> m_aDesignList;
+    bool m_bDesignListDirty;
     SdPublishingDesign* m_pDesign;
-    void    Load();
-    bool    Save();
+    void Load();
+    bool Save();
 
-    void    GetDesign( SdPublishingDesign* pDesign );
-    void    SetDesign( SdPublishingDesign const * pDesign );
+    void GetDesign(SdPublishingDesign* pDesign);
+    void SetDesign(SdPublishingDesign const* pDesign);
 
-    void    LoadPreviewButtons();
+    void LoadPreviewButtons();
 
-    DECL_LINK( FinishHdl, weld::Button&, void );
-    DECL_LINK( NextPageHdl, weld::Button&, void );
-    DECL_LINK( LastPageHdl, weld::Button&, void );
+    DECL_LINK(FinishHdl, weld::Button&, void);
+    DECL_LINK(NextPageHdl, weld::Button&, void);
+    DECL_LINK(LastPageHdl, weld::Button&, void);
 
-    DECL_LINK( DesignHdl, weld::Button&, void );
-    DECL_LINK( DesignSelectHdl, weld::TreeView&, void );
-    DECL_LINK( DesignDeleteHdl, weld::Button&, void );
-    DECL_LINK( BaseHdl, weld::Button&, void );
-    DECL_LINK( ContentHdl, weld::Button&, void );
-    DECL_LINK( GfxFormatHdl, weld::Button&, void );
-    DECL_LINK( ResolutionHdl, weld::Button&, void );
-    DECL_LINK( ButtonsHdl, ValueSet*, void );
-    DECL_LINK( ColorHdl, weld::Button&, void );
-    DECL_LINK( WebServerHdl, weld::Button&, void );
-    DECL_LINK( SlideChgHdl, weld::Button&, void );
+    DECL_LINK(DesignHdl, weld::Button&, void);
+    DECL_LINK(DesignSelectHdl, weld::TreeView&, void);
+    DECL_LINK(DesignDeleteHdl, weld::Button&, void);
+    DECL_LINK(BaseHdl, weld::Button&, void);
+    DECL_LINK(ContentHdl, weld::Button&, void);
+    DECL_LINK(GfxFormatHdl, weld::Button&, void);
+    DECL_LINK(ResolutionHdl, weld::Button&, void);
+    DECL_LINK(ButtonsHdl, ValueSet*, void);
+    DECL_LINK(ColorHdl, weld::Button&, void);
+    DECL_LINK(WebServerHdl, weld::Button&, void);
+    DECL_LINK(SlideChgHdl, weld::Button&, void);
 
 public:
     SdPublishingDlg(weld::Window* pWindow, DocumentType eDocType);
     virtual ~SdPublishingDlg() override;
 
-    void GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams );
+    void GetParameterSequence(css::uno::Sequence<css::beans::PropertyValue>& rParams);
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX

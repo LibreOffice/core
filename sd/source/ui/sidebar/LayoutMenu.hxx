@@ -29,23 +29,31 @@
 #include <sfx2/request.hxx>
 #include <xmloff/autolayout.hxx>
 
-namespace com::sun::star::frame { class XStatusListener; }
-namespace com::sun::star::ui { class XSidebar; }
+namespace com::sun::star::frame
+{
+class XStatusListener;
+}
+namespace com::sun::star::ui
+{
+class XSidebar;
+}
 
-
-namespace sd {
+namespace sd
+{
 class DrawDocShell;
 class ViewShellBase;
 }
 
-namespace sd::tools { class EventMultiplexerEvent; }
+namespace sd::tools
+{
+class EventMultiplexerEvent;
+}
 
-namespace sd::sidebar {
-
+namespace sd::sidebar
+{
 class LayoutValueSet;
 
-class LayoutMenu : public PanelLayout
-                 , public sfx2::sidebar::ILayoutableWindow
+class LayoutMenu : public PanelLayout, public sfx2::sidebar::ILayoutableWindow
 {
 public:
     /** Create a new layout menu.  Depending on the given flag it
@@ -56,10 +64,8 @@ public:
         @param i_rPanelViewShell
             the view shell of the task pane.
     */
-    LayoutMenu (
-        vcl::Window* pParent,
-        ViewShellBase& rViewShellBase,
-        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+    LayoutMenu(vcl::Window* pParent, ViewShellBase& rViewShellBase,
+               const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~LayoutMenu() override;
     virtual void dispose() override;
 
@@ -71,14 +77,14 @@ public:
     AutoLayout GetSelectedAutoLayout() const;
 
     // From ILayoutableWindow
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
+    virtual css::ui::LayoutSize GetHeightForWidth(const sal_Int32 nWidth) override;
 
     // From vcl::Window
     virtual void Resize() override;
 
     /** Show a context menu when the right mouse button is pressed.
     */
-    virtual void MouseButtonDown (const MouseEvent& rEvent) override;
+    virtual void MouseButtonDown(const MouseEvent& rEvent) override;
 
     /** Call this method when the set of displayed layouts is not up-to-date
         anymore.  It will re-assemble this set according to the current
@@ -93,7 +99,7 @@ public:
     /** Call Fill() when switching to or from high contrast mode so that the
         correct set of icons is displayed.
     */
-    virtual void DataChanged (const DataChangedEvent& rEvent) override;
+    virtual void DataChanged(const DataChangedEvent& rEvent) override;
 
     using Window::GetWindow;
 
@@ -117,7 +123,7 @@ private:
         valueset.  This number may be larger.  In that case a vertical
         scroll bar is displayed.
     */
-    int CalculateRowCount (const Size& rItemSize, int nColumnCount);
+    int CalculateRowCount(const Size& rItemSize, int nColumnCount);
 
     /** Fill the value set with the layouts that are applicable to the
         current main view shell.
@@ -132,7 +138,7 @@ private:
         If no slide sorter is active then this call is ignored.  The slide
         sorter in the center pane is preferred if the choice exists.
     */
-    void AssignLayoutToSelectedSlides (AutoLayout aLayout);
+    void AssignLayoutToSelectedSlides(AutoLayout aLayout);
 
     /** Insert a new page with the given layout.  The page is inserted via
         the main view shell, i.e. its SID_INSERTPAGE slot is called. If it
@@ -140,7 +146,7 @@ private:
         place.  The new page is inserted after the currently active one (the
         one returned by ViewShell::GetActualPage().)
     */
-    void InsertPageWithLayout (AutoLayout aLayout);
+    void InsertPageWithLayout(AutoLayout aLayout);
 
     /** Create a request structure that can be used with the SID_INSERTPAGE
         and SID_MODIFYPAGE slots.  The parameters are set so that the given
@@ -150,16 +156,14 @@ private:
         @param aLayout
             Layout of the page to insert or to assign.
     */
-    SfxRequest CreateRequest (
-        sal_uInt16 nSlotId,
-        AutoLayout aLayout);
+    SfxRequest CreateRequest(sal_uInt16 nSlotId, AutoLayout aLayout);
 
     /** Select the layout that is used by the current page.
     */
     void UpdateSelection();
 
     // internal ctor
-    void    implConstruct( DrawDocShell& rDocumentShell );
+    void implConstruct(DrawDocShell& rDocumentShell);
 
     /** When clicked then set the current page of the view in the center pane.
     */

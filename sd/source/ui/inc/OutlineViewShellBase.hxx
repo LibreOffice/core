@@ -22,13 +22,12 @@
 
 #include "ImpressViewShellBase.hxx"
 
-namespace sd {
-
+namespace sd
+{
 /** This class exists to be able to register a factory that
     creates an outline view shell as default.
 */
-class OutlineViewShellBase
-    : public ImpressViewShellBase
+class OutlineViewShellBase : public ImpressViewShellBase
 {
 public:
     SFX_DECL_VIEWFACTORY(OutlineViewShellBase);
@@ -36,7 +35,7 @@ public:
     /** This constructor is used by the view factory of the SFX
         macros.
     */
-    OutlineViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
+    OutlineViewShellBase(SfxViewFrame* pFrame, SfxViewShell* pOldShell);
     virtual ~OutlineViewShellBase() override;
 };
 

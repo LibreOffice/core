@@ -27,14 +27,14 @@ class ErrCode;
 class SdGRFFilter final : public SdFilter
 {
 public:
-    SdGRFFilter ( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell );
+    SdGRFFilter(SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell);
 
     virtual ~SdGRFFilter() override;
 
-    bool    Import();
-    bool    Export() override;
+    bool Import();
+    bool Export() override;
 
-    static void HandleGraphicFilterError( ErrCode nFilterError, ErrCode nStreamError );
+    static void HandleGraphicFilterError(ErrCode nFilterError, ErrCode nStreamError);
 };
 
 #endif // INCLUDED_SD_INC_SDGRFFILTER_HXX

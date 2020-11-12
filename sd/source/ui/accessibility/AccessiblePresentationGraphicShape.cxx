@@ -29,36 +29,31 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-namespace accessibility {
-
+namespace accessibility
+{
 //=====  internal  ============================================================
 
-AccessiblePresentationGraphicShape::AccessiblePresentationGraphicShape (
-    const AccessibleShapeInfo& rShapeInfo,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo)
-    : AccessibleGraphicShape (rShapeInfo, rShapeTreeInfo)
+AccessiblePresentationGraphicShape::AccessiblePresentationGraphicShape(
+    const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : AccessibleGraphicShape(rShapeInfo, rShapeTreeInfo)
 {
 }
 
-AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape()
-{
-}
+AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape() {}
 
 // XServiceInfo
 
-OUString SAL_CALL
-    AccessiblePresentationGraphicShape::getImplementationName()
+OUString SAL_CALL AccessiblePresentationGraphicShape::getImplementationName()
 {
     return "AccessiblePresentationGraphicShape";
 }
 
 /// Set this object's name if is different to the current name.
-OUString
-    AccessiblePresentationGraphicShape::CreateAccessibleBaseName()
+OUString AccessiblePresentationGraphicShape::CreateAccessibleBaseName()
 {
     OUString sName;
 
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId(mxShape);
     switch (nShapeType)
     {
         case PRESENTATION_GRAPHIC_OBJECT:
@@ -73,9 +68,9 @@ OUString
     return sName;
 }
 
-sal_Int16 SAL_CALL AccessiblePresentationGraphicShape::getAccessibleRole ()
+sal_Int16 SAL_CALL AccessiblePresentationGraphicShape::getAccessibleRole()
 {
-    return  AccessibleRole::GRAPHIC ;
+    return AccessibleRole::GRAPHIC;
 }
 } // end of namespace accessibility
 

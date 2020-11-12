@@ -27,8 +27,8 @@
 
 class OutlinerView;
 
-namespace sd {
-
+namespace sd
+{
 class ViewShell;
 
 /** An SdWindow contains the actual working area of ViewShell.
@@ -42,16 +42,14 @@ class ViewShell;
     member of the <type>OutputDevice</type> base class.  It is calculated to
     be an integer percent value.
 */
-class Window
-    : public vcl::Window,
-      public ::DropTargetHelper
+class Window : public vcl::Window, public ::DropTargetHelper
 {
 public:
-    Window (vcl::Window* pParent);
-    virtual ~Window () override;
+    Window(vcl::Window* pParent);
+    virtual ~Window() override;
     virtual void dispose() override;
 
-    void    SetViewShell (ViewShell* pViewSh);
+    void SetViewShell(ViewShell* pViewSh);
     ViewShell* GetViewShell();
 
     /** Set the zoom factor to the specified value and center the display
@@ -59,7 +57,7 @@ public:
         @param nZoom
             The zoom factor is given as integral percent value.
     */
-    void    SetZoomIntegral(::tools::Long nZoom);
+    void SetZoomIntegral(::tools::Long nZoom);
 
     /** This internally used method performs the actual adaptation of the
         window's map mode to the specified zoom factor.
@@ -72,7 +70,7 @@ public:
             forced into that interval.  Therefore the returned value is a
             valid zoom factor.
     */
-    ::tools::Long    SetZoomFactor(::tools::Long nZoom);
+    ::tools::Long SetZoomFactor(::tools::Long nZoom);
 
     /** This method is called when the whole page shall be displayed in the
         window.  Position and zoom factor are set so that the given
@@ -86,11 +84,11 @@ public:
         @return
             The new zoom factor is returned as integral percent value.
     */
-    ::tools::Long SetZoomRect (const ::tools::Rectangle& rZoomRect);
+    ::tools::Long SetZoomRect(const ::tools::Rectangle& rZoomRect);
 
-    ::tools::Long GetZoomForRect( const ::tools::Rectangle& rZoomRect );
+    ::tools::Long GetZoomForRect(const ::tools::Rectangle& rZoomRect);
 
-    void SetMinZoomAutoCalc (bool bAuto);
+    void SetMinZoomAutoCalc(bool bAuto);
 
     /** Calculate the minimal zoom factor as the value at which the
         application area would completely fill the window.  All values set
@@ -103,20 +101,20 @@ public:
         <member>bMinZoomAutoCalc</member> is set (to <TRUE/>).</p>
     */
     void CalcMinZoom();
-    void SetMinZoom (::tools::Long nMin);
-    ::tools::Long GetMinZoom() const { return mnMinZoom;}
-    void SetMaxZoom (::tools::Long nMax);
-    ::tools::Long GetMaxZoom() const { return mnMaxZoom;}
+    void SetMinZoom(::tools::Long nMin);
+    ::tools::Long GetMinZoom() const { return mnMinZoom; }
+    void SetMaxZoom(::tools::Long nMax);
+    ::tools::Long GetMaxZoom() const { return mnMaxZoom; }
 
     ::tools::Long GetZoom() const;
 
-    const Point& GetWinViewPos() const { return maWinPos;}
-    const Point& GetViewOrigin() const { return maViewOrigin;}
-    const Size& GetViewSize() const { return maViewSize;}
+    const Point& GetWinViewPos() const { return maWinPos; }
+    const Point& GetViewOrigin() const { return maViewOrigin; }
+    const Size& GetViewSize() const { return maViewSize; }
     void SetWinViewPos(const Point& rPnt);
     void SetViewOrigin(const Point& rPnt);
     void SetViewSize(const Size& rSize);
-    void SetCenterAllowed (bool bIsAllowed);
+    void SetCenterAllowed(bool bIsAllowed);
 
     /** Calculate origin of the map mode according to the size of the view
         and window (its size in model coordinates; that takes the zoom
@@ -125,36 +123,38 @@ public:
         larger than the view or the value of aWinPos in this direction is -1
         then the window is centered in this direction.
         */
-    void UpdateMapOrigin (bool bInvalidate = true);
+    void UpdateMapOrigin(bool bInvalidate = true);
 
     void UpdateMapMode();
 
-    double  GetVisibleX() const;          // interface for ScrollBars
-    double  GetVisibleY() const;
-    void    SetVisibleXY(double fX, double fY);
-    double  GetVisibleWidth() const;
-    double  GetVisibleHeight() const;
-    Point   GetVisibleCenter();
-    double  GetScrlLineWidth() const;
-    double  GetScrlLineHeight() const;
-    double  GetScrlPageWidth() const;
-    double  GetScrlPageHeight() const;
+    double GetVisibleX() const; // interface for ScrollBars
+    double GetVisibleY() const;
+    void SetVisibleXY(double fX, double fY);
+    double GetVisibleWidth() const;
+    double GetVisibleHeight() const;
+    Point GetVisibleCenter();
+    double GetScrlLineWidth() const;
+    double GetScrlLineHeight() const;
+    double GetScrlPageWidth() const;
+    double GetScrlPageHeight() const;
     void GrabFocus();
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
+    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override;
 
     /** The DropScroll() method is used by AcceptDrop() to scroll the
         content of the window while dragging and dropping.  With this method
         you can control whether DropScroll() shall be used.
     */
-    void SetUseDropScroll (bool bUseDropScroll);
-    void DropScroll (const Point& rMousePos);
+    void SetUseDropScroll(bool bUseDropScroll);
+    void DropScroll(const Point& rMousePos);
     virtual void KeyInput(const KeyEvent& rKEvt) override;
+
 private:
     OutlinerView* GetOutlinerView() const;
+
 protected:
     Point maWinPos;
     Point maViewOrigin;
@@ -175,14 +175,15 @@ protected:
 
     virtual void Resize() override;
     virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext,
+                       const ::tools::Rectangle& rRect) override;
     virtual void MouseMove(const MouseEvent& rMEvt) override;
     virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void Command(const CommandEvent& rCEvt) override;
-    virtual void RequestHelp( const HelpEvent& rEvt ) override;
+    virtual void RequestHelp(const HelpEvent& rEvt) override;
     virtual void LoseFocus() override;
-    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
+    virtual bool EventNotify(NotifyEvent& rNEvt) override;
 
     /** Create an accessibility object that makes this window accessible.
 
@@ -190,8 +191,7 @@ protected:
             The returned reference is empty if an accessible object could
             not be created.
     */
-    virtual css::uno::Reference<css::accessibility::XAccessible>
-        CreateAccessible() override;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     OUString GetSurroundingText() const override;
     Selection GetSurroundingTextSelection() const override;

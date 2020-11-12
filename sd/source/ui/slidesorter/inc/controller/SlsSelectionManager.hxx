@@ -27,10 +27,13 @@
 
 class SdPage;
 
-namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
 
-namespace sd::slidesorter::controller {
-
+namespace sd::slidesorter::controller
+{
 class SlideSorterController;
 class SelectionObserver;
 
@@ -46,7 +49,7 @@ class SelectionManager
 public:
     /** Create a new SelectionManager for the given slide sorter.
     */
-    SelectionManager (SlideSorter& rSlideSorter);
+    SelectionManager(SlideSorter& rSlideSorter);
 
     ~SelectionManager();
 
@@ -58,13 +61,13 @@ public:
             When <FALSE/> then make the first slide before the selected
             pages the new current slide.
     */
-    void DeleteSelectedPages (const bool bSelectFollowingPage = true);
+    void DeleteSelectedPages(const bool bSelectFollowingPage = true);
 
     /** Call this method after the selection has changed (possible several
         calls to the PageSelector) to invalidate the relevant slots and send
         appropriate events.
     */
-    void SelectionHasChanged ();
+    void SelectionHasChanged();
 
     /** Add a listener that is called when the selection of the slide sorter
         changes.
@@ -73,7 +76,7 @@ public:
             the second and all following calls are ignored.  Each listener
             is added only once.
     */
-    void AddSelectionChangeListener (const Link<LinkParamNone*,void>& rListener);
+    void AddSelectionChangeListener(const Link<LinkParamNone*, void>& rListener);
 
     /** Remove a listener that was called when the selection of the slide
         sorter changes.
@@ -81,7 +84,7 @@ public:
             It is safe to pass a listener that was not added are has been
             removed previously.  Such calls are ignored.
     */
-    void RemoveSelectionChangeListener (const Link<LinkParamNone*,void>& rListener);
+    void RemoveSelectionChangeListener(const Link<LinkParamNone*, void>& rListener);
 
     /** Return the position where to insert pasted slides based on the
         current selection.  When there is a selection then the insert
@@ -96,15 +99,18 @@ public:
     /** Store an insertion position temporarily.  It is reset when the
         selection changes the next time.
     */
-    void SetInsertionPosition (const sal_Int32 nInsertionPosition);
+    void SetInsertionPosition(const sal_Int32 nInsertionPosition);
 
-    const std::shared_ptr<SelectionObserver>& GetSelectionObserver() const { return mpSelectionObserver;}
+    const std::shared_ptr<SelectionObserver>& GetSelectionObserver() const
+    {
+        return mpSelectionObserver;
+    }
 
 private:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
 
-    ::std::vector<Link<LinkParamNone*,void>> maSelectionChangeListeners;
+    ::std::vector<Link<LinkParamNone*, void>> maSelectionChangeListeners;
 
     /** The insertion position is only temporarily valid.  Negative values
         indicate that the explicit insertion position is not valid.  In this
@@ -119,14 +125,14 @@ private:
         @param rSelectedNormalPages
             A list of normal pages.  Supplying master pages is an error.
     */
-    void DeleteSelectedNormalPages (const ::std::vector<SdPage*>& rSelectedNormalPages);
+    void DeleteSelectedNormalPages(const ::std::vector<SdPage*>& rSelectedNormalPages);
 
     /** Delete the given list of master pages.  This method is a helper
         function for DeleteSelectedPages().
         @param rSelectedMasterPages
             A list of master pages.  Supplying normal pages is an error.
     */
-    void DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedMasterPages);
+    void DeleteSelectedMasterPages(const ::std::vector<SdPage*>& rSelectedMasterPages);
 };
 
 } // end of namespace ::sd::slidesorter::controller

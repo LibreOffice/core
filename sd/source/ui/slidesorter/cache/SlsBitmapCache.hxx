@@ -26,8 +26,8 @@ class SdrPage;
 #include <osl/mutex.hxx>
 #include <memory>
 
-namespace sd::slidesorter::cache {
-
+namespace sd::slidesorter::cache
+{
 class CacheCompactor;
 class BitmapCompressor;
 
@@ -61,7 +61,7 @@ public:
         When that does not exist then an internal default value is
         used.
     */
-    explicit BitmapCache ();
+    explicit BitmapCache();
 
     /** The destructor clears the cache and releases all bitmaps still in it.
     */
@@ -75,34 +75,34 @@ public:
     /** Return <TRUE/> when the cache is full, i.e. the cache compactor had
         to be run.
     */
-    bool IsFull() const { return mbIsFull;}
+    bool IsFull() const { return mbIsFull; }
 
     /** Return the memory size that is occupied by all non-precious bitmaps
         in the cache.
     */
-    sal_Int32 GetSize() const { return mnNormalCacheSize;}
+    sal_Int32 GetSize() const { return mnNormalCacheSize; }
 
     /** Return <TRUE/> when a preview bitmap exists for the given key.
     */
-    bool HasBitmap (const CacheKey& rKey);
+    bool HasBitmap(const CacheKey& rKey);
 
     /** Return <TRUE/> when a preview bitmap exists for the given key and
         when it is up-to-date.
     */
-    bool BitmapIsUpToDate (const CacheKey& rKey);
+    bool BitmapIsUpToDate(const CacheKey& rKey);
 
     /** Return the preview bitmap for the given contact object.
     */
-    BitmapEx GetBitmap (const CacheKey& rKey);
+    BitmapEx GetBitmap(const CacheKey& rKey);
 
     /** Return the marked preview bitmap for the given contact object.
     */
-    BitmapEx GetMarkedBitmap (const CacheKey& rKey);
+    BitmapEx GetMarkedBitmap(const CacheKey& rKey);
 
     /** Release the reference to the preview bitmap that is associated with
         the given key.
     */
-    void ReleaseBitmap (const CacheKey& rKey);
+    void ReleaseBitmap(const CacheKey& rKey);
 
     /** Mark the specified preview bitmap as not being up-to-date
         anymore.
@@ -111,7 +111,7 @@ public:
             return <TRUE/>.  When the key is not known then <FALSE/>
             is returned.
     */
-    bool InvalidateBitmap (const CacheKey& rKey);
+    bool InvalidateBitmap(const CacheKey& rKey);
 
     /** Mark all preview bitmaps as not being up-to-date anymore.
     */
@@ -119,21 +119,16 @@ public:
 
     /** Add or replace a bitmap for the given key.
     */
-    void SetBitmap (
-        const CacheKey& rKey,
-        const BitmapEx& rPreview,
-        bool bIsPrecious);
+    void SetBitmap(const CacheKey& rKey, const BitmapEx& rPreview, bool bIsPrecious);
 
     /** Add or replace a marked bitmap for the given key.
     */
-    void SetMarkedBitmap (
-        const CacheKey& rKey,
-        const BitmapEx& rPreview);
+    void SetMarkedBitmap(const CacheKey& rKey, const BitmapEx& rPreview);
 
     /** Mark the specified preview bitmap as precious, i.e. that it must not
         be compressed or otherwise removed from the cache.
     */
-    void SetPrecious (const CacheKey& rKey, bool bIsPrecious);
+    void SetPrecious(const CacheKey& rKey, bool bIsPrecious);
 
     /** Calculate the cache size.  This should rarely be necessary because
         the cache size is tracked with each modification of preview
@@ -143,7 +138,7 @@ public:
 
     /** Use the previews in the given cache to initialize missing previews.
     */
-    void Recycle (const BitmapCache& rCache);
+    void Recycle(const BitmapCache& rCache);
 
     /** Return a list of sorted cache keys that represent an index into (a
         part of) the cache.  The entries of the index are sorted according
@@ -151,15 +146,13 @@ public:
         Entries with the precious flag set are omitted.
         Entries with that have no preview bitmaps are omitted.
     */
-    ::std::unique_ptr<CacheIndex> GetCacheIndex () const;
+    ::std::unique_ptr<CacheIndex> GetCacheIndex() const;
 
     /** Compress the specified preview bitmap with the given bitmap
         compressor.  A reference to the compressor is stored for later
         decompression.
     */
-    void Compress (
-        const CacheKey& rKey,
-        const std::shared_ptr<BitmapCompressor>& rpCompressor);
+    void Compress(const CacheKey& rKey, const std::shared_ptr<BitmapCompressor>& rpCompressor);
 
 private:
     mutable ::osl::Mutex maMutex;
@@ -203,8 +196,12 @@ private:
         precious flag of the specified preview bitmap and the specified
         operation.
     */
-    enum CacheOperation { ADD, REMOVE };
-    void UpdateCacheSize (const CacheEntry& rKey, CacheOperation eOperation);
+    enum CacheOperation
+    {
+        ADD,
+        REMOVE
+    };
+    void UpdateCacheSize(const CacheEntry& rKey, CacheOperation eOperation);
 };
 
 } // end of namespace ::sd::slidesorter::cache

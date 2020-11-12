@@ -36,16 +36,16 @@
 /**
  * Constructor of tab dialog: appends pages to the dialog
  */
-SdPageDlg::SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage, bool bIsImpressDoc)
+SdPageDlg::SdPageDlg(SfxObjectShell const* pDocSh, weld::Window* pParent, const SfxItemSet* pAttr,
+                     bool bAreaPage, bool bIsImpressDoc)
     : SfxTabDialogController(pParent, "modules/sdraw/ui/drawpagedialog.ui", "DrawPageDialog", pAttr)
     , mbIsImpressDoc(bIsImpressDoc)
 {
-
-    SvxColorListItem const * pColorListItem = pDocSh->GetItem( SID_COLOR_TABLE );
-    SvxGradientListItem const * pGradientListItem = pDocSh->GetItem( SID_GRADIENT_LIST );
-    SvxBitmapListItem const * pBitmapListItem = pDocSh->GetItem( SID_BITMAP_LIST );
-    SvxPatternListItem const * pPatternListItem = pDocSh->GetItem( SID_PATTERN_LIST );
-    SvxHatchListItem const * pHatchListItem = pDocSh->GetItem( SID_HATCH_LIST );
+    SvxColorListItem const* pColorListItem = pDocSh->GetItem(SID_COLOR_TABLE);
+    SvxGradientListItem const* pGradientListItem = pDocSh->GetItem(SID_GRADIENT_LIST);
+    SvxBitmapListItem const* pBitmapListItem = pDocSh->GetItem(SID_BITMAP_LIST);
+    SvxPatternListItem const* pPatternListItem = pDocSh->GetItem(SID_PATTERN_LIST);
+    SvxHatchListItem const* pHatchListItem = pDocSh->GetItem(SID_HATCH_LIST);
 
     mpColorList = pColorListItem->GetColorList();
     mpGradientList = pGradientListItem->GetGradientList();
@@ -57,9 +57,10 @@ SdPageDlg::SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const
 
     AddTabPage("RID_SVXPAGE_PAGE", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), nullptr);
     AddTabPage("RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA), nullptr);
-    AddTabPage("RID_SVXPAGE_TRANSPARENCE", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE), nullptr);
+    AddTabPage("RID_SVXPAGE_TRANSPARENCE", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE),
+               nullptr);
 
-    if (!bAreaPage)  // I have to add the page before I remove it !
+    if (!bAreaPage) // I have to add the page before I remove it !
     {
         RemoveTabPage("RID_SVXPAGE_AREA");
         RemoveTabPage("RID_SVXPAGE_TRANSPARENCE");
@@ -77,9 +78,9 @@ void SdPageDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "RID_SVXPAGE_PAGE")
     {
-        aSet.Put (SfxUInt16Item(sal_uInt16(SID_ENUM_PAGE_MODE), SVX_PAGE_MODE_PRESENTATION));
-        aSet.Put (SfxUInt16Item(SID_PAPER_START, PAPER_A0));
-        aSet.Put (SfxUInt16Item(SID_PAPER_END, PAPER_E));
+        aSet.Put(SfxUInt16Item(sal_uInt16(SID_ENUM_PAGE_MODE), SVX_PAGE_MODE_PRESENTATION));
+        aSet.Put(SfxUInt16Item(SID_PAPER_START, PAPER_A0));
+        aSet.Put(SfxUInt16Item(SID_PAPER_END, PAPER_E));
 
         if (mbIsImpressDoc)
             aSet.Put(SfxBoolItem(SID_IMPRESS_DOC, true));
@@ -88,20 +89,20 @@ void SdPageDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
     }
     else if (rId == "RID_SVXPAGE_AREA")
     {
-        aSet.Put (SvxColorListItem(mpColorList,SID_COLOR_TABLE));
-        aSet.Put (SvxGradientListItem(mpGradientList,SID_GRADIENT_LIST));
-        aSet.Put (SvxHatchListItem(mpHatchingList,SID_HATCH_LIST));
-        aSet.Put (SvxBitmapListItem(mpBitmapList,SID_BITMAP_LIST));
-        aSet.Put (SvxPatternListItem(mpPatternList,SID_PATTERN_LIST));
-        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
-        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
-        aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,0));
+        aSet.Put(SvxColorListItem(mpColorList, SID_COLOR_TABLE));
+        aSet.Put(SvxGradientListItem(mpGradientList, SID_GRADIENT_LIST));
+        aSet.Put(SvxHatchListItem(mpHatchingList, SID_HATCH_LIST));
+        aSet.Put(SvxBitmapListItem(mpBitmapList, SID_BITMAP_LIST));
+        aSet.Put(SvxPatternListItem(mpPatternList, SID_PATTERN_LIST));
+        aSet.Put(SfxUInt16Item(SID_PAGE_TYPE, 0));
+        aSet.Put(SfxUInt16Item(SID_DLG_TYPE, 1));
+        aSet.Put(SfxUInt16Item(SID_TABPAGE_POS, 0));
         rPage.PageCreated(aSet);
     }
     else if (rId == "RID_SVXPAGE_TRANSPARENCE")
     {
-        aSet.Put(SfxUInt16Item(SID_PAGE_TYPE,0));
-        aSet.Put(SfxUInt16Item(SID_DLG_TYPE,1));
+        aSet.Put(SfxUInt16Item(SID_PAGE_TYPE, 0));
+        aSet.Put(SfxUInt16Item(SID_DLG_TYPE, 1));
         rPage.PageCreated(aSet);
     }
 }

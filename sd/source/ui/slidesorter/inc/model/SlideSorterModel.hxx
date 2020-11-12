@@ -34,14 +34,23 @@ class SdDrawDocument;
 class SdrPage;
 class SdPage;
 
-namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
 
-namespace com::sun::star::container { class XIndexAccess; }
-namespace com::sun::star::drawing { class XDrawPage; }
+namespace com::sun::star::container
+{
+class XIndexAccess;
+}
+namespace com::sun::star::drawing
+{
+class XDrawPage;
+}
 
-namespace sd::slidesorter::model {
-
-inline sal_Int32 FromCoreIndex (const sal_uInt16 nCoreIndex) { return (nCoreIndex-1)/2; }
+namespace sd::slidesorter::model
+{
+inline sal_Int32 FromCoreIndex(const sal_uInt16 nCoreIndex) { return (nCoreIndex - 1) / 2; }
 
 /** The model of the slide sorter gives access to the slides that are to be
     displayed in the slide sorter view.  Via the SetDocumentSlides() method
@@ -51,7 +60,7 @@ inline sal_Int32 FromCoreIndex (const sal_uInt16 nCoreIndex) { return (nCoreInde
 class SlideSorterModel final
 {
 public:
-    SlideSorterModel (SlideSorter& rSlideSorter);
+    SlideSorterModel(SlideSorter& rSlideSorter);
 
     ~SlideSorterModel();
     void Dispose();
@@ -70,9 +79,9 @@ public:
             changed and thus the page descriptor list has been set up
             to reflect that change.  A repaint is necessary.
     */
-    bool SetEditMode (EditMode eEditMode);
+    bool SetEditMode(EditMode eEditMode);
 
-    EditMode GetEditMode() const { return meEditMode;}
+    EditMode GetEditMode() const { return meEditMode; }
 
     /** Return the number of slides in the document regardless of whether
         they are visible or not or whether they are hidden or not.
@@ -97,9 +106,8 @@ public:
             reference is returned. Note that the page count may change
             between calls to GetPageCount() and GetPageDescriptor().
     */
-    SharedPageDescriptor GetPageDescriptor (
-        const sal_Int32 nPageIndex,
-        const bool bCreate = true) const;
+    SharedPageDescriptor GetPageDescriptor(const sal_Int32 nPageIndex,
+                                           const bool bCreate = true) const;
 
     /** Return a page descriptor for the given XDrawPage.  Page descriptors
         are created on demand.  The page descriptor is found (or not found)
@@ -111,8 +119,7 @@ public:
             Returns the index to the requested page descriptor or -1 when
             there is no such page descriptor.
     */
-    sal_Int32 GetIndex (
-        const css::uno::Reference<css::drawing::XDrawPage>& rxSlide) const;
+    sal_Int32 GetIndex(const css::uno::Reference<css::drawing::XDrawPage>& rxSlide) const;
 
     /** Return a page descriptor for the given SdrPage.  Page descriptors
         are created on demand.  The page descriptor is found (or not found)
@@ -124,14 +131,14 @@ public:
             Returns the index to the requested page descriptor or -1 when
             there is no such page descriptor.
     */
-    sal_Int32 GetIndex (const SdrPage* pPage) const;
+    sal_Int32 GetIndex(const SdrPage* pPage) const;
 
     /** Return an index for accessing an SdrModel that corresponds to the
         given SlideSorterModel index.  In many cases we just have to apply
         the n*2+1 magic.  Only when a special model is set, like a custom
         slide show, then the returned value is different.
     */
-    sal_uInt16 GetCoreIndex (const sal_Int32 nIndex) const;
+    sal_uInt16 GetCoreIndex(const sal_Int32 nIndex) const;
 
     /** Call this method after the document has changed its structure.  This
         will get the model in sync with the SdDrawDocument.  This method
@@ -158,7 +165,7 @@ public:
     /** Return the mutex so that the caller can lock it and then safely
         access the model.
     */
-    ::osl::Mutex& GetMutex() { return maMutex;}
+    ::osl::Mutex& GetMutex() { return maMutex; }
 
     /** Set the XIndexAccess from which the called SlideSorterModel takes
         its pages.
@@ -167,7 +174,7 @@ public:
             necessarily the same as the ones of the XModel of the
             XController (although it typically is a subset).
     */
-    void SetDocumentSlides (const css::uno::Reference<css::container::XIndexAccess>& rxSlides);
+    void SetDocumentSlides(const css::uno::Reference<css::container::XIndexAccess>& rxSlides);
 
     /** Return the set of pages that is currently displayed by the slide sorter.
     */
@@ -200,7 +207,7 @@ public:
             Returns <TRUE/> when the given page is relevant for the current
             page kind and edit mode.
     */
-    bool NotifyPageEvent (const SdrPage* pPage);
+    bool NotifyPageEvent(const SdrPage* pPage);
 
 private:
     mutable ::osl::Mutex maMutex;
@@ -214,11 +221,11 @@ private:
     */
     void AdaptSize();
 
-    SdPage* GetPage (const sal_Int32 nCoreIndex) const;
-    void InsertSlide (SdPage* pPage, bool bMarkSelected);
+    SdPage* GetPage(const sal_Int32 nCoreIndex) const;
+    void InsertSlide(SdPage* pPage, bool bMarkSelected);
     // return if this page was marked as selected before being removed
-    bool DeleteSlide (const SdPage* pPage);
-    void UpdateIndices (const sal_Int32 nFirstIndex);
+    bool DeleteSlide(const SdPage* pPage);
+    void UpdateIndices(const sal_Int32 nFirstIndex);
 };
 
 } // end of namespace ::sd::slidesorter::model

@@ -27,15 +27,15 @@
 
 #include <memory>
 
-namespace sd::slidesorter::cache {
-
+namespace sd::slidesorter::cache
+{
 /** The request queue stores requests that are described by the Request
     sorted according to priority class and then priority.
 */
 class RequestQueue : public sdr::PageUser
 {
 public:
-    explicit RequestQueue (const SharedCacheContext& rpCacheContext);
+    explicit RequestQueue(const SharedCacheContext& rpCacheContext);
     virtual ~RequestQueue();
 
     /** Insert a request with highest or lowest priority in its priority
@@ -51,27 +51,23 @@ public:
             priority in its class.  When <FALSE/> the request is inserted
             with lowest priority.
     */
-    void AddRequest (
-        CacheKey aKey,
-        RequestPriorityClass eRequestClass);
+    void AddRequest(CacheKey aKey, RequestPriorityClass eRequestClass);
 
     /** Remove the specified request from the queue.
         @param aKey
             It is OK when the specified request is not a member of the
             queue.
     */
-#if OSL_DEBUG_LEVEL >=2
-bool
+#if OSL_DEBUG_LEVEL >= 2
+    bool
 #else
-void
+    void
 #endif
-    RemoveRequest (CacheKey aKey);
+    RemoveRequest(CacheKey aKey);
 
     /** Change the priority class of the specified request.
     */
-    void ChangeClass (
-        CacheKey aKey,
-        RequestPriorityClass eNewRequestClass);
+    void ChangeClass(CacheKey aKey, RequestPriorityClass eNewRequestClass);
 
     /** Get the request with the highest priority int the highest priority class.
     */
@@ -95,7 +91,7 @@ void
 
     /** Return the mutex that guards the access to the priority queue.
     */
-    ::osl::Mutex& GetMutex() { return maMutex;}
+    ::osl::Mutex& GetMutex() { return maMutex; }
 
     /** Ensure we don't hand out a page deleted before anyone got a
         chance to process it

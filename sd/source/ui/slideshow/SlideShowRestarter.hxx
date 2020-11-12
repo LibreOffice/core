@@ -24,13 +24,19 @@
 #include <tools/link.hxx>
 #include <memory>
 
-namespace sd { class SlideShow; }
-namespace sd { class ViewShellBase; }
+namespace sd
+{
+class SlideShow;
+}
+namespace sd
+{
+class ViewShellBase;
+}
 class SfxDispatcher;
 struct ImplSVEvent;
 
-namespace sd {
-
+namespace sd
+{
 /** This class is used when a display is removed or added to restart the
     slide show.  This is necessary at least with DirectX because
     deactivating a display invalidates DirectX resources.  Accessing those
@@ -39,8 +45,7 @@ namespace sd {
     During a restart a possibly installed presenter extension is given the
     opportunity to show or hide depending on the number of available displays.
 */
-class SlideShowRestarter
-    : public std::enable_shared_from_this<SlideShowRestarter>
+class SlideShowRestarter : public std::enable_shared_from_this<SlideShowRestarter>
 {
 public:
     /** Create a new SlideShowRestarter object.
@@ -51,9 +56,8 @@ public:
         @param pViewShellBase
             Used to get access to a slot dispatcher.
     */
-    SlideShowRestarter (
-        const ::rtl::Reference<SlideShow>& rpSlideShow,
-        ViewShellBase* pViewShellBase);
+    SlideShowRestarter(const ::rtl::Reference<SlideShow>& rpSlideShow,
+                       ViewShellBase* pViewShellBase);
     virtual ~SlideShowRestarter();
 
     /** Restarting the slide show is an asynchronous multi step process
@@ -61,10 +65,10 @@ public:
         @param bForce
            Used to force a re-start, even if the display count is unchanged.
     */
-    void Restart (bool bForce);
+    void Restart(bool bForce);
 
 private:
-    ImplSVEvent * mnEventId;
+    ImplSVEvent* mnEventId;
     ::rtl::Reference<SlideShow> mpSlideShow;
     ViewShellBase* mpViewShellBase;
     ::std::shared_ptr<SlideShowRestarter> mpSelf;

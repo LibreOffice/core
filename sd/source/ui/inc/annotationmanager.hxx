@@ -27,23 +27,21 @@ class SfxItemSet;
 
 namespace sd
 {
-
 class ViewShellBase;
 class AnnotationManagerImpl;
 
 class AnnotationManager
 {
 public:
-    AnnotationManager( ViewShellBase& rViewShellBase );
+    AnnotationManager(ViewShellBase& rViewShellBase);
     ~AnnotationManager();
 
-    void ExecuteAnnotation (SfxRequest const & rRequest);
-    void GetAnnotationState (SfxItemSet& rItemSet);
+    void ExecuteAnnotation(SfxRequest const& rRequest);
+    void GetAnnotationState(SfxItemSet& rItemSet);
 
 private:
-    ::rtl::Reference< AnnotationManagerImpl > mxImpl;
+    ::rtl::Reference<AnnotationManagerImpl> mxImpl;
 };
-
 }
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_ANNOTATIONMANAGER_HXX

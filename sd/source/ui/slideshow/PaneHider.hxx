@@ -22,11 +22,17 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::drawing::framework { class XConfiguration; }
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
+namespace com::sun::star::drawing::framework
+{
+class XConfiguration;
+}
+namespace com::sun::star::drawing::framework
+{
+class XConfigurationController;
+}
 
-namespace sd {
-
+namespace sd
+{
 class ViewShell;
 class SlideshowImpl;
 
@@ -40,7 +46,7 @@ public:
     /** The constructor hides all side panes that belong to the
         ViewShellBase of the given view shell.
     */
-    PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow);
+    PaneHider(const ViewShell& rViewShell, SlideshowImpl* pSlideShow);
 
     /** Restore the original visibility of the side panes.
     */
@@ -53,8 +59,7 @@ private:
 
     css::uno::Reference<css::drawing::framework::XConfigurationController>
         mxConfigurationController;
-    css::uno::Reference<css::drawing::framework::XConfiguration>
-        mxConfiguration;
+    css::uno::Reference<css::drawing::framework::XConfiguration> mxConfiguration;
 };
 
 } // end of namespace sd

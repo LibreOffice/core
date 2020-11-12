@@ -22,13 +22,12 @@
 
 #include "ViewShellBase.hxx"
 
-namespace sd {
-
+namespace sd
+{
 /** This class exists to be able to register another factory that
     creates the view shell for the Draw application.
 */
-class GraphicViewShellBase
-    : public ViewShellBase
+class GraphicViewShellBase : public ViewShellBase
 {
 public:
     SFX_DECL_VIEWFACTORY(GraphicViewShellBase);
@@ -36,12 +35,12 @@ public:
     /** This constructor is used by the view factory of the SFX
         macros.
     */
-    GraphicViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
+    GraphicViewShellBase(SfxViewFrame* pFrame, SfxViewShell* pOldShell);
     virtual ~GraphicViewShellBase() override;
 
     /** Callback function for general slot calls.
     */
-    virtual void Execute (SfxRequest& rRequest) override;
+    virtual void Execute(SfxRequest& rRequest) override;
 
 protected:
     virtual void InitializeFramework() override;

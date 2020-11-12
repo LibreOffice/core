@@ -22,8 +22,8 @@
 
 #include <sfx2/tabdlg.hxx>
 
-namespace sd {
-
+namespace sd
+{
 class View;
 
 /**
@@ -33,18 +33,18 @@ class OutlineBulletDlg : public SfxTabDialogController
 {
 public:
     OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView);
-    virtual ~OutlineBulletDlg () override;
+    virtual ~OutlineBulletDlg() override;
 
     const SfxItemSet* GetBulletOutputItemSet() const;
 
 protected:
-    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 
 private:
     SfxItemSet m_aInputSet;
     std::unique_ptr<SfxItemSet> m_xOutputSet;
     bool m_bTitle;
-    ::sd::View *m_pSdView;
+    ::sd::View* m_pSdView;
 };
 
 } // end of namespace sd

@@ -33,15 +33,39 @@
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::container { class XIndexAccess; }
-namespace com::sun::star::uno { template <typename > class Reference; }
-namespace sd { class FuPoor; }
-namespace sd { class Window; }
-namespace vcl { class Window; }
+namespace com::sun::star::container
+{
+class XIndexAccess;
+}
+namespace com::sun::star::uno
+{
+template <typename> class Reference;
+}
+namespace sd
+{
+class FuPoor;
+}
+namespace sd
+{
+class Window;
+}
+namespace vcl
+{
+class Window;
+}
 
-namespace sd::slidesorter { class SlideSorter; }
-namespace sd::slidesorter::view { class SlideSorterView; }
-namespace sd::slidesorter::model { class SlideSorterModel; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
+namespace sd::slidesorter::view
+{
+class SlideSorterView;
+}
+namespace sd::slidesorter::model
+{
+class SlideSorterModel;
+}
 
 class CommandEvent;
 class SdPage;
@@ -50,8 +74,8 @@ class SfxRequest;
 class VclSimpleEvent;
 class VclWindowEvent;
 
-namespace sd::slidesorter::controller {
-
+namespace sd::slidesorter::controller
+{
 class Animator;
 class Clipboard;
 class CurrentSlideManager;
@@ -73,7 +97,7 @@ public:
             The window that contains the controls of the new
             controller.
     */
-    SlideSorterController (SlideSorter& rSlideSorter);
+    SlideSorterController(SlideSorter& rSlideSorter);
 
     /** Late initialization. Call this method once a new object has been
         created.
@@ -87,7 +111,7 @@ public:
     /** Place and size the scroll bars and the browser window so that the
         given rectangle is filled.
     */
-    void Resize (const ::tools::Rectangle& rAvailableSpace);
+    void Resize(const ::tools::Rectangle& rAvailableSpace);
 
     /** Determine which of the UI elements--the scroll bars, the scroll bar
         filler, the actual slide sorter view--are visible and place them in
@@ -98,7 +122,7 @@ public:
             size does not change (the size does change when the visibility
             of scroll bars changes.)
     */
-    void Rearrange (bool bForce);
+    void Rearrange(bool bForce);
 
     /** Return the descriptor of the page that is rendered under the
         given position.  This takes the IsOnlyPreviewTriggersMouseOver
@@ -108,7 +132,7 @@ public:
             reference because when no page is found at the position
             then NULL is returned to indicate this.
     */
-    model::SharedPageDescriptor GetPageAt (const Point& rPixelPosition);
+    model::SharedPageDescriptor GetPageAt(const Point& rPixelPosition);
 
     // Exported for unit test
     SD_DLLPUBLIC PageSelector& GetPageSelector();
@@ -120,37 +144,37 @@ public:
     */
     ScrollBarManager& GetScrollBarManager();
 
-    std::shared_ptr<CurrentSlideManager> const & GetCurrentSlideManager() const;
-    std::shared_ptr<SlotManager> const & GetSlotManager() const;
-    std::shared_ptr<SelectionManager> const & GetSelectionManager() const;
-    std::shared_ptr<InsertionIndicatorHandler> const & GetInsertionIndicatorHandler() const;
+    std::shared_ptr<CurrentSlideManager> const& GetCurrentSlideManager() const;
+    std::shared_ptr<SlotManager> const& GetSlotManager() const;
+    std::shared_ptr<SelectionManager> const& GetSelectionManager() const;
+    std::shared_ptr<InsertionIndicatorHandler> const& GetInsertionIndicatorHandler() const;
 
     /** This method forwards the call to the SlideSorterView and executes
         pending operations like moving selected pages into the visible area.
     */
-    void Paint (const ::tools::Rectangle& rRect, vcl::Window* pWin);
+    void Paint(const ::tools::Rectangle& rRect, vcl::Window* pWin);
 
-    void FuTemporary (SfxRequest& rRequest);
-    void FuPermanent (SfxRequest& rRequest);
-    void FuSupport (SfxRequest& rRequest);
-    bool Command (
-        const CommandEvent& rEvent,
-        ::sd::Window* pWindow);
+    void FuTemporary(SfxRequest& rRequest);
+    void FuPermanent(SfxRequest& rRequest);
+    void FuSupport(SfxRequest& rRequest);
+    bool Command(const CommandEvent& rEvent, ::sd::Window* pWindow);
 
-    void GetCtrlState (SfxItemSet &rSet);
-    void GetStatusBarState (SfxItemSet& rSet);
+    void GetCtrlState(SfxItemSet& rSet);
+    void GetStatusBarState(SfxItemSet& rSet);
 
-    void ExecCtrl (SfxRequest& rRequest);
-    void GetAttrState (SfxItemSet& rSet);
+    void ExecCtrl(SfxRequest& rRequest);
+    void GetAttrState(SfxItemSet& rSet);
 
     /** Create an object of this inner class to prevent updates due to model
         changes.
     */
     class ModelChangeLock
-    {public:
+    {
+    public:
         ModelChangeLock(SlideSorterController& rController);
         ~ModelChangeLock() COVERITY_NOEXCEPT_FALSE;
         void Release();
+
     private:
         SlideSorterController* mpController;
     };
@@ -174,7 +198,7 @@ public:
 
     /** This factory method creates a selection function.
     */
-    rtl::Reference<FuPoor> CreateSelectionFunction (SfxRequest& rRequest);
+    rtl::Reference<FuPoor> CreateSelectionFunction(SfxRequest& rRequest);
 
     /** When the current function of the view shell is the slide sorter
         selection function then return a reference to it.  Otherwise return
@@ -193,7 +217,7 @@ public:
         this method should be called between calls to
         PrepareEditModeChange() and FinishEditModeChange().
     */
-    void ChangeEditMode (EditMode eEditMode);
+    void ChangeEditMode(EditMode eEditMode);
 
     /** Finish the change of the edit mode.  Here we may select a page or
         restore a previously saved selection.
@@ -208,16 +232,16 @@ public:
             The old name of the page.  The new name can be taken from the
             page object.
     */
-    void PageNameHasChanged (int nPageIndex, const OUString& rsOldName);
+    void PageNameHasChanged(int nPageIndex, const OUString& rsOldName);
 
     /** Provide the set of pages to be displayed in the slide sorter.  The
         GetDocumentSlides() method can be found only in the SlideSorterModel.
     */
-    void SetDocumentSlides (const css::uno::Reference<css::container::XIndexAccess>& rxSlides);
+    void SetDocumentSlides(const css::uno::Reference<css::container::XIndexAccess>& rxSlides);
 
     /** Return an Animator object.
     */
-    const std::shared_ptr<Animator>& GetAnimator() const { return mpAnimator;}
+    const std::shared_ptr<Animator>& GetAnimator() const { return mpAnimator; }
 
     VisibleAreaManager& GetVisibleAreaManager() const;
 

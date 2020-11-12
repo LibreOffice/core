@@ -25,11 +25,17 @@
 
 #include <vector>
 
-namespace com::sun::star::drawing::framework { class XConfiguration; }
-namespace com::sun::star::drawing::framework { class XResourceId; }
+namespace com::sun::star::drawing::framework
+{
+class XConfiguration;
+}
+namespace com::sun::star::drawing::framework
+{
+class XResourceId;
+}
 
-namespace sd::framework {
-
+namespace sd::framework
+{
 /** A ConfigurationClassifier object compares two configurations of
     resources and gives access to the differences.  It is used mainly when
     changes to the current configuration have been requested and the various
@@ -42,7 +48,7 @@ public:
     /** Create a new ConfigurationClassifier object that will compare the
         two given configurations.
     */
-    ConfigurationClassifier (
+    ConfigurationClassifier(
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration1,
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration2);
 
@@ -55,7 +61,8 @@ public:
     */
     bool Partition();
 
-    typedef ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId> > ResourceIdVector;
+    typedef ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId>>
+        ResourceIdVector;
 
     /** Return the resources that belong to the configuration given as
         rxConfiguration1 to the constructor but that do not belong to
@@ -65,7 +72,7 @@ public:
             returned.  This reference remains valid as long as the called
             ConfigurationClassifier object stays alive.
     */
-    const ResourceIdVector& GetC1minusC2() const { return maC1minusC2;}
+    const ResourceIdVector& GetC1minusC2() const { return maC1minusC2; }
 
     /** Return the resources that belong to the configuration given as
         rxConfiguration2 to the constructor but that do not belong to
@@ -75,7 +82,7 @@ public:
             returned.  This reference remains valid as long as the called
             ConfigurationClassifier object stays alive.
     */
-    const ResourceIdVector& GetC2minusC1() const { return maC2minusC1;}
+    const ResourceIdVector& GetC2minusC1() const { return maC2minusC1; }
 
 #if DEBUG_SD_CONFIGURATION_TRACE
 
@@ -86,11 +93,9 @@ public:
             returned.  This reference remains valid as long as the called
             ConfigurationClassifier object stays alive.
     */
-    const ResourceIdVector& GetC1andC2() const { return maC1andC2;}
+    const ResourceIdVector& GetC1andC2() const { return maC1andC2; }
 
-    static void TraceResourceIdVector (
-        const char* pMessage,
-        const ResourceIdVector& rResources);
+    static void TraceResourceIdVector(const char* pMessage, const ResourceIdVector& rResources);
 
 #endif
 
@@ -118,9 +123,9 @@ private:
         @param rS2
             Another sequence of XResourceId objects.
     */
-    void PartitionResources (
-        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId> >& rS1,
-        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId> >& rS2);
+    void PartitionResources(
+        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId>>& rS1,
+        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId>>& rS2);
 
     /** Compare the given sequences of resource ids and put their elements
         in one of three vectors depending on whether an element belongs to
@@ -132,12 +137,10 @@ private:
         @param rS2
             Another sequence of XResourceId objects.
     */
-    static void ClassifyResources (
-        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId> >& rS1,
-        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId> >& rS2,
-        ResourceIdVector& rS1minusS2,
-        ResourceIdVector& rS2minusS1,
-        ResourceIdVector& rS1andS2);
+    static void ClassifyResources(
+        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId>>& rS1,
+        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId>>& rS2,
+        ResourceIdVector& rS1minusS2, ResourceIdVector& rS2minusS1, ResourceIdVector& rS1andS2);
 
     /** Copy the resources given in rSource to the list of resources
         specified by rTarget.  Resources bound to the ones in rSource,
@@ -152,7 +155,7 @@ private:
             This list is filled with resources from rSource and the ones
             bound to them.
     */
-    static void CopyResources (
+    static void CopyResources(
         const ResourceIdVector& rSource,
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
         ResourceIdVector& rTarget);

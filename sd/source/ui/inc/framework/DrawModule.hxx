@@ -22,19 +22,24 @@
 
 #include <sal/types.h>
 
-namespace com::sun::star::frame { class XController; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::frame
+{
+class XController;
+}
+namespace com::sun::star::uno
+{
+template <typename> class Reference;
+}
 
-namespace sd::framework {
-
+namespace sd::framework
+{
 /** The task of this module is to instantiate all modules that belong to the
     Draw application.
 */
 class DrawModule
 {
 public:
-    static void Initialize (
-        css::uno::Reference<css::frame::XController> const & rxController);
+    static void Initialize(css::uno::Reference<css::frame::XController> const& rxController);
 };
 
 } // end of namespace sd::framework

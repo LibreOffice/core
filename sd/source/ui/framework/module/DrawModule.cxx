@@ -27,14 +27,12 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd::framework {
-
-void DrawModule::Initialize (Reference<frame::XController> const & rxController)
+namespace sd::framework
+{
+void DrawModule::Initialize(Reference<frame::XController> const& rxController)
 {
     new sd::framework::CenterViewFocusModule(rxController);
-    new sd::framework::SlideSorterModule(
-        rxController,
-        FrameworkHelper::msLeftDrawPaneURL);
+    new sd::framework::SlideSorterModule(rxController, FrameworkHelper::msLeftDrawPaneURL);
     new ToolBarModule(rxController);
 }
 

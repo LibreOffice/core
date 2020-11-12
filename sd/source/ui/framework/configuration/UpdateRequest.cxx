@@ -23,30 +23,24 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace sd::framework {
-
-UpdateRequest::UpdateRequest()
-    throw()
+namespace sd::framework
+{
+UpdateRequest::UpdateRequest() throw()
     : UpdateRequestInterfaceBase(MutexOwner::maMutex)
 {
 }
 
-UpdateRequest::~UpdateRequest() throw()
-{
-}
+UpdateRequest::~UpdateRequest() throw() {}
 
-void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>&)
+void SAL_CALL UpdateRequest::execute(const Reference<XConfiguration>&)
 {
     // Do nothing here.  The configuration is updated when the request queue
     // becomes empty.
 }
 
-OUString SAL_CALL UpdateRequest::getName()
-{
-    return "UpdateRequest";
-}
+OUString SAL_CALL UpdateRequest::getName() { return "UpdateRequest"; }
 
-void SAL_CALL UpdateRequest::setName (const OUString&)
+void SAL_CALL UpdateRequest::setName(const OUString&)
 {
     // Ignored.
 }

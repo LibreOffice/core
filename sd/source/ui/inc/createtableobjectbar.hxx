@@ -23,15 +23,15 @@
 
 class SfxShell;
 
-namespace sd {
-    class View;
-    class ViewShell;
+namespace sd
+{
+class View;
+class ViewShell;
 }
 
-namespace sd::ui::table {
-
-SfxShell* CreateTableObjectBar( ViewShell& rShell, ::sd::View* pView );
-
+namespace sd::ui::table
+{
+SfxShell* CreateTableObjectBar(ViewShell& rShell, ::sd::View* pView);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

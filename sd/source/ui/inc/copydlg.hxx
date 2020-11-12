@@ -25,8 +25,8 @@
 
 class ColorListBox;
 
-namespace sd {
-
+namespace sd
+{
 class View;
 
 /**
@@ -38,13 +38,13 @@ public:
     CopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView);
     virtual ~CopyDlg() override;
 
-    void GetAttr( SfxItemSet& rOutAttrs );
+    void GetAttr(SfxItemSet& rOutAttrs);
     void Reset();
 
 private:
-    const SfxItemSet&   mrOutAttrs;
-    Fraction            maUIScale;
-    ::sd::View*         mpView;
+    const SfxItemSet& mrOutAttrs;
+    Fraction maUIScale;
+    ::sd::View* mpView;
 
     std::unique_ptr<weld::SpinButton> m_xNumFldCopies;
     std::unique_ptr<weld::Button> m_xBtnSetViewData;

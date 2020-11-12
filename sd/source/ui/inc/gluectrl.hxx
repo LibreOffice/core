@@ -31,7 +31,7 @@ enum class SdrEscapeDirection;
 class GlueEscDirLB final : public InterimItemWindow
 {
 private:
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
     std::unique_ptr<weld::ComboBox> m_xWidget;
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
@@ -51,19 +51,19 @@ public:
 /**
  * Toolbox controller for glue-point escape direction
  */
-class SdTbxCtlGlueEscDir: public SfxToolBoxControl
+class SdTbxCtlGlueEscDir : public SfxToolBoxControl
 {
 private:
-    static sal_uInt16  GetEscDirPos( SdrEscapeDirection nEscDir );
+    static sal_uInt16 GetEscDirPos(SdrEscapeDirection nEscDir);
 
 public:
-    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pState ) override;
-    virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window *pParent ) override;
+    virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState,
+                              const SfxPoolItem* pState) override;
+    virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
 
-            SFX_DECL_TOOLBOX_CONTROL();
+    SFX_DECL_TOOLBOX_CONTROL();
 
-            SdTbxCtlGlueEscDir( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SdTbxCtlGlueEscDir(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_GLUECTRL_HXX

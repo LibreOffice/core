@@ -22,8 +22,8 @@
 
 #include <memory>
 
-namespace sd::slidesorter::model {
-
+namespace sd::slidesorter::model
+{
 class PageDescriptor;
 
 typedef std::shared_ptr<PageDescriptor> SharedPageDescriptor;

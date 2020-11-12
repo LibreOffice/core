@@ -19,11 +19,11 @@
 
 #include <ViewShellHint.hxx>
 
-namespace sd {
-
-ViewShellHint::ViewShellHint (HintId eHintId)
-    : SfxHint(),
-      meHintId(eHintId)
+namespace sd
+{
+ViewShellHint::ViewShellHint(HintId eHintId)
+    : SfxHint()
+    , meHintId(eHintId)
 {
 }
 

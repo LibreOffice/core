@@ -27,8 +27,8 @@ using com::sun::star::uno::RuntimeException;
 using sd::SimpleReferenceComponent;
 
 SimpleReferenceComponent::SimpleReferenceComponent()
-: m_nCount(0)
-, mbDisposed(false)
+    : m_nCount(0)
+    , mbDisposed(false)
 {
 }
 
@@ -38,39 +38,35 @@ SimpleReferenceComponent::~SimpleReferenceComponent()
     OSL_ASSERT(mbDisposed);
 }
 
-void SimpleReferenceComponent::acquire()
-{
-    osl_atomic_increment(&m_nCount);
-}
+void SimpleReferenceComponent::acquire() { osl_atomic_increment(&m_nCount); }
 
 void SimpleReferenceComponent::release()
 {
-    if((1 == m_nCount) && !mbDisposed)
+    if ((1 == m_nCount) && !mbDisposed)
     {
         try
         {
             Dispose();
         }
-        catch (RuntimeException const &) // don't break throw ()
+        catch (RuntimeException const&) // don't break throw ()
         {
-            TOOLS_WARN_EXCEPTION( "sd", "" );
+            TOOLS_WARN_EXCEPTION("sd", "");
         }
     }
 
-    if(osl_atomic_decrement(&m_nCount) == 0) delete this;
+    if (osl_atomic_decrement(&m_nCount) == 0)
+        delete this;
 }
 
 void SimpleReferenceComponent::Dispose()
 {
-    if( !mbDisposed )
+    if (!mbDisposed)
     {
         mbDisposed = true;
         disposing();
     }
 }
 
-void SimpleReferenceComponent::disposing()
-{
-}
+void SimpleReferenceComponent::disposing() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

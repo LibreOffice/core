@@ -24,28 +24,25 @@
 #include "htmlex.hxx"
 #include <sdhtmlfilter.hxx>
 
-
-SdHTMLFilter::SdHTMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
-    SdFilter( rMedium, rDocShell )
+SdHTMLFilter::SdHTMLFilter(SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell)
+    : SdFilter(rMedium, rDocShell)
 {
 }
 
-SdHTMLFilter::~SdHTMLFilter()
-{
-}
+SdHTMLFilter::~SdHTMLFilter() {}
 
 bool SdHTMLFilter::Export()
 {
     mrMedium.Close();
     mrMedium.Commit();
 
-    SfxItemSet *pSet = mrMedium.GetItemSet();
+    SfxItemSet* pSet = mrMedium.GetItemSet();
 
-    css::uno::Sequence< css::beans::PropertyValue > aParams;
+    css::uno::Sequence<css::beans::PropertyValue> aParams;
 
     const SfxPoolItem* pItem;
 
-    if ( pSet->GetItemState( SID_FILTER_DATA, false, &pItem ) == SfxItemState::SET )
+    if (pSet->GetItemState(SID_FILTER_DATA, false, &pItem) == SfxItemState::SET)
         static_cast<const SfxUnoAnyItem*>(pItem)->GetValue() >>= aParams;
 
     HtmlExport aExport(mrMedium.GetName(), aParams, &mrDocument, &mrDocShell);

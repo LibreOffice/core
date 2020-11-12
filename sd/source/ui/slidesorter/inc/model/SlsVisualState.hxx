@@ -23,8 +23,8 @@
 #include <sal/types.h>
 #include <tools/gen.hxx>
 
-namespace sd::slidesorter::model {
-
+namespace sd::slidesorter::model
+{
 /** This class gives access to values related to the visualization of page
     objects.  This includes animation state when blending from one state to
     another.
@@ -32,11 +32,11 @@ namespace sd::slidesorter::model {
 class VisualState
 {
 public:
-    VisualState (const sal_Int32 nPageId);
+    VisualState(const sal_Int32 nPageId);
     ~VisualState();
 
-    const Point& GetLocationOffset() const { return maLocationOffset;}
-    void SetLocationOffset (const Point& rPoint);
+    const Point& GetLocationOffset() const { return maLocationOffset; }
+    void SetLocationOffset(const Point& rPoint);
 
     sal_Int32 mnPageId; // For debugging
 

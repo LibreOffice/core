@@ -24,7 +24,7 @@
 
 class SdPrintOptions : public SfxTabPage
 {
- friend class SdModule;
+    friend class SdModule;
 
 private:
     std::unique_ptr<weld::Frame> m_xFrmContent;
@@ -47,21 +47,23 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxBack;
     std::unique_ptr<weld::CheckButton> m_xCbxPaperbin;
 
-    DECL_LINK( ClickCheckboxHdl, weld::ToggleButton&, void );
-    DECL_LINK( ClickBookletHdl, weld::ToggleButton&, void );
+    DECL_LINK(ClickCheckboxHdl, weld::ToggleButton&, void);
+    DECL_LINK(ClickBookletHdl, weld::ToggleButton&, void);
 
     void updateControls();
 
 public:
-    SdPrintOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
+    SdPrintOptions(weld::Container* pPage, weld::DialogController* pController,
+                   const SfxItemSet& rInAttrs);
     virtual ~SdPrintOptions() override;
 
-    static  std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet*);
 
-    virtual bool FillItemSet( SfxItemSet* ) override;
-    virtual void Reset( const SfxItemSet * ) override;
+    virtual bool FillItemSet(SfxItemSet*) override;
+    virtual void Reset(const SfxItemSet*) override;
 
-    void         SetDrawMode();
+    void SetDrawMode();
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
 
