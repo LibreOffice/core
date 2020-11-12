@@ -60,7 +60,8 @@ DECLARE_TXTENCEXPORT_TEST(testBullets, "bullets.odt")
         "    2. Second" SAL_NEWLINE_STRING "        1. Second-first" SAL_NEWLINE_STRING
         "       Third, but deleted" SAL_NEWLINE_STRING "    3. Actual third" SAL_NEWLINE_STRING
         "" SAL_NEWLINE_STRING "Paragraph after numbering" SAL_NEWLINE_STRING
-        "Next paragraph" SAL_NEWLINE_STRING "Final paragraph" SAL_NEWLINE_STRING,
+        "Next paragraph" SAL_NEWLINE_STRING "Hidden paragraph" SAL_NEWLINE_STRING
+        "Final paragraph" SAL_NEWLINE_STRING,
         RTL_TEXTENCODING_UTF8);
 
     // To get the stuff back in the system's encoding
@@ -86,7 +87,8 @@ DECLARE_TXTENCEXPORT_TEST(testBulletsHidden, "bullets.odt")
         "    2. Second" SAL_NEWLINE_STRING "        1. Second-first" SAL_NEWLINE_STRING
         "       Third, but deleted" SAL_NEWLINE_STRING "    3. Actual third" SAL_NEWLINE_STRING
         "" SAL_NEWLINE_STRING "Paragraph after numbering" SAL_NEWLINE_STRING
-        "Next paragraph" SAL_NEWLINE_STRING "Final paragraph" SAL_NEWLINE_STRING,
+        "Next paragraph" SAL_NEWLINE_STRING "Hidden paragraph" SAL_NEWLINE_STRING
+        "Final paragraph" SAL_NEWLINE_STRING,
         RTL_TEXTENCODING_UTF8);
 
     // To get the stuff back in the system's encoding
