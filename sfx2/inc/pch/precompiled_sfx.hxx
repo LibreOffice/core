@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-03 20:51:12 using:
+ Generated on 2020-11-14 15:11:04 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <assert.h>
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <functional>
 #include <initializer_list>
 #include <limits>
@@ -96,6 +97,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
@@ -352,12 +354,14 @@
 #include <tools/color.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>

@@ -263,7 +263,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/sidebar/Context \
     sfx2/source/sidebar/ContextChangeBroadcaster \
     sfx2/source/sidebar/ContextList \
-    sfx2/source/sidebar/ControlFactory \
     sfx2/source/sidebar/ControllerFactory \
     sfx2/source/sidebar/ControllerItem \
     sfx2/source/sidebar/Deck \
@@ -272,7 +271,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/sidebar/DeckTitleBar \
     sfx2/source/sidebar/DrawHelper \
     sfx2/source/sidebar/FocusManager \
-    sfx2/source/sidebar/MenuButton \
     sfx2/source/sidebar/IContextChangeReceiver \
     sfx2/source/sidebar/ILayoutableWindow \
     sfx2/source/sidebar/Panel \
@@ -281,7 +279,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/sidebar/PanelTitleBar \
     sfx2/source/sidebar/ResourceManager \
     sfx2/source/sidebar/TabBar \
-    sfx2/source/sidebar/TabItem \
     sfx2/source/sidebar/TitleBar \
     sfx2/source/sidebar/Theme \
     sfx2/source/sidebar/Tools \
