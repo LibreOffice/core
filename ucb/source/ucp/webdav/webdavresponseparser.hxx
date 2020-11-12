@@ -26,14 +26,15 @@
 #include "DAVResource.hxx"
 #include <vector>
 
-
 namespace http_dav_ucp
 {
-    std::vector< css::ucb::Lock > parseWebDAVLockResponse(const css::uno::Reference< css::io::XInputStream >& xInputStream);
-    std::vector< DAVResource > parseWebDAVPropFindResponse(const css::uno::Reference< css::io::XInputStream >& xInputStream);
-    std::vector< DAVResourceInfo > parseWebDAVPropNameResponse(const css::uno::Reference< css::io::XInputStream >& xInputStream);
+std::vector<css::ucb::Lock>
+parseWebDAVLockResponse(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+std::vector<DAVResource>
+parseWebDAVPropFindResponse(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+std::vector<DAVResourceInfo>
+parseWebDAVPropNameResponse(const css::uno::Reference<css::io::XInputStream>& xInputStream);
 } // namespace http_dav_ucp
-
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVRESPONSEPARSER_HXX
 

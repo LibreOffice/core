@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ftpintreq.hxx"
 
 #include <comphelper/interaction.hxx>
@@ -33,44 +32,33 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::task;
 using namespace ftp;
 
-
 XInteractionApproveImpl::XInteractionApproveImpl()
     : m_bSelected(false)
 {
 }
 
-void SAL_CALL XInteractionApproveImpl::select()
-{
-    m_bSelected = true;
-}
-
+void SAL_CALL XInteractionApproveImpl::select() { m_bSelected = true; }
 
 // XInteractionDisapproveImpl
 
-XInteractionDisapproveImpl::XInteractionDisapproveImpl()
-{
-}
+XInteractionDisapproveImpl::XInteractionDisapproveImpl() {}
 
-void SAL_CALL XInteractionDisapproveImpl::select()
-{
-}
+void SAL_CALL XInteractionDisapproveImpl::select() {}
 
 // XInteractionRequestImpl
 
 XInteractionRequestImpl::XInteractionRequestImpl()
-    : p1( new XInteractionApproveImpl )
+    : p1(new XInteractionApproveImpl)
 {
     std::vector<uno::Reference<task::XInteractionContinuation>> continuations{
         Reference<XInteractionContinuation>(p1),
-        Reference<XInteractionContinuation>(new XInteractionDisapproveImpl) };
+        Reference<XInteractionContinuation>(new XInteractionDisapproveImpl)
+    };
     UnsupportedNameClashException excep;
     excep.NameClash = NameClash::ERROR;
     m_xRequest.set(new ::comphelper::OInteractionRequest(Any(excep), continuations));
 }
 
-bool XInteractionRequestImpl::approved() const
-{
-    return p1->isSelected();
-}
+bool XInteractionRequestImpl::approved() const { return p1->isSelected(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

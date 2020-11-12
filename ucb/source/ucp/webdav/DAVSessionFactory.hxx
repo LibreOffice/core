@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVSESSIONFACTORY_HXX
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVSESSIONFACTORY_HXX
 
@@ -34,13 +33,13 @@
 
 using namespace com::sun::star;
 
-namespace com::sun::star::lang {
-    class XMultiServiceFactory;
+namespace com::sun::star::lang
+{
+class XMultiServiceFactory;
 }
 
 namespace http_dav_ucp
 {
-
 class DAVSession;
 
 class DAVSessionFactory : public salhelper::SimpleReferenceObject
@@ -49,18 +48,18 @@ public:
     virtual ~DAVSessionFactory() override;
 
     /// @throws DAVException
-    rtl::Reference< DAVSession >
-        createDAVSession( const OUString & inUri,
-                          const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    rtl::Reference<DAVSession>
+    createDAVSession(const OUString& inUri,
+                     const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
 private:
-    typedef std::map< OUString, DAVSession * > Map;
+    typedef std::map<OUString, DAVSession*> Map;
 
     Map m_aMap;
     osl::Mutex m_aMutex;
-    std::unique_ptr< ucbhelper::InternetProxyDecider > m_xProxyDecider;
+    std::unique_ptr<ucbhelper::InternetProxyDecider> m_xProxyDecider;
 
-    void releaseElement( DAVSession * pElement );
+    void releaseElement(DAVSession* pElement);
 
     friend class DAVSession;
 };

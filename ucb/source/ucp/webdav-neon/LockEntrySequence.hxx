@@ -35,14 +35,12 @@
 
 namespace webdav_ucp
 {
-
 class LockEntrySequence
 {
 public:
-    static bool createFromXML( const OString & rInData,
-                               css::uno::Sequence< css::ucb::LockEntry > & rOutData );
+    static bool createFromXML(const OString& rInData,
+                              css::uno::Sequence<css::ucb::LockEntry>& rOutData);
 };
-
 }
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LOCKENTRYSEQUENCE_HXX

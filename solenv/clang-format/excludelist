@@ -15299,8 +15299,6 @@ ucb/source/cacher/dynamicresultsetwrapper.hxx
 ucb/source/core/FileAccess.cxx
 ucb/source/core/cmdenv.cxx
 ucb/source/core/cmdenv.hxx
-ucb/source/core/identify.cxx
-ucb/source/core/identify.hxx
 ucb/source/core/providermap.hxx
 ucb/source/core/provprox.cxx
 ucb/source/core/provprox.hxx
@@ -15381,7 +15379,6 @@ ucb/source/ucp/file/filtask.hxx
 ucb/source/ucp/file/prov.cxx
 ucb/source/ucp/file/prov.hxx
 ucb/source/ucp/ftp/ftpcfunc.cxx
-ucb/source/ucp/ftp/ftpcfunc.hxx
 ucb/source/ucp/ftp/ftpcontainer.hxx
 ucb/source/ucp/ftp/ftpcontent.cxx
 ucb/source/ucp/ftp/ftpcontent.hxx
@@ -15394,7 +15391,6 @@ ucb/source/ucp/ftp/ftpdirp.cxx
 ucb/source/ucp/ftp/ftpdirp.hxx
 ucb/source/ucp/ftp/ftpdynresultset.cxx
 ucb/source/ucp/ftp/ftpdynresultset.hxx
-ucb/source/ucp/ftp/ftpintreq.cxx
 ucb/source/ucp/ftp/ftpintreq.hxx
 ucb/source/ucp/ftp/ftploaderthread.cxx
 ucb/source/ucp/ftp/ftploaderthread.hxx
@@ -15416,11 +15412,9 @@ ucb/source/ucp/gio/gio_mount.hxx
 ucb/source/ucp/gio/gio_outputstream.cxx
 ucb/source/ucp/gio/gio_outputstream.hxx
 ucb/source/ucp/gio/gio_provider.cxx
-ucb/source/ucp/gio/gio_provider.hxx
 ucb/source/ucp/gio/gio_resultset.cxx
 ucb/source/ucp/gio/gio_resultset.hxx
 ucb/source/ucp/gio/gio_seekable.cxx
-ucb/source/ucp/gio/gio_seekable.hxx
 ucb/source/ucp/hierarchy/dynamicresultset.cxx
 ucb/source/ucp/hierarchy/dynamicresultset.hxx
 ucb/source/ucp/hierarchy/hierarchycontent.cxx
@@ -15459,7 +15453,6 @@ ucb/source/ucp/tdoc/tdoc_docmgr.hxx
 ucb/source/ucp/tdoc/tdoc_documentcontentfactory.cxx
 ucb/source/ucp/tdoc/tdoc_documentcontentfactory.hxx
 ucb/source/ucp/tdoc/tdoc_passwordrequest.cxx
-ucb/source/ucp/tdoc/tdoc_passwordrequest.hxx
 ucb/source/ucp/tdoc/tdoc_provider.cxx
 ucb/source/ucp/tdoc/tdoc_provider.hxx
 ucb/source/ucp/tdoc/tdoc_resultset.cxx
@@ -15491,7 +15484,6 @@ ucb/source/ucp/webdav-neon/DateTimeHelper.hxx
 ucb/source/ucp/webdav-neon/LinkSequence.cxx
 ucb/source/ucp/webdav-neon/LinkSequence.hxx
 ucb/source/ucp/webdav-neon/LockEntrySequence.cxx
-ucb/source/ucp/webdav-neon/LockEntrySequence.hxx
 ucb/source/ucp/webdav-neon/LockSequence.cxx
 ucb/source/ucp/webdav-neon/LockSequence.hxx
 ucb/source/ucp/webdav-neon/NeonHeadRequest.cxx
@@ -15536,7 +15528,6 @@ ucb/source/ucp/webdav/DAVResourceAccess.cxx
 ucb/source/ucp/webdav/DAVResourceAccess.hxx
 ucb/source/ucp/webdav/DAVSession.hxx
 ucb/source/ucp/webdav/DAVSessionFactory.cxx
-ucb/source/ucp/webdav/DAVSessionFactory.hxx
 ucb/source/ucp/webdav/DAVTypes.hxx
 ucb/source/ucp/webdav/DateTimeHelper.cxx
 ucb/source/ucp/webdav/DateTimeHelper.hxx
@@ -15589,7 +15580,6 @@ ucb/source/ucp/webdav/webdavdatasupplier.hxx
 ucb/source/ucp/webdav/webdavprovider.cxx
 ucb/source/ucp/webdav/webdavprovider.hxx
 ucb/source/ucp/webdav/webdavresponseparser.cxx
-ucb/source/ucp/webdav/webdavresponseparser.hxx
 ucb/source/ucp/webdav/webdavresultset.cxx
 ucb/source/ucp/webdav/webdavresultset.hxx
 ucb/source/ucp/webdav/webdavservices.cxx

@@ -27,17 +27,14 @@
 
 #include <stddef.h>
 
-
 extern "C" {
 
-    /** callback for curl_easy_perform(),
+/** callback for curl_easy_perform(),
      *  forwarding the written content to the stream.
      *  stream has to be of type oslFileHandle.
      */
 
-
-    int file_write(void *buffer,size_t size,size_t nmemb,void *stream);
-
+int file_write(void* buffer, size_t size, size_t nmemb, void* stream);
 }
 
 #endif

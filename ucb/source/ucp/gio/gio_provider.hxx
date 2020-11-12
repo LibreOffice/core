@@ -24,37 +24,32 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <ucbhelper/providerhelper.hxx>
 
-
 namespace gio
 {
-
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
 public:
-    explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit ContentProvider(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~ContentProvider() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
+    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
+    virtual void SAL_CALL acquire() throw() override;
+    virtual void SAL_CALL release() throw() override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XContentProvider
-    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
-    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
+    virtual css::uno::Reference<css::ucb::XContent> SAL_CALL
+    queryContent(const css::uno::Reference<css::ucb::XContentIdentifier>& Identifier) override;
 };
-
 }
 
 #endif

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -30,39 +29,30 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 
-
 // ContentIdentifier Implementation.
-ContentIdentifier::ContentIdentifier( const OUString& ContentId )
-    : m_aContentId( ContentId )
+ContentIdentifier::ContentIdentifier(const OUString& ContentId)
+    : m_aContentId(ContentId)
 {
 }
-
 
 // virtual
-ContentIdentifier::~ContentIdentifier()
-{
-}
-
+ContentIdentifier::~ContentIdentifier() {}
 
 // XContentIdentifier methods.
 // virtual
-OUString SAL_CALL ContentIdentifier::getContentIdentifier()
-{
-    return m_aContentId;
-}
-
+OUString SAL_CALL ContentIdentifier::getContentIdentifier() { return m_aContentId; }
 
 // virtual
 OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
 {
-    if ( m_aProviderScheme.isEmpty() && !m_aContentId.isEmpty() )
+    if (m_aProviderScheme.isEmpty() && !m_aContentId.isEmpty())
     {
         // The content provider scheme is the part before the first ':'
         // within the content id.
-        sal_Int32 nPos = m_aContentId.indexOf( ':' );
-        if ( nPos != -1 )
+        sal_Int32 nPos = m_aContentId.indexOf(':');
+        if (nPos != -1)
         {
-            OUString aScheme( m_aContentId.copy( 0, nPos ) );
+            OUString aScheme(m_aContentId.copy(0, nPos));
             m_aProviderScheme = aScheme.toAsciiLowerCase();
         }
     }
