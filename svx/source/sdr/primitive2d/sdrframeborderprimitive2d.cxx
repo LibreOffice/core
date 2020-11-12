@@ -458,7 +458,7 @@ namespace
                             nBaseIndex = bUpper ? nVisEdgeUp : nVisEdgeDn;
                         }
 
-                        const size_t nSecuredIndex(std::min(nNumCutSets - 1, std::max(nBaseIndex, static_cast< size_t >(0))));
+                        const size_t nSecuredIndex(std::clamp(nBaseIndex, size_t(0), size_t(nNumCutSets - 1)));
                         const CutSet& rCutSet(aCutSets[nSecuredIndex]);
                         ExtendSet& rExt(rExtendSet[my]);
 

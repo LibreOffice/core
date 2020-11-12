@@ -1558,7 +1558,7 @@ namespace comphelper
             const sal_uInt16 nConfigNumCopies(static_cast<sal_uInt16>(sTokenOut.toUInt32()));
 
             // limit to range [1..mnMaxAllowedBackups]
-            mnNumBackups = std::min(std::max(nConfigNumCopies, mnNumBackups), mnMaxAllowedBackups);
+            mnNumBackups = std::clamp(mnNumBackups, nConfigNumCopies, mnMaxAllowedBackups);
         }
 
         if (mbActive && rtl::Bootstrap::get("SecureUserConfigMode", sTokenOut))
