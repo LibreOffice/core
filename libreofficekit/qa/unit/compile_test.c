@@ -15,9 +15,6 @@
 #include "test.h"
 
 // just make sure this stuff compiles from a plain C file
-LibreOfficeKit* compile_test(void)
-{
-    return lok_init("install/path");
-}
+LibreOfficeKit* compile_test(void) { return lok_init("install/path"); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -54,8 +54,12 @@ GQuark LOKTileBufferErrorQuark(void);
 */
 class Tile
 {
- public:
-    Tile() : valid(false), m_pBuffer(nullptr) {}
+public:
+    Tile()
+        : valid(false)
+        , m_pBuffer(nullptr)
+    {
+    }
     ~Tile()
     {
         if (m_pBuffer)
@@ -75,7 +79,7 @@ class Tile
 
 private:
     /// Pixel buffer data for this tile
-    cairo_surface_t *m_pBuffer;
+    cairo_surface_t* m_pBuffer;
 };
 
 /**
@@ -87,11 +91,12 @@ private:
 */
 class TileBuffer
 {
- public:
- TileBuffer(int columns = 0, int scale = 1)
-     : m_nWidth(columns)
+public:
+    TileBuffer(int columns = 0, int scale = 1)
+        : m_nWidth(columns)
     {
-        cairo_surface_t *pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nTileSizePixels * scale, nTileSizePixels * scale);
+        cairo_surface_t* pSurface = cairo_image_surface_create(
+            CAIRO_FORMAT_ARGB32, nTileSizePixels * scale, nTileSizePixels * scale);
         m_DummyTile.setSurface(pSurface);
         cairo_surface_destroy(pSurface);
     }
@@ -118,7 +123,7 @@ class TileBuffer
     /*
       Takes ownership of the surface and sets it on a tile at a given location
     */
-    void  setTile(int x, int y, cairo_surface_t *surface);
+    void setTile(int x, int y, cairo_surface_t* surface);
 
     /// Returns true if a valid tile exists at this location
     bool hasValidTile(int x, int y);
