@@ -11078,12 +11078,10 @@ sdext/source/presenter/PresenterWindowManager.cxx
 sdext/source/presenter/PresenterWindowManager.hxx
 setup_native/source/win32/customactions/indexingfilter/restartindexingservice.cxx
 setup_native/source/win32/customactions/quickstarter/quickstarter.cxx
-setup_native/source/win32/customactions/quickstarter/remove_quickstart_link.cxx
 setup_native/source/win32/customactions/quickstarter/shutdown_quickstart.cxx
 setup_native/source/win32/customactions/reg4allmsdoc/reg4allmsi.cxx
 setup_native/source/win32/customactions/regactivex/regactivex.cxx
 setup_native/source/win32/customactions/sellang/sellang.cxx
-setup_native/source/win32/customactions/shellextensions/checkdirectory.cxx
 setup_native/source/win32/customactions/shellextensions/checkpatches.cxx
 setup_native/source/win32/customactions/shellextensions/completeinstallpath.cxx
 setup_native/source/win32/customactions/shellextensions/migrateinstallpath.cxx
