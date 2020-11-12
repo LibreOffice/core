@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-[assembly:System::Reflection::AssemblyProduct( "CLI-UNO Language Binding" )];
-[assembly:System::Reflection::AssemblyDescription( "CLI-UNO Helper Library" )];
+[assembly:System::Reflection::AssemblyProduct("CLI-UNO Language Binding")];
+[assembly:System::Reflection::AssemblyDescription("CLI-UNO Helper Library")];
 [assembly:System::Reflection::AssemblyDelaySign(true)];
-[assembly:System::Reflection::AssemblyCompany( "OpenOffice.org" )];
-[assembly:System::Reflection::AssemblyVersion( "@CLI_CPPUHELPER_NEW_VERSION@" )];
+[assembly:System::Reflection::AssemblyCompany("OpenOffice.org")];
+[assembly:System::Reflection::AssemblyVersion("@CLI_CPPUHELPER_NEW_VERSION@")];
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
