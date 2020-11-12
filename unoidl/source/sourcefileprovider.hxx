@@ -16,26 +16,25 @@
 #include <rtl/ref.hxx>
 #include <unoidl/unoidl.hxx>
 
-namespace unoidl::detail {
-
-class SourceFileProvider: public Provider {
+namespace unoidl::detail
+{
+class SourceFileProvider : public Provider
+{
 public:
     // throws FileFormatException, NoSuchFileException:
-    SourceFileProvider(
-        rtl::Reference<Manager> const & manager, OUString const & uri);
+    SourceFileProvider(rtl::Reference<Manager> const& manager, OUString const& uri);
 
     // throws FileFormatException:
     virtual rtl::Reference<MapCursor> createRootCursor() const override;
 
     // throws FileFormatException:
-    virtual rtl::Reference<Entity> findEntity(OUString const & name) const override;
+    virtual rtl::Reference<Entity> findEntity(OUString const& name) const override;
 
 private:
-    virtual ~SourceFileProvider() throw () override;
+    virtual ~SourceFileProvider() throw() override;
 
-    std::map< OUString, rtl::Reference<Entity> > rootMap_;
+    std::map<OUString, rtl::Reference<Entity>> rootMap_;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

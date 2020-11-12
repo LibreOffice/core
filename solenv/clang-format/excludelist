@@ -15621,11 +15621,9 @@ unodevtools/source/unodevtools/options.cxx
 unoidl/source/legacyprovider.cxx
 unoidl/source/legacyprovider.hxx
 unoidl/source/sourcefileprovider.cxx
-unoidl/source/sourcefileprovider.hxx
 unoidl/source/sourceprovider-parser-requires.hxx
 unoidl/source/sourceprovider-scanner.hxx
 unoidl/source/sourcetreeprovider.cxx
-unoidl/source/sourcetreeprovider.hxx
 unoidl/source/unoidl-check.cxx
 unoidl/source/unoidl-read.cxx
 unoidl/source/unoidl-write.cxx

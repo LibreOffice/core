@@ -17,27 +17,27 @@
 #include <rtl/ref.hxx>
 #include <unoidl/unoidl.hxx>
 
-namespace unoidl::detail {
-
-class SourceTreeProvider: public Provider {
+namespace unoidl::detail
+{
+class SourceTreeProvider : public Provider
+{
 public:
     // throws FileFormatException, NoSuchFileException:
-    SourceTreeProvider(Manager & manager, OUString const & uri);
+    SourceTreeProvider(Manager& manager, OUString const& uri);
 
     // throws FileFormatException:
     virtual rtl::Reference<MapCursor> createRootCursor() const override;
 
     // throws FileFormatException:
-    virtual rtl::Reference<Entity> findEntity(OUString const & name) const override;
+    virtual rtl::Reference<Entity> findEntity(OUString const& name) const override;
 
 private:
-    virtual ~SourceTreeProvider() throw () override;
+    virtual ~SourceTreeProvider() throw() override;
 
-    Manager & manager_;
+    Manager& manager_;
     OUString uri_;
-    mutable std::map< OUString, rtl::Reference<Entity> > cache_; //TODO: at manager
+    mutable std::map<OUString, rtl::Reference<Entity>> cache_; //TODO: at manager
 };
-
 }
 
 #endif
