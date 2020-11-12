@@ -18,7 +18,7 @@
  */
 
 #include <config_features.h>
-
+#include <tools/long.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
@@ -522,7 +522,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         case ControlType::Progress:
         case ControlType::IntroProgress:
             {
-                long nProgressWidth = aValue.getNumericVal();
+                tools::Long nProgressWidth = aValue.getNumericVal();
                 HIThemeTrackDrawInfo aTrackInfo;
                 aTrackInfo.version = 0;
                 aTrackInfo.kind  = (rc.size.height > 10) ? kThemeProgressBarLarge : kThemeProgressBarMedium;
@@ -878,10 +878,10 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         if (mxClipPath)
             aRect = CGPathGetBoundingBox(mxClipPath);
         if (aRect.size.width != 0 && aRect.size.height != 0)
-            buttonRect.Intersection(tools::Rectangle(Point(static_cast<long int>(aRect.origin.x),
-                                                           static_cast<long int>(aRect.origin.y)),
-                                                     Size(static_cast<long int>(aRect.size.width),
-                                                          static_cast<long int>(aRect.size.height))));
+            buttonRect.Intersection(tools::Rectangle(Point(static_cast<tools::Long>(aRect.origin.x),
+                                                           static_cast<tools::Long>(aRect.origin.y)),
+                                                     Size(static_cast<tools::Long>(aRect.size.width),
+                                                          static_cast<tools::Long>(aRect.size.height))));
     }
     RefreshRect(buttonRect.Left(), buttonRect.Top(), buttonRect.GetWidth(), buttonRect.GetHeight());
     return bOK;

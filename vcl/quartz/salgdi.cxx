@@ -30,6 +30,7 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.h>
 #include <rtl/strbuf.hxx>
+#include <tools/long.hxx>
 #include <comphelper/lok.hxx>
 
 #include <vcl/metric.hxx>
@@ -769,12 +770,12 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
     ::CloseTTFont( pSftFont );
 }
 
-const void* AquaSalGraphics::GetEmbedFontData(const PhysicalFontFace*, long* /*pDataLen*/)
+const void* AquaSalGraphics::GetEmbedFontData(const PhysicalFontFace*, tools::Long* /*pDataLen*/)
 {
     return nullptr;
 }
 
-void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
+void AquaSalGraphics::FreeEmbedFontData( const void* pData, tools::Long /*nDataLen*/ )
 {
     // TODO: implementing this only makes sense when the implementation of
     //      AquaSalGraphics::GetEmbedFontData() returns non-NULL
@@ -803,10 +804,10 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
         // Rounding down x and width can accumulate a rounding error of up to 2
         // The decrementing of x, the rounding error and the antialiasing border
         // require that the width and the height need to be increased by four
-        const tools::Rectangle aVclRect(Point(static_cast<long int>(lX-1),
-                                       static_cast<long int>(lY-1) ),
-                                 Size(  static_cast<long int>(lWidth+4),
-                                        static_cast<long int>(lHeight+4) ) );
+        const tools::Rectangle aVclRect(Point(static_cast<tools::Long>(lX-1),
+                                       static_cast<tools::Long>(lY-1) ),
+                                 Size(  static_cast<tools::Long>(lWidth+4),
+                                        static_cast<tools::Long>(lHeight+4) ) );
         mpFrame->maInvalidRect.Union( aVclRect );
     }
 #else

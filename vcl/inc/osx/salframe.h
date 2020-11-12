@@ -24,6 +24,7 @@
 #include <IOKit/pwr_mgt/IOPMLib.h>
 #include <postmac.h>
 
+#include <tools/long.hxx>
 #include <vcl/sysdata.hxx>
 
 #include <osx/salinst.h>
@@ -117,10 +118,12 @@ public:
     virtual void                SetMenu( SalMenu* pSalMenu ) override;
     virtual void                DrawMenuBar() override;
     virtual void                Show( bool bVisible, bool bNoActivate = false ) override;
-    virtual void                SetMinClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetMaxClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( long& rWidth, long& rHeight ) override;
+    virtual void                SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
+        override;
+    virtual void                SetMaxClientSize( tools::Long nWidth, tools::Long nHeight )
+        override;
+    virtual void                SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags ) override;
+    virtual void                GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void                SetWindowState( const SalFrameState* pState ) override;
@@ -131,7 +134,7 @@ public:
     virtual void                ToTop( SalFrameToTop nFlags ) override;
     virtual void                SetPointer( PointerStyle ePointerStyle ) override;
     virtual void                CaptureMouse( bool bMouse ) override;
-    virtual void                SetPointerPos( long nX, long nY ) override;
+    virtual void                SetPointerPos( tools::Long nX, tools::Long nY ) override;
     virtual void                Flush( void ) override;
     virtual void                Flush( const tools::Rectangle& ) override;
     virtual void                SetInputContext( SalInputContext* pContext ) override;
@@ -157,7 +160,8 @@ public:
     // start setting the clipregion consisting of nRects rectangles
     virtual void BeginSetClipRegion( sal_uInt32 nRects ) override;
     // add a rectangle to the clip region
-    virtual void UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void UnionClipRegion(
+        tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     // done setting up the clipregion
     virtual void EndSetClipRegion() override;
 
@@ -193,7 +197,8 @@ public:
     void screenParametersChanged();
 
 protected:
-    SalEvent PreparePosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags);
+    SalEvent PreparePosSize(
+        tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags);
 
 private: // methods
     /** do things on initial show (like centering on parent or on screen)

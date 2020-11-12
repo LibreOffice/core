@@ -30,6 +30,7 @@
 #include <comphelper/solarmutex.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
+#include <tools/long.hxx>
 
 #ifdef MACOSX
 #include <osx/osxvcltypes.h>
@@ -101,7 +102,7 @@ public:
     virtual void            DestroyObject( SalObject* pObject ) override;
     virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics* pGraphics,
-                                                   long &nDX, long &nDY,
+                                                   tools::Long &nDX, tools::Long &nDY,
                                                    DeviceFormat eFormat,
                                                    const SystemGraphicsData *pData = nullptr ) override;
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,

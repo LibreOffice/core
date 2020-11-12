@@ -18,7 +18,7 @@
  */
 
 #include <rtl/ustrbuf.hxx>
-
+#include <tools/long.hxx>
 #include <vcl/stdtext.hxx>
 
 #include <osx/salsys.h>
@@ -59,8 +59,8 @@ tools::Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScre
     if( pScreen )
     {
         NSRect aFrame = [pScreen frame];
-        aRet = tools::Rectangle( Point( static_cast<long int>(aFrame.origin.x), static_cast<long int>(aFrame.origin.y) ),
-                          Size( static_cast<long int>(aFrame.size.width), static_cast<long int>(aFrame.size.height) ) );
+        aRet = tools::Rectangle( Point( static_cast<tools::Long>(aFrame.origin.x), static_cast<tools::Long>(aFrame.origin.y) ),
+                          Size( static_cast<tools::Long>(aFrame.size.width), static_cast<tools::Long>(aFrame.size.height) ) );
     }
     return aRet;
 }

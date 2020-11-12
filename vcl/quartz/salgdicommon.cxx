@@ -30,7 +30,7 @@
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <sal/types.h>
-
+#include <tools/long.hxx>
 #include <vcl/sysdata.hxx>
 
 #include <fontsubset.hxx>
@@ -310,12 +310,13 @@ static void DrawPattern50( void*, CGContextRef rContext )
 }
 
 static void getBoundRect( sal_uInt32 nPoints, const Point *pPtAry,
-                          long &rX, long& rY, long& rWidth, long& rHeight )
+                          tools::Long &rX, tools::Long& rY, tools::Long& rWidth,
+                          tools::Long& rHeight )
 {
-    long nX1 = pPtAry->getX();
-    long nX2 = nX1;
-    long nY1 = pPtAry->getY();
-    long nY2 = nY1;
+    tools::Long nX1 = pPtAry->getX();
+    tools::Long nX2 = nX1;
+    tools::Long nY1 = pPtAry->getY();
+    tools::Long nY2 = nY1;
 
     for( sal_uInt32 n = 1; n < nPoints; n++ )
     {
@@ -369,8 +370,9 @@ void AquaSalGraphics::ApplyXorContext()
     }
 }
 
-void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
-                                long nSrcWidth, long nSrcHeight, bool /*bWindowInvalidate*/ )
+void AquaSalGraphics::copyArea(
+    tools::Long nDstX, tools::Long nDstY,tools::Long nSrcX, tools::Long nSrcY,
+    tools::Long nSrcWidth, tools::Long nSrcHeight, bool /*bWindowInvalidate*/ )
 {
     SAL_WARN_IF (!maLayer.isSet(), "vcl.quartz",
                  "AquaSalGraphics::copyArea() for non-layered graphics this=" << this);
@@ -381,14 +383,14 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
 #endif
     float fScale = maLayer.getScale();
 
-    long nScaledSourceX = nSrcX * fScale;
-    long nScaledSourceY = nSrcY * fScale;
+    tools::Long nScaledSourceX = nSrcX * fScale;
+    tools::Long nScaledSourceY = nSrcY * fScale;
 
-    long nScaledTargetX = nDstX * fScale;
-    long nScaledTargetY = nDstY * fScale;
+    tools::Long nScaledTargetX = nDstX * fScale;
+    tools::Long nScaledTargetY = nDstY * fScale;
 
-    long nScaledSourceWidth = nSrcWidth * fScale;
-    long nScaledSourceHeight = nSrcHeight * fScale;
+    tools::Long nScaledSourceWidth = nSrcWidth * fScale;
+    tools::Long nScaledSourceHeight = nSrcHeight * fScale;
 
     ApplyXorContext();
 
@@ -555,8 +557,8 @@ bool AquaSalGraphics::drawTransformedBitmap(
     return true;
 }
 
-bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
-                                     long nHeight, sal_uInt8 nTransparency )
+bool AquaSalGraphics::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                     tools::Long nHeight, sal_uInt8 nTransparency )
 {
     if( !CheckContext() )
         return true;
@@ -621,8 +623,9 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
 
 #ifndef IOS
 
-bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
-                                   void* pEpsData, sal_uInt32 nByteCount )
+bool AquaSalGraphics::drawEPS(
+    tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+    void* pEpsData, sal_uInt32 nByteCount )
 {
     // convert the raw data to an NSImageRef
     NSData* xNSData = [NSData dataWithBytes:pEpsData length:static_cast<int>(nByteCount)];
@@ -668,7 +671,7 @@ bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
 
 #endif
 
-void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
+void AquaSalGraphics::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
 {
     if( nX1 == nX2 && nY1 == nY2 )
     {
@@ -709,13 +712,13 @@ void AquaSalGraphics::drawMask( const SalTwoRect& rPosAry, const SalBitmap& rSal
     RefreshRect( aDstRect );
 }
 
-void AquaSalGraphics::drawPixel( long nX, long nY )
+void AquaSalGraphics::drawPixel( tools::Long nX, tools::Long nY )
 {
     // draw pixel with current line color
     ImplDrawPixel( nX, nY, maLineColor );
 }
 
-void AquaSalGraphics::drawPixel( long nX, long nY, Color nColor )
+void AquaSalGraphics::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
 {
     const RGBAColor aPixelColor( nColor );
     ImplDrawPixel( nX, nY, aPixelColor );
@@ -947,12 +950,12 @@ void AquaSalGraphics::drawPolyPolygon( sal_uInt32 nPolyCount, const sal_uInt32 *
         return;
 
     // find bound rect
-    long leftX = 0, topY = 0, maxWidth = 0, maxHeight = 0;
+    tools::Long leftX = 0, topY = 0, maxWidth = 0, maxHeight = 0;
     getBoundRect( pPoints[0], ppPtAry[0], leftX, topY, maxWidth, maxHeight );
 
     for( sal_uInt32 n = 1; n < nPolyCount; n++ )
     {
-        long nX = leftX, nY = topY, nW = maxWidth, nH = maxHeight;
+        tools::Long nX = leftX, nY = topY, nW = maxWidth, nH = maxHeight;
         getBoundRect( pPoints[n], ppPtAry[n], nX, nY, nW, nH );
         if( nX < leftX )
         {
@@ -1051,7 +1054,7 @@ void AquaSalGraphics::drawPolygon( sal_uInt32 nPoints, const Point *pPtAry )
     if( !CheckContext() )
         return;
 
-    long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
+    tools::Long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
     getBoundRect( nPoints, pPtAry, nX, nY, nWidth, nHeight );
 
     CGPathDrawingMode eMode;
@@ -1113,7 +1116,8 @@ bool AquaSalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
     return false;
 }
 
-void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
+void AquaSalGraphics::drawRect(
+    tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     if( !CheckContext() )
         return;
@@ -1146,7 +1150,7 @@ void AquaSalGraphics::drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry )
     if( !CheckContext() )
         return;
 
-    long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
+    tools::Long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
     getBoundRect( nPoints, pPtAry, nX, nY, nWidth, nHeight );
 
     float fX, fY;
@@ -1171,7 +1175,8 @@ sal_uInt16 AquaSalGraphics::GetBitCount() const
     return nBits;
 }
 
-std::shared_ptr<SalBitmap> AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
+std::shared_ptr<SalBitmap> AquaSalGraphics::getBitmap(
+    tools::Long  nX, tools::Long  nY, tools::Long  nDX, tools::Long  nDY )
 {
     SAL_WARN_IF(!maLayer.isSet(), "vcl.quartz", "AquaSalGraphics::getBitmap() with no layer this=" << this);
 
@@ -1193,9 +1198,9 @@ SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
     return aRes;
 }
 
-long AquaSalGraphics::GetGraphicsWidth() const
+tools::Long AquaSalGraphics::GetGraphicsWidth() const
 {
-    long w = 0;
+    tools::Long w = 0;
     if( maContextHolder.isSet() && (
 #ifndef IOS
                       mbWindow ||
@@ -1217,7 +1222,7 @@ long AquaSalGraphics::GetGraphicsWidth() const
     return w;
 }
 
-Color AquaSalGraphics::getPixel( long nX, long nY )
+Color AquaSalGraphics::getPixel( tools::Long nX, tools::Long nY )
 {
     // return default value on printers or when out of bounds
     if (!maLayer.isSet() || (nX < 0) || (nX >= mnWidth) ||
@@ -1280,7 +1285,7 @@ void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 #endif
 }
 
-void AquaSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
+void AquaSalGraphics::ImplDrawPixel( tools::Long nX, tools::Long nY, const RGBAColor& rColor )
 {
     if( !CheckContext() )
     {
@@ -1406,7 +1411,8 @@ void AquaSalGraphics::initResolution(NSWindow* nsWindow)
 
 #endif
 
-void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+void AquaSalGraphics::invert(
+    tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, SalInvert nFlags )
 {
     if ( CheckContext() )
     {
@@ -1620,11 +1626,11 @@ bool AquaSalGraphics::setClipRegion( const vcl::Region& i_rClip )
 
         for(const auto& rRect : aRectangles)
         {
-            const long nW(rRect.Right() - rRect.Left() + 1); // uses +1 logic in original
+            const tools::Long nW(rRect.Right() - rRect.Left() + 1); // uses +1 logic in original
 
             if(nW)
             {
-                const long nH(rRect.Bottom() - rRect.Top() + 1); // uses +1 logic in original
+                const tools::Long nH(rRect.Bottom() - rRect.Top() + 1); // uses +1 logic in original
 
                 if(nH)
                 {

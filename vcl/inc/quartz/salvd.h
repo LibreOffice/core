@@ -28,6 +28,8 @@
 #endif
 #include <postmac.h>
 
+#include <tools/long.hxx>
+
 #include <quartz/salgdi.h>
 
 #include <salvd.hxx>
@@ -44,25 +46,25 @@ private:
     CGLayerHolder maLayer; // Quartz layer
     AquaSalGraphics* mpGraphics;     // current VirDev graphics
 
-    long mnWidth;
-    long mnHeight;
+    tools::Long mnWidth;
+    tools::Long mnHeight;
 
     void Destroy();
 
 public:
-    AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData );
+    AquaSalVirtualDevice( AquaSalGraphics* pGraphic, tools::Long &nDX, tools::Long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData );
     virtual ~AquaSalVirtualDevice() override;
 
     virtual SalGraphics*            AcquireGraphics() override;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;
-    virtual bool                    SetSize( long nNewDX, long nNewDY ) override;
+    virtual bool                    SetSize( tools::Long nNewDX, tools::Long nNewDY ) override;
 
-    long GetWidth() const override
+    tools::Long GetWidth() const override
     {
         return mnWidth;
     }
 
-    long GetHeight() const override
+    tools::Long GetHeight() const override
     {
         return mnHeight;
     }

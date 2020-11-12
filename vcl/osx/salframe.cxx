@@ -22,6 +22,7 @@
 #include <comphelper/fileurl.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/long.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
@@ -400,12 +401,12 @@ void AquaSalFrame::initShow()
         if( mpParent ) // center relative to parent
         {
             // center on parent
-            long nNewX = mpParent->maGeometry.nX + (static_cast<long>(mpParent->maGeometry.nWidth) - static_cast<long>(maGeometry.nWidth))/2;
+            tools::Long nNewX = mpParent->maGeometry.nX + (static_cast<tools::Long>(mpParent->maGeometry.nWidth) - static_cast<tools::Long>(maGeometry.nWidth))/2;
             if( nNewX < aScreenRect.Left() )
                 nNewX = aScreenRect.Left();
-            if( long(nNewX + maGeometry.nWidth) > aScreenRect.Right() )
+            if( tools::Long(nNewX + maGeometry.nWidth) > aScreenRect.Right() )
                 nNewX = aScreenRect.Right() - maGeometry.nWidth-1;
-            long nNewY = mpParent->maGeometry.nY + (static_cast<long>(mpParent->maGeometry.nHeight) - static_cast<long>(maGeometry.nHeight))/2;
+            tools::Long nNewY = mpParent->maGeometry.nY + (static_cast<tools::Long>(mpParent->maGeometry.nHeight) - static_cast<tools::Long>(maGeometry.nHeight))/2;
             if( nNewY < aScreenRect.Top() )
                 nNewY = aScreenRect.Top();
             if( nNewY > aScreenRect.Bottom() )
@@ -417,8 +418,8 @@ void AquaSalFrame::initShow()
         else if( ! (mnStyle & SalFrameStyleFlags::SIZEABLE) )
         {
             // center on screen
-            long nNewX = (aScreenRect.GetWidth() - maGeometry.nWidth)/2;
-            long nNewY = (aScreenRect.GetHeight() - maGeometry.nHeight)/2;
+            tools::Long nNewX = (aScreenRect.GetWidth() - maGeometry.nWidth)/2;
+            tools::Long nNewY = (aScreenRect.GetHeight() - maGeometry.nHeight)/2;
             SetPosSize( nNewX, nNewY, 0, 0,  SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
         }
     }
@@ -503,7 +504,7 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
     }
 }
 
-void AquaSalFrame::SetMinClientSize( long nWidth, long nHeight )
+void AquaSalFrame::SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     OSX_SALDATA_RUNINMAIN( SetMinClientSize( nWidth, nHeight ) )
 
@@ -525,7 +526,7 @@ void AquaSalFrame::SetMinClientSize( long nWidth, long nHeight )
     }
 }
 
-void AquaSalFrame::SetMaxClientSize( long nWidth, long nHeight )
+void AquaSalFrame::SetMaxClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     OSX_SALDATA_RUNINMAIN( SetMaxClientSize( nWidth, nHeight ) )
 
@@ -551,7 +552,7 @@ void AquaSalFrame::SetMaxClientSize( long nWidth, long nHeight )
     }
 }
 
-void AquaSalFrame::GetClientSize( long& rWidth, long& rHeight )
+void AquaSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
 {
     if (mbShown || mbInitShow || Application::IsBitmapRendering())
     {
@@ -565,7 +566,7 @@ void AquaSalFrame::GetClientSize( long& rWidth, long& rHeight )
     }
 }
 
-SalEvent AquaSalFrame::PreparePosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
+SalEvent AquaSalFrame::PreparePosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags)
 {
     SalEvent nEvent = SalEvent::NONE;
     assert(mpNSWindow || Application::IsBitmapRendering());
@@ -711,10 +712,10 @@ bool AquaSalFrame::GetWindowState( SalFrameState* pState )
     NSRect aStateRect = [mpNSWindow frame];
     aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
     CocoaToVCL( aStateRect );
-    pState->mnX         = long(aStateRect.origin.x);
-    pState->mnY         = long(aStateRect.origin.y);
-    pState->mnWidth     = long(aStateRect.size.width);
-    pState->mnHeight    = long(aStateRect.size.height);
+    pState->mnX         = tools::Long(aStateRect.origin.x);
+    pState->mnY         = tools::Long(aStateRect.origin.y);
+    pState->mnWidth     = tools::Long(aStateRect.size.width);
+    pState->mnHeight    = tools::Long(aStateRect.size.height);
 
     if( [mpNSWindow isMiniaturized] )
         pState->mnState = WindowStateState::Minimized;
@@ -962,7 +963,7 @@ void AquaSalFrame::SetPointer( PointerStyle ePointerStyle )
     [mpNSWindow invalidateCursorRectsForView: mpNSView];
 }
 
-void AquaSalFrame::SetPointerPos( long nX, long nY )
+void AquaSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
 {
     OSX_SALDATA_RUNINMAIN( SetPointerPos( nX, nY ) )
 
@@ -1333,7 +1334,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     // set scrollbar size
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
         // 'NSRegularControlSize' is deprecated: first deprecated in macOS 10.12
-    aStyleSettings.SetScrollBarSize( static_cast<long int>([NSScroller scrollerWidthForControlSize:NSRegularControlSize scrollerStyle:NSScrollerStyleLegacy]) );
+    aStyleSettings.SetScrollBarSize( static_cast<tools::Long>([NSScroller scrollerWidthForControlSize:NSRegularControlSize scrollerStyle:NSScrollerStyleLegacy]) );
 SAL_WNODEPRECATED_DECLARATIONS_POP
     // images in menus false for MacOSX
     aStyleSettings.SetPreferredUseImagesInMenus( false );
@@ -1364,7 +1365,8 @@ void AquaSalFrame::Beep()
     NSBeep();
 }
 
-void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
+void AquaSalFrame::SetPosSize(
+    tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags)
 {
     if (!mpNSWindow && !Application::IsBitmapRendering())
         return;
@@ -1391,7 +1393,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
             if( (nFlags & SAL_FRAME_POSSIZE_WIDTH) != 0 )
                 nX = mpParent->maGeometry.nWidth - nWidth-1 - nX;
             else
-                nX = mpParent->maGeometry.nWidth - static_cast<long int>( aContentRect.size.width-1) - nX;
+                nX = mpParent->maGeometry.nWidth - static_cast<tools::Long>( aContentRect.size.width-1) - nX;
         }
         NSRect aParentFrameRect = [mpParent->mpNSWindow frame];
         aParentContentRect = [NSWindow contentRectForFrameRect: aParentFrameRect styleMask: mpParent->mnStyleMask];
@@ -1459,10 +1461,10 @@ void AquaSalFrame::GetWorkArea( tools::Rectangle& rRect )
         pScreen = [NSScreen mainScreen];
     NSRect aRect = [pScreen visibleFrame];
     CocoaToVCL( aRect );
-    rRect.SetLeft( static_cast<long>(aRect.origin.x) );
-    rRect.SetTop( static_cast<long>(aRect.origin.y) );
-    rRect.SetRight( static_cast<long>(aRect.origin.x + aRect.size.width - 1) );
-    rRect.SetBottom( static_cast<long>(aRect.origin.y + aRect.size.height - 1) );
+    rRect.SetLeft( static_cast<tools::Long>(aRect.origin.x) );
+    rRect.SetTop( static_cast<tools::Long>(aRect.origin.y) );
+    rRect.SetRight( static_cast<tools::Long>(aRect.origin.x + aRect.size.width - 1) );
+    rRect.SetBottom( static_cast<tools::Long>(aRect.origin.y + aRect.size.height - 1) );
 }
 
 SalFrame::SalPointerState AquaSalFrame::GetPointerState()
@@ -1475,7 +1477,7 @@ SalFrame::SalPointerState AquaSalFrame::GetPointerState()
     // get position
     NSPoint aPt = [mpNSWindow mouseLocationOutsideOfEventStream];
     CocoaToVCL( aPt, false );
-    state.maPos = Point(static_cast<long>(aPt.x), static_cast<long>(aPt.y));
+    state.maPos = Point(static_cast<tools::Long>(aPt.x), static_cast<tools::Long>(aPt.y));
 
     NSEvent* pCur = [NSApp currentEvent];
     bool bMouseEvent = false;
@@ -1793,7 +1795,8 @@ void AquaSalFrame::BeginSetClipRegion( sal_uInt32 nRects )
     maClippingRects.reserve( nRects );
 }
 
-void AquaSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void AquaSalFrame::UnionClipRegion(
+    tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();

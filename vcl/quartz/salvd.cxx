@@ -37,7 +37,7 @@
 #include <quartz/utils.h>
 
 std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
-                                                        long &nDX, long &nDY,
+                                                        tools::Long &nDX, tools::Long &nDY,
                                                         DeviceFormat eFormat,
                                                         const SystemGraphicsData *pData )
 {
@@ -62,8 +62,9 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
 #endif
 }
 
-AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY,
-                                            DeviceFormat eFormat, const SystemGraphicsData *pData )
+AquaSalVirtualDevice::AquaSalVirtualDevice(
+    AquaSalGraphics* pGraphic, tools::Long &nDX, tools::Long &nDY,
+    DeviceFormat eFormat, const SystemGraphicsData *pData )
   : mbGraphicsUsed( false )
   , mnBitmapDepth( 0 )
   , mnWidth(0)
@@ -93,8 +94,8 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
         if (maLayer.isSet())
         {
             const CGSize aSize = CGLayerGetSize(maLayer.get());
-            nDX = static_cast<long>(aSize.width);
-            nDY = static_cast<long>(aSize.height);
+            nDX = static_cast<tools::Long>(aSize.width);
+            nDY = static_cast<tools::Long>(aSize.height);
         }
         else
         {
@@ -201,7 +202,7 @@ void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
     mbGraphicsUsed = false;
 }
 
-bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
+bool AquaSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
 {
     SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::SetSize() this=" << this <<
               " (" << nDX << "x" << nDY << ") mbForeignContext=" << (mbForeignContext ? "YES" : "NO"));
