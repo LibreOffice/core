@@ -32,63 +32,51 @@ enum class ScGeneralFunction
      */
     NONE = int(css::sheet::GeneralFunction_NONE),
 
-
     /** function is determined automatically.
 
         <p>If the values are all numerical, SUM is used, otherwise COUNT.</p>
      */
     AUTO = int(css::sheet::GeneralFunction_AUTO),
 
-
     /** sum of all numerical values is calculated.
      */
     SUM = int(css::sheet::GeneralFunction_SUM),
-
 
     /** all values, including non-numerical values, are counted.
      */
     COUNT = int(css::sheet::GeneralFunction_COUNT),
 
-
     /** average of all numerical values is calculated.
      */
     AVERAGE = int(css::sheet::GeneralFunction_AVERAGE),
-
 
     /** maximum value of all numerical values is calculated.
      */
     MAX = int(css::sheet::GeneralFunction_MAX),
 
-
     /** minimum value of all numerical values is calculated.
      */
     MIN = int(css::sheet::GeneralFunction_MIN),
-
 
     /** product of all numerical values is calculated.
      */
     PRODUCT = int(css::sheet::GeneralFunction_PRODUCT),
 
-
     /** numerical values are counted.
      */
     COUNTNUMS = int(css::sheet::GeneralFunction_COUNTNUMS),
-
 
     /** standard deviation is calculated based on a sample.
      */
     STDEV = int(css::sheet::GeneralFunction_STDEV),
 
-
     /** standard deviation is calculated based on the entire population.
      */
     STDEVP = int(css::sheet::GeneralFunction_STDEVP),
 
-
     /** variance is calculated based on a sample.
      */
     VAR = int(css::sheet::GeneralFunction_VAR),
-
 
     /** variance is calculated based on the entire population.
      */
@@ -98,7 +86,7 @@ enum class ScGeneralFunction
     *   median of all numerical values is calculated.
     *   @since LibreOffice 5.3
     */
-     MEDIAN = css::sheet::GeneralFunction2::MEDIAN
+    MEDIAN = css::sheet::GeneralFunction2::MEDIAN
 };
 
 #endif

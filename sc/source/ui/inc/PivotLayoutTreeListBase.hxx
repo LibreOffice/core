@@ -24,8 +24,8 @@ class ScPivotLayoutTreeDropTarget : public DropTargetHelper
 private:
     ScPivotLayoutTreeListBase& m_rTreeView;
 
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
+    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override;
 
 public:
     ScPivotLayoutTreeDropTarget(ScPivotLayoutTreeListBase& rTreeView);
@@ -56,7 +56,8 @@ protected:
 public:
     void Setup(ScPivotLayoutDialog* pParent);
 
-    ScPivotLayoutTreeListBase(std::unique_ptr<weld::TreeView> xControl, SvPivotTreeListType eType = UNDEFINED);
+    ScPivotLayoutTreeListBase(std::unique_ptr<weld::TreeView> xControl,
+                              SvPivotTreeListType eType = UNDEFINED);
     weld::TreeView& get_widget() { return *mxControl; }
     virtual ~ScPivotLayoutTreeListBase();
 

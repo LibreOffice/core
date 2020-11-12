@@ -23,19 +23,19 @@
 #include <vbahelper/vbatextframe.hxx>
 
 //typedef InheritedHelperInterfaceWeakImpl< ov::excel::XTextFrame > ScVbaTextFrame_BASE;
-typedef cppu::ImplInheritanceHelper< VbaTextFrame, ov::excel::XTextFrame > ScVbaTextFrame_BASE;
+typedef cppu::ImplInheritanceHelper<VbaTextFrame, ov::excel::XTextFrame> ScVbaTextFrame_BASE;
 
 class ScVbaTextFrame : public ScVbaTextFrame_BASE
 {
 public:
     /// @throws css::lang::IllegalArgumentException
-    ScVbaTextFrame( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext > const& xContext );
+    ScVbaTextFrame(css::uno::Sequence<css::uno::Any> const& aArgs,
+                   css::uno::Reference<css::uno::XComponentContext> const& xContext);
     // Methods
-    virtual css::uno::Any SAL_CALL Characters(  ) override;
+    virtual css::uno::Any SAL_CALL Characters() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
-
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBATEXTFRAME_HXX

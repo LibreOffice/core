@@ -18,13 +18,13 @@ class ScDocShell;
 class SvtURLBox;
 class ScRange;
 
-namespace sc {
-
+namespace sc
+{
 class DataStream;
 
 class DataStreamDlg : public weld::GenericDialogController
 {
-    ScDocShell *m_pDocShell;
+    ScDocShell* m_pDocShell;
 
     std::unique_ptr<SvtURLBox> m_xCbUrl;
     std::unique_ptr<weld::Button> m_xBtnBrowse;
@@ -51,14 +51,13 @@ class DataStreamDlg : public weld::GenericDialogController
     ScRange GetStartRange();
 
 public:
-    DataStreamDlg(ScDocShell *pDocShell, weld::Window* pParent);
+    DataStreamDlg(ScDocShell* pDocShell, weld::Window* pParent);
     virtual ~DataStreamDlg() override;
 
-    void Init( const DataStream& rStrm );
+    void Init(const DataStream& rStrm);
 
     void StartStream();
 };
-
 }
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_DATASTREAMDLG_HXX

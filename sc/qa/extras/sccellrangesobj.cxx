@@ -28,8 +28,8 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sc_apitest {
-
+namespace sc_apitest
+{
 class ScCellRangesObj : public CalcUnoApiTest,
                         public apitest::SheetCellRanges,
                         public apitest::XEnumerationAccess,
@@ -45,8 +45,8 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
-    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference<uno::XInterface> getXSpreadsheet() override;
+    virtual uno::Reference<uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(ScCellRangesObj);
 
@@ -80,23 +80,25 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
-ScCellRangesObj::ScCellRangesObj():
-    CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-    apitest::XFormulaQuery(table::CellRangeAddress(0, 4, 1, 5, 4), table::CellRangeAddress(0, 4, 1, 5, 4))
+ScCellRangesObj::ScCellRangesObj()
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , apitest::XFormulaQuery(table::CellRangeAddress(0, 4, 1, 5, 4),
+                             table::CellRangeAddress(0, 4, 1, 5, 4))
 {
 }
 
-uno::Reference< uno::XInterface > ScCellRangesObj::init()
+uno::Reference<uno::XInterface> ScCellRangesObj::init()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference< container::XIndexAccess > xIndexAccess(xDoc->getSheets(), uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
-    uno::Reference< lang::XMultiServiceFactory > xMSF(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference< container::XNameContainer > xRanges(xMSF->createInstance("com.sun.star.sheet.SheetCellRanges"), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameContainer> xRanges(
+        xMSF->createInstance("com.sun.star.sheet.SheetCellRanges"), uno::UNO_QUERY_THROW);
 
     uno::Any xCellRange;
     xCellRange <<= xSheet->getCellRangeByName("C1:D4");
@@ -108,9 +110,9 @@ uno::Reference< uno::XInterface > ScCellRangesObj::init()
     xCellRange <<= xSheet->getCellRangeByName("I7:J8");
     xRanges->insertByName("Range4", xCellRange);
 
-    for ( int i = 0; i < 10; i++ )
+    for (int i = 0; i < 10; i++)
     {
-        for ( int j = 5; j < 10; j++ )
+        for (int j = 5; j < 10; j++)
         {
             xSheet->getCellByPosition(i, j)->setValue(i + j);
         }
@@ -121,9 +123,9 @@ uno::Reference< uno::XInterface > ScCellRangesObj::init()
 
 uno::Reference<uno::XInterface> ScCellRangesObj::getXSpreadsheet()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XSpreadsheets> xSheets (xSheetDoc->getSheets(), UNO_SET_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xSheetDoc->getSheets(), UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xSheets, UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 
@@ -146,7 +148,6 @@ void ScCellRangesObj::tearDown()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellRangesObj);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

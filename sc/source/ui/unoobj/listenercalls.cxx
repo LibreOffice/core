@@ -24,20 +24,18 @@
 
 using namespace com::sun::star;
 
-ScUnoListenerCalls::ScUnoListenerCalls()
-{
-}
+ScUnoListenerCalls::ScUnoListenerCalls() {}
 
 ScUnoListenerCalls::~ScUnoListenerCalls()
 {
-    OSL_ENSURE( aEntries.empty(), "unhandled listener calls remaining" );
+    OSL_ENSURE(aEntries.empty(), "unhandled listener calls remaining");
 }
 
-void ScUnoListenerCalls::Add( const uno::Reference<util::XModifyListener>& rListener,
-                                const lang::EventObject& rEvent )
+void ScUnoListenerCalls::Add(const uno::Reference<util::XModifyListener>& rListener,
+                             const lang::EventObject& rEvent)
 {
-    if ( rListener.is() )
-        aEntries.emplace_back( rListener, rEvent );
+    if (rListener.is())
+        aEntries.emplace_back(rListener, rEvent);
 }
 
 void ScUnoListenerCalls::ExecuteAndClear()
@@ -52,9 +50,9 @@ void ScUnoListenerCalls::ExecuteAndClear()
         ScUnoListenerEntry aEntry = *aItr;
         try
         {
-            aEntry.xListener->modified( aEntry.aEvent );
+            aEntry.xListener->modified(aEntry.aEvent);
         }
-        catch ( const uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             // the listener is an external object and may throw a RuntimeException
             // for reasons we don't know

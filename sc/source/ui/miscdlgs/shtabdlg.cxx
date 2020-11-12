@@ -31,13 +31,10 @@ ScShowTabDlg::ScShowTabDlg(weld::Window* pParent)
     m_xLb->connect_row_activated(LINK(this, ScShowTabDlg, DblClkHdl));
 }
 
-ScShowTabDlg::~ScShowTabDlg()
-{
-}
+ScShowTabDlg::~ScShowTabDlg() {}
 
-void ScShowTabDlg::SetDescription(
-        const OUString& rTitle, const OUString& rFixedText,
-        const OString& rDlgHelpId, const OString& sLbHelpId )
+void ScShowTabDlg::SetDescription(const OUString& rTitle, const OUString& rFixedText,
+                                  const OString& rDlgHelpId, const OString& sLbHelpId)
 {
     m_xDialog->set_title(rTitle);
     m_xFrame->set_label(rFixedText);
@@ -58,10 +55,7 @@ std::vector<sal_Int32> ScShowTabDlg::GetSelectedRows() const
     return std::vector<sal_Int32>(aTmp.begin(), aTmp.end());
 }
 
-OUString ScShowTabDlg::GetEntry(sal_Int32 nIndex) const
-{
-    return m_xLb->get_text(nIndex);
-}
+OUString ScShowTabDlg::GetEntry(sal_Int32 nIndex) const { return m_xLb->get_text(nIndex); }
 
 IMPL_LINK_NOARG(ScShowTabDlg, DblClkHdl, weld::TreeView&, bool)
 {

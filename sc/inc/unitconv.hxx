@@ -30,16 +30,14 @@ class ScUnitConverterData
     double mfValue;
 
 public:
-    ScUnitConverterData( const OUString& rFromUnit,
-        const OUString& rToUnit, double fValue );
-    ScUnitConverterData( const ScUnitConverterData& ) = default;
-    ScUnitConverterData& operator=( const ScUnitConverterData& ) = delete;
+    ScUnitConverterData(const OUString& rFromUnit, const OUString& rToUnit, double fValue);
+    ScUnitConverterData(const ScUnitConverterData&) = default;
+    ScUnitConverterData& operator=(const ScUnitConverterData&) = delete;
 
-    double GetValue() const { return mfValue;}
-    const OUString& GetIndexString() const { return maIndexString;}
+    double GetValue() const { return mfValue; }
+    const OUString& GetIndexString() const { return maIndexString; }
 
-    static OUString BuildIndexString(
-        const OUString& rFromUnit, const OUString& rToUnit );
+    static OUString BuildIndexString(const OUString& rFromUnit, const OUString& rToUnit);
 };
 
 class ScUnitConverter
@@ -53,8 +51,7 @@ public:
     const ScUnitConverter& operator=(const ScUnitConverter&) = delete;
     ~ScUnitConverter();
 
-    bool GetValue(
-        double& fValue, const OUString& rFromUnit, const OUString& rToUnit ) const;
+    bool GetValue(double& fValue, const OUString& rFromUnit, const OUString& rToUnit) const;
 };
 
 #endif

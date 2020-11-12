@@ -42,14 +42,9 @@ ScRetypePassDlg::ScRetypePassDlg(weld::Window* pParent)
     Init();
 }
 
-ScRetypePassDlg::~ScRetypePassDlg()
-{
-}
+ScRetypePassDlg::~ScRetypePassDlg() {}
 
-void ScRetypePassDlg::DeleteSheets()
-{
-    maSheets.clear();
-}
+void ScRetypePassDlg::DeleteSheets() { maSheets.clear(); }
 
 short ScRetypePassDlg::run()
 {
@@ -93,10 +88,7 @@ void ScRetypePassDlg::SetDataFromDocument(const ScDocument& rDoc)
     }
 }
 
-void ScRetypePassDlg::SetDesiredHash(ScPasswordHash eHash)
-{
-    meDesiredHash = eHash;
-}
+void ScRetypePassDlg::SetDesiredHash(ScPasswordHash eHash) { meDesiredHash = eHash; }
 
 void ScRetypePassDlg::WriteNewDataToDocument(ScDocument& rDoc) const
 {
@@ -118,10 +110,10 @@ void ScRetypePassDlg::WriteNewDataToDocument(ScDocument& rDoc) const
 
 void ScRetypePassDlg::Init()
 {
-    Link<weld::Button&,void> aLink = LINK( this, ScRetypePassDlg, OKHdl );
+    Link<weld::Button&, void> aLink = LINK(this, ScRetypePassDlg, OKHdl);
     mxBtnOk->connect_clicked(aLink);
 
-    aLink = LINK( this, ScRetypePassDlg, RetypeBtnHdl );
+    aLink = LINK(this, ScRetypePassDlg, RetypeBtnHdl);
     mxBtnRetypeDoc->connect_clicked(aLink);
 
     mxTextDocStatus->set_label(maTextNotProtected);
@@ -135,7 +127,7 @@ void ScRetypePassDlg::PopulateDialog()
 
     // Sheet protection next.
     for (size_t i = 0; i < maTableItems.size(); ++i)
-        SetTableData(i, static_cast< SCTAB >( i ));
+        SetTableData(i, static_cast<SCTAB>(i));
 }
 
 void ScRetypePassDlg::SetDocData()
@@ -222,16 +214,12 @@ void ScRetypePassDlg::CheckHashStatus()
 
         mxBtnOk->set_sensitive(true);
         return;
-    }
-    while (false);
+    } while (false);
 
     mxBtnOk->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(ScRetypePassDlg, OKHdl, weld::Button&, void)
-{
-    m_xDialog->response(RET_OK);
-}
+IMPL_LINK_NOARG(ScRetypePassDlg, OKHdl, weld::Button&, void) { m_xDialog->response(RET_OK); }
 
 IMPL_LINK(ScRetypePassDlg, RetypeBtnHdl, weld::Button&, rBtn, void)
 {
@@ -277,7 +265,8 @@ IMPL_LINK(ScRetypePassDlg, RetypeBtnHdl, weld::Button&, rBtn, void)
 }
 
 ScRetypePassInputDlg::ScRetypePassInputDlg(weld::Window* pParent, ScPassHashProtectable* pProtected)
-    : GenericDialogController(pParent, "modules/scalc/ui/retypepassworddialog.ui", "RetypePasswordDialog")
+    : GenericDialogController(pParent, "modules/scalc/ui/retypepassworddialog.ui",
+                              "RetypePasswordDialog")
     , m_pProtected(pProtected)
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xBtnRetypePassword(m_xBuilder->weld_radio_button("retypepassword"))
@@ -290,19 +279,11 @@ ScRetypePassInputDlg::ScRetypePassInputDlg(weld::Window* pParent, ScPassHashProt
     Init();
 }
 
-ScRetypePassInputDlg::~ScRetypePassInputDlg()
-{
-}
+ScRetypePassInputDlg::~ScRetypePassInputDlg() {}
 
-bool ScRetypePassInputDlg::IsRemovePassword() const
-{
-    return m_xBtnRemovePassword->get_active();
-}
+bool ScRetypePassInputDlg::IsRemovePassword() const { return m_xBtnRemovePassword->get_active(); }
 
-OUString ScRetypePassInputDlg::GetNewPassword() const
-{
-    return m_xPassword1Edit->get_text();
-}
+OUString ScRetypePassInputDlg::GetNewPassword() const { return m_xPassword1Edit->get_text(); }
 
 void ScRetypePassInputDlg::Init()
 {
@@ -310,7 +291,7 @@ void ScRetypePassInputDlg::Init()
     m_xBtnRetypePassword->connect_toggled(LINK(this, ScRetypePassInputDlg, RadioBtnHdl));
     m_xBtnRemovePassword->connect_toggled(LINK(this, ScRetypePassInputDlg, RadioBtnHdl));
     m_xBtnMatchOldPass->connect_toggled(LINK(this, ScRetypePassInputDlg, CheckBoxHdl));
-    Link<weld::Entry&,void> aLink2 = LINK( this, ScRetypePassInputDlg, PasswordModifyHdl );
+    Link<weld::Entry&, void> aLink2 = LINK(this, ScRetypePassInputDlg, PasswordModifyHdl);
     m_xPassword1Edit->connect_changed(aLink2);
     m_xPassword2Edit->connect_changed(aLink2);
 
@@ -356,10 +337,7 @@ void ScRetypePassInputDlg::CheckPasswordInput()
     m_xBtnOk->set_sensitive(bPassGood);
 }
 
-IMPL_LINK_NOARG(ScRetypePassInputDlg, OKHdl, weld::Button&, void)
-{
-    m_xDialog->response(RET_OK);
-}
+IMPL_LINK_NOARG(ScRetypePassInputDlg, OKHdl, weld::Button&, void) { m_xDialog->response(RET_OK); }
 
 IMPL_LINK_NOARG(ScRetypePassInputDlg, RadioBtnHdl, weld::ToggleButton&, void)
 {

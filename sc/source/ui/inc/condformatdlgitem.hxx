@@ -14,8 +14,8 @@
 
 #include <memory>
 
-namespace condformat::dialog {
-
+namespace condformat::dialog
+{
 enum ScCondFormatDialogType
 {
     NONE,
@@ -25,7 +25,6 @@ enum ScCondFormatDialogType
     ICONSET,
     DATE
 };
-
 }
 
 class ScConditionalFormatList;
@@ -33,15 +32,15 @@ class ScConditionalFormatList;
 class ScCondFormatDlgItem : public SfxPoolItem
 {
 public:
-
-    ScCondFormatDlgItem(std::shared_ptr<ScConditionalFormatList> pCondFormats, sal_Int32 nItem, bool bManaged);
+    ScCondFormatDlgItem(std::shared_ptr<ScConditionalFormatList> pCondFormats, sal_Int32 nItem,
+                        bool bManaged);
 
     virtual ~ScCondFormatDlgItem() override;
 
-    ScCondFormatDlgItem(ScCondFormatDlgItem const &) = default;
-    ScCondFormatDlgItem(ScCondFormatDlgItem &&) = default;
-    ScCondFormatDlgItem & operator =(ScCondFormatDlgItem const &) = delete; // due to SfxPoolItem
-    ScCondFormatDlgItem & operator =(ScCondFormatDlgItem &&) = delete; // due to SfxPoolItem
+    ScCondFormatDlgItem(ScCondFormatDlgItem const&) = default;
+    ScCondFormatDlgItem(ScCondFormatDlgItem&&) = default;
+    ScCondFormatDlgItem& operator=(ScCondFormatDlgItem const&) = delete; // due to SfxPoolItem
+    ScCondFormatDlgItem& operator=(ScCondFormatDlgItem&&) = delete; // due to SfxPoolItem
 
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual ScCondFormatDlgItem* Clone(SfxItemPool* pPool = nullptr) const override;
@@ -55,7 +54,6 @@ public:
     ScConditionalFormatList* GetConditionalFormatList();
 
 private:
-
     std::shared_ptr<ScConditionalFormatList> mpCondFormats;
     sal_Int32 mnItem;
     condformat::dialog::ScCondFormatDialogType meDialogType;

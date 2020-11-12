@@ -50,12 +50,15 @@ public:
     const OUString& GetColText(SCCOL nCol) const { return pColText[nCol]; }
     const OUString& GetRowText(SCROW nRow) const { return pRowText[nRow]; }
     double GetData(SCCOL nCol, SCROW nRow) const { return pData[nCol * nRowCnt + nRow]; }
-    void SetData(SCCOL nCol, SCROW nRow, const double& rVal) { pData[nCol * nRowCnt + nRow] = rVal; }
+    void SetData(SCCOL nCol, SCROW nRow, const double& rVal)
+    {
+        pData[nCol * nRowCnt + nRow] = rVal;
+    }
     void SetColText(SCCOL nCol, const OUString& rText) { pColText[nCol] = rText; }
     void SetRowText(SCROW nRow, const OUString& rText) { pRowText[nRow] = rText; }
 };
 
-class ScChartArray             // only parameter-struct
+class ScChartArray // only parameter-struct
 {
     ScDocument& rDocument;
     ScChartPositioner aPositioner;
@@ -63,15 +66,16 @@ class ScChartArray             // only parameter-struct
 private:
     std::unique_ptr<ScMemChart> CreateMemChartSingle();
     std::unique_ptr<ScMemChart> CreateMemChartMulti();
+
 public:
-    ScChartArray( ScDocument& rDoc, const ScRangeListRef& rRangeList );
+    ScChartArray(ScDocument& rDoc, const ScRangeListRef& rRangeList);
 
-    const ScRangeListRef&   GetRangeList() const { return aPositioner.GetRangeList(); }
-    const   ScChartPositionMap* GetPositionMap() { return aPositioner.GetPositionMap(); }
+    const ScRangeListRef& GetRangeList() const { return aPositioner.GetRangeList(); }
+    const ScChartPositionMap* GetPositionMap() { return aPositioner.GetPositionMap(); }
 
-    void    SetHeaders(bool bCol, bool bRow) { aPositioner.SetHeaders(bCol, bRow); }
-    bool    HasColHeaders() const { return aPositioner.HasColHeaders(); }
-    bool    HasRowHeaders() const { return aPositioner.HasRowHeaders(); }
+    void SetHeaders(bool bCol, bool bRow) { aPositioner.SetHeaders(bCol, bRow); }
+    bool HasColHeaders() const { return aPositioner.HasColHeaders(); }
+    bool HasRowHeaders() const { return aPositioner.HasRowHeaders(); }
 
     std::unique_ptr<ScMemChart> CreateMemChart();
 };

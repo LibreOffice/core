@@ -28,19 +28,18 @@ private:
     std::unique_ptr<weld::Frame> m_xFrame;
     std::unique_ptr<weld::TreeView> m_xLb;
 
-    DECL_LINK( DblClkHdl, weld::TreeView&, bool );
+    DECL_LINK(DblClkHdl, weld::TreeView&, bool);
 
 public:
     ScShowTabDlg(weld::Window* pParent);
     virtual ~ScShowTabDlg() override;
 
     /** Sets dialog title, fixed text for listbox and help IDs. */
-    void    SetDescription(
-                const OUString& rTitle, const OUString& rFixedText,
-                const OString& nDlgHelpId, const OString& nLbHelpId );
+    void SetDescription(const OUString& rTitle, const OUString& rFixedText,
+                        const OString& nDlgHelpId, const OString& nLbHelpId);
 
     /** Inserts a string into the weld::TreeView. */
-    void    Insert( const OUString& rString, bool bSelected );
+    void Insert(const OUString& rString, bool bSelected);
 
     std::vector<sal_Int32> GetSelectedRows() const;
     OUString GetEntry(sal_Int32 nPos) const;

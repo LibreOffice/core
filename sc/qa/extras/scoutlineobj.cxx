@@ -17,8 +17,8 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sc_apitest {
-
+namespace sc_apitest
+{
 class ScOutlineObj : public CalcUnoApiTest, public apitest::XSheetOutline
 {
 public:
@@ -27,7 +27,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference<uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(ScOutlineObj);
 
@@ -43,7 +43,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScOutlineObj::ScOutlineObj()
@@ -51,13 +51,13 @@ ScOutlineObj::ScOutlineObj()
 {
 }
 
-uno::Reference< uno::XInterface > ScOutlineObj::init()
+uno::Reference<uno::XInterface> ScOutlineObj::init()
 {
     // get the first sheet
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 
-    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 
     return xSheet;
 }
@@ -78,7 +78,6 @@ void ScOutlineObj::tearDown()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScOutlineObj);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

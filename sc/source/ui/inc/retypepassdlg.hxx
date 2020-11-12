@@ -65,23 +65,23 @@ private:
     void DeleteSheets();
 
 private:
-    OUString         maTextNotProtected;
-    OUString         maTextNotPassProtected;
-    OUString         maTextHashBad;
-    OUString         maTextHashGood;
+    OUString maTextNotProtected;
+    OUString maTextNotPassProtected;
+    OUString maTextHashBad;
+    OUString maTextHashGood;
 
     DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(RetypeBtnHdl, weld::Button&, void);
 
     struct TableItem
     {
-        OUString       maName;
+        OUString maName;
         std::shared_ptr<ScTableProtection> mpProtect;
     };
     ::std::vector<TableItem> maTableItems;
 
     std::shared_ptr<ScDocProtection> mpDocItem;
-    ScPasswordHash      meDesiredHash;
+    ScPasswordHash meDesiredHash;
 
     std::unique_ptr<weld::Button> mxBtnOk;
     std::unique_ptr<weld::Label> mxTextDocStatus;
@@ -120,10 +120,10 @@ private:
 
     std::unique_ptr<weld::RadioButton> m_xBtnRemovePassword;
 
-    DECL_LINK( OKHdl, weld::Button&, void );
-    DECL_LINK( RadioBtnHdl, weld::ToggleButton&, void );
-    DECL_LINK( CheckBoxHdl, weld::ToggleButton&, void );
-    DECL_LINK( PasswordModifyHdl, weld::Entry&, void );
+    DECL_LINK(OKHdl, weld::Button&, void);
+    DECL_LINK(RadioBtnHdl, weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(PasswordModifyHdl, weld::Entry&, void);
 };
 
 #endif

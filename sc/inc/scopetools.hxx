@@ -14,22 +14,25 @@
 
 class ScDocument;
 class ScColumn;
-namespace vcl { class Window; }
+namespace vcl
+{
+class Window;
+}
 
-namespace sc {
-
+namespace sc
+{
 /**
  * Temporarily switch on/off auto calculation mode.
  */
 class SC_DLLPUBLIC AutoCalcSwitch
 {
     ScDocument& mrDoc;
-    bool        mbOldValue;
+    bool mbOldValue;
 
-    AutoCalcSwitch(AutoCalcSwitch const &) = delete;
-    AutoCalcSwitch(AutoCalcSwitch &&) = delete;
-    AutoCalcSwitch & operator =(AutoCalcSwitch const &) = delete;
-    AutoCalcSwitch & operator =(AutoCalcSwitch &&) = delete;
+    AutoCalcSwitch(AutoCalcSwitch const&) = delete;
+    AutoCalcSwitch(AutoCalcSwitch&&) = delete;
+    AutoCalcSwitch& operator=(AutoCalcSwitch const&) = delete;
+    AutoCalcSwitch& operator=(AutoCalcSwitch&&) = delete;
 
 public:
     AutoCalcSwitch(ScDocument& rDoc, bool bAutoCalc);
@@ -40,6 +43,7 @@ class ExpandRefsSwitch
 {
     ScDocument& mrDoc;
     bool mbOldValue;
+
 public:
     ExpandRefsSwitch(ScDocument& rDoc, bool bExpandRefs);
     ~ExpandRefsSwitch();
@@ -49,6 +53,7 @@ class SC_DLLPUBLIC UndoSwitch
 {
     ScDocument& mrDoc;
     bool mbOldValue;
+
 public:
     UndoSwitch(ScDocument& rDoc, bool bUndo);
     ~UndoSwitch();
@@ -58,6 +63,7 @@ class IdleSwitch
 {
     ScDocument& mrDoc;
     bool mbOldValue;
+
 public:
     IdleSwitch(ScDocument& rDoc, bool bEnableIdle);
     ~IdleSwitch();
@@ -68,6 +74,7 @@ class DelayFormulaGroupingSwitch
 {
     ScDocument& mrDoc;
     bool const mbOldValue;
+
 public:
     DelayFormulaGroupingSwitch(ScDocument& rDoc, bool delay);
     ~DelayFormulaGroupingSwitch() COVERITY_NOEXCEPT_FALSE;
@@ -79,6 +86,7 @@ class DelayStartListeningFormulaCells
 {
     ScColumn& mColumn;
     bool const mbOldValue;
+
 public:
     DelayStartListeningFormulaCells(ScColumn& column, bool delay);
     DelayStartListeningFormulaCells(ScColumn& column);
@@ -86,7 +94,6 @@ public:
     ~DelayStartListeningFormulaCells();
     void set();
 };
-
 }
 
 #endif

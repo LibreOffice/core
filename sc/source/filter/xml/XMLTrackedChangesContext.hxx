@@ -22,22 +22,26 @@
 
 #include "importcontext.hxx"
 
-namespace sax_fastparser { class FastAttributeList; }
+namespace sax_fastparser
+{
+class FastAttributeList;
+}
 
 class ScXMLChangeTrackingImportHelper;
 
 class ScXMLTrackedChangesContext : public ScXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper;
 
 public:
-    ScXMLTrackedChangesContext( ScXMLImport& rImport,
-                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
-                                      ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
+    ScXMLTrackedChangesContext(ScXMLImport& rImport,
+                               const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
+                               ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLTrackedChangesContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
 
 #endif

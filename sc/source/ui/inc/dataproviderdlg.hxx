@@ -46,13 +46,14 @@ private:
 
     void InitMenu();
 
-    DECL_LINK( StartMenuHdl, const OString&, void );
-    DECL_LINK( ColumnMenuHdl, const OString&, void );
-    DECL_LINK( ImportHdl, ScDataProviderBaseControl*, void );
-    DECL_LINK( ScrollToEnd, Timer*, void );
+    DECL_LINK(StartMenuHdl, const OString&, void);
+    DECL_LINK(ColumnMenuHdl, const OString&, void);
+    DECL_LINK(ImportHdl, ScDataProviderBaseControl*, void);
+    DECL_LINK(ScrollToEnd, Timer*, void);
 
 public:
-    ScDataProviderDlg(weld::Window* pWindow, std::shared_ptr<ScDocument> pDoc, const ScDocument* pDocument);
+    ScDataProviderDlg(weld::Window* pWindow, std::shared_ptr<ScDocument> pDoc,
+                      const ScDocument* pDocument);
     virtual ~ScDataProviderDlg() override;
 
     void applyAndQuit();

@@ -27,7 +27,7 @@ class ScViewData;
 
 #include "drawsh.hxx"
 
-class ScChartShell: public ScDrawShell
+class ScChartShell : public ScDrawShell
 {
 public:
     SFX_DECL_INTERFACE(SCID_CHART_SHELL)
@@ -41,8 +41,7 @@ public:
     virtual ~ScChartShell() override;
 
     void ExecuteExportAsGraphic(SfxRequest& rReq);
-    void GetExportAsGraphicState(SfxItemSet &rSet);
-
+    void GetExportAsGraphicState(SfxItemSet& rSet);
 };
 
 #endif

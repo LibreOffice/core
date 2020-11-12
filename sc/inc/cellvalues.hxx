@@ -17,14 +17,13 @@
 class ScColumn;
 class ScFormulaCell;
 
-namespace svl {
-
+namespace svl
+{
 class SharedString;
-
 }
 
-namespace sc {
-
+namespace sc
+{
 struct CellValuesImpl;
 
 struct CellValueSpan
@@ -32,7 +31,7 @@ struct CellValueSpan
     SCROW mnRow1;
     SCROW mnRow2;
 
-    CellValueSpan( SCROW nRow1, SCROW nRow2 );
+    CellValueSpan(SCROW nRow1, SCROW nRow2);
 };
 
 /**
@@ -43,8 +42,8 @@ class CellValues
 {
     std::unique_ptr<CellValuesImpl> mpImpl;
 
-    CellValues( const CellValues& ) = delete;
-    CellValues& operator= ( const CellValues& ) = delete;
+    CellValues(const CellValues&) = delete;
+    CellValues& operator=(const CellValues&) = delete;
 
 public:
     CellValues();
@@ -58,27 +57,27 @@ public:
      * @param nRow top row position in the source column.
      * @param nLen length of the segment to transfer.
      */
-    void transferFrom( ScColumn& rCol, SCROW nRow, size_t nLen );
+    void transferFrom(ScColumn& rCol, SCROW nRow, size_t nLen);
 
-    void copyTo( ScColumn& rCol, SCROW nRow ) const;
-    void swapNonEmpty( ScColumn& rCol );
+    void copyTo(ScColumn& rCol, SCROW nRow) const;
+    void swapNonEmpty(ScColumn& rCol);
 
-    void assign( const std::vector<double>& rVals );
-    void assign( const std::vector<ScFormulaCell*>& rVals );
+    void assign(const std::vector<double>& rVals);
+    void assign(const std::vector<ScFormulaCell*>& rVals);
 
     size_t size() const;
 
-    void reset( size_t nSize );
-    void setValue( size_t nRow, double fVal );
-    void setValue( size_t nRow, const svl::SharedString& rStr );
+    void reset(size_t nSize);
+    void setValue(size_t nRow, double fVal);
+    void setValue(size_t nRow, const svl::SharedString& rStr);
 
-    void swap( CellValues& r );
+    void swap(CellValues& r);
 
     std::vector<CellValueSpan> getNonEmptySpans() const;
 
 private:
-    void copyCellsTo( ScColumn& rCol, SCROW nRow ) const;
-    void copyCellTextAttrsTo( ScColumn& rCol, SCROW nRow ) const;
+    void copyCellsTo(ScColumn& rCol, SCROW nRow) const;
+    void copyCellTextAttrsTo(ScColumn& rCol, SCROW nRow) const;
 };
 
 /**
@@ -90,13 +89,12 @@ class TableValues
 
     std::unique_ptr<Impl> mpImpl;
 
-    TableValues( const TableValues& ) = delete;
-    TableValues& operator= ( const TableValues& ) = delete;
+    TableValues(const TableValues&) = delete;
+    TableValues& operator=(const TableValues&) = delete;
 
 public:
-
     TableValues();
-    TableValues( const ScRange& rRange );
+    TableValues(const ScRange& rRange);
     ~TableValues();
 
     const ScRange& getRange() const;
@@ -104,18 +102,17 @@ public:
     /**
      * Swap the entire column.
      */
-    void swap( SCTAB nTab, SCCOL nCol, CellValues& rColValue );
+    void swap(SCTAB nTab, SCCOL nCol, CellValues& rColValue);
 
     /**
      * Swap non-empty blocks with the column storage.
      */
-    void swapNonEmpty( SCTAB nTab, SCCOL nCol, ScColumn& rCol );
+    void swapNonEmpty(SCTAB nTab, SCCOL nCol, ScColumn& rCol);
 
-    std::vector<CellValueSpan> getNonEmptySpans( SCTAB nTab, SCCOL nCol ) const;
+    std::vector<CellValueSpan> getNonEmptySpans(SCTAB nTab, SCCOL nCol) const;
 
-    void swap( TableValues& rOther );
+    void swap(TableValues& rOther);
 };
-
 }
 
 #endif

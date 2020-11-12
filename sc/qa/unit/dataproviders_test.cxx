@@ -22,7 +22,6 @@
 class ScDataProvidersTest : public ScBootstrapFixture
 {
 public:
-
     ScDataProvidersTest();
 
     virtual void setUp() override;
@@ -44,20 +43,20 @@ public:
 
 private:
     ScDocShellRef m_xDocShell;
-    ScDocument *m_pDoc;
+    ScDocument* m_pDoc;
 };
 
 void ScDataProvidersTest::testCSVImport()
 {
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
-    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+    bool bInserted
+        = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
     createFileURL("test1.", "csv", aFileURL);
     sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", m_pDoc);
     aDataSource.setDBData(pDBData->GetName());
-
 
     m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
     auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
@@ -78,14 +77,14 @@ void ScDataProvidersTest::testCSVImport()
 void ScDataProvidersTest::testDataLargerThanDB()
 {
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 1, 1);
-    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+    bool bInserted
+        = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
     createFileURL("test1.", "csv", aFileURL);
     sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", m_pDoc);
     aDataSource.setDBData(pDBData->GetName());
-
 
     m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
     auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
@@ -106,7 +105,8 @@ void ScDataProvidersTest::testDataLargerThanDB()
 void ScDataProvidersTest::testHTMLImport()
 {
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
-    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+    bool bInserted
+        = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
@@ -115,7 +115,6 @@ void ScDataProvidersTest::testHTMLImport()
     aDataSource.setID("//table");
     aDataSource.setDBData(pDBData->GetName());
 
-
     m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
     auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
@@ -123,11 +122,12 @@ void ScDataProvidersTest::testHTMLImport()
     rDataSources[0].refresh(m_pDoc, true);
     Scheduler::ProcessEventsToIdle();
 
-
-    std::vector<OUString> aCarManufacturers = {"Audi", "GM", "Nissan", "Ferrari", "Peugeot"};
-    std::vector<OUString> aCities = {"Berlin", "San Francisco", "Tokyo", "Rome", "Paris"};
-    std::vector<double> aFirstCol = {1, 10, -100, -0.11111, 1};
-    std::vector<double> aSecondCol = {2, 2.1, 40179, 2, 2,}; // 40179 is equal to 2010-1-1
+    std::vector<OUString> aCarManufacturers = { "Audi", "GM", "Nissan", "Ferrari", "Peugeot" };
+    std::vector<OUString> aCities = { "Berlin", "San Francisco", "Tokyo", "Rome", "Paris" };
+    std::vector<double> aFirstCol = { 1, 10, -100, -0.11111, 1 };
+    std::vector<double> aSecondCol = {
+        2, 2.1, 40179, 2, 2,
+    }; // 40179 is equal to 2010-1-1
 
     CPPUNIT_ASSERT_EQUAL(OUString("Col1"), m_pDoc->GetString(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("Col2"), m_pDoc->GetString(1, 0, 0));
@@ -146,14 +146,15 @@ void ScDataProvidersTest::testHTMLImport()
 void ScDataProvidersTest::testXMLImport()
 {
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
-    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+    bool bInserted
+        = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
     ScOrcusImportXMLParam aParam;
 
     ScOrcusImportXMLParam::RangeLink aRangeLink;
-    aRangeLink.maPos = ScAddress(0,0,0);
+    aRangeLink.maPos = ScAddress(0, 0, 0);
     aRangeLink.maFieldPaths.push_back("/bookstore/book/title");
     aRangeLink.maFieldPaths.push_back("/bookstore/book/author");
     aRangeLink.maRowGroups.push_back("/bookstore/book");
@@ -163,7 +164,6 @@ void ScDataProvidersTest::testXMLImport()
     sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.xml", m_pDoc);
     aDataSource.setDBData("testDB");
     aDataSource.setXMLImportParam(aParam);
-
 
     m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
     auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
@@ -208,9 +208,9 @@ void ScDataProvidersTest::testBaseImport()
 }
 */
 
-ScDataProvidersTest::ScDataProvidersTest() :
-    ScBootstrapFixture( "sc/qa/unit/data/dataprovider" ),
-    m_pDoc(nullptr)
+ScDataProvidersTest::ScDataProvidersTest()
+    : ScBootstrapFixture("sc/qa/unit/data/dataprovider")
+    , m_pDoc(nullptr)
 {
 }
 
@@ -219,10 +219,9 @@ void ScDataProvidersTest::setUp()
     ScBootstrapFixture::setUp();
 
     ScDLL::Init();
-    m_xDocShell = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    m_xDocShell
+        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
     m_xDocShell->SetIsInUcalc();
     m_xDocShell->DoInitUnitTest();

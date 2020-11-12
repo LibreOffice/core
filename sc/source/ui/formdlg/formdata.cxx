@@ -27,13 +27,8 @@ ScFormEditData::ScFormEditData()
     Reset();
 }
 
-ScFormEditData::~ScFormEditData()
-{
-}
+ScFormEditData::~ScFormEditData() {}
 
-void ScFormEditData::SaveValues()
-{
-    Reset();
-}
+void ScFormEditData::SaveValues() { Reset(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

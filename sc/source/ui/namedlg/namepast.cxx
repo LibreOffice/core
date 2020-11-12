@@ -28,17 +28,17 @@
 #include <scresid.hxx>
 #include <compiler.hxx>
 
-ScNamePasteDlg::ScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell)
+ScNamePasteDlg::ScNamePasteDlg(weld::Window* pParent, ScDocShell* pShell)
     : GenericDialogController(pParent, "modules/scalc/ui/insertname.ui", "InsertNameDialog")
     , m_xBtnPasteAll(m_xBuilder->weld_button("pasteall"))
     , m_xBtnPaste(m_xBuilder->weld_button("paste"))
     , m_xBtnClose(m_xBuilder->weld_button("close"))
 {
     ScDocument& rDoc = pShell->GetDocument();
-    m_aSheetSep = OUString( rDoc.GetSheetSeparator());
+    m_aSheetSep = OUString(rDoc.GetSheetSeparator());
     std::map<OUString, ScRangeName*> aCopyMap;
     rDoc.GetRangeNameMap(aCopyMap);
-    for (const auto& [aTemp, pName] : aCopyMap)
+    for (const auto & [ aTemp, pName ] : aCopyMap)
     {
         m_RangeMap.insert(std::make_pair(aTemp, std::make_unique<ScRangeName>(*pName)));
     }
@@ -51,9 +51,9 @@ ScNamePasteDlg::ScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell)
                                 xTreeView->get_height_rows(10));
     m_xTable.reset(new ScRangeManagerTable(std::move(xTreeView), m_RangeMap, aPos));
 
-    m_xBtnPaste->connect_clicked( LINK( this, ScNamePasteDlg, ButtonHdl) );
-    m_xBtnPasteAll->connect_clicked( LINK( this, ScNamePasteDlg, ButtonHdl));
-    m_xBtnClose->connect_clicked( LINK( this, ScNamePasteDlg, ButtonHdl));
+    m_xBtnPaste->connect_clicked(LINK(this, ScNamePasteDlg, ButtonHdl));
+    m_xBtnPasteAll->connect_clicked(LINK(this, ScNamePasteDlg, ButtonHdl));
+    m_xBtnClose->connect_clicked(LINK(this, ScNamePasteDlg, ButtonHdl));
 
     if (!m_xTable->n_children())
     {
@@ -62,9 +62,7 @@ ScNamePasteDlg::ScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell)
     }
 }
 
-ScNamePasteDlg::~ScNamePasteDlg()
-{
-}
+ScNamePasteDlg::~ScNamePasteDlg() {}
 
 IMPL_LINK(ScNamePasteDlg, ButtonHdl, weld::Button&, rButton, void)
 {
@@ -74,7 +72,7 @@ IMPL_LINK(ScNamePasteDlg, ButtonHdl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xBtnPaste.get())
     {
-        const OUString aGlobalScope( ScResId( STR_GLOBAL_SCOPE));
+        const OUString aGlobalScope(ScResId(STR_GLOBAL_SCOPE));
         std::vector<ScRangeNameLine> aSelectedLines = m_xTable->GetSelectedEntries();
         for (const auto& rLine : aSelectedLines)
         {
@@ -82,9 +80,9 @@ IMPL_LINK(ScNamePasteDlg, ButtonHdl, weld::Button&, rButton, void)
                 maSelectedNames.push_back(rLine.aName);
             else
             {
-                OUString aSheet( rLine.aScope);
-                ScCompiler::CheckTabQuotes( aSheet);
-                maSelectedNames.push_back( aSheet + m_aSheetSep + rLine.aName);
+                OUString aSheet(rLine.aScope);
+                ScCompiler::CheckTabQuotes(aSheet);
+                maSelectedNames.push_back(aSheet + m_aSheetSep + rLine.aName);
             }
         }
         m_xDialog->response(BTN_PASTE_NAME);
@@ -95,9 +93,6 @@ IMPL_LINK(ScNamePasteDlg, ButtonHdl, weld::Button&, rButton, void)
     }
 }
 
-const std::vector<OUString>& ScNamePasteDlg::GetSelectedNames() const
-{
-    return maSelectedNames;
-}
+const std::vector<OUString>& ScNamePasteDlg::GetSelectedNames() const { return maSelectedNames; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

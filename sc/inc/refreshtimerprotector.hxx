@@ -18,10 +18,10 @@ class ScRefreshTimerControl;
 
 class SC_DLLPUBLIC ScRefreshTimerProtector
 {
-    std::unique_ptr<ScRefreshTimerControl> const & m_rpControl;
+    std::unique_ptr<ScRefreshTimerControl> const& m_rpControl;
 
 public:
-    ScRefreshTimerProtector( std::unique_ptr<ScRefreshTimerControl> const & rp );
+    ScRefreshTimerProtector(std::unique_ptr<ScRefreshTimerControl> const& rp);
     ~ScRefreshTimerProtector();
 };
 

@@ -24,19 +24,18 @@
 
 namespace scui
 {
-    static ScAbstractDialogFactory_Impl* GetFactory()
-    {
-        static ScAbstractDialogFactory_Impl* pFactory = new ScAbstractDialogFactory_Impl;
-        return pFactory;
-    }
+static ScAbstractDialogFactory_Impl* GetFactory()
+{
+    static ScAbstractDialogFactory_Impl* pFactory = new ScAbstractDialogFactory_Impl;
+    return pFactory;
+}
 }
 
-extern "C"
+extern "C" {
+SAL_DLLPUBLIC_EXPORT ScAbstractDialogFactory* ScCreateDialogFactory()
 {
-    SAL_DLLPUBLIC_EXPORT ScAbstractDialogFactory* ScCreateDialogFactory()
-    {
-        return ::scui::GetFactory();
-    }
+    return ::scui::GetFactory();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

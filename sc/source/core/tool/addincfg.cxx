@@ -29,28 +29,25 @@
 
 using namespace com::sun::star;
 
-#define CFGPATH_ADDINS  "Office.CalcAddIns/AddInInfo"
+#define CFGPATH_ADDINS "Office.CalcAddIns/AddInInfo"
 
-ScAddInCfg::ScAddInCfg() :
-    ConfigItem( CFGPATH_ADDINS )
+ScAddInCfg::ScAddInCfg()
+    : ConfigItem(CFGPATH_ADDINS)
 {
-    uno::Sequence<OUString> aNames(1);     // one entry: empty string
-    EnableNotification( aNames );
+    uno::Sequence<OUString> aNames(1); // one entry: empty string
+    EnableNotification(aNames);
 }
 
-void ScAddInCfg::ImplCommit()
-{
-    SAL_WARN("sc", "ScAddInCfg shouldn't be modified");
-}
+void ScAddInCfg::ImplCommit() { SAL_WARN("sc", "ScAddInCfg shouldn't be modified"); }
 
-void ScAddInCfg::Notify( const uno::Sequence<OUString>& )
+void ScAddInCfg::Notify(const uno::Sequence<OUString>&)
 {
     // forget all add-in information, re-initialize when needed next time
     ScGlobal::GetAddInCollection()->Clear();
 
     // function list must also be rebuilt, but can't be modified while function
     // autopilot is open (function list for autopilot is then still old)
-    if ( SC_MOD()->GetCurRefDlgId() != SID_OPENDLG_FUNCTION )
+    if (SC_MOD()->GetCurRefDlgId() != SID_OPENDLG_FUNCTION)
         ScGlobal::ResetFunctionList();
 }
 

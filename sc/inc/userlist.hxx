@@ -39,12 +39,13 @@ public:
         OUString maUpper;
         SubStr(const OUString& rReal, const OUString& rUpper);
     };
+
 private:
     typedef std::vector<SubStr> SubStringsType;
     SubStringsType maSubStrings;
     OUString aStr;
 
-    SAL_DLLPRIVATE void  InitTokens();
+    SAL_DLLPRIVATE void InitTokens();
 
 public:
     ScUserListData(const OUString& rStr);
@@ -65,8 +66,9 @@ public:
  */
 class SC_DLLPUBLIC ScUserList
 {
-    typedef std::vector< std::unique_ptr<ScUserListData> > DataType;
+    typedef std::vector<std::unique_ptr<ScUserListData>> DataType;
     DataType maData;
+
 public:
     typedef DataType::iterator iterator;
     typedef DataType::const_iterator const_iterator;
@@ -74,15 +76,15 @@ public:
     ScUserList();
     ScUserList(const ScUserList& r);
 
-    const ScUserListData* GetData( const OUString& rSubStr ) const;
+    const ScUserListData* GetData(const OUString& rSubStr) const;
     /// If the list in rStr is already inserted
-    bool HasEntry( const OUString& rStr ) const;
+    bool HasEntry(const OUString& rStr) const;
 
-    const ScUserListData&  operator[](size_t nIndex) const;
-    ScUserListData&  operator[](size_t nIndex);
-    ScUserList&     operator= ( const ScUserList& r );
-    bool            operator==( const ScUserList& r ) const;
-    bool            operator!=( const ScUserList& r ) const;
+    const ScUserListData& operator[](size_t nIndex) const;
+    ScUserListData& operator[](size_t nIndex);
+    ScUserList& operator=(const ScUserList& r);
+    bool operator==(const ScUserList& r) const;
+    bool operator!=(const ScUserList& r) const;
 
     iterator begin();
     const_iterator begin() const;

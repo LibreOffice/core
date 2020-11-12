@@ -16,8 +16,8 @@
 
 class ScDocument;
 
-namespace sc {
-
+namespace sc
+{
 /**
  * Context for creating string from an array of formula tokens, used in
  * ScTokenArray::CreateString().  You can re-use the same string context
@@ -27,7 +27,7 @@ namespace sc {
 struct SC_DLLPUBLIC TokenStringContext
 {
     typedef std::unordered_map<sal_uInt16, OUString> IndexNameMapType;
-    typedef std::unordered_map<size_t, std::vector<OUString> > IndexNamesMapType;
+    typedef std::unordered_map<size_t, std::vector<OUString>> IndexNamesMapType;
     typedef std::unordered_map<SCTAB, IndexNameMapType> TabIndexMapType;
 
     formula::FormulaGrammar::Grammar meGram;
@@ -43,7 +43,7 @@ struct SC_DLLPUBLIC TokenStringContext
     std::vector<OUString> maExternalFileNames;
     IndexNamesMapType maExternalCachedTabNames;
 
-    TokenStringContext( const ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram );
+    TokenStringContext(const ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram);
 };
 
 class SC_DLLPUBLIC CompileFormulaContext
@@ -55,17 +55,16 @@ class SC_DLLPUBLIC CompileFormulaContext
     void updateTabNames();
 
 public:
-    CompileFormulaContext( ScDocument& rDoc );
-    CompileFormulaContext( ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram );
+    CompileFormulaContext(ScDocument& rDoc);
+    CompileFormulaContext(ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram);
 
-    formula::FormulaGrammar::Grammar getGrammar() const { return meGram;}
-    void setGrammar( formula::FormulaGrammar::Grammar eGram );
+    formula::FormulaGrammar::Grammar getGrammar() const { return meGram; }
+    void setGrammar(formula::FormulaGrammar::Grammar eGram);
 
-    const std::vector<OUString>& getTabNames() const { return maTabNames;}
+    const std::vector<OUString>& getTabNames() const { return maTabNames; }
 
-    ScDocument& getDoc() { return mrDoc;}
+    ScDocument& getDoc() { return mrDoc; }
 };
-
 }
 
 #endif

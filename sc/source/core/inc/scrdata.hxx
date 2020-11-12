@@ -22,12 +22,15 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::i18n { class XBreakIterator; }
+namespace com::sun::star::i18n
+{
+class XBreakIterator;
+}
 
 class ScScriptTypeData
 {
 public:
-    css::uno::Reference< css::i18n::XBreakIterator > xBreakIter;
+    css::uno::Reference<css::i18n::XBreakIterator> xBreakIter;
 
     ScScriptTypeData() {}
 };

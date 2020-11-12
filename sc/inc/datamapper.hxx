@@ -20,8 +20,8 @@
 
 class ScDocument;
 
-namespace sc {
-
+namespace sc
+{
 class ScDBDataManager;
 class DataProvider;
 class DataTransformation;
@@ -29,7 +29,6 @@ class DataTransformation;
 class SC_DLLPUBLIC ExternalDataSource
 {
 private:
-
     /**
      * The URL for the external data provider. The URL
      * will be passed to the data provider together with
@@ -72,9 +71,7 @@ private:
     ScDocument* mpDoc;
 
 public:
-
-    ExternalDataSource(const OUString& rURL,
-            const OUString& rProvider, ScDocument* pDoc);
+    ExternalDataSource(const OUString& rURL, const OUString& rProvider, ScDocument* pDoc);
 
     void setUpdateFrequency(double nUpdateFrequency);
 
@@ -113,7 +110,6 @@ public:
     const std::vector<ExternalDataSource>& getDataSources() const;
     std::vector<ExternalDataSource>& getDataSources();
 };
-
 }
 
 #endif

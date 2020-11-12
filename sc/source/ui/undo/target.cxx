@@ -19,8 +19,6 @@
 
 #include <target.hxx>
 
-ScTabViewTarget::~ScTabViewTarget()
-{
-}
+ScTabViewTarget::~ScTabViewTarget() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

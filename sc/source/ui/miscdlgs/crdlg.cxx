@@ -22,7 +22,8 @@
 #include <crdlg.hxx>
 #include <scui_def.hxx>
 
-ScColOrRowDlg::ScColOrRowDlg(weld::Window* pParent, const OUString& rStrTitle, const OUString& rStrLabel)
+ScColOrRowDlg::ScColOrRowDlg(weld::Window* pParent, const OUString& rStrTitle,
+                             const OUString& rStrLabel)
     : GenericDialogController(pParent, "modules/scalc/ui/colorrowdialog.ui", "ColOrRowDialog")
     , m_xFrame(m_xBuilder->weld_frame("frame"))
     , m_xBtnRows(m_xBuilder->weld_radio_button("rows"))
@@ -34,9 +35,7 @@ ScColOrRowDlg::ScColOrRowDlg(weld::Window* pParent, const OUString& rStrTitle, c
     m_xBtnOk->connect_clicked(LINK(this, ScColOrRowDlg, OkHdl));
 }
 
-ScColOrRowDlg::~ScColOrRowDlg()
-{
-}
+ScColOrRowDlg::~ScColOrRowDlg() {}
 
 IMPL_LINK_NOARG(ScColOrRowDlg, OkHdl, weld::Button&, void)
 {

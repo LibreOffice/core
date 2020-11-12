@@ -15,8 +15,8 @@
 
 class ScDocument;
 
-namespace sc {
-
+namespace sc
+{
 class ColumnSpanSet;
 
 class BulkDataHint final : public SfxHint
@@ -24,19 +24,18 @@ class BulkDataHint final : public SfxHint
     struct Impl;
     std::unique_ptr<Impl> mpImpl;
 
-    BulkDataHint( const BulkDataHint& ) = delete;
-    BulkDataHint& operator= ( const BulkDataHint& ) = delete;
+    BulkDataHint(const BulkDataHint&) = delete;
+    BulkDataHint& operator=(const BulkDataHint&) = delete;
 
 public:
-    BulkDataHint( ScDocument& rDoc, SfxHintId nHintId );
+    BulkDataHint(ScDocument& rDoc, SfxHintId nHintId);
     virtual ~BulkDataHint() override;
 
-    void setSpans( const ColumnSpanSet* pSpans );
+    void setSpans(const ColumnSpanSet* pSpans);
     const ColumnSpanSet* getSpans() const;
 
     ScDocument& getDoc();
 };
-
 }
 
 #endif

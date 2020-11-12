@@ -27,8 +27,8 @@ enum class SfxStyleFamily;
 class ScStyleNameConversion
 {
 public:
-    static OUString DisplayToProgrammaticName( const OUString& rDispName, SfxStyleFamily nType );
-    static OUString ProgrammaticToDisplayName( const OUString& rProgName, SfxStyleFamily nType );
+    static OUString DisplayToProgrammaticName(const OUString& rDispName, SfxStyleFamily nType);
+    static OUString ProgrammaticToDisplayName(const OUString& rProgName, SfxStyleFamily nType);
 };
 
 #endif

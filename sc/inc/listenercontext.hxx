@@ -19,8 +19,8 @@
 class ScDocument;
 class ScTokenArray;
 
-namespace sc {
-
+namespace sc
+{
 class ColumnSet;
 
 class StartListeningContext
@@ -28,14 +28,15 @@ class StartListeningContext
     ScDocument& mrDoc;
     std::shared_ptr<ColumnBlockPositionSet> mpSet;
     std::shared_ptr<const ColumnSet> mpColSet;
+
 public:
     StartListeningContext(const StartListeningContext&) = delete;
     const StartListeningContext& operator=(const StartListeningContext&) = delete;
     StartListeningContext(ScDocument& rDoc);
     StartListeningContext(ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet);
-    void setColumnSet( const std::shared_ptr<const ColumnSet>& pColSet );
+    void setColumnSet(const std::shared_ptr<const ColumnSet>& pColSet);
     const std::shared_ptr<const ColumnSet>& getColumnSet() const;
-    ScDocument& getDoc() { return mrDoc;}
+    ScDocument& getDoc() { return mrDoc; }
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 };
@@ -52,13 +53,14 @@ public:
     EndListeningContext(const EndListeningContext&) = delete;
     const EndListeningContext& operator=(const EndListeningContext&) = delete;
     EndListeningContext(ScDocument& rDoc, ScTokenArray* pOldCode = nullptr);
-    EndListeningContext(ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet, ScTokenArray* pOldCode = nullptr);
+    EndListeningContext(ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet,
+                        ScTokenArray* pOldCode = nullptr);
 
-    void setPositionDelta( const ScAddress& rDelta );
+    void setPositionDelta(const ScAddress& rDelta);
 
-    ScDocument& getDoc() { return mrDoc;}
-    ScTokenArray* getOldCode() { return mpOldCode;}
-    ScAddress getOldPosition( const ScAddress& rPos ) const;
+    ScDocument& getDoc() { return mrDoc; }
+    ScTokenArray* getOldCode() { return mpOldCode; }
+    ScAddress getOldPosition(const ScAddress& rPos) const;
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 
@@ -74,12 +76,11 @@ class PurgeListenerAction final : public ColumnSpanSet::Action
 public:
     PurgeListenerAction(const PurgeListenerAction&) = delete;
     const PurgeListenerAction& operator=(const PurgeListenerAction&) = delete;
-    PurgeListenerAction( ScDocument& rDoc );
+    PurgeListenerAction(ScDocument& rDoc);
 
-    virtual void startColumn( SCTAB nTab, SCCOL nCol ) override;
-    virtual void execute( const ScAddress& rPos, SCROW nLength, bool bVal ) override;
+    virtual void startColumn(SCTAB nTab, SCCOL nCol) override;
+    virtual void execute(const ScAddress& rPos, SCROW nLength, bool bVal) override;
 };
-
 }
 
 #endif
