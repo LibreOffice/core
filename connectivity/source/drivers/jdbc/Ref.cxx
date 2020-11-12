@@ -23,30 +23,26 @@ using namespace connectivity;
 
 //************ Class: java.sql.Ref
 
-
 jclass java_sql_Ref::theClass = nullptr;
-java_sql_Ref::java_sql_Ref( JNIEnv * pEnv, jobject myObj )
-: java_lang_Object( pEnv, myObj )
+java_sql_Ref::java_sql_Ref(JNIEnv* pEnv, jobject myObj)
+    : java_lang_Object(pEnv, myObj)
 {
     SDBThreadAttach::addRef();
 }
-java_sql_Ref::~java_sql_Ref()
-{
-    SDBThreadAttach::releaseRef();
-}
+java_sql_Ref::~java_sql_Ref() { SDBThreadAttach::releaseRef(); }
 
 jclass java_sql_Ref::getMyClass() const
 {
     // the class must be fetched only once, therefore static
-    if( !theClass )
+    if (!theClass)
         theClass = findMyClass("java/sql/Ref");
     return theClass;
 }
 
-OUString SAL_CALL java_sql_Ref::getBaseTypeName(  )
+OUString SAL_CALL java_sql_Ref::getBaseTypeName()
 {
     static jmethodID mID(nullptr);
-    return callStringMethod("getBaseTypeName",mID);
+    return callStringMethod("getBaseTypeName", mID);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

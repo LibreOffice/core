@@ -1873,7 +1873,6 @@ connectivity/source/drivers/ado/AConnection.cxx
 connectivity/source/drivers/ado/ADatabaseMetaData.cxx
 connectivity/source/drivers/ado/ADatabaseMetaDataImpl.cxx
 connectivity/source/drivers/ado/ADatabaseMetaDataResultSet.cxx
-connectivity/source/drivers/ado/ADatabaseMetaDataResultSetMetaData.cxx
 connectivity/source/drivers/ado/ADriver.cxx
 connectivity/source/drivers/ado/AGroup.cxx
 connectivity/source/drivers/ado/AGroups.cxx
@@ -1894,7 +1893,6 @@ connectivity/source/drivers/ado/AViews.cxx
 connectivity/source/drivers/ado/Aolevariant.cxx
 connectivity/source/drivers/ado/Awrapado.cxx
 connectivity/source/drivers/ado/adoimp.cxx
-connectivity/source/drivers/calc/CCatalog.cxx
 connectivity/source/drivers/calc/CConnection.cxx
 connectivity/source/drivers/calc/CDatabaseMetaData.cxx
 connectivity/source/drivers/calc/CDriver.cxx
@@ -1904,18 +1902,14 @@ connectivity/source/drivers/component/CColumns.cxx
 connectivity/source/drivers/component/CDatabaseMetaData.cxx
 connectivity/source/drivers/component/CPreparedStatement.cxx
 connectivity/source/drivers/component/CResultSet.cxx
-connectivity/source/drivers/component/CStatement.cxx
 connectivity/source/drivers/component/CTable.cxx
-connectivity/source/drivers/dbase/DCatalog.cxx
 connectivity/source/drivers/dbase/DColumns.cxx
 connectivity/source/drivers/dbase/DConnection.cxx
 connectivity/source/drivers/dbase/DDatabaseMetaData.cxx
 connectivity/source/drivers/dbase/DDriver.cxx
 connectivity/source/drivers/dbase/DIndex.cxx
 connectivity/source/drivers/dbase/DIndexColumns.cxx
-connectivity/source/drivers/dbase/DIndexIter.cxx
 connectivity/source/drivers/dbase/DIndexes.cxx
-connectivity/source/drivers/dbase/DPreparedStatement.cxx
 connectivity/source/drivers/dbase/DResultSet.cxx
 connectivity/source/drivers/dbase/DStatement.cxx
 connectivity/source/drivers/dbase/DTable.cxx
@@ -1949,7 +1943,6 @@ connectivity/source/drivers/file/FCatalog.cxx
 connectivity/source/drivers/file/FColumns.cxx
 connectivity/source/drivers/file/FConnection.cxx
 connectivity/source/drivers/file/FDatabaseMetaData.cxx
-connectivity/source/drivers/file/FDateFunctions.cxx
 connectivity/source/drivers/file/FDriver.cxx
 connectivity/source/drivers/file/FNoException.cxx
 connectivity/source/drivers/file/FNumericFunctions.cxx
@@ -1957,7 +1950,6 @@ connectivity/source/drivers/file/FPreparedStatement.cxx
 connectivity/source/drivers/file/FResultSet.cxx
 connectivity/source/drivers/file/FResultSetMetaData.cxx
 connectivity/source/drivers/file/FStatement.cxx
-connectivity/source/drivers/file/FStringFunctions.cxx
 connectivity/source/drivers/file/FTable.cxx
 connectivity/source/drivers/file/FTables.cxx
 connectivity/source/drivers/file/fanalyzer.cxx
@@ -1980,7 +1972,6 @@ connectivity/source/drivers/firebird/DatabaseMetaData.cxx
 connectivity/source/drivers/firebird/DatabaseMetaData.hxx
 connectivity/source/drivers/firebird/Driver.cxx
 connectivity/source/drivers/firebird/Driver.hxx
-connectivity/source/drivers/firebird/Indexes.cxx
 connectivity/source/drivers/firebird/Indexes.hxx
 connectivity/source/drivers/firebird/Keys.cxx
 connectivity/source/drivers/firebird/Keys.hxx
@@ -2005,12 +1996,10 @@ connectivity/source/drivers/firebird/Users.cxx
 connectivity/source/drivers/firebird/Users.hxx
 connectivity/source/drivers/firebird/Util.cxx
 connectivity/source/drivers/firebird/Util.hxx
-connectivity/source/drivers/flat/ECatalog.cxx
 connectivity/source/drivers/flat/EColumns.cxx
 connectivity/source/drivers/flat/EConnection.cxx
 connectivity/source/drivers/flat/EDatabaseMetaData.cxx
 connectivity/source/drivers/flat/EDriver.cxx
-connectivity/source/drivers/flat/EPreparedStatement.cxx
 connectivity/source/drivers/flat/EResultSet.cxx
 connectivity/source/drivers/flat/EStatement.cxx
 connectivity/source/drivers/flat/ETable.cxx
@@ -2023,7 +2012,6 @@ connectivity/source/drivers/hsqldb/HStorageAccess.cxx
 connectivity/source/drivers/hsqldb/HStorageMap.cxx
 connectivity/source/drivers/hsqldb/HTable.cxx
 connectivity/source/drivers/hsqldb/HTables.cxx
-connectivity/source/drivers/hsqldb/HTerminateListener.cxx
 connectivity/source/drivers/hsqldb/HTerminateListener.hxx
 connectivity/source/drivers/hsqldb/HTools.cxx
 connectivity/source/drivers/hsqldb/HUser.cxx
@@ -2037,16 +2025,11 @@ connectivity/source/drivers/hsqldb/accesslog.cxx
 connectivity/source/drivers/hsqldb/accesslog.hxx
 connectivity/source/drivers/jdbc/Array.cxx
 connectivity/source/drivers/jdbc/Blob.cxx
-connectivity/source/drivers/jdbc/Boolean.cxx
 connectivity/source/drivers/jdbc/CallableStatement.cxx
-connectivity/source/drivers/jdbc/Class.cxx
 connectivity/source/drivers/jdbc/Clob.cxx
 connectivity/source/drivers/jdbc/ConnectionLog.cxx
 connectivity/source/drivers/jdbc/ContextClassLoader.cxx
 connectivity/source/drivers/jdbc/DatabaseMetaData.cxx
-connectivity/source/drivers/jdbc/Date.cxx
-connectivity/source/drivers/jdbc/DriverPropertyInfo.cxx
-connectivity/source/drivers/jdbc/Exception.cxx
 connectivity/source/drivers/jdbc/InputStream.cxx
 connectivity/source/drivers/jdbc/JBigDecimal.cxx
 connectivity/source/drivers/jdbc/JConnection.cxx
@@ -2055,13 +2038,9 @@ connectivity/source/drivers/jdbc/JStatement.cxx
 connectivity/source/drivers/jdbc/Object.cxx
 connectivity/source/drivers/jdbc/PreparedStatement.cxx
 connectivity/source/drivers/jdbc/Reader.cxx
-connectivity/source/drivers/jdbc/Ref.cxx
 connectivity/source/drivers/jdbc/ResultSet.cxx
 connectivity/source/drivers/jdbc/ResultSetMetaData.cxx
 connectivity/source/drivers/jdbc/SQLException.cxx
-connectivity/source/drivers/jdbc/SQLWarning.cxx
-connectivity/source/drivers/jdbc/String.cxx
-connectivity/source/drivers/jdbc/Throwable.cxx
 connectivity/source/drivers/jdbc/Timestamp.cxx
 connectivity/source/drivers/jdbc/tools.cxx
 connectivity/source/drivers/macab/MacabAddressBook.cxx
@@ -2128,7 +2107,6 @@ connectivity/source/drivers/mork/MStatement.cxx
 connectivity/source/drivers/mork/MStatement.hxx
 connectivity/source/drivers/mork/MTable.cxx
 connectivity/source/drivers/mork/MTable.hxx
-connectivity/source/drivers/mork/MTables.cxx
 connectivity/source/drivers/mork/MTables.hxx
 connectivity/source/drivers/mork/MorkParser.cxx
 connectivity/source/drivers/mork/MorkParser.hxx
@@ -2223,7 +2201,6 @@ connectivity/source/inc/FDatabaseMetaDataResultSetMetaData.hxx
 connectivity/source/inc/OColumn.hxx
 connectivity/source/inc/OTypeInfo.hxx
 connectivity/source/inc/ParameterSubstitution.hxx
-connectivity/source/inc/RowFunctionParser.hxx
 connectivity/source/inc/TConnection.hxx
 connectivity/source/inc/TDatabaseMetaDataBase.hxx
 connectivity/source/inc/TKeyValue.hxx

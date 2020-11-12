@@ -23,22 +23,18 @@ using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-
 //************ Class: java.sql.Driver
-
 
 jclass java_sql_DriverPropertyInfo::theClass = nullptr;
 
-java_sql_DriverPropertyInfo::~java_sql_DriverPropertyInfo()
-{}
+java_sql_DriverPropertyInfo::~java_sql_DriverPropertyInfo() {}
 
 jclass java_sql_DriverPropertyInfo::getMyClass() const
 {
     // the class must be fetched only once, therefore static
-    if( !theClass )
+    if (!theClass)
         theClass = findMyClass("java/sql/DriverPropertyInfo");
     return theClass;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,19 +23,16 @@ using namespace connectivity;
 
 //************ Class: java.util.Date
 
-
 jclass java_util_Date::theClass = nullptr;
 
-java_util_Date::~java_util_Date()
-{}
+java_util_Date::~java_util_Date() {}
 
 jclass java_util_Date::getMyClass() const
 {
     // the class must be fetched only once, therefore static
-    if( !theClass )
+    if (!theClass)
         theClass = findMyClass("java/util/Date");
     return theClass;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

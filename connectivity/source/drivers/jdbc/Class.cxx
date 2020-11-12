@@ -24,44 +24,44 @@ using namespace connectivity;
 
 //************ Class: java.lang.Class
 
-
 jclass java_lang_Class::theClass = nullptr;
 
-java_lang_Class::~java_lang_Class()
-{}
+java_lang_Class::~java_lang_Class() {}
 
 jclass java_lang_Class::getMyClass() const
 {
     // the class must be fetched only once, therefore static
-    if( !theClass )
+    if (!theClass)
         theClass = findMyClass("java/lang/Class");
     return theClass;
 }
 
-java_lang_Class * java_lang_Class::forName( const OUString& _par0 )
+java_lang_Class* java_lang_Class::forName(const OUString& _par0)
 {
     jobject out(nullptr);
     SDBThreadAttach t;
 
     {
         OString sClassName = OUStringToOString(_par0, RTL_TEXTENCODING_JAVA_UTF8);
-        sClassName = sClassName.replace('.','/');
+        sClassName = sClassName.replace('.', '/');
         out = t.pEnv->FindClass(sClassName.getStr());
-        ThrowSQLException(t.pEnv,nullptr);
+        ThrowSQLException(t.pEnv, nullptr);
     } //t.pEnv
     // WARNING: the caller becomes the owner of the returned pointer
-    return out==nullptr ? nullptr : new java_lang_Class( t.pEnv, out );
+    return out == nullptr ? nullptr : new java_lang_Class(t.pEnv, out);
 }
 
 jobject java_lang_Class::newInstanceObject()
 {
     SDBThreadAttach t;
     auto const id = t.pEnv->GetMethodID(static_cast<jclass>(object), "<init>", "()V");
-    if (id == nullptr) {
+    if (id == nullptr)
+    {
         ThrowSQLException(t.pEnv, nullptr);
     }
     auto const obj = t.pEnv->NewObject(static_cast<jclass>(object), id);
-    if (obj == nullptr) {
+    if (obj == nullptr)
+    {
         ThrowSQLException(t.pEnv, nullptr);
     }
     return obj;

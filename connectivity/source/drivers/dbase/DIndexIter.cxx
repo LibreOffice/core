@@ -27,22 +27,11 @@ using namespace connectivity::file;
 
 // OIndexIterator
 
+OIndexIterator::~OIndexIterator() {}
 
-OIndexIterator::~OIndexIterator()
-{
-}
+sal_uInt32 OIndexIterator::First() { return Find(true); }
 
-
-sal_uInt32 OIndexIterator::First()
-{
-    return Find(true);
-}
-
-
-sal_uInt32 OIndexIterator::Next()
-{
-    return Find(false);
-}
+sal_uInt32 OIndexIterator::Next() { return Find(false); }
 
 sal_uInt32 OIndexIterator::Find(bool bFirst)
 {
@@ -69,18 +58,17 @@ sal_uInt32 OIndexIterator::Find(bool bFirst)
         ONDXKey* pKey = GetNextKey();
         nRes = pKey ? pKey->GetRecord() : NODE_NOTFOUND;
     }
-    else if (dynamic_cast<const OOp_ISNOTNULL *>(m_pOperator) != nullptr)
+    else if (dynamic_cast<const OOp_ISNOTNULL*>(m_pOperator) != nullptr)
         nRes = GetNotNull(bFirst);
-    else if (dynamic_cast<const OOp_ISNULL *>(m_pOperator) != nullptr)
+    else if (dynamic_cast<const OOp_ISNULL*>(m_pOperator) != nullptr)
         nRes = GetNull(bFirst);
-    else if (dynamic_cast<const OOp_LIKE *>(m_pOperator) != nullptr)
+    else if (dynamic_cast<const OOp_LIKE*>(m_pOperator) != nullptr)
         nRes = GetLike(bFirst);
-    else if (dynamic_cast<const OOp_COMPARE *>(m_pOperator) != nullptr)
+    else if (dynamic_cast<const OOp_COMPARE*>(m_pOperator) != nullptr)
         nRes = GetCompare(bFirst);
 
     return nRes;
 }
-
 
 ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 {
@@ -95,20 +83,19 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     if (pPage->IsLeaf())
     {
         // in the leaf the actual operation is run, otherwise temp. (>)
-        while (i < pPage->Count() && !m_pOperator->operate(&((*pPage)[i]).GetKey(),&rKey))
-               i++;
+        while (i < pPage->Count() && !m_pOperator->operate(&((*pPage)[i]).GetKey(), &rKey))
+            i++;
     }
     else
-        while (i < pPage->Count() && !aTempOp.operate(&((*pPage)[i]).GetKey(),&rKey))
-               i++;
-
+        while (i < pPage->Count() && !aTempOp.operate(&((*pPage)[i]).GetKey(), &rKey))
+            i++;
 
     ONDXKey* pFoundKey = nullptr;
     if (!pPage->IsLeaf())
     {
         // descend further
-        ONDXPagePtr aPage = (i==0) ? pPage->GetChild(m_xIndex.get())
-                                     : ((*pPage)[i-1]).GetChild(m_xIndex.get(), pPage);
+        ONDXPagePtr aPage = (i == 0) ? pPage->GetChild(m_xIndex.get())
+                                     : ((*pPage)[i - 1]).GetChild(m_xIndex.get(), pPage);
         pFoundKey = aPage.Is() ? GetFirstKey(aPage, rKey) : nullptr;
     }
     else if (i == pPage->Count())
@@ -118,7 +105,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     else
     {
         pFoundKey = &(*pPage)[i].GetKey();
-        if (!m_pOperator->operate(pFoundKey,&rKey))
+        if (!m_pOperator->operate(pFoundKey, &rKey))
             pFoundKey = nullptr;
 
         m_aCurLeaf = pPage;
@@ -126,7 +113,6 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     }
     return pFoundKey;
 }
-
 
 sal_uInt32 OIndexIterator::GetCompare(bool bFirst)
 {
@@ -149,31 +135,31 @@ sal_uInt32 OIndexIterator::GetCompare(bool bFirst)
                 m_nCurNode = NODE_NOTFOUND;
         }
 
-
         switch (ePredicateType)
         {
             case SQLFilterOperator::NOT_EQUAL:
-                while ( ( pKey = GetNextKey() ) != nullptr )
-                    if (m_pOperator->operate(pKey,m_pOperand))
+                while ((pKey = GetNextKey()) != nullptr)
+                    if (m_pOperator->operate(pKey, m_pOperand))
                         break;
                 break;
             case SQLFilterOperator::LESS:
-                while ( ( pKey = GetNextKey() ) != nullptr )
+                while ((pKey = GetNextKey()) != nullptr)
                     if (!pKey->getValue().isNull())
                         break;
                 break;
             case SQLFilterOperator::LESS_EQUAL:
-                while ( ( pKey = GetNextKey() ) != nullptr ) ;
+                while ((pKey = GetNextKey()) != nullptr)
+                    ;
                 break;
             case SQLFilterOperator::GREATER_EQUAL:
             case SQLFilterOperator::EQUAL:
-                pKey = GetFirstKey(m_aRoot,*m_pOperand);
+                pKey = GetFirstKey(m_aRoot, *m_pOperand);
                 break;
             case SQLFilterOperator::GREATER:
-                pKey = GetFirstKey(m_aRoot,*m_pOperand);
-                if ( !pKey )
-                    while ( ( pKey = GetNextKey() ) != nullptr )
-                        if (m_pOperator->operate(pKey,m_pOperand))
+                pKey = GetFirstKey(m_aRoot, *m_pOperand);
+                if (!pKey)
+                    while ((pKey = GetNextKey()) != nullptr)
+                        if (m_pOperator->operate(pKey, m_pOperand))
                             break;
         }
     }
@@ -182,15 +168,15 @@ sal_uInt32 OIndexIterator::GetCompare(bool bFirst)
         switch (ePredicateType)
         {
             case SQLFilterOperator::NOT_EQUAL:
-                while ( ( pKey = GetNextKey() ) != nullptr )
-                    if (m_pOperator->operate(pKey,m_pOperand))
+                while ((pKey = GetNextKey()) != nullptr)
+                    if (m_pOperator->operate(pKey, m_pOperand))
                         break;
                 break;
             case SQLFilterOperator::LESS:
             case SQLFilterOperator::LESS_EQUAL:
             case SQLFilterOperator::EQUAL:
                 pKey = GetNextKey();
-                if ( pKey == nullptr  || !m_pOperator->operate(pKey,m_pOperand))
+                if (pKey == nullptr || !m_pOperator->operate(pKey, m_pOperand))
                 {
                     pKey = nullptr;
                     m_aCurLeaf.Clear();
@@ -204,7 +190,6 @@ sal_uInt32 OIndexIterator::GetCompare(bool bFirst)
 
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
-
 
 sal_uInt32 OIndexIterator::GetLike(bool bFirst)
 {
@@ -220,12 +205,11 @@ sal_uInt32 OIndexIterator::GetLike(bool bFirst)
     }
 
     ONDXKey* pKey;
-    while ( ( pKey = GetNextKey() ) != nullptr )
-        if (m_pOperator->operate(pKey,m_pOperand))
+    while ((pKey = GetNextKey()) != nullptr)
+        if (m_pOperator->operate(pKey, m_pOperand))
             break;
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
-
 
 sal_uInt32 OIndexIterator::GetNull(bool bFirst)
 {
@@ -240,7 +224,7 @@ sal_uInt32 OIndexIterator::GetNull(bool bFirst)
     }
 
     ONDXKey* pKey = GetNextKey();
-    if ( pKey == nullptr || !pKey->getValue().isNull())
+    if (pKey == nullptr || !pKey->getValue().isNull())
     {
         pKey = nullptr;
         m_aCurLeaf.Clear();
@@ -248,17 +232,14 @@ sal_uInt32 OIndexIterator::GetNull(bool bFirst)
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
 
-
 sal_uInt32 OIndexIterator::GetNotNull(bool bFirst)
 {
     ONDXKey* pKey;
     if (bFirst)
     {
         // go through all NULL values first
-        for (sal_uInt32 nRec = GetNull(bFirst);
-             nRec != NODE_NOTFOUND;
-             nRec = GetNull(false))
-                 ;
+        for (sal_uInt32 nRec = GetNull(bFirst); nRec != NODE_NOTFOUND; nRec = GetNull(false))
+            ;
         pKey = m_aCurLeaf.Is() ? &(*m_aCurLeaf)[m_nCurNode].GetKey() : nullptr;
     }
     else
@@ -266,7 +247,6 @@ sal_uInt32 OIndexIterator::GetNotNull(bool bFirst)
 
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
-
 
 ONDXKey* OIndexIterator::GetNextKey()
 {
@@ -281,8 +261,8 @@ ONDXKey* OIndexIterator::GetNextKey()
             {
                 sal_uInt16 nPos = pParentPage->Search(pPage);
                 if (nPos != pParentPage->Count() - 1)
-                {   // page found
-                    pPage = (*pParentPage)[nPos+1].GetChild(m_xIndex.get(),pParentPage);
+                { // page found
+                    pPage = (*pParentPage)[nPos + 1].GetChild(m_xIndex.get(), pParentPage);
                     break;
                 }
             }

@@ -22,16 +22,14 @@ using namespace connectivity;
 
 //************ Class: java.sql.SQLWarning
 
-
 jclass java_sql_SQLWarning_BASE::theClass = nullptr;
 
-java_sql_SQLWarning_BASE::~java_sql_SQLWarning_BASE()
-{}
+java_sql_SQLWarning_BASE::~java_sql_SQLWarning_BASE() {}
 
 jclass java_sql_SQLWarning_BASE::getMyClass() const
 {
     // the class needs to be fetched only once, that is why it is static
-    if( !theClass )
+    if (!theClass)
         theClass = findMyClass("java/sql/SQLWarning");
     return theClass;
 }
