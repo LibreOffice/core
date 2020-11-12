@@ -29,7 +29,7 @@
  * which can be opened by clicking on a button
  */
 
-DropdownBox::DropdownBox(vcl::Window *pParent)
+DropdownBox::DropdownBox(vcl::Window* pParent)
     : VclHBox(pParent)
     , IPrioritable()
     , m_bInFullView(true)
@@ -42,10 +42,7 @@ DropdownBox::DropdownBox(vcl::Window *pParent)
     m_pButton->Resize();
 }
 
-DropdownBox::~DropdownBox()
-{
-    disposeOnce();
-}
+DropdownBox::~DropdownBox() { disposeOnce(); }
 
 void DropdownBox::dispose()
 {
@@ -70,10 +67,7 @@ void DropdownBox::HideContent()
     }
 }
 
-bool DropdownBox::IsHidden()
-{
-    return !m_bInFullView;
-}
+bool DropdownBox::IsHidden() { return !m_bInFullView; }
 
 void DropdownBox::ShowContent()
 {
@@ -116,9 +110,8 @@ IMPL_LINK(DropdownBox, PBClickHdl, Button*, /*pButton*/, void)
     tools::Long y = GetPosPixel().getY() + NOTEBOOK_HEADER_HEIGHT + GetSizePixel().Height();
     tools::Rectangle aRect(x, y, x, y);
 
-    m_pPopup->StartPopupMode(aRect, FloatWinPopupFlags::Down
-                                    |FloatWinPopupFlags::GrabFocus
-                                    |FloatWinPopupFlags::AllMouseButtonClose);
+    m_pPopup->StartPopupMode(aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus
+                                        | FloatWinPopupFlags::AllMouseButtonClose);
 }
 
 VCL_BUILDER_FACTORY(DropdownBox)

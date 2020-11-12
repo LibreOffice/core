@@ -25,22 +25,19 @@
 
 namespace
 {
-    bool lcl_comparePriority(const vcl::IPrioritable* a, const vcl::IPrioritable* b)
-    {
-        return a->GetPriority() < b->GetPriority();
-    }
+bool lcl_comparePriority(const vcl::IPrioritable* a, const vcl::IPrioritable* b)
+{
+    return a->GetPriority() < b->GetPriority();
+}
 }
 
-PriorityHBox::PriorityHBox(vcl::Window *pParent)
+PriorityHBox::PriorityHBox(vcl::Window* pParent)
     : VclHBox(pParent)
     , m_bInitialized(false)
 {
 }
 
-PriorityHBox::~PriorityHBox()
-{
-    disposeOnce();
-}
+PriorityHBox::~PriorityHBox() { disposeOnce(); }
 
 void PriorityHBox::Initialize()
 {
@@ -81,7 +78,8 @@ Size PriorityHBox::calculateRequisition() const
     sal_uInt16 nVisibleChildren = 0;
 
     Size aSize;
-    for (vcl::Window *pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
+    for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+         pChild = pChild->GetWindow(GetWindowType::Next))
     {
         if (!pChild->IsVisible())
             continue;
@@ -146,7 +144,7 @@ void PriorityHBox::Resize()
         vcl::Window* pWindow = dynamic_cast<vcl::Window*>(*pChildR);
         vcl::IPrioritable* pPrioritable = *pChildR;
 
-        if(pWindow->GetParent() != this)
+        if (pWindow->GetParent() != this)
         {
             pChildR++;
             continue;

@@ -20,14 +20,13 @@
 #define INCLUDED_SFX2_SOURCE_INC_OPENFLAG_HXX
 
 // Open file for editing, then only the third option (reading a copy) works
-#define SFX_STREAM_READWRITE  (StreamMode::READWRITE |  StreamMode::SHARE_DENYWRITE)
+#define SFX_STREAM_READWRITE (StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE)
 // I work on the original, not a copy
 // -> file then can not be opened for editing
-#define SFX_STREAM_READONLY   (StreamMode::READ | StreamMode::SHARE_DENYWRITE) // + !bDirect
+#define SFX_STREAM_READONLY (StreamMode::READ | StreamMode::SHARE_DENYWRITE) // + !bDirect
 // Someone else is editing the file, a copy it created
 // -> the file can then be opened for editing
-#define SFX_STREAM_READONLY_MAKECOPY   (StreamMode::READ | StreamMode::SHARE_DENYNONE)
-
+#define SFX_STREAM_READONLY_MAKECOPY (StreamMode::READ | StreamMode::SHARE_DENYNONE)
 
 #endif
 

@@ -20,13 +20,12 @@
 
 #include <sidebar/TitleBar.hxx>
 
-namespace sfx2::sidebar {
-
+namespace sfx2::sidebar
+{
 class DeckTitleBar final : public TitleBar
 {
 public:
-    DeckTitleBar(const OUString& rsTitle,
-                 vcl::Window* pParentWindow,
+    DeckTitleBar(const OUString& rsTitle, vcl::Window* pParentWindow,
                  const std::function<void()>& rCloserAction);
 
     void SetCloserVisible(const bool bIsCloserVisible);

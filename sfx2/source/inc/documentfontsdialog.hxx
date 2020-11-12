@@ -24,15 +24,19 @@
 /**
  Tab page for document font settings in the document properties dialog.
 */
-class SfxDocumentFontsPage: public SfxTabPage
+class SfxDocumentFontsPage : public SfxTabPage
 {
 public:
-    SfxDocumentFontsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& set);
+    SfxDocumentFontsPage(weld::Container* pPage, weld::DialogController* pController,
+                         const SfxItemSet& set);
     virtual ~SfxDocumentFontsPage() override;
-    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* set);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* set);
+
 protected:
-    virtual bool FillItemSet( SfxItemSet* set ) override;
-    virtual void Reset( const SfxItemSet* set ) override;
+    virtual bool FillItemSet(SfxItemSet* set) override;
+    virtual void Reset(const SfxItemSet* set) override;
+
 private:
     std::unique_ptr<weld::CheckButton> embedFontsCheckbox;
     std::unique_ptr<weld::CheckButton> embedUsedFontsCheckbox;

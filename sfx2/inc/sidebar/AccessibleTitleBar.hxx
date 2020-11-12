@@ -20,22 +20,24 @@
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
-namespace com::sun::star::accessibility { class XAccessible; }
+namespace com::sun::star::accessibility
+{
+class XAccessible;
+}
 
-namespace sfx2::sidebar {
-
+namespace sfx2::sidebar
+{
 class TitleBar;
 
-class AccessibleTitleBar final
-    : public VCLXAccessibleComponent
+class AccessibleTitleBar final : public VCLXAccessibleComponent
 {
 public:
-    static css::uno::Reference<css::accessibility::XAccessible> Create (TitleBar& rTitleBar);
+    static css::uno::Reference<css::accessibility::XAccessible> Create(TitleBar& rTitleBar);
 
 private:
-    virtual void FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet) override;
+    virtual void FillAccessibleStateSet(utl::AccessibleStateSetHelper& rStateSet) override;
 
-    explicit AccessibleTitleBar (VCLXWindow* pWindow);
+    explicit AccessibleTitleBar(VCLXWindow* pWindow);
     virtual ~AccessibleTitleBar() override;
 };
 

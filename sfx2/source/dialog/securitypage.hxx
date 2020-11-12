@@ -26,14 +26,15 @@ struct SfxSecurityPage_Impl;
 
 class SfxSecurityPage final : public SfxTabPage
 {
-    std::unique_ptr< SfxSecurityPage_Impl > m_pImpl;
+    std::unique_ptr<SfxSecurityPage_Impl> m_pImpl;
 
-    virtual bool            FillItemSet( SfxItemSet* ) override;
-    virtual void            Reset( const SfxItemSet* ) override;
+    virtual bool FillItemSet(SfxItemSet*) override;
+    virtual void Reset(const SfxItemSet*) override;
 
 public:
     SfxSecurityPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&);
-    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet*);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet*);
     weld::Builder& GetBuilder() const { return *m_xBuilder; }
 };
 

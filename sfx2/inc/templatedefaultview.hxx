@@ -17,11 +17,11 @@ public:
     TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> xWindow,
                         std::unique_ptr<weld::Menu> xMenu);
 
-    virtual void showAllTemplates () override;
+    virtual void showAllTemplates() override;
 
-    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
 
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     void createContextMenu();
 };

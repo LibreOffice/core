@@ -22,8 +22,8 @@
 
 #include <sfx2/sidebar/Deck.hxx>
 
-namespace sfx2::sidebar {
-
+namespace sfx2::sidebar
+{
 class DeckDescriptor
 {
 public:
@@ -44,7 +44,7 @@ public:
     VclPtr<Deck> mpDeck;
 
     DeckDescriptor();
-    DeckDescriptor (const DeckDescriptor& rOther);
+    DeckDescriptor(const DeckDescriptor& rOther);
     ~DeckDescriptor();
 };
 

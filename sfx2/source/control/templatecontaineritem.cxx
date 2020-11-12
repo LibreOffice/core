@@ -9,16 +9,12 @@
 
 #include <templatecontaineritem.hxx>
 
-TemplateContainerItem::TemplateContainerItem (sal_uInt16 nId)
+TemplateContainerItem::TemplateContainerItem(sal_uInt16 nId)
     : mnId(nId)
     , mnRegionId(0)
 {
 }
 
-TemplateContainerItem::~TemplateContainerItem ()
-{
-}
+TemplateContainerItem::~TemplateContainerItem() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
-

@@ -16,8 +16,8 @@
 
 using namespace osl;
 
-namespace sfx2 {
-
+namespace sfx2
+{
 bool SafeMode::putFlag()
 {
     File safeModeFile(getFilePath("safemode"));
@@ -38,10 +38,7 @@ bool SafeMode::hasFlag()
     }
     return false;
 }
-bool SafeMode::removeFlag()
-{
-    return File::remove(getFilePath("safemode")) == FileBase::E_None;
-}
+bool SafeMode::removeFlag() { return File::remove(getFilePath("safemode")) == FileBase::E_None; }
 
 bool SafeMode::putRestartFlag()
 {
@@ -70,7 +67,8 @@ bool SafeMode::removeRestartFlag()
 
 OUString SafeMode::getFilePath(const OUString& sFilename)
 {
-    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/");
+    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
+                 "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/");
     rtl::Bootstrap::expandMacros(url);
 
     OUString aProfilePath;
@@ -78,7 +76,6 @@ OUString SafeMode::getFilePath(const OUString& sFilename)
     (void)FileBase::getAbsoluteFileURL(url, sFilename, aProfilePath);
     return aProfilePath;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

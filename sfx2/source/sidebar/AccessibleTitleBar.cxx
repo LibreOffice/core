@@ -28,9 +28,9 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sfx2::sidebar {
-
-Reference<accessibility::XAccessible> AccessibleTitleBar::Create (TitleBar& rTitleBar)
+namespace sfx2::sidebar
+{
+Reference<accessibility::XAccessible> AccessibleTitleBar::Create(TitleBar& rTitleBar)
 {
     rTitleBar.GetComponentInterface();
     VCLXWindow* pWindow = rTitleBar.GetWindowPeer();
@@ -40,16 +40,14 @@ Reference<accessibility::XAccessible> AccessibleTitleBar::Create (TitleBar& rTit
         return nullptr;
 }
 
-AccessibleTitleBar::AccessibleTitleBar (VCLXWindow* pWindow)
+AccessibleTitleBar::AccessibleTitleBar(VCLXWindow* pWindow)
     : VCLXAccessibleComponent(pWindow)
 {
 }
 
-AccessibleTitleBar::~AccessibleTitleBar()
-{
-}
+AccessibleTitleBar::~AccessibleTitleBar() {}
 
-void AccessibleTitleBar::FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet)
+void AccessibleTitleBar::FillAccessibleStateSet(utl::AccessibleStateSetHelper& rStateSet)
 {
     VCLXAccessibleComponent::FillAccessibleStateSet(rStateSet);
     rStateSet.AddState(accessibility::AccessibleStateType::FOCUSABLE);

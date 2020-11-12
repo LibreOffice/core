@@ -20,15 +20,20 @@
 
 #include <sidebar/TitleBar.hxx>
 
-namespace com::sun::star::frame { class XController; }
-namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame
+{
+class XController;
+}
+namespace com::sun::star::frame
+{
+class XFrame;
+}
 
-namespace sfx2::sidebar {
-
+namespace sfx2::sidebar
+{
 class Panel;
 
-class PanelTitleBar final
-    : public TitleBar
+class PanelTitleBar final : public TitleBar
 {
 public:
     PanelTitleBar(const OUString& rsTitle, vcl::Window* pParentWindow, Panel* pPanel);
@@ -47,7 +52,7 @@ private:
     virtual tools::Rectangle GetTitleArea(const tools::Rectangle& rTitleBarBox) override;
     virtual void PaintDecoration(vcl::RenderContext& rRenderContext) override;
     virtual Color GetBackgroundPaintColor() override;
-    virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex) override;
+    virtual void HandleToolBoxItemClick(const sal_uInt16 nItemIndex) override;
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     bool mbIsLeftButtonDown;

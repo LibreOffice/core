@@ -20,24 +20,21 @@
 #include <sfx2/sidebar/AsynchronousCall.hxx>
 #include <vcl/svapp.hxx>
 
-namespace sfx2::sidebar {
-
-AsynchronousCall::AsynchronousCall (const Action& rAction)
-    : maAction(rAction),
-      mnCallId(nullptr)
+namespace sfx2::sidebar
+{
+AsynchronousCall::AsynchronousCall(const Action& rAction)
+    : maAction(rAction)
+    , mnCallId(nullptr)
 {
 }
 
-AsynchronousCall::~AsynchronousCall()
-{
-    CancelRequest();
-}
+AsynchronousCall::~AsynchronousCall() { CancelRequest(); }
 
 void AsynchronousCall::RequestCall()
 {
     if (mnCallId == nullptr)
     {
-        Link<void*,void> aLink (LINK(this, AsynchronousCall, HandleUserCall));
+        Link<void*, void> aLink(LINK(this, AsynchronousCall, HandleUserCall));
         mnCallId = Application::PostUserEvent(aLink);
     }
 }
@@ -53,13 +50,14 @@ void AsynchronousCall::CancelRequest()
 
 void AsynchronousCall::Sync()
 {
-    if (mnCallId != nullptr) {
+    if (mnCallId != nullptr)
+    {
         maAction();
         CancelRequest();
     }
 }
 
-IMPL_LINK_NOARG(AsynchronousCall, HandleUserCall, void*, void )
+IMPL_LINK_NOARG(AsynchronousCall, HandleUserCall, void*, void)
 {
     mnCallId = nullptr;
     if (maAction)

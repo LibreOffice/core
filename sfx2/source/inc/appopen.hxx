@@ -27,10 +27,9 @@ class SfxItemPool;
 class SfxMedium;
 class SfxObjectShell;
 
-ErrCode CheckPasswd_Impl( SfxObjectShell* pDoc, SfxMedium* pFile );
+ErrCode CheckPasswd_Impl(SfxObjectShell* pDoc, SfxMedium* pFile);
 
-void SetTemplate_Impl( const OUString&, const OUString&, SfxObjectShell* );
-
+void SetTemplate_Impl(const OUString&, const OUString&, SfxObjectShell*);
 
 #endif
 

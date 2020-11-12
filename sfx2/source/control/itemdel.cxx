@@ -31,7 +31,7 @@ class SfxItemDisruptor_Impl
     Idle m_Idle;
 
 private:
-    DECL_LINK( Delete, Timer*, void );
+    DECL_LINK(Delete, Timer*, void);
 
 public:
     explicit SfxItemDisruptor_Impl(std::unique_ptr<SfxPoolItem> pItemToDesrupt);
@@ -49,34 +49,28 @@ SfxItemDisruptor_Impl::SfxItemDisruptor_Impl(std::unique_ptr<SfxPoolItem> pItemT
     m_Idle.SetPriority(TaskPriority::DEFAULT_IDLE);
     m_Idle.SetDebugName("sfx::SfxItemDisruptor_Impl m_Idle");
 
-    DBG_ASSERT( 0 == pItem->GetRefCount(), "disrupting pooled item" );
+    DBG_ASSERT(0 == pItem->GetRefCount(), "disrupting pooled item");
     pItem->SetKind(SfxItemKind::DeleteOnIdle);
 }
 
-void SfxItemDisruptor_Impl::LaunchDeleteOnIdle()
-{
-    m_Idle.Start();
-}
+void SfxItemDisruptor_Impl::LaunchDeleteOnIdle() { m_Idle.Start(); }
 
 SfxItemDisruptor_Impl::~SfxItemDisruptor_Impl()
 {
     m_Idle.Stop();
 
     // reset RefCount (was set to SFX_ITEMS_SPECIAL before!)
-    pItem->SetRefCount( 0 );
+    pItem->SetRefCount(0);
 
     pItem.reset();
 }
 
-IMPL_LINK_NOARG(SfxItemDisruptor_Impl, Delete, Timer*, void)
-{
-    delete this;
-}
+IMPL_LINK_NOARG(SfxItemDisruptor_Impl, Delete, Timer*, void) { delete this; }
 
 void DeleteItemOnIdle(std::unique_ptr<SfxPoolItem> pItem)
 {
-    DBG_ASSERT( 0 == pItem->GetRefCount(), "deleting item in use" );
-    SfxItemDisruptor_Impl *pDesruptor = new SfxItemDisruptor_Impl(std::move(pItem));
+    DBG_ASSERT(0 == pItem->GetRefCount(), "deleting item in use");
+    SfxItemDisruptor_Impl* pDesruptor = new SfxItemDisruptor_Impl(std::move(pItem));
     pDesruptor->LaunchDeleteOnIdle();
     // coverity[leaked_storage] - pDesruptor takes care of its own destruction at idle time
 }

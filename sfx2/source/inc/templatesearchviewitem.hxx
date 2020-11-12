@@ -14,12 +14,13 @@
 
 struct TemplateSearchViewItem : public TemplateViewItem
 {
-    TemplateSearchViewItem (ThumbnailViewBase &rView, sal_uInt16 nId)
+    TemplateSearchViewItem(ThumbnailViewBase& rView, sal_uInt16 nId)
         : TemplateViewItem(rView, nId)
         , mnAssocId(0)
-    {}
+    {
+    }
 
-    sal_uInt16 mnAssocId;    //Associated item id to the TemplateViews
+    sal_uInt16 mnAssocId; //Associated item id to the TemplateViews
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEWITEM_HXX

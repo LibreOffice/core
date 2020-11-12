@@ -38,12 +38,12 @@ public:
     iterator begin();
     iterator end();
 
-    const SfxObjectShell* operator[] ( size_t i ) const;
-    SfxObjectShell* operator[] ( size_t i );
+    const SfxObjectShell* operator[](size_t i) const;
+    SfxObjectShell* operator[](size_t i);
 
-    void erase( const iterator& it );
+    void erase(const iterator& it);
 
-    void push_back( SfxObjectShell* p );
+    void push_back(SfxObjectShell* p);
 
     size_t size() const;
 };
@@ -54,17 +54,16 @@ class SfxViewFrameArr_Impl
     DataType maData;
 
 public:
-
     typedef DataType::iterator iterator;
     iterator begin();
     iterator end();
 
-    const SfxViewFrame* operator[] ( size_t i ) const;
-    SfxViewFrame* operator[] ( size_t i );
+    const SfxViewFrame* operator[](size_t i) const;
+    SfxViewFrame* operator[](size_t i);
 
-    void erase( const iterator& it );
+    void erase(const iterator& it);
 
-    void push_back( SfxViewFrame* p );
+    void push_back(SfxViewFrame* p);
 
     size_t size() const;
 };
@@ -75,18 +74,17 @@ class SfxViewShellArr_Impl
     DataType maData;
 
 public:
-
     typedef DataType::iterator iterator;
 
     iterator begin();
     iterator end();
 
-    const SfxViewShell* operator[] ( size_t i ) const;
-    SfxViewShell* operator[] ( size_t i );
+    const SfxViewShell* operator[](size_t i) const;
+    SfxViewShell* operator[](size_t i);
 
-    void erase( const iterator& it );
+    void erase(const iterator& it);
 
-    void push_back( SfxViewShell* p );
+    void push_back(SfxViewShell* p);
 
     size_t size() const;
 };

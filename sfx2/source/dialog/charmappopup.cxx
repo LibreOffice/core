@@ -25,11 +25,9 @@ CharmapPopup::CharmapPopup(const css::uno::Reference<css::uno::XComponentContext
 {
 }
 
-CharmapPopup::~CharmapPopup()
-{
-}
+CharmapPopup::~CharmapPopup() {}
 
-void CharmapPopup::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+void CharmapPopup::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
 {
     PopupWindowController::initialize(rArguments);
 
@@ -44,9 +42,10 @@ std::unique_ptr<WeldToolbarPopup> CharmapPopup::weldPopupWindow()
     return std::make_unique<SfxCharmapCtrl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> CharmapPopup::createVclPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> CharmapPopup::createVclPopupWindow(vcl::Window* pParent)
 {
-    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(
+        getFrameInterface(), pParent,
         std::make_unique<SfxCharmapCtrl>(this, pParent->GetFrameWeld()));
 
     mxInterimPopover->Show();
@@ -64,12 +63,11 @@ css::uno::Sequence<OUString> CharmapPopup::getSupportedServiceNames()
     return { "com.sun.star.frame.ToolbarController" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sfx2_InsertSymbolToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::XComponentContext* rContext, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire( new CharmapPopup( rContext ) );
+    return cppu::acquire(new CharmapPopup(rContext));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

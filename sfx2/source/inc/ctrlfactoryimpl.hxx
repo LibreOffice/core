@@ -31,10 +31,10 @@ class SfxStbCtrlFactArr_Impl
     DataType maData;
 
 public:
-    const SfxStbCtrlFactory& operator []( size_t i ) const;
-    SfxStbCtrlFactory& operator []( size_t i );
+    const SfxStbCtrlFactory& operator[](size_t i) const;
+    SfxStbCtrlFactory& operator[](size_t i);
 
-    void push_back( const SfxStbCtrlFactory& );
+    void push_back(const SfxStbCtrlFactory&);
 
     size_t size() const;
 };
@@ -45,10 +45,10 @@ class SfxTbxCtrlFactArr_Impl
     DataType maData;
 
 public:
-    const SfxTbxCtrlFactory& operator []( size_t i ) const;
-    SfxTbxCtrlFactory& operator []( size_t i );
+    const SfxTbxCtrlFactory& operator[](size_t i) const;
+    SfxTbxCtrlFactory& operator[](size_t i);
 
-    void push_back( const SfxTbxCtrlFactory& );
+    void push_back(const SfxTbxCtrlFactory&);
 
     size_t size() const;
 };
