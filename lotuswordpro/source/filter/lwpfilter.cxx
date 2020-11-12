@@ -76,7 +76,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
 
- /**
+/**
  * @descr   decompressed small file
  * @param   pCompressed - real file stream
  * @param   pDecompressed - file decompressed, create inside, caller should delete it
@@ -85,7 +85,7 @@ using namespace ::com::sun::star;
 #include "bento.hxx"
 using namespace OpenStormBento;
 #include "explode.hxx"
-static bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
+static bool Decompress(SvStream* pCompressed, SvStream*& pOutDecompressed)
 {
     pCompressed->Seek(0);
     std::unique_ptr<SvMemoryStream> aDecompressed(new SvMemoryStream(4096, 4096));
@@ -101,14 +101,15 @@ static bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
             return false;
     }
 
-    std::unique_ptr<LtcUtBenValueStream> aWordProData(pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
+    std::unique_ptr<LtcUtBenValueStream> aWordProData(
+        pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
 
     if (!aWordProData)
         return false;
 
     // decompressing
     Decompression decompress(aWordProData.get(), aDecompressed.get());
-    if (0!= decompress.explode())
+    if (0 != decompress.explode())
         return false;
 
     sal_uInt32 nPos = aWordProData->GetSize();
@@ -126,20 +127,20 @@ static bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
     return true;
 }
 
- /**
+/**
  * @descr   Get LwpSvStream, if small file, both compressed/decompressed stream
  *                  Otherwise, only normal stream
  * @param   pStream - real file stream
  * @param    LwpSvStream * , created inside, deleted outside
  * @param      sal_Bool, sal_True -
  */
-static bool GetLwpSvStream(SvStream *pStream, LwpSvStream * & pLwpSvStream)
+static bool GetLwpSvStream(SvStream* pStream, LwpSvStream*& pLwpSvStream)
 {
-    SvStream * pDecompressed = nullptr;
+    SvStream* pDecompressed = nullptr;
 
     pStream->Seek(0x10);
     sal_uInt32 nTag(0);
-    pStream->ReadUInt32( nTag );
+    pStream->ReadUInt32(nTag);
     if (nTag != 0x3750574c) // "LWP7"
     {
         // small file, needs decompression
@@ -156,28 +157,29 @@ static bool GetLwpSvStream(SvStream *pStream, LwpSvStream * & pLwpSvStream)
     bool bCompressed = false;
     if (pDecompressed)
     {
-        LwpSvStream *pOriginalLwpSvStream = new LwpSvStream(pStream);
-        pLwpSvStream  = new LwpSvStream(pDecompressed, pOriginalLwpSvStream);
+        LwpSvStream* pOriginalLwpSvStream = new LwpSvStream(pStream);
+        pLwpSvStream = new LwpSvStream(pDecompressed, pOriginalLwpSvStream);
         bCompressed = true;
     }
     else
     {
-        pLwpSvStream  = new LwpSvStream(pStream);
+        pLwpSvStream = new LwpSvStream(pStream);
     }
     return bCompressed;
 }
-int ReadWordproFile(SvStream &rStream, uno::Reference<css::xml::sax::XDocumentHandler> const & xHandler)
+int ReadWordproFile(SvStream& rStream,
+                    uno::Reference<css::xml::sax::XDocumentHandler> const& xHandler)
 {
     int nRet = 0;
     try
     {
-        LwpSvStream *pRawLwpSvStream = nullptr;
+        LwpSvStream* pRawLwpSvStream = nullptr;
         std::unique_ptr<LwpSvStream> aLwpSvStream;
         std::unique_ptr<LwpSvStream> aCompressedLwpSvStream;
         std::unique_ptr<SvStream> aDecompressed;
         if (GetLwpSvStream(&rStream, pRawLwpSvStream) && pRawLwpSvStream)
         {
-            SvStream *pDecompressed = pRawLwpSvStream->GetStream();
+            SvStream* pDecompressed = pRawLwpSvStream->GetStream();
             if (pDecompressed)
             {
                 aDecompressed.reset(pDecompressed);

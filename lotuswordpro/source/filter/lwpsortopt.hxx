@@ -74,8 +74,9 @@ private:
     sal_uInt16 m_nField;
     sal_uInt16 m_nFlag;
     sal_uInt16 m_nWord;
+
 public:
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
 };
 /**
  * @brief       sort options in VO_DOCUMENT
@@ -85,8 +86,10 @@ class LwpSortOption
 {
 public:
     explicit LwpSortOption(LwpObjectStream* pStrm);
+
 public:
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
+
 private:
     LwpSortKey m_Keys[3];
     sal_uInt16 m_nCount;

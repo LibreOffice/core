@@ -65,7 +65,7 @@
 #include <lwpatomholder.hxx>
 
 LwpBreaksOverride::LwpBreaksOverride()
-    : m_pNextStyle( new LwpAtomHolder )
+    : m_pNextStyle(new LwpAtomHolder)
 {
 }
 
@@ -75,16 +75,11 @@ LwpBreaksOverride::LwpBreaksOverride(LwpBreaksOverride const& rOther)
 {
 }
 
-LwpBreaksOverride::~LwpBreaksOverride()
-{
-}
+LwpBreaksOverride::~LwpBreaksOverride() {}
 
-LwpBreaksOverride* LwpBreaksOverride::clone() const
-{
-    return new LwpBreaksOverride(*this);
-}
+LwpBreaksOverride* LwpBreaksOverride::clone() const { return new LwpBreaksOverride(*this); }
 
-void    LwpBreaksOverride::Read(LwpObjectStream *pStrm)
+void LwpBreaksOverride::Read(LwpObjectStream* pStrm)
 {
     if (pStrm->QuickReadBool())
     {
@@ -190,7 +185,7 @@ void LwpBreaksOverride::Override(LwpBreaksOverride* pOther)
 
 void LwpBreaksOverride::OverridePageBreakBefore(bool bVal)
 {
-    if(bVal)
+    if (bVal)
     {
         LwpOverride::Override(BO_PAGEBEFORE, STATE_ON);
     }
@@ -201,7 +196,7 @@ void LwpBreaksOverride::OverridePageBreakBefore(bool bVal)
 }
 void LwpBreaksOverride::OverridePageBreakAfter(bool bVal)
 {
-    if(bVal)
+    if (bVal)
     {
         LwpOverride::Override(BO_PAGEAFTER, STATE_ON);
     }
@@ -213,7 +208,7 @@ void LwpBreaksOverride::OverridePageBreakAfter(bool bVal)
 void LwpBreaksOverride::OverridePageBreakWithin(bool bVal)
 {
     // Note the flipped logic
-    if(!bVal)
+    if (!bVal)
     {
         LwpOverride::Override(BO_KEEPTOGETHER, STATE_ON);
     }
@@ -224,7 +219,7 @@ void LwpBreaksOverride::OverridePageBreakWithin(bool bVal)
 }
 void LwpBreaksOverride::OverrideColumnBreakBefore(bool bVal)
 {
-    if(bVal)
+    if (bVal)
     {
         LwpOverride::Override(BO_COLBEFORE, STATE_ON);
     }
@@ -235,7 +230,7 @@ void LwpBreaksOverride::OverrideColumnBreakBefore(bool bVal)
 }
 void LwpBreaksOverride::OverrideColumnBreakAfter(bool bVal)
 {
-    if(bVal)
+    if (bVal)
     {
         LwpOverride::Override(BO_COLAFTER, STATE_ON);
     }
@@ -246,7 +241,7 @@ void LwpBreaksOverride::OverrideColumnBreakAfter(bool bVal)
 }
 void LwpBreaksOverride::OverrideKeepWithNext(bool bVal)
 {
-    if(bVal)
+    if (bVal)
     {
         LwpOverride::Override(BO_KEEPNEXT, STATE_ON);
     }
@@ -257,7 +252,7 @@ void LwpBreaksOverride::OverrideKeepWithNext(bool bVal)
 }
 void LwpBreaksOverride::OverrideKeepWithPrevious(bool bVal)
 {
-    if(bVal)
+    if (bVal)
     {
         LwpOverride::Override(BO_KEEPPREV, STATE_ON);
     }
@@ -268,7 +263,7 @@ void LwpBreaksOverride::OverrideKeepWithPrevious(bool bVal)
 }
 void LwpBreaksOverride::OverrideUseNextStyle(bool bVal)
 {
-    if(bVal)
+    if (bVal)
     {
         LwpOverride::Override(BO_USENEXTSTYLE, STATE_ON);
     }

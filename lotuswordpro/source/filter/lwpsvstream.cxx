@@ -58,8 +58,9 @@
 
 const sal_uInt32 LwpSvStream::LWP_STREAM_BASE = 0x0010;
 
-LwpSvStream::LwpSvStream(SvStream* pStream, LwpSvStream * pCompressed)
-    : m_pStream(pStream), m_pCompressedStream(pCompressed)
+LwpSvStream::LwpSvStream(SvStream* pStream, LwpSvStream* pCompressed)
+    : m_pStream(pStream)
+    , m_pCompressedStream(pCompressed)
 {
 }
 
@@ -71,50 +72,38 @@ size_t LwpSvStream::Read(void* buf, size_t nBytesToRead)
     return m_pStream->ReadBytes(buf, nBytesToRead);
 }
 
-LwpSvStream& LwpSvStream::ReadUInt8( sal_uInt8& rUInt8 )
+LwpSvStream& LwpSvStream::ReadUInt8(sal_uInt8& rUInt8)
 {
-    m_pStream->ReadUChar( rUInt8 );
+    m_pStream->ReadUChar(rUInt8);
     return *this;
 }
 
-LwpSvStream& LwpSvStream::ReadUInt16( sal_uInt16& rUInt16 )
+LwpSvStream& LwpSvStream::ReadUInt16(sal_uInt16& rUInt16)
 {
-    m_pStream->ReadUInt16( rUInt16 );
+    m_pStream->ReadUInt16(rUInt16);
     return *this;
 }
 
-LwpSvStream& LwpSvStream::ReadUInt32( sal_uInt32& rUInt32 )
+LwpSvStream& LwpSvStream::ReadUInt32(sal_uInt32& rUInt32)
 {
-    m_pStream->ReadUInt32( rUInt32 );
+    m_pStream->ReadUInt32(rUInt32);
     return *this;
 }
 
 /**
  * @descr       SeekRel in stream
 */
-void LwpSvStream::SeekRel(sal_Int64 pos)
-{
-    m_pStream->SeekRel(pos);
-}
+void LwpSvStream::SeekRel(sal_Int64 pos) { m_pStream->SeekRel(pos); }
 /**
  * @descr       Get the current position in stream
 */
-sal_Int64 LwpSvStream::Tell()
-{
-    return m_pStream->Tell();
-}
+sal_Int64 LwpSvStream::Tell() { return m_pStream->Tell(); }
 /**
  * @descr       Seek to pos
 */
-sal_Int64 LwpSvStream::Seek(sal_Int64 pos)
-{
-    return m_pStream->Seek(pos);
-}
+sal_Int64 LwpSvStream::Seek(sal_Int64 pos) { return m_pStream->Seek(pos); }
 
-bool LwpSvStream::CheckSeek(sal_Int64 pos)
-{
-    return checkSeek(*m_pStream, pos);
-}
+bool LwpSvStream::CheckSeek(sal_Int64 pos) { return checkSeek(*m_pStream, pos); }
 /**
  * @descr       Return the stream data length
 */

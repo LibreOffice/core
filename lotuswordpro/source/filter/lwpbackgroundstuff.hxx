@@ -68,7 +68,8 @@ class XFBGImage;
 class LwpBackgroundStuff
 {
 public:
-    LwpBackgroundStuff() :  m_nID(0)
+    LwpBackgroundStuff()
+        : m_nID(0)
     {
     }
 
@@ -76,7 +77,7 @@ private:
     static void GetPattern(sal_uInt16 btPttnIndex, sal_uInt8 (&pPttnArray)[8]);
 
 public:
-    void    Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
     LwpColor* GetFillColor();
     std::unique_ptr<XFBGImage> GetFillPattern();
 
@@ -84,10 +85,11 @@ public:
     bool IsPatternFill() const { return (m_nID > 2 && m_nID < 72); }
 
     friend class LwpBackgroundOverride;
+
 private:
-    sal_uInt16  m_nID;
-    LwpColor    m_aFillColor;
-    LwpColor    m_aPatternColor;
+    sal_uInt16 m_nID;
+    LwpColor m_aFillColor;
+    LwpColor m_aPatternColor;
 };
 
 #endif

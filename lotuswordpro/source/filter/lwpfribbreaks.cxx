@@ -65,31 +65,32 @@
 #include <xfilter/xfstylemanager.hxx>
 #include <lwpglobalmgr.hxx>
 
-void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
+void LwpFribColumnBreak::RegisterBreakStyle(LwpPara* pPara)
 {
-//    XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(pFoundry->GetStyleManager()->GetStyle(styleID));
-    XFParaStyle* pBaseStyle =  pPara->GetXFParaStyle();
-    if (pBaseStyle == nullptr) return;
-//    m_StyleName = pBaseStyle->GetStyleName();
+    //    XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(pFoundry->GetStyleManager()->GetStyle(styleID));
+    XFParaStyle* pBaseStyle = pPara->GetXFParaStyle();
+    if (pBaseStyle == nullptr)
+        return;
+    //    m_StyleName = pBaseStyle->GetStyleName();
 
-    std::unique_ptr<XFParaStyle> pOverStyle( new XFParaStyle );
+    std::unique_ptr<XFParaStyle> pOverStyle(new XFParaStyle);
     *pOverStyle = *pBaseStyle;
     pOverStyle->SetStyleName("");
 
     //New code
     LwpStory* pStory = dynamic_cast<LwpStory*>(pPara->GetStoryID().obj().get());
     LwpPageLayout* pCurLayout = pStory ? pStory->GetCurrentLayout() : nullptr;
-    if( pCurLayout && (pCurLayout->GetNumCols() == 1) )
+    if (pCurLayout && (pCurLayout->GetNumCols() == 1))
 
     {
-//      if (!GetNext() || GetNext()->GetType()==FRIB_TAG_EOP)
-            pOverStyle->SetBreaks(enumXFBreakBefPage);
-//      else
-//          pOverStyle->SetBreaks(enumXFBreakBefPage);
+        //      if (!GetNext() || GetNext()->GetType()==FRIB_TAG_EOP)
+        pOverStyle->SetBreaks(enumXFBreakBefPage);
+        //      else
+        //          pOverStyle->SetBreaks(enumXFBreakBefPage);
     }
     else
     {
-        if (!GetNext() || GetNext()->GetType()==FRIB_TAG_EOP)
+        if (!GetNext() || GetNext()->GetType() == FRIB_TAG_EOP)
             pOverStyle->SetBreaks(enumXFBreakAftColumn);
         else
             pOverStyle->SetBreaks(enumXFBreakBefColumn);
@@ -98,29 +99,29 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
     m_StyleName = pXFStyleManager->AddStyle(std::move(pOverStyle)).m_pStyle->GetStyleName();
 }
 
-LwpFribPageBreak::LwpFribPageBreak( LwpPara* pPara )
-    : LwpFrib(pPara), m_bLastFrib(false)
+LwpFribPageBreak::LwpFribPageBreak(LwpPara* pPara)
+    : LwpFrib(pPara)
+    , m_bLastFrib(false)
 {
 }
 
-LwpFribPageBreak::~LwpFribPageBreak()
-{
-}
+LwpFribPageBreak::~LwpFribPageBreak() {}
 
-void LwpFribPageBreak::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
+void LwpFribPageBreak::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_Layout.ReadIndexed(pObjStrm);
 }
 
 void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
 {
-    XFParaStyle* pBaseStyle =  pPara->GetXFParaStyle();
-    if (pBaseStyle == nullptr) return;
+    XFParaStyle* pBaseStyle = pPara->GetXFParaStyle();
+    if (pBaseStyle == nullptr)
+        return;
 
     LwpPageLayout* pLayout = dynamic_cast<LwpPageLayout*>(m_Layout.obj().get());
-    if(pLayout)
+    if (pLayout)
     {
-        m_pMasterPage.reset( new LwpMasterPage(pPara, pLayout) );
+        m_pMasterPage.reset(new LwpMasterPage(pPara, pLayout));
         m_pMasterPage->RegisterMasterPage(this);
         return;
     }
@@ -130,7 +131,7 @@ void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
     pOverStyle->SetStyleName("");
     pOverStyle->SetMasterPage(pBaseStyle->GetMasterPage());
 
-    if (!GetNext() || GetNext()->GetType()==FRIB_TAG_EOP)
+    if (!GetNext() || GetNext()->GetType() == FRIB_TAG_EOP)
         m_bLastFrib = true;
     else
         m_bLastFrib = false;
@@ -146,7 +147,7 @@ void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
 
 void LwpFribPageBreak::ParseLayout()
 {
-    if(m_pMasterPage)
+    if (m_pMasterPage)
     {
         m_pMasterPage->ParseSection(this);
     }

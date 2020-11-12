@@ -80,7 +80,6 @@
 
 #include <osl/diagnose.h>
 
-
 LwpFrib::LwpFrib(LwpPara* pPara)
     : m_pFribMap(nullptr)
     , m_pPara(pPara)
@@ -93,16 +92,14 @@ LwpFrib::LwpFrib(LwpPara* pPara)
 {
 }
 
-LwpFrib::~LwpFrib()
-{
-    Deregister();
-}
+LwpFrib::~LwpFrib() { Deregister(); }
 
-LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag,sal_uInt8 editID)
+LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag,
+                             sal_uInt8 editID)
 {
     //Read Modifier
     std::unique_ptr<ModifierInfo> xModInfo;
-    if(fribtag & FRIB_TAG_MODIFIER)
+    if (fribtag & FRIB_TAG_MODIFIER)
     {
         xModInfo.reset(new ModifierInfo);
         xModInfo->CodePage = 0;
@@ -118,11 +115,11 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
     //Read frib data
     std::unique_ptr<LwpFrib> newFrib;
     sal_uInt16 friblen = pObjStrm->QuickReaduInt16();
-    sal_uInt8 fribtype = fribtag&~FRIB_TAG_TYPEMASK;
-    switch(fribtype)
+    sal_uInt8 fribtype = fribtag & ~FRIB_TAG_TYPEMASK;
+    switch (fribtype)
     {
-        case FRIB_TAG_INVALID:  //fall through
-        case FRIB_TAG_EOP:      //fall through
+        case FRIB_TAG_INVALID: //fall through
+        case FRIB_TAG_EOP: //fall through
         default:
             newFrib.reset(new LwpFrib(pPara));
             break;
@@ -207,16 +204,13 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
     return newFrib.release();
 }
 
-void LwpFrib::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
-{
-    pObjStrm->SeekRel(len);
-}
+void LwpFrib::Read(LwpObjectStream* pObjStrm, sal_uInt16 len) { pObjStrm->SeekRel(len); }
 
 void LwpFrib::SetModifiers(ModifierInfo* pModifiers)
 {
     if (pModifiers)
     {
-        m_pModifiers.reset( pModifiers );
+        m_pModifiers.reset(pModifiers);
         m_ModFlag = true;
         if (pModifiers->RevisionFlag)
         {
@@ -245,8 +239,8 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     XFTextStyle* pNamedStyle = nullptr;
     if (m_pModifiers->HasCharStyle && pFoundry)
     {
-        pNamedStyle = dynamic_cast<XFTextStyle*>
-                                (pFoundry->GetStyleManager()->GetStyle(m_pModifiers->CharStyleID));
+        pNamedStyle = dynamic_cast<XFTextStyle*>(
+            pFoundry->GetStyleManager()->GetStyle(m_pModifiers->CharStyleID));
     }
     if (pNamedStyle)
     {
@@ -259,7 +253,8 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
             *pNewStyle = *pNamedStyle;
 
             pNewStyle->SetStyleName("");
-            pFont = pFoundry->GetFontManager().CreateOverrideFont(pCharStyle->GetFinalFontID(),m_pModifiers->FontID);
+            pFont = pFoundry->GetFontManager().CreateOverrideFont(pCharStyle->GetFinalFontID(),
+                                                                  m_pModifiers->FontID);
             pNewStyle->SetFont(pFont);
             IXFStyleRet aNewStyle = pXFStyleManager->AddStyle(std::move(pNewStyle));
             m_StyleName = aNewStyle.m_pStyle->GetStyleName();
@@ -268,7 +263,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
                 pStyle = nullptr;
         }
         else
-            m_StyleName =  pNamedStyle->GetStyleName();
+            m_StyleName = pNamedStyle->GetStyleName();
     }
     else
     {
@@ -288,8 +283,8 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     if (!m_pModifiers->HasHighlight)
         return;
 
-    XFColor  aColor = GetHighlightColor();//right yellow
-    if (pStyle)//change the style directly
+    XFColor aColor = GetHighlightColor(); //right yellow
+    if (pStyle) //change the style directly
         pStyle->GetFont()->SetBackColor(aColor);
     else //register a new style
     {
@@ -311,9 +306,9 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     }
 }
 
-void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
+void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm, ModifierInfo* pModInfo)
 {
-    for(;;)
+    for (;;)
     {
         bool bFailure;
 
@@ -380,28 +375,26 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
 *  @descr:   Whether there are other fribs following current frib.
 *  @return:  True if having following fribs, or false.
 */
-bool LwpFrib::HasNextFrib()
-{
-    return GetNext() && GetNext()->GetType() != FRIB_TAG_EOP;
-}
+bool LwpFrib::HasNextFrib() { return GetNext() && GetNext()->GetType() != FRIB_TAG_EOP; }
 
-void LwpFrib::ConvertChars(XFContentContainer* pXFPara,const OUString& text)
+void LwpFrib::ConvertChars(XFContentContainer* pXFPara, const OUString& text)
 {
     if (m_ModFlag)
     {
         OUString strStyleName = GetStyleName();
-        XFTextSpan *pSpan = new XFTextSpan(text,strStyleName);
+        XFTextSpan* pSpan = new XFTextSpan(text, strStyleName);
         pXFPara->Add(pSpan);
     }
     else
     {
-        XFTextContent *pSpan = new XFTextContent();
+        XFTextContent* pSpan = new XFTextContent();
         pSpan->SetText(text);
         pXFPara->Add(pSpan);
     }
 }
 
-void LwpFrib::ConvertHyperLink(XFContentContainer* pXFPara, const LwpHyperlinkMgr* pHyperlink,const OUString& text)
+void LwpFrib::ConvertHyperLink(XFContentContainer* pXFPara, const LwpHyperlinkMgr* pHyperlink,
+                               const OUString& text)
 {
     XFHyperlink* pHyper = new XFHyperlink;
     pHyper->SetHRef(pHyperlink->GetHyperlink());
@@ -417,7 +410,7 @@ void LwpFrib::ConvertHyperLink(XFContentContainer* pXFPara, const LwpHyperlinkMg
 rtl::Reference<XFFont> LwpFrib::GetFont()
 {
     rtl::Reference<XFFont> pFont;
-    if(m_pModifiers&&m_pModifiers->FontID)
+    if (m_pModifiers && m_pModifiers->FontID)
     {
         LwpFoundry* pFoundry = m_pPara->GetFoundry();
         if (pFoundry)
@@ -443,7 +436,7 @@ XFColor LwpFrib::GetHighlightColor()
     return pGlobal->GetHighlightColor(m_nEditor);
 }
 
-void LwpFrib::Register(std::map<LwpFrib*,OUString>* pFribMap)
+void LwpFrib::Register(std::map<LwpFrib*, OUString>* pFribMap)
 {
     if (m_pFribMap)
         throw std::runtime_error("registered already");

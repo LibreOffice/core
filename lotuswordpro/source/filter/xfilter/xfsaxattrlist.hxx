@@ -64,7 +64,7 @@
 #include <rtl/ref.hxx>
 #include <xmloff/attrlist.hxx>
 
-class   XFSaxAttrList : public IXFAttrList
+class XFSaxAttrList : public IXFAttrList
 {
 public:
     XFSaxAttrList();
@@ -73,16 +73,16 @@ public:
 
 public:
     //Interface ISaxAttributeList:
-    virtual void    AddAttribute(const OUString& name, const OUString& value) override;
+    virtual void AddAttribute(const OUString& name, const OUString& value) override;
 
-    virtual void    Clear() override;
+    virtual void Clear() override;
 
     css::uno::Reference<css::xml::sax::XAttributeList> GetAttributeList() const;
 
     friend class XFSaxStream;
-private:
-    rtl::Reference<SvXMLAttributeList>  m_xSvAttrList;
 
+private:
+    rtl::Reference<SvXMLAttributeList> m_xSvAttrList;
 };
 
 #endif //XFSAXATTRLIST_INC

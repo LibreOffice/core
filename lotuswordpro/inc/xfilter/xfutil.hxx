@@ -64,31 +64,31 @@
 #include <xfilter/xfdefs.hxx>
 #include <rtl/ustring.hxx>
 
-OUString   GetTableColName(sal_Int32 col);
+OUString GetTableColName(sal_Int32 col);
 
-OUString   GetUnderlineName(enumXFUnderline type);
+OUString GetUnderlineName(enumXFUnderline type);
 
-OUString   GetCrossoutName(enumXFCrossout type);
+OUString GetCrossoutName(enumXFCrossout type);
 
-OUString   GetTransformName(enumXFTransform type);
+OUString GetTransformName(enumXFTransform type);
 
-OUString   GetTextDirName(enumXFTextDir dir);
+OUString GetTextDirName(enumXFTextDir dir);
 
-OUString   GetFrameXPos(enumXFFrameXPos pos);
+OUString GetFrameXPos(enumXFFrameXPos pos);
 
-OUString   GetFrameXRel(enumXFFrameXRel rel);
+OUString GetFrameXRel(enumXFFrameXRel rel);
 
-OUString   GetFrameYPos(enumXFFrameYPos pos);
+OUString GetFrameYPos(enumXFFrameYPos pos);
 
-OUString   GetFrameYRel(enumXFFrameYRel rel);
+OUString GetFrameYRel(enumXFFrameYRel rel);
 
-OUString   GetAlignName(enumXFAlignType align);
+OUString GetAlignName(enumXFAlignType align);
 
-OUString   GetPageUsageName(enumXFPageUsage usage);
+OUString GetPageUsageName(enumXFPageUsage usage);
 
-OUString   GetValueType(enumXFValueType type);
+OUString GetValueType(enumXFValueType type);
 
-OUString   GetColorMode(enumXFColorMode mode);
+OUString GetColorMode(enumXFColorMode mode);
 
 #endif
 

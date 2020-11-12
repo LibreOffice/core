@@ -62,11 +62,15 @@ class LwpSuperTableLayout;
 class LwpFribTable : public LwpFrib
 {
 public:
-    explicit LwpFribTable( LwpPara* pPara ) : LwpFrib(pPara){}
+    explicit LwpFribTable(LwpPara* pPara)
+        : LwpFrib(pPara)
+    {
+    }
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpSuperTableLayout* GetSuperTable();
     void RegisterNewStyle();
     void XFConvert(XFContentContainer* pCont);
+
 private:
     LwpObjectID m_objTable;
 };

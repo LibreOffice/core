@@ -60,14 +60,14 @@
 
 struct LtTm
 {
-    tools::Long tm_sec;     /* seconds after the minute - [0,59] */
-    tools::Long tm_min;     /* minutes after the hour - [0,59] */
-    tools::Long tm_hour;    /* hours since midnight - [0,23] */
-    tools::Long tm_mday;    /* day of the month - [1,31] */
-    tools::Long tm_mon;     /* months since January - [0,11] */
-    tools::Long tm_year;    /* years since 1900 */
-    tools::Long tm_wday;    /* days since Sunday - [0,6] */
-    tools::Long tm_yday;    /* days since January 1 - [0,365] */
+    tools::Long tm_sec; /* seconds after the minute - [0,59] */
+    tools::Long tm_min; /* minutes after the hour - [0,59] */
+    tools::Long tm_hour; /* hours since midnight - [0,23] */
+    tools::Long tm_mday; /* day of the month - [1,31] */
+    tools::Long tm_mon; /* months since January - [0,11] */
+    tools::Long tm_year; /* years since 1900 */
+    tools::Long tm_wday; /* days since Sunday - [0,6] */
+    tools::Long tm_yday; /* days since January 1 - [0,365] */
     LtTm()
         : tm_sec(0)
         , tm_min(0)
@@ -80,8 +80,8 @@ struct LtTm
     {
     }
 };
-bool LtgGmTime(tools::Long rtime,LtTm& rtm);
-bool LtgLocalTime(tools::Long rtime,LtTm& rtm);
+bool LtgGmTime(tools::Long rtime, LtTm& rtm);
+bool LtgLocalTime(tools::Long rtime, LtTm& rtm);
 
 #endif
 

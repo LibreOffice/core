@@ -71,16 +71,16 @@ public:
 public:
     void AddPoint(double x, double y)
     {
-        assert(x>=0&&y>=0);
-        m_aPoints.push_back( XFPoint(x,y) );
+        assert(x >= 0 && y >= 0);
+        m_aPoints.push_back(XFPoint(x, y));
     }
 
-    XFRect  CalcViewBox();
+    XFRect CalcViewBox();
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 protected:
-    std::vector<XFPoint>    m_aPoints;
+    std::vector<XFPoint> m_aPoints;
 };
 
 #endif

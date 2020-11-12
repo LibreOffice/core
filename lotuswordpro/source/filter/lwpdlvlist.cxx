@@ -62,9 +62,10 @@
 #include <lwpfilehdr.hxx>
 #include "lwpproplist.hxx"
 
-LwpDLVList::LwpDLVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpDLVList::LwpDLVList(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
-{}
+{
+}
 /**
  * @descr       Read LwpDLVList data from object stream
  **/
@@ -72,17 +73,17 @@ void LwpDLVList::Read()
 {
     LwpObjectStream* pObjStrm = m_pObjStrm.get();
     m_ListNext.ReadIndexed(pObjStrm);
-    if( LwpFileHeader::m_nFileRevision < 0x0006 )
+    if (LwpFileHeader::m_nFileRevision < 0x0006)
         pObjStrm->SkipExtra();
 
     m_ListPrevious.ReadIndexed(pObjStrm);
-    if( LwpFileHeader::m_nFileRevision < 0x0006 )
+    if (LwpFileHeader::m_nFileRevision < 0x0006)
         pObjStrm->SkipExtra();
-
 }
-LwpDLNFVList::LwpDLNFVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
-        : LwpDLVList(objHdr, pStrm)
-{}
+LwpDLNFVList::LwpDLNFVList(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpDLVList(objHdr, pStrm)
+{
+}
 /**
  * @descr       Read LwpDLNFVList data from object stream
  **/
@@ -93,13 +94,13 @@ void LwpDLNFVList::Read()
     LwpObjectStream* pObjStrm = m_pObjStrm.get();
 
     m_ChildHead.ReadIndexed(pObjStrm);
-    if( LwpFileHeader::m_nFileRevision < 0x0006 || !m_ChildHead.IsNull() )
+    if (LwpFileHeader::m_nFileRevision < 0x0006 || !m_ChildHead.IsNull())
         m_ChildTail.ReadIndexed(pObjStrm);
-    if( LwpFileHeader::m_nFileRevision < 0x0006 )
+    if (LwpFileHeader::m_nFileRevision < 0x0006)
         pObjStrm->SkipExtra();
 
     m_Parent.ReadIndexed(pObjStrm);
-    if( LwpFileHeader::m_nFileRevision < 0x0006 )
+    if (LwpFileHeader::m_nFileRevision < 0x0006)
         pObjStrm->SkipExtra();
 
     ReadName(pObjStrm);
@@ -110,17 +111,18 @@ void LwpDLNFVList::Read()
 void LwpDLNFVList::ReadName(LwpObjectStream* pObjStrm)
 {
     m_Name.Read(pObjStrm);
-    if( LwpFileHeader::m_nFileRevision < 0x0006 )
+    if (LwpFileHeader::m_nFileRevision < 0x0006)
         pObjStrm->SkipExtra();
 }
 /**
  * @descr       ctor of LwpDLNFPVList from object stream
  *          Note that m_bHasProperties is initialized to true
  **/
-LwpDLNFPVList::LwpDLNFPVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
-    : LwpDLNFVList(objHdr, pStrm),
-    m_bHasProperties(true)
-{}
+LwpDLNFPVList::LwpDLNFPVList(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpDLNFVList(objHdr, pStrm)
+    , m_bHasProperties(true)
+{
+}
 /**
  * @descr       Read name of LwpDLNFVList from object stream
  **/
@@ -137,12 +139,12 @@ void LwpDLNFPVList::Read()
  **/
 void LwpDLNFPVList::ReadPropertyList(LwpObjectStream* pObjStrm)
 {
-    if( LwpFileHeader::m_nFileRevision >= 0x0000B)
+    if (LwpFileHeader::m_nFileRevision >= 0x0000B)
     {
         m_bHasProperties = pObjStrm->QuickReaduInt8() != 0;
         if (m_bHasProperties)
         {
-            m_pPropList.reset( new LwpPropList );
+            m_pPropList.reset(new LwpPropList);
             m_pPropList->Read(pObjStrm);
         }
     }
@@ -150,9 +152,7 @@ void LwpDLNFPVList::ReadPropertyList(LwpObjectStream* pObjStrm)
 /**
  * @descr       release property list
  **/
-LwpDLNFPVList::~LwpDLNFPVList()
-{
-}
+LwpDLNFPVList::~LwpDLNFPVList() {}
 
 /**
  * @descr       Read head id and tail id
@@ -160,11 +160,11 @@ LwpDLNFPVList::~LwpDLNFPVList()
 void LwpDLVListHeadTail::Read(LwpObjectStream* pObjStrm)
 {
     m_ListHead.ReadIndexed(pObjStrm);
-    if( (LwpFileHeader::m_nFileRevision < 0x0006) || !m_ListHead.IsNull())
+    if ((LwpFileHeader::m_nFileRevision < 0x0006) || !m_ListHead.IsNull())
     {
         m_ListTail.ReadIndexed(pObjStrm);
     }
-    if( LwpFileHeader::m_nFileRevision < 0x0006)
+    if (LwpFileHeader::m_nFileRevision < 0x0006)
     {
         pObjStrm->SkipExtra();
     }
@@ -172,9 +172,6 @@ void LwpDLVListHeadTail::Read(LwpObjectStream* pObjStrm)
 /**
  * @descr       Read head id
  **/
-void LwpDLVListHead::Read(LwpObjectStream* pObjStrm)
-{
-    m_objHead.ReadIndexed(pObjStrm);
-}
+void LwpDLVListHead::Read(LwpObjectStream* pObjStrm) { m_objHead.ReadIndexed(pObjStrm); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

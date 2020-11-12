@@ -81,16 +81,16 @@ private:
     LwpCharacterBorderOverride& operator=(LwpCharacterBorderOverride const& rOther) = delete;
 
     std::unique_ptr<LwpBorderStuff> m_pBorderStuff;
-    std::unique_ptr<LwpMargins>     m_pMargins;
-    sal_Int32       m_nAboveWidth;
-    sal_Int32       m_nBelowWidth;
+    std::unique_ptr<LwpMargins> m_pMargins;
+    sal_Int32 m_nAboveWidth;
+    sal_Int32 m_nBelowWidth;
 
     enum
     {
-        PBO_STUFF       = 0x01,
-        PBO_MARGINS     = 0x04,
-        PBO_ABOVE       = 0x40,
-        PBO_BELOW       = 0x80
+        PBO_STUFF = 0x01,
+        PBO_MARGINS = 0x04,
+        PBO_ABOVE = 0x40,
+        PBO_BELOW = 0x80
     };
 };
 

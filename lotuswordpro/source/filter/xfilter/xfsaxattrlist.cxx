@@ -60,23 +60,19 @@
 #include "xfsaxattrlist.hxx"
 #include <xmloff/attrlist.hxx>
 
-XFSaxAttrList::XFSaxAttrList() : m_xSvAttrList(new SvXMLAttributeList())
+XFSaxAttrList::XFSaxAttrList()
+    : m_xSvAttrList(new SvXMLAttributeList())
 {
 }
 
-XFSaxAttrList::~XFSaxAttrList()
-{
-}
+XFSaxAttrList::~XFSaxAttrList() {}
 
 void XFSaxAttrList::AddAttribute(const OUString& name, const OUString& value)
 {
-    m_xSvAttrList->AddAttribute(name,value);
+    m_xSvAttrList->AddAttribute(name, value);
 }
 
-void XFSaxAttrList::Clear()
-{
-    m_xSvAttrList->Clear();
-}
+void XFSaxAttrList::Clear() { m_xSvAttrList->Clear(); }
 
 css::uno::Reference<css::xml::sax::XAttributeList> XFSaxAttrList::GetAttributeList() const
 {

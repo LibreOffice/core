@@ -63,42 +63,38 @@
 #include <algorithm>
 
 #include <lwpfilehdr.hxx>
- #include "lwptable.hxx"
+#include "lwptable.hxx"
 
- LwpSuperTable::LwpSuperTable(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpContent(objHdr, pStrm)
-{}
+LwpSuperTable::LwpSuperTable(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpContent(objHdr, pStrm)
+{
+}
 
-LwpSuperTable::~LwpSuperTable()
-{}
+LwpSuperTable::~LwpSuperTable() {}
 
 void LwpSuperTable::Read()
 {
     LwpContent::Read();
     m_pObjStrm->SkipExtra();
-
 }
 
-void  LwpSuperTable::Parse(IXFStream* /*pOutputStream*/)
-{
-}
+void LwpSuperTable::Parse(IXFStream* /*pOutputStream*/) {}
 
-void LwpSuperTable::XFConvert(XFContentContainer* /*pCont*/)
-{
-}
+void LwpSuperTable::XFConvert(XFContentContainer* /*pCont*/) {}
 
 /*****************************************************************************/
- LwpTable::LwpTable(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
-     : LwpContent(objHdr, pStrm)
-     , m_nRow(0)
-     , m_nColumn(0)
-     , m_nHeight(0)
-     , m_nWidth(0)
-     , m_nDefaultAutoGrowRowHeight(0)
-     , m_nAttributes(0)
-{}
+LwpTable::LwpTable(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpContent(objHdr, pStrm)
+    , m_nRow(0)
+    , m_nColumn(0)
+    , m_nHeight(0)
+    , m_nWidth(0)
+    , m_nDefaultAutoGrowRowHeight(0)
+    , m_nAttributes(0)
+{
+}
 
-LwpTable::~LwpTable()
-{}
+LwpTable::~LwpTable() {}
 
 void LwpTable::Read()
 {
@@ -128,48 +124,38 @@ void LwpTable::Read()
     m_pObjStrm->SkipExtra();
 }
 
-bool LwpTable::IsNumberDown() const
-{
-    return (m_nAttributes & NUMBER_DOWN) != 0;
-}
+bool LwpTable::IsNumberDown() const { return (m_nAttributes & NUMBER_DOWN) != 0; }
 
-void  LwpTable::Parse(IXFStream* /*pOutputStream*/)
-{
-}
+void LwpTable::Parse(IXFStream* /*pOutputStream*/) {}
 
- LwpSuperTableLayout* LwpTable::GetSuperTableLayout()
+LwpSuperTableLayout* LwpTable::GetSuperTableLayout()
 {
     LwpTableLayout* pLayout = dynamic_cast<LwpTableLayout*>(m_Layout.obj().get());
-    if(pLayout)
+    if (pLayout)
         return dynamic_cast<LwpSuperTableLayout*>(pLayout->GetParent().obj().get());
 
     return nullptr;
 }
 
- /*****************************************************************************/
- LwpTableHeading::LwpTableHeading(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpTable(objHdr, pStrm)
-{}
-
-LwpTableHeading::~LwpTableHeading()
-{}
-
-void LwpTableHeading::Read()
-{
-    m_pObjStrm->SkipExtra();
-}
-
-void  LwpTableHeading::Parse(IXFStream* /*pOutputStream*/)
+/*****************************************************************************/
+LwpTableHeading::LwpTableHeading(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpTable(objHdr, pStrm)
 {
 }
 
- /*****************************************************************************/
-LwpParallelColumns::LwpParallelColumns(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpTable(objHdr, pStrm)
+LwpTableHeading::~LwpTableHeading() {}
+
+void LwpTableHeading::Read() { m_pObjStrm->SkipExtra(); }
+
+void LwpTableHeading::Parse(IXFStream* /*pOutputStream*/) {}
+
+/*****************************************************************************/
+LwpParallelColumns::LwpParallelColumns(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpTable(objHdr, pStrm)
 {
 }
 
-LwpParallelColumns::~LwpParallelColumns()
-{
-}
+LwpParallelColumns::~LwpParallelColumns() {}
 
 void LwpParallelColumns::Read()
 {
@@ -179,18 +165,17 @@ void LwpParallelColumns::Read()
 
     m_pObjStrm->SkipExtra();
 }
- /*****************************************************************************/
-LwpGlossary::LwpGlossary(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpParallelColumns(objHdr, pStrm)
+/*****************************************************************************/
+LwpGlossary::LwpGlossary(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpParallelColumns(objHdr, pStrm)
 {
 }
 
-LwpGlossary::~LwpGlossary()
-{
-}
+LwpGlossary::~LwpGlossary() {}
 sal_uInt16 LwpGlossary::GetNumIndexRows() const
 {
     if (GetRow() > 0 && GetRow() <= MAX_NUM_ROWS)
-        return GetRow() - 1;    // Minus one row for repeated heading.
+        return GetRow() - 1; // Minus one row for repeated heading.
     return 0;
 }
 
@@ -204,7 +189,7 @@ void LwpGlossary::Read()
     if (FiledEntries < NumIndexRows)
     {
         /* We'll have to do sequential (slow) searches. */
-        m_pObjStrm->SeekRel( FiledEntries * sizeof(sal_uInt16));
+        m_pObjStrm->SeekRel(FiledEntries * sizeof(sal_uInt16));
     }
     else
     {
@@ -216,7 +201,7 @@ void LwpGlossary::Read()
                 m_pObjStrm->QuickReaduInt16();
 
             if (FiledEntries > EntriesRead)
-                m_pObjStrm->SeekRel((FiledEntries - EntriesRead)* sizeof(sal_uInt16));
+                m_pObjStrm->SeekRel((FiledEntries - EntriesRead) * sizeof(sal_uInt16));
         }
         else
             m_pObjStrm->SeekRel(FiledEntries * sizeof(sal_uInt16));

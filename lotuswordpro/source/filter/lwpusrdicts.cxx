@@ -61,19 +61,16 @@
 #include "lwpusrdicts.hxx"
 #include <lwpatomholder.hxx>
 
-LwpUserDictFiles::LwpUserDictFiles(LwpObjectStream *pStrm)
-{
-    Read(pStrm);
-}
+LwpUserDictFiles::LwpUserDictFiles(LwpObjectStream* pStrm) { Read(pStrm); }
 /**
  * @descr       Read UserDictFiles in VO_DOCUMENT
  *          words are skipped, not parsed yet
  **/
-void LwpUserDictFiles::Read(LwpObjectStream *pStrm)
+void LwpUserDictFiles::Read(LwpObjectStream* pStrm)
 {
     sal_uInt16 cnt = pStrm->QuickReaduInt16();
     LwpAtomHolder word;
-    while(cnt--)
+    while (cnt--)
     {
         word.Read(pStrm);
         pStrm->SkipExtra();

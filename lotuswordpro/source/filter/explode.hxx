@@ -66,12 +66,13 @@ class HuffmanTreeNode
     std::unique_ptr<HuffmanTreeNode> left;
     std::unique_ptr<HuffmanTreeNode> right;
     sal_uInt32 value;
+
 public:
-    explicit HuffmanTreeNode(sal_uInt32 value = 0xffffffff) ;
-    ~HuffmanTreeNode() ;
-    HuffmanTreeNode * InsertNode(sal_uInt32 nValue, const char * pInCode);
-    HuffmanTreeNode * QueryNode(const char *pCode);
-    sal_uInt32 QueryValue(const char *pCode);
+    explicit HuffmanTreeNode(sal_uInt32 value = 0xffffffff);
+    ~HuffmanTreeNode();
+    HuffmanTreeNode* InsertNode(sal_uInt32 nValue, const char* pInCode);
+    HuffmanTreeNode* QueryNode(const char* pCode);
+    sal_uInt32 QueryValue(const char* pCode);
 };
 
 /**
@@ -79,35 +80,35 @@ public:
  * define the function type for input read, output write
  */
 #define CHUNK 16384
-#define MAXWIN 4096     /* maximum window size */
+#define MAXWIN 4096 /* maximum window size */
 class Decompression
 {
 public:
-    Decompression(SvStream * pInStream, SvStream * pOutStream);
+    Decompression(SvStream* pInStream, SvStream* pOutStream);
     /**
      * @brief
      * decompress from instream to outstream
      */
     sal_Int32 explode();
-    sal_uInt32 ReadBits(sal_uInt16 iCount, sal_uInt32 & nBits) ;
-    sal_uInt32 Decode(HuffmanTreeNode * pRoot);
+    sal_uInt32 ReadBits(sal_uInt16 iCount, sal_uInt32& nBits);
+    sal_uInt32 Decode(HuffmanTreeNode* pRoot);
 
     /**
      * @brief
      * compressed/decompressed stream
      */
-    SvStream *m_pInStream;
-    SvStream *m_pOutStream;
+    SvStream* m_pInStream;
+    SvStream* m_pOutStream;
 
-    sal_uInt32 m_nCurrent4Byte;   // bit buffer
-    sal_uInt32 m_nBitsLeft;     // number of bits remained in bit buffer
+    sal_uInt32 m_nCurrent4Byte; // bit buffer
+    sal_uInt32 m_nBitsLeft; // number of bits remained in bit buffer
 
-    sal_uInt8 m_Buffer[CHUNK];  // input byte buffer
-    sal_uInt8 *m_pBuffer;           // pointer to input buffer
-    sal_uInt32 m_nBytesLeft;        // number of bytes remained in byte buffer
+    sal_uInt8 m_Buffer[CHUNK]; // input byte buffer
+    sal_uInt8* m_pBuffer; // pointer to input buffer
+    sal_uInt32 m_nBytesLeft; // number of bytes remained in byte buffer
 
     sal_uInt8 m_Output[MAXWIN]; // output byte buffer
-    sal_uInt32 m_nOutputBufferPos;  // pointer to output buffer
+    sal_uInt32 m_nOutputBufferPos; // pointer to output buffer
 
     sal_uInt32 m_iArrayOfM[16];
 
@@ -116,7 +117,7 @@ public:
     void ConstructTree1();
     void ConstructTree2();
     void fillArray();
-    static void ToString(sal_uInt32 nBits, char *pChar, sal_uInt32 nLen);
+    static void ToString(sal_uInt32 nBits, char* pChar, sal_uInt32 nLen);
 };
 #endif
 

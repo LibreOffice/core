@@ -73,17 +73,18 @@ class XFBorders;
 class LwpParaStyle : public LwpTextStyle
 {
 public:
-    LwpParaStyle(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpParaStyle(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
 
     virtual ~LwpParaStyle() override;
 
-    void        Read() override;
+    void Read() override;
 
-    void        Apply(XFParaStyle *pStrm);
+    void Apply(XFParaStyle* pStrm);
     static void ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverride* pBorder);
     static void ApplyBreaks(XFParaStyle* pParaStyle, const LwpBreaksOverride* pBreaks);
     static void ApplyAlignment(XFParaStyle* pParaStyle, const LwpAlignmentOverride* pAlign);
-    static void ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, const LwpIndentOverride* pIndent);
+    static void ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle,
+                            const LwpIndentOverride* pIndent);
     static void ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpacingOverride* pSpacing);
 
     static void ApplyTab(XFParaStyle* pParaStyle, LwpTabOverride* pTab);
@@ -98,8 +99,10 @@ public:
     LwpTabOverride* GetTabOverride() const;
     const LwpBulletOverride& GetBulletOverride() const { return m_BulletOverride; }
     LwpNumberingOverride* GetNumberingOverride() const;
+
 public:
-    static void ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::BorderType eType, XFBorders* pXFBorders);
+    static void ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::BorderType eType,
+                               XFBorders* pXFBorders);
 
 private:
     //style IDs
@@ -112,8 +115,8 @@ private:
     LwpObjectID m_TabStyle;
     LwpObjectID m_BackgroundStyle;
 
-    LwpKinsokuOptsOverride  m_KinsokuOptsOverride;
-    LwpBulletOverride       m_BulletOverride;
+    LwpKinsokuOptsOverride m_KinsokuOptsOverride;
+    LwpBulletOverride m_BulletOverride;
 };
 
 #endif

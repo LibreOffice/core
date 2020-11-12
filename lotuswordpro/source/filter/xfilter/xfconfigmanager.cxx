@@ -59,36 +59,32 @@
  ************************************************************************/
 #include <xfilter/xfconfigmanager.hxx>
 
-XFConfigManager::XFConfigManager()
+XFConfigManager::XFConfigManager() {}
+
+XFConfigManager::~XFConfigManager() {}
+
+void XFConfigManager::SetLineNumberConfig(XFLineNumberConfig* pLNConfig)
 {
+    m_pLineNumberConfig.reset(pLNConfig);
 }
 
-XFConfigManager::~XFConfigManager()
+void XFConfigManager::SetFootnoteConfig(XFFootnoteConfig* pFNConfig)
 {
+    m_pFootnoteConfig.reset(pFNConfig);
 }
 
-void XFConfigManager::SetLineNumberConfig(XFLineNumberConfig *pLNConfig)
+void XFConfigManager::SetEndnoteConfig(XFEndnoteConfig* pENConfig)
 {
-    m_pLineNumberConfig.reset( pLNConfig );
+    m_pEndnoteConfig.reset(pENConfig);
 }
 
-void    XFConfigManager::SetFootnoteConfig(XFFootnoteConfig *pFNConfig)
+void XFConfigManager::ToXml(IXFStream* pStrm)
 {
-    m_pFootnoteConfig.reset( pFNConfig );
-}
-
-void    XFConfigManager::SetEndnoteConfig(XFEndnoteConfig *pENConfig)
-{
-    m_pEndnoteConfig.reset( pENConfig );
-}
-
-void    XFConfigManager::ToXml(IXFStream *pStrm)
-{
-    if( m_pLineNumberConfig )
+    if (m_pLineNumberConfig)
         AddStyle(std::move(m_pLineNumberConfig));
-    if( m_pFootnoteConfig )
+    if (m_pFootnoteConfig)
         AddStyle(std::move(m_pFootnoteConfig));
-    if( m_pEndnoteConfig )
+    if (m_pEndnoteConfig)
         AddStyle(std::move(m_pEndnoteConfig));
 
     XFStyleContainer::ToXml(pStrm);

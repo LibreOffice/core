@@ -67,12 +67,13 @@
 class LwpPropListElement : public LwpDLVList
 {
 public:
-    LwpPropListElement(LwpObjectHeader const &objHdr, LwpSvStream *pStrm);
+    LwpPropListElement(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     void Read() override;
     bool IsNamed(const OUString& name);
     LwpPropListElement* GetNext();
-    const LwpAtomHolder& GetValue() const {return m_Value;}
-    const LwpAtomHolder& GetName() const {return m_Name;}
+    const LwpAtomHolder& GetValue() const { return m_Value; }
+    const LwpAtomHolder& GetName() const { return m_Name; }
+
 private:
     virtual ~LwpPropListElement() override {}
 
@@ -83,11 +84,12 @@ private:
 class LwpPropList : public LwpDLVListHead
 {
 public:
-    LwpPropList(){}
+    LwpPropList() {}
     using LwpDLVListHead::Read;
     LwpPropListElement* GetFirst();
     OUString GetNamedProperty(const OUString& name);
-    OUString EnumNamedProperty(OUString& name,OUString& value);
+    OUString EnumNamedProperty(OUString& name, OUString& value);
+
 private:
     LwpPropListElement* FindPropByName(const OUString& name);
 };

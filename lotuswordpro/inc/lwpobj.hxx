@@ -53,7 +53,7 @@
  *
  *
  ************************************************************************/
- /**
+/**
  * @file
  *  Base class of all Lwp VO objects
  */
@@ -79,10 +79,11 @@ class LwpFoundry;
 /**
  * @brief   Base class of all Lwp VO objects
 */
-class LwpObject: public salhelper::SimpleReferenceObject
+class LwpObject : public salhelper::SimpleReferenceObject
 {
 public:
     LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm);
+
 protected:
     virtual ~LwpObject() override;
     LwpObjectHeader m_ObjHdr;
@@ -92,11 +93,13 @@ protected:
     bool m_bRegisteringStyle;
     bool m_bParsingStyle;
     bool m_bConvertingContent;
+
 protected:
     virtual void Read();
     virtual void RegisterStyle();
     virtual void Parse(IXFStream* pOutputStream);
     virtual void XFConvert(XFContentContainer* pCont);
+
 public:
     void QuickRead();
     //calls RegisterStyle but bails if DoRegisterStyle is called
@@ -130,10 +133,10 @@ public:
         m_bConvertingContent = false;
     }
 
-    LwpFoundry* GetFoundry(){return m_pFoundry;}
-    void SetFoundry(LwpFoundry* pFoundry){m_pFoundry = pFoundry;}
-    LwpObjectID& GetObjectID(){ return m_ObjHdr.GetID();}
-    sal_uInt32 GetTag() const { return m_ObjHdr.GetTag();}
+    LwpFoundry* GetFoundry() { return m_pFoundry; }
+    void SetFoundry(LwpFoundry* pFoundry) { m_pFoundry = pFoundry; }
+    LwpObjectID& GetObjectID() { return m_ObjHdr.GetID(); }
+    sal_uInt32 GetTag() const { return m_ObjHdr.GetTag(); }
 };
 #endif
 

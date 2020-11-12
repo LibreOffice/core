@@ -66,13 +66,11 @@
 class LwpTabOverride final : public LwpOverride
 {
 public:
-    LwpTabOverride()
-    {
-    }
+    LwpTabOverride() {}
 
     virtual LwpTabOverride* clone() const override;
 
-    virtual void Read(LwpObjectStream *pStrm) override
+    virtual void Read(LwpObjectStream* pStrm) override
     {
         if (pStrm->QuickReadBool())
         {
@@ -93,14 +91,11 @@ private:
     LwpObjectID m_aTabRackID;
     enum
     {
-        TO_TABRACK  = 0x01
+        TO_TABRACK = 0x01
     };
 };
 
-inline LwpObjectID& LwpTabOverride::GetTabRackID()
-{
-    return m_aTabRackID;
-}
+inline LwpObjectID& LwpTabOverride::GetTabRackID() { return m_aTabRackID; }
 
 inline void LwpTabOverride::Override(LwpTabOverride* pOther)
 {

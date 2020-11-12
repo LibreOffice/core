@@ -65,46 +65,45 @@ LwpCharSetMgr* LwpCharSetMgr::Instance = nullptr;
 
 LwpCharSetMgr* LwpCharSetMgr::GetInstance()
 {
-   if (Instance == nullptr)
-       Instance = new LwpCharSetMgr;
-   return Instance;
+    if (Instance == nullptr)
+        Instance = new LwpCharSetMgr;
+    return Instance;
 }
 
 void LwpCharSetMgr::SetCodePageMap()
-{//sal_uInt16 wordproCode,rtl_TextEncoding encoding, tmp hardcoding, 1-18
-/*  m_CodePageMap[256] =
+{ //sal_uInt16 wordproCode,rtl_TextEncoding encoding, tmp hardcoding, 1-18
+    /*  m_CodePageMap[256] =
     m_CodePageMap[259] =
     m_CodePageMap[819] =
     m_CodePageMap[921] =*/
-    m_CodePageMap[437]  = RTL_TEXTENCODING_ASCII_US;
-    m_CodePageMap[850]  = RTL_TEXTENCODING_IBM_850;
+    m_CodePageMap[437] = RTL_TEXTENCODING_ASCII_US;
+    m_CodePageMap[850] = RTL_TEXTENCODING_IBM_850;
     //m_CodePageMap[851]  = RTL_TEXTENCODING_IBM_851;
-    m_CodePageMap[852]  = RTL_TEXTENCODING_IBM_852;
-    m_CodePageMap[857]  = RTL_TEXTENCODING_IBM_857;
-    m_CodePageMap[860]  = RTL_TEXTENCODING_IBM_860;
-    m_CodePageMap[863]  = RTL_TEXTENCODING_IBM_863;
-    m_CodePageMap[865]  = RTL_TEXTENCODING_IBM_865;
-    m_CodePageMap[866]  = RTL_TEXTENCODING_IBM_866;
-    m_CodePageMap[869]  = RTL_TEXTENCODING_IBM_869;
-    m_CodePageMap[874]  = RTL_TEXTENCODING_MS_874;//thai
-    m_CodePageMap[932]  = RTL_TEXTENCODING_MS_932; //japanese
-    m_CodePageMap[936]  = RTL_TEXTENCODING_MS_936; //chinese simple
-    m_CodePageMap[949]  = RTL_TEXTENCODING_MS_949;//korean
-    m_CodePageMap[950]  = RTL_TEXTENCODING_BIG5;//chinese traditional
-    m_CodePageMap[1250] = RTL_TEXTENCODING_MS_1250;//Central European
+    m_CodePageMap[852] = RTL_TEXTENCODING_IBM_852;
+    m_CodePageMap[857] = RTL_TEXTENCODING_IBM_857;
+    m_CodePageMap[860] = RTL_TEXTENCODING_IBM_860;
+    m_CodePageMap[863] = RTL_TEXTENCODING_IBM_863;
+    m_CodePageMap[865] = RTL_TEXTENCODING_IBM_865;
+    m_CodePageMap[866] = RTL_TEXTENCODING_IBM_866;
+    m_CodePageMap[869] = RTL_TEXTENCODING_IBM_869;
+    m_CodePageMap[874] = RTL_TEXTENCODING_MS_874; //thai
+    m_CodePageMap[932] = RTL_TEXTENCODING_MS_932; //japanese
+    m_CodePageMap[936] = RTL_TEXTENCODING_MS_936; //chinese simple
+    m_CodePageMap[949] = RTL_TEXTENCODING_MS_949; //korean
+    m_CodePageMap[950] = RTL_TEXTENCODING_BIG5; //chinese traditional
+    m_CodePageMap[1250] = RTL_TEXTENCODING_MS_1250; //Central European
     m_CodePageMap[1252] = RTL_TEXTENCODING_MS_1252;
     m_CodePageMap[1251] = RTL_TEXTENCODING_MS_1251; //ukrainian belarusian macedonian russian
-    m_CodePageMap[1253] = RTL_TEXTENCODING_MS_1253;//greek
-    m_CodePageMap[1254] = RTL_TEXTENCODING_MS_1254;//Turkish
-    m_CodePageMap[1255] = RTL_TEXTENCODING_MS_1255;//hebrew
-    m_CodePageMap[1256] = RTL_TEXTENCODING_MS_1256;//arabic
-    m_CodePageMap[1257] = RTL_TEXTENCODING_MS_1257;//estonian
+    m_CodePageMap[1253] = RTL_TEXTENCODING_MS_1253; //greek
+    m_CodePageMap[1254] = RTL_TEXTENCODING_MS_1254; //Turkish
+    m_CodePageMap[1255] = RTL_TEXTENCODING_MS_1255; //hebrew
+    m_CodePageMap[1256] = RTL_TEXTENCODING_MS_1256; //arabic
+    m_CodePageMap[1257] = RTL_TEXTENCODING_MS_1257; //estonian
 }
 
 rtl_TextEncoding LwpCharSetMgr::GetTextCharEncoding(sal_uInt16 wordproCode)
 {
-    std::map<sal_uInt16,rtl_TextEncoding>::iterator
-                                             pos = m_CodePageMap.find(wordproCode);
+    std::map<sal_uInt16, rtl_TextEncoding>::iterator pos = m_CodePageMap.find(wordproCode);
     if (pos != m_CodePageMap.end())
         return m_CodePageMap[wordproCode];
     return GetTextCharEncoding();

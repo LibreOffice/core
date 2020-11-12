@@ -63,12 +63,13 @@
 #include <lwpdocdata.hxx>
 #include <lwpchangemgr.hxx>
 
-Lwp9Reader::Lwp9Reader (LwpSvStream* pInputStream, IXFStream* pStream)
+Lwp9Reader::Lwp9Reader(LwpSvStream* pInputStream, IXFStream* pStream)
     : m_pDocStream(pInputStream)
     , m_pStream(pStream)
     , m_pObjMgr(nullptr)
     , m_LwpFileHdr()
-{}
+{
+}
 
 /**
  * @descr   The entrance of Word Pro 9 import filter.
@@ -82,7 +83,7 @@ bool Lwp9Reader::Read()
         m_pObjMgr = pGlobal->GetLwpObjFactory();
 
         //Does not support Word Pro 96 and previous versions
-        if (ReadFileHeader() && LwpFileHeader::m_nFileRevision>=0x000B)
+        if (ReadFileHeader() && LwpFileHeader::m_nFileRevision >= 0x000B)
         {
             ReadIndex();
             bRet = ParseDocument();
@@ -90,7 +91,7 @@ bool Lwp9Reader::Read()
         else
             bRet = false;
     }
-    catch(...)
+    catch (...)
     {
         LwpGlobalMgr::DeleteInstance();
         throw;
@@ -137,14 +138,14 @@ bool Lwp9Reader::ParseDocument()
     WriteDocHeader();
 
     //Get root document
-    LwpDocument* doc = dynamic_cast<LwpDocument*> ( m_LwpFileHdr.GetDocID().obj().get() );
+    LwpDocument* doc = dynamic_cast<LwpDocument*>(m_LwpFileHdr.GetDocID().obj().get());
 
     if (!doc)
         return false;
 
     //Parse Doc Data
-    LwpDocData *pDocData = dynamic_cast<LwpDocData*>(doc->GetDocData().obj().get());
-    if (pDocData!=nullptr)
+    LwpDocData* pDocData = dynamic_cast<LwpDocData*>(doc->GetDocData().obj().get());
+    if (pDocData != nullptr)
         pDocData->Parse(m_pStream);
 
     //Register Styles
@@ -155,7 +156,7 @@ bool Lwp9Reader::ParseDocument()
 
     //Parse document content
     m_pStream->GetAttrList()->Clear();
-    m_pStream->StartElement( "office:body" );
+    m_pStream->StartElement("office:body");
 
     //Parse change list
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
@@ -176,33 +177,32 @@ void Lwp9Reader::WriteDocHeader()
 {
     m_pStream->StartDocument();
 
-    IXFAttrList *pAttrList = m_pStream->GetAttrList();
+    IXFAttrList* pAttrList = m_pStream->GetAttrList();
 
-    pAttrList->AddAttribute( "xmlns:office", "http://openoffice.org/2000/office" );
-    pAttrList->AddAttribute( "xmlns:style", "http://openoffice.org/2000/style" );
-    pAttrList->AddAttribute( "xmlns:text", "http://openoffice.org/2000/text" );
-    pAttrList->AddAttribute( "xmlns:table", "http://openoffice.org/2000/table" );
-    pAttrList->AddAttribute( "xmlns:draw", "http://openoffice.org/2000/drawing" );
+    pAttrList->AddAttribute("xmlns:office", "http://openoffice.org/2000/office");
+    pAttrList->AddAttribute("xmlns:style", "http://openoffice.org/2000/style");
+    pAttrList->AddAttribute("xmlns:text", "http://openoffice.org/2000/text");
+    pAttrList->AddAttribute("xmlns:table", "http://openoffice.org/2000/table");
+    pAttrList->AddAttribute("xmlns:draw", "http://openoffice.org/2000/drawing");
 
-    pAttrList->AddAttribute( "xmlns:fo", "http://www.w3.org/1999/XSL/Format" );
-    pAttrList->AddAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
-    pAttrList->AddAttribute( "xmlns:number", "http://openoffice.org/2000/datastyle" );
-    pAttrList->AddAttribute( "xmlns:svg", "http://www.w3.org/2000/svg" );
-    pAttrList->AddAttribute( "xmlns:chart", "http://openoffice.org/2000/chart" );
+    pAttrList->AddAttribute("xmlns:fo", "http://www.w3.org/1999/XSL/Format");
+    pAttrList->AddAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    pAttrList->AddAttribute("xmlns:number", "http://openoffice.org/2000/datastyle");
+    pAttrList->AddAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
+    pAttrList->AddAttribute("xmlns:chart", "http://openoffice.org/2000/chart");
 
-    pAttrList->AddAttribute( "xmlns:dr3d", "http://openoffice.org/2000/dr3d" );
-    pAttrList->AddAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML" );
-    pAttrList->AddAttribute( "xmlns:form", "http://openoffice.org/2000/form" );
-    pAttrList->AddAttribute( "xmlns:script", "http://openoffice.org/2000/script" );
-    pAttrList->AddAttribute( "xmlns:dc", "http://purl.org/dc/elements/1.1/" );
+    pAttrList->AddAttribute("xmlns:dr3d", "http://openoffice.org/2000/dr3d");
+    pAttrList->AddAttribute("xmlns:math", "http://www.w3.org/1998/Math/MathML");
+    pAttrList->AddAttribute("xmlns:form", "http://openoffice.org/2000/form");
+    pAttrList->AddAttribute("xmlns:script", "http://openoffice.org/2000/script");
+    pAttrList->AddAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
 
-    pAttrList->AddAttribute( "xmlns:meta", "http://openoffice.org/2000/meta" );
-    pAttrList->AddAttribute( "office:class", "text");
-    pAttrList->AddAttribute( "office:version", "1.0");
+    pAttrList->AddAttribute("xmlns:meta", "http://openoffice.org/2000/meta");
+    pAttrList->AddAttribute("office:class", "text");
+    pAttrList->AddAttribute("office:version", "1.0");
 
-    m_pStream->StartElement( "office:document" );
+    m_pStream->StartElement("office:document");
     pAttrList->Clear();
-
 }
 /**
  * @descr   Write xml document end

@@ -90,42 +90,49 @@ class LwpFrib
 public:
     explicit LwpFrib(LwpPara* pPara);
     virtual ~LwpFrib();
-    static LwpFrib* CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag, sal_uInt8 editID);
+    static LwpFrib* CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag,
+                               sal_uInt8 editID);
     virtual void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
-    LwpFrib* GetNext(){return m_pNext;}
-    void SetNext(LwpFrib* next){m_pNext = next;}
-    sal_uInt8 GetType() const { return m_nFribType;}
+    LwpFrib* GetNext() { return m_pNext; }
+    void SetNext(LwpFrib* next) { m_pNext = next; }
+    sal_uInt8 GetType() const { return m_nFribType; }
     OUString GetEditor();
     XFColor GetHighlightColor();
+
 protected:
-    std::map<LwpFrib*,OUString>* m_pFribMap;
+    std::map<LwpFrib*, OUString>* m_pFribMap;
     LwpPara* m_pPara;
     LwpFrib* m_pNext;
     sal_uInt8 m_nFribType;
     std::unique_ptr<ModifierInfo> m_pModifiers;
     OUString m_StyleName;
+
 public:
     bool m_ModFlag;
-    const OUString& GetStyleName() const {return m_StyleName;}
+    const OUString& GetStyleName() const { return m_StyleName; }
     void SetModifiers(ModifierInfo* pModifiers);
-    ModifierInfo* GetModifiers(){return m_pModifiers.get();}
+    ModifierInfo* GetModifiers() { return m_pModifiers.get(); }
     virtual void RegisterStyle(LwpFoundry* pFoundry);
     bool HasNextFrib();
-    void ConvertChars(XFContentContainer* pXFPara,const OUString& text);
-    void ConvertHyperLink(XFContentContainer* pXFPara, const LwpHyperlinkMgr* pHyperlink,const OUString& text);
+    void ConvertChars(XFContentContainer* pXFPara, const OUString& text);
+    void ConvertHyperLink(XFContentContainer* pXFPara, const LwpHyperlinkMgr* pHyperlink,
+                          const OUString& text);
     rtl::Reference<XFFont> GetFont();
 
-    sal_uInt8 GetRevisionType() const {return m_nRevisionType;}
-    bool GetRevisionFlag() const {return m_bRevisionFlag;}
-    enum{
-        REV_INSERT =0,
+    sal_uInt8 GetRevisionType() const { return m_nRevisionType; }
+    bool GetRevisionFlag() const { return m_bRevisionFlag; }
+    enum
+    {
+        REV_INSERT = 0,
         REV_DELETE = 1,
     };
 
-    void Register(std::map<LwpFrib*,OUString>* pFribMap);
+    void Register(std::map<LwpFrib*, OUString>* pFribMap);
     void Deregister();
+
 private:
-    static void ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo);
+    static void ReadModifiers(LwpObjectStream* pObjStrm, ModifierInfo* pModInfo);
+
 protected:
     sal_uInt8 m_nRevisionType;
     bool m_bRevisionFlag;

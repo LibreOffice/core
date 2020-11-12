@@ -70,58 +70,49 @@ public:
     XFHyperlink();
 
 public:
-    void    SetHRef(const OUString& href);
+    void SetHRef(const OUString& href);
 
-    void    SetText(const OUString& text);
+    void SetText(const OUString& text);
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    OUString   m_strHRef;
-    OUString   m_strName;
-    OUString   m_strFrame;
-    OUString   m_strText;
+    OUString m_strHRef;
+    OUString m_strName;
+    OUString m_strFrame;
+    OUString m_strText;
 };
 
-inline XFHyperlink::XFHyperlink()
-{
-    m_strFrame = "_self";
-}
+inline XFHyperlink::XFHyperlink() { m_strFrame = "_self"; }
 
-inline void XFHyperlink::SetHRef(const OUString& href)
-{
-    m_strHRef = href;
-}
+inline void XFHyperlink::SetHRef(const OUString& href) { m_strHRef = href; }
 
-inline void XFHyperlink::SetText(const OUString& text)
-{
-    m_strText = text;
-}
+inline void XFHyperlink::SetText(const OUString& text) { m_strText = text; }
 
-inline void XFHyperlink::ToXml(IXFStream *pStrm)
+inline void XFHyperlink::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( "xlink:type", "simple" );
-    pAttrList->AddAttribute( "xlink:href", m_strHRef );
-    if( !m_strName.isEmpty() )
-        pAttrList->AddAttribute( "office:name", m_strName );
-    pAttrList->AddAttribute( "office:target-frame-name", m_strFrame );
-    pAttrList->AddAttribute( "xlink:show", "replace" );
-    pStrm->StartElement( "text:a" );
+    pAttrList->AddAttribute("xlink:type", "simple");
+    pAttrList->AddAttribute("xlink:href", m_strHRef);
+    if (!m_strName.isEmpty())
+        pAttrList->AddAttribute("office:name", m_strName);
+    pAttrList->AddAttribute("office:target-frame-name", m_strFrame);
+    pAttrList->AddAttribute("xlink:show", "replace");
+    pStrm->StartElement("text:a");
 
     pAttrList->Clear();
-    if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
-    pStrm->StartElement( "text:span" );
-    if( !m_strText.isEmpty() )
+    if (!GetStyleName().isEmpty())
+        pAttrList->AddAttribute("text:style-name", GetStyleName());
+    pStrm->StartElement("text:span");
+    if (!m_strText.isEmpty())
         pStrm->Characters(m_strText);
     else
         pStrm->Characters(m_strHRef);
-    pStrm->EndElement( "text:span" );
+    pStrm->EndElement("text:span");
 
-    pStrm->EndElement( "text:a" );
+    pStrm->EndElement("text:a");
 }
 
 #endif

@@ -75,53 +75,48 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
-XFSaxStream::XFSaxStream(Reference<XDocumentHandler> const & xHandler)
+XFSaxStream::XFSaxStream(Reference<XDocumentHandler> const& xHandler)
 {
     m_aHandler = xHandler;
-    m_pAttrList.reset(new XFSaxAttrList );
+    m_pAttrList.reset(new XFSaxAttrList);
 }
 
-XFSaxStream::~XFSaxStream()
-{
-}
+XFSaxStream::~XFSaxStream() {}
 
-void        XFSaxStream::StartDocument()
+void XFSaxStream::StartDocument()
 {
     if (m_aHandler.is())
         m_aHandler->startDocument();
 }
 
-void        XFSaxStream::EndDocument()
+void XFSaxStream::EndDocument()
 {
     if (m_aHandler.is())
         m_aHandler->endDocument();
 }
 
-void        XFSaxStream::StartElement(const OUString& oustr)
+void XFSaxStream::StartElement(const OUString& oustr)
 {
     if (m_aHandler.is())
-        m_aHandler->startElement( oustr, m_pAttrList->GetAttributeList() );
+        m_aHandler->startElement(oustr, m_pAttrList->GetAttributeList());
     m_pAttrList->Clear();
 }
 
-void        XFSaxStream::EndElement(const OUString& oustr)
+void XFSaxStream::EndElement(const OUString& oustr)
 {
     if (m_aHandler.is())
         m_aHandler->endElement(oustr);
 
-    if( m_pAttrList )
+    if (m_pAttrList)
         m_pAttrList->Clear();
 }
 
-void        XFSaxStream::Characters(const OUString& oustr)
+void XFSaxStream::Characters(const OUString& oustr)
 {
     if (m_aHandler.is())
         m_aHandler->characters(oustr);
 }
 
-IXFAttrList*    XFSaxStream::GetAttrList()
-{
-    return m_pAttrList.get();
-}
+IXFAttrList* XFSaxStream::GetAttrList() { return m_pAttrList.get(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

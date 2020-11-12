@@ -74,7 +74,7 @@ class LwpVirtualLayout;
 class LwpDocument : public LwpDLNFPVList
 {
 public:
-    LwpDocument(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpDocument(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual ~LwpDocument() override;
 
 private:
@@ -90,7 +90,7 @@ private:
     enum
     {
         DOC_PROTECTED = 0x00000004UL,
-        DOC_CHILDDOC =  0x00000800UL
+        DOC_CHILDDOC = 0x00000800UL
     };
 
     std::unique_ptr<LwpLineNumberOptions> m_xLnOpts;
@@ -172,42 +172,18 @@ private:
     bool IsSkippedDivision();
 };
 
-inline bool LwpDocument::IsChildDoc() const
-{
-    return (m_nPersistentFlags & DOC_CHILDDOC) != 0;
-}
+inline bool LwpDocument::IsChildDoc() const { return (m_nPersistentFlags & DOC_CHILDDOC) != 0; }
 inline bool LwpDocument::GetHonorProtection() const
 {
     return (m_nPersistentFlags & DOC_PROTECTED) != 0;
 }
-inline LwpObjectID& LwpDocument::GetSocket()
-{
-    return m_DocSockID;
-}
-inline LwpFoundry* LwpDocument::GetFoundry()
-{
-    return m_xOwnedFoundry.get();
-}
-inline LwpObjectID& LwpDocument::GetDivInfoID()
-{
-    return m_DivInfo;
-}
-inline LwpObjectID& LwpDocument::GetPageHintsID()
-{
-    return m_WYSIWYGPageHints;
-}
-inline LwpObjectID& LwpDocument::GetFootnoteOpts()
-{
-    return m_FootnoteOpts;
-}
-inline LwpObjectID& LwpDocument::GetDocData()
-{
-    return m_DocData;
-}
-inline LwpObjectID& LwpDocument::GetVerDoc()
-{
-    return m_VerDoc;
-}
+inline LwpObjectID& LwpDocument::GetSocket() { return m_DocSockID; }
+inline LwpFoundry* LwpDocument::GetFoundry() { return m_xOwnedFoundry.get(); }
+inline LwpObjectID& LwpDocument::GetDivInfoID() { return m_DivInfo; }
+inline LwpObjectID& LwpDocument::GetPageHintsID() { return m_WYSIWYGPageHints; }
+inline LwpObjectID& LwpDocument::GetFootnoteOpts() { return m_FootnoteOpts; }
+inline LwpObjectID& LwpDocument::GetDocData() { return m_DocData; }
+inline LwpObjectID& LwpDocument::GetVerDoc() { return m_VerDoc; }
 
 /**
  * @brief   DocumentSock object, divisions are embedded by document socket object
@@ -215,11 +191,14 @@ inline LwpObjectID& LwpDocument::GetVerDoc()
 class LwpDocSock : public LwpDLNFVList
 {
 public:
-    LwpDocSock(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpDocSock(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
+
 private:
     LwpObjectID m_Doc;
+
 protected:
     void Read() override;
+
 public:
     void RegisterStyle() override;
     void Parse(IXFStream* pOutputStream) override;

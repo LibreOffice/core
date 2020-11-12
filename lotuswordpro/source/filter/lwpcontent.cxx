@@ -61,9 +61,10 @@
 #include "lwpcontent.hxx"
 #include <lwpfilehdr.hxx>
 
-LwpHeadContent::LwpHeadContent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpHeadContent::LwpHeadContent(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpContent(objHdr, pStrm)
-{}
+{
+}
 
 void LwpHeadContent::Read()
 {
@@ -71,7 +72,7 @@ void LwpHeadContent::Read()
     m_pObjStrm->SkipExtra();
 }
 
-LwpContent::LwpContent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpContent::LwpContent(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpDLNFVList(objHdr, pStrm)
     , m_nFlags(0)
 {
@@ -90,7 +91,7 @@ void LwpContent::Read()
     //ClassName.Read(pStrm);
     m_ClassName.Read(pStrm);
 
-    if(LwpFileHeader::m_nFileRevision >= 0x0006)
+    if (LwpFileHeader::m_nFileRevision >= 0x0006)
     {
         //SkipID.ReadIndexed(pStrm);
         //SkipID.ReadIndexed(pStrm);
@@ -101,7 +102,7 @@ void LwpContent::Read()
     if (LwpFileHeader::m_nFileRevision >= 0x0007)
     {
         LwpObjectID SkipID;
-        if(LwpFileHeader::m_nFileRevision < 0x000B)
+        if (LwpFileHeader::m_nFileRevision < 0x000B)
         {
             SkipID.ReadIndexed(pStrm);
             pStrm->SkipExtra();
@@ -109,7 +110,7 @@ void LwpContent::Read()
         else
         {
             sal_uInt8 HasNotify = pStrm->QuickReaduInt8();
-            if(HasNotify)
+            if (HasNotify)
             {
                 SkipID.ReadIndexed(pStrm);
                 pStrm->SkipExtra();
@@ -120,7 +121,7 @@ void LwpContent::Read()
     pStrm->SkipExtra();
 }
 
-rtl::Reference<LwpVirtualLayout> LwpContent::GetLayout(LwpVirtualLayout const * pStartLayout)
+rtl::Reference<LwpVirtualLayout> LwpContent::GetLayout(LwpVirtualLayout const* pStartLayout)
 {
     return m_LayoutsWithMe.GetLayout(pStartLayout);
 }

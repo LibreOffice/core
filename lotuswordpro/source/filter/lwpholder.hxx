@@ -70,9 +70,10 @@
 class LwpDLVListHeadHolder : public LwpObject
 {
 public:
-    LwpDLVListHeadHolder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpDLVListHeadHolder(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     void Read() override;
-    LwpObjectID& GetHeadID() { return m_DLVHead;}
+    LwpObjectID& GetHeadID() { return m_DLVHead; }
+
 private:
     virtual ~LwpDLVListHeadHolder() override {}
 
@@ -85,10 +86,11 @@ private:
 class LwpDLVListHeadTailHolder final : public LwpObject
 {
 public:
-    LwpDLVListHeadTailHolder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpDLVListHeadTailHolder(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     void Read() override;
-    LwpObjectID& GetHead(){ return m_HeadTail.GetHead();}
-    LwpObjectID& GetTail(){ return m_HeadTail.GetTail();}
+    LwpObjectID& GetHead() { return m_HeadTail.GetHead(); }
+    LwpObjectID& GetTail() { return m_HeadTail.GetTail(); }
+
 private:
     virtual ~LwpDLVListHeadTailHolder() override {}
 
@@ -101,11 +103,13 @@ private:
 class LwpObjectHolder : public LwpDLVList
 {
 public:
-    LwpObjectHolder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpObjectHolder(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     void Read() override;
     LwpObjectID& GetObject() { return m_Object; }
+
 protected:
     virtual ~LwpObjectHolder() override {}
+
 private:
     LwpObjectID m_Object;
 };
@@ -117,9 +121,10 @@ private:
 class LwpListList final : public LwpObjectHolder
 {
 public:
-    LwpListList(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpListList(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     void Read() override;
-    LwpObjectID& GetHead(){ return m_HeadTail.GetHead();}
+    LwpObjectID& GetHead() { return m_HeadTail.GetHead(); }
+
 private:
     virtual ~LwpListList() override {}
 

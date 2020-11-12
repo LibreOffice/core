@@ -64,22 +64,25 @@
 #include <lwpglobalmgr.hxx>
 
 LwpObjectID::LwpObjectID()
-    :m_nLow(0), m_nHigh(0), m_nIndex(0), m_bIsCompressed(false)
+    : m_nLow(0)
+    , m_nHigh(0)
+    , m_nIndex(0)
+    , m_bIsCompressed(false)
 {
 }
 /**
  * @descr       Read object id with format: low(4bytes)+high(2bytes) from stream
  *          for LWP7 record
 */
-void LwpObjectID::Read(LwpSvStream *pStrm)
+void LwpObjectID::Read(LwpSvStream* pStrm)
 {
-    pStrm->ReadUInt32( m_nLow );
-    pStrm->ReadUInt16( m_nHigh );
+    pStrm->ReadUInt32(m_nLow);
+    pStrm->ReadUInt16(m_nHigh);
 }
 /**
  * @descr       Read object id with format: low(4bytes)+high(2bytes) from object stream
 */
-sal_uInt32 LwpObjectID::Read(LwpObjectStream *pObj)
+sal_uInt32 LwpObjectID::Read(LwpObjectStream* pObj)
 {
     m_nLow = pObj->QuickReaduInt32();
     m_nHigh = pObj->QuickReaduInt16();
@@ -90,17 +93,17 @@ sal_uInt32 LwpObjectID::Read(LwpObjectStream *pObj)
  *          if index>0, lowid is get from time table per the index
 *           else    index+lowid+highid
 */
-void LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
+void LwpObjectID::ReadIndexed(LwpSvStream* pStrm)
 {
-//note the m_nLow store the index instead of time from the timetable as in LWP
+    //note the m_nLow store the index instead of time from the timetable as in LWP
     m_bIsCompressed = false;
-    if( LwpFileHeader::m_nFileRevision < 0x000B)
+    if (LwpFileHeader::m_nFileRevision < 0x000B)
     {
         Read(pStrm);
         return;
     }
 
-    pStrm->ReadUInt8( m_nIndex );
+    pStrm->ReadUInt8(m_nIndex);
 
     if (m_nIndex)
     {
@@ -109,13 +112,13 @@ void LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();
         LwpIndexManager& rIdxMgr = pFactory->GetIndexManager();
-        m_nLow = rIdxMgr.GetObjTime( static_cast<sal_uInt16>(m_nIndex));
+        m_nLow = rIdxMgr.GetObjTime(static_cast<sal_uInt16>(m_nIndex));
     }
     else
     {
-        pStrm->ReadUInt32( m_nLow );
+        pStrm->ReadUInt32(m_nLow);
     }
-    pStrm->ReadUInt16( m_nHigh );
+    pStrm->ReadUInt16(m_nHigh);
     DiskSizeIndexed();
 }
 
@@ -124,10 +127,10 @@ void LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
  *          if index>0, lowid is get from time table per the index
 *           else    index+lowid+highid
 */
-sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
+sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream* pStrm)
 {
     m_bIsCompressed = false;
-    if(LwpFileHeader::m_nFileRevision < 0x000B)
+    if (LwpFileHeader::m_nFileRevision < 0x000B)
     {
         return Read(pStrm);
     }
@@ -140,7 +143,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();
         LwpIndexManager& rIdxMgr = pFactory->GetIndexManager();
-        m_nLow = rIdxMgr.GetObjTime( static_cast<sal_uInt16>(m_nIndex));
+        m_nLow = rIdxMgr.GetObjTime(static_cast<sal_uInt16>(m_nIndex));
     }
     else
         m_nLow = pStrm->QuickReaduInt32();
@@ -153,7 +156,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
  *          else    lowid equals to the lowid of previous low id
  *              and high id = the high id of previous id + diff +1
 */
-void LwpObjectID::ReadCompressed( LwpObjectStream* pObj, LwpObjectID const &prev )
+void LwpObjectID::ReadCompressed(LwpObjectStream* pObj, LwpObjectID const& prev)
 {
     sal_uInt8 diff = pObj->QuickReaduInt8();
 
@@ -164,7 +167,7 @@ void LwpObjectID::ReadCompressed( LwpObjectStream* pObj, LwpObjectID const &prev
     else
     {
         m_nLow = prev.GetLow();
-        m_nHigh = prev.GetHigh() + diff +1;
+        m_nHigh = prev.GetHigh() + diff + 1;
     }
 }
 /**
@@ -172,9 +175,7 @@ void LwpObjectID::ReadCompressed( LwpObjectStream* pObj, LwpObjectID const &prev
 */
 sal_uInt32 LwpObjectID::DiskSizeIndexed() const
 {
-    return sizeof(sal_uInt8)
-        + ((m_nIndex != 0) ? 0 : sizeof(m_nLow))
-        + sizeof(m_nHigh);
+    return sizeof(sal_uInt8) + ((m_nIndex != 0) ? 0 : sizeof(m_nLow)) + sizeof(m_nHigh);
 }
 /**
  * @descr       get object from object factory per the object id
@@ -188,9 +189,9 @@ rtl::Reference<LwpObject> LwpObjectID::obj(VO_TYPE tag) const
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
     LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
     rtl::Reference<LwpObject> pObj = pObjMgr->QueryObject(*this);
-    if( tag!=VO_INVALID &&  (pObj.is()) )
+    if (tag != VO_INVALID && (pObj.is()))
     {
-        if(static_cast<sal_uInt32>(tag) != pObj->GetTag())
+        if (static_cast<sal_uInt32>(tag) != pObj->GetTag())
         {
             pObj.clear();
         }

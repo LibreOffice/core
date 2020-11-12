@@ -69,58 +69,44 @@ public:
     XFArrowStyle();
 
 public:
-    void    SetArrowName(const OUString& name);
+    void SetArrowName(const OUString& name);
 
-    void    SetViewbox(const OUString& viewBox);
+    void SetViewbox(const OUString& viewBox);
 
-    void    SetSVGPath(const OUString& path);
+    void SetSVGPath(const OUString& path);
 
     virtual enumXFStyle GetStyleFamily() override;
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    OUString   m_strName;
-    OUString   m_strViewBox;
-    OUString   m_strPath;
+    OUString m_strName;
+    OUString m_strViewBox;
+    OUString m_strPath;
 };
 
-inline XFArrowStyle::XFArrowStyle()
-{
-}
+inline XFArrowStyle::XFArrowStyle() {}
 
-inline void XFArrowStyle::SetArrowName(const OUString& name)
-{
-    m_strName = name;
-}
+inline void XFArrowStyle::SetArrowName(const OUString& name) { m_strName = name; }
 
-inline void XFArrowStyle::SetViewbox(const OUString& viewBox)
-{
-    m_strViewBox = viewBox;
-}
+inline void XFArrowStyle::SetViewbox(const OUString& viewBox) { m_strViewBox = viewBox; }
 
-inline void XFArrowStyle::SetSVGPath(const OUString& path)
-{
-    m_strPath = path;
-}
+inline void XFArrowStyle::SetSVGPath(const OUString& path) { m_strPath = path; }
 
-inline enumXFStyle  XFArrowStyle::GetStyleFamily()
-{
-    return enumXFStyleArrow;
-}
+inline enumXFStyle XFArrowStyle::GetStyleFamily() { return enumXFStyleArrow; }
 
-inline void XFArrowStyle::ToXml(IXFStream *pStrm)
+inline void XFArrowStyle::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    if( !m_strName.isEmpty() )
-        pAttrList->AddAttribute( "draw:name", m_strName );
+    if (!m_strName.isEmpty())
+        pAttrList->AddAttribute("draw:name", m_strName);
     else
-        pAttrList->AddAttribute( "draw:name", GetStyleName() );
+        pAttrList->AddAttribute("draw:name", GetStyleName());
 
-    pAttrList->AddAttribute( "svg:viewBox", m_strViewBox );
-    pAttrList->AddAttribute( "svg:d", m_strPath );
+    pAttrList->AddAttribute("svg:viewBox", m_strViewBox);
+    pAttrList->AddAttribute("svg:d", m_strPath);
     pStrm->StartElement("draw:marker");
     pStrm->EndElement("draw:marker");
 }

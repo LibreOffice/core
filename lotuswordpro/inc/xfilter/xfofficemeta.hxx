@@ -66,7 +66,7 @@
 class XFOfficeMeta final
 {
 public:
-    XFOfficeMeta(){}
+    XFOfficeMeta() {}
 
     void SetCreator(const OUString& creator);
     void SetDescription(const OUString& dsr);
@@ -75,17 +75,17 @@ public:
     void SetLastTime(const OUString& lstime);
     void SetEditTime(const OUString& edtime);
 
-    void ToXml(IXFStream *pStream);
-private:
-    OUString   m_strGenerator;
-    OUString   m_strTitle;
-    OUString   m_strCreator;
-    OUString   m_strDsr;
-    OUString   m_strKeywords;
-    OUString   m_strCrtime;
-    OUString   m_strLstime;
-    OUString   m_strEdtime;
+    void ToXml(IXFStream* pStream);
 
+private:
+    OUString m_strGenerator;
+    OUString m_strTitle;
+    OUString m_strCreator;
+    OUString m_strDsr;
+    OUString m_strKeywords;
+    OUString m_strCrtime;
+    OUString m_strLstime;
+    OUString m_strEdtime;
 };
 
 #endif

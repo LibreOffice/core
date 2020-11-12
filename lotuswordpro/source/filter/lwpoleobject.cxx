@@ -68,9 +68,10 @@
  * @param:  objHdr - object header, read before entering this function
  * @param: pStrm - file stream
  */
-LwpGraphicOleObject::LwpGraphicOleObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpGraphicOleObject::LwpGraphicOleObject(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpContent(objHdr, pStrm)
-{}
+{
+}
 /**
  * @descr:   Read GraphicOleObject part
  */
@@ -85,21 +86,21 @@ void LwpGraphicOleObject::Read()
         m_pPrevObj.ReadIndexed(m_pObjStrm.get());
     }
     m_pObjStrm->SkipExtra();
-
 }
 
-void LwpGraphicOleObject::GetGrafOrgSize(double & rWidth, double & rHeight)
+void LwpGraphicOleObject::GetGrafOrgSize(double& rWidth, double& rHeight)
 {
     rWidth = 0;
     rHeight = 0;
 }
 
-void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
+void LwpGraphicOleObject::GetGrafScaledSize(double& fWidth, double& fHeight)
 {
     GetGrafOrgSize(fWidth, fHeight);
     // scaled image size
-    double fSclGrafWidth = fWidth;//LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleWidth());
-    double fSclGrafHeight = fHeight;//LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleHeight());
+    double fSclGrafWidth = fWidth; //LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleWidth());
+    double fSclGrafHeight
+        = fHeight; //LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleHeight());
 
     rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
     if (xLayout.is() && xLayout->IsFrame())
@@ -125,8 +126,8 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
             double fFrameHeight = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetHeight());
 
             // calculate the displayed size of the frame
-            double fDisFrameWidth = fFrameWidth - (fLeftMargin+fRightMargin);
-            double fDisFrameHeight = fFrameHeight - (fTopMargin+fBottomMargin);
+            double fDisFrameWidth = fFrameWidth - (fLeftMargin + fRightMargin);
+            double fDisFrameHeight = fFrameHeight - (fTopMargin + fBottomMargin);
 
             // get scale mode
             sal_uInt16 nScalemode = pMyScale->GetScaleMode();
@@ -137,7 +138,8 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
             }
             else if (nScalemode & LwpLayoutScale::PERCENTAGE)
             {
-                double fScalePercentage = static_cast<double>(pMyScale->GetScalePercentage()) / 1000;
+                double fScalePercentage
+                    = static_cast<double>(pMyScale->GetScalePercentage()) / 1000;
                 fSclGrafWidth = fScalePercentage * fWidth;
                 fSclGrafHeight = fScalePercentage * fHeight;
             }
@@ -152,17 +154,17 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
                 {
                     if (fHeight == 0.0 || fDisFrameHeight == 0.0)
                         throw o3tl::divide_by_zero();
-                    if (fWidth/fHeight >= fDisFrameWidth/fDisFrameHeight)
+                    if (fWidth / fHeight >= fDisFrameWidth / fDisFrameHeight)
                     {
                         fSclGrafWidth = fDisFrameWidth;
                         if (fWidth == 0.0)
                             throw o3tl::divide_by_zero();
-                        fSclGrafHeight = (fDisFrameWidth/fWidth) * fHeight;
+                        fSclGrafHeight = (fDisFrameWidth / fWidth) * fHeight;
                     }
                     else
                     {
                         fSclGrafHeight = fDisFrameHeight;
-                        fSclGrafWidth = (fDisFrameHeight/fHeight) * fWidth;
+                        fSclGrafWidth = (fDisFrameHeight / fHeight) * fWidth;
                     }
                 }
                 else
@@ -173,8 +175,8 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
             }
         }
     }
-    fWidth = fSclGrafWidth ;
-    fHeight =  fSclGrafHeight ;
+    fWidth = fSclGrafWidth;
+    fHeight = fSclGrafHeight;
 }
 
 /**
@@ -182,10 +184,10 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
  * @param:  objHdr - object header, read before entering this function
  * @param: pStrm - file stream
  */
-LwpOleObject::LwpOleObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpOleObject::LwpOleObject(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpGraphicOleObject(objHdr, pStrm)
     , cPersistentFlags(0)
-    , m_SizeRect(0,0,5,5)
+    , m_SizeRect(0, 0, 5, 5)
 {
 }
 /**
@@ -230,7 +232,6 @@ void LwpOleObject::Read()
         m_pObjStrm->QuickReaduInt16();
         m_pObjStrm->SkipExtra();
     }
-
 }
 
 /**
@@ -238,22 +239,16 @@ void LwpOleObject::Read()
  * @param:  pOutputStream - stream to dump OLE object
  * @param:  pFrameLayout -  framelayout object used to dump OLE object
  */
-void LwpOleObject::Parse(IXFStream* /*pOutputStream*/)
+void LwpOleObject::Parse(IXFStream* /*pOutputStream*/) {}
+
+void LwpOleObject::XFConvert(XFContentContainer* /*pCont*/) {}
+
+void LwpOleObject::GetGrafOrgSize(double& rWidth, double& rHeight)
 {
+    rWidth = static_cast<double>(m_SizeRect.GetWidth()) / 1000; //cm unit
+    rHeight = static_cast<double>(m_SizeRect.GetHeight()) / 1000; //cm unit
 }
 
-void LwpOleObject::XFConvert(XFContentContainer * /*pCont*/)
-{
-}
-
-void LwpOleObject::GetGrafOrgSize(double & rWidth, double & rHeight)
-{
-    rWidth = static_cast<double>(m_SizeRect.GetWidth())/1000;//cm unit
-    rHeight = static_cast<double>(m_SizeRect.GetHeight())/1000;//cm unit
-}
-
-void LwpOleObject::RegisterStyle()
-{
-}
+void LwpOleObject::RegisterStyle() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

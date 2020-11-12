@@ -70,16 +70,16 @@
 class XFPageCount : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 };
 
-inline void XFPageCount::ToXml(IXFStream *pStrm)
+inline void XFPageCount::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pStrm->StartElement( "text:page-count" );
-    pStrm->EndElement( "text:page-count" );
+    pStrm->StartElement("text:page-count");
+    pStrm->EndElement("text:page-count");
 }
 
 #endif

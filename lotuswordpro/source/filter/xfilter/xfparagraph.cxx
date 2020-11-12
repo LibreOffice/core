@@ -61,19 +61,11 @@
 #include <xfilter/ixfstream.hxx>
 #include <xfilter/ixfattrlist.hxx>
 
-XFParagraph::XFParagraph()
-{
+XFParagraph::XFParagraph() {}
 
-}
+XFParagraph::~XFParagraph() {}
 
-XFParagraph::~XFParagraph()
-{
-}
-
-enumXFContent XFParagraph::GetContentType()
-{
-    return enumXFContentPara;
-}
+enumXFContent XFParagraph::GetContentType() { return enumXFContentPara; }
 
 /**
  * The paragraph object serial function,the output will be like:
@@ -83,25 +75,22 @@ enumXFContent XFParagraph::GetContentType()
  *          <text:span text:style-name="T1">text content</text:span>
  *      </text:p>
  */
-void    XFParagraph::ToXml(IXFStream *pStrm)
+void XFParagraph::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
 
     assert(pAttrList);
 
     pAttrList->Clear();
-    if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
-    pStrm->StartElement( "text:p" );
+    if (!GetStyleName().isEmpty())
+        pAttrList->AddAttribute("text:style-name", GetStyleName());
+    pStrm->StartElement("text:p");
 
     XFContentContainer::ToXml(pStrm);
 
-    pStrm->EndElement( "text:p" );
+    pStrm->EndElement("text:p");
 }
 
-bool XFParagraph::HasContents() const
-{
-    return GetCount()>0;
-}
+bool XFParagraph::HasContents() const { return GetCount() > 0; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

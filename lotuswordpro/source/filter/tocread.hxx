@@ -61,38 +61,38 @@
 
 namespace OpenStormBento
 {
-
 class CBenTOCReader
 {
 public: // Methods
-    explicit CBenTOCReader(LtcBenContainer * pContainer)
+    explicit CBenTOCReader(LtcBenContainer* pContainer)
         : cpContainer(pContainer)
         , cBlockSize(0)
         , cCurr(0)
         , cTOCSize(0)
-        { }
+    {
+    }
     BenError ReadLabelAndTOC();
 
 private: // Methods
-    BenError ReadLabel(unsigned long * pTOCOffset, unsigned long * pTOCSize);
-    BenError SearchForLabel(BenByte * pLabel);
+    BenError ReadLabel(unsigned long* pTOCOffset, unsigned long* pTOCSize);
+    BenError SearchForLabel(BenByte* pLabel);
     BenError ReadTOC();
-    BenError ReadSegments(CBenValue * pValue, BenByte * pLookAhead);
-    BenError ReadSegment(CBenValue * pValue, BenByte * pLookAhead);
+    BenError ReadSegments(CBenValue* pValue, BenByte* pLookAhead);
+    BenError ReadSegment(CBenValue* pValue, BenByte* pLookAhead);
     bool CanGetData(unsigned long Amt);
-    BenError GetByte(BenByte * pByte);
-    BenError GetDWord(BenDWord * pDWord);
+    BenError GetByte(BenByte* pByte);
+    BenError GetDWord(BenDWord* pDWord);
     BenByte GetCode();
-    BenError GetData(void * pBuffer, unsigned long Amt);
+    BenError GetData(void* pBuffer, unsigned long Amt);
 
 private: // Data
-    LtcBenContainer * cpContainer;
+    LtcBenContainer* cpContainer;
     std::unique_ptr<BenByte[]> cpTOC;
     unsigned long cBlockSize;
     unsigned long cCurr;
     unsigned long cTOCSize;
 };
-}//end namespace OpenStormBento
+} //end namespace OpenStormBento
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

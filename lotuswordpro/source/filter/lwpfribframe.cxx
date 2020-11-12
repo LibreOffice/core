@@ -74,10 +74,7 @@ void LwpFribFrame::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 *  @descr:  Get the layout object which the frib points to
 *
 */
-rtl::Reference<LwpObject> LwpFribFrame::GetLayout() const
-{
-    return m_objLayout.obj();
-}
+rtl::Reference<LwpObject> LwpFribFrame::GetLayout() const { return m_objLayout.obj(); }
 
 /**
 *  @descr:  register frame style
@@ -90,7 +87,7 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
 
     if (pObject.is() && pObject->GetTag() == VO_DROPCAPLAYOUT)
     {
-        LwpDropcapLayout *pLayout = dynamic_cast<LwpDropcapLayout*>(pObject.get());
+        LwpDropcapLayout* pLayout = dynamic_cast<LwpDropcapLayout*>(pObject.get());
         if (!pLayout)
             return;
         pLayout->RegisterStyle(pFoundry);
@@ -106,8 +103,7 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
 
         //register next frib text style
         sal_uInt8 nType = pLayout->GetRelativeType();
-        if(LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE == nType
-            && HasNextFrib())
+        if (LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE == nType && HasNextFrib())
         {
             XFParaStyle* pOldStyle = m_pPara->GetXFParaStyle();
             if (pOldStyle->GetMasterPage().isEmpty())
@@ -117,7 +113,8 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
                 std::unique_ptr<XFParaStyle> pParaStyle(new XFParaStyle);
                 *pParaStyle = *pOldStyle;
                 XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-                m_StyleName = pXFStyleManager->AddStyle(std::move(pParaStyle)).m_pStyle->GetStyleName();
+                m_StyleName
+                    = pXFStyleManager->AddStyle(std::move(pParaStyle)).m_pStyle->GetStyleName();
             }
         }
         //remember the current paragraph font size which will be used in parsing frame
@@ -148,7 +145,7 @@ void LwpFribFrame::XFConvert(XFContentContainer* pCont)
     if (!pLayout)
         return;
     sal_uInt8 nType = pLayout->GetRelativeType();
-    if( LwpLayoutRelativityGuts::LAY_PARA_RELATIVE == nType)
+    if (LwpLayoutRelativityGuts::LAY_PARA_RELATIVE == nType)
     {
         rtl::Reference<LwpVirtualLayout> xContainerLayout(pLayout->GetContainerLayout());
         if (xContainerLayout.is() && xContainerLayout->IsFrame())
@@ -159,15 +156,14 @@ void LwpFribFrame::XFConvert(XFContentContainer* pCont)
         else if (xContainerLayout.is() && xContainerLayout->IsCell())
         {
             //same page as text and in cell, get the first xfpara
-            rtl::Reference<XFContent> first(
-                pCont->FindFirstContent(enumXFContentPara));
+            rtl::Reference<XFContent> first(pCont->FindFirstContent(enumXFContentPara));
             XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(first.get());
-            if(pXFFirtPara)
+            if (pXFFirtPara)
                 pXFContentContainer = pXFFirtPara;
         }
     }
     OUString sChangeID;
-    if(m_bRevisionFlag)
+    if (m_bRevisionFlag)
     {
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
@@ -182,7 +178,7 @@ void LwpFribFrame::XFConvert(XFContentContainer* pCont)
 
     pLayout->DoXFConvert(pXFContentContainer);
 
-    if(m_bRevisionFlag)
+    if (m_bRevisionFlag)
     {
         if (!sChangeID.isEmpty())
         {
@@ -192,15 +188,13 @@ void LwpFribFrame::XFConvert(XFContentContainer* pCont)
         }
     }
 
-    if(LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE == nType
-        && HasNextFrib())
+    if (LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE == nType && HasNextFrib())
     {
         XFParagraph* pXFPara = new XFParagraph();
         pXFPara->SetStyleName(m_StyleName);
         m_pPara->AddXFContent(pXFPara);
         m_pPara->GetFribs().SetXFPara(pXFPara);
     }
-
 }
 
 /**

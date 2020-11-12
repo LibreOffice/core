@@ -70,19 +70,18 @@
 class XFFloatFrame : public XFFrame
 {
 public:
-
     /**
      * @descr   output range: [start,end], not [start,end).
      */
     XFFloatFrame(sal_Int32 start, sal_Int32 end, bool all);
 
 public:
-    void    ToXml(IXFStream *pStrm) override;
+    void ToXml(IXFStream* pStrm) override;
 
 private:
-    sal_Int32   m_nStart;
-    sal_Int32   m_nEnd;
-    bool    m_bAll;
+    sal_Int32 m_nStart;
+    sal_Int32 m_nEnd;
+    bool m_bAll;
 };
 
 #endif

@@ -64,6 +64,7 @@ class LwpFileHeader
 {
 public:
     LwpFileHeader();
+
 private: //data member
     sal_uInt16 m_nAppRevision;
     sal_uInt16 m_nAppReleaseNo;
@@ -71,20 +72,15 @@ private: //data member
     sal_uInt16 m_nRequiredFileRevision;
     LwpObjectID m_cDocumentID;
     sal_uInt32 m_nRootIndexOffset;
+
 public:
     static sal_uInt16 m_nFileRevision;
-    void Read(LwpSvStream *pStrm);
+    void Read(LwpSvStream* pStrm);
     sal_uInt32 GetRootIndexOffset() const;
     LwpObjectID& GetDocID();
 };
-inline sal_uInt32 LwpFileHeader::GetRootIndexOffset() const
-{
-    return m_nRootIndexOffset;
-}
-inline LwpObjectID& LwpFileHeader::GetDocID()
-{
-    return m_cDocumentID;
-}
+inline sal_uInt32 LwpFileHeader::GetRootIndexOffset() const { return m_nRootIndexOffset; }
+inline LwpObjectID& LwpFileHeader::GetDocID() { return m_cDocumentID; }
 
 #endif
 

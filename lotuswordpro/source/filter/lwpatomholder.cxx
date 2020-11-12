@@ -58,33 +58,37 @@
 #include <rtl/textenc.h>
 
 LwpAtomHolder::LwpAtomHolder()
-    : m_nAtom(0), m_nAssocAtom(0)
-{}
+    : m_nAtom(0)
+    , m_nAssocAtom(0)
+{
+}
 
 /**
  * @descr       read atomholder from object stream
  *          the default encoding used in Word Pro is 1252
 */
-void LwpAtomHolder::Read(LwpObjectStream *pStrm)
+void LwpAtomHolder::Read(LwpObjectStream* pStrm)
 {
     //Referred to lwp: file40.cpp, QuickReadAtomHolder()
 
     sal_uInt16 diskSize = pStrm->QuickReaduInt16();
     sal_uInt16 len = pStrm->QuickReaduInt16();
 
-    if (len == 0 || diskSize < sizeof diskSize) {
+    if (len == 0 || diskSize < sizeof diskSize)
+    {
         m_nAtom = BAD_ATOM;
         m_nAssocAtom = BAD_ATOM;
         return;
     }
     m_nAtom = m_nAssocAtom = len;
 
-    LwpTools::QuickReadUnicode(pStrm, m_String, diskSize-sizeof(diskSize), RTL_TEXTENCODING_MS_1252);
+    LwpTools::QuickReadUnicode(pStrm, m_String, diskSize - sizeof(diskSize),
+                               RTL_TEXTENCODING_MS_1252);
 }
 /**
  * @descr       skip the atom holder in object stream
 */
-void LwpAtomHolder::Skip(LwpObjectStream *pStrm)
+void LwpAtomHolder::Skip(LwpObjectStream* pStrm)
 {
     sal_uInt16 holdersize = pStrm->QuickReaduInt16();
     pStrm->SeekRel(holdersize);
@@ -94,7 +98,7 @@ void LwpAtomHolder::Skip(LwpObjectStream *pStrm)
  * @descr       read path atom
  *          No use now for lwp filter, just skip the atom
 */
-void LwpAtomHolder::ReadPathAtom(LwpObjectStream *pStrm)
+void LwpAtomHolder::ReadPathAtom(LwpObjectStream* pStrm)
 {
     //Referred to lwp: file40.cpp, QuickReadPathAtom()
     // TODO:  Read the data. Now just skip it. The method to skip is same as above.

@@ -77,21 +77,21 @@ public:
     virtual ~XFSectionStyle() override;
 
 public:
-    void    SetMarginLeft(double left);
+    void SetMarginLeft(double left);
 
-    void    SetMarginRight(double right);
+    void SetMarginRight(double right);
 
-    void    SetColumns(XFColumns *pColumns);
+    void SetColumns(XFColumns* pColumns);
 
     virtual enumXFStyle GetStyleFamily() override;
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    double      m_fMarginLeft;
-    double      m_fMarginRight;
-    XFColor     m_aBackColor;
-    std::unique_ptr<XFColumns>  m_pColumns;
+    double m_fMarginLeft;
+    double m_fMarginRight;
+    XFColor m_aBackColor;
+    std::unique_ptr<XFColumns> m_pColumns;
 };
 
 #endif

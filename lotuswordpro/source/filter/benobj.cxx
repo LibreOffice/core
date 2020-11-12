@@ -58,23 +58,20 @@
 
 namespace OpenStormBento
 {
-
-CBenProperty *
-CBenObject::UseProperty(BenObjectID PropertyID)
+CBenProperty* CBenObject::UseProperty(BenObjectID PropertyID)
 {
-    CUtListElmt * pPrev;
-    return static_cast<CBenProperty *>( FindID(&cProperties, PropertyID, &pPrev) );
+    CUtListElmt* pPrev;
+    return static_cast<CBenProperty*>(FindID(&cProperties, PropertyID, &pPrev));
 }
 
-CBenValue *
-CBenObject::UseValue(BenObjectID PropertyID)
+CBenValue* CBenObject::UseValue(BenObjectID PropertyID)
 {
-    CBenProperty * pProperty = UseProperty(PropertyID);
+    CBenProperty* pProperty = UseProperty(PropertyID);
     if (pProperty == nullptr)
         return nullptr;
     return &pProperty->UseValue();
 }
 
-}// end namespace OpenStormBento
+} // end namespace OpenStormBento
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,16 +58,16 @@
 #include <unicode/timezone.h>
 #include <memory>
 
-const tools::Long DAY_SEC =24 * 60 * 60;
+const tools::Long DAY_SEC = 24 * 60 * 60;
 const tools::Long YEAR_SEC = 365 * DAY_SEC;
 const tools::Long FOURYEAR_SEC = 4 * YEAR_SEC + DAY_SEC;
 #ifndef LONG_MAX
-const long LONG_MAX=2147483647;
+const long LONG_MAX = 2147483647;
 #endif
 //01-01-70 was a Thursday
 const tools::Long BASE_DOW = 4;
 
-bool LtgGmTime(tools::Long rtime,LtTm& rtm)
+bool LtgGmTime(tools::Long rtime, LtTm& rtm)
 {
     if (rtime < 0)
     {
@@ -92,7 +92,7 @@ bool LtgGmTime(tools::Long rtime,LtTm& rtm)
         tmptim++;
         caltim -= YEAR_SEC;
 
-        if ( caltim >= YEAR_SEC )
+        if (caltim >= YEAR_SEC)
         {
             // 1972, 1976, 1980,...,etc.
             tmptim++;
@@ -126,21 +126,22 @@ bool LtgGmTime(tools::Long rtime,LtTm& rtm)
 
     //Determine months since January (0 - 11) and day of month (1 - 31)
 
-    tools::Long const * mdays;
-    if ( islpyr )
+    tools::Long const* mdays;
+    if (islpyr)
     {
-        static tools::Long const lpdays[] =
-            {-1, 30, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
+        static tools::Long const lpdays[]
+            = { -1, 30, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 };
         mdays = lpdays;
     }
     else
     {
-        static tools::Long const days[] =
-            {-1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364};
+        static tools::Long const days[]
+            = { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 };
         mdays = days;
     }
 
-    for ( tmptim = 1 ; mdays[tmptim] < rtm.tm_yday ; tmptim++ ) ;
+    for (tmptim = 1; mdays[tmptim] < rtm.tm_yday; tmptim++)
+        ;
 
     rtm.tm_mon = --tmptim;
 
@@ -164,22 +165,21 @@ bool LtgGmTime(tools::Long rtime,LtTm& rtm)
     ++(rtm.tm_mon);
 
     return true;
-
 };
-bool LtgLocalTime(tools::Long rtime,LtTm& rtm)
+bool LtgLocalTime(tools::Long rtime, LtTm& rtm)
 {
     if (rtime < 0)
     {
         return false;
     }
 
-    if ((rtime > 3 * DAY_SEC)&&(rtime < LONG_MAX - 3 * DAY_SEC))
+    if ((rtime > 3 * DAY_SEC) && (rtime < LONG_MAX - 3 * DAY_SEC))
     {
         std::unique_ptr<icu::TimeZone> pLocalZone(icu::TimeZone::createDefault());
-        tools::Long offset = (pLocalZone->getRawOffset())/1000;
+        tools::Long offset = (pLocalZone->getRawOffset()) / 1000;
         pLocalZone.reset();
         tools::Long ltime = rtime + offset;
-        return LtgGmTime(ltime,rtm);
+        return LtgGmTime(ltime, rtm);
     }
     return false;
 };

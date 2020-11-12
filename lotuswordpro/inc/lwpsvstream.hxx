@@ -68,27 +68,21 @@ class SvStream;
 class LwpSvStream
 {
 public:
-    LwpSvStream(SvStream* pStream, LwpSvStream * pCompressed = nullptr);
+    LwpSvStream(SvStream* pStream, LwpSvStream* pCompressed = nullptr);
     size_t Read(void* bytes, size_t nBytesToRead);
     void SeekRel(sal_Int64 pos);
     sal_Int64 Tell();
     sal_Int64 Seek(sal_Int64 pos);
     bool CheckSeek(sal_Int64 pos);
 
-    LwpSvStream& ReadUInt8( sal_uInt8& rUInt8 );
-    LwpSvStream& ReadUInt16( sal_uInt16& rUInt16 );
-    LwpSvStream& ReadUInt32( sal_uInt32& rUInt32 );
+    LwpSvStream& ReadUInt8(sal_uInt8& rUInt8);
+    LwpSvStream& ReadUInt16(sal_uInt16& rUInt16);
+    LwpSvStream& ReadUInt32(sal_uInt32& rUInt32);
 
     static const sal_uInt32 LWP_STREAM_BASE;
 
-    LwpSvStream * GetCompressedStream()
-    {
-        return m_pCompressedStream;
-    };
-    SvStream * GetStream()
-    {
-        return m_pStream;
-    }
+    LwpSvStream* GetCompressedStream() { return m_pCompressedStream; };
+    SvStream* GetStream() { return m_pStream; }
 
 private:
     // when the file opened is small file, m_pStream is the decompressed stream
@@ -97,7 +91,7 @@ private:
 
     // when the file opened is small file, this stream is for saving the
     // compressed stream which is to be used for Chart/OLE as BENTO container
-    LwpSvStream * m_pCompressedStream;
+    LwpSvStream* m_pCompressedStream;
 };
 #endif
 

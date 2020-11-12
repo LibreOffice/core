@@ -73,20 +73,23 @@ public:
     LwpFribPtr();
     ~LwpFribPtr();
     void ReadPara(LwpObjectStream* pObjStrm);
+
 private:
     LwpFrib* m_pFribs;
-    XFParagraph* m_pXFPara;//Current XFPara used for frib parsing
-    LwpPara* m_pPara;//for get foundry
-    static void ProcessDropcap(LwpStory* pStory, const LwpFrib* pFrib,sal_uInt32 nLen);
+    XFParagraph* m_pXFPara; //Current XFPara used for frib parsing
+    LwpPara* m_pPara; //for get foundry
+    static void ProcessDropcap(LwpStory* pStory, const LwpFrib* pFrib, sal_uInt32 nLen);
+
 public:
     void XFConvert();
-    void SetXFPara(XFParagraph* Para){m_pXFPara = Para;}
-    XFParagraph* GetXFPara(){return m_pXFPara;}
-    void SetPara(LwpPara* para){m_pPara=para;}
+    void SetXFPara(XFParagraph* Para) { m_pXFPara = Para; }
+    XFParagraph* GetXFPara() { return m_pXFPara; }
+    void SetPara(LwpPara* para) { m_pPara = para; }
     void RegisterStyle();
-    LwpFrib* GetFribs(){return m_pFribs;}
+    LwpFrib* GetFribs() { return m_pFribs; }
     LwpFrib* HasFrib(sal_uInt8 nType);
-    bool ComparePagePosition(LwpVirtualLayout const * pPreLayout, LwpVirtualLayout const * pNextLayout);
+    bool ComparePagePosition(LwpVirtualLayout const* pPreLayout,
+                             LwpVirtualLayout const* pNextLayout);
     void GatherAllText();
 };
 

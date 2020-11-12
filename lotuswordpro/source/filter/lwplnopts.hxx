@@ -70,23 +70,27 @@ class LwpLineNumberOptions final
 {
 public:
     explicit LwpLineNumberOptions(LwpObjectStream* pStrm);
+
 private:
     sal_uInt16 m_nType;
     sal_uInt16 m_nFlags;
     sal_uInt16 m_nSeparator;
     sal_uInt32 m_nSpacing;
     sal_uInt32 m_nDistance;
+
 public:
     enum
     {
-        NUMBER_NONE, NUMBER_LINES, NUMBER_TEXTLINESONLY
+        NUMBER_NONE,
+        NUMBER_LINES,
+        NUMBER_TEXTLINESONLY
     };
     enum
     {
-        LN_RESETEACHPAGE    = 0x01,
-        LN_COUNTBLANKLINES  = 0x02
+        LN_RESETEACHPAGE = 0x01,
+        LN_COUNTBLANKLINES = 0x02
     };
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
     void RegisterStyle();
 };
 #endif

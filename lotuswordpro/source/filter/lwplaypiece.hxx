@@ -67,27 +67,27 @@
 #include "lwpborderstuff.hxx"
 #include "lwpshadow.hxx"
 
-
 class LwpRotor
 {
 public:
     LwpRotor();
     ~LwpRotor();
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
+
 private:
-    sal_Int16 m_nRotation;  //angle
+    sal_Int16 m_nRotation; //angle
 };
 
 class LwpLayoutGeometry final : public LwpVirtualPiece
 {
 public:
-    LwpLayoutGeometry(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpLayoutGeometry(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     sal_Int32 GetWidth() const { return m_nWidth; }
     sal_Int32 GetHeight() const { return m_nHeight; }
     const LwpPoint& GetOrigin() const { return m_Origin; }
     const LwpPoint& GetAbsoluteOrigin() const { return m_AbsoluteOrigin; }
-    sal_uInt8 GetContentOrientation() const { return m_ContentOrientation;}
+    sal_uInt8 GetContentOrientation() const { return m_ContentOrientation; }
 
 private:
     virtual void Read() override;
@@ -104,18 +104,29 @@ private:
 class LwpLayoutScale final : public LwpVirtualPiece
 {
 public:
-    enum    {ORIGINAL_SIZE = 1, FIT_IN_FRAME = 2, PERCENTAGE = 4,
-             CUSTOM = 8, MAINTAIN_ASPECT_RATIO = 16};
+    enum
+    {
+        ORIGINAL_SIZE = 1,
+        FIT_IN_FRAME = 2,
+        PERCENTAGE = 4,
+        CUSTOM = 8,
+        MAINTAIN_ASPECT_RATIO = 16
+    };
 
-    enum    {CENTERED = 1, TILED = 2};
-    LwpLayoutScale(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    enum
+    {
+        CENTERED = 1,
+        TILED = 2
+    };
+    LwpLayoutScale(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
-    sal_uInt16 GetScaleMode() const {return m_nScaleMode;}
-    sal_uInt32 GetScalePercentage() const {return m_nScalePercentage;}
-    sal_Int32 GetScaleWidth() const {return m_nScaleWidth;}
-    sal_Int32 GetScaleHeight() const {return m_nScaleHeight;}
-    sal_uInt16 GetPlacement() const {return m_nPlacement;}
-    LwpPoint& GetOffset() {return m_Offset;}
+    sal_uInt16 GetScaleMode() const { return m_nScaleMode; }
+    sal_uInt32 GetScalePercentage() const { return m_nScalePercentage; }
+    sal_Int32 GetScaleWidth() const { return m_nScaleWidth; }
+    sal_Int32 GetScaleHeight() const { return m_nScaleHeight; }
+    sal_uInt16 GetPlacement() const { return m_nPlacement; }
+    LwpPoint& GetOffset() { return m_Offset; }
+
 private:
     virtual void Read() override;
     virtual ~LwpLayoutScale() override;
@@ -132,10 +143,11 @@ private:
 class LwpLayoutMargins final : public LwpVirtualPiece
 {
 public:
-    LwpLayoutMargins(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpLayoutMargins(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpMargins& GetMargins() { return m_Margins; }
-    LwpMargins& GetExtMargins(){ return m_ExtMargins;}
+    LwpMargins& GetExtMargins() { return m_ExtMargins; }
+
 private:
     virtual void Read() override;
     virtual ~LwpLayoutMargins() override;
@@ -148,9 +160,10 @@ private:
 class LwpLayoutBorder final : public LwpVirtualPiece
 {
 public:
-    LwpLayoutBorder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpLayoutBorder(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
-    LwpBorderStuff& GetBorderStuff(){ return m_BorderStuff;}
+    LwpBorderStuff& GetBorderStuff() { return m_BorderStuff; }
+
 private:
     virtual void Read() override;
     virtual ~LwpLayoutBorder() override;
@@ -161,9 +174,10 @@ private:
 class LwpLayoutBackground final : public LwpVirtualPiece
 {
 public:
-    LwpLayoutBackground(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpLayoutBackground(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
-    LwpBackgroundStuff& GetBackgoudStuff(){return m_BackgroundStuff;}
+    LwpBackgroundStuff& GetBackgoudStuff() { return m_BackgroundStuff; }
+
 private:
     virtual void Read() override;
     virtual ~LwpLayoutBackground() override;
@@ -176,7 +190,8 @@ class LwpExternalBorder
 public:
     LwpExternalBorder();
     ~LwpExternalBorder();
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
+
 private:
     LwpAtomHolder m_LeftName;
     LwpAtomHolder m_TopName;
@@ -188,13 +203,14 @@ private:
 class LwpLayoutExternalBorder final : public LwpVirtualPiece
 {
 public:
-    LwpLayoutExternalBorder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpLayoutExternalBorder(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
+
 private:
     virtual void Read() override;
     virtual ~LwpLayoutExternalBorder() override;
 
-    LwpExternalBorder   m_ExtranalBorder;
+    LwpExternalBorder m_ExtranalBorder;
 };
 
 class LwpColumnInfo
@@ -202,8 +218,9 @@ class LwpColumnInfo
 public:
     LwpColumnInfo();
     ~LwpColumnInfo();
-    void Read(LwpObjectStream *pStrm);
-    double GetGap(){return LwpTools::ConvertFromUnitsToMetric(m_nGap);}
+    void Read(LwpObjectStream* pStrm);
+    double GetGap() { return LwpTools::ConvertFromUnitsToMetric(m_nGap); }
+
 private:
     sal_Int32 m_nWidth;
     sal_Int32 m_nGap;
@@ -212,10 +229,11 @@ private:
 class LwpLayoutColumns final : public LwpVirtualPiece
 {
 public:
-    LwpLayoutColumns(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpLayoutColumns(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
-    sal_uInt16 GetNumCols() const {return m_nNumCols;}
+    sal_uInt16 GetNumCols() const { return m_nNumCols; }
     double GetColGap(sal_uInt16 nIndex);
+
 private:
     virtual void Read() override;
     virtual ~LwpLayoutColumns() override;
@@ -227,9 +245,10 @@ private:
 class LwpLayoutGutters final : public LwpVirtualPiece
 {
 public:
-    LwpLayoutGutters(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpLayoutGutters(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpBorderStuff& GetBorderStuff() { return m_BorderBuffer; }
+
 private:
     virtual void Read() override;
     virtual ~LwpLayoutGutters() override;
@@ -242,7 +261,8 @@ class LwpJoinStuff
 public:
     LwpJoinStuff();
     ~LwpJoinStuff();
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
+
 private:
     sal_uInt16 m_nPercentage;
     sal_uInt16 m_nCorners;
@@ -278,7 +298,7 @@ private:
         MAXJOIN = 24
     };
 
-    sal_uInt16 m_nID;//JoinType
+    sal_uInt16 m_nID; //JoinType
     sal_uInt16 m_nScaling;
     LwpColor m_Color;
 };
@@ -286,8 +306,9 @@ private:
 class LwpLayoutJoins final : public LwpVirtualPiece
 {
 public:
-    LwpLayoutJoins(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpLayoutJoins(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
+
 private:
     virtual void Read() override;
     virtual ~LwpLayoutJoins() override;
@@ -298,9 +319,10 @@ private:
 class LwpLayoutShadow final : public LwpVirtualPiece
 {
 public:
-    LwpLayoutShadow(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpLayoutShadow(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpShadow& GetShadow() { return m_Shadow; }
+
 private:
     virtual void Read() override;
     virtual ~LwpLayoutShadow() override;
@@ -312,8 +334,8 @@ class LwpLayoutRelativityGuts
 {
 public:
     LwpLayoutRelativityGuts();
-    void Read(LwpObjectStream *pStrm);
-    sal_uInt8 GetRelativeType() const { return m_nRelType;}
+    void Read(LwpObjectStream* pStrm);
+    sal_uInt8 GetRelativeType() const { return m_nRelType; }
     enum RelativeType
     {
         LAY_PARENT_RELATIVE = 1,
@@ -341,21 +363,23 @@ public:
         LAY_EXTERNAL,
         LAY_BORDER
     };
+
 private:
-    sal_uInt8   m_nRelType;
-    sal_uInt8   m_nRelFromWhere;
-    LwpPoint    m_RelDistance;
-    sal_uInt8   m_nTether;
-    sal_uInt8   m_nTetherWhere;
-    sal_uInt8   m_nFlags;
+    sal_uInt8 m_nRelType;
+    sal_uInt8 m_nRelFromWhere;
+    LwpPoint m_RelDistance;
+    sal_uInt8 m_nTether;
+    sal_uInt8 m_nTetherWhere;
+    sal_uInt8 m_nFlags;
 };
 
 class LwpLayoutRelativity final : public LwpVirtualPiece
 {
 public:
-    LwpLayoutRelativity(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpLayoutRelativity(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpLayoutRelativityGuts& GetRelGuts() { return m_RelGuts; }
+
 private:
     virtual void Read() override;
     virtual ~LwpLayoutRelativity() override;

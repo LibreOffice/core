@@ -57,7 +57,7 @@
 /**
  * @descr       read PonoseNumber from object stream
 */
-void LwpPanoseNumber::Read(LwpObjectStream *pStrm)
+void LwpPanoseNumber::Read(LwpObjectStream* pStrm)
 {
     m_nFamilyType = pStrm->QuickReaduInt8();
     m_nSerifStyle = pStrm->QuickReaduInt8();
@@ -69,18 +69,14 @@ void LwpPanoseNumber::Read(LwpObjectStream *pStrm)
     m_nLetterform = pStrm->QuickReaduInt8();
     m_nMidline = pStrm->QuickReaduInt8();
     m_nXHeight = pStrm->QuickReaduInt8();
-
 }
 
-LwpPoint::LwpPoint()
-{
-    Reset();
-}
+LwpPoint::LwpPoint() { Reset(); }
 
 /**
  * @descr       read point from object stream
 */
-void LwpPoint::Read(LwpObjectStream *pStrm)
+void LwpPoint::Read(LwpObjectStream* pStrm)
 {
     m_nX = pStrm->QuickReadInt32();
     m_nY = pStrm->QuickReadInt32();
@@ -90,8 +86,8 @@ void LwpPoint::Read(LwpObjectStream *pStrm)
 */
 void LwpPoint::Reset()
 {
-    m_nX=0;
-    m_nY=0;
+    m_nX = 0;
+    m_nY = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -75,7 +75,7 @@ class XFBGImage;
 class XFHeaderStyle : public XFStyle
 {
 public:
-    explicit XFHeaderStyle(bool isFooter=false);
+    explicit XFHeaderStyle(bool isFooter = false);
 
     virtual ~XFHeaderStyle() override;
 
@@ -83,53 +83,53 @@ public:
     /**
      * @descr   Set margins for header style.
      */
-    void    SetMargins(double left, double right, double bottom);
+    void SetMargins(double left, double right, double bottom);
 
-    void    SetDynamicSpace(bool dynamic);
+    void SetDynamicSpace(bool dynamic);
 
     /**
      * @descr   Set header fixed height.
      */
-    void    SetHeight(double height);
+    void SetHeight(double height);
 
     /**
      * @descr   Set header min height.
      */
-    void    SetMinHeight(double minHeight);
+    void SetMinHeight(double minHeight);
 
     /**
      * @descr   Set header shadow.
      */
-    void    SetShadow(XFShadow *pShadow);
+    void SetShadow(XFShadow* pShadow);
 
     /**
      * @descr   Set header borders.
      */
-    void    SetBorders(std::unique_ptr<XFBorders> pBorders);
+    void SetBorders(std::unique_ptr<XFBorders> pBorders);
 
-    void    SetBackImage(std::unique_ptr<XFBGImage>& rImage);
+    void SetBackImage(std::unique_ptr<XFBGImage>& rImage);
 
     /**
      * @descr   Set header background color.
      */
-    void    SetBackColor(XFColor color);
+    void SetBackColor(XFColor color);
 
     /**
      * @descr   Output header style object.
      */
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 protected:
-    bool    m_bIsFooter;
-    bool    m_bDynamicSpace;
-    double      m_fHeight;
-    double      m_fMinHeight;
-    XFMargins   m_aMargin;
-    std::unique_ptr<XFShadow>  m_pShadow;
-    XFPadding   m_aPadding;
+    bool m_bIsFooter;
+    bool m_bDynamicSpace;
+    double m_fHeight;
+    double m_fMinHeight;
+    XFMargins m_aMargin;
+    std::unique_ptr<XFShadow> m_pShadow;
+    XFPadding m_aPadding;
     std::unique_ptr<XFBorders> m_pBorders;
     std::unique_ptr<XFBGImage> m_pBGImage;
-    XFColor     m_aBackColor;
+    XFColor m_aBackColor;
 };
 
 #endif

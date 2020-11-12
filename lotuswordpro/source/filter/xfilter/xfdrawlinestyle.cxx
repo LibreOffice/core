@@ -69,52 +69,49 @@ XFDrawLineStyle::XFDrawLineStyle()
     , m_fSpace(0)
     , m_fLength1(0)
     , m_fLength2(0)
-{}
-
-enumXFStyle XFDrawLineStyle::GetStyleFamily()
 {
-    return enumXFStyleStrokeDash;
 }
 
-void    XFDrawLineStyle::ToXml(IXFStream *pStrm)
+enumXFStyle XFDrawLineStyle::GetStyleFamily() { return enumXFStyleStrokeDash; }
+
+void XFDrawLineStyle::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "draw:name", GetStyleName());
+    pAttrList->AddAttribute("draw:name", GetStyleName());
     //simple place here:
-    pAttrList->AddAttribute( "draw:style", "rect");
+    pAttrList->AddAttribute("draw:style", "rect");
 
-    if( m_eLineStyle == enumXFLineDot )
+    if (m_eLineStyle == enumXFLineDot)
     {
-
     }
-    else if( m_eLineStyle == enumXFLineDash )
+    else if (m_eLineStyle == enumXFLineDash)
     {
-        pAttrList->AddAttribute( "draw:dots1", OUString::number(m_nNumber1));
-        pAttrList->AddAttribute( " draw:dots1-length", OUString::number(m_fLength1) + "cm");
+        pAttrList->AddAttribute("draw:dots1", OUString::number(m_nNumber1));
+        pAttrList->AddAttribute(" draw:dots1-length", OUString::number(m_fLength1) + "cm");
 
-        pAttrList->AddAttribute( "draw:dots2", OUString::number(m_nNumber2));
-        pAttrList->AddAttribute( " draw:dots2-length", OUString::number(m_fLength2) + "cm");
+        pAttrList->AddAttribute("draw:dots2", OUString::number(m_nNumber2));
+        pAttrList->AddAttribute(" draw:dots2-length", OUString::number(m_fLength2) + "cm");
     }
-    else if( m_eLineStyle == enumXFLineDotDash )
+    else if (m_eLineStyle == enumXFLineDotDash)
     {
-        pAttrList->AddAttribute( "draw:dots1", OUString::number(m_nNumber1));
+        pAttrList->AddAttribute("draw:dots1", OUString::number(m_nNumber1));
 
-        pAttrList->AddAttribute( "draw:dots2", OUString::number(m_nNumber2));
-        pAttrList->AddAttribute( " draw:dots2-length", OUString::number(m_fLength2) + "cm");
+        pAttrList->AddAttribute("draw:dots2", OUString::number(m_nNumber2));
+        pAttrList->AddAttribute(" draw:dots2-length", OUString::number(m_fLength2) + "cm");
     }
-    else if( m_eLineStyle == enumXFLineDashDot )
+    else if (m_eLineStyle == enumXFLineDashDot)
     {
-        pAttrList->AddAttribute( "draw:dots1", OUString::number(m_nNumber1));
-        pAttrList->AddAttribute( " draw:dots1-length", OUString::number(m_fLength1) + "cm");
+        pAttrList->AddAttribute("draw:dots1", OUString::number(m_nNumber1));
+        pAttrList->AddAttribute(" draw:dots1-length", OUString::number(m_fLength1) + "cm");
 
-        pAttrList->AddAttribute( "draw:dots2", OUString::number(m_nNumber2));
+        pAttrList->AddAttribute("draw:dots2", OUString::number(m_nNumber2));
     }
 
-    pAttrList->AddAttribute( "draw:distance", OUString::number(m_fSpace) + "cm" );
+    pAttrList->AddAttribute("draw:distance", OUString::number(m_fSpace) + "cm");
 
-    pStrm->StartElement( "draw:stroke-dash" );
-    pStrm->EndElement( "draw:stroke-dash" );
+    pStrm->StartElement("draw:stroke-dash");
+    pStrm->EndElement("draw:stroke-dash");
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -71,12 +71,14 @@
 class LwpDLVList : public LwpObject
 {
 public:
-    LwpDLVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpDLVList(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     LwpObjectID& GetNext() { return m_ListNext; }
     LwpObjectID& GetPrevious() { return m_ListPrevious; }
+
 protected:
     virtual ~LwpDLVList() override {}
     void Read() override;
+
 private:
     LwpObjectID m_ListPrevious;
     LwpObjectID m_ListNext;
@@ -88,7 +90,8 @@ private:
 class LwpDLNFVList : public LwpDLVList
 {
 public:
-    LwpDLNFVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpDLNFVList(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
+
 protected:
     virtual ~LwpDLNFVList() override {}
 
@@ -96,16 +99,17 @@ protected:
     LwpObjectID m_ChildTail;
     LwpObjectID m_Parent;
     LwpAtomHolder m_Name;
+
 protected:
     void Read() override;
     void ReadName(LwpObjectStream* pObjStrm);
+
 public:
     LwpAtomHolder& GetName() { return m_Name; }
     LwpObjectID& GetChildHead() { return m_ChildHead; }
     LwpObjectID& GetChildTail() { return m_ChildTail; }
     LwpObjectID& GetParent() { return m_Parent; }
 };
-
 
 class LwpPropList;
 /**
@@ -114,12 +118,14 @@ class LwpPropList;
 class LwpDLNFPVList : public LwpDLNFVList
 {
 public:
-    LwpDLNFPVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpDLNFPVList(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual ~LwpDLNFPVList() override;
     LwpPropList* GetPropList() { return m_pPropList.get(); }
+
 protected:
     void Read() override;
     void ReadPropertyList(LwpObjectStream* pObjStrm);
+
 private:
     bool m_bHasProperties;
     std::unique_ptr<LwpPropList> m_pPropList;
@@ -131,11 +137,13 @@ private:
 class LwpDLVListHeadTail
 {
 public:
-    LwpDLVListHeadTail(){}
+    LwpDLVListHeadTail() {}
     void Read(LwpObjectStream* pObjStrm);
+
 private:
     LwpObjectID m_ListHead;
     LwpObjectID m_ListTail;
+
 public:
     LwpObjectID& GetHead() { return m_ListHead; }
     LwpObjectID& GetTail() { return m_ListTail; }
@@ -147,11 +155,12 @@ public:
 class LwpDLVListHead
 {
 public:
-    LwpDLVListHead(){}
+    LwpDLVListHead() {}
     void Read(LwpObjectStream* pObjStrm);
     LwpObjectID& GetFirst() { return m_objHead; }
+
 private:
-    LwpObjectID m_objHead;//LwpDLVList
+    LwpObjectID m_objHead; //LwpDLVList
 };
 
 #endif

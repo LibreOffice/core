@@ -60,26 +60,23 @@
 
 #include "lwpsortopt.hxx"
 
-void LwpSortKey::Read(LwpObjectStream *pStrm)
+void LwpSortKey::Read(LwpObjectStream* pStrm)
 {
     m_nField = pStrm->QuickReaduInt16();
     m_nFlag = pStrm->QuickReaduInt16();
     m_nWord = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 }
-LwpSortOption::LwpSortOption(LwpObjectStream* pStrm)
-{
-    Read(pStrm);
-}
+LwpSortOption::LwpSortOption(LwpObjectStream* pStrm) { Read(pStrm); }
 /**
  * @descr       Read sort option in VO_DOCUMENT from object stream
  **/
-void LwpSortOption::Read(LwpObjectStream *pStrm)
+void LwpSortOption::Read(LwpObjectStream* pStrm)
 {
     m_nCount = pStrm->QuickReaduInt16();
     m_nFlags = pStrm->QuickReaduInt16();
     m_nText = pStrm->QuickReaduInt8();
-    for(LwpSortKey & key : m_Keys)
+    for (LwpSortKey& key : m_Keys)
     {
         key.Read(pStrm);
     }

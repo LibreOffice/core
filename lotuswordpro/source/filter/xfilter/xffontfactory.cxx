@@ -59,24 +59,17 @@
  ************************************************************************/
 #include <xfilter/xffontfactory.hxx>
 
-XFFontFactory::XFFontFactory()
-{
-}
+XFFontFactory::XFFontFactory() {}
 
-XFFontFactory::~XFFontFactory()
-{
-}
+XFFontFactory::~XFFontFactory() {}
 
-void XFFontFactory::AddFont(rtl::Reference<XFFont> const & pFont)
-{
-    s_aFonts.push_back( pFont );
-}
+void XFFontFactory::AddFont(rtl::Reference<XFFont> const& pFont) { s_aFonts.push_back(pFont); }
 
-rtl::Reference<XFFont> XFFontFactory::FindSameFont(rtl::Reference<XFFont> const & pFont)
+rtl::Reference<XFFont> XFFontFactory::FindSameFont(rtl::Reference<XFFont> const& pFont)
 {
     for (auto const& font : s_aFonts)
     {
-        if( *pFont == *font )
+        if (*pFont == *font)
             return font;
     }
 

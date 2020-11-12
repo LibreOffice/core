@@ -67,18 +67,17 @@
 class XFHeader : public XFContentContainer
 {
 public:
-    XFHeader()
-    {
-    }
+    XFHeader() {}
+
 public:
-    virtual void ToXml(IXFStream *pStrm) override
+    virtual void ToXml(IXFStream* pStrm) override
     {
-        IXFAttrList *pAttrList = pStrm->GetAttrList();
+        IXFAttrList* pAttrList = pStrm->GetAttrList();
         pAttrList->Clear();
 
-        pStrm->StartElement( "style:header" );
+        pStrm->StartElement("style:header");
         XFContentContainer::ToXml(pStrm);
-        pStrm->EndElement( "style:header" );
+        pStrm->EndElement("style:header");
     }
 };
 
