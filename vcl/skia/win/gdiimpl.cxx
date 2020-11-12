@@ -92,6 +92,8 @@ bool WinSkiaSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const&
                                    << this << "): "
                                    << SkIRect::MakeXYWH(nX, nY, iterator->second->width(),
                                                         iterator->second->height()));
+    addUpdateRegion(
+        SkRect::MakeXYWH(nX, nY, iterator->second->width(), iterator->second->height()));
     mSurface->getCanvas()->drawImage(iterator->second, nX, nY);
     postDraw();
     return true;
@@ -110,6 +112,7 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
     SAL_INFO("vcl.skia.trace",
              "renderandcachednativecontrol("
                  << this << "): " << SkIRect::MakeXYWH(nX, nY, image->width(), image->height()));
+    addUpdateRegion(SkRect::MakeXYWH(nX, nY, image->width(), image->height()));
     mSurface->getCanvas()->drawImage(image, nX, nY);
     postDraw();
 
