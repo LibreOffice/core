@@ -56,7 +56,6 @@ public:
 
         AnyItem_ = Pre_Image_,
 
-        Image_TabBarMenu,
         Image_CloseIndicator,
 
         Image_Color_,
@@ -93,10 +92,6 @@ public:
         Int_DeckTopPadding,
         Int_DeckRightPadding,
         Int_DeckBottomPadding,
-        Int_TabBarLeftPadding,
-        Int_TabBarTopPadding,
-        Int_TabBarRightPadding,
-        Int_TabBarBottomPadding,
         Int_ButtonCornerRadius,
 
         Int_Bool_,

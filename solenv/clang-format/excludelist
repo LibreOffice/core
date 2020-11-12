@@ -11495,7 +11495,6 @@ sfx2/inc/recentdocsview.hxx
 sfx2/inc/sidebar/Accessible.hxx
 sfx2/inc/sidebar/ContextChangeBroadcaster.hxx
 sfx2/inc/sidebar/ContextList.hxx
-sfx2/inc/sidebar/ControlFactory.hxx
 sfx2/inc/sidebar/ControllerFactory.hxx
 sfx2/inc/sidebar/DeckDescriptor.hxx
 sfx2/inc/sidebar/DeckLayouter.hxx
@@ -11746,7 +11745,6 @@ sfx2/source/sidebar/AsynchronousCall.cxx
 sfx2/source/sidebar/Context.cxx
 sfx2/source/sidebar/ContextChangeBroadcaster.cxx
 sfx2/source/sidebar/ContextList.cxx
-sfx2/source/sidebar/ControlFactory.cxx
 sfx2/source/sidebar/ControllerFactory.cxx
 sfx2/source/sidebar/ControllerItem.cxx
 sfx2/source/sidebar/Deck.cxx

@@ -129,7 +129,7 @@ SidebarController::SidebarController (
               mpParentWindow,
               mxFrame,
               [this](const OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
-              [this](const tools::Rectangle& rButtonBox,const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
+              [this](weld::MenuButton& rButton, const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButton, rMenuData); },
               this)),
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(),
@@ -1035,25 +1035,15 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
     }
 }
 
-void SidebarController::ShowPopupMenu (
-    const tools::Rectangle& rButtonBox,
+void SidebarController::ShowPopupMenu(
+    weld::MenuButton& rButton,
     const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
-    VclPtr<PopupMenu> pMenu = CreatePopupMenu(rMenuData);
-    pMenu->SetSelectHdl(LINK(const_cast<SidebarController*>(this), SidebarController, OnMenuItemSelected));
-
-    // pass toolbox button rect so the menu can stay open on button up
-    tools::Rectangle aBox (rButtonBox);
-    aBox.Move(mpTabBar->GetPosPixel().X(), 0);
-    const PopupMenuFlags aMenuDirection
-        = (comphelper::LibreOfficeKit::isActive() ? PopupMenuFlags::ExecuteLeft
-                                                  : PopupMenuFlags::ExecuteDown);
-    pMenu->Execute(mpParentWindow, aBox, aMenuDirection);
-    pMenu.disposeAndClear();
+    CreatePopupMenu(rButton, rMenuData);
+    rButton.connect_selected(LINK(const_cast<SidebarController*>(this), SidebarController, OnMenuItemSelected));
 }
 
-VclPtr<PopupMenu>
-SidebarController::CreatePopupMenu(const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
+void SidebarController::CreatePopupMenu(weld::MenuButton& rButton, const std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
     // Create the top level popup menu.
     auto pMenu = VclPtr<PopupMenu>::Create();
@@ -1063,10 +1053,6 @@ SidebarController::CreatePopupMenu(const ::std::vector<TabBar::DeckMenuData>& rM
         pMenuWindow->SetPopupModeFlags(pMenuWindow->GetPopupModeFlags()
                                        | FloatWinPopupFlags::NoMouseUpClose);
     }
-
-    // Create sub menu for customization (hiding of deck tabs), only on desktop.
-    VclPtr<PopupMenu> pCustomizationMenu
-        = (comphelper::LibreOfficeKit::isActive() ? nullptr : VclPtr<PopupMenu>::Create());
 
     // Add one entry for every tool panel element to individually make
     // them visible or hide them.
@@ -1099,50 +1085,29 @@ SidebarController::CreatePopupMenu(const ::std::vector<TabBar::DeckMenuData>& rM
         ++nIndex;
     }
 
-    pMenu->InsertSeparator();
-
+    bool bHideLock = true;
+    bool bHideUnLock = true;
     // LOK doesn't support docked/undocked; Sidebar is floating but rendered docked in browser.
     if (!comphelper::LibreOfficeKit::isActive())
     {
         // Add entry for docking or un-docking the tool panel.
         if (mpParentWindow->IsFloatingMode())
-        {
-            pMenu->InsertItem(MID_LOCK_TASK_PANEL, SfxResId(STR_SFX_DOCK));
-            pMenu->SetAccelKey(MID_LOCK_TASK_PANEL, vcl::KeyCode(KEY_F10, true, true, false, false));
-        }
+            bHideLock = false;
         else
-        {
-            pMenu->InsertItem(MID_UNLOCK_TASK_PANEL, SfxResId(STR_SFX_UNDOCK));
-            pMenu->SetAccelKey(MID_UNLOCK_TASK_PANEL, vcl::KeyCode(KEY_F10, true, true, false, false));
-        }
+            bHideUnLock = false;
     }
-
-    pMenu->InsertItem(MID_HIDE_SIDEBAR, SfxResId(SFX_STR_SIDEBAR_HIDE_SIDEBAR));
+    if (bHideLock)
+        pMenu->set_item_visible("locktaskpanel", false);
+    if (bHideUnLock)
+        pMenu->set_item_visible("unlocktaskpanel", false);
 
     // No Restore or Customize options for LoKit.
     if (!comphelper::LibreOfficeKit::isActive())
-    {
-        pCustomizationMenu->InsertSeparator();
-        pCustomizationMenu->InsertItem(MID_RESTORE_DEFAULT, SfxResId(SFX_STR_SIDEBAR_RESTORE));
-
-        pMenu->InsertItem(MID_CUSTOMIZATION, SfxResId(SFX_STR_SIDEBAR_CUSTOMIZATION));
-        pMenu->SetPopupMenu(MID_CUSTOMIZATION, pCustomizationMenu);
-    }
-
-    pMenu->RemoveDisabledEntries(false);
-
-    return pMenu;
+        pMenu->set_item_visible("customization", false);
 }
 
-IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
+IMPL_LINK(SidebarController, OnMenuItemSelected, const OString&, rCurItemId, void)
 {
-    if (pMenu == nullptr)
-    {
-        OSL_ENSURE(pMenu!=nullptr, "sfx2::sidebar::SidebarController::OnMenuItemSelected: illegal menu!");
-        return false;
-    }
-
-    pMenu->Deactivate();
     const sal_Int32 nIndex (pMenu->GetCurItemId());
     switch (nIndex)
     {
@@ -1212,8 +1177,6 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
         }
         break;
     }
-
-    return true;
 }
 
 void SidebarController::RequestCloseDeck()
