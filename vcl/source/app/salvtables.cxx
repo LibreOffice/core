@@ -3199,23 +3199,6 @@ IMPL_LINK_NOARG(SalInstanceEntry, ActivateHdl, Edit&, bool)
     return m_aActivateHdl.Call(*this);
 }
 
-struct SalInstanceTreeIter : public weld::TreeIter
-{
-    SalInstanceTreeIter(const SalInstanceTreeIter* pOrig)
-        : iter(pOrig ? pOrig->iter : nullptr)
-    {
-    }
-    SalInstanceTreeIter(SvTreeListEntry* pIter)
-        : iter(pIter)
-    {
-    }
-    virtual bool equal(const TreeIter& rOther) const override
-    {
-        return iter == static_cast<const SalInstanceTreeIter&>(rOther).iter;
-    }
-    SvTreeListEntry* iter;
-};
-
 static SalInstanceTreeView* g_DragSource;
 
 // Each row has a cell for the expander image, (and an optional cell for a
