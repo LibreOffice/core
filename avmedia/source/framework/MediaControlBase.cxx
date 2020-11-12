@@ -64,8 +64,7 @@ void MediaControlBase::UpdateVolumeSlider( MediaItem const & aMediaItem )
     {
         mxVolumeSlider->set_sensitive(true);
         const sal_Int32 nVolumeDB = aMediaItem.getVolumeDB();
-        mxVolumeSlider->set_value( std::min( std::max( nVolumeDB, static_cast< sal_Int32 >( AVMEDIA_DB_RANGE ) ),
-                                                static_cast< sal_Int32 >( 0 ) ) );
+        mxVolumeSlider->set_value( std::clamp( nVolumeDB, 0, AVMEDIA_DB_RANGE ) );
     }
 }
 
