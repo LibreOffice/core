@@ -15831,7 +15831,6 @@ vbahelper/source/msforms/vbalistcontrolhelper.hxx
 vbahelper/source/msforms/vbamultipage.cxx
 vbahelper/source/msforms/vbamultipage.hxx
 vbahelper/source/msforms/vbanewfont.cxx
-vbahelper/source/msforms/vbanewfont.hxx
 vbahelper/source/msforms/vbapages.cxx
 vbahelper/source/msforms/vbapages.hxx
 vbahelper/source/msforms/vbaprogressbar.cxx
@@ -15863,8 +15862,6 @@ vbahelper/source/vbahelper/vbacommandbarhelper.cxx
 vbahelper/source/vbahelper/vbacommandbarhelper.hxx
 vbahelper/source/vbahelper/vbacommandbars.cxx
 vbahelper/source/vbahelper/vbacommandbars.hxx
-vbahelper/source/vbahelper/vbadialogbase.cxx
-vbahelper/source/vbahelper/vbadialogsbase.cxx
 vbahelper/source/vbahelper/vbadocumentbase.cxx
 vbahelper/source/vbahelper/vbadocumentsbase.cxx
 vbahelper/source/vbahelper/vbaeventshelperbase.cxx
