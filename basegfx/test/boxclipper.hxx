@@ -23,10 +23,9 @@
 
 #include <cstddef>
 
-namespace basegfx2d {
-
-double getRandomOrdinal( const std::size_t n );
-
+namespace basegfx2d
+{
+double getRandomOrdinal(const std::size_t n);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
