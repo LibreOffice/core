@@ -396,6 +396,9 @@ void ScCheckListMenuControl::StartPopupMode(const tools::Rectangle& rRect, Float
 
 void ScCheckListMenuControl::terminateAllPopupMenus()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        NotifyCloseLOK();
+
     EndPopupMode();
     ScCheckListMenuWindow* pParentMenu = mxFrame->GetParentMenu();
     if (pParentMenu)
@@ -1383,7 +1386,7 @@ void ScCheckListMenuControl::NotifyCloseLOK()
         if (pNotifier)
         {
             tools::JsonWriter aJsonWriter;
-            aJsonWriter.put("jsontype", "dockingwindow");
+            aJsonWriter.put("jsontype", "autofilter");
             aJsonWriter.put("action", "close");
 
             const std::string message = aJsonWriter.extractAsStdString();
