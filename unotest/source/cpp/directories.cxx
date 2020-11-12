@@ -13,31 +13,33 @@
 #include <osl/file.hxx>
 #include <unotest/directories.hxx>
 
-namespace {
-
-OUString getFileURLFromSystemPath(OUString const & path) {
+namespace
+{
+OUString getFileURLFromSystemPath(OUString const& path)
+{
     OUString url;
     osl::FileBase::RC e = osl::FileBase::getFileURLFromSystemPath(path, url);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
-    if (!url.endsWith("/")) {
+    if (!url.endsWith("/"))
+    {
         url += "/";
     }
     return url;
 }
-
 }
 
-test::Directories::Directories() {
-    const char* pSrcRoot = getenv( "SRC_ROOT" );
+test::Directories::Directories()
+{
+    const char* pSrcRoot = getenv("SRC_ROOT");
     CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != nullptr);
     CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot[0] != 0);
-    const char* pWorkdirRoot = getenv( "WORKDIR_FOR_BUILD" );
+    const char* pWorkdirRoot = getenv("WORKDIR_FOR_BUILD");
     CPPUNIT_ASSERT_MESSAGE("$WORKDIR_FOR_BUILD env variable not set", pWorkdirRoot != nullptr);
     CPPUNIT_ASSERT_MESSAGE("$WORKDIR_FOR_BUILD env variable not set", pWorkdirRoot[0] != 0);
-    m_aSrcRootPath = OUString::createFromAscii( pSrcRoot );
+    m_aSrcRootPath = OUString::createFromAscii(pSrcRoot);
     m_aSrcRootURL = getFileURLFromSystemPath(m_aSrcRootPath);
 
-    m_aWorkdirRootPath = OUString::createFromAscii( pWorkdirRoot );
+    m_aWorkdirRootPath = OUString::createFromAscii(pWorkdirRoot);
     m_aWorkdirRootURL = getFileURLFromSystemPath(m_aWorkdirRootPath);
 }
 

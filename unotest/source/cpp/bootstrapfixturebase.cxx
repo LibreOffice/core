@@ -19,13 +19,9 @@ using namespace ::com::sun::star;
 // test function in a rather non-intuitive way. This is why all the 'real'
 // heavy lifting is deferred until setUp. setUp and tearDown are interleaved
 // between the tests as you might expect.
-test::BootstrapFixtureBase::BootstrapFixtureBase()
-{
-}
+test::BootstrapFixtureBase::BootstrapFixtureBase() {}
 
-test::BootstrapFixtureBase::~BootstrapFixtureBase()
-{
-}
+test::BootstrapFixtureBase::~BootstrapFixtureBase() {}
 
 void test::BootstrapFixtureBase::setUp()
 {
@@ -34,9 +30,6 @@ void test::BootstrapFixtureBase::setUp()
     m_xSFactory.set(m_xFactory, uno::UNO_QUERY_THROW);
 }
 
-void test::BootstrapFixtureBase::tearDown()
-{
-    StarBASIC::DetachAllDocBasicItems();
-}
+void test::BootstrapFixtureBase::tearDown() { StarBASIC::DetachAllDocBasicItems(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,13 +25,13 @@
 
 #include "getargument.hxx"
 
-namespace test::detail {
-
-bool getArgument(OUString const & name, OUString * value) {
+namespace test::detail
+{
+bool getArgument(OUString const& name, OUString* value)
+{
     OSL_ASSERT(value != nullptr);
     return rtl::Bootstrap::get("arg-" + name, *value);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
