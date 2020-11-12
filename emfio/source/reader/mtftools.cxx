@@ -363,6 +363,24 @@ namespace emfio
                         fY2 += mnDevOrgY;
                     }
                     break;
+                    case MM_TEXT : // in device pixel. Positive x is to the right, positive y is down.
+                    {
+                        if (mnPixX == 0 || mnPixY == 0)
+                        {
+                            SAL_WARN("emfio", "invalid scaling factor");
+                            return Point();
+                        }
+                        else
+                        {
+                            fX2 -= mnWinOrgX;
+                            fY2 -= mnWinOrgY;
+                            fX2 += mnDevOrgX;
+                            fY2 += mnDevOrgY;
+                            fX2 *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
+                            fY2 *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
+                        }
+                    }
+                    break;
                     default :
                     {
                         if (mnPixX == 0 || mnPixY == 0)
@@ -2131,6 +2149,12 @@ namespace emfio
         pSave->maPathObj = maPathObj;
         pSave->maClipPath = maClipPath;
 
+        SAL_INFO("emfio", "\t\t GfxMode: " << mnGfxMode);
+        SAL_INFO("emfio", "\t\t MapMode: " << mnMapMode);
+        SAL_INFO("emfio", "\t\t WinOrg: " << mnWinOrgX << ", " << mnWinOrgY);
+        SAL_INFO("emfio", "\t\t WinExt: " << mnWinExtX << " x " << mnWinExtY);
+        SAL_INFO("emfio", "\t\t DevOrg: " << mnDevOrgX << ", " << mnDevOrgY);
+        SAL_INFO("emfio", "\t\t DevWidth/Height: " << mnDevWidth << " x " << mnDevHeight);
         mvSaveStack.push_back( pSave );
     }
 
@@ -2180,6 +2204,13 @@ namespace emfio
             mpGDIMetaFile->AddAction( new MetaRasterOpAction( meRasterOp ) );
             meLatestRasterOp = meRasterOp;
         }
+
+        SAL_INFO("emfio", "\t\t GfxMode: " << mnGfxMode);
+        SAL_INFO("emfio", "\t\t MapMode: " << mnMapMode);
+        SAL_INFO("emfio", "\t\t WinOrg: " << mnWinOrgX << ", " << mnWinOrgY);
+        SAL_INFO("emfio", "\t\t WinExt: " << mnWinExtX << " x " << mnWinExtY);
+        SAL_INFO("emfio", "\t\t DevOrg: " << mnDevOrgX << ", " << mnDevOrgY);
+        SAL_INFO("emfio", "\t\t DevWidth/Height: " << mnDevWidth << " x " << mnDevHeight);
         mvSaveStack.pop_back();
     }
 
