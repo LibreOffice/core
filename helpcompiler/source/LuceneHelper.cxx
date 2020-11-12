@@ -9,7 +9,7 @@
 
 #include "LuceneHelper.hxx"
 
-std::vector<TCHAR> OUStringToTCHARVec(OUString const &rStr)
+std::vector<TCHAR> OUStringToTCHARVec(OUString const& rStr)
 {
     //UTF-16
     if (sizeof(TCHAR) == sizeof(sal_Unicode))
@@ -17,7 +17,7 @@ std::vector<TCHAR> OUStringToTCHARVec(OUString const &rStr)
 
     //UTF-32
     std::vector<TCHAR> aRet;
-    for (sal_Int32 nStrIndex = 0; nStrIndex < rStr.getLength(); )
+    for (sal_Int32 nStrIndex = 0; nStrIndex < rStr.getLength();)
     {
         const sal_uInt32 nCode = rStr.iterateCodePoints(&nStrIndex);
         aRet.push_back(nCode);
@@ -26,7 +26,7 @@ std::vector<TCHAR> OUStringToTCHARVec(OUString const &rStr)
     return aRet;
 }
 
-OUString TCHARArrayToOUString(TCHAR const *str)
+OUString TCHARArrayToOUString(TCHAR const* str)
 {
     // UTF-16
     if (sizeof(TCHAR) == sizeof(sal_Unicode))

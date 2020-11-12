@@ -11,20 +11,20 @@
 #define INCLUDED_HELPCOMPILER_SOURCE_LUCENEHELPER_HXX
 
 #if defined(__GNUC__)
-#  pragma GCC visibility push (default)
+#pragma GCC visibility push(default)
 #endif
 
 #include <CLucene.h>
 
 #if defined(__GNUC__)
-#  pragma GCC visibility pop
+#pragma GCC visibility pop
 #endif
 
 #include <rtl/ustring.hxx>
 #include <vector>
 
-std::vector<TCHAR> OUStringToTCHARVec(OUString const &rStr);
-OUString TCHARArrayToOUString(TCHAR const *str);
+std::vector<TCHAR> OUStringToTCHARVec(OUString const& rStr);
+OUString TCHARArrayToOUString(TCHAR const* str);
 
 #endif
 
