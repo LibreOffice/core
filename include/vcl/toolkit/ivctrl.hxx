@@ -213,6 +213,7 @@ public:
     virtual void        dispose() override;
 
     WinBits             GetStyle() const;
+    void SetSelectionMode(SelectionMode eMode);
 
     void                SetFont( const vcl::Font& rFont );
     void                SetPointFont( const vcl::Font& rFont );

@@ -252,6 +252,11 @@ public:
                         SvxIconChoiceCtrl_Impl( SvtIconChoiceCtrl* pView, WinBits nWinStyle );
                         ~SvxIconChoiceCtrl_Impl();
 
+    void SetSelectionMode(SelectionMode eMode)
+    {
+        eSelectionMode = eMode;
+    }
+
     void                Clear( bool bInCtor );
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const { return nWinBits; }
