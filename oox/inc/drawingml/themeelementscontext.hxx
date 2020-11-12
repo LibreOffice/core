@@ -22,16 +22,16 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox::drawingml {
-
+namespace oox::drawingml
+{
 class Theme;
 
 class ThemeElementsContext final : public oox::core::ContextHandler2
 {
 public:
-    ThemeElementsContext( ::oox::core::ContextHandler2Helper const & rParent, Theme& rTheme );
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement,
-        const ::oox::AttributeList& rAttribs ) override;
+    ThemeElementsContext(::oox::core::ContextHandler2Helper const& rParent, Theme& rTheme);
+    virtual ::oox::core::ContextHandlerRef
+    onCreateContext(sal_Int32 nElement, const ::oox::AttributeList& rAttribs) override;
 
 private:
     Theme& mrTheme;

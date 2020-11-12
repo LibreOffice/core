@@ -22,13 +22,12 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
-namespace oox::ppt {
-
+namespace oox::ppt
+{
 // ST_TLTime
-css::uno::Any GetTime( const OUString & val );
+css::uno::Any GetTime(const OUString& val);
 // ST_TLTimeAnimateValueTime
-css::uno::Any GetTimeAnimateValueTime( const OUString & val );
-
+css::uno::Any GetTimeAnimateValueTime(const OUString& val);
 }
 
 #endif

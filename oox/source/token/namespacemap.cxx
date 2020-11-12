@@ -19,8 +19,8 @@
 
 #include <oox/token/namespacemap.hxx>
 
-namespace oox {
-
+namespace oox
+{
 NamespaceMap::NamespaceMap()
 {
     maTransitionalNamespaceMap = std::map<sal_Int32, OUString>{
@@ -31,7 +31,6 @@ NamespaceMap::NamespaceMap()
 #include <namespaces-strictnames.inc>
     };
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

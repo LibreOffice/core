@@ -28,8 +28,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::oox::core;
 
-namespace oox::drawingml {
-
+namespace oox::drawingml
+{
 void ShapeCreationVisitor::visit(ConstraintAtom& /*rAtom*/)
 {
     // stop processing
@@ -56,8 +56,10 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
     // stop processing if it's not a child of previous LayoutNode
 
-    const DiagramData::PointsNameMap::const_iterator aDataNode = mrDgm.getData()->getPointsPresNameMap().find(rAtom.getName());
-    if (aDataNode == mrDgm.getData()->getPointsPresNameMap().end() || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
+    const DiagramData::PointsNameMap::const_iterator aDataNode
+        = mrDgm.getData()->getPointsPresNameMap().find(rAtom.getName());
+    if (aDataNode == mrDgm.getData()->getPointsPresNameMap().end()
+        || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
         return;
 
     const dgm::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
@@ -65,8 +67,9 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         return;
 
     bool bIsChild = false;
-    for (const auto & aConnection : mrDgm.getData()->getConnections())
-        if (aConnection.msSourceId == mpCurrentNode->msModelId && aConnection.msDestId == pNewNode->msModelId)
+    for (const auto& aConnection : mrDgm.getData()->getConnections())
+        if (aConnection.msSourceId == mpCurrentNode->msModelId
+            && aConnection.msDestId == pNewNode->msModelId)
             bIsChild = true;
 
     if (!bIsChild)
@@ -93,9 +96,9 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
         if (pShape)
         {
-            SAL_INFO(
-                "oox.drawingml",
-                "processing shape type " << (pShape->getCustomShapeProperties()->getShapePresetType()));
+            SAL_INFO("oox.drawingml",
+                     "processing shape type "
+                         << (pShape->getCustomShapeProperties()->getShapePresetType()));
 
             if (rAtom.setupShape(pShape, pNewNode, mnCurrIdx))
             {
@@ -108,7 +111,9 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         }
         else
         {
-            SAL_WARN("oox.drawingml", "ShapeCreationVisitor::visit: no shape set while processing layoutnode named " << rAtom.getName());
+            SAL_WARN("oox.drawingml",
+                     "ShapeCreationVisitor::visit: no shape set while processing layoutnode named "
+                         << rAtom.getName());
         }
     }
 
@@ -117,7 +122,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
     // set new parent for children
     ShapePtr pPreviousParent(mpParentShape);
-    mpParentShape=pCurrParent;
+    mpParentShape = pCurrParent;
 
     // process children
     meLookFor = LAYOUT_NODE;
@@ -128,7 +133,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     meLookFor = LAYOUT_NODE;
 
     // restore parent
-    mpParentShape=pPreviousParent;
+    mpParentShape = pPreviousParent;
     mpCurrentNode = pPreviousNode;
 }
 
@@ -196,7 +201,8 @@ void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
 {
     if (meLookFor == ALGORITHM)
     {
-        const PresPointShapeMap aMap = rAtom.getLayoutNode().getDiagram().getLayout()->getPresPointShapeMap();
+        const PresPointShapeMap aMap
+            = rAtom.getLayoutNode().getDiagram().getLayout()->getPresPointShapeMap();
         auto pShape = aMap.find(mpCurrentNode);
         if (pShape != aMap.end())
             rAtom.layoutShape(pShape->second, maConstraints, maRules);
@@ -254,7 +260,6 @@ void ShapeLayoutingVisitor::visit(ShapeAtom& /*rAtom*/)
 {
     // stop processing
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

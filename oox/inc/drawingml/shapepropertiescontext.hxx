@@ -23,19 +23,19 @@
 #include <oox/core/contexthandler2.hxx>
 #include <oox/drawingml/shape.hxx>
 
-namespace oox::drawingml {
-
+namespace oox::drawingml
+{
 class ShapePropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    ShapePropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, Shape& rShape );
+    ShapePropertiesContext(::oox::core::ContextHandler2Helper const& rParent, Shape& rShape);
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef
+    onCreateContext(::sal_Int32 Element, const ::oox::AttributeList& rAttribs) override;
 
 protected:
-    Shape&              mrShape;
+    Shape& mrShape;
 };
-
 }
 
 #endif // INCLUDED_OOX_DRAWINGML_SHAPEPROPERTIESCONTEXT_HXX

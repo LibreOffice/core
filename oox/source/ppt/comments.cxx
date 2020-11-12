@@ -11,8 +11,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/math.hxx>
 
-namespace oox::ppt {
-
+namespace oox::ppt
+{
 void CommentAuthorList::setValues(const CommentAuthorList& list)
 {
     for (auto const& author : list.cmAuthorLst)
@@ -29,7 +29,7 @@ void CommentAuthorList::setValues(const CommentAuthorList& list)
 }
 
 //DateTime is saved as : 2013-01-10T15:53:26.000
-void Comment::setDateTime (const OUString& sDateTime)
+void Comment::setDateTime(const OUString& sDateTime)
 {
     sal_Int32 nIdx{ 0 };
     aDateTime.Year = sDateTime.getToken(0, '-', nIdx).toInt32();
@@ -61,26 +61,24 @@ void Comment::setDateTime (const OUString& sDateTime)
     // if overflow goes into date, I give up
 }
 
-OUString Comment::getAuthor ( const CommentAuthorList& list )
+OUString Comment::getAuthor(const CommentAuthorList& list)
 {
     const sal_Int32 nId = authorId.toInt32();
     for (auto const& author : list.cmAuthorLst)
     {
-        if(author.id.toInt32() == nId)
+        if (author.id.toInt32() == nId)
             return author.name;
     }
     return "Anonymous";
 }
 
-const Comment& CommentList::getCommentAtIndex (int index)
+const Comment& CommentList::getCommentAtIndex(int index)
 {
-    if(index >= static_cast<int>(cmLst.size()) || index < 0)
+    if (index >= static_cast<int>(cmLst.size()) || index < 0)
         throw css::lang::IllegalArgumentException();
 
-    return cmLst.at(index)
-;
+    return cmLst.at(index);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

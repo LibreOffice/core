@@ -23,38 +23,38 @@
 #include <drawingml/textparagraphproperties.hxx>
 #include <oox/helper/refvector.hxx>
 
-namespace oox::drawingml {
-
-typedef RefVector< TextParagraphProperties > TextParagraphPropertiesVector;
+namespace oox::drawingml
+{
+typedef RefVector<TextParagraphProperties> TextParagraphPropertiesVector;
 
 class TextListStyle
 {
 public:
-
     TextListStyle();
     ~TextListStyle();
 
     TextListStyle(const TextListStyle& rStyle);
     TextListStyle& operator=(const TextListStyle& rStyle);
 
-    void apply( const TextListStyle& rTextListStyle );
+    void apply(const TextListStyle& rTextListStyle);
 
     const TextParagraphPropertiesVector& getListStyle() const { return maListStyle; };
-    TextParagraphPropertiesVector&       getListStyle() { return maListStyle; };
+    TextParagraphPropertiesVector& getListStyle() { return maListStyle; };
 
-    const TextParagraphPropertiesVector& getAggregationListStyle() const { return maAggregationListStyle; };
-    TextParagraphPropertiesVector&       getAggregationListStyle() { return maAggregationListStyle; };
+    const TextParagraphPropertiesVector& getAggregationListStyle() const
+    {
+        return maAggregationListStyle;
+    };
+    TextParagraphPropertiesVector& getAggregationListStyle() { return maAggregationListStyle; };
 
 #ifdef DBG_UTIL
     void dump() const;
 #endif
 
 private:
-
     TextParagraphPropertiesVector maListStyle;
     TextParagraphPropertiesVector maAggregationListStyle;
 };
-
 }
 
 #endif // INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLE_HXX

@@ -22,23 +22,22 @@
 
 #include <oox/drawingml/shapecontext.hxx>
 
-namespace oox::drawingml::table {
-
+namespace oox::drawingml::table
+{
 class TableProperties;
 
 class TableContext final : public ShapeContext
 {
 public:
-    TableContext( ::oox::core::ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr );
+    TableContext(::oox::core::ContextHandler2Helper const& rParent, const ShapePtr& pShapePtr);
     virtual ~TableContext() override;
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef
+    onCreateContext(::sal_Int32 Element, const ::oox::AttributeList& rAttribs) override;
 
 private:
-
     TableProperties& mrTableProperties;
 };
-
 }
 
 #endif

@@ -22,17 +22,16 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox::drawingml {
-
-    // CT_EmbeddedWAVAudioFile
-OUString getEmbeddedWAVAudioFile( const core::Relations& rRelations, const AttributeList& rAttribs )
+namespace oox::drawingml
 {
-    if (rAttribs.getBool( XML_builtIn, false ))
-        return rAttribs.getString( XML_name ).get();
+// CT_EmbeddedWAVAudioFile
+OUString getEmbeddedWAVAudioFile(const core::Relations& rRelations, const AttributeList& rAttribs)
+{
+    if (rAttribs.getBool(XML_builtIn, false))
+        return rAttribs.getString(XML_name).get();
     else
-        return rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN(embed) ).get() );
+        return rRelations.getFragmentPathFromRelId(rAttribs.getString(R_TOKEN(embed)).get());
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
