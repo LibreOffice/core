@@ -26,12 +26,9 @@ HStream::HStream()
 {
 }
 
-void HStream::addData(const byte *buf, size_t aToAdd)
-{
-    seq.insert(seq.end(), buf, buf + aToAdd);
-}
+void HStream::addData(const byte* buf, size_t aToAdd) { seq.insert(seq.end(), buf, buf + aToAdd); }
 
-size_t HStream::readBytes(byte * buf, size_t aToRead)
+size_t HStream::readBytes(byte* buf, size_t aToRead)
 {
     auto size = seq.size();
     if (aToRead >= (size - pos))
@@ -50,9 +47,6 @@ size_t HStream::skipBytes(size_t aToSkip)
     return aToSkip;
 }
 
-size_t HStream::available() const
-{
-    return seq.size() - pos;
-}
+size_t HStream::available() const { return seq.size() - pos; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

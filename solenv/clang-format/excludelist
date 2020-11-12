@@ -4813,7 +4813,6 @@ hwpfilter/source/attributes.cxx
 hwpfilter/source/attributes.hxx
 hwpfilter/source/cspline.cxx
 hwpfilter/source/cspline.h
-hwpfilter/source/datecode.h
 hwpfilter/source/drawdef.h
 hwpfilter/source/drawing.h
 hwpfilter/source/fontmap.cxx
@@ -4825,7 +4824,6 @@ hwpfilter/source/hbox.cxx
 hwpfilter/source/hbox.h
 hwpfilter/source/hcode.cxx
 hwpfilter/source/hcode.h
-hwpfilter/source/hfont.cxx
 hwpfilter/source/hfont.h
 hwpfilter/source/hgzip.cxx
 hwpfilter/source/hgzip.h
@@ -4835,12 +4833,9 @@ hwpfilter/source/hiodev.cxx
 hwpfilter/source/hiodev.h
 hwpfilter/source/hpara.cxx
 hwpfilter/source/hpara.h
-hwpfilter/source/hstream.cxx
 hwpfilter/source/hstream.hxx
-hwpfilter/source/hstyle.cxx
 hwpfilter/source/hstyle.h
 hwpfilter/source/htags.cxx
-hwpfilter/source/htags.h
 hwpfilter/source/hutil.cxx
 hwpfilter/source/hutil.h
 hwpfilter/source/hwpeq.cxx
@@ -4856,9 +4851,7 @@ hwpfilter/source/mapping.h
 hwpfilter/source/mzstring.cxx
 hwpfilter/source/mzstring.h
 hwpfilter/source/nodes.h
-hwpfilter/source/precompile.h
 hwpfilter/source/solver.cxx
-hwpfilter/source/solver.h
 i18nlangtag/qa/cppunit/test_languagetag.cxx
 i18nlangtag/source/isolang/inunx.cxx
 i18nlangtag/source/isolang/inwnt.cxx

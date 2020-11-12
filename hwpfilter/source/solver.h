@@ -23,17 +23,17 @@
 class mgcLinearSystemD
 {
 public:
-  static std::unique_ptr<std::unique_ptr<double[]>[]> NewMatrix (int N);
-  static std::unique_ptr<double[]> NewVector (int N);
+    static std::unique_ptr<std::unique_ptr<double[]>[]> NewMatrix(int N);
+    static std::unique_ptr<double[]> NewVector(int N);
 
-  static bool Solve (int N, std::unique_ptr<std::unique_ptr<double[]>[]> const & A, double* b);
-  // Input:
-  //     A[N][N] coefficient matrix, entries are A[row][col]
-  //     b[N] vector, entries are b[row]
-  // Output:
-  //     return value is TRUE if successful, FALSE if pivoting failed
-  //     A[N][N] is inverse matrix
-  //     b[N] is solution x to Ax = b
+    static bool Solve(int N, std::unique_ptr<std::unique_ptr<double[]>[]> const& A, double* b);
+    // Input:
+    //     A[N][N] coefficient matrix, entries are A[row][col]
+    //     b[N] vector, entries are b[row]
+    // Output:
+    //     return value is TRUE if successful, FALSE if pivoting failed
+    //     A[N][N] is inverse matrix
+    //     b[N] is solution x to Ax = b
 };
 
 #endif
