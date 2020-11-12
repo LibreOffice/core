@@ -31,7 +31,7 @@ int main()
     {
         jvmaccess::VirtualMachine::AttachGuard aGuard(0);
     }
-    catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+    catch (jvmaccess::VirtualMachine::AttachGuard::CreationException&)
     {
         std::cout << "Exception caught" << std::endl;
     }
