@@ -25,18 +25,18 @@
 #include <osl/mutex.hxx>
 
 class OStorage;
-class OChildDispListener_Impl : public ::cppu::WeakImplHelper < css::lang::XEventListener >
+class OChildDispListener_Impl : public ::cppu::WeakImplHelper<css::lang::XEventListener>
 {
     ::osl::Mutex m_aMutex;
     OStorage* m_pStorage;
 
 public:
-    explicit OChildDispListener_Impl( OStorage& aStorage );
+    explicit OChildDispListener_Impl(OStorage& aStorage);
     virtual ~OChildDispListener_Impl() override;
 
     void OwnerIsDisposed();
 
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 };
 
 #endif

@@ -23,12 +23,13 @@
 
 class ZipEnumeration final
 {
-    EntryHash       &rEntryHash;
+    EntryHash& rEntryHash;
     EntryHash::const_iterator aIterator;
+
 public:
     bool hasMoreElements();
-    const ZipEntry * nextElement();
-    ZipEnumeration( EntryHash &rNewEntryHash );
+    const ZipEntry* nextElement();
+    ZipEnumeration(EntryHash& rNewEntryHash);
     ~ZipEnumeration();
 };
 

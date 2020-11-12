@@ -42,7 +42,8 @@
 
 */
 const sal_uInt32 n_ConstHeader = 0x05024d4dL; // "MM\002\005"
-const sal_Int32 n_ConstHeaderSize = 38; // + salt length + iv length + digest length + mediatype length
+const sal_Int32 n_ConstHeaderSize
+    = 38; // + salt length + iv length + digest length + mediatype length
 const sal_Int16 n_ConstCurrentVersion = 1;
 #endif
 

@@ -30,25 +30,23 @@ using namespace com::sun::star;
 #define THROW_WHERE ""
 #endif
 
-ZipPackageFolderEnumeration::ZipPackageFolderEnumeration ( ContentHash &rInput)
-: rContents (rInput)
-, aIterator (rContents.begin())
+ZipPackageFolderEnumeration::ZipPackageFolderEnumeration(ContentHash& rInput)
+    : rContents(rInput)
+    , aIterator(rContents.begin())
 {
 }
 
-ZipPackageFolderEnumeration::~ZipPackageFolderEnumeration()
-{
-}
+ZipPackageFolderEnumeration::~ZipPackageFolderEnumeration() {}
 
-sal_Bool SAL_CALL ZipPackageFolderEnumeration::hasMoreElements(  )
+sal_Bool SAL_CALL ZipPackageFolderEnumeration::hasMoreElements()
 {
-    return (aIterator != rContents.end() );
+    return (aIterator != rContents.end());
 }
-uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement(  )
+uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement()
 {
     uno::Any aAny;
-    if (aIterator == rContents.end() )
-        throw container::NoSuchElementException(THROW_WHERE );
+    if (aIterator == rContents.end())
+        throw container::NoSuchElementException(THROW_WHERE);
     aAny <<= (*aIterator).second->xTunnel;
     ++aIterator;
     return aAny;
@@ -59,13 +57,13 @@ OUString ZipPackageFolderEnumeration::getImplementationName()
     return "ZipPackageFolderEnumeration";
 }
 
-uno::Sequence< OUString > ZipPackageFolderEnumeration::getSupportedServiceNames()
+uno::Sequence<OUString> ZipPackageFolderEnumeration::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aNames { "com.sun.star.packages.PackageFolderEnumeration" };
+    uno::Sequence<OUString> aNames{ "com.sun.star.packages.PackageFolderEnumeration" };
     return aNames;
 }
 
-sal_Bool SAL_CALL ZipPackageFolderEnumeration::supportsService( OUString const & rServiceName )
+sal_Bool SAL_CALL ZipPackageFolderEnumeration::supportsService(OUString const& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

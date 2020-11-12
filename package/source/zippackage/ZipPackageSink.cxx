@@ -20,17 +20,16 @@
 #include "ZipPackageSink.hxx"
 
 ZipPackageSink::ZipPackageSink()
-: xStream ( css::uno::Reference < css::io::XInputStream > (nullptr))
+    : xStream(css::uno::Reference<css::io::XInputStream>(nullptr))
 {
 }
-ZipPackageSink::~ZipPackageSink()
-{
-}
-void SAL_CALL ZipPackageSink::setInputStream( const css::uno::Reference< css::io::XInputStream >& aStream )
+ZipPackageSink::~ZipPackageSink() {}
+void SAL_CALL
+ZipPackageSink::setInputStream(const css::uno::Reference<css::io::XInputStream>& aStream)
 {
     xStream = aStream;
 }
-css::uno::Reference< css::io::XInputStream > SAL_CALL ZipPackageSink::getInputStream(  )
+css::uno::Reference<css::io::XInputStream> SAL_CALL ZipPackageSink::getInputStream()
 {
     return xStream;
 }
