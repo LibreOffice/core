@@ -25,7 +25,8 @@
 
 #define MAX_TABLE_SIZE 4096
 
-struct LZWTableEntry {
+struct LZWTableEntry
+{
     sal_uInt16 nPrevCode;
     sal_uInt16 nDataCount;
     sal_uInt8 nData;
@@ -33,26 +34,24 @@ struct LZWTableEntry {
 
 class SvStream;
 
-class LZWDecompressor {
-
+class LZWDecompressor
+{
 public:
-
     LZWDecompressor();
     ~LZWDecompressor();
 
-    void StartDecompression(SvStream & rIStream);
+    void StartDecompression(SvStream& rIStream);
 
-    sal_uInt64 Decompress(sal_uInt8 * pTarget, sal_uInt32 nMaxCount);
-        // Returns the number of written bytes. If < nMaxCount there is
-        // no more data to be unpacked or an error occurred.
+    // Returns the number of written bytes. If < nMaxCount there is
+    // no more data to be unpacked or an error occurred.
+    sal_uInt64 Decompress(sal_uInt8* pTarget, sal_uInt32 nMaxCount);
 
 private:
-
     sal_uInt16 GetNextCode();
     void AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData);
     void DecompressSome();
 
-    SvStream * pIStream;
+    SvStream* pIStream;
 
     std::array<LZWTableEntry, MAX_TABLE_SIZE> pTable;
     sal_uInt16 nTableSize;
@@ -62,15 +61,13 @@ private:
     sal_uInt16 nOldCode;
 
     std::array<sal_uInt8, MAX_TABLE_SIZE> pOutBuf;
-    sal_uInt8 * pOutBufData;
+    sal_uInt8* pOutBufData;
     sal_uInt16 nOutBufDataLen;
 
     sal_uInt8 nInputBitsBuf;
     sal_uInt16 nInputBitsBufSize;
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

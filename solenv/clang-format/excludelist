@@ -4138,7 +4138,6 @@ filter/source/graphicfilter/ipbm/ipbm.cxx
 filter/source/graphicfilter/ipcd/ipcd.cxx
 filter/source/graphicfilter/ipcx/ipcx.cxx
 filter/source/graphicfilter/ipict/ipict.cxx
-filter/source/graphicfilter/ipict/ipict.hxx
 filter/source/graphicfilter/ipict/shape.cxx
 filter/source/graphicfilter/ipict/shape.hxx
 filter/source/graphicfilter/ipsd/ipsd.cxx
@@ -4148,10 +4147,8 @@ filter/source/graphicfilter/itiff/ccidecom.cxx
 filter/source/graphicfilter/itiff/ccidecom.hxx
 filter/source/graphicfilter/itiff/itiff.cxx
 filter/source/graphicfilter/itiff/lzwdecom.cxx
-filter/source/graphicfilter/itiff/lzwdecom.hxx
 filter/source/msfilter/countryid.cxx
 filter/source/msfilter/dffpropset.cxx
-filter/source/msfilter/dffrecordheader.cxx
 filter/source/msfilter/escherex.cxx
 filter/source/msfilter/eschesdo.cxx
 filter/source/msfilter/eschesdo.hxx
@@ -4186,7 +4183,6 @@ filter/source/svg/svgfontexport.hxx
 filter/source/svg/svgwriter.cxx
 filter/source/svg/svgwriter.hxx
 filter/source/svg/test/odfserializer.cxx
-filter/source/svg/test/odfserializer.hxx
 filter/source/t602/t602filter.cxx
 filter/source/t602/t602filter.hxx
 filter/source/textfilterdetect/filterdetect.cxx
