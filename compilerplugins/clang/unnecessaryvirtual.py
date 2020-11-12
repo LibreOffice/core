@@ -81,10 +81,14 @@ for clazz in (definitionSet - nonEmptySet):
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
+# sort by both the source-line and the datatype, so the output file ordering is stable
+# when we have multiple items on the same source line
+def v_sort_key(v):
+    return natural_sort_key(v[1]) + [v[0]]
 
 # sort results by name and line number
-tmp1list = sorted(unnecessaryVirtualSet, key=lambda v: natural_sort_key(v[1]))
-tmp2list = sorted(deadSet, key=lambda v: natural_sort_key(v[1]))
+tmp1list = sorted(unnecessaryVirtualSet, key=lambda v: v_sort_key(v))
+tmp2list = sorted(deadSet, key=lambda v: v_sort_key(v))
 
 with open("compilerplugins/clang/unnecessaryvirtual.results", "wt") as f:
     for t in tmp1list:

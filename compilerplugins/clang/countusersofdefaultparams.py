@@ -66,9 +66,13 @@ for k,v in callDict.iteritems():
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
+# sort by both the source-line and the datatype, so the output file ordering is stable
+# when we have multiple items on the same source line
+def v_sort_key(v):
+    return natural_sort_key(v[1]) + [v[0]]
 
 # sort results by name and line number
-tmp1list.sort(key=lambda v: natural_sort_key(v[1]))
+tmp1list.sort(key=lambda v: v_sort_key(v))
 
 # print out the results
 with open("loplugin.countusersofdefaultparams.report", "wt") as f:

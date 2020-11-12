@@ -10,7 +10,7 @@ definitionToFileDict = {}
 with open("workdir/loplugin.finalclasses.log") as txt:
     for line in txt:
         tokens = line.strip().split("\t")
-    
+
         if len(tokens) == 1:
             pass
 
@@ -20,7 +20,7 @@ with open("workdir/loplugin.finalclasses.log") as txt:
             fileName  = tokens[2][1:]
             definitionSet.add(clazzName)
             definitionToFileDict[clazzName] = fileName
-            
+
         elif tokens[0] == "inherited-from:":
             parent = tokens[1]
             if (parent.startswith("class ")):
@@ -67,8 +67,12 @@ for clazz in sorted(definitionSet - inheritFromSet):
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
+# sort by both the source-line and the datatype, so the output file ordering is stable
+# when we have multiple items on the same source line
+def v_sort_key(v):
+    return natural_sort_key(v[1]) + [v[0]]
 def sort_set_by_natural_key(s):
-    return sorted(s, key=lambda v: natural_sort_key(v[1]))
+    return sorted(s, key=lambda v: v_sort_key(v))
 
 # print output, sorted by name and line number
 with open("compilerplugins/clang/finalclasses.results", "wt") as f:
