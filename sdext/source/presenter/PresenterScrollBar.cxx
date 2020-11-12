@@ -659,7 +659,7 @@ void PresenterVerticalScrollBar::UpdateBorders()
     else
     {
         const double nThumbSize = ::std::min(mnThumbSize,mnTotalSize);
-        const double nThumbPosition = ::std::min(::std::max(0.0,mnThumbPosition), mnTotalSize - nThumbSize);
+        const double nThumbPosition = ::std::clamp(mnThumbPosition, 0.0, mnTotalSize - nThumbSize);
         maBox[Thumb] = geometry::RealRectangle2D(
             0, nThumbPosition / mnTotalSize * nPagerHeight,
             aWindowBox.Width,

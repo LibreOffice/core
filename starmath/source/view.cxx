@@ -575,7 +575,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
 
 void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
 {
-    nZoom = std::min(std::max(Factor, MINZOOM), MAXZOOM);
+    nZoom = std::clamp(Factor, MINZOOM, MAXZOOM);
     Fraction   aFraction (nZoom, 100);
     SetMapMode( MapMode(MapUnit::Map100thMM, Point(), aFraction, aFraction) );
     SetTotalSize();
