@@ -23,7 +23,7 @@
 #include <iostream>
 #include <rtl/ustring>
 
-ostream& operator<<( ostream& out,const OUString& bla );
+ostream& operator<<(ostream& out, const OUString& bla);
 
 #endif // INCLUDED_XMLHELP_SOURCE_CXXHELP_TEST_ABIDEBUG_HXX
 
