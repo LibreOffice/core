@@ -57,6 +57,8 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     private float    _float;
     private double   _double;
     private String   _string;
+    private byte     _byte2;
+    private short    _short2;
     private Object   _xInterface;
     private Any   _any;
     private TestEnum _testEnum = TestEnum.TEST;
@@ -101,6 +103,8 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         double           fDouble,
         TestEnum         testEnum,
         String           str,
+        byte             nByte2,
+        short            nShort2,
         Object           xInterface,
         Any              any,
         TestElement []   testElements,
@@ -121,6 +125,8 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         _double           = fDouble;
         _testEnum         = testEnum;
         _string           = str;
+        _byte2            = nByte2;
+        _short2           = nShort2;
         _xInterface       = xInterface;
         _any              = any;
         _testElements     = testElements;
@@ -141,6 +147,8 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         /*INOUT*/ref double           io_double,
         /*INOUT*/ref TestEnum         io_testEnum,
         /*INOUT*/ref String           io_string,
+        /*INOUT*/ref byte             io_byte2,
+        /*INOUT*/ref short            io_short2,
         /*INOUT*/ref Object           io_xInterface,
         /*INOUT*/ref Any              io_any,
         /*INOUT*/ref TestElement[]    io_testElements,
@@ -161,6 +169,8 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         _double           = io_double;
         _testEnum         = io_testEnum;
         _string           = io_string;
+        _byte2            = io_byte2;
+        _short2           = io_short2;
         _xInterface       = io_xInterface;
         _any              = io_any;
         _testElements     = (TestElement[]) io_testElements.Clone();
@@ -187,6 +197,8 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         /*OUT*/out double           o_double,
         /*OUT*/out TestEnum         o_testEnum,
         /*OUT*/out String           o_string,
+        /*OUT*/out byte             o_byte2,
+        /*OUT*/out short            o_short2,
         /*OUT*/out Object           o_xInterface,
         /*OUT*/out Any              o_any,
         /*OUT*/out TestElement[]    o_testElements,
@@ -207,6 +219,8 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         o_double           = _double;
         o_testEnum         = _testEnum;
         o_string           = _string;
+        o_byte2            = _byte2;
+        o_short2           = _short2;
         o_xInterface       = _xInterface;
         o_any              = _any;
         o_testElements     = _testElements;
@@ -330,6 +344,16 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     {
         get { return _string; }
         set { _string = value; }
+    }
+    public byte Byte2
+    {
+        get { return _byte2; }
+        set { _byte2 = value; }
+    }
+    public short Short2
+    {
+        get { return _short2; }
+        set { _short2 = value; }
     }
     public Object Interface
     {

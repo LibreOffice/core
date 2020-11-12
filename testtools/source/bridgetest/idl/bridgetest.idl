@@ -50,7 +50,9 @@ struct TestSimple
     boolean                    Bool;
     char                       Char;
     byte                       Byte;
+    byte                       Byte2;
     short                      Short;
+    short                      Short2;
     unsigned short             UShort;
     long                       Long;
     unsigned long              ULong;
@@ -240,6 +242,8 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
                     [in] double fDouble,
                     [in] TestEnum eEnum,
                     [in] string aString,
+                    [in] byte aByte2,
+                    [in] short aShort2,
                     [in] com::sun::star::uno::XInterface xInterface,
                     [in] any aAny,
                     [in] sequence< TestElement > aSequence,
@@ -264,6 +268,8 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
                          [inout] double fDouble,
                          [inout] TestEnum eEnum,
                          [inout] string aString,
+                         [inout] byte aByte2,
+                         [inout] short aShort2,
                          [inout] com::sun::star::uno::XInterface xInterface,
                          [inout] any aAny,
                          [inout] sequence< TestElement > aSequence,
@@ -285,6 +291,8 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
                         [out] double fDouble,
                         [out] TestEnum eEnum,
                         [out] string aString,
+                        [out] byte aByte2,
+                        [out] short aShort2,
                         [out] com::sun::star::uno::XInterface xInterface,
                         [out] any aAny,
                         [out] sequence< TestElement > aSequence,
@@ -354,6 +362,8 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     [attribute] double                   Double;
     [attribute] TestEnum                 Enum;
     [attribute] string                   String;
+    [attribute] byte                     Byte2;
+    [attribute] short                    Short2;
     [attribute] com::sun::star::uno::XInterface Interface;
     [attribute] any                      Any;
     [attribute] sequence< TestElement >  Sequence;

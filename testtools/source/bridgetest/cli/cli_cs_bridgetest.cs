@@ -176,6 +176,8 @@ public class BridgeTest : WeakBase, XMain
         check( rData1.Double == rData2.Double, "### double does not match!" );
         check( rData1.Enum == rData2.Enum, "### enum does not match!" );
         check( rData1.String == rData2.String, "### string does not match!" );
+        check( rData1.Byte2 == rData2.Byte2, "### byte2 does not match!" );
+        check( rData1.Short2 == rData2.Short2, "### short2 does not match!" );
         check( rData1.Interface == rData2.Interface, "### interface does not match!" );
         check( compareData(rData1.Any, rData2.Any), "### any does not match!" );
 
@@ -192,6 +194,8 @@ public class BridgeTest : WeakBase, XMain
                 rData1.Double == rData2.Double &&
                 rData1.Enum == rData2.Enum &&
                 rData1.String == rData2.String &&
+                rData1.Byte2 == rData2.Byte2 &&
+                rData1.Short2 == rData2.Short2 &&
                 rData1.Interface == rData2.Interface &&
                 compareData(rData1.Any, rData2.Any));
     }
@@ -203,6 +207,7 @@ static void assign( TestElement rData,
 					long nHyper, ulong nUHyper,
 					float fFloat, double fDouble,
 					TestEnum eEnum, string rStr,
+					byte nByte2, short nShort2,
 					Object xTest,
 					Any rAny )
 {
@@ -219,6 +224,8 @@ static void assign( TestElement rData,
 	rData.Double = fDouble;
 	rData.Enum = eEnum;
 	rData.String = rStr;
+	rData.Byte2 = nByte2;
+	rData.Short2 = nShort2;
 	rData.Interface = xTest;
 	rData.Any = rAny;
 }
@@ -230,13 +237,14 @@ static void assign( TestDataElements rData,
 					long nHyper, ulong nUHyper,
 					float fFloat, double fDouble,
 					TestEnum eEnum, string rStr,
+					byte nByte2, short nShort2,
 					Object xTest,
 					Any rAny,
 					TestElement[] rSequence)
 {
 	assign( (TestElement) rData,
 			bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
-			eEnum, rStr, xTest, rAny );
+			eEnum, rStr, nByte2, nShort2, xTest, rAny );
 	rData.Sequence = rSequence;
 }
 
@@ -275,6 +283,8 @@ static bool performAnyTest(XBridgeTest xLBT,  TestDataElements data)
 	bReturn = testAny( null, data.Double,xLBT ) && bReturn;
 	bReturn = testAny( null, data.Enum,xLBT ) && bReturn;
 	bReturn = testAny( null, data.String,xLBT ) && bReturn;
+	bReturn = testAny( null, data.Byte2 ,xLBT ) && bReturn;
+	bReturn = testAny( null, data.Short2,xLBT ) && bReturn;
 	bReturn = testAny(typeof(XWeak), data.Interface,xLBT ) && bReturn;
 	bReturn = testAny(null, data, xLBT ) && bReturn;
 
@@ -369,6 +379,7 @@ bool performTest(XBridgeTest xLBT)
         aData.UShort, aData.Long, aData.ULong,
         aData.Hyper, aData.UHyper, aData.Float,
         aData.Double, aData.Enum, aData.String,
+	aData.Byte2, aData.Short2,
         aData.Interface, aData.Any); //(TestElement) aData;
     aData.Sequence[1] = new TestElement(); //is empty
 
@@ -380,7 +391,7 @@ bool performTest(XBridgeTest xLBT)
     assign( (TestElement)aSetData,
             aData.Bool, aData.Char, aData.Byte, aData.Short, aData.UShort,
             aData.Long, aData.ULong, aData.Hyper, aData.UHyper, aData.Float, aData.Double,
-            aData.Enum, aData.String, xI,
+            aData.Enum, aData.String, aData.Byte2, aData.Short2, xI,
             aAnySet);
 
     aSetData.Sequence = new TestElement[2];
@@ -389,6 +400,7 @@ bool performTest(XBridgeTest xLBT)
         aSetData.UShort, aSetData.Long, aSetData.ULong,
         aSetData.Hyper, aSetData.UHyper, aSetData.Float,
         aSetData.Double, aSetData.Enum, aSetData.String,
+	aSetData.Byte2, aSetData.Short2,
         aSetData.Interface, aSetData.Any); //TestElement) aSetData;
     aSetData.Sequence[1] = new TestElement(); // empty struct
 
@@ -406,6 +418,8 @@ bool performTest(XBridgeTest xLBT)
 	aSetData.Double,
         aSetData.Enum,
 	aSetData.String,
+	aSetData.Byte2,
+	aSetData.Short2,
 	aSetData.Interface,
 	aSetData.Any,
 	aSetData.Sequence,
@@ -428,6 +442,8 @@ bool performTest(XBridgeTest xLBT)
 			out aRet.Double,
 			out aRet.Enum,
 			out aRet.String,
+			out aRet.Byte2,
+			out aRet.Short2,
 			out aRet.Interface,
 			out aRet.Any,
 			out aRet.Sequence,
@@ -450,6 +466,8 @@ bool performTest(XBridgeTest xLBT)
 			ref aRet.Double,
 			ref aRet.Enum,
 			ref aRet.String,
+			ref aRet.Byte2,
+			ref aRet.Short2,
 			ref aRet.Interface,
 			ref aRet.Any,
 			ref aRet.Sequence,
@@ -482,6 +500,8 @@ bool performTest(XBridgeTest xLBT)
 			out aRet.Double,
 			out aRet.Enum,
 			out aRet.String,
+			out aRet.Byte2,
+			out aRet.Short2,
 			out aRet.Interface,
 			out aRet.Any,
 			out aRet.Sequence,
@@ -495,7 +515,7 @@ bool performTest(XBridgeTest xLBT)
 		xLBT.Byte = aRet.Byte;
 		xLBT.Short = aRet.Short;
 		xLBT.UShort = aRet.UShort;
-        xLBT.Long = aRet.Long;
+	        xLBT.Long = aRet.Long;
 		xLBT.ULong = aRet.ULong;
 		xLBT.Hyper = aRet.Hyper;
 		xLBT.UHyper = aRet.UHyper;
@@ -503,6 +523,8 @@ bool performTest(XBridgeTest xLBT)
 		xLBT.Double = aRet.Double;
 		xLBT.Enum = aRet.Enum;
 		xLBT.String = aRet.String;
+		xLBT.Byte2 = aRet.Byte2;
+		xLBT.Short2 = aRet.Short2;
 		xLBT.Interface = aRet.Interface;
 		xLBT.Any = aRet.Any;
 		xLBT.Sequence = aRet.Sequence;
@@ -524,6 +546,8 @@ bool performTest(XBridgeTest xLBT)
 		aRet.ULong = xLBT.ULong;
 		aRet.Enum = xLBT.Enum;
 		aRet.String = xLBT.String;
+		aRet.Byte2 = xLBT.Byte2;
+		aRet.Short2 = xLBT.Short2;
 		aRet.Interface = xLBT.Interface;
 		aRet.Any = xLBT.Any;
 		aRet.Sequence = xLBT.Sequence;

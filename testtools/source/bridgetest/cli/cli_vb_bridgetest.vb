@@ -78,10 +78,12 @@ Public Class BridgeTest
     End Function
 
     Private Shared Sub assign( rData As TestElement, bBool As Boolean, _
-			aChar As Char, nByte As Byte, nShort As Short, nUShort As UInt16, _
+					aChar As Char, nByte As Byte, nShort As Short, nUShort As UInt16, _
 					nLong As Integer, nULong As UInt32, nHyper As Long, _
-                    nUHyper As UInt64, fFloat As Single, fDouble As Double, _
-					eEnum As TestEnum, rStr As String, xTest As Object, _
+					UHyper As UInt64, fFloat As Single, fDouble As Double, _
+					eEnum As TestEnum, rStr As String, _
+					nByte2 As Byte, nShort2 As Short, _
+					xTest As Object, _
 					rAny As Any)
 
     	rData.Bool = bBool
@@ -97,20 +99,24 @@ Public Class BridgeTest
 	    rData.Double = fDouble
 	    rData.Enum = eEnum
 	    rData.String = rStr
+	    rData.Byte2 = nByte2
+	    rData.Short2 = nShort2
 	    rData.Interface = xTest
 	    rData.Any = rAny
     End Sub
 
     Private Shared Sub assign( rData As TestDataElements, bBool As Boolean, _
-            aChar As Char, nByte As Byte, nShort As Short, nUShort As UInt16, _
+			aChar As Char, nByte As Byte, nShort As Short, nUShort As UInt16, _
 			nLong As Integer, nULong As UInt32, nHyper As Long, _
-            nUHyper As UInt64, fFloat As Single, fDouble As Double, _
-    		eEnum As TestEnum, rStr As String, xTest As Object, _
+			nUHyper As UInt64, fFloat As Single, fDouble As Double, _
+			eEnum As TestEnum, rStr As String, _
+			nByte2 As Byte, nShort2 As Short, _
+			xTest As Object, _
 			rAny As Any, rSequence() As TestElement)
 
     	assign( DirectCast( rData,TestElement), _
 			bBool, aChar, nByte, nShort, nUShort, nLong, nULong, nHyper, _
-            nUHyper, fFloat, fDouble, eEnum, rStr, xTest, rAny )
+            nUHyper, fFloat, fDouble, eEnum, rStr, nByte2, nShort2, xTest, rAny )
 	    rData.Sequence = rSequence
     End Sub
 
@@ -238,17 +244,17 @@ Public Class BridgeTest
         assign( arStruct(0), True, "@"C, 17, &H1234, Convert.ToUInt16(&Hfedc), _
             &H12345678, Convert.ToUInt32(&H123456), &H123456789abcdef0, _
             Convert.ToUInt64(123456788), 17.0815F, 3.1415926359, _
-            TestEnum.LOLA, CONSTANTS.STRING_TEST_CONSTANT, arObject(0), _
+            TestEnum.LOLA, CONSTANTS.STRING_TEST_CONSTANT, 18, &H5678, arObject(0), _
             New Any(GetType(System.Object), arObject(0)))
         assign( arStruct(1), True, "A"C, 17, &H1234, Convert.ToUInt16(&Hfedc), _
             &H12345678, Convert.ToUInt32(&H123456), &H123456789abcdef0, _
             Convert.ToUInt64(12345678), 17.0815F, 3.1415926359, _
-            TestEnum.TWO, CONSTANTS.STRING_TEST_CONSTANT, arObject(1), _
+            TestEnum.TWO, CONSTANTS.STRING_TEST_CONSTANT, 18, &H5678, arObject(1), _
             New Any(GetType(System.Object), arObject(1)) )
         assign( arStruct(2), True, "B"C, 17, &H1234, Convert.ToUInt16(&Hfedc), _ 
             &H12345678, Convert.ToUInt32(654321), &H123456789abcdef0, _
             Convert.ToUInt64(87654321), 17.0815F, 3.1415926359, _ 
-            TestEnum.CHECK, Constants.STRING_TEST_CONSTANT, arObject(2), _
+            TestEnum.CHECK, Constants.STRING_TEST_CONSTANT, 18, &H5678, arObject(2), _
             New Any(GetType(System.Object), arObject(2)))
 
     
@@ -497,6 +503,8 @@ Public Class BridgeTest
 	    bReturn = testAny( Nothing, data.Double,xLBT ) And bReturn
 	    bReturn = testAny( Nothing, data.Enum,xLBT ) And bReturn
 	    bReturn = testAny( Nothing, data.String,xLBT ) And bReturn
+	    bReturn = testAny( Nothing, data.Byte2 ,xLBT ) And bReturn
+	    bReturn = testAny( Nothing, data.Short2,xLBT ) And bReturn
 	    bReturn = testAny(GetType(unoidl.com.sun.star.uno.XWeak), _
                      data.Interface,xLBT ) And bReturn
 	    bReturn = testAny(Nothing, data, xLBT ) And bReturn
@@ -584,6 +592,7 @@ Public Class BridgeTest
 			aSetData.UShort, aSetData.Long, aSetData.ULong, _
 			aSetData.Hyper, aSetData.UHyper, aSetData.Float, _
 			aSetData.Double, aSetData.Enum, aSetData.String, _
+			aSetData.Byte2, aSetData.Short2, _
 			aSetData.Interface, aSetData.Any)
         aSetData.Sequence(1) = New TestElement ' empty struct
 
@@ -601,6 +610,8 @@ Public Class BridgeTest
 			aSetData.Double, _
 			aSetData.Enum, _
 			aSetData.String, _
+			aSetData.Byte2, _
+			aSetData.Short2, _
 			aSetData.Interface, _
 			aSetData.Any, _
 			aSetData.Sequence, _
@@ -623,6 +634,8 @@ Public Class BridgeTest
 			aRet.Double, _
 			aRet.Enum, _
 			aRet.String, _
+			aRet.Byte2, _
+			aRet.Short2, _
 			aRet.Interface, _
 			aRet.Any, _
 			aRet.Sequence, _
@@ -646,6 +659,8 @@ Public Class BridgeTest
 			aRet.Double, _
 			aRet.Enum, _
 			aRet.String, _
+			aRet.Byte2, _
+			aRet.Short2, _
 			aRet.Interface, _
 			aRet.Any, _
 			aRet.Sequence, _
@@ -678,6 +693,8 @@ Public Class BridgeTest
 			aRet.Double, _
 			aRet.Enum, _
 			aRet.String, _
+			aRet.Byte2, _
+			aRet.Short2, _
 			aRet.Interface, _
 			aRet.Any, _
 			aRet.Sequence, _
@@ -693,7 +710,7 @@ Public Class BridgeTest
 		xLBT.Byte = aRet.Byte
 		xLBT.Short = aRet.Short
 		xLBT.UShort = aRet.UShort
-        xLBT.Long = aRet.Long
+		xLBT.Long = aRet.Long
 		xLBT.ULong = aRet.ULong
 		xLBT.Hyper = aRet.Hyper
 		xLBT.UHyper = aRet.UHyper
@@ -701,6 +718,8 @@ Public Class BridgeTest
 		xLBT.Double = aRet.Double
 		xLBT.Enum = aRet.Enum
 		xLBT.String = aRet.String
+		xLBT.Byte2 = aRet.Byte2
+		xLBT.Short2 = aRet.Short2
 		xLBT.Interface = aRet.Interface
 		xLBT.Any = aRet.Any
 		xLBT.Sequence = aRet.Sequence
@@ -722,6 +741,8 @@ Public Class BridgeTest
 		aRet.ULong = xLBT.ULong
 		aRet.Enum = xLBT.Enum
 		aRet.String = xLBT.String
+		aRet.Byte2 = xLBT.Byte2
+		aRet.Short2 = xLBT.Short2
 		aRet.Interface = xLBT.Interface
 		aRet.Any = xLBT.Any
 		aRet.Sequence = xLBT.Sequence
