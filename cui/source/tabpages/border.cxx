@@ -885,7 +885,8 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     SfxItemPool* pPool = rCoreAttrs->GetPool();
 
-    if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::TLBR))
+    if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::TLBR) &&
+        m_aFrameSel.GetFrameBorderState(svx::FrameBorderType::TLBR) != svx::FrameBorderState::DontCare)
     {
         if (const SfxPoolItem* pOldItem = GetOldItem(*rCoreAttrs, SID_ATTR_BORDER_DIAG_TLBR))
         {
@@ -896,7 +897,8 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         }
     }
 
-    if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::BLTR))
+    if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::BLTR) &&
+        m_aFrameSel.GetFrameBorderState(svx::FrameBorderType::BLTR) != svx::FrameBorderState::DontCare)
     {
         if (const SfxPoolItem* pOldItem = GetOldItem(*rCoreAttrs, SID_ATTR_BORDER_DIAG_BLTR))
         {
