@@ -294,15 +294,9 @@
 #define STR_SIGNATURE_SHOW                      NC_("STR_SIGNATURE_SHOW", "Show Signatures")
 
 #define STR_CLOSE_PANE                          NC_("STR_CLOSE_PANE", "Close Pane")
-#define STR_SFX_DOCK                            NC_("STR_SFX_DOCK", "Dock")
-#define STR_SFX_UNDOCK                          NC_("STR_SFX_UNDOCK", "Undock")
 
 #define SFX_STR_SIDEBAR_MORE_OPTIONS            NC_("SFX_STR_SIDEBAR_MORE_OPTIONS", "More Options")
 #define SFX_STR_SIDEBAR_CLOSE_DECK              NC_("SFX_STR_SIDEBAR_CLOSE_DECK", "Close Sidebar Deck")
-#define SFX_STR_SIDEBAR_SETTINGS                NC_("SFX_STR_SIDEBAR_SETTINGS", "Sidebar Settings")
-#define SFX_STR_SIDEBAR_CUSTOMIZATION           NC_("SFX_STR_SIDEBAR_CUSTOMIZATION", "Customization")
-#define SFX_STR_SIDEBAR_RESTORE                 NC_("SFX_STR_SIDEBAR_RESTORE", "Restore Default")
-#define SFX_STR_SIDEBAR_HIDE_SIDEBAR            NC_("SFX_STR_SIDEBAR_HIDE_SIDEBAR", "Close Sidebar")
 
 // Translators: default Impress template names
 #define STR_TEMPLATE_NAME1                      NC_("STR_TEMPLATE_NAME1", "Alizarin")

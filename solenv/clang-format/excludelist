@@ -11107,17 +11107,14 @@ sfx2/inc/recentdocsview.hxx
 sfx2/inc/sidebar/Accessible.hxx
 sfx2/inc/sidebar/ContextChangeBroadcaster.hxx
 sfx2/inc/sidebar/ContextList.hxx
-sfx2/inc/sidebar/ControlFactory.hxx
 sfx2/inc/sidebar/ControllerFactory.hxx
 sfx2/inc/sidebar/DeckDescriptor.hxx
 sfx2/inc/sidebar/DeckLayouter.hxx
 sfx2/inc/sidebar/DeckTitleBar.hxx
 sfx2/inc/sidebar/DrawHelper.hxx
-sfx2/inc/sidebar/MenuButton.hxx
 sfx2/inc/sidebar/PanelDescriptor.hxx
 sfx2/inc/sidebar/PanelTitleBar.hxx
 sfx2/inc/sidebar/SidebarToolBox.hxx
-sfx2/inc/sidebar/TabItem.hxx
 sfx2/inc/sidebar/TitleBar.hxx
 sfx2/inc/sidebar/Tools.hxx
 sfx2/inc/sidebar/UnoDeck.hxx
@@ -11358,7 +11355,6 @@ sfx2/source/sidebar/AsynchronousCall.cxx
 sfx2/source/sidebar/Context.cxx
 sfx2/source/sidebar/ContextChangeBroadcaster.cxx
 sfx2/source/sidebar/ContextList.cxx
-sfx2/source/sidebar/ControlFactory.cxx
 sfx2/source/sidebar/ControllerFactory.cxx
 sfx2/source/sidebar/ControllerItem.cxx
 sfx2/source/sidebar/Deck.cxx
@@ -11369,7 +11365,6 @@ sfx2/source/sidebar/DrawHelper.cxx
 sfx2/source/sidebar/FocusManager.cxx
 sfx2/source/sidebar/IContextChangeReceiver.cxx
 sfx2/source/sidebar/ILayoutableWindow.cxx
-sfx2/source/sidebar/MenuButton.cxx
 sfx2/source/sidebar/Panel.cxx
 sfx2/source/sidebar/PanelDescriptor.cxx
 sfx2/source/sidebar/PanelLayout.cxx
@@ -11383,7 +11378,6 @@ sfx2/source/sidebar/SidebarModelUpdate.cxx
 sfx2/source/sidebar/SidebarPanelBase.cxx
 sfx2/source/sidebar/SidebarToolBox.cxx
 sfx2/source/sidebar/TabBar.cxx
-sfx2/source/sidebar/TabItem.cxx
 sfx2/source/sidebar/Theme.cxx
 sfx2/source/sidebar/TitleBar.cxx
 sfx2/source/sidebar/Tools.cxx

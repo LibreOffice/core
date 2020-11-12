@@ -22,7 +22,9 @@
 #include <tools/link.hxx>
 #include <vcl/keycod.hxx>
 
-class Button;
+namespace weld {
+class Widget;
+}
 
 namespace sfx2::sidebar {
 
@@ -48,8 +50,7 @@ class DeckTitleBar;
 class FocusManager
 {
 public:
-    FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor,
-                 const std::function<bool(const sal_Int32)> &rIsDeckOpenFunctor);
+    FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor);
     ~FocusManager();
 
     /** Forget all panels and buttons.  Remove all window listeners.
@@ -65,18 +66,16 @@ public:
 
     void SetDeckTitle(DeckTitleBar* pDeckTitleBar);
     void SetPanels(const SharedPanelContainer& rPanels);
-    void SetButtons(const ::std::vector<Button*>& rButtons);
+    void SetButtons(const std::vector<weld::Widget*>& rButtons);
 
 private:
     VclPtr<DeckTitleBar> mpDeckTitleBar;
     std::vector<VclPtr<Panel> > maPanels;
-    std::vector<VclPtr<Button> > maButtons;
+    std::vector<weld::Widget*> maButtons;
     const std::function<void(const Panel&)> maShowPanelFunctor;
-    const std::function<bool(const sal_Int32)> mbIsDeckOpenFunctor;
 
     enum PanelComponent
     {
-        PC_DeckTitle,
         PC_DeckToolBox,
         PC_PanelTitle,
         PC_PanelToolBox,
@@ -94,7 +93,7 @@ private:
 
     /** Listen for key events for panels and buttons.
     */
-    DECL_LINK( WindowEventListener, VclWindowEvent&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ChildEventListener, VclWindowEvent&, void);
 
     void ClearPanels();
@@ -103,8 +102,8 @@ private:
     /** Let the focus manager listen for window events for the given
         window.
     */
-    void RegisterWindow(vcl::Window& rWindow);
-    void UnregisterWindow(vcl::Window& rWindow);
+    void RegisterWindow(weld::Widget& rWidget);
+    static void UnregisterWindow(weld::Widget& rWidget);
 
     /** Remove the window from the panel or the button container.
     */
@@ -134,10 +133,11 @@ private:
     void MoveFocusInsideDeckTitle(const FocusLocation& rLocation,
                                   const sal_Int32 nDirection);
 
-    void HandleKeyEvent(const vcl::KeyCode& rKeyCode,
-                         const vcl::Window& rWindow);
+    bool HandleKeyEvent(const vcl::KeyCode& rKeyCode,
+                        const FocusLocation& rLocation);
 
     FocusLocation GetFocusLocation(const vcl::Window& rWindow) const;
+    FocusLocation GetFocusLocation() const;
 
 };
 

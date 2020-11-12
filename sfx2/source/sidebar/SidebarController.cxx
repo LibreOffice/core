@@ -129,7 +129,8 @@ SidebarController::SidebarController (
               mpParentWindow,
               mxFrame,
               [this](const OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
-              [this](const tools::Rectangle& rButtonBox,const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
+              [this](weld::Menu& rMainMenu, weld::Menu& rSubMenu,
+                     const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rMainMenu, rSubMenu, rMenuData); },
               this)),
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(),
@@ -142,8 +143,7 @@ SidebarController::SidebarController (
       mbIsDeckOpen(),
       mbFloatingDeckClosed(!pParentWindow->IsFloatingMode()),
       mnSavedSidebarWidth(pParentWindow->GetSizePixel().Width()),
-      maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); },
-                     [this](const sal_Int32 nIndex){ return this->IsDeckOpen(nIndex); }),
+      maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); }),
       mxReadOnlyModeDispatch(),
       mbIsDocumentReadOnly(false),
       mpSplitWindow(nullptr),
@@ -546,6 +546,8 @@ void SidebarController::UpdateConfigurations()
         maCurrentContext,
         mbIsDocumentReadOnly,
         xController);
+
+    maFocusManager.Clear();
 
     // Notify the tab bar about the updated set of decks.
     mpTabBar->SetDecks(aDecks);
@@ -1052,186 +1054,146 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
     }
 }
 
-void SidebarController::ShowPopupMenu (
-    const tools::Rectangle& rButtonBox,
+void SidebarController::ShowPopupMenu(
+    weld::Menu& rMainMenu, weld::Menu& rSubMenu,
     const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
-    VclPtr<PopupMenu> pMenu = CreatePopupMenu(rMenuData);
-    pMenu->SetSelectHdl(LINK(const_cast<SidebarController*>(this), SidebarController, OnMenuItemSelected));
-
-    // pass toolbox button rect so the menu can stay open on button up
-    tools::Rectangle aBox (rButtonBox);
-    aBox.Move(mpTabBar->GetPosPixel().X(), 0);
-    const PopupMenuFlags aMenuDirection
-        = (comphelper::LibreOfficeKit::isActive() ? PopupMenuFlags::ExecuteLeft
-                                                  : PopupMenuFlags::ExecuteDown);
-    pMenu->Execute(mpParentWindow, aBox, aMenuDirection);
-    pMenu.disposeAndClear();
+    PopulatePopupMenus(rMainMenu, rSubMenu, rMenuData);
+    rMainMenu.connect_activate(LINK(const_cast<SidebarController*>(this), SidebarController, OnMenuItemSelected));
+    rSubMenu.connect_activate(LINK(const_cast<SidebarController*>(this), SidebarController, OnSubMenuItemSelected));
 }
 
-VclPtr<PopupMenu>
-SidebarController::CreatePopupMenu(const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
+void SidebarController::PopulatePopupMenus(weld::Menu& rMenu, weld::Menu& rCustomizationMenu,
+                                           const std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
-    // Create the top level popup menu.
-    auto pMenu = VclPtr<PopupMenu>::Create();
-    FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
-    if (pMenuWindow != nullptr)
-    {
-        pMenuWindow->SetPopupModeFlags(pMenuWindow->GetPopupModeFlags()
-                                       | FloatWinPopupFlags::NoMouseUpClose);
-    }
-
-    // Create sub menu for customization (hiding of deck tabs), only on desktop.
-    VclPtr<PopupMenu> pCustomizationMenu
-        = (comphelper::LibreOfficeKit::isActive() ? nullptr : VclPtr<PopupMenu>::Create());
-
     // Add one entry for every tool panel element to individually make
     // them visible or hide them.
     sal_Int32 nIndex (0);
     for (const auto& rItem : rMenuData)
     {
-        const sal_Int32 nMenuIndex (nIndex+MID_FIRST_PANEL);
-        pMenu->InsertItem(nMenuIndex, rItem.msDisplayName, MenuItemBits::RADIOCHECK);
-        pMenu->CheckItem(nMenuIndex, rItem.mbIsCurrentDeck);
-        pMenu->EnableItem(nMenuIndex, rItem.mbIsEnabled && rItem.mbIsActive);
+        OString sIdent("select" + OString::number(nIndex));
+        rMenu.insert(nIndex, OUString::fromUtf8(sIdent), rItem.msDisplayName, nullptr, nullptr, TRISTATE_FALSE);
+        rMenu.set_active(sIdent, rItem.mbIsCurrentDeck);
+        rMenu.set_sensitive(sIdent, rItem.mbIsEnabled && rItem.mbIsActive);
 
         if (!comphelper::LibreOfficeKit::isActive())
         {
-            const sal_Int32 nSubMenuIndex(nIndex + MID_FIRST_HIDE);
             if (rItem.mbIsCurrentDeck)
             {
                 // Don't allow the currently visible deck to be disabled.
-                pCustomizationMenu->InsertItem(nSubMenuIndex, rItem.msDisplayName,
-                                               MenuItemBits::RADIOCHECK);
-                pCustomizationMenu->CheckItem(nSubMenuIndex);
+                OString sSubIdent("nocustomize" + OString::number(nIndex));
+                rCustomizationMenu.insert(nIndex, OUString::fromUtf8(sSubIdent), rItem.msDisplayName, nullptr, nullptr, TRISTATE_FALSE);
+                rCustomizationMenu.set_active(sSubIdent, true);
             }
             else
             {
-                pCustomizationMenu->InsertItem(nSubMenuIndex, rItem.msDisplayName,
-                                               MenuItemBits::CHECKABLE);
-                pCustomizationMenu->CheckItem(nSubMenuIndex, rItem.mbIsEnabled && rItem.mbIsActive);
+                OString sSubIdent("customize" + OString::number(nIndex));
+                rCustomizationMenu.insert(nIndex, OUString::fromUtf8(sSubIdent), rItem.msDisplayName, nullptr, nullptr, TRISTATE_TRUE);
+                rCustomizationMenu.set_active(sSubIdent, rItem.mbIsEnabled && rItem.mbIsActive);
             }
         }
 
         ++nIndex;
     }
 
-    pMenu->InsertSeparator();
-
+    bool bHideLock = true;
+    bool bHideUnLock = true;
     // LOK doesn't support docked/undocked; Sidebar is floating but rendered docked in browser.
     if (!comphelper::LibreOfficeKit::isActive())
     {
         // Add entry for docking or un-docking the tool panel.
         if (mpParentWindow->IsFloatingMode())
+            bHideLock = false;
+        else
+            bHideUnLock = false;
+    }
+    rMenu.set_visible("locktaskpanel", !bHideLock);
+    rMenu.set_visible("unlocktaskpanel", !bHideUnLock);
+
+    // No Restore or Customize options for LoKit.
+    rMenu.set_visible("customization", !comphelper::LibreOfficeKit::isActive());
+}
+
+IMPL_LINK(SidebarController, OnMenuItemSelected, const OString&, rCurItemId, void)
+{
+    if (rCurItemId == "unlocktaskpanel")
+    {
+        mpParentWindow->SetFloatingMode(true);
+        if (mpParentWindow->IsFloatingMode())
+            mpParentWindow->ToTop(ToTopFlags::GrabFocusOnly);
+    }
+    else if (rCurItemId == "locktaskpanel")
+    {
+        mpParentWindow->SetFloatingMode(false);
+    }
+    else if (rCurItemId == "hidesidebar")
+    {
+        if (!comphelper::LibreOfficeKit::isActive())
         {
-            pMenu->InsertItem(MID_LOCK_TASK_PANEL, SfxResId(STR_SFX_DOCK));
-            pMenu->SetAccelKey(MID_LOCK_TASK_PANEL, vcl::KeyCode(KEY_F10, true, true, false, false));
+            const util::URL aURL(Tools::GetURL(".uno:Sidebar"));
+            Reference<frame::XDispatch> xDispatch(Tools::GetDispatch(mxFrame, aURL));
+            if (xDispatch.is())
+                xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
         }
         else
         {
-            pMenu->InsertItem(MID_UNLOCK_TASK_PANEL, SfxResId(STR_SFX_UNDOCK));
-            pMenu->SetAccelKey(MID_UNLOCK_TASK_PANEL, vcl::KeyCode(KEY_F10, true, true, false, false));
+            // In LOK we don't really destroy the sidebar when "closing";
+            // we simply hide it. This is because recreating it is problematic
+            // See notes in SidebarDockingWindow::NotifyResize().
+            RequestCloseDeck();
         }
     }
-
-    pMenu->InsertItem(MID_HIDE_SIDEBAR, SfxResId(SFX_STR_SIDEBAR_HIDE_SIDEBAR));
-
-    // No Restore or Customize options for LoKit.
-    if (!comphelper::LibreOfficeKit::isActive())
+    else
     {
-        pCustomizationMenu->InsertSeparator();
-        pCustomizationMenu->InsertItem(MID_RESTORE_DEFAULT, SfxResId(SFX_STR_SIDEBAR_RESTORE));
-
-        pMenu->InsertItem(MID_CUSTOMIZATION, SfxResId(SFX_STR_SIDEBAR_CUSTOMIZATION));
-        pMenu->SetPopupMenu(MID_CUSTOMIZATION, pCustomizationMenu);
+        try
+        {
+            OString sNumber;
+            if (rCurItemId.startsWith("select", &sNumber))
+            {
+                RequestOpenDeck();
+                SwitchToDeck(mpTabBar->GetDeckIdForIndex(sNumber.toInt32()));
+            }
+            mpParentWindow->GrabFocusToDocument();
+        }
+        catch (RuntimeException&)
+        {
+        }
     }
-
-    pMenu->RemoveDisabledEntries(false);
-
-    return pMenu;
 }
 
-IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
+IMPL_LINK(SidebarController, OnSubMenuItemSelected, const OString&, rCurItemId, void)
 {
-    if (pMenu == nullptr)
+    if (rCurItemId == "restoredefault")
+        mpTabBar->RestoreHideFlags();
+    else
     {
-        OSL_ENSURE(pMenu!=nullptr, "sfx2::sidebar::SidebarController::OnMenuItemSelected: illegal menu!");
-        return false;
-    }
-
-    pMenu->Deactivate();
-    const sal_Int32 nIndex (pMenu->GetCurItemId());
-    switch (nIndex)
-    {
-        case MID_UNLOCK_TASK_PANEL:
-            mpParentWindow->SetFloatingMode(true);
-            if (mpParentWindow->IsFloatingMode())
-                mpParentWindow->ToTop(ToTopFlags::GrabFocusOnly);
-            break;
-
-        case MID_LOCK_TASK_PANEL:
-            mpParentWindow->SetFloatingMode(false);
-            break;
-
-        case MID_RESTORE_DEFAULT:
-            mpTabBar->RestoreHideFlags();
-            break;
-
-        case MID_HIDE_SIDEBAR:
+        try
         {
-            if (!comphelper::LibreOfficeKit::isActive())
+            OString sNumber;
+            if (rCurItemId.startsWith("customize", &sNumber))
             {
-                const util::URL aURL(Tools::GetURL(".uno:Sidebar"));
-                Reference<frame::XDispatch> xDispatch(Tools::GetDispatch(mxFrame, aURL));
-                if (xDispatch.is())
-                    xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
+                mpTabBar->ToggleHideFlag(sNumber.toInt32());
+
+                // Find the set of decks that could be displayed for the new context.
+                ResourceManager::DeckContextDescriptorContainer aDecks;
+                mpResourceManager->GetMatchingDecks (
+                                            aDecks,
+                                            GetCurrentContext(),
+                                            IsDocumentReadOnly(),
+                                            mxFrame->getController());
+                // Notify the tab bar about the updated set of decks.
+                mpTabBar->SetDecks(aDecks);
+                mpTabBar->HighlightDeck(mpCurrentDeck->GetId());
+                mpTabBar->UpdateFocusManager(maFocusManager);
             }
-            else
-            {
-                // In LOK we don't really destroy the sidebar when "closing";
-                // we simply hide it. This is because recreating it is problematic
-                // See notes in SidebarDockingWindow::NotifyResize().
-                RequestCloseDeck();
-            }
-            break;
+            mpParentWindow->GrabFocusToDocument();
         }
-        default:
+        catch (RuntimeException&)
         {
-            try
-            {
-                if (nIndex >= MID_FIRST_PANEL && nIndex<MID_FIRST_HIDE)
-                {
-                    RequestOpenDeck();
-                    SwitchToDeck(mpTabBar->GetDeckIdForIndex(nIndex - MID_FIRST_PANEL));
-                }
-                else if (nIndex >=MID_FIRST_HIDE)
-                    if (pMenu->GetItemBits(nIndex) == MenuItemBits::CHECKABLE)
-                    {
-                        mpTabBar->ToggleHideFlag(nIndex-MID_FIRST_HIDE);
-
-                        // Find the set of decks that could be displayed for the new context.
-                        ResourceManager::DeckContextDescriptorContainer aDecks;
-                        mpResourceManager->GetMatchingDecks (
-                                                    aDecks,
-                                                    GetCurrentContext(),
-                                                    IsDocumentReadOnly(),
-                                                    mxFrame->getController());
-                        // Notify the tab bar about the updated set of decks.
-                        mpTabBar->SetDecks(aDecks);
-                        mpTabBar->HighlightDeck(mpCurrentDeck->GetId());
-                        mpTabBar->UpdateFocusManager(maFocusManager);
-                    }
-                mpParentWindow->GrabFocusToDocument();
-            }
-            catch (RuntimeException&)
-            {
-            }
         }
-        break;
     }
-
-    return true;
 }
+
 
 void SidebarController::RequestCloseDeck()
 {

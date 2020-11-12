@@ -63,6 +63,9 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/singletabdialog \
 	sfx2/uiconfig/ui/startcenter \
 	sfx2/uiconfig/ui/stylecontextmenu \
+	sfx2/uiconfig/ui/tabbar \
+	sfx2/uiconfig/ui/tabbarcontents \
+	sfx2/uiconfig/ui/tabbutton \
 	sfx2/uiconfig/ui/templatedlg \
 	sfx2/uiconfig/ui/templatecategorydlg \
 	sfx2/uiconfig/ui/templatepanel \
