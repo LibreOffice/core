@@ -208,7 +208,7 @@ std::ostream &operator <<(std::ostream& s, CGColorSpaceRef cs)
 
     CFStringRef name = CGColorSpaceCopyName(cs);
     if (name != nullptr)
-        s << " (" << [(NSString *)name UTF8String] << ")";
+        s << " (" << [static_cast<NSString *>(name) UTF8String] << ")";
 #endif
     return s;
 }
