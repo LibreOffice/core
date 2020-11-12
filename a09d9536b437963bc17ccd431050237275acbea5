@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dcd5c121_9ed0b9d1",
+        "filename": "emfio/source/reader/mtftools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2020-11-12T20:55:46Z",
+      "side": 1,
+      "message": "This is the fix. Other changes are only for adding regression tests.",
+      "revId": "a09d9536b437963bc17ccd431050237275acbea5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
