@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26daf055_74a59c5e",
+        "filename": "vcl/unx/generic/print/genpspgraphics.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-11-12T11:36:07Z",
+      "side": 1,
+      "message": "there are then a bunch of these no-op reinterpret_casts left over, I\u0027ll update with these removed",
+      "revId": "39ffee27b9808c0bdd76fa43bf920becaf739339",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
