@@ -203,7 +203,7 @@ void ProgressBarWrapper::setValue( ::sal_Int32 nValue )
         if ( m_nRange > 0 )
         {
             fVal = ( double( nValue ) / double( m_nRange )) * 100;
-            fVal = std::max( double( 0 ), std::min( fVal, double( 100 )));
+            fVal = std::clamp( fVal, 0.0, 100.0 );
         }
 
         if ( m_nValue != sal_Int32( fVal ))

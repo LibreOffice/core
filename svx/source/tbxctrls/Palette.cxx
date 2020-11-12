@@ -72,9 +72,9 @@ static void lcl_CMYKtoRGB( float fCyan, float fMagenta, float fYellow, float fKe
     fMagenta = (fMagenta * ( 1.0 - fKey )) + fKey;
     fYellow = (fYellow * ( 1.0 - fKey )) + fKey;
 
-    dR = std::max( std::min( ( 1.0 - fCyan ), 1.0), 0.0 );
-    dG = std::max( std::min( ( 1.0 - fMagenta ), 1.0), 0.0 );
-    dB = std::max( std::min( ( 1.0 - fYellow ), 1.0), 0.0 );
+    dR = std::clamp( 1.0 - fCyan, 0.0, 1.0 );
+    dG = std::clamp( 1.0 - fMagenta, 0.0, 1.0 );
+    dB = std::clamp( 1.0 - fYellow, 0.0, 1.0 );
 }
 
 void PaletteASE::LoadPalette()

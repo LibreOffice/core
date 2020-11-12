@@ -298,7 +298,7 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
     while(nXA < nXB)
     {
         // early-test Z values if we need to do anything at all
-        const double fNewZ(std::max(0.0, std::min(double(0xffff), maIntZ.getVal())));
+        const double fNewZ(std::clamp(maIntZ.getVal(), 0.0, 65535.0));
         const sal_uInt16 nNewZ(static_cast< sal_uInt16 >(fNewZ));
         sal_uInt16& rOldZ(mrBuffer.getZ(nScanlineIndex));
 
