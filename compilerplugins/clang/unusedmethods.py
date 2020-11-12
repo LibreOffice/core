@@ -101,10 +101,14 @@ def isOtherConstness( d, callSet ):
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
+# sort by both the source-line and the datatype, so the output file ordering is stable
+# when we have multiple items on the same source line
+def v_sort_key(v):
+    return natural_sort_key(v[1]) + [v[0]]
 def sort_set_by_natural_key(s):
-    return sorted(s, key=lambda v: natural_sort_key(v[1]))
+    return sorted(s, key=lambda v: v_sort_key(v))
 
-    
+
 # --------------------------------------------------------------------------------------------
 #  "unused methods" analysis
 # --------------------------------------------------------------------------------------------

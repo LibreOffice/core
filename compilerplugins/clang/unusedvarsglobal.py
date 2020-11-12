@@ -124,11 +124,15 @@ for d in definitionSet2:
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
+# sort by both the source-line and the datatype, so the output file ordering is stable
+# when we have multiple items on the same source line
+def v_sort_key(v):
+    return natural_sort_key(v[0]) + [v1]]
 
 # sort results by name and line number
-tmp1list = sorted(untouchedSet, key=lambda v: natural_sort_key(v[0]))
-tmp2list = sorted(writeonlySet, key=lambda v: natural_sort_key(v[0]))
-tmp3list = sorted(readonlySet, key=lambda v: natural_sort_key(v[0]))
+tmp1list = sorted(untouchedSet, key=lambda v: v_sort_key(v))
+tmp2list = sorted(writeonlySet, key=lambda v: v_sort_key(v))
+tmp3list = sorted(readonlySet, key=lambda v: v_sort_key(v))
 
 # print out the results
 with open("compilerplugins/clang/unusedvarsglobal.untouched.results", "wt") as f:
