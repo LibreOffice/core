@@ -15623,13 +15623,8 @@ unoidl/source/unoidl-write.cxx
 unoidl/source/unoidl.cxx
 unoidl/source/unoidlprovider.cxx
 unoidl/source/unoidlprovider.hxx
-unotest/source/cpp/bootstrapfixturebase.cxx
-unotest/source/cpp/directories.cxx
 unotest/source/cpp/filters-test.cxx
-unotest/source/cpp/getargument.cxx
 unotest/source/cpp/getargument.hxx
-unotest/source/cpp/gettestargument.cxx
-unotest/source/cpp/macros_test.cxx
 unotest/source/cpp/officeconnection.cxx
 unotest/source/cpp/toabsolutefileurl.cxx
 unotest/source/cpp/unobootstrapprotector/unobootstrapprotector.cxx

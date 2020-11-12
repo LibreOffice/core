@@ -24,12 +24,12 @@
 
 #include "getargument.hxx"
 
-namespace test {
-
-bool getTestArgument(OUString const & name, OUString * value) {
+namespace test
+{
+bool getTestArgument(OUString const& name, OUString* value)
+{
     return detail::getArgument("testarg." + name, value);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
