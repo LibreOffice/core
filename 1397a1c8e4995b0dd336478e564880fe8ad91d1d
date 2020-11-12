@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e437a555_146f686e",
+        "filename": "include/editeng/itemtype.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-12T07:47:58Z",
+      "side": 1,
+      "message": "But in that change, the *inconsistent* old behaviour (where long was sometimes used as-is, accepting 8 bytes, and sometimes as 4-byte value, as in Normalize) was changed to consistent one.\n\nMaybe better introduce a proper operator sal_Int64 for BigInt, that would possibly convert big int that is in the 64-bit range?",
+      "parentUuid": "17443839_29261750",
+      "revId": "1397a1c8e4995b0dd336478e564880fe8ad91d1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f81f6bb4_db017dff",
         "filename": "include/tools/bigint.hxx",
         "patchSetId": 2
