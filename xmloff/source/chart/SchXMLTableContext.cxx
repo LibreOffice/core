@@ -45,6 +45,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <string_view>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
@@ -183,11 +184,11 @@ bool lcl_mapContainsRange(
 
 bool lcl_tableOfRangeMatches(
     const OUString & rRange,
-    const OUString & rTableName )
+    std::u16string_view rTableName )
 {
     // both strings are non-empty and the table name is part of the range
     return ( !rRange.isEmpty() &&
-             !rTableName.isEmpty() &&
+             !rTableName.empty() &&
              (rRange.indexOf( rTableName ) != -1 ));
 }
 

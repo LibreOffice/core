@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+#include <string_view>
+
 #include <sal/config.h>
 
 #include <AccessibleCell.hxx>
@@ -461,7 +463,7 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
     pRelationSet->AddRelation(aRelation);
 }
 
-static OUString ReplaceOneChar(const OUString& oldOUString, const OUString& replacedChar, const OUString& replaceStr)
+static OUString ReplaceOneChar(const OUString& oldOUString, std::u16string_view replacedChar, const OUString& replaceStr)
 {
     int iReplace = oldOUString.lastIndexOf(replacedChar);
     OUString aRet = oldOUString;
@@ -475,11 +477,11 @@ static OUString ReplaceOneChar(const OUString& oldOUString, const OUString& repl
 
 static OUString ReplaceFourChar(const OUString& oldOUString)
 {
-    OUString aRet = ReplaceOneChar(oldOUString, "\\", "\\\\");
-    aRet = ReplaceOneChar(aRet, ";", "\\;");
-    aRet = ReplaceOneChar(aRet, "=", "\\=");
-    aRet = ReplaceOneChar(aRet, ",", "\\,");
-    aRet = ReplaceOneChar(aRet, ":", "\\:");
+    OUString aRet = ReplaceOneChar(oldOUString, u"\\", "\\\\");
+    aRet = ReplaceOneChar(aRet, u";", "\\;");
+    aRet = ReplaceOneChar(aRet, u"=", "\\=");
+    aRet = ReplaceOneChar(aRet, u",", "\\,");
+    aRet = ReplaceOneChar(aRet, u":", "\\:");
     return aRet;
 }
 

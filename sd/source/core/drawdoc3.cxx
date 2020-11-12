@@ -19,6 +19,7 @@
 
 
 #include <memory>
+#include <string_view>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -343,7 +344,7 @@ lcl_removeUnusedStyles(SfxStyleSheetBasePool* const pStyleSheetPool, StyleSheetC
     rStyles = aUsedStyles;
 }
 
-SfxStyleSheet *lcl_findStyle(StyleSheetCopyResultVector& rStyles, const OUString& aStyleName)
+SfxStyleSheet *lcl_findStyle(StyleSheetCopyResultVector& rStyles, std::u16string_view aStyleName)
 {
     for (const auto& a : rStyles)
     {
@@ -921,7 +922,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                     if(pPg->GetObj(i)->GetStyleSheet())
                     {
                         OUString aStyleName = pPg->GetObj(i)->GetStyleSheet()->GetName();
-                        SfxStyleSheet *pSheet = lcl_findStyle(aNewGraphicStyles, aStyleName + aRenameStr);
+                        SfxStyleSheet *pSheet = lcl_findStyle(aNewGraphicStyles, OUString(aStyleName + aRenameStr));
                         if(pSheet != nullptr)
                             pPg->GetObj(i)->SetStyleSheet(pSheet, true);
                     }

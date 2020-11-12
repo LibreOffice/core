@@ -29,7 +29,7 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 
 #include <map>
-
+#include <string_view>
 
 namespace comphelper
 {
@@ -66,9 +66,9 @@ namespace comphelper
 
     namespace
     {
-        void    lcl_checkForEmptyName( const bool _allowEmpty, const OUString& _name )
+        void    lcl_checkForEmptyName( const bool _allowEmpty, std::u16string_view _name )
         {
-            if ( !_allowEmpty && _name.isEmpty() )
+            if ( !_allowEmpty && _name.empty() )
                 throw IllegalArgumentException(
                         "The property name must not be empty.",
                         // TODO: resource

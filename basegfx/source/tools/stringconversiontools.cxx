@@ -23,7 +23,7 @@
 namespace basegfx::internal
 {
         void skipSpaces(sal_Int32&      io_rPos,
-                        const OUString& rStr,
+                        std::u16string_view rStr,
                         const sal_Int32 nLen)
         {
             while( io_rPos < nLen &&
@@ -34,7 +34,7 @@ namespace basegfx::internal
         }
 
         static void skipSpacesAndCommas(sal_Int32&      io_rPos,
-                                 const OUString& rStr,
+                                 std::u16string_view rStr,
                                  const sal_Int32 nLen)
         {
             while(io_rPos < nLen
@@ -134,7 +134,7 @@ namespace basegfx::internal
 
         bool importFlagAndSpaces(sal_Int32&      o_nRetval,
                                  sal_Int32&      io_rPos,
-                                 const OUString& rStr,
+                                 std::u16string_view rStr,
                                  const sal_Int32 nLen)
         {
             sal_Unicode aChar( rStr[io_rPos] );

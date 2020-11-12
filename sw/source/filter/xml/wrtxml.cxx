@@ -559,7 +559,8 @@ bool SwXMLWriter::WriteThroughComponent(
     return xFilter->filter( rMediaDesc );
 }
 
-void GetXMLWriter( const OUString& /*rName*/, const OUString& rBaseURL, WriterRef& xRet )
+void GetXMLWriter(
+    [[maybe_unused]] const OUString& /*rName*/, const OUString& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwXMLWriter( rBaseURL );
 }

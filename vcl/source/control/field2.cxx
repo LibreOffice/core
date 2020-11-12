@@ -461,7 +461,7 @@ static void ImplPatternProcessStrictModify( weld::Entry& rEntry,
     rEntry.select_region(nStartPos, nEndPos);
 }
 
-static sal_Int32 ImplPatternLeftPos(const OString& rEditMask, sal_Int32 nCursorPos)
+static sal_Int32 ImplPatternLeftPos(std::string_view rEditMask, sal_Int32 nCursorPos)
 {
     // search non-literal predecessor
     sal_Int32 nNewPos = nCursorPos;
@@ -1193,7 +1193,7 @@ static sal_uInt16 ImplCutNumberFromString( OUString& rStr )
     return nValue;
 }
 
-static bool ImplCutMonthName( OUString& rStr, const OUString& _rLookupMonthName )
+static bool ImplCutMonthName( OUString& rStr, std::u16string_view _rLookupMonthName )
 {
     sal_Int32 index = 0;
     rStr = rStr.replaceFirst(_rLookupMonthName, "", &index);

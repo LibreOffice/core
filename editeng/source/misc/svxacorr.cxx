@@ -1279,7 +1279,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPo
 }
 
 // search preceding opening quote in the paragraph before the insert position
-static bool lcl_HasPrecedingChar( const OUString& rTxt, sal_Int32 nPos,
+static bool lcl_HasPrecedingChar( std::u16string_view rTxt, sal_Int32 nPos,
                 const sal_Unicode sPrecedingChar, const sal_Unicode* aStopChars )
 {
     sal_Unicode cTmpChar;

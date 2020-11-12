@@ -474,7 +474,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
 
     if ( !m_xBrowserController.is() )
     {
-        ShowServiceNotAvailableError(m_pParent, "com.sun.star.inspection.ObjectInspector", true);
+        ShowServiceNotAvailableError(m_pParent, u"com.sun.star.inspection.ObjectInspector", true);
     }
     else
     {

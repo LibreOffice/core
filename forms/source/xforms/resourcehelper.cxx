@@ -34,22 +34,22 @@ OUString getResource(const char* pResourceId)
 }
 
 OUString getResource(const char* pResourceId,
-                     const OUString& rInfo1)
+                     std::u16string_view rInfo1)
 {
     return getResource(pResourceId, rInfo1, OUString(), OUString());
 }
 
 OUString getResource(const char* pResourceId,
-                     const OUString& rInfo1,
-                     const OUString& rInfo2)
+                     std::u16string_view rInfo1,
+                     std::u16string_view rInfo2)
 {
     return getResource(pResourceId, rInfo1, rInfo2, OUString());
 }
 
 OUString getResource(const char* pResourceId,
-                     const OUString& rInfo1,
-                     const OUString& rInfo2,
-                     const OUString& rInfo3)
+                     std::u16string_view rInfo1,
+                     std::u16string_view rInfo2,
+                     std::u16string_view rInfo3)
 {
     OUString sResource = frm::ResourceManager::loadString(pResourceId);
     OSL_ENSURE( !sResource.isEmpty(), "resource not found?" );

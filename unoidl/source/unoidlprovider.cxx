@@ -13,6 +13,7 @@
 #include <cassert>
 #include <cstring>
 #include <set>
+#include <string_view>
 #include <vector>
 
 #include <osl/endian.h>
@@ -466,7 +467,7 @@ namespace {
 enum Compare { COMPARE_LESS, COMPARE_GREATER, COMPARE_EQUAL };
 
 Compare compare(
-    rtl::Reference< MappedFile > const & file, OUString const & name,
+    rtl::Reference< MappedFile > const & file, std::u16string_view name,
     sal_Int32 nameOffset, sal_Int32 nameLength, MapEntry const * entry)
 {
     assert(file.is());

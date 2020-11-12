@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <xexptran.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -34,28 +38,28 @@ using namespace ::com::sun::star;
 using std::make_unique;
 
 // parsing help functions for simple chars
-static void Imp_SkipSpaces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
+static void Imp_SkipSpaces(std::u16string_view rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
         && ' ' == rStr[rPos])
         rPos++;
 }
 
-static void Imp_SkipSpacesAndOpeningBraces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
+static void Imp_SkipSpacesAndOpeningBraces(std::u16string_view rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
         && (' ' == rStr[rPos] || '(' == rStr[rPos]))
         rPos++;
 }
 
-static void Imp_SkipSpacesAndCommas(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
+static void Imp_SkipSpacesAndCommas(std::u16string_view rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
         && (' ' == rStr[rPos] || ',' == rStr[rPos]))
         rPos++;
 }
 
-static void Imp_SkipSpacesAndClosingBraces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
+static void Imp_SkipSpacesAndClosingBraces(std::u16string_view rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
         && (' ' == rStr[rPos] || ')' == rStr[rPos]))
@@ -64,7 +68,7 @@ static void Imp_SkipSpacesAndClosingBraces(const OUString& rStr, sal_Int32& rPos
 
 // parsing help functions for integer numbers
 
-static bool Imp_IsOnUnitChar(const OUString& rStr, const sal_Int32 nPos)
+static bool Imp_IsOnUnitChar(std::u16string_view rStr, const sal_Int32 nPos)
 {
     sal_Unicode aChar(rStr[nPos]);
 
@@ -73,7 +77,7 @@ static bool Imp_IsOnUnitChar(const OUString& rStr, const sal_Int32 nPos)
         || '%' == aChar;
 }
 
-static double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen,
+static double Imp_GetDoubleChar(std::u16string_view rStr, sal_Int32& rPos, const sal_Int32 nLen,
     const SvXMLUnitConverter& rConv, double fRetval, bool bLookForUnits = false)
 {
     sal_Unicode aChar(rStr[rPos]);

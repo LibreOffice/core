@@ -21,7 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
-short ExecuteQuerySaveDocument(weld::Widget* _pParent, const OUString& _rTitle)
+short ExecuteQuerySaveDocument(weld::Widget* _pParent, std::u16string_view _rTitle)
 {
     if (Application::IsHeadlessModeEnabled())
     {

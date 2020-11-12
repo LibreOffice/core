@@ -25,6 +25,8 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "svgpaint.hxx"
+
+#include <string_view>
 #include <vector>
 
 namespace svgio::svgreader
@@ -179,16 +181,16 @@ namespace svgio::svgreader
             basegfx::B2DHomMatrix createMapping(const basegfx::B2DRange& rTarget, const basegfx::B2DRange& rSource) const;
         };
 
-        void skip_char(const OUString& rCandidate, sal_Unicode aChar, sal_Int32& nPos, const sal_Int32 nLen);
-        void skip_char(const OUString& rCandidate, sal_Unicode aCharA, sal_Unicode nCharB, sal_Int32& nPos, const sal_Int32 nLen);
-        void copySign(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
-        void copyNumber(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
-        void copyHex(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
-        void copyString(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
-        void copyToLimiter(const OUString& rCandidate, sal_Unicode aLimiter, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
-        bool readNumber(const OUString& rCandidate, sal_Int32& nPos, double& fNum, const sal_Int32 nLen);
-        SvgUnit readUnit(const OUString& rCandidate, sal_Int32& nPos, const sal_Int32 nLen);
-        bool readNumberAndUnit(const OUString& rCandidate, sal_Int32& nPos, SvgNumber& aNum, const sal_Int32 nLen);
+        void skip_char(std::u16string_view rCandidate, sal_Unicode aChar, sal_Int32& nPos, const sal_Int32 nLen);
+        void skip_char(std::u16string_view rCandidate, sal_Unicode aCharA, sal_Unicode nCharB, sal_Int32& nPos, const sal_Int32 nLen);
+        void copySign(std::u16string_view rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
+        void copyNumber(std::u16string_view rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
+        void copyHex(std::u16string_view rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
+        void copyString(std::u16string_view rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
+        void copyToLimiter(std::u16string_view rCandidate, sal_Unicode aLimiter, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
+        bool readNumber(std::u16string_view rCandidate, sal_Int32& nPos, double& fNum, const sal_Int32 nLen);
+        SvgUnit readUnit(std::u16string_view rCandidate, sal_Int32& nPos, const sal_Int32 nLen);
+        bool readNumberAndUnit(std::u16string_view rCandidate, sal_Int32& nPos, SvgNumber& aNum, const sal_Int32 nLen);
         bool readAngle(const OUString& rCandidate, sal_Int32& nPos, double& fAngle, const sal_Int32 nLen);
         sal_Int32 read_hex(sal_Unicode aChar);
         bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName, bool bCaseIndependent);

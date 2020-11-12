@@ -45,7 +45,7 @@ sal_Int32 GetCoordinate( sal_Int32 nValue )
 }
 
 /** converts an emu string into 1/100th mmm */
-sal_Int32 GetCoordinate( const OUString& sValue )
+sal_Int32 GetCoordinate( std::u16string_view sValue )
 {
     sal_Int32 nRet = 0;
     if( !::sax::Converter::convertNumber( nRet, sValue ) )
@@ -60,7 +60,7 @@ sal_Int32 GetPointFromCoordinate( sal_Int32 nValue )
 }
 
 /** converts a ST_Percentage % string into 1/1000th of % */
-sal_Int32 GetPercent( const OUString& sValue )
+sal_Int32 GetPercent( std::u16string_view sValue )
 {
     sal_Int32 nRet = 0;
     if( !::sax::Converter::convertNumber( nRet, sValue ) )
@@ -82,7 +82,7 @@ awt::Point GetPointPercent( const Reference< XFastAttributeList >& xAttribs )
 }
 
 /** converts the ST_TextFontSize to point */
-float GetTextSize( const OUString& sValue )
+float GetTextSize( std::u16string_view sValue )
 {
     float fRet = 0;
     sal_Int32 nRet;
@@ -92,7 +92,7 @@ float GetTextSize( const OUString& sValue )
 }
 
 /** converts the ST_TextSpacingPoint to 1/100mm */
-sal_Int32 GetTextSpacingPoint( const OUString& sValue )
+sal_Int32 GetTextSpacingPoint( std::u16string_view sValue )
 {
     sal_Int32 nRet;
     if( ::sax::Converter::convertNumber( nRet, sValue, (SAL_MIN_INT32 + 360) / 254, (SAL_MAX_INT32 - 360) / 254 ) )

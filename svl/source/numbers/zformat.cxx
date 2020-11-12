@@ -5052,7 +5052,7 @@ const Color* SvNumberformat::GetColor( sal_uInt16 nNumFor ) const
 
 static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
                                                    SvNumberformatLimitOps eOp,
-                                                   double fLimit, const OUString& rDecSep )
+                                                   double fLimit, std::u16string_view rDecSep )
 {
     if ( eOp == NUMBERFORMAT_OP_NO )
         return;

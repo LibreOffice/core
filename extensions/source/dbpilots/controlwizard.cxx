@@ -436,7 +436,7 @@ namespace dbp
         catch(const Exception&) { }
         if (!xHandler.is())
         {
-            ShowServiceNotAvailableError(_pWindow, "com.sun.star.task.InteractionHandler", true);
+            ShowServiceNotAvailableError(_pWindow, u"com.sun.star.task.InteractionHandler", true);
         }
         return xHandler;
     }

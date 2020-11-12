@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_STDTEXT_HXX
 #define INCLUDED_VCL_STDTEXT_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/dllapi.h>
@@ -27,7 +31,7 @@
 class Image;
 namespace weld { class Widget; }
 
-void VCL_DLLPUBLIC ShowServiceNotAvailableError(weld::Widget* pParent, const OUString& rServiceName, bool bError);
+void VCL_DLLPUBLIC ShowServiceNotAvailableError(weld::Widget* pParent, std::u16string_view rServiceName, bool bError);
 
 OUString VCL_DLLPUBLIC GetStandardText(StandardButtonType eButton);
 

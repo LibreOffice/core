@@ -19,13 +19,17 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 namespace basegfx::internal
     {
         void skipSpaces(sal_Int32&      io_rPos,
-                        const OUString& rStr,
+                        std::u16string_view rStr,
                         const sal_Int32 nLen);
 
         inline bool isOnNumberChar(const sal_Unicode aChar,
@@ -39,7 +43,7 @@ namespace basegfx::internal
             return bPredicate;
         }
 
-        inline bool isOnNumberChar(const OUString& rStr,
+        inline bool isOnNumberChar(std::u16string_view rStr,
                                    const sal_Int32 nPos)
         {
             return isOnNumberChar(rStr[nPos], true/*bSignAllowed*/);
@@ -52,7 +56,7 @@ namespace basegfx::internal
 
         bool importFlagAndSpaces(sal_Int32&      o_nRetval,
                                  sal_Int32&      io_rPos,
-                                 const OUString& rStr,
+                                 std::u16string_view rStr,
                                  const sal_Int32 nLen);
 
 } // namespace basegfx::internal

@@ -90,9 +90,9 @@ namespace
     const sal_Unicode comma_char = ',';
     constexpr OUStringLiteral dos_newline = u"\r\n";
 
-    bool needsQuoting(const OUString& str)
+    bool needsQuoting(std::u16string_view str)
     {
-        return std::u16string_view(str).find_first_of(u"\",\n\r") != std::u16string_view::npos;
+        return str.find_first_of(u"\",\n\r") != std::u16string_view::npos;
     };
 
     void appendEncodedString(OUStringBuffer& buf, const OUString& str)

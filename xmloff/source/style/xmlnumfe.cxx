@@ -47,6 +47,7 @@
 
 #include <float.h>
 #include <set>
+#include <string_view>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -836,7 +837,7 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
 
 //  for old (automatic) currency formats: parse currency symbol from text
 
-static sal_Int32 lcl_FindSymbol( const OUString& sUpperStr, const OUString& sCurString )
+static sal_Int32 lcl_FindSymbol( const OUString& sUpperStr, std::u16string_view sCurString )
 {
     //  search for currency symbol
     //  Quoting as in ImpSvNumberformatScan::Symbol_Division
