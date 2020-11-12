@@ -17,12 +17,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
 
-bool cppu::supportsService(
-    css::lang::XServiceInfo * implementation, OUString const & name)
+bool cppu::supportsService(css::lang::XServiceInfo* implementation, OUString const& name)
 {
     assert(implementation != nullptr);
-    const css::uno::Sequence< OUString > s(
-        implementation->getSupportedServiceNames());
+    const css::uno::Sequence<OUString> s(implementation->getSupportedServiceNames());
     return std::find(s.begin(), s.end(), name) != s.end();
 }
 

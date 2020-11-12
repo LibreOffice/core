@@ -2457,7 +2457,6 @@ cppu/source/typelib/typelib.hxx
 cppu/source/uno/EnvDcp.cxx
 cppu/source/uno/EnvStack.cxx
 cppu/source/uno/IdentityMapping.cxx
-cppu/source/uno/IdentityMapping.hxx
 cppu/source/uno/any.cxx
 cppu/source/uno/assign.hxx
 cppu/source/uno/cascade_mapping.cxx
@@ -2471,7 +2470,6 @@ cppu/source/uno/eq.hxx
 cppu/source/uno/lbenv.cxx
 cppu/source/uno/lbmap.cxx
 cppu/source/uno/loadmodule.cxx
-cppu/source/uno/loadmodule.hxx
 cppu/source/uno/prim.hxx
 cppu/source/uno/sequence.cxx
 cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx
@@ -2496,13 +2494,11 @@ cppuhelper/source/loadsharedlibcomponentfactory.hxx
 cppuhelper/source/macro_expander.cxx
 cppuhelper/source/macro_expander.hxx
 cppuhelper/source/paths.cxx
-cppuhelper/source/paths.hxx
 cppuhelper/source/propertysetmixin.cxx
 cppuhelper/source/propshlp.cxx
 cppuhelper/source/servicemanager.cxx
 cppuhelper/source/servicemanager.hxx
 cppuhelper/source/shlib.cxx
-cppuhelper/source/supportsservice.cxx
 cppuhelper/source/tdmgr.cxx
 cppuhelper/source/typemanager.cxx
 cppuhelper/source/typemanager.hxx
