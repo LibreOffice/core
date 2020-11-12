@@ -108,7 +108,7 @@ const sal_Int8 API_ESCAPEHEIGHT_DEFAULT     = 58;       ///< Relative character 
 template< typename ReturnType, typename Type >
 inline ReturnType getLimitedValue( Type nValue, Type nMin, Type nMax )
 {
-    return static_cast< ReturnType >( ::std::min( ::std::max( nValue, nMin ), nMax ) );
+    return static_cast< ReturnType >( ::std::clamp( nValue, nMin, nMax ) );
 }
 
 template< typename ReturnType, typename Type >

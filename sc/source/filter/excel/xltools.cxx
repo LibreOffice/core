@@ -274,7 +274,7 @@ XclBoolError XclTools::ErrorToEnum( double& rfDblValue, bool bErrOrBool, sal_uIn
 sal_uInt16 XclTools::GetTwipsFromInch( double fInches )
 {
     return static_cast< sal_uInt16 >(
-        ::std::min( ::std::max( (fInches * EXC_TWIPS_PER_INCH + 0.5), 0.0 ), 65535.0 ) );
+        ::std::clamp( fInches * EXC_TWIPS_PER_INCH + 0.5, 0.0, 65535.0 ) );
 }
 
 sal_uInt16 XclTools::GetTwipsFromHmm( sal_Int32 nHmm )
