@@ -3889,7 +3889,6 @@ embedserv/source/inprocserv/dllentry.cxx
 embedserv/source/inprocserv/inprocembobj.cxx
 embedserv/source/inprocserv/inprocembobj.h
 embedserv/source/inprocserv/smartpointer.hxx
-emfio/inc/emfiodllapi.h
 emfio/inc/emfreader.hxx
 emfio/inc/mtftools.hxx
 emfio/inc/wmfreader.hxx
