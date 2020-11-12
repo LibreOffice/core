@@ -23,7 +23,6 @@
 
 using namespace css;
 
-
 IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl, weld::Button&, void)
 {
     if (m_xOptionButtonAccept->get_active())
@@ -38,17 +37,16 @@ IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl, weld::Button&, void)
 {
-    uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures(
-        css::security::DocumentDigitalSignatures::createDefault(m_xContext) );
+    uno::Reference<css::security::XDocumentDigitalSignatures> xDocumentDigitalSignatures(
+        css::security::DocumentDigitalSignatures::createDefault(m_xContext));
     xDocumentDigitalSignatures->setParentWindow(m_xDialog->GetXWindow());
     xDocumentDigitalSignatures->showCertificate(m_rXCert);
 }
 
-UnknownAuthDialog::UnknownAuthDialog(weld::Window* pParent,
-    const css::uno::Reference< css::security::XCertificate >& rXCert,
-    const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : MessageDialogController(pParent, "uui/ui/unknownauthdialog.ui",
-            "UnknownAuthDialog")
+UnknownAuthDialog::UnknownAuthDialog(
+    weld::Window* pParent, const css::uno::Reference<css::security::XCertificate>& rXCert,
+    const css::uno::Reference<css::uno::XComponentContext>& xContext)
+    : MessageDialogController(pParent, "uui/ui/unknownauthdialog.ui", "UnknownAuthDialog")
     , m_xCommandButtonOK(m_xBuilder->weld_button("ok"))
     , m_xView_Certificate(m_xBuilder->weld_button("examine"))
     , m_xOptionButtonAccept(m_xBuilder->weld_radio_button("accept"))

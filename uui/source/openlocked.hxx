@@ -25,9 +25,11 @@ class OpenLockedQueryBox
 {
 private:
     std::unique_ptr<weld::MessageDialog> m_xQueryBox;
+
 public:
-    OpenLockedQueryBox(weld::Window* pParent, const std::locale& rResLocale, const OUString& rMessage, bool bEnableOverride);
-    short run() {  return m_xQueryBox->run(); }
+    OpenLockedQueryBox(weld::Window* pParent, const std::locale& rResLocale,
+                       const OUString& rMessage, bool bEnableOverride);
+    short run() { return m_xQueryBox->run(); }
 };
 
 #endif

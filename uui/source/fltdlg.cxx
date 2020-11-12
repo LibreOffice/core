@@ -27,7 +27,6 @@
 
 namespace uui
 {
-
 /*-************************************************************************************************************
     @short      initialize filter dialog with start values
     @descr      We set some necessary information on these instance for later working and create internal structures.
@@ -39,7 +38,7 @@ namespace uui
 
     @param      "pParentWindow"  , parent window for dialog
     @threadsafe no
-*//*-*************************************************************************************************************/
+*/ /*-*************************************************************************************************************/
 FilterDialog::FilterDialog(weld::Window* pParentWindow)
     : GenericDialogController(pParentWindow, "uui/ui/filterselect.ui", "FilterSelectDialog")
     , m_pFilterNames(nullptr)
@@ -50,17 +49,15 @@ FilterDialog::FilterDialog(weld::Window* pParentWindow)
                                    m_xLbFilters->get_height_rows(15));
 }
 
-FilterDialog::~FilterDialog()
-{
-}
+FilterDialog::~FilterDialog() {}
 
 /*-************************************************************************************************************
     @short      set file name on dialog control
     @descr      We convert given URL (it must be a URL!) into valid file name and show it on our dialog.
     @param      "sURL", URL for showing
     @threadsafe no
-*//*-*************************************************************************************************************/
-void FilterDialog::SetURL( const OUString& sURL )
+*/ /*-*************************************************************************************************************/
+void FilterDialog::SetURL(const OUString& sURL)
 {
     // convert it and use given pure string as fallback if conversion failed
     m_xFtURL->set_label(impl_buildUIFileName(sURL));
@@ -82,14 +79,14 @@ void FilterDialog::SetURL( const OUString& sURL )
     @param      "pFilterNames", pointer to list of filter names, which should be used for later operations.
     @onerror    We clear list box and forget our currently set filter information completely!
     @threadsafe no
-*//*-*************************************************************************************************************/
-void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
+*/ /*-*************************************************************************************************************/
+void FilterDialog::ChangeFilters(const FilterNameList* pFilterNames)
 {
     m_pFilterNames = pFilterNames;
     m_xLbFilters->clear();
-    if( m_pFilterNames != nullptr )
+    if (m_pFilterNames != nullptr)
     {
-        for( const auto& rItem : *m_pFilterNames )
+        for (const auto& rItem : *m_pFilterNames)
         {
             m_xLbFilters->append_text(rItem.sUI);
         }
@@ -113,24 +110,24 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
 
     @onerror    We return false ... but don't change pSelectedItem!
     @threadsafe no
-*//*-*************************************************************************************************************/
-bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
+*/ /*-*************************************************************************************************************/
+bool FilterDialog::AskForFilter(FilterNameListPtr& pSelectedItem)
 {
     bool bSelected = false;
 
-    if( m_pFilterNames != nullptr )
+    if (m_pFilterNames != nullptr)
     {
         if (m_xDialog->run() == RET_OK)
         {
             OUString sEntry = m_xLbFilters->get_selected_text();
-            if( !sEntry.isEmpty() )
+            if (!sEntry.isEmpty())
             {
                 int nPos = m_xLbFilters->get_selected_index();
-                if( nPos < static_cast<int>(m_pFilterNames->size()) )
+                if (nPos < static_cast<int>(m_pFilterNames->size()))
                 {
-                    pSelectedItem  = m_pFilterNames->begin();
+                    pSelectedItem = m_pFilterNames->begin();
                     pSelectedItem += nPos;
-                    bSelected      = ( pSelectedItem != m_pFilterNames->end() );
+                    bSelected = (pSelectedItem != m_pFilterNames->end());
                 }
             }
         }
@@ -139,8 +136,8 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
     return bSelected;
 }
 
-namespace {
-
+namespace
+{
 /*-************************************************************************************************************
     @short      helper class to calculate length of given string
     @descr      Instances of it can be used as callback for INetURLObject::getAbbreviated() method to build
@@ -149,24 +146,23 @@ namespace {
     @seealso    method OutputDevice::GetTextWidth()
     @seealso    method InetURLObject::getAbbreviated()
     @threadsafe no
-*//*-*************************************************************************************************************/
-class StringCalculator : public ::cppu::WeakImplHelper< css::util::XStringWidth >
+*/ /*-*************************************************************************************************************/
+class StringCalculator : public ::cppu::WeakImplHelper<css::util::XStringWidth>
 {
-    public:
-        explicit StringCalculator(weld::Widget* pDevice)
-            : m_pDevice(pDevice)
-        {
-        }
+public:
+    explicit StringCalculator(weld::Widget* pDevice)
+        : m_pDevice(pDevice)
+    {
+    }
 
-        sal_Int32 SAL_CALL queryStringWidth( const OUString& sString ) override
-        {
-            return static_cast<sal_Int32>(m_pDevice->get_pixel_size(sString).Width());
-        }
+    sal_Int32 SAL_CALL queryStringWidth(const OUString& sString) override
+    {
+        return static_cast<sal_Int32>(m_pDevice->get_pixel_size(sString).Width());
+    }
 
-    private:
-        weld::Widget* m_pDevice;
+private:
+    weld::Widget* m_pDevice;
 };
-
 }
 
 /*-************************************************************************************************************
@@ -181,10 +177,10 @@ class StringCalculator : public ::cppu::WeakImplHelper< css::util::XStringWidth 
 
     @onerror    We return given name without any changes.
     @threadsafe no
-*//*-*************************************************************************************************************/
-OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
+*/ /*-*************************************************************************************************************/
+OUString FilterDialog::impl_buildUIFileName(const OUString& sName)
 {
-    OUString sShortName( sName );
+    OUString sShortName(sName);
 
     if (osl::FileBase::getSystemPathFromFileURL(sName, sShortName) == osl::FileBase::E_None)
 
@@ -194,18 +190,20 @@ OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
     else
     {
         // otherwise it's really a URL... build short name by using INetURLObject
-        css::uno::Reference< css::util::XStringWidth > xStringCalculator(new StringCalculator(m_xFtURL.get()));
-        if( xStringCalculator.is() )
+        css::uno::Reference<css::util::XStringWidth> xStringCalculator(
+            new StringCalculator(m_xFtURL.get()));
+        if (xStringCalculator.is())
         {
-            INetURLObject aBuilder   ( sName );
-            Size          aSize      = m_xLbFilters->get_preferred_size();
-            sShortName = aBuilder.getAbbreviated( xStringCalculator, aSize.Width(), INetURLObject::DecodeMechanism::Unambiguous );
+            INetURLObject aBuilder(sName);
+            Size aSize = m_xLbFilters->get_preferred_size();
+            sShortName = aBuilder.getAbbreviated(xStringCalculator, aSize.Width(),
+                                                 INetURLObject::DecodeMechanism::Unambiguous);
         }
     }
 
     return sShortName;
 }
 
-}   // namespace uui
+} // namespace uui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
