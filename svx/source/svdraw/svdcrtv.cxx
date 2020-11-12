@@ -409,6 +409,9 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, SdrObjKind nIdent, cons
             }
             if (pCurrentCreate!=nullptr)
             {
+                pCurrentCreate->SetName(pCurrentCreate->TakeObjNameSingul());
+                pCurrentCreate->MakeNameUnique();
+
                 if (mpDefaultStyleSheet!=nullptr) pCurrentCreate->NbcSetStyleSheet(mpDefaultStyleSheet, false);
 
                 // SW uses a naked SdrObject for frame construction. Normally, such an
