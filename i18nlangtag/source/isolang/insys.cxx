@@ -17,12 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #if defined(_WIN32)
 
 #include "inwnt.cxx"
 
-#elif defined( UNX )
+#elif defined(UNX)
 
 #include "inunx.cxx"
 
