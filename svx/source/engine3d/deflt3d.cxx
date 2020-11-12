@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/deflt3d.hxx>
 
 // Class to manage the 3D default attributes
 
-E3dDefaultAttributes::E3dDefaultAttributes()
-{
-    Reset();
-}
+E3dDefaultAttributes::E3dDefaultAttributes() { Reset(); }
 
 void E3dDefaultAttributes::Reset()
 {

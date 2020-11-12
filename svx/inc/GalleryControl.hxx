@@ -31,13 +31,12 @@ class GalleryBrowser2;
 class FmFormModel;
 class Splitter;
 
-namespace svx::sidebar {
-
-
+namespace svx::sidebar
+{
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) GalleryControl final : public PanelLayout
 {
 public:
-    GalleryControl( vcl::Window* pParentWindow );
+    GalleryControl(vcl::Window* pParentWindow);
 
 private:
     Gallery* mpGallery;

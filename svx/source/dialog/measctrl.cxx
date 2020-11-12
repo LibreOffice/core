@@ -71,9 +71,7 @@ void SvxXMeasurePreview::Resize()
     Invalidate();
 }
 
-SvxXMeasurePreview::~SvxXMeasurePreview()
-{
-}
+SvxXMeasurePreview::~SvxXMeasurePreview() {}
 
 void SvxXMeasurePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
@@ -99,9 +97,9 @@ void SvxXMeasurePreview::SetAttributes(const SfxItemSet& rInAttrs)
 
 bool SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    bool bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
+    bool bZoomIn = rMEvt.IsLeft() && !rMEvt.IsShift();
     bool bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
-    bool bCtrl    = rMEvt.IsMod1();
+    bool bCtrl = rMEvt.IsMod1();
 
     if (bZoomIn || bZoomOut)
     {
@@ -127,8 +125,8 @@ bool SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
         aXFrac *= *pMultFrac;
         aYFrac *= *pMultFrac;
 
-        if (double(aXFrac) > 0.001 && double(aXFrac) < 1000.0 &&
-            double(aYFrac) > 0.001 && double(aYFrac) < 1000.0)
+        if (double(aXFrac) > 0.001 && double(aXFrac) < 1000.0 && double(aYFrac) > 0.001
+            && double(aYFrac) < 1000.0)
         {
             m_aMapMode.SetScaleX(aXFrac);
             m_aMapMode.SetScaleY(aYFrac);
@@ -140,10 +138,14 @@ bool SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
             rRefDevice.Pop();
 
             Point aPt(m_aMapMode.GetOrigin());
-            tools::Long nX = tools::Long((double(aOutSize.Width()) - (double(aOutSize.Width()) * double(*pMultFrac))) / 2.0 + 0.5);
-            tools::Long nY = tools::Long((double(aOutSize.Height()) - (double(aOutSize.Height()) * double(*pMultFrac))) / 2.0 + 0.5);
-            aPt.AdjustX(nX );
-            aPt.AdjustY(nY );
+            tools::Long nX = tools::Long(
+                (double(aOutSize.Width()) - (double(aOutSize.Width()) * double(*pMultFrac))) / 2.0
+                + 0.5);
+            tools::Long nY = tools::Long(
+                (double(aOutSize.Height()) - (double(aOutSize.Height()) * double(*pMultFrac))) / 2.0
+                + 0.5);
+            aPt.AdjustX(nX);
+            aPt.AdjustY(nY);
 
             m_aMapMode.SetOrigin(aPt);
 

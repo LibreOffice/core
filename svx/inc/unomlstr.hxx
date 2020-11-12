@@ -25,12 +25,13 @@
 
 class SdrObject;
 
-class SvxUnoShapeModifyListener final : public ::cppu::WeakAggImplHelper1< css::util::XModifyListener >
+class SvxUnoShapeModifyListener final
+    : public ::cppu::WeakAggImplHelper1<css::util::XModifyListener>
 {
-    SdrObject*  mpObj;
+    SdrObject* mpObj;
 
 public:
-    SvxUnoShapeModifyListener( SdrObject* pObj ) throw();
+    SvxUnoShapeModifyListener(SdrObject* pObj) throw();
     virtual ~SvxUnoShapeModifyListener() throw() override;
 
     // css::util::XModifyListener
@@ -43,8 +44,6 @@ public:
     void invalidate() throw();
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

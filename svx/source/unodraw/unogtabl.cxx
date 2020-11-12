@@ -29,49 +29,41 @@
 using namespace ::com::sun::star;
 using namespace ::cppu;
 
-namespace {
-
+namespace
+{
 class SvxUnoGradientTable : public SvxUnoNameItemTable
 {
 public:
-    explicit SvxUnoGradientTable( SdrModel* pModel ) throw();
+    explicit SvxUnoGradientTable(SdrModel* pModel) throw();
 
     virtual NameOrIndex* createItem() const override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override;
+    virtual uno::Type SAL_CALL getElementType() override;
 };
-
 }
 
-SvxUnoGradientTable::SvxUnoGradientTable( SdrModel* pModel ) throw()
-    : SvxUnoNameItemTable( pModel, XATTR_FILLGRADIENT, MID_FILLGRADIENT )
+SvxUnoGradientTable::SvxUnoGradientTable(SdrModel* pModel) throw()
+    : SvxUnoNameItemTable(pModel, XATTR_FILLGRADIENT, MID_FILLGRADIENT)
 {
 }
 
-OUString SAL_CALL SvxUnoGradientTable::getImplementationName()
-{
-    return "SvxUnoGradientTable";
-}
+OUString SAL_CALL SvxUnoGradientTable::getImplementationName() { return "SvxUnoGradientTable"; }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoGradientTable::getSupportedServiceNames(  )
+uno::Sequence<OUString> SAL_CALL SvxUnoGradientTable::getSupportedServiceNames()
 {
     return { "com.sun.star.drawing.GradientTable" };
 }
 
-
 // XNameContainer
-NameOrIndex* SvxUnoGradientTable::createItem() const
-{
-    return new XFillGradientItem();
-}
+NameOrIndex* SvxUnoGradientTable::createItem() const { return new XFillGradientItem(); }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoGradientTable::getElementType(  )
+uno::Type SAL_CALL SvxUnoGradientTable::getElementType()
 {
     return cppu::UnoType<awt::Gradient>::get();
 }
@@ -79,10 +71,9 @@ uno::Type SAL_CALL SvxUnoGradientTable::getElementType(  )
 /**
  * Create a gradienttable
  */
-uno::Reference< uno::XInterface > SvxUnoGradientTable_createInstance( SdrModel* pModel )
+uno::Reference<uno::XInterface> SvxUnoGradientTable_createInstance(SdrModel* pModel)
 {
     return *new SvxUnoGradientTable(pModel);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

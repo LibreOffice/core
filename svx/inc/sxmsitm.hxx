@@ -25,9 +25,13 @@
 // Measure scale setting
 // We do not overwrite a measure scale (UIScale), If the model already has one set.
 // Instead, we multiply them with each other.
-class SdrMeasureScaleItem final : public SdrScaleItem {
+class SdrMeasureScaleItem final : public SdrScaleItem
+{
 public:
-    SdrMeasureScaleItem()                   : SdrScaleItem(SDRATTR_MEASURESCALE,Fraction(1,1)) {}
+    SdrMeasureScaleItem()
+        : SdrScaleItem(SDRATTR_MEASURESCALE, Fraction(1, 1))
+    {
+    }
     virtual SdrMeasureScaleItem* Clone(SfxItemPool*) const override
     {
         return new SdrMeasureScaleItem(*this);

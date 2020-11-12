@@ -25,12 +25,10 @@
 
 namespace svxform::charset_helper
 {
-
-    /** enumerates all supported charsets
+/** enumerates all supported charsets
         @return the number of charsets supported
     */
-    sal_Int32 getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs );
-
+sal_Int32 getSupportedTextEncodings(::std::vector<rtl_TextEncoding>& _rEncs);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

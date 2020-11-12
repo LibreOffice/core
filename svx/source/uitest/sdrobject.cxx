@@ -16,9 +16,7 @@
 #include <memory>
 #include <svx/SvxColorValueSet.hxx>
 
-SdrUIObject::~SdrUIObject()
-{
-}
+SdrUIObject::~SdrUIObject() {}
 
 StringMap SdrUIObject::get_state()
 {
@@ -51,8 +49,7 @@ StringMap SdrUIObject::get_state()
     return aMap;
 }
 
-void SdrUIObject::execute(const OUString& rAction,
-        const StringMap& rParameters)
+void SdrUIObject::execute(const OUString& rAction, const StringMap& rParameters)
 {
     SdrObject* pObj = get_object();
     if (!pObj)
@@ -98,7 +95,7 @@ void SdrUIObject::execute(const OUString& rAction,
             throw css::uno::RuntimeException("missing parameter FRAC_Y");
         double nFracY = itrFracY->second.toDouble();
         Fraction aFracY(nFracY);
-        pObj->Resize(aPos, aFracX, aFracY, true/*bRelative*/);
+        pObj->Resize(aPos, aFracX, aFracY, true /*bRelative*/);
     }
     else if (rAction == "CROP")
     {
@@ -143,7 +140,7 @@ void SdrUIObject::execute(const OUString& rAction,
         Point aPos(nX, nY);
 
         auto itrAngle = rParameters.find("ANGLE");
-        if (itrAngle  == rParameters.end())
+        if (itrAngle == rParameters.end())
             throw css::uno::RuntimeException("missing parameter ANGLE");
 
         double nAngle = itrAngle->second.toDouble();
@@ -155,15 +152,11 @@ void SdrUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "SHEAR")
     {
-        pObj->Shear(Point(), 0.0/*nAngle*/, 0, false);
+        pObj->Shear(Point(), 0.0 /*nAngle*/, 0, false);
     }
 }
 
-OUString SdrUIObject::get_type() const
-{
-    return "SdrUIObject";
-}
-
+OUString SdrUIObject::get_type() const { return "SdrUIObject"; }
 
 SvxColorValueSetUIObject::SvxColorValueSetUIObject(vcl::Window* pColorSetWin)
     : DrawingAreaUIObject(pColorSetWin)
@@ -171,8 +164,7 @@ SvxColorValueSetUIObject::SvxColorValueSetUIObject(vcl::Window* pColorSetWin)
 {
 }
 
-void SvxColorValueSetUIObject::execute(const OUString& rAction,
-        const StringMap& rParameters)
+void SvxColorValueSetUIObject::execute(const OUString& rAction, const StringMap& rParameters)
 {
     if (rAction == "CHOOSE")
     {
@@ -185,7 +177,7 @@ void SvxColorValueSetUIObject::execute(const OUString& rAction,
         }
     }
     else
-       DrawingAreaUIObject::execute(rAction, rParameters);
+        DrawingAreaUIObject::execute(rAction, rParameters);
 }
 
 std::unique_ptr<UIObject> SvxColorValueSetUIObject::create(vcl::Window* pWindow)
@@ -193,16 +185,13 @@ std::unique_ptr<UIObject> SvxColorValueSetUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new SvxColorValueSetUIObject(pWindow));
 }
 
-OUString SvxColorValueSetUIObject::get_name() const
-{
-    return "SvxColorValueSetUIObject";
-}
+OUString SvxColorValueSetUIObject::get_name() const { return "SvxColorValueSetUIObject"; }
 
 StringMap SvxColorValueSetUIObject::get_state()
 {
     StringMap aMap = DrawingAreaUIObject::get_state();
-    aMap["CurrColorId"] = OUString::number( mpColorSet->GetSelectedItemId() );
-    aMap["CurrColorPos"] = OUString::number( mpColorSet->GetSelectItemPos() );
+    aMap["CurrColorId"] = OUString::number(mpColorSet->GetSelectedItemId());
+    aMap["CurrColorPos"] = OUString::number(mpColorSet->GetSelectItemPos());
     aMap["ColorsCount"] = OUString::number(mpColorSet->GetItemCount());
     aMap["ColCount"] = OUString::number(mpColorSet->GetColCount());
     aMap["ColorText"] = mpColorSet->GetItemText(mpColorSet->GetSelectedItemId());
@@ -210,7 +199,9 @@ StringMap SvxColorValueSetUIObject::get_state()
     aMap["R"] = OUString::number(currColor.GetRed());
     aMap["G"] = OUString::number(currColor.GetGreen());
     aMap["B"] = OUString::number(currColor.GetBlue());
-    aMap["RGB"] = "("+OUString::number(currColor.GetRed())+","+OUString::number(currColor.GetGreen())+","+OUString::number(currColor.GetBlue())+")";
+    aMap["RGB"] = "(" + OUString::number(currColor.GetRed()) + ","
+                  + OUString::number(currColor.GetGreen()) + ","
+                  + OUString::number(currColor.GetBlue()) + ")";
     return aMap;
 }
 

@@ -56,7 +56,7 @@ double GetDefaultValNum(const SvNumFormatType nType)
         case SvNumFormatType::LOGICAL:
             return fSvxNumValConst[SvxNumValCategory::Boolean];
         default:
-        break;
+            break;
     }
     return fSvxNumValConst[SvxNumValCategory::NoValue];
 }
@@ -99,7 +99,7 @@ SvxNumberFormatShell::SvxNumberFormatShell(SvNumberFormatter* pNumFormatter, sal
     {
         case SvxNumberValueType::String:
             aValStr = rNumStr;
-        break;
+            break;
         case SvxNumberValueType::Number:
             if (pFormatter)
             {
@@ -138,7 +138,7 @@ SvxNumberFormatShell::SvxNumberFormatShell(SvNumberFormatter* pNumFormatter, sal
     {
         case SvxNumberValueType::Number:
             nValNum = nNumVal;
-        break;
+            break;
         case SvxNumberValueType::String:
         case SvxNumberValueType::Undefined:
         default:
@@ -204,7 +204,8 @@ void SvxNumberFormatShell::FormatChanged(sal_uInt16 nFmtLbPos, OUString& rPrevie
         {
             if (static_cast<size_t>(nFmtLbPos) < aCurrencyFormatList.size())
             {
-                MakePrevStringFromVal(aCurrencyFormatList[nFmtLbPos], rPreviewStr, rpFontColor, nValNum);
+                MakePrevStringFromVal(aCurrencyFormatList[nFmtLbPos], rPreviewStr, rpFontColor,
+                                      nValNum);
             }
         }
     }
@@ -313,13 +314,15 @@ void SvxNumberFormatShell::MakeFormat(OUString& rFormat, bool bThousand, bool bN
         sal_Int32 rErrPos = 0;
         std::vector<OUString> aFmtEList;
 
-        sal_uInt32 nFound = pFormatter->TestNewString(aCurrencyFormatList[nCurrencyPos], eCurLanguage);
+        sal_uInt32 nFound
+            = pFormatter->TestNewString(aCurrencyFormatList[nCurrencyPos], eCurLanguage);
 
         if (nFound == NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
             sal_uInt16 rCatLbSelPos = 0;
             short rFmtSelPos = 0;
-            AddFormat(aCurrencyFormatList[nCurrencyPos], rErrPos, rCatLbSelPos, rFmtSelPos, aFmtEList);
+            AddFormat(aCurrencyFormatList[nCurrencyPos], rErrPos, rCatLbSelPos, rFmtSelPos,
+                      aFmtEList);
         }
 
         if (rErrPos == 0)
@@ -360,8 +363,9 @@ void SvxNumberFormatShell::GetOptions(const OUString& rFormat, bool& rThousand, 
         sal_uInt16 nPos = FindCurrencyTableEntry(rFormat, bTestBanking);
 
         if (IsInTable(nPos, bTestBanking, rFormat)
-                && pFormatter->GetFormatSpecialInfo(rFormat, rThousand, rNegRed, rPrecision,
-                    rLeadingZeroes, eCurLanguage) == 0)
+            && pFormatter->GetFormatSpecialInfo(rFormat, rThousand, rNegRed, rPrecision,
+                                                rLeadingZeroes, eCurLanguage)
+                   == 0)
         {
             rCatLbPos = CAT_CURRENCY;
         }
@@ -379,7 +383,8 @@ void SvxNumberFormatShell::MakePreviewString(const OUString& rFormatStr, OUStrin
     if (nExistingFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
         //  real preview - not implemented in NumberFormatter for text formats
-        pFormatter->GetPreviewString(rFormatStr, nValNum, rPreviewStr, &rpFontColor, eCurLanguage, bUseStarFormat);
+        pFormatter->GetPreviewString(rFormatStr, nValNum, rPreviewStr, &rpFontColor, eCurLanguage,
+                                     bUseStarFormat);
     }
     else
     {
@@ -387,7 +392,8 @@ void SvxNumberFormatShell::MakePreviewString(const OUString& rFormatStr, OUStrin
 
         //  #50441# if a string was set in addition to the value, use it for text formats
         bool bUseText = (eValType == SvxNumberValueType::String
-                || (!aValStr.isEmpty() && (pFormatter->GetType(nExistingFormat) & SvNumFormatType::TEXT)));
+                         || (!aValStr.isEmpty()
+                             && (pFormatter->GetType(nExistingFormat) & SvNumFormatType::TEXT)));
 
         if (bUseText)
         {
@@ -397,7 +403,8 @@ void SvxNumberFormatShell::MakePreviewString(const OUString& rFormatStr, OUStrin
         {
             if (bIsDefaultValNum)
                 nValNum = GetDefaultValNum(pFormatter->GetType(nExistingFormat));
-            pFormatter->GetOutputString(nValNum, nExistingFormat, rPreviewStr, &rpFontColor, bUseStarFormat);
+            pFormatter->GetOutputString(nValNum, nExistingFormat, rPreviewStr, &rpFontColor,
+                                        bUseStarFormat);
         }
     }
 }
@@ -568,11 +575,11 @@ void SvxNumberFormatShell::FillEListWithStd_Impl(std::vector<OUString>& rList,
         case SvNumFormatType::NUMBER:
             eOffsetStart = NF_NUMBER_START;
             eOffsetEnd = NF_NUMBER_END;
-        break;
+            break;
         case SvNumFormatType::PERCENT:
             eOffsetStart = NF_PERCENT_START;
             eOffsetEnd = NF_PERCENT_END;
-        break;
+            break;
         case SvNumFormatType::CURRENCY:
             // Currency entries are generated and assembled, ignore
             // bSuppressDuplicates.
@@ -581,36 +588,38 @@ void SvxNumberFormatShell::FillEListWithStd_Impl(std::vector<OUString>& rList,
         case SvNumFormatType::DATE:
             eOffsetStart = NF_DATE_START;
             eOffsetEnd = NF_DATE_END;
-        break;
+            break;
         case SvNumFormatType::TIME:
             eOffsetStart = NF_TIME_START;
             eOffsetEnd = NF_TIME_END;
-        break;
+            break;
         case SvNumFormatType::SCIENTIFIC:
             eOffsetStart = NF_SCIENTIFIC_START;
             eOffsetEnd = NF_SCIENTIFIC_END;
-        break;
+            break;
         case SvNumFormatType::FRACTION:
             eOffsetStart = NF_FRACTION_START;
             eOffsetEnd = NF_FRACTION_END;
             // Fraction formats are internally generated by the number
             // formatter and are not supposed to contain duplicates anyway.
             nSelPos = FillEListWithFormats_Impl(rList, nSelPos, eOffsetStart, eOffsetEnd, false);
-            nSelPos = FillEListWithFormats_Impl(rList, nSelPos, NF_FRACTION_3D, NF_FRACTION_100, false);
+            nSelPos
+                = FillEListWithFormats_Impl(rList, nSelPos, NF_FRACTION_3D, NF_FRACTION_100, false);
             return;
         case SvNumFormatType::LOGICAL:
             eOffsetStart = NF_BOOLEAN;
             eOffsetEnd = NF_BOOLEAN;
-        break;
+            break;
         case SvNumFormatType::TEXT:
             eOffsetStart = NF_TEXT;
             eOffsetEnd = NF_TEXT;
-        break;
+            break;
         default:
             return;
     }
 
-    nSelPos = FillEListWithFormats_Impl(rList, nSelPos, eOffsetStart, eOffsetEnd, bSuppressDuplicates);
+    nSelPos
+        = FillEListWithFormats_Impl(rList, nSelPos, eOffsetStart, eOffsetEnd, bSuppressDuplicates);
 }
 
 short SvxNumberFormatShell::FillEListWithFormats_Impl(std::vector<OUString>& rList, short nSelPos,
@@ -624,7 +633,8 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl(std::vector<OUString>& rLi
      */
     for (tools::Long nIndex = eOffsetStart; nIndex <= eOffsetEnd; ++nIndex)
     {
-        FillEListWithOneFormat_Impl( rList, nSelPos, bSuppressDuplicates, static_cast<NfIndexTableOffset>(nIndex), false);
+        FillEListWithOneFormat_Impl(rList, nSelPos, bSuppressDuplicates,
+                                    static_cast<NfIndexTableOffset>(nIndex), false);
     }
 
     return nSelPos;
@@ -638,11 +648,13 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl(std::vector<OUString>& rL
     // Add first, so a NF_DATETIME_SYSTEM_SHORT_HHMM may be suppressed in
     // locales that do not use 2-digit years there and this here is the
     // default.
-    FillEListWithOneFormat_Impl( rList, nSelPos, bSuppressDuplicates, NF_DATETIME_SYS_DDMMYYYY_HHMM, true);
+    FillEListWithOneFormat_Impl(rList, nSelPos, bSuppressDuplicates, NF_DATETIME_SYS_DDMMYYYY_HHMM,
+                                true);
 
     for (tools::Long nIndex = NF_DATETIME_START; nIndex <= NF_DATETIME_END; ++nIndex)
     {
-        FillEListWithOneFormat_Impl( rList, nSelPos, bSuppressDuplicates, static_cast<NfIndexTableOffset>(nIndex), true);
+        FillEListWithOneFormat_Impl(rList, nSelPos, bSuppressDuplicates,
+                                    static_cast<NfIndexTableOffset>(nIndex), true);
     }
 
     // Always add the internally generated ISO formats.
@@ -652,8 +664,9 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl(std::vector<OUString>& rL
     return nSelPos;
 }
 
-void SvxNumberFormatShell::FillEListWithOneFormat_Impl(std::vector<OUString>& rList, short & nSelPos,
-                                                       bool bSuppressDuplicates, NfIndexTableOffset nOffset,
+void SvxNumberFormatShell::FillEListWithOneFormat_Impl(std::vector<OUString>& rList, short& nSelPos,
+                                                       bool bSuppressDuplicates,
+                                                       NfIndexTableOffset nOffset,
                                                        bool bSuppressIsoDateTime)
 {
     sal_uInt32 nNFEntry = pFormatter->GetFormatIndex(nOffset, eCurLanguage);
@@ -675,11 +688,13 @@ void SvxNumberFormatShell::FillEListWithOneFormat_Impl(std::vector<OUString>& rL
     // Ugly hack to suppress an ISO date+time format that is the default
     // date+time format of the locale and identical to the internally generated
     // one always to be added after/below.
-    const bool bSupIso = bSuppressIsoDateTime && bSuppressDuplicates &&
-        (aNewFormNInfo == "YYYY-MM-DD HH:MM:SS" || aNewFormNInfo == "YYYY-MM-DD\"T\"HH:MM:SS");
+    const bool bSupIso
+        = bSuppressIsoDateTime && bSuppressDuplicates
+          && (aNewFormNInfo == "YYYY-MM-DD HH:MM:SS" || aNewFormNInfo == "YYYY-MM-DD\"T\"HH:MM:SS");
 
-    if (!bSupIso && (!bSuppressDuplicates || IsEssentialFormat_Impl(nMyCat, nNFEntry)
-                || std::find(rList.begin(), rList.end(), aNewFormNInfo) == rList.end()))
+    if (!bSupIso
+        && (!bSuppressDuplicates || IsEssentialFormat_Impl(nMyCat, nNFEntry)
+            || std::find(rList.begin(), rList.end(), aNewFormNInfo) == rList.end()))
     {
         rList.push_back(aNewFormNInfo);
         aCurEntryList.push_back(nNFEntry);
@@ -706,7 +721,7 @@ bool SvxNumberFormatShell::IsEssentialFormat_Impl(SvNumFormatType eType, sal_uIn
         case NF_DATETIME_ISO_YYYYMMDDTHHMMSS:
             return true;
         default:
-        break;
+            break;
     }
 
     return nKey == pFormatter->GetStandardFormat(eType, eCurLanguage);
@@ -724,11 +739,12 @@ short SvxNumberFormatShell::FillEListWithCurrency_Impl(std::vector<OUString>& rL
     bool bTmpBanking;
     OUString rSymbol;
 
-    bool bFlag = pFormatter->GetNewCurrencySymbolString(nCurFormatKey, rSymbol, &pTmpCurrencyEntry, &bTmpBanking);
+    bool bFlag = pFormatter->GetNewCurrencySymbolString(nCurFormatKey, rSymbol, &pTmpCurrencyEntry,
+                                                        &bTmpBanking);
 
     if ((!bFlag && pCurCurrencyEntry == nullptr)
-            || (bFlag && pTmpCurrencyEntry == nullptr && rSymbol.isEmpty())
-            || (nCurCategory == SvNumFormatType::ALL))
+        || (bFlag && pTmpCurrencyEntry == nullptr && rSymbol.isEmpty())
+        || (nCurCategory == SvNumFormatType::ALL))
     {
         if (nCurCategory == SvNumFormatType::ALL)
             FillEListWithUserCurrencys(rList, nSelPos);
@@ -759,7 +775,8 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys(std::vector<OUString>& rLi
 
     for (tools::Long nIndex = NF_CURRENCY_START; nIndex <= NF_CURRENCY_END; nIndex++)
     {
-        nNFEntry = pFormatter->GetFormatIndex(static_cast<NfIndexTableOffset>(nIndex), eCurLanguage);
+        nNFEntry
+            = pFormatter->GetFormatIndex(static_cast<NfIndexTableOffset>(nIndex), eCurLanguage);
 
         if (nCurCategory == SvNumFormatType::ALL && nNFEntry != nCurFormatKey)
             // Deprecated old currency entries, for ALL add only if used as
@@ -800,7 +817,8 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys(std::vector<OUString>& rLi
                     bool bTmpBanking;
                     OUString rSymbol;
 
-                    pFormatter->GetNewCurrencySymbolString(nKey, rSymbol, &pTmpCurrencyEntry, &bTmpBanking);
+                    pFormatter->GetNewCurrencySymbolString(nKey, rSymbol, &pTmpCurrencyEntry,
+                                                           &bTmpBanking);
 
                     bUserNewCurrency = (pTmpCurrencyEntry != nullptr);
                 }
@@ -842,7 +860,8 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys(std::vector<OUString>& rL
     std::vector<OUString> aList;
     std::vector<sal_uInt32> aKeyList;
 
-    pFormatter->GetNewCurrencySymbolString(nCurFormatKey, rSymbol, &pTmpCurrencyEntry, &bTmpBanking);
+    pFormatter->GetNewCurrencySymbolString(nCurFormatKey, rSymbol, &pTmpCurrencyEntry,
+                                           &bTmpBanking);
 
     OUString rShortSymbol;
 
@@ -895,7 +914,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys(std::vector<OUString>& rL
                     bInsFlag = true; // merge locale formats into currency selection
                 }
                 else if ((!bTmpBanking && aNewFormNInfo.indexOf(rSymbol) >= 0)
-                        || (bTmpBanking && aNewFormNInfo.indexOf(rBankSymbol) >= 0))
+                         || (bTmpBanking && aNewFormNInfo.indexOf(rBankSymbol) >= 0))
                 {
                     bInsFlag = true;
                 }
@@ -905,7 +924,8 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys(std::vector<OUString>& rL
                     const NfCurrencyEntry* pTstCurrencyEntry;
                     bool bTstBanking;
 
-                    pFormatter->GetNewCurrencySymbolString(nKey, rTstSymbol, &pTstCurrencyEntry, &bTstBanking);
+                    pFormatter->GetNewCurrencySymbolString(nKey, rTstSymbol, &pTstCurrencyEntry,
+                                                           &bTstBanking);
 
                     if (pTmpCurrencyEntry == pTstCurrencyEntry && bTstBanking == bTmpBanking)
                     {
@@ -926,7 +946,8 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys(std::vector<OUString>& rL
     sal_uInt16 nDefault;
     if (pTmpCurrencyEntry && nCurCategory != SvNumFormatType::ALL)
     {
-        nDefault = pFormatter->GetCurrencyFormatStrings(aWSStringsDtor, *pTmpCurrencyEntry, bTmpBanking);
+        nDefault
+            = pFormatter->GetCurrencyFormatStrings(aWSStringsDtor, *pTmpCurrencyEntry, bTmpBanking);
         if (!bTmpBanking)
             pFormatter->GetCurrencyFormatStrings(aWSStringsDtor, *pTmpCurrencyEntry, true);
     }
@@ -1058,8 +1079,9 @@ void SvxNumberFormatShell::GetPreviewString_Impl(OUString& rString, const Color*
     rpColor = nullptr;
 
     //  #50441# if a string was set in addition to the value, use it for text formats
-    bool bUseText = (eValType == SvxNumberValueType::String
-            || (!aValStr.isEmpty() && (pFormatter->GetType(nCurFormatKey) & SvNumFormatType::TEXT)));
+    bool bUseText
+        = (eValType == SvxNumberValueType::String
+           || (!aValStr.isEmpty() && (pFormatter->GetType(nCurFormatKey) & SvNumFormatType::TEXT)));
 
     if (bUseText)
     {
@@ -1094,38 +1116,38 @@ void SvxNumberFormatShell::PosToCategory_Impl(sal_uInt16 nPos, SvNumFormatType& 
     {
         case CAT_USERDEFINED:
             rCategory = SvNumFormatType::DEFINED;
-        break;
+            break;
         case CAT_NUMBER:
             rCategory = SvNumFormatType::NUMBER;
-        break;
+            break;
         case CAT_PERCENT:
             rCategory = SvNumFormatType::PERCENT;
-        break;
+            break;
         case CAT_CURRENCY:
             rCategory = SvNumFormatType::CURRENCY;
-        break;
+            break;
         case CAT_DATE:
             rCategory = SvNumFormatType::DATE;
-        break;
+            break;
         case CAT_TIME:
             rCategory = SvNumFormatType::TIME;
-        break;
+            break;
         case CAT_SCIENTIFIC:
             rCategory = SvNumFormatType::SCIENTIFIC;
-        break;
+            break;
         case CAT_FRACTION:
             rCategory = SvNumFormatType::FRACTION;
-        break;
+            break;
         case CAT_BOOLEAN:
             rCategory = SvNumFormatType::LOGICAL;
-        break;
+            break;
         case CAT_TEXT:
             rCategory = SvNumFormatType::TEXT;
-        break;
+            break;
         case CAT_ALL:
         default:
             rCategory = SvNumFormatType::ALL;
-        break;
+            break;
     }
 }
 
@@ -1136,35 +1158,35 @@ void SvxNumberFormatShell::CategoryToPos_Impl(SvNumFormatType nCategory, sal_uIn
     {
         case SvNumFormatType::DEFINED:
             rPos = CAT_USERDEFINED;
-        break;
+            break;
         case SvNumFormatType::NUMBER:
             rPos = CAT_NUMBER;
-        break;
+            break;
         case SvNumFormatType::PERCENT:
             rPos = CAT_PERCENT;
-        break;
+            break;
         case SvNumFormatType::CURRENCY:
             rPos = CAT_CURRENCY;
-        break;
+            break;
         case SvNumFormatType::DATETIME:
         case SvNumFormatType::DATE:
             rPos = CAT_DATE;
-        break;
+            break;
         case SvNumFormatType::TIME:
             rPos = CAT_TIME;
-        break;
+            break;
         case SvNumFormatType::SCIENTIFIC:
             rPos = CAT_SCIENTIFIC;
-        break;
+            break;
         case SvNumFormatType::FRACTION:
             rPos = CAT_FRACTION;
-        break;
+            break;
         case SvNumFormatType::LOGICAL:
             rPos = CAT_BOOLEAN;
-        break;
+            break;
         case SvNumFormatType::TEXT:
             rPos = CAT_TEXT;
-        break;
+            break;
         case SvNumFormatType::ALL:
         default:
             rPos = CAT_ALL;
@@ -1311,7 +1333,7 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
  * Input:      Number of the entry
  * Output:     Category number
  */
-short SvxNumberFormatShell::GetListPos4Entry( sal_uInt32 nIdx, const OUString& rFmtString )
+short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx, const OUString& rFmtString)
 {
     short nSelP = SELPOS_NONE;
     if (nIdx != NUMBERFORMAT_ENTRY_NEW_CURRENCY)
@@ -1463,8 +1485,8 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry(const OUString& rFmtStri
     OUString aSymbol, aExtension;
     sal_uInt32 nFound = pFormatter->TestNewString(rFmtString, eCurLanguage);
     if (nFound != NUMBERFORMAT_ENTRY_NOT_FOUND
-            && ((pFormat = pFormatter->GetEntry(nFound)) != nullptr)
-            && pFormat->GetNewCurrencySymbol(aSymbol, aExtension))
+        && ((pFormat = pFormatter->GetEntry(nFound)) != nullptr)
+        && pFormat->GetNewCurrencySymbol(aSymbol, aExtension))
     {
         // eventually match with format locale
         const NfCurrencyEntry* pTmpCurrencyEntry = SvNumberFormatter::GetCurrencyEntry(

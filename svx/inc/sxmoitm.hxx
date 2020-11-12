@@ -24,9 +24,13 @@
 
 // Overlap of the measure line over the measure helper lines
 // Only of the measure arrows are on the outside
-class SdrMeasureOverhangItem: public SdrMetricItem {
+class SdrMeasureOverhangItem : public SdrMetricItem
+{
 public:
-    SdrMeasureOverhangItem(tools::Long nVal): SdrMetricItem(SDRATTR_MEASUREOVERHANG,nVal)  {}
+    SdrMeasureOverhangItem(tools::Long nVal)
+        : SdrMetricItem(SDRATTR_MEASUREOVERHANG, nVal)
+    {
+    }
     virtual SdrMeasureOverhangItem* Clone(SfxItemPool*) const override
     {
         return new SdrMeasureOverhangItem(*this);

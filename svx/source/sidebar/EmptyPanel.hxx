@@ -21,16 +21,15 @@
 
 #include <sfx2/sidebar/PanelLayout.hxx>
 
-namespace svx::sidebar {
-
-
+namespace svx::sidebar
+{
 /** Display a panel that tells the user that the current deck is
     intentionally empty.
 */
 class EmptyPanel final : public PanelLayout
 {
 public:
-    explicit EmptyPanel (vcl::Window* pParent);
+    explicit EmptyPanel(vcl::Window* pParent);
     virtual ~EmptyPanel() override;
     virtual void dispose() override;
 

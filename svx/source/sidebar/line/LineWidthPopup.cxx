@@ -29,8 +29,8 @@
 #include "LineWidthValueSet.hxx"
 #include <bitmaps.hlst>
 
-namespace svx::sidebar {
-
+namespace svx::sidebar
+{
 LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rParent)
     : m_rParent(rParent)
     , m_sPt(SvxResId(RID_SVXSTR_PT))
@@ -48,7 +48,7 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
 {
     m_xTopLevel->connect_focus_in(LINK(this, LineWidthPopup, FocusHdl));
 
-    m_xVSWidth->SetStyle(m_xVSWidth->GetStyle() | WB_3DLOOK |  WB_NO_DIRECTSELECT);
+    m_xVSWidth->SetStyle(m_xVSWidth->GetStyle() | WB_3DLOOK | WB_NO_DIRECTSELECT);
 
     maStrUnits[0] = "0.5";
     maStrUnits[1] = "0.8";
@@ -60,20 +60,20 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
     maStrUnits[7] = "6.0";
     maStrUnits[8] = SvxResId(RID_SVXSTR_WIDTH_LAST_CUSTOM);
 
-    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+    const LocaleDataWrapper& rLocaleWrapper(Application::GetSettings().GetLocaleDataWrapper());
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
-    for(int i = 0; i <= 7 ; i++)
+    for (int i = 0; i <= 7; i++)
     {
-        maStrUnits[i] = maStrUnits[i].replace('.', cSep);//Modify
+        maStrUnits[i] = maStrUnits[i].replace('.', cSep); //Modify
         maStrUnits[i] += " ";
         maStrUnits[i] += m_sPt;
     }
 
-    for (sal_uInt16 i = 1 ; i <= 9; ++i)
+    for (sal_uInt16 i = 1; i <= 9; ++i)
     {
         m_xVSWidth->InsertItem(i);
-        m_xVSWidth->SetItemText(i, maStrUnits[i-1]);
+        m_xVSWidth->SetItemText(i, maStrUnits[i - 1]);
     }
 
     m_xVSWidth->SetUnit(maStrUnits);
@@ -93,36 +93,37 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
     m_xMFWidth->connect_value_changed(LINK(this, LineWidthPopup, MFModifyHdl));
 }
 
-LineWidthPopup::~LineWidthPopup()
-{
-}
+LineWidthPopup::~LineWidthPopup() {}
 
 IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, ValueSet*, void)
 {
     sal_uInt16 iPos = m_xVSWidth->GetSelectedItemId();
     if (iPos >= 1 && iPos <= 8)
     {
-        sal_IntPtr nVal = OutputDevice::LogicToLogic(reinterpret_cast<sal_IntPtr>(m_xVSWidth->GetItemData( iPos )), MapUnit::MapPoint, m_eMapUnit);
+        sal_IntPtr nVal = OutputDevice::LogicToLogic(
+            reinterpret_cast<sal_IntPtr>(m_xVSWidth->GetItemData(iPos)), MapUnit::MapPoint,
+            m_eMapUnit);
         nVal = m_xMFWidth->denormalize(nVal);
-        XLineWidthItem aWidthItem( nVal );
+        XLineWidthItem aWidthItem(nVal);
         m_rParent.setLineWidth(aWidthItem);
         m_rParent.SetWidthIcon(iPos);
         m_rParent.SetWidth(nVal);
     }
     else if (iPos == 9)
-    {//last custom
+    { //last custom
         //modified
         if (m_bCustom)
         {
-            tools::Long nVal = OutputDevice::LogicToLogic(m_nCustomWidth , MapUnit::MapPoint, m_eMapUnit);
+            tools::Long nVal
+                = OutputDevice::LogicToLogic(m_nCustomWidth, MapUnit::MapPoint, m_eMapUnit);
             nVal = m_xMFWidth->denormalize(nVal);
-            XLineWidthItem aWidthItem( nVal );
+            XLineWidthItem aWidthItem(nVal);
             m_rParent.setLineWidth(aWidthItem);
             m_rParent.SetWidth(nVal);
         }
         else
         {
-            m_xVSWidth->SetNoSelection();     //add , set no selection and keep the last select item
+            m_xVSWidth->SetNoSelection(); //add , set no selection and keep the last select item
             m_xVSWidth->SetFormat();
             m_xVSWidth->Invalidate();
         }
@@ -144,8 +145,8 @@ IMPL_LINK_NOARG(LineWidthPopup, MFModifyHdl, weld::MetricSpinButton&, void)
         m_xVSWidth->Invalidate();
     }
     tools::Long nTmp = static_cast<tools::Long>(m_xMFWidth->get_value(FieldUnit::NONE));
-    tools::Long nVal = OutputDevice::LogicToLogic( nTmp, MapUnit::MapPoint, m_eMapUnit );
-    sal_Int32 nNewWidth = static_cast<short>(m_xMFWidth->denormalize( nVal ));
+    tools::Long nVal = OutputDevice::LogicToLogic(nTmp, MapUnit::MapPoint, m_eMapUnit);
+    sal_Int32 nNewWidth = static_cast<short>(m_xMFWidth->denormalize(nVal));
     XLineWidthItem aWidthItem(nNewWidth);
     m_rParent.setLineWidth(aWidthItem);
 }
@@ -155,22 +156,21 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
     m_bVSFocus = true;
     m_xVSWidth->SetSelItem(0);
     m_eMapUnit = eMapUnit;
-    SvtViewOptions aWinOpt( EViewType::Window, "PopupPanel_LineWidth" );
+    SvtViewOptions aWinOpt(EViewType::Window, "PopupPanel_LineWidth");
     if (aWinOpt.Exists())
     {
-        css::uno::Sequence <css::beans::NamedValue> aSeq = aWinOpt.GetUserData();
+        css::uno::Sequence<css::beans::NamedValue> aSeq = aWinOpt.GetUserData();
         OUString aTmp;
-        if ( aSeq.hasElements())
+        if (aSeq.hasElements())
             aSeq[0].Value >>= aTmp;
 
-        OUString aWinData( aTmp );
+        OUString aWinData(aTmp);
         m_nCustomWidth = aWinData.toInt32();
         m_bCustom = true;
         m_xVSWidth->SetImage(m_aIMGCus);
         m_xVSWidth->SetCusEnable(true);
 
-        OUString aStrTip = OUString::number( static_cast<double>(m_nCustomWidth) / 10) +
-            m_sPt;
+        OUString aStrTip = OUString::number(static_cast<double>(m_nCustomWidth) / 10) + m_sPt;
         m_xVSWidth->SetItemText(9, aStrTip);
     }
     else
@@ -183,27 +183,27 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
 
     if (bValuable)
     {
-        sal_Int64 nVal = OutputDevice::LogicToLogic(lValue, eMapUnit, MapUnit::Map100thMM );
+        sal_Int64 nVal = OutputDevice::LogicToLogic(lValue, eMapUnit, MapUnit::Map100thMM);
         nVal = m_xMFWidth->normalize(nVal);
-        m_xMFWidth->set_value( nVal, FieldUnit::MM_100TH );
+        m_xMFWidth->set_value(nVal, FieldUnit::MM_100TH);
     }
     else
     {
-        m_xMFWidth->set_text( "" );
+        m_xMFWidth->set_text("");
     }
 
     OUString strCurrValue = m_xMFWidth->get_text();
     sal_uInt16 i = 0;
-    for(; i < 8; i++)
+    for (; i < 8; i++)
     {
         if (strCurrValue == maStrUnits[i])
         {
-            m_xVSWidth->SetSelItem(i+1);
+            m_xVSWidth->SetSelItem(i + 1);
             break;
         }
     }
 
-    if (i>=8)
+    if (i >= 8)
     {
         m_bVSFocus = false;
         m_xVSWidth->SetSelItem(0);

@@ -23,7 +23,6 @@
 
 namespace textconversiondlgs
 {
-
 class ChineseDictionaryDialog;
 
 class ChineseTranslationDialog : public weld::GenericDialogController
@@ -32,12 +31,11 @@ public:
     explicit ChineseTranslationDialog(weld::Window* pParent);
     virtual ~ChineseTranslationDialog() override;
 
-    void getSettings( bool& rbDirectionToSimplified
-                    , bool& rbTranslateCommonTerms ) const;
+    void getSettings(bool& rbDirectionToSimplified, bool& rbTranslateCommonTerms) const;
 
 private:
-    DECL_LINK( DictionaryHdl, weld::Button&, void );
-    DECL_LINK( OkHdl, weld::Button&, void );
+    DECL_LINK(DictionaryHdl, weld::Button&, void);
+    DECL_LINK(OkHdl, weld::Button&, void);
 
 private:
     std::unique_ptr<weld::Button> m_xBP_OK;

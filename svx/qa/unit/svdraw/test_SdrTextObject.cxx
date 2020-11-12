@@ -15,7 +15,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-class SdrTextObjTest : public CppUnit::TestFixture {
+class SdrTextObjTest : public CppUnit::TestFixture
+{
 public:
     void AllFamiliesCanBeRestoredFromSavedString();
 
@@ -24,18 +25,20 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void SdrTextObjTest::AllFamiliesCanBeRestoredFromSavedString() {
+void SdrTextObjTest::AllFamiliesCanBeRestoredFromSavedString()
+{
     std::vector<SfxStyleFamily> allFamilies;
     allFamilies.push_back(SfxStyleFamily::Char);
     allFamilies.push_back(SfxStyleFamily::Para);
     allFamilies.push_back(SfxStyleFamily::Page);
     allFamilies.push_back(SfxStyleFamily::Pseudo);
 
-    for (SfxStyleFamily family : allFamilies) {
-      OUString styleName = "styleName";
-      SdrTextObj::AppendFamilyToStyleName(styleName, family);
-      SfxStyleFamily readFamily = SdrTextObj::ReadFamilyFromStyleName(styleName);
-      CPPUNIT_ASSERT_EQUAL(static_cast<int>(family), static_cast<int>(readFamily));
+    for (SfxStyleFamily family : allFamilies)
+    {
+        OUString styleName = "styleName";
+        SdrTextObj::AppendFamilyToStyleName(styleName, family);
+        SfxStyleFamily readFamily = SdrTextObj::ReadFamilyFromStyleName(styleName);
+        CPPUNIT_ASSERT_EQUAL(static_cast<int>(family), static_cast<int>(readFamily));
     }
 }
 

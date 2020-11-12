@@ -20,13 +20,11 @@
 #include <svx/XPropertyEntry.hxx>
 
 XPropertyEntry::XPropertyEntry(const OUString& rPropEntryName)
-:   maPropEntryName(rPropEntryName),
-    maUiBitmap()
+    : maPropEntryName(rPropEntryName)
+    , maUiBitmap()
 {
 }
 
-XPropertyEntry::~XPropertyEntry()
-{
-}
+XPropertyEntry::~XPropertyEntry() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

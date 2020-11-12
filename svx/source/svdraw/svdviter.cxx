@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svdviter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
@@ -26,13 +25,11 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdsob.hxx>
 
-
 void SdrViewIter::ImpInitVars()
 {
     mnListenerNum = 0;
     mpCurrentView = nullptr;
 }
-
 
 SdrViewIter::SdrViewIter(const SdrPage* pPage)
 {
@@ -42,14 +39,13 @@ SdrViewIter::SdrViewIter(const SdrPage* pPage)
     ImpInitVars();
 }
 
-
 SdrViewIter::SdrViewIter(const SdrObject* pObject)
 {
     mpObject = pObject;
     mpModel = pObject ? &pObject->getSdrModelFromSdrObject() : nullptr;
     mpPage = pObject ? pObject->getSdrPageFromSdrObject() : nullptr;
 
-    if(!mpModel || !mpPage)
+    if (!mpModel || !mpPage)
     {
         mpModel = nullptr;
         mpPage = nullptr;
@@ -58,18 +54,17 @@ SdrViewIter::SdrViewIter(const SdrObject* pObject)
     ImpInitVars();
 }
 
-
-bool SdrViewIter::ImpCheckPageView(SdrPageView const * pPV) const
+bool SdrViewIter::ImpCheckPageView(SdrPageView const* pPV) const
 {
-    if(!mpPage)
+    if (!mpPage)
         return true;
 
     bool bMaster(mpPage->IsMasterPage());
     SdrPage* pPg = pPV->GetPage();
 
-    if(pPg == mpPage)
+    if (pPg == mpPage)
     {
-        if(mpObject)
+        if (mpObject)
         {
             // Looking for an object? First, determine if it visible in
             // this PageView.
@@ -83,16 +78,16 @@ bool SdrViewIter::ImpCheckPageView(SdrPageView const * pPV) const
             return true;
         }
     }
-    else if(bMaster && (!mpObject || !mpObject->IsNotVisibleAsMaster()))
+    else if (bMaster && (!mpObject || !mpObject->IsNotVisibleAsMaster()))
     {
-        if(pPg->TRG_HasMasterPage())
+        if (pPg->TRG_HasMasterPage())
         {
             SdrPage& rMasterPage = pPg->TRG_GetMasterPage();
 
-            if(&rMasterPage == mpPage)
+            if (&rMasterPage == mpPage)
             {
                 // the page we're looking for is a master page in this PageView
-                if(mpObject)
+                if (mpObject)
                 {
                     // Looking for an object? First, determine if it visible in
                     // this PageView.
@@ -101,7 +96,7 @@ bool SdrViewIter::ImpCheckPageView(SdrPageView const * pPV) const
                     aObjLay &= pPV->GetVisibleLayers();
                     aObjLay &= pPg->TRG_GetMasterPageVisibleLayers();
 
-                    if(!aObjLay.IsEmpty())
+                    if (!aObjLay.IsEmpty())
                     {
                         return true;
                     } // else, look at the next master page of this page...
@@ -120,22 +115,22 @@ bool SdrViewIter::ImpCheckPageView(SdrPageView const * pPV) const
 
 SdrView* SdrViewIter::ImpFindView()
 {
-    if(mpModel)
+    if (mpModel)
     {
         const size_t nLsCnt(mpModel->GetSizeOfVector());
 
-        while(mnListenerNum < nLsCnt)
+        while (mnListenerNum < nLsCnt)
         {
             SfxListener* pLs = mpModel->GetListener(mnListenerNum);
-            mpCurrentView = dynamic_cast<SdrView*>( pLs );
+            mpCurrentView = dynamic_cast<SdrView*>(pLs);
 
-            if(mpCurrentView)
+            if (mpCurrentView)
             {
-                if(mpPage)
+                if (mpPage)
                 {
                     SdrPageView* pPV = mpCurrentView->GetSdrPageView();
 
-                    if(pPV && ImpCheckPageView(pPV))
+                    if (pPV && ImpCheckPageView(pPV))
                     {
                         return mpCurrentView;
                     }
@@ -154,13 +149,11 @@ SdrView* SdrViewIter::ImpFindView()
     return mpCurrentView;
 }
 
-
 SdrView* SdrViewIter::FirstView()
 {
     ImpInitVars();
     return ImpFindView();
 }
-
 
 SdrView* SdrViewIter::NextView()
 {

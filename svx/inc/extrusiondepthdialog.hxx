@@ -22,8 +22,8 @@
 
 #include <vcl/weld.hxx>
 
-namespace svx {
-
+namespace svx
+{
 class ExtrusionDepthDialog final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::MetricSpinButton> m_xMtrDepth;
@@ -34,7 +34,6 @@ public:
 
     double getDepth() const;
 };
-
 }
 
 #endif // INCLUDED_SVX_INC_EXTRUSIONDEPTHDIALOG_HXX

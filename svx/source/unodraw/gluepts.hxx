@@ -24,11 +24,13 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uno
+{
+class XInterface;
+}
 class SdrObject;
 
-css::uno::Reference<css::uno::XInterface>
-SvxUnoGluePointAccess_createInstance(SdrObject * pObject);
+css::uno::Reference<css::uno::XInterface> SvxUnoGluePointAccess_createInstance(SdrObject* pObject);
 
 #endif
 

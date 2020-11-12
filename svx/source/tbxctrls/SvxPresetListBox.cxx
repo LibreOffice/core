@@ -50,11 +50,13 @@ bool SvxPresetListBox::Command(const CommandEvent& rEvent)
     if (rEvent.GetCommand() != CommandEventId::ContextMenu)
         return CustomWidgetController::Command(rEvent);
     const sal_uInt16 nIndex = GetSelectedItemId();
-    if(nIndex > 0)
+    if (nIndex > 0)
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), "svx/ui/presetmenu.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(
+            Application::CreateBuilder(GetDrawingArea(), "svx/ui/presetmenu.ui"));
         std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
-        OnMenuItemSelected(xMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(rEvent.GetMousePosPixel(), Size(1,1))));
+        OnMenuItemSelected(xMenu->popup_at_rect(
+            GetDrawingArea(), tools::Rectangle(rEvent.GetMousePosPixel(), Size(1, 1))));
         return true;
     }
     return false;
@@ -66,37 +68,37 @@ void SvxPresetListBox::DrawLayout()
     SetLineCount(5);
 }
 
-template< typename ListType, typename EntryType >
-void SvxPresetListBox::FillPresetListBoxImpl(ListType & pList, sal_uInt32 nStartIndex)
+template <typename ListType, typename EntryType>
+void SvxPresetListBox::FillPresetListBoxImpl(ListType& pList, sal_uInt32 nStartIndex)
 {
-    const Size aSize( GetIconSize() );
+    const Size aSize(GetIconSize());
     BitmapEx aBitmap;
-    for(tools::Long nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
+    for (tools::Long nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
     {
         aBitmap = pList.GetBitmapForPreview(nIndex, aSize);
-        EntryType* pItem = static_cast<EntryType*>( pList.Get(nIndex) );
+        EntryType* pItem = static_cast<EntryType*>(pList.Get(nIndex));
         InsertItem(nStartIndex, Image(aBitmap), pItem->GetName());
     }
 }
 
 void SvxPresetListBox::FillPresetListBox(XGradientList& pList, sal_uInt32 nStartIndex)
 {
-    FillPresetListBoxImpl< XGradientList, XGradientEntry>( pList, nStartIndex );
+    FillPresetListBoxImpl<XGradientList, XGradientEntry>(pList, nStartIndex);
 }
 
 void SvxPresetListBox::FillPresetListBox(XHatchList& pList, sal_uInt32 nStartIndex)
 {
-    FillPresetListBoxImpl< XHatchList, XHatchEntry>( pList, nStartIndex );
+    FillPresetListBoxImpl<XHatchList, XHatchEntry>(pList, nStartIndex);
 }
 
 void SvxPresetListBox::FillPresetListBox(XBitmapList& pList, sal_uInt32 nStartIndex)
 {
-    FillPresetListBoxImpl< XBitmapList, XBitmapEntry >( pList, nStartIndex );
+    FillPresetListBoxImpl<XBitmapList, XBitmapEntry>(pList, nStartIndex);
 }
 
 void SvxPresetListBox::FillPresetListBox(XPatternList& pList, sal_uInt32 nStartIndex)
 {
-    FillPresetListBoxImpl< XPatternList, XBitmapEntry >( pList, nStartIndex );
+    FillPresetListBoxImpl<XPatternList, XBitmapEntry>(pList, nStartIndex);
 }
 
 void SvxPresetListBox::OnMenuItemSelected(const OString& rIdent)

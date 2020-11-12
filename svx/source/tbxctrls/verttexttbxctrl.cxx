@@ -24,7 +24,8 @@
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 
-SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(
+    const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl(rContext)
 {
     addStatusListener(".uno:CTLFontState");
@@ -35,15 +36,15 @@ OUString SvxCTLTextTbxCtrl::getImplementationName()
     return "com.sun.star.comp.svx.CTLToolBoxControl";
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_svx_CTLToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_svx_CTLToolBoxControl_get_implementation(css::uno::XComponentContext* rContext,
+                                                           css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new SvxCTLTextTbxCtrl(rContext));
 }
 
-SvxVertTextTbxCtrl::SvxVertTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+SvxVertTextTbxCtrl::SvxVertTextTbxCtrl(
+    const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl(rContext)
 {
     addStatusListener(".uno:VerticalTextState");
@@ -54,23 +55,21 @@ OUString SvxVertTextTbxCtrl::getImplementationName()
     return "com.sun.star.comp.svx.VertTextToolBoxControl";
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_VertTextToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::XComponentContext* rContext, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new SvxVertTextTbxCtrl(rContext));
 }
 
-SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl(
+    const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl_Base(rContext, nullptr, OUString())
     , m_bVisible(false)
 {
 }
 
-SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
-{
-}
+SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl() {}
 
 void SAL_CALL SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
 {
@@ -143,19 +142,19 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStat
         if (WindowType::FLOATINGWINDOW == pParent->GetType())
         {
             Size aSize(pToolBox->CalcWindowSizePixel());
-            pToolBox->SetPosSizePixel( Point(), aSize );
-            pParent->SetOutputSizePixel( aSize );
+            pToolBox->SetPosSizePixel(Point(), aSize);
+            pParent->SetOutputSizePixel(aSize);
         }
     }
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL SvxVertCTLTextTbxCtrl::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL SvxVertCTLTextTbxCtrl::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SvxVertCTLTextTbxCtrl::getSupportedServiceNames()
+css::uno::Sequence<OUString> SvxVertCTLTextTbxCtrl::getSupportedServiceNames()
 {
     return { "com.sun.star.frame.ToolbarController" };
 }

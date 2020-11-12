@@ -24,18 +24,18 @@
 
 class SdrOle2Obj;
 
-namespace sdr::contact {
-
+namespace sdr::contact
+{
 class ViewObjectContactOfSdrOle2Obj final : public ViewObjectContactOfSdrObj
 {
     // This method is responsible for creating the graphical visualisation data
-    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer
+    createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
 public:
     ViewObjectContactOfSdrOle2Obj(ObjectContact& rObjectContact, ViewContact& rViewContact);
     virtual ~ViewObjectContactOfSdrOle2Obj() override;
 };
-
 }
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFSDROLE2OBJ_HXX

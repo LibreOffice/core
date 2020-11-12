@@ -25,16 +25,19 @@
 
 class SdrPage;
 
-namespace sdr::contact {
-
+namespace sdr::contact
+{
 class ViewContactOfPageObj final : public ViewContactOfSdrObj
 {
     // Create an Object-Specific ViewObjectContact, set ViewContact and
     // ObjectContact. Always needs to return something.
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
+    virtual ViewObjectContact&
+    CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
     // create graphical visualisation data
-    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer
+    createViewIndependentPrimitive2DSequence() const override;
+
 public:
     // basic constructor, used from SdrObject.
     explicit ViewContactOfPageObj(SdrPageObj& rPageObj);
@@ -44,13 +47,8 @@ public:
     virtual void ActionChanged() override;
 
     // access to SdrObject
-    const SdrPageObj& GetPageObj() const
-    {
-        return static_cast<const SdrPageObj&>(GetSdrObject());
-    }
+    const SdrPageObj& GetPageObj() const { return static_cast<const SdrPageObj&>(GetSdrObject()); }
 };
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

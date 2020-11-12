@@ -33,9 +33,10 @@
 #include "lookupcolorname.hxx"
 #include <unordered_map>
 
-namespace {
-
-class ColorNameMap {
+namespace
+{
+class ColorNameMap
+{
 public:
     ColorNameMap();
     ColorNameMap(const ColorNameMap&) = delete;
@@ -44,20 +45,21 @@ public:
     OUString lookUp(tools::Long color) const;
 
 private:
-    typedef std::unordered_map< tools::Long, OUString > Map;
+    typedef std::unordered_map<tools::Long, OUString> Map;
 
     Map map_;
 };
 
-ColorNameMap::ColorNameMap() {
-    css::uno::Sequence< OUString > aNames;
-    css::uno::Reference< css::container::XNameAccess > xNA;
+ColorNameMap::ColorNameMap()
+{
+    css::uno::Sequence<OUString> aNames;
+    css::uno::Reference<css::container::XNameAccess> xNA;
 
     try
     {
         // Create color table in which to look up the given color.
-        css::uno::Reference< css::container::XNameContainer > xColorTable =
-             css::drawing::ColorTable::create( comphelper::getProcessComponentContext() );
+        css::uno::Reference<css::container::XNameContainer> xColorTable
+            = css::drawing::ColorTable::create(comphelper::getProcessComponentContext());
 
         // Get list of color names in order to iterate over the color table.
 
@@ -95,25 +97,25 @@ ColorNameMap::ColorNameMap() {
     }
 }
 
-OUString ColorNameMap::lookUp(tools::Long color) const {
+OUString ColorNameMap::lookUp(tools::Long color) const
+{
     Map::const_iterator i(map_.find(color));
-    if (i != map_.end()) {
+    if (i != map_.end())
+    {
         return i->second;
     }
     // Did not find the given color; return its RGB tuple representation:
     return "#" + OUString::number(color, 16);
 }
 
-struct theColorNameMap: public rtl::Static< ColorNameMap, theColorNameMap > {};
-
+struct theColorNameMap : public rtl::Static<ColorNameMap, theColorNameMap>
+{
+};
 }
 
-namespace accessibility {
-
-OUString lookUpColorName(tools::Long color) {
-    return theColorNameMap::get().lookUp(color);
-}
-
+namespace accessibility
+{
+OUString lookUpColorName(tools::Long color) { return theColorNameMap::get().lookUp(color); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

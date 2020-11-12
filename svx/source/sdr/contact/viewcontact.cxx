@@ -26,8 +26,8 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <tools/debug.hxx>
 
-namespace sdr::contact {
-
+namespace sdr::contact
+{
 // Create an Object-Specific ViewObjectContact, set ViewContact and
 // ObjectContact. Always needs to return something. Default is to create
 // a standard ViewObjectContact containing the given ObjectContact and *this
@@ -37,15 +37,12 @@ ViewObjectContact& ViewContact::CreateObjectSpecificViewObjectContact(ObjectCont
 }
 
 ViewContact::ViewContact()
-:   maViewObjectContactVector(),
-    mxViewIndependentPrimitive2DSequence()
+    : maViewObjectContactVector()
+    , mxViewIndependentPrimitive2DSequence()
 {
 }
 
-ViewContact::~ViewContact()
-{
-    deleteAllVOCs();
-}
+ViewContact::~ViewContact() { deleteAllVOCs(); }
 
 void ViewContact::deleteAllVOCs()
 {
@@ -53,10 +50,10 @@ void ViewContact::deleteAllVOCs()
     // #i84257# To avoid that each 'delete pCandidate' again uses
     // the local RemoveViewObjectContact with a search and removal in the
     // vector, simply copy and clear local vector.
-    std::vector< ViewObjectContact* > aLocalVOCList;
+    std::vector<ViewObjectContact*> aLocalVOCList;
     aLocalVOCList.swap(maViewObjectContactVector);
 
-    for (const auto & pCandidate : aLocalVOCList)
+    for (const auto& pCandidate : aLocalVOCList)
         // ViewObjectContacts only make sense with View and Object contacts.
         // When the contact to the SdrObject is deleted like in this case,
         // all ViewObjectContacts can be deleted, too.
@@ -74,18 +71,18 @@ ViewObjectContact& ViewContact::GetViewObjectContact(ObjectContact& rObjectConta
     const sal_uInt32 nCount(maViewObjectContactVector.size());
 
     // first search if there exists a VOC for the given OC
-    for(sal_uInt32 a(0); !pRetval && a < nCount; a++)
+    for (sal_uInt32 a(0); !pRetval && a < nCount; a++)
     {
         ViewObjectContact* pCandidate = maViewObjectContactVector[a];
         DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList (!)");
 
-        if(&(pCandidate->GetObjectContact()) == &rObjectContact)
+        if (&(pCandidate->GetObjectContact()) == &rObjectContact)
         {
             pRetval = pCandidate;
         }
     }
 
-    if(!pRetval)
+    if (!pRetval)
     {
         // create a new one. It's inserted to the local list from the
         // ViewObjectContact constructor via AddViewObjectContact()
@@ -104,9 +101,10 @@ void ViewContact::AddViewObjectContact(ViewObjectContact& rVOContact)
 // A ViewObjectContact was deleted and shall be forgotten.
 void ViewContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
 {
-    std::vector< ViewObjectContact* >::iterator aFindResult = std::find(maViewObjectContactVector.begin(), maViewObjectContactVector.end(), &rVOContact);
+    std::vector<ViewObjectContact*>::iterator aFindResult = std::find(
+        maViewObjectContactVector.begin(), maViewObjectContactVector.end(), &rVOContact);
 
-    if(aFindResult != maViewObjectContactVector.end())
+    if (aFindResult != maViewObjectContactVector.end())
     {
         maViewObjectContactVector.erase(aFindResult);
     }
@@ -118,9 +116,9 @@ bool ViewContact::HasViewObjectContacts() const
 {
     const sal_uInt32 nCount(maViewObjectContactVector.size());
 
-    for(sal_uInt32 a(0); a < nCount; a++)
+    for (sal_uInt32 a(0); a < nCount; a++)
     {
-        if(!maViewObjectContactVector[a]->GetObjectContact().IsPreviewRenderer())
+        if (!maViewObjectContactVector[a]->GetObjectContact().IsPreviewRenderer())
         {
             return true;
         }
@@ -134,9 +132,9 @@ bool ViewContact::isAnimatedInAnyViewObjectContact() const
 {
     const sal_uInt32 nCount(maViewObjectContactVector.size());
 
-    for(sal_uInt32 a(0); a < nCount; a++)
+    for (sal_uInt32 a(0); a < nCount; a++)
     {
-        if(maViewObjectContactVector[a]->isAnimated())
+        if (maViewObjectContactVector[a]->isAnimated())
         {
             return true;
         }
@@ -157,7 +155,8 @@ sal_uInt32 ViewContact::GetObjectCount() const
 ViewContact& ViewContact::GetViewContact(sal_uInt32 /*nIndex*/) const
 {
     // This is the default implementation; call would be an error
-    OSL_FAIL("ViewContact::GetViewContact: This call needs to be overridden when GetObjectCount() can return results != 0 (!)");
+    OSL_FAIL("ViewContact::GetViewContact: This call needs to be overridden when GetObjectCount() "
+             "can return results != 0 (!)");
     return const_cast<ViewContact&>(*this);
 }
 
@@ -173,10 +172,11 @@ void ViewContact::ActionChildInserted(ViewContact& rChild)
     // will force a VOC for the new child and invalidate its range
     const sal_uInt32 nCount(maViewObjectContactVector.size());
 
-    for(sal_uInt32 a(0); a < nCount; a++)
+    for (sal_uInt32 a(0); a < nCount; a++)
     {
         ViewObjectContact* pCandidate = maViewObjectContactVector[a];
-        DBG_ASSERT(pCandidate, "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
+        DBG_ASSERT(pCandidate,
+                   "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
 
         // take action at all VOCs. At the VOCs ObjectContact the initial
         // rectangle will be invalidated at the associated OutputDevice.
@@ -191,10 +191,11 @@ void ViewContact::ActionChanged()
     // all drawn visualisations in all known views
     const sal_uInt32 nCount(maViewObjectContactVector.size());
 
-    for(sal_uInt32 a(0); a < nCount; a++)
+    for (sal_uInt32 a(0); a < nCount; a++)
     {
         ViewObjectContact* pCandidate = maViewObjectContactVector[a];
-        DBG_ASSERT(pCandidate, "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
+        DBG_ASSERT(pCandidate,
+                   "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
 
         pCandidate->ActionChanged();
     }
@@ -202,44 +203,46 @@ void ViewContact::ActionChanged()
 
 // access to SdrObject and/or SdrPage. May return 0L like the default
 // implementations do. Override as needed.
-SdrObject* ViewContact::TryToGetSdrObject() const
-{
-    return nullptr;
-}
+SdrObject* ViewContact::TryToGetSdrObject() const { return nullptr; }
 
 // primitive stuff
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContact::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer
+ViewContact::createViewIndependentPrimitive2DSequence() const
 {
     // This is the default implementation and should never be called (see header). If this is called,
     // someone implemented a ViewContact (VC) visualisation object without defining the visualisation by
     // providing a sequence of primitives -> which cannot be correct.
     // Since we have no access to any known model data here, the default implementation creates a yellow placeholder
     // hairline polygon with a default size of (1000, 1000, 5000, 3000)
-    OSL_FAIL("ViewContact::createViewIndependentPrimitive2DSequence(): Never call the fallback base implementation, this is always an error (!)");
-    const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(basegfx::B2DRange(1000.0, 1000.0, 5000.0, 3000.0)));
+    OSL_FAIL("ViewContact::createViewIndependentPrimitive2DSequence(): Never call the fallback "
+             "base implementation, this is always an error (!)");
+    const basegfx::B2DPolygon aOutline(
+        basegfx::utils::createPolygonFromRect(basegfx::B2DRange(1000.0, 1000.0, 5000.0, 3000.0)));
     const basegfx::BColor aYellow(1.0, 1.0, 0.0);
     const drawinglayer::primitive2d::Primitive2DReference xReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));
 
-    return drawinglayer::primitive2d::Primitive2DContainer { xReference };
+    return drawinglayer::primitive2d::Primitive2DContainer{ xReference };
 }
 
-drawinglayer::primitive2d::Primitive2DContainer const & ViewContact::getViewIndependentPrimitive2DContainer() const
+drawinglayer::primitive2d::Primitive2DContainer const&
+ViewContact::getViewIndependentPrimitive2DContainer() const
 {
     // local up-to-date checks. Create new list and compare.
-    drawinglayer::primitive2d::Primitive2DContainer xNew(createViewIndependentPrimitive2DSequence());
+    drawinglayer::primitive2d::Primitive2DContainer xNew(
+        createViewIndependentPrimitive2DSequence());
 
-    if(!xNew.empty())
+    if (!xNew.empty())
     {
         // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
         xNew = embedToObjectSpecificInformation(std::move(xNew));
     }
 
-    if(mxViewIndependentPrimitive2DSequence != xNew)
+    if (mxViewIndependentPrimitive2DSequence != xNew)
     {
         // has changed, copy content
-        const_cast< ViewContact* >(this)->mxViewIndependentPrimitive2DSequence = std::move(xNew);
+        const_cast<ViewContact*>(this)->mxViewIndependentPrimitive2DSequence = std::move(xNew);
     }
 
     // return current Primitive2DContainer
@@ -247,19 +250,22 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewContact::getViewInde
 }
 
 // add Gluepoints (if available)
-drawinglayer::primitive2d::Primitive2DContainer ViewContact::createGluePointPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer
+ViewContact::createGluePointPrimitive2DSequence() const
 {
     // default returns empty reference
     return drawinglayer::primitive2d::Primitive2DContainer();
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContact::embedToObjectSpecificInformation(drawinglayer::primitive2d::Primitive2DContainer aSource) const
+drawinglayer::primitive2d::Primitive2DContainer ViewContact::embedToObjectSpecificInformation(
+    drawinglayer::primitive2d::Primitive2DContainer aSource) const
 {
     // nothing to do for default
     return aSource;
 }
 
-basegfx::B2DRange ViewContact::getRange( const drawinglayer::geometry::ViewInformation2D& /*rViewInfo2D*/ ) const
+basegfx::B2DRange
+ViewContact::getRange(const drawinglayer::geometry::ViewInformation2D& /*rViewInfo2D*/) const
 {
     // Return empty range.
     return basegfx::B2DRange();
@@ -267,12 +273,12 @@ basegfx::B2DRange ViewContact::getRange( const drawinglayer::geometry::ViewInfor
 
 void ViewContact::flushViewObjectContacts(bool bWithHierarchy)
 {
-    if(bWithHierarchy)
+    if (bWithHierarchy)
     {
         // flush DrawingLayer hierarchy
         const sal_uInt32 nCount(GetObjectCount());
 
-        for(sal_uInt32 a(0); a < nCount; a++)
+        for (sal_uInt32 a(0); a < nCount; a++)
         {
             ViewContact& rChild = GetViewContact(a);
             rChild.flushViewObjectContacts(bWithHierarchy);
@@ -282,7 +288,6 @@ void ViewContact::flushViewObjectContacts(bool bWithHierarchy)
     // delete local VOCs
     deleteAllVOCs();
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

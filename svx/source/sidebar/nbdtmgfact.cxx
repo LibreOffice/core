@@ -19,25 +19,24 @@
 
 #include <svx/nbdtmgfact.hxx>
 
-namespace svx::sidebar::NBOutlineTypeMgrFact {
-
+namespace svx::sidebar::NBOutlineTypeMgrFact
+{
 NBOTypeMgrBase* CreateInstance(const NBOType aType)
 {
-    if ( aType == NBOType::Bullets )
+    if (aType == NBOType::Bullets)
     {
         return &BulletsTypeMgr::GetInstance();
     }
-    else if ( aType == NBOType::Numbering )
+    else if (aType == NBOType::Numbering)
     {
         return &NumberingTypeMgr::GetInstance();
     }
-    else if ( aType == NBOType::Outline )
+    else if (aType == NBOType::Outline)
     {
         return &OutlineTypeMgr::GetInstance();
     }
     return nullptr;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

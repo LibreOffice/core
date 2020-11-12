@@ -20,14 +20,8 @@
 #include <unotools/resmgr.hxx>
 #include <svx/dialmgr.hxx>
 
-std::locale SvxResLocale()
-{
-    return Translate::Create("svx");
-}
+std::locale SvxResLocale() { return Translate::Create("svx"); }
 
-OUString SvxResId(const char* pId)
-{
-    return Translate::get(pId, SvxResLocale());
-}
+OUString SvxResId(const char* pId) { return Translate::get(pId, SvxResLocale()); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

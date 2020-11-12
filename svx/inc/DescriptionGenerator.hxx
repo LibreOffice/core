@@ -17,18 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustrbuf.hxx>
 
-namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::drawing { class XShape; }
+namespace com::sun::star::beans
+{
+class XPropertySet;
+}
+namespace com::sun::star::drawing
+{
+class XShape;
+}
 
-
-namespace accessibility {
-
+namespace accessibility
+{
 /** This class creates description strings for shapes.
     <p>Initialized with a given shape additional calls to the
     <member>addProperty</member> method will build a descriptive string that
@@ -39,7 +43,8 @@ namespace accessibility {
 class DescriptionGenerator
 {
 public:
-    enum class PropertyType {
+    enum class PropertyType
+    {
         Color,
         Integer
     };
@@ -51,8 +56,7 @@ public:
             The shape from which properties will be extracted by later calls
             to <member>addProperty</member>.
     */
-    DescriptionGenerator (const css::uno::Reference<
-        css::drawing::XShape>& xShape);
+    DescriptionGenerator(const css::uno::Reference<css::drawing::XShape>& xShape);
 
     ~DescriptionGenerator();
 
@@ -62,7 +66,7 @@ public:
             An introductory description of the shape that is made more
             specific by later calls to <member>addProperty</member>.
     */
-    void Initialize (const OUString& sPrefix);
+    void Initialize(const OUString& sPrefix);
 
     /** Initialize the description with the specified string from the
         resource followed by the shape style in parentheses and a colon.
@@ -78,7 +82,7 @@ public:
          @return
              The description string in its current form.
     */
-    OUString operator() (void);
+    OUString operator()(void);
 
     /** Add the given property name and its associated value to the
         description string.  If the property value does not differ from the
@@ -93,22 +97,21 @@ public:
             Localized name of the property.  An empty string tells the
             method to use the property name instead.
     */
-    void AddProperty (const OUString& sPropertyName,
-        PropertyType aType);
+    void AddProperty(const OUString& sPropertyName, PropertyType aType);
 
     /** Append the given string as is to the current description.
         @param sString
             String to append to the current description.  It is not modified
             in any way.
     */
-    void AppendString (const OUString& sString);
+    void AppendString(const OUString& sString);
 
 private:
     /// Reference to the shape from which the properties are extracted.
-    css::uno::Reference< css::drawing::XShape> mxShape;
+    css::uno::Reference<css::drawing::XShape> mxShape;
 
     /// Reference to the shape's property set.
-    css::uno::Reference< css::beans::XPropertySet> mxSet;
+    css::uno::Reference<css::beans::XPropertySet> mxSet;
 
     /// The description string that is build.
     OUStringBuffer msDescription;
@@ -120,15 +123,13 @@ private:
 
     /** Add a property value formatted as color to the description string.
     */
-    void AddColor (const OUString& sPropertyName);
+    void AddColor(const OUString& sPropertyName);
 
     /** Add a property value formatted as integer to the description string.
     */
-    void AddInteger (const OUString& sPropertyName);
+    void AddInteger(const OUString& sPropertyName);
 };
 
-
 } // end of namespace accessibility
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

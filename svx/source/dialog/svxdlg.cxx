@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svxdlg.hxx>
 
 SvxAbstractDialogFactory* SvxAbstractDialogFactory::Create()
 {
-    return dynamic_cast< SvxAbstractDialogFactory* >( VclAbstractDialogFactory::Create() );
+    return dynamic_cast<SvxAbstractDialogFactory*>(VclAbstractDialogFactory::Create());
 }
 
-SvxAbstractDialogFactory::~SvxAbstractDialogFactory()
-{
-}
+SvxAbstractDialogFactory::~SvxAbstractDialogFactory() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

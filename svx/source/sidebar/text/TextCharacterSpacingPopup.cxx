@@ -22,12 +22,13 @@
 
 using namespace svx;
 
-TextCharacterSpacingPopup::TextCharacterSpacingPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+TextCharacterSpacingPopup::TextCharacterSpacingPopup(
+    const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }
 
-void TextCharacterSpacingPopup::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+void TextCharacterSpacingPopup::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
 {
     PopupWindowController::initialize(rArguments);
 
@@ -43,18 +44,17 @@ void TextCharacterSpacingPopup::initialize( const css::uno::Sequence< css::uno::
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
 
-TextCharacterSpacingPopup::~TextCharacterSpacingPopup()
-{
-}
+TextCharacterSpacingPopup::~TextCharacterSpacingPopup() {}
 
 std::unique_ptr<WeldToolbarPopup> TextCharacterSpacingPopup::weldPopupWindow()
 {
     return std::make_unique<TextCharacterSpacingControl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> TextCharacterSpacingPopup::createVclPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> TextCharacterSpacingPopup::createVclPopupWindow(vcl::Window* pParent)
 {
-    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(
+        getFrameInterface(), pParent,
         std::make_unique<TextCharacterSpacingControl>(this, pParent->GetFrameWeld()));
 
     mxInterimPopover->Show();
@@ -72,10 +72,9 @@ css::uno::Sequence<OUString> TextCharacterSpacingPopup::getSupportedServiceNames
     return { "com.sun.star.frame.ToolbarController" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_CharacterSpacingToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
-    css::uno::Sequence<css::uno::Any> const & )
+    css::uno::XComponentContext* rContext, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new TextCharacterSpacingPopup(rContext));
 }

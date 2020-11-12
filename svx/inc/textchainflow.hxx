@@ -34,21 +34,21 @@ class UFlowChainedText;
 class TextChainFlow
 {
 public:
-    TextChainFlow(SdrTextObj *pChainTarget);
+    TextChainFlow(SdrTextObj* pChainTarget);
     virtual ~TextChainFlow();
 
     // Check for flow events in Outliner
-    virtual void CheckForFlowEvents(SdrOutliner *);
+    virtual void CheckForFlowEvents(SdrOutliner*);
 
-    void ExecuteUnderflow(SdrOutliner *);
+    void ExecuteUnderflow(SdrOutliner*);
 
     // Uses two outliners: one for the non-overflow text and one for overflowing (might be the same)
-    void ExecuteOverflow(SdrOutliner *, SdrOutliner *);
+    void ExecuteOverflow(SdrOutliner*, SdrOutliner*);
 
     bool IsOverflow() const;
     bool IsUnderflow() const;
 
-    SdrTextObj *GetLinkTarget() const;
+    SdrTextObj* GetLinkTarget() const;
 
 protected:
     // Cursor related
@@ -59,43 +59,42 @@ protected:
     std::unique_ptr<OFlowChainedText> mpOverflChText;
     std::unique_ptr<UFlowChainedText> mpUnderflChText;
 
-    void impCheckForFlowEvents(SdrOutliner *, SdrOutliner *);
+    void impCheckForFlowEvents(SdrOutliner*, SdrOutliner*);
 
-    TextChain *GetTextChain() const;
+    TextChain* GetTextChain() const;
 
-    virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *);
-    void impMoveChainedTextToNextLink(SdrOutliner *);
+    virtual void impLeaveOnlyNonOverflowingText(SdrOutliner*);
+    void impMoveChainedTextToNextLink(SdrOutliner*);
 
-    virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *);
+    virtual void impSetFlowOutlinerParams(SdrOutliner*, SdrOutliner*);
 
 private:
     bool mbOFisUFinduced;
 
     void impUpdateCursorInfo();
 
-    SdrTextObj *mpTargetLink;
-    SdrTextObj *mpNextLink;
+    SdrTextObj* mpTargetLink;
+    SdrTextObj* mpNextLink;
 
-    TextChain *mpTextChain;
+    TextChain* mpTextChain;
 
     bool bUnderflow;
     bool bOverflow;
 };
 
-
 // NOTE: EditingTextChainFlow might be strongly coupled with behavior in SdrTextObj::onChainingEvent
 class EditingTextChainFlow : public TextChainFlow
 {
 public:
-    EditingTextChainFlow(SdrTextObj *);
-    virtual void CheckForFlowEvents(SdrOutliner *) override;
+    EditingTextChainFlow(SdrTextObj*);
+    virtual void CheckForFlowEvents(SdrOutliner*) override;
 
     //virtual void ExecuteOverflow(SdrOutliner *, SdrOutliner *) override;
 
 protected:
-    virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *) override;
+    virtual void impLeaveOnlyNonOverflowingText(SdrOutliner*) override;
 
-    virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *) override;
+    virtual void impSetFlowOutlinerParams(SdrOutliner*, SdrOutliner*) override;
 
 private:
     void impBroadcastCursorInfo() const;

@@ -20,25 +20,20 @@
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 
-namespace sdr::contact {
-
-// basic constructor.
-ViewObjectContactRedirector::ViewObjectContactRedirector()
+namespace sdr::contact
 {
-}
+// basic constructor.
+ViewObjectContactRedirector::ViewObjectContactRedirector() {}
 
 // The destructor.
-ViewObjectContactRedirector::~ViewObjectContactRedirector()
-{
-}
+ViewObjectContactRedirector::~ViewObjectContactRedirector() {}
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
-    const sdr::contact::ViewObjectContact& rOriginal,
-    const sdr::contact::DisplayInfo& rDisplayInfo)
+drawinglayer::primitive2d::Primitive2DContainer
+ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+    const sdr::contact::ViewObjectContact& rOriginal, const sdr::contact::DisplayInfo& rDisplayInfo)
 {
     return rOriginal.createPrimitive2DSequence(rDisplayInfo);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

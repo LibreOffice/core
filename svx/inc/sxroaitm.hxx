@@ -22,9 +22,13 @@
 #include <svx/svddef.hxx>
 #include <svx/sdangitm.hxx>
 
-class SdrRotateAllItem final : public SdrAngleItem {
+class SdrRotateAllItem final : public SdrAngleItem
+{
 public:
-    SdrRotateAllItem(): SdrAngleItem(SDRATTR_ROTATEALL,0) {}
+    SdrRotateAllItem()
+        : SdrAngleItem(SDRATTR_ROTATEALL, 0)
+    {
+    }
     virtual SdrRotateAllItem* Clone(SfxItemPool*) const override
     {
         return new SdrRotateAllItem(*this);

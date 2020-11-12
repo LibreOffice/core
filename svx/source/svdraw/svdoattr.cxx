@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svdoattr.hxx>
 #include <svx/svdmodel.hxx>
 #include <svl/hint.hxx>
@@ -35,19 +34,16 @@ std::unique_ptr<sdr::properties::BaseProperties> SdrAttrObj::CreateObjectSpecifi
     return std::make_unique<sdr::properties::AttributeProperties>(*this);
 }
 
-
 SdrAttrObj::SdrAttrObj(SdrModel& rSdrModel)
-:   SdrObject(rSdrModel)
+    : SdrObject(rSdrModel)
 {
 }
 
-SdrAttrObj::~SdrAttrObj()
-{
-}
+SdrAttrObj::~SdrAttrObj() {}
 
 const tools::Rectangle& SdrAttrObj::GetSnapRect() const
 {
-    if(bSnapRectDirty)
+    if (bSnapRectDirty)
     {
         const_cast<SdrAttrObj*>(this)->RecalcSnapRect();
         const_cast<SdrAttrObj*>(this)->bSnapRectDirty = false;
@@ -61,7 +57,7 @@ void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     bool bDataChg(SfxHintId::DataChanged == rHint.GetId());
 
-    if(bDataChg)
+    if (bDataChg)
     {
         tools::Rectangle aBoundRect = GetLastBoundRect();
         SetBoundRectDirty();
@@ -78,7 +74,7 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
 {
     sal_Int32 nRetval(0);
 
-    if(drawing::LineStyle_NONE != GetObjectItem(XATTR_LINESTYLE).GetValue())
+    if (drawing::LineStyle_NONE != GetObjectItem(XATTR_LINESTYLE).GetValue())
     {
         nRetval = GetObjectItem(XATTR_LINEWIDTH).GetValue();
     }
@@ -88,12 +84,15 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
 
 bool SdrAttrObj::HasFill() const
 {
-    return bClosedObj && GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE).GetValue() != drawing::FillStyle_NONE;
+    return bClosedObj
+           && GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE).GetValue()
+                  != drawing::FillStyle_NONE;
 }
 
 bool SdrAttrObj::HasLine() const
 {
-    return GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE).GetValue() != drawing::LineStyle_NONE;
+    return GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE).GetValue()
+           != drawing::LineStyle_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

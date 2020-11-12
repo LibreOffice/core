@@ -26,17 +26,16 @@ class SvStream;
 class GalleryCodec
 {
 private:
-
-    SvStream&   rStm;
+    SvStream& rStm;
 
 public:
-    explicit GalleryCodec( SvStream& rIOStm );
+    explicit GalleryCodec(SvStream& rIOStm);
     ~GalleryCodec();
 
-    void        Write( SvStream& rStmToWrite );
-    void        Read( SvStream& rStmToRead );
+    void Write(SvStream& rStmToWrite);
+    void Read(SvStream& rStmToRead);
 
-    static bool IsCoded( SvStream& rStm, sal_uInt32& rVersion );
+    static bool IsCoded(SvStream& rStm, sal_uInt32& rVersion);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

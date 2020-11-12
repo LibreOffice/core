@@ -25,13 +25,12 @@
 
 #include <celltypes.hxx>
 
-
-namespace sdr::table {
-
-class TableRows : public ::cppu::WeakAggImplHelper1< css::table::XTableRows >
+namespace sdr::table
+{
+class TableRows : public ::cppu::WeakAggImplHelper1<css::table::XTableRows>
 {
 public:
-    explicit TableRows( const TableModelRef& xTableModel );
+    explicit TableRows(const TableModelRef& xTableModel);
     virtual ~TableRows() override;
 
     void dispose();
@@ -39,21 +38,20 @@ public:
     void throwIfDisposed() const;
 
     // XTableRows
-    virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, sal_Int32 nCount ) override;
-    virtual void SAL_CALL removeByIndex( sal_Int32 nIndex, sal_Int32 nCount ) override;
+    virtual void SAL_CALL insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) override;
+    virtual void SAL_CALL removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override;
 
     // Methods
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual sal_Bool SAL_CALL hasElements() override;
 
 private:
-    TableModelRef   mxTableModel;
+    TableModelRef mxTableModel;
 };
-
 }
 
 #endif

@@ -19,18 +19,15 @@
 
 #include "EmptyPanel.hxx"
 
-namespace svx::sidebar {
-
-EmptyPanel::EmptyPanel (vcl::Window* pParent)
+namespace svx::sidebar
+{
+EmptyPanel::EmptyPanel(vcl::Window* pParent)
     : PanelLayout(pParent, "EmptyPanel", "svx/ui/sidebarempty.ui", nullptr)
     , mxMessageControl(m_xBuilder->weld_label("message"))
 {
 }
 
-EmptyPanel::~EmptyPanel()
-{
-    disposeOnce();
-}
+EmptyPanel::~EmptyPanel() { disposeOnce(); }
 
 void EmptyPanel::dispose()
 {
