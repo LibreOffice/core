@@ -7,7 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-struct Foo { // expected-error {{class has only copy/move constructors, must be dead [loplugin:deadclass]}}
+struct Foo
+{ // expected-error {{class has only copy/move constructors, must be dead [loplugin:deadclass]}}
     Foo(Foo&);
 };
 

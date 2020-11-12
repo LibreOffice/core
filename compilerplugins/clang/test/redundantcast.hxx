@@ -9,23 +9,24 @@
 
 #pragma once
 
-struct S {
+struct S
+{
     void f1();
     void f2() const;
     void f3();
     void f3() const;
 };
 
-int && nix();
-int const && cix();
+int&& nix();
+int const&& cix();
 int nir();
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wignored-qualifiers"
 int const cir();
 #pragma clang diagnostic pop
 
-S && nsx();
-S const && csx();
+S&& nsx();
+S const&& csx();
 S nsr();
 S const csr();
 

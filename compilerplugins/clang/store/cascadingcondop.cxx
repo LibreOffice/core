@@ -30,16 +30,15 @@ static const int stmtlimit = 50;
 
 namespace loplugin
 {
-
 struct WalkCounter
 {
-    int  stmtcount;
+    int stmtcount;
     bool cascading;
 };
 
 // Ctor, nothing special, pass the argument(s).
-CascadingCondOp::CascadingCondOp( const InstantiationData& data )
-    : FilteringPlugin( data )
+CascadingCondOp::CascadingCondOp(const InstantiationData& data)
+    : FilteringPlugin(data)
 {
 }
 
@@ -48,38 +47,38 @@ void CascadingCondOp::run()
 {
     // Traverse the whole AST of the translation unit (i.e. examine the whole source file).
     // The Clang AST helper class will call VisitReturnStmt for every return statement.
-    TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
+    TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 }
 
-void CascadingCondOp::Walk( const Stmt* stmt, WalkCounter& c )
+void CascadingCondOp::Walk(const Stmt* stmt, WalkCounter& c)
 {
-    for(Stmt::const_child_iterator it = stmt->child_begin(); it != stmt->child_end(); ++it)
+    for (Stmt::const_child_iterator it = stmt->child_begin(); it != stmt->child_end(); ++it)
     {
         ++c.stmtcount;
-        if ( dyn_cast< ConditionalOperator >( *it ))
+        if (dyn_cast<ConditionalOperator>(*it))
             c.cascading = true;
         Walk(*it, c);
     }
 }
 
-bool CascadingCondOp::VisitStmt( const Stmt* stmt )
+bool CascadingCondOp::VisitStmt(const Stmt* stmt)
 {
-    if ( const ConditionalOperator* condop = dyn_cast< ConditionalOperator >( stmt ))
+    if (const ConditionalOperator* condop = dyn_cast<ConditionalOperator>(stmt))
     {
         WalkCounter c = { 0, false };
         Walk(condop, c);
-        if(c.cascading && c.stmtcount >= stmtlimit)
+        if (c.cascading && c.stmtcount >= stmtlimit)
         {
             std::string msg("cascading conditional operator, complexity: ");
             msg.append(std::to_string(c.stmtcount));
-            report( DiagnosticsEngine::Warning, msg, condop->getLocStart());
+            report(DiagnosticsEngine::Warning, msg, condop->getLocStart());
         }
     }
     return true;
 }
 
 // Register the plugin action with the LO plugin handling.
-static Plugin::Registration< CascadingCondOp > X( "cascadingcondop" );
+static Plugin::Registration<CascadingCondOp> X("cascadingcondop");
 
 } // namespace loplugin
 

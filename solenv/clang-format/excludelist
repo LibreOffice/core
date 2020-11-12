@@ -1565,7 +1565,6 @@ compilerplugins/clang/dodgyswitch.cxx
 compilerplugins/clang/dyncastvisibility.cxx
 compilerplugins/clang/dynexcspec.cxx
 compilerplugins/clang/expandablemethods.cxx
-compilerplugins/clang/expressionalwayszero.cxx
 compilerplugins/clang/externandnotdefined.cxx
 compilerplugins/clang/faileddyncast.cxx
 compilerplugins/clang/fakebool.cxx
@@ -1620,7 +1619,6 @@ compilerplugins/clang/store/bodynotinblock.cxx
 compilerplugins/clang/store/bodynotinblock.hxx
 compilerplugins/clang/store/cascadingassignop.cxx
 compilerplugins/clang/store/cascadingassignop.hxx
-compilerplugins/clang/store/cascadingcondop.cxx
 compilerplugins/clang/store/cascadingcondop.hxx
 compilerplugins/clang/store/changefunctioncalls.cxx
 compilerplugins/clang/store/constantfunction.cxx
@@ -1647,7 +1645,6 @@ compilerplugins/clang/store/sfxitemsetrewrite.cxx
 compilerplugins/clang/store/stdexception.cxx
 compilerplugins/clang/store/stylepolice.cxx
 compilerplugins/clang/store/svstreamoutputoperators.cxx
-compilerplugins/clang/store/test/deadclass.cxx
 compilerplugins/clang/store/tutorial/tutorial1.cxx
 compilerplugins/clang/store/tutorial/tutorial1.hxx
 compilerplugins/clang/store/tutorial/tutorial1_example.cxx
@@ -1671,10 +1668,8 @@ compilerplugins/clang/test/constmethod.cxx
 compilerplugins/clang/test/constparams.cxx
 compilerplugins/clang/test/cppunitassertequals.cxx
 compilerplugins/clang/test/cppunitassertequals.hxx
-compilerplugins/clang/test/datamembershadow.cxx
 compilerplugins/clang/test/dodgyswitch.cxx
 compilerplugins/clang/test/expressionalwayszero.cxx
-compilerplugins/clang/test/external.hxx
 compilerplugins/clang/test/faileddyncast.cxx
 compilerplugins/clang/test/fakebool.cxx
 compilerplugins/clang/test/finalprotected.cxx
@@ -1683,18 +1678,15 @@ compilerplugins/clang/test/indentation.cxx
 compilerplugins/clang/test/loopvartoosmall.cxx
 compilerplugins/clang/test/namespaceindentation.cxx
 compilerplugins/clang/test/oncevar.cxx
-compilerplugins/clang/test/oslendian-1.cxx
 compilerplugins/clang/test/oslendian-2.cxx
 compilerplugins/clang/test/oslendian-3.cxx
 compilerplugins/clang/test/passparamsbyref.cxx
 compilerplugins/clang/test/passstuffbyref.cxx
 compilerplugins/clang/test/redundantcast.cxx
-compilerplugins/clang/test/redundantcast.hxx
 compilerplugins/clang/test/redundantinline.cxx
 compilerplugins/clang/test/redundantinline.hxx
 compilerplugins/clang/test/redundantpointerops.cxx
 compilerplugins/clang/test/salunicodeliteral.cxx
-compilerplugins/clang/test/stringconcatauto.cxx
 compilerplugins/clang/test/stringconstant.cxx
 compilerplugins/clang/test/unnecessarycatchthrow.cxx
 compilerplugins/clang/test/unnecessaryoverride-dtor.cxx
