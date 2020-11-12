@@ -36,9 +36,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-XmlsecurityDialogsTest::XmlsecurityDialogsTest()
-{
-}
+XmlsecurityDialogsTest::XmlsecurityDialogsTest() {}
 
 void XmlsecurityDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {

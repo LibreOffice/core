@@ -14,14 +14,14 @@
 
 #include <cppuhelper/implbase.hxx>
 
-class CipherContext : public cppu::WeakImplHelper< css::xml::crypto::XCipherContext >
+class CipherContext : public cppu::WeakImplHelper<css::xml::crypto::XCipherContext>
 {
 private:
-
 public:
     // XCipherContext
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext(const css::uno::Sequence< ::sal_Int8 >& aData) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose() override;
+    virtual css::uno::Sequence<::sal_Int8>
+        SAL_CALL convertWithCipherContext(const css::uno::Sequence<::sal_Int8>& aData) override;
+    virtual css::uno::Sequence<::sal_Int8> SAL_CALL finalizeCipherContextAndDispose() override;
 };
 
 #endif

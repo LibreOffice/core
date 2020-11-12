@@ -7,19 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 #include "DigestContext.hxx"
 
 using namespace css;
 using namespace css::uno;
 using namespace css::lang;
 
+void SAL_CALL DigestContext::updateDigest(const Sequence<sal_Int8>& /*aData*/) {}
 
-void SAL_CALL DigestContext::updateDigest(const Sequence< sal_Int8 >& /*aData*/)
-{
-}
-
-uno::Sequence< sal_Int8 > SAL_CALL DigestContext::finalizeDigestAndDispose()
+uno::Sequence<sal_Int8> SAL_CALL DigestContext::finalizeDigestAndDispose()
 {
     return Sequence<sal_Int8>();
 }

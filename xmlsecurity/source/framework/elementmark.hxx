@@ -55,14 +55,14 @@ protected:
 
 public:
     ElementMark(sal_Int32 nSecurityId, sal_Int32 nBufferId);
-    virtual ~ElementMark() {};
+    virtual ~ElementMark(){};
 
-    BufferNode* getBufferNode() const { return m_pBufferNode;}
+    BufferNode* getBufferNode() const { return m_pBufferNode; }
     void setBufferNode(const BufferNode* pBufferNode);
-    sal_Int32 getSecurityId() const { return m_nSecurityId;}
+    sal_Int32 getSecurityId() const { return m_nSecurityId; }
     void setSecurityId(sal_Int32 nSecurityId);
-    css::xml::crypto::sax::ElementMarkType getType() const { return m_type;}
-    sal_Int32 getBufferId() const { return m_nBufferId;}
+    css::xml::crypto::sax::ElementMarkType getType() const { return m_type; }
+    sal_Int32 getBufferId() const { return m_nBufferId; }
 };
 
 #endif

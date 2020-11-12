@@ -25,7 +25,10 @@
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
+namespace com::sun::star::xml::wrapper
+{
+class XXMLElementWrapper;
+}
 
 class ElementMark;
 class ElementCollector;
@@ -51,10 +54,10 @@ private:
     BufferNode* m_pParent;
 
     /* all child BufferNodes */
-    std::vector< std::unique_ptr<BufferNode> > m_vChildren;
+    std::vector<std::unique_ptr<BufferNode>> m_vChildren;
 
     /* all ElementCollector holding this BufferNode */
-    std::vector< const ElementCollector* > m_vElementCollectors;
+    std::vector<const ElementCollector*> m_vElementCollectors;
 
     /*
      * the blocker holding this BufferNode, one BufferNode can have one
@@ -69,7 +72,7 @@ private:
     bool m_bAllReceived;
 
     /* the XMLElementWrapper of the buffered element */
-    css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > m_xXMLElement;
+    css::uno::Reference<css::xml::wrapper::XXMLElementWrapper> m_xXMLElement;
 
 private:
     bool isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const;
@@ -79,34 +82,37 @@ private:
 
 public:
     explicit BufferNode(
-        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& xXMLElement);
+        const css::uno::Reference<css::xml::wrapper::XXMLElementWrapper>& xXMLElement);
 
     bool isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const;
-        void setReceivedAll();
-        bool isAllReceived() const { return m_bAllReceived;}
+    void setReceivedAll();
+    bool isAllReceived() const { return m_bAllReceived; }
     void addElementCollector(const ElementCollector* pElementCollector);
     void removeElementCollector(const ElementCollector* pElementCollector);
-    ElementMark* getBlocker() const { return m_pBlocker;}
+    ElementMark* getBlocker() const { return m_pBlocker; }
     void setBlocker(const ElementMark* pBlocker);
     OUString printChildren() const;
     bool hasAnything() const;
     bool hasChildren() const;
-    std::vector< std::unique_ptr< BufferNode> > const & getChildren() const;
-    std::vector< std::unique_ptr< BufferNode> > releaseChildren();
+    std::vector<std::unique_ptr<BufferNode>> const& getChildren() const;
+    std::vector<std::unique_ptr<BufferNode>> releaseChildren();
     const BufferNode* getFirstChild() const;
     void addChild(std::unique_ptr<BufferNode> pChild, sal_Int32 nPosition);
     void addChild(std::unique_ptr<BufferNode> pChild);
     void removeChild(const BufferNode* pChild);
     sal_Int32 indexOfChild(const BufferNode* pChild) const;
-    const BufferNode* getParent() const { return m_pParent;}
+    const BufferNode* getParent() const { return m_pParent; }
     void setParent(const BufferNode* pParent);
     const BufferNode* getNextSibling() const;
     const BufferNode* isAncestor(const BufferNode* pDescendant) const;
     bool isPrevious(const BufferNode* pFollowing) const;
     const BufferNode* getNextNodeByTreeOrder() const;
-    const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& getXMLElement() const { return m_xXMLElement;}
-    void setXMLElement(const css::uno::Reference<
-        css::xml::wrapper::XXMLElementWrapper >& xXMLElement);
+    const css::uno::Reference<css::xml::wrapper::XXMLElementWrapper>& getXMLElement() const
+    {
+        return m_xXMLElement;
+    }
+    void
+    setXMLElement(const css::uno::Reference<css::xml::wrapper::XXMLElementWrapper>& xXMLElement);
     void notifyBranch();
     void elementCollectorNotify();
 };

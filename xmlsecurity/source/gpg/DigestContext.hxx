@@ -14,12 +14,12 @@
 
 #include <cppuhelper/implbase.hxx>
 
-class DigestContext : public cppu::WeakImplHelper< css::xml::crypto::XDigestContext >
+class DigestContext : public cppu::WeakImplHelper<css::xml::crypto::XDigestContext>
 {
 public:
     // XDigestContext
-    virtual void SAL_CALL updateDigest( const css::uno::Sequence< ::sal_Int8 >& aData ) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() override;
+    virtual void SAL_CALL updateDigest(const css::uno::Sequence<::sal_Int8>& aData) override;
+    virtual css::uno::Sequence<::sal_Int8> SAL_CALL finalizeDigestAndDispose() override;
 };
 
 #endif
