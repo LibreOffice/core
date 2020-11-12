@@ -36,8 +36,7 @@ using osl::FileBase;
 
 namespace registry::tools
 {
-
-OUString convertToFileUrl(char const * filename, sal_Int32 length)
+OUString convertToFileUrl(char const* filename, sal_Int32 length)
 {
     OUString const uFileName(filename, length, osl_getThreadTextEncoding());
     if (strncmp(filename, "file://", 7) == 0)

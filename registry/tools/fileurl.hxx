@@ -24,8 +24,7 @@
 
 namespace registry::tools
 {
-
-OUString convertToFileUrl(char const * filename, sal_Int32 length);
+OUString convertToFileUrl(char const* filename, sal_Int32 length);
 
 } // namespace registry::tools
 
