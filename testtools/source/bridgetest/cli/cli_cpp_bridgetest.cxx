@@ -194,6 +194,8 @@ public __gc class BridgeTest : public WeakBase, public XMain
         check( rData1->Double == rData2->Double, "### double does not match!" );
         check( rData1->Enum == rData2->Enum, "### enum does not match!" );
         check( rData1->String == rData2->String, "### string does not match!" );
+        check( rData1->Byte2 == rData2->Byte2, "### byte2 does not match!" );
+        check( rData1->Short2 == rData2->Short2, "### short2 does not match!" );
         check( rData1->Interface == rData2->Interface, "### interface does not match!" );
         check( compareData(__box(rData1->Any), __box(rData2->Any)), "### any does not match!" );
 
@@ -210,6 +212,8 @@ public __gc class BridgeTest : public WeakBase, public XMain
                 rData1->Double == rData2->Double &&
                 rData1->Enum == rData2->Enum &&
                 rData1->String == rData2->String &&
+                rData1->Byte2 == rData2->Byte2 &&
+                rData1->Short2 == rData2->Short2 &&
                 rData1->Interface == rData2->Interface &&
                 compareData(__box(rData1->Any), __box(rData2->Any)));
     }
@@ -221,6 +225,7 @@ static void assign( TestElement* rData,
                     Int64 nHyper, UInt64 nUHyper,
                     float fFloat, double fDouble,
                     TestEnum eEnum, String* rStr,
+                    Byte nByte2, Int16 nShort2,
                     Object* xTest,
                     uno::Any rAny )
 {
@@ -237,6 +242,8 @@ static void assign( TestElement* rData,
     rData->Double = fDouble;
     rData->Enum = eEnum;
     rData->String = rStr;
+    rData->Byte2 = nByte2;
+    rData->Short2 = nShort2;
     rData->Interface = xTest;
     rData->Any = rAny;
 }
@@ -248,13 +255,14 @@ static void assign( TestDataElements* rData,
                     Int64 nHyper, UInt64 nUHyper,
                     float fFloat, double fDouble,
                     TestEnum eEnum, String* rStr,
+                    Byte nByte2, Int16 nShort2,
                     Object* xTest,
                     Any rAny,
                     TestElement* rSequence[])
 {
     assign( static_cast<TestElement*>(rData),
             bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
-            eEnum, rStr, xTest, rAny );
+            eEnum, rStr, nByte2, nShort2, xTest, rAny );
     rData->Sequence = rSequence;
 }
 
@@ -291,6 +299,8 @@ static bool performAnyTest(XBridgeTest* xLBT,  TestDataElements* data)
     bReturn = testAny( 0, __box(data->Double),xLBT ) && bReturn;
     bReturn = testAny( 0, __box(data->Enum), xLBT ) && bReturn;
     bReturn = testAny( 0, data->String,xLBT ) && bReturn;
+    bReturn = testAny( 0, data->Byte2,xLBT ) && bReturn;
+    bReturn = testAny( 0, data->Short2,xLBT ) && bReturn;
     bReturn = testAny(__typeof(XWeak), data->Interface,xLBT ) && bReturn;
     bReturn = testAny(0, data, xLBT ) && bReturn;
 
@@ -382,6 +392,7 @@ static bool performTest(XBridgeTest* xLBT)
             aData->UShort, aData->Long, aData->ULong,
             aData->Hyper, aData->UHyper, aData->Float,
             aData->Double, aData->Enum, aData->String,
+            aData->Byte2, aData->Short2,
             aData->Interface, aData->Any); //(TestElement) aData;
         aData->Sequence[1] = new TestElement(); //is empty
 
@@ -399,6 +410,8 @@ static bool performTest(XBridgeTest* xLBT)
                 aData->Long, aData->ULong, aData->Hyper, aData->UHyper, aData->Float, aData->Double,
                 aData->Enum,
                 aData->String,
+                aData->Byte2,
+                aData->Short2,
                 xI,
                 aAnySet);
 
@@ -408,6 +421,7 @@ static bool performTest(XBridgeTest* xLBT)
             aSetData->UShort, aSetData->Long, aSetData->ULong,
             aSetData->Hyper, aSetData->UHyper, aSetData->Float,
             aSetData->Double, aSetData->Enum, aSetData->String,
+            aSetData->Byte2, aSetData->Short2,
             aSetData->Interface, aSetData->Any); //TestElement) aSetData;
         aSetData->Sequence[1] = new TestElement(); // empty struct
 
@@ -425,6 +439,8 @@ static bool performTest(XBridgeTest* xLBT)
                 aSetData->Double,
                 aSetData->Enum,
                 aSetData->String,
+                aSetData->Byte2,
+                aSetData->Short2,
                 aSetData->Interface,
                 aSetData->Any,
                 aSetData->Sequence,
@@ -447,6 +463,8 @@ static bool performTest(XBridgeTest* xLBT)
             & aRet->Double,
             & aRet->Enum,
             & aRet->String,
+            & aRet->Byte2,
+            & aRet->Short2,
             & aRet->Interface,
             & aRet->Any,
             & aRet->Sequence,
@@ -469,6 +487,8 @@ static bool performTest(XBridgeTest* xLBT)
             & aRet->Double,
             & aRet->Enum,
             & aRet->String,
+            & aRet->Byte2,
+            & aRet->Short2,
             & aRet->Interface,
             & aRet->Any,
             & aRet->Sequence,
@@ -501,6 +521,8 @@ static bool performTest(XBridgeTest* xLBT)
             & aRet->Double,
             & aRet->Enum,
             & aRet->String,
+            & aRet->Byte2,
+            & aRet->Short2,
             & aRet->Interface,
             & aRet->Any,
             & aRet->Sequence,
@@ -522,6 +544,8 @@ static bool performTest(XBridgeTest* xLBT)
         xLBT->Double = aRet->Double;
         xLBT->Enum = aRet->Enum;
         xLBT->String = aRet->String;
+        xLBT->Byte2 = aRet->Byte2;
+        xLBT->Short2 = aRet->Short2;
         xLBT->Interface = aRet->Interface;
         xLBT->Any = aRet->Any;
         xLBT->Sequence = aRet->Sequence;
@@ -543,6 +567,8 @@ static bool performTest(XBridgeTest* xLBT)
         aRet->ULong = xLBT->ULong;
         aRet->Enum = xLBT->Enum;
         aRet->String = xLBT->String;
+        aRet->Byte2 = xLBT->Byte2;
+        aRet->Short2 = xLBT->Short2;
         aRet->Interface = xLBT->Interface;
         aRet->Any = xLBT->Any;
         aRet->Sequence = xLBT->Sequence;
@@ -629,15 +655,15 @@ static bool performSequenceTest(XBridgeTest* xBT)
     arStruct[2] = new TestElement();
     assign( arStruct[0], true, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
              0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
-            TestEnum::LOLA, Constants::STRING_TEST_CONSTANT, arObject[0],
+            TestEnum::LOLA, Constants::STRING_TEST_CONSTANT, 18, 0x5678, arObject[0],
             Any( __typeof(Object),  arObject[0]) );
     assign( arStruct[1], true, 'A', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
             0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
-            TestEnum::TWO, Constants::STRING_TEST_CONSTANT, arObject[1],
+            TestEnum::TWO, Constants::STRING_TEST_CONSTANT, 18, 0x5678, arObject[1],
             Any( __typeof(Object), arObject[1]) );
     assign( arStruct[2], true, 'B', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
             0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
-            TestEnum::CHECK, Constants::STRING_TEST_CONSTANT, arObject[2],
+            TestEnum::CHECK, Constants::STRING_TEST_CONSTANT, 18, 0x5678, arObject[2],
             Any( __typeof(Object), arObject[2] ) );
     {
     Any seqAnyRet[] = xBT2->setSequenceAny(arAny);
