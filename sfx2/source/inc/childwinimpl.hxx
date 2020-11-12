@@ -29,19 +29,19 @@ class SfxFrame;
 
 class SfxChildWinContextArr_Impl
 {
-    typedef std::vector<std::unique_ptr<SfxChildWinContextFactory> > DataType;
+    typedef std::vector<std::unique_ptr<SfxChildWinContextFactory>> DataType;
     DataType maData;
 
 public:
     size_t size() const;
-    const SfxChildWinContextFactory& operator []( size_t i ) const;
-    SfxChildWinContextFactory& operator []( size_t i );
-    void push_back( std::unique_ptr<SfxChildWinContextFactory> p );
+    const SfxChildWinContextFactory& operator[](size_t i) const;
+    SfxChildWinContextFactory& operator[](size_t i);
+    void push_back(std::unique_ptr<SfxChildWinContextFactory> p);
 };
 
 class SfxChildWinFactArr_Impl
 {
-    typedef std::vector<std::unique_ptr<SfxChildWinFactory> > DataType;
+    typedef std::vector<std::unique_ptr<SfxChildWinFactory>> DataType;
     DataType maData;
 
 public:
@@ -49,15 +49,14 @@ public:
     typedef DataType::const_iterator const_iterator;
 
     size_t size() const;
-    const SfxChildWinFactory& operator []( size_t i ) const;
-    SfxChildWinFactory& operator []( size_t i );
-    void push_back( std::unique_ptr<SfxChildWinFactory> p );
-    void erase( const iterator& it );
+    const SfxChildWinFactory& operator[](size_t i) const;
+    SfxChildWinFactory& operator[](size_t i);
+    void push_back(std::unique_ptr<SfxChildWinFactory> p);
+    void erase(const iterator& it);
 
     iterator begin();
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

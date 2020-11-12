@@ -34,20 +34,18 @@ enum class FILTER_CATEGORY
 class ViewFilter_Category final
 {
 public:
-
-    ViewFilter_Category (FILTER_CATEGORY rCategory)
+    ViewFilter_Category(FILTER_CATEGORY rCategory)
         : mCategory(rCategory)
-    {}
+    {
+    }
 
-    bool operator () (const ThumbnailViewItem *pItem);
+    bool operator()(const ThumbnailViewItem* pItem);
 
-    static bool isFilteredCategory(FILTER_CATEGORY filter, const OUString &rCategory);
+    static bool isFilteredCategory(FILTER_CATEGORY filter, const OUString& rCategory);
 
 private:
-
     FILTER_CATEGORY mCategory;
 };
-
 
 class EmojiView final : public ThumbnailView
 {
@@ -59,16 +57,16 @@ public:
     // Fill view with emojis
     void Populate();
 
-    void setInsertEmojiHdl (const Link<ThumbnailViewItem*, void> &rLink);
+    void setInsertEmojiHdl(const Link<ThumbnailViewItem*, void>& rLink);
 
-    void AppendItem(const OUString &rTitle, const OUString &rCategory, const OUString &rName );
+    void AppendItem(const OUString& rTitle, const OUString& rCategory, const OUString& rName);
 
 private:
-    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
 
     std::string msJSONData;
 

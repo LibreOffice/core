@@ -29,7 +29,7 @@ class SfxStack
     static unsigned nLevel;
 
 public:
-    SfxStack( const char *pName )
+    SfxStack(const char* pName)
     {
         ++nLevel;
         SAL_INFO("sfx.control", "STACK: enter " << nLevel << " " << pName);
@@ -41,13 +41,11 @@ public:
     }
 };
 
-#define SFX_STACK(s) SfxStack aSfxStack_( #s )
+#define SFX_STACK(s) SfxStack aSfxStack_(#s)
 #else
 #define SFX_STACK(s)
 #endif
 
-
 #endif // INCLUDED_SFX2_SOURCE_INC_SFXTYPES_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

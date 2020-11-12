@@ -42,9 +42,9 @@ struct SfxViewShell_Impl
     bool m_bHasPrintOptions;
     sal_uInt16 m_nFamily;
     ::rtl::Reference<SfxBaseController> m_pController;
-    std::unique_ptr< ::svt::AcceleratorExecute > m_xAccExec;
-    ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
-    std::shared_ptr< vcl::PrinterController > m_xPrinterController;
+    std::unique_ptr<::svt::AcceleratorExecute> m_xAccExec;
+    ::rtl::Reference<SfxClipboardChangeListener> xClipboardListener;
+    std::shared_ptr<vcl::PrinterController> m_xPrinterController;
 
     mutable std::unique_ptr<std::vector<SfxInPlaceClient*>> mpIPClients;
 
@@ -59,7 +59,7 @@ struct SfxViewShell_Impl
     explicit SfxViewShell_Impl(SfxViewShellFlags const nFlags, ViewShellDocId nDocId);
     ~SfxViewShell_Impl();
 
-    std::vector< SfxInPlaceClient* >* GetIPClients_Impl(bool bCreate = true) const;
+    std::vector<SfxInPlaceClient*>* GetIPClients_Impl(bool bCreate = true) const;
 };
 
 #endif
