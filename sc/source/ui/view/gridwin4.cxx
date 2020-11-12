@@ -709,6 +709,20 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         aDrawingRectLogic = PixelToLogic(aDrawingRectPixel, aDrawMode);
     }
 
+    bool bInPlaceEditing = bEditMode && (mrViewData.GetRefTabNo() == mrViewData.GetTabNo());
+    vcl::Cursor* pInPlaceCrsr = nullptr;
+    bool bInPlaceVisCursor = false;
+    if (bInPlaceEditing)
+    {
+        // toggle the cursor off if its on to ensure the cursor invert
+        // background logic remains valid after the background is cleared on
+        // the next cursor flash
+        pInPlaceCrsr = pEditView->GetCursor();
+        bInPlaceVisCursor = pInPlaceCrsr && pInPlaceCrsr->IsVisible();
+        if (bInPlaceVisCursor)
+            pInPlaceCrsr->Hide();
+    }
+
     OutputDevice* pContentDev = &rDevice;   // device for document content, used by overlay manager
     SdrPaintWindow* pTargetPaintWindow = nullptr; // #i74769# work with SdrPaintWindow directly
 
@@ -1074,7 +1088,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     // using the editeng.
     // It's being done after EndDrawLayers() to get it outside the overlay
     // buffer and on top of everything.
-    if ( bEditMode && (mrViewData.GetRefTabNo() == mrViewData.GetTabNo()) )
+    if (bInPlaceEditing)
     {
         // get the coordinates of the area we need to clear (overpaint by
         // the background)
@@ -1091,14 +1105,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
         aEnd.AdjustX( -(2 * nLayoutSign) );
         aEnd.AdjustY( -2 );
-
-        // toggle the cursor off if its on to ensure the cursor invert
-        // background logic remains valid after the background is cleared on
-        // the next cursor flash
-        vcl::Cursor* pCrsr = pEditView->GetCursor();
-        const bool bVisCursor = pCrsr && pCrsr->IsVisible();
-        if (bVisCursor)
-            pCrsr->Hide();
 
         // set the correct mapmode
         tools::Rectangle aBackground(aStart, aEnd);
@@ -1199,8 +1205,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
 
         // restore the cursor it was originally visible
-        if (bVisCursor)
-            pCrsr->Show();
+        if (bInPlaceVisCursor)
+            pInPlaceCrsr->Show();
     }
 
     if (mrViewData.HasEditView(eWhich))
