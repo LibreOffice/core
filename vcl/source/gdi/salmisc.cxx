@@ -41,23 +41,13 @@ while( ( nActY < nHeight1 ) && ( pMapY[ nActY + 1 ] == nMapY ) )                
     nActY++;                                                                    \
 }
 
-#define TC_TO_PAL_COLORS    4096
+constexpr int TC_TO_PAL_COLORS = 4096;
 
 static tools::Long ImplIndexFromColor( const BitmapColor& rCol )
 {
-#if TC_TO_PAL_COLORS == 4096
-
-    return( ( ( static_cast<tools::Long>(rCol.GetBlue()) >> 4) << 8 ) |
+    return  ( ( static_cast<tools::Long>(rCol.GetBlue()) >> 4) << 8 ) |
             ( ( static_cast<tools::Long>(rCol.GetGreen()) >> 4 ) << 4 ) |
-            ( static_cast<tools::Long>(rCol.GetRed()) >> 4 ) );
-
-#elif TC_TO_PAL_COLORS == 32768
-
-    return( ( ( (tools::Long) rCol.GetBlue() >> 3) << 10 ) |
-            ( ( (tools::Long) rCol.GetGreen() >> 3 ) << 5 ) |
-            ( (tools::Long) rCol.GetRed() >> 3 ) );
-
-#endif
+            ( static_cast<tools::Long>(rCol.GetRed()) >> 4 );
 }
 
 static void ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
