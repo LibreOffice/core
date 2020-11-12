@@ -766,7 +766,7 @@ private:
         {
             double fTemp = std::abs((nOffset + i) * fReverseScale);
 
-            pMap[i] = MinMax(nDstLocation + tools::Long(fTemp), 0, nSampleRange);
+            pMap[i] = std::clamp(nDstLocation + tools::Long(fTemp), tools::Long(0), nSampleRange);
             pMapOffset[i] = static_cast<tools::Long>((fTemp - pMap[i]) * 128.0);
         }
     }

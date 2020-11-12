@@ -16,53 +16,6 @@
 #include <cassert>
 #include <type_traits>
 
-template<typename T>
-inline
-typename std::enable_if<
-             std::is_signed<T>::value || std::is_floating_point<T>::value, long >::type
-MinMax(T nVal, tools::Long nMin, tools::Long nMax)
-{
-    assert(nMin <= nMax);
-    if (nVal >= nMin)
-    {
-        if (nVal <= nMax)
-            return static_cast<tools::Long>(nVal);
-        else
-           return nMax;
-    }
-    else
-    {
-        return nMin;
-    }
-}
-
-template<typename T>
-inline
-typename std::enable_if<
-             std::is_unsigned<T>::value, long >::type
-MinMax(T nVal, tools::Long nMin, tools::Long nMax)
-{
-    assert(nMin <= nMax);
-    if (nMax < 0)
-    {
-        return nMax;
-    }
-    else
-    {
-        if (nMin < 0 || nVal >= static_cast<unsigned long>(nMin))
-        {
-            if (nVal <= static_cast<unsigned long>(nMax))
-                return static_cast<tools::Long>(nVal);
-            else
-                return nMax;
-        }
-        else
-        {
-            return nMin;
-        }
-    }
-}
-
 inline sal_uInt32 AlignedWidth4Bytes(sal_uInt32 nWidthBits)
 {
     if (nWidthBits > SAL_MAX_UINT32 - 31)
