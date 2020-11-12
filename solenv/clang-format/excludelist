@@ -7502,7 +7502,6 @@ lingucomponent/source/languageguessing/guess.cxx
 lingucomponent/source/languageguessing/guess.hxx
 lingucomponent/source/languageguessing/guesslang.cxx
 lingucomponent/source/languageguessing/simpleguesser.cxx
-lingucomponent/source/languageguessing/simpleguesser.hxx
 lingucomponent/source/lingutil/lingutil.cxx
 lingucomponent/source/lingutil/lingutil.hxx
 lingucomponent/source/spellcheck/macosxspell/macspellimp.hxx

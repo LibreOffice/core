@@ -29,7 +29,8 @@
 
 using namespace std;
 
-class SimpleGuesser final {
+class SimpleGuesser final
+{
 public:
     /**inits the object with conf file "./conf.txt"*/
     SimpleGuesser();
@@ -96,7 +97,6 @@ public:
     void SetDBPath(const char* thePathOfConfFile, const char* prefix);
 
 private:
-
     //Where typical fingerprints (n-gram tables) are stored
     void* h;
 
