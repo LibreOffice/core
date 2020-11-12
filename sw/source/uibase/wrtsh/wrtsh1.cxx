@@ -337,13 +337,13 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         if( aGrfSize.Width() > aBound.Width() )
         {
             aGrfSize.setWidth( aBound.Width() );
-            aGrfSize.setHeight( sal_Int32(BigInt(aBound.Width()) * aTempHeight / aTempWidth) );
+            aGrfSize.setHeight( BigInt(aBound.Width()) * aTempHeight / aTempWidth );
         }
         // Fit height if necessary, scale down the width proportional thereafter.
         if( aGrfSize.Height() > aBound.Height() )
         {
             aGrfSize.setHeight( aBound.Height() );
-            aGrfSize.setWidth(  sal_Int32(BigInt(aBound.Height()) * aTempWidth / aTempHeight) );
+            aGrfSize.setWidth(  BigInt(aBound.Height()) * aTempWidth / aTempHeight );
         }
         pFrameMgr->SetSize( aGrfSize );
         pFrameMgr->UpdateFlyFrame();

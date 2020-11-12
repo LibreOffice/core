@@ -42,7 +42,7 @@ inline tools::Long Scale( tools::Long nVal, tools::Long nMult, tools::Long nDiv 
     aVal *= nMult;
     aVal += nDiv/2;
     aVal /= nDiv;
-    return static_cast<sal_Int32>(aVal);
+    return aVal;
 }
 
 #endif
