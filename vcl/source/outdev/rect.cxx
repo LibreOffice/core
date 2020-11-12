@@ -131,7 +131,7 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect,
 
         if ( aRoundRectPoly.GetSize() >= 2 )
         {
-            SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aRoundRectPoly.GetPointAry());
+            Point* pPtAry = reinterpret_cast<Point*>(aRoundRectPoly.GetPointAry());
 
             if ( !mbFillColor )
                 mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, this );
@@ -202,7 +202,7 @@ void OutputDevice::Invert( const tools::Polygon& rPoly, InvertFlags nFlags )
         nSalFlags |= SalInvert::N50;
     if ( nFlags & InvertFlags::TrackFrame )
         nSalFlags |= SalInvert::TrackFrame;
-    const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
+    const Point* pPtAry = reinterpret_cast<const Point*>(aPoly.GetConstPointAry());
     mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
 }
 

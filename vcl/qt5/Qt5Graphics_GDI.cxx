@@ -216,7 +216,7 @@ void Qt5Graphics::drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth, t
     aPainter.update(nX, nY, nWidth, nHeight);
 }
 
-void Qt5Graphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
+void Qt5Graphics::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
 {
     if (0 == nPoints)
         return;
@@ -242,7 +242,7 @@ void Qt5Graphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
     aPainter.update(QRect(aTopLeft, aBottomRight));
 }
 
-void Qt5Graphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
+void Qt5Graphics::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
 {
     Qt5Painter aPainter(*this, true);
     QPolygon aPolygon(nPoints);
@@ -253,7 +253,7 @@ void Qt5Graphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
 }
 
 void Qt5Graphics::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt32* pPoints,
-                                  PCONSTSALPOINT* ppPtAry)
+                                  const Point** ppPtAry)
 {
     // ignore invisible polygons
     if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
@@ -265,7 +265,7 @@ void Qt5Graphics::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt32* pPoin
         const sal_uInt32 nPoints = pPoints[nPoly];
         if (nPoints > 1)
         {
-            const SalPoint* pPtAry = ppPtAry[nPoly];
+            const Point* pPtAry = ppPtAry[nPoly];
             aPath.moveTo(pPtAry->mnX, pPtAry->mnY);
             pPtAry++;
             for (sal_uInt32 nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++)
@@ -303,20 +303,20 @@ bool Qt5Graphics::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
     return true;
 }
 
-bool Qt5Graphics::drawPolyLineBezier(sal_uInt32 /*nPoints*/, const SalPoint* /*pPtAry*/,
+bool Qt5Graphics::drawPolyLineBezier(sal_uInt32 /*nPoints*/, const Point* /*pPtAry*/,
                                      const PolyFlags* /*pFlgAry*/)
 {
     return false;
 }
 
-bool Qt5Graphics::drawPolygonBezier(sal_uInt32 /*nPoints*/, const SalPoint* /*pPtAry*/,
+bool Qt5Graphics::drawPolygonBezier(sal_uInt32 /*nPoints*/, const Point* /*pPtAry*/,
                                     const PolyFlags* /*pFlgAry*/)
 {
     return false;
 }
 
 bool Qt5Graphics::drawPolyPolygonBezier(sal_uInt32 /*nPoly*/, const sal_uInt32* /*pPoints*/,
-                                        const SalPoint* const* /*pPtAry*/,
+                                        const Point* const* /*pPtAry*/,
                                         const PolyFlags* const* /*pFlgAry*/)
 {
     return false;
@@ -547,9 +547,7 @@ void Qt5Graphics::invert(tools::Long nX, tools::Long nY, tools::Long nWidth, too
     aPainter.update(nX, nY, nWidth, nHeight);
 }
 
-void Qt5Graphics::invert(sal_uInt32 /*nPoints*/, const SalPoint* /*pPtAry*/, SalInvert /*nFlags*/)
-{
-}
+void Qt5Graphics::invert(sal_uInt32 /*nPoints*/, const Point* /*pPtAry*/, SalInvert /*nFlags*/) {}
 
 bool Qt5Graphics::drawEPS(tools::Long /*nX*/, tools::Long /*nY*/, tools::Long /*nWidth*/,
                           tools::Long /*nHeight*/, void* /*pPtr*/, sal_uInt32 /*nSize*/)

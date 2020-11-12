@@ -1082,7 +1082,7 @@ void SvpSalGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nWidt
     m_aLineColor = aOrigLineColor;
 }
 
-void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
+void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry)
 {
     basegfx::B2DPolygon aPoly;
     aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
@@ -1102,7 +1102,7 @@ void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
         false);
 }
 
-void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
+void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const Point* pPtAry)
 {
     basegfx::B2DPolygon aPoly;
     aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
@@ -1117,7 +1117,7 @@ void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
 
 void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
                                      const sal_uInt32* pPointCounts,
-                                     PCONSTSALPOINT*   pPtAry)
+                                     const Point**   pPtAry)
 {
     basegfx::B2DPolyPolygon aPolyPoly;
     for(sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
@@ -1125,7 +1125,7 @@ void SvpSalGraphics::drawPolyPolygon(sal_uInt32 nPoly,
         sal_uInt32 nPoints = pPointCounts[nPolygon];
         if (nPoints)
         {
-            PCONSTSALPOINT pPoints = pPtAry[nPolygon];
+            const Point* pPoints = pPtAry[nPolygon];
             basegfx::B2DPolygon aPoly;
             aPoly.append( basegfx::B2DPoint(pPoints->mnX, pPoints->mnY), nPoints);
             for (sal_uInt32 i = 1; i < nPoints; ++i)
@@ -1772,7 +1772,7 @@ bool SvpSalGraphics::drawPolyLine(
 }
 
 bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
-                                         const SalPoint*,
+                                         const Point*,
                                          const PolyFlags* )
 {
     SAL_INFO("vcl.gdi", "unsupported SvpSalGraphics::drawPolyLineBezier case");
@@ -1780,7 +1780,7 @@ bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
 }
 
 bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
-                                        const SalPoint*,
+                                        const Point*,
                                         const PolyFlags* )
 {
     SAL_INFO("vcl.gdi", "unsupported SvpSalGraphics::drawPolygonBezier case");
@@ -1789,7 +1789,7 @@ bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
 
 bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
                                             const sal_uInt32*,
-                                            const SalPoint* const*,
+                                            const Point* const*,
                                             const PolyFlags* const* )
 {
     SAL_INFO("vcl.gdi", "unsupported SvpSalGraphics::drawPolyPolygonBezier case");
@@ -2413,7 +2413,7 @@ void SvpSalGraphics::invert( tools::Long nX, tools::Long nY, tools::Long nWidth,
     invert(aRect, nFlags);
 }
 
-void SvpSalGraphics::invert(sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags)
+void SvpSalGraphics::invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags)
 {
     basegfx::B2DPolygon aPoly;
     aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);

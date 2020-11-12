@@ -228,16 +228,16 @@ public:
     virtual void            drawPixel( long nX, long nY, Color nColor ) override;
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
-    virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
-    virtual void            drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) override;
+    virtual void            drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
+    virtual void            drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
+    virtual void            drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry ) override;
     virtual bool            drawPolyPolygon(
                                 const basegfx::B2DHomMatrix& rObjectToDevice,
                                 const basegfx::B2DPolyPolygon&,
                                 double fTransparency) override;
-    virtual bool            drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry ) override;
-    virtual bool            drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry ) override;
-    virtual bool            drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const PolyFlags* const* pFlgAry ) override;
+    virtual bool            drawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry ) override;
+    virtual bool            drawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry ) override;
+    virtual bool            drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point* const* pPtAry, const PolyFlags* const* pFlgAry ) override;
     virtual bool            drawPolyLine(
                                 const basegfx::B2DHomMatrix& rObjectToDevice,
                                 const basegfx::B2DPolygon&,
@@ -270,7 +270,7 @@ public:
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) override;
-    virtual void            invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) override;
+    virtual void            invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) override;
 
     virtual bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uInt32 nSize ) override;
 
