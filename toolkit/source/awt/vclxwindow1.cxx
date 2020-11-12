@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <vcl/wrkwin.hxx>
@@ -26,7 +25,7 @@
 #ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
-#elif defined ( MACOSX )
+#elif defined(MACOSX)
 #include <premac.h>
 #include <Cocoa/Cocoa.h>
 #include <postmac.h>
@@ -34,11 +33,11 @@
 #include <vcl/sysdata.hxx>
 
 /// helper method to set a window handle into a SystemParentData struct
-void VCLXWindow::SetSystemParent_Impl( const css::uno::Any& rHandle )
+void VCLXWindow::SetSystemParent_Impl(const css::uno::Any& rHandle)
 {
     // does only work for WorkWindows
     VclPtr<vcl::Window> pWindow = GetWindow();
-    if ( pWindow->GetType() != WindowType::WORKWINDOW )
+    if (pWindow->GetType() != WindowType::WORKWINDOW)
     {
         css::uno::RuntimeException aException;
         aException.Message = "not a work window";
@@ -48,25 +47,25 @@ void VCLXWindow::SetSystemParent_Impl( const css::uno::Any& rHandle )
     // use sal_Int64 here to accommodate all int types
     // uno::Any shift operator whill upcast if necessary
     sal_Int64 nHandle = 0;
-    bool  bXEmbed = false;
+    bool bXEmbed = false;
     bool bThrow = false;
-    if( ! (rHandle >>= nHandle) )
+    if (!(rHandle >>= nHandle))
     {
-        css::uno::Sequence< css::beans::NamedValue > aProps;
-        if( rHandle >>= aProps )
+        css::uno::Sequence<css::beans::NamedValue> aProps;
+        if (rHandle >>= aProps)
         {
-            for( const css::beans::NamedValue& rProp : std::as_const(aProps) )
+            for (const css::beans::NamedValue& rProp : std::as_const(aProps))
             {
-                if ( rProp.Name == "WINDOW" )
+                if (rProp.Name == "WINDOW")
                     rProp.Value >>= nHandle;
-                else if ( rProp.Name == "XEMBED" )
+                else if (rProp.Name == "XEMBED")
                     rProp.Value >>= bXEmbed;
             }
         }
         else
             bThrow = true;
     }
-    if( bThrow )
+    if (bThrow)
     {
         css::uno::RuntimeException aException;
         aException.Message = "incorrect window handle type";
@@ -74,22 +73,22 @@ void VCLXWindow::SetSystemParent_Impl( const css::uno::Any& rHandle )
     }
     // create system parent data
     SystemParentData aSysParentData;
-    aSysParentData.nSize = sizeof ( SystemParentData );
+    aSysParentData.nSize = sizeof(SystemParentData);
 #if defined(_WIN32)
     aSysParentData.hWnd = reinterpret_cast<HWND>(nHandle);
-#elif defined( MACOSX )
+#elif defined(MACOSX)
     aSysParentData.pView = reinterpret_cast<NSView*>(nHandle);
-#elif defined( ANDROID )
+#elif defined(ANDROID)
     // Nothing
-#elif defined( IOS )
+#elif defined(IOS)
     // Nothing
-#elif defined( UNX )
+#elif defined(UNX)
     aSysParentData.aWindow = nHandle;
     aSysParentData.bXEmbedSupport = bXEmbed;
 #endif
 
     // set system parent
-    static_cast<WorkWindow*>(pWindow.get())->SetPluginParent( &aSysParentData );
+    static_cast<WorkWindow*>(pWindow.get())->SetPluginParent(&aSysParentData);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

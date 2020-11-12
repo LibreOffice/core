@@ -32,21 +32,22 @@ using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::graphic::XGraphicProvider;
 using namespace ::com::sun::star;
 
-Image TkResMgr::getImageFromURL( const OUString& i_rImageURL )
+Image TkResMgr::getImageFromURL(const OUString& i_rImageURL)
 {
-    if ( i_rImageURL.isEmpty() )
+    if (i_rImageURL.isEmpty())
         return Image();
 
     try
     {
-        Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-        Reference< XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
+        Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+        Reference<XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
         ::comphelper::NamedValueCollection aMediaProperties;
-        aMediaProperties.put( "URL", i_rImageURL );
-        Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
-        return Image( xGraphic );
+        aMediaProperties.put("URL", i_rImageURL);
+        Reference<XGraphic> xGraphic
+            = xProvider->queryGraphic(aMediaProperties.getPropertyValues());
+        return Image(xGraphic);
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("toolkit");
     }

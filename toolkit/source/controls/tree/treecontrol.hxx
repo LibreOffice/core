@@ -22,31 +22,32 @@
 
 #include <toolkit/controls/unocontrolmodel.hxx>
 
-namespace toolkit {
-
-
+namespace toolkit
+{
 // = UnoTreeModel
 
 class UnoTreeModel : public UnoControlModel
 {
 protected:
-    css::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    css::uno::Any ImplGetDefaultValue(sal_uInt16 nPropId) const override;
+    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
 public:
-    explicit UnoTreeModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
+    explicit UnoTreeModel(const css::uno::Reference<css::uno::XComponentContext>& i_factory);
 
     rtl::Reference<UnoControlModel> Clone() const override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
-    { return "stardiv.Toolkit.TreeControlModel"; }
+    {
+        return "stardiv.Toolkit.TreeControlModel";
+    }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {

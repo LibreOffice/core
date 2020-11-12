@@ -26,9 +26,8 @@ class Image;
 
 namespace TkResMgr
 {
-    Image getImageFromURL( const OUString& i_rImageURL );
+Image getImageFromURL(const OUString& i_rImageURL);
 };
-
 
 #endif // INCLUDED_TOOLKIT_INC_HELPER_TKRESMGR_HXX
 
