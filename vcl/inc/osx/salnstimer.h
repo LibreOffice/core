@@ -27,7 +27,7 @@
 @interface TimerCallbackCaller : NSObject
 {
 }
--(void)timerElapsed:(NSTimer*)pTimer;
+- (void)timerElapsed:(NSTimer*)pTimer;
 @end
 
 #endif // INCLUDED_VCL_INC_OSX_SALNSTIMER_H

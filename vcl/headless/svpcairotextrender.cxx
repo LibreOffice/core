@@ -16,10 +16,7 @@ SvpCairoTextRender::SvpCairoTextRender(SvpSalGraphics& rParent)
 {
 }
 
-cairo_t* SvpCairoTextRender::getCairoContext()
-{
-    return mrParent.getCairoContext(false);
-}
+cairo_t* SvpCairoTextRender::getCairoContext() { return mrParent.getCairoContext(false); }
 
 void SvpCairoTextRender::getSurfaceOffset(double& nDX, double& nDY)
 {
@@ -27,10 +24,7 @@ void SvpCairoTextRender::getSurfaceOffset(double& nDX, double& nDY)
     nDY = 0;
 }
 
-void SvpCairoTextRender::clipRegion(cairo_t* cr)
-{
-    mrParent.clipRegion(cr);
-}
+void SvpCairoTextRender::clipRegion(cairo_t* cr) { mrParent.clipRegion(cr); }
 
 void SvpCairoTextRender::releaseCairoContext(cairo_t* cr)
 {

@@ -23,12 +23,14 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <atk/atk.h>
 
-AtkObject * ooo_wrapper_registry_get(const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible);
+AtkObject*
+ooo_wrapper_registry_get(const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible);
 
-void ooo_wrapper_registry_add(const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible, AtkObject *obj);
+void ooo_wrapper_registry_add(
+    const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible, AtkObject* obj);
 
 void ooo_wrapper_registry_remove(
-    css::uno::Reference<css::accessibility::XAccessible> const & pAccessible);
+    css::uno::Reference<css::accessibility::XAccessible> const& pAccessible);
 
 #endif // __ATK_REGISTRY_HXX_
 

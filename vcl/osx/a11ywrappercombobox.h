@@ -25,18 +25,19 @@
 
 @interface AquaA11yWrapperComboBox : AquaA11yWrapper
 {
-    AquaA11yWrapper * textArea;
+    AquaA11yWrapper* textArea;
 }
--(id)initWithAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) anAccessibleContext;
--(id)valueAttribute;
--(id)numberOfCharactersAttribute;
--(id)selectedTextAttribute;
--(id)selectedTextRangeAttribute;
--(id)visibleCharacterRangeAttribute;
+- (id)initWithAccessibleContext:
+    (css::uno::Reference<css::accessibility::XAccessibleContext>)anAccessibleContext;
+- (id)valueAttribute;
+- (id)numberOfCharactersAttribute;
+- (id)selectedTextAttribute;
+- (id)selectedTextRangeAttribute;
+- (id)visibleCharacterRangeAttribute;
 // Accessibility Protocol
--(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
--(void)accessibilitySetValue:(id)value forAttribute:(NSString *)attribute;
--(NSArray *)accessibilityAttributeNames;
+- (BOOL)accessibilityIsAttributeSettable:(NSString*)attribute;
+- (void)accessibilitySetValue:(id)value forAttribute:(NSString*)attribute;
+- (NSArray*)accessibilityAttributeNames;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YWRAPPERCOMBOBOX_H

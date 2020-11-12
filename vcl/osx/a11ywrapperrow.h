@@ -25,8 +25,8 @@
 @interface AquaA11yWrapperRow : AquaA11yWrapper
 {
 }
--(id)disclosingAttribute;
--(NSArray *)accessibilityAttributeNames;
+- (id)disclosingAttribute;
+- (NSArray*)accessibilityAttributeNames;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YWRAPPERROW_H

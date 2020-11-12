@@ -23,7 +23,7 @@ public:
     static bool check(Bitmap& rBitmap);
 
 private:
-    static bool checkImpl(BitmapReadAccess const * pReadAccess);
+    static bool checkImpl(BitmapReadAccess const* pReadAccess);
 };
 
 #endif // INCLUDED_VCL_INC_BITMAPSYMMETRYCHECK_HXX

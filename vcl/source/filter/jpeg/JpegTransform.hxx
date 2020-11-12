@@ -24,12 +24,11 @@
 
 class JpegTransform final
 {
-    Degree10   maRotate;
-    SvStream&  mrInputStream;
-    SvStream&  mrOutputStream;
+    Degree10 maRotate;
+    SvStream& mrInputStream;
+    SvStream& mrOutputStream;
 
 public:
-
     JpegTransform(SvStream& rInputStream, SvStream& rOutputStream);
     ~JpegTransform();
 

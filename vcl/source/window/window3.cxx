@@ -24,16 +24,13 @@
 
 WaitObject::~WaitObject()
 {
-    if ( mpWindow )
+    if (mpWindow)
         mpWindow->LeaveWait();
 }
 
-namespace vcl {
-
-Size Window::GetOptimalSize() const
+namespace vcl
 {
-    return Size();
-}
+Size Window::GetOptimalSize() const { return Size(); }
 
 void Window::ImplAdjustNWFSizes()
 {

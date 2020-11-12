@@ -33,7 +33,6 @@ public:
 private:
     double mrScaleX;
     double mrScaleY;
-
 };
 
 #endif

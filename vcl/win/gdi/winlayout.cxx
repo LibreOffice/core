@@ -54,9 +54,9 @@
 #include <shlwapi.h>
 #include <winver.h>
 
-GlobalWinGlyphCache * GlobalWinGlyphCache::get()
+GlobalWinGlyphCache* GlobalWinGlyphCache::get()
 {
-    SalData *data = GetSalData();
+    SalData* data = GetSalData();
     if (!data->m_pGlobalWinGlyphCache)
     {
         if (OpenGLHelper::isVCLOpenGLEnabled())
@@ -85,10 +85,11 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
         return false;
     }
     const ::comphelper::ScopeGuard aHFONTrestoreScopeGuard(
-        [&aHDC,hOrigFont]() { SelectFont(aHDC.get(), hOrigFont); });
+        [&aHDC, hOrigFont]() { SelectFont(aHDC.get(), hOrigFont); });
 
     // For now we assume DWrite is present and we won't bother with fallback paths.
-    D2DWriteTextOutRenderer * pTxt = dynamic_cast<D2DWriteTextOutRenderer *>(&TextOutRenderer::get(true));
+    D2DWriteTextOutRenderer* pTxt
+        = dynamic_cast<D2DWriteTextOutRenderer*>(&TextOutRenderer::get(true));
     if (!pTxt)
         return false;
 
@@ -96,7 +97,8 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
 
     if (!pTxt->BindFont(aHDC.get()))
     {
-        SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by DirectWrite.");
+        SAL_WARN("vcl.gdi",
+                 "Binding of font failed. The font might not be supported by DirectWrite.");
         return false;
     }
     const ::comphelper::ScopeGuard aFontReleaseScopeGuard([&pTxt]() { pTxt->ReleaseFont(); });
@@ -109,7 +111,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
     if (aInkBoxes.empty())
         return false;
 
-    for (auto &box : aInkBoxes)
+    for (auto& box : aInkBoxes)
         bounds.Union(box + Point(bounds.Right(), 0));
 
     // bounds.Top() is the offset from the baseline at (0,0) to the top of the
@@ -122,8 +124,8 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
     // individual rectangles for each glyph. The ABC widths don't
     // take anti-aliasing into consideration. Let's hope that leaving
     // "extra" space between glyphs will help.
-    std::vector<float> aGlyphAdv(1);   // offsets between glyphs
-    std::vector<DWRITE_GLYPH_OFFSET> aGlyphOffset(1, {0.0f, 0.0f});
+    std::vector<float> aGlyphAdv(1); // offsets between glyphs
+    std::vector<DWRITE_GLYPH_OFFSET> aGlyphOffset(1, { 0.0f, 0.0f });
     std::vector<int> aEnds(1); // end of each glyph box
     float fHScale = getHScale();
     float totWidth = 0;
@@ -150,7 +152,8 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
     aElement.maLocation.SetBottom(bounds.getHeight() + aElement.getExtraSpace());
     nPos = aEnds[0];
 
-    std::unique_ptr<CompatibleDC> aDC(CompatibleDC::create(rGraphics, 0, 0, nBitmapWidth, nBitmapHeight));
+    std::unique_ptr<CompatibleDC> aDC(
+        CompatibleDC::create(rGraphics, 0, 0, nBitmapWidth, nBitmapHeight));
 
     SetTextColor(aDC->getCompatibleHDC(), RGB(0, 0, 0));
     SetBkColor(aDC->getCompatibleHDC(), RGB(255, 255, 255));
@@ -164,21 +167,13 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
     if (!SUCCEEDED(pRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &pBrush)))
         return false;
 
-    D2D1_POINT_2F baseline = {
-        static_cast<FLOAT>(aElement.getExtraOffset()),
-        static_cast<FLOAT>(aElement.getExtraOffset() + aElement.mnBaselineOffset)
-    };
+    D2D1_POINT_2F baseline
+        = { static_cast<FLOAT>(aElement.getExtraOffset()),
+            static_cast<FLOAT>(aElement.getExtraOffset() + aElement.mnBaselineOffset) };
 
-    DWRITE_GLYPH_RUN glyphs = {
-        pTxt->GetFontFace(),
-        pTxt->GetEmHeight(),
-        1,
-        aGlyphIndices.data(),
-        aGlyphAdv.data(),
-        aGlyphOffset.data(),
-        false,
-        0
-    };
+    DWRITE_GLYPH_RUN glyphs
+        = { pTxt->GetFontFace(), pTxt->GetEmHeight(), 1,     aGlyphIndices.data(),
+            aGlyphAdv.data(),    aGlyphOffset.data(), false, 0 };
 
     WinFontTransformGuard aTransformGuard(pRT, fHScale, rLayout, baseline);
     pRT->BeginDraw();
@@ -189,14 +184,15 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
 
     switch (hResult)
     {
-    case S_OK:
-        break;
-    case D2DERR_RECREATE_TARGET:
-        pTxt->CreateRenderTarget();
-        break;
-    default:
-        SAL_WARN("vcl.gdi", "DrawGlyphRun-EndDraw failed: " << WindowsErrorString(GetLastError()));
-        return false;
+        case S_OK:
+            break;
+        case D2DERR_RECREATE_TARGET:
+            pTxt->CreateRenderTarget();
+            break;
+        default:
+            SAL_WARN("vcl.gdi",
+                     "DrawGlyphRun-EndDraw failed: " << WindowsErrorString(GetLastError()));
+            return false;
     }
 
     if (!GlobalWinGlyphCache::get()->AllocateTexture(aElement, aDC.get()))
@@ -207,12 +203,12 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
     return true;
 }
 
-TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
+TextOutRenderer& TextOutRenderer::get(bool bUseDWrite)
 {
-    SalData *const pSalData = GetSalData();
+    SalData* const pSalData = GetSalData();
 
     if (!pSalData)
-    {   // don't call this after DeInitVCL()
+    { // don't call this after DeInitVCL()
         fprintf(stderr, "TextOutRenderer fatal error: no SalData");
         abort();
     }
@@ -232,12 +228,10 @@ TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
     return *pSalData->m_pExTextOutRenderer;
 }
 
-
-bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
-    SalGraphics & /*rGraphics*/,
-    HDC hDC)
+bool ExTextOutRenderer::operator()(GenericSalLayout const& rLayout, SalGraphics& /*rGraphics*/,
+                                   HDC hDC)
 {
-    HFONT hFont = static_cast<HFONT>(GetCurrentObject( hDC, OBJ_FONT ));
+    HFONT hFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
     ScopedHFONT hAltFont;
     bool bUseAltFont = false;
     bool bShift = false;
@@ -248,7 +242,7 @@ bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
         if (aLogFont.lfFaceName[0] == '@')
         {
             memmove(&aLogFont.lfFaceName[0], &aLogFont.lfFaceName[1],
-                sizeof(aLogFont.lfFaceName)-sizeof(aLogFont.lfFaceName[0]));
+                    sizeof(aLogFont.lfFaceName) - sizeof(aLogFont.lfFaceName[0]));
             hAltFont.reset(CreateFontIndirectW(&aLogFont));
         }
         else
@@ -260,7 +254,7 @@ bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
         }
     }
 
-    UINT nTextAlign = GetTextAlign ( hDC );
+    UINT nTextAlign = GetTextAlign(hDC);
     int nStart = 0;
     Point aPos(0, 0);
     const GlyphItem* pGlyph;
@@ -273,7 +267,7 @@ bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
             SelectFont(hDC, bUseAltFont ? hAltFont.get() : hFont);
         }
         if (bShift && pGlyph->IsVertical())
-            SetTextAlign(hDC, TA_TOP|TA_LEFT);
+            SetTextAlign(hDC, TA_TOP | TA_LEFT);
 
         ExtTextOutW(hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, nullptr, &glyphWStr, 1, nullptr);
 
@@ -317,7 +311,7 @@ WinFontInstance::~WinFontInstance()
 
 bool WinFontInstance::hasHScale() const
 {
-    const FontSelectPattern &rPattern = GetFontSelectPattern();
+    const FontSelectPattern& rPattern = GetFontSelectPattern();
     int nHeight(rPattern.mnHeight);
     int nWidth(rPattern.mnWidth ? rPattern.mnWidth * GetAverageWidthFactor() : nHeight);
     return nWidth != nHeight;
@@ -333,29 +327,29 @@ float WinFontInstance::getHScale() const
     return nWidth / nHeight;
 }
 
-namespace {
-
+namespace
+{
 struct BlobReference
 {
     hb_blob_t* mpBlob;
-    BlobReference(hb_blob_t* pBlob) : mpBlob(pBlob)
+    BlobReference(hb_blob_t* pBlob)
+        : mpBlob(pBlob)
     {
         hb_blob_reference(mpBlob);
     }
-    BlobReference(BlobReference const & other)
+    BlobReference(BlobReference const& other)
         : mpBlob(other.mpBlob)
     {
         hb_blob_reference(mpBlob);
     }
     ~BlobReference() { hb_blob_destroy(mpBlob); }
 };
-
 }
 
 using BlobCacheKey = std::pair<rtl::Reference<PhysicalFontFace>, hb_tag_t>;
 
-namespace {
-
+namespace
+{
 struct BlobCacheKeyHash
 {
     std::size_t operator()(BlobCacheKey const& rKey) const
@@ -366,7 +360,6 @@ struct BlobCacheKeyHash
         return seed;
     }
 };
-
 }
 
 static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
@@ -379,7 +372,7 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     assert(hDC);
     assert(hFont);
 
-    BlobCacheKey cacheKey { rtl::Reference<PhysicalFontFace>(pFont->GetFontFace()), nTableTag };
+    BlobCacheKey cacheKey{ rtl::Reference<PhysicalFontFace>(pFont->GetFontFace()), nTableTag };
     auto it = gCache.find(cacheKey);
     if (it != gCache.end())
     {
@@ -402,11 +395,12 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     if (!pBuffer)
         return nullptr;
 
-    hb_blob_t* pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
-                               pBuffer, [](void* data){ delete[] static_cast<unsigned char*>(data); });
+    hb_blob_t* pBlob
+        = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
+                         pBuffer, [](void* data) { delete[] static_cast<unsigned char*>(data); });
     if (!pBlob)
         return pBlob;
-    gCache.insert({cacheKey, BlobReference(pBlob)});
+    gCache.insert({ cacheKey, BlobReference(pBlob) });
     return pBlob;
 }
 
@@ -442,7 +436,7 @@ hb_font_t* WinFontInstance::ImplInitHbFont()
     return pHbFont;
 }
 
-void WinFontInstance::SetGraphics(WinSalGraphics *pGraphics)
+void WinFontInstance::SetGraphics(WinSalGraphics* pGraphics)
 {
     m_pGraphics = pGraphics;
     if (m_hFont)
@@ -491,7 +485,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
     COLORREF color = GetTextColor(hDC);
     Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
 
-    WinSalGraphicsImplBase *pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
+    WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
     if (!pImpl->UseTextDraw())
         return false;
 
@@ -508,8 +502,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
         if (!texture || !texture->isValid())
             return false;
 
-        SalTwoRect a2Rects(0, 0,
-                           texture->GetWidth(), texture->GetHeight(),
+        SalTwoRect a2Rects(0, 0, texture->GetWidth(), texture->GetHeight(),
                            aPos.X() - rElement.getExtraOffset() + rElement.maLeftOverhangs,
                            aPos.Y() - rElement.mnBaselineOffset - rElement.getExtraOffset(),
                            texture->GetWidth(), texture->GetHeight());
@@ -520,21 +513,18 @@ bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
     return true;
 }
 
-static void PruneGlyphCache()
-{
-    GlobalWinGlyphCache::get()->Prune();
-}
+static void PruneGlyphCache() { GlobalWinGlyphCache::get()->Prune(); }
 
 void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bool bUseDWrite)
 {
-    TextOutRenderer &render = TextOutRenderer::get(bUseDWrite);
+    TextOutRenderer& render = TextOutRenderer::get(bUseDWrite);
     render(rLayout, *this, hDC);
 }
 
 void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
-    if( !mbPrinter && pImpl->DrawTextLayout(rLayout))
+    if (!mbPrinter && pImpl->DrawTextLayout(rLayout))
         return; // handled by pImpl
 
     HDC hDC = getHDC();
@@ -593,18 +583,21 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
         tools::Rectangle aRect;
         rLayout.GetBoundRect(aRect);
-        if( aRect.IsEmpty())
+        if (aRect.IsEmpty())
             return;
 
         pImpl->PreDrawText();
 
-        std::unique_ptr<CompatibleDC> aDC(CompatibleDC::create(*this, aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight()));
+        std::unique_ptr<CompatibleDC> aDC(CompatibleDC::create(
+            *this, aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight()));
 
         // we are making changes to the DC, make sure we got a new one
         assert(aDC->getCompatibleHDC() != hDC);
 
-        RECT aWinRect = { aRect.Left(), aRect.Top(), aRect.Left() + aRect.GetWidth(), aRect.Top() + aRect.GetHeight() };
-        ::FillRect(aDC->getCompatibleHDC(), &aWinRect, static_cast<HBRUSH>(::GetStockObject(WHITE_BRUSH)));
+        RECT aWinRect = { aRect.Left(), aRect.Top(), aRect.Left() + aRect.GetWidth(),
+                          aRect.Top() + aRect.GetHeight() };
+        ::FillRect(aDC->getCompatibleHDC(), &aWinRect,
+                   static_cast<HBRUSH>(::GetStockObject(WHITE_BRUSH)));
 
         // setup the hidden DC with black color and white background, we will
         // use the result of the text drawing later as a mask only

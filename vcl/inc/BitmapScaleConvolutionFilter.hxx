@@ -29,7 +29,8 @@ namespace vcl
 class BitmapScaleConvolutionFilter : public BitmapFilter
 {
 protected:
-    BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY, std::unique_ptr<Kernel> pKernel)
+    BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY,
+                                 std::unique_ptr<Kernel> pKernel)
         : mxKernel(std::move(pKernel))
         , mrScaleX(rScaleX)
         , mrScaleY(rScaleY)
@@ -57,7 +58,7 @@ class VCL_DLLPUBLIC BitmapScaleBicubicFilter final : public BitmapScaleConvoluti
 {
 public:
     BitmapScaleBicubicFilter(const double& rScaleX, const double& rScaleY)
-      : BitmapScaleConvolutionFilter(rScaleX, rScaleY, std::make_unique<BicubicKernel>())
+        : BitmapScaleConvolutionFilter(rScaleX, rScaleY, std::make_unique<BicubicKernel>())
     {
     }
 };
@@ -70,7 +71,6 @@ public:
     {
     }
 };
-
 }
 
 #endif // VCL_INC_BITMAPSCALECONVOLUTIONFILTER_HXX
