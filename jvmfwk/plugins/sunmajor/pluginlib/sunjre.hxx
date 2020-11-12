@@ -24,20 +24,18 @@
 
 namespace jfw_plugin
 {
-
-class SunInfo: public VendorBase
+class SunInfo : public VendorBase
 {
 public:
-    static char const* const* getJavaExePaths(int * size);
+    static char const* const* getJavaExePaths(int* size);
 
     static rtl::Reference<VendorBase> createInstance();
 
-    virtual char const* const* getRuntimePaths(int * size) override;
+    virtual char const* const* getRuntimePaths(int* size) override;
     virtual char const* const* getLibraryPaths(int* size) override;
 
     virtual int compareVersions(const OUString& sSecond) const override;
 };
-
 }
 #endif
 

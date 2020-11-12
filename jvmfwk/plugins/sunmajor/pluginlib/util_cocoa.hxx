@@ -7,7 +7,7 @@
 
 #include <rtl/ustring.hxx>
 
-bool JvmfwkUtil_isLoadableJVM( OUString const & aURL );
+bool JvmfwkUtil_isLoadableJVM(OUString const& aURL);
 
 #endif
 

@@ -22,7 +22,8 @@
 
 #include <rtl/ustring.hxx>
 
-namespace jfw_plugin {
+namespace jfw_plugin
+{
 // Define OSL_DEBUG_LEVEL >= 2 to run a test when this lib is loaded
 
 /* SunVersion is used to compare java versions based on a string, as taken
@@ -68,7 +69,7 @@ class SunVersion final
         Rel_RC2,
         Rel_RC3
 #if defined(FREEBSD)
-    ,
+        ,
         Rel_FreeBSD
 #endif
     };
@@ -79,8 +80,9 @@ class SunVersion final
     char m_nUpdateSpecial;
 
     PreRelease m_preRelease;
+
 public:
-    explicit SunVersion(const char * szVer);
+    explicit SunVersion(const char* szVer);
     explicit SunVersion(const OUString& usVer);
     ~SunVersion();
 
@@ -88,16 +90,16 @@ public:
        Pre-release versions are taken into account.
        1.5.0-beta > 1.5.0-ea > 1.4.2
      */
-    bool operator > (const SunVersion& ver) const;
-    bool operator < (const SunVersion& ver) const;
-    bool operator == (const SunVersion& ver) const;
+    bool operator>(const SunVersion& ver) const;
+    bool operator<(const SunVersion& ver) const;
+    bool operator==(const SunVersion& ver) const;
 
     /** Test if the version is compatible tu SUN's versioning scheme
      */
-    operator bool () { return m_bValid;}
+    operator bool() { return m_bValid; }
 
 private:
-    bool init(const char * szVer);
+    bool init(const char* szVer);
 
     bool m_bValid;
 
@@ -105,9 +107,8 @@ private:
        "ea" is passed then Rel_EA is returned. If the string is no pre release
        then Rel_NONE is returned.
     */
-    static PreRelease getPreRelease(const char *szRel);
+    static PreRelease getPreRelease(const char* szRel);
 };
-
 }
 
 #endif // INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_SUNVERSION_HXX

@@ -28,8 +28,6 @@
 
 namespace jfw_plugin
 {
-
-
 //Used by subclasses of VendorBase to build paths to Java runtime
 #if defined(JAVA_ARCH)
 #define JFW_PLUGIN_ARCH JAVA_ARCH
@@ -49,17 +47,17 @@ namespace jfw_plugin
 #define JFW_PLUGIN_ARCH "ppc"
 #elif defined MIPS
 #ifdef OSL_BIGENDIAN
-#  define JFW_PLUGIN_ARCH "mips"
+#define JFW_PLUGIN_ARCH "mips"
 #else
 /* FIXME: do JDKs have some JDK-specific define? This is for
 OpenJDK at least, but probably not true for Lemotes JDK */
-#  define JFW_PLUGIN_ARCH "mipsel"
+#define JFW_PLUGIN_ARCH "mipsel"
 #endif
 #elif defined MIPS64
 #ifdef OSL_BIGENDIAN
-#  define JFW_PLUGIN_ARCH "mips64"
+#define JFW_PLUGIN_ARCH "mips64"
 #else
-#  define JFW_PLUGIN_ARCH "mips64el"
+#define JFW_PLUGIN_ARCH "mips64el"
 #endif
 #elif defined S390X
 #define JFW_PLUGIN_ARCH "s390x"
@@ -81,14 +79,13 @@ OpenJDK at least, but probably not true for Lemotes JDK */
 #error unknown platform
 #endif // SPARC, INTEL, POWERPC, MIPS, MIPS64, ARM, IA64, M68K, HPPA, ALPHA
 
-
 class MalformedVersionException final : public std::exception
 {
 public:
     virtual ~MalformedVersionException() override;
 };
 
-class VendorBase: public salhelper::SimpleReferenceObject
+class VendorBase : public salhelper::SimpleReferenceObject
 {
 public:
     VendorBase();
@@ -121,18 +118,18 @@ public:
        Key - value pairs of the system properties of the JRE.
      */
 
-    const OUString & getVendor() const;
-    const OUString & getVersion() const;
-    const OUString & getHome() const;
-    const OUString & getRuntimeLibrary() const;
-    const OUString & getLibraryPath() const;
+    const OUString& getVendor() const;
+    const OUString& getVersion() const;
+    const OUString& getHome() const;
+    const OUString& getRuntimeLibrary() const;
+    const OUString& getLibraryPath() const;
     bool isValidArch() const;
-     /* determines if prior to running java something has to be done,
+    /* determines if prior to running java something has to be done,
         like setting the LD_LIBRARY_PATH. This implementation checks
         if an LD_LIBRARY_PATH (getLD_LIBRARY_PATH) needs to be set and
         if so, needsRestart returns true.
       */
-     bool needsRestart() const;
+    bool needsRestart() const;
 
     /* compares versions of this vendor. MUST be overridden
        in a derived class.
@@ -157,8 +154,7 @@ protected:
        false - the object could not completely initialize. In this case
        it will be discarded by the caller.
     */
-    virtual bool initialize(
-        std::vector<std::pair<OUString, OUString> > props);
+    virtual bool initialize(std::vector<std::pair<OUString, OUString>> props);
 
     /* returns relative file URLs to the runtime library.
        For example         "/bin/client/jvm.dll"
@@ -174,13 +170,11 @@ protected:
     OUString m_sLD_LIBRARY_PATH;
     OUString m_sArch;
 
-
-    typedef rtl::Reference<VendorBase> (* createInstance_func) ();
-    friend rtl::Reference<VendorBase> createInstance(
-        createInstance_func pFunc,
-        const std::vector<std::pair<OUString, OUString> >& properties);
+    typedef rtl::Reference<VendorBase> (*createInstance_func)();
+    friend rtl::Reference<VendorBase>
+    createInstance(createInstance_func pFunc,
+                   const std::vector<std::pair<OUString, OUString>>& properties);
 };
-
 }
 
 #endif
