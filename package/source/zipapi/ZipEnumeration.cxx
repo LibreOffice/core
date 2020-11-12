@@ -21,18 +21,13 @@
 
 /** Provides an Enumeration over the contents of a Zip file */
 
-ZipEnumeration::ZipEnumeration( EntryHash & rNewEntryHash)
-: rEntryHash(rNewEntryHash)
-, aIterator(rEntryHash.begin())
+ZipEnumeration::ZipEnumeration(EntryHash& rNewEntryHash)
+    : rEntryHash(rNewEntryHash)
+    , aIterator(rEntryHash.begin())
 {
 }
-ZipEnumeration::~ZipEnumeration()
-{
-}
-bool ZipEnumeration::hasMoreElements()
-{
-    return (aIterator != rEntryHash.end());
-}
+ZipEnumeration::~ZipEnumeration() {}
+bool ZipEnumeration::hasMoreElements() { return (aIterator != rEntryHash.end()); }
 
 const ZipEntry* ZipEnumeration::nextElement()
 {

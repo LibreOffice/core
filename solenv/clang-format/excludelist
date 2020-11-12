@@ -7905,11 +7905,8 @@ opencl/source/platforminfo.cxx
 package/inc/ByteChucker.hxx
 package/inc/ByteGrabber.hxx
 package/inc/CRC32.hxx
-package/inc/EncryptedDataHeader.hxx
 package/inc/EncryptionData.hxx
 package/inc/HashMaps.hxx
-package/inc/PackageConstants.hxx
-package/inc/ZipEnumeration.hxx
 package/inc/ZipFile.hxx
 package/inc/ZipOutputEntry.hxx
 package/inc/ZipOutputStream.hxx
@@ -7930,7 +7927,6 @@ package/source/manifest/ManifestReader.hxx
 package/source/manifest/ManifestWriter.cxx
 package/source/manifest/ManifestWriter.hxx
 package/source/xstor/disposelistener.cxx
-package/source/xstor/disposelistener.hxx
 package/source/xstor/ocompinstream.cxx
 package/source/xstor/ocompinstream.hxx
 package/source/xstor/ohierarchyholder.cxx
@@ -7957,7 +7953,6 @@ package/source/zipapi/XBufferedThreadedStream.cxx
 package/source/zipapi/XBufferedThreadedStream.hxx
 package/source/zipapi/XUnbufferedStream.cxx
 package/source/zipapi/XUnbufferedStream.hxx
-package/source/zipapi/ZipEnumeration.cxx
 package/source/zipapi/ZipFile.cxx
 package/source/zipapi/ZipOutputEntry.cxx
 package/source/zipapi/ZipOutputStream.cxx
@@ -7970,10 +7965,6 @@ package/source/zippackage/ZipPackage.cxx
 package/source/zippackage/ZipPackageBuffer.cxx
 package/source/zippackage/ZipPackageEntry.cxx
 package/source/zippackage/ZipPackageFolder.cxx
-package/source/zippackage/ZipPackageFolderEnumeration.cxx
-package/source/zippackage/ZipPackageFolderEnumeration.hxx
-package/source/zippackage/ZipPackageSink.cxx
-package/source/zippackage/ZipPackageSink.hxx
 package/source/zippackage/ZipPackageStream.cxx
 package/source/zippackage/wrapstreamforshare.cxx
 package/source/zippackage/wrapstreamforshare.hxx
