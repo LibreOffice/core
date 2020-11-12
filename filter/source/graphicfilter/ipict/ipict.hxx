@@ -15,11 +15,10 @@
 class GDIMetaFile;
 class SvStream;
 
-namespace pict {
-
+namespace pict
+{
 /// Function to access PictReader::ReadPict for unit testing.
-void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile);
-
+void ReadPictFile(SvStream& rStreamPict, GDIMetaFile& rGDIMetaFile);
 }
 
 #endif // INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IPICT_HXX
