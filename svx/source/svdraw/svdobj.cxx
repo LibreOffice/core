@@ -118,6 +118,9 @@
 #include <libxml/xmlwriter.h>
 #include <memory>
 
+#include <svx/scene3d.hxx>
+#include <rtl/character.hxx>
+
 using namespace ::com::sun::star;
 
 
@@ -3060,6 +3063,22 @@ bool SdrObject::IsTextBox() const
 
 void SdrObject::MakeNameUnique()
 {
+    if (GetName().isEmpty())
+    {
+        if (const E3dScene* pE3dObj = dynamic_cast<const E3dScene*>(this))
+        {
+            SdrObjList* pObjList = pE3dObj->GetSubList();
+            if (pObjList)
+            {
+                SdrObject* pObj0 = pObjList->GetObj(0);
+                if (pObj0)
+                    SetName(pObj0->TakeObjNameSingul());
+            }
+        }
+        else
+            SetName(TakeObjNameSingul());
+    }
+
     std::unordered_set<OUString> aNameSet;
     MakeNameUnique(aNameSet);
 }
@@ -3086,17 +3105,20 @@ void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
         }
     }
 
-    OUString sName(GetName());
-    OUString sRootName(GetName());
-    sal_Int32 index = sName.lastIndexOf("_");
-    if ( index > 0)
-        sRootName = sRootName.copy(0, index);
+    OUString sName(GetName().trim());
+    OUString sRootName(sName);
 
-    sal_uInt32 n = 0;
-    while (rNameSet.find(sName) != rNameSet.end())
+    if (!sName.isEmpty() && rtl::isAsciiDigit(sName[sName.getLength() - 1]))
     {
-        sName = sRootName + "_" + OUString::number(n++);
+        sal_Int32 nPos(sName.getLength() - 1);
+        while (nPos > 0 && rtl::isAsciiDigit(sName[--nPos]));
+        sRootName = sName.copy(0, nPos + 1).trim();
     }
+    else
+        sName += " 1";
+
+    for (sal_uInt32 n = 1; rNameSet.find(sName) != rNameSet.end(); n++)
+        sName = sRootName + " " + OUString::number(n);
     rNameSet.insert(sName);
 
     SetName(sName);

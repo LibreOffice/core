@@ -36,6 +36,7 @@
 #include <svx/scene3d.hxx>
 #include <svx/xfillit0.hxx>
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace com::sun::star;
 
@@ -1000,6 +1001,17 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
     {
         EndTextEditAllViews();
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+    }
+
+    css::uno::Reference<lang::XServiceInfo> xServices(GetModel()->getUnoModel(),
+                                                      css::uno::UNO_QUERY);
+    if (xServices->supportsService("com.sun.star.sheet.SpreadsheetDocument") ||
+            xServices->supportsService("com.sun.star.text.TextDocument"))
+    {
+        const bool bUndo(IsUndoEnabled());
+        GetModel()->EnableUndo(false);
+        pObj->MakeNameUnique();
+        GetModel()->EnableUndo(bUndo);
     }
 
     if (!(nOptions & SdrInsertFlags::DONTMARK)) {
