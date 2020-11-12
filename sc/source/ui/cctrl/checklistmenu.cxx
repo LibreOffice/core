@@ -395,6 +395,9 @@ void ScCheckListMenuControl::StartPopupMode(const tools::Rectangle& rRect, Float
 
 void ScCheckListMenuControl::terminateAllPopupMenus()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        NotifyCloseLOK();
+
     EndPopupMode();
     ScCheckListMenuWindow* pParentMenu = mxFrame->GetParentMenu();
     if (pParentMenu)
@@ -1355,7 +1358,7 @@ void ScCheckListMenuControl::NotifyCloseLOK()
             {
                 std::stringstream aStream;
                 boost::property_tree::ptree aTree;
-                aTree.put("jsontype", "dockingwindow");
+                aTree.put("jsontype", "autofilter");
                 aTree.put("action", "close");
 
                 boost::property_tree::write_json(aStream, aTree);
