@@ -25,8 +25,8 @@
 @interface AquaA11yWrapperStaticText : AquaA11yWrapper
 {
 }
--(id)titleAttribute;
--(NSArray *)accessibilityAttributeNames;
+- (id)titleAttribute;
+- (NSArray*)accessibilityAttributeNames;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YWRAPPERSTATICTEXT_H

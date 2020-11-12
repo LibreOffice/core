@@ -28,11 +28,11 @@ namespace vcl
 {
 // TODO: sal_UCS4
 
-    sal_uInt16 TranslateChar12(sal_uInt16);
-    sal_uInt16 TranslateChar13(sal_uInt16);
-    sal_uInt16 TranslateChar14(sal_uInt16);
-    sal_uInt16 TranslateChar15(sal_uInt16);
-    sal_uInt16 TranslateChar16(sal_uInt16);
+sal_uInt16 TranslateChar12(sal_uInt16);
+sal_uInt16 TranslateChar13(sal_uInt16);
+sal_uInt16 TranslateChar14(sal_uInt16);
+sal_uInt16 TranslateChar15(sal_uInt16);
+sal_uInt16 TranslateChar16(sal_uInt16);
 }
 
 #endif // INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX

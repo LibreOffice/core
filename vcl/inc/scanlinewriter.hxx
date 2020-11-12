@@ -25,31 +25,32 @@
 
 namespace vcl
 {
-
 // Write color information for 1, 4 and 8 bit palette bitmap scanlines.
 class ScanlineWriter
 {
     BitmapPalette& maPalette;
     sal_uInt8 const mnColorsPerByte; // number of colors that are stored in one byte
-    sal_uInt8 const mnColorBitSize;  // number of bits a color takes
-    sal_uInt8 const mnColorBitMask;  // bit mask used to isolate the color
+    sal_uInt8 const mnColorBitSize; // number of bits a color takes
+    sal_uInt8 const mnColorBitMask; // bit mask used to isolate the color
     sal_uInt8* mpCurrentScanline;
     tools::Long mnX;
 
 public:
-
     ScanlineWriter(BitmapPalette& aPalette, sal_Int8 nColorsPerByte)
         : maPalette(aPalette)
         , mnColorsPerByte(nColorsPerByte)
-        , mnColorBitSize(8 / mnColorsPerByte) // bit size is number of bit in a byte divided by number of colors per byte (8 / 2 = 4 for 4-bit)
+        , mnColorBitSize(
+              8
+              / mnColorsPerByte) // bit size is number of bit in a byte divided by number of colors per byte (8 / 2 = 4 for 4-bit)
         , mnColorBitMask((1 << mnColorBitSize) - 1) // calculate the bit mask from the bit size
         , mpCurrentScanline(nullptr)
         , mnX(0)
-    {}
+    {
+    }
 
     static std::unique_ptr<ScanlineWriter> Create(sal_uInt16 nBits, BitmapPalette& aPalette)
     {
-        switch(nBits)
+        switch (nBits)
         {
             case 1:
                 return std::make_unique<ScanlineWriter>(aPalette, 8);

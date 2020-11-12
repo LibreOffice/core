@@ -24,7 +24,7 @@
 #include <sallayout.hxx>
 
 SystemFontList* GetCoretextFontList();
-FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef, bool* );
+FontAttributes DevFontFromCTFontDescriptor(CTFontDescriptorRef, bool*);
 
 #endif // INCLUDED_VCL_INC_QUARTZ_CTFONTS_HXX
 

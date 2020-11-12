@@ -26,26 +26,26 @@ class AquaSalMenuItem;
 @interface OOStatusItemView : NSView
 {
 }
--(void)drawRect: (NSRect)aRect;
--(void)layout;
--(void)mouseUp: (NSEvent *)pEvent;
+- (void)drawRect:(NSRect)aRect;
+- (void)layout;
+- (void)mouseUp:(NSEvent*)pEvent;
 @end
 
 @interface SalNSMenu : NSMenu
 {
-    AquaSalMenu*        mpMenu;
+    AquaSalMenu* mpMenu;
 }
--(id)initWithMenu: (AquaSalMenu*)pMenu;
--(void)menuNeedsUpdate: (NSMenu*)pMenu;
--(void)setSalMenu: (AquaSalMenu*)pMenu;
+- (id)initWithMenu:(AquaSalMenu*)pMenu;
+- (void)menuNeedsUpdate:(NSMenu*)pMenu;
+- (void)setSalMenu:(AquaSalMenu*)pMenu;
 @end
 
 @interface SalNSMenuItem : NSMenuItem
 {
-    AquaSalMenuItem*    mpMenuItem;
+    AquaSalMenuItem* mpMenuItem;
 }
--(id)initWithMenuItem: (AquaSalMenuItem*)pMenuItem;
--(void)menuItemTriggered: (id)aSender;
+- (id)initWithMenuItem:(AquaSalMenuItem*)pMenuItem;
+- (void)menuItemTriggered:(id)aSender;
 @end
 
 #endif // INCLUDED_VCL_INC_OSX_SALNSMENU_H

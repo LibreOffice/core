@@ -13,9 +13,7 @@
 
 namespace vcl
 {
-
-template<typename TYPE, GLenum BUFFER_TYPE>
-class BufferObject
+template <typename TYPE, GLenum BUFFER_TYPE> class BufferObject
 {
 private:
     GLuint mId;
@@ -65,11 +63,9 @@ public:
             CHECK_GL_ERROR();
         }
     }
-
 };
 
-template<typename TYPE>
-class VertexBufferObject final : public BufferObject<TYPE, GL_ARRAY_BUFFER>
+template <typename TYPE> class VertexBufferObject final : public BufferObject<TYPE, GL_ARRAY_BUFFER>
 {
 };
 

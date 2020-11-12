@@ -25,9 +25,9 @@
 @interface AquaA11yWrapperScrollArea : AquaA11yWrapper
 {
 }
--(id)verticalScrollBarAttribute;
--(id)horizontalScrollBarAttribute;
--(NSArray *)accessibilityAttributeNames;
+- (id)verticalScrollBarAttribute;
+- (id)horizontalScrollBarAttribute;
+- (NSArray*)accessibilityAttributeNames;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YWRAPPERSCROLLAREA_H

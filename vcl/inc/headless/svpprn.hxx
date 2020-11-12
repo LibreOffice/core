@@ -25,13 +25,13 @@
 class SvpSalInfoPrinter final : public PspSalInfoPrinter
 {
 public:
-    virtual bool Setup( weld::Window* pFrame, ImplJobSetup* pSetupData ) override;
+    virtual bool Setup(weld::Window* pFrame, ImplJobSetup* pSetupData) override;
 };
 
 class SvpSalPrinter final : public PspSalPrinter
 {
 public:
-    SvpSalPrinter( SalInfoPrinter* pInfoPrinter );
+    SvpSalPrinter(SalInfoPrinter* pInfoPrinter);
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPPRN_HXX

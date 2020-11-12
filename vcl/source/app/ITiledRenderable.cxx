@@ -11,21 +11,20 @@
 
 namespace vcl
 {
-
-    /*
-     * Map directly to css cursor styles to avoid further mapping in the client.
-     * Gtk (via gdk_cursor_new_from_name) also supports the same css cursor styles.
-     *
-     * This was created partially with help of the mappings in gtkdata.cxx.
-     * The list is incomplete as some cursor style simply aren't supported
-     * by css, it might turn out to be worth mapping some of these missing cursors
-     * to available cursors?
-     */
+/*
+ * Map directly to css cursor styles to avoid further mapping in the client.
+ * Gtk (via gdk_cursor_new_from_name) also supports the same css cursor styles.
+ *
+ * This was created partially with help of the mappings in gtkdata.cxx.
+ * The list is incomplete as some cursor style simply aren't supported
+ * by css, it might turn out to be worth mapping some of these missing cursors
+ * to available cursors?
+ */
 #ifdef _MSC_VER
 #pragma warning(push)
-#pragma warning( disable : 4592)
+#pragma warning(disable : 4592)
 #endif
-    const std::map <PointerStyle, OString> gaLOKPointerMap {
+const std::map<PointerStyle, OString> gaLOKPointerMap{
     { PointerStyle::Arrow, "default" },
     // PointerStyle::Null ?
     { PointerStyle::Wait, "wait" },
@@ -67,15 +66,12 @@ namespace vcl
     { PointerStyle::TextVertical, "vertical-text" }
     // Pivot Delete, TabSelectS through TabSelectSW
     // PaintBrush, HideWhiteSpace, ShowWhiteSpace
-    };
+};
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
-ITiledRenderable::~ITiledRenderable()
-{
-}
-
+ITiledRenderable::~ITiledRenderable() {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

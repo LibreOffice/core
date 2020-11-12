@@ -22,10 +22,11 @@
 
 #include <com/sun/star/awt/Point.hpp>
 
-@interface AquaA11yUtil : NSObject {
+@interface AquaA11yUtil : NSObject
+{
 }
-+(NSValue *)vclPointToNSPoint:(css::awt::Point)vclPoint;
-+(css::awt::Point)nsPointToVclPoint:(NSValue *)nsPoint;
++ (NSValue*)vclPointToNSPoint:(css::awt::Point)vclPoint;
++ (css::awt::Point)nsPointToVclPoint:(NSValue*)nsPoint;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YUTIL_H

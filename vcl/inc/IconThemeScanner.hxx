@@ -21,8 +21,8 @@
 // forward declaration of unit test class. Required for friend relationship.
 class IconThemeScannerTest;
 
-namespace vcl {
-
+namespace vcl
+{
 /** This class scans a folder for icon themes and provides the results.
  */
 class VCL_DLLPUBLIC IconThemeScanner
@@ -31,15 +31,13 @@ public:
     /** Factory method to create the object.
      * Provide a path to search for IconThemes.
      */
-    static std::shared_ptr<IconThemeScanner> Create(const OUString &path);
+    static std::shared_ptr<IconThemeScanner> Create(const OUString& path);
 
     /** This method will return the standard path where icon themes are located.
      */
-    static OUString
-    GetStandardIconThemePath();
+    static OUString GetStandardIconThemePath();
 
-    const std::vector<IconThemeInfo>&
-    GetFoundIconThemes() const {return mFoundIconThemes;}
+    const std::vector<IconThemeInfo>& GetFoundIconThemes() const { return mFoundIconThemes; }
 
     /** Get the IconThemeInfo for a theme.
      * If the theme id is not among the found themes, a std::runtime_error will be thrown.
@@ -50,8 +48,7 @@ public:
     /** Checks whether the theme with the provided name has been found in the
      * scanned directory.
      */
-    bool
-    IconThemeIsInstalled(const OUString& themeId) const;
+    bool IconThemeIsInstalled(const OUString& themeId) const;
 
 private:
     IconThemeScanner();
@@ -63,22 +60,19 @@ private:
      * - The directory does not exist
      * - There are no files which match the pattern images_xxx.zip
      */
-    void ScanDirectoryForIconThemes(const OUString &path);
+    void ScanDirectoryForIconThemes(const OUString& path);
 
     /** Adds the provided icon theme by path.
      */
-    bool
-    AddIconThemeByPath(const OUString &path);
+    bool AddIconThemeByPath(const OUString& path);
 
     /** Scans the provided directory for icon themes.
      * The returned strings will contain the URLs to the icon themes.
      */
-    static std::vector<OUString>
-    ReadIconThemesFromPath(const OUString& dir);
+    static std::vector<OUString> ReadIconThemesFromPath(const OUString& dir);
 
     /** Check whether a single file is valid */
-    static bool
-    FileIsValidIconTheme(const OUString&);
+    static bool FileIsValidIconTheme(const OUString&);
 
     std::vector<IconThemeInfo> mFoundIconThemes;
 

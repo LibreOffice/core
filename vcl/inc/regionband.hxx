@@ -32,8 +32,8 @@ class RegionBand
 private:
     friend const char* ImplDbgTestRegionBand(const void*);
 
-    ImplRegionBand*             mpFirstBand;        // root of the list with y-bands
-    ImplRegionBand*             mpLastCheckedBand;
+    ImplRegionBand* mpFirstBand; // root of the list with y-bands
+    ImplRegionBand* mpLastCheckedBand;
 
     void implReset();
     [[nodiscard]] bool CheckConsistency() const;
@@ -45,7 +45,7 @@ public:
     RegionBand(const tools::Rectangle&);
     ~RegionBand();
 
-    bool operator==( const RegionBand& rRegionBand ) const;
+    bool operator==(const RegionBand& rRegionBand) const;
 
     [[nodiscard]] bool load(SvStream& rIStrm);
     void save(SvStream& rIStrm) const;
@@ -57,7 +57,7 @@ public:
     void processPoints();
     void CreateBandRange(tools::Long nYTop, tools::Long nYBottom);
     void InsertLine(const Point& rStartPt, const Point& rEndPt, tools::Long nLineId);
-    void InsertPoint(const Point &rPoint, tools::Long nLineID, bool bEndPoint, LineType eLineType);
+    void InsertPoint(const Point& rPoint, tools::Long nLineID, bool bEndPoint, LineType eLineType);
     bool OptimizeBandList();
     void Move(tools::Long nHorzMove, tools::Long nVertMove);
     void Scale(double fScaleX, double fScaleY);
@@ -73,7 +73,8 @@ public:
     void XOr(const RegionBand& rSource);
     tools::Rectangle GetBoundRect() const;
     bool IsInside(const Point& rPoint) const;
-    sal_uInt32 getRectangleCount() const; // only users are Region::Intersect, Region::IsRectangle and PSWriter::ImplBmp
+    sal_uInt32 getRectangleCount()
+        const; // only users are Region::Intersect, Region::IsRectangle and PSWriter::ImplBmp
     void GetRegionRectangles(RectangleVector& rTarget) const;
 };
 

@@ -24,7 +24,10 @@
 class VclOutdevTest : public test::BootstrapFixture
 {
 public:
-    VclOutdevTest() : BootstrapFixture(true, false) {}
+    VclOutdevTest()
+        : BootstrapFixture(true, false)
+    {
+    }
 
     void testVirtualDevice();
     void testUseAfterDispose();
@@ -80,20 +83,20 @@ void VclOutdevTest::testWindowBackgroundColor()
 
 void VclOutdevTest::testVirtualDevice()
 {
-    ScopedVclPtrInstance< VirtualDevice > pVDev;
-    pVDev->SetOutputSizePixel(Size(32,32));
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    pVDev->SetOutputSizePixel(Size(32, 32));
     pVDev->SetBackground(Wallpaper(COL_WHITE));
 
     CPPUNIT_ASSERT_EQUAL(pVDev->GetBackgroundColor(), COL_WHITE);
 
     pVDev->Erase();
-    pVDev->DrawPixel(Point(1,2),COL_BLUE);
-    pVDev->DrawPixel(Point(31,30),COL_RED);
+    pVDev->DrawPixel(Point(1, 2), COL_BLUE);
+    pVDev->DrawPixel(Point(31, 30), COL_RED);
 
     Size aSize = pVDev->GetOutputSizePixel();
-    CPPUNIT_ASSERT_EQUAL(Size(32,32), aSize);
+    CPPUNIT_ASSERT_EQUAL(Size(32, 32), aSize);
 
-    Bitmap aBmp = pVDev->GetBitmap(Point(),aSize);
+    Bitmap aBmp = pVDev->GetBitmap(Point(), aSize);
 
 #if 0
     OUString rFileName("/tmp/foo-unx.png");
@@ -107,21 +110,21 @@ void VclOutdevTest::testVirtualDevice()
     }
 #endif
 
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0,0)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0, 0)));
 #if !defined _WIN32 //TODO: various failures on Windows tinderboxes
-    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pVDev->GetPixel(Point(1,2)));
-    CPPUNIT_ASSERT_EQUAL(COL_RED, pVDev->GetPixel(Point(31,30)));
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pVDev->GetPixel(Point(1, 2)));
+    CPPUNIT_ASSERT_EQUAL(COL_RED, pVDev->GetPixel(Point(31, 30)));
 #endif
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(30,31)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(30, 31)));
 
     // Gotcha: y and x swap for BitmapReadAccess: deep joy.
     Bitmap::ScopedReadAccess pAcc(aBmp);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, static_cast<Color>(pAcc->GetPixel(0,0)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, static_cast<Color>(pAcc->GetPixel(0, 0)));
 #if !defined _WIN32 //TODO: various failures on Windows tinderboxes
-    CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<Color>(pAcc->GetPixel(2,1)));
-    CPPUNIT_ASSERT_EQUAL(COL_RED, static_cast<Color>(pAcc->GetPixel(30,31)));
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<Color>(pAcc->GetPixel(2, 1)));
+    CPPUNIT_ASSERT_EQUAL(COL_RED, static_cast<Color>(pAcc->GetPixel(30, 31)));
 #endif
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, static_cast<Color>(pAcc->GetPixel(31,30)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, static_cast<Color>(pAcc->GetPixel(31, 30)));
 
 #if 0
     VclPtr<vcl::Window> pWin = VclPtr<WorkWindow>::Create( (vcl::Window *)nullptr );
