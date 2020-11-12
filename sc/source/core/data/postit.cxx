@@ -237,8 +237,8 @@ void ScCaptionCreator::FitCaptionToRect( const tools::Rectangle* pVisRect )
 
     // tail position
     Point aTailPos = mxCaption->GetTailPos();
-    aTailPos.setX( ::std::max( ::std::min( aTailPos.X(), rVisRect.Right() ), rVisRect.Left() ) );
-    aTailPos.setY( ::std::max( ::std::min( aTailPos.Y(), rVisRect.Bottom() ), rVisRect.Top() ) );
+    aTailPos.setX( ::std::clamp( aTailPos.X(), rVisRect.Left(), rVisRect.Right() ) );
+    aTailPos.setY( ::std::clamp( aTailPos.Y(), rVisRect.Top(), rVisRect.Bottom() ) );
     mxCaption->SetTailPos( aTailPos );
 
     // caption rectangle

@@ -131,14 +131,14 @@ tools::Long SwView::SetHScrollMax( tools::Long lMax )
 
     // At negative values the document is completely visible.
     // In this case, no scrolling.
-    return std::max( std::min( lMax, lSize ), tools::Long(0) );
+    return std::clamp( lSize, tools::Long(0), lMax );
 }
 
 tools::Long SwView::SetVScrollMax( tools::Long lMax )
 {
     const tools::Long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     tools::Long lSize = GetDocSz().Height() + lBorder - m_aVisArea.GetHeight();
-    return std::max( std::min( lMax, lSize), tools::Long(0) );        // see horizontal
+    return std::clamp( lSize, tools::Long(0), lMax );        // see horizontal
 }
 
 Point SwView::AlignToPixel(const Point &rPt) const

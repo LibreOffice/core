@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_FTOOLS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_FTOOLS_HXX
 
+#include <algorithm>
 #include <vector>
 #include <limits>
 #include <tools/ref.hxx>
@@ -59,7 +60,7 @@ inline ReturnType ulimit_cast( Type nValue )
 /** Returns the value, if it is not less than nMin and not greater than nMax, otherwise one of the limits. */
 template< typename ReturnType, typename Type >
 inline ReturnType limit_cast( Type nValue, ReturnType nMin, ReturnType nMax )
-{ return static_cast< ReturnType >( ::std::max< Type >( ::std::min< Type >( nValue, nMax ), nMin ) ); }
+{ return static_cast< ReturnType >( ::std::clamp< Type >( nValue, nMin, nMax ) ); }
 
 /** Returns the value, if it fits into ReturnType, otherwise one of the limits of ReturnType. */
 template< typename ReturnType, typename Type >

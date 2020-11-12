@@ -1640,7 +1640,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
 
 template< typename Type >
 static Type getLimitedValue( const Type& rValue, const Type& rMin, const Type& rMax )
-{ return std::max( std::min( rValue, rMax ), rMin ); }
+{ return std::clamp( rValue, rMin, rMax ); }
 
 ScHTMLEntry::ScHTMLEntry( const SfxItemSet& rItemSet, ScHTMLTableId nTableId ) :
     ScEEParseEntry( rItemSet ),
