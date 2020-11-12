@@ -93,4 +93,4 @@
 #define FALLBACKKEY_SERVICE_NO_STOP_ERROR 103
 #define FALLBACKKEY_LAUNCH_ERROR 104
 
-#endif  // Errors_h__
+#endif // Errors_h__

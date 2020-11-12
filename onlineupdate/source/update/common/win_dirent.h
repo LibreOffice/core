@@ -27,5 +27,5 @@ DIR* opendir(const WCHAR* path);
 int closedir(DIR* dir);
 dirent* readdir(DIR* dir);
 
-#endif  // WNT
-#endif  // WINDIRENT_H__
+#endif // WNT
+#endif // WINDIRENT_H__

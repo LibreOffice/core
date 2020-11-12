@@ -16,38 +16,32 @@
 
 #ifdef _WIN32
 // from Mozilla's nsAlgorithm.h
-template <class T>
-inline const T&
-XPCOM_MIN(const T& aA, const T& aB)
-{
-    return aB < aA ? aB : aA;
-}
+template <class T> inline const T& XPCOM_MIN(const T& aA, const T& aB) { return aB < aA ? aB : aA; }
 #endif
 
 struct VersionPart
 {
-    int32_t     numA;
+    int32_t numA;
 
-    const char* strB;    // NOT null-terminated, can be a null pointer
-    uint32_t    strBlen;
+    const char* strB; // NOT null-terminated, can be a null pointer
+    uint32_t strBlen;
 
-    int32_t     numC;
+    int32_t numC;
 
-    char*       extraD;  // null-terminated
+    char* extraD; // null-terminated
 };
 
 #ifdef _WIN32
 struct VersionPartW
 {
-    int32_t     numA;
+    int32_t numA;
 
-    wchar_t*    strB;    // NOT null-terminated, can be a null pointer
-    uint32_t    strBlen;
+    wchar_t* strB; // NOT null-terminated, can be a null pointer
+    uint32_t strBlen;
 
-    int32_t     numC;
+    int32_t numC;
 
-    wchar_t*    extraD;  // null-terminated
-
+    wchar_t* extraD; // null-terminated
 };
 #endif
 
@@ -56,8 +50,7 @@ struct VersionPartW
  *
  * @returns A pointer to the next versionpart, or null if none.
  */
-static char*
-ParseVP(char* aPart, VersionPart& aResult)
+static char* ParseVP(char* aPart, VersionPart& aResult)
 {
     char* dot;
 
@@ -136,17 +129,14 @@ ParseVP(char* aPart, VersionPart& aResult)
     return dot;
 }
 
-
 /**
  * Parse a version part into a number and "extra text".
  *
  * @returns A pointer to the next versionpart, or null if none.
  */
 #ifdef _WIN32
-static wchar_t*
-ParseVP(wchar_t* aPart, VersionPartW& aResult)
+static wchar_t* ParseVP(wchar_t* aPart, VersionPartW& aResult)
 {
-
     wchar_t* dot;
 
     aResult.numA = 0;
@@ -226,8 +216,7 @@ ParseVP(wchar_t* aPart, VersionPartW& aResult)
 #endif
 
 // compare two null-terminated strings, which may be null pointers
-static int32_t
-ns_strcmp(const char* aStr1, const char* aStr2)
+static int32_t ns_strcmp(const char* aStr1, const char* aStr2)
 {
     // any string is *before* no string
     if (!aStr1)
@@ -244,9 +233,7 @@ ns_strcmp(const char* aStr1, const char* aStr2)
 }
 
 // compare two length-specified string, which may be null pointers
-static int32_t
-ns_strnncmp(const char* aStr1, uint32_t aLen1,
-            const char* aStr2, uint32_t aLen2)
+static int32_t ns_strnncmp(const char* aStr1, uint32_t aLen1, const char* aStr2, uint32_t aLen2)
 {
     // any string is *before* no string
     if (!aStr1)
@@ -281,8 +268,7 @@ ns_strnncmp(const char* aStr1, uint32_t aLen1,
 }
 
 // compare two int32_t
-static int32_t
-ns_cmp(int32_t aNum1, int32_t aNum2)
+static int32_t ns_cmp(int32_t aNum1, int32_t aNum2)
 {
     if (aNum1 < aNum2)
     {
@@ -295,8 +281,7 @@ ns_cmp(int32_t aNum1, int32_t aNum2)
 /**
  * Compares two VersionParts
  */
-static int32_t
-CompareVP(VersionPart& aVer1, VersionPart& aVer2)
+static int32_t CompareVP(VersionPart& aVer1, VersionPart& aVer2)
 {
     int32_t r = ns_cmp(aVer1.numA, aVer2.numA);
     if (r)
@@ -323,8 +308,7 @@ CompareVP(VersionPart& aVer1, VersionPart& aVer2)
  * Compares two VersionParts
  */
 #ifdef _WIN32
-static int32_t
-CompareVP(VersionPartW& aVer1, VersionPartW& aVer2)
+static int32_t CompareVP(VersionPartW& aVer1, VersionPartW& aVer2)
 {
     int32_t r = ns_cmp(aVer1.numA, aVer2.numA);
     if (r)
@@ -358,11 +342,10 @@ CompareVP(VersionPartW& aVer1, VersionPartW& aVer2)
 }
 #endif
 
-namespace mozilla {
-
+namespace mozilla
+{
 #ifdef _WIN32
-int32_t
-CompareVersions(const wchar_t* aStrA, const wchar_t* aStrB)
+int32_t CompareVersions(const wchar_t* aStrA, const wchar_t* aStrB)
 {
     wchar_t* A2 = wcsdup(aStrA);
     if (!A2)
@@ -394,8 +377,7 @@ CompareVersions(const wchar_t* aStrA, const wchar_t* aStrB)
             break;
         }
 
-    }
-    while (a || b);
+    } while (a || b);
 
     free(A2);
     free(B2);
@@ -404,8 +386,7 @@ CompareVersions(const wchar_t* aStrA, const wchar_t* aStrB)
 }
 #endif
 
-int32_t
-CompareVersions(const char* aStrA, const char* aStrB)
+int32_t CompareVersions(const char* aStrA, const char* aStrB)
 {
     char* A2 = strdup(aStrA);
     if (!A2)
@@ -437,8 +418,7 @@ CompareVersions(const char* aStrA, const char* aStrB)
             break;
         }
 
-    }
-    while (a || b);
+    } while (a || b);
 
     free(A2);
     free(B2);
@@ -447,4 +427,3 @@ CompareVersions(const char* aStrA, const char* aStrB)
 }
 
 } // namespace mozilla
-
