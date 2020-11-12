@@ -12419,11 +12419,9 @@ svgio/source/svgreader/svgusenode.cxx
 svgio/source/svguno/xsvgparser.cxx
 svl/qa/unit/items/test_IndexedStyleSheets.cxx
 svl/qa/unit/items/test_itempool.cxx
-svl/qa/unit/notify/test_SfxBroadcaster.cxx
 svl/qa/unit/svl.cxx
 svl/qa/unit/test_INetContentType.cxx
 svl/qa/unit/test_URIHelper.cxx
-svl/qa/unit/test_lngmisc.cxx
 svl/source/config/asiancfg.cxx
 svl/source/config/cjkoptions.cxx
 svl/source/config/ctloptions.cxx
@@ -12441,7 +12439,6 @@ svl/source/fsstor/ostreamcontainer.cxx
 svl/source/fsstor/ostreamcontainer.hxx
 svl/source/inc/fsfactory.hxx
 svl/source/inc/poolio.hxx
-svl/source/inc/stringio.hxx
 svl/source/items/IndexedStyleSheets.cxx
 svl/source/items/aeitem.cxx
 svl/source/items/cenumitm.cxx
@@ -12453,7 +12450,6 @@ svl/source/items/ilstitem.cxx
 svl/source/items/imageitm.cxx
 svl/source/items/int64item.cxx
 svl/source/items/intitem.cxx
-svl/source/items/itemiter.cxx
 svl/source/items/itempool.cxx
 svl/source/items/itemprop.cxx
 svl/source/items/itemset.cxx
@@ -12462,14 +12458,12 @@ svl/source/items/legacyitem.cxx
 svl/source/items/macitem.cxx
 svl/source/items/poolcach.cxx
 svl/source/items/poolio.cxx
-svl/source/items/poolitem.cxx
 svl/source/items/ptitem.cxx
 svl/source/items/rectitem.cxx
 svl/source/items/rngitem.cxx
 svl/source/items/sitem.cxx
 svl/source/items/slstitm.cxx
 svl/source/items/srchitem.cxx
-svl/source/items/stringio.cxx
 svl/source/items/stritem.cxx
 svl/source/items/style.cxx
 svl/source/items/stylepool.cxx
@@ -12480,7 +12474,6 @@ svl/source/misc/adrparse.cxx
 svl/source/misc/documentlockfile.cxx
 svl/source/misc/filenotation.cxx
 svl/source/misc/fstathelper.cxx
-svl/source/misc/getstringresource.cxx
 svl/source/misc/gridprinter.cxx
 svl/source/misc/inethist.cxx
 svl/source/misc/inettype.cxx
@@ -12489,13 +12482,9 @@ svl/source/misc/lockfilecommon.cxx
 svl/source/misc/ownlist.cxx
 svl/source/misc/sharecontrolfile.cxx
 svl/source/misc/sharedstring.cxx
-svl/source/misc/sharedstringpool.cxx
 svl/source/misc/strmadpt.cxx
 svl/source/misc/urihelper.cxx
-svl/source/notify/SfxBroadcaster.cxx
 svl/source/notify/broadcast.cxx
-svl/source/notify/hint.cxx
-svl/source/notify/isethint.cxx
 svl/source/notify/listener.cxx
 svl/source/notify/lstner.cxx
 svl/source/numbers/currencytable.cxx
@@ -12519,7 +12508,6 @@ svl/source/svdde/ddedata.cxx
 svl/source/svdde/ddeimp.hxx
 svl/source/svdde/ddestrg.cxx
 svl/source/svdde/ddesvr.cxx
-svl/source/svsql/converter.cxx
 svl/source/undo/undo.cxx
 svl/source/uno/pathservice.cxx
 svl/unx/source/svdde/ddedummy.cxx

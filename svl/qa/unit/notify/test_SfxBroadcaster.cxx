@@ -36,30 +36,26 @@ class SfxBroadcasterTest : public CppUnit::TestFixture
     CPPUNIT_TEST_SUITE_END();
 };
 
-namespace {
-
+namespace
+{
 class MockedSfxListener : public SfxListener
 {
 public:
     MockedSfxListener()
-    : mNotifyWasCalled(false) {}
-
-    void Notify(SfxBroadcaster&, const SfxHint&) override {
-        mNotifyWasCalled = true;
+        : mNotifyWasCalled(false)
+    {
     }
 
-    bool NotifyWasCalled() const {
-        return mNotifyWasCalled;
-    }
+    void Notify(SfxBroadcaster&, const SfxHint&) override { mNotifyWasCalled = true; }
+
+    bool NotifyWasCalled() const { return mNotifyWasCalled; }
 
 private:
     bool mNotifyWasCalled;
 };
-
 }
 
-void
-SfxBroadcasterTest::AddingListenersIncreasesCount()
+void SfxBroadcasterTest::AddingListenersIncreasesCount()
 {
     SfxBroadcaster sb;
     MockedSfxListener sl;
@@ -70,8 +66,7 @@ SfxBroadcasterTest::AddingListenersIncreasesCount()
     CPPUNIT_ASSERT_EQUAL(size_t(1), sb.GetListenerCount());
 }
 
-void
-SfxBroadcasterTest::RemovingListenersDecreasesCount()
+void SfxBroadcasterTest::RemovingListenersDecreasesCount()
 {
     SfxBroadcaster sb;
     MockedSfxListener sl;
@@ -83,8 +78,7 @@ SfxBroadcasterTest::RemovingListenersDecreasesCount()
     CPPUNIT_ASSERT_EQUAL(size_t(0), sb.GetListenerCount());
 }
 
-void
-SfxBroadcasterTest::HintsAreNotForwardedToRemovedListeners()
+void SfxBroadcasterTest::HintsAreNotForwardedToRemovedListeners()
 {
     SfxBroadcaster sb;
     MockedSfxListener sl1;
@@ -100,8 +94,7 @@ SfxBroadcasterTest::HintsAreNotForwardedToRemovedListeners()
     CPPUNIT_ASSERT_EQUAL(false, sl1.NotifyWasCalled());
 }
 
-void
-SfxBroadcasterTest::SameListenerCanBeAddedMoreThanOnce()
+void SfxBroadcasterTest::SameListenerCanBeAddedMoreThanOnce()
 {
     MockedSfxListener sl;
     SfxBroadcaster sb;
@@ -110,8 +103,7 @@ SfxBroadcasterTest::SameListenerCanBeAddedMoreThanOnce()
     CPPUNIT_ASSERT_EQUAL(size_t(2), sb.GetListenerCount());
 }
 
-void
-SfxBroadcasterTest::StoppingListeningAffectsOnlyFirstOfIdenticalListeners()
+void SfxBroadcasterTest::StoppingListeningAffectsOnlyFirstOfIdenticalListeners()
 {
     MockedSfxListener sl;
     SfxBroadcaster sb;

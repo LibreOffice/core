@@ -21,13 +21,12 @@
 
 #include <tools/stream.hxx>
 
-
 OUString readByteString(SvStream& rStream)
 {
     return rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
 }
 
-void writeByteString(SvStream & rStream, const OUString& rString)
+void writeByteString(SvStream& rStream, const OUString& rString)
 {
     rStream.WriteUniOrByteString(rString, rStream.GetStreamCharSet());
 }

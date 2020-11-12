@@ -27,17 +27,16 @@
 #include <cassert>
 #include <vector>
 
-
 // broadcast immediately
 
-void SfxBroadcaster::Broadcast( const SfxHint &rHint )
+void SfxBroadcaster::Broadcast(const SfxHint& rHint)
 {
     // notify all registered listeners exactly once
     for (size_t i = 0; i < m_Listeners.size(); ++i)
     {
-        SfxListener *const pListener = m_Listeners[i];
+        SfxListener* const pListener = m_Listeners[i];
         if (pListener)
-            pListener->Notify( *this, rHint );
+            pListener->Notify(*this, rHint);
     }
 }
 
@@ -45,34 +44,32 @@ void SfxBroadcaster::Broadcast( const SfxHint &rHint )
 
 SfxBroadcaster::~SfxBroadcaster() COVERITY_NOEXCEPT_FALSE
 {
-    Broadcast( SfxHint(SfxHintId::Dying) );
+    Broadcast(SfxHint(SfxHintId::Dying));
 
     // remove all still registered listeners
     for (size_t i = 0; i < m_Listeners.size(); ++i)
     {
-        SfxListener *const pListener = m_Listeners[i];
+        SfxListener* const pListener = m_Listeners[i];
         if (pListener)
             pListener->RemoveBroadcaster_Impl(*this);
     }
 }
 
-
 // copy ctor of class SfxBroadcaster
 
-SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rOther )
+SfxBroadcaster::SfxBroadcaster(const SfxBroadcaster& rOther)
 {
     for (size_t i = 0; i < rOther.m_Listeners.size(); ++i)
     {
-        SfxListener *const pListener = rOther.m_Listeners[i];
+        SfxListener* const pListener = rOther.m_Listeners[i];
         if (pListener)
-            pListener->StartListening( *this );
+            pListener->StartListening(*this);
     }
 }
 
-
 // add a new SfxListener to the list
 
-void SfxBroadcaster::AddListener( SfxListener& rListener )
+void SfxBroadcaster::AddListener(SfxListener& rListener)
 {
     DBG_TESTSOLARMUTEX();
     if (m_RemovedPositions.empty())
@@ -88,23 +85,21 @@ void SfxBroadcaster::AddListener( SfxListener& rListener )
     }
 }
 
-
 // forward a notification to all registered listeners
 
 void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     for (size_t i = 0; i < m_Listeners.size(); ++i)
     {
-        SfxListener *const pListener = m_Listeners[i];
+        SfxListener* const pListener = m_Listeners[i];
         if (pListener)
-            pListener->Notify( rBC, rHint );
+            pListener->Notify(rBC, rHint);
     }
 }
 
-
 // remove one SfxListener from the list
 
-void SfxBroadcaster::RemoveListener( SfxListener& rListener )
+void SfxBroadcaster::RemoveListener(SfxListener& rListener)
 {
     DBG_TESTSOLARMUTEX();
 
@@ -114,13 +109,13 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
     if (!m_RemovedPositions.empty())
     {
         auto i = m_RemovedPositions.back();
-        if (i < m_Listeners.size() - 2 && m_Listeners[i+1] == &rListener)
+        if (i < m_Listeners.size() - 2 && m_Listeners[i + 1] == &rListener)
         {
             positionOfRemovedElement = i + 1;
         }
-        else if (i > 0 && m_Listeners[i-1] == &rListener)
+        else if (i > 0 && m_Listeners[i - 1] == &rListener)
         {
-            positionOfRemovedElement = i-1;
+            positionOfRemovedElement = i - 1;
         }
     }
     // then scan the whole list if we didn't find it
@@ -135,10 +130,7 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
     m_RemovedPositions.push_back(positionOfRemovedElement);
 }
 
-bool SfxBroadcaster::HasListeners() const
-{
-    return (GetListenerCount() != 0);
-}
+bool SfxBroadcaster::HasListeners() const { return (GetListenerCount() != 0); }
 
 size_t SfxBroadcaster::GetListenerCount() const
 {
@@ -146,15 +138,8 @@ size_t SfxBroadcaster::GetListenerCount() const
     return m_Listeners.size() - m_RemovedPositions.size();
 }
 
-size_t SfxBroadcaster::GetSizeOfVector() const
-{
-    return m_Listeners.size();
-}
+size_t SfxBroadcaster::GetSizeOfVector() const { return m_Listeners.size(); }
 
-SfxListener* SfxBroadcaster::GetListener( size_t nNo ) const
-{
-    return m_Listeners[nNo];
-}
-
+SfxListener* SfxBroadcaster::GetListener(size_t nNo) const { return m_Listeners[nNo]; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
