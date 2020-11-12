@@ -8437,13 +8437,9 @@ salhelper/source/thread.cxx
 salhelper/source/timer.cxx
 salhelper/test/Symbols/loader.cxx
 salhelper/test/Symbols/samplelib.cxx
-salhelper/test/Symbols/samplelib.hxx
 salhelper/test/dynamicloader/loader.cxx
 salhelper/test/dynamicloader/samplelib.cxx
-salhelper/test/dynamicloader/samplelib.hxx
-salhelper/test/rtti/rttitest.cxx
 salhelper/test/rtti/samplelibrtti.cxx
-salhelper/test/rtti/samplelibrtti.hxx
 sax/inc/xml2utf.hxx
 sax/qa/cppunit/attributes.cxx
 sax/qa/cppunit/parser.cxx
