@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fd4412f9_71631429",
+        "filename": "include/editeng/itemtype.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-12T07:57:43Z",
+      "side": 1,
+      "message": "\u003e But in that change, the *inconsistent* old behaviour (where long was sometimes used as-is, accepting 8 bytes, and sometimes as 4-byte value, as in Normalize) was changed to consistent one.\n\noops\n\n\u003e Maybe better introduce a proper operator sal_Int64 for BigInt, that would possibly convert big int that is in the 64-bit range?\n\nSounds reasonable.  (And leave the question whether to extend BigInt\u0027s non-big representation to sal_Int64 for another change.)",
+      "parentUuid": "e437a555_146f686e",
+      "revId": "1397a1c8e4995b0dd336478e564880fe8ad91d1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f81f6bb4_db017dff",
         "filename": "include/tools/bigint.hxx",
         "patchSetId": 2
