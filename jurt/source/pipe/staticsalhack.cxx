@@ -70,8 +70,7 @@
 // defined for ANDROID (in ANDROID-specific sal/textenc/tables.cxx); would even
 // work to leave it undefined for LINUX due to no '-z defs' under -fsanitize=*
 // (solenv/gbuild/platform/linux.mk), but not for MACOSX:
-extern "C" ImplTextEncodingData const * sal_getFullTextEncodingData(
-    rtl_TextEncoding)
+extern "C" ImplTextEncodingData const* sal_getFullTextEncodingData(rtl_TextEncoding)
 {
     std::abort();
 }

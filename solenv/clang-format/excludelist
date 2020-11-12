@@ -7409,7 +7409,6 @@ javaunohelper/source/preload.cxx
 javaunohelper/source/vm.cxx
 javaunohelper/source/vm.hxx
 jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection.c
-jurt/source/pipe/staticsalhack.cxx
 jurt/source/pipe/wrapper/wrapper.c
 jvmaccess/source/classpath.cxx
 jvmaccess/source/unovirtualmachine.cxx
