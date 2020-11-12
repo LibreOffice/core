@@ -22,9 +22,9 @@
 
 namespace
 {
-  class LngMiscTest : public CppUnit::TestFixture
-  {
-  private:
+class LngMiscTest : public CppUnit::TestFixture
+{
+private:
     void testRemoveHyphens();
     void testRemoveControlChars();
     void testReplaceControlChars();
@@ -38,14 +38,15 @@ namespace
     CPPUNIT_TEST(testGetThesaurusReplaceText);
 
     CPPUNIT_TEST_SUITE_END();
-  };
+};
 
-  void LngMiscTest::testRemoveHyphens()
-  {
+void LngMiscTest::testRemoveHyphens()
+{
     OUString str1("");
     OUString str2("a-b--c---");
 
-    OUString str3 = OUStringChar(SVT_SOFT_HYPHEN) + OUStringChar(SVT_HARD_HYPHEN) + OUStringChar(SVT_HARD_HYPHEN);
+    OUString str3 = OUStringChar(SVT_SOFT_HYPHEN) + OUStringChar(SVT_HARD_HYPHEN)
+                    + OUStringChar(SVT_HARD_HYPHEN);
 
     OUString str4("asdf");
 
@@ -56,7 +57,7 @@ namespace
     // Note that '-' isn't a hyphen to RemoveHyphens.
     bModified = linguistic::RemoveHyphens(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT_EQUAL( OUString("a-b--c---"), str2 );
+    CPPUNIT_ASSERT_EQUAL(OUString("a-b--c---"), str2);
 
     bModified = linguistic::RemoveHyphens(str3);
     CPPUNIT_ASSERT(bModified);
@@ -64,19 +65,19 @@ namespace
 
     bModified = linguistic::RemoveHyphens(str4);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT_EQUAL( OUString("asdf"), str4 );
-  }
+    CPPUNIT_ASSERT_EQUAL(OUString("asdf"), str4);
+}
 
-  void LngMiscTest::testRemoveControlChars()
-  {
+void LngMiscTest::testRemoveControlChars()
+{
     OUString str1("");
     OUString str2("asdf");
     OUString str3("asdf\nasdf");
 
     OUStringBuffer str4Buf(33);
     str4Buf.setLength(33);
-    for(int i = 0; i < 33; i++)
-      str4Buf[i] = static_cast<sal_Unicode>(i);
+    for (int i = 0; i < 33; i++)
+        str4Buf[i] = static_cast<sal_Unicode>(i);
     //    TODO: is this a bug? shouldn't RemoveControlChars remove this?
     //    str4Buf[33] = static_cast<sal_Unicode>(0x7F);
     OUString str4(str4Buf.makeStringAndClear());
@@ -87,27 +88,27 @@ namespace
 
     bModified = linguistic::RemoveControlChars(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT_EQUAL( OUString("asdf"), str2 );
+    CPPUNIT_ASSERT_EQUAL(OUString("asdf"), str2);
 
     bModified = linguistic::RemoveControlChars(str3);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT_EQUAL( OUString("asdfasdf"), str3 );
+    CPPUNIT_ASSERT_EQUAL(OUString("asdfasdf"), str3);
 
     bModified = linguistic::RemoveControlChars(str4);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT_EQUAL( OUString(" "), str4 );
-  }
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), str4);
+}
 
-  void LngMiscTest::testReplaceControlChars()
-  {
+void LngMiscTest::testReplaceControlChars()
+{
     OUString str1("");
     OUString str2("asdf");
     OUString str3("asdf\nasdf");
 
     OUStringBuffer str4Buf(33);
     str4Buf.setLength(33);
-    for(int i = 0; i < 33; i++)
-      str4Buf[i] = static_cast<sal_Unicode>(i);
+    for (int i = 0; i < 33; i++)
+        str4Buf[i] = static_cast<sal_Unicode>(i);
     //    TODO: is this a bug? shouldn't RemoveControlChars remove this?
     //    str4Buf[33] = static_cast<sal_Unicode>(0x7F);
     OUString str4(str4Buf.makeStringAndClear());
@@ -118,21 +119,21 @@ namespace
 
     bModified = linguistic::ReplaceControlChars(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT_EQUAL( OUString("asdf"), str2 );
+    CPPUNIT_ASSERT_EQUAL(OUString("asdf"), str2);
 
     bModified = linguistic::ReplaceControlChars(str3);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT_EQUAL(OUString("asdf asdf"),  str3 );
+    CPPUNIT_ASSERT_EQUAL(OUString("asdf asdf"), str3);
 
     bModified = linguistic::ReplaceControlChars(str4);
     CPPUNIT_ASSERT(bModified);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(32), str4.getLength());
-    for(int i = 0; i < 32; i++)
+    for (int i = 0; i < 32; i++)
         CPPUNIT_ASSERT_EQUAL(u' ', str4[i]);
-  }
+}
 
-  void LngMiscTest::testGetThesaurusReplaceText()
-  {
+void LngMiscTest::testGetThesaurusReplaceText()
+{
     const OUString str2("asdf");
 
     OUString r = linguistic::GetThesaurusReplaceText("");
@@ -158,9 +159,9 @@ namespace
 
     r = linguistic::GetThesaurusReplaceText(" * (abc) asdf *");
     CPPUNIT_ASSERT(r.isEmpty());
-  }
+}
 
-  CPPUNIT_TEST_SUITE_REGISTRATION(LngMiscTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(LngMiscTest);
 }
 CPPUNIT_PLUGIN_IMPLEMENT();
 

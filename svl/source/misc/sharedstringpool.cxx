@@ -15,15 +15,11 @@
 #include <unordered_map>
 #include <unordered_set>
 
-namespace svl {
-
-namespace {
-
-sal_Int32 getRefCount( const rtl_uString* p )
+namespace svl
 {
-    return (p->refCount & 0x3FFFFFFF);
-}
-
+namespace
+{
+sal_Int32 getRefCount(const rtl_uString* p) { return (p->refCount & 0x3FFFFFFF); }
 }
 
 struct SharedStringPool::Impl
@@ -32,24 +28,27 @@ struct SharedStringPool::Impl
     // We use this map for two purposes - to store lower->upper case mappings
     // and to retrieve a shared uppercase object, so the management logic
     // is quite complex.
-    std::unordered_map<OUString,OUString> maStrMap;
+    std::unordered_map<OUString, OUString> maStrMap;
     const CharClass& mrCharClass;
 
-    explicit Impl( const CharClass& rCharClass ) : mrCharClass(rCharClass) {}
+    explicit Impl(const CharClass& rCharClass)
+        : mrCharClass(rCharClass)
+    {
+    }
 };
 
-SharedStringPool::SharedStringPool( const CharClass& rCharClass ) :
-    mpImpl(new Impl(rCharClass)) {}
-
-SharedStringPool::~SharedStringPool()
+SharedStringPool::SharedStringPool(const CharClass& rCharClass)
+    : mpImpl(new Impl(rCharClass))
 {
 }
 
-SharedString SharedStringPool::intern( const OUString& rStr )
+SharedStringPool::~SharedStringPool() {}
+
+SharedString SharedStringPool::intern(const OUString& rStr)
 {
     osl::MutexGuard aGuard(&mpImpl->maMutex);
 
-    auto [mapIt,bInserted] = mpImpl->maStrMap.emplace(rStr, rStr);
+    auto[mapIt, bInserted] = mpImpl->maStrMap.emplace(rStr, rStr);
     if (!bInserted)
         // there is already a mapping
         return SharedString(mapIt->first.pData, mapIt->second.pData);
@@ -141,11 +140,10 @@ size_t SharedStringPool::getCountIgnoreCase() const
     osl::MutexGuard aGuard(&mpImpl->maMutex);
     // this is only called from unit tests, so no need to be efficient
     std::unordered_set<OUString> aUpperSet;
-    for (auto const & pair : mpImpl->maStrMap)
+    for (auto const& pair : mpImpl->maStrMap)
         aUpperSet.insert(pair.second);
     return aUpperSet.size();
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

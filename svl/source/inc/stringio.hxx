@@ -31,7 +31,7 @@ class SvStream;
 
     @return  On success, returns the reconstructed Unicode string.
  */
-OUString readByteString(SvStream & rStream);
+OUString readByteString(SvStream& rStream);
 
 /** Write a byte string representation of a Unicode string into a stream.
 
@@ -40,8 +40,7 @@ OUString readByteString(SvStream & rStream);
 
     @param rString  Some Unicode string.
  */
-void writeByteString(SvStream & rStream, const OUString& rString);
-
+void writeByteString(SvStream& rStream, const OUString& rString);
 
 #endif // INCLUDED_SVL_SOURCE_INC_STRINGIO_HXX
 

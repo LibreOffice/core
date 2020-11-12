@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/poolitem.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
@@ -476,21 +475,17 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     assert(nWhich <= SHRT_MAX);
 }
 
-
 SfxPoolItem::~SfxPoolItem()
 {
-    assert((m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF)
-            && "destroying item in use");
+    assert((m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF) && "destroying item in use");
 }
 
-
-bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
+bool SfxPoolItem::operator==(const SfxPoolItem& rCmp) const
 {
     assert(typeid(rCmp) == typeid(*this) && "comparing different pool item subclasses");
     (void)rCmp;
     return true;
 }
-
 
 /**
  * This virtual method allows to get a textual representation of the value
@@ -528,14 +523,12 @@ bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
  *    pSvxBorderItem->GetPresentation( SFX_PRESENTATION_COMPLETE, ... )
  *        "1cm top border, 2cm left border, 0.2cm bottom border, ..."
  */
-bool SfxPoolItem::GetPresentation
-(
-    SfxItemPresentation /*ePresentation*/,       // IN:  how we should format
-    MapUnit             /*eCoreMetric*/,         // IN:  current metric of the SfxPoolItems
-    MapUnit             /*ePresentationMetric*/, // IN:  target metric of the presentation
-    OUString&           /*rText*/,               // OUT: textual representation
-    const IntlWrapper&
-)   const
+bool SfxPoolItem::GetPresentation(
+    SfxItemPresentation /*ePresentation*/, // IN:  how we should format
+    MapUnit /*eCoreMetric*/, // IN:  current metric of the SfxPoolItems
+    MapUnit /*ePresentationMetric*/, // IN:  target metric of the presentation
+    OUString& /*rText*/, // OUT: textual representation
+    const IntlWrapper&) const
 {
     return false;
 }
@@ -543,13 +536,15 @@ bool SfxPoolItem::GetPresentation
 void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxPoolItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
+                                BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("typeName"), BAD_CAST(typeid(*this).name()));
     OUString rText;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
-    if (GetPresentation( SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM, rText, aIntlWrapper))
-        xmlTextWriterWriteAttribute(
-            pWriter, BAD_CAST("presentation"), BAD_CAST(rText.toUtf8().getStr()));
+    if (GetPresentation(SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM,
+                        rText, aIntlWrapper))
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"),
+                                    BAD_CAST(rText.toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
@@ -559,44 +554,32 @@ boost::property_tree::ptree SfxPoolItem::dumpAsJSON() const
     return aTree;
 }
 
-std::unique_ptr<SfxPoolItem> SfxPoolItem::CloneSetWhich( sal_uInt16 nNewWhich ) const
+std::unique_ptr<SfxPoolItem> SfxPoolItem::CloneSetWhich(sal_uInt16 nNewWhich) const
 {
     std::unique_ptr<SfxPoolItem> pItem(Clone());
     pItem->SetWhich(nNewWhich);
     return pItem;
 }
 
-bool SfxPoolItem::IsVoidItem() const
-{
-    return false;
-}
+bool SfxPoolItem::IsVoidItem() const { return false; }
 
-SfxPoolItem* SfxVoidItem::CreateDefault()
-{
-    return new SfxVoidItem(0);
-}
+SfxPoolItem* SfxVoidItem::CreateDefault() { return new SfxVoidItem(0); }
 
-SfxVoidItem::SfxVoidItem( sal_uInt16 which ):
-    SfxPoolItem(which)
+SfxVoidItem::SfxVoidItem(sal_uInt16 which)
+    : SfxPoolItem(which)
 {
 }
 
-bool SfxVoidItem::operator==( const SfxPoolItem& rCmp ) const
+bool SfxVoidItem::operator==(const SfxPoolItem& rCmp) const
 {
     assert(SfxPoolItem::operator==(rCmp));
-    (void) rCmp;
+    (void)rCmp;
     return true;
 }
 
-
-bool SfxVoidItem::GetPresentation
-(
-    SfxItemPresentation     /*ePresentation*/,
-    MapUnit                 /*eCoreMetric*/,
-    MapUnit                 /*ePresentationMetric*/,
-    OUString&               rText,
-    const IntlWrapper&
-)   const
+bool SfxVoidItem::GetPresentation(SfxItemPresentation /*ePresentation*/, MapUnit /*eCoreMetric*/,
+                                  MapUnit /*ePresentationMetric*/, OUString& rText,
+                                  const IntlWrapper&) const
 {
     rText = "Void";
     return true;
@@ -605,44 +588,31 @@ bool SfxVoidItem::GetPresentation
 void SfxVoidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxVoidItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
+                                BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
-SfxVoidItem* SfxVoidItem::Clone(SfxItemPool *) const
-{
-    return new SfxVoidItem(*this);
-}
+SfxVoidItem* SfxVoidItem::Clone(SfxItemPool*) const { return new SfxVoidItem(*this); }
 
-bool SfxVoidItem::IsVoidItem() const
-{
-    return true;
-}
+bool SfxVoidItem::IsVoidItem() const { return true; }
 
-void SfxPoolItem::ScaleMetrics( tools::Long /*lMult*/, tools::Long /*lDiv*/ )
-{
-}
+void SfxPoolItem::ScaleMetrics(tools::Long /*lMult*/, tools::Long /*lDiv*/) {}
 
-bool SfxPoolItem::HasMetrics() const
-{
-    return false;
-}
+bool SfxPoolItem::HasMetrics() const { return false; }
 
-bool SfxPoolItem::QueryValue( css::uno::Any&, sal_uInt8 ) const
+bool SfxPoolItem::QueryValue(css::uno::Any&, sal_uInt8) const
 {
     OSL_FAIL("There is no implementation for QueryValue for this item!");
     return false;
 }
 
-
-bool SfxPoolItem::PutValue( const css::uno::Any&, sal_uInt8 )
+bool SfxPoolItem::PutValue(const css::uno::Any&, sal_uInt8)
 {
     OSL_FAIL("There is no implementation for PutValue for this item!");
     return false;
 }
 
-SfxVoidItem::~SfxVoidItem()
-{
-}
+SfxVoidItem::~SfxVoidItem() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,15 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/hint.hxx>
-
 
 // virtual dtor for the typical base-class Hint
 
-SfxHint::~SfxHint() COVERITY_NOEXCEPT_FALSE
-{
-}
-
+SfxHint::~SfxHint() COVERITY_NOEXCEPT_FALSE {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

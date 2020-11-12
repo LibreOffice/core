@@ -17,12 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/itemiter.hxx>
 #include <svl/itemset.hxx>
 
-SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
-    : m_rSet( rItemSet )
+SfxItemIter::SfxItemIter(const SfxItemSet& rItemSet)
+    : m_rSet(rItemSet)
 {
     if (!m_rSet.m_nCount)
     {
@@ -34,10 +33,10 @@ SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
         SfxPoolItem const** ppFnd = m_rSet.m_pItems.get();
 
         // Find the first Item that is set
-        for (m_nStart = 0; !*(ppFnd + m_nStart ); ++m_nStart)
+        for (m_nStart = 0; !*(ppFnd + m_nStart); ++m_nStart)
             ; // empty loop
         if (1 < m_rSet.Count())
-            for (m_nEnd = m_rSet.TotalCount(); !*(ppFnd + --m_nEnd); )
+            for (m_nEnd = m_rSet.TotalCount(); !*(ppFnd + --m_nEnd);)
                 ; // empty loop
         else
             m_nEnd = m_nStart;
@@ -46,18 +45,17 @@ SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
     m_nCurrent = m_nStart;
 }
 
-SfxItemIter::~SfxItemIter()
-{
-}
+SfxItemIter::~SfxItemIter() {}
 
 // Precondition : m_nCurrent < m_nEnd
 const SfxPoolItem* SfxItemIter::ImplNextItem()
 {
     SfxPoolItem const** ppFnd = m_rSet.m_pItems.get();
-    do {
+    do
+    {
         m_nCurrent++;
-    } while (m_nCurrent < m_nEnd && !*(ppFnd + m_nCurrent ));
-    return *(ppFnd+m_nCurrent);
+    } while (m_nCurrent < m_nEnd && !*(ppFnd + m_nCurrent));
+    return *(ppFnd + m_nCurrent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

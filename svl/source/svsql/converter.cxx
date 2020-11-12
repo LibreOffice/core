@@ -21,12 +21,11 @@
 
 sal_Int32 SvDbaseConverter::ConvertPrecisionToDbase(sal_Int32 _nLen, sal_Int32 _nScale)
 {
-    return _nScale ? _nLen +2 : _nLen +1;
+    return _nScale ? _nLen + 2 : _nLen + 1;
 }
 sal_Int32 SvDbaseConverter::ConvertPrecisionToOdbc(sal_Int32 _nLen, sal_Int32 _nScale)
 {
-    return _nScale ? _nLen -2 : _nLen -1;
+    return _nScale ? _nLen - 2 : _nLen - 1;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

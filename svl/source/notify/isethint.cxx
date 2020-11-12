@@ -17,22 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/isethint.hxx>
 #include <svl/itemset.hxx>
-
 
 /**
  * Copies the SfxItemSet passed as a parameter.
  */
-SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
-:   _pItemSet( rItemSet.Clone() )
+SfxItemSetHint::SfxItemSetHint(const SfxItemSet& rItemSet)
+    : _pItemSet(rItemSet.Clone())
 {
 }
 
-SfxItemSetHint::~SfxItemSetHint()
-{
-}
-
+SfxItemSetHint::~SfxItemSetHint() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
