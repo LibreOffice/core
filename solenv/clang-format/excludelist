@@ -3831,8 +3831,6 @@ embeddedobj/source/inc/specialobject.hxx
 embeddedobj/source/inc/targetstatecontrol.hxx
 embeddedobj/source/inc/xcreator.hxx
 embeddedobj/source/msole/advisesink.cxx
-embeddedobj/source/msole/advisesink.hxx
-embeddedobj/source/msole/closepreventer.cxx
 embeddedobj/source/msole/graphconvert.cxx
 embeddedobj/source/msole/graphconvert.hxx
 embeddedobj/source/msole/mtnotification.hxx

@@ -32,7 +32,7 @@ protected:
     OleComponent* m_pOleComp;
 
 public:
-    OleWrapperAdviseSink( OleComponent* pOleComp );
+    OleWrapperAdviseSink(OleComponent* pOleComp);
     OleWrapperAdviseSink();
     virtual ~OleWrapperAdviseSink();
 
@@ -41,11 +41,11 @@ public:
     STDMETHODIMP_(ULONG) AddRef() override;
     STDMETHODIMP_(ULONG) Release() override;
 
-    STDMETHODIMP_(void)  OnDataChange(FORMATETC *, STGMEDIUM *) override;
-    STDMETHODIMP_(void)  OnViewChange(DWORD, LONG) override;
-    STDMETHODIMP_(void)  OnRename(IMoniker *) override;
-    STDMETHODIMP_(void)  OnSave() override;
-    STDMETHODIMP_(void)  OnClose() override;
+    STDMETHODIMP_(void) OnDataChange(FORMATETC*, STGMEDIUM*) override;
+    STDMETHODIMP_(void) OnViewChange(DWORD, LONG) override;
+    STDMETHODIMP_(void) OnRename(IMoniker*) override;
+    STDMETHODIMP_(void) OnSave() override;
+    STDMETHODIMP_(void) OnClose() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
