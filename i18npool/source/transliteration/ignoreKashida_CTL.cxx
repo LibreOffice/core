@@ -9,12 +9,11 @@
 
 #include <transliteration_Ignore.hxx>
 
-namespace i18npool {
-
-static sal_Unicode
-ignoreKashida_CTL_translator (const sal_Unicode c)
+namespace i18npool
 {
-    if( c == 0x0640 ) // Check if it's Kashida
+static sal_Unicode ignoreKashida_CTL_translator(const sal_Unicode c)
+{
+    if (c == 0x0640) // Check if it's Kashida
         return 0xffff; // Then skip this character
 
     return c;
@@ -28,7 +27,6 @@ ignoreKashida_CTL::ignoreKashida_CTL()
     transliterationName = "ignoreKashida_CTL";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreKashida_CTL";
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-namespace i18npool {
-
+namespace i18npool
+{
 const transliteration_Ignore::Mapping SeZe[] = {
     // SI + E --> SE
     { 0x30B7, 0x30A7, 0x30BB, true },
@@ -45,7 +45,6 @@ ignoreSeZe_ja_JP::ignoreSeZe_ja_JP()
     transliterationName = "ignoreSeZe_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreSeZe_ja_JP";
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,16 +19,16 @@
 
 #include <transliteration_Ignore.hxx>
 
-namespace i18npool {
-
-static sal_Unicode
-ignoreMiddleDot_ja_JP_translator (const sal_Unicode c)
+namespace i18npool
 {
-    switch (c) {
+static sal_Unicode ignoreMiddleDot_ja_JP_translator(const sal_Unicode c)
+{
+    switch (c)
+    {
         case 0x30FB: // KATAKANA MIDDLE DOT
         case 0xFF65: // HALFWIDTH KATAKANA MIDDLE DOT
-        // no break;
-        return 0xffff; // Skip this character
+            // no break;
+            return 0xffff; // Skip this character
     }
     return c;
 }
@@ -41,7 +41,6 @@ ignoreMiddleDot_ja_JP::ignoreMiddleDot_ja_JP()
     transliterationName = "ignoreMiddleDot_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreMiddleDot_ja_JP";
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

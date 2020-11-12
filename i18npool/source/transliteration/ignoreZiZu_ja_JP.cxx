@@ -19,23 +19,22 @@
 
 #include <transliteration_Ignore.hxx>
 
-namespace i18npool {
-
-static sal_Unicode
-ignoreZiZu_ja_JP_translator (const sal_Unicode c)
+namespace i18npool
 {
-
-    switch (c) {
-        case 0x30C2:     // KATAKANA LETTER DI
+static sal_Unicode ignoreZiZu_ja_JP_translator(const sal_Unicode c)
+{
+    switch (c)
+    {
+        case 0x30C2: // KATAKANA LETTER DI
             return 0x30B8; // KATAKANA LETTER ZI
 
-        case 0x3062:     // HIRAGANA LETTER DI
+        case 0x3062: // HIRAGANA LETTER DI
             return 0x3058; // HIRAGANA LETTER ZI
 
-        case 0x30C5:     // KATAKANA LETTER DU
+        case 0x30C5: // KATAKANA LETTER DU
             return 0x30BA; // KATAKANA LETTER ZU
 
-        case 0x3065:     // HIRAGANA LETTER DU
+        case 0x3065: // HIRAGANA LETTER DU
             return 0x305A; // HIRAGANA LETTER ZU
     }
     return c;
@@ -49,7 +48,6 @@ ignoreZiZu_ja_JP::ignoreZiZu_ja_JP()
     transliterationName = "ignoreZiZu_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreZiZu_ja_JP";
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

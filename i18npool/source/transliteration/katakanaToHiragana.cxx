@@ -19,13 +19,14 @@
 
 #include <transliteration_OneToOne.hxx>
 
-namespace i18npool {
-
+namespace i18npool
+{
 // see http://charts.unicode.org/Web/U3040.html Hiragana (U+3040..U+309F)
 // see http://charts.unicode.org/Web/U30A0.html Katakana (U+30A0..U+30FF)
-static sal_Unicode toHiragana (const sal_Unicode c)
+static sal_Unicode toHiragana(const sal_Unicode c)
 {
-    if ( (0x30a1 <= c && c <= 0x30f6) || (0x30fd <= c && c <= 0x30ff) ) { // 30A0 - 30FF KATAKANA LETTER
+    if ((0x30a1 <= c && c <= 0x30f6) || (0x30fd <= c && c <= 0x30ff))
+    { // 30A0 - 30FF KATAKANA LETTER
         // shift code point by 0x0060
         return c - (0x30a0 - 0x3040);
     }
@@ -39,7 +40,6 @@ katakanaToHiragana::katakanaToHiragana()
     transliterationName = "katakanaToHiragana";
     implementationName = "com.sun.star.i18n.Transliteration.KATAKANA_HIRAGANA";
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
