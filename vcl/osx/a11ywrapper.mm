@@ -1032,7 +1032,7 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
     }
     Reference < XAccessibleContext > hitChild;
     NSRect screenRect = [ [ NSScreen mainScreen ] frame ];
-    css::awt::Point hitPoint ( static_cast<long>(point.x) , static_cast<long>(screenRect.size.height - point.y) );
+    css::awt::Point hitPoint ( static_cast<sal_Int32>(point.x) , static_cast<sal_Int32>(screenRect.size.height - point.y) );
     // check child windows first
     NSWindow * window = static_cast<NSWindow *>([ self accessibilityAttributeValue: NSAccessibilityWindowAttribute ]);
     NSArray * childWindows = [ window childWindows ];
