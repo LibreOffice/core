@@ -38,16 +38,16 @@ public:
     NSClipView*                 mpClipView;
     SystemEnvData               maSysData;
 
-    long                        mnClipX;
-    long                        mnClipY;
-    long                        mnClipWidth;
-    long                        mnClipHeight;
+    CGFloat                     mnClipX;
+    CGFloat                     mnClipY;
+    CGFloat                     mnClipWidth;
+    CGFloat                     mnClipHeight;
     bool                        mbClip;
 
-    long                        mnX;
-    long                        mnY;
-    long                        mnWidth;
-    long                        mnHeight;
+    CGFloat                     mnX;
+    CGFloat                     mnY;
+    CGFloat                     mnWidth;
+    CGFloat                     mnHeight;
 
     void setClippedPosSize();
 
