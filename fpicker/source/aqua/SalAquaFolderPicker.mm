@@ -114,7 +114,7 @@ OUString SAL_CALL SalAquaFolderPicker::getDirectory()
         files = [static_cast<NSOpenPanel*>(m_pDialog) URLs];
     }
 
-    long nFiles = [files count];
+    NSUInteger nFiles = [files count];
     SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
 
     if (nFiles < 1) {

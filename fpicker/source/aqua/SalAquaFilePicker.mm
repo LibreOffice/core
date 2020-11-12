@@ -253,12 +253,12 @@ uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
         files = [NSArray arrayWithObjects:[m_pDialog URL], nil];
     }
 
-    long nFiles = [files count];
+    NSUInteger nFiles = [files count];
     SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
 
     uno::Sequence< OUString > aSelectedFiles(nFiles);
 
-    for(long nIndex = 0; nIndex < nFiles; nIndex += 1)
+    for(NSUInteger nIndex = 0; nIndex < nFiles; nIndex += 1)
     {
         NSURL *url = [files objectAtIndex:nIndex];
 
