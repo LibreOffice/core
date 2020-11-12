@@ -22,12 +22,11 @@
 #include <osl/time.h>
 #include <rtl/unload.h>
 
-extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount *) {}
+extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount*) {}
 
-extern "C" void rtl_moduleCount_release(rtl_ModuleCount *) {}
+extern "C" void rtl_moduleCount_release(rtl_ModuleCount*) {}
 
-extern "C" sal_Bool rtl_moduleCount_canUnload(
-    rtl_StandardModuleCount *, TimeValue *)
+extern "C" sal_Bool rtl_moduleCount_canUnload(rtl_StandardModuleCount*, TimeValue*)
 {
     return false;
 }

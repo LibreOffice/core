@@ -23,9 +23,9 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
-inline void operator <<= (OString& _rAsciiString, OUString const & _rUnicodeString)
+inline void operator<<=(OString& _rAsciiString, OUString const& _rUnicodeString)
 {
-    _rAsciiString = OUStringToOString(_rUnicodeString,RTL_TEXTENCODING_ASCII_US);
+    _rAsciiString = OUStringToOString(_rUnicodeString, RTL_TEXTENCODING_ASCII_US);
 }
 
 #endif

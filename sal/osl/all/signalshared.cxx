@@ -47,7 +47,6 @@ bool deInitSignal()
 
     return bRet;
 }
-
 }
 
 oslSignalAction callSignalHandler(oslSignalInfo* pInfo)
@@ -57,8 +56,7 @@ oslSignalAction callSignalHandler(oslSignalInfo* pInfo)
 
     while (pHandler)
     {
-        if ((Action = pHandler->Handler(pHandler->pData, pInfo))
-                != osl_Signal_ActCallNextHdl)
+        if ((Action = pHandler->Handler(pHandler->pData, pInfo)) != osl_Signal_ActCallNextHdl)
             break;
 
         pHandler = pHandler->pNext;
@@ -75,17 +73,18 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction handler,
     if (!bInitSignal)
         bInitSignal = initSignal();
 
-    oslSignalHandlerImpl* pHandler = static_cast<oslSignalHandlerImpl*>(calloc(1, sizeof(oslSignalHandlerImpl)));
+    oslSignalHandlerImpl* pHandler
+        = static_cast<oslSignalHandlerImpl*>(calloc(1, sizeof(oslSignalHandlerImpl)));
 
     if (pHandler)
     {
         pHandler->Handler = handler;
-        pHandler->pData   = pData;
+        pHandler->pData = pData;
 
         osl_acquireMutex(SignalListMutex);
 
         pHandler->pNext = SignalList;
-        SignalList      = pHandler;
+        SignalList = pHandler;
 
         osl_releaseMutex(SignalListMutex);
 
@@ -125,7 +124,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
         }
 
         pPrevious = pHandler;
-        pHandler  = pHandler->pNext;
+        pHandler = pHandler->pNext;
     }
 
     osl_releaseMutex(SignalListMutex);
@@ -152,7 +151,7 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 userSignal, void* userData)
     return action;
 }
 
-sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool /*bEnable*/ )
+sal_Bool SAL_CALL osl_setErrorReporting(sal_Bool /*bEnable*/)
 {
     // this is part of the stable API
     return false;

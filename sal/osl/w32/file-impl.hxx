@@ -18,8 +18,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-extern "C" oslFileHandle osl_createFileHandleFromOSHandle(
-    HANDLE hFile, sal_uInt32 uFlags);
+extern "C" oslFileHandle osl_createFileHandleFromOSHandle(HANDLE hFile, sal_uInt32 uFlags);
 
 #endif
 

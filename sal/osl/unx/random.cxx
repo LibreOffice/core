@@ -18,9 +18,9 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
 
     assert(buffer);
     fd = open("/dev/urandom", O_RDONLY);
-    if(fd != -1)
+    if (fd != -1)
     {
-        while(desired_len)
+        while (desired_len)
         {
             ssize_t nb_read;
             if ((nb_read = read(fd, buffer, desired_len)) == -1)
@@ -33,7 +33,7 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
             }
             else
             {
-                buffer  += nb_read;
+                buffer += nb_read;
                 desired_len -= nb_read;
             }
         }

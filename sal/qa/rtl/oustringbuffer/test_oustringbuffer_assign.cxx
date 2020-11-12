@@ -16,11 +16,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
-namespace {
-
-class Test: public CppUnit::TestFixture {
+namespace
+{
+class Test : public CppUnit::TestFixture
+{
 private:
-    void test() {
+    void test()
+    {
         OUStringBuffer b1;
         OUString s1("123456789012345");
         b1 = s1;
@@ -70,7 +72,6 @@ private:
     CPPUNIT_TEST(test);
     CPPUNIT_TEST_SUITE_END();
 };
-
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

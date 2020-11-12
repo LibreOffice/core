@@ -71,7 +71,7 @@ long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
     oslSignalInfo info;
 
     info.UserSignal = lpEP->ExceptionRecord->ExceptionCode;
-    info.UserData   = nullptr;
+    info.UserData = nullptr;
 
     switch (lpEP->ExceptionRecord->ExceptionCode)
     {
@@ -102,7 +102,7 @@ long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 
     oslSignalAction action;
 
-    if ( !bNested )
+    if (!bNested)
     {
         bNested = true;
         action = callSignalHandler(&info);
@@ -110,7 +110,7 @@ long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
     else
         action = osl_Signal_ActKillApp;
 
-    switch ( action )
+    switch (action)
     {
         case osl_Signal_ActCallNextHdl:
             return EXCEPTION_CONTINUE_SEARCH;
@@ -128,7 +128,6 @@ long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 
     return EXCEPTION_CONTINUE_EXECUTION;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

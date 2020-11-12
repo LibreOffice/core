@@ -27,8 +27,7 @@ bool ImplIsControlOrFormat(sal_uInt32 nUtf32)
     // <http://www.unicode.org/Public/UNIDATA/UnicodeData.txt>, Version 3.1.1,
     // that have a General Category of Cc (Other, Control) or Cf (Other,
     // Format):
-    return nUtf32 <= 0x001F
-           || (nUtf32 >= 0x007F && nUtf32 <= 0x009F)
+    return nUtf32 <= 0x001F || (nUtf32 >= 0x007F && nUtf32 <= 0x009F)
            || nUtf32 == 0x070F // SYRIAC ABBREVIATION MARK
            || nUtf32 == 0x180B // MONGOLIAN FREE VARIATION SELECTOR ONE
            || nUtf32 == 0x180C // MONGOLIAN FREE VARIATION SELECTOR TWO
@@ -70,8 +69,7 @@ bool ImplIsPrivateUse(sal_uInt32 nUtf32)
     // All code points of
     // <http://www.unicode.org/Public/UNIDATA/UnicodeData.txt>, Version 3.1.1,
     // that have a General Category of Co (Other, Private Use):
-    return (nUtf32 >= 0xE000 && nUtf32 <= 0xF8FF)
-           || (nUtf32 >= 0xF0000 && nUtf32 <= 0xFFFFD)
+    return (nUtf32 >= 0xE000 && nUtf32 <= 0xF8FF) || (nUtf32 >= 0xF0000 && nUtf32 <= 0xFFFFD)
            || (nUtf32 >= 0x100000 && nUtf32 <= 0x10FFFD);
 }
 

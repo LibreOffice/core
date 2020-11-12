@@ -31,13 +31,11 @@
 
 bool ImplIsControlOrFormat(sal_uInt32 nUtf32);
 
-inline bool ImplIsHighSurrogate(sal_uInt32 nUtf32)
-{ return nUtf32 >= 0xD800 && nUtf32 <= 0xDBFF; }
-    // All code points that are high-surrogates, as of Unicode 3.1.1.
+// All code points that are high-surrogates, as of Unicode 3.1.1.
+inline bool ImplIsHighSurrogate(sal_uInt32 nUtf32) { return nUtf32 >= 0xD800 && nUtf32 <= 0xDBFF; }
 
-inline bool ImplIsLowSurrogate(sal_uInt32 nUtf32)
-{ return nUtf32 >= 0xDC00 && nUtf32 <= 0xDFFF; }
-    // All code points that are low-surrogates, as of Unicode 3.1.1.
+// All code points that are low-surrogates, as of Unicode 3.1.1.
+inline bool ImplIsLowSurrogate(sal_uInt32 nUtf32) { return nUtf32 >= 0xDC00 && nUtf32 <= 0xDFFF; }
 
 bool ImplIsPrivateUse(sal_uInt32 nUtf32);
 
