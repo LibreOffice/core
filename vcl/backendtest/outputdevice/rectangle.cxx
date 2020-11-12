@@ -10,23 +10,23 @@
 
 #include <test/outputdevice.hxx>
 
-namespace vcl::test {
-
+namespace vcl::test
+{
 namespace
 {
-    void drawRectOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int nOffset)
-    {
-        rDevice.DrawRect(tools::Rectangle(rRect.Left()  + nOffset, rRect.Top()    + nOffset,
-                                   rRect.Right() - nOffset, rRect.Bottom() - nOffset));
+void drawRectOffset(OutputDevice& rDevice, tools::Rectangle const& rRect, int nOffset)
+{
+    rDevice.DrawRect(tools::Rectangle(rRect.Left() + nOffset, rRect.Top() + nOffset,
+                                      rRect.Right() - nOffset, rRect.Bottom() - nOffset));
+}
 
-    }
-
-    void drawInvertOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int nOffset, InvertFlags eFlags)
-    {
-        tools::Rectangle aRectangle(rRect.Left()  + nOffset, rRect.Top() + nOffset,
-                                    rRect.Right() - nOffset, rRect.Bottom() - nOffset);
-        rDevice.Invert(aRectangle, eFlags);
-    }
+void drawInvertOffset(OutputDevice& rDevice, tools::Rectangle const& rRect, int nOffset,
+                      InvertFlags eFlags)
+{
+    tools::Rectangle aRectangle(rRect.Left() + nOffset, rRect.Top() + nOffset,
+                                rRect.Right() - nOffset, rRect.Bottom() - nOffset);
+    rDevice.Invert(aRectangle, eFlags);
+}
 
 } // end anonymous namespace
 
@@ -34,7 +34,7 @@ Bitmap OutputDeviceTestRect::setupFilledRectangle(bool useLineColor)
 {
     initialSetup(13, 13, constBackgroundColor);
 
-    if(useLineColor)
+    if (useLineColor)
         mpVirtualDevice->SetLineColor(constLineColor);
     else
         mpVirtualDevice->SetLineColor();

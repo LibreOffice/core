@@ -141,8 +141,9 @@ void SalBitmap::DropScaledCache()
     {
         auto& rCache = pSVData->maGDIData.maScaleCache;
 
-        rCache.remove_if([this] (const lru_scale_cache::key_value_pair_t& rKeyValuePair)
-                         { return rKeyValuePair.first.mpBitmap == this; });
+        rCache.remove_if([this](const lru_scale_cache::key_value_pair_t& rKeyValuePair) {
+            return rKeyValuePair.first.mpBitmap == this;
+        });
     }
 }
 
@@ -514,8 +515,7 @@ css::uno::Reference<css::datatransfer::dnd::XDropTarget> SalInstanceWidget::get_
     return m_xWidget->GetDropTarget();
 }
 
-void SalInstanceWidget::connect_get_property_tree(
-    const Link<tools::JsonWriter&, void>& rLink)
+void SalInstanceWidget::connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink)
 {
     m_xWidget->SetDumpAsPropertyTreeHdl(rLink);
 }
@@ -557,11 +557,13 @@ void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
 
 namespace
 {
-    MouseEvent TransformEvent(const MouseEvent& rEvent, const vcl::Window* pParent, const vcl::Window* pChild)
-    {
-        return MouseEvent(pParent->ScreenToOutputPixel(pChild->OutputToScreenPixel(rEvent.GetPosPixel())),
-                          rEvent.GetClicks(), rEvent.GetMode(), rEvent.GetButtons(), rEvent.GetModifier());
-    }
+MouseEvent TransformEvent(const MouseEvent& rEvent, const vcl::Window* pParent,
+                          const vcl::Window* pChild)
+{
+    return MouseEvent(
+        pParent->ScreenToOutputPixel(pChild->OutputToScreenPixel(rEvent.GetPosPixel())),
+        rEvent.GetClicks(), rEvent.GetMode(), rEvent.GetButtons(), rEvent.GetModifier());
+}
 }
 
 void SalInstanceWidget::HandleMouseEventListener(VclSimpleEvent& rEvent)
@@ -577,7 +579,8 @@ void SalInstanceWidget::HandleMouseEventListener(VclSimpleEvent& rEvent)
         else if (m_xWidget->ImplIsChild(rWinEvent.GetWindow()))
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
-            const MouseEvent aTransformedEvent(TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
+            const MouseEvent aTransformedEvent(
+                TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
             m_aMousePressHdl.Call(aTransformedEvent);
         }
     }
@@ -592,7 +595,8 @@ void SalInstanceWidget::HandleMouseEventListener(VclSimpleEvent& rEvent)
         else if (m_xWidget->ImplIsChild(rWinEvent.GetWindow()))
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
-            const MouseEvent aTransformedEvent(TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
+            const MouseEvent aTransformedEvent(
+                TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
             m_aMouseReleaseHdl.Call(aTransformedEvent);
         }
     }
@@ -607,7 +611,8 @@ void SalInstanceWidget::HandleMouseEventListener(VclSimpleEvent& rEvent)
         else if (m_xWidget->ImplIsChild(rWinEvent.GetWindow()))
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
-            const MouseEvent aTransformedEvent(TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
+            const MouseEvent aTransformedEvent(
+                TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
             m_aMouseMotionHdl.Call(aTransformedEvent);
         }
     }
@@ -691,8 +696,8 @@ sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, const O
     else
         nBits = MenuItemBits::NONE;
 
-    pMenu->InsertItem(nNewid, rStr, nBits,
-                      OUStringToOString(rId, RTL_TEXTENCODING_UTF8), pos == -1 ? MENU_APPEND : pos);
+    pMenu->InsertItem(nNewid, rStr, nBits, OUStringToOString(rId, RTL_TEXTENCODING_UTF8),
+                      pos == -1 ? MENU_APPEND : pos);
     if (pIconName)
     {
         pMenu->SetItemImage(nNewid, createImage(*pIconName));
@@ -718,7 +723,7 @@ OString SalInstanceMenu::popup_at_rect(weld::Widget* pParent, const tools::Recta
     SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pParent);
     assert(pVclWidget);
     m_xMenu->Execute(pVclWidget->getWidget(), rRect,
-                        PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose);
+                     PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose);
     return m_xMenu->GetCurItemIdent();
 }
 void SalInstanceMenu::set_sensitive(const OString& rIdent, bool bSensitive)
@@ -747,11 +752,11 @@ void SalInstanceMenu::set_visible(const OString& rIdent, bool bShow)
 }
 void SalInstanceMenu::clear() { m_xMenu->Clear(); }
 void SalInstanceMenu::insert(int pos, const OUString& rId, const OUString& rStr,
-                    const OUString* pIconName, VirtualDevice* pImageSurface,
-                    TriState eCheckRadioFalse)
+                             const OUString* pIconName, VirtualDevice* pImageSurface,
+                             TriState eCheckRadioFalse)
 {
-    m_nLastId
-        = insert_to_menu(m_nLastId, m_xMenu, pos, rId, rStr, pIconName, pImageSurface, eCheckRadioFalse);
+    m_nLastId = insert_to_menu(m_nLastId, m_xMenu, pos, rId, rStr, pIconName, pImageSurface,
+                               eCheckRadioFalse);
 }
 void SalInstanceMenu::insert_separator(int pos, const OUString& rId)
 {
@@ -789,7 +794,8 @@ IMPL_LINK_NOARG(SalInstanceMenu, SelectMenuHdl, ::Menu*, bool)
     return false;
 }
 
-SalInstanceToolbar::SalInstanceToolbar(ToolBox* pToolBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+SalInstanceToolbar::SalInstanceToolbar(ToolBox* pToolBox, SalInstanceBuilder* pBuilder,
+                                       bool bTakeOwnership)
     : SalInstanceWidget(pToolBox, pBuilder, bTakeOwnership)
     , m_xToolBox(pToolBox)
 {
@@ -849,7 +855,7 @@ void SalInstanceToolbar::set_menu_item_active(const OString& rIdent, bool bActiv
     {
         if (bActive)
             vcl::Window::GetDockingManager()->StartPopupMode(m_xToolBox, pFloat,
-                                                                FloatWinPopupFlags::GrabFocus);
+                                                             FloatWinPopupFlags::GrabFocus);
         else
             vcl::Window::GetDockingManager()->EndPopupMode(pFloat);
     }
@@ -938,8 +944,7 @@ OString SalInstanceToolbar::get_item_ident(int nIndex) const
 
 void SalInstanceToolbar::set_item_ident(int nIndex, const OString& rIdent)
 {
-    return m_xToolBox->SetItemCommand(m_xToolBox->GetItemId(nIndex),
-                                        OUString::fromUtf8(rIdent));
+    return m_xToolBox->SetItemCommand(m_xToolBox->GetItemId(nIndex), OUString::fromUtf8(rIdent));
 }
 
 void SalInstanceToolbar::set_item_label(int nIndex, const OUString& rLabel)
@@ -960,11 +965,11 @@ void SalInstanceToolbar::set_item_label(const OString& rIdent, const OUString& r
 void SalInstanceToolbar::set_item_icon_name(const OString& rIdent, const OUString& rIconName)
 {
     m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)),
-                                Image(StockImage::Yes, rIconName));
+                             Image(StockImage::Yes, rIconName));
 }
 
 void SalInstanceToolbar::set_item_image(const OString& rIdent,
-                            const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+                                        const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 {
     m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), Image(rIcon));
 }
@@ -973,13 +978,13 @@ void SalInstanceToolbar::set_item_image(const OString& rIdent, VirtualDevice* pD
 {
     if (pDevice)
         m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)),
-                                    createImage(*pDevice));
+                                 createImage(*pDevice));
     else
         m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), Image());
 }
 
 void SalInstanceToolbar::set_item_image(int nIndex,
-                            const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+                                        const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 {
     m_xToolBox->SetItemImage(m_xToolBox->GetItemId(nIndex), Image(rIcon));
 }
@@ -1023,10 +1028,7 @@ void SalInstanceToolbar::set_icon_size(vcl::ImageType eType)
     }
 }
 
-sal_uInt16 SalInstanceToolbar::get_modifier_state() const
-{
-    return m_xToolBox->GetModifier();
-}
+sal_uInt16 SalInstanceToolbar::get_modifier_state() const { return m_xToolBox->GetModifier(); }
 
 int SalInstanceToolbar::get_drop_index(const Point& rPoint) const
 {
@@ -1159,35 +1161,36 @@ std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
 
 namespace
 {
-    void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOutput)
+void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOutput)
+{
+    Size aSize = pWindow->GetSizePixel();
+
+    VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    xOutput->SetOutputSizePixel(aSize);
+    xOutput->DrawOutDev(Point(), aSize, rPos, aSize, rOutput);
+
+    //set ReallyVisible to match Visible, we restore the original
+    //state after Paint
+    WindowImpl* pImpl = pWindow->ImplGetWindowImpl();
+    bool bRVisible = pImpl->mbReallyVisible;
+    pImpl->mbReallyVisible = pWindow->IsVisible();
+
+    pWindow->Paint(*xOutput, tools::Rectangle(Point(), aSize));
+
+    pImpl->mbReallyVisible = bRVisible;
+
+    rOutput.DrawOutDev(rPos, aSize, Point(), aSize, *xOutput);
+
+    xOutput.disposeAndClear();
+
+    for (vcl::Window* pChild = pWindow->GetWindow(GetWindowType::FirstChild); pChild;
+         pChild = pChild->GetWindow(GetWindowType::Next))
     {
-        Size aSize = pWindow->GetSizePixel();
-
-        VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
-        xOutput->SetOutputSizePixel(aSize);
-        xOutput->DrawOutDev(Point(), aSize, rPos, aSize, rOutput);
-
-        //set ReallyVisible to match Visible, we restore the original
-        //state after Paint
-        WindowImpl* pImpl = pWindow->ImplGetWindowImpl();
-        bool bRVisible = pImpl->mbReallyVisible;
-        pImpl->mbReallyVisible = pWindow->IsVisible();
-
-        pWindow->Paint(*xOutput, tools::Rectangle(Point(), aSize));
-
-        pImpl->mbReallyVisible = bRVisible;
-
-        rOutput.DrawOutDev(rPos, aSize, Point(), aSize, *xOutput);
-
-        xOutput.disposeAndClear();
-
-        for (vcl::Window *pChild = pWindow->GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
-        {
-            if (!pChild->IsVisible())
-                continue;
-            DoRecursivePaint(pChild, rPos + pChild->GetPosPixel(), rOutput);
-        }
+        if (!pChild->IsVisible())
+            continue;
+        DoRecursivePaint(pChild, rPos + pChild->GetPosPixel(), rOutput);
     }
+}
 }
 
 void SalInstanceWidget::draw(OutputDevice& rOutput, const tools::Rectangle& rRect)
@@ -1206,6 +1209,7 @@ class SalInstanceBox : public SalInstanceContainer, public virtual weld::Box
 {
 private:
     VclPtr<VclBox> m_xBox;
+
 public:
     SalInstanceBox(VclBox* pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pContainer, pBuilder, bTakeOwnership)
@@ -1218,10 +1222,7 @@ public:
         assert(pVclWidget);
         pVclWidget->getWidget()->reorderWithinParent(nNewPosition);
     }
-    virtual void sort_native_button_order() override
-    {
-        ::sort_native_button_order(*m_xBox);
-    }
+    virtual void sort_native_button_order() override { ::sort_native_button_order(*m_xBox); }
 };
 
 void CollectChildren(const vcl::Window& rCurrent, const basegfx::B2IPoint& rTopLeft,
@@ -1252,7 +1253,6 @@ void CollectChildren(const vcl::Window& rCurrent, const basegfx::B2IPoint& rTopL
         }
     }
 }
-
 }
 
 void SalInstanceWindow::override_child_help(vcl::Window* pParent)
@@ -1648,8 +1648,9 @@ IMPL_LINK(SalInstanceDialog, PopupScreenShotMenuHdl, const CommandEvent&, rCEvt,
     return false;
 }
 
-SalInstanceMessageDialog::SalInstanceMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder,
-                            bool bTakeOwnership)
+SalInstanceMessageDialog::SalInstanceMessageDialog(::MessageDialog* pDialog,
+                                                   SalInstanceBuilder* pBuilder,
+                                                   bool bTakeOwnership)
     : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
     , m_xMessageDialog(pDialog)
 {
@@ -1682,7 +1683,6 @@ weld::Container* SalInstanceMessageDialog::weld_message_area()
 
 namespace
 {
-
 class SalInstanceAssistant : public SalInstanceDialog, public virtual weld::Assistant
 {
 private:
@@ -1872,7 +1872,6 @@ public:
             rPage.disposeAndClear();
     }
 };
-
 }
 
 IMPL_LINK_NOARG(SalInstanceAssistant, OnRoadmapItemSelected, LinkParamNone*, void)
@@ -1941,15 +1940,9 @@ public:
     {
     }
 
-    virtual void set_position(int nPos) override
-    {
-        m_xPaned->set_position(nPos);
-    }
+    virtual void set_position(int nPos) override { m_xPaned->set_position(nPos); }
 
-    virtual int get_position() const override
-    {
-        return m_xPaned->get_position();
-    }
+    virtual int get_position() const override { return m_xPaned->get_position(); }
 };
 
 class SalInstanceScrolledWindow : public SalInstanceContainer, public virtual weld::ScrolledWindow
@@ -2173,7 +2166,6 @@ public:
         rVertScrollBar.SetScrollHdl(m_aOrigVScrollHdl);
     }
 };
-
 }
 
 IMPL_LINK(SalInstanceScrolledWindow, VscrollHdl, ScrollBar*, pScrollBar, void)
@@ -2190,7 +2182,8 @@ IMPL_LINK_NOARG(SalInstanceScrolledWindow, HscrollHdl, ScrollBar*, void)
         m_aOrigHScrollHdl.Call(&m_xScrolledWindow->getHorzScrollBar());
 }
 
-SalInstanceNotebook::SalInstanceNotebook(TabControl* pNotebook, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+SalInstanceNotebook::SalInstanceNotebook(TabControl* pNotebook, SalInstanceBuilder* pBuilder,
+                                         bool bTakeOwnership)
     : SalInstanceContainer(pNotebook, pBuilder, bTakeOwnership)
     , m_xNotebook(pNotebook)
 {
@@ -2434,7 +2427,6 @@ public:
         m_xNotebook->SetDeactivatePageHdl(Link<VerticalTabControl*, bool>());
     }
 };
-
 }
 
 IMPL_LINK_NOARG(SalInstanceVerticalNotebook, DeactivatePageHdl, VerticalTabControl*, bool)
@@ -2447,7 +2439,8 @@ IMPL_LINK_NOARG(SalInstanceVerticalNotebook, ActivatePageHdl, VerticalTabControl
     m_aEnterPageHdl.Call(get_current_page_ident());
 }
 
-SalInstanceButton::SalInstanceButton(::Button* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+SalInstanceButton::SalInstanceButton(::Button* pButton, SalInstanceBuilder* pBuilder,
+                                     bool bTakeOwnership)
     : SalInstanceContainer(pButton, pBuilder, bTakeOwnership)
     , m_xButton(pButton)
     , m_aOldClickHdl(pButton->GetClickHdl())
@@ -2662,7 +2655,6 @@ public:
         m_xMenuButton->SetActivateHdl(Link<::MenuButton*, void>());
     }
 };
-
 }
 
 IMPL_LINK_NOARG(SalInstanceMenuButton, MenuSelectHdl, ::MenuButton*, void)
@@ -2679,14 +2671,15 @@ IMPL_LINK_NOARG(SalInstanceMenuButton, ActivateHdl, ::MenuButton*, void)
 
 namespace
 {
-
-class SalInstanceMenuToggleButton : public SalInstanceMenuButton, public virtual weld::MenuToggleButton
+class SalInstanceMenuToggleButton : public SalInstanceMenuButton,
+                                    public virtual weld::MenuToggleButton
 {
 private:
     VclPtr<::MenuToggleButton> m_xMenuToggleButton;
 
 public:
-    SalInstanceMenuToggleButton(::MenuToggleButton* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    SalInstanceMenuToggleButton(::MenuToggleButton* pButton, SalInstanceBuilder* pBuilder,
+                                bool bTakeOwnership)
         : SalInstanceMenuButton(pButton, pBuilder, bTakeOwnership)
         , m_xMenuToggleButton(pButton)
     {
@@ -2703,7 +2696,6 @@ public:
 
     virtual bool get_active() const override { return m_xMenuToggleButton->GetActive(); }
 };
-
 }
 
 namespace
@@ -2736,7 +2728,6 @@ public:
 
     virtual ~SalInstanceLinkButton() override { m_xButton->SetClickHdl(m_aOrigClickHdl); }
 };
-
 }
 
 IMPL_LINK(SalInstanceLinkButton, ClickHdl, FixedHyperlink&, rButton, void)
@@ -2805,7 +2796,6 @@ public:
         m_xRadioButton->SetToggleHdl(Link<::RadioButton&, void>());
     }
 };
-
 }
 
 IMPL_LINK_NOARG(SalInstanceRadioButton, ToggleHdl, ::RadioButton&, void)
@@ -2866,7 +2856,6 @@ public:
                 LINK(this, SalInstanceToggleButton, ToggleListener));
     }
 };
-
 }
 
 IMPL_LINK(SalInstanceToggleButton, ToggleListener, VclWindowEvent&, rEvent, void)
@@ -2877,7 +2866,8 @@ IMPL_LINK(SalInstanceToggleButton, ToggleListener, VclWindowEvent&, rEvent, void
         signal_toggled();
 }
 
-SalInstanceCheckButton::SalInstanceCheckButton(CheckBox* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+SalInstanceCheckButton::SalInstanceCheckButton(CheckBox* pButton, SalInstanceBuilder* pBuilder,
+                                               bool bTakeOwnership)
     : SalInstanceButton(pButton, pBuilder, bTakeOwnership)
     , m_xCheckButton(pButton)
 {
@@ -2961,7 +2951,6 @@ public:
 
     virtual ~SalInstanceScale() override { m_xScale->SetSlideHdl(Link<Slider*, void>()); }
 };
-
 }
 
 IMPL_LINK_NOARG(SalInstanceScale, SlideHdl, Slider*, void) { signal_value_changed(); }
@@ -3063,7 +3052,6 @@ public:
         m_xCalendar->SetActivateHdl(Link<::Calendar*, void>());
     }
 };
-
 }
 
 IMPL_LINK_NOARG(SalInstanceCalendar, SelectHdl, ::Calendar*, void)
@@ -3114,25 +3102,13 @@ void SalInstanceEntry::set_text(const OUString& rText)
     enable_notify_events();
 }
 
-OUString SalInstanceEntry::get_text() const
-{
-    return m_xEntry->GetText();
-}
+OUString SalInstanceEntry::get_text() const { return m_xEntry->GetText(); }
 
-void SalInstanceEntry::set_width_chars(int nChars)
-{
-    m_xEntry->SetWidthInChars(nChars);
-}
+void SalInstanceEntry::set_width_chars(int nChars) { m_xEntry->SetWidthInChars(nChars); }
 
-int SalInstanceEntry::get_width_chars() const
-{
-    return m_xEntry->GetWidthInChars();
-}
+int SalInstanceEntry::get_width_chars() const { return m_xEntry->GetWidthInChars(); }
 
-void SalInstanceEntry::set_max_length(int nChars)
-{
-    m_xEntry->SetMaxTextLen(nChars);
-}
+void SalInstanceEntry::set_max_length(int nChars) { m_xEntry->SetMaxTextLen(nChars); }
 
 void SalInstanceEntry::select_region(int nStartPos, int nEndPos)
 {
@@ -3166,30 +3142,15 @@ void SalInstanceEntry::set_position(int nCursorPos)
     enable_notify_events();
 }
 
-int SalInstanceEntry::get_position() const
-{
-    return m_xEntry->GetSelection().Max();
-}
+int SalInstanceEntry::get_position() const { return m_xEntry->GetSelection().Max(); }
 
-void SalInstanceEntry::set_editable(bool bEditable)
-{
-    m_xEntry->SetReadOnly(!bEditable);
-}
+void SalInstanceEntry::set_editable(bool bEditable) { m_xEntry->SetReadOnly(!bEditable); }
 
-bool SalInstanceEntry::get_editable() const
-{
-    return !m_xEntry->IsReadOnly();
-}
+bool SalInstanceEntry::get_editable() const { return !m_xEntry->IsReadOnly(); }
 
-void SalInstanceEntry::set_overwrite_mode(bool bOn)
-{
-    m_xEntry->SetInsertMode(!bOn);
-}
+void SalInstanceEntry::set_overwrite_mode(bool bOn) { m_xEntry->SetInsertMode(!bOn); }
 
-bool SalInstanceEntry::get_overwrite_mode() const
-{
-    return !m_xEntry->IsInsertMode();
-}
+bool SalInstanceEntry::get_overwrite_mode() const { return !m_xEntry->IsInsertMode(); }
 
 void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
 {
@@ -3243,58 +3204,40 @@ void SalInstanceEntry::set_placeholder_text(const OUString& rText)
     m_xEntry->SetPlaceholderText(rText);
 }
 
-Edit& SalInstanceEntry::getEntry()
-{
-    return *m_xEntry;
-}
+Edit& SalInstanceEntry::getEntry() { return *m_xEntry; }
 
-void SalInstanceEntry::fire_signal_changed()
-{
-    signal_changed();
-}
+void SalInstanceEntry::fire_signal_changed() { signal_changed(); }
 
-void SalInstanceEntry::cut_clipboard()
-{
-    m_xEntry->Cut();
-}
+void SalInstanceEntry::cut_clipboard() { m_xEntry->Cut(); }
 
-void SalInstanceEntry::copy_clipboard()
-{
-    m_xEntry->Copy();
-}
+void SalInstanceEntry::copy_clipboard() { m_xEntry->Copy(); }
 
-void SalInstanceEntry::paste_clipboard()
-{
-    m_xEntry->Paste();
-}
+void SalInstanceEntry::paste_clipboard() { m_xEntry->Paste(); }
 
 namespace
 {
-    void set_alignment(Edit& rEntry, TxtAlign eXAlign)
+void set_alignment(Edit& rEntry, TxtAlign eXAlign)
+{
+    WinBits nAlign(0);
+    switch (eXAlign)
     {
-        WinBits nAlign(0);
-        switch (eXAlign)
-        {
-            case TxtAlign::Left:
-                nAlign = WB_LEFT;
-                break;
-            case TxtAlign::Center:
-                nAlign = WB_CENTER;
-                break;
-            case TxtAlign::Right:
-                nAlign = WB_RIGHT;
-                break;
-        }
-        WinBits nBits = rEntry.GetStyle();
-        nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
-        rEntry.SetStyle(nBits | nAlign);
+        case TxtAlign::Left:
+            nAlign = WB_LEFT;
+            break;
+        case TxtAlign::Center:
+            nAlign = WB_CENTER;
+            break;
+        case TxtAlign::Right:
+            nAlign = WB_RIGHT;
+            break;
     }
+    WinBits nBits = rEntry.GetStyle();
+    nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
+    rEntry.SetStyle(nBits | nAlign);
+}
 }
 
-void SalInstanceEntry::set_alignment(TxtAlign eXAlign)
-{
-    ::set_alignment(*m_xEntry, eXAlign);
-}
+void SalInstanceEntry::set_alignment(TxtAlign eXAlign) { ::set_alignment(*m_xEntry, eXAlign); }
 
 SalInstanceEntry::~SalInstanceEntry()
 {
@@ -3336,7 +3279,6 @@ struct SalInstanceTreeIter : public weld::TreeIter
     }
     SvTreeListEntry* iter;
 };
-
 }
 
 class SalInstanceTreeView;
@@ -3345,37 +3287,38 @@ static SalInstanceTreeView* g_DragSource;
 
 namespace
 {
-    // tdf#131581 if the TreeView is hidden then there are possibly additional
-    // optimizations available
-    class UpdateGuardIfHidden
+// tdf#131581 if the TreeView is hidden then there are possibly additional
+// optimizations available
+class UpdateGuardIfHidden
+{
+private:
+    SvTabListBox& m_rTreeView;
+    bool m_bOrigUpdate;
+    bool m_bOrigEnableInvalidate;
+
+public:
+    UpdateGuardIfHidden(SvTabListBox& rTreeView)
+        : m_rTreeView(rTreeView)
+        // tdf#136962 only do SetUpdateMode(false) optimization if the widget is currently hidden
+        , m_bOrigUpdate(!m_rTreeView.IsVisible() && m_rTreeView.IsUpdateMode())
+        // tdf#137432 only do EnableInvalidate(false) optimization if the widget is currently hidden
+        , m_bOrigEnableInvalidate(!m_rTreeView.IsVisible()
+                                  && m_rTreeView.GetModel()->IsEnableInvalidate())
     {
-    private:
-        SvTabListBox& m_rTreeView;
-        bool m_bOrigUpdate;
-        bool m_bOrigEnableInvalidate;
+        if (m_bOrigUpdate)
+            m_rTreeView.SetUpdateMode(false);
+        if (m_bOrigEnableInvalidate)
+            m_rTreeView.GetModel()->EnableInvalidate(false);
+    }
 
-    public:
-        UpdateGuardIfHidden(SvTabListBox& rTreeView)
-            : m_rTreeView(rTreeView)
-            // tdf#136962 only do SetUpdateMode(false) optimization if the widget is currently hidden
-            , m_bOrigUpdate(!m_rTreeView.IsVisible() && m_rTreeView.IsUpdateMode())
-            // tdf#137432 only do EnableInvalidate(false) optimization if the widget is currently hidden
-            , m_bOrigEnableInvalidate(!m_rTreeView.IsVisible() && m_rTreeView.GetModel()->IsEnableInvalidate())
-        {
-            if (m_bOrigUpdate)
-                m_rTreeView.SetUpdateMode(false);
-            if (m_bOrigEnableInvalidate)
-                m_rTreeView.GetModel()->EnableInvalidate(false);
-        }
-
-        ~UpdateGuardIfHidden()
-        {
-            if (m_bOrigEnableInvalidate)
-                m_rTreeView.GetModel()->EnableInvalidate(true);
-            if (m_bOrigUpdate)
-                m_rTreeView.SetUpdateMode(true);
-        }
-    };
+    ~UpdateGuardIfHidden()
+    {
+        if (m_bOrigEnableInvalidate)
+            m_rTreeView.GetModel()->EnableInvalidate(true);
+        if (m_bOrigUpdate)
+            m_rTreeView.SetUpdateMode(true);
+    }
+};
 }
 
 class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::TreeView
@@ -3468,8 +3411,8 @@ private:
 
     void do_insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
                    const OUString* pId, const OUString* pIconName,
-                   const VirtualDevice* pImageSurface, bool bChildrenOnDemand,
-                   weld::TreeIter* pRet, bool bIsSeparator)
+                   const VirtualDevice* pImageSurface, bool bChildrenOnDemand, weld::TreeIter* pRet,
+                   bool bIsSeparator)
     {
         disable_notify_events();
         const SalInstanceTreeIter* pVclIter = static_cast<const SalInstanceTreeIter*>(pParent);
@@ -3514,7 +3457,8 @@ private:
 
         if (bChildrenOnDemand)
         {
-            SvTreeListEntry* pPlaceHolder = m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
+            SvTreeListEntry* pPlaceHolder
+                = m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
             SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pPlaceHolder);
             pViewData->SetSelectable(false);
         }
@@ -3551,7 +3495,6 @@ private:
             SvLBoxButtonData* pData = m_bTogglesAsRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
             pEntry->ReplaceItem(std::make_unique<SvLBoxButton>(pData), 0);
             update_checkbutton_column_width(pEntry);
-
         }
         SvLBoxItem& rItem = pEntry->GetItem(col);
         assert(dynamic_cast<SvLBoxButton*>(&rItem));
@@ -3743,7 +3686,7 @@ public:
     virtual void set_column_editables(const std::vector<bool>& rEditables) override
     {
         size_t nTabCount = rEditables.size();
-        for (size_t i = 0 ; i < nTabCount; ++i)
+        for (size_t i = 0; i < nTabCount; ++i)
             m_xTreeView->SetTabEditable(i, rEditables[i]);
     }
 
@@ -3797,7 +3740,8 @@ public:
     {
         // invalidate the entries
         SvTreeList* pModel = m_xTreeView->GetModel();
-        for (SvTreeListEntry* pEntry = m_xTreeView->First(); pEntry; pEntry = m_xTreeView->Next(pEntry))
+        for (SvTreeListEntry* pEntry = m_xTreeView->First(); pEntry;
+             pEntry = m_xTreeView->Next(pEntry))
             pModel->InvalidateEntry(pEntry);
     }
 
@@ -3820,15 +3764,14 @@ public:
                         VirtualDevice* pImageSurface, bool bChildrenOnDemand,
                         weld::TreeIter* pRet) override
     {
-        do_insert(pParent, pos, pStr, pId, pIconName, pImageSurface,
-                  bChildrenOnDemand, pRet, false);
+        do_insert(pParent, pos, pStr, pId, pIconName, pImageSurface, bChildrenOnDemand, pRet,
+                  false);
     }
 
     virtual void insert_separator(int pos, const OUString& /*rId*/) override
     {
         OUString sSep(VclResId(STR_SEPARATOR));
-        do_insert(nullptr, pos, &sSep, nullptr, nullptr, nullptr,
-                  false, nullptr, true);
+        do_insert(nullptr, pos, &sSep, nullptr, nullptr, nullptr, false, nullptr, true);
     }
 
     virtual void
@@ -3951,7 +3894,9 @@ public:
 
     virtual void select(int pos) override
     {
-        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        assert(m_xTreeView->IsUpdateMode()
+               && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+                  "freeze");
         disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
             m_xTreeView->SelectAll(false);
@@ -3987,7 +3932,9 @@ public:
 
     virtual void scroll_to_row(int pos) override
     {
-        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        assert(m_xTreeView->IsUpdateMode()
+               && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+                  "freeze");
         disable_notify_events();
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         m_xTreeView->MakeVisible(pEntry);
@@ -4002,7 +3949,9 @@ public:
 
     virtual void unselect(int pos) override
     {
-        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        assert(m_xTreeView->IsUpdateMode()
+               && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+                  "freeze");
         disable_notify_events();
         if (pos == -1)
             m_xTreeView->SelectAll(true);
@@ -4232,9 +4181,8 @@ public:
         set_text_align(pEntry, fAlign, col);
     }
 
-    virtual void connect_editing(
-        const Link<const weld::TreeIter&, bool>& rStartLink,
-        const Link<const iter_string&, bool>& rEndLink) override
+    virtual void connect_editing(const Link<const weld::TreeIter&, bool>& rStartLink,
+                                 const Link<const iter_string&, bool>& rEndLink) override
     {
         m_xTreeView->EnableInplaceEditing(rStartLink.IsSet() || rEndLink.IsSet());
         weld::TreeView::connect_editing(rStartLink, rEndLink);
@@ -4481,7 +4429,9 @@ public:
 
     virtual void select(const weld::TreeIter& rIter) override
     {
-        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        assert(m_xTreeView->IsUpdateMode()
+               && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+                  "freeze");
         disable_notify_events();
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         m_xTreeView->Select(rVclIter.iter, true);
@@ -4490,7 +4440,9 @@ public:
 
     virtual void scroll_to_row(const weld::TreeIter& rIter) override
     {
-        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        assert(m_xTreeView->IsUpdateMode()
+               && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+                  "freeze");
         disable_notify_events();
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         m_xTreeView->MakeVisible(rVclIter.iter);
@@ -4536,7 +4488,8 @@ public:
         return GetPlaceHolderChild(rVclIter.iter) != nullptr;
     }
 
-    virtual void set_children_on_demand(const weld::TreeIter& rIter, bool bChildrenOnDemand) override
+    virtual void set_children_on_demand(const weld::TreeIter& rIter,
+                                        bool bChildrenOnDemand) override
     {
         disable_notify_events();
 
@@ -4804,10 +4757,13 @@ public:
 
     SvTabListBox& getTreeView() { return *m_xTreeView; }
 
-    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult, bool bDnDMode) override
+    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult,
+                                     bool bDnDMode) override
     {
-        LclTabListBox* pTreeView = !bDnDMode ? dynamic_cast<LclTabListBox*>(m_xTreeView.get()) : nullptr;
-        SvTreeListEntry* pTarget = pTreeView ? pTreeView->GetTargetAtPoint(rPos, false) : m_xTreeView->GetDropTarget(rPos);
+        LclTabListBox* pTreeView
+            = !bDnDMode ? dynamic_cast<LclTabListBox*>(m_xTreeView.get()) : nullptr;
+        SvTreeListEntry* pTarget = pTreeView ? pTreeView->GetTargetAtPoint(rPos, false)
+                                             : m_xTreeView->GetDropTarget(rPos);
 
         if (pTarget && pResult)
         {
@@ -4818,10 +4774,7 @@ public:
         return pTarget != nullptr;
     }
 
-    virtual void unset_drag_dest_row() override
-    {
-        m_xTreeView->UnsetDropTarget();
-    }
+    virtual void unset_drag_dest_row() override { m_xTreeView->UnsetDropTarget(); }
 
     virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const override
     {
@@ -5039,7 +4992,8 @@ IMPL_LINK_NOARG(SalInstanceTreeView, DeSelectHdl, SvTreeListBox*, void)
 {
     if (notify_events_disabled())
         return;
-    if (m_xTreeView->GetSelectionMode() == SelectionMode::Single && !m_xTreeView->GetHoverSelection())
+    if (m_xTreeView->GetSelectionMode() == SelectionMode::Single
+        && !m_xTreeView->GetHoverSelection())
         return;
     signal_changed();
 }
@@ -5120,8 +5074,8 @@ IMPL_LINK(SalInstanceTreeView, EditingEntryHdl, SvTreeListEntry*, pEntry, bool)
 
 IMPL_LINK(SalInstanceTreeView, EditedEntryHdl, IterString, rIterString, bool)
 {
-    return signal_editing_done(iter_string(
-        SalInstanceTreeIter(rIterString.first), rIterString.second));
+    return signal_editing_done(
+        iter_string(SalInstanceTreeIter(rIterString.first), rIterString.second));
 }
 
 class SalInstanceIconView : public SalInstanceContainer, public virtual weld::IconView
@@ -5219,7 +5173,9 @@ public:
 
     virtual void select(int pos) override
     {
-        assert(m_xIconView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        assert(m_xIconView->IsUpdateMode()
+               && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+                  "freeze");
         disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
             m_xIconView->SelectAll(false);
@@ -5234,7 +5190,9 @@ public:
 
     virtual void unselect(int pos) override
     {
-        assert(m_xIconView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        assert(m_xIconView->IsUpdateMode()
+               && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+                  "freeze");
         disable_notify_events();
         if (pos == -1)
             m_xIconView->SelectAll(true);
@@ -5293,7 +5251,9 @@ public:
 
     virtual void scroll_to_item(const weld::TreeIter& rIter) override
     {
-        assert(m_xIconView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
+        assert(m_xIconView->IsUpdateMode()
+               && "don't select when frozen, select after thaw. Note selection doesn't survive a "
+                  "freeze");
         disable_notify_events();
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         m_xIconView->MakeVisible(rVclIter.iter);
@@ -5362,7 +5322,7 @@ IMPL_LINK_NOARG(SalInstanceIconView, DoubleClickHdl, SvTreeListBox*, bool)
 double SalInstanceSpinButton::toField(int nValue) const
 {
     return static_cast<double>(nValue) / Power10(get_digits());
-    }
+}
 
 int SalInstanceSpinButton::fromField(double fValue) const
 {
@@ -5370,7 +5330,7 @@ int SalInstanceSpinButton::fromField(double fValue) const
 }
 
 SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
-                        bool bTakeOwnership)
+                                             bool bTakeOwnership)
     : SalInstanceEntry(pButton, pBuilder, bTakeOwnership)
     , m_xButton(pButton)
     , m_rFormatter(m_xButton->GetFormatter())
@@ -5387,15 +5347,9 @@ SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanc
         m_xButton->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
 }
 
-int SalInstanceSpinButton::get_value() const
-{
-    return fromField(m_rFormatter.GetValue());
-}
+int SalInstanceSpinButton::get_value() const { return fromField(m_rFormatter.GetValue()); }
 
-void SalInstanceSpinButton::set_value(int value)
-{
-    m_rFormatter.SetValue(toField(value));
-}
+void SalInstanceSpinButton::set_value(int value) { m_rFormatter.SetValue(toField(value)); }
 
 void SalInstanceSpinButton::set_range(int min, int max)
 {
@@ -5427,21 +5381,12 @@ void SalInstanceSpinButton::set_digits(unsigned int digits)
 
 // SpinButton may be comprised of multiple subwidgets, consider the lot as
 // one thing for focus
-bool SalInstanceSpinButton::has_focus() const
-{
-    return m_xWidget->HasChildPathFocus();
-}
+bool SalInstanceSpinButton::has_focus() const { return m_xWidget->HasChildPathFocus(); }
 
 //off by default for direct SpinButtons, MetricSpinButton enables it
-void SalInstanceSpinButton::SetUseThousandSep()
-{
-    m_rFormatter.SetThousandsSep(true);
-}
+void SalInstanceSpinButton::SetUseThousandSep() { m_rFormatter.SetThousandsSep(true); }
 
-unsigned int SalInstanceSpinButton::get_digits() const
-{
-    return m_rFormatter.GetDecimalDigits();
-}
+unsigned int SalInstanceSpinButton::get_digits() const { return m_rFormatter.GetDecimalDigits(); }
 
 SalInstanceSpinButton::~SalInstanceSpinButton()
 {
@@ -5551,10 +5496,7 @@ public:
         // no-op for gen
     }
 
-    virtual Formatter& GetFormatter() override
-    {
-        return m_xButton->GetFormatter();
-    }
+    virtual Formatter& GetFormatter() override { return m_xButton->GetFormatter(); }
 
     virtual ~SalInstanceFormattedSpinButton() override
     {
@@ -5564,14 +5506,16 @@ public:
     }
 };
 
-IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, UpDownHdl, SpinField&, void) { signal_value_changed(); }
+IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, UpDownHdl, SpinField&, void)
+{
+    signal_value_changed();
+}
 
 IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, LoseFocusHdl, Control&, void)
 {
     signal_value_changed();
     m_aLoseFocusHdl.Call(*this);
 }
-
 }
 
 SalInstanceLabel::SalInstanceLabel(Control* pLabel, SalInstanceBuilder* pBuilder,
@@ -5641,7 +5585,7 @@ std::unique_ptr<weld::Label> SalInstanceFrame::weld_label_widget() const
 }
 
 SalInstanceTextView::SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
-                    bool bTakeOwnership)
+                                         bool bTakeOwnership)
     : SalInstanceContainer(pTextView, pBuilder, bTakeOwnership)
     , m_xTextView(pTextView)
 {
@@ -5694,7 +5638,7 @@ void SalInstanceTextView::set_monospace(bool bMonospace)
     vcl::Font aFont;
     if (bMonospace)
         aFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_FIXED, LANGUAGE_DONTKNOW,
-                                                GetDefaultFontFlags::OnlyOne, m_xTextView);
+                                             GetDefaultFontFlags::OnlyOne, m_xTextView);
     else
         aFont = Application::GetSettings().GetStyleSettings().GetFieldFont();
     aFont.SetFontHeight(aOrigFont.GetFontHeight());
@@ -5729,20 +5673,11 @@ bool SalInstanceTextView::can_move_cursor_with_down() const
     return !bNoSelection || m_xTextView->CanDown();
 }
 
-void SalInstanceTextView::cut_clipboard()
-{
-    m_xTextView->Cut();
-}
+void SalInstanceTextView::cut_clipboard() { m_xTextView->Cut(); }
 
-void SalInstanceTextView::copy_clipboard()
-{
-    m_xTextView->Copy();
-}
+void SalInstanceTextView::copy_clipboard() { m_xTextView->Copy(); }
 
-void SalInstanceTextView::paste_clipboard()
-{
-    m_xTextView->Paste();
-}
+void SalInstanceTextView::paste_clipboard() { m_xTextView->Paste(); }
 
 void SalInstanceTextView::set_alignment(TxtAlign eXAlign)
 {
@@ -5780,10 +5715,7 @@ int SalInstanceTextView::vadjustment_get_page_size() const
     return rVertScrollBar.GetVisibleSize();
 }
 
-bool SalInstanceTextView::has_focus() const
-{
-    return m_xTextView->HasChildPathFocus();
-}
+bool SalInstanceTextView::has_focus() const { return m_xTextView->HasChildPathFocus(); }
 
 SalInstanceTextView::~SalInstanceTextView()
 {
@@ -5854,7 +5786,6 @@ public:
         m_xExpander->SetExpandedHdl(Link<VclExpander&, void>());
     }
 };
-
 }
 
 IMPL_LINK_NOARG(SalInstanceExpander, ExpandedHdl, VclExpander&, void) { signal_expanded(); }
@@ -5882,9 +5813,10 @@ void SalInstanceDrawingArea::HandleMouseEventListener(VclSimpleEvent& rEvent)
 
 bool SalInstanceDrawingArea::HandleKeyEventListener(VclWindowEvent& /*rEvent*/) { return false; }
 
-SalInstanceDrawingArea::SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, SalInstanceBuilder* pBuilder,
-                        const a11yref& rAlly, FactoryFunction pUITestFactoryFunction,
-                        void* pUserData, bool bTakeOwnership)
+SalInstanceDrawingArea::SalInstanceDrawingArea(VclDrawingArea* pDrawingArea,
+                                               SalInstanceBuilder* pBuilder, const a11yref& rAlly,
+                                               FactoryFunction pUITestFactoryFunction,
+                                               void* pUserData, bool bTakeOwnership)
     : SalInstanceWidget(pDrawingArea, pBuilder, bTakeOwnership)
     , m_xDrawingArea(pDrawingArea)
 {
@@ -5901,7 +5833,8 @@ SalInstanceDrawingArea::SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, Sal
     m_xDrawingArea->SetCommandHdl(LINK(this, SalInstanceDrawingArea, CommandHdl));
     m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
     m_xDrawingArea->SetGetSurroundingHdl(LINK(this, SalInstanceDrawingArea, GetSurroundingHdl));
-    m_xDrawingArea->SetDeleteSurroundingHdl(LINK(this, SalInstanceDrawingArea, DeleteSurroundingHdl));
+    m_xDrawingArea->SetDeleteSurroundingHdl(
+        LINK(this, SalInstanceDrawingArea, DeleteSurroundingHdl));
     m_xDrawingArea->SetStartDragHdl(LINK(this, SalInstanceDrawingArea, StartDragHdl));
 }
 
@@ -5939,10 +5872,12 @@ void SalInstanceDrawingArea::set_input_context(const InputContext& rInputContext
     m_xDrawingArea->SetInputContext(rInputContext);
 }
 
-void SalInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectangle& rCursorRect, int nExtTextInputWidth)
+void SalInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectangle& rCursorRect,
+                                                            int nExtTextInputWidth)
 {
     tools::Rectangle aCursorRect = m_xDrawingArea->PixelToLogic(rCursorRect);
-    m_xDrawingArea->SetCursorRect(&aCursorRect, m_xDrawingArea->PixelToLogic(Size(nExtTextInputWidth, 0)).Width());
+    m_xDrawingArea->SetCursorRect(
+        &aCursorRect, m_xDrawingArea->PixelToLogic(Size(nExtTextInputWidth, 0)).Width());
 }
 
 a11yref SalInstanceDrawingArea::get_accessible_parent()
@@ -5988,7 +5923,7 @@ Point SalInstanceDrawingArea::get_accessible_location()
 }
 
 void SalInstanceDrawingArea::enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper,
-                                sal_uInt8 eDNDConstants)
+                                                sal_uInt8 eDNDConstants)
 {
     m_xDrawingArea->SetDragHelper(rHelper, eDNDConstants);
 }
@@ -6089,19 +6024,23 @@ IMPL_LINK_NOARG(SalInstanceDrawingArea, StartDragHdl, VclDrawingArea*, bool)
     return false;
 }
 
-SalInstanceComboBoxWithoutEdit::SalInstanceComboBoxWithoutEdit(ListBox* pListBox, SalInstanceBuilder* pBuilder,
-                                bool bTakeOwnership)
+SalInstanceComboBoxWithoutEdit::SalInstanceComboBoxWithoutEdit(ListBox* pListBox,
+                                                               SalInstanceBuilder* pBuilder,
+                                                               bool bTakeOwnership)
     : SalInstanceComboBox<ListBox>(pListBox, pBuilder, bTakeOwnership)
 {
     m_xComboBox->SetSelectHdl(LINK(this, SalInstanceComboBoxWithoutEdit, SelectHdl));
 }
 
-OUString SalInstanceComboBoxWithoutEdit::get_active_text() const { return m_xComboBox->GetSelectedEntry(); }
+OUString SalInstanceComboBoxWithoutEdit::get_active_text() const
+{
+    return m_xComboBox->GetSelectedEntry();
+}
 
 void SalInstanceComboBoxWithoutEdit::remove(int pos) { m_xComboBox->RemoveEntry(pos); }
 
 void SalInstanceComboBoxWithoutEdit::insert(int pos, const OUString& rStr, const OUString* pId,
-                    const OUString* pIconName, VirtualDevice* pImageSurface)
+                                            const OUString* pIconName, VirtualDevice* pImageSurface)
 {
     auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
     sal_Int32 nInsertedAt;
@@ -6135,9 +6074,13 @@ void SalInstanceComboBoxWithoutEdit::set_entry_message_type(weld::EntryMessageTy
 
 void SalInstanceComboBoxWithoutEdit::set_entry_text(const OUString& /*rText*/) { assert(false); }
 
-void SalInstanceComboBoxWithoutEdit::select_entry_region(int /*nStartPos*/, int /*nEndPos*/) { assert(false); }
+void SalInstanceComboBoxWithoutEdit::select_entry_region(int /*nStartPos*/, int /*nEndPos*/)
+{
+    assert(false);
+}
 
-bool SalInstanceComboBoxWithoutEdit::get_entry_selection_bounds(int& /*rStartPos*/, int& /*rEndPos*/)
+bool SalInstanceComboBoxWithoutEdit::get_entry_selection_bounds(int& /*rStartPos*/,
+                                                                int& /*rEndPos*/)
 {
     assert(false);
     return false;
@@ -6161,7 +6104,11 @@ void SalInstanceComboBoxWithoutEdit::paste_entry_clipboard() { assert(false); }
 
 void SalInstanceComboBoxWithoutEdit::set_entry_font(const vcl::Font&) { assert(false); }
 
-vcl::Font SalInstanceComboBoxWithoutEdit::get_entry_font() { assert(false); return vcl::Font(); }
+vcl::Font SalInstanceComboBoxWithoutEdit::get_entry_font()
+{
+    assert(false);
+    return vcl::Font();
+}
 
 void SalInstanceComboBoxWithoutEdit::set_custom_renderer(bool /*bOn*/)
 {
@@ -6174,10 +6121,7 @@ int SalInstanceComboBoxWithoutEdit::get_max_mru_count() const
     return 0;
 }
 
-void SalInstanceComboBoxWithoutEdit::set_max_mru_count(int)
-{
-    assert(false && "not implemented");
-}
+void SalInstanceComboBoxWithoutEdit::set_max_mru_count(int) { assert(false && "not implemented"); }
 
 OUString SalInstanceComboBoxWithoutEdit::get_mru_entries() const
 {
@@ -6205,8 +6149,9 @@ IMPL_LINK_NOARG(SalInstanceComboBoxWithoutEdit, SelectHdl, ListBox&, void)
     return signal_changed();
 }
 
-SalInstanceComboBoxWithEdit::SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
-                            bool bTakeOwnership)
+SalInstanceComboBoxWithEdit::SalInstanceComboBoxWithEdit(::ComboBox* pComboBox,
+                                                         SalInstanceBuilder* pBuilder,
+                                                         bool bTakeOwnership)
     : SalInstanceComboBox<::ComboBox>(pComboBox, pBuilder, bTakeOwnership)
     , m_aTextFilter(m_aEntryInsertTextHdl)
     , m_bInSelect(false)
@@ -6245,15 +6190,14 @@ OUString SalInstanceComboBoxWithEdit::get_active_text() const { return m_xComboB
 void SalInstanceComboBoxWithEdit::remove(int pos) { m_xComboBox->RemoveEntryAt(pos); }
 
 void SalInstanceComboBoxWithEdit::insert(int pos, const OUString& rStr, const OUString* pId,
-                    const OUString* pIconName, VirtualDevice* pImageSurface)
+                                         const OUString* pIconName, VirtualDevice* pImageSurface)
 {
     auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
     sal_Int32 nInsertedAt;
     if (!pIconName && !pImageSurface)
         nInsertedAt = m_xComboBox->InsertEntry(rStr, nInsertPos);
     else if (pIconName)
-        nInsertedAt
-            = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pIconName), nInsertPos);
+        nInsertedAt = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pIconName), nInsertPos);
     else
         nInsertedAt
             = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pImageSurface), nInsertPos);
@@ -6270,14 +6214,20 @@ void SalInstanceComboBoxWithEdit::insert_separator(int pos, const OUString& /*rI
     m_xComboBox->AddSeparator(nInsertPos - 1);
 }
 
-void SalInstanceComboBoxWithEdit::set_entry_text(const OUString& rText) { m_xComboBox->SetText(rText); }
+void SalInstanceComboBoxWithEdit::set_entry_text(const OUString& rText)
+{
+    m_xComboBox->SetText(rText);
+}
 
 void SalInstanceComboBoxWithEdit::set_entry_width_chars(int nChars)
 {
     m_xComboBox->SetWidthInChars(nChars);
 }
 
-void SalInstanceComboBoxWithEdit::set_entry_max_length(int nChars) { m_xComboBox->SetMaxTextLen(nChars); }
+void SalInstanceComboBoxWithEdit::set_entry_max_length(int nChars)
+{
+    m_xComboBox->SetMaxTextLen(nChars);
+}
 
 void SalInstanceComboBoxWithEdit::set_entry_completion(bool bEnable, bool bCaseSensitive)
 {
@@ -6294,20 +6244,11 @@ void SalInstanceComboBoxWithEdit::set_entry_editable(bool bEditable)
     m_xComboBox->SetReadOnly(!bEditable);
 }
 
-void SalInstanceComboBoxWithEdit::cut_entry_clipboard()
-{
-    m_xComboBox->Cut();
-}
+void SalInstanceComboBoxWithEdit::cut_entry_clipboard() { m_xComboBox->Cut(); }
 
-void SalInstanceComboBoxWithEdit::copy_entry_clipboard()
-{
-    m_xComboBox->Copy();
-}
+void SalInstanceComboBoxWithEdit::copy_entry_clipboard() { m_xComboBox->Copy(); }
 
-void SalInstanceComboBoxWithEdit::paste_entry_clipboard()
-{
-    m_xComboBox->Paste();
-}
+void SalInstanceComboBoxWithEdit::paste_entry_clipboard() { m_xComboBox->Paste(); }
 
 void SalInstanceComboBoxWithEdit::select_entry_region(int nStartPos, int nEndPos)
 {
@@ -6359,10 +6300,7 @@ void SalInstanceComboBoxWithEdit::set_custom_renderer(bool bOn)
     m_xComboBox->SetDropDownLineCount(nDropDownLineCount * fRatio);
 }
 
-int SalInstanceComboBoxWithEdit::get_max_mru_count() const
-{
-    return m_xComboBox->GetMaxMRUCount();
-}
+int SalInstanceComboBoxWithEdit::get_max_mru_count() const { return m_xComboBox->GetMaxMRUCount(); }
 
 void SalInstanceComboBoxWithEdit::set_max_mru_count(int nCount)
 {
@@ -6519,10 +6457,7 @@ public:
 
     virtual bool changed_by_direct_pick() const override { return m_bTreeChange; }
 
-    virtual void set_custom_renderer(bool /*bOn*/) override
-    {
-        assert(false && "not implemented");
-    }
+    virtual void set_custom_renderer(bool /*bOn*/) override { assert(false && "not implemented"); }
 
     virtual int get_max_mru_count() const override
     {
@@ -6530,10 +6465,7 @@ public:
         return 0;
     }
 
-    virtual void set_max_mru_count(int) override
-    {
-        assert(false && "not implemented");
-    }
+    virtual void set_max_mru_count(int) override { assert(false && "not implemented"); }
 
     virtual OUString get_mru_entries() const override
     {
@@ -6541,10 +6473,7 @@ public:
         return OUString();
     }
 
-    virtual void set_mru_entries(const OUString&) override
-    {
-        assert(false && "not implemented");
-    }
+    virtual void set_mru_entries(const OUString&) override { assert(false && "not implemented"); }
 
     virtual void set_item_menu(const OString&, weld::Menu*) override
     {
@@ -6577,7 +6506,7 @@ IMPL_LINK(SalInstanceEntryTreeView, KeyPressListener, VclWindowEvent&, rEvent, v
     const KeyEvent& rKeyEvent = *static_cast<KeyEvent*>(rEvent.GetData());
     sal_uInt16 nKeyCode = rKeyEvent.GetKeyCode().GetCode();
     if (!(nKeyCode == KEY_UP || nKeyCode == KEY_DOWN || nKeyCode == KEY_PAGEUP
-        || nKeyCode == KEY_PAGEDOWN))
+          || nKeyCode == KEY_PAGEDOWN))
         return;
 
     m_pTreeView->disable_notify_events();
@@ -6626,7 +6555,8 @@ IMPL_LINK(SalInstanceEntryTreeView, AutocompleteHdl, Edit&, rEdit, void)
 }
 
 SalInstanceBuilder::SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
-                                       const OUString& rUIFile, const css::uno::Reference<css::frame::XFrame>& rFrame)
+                                       const OUString& rUIFile,
+                                       const css::uno::Reference<css::frame::XFrame>& rFrame)
     : weld::Builder()
     , m_xBuilder(new VclBuilder(pParent, rUIRoot, rUIFile, OString(), rFrame, false))
 {
@@ -6712,22 +6642,19 @@ std::unique_ptr<weld::Widget> SalInstanceBuilder::weld_widget(const OString& id)
 std::unique_ptr<weld::Container> SalInstanceBuilder::weld_container(const OString& id)
 {
     vcl::Window* pContainer = m_xBuilder->get(id);
-    return pContainer ? std::make_unique<SalInstanceContainer>(pContainer, this, false)
-                      : nullptr;
+    return pContainer ? std::make_unique<SalInstanceContainer>(pContainer, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::Box> SalInstanceBuilder::weld_box(const OString& id)
 {
     VclBox* pContainer = m_xBuilder->get<VclBox>(id);
-    return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, false)
-                      : nullptr;
+    return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::Paned> SalInstanceBuilder::weld_paned(const OString& id)
 {
     VclPaned* pPaned = m_xBuilder->get<VclPaned>(id);
-    return pPaned ? std::make_unique<SalInstancePaned>(pPaned, this, false)
-                  : nullptr;
+    return pPaned ? std::make_unique<SalInstancePaned>(pPaned, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::Frame> SalInstanceBuilder::weld_frame(const OString& id)
@@ -6737,12 +6664,13 @@ std::unique_ptr<weld::Frame> SalInstanceBuilder::weld_frame(const OString& id)
     return pRet;
 }
 
-std::unique_ptr<weld::ScrolledWindow> SalInstanceBuilder::weld_scrolled_window(const OString& id, bool bUserManagedScrolling)
+std::unique_ptr<weld::ScrolledWindow>
+SalInstanceBuilder::weld_scrolled_window(const OString& id, bool bUserManagedScrolling)
 {
     VclScrolledWindow* pScrolledWindow = m_xBuilder->get<VclScrolledWindow>(id);
-    return pScrolledWindow
-               ? std::make_unique<SalInstanceScrolledWindow>(pScrolledWindow, this, false, bUserManagedScrolling)
-               : nullptr;
+    return pScrolledWindow ? std::make_unique<SalInstanceScrolledWindow>(
+                                 pScrolledWindow, this, false, bUserManagedScrolling)
+                           : nullptr;
 }
 
 std::unique_ptr<weld::Notebook> SalInstanceBuilder::weld_notebook(const OString& id)
@@ -6768,46 +6696,41 @@ std::unique_ptr<weld::Button> SalInstanceBuilder::weld_button(const OString& id)
 std::unique_ptr<weld::MenuButton> SalInstanceBuilder::weld_menu_button(const OString& id)
 {
     MenuButton* pButton = m_xBuilder->get<MenuButton>(id);
-    return pButton ? std::make_unique<SalInstanceMenuButton>(pButton, this, false)
-                   : nullptr;
+    return pButton ? std::make_unique<SalInstanceMenuButton>(pButton, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::MenuToggleButton> SalInstanceBuilder::weld_menu_toggle_button(const OString& id)
+std::unique_ptr<weld::MenuToggleButton>
+SalInstanceBuilder::weld_menu_toggle_button(const OString& id)
 {
     MenuToggleButton* pButton = m_xBuilder->get<MenuToggleButton>(id);
-    return pButton ? std::make_unique<SalInstanceMenuToggleButton>(pButton, this, false)
-                   : nullptr;
+    return pButton ? std::make_unique<SalInstanceMenuToggleButton>(pButton, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::LinkButton> SalInstanceBuilder::weld_link_button(const OString& id)
 {
     FixedHyperlink* pButton = m_xBuilder->get<FixedHyperlink>(id);
-    return pButton ? std::make_unique<SalInstanceLinkButton>(pButton, this, false)
-                   : nullptr;
+    return pButton ? std::make_unique<SalInstanceLinkButton>(pButton, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::ToggleButton> SalInstanceBuilder::weld_toggle_button(const OString& id)
 {
     PushButton* pToggleButton = m_xBuilder->get<PushButton>(id);
-    return pToggleButton
-               ? std::make_unique<SalInstanceToggleButton>(pToggleButton, this, false)
-               : nullptr;
+    return pToggleButton ? std::make_unique<SalInstanceToggleButton>(pToggleButton, this, false)
+                         : nullptr;
 }
 
 std::unique_ptr<weld::RadioButton> SalInstanceBuilder::weld_radio_button(const OString& id)
 {
     RadioButton* pRadioButton = m_xBuilder->get<RadioButton>(id);
-    return pRadioButton
-               ? std::make_unique<SalInstanceRadioButton>(pRadioButton, this, false)
-               : nullptr;
+    return pRadioButton ? std::make_unique<SalInstanceRadioButton>(pRadioButton, this, false)
+                        : nullptr;
 }
 
 std::unique_ptr<weld::CheckButton> SalInstanceBuilder::weld_check_button(const OString& id)
 {
     CheckBox* pCheckButton = m_xBuilder->get<CheckBox>(id);
-    return pCheckButton
-               ? std::make_unique<SalInstanceCheckButton>(pCheckButton, this, false)
-               : nullptr;
+    return pCheckButton ? std::make_unique<SalInstanceCheckButton>(pCheckButton, this, false)
+                        : nullptr;
 }
 
 std::unique_ptr<weld::Scale> SalInstanceBuilder::weld_scale(const OString& id)
@@ -6819,15 +6742,13 @@ std::unique_ptr<weld::Scale> SalInstanceBuilder::weld_scale(const OString& id)
 std::unique_ptr<weld::ProgressBar> SalInstanceBuilder::weld_progress_bar(const OString& id)
 {
     ::ProgressBar* pProgress = m_xBuilder->get<::ProgressBar>(id);
-    return pProgress ? std::make_unique<SalInstanceProgressBar>(pProgress, this, false)
-                     : nullptr;
+    return pProgress ? std::make_unique<SalInstanceProgressBar>(pProgress, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::Spinner> SalInstanceBuilder::weld_spinner(const OString& id)
 {
     Throbber* pThrobber = m_xBuilder->get<Throbber>(id);
-    return pThrobber ? std::make_unique<SalInstanceSpinner>(pThrobber, this, false)
-                     : nullptr;
+    return pThrobber ? std::make_unique<SalInstanceSpinner>(pThrobber, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::Image> SalInstanceBuilder::weld_image(const OString& id)
@@ -6839,8 +6760,7 @@ std::unique_ptr<weld::Image> SalInstanceBuilder::weld_image(const OString& id)
 std::unique_ptr<weld::Calendar> SalInstanceBuilder::weld_calendar(const OString& id)
 {
     Calendar* pCalendar = m_xBuilder->get<Calendar>(id);
-    return pCalendar ? std::make_unique<SalInstanceCalendar>(pCalendar, this, false)
-                     : nullptr;
+    return pCalendar ? std::make_unique<SalInstanceCalendar>(pCalendar, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::Entry> SalInstanceBuilder::weld_entry(const OString& id)
@@ -6872,9 +6792,8 @@ std::unique_ptr<weld::FormattedSpinButton>
 SalInstanceBuilder::weld_formatted_spin_button(const OString& id)
 {
     FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
-    return pSpinButton
-               ? std::make_unique<SalInstanceFormattedSpinButton>(pSpinButton, this, false)
-               : nullptr;
+    return pSpinButton ? std::make_unique<SalInstanceFormattedSpinButton>(pSpinButton, this, false)
+                       : nullptr;
 }
 
 std::unique_ptr<weld::ComboBox> SalInstanceBuilder::weld_combo_box(const OString& id)
@@ -6884,9 +6803,8 @@ std::unique_ptr<weld::ComboBox> SalInstanceBuilder::weld_combo_box(const OString
     if (pComboBox)
         return std::make_unique<SalInstanceComboBoxWithEdit>(pComboBox, this, false);
     ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
-    return pListBox
-               ? std::make_unique<SalInstanceComboBoxWithoutEdit>(pListBox, this, false)
-               : nullptr;
+    return pListBox ? std::make_unique<SalInstanceComboBoxWithoutEdit>(pListBox, this, false)
+                    : nullptr;
 }
 
 std::unique_ptr<weld::EntryTreeView>
@@ -6894,24 +6812,22 @@ SalInstanceBuilder::weld_entry_tree_view(const OString& containerid, const OStri
                                          const OString& treeviewid)
 {
     vcl::Window* pContainer = m_xBuilder->get(containerid);
-    return pContainer ? std::make_unique<SalInstanceEntryTreeView>(
-                            pContainer, this, false, weld_entry(entryid),
-                            weld_tree_view(treeviewid))
+    return pContainer ? std::make_unique<SalInstanceEntryTreeView>(pContainer, this, false,
+                                                                   weld_entry(entryid),
+                                                                   weld_tree_view(treeviewid))
                       : nullptr;
 }
 
 std::unique_ptr<weld::TreeView> SalInstanceBuilder::weld_tree_view(const OString& id)
 {
     SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
-    return pTreeView ? std::make_unique<SalInstanceTreeView>(pTreeView, this, false)
-                     : nullptr;
+    return pTreeView ? std::make_unique<SalInstanceTreeView>(pTreeView, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::IconView> SalInstanceBuilder::weld_icon_view(const OString& id)
 {
     IconView* pIconView = m_xBuilder->get<IconView>(id);
-    return pIconView ? std::make_unique<SalInstanceIconView>(pIconView, this, false)
-                     : nullptr;
+    return pIconView ? std::make_unique<SalInstanceIconView>(pIconView, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::Label> SalInstanceBuilder::weld_label(const OString& id)
@@ -6923,15 +6839,13 @@ std::unique_ptr<weld::Label> SalInstanceBuilder::weld_label(const OString& id)
 std::unique_ptr<weld::TextView> SalInstanceBuilder::weld_text_view(const OString& id)
 {
     VclMultiLineEdit* pTextView = m_xBuilder->get<VclMultiLineEdit>(id);
-    return pTextView ? std::make_unique<SalInstanceTextView>(pTextView, this, false)
-                     : nullptr;
+    return pTextView ? std::make_unique<SalInstanceTextView>(pTextView, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::Expander> SalInstanceBuilder::weld_expander(const OString& id)
 {
     VclExpander* pExpander = m_xBuilder->get<VclExpander>(id);
-    return pExpander ? std::make_unique<SalInstanceExpander>(pExpander, this, false)
-                     : nullptr;
+    return pExpander ? std::make_unique<SalInstanceExpander>(pExpander, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::DrawingArea>
@@ -6939,10 +6853,10 @@ SalInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImp
                                       FactoryFunction pUITestFactoryFunction, void* pUserData)
 {
     VclDrawingArea* pDrawingArea = m_xBuilder->get<VclDrawingArea>(id);
-    return pDrawingArea ? std::make_unique<SalInstanceDrawingArea>(pDrawingArea, this, rA11yImpl,
-                                                                   pUITestFactoryFunction,
-                                                                   pUserData, false)
-                        : nullptr;
+    return pDrawingArea
+               ? std::make_unique<SalInstanceDrawingArea>(pDrawingArea, this, rA11yImpl,
+                                                          pUITestFactoryFunction, pUserData, false)
+               : nullptr;
 }
 
 std::unique_ptr<weld::Menu> SalInstanceBuilder::weld_menu(const OString& id)
@@ -6954,8 +6868,7 @@ std::unique_ptr<weld::Menu> SalInstanceBuilder::weld_menu(const OString& id)
 std::unique_ptr<weld::Toolbar> SalInstanceBuilder::weld_toolbar(const OString& id)
 {
     ToolBox* pToolBox = m_xBuilder->get<ToolBox>(id);
-    return pToolBox ? std::make_unique<SalInstanceToolbar>(pToolBox, this, false)
-                    : nullptr;
+    return pToolBox ? std::make_unique<SalInstanceToolbar>(pToolBox, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::SizeGroup> SalInstanceBuilder::create_size_group()

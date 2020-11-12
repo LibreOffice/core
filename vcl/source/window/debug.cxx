@@ -23,20 +23,20 @@
 #include <window.h>
 
 #ifdef DBG_UTIL
-const char* ImplDbgCheckWindow( const void* pObj )
+const char* ImplDbgCheckWindow(const void* pObj)
 {
     DBG_TESTSOLARMUTEX();
 
-    const vcl::Window* pWindow = static_cast<vcl::Window const *>(pObj);
+    const vcl::Window* pWindow = static_cast<vcl::Window const*>(pObj);
 
-    if ( (pWindow->GetType() < WindowType::FIRST) || (pWindow->GetType() > WindowType::LAST) )
+    if ((pWindow->GetType() < WindowType::FIRST) || (pWindow->GetType() > WindowType::LAST))
         return "Window data overwrite";
 
     // check window-chain
     vcl::Window* pChild = pWindow->mpWindowImpl->mpFirstChild;
-    while ( pChild )
+    while (pChild)
     {
-        if ( pChild->mpWindowImpl->mpParent != pWindow )
+        if (pChild->mpWindowImpl->mpParent != pWindow)
             return "Child-Window-Parent wrong";
         pChild = pChild->mpWindowImpl->mpNext;
     }

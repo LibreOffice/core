@@ -21,10 +21,12 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/bitmapex.hxx>
 
-typedef VclAbstractDialogFactory* (SAL_CALL* FuncPtrCreateDialogFactory)();
+typedef VclAbstractDialogFactory*(SAL_CALL* FuncPtrCreateDialogFactory)();
 
 #ifndef DISABLE_DYNLOADING
-extern "C" { static void thisModule() {} }
+extern "C" {
+static void thisModule() {}
+}
 #else
 extern "C" VclAbstractDialogFactory* CreateDialogFactory();
 #endif
@@ -38,7 +40,7 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
                                         SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY))
         {
             auto const p = reinterpret_cast<FuncPtrCreateDialogFactory>(
-                aDialogLibrary.getFunctionSymbol( "CreateDialogFactory" ) );
+                aDialogLibrary.getFunctionSymbol("CreateDialogFactory"));
             aDialogLibrary.release();
             return p;
         }
@@ -47,16 +49,14 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
         return CreateDialogFactory;
 #endif
     }();
-    if ( fp )
+    if (fp)
         return fp();
     return nullptr;
 }
 
-VclAbstractDialog::~VclAbstractDialog()
-{
-}
+VclAbstractDialog::~VclAbstractDialog() {}
 
-bool VclAbstractDialog::StartExecuteAsync(AsyncContext &)
+bool VclAbstractDialog::StartExecuteAsync(AsyncContext&)
 {
     assert(false);
     return false;
@@ -80,8 +80,6 @@ BitmapEx VclAbstractDialog::createScreenshot() const
     return BitmapEx();
 }
 
-VclAbstractDialogFactory::~VclAbstractDialogFactory()
-{
-}
+VclAbstractDialogFactory::~VclAbstractDialogFactory() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

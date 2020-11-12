@@ -325,7 +325,7 @@ OUString StringMapToOUString(const std::map<OUString, OUString>& rParameters)
     if (rParameters.empty())
         return "";
 
-    OUStringBuffer aParameterString(static_cast<int>(rParameters.size()*32));
+    OUStringBuffer aParameterString(static_cast<int>(rParameters.size() * 32));
     aParameterString.append(" {");
 
     for (std::map<OUString, OUString>::const_iterator itr = rParameters.begin();
@@ -391,8 +391,9 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
     }
     else if (rDescription.aKeyWord == "ValueSet")
     {
-        aLogLine = "Choose element with position " + GetValueInMapWithIndex(rDescription.aParameters, 0) +
-                 " in '" + rDescription.aID +"' from '" + rDescription.aParent + "'";
+        aLogLine = "Choose element with position "
+                   + GetValueInMapWithIndex(rDescription.aParameters, 0) + " in '"
+                   + rDescription.aID + "' from '" + rDescription.aParent + "'";
     }
     else if (rDescription.aAction == "SELECT" && rDescription.aID.isEmpty())
     {
@@ -450,11 +451,8 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
         }
         else if (rDescription.aAction == "LAUNCH")
         {
-            aLogLine = "Launch"
-                       + GetKeyInMapWithIndex(rDescription.aParameters, 2)
-                       + " from Col "
-                       + GetValueInMapWithIndex(rDescription.aParameters, 2)
-                       + " and Row "
+            aLogLine = "Launch" + GetKeyInMapWithIndex(rDescription.aParameters, 2) + " from Col "
+                       + GetValueInMapWithIndex(rDescription.aParameters, 2) + " and Row "
                        + GetValueInMapWithIndex(rDescription.aParameters, 1);
         }
         else if (rDescription.aAction == "DELETE_CONTENT")
@@ -501,11 +499,11 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
         else if (rDescription.aAction == "COMMENT")
         {
             OUString type = GetKeyInMapWithIndex(rDescription.aParameters, 0);
-            if(type == "OPEN")
+            if (type == "OPEN")
             {
                 aLogLine = "Open Comment";
             }
-            else if(type == "CLOSE")
+            else if (type == "CLOSE")
             {
                 aLogLine = "Close Comment";
             }
@@ -561,19 +559,24 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
     }
     else if (rDescription.aKeyWord == "SwEditWinUIObject")
     {
-        if(rDescription.aAction=="LEAVE"){
+        if (rDescription.aAction == "LEAVE")
+        {
             aLogLine = "Leave '" + rDescription.aID + "'";
         }
-        else if(rDescription.aAction=="SHOW"){
+        else if (rDescription.aAction == "SHOW")
+        {
             aLogLine = "Show '" + rDescription.aID + "'";
         }
-        else if(rDescription.aAction=="HIDE"){
+        else if (rDescription.aAction == "HIDE")
+        {
             aLogLine = "Hide '" + rDescription.aID + "'";
         }
-        else if(rDescription.aAction=="DELETE"){
+        else if (rDescription.aAction == "DELETE")
+        {
             aLogLine = "Delete '" + rDescription.aID + "'";
         }
-        else if(rDescription.aAction=="SETRESOLVED"){
+        else if (rDescription.aAction == "SETRESOLVED")
+        {
             aLogLine = "Resolve '" + rDescription.aID + "'";
         }
     }
@@ -581,21 +584,26 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
     {
         aLogLine = "Select element no " + rDescription.aID + " From " + rDescription.aParent;
     }
-    else if(rDescription.aKeyWord == "MenuButton"){
-        if(rDescription.aAction == "OPENLIST"){
+    else if (rDescription.aKeyWord == "MenuButton")
+    {
+        if (rDescription.aAction == "OPENLIST")
+        {
             aLogLine = "Open List From " + rDescription.aID;
         }
-        else if(rDescription.aAction == "CLOSELIST"){
+        else if (rDescription.aAction == "CLOSELIST")
+        {
             aLogLine = "Close List From " + rDescription.aID;
         }
-        else if(rDescription.aAction == "OPENFROMLIST"){
-            aLogLine = "Select item no "+ GetValueInMapWithIndex(rDescription.aParameters, 0) +" From List of "+ rDescription.aID;
+        else if (rDescription.aAction == "OPENFROMLIST")
+        {
+            aLogLine = "Select item no " + GetValueInMapWithIndex(rDescription.aParameters, 0)
+                       + " From List of " + rDescription.aID;
         }
     }
-    else if(rDescription.aKeyWord == "VerticalTab"){
-        aLogLine = "Choose Tab number " + GetValueInMapWithIndex(rDescription.aParameters, 0) +
-                " in '" + rDescription.aID +
-                "' from " + rDescription.aParent ;
+    else if (rDescription.aKeyWord == "VerticalTab")
+    {
+        aLogLine = "Choose Tab number " + GetValueInMapWithIndex(rDescription.aParameters, 0)
+                   + " in '" + rDescription.aID + "' from " + rDescription.aParent;
     }
     else
     {

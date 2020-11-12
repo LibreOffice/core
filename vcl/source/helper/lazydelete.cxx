@@ -21,26 +21,26 @@
 #include <svdata.hxx>
 #include <sal/log.hxx>
 
-namespace vcl {
-
+namespace vcl
+{
 DeleteOnDeinitBase::~DeleteOnDeinitBase()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( !pSVData )
+    if (!pSVData)
         return;
-    auto & rList = pSVData->maDeinitDeleteList;
+    auto& rList = pSVData->maDeinitDeleteList;
     rList.erase(std::remove(rList.begin(), rList.end(), this), rList.end());
 }
 
-void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )
+void DeleteOnDeinitBase::addDeinitContainer(DeleteOnDeinitBase* i_pContainer)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    SAL_WARN_IF(  pSVData->mbDeInit, "vcl", "DeleteOnDeinit added after DeiInitVCL !" );
-    if( pSVData->mbDeInit )
+    SAL_WARN_IF(pSVData->mbDeInit, "vcl", "DeleteOnDeinit added after DeiInitVCL !");
+    if (pSVData->mbDeInit)
         return;
 
-    pSVData->maDeinitDeleteList.push_back( i_pContainer );
+    pSVData->maDeinitDeleteList.push_back(i_pContainer);
 }
 
 void DeleteOnDeinitBase::ImplDeleteOnDeInit()

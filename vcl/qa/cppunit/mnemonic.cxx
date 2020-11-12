@@ -18,7 +18,10 @@
 class VclMnemonicTest : public test::BootstrapFixture
 {
 public:
-    VclMnemonicTest() : BootstrapFixture(true, false) {}
+    VclMnemonicTest()
+        : BootstrapFixture(true, false)
+    {
+    }
 
     void testMnemonic();
 
@@ -47,7 +50,6 @@ void VclMnemonicTest::testMnemonic()
         OUString sResult = aGenerator.CreateMnemonic(OUString(TEST, SAL_N_ELEMENTS(TEST)));
         CPPUNIT_ASSERT_EQUAL(OUString("(~C)"), sResult.copy(sResult.getLength() - 4));
     }
-
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclMnemonicTest);

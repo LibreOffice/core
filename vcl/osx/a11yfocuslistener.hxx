@@ -27,18 +27,19 @@ class AquaA11yFocusListener : public KeyboardFocusListener
 {
     id m_focusedObject;
 
-    static rtl::Reference< AquaA11yFocusListener > theListener;
+    static rtl::Reference<AquaA11yFocusListener> theListener;
 
     AquaA11yFocusListener();
-    virtual ~AquaA11yFocusListener() override {};
-public:
+    virtual ~AquaA11yFocusListener() override{};
 
-    static rtl::Reference< AquaA11yFocusListener > const & get();
+public:
+    static rtl::Reference<AquaA11yFocusListener> const& get();
 
     id getFocusedUIElement();
 
     // KeyboardFocusListener
-    virtual void focusedObjectChanged(const css::uno::Reference< css::accessibility::XAccessible >& xAccessible) override;
+    virtual void focusedObjectChanged(
+        const css::uno::Reference<css::accessibility::XAccessible>& xAccessible) override;
 };
 
 #endif // INCLUDED_VCL_OSX_A11YFOCUSLISTENER_HXX

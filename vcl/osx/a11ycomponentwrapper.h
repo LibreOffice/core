@@ -26,12 +26,12 @@
 @interface AquaA11yComponentWrapper : NSObject
 {
 }
-+(id)sizeAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(id)positionAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(id)descriptionAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(void)addAttributeNamesTo:(NSMutableArray *)attributeNames;
-+(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
-+(void)setFocusedAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
++ (id)sizeAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (id)positionAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (id)descriptionAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (void)addAttributeNamesTo:(NSMutableArray*)attributeNames;
++ (BOOL)isAttributeSettable:(NSString*)attribute forElement:(AquaA11yWrapper*)wrapper;
++ (void)setFocusedAttributeForElement:(AquaA11yWrapper*)wrapper to:(id)value;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YCOMPONENTWRAPPER_H

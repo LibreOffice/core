@@ -27,7 +27,7 @@
 void Sound::Beep()
 {
     // #i91990#
-    if ( Application::IsHeadlessModeEnabled() )
+    if (Application::IsHeadlessModeEnabled())
         return;
 
     vcl::Window* pWindow = ImplGetDefaultWindow();

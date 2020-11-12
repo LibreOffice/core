@@ -11,16 +11,16 @@
 #include <test/outputdevice.hxx>
 #include <vcl/gradient.hxx>
 
-namespace vcl::test {
-
+namespace vcl::test
+{
 Bitmap OutputDeviceTestGradient::setupLinearGradient()
 {
     initialSetup(12, 12, constBackgroundColor);
 
     Gradient aGradient(GradientStyle::Linear, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
     aGradient.SetAngle(Degree10(900));
-    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1,  maVDRectangle.Top() + 1,
-                        maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
+    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
+                               maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
@@ -32,8 +32,8 @@ Bitmap OutputDeviceTestGradient::setupLinearGradientAngled()
 
     Gradient aGradient(GradientStyle::Linear, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
     aGradient.SetAngle(Degree10(450));
-    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1,  maVDRectangle.Top() + 1,
-                        maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
+    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
+                               maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
@@ -45,8 +45,8 @@ Bitmap OutputDeviceTestGradient::setupLinearGradientBorder()
 
     Gradient aGradient(GradientStyle::Linear, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
     aGradient.SetBorder(50);
-    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1,  maVDRectangle.Top() + 1,
-                        maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
+    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
+                               maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
@@ -58,8 +58,8 @@ Bitmap OutputDeviceTestGradient::setupLinearGradientIntensity()
 
     Gradient aGradient(GradientStyle::Linear, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
     aGradient.SetStartIntensity(50);
-    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1,  maVDRectangle.Top() + 1,
-                        maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
+    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
+                               maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
@@ -72,8 +72,8 @@ Bitmap OutputDeviceTestGradient::setupLinearGradientSteps()
     Gradient aGradient(GradientStyle::Linear, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
     aGradient.SetAngle(Degree10(900));
     aGradient.SetSteps(4);
-    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1,  maVDRectangle.Top() + 1,
-                        maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
+    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
+                               maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
@@ -85,8 +85,8 @@ Bitmap OutputDeviceTestGradient::setupAxialGradient()
 
     Gradient aGradient(GradientStyle::Axial, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
     aGradient.SetAngle(Degree10(900));
-    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1,  maVDRectangle.Top() + 1,
-                        maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
+    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
+                               maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
@@ -97,8 +97,8 @@ Bitmap OutputDeviceTestGradient::setupRadialGradient()
     initialSetup(12, 12, constBackgroundColor);
 
     Gradient aGradient(GradientStyle::Radial, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
-    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1,  maVDRectangle.Top() + 1,
-                        maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
+    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
+                               maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
@@ -111,8 +111,8 @@ Bitmap OutputDeviceTestGradient::setupRadialGradientOfs()
     Gradient aGradient(GradientStyle::Radial, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
     aGradient.SetOfsX(100); // Move center to the bottom-right corner.
     aGradient.SetOfsY(100);
-    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1,  maVDRectangle.Top() + 1,
-                        maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
+    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
+                               maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());

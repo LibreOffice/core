@@ -38,24 +38,25 @@ public:
 
 static int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
 {
-    int deltaR = std::abs(aColor1.GetRed()   - aColor2.GetRed());
+    int deltaR = std::abs(aColor1.GetRed() - aColor2.GetRed());
     int deltaG = std::abs(aColor1.GetGreen() - aColor2.GetGreen());
-    int deltaB = std::abs(aColor1.GetBlue()  - aColor2.GetBlue());
+    int deltaB = std::abs(aColor1.GetBlue() - aColor2.GetBlue());
 
     return std::max(std::max(deltaR, deltaG), deltaB);
 }
 
-static bool checkRect(Bitmap& rBitmap, int aLayerNumber, tools::Long nAreaHeight, tools::Long nAreaWidth, Color aExpectedColor, int nMaxDelta)
+static bool checkRect(Bitmap& rBitmap, int aLayerNumber, tools::Long nAreaHeight,
+                      tools::Long nAreaWidth, Color aExpectedColor, int nMaxDelta)
 {
     BitmapScopedWriteAccess pAccess(rBitmap);
 
-    tools::Long nWidth  = std::min(nAreaWidth,  pAccess->Width());
+    tools::Long nWidth = std::min(nAreaWidth, pAccess->Width());
     tools::Long nHeight = std::min(nAreaHeight, pAccess->Height());
 
     tools::Long firstX = 0 + aLayerNumber;
     tools::Long firstY = 0 + aLayerNumber;
 
-    tools::Long lastX = nWidth  - 1 - aLayerNumber;
+    tools::Long lastX = nWidth - 1 - aLayerNumber;
     tools::Long lastY = nHeight - 1 - aLayerNumber;
 
     int delta;
@@ -79,7 +80,7 @@ static bool checkRect(Bitmap& rBitmap, int aLayerNumber, tools::Long nAreaHeight
         if (delta > nMaxDelta)
             return false;
 
-        Color aColorLast  = pAccess->GetPixel(lastY, x);
+        Color aColorLast = pAccess->GetPixel(lastY, x);
         delta = deltaColor(aColorLast, aExpectedColor);
         if (delta > nMaxDelta)
             return false;
@@ -132,7 +133,8 @@ void JpegReaderTest::testReadGray()
     CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Height());
 
-    aBitmap.Convert(BmpConversion::N24Bit); // convert to 24bit so we don't need to deal with palette
+    aBitmap.Convert(
+        BmpConversion::N24Bit); // convert to 24bit so we don't need to deal with palette
 
     int nMaxDelta = 1;
     CPPUNIT_ASSERT(checkRect(aBitmap, 0, 8, 8, Color(0xff, 0xff, 0xff), nMaxDelta));
