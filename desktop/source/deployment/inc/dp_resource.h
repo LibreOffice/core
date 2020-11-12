@@ -22,10 +22,9 @@
 #include <i18nlangtag/languagetag.hxx>
 #include "dp_misc_api.hxx"
 
-namespace dp_misc {
-
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC const LanguageTag & getOfficeLanguageTag();
-
+namespace dp_misc
+{
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC const LanguageTag& getOfficeLanguageTag();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

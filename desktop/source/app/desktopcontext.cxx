@@ -26,33 +26,30 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
 
-
 namespace desktop
 {
-
-DesktopContext::DesktopContext( const Reference< XCurrentContext > & ctx )
-    : m_xNextContext( ctx )
+DesktopContext::DesktopContext(const Reference<XCurrentContext>& ctx)
+    : m_xNextContext(ctx)
 {
 }
 
-Any SAL_CALL DesktopContext::getValueByName( const OUString& Name)
+Any SAL_CALL DesktopContext::getValueByName(const OUString& Name)
 {
     Any retVal;
 
-    if ( Name == JAVA_INTERACTION_HANDLER_NAME )
+    if (Name == JAVA_INTERACTION_HANDLER_NAME)
     {
 #if HAVE_FEATURE_JAVA
-        retVal <<= Reference< XInteractionHandler >( new svt::JavaInteractionHandler());
+        retVal <<= Reference<XInteractionHandler>(new svt::JavaInteractionHandler());
 #endif
     }
-    else if( m_xNextContext.is() )
+    else if (m_xNextContext.is())
     {
         // Call next context in chain if found
-        retVal = m_xNextContext->getValueByName( Name );
+        retVal = m_xNextContext->getValueByName(Name);
     }
     return retVal;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

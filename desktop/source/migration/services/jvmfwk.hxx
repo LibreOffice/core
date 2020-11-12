@@ -22,13 +22,11 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-
 namespace migration
 {
-
 OUString jvmfwk_getImplementationName();
 
-css::uno::Sequence< OUString > jvmfwk_getSupportedServiceNames();
+css::uno::Sequence<OUString> jvmfwk_getSupportedServiceNames();
 
 } //end blind namespace
 

@@ -25,14 +25,17 @@
 #include <optional>
 #include <dp_backenddb.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno
+{
+class XComponentContext;
+}
 
-namespace dp_registry::backend::configuration {
-
+namespace dp_registry::backend::configuration
+{
 /* The XML file stores the extensions which are currently registered.
    They will be removed when they are revoked.
  */
-class ConfigurationBackendDb: public dp_registry::backend::BackendDb
+class ConfigurationBackendDb : public dp_registry::backend::BackendDb
 {
 protected:
     virtual OUString getDbNSName() override;
@@ -56,18 +59,14 @@ public:
     };
 
 public:
+    ConfigurationBackendDb(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                           OUString const& url);
 
-    ConfigurationBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
-                        OUString const & url);
+    void addEntry(OUString const& url, Data const& data);
 
-    void addEntry(OUString const & url, Data const & data);
-
-    ::std::optional<Data> getEntry(OUString const & url);
-    std::vector< OUString> getAllDataUrls();
+    ::std::optional<Data> getEntry(OUString const& url);
+    std::vector<OUString> getAllDataUrls();
 };
-
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

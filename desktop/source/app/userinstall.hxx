@@ -21,9 +21,10 @@
 
 #include <sal/config.h>
 
-namespace desktop::userinstall {
-
-enum Status {
+namespace desktop::userinstall
+{
+enum Status
+{
     EXISTED,
     CREATED,
     ERROR_NO_SPACE,
@@ -32,7 +33,6 @@ enum Status {
 };
 
 Status finalize();
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

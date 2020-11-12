@@ -17,37 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <dp_resource.h>
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace dp_misc {
-namespace {
-
-struct OfficeLocale :
-        public rtl::StaticWithInit<LanguageTag, OfficeLocale> {
-    LanguageTag operator () () {
+namespace dp_misc
+{
+namespace
+{
+struct OfficeLocale : public rtl::StaticWithInit<LanguageTag, OfficeLocale>
+{
+    LanguageTag operator()()
+    {
         OUString slang(utl::ConfigManager::getUILocale());
         //fallback, the locale is currently only set when the user starts the
         //office for the first time.
         if (slang.isEmpty())
             slang = "en-US";
-        return LanguageTag( slang);
+        return LanguageTag(slang);
     }
 };
 
 } // anon namespace
 
-const LanguageTag & getOfficeLanguageTag()
-{
-    return OfficeLocale::get();
-}
-
+const LanguageTag& getOfficeLanguageTag() { return OfficeLocale::get(); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

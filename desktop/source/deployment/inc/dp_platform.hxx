@@ -19,7 +19,6 @@
 
 #pragma once
 
-
 #include "dp_misc_api.hxx"
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -27,19 +26,16 @@
 
 namespace dp_misc
 {
-
-
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString const & getPlatformString();
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString const& getPlatformString();
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-    bool platform_fits( OUString const & platform_string );
+bool platform_fits(OUString const& platform_string);
 
 /** determines if the current platform corresponds to one of the platform strings.
 
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-bool hasValidPlatform( css::uno::Sequence< OUString > const & platformStrings);
-
+bool hasValidPlatform(css::uno::Sequence<OUString> const& platformStrings);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,8 +19,8 @@
 
 #pragma once
 
-namespace desktop {
-
+namespace desktop
+{
 class Migration
 {
 public:

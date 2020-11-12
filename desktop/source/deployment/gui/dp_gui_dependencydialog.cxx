@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>
@@ -27,8 +26,7 @@
 
 using dp_gui::DependencyDialog;
 
-DependencyDialog::DependencyDialog(
-    weld::Window * parent, std::vector< OUString > const & dependencies)
+DependencyDialog::DependencyDialog(weld::Window* parent, std::vector<OUString> const& dependencies)
     : GenericDialogController(parent, "desktop/ui/dependenciesdialog.ui", "Dependencies")
     , m_xList(m_xBuilder->weld_tree_view("depListTreeview"))
 {
@@ -39,8 +37,6 @@ DependencyDialog::DependencyDialog(
     }
 }
 
-DependencyDialog::~DependencyDialog()
-{
-}
+DependencyDialog::~DependencyDialog() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

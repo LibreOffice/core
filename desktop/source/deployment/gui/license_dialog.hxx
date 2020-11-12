@@ -24,9 +24,8 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-
-namespace dp_gui {
-
+namespace dp_gui
+{
 class LicenseDialog
     : public ::cppu::WeakImplHelper<css::ui::dialogs::XExecutableDialog, css::lang::XServiceInfo>
 {
@@ -37,16 +36,16 @@ class LicenseDialog
     sal_Int16 solar_execute();
 
 public:
-    LicenseDialog( css::uno::Sequence<css::uno::Any> const & args,
-                 css::uno::Reference<css::uno::XComponentContext> const & xComponentContext );
+    LicenseDialog(css::uno::Sequence<css::uno::Any> const& args,
+                  css::uno::Reference<css::uno::XComponentContext> const& xComponentContext);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XExecutableDialog
-    virtual void SAL_CALL setTitle( OUString const & title ) override;
+    virtual void SAL_CALL setTitle(OUString const& title) override;
     virtual sal_Int16 SAL_CALL execute() override;
 };
 }

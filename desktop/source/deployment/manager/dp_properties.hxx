@@ -19,35 +19,32 @@
 
 #pragma once
 
-
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <optional>
 
-
-namespace dp_manager {
-
-
+namespace dp_manager
+{
 class ExtensionProperties final
 {
     OUString m_propFileUrl;
     const css::uno::Reference<css::ucb::XCommandEnvironment> m_xCmdEnv;
     const css::uno::Reference<css::uno::XComponentContext> m_xContext;
-    ::std::optional< OUString> m_prop_suppress_license;
-    ::std::optional< OUString> m_prop_extension_update;
+    ::std::optional<OUString> m_prop_suppress_license;
+    ::std::optional<OUString> m_prop_extension_update;
 
-    static OUString getPropertyValue(css::beans::NamedValue const & v);
+    static OUString getPropertyValue(css::beans::NamedValue const& v);
+
 public:
+    ExtensionProperties(OUString const& urlExtension,
+                        css::uno::Reference<css::ucb::XCommandEnvironment> const& xCmdEnv,
+                        css::uno::Reference<css::uno::XComponentContext> const& xContext);
 
-    ExtensionProperties(OUString const & urlExtension,
-                        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
-                        css::uno::Reference<css::uno::XComponentContext> const & xContext);
-
-    ExtensionProperties(OUString const & urlExtension,
-                        css::uno::Sequence<css::beans::NamedValue> const & properties,
-                        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
-                        css::uno::Reference<css::uno::XComponentContext> const & xContext);
+    ExtensionProperties(OUString const& urlExtension,
+                        css::uno::Sequence<css::beans::NamedValue> const& properties,
+                        css::uno::Reference<css::ucb::XCommandEnvironment> const& xCmdEnv,
+                        css::uno::Reference<css::uno::XComponentContext> const& xContext);
 
     void write();
 
@@ -56,6 +53,5 @@ public:
     bool isExtensionUpdate() const;
 };
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
