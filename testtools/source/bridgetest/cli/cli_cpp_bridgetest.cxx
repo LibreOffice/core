@@ -408,27 +408,67 @@ static bool performTest(XBridgeTest* xLBT)
         aSetData->Sequence[1] = new TestElement(); // empty struct
 
         xLBT->setValues(
-                aSetData->Bool, aSetData->Char, aSetData->Byte, aSetData->Short, aSetData->UShort,
-                aSetData->Long, aSetData->ULong, aSetData->Hyper, aSetData->UHyper, aSetData->Float, aSetData->Double,
-                aSetData->Enum, aSetData->String, aSetData->Interface, aSetData->Any, aSetData->Sequence, aSetData );
+                aSetData->Bool,
+                aSetData->Char,
+                aSetData->Byte,
+                aSetData->Short,
+                aSetData->UShort,
+                aSetData->Long,
+                aSetData->ULong,
+                aSetData->Hyper,
+                aSetData->UHyper,
+                aSetData->Float,
+                aSetData->Double,
+                aSetData->Enum,
+                aSetData->String,
+                aSetData->Interface,
+                aSetData->Any,
+                aSetData->Sequence,
+                aSetData );
 
         {
         TestDataElements* aRet = new TestDataElements();
         TestDataElements* aRet2 = new TestDataElements();
         xLBT->getValues(
-            & aRet->Bool, & aRet->Char, & aRet->Byte, & aRet->Short, & aRet->UShort,
-            & aRet->Long, & aRet->ULong, & aRet->Hyper, & aRet->UHyper,
-            & aRet->Float, & aRet->Double, & aRet->Enum, & aRet->String,
-            & aRet->Interface, & aRet->Any, & aRet->Sequence, & aRet2 );
+            & aRet->Bool,
+            & aRet->Char,
+            & aRet->Byte,
+            & aRet->Short,
+            & aRet->UShort,
+            & aRet->Long,
+            & aRet->ULong,
+            & aRet->Hyper,
+            & aRet->UHyper,
+            & aRet->Float,
+            & aRet->Double,
+            & aRet->Enum,
+            & aRet->String,
+            & aRet->Interface,
+            & aRet->Any,
+            & aRet->Sequence,
+            & aRet2 );
 
         bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) , "getValues test") && bRet;
 
         // set last retrieved values
         TestDataElements* aSV2ret = xLBT->setValues2(
-            & aRet->Bool, & aRet->Char, & aRet->Byte, & aRet->Short, & aRet->UShort,
-            & aRet->Long, & aRet->ULong, & aRet->Hyper, & aRet->UHyper, & aRet->Float,
-            & aRet->Double, & aRet->Enum, & aRet->String, & aRet->Interface, & aRet->Any,
-            & aRet->Sequence, & aRet2 );
+            & aRet->Bool,
+            & aRet->Char,
+            & aRet->Byte,
+            & aRet->Short,
+            & aRet->UShort,
+            & aRet->Long,
+            & aRet->ULong,
+            & aRet->Hyper,
+            & aRet->UHyper,
+            & aRet->Float,
+            & aRet->Double,
+            & aRet->Enum,
+            & aRet->String,
+            & aRet->Interface,
+            & aRet->Any,
+            & aRet->Sequence,
+            & aRet2 );
 
         // check inout sequence order
         // => inout sequence parameter was switched by test objects
@@ -444,10 +484,22 @@ static bool performTest(XBridgeTest* xLBT)
         TestDataElements* aRet = new TestDataElements();
         TestDataElements* aRet2 = new TestDataElements();
         TestDataElements* aGVret = xLBT->getValues(
-            & aRet->Bool, & aRet->Char, & aRet->Byte, & aRet->Short,
-            & aRet->UShort, & aRet->Long, & aRet->ULong, & aRet->Hyper,
-            & aRet->UHyper, & aRet->Float, & aRet->Double, & aRet->Enum,
-            & aRet->String, & aRet->Interface, & aRet->Any, & aRet->Sequence,
+            & aRet->Bool,
+            & aRet->Char,
+            & aRet->Byte,
+            & aRet->Short,
+            & aRet->UShort,
+            & aRet->Long,
+            & aRet->ULong,
+            & aRet->Hyper,
+            & aRet->UHyper,
+            & aRet->Float,
+            & aRet->Double,
+            & aRet->Enum,
+            & aRet->String,
+            & aRet->Interface,
+            & aRet->Any,
+            & aRet->Sequence,
             & aRet2 );
 
         bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) && compareData( aData, aGVret ), "getValues test" ) && bRet;
