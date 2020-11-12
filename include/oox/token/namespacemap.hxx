@@ -26,24 +26,24 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace oox {
-
-
+namespace oox
+{
 /** A map that contains all XML namespace URLs used in the filters. */
 struct NamespaceMap
 {
-    std::map< sal_Int32, OUString > maTransitionalNamespaceMap;
-    std::map< sal_Int32, OUString > maStrictNamespaceMap;
+    std::map<sal_Int32, OUString> maTransitionalNamespaceMap;
+    std::map<sal_Int32, OUString> maStrictNamespaceMap;
 
     NamespaceMap();
 
-    typedef std::map< sal_Int32, OUString >::iterator iterator;
-    typedef std::map< sal_Int32, OUString >::const_iterator const_iterator;
+    typedef std::map<sal_Int32, OUString>::iterator iterator;
+    typedef std::map<sal_Int32, OUString>::const_iterator const_iterator;
 };
 
 /** Thread-save singleton of a map of all supported XML namespace URLs. */
-struct StaticNamespaceMap : public ::rtl::Static< NamespaceMap, StaticNamespaceMap > {};
-
+struct StaticNamespaceMap : public ::rtl::Static<NamespaceMap, StaticNamespaceMap>
+{
+};
 
 } // namespace oox
 

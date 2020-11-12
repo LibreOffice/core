@@ -20,16 +20,16 @@
 #include <map>
 
 class VclAbstractDialog;
-typedef std::map< OString, sal_uInt32 > mapType;
+typedef std::map<OString, sal_uInt32> mapType;
 
 class OOO_DLLPUBLIC_TEST ScreenshotTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 private:
     /// The current UI language
-    OUString    maCurrentLanguage;
+    OUString maCurrentLanguage;
 
     /// the set of known dialogs and their ID for usage in createDialogByID
-    mapType     maKnownDialogs;
+    mapType maKnownDialogs;
 
     /// parent for non-dialog buildables
     weld::GenericDialogController maParent;
@@ -38,7 +38,7 @@ private:
 private:
     /// helpers
     void implSaveScreenshot(const BitmapEx& rScreenshot, const OString& rScreenshotId);
-    void saveScreenshot(VclAbstractDialog const & rDialog);
+    void saveScreenshot(VclAbstractDialog const& rDialog);
     void saveScreenshot(weld::Window& rDialog);
 
     /// helper method to create and dump a dialog based on Builder contents.

@@ -23,11 +23,13 @@
 #include <rtl/ustring.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno
+{
+class Any;
+}
 
 namespace comphelper
 {
-
 /** Creates a STRING representation out of an ANY value.
 
     @param value
@@ -35,8 +37,7 @@ namespace comphelper
     @return
            STRING representation of given ANY value
 */
-COMPHELPER_DLLPUBLIC OUString anyToString( css::uno::Any const & value );
-
+COMPHELPER_DLLPUBLIC OUString anyToString(css::uno::Any const& value);
 }
 
 #endif

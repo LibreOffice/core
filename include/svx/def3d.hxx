@@ -30,14 +30,16 @@ const double fPiDiv180 = 0.01745329251994;
 
 enum class E3dDragConstraint
 {
-    X   = 0x0001,
-    Y   = 0x0002,
-    Z   = 0x0004,
+    X = 0x0001,
+    Y = 0x0002,
+    Z = 0x0004,
     XYZ = X | Y | Z
 };
 namespace o3tl
 {
-    template<> struct typed_flags<E3dDragConstraint> : is_typed_flags<E3dDragConstraint, 0x7> {};
+template <> struct typed_flags<E3dDragConstraint> : is_typed_flags<E3dDragConstraint, 0x7>
+{
+};
 }
 
 #endif

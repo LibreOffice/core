@@ -30,7 +30,10 @@ namespace ucbhelper
 struct CommandEnvironment_Impl;
 
 // workaround for incremental linking bugs in MSVC2015
-class SAL_DLLPUBLIC_TEMPLATE CommandEnvironment_Base : public cppu::WeakImplHelper< css::ucb::XCommandEnvironment > {};
+class SAL_DLLPUBLIC_TEMPLATE CommandEnvironment_Base
+    : public cppu::WeakImplHelper<css::ucb::XCommandEnvironment>
+{
+};
 
 /**
   * This class implements the interface
@@ -42,8 +45,8 @@ class UCBHELPER_DLLPUBLIC CommandEnvironment final : public CommandEnvironment_B
     std::unique_ptr<CommandEnvironment_Impl> m_pImpl;
 
 private:
-    CommandEnvironment( const CommandEnvironment& ) = delete;
-    CommandEnvironment& operator=( const CommandEnvironment& ) = delete;
+    CommandEnvironment(const CommandEnvironment&) = delete;
+    CommandEnvironment& operator=(const CommandEnvironment&) = delete;
 
 public:
     /**
@@ -54,17 +57,19 @@ public:
       * @param rxProgressHandler is the implementation of a Progress
       *        Handler or an empty reference.
       */
-    CommandEnvironment( const css::uno::Reference< css::task::XInteractionHandler >& rxInteractionHandler,
-                        const css::uno::Reference< css::ucb::XProgressHandler >& rxProgressHandler );
+    CommandEnvironment(
+        const css::uno::Reference<css::task::XInteractionHandler>& rxInteractionHandler,
+        const css::uno::Reference<css::ucb::XProgressHandler>& rxProgressHandler);
     /**
       * Destructor.
       */
     virtual ~CommandEnvironment() override;
 
-     // XCommandEnvironment
-    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() override;
+    // XCommandEnvironment
+    virtual css::uno::Reference<css::task::XInteractionHandler>
+        SAL_CALL getInteractionHandler() override;
 
-    virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL getProgressHandler() override;
+    virtual css::uno::Reference<css::ucb::XProgressHandler> SAL_CALL getProgressHandler() override;
 };
 
 } /* namespace ucbhelper */

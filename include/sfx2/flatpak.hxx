@@ -17,16 +17,15 @@
 
 // Functionality related to the Flatpak version of LibreOffice.
 
-namespace flatpak {
-
+namespace flatpak
+{
 bool isFlatpak();
 
 // Must only be called with SolarMutex locked:
-bool createTemporaryHtmlDirectory(OUString ** url);
+bool createTemporaryHtmlDirectory(OUString** url);
 
 // Must only be called with SolarMutex locked:
 SFX2_DLLPUBLIC void removeTemporaryHtmlDirectory();
-
 }
 
 #endif

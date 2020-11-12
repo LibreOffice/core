@@ -14,20 +14,19 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XAreaLink
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
-    virtual ~XAreaLink(){}
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual ~XAreaLink() {}
 
     void testGetSourceArea();
     void testSetSourceArea();
     void testGetDestArea();
     void testSetDestArea();
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XAREALINK_HXX

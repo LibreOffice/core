@@ -28,8 +28,7 @@ public:
     virtual void setUp() override;
 
 protected:
-    void closeDocument( css::uno::Reference< css::lang::XComponent > const & xDocument );
-
+    void closeDocument(css::uno::Reference<css::lang::XComponent> const& xDocument);
 
 private:
     OUString m_aBaseString;

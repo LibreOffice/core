@@ -164,7 +164,7 @@
     <p>Therefore, when a Java is selected in OO then the office must be
     restarted, so that the changes can take effect.</p>
  */
-#define JFW_REQUIRE_NEEDRESTART  0x1l
+#define JFW_REQUIRE_NEEDRESTART 0x1l
 
 /** error codes which are returned by functions of this API.
  */
@@ -251,8 +251,7 @@ struct JavaInfo
    true - both object represent the same JRE.</br>
    false - the objects represent different JREs
  */
-JVMFWK_DLLPUBLIC bool jfw_areEqualJavaInfo(
-    JavaInfo const * pInfoA,JavaInfo const * pInfoB);
+JVMFWK_DLLPUBLIC bool jfw_areEqualJavaInfo(JavaInfo const* pInfoA, JavaInfo const* pInfoB);
 
 /** determines if a Java Virtual Machine is already running.
 
@@ -314,7 +313,7 @@ JVMFWK_DLLPUBLIC bool jfw_isVMRunning();
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo>* pInfo);
 
 /** provides information about all available JRE installations.
 
@@ -336,8 +335,8 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInf
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.
 */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAllJREs(
-    std::vector<std::unique_ptr<JavaInfo>> *parInfo);
+JVMFWK_DLLPUBLIC javaFrameworkError
+jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>>* parInfo);
 
 /** determines if a path points to a Java installation.
 
@@ -367,9 +366,8 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAllJREs(
    JFW_E_FAILED_VERSION a JRE was detected but if failed the version
    requirements as determined by the javavendors.xml
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_getJavaInfoByPath(
-    OUString const & pPath, std::unique_ptr<JavaInfo> *ppInfo);
-
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_getJavaInfoByPath(OUString const& pPath,
+                                                          std::unique_ptr<JavaInfo>* ppInfo);
 
 /** starts a Java Virtual Machine (JVM).
 
@@ -431,9 +429,9 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getJavaInfoByPath(
     JFW_E_FAILED_VERSION the &quot;Default Mode&quot; is active. The JRE determined by
     <code>JAVA_HOME</code>does not meet the version requirements.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_startVM(
-    JavaInfo const * pInfo, std::vector<OUString> const & arOptions,
-    JavaVM ** ppVM, JNIEnv ** ppEnv);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_startVM(JavaInfo const* pInfo,
+                                                std::vector<OUString> const& arOptions,
+                                                JavaVM** ppVM, JNIEnv** ppEnv);
 
 /** determines the JRE that is to be used.
 
@@ -461,8 +459,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_startVM(
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_setSelectedJRE(JavaInfo const *pInfo);
-
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_setSelectedJRE(JavaInfo const* pInfo);
 
 /** provides information about the JRE that is to be used.
 
@@ -489,8 +486,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setSelectedJRE(JavaInfo const *pInfo);
     JFW_E_INVALID_SETTINGS the javavendors.xml has been changed and no
     JRE has been selected afterwards. <br/>
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo);
-
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo>* ppInfo);
 
 /** determines if Java can be used.
 
@@ -522,7 +518,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setEnabled(bool bEnabled);
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_getEnabled(bool *pbEnabled);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_getEnabled(bool* pbEnabled);
 
 /** determines parameters which are passed to VM during its creation.
 
@@ -543,8 +539,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getEnabled(bool *pbEnabled);
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_setVMParameters(
-    std::vector<OUString> const & arArgs);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_setVMParameters(std::vector<OUString> const& arArgs);
 
 /** obtains the currently used start parameters.
 
@@ -558,8 +553,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setVMParameters(
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_getVMParameters(
-    std::vector<OUString> * parParameters);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_getVMParameters(std::vector<OUString>* parParameters);
 
 /** sets the user class path.
 
@@ -578,7 +572,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getVMParameters(
     were not met.<br/>
    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_setUserClassPath(OUString const  & pCP);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_setUserClassPath(OUString const& pCP);
 /** provides the value of the current user class path.
 
    <p>The function returns an empty string if no user class path is set.
@@ -594,7 +588,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setUserClassPath(OUString const  & pCP);
     were not met.<br/>
    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_getUserClassPath(OUString * ppCP);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_getUserClassPath(OUString* ppCP);
 
 /** saves the location of a JRE.
 
@@ -621,8 +615,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getUserClassPath(OUString * ppCP);
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_addJRELocation(
-    OUString const & sLocation);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_addJRELocation(OUString const& sLocation);
 
 /** checks if the installation of the jre still exists.
 
@@ -640,8 +633,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_addJRELocation(
     JFW_E_NONE the function ran successfully.</br>
     JFW_E_ERROR an error occurred during execution.</br>
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, bool *exist);
-
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_existJRE(const JavaInfo* pInfo, bool* exist);
 
 /** locks this API so that it cannot be used by other threads.
 

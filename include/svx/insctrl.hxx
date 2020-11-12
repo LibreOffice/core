@@ -26,17 +26,17 @@
 class SVX_DLLPUBLIC SvxInsertStatusBarControl final : public SfxStatusBarControl
 {
 public:
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) override;
-    virtual void    Paint( const UserDrawEvent& rEvt ) override;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+                              const SfxPoolItem* pState) override;
+    virtual void Paint(const UserDrawEvent& rEvt) override;
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SvxInsertStatusBarControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
+    SvxInsertStatusBarControl(sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb);
     virtual ~SvxInsertStatusBarControl() override;
 
 private:
-    bool    bInsert;
+    bool bInsert;
 
     SVX_DLLPRIVATE void DrawItemText_Impl();
 };

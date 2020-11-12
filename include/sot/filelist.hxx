@@ -36,7 +36,7 @@ private:
 
 public:
     // import / export
-    SOT_DLLPUBLIC friend SvStream&  ReadFileList( SvStream& rIStm, FileList& rFileList );
+    SOT_DLLPUBLIC friend SvStream& ReadFileList(SvStream& rIStm, FileList& rFileList);
 
     // fill in / interrogate list
     void AppendFile(const OUString& rStr);

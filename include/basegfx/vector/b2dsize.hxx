@@ -23,11 +23,11 @@
 
 namespace basegfx
 {
-    // syntactic sugar: a B2DVector exactly models a Size object,
-    // thus, for interface clarity, we provide an alias name
+// syntactic sugar: a B2DVector exactly models a Size object,
+// thus, for interface clarity, we provide an alias name
 
-    /// Alias name for interface clarity (not everybody is aware of the identity)
-    typedef B2DVector B2DSize;
+/// Alias name for interface clarity (not everybody is aware of the identity)
+typedef B2DVector B2DSize;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

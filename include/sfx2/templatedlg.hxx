@@ -24,33 +24,33 @@
 class TemplateSearchView;
 class ThumbnailViewItem;
 
-namespace com {
-    namespace sun::star::frame {
-        class XDesktop2;
-        class XModel;
-    }
+namespace com
+{
+namespace sun::star::frame
+{
+class XDesktop2;
+class XModel;
+}
 }
 
 class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public weld::GenericDialogController
 {
-    typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
+    typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*, const ThumbnailViewItem*);
 
 public:
-
-    SfxTemplateManagerDlg(weld::Window *parent);
+    SfxTemplateManagerDlg(weld::Window* parent);
 
     virtual ~SfxTemplateManagerDlg() override;
     virtual short run() override;
 
-    void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
+    void setDocumentModel(const css::uno::Reference<css::frame::XModel>& rModel);
 
 protected:
-
     void getApplicationSpecificSettings();
 
-    void readSettings ();
+    void readSettings();
 
-    void writeSettings ();
+    void writeSettings();
 
     void fillFolderComboBox();
 
@@ -84,17 +84,17 @@ protected:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
     void OnTemplateImportCategory(const OUString& sCategory);
-//    static void OnTemplateLink ();
-    void OnTemplateOpen ();
-    void OnTemplateExport ();
+    //    static void OnTemplateLink ();
+    void OnTemplateOpen();
+    void OnTemplateExport();
 
-    void OnTemplateState (const ThumbnailViewItem *pItem);
+    void OnTemplateState(const ThumbnailViewItem* pItem);
 
-    void OnCategoryNew ();
+    void OnCategoryNew();
     void OnCategoryRename();
     void OnCategoryDelete();
 
-    void createDefaultTemplateMenu ();
+    void createDefaultTemplateMenu();
 
     /**
      *
@@ -102,7 +102,7 @@ protected:
      *
      **/
 
-    void localMoveTo (sal_uInt16 nMenuId);
+    void localMoveTo(sal_uInt16 nMenuId);
 
     /**
      *
@@ -110,15 +110,15 @@ protected:
      *
      **/
 
-    void localSearchMoveTo (sal_uInt16 nMenuId);
+    void localSearchMoveTo(sal_uInt16 nMenuId);
 
     /// Return filter according to the currently selected application filter.
     FILTER_APPLICATION getCurrentApplicationFilter() const;
 
 protected:
-    std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelTemplates;
-    css::uno::Reference< css::frame::XModel > m_xModel;
-    css::uno::Reference< css::frame::XDesktop2 > mxDesktop;
+    std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelTemplates;
+    css::uno::Reference<css::frame::XModel> m_xModel;
+    css::uno::Reference<css::frame::XDesktop2> mxDesktop;
 
     Timer m_aUpdateDataTimer;
 
@@ -145,8 +145,8 @@ protected:
 class SfxTemplateCategoryDialog final : public weld::GenericDialogController
 {
 private:
-    OUString   msSelectedCategory;
-    bool       mbIsNewCategory;
+    OUString msSelectedCategory;
+    bool mbIsNewCategory;
 
     std::unique_ptr<weld::TreeView> mxLBCategory;
     std::unique_ptr<weld::Label> mxSelectLabel;
@@ -162,37 +162,29 @@ public:
 
     void HideNewCategoryOption();
 
-    const OUString& GetSelectedCategory() const {
-        return msSelectedCategory;
-    };
+    const OUString& GetSelectedCategory() const { return msSelectedCategory; };
 
-    void SetSelectLabelText(OUString const & sText) const {
-        mxSelectLabel->set_label(sText);
-    };
+    void SetSelectLabelText(OUString const& sText) const { mxSelectLabel->set_label(sText); };
 
-    bool IsNewCategoryCreated() const {
-        return mbIsNewCategory;
-    }
+    bool IsNewCategoryCreated() const { return mbIsNewCategory; }
 
 public:
-
     explicit SfxTemplateCategoryDialog(weld::Window* pParent);
 
     virtual ~SfxTemplateCategoryDialog() override;
 };
-
 
 //  class SfxTemplateSelectionDialog -------------------------------------------------------------------
 
 class SFX2_DLLPUBLIC SfxTemplateSelectionDlg final : public SfxTemplateManagerDlg
 {
 public:
-    SfxTemplateSelectionDlg(weld::Window *parent);
+    SfxTemplateSelectionDlg(weld::Window* parent);
 
     virtual ~SfxTemplateSelectionDlg() override;
     virtual short run() override;
 
-    OUString const & getTemplatePath() const { return msTemplatePath; };
+    OUString const& getTemplatePath() const { return msTemplatePath; };
     bool IsStartWithTemplate() const { return mxCBXHideDlg->get_active(); };
 
 private:

@@ -34,6 +34,7 @@ class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) EditUndoManager : public SfxUndoManage
 
     EditEngine* mpEditEngine;
     void SetEditEngine(EditEngine* pNew);
+
 public:
     EditUndoManager(sal_uInt16 nMaxUndoActionCount = 20);
 
@@ -41,33 +42,31 @@ public:
     virtual bool Redo() override;
 };
 
-
 // EditUndo
 
 class EDITENG_DLLPUBLIC EditUndo : public SfxUndoAction
 {
 private:
-    sal_uInt16   nId;
-    ViewShellId  mnViewShellId;
-    EditEngine*  mpEditEngine;
+    sal_uInt16 nId;
+    ViewShellId mnViewShellId;
+    EditEngine* mpEditEngine;
 
 public:
     EditUndo(sal_uInt16 nI, EditEngine* pEE);
     virtual ~EditUndo() override;
 
-    EditEngine* GetEditEngine() { return mpEditEngine;}
+    EditEngine* GetEditEngine() { return mpEditEngine; }
 
-    virtual void    Undo() override      = 0;
-    virtual void    Redo() override      = 0;
+    virtual void Undo() override = 0;
+    virtual void Redo() override = 0;
 
-    virtual bool    CanRepeat(SfxRepeatTarget&) const override;
+    virtual bool CanRepeat(SfxRepeatTarget&) const override;
     virtual OUString GetComment() const override;
     /// See SfxUndoAction::GetViewShellId().
     ViewShellId GetViewShellId() const override;
-    sal_uInt16  GetId() const;
+    sal_uInt16 GetId() const;
 };
 
 #endif // INCLUDED_EDITENG_EDITUND2_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

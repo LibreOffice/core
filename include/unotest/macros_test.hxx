@@ -34,18 +34,18 @@ namespace test
 class Directories;
 }
 
-namespace unotest {
-
+namespace unotest
+{
 class OOO_DLLPUBLIC_UNOTEST MacrosTest
 {
 public:
     class Resetter
     {
     private:
-        std::function<void ()> m_Func;
+        std::function<void()> m_Func;
 
     public:
-        Resetter(std::function<void ()> const& rFunc)
+        Resetter(std::function<void()> const& rFunc)
             : m_Func(rFunc)
         {
         }
@@ -66,8 +66,10 @@ public:
     MacrosTest();
     ~MacrosTest();
 
-    css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString& rURL, const OUString& rDocService = OUString(),
-        const css::uno::Sequence<css::beans::PropertyValue>& rExtra_args = css::uno::Sequence<css::beans::PropertyValue>() );
+    css::uno::Reference<css::lang::XComponent>
+    loadFromDesktop(const OUString& rURL, const OUString& rDocService = OUString(),
+                    const css::uno::Sequence<css::beans::PropertyValue>& rExtra_args
+                    = css::uno::Sequence<css::beans::PropertyValue>());
 
     static void
     dispatchCommand(const css::uno::Reference<css::lang::XComponent>& xComponent,
@@ -78,7 +80,7 @@ public:
     void tearDownNssGpg();
 
 protected:
-    css::uno::Reference< css::frame::XDesktop2> mxDesktop;
+    css::uno::Reference<css::frame::XDesktop2> mxDesktop;
 
 private:
     std::unique_ptr<BasicDLL> mpDll;
@@ -86,7 +88,6 @@ private:
     OString m_gpgconfCommandPrefix;
 #endif
 };
-
 }
 
 #endif

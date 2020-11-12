@@ -22,11 +22,13 @@
 #include <svx/sdooitm.hxx>
 #include <svx/svddef.hxx>
 
-inline SdrOnOffItem makeSdrTextAutoGrowHeightItem(bool bAuto) {
+inline SdrOnOffItem makeSdrTextAutoGrowHeightItem(bool bAuto)
+{
     return SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, bAuto);
 }
 
-inline SdrOnOffItem makeSdrTextAutoGrowWidthItem(bool bAuto) {
+inline SdrOnOffItem makeSdrTextAutoGrowWidthItem(bool bAuto)
+{
     return SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, bAuto);
 }
 

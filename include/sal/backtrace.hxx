@@ -28,19 +28,18 @@
 */
 #if defined LIBO_INTERNAL_ONLY
 
-namespace sal {
-
-struct BacktraceState {
+namespace sal
+{
+struct BacktraceState
+{
     void** buffer;
     int nDepth;
-    ~BacktraceState() {delete[] buffer;}
+    ~BacktraceState() { delete[] buffer; }
 };
 
-SAL_DLLPUBLIC std::unique_ptr<BacktraceState> backtrace_get(
-    sal_uInt32 backtraceDepth);
+SAL_DLLPUBLIC std::unique_ptr<BacktraceState> backtrace_get(sal_uInt32 backtraceDepth);
 
 SAL_DLLPUBLIC OUString backtrace_to_string(BacktraceState* backtraceState);
-
 }
 
 #endif

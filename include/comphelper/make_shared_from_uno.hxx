@@ -21,13 +21,15 @@
 
 #include <memory>
 
-namespace comphelper {
-
+namespace comphelper
+{
 /// @internal
-namespace detail {
+namespace detail
+{
 /// @internal
-template <typename T> struct ReleaseFunc {
-    void operator()( T * p ) const { p->release(); }
+template <typename T> struct ReleaseFunc
+{
+    void operator()(T* p) const { p->release(); }
 };
 } // namespace detail
 
@@ -53,11 +55,10 @@ template <typename T> struct ReleaseFunc {
     @param p object pointer
     @return shared_ptr to object
 */
-template <typename T>
-inline std::shared_ptr<T> make_shared_from_UNO( T * p )
+template <typename T> inline std::shared_ptr<T> make_shared_from_UNO(T* p)
 {
     p->acquire();
-    return std::shared_ptr<T>( p, detail::ReleaseFunc<T>() );
+    return std::shared_ptr<T>(p, detail::ReleaseFunc<T>());
 }
 
 } // namespace comphelper

@@ -14,8 +14,14 @@
 #include <rtl/ustring.hxx>
 #include <map>
 
-namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::frame
+{
+class XFrame;
+}
+namespace com::sun::star::uno
+{
+template <typename> class Reference;
+}
 
 class SfxBindings;
 class SfxViewFrame;
@@ -23,8 +29,8 @@ class SfxViewShell;
 class SystemWindow;
 class WeldedTabbedNotebookbar;
 
-namespace sfx2 {
-
+namespace sfx2
+{
 /** Helpers for easier access to NotebookBar via the sfx2 infrastructure.
 */
 class SFX2_DLLPUBLIC SfxNotebookBar
@@ -50,12 +56,12 @@ public:
     /// Method restores normal behaviour of the Notebookbar
     static void UnlockNotebookBar();
 
-    static void RemoveListeners(SystemWindow const * pSysWindow);
+    static void RemoveListeners(SystemWindow const* pSysWindow);
 
     /** Show menu bar in all frames of current application */
     static void ShowMenubar(bool bShow);
     /** Show menu bar only in current frame */
-    static void ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow);
+    static void ShowMenubar(SfxViewFrame const* pViewFrame, bool bShow);
     static void ToggleMenubar();
     static void ReloadNotebookBar(const OUString& sUIPath);
 
@@ -63,7 +69,8 @@ private:
     static bool m_bLock;
     static bool m_bHide;
 
-    static std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>> m_pNotebookBarWeldedWrapper;
+    static std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>>
+        m_pNotebookBarWeldedWrapper;
 
     DECL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, void);
 };

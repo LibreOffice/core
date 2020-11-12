@@ -20,7 +20,8 @@
 #ifndef INCLUDED_DESKTOP_EXITHELPER_H
 #define INCLUDED_DESKTOP_EXITHELPER_H
 
-enum EExitCodes {
+enum EExitCodes
+{
     /* e.g. used to force showing of the command line help */
     EXITHELPER_NO_ERROR = 0,
     /* a uno exception was caught during startup */

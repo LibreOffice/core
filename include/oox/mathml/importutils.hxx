@@ -18,13 +18,16 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com::sun::star {
-    namespace xml::sax { class XFastAttributeList; }
+namespace com::sun::star
+{
+namespace xml::sax
+{
+class XFastAttributeList;
+}
 }
 
 namespace oox::formulaimport
 {
-
 // used to differentiate between tags that opening or closing
 const int TAG_OPENING = 1 << 29;
 const int TAG_CLOSING = 1 << 30;
@@ -32,8 +35,8 @@ const int TAG_CLOSING = 1 << 30;
 // you probably want to #define these to something shorter in the .cxx file,
 // but they must be done as macros, otherwise they wouldn't be usable for case values,
 // and macros cannot be namespaced
-#define XML_STREAM_OPENING( token ) ( TAG_OPENING | token )
-#define XML_STREAM_CLOSING( token ) ( TAG_CLOSING | token )
+#define XML_STREAM_OPENING(token) (TAG_OPENING | token)
+#define XML_STREAM_CLOSING(token) (TAG_CLOSING | token)
 
 /**
  Class for storing a stream of xml tokens.
@@ -116,23 +119,23 @@ public:
     // which means using oox::AttributeList would make them all point to the one instance.
     struct OOX_DLLPUBLIC AttributeList
     {
-        OUString& operator[] (int token);
-        OUString attribute( int token, const OUString& def) const;
-        bool attribute( int token, bool def ) const;
-        sal_Unicode attribute( int token, sal_Unicode def ) const;
+        OUString& operator[](int token);
+        OUString attribute(int token, const OUString& def) const;
+        bool attribute(int token, bool def) const;
+        sal_Unicode attribute(int token, sal_Unicode def) const;
         // when adding more attribute() overloads, add also to XmlStream itself
     protected:
-        std::map< int, OUString > attrs;
+        std::map<int, OUString> attrs;
     };
     /**
      Structure representing a tag, including its attributes and content text immediately following it.
     */
     struct OOX_DLLPUBLIC Tag
     {
-        Tag( int token = XML_TOKEN_INVALID,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& attributes = css::uno::Reference< css::xml::sax::XFastAttributeList >());
-        Tag( int token,
-            const AttributeList& attribs);
+        Tag(int token = XML_TOKEN_INVALID,
+            const css::uno::Reference<css::xml::sax::XFastAttributeList>& attributes
+            = css::uno::Reference<css::xml::sax::XFastAttributeList>());
+        Tag(int token, const AttributeList& attribs);
         int token; ///< tag type, or XML_TOKEN_INVALID
         AttributeList attributes;
         OUString text;
@@ -140,15 +143,15 @@ public:
          This function returns value of the given attribute, or the passed default value if not found.
          The type of the default value selects the return type (OUString here).
         */
-        OUString attribute( int token, const OUString& def = OUString()) const;
+        OUString attribute(int token, const OUString& def = OUString()) const;
         /**
          @overload
         */
-        bool attribute( int token, bool def ) const;
+        bool attribute(int token, bool def) const;
         /**
          @overload
         */
-        sal_Unicode attribute( int token, sal_Unicode def ) const;
+        sal_Unicode attribute(int token, sal_Unicode def) const;
         // when adding more attribute() overloads, add also to XmlStream::AttributeList and inline below
         /**
          Converts to true if the tag has a valid token, false otherwise. Allows simple
@@ -178,34 +181,35 @@ public:
      If found, the position in the stream is afterwards moved to the next tag.
      @return the matching found opening tag, or empty tag if not found
     */
-    Tag ensureOpeningTag( int token );
+    Tag ensureOpeningTag(int token);
     /**
      Tries to find an opening tag with the given token. Works similarly like ensureOpeningTag(),
      but if a matching tag is not found, the position in the stream is not altered. The primary
      use of this function is to check for optional elements.
      @return the matching found opening tag, or empty tag if not found
     */
-    Tag checkOpeningTag( int token );
+    Tag checkOpeningTag(int token);
     /**
      Ensures that a closing tag with the given token is read. Like ensureOpeningTag(),
      if not, writes out a warning and tries to recover by skipping tags until found (or until the current element would end).
      If found, the position in the stream is afterwards moved to the next tag.
     */
-    void ensureClosingTag( int token );
+    void ensureClosingTag(int token);
     /**
      Tries to find the given token, until either found (returns true) or end of current element.
      Position in the stream is set to make the tag current (i.e. it will be the next one read).
     */
-    bool findTag( int token );
+    bool findTag(int token);
     /**
      Handle the current (unexpected) tag.
     */
     void handleUnexpectedTag();
+
 protected:
-    Tag checkTag( int token, bool optional );
-    bool findTagInternal( int token, bool silent );
-    void skipElementInternal( int token, bool silent );
-    std::vector< Tag > tags;
+    Tag checkTag(int token, bool optional);
+    bool findTagInternal(int token, bool silent);
+    void skipElementInternal(int token, bool silent);
+    std::vector<Tag> tags;
     unsigned int pos;
 };
 
@@ -216,35 +220,31 @@ protected:
 
  @since 3.5.0
 */
-class OOX_DLLPUBLIC XmlStreamBuilder
-: public XmlStream
+class OOX_DLLPUBLIC XmlStreamBuilder : public XmlStream
 {
 public:
-    void appendOpeningTag( int token,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& attributes = css::uno::Reference< css::xml::sax::XFastAttributeList >());
-    void appendOpeningTag( int token,
-        const AttributeList& attribs );
-    void appendClosingTag( int token );
+    void appendOpeningTag(int token,
+                          const css::uno::Reference<css::xml::sax::XFastAttributeList>& attributes
+                          = css::uno::Reference<css::xml::sax::XFastAttributeList>());
+    void appendOpeningTag(int token, const AttributeList& attribs);
+    void appendClosingTag(int token);
     // appends the characters after the last appended token
-    void appendCharacters( const OUString& characters );
+    void appendCharacters(const OUString& characters);
 };
 
-inline
-OUString XmlStream::Tag::attribute( int t, const OUString& def ) const
+inline OUString XmlStream::Tag::attribute(int t, const OUString& def) const
 {
-    return attributes.attribute( t, def );
+    return attributes.attribute(t, def);
 }
 
-inline
-bool XmlStream::Tag::attribute( int t, bool def ) const
+inline bool XmlStream::Tag::attribute(int t, bool def) const
 {
-    return attributes.attribute( t, def );
+    return attributes.attribute(t, def);
 }
 
-inline
-sal_Unicode XmlStream::Tag::attribute( int t, sal_Unicode def ) const
+inline sal_Unicode XmlStream::Tag::attribute(int t, sal_Unicode def) const
 {
-    return attributes.attribute( t, def );
+    return attributes.attribute(t, def);
 }
 
 } // namespace

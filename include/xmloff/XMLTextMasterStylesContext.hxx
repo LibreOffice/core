@@ -27,18 +27,18 @@
 class XMLOFF_DLLPUBLIC XMLTextMasterStylesContext : public SvXMLStylesContext
 {
 protected:
-    virtual SvXMLStyleContext *CreateStyleChildContext( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+    virtual SvXMLStyleContext* CreateStyleChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 
-    virtual bool InsertStyleFamily( XmlStyleFamily nFamily ) const override;
+    virtual bool InsertStyleFamily(XmlStyleFamily nFamily) const override;
 
 public:
-
-    XMLTextMasterStylesContext( SvXMLImport& rImport );
+    XMLTextMasterStylesContext(SvXMLImport& rImport);
 
     virtual ~XMLTextMasterStylesContext() override;
 };
 
-#endif  //  _XMLOFF_XMLTEXTMASTERSTYLECONTEXT_HXX
+#endif //  _XMLOFF_XMLTEXTMASTERSTYLECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

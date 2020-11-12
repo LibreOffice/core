@@ -23,8 +23,6 @@
 #include <svx/svxdllapi.h>
 #include <vcl/bitmapex.hxx>
 
-
-
 class SVXCORE_DLLPUBLIC XPropertyEntry
 {
 private:
@@ -34,14 +32,14 @@ private:
 protected:
     XPropertyEntry(const OUString& rPropEntryName);
 
-    XPropertyEntry(XPropertyEntry const &) = default;
-    XPropertyEntry(XPropertyEntry &&) = default;
+    XPropertyEntry(XPropertyEntry const&) = default;
+    XPropertyEntry(XPropertyEntry&&) = default;
 
 public:
     virtual ~XPropertyEntry();
 
-    XPropertyEntry & operator =(XPropertyEntry const &) = default;
-    XPropertyEntry & operator =(XPropertyEntry &&) = default;
+    XPropertyEntry& operator=(XPropertyEntry const&) = default;
+    XPropertyEntry& operator=(XPropertyEntry&&) = default;
 
     void SetName(const OUString& rPropEntryName) { maPropEntryName = rPropEntryName; }
     const OUString& GetName() const { return maPropEntryName; }

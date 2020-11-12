@@ -15,12 +15,12 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XSheetAnnotation
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     // XSheetAnnotation
     void testGetPosition();
@@ -32,9 +32,9 @@ public:
 protected:
     ~XSheetAnnotation() {}
 
-    virtual css::uno::Reference< css::sheet::XSheetAnnotation> getAnnotation(css::table::CellAddress&) = 0;
+    virtual css::uno::Reference<css::sheet::XSheetAnnotation>
+    getAnnotation(css::table::CellAddress&) = 0;
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XSHEETANNOTATION_HXX

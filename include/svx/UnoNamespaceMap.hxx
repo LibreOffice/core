@@ -25,10 +25,10 @@
 
 class SfxItemPool;
 
-namespace svx {
-
-SVX_DLLPUBLIC css::uno::Reference< css::uno::XInterface > NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool );
-
+namespace svx
+{
+SVX_DLLPUBLIC css::uno::Reference<css::uno::XInterface>
+NamespaceMap_createInstance(sal_uInt16* pWhichIds, SfxItemPool* pPool);
 }
 
 #endif // INCLUDED_SVX_UNONAMESPACEMAP_HXX

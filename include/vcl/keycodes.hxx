@@ -160,32 +160,39 @@ constexpr sal_uInt16 KEY_NUMLOCK = css::awt::Key::NUMLOCK;
 constexpr sal_uInt16 KEY_SCROLLLOCK = css::awt::Key::SCROLLLOCK;
 
 // extended Modifier-Keys (only used for modkey events)
-enum class ModKeyFlags {
-    NONE         = 0x0000,
-    LeftShift    = 0x0001,
-    RightShift   = 0x0002,
-    LeftMod1     = 0x0004,
-    RightMod1    = 0x0008,
-    LeftMod2     = 0x0010,
-    RightMod2    = 0x0020,
-    LeftMod3     = 0x0040,
-    RightMod3    = 0x0080,
-    Mod1Msk      = LeftMod1 | RightMod1, // should be Mod1Mask, but that conflicts with a X.h macro grrrr
-    Mod2Msk      = LeftMod2 | RightMod2,
-};
-namespace o3tl {
-    template<> struct typed_flags<ModKeyFlags> : is_typed_flags<ModKeyFlags, 0x00ff> {};
-}
-
-enum class KeyIndicatorState {
-    NONE          = 0x0000,
-    CAPSLOCK      = 0x0001,
-    NUMLOCK       = 0x0002,
-    SCROLLLOCK    = 0x0004
+enum class ModKeyFlags
+{
+    NONE = 0x0000,
+    LeftShift = 0x0001,
+    RightShift = 0x0002,
+    LeftMod1 = 0x0004,
+    RightMod1 = 0x0008,
+    LeftMod2 = 0x0010,
+    RightMod2 = 0x0020,
+    LeftMod3 = 0x0040,
+    RightMod3 = 0x0080,
+    Mod1Msk = LeftMod1 | RightMod1, // should be Mod1Mask, but that conflicts with a X.h macro grrrr
+    Mod2Msk = LeftMod2 | RightMod2,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<KeyIndicatorState> : is_typed_flags<KeyIndicatorState, 0x0007> {};
+template <> struct typed_flags<ModKeyFlags> : is_typed_flags<ModKeyFlags, 0x00ff>
+{
+};
+}
+
+enum class KeyIndicatorState
+{
+    NONE = 0x0000,
+    CAPSLOCK = 0x0001,
+    NUMLOCK = 0x0002,
+    SCROLLLOCK = 0x0004
+};
+namespace o3tl
+{
+template <> struct typed_flags<KeyIndicatorState> : is_typed_flags<KeyIndicatorState, 0x0007>
+{
+};
 }
 
 #endif // INCLUDED_VCL_KEYCODES_HXX

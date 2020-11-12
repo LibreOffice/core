@@ -21,11 +21,10 @@
 
 #include <vcl/dllapi.h>
 
-
 class VCL_DLLPUBLIC Sound
 {
 public:
-    static void         Beep();
+    static void Beep();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

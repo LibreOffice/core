@@ -17,18 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_EDITENG_ACCESSIBLECOMPONENTBASE_HXX
 #define INCLUDED_EDITENG_ACCESSIBLECOMPONENTBASE_HXX
-
 
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <editeng/editengdllapi.h>
 
-namespace com::sun::star::accessibility { class XAccessible; }
+namespace com::sun::star::accessibility
+{
+class XAccessible;
+}
 
-namespace accessibility {
-
+namespace accessibility
+{
 /** @descr
         This base class provides (will provide) a base implementation of the
         XAccessibleComponent and the
@@ -39,13 +40,12 @@ namespace accessibility {
         XServiceInfo, and <type>XTypeProvider</type>.
 */
 class EDITENG_DLLPUBLIC AccessibleComponentBase
-    :   public css::accessibility::XAccessibleExtendedComponent
+    : public css::accessibility::XAccessibleExtendedComponent
 {
 public:
     //=====  internal  ========================================================
     AccessibleComponentBase();
     virtual ~AccessibleComponentBase();
-
 
     //=====  XAccessibleComponent  ================================================
 
@@ -53,14 +53,12 @@ public:
         <member>getBounds</member> to determine whether the given point lies
         inside this object.
     */
-    virtual sal_Bool SAL_CALL containsPoint (
-        const css::awt::Point& aPoint) override;
+    virtual sal_Bool SAL_CALL containsPoint(const css::awt::Point& aPoint) override;
 
     /** The default implementation returns an empty reference.
     */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-        getAccessibleAtPoint (
-            const css::awt::Point& aPoint) override;
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getAccessibleAtPoint(const css::awt::Point& aPoint) override;
 
     /** The default implementation returns an empty rectangle.
     */
@@ -94,18 +92,14 @@ public:
     virtual sal_Int32 SAL_CALL getBackground() override;
 
     //=====  XAccessibleExtendedComponent  ====================================
-    virtual css::uno::Reference< css::awt::XFont > SAL_CALL
-        getFont() override;
+    virtual css::uno::Reference<css::awt::XFont> SAL_CALL getFont() override;
     virtual OUString SAL_CALL getTitledBorderText() override;
     virtual OUString SAL_CALL getToolTipText() override;
-
 
     //=====  XTypeProvider  ===================================================
 
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
-        getTypes();
-
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes();
 };
 
 } // end of namespace accessibility

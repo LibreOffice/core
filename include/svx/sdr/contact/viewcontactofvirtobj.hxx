@@ -24,8 +24,8 @@
 
 class SdrVirtObj;
 
-namespace sdr::contact {
-
+namespace sdr::contact
+{
 class SVXCORE_DLLPUBLIC ViewContactOfVirtObj : public ViewContactOfSdrObj
 {
 protected:
@@ -44,9 +44,9 @@ public:
 protected:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
-    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer
+    createViewIndependentPrimitive2DSequence() const override;
 };
-
 }
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX

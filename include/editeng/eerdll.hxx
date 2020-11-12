@@ -27,10 +27,10 @@
 class GlobalEditData;
 namespace editeng
 {
-    class SharedVclResources;
+class SharedVclResources;
 }
 
-OUString EDITENG_DLLPUBLIC EditResId(const char *pId);
+OUString EDITENG_DLLPUBLIC EditResId(const char* pId);
 
 class EditDLL
 {
@@ -41,7 +41,7 @@ public:
     EditDLL();
     ~EditDLL();
 
-    GlobalEditData* GetGlobalData() const   { return pGlobalData.get(); }
+    GlobalEditData* GetGlobalData() const { return pGlobalData.get(); }
     std::shared_ptr<editeng::SharedVclResources> GetSharedVclResources();
     static EditDLL& Get();
 };

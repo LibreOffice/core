@@ -25,8 +25,8 @@
 
 #include <vector>
 
-namespace svx::sidebar {
-
+namespace svx::sidebar
+{
 /** Specialization of class <ValueSet>.
     This specialization allows is a one-columned ValueSet which allow
     items containing an image and a text or a text and a second text.
@@ -40,11 +40,9 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    void AddItem(
-        const OUString& rItemText,
-        const OUString& rItemText2 );
+    void AddItem(const OUString& rItemText, const OUString& rItemText2);
 
-    virtual void UserDraw( const UserDrawEvent& rUDEvt ) override;
+    virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
 
 private:
     struct ValueSetWithTextItem
@@ -53,7 +51,7 @@ private:
         OUString maItemText2;
     };
 
-    ::std::vector< ValueSetWithTextItem > maItems;
+    ::std::vector<ValueSetWithTextItem> maItems;
 };
 
 } // end of namespace svx::sidebar

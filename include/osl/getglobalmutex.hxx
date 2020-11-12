@@ -22,8 +22,8 @@
 
 #include "osl/mutex.hxx"
 
-namespace osl {
-
+namespace osl
+{
 /** A helper functor for the rtl_Instance template.
 
     See the rtl_Instance template for examples of how this class is used.
@@ -31,12 +31,8 @@ namespace osl {
 class GetGlobalMutex
 {
 public:
-    ::osl::Mutex * operator()()
-    {
-        return ::osl::Mutex::getGlobalMutex();
-    }
+    ::osl::Mutex* operator()() { return ::osl::Mutex::getGlobalMutex(); }
 };
-
 }
 
 #endif // INCLUDED_OSL_GETGLOBALMUTEX_HXX

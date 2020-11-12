@@ -14,8 +14,8 @@
 
 #include <rtl/ustring.hxx>
 
-namespace sfx2 {
-
+namespace sfx2
+{
 class SFX2_DLLPUBLIC SafeMode
 {
 public:
@@ -66,7 +66,6 @@ private:
     /** Returns the path of the safe mode flag file.*/
     static OUString getFilePath(const OUString& sFilename);
 };
-
 }
 
 #endif

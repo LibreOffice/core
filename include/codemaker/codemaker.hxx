@@ -22,15 +22,15 @@
 
 #include <sal/config.h>
 
-namespace rtl {
-    class OString;
-    class OUString;
+namespace rtl
+{
+class OString;
+class OUString;
 }
 
-namespace codemaker {
-
-rtl::OString convertString(rtl::OUString const & string);
-
+namespace codemaker
+{
+rtl::OString convertString(rtl::OUString const& string);
 }
 
 #endif // INCLUDED_CODEMAKER_CODEMAKER_HXX

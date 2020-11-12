@@ -27,14 +27,24 @@
 #include <svx/svxdllapi.h>
 #include <tools/long.hxx>
 
-namespace com::sun::star {
-     namespace accessibility { class XAccessible; }
-     namespace drawing { class XShape; }
-     namespace drawing { class XShapes; }
+namespace com::sun::star
+{
+namespace accessibility
+{
+class XAccessible;
+}
+namespace drawing
+{
+class XShape;
+}
+namespace drawing
+{
+class XShapes;
+}
 }
 
-namespace accessibility {
-
+namespace accessibility
+{
 class AccessibleContextBase;
 class AccessibleShapeTreeInfo;
 class ChildrenManagerImpl;
@@ -95,12 +105,9 @@ public:
             for new and deleted children, i.e. that holds a list of
             listeners to be informed.
     */
-    ChildrenManager (const css::uno::Reference<
-            css::accessibility::XAccessible>& rxParent,
-        const css::uno::Reference<
-            css::drawing::XShapes>& rxShapeList,
-        const AccessibleShapeTreeInfo& rShapeTreeInfo,
-        AccessibleContextBase& rContext);
+    ChildrenManager(const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+                    const css::uno::Reference<css::drawing::XShapes>& rxShapeList,
+                    const AccessibleShapeTreeInfo& rShapeTreeInfo, AccessibleContextBase& rContext);
 
     /** If there still are managed children these are marked as DEFUNC and
         released.
@@ -111,7 +118,7 @@ public:
         @return
             If there are no children a 0 is returned.
     */
-    tools::Long GetChildCount() const throw ();
+    tools::Long GetChildCount() const throw();
 
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
@@ -126,12 +133,10 @@ public:
         @throws
             Throws an IndexOutOfBoundsException if the index is not valid.
     */
-    css::uno::Reference<
-            css::accessibility::XAccessible>
-        GetChild (tools::Long nIndex);
+    css::uno::Reference<css::accessibility::XAccessible> GetChild(tools::Long nIndex);
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::drawing::XShape> GetChildShape (tools::Long nIndex);
+    css::uno::Reference<css::drawing::XShape> GetChildShape(tools::Long nIndex);
 
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update
@@ -144,14 +149,13 @@ public:
             before this method returns and events are sent to inform the
             listeners of the new object.
     */
-    void Update (bool bCreateNewObjectsOnDemand = true);
+    void Update(bool bCreateNewObjectsOnDemand = true);
 
     /** Replace the list of UNO shapes by the specified list.
         @param xShapeList
             The new list of shapes.
     */
-    void SetShapeList (const css::uno::Reference<
-        css::drawing::XShapes>& xShapeList);
+    void SetShapeList(const css::uno::Reference<css::drawing::XShapes>& xShapeList);
 
     /** Add an accessible shape.  The difference to the UNO shapes in the
         list passed to the constructor the specified object does not have to
@@ -160,7 +164,7 @@ public:
 
         @param shape must be non-null
     */
-    void AddAccessibleShape (css::uno::Reference<css::accessibility::XAccessible> const & shape);
+    void AddAccessibleShape(css::uno::Reference<css::accessibility::XAccessible> const& shape);
 
     /** Clear the list of accessible shapes which have been added by
         previous calls to <member>AddAccessibleShape</member>.
@@ -172,7 +176,7 @@ public:
         @param rShapeTreeInfo
             The new info that replaces the current one.
     */
-    void SetInfo (AccessibleShapeTreeInfo const & rShapeTreeInfo);
+    void SetInfo(AccessibleShapeTreeInfo const& rShapeTreeInfo);
 
     /** Update the SELECTED and FOCUSED states of all visible children
         according to the given selection.  This includes setting
@@ -199,8 +203,8 @@ public:
 private:
     rtl::Reference<ChildrenManagerImpl> mpImpl;
 
-    ChildrenManager (const ChildrenManager&) = delete;
-    ChildrenManager& operator= (const ChildrenManager&) = delete;
+    ChildrenManager(const ChildrenManager&) = delete;
+    ChildrenManager& operator=(const ChildrenManager&) = delete;
 };
 
 } // end of namespace accessibility

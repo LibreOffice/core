@@ -23,7 +23,10 @@
 #include <vcl/dllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::beans
+{
+struct PropertyValue;
+}
 
 struct VCL_DLLPUBLIC WmfExternal
 {
@@ -47,8 +50,8 @@ struct VCL_DLLPUBLIC WmfExternal
     sal_uInt16 mapMode;
 
     WmfExternal();
-    css::uno::Sequence< css::beans::PropertyValue > getSequence() const;
-    bool setSequence(const css::uno::Sequence< css::beans::PropertyValue >& rSequence);
+    css::uno::Sequence<css::beans::PropertyValue> getSequence() const;
+    bool setSequence(const css::uno::Sequence<css::beans::PropertyValue>& rSequence);
 };
 
 #endif

@@ -31,11 +31,11 @@ class SvStream;
 
 class SvStorageInfo
 {
-friend class SotStorage;
+    friend class SotStorage;
     OUString aName;
     sal_uLong nSize;
     bool bStream;
-    bool  bStorage;
+    bool bStorage;
 
 public:
     SvStorageInfo(const StgDirEntry&);
@@ -44,9 +44,10 @@ public:
         , nSize(nSz)
         , bStream(!bIsStorage)
         , bStorage(bIsStorage)
-    {}
+    {
+    }
 
-    const OUString & GetName() const { return aName; }
+    const OUString& GetName() const { return aName; }
     bool IsStream() const { return bStream; }
     bool IsStorage() const { return bStorage; }
     sal_uLong GetSize() const { return nSize; }
@@ -54,8 +55,8 @@ public:
 
 typedef std::vector<SvStorageInfo> SvStorageInfoList;
 
-SotClipboardFormatId ReadClipboardFormat(SvStream & rStm);
-SOT_DLLPUBLIC void WriteClipboardFormat(SvStream & rStm, SotClipboardFormatId nFormat);
+SotClipboardFormatId ReadClipboardFormat(SvStream& rStm);
+SOT_DLLPUBLIC void WriteClipboardFormat(SvStream& rStm, SotClipboardFormatId nFormat);
 
 #endif // _STORINFO_HXX
 

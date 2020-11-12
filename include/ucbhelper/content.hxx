@@ -24,42 +24,48 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace com::sun::star::beans {
-    class XPropertySetInfo;
+namespace com::sun::star::beans
+{
+class XPropertySetInfo;
 }
 
-namespace com::sun::star::io {
-    class XActiveDataSink;
-    class XOutputStream;
-    class XInputStream;
-    class XStream;
+namespace com::sun::star::io
+{
+class XActiveDataSink;
+class XOutputStream;
+class XInputStream;
+class XStream;
 }
 
-namespace com::sun::star::sdbc {
-    class XResultSet;
-    class XRow;
+namespace com::sun::star::sdbc
+{
+class XResultSet;
+class XRow;
 }
 
-namespace com::sun::star::ucb {
-    class XCommandEnvironment;
-    class XCommandInfo;
-    class XContent;
-    class XDynamicResultSet;
-    class XAnyCompareFactory;
-    struct ContentInfo;
-    struct NumberedSortingInfo;
+namespace com::sun::star::ucb
+{
+class XCommandEnvironment;
+class XCommandInfo;
+class XContent;
+class XDynamicResultSet;
+class XAnyCompareFactory;
+struct ContentInfo;
+struct NumberedSortingInfo;
 }
 
-namespace com::sun::star::uno {
-    class XComponentContext;
+namespace com::sun::star::uno
+{
+class XComponentContext;
 }
 
-namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno
+{
+class Any;
+}
 
 namespace ucbhelper
 {
-
-
 /**
   * These are the possible values for the parameter eMode of method
   * ucbhelper::Content::createCursor.
@@ -79,9 +85,8 @@ enum class InsertOperation
 {
     Copy, // copy source data
     Move, // move source data
-    Checkin  // check-in source data
+    Checkin // check-in source data
 };
-
 
 class Content_Impl;
 
@@ -92,13 +97,13 @@ class Content_Impl;
   */
 class UCBHELPER_DLLPUBLIC Content final
 {
-    rtl::Reference< Content_Impl > m_xImpl;
+    rtl::Reference<Content_Impl> m_xImpl;
 
     /// @throws css::ucb::CommandAbortedException
     /// @throws css::uno::RuntimeException,
     /// @throws css::uno::Exception
-    css::uno::Any createCursorAny( const css::uno::Sequence< OUString >& rPropertyNames,
-                                   ResultSetInclude eMode );
+    css::uno::Any createCursorAny(const css::uno::Sequence<OUString>& rPropertyNames,
+                                  ResultSetInclude eMode);
 
 public:
     /**
@@ -117,9 +122,8 @@ public:
       * @throws css::ucb::ContentCreationException
       * @throws css::uno::RuntimeException
       */
-    Content( const OUString& rURL,
-             const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnv,
-             const css::uno::Reference< css::uno::XComponentContext >& rCtx );
+    Content(const OUString& rURL, const css::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
+            const css::uno::Reference<css::uno::XComponentContext>& rCtx);
     /**
       * Constructor.
       *
@@ -131,15 +135,15 @@ public:
       * @throws css::ucb::ContentCreationException
       * @throws css::uno::RuntimeException
       */
-    Content( const css::uno::Reference< css::ucb::XContent >& rContent,
-             const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnv,
-             const css::uno::Reference< css::uno::XComponentContext >& rCtx );
+    Content(const css::uno::Reference<css::ucb::XContent>& rContent,
+            const css::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
+            const css::uno::Reference<css::uno::XComponentContext>& rCtx);
     /**
       * Copy Constructor.
       *
       * @param rContent is the content this content shall be a copy of.
       */
-    Content( const Content& rOther );
+    Content(const Content& rOther);
 
     /**
       * Move constructor.
@@ -156,7 +160,7 @@ public:
       *
       * @param rContent is the content this content shall be a copy of.
       */
-    Content& operator=( const Content& rOther );
+    Content& operator=(const Content& rOther);
 
     /**
       * Move assignment operator.
@@ -176,15 +180,12 @@ public:
       * @param rContent will be filled by this method with the content created.
       * @return true, if the operation was successful - false, otherwise.
       */
-    static bool
-    create( const OUString& rURL,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnv,
-            const css::uno::Reference< css::uno::XComponentContext >& rCtx,
-            Content& rContent );
-
+    static bool create(const OUString& rURL,
+                       const css::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
+                       const css::uno::Reference<css::uno::XComponentContext>& rCtx,
+                       Content& rContent);
 
     // Direct access to UCB content.
-
 
     /**
       * This method provides access to the "native" UCB content interface(s).
@@ -195,11 +196,9 @@ public:
       *
       * @return the XContent interface of the underlying UCB content.
       */
-    css::uno::Reference< css::ucb::XContent > get() const;
-
+    css::uno::Reference<css::ucb::XContent> get() const;
 
     // Object identity.
-
 
     /**
       * This method returns the URL of the content.
@@ -208,29 +207,23 @@ public:
       */
     const OUString& getURL() const;
 
-
     // Command environment.
-
 
     /**
       * This method returns the environment to use when executing commands.
       *
       * @return the command environment.
       */
-    const css::uno::Reference< css::ucb::XCommandEnvironment >&
-    getCommandEnvironment() const;
+    const css::uno::Reference<css::ucb::XCommandEnvironment>& getCommandEnvironment() const;
 
     /**
       * This method sets a new command environment.
       *
       * @param xNewEnv is the new command environment.
       */
-    void setCommandEnvironment(
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& xNewEnv );
-
+    void setCommandEnvironment(const css::uno::Reference<css::ucb::XCommandEnvironment>& xNewEnv);
 
     // Access to supported commands/properties.
-
 
     /**
       * This methods provides access to meta data of the commands supported
@@ -242,8 +235,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Reference< css::ucb::XCommandInfo >
-    getCommands();
+    css::uno::Reference<css::ucb::XCommandInfo> getCommands();
     /**
       * This methods provides access to meta data of the properties supported
       * by this content.
@@ -254,12 +246,9 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Reference< css::beans::XPropertySetInfo >
-    getProperties();
-
+    css::uno::Reference<css::beans::XPropertySetInfo> getProperties();
 
     // Access to property value(s).
-
 
     /**
       * This method can be used to read a single property value.
@@ -271,8 +260,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Any
-    getPropertyValue( const OUString& rPropertyName );
+    css::uno::Any getPropertyValue(const OUString& rPropertyName);
     /**
       * This method can be used to set a single property value.
       *
@@ -300,9 +288,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Any
-    setPropertyValue( const OUString& rPropertyName,
-                      const css::uno::Any& rValue );
+    css::uno::Any setPropertyValue(const OUString& rPropertyName, const css::uno::Any& rValue);
     /**
       * This method can be used to read multiple property values.
       *
@@ -313,8 +299,8 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Sequence< css::uno::Any >
-    getPropertyValues( const css::uno::Sequence< OUString >& rPropertyNames );
+    css::uno::Sequence<css::uno::Any>
+    getPropertyValues(const css::uno::Sequence<OUString>& rPropertyNames);
     /**
       * This method can be used to read multiple property values.
       *
@@ -325,8 +311,8 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Reference< css::sdbc::XRow >
-    getPropertyValuesInterface( const css::uno::Sequence< OUString >& rPropertyNames );
+    css::uno::Reference<css::sdbc::XRow>
+    getPropertyValuesInterface(const css::uno::Sequence<OUString>& rPropertyNames);
 
     /**
       * This method can be used to set multiple property values.
@@ -361,13 +347,11 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Sequence< css::uno::Any >
-    setPropertyValues( const css::uno::Sequence< OUString >& rPropertyNames,
-                       const css::uno::Sequence< css::uno::Any >& rValues );
-
+    css::uno::Sequence<css::uno::Any>
+    setPropertyValues(const css::uno::Sequence<OUString>& rPropertyNames,
+                      const css::uno::Sequence<css::uno::Any>& rValues);
 
     // General command execution.
-
 
     /**
       * This method can be used to execute any command supported by the
@@ -382,13 +366,10 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Any
-    executeCommand( const OUString& rCommandName,
-                    const css::uno::Any& rCommandArgument );
-
+    css::uno::Any executeCommand(const OUString& rCommandName,
+                                 const css::uno::Any& rCommandArgument);
 
     // Special commands.
-
 
     /**
       * This methods gives access to the children of a folder content.
@@ -408,9 +389,9 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Reference< css::sdbc::XResultSet >
-    createCursor( const css::uno::Sequence< OUString >& rPropertyNames,
-                  ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS );
+    css::uno::Reference<css::sdbc::XResultSet>
+    createCursor(const css::uno::Sequence<OUString>& rPropertyNames,
+                 ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS);
     /**
       * This methods gives access to the children of a folder content.
       * Additionally, the result set returned provides efficient access to
@@ -429,18 +410,18 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Reference< css::ucb::XDynamicResultSet >
-    createDynamicCursor( const css::uno::Sequence< OUString >& rPropertyNames,
-                         ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS );
+    css::uno::Reference<css::ucb::XDynamicResultSet>
+    createDynamicCursor(const css::uno::Sequence<OUString>& rPropertyNames,
+                        ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS);
 
     /// @throws css::ucb::CommandAbortedException
     /// @throws css::uno::RuntimeException
     /// @throws css::uno::Exception
-    css::uno::Reference< css::sdbc::XResultSet >
-    createSortedCursor( const css::uno::Sequence< OUString >& rPropertyNames,
-                        const css::uno::Sequence< css::ucb::NumberedSortingInfo >& rSortInfo,
-                        const css::uno::Reference< css::ucb::XAnyCompareFactory >& rAnyCompareFactory,
-                        ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS );
+    css::uno::Reference<css::sdbc::XResultSet>
+    createSortedCursor(const css::uno::Sequence<OUString>& rPropertyNames,
+                       const css::uno::Sequence<css::ucb::NumberedSortingInfo>& rSortInfo,
+                       const css::uno::Reference<css::ucb::XAnyCompareFactory>& rAnyCompareFactory,
+                       ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS);
 
     /**
       * This methods gives read access to the content stream of a content (i.e
@@ -453,8 +434,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Reference< css::io::XInputStream >
-    openStream();
+    css::uno::Reference<css::io::XInputStream> openStream();
     /**
       * This methods gives read access to the content stream of a content (i.e
       * the content of a file located at the local file system).
@@ -467,8 +447,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Reference< css::io::XInputStream >
-    openStreamNoLock();
+    css::uno::Reference<css::io::XInputStream> openStreamNoLock();
 
     /**
       * This methods gives read/write access to the content stream of a content (i.e
@@ -481,8 +460,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Reference< css::io::XStream >
-    openWriteableStream();
+    css::uno::Reference<css::io::XStream> openWriteableStream();
     /**
       * This methods gives read/write access to the content stream of a content (i.e
       * the content of a file located at the local file system).
@@ -495,8 +473,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Reference< css::io::XStream >
-    openWriteableStreamNoLock();
+    css::uno::Reference<css::io::XStream> openWriteableStreamNoLock();
 
     /**
       * This methods gives read access to the content stream of a content (i.e
@@ -509,8 +486,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    bool
-    openStream( const css::uno::Reference< css::io::XActiveDataSink >& rSink );
+    bool openStream(const css::uno::Reference<css::io::XActiveDataSink>& rSink);
     /**
       * This methods gives read access to the content stream of a content (i.e
       * the content of a file located at the local file system).
@@ -522,8 +498,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    bool
-    openStream( const css::uno::Reference< css::io::XOutputStream >& rStream );
+    bool openStream(const css::uno::Reference<css::io::XOutputStream>& rStream);
     /**
       * This methods gives write access to the content stream of a content (i.e
       * the content of a file located at the local file system).
@@ -537,9 +512,8 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    void
-    writeStream( const css::uno::Reference< css::io::XInputStream >& rStream,
-                 bool bReplaceExisting );
+    void writeStream(const css::uno::Reference<css::io::XInputStream>& rStream,
+                     bool bReplaceExisting);
 
     /**
       * This method returns the different types of contents this content
@@ -551,8 +525,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Sequence< css::ucb::ContentInfo >
-    queryCreatableContentsInfo();
+    css::uno::Sequence<css::ucb::ContentInfo> queryCreatableContentsInfo();
 
     /**
       * This method creates, initializes and inserts ( commits ) a new content
@@ -580,11 +553,10 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    bool
-    insertNewContent( const OUString& rContentType,
-                      const css::uno::Sequence< OUString >& rPropertyNames,
-                      const css::uno::Sequence< css::uno::Any >& rPropertyValues,
-                      Content& rNewContent );
+    bool insertNewContent(const OUString& rContentType,
+                          const css::uno::Sequence<OUString>& rPropertyNames,
+                          const css::uno::Sequence<css::uno::Any>& rPropertyValues,
+                          Content& rNewContent);
     /**
       * This method creates, initializes and inserts (commits) a new content
       * inside this (the target folder) content. For example, it can be used to
@@ -614,12 +586,11 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    bool
-    insertNewContent( const OUString& rContentType,
-                      const css::uno::Sequence< OUString >& rPropertyNames,
-                      const css::uno::Sequence< css::uno::Any >& rPropertyValues,
-                      const css::uno::Reference< css::io::XInputStream >& rStream,
-                      Content& rNewContent );
+    bool insertNewContent(const OUString& rContentType,
+                          const css::uno::Sequence<OUString>& rPropertyNames,
+                          const css::uno::Sequence<css::uno::Any>& rPropertyValues,
+                          const css::uno::Reference<css::io::XInputStream>& rStream,
+                          Content& rNewContent);
 
     /**
       * This method transfers (copies/moves) a content. It creates a new
@@ -653,16 +624,12 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    void
-    transferContent( const Content& rSourceContent,
-                     InsertOperation eOperation,
-                     const OUString & rTitle,
-                     const sal_Int32 nNameClashAction,
-                     const OUString & rMimeType = OUString( ),
-                     bool bMajorVersion = false,
-                     const OUString & rCommentVersion = OUString( ),
-                     OUString* pResultURL = nullptr,
-                     const OUString & rDocumentId = OUString( ) ) const;
+    void transferContent(const Content& rSourceContent, InsertOperation eOperation,
+                         const OUString& rTitle, const sal_Int32 nNameClashAction,
+                         const OUString& rMimeType = OUString(), bool bMajorVersion = false,
+                         const OUString& rCommentVersion = OUString(),
+                         OUString* pResultURL = nullptr,
+                         const OUString& rDocumentId = OUString()) const;
 
     /**
       *  This method lock the resource.
@@ -671,8 +638,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    void
-      lock();
+    void lock();
 
     /**
       * This method unlock the resource.
@@ -681,11 +647,9 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    void
-      unlock();
+    void unlock();
 
     // Required properties.
-
 
     /**
       * This method returns the value of the content's property "IsFolder".
@@ -696,8 +660,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    bool
-    isFolder();
+    bool isFolder();
     /**
       * This method returns the value of the content's property "IsDocument".
       *
@@ -707,9 +670,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    bool
-    isDocument();
-
+    bool isDocument();
 };
 
 } /* namespace ucbhelper */

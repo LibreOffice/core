@@ -32,14 +32,15 @@
 class XOutdevItemPool : public SfxItemPool
 {
 protected:
-    std::vector<SfxPoolItem*>*     mpLocalPoolDefaults;
+    std::vector<SfxPoolItem*>* mpLocalPoolDefaults;
     std::unique_ptr<SfxItemInfo[]> mpLocalItemInfos;
 
 public:
-    XOutdevItemPool( SfxItemPool* pMaster);
+    XOutdevItemPool(SfxItemPool* pMaster);
     XOutdevItemPool(const XOutdevItemPool& rPool);
 
     virtual SfxItemPool* Clone() const override;
+
 protected:
     virtual ~XOutdevItemPool() override;
 };

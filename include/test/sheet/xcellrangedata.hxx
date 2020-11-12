@@ -13,13 +13,13 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XCellRangeData
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
-    virtual css::uno::Reference< css::uno::XInterface > getXCellRangeData() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> getXCellRangeData() = 0;
 
     void testGetDataArray();
     void testSetDataArray();
@@ -29,7 +29,6 @@ public:
 protected:
     ~XCellRangeData() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XCELLRANGEDATA_HXX

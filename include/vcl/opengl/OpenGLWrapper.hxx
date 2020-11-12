@@ -31,10 +31,7 @@ struct VCL_DLLPUBLIC OpenGLWrapper
      */
     static sal_Int64 getBufferSwapCounter();
 #else
-    static bool isVCLOpenGLEnabled()
-    {
-        return false;
-    }
+    static bool isVCLOpenGLEnabled() { return false; }
 #endif
 };
 

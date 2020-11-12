@@ -25,11 +25,10 @@
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace comphelper {
-
+namespace comphelper
+{
 // Return true iff url is an absolute URL of "file" scheme:
-COMPHELPER_DLLPUBLIC bool isFileUrl(OUString const & url);
-
+COMPHELPER_DLLPUBLIC bool isFileUrl(OUString const& url);
 }
 
 #endif

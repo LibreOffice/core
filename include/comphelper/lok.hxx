@@ -20,7 +20,6 @@ class LanguageTag;
 
 namespace comphelper::LibreOfficeKit
 {
-
 // Functions to be called only from the LibreOfficeKit implementation in desktop, not from other
 // places in LibreOffice code.
 
@@ -36,10 +35,15 @@ COMPHELPER_DLLPUBLIC void setMobilePhone(int nViewId);
 // Tell that LOK view is on a tablet
 COMPHELPER_DLLPUBLIC void setTablet(int nViewId);
 
-enum class statusIndicatorCallbackType { Start, SetValue, Finish };
+enum class statusIndicatorCallbackType
+{
+    Start,
+    SetValue,
+    Finish
+};
 
-COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(void (*callback)(void *data, statusIndicatorCallbackType type, int percent), void *data);
-
+COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(
+    void (*callback)(void* data, statusIndicatorCallbackType type, int percent), void* data);
 
 // Functions that can be called from arbitrary places in LibreOffice.
 
@@ -90,7 +94,6 @@ COMPHELPER_DLLPUBLIC void setCompatFlag(Compat flag);
 /// Get compatibility flags
 COMPHELPER_DLLPUBLIC bool isCompatFlagSet(Compat flag);
 
-
 /// Check whether clients want viewId in visible cursor invalidation payload.
 COMPHELPER_DLLPUBLIC bool isViewIdForVisCursorInvalidation();
 /// Set whether clients want viewId in visible cursor invalidation payload.
@@ -114,7 +117,6 @@ COMPHELPER_DLLPUBLIC bool isAllowlistedLanguage(const OUString& lang);
 COMPHELPER_DLLPUBLIC void statusIndicatorStart();
 COMPHELPER_DLLPUBLIC void statusIndicatorSetValue(int percent);
 COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
-
 }
 
 #endif // INCLUDED_COMPHELPER_LOK_HXX

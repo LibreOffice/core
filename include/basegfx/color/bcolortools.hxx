@@ -21,11 +21,13 @@
 
 #include <basegfx/basegfxdllapi.h>
 
-namespace basegfx { class BColor; }
+namespace basegfx
+{
+class BColor;
+}
 
 namespace basegfx::utils
 {
-
 /// Transform from RGB to HSL
 BASEGFX_DLLPUBLIC BColor rgb2hsl(const BColor& rRGBColor);
 /// Transform from HSL to RGB

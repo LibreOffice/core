@@ -15,9 +15,10 @@
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
 
-namespace test {
-
-class OOO_DLLPUBLIC_UNOTEST Directories {
+namespace test
+{
+class OOO_DLLPUBLIC_UNOTEST Directories
+{
 private:
     OUString m_aSrcRootURL;
     OUString m_aSrcRootPath;
@@ -27,7 +28,7 @@ private:
 public:
     Directories();
 
-    const OUString& getSrcRootURL()  const { return m_aSrcRootURL; }
+    const OUString& getSrcRootURL() const { return m_aSrcRootURL; }
     const OUString& getSrcRootPath() const { return m_aSrcRootPath; }
 
     // return a URL to a given path from the source directory
@@ -37,12 +38,11 @@ public:
     OUString getPathFromSrc(const OUString& rPath) const;
 
     // return a URL to a given path from the workdir directory
-    OUString getURLFromWorkdir(const OUString &rPath) const;
+    OUString getURLFromWorkdir(const OUString& rPath) const;
 
     // return a Path to a given path from the workdir directory
-    OUString getPathFromWorkdir(const OUString &rPath) const;
+    OUString getPathFromWorkdir(const OUString& rPath) const;
 };
-
 }
 
 #endif

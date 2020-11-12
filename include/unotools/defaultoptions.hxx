@@ -32,11 +32,10 @@ private:
     std::shared_ptr<SvtDefaultOptions_Impl> pImpl;
 
 public:
-
     SvtDefaultOptions();
     virtual ~SvtDefaultOptions() override;
 
-    OUString  GetDefaultPath( sal_uInt16 nId ) const;
+    OUString GetDefaultPath(sal_uInt16 nId) const;
 };
 
 #endif // INCLUDED_UNOTOOLS_DEFAULTOPTIONS_HXX

@@ -26,10 +26,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno
+{
+template <class E> class Sequence;
+}
 
-namespace comphelper {
-
+namespace comphelper
+{
 class COMPHELPER_DLLPUBLIC Base64
 {
 public:
@@ -47,7 +50,6 @@ public:
 
     static sal_Int32 decodeSomeChars(css::uno::Sequence<sal_Int8>& aPass, const OUString& sBuffer);
 };
-
 }
 
 #endif // INCLUDED_COMPHELPER_BASE64_HXX

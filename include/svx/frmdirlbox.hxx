@@ -24,8 +24,8 @@
 #include <editeng/frmdir.hxx>
 #include <svx/svxdllapi.h>
 
-namespace svx {
-
+namespace svx
+{
 /** This listbox contains entries to select horizontal text direction.
 
     The control works on the SvxFrameDirection enumeration (i.e. left-to-right,
@@ -35,14 +35,21 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameDirectionListBox
 {
 private:
     std::unique_ptr<weld::ComboBox> m_xControl;
+
 public:
     explicit FrameDirectionListBox(std::unique_ptr<weld::ComboBox> pControl);
     virtual ~FrameDirectionListBox();
     bool get_visible() const { return m_xControl->get_visible(); }
     void save_value() { m_xControl->save_value(); }
     bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
-    SvxFrameDirection get_active_id() const { return static_cast<SvxFrameDirection>(m_xControl->get_active_id().toUInt32()); }
-    void set_active_id(SvxFrameDirection eDir) { m_xControl->set_active_id(OUString::number(static_cast<sal_uInt32>(eDir))); }
+    SvxFrameDirection get_active_id() const
+    {
+        return static_cast<SvxFrameDirection>(m_xControl->get_active_id().toUInt32());
+    }
+    void set_active_id(SvxFrameDirection eDir)
+    {
+        m_xControl->set_active_id(OUString::number(static_cast<sal_uInt32>(eDir)));
+    }
     void remove_id(SvxFrameDirection eDir)
     {
         int nPos = m_xControl->find_id(OUString::number(static_cast<sal_uInt32>(eDir)));
@@ -61,9 +68,11 @@ public:
     {
         m_xControl->append(OUString::number(static_cast<sal_uInt32>(eDirection)), rString);
     }
-    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink)
+    {
+        m_xControl->connect_changed(rLink);
+    }
 };
-
 }
 
 #endif

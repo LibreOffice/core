@@ -25,8 +25,8 @@
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace ucbhelper {
-
+namespace ucbhelper
+{
 class InteractionSupplyName;
 
 /**
@@ -40,9 +40,10 @@ class InteractionSupplyName;
   * @see InteractionAbort
   * @see InteractioneplaceExistingData
   */
-class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) SimpleNameClashResolveRequest final : public ucbhelper::InteractionRequest
+class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) SimpleNameClashResolveRequest final
+    : public ucbhelper::InteractionRequest
 {
-    rtl::Reference< InteractionSupplyName > m_xNameSupplier;
+    rtl::Reference<InteractionSupplyName> m_xNameSupplier;
 
     virtual ~SimpleNameClashResolveRequest() override;
 
@@ -54,15 +55,14 @@ public:
       *        the clashing resource.
       * @param rClashingName contains the clashing name.
       */
-    SimpleNameClashResolveRequest( const OUString & rTargetFolderURL,
-                                   const OUString & rClashingName );
+    SimpleNameClashResolveRequest(const OUString& rTargetFolderURL, const OUString& rClashingName);
     /**
       * This method returns the new name that was supplied by the interaction
       * handler.
       *
       * @return the new name, if supplied.
       */
-    OUString const & getNewName() const;
+    OUString const& getNewName() const;
 };
 
 } // namespace ucbhelper

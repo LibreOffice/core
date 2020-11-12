@@ -13,12 +13,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XSheetPageBreak
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void testGetColumnPageBreaks();
     void testGetRowPageBreaks();
@@ -27,7 +27,6 @@ public:
 protected:
     ~XSheetPageBreak() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XSHEETPAGEBREAK_HXX

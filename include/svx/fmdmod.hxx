@@ -24,14 +24,14 @@
 
 class SVXCORE_DLLPUBLIC SvxFmMSFactory : public SvxUnoDrawMSFactory
 {
-
 public:
-    SvxFmMSFactory() {};
+    SvxFmMSFactory(){};
 
     virtual ~SvxFmMSFactory() {}
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+    virtual ::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface>
+        SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
+    virtual ::com::sun::star::uno::Sequence<OUString> SAL_CALL getAvailableServiceNames() override;
 };
 
 #endif // INCLUDED_SVX_FMDMOD_HXX

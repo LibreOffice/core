@@ -25,8 +25,8 @@
 #include <svtools/toolboxcontroller.hxx>
 
 //HACK to avoid duplicate ImplInheritanceHelper symbols with MSVC:
-class SAL_DLLPUBLIC_TEMPLATE SvxVertCTLTextTbxCtrl_Base:
-    public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
+class SAL_DLLPUBLIC_TEMPLATE SvxVertCTLTextTbxCtrl_Base
+    : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
     using ImplInheritanceHelper::ImplInheritanceHelper;
 };
@@ -37,8 +37,10 @@ class SAL_DLLPUBLIC_TEMPLATE SvxVertCTLTextTbxCtrl_Base:
 class SvxVertCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl_Base
 {
     bool m_bVisible;
+
 public:
-    explicit SvxVertCTLTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    explicit SvxVertCTLTextTbxCtrl(
+        const css::uno::Reference<css::uno::XComponentContext>& rContext);
 
     virtual ~SvxVertCTLTextTbxCtrl() override;
 
@@ -47,8 +49,8 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override = 0;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XStatusListener
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;

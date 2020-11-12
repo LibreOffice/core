@@ -33,10 +33,10 @@
 
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC Camera3D final : public Viewport3D
 {
-    basegfx::B3DPoint   aPosition;
-    basegfx::B3DPoint   aLookAt;
-    double      fFocalLength;
-    double      fBankAngle;
+    basegfx::B3DPoint aPosition;
+    basegfx::B3DPoint aLookAt;
+    double fFocalLength;
+    double fBankAngle;
 
     bool bAutoAdjustProjection;
 
@@ -53,14 +53,13 @@ public:
     void SetPosAndLookAt(const basegfx::B3DPoint& rNewPos, const basegfx::B3DPoint& rNewLookAt);
 
     // Focal length in mm
-    void    SetFocalLength(double fLen);
-    double  GetFocalLength() const { return fFocalLength; }
+    void SetFocalLength(double fLen);
+    double GetFocalLength() const { return fFocalLength; }
 
     // Bank angle left/right
-    void    SetBankAngle(double fAngle);
+    void SetBankAngle(double fAngle);
 
-    void SetAutoAdjustProjection(bool bAdjust)
-        { bAutoAdjustProjection = bAdjust; }
+    void SetAutoAdjustProjection(bool bAdjust) { bAutoAdjustProjection = bAdjust; }
 };
 
 #endif // INCLUDED_SVX_CAMERA3D_HXX

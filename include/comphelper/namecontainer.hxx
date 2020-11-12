@@ -24,12 +24,15 @@
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com::sun::star::container { class XNameContainer; }
+namespace com::sun::star::container
+{
+class XNameContainer;
+}
 
 namespace comphelper
 {
-    COMPHELPER_DLLPUBLIC css::uno::Reference< css::container::XNameContainer >
-        NameContainer_createInstance( const css::uno::Type& aType );
+COMPHELPER_DLLPUBLIC css::uno::Reference<css::container::XNameContainer>
+NameContainer_createInstance(const css::uno::Type& aType);
 }
 
 #endif // INCLUDED_COMPHELPER_NAMECONTAINER_HXX

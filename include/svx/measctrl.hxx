@@ -30,7 +30,7 @@ class SdrModel;
 
 class SVX_DLLPUBLIC SvxXMeasurePreview final : public weld::CustomWidgetController
 {
- friend class SvxMeasurePage;
+    friend class SvxMeasurePage;
 
 private:
     MapMode m_aMapMode;
@@ -38,6 +38,7 @@ private:
     std::unique_ptr<SdrMeasureObj, SdrObjectFreeOp> pMeasureObj;
 
     void ResizeImpl(const Size& rSize);
+
 public:
     SvxXMeasurePreview();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;

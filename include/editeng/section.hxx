@@ -16,8 +16,8 @@
 
 class SfxPoolItem;
 
-namespace editeng {
-
+namespace editeng
+{
 struct Section
 {
     sal_Int32 mnParagraph;
@@ -28,7 +28,6 @@ struct Section
 
     Section(sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd);
 };
-
 }
 
 #endif

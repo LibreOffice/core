@@ -14,12 +14,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST DatabaseRange
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init(const OUString& rDBName) = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init(const OUString& rDBName) = 0;
 
     void testMoveCells();
     void testKeepFormats();
@@ -36,7 +36,6 @@ public:
 protected:
     ~DatabaseRange() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_DATABASERANGE_HXX

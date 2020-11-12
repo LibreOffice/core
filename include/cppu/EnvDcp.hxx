@@ -23,7 +23,6 @@
 #include "rtl/ustring.hxx"
 #include "uno/EnvDcp.h"
 
-
 namespace cppu
 {
 namespace EnvDcp
@@ -35,7 +34,7 @@ namespace EnvDcp
     @return                the OBI type
     @since UDK 3.2.7
 */
-inline rtl::OUString getTypeName(rtl::OUString const & rEnvDcp)
+inline rtl::OUString getTypeName(rtl::OUString const& rEnvDcp)
 {
     rtl::OUString typeName;
 
@@ -51,7 +50,7 @@ inline rtl::OUString getTypeName(rtl::OUString const & rEnvDcp)
     @return                the purpose
     @since UDK 3.2.7
 */
-inline rtl::OUString getPurpose(rtl::OUString const & rEnvDcp)
+inline rtl::OUString getPurpose(rtl::OUString const& rEnvDcp)
 {
     rtl::OUString purpose;
 
@@ -59,10 +58,8 @@ inline rtl::OUString getPurpose(rtl::OUString const & rEnvDcp)
 
     return purpose;
 }
-
 }
 }
-
 
 #endif
 

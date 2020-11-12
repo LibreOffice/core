@@ -22,12 +22,11 @@
 
 #include <boost/intrusive_ptr.hpp>
 
-namespace formula {
-
+namespace formula
+{
 class FormulaToken;
-typedef ::boost::intrusive_ptr<FormulaToken>        FormulaTokenRef;
-typedef ::boost::intrusive_ptr<const FormulaToken>  FormulaConstTokenRef;
-
+typedef ::boost::intrusive_ptr<FormulaToken> FormulaTokenRef;
+typedef ::boost::intrusive_ptr<const FormulaToken> FormulaConstTokenRef;
 }
 
 #endif

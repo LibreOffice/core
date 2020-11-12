@@ -28,7 +28,7 @@
 class SFX2_DLLPUBLIC SfxNewStyleDlg final : public weld::GenericDialogController
 {
 private:
-    SfxStyleSheetBasePool&  m_rPool;
+    SfxStyleSheetBasePool& m_rPool;
     SfxStyleFamily m_eSearchFamily;
 
     std::unique_ptr<weld::EntryTreeView> m_xColBox;
@@ -44,7 +44,10 @@ public:
     SfxNewStyleDlg(weld::Widget* pParent, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam);
     virtual ~SfxNewStyleDlg() override;
 
-    OUString                GetName() const { return comphelper::string::stripStart(m_xColBox->get_active_text(), ' '); }
+    OUString GetName() const
+    {
+        return comphelper::string::stripStart(m_xColBox->get_active_text(), ' ');
+    }
 };
 
 #endif

@@ -21,8 +21,10 @@ class UNOTOOLS_DLLPUBLIC RotateTransliteration
 {
 private:
     int nF3ShiftCounter;
+
 public:
-    RotateTransliteration() : nF3ShiftCounter(0)
+    RotateTransliteration()
+        : nF3ShiftCounter(0)
     {
     }
     TransliterationFlags getNextMode();

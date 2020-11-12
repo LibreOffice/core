@@ -25,10 +25,10 @@ class SdrObject;
 
 //defines for the symbol selection on the page
 //Positive value (0,...n) declares the index in pSymbollist, else:
-#define SVX_SYMBOLTYPE_NONE       (-3)  //symbol hidden
-#define SVX_SYMBOLTYPE_AUTO       (-2)  //symbol automatically generated
-#define SVX_SYMBOLTYPE_BRUSHITEM  (-1)  //symbol is contained as graphic in item:
-#define SVX_SYMBOLTYPE_UNKNOWN  (-100) //unknown/not initialized
+#define SVX_SYMBOLTYPE_NONE (-3) //symbol hidden
+#define SVX_SYMBOLTYPE_AUTO (-2) //symbol automatically generated
+#define SVX_SYMBOLTYPE_BRUSHITEM (-1) //symbol is contained as graphic in item:
+#define SVX_SYMBOLTYPE_UNKNOWN (-100) //unknown/not initialized
 
 #endif // INCLUDED_SVX_TABLINE_HXX
 

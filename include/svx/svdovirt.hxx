@@ -29,15 +29,16 @@
  */
 class SVXCORE_DLLPUBLIC SdrVirtObj : public SdrObject
 {
-    SdrVirtObj( const SdrVirtObj& ) = delete;
+    SdrVirtObj(const SdrVirtObj&) = delete;
+
 public:
     virtual sdr::properties::BaseProperties& GetProperties() const override;
 
 protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
-    SdrObject&                  rRefObj; // Referenced drawing object
-    tools::Rectangle            aSnapRect;
+    SdrObject& rRefObj; // Referenced drawing object
+    tools::Rectangle aSnapRect;
 
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
@@ -50,9 +51,7 @@ protected:
     virtual ~SdrVirtObj() override;
 
 public:
-    SdrVirtObj(
-        SdrModel& rSdrModel,
-        SdrObject& rNewObj);
+    SdrVirtObj(SdrModel& rSdrModel, SdrObject& rNewObj);
 
     SdrObject& ReferencedObj();
     const SdrObject& GetReferencedObj() const;
@@ -99,13 +98,15 @@ public:
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
 
     virtual void NbcMove(const Size& rSiz) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact,
+                           const Fraction& yFact) override;
     virtual void NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs) override;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
     virtual void NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear) override;
 
     virtual void Move(const Size& rSiz) override;
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true) override;
+    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact,
+                        bool bUnsetRelative = true) override;
     virtual void Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs) override;
     virtual void Mirror(const Point& rRef1, const Point& rRef2) override;
     virtual void Shear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear) override;
@@ -136,10 +137,11 @@ public:
     virtual void NbcReformatText() override;
 
     virtual bool HasMacro() const override;
-    virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const override;
-    virtual PointerStyle GetMacroPointer (const SdrObjMacroHitRec& rRec) const override;
-    virtual void PaintMacro (OutputDevice& rOut, const tools::Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const override;
-    virtual bool DoMacro (const SdrObjMacroHitRec& rRec) override;
+    virtual SdrObject* CheckMacroHit(const SdrObjMacroHitRec& rRec) const override;
+    virtual PointerStyle GetMacroPointer(const SdrObjMacroHitRec& rRec) const override;
+    virtual void PaintMacro(OutputDevice& rOut, const tools::Rectangle& rDirtyRect,
+                            const SdrObjMacroHitRec& rRec) const override;
+    virtual bool DoMacro(const SdrObjMacroHitRec& rRec) override;
 
     // #i73248# for default SdrVirtObj, offset is aAnchor, not (0,0)
     virtual Point GetOffset() const;

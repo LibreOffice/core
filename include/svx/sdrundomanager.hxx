@@ -31,11 +31,12 @@ private:
     using EditUndoManager::Undo;
     using EditUndoManager::Redo;
 
-    Link<SdrUndoManager*,void>  maEndTextEditHdl;
-    SfxUndoAction*  mpLastUndoActionBeforeTextEdit;
-    bool            mbEndTextEditTriggeredFromUndo;
+    Link<SdrUndoManager*, void> maEndTextEditHdl;
+    SfxUndoAction* mpLastUndoActionBeforeTextEdit;
+    bool mbEndTextEditTriggeredFromUndo;
 
     SfxObjectShell* m_pDocSh;
+
 protected:
     // call to check for TextEdit active
     bool isTextEditActive() const;
@@ -56,7 +57,7 @@ public:
     // activate (start text edit) and empty link to reset (end text edit). On
     // reset all text edit actions will be removed from this undo manager to
     // restore the state before activation
-    void SetEndTextEditHdl(const Link<SdrUndoManager*,void>& rLink);
+    void SetEndTextEditHdl(const Link<SdrUndoManager*, void>& rLink);
 
     // check from outside if we are inside a callback for ending text edit. This
     // is needed to detect inside end text edit if it is a regular one or triggered

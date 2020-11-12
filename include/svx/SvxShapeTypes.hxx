@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVX_SVXSHAPETYPES_HXX
 #define INCLUDED_SVX_SVXSHAPETYPES_HXX
 
-namespace accessibility {
-
+namespace accessibility
+{
 /** Register the SVX draw shape types with the ShapeTypeHandler singleton.
     This method is usually called from the shape type handler constructor.
 */

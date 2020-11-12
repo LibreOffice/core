@@ -22,9 +22,6 @@
 
 #include <osl/mutex.hxx>
 
-
-
-
 class MutexHelper
 {
 private:
@@ -32,9 +29,7 @@ private:
 
 public:
     ::osl::Mutex& GetMutex() { return maMutex; }
-
 };
-
 
 #endif // INCLUDED_TOOLKIT_HELPER_MUTEXHELPER_HXX
 

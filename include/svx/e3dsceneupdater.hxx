@@ -26,8 +26,9 @@
 class SdrObject;
 class E3dScene;
 
-namespace drawinglayer::geometry {
-    class ViewInformation3D;
+namespace drawinglayer::geometry
+{
+class ViewInformation3D;
 }
 
 /** Helper for 3d object changes affecting 2d geometry
@@ -50,11 +51,11 @@ class SVXCORE_DLLPUBLIC E3DModifySceneSnapRectUpdater
     // of the to-be-changed 3D object when the scene has a 3d transformation
     // stack at construction time. In all other cases it's set to zero and
     // no action needs to be taken
-    E3dScene*       mpScene;
+    E3dScene* mpScene;
 
     // the 3d transformation stack at the time of construction, valid when
     // mpScene is not zero
-    std::unique_ptr<drawinglayer::geometry::ViewInformation3D>  mpViewInformation3D;
+    std::unique_ptr<drawinglayer::geometry::ViewInformation3D> mpViewInformation3D;
 
 public:
     // the constructor evaluates and sets the members at construction time

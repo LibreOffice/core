@@ -25,12 +25,9 @@
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
 
-
 namespace ucbhelper
 {
-
 struct ContentIdentifier_Impl;
-
 
 /**
   * This class implements a simple identifier object for UCB contents.
@@ -38,18 +35,16 @@ struct ContentIdentifier_Impl;
   * The only difference is that the URL scheme will be lower cased. This can
   * be done, because URL schemes are never case sensitive.
   */
-class UCBHELPER_DLLPUBLIC ContentIdentifier final :
-                public cppu::WeakImplHelper<css::ucb::XContentIdentifier>
+class UCBHELPER_DLLPUBLIC ContentIdentifier final
+    : public cppu::WeakImplHelper<css::ucb::XContentIdentifier>
 {
 public:
-    ContentIdentifier( const OUString& rURL );
+    ContentIdentifier(const OUString& rURL);
     virtual ~ContentIdentifier() override;
 
     // XContentIdentifier
-    virtual OUString SAL_CALL
-    getContentIdentifier() override;
-    virtual OUString SAL_CALL
-    getContentProviderScheme() override;
+    virtual OUString SAL_CALL getContentIdentifier() override;
+    virtual OUString SAL_CALL getContentProviderScheme() override;
 
 private:
     std::unique_ptr<ContentIdentifier_Impl> m_pImpl;

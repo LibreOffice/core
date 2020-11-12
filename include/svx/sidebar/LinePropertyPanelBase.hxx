@@ -40,7 +40,6 @@ class XDashList;
 
 namespace svx::sidebar
 {
-
 class DisableArrowsWrapper;
 
 class SVX_DLLPUBLIC LinePropertyPanelBase : public PanelLayout
@@ -56,9 +55,8 @@ public:
     void EndLineWidthPopup();
 
     // constructor/destructor
-    LinePropertyPanelBase(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    LinePropertyPanelBase(vcl::Window* pParent,
+                          const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual void setLineWidth(const XLineWidthItem& rItem) = 0;
 
@@ -72,7 +70,6 @@ public:
     }
 
 protected:
-
     void ActivateControls();
 
     virtual void setLineTransparency(const XLineTransparenceItem& rItem) = 0;
@@ -90,7 +87,6 @@ protected:
     void disableArrowHead();
 
 protected:
-
     std::unique_ptr<weld::Toolbar> mxTBColor;
     std::unique_ptr<ToolbarUnoDispatcher> mxColorDispatch;
 
@@ -114,9 +110,9 @@ private:
 
     std::unique_ptr<DisableArrowsWrapper> mxDisableArrowsWrapper;
 
-    sal_uInt16      mnTrans;
-    MapUnit         meMapUnit;
-    sal_Int32       mnWidthCoreValue;
+    sal_uInt16 mnTrans;
+    MapUnit meMapUnit;
+    sal_Int32 mnWidthCoreValue;
 
     // images from resource
     OUString maIMGNone;
@@ -124,14 +120,14 @@ private:
     // multi-images
     OUString maIMGWidthIcon[8];
 
-    bool                mbWidthValuable : 1;
+    bool mbWidthValuable : 1;
     bool mbArrowSupported;
     bool mbNoneLineStyle;
 
     void Initialize();
 
     DECL_LINK(ToolboxWidthSelectHdl, const OString&, void);
-    DECL_LINK(ChangeTransparentHdl, weld::MetricSpinButton&, void );
+    DECL_LINK(ChangeTransparentHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ChangeEdgeStyleHdl, weld::ComboBox&, void);
     DECL_LINK(ChangeCapStyleHdl, weld::ComboBox&, void);
 };

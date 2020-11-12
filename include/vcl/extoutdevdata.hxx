@@ -24,14 +24,11 @@
 
 namespace vcl
 {
-
 class VCL_DLLPUBLIC ExtOutDevData
 {
 public:
-
     virtual ~ExtOutDevData();
 };
-
 }
 
 #endif // INCLUDED_VCL_EXTOUTDEVDATA_HXX

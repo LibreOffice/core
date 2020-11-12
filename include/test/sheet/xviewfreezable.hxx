@@ -14,17 +14,16 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XViewFreezable
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
-    virtual ~XViewFreezable(){}
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual ~XViewFreezable() {}
 
     void testFreeze();
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XVIEWFREEZABLE_HXX

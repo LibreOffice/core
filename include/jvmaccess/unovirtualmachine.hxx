@@ -25,14 +25,15 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 
-namespace jvmaccess {
-
+namespace jvmaccess
+{
 class VirtualMachine;
 
 /** An encapsulating wrapper around a Java virtual machine and an appropriate
     UNO class loader.
  */
-class JVMACCESS_DLLPUBLIC UnoVirtualMachine final : public salhelper::SimpleReferenceObject {
+class JVMACCESS_DLLPUBLIC UnoVirtualMachine final : public salhelper::SimpleReferenceObject
+{
 public:
     /** An exception indicating failure to create a UnoVirtualMachine.
      */
@@ -41,11 +42,11 @@ public:
     public:
         CreationException();
 
-        CreationException(CreationException const &);
+        CreationException(CreationException const&);
 
         ~CreationException();
 
-        CreationException & operator =(CreationException const &);
+        CreationException& operator=(CreationException const&);
     };
 
     /** Create a wrapper around a Java virtual machine and an appropriate UNO
@@ -65,16 +66,15 @@ public:
         @exception CreationException
         Thrown in case creation fails (due to a JNI problem).
      */
-    UnoVirtualMachine(
-        rtl::Reference< jvmaccess::VirtualMachine > const & virtualMachine,
-        void * classLoader);
+    UnoVirtualMachine(rtl::Reference<jvmaccess::VirtualMachine> const& virtualMachine,
+                      void* classLoader);
 
     /** Get the Java virtual machine wrapper.
 
         @return
         The Java virtual machine wrapper.  Will never be null.
      */
-    const rtl::Reference< jvmaccess::VirtualMachine >& getVirtualMachine() const;
+    const rtl::Reference<jvmaccess::VirtualMachine>& getVirtualMachine() const;
 
     /** Get the UNO class loader.
 
@@ -85,18 +85,17 @@ public:
         different for different JDK versions, so that the mangled C++ name of
         the function would depend on the JDK version used at compile time.
      */
-    void * getClassLoader() const { return m_classLoader;}
+    void* getClassLoader() const { return m_classLoader; }
 
 private:
-    UnoVirtualMachine(UnoVirtualMachine const &) = delete;
-    UnoVirtualMachine& operator =(UnoVirtualMachine const &) = delete;
+    UnoVirtualMachine(UnoVirtualMachine const&) = delete;
+    UnoVirtualMachine& operator=(UnoVirtualMachine const&) = delete;
 
     virtual ~UnoVirtualMachine() override;
 
-    rtl::Reference< jvmaccess::VirtualMachine > m_virtualMachine;
-    void * m_classLoader;
+    rtl::Reference<jvmaccess::VirtualMachine> m_virtualMachine;
+    void* m_classLoader;
 };
-
 }
 
 #endif

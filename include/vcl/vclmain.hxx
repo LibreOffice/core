@@ -16,8 +16,8 @@
 #include <vcl/dllapi.h>
 #endif
 
-namespace vclmain {
-
+namespace vclmain
+{
 // Function called from vclmain's implementation of main, needs to be
 // implemented by the application and needs to instantiate a (static, derived)
 // instance of Application (where the Application constructor takes care to link

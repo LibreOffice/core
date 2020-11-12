@@ -20,8 +20,11 @@
 #ifndef INCLUDED_VCL_EXCEPTIONTYPES_HXX
 #define INCLUDED_VCL_EXCEPTIONTYPES_HXX
 
-enum class ExceptionCategory {
-    NONE, System, UserInterface
+enum class ExceptionCategory
+{
+    NONE,
+    System,
+    UserInterface
 };
 
 #endif // INCLUDED_VCL_EXCEPTIONTYPES_HXX

@@ -21,7 +21,7 @@ private:
     std::unique_ptr<weld::Button> m_xHelp;
 
 public:
-    InputDialog(weld::Widget* pParent, const OUString &rLabelText);
+    InputDialog(weld::Widget* pParent, const OUString& rLabelText);
     OUString GetEntryText() const;
     void SetEntryText(const OUString& rStr);
     void HideHelpBtn();

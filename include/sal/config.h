@@ -31,7 +31,7 @@
 #define SAL_PATHSEPARATOR ';'
 #define SAL_PATHDELIMITER '\\'
 #define SAL_NEWLINE_STRING "\r\n"
-#define SAL_CONFIGFILE( name ) name ".ini"
+#define SAL_CONFIGFILE(name) name ".ini"
 
 #ifdef _MSC_VER
 
@@ -43,9 +43,8 @@
 
 #endif /* defined _WIN32 */
 
-#if defined(__sun) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || \
-    defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY) || defined(ANDROID) || \
-    defined(HAIKU)
+#if defined(__sun) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(AIX)        \
+    || defined(OPENBSD) || defined(DRAGONFLY) || defined(ANDROID) || defined(HAIKU)
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".so"
 #define SAL_EXEEXTENSION ""
@@ -53,7 +52,7 @@
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
 #define SAL_NEWLINE_STRING "\n"
-#define SAL_CONFIGFILE( name ) name "rc"
+#define SAL_CONFIGFILE(name) name "rc"
 #endif
 
 #ifdef MACOSX
@@ -64,7 +63,7 @@
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
 #define SAL_NEWLINE_STRING "\n"
-#define SAL_CONFIGFILE( name ) name "rc"
+#define SAL_CONFIGFILE(name) name "rc"
 #endif
 
 #ifdef IOS
@@ -77,7 +76,7 @@
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
 #define SAL_NEWLINE_STRING "\n"
-#define SAL_CONFIGFILE( name ) name "rc"
+#define SAL_CONFIGFILE(name) name "rc"
 #endif
 
 /* The following spell is for Solaris and its descendants.

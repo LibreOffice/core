@@ -27,7 +27,6 @@
 
 namespace vcl
 {
-
 class PNGReaderImpl;
 
 class VCL_DLLPUBLIC PNGReader
@@ -35,7 +34,6 @@ class VCL_DLLPUBLIC PNGReader
     std::unique_ptr<PNGReaderImpl> mpImpl;
 
 public:
-
     /* the PNG chunks are read within the c'tor, so the stream will
     be positioned at the end of the PNG */
     explicit PNGReader(SvStream& rStream);

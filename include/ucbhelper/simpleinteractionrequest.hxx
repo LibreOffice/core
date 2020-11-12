@@ -29,25 +29,28 @@
   * SimpleInteractionRequest::getResponse().
   */
 
-enum class ContinuationFlags {
+enum class ContinuationFlags
+{
     /** The request was not (yet) handled by the interaction handler. */
-    NONE    = 0,
+    NONE = 0,
     /** The interaction handler selected XInteractionAbort. */
-    Abort      = 1,
+    Abort = 1,
     /** The interaction handler selected XInteractionRetry. */
-    Retry      = 2,
+    Retry = 2,
     /** The interaction handler selected XInteractionApprove. */
-    Approve    = 4,
+    Approve = 4,
     /** The interaction handler selected XInteractionDisapprove. */
     Disapprove = 8,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ContinuationFlags> : is_typed_flags<ContinuationFlags, 0x0f> {};
+template <> struct typed_flags<ContinuationFlags> : is_typed_flags<ContinuationFlags, 0x0f>
+{
+};
 }
 
-namespace ucbhelper {
-
+namespace ucbhelper
+{
 /**
   * This class implements a simple interaction request. The user must not deal
   * with XInteractionContinuations directly, but can use constants that are
@@ -73,8 +76,7 @@ public:
       *        This can be any of the CONTINUATION_* constants combinations
       *        listed above.
       */
-    SimpleInteractionRequest( const css::uno::Any & rRequest,
-                              const ContinuationFlags nContinuations );
+    SimpleInteractionRequest(const css::uno::Any& rRequest, const ContinuationFlags nContinuations);
 
     /**
       * After passing this request to XInteractionHandler::handle, this method

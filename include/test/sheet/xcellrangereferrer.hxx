@@ -16,15 +16,15 @@
 
 #include <test/testdllapi.hxx>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XCellRangeReferrer
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void setCellRange(css::table::CellRangeAddress aCellRange) { m_aCellRange = aCellRange; }
-    const css::table::CellRangeAddress & getCellRange() const { return m_aCellRange; }
+    const css::table::CellRangeAddress& getCellRange() const { return m_aCellRange; }
     void testGetReferredCells();
 
 protected:
@@ -33,7 +33,6 @@ protected:
 private:
     css::table::CellRangeAddress m_aCellRange;
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XCELLRANGEREFERRER_HXX

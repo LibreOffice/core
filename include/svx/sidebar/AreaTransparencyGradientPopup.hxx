@@ -23,8 +23,8 @@
 
 class XFillFloatTransparenceItem;
 
-namespace svx::sidebar {
-
+namespace svx::sidebar
+{
 class AreaTransparencyGradientControl;
 class AreaPropertyPanelBase;
 
@@ -45,7 +45,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxMtrTrgrEndValue;
     std::unique_ptr<weld::MetricSpinButton> mxMtrTrgrBorder;
 
-    void InitStatus(XFillFloatTransparenceItem const * pGradientItem);
+    void InitStatus(XFillFloatTransparenceItem const* pGradientItem);
     void ExecuteValueModify(sal_uInt8 nStartCol, sal_uInt8 nEndCol);
     DECL_LINK(ModifiedTrgrHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(Left_Click45_Impl, const OString&, void);
@@ -58,7 +58,7 @@ public:
 
     weld::Container* getTopLevel() const { return mxTopLevel.get(); }
 
-    void Rearrange(XFillFloatTransparenceItem const * pItem);
+    void Rearrange(XFillFloatTransparenceItem const* pItem);
 };
 
 } // end of namespace svx::sidebar

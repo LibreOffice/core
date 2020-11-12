@@ -23,7 +23,6 @@
 #include <svl/svldllapi.h>
 #include <tools/inetmime.hxx>
 
-
 /** Definitions for frequently used media type names.
  */
 #define CONTENT_TYPE_STR_APP_OCTSTREAM "application/octet-stream"
@@ -110,7 +109,6 @@
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_MATH "application/vnd.sun.xml.math"
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_WRITER_GLOBAL "application/vnd.sun.xml.writer-global"
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_IMPRESSPACKED "application/vnd.sun.xml.impress-packed"
-
 
 /** Definitions for matching parts of URIs.
  */
@@ -212,23 +210,21 @@ enum INetContentType
     CONTENT_TYPE_LAST = CONTENT_TYPE_APP_VND_SUN_XML_IMPRESSPACKED
 };
 
-
 class SVL_DLLPUBLIC INetContentTypes
 {
 public:
-    static INetContentType GetContentType(OUString const & rTypeName);
+    static INetContentType GetContentType(OUString const& rTypeName);
 
     static OUString GetContentType(INetContentType eTypeID);
 
-    static INetContentType GetContentType4Extension(OUString const & rExtension);
+    static INetContentType GetContentType4Extension(OUString const& rExtension);
 
-    static INetContentType GetContentTypeFromURL(OUString const & rURL);
+    static INetContentType GetContentTypeFromURL(OUString const& rURL);
 
-    static bool GetExtensionFromURL(OUString const & rURL, OUString & rExtension);
+    static bool GetExtensionFromURL(OUString const& rURL, OUString& rExtension);
 
-    static bool parse(OUString const & rMediaType, OUString & rType,
-                      OUString & rSubType,
-                      INetContentTypeParameterList * pParameters = nullptr);
+    static bool parse(OUString const& rMediaType, OUString& rType, OUString& rSubType,
+                      INetContentTypeParameterList* pParameters = nullptr);
 };
 
 #endif // INCLUDED_SVL_INETTYPE_HXX

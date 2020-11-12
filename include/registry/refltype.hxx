@@ -43,7 +43,7 @@ class RTConstValue
 {
 public:
     /// stores the type of the constant value.
-    RTValueType         m_type;
+    RTValueType m_type;
     /// stores the value of the constant.
     RTConstValueUnion m_value;
 
@@ -70,7 +70,7 @@ struct RTUik
 };
 
 /// specifies the calling convention for type reader/writer api
-#define TYPEREG_CALLTYPE    SAL_CALL
+#define TYPEREG_CALLTYPE SAL_CALL
 
 #endif
 

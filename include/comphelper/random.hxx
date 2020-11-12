@@ -14,7 +14,6 @@
 
 namespace comphelper::rng
 {
-
 // These functions obey the SAL_RAND_REPEATABLE environment
 // variable: If it is set, use a fixed seed.
 

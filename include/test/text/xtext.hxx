@@ -14,8 +14,8 @@
 
 #include <com/sun/star/text/XTextContent.hpp>
 
-namespace apitest {
-
+namespace apitest
+{
 class OOO_DLLPUBLIC_TEST XText
 {
 public:
@@ -26,7 +26,6 @@ public:
 
     void testInsertRemoveTextContent();
 };
-
 }
 
 #endif

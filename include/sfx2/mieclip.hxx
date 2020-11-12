@@ -29,15 +29,14 @@
 class SFX2_DLLPUBLIC MSE40HTMLClipFormatObj
 {
     std::unique_ptr<SvStream> pStrm;
-    OUString                  sBaseURL;
+    OUString sBaseURL;
 
 public:
     MSE40HTMLClipFormatObj() {}
     ~MSE40HTMLClipFormatObj();
 
-    SvStream* IsValid( SvStream& );
+    SvStream* IsValid(SvStream&);
 };
-
 
 #endif // INCLUDED_SFX2_MIECLIP_HXX
 

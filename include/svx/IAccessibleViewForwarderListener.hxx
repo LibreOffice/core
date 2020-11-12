@@ -20,9 +20,8 @@
 #ifndef INCLUDED_SVX_IACCESSIBLEVIEWFORWARDERLISTENER_HXX
 #define INCLUDED_SVX_IACCESSIBLEVIEWFORWARDERLISTENER_HXX
 
-
-namespace accessibility {
-
+namespace accessibility
+{
 /** <p>The purpose of this interface is to notify a user of an
     IAccessibleViewForwarder when that view forwarder changes its
     properties.  Such a change may be one of the following:
@@ -35,7 +34,6 @@ namespace accessibility {
 class IAccessibleViewForwarderListener
 {
 public:
-
     /** This method is called to indicate a change of the specified view
         forwarder, specifically, a change in visible area.
     */

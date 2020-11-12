@@ -30,7 +30,6 @@
 
 namespace cppu
 {
-
 /**
  * Sets enum from int32 value.  This function does NOT check for valid enum values!
  *
@@ -38,11 +37,10 @@ namespace cppu
  * @param rType         enum type
  * @return enum or empty any.
  */
-inline css::uno::Any int2enum(
-    sal_Int32 nEnum, const css::uno::Type & rType )
+inline css::uno::Any int2enum(sal_Int32 nEnum, const css::uno::Type& rType)
 {
     assert(rType.getTypeClass() == css::uno::TypeClass_ENUM);
-    return css::uno::Any( &nEnum, rType );
+    return css::uno::Any(&nEnum, rType);
 }
 
 /**
@@ -53,11 +51,11 @@ inline css::uno::Any int2enum(
  * @retval true if enum or int value was set
  * @retval false otherwise
  */
-inline bool enum2int( sal_Int32 & rnEnum, const css::uno::Any & rAny )
+inline bool enum2int(sal_Int32& rnEnum, const css::uno::Any& rAny)
 {
     if (rAny.getValueTypeClass() == css::uno::TypeClass_ENUM)
     {
-        rnEnum = * static_cast< const sal_Int32 * >( rAny.getValue() );
+        rnEnum = *static_cast<const sal_Int32*>(rAny.getValue());
         return true;
     }
 
@@ -72,15 +70,14 @@ inline bool enum2int( sal_Int32 & rnEnum, const css::uno::Any & rAny )
  * @param rAny          enum or int
  * @throws css::lang::IllegalArgumentException
  */
-template< typename E >
-inline void any2enum( E & eRet, const css::uno::Any & rAny )
+template <typename E> inline void any2enum(E& eRet, const css::uno::Any& rAny)
 {
     // check for typesafe enum
-    if (! (rAny >>= eRet))
+    if (!(rAny >>= eRet))
     {
         // if not enum, maybe integer?
         sal_Int32 nValue = 0;
-        if (! (rAny >>= nValue))
+        if (!(rAny >>= nValue))
             throw css::lang::IllegalArgumentException();
 
         eRet = static_cast<E>(nValue);
@@ -94,7 +91,7 @@ inline void any2enum( E & eRet, const css::uno::Any & rAny )
  *
  * @throws css::lang::IllegalArgumentException
  */
-inline bool any2bool( const css::uno::Any & rAny )
+inline bool any2bool(const css::uno::Any& rAny)
 {
     bool b;
     if (rAny >>= b)
@@ -104,12 +101,11 @@ inline bool any2bool( const css::uno::Any & rAny )
     else
     {
         sal_Int32 nValue = 0;
-        if (! (rAny >>= nValue))
+        if (!(rAny >>= nValue))
             throw css::lang::IllegalArgumentException();
         return nValue != 0;
     }
 }
-
 }
 
 #endif

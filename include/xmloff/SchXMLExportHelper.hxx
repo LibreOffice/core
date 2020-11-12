@@ -38,20 +38,19 @@ class SchXMLExportHelper_Impl;
 class XMLOFF_DLLPUBLIC SchXMLExportHelper final : public salhelper::SimpleReferenceObject
 {
 public:
-    SchXMLExportHelper( SvXMLExport& rExport,
-                        SvXMLAutoStylePoolP& rASPool );
+    SchXMLExportHelper(SvXMLExport& rExport, SvXMLAutoStylePoolP& rASPool);
 
     virtual ~SchXMLExportHelper() override;
 
     /// returns the string corresponding to the current FileFormat CLSID for Chart
     const OUString& getChartCLSID() const;
 
-    void SetSourceShellID( const OUString& rShellID );
-    void SetDestinationShellID( const OUString& rShellID );
+    void SetSourceShellID(const OUString& rShellID);
+    void SetDestinationShellID(const OUString& rShellID);
 
 private:
-    SchXMLExportHelper(SchXMLExportHelper const &) = delete;
-    SchXMLExportHelper& operator =(SchXMLExportHelper const &) = delete;
+    SchXMLExportHelper(SchXMLExportHelper const&) = delete;
+    SchXMLExportHelper& operator=(SchXMLExportHelper const&) = delete;
 
 private:
     std::unique_ptr<SchXMLExportHelper_Impl> m_pImpl;

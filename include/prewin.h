@@ -21,18 +21,18 @@
 
 #if defined(_WIN32)
 
-#define Folder       WIN_Folder
-#define GradientStyle_RECT  WIN_GradientStyle_RECT
+#define Folder WIN_Folder
+#define GradientStyle_RECT WIN_GradientStyle_RECT
 
 #ifndef IN
-#   define IN
+#define IN
 #endif
 #ifndef OUT
-#   define OUT
+#define OUT
 #endif
 
 #if !defined STRICT
-#   define STRICT
+#define STRICT
 #endif
 
 #define WIN32_LEAN_AND_MEAN

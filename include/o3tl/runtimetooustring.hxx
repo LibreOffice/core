@@ -20,8 +20,8 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
-namespace o3tl {
-
+namespace o3tl
+{
 /** Convert an NTBS from the C++ runtime to an OUString.
 
     This is used to convert an NTBS as provided by std::exception::what or
@@ -29,18 +29,17 @@ namespace o3tl {
     is done using RTL_TEXTENCODING_ISO_8859_1, so each char in the input maps
     to one Unicode character in the output.
 */
-inline OUString runtimeToOUString(char const * runtimeString) {
+inline OUString runtimeToOUString(char const* runtimeString)
+{
     OUString s;
     bool ok = rtl_convertStringToUString(
-        &s.pData, runtimeString, std::strlen(runtimeString),
-        RTL_TEXTENCODING_ISO_8859_1,
-        (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-         | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+        &s.pData, runtimeString, std::strlen(runtimeString), RTL_TEXTENCODING_ISO_8859_1,
+        (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
          | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR));
-    assert(ok); (void) ok;
+    assert(ok);
+    (void)ok;
     return s;
 }
-
 }
 
 #endif

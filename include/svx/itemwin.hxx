@@ -35,7 +35,7 @@ class SvxLineBox final : public WeldToolbarPopup
     std::unique_ptr<weld::CustomWeld> mxLineStyleSetWin;
 
     void FillControl();
-    void Fill(const XDashListRef &pList);
+    void Fill(const XDashListRef& pList);
 
     DECL_LINK(SelectHdl, ValueSet*, void);
 
@@ -48,15 +48,15 @@ public:
 
 namespace SvxFillTypeBox
 {
-    SVX_DLLPUBLIC void Fill(weld::ComboBox& rListBox);
+SVX_DLLPUBLIC void Fill(weld::ComboBox& rListBox);
 }
 
 namespace SvxFillAttrBox
 {
-    SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XHatchListRef &pList);
-    SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XGradientListRef &pList);
-    SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XBitmapListRef &pList);
-    SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XPatternListRef &pList);
+SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XHatchListRef& pList);
+SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XGradientListRef& pList);
+SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XBitmapListRef& pList);
+SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XPatternListRef& pList);
 }
 
 #endif // INCLUDED_SVX_ITEMWIN_HXX

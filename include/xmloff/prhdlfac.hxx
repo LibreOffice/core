@@ -42,8 +42,8 @@ class XMLOFF_DLLPUBLIC XMLPropertyHandlerFactory : public salhelper::SimpleRefer
     struct Impl;
     std::unique_ptr<Impl> mpImpl;
 
-    XMLPropertyHandlerFactory( const XMLPropertyHandlerFactory& ) = delete;
-    XMLPropertyHandlerFactory& operator= ( const XMLPropertyHandlerFactory& ) = delete;
+    XMLPropertyHandlerFactory(const XMLPropertyHandlerFactory&) = delete;
+    XMLPropertyHandlerFactory& operator=(const XMLPropertyHandlerFactory&) = delete;
 
 public:
     XMLPropertyHandlerFactory();
@@ -81,24 +81,24 @@ public:
         return pHdl;
     }
     */
-    virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const;
+    virtual const XMLPropertyHandler* GetPropertyHandler(sal_Int32 nType) const;
 
     /** helper method to statically create a property handler; this will not
      *  use the handler cache. This method should only be called in special
      *  circumstances; calling GetPropertyHandler is almost always
      *  preferable. */
-    static std::unique_ptr<XMLPropertyHandler> CreatePropertyHandler( sal_Int32 nType );
+    static std::unique_ptr<XMLPropertyHandler> CreatePropertyHandler(sal_Int32 nType);
 
 protected:
     /** Retrieves a PropertyHandler from the internal cache */
-    const XMLPropertyHandler* GetHdlCache( sal_Int32 nType ) const;
+    const XMLPropertyHandler* GetHdlCache(sal_Int32 nType) const;
     /** Puts a PropertyHandler into the internal cache */
-    void PutHdlCache( sal_Int32 nType, const XMLPropertyHandler* pHdl ) const;
+    void PutHdlCache(sal_Int32 nType, const XMLPropertyHandler* pHdl) const;
 
 private:
     /** Retrieves ( creates if necessary ) PropertyHandler for
         basic XML-types */
-    SAL_DLLPRIVATE const XMLPropertyHandler* GetBasicHandler( sal_Int32 nType ) const;
+    SAL_DLLPRIVATE const XMLPropertyHandler* GetBasicHandler(sal_Int32 nType) const;
 };
 
 #endif // INCLUDED_XMLOFF_PRHDLFAC_HXX

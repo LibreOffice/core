@@ -16,7 +16,6 @@
 
 namespace svl
 {
-
 /** Test whether object that uses a stylesheet is used itself.
 
   This interface should be implemented by all classes that use
@@ -31,10 +30,10 @@ public:
       @return true, if the object is used, false otherwise
       */
     virtual bool isUsedByModel() const = 0;
+
 protected:
     ~StyleSheetUser() {}
 };
-
 }
 
 #endif

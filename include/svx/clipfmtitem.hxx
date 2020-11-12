@@ -33,25 +33,25 @@ struct SvxClipboardFormatItem_Impl;
 
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxClipboardFormatItem final : public SfxPoolItem
 {
-    virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual SvxClipboardFormatItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual bool operator==(const SfxPoolItem&) const override;
+    virtual SvxClipboardFormatItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
 public:
     static SfxPoolItem* CreateDefault();
-    SvxClipboardFormatItem( sal_uInt16 nId );
-    SvxClipboardFormatItem( const SvxClipboardFormatItem& );
+    SvxClipboardFormatItem(sal_uInt16 nId);
+    SvxClipboardFormatItem(const SvxClipboardFormatItem&);
     virtual ~SvxClipboardFormatItem() override;
 
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
-    void AddClipbrdFormat( SotClipboardFormatId nId );
-    void AddClipbrdFormat( SotClipboardFormatId nId, const OUString& rName,
-                            sal_uInt16 nPos = USHRT_MAX );
+    void AddClipbrdFormat(SotClipboardFormatId nId);
+    void AddClipbrdFormat(SotClipboardFormatId nId, const OUString& rName,
+                          sal_uInt16 nPos = USHRT_MAX);
     sal_uInt16 Count() const;
 
-    SotClipboardFormatId GetClipbrdFormatId( sal_uInt16 nPos ) const;
-    OUString const & GetClipbrdFormatName( sal_uInt16 nPos ) const;
+    SotClipboardFormatId GetClipbrdFormatId(sal_uInt16 nPos) const;
+    OUString const& GetClipbrdFormatName(sal_uInt16 nPos) const;
 
 private:
     std::unique_ptr<SvxClipboardFormatItem_Impl> pImpl;

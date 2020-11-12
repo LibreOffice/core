@@ -23,12 +23,19 @@
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com::sun::star::beans { class XPropertySet; }
-namespace comphelper { class PropertySetInfo; }
+namespace com::sun::star::beans
+{
+class XPropertySet;
+}
+namespace comphelper
+{
+class PropertySetInfo;
+}
 
 namespace comphelper
 {
-    COMPHELPER_DLLPUBLIC css::uno::Reference< css::beans::XPropertySet > GenericPropertySet_CreateInstance( PropertySetInfo* pInfo );
+COMPHELPER_DLLPUBLIC css::uno::Reference<css::beans::XPropertySet>
+GenericPropertySet_CreateInstance(PropertySetInfo* pInfo);
 }
 
 #endif // INCLUDED_COMPHELPER_GENERICPROPERTYSET_HXX

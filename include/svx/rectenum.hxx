@@ -29,7 +29,7 @@ enum class RectPoint
     RM, // right center
     LB, // bottom left
     MB, // bottom center
-    RB  // bottom right
+    RB // bottom right
 };
 
 #endif

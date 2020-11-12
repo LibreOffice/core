@@ -24,28 +24,27 @@
 
 #include <sal/types.h>
 
-
 //   Defines
 
 enum class SdrPathSmoothKind
 {
-    DontCare,   // only for status query
-    Angular,    // angular
+    DontCare, // only for status query
+    Angular, // angular
     Asymmetric, // asymmetric, normal Smooth
-    Symmetric   // symmetric
+    Symmetric // symmetric
 };
 enum class SdrPathSegmentKind
 {
-    DontCare,  // only for status query
-    Line,      // straight path segment
-    Curve,     // curve path segment (Bezier)
-    Toggle     // only for Set: Toggle
+    DontCare, // only for status query
+    Line, // straight path segment
+    Curve, // curve path segment (Bezier)
+    Toggle // only for Set: Toggle
 };
 enum class SdrObjClosedKind
 {
-    DontCare,    // only for status query
-    Open,        // non-closed object (line, polyline, ...)
-    Closed       // closed object (polygon, ...)
+    DontCare, // only for status query
+    Open, // non-closed object (line, polyline, ...)
+    Closed // closed object (polygon, ...)
 };
 
 class SAL_DLLPUBLIC_RTTI IPolyPolygonEditorController

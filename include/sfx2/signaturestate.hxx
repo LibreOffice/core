@@ -27,17 +27,17 @@
 enum class SignatureState
 {
     // FIXME: Do these values have to be these, and given at all, or is this just cargo cult?
-    UNKNOWN       = 0xffff, // used to be -1 when this was a sal_uInt16
-    NOSIGNATURES  = 0,
-    OK            = 1,
-    BROKEN        = 2,
+    UNKNOWN = 0xffff, // used to be -1 when this was a sal_uInt16
+    NOSIGNATURES = 0,
+    OK = 1,
+    BROKEN = 2,
     // State was SignatureState::OK, but doc is modified now
-    INVALID       = 3,
+    INVALID = 3,
     // signature is OK, but certificate could not be validated
-    NOTVALIDATED  = 4,
+    NOTVALIDATED = 4,
     // signature and certificate are ok, but not all files are signed, as it was the case in
     // OOo 2.x - OOo 3.1.1. This state is only used together with document signatures.
-    PARTIAL_OK    = 5,
+    PARTIAL_OK = 5,
     /// Certificate could not be validated and the document is only partially signed.
     NOTVALIDATED_PARTIAL_OK = 6
 };

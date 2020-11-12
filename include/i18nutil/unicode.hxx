@@ -27,7 +27,8 @@
 
 class LanguageTag;
 
-struct ScriptTypeList {
+struct ScriptTypeList
+{
     css::i18n::UnicodeScript from;
     css::i18n::UnicodeScript to;
     sal_Int16 value;
@@ -36,16 +37,16 @@ struct ScriptTypeList {
 class I18NUTIL_DLLPUBLIC unicode
 {
 public:
-
-    static sal_Int16 getUnicodeType( const sal_Unicode ch );
-    static sal_Int16 getUnicodeScriptType( const sal_Unicode ch, const ScriptTypeList *typeList, sal_Int16 unknownType = 0 );
+    static sal_Int16 getUnicodeType(const sal_Unicode ch);
+    static sal_Int16 getUnicodeScriptType(const sal_Unicode ch, const ScriptTypeList* typeList,
+                                          sal_Int16 unknownType = 0);
     static sal_Unicode getUnicodeScriptStart(css::i18n::UnicodeScript type);
     static sal_Unicode getUnicodeScriptEnd(css::i18n::UnicodeScript type);
-    static sal_uInt8 getUnicodeDirection( const sal_Unicode ch );
-    static bool isControl( const sal_Unicode ch);
-    static bool isAlpha( const sal_Unicode ch);
-    static bool isSpace( const sal_Unicode ch);
-    static bool isWhiteSpace( const sal_Unicode ch);
+    static sal_uInt8 getUnicodeDirection(const sal_Unicode ch);
+    static bool isControl(const sal_Unicode ch);
+    static bool isAlpha(const sal_Unicode ch);
+    static bool isSpace(const sal_Unicode ch);
+    static bool isWhiteSpace(const sal_Unicode ch);
 
     /** Check for Unicode variation sequence selectors
 
@@ -55,8 +56,8 @@ public:
      */
     static bool isIVSSelector(sal_uInt32 nCode)
     {
-        return (nCode >= 0xFE00 && nCode <= 0xFE0F)   // Variation Selectors block
-            || (nCode >= 0xE0100 && nCode <= 0xE01EF);// Variation Selectors Supplement block
+        return (nCode >= 0xFE00 && nCode <= 0xFE0F) // Variation Selectors block
+               || (nCode >= 0xE0100 && nCode <= 0xE01EF); // Variation Selectors Supplement block
     }
 
     /** Check for base characters of a CJK ideographic variation sequence (IVS)
@@ -67,9 +68,9 @@ public:
      */
     static bool isCJKIVSCharacter(sal_uInt32 nCode)
     {
-        return (nCode >= 0x4E00 && nCode <= 0x9FFF)       // CJK Unified Ideographs
-            || (nCode >= 0x3400 && nCode <= 0x4DBF)       // CJK Unified Ideographs Extension A
-            || (nCode >= 0x20000 && nCode <= 0x2A6DF);    // CJK Unified Ideographs Extension B
+        return (nCode >= 0x4E00 && nCode <= 0x9FFF) // CJK Unified Ideographs
+               || (nCode >= 0x3400 && nCode <= 0x4DBF) // CJK Unified Ideographs Extension A
+               || (nCode >= 0x20000 && nCode <= 0x2A6DF); // CJK Unified Ideographs Extension B
     }
 
     //Map an ISO 15924 script code to Latin/Asian/Complex/Weak
@@ -80,8 +81,7 @@ public:
 
     //Format a number as a percentage according to the rules of the given
     //language, e.g. 100 -> "100%" for en-US vs "100 %" for de-DE
-    static OUString formatPercent(double dNumber,
-        const LanguageTag &rLangTag);
+    static OUString formatPercent(double dNumber, const LanguageTag& rLangTag);
 };
 
 /*
@@ -127,6 +127,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

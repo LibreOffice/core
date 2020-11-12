@@ -27,19 +27,23 @@
 #include <jvmaccess/jvmaccessdllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::uno {
-    class XComponentContext;
+namespace com::sun::star::uno
+{
+class XComponentContext;
 }
 
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::uno
+{
+template <typename> class Reference;
+}
 
-namespace jvmaccess {
-
+namespace jvmaccess
+{
 /**
    Helper functions for class path handling.
  */
-namespace ClassPath {
-
+namespace ClassPath
+{
 /**
    translates a class path into a java.net.URL[] instance.
 
@@ -65,12 +69,10 @@ namespace ClassPath {
 
    @throws com::sun::star::uno::RuntimeException
  */
-JVMACCESS_DLLPUBLIC jobjectArray translateToUrls(
-    css::uno::Reference<css::uno::XComponentContext> const & context,
-    JNIEnv * environment, OUString const & classPath);
-
+JVMACCESS_DLLPUBLIC jobjectArray
+translateToUrls(css::uno::Reference<css::uno::XComponentContext> const& context,
+                JNIEnv* environment, OUString const& classPath);
 }
-
 }
 
 #endif

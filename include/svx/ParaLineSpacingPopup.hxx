@@ -21,17 +21,18 @@
 
 #include <svtools/popupwindowcontroller.hxx>
 
-namespace svx {
-
+namespace svx
+{
 class SvxLineSpacingToolBoxControl final : public svt::PopupWindowController
 {
 public:
-    explicit SvxLineSpacingToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
+    explicit SvxLineSpacingToolBoxControl(
+        const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~SvxLineSpacingToolBoxControl() override;
 
     virtual void SAL_CALL execute(sal_Int16 KeyModifier) override;
 
-    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XServiceInfo
@@ -39,12 +40,10 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 };
-
 }
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

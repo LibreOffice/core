@@ -26,7 +26,8 @@
 // !! If you add a new group, please change sfxbasecontroller.cxx and
 // !! com.sun.star.frame.CommandGroup accordingly!
 
-enum class SfxGroupId {
+enum class SfxGroupId
+{
     NONE = 0,
     Intern = 32700,
     Application,
@@ -59,14 +60,13 @@ enum class SfxGroupId {
 // make it hashable for storing in maps
 namespace std
 {
-  template <>
-  struct hash<SfxGroupId>
-  {
+template <> struct hash<SfxGroupId>
+{
     std::size_t operator()(const SfxGroupId& k) const
     {
-      return std::hash<sal_uInt16>()(static_cast<sal_uInt16>(k));
+        return std::hash<sal_uInt16>()(static_cast<sal_uInt16>(k));
     }
-  };
+};
 }
 
 #endif

@@ -28,7 +28,8 @@
     The general structure of a binary type blob is always the same.  It depends
     on the typeclass which parts of the blob are filled with data or not.
  */
-enum RTTypeClass {
+enum RTTypeClass
+{
     /** specifies that the structure of the given blob is unknown and can't be
         read.
      */
@@ -131,37 +132,37 @@ enum RTTypeClass {
  */
 enum class RTFieldAccess
 {
-    NONE        = 0x0000,
+    NONE = 0x0000,
     /// specifies an unknown flag
-    INVALID     = 0x0000,
+    INVALID = 0x0000,
     /// specifies a readonly property/attribute
-    READONLY    = 0x0001,
+    READONLY = 0x0001,
     /// specifies a property as optional that means that it must not be implemented.
-    OPTIONAL    = 0x0002,
+    OPTIONAL = 0x0002,
     /// @see com::sun::star::beans::PropertyAttribute
-    MAYBEVOID   = 0x0004,
+    MAYBEVOID = 0x0004,
     /// @see com::sun::star::beans::PropertyAttribute
-    BOUND       = 0x0008,
+    BOUND = 0x0008,
     /// @see com::sun::star::beans::PropertyAttribute
     CONSTRAINED = 0x0010,
     /// @see com::sun::star::beans::PropertyAttribute
-    TRANSIENT   = 0x0020,
+    TRANSIENT = 0x0020,
     /// @see com::sun::star::beans::PropertyAttribute
     MAYBEAMBIGUOUS = 0x0040,
     /// @see com::sun::star::beans::PropertyAttribute
     MAYBEDEFAULT = 0x0080,
     /// @see com::sun::star::beans::PropertyAttribute
-    REMOVABLE   = 0x0100,
+    REMOVABLE = 0x0100,
     /// @see com::sun::star::beans::PropertyAttribute
-    ATTRIBUTE   = 0x0200,
+    ATTRIBUTE = 0x0200,
     /// specifies that the field is a property
-    PROPERTY    = 0x0400,
+    PROPERTY = 0x0400,
     /// specifies that the field is a constant or enum value
-    CONST       = 0x0800,
+    CONST = 0x0800,
     /// specifies that the property/attribute has read/write access
-    READWRITE   = 0x1000,
+    READWRITE = 0x1000,
     /// only to describe a union default label
-    DEFAULT     = 0x2000,
+    DEFAULT = 0x2000,
     /**
        Indicates that a member of a polymorphic struct type template is of a
        parameterized type.
@@ -185,14 +186,17 @@ enum class RTFieldAccess
 };
 namespace o3tl
 {
-    template<> struct typed_flags<RTFieldAccess> : is_typed_flags<RTFieldAccess, 0xffff> {};
+template <> struct typed_flags<RTFieldAccess> : is_typed_flags<RTFieldAccess, 0xffff>
+{
+};
 }
 
 /** specifies the type of a field value.
 
     A field can have a value if it represents a constant or an enum value.
  */
-enum RTValueType {
+enum RTValueType
+{
     RT_TYPE_NONE,
     RT_TYPE_BOOL,
     RT_TYPE_BYTE,
@@ -220,7 +224,7 @@ union RTConstValueUnion {
     sal_uInt64 aUHyper;
     float aFloat;
     double aDouble;
-    sal_Unicode const * aString;
+    sal_Unicode const* aString;
 };
 
 /** specifies the mode of a method.
@@ -228,7 +232,8 @@ union RTConstValueUnion {
     A method can be synchron or asynchron (oneway).  The const attribute for
     methods was removed so that the const values are deprecated.
  */
-enum class RTMethodMode {
+enum class RTMethodMode
+{
     /// indicates an invalid mode
     INVALID,
 
@@ -266,7 +271,8 @@ enum class RTMethodMode {
     There are three parameter modes which have impact of the handling of the
     parameter in the UNO bridges and the UNO code generation.
  */
-enum RTParamMode {
+enum RTParamMode
+{
     /// indicates an invalid parameter mode
     RT_PARAM_INVALID = 0,
 
@@ -294,7 +300,8 @@ enum RTParamMode {
 
 /** specifies the type of a reference used in a service description.
  */
-enum class RTReferenceType {
+enum class RTReferenceType
+{
     /// the reference type is unknown
     INVALID,
 
