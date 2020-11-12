@@ -22,10 +22,13 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 
-namespace osl { class Module; }
+namespace osl
+{
+class Module;
+}
 
-namespace cppu::detail {
-
+namespace cppu::detail
+{
 #ifndef DISABLE_DYNLOADING
 
 /** Load a module.
@@ -36,10 +39,9 @@ namespace cppu::detail {
 
     @return false if the module could not be loaded, otherwise true
 */
-bool loadModule(osl::Module & rModule, OUString const & name);
+bool loadModule(osl::Module& rModule, OUString const& name);
 
 #endif
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
