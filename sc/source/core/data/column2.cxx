@@ -440,7 +440,7 @@ tools::Long ScColumn::GetNeededSize(
             constexpr tools::Long nFilterButtonWidthPix = 20; // Autofilter pixel width at 100% zoom.
             if ( pFlag->HasAutoFilter() && !bTextWysiwyg )
                 nDocWidth -= bInPrintTwips ?
-                        (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : sal_Int32(rZoomX * nFilterButtonWidthPix);
+                        (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : tools::Long(rZoomX * nFilterButtonWidthPix);
 
             aPaper.setWidth( nDocWidth );
 
@@ -596,7 +596,7 @@ tools::Long ScColumn::GetNeededSize(
         ScMF nFlags = pPattern->GetItem(ATTR_MERGE_FLAG).GetValue();
         if (nFlags & ScMF::Auto)
             nValue += bInPrintTwips ?
-                (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : sal_Int32(rZoomX * nFilterButtonWidthPix);
+                (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : tools::Long(rZoomX * nFilterButtonWidthPix);
     }
 
     return nValue;

@@ -990,7 +990,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
             const Fraction& rFrac = GetEditWin().GetMapMode().GetScaleX();
             tools::Long nZoom = 100;
             if (rFrac.IsValid())
-                nZoom = sal_Int32(rFrac * 100);
+                nZoom = tools::Long(rFrac * 100);
 
             const Fraction aFrac( nZoom, 100 );
             m_pVRuler->SetZoom( aFrac );
@@ -1140,7 +1140,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 {
     const Fraction &rFrac = rX < rY ? rX : rY;
-    SetZoom( SvxZoomType::PERCENT, static_cast<short>(sal_Int32(rFrac * Fraction( 100, 1 ))) );
+    SetZoom( SvxZoomType::PERCENT, static_cast<short>(tools::Long(rFrac * Fraction( 100, 1 ))) );
 
     // To minimize rounding errors we also adjust the odd values
     // of the base class if necessary.

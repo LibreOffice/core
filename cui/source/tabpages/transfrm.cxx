@@ -451,7 +451,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
     if (m_xMtrRadius->get_value_changed_from_saved())
     {
         Fraction aUIScale = pView->GetModel()->GetUIScale();
-        tools::Long nTmp = sal_Int32(GetCoreValue(*m_xMtrRadius, ePoolUnit) * aUIScale);
+        tools::Long nTmp = tools::Long(GetCoreValue(*m_xMtrRadius, ePoolUnit) * aUIScale);
 
         rAttrs->Put( makeSdrEckenradiusItem( nTmp ) );
         bModified = true;

@@ -1441,8 +1441,8 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
                     getView()->getSdrModelFromSdrView(),
                     SdrInventor::FmForm,
                     nObjID));
-            controlSize.setWidth( sal_Int32(controlSize.Width() * eTargetMode.GetScaleX()) );
-            controlSize.setHeight( sal_Int32(controlSize.Height() * eTargetMode.GetScaleY()) );
+            controlSize.setWidth( tools::Long(controlSize.Width() * eTargetMode.GetScaleX()) );
+            controlSize.setHeight( tools::Long(controlSize.Height() * eTargetMode.GetScaleY()) );
             ::Point controlPos( OutputDevice::LogicToLogic( ::Point( controlSize.Width(), 0 ), eSourceMode, eTargetMode ) );
             ::tools::Rectangle controlRect( controlPos, OutputDevice::LogicToLogic( controlSize, eSourceMode, eTargetMode ) );
             pControl->SetLogicRect(controlRect);
@@ -1548,8 +1548,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     aRealSize.setHeight( aDefSize.Height() );
 
     // adjust to scaling of the target device (#53523#)
-    aRealSize.setWidth( sal_Int32(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX()) );
-    aRealSize.setHeight( sal_Int32(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY()) );
+    aRealSize.setWidth( tools::Long(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX()) );
+    aRealSize.setHeight( tools::Long(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY()) );
 
     // for boolean fields, we do not create a label, but just a checkbox
     bool bNeedLabel = ( _nControlObjectID != OBJ_FM_CHECKBOX );
@@ -1626,8 +1626,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     if ( OBJ_FM_IMAGECONTROL == _nControlObjectID )
         aControlSize = aDefImageSize;
 
-    aControlSize.setWidth( sal_Int32(Fraction(aControlSize.Width(), 1) * eTargetMode.GetScaleX()) );
-    aControlSize.setHeight( sal_Int32(Fraction(aControlSize.Height(), 1) * eTargetMode.GetScaleY()) );
+    aControlSize.setWidth( tools::Long(Fraction(aControlSize.Width(), 1) * eTargetMode.GetScaleX()) );
+    aControlSize.setHeight( tools::Long(Fraction(aControlSize.Height(), 1) * eTargetMode.GetScaleY()) );
 
     pControl->SetLogicRect( ::tools::Rectangle(
         OutputDevice::LogicToLogic( ::Point( aRealSize.Width() + _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),

@@ -1368,7 +1368,7 @@ sal_Int16 ScTabViewObj::GetZoom() const
     if (pViewSh)
     {
         const Fraction& rZoomY = pViewSh->GetViewData().GetZoomY();    // Y will be shown
-        return static_cast<sal_Int16>(sal_Int32( rZoomY * 100 ));
+        return static_cast<sal_Int16>(tools::Long( rZoomY * 100 ));
     }
     return 0;
 }

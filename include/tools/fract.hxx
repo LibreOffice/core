@@ -53,6 +53,9 @@ public:
     sal_Int32       GetDenominator() const;
 
     explicit operator sal_Int32() const;
+#if SAL_TYPES_SIZEOFPOINTER == 8
+    explicit operator ::tools::Long() const { return sal_Int32(*this); }
+#endif
     explicit operator double() const;
 
     Fraction&       operator=( const Fraction& rfrFrac ) = default;
