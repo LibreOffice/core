@@ -36,8 +36,6 @@ public:
                                    const sal_Int32 nY, const sal_Int32 nHeight, const Color& rColor);
     static void DrawVerticalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nTop, const sal_Int32 nBottom,
                                  const sal_Int32 nX, const sal_Int32 nWidth, const Color& rColor);
-    static void DrawRoundedRectangle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBox, const sal_Int32 nCornerRadius,
-                                     const Color& rBorderColor, const Color& rFillColor);
 };
 
 } // end of namespace sfx2::sidebar
