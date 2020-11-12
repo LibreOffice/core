@@ -18,7 +18,7 @@
  */
 
 #if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 #include <ole2.h>
@@ -38,6 +38,7 @@ class Test : public CppUnit::TestFixture
 private:
     wstring documentName;
     LPSTREAM pStream;
+
 public:
     Test();
     void test_file_directory();
@@ -58,7 +59,9 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
-Test::Test() : documentName(), pStream(nullptr)
+Test::Test()
+    : documentName()
+    , pStream(nullptr)
 {
     const wchar_t* pSrcRoot = _wgetenv(L"SRC_ROOT");
     if (pSrcRoot)
@@ -69,7 +72,8 @@ Test::Test() : documentName(), pStream(nullptr)
     documentName.append(L"shell/qa/zip/simpledocument.odt");
 
     // Create an IStream pointer from the file
-    HANDLE hFile = CreateFileW(documentName.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, 0, nullptr);
+    HANDLE hFile
+        = CreateFileW(documentName.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, 0, nullptr);
 
     DWORD dwFileSize = GetFileSize(hFile, nullptr);
     HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, dwFileSize);
@@ -90,7 +94,8 @@ void Test::test_file_directory()
     FileStream stream(documentName.c_str());
     TestZipImpl testImpl(&stream);
     bool isPassed = testImpl.test_directory();
-    CPPUNIT_ASSERT_MESSAGE("FileStream: Content does not match with expected directory names.", isPassed);
+    CPPUNIT_ASSERT_MESSAGE("FileStream: Content does not match with expected directory names.",
+                           isPassed);
 }
 
 void Test::test_file_hasContentCaseInSensitive()
@@ -114,7 +119,8 @@ void Test::test_stream_directory()
     BufferStream stream(pStream);
     TestZipImpl testImpl(&stream);
     bool isPassed = testImpl.test_directory();
-    CPPUNIT_ASSERT_MESSAGE("BufferStream: Content does not match with expected directory names.", isPassed);
+    CPPUNIT_ASSERT_MESSAGE("BufferStream: Content does not match with expected directory names.",
+                           isPassed);
 }
 
 void Test::test_stream_hasContentCaseInSensitive()

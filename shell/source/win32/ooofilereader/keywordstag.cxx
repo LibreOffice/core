@@ -21,15 +21,9 @@
 
 /***********************   CKeywordsTag  ***********************/
 
-void CKeywordsTag::startTag()
-{
-    m_sCurrentKeyword.clear();
-}
+void CKeywordsTag::startTag() { m_sCurrentKeyword.clear(); }
 
-void CKeywordsTag::endTag()
-{
-    m_slKeywords.push_back(m_sCurrentKeyword);
-}
+void CKeywordsTag::endTag() { m_slKeywords.push_back(m_sCurrentKeyword); }
 
 void CKeywordsTag::addCharacters(const std::wstring& characters)
 {
@@ -41,13 +35,13 @@ void CKeywordsTag::addAttributes(const XmlTagAttributes_t& /*attributes*/)
     // there are no attributes for keywords
 }
 
-std::wstring CKeywordsTag::getTagContent( )
+std::wstring CKeywordsTag::getTagContent()
 {
-    auto keywords_Iter= m_slKeywords.cbegin( );
-    auto keywords_Iter_end = m_slKeywords.cend( );
+    auto keywords_Iter = m_slKeywords.cbegin();
+    auto keywords_Iter_end = m_slKeywords.cend();
 
-    std::wstring ret_KeyWord_String = ( keywords_Iter != keywords_Iter_end) ? *keywords_Iter++ : L"";
-    for ( ; keywords_Iter != keywords_Iter_end; ++keywords_Iter)
+    std::wstring ret_KeyWord_String = (keywords_Iter != keywords_Iter_end) ? *keywords_Iter++ : L"";
+    for (; keywords_Iter != keywords_Iter_end; ++keywords_Iter)
         ret_KeyWord_String += L"," + *keywords_Iter;
     return ret_KeyWord_String;
 }

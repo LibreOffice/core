@@ -17,26 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdexcept>
 #include "cmdline.hxx"
-
 
 /** Simple command line abstraction
 */
 
 // Creation
 
-
-CommandLine::CommandLine(size_t argc, char* argv[]) :
-    m_argc(argc),
-    m_argv(argv)
+CommandLine::CommandLine(size_t argc, char* argv[])
+    : m_argc(argc)
+    , m_argv(argv)
 {
 }
 
-
 // Query
-
 
 /** Returns an argument by name. If there are
     duplicate argument names in the command line,
@@ -58,13 +53,13 @@ std::string CommandLine::get_arg(const std::string& ArgumentName) const
 {
     std::string arg_value;
     size_t i;
-    for ( i = 0; i < m_argc; i++)
+    for (i = 0; i < m_argc; i++)
     {
         std::string arg = m_argv[i];
 
-        if (ArgumentName == arg && ((i+1) < m_argc) && !is_arg_name(m_argv[i+1]))
+        if (ArgumentName == arg && ((i + 1) < m_argc) && !is_arg_name(m_argv[i + 1]))
         {
-            arg_value = m_argv[i+1];
+            arg_value = m_argv[i + 1];
             break;
         }
     }
@@ -75,9 +70,7 @@ std::string CommandLine::get_arg(const std::string& ArgumentName) const
     return arg_value;
 }
 
-
 // Command
-
 
 /** Returns whether a given argument is an argument name
 */

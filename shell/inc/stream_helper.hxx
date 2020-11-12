@@ -28,25 +28,27 @@ struct IStream;
 class BufferStream : public StreamInterface
 {
 public:
-    BufferStream(IStream *str);
+    BufferStream(IStream* str);
     ~BufferStream() override;
-    unsigned long sread (unsigned char *vuf, unsigned long size) override;
-    long stell () override;
-    long sseek (long offset, int origin) override;
+    unsigned long sread(unsigned char* vuf, unsigned long size) override;
+    long stell() override;
+    long sseek(long offset, int origin) override;
+
 private:
-    IStream *stream;
+    IStream* stream;
 };
 
 class FileStream : public StreamInterface
 {
 public:
-    FileStream(const Filepath_char_t *filename);
+    FileStream(const Filepath_char_t* filename);
     ~FileStream() override;
-    unsigned long sread (unsigned char *buf, unsigned long size) override;
-    long stell () override;
-    long sseek (long offset, int origin) override;
+    unsigned long sread(unsigned char* buf, unsigned long size) override;
+    long stell() override;
+    long sseek(long offset, int origin) override;
+
 private:
-    FILE *file;
+    FILE* file;
 };
 
 #endif
