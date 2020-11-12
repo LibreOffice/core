@@ -434,18 +434,18 @@ namespace {
 struct ColumnItem
 {
     NSControl*      pControl;
-    long            nOffset;
+    CGFloat         nOffset;
     NSControl*      pSubControl;
     
-    ColumnItem( NSControl* i_pControl = nil, long i_nOffset = 0, NSControl* i_pSub = nil )
+    ColumnItem( NSControl* i_pControl = nil, CGFloat i_nOffset = 0, NSControl* i_pSub = nil )
     : pControl( i_pControl )
     , nOffset( i_nOffset )
     , pSubControl( i_pSub )
     {}
     
-    long getWidth() const
+    CGFloat getWidth() const
     {
-        long nWidth = 0;
+        CGFloat nWidth = 0;
         if( pControl )
         {
             NSRect aCtrlRect = [pControl frame];
@@ -472,17 +472,17 @@ static void adjustViewAndChildren( NSView* pNSView, NSSize& rMaxSize,
     // balance columns
 
     // first get overall column widths
-    long nLeftWidth = 0;
-    long nRightWidth = 0;
+    CGFloat nLeftWidth = 0;
+    CGFloat nRightWidth = 0;
     for( size_t i = 0; i < rLeftColumn.size(); i++ )
     {
-        long nW = rLeftColumn[i].getWidth();
+        CGFloat nW = rLeftColumn[i].getWidth();
         if( nW > nLeftWidth )
             nLeftWidth = nW;
     }
     for( size_t i = 0; i < rRightColumn.size(); i++ )
     {
-        long nW = rRightColumn[i].getWidth();
+        CGFloat nW = rRightColumn[i].getWidth();
         if( nW > nRightWidth )
             nRightWidth = nW;
     }
@@ -493,7 +493,7 @@ static void adjustViewAndChildren( NSView* pNSView, NSSize& rMaxSize,
         if( rLeftColumn[i].pControl )
         {
             NSRect aCtrlRect = [rLeftColumn[i].pControl frame];
-            long nX = nLeftWidth - aCtrlRect.size.width;
+            CGFloat nX = nLeftWidth - aCtrlRect.size.width;
             if( rLeftColumn[i].pSubControl )
             {
                 NSRect aSubRect = [rLeftColumn[i].pSubControl frame];
@@ -512,7 +512,7 @@ static void adjustViewAndChildren( NSView* pNSView, NSSize& rMaxSize,
         if( rRightColumn[i].pControl )
         {
             NSRect aCtrlRect = [rRightColumn[i].pControl frame];
-            long nX = nLeftWidth + 3;
+            CGFloat nX = nLeftWidth + 3;
             if( rRightColumn[i].pSubControl )
             {
                 NSRect aSubRect = [rRightColumn[i].pSubControl frame];
@@ -647,7 +647,7 @@ static void linebreakCell( NSCell* pBtn, const OUString& i_rText )
     }
 }
 
-static void addSubgroup( NSView* pCurParent, long& rCurY, const OUString& rText )
+static void addSubgroup( NSView* pCurParent, CGFloat& rCurY, const OUString& rText )
 {
     NSControl* pTextView = createLabel( rText );
     [pCurParent addSubview: [pTextView autorelease]];                
@@ -665,7 +665,7 @@ static void addSubgroup( NSView* pCurParent, long& rCurY, const OUString& rText 
     rCurY = aTextRect.origin.y - 5;
 }
 
-static void addBool( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOffset,
+static void addBool( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat nAttachOffset,
                     const OUString& rText, bool bEnabled,
                     const OUString& rProperty, bool bValue,
                     std::vector<ColumnItem >& rRightColumn,
@@ -673,7 +673,7 @@ static void addBool( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
                     ControlTarget* pCtrlTarget
                     )
 {
-    NSRect aCheckRect = { { static_cast<CGFloat>(rCurX + nAttachOffset), 0 }, { 0, 15 } };
+    NSRect aCheckRect = { { rCurX + nAttachOffset, 0 }, { 0, 15 } };
     NSButton* pBtn = [[NSButton alloc] initWithFrame: aCheckRect];
     [pBtn setButtonType: NSButtonTypeSwitch];                
     [pBtn setState: bValue ? NSControlStateValueOn : NSControlStateValueOff];
@@ -708,7 +708,7 @@ static void addBool( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
     rCurY = aCheckRect.origin.y - 5;
 }
 
-static void addRadio( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOffset,
+static void addRadio( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat nAttachOffset,
                      const OUString& rText,
                      const OUString& rProperty, Sequence<OUString> const & rChoices, sal_Int32 nSelectValue,
                      std::vector<ColumnItem >& rLeftColumn,
@@ -717,7 +717,7 @@ static void addRadio( NSView* pCurParent, long rCurX, long& rCurY, long nAttachO
                      ControlTarget* pCtrlTarget
                      )
 {
-    sal_Int32 nOff = 0;
+    CGFloat nOff = 0;
     if( rText.getLength() )
     {
         // add a label
@@ -742,8 +742,8 @@ static void addRadio( NSView* pCurParent, long rCurX, long& rCurY, long nAttachO
     // setup radio matrix
     NSButtonCell* pProto = [[NSButtonCell alloc] init];
     
-    NSRect aRadioRect = { { static_cast<CGFloat>(rCurX + nOff), 0 },
-                          { static_cast<CGFloat>(280 - rCurX),
+    NSRect aRadioRect = { { rCurX + nOff, 0 },
+                          { 280 - rCurX,
                             static_cast<CGFloat>(5*rChoices.getLength()) } };
     [pProto setTitle: @"RadioButtonGroup"];
     [pProto setButtonType: NSButtonTypeRadio];
@@ -784,7 +784,7 @@ static void addRadio( NSView* pCurParent, long rCurX, long& rCurY, long nAttachO
     [pProto release];
 }
 
-static void addList( NSView* pCurParent, long& rCurX, long& rCurY, long /*nAttachOffset*/,
+static void addList( NSView* pCurParent, CGFloat& rCurX, CGFloat& rCurY, CGFloat /*nAttachOffset*/,
                     const OUString& rText,
                     const OUString& rProperty, Sequence<OUString> const & rChoices, sal_Int32 nSelectValue,
                     std::vector<ColumnItem >& rLeftColumn,
@@ -844,7 +844,7 @@ static void addList( NSView* pCurParent, long& rCurX, long& rCurY, long /*nAttac
     rCurY = aBtnRect.origin.y - 5;
 }
 
-static void addEdit( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOffset,
+static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat nAttachOffset,
                     const OUString& rCtrlType,
                     const OUString& rText,
                     const OUString& rProperty, const PropertyValue* pValue,
@@ -855,7 +855,7 @@ static void addEdit( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
                     ControlTarget* pCtrlTarget
                     )
 {
-    sal_Int32 nOff = 0;
+    CGFloat nOff = 0;
     if( rText.getLength() )
     {
         // add a label
@@ -877,7 +877,7 @@ static void addEdit( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
         nOff = aTextRect.size.width + 5;
     }
     
-    NSRect aFieldRect = { { static_cast<CGFloat>(rCurX + nOff + nAttachOffset), 0 }, { 100, 25 } };
+    NSRect aFieldRect = { { rCurX + nOff + nAttachOffset, 0 }, { 100, 25 } };
     NSTextField* pFieldView = [[NSTextField alloc] initWithFrame: aFieldRect];
     [pFieldView setEditable: YES];
     [pFieldView setSelectable: YES];
@@ -994,8 +994,8 @@ static void addEdit( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
     [pAccessoryController withViewState: pState];
 
     NSView* pCurParent = nullptr;
-    long nCurY = 0;
-    long nCurX = 0;
+    CGFloat nCurY = 0;
+    CGFloat nCurX = 0;
     NSSize aMaxTabSize = NSZeroSize;
 
     ControllerProperties* pControllerProperties = new ControllerProperties( pAccessoryController );
@@ -1064,7 +1064,7 @@ static void addEdit( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
         Sequence< OUString > aChoices;
         bool bEnabled = true;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
-        long nAttachOffset = 0;
+        CGFloat nAttachOffset = 0;
         bool bIgnore = false;
 
         for( const beans::PropertyValue& rEntry : std::as_const(aOptProp) )
