@@ -23,6 +23,7 @@
 #include <vcl/print.hxx>
 #include <sal/macros.h>
 #include <osl/diagnose.h>
+#include <tools/long.hxx>
 
 #include <osx/salinst.h>
 #include <osx/salprn.h>
@@ -198,7 +199,7 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
     return bSuccess;
 }
 
-void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientation i_eSetOrientation )
+void AquaSalInfoPrinter::setPaperSize( tools::Long i_nWidth, tools::Long i_nHeight, Orientation i_eSetOrientation )
 {
 
     Orientation ePaperOrientation = Orientation::Portrait;
@@ -231,7 +232,7 @@ bool AquaSalInfoPrinter::SetData( JobSetFlags i_nFlags, ImplJobSetup* io_pSetupD
         if( i_nFlags & JobSetFlags::PAPERSIZE )
         {
             // set paper format
-            long width = 21000, height = 29700;
+            tools::Long width = 21000, height = 29700;
             if( io_pSetupData->GetPaperFormat() == PAPER_USER )
             {
                 // #i101108# sanity check
@@ -294,7 +295,7 @@ sal_uInt32 AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, PrinterCapT
 }
 
 void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
-                                  long& o_rOutWidth, long& o_rOutHeight,
+                                  tools::Long& o_rOutWidth, tools::Long& o_rOutHeight,
                                   Point& rPageOffset,
                                   Size& rPaperSize )
 {
@@ -306,20 +307,20 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                      fYScaling = static_cast<double>(nDPIY)/72.0;
 
         NSSize aPaperSize = [mpPrintInfo paperSize];
-        rPaperSize.setWidth( static_cast<long>( double(aPaperSize.width) * fXScaling ) );
-        rPaperSize.setHeight( static_cast<long>( double(aPaperSize.height) * fYScaling ) );
+        rPaperSize.setWidth( static_cast<tools::Long>( double(aPaperSize.width) * fXScaling ) );
+        rPaperSize.setHeight( static_cast<tools::Long>( double(aPaperSize.height) * fYScaling ) );
 
         NSRect aImageRect = [mpPrintInfo imageablePageBounds];
-        rPageOffset.setX( static_cast<long>( aImageRect.origin.x * fXScaling ) );
-        rPageOffset.setY( static_cast<long>( (aPaperSize.height - aImageRect.size.height - aImageRect.origin.y) * fYScaling ) );
-        o_rOutWidth   = static_cast<long>( aImageRect.size.width * fXScaling );
-        o_rOutHeight  = static_cast<long>( aImageRect.size.height * fYScaling );
+        rPageOffset.setX( static_cast<tools::Long>( aImageRect.origin.x * fXScaling ) );
+        rPageOffset.setY( static_cast<tools::Long>( (aPaperSize.height - aImageRect.size.height - aImageRect.origin.y) * fYScaling ) );
+        o_rOutWidth   = static_cast<tools::Long>( aImageRect.size.width * fXScaling );
+        o_rOutHeight  = static_cast<tools::Long>( aImageRect.size.height * fYScaling );
 
         if( mePageOrientation == Orientation::Landscape )
         {
             std::swap( o_rOutWidth, o_rOutHeight );
             // swap width and height
-            long n = rPaperSize.Width();
+            tools::Long n = rPaperSize.Width();
             rPaperSize.setWidth(rPaperSize.Height());
             rPaperSize.setHeight(n);
             // swap offset x and y
@@ -651,7 +652,7 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
     }
 }
 
-const PaperInfo* AquaSalInfoPrinter::matchPaper( long i_nWidth, long i_nHeight, Orientation& o_rOrientation ) const
+const PaperInfo* AquaSalInfoPrinter::matchPaper( tools::Long i_nWidth, tools::Long i_nHeight, Orientation& o_rOrientation ) const
 {
     if( ! m_bPapersInit )
         const_cast<AquaSalInfoPrinter*>(this)->InitPaperFormats( nullptr );

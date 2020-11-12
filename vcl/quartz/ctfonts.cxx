@@ -22,7 +22,7 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
+#include <tools/long.hxx>
 #include <vcl/settings.hxx>
 
 
@@ -135,10 +135,10 @@ bool CoreTextStyle::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRe
     if (mfFontRotation && !bVertical)
         aCGRect = CGRectApplyAffineTransform(aCGRect, CGAffineTransformMakeRotation(mfFontRotation));
 
-    long xMin = floor(aCGRect.origin.x);
-    long yMin = floor(aCGRect.origin.y);
-    long xMax = ceil(aCGRect.origin.x + aCGRect.size.width);
-    long yMax = ceil(aCGRect.origin.y + aCGRect.size.height);
+    tools::Long xMin = floor(aCGRect.origin.x);
+    tools::Long yMin = floor(aCGRect.origin.y);
+    tools::Long xMax = ceil(aCGRect.origin.x + aCGRect.size.width);
+    tools::Long yMax = ceil(aCGRect.origin.y + aCGRect.size.height);
     rRect = tools::Rectangle(xMin, -yMax, xMax, -yMin);
     return true;
 }
