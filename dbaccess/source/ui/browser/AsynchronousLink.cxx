@@ -22,25 +22,25 @@
 
 // OAsynchronousLink
 using namespace dbaui;
-OAsynchronousLink::OAsynchronousLink( const Link<void*,void>& _rHandler )
-    :m_aHandler(_rHandler)
-    ,m_aEventSafety()
-    ,m_aDestructionSafety()
-    ,m_nEventId(nullptr)
+OAsynchronousLink::OAsynchronousLink(const Link<void*, void>& _rHandler)
+    : m_aHandler(_rHandler)
+    , m_aEventSafety()
+    , m_aDestructionSafety()
+    , m_nEventId(nullptr)
 {
 }
 
 OAsynchronousLink::~OAsynchronousLink()
 {
     {
-        ::osl::MutexGuard aEventGuard( m_aEventSafety );
-        if ( m_nEventId )
+        ::osl::MutexGuard aEventGuard(m_aEventSafety);
+        if (m_nEventId)
             Application::RemoveUserEvent(m_nEventId);
         m_nEventId = nullptr;
     }
 
     {
-        ::osl::MutexGuard aDestructionGuard( m_aDestructionSafety );
+        ::osl::MutexGuard aDestructionGuard(m_aDestructionSafety);
         // this is just for the case we're deleted while another thread just handled the event :
         // if this other thread called our link while we were deleting the event here, the
         // link handler blocked. With leaving the above block it continued, but now we are prevented
@@ -48,28 +48,28 @@ OAsynchronousLink::~OAsynchronousLink()
     }
 }
 
-void OAsynchronousLink::Call( void* _pArgument )
+void OAsynchronousLink::Call(void* _pArgument)
 {
-    ::osl::MutexGuard aEventGuard( m_aEventSafety );
+    ::osl::MutexGuard aEventGuard(m_aEventSafety);
     if (m_nEventId)
         Application::RemoveUserEvent(m_nEventId);
-    m_nEventId = Application::PostUserEvent( LINK( this, OAsynchronousLink, OnAsyncCall ), _pArgument );
+    m_nEventId = Application::PostUserEvent(LINK(this, OAsynchronousLink, OnAsyncCall), _pArgument);
 }
 
 void OAsynchronousLink::CancelCall()
 {
-    ::osl::MutexGuard aEventGuard( m_aEventSafety );
-    if ( m_nEventId )
-        Application::RemoveUserEvent( m_nEventId );
+    ::osl::MutexGuard aEventGuard(m_aEventSafety);
+    if (m_nEventId)
+        Application::RemoveUserEvent(m_nEventId);
     m_nEventId = nullptr;
 }
 
 IMPL_LINK(OAsynchronousLink, OnAsyncCall, void*, _pArg, void)
 {
     {
-        ::osl::MutexGuard aDestructionGuard( m_aDestructionSafety );
+        ::osl::MutexGuard aDestructionGuard(m_aDestructionSafety);
         {
-            ::osl::MutexGuard aEventGuard( m_aEventSafety );
+            ::osl::MutexGuard aEventGuard(m_aEventSafety);
             if (!m_nEventId)
                 // our destructor deleted the event just while we are waiting for m_aEventSafety
                 // -> get outta here

@@ -33,7 +33,6 @@
 
 namespace dbaui
 {
-
 class OApplicationIconControlDropTarget final : public DropTargetHelper
 {
 private:
@@ -75,17 +74,16 @@ void OApplicationIconControl::Fill()
         const char* pLabelResId;
         ElementType eType;
         const char* aImageResId;
-    }   aCategories[] = {
-        { RID_STR_TABLES_CONTAINER,     E_TABLE,    BMP_TABLEFOLDER_TREE_L  },
-        { RID_STR_QUERIES_CONTAINER,    E_QUERY,    BMP_QUERYFOLDER_TREE_L  },
-        { RID_STR_FORMS_CONTAINER,      E_FORM,     BMP_FORMFOLDER_TREE_L   },
-        { RID_STR_REPORTS_CONTAINER,    E_REPORT,   BMP_REPORTFOLDER_TREE_L }
-    };
+    } aCategories[] = { { RID_STR_TABLES_CONTAINER, E_TABLE, BMP_TABLEFOLDER_TREE_L },
+                        { RID_STR_QUERIES_CONTAINER, E_QUERY, BMP_QUERYFOLDER_TREE_L },
+                        { RID_STR_FORMS_CONTAINER, E_FORM, BMP_FORMFOLDER_TREE_L },
+                        { RID_STR_REPORTS_CONTAINER, E_REPORT, BMP_REPORTFOLDER_TREE_L } };
 
     for (const CategoryDescriptor& aCategorie : aCategories)
     {
         // E_TABLE is 0, but 0 means void so use id of enum + 1
-        std::unique_ptr<ThumbnailViewItem> xItem(new ThumbnailViewItem(*this, aCategorie.eType + 1));
+        std::unique_ptr<ThumbnailViewItem> xItem(
+            new ThumbnailViewItem(*this, aCategorie.eType + 1));
         xItem->mbBorder = false;
         xItem->maPreview1 = BitmapEx(OUString::createFromAscii(aCategorie.aImageResId));
         const Size& rSize = xItem->maPreview1.GetSizePixel();
@@ -186,7 +184,8 @@ sal_Int8 OApplicationIconControl::AcceptDrop(const AcceptDropEvent& rEvt)
         {
             deselectItems();
             SelectItem(nEntry);
-            nDropOption = m_pActionListener->queryDrop(rEvt, m_xDropTarget->GetDataFlavorExVector());
+            nDropOption
+                = m_pActionListener->queryDrop(rEvt, m_xDropTarget->GetDataFlavorExVector());
         }
     }
     return nDropOption;
@@ -199,9 +198,7 @@ sal_Int8 OApplicationIconControl::ExecuteDrop(const ExecuteDropEvent& rEvt)
     return DND_ACTION_NONE;
 }
 
-OApplicationIconControl::~OApplicationIconControl()
-{
-}
+OApplicationIconControl::~OApplicationIconControl() {}
 
 void OApplicationIconControl::GetFocus()
 {
@@ -236,7 +233,6 @@ tools::Rectangle OApplicationIconControl::GetFocusRect()
     }
     return tools::Rectangle();
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,7 +32,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-OApplicationSwapWindow::OApplicationSwapWindow(weld::Container* pParent, OAppBorderWindow& rBorderWindow)
+OApplicationSwapWindow::OApplicationSwapWindow(weld::Container* pParent,
+                                               OAppBorderWindow& rBorderWindow)
     : OChildWindow(pParent, "dbaccess/ui/appswapwindow.ui", "AppSwapWindow")
     , m_xIconControl(new OApplicationIconControl(m_xBuilder->weld_scrolled_window("scroll", true)))
     , m_xIconControlWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xIconControl))
@@ -45,7 +46,7 @@ OApplicationSwapWindow::OApplicationSwapWindow(weld::Container* pParent, OAppBor
     m_xIconControl->SetHelpId(HID_APP_SWAP_ICONCONTROL);
     m_xIconControl->Fill();
     m_xIconControl->setItemStateHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
-    m_xIconControl->setControlActionListener( &m_rBorderWin.getView()->getAppController() );
+    m_xIconControl->setControlActionListener(&m_rBorderWin.getView()->getAppController());
 }
 
 void OApplicationSwapWindow::GrabFocus()
@@ -76,11 +77,11 @@ void OApplicationSwapWindow::createIconAutoMnemonics(MnemonicGenerator& rMnemoni
     m_xIconControl->createIconAutoMnemonics(rMnemonics);
 }
 
-bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
+bool OApplicationSwapWindow::interceptKeyInput(const KeyEvent& _rEvent)
 {
     const vcl::KeyCode& rKeyCode = _rEvent.GetKeyCode();
-    if ( rKeyCode.GetModifier() == KEY_MOD2 )
-        return m_xIconControl->DoKeyShortCut( _rEvent );
+    if (rKeyCode.GetModifier() == KEY_MOD2)
+        return m_xIconControl->DoKeyShortCut(_rEvent);
     // not handled
     return false;
 }
@@ -90,20 +91,21 @@ ElementType OApplicationSwapWindow::getElementType() const
     return m_xIconControl->GetSelectedItem();
 }
 
-bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
+bool OApplicationSwapWindow::onContainerSelected(ElementType _eType)
 {
-    if ( m_eLastType == _eType )
+    if (m_eLastType == _eType)
         return true;
 
-    if ( m_rBorderWin.getView()->getAppController().onContainerSelect( _eType ) )
+    if (m_rBorderWin.getView()->getAppController().onContainerSelect(_eType))
     {
-        if ( _eType != E_NONE )
+        if (_eType != E_NONE)
             m_eLastType = _eType;
         return true;
     }
 
     if (!m_nChangeEvent)
-        m_nChangeEvent = Application::PostUserEvent(LINK(this, OApplicationSwapWindow, ChangeToLastSelected));
+        m_nChangeEvent
+            = Application::PostUserEvent(LINK(this, OApplicationSwapWindow, ChangeToLastSelected));
     return false;
 }
 
@@ -112,7 +114,7 @@ IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, const ThumbnailViewItem*
     if (pEntry->mbSelected)
     {
         ElementType eType = static_cast<ElementType>(pEntry->mnId - 1);
-        onContainerSelected( eType ); // i87582
+        onContainerSelected(eType); // i87582
     }
 }
 

@@ -56,7 +56,7 @@ IMPL_LINK_NOARG(OQueryTextView, ModifyHdl, LinkParamNone*, void)
     m_timerUndoActionCreation.Start();
 
     if (!m_rController.isModified())
-        m_rController.setModified( true );
+        m_rController.setModified(true);
 
     m_rController.InvalidateFeature(SID_SBA_QRY_EXECUTE);
     m_rController.InvalidateFeature(SID_CUT);
@@ -103,10 +103,7 @@ void OQueryTextView::stopTimer()
         m_timerInvalidate.Stop();
 }
 
-OQueryTextView::~OQueryTextView()
-{
-    disposeOnce();
-}
+OQueryTextView::~OQueryTextView() { disposeOnce(); }
 
 void OQueryTextView::dispose()
 {
@@ -128,30 +125,21 @@ void OQueryTextView::GetFocus()
     InterimItemWindow::GetFocus();
 }
 
-OUString OQueryTextView::getStatement() const
-{
-    return m_xSQL->GetText();
-}
+OUString OQueryTextView::getStatement() const { return m_xSQL->GetText(); }
 
 void OQueryTextView::clear()
 {
     std::unique_ptr<OSqlEditUndoAct> xUndoAct(new OSqlEditUndoAct(*this));
 
     xUndoAct->SetOriginalText(m_xSQL->GetText());
-    m_rController.addUndoActionAndInvalidate( std::move(xUndoAct) );
+    m_rController.addUndoActionAndInvalidate(std::move(xUndoAct));
 
     SetSQLText(OUString());
 }
 
-void OQueryTextView::setStatement(const OUString& rsStatement)
-{
-    SetSQLText(rsStatement);
-}
+void OQueryTextView::setStatement(const OUString& rsStatement) { SetSQLText(rsStatement); }
 
-OUString OQueryTextView::GetSQLText() const
-{
-    return m_xSQL->GetText();
-}
+OUString OQueryTextView::GetSQLText() const { return m_xSQL->GetText(); }
 
 void OQueryTextView::SetSQLText(const OUString& rNewText)
 {
@@ -167,15 +155,9 @@ void OQueryTextView::SetSQLText(const OUString& rNewText)
     m_strOrigText = rNewText;
 }
 
-void OQueryTextView::copy()
-{
-    m_xSQL->Copy();
-}
+void OQueryTextView::copy() { m_xSQL->Copy(); }
 
-bool OQueryTextView::isCutAllowed() const
-{
-    return m_xSQL->HasSelection();
-}
+bool OQueryTextView::isCutAllowed() const { return m_xSQL->HasSelection(); }
 
 void OQueryTextView::cut()
 {

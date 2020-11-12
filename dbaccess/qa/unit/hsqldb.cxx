@@ -16,8 +16,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-class HSQLDBTest
-    : public DBTestBase
+class HSQLDBTest : public DBTestBase
 {
 public:
     void testEmptyDBConnection();
@@ -34,13 +33,11 @@ public:
 void HSQLDBTest::testEmptyDBConnection()
 {
     auto const file = createTempCopy("hsqldb_empty.odb");
-    uno::Reference< XOfficeDatabaseDocument > xDocument =
-        getDocumentForUrl(file.GetURL());
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(file.GetURL());
 
     getConnectionForDocument(xDocument);
 
-    css::uno::Reference<css::lang::XComponent>(
-        xDocument, css::uno::UNO_QUERY_THROW)->dispose();
+    css::uno::Reference<css::lang::XComponent>(xDocument, css::uno::UNO_QUERY_THROW)->dispose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HSQLDBTest);

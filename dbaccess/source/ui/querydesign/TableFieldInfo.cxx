@@ -21,13 +21,12 @@
 
 using namespace dbaui;
 
-OTableFieldInfo::OTableFieldInfo()  :
-    m_eFieldType(TAB_NORMAL_FIELD), m_eDataType(1000)
+OTableFieldInfo::OTableFieldInfo()
+    : m_eFieldType(TAB_NORMAL_FIELD)
+    , m_eDataType(1000)
 {
 }
 
-OTableFieldInfo::~OTableFieldInfo()
-{
-}
+OTableFieldInfo::~OTableFieldInfo() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

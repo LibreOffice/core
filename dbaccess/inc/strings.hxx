@@ -167,7 +167,6 @@
 #define PROPERTY_SINGLESELECTQUERYCOMPOSER "SingleSelectQueryComposer"
 #define PROPERTY_CHANGE_NOTIFICATION_ENABLED "PropertyChangeNotificationEnabled"
 
-
 // service names
 
 #define SERVICE_SDBC_RESULTSET "com.sun.star.sdbc.ResultSet"
@@ -241,31 +240,31 @@
 
 // URLs
 
-#define URL_COMPONENT_QUERYDESIGN         ".component:DB/QueryDesign"
-#define URL_COMPONENT_VIEWDESIGN          ".component:DB/ViewDesign"
-#define URL_COMPONENT_TABLEDESIGN         ".component:DB/TableDesign"
-#define URL_COMPONENT_FORMGRIDVIEW        ".component:DB/FormGridView"
-#define URL_COMPONENT_DATASOURCEBROWSER   ".component:DB/DataSourceBrowser"
-#define URL_COMPONENT_RELATIONDESIGN      ".component:DB/RelationDesign"
-#define URL_COMPONENT_APPLICATION         ".component:DB/Application"
-#define URL_COMPONENT_REPORTDESIGN        ".component:DB/ReportDesign"
+#define URL_COMPONENT_QUERYDESIGN ".component:DB/QueryDesign"
+#define URL_COMPONENT_VIEWDESIGN ".component:DB/ViewDesign"
+#define URL_COMPONENT_TABLEDESIGN ".component:DB/TableDesign"
+#define URL_COMPONENT_FORMGRIDVIEW ".component:DB/FormGridView"
+#define URL_COMPONENT_DATASOURCEBROWSER ".component:DB/DataSourceBrowser"
+#define URL_COMPONENT_RELATIONDESIGN ".component:DB/RelationDesign"
+#define URL_COMPONENT_APPLICATION ".component:DB/Application"
+#define URL_COMPONENT_REPORTDESIGN ".component:DB/ReportDesign"
 
 // service names
 
-#define SERVICE_SDB_DIRECTSQLDIALOG       "org.openoffice.comp.dbu.DirectSqlDialog"
+#define SERVICE_SDB_DIRECTSQLDIALOG "org.openoffice.comp.dbu.DirectSqlDialog"
 
 // other DBU relevant strings
 
-#define FRAME_NAME_QUERY_PREVIEW          "QueryPreview"
-#define SERVICE_CONTROLDEFAULT            "com.sun.star.comp.dbu.OColumnControl"
-#define PROPERTY_QUERYDESIGNVIEW          "QueryDesignView"
-#define PROPERTY_GRAPHICAL_DESIGN         "GraphicalDesign"
-#define PROPERTY_HELP_URL                 "HelpURL"
+#define FRAME_NAME_QUERY_PREVIEW "QueryPreview"
+#define SERVICE_CONTROLDEFAULT "com.sun.star.comp.dbu.OColumnControl"
+#define PROPERTY_QUERYDESIGNVIEW "QueryDesignView"
+#define PROPERTY_GRAPHICAL_DESIGN "GraphicalDesign"
+#define PROPERTY_HELP_URL "HelpURL"
 
 // other DBU properties
 
-#define PROPERTY_TRISTATE         "TriState"
-#define PROPERTY_ENABLEOUTERJOIN  "EnableOuterJoinEscape"
+#define PROPERTY_TRISTATE "TriState"
+#define PROPERTY_ENABLEOUTERJOIN "EnableOuterJoinEscape"
 #define PROPERTY_TABSTOP "TabStop"
 #define PROPERTY_DEFAULTCONTROL "DefaultControl"
 #define PROPERTY_ENABLED "Enabled"
@@ -274,8 +273,8 @@
 #define SQLSTATE_GENERAL "01000"
 
 #define PROPERTY_APPLYFORMDESIGNMODE "ApplyFormDesignMode"
-#define PROPERTY_IS_FORM             "IsForm"
-#define PROPERTY_PERSISTENT_PATH     "PersistentPath"
+#define PROPERTY_IS_FORM "IsForm"
+#define PROPERTY_PERSISTENT_PATH "PersistentPath"
 
 #define STR_AUTOTEXTSEPARATORLIST "\"\t34\t'\t39"
 

@@ -25,12 +25,10 @@ public:
     CPPUNIT_TEST_SUITE(DBAccessTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST_SUITE_END();
-
 };
 
-
 DBAccessTest::DBAccessTest()
-      : UnoApiTest("/dbaccess/qa/extras/testdocuments")
+    : UnoApiTest("/dbaccess/qa/extras/testdocuments")
 {
 }
 
@@ -38,7 +36,7 @@ void DBAccessTest::test()
 {
     OUString aFileName;
     createFileURL("testdb.odb", aFileName);
-    uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop(aFileName);
     CPPUNIT_ASSERT(xComponent.is());
     xComponent->dispose();
 }

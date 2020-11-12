@@ -28,15 +28,13 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace connectivity;
 
-OSharedConnection::OSharedConnection(Reference< XAggregation >& _rxProxyConnection)
-            : OSharedConnection_BASE(m_aMutex)
+OSharedConnection::OSharedConnection(Reference<XAggregation>& _rxProxyConnection)
+    : OSharedConnection_BASE(m_aMutex)
 {
-    setDelegation(_rxProxyConnection,m_refCount);
+    setDelegation(_rxProxyConnection, m_refCount);
 }
 
-OSharedConnection::~OSharedConnection()
-{
-}
+OSharedConnection::~OSharedConnection() {}
 
 void SAL_CALL OSharedConnection::disposing()
 {
@@ -44,114 +42,113 @@ void SAL_CALL OSharedConnection::disposing()
     OConnectionWrapper::disposing();
 }
 
-Reference< XStatement > SAL_CALL OSharedConnection::createStatement(  )
+Reference<XStatement> SAL_CALL OSharedConnection::createStatement()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
     return m_xConnection->createStatement();
 }
 
-Reference< XPreparedStatement > SAL_CALL OSharedConnection::prepareStatement( const OUString& sql )
+Reference<XPreparedStatement> SAL_CALL OSharedConnection::prepareStatement(const OUString& sql)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
     return m_xConnection->prepareStatement(sql);
 }
 
-Reference< XPreparedStatement > SAL_CALL OSharedConnection::prepareCall( const OUString& sql )
+Reference<XPreparedStatement> SAL_CALL OSharedConnection::prepareCall(const OUString& sql)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
     return m_xConnection->prepareCall(sql);
 }
 
-OUString SAL_CALL OSharedConnection::nativeSQL( const OUString& sql )
+OUString SAL_CALL OSharedConnection::nativeSQL(const OUString& sql)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
     return m_xConnection->nativeSQL(sql);
 }
 
-sal_Bool SAL_CALL OSharedConnection::getAutoCommit(  )
+sal_Bool SAL_CALL OSharedConnection::getAutoCommit()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
     return m_xConnection->getAutoCommit();
 }
 
-void SAL_CALL OSharedConnection::commit(  )
+void SAL_CALL OSharedConnection::commit()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
     m_xConnection->commit();
 }
 
-void SAL_CALL OSharedConnection::rollback(  )
+void SAL_CALL OSharedConnection::rollback()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
     m_xConnection->rollback();
 }
 
-sal_Bool SAL_CALL OSharedConnection::isClosed(  )
+sal_Bool SAL_CALL OSharedConnection::isClosed()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if ( !m_xConnection.is() )
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if (!m_xConnection.is())
         return true;
 
     return m_xConnection->isClosed();
 }
 
-Reference< XDatabaseMetaData > SAL_CALL OSharedConnection::getMetaData(  )
+Reference<XDatabaseMetaData> SAL_CALL OSharedConnection::getMetaData()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-
 
     return m_xConnection->getMetaData();
 }
 
-sal_Bool SAL_CALL OSharedConnection::isReadOnly(  )
+sal_Bool SAL_CALL OSharedConnection::isReadOnly()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
     return m_xConnection->isReadOnly();
 }
 
-OUString SAL_CALL OSharedConnection::getCatalog(  )
+OUString SAL_CALL OSharedConnection::getCatalog()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
     return m_xConnection->getCatalog();
 }
 
-sal_Int32 SAL_CALL OSharedConnection::getTransactionIsolation(  )
+sal_Int32 SAL_CALL OSharedConnection::getTransactionIsolation()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
     return m_xConnection->getTransactionIsolation();
 }
 
-Reference< css::container::XNameAccess > SAL_CALL OSharedConnection::getTypeMap(  )
+Reference<css::container::XNameAccess> SAL_CALL OSharedConnection::getTypeMap()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
     return m_xConnection->getTypeMap();
 }
 
-IMPLEMENT_GET_IMPLEMENTATION_ID( OSharedConnection )
+IMPLEMENT_GET_IMPLEMENTATION_ID(OSharedConnection)
 
-}   // namespace dbaccess
+} // namespace dbaccess
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

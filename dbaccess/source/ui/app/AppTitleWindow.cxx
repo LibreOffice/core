@@ -23,7 +23,6 @@
 
 namespace dbaui
 {
-
 OTitleWindow::OTitleWindow(weld::Container* pParent, const char* pTitleId)
     : m_xBuilder(Application::CreateBuilder(pParent, "dbaccess/ui/titlewindow.ui"))
     , m_xContainer(m_xBuilder->weld_container("TitleWindow"))
@@ -38,14 +37,9 @@ OTitleWindow::OTitleWindow(weld::Container* pParent, const char* pTitleId)
     m_xTitle->set_label_type(weld::LabelType::Title);
 }
 
-OTitleWindow::~OTitleWindow()
-{
-}
+OTitleWindow::~OTitleWindow() {}
 
-weld::Container* OTitleWindow::getChildContainer()
-{
-    return m_xChildContainer.get();
-}
+weld::Container* OTitleWindow::getChildContainer() { return m_xChildContainer.get(); }
 
 void OTitleWindow::setChildWindow(const std::shared_ptr<OChildWindow>& rChild)
 {
@@ -65,10 +59,7 @@ void OTitleWindow::GrabFocus()
         m_xChild->GrabFocus();
 }
 
-bool OTitleWindow::HasChildPathFocus() const
-{
-    return m_xChild && m_xChild->HasChildPathFocus();
-}
+bool OTitleWindow::HasChildPathFocus() const { return m_xChild && m_xChild->HasChildPathFocus(); }
 
 } // namespace dbaui
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

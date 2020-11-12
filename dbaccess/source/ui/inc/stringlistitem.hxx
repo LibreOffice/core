@@ -26,24 +26,23 @@
 
 namespace dbaui
 {
-
 // OStringListItem
 /** <type>SfxPoolItem</type> which transports a sequence of <type scope="rtl">OUString</type>'s
 */
 class OStringListItem : public SfxPoolItem
 {
-    css::uno::Sequence< OUString >      m_aList;
+    css::uno::Sequence<OUString> m_aList;
 
 public:
-    OStringListItem(sal_Int16 nWhich, const css::uno::Sequence< OUString >& _rList);
+    OStringListItem(sal_Int16 nWhich, const css::uno::Sequence<OUString>& _rList);
     OStringListItem(const OStringListItem& _rSource);
 
-    virtual bool             operator==(const SfxPoolItem& _rItem) const override;
+    virtual bool operator==(const SfxPoolItem& _rItem) const override;
     virtual OStringListItem* Clone(SfxItemPool* _pPool = nullptr) const override;
 
-    const css::uno::Sequence< OUString >& getList() const { return m_aList; }
+    const css::uno::Sequence<OUString>& getList() const { return m_aList; }
 };
 
-}   // namespace dbaui
+} // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,7 @@
 
 namespace SvtDocInfoTable_Impl
 {
-    OUString GetString(int nId);
+OUString GetString(int nId);
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,16 +29,16 @@ using namespace dbaui;
 OQueryTabConnUndoAction::~OQueryTabConnUndoAction()
 {
     if (m_bOwnerOfConn)
-    {   // I have the connection -> delete
+    { // I have the connection -> delete
         m_pOwner->DeselectConn(m_pConnection);
         m_pConnection.disposeAndClear();
     }
 }
 
 OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, const char* pCommentID)
-    :OQueryDesignUndoAction(pOwner, pCommentID)
-    ,m_pConnection(nullptr)
-    ,m_bOwnerOfConn(false)
+    : OQueryDesignUndoAction(pOwner, pCommentID)
+    , m_pConnection(nullptr)
+    , m_bOwnerOfConn(false)
 {
 }
 
@@ -77,13 +77,11 @@ void OQueryDelTabConnUndoAction::Redo()
 }
 
 OQueryTabWinShowUndoAct::OQueryTabWinShowUndoAct(OQueryTableView* pOwner)
- : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINSHOW)
+    : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINSHOW)
 {
 }
 
-OQueryTabWinShowUndoAct::~OQueryTabWinShowUndoAct()
-{
-}
+OQueryTabWinShowUndoAct::~OQueryTabWinShowUndoAct() {}
 
 void OQueryTabWinShowUndoAct::Undo()
 {
@@ -93,28 +91,26 @@ void OQueryTabWinShowUndoAct::Undo()
 
 void OQueryTabWinShowUndoAct::Redo()
 {
-    static_cast<OQueryTableView*>(m_pOwner.get())->ShowTabWin(m_pTabWin, this,true);
+    static_cast<OQueryTableView*>(m_pOwner.get())->ShowTabWin(m_pTabWin, this, true);
     SetOwnership(false);
 }
 
 OQueryTabWinDelUndoAct::OQueryTabWinDelUndoAct(OQueryTableView* pOwner)
- : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINDELETE)
+    : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINDELETE)
 {
 }
 
-OQueryTabWinDelUndoAct::~OQueryTabWinDelUndoAct()
-{
-}
+OQueryTabWinDelUndoAct::~OQueryTabWinDelUndoAct() {}
 
 void OQueryTabWinDelUndoAct::Undo()
 {
-    static_cast<OQueryTableView*>(m_pOwner.get())->ShowTabWin( m_pTabWin, this,true );
+    static_cast<OQueryTableView*>(m_pOwner.get())->ShowTabWin(m_pTabWin, this, true);
     SetOwnership(false);
 }
 
 void OQueryTabWinDelUndoAct::Redo()
 {
-    static_cast<OQueryTableView*>(m_pOwner.get())->HideTabWin( m_pTabWin, this );
+    static_cast<OQueryTableView*>(m_pOwner.get())->HideTabWin(m_pTabWin, this);
     SetOwnership(true);
 }
 

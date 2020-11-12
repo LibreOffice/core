@@ -21,19 +21,18 @@
 
 namespace dbaui
 {
-
 using namespace ::com::sun::star::uno;
 
 // OStringListItem
-OStringListItem::OStringListItem(sal_Int16 _nWhich, const Sequence< OUString >& _rList)
-    :SfxPoolItem(_nWhich)
-    ,m_aList(_rList)
+OStringListItem::OStringListItem(sal_Int16 _nWhich, const Sequence<OUString>& _rList)
+    : SfxPoolItem(_nWhich)
+    , m_aList(_rList)
 {
 }
 
 OStringListItem::OStringListItem(const OStringListItem& _rSource)
-    :SfxPoolItem(_rSource)
-    ,m_aList(_rSource.m_aList)
+    : SfxPoolItem(_rSource)
+    , m_aList(_rSource.m_aList)
 {
 }
 
@@ -41,12 +40,12 @@ bool OStringListItem::operator==(const SfxPoolItem& _rItem) const
 {
     if (!SfxPoolItem::operator==(_rItem))
         return false;
-    const OStringListItem* pCompare = static_cast<const OStringListItem*>( &_rItem );
+    const OStringListItem* pCompare = static_cast<const OStringListItem*>(&_rItem);
     if (pCompare->m_aList.getLength() != m_aList.getLength())
         return false;
 
     // compare all strings individually
-    for (sal_Int32 i=0; i<m_aList.getLength(); ++i)
+    for (sal_Int32 i = 0; i < m_aList.getLength(); ++i)
         if (m_aList[i] != pCompare->m_aList[i])
             return false;
 
@@ -58,6 +57,6 @@ OStringListItem* OStringListItem::Clone(SfxItemPool* /* _pPool */) const
     return new OStringListItem(*this);
 }
 
-}   // namespace dbaui
+} // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
