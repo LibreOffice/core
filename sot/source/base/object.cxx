@@ -61,9 +61,6 @@ bool SotObject::DoClose()
     return bRet;
 }
 
-bool SotObject::Close()
-{
-    return true;
-}
+bool SotObject::Close() { return true; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
