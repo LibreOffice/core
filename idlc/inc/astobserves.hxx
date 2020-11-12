@@ -27,12 +27,13 @@ public:
     AstObserves(AstInterface* pRealInterface, const OString& name, AstScope* pScope)
         : AstDeclaration(NT_observes, name, pScope)
         , m_pRealInterface(pRealInterface)
-        {}
+    {
+    }
 
-    AstInterface* getRealInterface()
-        { return m_pRealInterface; }
+    AstInterface* getRealInterface() { return m_pRealInterface; }
+
 private:
-    AstInterface*   m_pRealInterface;
+    AstInterface* m_pRealInterface;
 };
 
 #endif // INCLUDED_IDLC_INC_ASTOBSERVES_HXX

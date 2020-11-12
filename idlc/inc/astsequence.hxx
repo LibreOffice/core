@@ -24,20 +24,23 @@
 class AstSequence final : public AstType
 {
 public:
-    AstSequence(AstType const * pMemberType, AstScope* pScope)
-        : AstType(NT_sequence, OStringLiteral("[]")+pMemberType->getScopedName(), pScope)
+    AstSequence(AstType const* pMemberType, AstScope* pScope)
+        : AstType(NT_sequence, OStringLiteral("[]") + pMemberType->getScopedName(), pScope)
         , m_pMemberType(pMemberType)
-    {}
+    {
+    }
 
-    AstType const * getMemberType() const
-        { return m_pMemberType; }
+    AstType const* getMemberType() const { return m_pMemberType; }
 
     virtual bool isUnsigned() const override
-    { return m_pMemberType != nullptr && m_pMemberType->isUnsigned(); }
+    {
+        return m_pMemberType != nullptr && m_pMemberType->isUnsigned();
+    }
 
     virtual const char* getRelativName() const override;
+
 private:
-    AstType const * m_pMemberType;
+    AstType const* m_pMemberType;
     mutable std::optional<OString> m_xRelativName;
 };
 

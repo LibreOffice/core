@@ -23,23 +23,21 @@
 #include "astscope.hxx"
 #include "astconstant.hxx"
 
-class AstEnum final : public AstType
-              , public AstScope
+class AstEnum final : public AstType, public AstScope
 {
 public:
     AstEnum(const OString& name, AstScope* pScope);
 
     virtual ~AstEnum() override;
 
-    sal_Int32 getEnumValueCount()
-        { return m_enumValueCount++; }
+    sal_Int32 getEnumValueCount() { return m_enumValueCount++; }
 
     AstConstant* checkValue(AstExpression* pExpr);
 
     virtual bool dump(RegistryKey& rKey) override;
 
 private:
-    sal_Int32   m_enumValueCount;
+    sal_Int32 m_enumValueCount;
 };
 
 #endif // INCLUDED_IDLC_INC_ASTENUM_HXX

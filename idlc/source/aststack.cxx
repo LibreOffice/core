@@ -21,16 +21,13 @@
 #include <aststack.hxx>
 #include <astscope.hxx>
 
-AstStack::AstStack()
-{
-}
+AstStack::AstStack() {}
 
 AstStack::~AstStack()
 {
     for (AstScope* p : m_stack)
         delete p;
 }
-
 
 AstScope* AstStack::top()
 {
@@ -58,7 +55,7 @@ AstScope* AstStack::topNonNull()
 {
     for (sal_uInt32 i = m_stack.size(); i > 0; i--)
     {
-        if ( m_stack[i - 1] )
+        if (m_stack[i - 1])
             return m_stack[i - 1];
     }
     return nullptr;
@@ -77,9 +74,6 @@ void AstStack::pop()
     m_stack.pop_back();
 }
 
-void AstStack::clear()
-{
-   m_stack.clear();
-}
+void AstStack::clear() { m_stack.clear(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
