@@ -69,39 +69,6 @@ css::uno::Reference<css::graphic::XGraphic> Tools::GetImage(
     return nullptr;
 }
 
-css::awt::Gradient Tools::VclToAwtGradient (const Gradient& rVclGradient)
-{
-    css::awt::Gradient aAwtGradient (
-        awt::GradientStyle(rVclGradient.GetStyle()),
-        sal_Int32(rVclGradient.GetStartColor().GetRGBColor()),
-        sal_Int32(rVclGradient.GetEndColor().GetRGBColor()),
-        rVclGradient.GetAngle().get(),
-        rVclGradient.GetBorder(),
-        rVclGradient.GetOfsX(),
-        rVclGradient.GetOfsY(),
-        rVclGradient.GetStartIntensity(),
-        rVclGradient.GetEndIntensity(),
-        rVclGradient.GetSteps());
-    return aAwtGradient;
-}
-
-Gradient Tools::AwtToVclGradient (const css::awt::Gradient& rAwtGradient)
-{
-    Gradient aVclGradient (
-        GradientStyle(rAwtGradient.Style),
-        Color(rAwtGradient.StartColor),
-        Color(rAwtGradient.EndColor));
-    aVclGradient.SetAngle(Degree10(rAwtGradient.Angle));
-    aVclGradient.SetBorder(rAwtGradient.Border);
-    aVclGradient.SetOfsX(rAwtGradient.XOffset);
-    aVclGradient.SetOfsY(rAwtGradient.YOffset);
-    aVclGradient.SetStartIntensity(rAwtGradient.StartIntensity);
-    aVclGradient.SetEndIntensity(rAwtGradient.EndIntensity);
-    aVclGradient.SetSteps(rAwtGradient.StepCount);
-
-    return aVclGradient;
-}
-
 util::URL Tools::GetURL (const OUString& rsCommand)
 {
     util::URL aURL;

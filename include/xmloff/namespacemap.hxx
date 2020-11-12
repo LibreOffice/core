@@ -135,8 +135,6 @@ public:
 /* deprecated */ const OUString& GetPrefixByIndex( sal_uInt16 nIdx ) const;
 /* deprecated */ const OUString& GetNameByIndex( sal_uInt16 nIdx ) const;
 /* deprecated */ OUString GetAttrNameByIndex( sal_uInt16 nIdx ) const;
-/* deprecated */ OUString GetQNameByIndex( sal_uInt16 nIdx,
-                            const OUString& rLocalName ) const;
                  sal_uInt16 GetKeyByAttrName( const OUString& rAttrName,
                              OUString *pPrefix,
                              OUString *pLocalName,

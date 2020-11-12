@@ -69,8 +69,6 @@ namespace xmloff
             SvXMLImport& _rImport,
             sal_uInt16 _nPrefix,
             const OUString& _rLocalName);
-        static SvXMLImportContext* createOfficeFormsContext(
-            SvXMLImport& _rImport);
 
         /** create an SvXMLImportContext instance which is able to import the &lt;form:form&gt;
             element.

@@ -58,7 +58,6 @@ namespace xmloff
         OElementNameMap() = delete;
 
     public:
-        static ElementType getElementType(const OUString& _rName);
         static ElementType getElementType(sal_Int32 nToken);
     };
 
@@ -140,11 +139,6 @@ namespace xmloff
             @see encounteredAttribute
         */
         void        simulateDefaultedAttribute(sal_Int32 nElement, const OUString& _rPropertyName, const char* _pAttributeDefault);
-
-        /** to be called from within handleAttribute, checks whether the given attribute is covered by our generic
-            attribute handler mechanisms
-        */
-        bool        tryGenericAttribute( sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue );
 
         /** to be called from within handleAttribute, checks whether the given attribute is covered by our generic
             attribute handler mechanisms
@@ -547,9 +541,6 @@ namespace xmloff
                     m_xColumnFactory;
 
     public:
-        OColumnImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_Int32 nElement,
-                const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
-                OControlElement::ElementType _eType);
         OColumnImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
                 const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
                 OControlElement::ElementType _eType);
@@ -638,10 +629,6 @@ namespace xmloff
         virtual css::uno::Reference< css::beans::XPropertySet >
                         createElement() override;
 
-        OControlImport* implCreateChildContext(
-                sal_uInt16 _nPrefix, const OUString& _rLocalName,
-                OControlElement::ElementType _eType );
-
         virtual OUString determineDefaultServiceName() const override;
         void implTranslateStringListProperty(const OUString& _rPropertyName, const OUString& _rValue);
 
@@ -658,17 +645,6 @@ namespace xmloff
     };
 
     //= OColumnImport
-    template <class BASE>
-    OColumnImport< BASE >::OColumnImport(OFormLayerXMLImport_Impl& _rImport,
-            IEventAttacherManager& _rEventManager,
-            sal_Int32 _nElement,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
-            OControlElement::ElementType _eType)
-        :BASE(_rImport, _rEventManager, _nElement, _rxParentContainer, _eType)
-        ,m_xColumnFactory(_rxParentContainer, css::uno::UNO_QUERY)
-    {
-        OSL_ENSURE(m_xColumnFactory.is(), "OColumnImport::OColumnImport: invalid parent container (no factory)!");
-    }
     template <class BASE>
     OColumnImport< BASE >::OColumnImport(OFormLayerXMLImport_Impl& _rImport,
             IEventAttacherManager& _rEventManager,

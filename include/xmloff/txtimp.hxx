@@ -411,7 +411,6 @@ public:
     const SvXMLTokenMap& GetTextNumberedParagraphAttrTokenMap();
     const SvXMLTokenMap& GetTextListBlockAttrTokenMap();
     const SvXMLTokenMap& GetTextListBlockElemTokenMap();
-    const SvXMLTokenMap& GetTextFieldAttrTokenMap(); // impl: txtfldi.cxx
 
     css::uno::Reference< css::text::XText > & GetText();
     css::uno::Reference< css::text::XTextCursor > & GetCursor();

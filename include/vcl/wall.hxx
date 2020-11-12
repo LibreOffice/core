@@ -67,7 +67,6 @@ public:
                     Wallpaper( Wallpaper&& rWallpaper );
                     Wallpaper( const Color& rColor );
                     explicit Wallpaper( const BitmapEx& rBmpEx );
-                    Wallpaper( const Gradient& rGradient );
                     ~Wallpaper();
 
     void            SetColor( const Color& rColor );

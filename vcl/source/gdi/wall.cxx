@@ -166,12 +166,6 @@ Wallpaper::Wallpaper( const BitmapEx& rBmpEx ) : mpImplWallpaper()
     mpImplWallpaper->meStyle    = WallpaperStyle::Tile;
 }
 
-Wallpaper::Wallpaper( const Gradient& rGradient ) : mpImplWallpaper()
-{
-    mpImplWallpaper->mpGradient = std::make_unique<Gradient>( rGradient );
-    mpImplWallpaper->meStyle    = WallpaperStyle::Tile;
-}
-
 Wallpaper::~Wallpaper() = default;
 
 void Wallpaper::ImplSetCachedBitmap( BitmapEx& rBmp ) const
