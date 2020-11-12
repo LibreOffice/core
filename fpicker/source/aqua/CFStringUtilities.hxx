@@ -27,14 +27,15 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-enum InfoType {
+enum InfoType
+{
     FULLPATH,
     FILENAME,
     PATHWITHOUTLASTCOMPONENT
 };
 
 OUString CFStringToOUString(const CFStringRef sOrig);
-OUString FSRefToOUString(FSRef const & fsRef, InfoType info = FULLPATH);
+OUString FSRefToOUString(FSRef const& fsRef, InfoType info = FULLPATH);
 OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info);
 CFStringRef CFStringCreateWithOUString(const OUString& aString);
 
