@@ -447,7 +447,9 @@ VerticalTabControl::VerticalTabControl(vcl::Window* pParent)
                                                          WB_ALIGN_LEFT | WB_NOHSCROLL))
     , m_xBox(VclPtr<VclVBox>::Create(this))
 {
+    SetStyle(GetStyle() | WB_DIALOGCONTROL);
     SetType(WindowType::VERTICALTABCONTROL);
+    m_xChooser->SetSelectionMode(SelectionMode::Single);
     m_xChooser->SetClickHdl(LINK(this, VerticalTabControl, ChosePageHdl_Impl));
     m_xChooser->set_width_request(110);
     m_xChooser->set_height_request(400);
