@@ -12,12 +12,15 @@
 
 #include <rtl/ustring.hxx>
 
-namespace openclwrapper { struct GPUEnv; }
+namespace openclwrapper
+{
+struct GPUEnv;
+}
 struct ds_device;
 
-ds_device const & getDeviceSelection(OUString const & pFileName, bool bForceSelection);
+ds_device const& getDeviceSelection(OUString const& pFileName, bool bForceSelection);
 
-void releaseOpenCLEnv( openclwrapper::GPUEnv *gpuInfo );
+void releaseOpenCLEnv(openclwrapper::GPUEnv* gpuInfo);
 
 #endif
 

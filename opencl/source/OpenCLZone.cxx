@@ -30,12 +30,14 @@ void OpenCLZone::hardDisable()
 
     bDisabled = true;
 
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+        comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::UseOpenCL::set(false, xChanges);
     xChanges->commit();
 
     // Force synchronous config write
-    auto xConfProvider = css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext());
+    auto xConfProvider
+        = css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext());
     css::uno::Reference<css::util::XFlushable> xFlushable(xConfProvider, css::uno::UNO_QUERY_THROW);
     xFlushable->flush();
 
