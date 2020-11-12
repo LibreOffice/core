@@ -12333,8 +12333,6 @@ stoc/test/testsmgr_cpnt.cxx
 stoc/test/uriproc/test_uriproc.cxx
 store/source/lockbyte.cxx
 store/source/lockbyte.hxx
-store/source/object.cxx
-store/source/object.hxx
 store/source/storbase.cxx
 store/source/storbase.hxx
 store/source/storbios.cxx
