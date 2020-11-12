@@ -77,7 +77,7 @@ using namespace ::com::sun::star::uno;
     if ( start != end ) {
         return [ NSValue valueWithRange: NSMakeRange ( start, end - start ) ]; // true selection
     } else {
-        long caretPos = [ wrapper accessibleText ] -> getCaretPosition();
+        sal_Int32 caretPos = [ wrapper accessibleText ] -> getCaretPosition();
         if ( caretPos < 0 || caretPos > [ wrapper accessibleText ] -> getCharacterCount() ) {
             return nil;
         }
