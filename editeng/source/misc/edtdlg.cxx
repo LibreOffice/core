@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editeng/edtdlg.hxx>
 
 EditAbstractDialogFactory* EditAbstractDialogFactory::Create()
 {
-    return dynamic_cast <EditAbstractDialogFactory*>( VclAbstractDialogFactory::Create() );
+    return dynamic_cast<EditAbstractDialogFactory*>(VclAbstractDialogFactory::Create());
 }
 
-EditAbstractDialogFactory::~EditAbstractDialogFactory()
-{
-}
+EditAbstractDialogFactory::~EditAbstractDialogFactory() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

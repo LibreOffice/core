@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editeng/measfld.hxx>
 
-SdrMeasureField::~SdrMeasureField()
-{
-}
+SdrMeasureField::~SdrMeasureField() {}
 
 std::unique_ptr<SvxFieldData> SdrMeasureField::Clone() const
 {

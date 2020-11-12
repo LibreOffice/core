@@ -3571,13 +3571,10 @@ drawinglayer/source/tools/wmfemfhelper.cxx
 editeng/inc/AccessibleStringWrap.hxx
 editeng/inc/editattr.hxx
 editeng/inc/editdoc.hxx
-editeng/inc/editeng.hxx
-editeng/inc/editxml.hxx
 editeng/inc/edtspell.hxx
 editeng/inc/eerdll2.hxx
 editeng/inc/helpids.h
 editeng/inc/unomodel.hxx
-editeng/inc/unopracc.hxx
 editeng/qa/items/borderline_test.cxx
 editeng/qa/lookuptree/lookuptree_test.cxx
 editeng/qa/unit/core-test.cxx
@@ -3636,7 +3633,6 @@ editeng/source/items/numitem.cxx
 editeng/source/items/optitems.cxx
 editeng/source/items/paperinf.cxx
 editeng/source/items/paraitem.cxx
-editeng/source/items/svdfield.cxx
 editeng/source/items/svxfont.cxx
 editeng/source/items/textitem.cxx
 editeng/source/items/writingmodeitem.cxx
@@ -3649,8 +3645,6 @@ editeng/source/misc/SvXMLAutoCorrectImport.hxx
 editeng/source/misc/SvXMLAutoCorrectTokenHandler.cxx
 editeng/source/misc/SvXMLAutoCorrectTokenHandler.hxx
 editeng/source/misc/acorrcfg.cxx
-editeng/source/misc/edtdlg.cxx
-editeng/source/misc/forbiddencharacterstable.cxx
 editeng/source/misc/hangulhanja.cxx
 editeng/source/misc/splwrap.cxx
 editeng/source/misc/svxacorr.cxx
