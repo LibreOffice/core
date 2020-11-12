@@ -4030,10 +4030,6 @@ extensions/test/ole/unoTocomCalls/XCallback_Impl/Simple.h
 extensions/test/ole/unoTocomCalls/XCallback_Impl/XCallback_Impl.cpp
 extensions/test/ole/unoTocomCalls/XCallback_Impl/resource.h
 external/bluez_bluetooth/inc/bluetooth/bluetooth.h
-external/bluez_bluetooth/inc/bluetooth/hci.h
-external/bluez_bluetooth/inc/bluetooth/hci_lib.h
-external/bluez_bluetooth/inc/bluetooth/rfcomm.h
-external/bluez_bluetooth/inc/bluetooth/sco.h
 external/clew/source/clew.c
 external/clew/source/include/clew/clew.h
 external/clucene/configs/_clucene-config-LINUX.h

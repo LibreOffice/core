@@ -16,9 +16,8 @@
 #endif
 #ifdef __cplusplus
 #endif
-static inline int
-hci_test_bit (int nr, void *addr)
+static inline int hci_test_bit(int nr, void* addr)
 {
-  return *((uint32_t *) addr + (nr >> 5)) & (1 << (nr & 31));
+    return *((uint32_t*)addr + (nr >> 5)) & (1 << (nr & 31));
 }
 #endif

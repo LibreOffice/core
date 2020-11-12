@@ -96,7 +96,7 @@
 #define ESCO_3EV5 0x0200
 #define SCO_ESCO_MASK (ESCO_HV1 | ESCO_HV2 | ESCO_HV3)
 #define EDR_ESCO_MASK (ESCO_2EV3 | ESCO_3EV3 | ESCO_2EV5 | ESCO_3EV5)
-#define ALL_ESCO_MASK (SCO_ESCO_MASK | ESCO_EV3 | ESCO_EV4 | ESCO_EV5 |  EDR_ESCO_MASK)
+#define ALL_ESCO_MASK (SCO_ESCO_MASK | ESCO_EV3 | ESCO_EV4 | ESCO_EV5 | EDR_ESCO_MASK)
 #define HCI_UNKNOWN_COMMAND 0x01
 #define HCI_NO_CONNECTION 0x02
 #define HCI_HARDWARE_FAILURE 0x03
@@ -414,9 +414,9 @@
 #define OCF_READ_NUM_SUPPORTED_IAC 0x0038
 #define MAX_IAC_LAP 0x40
 #define OCF_READ_CURRENT_IAC_LAP 0x0039
-#define READ_CURRENT_IAC_LAP_RP_SIZE 2+3*MAX_IAC_LAP
+#define READ_CURRENT_IAC_LAP_RP_SIZE 2 + 3 * MAX_IAC_LAP
 #define OCF_WRITE_CURRENT_IAC_LAP 0x003A
-#define WRITE_CURRENT_IAC_LAP_CP_SIZE 1+3*MAX_IAC_LAP
+#define WRITE_CURRENT_IAC_LAP_CP_SIZE 1 + 3 * MAX_IAC_LAP
 #define OCF_READ_PAGE_SCAN_PERIOD_MODE 0x003B
 #define OCF_WRITE_PAGE_SCAN_PERIOD_MODE 0x003C
 #define OCF_READ_PAGE_SCAN_MODE 0x003D
@@ -620,10 +620,10 @@
 #define HCI_ACL_HDR_SIZE 4
 #define HCI_SCO_HDR_SIZE 3
 #define HCI_MSG_HDR_SIZE 6
-#define cmd_opcode_pack(ogf, ocf) (uint16_t)((ocf & 0x03ff)|(ogf << 10))
+#define cmd_opcode_pack(ogf, ocf) (uint16_t)((ocf & 0x03ff) | (ogf << 10))
 #define cmd_opcode_ogf(op) (op >> 10)
 #define cmd_opcode_ocf(op) (op & 0x03ff)
-#define acl_handle_pack(h, f) (uint16_t)((h & 0x0fff)|(f << 12))
+#define acl_handle_pack(h, f) (uint16_t)((h & 0x0fff) | (f << 12))
 #define acl_handle(h) (h & 0x0fff)
 #define acl_flags(h) (h >> 12)
 #endif
@@ -642,77 +642,77 @@
 #endif
 struct hci_dev_stats
 {
-  uint32_t err_rx;
-  uint32_t err_tx;
-  uint32_t cmd_tx;
-  uint32_t evt_rx;
-  uint32_t acl_tx;
-  uint32_t acl_rx;
-  uint32_t sco_tx;
-  uint32_t sco_rx;
-  uint32_t byte_rx;
-  uint32_t byte_tx;
+    uint32_t err_rx;
+    uint32_t err_tx;
+    uint32_t cmd_tx;
+    uint32_t evt_rx;
+    uint32_t acl_tx;
+    uint32_t acl_rx;
+    uint32_t sco_tx;
+    uint32_t sco_rx;
+    uint32_t byte_rx;
+    uint32_t byte_tx;
 };
 struct hci_dev_info
 {
-  uint16_t dev_id;
-  char name[8];
+    uint16_t dev_id;
+    char name[8];
 
-  bdaddr_t bdaddr;
+    bdaddr_t bdaddr;
 
-  uint32_t flags;
-  uint8_t type;
+    uint32_t flags;
+    uint8_t type;
 
-  uint8_t features[8];
+    uint8_t features[8];
 
-  uint32_t pkt_type;
-  uint32_t link_policy;
-  uint32_t link_mode;
+    uint32_t pkt_type;
+    uint32_t link_policy;
+    uint32_t link_mode;
 
-  uint16_t acl_mtu;
-  uint16_t acl_pkts;
-  uint16_t sco_mtu;
-  uint16_t sco_pkts;
+    uint16_t acl_mtu;
+    uint16_t acl_pkts;
+    uint16_t sco_mtu;
+    uint16_t sco_pkts;
 
-  struct hci_dev_stats stat;
+    struct hci_dev_stats stat;
 };
 enum
 {
-  HCI_UP,
-  HCI_INIT,
-  HCI_RUNNING,
+    HCI_UP,
+    HCI_INIT,
+    HCI_RUNNING,
 
-  HCI_PSCAN,
-  HCI_ISCAN,
-  HCI_AUTH,
-  HCI_ENCRYPT,
-  HCI_INQUIRY,
+    HCI_PSCAN,
+    HCI_ISCAN,
+    HCI_AUTH,
+    HCI_ENCRYPT,
+    HCI_INQUIRY,
 
-  HCI_RAW,
+    HCI_RAW,
 
-  HCI_SECMGR
+    HCI_SECMGR
 };
 struct sockaddr_hci
 {
-  sa_family_t hci_family;
-  unsigned short hci_dev;
+    sa_family_t hci_family;
+    unsigned short hci_dev;
 };
 struct hci_conn_info
 {
-  uint16_t handle;
-  bdaddr_t bdaddr;
-  uint8_t type;
-  uint8_t out;
-  uint16_t state;
-  uint32_t link_mode;
-  uint32_t mtu;
-  uint32_t cnt;
-  uint32_t pkts;
+    uint16_t handle;
+    bdaddr_t bdaddr;
+    uint8_t type;
+    uint8_t out;
+    uint16_t state;
+    uint32_t link_mode;
+    uint32_t mtu;
+    uint32_t cnt;
+    uint32_t pkts;
 };
 struct hci_conn_list_req
 {
-  uint16_t dev_id;
-  uint16_t conn_num;
-  struct hci_conn_info conn_info[0];
+    uint16_t dev_id;
+    uint16_t conn_num;
+    struct hci_conn_info conn_info[0];
 };
 #endif
