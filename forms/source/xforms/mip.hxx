@@ -24,7 +24,6 @@
 
 namespace xforms
 {
-
 /** represents the XForms *m*odel *i*tem *p*roperties (MIPs) for a
  * given XNode in the instance data at a given point in time.  The
  * values will not be updated; for updated values new MIP objects have
@@ -54,51 +53,49 @@ public:
     MIP();
 
     /// inherit from upper-level MIPs
-    void inherit( const MIP& );
+    void inherit(const MIP&);
 
     /// join with same-level MIPs
-    void join( const MIP& );
-
+    void join(const MIP&);
 
     // - type (static; default: xsd:string)
     //        (currently default implemented as empty string)
     const OUString& getTypeName() const { return msTypeName; }
-    void setTypeName( const OUString& );
+    void setTypeName(const OUString&);
     void resetTypeName();
 
     // - readonly (computed XPath; default: false; true if calculate exists)
     bool isReadonly() const;
-    void setReadonly( bool );
+    void setReadonly(bool);
     void resetReadonly();
 
     // - required (computed XPath; default: false)
     bool isRequired() const { return mbRequired; }
-    void setRequired( bool );
+    void setRequired(bool);
     void resetRequired();
 
     // - relevant (computed XPath; default: true)
     bool isRelevant() const { return mbRelevant; }
-    void setRelevant( bool );
+    void setRelevant(bool);
     void resetRelevant();
 
     // - constraint (computed XPath; default: true)
     bool isConstraint() const { return mbConstraint; }
-    void setConstraint( bool );
+    void setConstraint(bool);
     void resetConstraint();
 
     // explain _why_ a constraint failed
-    void setConstraintExplanation( const OUString& );
+    void setConstraintExplanation(const OUString&);
     const OUString& getConstraintExplanation() const { return msConstraintExplanation; }
 
     // - calculate (computed XPath; default: has none (false))
     //   (for calculate, we only store whether a calculate MIP is present;
     //    the actual calculate value is handled my changing the instance
     //    directly)
-    void setHasCalculate( bool );
+    void setHasCalculate(bool);
 
     // - minOccurs/maxOccurs (computed XPath; default: 0/inf)
     // - p3ptype (static; no default)
-
 };
 
 } // namespace xforms

@@ -24,13 +24,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
 
-
-namespace detail {
-
-sal_Int32 findPos(
-    const OUString& aStr,
-    const css::uno::Sequence< OUString >& rList);
-
+namespace detail
+{
+sal_Int32 findPos(const OUString& aStr, const css::uno::Sequence<OUString>& rList);
 }
 
 #endif

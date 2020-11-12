@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "enumeration.hxx"
 
 #include <osl/diagnose.h>
@@ -32,17 +31,16 @@ using com::sun::star::container::XIndexAccess;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::RuntimeException;
 
-
-Enumeration::Enumeration( XIndexAccess* pContainer )
-    : mxContainer( pContainer ),
-      mnIndex( 0 )
+Enumeration::Enumeration(XIndexAccess* pContainer)
+    : mxContainer(pContainer)
+    , mnIndex(0)
 {
-    OSL_ENSURE( mxContainer.is(), "no container?" );
+    OSL_ENSURE(mxContainer.is(), "no container?");
 }
 
 sal_Bool Enumeration::hasMoreElements()
 {
-    if( ! mxContainer.is() )
+    if (!mxContainer.is())
         throw RuntimeException();
 
     return mnIndex < mxContainer->getCount();
@@ -50,12 +48,12 @@ sal_Bool Enumeration::hasMoreElements()
 
 Any Enumeration::nextElement()
 {
-    if( ! mxContainer.is() )
+    if (!mxContainer.is())
         throw RuntimeException();
-    if( mnIndex >= mxContainer->getCount() )
+    if (mnIndex >= mxContainer->getCount())
         throw NoSuchElementException();
 
-    return mxContainer->getByIndex( mnIndex++ );
+    return mxContainer->getByIndex(mnIndex++);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

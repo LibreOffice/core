@@ -25,9 +25,10 @@
 class CSubmissionPut : public CSubmission
 {
 public:
-    CSubmissionPut(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment);
-    virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler) override;
-
+    CSubmissionPut(const OUString& aURL,
+                   const css::uno::Reference<css::xml::dom::XDocumentFragment>& aFragment);
+    virtual SubmissionResult
+    submit(const css::uno::Reference<css::task::XInteractionHandler>& aInteractionHandler) override;
 };
 #endif
 

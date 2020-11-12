@@ -30,23 +30,24 @@
 #include <com/sun/star/xforms/XModel.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 
-
-class CLibxml2XFormsExtension : public cppu::WeakImplHelper<
-    css::xml::xpath::XXPathExtension, css::lang::XInitialization>
+class CLibxml2XFormsExtension
+    : public cppu::WeakImplHelper<css::xml::xpath::XXPathExtension, css::lang::XInitialization>
 {
 private:
-    css::uno::Reference <css::xforms::XModel>  m_aModel;
-    css::uno::Reference <css::xml::dom::XNode> m_aContextNode;
+    css::uno::Reference<css::xforms::XModel> m_aModel;
+    css::uno::Reference<css::xml::dom::XNode> m_aContextNode;
 
 public:
     CLibxml2XFormsExtension() {}
 
-    const css::uno::Reference< css::xforms::XModel >& getModel() const { return m_aModel;}
-    const css::uno::Reference< css::xml::dom::XNode >& getContextNode() const { return m_aContextNode;}
+    const css::uno::Reference<css::xforms::XModel>& getModel() const { return m_aModel; }
+    const css::uno::Reference<css::xml::dom::XNode>& getContextNode() const
+    {
+        return m_aContextNode;
+    }
 
     virtual css::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() override;
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& aSequence) override;
-
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aSequence) override;
 };
 
 #endif // INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
