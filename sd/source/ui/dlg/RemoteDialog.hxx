@@ -15,7 +15,6 @@
 
 namespace sd
 {
-
 class RemoteDialog : public weld::GenericDialogController
 {
 private:
@@ -23,12 +22,12 @@ private:
     std::unique_ptr<ClientBox> m_xClientBox;
 
     DECL_LINK(HandleConnectButton, weld::Button&, void);
+
 public:
     explicit RemoteDialog(weld::Window* pWindow);
     virtual short run() override;
     virtual ~RemoteDialog() override;
 };
-
 }
 
 #endif // INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOG_HXX

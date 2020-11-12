@@ -22,18 +22,15 @@
 
 #include "drawview.hxx"
 
-namespace sd {
-
+namespace sd
+{
 /**
  * The SdClientView is used for DrawDocShell::Draw()
  */
-class ClientView
-    : public DrawView
+class ClientView : public DrawView
 {
 public:
-    ClientView (
-        DrawDocShell* pDocSh,
-        OutputDevice* pOutDev);
+    ClientView(DrawDocShell* pDocSh, OutputDevice* pOutDev);
     virtual ~ClientView() override;
 
     /* if the view should not do an Invalidate() on the windows, you have to

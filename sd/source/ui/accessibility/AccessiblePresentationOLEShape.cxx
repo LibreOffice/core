@@ -29,36 +29,31 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-namespace accessibility {
-
+namespace accessibility
+{
 //=====  internal  ============================================================
 
-AccessiblePresentationOLEShape::AccessiblePresentationOLEShape (
-    const AccessibleShapeInfo& rShapeInfo,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo)
-    :   AccessibleOLEShape (rShapeInfo, rShapeTreeInfo)
+AccessiblePresentationOLEShape::AccessiblePresentationOLEShape(
+    const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : AccessibleOLEShape(rShapeInfo, rShapeTreeInfo)
 {
 }
 
-AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape()
-{
-}
+AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape() {}
 
 // XServiceInfo
 
-OUString SAL_CALL
-    AccessiblePresentationOLEShape::getImplementationName()
+OUString SAL_CALL AccessiblePresentationOLEShape::getImplementationName()
 {
     return "AccessiblePresentationOLEShape";
 }
 
 /// Set this object's name if it is different to the current name.
-OUString
-    AccessiblePresentationOLEShape::CreateAccessibleBaseName()
+OUString AccessiblePresentationOLEShape::CreateAccessibleBaseName()
 {
     OUString sName;
 
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId(mxShape);
     switch (nShapeType)
     {
         case PRESENTATION_OLE:
@@ -80,9 +75,9 @@ OUString
 }
 
 //  Return this object's role.
-sal_Int16 SAL_CALL AccessiblePresentationOLEShape::getAccessibleRole ()
+sal_Int16 SAL_CALL AccessiblePresentationOLEShape::getAccessibleRole()
 {
-    return  AccessibleRole::EMBEDDED_OBJECT ;
+    return AccessibleRole::EMBEDDED_OBJECT;
 }
 
 } // end of namespace accessibility

@@ -26,12 +26,10 @@
 class SdHTMLFilter final : public SdFilter
 {
 public:
-    SdHTMLFilter (
-        SfxMedium& rMedium,
-        ::sd::DrawDocShell& rDocShell);
+    SdHTMLFilter(SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell);
     virtual ~SdHTMLFilter() override;
 
-    virtual bool        Export() override;
+    virtual bool Export() override;
 };
 
 #endif // INCLUDED_SD_INC_SDHTMLFILTER_HXX

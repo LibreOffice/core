@@ -26,27 +26,35 @@
 
 #include <vector>
 
-namespace sd { class SmartTag; }
-namespace sd::tools { class EventMultiplexerEvent; }
-namespace sd { class ViewShellBase; }
+namespace sd
+{
+class SmartTag;
+}
+namespace sd::tools
+{
+class EventMultiplexerEvent;
+}
+namespace sd
+{
+class ViewShellBase;
+}
 struct ImplSVEvent;
 
 namespace sd
 {
-
-typedef std::vector< rtl::Reference< SmartTag > > ViewTagVector;
+typedef std::vector<rtl::Reference<SmartTag>> ViewTagVector;
 
 class ViewOverlayManager : public SfxListener
 {
 public:
-    ViewOverlayManager( ViewShellBase& rViewShellBase );
+    ViewOverlayManager(ViewShellBase& rViewShellBase);
     virtual ~ViewOverlayManager() override;
 
     void onZoomChanged();
     void UpdateTags();
 
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
-    DECL_LINK(UpdateTagsHdl, void *, void);
+    DECL_LINK(UpdateTagsHdl, void*, void);
 
     bool CreateTags();
     bool DisposeTags();
@@ -55,11 +63,10 @@ public:
 
 private:
     ViewShellBase& mrBase;
-    ImplSVEvent * mnUpdateTagsEvent;
+    ImplSVEvent* mnUpdateTagsEvent;
 
-    ViewTagVector   maTagVector;
+    ViewTagVector maTagVector;
 };
-
 }
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_VIEW_VIEWOVERLAYMANAGER_HXX

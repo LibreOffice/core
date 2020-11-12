@@ -31,25 +31,21 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-namespace accessibility {
-
+namespace accessibility
+{
 //=====  internal  ============================================================
 
-AccessiblePresentationShape::AccessiblePresentationShape (
-    const AccessibleShapeInfo& rShapeInfo,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo)
-    : AccessibleShape (rShapeInfo, rShapeTreeInfo)
+AccessiblePresentationShape::AccessiblePresentationShape(
+    const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : AccessibleShape(rShapeInfo, rShapeTreeInfo)
 {
 }
 
-AccessiblePresentationShape::~AccessiblePresentationShape()
-{
-}
+AccessiblePresentationShape::~AccessiblePresentationShape() {}
 
 // XServiceInfo
 
-OUString SAL_CALL
-    AccessiblePresentationShape::getImplementationName()
+OUString SAL_CALL AccessiblePresentationShape::getImplementationName()
 {
     return "AccessiblePresentationShape";
 }
@@ -59,7 +55,7 @@ OUString AccessiblePresentationShape::CreateAccessibleBaseName()
 {
     OUString sName;
 
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId(mxShape);
     switch (nShapeType)
     {
         case PRESENTATION_TITLE:
@@ -105,7 +101,7 @@ OUString AccessiblePresentationShape::GetStyle()
 {
     OUString sName;
 
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId(mxShape);
     switch (nShapeType)
     {
         case PRESENTATION_TITLE:
@@ -145,7 +141,6 @@ OUString AccessiblePresentationShape::GetStyle()
     }
 
     return sName;
-
 }
 } // end of namespace accessibility
 

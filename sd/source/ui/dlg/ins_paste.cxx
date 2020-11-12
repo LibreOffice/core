@@ -27,13 +27,8 @@ SdInsertPasteDlg::SdInsertPasteDlg(weld::Window* pWindow)
     m_xRbAfter->set_active(true);
 }
 
-SdInsertPasteDlg::~SdInsertPasteDlg()
-{
-}
+SdInsertPasteDlg::~SdInsertPasteDlg() {}
 
-bool SdInsertPasteDlg::IsInsertBefore() const
-{
-    return m_xRbBefore->get_active();
-}
+bool SdInsertPasteDlg::IsInsertBefore() const { return m_xRbBefore->get_active(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

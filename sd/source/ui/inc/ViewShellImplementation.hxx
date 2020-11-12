@@ -28,8 +28,8 @@
 
 class SvxIMapDlg;
 
-namespace sd {
-
+namespace sd
+{
 /** This class contains (will contain) the implementation of methods that
     have not be accessible from the outside.
 */
@@ -61,8 +61,8 @@ public:
         /** Create a new instance.  This allows the mpSelf member to be set
             automatically.
         */
-        static std::shared_ptr<ToolBarManagerLock> Create (
-            const std::shared_ptr<ToolBarManager>& rpManager);
+        static std::shared_ptr<ToolBarManagerLock>
+        Create(const std::shared_ptr<ToolBarManager>& rpManager);
         /** Release the lock.  When the UI is captured
             (Application::IsUICaptured() returns <TRUE/>) then the lock is
             released later asynchronously.
@@ -70,10 +70,13 @@ public:
                 When this flag is <TRUE/> then the lock is released even
                 when IsUICaptured() returns <TRUE/>.
         */
-        void Release (bool bForce = false);
-        DECL_LINK(TimeoutCallback, Timer *, void);
+        void Release(bool bForce = false);
+        DECL_LINK(TimeoutCallback, Timer*, void);
+
     private:
-        ::std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock>> mpLock;
+        ::std::unique_ptr<ToolBarManager::UpdateLock,
+                          o3tl::default_delete<ToolBarManager::UpdateLock>>
+            mpLock;
         /** The timer is used both as a safe guard to unlock the update lock
             when Release() is not called explicitly.  It is also used to
             defer the release of the lock to a time when the UI is not
@@ -85,7 +88,7 @@ public:
             holds another shared_ptr longer than only temporary.
         */
         std::shared_ptr<ToolBarManagerLock> mpSelf;
-        ToolBarManagerLock (const std::shared_ptr<sd::ToolBarManager>& rpManager);
+        ToolBarManagerLock(const std::shared_ptr<sd::ToolBarManager>& rpManager);
         ~ToolBarManagerLock();
 
         class Deleter;
@@ -95,22 +98,19 @@ public:
     // control.
     std::weak_ptr<ToolBarManagerLock> mpUpdateLockForMouse;
 
-    Implementation (ViewShell& rViewShell);
+    Implementation(ViewShell& rViewShell);
     ~Implementation() COVERITY_NOEXCEPT_FALSE;
 
     /** Process the SID_MODIFY slot.
     */
-    void ProcessModifyPageSlot (
-        SfxRequest& rRequest,
-        SdPage* pCurrentPage,
-        PageKind ePageKind);
+    void ProcessModifyPageSlot(SfxRequest& rRequest, SdPage* pCurrentPage, PageKind ePageKind);
 
     /** Assign the given layout to the given page.  This method is at the
         moment merely a front end for ProcessModifyPageSlot.
         @param pPage
             If a NULL pointer is given then this call is ignored.
     */
-    void AssignLayout ( SfxRequest const & rRequest, PageKind ePageKind );
+    void AssignLayout(SfxRequest const& rRequest, PageKind ePageKind);
 
     /** Determine the view id of the view shell.  This corresponds to the
         view id stored in the SfxViewFrame class.

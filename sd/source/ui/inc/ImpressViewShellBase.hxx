@@ -22,13 +22,12 @@
 
 #include "ViewShellBase.hxx"
 
-namespace sd {
-
+namespace sd
+{
 /** This class implements a few features that exist only for the Impress
     application.
 */
-class ImpressViewShellBase
-    : public ViewShellBase
+class ImpressViewShellBase : public ViewShellBase
 {
 public:
     SFX_DECL_VIEWFACTORY(ImpressViewShellBase);
@@ -36,12 +35,12 @@ public:
     /** This constructor is used by the view factory of the SFX
         macros.
     */
-    ImpressViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
+    ImpressViewShellBase(SfxViewFrame* pFrame, SfxViewShell* pOldShell);
     virtual ~ImpressViewShellBase() override;
 
     /** Callback function for general slot calls.
     */
-    virtual void Execute (SfxRequest& rRequest) override;
+    virtual void Execute(SfxRequest& rRequest) override;
 
 protected:
     virtual void InitializeFramework() override;

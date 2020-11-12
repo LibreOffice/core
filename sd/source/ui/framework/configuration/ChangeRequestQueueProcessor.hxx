@@ -27,13 +27,19 @@
 
 #include <memory>
 
-namespace com::sun::star::drawing::framework { class XConfiguration; }
-namespace com::sun::star::drawing::framework { class XConfigurationChangeRequest; }
+namespace com::sun::star::drawing::framework
+{
+class XConfiguration;
+}
+namespace com::sun::star::drawing::framework
+{
+class XConfigurationChangeRequest;
+}
 
 struct ImplSVEvent;
 
-namespace sd::framework {
-
+namespace sd::framework
+{
 class ConfigurationUpdater;
 
 /** The ChangeRequestQueueProcessor owns the ChangeRequestQueue and
@@ -52,22 +58,22 @@ public:
         ConfigurationController so that its UpdateConfiguration() method can
         be called when the queue becomes empty.
     */
-    explicit ChangeRequestQueueProcessor (
-        const std::shared_ptr<ConfigurationUpdater>& rpUpdater);
+    explicit ChangeRequestQueueProcessor(const std::shared_ptr<ConfigurationUpdater>& rpUpdater);
     ~ChangeRequestQueueProcessor();
 
     /** Sets the configuration who will be changed by subsequent change
         requests.  This method should be called only by the configuration
         controller who owns the configuration.
     */
-    void SetConfiguration (
+    void SetConfiguration(
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
 
     /** The given request is appended to the end of the queue and will
         eventually be processed when all other entries in front of it have
         been processed.
     */
-    void AddRequest (const css::uno::Reference<css::drawing::framework::XConfigurationChangeRequest>& rxRequest);
+    void AddRequest(
+        const css::uno::Reference<css::drawing::framework::XConfigurationChangeRequest>& rxRequest);
 
     /** Returns </sal_True> when the queue is empty.
     */
@@ -100,7 +106,7 @@ private:
         so that a pending user event can be removed when the queue processor
         is destroyed.
     */
-    ImplSVEvent * mnUserEventId;
+    ImplSVEvent* mnUserEventId;
 
     css::uno::Reference<css::drawing::framework::XConfiguration> mxConfiguration;
 

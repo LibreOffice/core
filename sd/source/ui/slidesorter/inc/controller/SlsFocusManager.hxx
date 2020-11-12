@@ -26,10 +26,13 @@
 #include <tools/link.hxx>
 #include <vector>
 
-namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
 
-namespace sd::slidesorter::controller {
-
+namespace sd::slidesorter::controller
+{
 /** This class manages the focus of the slide sorter.  There is the focus
     page which is or is not focused.  Initialized to point to the first page
     it can be set to other pages by using the MoveFocus() method.  The
@@ -43,7 +46,7 @@ public:
         associated with the given controller.  The focus page is set to the
         first page.  Focused state is off.
     */
-    FocusManager (SlideSorter& rSlideSorter);
+    FocusManager(SlideSorter& rSlideSorter);
 
     ~FocusManager();
 
@@ -68,14 +71,14 @@ public:
             The current page index is set to the nearest valid
             page index.
     */
-    void MoveFocus (FocusMoveDirection eDirection);
+    void MoveFocus(FocusMoveDirection eDirection);
 
     /** Show the focus indicator of the current slide.
         @param bScrollToFocus
             When <TRUE/> (the default) then the view is scrolled so that the
             focus rectangle lies inside its visible area.
     */
-    void ShowFocus (const bool bScrollToFocus = true);
+    void ShowFocus(const bool bScrollToFocus = true);
 
     /** Hide the focus indicator.
     */
@@ -105,7 +108,7 @@ public:
             When there is no page that currently has the focus then -1 is
             returned.
     */
-    sal_Int32 GetFocusedPageIndex() const { return mnPageIndex;}
+    sal_Int32 GetFocusedPageIndex() const { return mnPageIndex; }
 
     /** Set the focused page to the one described by the given page
         descriptor.  The visibility of the focus indicator is not modified.
@@ -113,14 +116,14 @@ public:
             One of the page descriptors that are currently managed by the
             SlideSorterModel.
     */
-    bool SetFocusedPage (const model::SharedPageDescriptor& rDescriptor);
+    bool SetFocusedPage(const model::SharedPageDescriptor& rDescriptor);
 
     /** Set the focused page to the one described by the given page
         index.  The visibility of the focus indicator is not modified.
         @param nPageIndex
             A valid page index that is understood by the SlideSorterModel.
     */
-    void SetFocusedPage (sal_Int32 nPageIndex);
+    void SetFocusedPage(sal_Int32 nPageIndex);
 
     bool SetFocusedPageToCurrentPage();
 
@@ -139,14 +142,14 @@ public:
             the second and all following calls are ignored.  Each listener
             is added only once.
     */
-    void AddFocusChangeListener (const Link<LinkParamNone*,void>& rListener);
+    void AddFocusChangeListener(const Link<LinkParamNone*, void>& rListener);
 
     /** Remove a focus change listener.
         @param rListener
             It is safe to pass a listener that was not added are has been
             removed previously.  Such calls are ignored.
     */
-    void RemoveFocusChangeListener (const Link<LinkParamNone*,void>& rListener);
+    void RemoveFocusChangeListener(const Link<LinkParamNone*, void>& rListener);
 
     /** Create an instance of this class to temporarily hide the focus
         indicator.  It is restored to its former visibility state when the
@@ -155,8 +158,9 @@ public:
     class FocusHider
     {
     public:
-        FocusHider (FocusManager&);
+        FocusHider(FocusManager&);
         ~FocusHider() COVERITY_NOEXCEPT_FALSE;
+
     private:
         bool mbFocusVisible;
         FocusManager& mrManager;
@@ -175,14 +179,14 @@ private:
     */
     bool mbPageIsFocused;
 
-    ::std::vector<Link<LinkParamNone*,void>> maFocusChangeListeners;
+    ::std::vector<Link<LinkParamNone*, void>> maFocusChangeListeners;
 
     /** Reset the focus state of the given descriptor and request a repaint
         so that the focus indicator is hidden.
         @param pDescriptor
             When NULL is given then the call is ignored.
     */
-    void HideFocusIndicator (const model::SharedPageDescriptor& rpDescriptor);
+    void HideFocusIndicator(const model::SharedPageDescriptor& rpDescriptor);
 
     /** Set the focus state of the given descriptor, scroll it into the
         visible area and request a repaint so that the focus indicator is
@@ -193,9 +197,8 @@ private:
             When <TRUE/> (the default) then the view is scrolled so that the
             focus rectangle lies inside its visible area.
     */
-    void ShowFocusIndicator (
-        const model::SharedPageDescriptor& rpDescriptor,
-        const bool bScrollToFocus);
+    void ShowFocusIndicator(const model::SharedPageDescriptor& rpDescriptor,
+                            const bool bScrollToFocus);
 
     /** Call all currently registered listeners that a focus change has
         happened.  The focus may be hidden or shown or moved from one page

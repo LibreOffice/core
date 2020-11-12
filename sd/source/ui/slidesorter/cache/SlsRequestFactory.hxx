@@ -22,16 +22,14 @@
 
 #include <cache/SlsCacheContext.hxx>
 
-namespace sd::slidesorter::cache {
-
+namespace sd::slidesorter::cache
+{
 class RequestQueue;
 
 class RequestFactory
 {
 public:
-    void operator() (
-        RequestQueue& rRequestQueue,
-        const SharedCacheContext& rpCacheContext);
+    void operator()(RequestQueue& rRequestQueue, const SharedCacheContext& rpCacheContext);
 };
 
 } // end of namespace ::sd::slidesorter::cache

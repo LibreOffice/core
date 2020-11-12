@@ -23,13 +23,12 @@
 #include <sfx2/shell.hxx>
 #include <glob.hxx>
 
-namespace sd {
-
+namespace sd
+{
 class View;
 class ViewShell;
 
-class BezierObjectBar final
-    : public SfxShell
+class BezierObjectBar final : public SfxShell
 {
 public:
     SFX_DECL_INTERFACE(SD_IF_SDDRAWBEZIEROBJECTBAR)
@@ -38,7 +37,7 @@ public:
     virtual ~BezierObjectBar() override;
 
     void GetAttrState(SfxItemSet& rSet);
-    void Execute(SfxRequest &rReq);
+    void Execute(SfxRequest& rReq);
 
 private:
     /// SfxInterface initializer.

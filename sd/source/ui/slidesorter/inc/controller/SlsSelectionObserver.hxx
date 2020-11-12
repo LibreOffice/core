@@ -24,13 +24,16 @@
 #include <memory>
 #include <vector>
 
-namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
 
 class SdrPage;
 class SdPage;
 
-namespace sd::slidesorter::controller {
-
+namespace sd::slidesorter::controller
+{
 /** Observe insertions and deletions of pages between calls to
     StartObservation() and EndObservation().  When the later is called
     the selection is set to just the newly inserted pages.
@@ -38,10 +41,10 @@ namespace sd::slidesorter::controller {
 class SelectionObserver final
 {
 public:
-    SelectionObserver (SlideSorter& rSlideSorter);
+    SelectionObserver(SlideSorter& rSlideSorter);
     ~SelectionObserver();
 
-    void NotifyPageEvent (const SdrPage* pPage);
+    void NotifyPageEvent(const SdrPage* pPage);
     void StartObservation();
     void AbortObservation();
     void EndObservation();
@@ -54,9 +57,10 @@ public:
     class Context
     {
     public:
-        Context (SlideSorter const & rSlideSorter);
+        Context(SlideSorter const& rSlideSorter);
         ~Context() COVERITY_NOEXCEPT_FALSE;
         void Abort();
+
     private:
         std::shared_ptr<SelectionObserver> mpSelectionObserver;
     };

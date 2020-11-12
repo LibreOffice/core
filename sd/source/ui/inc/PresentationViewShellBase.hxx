@@ -22,13 +22,12 @@
 
 #include "ViewShellBase.hxx"
 
-namespace sd {
-
+namespace sd
+{
 /** This class exists to be able to register another factory that
     creates the view shell for the presentation.
 */
-class PresentationViewShellBase
-    : public ViewShellBase
+class PresentationViewShellBase : public ViewShellBase
 {
 public:
     SFX_DECL_VIEWFACTORY(PresentationViewShellBase);
@@ -36,7 +35,7 @@ public:
     /** This constructor is used by the view factory of the SFX
         macros.
     */
-    PresentationViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
+    PresentationViewShellBase(SfxViewFrame* pFrame, SfxViewShell* pOldShell);
     virtual ~PresentationViewShellBase() override;
 
 protected:

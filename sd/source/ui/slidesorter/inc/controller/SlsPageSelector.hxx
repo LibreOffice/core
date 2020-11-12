@@ -29,11 +29,17 @@
 
 class SdPage;
 
-namespace sd::slidesorter { class SlideSorter; }
-namespace sd::slidesorter::model { class SlideSorterModel; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
+namespace sd::slidesorter::model
+{
+class SlideSorterModel;
+}
 
-namespace sd::slidesorter::controller {
-
+namespace sd::slidesorter::controller
+{
 class SlideSorterController;
 
 /** A sub-controller that handles page selection of the slide browser.
@@ -70,15 +76,15 @@ public:
     /** Select the specified descriptor.  The selection state of the other
         descriptors is not affected.
     */
-    void SelectPage (int nPageIndex);
+    void SelectPage(int nPageIndex);
     /** Select the descriptor that is associated with the given page.  The
         selection state of the other descriptors is not affected.
     */
-    void SelectPage (const SdPage* pPage);
+    void SelectPage(const SdPage* pPage);
     /** Select the specified descriptor.  The selection state of the other
         descriptors is not affected.
     */
-    void SelectPage (const model::SharedPageDescriptor& rpDescriptor);
+    void SelectPage(const model::SharedPageDescriptor& rpDescriptor);
 
     /** Return whether the specified page is selected.  This convenience
         method is a substitute for
@@ -98,10 +104,9 @@ public:
         The current page is updated to the first slide
         of the remaining selection.
     */
-    void DeselectPage (int nPageIndex);
-    void DeselectPage (
-        const model::SharedPageDescriptor& rpDescriptor,
-        const bool bUpdateCurrentPage = true);
+    void DeselectPage(int nPageIndex);
+    void DeselectPage(const model::SharedPageDescriptor& rpDescriptor,
+                      const bool bUpdateCurrentPage = true);
 
     /** This convenience method returns the same number of pages that
         SlideSorterModel.GetPageCount() returns.  It is included here so
@@ -109,14 +114,14 @@ public:
         deselect them.
     */
     int GetPageCount() const;
-    int GetSelectedPageCount() const { return mnSelectedPageCount;}
+    int GetSelectedPageCount() const { return mnSelectedPageCount; }
 
     /** Return the anchor for a range selection.  This usually is the first
         selected page after all pages have been deselected.
         @return
             The returned anchor may be NULL.
     */
-    const model::SharedPageDescriptor& GetSelectionAnchor() const { return mpSelectionAnchor;}
+    const model::SharedPageDescriptor& GetSelectionAnchor() const { return mpSelectionAnchor; }
 
     typedef ::std::vector<SdPage*> PageSelection;
 
@@ -143,9 +148,8 @@ public:
             When called from within UpdateCurrentPage() then this flag is
             used to prevent a recursion loop.
     */
-    void SetPageSelection (
-        const std::shared_ptr<PageSelection>& rSelection,
-        const bool bUpdateCurrentPage);
+    void SetPageSelection(const std::shared_ptr<PageSelection>& rSelection,
+                          const bool bUpdateCurrentPage);
 
     /** Call this method after the model has changed to set the number
         of selected pages.
@@ -159,10 +163,11 @@ public:
     class UpdateLock
     {
     public:
-        UpdateLock (SlideSorter const & rSlideSorter);
-        UpdateLock (PageSelector& rPageSelector);
+        UpdateLock(SlideSorter const& rSlideSorter);
+        UpdateLock(PageSelector& rPageSelector);
         ~UpdateLock();
         void Release();
+
     private:
         PageSelector* mpSelector;
     };
@@ -170,9 +175,10 @@ public:
     class BroadcastLock
     {
     public:
-        BroadcastLock (SlideSorter const & rSlideSorter);
-        BroadcastLock (PageSelector& rPageSelector);
+        BroadcastLock(SlideSorter const& rSlideSorter);
+        BroadcastLock(PageSelector& rPageSelector);
         ~BroadcastLock();
+
     private:
         PageSelector& mrSelector;
     };
@@ -204,7 +210,7 @@ private:
     */
     void DisableBroadcasting();
 
-    void UpdateCurrentPage (const bool bUpdateOnlyWhenPending = false);
+    void UpdateCurrentPage(const bool bUpdateOnlyWhenPending = false);
 
     void CheckConsistency() const;
 };

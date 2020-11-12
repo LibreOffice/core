@@ -22,13 +22,12 @@
 
 #include <memory>
 
-namespace sd::slidesorter::model {
-
+namespace sd::slidesorter::model
+{
 /** Interface to generic enumerations.  Designed to operate on shared
     pointers.  Therefore GetNextElement() returns T and not T&.
 */
-template <class T>
-class Enumeration
+template <class T> class Enumeration
 {
 public:
     virtual ~Enumeration() {}
@@ -38,7 +37,7 @@ public:
     */
     virtual T GetNextElement() = 0;
     virtual void Rewind() = 0;
-    virtual ::std::unique_ptr<Enumeration<T> > Clone() = 0;
+    virtual ::std::unique_ptr<Enumeration<T>> Clone() = 0;
 };
 
 } // end of namespace ::sd::slidesorter::model

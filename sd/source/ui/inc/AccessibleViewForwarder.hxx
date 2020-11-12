@@ -25,8 +25,8 @@
 class SdrPaintView;
 class OutputDevice;
 
-namespace accessibility {
-
+namespace accessibility
+{
 /** <p>This class provides the means to transform between internal coordinates
     and screen coordinates without giving direct access to the underlying
     view.  It represents a certain window.  A call to
@@ -38,13 +38,12 @@ namespace accessibility {
         different transformations between internal and screen coordinates or
         change the validity of the forwarder have to be signaled separately.
 */
-class AccessibleViewForwarder final
-    :   public IAccessibleViewForwarder
+class AccessibleViewForwarder final : public IAccessibleViewForwarder
 {
 public:
     //=====  internal  ========================================================
 
-    AccessibleViewForwarder (SdrPaintView* pView, OutputDevice& rDevice);
+    AccessibleViewForwarder(SdrPaintView* pView, OutputDevice& rDevice);
 
     virtual ~AccessibleViewForwarder() override;
 
@@ -68,7 +67,7 @@ public:
             The same point but in screen coordinates relative to the upper
             left corner of the (current) screen.
      */
-    virtual Point LogicToPixel (const Point& rPoint) const override;
+    virtual Point LogicToPixel(const Point& rPoint) const override;
 
     /** Transform the specified size from internal coordinates to a screen
     * position.
@@ -79,14 +78,14 @@ public:
         @return
             The same size but in screen coordinates.
      */
-    virtual Size LogicToPixel (const Size& rSize) const override;
+    virtual Size LogicToPixel(const Size& rSize) const override;
 
 private:
     SdrPaintView* mpView;
     sal_uInt16 mnWindowId;
 
-    AccessibleViewForwarder (AccessibleViewForwarder const &) = delete;
-    AccessibleViewForwarder& operator= (AccessibleViewForwarder const &) = delete;
+    AccessibleViewForwarder(AccessibleViewForwarder const&) = delete;
+    AccessibleViewForwarder& operator=(AccessibleViewForwarder const&) = delete;
 };
 
 } // end of namespace accessibility

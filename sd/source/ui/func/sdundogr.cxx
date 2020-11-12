@@ -22,17 +22,17 @@
 
 SdUndoGroup::~SdUndoGroup() = default;
 
-bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
+bool SdUndoGroup::Merge(SfxUndoAction* pNextAction)
 {
     bool bRet = false;
 
-    if( auto pSdUndoAction = dynamic_cast<SdUndoAction *>( pNextAction ) )
+    if (auto pSdUndoAction = dynamic_cast<SdUndoAction*>(pNextAction))
     {
         SdUndoAction* pClone = pSdUndoAction->Clone();
 
-        if( pClone )
+        if (pClone)
         {
-            AddAction( pClone );
+            AddAction(pClone);
             bRet = true;
         }
     }
@@ -50,7 +50,6 @@ void SdUndoGroup::Undo()
     {
         aCtn[nAction]->Undo();
     }
-
 }
 
 void SdUndoGroup::Redo()
@@ -60,12 +59,8 @@ void SdUndoGroup::Redo()
     {
         aCtn[nAction]->Redo();
     }
-
 }
 
-void SdUndoGroup::AddAction(SdUndoAction* pAction)
-{
-    aCtn.emplace_back(pAction);
-}
+void SdUndoGroup::AddAction(SdUndoAction* pAction) { aCtn.emplace_back(pAction); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

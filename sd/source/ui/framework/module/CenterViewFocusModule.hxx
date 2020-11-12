@@ -25,46 +25,47 @@
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <cppuhelper/compbase.hxx>
 
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
-namespace com::sun::star::frame { class XController; }
-
-namespace sd {
-
-class ViewShellBase;
-
+namespace com::sun::star::drawing::framework
+{
+class XConfigurationController;
+}
+namespace com::sun::star::frame
+{
+class XController;
 }
 
-namespace sd::framework {
+namespace sd
+{
+class ViewShellBase;
+}
 
-typedef ::cppu::WeakComponentImplHelper <
-    css::drawing::framework::XConfigurationChangeListener
-    > CenterViewFocusModuleInterfaceBase;
+namespace sd::framework
+{
+typedef ::cppu::WeakComponentImplHelper<css::drawing::framework::XConfigurationChangeListener>
+    CenterViewFocusModuleInterfaceBase;
 
 /** This module waits for new views to be created for the center pane and
     then moves the center view to the top most place on the shell stack.  As
     we are moving away from the shell stack this module may become obsolete
     or has to be modified.
 */
-class CenterViewFocusModule
-    : private sd::MutexOwner,
-      public CenterViewFocusModuleInterfaceBase
+class CenterViewFocusModule : private sd::MutexOwner, public CenterViewFocusModuleInterfaceBase
 {
 public:
-    explicit CenterViewFocusModule (
-        css::uno::Reference<css::frame::XController> const & rxController);
+    explicit CenterViewFocusModule(
+        css::uno::Reference<css::frame::XController> const& rxController);
     virtual ~CenterViewFocusModule() override;
 
     virtual void SAL_CALL disposing() override;
 
     // XConfigurationChangeListener
 
-    virtual void SAL_CALL notifyConfigurationChange (
+    virtual void SAL_CALL notifyConfigurationChange(
         const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
 
     // XEventListener
 
-    virtual void SAL_CALL disposing (
-        const css::lang::EventObject& rEvent) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override;
 
 private:
     class ViewShellContainer;

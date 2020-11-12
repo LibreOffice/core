@@ -22,10 +22,13 @@
 
 #include "DrawViewShell.hxx"
 
-namespace vcl { class Window; }
+namespace vcl
+{
+class Window;
+}
 
-namespace sd {
-
+namespace sd
+{
 /** View shell of the Draw application.
 
     <p>This class is an example of how not to do it: specialization by
@@ -35,11 +38,9 @@ namespace sd {
     ViewShell that turns off some of the features for GraphicViewShell
     instances.</p>
 */
-class SAL_DLLPUBLIC_RTTI GraphicViewShell final
-    : public DrawViewShell
+class SAL_DLLPUBLIC_RTTI GraphicViewShell final : public DrawViewShell
 {
 public:
-
     SFX_DECL_VIEWFACTORY(GraphicViewShell);
     SFX_DECL_INTERFACE(SD_IF_SDGRAPHICVIEWSHELL)
 
@@ -50,16 +51,14 @@ public:
             The frame view that makes it possible to pass information from
             one view shell to the next.
     */
-    GraphicViewShell (
-        ViewShellBase& rViewShellBase,
-        vcl::Window* pParentWindow,
-        FrameView* pFrameView);
+    GraphicViewShell(ViewShellBase& rViewShellBase, vcl::Window* pParentWindow,
+                     FrameView* pFrameView);
 
     virtual ~GraphicViewShell() override;
 
     /** Override this method in order to have the layer mode always active.
     */
-    virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive) override;
+    virtual void ChangeEditMode(EditMode eMode, bool bIsLayerModeActive) override;
 
 private:
     /// SfxInterface initializer.

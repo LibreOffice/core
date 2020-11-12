@@ -24,10 +24,13 @@
 #include <rtl/ustring.hxx>
 #include <vcl/timer.hxx>
 
-namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
 
-namespace sd::slidesorter::view {
-
+namespace sd::slidesorter::view
+{
 /** Manage the display of tool tips.  The tool tip text changes when the
     mouse is moved from slide to slide or from button to button.
     After the mouse enters a slide the first display of the tool tip is
@@ -37,7 +40,7 @@ namespace sd::slidesorter::view {
 class ToolTip
 {
 public:
-    ToolTip (SlideSorter& rSlideSorter);
+    ToolTip(SlideSorter& rSlideSorter);
     ~ToolTip();
 
     /** Set a new page.  This modifies the default help text.  After a page
@@ -46,7 +49,7 @@ public:
         @param rpPage
             When this is empty then the tool tip is hidden.
     */
-    void SetPage (const model::SharedPageDescriptor& rpPage);
+    void SetPage(const model::SharedPageDescriptor& rpPage);
 
     /** Hide the tool tip.
         @return

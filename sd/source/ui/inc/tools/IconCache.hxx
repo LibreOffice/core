@@ -24,8 +24,8 @@
 #include <tools/SdGlobalResourceContainer.hxx>
 #include <vcl/image.hxx>
 
-namespace sd {
-
+namespace sd
+{
 /** This simple class stores frequently used icons so that the classes that
     use the icons do not have to store them in every one of their
     instances.
@@ -35,8 +35,7 @@ namespace sd {
     This cache acts like a singleton with a lifetime equal to that of the sd
     module.
 */
-class IconCache
-    : public SdGlobalResource
+class IconCache : public SdGlobalResource
 {
 public:
     /** The lifetime of the returned reference is limited to that of the sd

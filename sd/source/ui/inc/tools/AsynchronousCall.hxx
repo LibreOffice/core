@@ -25,8 +25,8 @@
 #include <memory>
 #include <functional>
 
-namespace sd::tools {
-
+namespace sd::tools
+{
 /** Store a function object and execute it asynchronous.
 
     The features of this class are:
@@ -61,9 +61,8 @@ public:
             The function object that may be called asynchronously in the
             near future.
     */
-    typedef ::std::function<void ()> AsynchronousFunction;
-    void Post (
-        const AsynchronousFunction& rFunction);
+    typedef ::std::function<void()> AsynchronousFunction;
+    void Post(const AsynchronousFunction& rFunction);
 
 private:
     Timer maTimer;
@@ -71,7 +70,7 @@ private:
         function is called the next time.  This pointer may be NULL.
     */
     ::std::unique_ptr<AsynchronousFunction> mpFunction;
-    DECL_LINK(TimerCallback,Timer*,void);
+    DECL_LINK(TimerCallback, Timer*, void);
 };
 
 } // end of namespace ::sd::tools

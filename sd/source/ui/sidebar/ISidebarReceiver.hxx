@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_ISIDEBARRECEIVER_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_ISIDEBARRECEIVER_HXX
 
-namespace sd::sidebar {
-
+namespace sd::sidebar
+{
 class ISidebarReceiver
 {
 public:

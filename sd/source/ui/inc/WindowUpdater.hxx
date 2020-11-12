@@ -26,12 +26,15 @@
 
 #include <vector>
 
-namespace vcl { class Window; }
+namespace vcl
+{
+class Window;
+}
 class OutputDevice;
 class SdDrawDocument;
 
-namespace sd {
-
+namespace sd
+{
 /** The purpose of the <type>WindowUpdater</type> is to update output
     devices to take care of modified global values.  These values are
     monitored for changes.  At the moment this is
@@ -59,7 +62,7 @@ public:
             This device is added to the device list if it is not <null/> and
             when it is not already a member of that list.
     */
-    void RegisterWindow (vcl::Window* pWindow);
+    void RegisterWindow(vcl::Window* pWindow);
 
     /** Remove the given device from the list of devices which will be updated
         when one of the monitored values changes.
@@ -67,7 +70,7 @@ public:
             This device is removed from the device list when it is a member
             of that list.
     */
-    void UnregisterWindow (vcl::Window* pWindow);
+    void UnregisterWindow(vcl::Window* pWindow);
 
     /** Set the document so that it is reformatted when one of the monitored
         values changes.
@@ -75,7 +78,7 @@ public:
             When <null/> is given document reformatting will not take
             place in the future.
     */
-    void SetDocument (SdDrawDocument* pDocument);
+    void SetDocument(SdDrawDocument* pDocument);
 
     /** Update the given output device and update all text objects of the
         view shell if not told otherwise.
@@ -83,12 +86,13 @@ public:
             The device to update.  When the given pointer is NULL then
             nothing is done.
     */
-    void Update (OutputDevice* pDevice) const;
+    void Update(OutputDevice* pDevice) const;
 
     /** Callback that waits for notifications of a
         <type>SvtCTLOptions</type> object.
     */
-    virtual void ConfigurationChanged ( utl::ConfigurationBroadcaster*, ConfigurationHints nHint) override;
+    virtual void ConfigurationChanged(utl::ConfigurationBroadcaster*,
+                                      ConfigurationHints nHint) override;
 
 private:
     /// Options to monitor for changes.
@@ -97,14 +101,14 @@ private:
     /// The document rendered in the output devices.
     SdDrawDocument* mpDocument;
 
-    WindowUpdater (const WindowUpdater& rUpdater) = delete;
+    WindowUpdater(const WindowUpdater& rUpdater) = delete;
 
-    WindowUpdater operator= (const WindowUpdater& rUpdater) = delete;
+    WindowUpdater operator=(const WindowUpdater& rUpdater) = delete;
 
     /** Type and data member for a list of devices that have to be kept
         up-to-date.
     */
-    typedef ::std::vector< VclPtr<vcl::Window> > tWindowList;
+    typedef ::std::vector<VclPtr<vcl::Window>> tWindowList;
     tWindowList maWindowList;
 
     /** The central method of this class.  Update the given output device.
@@ -114,7 +118,7 @@ private:
             The output device to update.  When it is <null/> then the call
             is ignored.
     */
-    void UpdateWindow (OutputDevice* pDevice) const;
+    void UpdateWindow(OutputDevice* pDevice) const;
 };
 
 } // end of namespace sd

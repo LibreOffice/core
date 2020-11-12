@@ -25,22 +25,17 @@
 
 class SdOutliner;
 
-namespace sd {
-
+namespace sd
+{
 /** This derivation of the svx::SpellDialogChildWindow base class
     provides Draw and Impress specific implementations of
     GetNextWrongSentence() and ApplyChangedSentence().
 */
-class SpellDialogChildWindow
-    : public svx::SpellDialogChildWindow
-    , public SfxListener
+class SpellDialogChildWindow : public svx::SpellDialogChildWindow, public SfxListener
 {
 public:
-    SpellDialogChildWindow (
-        vcl::Window* pParent,
-        sal_uInt16 nId,
-        SfxBindings* pBindings,
-        SfxChildWinInfo* pInfo);
+    SpellDialogChildWindow(vcl::Window* pParent, sal_uInt16 nId, SfxBindings* pBindings,
+                           SfxChildWinInfo* pInfo);
     virtual ~SpellDialogChildWindow() override;
 
     /** This method makes the one from the base class public so that
@@ -58,7 +53,7 @@ protected:
         next sentence with spelling errors. While doing so the view
         mode may be changed and text shapes are set into edit mode.
     */
-    virtual svx::SpellPortions GetNextWrongSentence( bool bRecheck ) override;
+    virtual svx::SpellPortions GetNextWrongSentence(bool bRecheck) override;
 
     /** This method is responsible for merging corrections made in the
         spelling dialog back into the document.

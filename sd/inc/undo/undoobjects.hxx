@@ -30,20 +30,19 @@ class SdPage;
 
 namespace sd
 {
-
 class UndoRemovePresObjectImpl
 {
 protected:
-    UndoRemovePresObjectImpl( SdrObject& rObject );
+    UndoRemovePresObjectImpl(SdrObject& rObject);
     virtual ~UndoRemovePresObjectImpl();
 
     virtual void Undo();
     virtual void Redo();
 
 private:
-    std::unique_ptr<SfxUndoAction>  mpUndoUsercall;
-    std::unique_ptr<SfxUndoAction>  mpUndoAnimation;
-    std::unique_ptr<SfxUndoAction>  mpUndoPresObj;
+    std::unique_ptr<SfxUndoAction> mpUndoUsercall;
+    std::unique_ptr<SfxUndoAction> mpUndoAnimation;
+    std::unique_ptr<SfxUndoAction> mpUndoPresObj;
 };
 
 class UndoRemoveObject final : public SdrUndoRemoveObj, public UndoRemovePresObjectImpl
@@ -61,7 +60,7 @@ private:
 class UndoDeleteObject final : public SdrUndoDelObj, public UndoRemovePresObjectImpl
 {
 public:
-    UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect );
+    UndoDeleteObject(SdrObject& rObject, bool bOrdNumDirect);
 
     virtual void Undo() override;
     virtual void Redo() override;
@@ -73,7 +72,7 @@ private:
 class UndoReplaceObject final : public SdrUndoReplaceObj, public UndoRemovePresObjectImpl
 {
 public:
-    UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject );
+    UndoReplaceObject(SdrObject& rOldObject, SdrObject& rNewObject);
 
     virtual void Undo() override;
     virtual void Redo() override;
@@ -85,7 +84,7 @@ private:
 class UndoObjectSetText final : public SdrUndoObjSetText
 {
 public:
-    UndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
+    UndoObjectSetText(SdrObject& rNewObj, sal_Int32 nText);
     virtual ~UndoObjectSetText() override;
 
     virtual void Undo() override;
@@ -93,7 +92,7 @@ public:
 
 private:
     std::unique_ptr<SfxUndoAction> mpUndoAnimation;
-    bool            mbNewEmptyPresObj;
+    bool mbNewEmptyPresObj;
     ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
@@ -136,7 +135,7 @@ private:
 class UndoAutoLayoutPosAndSize final : public SfxUndoAction
 {
 public:
-    UndoAutoLayoutPosAndSize( SdPage& rPage );
+    UndoAutoLayoutPosAndSize(SdPage& rPage);
 
     virtual void Undo() override;
     virtual void Redo() override;
@@ -148,7 +147,7 @@ private:
 class UndoGeoObject final : public SdrUndoGeoObj
 {
 public:
-    UndoGeoObject( SdrObject& rNewObj );
+    UndoGeoObject(SdrObject& rNewObj);
 
     virtual void Undo() override;
     virtual void Redo() override;
@@ -161,7 +160,7 @@ private:
 class UndoAttrObject final : public SdrUndoAttrObj
 {
 public:
-    UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText );
+    UndoAttrObject(SdrObject& rObject, bool bStyleSheet1, bool bSaveText);
 
     virtual void Undo() override;
     virtual void Redo() override;

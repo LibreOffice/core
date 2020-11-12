@@ -46,8 +46,8 @@ using namespace sd;
 #define ShellClass_GraphicViewShell
 #include <sdgslots.hxx>
 
-namespace sd {
-
+namespace sd
+{
 /**
  * Declare SFX-Slotmap and Standardinterface
  */
@@ -73,9 +73,9 @@ void DrawViewShell::InitInterface_Impl()
 #if HAVE_FEATURE_AVMEDIA
     GetStaticInterface()->RegisterChildWindow(::avmedia::MediaPlayer::GetChildWindowId());
 #endif
-    GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(
+        ::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
-
 
 // SdGraphicViewShell
 SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell)
@@ -98,9 +98,9 @@ void GraphicViewShell::InitInterface_Impl()
 #if HAVE_FEATURE_AVMEDIA
     GetStaticInterface()->RegisterChildWindow(::avmedia::MediaPlayer::GetChildWindowId());
 #endif
-    GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(
+        ::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
-
 
 } // end of namespace sd
 

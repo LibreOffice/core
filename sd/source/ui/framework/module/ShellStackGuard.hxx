@@ -30,20 +30,24 @@
 #include <cppuhelper/compbase.hxx>
 #include <memory>
 
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
-namespace com::sun::star::frame { class XController; }
-
-namespace sd {
-
-class ViewShellBase;
-
+namespace com::sun::star::drawing::framework
+{
+class XConfigurationController;
+}
+namespace com::sun::star::frame
+{
+class XController;
 }
 
-namespace sd::framework {
+namespace sd
+{
+class ViewShellBase;
+}
 
-typedef ::cppu::WeakComponentImplHelper <
-    css::drawing::framework::XConfigurationChangeListener
-    > ShellStackGuardInterfaceBase;
+namespace sd::framework
+{
+typedef ::cppu::WeakComponentImplHelper<css::drawing::framework::XConfigurationChangeListener>
+    ShellStackGuardInterfaceBase;
 
 /** This module locks updates of the current configuration in situations
     when the shell stack must not be modified.
@@ -55,24 +59,22 @@ typedef ::cppu::WeakComponentImplHelper <
     When in the future there are no resources left that use shells then this
     module can be removed.
 */
-class ShellStackGuard
-    : private ::cppu::BaseMutex,
-      public ShellStackGuardInterfaceBase
+class ShellStackGuard : private ::cppu::BaseMutex, public ShellStackGuardInterfaceBase
 {
 public:
-    explicit ShellStackGuard (css::uno::Reference<css::frame::XController> const & rxController);
+    explicit ShellStackGuard(css::uno::Reference<css::frame::XController> const& rxController);
     virtual ~ShellStackGuard() override;
 
     virtual void SAL_CALL disposing() override;
 
     // XConfigurationChangeListener
 
-    virtual void SAL_CALL notifyConfigurationChange (
+    virtual void SAL_CALL notifyConfigurationChange(
         const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
 
     // XEventListener
 
-    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override;
 
 private:
     css::uno::Reference<css::drawing::framework::XConfigurationController>

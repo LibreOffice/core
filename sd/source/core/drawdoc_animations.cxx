@@ -30,9 +30,9 @@ using namespace ::com::sun::star::presentation;
 /** replaces a slide from all custom shows with a new one or removes a slide from
     all custom shows if pNewPage is 0.
 */
-void SdDrawDocument::ReplacePageInCustomShows( const SdPage* pOldPage, const SdPage* pNewPage )
+void SdDrawDocument::ReplacePageInCustomShows(const SdPage* pOldPage, const SdPage* pNewPage)
 {
-    if ( mpCustomShowList )
+    if (mpCustomShowList)
     {
         for (sal_uLong i = 0; i < mpCustomShowList->size(); i++)
         {
@@ -42,11 +42,11 @@ void SdDrawDocument::ReplacePageInCustomShows( const SdPage* pOldPage, const SdP
     }
 }
 
-const Reference< XPresentation2 >& SdDrawDocument::getPresentation() const
+const Reference<XPresentation2>& SdDrawDocument::getPresentation() const
 {
-    if( !mxPresentation.is() )
+    if (!mxPresentation.is())
     {
-        const_cast< SdDrawDocument* >( this )->mxPresentation = CreatePresentation(*this);
+        const_cast<SdDrawDocument*>(this)->mxPresentation = CreatePresentation(*this);
     }
     return mxPresentation;
 }

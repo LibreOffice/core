@@ -22,8 +22,8 @@
 
 #include <model/SlsPageEnumeration.hxx>
 
-namespace sd::slidesorter::model {
-
+namespace sd::slidesorter::model
+{
 class SlideSorterModel;
 
 /** Collection of methods that create enumeration of slides.
@@ -34,17 +34,17 @@ public:
     /** The returned enumeration of slides iterates over all slides of the
         given model.
     */
-    static PageEnumeration CreateAllPagesEnumeration (const SlideSorterModel& rModel);
+    static PageEnumeration CreateAllPagesEnumeration(const SlideSorterModel& rModel);
 
     /** The returned enumeration of slides iterates over the currently
         selected slides of the given model.
     */
-    static PageEnumeration CreateSelectedPagesEnumeration (const SlideSorterModel& rModel);
+    static PageEnumeration CreateSelectedPagesEnumeration(const SlideSorterModel& rModel);
 
     /** The returned enumeration of slides iterates over the slides
         (partially) inside the visible area.
     */
-    static PageEnumeration CreateVisiblePagesEnumeration (const SlideSorterModel& rModel);
+    static PageEnumeration CreateVisiblePagesEnumeration(const SlideSorterModel& rModel);
 };
 
 } // end of namespace ::sd::slidesorter::model

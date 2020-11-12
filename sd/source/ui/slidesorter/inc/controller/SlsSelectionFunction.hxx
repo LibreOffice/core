@@ -24,22 +24,24 @@
 #include <fupoor.hxx>
 #include <memory>
 
-namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
 
 struct AcceptDropEvent;
 
-namespace sd::slidesorter::controller {
-
+namespace sd::slidesorter::controller
+{
 class SlideSorterController;
 
-class SelectionFunction final
-    : public FuPoor
+class SelectionFunction final : public FuPoor
 {
 public:
     SelectionFunction(const SelectionFunction&) = delete;
     SelectionFunction& operator=(const SelectionFunction&) = delete;
 
-    static rtl::Reference<FuPoor> Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
+    static rtl::Reference<FuPoor> Create(SlideSorter& rSlideSorter, SfxRequest& rRequest);
 
     // Mouse- & Key-Events
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
@@ -65,9 +67,7 @@ public:
     */
     virtual bool cancel() override;
 
-    void MouseDragged (
-        const AcceptDropEvent& rEvent,
-        const sal_Int8 nDragAction);
+    void MouseDragged(const AcceptDropEvent& rEvent, const sal_Int8 nDragAction);
 
     /** Turn of substitution display and insertion indicator.
     */
@@ -84,7 +84,7 @@ public:
     };
     void SwitchToNormalMode();
     void SwitchToDragAndDropMode(const Point& rMousePosition);
-    void SwitchToMultiSelectionMode (const Point& rMousePosition, const sal_uInt32 nEventCode);
+    void SwitchToMultiSelectionMode(const Point& rMousePosition, const sal_uInt32 nEventCode);
 
     void ResetShiftKeySelectionAnchor();
     /** Special case handling for when the context menu is hidden.  This
@@ -98,9 +98,7 @@ private:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
 
-    SelectionFunction (
-        SlideSorter& rSlideSorter,
-        SfxRequest& rRequest);
+    SelectionFunction(SlideSorter& rSlideSorter, SfxRequest& rRequest);
 
     virtual ~SelectionFunction() override;
 
@@ -121,28 +119,26 @@ private:
             When nOffset is negative then go back.  When nOffset if positive go
             forward.  When it is zero then ignore the call.
     */
-    void GotoNextPage (int nOffset);
+    void GotoNextPage(int nOffset);
 
     /** Make the slide with the given index the new current slide.
         @param nIndex
             Index of the new current slide.  When the new index is outside
             the range of valid page numbers it is clipped to that range.
     */
-    void GotoPage (int nIndex);
+    void GotoPage(int nIndex);
 
-    void ProcessMouseEvent (sal_uInt32 nEventType, const MouseEvent& rEvent);
+    void ProcessMouseEvent(sal_uInt32 nEventType, const MouseEvent& rEvent);
 
     // What follows are a couple of helper methods that are used by
     // ProcessMouseEvent().
 
-    void ProcessEvent (EventDescriptor& rEvent);
+    void ProcessEvent(EventDescriptor& rEvent);
 
-    void MoveFocus (
-        const FocusManager::FocusMoveDirection eDirection,
-        const bool bIsShiftDown,
-        const bool bIsControlDown);
+    void MoveFocus(const FocusManager::FocusMoveDirection eDirection, const bool bIsShiftDown,
+                   const bool bIsControlDown);
 
-    void SwitchMode (const std::shared_ptr<ModeHandler>& rpHandler);
+    void SwitchMode(const std::shared_ptr<ModeHandler>& rpHandler);
 };
 
 } // end of namespace ::sd::slidesorter::controller
