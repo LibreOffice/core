@@ -70,13 +70,13 @@ class SalPolyLine
 {
     std::vector<XPoint> Points_;
 public:
-    SalPolyLine(sal_uLong nPoints, const SalPoint *p)
+    SalPolyLine(sal_uLong nPoints, const Point *p)
         : Points_(nPoints+1)
     {
         for (sal_uLong i = 0; i < nPoints; ++i)
         {
-            Points_[i].x = static_cast<short>(p[i].mnX);
-            Points_[i].y = static_cast<short>(p[i].mnY);
+            Points_[i].x = static_cast<short>(p[i].getX());
+            Points_[i].y = static_cast<short>(p[i].getY());
         }
         Points_[nPoints] = Points_[0]; // close polyline
     }
@@ -1176,12 +1176,12 @@ void X11SalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long n
                         nX, nY, nDX-1, nDY-1 );
 }
 
-void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
+void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry )
 {
     drawPolyLine( nPoints, pPtAry, false );
 }
 
-void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry, bool bClose )
+void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry, bool bClose )
 {
     if( mnPenColor != SALCOLOR_NONE )
     {
@@ -1191,7 +1191,7 @@ void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAr
     }
 }
 
-void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
 {
     if( nPoints == 0 )
         return;
@@ -1201,10 +1201,10 @@ void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry
         if( !mbXORMode )
         {
             if( 1 == nPoints  )
-                drawPixel( pPtAry[0].mnX, pPtAry[0].mnY );
+                drawPixel( pPtAry[0].getX(), pPtAry[0].getY() );
             else
-                drawLine( pPtAry[0].mnX, pPtAry[0].mnY,
-                          pPtAry[1].mnX, pPtAry[1].mnY );
+                drawLine( pPtAry[0].getX(), pPtAry[0].getY(),
+                          pPtAry[1].getX(), pPtAry[1].getY() );
         }
         return;
     }
@@ -1259,7 +1259,7 @@ void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry
 
 void X11SalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly,
                                    const sal_uInt32    *pPoints,
-                                   PCONSTSALPOINT  *pPtAry )
+                                   const Point*  *pPtAry )
 {
     if( mnBrushColor != SALCOLOR_NONE )
     {
@@ -1304,18 +1304,18 @@ void X11SalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly,
             drawPolyLine( pPoints[i], pPtAry[i], true );
 }
 
-bool X11SalGraphicsImpl::drawPolyLineBezier( sal_uInt32, const SalPoint*, const PolyFlags* )
+bool X11SalGraphicsImpl::drawPolyLineBezier( sal_uInt32, const Point*, const PolyFlags* )
 {
     return false;
 }
 
-bool X11SalGraphicsImpl::drawPolygonBezier( sal_uInt32, const SalPoint*, const PolyFlags* )
+bool X11SalGraphicsImpl::drawPolygonBezier( sal_uInt32, const Point*, const PolyFlags* )
 {
     return false;
 }
 
 bool X11SalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
-                                                const SalPoint* const*, const PolyFlags* const* )
+                                                const Point* const*, const PolyFlags* const* )
 {
     return false;
 }
@@ -1348,7 +1348,7 @@ void X11SalGraphicsImpl::invert( tools::Long       nX,
 }
 
 void X11SalGraphicsImpl::invert( sal_uInt32 nPoints,
-                             const SalPoint* pPtAry,
+                             const Point* pPtAry,
                              SalInvert nFlags )
 {
     SalPolyLine Points ( nPoints, pPtAry );

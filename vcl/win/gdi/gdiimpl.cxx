@@ -79,7 +79,7 @@ namespace {
 void ImplPreparePolyDraw( bool                      bCloseFigures,
                           sal_uLong                 nPoly,
                           const sal_uInt32*         pPoints,
-                          const SalPoint* const*    pPtAry,
+                          const Point* const*    pPtAry,
                           const PolyFlags* const*   pFlgAry,
                           POINT*                    pWinPointAry,
                           BYTE*                     pWinFlagAry     )
@@ -87,7 +87,7 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
     sal_uLong nCurrPoly;
     for( nCurrPoly=0; nCurrPoly<nPoly; ++nCurrPoly )
     {
-        const POINT* pCurrPoint = reinterpret_cast<const POINT*>( *pPtAry++ );
+        const Point* pCurrPoint = *pPtAry++;
         const PolyFlags* pCurrFlag = *pFlgAry++;
         const sal_uInt32 nCurrPoints = *pPoints++;
         const bool bHaveFlagArray( pCurrFlag );
@@ -96,7 +96,8 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
         if( nCurrPoints )
         {
             // start figure
-            *pWinPointAry++ = *pCurrPoint++;
+            *pWinPointAry++ = POINT { static_cast<LONG>(pCurrPoint->getX()), static_cast<LONG>(pCurrPoint->getY()) };
+            pCurrPoint++;
             *pWinFlagAry++  = PT_MOVETO;
             ++pCurrFlag;
 
@@ -113,15 +114,18 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
                         ( PolyFlags::Normal == P4 || PolyFlags::Smooth == P4 || PolyFlags::Symmetric == P4 ) )
                     {
                         // control point one
-                        *pWinPointAry++ = *pCurrPoint++;
+                        *pWinPointAry++ = POINT { static_cast<LONG>(pCurrPoint->getX()), static_cast<LONG>(pCurrPoint->getY()) };
+                        pCurrPoint++;
                         *pWinFlagAry++  = PT_BEZIERTO;
 
                         // control point two
-                        *pWinPointAry++ = *pCurrPoint++;
+                        *pWinPointAry++ = POINT { static_cast<LONG>(pCurrPoint->getX()), static_cast<LONG>(pCurrPoint->getY()) };
+                        pCurrPoint++;
                         *pWinFlagAry++  = PT_BEZIERTO;
 
                         // end point
-                        *pWinPointAry++ = *pCurrPoint++;
+                        *pWinPointAry++ = POINT { static_cast<LONG>(pCurrPoint->getX()), static_cast<LONG>(pCurrPoint->getY()) };
+                        pCurrPoint++;
                         *pWinFlagAry++  = PT_BEZIERTO;
 
                         nCurrPoint += 3;
@@ -131,7 +135,8 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
                 }
 
                 // regular line point
-                *pWinPointAry++ = *pCurrPoint++;
+                *pWinPointAry++ = POINT { static_cast<LONG>(pCurrPoint->getX()), static_cast<LONG>(pCurrPoint->getY()) };
+                pCurrPoint++;
                 *pWinFlagAry++  = PT_LINETO;
                 ++pCurrFlag;
                 ++nCurrPoint;
@@ -894,7 +899,7 @@ void WinSalGraphicsImpl::invert( tools::Long nX, tools::Long nY, tools::Long nWi
     }
 }
 
-void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
+void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nSalFlags )
 {
     HPEN        hPen;
     HPEN        hOldPen;
@@ -919,21 +924,20 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
     }
     hOldPen = SelectPen( mrParent.getHDC(), hPen );
 
-    POINT const * pWinPtAry;
-    // for NT, we can handover the array directly
-    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
+    std::unique_ptr<POINT[]> pWinPtAry(new POINT[nPoints]);
+    for (sal_uInt32 i=0; i<nPoints; ++i)
+        pWinPtAry[i] = POINT { static_cast<LONG>(pPtAry[i].getX()), static_cast<LONG>(pPtAry[i].getY()) };
 
-    pWinPtAry = reinterpret_cast<POINT const *>(pPtAry);
     // for Windows 95 and its maximum number of points
     if ( nSalFlags & SalInvert::TrackFrame )
     {
-        if ( !Polyline( mrParent.getHDC(), pWinPtAry, static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
-            Polyline( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
+        if ( !Polyline( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
+            Polyline( mrParent.getHDC(), pWinPtAry.get(), MAX_64KSALPOINTS );
     }
     else
     {
-        if ( !Polygon( mrParent.getHDC(), pWinPtAry, static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
-            Polygon( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
+        if ( !Polygon( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
+            Polygon( mrParent.getHDC(), pWinPtAry.get(), MAX_64KSALPOINTS );
     }
 
     SetROP2( mrParent.getHDC(), nOldROP );
@@ -1627,35 +1631,34 @@ void WinSalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long n
         Rectangle( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), static_cast<int>(nX+nWidth), static_cast<int>(nY+nHeight) );
 }
 
-void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry )
 {
-    // for NT, we can handover the array directly
-    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
-
-    POINT const * pWinPtAry = reinterpret_cast<POINT const *>(pPtAry);
+    std::unique_ptr<POINT[]> pWinPtAry(new POINT[nPoints]);
+    for (sal_uInt32 i=0; i<nPoints; ++i)
+        pWinPtAry[i] = POINT { static_cast<LONG>(pPtAry[i].getX()), static_cast<LONG>(pPtAry[i].getY()) };
 
     // for Windows 95 and its maximum number of points
-    if ( !Polyline( mrParent.getHDC(), pWinPtAry, static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
-        Polyline( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
+    if ( !Polyline( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
+        Polyline( mrParent.getHDC(), pWinPtAry.get(), MAX_64KSALPOINTS );
 
     // Polyline seems to uses LineTo, which doesn't paint the last pixel (see 87eb8f8ee)
     if ( !mrParent.isPrinter() )
         DrawPixelImpl( pWinPtAry[nPoints-1].x, pWinPtAry[nPoints-1].y, mnPenColor );
 }
 
-void WinSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void WinSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
 {
-    // for NT, we can handover the array directly
-    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
+    std::unique_ptr<POINT[]> pWinPtAry(new POINT[nPoints]);
+    for (sal_uInt32 i=0; i<nPoints; ++i)
+        pWinPtAry[i] = POINT { static_cast<LONG>(pPtAry[i].getX()), static_cast<LONG>(pPtAry[i].getY()) };
 
-    POINT const * pWinPtAry = reinterpret_cast<POINT const *>(pPtAry);
     // for Windows 95 and its maximum number of points
-    if ( !Polygon( mrParent.getHDC(), pWinPtAry, static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
-        Polygon( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
+    if ( !Polygon( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
+        Polygon( mrParent.getHDC(), pWinPtAry.get(), MAX_64KSALPOINTS );
 }
 
 void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                   PCONSTSALPOINT* pPtAry )
+                                   const Point** pPtAry )
 {
     UINT    aWinPointAry[SAL_POLYPOLYCOUNT_STACKBUF];
     UINT*   pWinPointAry;
@@ -1681,14 +1684,13 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
         pWinPointAryAry = aWinPointAryAry;
     else
         pWinPointAryAry = new POINT[nPolyPolyPoints];
-    // for NT, we can handover the array directly
-    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
     UINT            n = 0;
     for ( i = 0; i < static_cast<UINT>(nPoly); i++ )
     {
         nPoints = pWinPointAry[i];
-        const SalPoint* pPolyAry = pPtAry[i];
-        memcpy( pWinPointAryAry+n, pPolyAry, (nPoints-1)*sizeof(POINT) );
+        const Point* pPolyAry = pPtAry[i];
+        for (sal_uInt32 j=0; j<nPoints-1; ++j)
+            pWinPointAryAry[n+j] = POINT { static_cast<LONG>(pPolyAry[j].getX()), static_cast<LONG>(pPolyAry[j].getY()) };
         pWinPointAryAry[n+nPoints-1] = pWinPointAryAry[n];
         n += nPoints;
     }
@@ -1719,10 +1721,8 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
         delete [] pWinPointAryAry;
 }
 
-bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
+bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
 {
-    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
-
     // #100127# draw an array of points which might also contain bezier control points
     if (!nPoints)
         return true;
@@ -1732,7 +1732,7 @@ bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint*
     // TODO: profile whether the following options are faster:
     // a) look ahead and draw consecutive bezier or line segments by PolyBezierTo/PolyLineTo resp.
     // b) convert our flag array to window's and use PolyDraw
-    MoveToEx(hdc, pPtAry->mnX, pPtAry->mnY, nullptr);
+    MoveToEx(hdc, static_cast<LONG>(pPtAry->getX()), static_cast<LONG>(pPtAry->getY()), nullptr);
     ++pPtAry;
     ++pFlgAry;
 
@@ -1740,11 +1740,16 @@ bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint*
     {
         if(*pFlgAry != PolyFlags::Control)
         {
-            LineTo(hdc, pPtAry->mnX, pPtAry->mnY);
+            LineTo(hdc, pPtAry->getX(), pPtAry->getY());
         }
         else if(nPoints - i > 2)
         {
-            PolyBezierTo(hdc, reinterpret_cast<const POINT*>(pPtAry), 3);
+            POINT bezierPoints[] = {
+                POINT { static_cast<LONG>(pPtAry[0].getX()), static_cast<LONG>(pPtAry[0].getY()) },
+                POINT { static_cast<LONG>(pPtAry[1].getX()), static_cast<LONG>(pPtAry[1].getY()) },
+                POINT { static_cast<LONG>(pPtAry[2].getX()), static_cast<LONG>(pPtAry[2].getY()) },
+            };
+            PolyBezierTo(hdc, bezierPoints, 3);
             i += 2;
             pPtAry += 2;
             pFlgAry += 2;
@@ -1757,10 +1762,8 @@ bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint*
     return true;
 }
 
-bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
+bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
 {
-    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
-
     POINT   aStackAry1[SAL_POLY_STACKBUF];
     BYTE    aStackAry2[SAL_POLY_STACKBUF];
     POINT*  pWinPointAry;
@@ -1802,10 +1805,8 @@ bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* 
 }
 
 bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                             const SalPoint* const* pPtAry, const PolyFlags* const* pFlgAry )
+                                             const Point* const* pPtAry, const PolyFlags* const* pFlgAry )
 {
-    static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
-
     sal_uLong nCurrPoly, nTotalPoints;
     const sal_uInt32* pCurrPoints = pPoints;
     for( nCurrPoly=0, nTotalPoints=0; nCurrPoly<nPoly; ++nCurrPoly )
