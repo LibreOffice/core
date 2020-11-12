@@ -20,30 +20,26 @@
 #include <embeddoc.hxx>
 #include <osl/diagnose.h>
 
-
-COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetWindow(HWND *hWnd)
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetWindow(HWND* hWnd)
 {
-    OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
+    OSL_ENSURE(m_pDocHolder, "no document for inplace activation");
 
     *hWnd = m_pDocHolder->GetTopMostWinHandle();
-    if(*hWnd != nullptr)
+    if (*hWnd != nullptr)
         return NOERROR;
     else
         return ERROR;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::ContextSensitiveHelp(BOOL)
-{
-    return NOERROR;
-}
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::ContextSensitiveHelp(BOOL) { return NOERROR; }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::InPlaceDeactivate()
 {
     // no locking is used since the OLE must use the same thread always
-    if ( m_bIsInVerbHandling )
+    if (m_bIsInVerbHandling)
         return E_UNEXPECTED;
 
-    BooleanGuard_Impl aGuard( m_bIsInVerbHandling );
+    BooleanGuard_Impl aGuard(m_bIsInVerbHandling);
 
     m_pDocHolder->InPlaceDeactivate();
 
@@ -57,11 +53,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::InPlaceDeactivate()
 COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::UIDeactivate()
 {
     // no locking is used since the OLE must use the same thread always
-    if ( m_bIsInVerbHandling )
+    if (m_bIsInVerbHandling)
         return E_UNEXPECTED;
 
-    BooleanGuard_Impl aGuard( m_bIsInVerbHandling );
-
+    BooleanGuard_Impl aGuard(m_bIsInVerbHandling);
 
     m_pDocHolder->UIDeactivate();
 
@@ -74,14 +69,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::UIDeactivate()
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SetObjectRects(LPCRECT aRect, LPCRECT aClip)
 {
-    OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
+    OSL_ENSURE(m_pDocHolder, "no document for inplace activation");
 
-    return m_pDocHolder->SetObjectRects(aRect,aClip);
+    return m_pDocHolder->SetObjectRects(aRect, aClip);
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::ReactivateAndUndo()
-{
-    return E_NOTIMPL;
-}
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::ReactivateAndUndo() { return E_NOTIMPL; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

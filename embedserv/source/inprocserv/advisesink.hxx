@@ -25,20 +25,20 @@
 #include <memory>
 
 #if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 #include <objidl.h>
 #include "smartpointer.hxx"
 
-namespace inprocserv {
-
+namespace inprocserv
+{
 class OleWrapperAdviseSink : public IAdviseSink
 {
 protected:
     ULONG m_nRefCount;
 
-    ComSmart< IAdviseSink > m_pListener;
+    ComSmart<IAdviseSink> m_pListener;
     DWORD m_nListenerID;
 
     std::unique_ptr<FORMATETC> m_pFormatEtc;
@@ -57,17 +57,18 @@ public:
     OleWrapperAdviseSink();
 
     // an AdviseSink for IOleObject interface
-    explicit OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener );
+    explicit OleWrapperAdviseSink(const ComSmart<IAdviseSink>& pListener);
 
     // an AdviseSink for IDataObject interface
-    OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener, FORMATETC* pFormatEtc, DWORD nDataRegFlag );
+    OleWrapperAdviseSink(const ComSmart<IAdviseSink>& pListener, FORMATETC* pFormatEtc,
+                         DWORD nDataRegFlag);
 
     // an AdviseSink for IViewObject interface
-    OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener, DWORD nAspect, DWORD nViewRegFlag );
+    OleWrapperAdviseSink(const ComSmart<IAdviseSink>& pListener, DWORD nAspect, DWORD nViewRegFlag);
 
     virtual ~OleWrapperAdviseSink();
 
-    void SetRegID( DWORD nRegID ) { m_nRegID = nRegID; }
+    void SetRegID(DWORD nRegID) { m_nRegID = nRegID; }
     DWORD GetRegID() { return m_nRegID; }
 
     bool IsOleAdvise() { return m_bObjectAdvise; }
@@ -76,7 +77,7 @@ public:
 
     FORMATETC* GetFormatEtc() { return m_pFormatEtc.get(); }
     DWORD GetAspect() { return m_nAspect; }
-    ComSmart< IAdviseSink >& GetOrigAdvise() { return m_pListener; }
+    ComSmart<IAdviseSink>& GetOrigAdvise() { return m_pListener; }
     void DisconnectOrigAdvise() { m_pListener = nullptr; }
 
     void SetClosed() { m_bClosed = TRUE; }
@@ -87,11 +88,11 @@ public:
     STDMETHODIMP_(ULONG) AddRef() override;
     STDMETHODIMP_(ULONG) Release() override;
 
-    STDMETHODIMP_(void)  OnDataChange(FORMATETC *, STGMEDIUM *) override;
-    STDMETHODIMP_(void)  OnViewChange(DWORD, LONG) override;
-    STDMETHODIMP_(void)  OnRename(IMoniker *) override;
-    STDMETHODIMP_(void)  OnSave() override;
-    STDMETHODIMP_(void)  OnClose() override;
+    STDMETHODIMP_(void) OnDataChange(FORMATETC*, STGMEDIUM*) override;
+    STDMETHODIMP_(void) OnViewChange(DWORD, LONG) override;
+    STDMETHODIMP_(void) OnRename(IMoniker*) override;
+    STDMETHODIMP_(void) OnSave() override;
+    STDMETHODIMP_(void) OnClose() override;
 };
 
 }; // namespace advisesink
