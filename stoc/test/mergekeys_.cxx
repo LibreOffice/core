@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "../source/implementationregistration/mergekeys.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,14 +38,13 @@ extern "C" void SAL_CALL test_ServiceManager();
 #define TRUE 1
 #endif
 
-
 OString userRegEnv("STAR_USER_REGISTRY=");
 
 OUString getExePath()
 {
-    OUString        exe;
+    OUString exe;
 
-    OSL_VERIFY( osl_getExecutableFile( &exe.pData) == osl_Process_E_None);
+    OSL_VERIFY(osl_getExecutableFile(&exe.pData) == osl_Process_E_None);
 
 #if defined(_WIN32)
     exe = exe.copy(0, exe.getLength() - 16);
@@ -57,13 +56,13 @@ OUString getExePath()
 
 void setStarUserRegistry()
 {
-    Registry *myRegistry = new Registry();
+    Registry* myRegistry = new Registry();
 
     RegistryKey rootKey, rKey, rKey2;
 
     OUString userReg = getExePath();
     userReg += "user.rdb";
-    if(myRegistry->open(userReg, RegAccessMode::READWRITE))
+    if (myRegistry->open(userReg, RegAccessMode::READWRITE))
     {
         OSL_VERIFY(!myRegistry->create(userReg));
     }
@@ -72,18 +71,17 @@ void setStarUserRegistry()
     delete myRegistry;
 
     userRegEnv += OUStringToOString(userReg, RTL_TEXTENCODING_ASCII_US);
-    putenv((char *)userRegEnv.getStr());
+    putenv((char*)userRegEnv.getStr());
 }
-
 
 SAL_IMPLEMENT_MAIN()
 {
-    printf( "ServiceManagerTest : \r");
+    printf("ServiceManagerTest : \r");
     setStarUserRegistry();
-    fflush( stdout );
+    fflush(stdout);
     test_ServiceManager();
 
-    printf( "ServiceManagerTest : OK\n" );
+    printf("ServiceManagerTest : OK\n");
     return 0;
 }
 

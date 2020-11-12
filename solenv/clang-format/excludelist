@@ -11947,7 +11947,6 @@ stoc/source/javavm/interact.cxx
 stoc/source/javavm/interact.hxx
 stoc/source/javavm/javavm.cxx
 stoc/source/javavm/javavm.hxx
-stoc/source/javavm/jvmargs.cxx
 stoc/source/javavm/jvmargs.hxx
 stoc/source/loader/dllcomponentloader.cxx
 stoc/source/namingservice/namingservice.cxx
@@ -11969,7 +11968,6 @@ stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript.cxx
 stoc/source/uriproc/VndSunStarPkgUrlReferenceFactory.cxx
 stoc/test/javavm/jvm_interaction/interactionhandler.cxx
 stoc/test/javavm/testjavavm.cxx
-stoc/test/mergekeys_.cxx
 stoc/test/registry_tdprovider/testregistrytdprovider.cxx
 stoc/test/tdmanager/testtdmanager.cxx
 stoc/test/testconv.cxx
@@ -11979,7 +11977,6 @@ stoc/test/testintrosp.cxx
 stoc/test/testloader.cxx
 stoc/test/testproxyfac.cxx
 stoc/test/testregistry.cxx
-stoc/test/testsmgr.cxx
 stoc/test/testsmgr2.cxx
 stoc/test/testsmgr_cpnt.cxx
 stoc/test/uriproc/test_uriproc.cxx
