@@ -3188,6 +3188,9 @@ SdrObject* SdrObjFactory::MakeNewObject(
         pObj->SetSnapRect(*pSnapRect);
     }
 
+    pObj->SetName("DrawObject");
+    pObj->MakeNameUnique();
+
     return pObj;
 }
 
