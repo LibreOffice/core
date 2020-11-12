@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SOLTOOLS_CPP__GETOPT_H
 #define INCLUDED_SOLTOOLS_CPP__GETOPT_H
 
-int stgetopt(int, char *const [], const char *);
-extern char *optarg;
+int stgetopt(int, char* const[], const char*);
+extern char* optarg;
 extern int optind;
 
 #endif
