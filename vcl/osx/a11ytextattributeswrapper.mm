@@ -275,9 +275,9 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     [ pool release ];
 }
 
-+(void)addMarkup:(XAccessibleTextMarkup*)markup withType:(long)type toString:(NSMutableAttributedString*)string inRange:(NSRange)range {
-    const long markupCount = markup->getTextMarkupCount(type);
-    for (long markupIndex = 0; markupIndex < markupCount; ++markupIndex) {
++(void)addMarkup:(XAccessibleTextMarkup*)markup withType:(sal_Int32)type toString:(NSMutableAttributedString*)string inRange:(NSRange)range {
+    const sal_Int32 markupCount = markup->getTextMarkupCount(type);
+    for (sal_Int32 markupIndex = 0; markupIndex < markupCount; ++markupIndex) {
         TextSegment markupSegment = markup->getTextMarkup(markupIndex, type);
         NSRange markupRange = NSMakeRange(markupSegment.SegmentStart, markupSegment.SegmentEnd - markupSegment.SegmentStart);
         markupRange = NSIntersectionRange(range, markupRange);
