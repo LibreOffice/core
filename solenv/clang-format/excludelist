@@ -4444,11 +4444,9 @@ formula/source/core/api/FormulaOpCodeMapperObj.cxx
 formula/source/core/api/grammar.cxx
 formula/source/core/api/token.cxx
 formula/source/core/api/vectortoken.cxx
-formula/source/core/resource/core_resource.cxx
 formula/source/ui/dlg/ControlHelper.hxx
 formula/source/ui/dlg/FormulaHelper.cxx
 formula/source/ui/dlg/formula.cxx
-formula/source/ui/dlg/funcpage.cxx
 formula/source/ui/dlg/funcpage.hxx
 formula/source/ui/dlg/funcutl.cxx
 formula/source/ui/dlg/parawin.cxx

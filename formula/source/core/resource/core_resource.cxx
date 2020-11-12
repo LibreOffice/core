@@ -19,9 +19,6 @@
 #include <unotools/resmgr.hxx>
 #include <core_resource.hxx>
 
-OUString ForResId(const char *pId)
-{
-    return Translate::get(pId, Translate::Create("for"));
-}
+OUString ForResId(const char* pId) { return Translate::get(pId, Translate::Create("for")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

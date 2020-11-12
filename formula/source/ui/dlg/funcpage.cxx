@@ -27,7 +27,6 @@
 
 namespace formula
 {
-
 IMPL_LINK(FuncPage, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     if (rKEvt.GetCharCode() == ' ')
@@ -52,7 +51,7 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     m_pFunctionManager->fillLastRecentlyUsedFunctions(aLRUList);
 
     const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
-    for(sal_uInt32 j= 0; j < nCategoryCount; ++j)
+    for (sal_uInt32 j = 0; j < nCategoryCount; ++j)
     {
         const IFunctionCategory* pCategory = m_pFunctionManager->getCategory(j);
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pCategory)));
@@ -65,23 +64,21 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     // lock to its initial size
     m_xLbFunction->set_size_request(m_xLbFunction->get_preferred_size().Width(),
                                     m_xLbFunction->get_height_rows(15));
-    m_xLbCategory->connect_changed( LINK( this, FuncPage, SelComboBoxHdl ) );
-    m_xLbFunction->connect_changed( LINK( this, FuncPage, SelTreeViewHdl ) );
-    m_xLbFunction->connect_row_activated( LINK( this, FuncPage, DblClkHdl ) );
-    m_xLbFunction->connect_key_press( LINK( this, FuncPage, KeyInputHdl ) );
-    m_xLbFunctionSearchString->connect_changed( LINK( this, FuncPage, ModifyHdl ) );
+    m_xLbCategory->connect_changed(LINK(this, FuncPage, SelComboBoxHdl));
+    m_xLbFunction->connect_changed(LINK(this, FuncPage, SelTreeViewHdl));
+    m_xLbFunction->connect_row_activated(LINK(this, FuncPage, DblClkHdl));
+    m_xLbFunction->connect_key_press(LINK(this, FuncPage, KeyInputHdl));
+    m_xLbFunctionSearchString->connect_changed(LINK(this, FuncPage, ModifyHdl));
 
     m_xLbFunctionSearchString->grab_focus();
 }
 
-FuncPage::~FuncPage()
-{
-}
+FuncPage::~FuncPage() {}
 
 void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
 {
     const sal_uInt32 nCount = _pCategory->getCount();
-    for(sal_uInt32 i = 0 ; i < nCount; ++i)
+    for (sal_uInt32 i = 0; i < nCount; ++i)
     {
         TFunctionDesc pDesc(_pCategory->getFunction(i));
         if (!pDesc->isHidden())
@@ -102,14 +99,15 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
 
     if (aStr.isEmpty() || nSelPos == 0)
     {
-        const IFunctionCategory* pCategory = reinterpret_cast<const IFunctionCategory*>(m_xLbCategory->get_id(nSelPos).toInt64());
+        const IFunctionCategory* pCategory
+            = reinterpret_cast<const IFunctionCategory*>(m_xLbCategory->get_id(nSelPos).toInt64());
 
-        if ( nSelPos > 0 )
+        if (nSelPos > 0)
         {
-            if ( pCategory == nullptr )
+            if (pCategory == nullptr)
             {
                 const sal_uInt32 nCount = m_pFunctionManager->getCount();
-                for(sal_uInt32 i = 0 ; i < nCount; ++i)
+                for (sal_uInt32 i = 0; i < nCount; ++i)
                 {
                     impl_addFunctions(m_pFunctionManager->getCategory(i));
                 }
@@ -123,7 +121,7 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
         {
             for (auto const& elem : aLRUList)
             {
-                if (elem)  // may be null if a function is no longer available
+                if (elem) // may be null if a function is no longer available
                 {
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(elem)));
                     m_xLbFunction->append(sId, elem->getFunctionName());
@@ -135,7 +133,7 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
     {
         SvtSysLocale aSysLocale;
         const CharClass* pCharClass = aSysLocale.GetCharClassPtr();
-        const OUString aSearchStr( pCharClass->uppercase(aStr));
+        const OUString aSearchStr(pCharClass->uppercase(aStr));
 
         const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
         // Category listbox holds additional entries for Last Used and All, so
@@ -191,11 +189,11 @@ IMPL_LINK_NOARG(FuncPage, SelComboBoxHdl, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(FuncPage, SelTreeViewHdl, weld::TreeView&, void)
 {
-    const IFunctionDescription* pDesc = GetFuncDesc( GetFunction() );
-    if ( pDesc )
+    const IFunctionDescription* pDesc = GetFuncDesc(GetFunction());
+    if (pDesc)
     {
         const OString sHelpId = pDesc->getHelpId();
-        if ( !sHelpId.isEmpty() )
+        if (!sHelpId.isEmpty())
             m_xLbFunction->set_help_id(sHelpId);
     }
     aSelectionLink.Call(*this);
@@ -234,37 +232,19 @@ void FuncPage::SetFunction(sal_Int32 nFunc)
         m_xLbFunction->select(nFunc);
 }
 
-void FuncPage::SetFocus()
-{
-    m_xLbFunction->grab_focus();
-}
+void FuncPage::SetFocus() { m_xLbFunction->grab_focus(); }
 
-sal_Int32 FuncPage::GetCategory() const
-{
-    return m_xLbCategory->get_active();
-}
+sal_Int32 FuncPage::GetCategory() const { return m_xLbCategory->get_active(); }
 
-sal_Int32 FuncPage::GetCategoryEntryCount() const
-{
-    return m_xLbCategory->get_count();
-}
+sal_Int32 FuncPage::GetCategoryEntryCount() const { return m_xLbCategory->get_count(); }
 
-sal_Int32 FuncPage::GetFunction() const
-{
-    return m_xLbFunction->get_selected_index();
-}
+sal_Int32 FuncPage::GetFunction() const { return m_xLbFunction->get_selected_index(); }
 
-sal_Int32 FuncPage::GetFunctionEntryCount() const
-{
-    return m_xLbFunction->n_children();
-}
+sal_Int32 FuncPage::GetFunctionEntryCount() const { return m_xLbFunction->n_children(); }
 
-OUString FuncPage::GetSelFunctionName() const
-{
-    return m_xLbFunction->get_selected_text();
-}
+OUString FuncPage::GetSelFunctionName() const { return m_xLbFunction->get_selected_text(); }
 
-const IFunctionDescription* FuncPage::GetFuncDesc( sal_Int32 nPos ) const
+const IFunctionDescription* FuncPage::GetFuncDesc(sal_Int32 nPos) const
 {
     if (nPos == -1)
         return nullptr;
