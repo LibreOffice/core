@@ -1123,7 +1123,7 @@ void XMLDateFieldImportContext::ProcessAttribute(
         case XML_ELEMENT(TEXT, XML_DATE_ADJUST):
             // delegate to superclass, pretending it was a time-adjust attr.
             XMLTimeFieldImportContext::ProcessAttribute(
-                XML_TOK_TEXTFIELD_TIME_ADJUST,
+                XML_ELEMENT(TEXT, XML_TIME_ADJUST),
                 sAttrValue);
             break;
         case XML_ELEMENT(TEXT, XML_TIME_VALUE):
