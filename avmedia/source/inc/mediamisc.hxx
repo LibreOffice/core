@@ -23,19 +23,19 @@
 
 #define AVMEDIA_MANAGER_SERVICE_PREFERRED "com.sun.star.comp.avmedia.Manager_VLC"
 #ifdef _WIN32
-#define AVMEDIA_MANAGER_SERVICE_NAME      "com.sun.star.comp.avmedia.Manager_DirectX"
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_DirectX"
 #else
 #ifdef MACOSX
-#define AVMEDIA_MANAGER_SERVICE_NAME      "com.sun.star.comp.avmedia.Manager_MacAVF"
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_MacAVF"
 #else
-#define AVMEDIA_MANAGER_SERVICE_NAME      "com.sun.star.comp.avmedia.Manager_GStreamer"
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_GStreamer"
 #endif
 #endif
 
 #define AVMEDIA_OPENGL_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_OpenGL"
 
 // Mime types
-#define AVMEDIA_MIMETYPE_COMMON           "application/vnd.sun.star.media"
+#define AVMEDIA_MIMETYPE_COMMON "application/vnd.sun.star.media"
 
 inline OUString AvmResId(const char* pId)
 {
