@@ -1276,6 +1276,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromTopMarginNoHeade
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "2551");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf64531,"tdf64531.docx")
+{
+    xmlDocUniquePtr pXmlDoc= parseExport("word/document.xml");
+    OString sPathToTabs= "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:pPr/w:tabs/";
+    assertXPath(pXmlDoc, sPathToTabs+"w:tab[1]", "pos","720");
+    assertXPath(pXmlDoc, sPathToTabs+"w:tab[2]", "pos","12950");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWordWrap.docx")
 {
     // tdf#97618 The text wrapping of a shape was not handled in a canvas.
