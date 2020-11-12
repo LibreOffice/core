@@ -22,16 +22,14 @@
 
 namespace basegfx3d
 {
-
 class b3dhommatrix : public CppUnit::TestFixture
 {
 public:
-
     // insert your test code here.
     // this is only demonstration code
     void EmptyMethod()
     {
-          // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -46,12 +44,11 @@ public:
 class b3dpoint : public CppUnit::TestFixture
 {
 public:
-
     // insert your test code here.
     // this is only demonstration code
     void EmptyMethod()
     {
-          // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -66,11 +63,8 @@ public:
 class b3drange : public CppUnit::TestFixture
 {
 public:
-
     // insert your test code here.
-    void EmptyMethod()
-    {
-    }
+    void EmptyMethod() {}
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
@@ -84,12 +78,11 @@ public:
 class b3dtuple : public CppUnit::TestFixture
 {
 public:
-
     // insert your test code here.
     // this is only demonstration code
     void EmptyMethod()
     {
-          // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -104,11 +97,8 @@ public:
 class b3dvector : public CppUnit::TestFixture
 {
 public:
-
     // insert your test code here.
-    void EmptyMethod()
-    {
-    }
+    void EmptyMethod() {}
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,

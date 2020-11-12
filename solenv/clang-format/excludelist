@@ -338,10 +338,7 @@ basegfx/source/workbench/bezierclip.hxx
 basegfx/source/workbench/convexhull.cxx
 basegfx/source/workbench/gauss.hxx
 basegfx/test/SvgPathImportExport.cxx
-basegfx/test/basegfx3d.cxx
-basegfx/test/basegfxtools.cxx
 basegfx/test/boxclipper.cxx
-basegfx/test/boxclipper.hxx
 basegfx/test/clipstate.cxx
 basegfx/test/genericclipper.cxx
 basic/inc/global.hxx
