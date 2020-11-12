@@ -16,8 +16,8 @@
 #include <com/sun/star/ucb/InteractiveNetworkException.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 
-namespace comphelper {
-
+namespace comphelper
+{
 /// Will handle com::sun::star::ucb::InteractiveIOException and derived classes
 const sal_Int32 HANDLE_INTERACTIVEIOEXCEPTION = 0;
 /// Will handle com::sun::star::ucb::UnsupportedDataSinkException
@@ -30,10 +30,10 @@ const sal_Int32 HANDLE_CERTIFICATEREQUEST = 3;
 const sal_Int32 HANDLE_AUTHENTICATIONREQUEST = 4;
 
 SimpleFileAccessInteraction::SimpleFileAccessInteraction(
-    const css::uno::Reference< css::task::XInteractionHandler >& xHandler )
+    const css::uno::Reference<css::task::XInteractionHandler>& xHandler)
 {
-    std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
-    ::ucbhelper::InterceptedInteraction::InterceptedRequest                  aInterceptedRequest;
+    std::vector<::ucbhelper::InterceptedInteraction::InterceptedRequest> lInterceptions;
+    ::ucbhelper::InterceptedInteraction::InterceptedRequest aInterceptedRequest;
 
     //intercept standard IO error exception (local file and WebDAV)
     aInterceptedRequest.Handle = HANDLE_INTERACTIVEIOEXCEPTION;
@@ -69,16 +69,14 @@ SimpleFileAccessInteraction::SimpleFileAccessInteraction(
     setInterceptions(lInterceptions);
 }
 
-SimpleFileAccessInteraction::~SimpleFileAccessInteraction()
-{
-}
+SimpleFileAccessInteraction::~SimpleFileAccessInteraction() {}
 
 ucbhelper::InterceptedInteraction::EInterceptionState SimpleFileAccessInteraction::intercepted(
     const ::ucbhelper::InterceptedInteraction::InterceptedRequest& aRequest,
-    const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
+    const css::uno::Reference<css::task::XInteractionRequest>& xRequest)
 {
     bool bAbort = false;
-    switch(aRequest.Handle)
+    switch (aRequest.Handle)
     {
         case HANDLE_UNSUPPORTEDDATASINKEXCEPTION:
         case HANDLE_INTERACTIVENETWORKEXCEPTION:
@@ -119,10 +117,9 @@ ucbhelper::InterceptedInteraction::EInterceptionState SimpleFileAccessInteractio
     // any selection...
     if (bAbort)
     {
-        css::uno::Reference< css::task::XInteractionContinuation > xAbort =
-            ::ucbhelper::InterceptedInteraction::extractContinuation(
-                xRequest->getContinuations(),
-                cppu::UnoType<css::task::XInteractionAbort>::get() );
+        css::uno::Reference<css::task::XInteractionContinuation> xAbort
+            = ::ucbhelper::InterceptedInteraction::extractContinuation(
+                xRequest->getContinuations(), cppu::UnoType<css::task::XInteractionAbort>::get());
         if (!xAbort.is())
             return ::ucbhelper::InterceptedInteraction::E_NO_CONTINUATION_FOUND;
         return ::ucbhelper::InterceptedInteraction::E_INTERCEPTED;

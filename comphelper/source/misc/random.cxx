@@ -27,17 +27,16 @@
 
 namespace comphelper::rng
 {
-
 // underlying random number generator
 // std::mt19937 implements the Mersenne twister algorithm which
 // is fast and has good statistical properties, it produces integers
 // in the range of [0, 2^32-1] internally
 // memory requirement: 625*sizeof(uint32_t)
 // http://en.wikipedia.org/wiki/Mersenne_twister
-#define STD_RNG_ALGO  std::mt19937
+#define STD_RNG_ALGO std::mt19937
 
-namespace {
-
+namespace
+{
 struct RandomNumberGenerator
 {
     std::mutex mutex;
@@ -75,15 +74,16 @@ struct RandomNumberGenerator
     }
 };
 
-class theRandomNumberGenerator : public rtl::Static<RandomNumberGenerator, theRandomNumberGenerator> {};
-
+class theRandomNumberGenerator : public rtl::Static<RandomNumberGenerator, theRandomNumberGenerator>
+{
+};
 }
 
 // uniform ints [a,b] distribution
 int uniform_int_distribution(int a, int b)
 {
     std::uniform_int_distribution<int> dist(a, b);
-    auto & gen = theRandomNumberGenerator::get();
+    auto& gen = theRandomNumberGenerator::get();
     std::scoped_lock<std::mutex> g(gen.mutex);
     return dist(gen.global_rng);
 }
@@ -92,7 +92,7 @@ int uniform_int_distribution(int a, int b)
 unsigned int uniform_uint_distribution(unsigned int a, unsigned int b)
 {
     std::uniform_int_distribution<unsigned int> dist(a, b);
-    auto & gen = theRandomNumberGenerator::get();
+    auto& gen = theRandomNumberGenerator::get();
     std::scoped_lock<std::mutex> g(gen.mutex);
     return dist(gen.global_rng);
 }
@@ -101,7 +101,7 @@ unsigned int uniform_uint_distribution(unsigned int a, unsigned int b)
 size_t uniform_size_distribution(size_t a, size_t b)
 {
     std::uniform_int_distribution<size_t> dist(a, b);
-    auto & gen = theRandomNumberGenerator::get();
+    auto& gen = theRandomNumberGenerator::get();
     std::scoped_lock<std::mutex> g(gen.mutex);
     return dist(gen.global_rng);
 }
@@ -111,7 +111,7 @@ double uniform_real_distribution(double a, double b)
 {
     assert(a < b);
     std::uniform_real_distribution<double> dist(a, b);
-    auto & gen = theRandomNumberGenerator::get();
+    auto& gen = theRandomNumberGenerator::get();
     std::scoped_lock<std::mutex> g(gen.mutex);
     return dist(gen.global_rng);
 }

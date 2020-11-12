@@ -27,11 +27,8 @@
 #include <typelib/typedescription.hxx>
 #include <sal/log.hxx>
 
-
 namespace comphelper
 {
-
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
@@ -39,56 +36,50 @@ using namespace ::com::sun::star::lang;
 sal_Int64 getINT64(const Any& _rAny)
 {
     sal_Int64 nReturn = 0;
-    if(!(_rAny >>= nReturn))
+    if (!(_rAny >>= nReturn))
         SAL_WARN("comphelper", "conversion from Any to sal_Int64 failed");
     return nReturn;
 }
 
-
 sal_Int32 getINT32(const Any& _rAny)
 {
     sal_Int32 nReturn = 0;
-    if(!(_rAny >>= nReturn))
+    if (!(_rAny >>= nReturn))
         SAL_WARN("comphelper", "conversion from Any to sal_Int32 failed");
     return nReturn;
 }
 
-
 sal_Int16 getINT16(const Any& _rAny)
 {
     sal_Int16 nReturn = 0;
-    if(!(_rAny >>= nReturn))
+    if (!(_rAny >>= nReturn))
         SAL_WARN("comphelper", "conversion from Any to sal_Int16 failed");
     return nReturn;
 }
 
-
 double getDouble(const Any& _rAny)
 {
     double nReturn = 0.0;
-    if(!(_rAny >>= nReturn))
+    if (!(_rAny >>= nReturn))
         SAL_WARN("comphelper", "conversion from Any to double failed");
     return nReturn;
 }
 
-
 float getFloat(const Any& _rAny)
 {
     float nReturn = 0.0;
-    if(!(_rAny >>= nReturn))
+    if (!(_rAny >>= nReturn))
         SAL_WARN("comphelper", "conversion from Any to float failed");
     return nReturn;
 }
 
-
 OUString getString(const Any& _rAny)
 {
     OUString nReturn;
-    if(!(_rAny >>= nReturn))
+    if (!(_rAny >>= nReturn))
         SAL_WARN("comphelper", "conversion from Any to OUString failed");
     return nReturn;
 }
-
 
 bool getBOOL(const Any& _rAny)
 {
@@ -100,17 +91,15 @@ bool getBOOL(const Any& _rAny)
     return bReturn;
 }
 
-
 sal_Int32 getEnumAsINT32(const Any& _rAny)
 {
     sal_Int32 nReturn = 0;
-    if (! ::cppu::enum2int(nReturn,_rAny) )
+    if (!::cppu::enum2int(nReturn, _rAny))
         throw IllegalArgumentException();
     return nReturn;
 }
 
-
-FontDescriptor  getDefaultFont()
+FontDescriptor getDefaultFont()
 {
     FontDescriptor aReturn;
     aReturn.Slant = FontSlant_DONTKNOW;
@@ -118,7 +107,6 @@ FontDescriptor  getDefaultFont()
     aReturn.Strikeout = com::sun::star::awt::FontStrikeout::DONTKNOW;
     return aReturn;
 }
-
 
 bool isAssignableFrom(const Type& _rAssignable, const Type& _rFrom)
 {
@@ -136,14 +124,14 @@ bool isAssignableFrom(const Type& _rAssignable, const Type& _rFrom)
 Type getSequenceElementType(const Type& _rSequenceType)
 {
     OSL_ENSURE(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE,
-                "getSequenceElementType: must be called with a  sequence type!");
+               "getSequenceElementType: must be called with a  sequence type!");
 
     if (_rSequenceType.getTypeClass() != TypeClass_SEQUENCE)
         return Type();
 
     TypeDescription aTD(_rSequenceType);
-    typelib_IndirectTypeDescription* pSequenceTD =
-        reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
+    typelib_IndirectTypeDescription* pSequenceTD
+        = reinterpret_cast<typelib_IndirectTypeDescription*>(aTD.get());
 
     OSL_ASSERT(pSequenceTD && pSequenceTD->pType);
     if (pSequenceTD && pSequenceTD->pType)
@@ -152,7 +140,6 @@ Type getSequenceElementType(const Type& _rSequenceType)
     return Type();
 }
 
-}   // namespace comphelper
-
+} // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
