@@ -24,9 +24,10 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <memory>
 
-namespace com::sun::star::lang {
-    class XMultiServiceFactory;
-    struct Locale;
+namespace com::sun::star::lang
+{
+class XMultiServiceFactory;
+struct Locale;
 }
 
 namespace writerfilter::dmapper
@@ -39,7 +40,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 {
     std::unique_ptr<SettingsTable_Impl> m_pImpl;
 
- public:
+public:
     SettingsTable(const DomainMapper& rDomainMapper);
     virtual ~SettingsTable() override;
 
@@ -81,7 +82,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     OUString GetDecimalSymbol() const;
     OUString GetListSeparator() const;
 
-    css::uno::Sequence<css::beans::PropertyValue> const & GetThemeFontLangProperties() const;
+    css::uno::Sequence<css::beans::PropertyValue> const& GetThemeFontLangProperties() const;
 
     css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings() const;
 
@@ -89,21 +90,20 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
     void ApplyProperties(css::uno::Reference<css::text::XTextDocument> const& xDoc);
 
-    bool GetCompatSettingValue( const OUString& sCompatName ) const;
+    bool GetCompatSettingValue(const OUString& sCompatName) const;
     sal_Int32 GetWordCompatibilityMode() const;
 
-    const OUString & GetCurrentDatabaseDataSource() const;
+    const OUString& GetCurrentDatabaseDataSource() const;
 
- private:
+private:
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) override;
-    virtual void lcl_sprm(Sprm & sprm) override;
+    virtual void lcl_attribute(Id Name, Value& val) override;
+    virtual void lcl_sprm(Sprm& sprm) override;
 
     // Table
     virtual void lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref) override;
-
 };
-typedef tools::SvRef< SettingsTable >          SettingsTablePtr;
+typedef tools::SvRef<SettingsTable> SettingsTablePtr;
 }
 
 #endif

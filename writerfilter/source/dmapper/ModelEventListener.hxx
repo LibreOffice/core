@@ -22,22 +22,21 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace writerfilter::dmapper{
-
-
+namespace writerfilter::dmapper
+{
 class ModelEventListener : public cppu::WeakImplHelper<css::document::XEventListener>
 {
     bool m_bIndexes;
     bool m_bControls;
+
 public:
     ModelEventListener(bool bIndexes, bool bControls);
     virtual ~ModelEventListener() override;
 
     virtual void SAL_CALL notifyEvent(const css::document::EventObject& Event) override;
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
-
 };
-}//namespace writerfilter::dmapper
+} //namespace writerfilter::dmapper
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,11 +24,9 @@
 
 namespace writerfilter
 {
-
 #ifdef DBG_UTIL
-    std::string QNameToString(Id);
+std::string QNameToString(Id);
 #endif
-
 }
 
 #endif // INCLUDED_WRITERFILTER_INC_OOXML_QNAMETOSTRING_HXX

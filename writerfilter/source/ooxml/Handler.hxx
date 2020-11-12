@@ -26,149 +26,154 @@ namespace writerfilter::ooxml
 {
 class OOXMLFootnoteHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
+    OOXMLFastContextHandler* mpFastContext;
 
 public:
-    explicit OOXMLFootnoteHandler(OOXMLFastContextHandler * pContext);
+    explicit OOXMLFootnoteHandler(OOXMLFastContextHandler* pContext);
     virtual ~OOXMLFootnoteHandler() override;
 
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
 
 class OOXMLEndnoteHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
+    OOXMLFastContextHandler* mpFastContext;
+
 public:
-    explicit OOXMLEndnoteHandler(OOXMLFastContextHandler * pContext);
+    explicit OOXMLEndnoteHandler(OOXMLFastContextHandler* pContext);
     virtual ~OOXMLEndnoteHandler() override;
 
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
 
 class OOXMLFooterHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
+    OOXMLFastContextHandler* mpFastContext;
     OUString msStreamId;
     sal_Int32 mnType;
+
 public:
-    explicit OOXMLFooterHandler(OOXMLFastContextHandler * pContext);
+    explicit OOXMLFooterHandler(OOXMLFastContextHandler* pContext);
     void finalize();
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
 
 class OOXMLHeaderHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
+    OOXMLFastContextHandler* mpFastContext;
     OUString msStreamId;
     sal_Int32 mnType;
+
 public:
-    explicit OOXMLHeaderHandler(OOXMLFastContextHandler * pContext);
+    explicit OOXMLHeaderHandler(OOXMLFastContextHandler* pContext);
     void finalize();
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
 
 class OOXMLCommentHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
+    OOXMLFastContextHandler* mpFastContext;
+
 public:
-    explicit OOXMLCommentHandler(OOXMLFastContextHandler * pContext);
+    explicit OOXMLCommentHandler(OOXMLFastContextHandler* pContext);
     virtual ~OOXMLCommentHandler() override;
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
 
 class OOXMLOLEHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
+    OOXMLFastContextHandler* mpFastContext;
 
 public:
-    explicit OOXMLOLEHandler(OOXMLFastContextHandler * pContext);
+    explicit OOXMLOLEHandler(OOXMLFastContextHandler* pContext);
     virtual ~OOXMLOLEHandler() override;
 
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
 
 class OOXMLEmbeddedFontHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
+    OOXMLFastContextHandler* mpFastContext;
 
 public:
-    explicit OOXMLEmbeddedFontHandler(OOXMLFastContextHandler * pContext);
+    explicit OOXMLEmbeddedFontHandler(OOXMLFastContextHandler* pContext);
     virtual ~OOXMLEmbeddedFontHandler() override;
 
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
 
 class OOXMLBreakHandler : public Properties
 {
     sal_Int32 mnType;
-    Stream & mrStream;
+    Stream& mrStream;
+
 public:
-    explicit OOXMLBreakHandler(Stream & rStream);
+    explicit OOXMLBreakHandler(Stream& rStream);
     virtual ~OOXMLBreakHandler() override;
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
 
 class OOXMLPictureHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
+    OOXMLFastContextHandler* mpFastContext;
+
 public:
-    explicit OOXMLPictureHandler(OOXMLFastContextHandler * pContext);
+    explicit OOXMLPictureHandler(OOXMLFastContextHandler* pContext);
     virtual ~OOXMLPictureHandler() override;
 
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
 
 class OOXMLHyperlinkHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
+    OOXMLFastContextHandler* mpFastContext;
     OUString mFieldCode;
     OUString mURL;
 
 public:
-    explicit OOXMLHyperlinkHandler(OOXMLFastContextHandler * pContext);
+    explicit OOXMLHyperlinkHandler(OOXMLFastContextHandler* pContext);
     virtual ~OOXMLHyperlinkHandler() override;
     void writetext();
 
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
 
 class OOXMLHyperlinkURLHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
+    OOXMLFastContextHandler* mpFastContext;
     OUString mURL;
 
 public:
-    explicit OOXMLHyperlinkURLHandler(OOXMLFastContextHandler * pContext);
+    explicit OOXMLHyperlinkURLHandler(OOXMLFastContextHandler* pContext);
     virtual ~OOXMLHyperlinkURLHandler() override;
 
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
 
 /// Looks up the stream name for a '<w:altChunk r:id="..."/>' reference.
 class OOXMLAltChunkHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
+    OOXMLFastContextHandler* mpFastContext;
     OUString m_aStreamName;
 
 public:
-    explicit OOXMLAltChunkHandler(OOXMLFastContextHandler * pContext);
+    explicit OOXMLAltChunkHandler(OOXMLFastContextHandler* pContext);
     virtual ~OOXMLAltChunkHandler() override;
 
-    virtual void attribute(Id name, Value & val) override;
-    virtual void sprm(Sprm & sprm) override;
+    virtual void attribute(Id name, Value& val) override;
+    virtual void sprm(Sprm& sprm) override;
 };
-
 }
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_HANDLER_HXX
 

@@ -25,7 +25,6 @@
 
 namespace writerfilter::ooxml
 {
-
 /**
  * Struct to store our 'alternate state'. If multiple mc:AlternateContent
  * elements arrive, then while the inner ones are active, the original state is
@@ -66,44 +65,44 @@ public:
     OOXMLParserState();
     ~OOXMLParserState() override;
 
-    bool isInSectionGroup() const { return mbInSectionGroup;}
+    bool isInSectionGroup() const { return mbInSectionGroup; }
     void setInSectionGroup(bool bInSectionGroup);
 
     void setLastParagraphInSection(bool bLastParagraphInSection);
-    bool isLastParagraphInSection() const { return mbLastParagraphInSection;}
+    bool isLastParagraphInSection() const { return mbLastParagraphInSection; }
 
     std::vector<SavedAlternateState>& getSavedAlternateStates() { return maSavedAlternateStates; }
 
-    bool isInParagraphGroup() const { return mbInParagraphGroup;}
+    bool isInParagraphGroup() const { return mbInParagraphGroup; }
     void setInParagraphGroup(bool bInParagraphGroup);
 
-    bool isInCharacterGroup() const { return mbInCharacterGroup;}
+    bool isInCharacterGroup() const { return mbInCharacterGroup; }
     void setInCharacterGroup(bool bInCharacterGroup);
 
     void setForwardEvents(bool bForwardEvents);
-    bool isForwardEvents() const { return mbForwardEvents;}
+    bool isForwardEvents() const { return mbForwardEvents; }
 
     std::string getHandle() const;
     void setHandle();
 
     void setDocument(OOXMLDocumentImpl* pDocument);
-    OOXMLDocumentImpl* getDocument() const { return mpDocument;}
+    OOXMLDocumentImpl* getDocument() const { return mpDocument; }
 
     void setXNoteId(const sal_Int32 rId);
     sal_Int32 getXNoteId() const;
 
-    const OUString & getTarget() const;
+    const OUString& getTarget() const;
 
-    void resolveCharacterProperties(Stream & rStream);
+    void resolveCharacterProperties(Stream& rStream);
     void setCharacterProperties(const OOXMLPropertySet::Pointer_t& pProps);
-    void resolveCellProperties(Stream & rStream);
+    void resolveCellProperties(Stream& rStream);
     void setCellProperties(const OOXMLPropertySet::Pointer_t& pProps);
-    void resolveRowProperties(Stream & rStream);
+    void resolveRowProperties(Stream& rStream);
     void setRowProperties(const OOXMLPropertySet::Pointer_t& pProps);
-    void resolveTableProperties(Stream & rStream);
+    void resolveTableProperties(Stream& rStream);
     void setTableProperties(const OOXMLPropertySet::Pointer_t& pProps);
     // tdf#108714
-    void resolvePostponedBreak(Stream & rStream);
+    void resolvePostponedBreak(Stream& rStream);
     void setPostponedBreak(const OOXMLPropertySet::Pointer_t& pProps);
 
     void startTable();
@@ -113,9 +112,7 @@ public:
 
     void startTxbxContent();
     void endTxbxContent();
-
 };
-
 }
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPARSERSTATE_HXX

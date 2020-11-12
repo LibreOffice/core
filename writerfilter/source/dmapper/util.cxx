@@ -24,7 +24,7 @@ namespace writerfilter::dmapper
 {
 using namespace com::sun::star;
 
-std::string XTextRangeToString(uno::Reference< text::XTextRange > const & textRange)
+std::string XTextRangeToString(uno::Reference<text::XTextRange> const& textRange)
 {
     std::string result;
 
@@ -44,28 +44,27 @@ std::string XTextRangeToString(uno::Reference< text::XTextRange > const & textRa
             result += ")";
         }
 
-        OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
+        OString aOStr(aOUStr.getStr(), aOUStr.getLength(), RTL_TEXTENCODING_ASCII_US);
 
         result = aOStr.getStr();
     }
     else
     {
-        result="(nil)";
+        result = "(nil)";
     }
 #else
-    (void) textRange;
+    (void)textRange;
 #endif
 
     return result;
 }
 
-void resolveSprmProps(Properties & rHandler, Sprm & rSprm)
+void resolveSprmProps(Properties& rHandler, Sprm& rSprm)
 {
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-    if( pProperties)
+    if (pProperties)
         pProperties->resolve(rHandler);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,6 @@
 
 namespace writerfilter::ooxml
 {
-
 class OOXMLValue : public Value
 {
 public:
@@ -34,10 +33,10 @@ public:
     OOXMLValue();
     virtual ~OOXMLValue() override;
 
-    OOXMLValue(OOXMLValue const &) = default;
-    OOXMLValue(OOXMLValue &&) = default;
-    OOXMLValue & operator =(OOXMLValue const &) = default;
-    OOXMLValue & operator =(OOXMLValue &&) = default;
+    OOXMLValue(OOXMLValue const&) = default;
+    OOXMLValue(OOXMLValue&&) = default;
+    OOXMLValue& operator=(OOXMLValue const&) = default;
+    OOXMLValue& operator=(OOXMLValue&&) = default;
 
     virtual int getInt() const override;
     ;
@@ -48,14 +47,19 @@ public:
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue * clone() const;
+    virtual OOXMLValue* clone() const;
 };
 
 class OOXMLProperty : public Sprm
 {
 public:
     typedef tools::SvRef<OOXMLProperty> Pointer_t;
-    enum Type_t { SPRM, ATTRIBUTE };
+    enum Type_t
+    {
+        SPRM,
+        ATTRIBUTE
+    };
+
 private:
     Id mId;
     mutable OOXMLValue::Pointer_t mpValue;
@@ -63,7 +67,7 @@ private:
 
 public:
     OOXMLProperty(Id id, const OOXMLValue::Pointer_t& pValue, Type_t eType);
-    OOXMLProperty(const OOXMLProperty & rSprm) = delete;
+    OOXMLProperty(const OOXMLProperty& rSprm) = delete;
     virtual ~OOXMLProperty() override;
 
     sal_uInt32 getId() const override;
@@ -73,64 +77,67 @@ public:
     std::string getName() const override;
     std::string toString() const override;
 #endif
-    void resolve(Properties & rProperties);
+    void resolve(Properties& rProperties);
 };
 
 class OOXMLBinaryValue : public OOXMLValue
 {
     mutable OOXMLBinaryObjectReference::Pointer_t mpBinaryObj;
+
 public:
-    explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t const & pBinaryObj);
+    explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t const& pBinaryObj);
     virtual ~OOXMLBinaryValue() override;
 
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue * clone() const override;
+    virtual OOXMLValue* clone() const override;
 };
 
 class OOXMLBooleanValue : public OOXMLValue
 {
     bool mbValue;
     explicit OOXMLBooleanValue(bool bValue);
+
 public:
-    static OOXMLValue::Pointer_t const & Create (bool bValue);
-    static OOXMLValue::Pointer_t const & Create (const char *pValue);
+    static OOXMLValue::Pointer_t const& Create(bool bValue);
+    static OOXMLValue::Pointer_t const& Create(const char* pValue);
 
     virtual ~OOXMLBooleanValue() override;
 
-    OOXMLBooleanValue(OOXMLBooleanValue const &) = default;
-    OOXMLBooleanValue(OOXMLBooleanValue &&) = default;
-    OOXMLBooleanValue & operator =(OOXMLBooleanValue const &) = delete; // due to const mbValue
-    OOXMLBooleanValue & operator =(OOXMLBooleanValue &&) = delete; // due to const mbValue
+    OOXMLBooleanValue(OOXMLBooleanValue const&) = default;
+    OOXMLBooleanValue(OOXMLBooleanValue&&) = default;
+    OOXMLBooleanValue& operator=(OOXMLBooleanValue const&) = delete; // due to const mbValue
+    OOXMLBooleanValue& operator=(OOXMLBooleanValue&&) = delete; // due to const mbValue
 
     virtual int getInt() const override;
     virtual css::uno::Any getAny() const override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue * clone() const override;
+    virtual OOXMLValue* clone() const override;
 };
 
 class OOXMLStringValue : public OOXMLValue
 {
     OUString mStr;
+
 public:
-    explicit OOXMLStringValue(const OUString & rStr);
+    explicit OOXMLStringValue(const OUString& rStr);
     virtual ~OOXMLStringValue() override;
 
-    OOXMLStringValue(OOXMLStringValue const &) = default;
-    OOXMLStringValue(OOXMLStringValue &&) = default;
-    OOXMLStringValue & operator =(OOXMLStringValue const &) = delete; // due to const mStr
-    OOXMLStringValue & operator =(OOXMLStringValue &&) = delete; // due to const mStr
+    OOXMLStringValue(OOXMLStringValue const&) = default;
+    OOXMLStringValue(OOXMLStringValue&&) = default;
+    OOXMLStringValue& operator=(OOXMLStringValue const&) = delete; // due to const mStr
+    OOXMLStringValue& operator=(OOXMLStringValue&&) = delete; // due to const mStr
 
     virtual css::uno::Any getAny() const override;
     virtual OUString getString() const override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue * clone() const override;
+    virtual OOXMLValue* clone() const override;
 };
 
 class OOXMLInputStreamValue : public OOXMLValue
@@ -138,14 +145,14 @@ class OOXMLInputStreamValue : public OOXMLValue
     css::uno::Reference<css::io::XInputStream> mxInputStream;
 
 public:
-    explicit OOXMLInputStreamValue(css::uno::Reference<css::io::XInputStream> const & xInputStream);
+    explicit OOXMLInputStreamValue(css::uno::Reference<css::io::XInputStream> const& xInputStream);
     virtual ~OOXMLInputStreamValue() override;
 
     virtual css::uno::Any getAny() const override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue * clone() const override;
+    virtual OOXMLValue* clone() const override;
 };
 
 class OOXMLPropertySet : public writerfilter::Reference<Properties>
@@ -153,22 +160,24 @@ class OOXMLPropertySet : public writerfilter::Reference<Properties>
 public:
     typedef std::vector<OOXMLProperty::Pointer_t> OOXMLProperties_t;
     typedef tools::SvRef<OOXMLPropertySet> Pointer_t;
+
 private:
     OOXMLProperties_t mProperties;
     void add(const OOXMLProperty::Pointer_t& pProperty);
+
 public:
     OOXMLPropertySet();
     virtual ~OOXMLPropertySet() override;
 
-    OOXMLPropertySet(OOXMLPropertySet const &) = default;
-    OOXMLPropertySet(OOXMLPropertySet &&) = default;
-    OOXMLPropertySet & operator =(OOXMLPropertySet const &) = default;
-    OOXMLPropertySet & operator =(OOXMLPropertySet &&) = default;
+    OOXMLPropertySet(OOXMLPropertySet const&) = default;
+    OOXMLPropertySet(OOXMLPropertySet&&) = default;
+    OOXMLPropertySet& operator=(OOXMLPropertySet const&) = default;
+    OOXMLPropertySet& operator=(OOXMLPropertySet&&) = default;
 
-    void resolve(Properties & rHandler) override;
+    void resolve(Properties& rHandler) override;
     void add(Id id, const OOXMLValue::Pointer_t& pValue, OOXMLProperty::Type_t eType);
     void add(const OOXMLPropertySet::Pointer_t& pPropertySet);
-    OOXMLPropertySet * clone() const;
+    OOXMLPropertySet* clone() const;
 
     OOXMLProperties_t::iterator begin();
     OOXMLProperties_t::iterator end();
@@ -189,14 +198,15 @@ public:
     OOXMLTable();
     virtual ~OOXMLTable() override;
 
-    OOXMLTable(OOXMLTable const &) = default;
-    OOXMLTable(OOXMLTable &&) = default;
-    OOXMLTable & operator =(OOXMLTable const &) = default;
-    OOXMLTable & operator =(OOXMLTable &&) = default;
+    OOXMLTable(OOXMLTable const&) = default;
+    OOXMLTable(OOXMLTable&&) = default;
+    OOXMLTable& operator=(OOXMLTable const&) = default;
+    OOXMLTable& operator=(OOXMLTable&&) = default;
 
-    void resolve(Table & rTable) override;
+    void resolve(Table& rTable) override;
     void add(const ValuePointer_t& pPropertySet);
-    OOXMLTable * clone() const;
+    OOXMLTable* clone() const;
+
 private:
     typedef std::vector<ValuePointer_t> PropertySets_t;
     PropertySets_t mPropertySets;
@@ -205,82 +215,88 @@ private:
 class OOXMLPropertySetValue : public OOXMLValue
 {
     OOXMLPropertySet::Pointer_t mpPropertySet;
+
 public:
     explicit OOXMLPropertySetValue(const OOXMLPropertySet::Pointer_t& pPropertySet);
     virtual ~OOXMLPropertySetValue() override;
 
-    OOXMLPropertySetValue(OOXMLPropertySetValue const &) = default;
-    OOXMLPropertySetValue(OOXMLPropertySetValue &&) = default;
-    OOXMLPropertySetValue & operator =(OOXMLPropertySetValue const &) = delete; // due to const mpPropertySet
-    OOXMLPropertySetValue & operator =(OOXMLPropertySetValue &&) = delete; // due to const mpPropertySet
+    OOXMLPropertySetValue(OOXMLPropertySetValue const&) = default;
+    OOXMLPropertySetValue(OOXMLPropertySetValue&&) = default;
+    OOXMLPropertySetValue& operator=(OOXMLPropertySetValue const&)
+        = delete; // due to const mpPropertySet
+    OOXMLPropertySetValue& operator=(OOXMLPropertySetValue&&)
+        = delete; // due to const mpPropertySet
 
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue * clone() const override;
+    virtual OOXMLValue* clone() const override;
 };
 
 class OOXMLIntegerValue : public OOXMLValue
 {
     sal_Int32 mnValue;
     explicit OOXMLIntegerValue(sal_Int32 nValue);
+
 public:
-    static OOXMLValue::Pointer_t Create (sal_Int32 nValue);
+    static OOXMLValue::Pointer_t Create(sal_Int32 nValue);
     virtual ~OOXMLIntegerValue() override;
 
-    OOXMLIntegerValue(OOXMLIntegerValue const &) = default;
-    OOXMLIntegerValue(OOXMLIntegerValue &&) = default;
-    OOXMLIntegerValue & operator =(OOXMLIntegerValue const &) = delete; // due to const mnValue
-    OOXMLIntegerValue & operator =(OOXMLIntegerValue &&) = delete; // due to const mnValue
+    OOXMLIntegerValue(OOXMLIntegerValue const&) = default;
+    OOXMLIntegerValue(OOXMLIntegerValue&&) = default;
+    OOXMLIntegerValue& operator=(OOXMLIntegerValue const&) = delete; // due to const mnValue
+    OOXMLIntegerValue& operator=(OOXMLIntegerValue&&) = delete; // due to const mnValue
 
     virtual int getInt() const override;
     virtual css::uno::Any getAny() const override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue * clone() const override;
+    virtual OOXMLValue* clone() const override;
 };
 
 class OOXMLHexValue : public OOXMLValue
 {
 protected:
     sal_uInt32 mnValue;
+
 public:
     explicit OOXMLHexValue(sal_uInt32 nValue);
-    explicit OOXMLHexValue(const char * pValue);
+    explicit OOXMLHexValue(const char* pValue);
     virtual ~OOXMLHexValue() override;
 
-    OOXMLHexValue(OOXMLHexValue const &) = default;
-    OOXMLHexValue(OOXMLHexValue &&) = default;
-    OOXMLHexValue & operator =(OOXMLHexValue const &) = default;
-    OOXMLHexValue & operator =(OOXMLHexValue &&) = default;
+    OOXMLHexValue(OOXMLHexValue const&) = default;
+    OOXMLHexValue(OOXMLHexValue&&) = default;
+    OOXMLHexValue& operator=(OOXMLHexValue const&) = default;
+    OOXMLHexValue& operator=(OOXMLHexValue&&) = default;
 
     virtual int getInt() const override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue * clone() const override;
+    virtual OOXMLValue* clone() const override;
 };
 
 class OOXMLHexColorValue : public OOXMLHexValue
 {
 public:
-    explicit OOXMLHexColorValue(const char * pValue);
+    explicit OOXMLHexColorValue(const char* pValue);
 };
 
 class OOXMLUniversalMeasureValue : public OOXMLValue
 {
 private:
     int mnValue;
+
 public:
-    OOXMLUniversalMeasureValue(const char * pValue, sal_uInt32 npPt);
+    OOXMLUniversalMeasureValue(const char* pValue, sal_uInt32 npPt);
     virtual ~OOXMLUniversalMeasureValue() override;
 
-    OOXMLUniversalMeasureValue(OOXMLUniversalMeasureValue const &) = default;
-    OOXMLUniversalMeasureValue(OOXMLUniversalMeasureValue &&) = default;
-    OOXMLUniversalMeasureValue & operator =(OOXMLUniversalMeasureValue const &) = default;
-    OOXMLUniversalMeasureValue & operator =(OOXMLUniversalMeasureValue &&) = default;
+    OOXMLUniversalMeasureValue(OOXMLUniversalMeasureValue const&) = default;
+    OOXMLUniversalMeasureValue(OOXMLUniversalMeasureValue&&) = default;
+    OOXMLUniversalMeasureValue& operator=(OOXMLUniversalMeasureValue const&) = default;
+    OOXMLUniversalMeasureValue& operator=(OOXMLUniversalMeasureValue&&) = default;
 
     virtual int getInt() const override;
 #ifdef DBG_UTIL
@@ -292,12 +308,11 @@ public:
 template <sal_uInt32 npPt> class OOXMLNthPtMeasureValue : public OOXMLUniversalMeasureValue
 {
 public:
-    explicit OOXMLNthPtMeasureValue(const char * pValue)
-        : OOXMLUniversalMeasureValue(pValue, npPt) {}
-    virtual OOXMLValue* clone() const override
+    explicit OOXMLNthPtMeasureValue(const char* pValue)
+        : OOXMLUniversalMeasureValue(pValue, npPt)
     {
-        return new OOXMLNthPtMeasureValue<npPt>(*this);
     }
+    virtual OOXMLValue* clone() const override { return new OOXMLNthPtMeasureValue<npPt>(*this); }
 };
 
 /// Handles OOXML's ST_TwipsMeasure value.
@@ -309,14 +324,12 @@ typedef OOXMLNthPtMeasureValue<2> OOXMLHpsMeasureValue;
 class OOXMLMeasurementOrPercentValue : public OOXMLValue
 {
     int mnValue;
+
 public:
-    explicit OOXMLMeasurementOrPercentValue(const char * pValue);
+    explicit OOXMLMeasurementOrPercentValue(const char* pValue);
 
     virtual int getInt() const override;
-    virtual OOXMLValue* clone() const override
-    {
-        return new OOXMLMeasurementOrPercentValue(*this);
-    }
+    virtual OOXMLValue* clone() const override { return new OOXMLMeasurementOrPercentValue(*this); }
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
@@ -325,29 +338,31 @@ public:
 class OOXMLShapeValue : public OOXMLValue
 {
     css::uno::Reference<css::drawing::XShape> mrShape;
+
 public:
-    explicit OOXMLShapeValue(css::uno::Reference<css::drawing::XShape> const & rShape);
+    explicit OOXMLShapeValue(css::uno::Reference<css::drawing::XShape> const& rShape);
     virtual ~OOXMLShapeValue() override;
 
     virtual css::uno::Any getAny() const override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue * clone() const override;
+    virtual OOXMLValue* clone() const override;
 };
 
 class OOXMLStarMathValue : public OOXMLValue
 {
-    css::uno::Reference< css::embed::XEmbeddedObject > component;
+    css::uno::Reference<css::embed::XEmbeddedObject> component;
+
 public:
-    explicit OOXMLStarMathValue( css::uno::Reference< css::embed::XEmbeddedObject > const & component );
+    explicit OOXMLStarMathValue(css::uno::Reference<css::embed::XEmbeddedObject> const& component);
     virtual ~OOXMLStarMathValue() override;
 
     virtual css::uno::Any getAny() const override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue * clone() const override;
+    virtual OOXMLValue* clone() const override;
 };
 
 class OOXMLPropertySetEntryToString : public Properties
@@ -359,41 +374,41 @@ public:
     explicit OOXMLPropertySetEntryToString(Id nId);
     virtual ~OOXMLPropertySetEntryToString() override;
 
-    virtual void sprm(Sprm & rSprm) override;
-    virtual void attribute(Id nId, Value & rValue) override;
+    virtual void sprm(Sprm& rSprm) override;
+    virtual void attribute(Id nId, Value& rValue) override;
 
-    const OUString & getString() const { return mStr;}
+    const OUString& getString() const { return mStr; }
 };
 
 class OOXMLPropertySetEntryToInteger : public Properties
 {
     Id mnId;
     int mnValue;
+
 public:
     explicit OOXMLPropertySetEntryToInteger(Id nId);
     virtual ~OOXMLPropertySetEntryToInteger() override;
 
-    virtual void sprm(Sprm & rSprm) override;
-    virtual void attribute(Id nId, Value & rValue) override;
+    virtual void sprm(Sprm& rSprm) override;
+    virtual void attribute(Id nId, Value& rValue) override;
 
-    int getValue() const { return mnValue;}
+    int getValue() const { return mnValue; }
 };
 
 class OOXMLPropertySetEntryToBool : public Properties
 {
     Id mnId;
     bool mValue;
+
 public:
     explicit OOXMLPropertySetEntryToBool(Id nId);
     virtual ~OOXMLPropertySetEntryToBool() override;
 
-    virtual void sprm(Sprm & rSprm) override;
-    virtual void attribute(Id nId, Value & rValue) override;
+    virtual void sprm(Sprm& rSprm) override;
+    virtual void attribute(Id nId, Value& rValue) override;
 
     bool getValue() const { return mValue; }
 };
-
-
 }
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX
