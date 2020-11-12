@@ -27,19 +27,20 @@
 // forward declaractions
 namespace com::sun::star::xml::dom
 {
-    class XNodeList;
-    namespace events { class XEventListener; }
+class XNodeList;
+namespace events
+{
+class XEventListener;
 }
-
+}
 
 namespace xforms
 {
-
 /** PathExpression represents an XPath Expression and caches results */
 class PathExpression final : public ComputedExpression
 {
 public:
-    typedef std::vector<css::uno::Reference<css::xml::dom::XNode> > NodeVector_t;
+    typedef std::vector<css::uno::Reference<css::xml::dom::XNode>> NodeVector_t;
 
 private:
     /// the node-list result from the last bind (cached from mxResult)
@@ -48,7 +49,6 @@ private:
     /// get expression for evaluation
     OUString _getExpressionForEvaluation() const;
 
-
 public:
     PathExpression();
     ~PathExpression();
@@ -56,18 +56,15 @@ public:
     /// set the expression string
     /// (overridden to do remove old listeners)
     /// (also defines simple expressions)
-    void setExpression( const OUString& rExpression );
-
+    void setExpression(const OUString& rExpression);
 
     /// evaluate the expression relative to the content node.
-    void evaluate( const xforms::EvaluationContext& rContext );
-
+    void evaluate(const xforms::EvaluationContext& rContext);
 
     // get the result of this expression as node/node list/...
     css::uno::Reference<css::xml::dom::XNode> getNode() const;
-    const NodeVector_t& getNodeList() const { return maNodes;}
+    const NodeVector_t& getNodeList() const { return maNodes; }
     css::uno::Reference<css::xml::dom::XNodeList> getXNodeList() const;
-
 };
 
 } // namespace xforms

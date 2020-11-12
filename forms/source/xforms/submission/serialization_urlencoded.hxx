@@ -29,16 +29,16 @@
 class CSerializationURLEncoded : public CSerialization
 {
 private:
-    css::uno::Reference< css::io::XPipe > m_aPipe;
+    css::uno::Reference<css::io::XPipe> m_aPipe;
 
     static bool is_unreserved(char);
     static void encode_and_append(const OUString& aString, OStringBuffer& aBuffer);
-    void serialize_node(const css::uno::Reference< css::xml::dom::XNode >& aNode);
+    void serialize_node(const css::uno::Reference<css::xml::dom::XNode>& aNode);
 
 public:
     CSerializationURLEncoded();
     virtual void serialize() override;
-    virtual css::uno::Reference< css::io::XInputStream > getInputStream() override;
+    virtual css::uno::Reference<css::io::XInputStream> getInputStream() override;
 };
 
 #endif

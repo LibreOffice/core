@@ -17,33 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "boolexpression.hxx"
-
 
 namespace xforms
 {
-
 /** BoolExpression represents a computed XPath expression that returns
  * a bool value and caches the results.
  *
  * As this class has no virtual methods, it should never be used
  * polymorphically. */
 
-BoolExpression::BoolExpression() : ComputedExpression()
+BoolExpression::BoolExpression()
+    : ComputedExpression()
 {
 }
 
-BoolExpression::~BoolExpression()
-{
-}
+BoolExpression::~BoolExpression() {}
 
-void BoolExpression::setExpression( const OUString& rExpression )
+void BoolExpression::setExpression(const OUString& rExpression)
 {
-    ComputedExpression::setExpression( rExpression );
-    mbIsSimple = _checkExpression( " *(true)|(false) *\\( *\\) *" );
+    ComputedExpression::setExpression(rExpression);
+    mbIsSimple = _checkExpression(" *(true)|(false) *\\( *\\) *");
 }
-
 
 } // namespace xforms
 

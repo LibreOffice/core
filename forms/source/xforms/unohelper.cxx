@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "unohelper.hxx"
 
 #include <osl/diagnose.h>
@@ -30,7 +29,6 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Exception;
@@ -39,34 +37,31 @@ using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XPropertySetInfo;
 using com::sun::star::beans::PropertyAttribute::READONLY;
 
-
-void xforms::copy( const Reference<XPropertySet>& xFrom,
-                   Reference<XPropertySet> const & xTo )
+void xforms::copy(const Reference<XPropertySet>& xFrom, Reference<XPropertySet> const& xTo)
 {
-    OSL_ENSURE( xFrom.is(), "no source" );
-    OSL_ENSURE( xTo.is(), "no target" );
+    OSL_ENSURE(xFrom.is(), "no source");
+    OSL_ENSURE(xTo.is(), "no target");
 
     // get property names & infos, and iterate over target properties
-    Sequence<Property> aProperties =
-        xTo->getPropertySetInfo()->getProperties();
+    Sequence<Property> aProperties = xTo->getPropertySetInfo()->getProperties();
     sal_Int32 nProperties = aProperties.getLength();
     const Property* pProperties = aProperties.getConstArray();
     Reference<XPropertySetInfo> xFromInfo = xFrom->getPropertySetInfo();
-    for( sal_Int32 n = 0; n < nProperties; n++ )
+    for (sal_Int32 n = 0; n < nProperties; n++)
     {
         const OUString& rName = pProperties[n].Name;
 
         // if both set have the property, copy the value
         // (catch and ignore exceptions, if any)
-        if( xFromInfo->hasPropertyByName( rName ) )
+        if (xFromInfo->hasPropertyByName(rName))
         {
             try
             {
-                Property aProperty = xFromInfo->getPropertyByName( rName );
-                if ( ( aProperty.Attributes & READONLY ) == 0 )
-                    xTo->setPropertyValue(rName, xFrom->getPropertyValue( rName ));
+                Property aProperty = xFromInfo->getPropertyByName(rName);
+                if ((aProperty.Attributes & READONLY) == 0)
+                    xTo->setPropertyValue(rName, xFrom->getPropertyValue(rName));
             }
-            catch( const Exception& )
+            catch (const Exception&)
             {
                 // ignore any errors; we'll copy as good as we can
             }
