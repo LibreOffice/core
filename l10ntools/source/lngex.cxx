@@ -23,21 +23,20 @@
 
 #include <lngmerge.hxx>
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
-
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+{
     common::HandledArgs aArgs;
-    if ( !common::handleArguments(argc, argv, aArgs) )
+    if (!common::handleArguments(argc, argv, aArgs))
     {
-        common::writeUsage("ulfex","*.ulf");
+        common::writeUsage("ulfex", "*.ulf");
         return 1;
     }
 
-    LngParser aParser( aArgs.m_sInputFile );
-    if ( aArgs.m_bMergeMode )
-        aParser.Merge(
-            aArgs.m_sMergeSrc, aArgs.m_sOutputFile, aArgs.m_sLanguage );
+    LngParser aParser(aArgs.m_sInputFile);
+    if (aArgs.m_bMergeMode)
+        aParser.Merge(aArgs.m_sMergeSrc, aArgs.m_sOutputFile, aArgs.m_sLanguage);
     else
-        aParser.CreatePO( aArgs.m_sOutputFile );
+        aParser.CreatePO(aArgs.m_sOutputFile);
 
     return 0;
 }
