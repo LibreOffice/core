@@ -26,7 +26,8 @@ class AstType : public AstDeclaration
 public:
     AstType(const NodeType type, const OString& name, AstScope* pScope)
         : AstDeclaration(type, name, pScope)
-        {}
+    {
+    }
 
     virtual bool isUnsigned() const { return false; }
 };

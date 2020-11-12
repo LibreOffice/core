@@ -27,10 +27,11 @@ public:
     AstNeeds(AstService* pRealService, const OString& name, AstScope* pScope)
         : AstDeclaration(NT_needs, name, pScope)
         , m_pRealService(pRealService)
-        {}
+    {
+    }
 
-    AstService* getRealService()
-        { return m_pRealService; }
+    AstService* getRealService() { return m_pRealService; }
+
 private:
     AstService* m_pRealService;
 };

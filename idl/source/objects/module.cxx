@@ -22,17 +22,14 @@
 #include <database.hxx>
 #include <osl/file.hxx>
 
+SvMetaModule::SvMetaModule() {}
 
-SvMetaModule::SvMetaModule()
+void SvMetaModule::WriteSfx(SvIdlDataBase& rBase, SvStream& rOutStm)
 {
-}
-
-void SvMetaModule::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
-{
-    for( sal_uLong n = 0; n < aClassList.size(); n++ )
+    for (sal_uLong n = 0; n < aClassList.size(); n++)
     {
-        SvMetaClass * pClass = aClassList[n];
-        pClass->WriteSfx( rBase, rOutStm );
+        SvMetaClass* pClass = aClassList[n];
+        pClass->WriteSfx(rBase, rOutStm);
     }
 }
 

@@ -22,18 +22,19 @@
 #include "astdeclaration.hxx"
 #include "astscope.hxx"
 
-class AstModule : public AstDeclaration
-                , public AstScope
+class AstModule : public AstDeclaration, public AstScope
 {
 public:
     AstModule(const OString& name, AstScope* pScope)
         : AstDeclaration(NT_module, name, pScope)
         , AstScope(NT_module)
-    {}
+    {
+    }
     AstModule(NodeType type, const OString& name, AstScope* pScope)
         : AstDeclaration(type, name, pScope)
         , AstScope(type)
-    {}
+    {
+    }
 
     virtual bool dump(RegistryKey& rKey) override;
 };
