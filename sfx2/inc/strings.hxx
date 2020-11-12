@@ -14,15 +14,15 @@
 
 // Do not translate STR_TEMPLATE_NAME*_DEF names!!
 // STR_TEMPLATE_NAME*_DEF strings must EXACTLY fit dc:title tag in meta.xml of each template file
-#define STR_TEMPLATE_NAME1_DEF  "Alizarin"
-#define STR_TEMPLATE_NAME2_DEF  "Beehive"
-#define STR_TEMPLATE_NAME3_DEF  "Blue Curve"
-#define STR_TEMPLATE_NAME4_DEF  "Blueprint Plans"
-#define STR_TEMPLATE_NAME5_DEF  "Bright Blue"
-#define STR_TEMPLATE_NAME6_DEF  "Classy Red"
-#define STR_TEMPLATE_NAME7_DEF  "DNA"
-#define STR_TEMPLATE_NAME8_DEF  "Focus"
-#define STR_TEMPLATE_NAME9_DEF  "Forestbird"
+#define STR_TEMPLATE_NAME1_DEF "Alizarin"
+#define STR_TEMPLATE_NAME2_DEF "Beehive"
+#define STR_TEMPLATE_NAME3_DEF "Blue Curve"
+#define STR_TEMPLATE_NAME4_DEF "Blueprint Plans"
+#define STR_TEMPLATE_NAME5_DEF "Bright Blue"
+#define STR_TEMPLATE_NAME6_DEF "Classy Red"
+#define STR_TEMPLATE_NAME7_DEF "DNA"
+#define STR_TEMPLATE_NAME8_DEF "Focus"
+#define STR_TEMPLATE_NAME9_DEF "Forestbird"
 #define STR_TEMPLATE_NAME10_DEF "Impress"
 #define STR_TEMPLATE_NAME11_DEF "Inspiration"
 #define STR_TEMPLATE_NAME12_DEF "Lights"
@@ -47,11 +47,11 @@
 #define STR_TEMPLATE_NAME31_DEF "Simple"
 #define STR_TEMPLATE_NAME32_DEF "BPMN"
 
-#define CMIS_TYPE_STRING        "String"
-#define CMIS_TYPE_INTEGER       "Integer"
-#define CMIS_TYPE_DECIMAL       "Decimal"
-#define CMIS_TYPE_DATETIME      "Datetime"
-#define CMIS_TYPE_BOOL          "Bool"
+#define CMIS_TYPE_STRING "String"
+#define CMIS_TYPE_INTEGER "Integer"
+#define CMIS_TYPE_DECIMAL "Decimal"
+#define CMIS_TYPE_DATETIME "Datetime"
+#define CMIS_TYPE_BOOL "Bool"
 
 #endif
 

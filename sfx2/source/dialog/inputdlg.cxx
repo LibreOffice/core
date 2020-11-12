@@ -9,7 +9,7 @@
 
 #include <sfx2/inputdlg.hxx>
 
-InputDialog::InputDialog(weld::Widget* pParent, const OUString &rLabelText)
+InputDialog::InputDialog(weld::Widget* pParent, const OUString& rLabelText)
     : GenericDialogController(pParent, "sfx/ui/inputdialog.ui", "InputDialog")
     , m_xEntry(m_xBuilder->weld_entry("entry"))
     , m_xLabel(m_xBuilder->weld_label("label"))
@@ -18,15 +18,9 @@ InputDialog::InputDialog(weld::Widget* pParent, const OUString &rLabelText)
     m_xLabel->set_label(rLabelText);
 }
 
-void InputDialog::HideHelpBtn()
-{
-    m_xHelp->hide();
-}
+void InputDialog::HideHelpBtn() { m_xHelp->hide(); }
 
-OUString InputDialog::GetEntryText() const
-{
-    return m_xEntry->get_text();
-}
+OUString InputDialog::GetEntryText() const { return m_xEntry->get_text(); }
 
 void InputDialog::SetEntryText(const OUString& rStr)
 {
@@ -35,5 +29,3 @@ void InputDialog::SetEntryText(const OUString& rStr)
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
-

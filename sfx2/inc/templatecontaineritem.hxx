@@ -19,9 +19,9 @@ public:
     OUString maTitle;
     std::vector<TemplateItemProperties> maTemplates;
 
-    TemplateContainerItem (sal_uInt16 nId);
+    TemplateContainerItem(sal_uInt16 nId);
 
-    ~TemplateContainerItem ();
+    ~TemplateContainerItem();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

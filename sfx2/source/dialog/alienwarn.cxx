@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/saveopt.hxx>
 #include <alienwarn.hxx>
 
-SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent, std::u16string_view _rFormatName,
-                                             const OUString& _rDefaultExtension, bool rDefaultIsAlien)
+SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent,
+                                             std::u16string_view _rFormatName,
+                                             const OUString& _rDefaultExtension,
+                                             bool rDefaultIsAlien)
     : MessageDialogController(pParent, "sfx/ui/alienwarndialog.ui", "AlienWarnDialog", "ask")
     , m_xKeepCurrentBtn(m_xBuilder->weld_button("save"))
     , m_xUseDefaultFormatBtn(m_xBuilder->weld_button("cancel"))
@@ -32,17 +33,17 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent, std::u16stri
 
     // replace formatname (text)
     OUString sInfoText = m_xDialog->get_primary_text();
-    sInfoText = sInfoText.replaceAll( "%FORMATNAME", _rFormatName );
+    sInfoText = sInfoText.replaceAll("%FORMATNAME", _rFormatName);
     m_xDialog->set_primary_text(sInfoText);
 
     // replace formatname (button)
     sInfoText = m_xKeepCurrentBtn->get_label();
-    sInfoText = sInfoText.replaceAll( "%FORMATNAME", _rFormatName );
+    sInfoText = sInfoText.replaceAll("%FORMATNAME", _rFormatName);
     m_xKeepCurrentBtn->set_label(sInfoText);
 
     // hide ODF explanation if default format is alien
     // and set the proper extension in the button
-    if( rDefaultIsAlien )
+    if (rDefaultIsAlien)
     {
         m_xDialog->set_secondary_text(OUString());
         aExtension = _rDefaultExtension.toAsciiUpperCase();
@@ -50,7 +51,7 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent, std::u16stri
 
     // replace defaultextension (button)
     sInfoText = m_xUseDefaultFormatBtn->get_label();
-    sInfoText = sInfoText.replaceAll( "%DEFAULTEXTENSION", aExtension );
+    sInfoText = sInfoText.replaceAll("%DEFAULTEXTENSION", aExtension);
     m_xUseDefaultFormatBtn->set_label(sInfoText);
 
     // load value of "warning on" checkbox from save options

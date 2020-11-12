@@ -43,7 +43,7 @@ class SfxVersionDialog : public SfxDialogController
 
     DECL_LINK(DClickHdl_Impl, weld::TreeView&, bool);
     DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
-    DECL_LINK(ButtonHdl_Impl, weld::Button&, void );
+    DECL_LINK(ButtonHdl_Impl, weld::Button&, void);
     void Init_Impl();
     void Open_Impl();
 
@@ -56,7 +56,7 @@ public:
 class SfxViewVersionDialog_Impl : public SfxDialogController
 {
 private:
-    SfxVersionInfo&   m_rInfo;
+    SfxVersionInfo& m_rInfo;
 
     std::unique_ptr<weld::Label> m_xDateTimeText;
     std::unique_ptr<weld::Label> m_xSavedByText;
@@ -68,7 +68,7 @@ private:
     DECL_LINK(ButtonHdl, weld::Button&, void);
 
 public:
-    SfxViewVersionDialog_Impl(weld::Window *pParent, SfxVersionInfo& rInfo, bool bEdit);
+    SfxViewVersionDialog_Impl(weld::Window* pParent, SfxVersionInfo& rInfo, bool bEdit);
 };
 
 class SfxCmisVersionsDialog : public SfxDialogController
@@ -82,10 +82,10 @@ class SfxCmisVersionsDialog : public SfxDialogController
     std::unique_ptr<weld::Button> m_xCompareButton;
     std::unique_ptr<weld::TreeView> m_xVersionBox;
 
-    void                        LoadVersions();
+    void LoadVersions();
 
 public:
-    SfxCmisVersionsDialog(weld::Window *pParent, SfxViewFrame* pFrame);
+    SfxCmisVersionsDialog(weld::Window* pParent, SfxViewFrame* pFrame);
     virtual ~SfxCmisVersionsDialog() override;
 };
 

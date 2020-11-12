@@ -14,7 +14,7 @@
 
 Size getParagraphPreviewOptimalSize(const OutputDevice& rReference)
 {
-    return rReference.LogicToPixel(Size(68 , 112), MapMode(MapUnit::MapAppFont));
+    return rReference.LogicToPixel(Size(68, 112), MapMode(MapUnit::MapAppFont));
 }
 
 Size getDrawPreviewOptimalSize(const OutputDevice& rReference)
@@ -24,12 +24,12 @@ Size getDrawPreviewOptimalSize(const OutputDevice& rReference)
 
 Size getPreviewStripSize(const OutputDevice& rReference)
 {
-    return rReference.LogicToPixel(Size(70 , 40), MapMode(MapUnit::MapAppFont));
+    return rReference.LogicToPixel(Size(70, 40), MapMode(MapUnit::MapAppFont));
 }
 
 Size getPreviewOptionsSize(const OutputDevice& rReference)
 {
-    return rReference.LogicToPixel(Size(70 , 27), MapMode(MapUnit::MapAppFont));
+    return rReference.LogicToPixel(Size(70, 27), MapMode(MapUnit::MapAppFont));
 }
 
 OUString getWidestTime(const LocaleDataWrapper& rWrapper)
@@ -42,8 +42,7 @@ OUString getWidestTime(const LocaleDataWrapper& rWrapper)
 
 OUString formatTime(const DateTime& rDateTime, const LocaleDataWrapper& rWrapper)
 {
-    return rWrapper.getDate(rDateTime) + " "
-        + rWrapper.getTime(rDateTime, false);
+    return rWrapper.getDate(rDateTime) + " " + rWrapper.getTime(rDateTime, false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

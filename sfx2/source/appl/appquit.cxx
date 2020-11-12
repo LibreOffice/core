@@ -43,7 +43,7 @@ using ::basic::BasicManagerRepository;
 
 void SfxApplication::Deinitialize()
 {
-    if ( pImpl->bDowning )
+    if (pImpl->bDowning)
         return;
 
 #if HAVE_FEATURE_SCRIPTING
@@ -61,14 +61,12 @@ void SfxApplication::Deinitialize()
     // some stack traces, which we don't understand.
     // For more information see:
     pImpl->bDowning = false;
-    DBG_ASSERT( !SfxViewFrame::GetFirst(),
-                "existing SfxViewFrame after Execute" );
-    DBG_ASSERT( !SfxObjectShell::GetFirst(),
-                "existing SfxObjectShell after Execute" );
-    pImpl->pAppDispat->Pop( *this, SfxDispatcherPopFlags::POP_UNTIL );
+    DBG_ASSERT(!SfxViewFrame::GetFirst(), "existing SfxViewFrame after Execute");
+    DBG_ASSERT(!SfxObjectShell::GetFirst(), "existing SfxObjectShell after Execute");
+    pImpl->pAppDispat->Pop(*this, SfxDispatcherPopFlags::POP_UNTIL);
     pImpl->pAppDispat->Flush();
     pImpl->bDowning = true;
-    pImpl->pAppDispat->DoDeactivate_Impl( true, nullptr );
+    pImpl->pAppDispat->DoDeactivate_Impl(true, nullptr);
 
     // Release Controller and others
     // then the remaining components should also disappear ( Beamer! )
@@ -76,10 +74,10 @@ void SfxApplication::Deinitialize()
 #if HAVE_FEATURE_SCRIPTING
     BasicManagerRepository::resetApplicationBasicManager();
     pImpl->pBasicManager->reset(nullptr);
-        // this will also delete pBasMgr
+    // this will also delete pBasMgr
 #endif
 
-    DBG_ASSERT( pImpl->pViewFrame == nullptr, "active foreign ViewFrame" );
+    DBG_ASSERT(pImpl->pViewFrame == nullptr, "active foreign ViewFrame");
 
     // free administration managers
     pImpl->pAppDispat.reset();
