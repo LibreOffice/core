@@ -11,10 +11,10 @@
 #include <tools/cpuid.hxx>
 #include <cstdint>
 
-namespace cpuid {
-
-namespace {
-
+namespace cpuid
+{
+namespace
+{
 #if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64))
 #include <intrin.h>
 void getCpuId(uint32_t array[4], uint32_t nInfoType)
@@ -30,7 +30,7 @@ void getCpuId(uint32_t array[4], uint32_t nInfoType)
 #else
 void getCpuId(uint32_t array[4], uint32_t /*nInfoType*/)
 {
-   array[0] = array[1] =  array[2] = array[3] = 0;
+    array[0] = array[1] = array[2] = array[3] = 0;
 }
 #endif
 
@@ -41,7 +41,7 @@ bool checkAVXSupportInOS()
 #if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64))
     xcr0 = uint32_t(_xgetbv(0));
 #elif (defined(__i386__) || defined(__x86_64__))
-    __asm__("xgetbv" : "=a" (xcr0) : "c" (0) : "%edx");
+    __asm__("xgetbv" : "=a"(xcr0) : "c"(0) : "%edx");
 #endif
     return ((xcr0 & 6) == 6); /* checking if xmm and ymm state are enabled in XCR0 */
 }
@@ -49,25 +49,25 @@ bool checkAVXSupportInOS()
 } // end anonymous namespace
 
 #define HYPER_bit (1 << 28)
-#define SSE2_bit  (1 << 26)
-#define SSSE3_bit (1 <<  9)
+#define SSE2_bit (1 << 26)
+#define SSSE3_bit (1 << 9)
 #define SSE41_bit (1 << 19)
 #define SSE42_bit (1 << 20)
 #define XSAVE_bit (1 << 27)
-#define AVX_bit   (1 << 28)
-#define AVX2_bit  (1 << 5)
+#define AVX_bit (1 << 28)
+#define AVX2_bit (1 << 5)
 
 InstructionSetFlags getCpuInstructionSetFlags()
 {
     InstructionSetFlags eInstructions = InstructionSetFlags::NONE;
 
-    uint32_t info[] = {0, 0, 0, 0};
+    uint32_t info[] = { 0, 0, 0, 0 };
     getCpuId(info, 0);
     int nLevel = info[0];
 
     if (nLevel >= 1)
     {
-        uint32_t aCpuInfoArray[] = {0, 0, 0, 0};
+        uint32_t aCpuInfoArray[] = { 0, 0, 0, 0 };
         getCpuId(aCpuInfoArray, 1);
 
         if ((aCpuInfoArray[3] & HYPER_bit) != 0)
@@ -79,14 +79,13 @@ InstructionSetFlags getCpuInstructionSetFlags()
         if ((aCpuInfoArray[2] & SSSE3_bit) != 0)
             eInstructions |= InstructionSetFlags::SSSE3;
 
-        if ((aCpuInfoArray[2] & SSE41_bit ) != 0)
+        if ((aCpuInfoArray[2] & SSE41_bit) != 0)
             eInstructions |= InstructionSetFlags::SSE41;
 
         if ((aCpuInfoArray[2] & SSE42_bit) != 0)
             eInstructions |= InstructionSetFlags::SSE42;
 
-        if (((aCpuInfoArray[2] & AVX_bit)   != 0) &&
-            ((aCpuInfoArray[2] & XSAVE_bit) != 0))
+        if (((aCpuInfoArray[2] & AVX_bit) != 0) && ((aCpuInfoArray[2] & XSAVE_bit) != 0))
         {
             if (checkAVXSupportInOS())
             {
@@ -94,7 +93,7 @@ InstructionSetFlags getCpuInstructionSetFlags()
 
                 if (nLevel >= 7)
                 {
-                    uint32_t aExtendedInfo[] = {0, 0, 0, 0};
+                    uint32_t aExtendedInfo[] = { 0, 0, 0, 0 };
                     getCpuId(aExtendedInfo, 7);
 
                     if ((aExtendedInfo[1] & AVX2_bit) != 0)

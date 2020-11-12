@@ -14,8 +14,7 @@
 
 namespace
 {
-
-class Test: public CppUnit::TestFixture
+class Test : public CppUnit::TestFixture
 {
 public:
     void test_rectangle();
@@ -28,7 +27,7 @@ public:
 void Test::test_rectangle()
 {
     {
-        tools::Rectangle aRect(1,1,1,1);
+        tools::Rectangle aRect(1, 1, 1, 1);
 
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetWidth());
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetHeight());
@@ -38,7 +37,7 @@ void Test::test_rectangle()
     }
 
     {
-        tools::Rectangle aRect(Point(), Size(1,1));
+        tools::Rectangle aRect(Point(), Size(1, 1));
 
         CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.Left());
         CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.Top());
@@ -55,9 +54,7 @@ void Test::test_rectangle()
     }
 }
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

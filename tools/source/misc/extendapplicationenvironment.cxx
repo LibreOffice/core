@@ -34,13 +34,15 @@
 #include <sal/types.h>
 #include <tools/extendapplicationenvironment.hxx>
 
-namespace tools {
-
-void extendApplicationEnvironment() {
+namespace tools
+{
+void extendApplicationEnvironment()
+{
 #if defined UNX
     // Try to set RLIMIT_NOFILE as large as possible (failure is harmless):
     rlimit lim;
-    if (getrlimit(RLIMIT_NOFILE, &lim) == 0) {
+    if (getrlimit(RLIMIT_NOFILE, &lim) == 0)
+    {
         lim.rlim_cur = lim.rlim_max;
         setrlimit(RLIMIT_NOFILE, &lim);
     }
@@ -57,12 +59,16 @@ void extendApplicationEnvironment() {
             uri = rtl::Bootstrap::encode(uri);
         }
         env.append(uri);
-    } else {
-        if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None) {
+    }
+    else
+    {
+        if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None)
+        {
             abort();
         }
         sal_Int32 lastDirSeparatorPos = uri.lastIndexOf('/');
-        if (lastDirSeparatorPos >= 0) {
+        if (lastDirSeparatorPos >= 0)
+        {
             uri = uri.copy(0, lastDirSeparatorPos + 1);
         }
         env.append(rtl::Bootstrap::encode(uri));
@@ -72,11 +78,11 @@ void extendApplicationEnvironment() {
         env.append(SAL_CONFIGFILE("fundamental"));
     }
     OUString envValue(env.makeStringAndClear());
-    if (osl_setEnvironment(envVar.pData, envValue.pData) != osl_Process_E_None) {
+    if (osl_setEnvironment(envVar.pData, envValue.pData) != osl_Process_E_None)
+    {
         abort();
     }
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

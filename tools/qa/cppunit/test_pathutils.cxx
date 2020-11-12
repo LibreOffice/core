@@ -24,25 +24,24 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <tools/pathutils.hxx>
 
-namespace {
-
-void buildPath(
-    wchar_t const * front, wchar_t const * back, wchar_t const * path)
+namespace
+{
+void buildPath(wchar_t const* front, wchar_t const* back, wchar_t const* path)
 {
 #if defined(_WIN32)
     wchar_t p[MAX_PATH];
-    wchar_t * e = tools::buildPath(
-        p, front, front + std::wcslen(front), back, std::wcslen(back));
-    CPPUNIT_ASSERT_EQUAL(static_cast<void *>(p + std::wcslen(path)), static_cast<void *>(e));
+    wchar_t* e = tools::buildPath(p, front, front + std::wcslen(front), back, std::wcslen(back));
+    CPPUNIT_ASSERT_EQUAL(static_cast<void*>(p + std::wcslen(path)), static_cast<void*>(e));
     CPPUNIT_ASSERT_EQUAL(0, std::wcscmp(path, p));
 #else
-    (void) front;
-    (void) back;
-    (void) path;
+    (void)front;
+    (void)back;
+    (void)path;
 #endif
 }
 
-class Test: public CppUnit::TestFixture {
+class Test : public CppUnit::TestFixture
+{
 public:
     void testBuildPath();
 
@@ -51,7 +50,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::testBuildPath() {
+void Test::testBuildPath()
+{
     buildPath(L"a:\\b\\", L"..", L"a:\\");
     buildPath(L"a:\\b\\", L"..\\", L"a:\\");
     buildPath(L"a:\\b\\c\\", L"..\\..\\..\\d", L"a:\\..\\d");
@@ -61,7 +61,6 @@ void Test::testBuildPath() {
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
