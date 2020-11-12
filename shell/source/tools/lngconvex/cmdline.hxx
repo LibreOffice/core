@@ -24,22 +24,17 @@
 
 #include <sal/config.h>
 
-
 /** Simple command line abstraction
 */
 
 class CommandLine
 {
 public:
-
     // Creation
-
 
     CommandLine(size_t argc, char* argv[]);
 
-
     // Query
-
 
     /** Returns an argument by name. If there are
         duplicate argument names in the command line,
@@ -59,18 +54,16 @@ public:
     */
     std::string get_arg(const std::string& ArgumentName) const;
 
-
 private:
-
     /** Returns whether a given argument is an argument name
     */
     static bool is_arg_name(const std::string& Argument);
 
 private:
-    size_t      m_argc;
-    char**      m_argv;
+    size_t m_argc;
+    char** m_argv;
 
-// prevent copy and assignment
+    // prevent copy and assignment
 private:
     CommandLine(const CommandLine&) = delete;
     CommandLine& operator=(const CommandLine&) = delete;

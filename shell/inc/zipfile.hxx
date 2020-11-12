@@ -33,12 +33,11 @@ class StreamInterface;
 class ZipFile
 {
 public:
-    typedef std::vector<std::string>   Directory_t;
+    typedef std::vector<std::string> Directory_t;
     typedef std::unique_ptr<Directory_t> DirectoryPtr_t;
-    typedef std::vector<char>          ZipContentBuffer_t;
+    typedef std::vector<char> ZipContentBuffer_t;
 
 public:
-
     /** Checks whether a file is a zip file or not
 
     @precond    The given parameter must be a string with length > 0
@@ -52,10 +51,9 @@ public:
             IOException if the specified file doesn't exist
             AccessViolationException if read access to the file is denied
     */
-    static bool IsZipFile(const Filepath_t &FileName);
+    static bool IsZipFile(const Filepath_t& FileName);
 
-    static bool IsZipFile(void *stream);
-
+    static bool IsZipFile(void* stream);
 
     /** Returns whether the version of the specified zip file may be uncompressed with the
           currently used zlib version or not
@@ -72,12 +70,11 @@ public:
             IOException if the specified file doesn't exist or is no zip file
             AccessViolationException if read access to the file is denied
     */
-    static bool IsValidZipFileVersionNumber(const Filepath_t &FileName);
+    static bool IsValidZipFileVersionNumber(const Filepath_t& FileName);
 
-    static bool IsValidZipFileVersionNumber(void *stream);
+    static bool IsValidZipFileVersionNumber(void* stream);
 
 public:
-
     /** Constructs a zip file from a zip file
 
     @precond    The given parameter must be a string with length > 0
@@ -90,10 +87,9 @@ public:
             WrongZipVersionException if the zip file cannot be uncompressed
             with the used zlib version
     */
-    ZipFile(const Filepath_t &FileName);
+    ZipFile(const Filepath_t& FileName);
 
-    ZipFile(StreamInterface *stream);
-
+    ZipFile(StreamInterface* stream);
 
     /** Destroys a zip file
     */
@@ -117,7 +113,8 @@ public:
                 ZipContentMissException if the specified zip content
                 does not exist in this zip file
     */
-    void GetUncompressedContent(const std::string &ContentName, /*inout*/ ZipContentBuffer_t &ContentBuffer);
+    void GetUncompressedContent(const std::string& ContentName,
+                                /*inout*/ ZipContentBuffer_t& ContentBuffer);
 
     /** Returns a list with the content names contained within this file
 
@@ -129,10 +126,9 @@ public:
         iterating over a ZipFileDirectory returned by
         GetDirectory
     */
-    bool HasContent(const std::string &ContentName) const;
+    bool HasContent(const std::string& ContentName) const;
 
 private:
-
     /** Returns the length of the longest file name
         in the current zip file
 
@@ -141,7 +137,7 @@ private:
     long GetFileLongestFileNameLength() const;
 
 private:
-    StreamInterface *m_pStream;
+    StreamInterface* m_pStream;
     bool m_bShouldFree;
 };
 

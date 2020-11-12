@@ -10,9 +10,7 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_FILEPATH_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_FILEPATH_HXX
 
-
 // typedefs to allow using Unicode paths on Windows
-
 
 #include <string>
 

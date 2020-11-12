@@ -23,7 +23,7 @@
 #include <malloc.h>
 
 #if !defined WIN32_LEAN_AND_MEAN
-  #define WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 
@@ -41,24 +41,20 @@
 */
 std::wstring StringToWString(const std::string& String);
 
-
 /** Convert a wstring to a string
     using CP_ACP
 */
 std::string WStringToString(const std::wstring& String);
-
 
 /** Convert a string to a wstring
     using CP_UTF8
 */
 std::wstring UTF8ToWString(const std::string& String);
 
-
 /** Retrieve a string from the
     resources of this module
 */
 std::wstring GetResString(int ResId);
-
 
 /** helper function to judge if the string is only has spaces.
     @returns
@@ -72,32 +68,26 @@ bool HasOnlySpaces(const std::wstring& String);
         Windows Locale Identifier corresponding to input LocaleSet.
 */
 
-
 /** Convert a long path name using Windows api call GetShortPathName
 */
-std::wstring getShortPathName( const std::wstring& aLongName );
+std::wstring getShortPathName(const std::wstring& aLongName);
 
-
-LCID LocaleSetToLCID( const LocaleSet_t & Locale );
-
+LCID LocaleSetToLCID(const LocaleSet_t& Locale);
 
 #ifdef DEBUG
-inline void OutputDebugStringFormatW( LPCWSTR pFormat, ... )
+inline void OutputDebugStringFormatW(LPCWSTR pFormat, ...)
 {
-    WCHAR    buffer[1024];
+    WCHAR buffer[1024];
     va_list args;
 
-    va_start( args, pFormat );
-    StringCchVPrintfW( buffer, sizeof(buffer)/sizeof(*buffer), pFormat, args );
-    va_end( args );
-    OutputDebugStringW( buffer );
+    va_start(args, pFormat);
+    StringCchVPrintfW(buffer, sizeof(buffer) / sizeof(*buffer), pFormat, args);
+    va_end(args);
+    OutputDebugStringW(buffer);
 }
 #else
-static inline void OutputDebugStringFormatW( LPCWSTR, ... )
-{
-}
+static inline void OutputDebugStringFormatW(LPCWSTR, ...) {}
 #endif
-
 
 #endif
 

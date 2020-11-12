@@ -19,8 +19,9 @@
 
 #include "testzipimpl.hxx"
 
-TestZipImpl::TestZipImpl(StreamInterface *stream) :
-    zipFile(ZipFile(stream)), expectedContents()
+TestZipImpl::TestZipImpl(StreamInterface* stream)
+    : zipFile(ZipFile(stream))
+    , expectedContents()
 {
     expectedContents.push_back("mimetype");
     expectedContents.push_back("Configurations2/statusbar/");
@@ -42,22 +43,17 @@ TestZipImpl::TestZipImpl(StreamInterface *stream) :
     sort(expectedContents.begin(), expectedContents.end());
 }
 
-TestZipImpl::~TestZipImpl()
-{
-}
+TestZipImpl::~TestZipImpl() {}
 
 bool TestZipImpl::test_directory()
 {
     ZipFile::DirectoryPtr_t contents = zipFile.GetDirectory();
-    vector<string> &stringVector = *contents;
+    vector<string>& stringVector = *contents;
     sort(stringVector.begin(), stringVector.end());
     return expectedContents == stringVector;
 }
 
-bool TestZipImpl::test_hasContentCaseInSensitive()
-{
-    return zipFile.HasContent("mimetype");
-}
+bool TestZipImpl::test_hasContentCaseInSensitive() { return zipFile.HasContent("mimetype"); }
 
 bool TestZipImpl::test_getContent()
 {

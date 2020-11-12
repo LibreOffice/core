@@ -26,14 +26,11 @@
 class xml_parser_exception final : public std::runtime_error
 {
 public:
-
-    xml_parser_exception(
-        const std::string& error_msg) :
-        std::runtime_error(error_msg)
-    {}
-
+    xml_parser_exception(const std::string& error_msg)
+        : std::runtime_error(error_msg)
+    {
+    }
 };
-
 
 //  Simple wrapper around expat, the xml parser library
 //  created by James Clark
@@ -88,9 +85,9 @@ public:
 
     /** Returns the currently used document handler or null if
         no document handler was set before. */
-    i_xml_parser_event_handler* get_document_handler() const { return document_handler_;}
-private:
+    i_xml_parser_event_handler* get_document_handler() const { return document_handler_; }
 
+private:
     void init();
 
 private:

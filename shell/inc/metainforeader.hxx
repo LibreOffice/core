@@ -35,9 +35,9 @@ class CMetaInfoReader : public CBaseReader
 public:
     virtual ~CMetaInfoReader() override;
 
-    CMetaInfoReader( const Filepath_t& DocumentName );
+    CMetaInfoReader(const Filepath_t& DocumentName);
 
-    CMetaInfoReader( StreamInterface* stream );
+    CMetaInfoReader(StreamInterface* stream);
 
     /** check if the Tag is in the target meta.xml file.
 
@@ -45,7 +45,6 @@ public:
         the name of the tag that will be retrieved.
     */
     bool hasTag(const std::wstring& TagName) const;
-
 
     /** Get a specific tag content, compound tags will be returned as comma separated list.
 
@@ -61,7 +60,7 @@ public:
         @param AttributeName
         the name of the attribute.
     */
-    bool hasTagAttribute(const std::wstring& TagName,  const std::wstring& AttributeName);
+    bool hasTagAttribute(const std::wstring& TagName, const std::wstring& AttributeName);
 
     /** Get a specific attribute content.
 
@@ -70,14 +69,13 @@ public:
         @param AttributeName
         the name of the attribute.
     */
-    std::wstring getTagAttribute(const std::wstring& TagName,  const std::wstring& AttributeName);
+    std::wstring getTagAttribute(const std::wstring& TagName, const std::wstring& AttributeName);
 
     /** Get the default language of the whole document.
     */
-    LocaleSet_t getDefaultLocale( );
+    LocaleSet_t getDefaultLocale();
 
 protected: // protected because its only an implementation relevant class
-
     /** start_element occurs when a tag is start.
 
         @param raw_name
@@ -87,10 +85,8 @@ protected: // protected because its only an implementation relevant class
         @param attributes
         attribute structure.
     */
-    virtual void start_element(
-        const string_t& raw_name,
-        const string_t& local_name,
-        const xml_tag_attribute_container_t& attributes) override;
+    virtual void start_element(const string_t& raw_name, const string_t& local_name,
+                               const xml_tag_attribute_container_t& attributes) override;
 
     /** end_element occurs when a tag is closed
 
@@ -99,8 +95,7 @@ protected: // protected because its only an implementation relevant class
         @param local_name
         local name of the tag.
     */
-    virtual void end_element(
-        const string_t& raw_name, const string_t& local_name) override;
+    virtual void end_element(const string_t& raw_name, const string_t& local_name) override;
 
     /** characters occurs when receiving characters
 
@@ -117,25 +112,24 @@ protected:
         @param XmlAttributes
         attribute structure of the tag to save in.
     */
-    ITag* chooseTagReader(
-        const std::wstring& tag_name, const XmlTagAttributes_t& XmlAttributes );
+    ITag* chooseTagReader(const std::wstring& tag_name, const XmlTagAttributes_t& XmlAttributes);
 
     /** save the received content into structure.
 
         @param tag_name
         the name of the tag.
     */
-    void saveTagContent( const std::wstring& tag_name );
+    void saveTagContent(const std::wstring& tag_name);
 
 private:
-    XmlTags_t      m_AllMetaInfo;
+    XmlTags_t m_AllMetaInfo;
 
 private:
     std::stack<ITag*> m_TagBuilderStack;
 
 private:
     CKeywordsTag* m_pKeywords_Builder;
-    CDummyTag*   m_pDummy_Builder;
+    CDummyTag* m_pDummy_Builder;
     CSimpleTag* m_pSimple_Builder;
 };
 

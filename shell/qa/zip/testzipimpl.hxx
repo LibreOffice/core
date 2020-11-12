@@ -30,11 +30,12 @@ using namespace std;
 
 class TestZipImpl
 {
- private:
+private:
     ZipFile zipFile;
     vector<string> expectedContents;
- public:
-    explicit TestZipImpl(StreamInterface *stream);
+
+public:
+    explicit TestZipImpl(StreamInterface* stream);
     ~TestZipImpl();
     bool test_directory();
     bool test_hasContentCaseInSensitive();
