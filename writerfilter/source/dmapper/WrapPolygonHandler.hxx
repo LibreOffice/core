@@ -30,8 +30,8 @@ namespace com::sun::star::text
 struct GraphicCrop;
 }
 
-namespace writerfilter::dmapper {
-
+namespace writerfilter::dmapper
+{
 /// Handles <wp:wrapPolygon> from DOCX and the pWrapPolygonVertices shape property from RTF.
 class WrapPolygon final : public virtual SvRefBase
 {
@@ -46,15 +46,15 @@ public:
     WrapPolygon();
     ~WrapPolygon() override;
 
-    void addPoint(const css::awt::Point & rPoint);
+    void addPoint(const css::awt::Point& rPoint);
 
     Points_t::const_iterator begin() const;
     Points_t::const_iterator end() const;
 
-    WrapPolygon::Pointer_t move(const css::awt::Point & rMove) const;
-    WrapPolygon::Pointer_t scale(const Fraction & rFractionX, const Fraction & rFractionY) const;
-    WrapPolygon::Pointer_t correctWordWrapPolygon(const css::awt::Size & rSrcSize) const;
-    WrapPolygon::Pointer_t correctWordWrapPolygonPixel(const css::awt::Size & rSrcSize) const;
+    WrapPolygon::Pointer_t move(const css::awt::Point& rMove) const;
+    WrapPolygon::Pointer_t scale(const Fraction& rFractionX, const Fraction& rFractionY) const;
+    WrapPolygon::Pointer_t correctWordWrapPolygon(const css::awt::Size& rSrcSize) const;
+    WrapPolygon::Pointer_t correctWordWrapPolygonPixel(const css::awt::Size& rSrcSize) const;
     WrapPolygon::Pointer_t correctCrop(const css::awt::Size& rGraphicSize,
                                        const css::text::GraphicCrop& rGraphicCrop) const;
     css::drawing::PointSequenceSequence getPointSequenceSequence() const;
@@ -66,7 +66,7 @@ public:
     WrapPolygonHandler();
     virtual ~WrapPolygonHandler() override;
 
-    const WrapPolygon::Pointer_t& getPolygon() const { return mpPolygon;}
+    const WrapPolygon::Pointer_t& getPolygon() const { return mpPolygon; }
 
 private:
     WrapPolygon::Pointer_t mpPolygon;
@@ -75,11 +75,9 @@ private:
     sal_Int32 mnY;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) override;
-    virtual void lcl_sprm(Sprm & sprm) override;
-
+    virtual void lcl_attribute(Id Name, Value& val) override;
+    virtual void lcl_sprm(Sprm& sprm) override;
 };
-
 }
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_WRAPPOLYGONHANDLER_HXX

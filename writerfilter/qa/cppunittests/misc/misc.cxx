@@ -21,10 +21,9 @@
 #include <dmapper/ConversionHelper.hxx>
 #include <dmapper/DomainMapperFactory.hxx>
 
-namespace {
-
-class WriterfilterMiscTest
-    : public ::CppUnit::TestFixture
+namespace
+{
+class WriterfilterMiscTest : public ::CppUnit::TestFixture
 {
 public:
     void testTwipConversions();
@@ -59,7 +58,7 @@ void WriterfilterMiscTest::testTwipConversions()
 void WriterfilterMiscTest::testFieldParameters()
 {
     using writerfilter::dmapper::splitFieldCommand;
-    std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > result;
+    std::tuple<OUString, std::vector<OUString>, std::vector<OUString>> result;
 
     result = splitFieldCommand("PAGEREF last_page");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), std::get<0>(result));
@@ -148,9 +147,8 @@ void WriterfilterMiscTest::testFieldParameters()
     CPPUNIT_ASSERT_EQUAL(OUString("\\A"), std::get<2>(result)[2]);
     CPPUNIT_ASSERT_EQUAL(OUString(), std::get<2>(result)[3]);
 
-    for (auto prefix : {"#", "$", "%", "&", "'", "(", ")", "*", "+", ",",
-                        "-", ".", "/", ":", ";", "<", ">", "?", "@", "[",
-                        "]", "^", "_", "`", "{", "|", "}", "~"})
+    for (auto prefix : { "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", ":",
+                         ";", "<", ">", "?", "@", "[", "]", "^", "_", "`", "{", "|", "}", "~" })
     {
         OUString test(OUString::createFromAscii(prefix) + "PAGE");
         result = splitFieldCommand(test + " ");
@@ -170,7 +168,6 @@ void WriterfilterMiscTest::testFieldParameters()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WriterfilterMiscTest);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -23,14 +23,14 @@ namespace writerfilter::dmapper
  */
 class TrackChangesHandler : public LoggedProperties
 {
-    RedlineParamsPtr     m_pRedlineParams;
+    RedlineParamsPtr m_pRedlineParams;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) override;
-    virtual void lcl_sprm(Sprm & sprm) override;
+    virtual void lcl_attribute(Id Name, Value& val) override;
+    virtual void lcl_sprm(Sprm& sprm) override;
 
 public:
-    explicit TrackChangesHandler( sal_Int32 nToken );
+    explicit TrackChangesHandler(sal_Int32 nToken);
     virtual ~TrackChangesHandler() override;
 
     /// Compute the UNO properties for the track changes object based on the received tokens.

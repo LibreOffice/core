@@ -27,7 +27,6 @@
 
 namespace writerfilter::dmapper
 {
-
 struct ThemeTable_Impl;
 
 class ThemeTable : public LoggedProperties, public LoggedTable
@@ -42,10 +41,10 @@ public:
     static OUString getStringForTheme(const Id id);
     void setThemeFontLangProperties(const css::uno::Sequence<css::beans::PropertyValue>& aPropSeq);
 
- private:
+private:
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) override;
-    virtual void lcl_sprm(Sprm & sprm) override;
+    virtual void lcl_attribute(Id Name, Value& val) override;
+    virtual void lcl_sprm(Sprm& sprm) override;
 
     // Table
     virtual void lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref) override;
@@ -54,7 +53,7 @@ public:
     static OUString fromLocaleToScriptTag(const OUString& sLocale);
     static OUString fromLCIDToScriptTag(LanguageType lang);
 };
-typedef tools::SvRef< ThemeTable >          ThemeTablePtr;
+typedef tools::SvRef<ThemeTable> ThemeTablePtr;
 }
 
 #endif

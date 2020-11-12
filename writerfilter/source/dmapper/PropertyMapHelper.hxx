@@ -24,15 +24,13 @@
 
 namespace writerfilter::dmapper
 {
-
-void lcl_DumpTableColumnSeparators(const css::uno::Any & rTableColumnSeparators);
+void lcl_DumpTableColumnSeparators(const css::uno::Any& rTableColumnSeparators);
 #ifdef DBG_UTIL
-void lcl_DumpPropertyValues(css::beans::PropertyValues const & rValues);
+void lcl_DumpPropertyValues(css::beans::PropertyValues const& rValues);
 
-void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> const & rPropValSeq);
+void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> const& rPropValSeq);
 #endif // DBG_UTIL
 }
-
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
 
