@@ -127,6 +127,8 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
     maWildcardReversePattern.clear();
     maWildcardReversePattern2.clear();
     TransliterationFlags transliterateFlags = static_cast<TransliterationFlags>(aSrchPara.transliterateFlags);
+    bSearchApostrophe = false;
+    bool bReplaceApostrophe = false;
     if (aSrchPara.AlgorithmType2 == SearchAlgorithms2::REGEXP)
     {
         // RESrchPrepare will consider aSrchPara.transliterateFlags when
@@ -136,6 +138,11 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
         // ignore-case so later in TextSearch::searchForward() the string to
         // match is not case-altered, leave case-(in)sensitive to regex engine.
         transliterateFlags &= ~TransliterationFlags::IGNORE_CASE;
+    }
+    else if ( aSrchPara.searchString.indexOf('\'') > - 1 )
+    {
+        bSearchApostrophe = true;
+        bReplaceApostrophe = aSrchPara.searchString.indexOf(u'\u2019') > -1;
     }
 
     // Create Transliteration class
@@ -213,6 +220,9 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
                 ScriptType::COMPLEX));
     checkCTLEnd = (xBreak.is() && (xBreak->getScriptType(sSrchStr,
                     sSrchStr.getLength()-1) == ScriptType::COMPLEX));
+
+    if ( bReplaceApostrophe )
+        sSrchStr = sSrchStr.replace(u'\u2019', '\'');
 
     // Take the new SearchOptions2::AlgorithmType2 field and ignore
     // SearchOptions::algorithmType
@@ -312,6 +322,10 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
 
     OUString in_str(searchStr);
 
+    // in non-regex mode, allow searching typographical apostrophe with the ASCII one
+    // to avoid regression after using automatic conversion to U+2019 during typing in Writer
+    bool bReplaceApostrophe = bSearchApostrophe && in_str.indexOf(u'\u2019') > -1;
+
     bUsePrimarySrchStr = true;
 
     if ( xTranslit.is() )
@@ -340,6 +354,9 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
 
         css::uno::Sequence<sal_Int32> offset(nInEndPos - nInStartPos);
         in_str = xTranslit->transliterate(searchStr, nInStartPos, nInEndPos - nInStartPos, offset);
+
+        if ( bReplaceApostrophe )
+            in_str = in_str.replace(u'\u2019', '\'');
 
         // JP 20.6.2001: also the start and end positions must be corrected!
         sal_Int32 newStartPos =
@@ -382,6 +399,9 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
     }
     else
     {
+        if ( bReplaceApostrophe )
+            in_str = in_str.replace(u'\u2019', '\'');
+
         sres = (this->*fnForward)( in_str, startPos, endPos );
     }
 
@@ -437,6 +457,10 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
 
     OUString in_str(searchStr);
 
+    // in non-regex mode, allow searching typographical apostrophe with the ASCII one
+    // to avoid regression after using automatic conversion to U+2019 during typing in Writer
+    bool bReplaceApostrophe = bSearchApostrophe && in_str.indexOf(u'\u2019') > -1;
+
     bUsePrimarySrchStr = true;
 
     if ( xTranslit.is() )
@@ -444,6 +468,9 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         // apply only simple 1<->1 transliteration here
         css::uno::Sequence<sal_Int32> offset(startPos - endPos);
         in_str = xTranslit->transliterate( searchStr, endPos, startPos - endPos, offset );
+
+        if ( bReplaceApostrophe )
+            in_str = in_str.replace(u'\u2019', '\'');
 
         // JP 20.6.2001: also the start and end positions must be corrected!
         sal_Int32 const newStartPos = (startPos < searchStr.getLength())
@@ -490,6 +517,9 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     }
     else
     {
+        if ( bReplaceApostrophe )
+            in_str = in_str.replace(u'\u2019', '\'');
+
         sres = (this->*fnBackward)( in_str, startPos, endPos );
     }
 

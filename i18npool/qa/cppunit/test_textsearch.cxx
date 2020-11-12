@@ -38,11 +38,13 @@ public:
     void testICU();
     void testSearches();
     void testWildcardSearch();
+    void testApostropheSearch();
 
     CPPUNIT_TEST_SUITE(TestTextSearch);
     CPPUNIT_TEST(testICU);
     CPPUNIT_TEST(testSearches);
     CPPUNIT_TEST(testWildcardSearch);
+    CPPUNIT_TEST(testApostropheSearch);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<util::XTextSearch> m_xSearch;
@@ -263,6 +265,119 @@ void TestTextSearch::testWildcardSearch()
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 6) && (aRes.endOffset[0] == 0));
+}
+
+void TestTextSearch::testApostropheSearch()
+{
+    // A) find typographic apostrophes also by using ASCII apostrophe in searchString
+    OUString str( u"It\u2019s an apostrophe." );
+    sal_Int32 startPos = 0, endPos = str.getLength();
+
+    // set options
+    util::SearchOptions aOptions;
+    aOptions.algorithmType = util::SearchAlgorithms_ABSOLUTE;
+    aOptions.searchFlag = util::SearchFlags::ALL_IGNORE_CASE;
+    aOptions.searchString = "'";
+    m_xSearch->setOptions( aOptions );
+
+    util::SearchResult aRes;
+
+    // search forward
+    aRes = m_xSearch->searchForward( str, startPos, endPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(2), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(3), aRes.endOffset[0] );
+
+    // search backwards
+    aRes = m_xSearch->searchBackward( str, endPos, startPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(3), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(2), aRes.endOffset[0] );
+
+    // check with transliteration
+    aOptions.transliterateFlags = static_cast<int>(TransliterationFlags::IGNORE_CASE
+                                | TransliterationFlags::IGNORE_WIDTH);
+    m_xSearch->setOptions(aOptions);
+
+    // search forward
+    aRes = m_xSearch->searchForward( str, startPos, endPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(2), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(3), aRes.endOffset[0] );
+
+    // search backwards
+    aRes = m_xSearch->searchBackward( str, endPos, startPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(3), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(2), aRes.endOffset[0] );
+
+    // B) search ASCII apostrophe in a text with ASCII apostrophes
+    str = str.replace(u'\u2019', '\'');
+
+    // search forward
+    aRes = m_xSearch->searchForward( str, startPos, endPos );
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(2), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(3), aRes.endOffset[0] );
+
+    // search backwards
+    aRes = m_xSearch->searchBackward( str, endPos, startPos );
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(3), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(2), aRes.endOffset[0] );
+
+    // C) search typographic apostrophe in a text with ASCII apostrophes (no result)
+    aOptions.searchString = OUString(u"\u2019");
+    m_xSearch->setOptions( aOptions );
+
+    aRes = m_xSearch->searchForward( str, startPos, endPos );
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aRes.subRegExpressions);
+
+    aRes = m_xSearch->searchBackward( str, endPos, startPos );
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aRes.subRegExpressions);
+
+    // D) search typographic apostrophe in a text with typographic apostrophes
+    str = str.replace('\'', u'\u2019');
+
+    // search forward
+    aRes = m_xSearch->searchForward( str, startPos, endPos );
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(2), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(3), aRes.endOffset[0] );
+
+    // search backwards
+    aRes = m_xSearch->searchBackward( str, endPos, startPos );
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(3), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(2), aRes.endOffset[0] );
+
+    // E) search mixed apostrophes in a text with mixed apostrophes:
+    aOptions.searchString = OUString(u"'\u2019");
+    m_xSearch->setOptions( aOptions );
+    str = u"test: \u2019'";
+
+    // search forward
+    aRes = m_xSearch->searchForward( str, startPos, str.getLength());
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+
+    // search backwards
+    aRes = m_xSearch->searchBackward( str, str.getLength(), startPos );
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+
+    // F) search mixed apostrophes in a text with ASCII apostrophes:
+    str = u"test: ''";
+
+    // search forward
+    aRes = m_xSearch->searchForward( str, startPos, str.getLength());
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+
+    // search backwards
+    aRes = m_xSearch->searchBackward( str, str.getLength(), startPos );
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
 }
 
 void TestTextSearch::setUp()
