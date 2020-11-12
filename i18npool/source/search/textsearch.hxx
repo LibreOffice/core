@@ -73,6 +73,7 @@ class TextSearch: public cppu::WeakImplHelper
     std::unique_ptr<TextSearchJumpTable> pJumpTable2;
     bool bIsForwardTab;
     bool bUsePrimarySrchStr;
+    bool bSearchApostrophe;
     void MakeForwardTab();
     void MakeForwardTab2();
     void MakeBackwardTab();
