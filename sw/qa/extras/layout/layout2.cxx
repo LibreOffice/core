@@ -1910,11 +1910,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testCommentCursorPosition)
     pTextFrame->GetModelPositionForViewPoint(&aPosition, aPoint);
 
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 4 (six would be even better...)
-    // - Actual  : 3
-    // i.e. the cursor got positioned before the first comment,
-    // so typing extended the comment instead of adding content after the comment.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aPosition.nContent.GetIndex());
+    // - Expected: 6
+    // - Actual  : 3 or 4
+    // i.e. the cursor got positioned before the comments,
+    // so typing extended the first comment instead of adding content after the comments.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), aPosition.nContent.GetIndex());
+    // The second line is also important, but can't be auto-tested
+    // since the failing situation depends on GetViewWidth which is zero in the headless tests.
+    // bb<comment>|   - the cursor should move behind the |, not before it.
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf64222)
