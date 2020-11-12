@@ -4113,7 +4113,7 @@ void ChartExport::exportMarker(const Reference< XPropertySet >& xPropSet)
 
         nSize = nSize/250.0*7.0 + 1; // just guessed based on some test cases,
         //the value is always 1 less than the actual value.
-        nSize = std::min<sal_Int32>( 72, std::max<sal_Int32>( 2, nSize ) );
+        nSize = std::clamp( int(nSize), 2, 72 );
         pFS->singleElement(FSNS(XML_c, XML_size), XML_val, OString::number(nSize));
 
         pFS->startElement(FSNS(XML_c, XML_spPr));
