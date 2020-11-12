@@ -2037,7 +2037,7 @@ bool SwFEShell::ImpEndCreate()
         {
             bool bRestore = GetDoc()->GetIDocumentUndoRedo().DoesDrawUndo();
             GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
-            rSdrObj.SetName(GetUniqueShapeName());
+            rSdrObj.MakeNameUnique();
             GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(bRestore);
         }
 

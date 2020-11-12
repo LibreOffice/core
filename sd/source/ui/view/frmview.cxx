@@ -227,7 +227,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
             bool bUseContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
             mnDrawMode = bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR;
         }
-        mbIsNavigatorShowingAllShapes = false;
+        mbIsNavigatorShowingAllShapes = true;
         SetPreviousViewShellType (ViewShell::ST_NONE);
         SetViewShellTypeOnLoad (ViewShell::ST_IMPRESS);
 
