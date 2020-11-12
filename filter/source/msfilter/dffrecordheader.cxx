@@ -19,21 +19,21 @@
 
 #include <filter/msfilter/dffrecordheader.hxx>
 
-bool ReadDffRecordHeader( SvStream& rIn, DffRecordHeader& rRec )
+bool ReadDffRecordHeader(SvStream& rIn, DffRecordHeader& rRec)
 {
     rRec.nFilePos = rIn.Tell();
     sal_uInt16 nTmp(0);
-    rIn.ReadUInt16( nTmp );
+    rIn.ReadUInt16(nTmp);
     rRec.nImpVerInst = nTmp;
-    rRec.nRecVer = sal::static_int_cast< sal_uInt8 >(nTmp & 0x000F);
+    rRec.nRecVer = sal::static_int_cast<sal_uInt8>(nTmp & 0x000F);
     rRec.nRecInstance = nTmp >> 4;
-    rIn.ReadUInt16( rRec.nRecType );
-    rIn.ReadUInt32( rRec.nRecLen );
+    rIn.ReadUInt16(rRec.nRecType);
+    rIn.ReadUInt32(rRec.nRecLen);
 
     // preserving overflow, optimally we would check
     // the record size against the parent header
-    if ( rRec.nRecLen > ( SAL_MAX_UINT32 - rRec.nFilePos ) )
-      rIn.SetError( SVSTREAM_FILEFORMAT_ERROR );
+    if (rRec.nRecLen > (SAL_MAX_UINT32 - rRec.nFilePos))
+        rIn.SetError(SVSTREAM_FILEFORMAT_ERROR);
 
     return rIn.good();
 }
