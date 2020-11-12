@@ -16,6 +16,24 @@
       "revId": "3d90997fb6f232d8008df4d166d7b97b869c200f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc5a33f4_70eba42c",
+        "filename": "include/vcl/salgtype.hxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-12T10:33:11Z",
+      "side": 1,
+      "message": "See https://gerrit.libreoffice.org/c/core/+/105634",
+      "parentUuid": "83563a1c_d3416b7b",
+      "revId": "3d90997fb6f232d8008df4d166d7b97b869c200f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
