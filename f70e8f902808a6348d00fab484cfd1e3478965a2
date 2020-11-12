@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af6f4ac9_836a7a40",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-11-12T09:57:01Z",
+      "side": 1,
+      "message": "You may want to extract this to a local function to avoid copy\u0026paste.",
+      "revId": "f70e8f902808a6348d00fab484cfd1e3478965a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
