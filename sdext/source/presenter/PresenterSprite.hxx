@@ -23,8 +23,8 @@
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
-namespace sdext::presenter {
-
+namespace sdext::presenter
+{
 /** A wrapper around a css::rendering::XCustomSprite that allows
     not only setting values like size, location, and transformation but also
     provides read access to them.
@@ -44,16 +44,15 @@ public:
         is wrapped by objects of this class.
         It is also used to call updateScreen() at (wrapped by the Update() method).
     */
-    void SetFactory (
-        const css::uno::Reference<css::rendering::XSpriteCanvas>& rxSpriteFactory);
+    void SetFactory(const css::uno::Reference<css::rendering::XSpriteCanvas>& rxSpriteFactory);
 
     css::uno::Reference<css::rendering::XCanvas> GetCanvas();
 
     void Show();
     void Hide();
 
-    void Resize (const css::geometry::RealSize2D& rSize);
-    void MoveTo (const css::geometry::RealPoint2D& rLocation);
+    void Resize(const css::geometry::RealSize2D& rSize);
+    void MoveTo(const css::geometry::RealPoint2D& rLocation);
 
     void Update();
 
@@ -67,7 +66,6 @@ private:
     void ProvideSprite();
     void DisposeSprite();
 };
-
 }
 
 #endif

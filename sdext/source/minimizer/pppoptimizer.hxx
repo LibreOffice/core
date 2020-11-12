@@ -22,10 +22,9 @@
 
 #include <rtl/ustring.hxx>
 
-
 struct PPPOptimizer
 {
-    static sal_Int64 GetFileSize( const OUString& rURL );
+    static sal_Int64 GetFileSize(const OUString& rURL);
 };
 
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZER_HXX

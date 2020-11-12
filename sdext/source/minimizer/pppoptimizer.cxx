@@ -17,19 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "pppoptimizer.hxx"
 #include <osl/file.hxx>
 
 // returning filesize, on error zero is returned
-sal_Int64 PPPOptimizer::GetFileSize( const OUString& rURL )
+sal_Int64 PPPOptimizer::GetFileSize(const OUString& rURL)
 {
     sal_Int64 nFileSize = 0;
     osl::DirectoryItem aItem;
-    if ( osl::DirectoryItem::get( rURL, aItem ) == osl::FileBase::E_None )
+    if (osl::DirectoryItem::get(rURL, aItem) == osl::FileBase::E_None)
     {
-        osl::FileStatus aStatus( osl_FileStatus_Mask_FileSize );
-        if ( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
+        osl::FileStatus aStatus(osl_FileStatus_Mask_FileSize);
+        if (aItem.getFileStatus(aStatus) == osl::FileBase::E_None)
         {
             nFileSize = aStatus.getFileSize();
         }
