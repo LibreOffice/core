@@ -22,21 +22,21 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <osl/diagnose.h>
 
-void SAL_CALL OClosePreventer::queryClosing( const css::lang::EventObject&, sal_Bool  )
+void SAL_CALL OClosePreventer::queryClosing(const css::lang::EventObject&, sal_Bool)
 {
     throw css::util::CloseVetoException();
 }
 
-void SAL_CALL OClosePreventer::notifyClosing( const css::lang::EventObject& )
+void SAL_CALL OClosePreventer::notifyClosing(const css::lang::EventObject&)
 {
     // just a disaster
-    OSL_FAIL( "The object can not be prevented from closing!" );
+    OSL_FAIL("The object can not be prevented from closing!");
 }
 
-void SAL_CALL OClosePreventer::disposing( const css::lang::EventObject& )
+void SAL_CALL OClosePreventer::disposing(const css::lang::EventObject&)
 {
     // just a disaster
-    OSL_FAIL( "The object can not be prevented from closing!" );
+    OSL_FAIL("The object can not be prevented from closing!");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
