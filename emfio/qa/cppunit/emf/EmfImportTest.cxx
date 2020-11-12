@@ -44,13 +44,12 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
 {
     uno::Reference<lang::XComponent> mxComponent;
 
-    void checkRectPrimitive(Primitive2DSequence const & rPrimitive);
-
-    void testWorking();
+    void testPolyPolygon();
     void TestDrawString();
     void TestDrawStringTransparent();
     void TestDrawLine();
     void TestLinearGradient();
+    void TestTextMapMode();
     void TestPdfInEmf();
 
     Primitive2DSequence parseEmf(const OUString& aSource);
@@ -61,11 +60,12 @@ public:
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 
     CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testWorking);
+    CPPUNIT_TEST(testPolyPolygon);
     CPPUNIT_TEST(TestDrawString);
     CPPUNIT_TEST(TestDrawStringTransparent);
     CPPUNIT_TEST(TestDrawLine);
     CPPUNIT_TEST(TestLinearGradient);
+    CPPUNIT_TEST(TestTextMapMode);
     CPPUNIT_TEST(TestPdfInEmf);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -105,24 +105,39 @@ Primitive2DSequence Test::parseEmf(const OUString& aSource)
     return xEmfParser->getDecomposition(aInputStream, aPath, aEmptyValues);
 }
 
-void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
+void Test::testPolyPolygon()
 {
+    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/fdo79679-2.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(rPrimitive));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
 
     CPPUNIT_ASSERT (pDocument);
 
-    // emfio: add examples (later)
-    // assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#00cc00"); // rect background color
-    // assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "height", "100"); // rect background height
-    // assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "width", "100"); // rect background width
-}
+    // Chart axis
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon", "path", "m0 0h19746v14817h-19746z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor", 2);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[1]", "color", "#ffffff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[1]/polypolygon", "path", "m0 0h19780v14851h-19780z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[2]/polypolygon", "path", "m2574 13194v-12065h15303v12065z");
 
-void Test::testWorking()
-{
-    Primitive2DSequence aSequenceRect = parseEmf("/emfio/qa/cppunit/emf/data/fdo79679-2.emf");
-    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceRect.getLength()));
-    checkRectPrimitive(aSequenceRect);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke", 116);
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[1]/polygon", "2574,13194 2574,1129 17877,1129 17877,13194");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[1]/line", "color", "#ffffff");
+
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[10]/polygon", "8674,13194 8674,1129");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[10]/line", "color", "#000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion", 28);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[6]", "width", "459");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[6]", "x", "9908");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[6]", "text", "0.5");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[6]", "fontcolor", "#000000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/pointarray", 98);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/pointarray[1]", "color", "#000000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/pointarray[1]/point", "x", "2574");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/pointarray[1]/point", "y", "1129");
+
 }
 
 void Test::TestDrawString()
@@ -219,6 +234,40 @@ void Test::TestLinearGradient()
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[2]", "endy", "-1");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[2]", "opacity", "1");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[2]/polypolygon", "path", "m7615.75822989746 0.216110019646294h7615.75822989746v7610.21611001965h-7615.75822989746z");
+}
+
+void Test::TestTextMapMode()
+{
+    // Check import of EMF image with records: SETMAPMODE with MM_TEXT MapMode, POLYLINE16, EXTCREATEPEN, EXTTEXTOUTW
+    // MM_TEXT is mapped to one device pixel. Positive x is to the right; positive y is down.
+    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TextMapMode.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor", 2);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]", "color", "#ffffff");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygoncolor[1]/polypolygon", "path", "m0 0h3542v4647h-3542z");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", 20);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion[1]", "text", "N");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion[1]", "fontcolor", "#4a70e3");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion[1]", "x", "2099");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion[1]", "y", "1859");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke", 138);
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke[1]/polygon", "2142,1638 2142,1489");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke[1]/line", "color", "#4a70e3");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke[1]/line", "width", "11");
+
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke[10]/polygon", "1967,1029 1869,952");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke[10]/line", "color", "#4a70e3");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke[10]/line", "width", "11");
+
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke[20]/polygon", "2710,1113 2873,1330");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke[20]/line", "color", "#666666");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke[20]/line", "width", "11");
 }
 
 void Test::TestPdfInEmf()
