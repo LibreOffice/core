@@ -55,7 +55,7 @@ void OutputDevice::DrawEllipse( const tools::Rectangle& rRect )
     tools::Polygon aRectPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
     if ( aRectPoly.GetSize() >= 2 )
     {
-        SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aRectPoly.GetPointAry());
+        Point* pPtAry = aRectPoly.GetPointAry();
         if ( !mbFillColor )
             mpGraphics->DrawPolyLine( aRectPoly.GetSize(), pPtAry, this );
         else
@@ -103,7 +103,7 @@ void OutputDevice::DrawArc( const tools::Rectangle& rRect,
 
     if ( aArcPoly.GetSize() >= 2 )
     {
-        SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aArcPoly.GetPointAry());
+        Point* pPtAry = aArcPoly.GetPointAry();
         mpGraphics->DrawPolyLine( aArcPoly.GetSize(), pPtAry, this );
     }
 
@@ -144,7 +144,7 @@ void OutputDevice::DrawPie( const tools::Rectangle& rRect,
 
     if ( aPiePoly.GetSize() >= 2 )
     {
-        SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aPiePoly.GetPointAry());
+        Point* pPtAry = aPiePoly.GetPointAry();
         if ( !mbFillColor )
             mpGraphics->DrawPolyLine( aPiePoly.GetSize(), pPtAry, this );
         else
@@ -192,7 +192,7 @@ void OutputDevice::DrawChord( const tools::Rectangle& rRect,
 
     if ( aChordPoly.GetSize() >= 2 )
     {
-        SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aChordPoly.GetPointAry());
+        Point* pPtAry = aChordPoly.GetPointAry();
         if ( !mbFillColor )
             mpGraphics->DrawPolyLine( aChordPoly.GetSize(), pPtAry, this );
         else
