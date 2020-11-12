@@ -26,13 +26,13 @@
 #include "node.hxx"
 #include "nodemap.hxx"
 
-namespace configmgr {
-
-void NodeMap::cloneInto(NodeMap * target) const
+namespace configmgr
+{
+void NodeMap::cloneInto(NodeMap* target) const
 {
     assert(target != nullptr && target->empty());
     NodeMapImpl clone(maImpl);
-    for (auto & elem : clone)
+    for (auto& elem : clone)
     {
         elem.second = elem.second->clone(true);
     }
@@ -40,16 +40,14 @@ void NodeMap::cloneInto(NodeMap * target) const
     target->clearCache();
 }
 
-rtl::Reference< Node > NodeMap::findNode(int layer, OUString const & name) const
+rtl::Reference<Node> NodeMap::findNode(int layer, OUString const& name) const
 {
     const_iterator i;
     if (maCache == end() || maCache->first != name)
-        maCache = const_cast< NodeMap *>(this)->maImpl.find(name);
+        maCache = const_cast<NodeMap*>(this)->maImpl.find(name);
     i = maCache;
-    return i == end() || i->second->getLayer() > layer
-        ? rtl::Reference< Node >() : i->second;
+    return i == end() || i->second->getLayer() > layer ? rtl::Reference<Node>() : i->second;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

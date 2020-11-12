@@ -34,22 +34,20 @@ com_sun_star_comp_configuration_DefaultProvider_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     osl::MutexGuard guard(*configmgr::lock());
-    css::uno::Reference< css::uno::XInterface > singleton(
+    css::uno::Reference<css::uno::XInterface> singleton(
         configmgr::configuration_provider::createDefault(context));
     singleton->acquire();
     return singleton.get();
 }
 
-namespace configmgr::default_provider {
+namespace configmgr::default_provider
+{
+OUString getImplementationName() { return "com.sun.star.comp.configuration.DefaultProvider"; }
 
-OUString getImplementationName() {
-    return "com.sun.star.comp.configuration.DefaultProvider";
+css::uno::Sequence<OUString> getSupportedServiceNames()
+{
+    return css::uno::Sequence<OUString>{ "com.sun.star.configuration.DefaultProvider" };
 }
-
-css::uno::Sequence< OUString > getSupportedServiceNames() {
-    return css::uno::Sequence< OUString > { "com.sun.star.configuration.DefaultProvider" };
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

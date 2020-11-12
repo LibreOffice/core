@@ -23,14 +23,13 @@
 
 #include "lock.hxx"
 
-namespace configmgr {
-
-std::shared_ptr<osl::Mutex> const & lock()
+namespace configmgr
+{
+std::shared_ptr<osl::Mutex> const& lock()
 {
     static std::shared_ptr<osl::Mutex> theLock = std::make_shared<osl::Mutex>();
     return theLock;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,11 +28,13 @@
 #include <boost/unordered_map.hpp>
 #include <config_dconf.h>
 
-namespace configmgr {
-
-class Modifications {
+namespace configmgr
+{
+class Modifications
+{
 public:
-    struct Node {
+    struct Node
+    {
         typedef boost::unordered_map<OUString, Node, OUStringHash> Children;
 
         Children children;
@@ -42,9 +44,9 @@ public:
 
     ~Modifications();
 
-    void add(std::vector<OUString> const & path);
+    void add(std::vector<OUString> const& path);
 
-    void remove(std::vector<OUString> const & path);
+    void remove(std::vector<OUString> const& path);
 
 #if ENABLE_DCONF
     void clear() { root_.children.clear(); }
@@ -52,7 +54,7 @@ public:
 
     bool empty() const { return root_.children.empty(); }
 
-    Node const & getRoot() const { return root_;}
+    Node const& getRoot() const { return root_; }
 
 private:
     Modifications(const Modifications&) = delete;
@@ -60,7 +62,6 @@ private:
 
     Node root_;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

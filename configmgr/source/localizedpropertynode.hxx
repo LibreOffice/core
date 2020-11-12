@@ -27,35 +27,34 @@
 #include "nodemap.hxx"
 #include "type.hxx"
 
-
-namespace configmgr {
-
-class LocalizedPropertyNode: public Node {
+namespace configmgr
+{
+class LocalizedPropertyNode : public Node
+{
 public:
     LocalizedPropertyNode(int layer, Type staticType, bool nillable);
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const override;
+    virtual rtl::Reference<Node> clone(bool keepTemplateName) const override;
 
-    virtual NodeMap & getMembers() override;
+    virtual NodeMap& getMembers() override;
 
-    Type getStaticType() const { return staticType_;}
+    Type getStaticType() const { return staticType_; }
 
-    bool isNillable() const { return nillable_;}
+    bool isNillable() const { return nillable_; }
 
 private:
-    LocalizedPropertyNode(LocalizedPropertyNode const & other);
+    LocalizedPropertyNode(LocalizedPropertyNode const& other);
 
     virtual ~LocalizedPropertyNode() override;
 
     virtual Kind kind() const override;
 
     Type staticType_;
-        // as specified in the component-schema (TYPE_ANY, ...,
-        // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
+    // as specified in the component-schema (TYPE_ANY, ...,
+    // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
     bool nillable_;
     NodeMap members_;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

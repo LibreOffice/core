@@ -23,10 +23,9 @@
 #include <osl/mutex.hxx>
 #include <memory>
 
-namespace configmgr {
-
-std::shared_ptr<osl::Mutex> const & lock();
-
+namespace configmgr
+{
+std::shared_ptr<osl::Mutex> const& lock();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

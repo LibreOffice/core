@@ -16,9 +16,10 @@
 #include "node.hxx"
 #include "nodemap.hxx"
 
-namespace configmgr {
-
-class RootNode: public Node {
+namespace configmgr
+{
+class RootNode : public Node
+{
 public:
     RootNode();
 
@@ -27,13 +28,12 @@ private:
 
     virtual Kind kind() const override;
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const override;
+    virtual rtl::Reference<Node> clone(bool keepTemplateName) const override;
 
-    virtual NodeMap & getMembers() override;
+    virtual NodeMap& getMembers() override;
 
     NodeMap members_;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

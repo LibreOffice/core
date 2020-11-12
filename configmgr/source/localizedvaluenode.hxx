@@ -26,26 +26,26 @@
 
 #include "node.hxx"
 
-
-namespace configmgr {
-
-class LocalizedValueNode: public Node {
+namespace configmgr
+{
+class LocalizedValueNode : public Node
+{
 public:
     explicit LocalizedValueNode(int layer);
-    LocalizedValueNode(int layer, css::uno::Any const & value);
+    LocalizedValueNode(int layer, css::uno::Any const& value);
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const override;
+    virtual rtl::Reference<Node> clone(bool keepTemplateName) const override;
 
     virtual OUString getTemplateName() const override;
 
-    const css::uno::Any&  getValue() const { return value_;}
-    css::uno::Any *getValuePtr(int layer)
+    const css::uno::Any& getValue() const { return value_; }
+    css::uno::Any* getValuePtr(int layer)
     {
         setLayer(layer);
         return &value_;
     }
 
-    void setValue(int layer, css::uno::Any const & value);
+    void setValue(int layer, css::uno::Any const& value);
 
 private:
     LocalizedValueNode(LocalizedValueNode const&) = default;
@@ -56,7 +56,6 @@ private:
 
     css::uno::Any value_;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
