@@ -17,18 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <codemaker/options.hxx>
 
-Options::Options()
-{
-}
+Options::Options() {}
 
-Options::~Options()
-{
-
-}
-
+Options::~Options() {}
 
 bool Options::isValid(const OString& option) const
 {
@@ -38,11 +31,11 @@ bool Options::isValid(const OString& option) const
 const OString& Options::getOption(const OString& option) const
 {
     OptionMap::const_iterator i(m_options.find(option));
-    if (i == m_options.end()) {
+    if (i == m_options.end())
+    {
         throw IllegalArgument("Option is not valid or currently not set.");
     }
     return i->second;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

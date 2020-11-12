@@ -25,13 +25,15 @@ class CppuOptions : public Options
 {
 public:
     CppuOptions()
-        : Options() {}
+        : Options()
+    {
+    }
 
-    bool initOptions(int ac, char* av[], bool bCmdFile=false) override;
+    bool initOptions(int ac, char* av[], bool bCmdFile = false) override;
 
-    OString  prepareHelp() override;
+    OString prepareHelp() override;
 
-    OString  prepareVersion() const;
+    OString prepareVersion() const;
 
 protected:
 };
