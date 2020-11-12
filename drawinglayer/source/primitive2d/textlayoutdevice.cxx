@@ -394,6 +394,8 @@ namespace drawinglayer::primitive2d
         {
             // detect FontScaling
             const sal_uInt32 nHeight(basegfx::fround(fabs(fFontScaleY)));
+            const sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
+            const bool bFontIsScaled(nHeight != nWidth);
 
 #ifdef _WIN32
             // for WIN32 systems, start with creating an unscaled font. If FontScaling
@@ -403,15 +405,12 @@ namespace drawinglayer::primitive2d
                 rFontAttribute.getFamilyName(),
                 rFontAttribute.getStyleName(),
                 Size(0, nHeight));
-            (void)fFontScaleX;
 #else
             // for non-WIN32 systems things are easier since these accept a Font creation
             // with initially nWidth != nHeight for FontScaling. Despite that, use zero for
             // FontWidth when no scaling is used to explicitly have that zero when e.g. the
             // Font would be recorded in a MetaFile (The MetaFile FontAction WILL record a
             // set FontWidth; import that in a WIN32 system, and trouble is there)
-            const sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
-            const bool bFontIsScaled(nHeight != nWidth);
             vcl::Font aRetval(
                 rFontAttribute.getFamilyName(),
                 rFontAttribute.getStyleName(),
@@ -427,6 +426,20 @@ namespace drawinglayer::primitive2d
             aRetval.SetPitch(rFontAttribute.getMonospaced() ? PITCH_FIXED : PITCH_VARIABLE);
             aRetval.SetLanguage(LanguageTag::convertToLanguageType( rLocale, false));
 
+#ifdef _WIN32
+            // for WIN32 systems, correct the FontWidth if FontScaling is used
+            if(bFontIsScaled && nHeight > 0)
+            {
+                const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aRetval));
+
+                if(aUnscaledFontMetric.GetAverageFontWidth() > 0)
+                {
+                    const double fScaleFactor(static_cast<double>(nWidth) / static_cast<double>(nHeight));
+                    const sal_uInt32 nScaledWidth(basegfx::fround(static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()) * fScaleFactor));
+                    aRetval.SetAverageFontWidth(nScaledWidth);
+                }
+            }
+#endif
             // handle FontRotation (if defined)
             if(!basegfx::fTools::equalZero(fFontRotation))
             {
