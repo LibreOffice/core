@@ -95,13 +95,16 @@ void SAL_CALL SfxUnoDeck::activate( const sal_Bool bActivate )
 
     SidebarController* pSidebarController = getSidebarController();
 
+    // tdf#138160: OpenThenToggleDeck takes care of minimal width
     if (bActivate)
-        pSidebarController->SwitchToDeck(mDeckId);
+        pSidebarController->OpenThenToggleDeck(mDeckId);
     else
+    {
         pSidebarController->SwitchToDefaultDeck();
+        // update the sidebar
+        pSidebarController->NotifyResize();
+    }
 
-    // update the sidebar
-    pSidebarController->NotifyResize();
 }
 
 uno::Reference<ui::XPanels> SAL_CALL SfxUnoDeck::getPanels()
