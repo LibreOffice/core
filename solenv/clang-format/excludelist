@@ -10652,7 +10652,6 @@ scaddins/source/analysis/analysisdefs.hxx
 scaddins/source/analysis/analysishelper.cxx
 scaddins/source/analysis/analysishelper.hxx
 scaddins/source/analysis/bessel.cxx
-scaddins/source/analysis/bessel.hxx
 scaddins/source/analysis/deffuncname.hxx
 scaddins/source/analysis/financial.cxx
 scaddins/source/datefunc/datefunc.cxx
