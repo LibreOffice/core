@@ -45,10 +45,10 @@ class SwRect;
 class SwPaintQueue
 {
 public:
-    static SwQueuedPaint *s_pPaintQueue;
+    static SwQueuedPaint* s_pPaintQueue;
 
-    static void Add( SwViewShell *pSh, const SwRect &rNew );
-    static void Remove( SwViewShell const *pSh );
+    static void Add(SwViewShell* pSh, const SwRect& rNew);
+    static void Remove(SwViewShell const* pSh);
     static void Repaint();
 };
 

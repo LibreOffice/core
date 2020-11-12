@@ -32,11 +32,11 @@ class SwTextLine : public SwCacheObj
     virtual void UpdateCachePos() override;
 
 public:
-    SwTextLine( SwTextFrame const *pFrame, std::unique_ptr<SwParaPortion> pNew = nullptr );
+    SwTextLine(SwTextFrame const* pFrame, std::unique_ptr<SwParaPortion> pNew = nullptr);
     virtual ~SwTextLine() override;
 
-    SwParaPortion *GetPara()       { return pLine.get(); }
-    const SwParaPortion *GetPara() const { return pLine.get(); }
+    SwParaPortion* GetPara() { return pLine.get(); }
+    const SwParaPortion* GetPara() const { return pLine.get(); }
 
     void SetPara(SwParaPortion* pNew, bool bDelete)
     {
@@ -48,14 +48,13 @@ public:
 
 class SwTextLineAccess : public SwCacheAccess
 {
-
 protected:
-    virtual SwCacheObj *NewObj() override;
+    virtual SwCacheObj* NewObj() override;
 
 public:
-    explicit SwTextLineAccess( const SwTextFrame *pOwner );
+    explicit SwTextLineAccess(const SwTextFrame* pOwner);
 
-    SwParaPortion *GetPara();
+    SwParaPortion* GetPara();
 
     bool IsAvailable() const;
 };

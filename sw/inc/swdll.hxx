@@ -21,7 +21,10 @@
 
 #include "swdllapi.h"
 
-namespace sw { class Filters; }
+namespace sw
+{
+class Filters;
+}
 
 /**
  * This class is a wrapper for a Load-On-Demand-DLL. One instance
@@ -30,9 +33,9 @@ namespace sw { class Filters; }
 */
 namespace SwGlobals
 {
-    void SW_DLLPUBLIC ensure();
+void SW_DLLPUBLIC ensure();
 
-    sw::Filters & getFilters();
+sw::Filters& getFilters();
 }
 
 #endif

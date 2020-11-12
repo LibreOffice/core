@@ -30,39 +30,37 @@ class OutputDevice;
 class JobSetup;
 class SwPrintData;
 
-namespace sw {
-
+namespace sw
+{
 class DocumentDeviceManager : public IDocumentDeviceAccess
 {
-
 public:
+    DocumentDeviceManager(SwDoc& i_rSwdoc);
 
-    DocumentDeviceManager( SwDoc& i_rSwdoc );
+    SfxPrinter* getPrinter(/*[in]*/ bool bCreate) const override;
 
-    SfxPrinter* getPrinter(/*[in]*/ bool bCreate ) const override;
+    void setPrinter(/*[in]*/ SfxPrinter* pP, /*[in]*/ bool bDeleteOld,
+                    /*[in]*/ bool bCallPrtDataChanged) override;
 
-    void setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged ) override;
+    VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate) const override;
 
-    VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate ) const override;
+    void setVirtualDevice(/*[in]*/ VirtualDevice* pVd) override;
 
-    void setVirtualDevice(/*[in]*/ VirtualDevice* pVd ) override;
+    OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate) const override;
 
-    OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate ) const override;
-
-    void setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*[in]*/ bool bNewHiRes ) override;
+    void setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*[in]*/ bool bNewHiRes) override;
 
     const JobSetup* getJobsetup() const override;
 
-    void setJobsetup(/*[in]*/ const JobSetup &rJobSetup ) override;
+    void setJobsetup(/*[in]*/ const JobSetup& rJobSetup) override;
 
-    const SwPrintData & getPrintData() const override;
+    const SwPrintData& getPrintData() const override;
 
-    void setPrintData(/*[in]*/ const SwPrintData& rPrtData ) override;
+    void setPrintData(/*[in]*/ const SwPrintData& rPrtData) override;
 
     virtual ~DocumentDeviceManager() override;
 
 private:
-
     DocumentDeviceManager(DocumentDeviceManager const&) = delete;
     DocumentDeviceManager& operator=(DocumentDeviceManager const&) = delete;
 
@@ -77,7 +75,6 @@ private:
     VclPtr<VirtualDevice> mpVirDev;
     std::unique_ptr<SwPrintData> mpPrtData;
 };
-
 }
 #endif
 

@@ -38,9 +38,9 @@ enum DlgEventType
 class SwMacroAssignDlg
 {
 public:
-    static SfxEventNamesItem AddEvents( DlgEventType eType );
+    static SfxEventNamesItem AddEvents(DlgEventType eType);
     static bool INetFormatDlg(weld::Window* pParent, SwWrtShell& rSh,
-                              std::unique_ptr<SvxMacroItem>& rpINetItem );
+                              std::unique_ptr<SvxMacroItem>& rpINetItem);
 };
 
 #endif

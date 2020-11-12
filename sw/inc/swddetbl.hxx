@@ -27,22 +27,22 @@ class SwDDETable final : public SwTable
 {
     sw::WriterMultiListener m_aDepends;
     SwDDEFieldType* m_pDDEType;
-public:
 
+public:
     // Ctor moves all lines/boxes from SwTable to it.
     // After that SwTable is empty and has to be deleted.
-    SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
-                bool bUpdate = true );
+    SwDDETable(SwTable& rTable, SwDDEFieldType* pDDEType, bool bUpdate = true);
     virtual ~SwDDETable() override;
 
     void ChangeContent();
-    bool  NoDDETable();
+    bool NoDDETable();
 
     SwDDEFieldType* GetDDEFieldType();
     inline const SwDDEFieldType* GetDDEFieldType() const;
+
 private:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
-    virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
+    virtual void Modify(const SfxPoolItem*, const SfxPoolItem*) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
 inline const SwDDEFieldType* SwDDETable::GetDDEFieldType() const

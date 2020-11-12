@@ -26,7 +26,7 @@ class SwTableFUNC;
 class SwTableWidthDlg final : public weld::GenericDialogController
 {
 private:
-    SwTableFUNC &m_rFnc;
+    SwTableFUNC& m_rFnc;
 
     std::unique_ptr<weld::SpinButton> m_xColNF;
     std::unique_ptr<weld::MetricSpinButton> m_xWidthMF;
@@ -36,7 +36,7 @@ private:
     void Apply();
 
 public:
-    SwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc);
+    SwTableWidthDlg(weld::Window* pParent, SwTableFUNC& rFnc);
     virtual short run() override;
 };
 

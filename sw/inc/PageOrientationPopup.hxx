@@ -29,14 +29,14 @@ public:
     virtual ~PageOrientationPopup() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
-    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 };
 
 #endif

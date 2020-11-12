@@ -27,23 +27,27 @@ class SwXTextFrame;
 class SwXTextGraphicObject;
 class SwXTextEmbeddedObject;
 class SwFormatINetFormat;
-namespace sw { class ICoreFrameStyle; }
+namespace sw
+{
+class ICoreFrameStyle;
+}
 
 class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
 {
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
+
 protected:
     virtual ~SwHyperlinkEventDescriptor() override;
-public:
 
-     SwHyperlinkEventDescriptor();
+public:
+    SwHyperlinkEventDescriptor();
 
     void copyMacrosFromINetFormat(const SwFormatINetFormat& aFormat);
     void copyMacrosIntoINetFormat(SwFormatINetFormat& aFormat);
 
-    void copyMacrosFromNameReplace(
-        css::uno::Reference<css::container::XNameReplace> const & xReplace);
+    void
+    copyMacrosFromNameReplace(css::uno::Reference<css::container::XNameReplace> const& xReplace);
 };
 
 // SwEventDescriptor for
@@ -56,9 +60,9 @@ class SwFrameEventDescriptor : public SvEventDescriptor
     SwXFrame& rFrame;
 
 public:
-    SwFrameEventDescriptor( SwXTextFrame& rFrameRef );
-    SwFrameEventDescriptor( SwXTextGraphicObject& rGraphicRef );
-    SwFrameEventDescriptor( SwXTextEmbeddedObject& rObjectRef );
+    SwFrameEventDescriptor(SwXTextFrame& rFrameRef);
+    SwFrameEventDescriptor(SwXTextGraphicObject& rGraphicRef);
+    SwFrameEventDescriptor(SwXTextEmbeddedObject& rObjectRef);
 
     virtual ~SwFrameEventDescriptor() override;
 
@@ -75,7 +79,7 @@ class SwFrameStyleEventDescriptor : public SvEventDescriptor
     sw::ICoreFrameStyle& m_rStyle;
 
 public:
-    SwFrameStyleEventDescriptor( sw::ICoreFrameStyle& rStyle );
+    SwFrameStyleEventDescriptor(sw::ICoreFrameStyle& rStyle);
 
     virtual ~SwFrameStyleEventDescriptor() override;
 

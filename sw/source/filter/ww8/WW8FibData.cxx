@@ -22,14 +22,12 @@
 namespace ww8
 {
 WW8FibData::WW8FibData()
-  : m_bReadOnlyRecommended(false),
-    m_bWriteReservation(false)
+    : m_bReadOnlyRecommended(false)
+    , m_bWriteReservation(false)
 {
 }
 
-WW8FibData::~WW8FibData()
-{
-}
+WW8FibData::~WW8FibData() {}
 
 void WW8FibData::setReadOnlyRecommended(bool bReadOnlyRecommended)
 {
@@ -40,8 +38,6 @@ void WW8FibData::setWriteReservation(bool bWriteReservation)
 {
     m_bWriteReservation = bWriteReservation;
 }
-
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

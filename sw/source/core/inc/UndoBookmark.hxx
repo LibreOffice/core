@@ -27,9 +27,10 @@ class SwHistoryBookmark;
 class SwHistoryNoTextFieldmark;
 class SwHistoryTextFieldmark;
 
-namespace sw::mark {
-    class IMark;
-    class IFieldmark;
+namespace sw::mark
+{
+class IMark;
+class IFieldmark;
 }
 
 class SwDoc;
@@ -39,10 +40,10 @@ class SwUndoBookmark : public SwUndo
     const std::unique_ptr<SwHistoryBookmark> m_pHistoryBookmark;
 
 protected:
-    SwUndoBookmark( SwUndoId nUndoId, const ::sw::mark::IMark& );
+    SwUndoBookmark(SwUndoId nUndoId, const ::sw::mark::IMark&);
 
-    void SetInDoc( SwDoc* );
-    void ResetInDoc( SwDoc& );
+    void SetInDoc(SwDoc*);
+    void ResetInDoc(SwDoc&);
 
 public:
     virtual ~SwUndoBookmark() override;
@@ -65,19 +66,19 @@ public:
 class SwUndoInsBookmark : public SwUndoBookmark
 {
 public:
-    SwUndoInsBookmark( const ::sw::mark::IMark& );
+    SwUndoInsBookmark(const ::sw::mark::IMark&);
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void UndoImpl(::sw::UndoRedoContext&) override;
+    virtual void RedoImpl(::sw::UndoRedoContext&) override;
 };
 
 class SwUndoDeleteBookmark : public SwUndoBookmark
 {
 public:
-    SwUndoDeleteBookmark( const ::sw::mark::IMark& );
+    SwUndoDeleteBookmark(const ::sw::mark::IMark&);
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void UndoImpl(::sw::UndoRedoContext&) override;
+    virtual void RedoImpl(::sw::UndoRedoContext&) override;
 };
 
 class SwUndoRenameBookmark : public SwUndo
@@ -86,14 +87,14 @@ class SwUndoRenameBookmark : public SwUndo
     const OUString m_sNewName;
 
 public:
-    SwUndoRenameBookmark( const OUString& rOldName, const OUString& rNewName, const SwDoc& rDoc );
+    SwUndoRenameBookmark(const OUString& rOldName, const OUString& rNewName, const SwDoc& rDoc);
     virtual ~SwUndoRenameBookmark() override;
 
 private:
     virtual SwRewriter GetRewriter() const override;
-    static void Rename( ::sw::UndoRedoContext const &, const OUString& sFrom, const OUString& sTo );
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    static void Rename(::sw::UndoRedoContext const&, const OUString& sFrom, const OUString& sTo);
+    virtual void UndoImpl(::sw::UndoRedoContext&) override;
+    virtual void RedoImpl(::sw::UndoRedoContext&) override;
 };
 
 /// Handling undo / redo of checkbox and drop-down form field insertion
@@ -105,8 +106,8 @@ private:
 public:
     SwUndoInsNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void UndoImpl(::sw::UndoRedoContext&) override;
+    virtual void RedoImpl(::sw::UndoRedoContext&) override;
 };
 
 /// Handling undo / redo of checkbox and drop-down form field deletion
@@ -119,8 +120,8 @@ public:
     SwUndoDelNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
     ~SwUndoDelNoTextFieldmark();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void UndoImpl(::sw::UndoRedoContext&) override;
+    virtual void RedoImpl(::sw::UndoRedoContext&) override;
 };
 
 /// Handling undo / redo of text form field insertion
@@ -132,8 +133,8 @@ private:
 public:
     SwUndoInsTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void UndoImpl(::sw::UndoRedoContext&) override;
+    virtual void RedoImpl(::sw::UndoRedoContext&) override;
 };
 
 /// Handling undo / redo of text form field deletion
@@ -146,8 +147,8 @@ public:
     SwUndoDelTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
     ~SwUndoDelTextFieldmark();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void UndoImpl(::sw::UndoRedoContext&) override;
+    virtual void RedoImpl(::sw::UndoRedoContext&) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOBOOKMARK_HXX

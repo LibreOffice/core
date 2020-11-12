@@ -37,30 +37,32 @@ class SwEnvPrtPage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xBottomButton;
     std::unique_ptr<weld::MetricSpinButton> m_xRightField;
     std::unique_ptr<weld::MetricSpinButton> m_xDownField;
-    std::unique_ptr<weld::Label>   m_xPrinterInfo;
-    std::unique_ptr<weld::Button>  m_xPrtSetup;
+    std::unique_ptr<weld::Label> m_xPrinterInfo;
+    std::unique_ptr<weld::Button> m_xPrtSetup;
 
-    std::unique_ptr<weld::RadioButton> m_aIdsL[ENV_VER_RGHT-ENV_HOR_LEFT+1];
-    std::unique_ptr<weld::RadioButton> m_aIdsU[ENV_VER_RGHT-ENV_HOR_LEFT+1];
+    std::unique_ptr<weld::RadioButton> m_aIdsL[ENV_VER_RGHT - ENV_HOR_LEFT + 1];
+    std::unique_ptr<weld::RadioButton> m_aIdsU[ENV_VER_RGHT - ENV_HOR_LEFT + 1];
 
-    VclPtr<Printer>     m_xPrt;
+    VclPtr<Printer> m_xPrt;
 
     DECL_LINK(LowerHdl, weld::ToggleButton&, void);
     DECL_LINK(UpperHdl, weld::ToggleButton&, void);
     DECL_LINK(ClickHdl, weld::ToggleButton&, void);
-    DECL_LINK(ButtonHdl, weld::Button&, void );
+    DECL_LINK(ButtonHdl, weld::Button&, void);
 
-    SwEnvDlg* GetParentSwEnvDlg() {return static_cast<SwEnvDlg*>(GetDialogController()); }
+    SwEnvDlg* GetParentSwEnvDlg() { return static_cast<SwEnvDlg*>(GetDialogController()); }
 
 public:
-    SwEnvPrtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
+    SwEnvPrtPage(weld::Container* pPage, weld::DialogController* pController,
+                 const SfxItemSet& rSet);
     virtual ~SwEnvPrtPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
-            void FillItem(SwEnvItem& rItem);
+    void FillItem(SwEnvItem& rItem);
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 

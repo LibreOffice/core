@@ -38,14 +38,13 @@ SwNumberingTypeListBox::SwNumberingTypeListBox(std::unique_ptr<weld::ComboBox> p
     : m_xWidget(std::move(pWidget))
     , m_xImpl(new SwNumberingTypeListBox_Impl)
 {
-    uno::Reference<uno::XComponentContext>          xContext( ::comphelper::getProcessComponentContext() );
-    uno::Reference<text::XDefaultNumberingProvider> xDefNum = text::DefaultNumberingProvider::create(xContext);
+    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    uno::Reference<text::XDefaultNumberingProvider> xDefNum
+        = text::DefaultNumberingProvider::create(xContext);
     m_xImpl->xInfo.set(xDefNum, uno::UNO_QUERY);
 }
 
-SwNumberingTypeListBox::~SwNumberingTypeListBox()
-{
-}
+SwNumberingTypeListBox::~SwNumberingTypeListBox() {}
 
 void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
 {
@@ -57,36 +56,36 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
             aTypes = m_xImpl->xInfo->getSupportedNumberingTypes();
     }
 
-    for(size_t i = 0; i < SvxNumberingTypeTable::Count(); i++)
+    for (size_t i = 0; i < SvxNumberingTypeTable::Count(); i++)
     {
         sal_IntPtr nValue = SvxNumberingTypeTable::GetValue(i);
         bool bInsert = true;
         int nPos = -1;
-        switch(nValue)
+        switch (nValue)
         {
-            case  style::NumberingType::NUMBER_NONE:
+            case style::NumberingType::NUMBER_NONE:
                 bInsert = bool(nTypeFlags & SwInsertNumTypes::NoNumbering);
                 nPos = 0;
 
                 break;
-            case  style::NumberingType::CHAR_SPECIAL:
+            case style::NumberingType::CHAR_SPECIAL:
                 bInsert = false;
 
                 break;
-            case  style::NumberingType::PAGE_DESCRIPTOR:
+            case style::NumberingType::PAGE_DESCRIPTOR:
                 bInsert = false;
 
                 break;
-            case  style::NumberingType::BITMAP:
+            case style::NumberingType::BITMAP:
                 bInsert = false;
 
                 break;
-            case  style::NumberingType::BITMAP | LINK_TOKEN:
+            case style::NumberingType::BITMAP | LINK_TOKEN:
                 bInsert = false;
 
                 break;
             default:
-                if (nValue >  style::NumberingType::CHARS_LOWER_LETTER_N)
+                if (nValue > style::NumberingType::CHARS_LOWER_LETTER_N)
                 {
                     // Insert only if offered by i18n framework per configuration.
                     bInsert = std::find(aTypes.begin(), aTypes.end(), nValue) != aTypes.end();
@@ -107,7 +106,8 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
         {
             if (m_xWidget->find_id(OUString::number(nCurrent)) == -1)
             {
-                m_xWidget->append(OUString::number(nCurrent), m_xImpl->xInfo->getNumberingIdentifier(nCurrent));
+                m_xWidget->append(OUString::number(nCurrent),
+                                  m_xImpl->xInfo->getNumberingIdentifier(nCurrent));
             }
         }
     }

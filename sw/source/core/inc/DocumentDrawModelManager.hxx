@@ -30,12 +30,10 @@ class SwDoc;
 
 namespace sw
 {
-
 class DocumentDrawModelManager : public IDocumentDrawModelAccess
 {
 public:
-
-    DocumentDrawModelManager( SwDoc& i_rSwdoc );
+    DocumentDrawModelManager(SwDoc& i_rSwdoc);
 
     void InitDrawModel();
     void ReleaseDrawModel();
@@ -53,16 +51,15 @@ public:
     virtual SdrLayerID GetInvisibleHellId() const override;
     virtual SdrLayerID GetInvisibleControlsId() const override;
 
-    virtual void NotifyInvisibleLayers( SdrPageView& _rSdrPageView ) override;
+    virtual void NotifyInvisibleLayers(SdrPageView& _rSdrPageView) override;
 
-    virtual bool IsVisibleLayerId( SdrLayerID _nLayerId ) const override;
+    virtual bool IsVisibleLayerId(SdrLayerID _nLayerId) const override;
 
-    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( SdrLayerID _nVisibleLayerId ) override;
+    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne(SdrLayerID _nVisibleLayerId) override;
 
     virtual bool Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem) override;
 
 private:
-
     DocumentDrawModelManager(DocumentDrawModelManager const&) = delete;
     DocumentDrawModelManager& operator=(DocumentDrawModelManager const&) = delete;
 
@@ -82,7 +79,6 @@ private:
     SdrLayerID mnInvisibleHell;
     SdrLayerID mnInvisibleControls;
 };
-
 }
 
 #endif

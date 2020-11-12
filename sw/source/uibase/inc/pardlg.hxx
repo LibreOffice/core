@@ -20,8 +20,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_PARDLG_HXX
 
 //DialogModes:
-#define DLG_STD         0
-#define DLG_ENVELOP     2
+#define DLG_STD 0
+#define DLG_ENVELOP 2
 
 #endif
 

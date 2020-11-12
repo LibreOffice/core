@@ -20,6 +20,6 @@
 #include <noteurl.hxx>
 
 // Global variable
-SwNoteURL *pNoteURL = nullptr;
+SwNoteURL* pNoteURL = nullptr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

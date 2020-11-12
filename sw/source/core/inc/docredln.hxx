@@ -26,7 +26,7 @@
 
 class SwDoc;
 
-void sw_DebugRedline( const SwDoc* pDoc );
+void sw_DebugRedline(const SwDoc* pDoc);
 
 #endif
 

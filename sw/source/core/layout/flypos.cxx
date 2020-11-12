@@ -27,7 +27,7 @@
 
 bool SwPosFlyFrameCmp::operator()(const SwPosFlyFramePtr& rA, const SwPosFlyFramePtr& rB) const
 {
-    if(rA->GetNdIndex() == rB->GetNdIndex())
+    if (rA->GetNdIndex() == rB->GetNdIndex())
     {
         // In this case, the order number decides!
         return rA->GetOrdNum() < rB->GetOrdNum();
@@ -36,15 +36,18 @@ bool SwPosFlyFrameCmp::operator()(const SwPosFlyFramePtr& rA, const SwPosFlyFram
     return rA->GetNdIndex() < rB->GetNdIndex();
 }
 
-SwPosFlyFrame::SwPosFlyFrame(const SwNodeIndex& rIdx, const SwFrameFormat* pFormat, sal_uInt16 nArrPos)
-    : m_pFrameFormat(pFormat), m_pNodeIndex(const_cast<SwNodeIndex*>(&rIdx)), m_nOrdNum(SAL_MAX_UINT32)
+SwPosFlyFrame::SwPosFlyFrame(const SwNodeIndex& rIdx, const SwFrameFormat* pFormat,
+                             sal_uInt16 nArrPos)
+    : m_pFrameFormat(pFormat)
+    , m_pNodeIndex(const_cast<SwNodeIndex*>(&rIdx))
+    , m_nOrdNum(SAL_MAX_UINT32)
 {
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-    if(RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
+    if (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
         m_pNodeIndex = new SwNodeIndex(rIdx);
-    else if(pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell())
+    else if (pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell())
         pFormat->CallSwClientNotify(sw::GetZOrderHint(m_nOrdNum));
-    if(m_nOrdNum == SAL_MAX_UINT32)
+    if (m_nOrdNum == SAL_MAX_UINT32)
     {
         m_nOrdNum = pFormat->GetDoc()->GetSpzFrameFormats()->size();
         m_nOrdNum += nArrPos;

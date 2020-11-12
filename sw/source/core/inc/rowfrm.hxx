@@ -25,15 +25,16 @@ class SwTableLine;
 class SwBorderAttrs;
 
 /// SwRowFrame is one table row in the document layout.
-class SwRowFrame: public SwLayoutFrame
+class SwRowFrame : public SwLayoutFrame
 {
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
+    virtual void Format(vcl::RenderContext* pRenderContext,
+                        const SwBorderAttrs* pAttrs = nullptr) override;
     /// Only change the Frame size, not the PrtArea SSize
-    virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
-    virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips ShrinkFrame(SwTwips, bool bTst = false, bool bInfo = false) override;
+    virtual SwTwips GrowFrame(SwTwips, bool bTst = false, bool bInfo = false) override;
 
-    const SwTableLine * m_pTabLine;
-    SwRowFrame * m_pFollowRow; ///< note: this is *only* set on old-style tables!
+    const SwTableLine* m_pTabLine;
+    SwRowFrame* m_pFollowRow; ///< note: this is *only* set on old-style tables!
     // #i29550#
     sal_uInt16 mnTopMarginForLowers;
     sal_uInt16 mnBottomMarginForLowers;
@@ -51,10 +52,10 @@ class SwRowFrame: public SwLayoutFrame
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void Modify(const SfxPoolItem*, const SfxPoolItem*) override;
 
 public:
-    SwRowFrame( const SwTableLine &, SwFrame*, bool bInsertContent = true );
+    SwRowFrame(const SwTableLine&, SwFrame*, bool bInsertContent = true);
 
     virtual void Cut() override;
 
@@ -64,45 +65,45 @@ public:
      * been created; the same holds true for the Page at which the Flys
      * are to be registered at.
      */
-    void RegistFlys( SwPageFrame *pPage = nullptr );
+    void RegistFlys(SwPageFrame* pPage = nullptr);
 
-    const SwTableLine *GetTabLine() const { return m_pTabLine; }
+    const SwTableLine* GetTabLine() const { return m_pTabLine; }
 
     /**
      * Adapts the Cells to the current height; invalidates the Cells if
      * the Direction does not match the height
      */
-    void AdjustCells( const SwTwips nHeight, const bool bHeight );
+    void AdjustCells(const SwTwips nHeight, const bool bHeight);
 
     SwRowFrame* GetFollowRow() const { return m_pFollowRow; }
-    void SetFollowRow( SwRowFrame* pNew ) { m_pFollowRow = pNew; }
+    void SetFollowRow(SwRowFrame* pNew) { m_pFollowRow = pNew; }
 
     // #i29550#
     sal_uInt16 GetTopMarginForLowers() const { return mnTopMarginForLowers; }
-    void   SetTopMarginForLowers( sal_uInt16 nNew ) { mnTopMarginForLowers = nNew; }
+    void SetTopMarginForLowers(sal_uInt16 nNew) { mnTopMarginForLowers = nNew; }
     sal_uInt16 GetBottomMarginForLowers() const { return mnBottomMarginForLowers; }
-    void   SetBottomMarginForLowers( sal_uInt16 nNew ) { mnBottomMarginForLowers = nNew; }
+    void SetBottomMarginForLowers(sal_uInt16 nNew) { mnBottomMarginForLowers = nNew; }
     sal_uInt16 GetBottomLineSize() const { return mnBottomLineSize; }
-    void   SetBottomLineSize( sal_uInt16 nNew ) { mnBottomLineSize = nNew; }
+    void SetBottomLineSize(sal_uInt16 nNew) { mnBottomLineSize = nNew; }
     // <-- collapsing
 
     bool IsRepeatedHeadline() const { return m_bIsRepeatedHeadline; }
-    void SetRepeatedHeadline( bool bNew ) { m_bIsRepeatedHeadline = bNew; }
+    void SetRepeatedHeadline(bool bNew) { m_bIsRepeatedHeadline = bNew; }
 
     // --> split table rows
     bool IsRowSplitAllowed() const;
     bool IsForceRowSplitAllowed() const { return m_bForceRowSplitAllowed; }
-    void SetForceRowSplitAllowed( bool bNew) { m_bForceRowSplitAllowed = bNew; };
+    void SetForceRowSplitAllowed(bool bNew) { m_bForceRowSplitAllowed = bNew; };
     bool IsFollowFlowRow() const { return m_bIsFollowFlowRow; }
-    void SetFollowFlowRow( bool bNew ) { m_bIsFollowFlowRow = bNew; }
+    void SetFollowFlowRow(bool bNew) { m_bIsFollowFlowRow = bNew; }
     // <-- split table rows
 
     // #131283# Table row keep feature
-    bool ShouldRowKeepWithNext( const bool bCheckParents = true ) const;
+    bool ShouldRowKeepWithNext(const bool bCheckParents = true) const;
 
     // #i4032# NEW TABLES
     bool IsRowSpanLine() const { return m_bIsRowSpanLine; }
-    void SetRowSpanLine( bool bNew ) { m_bIsRowSpanLine = bNew; }
+    void SetRowSpanLine(bool bNew) { m_bIsRowSpanLine = bNew; }
 
     // A row may only be split if the minimum height of the row frame
     // fits into the vertical space left.

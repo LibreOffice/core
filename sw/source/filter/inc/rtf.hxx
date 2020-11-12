@@ -24,21 +24,24 @@
 class RTFSurround
 {
     union {
-        struct {
+        struct
+        {
             sal_uInt8 nGoldCut : 1; // should ideally be bool
             sal_uInt8 nOrder : 4;
             sal_uInt8 nJunk : 3;
         } Flags;
         sal_uInt8 nVal;
     } Value;
+
 public:
-    RTFSurround( bool bGoldCut, sal_uInt8 nOrder ) {
+    RTFSurround(bool bGoldCut, sal_uInt8 nOrder)
+    {
         Value.Flags.nGoldCut = sal_uInt8(bGoldCut);
         Value.Flags.nOrder = nOrder;
         Value.Flags.nJunk = 0;
     }
 
-    sal_uInt16 GetValue()   const { return Value.nVal; }
+    sal_uInt16 GetValue() const { return Value.nVal; }
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_INC_RTF_HXX

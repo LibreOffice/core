@@ -21,7 +21,7 @@
 
 #include "basesh.hxx"
 
-class SwListShell: public SwBaseShell
+class SwListShell : public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_LISTSHELL)
@@ -31,10 +31,10 @@ private:
     static void InitInterface_Impl();
 
 public:
-            SwListShell(SwView &rView);
+    SwListShell(SwView& rView);
 
-    void    Execute(SfxRequest &);
-    void    GetState(SfxItemSet &);
+    void Execute(SfxRequest&);
+    void GetState(SfxItemSet&);
 };
 
 #endif

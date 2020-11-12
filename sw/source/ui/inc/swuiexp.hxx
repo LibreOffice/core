@@ -23,7 +23,7 @@
 
 namespace swui
 {
-    SwAbstractDialogFactory& GetFactory();
+SwAbstractDialogFactory& GetFactory();
 }
 
 #endif

@@ -24,14 +24,15 @@
 /* When using the NameMapper to translate pool ids to UI or programmatic
  * names, this enum is used to define which family is required */
 
-enum class SwGetPoolIdFromName : sal_uInt16 {
-    TxtColl  = 0x01,
-    ChrFmt   = 0x02,
-    FrmFmt   = 0x04,
+enum class SwGetPoolIdFromName : sal_uInt16
+{
+    TxtColl = 0x01,
+    ChrFmt = 0x02,
+    FrmFmt = 0x04,
     PageDesc = 0x08,
-    NumRule  = 0x10,
+    NumRule = 0x10,
     TabStyle = 0x20,
-    CellStyle= 0x40
+    CellStyle = 0x40
 };
 
 #endif

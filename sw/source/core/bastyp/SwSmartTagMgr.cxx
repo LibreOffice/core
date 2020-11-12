@@ -30,41 +30,39 @@ SwSmartTagMgr* SwSmartTagMgr::spTheSwSmartTagMgr = nullptr;
 
 SwSmartTagMgr& SwSmartTagMgr::Get()
 {
-    if ( !spTheSwSmartTagMgr )
+    if (!spTheSwSmartTagMgr)
     {
-        spTheSwSmartTagMgr = new SwSmartTagMgr( SwDocShell::Factory().GetModuleName() );
+        spTheSwSmartTagMgr = new SwSmartTagMgr(SwDocShell::Factory().GetModuleName());
         spTheSwSmartTagMgr->Init("Writer");
     }
     return *spTheSwSmartTagMgr;
 }
 
-SwSmartTagMgr::SwSmartTagMgr( const OUString& rModuleName ) :
-    SmartTagMgr( rModuleName )
+SwSmartTagMgr::SwSmartTagMgr(const OUString& rModuleName)
+    : SmartTagMgr(rModuleName)
 {
 }
 
-SwSmartTagMgr::~SwSmartTagMgr()
-{
-}
+SwSmartTagMgr::~SwSmartTagMgr() {}
 
-void SwSmartTagMgr::modified( const lang::EventObject& rEO )
+void SwSmartTagMgr::modified(const lang::EventObject& rEO)
 {
     SolarMutexGuard aGuard;
 
     // Installed recognizers have changed. We remove all existing smart tags:
-    SwModule::CheckSpellChanges( false, true, true, true );
+    SwModule::CheckSpellChanges(false, true, true, true);
 
-    SmartTagMgr::modified( rEO );
+    SmartTagMgr::modified(rEO);
 }
 
-void SwSmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent )
+void SwSmartTagMgr::changesOccurred(const util::ChangesEvent& rEvent)
 {
     SolarMutexGuard aGuard;
 
     // Configuration has changed. We remove all existing smart tags:
-    SwModule::CheckSpellChanges( false, true, true, true );
+    SwModule::CheckSpellChanges(false, true, true, true);
 
-    SmartTagMgr::changesOccurred( rEvent );
+    SmartTagMgr::changesOccurred(rEvent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

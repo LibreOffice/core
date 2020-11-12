@@ -7,15 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 #ifndef TOXWHITESPACESTRIPPER_HXX_
 #define TOXWHITESPACESTRIPPER_HXX_
 
 #include <rtl/ustring.hxx>
 #include <vector>
 
-namespace sw {
-
+namespace sw
+{
 /** This class helps to remove unwanted whitespaces from a string to use in a Tox.
  *
  * The new string will have
@@ -34,11 +33,9 @@ class ToxWhitespaceStripper
 public:
     ToxWhitespaceStripper(const OUString&);
 
-    sal_Int32
-    GetPositionInStrippedString(sal_Int32 pos) const;
+    sal_Int32 GetPositionInStrippedString(sal_Int32 pos) const;
 
-    const OUString&
-    GetStrippedString() const { return mStripped;}
+    const OUString& GetStrippedString() const { return mStripped; }
 
 private:
     OUString mStripped;
@@ -46,6 +43,5 @@ private:
 };
 
 } // end namespace sw
-
 
 #endif /* TOXWHITESPACESTRIPPER_HXX_ */

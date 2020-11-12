@@ -33,17 +33,17 @@
 
 class SwInsTableDlg : public SfxDialogController
 {
-    TextFilter      m_aTextFilter;
+    TextFilter m_aTextFilter;
 
-    SwWrtShell*     pShell;
+    SwWrtShell* pShell;
     SwTableAutoFormatTable* pTableTable;
-    SwTableAutoFormat*      pTAutoFormat;
+    SwTableAutoFormat* pTAutoFormat;
 
-    sal_uInt8       lbIndex;
-    sal_uInt8       tbIndex;
-    sal_uInt8       minTableIndexInLb;
-    sal_uInt8       maxTableIndexInLb;
-    sal_Int64       nEnteredValRepeatHeaderNF;
+    sal_uInt8 lbIndex;
+    sal_uInt8 tbIndex;
+    sal_uInt8 minTableIndexInLb;
+    sal_uInt8 maxTableIndexInLb;
+    sal_Int64 nEnteredValRepeatHeaderNF;
 
     AutoFormatPreview m_aWndPreview;
 
@@ -62,7 +62,7 @@ class SwInsTableDlg : public SfxDialogController
 
     // Returns 255 if mapping is not possible.
     // This means there cannot be more than 255 autotable style.
-    sal_uInt8 lbIndexToTableIndex( const sal_uInt8 listboxIndex );
+    sal_uInt8 lbIndexToTableIndex(const sal_uInt8 listboxIndex);
     void InitAutoTableFormat();
 
     DECL_LINK(TextFilterHdl, OUString&, bool);
@@ -77,9 +77,9 @@ class SwInsTableDlg : public SfxDialogController
 public:
     SwInsTableDlg(SwView& rView);
 
-    void GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                    SwInsertTableOptions& rInsTableOpts, OUString& rTableAutoFormatName,
-                    std::unique_ptr<SwTableAutoFormat>& prTAFormat );
+    void GetValues(OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
+                   SwInsertTableOptions& rInsTableOpts, OUString& rTableAutoFormatName,
+                   std::unique_ptr<SwTableAutoFormat>& prTAFormat);
 };
 
 #endif

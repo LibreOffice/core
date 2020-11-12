@@ -22,17 +22,15 @@
 
 using namespace std;
 
-SwRewriter::SwRewriter()
-{
-}
+SwRewriter::SwRewriter() {}
 
-void SwRewriter::AddRule(SwUndoArg eWhat, const OUString & rWith)
+void SwRewriter::AddRule(SwUndoArg eWhat, const OUString& rWith)
 {
     SwRewriteRule aRule(eWhat, rWith);
 
-    vector<SwRewriteRule>::iterator aIt = find_if(
-        mRules.begin(), mRules.end(),
-        [&aRule](SwRewriteRule const & a) { return a.first == aRule.first; });
+    vector<SwRewriteRule>::iterator aIt
+        = find_if(mRules.begin(), mRules.end(),
+                  [&aRule](SwRewriteRule const& a) { return a.first == aRule.first; });
 
     if (aIt != mRules.end())
         *aIt = aRule;
@@ -40,7 +38,7 @@ void SwRewriter::AddRule(SwUndoArg eWhat, const OUString & rWith)
         mRules.push_back(aRule);
 }
 
-OUString SwRewriter::Apply(const OUString & rStr) const
+OUString SwRewriter::Apply(const OUString& rStr) const
 {
     OUString aResult = rStr;
 

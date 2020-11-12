@@ -26,8 +26,14 @@
 
 class SwDoc;
 
-namespace com::sun::star::text { class XTextContent; }
-namespace com::sun::star::text { class XTextField; }
+namespace com::sun::star::text
+{
+class XTextContent;
+}
+namespace com::sun::star::text
+{
+class XTextField;
+}
 
 /// Undo/Redo Paragraph Signature.
 class SwUndoParagraphSigning final : public SwUndo
@@ -42,8 +48,7 @@ private:
     const bool m_bRemove;
 
 public:
-    SwUndoParagraphSigning(SwDoc& rDoc,
-                           const css::uno::Reference<css::text::XTextField>& xField,
+    SwUndoParagraphSigning(SwDoc& rDoc, const css::uno::Reference<css::text::XTextField>& xField,
                            const css::uno::Reference<css::text::XTextContent>& xParent,
                            const bool bRemove);
 

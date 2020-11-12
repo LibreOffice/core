@@ -22,7 +22,7 @@
 
 #include <sal/log.hxx>
 
-SwFormatFollowTextFlow* SwFormatFollowTextFlow::Clone( SfxItemPool * ) const
+SwFormatFollowTextFlow* SwFormatFollowTextFlow::Clone(SfxItemPool*) const
 {
     return new SwFormatFollowTextFlow(*this);
 }

@@ -40,9 +40,9 @@ class SW_DLLPUBLIC SwRewriter
 public:
     SwRewriter();
 
-    void AddRule(SwUndoArg eWhat, const OUString & rWith);
+    void AddRule(SwUndoArg eWhat, const OUString& rWith);
 
-    OUString Apply(const OUString & rStr) const;
+    OUString Apply(const OUString& rStr) const;
 
     static OUString GetPlaceHolder(SwUndoArg eId);
 };

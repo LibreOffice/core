@@ -40,8 +40,8 @@ public:
      * Test if the object contains text or paragraph attribute
      */
     bool HasContent() const;
-    bool HasContentForThisType( SelectionType nSelectionType ) const;
-    static bool CanCopyThisType( SelectionType nSelectionType );
+    bool HasContentForThisType(SelectionType nSelectionType) const;
+    static bool CanCopyThisType(SelectionType nSelectionType);
 
     /**
      * Store/Backup the text and paragraph attribute of the current selection.
@@ -49,7 +49,7 @@ public:
      * @param bPersistentCopy
      * input parameter - specify if the Paste function will erase the current object.
      */
-    void Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bPersistentCopy );
+    void Copy(SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bPersistentCopy);
 
     /**
      * Paste the stored text and paragraph attributes on the current selection and current paragraph.
@@ -60,8 +60,8 @@ public:
      * @param bNoParagraphFormats
      * Do not paste the paragraph formats.
      */
-    void Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPool
-        , bool bNoCharacterFormats, bool bNoParagraphFormats );
+    void Paste(SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPool, bool bNoCharacterFormats,
+               bool bNoParagraphFormats);
 
     /**
      * Clear the currently stored text and paragraph attributes.
@@ -87,7 +87,7 @@ private:
     //no frame style because it contains position information
 
     /** specify if the Paste function have to clear the current object */
-    bool   m_bPersistentCopy;
+    bool m_bPersistentCopy;
 };
 
 #endif

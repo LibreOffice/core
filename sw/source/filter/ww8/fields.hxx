@@ -25,22 +25,22 @@
 
 namespace ww
 {
-    /** Find the English Field Name from a winword index
+/** Find the English Field Name from a winword index
 
-        See OpenOffice.org issue 12831
-        (https://bz.apache.org/ooo/show_bug.cgi?id=12831) and MS
-        Knowledge Base article 268717
-        (http://support.microsoft.com/default.aspx?scid=kb;en-us;268717) for
-        details of why to use english field names and not localized ones since
-        Word 2000.
+    See OpenOffice.org issue 12831
+    (https://bz.apache.org/ooo/show_bug.cgi?id=12831) and MS
+    Knowledge Base article 268717
+    (http://support.microsoft.com/default.aspx?scid=kb;en-us;268717) for
+    details of why to use english field names and not localized ones since
+    Word 2000.
 
-        @param
-        nIndex the index to search for
+    @param
+    nIndex the index to search for
 
-        @return 0 if not found, otherwise the fieldname as a C style ASCII
-        string
-    */
-    const char *GetEnglishFieldName(eField eIndex) throw();
+    @return 0 if not found, otherwise the fieldname as a C style ASCII
+    string
+*/
+const char* GetEnglishFieldName(eField eIndex) throw();
 }
 
 #endif

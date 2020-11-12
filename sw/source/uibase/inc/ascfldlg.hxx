@@ -37,7 +37,7 @@ class SwAsciiFilterDlg : public SfxDialogController
     std::unique_ptr<weld::Label> m_xFontFT;
     std::unique_ptr<weld::ComboBox> m_xFontLB;
     std::unique_ptr<weld::Label> m_xLanguageFT;
-    std::unique_ptr<SvxLanguageBox>     m_xLanguageLB;
+    std::unique_ptr<SvxLanguageBox> m_xLanguageLB;
     std::unique_ptr<weld::RadioButton> m_xCRLF_RB;
     std::unique_ptr<weld::RadioButton> m_xCR_RB;
     std::unique_ptr<weld::RadioButton> m_xLF_RB;
@@ -45,9 +45,9 @@ class SwAsciiFilterDlg : public SfxDialogController
 
     DECL_LINK(CharSetSelHdl, weld::ComboBox&, void);
     DECL_LINK(LineEndHdl, weld::ToggleButton&, void);
-    void SetCRLF( LineEnd eEnd );
+    void SetCRLF(LineEnd eEnd);
     LineEnd GetCRLF() const;
-    void SetIncludeBOM( bool bIncludeBOM );
+    void SetIncludeBOM(bool bIncludeBOM);
     bool GetIncludeBOM() const;
     void UpdateIncludeBOMSensitiveState();
 
@@ -57,7 +57,7 @@ public:
     SwAsciiFilterDlg(weld::Window* pParent, SwDocShell& rDocSh, SvStream* pStream);
     virtual ~SwAsciiFilterDlg() override;
 
-    void FillOptions( SwAsciiOptions& rOptions );
+    void FillOptions(SwAsciiOptions& rOptions);
 };
 
 #endif

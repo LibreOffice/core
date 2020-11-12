@@ -24,7 +24,7 @@
 #include <vcl/customweld.hxx>
 #include "envimg.hxx"
 
-#define GetFieldVal(rField)         (rField).Denormalize((rField).GetValue(FieldUnit::TWIP))
+#define GetFieldVal(rField) (rField).Denormalize((rField).GetValue(FieldUnit::TWIP))
 #define SetFieldVal(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FieldUnit::TWIP)
 
 inline int getfieldval(const weld::MetricSpinButton& rField)
@@ -58,32 +58,33 @@ public:
 
 class SwEnvDlg : public SfxTabDialogController
 {
-friend class SwEnvPage;
-friend class SwEnvFormatPage;
-friend class SwEnvPrtPage;
-friend class SwEnvPreview;
+    friend class SwEnvPage;
+    friend class SwEnvFormatPage;
+    friend class SwEnvPrtPage;
+    friend class SwEnvPreview;
 
-    SwEnvItem       aEnvItem;
-    SwWrtShell      *pSh;
+    SwEnvItem aEnvItem;
+    SwWrtShell* pSh;
     VclPtr<Printer> pPrinter;
     std::unique_ptr<SfxItemSet> pAddresseeSet;
     std::unique_ptr<SfxItemSet> pSenderSet;
 
     std::unique_ptr<weld::Button> m_xModify;
 
-    virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
-    virtual short   Ok() override;
+    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
+    virtual short Ok() override;
 
 public:
-    SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert);
+    SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt,
+             bool bInsert);
     virtual ~SwEnvDlg() override;
 };
 
 class SwEnvPage : public SfxTabPage
 {
     SwEnvDlg* m_pDialog;
-    SwWrtShell*   m_pSh;
-    OUString      m_sActDBName;
+    SwWrtShell* m_pSh;
+    OUString m_sActDBName;
 
     SwEnvPreview m_aPreview;
     std::unique_ptr<weld::TextView> m_xAddrEdit;
@@ -108,11 +109,12 @@ public:
     void Init(SwEnvDlg* pDialog);
     virtual ~SwEnvPage() override;
 
-    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
-            void FillItem(SwEnvItem& rItem);
+    void FillItem(SwEnvItem& rItem);
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 };

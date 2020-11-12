@@ -29,16 +29,15 @@ class SwNumRule;
 class SAL_DLLPUBLIC_RTTI SwNodeNum : public SwNumberTreeNode
 {
 public:
-
-    explicit SwNodeNum( SwTextNode* pTextNode, bool isHiddenRedlines );
+    explicit SwNodeNum(SwTextNode* pTextNode, bool isHiddenRedlines);
     // note: this is only for creating phantom nodes and root nodes; these
     // never have a text node
-    explicit SwNodeNum( SwNumRule* pNumRule );
+    explicit SwNodeNum(SwNumRule* pNumRule);
     virtual ~SwNodeNum() override;
 
-    SwNumRule* GetNumRule() const { return mpNumRule;}
-    void ChangeNumRule( SwNumRule& rNumRule );
-    SwTextNode* GetTextNode() const { return mpTextNode;}
+    SwNumRule* GetNumRule() const { return mpNumRule; }
+    void ChangeNumRule(SwNumRule& rNumRule);
+    SwTextNode* GetTextNode() const { return mpTextNode; }
 
     virtual bool IsNotificationEnabled() const override;
 
@@ -46,7 +45,7 @@ public:
 
     virtual bool IsCounted() const override;
 
-    virtual bool LessThan(const SwNumberTreeNode & rNode) const override;
+    virtual bool LessThan(const SwNumberTreeNode& rNode) const override;
 
     virtual bool IsRestart() const override;
 
@@ -61,16 +60,16 @@ public:
     // unregistered.
     // Text nodes of the document nodes array aren't allowed to be registered
     // in this situation - this will be asserted.
-    static void HandleNumberTreeRootNodeDelete( SwNodeNum& rNodeNum );
+    static void HandleNumberTreeRootNodeDelete(SwNodeNum& rNodeNum);
 
     /** determines the <SwNodeNum> instance, which is preceding the given text node
 
         #i81002#
     */
-    const SwNodeNum* GetPrecedingNodeNumOf( const SwTextNode& rTextNode ) const;
+    const SwNodeNum* GetPrecedingNodeNumOf(const SwTextNode& rTextNode) const;
 
 protected:
-    virtual SwNumberTreeNode * Create() const override;
+    virtual SwNumberTreeNode* Create() const override;
 
     // --> #i64010#
     virtual bool HasCountedChildren() const override;
@@ -80,15 +79,16 @@ protected:
     virtual void PreAdd() override;
     // method called at a child after this child has been removed from the list tree
     virtual void PostRemove() override;
+
 private:
-    SwTextNode *const mpTextNode;
-    SwNumRule * mpNumRule;
+    SwTextNode* const mpTextNode;
+    SwNumRule* mpNumRule;
     bool m_isHiddenRedlines;
 
-    static void UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum );
+    static void UnregisterMeAndChildrenDueToRootDelete(SwNodeNum& rNodeNum);
 
-    SwNodeNum( const SwNodeNum& ) = delete;
-    SwNodeNum& operator=( const SwNodeNum& ) = delete;
+    SwNodeNum(const SwNodeNum&) = delete;
+    SwNodeNum& operator=(const SwNodeNum&) = delete;
 
     virtual bool IsCountPhantoms() const override;
 

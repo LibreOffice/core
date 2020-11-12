@@ -22,7 +22,7 @@
 #include <ooo/vba/word/XAddin.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XAddin > SwVbaAddin_BASE;
+typedef InheritedHelperInterfaceWeakImpl<ooo::vba::word::XAddin> SwVbaAddin_BASE;
 
 class SwVbaAddin : public SwVbaAddin_BASE
 {
@@ -32,16 +32,18 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaAddin( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const OUString& rFileURL );
+    SwVbaAddin(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
+               const css::uno::Reference<css::uno::XComponentContext>& rContext,
+               const OUString& rFileURL);
     virtual ~SwVbaAddin() override;
 
     // Attributes
     virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName( const OUString& _name ) override;
+    virtual void SAL_CALL setName(const OUString& _name) override;
     virtual OUString SAL_CALL getPath() override;
     virtual sal_Bool SAL_CALL getAutoload() override;
     virtual sal_Bool SAL_CALL getInstalled() override;
-    virtual void SAL_CALL setInstalled( sal_Bool _installed ) override;
+    virtual void SAL_CALL setInstalled(sal_Bool _installed) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

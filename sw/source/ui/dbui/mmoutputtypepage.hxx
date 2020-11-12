@@ -25,7 +25,7 @@ class SwMailMergeWizard;
 
 class SwMailMergeOutputTypePage : public vcl::OWizardPage
 {
-    SwMailMergeWizard*  m_pWizard;
+    SwMailMergeWizard* m_pWizard;
 
     std::unique_ptr<weld::RadioButton> m_xLetterRB;
     std::unique_ptr<weld::RadioButton> m_xMailRB;

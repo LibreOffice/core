@@ -46,7 +46,7 @@ public:
 
        @return a copy of this type
     */
-    virtual std::unique_ptr<SwFieldType> Copy () const override;
+    virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
 /**
@@ -105,14 +105,14 @@ public:
 
        @param pTyp field type for this field
     */
-    SwDropDownField(SwFieldType * pTyp);
+    SwDropDownField(SwFieldType* pTyp);
 
     /**
        Copy constructor
 
        @param rSrc dropdown field to copy
     */
-    SwDropDownField(const SwDropDownField & rSrc);
+    SwDropDownField(const SwDropDownField& rSrc);
 
     /**
        Destructor
@@ -142,14 +142,14 @@ public:
        selected. Otherwise no item will be selected, i.e. the
        resulting selection will be empty.
     */
-    virtual void SetPar1(const OUString & rStr) override;
+    virtual void SetPar1(const OUString& rStr) override;
 
     /**
        Sets the name of the field.
 
        @param rStr the new name of the field
     */
-    virtual void SetPar2(const OUString & rStr) override;
+    virtual void SetPar2(const OUString& rStr) override;
 
     /**
        Sets the items of the dropdown box.
@@ -158,7 +158,7 @@ public:
 
        @param rItems the new items
     */
-    void SetItems(const std::vector<OUString> & rItems);
+    void SetItems(const std::vector<OUString>& rItems);
 
     /**
        Sets the items of the dropdown box.
@@ -167,7 +167,7 @@ public:
 
        @param rItems the new items
     */
-    void SetItems(const css::uno::Sequence<OUString> & rItems);
+    void SetItems(const css::uno::Sequence<OUString>& rItems);
 
     /**
         Returns the items of the dropdown box.
@@ -181,28 +181,28 @@ public:
 
        @return the selected item
     */
-    const OUString& GetSelectedItem() const { return m_aSelectedItem;}
+    const OUString& GetSelectedItem() const { return m_aSelectedItem; }
 
     /**
        Returns the name of the field.
 
        @return the name of the field
     */
-    const OUString& GetName() const { return m_aName;}
+    const OUString& GetName() const { return m_aName; }
 
     /**
        Returns the help text of the field.
 
        @return the help text of the field
     */
-    const OUString& GetHelp() const { return m_aHelp;}
+    const OUString& GetHelp() const { return m_aHelp; }
 
     /**
        Returns the tool tip of the field.
 
        @return the tool tip of the field
      */
-    const OUString& GetToolTip() const { return m_aToolTip;}
+    const OUString& GetToolTip() const { return m_aToolTip; }
 
     /**
        Sets the selected item.
@@ -212,28 +212,28 @@ public:
 
        @param rItem the item to be set
     */
-    void SetSelectedItem(const OUString & rItem);
+    void SetSelectedItem(const OUString& rItem);
 
     /**
        Sets the name of the field.
 
        @param rName the new name of the field
     */
-    void SetName(const OUString & rName);
+    void SetName(const OUString& rName);
 
     /**
        Sets the help text of the field.
 
        @param rHelp    the help text
     */
-    void SetHelp(const OUString & rHelp);
+    void SetHelp(const OUString& rHelp);
 
     /**
        Sets the tool tip of the field.
 
        @param rToolTip  the tool tip
     */
-    void SetToolTip(const OUString & rToolTip);
+    void SetToolTip(const OUString& rToolTip);
 
     /**
        API: Gets a property value from the dropdown field.
@@ -245,7 +245,7 @@ public:
           - FIELD_PROP_PAR3 Get the help text of the field.
           - FIELD_PROP_PAR4 Get the tool tip of the field.
     */
-    virtual bool QueryValue(css::uno::Any &rVal, sal_uInt16 nWhichId) const override;
+    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt16 nWhichId) const override;
 
     /**
        API: Sets a property value on the dropdown field.
@@ -257,7 +257,7 @@ public:
           - FIELD_PROP_PAR3  Set the help text of the field.
           - FIELD_PROP_PAR4  Set the tool tip of the field.
     */
-    virtual bool PutValue(const css::uno::Any &rVal, sal_uInt16 nWhichId) override;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt16 nWhichId) override;
 };
 
 #endif

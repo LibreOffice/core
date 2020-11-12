@@ -21,7 +21,10 @@
 
 enum SwCapObjType
 {
-        FRAME_CAP, GRAPHIC_CAP, TABLE_CAP, OLE_CAP
+    FRAME_CAP,
+    GRAPHIC_CAP,
+    TABLE_CAP,
+    OLE_CAP
 };
 
 #endif

@@ -26,10 +26,10 @@ class SwMailMergeWizard;
 
 class SwMailMergeDocSelectPage : public vcl::OWizardPage
 {
-    OUString            m_sLoadFileName;
-    OUString            m_sLoadTemplateName;
+    OUString m_sLoadFileName;
+    OUString m_sLoadTemplateName;
 
-    SwMailMergeWizard*  m_pWizard;
+    SwMailMergeWizard* m_pWizard;
 
     std::unique_ptr<weld::RadioButton> m_xCurrentDocRB;
     std::unique_ptr<weld::RadioButton> m_xNewDocRB;
@@ -43,7 +43,7 @@ class SwMailMergeDocSelectPage : public vcl::OWizardPage
     DECL_LINK(DocSelectHdl, weld::ToggleButton&, void);
     DECL_LINK(FileSelectHdl, weld::Button&, void);
 
-    virtual bool    commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
+    virtual bool commitPage(::vcl::WizardTypes::CommitPageReason _eReason) override;
 
 public:
     SwMailMergeDocSelectPage(weld::Container* pPage, SwMailMergeWizard* pWizard);

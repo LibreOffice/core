@@ -25,7 +25,7 @@
 #include "basesh.hxx"
 #include <shellid.hxx>
 
-class SwMediaShell: public SwBaseShell
+class SwMediaShell : public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_MEDIASHELL)
@@ -35,10 +35,10 @@ private:
     static void InitInterface_Impl();
 
 public:
-    void    ExecMedia(SfxRequest const &);
-    void    GetMediaState(SfxItemSet &);
+    void ExecMedia(SfxRequest const&);
+    void GetMediaState(SfxItemSet&);
 
-            SwMediaShell(SwView &rView);
+    SwMediaShell(SwView& rView);
 };
 
 #endif

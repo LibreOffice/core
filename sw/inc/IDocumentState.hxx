@@ -37,7 +37,7 @@ public:
 
     virtual bool IsInCallModified() const = 0;
 
-    virtual bool IsUpdateExpField() const  = 0;
+    virtual bool IsUpdateExpField() const = 0;
 
     virtual bool IsNewDoc() const = 0;
 
@@ -49,7 +49,7 @@ public:
     virtual void SetEnableSetModified(bool bEnableSetModified) = 0;
 
 protected:
-    virtual ~IDocumentState() {};
+    virtual ~IDocumentState(){};
 };
 
 #endif // INCLUDED_SW_INC_IDOCUMENTSTATE_HXX

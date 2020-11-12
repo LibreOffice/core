@@ -19,8 +19,8 @@
 
 #pragma once
 
-namespace sw::sidebarwindows {
-
+namespace sw::sidebarwindows
+{
 enum class ViewState
 {
     NORMAL,
@@ -30,9 +30,9 @@ enum class ViewState
 
 enum class SidebarPosition
 {
-    LEFT,   // sidebar on left side
-    RIGHT,  // sidebar on right side
-    NONE    // sidebar on neither side
+    LEFT, // sidebar on left side
+    RIGHT, // sidebar on right side
+    NONE // sidebar on neither side
 };
 
 } // end of namespace sw::sidebarwindows

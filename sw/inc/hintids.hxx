@@ -166,10 +166,10 @@ class SfxVoidItem;
 
 // For SwTextHints without end index the following char is added:
 
-#define CH_TXTATR_BREAKWORD     u'\x0001'
-#define CH_TXTATR_INWORD        u'\xFFF9'
-#define CH_TXTATR_TAB           u'\t'
-#define CH_TXTATR_NEWLINE       u'\n'
+#define CH_TXTATR_BREAKWORD u'\x0001'
+#define CH_TXTATR_INWORD u'\xFFF9'
+#define CH_TXTATR_TAB u'\t'
+#define CH_TXTATR_NEWLINE u'\n'
 #define CH_TXT_ATR_INPUTFIELDSTART u'\x0004'
 #define CH_TXT_ATR_INPUTFIELDEND u'\x0005'
 
@@ -192,51 +192,51 @@ constexpr sal_uInt16 POOLATTR_BEGIN(HINT_BEGIN);
 // Ranges for the IDs of the format-attributes.
 // Which-values for character-format attributes.
 constexpr sal_uInt16 RES_CHRATR_BEGIN(HINT_BEGIN);
-constexpr TypedWhichId<SvxCaseMapItem> RES_CHRATR_CASEMAP (RES_CHRATR_BEGIN); // 1
-constexpr TypedWhichId<SvxColorItem> RES_CHRATR_CHARSETCOLOR (2);
-constexpr TypedWhichId<SvxColorItem> RES_CHRATR_COLOR (3);
-constexpr TypedWhichId<SvxContourItem> RES_CHRATR_CONTOUR (4);
-constexpr TypedWhichId<SvxCrossedOutItem> RES_CHRATR_CROSSEDOUT (5);
-constexpr TypedWhichId<SvxEscapementItem> RES_CHRATR_ESCAPEMENT (6);
-constexpr TypedWhichId<SvxFontItem> RES_CHRATR_FONT (7);
-constexpr TypedWhichId<SvxFontHeightItem> RES_CHRATR_FONTSIZE (8);
-constexpr TypedWhichId<SvxKerningItem> RES_CHRATR_KERNING (9);
-constexpr TypedWhichId<SvxLanguageItem> RES_CHRATR_LANGUAGE (10);
-constexpr TypedWhichId<SvxPostureItem> RES_CHRATR_POSTURE (11);
-constexpr TypedWhichId<SfxVoidItem> RES_CHRATR_UNUSED1 (12);
-constexpr TypedWhichId<SvxShadowedItem> RES_CHRATR_SHADOWED (13);
-constexpr TypedWhichId<SvxUnderlineItem> RES_CHRATR_UNDERLINE (14);
-constexpr TypedWhichId<SvxWeightItem> RES_CHRATR_WEIGHT (15);
-constexpr TypedWhichId<SvxWordLineModeItem> RES_CHRATR_WORDLINEMODE (16);
-constexpr TypedWhichId<SvxAutoKernItem> RES_CHRATR_AUTOKERN (17);
-constexpr TypedWhichId<SvxBlinkItem> RES_CHRATR_BLINK (18);
-constexpr TypedWhichId<SvxNoHyphenItem> RES_CHRATR_NOHYPHEN (19);
-constexpr TypedWhichId<SfxVoidItem> RES_CHRATR_UNUSED2 (20);
-constexpr TypedWhichId<SvxBrushItem> RES_CHRATR_BACKGROUND (21);
-constexpr TypedWhichId<SvxFontItem> RES_CHRATR_CJK_FONT (22);
-constexpr TypedWhichId<SvxFontHeightItem> RES_CHRATR_CJK_FONTSIZE (23);
-constexpr TypedWhichId<SvxLanguageItem> RES_CHRATR_CJK_LANGUAGE (24);
-constexpr TypedWhichId<SvxPostureItem> RES_CHRATR_CJK_POSTURE (25);
-constexpr TypedWhichId<SvxWeightItem> RES_CHRATR_CJK_WEIGHT (26);
-constexpr TypedWhichId<SvxFontItem> RES_CHRATR_CTL_FONT (27);
-constexpr TypedWhichId<SvxFontHeightItem> RES_CHRATR_CTL_FONTSIZE (28);
-constexpr TypedWhichId<SvxLanguageItem> RES_CHRATR_CTL_LANGUAGE (29);
-constexpr TypedWhichId<SvxPostureItem> RES_CHRATR_CTL_POSTURE (30);
-constexpr TypedWhichId<SvxWeightItem> RES_CHRATR_CTL_WEIGHT (31);
-constexpr TypedWhichId<SvxCharRotateItem> RES_CHRATR_ROTATE (32);
-constexpr TypedWhichId<SvxEmphasisMarkItem> RES_CHRATR_EMPHASIS_MARK (33);
-constexpr TypedWhichId<SvxTwoLinesItem> RES_CHRATR_TWO_LINES (34);
-constexpr TypedWhichId<SvxCharScaleWidthItem> RES_CHRATR_SCALEW (35);
-constexpr TypedWhichId<SvxCharReliefItem> RES_CHRATR_RELIEF (36);
-constexpr TypedWhichId<SvxCharHiddenItem> RES_CHRATR_HIDDEN (37);
-constexpr TypedWhichId<SvxOverlineItem> RES_CHRATR_OVERLINE (38);
-constexpr TypedWhichId<SvxRsidItem> RES_CHRATR_RSID (39);
-constexpr TypedWhichId<SvxBoxItem> RES_CHRATR_BOX (40);
-constexpr TypedWhichId<SvxShadowItem> RES_CHRATR_SHADOW (41);
-constexpr TypedWhichId<SvxBrushItem> RES_CHRATR_HIGHLIGHT (42);
-constexpr TypedWhichId<SfxGrabBagItem> RES_CHRATR_GRABBAG (43);
-constexpr TypedWhichId<SfxInt16Item> RES_CHRATR_BIDIRTL (44);
-constexpr TypedWhichId<SfxInt16Item> RES_CHRATR_IDCTHINT (45);
+constexpr TypedWhichId<SvxCaseMapItem> RES_CHRATR_CASEMAP(RES_CHRATR_BEGIN); // 1
+constexpr TypedWhichId<SvxColorItem> RES_CHRATR_CHARSETCOLOR(2);
+constexpr TypedWhichId<SvxColorItem> RES_CHRATR_COLOR(3);
+constexpr TypedWhichId<SvxContourItem> RES_CHRATR_CONTOUR(4);
+constexpr TypedWhichId<SvxCrossedOutItem> RES_CHRATR_CROSSEDOUT(5);
+constexpr TypedWhichId<SvxEscapementItem> RES_CHRATR_ESCAPEMENT(6);
+constexpr TypedWhichId<SvxFontItem> RES_CHRATR_FONT(7);
+constexpr TypedWhichId<SvxFontHeightItem> RES_CHRATR_FONTSIZE(8);
+constexpr TypedWhichId<SvxKerningItem> RES_CHRATR_KERNING(9);
+constexpr TypedWhichId<SvxLanguageItem> RES_CHRATR_LANGUAGE(10);
+constexpr TypedWhichId<SvxPostureItem> RES_CHRATR_POSTURE(11);
+constexpr TypedWhichId<SfxVoidItem> RES_CHRATR_UNUSED1(12);
+constexpr TypedWhichId<SvxShadowedItem> RES_CHRATR_SHADOWED(13);
+constexpr TypedWhichId<SvxUnderlineItem> RES_CHRATR_UNDERLINE(14);
+constexpr TypedWhichId<SvxWeightItem> RES_CHRATR_WEIGHT(15);
+constexpr TypedWhichId<SvxWordLineModeItem> RES_CHRATR_WORDLINEMODE(16);
+constexpr TypedWhichId<SvxAutoKernItem> RES_CHRATR_AUTOKERN(17);
+constexpr TypedWhichId<SvxBlinkItem> RES_CHRATR_BLINK(18);
+constexpr TypedWhichId<SvxNoHyphenItem> RES_CHRATR_NOHYPHEN(19);
+constexpr TypedWhichId<SfxVoidItem> RES_CHRATR_UNUSED2(20);
+constexpr TypedWhichId<SvxBrushItem> RES_CHRATR_BACKGROUND(21);
+constexpr TypedWhichId<SvxFontItem> RES_CHRATR_CJK_FONT(22);
+constexpr TypedWhichId<SvxFontHeightItem> RES_CHRATR_CJK_FONTSIZE(23);
+constexpr TypedWhichId<SvxLanguageItem> RES_CHRATR_CJK_LANGUAGE(24);
+constexpr TypedWhichId<SvxPostureItem> RES_CHRATR_CJK_POSTURE(25);
+constexpr TypedWhichId<SvxWeightItem> RES_CHRATR_CJK_WEIGHT(26);
+constexpr TypedWhichId<SvxFontItem> RES_CHRATR_CTL_FONT(27);
+constexpr TypedWhichId<SvxFontHeightItem> RES_CHRATR_CTL_FONTSIZE(28);
+constexpr TypedWhichId<SvxLanguageItem> RES_CHRATR_CTL_LANGUAGE(29);
+constexpr TypedWhichId<SvxPostureItem> RES_CHRATR_CTL_POSTURE(30);
+constexpr TypedWhichId<SvxWeightItem> RES_CHRATR_CTL_WEIGHT(31);
+constexpr TypedWhichId<SvxCharRotateItem> RES_CHRATR_ROTATE(32);
+constexpr TypedWhichId<SvxEmphasisMarkItem> RES_CHRATR_EMPHASIS_MARK(33);
+constexpr TypedWhichId<SvxTwoLinesItem> RES_CHRATR_TWO_LINES(34);
+constexpr TypedWhichId<SvxCharScaleWidthItem> RES_CHRATR_SCALEW(35);
+constexpr TypedWhichId<SvxCharReliefItem> RES_CHRATR_RELIEF(36);
+constexpr TypedWhichId<SvxCharHiddenItem> RES_CHRATR_HIDDEN(37);
+constexpr TypedWhichId<SvxOverlineItem> RES_CHRATR_OVERLINE(38);
+constexpr TypedWhichId<SvxRsidItem> RES_CHRATR_RSID(39);
+constexpr TypedWhichId<SvxBoxItem> RES_CHRATR_BOX(40);
+constexpr TypedWhichId<SvxShadowItem> RES_CHRATR_SHADOW(41);
+constexpr TypedWhichId<SvxBrushItem> RES_CHRATR_HIGHLIGHT(42);
+constexpr TypedWhichId<SfxGrabBagItem> RES_CHRATR_GRABBAG(43);
+constexpr TypedWhichId<SfxInt16Item> RES_CHRATR_BIDIRTL(44);
+constexpr TypedWhichId<SfxInt16Item> RES_CHRATR_IDCTHINT(45);
 constexpr sal_uInt16 RES_CHRATR_END(46);
 
 // this Attribute used only in a TextNodes SwpAttr-Array
@@ -259,198 +259,200 @@ constexpr sal_uInt16 RES_TXTATR_BEGIN(RES_CHRATR_END);
    - META and METAFIELD must precede CJK_RUBY and INETFMT
  */
 constexpr sal_uInt16 RES_TXTATR_WITHEND_BEGIN(RES_TXTATR_BEGIN);
-constexpr TypedWhichId<SwFormatRefMark> RES_TXTATR_REFMARK (RES_TXTATR_WITHEND_BEGIN); // 46
-constexpr TypedWhichId<SwTOXMark> RES_TXTATR_TOXMARK (47);
-constexpr TypedWhichId<SwFormatMeta> RES_TXTATR_META (48);
-constexpr TypedWhichId<SwFormatMeta> RES_TXTATR_METAFIELD (49);
-constexpr TypedWhichId<SwFormatAutoFormat> RES_TXTATR_AUTOFMT (50);
-constexpr TypedWhichId<SwFormatINetFormat> RES_TXTATR_INETFMT (51);
-constexpr TypedWhichId<SwFormatCharFormat> RES_TXTATR_CHARFMT (52);
-constexpr TypedWhichId<SwFormatRuby> RES_TXTATR_CJK_RUBY (53);
-constexpr TypedWhichId<SvXMLAttrContainerItem> RES_TXTATR_UNKNOWN_CONTAINER (54);
-constexpr TypedWhichId<SwFormatField> RES_TXTATR_INPUTFIELD (55);
+constexpr TypedWhichId<SwFormatRefMark> RES_TXTATR_REFMARK(RES_TXTATR_WITHEND_BEGIN); // 46
+constexpr TypedWhichId<SwTOXMark> RES_TXTATR_TOXMARK(47);
+constexpr TypedWhichId<SwFormatMeta> RES_TXTATR_META(48);
+constexpr TypedWhichId<SwFormatMeta> RES_TXTATR_METAFIELD(49);
+constexpr TypedWhichId<SwFormatAutoFormat> RES_TXTATR_AUTOFMT(50);
+constexpr TypedWhichId<SwFormatINetFormat> RES_TXTATR_INETFMT(51);
+constexpr TypedWhichId<SwFormatCharFormat> RES_TXTATR_CHARFMT(52);
+constexpr TypedWhichId<SwFormatRuby> RES_TXTATR_CJK_RUBY(53);
+constexpr TypedWhichId<SvXMLAttrContainerItem> RES_TXTATR_UNKNOWN_CONTAINER(54);
+constexpr TypedWhichId<SwFormatField> RES_TXTATR_INPUTFIELD(55);
 constexpr sal_uInt16 RES_TXTATR_WITHEND_END(56);
 
 // all TextAttributes without an end
 constexpr sal_uInt16 RES_TXTATR_NOEND_BEGIN(RES_TXTATR_WITHEND_END);
-constexpr TypedWhichId<SwFormatField> RES_TXTATR_FIELD (RES_TXTATR_NOEND_BEGIN); // 56
-constexpr TypedWhichId<SwFormatFlyCnt> RES_TXTATR_FLYCNT (57);
-constexpr TypedWhichId<SwFormatFootnote> RES_TXTATR_FTN (58);
-constexpr TypedWhichId<SwFormatField> RES_TXTATR_ANNOTATION (59);
-constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY3 (60);
-constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY1 (61);
-constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY2 (62);
+constexpr TypedWhichId<SwFormatField> RES_TXTATR_FIELD(RES_TXTATR_NOEND_BEGIN); // 56
+constexpr TypedWhichId<SwFormatFlyCnt> RES_TXTATR_FLYCNT(57);
+constexpr TypedWhichId<SwFormatFootnote> RES_TXTATR_FTN(58);
+constexpr TypedWhichId<SwFormatField> RES_TXTATR_ANNOTATION(59);
+constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY3(60);
+constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY1(61);
+constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY2(62);
 constexpr sal_uInt16 RES_TXTATR_NOEND_END(63);
 constexpr sal_uInt16 RES_TXTATR_END(RES_TXTATR_NOEND_END);
 
 constexpr sal_uInt16 RES_PARATR_BEGIN(RES_TXTATR_END);
-constexpr TypedWhichId<SvxLineSpacingItem> RES_PARATR_LINESPACING (RES_PARATR_BEGIN); // 63
-constexpr TypedWhichId<SvxAdjustItem> RES_PARATR_ADJUST (64);
-constexpr TypedWhichId<SvxFormatSplitItem> RES_PARATR_SPLIT (65);
-constexpr TypedWhichId<SvxOrphansItem> RES_PARATR_ORPHANS (66);
-constexpr TypedWhichId<SvxWidowsItem> RES_PARATR_WIDOWS (67);
-constexpr TypedWhichId<SvxTabStopItem> RES_PARATR_TABSTOP (68);
-constexpr TypedWhichId<SvxHyphenZoneItem> RES_PARATR_HYPHENZONE (69);
-constexpr TypedWhichId<SwFormatDrop> RES_PARATR_DROP (70);
-constexpr TypedWhichId<SwRegisterItem> RES_PARATR_REGISTER (71);
-constexpr TypedWhichId<SwNumRuleItem> RES_PARATR_NUMRULE (72);
-constexpr TypedWhichId<SvxScriptSpaceItem> RES_PARATR_SCRIPTSPACE (73);
-constexpr TypedWhichId<SvxHangingPunctuationItem> RES_PARATR_HANGINGPUNCTUATION (74);
-constexpr TypedWhichId<SvxForbiddenRuleItem> RES_PARATR_FORBIDDEN_RULES (75);
-constexpr TypedWhichId<SvxParaVertAlignItem> RES_PARATR_VERTALIGN (76);
-constexpr TypedWhichId<SvxParaGridItem> RES_PARATR_SNAPTOGRID (77);
-constexpr TypedWhichId<SwParaConnectBorderItem> RES_PARATR_CONNECT_BORDER (78);
-constexpr TypedWhichId<SfxUInt16Item> RES_PARATR_OUTLINELEVEL (79);
-constexpr TypedWhichId<SvxRsidItem> RES_PARATR_RSID (80);
-constexpr TypedWhichId<SfxGrabBagItem> RES_PARATR_GRABBAG (81);
+constexpr TypedWhichId<SvxLineSpacingItem> RES_PARATR_LINESPACING(RES_PARATR_BEGIN); // 63
+constexpr TypedWhichId<SvxAdjustItem> RES_PARATR_ADJUST(64);
+constexpr TypedWhichId<SvxFormatSplitItem> RES_PARATR_SPLIT(65);
+constexpr TypedWhichId<SvxOrphansItem> RES_PARATR_ORPHANS(66);
+constexpr TypedWhichId<SvxWidowsItem> RES_PARATR_WIDOWS(67);
+constexpr TypedWhichId<SvxTabStopItem> RES_PARATR_TABSTOP(68);
+constexpr TypedWhichId<SvxHyphenZoneItem> RES_PARATR_HYPHENZONE(69);
+constexpr TypedWhichId<SwFormatDrop> RES_PARATR_DROP(70);
+constexpr TypedWhichId<SwRegisterItem> RES_PARATR_REGISTER(71);
+constexpr TypedWhichId<SwNumRuleItem> RES_PARATR_NUMRULE(72);
+constexpr TypedWhichId<SvxScriptSpaceItem> RES_PARATR_SCRIPTSPACE(73);
+constexpr TypedWhichId<SvxHangingPunctuationItem> RES_PARATR_HANGINGPUNCTUATION(74);
+constexpr TypedWhichId<SvxForbiddenRuleItem> RES_PARATR_FORBIDDEN_RULES(75);
+constexpr TypedWhichId<SvxParaVertAlignItem> RES_PARATR_VERTALIGN(76);
+constexpr TypedWhichId<SvxParaGridItem> RES_PARATR_SNAPTOGRID(77);
+constexpr TypedWhichId<SwParaConnectBorderItem> RES_PARATR_CONNECT_BORDER(78);
+constexpr TypedWhichId<SfxUInt16Item> RES_PARATR_OUTLINELEVEL(79);
+constexpr TypedWhichId<SvxRsidItem> RES_PARATR_RSID(80);
+constexpr TypedWhichId<SfxGrabBagItem> RES_PARATR_GRABBAG(81);
 constexpr sal_uInt16 RES_PARATR_END(82);
 
 // list attributes for paragraphs.
 // intentionally these list attributes are not contained in paragraph styles
 constexpr sal_uInt16 RES_PARATR_LIST_BEGIN(RES_PARATR_END);
-constexpr TypedWhichId<SfxStringItem> RES_PARATR_LIST_ID (RES_PARATR_LIST_BEGIN); // 82
-constexpr TypedWhichId<SfxInt16Item> RES_PARATR_LIST_LEVEL (83);
-constexpr TypedWhichId<SfxBoolItem> RES_PARATR_LIST_ISRESTART (84);
-constexpr TypedWhichId<SfxInt16Item> RES_PARATR_LIST_RESTARTVALUE (85);
-constexpr TypedWhichId<SfxBoolItem> RES_PARATR_LIST_ISCOUNTED (86);
-constexpr TypedWhichId<SwFormatAutoFormat> RES_PARATR_LIST_AUTOFMT (87);//TypedWhichId<SfxSetItem>(87)
+constexpr TypedWhichId<SfxStringItem> RES_PARATR_LIST_ID(RES_PARATR_LIST_BEGIN); // 82
+constexpr TypedWhichId<SfxInt16Item> RES_PARATR_LIST_LEVEL(83);
+constexpr TypedWhichId<SfxBoolItem> RES_PARATR_LIST_ISRESTART(84);
+constexpr TypedWhichId<SfxInt16Item> RES_PARATR_LIST_RESTARTVALUE(85);
+constexpr TypedWhichId<SfxBoolItem> RES_PARATR_LIST_ISCOUNTED(86);
+constexpr TypedWhichId<SwFormatAutoFormat>
+    RES_PARATR_LIST_AUTOFMT(87); //TypedWhichId<SfxSetItem>(87)
 constexpr sal_uInt16 RES_PARATR_LIST_END(88);
 
 constexpr sal_uInt16 RES_FRMATR_BEGIN(RES_PARATR_LIST_END);
-constexpr TypedWhichId<SwFormatFillOrder> RES_FILL_ORDER (RES_FRMATR_BEGIN);
-constexpr TypedWhichId<SwFormatFrameSize> RES_FRM_SIZE (89);
-constexpr TypedWhichId<SvxPaperBinItem> RES_PAPER_BIN (90);
-constexpr TypedWhichId<SvxLRSpaceItem> RES_LR_SPACE (91);
-constexpr TypedWhichId<SvxULSpaceItem> RES_UL_SPACE (92);
-constexpr TypedWhichId<SwFormatPageDesc> RES_PAGEDESC (93);
-constexpr TypedWhichId<SvxFormatBreakItem> RES_BREAK (94);
-constexpr TypedWhichId<SwFormatContent> RES_CNTNT (95);
-constexpr TypedWhichId<SwFormatHeader> RES_HEADER (96);
-constexpr TypedWhichId<SwFormatFooter> RES_FOOTER (97);
-constexpr TypedWhichId<SvxPrintItem> RES_PRINT (98);
-constexpr TypedWhichId<SvxOpaqueItem> RES_OPAQUE (99);
-constexpr TypedWhichId<SvxProtectItem> RES_PROTECT (100);
-constexpr TypedWhichId<SwFormatSurround> RES_SURROUND (101);
-constexpr TypedWhichId<SwFormatVertOrient> RES_VERT_ORIENT (102);
-constexpr TypedWhichId<SwFormatHoriOrient> RES_HORI_ORIENT (103);
-constexpr TypedWhichId<SwFormatAnchor> RES_ANCHOR (104);
-constexpr TypedWhichId<SvxBrushItem> RES_BACKGROUND (105);
-constexpr TypedWhichId<SvxBoxItem> RES_BOX (106);
-constexpr TypedWhichId<SvxShadowItem> RES_SHADOW (107);
-constexpr TypedWhichId<SvxMacroItem> RES_FRMMACRO (108);
-constexpr TypedWhichId<SwFormatCol> RES_COL (109);
-constexpr TypedWhichId<SvxFormatKeepItem> RES_KEEP (110);
-constexpr TypedWhichId<SwFormatURL> RES_URL (111);
-constexpr TypedWhichId<SwFormatEditInReadonly> RES_EDIT_IN_READONLY (112);
-constexpr TypedWhichId<SwFormatLayoutSplit> RES_LAYOUT_SPLIT (113);
-constexpr TypedWhichId<SwFormatChain> RES_CHAIN (114);
-constexpr TypedWhichId<SwTextGridItem> RES_TEXTGRID (115);
-constexpr TypedWhichId<SwFormatLineNumber> RES_LINENUMBER (116);
-constexpr TypedWhichId<SwFormatFootnoteAtTextEnd> RES_FTN_AT_TXTEND (117);
-constexpr TypedWhichId<SwFormatEndAtTextEnd> RES_END_AT_TXTEND (118);
-constexpr TypedWhichId<SwFormatNoBalancedColumns> RES_COLUMNBALANCE (119);
-constexpr TypedWhichId<SvxFrameDirectionItem> RES_FRAMEDIR (120);
-constexpr TypedWhichId<SwHeaderAndFooterEatSpacingItem> RES_HEADER_FOOTER_EAT_SPACING (121);
-constexpr TypedWhichId<SwFormatRowSplit> RES_ROW_SPLIT (122);
-constexpr TypedWhichId<SwFormatFollowTextFlow> RES_FOLLOW_TEXT_FLOW (123);
-constexpr TypedWhichId<SfxBoolItem> RES_COLLAPSING_BORDERS (124);
-constexpr TypedWhichId<SwFormatWrapInfluenceOnObjPos> RES_WRAP_INFLUENCE_ON_OBJPOS (125);
-constexpr TypedWhichId<SwFormatAutoFormat> RES_AUTO_STYLE (126);
-constexpr TypedWhichId<SfxStringItem> RES_FRMATR_STYLE_NAME (127);
-constexpr TypedWhichId<SfxStringItem> RES_FRMATR_CONDITIONAL_STYLE_NAME (128);
-constexpr TypedWhichId<SfxGrabBagItem> RES_FRMATR_GRABBAG (129);
-constexpr TypedWhichId<SdrTextVertAdjustItem> RES_TEXT_VERT_ADJUST (130);
+constexpr TypedWhichId<SwFormatFillOrder> RES_FILL_ORDER(RES_FRMATR_BEGIN);
+constexpr TypedWhichId<SwFormatFrameSize> RES_FRM_SIZE(89);
+constexpr TypedWhichId<SvxPaperBinItem> RES_PAPER_BIN(90);
+constexpr TypedWhichId<SvxLRSpaceItem> RES_LR_SPACE(91);
+constexpr TypedWhichId<SvxULSpaceItem> RES_UL_SPACE(92);
+constexpr TypedWhichId<SwFormatPageDesc> RES_PAGEDESC(93);
+constexpr TypedWhichId<SvxFormatBreakItem> RES_BREAK(94);
+constexpr TypedWhichId<SwFormatContent> RES_CNTNT(95);
+constexpr TypedWhichId<SwFormatHeader> RES_HEADER(96);
+constexpr TypedWhichId<SwFormatFooter> RES_FOOTER(97);
+constexpr TypedWhichId<SvxPrintItem> RES_PRINT(98);
+constexpr TypedWhichId<SvxOpaqueItem> RES_OPAQUE(99);
+constexpr TypedWhichId<SvxProtectItem> RES_PROTECT(100);
+constexpr TypedWhichId<SwFormatSurround> RES_SURROUND(101);
+constexpr TypedWhichId<SwFormatVertOrient> RES_VERT_ORIENT(102);
+constexpr TypedWhichId<SwFormatHoriOrient> RES_HORI_ORIENT(103);
+constexpr TypedWhichId<SwFormatAnchor> RES_ANCHOR(104);
+constexpr TypedWhichId<SvxBrushItem> RES_BACKGROUND(105);
+constexpr TypedWhichId<SvxBoxItem> RES_BOX(106);
+constexpr TypedWhichId<SvxShadowItem> RES_SHADOW(107);
+constexpr TypedWhichId<SvxMacroItem> RES_FRMMACRO(108);
+constexpr TypedWhichId<SwFormatCol> RES_COL(109);
+constexpr TypedWhichId<SvxFormatKeepItem> RES_KEEP(110);
+constexpr TypedWhichId<SwFormatURL> RES_URL(111);
+constexpr TypedWhichId<SwFormatEditInReadonly> RES_EDIT_IN_READONLY(112);
+constexpr TypedWhichId<SwFormatLayoutSplit> RES_LAYOUT_SPLIT(113);
+constexpr TypedWhichId<SwFormatChain> RES_CHAIN(114);
+constexpr TypedWhichId<SwTextGridItem> RES_TEXTGRID(115);
+constexpr TypedWhichId<SwFormatLineNumber> RES_LINENUMBER(116);
+constexpr TypedWhichId<SwFormatFootnoteAtTextEnd> RES_FTN_AT_TXTEND(117);
+constexpr TypedWhichId<SwFormatEndAtTextEnd> RES_END_AT_TXTEND(118);
+constexpr TypedWhichId<SwFormatNoBalancedColumns> RES_COLUMNBALANCE(119);
+constexpr TypedWhichId<SvxFrameDirectionItem> RES_FRAMEDIR(120);
+constexpr TypedWhichId<SwHeaderAndFooterEatSpacingItem> RES_HEADER_FOOTER_EAT_SPACING(121);
+constexpr TypedWhichId<SwFormatRowSplit> RES_ROW_SPLIT(122);
+constexpr TypedWhichId<SwFormatFollowTextFlow> RES_FOLLOW_TEXT_FLOW(123);
+constexpr TypedWhichId<SfxBoolItem> RES_COLLAPSING_BORDERS(124);
+constexpr TypedWhichId<SwFormatWrapInfluenceOnObjPos> RES_WRAP_INFLUENCE_ON_OBJPOS(125);
+constexpr TypedWhichId<SwFormatAutoFormat> RES_AUTO_STYLE(126);
+constexpr TypedWhichId<SfxStringItem> RES_FRMATR_STYLE_NAME(127);
+constexpr TypedWhichId<SfxStringItem> RES_FRMATR_CONDITIONAL_STYLE_NAME(128);
+constexpr TypedWhichId<SfxGrabBagItem> RES_FRMATR_GRABBAG(129);
+constexpr TypedWhichId<SdrTextVertAdjustItem> RES_TEXT_VERT_ADJUST(130);
 constexpr sal_uInt16 RES_FRMATR_END(131);
 
 constexpr sal_uInt16 RES_GRFATR_BEGIN(RES_FRMATR_END);
-constexpr TypedWhichId<SwMirrorGrf> RES_GRFATR_MIRRORGRF (RES_GRFATR_BEGIN); // 131
-constexpr TypedWhichId<SwCropGrf> RES_GRFATR_CROPGRF (132);
+constexpr TypedWhichId<SwMirrorGrf> RES_GRFATR_MIRRORGRF(RES_GRFATR_BEGIN); // 131
+constexpr TypedWhichId<SwCropGrf> RES_GRFATR_CROPGRF(132);
 
-constexpr TypedWhichId<SwRotationGrf> RES_GRFATR_ROTATION (133);
-constexpr TypedWhichId<SwLuminanceGrf> RES_GRFATR_LUMINANCE (134);
-constexpr TypedWhichId<SwContrastGrf> RES_GRFATR_CONTRAST (135);
-constexpr TypedWhichId<SwChannelRGrf> RES_GRFATR_CHANNELR (136);
-constexpr TypedWhichId<SwChannelGGrf> RES_GRFATR_CHANNELG (137);
-constexpr TypedWhichId<SwChannelBGrf> RES_GRFATR_CHANNELB (138);
-constexpr TypedWhichId<SwGammaGrf> RES_GRFATR_GAMMA (139);
-constexpr TypedWhichId<SwInvertGrf> RES_GRFATR_INVERT (140);
-constexpr TypedWhichId<SwTransparencyGrf> RES_GRFATR_TRANSPARENCY (141);
-constexpr TypedWhichId<SwDrawModeGrf> RES_GRFATR_DRAWMODE (142);
+constexpr TypedWhichId<SwRotationGrf> RES_GRFATR_ROTATION(133);
+constexpr TypedWhichId<SwLuminanceGrf> RES_GRFATR_LUMINANCE(134);
+constexpr TypedWhichId<SwContrastGrf> RES_GRFATR_CONTRAST(135);
+constexpr TypedWhichId<SwChannelRGrf> RES_GRFATR_CHANNELR(136);
+constexpr TypedWhichId<SwChannelGGrf> RES_GRFATR_CHANNELG(137);
+constexpr TypedWhichId<SwChannelBGrf> RES_GRFATR_CHANNELB(138);
+constexpr TypedWhichId<SwGammaGrf> RES_GRFATR_GAMMA(139);
+constexpr TypedWhichId<SwInvertGrf> RES_GRFATR_INVERT(140);
+constexpr TypedWhichId<SwTransparencyGrf> RES_GRFATR_TRANSPARENCY(141);
+constexpr TypedWhichId<SwDrawModeGrf> RES_GRFATR_DRAWMODE(142);
 
-constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY1 (143);
-constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY2 (144);
-constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY3 (145);
-constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY4 (146);
-constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY5 (147);
+constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY1(143);
+constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY2(144);
+constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY3(145);
+constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY4(146);
+constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY5(147);
 constexpr sal_uInt16 RES_GRFATR_END(148);
 
 constexpr sal_uInt16 RES_BOXATR_BEGIN(RES_GRFATR_END);
-constexpr TypedWhichId<SwTableBoxNumFormat> RES_BOXATR_FORMAT (RES_BOXATR_BEGIN); // 148
-constexpr TypedWhichId<SwTableBoxFormula> RES_BOXATR_FORMULA (149);
-constexpr TypedWhichId<SwTableBoxValue> RES_BOXATR_VALUE (150);
+constexpr TypedWhichId<SwTableBoxNumFormat> RES_BOXATR_FORMAT(RES_BOXATR_BEGIN); // 148
+constexpr TypedWhichId<SwTableBoxFormula> RES_BOXATR_FORMULA(149);
+constexpr TypedWhichId<SwTableBoxValue> RES_BOXATR_VALUE(150);
 constexpr sal_uInt16 RES_BOXATR_END(151);
 
 constexpr sal_uInt16 RES_UNKNOWNATR_BEGIN(RES_BOXATR_END);
-constexpr TypedWhichId<SvXMLAttrContainerItem> RES_UNKNOWNATR_CONTAINER (RES_UNKNOWNATR_BEGIN);// 151
+constexpr TypedWhichId<SvXMLAttrContainerItem>
+    RES_UNKNOWNATR_CONTAINER(RES_UNKNOWNATR_BEGIN); // 151
 constexpr sal_uInt16 RES_UNKNOWNATR_END(152);
 
 constexpr sal_uInt16 POOLATTR_END(RES_UNKNOWNATR_END);
 
 // Format IDs
 constexpr sal_uInt16 RES_FMT_BEGIN(RES_UNKNOWNATR_END);
-constexpr TypedWhichId<SwCharFormat> RES_CHRFMT (RES_FMT_BEGIN);  // 152
-constexpr TypedWhichId<SwFrameFormat> RES_FRMFMT (153);
-constexpr TypedWhichId<SwFlyFrameFormat> RES_FLYFRMFMT (154);
-constexpr TypedWhichId<SwTextFormatColl> RES_TXTFMTCOLL (155);
-constexpr TypedWhichId<SwGrfFormatColl> RES_GRFFMTCOLL (156);
-constexpr TypedWhichId<SwDrawFrameFormat> RES_DRAWFRMFMT (157);
-constexpr TypedWhichId<SwConditionTextFormatColl> RES_CONDTXTFMTCOLL (158);
+constexpr TypedWhichId<SwCharFormat> RES_CHRFMT(RES_FMT_BEGIN); // 152
+constexpr TypedWhichId<SwFrameFormat> RES_FRMFMT(153);
+constexpr TypedWhichId<SwFlyFrameFormat> RES_FLYFRMFMT(154);
+constexpr TypedWhichId<SwTextFormatColl> RES_TXTFMTCOLL(155);
+constexpr TypedWhichId<SwGrfFormatColl> RES_GRFFMTCOLL(156);
+constexpr TypedWhichId<SwDrawFrameFormat> RES_DRAWFRMFMT(157);
+constexpr TypedWhichId<SwConditionTextFormatColl> RES_CONDTXTFMTCOLL(158);
 constexpr sal_uInt16 RES_FMT_END(159);
 
 // ID's for Messages in the Formats
 constexpr sal_uInt16 RES_MSG_BEGIN(RES_FMT_END);
-constexpr TypedWhichId<SwPtrMsgPoolItem> RES_OBJECTDYING (RES_MSG_BEGIN);                // 159
-constexpr TypedWhichId<SwFormatChg> RES_FMT_CHG (160);
-constexpr TypedWhichId<SwAttrSetChg> RES_ATTRSET_CHG (161);
-constexpr TypedWhichId<SwInsText> RES_INS_TXT (162);
-constexpr TypedWhichId<SwDelChr> RES_DEL_CHR (163);
-constexpr TypedWhichId<SwDelText> RES_DEL_TXT (164);
-constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR (165);
-constexpr TypedWhichId<SwRefMarkFieldUpdate> RES_REFMARKFLD_UPDATE (166);
-constexpr TypedWhichId<SwDocPosUpdate> RES_DOCPOS_UPDATE (167);
-constexpr TypedWhichId<SwTableFormulaUpdate> RES_TABLEFML_UPDATE (168);
-constexpr TypedWhichId<SwMsgPoolItem> RES_UPDATEDDETBL (169);
-constexpr TypedWhichId<SwMsgPoolItem> RES_TBLHEADLINECHG (170);
-constexpr TypedWhichId<SwAutoFormatGetDocNode> RES_AUTOFMT_DOCNODE (171);
-constexpr TypedWhichId<SwMsgPoolItem> RES_SECTION_HIDDEN (172);
-constexpr TypedWhichId<SwMsgPoolItem> RES_SECTION_NOT_HIDDEN (173);
-constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_PIECE_ARRIVED (175);
-constexpr TypedWhichId<SwMsgPoolItem> RES_HIDDENPARA_PRINT (176);
-constexpr TypedWhichId<SwVirtPageNumInfo> RES_VIRTPAGENUM_INFO (178);
-constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REMOVE_UNO_OBJECT (179);
+constexpr TypedWhichId<SwPtrMsgPoolItem> RES_OBJECTDYING(RES_MSG_BEGIN); // 159
+constexpr TypedWhichId<SwFormatChg> RES_FMT_CHG(160);
+constexpr TypedWhichId<SwAttrSetChg> RES_ATTRSET_CHG(161);
+constexpr TypedWhichId<SwInsText> RES_INS_TXT(162);
+constexpr TypedWhichId<SwDelChr> RES_DEL_CHR(163);
+constexpr TypedWhichId<SwDelText> RES_DEL_TXT(164);
+constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR(165);
+constexpr TypedWhichId<SwRefMarkFieldUpdate> RES_REFMARKFLD_UPDATE(166);
+constexpr TypedWhichId<SwDocPosUpdate> RES_DOCPOS_UPDATE(167);
+constexpr TypedWhichId<SwTableFormulaUpdate> RES_TABLEFML_UPDATE(168);
+constexpr TypedWhichId<SwMsgPoolItem> RES_UPDATEDDETBL(169);
+constexpr TypedWhichId<SwMsgPoolItem> RES_TBLHEADLINECHG(170);
+constexpr TypedWhichId<SwAutoFormatGetDocNode> RES_AUTOFMT_DOCNODE(171);
+constexpr TypedWhichId<SwMsgPoolItem> RES_SECTION_HIDDEN(172);
+constexpr TypedWhichId<SwMsgPoolItem> RES_SECTION_NOT_HIDDEN(173);
+constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_PIECE_ARRIVED(175);
+constexpr TypedWhichId<SwMsgPoolItem> RES_HIDDENPARA_PRINT(176);
+constexpr TypedWhichId<SwVirtPageNumInfo> RES_VIRTPAGENUM_INFO(178);
+constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REMOVE_UNO_OBJECT(179);
 // empty
-constexpr TypedWhichId<SwFindNearestNode> RES_FINDNEARESTNODE (182);
-constexpr TypedWhichId<SwPtrMsgPoolItem> RES_CONTENT_VISIBLE (183);
-constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_SWAPIN (184);
-constexpr TypedWhichId<SwStringMsgPoolItem> RES_NAME_CHANGED (185);
-constexpr TypedWhichId<SwStringMsgPoolItem> RES_TITLE_CHANGED (186);
-constexpr TypedWhichId<SwStringMsgPoolItem> RES_DESCRIPTION_CHANGED (187);
-constexpr TypedWhichId<SwMsgPoolItem> RES_LINKED_GRAPHIC_STREAM_ARRIVED (187);
+constexpr TypedWhichId<SwFindNearestNode> RES_FINDNEARESTNODE(182);
+constexpr TypedWhichId<SwPtrMsgPoolItem> RES_CONTENT_VISIBLE(183);
+constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_SWAPIN(184);
+constexpr TypedWhichId<SwStringMsgPoolItem> RES_NAME_CHANGED(185);
+constexpr TypedWhichId<SwStringMsgPoolItem> RES_TITLE_CHANGED(186);
+constexpr TypedWhichId<SwStringMsgPoolItem> RES_DESCRIPTION_CHANGED(187);
+constexpr TypedWhichId<SwMsgPoolItem> RES_LINKED_GRAPHIC_STREAM_ARRIVED(187);
 constexpr sal_uInt16 RES_MSG_END(188);
 
 // An ID for the RTF-reader. The stylesheets are treated like attributes,
 // i.e. there is a StyleSheet-attribute. To avoid collision with other
 // Which()-values, the value is listed here. (The help system too defines
 // new attributes!)
-constexpr sal_uInt16     RES_FLTRATTR_BEGIN(RES_MSG_END);
-constexpr TypedWhichId<SfxStringItem> RES_FLTR_BOOKMARK (RES_FLTRATTR_BEGIN);
-constexpr TypedWhichId<SwFltAnchor> RES_FLTR_ANCHOR (189);
-constexpr TypedWhichId<SfxStringItem> RES_FLTR_NUMRULE (190);
-constexpr TypedWhichId<SwFltTOX> RES_FLTR_TOX (191);
-constexpr TypedWhichId<SwFltRedline> RES_FLTR_REDLINE (192);
-constexpr TypedWhichId<CntUInt16Item> RES_FLTR_ANNOTATIONMARK (193);
-constexpr TypedWhichId<SwFltRDFMark> RES_FLTR_RDFMARK (194);
-constexpr sal_uInt16     RES_FLTRATTR_END(195);
+constexpr sal_uInt16 RES_FLTRATTR_BEGIN(RES_MSG_END);
+constexpr TypedWhichId<SfxStringItem> RES_FLTR_BOOKMARK(RES_FLTRATTR_BEGIN);
+constexpr TypedWhichId<SwFltAnchor> RES_FLTR_ANCHOR(189);
+constexpr TypedWhichId<SfxStringItem> RES_FLTR_NUMRULE(190);
+constexpr TypedWhichId<SwFltTOX> RES_FLTR_TOX(191);
+constexpr TypedWhichId<SwFltRedline> RES_FLTR_REDLINE(192);
+constexpr TypedWhichId<CntUInt16Item> RES_FLTR_ANNOTATIONMARK(193);
+constexpr TypedWhichId<SwFltRDFMark> RES_FLTR_RDFMARK(194);
+constexpr sal_uInt16 RES_FLTRATTR_END(195);
 
 constexpr sal_uInt16 RES_TBX_DUMMY(RES_FLTRATTR_END + 1);
 
@@ -470,13 +472,11 @@ inline bool isCHRATR(const sal_uInt16 nWhich)
 }
 inline bool isTXTATR_WITHEND(const sal_uInt16 nWhich)
 {
-    return (RES_TXTATR_WITHEND_BEGIN <= nWhich)
-        && (RES_TXTATR_WITHEND_END > nWhich);
+    return (RES_TXTATR_WITHEND_BEGIN <= nWhich) && (RES_TXTATR_WITHEND_END > nWhich);
 }
 inline bool isTXTATR_NOEND(const sal_uInt16 nWhich)
 {
-    return (RES_TXTATR_NOEND_BEGIN <= nWhich)
-        && (RES_TXTATR_NOEND_END > nWhich);
+    return (RES_TXTATR_NOEND_BEGIN <= nWhich) && (RES_TXTATR_NOEND_END > nWhich);
 }
 inline bool isTXTATR(const sal_uInt16 nWhich)
 {
@@ -522,26 +522,28 @@ struct SfxItemInfo;
 typedef std::vector<SfxPoolItem*> SwDfltAttrTab;
 
 extern SwDfltAttrTab aAttrTab;
-extern SfxItemInfo   aSlotTab[];
+extern SfxItemInfo aSlotTab[];
 
 /** Get the default attribute from corresponding default attribute table.
 
     @param[in] nWhich Position in table
     @return Attribute if found, null pointer otherwise
 */
-SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich );
+SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr(sal_uInt16 nWhich);
 
-template<class T> inline const T* GetDfltAttr( TypedWhichId<T> nWhich )
-{ return static_cast<const T*>(GetDfltAttr(sal_uInt16(nWhich))); }
+template <class T> inline const T* GetDfltAttr(TypedWhichId<T> nWhich)
+{
+    return static_cast<const T*>(GetDfltAttr(sal_uInt16(nWhich)));
+}
 
-SW_DLLPUBLIC sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript );
+SW_DLLPUBLIC sal_uInt16 GetWhichOfScript(sal_uInt16 nWhich, sal_uInt16 nScript);
 
 // return for the given TextAttribute without an end the correct character.
 // This function returns
 //      CH_TXTATR_BREAKWORD for Textattribute which breaks a word (default)
 //      CH_TXTATR_INWORD    for Textattribute which doesn't breaks a word
 class SwTextAttr;
-sal_Unicode GetCharOfTextAttr( const SwTextAttr& rAttr );
+sal_Unicode GetCharOfTextAttr(const SwTextAttr& rAttr);
 
 // all Sets defined in init.cxx
 
@@ -571,7 +573,7 @@ extern sal_uInt16 const aCharAutoFormatSetRange[];
 extern sal_uInt16 const aPgFrameFormatSetRange[];
 
 // check if ID is InRange of AttrSet-Ids
-bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId );
+bool IsInRange(const sal_uInt16* pRange, const sal_uInt16 nId);
 
 #endif
 

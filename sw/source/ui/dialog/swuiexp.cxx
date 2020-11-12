@@ -23,19 +23,18 @@
 
 namespace swui
 {
-    SwAbstractDialogFactory& GetFactory()
-    {
-        static SwAbstractDialogFactory_Impl aFactory;
-        return aFactory;
-    }
+SwAbstractDialogFactory& GetFactory()
+{
+    static SwAbstractDialogFactory_Impl aFactory;
+    return aFactory;
+}
 }
 
-extern "C"
+extern "C" {
+SAL_DLLPUBLIC_EXPORT SwAbstractDialogFactory* SwCreateDialogFactory()
 {
-    SAL_DLLPUBLIC_EXPORT SwAbstractDialogFactory* SwCreateDialogFactory()
-    {
-        return &::swui::GetFactory();
-    }
+    return &::swui::GetFactory();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

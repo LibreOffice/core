@@ -45,9 +45,9 @@ public:
         optional parameter - pointer to a fly frame of the given fly frame format,
         which isn't deleted, if re-creation of fly frames is necessary.
     */
-    SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat,
-                           const SwFormatAnchor& _rNewAnchorFormat,
-                           SwFlyFrame const * _pKeepThisFlyFrame = nullptr );
+    SwHandleAnchorNodeChg(SwFlyFrameFormat& _rFlyFrameFormat,
+                          const SwFormatAnchor& _rNewAnchorFormat,
+                          SwFlyFrame const* _pKeepThisFlyFrame = nullptr);
 
     /** calls <SwFlyFrameFormat::MakeFrames>, if re-creation of fly frames is necessary. */
     ~SwHandleAnchorNodeChg() COVERITY_NOEXCEPT_FALSE;
@@ -64,8 +64,8 @@ private:
 
     SwWrtShell* mpWrtShell;
 
-    SwHandleAnchorNodeChg( const SwHandleAnchorNodeChg& ) = delete;
-    void operator=( const SwHandleAnchorNodeChg ) = delete;
+    SwHandleAnchorNodeChg(const SwHandleAnchorNodeChg&) = delete;
+    void operator=(const SwHandleAnchorNodeChg) = delete;
 };
 #endif
 

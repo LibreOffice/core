@@ -22,9 +22,9 @@
 
 class SwPaM;
 
-bool sw_JoinText( SwPaM& rPam, bool bJoinPrev );
+bool sw_JoinText(SwPaM& rPam, bool bJoinPrev);
 
-void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev );
+void sw_GetJoinFlags(SwPaM& rPam, bool& rJoinText, bool& rJoinPrev);
 
 #endif
 

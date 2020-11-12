@@ -24,10 +24,10 @@
 // draw rectangle
 class DrawSelection : public SwDrawBase
 {
- public:
+public:
     DrawSelection(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
-    virtual void Activate(const sal_uInt16 nSlotId) override;    // activate function
+    virtual void Activate(const sal_uInt16 nSlotId) override; // activate function
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_DSELECT_HXX

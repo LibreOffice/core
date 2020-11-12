@@ -28,36 +28,36 @@
 #include <cppuhelper/implbase.hxx>
 #include <vbahelper/vbaglobalbase.hxx>
 
-typedef ::cppu::ImplInheritanceHelper< VbaGlobalsBase, ov::word::XGlobals > SwVbaGlobals_BASE;
+typedef ::cppu::ImplInheritanceHelper<VbaGlobalsBase, ov::word::XGlobals> SwVbaGlobals_BASE;
 
 class SwVbaGlobals : public SwVbaGlobals_BASE
 {
 private:
-    css::uno::Reference< ooo::vba::word::XApplication > mxApplication;
+    css::uno::Reference<ooo::vba::word::XApplication> mxApplication;
 
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< ooo::vba::word::XApplication > const & getApplication();
+    css::uno::Reference<ooo::vba::word::XApplication> const& getApplication();
 
 public:
-
-    SwVbaGlobals( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& rxContext );
+    SwVbaGlobals(css::uno::Sequence<css::uno::Any> const& aArgs,
+                 css::uno::Reference<css::uno::XComponentContext> const& rxContext);
     virtual ~SwVbaGlobals() override;
 
     // XGlobals
     virtual OUString SAL_CALL getName() override;
-    virtual css::uno::Reference< ooo::vba::word::XSystem > SAL_CALL getSystem() override;
-    virtual css::uno::Reference< ov::word::XDocument > SAL_CALL getActiveDocument() override;
-    virtual css::uno::Reference< ov::word::XWindow > SAL_CALL getActiveWindow() override;
-    virtual css::uno::Reference< ooo::vba::word::XOptions > SAL_CALL getOptions() override;
-    virtual css::uno::Reference< ooo::vba::word::XSelection > SAL_CALL getSelection() override;
-    virtual css::uno::Any SAL_CALL CommandBars( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Documents( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Addins( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL Dialogs( const css::uno::Any& aIndex ) override;
-    virtual css::uno::Any SAL_CALL ListGalleries( const css::uno::Any& aIndex ) override;
-    virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
+    virtual css::uno::Reference<ooo::vba::word::XSystem> SAL_CALL getSystem() override;
+    virtual css::uno::Reference<ov::word::XDocument> SAL_CALL getActiveDocument() override;
+    virtual css::uno::Reference<ov::word::XWindow> SAL_CALL getActiveWindow() override;
+    virtual css::uno::Reference<ooo::vba::word::XOptions> SAL_CALL getOptions() override;
+    virtual css::uno::Reference<ooo::vba::word::XSelection> SAL_CALL getSelection() override;
+    virtual css::uno::Any SAL_CALL CommandBars(const css::uno::Any& aIndex) override;
+    virtual css::uno::Any SAL_CALL Documents(const css::uno::Any& aIndex) override;
+    virtual css::uno::Any SAL_CALL Addins(const css::uno::Any& aIndex) override;
+    virtual css::uno::Any SAL_CALL Dialogs(const css::uno::Any& aIndex) override;
+    virtual css::uno::Any SAL_CALL ListGalleries(const css::uno::Any& aIndex) override;
+    virtual float SAL_CALL CentimetersToPoints(float Centimeters) override;
     // XMultiServiceFactory
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getAvailableServiceNames() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

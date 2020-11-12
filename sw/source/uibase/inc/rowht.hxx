@@ -25,7 +25,7 @@ class SwWrtShell;
 
 class SwTableHeightDlg : public weld::GenericDialogController
 {
-    SwWrtShell &m_rSh;
+    SwWrtShell& m_rSh;
 
     std::unique_ptr<weld::MetricSpinButton> m_xHeightEdit;
     std::unique_ptr<weld::CheckButton> m_xAutoHeightCB;
@@ -34,7 +34,7 @@ private:
     void Apply();
 
 public:
-    SwTableHeightDlg(weld::Window *pParent, SwWrtShell &rS);
+    SwTableHeightDlg(weld::Window* pParent, SwWrtShell& rS);
     virtual short run() override;
 };
 
