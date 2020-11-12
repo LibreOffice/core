@@ -118,6 +118,8 @@
 #include <libxml/xmlwriter.h>
 #include <memory>
 
+#include <svx/scene3d.hxx>
+
 using namespace ::com::sun::star;
 
 
@@ -3006,7 +3008,20 @@ void SdrObject::MakeNameUnique()
 void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
 {
     if (GetName().isEmpty())
-        return;
+    {
+        if (const E3dScene* pE3dObj = dynamic_cast<const E3dScene*>(this))
+        {
+            SdrObjList* pObjList = pE3dObj->GetSubList();
+            if (pObjList)
+            {
+                SdrObject* pObj0 = pObjList->GetObj(0);
+                if (pObj0)
+                    SetName(pObj0->TakeObjNameSingul());
+            }
+        }
+        else
+            SetName(TakeObjNameSingul());
+    }
 
     if (rNameSet.empty())
     {

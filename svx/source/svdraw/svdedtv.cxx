@@ -1001,6 +1001,10 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
         EndTextEditAllViews();
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
     }
+    const bool bUndo(IsUndoEnabled());
+    GetModel()->EnableUndo(false);
+    pObj->MakeNameUnique();
+    GetModel()->EnableUndo(bUndo);
 
     if (!(nOptions & SdrInsertFlags::DONTMARK)) {
         if (!(nOptions & SdrInsertFlags::ADDMARK)) UnmarkAllObj();

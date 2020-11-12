@@ -714,7 +714,10 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 
     if (pSvxShape->GetSdrObject()->GetName().isEmpty())
     {
-        pSvxShape->GetSdrObject()->SetName(m_pDoc->GetUniqueShapeName());
+        //bool bUndo = m_pDoc->GetIDocumentUndoRedo().DoesDrawUndo();
+        //m_pDoc->GetIDocumentUndoRedo().DoDrawUndo(false);
+        pSvxShape->GetSdrObject()->MakeNameUnique();
+        //m_pDoc->GetIDocumentUndoRedo().DoDrawUndo(bUndo);
     }
 
     SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
