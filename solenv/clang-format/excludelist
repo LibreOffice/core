@@ -7897,9 +7897,7 @@ oox/source/vml/vmlshapecontainer.cxx
 oox/source/vml/vmlshapecontext.cxx
 oox/source/vml/vmltextbox.cxx
 oox/source/vml/vmltextboxcontext.cxx
-opencl/inc/opencl_device.hxx
 opencl/inc/opencl_device_selection.h
-opencl/source/OpenCLZone.cxx
 opencl/source/opencl_device.cxx
 opencl/source/openclconfig.cxx
 opencl/source/openclwrapper.cxx
