@@ -304,6 +304,8 @@ public class TestComponent {
         private float    _float;
         private double   _double;
         private String   _string;
+        private byte     _byte2;
+        private short    _short2;
         private Object   _xInterface;
         private Object   _any;
         private TestEnum _testEnum = TestEnum.TEST;
@@ -353,6 +355,8 @@ public class TestComponent {
                               double           fDouble,
                               TestEnum         testEnum,
                               String           string,
+                              byte             nByte2,
+                              short            nShort2,
                               Object           xInterface,
                               Object           any,
                               TestElement      testElements[],
@@ -373,6 +377,8 @@ public class TestComponent {
             _double           = fDouble;
             _testEnum         = testEnum;
             _string           = string;
+            _byte2            = nByte2;
+            _short2           = nShort2;
             _xInterface       = xInterface;
             _any              = any;
             _testElements     = testElements;
@@ -394,6 +400,8 @@ public class TestComponent {
                                            /*INOUT*/double[]           io_double,
                                            /*INOUT*/TestEnum[]         io_testEnum,
                                            /*INOUT*/String[]           io_string,
+                                           /*INOUT*/byte[]             io_byte2,
+                                           /*INOUT*/short[]            io_short2,
                                            /*INOUT*/Object[]           io_xInterface,
                                            /*INOUT*/Object[]           io_any,
                                            /*INOUT*/TestElement[][]    io_testElements,
@@ -414,6 +422,8 @@ public class TestComponent {
             _double           = io_double[0];
             _testEnum         = io_testEnum[0];
             _string           = io_string[0];
+            _byte2            = io_byte2[0];
+            _short2           = io_short2[0];
             _xInterface       = io_xInterface[0];
             _any              = io_any[0];
             _testElements     = io_testElements[0];
@@ -438,6 +448,8 @@ public class TestComponent {
                                           /*OUT*/double[]           o_double,
                                           /*OUT*/TestEnum[]         o_testEnum,
                                           /*OUT*/String[]           o_string,
+                                          /*OUT*/byte[]             o_byte2,
+                                          /*OUT*/short[]            o_short2,
                                           /*OUT*/Object[]           o_xInterface,
                                           /*OUT*/Object[]           o_any,
                                           /*OUT*/TestElement[][]    o_testElements,
@@ -458,7 +470,9 @@ public class TestComponent {
             o_double[0]           = _double;
             o_testEnum[0]         = _testEnum;
             o_string[0]           = _string;
-              o_xInterface[0]       = _xInterface;
+            o_byte2[0]            = _byte2;
+            o_short2[0]            = _short2;
+            o_xInterface[0]       = _xInterface;
             o_any[0]              = _any;
             o_testElements[0]     = _testElements;
             o_testDataElements[0] = _testDataElements;
@@ -609,6 +623,22 @@ public class TestComponent {
 
         public void setString(String string) throws com.sun.star.uno.RuntimeException {
             _string = string;
+        }
+
+        public byte getByte2() throws com.sun.star.uno.RuntimeException {
+            return _byte2;
+        }
+
+        public void setByte2(byte zbyte) throws com.sun.star.uno.RuntimeException {
+            _byte2 = zbyte;
+        }
+
+        public short getShort2() throws com.sun.star.uno.RuntimeException {
+            return _short2;
+        }
+
+        public void setShort2(short zshort) throws com.sun.star.uno.RuntimeException {
+            _short2 = zshort;
         }
 
         public Object getInterface() throws com.sun.star.uno.RuntimeException {

@@ -135,6 +135,8 @@ static bool equals( const TestElement & rData1, const TestElement & rData2 )
     check( rData1.Double == rData2.Double, "### double does not match!" );
     check( rData1.Enum == rData2.Enum, "### enum does not match!" );
     check( rData1.String == rData2.String, "### string does not match!" );
+    check( rData1.Byte2 == rData2.Byte2, "### byte2 does not match!" );
+    check( rData1.Short2 == rData2.Short2, "### short2 does not match!" );
     check( rData1.Interface == rData2.Interface, "### interface does not match!" );
     check( rData1.Any == rData2.Any, "### any does not match!" );
 
@@ -151,6 +153,8 @@ static bool equals( const TestElement & rData1, const TestElement & rData2 )
             rData1.Double == rData2.Double &&
             rData1.Enum == rData2.Enum &&
             rData1.String == rData2.String &&
+            rData1.Byte2 == rData2.Byte2 &&
+            rData1.Short2 == rData2.Short2 &&
             rData1.Interface == rData2.Interface &&
             rData1.Any == rData2.Any);
 }
@@ -189,6 +193,7 @@ static void assign( TestElement & rData,
                     sal_Int64 nHyper, sal_uInt64 nUHyper,
                     float fFloat, double fDouble,
                     TestEnum eEnum, const OUString& rStr,
+                    sal_Int8 nByte2, sal_Int16 nShort2,
                     const css::uno::Reference< css::uno::XInterface >& xTest,
                     const css::uno::Any& rAny )
 {
@@ -205,6 +210,8 @@ static void assign( TestElement & rData,
     rData.Double = fDouble;
     rData.Enum = eEnum;
     rData.String = rStr;
+    rData.Byte2 = nByte2;
+    rData.Short2 = nShort2;
     rData.Interface = xTest;
     rData.Any = rAny;
 }
@@ -261,6 +268,8 @@ static bool performAnyTest( const Reference< XBridgeTest > &xLBT, const TestData
     bReturn = testAny( data.Double,xLBT ) && bReturn;
     bReturn = testAny( data.Enum,xLBT ) && bReturn;
     bReturn = testAny( data.String,xLBT ) && bReturn;
+    bReturn = testAny( data.Byte2 ,xLBT ) && bReturn;
+    bReturn = testAny( data.Short2,xLBT ) && bReturn;
     bReturn = testAny( data.Interface,xLBT ) && bReturn;
     bReturn = testAny( data, xLBT ) && bReturn;
     bReturn &= testAny(
@@ -365,7 +374,7 @@ static bool performTest(
             static_cast<TestElement &>(aData), true, '@', 17, 0x1234, 0xFEDC,
             0x12345678, 0xFEDCBA98, SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
-            TestEnum_LOLA, STRING_TEST_CONSTANT, xI,
+            TestEnum_LOLA, STRING_TEST_CONSTANT, 18, 0x5678, xI,
             Any(&xI, cppu::UnoType<XInterface>::get()));
         bRet &= check(aData.Any == xI, "### unexpected any!");
         bRet &= check(!(aData.Any != xI), "### unexpected any!");
@@ -378,7 +387,7 @@ static bool performTest(
             static_cast<TestElement &>(aSetData), aData.Bool, aData.Char,
             aData.Byte, aData.Short, aData.UShort, aData.Long, aData.ULong,
             aData.Hyper, aData.UHyper, aData.Float, aData.Double, aData.Enum,
-            aData.String, xI, Any(&xI, cppu::UnoType<XInterface>::get()));
+            aData.String, aData.Byte2, aData.Short2, xI, Any(&xI, cppu::UnoType<XInterface>::get()));
         aSetData.Sequence.realloc(2);
         aSetData.Sequence[0] = *static_cast<TestElement const *>(&aSetData);
         // aSetData.Sequence[1] is empty
@@ -396,6 +405,8 @@ static bool performTest(
             aSetData.Double,
             aSetData.Enum,
             aSetData.String,
+            aSetData.Byte2,
+            aSetData.Short2,
             aSetData.Interface,
             aSetData.Any,
             aSetData.Sequence,
@@ -417,6 +428,8 @@ static bool performTest(
                 aRet.Double,
                 aRet.Enum,
                 aRet.String,
+                aRet.Byte2,
+                aRet.Short2,
                 aRet.Interface,
                 aRet.Any,
                 aRet.Sequence,
@@ -439,6 +452,8 @@ static bool performTest(
                     aRet.Double,
                     aRet.Enum,
                     aRet.String,
+                    aRet.Byte2,
+                    aRet.Short2,
                     aRet.Interface,
                     aRet.Any,
                     aRet.Sequence,
@@ -490,6 +505,8 @@ static bool performTest(
                     aRet.Double,
                     aRet.Enum,
                     aRet.String,
+                    aRet.Byte2,
+                    aRet.Short2,
                     aRet.Interface,
                     aRet.Any,
                     aRet.Sequence,
@@ -512,6 +529,8 @@ static bool performTest(
             xLBT->setDouble(aRet.Double);
             xLBT->setEnum(aRet.Enum);
             xLBT->setString(aRet.String);
+            xLBT->setByte2(aRet.Byte2);
+            xLBT->setShort2(aRet.Short2);
             xLBT->setInterface(aRet.Interface);
             xLBT->setAny(aRet.Any);
             xLBT->setSequence(aRet.Sequence);
@@ -532,6 +551,8 @@ static bool performTest(
             aRet.ULong = xLBT->getULong();
             aRet.Enum = xLBT->getEnum();
             aRet.String = xLBT->getString();
+            aRet.Byte2 = xLBT->getByte2();
+            aRet.Short2 = xLBT->getShort2();
             aRet.Interface = xLBT->getInterface();
             aRet.Any = xLBT->getAny();
             aRet.Sequence = xLBT->getSequence();
@@ -692,19 +713,19 @@ static bool performTest(
             _arStruct[0], true, '@', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
             SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
-            TestEnum_LOLA, STRING_TEST_CONSTANT, _arObj[0],
+            TestEnum_LOLA, STRING_TEST_CONSTANT, 18, 0x5678, _arObj[0],
             Any(&_arObj[0], cppu::UnoType<XInterface>::get()));
         assign(
             _arStruct[1], true, 'A', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
             SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
-            TestEnum_TWO, STRING_TEST_CONSTANT, _arObj[1],
+            TestEnum_TWO, STRING_TEST_CONSTANT, 18, 0x5678, _arObj[1],
             Any(&_arObj[1], cppu::UnoType<XInterface>::get()));
         assign(
             _arStruct[2], true, 'B', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
             SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
-            TestEnum_CHECK, STRING_TEST_CONSTANT, _arObj[2],
+            TestEnum_CHECK, STRING_TEST_CONSTANT, 18, 0x5678, _arObj[2],
             Any(&_arObj[2], cppu::UnoType<XInterface>::get()));
         {
             Sequence<sal_Bool> arBool({true, false, true});
