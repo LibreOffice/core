@@ -16,6 +16,7 @@
 #include <memory>
 #include <sal/log.hxx>
 
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
@@ -206,7 +207,50 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.endElement();
             }
             break;
+            case PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D:
+            {
+                const PointArrayPrimitive2D& rPointArrayPrimitive2D = dynamic_cast<const PointArrayPrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("pointarray");
 
+                rWriter.attribute("color", convertColorToString(rPointArrayPrimitive2D.getRGBColor()));
+
+                const std::vector< basegfx::B2DPoint > aPositions = rPointArrayPrimitive2D.getPositions();
+                for (std::vector<basegfx::B2DPoint>::const_iterator iter = aPositions.begin(); iter != aPositions.end(); ++iter)
+                {
+                    rWriter.startElement("point");
+                    rWriter.attribute("x", OUString::number(iter->getX()));
+                    rWriter.attribute("y", OUString::number(iter->getY()));
+                    rWriter.endElement();
+                }
+
+                rWriter.endElement();
+            }
+            break;
+            case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
+            {
+                const PolygonStrokePrimitive2D& rPolygonStrokePrimitive2D = dynamic_cast<const PolygonStrokePrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("polygonstroke");
+
+                rWriter.startElement("polygon");
+                rWriter.content(basegfx::utils::exportToSvgPoints(rPolygonStrokePrimitive2D.getB2DPolygon()));
+                rWriter.endElement();
+
+                rWriter.startElement("line");
+                const drawinglayer::attribute::LineAttribute& aLineAttribute = rPolygonStrokePrimitive2D.getLineAttribute();
+                rWriter.attribute("color", convertColorToString(aLineAttribute.getColor()));
+                rWriter.attribute("width", aLineAttribute.getWidth());
+
+                rWriter.endElement();
+
+                rWriter.startElement("stroke");
+                const drawinglayer::attribute::StrokeAttribute& aStrokeAttribute = rPolygonStrokePrimitive2D.getStrokeAttribute();
+                rWriter.attribute("fulldotdashlen", aStrokeAttribute.getFullDotDashLen());
+                //rWriter.attribute("dotdasharray", aStrokeAttribute.getDotDashArray());
+                rWriter.endElement();
+
+                rWriter.endElement();
+            }
+            break;
             case PRIMITIVE2D_ID_POLYPOLYGONSTROKEPRIMITIVE2D:
             {
                 const PolyPolygonStrokePrimitive2D& rPolyPolygonStrokePrimitive2D = dynamic_cast<const PolyPolygonStrokePrimitive2D&>(*pBasePrimitive);
@@ -434,6 +478,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 rWriter.startElement("unhandled");
                 rWriter.attribute("id", OUStringToOString(sCurrentElementTag, RTL_TEXTENCODING_UTF8));
+                rWriter.attribute("idNumber", nId);
                 drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
                 pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
                                                    drawinglayer::geometry::ViewInformation2D());
