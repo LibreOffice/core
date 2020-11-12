@@ -27,16 +27,12 @@
 #include <map>
 #include <set>
 
-
 namespace dbp
 {
+typedef std::set<OUString> StringBag;
+typedef std::map<sal_uInt32, OUString> MapInt2String;
 
-
-    typedef std::set<OUString> StringBag;
-    typedef std::map<sal_uInt32, OUString> MapInt2String;
-
-
-}   // namespace dbp
+} // namespace dbp
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPTYPES_HXX
 

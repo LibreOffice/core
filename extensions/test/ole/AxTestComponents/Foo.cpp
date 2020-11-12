@@ -20,21 +20,11 @@
 #include "stdafx.h"
 #include "Foo.h"
 
-
-
 // CBasic
-CFoo::CFoo()
-{
-}
+CFoo::CFoo() {}
 
-CFoo::~CFoo()
-{
+CFoo::~CFoo() {}
 
-}
-
-STDMETHODIMP CFoo::Foo(IUnknown *pVal)
-{
-    return S_OK;
-}
+STDMETHODIMP CFoo::Foo(IUnknown* pVal) { return S_OK; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

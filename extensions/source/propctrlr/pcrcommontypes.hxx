@@ -25,17 +25,11 @@
 
 #include <unordered_map>
 
-
 namespace pcr
 {
-
-
-    typedef std::unordered_map< OUString, css::beans::Property >
-        PropertyMap;
-
+typedef std::unordered_map<OUString, css::beans::Property> PropertyMap;
 
 } // namespace pcr
-
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX
 

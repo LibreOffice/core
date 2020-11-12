@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #define STRICT
 #define _WIN32_DCOM
 
@@ -54,8 +53,7 @@ END_OBJECT_MAP()
 
 // DLL Entry Point
 
-extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -66,7 +64,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     {
         _Module.Term();
     }
-    return TRUE;    // ok
+    return TRUE; // ok
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,10 +23,7 @@
 
 namespace pcr
 {
-    OUString PcrRes(const char* pId)
-    {
-        return Translate::get(pId, Translate::Create("pcr"));
-    }
+OUString PcrRes(const char* pId) { return Translate::get(pId, Translate::Create("pcr")); }
 
 } // namespace pcr
 
