@@ -246,11 +246,15 @@ private:
         const Context& rContext);
 
     void ShowPopupMenu (
-        const tools::Rectangle& rButtonBox,
+        weld::Menu& rMainMenu,
+        weld::Menu& rSubMenu,
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
-    VclPtr<PopupMenu> CreatePopupMenu (
+    void PopulatePopupMenus(
+        weld::Menu& rMainButton,
+        weld::Menu& rSubMenu,
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
-    DECL_LINK(OnMenuItemSelected, Menu*, bool);
+    DECL_LINK(OnMenuItemSelected, const OString&, void);
+    DECL_LINK(OnSubMenuItemSelected, const OString&, void);
     void BroadcastPropertyChange();
 
     /** The close of the deck changes the width of the child window.

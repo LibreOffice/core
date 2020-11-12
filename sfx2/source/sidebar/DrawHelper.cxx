@@ -64,14 +64,6 @@ void DrawHelper::DrawVerticalLine(vcl::RenderContext& rRenderContext, const sal_
     }
 }
 
-void DrawHelper::DrawRoundedRectangle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBox, const sal_Int32 nCornerRadius,
-                                      const Color& rBorderColor, const Color& rFillColor)
-{
-    rRenderContext.SetLineColor(rBorderColor);
-    rRenderContext.SetFillColor(rFillColor);
-    rRenderContext.DrawRect(rBox, nCornerRadius, nCornerRadius);
-}
-
 } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
