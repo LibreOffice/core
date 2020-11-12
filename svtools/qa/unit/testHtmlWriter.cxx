@@ -17,7 +17,6 @@
 
 namespace
 {
-
 OString extractFromStream(SvMemoryStream& rStream)
 {
     rStream.WriteChar('\0');
@@ -25,10 +24,9 @@ OString extractFromStream(SvMemoryStream& rStream)
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     return static_cast<const char*>(rStream.GetData());
 }
-
 }
 
-class Test: public CppUnit::TestFixture
+class Test : public CppUnit::TestFixture
 {
 };
 

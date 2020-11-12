@@ -20,14 +20,8 @@
 #include <unotools/resmgr.hxx>
 #include <svtools/svtresid.hxx>
 
-std::locale SvtResLocale()
-{
-    return Translate::Create("svt");
-}
+std::locale SvtResLocale() { return Translate::Create("svt"); }
 
-OUString SvtResId(const char* pId)
-{
-    return Translate::get(pId, SvtResLocale());
-}
+OUString SvtResId(const char* pId) { return Translate::get(pId, SvtResLocale()); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

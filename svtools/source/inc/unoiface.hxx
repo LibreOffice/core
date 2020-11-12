@@ -23,12 +23,11 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-namespace com::sun::star::util {
-    class XNumberFormatsSupplier;
+namespace com::sun::star::util
+{
+class XNumberFormatsSupplier;
 }
 
 class SvNumberFormatsSupplierObj;
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
