@@ -68,6 +68,9 @@ class TextSearch: public cppu::WeakImplHelper
     FnSrch fnForward;
     FnSrch fnBackward;
 
+    // to fix UX regression, U+0027 matches also U+2019 in non-regex search
+    bool bSearchApostrophe;
+
     // Members and methods for the normal (Boyer-Moore) search
     std::unique_ptr<TextSearchJumpTable> pJumpTable;
     std::unique_ptr<TextSearchJumpTable> pJumpTable2;
