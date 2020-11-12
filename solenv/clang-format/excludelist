@@ -7671,8 +7671,6 @@ o3tl/qa/cow_wrapper_clients.cxx
 o3tl/qa/cow_wrapper_clients.hxx
 o3tl/qa/test-cow_wrapper.cxx
 o3tl/qa/test-enumarray.cxx
-o3tl/qa/test-lru_map.cxx
-o3tl/qa/test-safeint.cxx
 o3tl/qa/test-sorted_vector.cxx
 o3tl/qa/test-span.cxx
 o3tl/qa/test-typed_flags.cxx
