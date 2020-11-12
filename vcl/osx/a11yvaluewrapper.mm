@@ -31,7 +31,7 @@ using namespace ::com::sun::star::uno;
 +(id)valueAttributeForElement:(AquaA11yWrapper *)wrapper {
     // TODO: Detect Type from Any
     if ( [ wrapper accessibleValue ] ) {
-        long value = 0;
+        sal_Int32 value = 0;
         [ wrapper accessibleValue ] -> getCurrentValue() >>= value;
         return [ NSNumber numberWithLong: value ];
     }
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 +(id)minValueAttributeForElement:(AquaA11yWrapper *)wrapper {
     // TODO: Detect Type from Any
     if ( [ wrapper accessibleValue ] ) {
-        long value = 0;
+        sal_Int32 value = 0;
         [ wrapper accessibleValue ] -> getMinimumValue() >>= value;
         return [ NSNumber numberWithLong: value ];
     }
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::uno;
 +(id)maxValueAttributeForElement:(AquaA11yWrapper *)wrapper {
     // TODO: Detect Type from Any
     if ( [ wrapper accessibleValue ] ) {
-        long value = 0;
+        sal_Int32 value = 0;
         [ wrapper accessibleValue ] -> getMaximumValue() >>= value;
         return [ NSNumber numberWithLong: value ];
     }
