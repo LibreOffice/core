@@ -28,13 +28,15 @@
 #include <osl/mutex.hxx>
 #include <salhelper/thread.hxx>
 
-namespace com::sun::star::util {
-    class XUpdatable;
+namespace com::sun::star::util
+{
+class XUpdatable;
 }
 
-namespace framework{
-
-class WakeUpThread final : public salhelper::Thread {
+namespace framework
+{
+class WakeUpThread final : public salhelper::Thread
+{
     css::uno::WeakReference<css::util::XUpdatable> updatable_;
     osl::Condition condition_;
 
@@ -44,11 +46,10 @@ class WakeUpThread final : public salhelper::Thread {
     void execute() override;
 
 public:
-    WakeUpThread(css::uno::Reference<css::util::XUpdatable> const & updatable);
+    WakeUpThread(css::uno::Reference<css::util::XUpdatable> const& updatable);
 
     void stop();
 };
-
 }
 
 #endif

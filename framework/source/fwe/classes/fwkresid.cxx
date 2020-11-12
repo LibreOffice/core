@@ -20,9 +20,6 @@
 #include <classes/fwkresid.hxx>
 #include <unotools/resmgr.hxx>
 
-OUString FwkResId(const char* pId)
-{
-    return Translate::get(pId, Translate::Create("fwk"));
-}
+OUString FwkResId(const char* pId) { return Translate::get(pId, Translate::Create("fwk")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

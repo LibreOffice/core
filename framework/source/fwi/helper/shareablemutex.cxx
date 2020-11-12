@@ -21,20 +21,19 @@
 
 namespace framework
 {
-
 ShareableMutex::ShareableMutex()
 {
     m_pMutexRef = new MutexRef;
     m_pMutexRef->acquire();
 }
 
-ShareableMutex::ShareableMutex( const ShareableMutex& rShareableMutex )
+ShareableMutex::ShareableMutex(const ShareableMutex& rShareableMutex)
 {
     m_pMutexRef = rShareableMutex.m_pMutexRef;
     m_pMutexRef->acquire();
 }
 
-ShareableMutex& ShareableMutex::operator=( const ShareableMutex& rShareableMutex )
+ShareableMutex& ShareableMutex::operator=(const ShareableMutex& rShareableMutex)
 {
     rShareableMutex.m_pMutexRef->acquire();
     m_pMutexRef->release();
@@ -42,16 +41,9 @@ ShareableMutex& ShareableMutex::operator=( const ShareableMutex& rShareableMutex
     return *this;
 }
 
-void ShareableMutex::acquire()
-{
-    m_pMutexRef->m_oslMutex.acquire();
-}
+void ShareableMutex::acquire() { m_pMutexRef->m_oslMutex.acquire(); }
 
-void ShareableMutex::release()
-{
-    m_pMutexRef->m_oslMutex.release();
-}
-
+void ShareableMutex::release() { m_pMutexRef->m_oslMutex.release(); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

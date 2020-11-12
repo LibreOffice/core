@@ -20,8 +20,8 @@
 #include <comphelper/lok.hxx>
 #include <helper/statusindicator.hxx>
 
-namespace framework{
-
+namespace framework
+{
 StatusIndicator::StatusIndicator(StatusIndicatorFactory* pFactory)
     : m_xFactory(pFactory)
     , m_nRange(100)
@@ -29,12 +29,9 @@ StatusIndicator::StatusIndicator(StatusIndicatorFactory* pFactory)
 {
 }
 
-StatusIndicator::~StatusIndicator()
-{
-}
+StatusIndicator::~StatusIndicator() {}
 
-void SAL_CALL StatusIndicator::start(const OUString& sText ,
-                                     sal_Int32       nRange)
+void SAL_CALL StatusIndicator::start(const OUString& sText, sal_Int32 nRange)
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -44,14 +41,14 @@ void SAL_CALL StatusIndicator::start(const OUString& sText ,
         comphelper::LibreOfficeKit::statusIndicatorStart();
     }
 #if !defined(IOS) && !defined(ANDROID)
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
+    css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->start(this, sText, nRange);
     }
 #else
-    (void) sText;
+    (void)sText;
 #endif
 }
 
@@ -62,7 +59,7 @@ void SAL_CALL StatusIndicator::end()
         comphelper::LibreOfficeKit::statusIndicatorFinish();
     }
 #if !defined(IOS) && !defined(ANDROID)
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
+    css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
@@ -76,7 +73,7 @@ void SAL_CALL StatusIndicator::reset()
     if (comphelper::LibreOfficeKit::isActive())
         return;
 #if !defined(IOS) && !defined(ANDROID)
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
+    css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
@@ -90,14 +87,14 @@ void SAL_CALL StatusIndicator::setText(const OUString& sText)
     if (comphelper::LibreOfficeKit::isActive())
         return;
 #if !defined(IOS) && !defined(ANDROID)
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
+    css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->setText(this, sText);
     }
 #else
-    (void) sText;
+    (void)sText;
 #endif
 }
 
@@ -107,7 +104,7 @@ void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
     {
         if (m_nRange > 0)
         {
-            int nPercent = (100*nValue)/m_nRange;
+            int nPercent = (100 * nValue) / m_nRange;
             if (nPercent >= m_nLastCallbackPercent)
             {
                 comphelper::LibreOfficeKit::statusIndicatorSetValue(nPercent);
@@ -117,7 +114,7 @@ void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
         return;
     }
 #if !defined(IOS) && !defined(ANDROID)
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
+    css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
