@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6c4b6eb_5108d1d0",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-11-12T12:40:40Z",
+      "side": 1,
+      "message": "Please use camel case function names like other function names. For here: testTdf64531 is ok.",
+      "range": {
+        "startLine": 1252,
+        "startChar": 36,
+        "endLine": 1252,
+        "endChar": 49
+      },
+      "revId": "f086049f426e5447e755fa707c57de23404dc740",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
