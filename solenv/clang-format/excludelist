@@ -1460,11 +1460,9 @@ codemaker/source/javamaker/javatype.hxx
 comphelper/qa/container/comphelper_ifcontainer.cxx
 comphelper/qa/container/testifcontainer.cxx
 comphelper/qa/string/test_string.cxx
-comphelper/qa/unit/base64_test.cxx
 comphelper/qa/unit/syntaxhighlighttest.cxx
 comphelper/qa/unit/test_hash.cxx
 comphelper/qa/unit/variadictemplates.cxx
-comphelper/qa/weakbag/test_weakbag.cxx
 comphelper/source/compare/AnyCompareFactory.cxx
 comphelper/source/container/IndexedPropertyValuesContainer.cxx
 comphelper/source/container/NamedPropertyValuesContainer.cxx
@@ -1499,7 +1497,6 @@ comphelper/source/misc/docpasswordrequest.cxx
 comphelper/source/misc/documentinfo.cxx
 comphelper/source/misc/evtlistenerhlp.cxx
 comphelper/source/misc/evtmethodhelper.cxx
-comphelper/source/misc/fileurl.cxx
 comphelper/source/misc/getexpandeduri.cxx
 comphelper/source/misc/hash.cxx
 comphelper/source/misc/instancelocker.cxx
@@ -1516,11 +1513,9 @@ comphelper/source/misc/officerestartmanager.cxx
 comphelper/source/misc/officerestartmanager.hxx
 comphelper/source/misc/profilezone.cxx
 comphelper/source/misc/proxyaggregation.cxx
-comphelper/source/misc/random.cxx
 comphelper/source/misc/sequenceashashmap.cxx
 comphelper/source/misc/servicedecl.cxx
 comphelper/source/misc/sharedmutex.cxx
-comphelper/source/misc/simplefileaccessinteraction.cxx
 comphelper/source/misc/solarmutex.cxx
 comphelper/source/misc/stillreadwriteinteraction.cxx
 comphelper/source/misc/storagehelper.cxx
@@ -1528,7 +1523,6 @@ comphelper/source/misc/string.cxx
 comphelper/source/misc/synchronousdispatch.cxx
 comphelper/source/misc/syntaxhighlight.cxx
 comphelper/source/misc/threadpool.cxx
-comphelper/source/misc/types.cxx
 comphelper/source/misc/weak.cxx
 comphelper/source/misc/weakeventlistener.cxx
 comphelper/source/misc/xmlsechelper.cxx

@@ -30,12 +30,11 @@
 
 using namespace css;
 
-namespace {
-
+namespace
+{
 class Base64Test : public CppUnit::TestFixture
 {
 public:
-
     void testBase64Encode();
     void testBase64Decode();
     void testBase64EncodeForOStringBuffer();
@@ -73,15 +72,18 @@ void Base64Test::testBase64Decode()
 
     uno::Sequence<sal_Int8> expectedSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
     comphelper::Base64::decode(decodedSequence, "AAAAAAABAgM=");
-    CPPUNIT_ASSERT(std::equal(expectedSequence.begin(), expectedSequence.end(), decodedSequence.begin()));
+    CPPUNIT_ASSERT(
+        std::equal(expectedSequence.begin(), expectedSequence.end(), decodedSequence.begin()));
 
     expectedSequence = { 5, 2, 3, 0, 0, 1, 2, 3 };
     comphelper::Base64::decode(decodedSequence, "BQIDAAABAgM=");
-    CPPUNIT_ASSERT(std::equal(expectedSequence.begin(), expectedSequence.end(), decodedSequence.begin()));
+    CPPUNIT_ASSERT(
+        std::equal(expectedSequence.begin(), expectedSequence.end(), decodedSequence.begin()));
 
     expectedSequence = { sal_Int8(sal_uInt8(200)), 31, 77, 111, 0, 1, 2, 3 };
     comphelper::Base64::decode(decodedSequence, "yB9NbwABAgM=");
-    CPPUNIT_ASSERT(std::equal(expectedSequence.begin(), expectedSequence.end(), decodedSequence.begin()));
+    CPPUNIT_ASSERT(
+        std::equal(expectedSequence.begin(), expectedSequence.end(), decodedSequence.begin()));
 }
 
 void Base64Test::testBase64EncodeForOStringBuffer()
@@ -105,7 +107,6 @@ void Base64Test::testBase64EncodeForOStringBuffer()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Base64Test);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

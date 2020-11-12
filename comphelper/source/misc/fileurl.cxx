@@ -22,8 +22,6 @@
 #include <comphelper/fileurl.hxx>
 #include <rtl/ustring.hxx>
 
-bool comphelper::isFileUrl(OUString const & url) {
-    return url.startsWithIgnoreAsciiCase("file:");
-}
+bool comphelper::isFileUrl(OUString const& url) { return url.startsWithIgnoreAsciiCase("file:"); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
