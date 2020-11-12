@@ -374,10 +374,13 @@ namespace emfio
                         {
                             fX2 -= mnWinOrgX;
                             fY2 -= mnWinOrgY;
-                            fX2 /= mnWinExtX;
-                            fY2 /= mnWinExtY;
-                            fX2 *= mnDevWidth;
-                            fY2 *= mnDevHeight;
+                            if ( mnMapMode != MM_TEXT )
+                            {
+                                fX2 /= mnWinExtX;
+                                fY2 /= mnWinExtY;
+                                fX2 *= mnDevWidth;
+                                fY2 *= mnDevHeight;
+                            }
                             fX2 += mnDevOrgX;
                             fY2 += mnDevOrgY;   // fX2, fY2 now in device units
                             fX2 *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
@@ -464,10 +467,13 @@ namespace emfio
                         }
                         else
                         {
-                            fWidth /= mnWinExtX;
-                            fHeight /= mnWinExtY;
-                            fWidth *= mnDevWidth;
-                            fHeight *= mnDevHeight;
+                            if ( mnMapMode != MM_TEXT )
+                            {
+                                fWidth /= mnWinExtX;
+                                fHeight /= mnWinExtY;
+                                fWidth *= mnDevWidth;
+                                fHeight *= mnDevHeight;
+                            }
                             fWidth *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
                             fHeight *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
                         }
@@ -2131,6 +2137,12 @@ namespace emfio
         pSave->maPathObj = maPathObj;
         pSave->maClipPath = maClipPath;
 
+        SAL_INFO("emfio", "\t\t GfxMode: " << mnGfxMode);
+        SAL_INFO("emfio", "\t\t MapMode: " << mnMapMode);
+        SAL_INFO("emfio", "\t\t WinOrg: " << mnWinOrgX << ", " << mnWinOrgY);
+        SAL_INFO("emfio", "\t\t WinExt: " << mnWinExtX << " x " << mnWinExtY);
+        SAL_INFO("emfio", "\t\t DevOrg: " << mnDevOrgX << ", " << mnDevOrgY);
+        SAL_INFO("emfio", "\t\t DevWidth/Height: " << mnDevWidth << " x " << mnDevHeight);
         mvSaveStack.push_back( pSave );
     }
 
@@ -2180,6 +2192,13 @@ namespace emfio
             mpGDIMetaFile->AddAction( new MetaRasterOpAction( meRasterOp ) );
             meLatestRasterOp = meRasterOp;
         }
+
+        SAL_INFO("emfio", "\t\t GfxMode: " << mnGfxMode);
+        SAL_INFO("emfio", "\t\t MapMode: " << mnMapMode);
+        SAL_INFO("emfio", "\t\t WinOrg: " << mnWinOrgX << ", " << mnWinOrgY);
+        SAL_INFO("emfio", "\t\t WinExt: " << mnWinExtX << " x " << mnWinExtY);
+        SAL_INFO("emfio", "\t\t DevOrg: " << mnDevOrgX << ", " << mnDevOrgY);
+        SAL_INFO("emfio", "\t\t DevWidth/Height: " << mnDevWidth << " x " << mnDevHeight);
         mvSaveStack.pop_back();
     }
 
