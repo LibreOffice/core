@@ -26,23 +26,20 @@
 
 #include "parametricpolypolygon.hxx"
 
-
-namespace slideshow::internal {
-
+namespace slideshow::internal
+{
 class RandomWipe : public ParametricPolyPolygon
 {
 public:
-    RandomWipe( sal_Int32 nElements,
-                bool randomBars /* true: generates a horizontal random bar wipe,
-                                   false: generates a dissolve wipe */ );
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
+    RandomWipe(sal_Int32 nElements, bool randomBars /* true: generates a horizontal random bar wipe,
+                                                      false: generates a dissolve wipe */);
+    virtual ::basegfx::B2DPolyPolygon operator()(double t) override;
+
 private:
-    ::std::unique_ptr< ::basegfx::B2DPoint []> m_positions;
+    ::std::unique_ptr<::basegfx::B2DPoint[]> m_positions;
     sal_Int32 m_nElements;
     ::basegfx::B2DPolygon m_rect;
 };
-
-
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_RANDOMWIPE_HXX

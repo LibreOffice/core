@@ -23,19 +23,16 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include "parametricpolypolygon.hxx"
 
-
-namespace slideshow::internal {
-
+namespace slideshow::internal
+{
 /// Generates a clockWiseTwelve clock wipe:
 class ClockWipe : public ParametricPolyPolygon
 {
 public:
     /// 0,1 to 1,1 to 1,0 to 0,-1 to -1,0 to 0,1:
-    static ::basegfx::B2DPolygon calcCenteredClock( double t, double e = 1.0 );
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
+    static ::basegfx::B2DPolygon calcCenteredClock(double t, double e = 1.0);
+    virtual ::basegfx::B2DPolyPolygon operator()(double t) override;
 };
-
-
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_CLOCKWIPE_HXX
