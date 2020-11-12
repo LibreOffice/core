@@ -49,17 +49,17 @@
 
 #include <memory>
 
-#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
+#define GAMMA( _def_cVal, _def_InvGamma )   (std::clamp<sal_uInt8>(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255))
 
 #define CALC_ERRORS                                                             \
                         nTemp = p1T[nX++] >> 12;                              \
-                        nBErr = MinMax( nTemp, 0, 255 );                        \
+                        nBErr = std::clamp<sal_uInt8>( nTemp, 0, 255 );                        \
                         nBErr = nBErr - FloydIndexMap[ nBC = FloydMap[nBErr] ]; \
                         nTemp = p1T[nX++] >> 12;                              \
-                        nGErr = MinMax( nTemp, 0, 255 );                        \
+                        nGErr = std::clamp<sal_uInt8>( nTemp, 0, 255 );                        \
                         nGErr = nGErr - FloydIndexMap[ nGC = FloydMap[nGErr] ]; \
                         nTemp = p1T[nX] >> 12;                                \
-                        nRErr = MinMax( nTemp, 0, 255 );                        \
+                        nRErr = std::clamp<sal_uInt8>( nTemp, 0, 255 );                        \
                         nRErr = nRErr - FloydIndexMap[ nRC = FloydMap[nRErr] ];
 
 #define CALC_TABLES3                                        \
@@ -1025,15 +1025,15 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
 
             // calculate slope
             if( nContrastPercent >= 0 )
-                fM = 128.0 / ( 128.0 - 1.27 * MinMax( nContrastPercent, 0, 100 ) );
+                fM = 128.0 / ( 128.0 - 1.27 * std::clamp<sal_Int8>( nContrastPercent, 0, 100 ) );
             else
-                fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100, 0 ) ) / 128.0;
+                fM = ( 128.0 + 1.27 * std::clamp<sal_Int8>( nContrastPercent, -100, 0 ) ) / 128.0;
 
             if(!msoBrightness)
                 // total offset = luminance offset + contrast offset
-                fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55 + 128.0 - fM * 128.0;
+                fOff = std::clamp<sal_Int8>( nLuminancePercent, -100, 100 ) * 2.55 + 128.0 - fM * 128.0;
             else
-                fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55;
+                fOff = std::clamp<sal_Int8>( nLuminancePercent, -100, 100 ) * 2.55;
 
             // channel offset = channel offset + total offset
             fROff = nChannelRPercent * 2.55 + fOff;
@@ -1049,18 +1049,18 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             {
                 if(!msoBrightness)
                 {
-                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fROff ), 0, 255 ));
-                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fGOff ), 0, 255 ));
-                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fBOff ), 0, 255 ));
+                    cMapR[ nX ] = std::clamp<sal_uInt8>( FRound( nX * fM + fROff ), 0, 255 );
+                    cMapG[ nX ] = std::clamp<sal_uInt8>( FRound( nX * fM + fGOff ), 0, 255 );
+                    cMapB[ nX ] = std::clamp<sal_uInt8>( FRound( nX * fM + fBOff ), 0, 255 );
                 }
                 else
                 {
                     // LO simply uses (in a somewhat optimized form) "newcolor = (oldcolor-128)*contrast+brightness+128"
                     // as the formula, i.e. contrast first, brightness afterwards. MSOffice, for whatever weird reason,
                     // use neither first, but apparently it applies half of brightness before contrast and half afterwards.
-                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 ));
-                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 ));
-                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 ));
+                    cMapR[ nX ] = std::clamp<sal_uInt8>( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 );
+                    cMapG[ nX ] = std::clamp<sal_uInt8>( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 );
+                    cMapB[ nX ] = std::clamp<sal_uInt8>( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 );
                 }
                 if( bGamma )
                 {
