@@ -10570,12 +10570,9 @@ sdext/source/minimizer/optimizerdialog.hxx
 sdext/source/minimizer/optimizerdialogcontrols.cxx
 sdext/source/minimizer/pagecollector.cxx
 sdext/source/minimizer/pagecollector.hxx
-sdext/source/minimizer/pppoptimizer.cxx
-sdext/source/minimizer/pppoptimizer.hxx
 sdext/source/minimizer/pppoptimizerdialog.cxx
 sdext/source/minimizer/pppoptimizerdialog.hxx
 sdext/source/minimizer/pppoptimizertoken.cxx
-sdext/source/minimizer/pppoptimizertoken.hxx
 sdext/source/minimizer/unodialog.cxx
 sdext/source/minimizer/unodialog.hxx
 sdext/source/pdfimport/filterdet.cxx
@@ -10644,13 +10641,11 @@ sdext/source/presenter/PresenterGeometryHelper.hxx
 sdext/source/presenter/PresenterHelpView.cxx
 sdext/source/presenter/PresenterHelpView.hxx
 sdext/source/presenter/PresenterHelper.cxx
-sdext/source/presenter/PresenterHelper.hxx
 sdext/source/presenter/PresenterNotesView.cxx
 sdext/source/presenter/PresenterNotesView.hxx
 sdext/source/presenter/PresenterPaintManager.cxx
 sdext/source/presenter/PresenterPaintManager.hxx
 sdext/source/presenter/PresenterPane.cxx
-sdext/source/presenter/PresenterPane.hxx
 sdext/source/presenter/PresenterPaneBase.cxx
 sdext/source/presenter/PresenterPaneBase.hxx
 sdext/source/presenter/PresenterPaneBorderPainter.cxx
@@ -10672,9 +10667,7 @@ sdext/source/presenter/PresenterSlideShowView.hxx
 sdext/source/presenter/PresenterSlideSorter.cxx
 sdext/source/presenter/PresenterSlideSorter.hxx
 sdext/source/presenter/PresenterSprite.cxx
-sdext/source/presenter/PresenterSprite.hxx
 sdext/source/presenter/PresenterSpritePane.cxx
-sdext/source/presenter/PresenterSpritePane.hxx
 sdext/source/presenter/PresenterTextView.cxx
 sdext/source/presenter/PresenterTextView.hxx
 sdext/source/presenter/PresenterTheme.cxx
@@ -10684,7 +10677,6 @@ sdext/source/presenter/PresenterTimer.hxx
 sdext/source/presenter/PresenterToolBar.cxx
 sdext/source/presenter/PresenterToolBar.hxx
 sdext/source/presenter/PresenterUIPainter.cxx
-sdext/source/presenter/PresenterUIPainter.hxx
 sdext/source/presenter/PresenterViewFactory.cxx
 sdext/source/presenter/PresenterViewFactory.hxx
 sdext/source/presenter/PresenterWindowManager.cxx
