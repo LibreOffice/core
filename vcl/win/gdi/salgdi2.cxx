@@ -240,7 +240,7 @@ void WinSalGraphics::invert( tools::Long nX, tools::Long nY, tools::Long nWidth,
     mpImpl->invert( nX, nY, nWidth, nHeight, nFlags );
 }
 
-void WinSalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
+void WinSalGraphics::invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nSalFlags )
 {
     mpImpl->invert( nPoints, pPtAry, nSalFlags );
 }
