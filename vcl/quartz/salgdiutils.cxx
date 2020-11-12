@@ -18,6 +18,9 @@
  */
 
 #include <sal/config.h>
+
+#include <cstdint>
+
 #include <sal/log.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -155,14 +158,16 @@ bool AquaSalGraphics::CheckContext()
             const CGSize aLayerSize = { static_cast<CGFloat>(nScaledWidth), static_cast<CGFloat>(nScaledHeight) };
 
             const int nBytesPerRow = (nBitmapDepth * nScaledWidth) / 8;
-            int nFlags = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host;
+            std::uint32_t nFlags = std::uint32_t(kCGImageAlphaNoneSkipFirst)
+                | std::uint32_t(kCGBitmapByteOrder32Host);
             maBGContextHolder.set(CGBitmapContextCreate(
                 nullptr, nScaledWidth, nScaledHeight, 8, nBytesPerRow, GetSalData()->mxRGBSpace, nFlags));
 
             maLayer.set(CGLayerCreateWithContext(maBGContextHolder.get(), aLayerSize, nullptr));
             maLayer.setScale(fScale);
 
-            nFlags = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Host;
+            nFlags = std::uint32_t(kCGImageAlphaPremultipliedFirst)
+                | std::uint32_t(kCGBitmapByteOrder32Host);
             maCSContextHolder.set(CGBitmapContextCreate(
                 nullptr, nScaledWidth, nScaledHeight, 8, nBytesPerRow, GetSalData()->mxRGBSpace, nFlags));
 
