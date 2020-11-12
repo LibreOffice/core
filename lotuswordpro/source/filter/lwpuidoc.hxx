@@ -77,7 +77,7 @@ class LwpNamedProperties
 {
 public:
     LwpNamedProperties() = delete;
-    static void Read(LwpObjectStream *pStrm);
+    static void Read(LwpObjectStream* pStrm);
 };
 /**
  * @brief       macro options contained in UIDocument structure
@@ -88,14 +88,17 @@ class LwpAutoRunMacroOptions
 public:
     LwpAutoRunMacroOptions()
         : m_OptionFlag(0)
-        {}
+    {
+    }
+
 private:
     LwpAtomHolder m_OpenName;
     LwpAtomHolder m_CloseName;
     LwpAtomHolder m_NewName;
     sal_uInt16 m_OptionFlag;
+
 public:
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
 };
 /**
  * @brief       Merge options contained in UIDocument structure
@@ -107,15 +110,17 @@ public:
     LwpMergeOptions()
         : m_nType(0)
         , m_nLastActionFlag(0)
-        {}
+    {
+    }
+
 private:
     LwpAtomHolder m_RecordFile;
     LwpAtomHolder m_DescriptionFile;
     LwpAtomHolder m_Filter;
     sal_uInt16 m_nType;
-    sal_uInt16 m_nLastActionFlag;   // flag remembers last merge action
+    sal_uInt16 m_nLastActionFlag; // flag remembers last merge action
 public:
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
 };
 /**
  * @brief       UIDocument structure contained in VO_DOCUMENT
@@ -124,18 +129,19 @@ public:
 class LwpUIDocument
 {
 public:
-    explicit LwpUIDocument(LwpObjectStream *pStrm);
+    explicit LwpUIDocument(LwpObjectStream* pStrm);
     ~LwpUIDocument();
+
 private:
     LwpAutoRunMacroOptions m_ARMacroOpts;
     LwpMergeOptions m_MergedOpts;
-    LwpAtomHolder m_SheetFullPath;  // full path for style sheet
+    LwpAtomHolder m_SheetFullPath; // full path for style sheet
     sal_uInt16 m_nFlags;
     LwpAtomHolder m_InitialSaveAsType;
     enum
     {
-        DOC_READONLY    = 0x01,
-        DOC_BLOCKSETS   = 0x02,
+        DOC_READONLY = 0x01,
+        DOC_BLOCKSETS = 0x02,
         DOC_LOCKED = 0x04,
         DOC_ENVELOPE = 0x08,
         DOC_EXTERNALFILE = 0x10,
@@ -143,8 +149,9 @@ private:
         DOC_ANNOTATEONLY = 0x40,
         DOC_CANCELED = 0x80
     };
+
 public:
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
 };
 
 #endif

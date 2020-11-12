@@ -71,31 +71,25 @@ public:
     XFRowStyle();
 
 public:
-    void    SetRowHeight(double height);
+    void SetRowHeight(double height);
 
-    double  GetRowHeight() const;
+    double GetRowHeight() const;
 
-    void    SetMinRowHeight(double height);
+    void SetMinRowHeight(double height);
 
     virtual enumXFStyle GetStyleFamily() override;
 
-    virtual void ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    double  m_fHeight;
-    double  m_fMinHeight;
+    double m_fHeight;
+    double m_fMinHeight;
     XFColor m_aBackColor;
 };
 
-inline void XFRowStyle::SetRowHeight(double height)
-{
-    m_fHeight = height;
-}
+inline void XFRowStyle::SetRowHeight(double height) { m_fHeight = height; }
 
-inline void XFRowStyle::SetMinRowHeight(double height)
-{
-    m_fMinHeight = height;
-}
+inline void XFRowStyle::SetMinRowHeight(double height) { m_fMinHeight = height; }
 
 inline double XFRowStyle::GetRowHeight() const
 {

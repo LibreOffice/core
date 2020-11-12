@@ -68,21 +68,18 @@
 #include "lwpfribptr.hxx"
 #include <lwpglobalmgr.hxx>
 
-LwpFribSection::LwpFribSection(LwpPara *pPara)
-     : LwpFrib(pPara)
-{
-
-}
-
-LwpFribSection::~LwpFribSection()
+LwpFribSection::LwpFribSection(LwpPara* pPara)
+    : LwpFrib(pPara)
 {
 }
+
+LwpFribSection::~LwpFribSection() {}
 
 /**
  * @descr:  Read section frib information
  *
  */
-void LwpFribSection::Read(LwpObjectStream *pObjStrm, sal_uInt16 /*len*/)
+void LwpFribSection::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_Section.ReadIndexed(pObjStrm);
 }
@@ -103,9 +100,9 @@ LwpSection* LwpFribSection::GetSection()
 void LwpFribSection::RegisterSectionStyle()
 {
     LwpPageLayout* pLayout = GetPageLayout();
-    if(pLayout)
+    if (pLayout)
     {
-        m_pMasterPage.reset( new LwpMasterPage(m_pPara, pLayout) );
+        m_pMasterPage.reset(new LwpMasterPage(m_pPara, pLayout));
         m_pMasterPage->RegisterMasterPage(this);
     }
 }
@@ -143,15 +140,15 @@ LwpPageLayout* LwpFribSection::GetPageLayout()
 void LwpFribSection::ParseSection()
 {
     LwpPageLayout* pLayout = GetPageLayout();
-    if(pLayout)
+    if (pLayout)
     {
         // StartWithinColume not support now
         LwpLayout::UseWhenType eSectionType = pLayout->GetUseWhenType();
-        if(eSectionType==LwpLayout::StartWithinColume)
+        if (eSectionType == LwpLayout::StartWithinColume)
         {
             return;
         }
-        if(m_pMasterPage)
+        if (m_pMasterPage)
         {
             m_pMasterPage->ParseSection(this);
         }
@@ -166,69 +163,71 @@ void LwpFribSection::ParseSection()
             pIndex->SetIndexType(enumXFIndexAlphabetical);
             SetDefaultAlphaIndex(pIndex);
 
-            pStory->AddXFContent( pIndex );
-            m_pPara->SetXFContainer( pIndex );
+            pStory->AddXFContent(pIndex);
+            m_pPara->SetXFContainer(pIndex);
         }
         else
         {
             XFContentContainer* pContent = pStory->GetXFContent();
-            m_pPara->SetXFContainer( pContent );
+            m_pPara->SetXFContainer(pContent);
         }
     }
 }
 
-void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
+void LwpFribSection::SetDefaultAlphaIndex(XFIndex* pXFIndex)
 {
     LwpFoundry* pFoundry = m_pPara->GetFoundry();
     OUString styleName = pFoundry->FindActuralStyleName("Separator");
 
     LwpIndexSection* pIndexSection = dynamic_cast<LwpIndexSection*>(m_Section.obj().get());
-    XFIndexTemplate * pTemplateSep = new XFIndexTemplate();
+    XFIndexTemplate* pTemplateSep = new XFIndexTemplate();
     if (pIndexSection && pIndexSection->IsFormatSeparator())
     {
         pXFIndex->SetSeparator(true);
-        pTemplateSep->AddEntry(enumXFIndexTemplateText,"");
+        pTemplateSep->AddEntry(enumXFIndexTemplateText, "");
     }
     //pXFIndex->AddTemplate("separator","Separator",pTemplateSep);
-    pXFIndex->AddTemplate("separator",styleName,pTemplateSep);
+    pXFIndex->AddTemplate("separator", styleName, pTemplateSep);
 
     styleName = pFoundry->FindActuralStyleName("Primary");
 
-    XFIndexTemplate * pTemplate1 = new XFIndexTemplate();
-    pTemplate1->AddEntry(enumXFIndexTemplateText,"");
-    pTemplate1->AddEntry(enumXFIndexTemplateTab,"");
-    pTemplate1->AddEntry(enumXFIndexTemplatePage,"");
+    XFIndexTemplate* pTemplate1 = new XFIndexTemplate();
+    pTemplate1->AddEntry(enumXFIndexTemplateText, "");
+    pTemplate1->AddEntry(enumXFIndexTemplateTab, "");
+    pTemplate1->AddEntry(enumXFIndexTemplatePage, "");
     //pXFIndex->AddTemplate(OUString::number(1),"Primary",pTemplate1);
-    pXFIndex->AddTemplate(OUString::number(1),styleName,pTemplate1);
+    pXFIndex->AddTemplate(OUString::number(1), styleName, pTemplate1);
 
-    XFIndexTemplate * pTemplate2 = new XFIndexTemplate();
-    pTemplate2->AddEntry(enumXFIndexTemplateText,"");
-    pTemplate2->AddEntry(enumXFIndexTemplateTab,"");
-    pTemplate2->AddEntry(enumXFIndexTemplatePage,"");
-    XFIndexTemplate * pTemplate3 = new XFIndexTemplate();
-    pTemplate3->AddEntry(enumXFIndexTemplateText,"");
-    pTemplate3->AddEntry(enumXFIndexTemplateTab,"");
-    pTemplate3->AddEntry(enumXFIndexTemplatePage,"");
+    XFIndexTemplate* pTemplate2 = new XFIndexTemplate();
+    pTemplate2->AddEntry(enumXFIndexTemplateText, "");
+    pTemplate2->AddEntry(enumXFIndexTemplateTab, "");
+    pTemplate2->AddEntry(enumXFIndexTemplatePage, "");
+    XFIndexTemplate* pTemplate3 = new XFIndexTemplate();
+    pTemplate3->AddEntry(enumXFIndexTemplateText, "");
+    pTemplate3->AddEntry(enumXFIndexTemplateTab, "");
+    pTemplate3->AddEntry(enumXFIndexTemplatePage, "");
 
     if (pIndexSection && pIndexSection->IsFormatRunin())
     {
         //pXFIndex->AddTemplate(OUString::number(2),"Primary",pTemplate2);
         //pXFIndex->AddTemplate(OUString::number(3),"Primary",pTemplate3);
-        pXFIndex->AddTemplate(OUString::number(2),styleName,pTemplate2);
-        pXFIndex->AddTemplate(OUString::number(3),styleName,pTemplate3);
+        pXFIndex->AddTemplate(OUString::number(2), styleName, pTemplate2);
+        pXFIndex->AddTemplate(OUString::number(3), styleName, pTemplate3);
     }
     else
     {
         //pXFIndex->AddTemplate(OUString::number(2),"Secondary",pTemplate2);
         //pXFIndex->AddTemplate(OUString::number(3),"Secondary",pTemplate3);
         styleName = pFoundry->FindActuralStyleName("Secondary");
-        pXFIndex->AddTemplate(OUString::number(2),styleName,pTemplate2);
-        pXFIndex->AddTemplate(OUString::number(3),styleName,pTemplate3);
+        pXFIndex->AddTemplate(OUString::number(2), styleName, pTemplate2);
+        pXFIndex->AddTemplate(OUString::number(3), styleName, pTemplate3);
     }
 }
 
 LwpMasterPage::LwpMasterPage(LwpPara* pPara, LwpPageLayout* pLayout)
-    :m_bNewSection(false),m_pPara(pPara),m_pLayout(pLayout)
+    : m_bNewSection(false)
+    , m_pPara(pPara)
+    , m_pLayout(pLayout)
 {
 }
 
@@ -240,7 +239,7 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
 {
     //if there is no other frib after current frib, register master page in starting para of next page
     LwpStory* pStory = nullptr;
-    if (IsNextPageType()&&(!pFrib->HasNextFrib()))
+    if (IsNextPageType() && (!pFrib->HasNextFrib()))
         pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
 
     if (pStory)
@@ -258,9 +257,9 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     xOverStyle->SetStyleName("");
 
     LwpLayout::UseWhenType eUserType = m_pLayout->GetUseWhenType();
-    switch(eUserType)
+    switch (eUserType)
     {
-        case LwpLayout::StartWithinColume://not support now
+        case LwpLayout::StartWithinColume: //not support now
         {
             m_bNewSection = false;
             break;
@@ -271,7 +270,7 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
             //bSectionColumns = sal_True;
             break;
         }
-        case LwpLayout::StartOnNextPage://fall through
+        case LwpLayout::StartOnNextPage: //fall through
         case LwpLayout::StartOnOddPage: //fall through
         case LwpLayout::StartOnEvenPage:
         {
@@ -303,7 +302,7 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_StyleName = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
     //register section style here
-    if(!m_bNewSection)
+    if (!m_bNewSection)
         return;
 
     std::unique_ptr<XFSectionStyle> pSectStyle(new XFSectionStyle());
@@ -312,14 +311,16 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     LwpPageLayout* pCurrentLayout = pStory ? pStory->GetCurrentLayout() : nullptr;
     if (pCurrentLayout)
     {
-        double fLeft = m_pLayout->GetMarginsValue(MARGIN_LEFT) - pCurrentLayout->GetMarginsValue(MARGIN_LEFT);
-        double fRight = m_pLayout->GetMarginsValue(MARGIN_RIGHT) - pCurrentLayout->GetMarginsValue(MARGIN_RIGHT);
+        double fLeft = m_pLayout->GetMarginsValue(MARGIN_LEFT)
+                       - pCurrentLayout->GetMarginsValue(MARGIN_LEFT);
+        double fRight = m_pLayout->GetMarginsValue(MARGIN_RIGHT)
+                        - pCurrentLayout->GetMarginsValue(MARGIN_RIGHT);
         pSectStyle->SetMarginLeft(fLeft);
         pSectStyle->SetMarginRight(fRight);
     }
 
     XFColumns* pColumns = m_pLayout->GetXFColumns();
-    if(pColumns)
+    if (pColumns)
     {
         pSectStyle->SetColumns(pColumns);
     }
@@ -349,7 +350,7 @@ bool LwpMasterPage::IsNeedSection()
  */
 XFSection* LwpMasterPage::CreateXFSection()
 {
-    if(m_bNewSection)
+    if (m_bNewSection)
     {
         //new a section
         XFSection* pXFSection = new XFSection();
@@ -369,9 +370,9 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
     //XFParagraph * pXFPara = rFribPtr.GetXFPara();
 
     //parse fillerpage text
-    if(m_pLayout->HasFillerPageText(m_pPara->GetFoundry()))
+    if (m_pLayout->HasFillerPageText(m_pPara->GetFoundry()))
     {
-        XFParagraph *pPara = new XFParagraph();
+        XFParagraph* pPara = new XFParagraph();
         pPara->SetStyleName(m_FillerPageStyleName);
         m_pPara->AddXFContent(pPara);
         rFribPtr.SetXFPara(pPara);
@@ -380,40 +381,39 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
     }
     //create a new section and add it to container
     XFContentContainer* pContent = CreateXFSection();
-    if(pContent)
+    if (pContent)
     {
-        LwpStory* pStory = dynamic_cast<LwpStory*> ( m_pPara->GetStoryID().obj().get() );
+        LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
         //delete the additional blank para
         XFParagraph* pCurrPara = rFribPtr.GetXFPara();
-        if(!pCurrPara->HasContents())
+        if (!pCurrPara->HasContents())
         {
             XFContentContainer* pCurrContainer = m_pPara->GetXFContainer();
-            if(pFrib->HasNextFrib() && (pCurrContainer->GetLastContent() == pCurrPara))
+            if (pFrib->HasNextFrib() && (pCurrContainer->GetLastContent() == pCurrPara))
             {
                 pCurrContainer->RemoveLastContent();
             }
         }
         if (pStory)
-            pStory->AddXFContent( pContent );
+            pStory->AddXFContent(pContent);
     }
     else
     {
-        LwpStory* pStory = dynamic_cast<LwpStory*> ( m_pPara->GetStoryID().obj().get() );
+        LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
         pContent = pStory ? pStory->GetXFContent() : nullptr;
     }
-    if(pContent)
+    if (pContent)
     {
-        m_pPara->SetXFContainer( pContent );
+        m_pPara->SetXFContainer(pContent);
     }
     //out put the contents after the section frib in the same para.
-    if(pFrib->HasNextFrib())
+    if (pFrib->HasNextFrib())
     {
-        XFParagraph *pNextPara = new XFParagraph();
+        XFParagraph* pNextPara = new XFParagraph();
         pNextPara->SetStyleName(m_StyleName);
         m_pPara->AddXFContent(pNextPara);
         rFribPtr.SetXFPara(pNextPara);
     }
-
 }
 
 /**
@@ -423,17 +423,17 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
 void LwpMasterPage::RegisterFillerPageStyle()
 {
     LwpLayout::UseWhenType eUserType = m_pLayout->GetUseWhenType();
-    if(eUserType==LwpLayout::StartOnOddPage
-            ||eUserType==LwpLayout::StartOnEvenPage)
+    if (eUserType == LwpLayout::StartOnOddPage || eUserType == LwpLayout::StartOnEvenPage)
     {
-        if(m_pLayout->HasFillerPageText(m_pPara->GetFoundry()))
+        if (m_pLayout->HasFillerPageText(m_pPara->GetFoundry()))
         {
             std::unique_ptr<XFParaStyle> pPagebreakStyle(new XFParaStyle);
             *pPagebreakStyle = *(m_pPara->GetXFParaStyle());
             pPagebreakStyle->SetStyleName("");
             pPagebreakStyle->SetBreaks(enumXFBreakAftPage);
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            m_FillerPageStyleName= pXFStyleManager->AddStyle(std::move(pPagebreakStyle)).m_pStyle->GetStyleName();
+            m_FillerPageStyleName
+                = pXFStyleManager->AddStyle(std::move(pPagebreakStyle)).m_pStyle->GetStyleName();
         }
     }
 }
@@ -445,9 +445,8 @@ void LwpMasterPage::RegisterFillerPageStyle()
 bool LwpMasterPage::IsNextPageType()
 {
     LwpLayout::UseWhenType eUserType = m_pLayout->GetUseWhenType();
-    return eUserType == LwpLayout::StartOnNextPage
-        || eUserType == LwpLayout::StartOnOddPage
-        || eUserType == LwpLayout::StartOnEvenPage;
+    return eUserType == LwpLayout::StartOnNextPage || eUserType == LwpLayout::StartOnOddPage
+           || eUserType == LwpLayout::StartOnEvenPage;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

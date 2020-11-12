@@ -64,14 +64,14 @@
 #include <rtl/ustring.hxx>
 
 #define PI 3.1415926
-#define FLOAT_MIN   0.001
-#define MAX2(a,b)    (((a) > (b)) ? (a) : (b))
-#define MAX3(a,b,c) MAX2(a,MAX2(b,c))
-#define MIN2(a,b)    (((a) < (b)) ? (a) : (b))
-#define MIN3(a,b,c) MIN2(a,MIN2(b,c))
-#define FABS(f)     (f>0?f:-f)
+#define FLOAT_MIN 0.001
+#define MAX2(a, b) (((a) > (b)) ? (a) : (b))
+#define MAX3(a, b, c) MAX2(a, MAX2(b, c))
+#define MIN2(a, b) (((a) < (b)) ? (a) : (b))
+#define MIN3(a, b, c) MIN2(a, MIN2(b, c))
+#define FABS(f) (f > 0 ? f : -f)
 
-void    XFGlobalReset();
+void XFGlobalReset();
 
 /**
  * @brief
@@ -79,43 +79,43 @@ void    XFGlobalReset();
  * Before loading a file, we'll need to reset all global variables.
  * XFGlobal::Reset can do this for you.
  */
-class   XFGlobal
+class XFGlobal
 {
 public:
     /**
      * @descr   Generate a name for the section.
      */
-    static OUString    GenSectionName();
+    static OUString GenSectionName();
 
     /**
      * @descr   Gen a name for the frame.
      */
-    static OUString    GenFrameName();
+    static OUString GenFrameName();
 
     /**
      * @descr   Generate a name for a table.
      */
-    static OUString    GenTableName();
+    static OUString GenTableName();
 
     /**
      * @descr   Generate a name for a note.
      */
-    static OUString    GenNoteName();
+    static OUString GenNoteName();
 
     /**
      * @descr   Generate a name for the stroke style.
      */
-    static OUString    GenStrokeDashName();
+    static OUString GenStrokeDashName();
 
     /**
      * @descr   Generate a name for the area fill style.
      */
-    static OUString    GenAreaName();
+    static OUString GenAreaName();
 
     /**
      * @descr   Generate a name for an image object
      */
-    static OUString    GenImageName();
+    static OUString GenImageName();
 
     /**
      * @descr   Reset all global variables.
@@ -123,11 +123,11 @@ public:
     static void Reset();
 
 public:
-    static int  s_nSectionID;
-    static int  s_nFrameID;
-    static int  s_nNoteID;
-    static int  s_nStrokeDashID;
-    static int  s_nAreaID;
+    static int s_nSectionID;
+    static int s_nFrameID;
+    static int s_nNoteID;
+    static int s_nStrokeDashID;
+    static int s_nAreaID;
     static int s_nImageID;
 };
 

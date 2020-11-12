@@ -58,7 +58,6 @@
 
 namespace OpenStormBento
 {
-
 class CUtList;
 
 class CUtListElmt
@@ -67,17 +66,18 @@ public: // Methods
     CUtListElmt()
         : cpNext(nullptr)
         , cpPrev(nullptr)
-    {}
-    explicit CUtListElmt(CUtListElmt * pPrev) { InsertAfter(pPrev); }
-    explicit CUtListElmt(CUtList * pList);
+    {
+    }
+    explicit CUtListElmt(CUtListElmt* pPrev) { InsertAfter(pPrev); }
+    explicit CUtListElmt(CUtList* pList);
     virtual ~CUtListElmt();
     void MakeNotOnList() { cpNext = nullptr; } // Same as Remove but doesn't
-                                            // patch up list
-    CUtListElmt * GetNext() const { return cpNext; }
-    void SetNext(CUtListElmt * pNext) { cpNext = pNext; }
-    CUtListElmt * GetPrev() const { return cpPrev; }
-    void SetPrev(CUtListElmt * pPrev) { cpPrev = pPrev; }
-    void InsertAfter(CUtListElmt * pPrev)
+    // patch up list
+    CUtListElmt* GetNext() const { return cpNext; }
+    void SetNext(CUtListElmt* pNext) { cpNext = pNext; }
+    CUtListElmt* GetPrev() const { return cpPrev; }
+    void SetPrev(CUtListElmt* pPrev) { cpPrev = pPrev; }
+    void InsertAfter(CUtListElmt* pPrev)
     {
         cpNext = pPrev->cpNext;
         cpPrev = pPrev;
@@ -86,22 +86,23 @@ public: // Methods
     }
 
 private: // Data
-    CUtListElmt * cpNext;
-    CUtListElmt * cpPrev;
+    CUtListElmt* cpNext;
+    CUtListElmt* cpPrev;
 };
 
 class CUtList
 {
 public: // Methods
-    CUtList() {
+    CUtList()
+    {
         cDummyElmt.SetNext(&cDummyElmt);
         cDummyElmt.SetPrev(&cDummyElmt);
     }
     virtual ~CUtList();
-    CUtListElmt * GetFirst() { return cDummyElmt.GetNext(); }
-    CUtListElmt * GetLast() { return cDummyElmt.GetPrev(); }
+    CUtListElmt* GetFirst() { return cDummyElmt.GetNext(); }
+    CUtListElmt* GetLast() { return cDummyElmt.GetPrev(); }
     CUtListElmt& GetTerminating() { return cDummyElmt; }
-    CUtListElmt * GetNextOrNULL(CUtListElmt const * pCurr);
+    CUtListElmt* GetNextOrNULL(CUtListElmt const* pCurr);
 
     void Destroy();
 
@@ -114,7 +115,7 @@ class CUtOwningList : public CUtList
 public: // Methods
     virtual ~CUtOwningList() override;
 };
-}//end namespace OpenStormBento
+} //end namespace OpenStormBento
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

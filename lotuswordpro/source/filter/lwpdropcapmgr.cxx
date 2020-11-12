@@ -60,18 +60,10 @@
 
 #include <lwpdropcapmgr.hxx>
 
-LwpDropcapMgr::LwpDropcapMgr()
-{
-    m_pXFPara = nullptr;
-}
+LwpDropcapMgr::LwpDropcapMgr() { m_pXFPara = nullptr; }
 
-LwpDropcapMgr::~LwpDropcapMgr()
-{
-}
+LwpDropcapMgr::~LwpDropcapMgr() {}
 
-void LwpDropcapMgr::SetXFPara(XFParagraph* pXFPara)
-{
-    m_pXFPara = pXFPara;
-}
+void LwpDropcapMgr::SetXFPara(XFParagraph* pXFPara) { m_pXFPara = pXFPara; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

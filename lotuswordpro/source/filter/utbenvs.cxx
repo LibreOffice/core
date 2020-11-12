@@ -67,13 +67,12 @@ std::size_t LtcUtBenValueStream::GetData(void* pData, std::size_t nSize)
 {
     size_t AmtRead;
 
-    /*BenError Err = */cpValue->ReadValueData(pData, cCurrentPosition, nSize,
-      &AmtRead);
+    /*BenError Err = */ cpValue->ReadValueData(pData, cCurrentPosition, nSize, &AmtRead);
     cCurrentPosition += AmtRead;
 
     return AmtRead;
 }
- /**
+/**
 *   Value stream write function, not supported now
 *   @param  pointer of saved buffer
 *   @param  size of buffer to be written
@@ -91,7 +90,7 @@ std::size_t LtcUtBenValueStream::PutData(const void* /*pData*/, std::size_t nSiz
 *   @param  position in value stream
 *   @return current position in value stream
 */
-sal_uInt64  LtcUtBenValueStream::SeekPos(sal_uInt64 const nPos)
+sal_uInt64 LtcUtBenValueStream::SeekPos(sal_uInt64 const nPos)
 {
     if (nPos <= m_ulValueLength)
         cCurrentPosition = nPos;
@@ -104,7 +103,7 @@ sal_uInt64  LtcUtBenValueStream::SeekPos(sal_uInt64 const nPos)
 *   @param  size of buffer
 *   @return
 */
- void   LtcUtBenValueStream::SetSize( sal_uInt64 /*nSize*/ )
+void LtcUtBenValueStream::SetSize(sal_uInt64 /*nSize*/)
 {
     //pLtcBenContainer pContainer = cpValue->GetContainer();
     //pContainer->GetStream()->SetStreamSize(nSize);
@@ -112,7 +111,7 @@ sal_uInt64  LtcUtBenValueStream::SeekPos(sal_uInt64 const nPos)
 /**
 *   Flush data function, not supported now
 */
-void    LtcUtBenValueStream::FlushData()
+void LtcUtBenValueStream::FlushData()
 {
     /* Because we only support IMPORT filter, FlushData implementation is ignored
         It won't bring negative influence to read-only stream object
@@ -123,17 +122,16 @@ void    LtcUtBenValueStream::FlushData()
 /**
 *   Construction
 */
-LtcUtBenValueStream::LtcUtBenValueStream(CBenValue * pValue)
-  : cpValue(pValue),
+LtcUtBenValueStream::LtcUtBenValueStream(CBenValue* pValue)
+    : cpValue(pValue)
+    ,
     // Calculate the length of the whole value stream
-    cCurrentPosition(0),
-    m_ulValueLength(pValue->GetValueSize())
+    cCurrentPosition(0)
+    , m_ulValueLength(pValue->GetValueSize())
 {
 }
 
-LtcUtBenValueStream::~LtcUtBenValueStream()
-{
-}
+LtcUtBenValueStream::~LtcUtBenValueStream() {}
 
 } // end namespace OpenStormBento
 

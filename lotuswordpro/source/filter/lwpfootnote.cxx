@@ -67,14 +67,15 @@
 #include "lwpfnlayout.hxx"
 #include <lwpglobalmgr.hxx>
 
-LwpFribFootnote::LwpFribFootnote(LwpPara* pPara ):LwpFrib(pPara)
+LwpFribFootnote::LwpFribFootnote(LwpPara* pPara)
+    : LwpFrib(pPara)
 {
 }
 
 /**
  * @descr  read footnote frib information
  */
-void LwpFribFootnote::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
+void LwpFribFootnote::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_Footnote.ReadIndexed(pObjStrm);
 }
@@ -85,7 +86,7 @@ void LwpFribFootnote::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
 void LwpFribFootnote::RegisterNewStyle()
 {
     LwpFootnote* pFootnote = GetFootnote();
-    if(pFootnote)
+    if (pFootnote)
     {
         //register footnote number font style
         LwpFrib::RegisterStyle(m_pPara->GetFoundry());
@@ -101,11 +102,11 @@ void LwpFribFootnote::RegisterNewStyle()
 void LwpFribFootnote::XFConvert(XFContentContainer* pCont)
 {
     LwpFootnote* pFootnote = GetFootnote();
-    if(!pFootnote)
+    if (!pFootnote)
         return;
 
     rtl::Reference<XFContentContainer> xContent;
-    if(pFootnote->GetType() == FN_FOOTNOTE)
+    if (pFootnote->GetType() == FN_FOOTNOTE)
     {
         xContent.set(new XFFootNote);
     }
@@ -137,17 +138,14 @@ LwpFootnote* LwpFribFootnote::GetFootnote()
     return dynamic_cast<LwpFootnote*>(m_Footnote.obj().get());
 }
 
-LwpFootnote::LwpFootnote(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
+LwpFootnote::LwpFootnote(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpOrderedObject(objHdr, pStrm)
     , m_nType(0)
     , m_nRow(0)
 {
 }
 
-LwpFootnote::~LwpFootnote()
-{
-
-}
+LwpFootnote::~LwpFootnote() {}
 
 /**
  * @descr  Read foonote object
@@ -168,10 +166,10 @@ void LwpFootnote::RegisterStyle()
 {
     //Only register footnote contents style,
     //Endnote contents style registers in LwpEnSuperTableLayout::RegisterStyle
-    if(m_nType == FN_FOOTNOTE)
+    if (m_nType == FN_FOOTNOTE)
     {
         LwpContent* pContent = FindFootnoteContent();
-        if(pContent)
+        if (pContent)
         {
             pContent->SetFoundry(m_pFoundry);
             pContent->DoRegisterStyle();
@@ -182,10 +180,10 @@ void LwpFootnote::RegisterStyle()
 /**
  * @descr  Parse footnote
  */
-void LwpFootnote::XFConvert(XFContentContainer * pCont)
+void LwpFootnote::XFConvert(XFContentContainer* pCont)
 {
     LwpContent* pContent = FindFootnoteContent();
-    if(pContent)
+    if (pContent)
     {
         pContent->DoXFConvert(pCont);
     }
@@ -197,13 +195,14 @@ void LwpFootnote::XFConvert(XFContentContainer * pCont)
 LwpCellLayout* LwpFootnote::GetCellLayout()
 {
     LwpEnSuperTableLayout* pEnSuperLayout = FindFootnoteTableLayout();
-    if(pEnSuperLayout)
+    if (pEnSuperLayout)
     {
-        LwpTableLayout* pTableLayout = dynamic_cast<LwpTableLayout*>(pEnSuperLayout->GetMainTableLayout());
-        if(pTableLayout)
+        LwpTableLayout* pTableLayout
+            = dynamic_cast<LwpTableLayout*>(pEnSuperLayout->GetMainTableLayout());
+        if (pTableLayout)
         {
             LwpRowLayout* pRowLayout = pTableLayout->GetRowLayout(m_nRow);
-            if(pRowLayout)
+            if (pRowLayout)
             {
                 return dynamic_cast<LwpCellLayout*>(pRowLayout->GetChildHead().obj().get());
             }
@@ -217,12 +216,12 @@ LwpCellLayout* LwpFootnote::GetCellLayout()
  */
 LwpDocument* LwpFootnote::GetFootnoteTableDivision()
 {
-    if(!m_pFoundry)
+    if (!m_pFoundry)
         return nullptr;
 
-    LwpDocument* pPrev =nullptr;
+    LwpDocument* pPrev = nullptr;
     LwpDocument* pDivision = nullptr;
-    LwpDocument* pFootnoteDivision =nullptr;
+    LwpDocument* pFootnoteDivision = nullptr;
 
     // Make sure the footnote does belong to some division
     // The division might not have a DivisionInfo if it's being Destruct()ed
@@ -264,7 +263,6 @@ LwpDocument* LwpFootnote::GetFootnoteTableDivision()
                 pDivision = pDivision->GetLastDivisionWithContents();
             break;
         }
-
     }
 
     // Make sure we're using the proper endnote division, if it's separate
@@ -293,7 +291,7 @@ LwpDocument* LwpFootnote::GetFootnoteTableDivision()
  */
 LwpDocument* LwpFootnote::GetEndnoteDivision(LwpDocument* pPossible)
 {
-    LwpDocument*  pDivision = pPossible;
+    LwpDocument* pDivision = pPossible;
     sal_uInt16 nDivType;
 
     // In case we have multiple endnote divisions, walk backwards until
@@ -351,22 +349,22 @@ OUString LwpFootnote::GetTableClass() const
 LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
 {
     LwpDocument* pDivision = GetFootnoteTableDivision();
-    if(!pDivision)
+    if (!pDivision)
         return nullptr;
 
     LwpFoundry* pFoundry = pDivision->GetFoundry();
     OUString strClassName = GetTableClass();
-    if(strClassName.isEmpty() )
+    if (strClassName.isEmpty())
         return nullptr;
 
     LwpContent* pContent = nullptr;
 
     while ((pContent = pFoundry->EnumContents(pContent)) != nullptr)
-        if (pContent->IsTable() && (strClassName == pContent->GetClassName()) &&
-            pContent->IsActive() && pContent->GetLayout(nullptr).is())
+        if (pContent->IsTable() && (strClassName == pContent->GetClassName())
+            && pContent->IsActive() && pContent->GetLayout(nullptr).is())
         {
             // Found it!
-            return static_cast<LwpEnSuperTableLayout *>(
+            return static_cast<LwpEnSuperTableLayout*>(
                 static_cast<LwpTable*>(pContent)->GetSuperTableLayout());
         }
 
@@ -385,7 +383,7 @@ LwpContent* LwpFootnote::FindFootnoteContent()
         return pContent;
 
     LwpCellLayout* pCellLayout = GetCellLayout();
-    if(pCellLayout)
+    if (pCellLayout)
     {
         pContent = dynamic_cast<LwpContent*>(pCellLayout->GetContent().obj().get());
     }
@@ -393,7 +391,7 @@ LwpContent* LwpFootnote::FindFootnoteContent()
     return pContent;
 }
 
-LwpFootnoteTable::LwpFootnoteTable(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
+LwpFootnoteTable::LwpFootnoteTable(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpTable(objHdr, pStrm)
 {
 }
@@ -407,7 +405,7 @@ void LwpFootnoteTable::Read()
 /**
  * @descr  Read footnote number options information
  */
-void LwpFootnoteNumberOptions::Read(LwpObjectStream *pObjStrm)
+void LwpFootnoteNumberOptions::Read(LwpObjectStream* pObjStrm)
 {
     m_nFlag = pObjStrm->QuickReaduInt16();
     m_nStartingNumber = pObjStrm->QuickReaduInt16();
@@ -419,7 +417,7 @@ void LwpFootnoteNumberOptions::Read(LwpObjectStream *pObjStrm)
 /**
  * @descr  Read footnote separator options information
  */
-void LwpFootnoteSeparatorOptions::Read(LwpObjectStream *pObjStrm)
+void LwpFootnoteSeparatorOptions::Read(LwpObjectStream* pObjStrm)
 {
     m_nFlag = pObjStrm->QuickReaduInt16();
     m_nLength = pObjStrm->QuickReaduInt32();
@@ -430,16 +428,13 @@ void LwpFootnoteSeparatorOptions::Read(LwpObjectStream *pObjStrm)
     pObjStrm->SkipExtra();
 }
 
-LwpFootnoteOptions::LwpFootnoteOptions(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
+LwpFootnoteOptions::LwpFootnoteOptions(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
     , m_nFlag(0)
 {
 }
 
-LwpFootnoteOptions::~LwpFootnoteOptions()
-{
-
-}
+LwpFootnoteOptions::~LwpFootnoteOptions() {}
 
 /**
  * @descr  Register footnote options object
@@ -473,23 +468,23 @@ void LwpFootnoteOptions::RegisterStyle()
 void LwpFootnoteOptions::RegisterFootnoteStyle()
 {
     std::unique_ptr<XFFootnoteConfig> xFootnoteConfig(new XFFootnoteConfig);
-    xFootnoteConfig->SetStartValue(m_FootnoteNumbering.GetStartingNumber() -1);
+    xFootnoteConfig->SetStartValue(m_FootnoteNumbering.GetStartingNumber() - 1);
     xFootnoteConfig->SetNumPrefix(m_FootnoteNumbering.GetLeadingText());
     xFootnoteConfig->SetNumSuffix(m_FootnoteNumbering.GetTrailingText());
-    if(m_FootnoteNumbering.GetReset() == LwpFootnoteNumberOptions::RESET_PAGE)
+    if (m_FootnoteNumbering.GetReset() == LwpFootnoteNumberOptions::RESET_PAGE)
     {
         xFootnoteConfig->SetRestartOnPage();
     }
-    if(GetContinuedFrom())
+    if (GetContinuedFrom())
     {
         xFootnoteConfig->SetMessageFrom(GetContinuedFromMessage());
     }
-    if(GetContinuedOn())
+    if (GetContinuedOn())
     {
         xFootnoteConfig->SetMessageOn(GetContinuedOnMessage());
     }
 
-    xFootnoteConfig->SetMasterPage( m_strMasterPage);
+    xFootnoteConfig->SetMasterPage(m_strMasterPage);
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pXFStyleManager->SetFootnoteConfig(xFootnoteConfig.release());
 }
@@ -500,25 +495,25 @@ void LwpFootnoteOptions::RegisterFootnoteStyle()
 void LwpFootnoteOptions::RegisterEndnoteStyle()
 {
     std::unique_ptr<XFEndnoteConfig> xEndnoteConfig(new XFEndnoteConfig);
-    xEndnoteConfig->SetStartValue(m_EndnoteDocNumbering.GetStartingNumber() -1);
+    xEndnoteConfig->SetStartValue(m_EndnoteDocNumbering.GetStartingNumber() - 1);
     OUString message = m_EndnoteDocNumbering.GetLeadingText();
-    if(message.isEmpty())
+    if (message.isEmpty())
     {
-        message = "[";//default prefix
+        message = "["; //default prefix
     }
     xEndnoteConfig->SetNumPrefix(message);
     message = m_EndnoteDocNumbering.GetTrailingText();
-    if(message.isEmpty())
+    if (message.isEmpty())
     {
-        message = "]";//default suffix
+        message = "]"; //default suffix
     }
     xEndnoteConfig->SetNumSuffix(message);
-    if(m_EndnoteDocNumbering.GetReset() == LwpFootnoteNumberOptions::RESET_PAGE)
+    if (m_EndnoteDocNumbering.GetReset() == LwpFootnoteNumberOptions::RESET_PAGE)
     {
         xEndnoteConfig->SetRestartOnPage();
     }
 
-    xEndnoteConfig->SetMasterPage( m_strMasterPage);
+    xEndnoteConfig->SetMasterPage(m_strMasterPage);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pXFStyleManager->SetEndnoteConfig(xEndnoteConfig.release());
@@ -529,7 +524,7 @@ void LwpFootnoteOptions::RegisterEndnoteStyle()
  */
 OUString LwpFootnoteOptions::GetContinuedOnMessage() const
 {
-    if(m_ContinuedOnMessage.HasValue())
+    if (m_ContinuedOnMessage.HasValue())
     {
         return m_ContinuedOnMessage.str();
     }
@@ -542,7 +537,7 @@ OUString LwpFootnoteOptions::GetContinuedOnMessage() const
  */
 OUString LwpFootnoteOptions::GetContinuedFromMessage() const
 {
-    if(m_ContinuedFromMessage.HasValue())
+    if (m_ContinuedFromMessage.HasValue())
     {
         return m_ContinuedFromMessage.str();
     }

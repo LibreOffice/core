@@ -68,25 +68,27 @@
 #include <lwpatomholder.hxx>
 #include <lwpcolor.hxx>
 
-#define STR_OleDivisionClassName    "OLEDivision"
+#define STR_OleDivisionClassName "OLEDivision"
 
 class LwpDivInfo : public LwpObject
 {
 public:
-    LwpDivInfo(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpDivInfo(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     LwpObjectID& GetInitialLayoutID() { return m_InitialLayoutID; }
     LwpObjectID& GetFillerPageTextID() { return m_FillerPageTextID; }
-    OUString const & GetDivName() const { return m_Name.str(); }
+    OUString const& GetDivName() const { return m_Name.str(); }
 
-    OUString const & GetClassName() const { return m_ClassName.str(); }
+    OUString const& GetClassName() const { return m_ClassName.str(); }
     inline bool HasContents() const;
     inline bool IsOleDivision() const;
     inline bool IsScrollable() const;
     inline bool IsGotoable() const;
     void GetNumberOfPages(sal_uInt16& nPageno);
     sal_uInt16 GetMaxNumberOfPages() const;
+
 protected:
     void Read() override;
+
 private:
     virtual ~LwpDivInfo() override;
 
@@ -126,13 +128,9 @@ private:
     };
 
     void SkipFront();
-
 };
 
-inline bool LwpDivInfo::HasContents() const
-{
-    return (m_nFlags & DI_HASCONTENTS) != 0;
-}
+inline bool LwpDivInfo::HasContents() const { return (m_nFlags & DI_HASCONTENTS) != 0; }
 
 inline bool LwpDivInfo::IsOleDivision() const
 {
@@ -142,10 +140,7 @@ inline bool LwpDivInfo::IsOleDivision() const
     return false;
 }
 
-inline bool LwpDivInfo::IsScrollable() const
-{
-    return (m_nFlags & DI_SCROLLABLE) != 0;
-}
+inline bool LwpDivInfo::IsScrollable() const { return (m_nFlags & DI_SCROLLABLE) != 0; }
 
 inline bool LwpDivInfo::IsGotoable() const
 {

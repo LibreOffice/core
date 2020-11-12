@@ -82,27 +82,27 @@ public:
     /**
      * @descr   Set line number config.
      */
-    void    SetLineNumberConfig(XFLineNumberConfig *pLNConfig);
+    void SetLineNumberConfig(XFLineNumberConfig* pLNConfig);
 
     /**
      * @descr   Set footnote config.
      */
-    void    SetFootnoteConfig(XFFootnoteConfig *pFNConfig);
+    void SetFootnoteConfig(XFFootnoteConfig* pFNConfig);
 
     /**
      * @descr   Set endnote config.
      */
-    void    SetEndnoteConfig(XFEndnoteConfig *pFNConfig);
+    void SetEndnoteConfig(XFEndnoteConfig* pFNConfig);
 
     /**
      * @descr   Output config information.
      */
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
     std::unique_ptr<XFLineNumberConfig> m_pLineNumberConfig;
-    std::unique_ptr<XFFootnoteConfig>   m_pFootnoteConfig;
-    std::unique_ptr<XFEndnoteConfig>    m_pEndnoteConfig;
+    std::unique_ptr<XFFootnoteConfig> m_pFootnoteConfig;
+    std::unique_ptr<XFEndnoteConfig> m_pEndnoteConfig;
 };
 
 #endif

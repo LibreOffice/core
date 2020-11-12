@@ -68,7 +68,7 @@
  * Font declaration in OOo xml file.
  * Each font used should be declared.
  */
-class   XFFontDecl
+class XFFontDecl
 {
 public:
     XFFontDecl(const OUString& name, const OUString& family);
@@ -77,16 +77,16 @@ public:
     /**
      * @descr   Get font name.
      */
-    const OUString& GetFontName() const { return m_strFontName;}
+    const OUString& GetFontName() const { return m_strFontName; }
 
     /**
      * @descr   Get font family.
      */
-    const OUString& GetFontFamily() const { return m_strFontFamily;}
+    const OUString& GetFontFamily() const { return m_strFontFamily; }
 
 private:
-    OUString   m_strFontName;
-    OUString   m_strFontFamily;
+    OUString m_strFontName;
+    OUString m_strFontFamily;
 };
 
 #endif

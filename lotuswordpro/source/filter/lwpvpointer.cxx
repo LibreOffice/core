@@ -56,25 +56,24 @@
 #include "lwpvpointer.hxx"
 #include <lwpfilehdr.hxx>
 
-LwpVersionedPointer::LwpVersionedPointer(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
+LwpVersionedPointer::LwpVersionedPointer(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
-{}
+{
+}
 
 void LwpVersionedPointer::Read()
 {
     m_PointerID.ReadIndexed(m_pObjStrm.get());
-    if( LwpFileHeader::m_nFileRevision < 0x0006 )
+    if (LwpFileHeader::m_nFileRevision < 0x0006)
         m_pObjStrm->SkipExtra();
 }
 
-void LwpVersionedPointer::Parse(IXFStream* /*pOutputStream*/)
-{
-}
+void LwpVersionedPointer::Parse(IXFStream* /*pOutputStream*/) {}
 
 void LwpVersionedPointer::RegisterStyle()
 {
     rtl::Reference<LwpObject> pObj = m_PointerID.obj();
-    if( pObj.is() )
+    if (pObj.is())
     {
         pObj->SetFoundry(m_pFoundry);
         pObj->DoRegisterStyle();

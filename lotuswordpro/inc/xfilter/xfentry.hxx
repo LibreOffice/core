@@ -75,43 +75,37 @@ public:
     /**
      * @descr   Set entry type.
      */
-    void    SetEntryType(enumXFEntry type);
+    void SetEntryType(enumXFEntry type);
 
     /**
      * @descr   Set entry string value.
      */
-    void    SetStringValue(const OUString& value);
+    void SetStringValue(const OUString& value);
 
     /**
      * @descr   Set entry key. The keys is available only for enumXFEntryAlphabetical.
      */
-    void    SetKey(const OUString& key1, const OUString& key2);
+    void SetKey(const OUString& key1, const OUString& key2);
 
     /**
      * @descr   Set outline level. This is available for enumXFEntryTOC and enumXFEntryUserIndex.
      */
-    void    SetOutlineLevel(sal_Int32 level);
+    void SetOutlineLevel(sal_Int32 level);
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    enumXFEntry    m_eType;
-    OUString       m_strValue;
-    OUString       m_strKey1;
-    OUString       m_strKey2;
-    OUString       m_strName;
-    sal_Int32      m_nOutlineLevel;
+    enumXFEntry m_eType;
+    OUString m_strValue;
+    OUString m_strKey1;
+    OUString m_strKey2;
+    OUString m_strName;
+    sal_Int32 m_nOutlineLevel;
 };
 
-inline void XFEntry::SetEntryType(enumXFEntry type)
-{
-    m_eType = type;
-}
+inline void XFEntry::SetEntryType(enumXFEntry type) { m_eType = type; }
 
-inline void XFEntry::SetStringValue(const OUString& value)
-{
-    m_strValue = value;
-}
+inline void XFEntry::SetStringValue(const OUString& value) { m_strValue = value; }
 
 inline void XFEntry::SetKey(const OUString& key1, const OUString& key2)
 {
@@ -119,10 +113,7 @@ inline void XFEntry::SetKey(const OUString& key1, const OUString& key2)
     m_strKey2 = key2;
 }
 
-inline void XFEntry::SetOutlineLevel(sal_Int32 level)
-{
-    m_nOutlineLevel = level;
-}
+inline void XFEntry::SetOutlineLevel(sal_Int32 level) { m_nOutlineLevel = level; }
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,26 +60,30 @@
 sal_uInt16 LwpFileHeader::m_nFileRevision = 0;
 
 LwpFileHeader::LwpFileHeader()
-    :m_nAppRevision(0),
-    m_nAppReleaseNo(0), m_nRequiredAppRevision(0), m_nRequiredFileRevision(0),
-    m_cDocumentID(), m_nRootIndexOffset(0)
-{}
+    : m_nAppRevision(0)
+    , m_nAppReleaseNo(0)
+    , m_nRequiredAppRevision(0)
+    , m_nRequiredFileRevision(0)
+    , m_cDocumentID()
+    , m_nRootIndexOffset(0)
+{
+}
 /**
  * @descr  read file header object from svstream
   */
-void LwpFileHeader::Read(LwpSvStream *pStrm)
+void LwpFileHeader::Read(LwpSvStream* pStrm)
 {
-    pStrm->ReadUInt16( m_nAppRevision );
-    pStrm->ReadUInt16( m_nFileRevision );
-    pStrm->ReadUInt16( m_nAppReleaseNo );
-    pStrm->ReadUInt16( m_nRequiredAppRevision );
-    pStrm->ReadUInt16( m_nRequiredFileRevision );
+    pStrm->ReadUInt16(m_nAppRevision);
+    pStrm->ReadUInt16(m_nFileRevision);
+    pStrm->ReadUInt16(m_nAppReleaseNo);
+    pStrm->ReadUInt16(m_nRequiredAppRevision);
+    pStrm->ReadUInt16(m_nRequiredFileRevision);
     m_cDocumentID.Read(pStrm);
     if (m_nFileRevision < 0x000B)
         m_nRootIndexOffset = BAD_OFFSET;
     else
     {
-        pStrm->ReadUInt32( m_nRootIndexOffset );
+        pStrm->ReadUInt32(m_nRootIndexOffset);
     }
 }
 

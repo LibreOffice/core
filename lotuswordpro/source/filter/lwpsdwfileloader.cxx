@@ -68,15 +68,13 @@ LwpSdwFileLoader::LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphic
     pStream->Seek(0);
 }
 
-LwpSdwFileLoader::~LwpSdwFileLoader()
-{
-}
+LwpSdwFileLoader::~LwpSdwFileLoader() {}
 
 /**
  * @descr   entry of lwp-drawing objects.
  * @param   pDrawObjVector   a container which will contains the created drawing object of XF-Model.
  */
-void LwpSdwFileLoader::CreateDrawObjects(std::vector< rtl::Reference<XFFrame> >* pDrawObjVector)
+void LwpSdwFileLoader::CreateDrawObjects(std::vector<rtl::Reference<XFFrame>>* pDrawObjVector)
 {
     unsigned char BinSignature[2];
     m_pStream->ReadBytes(BinSignature, 2);
@@ -88,11 +86,11 @@ void LwpSdwFileLoader::CreateDrawObjects(std::vector< rtl::Reference<XFFrame> >*
     m_pStream->ReadUInt16(nVersion);
 
     m_pStream->Seek(0);
-    if (nVersion<0x0102)
+    if (nVersion < 0x0102)
     {
         assert(false);
     }
-    if (nVersion>=0x0102)
+    if (nVersion >= 0x0102)
     {
         LwpSdwGroupLoaderV0102 sdwGroupLoader(m_pStream, m_pGraphicObj);
         sdwGroupLoader.BeginDrawObjects(pDrawObjVector);

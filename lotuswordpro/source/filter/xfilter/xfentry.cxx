@@ -67,40 +67,41 @@
 XFEntry::XFEntry()
     : m_eType(enumXFEntryTOC)
     , m_nOutlineLevel(1)
-{}
-
-void    XFEntry::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+}
+
+void XFEntry::ToXml(IXFStream* pStrm)
+{
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( "text:string-value", m_strValue );
+    pAttrList->AddAttribute("text:string-value", m_strValue);
 
-    if( m_eType == enumXFEntryTOC )
+    if (m_eType == enumXFEntryTOC)
     {
-        pAttrList->AddAttribute( "text:outline-level", OUString::number(m_nOutlineLevel) );
-        pStrm->StartElement( "text:toc-mark" );
-//      pStrm->Characters(m_strDisplay);
-        pStrm->EndElement( "text:toc-mark" );
+        pAttrList->AddAttribute("text:outline-level", OUString::number(m_nOutlineLevel));
+        pStrm->StartElement("text:toc-mark");
+        //      pStrm->Characters(m_strDisplay);
+        pStrm->EndElement("text:toc-mark");
     }
-    else if( m_eType == enumXFEntryAlphabetical )
+    else if (m_eType == enumXFEntryAlphabetical)
     {
-        pAttrList->AddAttribute( "text:key1", m_strKey1 );
-        if( !m_strKey2.isEmpty() )
-            pAttrList->AddAttribute( "text:key2", m_strKey2 );
+        pAttrList->AddAttribute("text:key1", m_strKey1);
+        if (!m_strKey2.isEmpty())
+            pAttrList->AddAttribute("text:key2", m_strKey2);
 
-        pStrm->StartElement( "text:alphabetical-index-mark" );
-//      pStrm->Characters(m_strDisplay);
-        pStrm->EndElement( "text:alphabetical-index-mark" );
+        pStrm->StartElement("text:alphabetical-index-mark");
+        //      pStrm->Characters(m_strDisplay);
+        pStrm->EndElement("text:alphabetical-index-mark");
     }
-    else if( m_eType == enumXFEntryUserIndex )
+    else if (m_eType == enumXFEntryUserIndex)
     {
-        pAttrList->AddAttribute( "text:outline-level", OUString::number(m_nOutlineLevel) );
-        pAttrList->AddAttribute( "text:index-name", m_strName );
+        pAttrList->AddAttribute("text:outline-level", OUString::number(m_nOutlineLevel));
+        pAttrList->AddAttribute("text:index-name", m_strName);
 
-        pStrm->StartElement( "text:user-index-mark" );
-//      pStrm->Characters(m_strDisplay);
-        pStrm->EndElement( "text:user-index-mark" );
+        pStrm->StartElement("text:user-index-mark");
+        //      pStrm->Characters(m_strDisplay);
+        pStrm->EndElement("text:user-index-mark");
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -56,8 +56,7 @@
 #include "utlist.hxx"
 namespace OpenStormBento
 {
-
-CUtListElmt::CUtListElmt(CUtList * pList)
+CUtListElmt::CUtListElmt(CUtList* pList)
     : cpNext(nullptr)
     , cpPrev(nullptr)
 {
@@ -77,9 +76,9 @@ CUtListElmt::~CUtListElmt()
 CUtList::~CUtList()
 {
     CUtListElmt& rTerminating = GetTerminating();
-    for (CUtListElmt * pCurr = GetFirst(); pCurr != &rTerminating; )
+    for (CUtListElmt* pCurr = GetFirst(); pCurr != &rTerminating;)
     {
-        CUtListElmt * pNext = pCurr->GetNext();
+        CUtListElmt* pNext = pCurr->GetNext();
         pCurr->MakeNotOnList();
         pCurr = pNext;
     }
@@ -90,35 +89,31 @@ CUtList::~CUtList()
 // If pCurr is NULL, returns first item in list.  Otherwise, returns item
 // in list after pCurr or NULL if no more items in list.  Terminating item
 // is never returned
-CUtListElmt *
-CUtList::GetNextOrNULL(CUtListElmt const * pCurr)
+CUtListElmt* CUtList::GetNextOrNULL(CUtListElmt const* pCurr)
 {
-    CUtListElmt * pNext;
+    CUtListElmt* pNext;
 
     if (pCurr == nullptr)
         pNext = GetFirst();
-    else pNext = pCurr->GetNext();
+    else
+        pNext = pCurr->GetNext();
     if (pNext == &GetTerminating())
         pNext = nullptr;
     return pNext;
 }
 
-void
-CUtList::Destroy()
+void CUtList::Destroy()
 {
     CUtListElmt& rTerminating = GetTerminating();
-    for (CUtListElmt * pCurr = GetFirst(); pCurr != &rTerminating; )
+    for (CUtListElmt* pCurr = GetFirst(); pCurr != &rTerminating;)
     {
-        CUtListElmt * pNext = pCurr->GetNext();
+        CUtListElmt* pNext = pCurr->GetNext();
         delete pCurr;
         pCurr = pNext;
     }
 }
 
-CUtOwningList::~CUtOwningList()
-{
-    Destroy();
-}
-}//end namespace OpenStormBento
+CUtOwningList::~CUtOwningList() { Destroy(); }
+} //end namespace OpenStormBento
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

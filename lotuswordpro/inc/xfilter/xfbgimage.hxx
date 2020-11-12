@@ -75,45 +75,47 @@ public:
     /**
      * @descr   Use file link as image source.
      */
-    void    SetFileLink(const OUString& fileName);
+    void SetFileLink(const OUString& fileName);
 
     /**
      * @descr   Use base64 stream as image source.
      */
-    void    SetImageData(sal_uInt8 const *buf, int len);
+    void SetImageData(sal_uInt8 const* buf, int len);
 
     /**
      * @descr   Set the image position type.
      */
-    void    SetPosition(enumXFAlignType horiAlign = enumXFAlignCenter, enumXFAlignType vertAlign = enumXFAlignCenter);
+    void SetPosition(enumXFAlignType horiAlign = enumXFAlignCenter,
+                     enumXFAlignType vertAlign = enumXFAlignCenter);
 
     /**
      * @descr   Set background image repeat style.
      */
-    void    SetRepeate();
+    void SetRepeate();
 
     /**
      * @descr   Set whether the image should be stretched to fill the owner object.
      */
-    void    SetStretch();
+    void SetStretch();
 
     /**
      * @descr   decide whether there has been a style that is the same as this object.
      *          If it use base64 stream, i'll simply return sal_False because it's too slow to compare two base64 stream.
      */
-    virtual bool Equal(IXFStyle *pStyle) override;
+    virtual bool Equal(IXFStyle* pStyle) override;
 
-    virtual void ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
-    friend bool operator==(XFBGImage const & img1, XFBGImage const & img2);
-    friend bool operator!=(XFBGImage const & img1, XFBGImage const & img2);
+    friend bool operator==(XFBGImage const& img1, XFBGImage const& img2);
+    friend bool operator!=(XFBGImage const& img1, XFBGImage const& img2);
+
 private:
-    OUString   m_strFileName;
-    OUString   m_strData;
-    bool       m_bUserFileLink;
-    bool       m_bRepeate;
-    bool       m_bStretch;
-    bool       m_bPosition;
+    OUString m_strFileName;
+    OUString m_strData;
+    bool m_bUserFileLink;
+    bool m_bRepeate;
+    bool m_bStretch;
+    bool m_bPosition;
     enumXFAlignType m_eHoriAlign;
     enumXFAlignType m_eVertAlign;
 };

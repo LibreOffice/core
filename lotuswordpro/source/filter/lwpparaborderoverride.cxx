@@ -68,10 +68,10 @@
 
 LwpParaBorderOverride::LwpParaBorderOverride()
 {
-    m_pBorderStuff.reset( new LwpBorderStuff() );
-    m_pBetweenStuff.reset( new LwpBorderStuff() );
-    m_pShadow.reset( new LwpShadow() );
-    m_pMargins.reset( new LwpMargins() );
+    m_pBorderStuff.reset(new LwpBorderStuff());
+    m_pBetweenStuff.reset(new LwpBorderStuff());
+    m_pShadow.reset(new LwpShadow());
+    m_pMargins.reset(new LwpMargins());
 
     m_eAboveType = PB_NONE;
     m_eBelowType = PB_NONE;
@@ -98,37 +98,34 @@ LwpParaBorderOverride::LwpParaBorderOverride(LwpParaBorderOverride const& rOther
     , m_nRightWidth(rOther.m_nRightWidth)
     , m_nBetweenMargin(rOther.m_nBetweenMargin)
 {
-    m_pBorderStuff.reset( ::clone(rOther.m_pBorderStuff.get()) );
-    m_pBetweenStuff.reset( ::clone(rOther.m_pBetweenStuff.get()) );
-    m_pShadow.reset( ::clone(rOther.m_pShadow.get()) );
-    m_pMargins.reset( ::clone(rOther.m_pMargins.get()) );
+    m_pBorderStuff.reset(::clone(rOther.m_pBorderStuff.get()));
+    m_pBetweenStuff.reset(::clone(rOther.m_pBetweenStuff.get()));
+    m_pShadow.reset(::clone(rOther.m_pShadow.get()));
+    m_pMargins.reset(::clone(rOther.m_pMargins.get()));
 }
 
-LwpParaBorderOverride::~LwpParaBorderOverride()
-{
-}
+LwpParaBorderOverride::~LwpParaBorderOverride() {}
 
 LwpParaBorderOverride* LwpParaBorderOverride::clone() const
 {
     return new LwpParaBorderOverride(*this);
 }
 
-namespace {
-
-LwpParaBorderOverride::BorderWidthType readBorderWidthType(
-    LwpObjectStream * stream)
+namespace
+{
+LwpParaBorderOverride::BorderWidthType readBorderWidthType(LwpObjectStream* stream)
 {
     sal_uInt16 n = stream->QuickReaduInt16();
-    if (n > LwpParaBorderOverride::PB_CUSTOMWIDTH) {
+    if (n > LwpParaBorderOverride::PB_CUSTOMWIDTH)
+    {
         SAL_WARN("lwp", "bad BorderWidthType " << n);
         n = LwpParaBorderOverride::PB_NONE;
     }
     return static_cast<LwpParaBorderOverride::BorderWidthType>(n);
 }
-
 }
 
-void LwpParaBorderOverride::Read(LwpObjectStream *pStrm)
+void LwpParaBorderOverride::Read(LwpObjectStream* pStrm)
 {
     if (pStrm->QuickReadBool())
     {
@@ -142,7 +139,7 @@ void LwpParaBorderOverride::Read(LwpObjectStream *pStrm)
         m_eBelowType = readBorderWidthType(pStrm);
         m_eRightType = readBorderWidthType(pStrm);
 
-        if( pStrm->CheckExtra() )
+        if (pStrm->CheckExtra())
         {
             m_pBetweenStuff->Read(pStrm);
 
@@ -150,7 +147,7 @@ void LwpParaBorderOverride::Read(LwpObjectStream *pStrm)
             m_nBetweenWidth = pStrm->QuickReaduInt32();
             m_nBetweenMargin = pStrm->QuickReaduInt32();
 
-            if( pStrm->CheckExtra() )
+            if (pStrm->CheckExtra())
             {
                 m_eRightType = readBorderWidthType(pStrm);
                 m_nRightWidth = pStrm->QuickReaduInt32();
@@ -320,22 +317,22 @@ void LwpParaBorderOverride::Override(LwpParaBorderOverride* pOther)
     }
 }
 
-void LwpParaBorderOverride::OverrideBorderStuff(LwpBorderStuff const * pBorderStuff)
+void LwpParaBorderOverride::OverrideBorderStuff(LwpBorderStuff const* pBorderStuff)
 {
     *m_pBorderStuff = *pBorderStuff;
     LwpOverride::Override(PBO_STUFF, STATE_ON);
 }
-void LwpParaBorderOverride::OverrideBetweenStuff(LwpBorderStuff const * pBorderStuff)
+void LwpParaBorderOverride::OverrideBetweenStuff(LwpBorderStuff const* pBorderStuff)
 {
     *m_pBetweenStuff = *pBorderStuff;
     LwpOverride::Override(PBO_BETWEENSTUFF, STATE_ON);
 }
-void LwpParaBorderOverride::OverrideShadow(LwpShadow const * pShadow)
+void LwpParaBorderOverride::OverrideShadow(LwpShadow const* pShadow)
 {
     *m_pShadow = *pShadow;
     LwpOverride::Override(PBO_SHADOW, STATE_ON);
 }
-void LwpParaBorderOverride::OverrideMargins(LwpMargins const * pMargins)
+void LwpParaBorderOverride::OverrideMargins(LwpMargins const* pMargins)
 {
     *m_pMargins = *pMargins;
     LwpOverride::Override(PBO_MARGINS, STATE_ON);

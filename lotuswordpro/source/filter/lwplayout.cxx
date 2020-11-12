@@ -74,7 +74,7 @@
 #include <sal/log.hxx>
 #include <o3tl/sorted_vector.hxx>
 
-LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
     , m_bGettingHonorProtection(false)
     , m_bGettingMarginsSameAsParent(false)
@@ -140,19 +140,20 @@ double LwpVirtualLayout::GetColGap(sal_uInt16 /*nIndex*/)
 */
 bool LwpVirtualLayout::HonorProtection()
 {
-    if(!(m_nAttributes2 & STYLE2_HONORPROTECTION))
+    if (!(m_nAttributes2 & STYLE2_HONORPROTECTION))
         return false;
 
-    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+    rtl::Reference<LwpVirtualLayout> xParent(
+        dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
     if (xParent.is() && !xParent->IsHeader())
     {
         return xParent->GetHonorProtection();
     }
 
-    if(m_pFoundry)//is null now
+    if (m_pFoundry) //is null now
     {
         LwpDocument* pDoc = m_pFoundry->GetDocument();
-        if(pDoc && pDoc->GetRootDocument())
+        if (pDoc && pDoc->GetRootDocument())
             return pDoc->GetRootDocument()->GetHonorProtection();
     }
 
@@ -165,20 +166,21 @@ bool LwpVirtualLayout::HonorProtection()
 */
 bool LwpVirtualLayout::IsProtected()
 {
-    bool bProtected = (m_nAttributes & STYLE_PROTECTED)!=0;
+    bool bProtected = (m_nAttributes & STYLE_PROTECTED) != 0;
 
-    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+    rtl::Reference<LwpVirtualLayout> xParent(
+        dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
     if (xParent.is() && !xParent->IsHeader())
     {
-        if (xParent->GetHonorProtection() && (xParent->GetHasProtection()||bProtected))
+        if (xParent->GetHonorProtection() && (xParent->GetHasProtection() || bProtected))
         {
             return true;
         }
     }
-    else if(m_pFoundry)//is null now
+    else if (m_pFoundry) //is null now
     {
         LwpDocument* pDoc = m_pFoundry->GetDocument();
-        if(pDoc)
+        if (pDoc)
         {
             if (pDoc->GetHonorProtection() && bProtected)
             {
@@ -196,10 +198,11 @@ bool LwpVirtualLayout::IsProtected()
 */
 bool LwpVirtualLayout::HasProtection()
 {
-    if(m_nAttributes & STYLE_PROTECTED)
+    if (m_nAttributes & STYLE_PROTECTED)
         return true;
 
-    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+    rtl::Reference<LwpVirtualLayout> xParent(
+        dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
     if (xParent.is() && !xParent->IsHeader())
     {
         return xParent->GetHasProtection();
@@ -212,10 +215,7 @@ bool LwpVirtualLayout::HasProtection()
 * @descr:   Whether it is a mirror layout
 *
 */
-bool LwpVirtualLayout::IsComplex() const
-{
-    return (m_nAttributes & STYLE_COMPLEX) != 0;
-}
+bool LwpVirtualLayout::IsComplex() const { return (m_nAttributes & STYLE_COMPLEX) != 0; }
 
 /**
 * @descr:   Get usewhen pointer
@@ -225,7 +225,7 @@ LwpUseWhen* LwpVirtualLayout::GetUseWhen()
 {
     if (m_bGettingUseWhen)
         throw std::runtime_error("recursion in layout");
-    m_bGettingUseWhen= true;
+    m_bGettingUseWhen = true;
 
     LwpUseWhen* pRet = nullptr;
 
@@ -233,13 +233,13 @@ LwpUseWhen* LwpVirtualLayout::GetUseWhen()
         If we have a parent, and I'm not a page layout,
         use my parents information.
     */
-    if(GetLayoutType()!=LWP_PAGE_LAYOUT)
+    if (GetLayoutType() != LWP_PAGE_LAYOUT)
     {
         //get parent
-        rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xParent(
+            dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
         if (xParent.is() && !xParent->IsHeader() && (xParent->GetLayoutType() != LWP_PAGE_LAYOUT))
             pRet = xParent->GetUseWhen();
-
     }
 
     if (!pRet)
@@ -252,55 +252,36 @@ LwpUseWhen* LwpVirtualLayout::GetUseWhen()
 /**
  * @descr:  Whether this layout is page layout or not
 */
-bool LwpVirtualLayout::IsPage()
-{
-    return (GetLayoutType() == LWP_PAGE_LAYOUT);
-}
+bool LwpVirtualLayout::IsPage() { return (GetLayoutType() == LWP_PAGE_LAYOUT); }
 /**
  * @descr:  Whether this layout is header layout or not
 */
-bool LwpVirtualLayout::IsHeader()
-{
-    return (GetLayoutType() == LWP_HEADER_LAYOUT);
-}
+bool LwpVirtualLayout::IsHeader() { return (GetLayoutType() == LWP_HEADER_LAYOUT); }
 /**
  * @descr:  Whether this layout is footer layout or not
 */
-bool LwpVirtualLayout::IsFooter()
-{
-    return (GetLayoutType() == LWP_FOOTER_LAYOUT);
-}
+bool LwpVirtualLayout::IsFooter() { return (GetLayoutType() == LWP_FOOTER_LAYOUT); }
 /**
  * @descr:  Whether this layout is frame layout or not
 */
-bool LwpVirtualLayout::IsFrame()
-{
-    return (GetLayoutType() == LWP_FRAME_LAYOUT);
-}
+bool LwpVirtualLayout::IsFrame() { return (GetLayoutType() == LWP_FRAME_LAYOUT); }
 
 /**
  * @descr:  Whether this layout is cell layout or not
 */
 bool LwpVirtualLayout::IsCell()
 {
-    return (GetLayoutType() == LWP_CELL_LAYOUT
-        || GetLayoutType() == LWP_CONNECTED_CELL_LAYOUT
-        || GetLayoutType() == LWP_HIDDEN_CELL_LAYOUT);
+    return (GetLayoutType() == LWP_CELL_LAYOUT || GetLayoutType() == LWP_CONNECTED_CELL_LAYOUT
+            || GetLayoutType() == LWP_HIDDEN_CELL_LAYOUT);
 }
 /**
  * @descr:  Whether this layout is supertable layout or not
 */
-bool LwpVirtualLayout::IsSuperTable()
-{
-    return (GetLayoutType() == LWP_SUPERTABLE_LAYOUT);
-}
+bool LwpVirtualLayout::IsSuperTable() { return (GetLayoutType() == LWP_SUPERTABLE_LAYOUT); }
 /**
  * @descr:  Whether this layout is group layout or not
 */
-bool LwpVirtualLayout::IsGroupHead()
-{
-    return (GetLayoutType() == LWP_GROUP_LAYOUT);
-}
+bool LwpVirtualLayout::IsGroupHead() { return (GetLayoutType() == LWP_GROUP_LAYOUT); }
 /**
  * @descr:  get the relative type
 */
@@ -316,15 +297,17 @@ bool LwpVirtualLayout::IsRelativeAnchored()
     sal_uInt8 nType;
 
     nType = GetRelativeType();
-    return (nType == LwpLayoutRelativityGuts::LAY_PARA_RELATIVE) || (nType == LwpLayoutRelativityGuts::LAY_INLINE)
-    || (nType == LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE) || (nType == LwpLayoutRelativityGuts::LAY_INLINE_VERTICAL);
+    return (nType == LwpLayoutRelativityGuts::LAY_PARA_RELATIVE)
+           || (nType == LwpLayoutRelativityGuts::LAY_INLINE)
+           || (nType == LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE)
+           || (nType == LwpLayoutRelativityGuts::LAY_INLINE_VERTICAL);
 }
 /**
  * @descr:  whether it is MinimumHeight layout
 */
 bool LwpVirtualLayout::IsMinimumHeight() const
 {
-    return ((m_nAttributes3& STYLE3_MINHEIGHTVALID) != 0);
+    return ((m_nAttributes3 & STYLE3_MINHEIGHTVALID) != 0);
 }
 
 /**
@@ -333,7 +316,8 @@ bool LwpVirtualLayout::IsMinimumHeight() const
 */
 rtl::Reference<LwpVirtualLayout> LwpVirtualLayout::GetParentLayout()
 {
-    return rtl::Reference<LwpVirtualLayout>(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+    return rtl::Reference<LwpVirtualLayout>(
+        dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
 }
 
 /**
@@ -343,7 +327,8 @@ rtl::Reference<LwpVirtualLayout> LwpVirtualLayout::GetParentLayout()
 void LwpVirtualLayout::RegisterChildStyle()
 {
     //Register all children styles
-    rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    rtl::Reference<LwpVirtualLayout> xLayout(
+        dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
     while (xLayout.is())
     {
         xLayout->SetFoundry(m_pFoundry);
@@ -368,7 +353,8 @@ bool LwpVirtualLayout::IsStyleLayout()
         bRet = true;
     else
     {
-        rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xParent(
+            dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
         if (xParent.is())
             bRet = xParent->IsStyleLayout();
     }
@@ -383,12 +369,12 @@ bool LwpVirtualLayout::IsStyleLayout()
 */
 LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
 {
-    LwpObjectID *pID = &GetChildHead();
+    LwpObjectID* pID = &GetChildHead();
     LwpVirtualLayout* pPrevLayout = nullptr;
 
-    while(pID && !pID->IsNull())
+    while (pID && !pID->IsNull())
     {
-        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout *>(pID->obj().get());
+        LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(pID->obj().get());
         if (!pLayout)
             break;
 
@@ -422,10 +408,7 @@ bool LwpVirtualLayout::IsFitGraphic()
 * @descr:   Whether the width of layout is auto grow
 *
 */
-bool LwpVirtualLayout::IsAutoGrowWidth()
-{
-    return IsAutoGrowLeft() || IsAutoGrowRight();
-}
+bool LwpVirtualLayout::IsAutoGrowWidth() { return IsAutoGrowLeft() || IsAutoGrowRight(); }
 
 /**
 * @descr:   Determine whether the layout width is to margin
@@ -447,16 +430,20 @@ void LwpAssociatedLayouts::Read(LwpObjectStream* pStrm)
 * @descr:   Looking for the layout which follows the pStartLayout
 * @param:   pStartLayout - the layout which is used for looking for its following layout
 */
-rtl::Reference<LwpVirtualLayout> LwpAssociatedLayouts::GetLayout(LwpVirtualLayout const *pStartLayout)
+rtl::Reference<LwpVirtualLayout>
+LwpAssociatedLayouts::GetLayout(LwpVirtualLayout const* pStartLayout)
 {
     if (!pStartLayout && !m_OnlyLayout.IsNull())
         /* Looking for the first layout and there's only one layout in  the list.*/
-        return rtl::Reference<LwpVirtualLayout>(dynamic_cast<LwpVirtualLayout*>(m_OnlyLayout.obj().get()));
+        return rtl::Reference<LwpVirtualLayout>(
+            dynamic_cast<LwpVirtualLayout*>(m_OnlyLayout.obj().get()));
 
-    rtl::Reference<LwpObjectHolder> xObjHolder(dynamic_cast<LwpObjectHolder*>(m_Layouts.GetHead().obj().get()));
+    rtl::Reference<LwpObjectHolder> xObjHolder(
+        dynamic_cast<LwpObjectHolder*>(m_Layouts.GetHead().obj().get()));
     if (xObjHolder.is())
     {
-        rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(xObjHolder->GetObject().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xLayout(
+            dynamic_cast<LwpVirtualLayout*>(xObjHolder->GetObject().obj().get()));
         if (!pStartLayout)
             return xLayout;
 
@@ -483,9 +470,10 @@ rtl::Reference<LwpVirtualLayout> LwpAssociatedLayouts::GetLayout(LwpVirtualLayou
     return rtl::Reference<LwpVirtualLayout>();
 }
 
-LwpHeadLayout::LwpHeadLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpHeadLayout::LwpHeadLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpVirtualLayout(objHdr, pStrm)
-{}
+{
+}
 
 void LwpHeadLayout::Read()
 {
@@ -499,7 +487,8 @@ void LwpHeadLayout::Read()
 void LwpHeadLayout::RegisterStyle()
 {
     //Register all children styles
-    rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    rtl::Reference<LwpVirtualLayout> xLayout(
+        dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
     o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
     while (xLayout.is())
     {
@@ -508,7 +497,8 @@ void LwpHeadLayout::RegisterStyle()
         //if the layout is relative to para, the layout will be registered in para
         if (!xLayout->IsRelativeAnchored())
             xLayout->DoRegisterStyle();
-        rtl::Reference<LwpVirtualLayout> xNext(dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xNext(
+            dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
         if (aSeen.find(xNext.get()) != aSeen.end())
             throw std::runtime_error("loop in conversion");
         xLayout = xNext;
@@ -521,7 +511,8 @@ void LwpHeadLayout::RegisterStyle()
  */
 rtl::Reference<LwpVirtualLayout> LwpHeadLayout::FindEnSuperTableLayout()
 {
-    rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    rtl::Reference<LwpVirtualLayout> xLayout(
+        dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
     o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
     while (xLayout)
     {
@@ -544,9 +535,7 @@ LwpLayoutStyle::LwpLayoutStyle()
 {
 }
 
-LwpLayoutStyle::~LwpLayoutStyle()
-{
-}
+LwpLayoutStyle::~LwpLayoutStyle() {}
 
 void LwpLayoutStyle::Read(LwpObjectStream* pStrm)
 {
@@ -559,14 +548,13 @@ void LwpLayoutStyle::Read(LwpObjectStream* pStrm)
     }
 }
 
-LwpLayoutMisc::LwpLayoutMisc() :
-m_nGridDistance(0), m_nGridType(0)
+LwpLayoutMisc::LwpLayoutMisc()
+    : m_nGridDistance(0)
+    , m_nGridType(0)
 {
 }
 
-LwpLayoutMisc::~LwpLayoutMisc()
-{
-}
+LwpLayoutMisc::~LwpLayoutMisc() {}
 
 void LwpLayoutMisc::Read(LwpObjectStream* pStrm)
 {
@@ -576,16 +564,14 @@ void LwpLayoutMisc::Read(LwpObjectStream* pStrm)
     pStrm->SkipExtra();
 }
 
-LwpMiddleLayout::LwpMiddleLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm )
+LwpMiddleLayout::LwpMiddleLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpVirtualLayout(objHdr, pStrm)
     , m_bGettingGeometry(false)
     , m_bGettingBackgroundStuff(false)
 {
 }
 
-LwpMiddleLayout::~LwpMiddleLayout()
-{
-}
+LwpMiddleLayout::~LwpMiddleLayout() {}
 
 void LwpMiddleLayout::Read()
 {
@@ -599,7 +585,7 @@ void LwpMiddleLayout::Read()
     pStrm->SkipExtra();
 
     // before layout hierarchy rework
-    if(LwpFileHeader::m_nFileRevision < 0x000B)
+    if (LwpFileHeader::m_nFileRevision < 0x000B)
         return;
 
     m_Content.ReadIndexed(pStrm);
@@ -654,9 +640,9 @@ LwpLayoutGeometry* LwpMiddleLayout::GetGeometry()
     m_bGettingGeometry = true;
 
     LwpLayoutGeometry* pRet = nullptr;
-    if( !m_LayGeometry.IsNull() )
+    if (!m_LayGeometry.IsNull())
     {
-        pRet = dynamic_cast<LwpLayoutGeometry*> (m_LayGeometry.obj().get());
+        pRet = dynamic_cast<LwpLayoutGeometry*>(m_LayGeometry.obj().get());
     }
     else
     {
@@ -678,9 +664,9 @@ LwpLayoutGeometry* LwpMiddleLayout::GetGeometry()
 double LwpMiddleLayout::GetGeometryHeight()
 {
     LwpLayoutGeometry* pGeo = GetGeometry();
-    if(pGeo)
+    if (pGeo)
     {
-        return LwpTools::ConvertFromUnitsToMetric( pGeo->GetHeight() );
+        return LwpTools::ConvertFromUnitsToMetric(pGeo->GetHeight());
     }
     else
         return -1;
@@ -693,9 +679,9 @@ double LwpMiddleLayout::GetGeometryHeight()
 double LwpMiddleLayout::GetGeometryWidth()
 {
     LwpLayoutGeometry* pGeo = GetGeometry();
-    if(pGeo)
+    if (pGeo)
     {
-        return LwpTools::ConvertFromUnitsToMetric( pGeo->GetWidth() );
+        return LwpTools::ConvertFromUnitsToMetric(pGeo->GetWidth());
     }
     else
         return -1;
@@ -707,7 +693,7 @@ double LwpMiddleLayout::GetGeometryWidth()
 */
 bool LwpMiddleLayout::MarginsSameAsParent()
 {
-    if(m_nOverrideFlag & OVER_MARGINS)
+    if (m_nOverrideFlag & OVER_MARGINS)
     {
         return LwpVirtualLayout::MarginsSameAsParent();
     }
@@ -726,11 +712,12 @@ bool LwpMiddleLayout::MarginsSameAsParent()
 double LwpMiddleLayout::MarginsValue(sal_uInt8 nWhichSide)
 {
     double fValue = 0;
-    if((nWhichSide==MARGIN_LEFT)||(nWhichSide==MARGIN_RIGHT))
+    if ((nWhichSide == MARGIN_LEFT) || (nWhichSide == MARGIN_RIGHT))
     {
-        if ( GetMarginsSameAsParent() )
+        if (GetMarginsSameAsParent())
         {
-            rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+            rtl::Reference<LwpVirtualLayout> xParent(
+                dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
             if (xParent.is() && !xParent->IsHeader())
             {
                 fValue = xParent->GetMarginsValue(nWhichSide);
@@ -739,10 +726,10 @@ double LwpMiddleLayout::MarginsValue(sal_uInt8 nWhichSide)
         }
     }
 
-    if(m_nOverrideFlag & OVER_MARGINS)
+    if (m_nOverrideFlag & OVER_MARGINS)
     {
-        LwpLayoutMargins* pMar1 = dynamic_cast<LwpLayoutMargins*> (m_LayMargins.obj().get());
-        if(pMar1)
+        LwpLayoutMargins* pMar1 = dynamic_cast<LwpLayoutMargins*>(m_LayMargins.obj().get());
+        if (pMar1)
         {
             fValue = pMar1->GetMargins().GetMarginsValue(nWhichSide);
             return fValue;
@@ -766,17 +753,17 @@ double LwpMiddleLayout::MarginsValue(sal_uInt8 nWhichSide)
 double LwpMiddleLayout::ExtMarginsValue(sal_uInt8 nWhichSide)
 {
     double fValue = 0;
-    if(m_nOverrideFlag & OVER_MARGINS)
+    if (m_nOverrideFlag & OVER_MARGINS)
     {
-        LwpLayoutMargins* pMar1 = dynamic_cast<LwpLayoutMargins*> (m_LayMargins.obj().get());
-        if(pMar1)
+        LwpLayoutMargins* pMar1 = dynamic_cast<LwpLayoutMargins*>(m_LayMargins.obj().get());
+        if (pMar1)
         {
             fValue = pMar1->GetExtMargins().GetMarginsValue(nWhichSide);
             return fValue;
         }
     }
     LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*>(GetBasedOnStyle().get());
-    if(pStyle)
+    if (pStyle)
     {
         fValue = pStyle->GetExtMarginsValue(nWhichSide);
         return fValue;
@@ -794,9 +781,10 @@ LwpBorderStuff* LwpMiddleLayout::GetBorderStuff()
 
     LwpBorderStuff* pRet = nullptr;
 
-    if(m_nOverrideFlag & OVER_BORDERS)
+    if (m_nOverrideFlag & OVER_BORDERS)
     {
-        LwpLayoutBorder* pLayoutBorder = dynamic_cast<LwpLayoutBorder*>(m_LayBorderStuff.obj().get());
+        LwpLayoutBorder* pLayoutBorder
+            = dynamic_cast<LwpLayoutBorder*>(m_LayBorderStuff.obj().get());
         pRet = pLayoutBorder ? &pLayoutBorder->GetBorderStuff() : nullptr;
     }
     else
@@ -808,7 +796,7 @@ LwpBorderStuff* LwpMiddleLayout::GetBorderStuff()
         }
     }
 
-    m_bGettingBorderStuff= false;
+    m_bGettingBorderStuff = false;
     return pRet;
 }
 
@@ -823,9 +811,10 @@ LwpBackgroundStuff* LwpMiddleLayout::GetBackgroundStuff()
 
     LwpBackgroundStuff* pRet = nullptr;
 
-    if(m_nOverrideFlag & OVER_BACKGROUND)
+    if (m_nOverrideFlag & OVER_BACKGROUND)
     {
-        LwpLayoutBackground* pLayoutBackground = dynamic_cast<LwpLayoutBackground*>(m_LayBackgroundStuff.obj().get());
+        LwpLayoutBackground* pLayoutBackground
+            = dynamic_cast<LwpLayoutBackground*>(m_LayBackgroundStuff.obj().get());
         pRet = pLayoutBackground ? &pLayoutBackground->GetBackgoudStuff() : nullptr;
     }
     else
@@ -847,13 +836,13 @@ LwpBackgroundStuff* LwpMiddleLayout::GetBackgroundStuff()
 std::unique_ptr<XFBorders> LwpMiddleLayout::GetXFBorders()
 {
     LwpBorderStuff* pBorderStuff = GetBorderStuff();
-    if(pBorderStuff&&pBorderStuff->GetSide() != 0)
+    if (pBorderStuff && pBorderStuff->GetSide() != 0)
     {
         //copy from lwpparastyle.
         std::unique_ptr<XFBorders> xXFBorders(new XFBorders);
         // apply 4 borders respectively
         LwpBorderStuff::BorderType const pType[] = { LwpBorderStuff::LEFT, LwpBorderStuff::RIGHT,
-            LwpBorderStuff::TOP, LwpBorderStuff::BOTTOM };
+                                                     LwpBorderStuff::TOP, LwpBorderStuff::BOTTOM };
 
         for (LwpBorderStuff::BorderType nC : pType)
         {
@@ -874,7 +863,7 @@ enumXFTextDir LwpMiddleLayout::GetTextDirection()
 {
     enumXFTextDir eTextDir = enumXFTextDirNone;
     sal_uInt8 nDirection = GetContentOrientation();
-    switch(nDirection)
+    switch (nDirection)
     {
         case TEXT_ORIENT_LRTB:
         {
@@ -907,10 +896,10 @@ enumXFTextDir LwpMiddleLayout::GetTextDirection()
 LwpColor* LwpMiddleLayout::GetBackColor()
 {
     LwpBackgroundStuff* pBackgroundStuff = GetBackgroundStuff();
-    if(pBackgroundStuff && !pBackgroundStuff->IsTransparent())
+    if (pBackgroundStuff && !pBackgroundStuff->IsTransparent())
     {
         LwpColor* pColor = pBackgroundStuff->GetFillColor();
-        if(pColor->IsValidColor())
+        if (pColor->IsValidColor())
         {
             return pColor;
         }
@@ -923,11 +912,11 @@ LwpColor* LwpMiddleLayout::GetBackColor()
 */
 LwpTabOverride* LwpMiddleLayout::GetTabOverride()
 {
-    if(m_nAttributes & OVER_TABS)
+    if (m_nAttributes & OVER_TABS)
     {
-        if(!m_TabPiece.IsNull())
+        if (!m_TabPiece.IsNull())
         {
-            LwpTabPiece *pPiece = dynamic_cast<LwpTabPiece*>(m_TabPiece.obj().get());
+            LwpTabPiece* pPiece = dynamic_cast<LwpTabPiece*>(m_TabPiece.obj().get());
             return static_cast<LwpTabOverride*>(pPiece ? pPiece->GetOverride() : nullptr);
         }
         return nullptr;
@@ -960,8 +949,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleMode()
 sal_uInt16 LwpMiddleLayout::GetScaleTile()
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
-        return (GetLayoutScale()->GetPlacement() & LwpLayoutScale::TILED)
-            ? 1 : 0;
+        return (GetLayoutScale()->GetPlacement() & LwpLayoutScale::TILED) ? 1 : 0;
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
         return dynamic_cast<LwpMiddleLayout&>(*xBase).GetScaleTile();
@@ -979,8 +967,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleCenter()
 
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
     {
-        nRet = (GetLayoutScale()->GetPlacement() & LwpLayoutScale::CENTERED)
-            ? 1 : 0;
+        nRet = (GetLayoutScale()->GetPlacement() & LwpLayoutScale::CENTERED) ? 1 : 0;
     }
     else
     {
@@ -997,7 +984,8 @@ bool LwpMiddleLayout::CanSizeRight()
 {
     sal_uInt8 RelType = GetRelativeType();
 
-    return !(RelType == LwpLayoutRelativityGuts::LAY_INLINE || RelType == LwpLayoutRelativityGuts::LAY_PARA_RELATIVE
+    return !(RelType == LwpLayoutRelativityGuts::LAY_INLINE
+             || RelType == LwpLayoutRelativityGuts::LAY_PARA_RELATIVE
              || RelType == LwpLayoutRelativityGuts::LAY_INLINE_VERTICAL);
 }
 sal_Int32 LwpMiddleLayout::GetMinimumWidth()
@@ -1036,14 +1024,13 @@ bool LwpMiddleLayout::IsSizeRightToContainer()
 
     if (m_nOverrideFlag & OVER_SIZE)
     {
-        return (m_nDirection & ((LAY_USEDIRECTION|LAY_AUTOSIZE|LAY_TOCONTAINER)
-                        << SHIFT_RIGHT))
-        == ((LAY_USEDIRECTION | LAY_TOCONTAINER | LAY_AUTOSIZE) << SHIFT_RIGHT);
+        return (m_nDirection & ((LAY_USEDIRECTION | LAY_AUTOSIZE | LAY_TOCONTAINER) << SHIFT_RIGHT))
+               == ((LAY_USEDIRECTION | LAY_TOCONTAINER | LAY_AUTOSIZE) << SHIFT_RIGHT);
     }
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
     {
-        LwpMiddleLayout * pLayout = dynamic_cast<LwpMiddleLayout *>(xBase.get());
+        LwpMiddleLayout* pLayout = dynamic_cast<LwpMiddleLayout*>(xBase.get());
         return pLayout && pLayout->IsSizeRightToContainer();
     }
     else
@@ -1056,14 +1043,13 @@ bool LwpMiddleLayout::IsSizeRightToContent()
 
     if (m_nOverrideFlag & OVER_SIZE)
     {
-        return (m_nDirection & ((LAY_USEDIRECTION|LAY_AUTOSIZE|LAY_TOCONTAINER)
-                            << SHIFT_RIGHT))
-                == ((LAY_USEDIRECTION | LAY_AUTOSIZE) << SHIFT_RIGHT);
+        return (m_nDirection & ((LAY_USEDIRECTION | LAY_AUTOSIZE | LAY_TOCONTAINER) << SHIFT_RIGHT))
+               == ((LAY_USEDIRECTION | LAY_AUTOSIZE) << SHIFT_RIGHT);
     }
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
     {
-        LwpMiddleLayout * pLayout = dynamic_cast<LwpMiddleLayout *>(xBase.get());
+        LwpMiddleLayout* pLayout = dynamic_cast<LwpMiddleLayout*>(xBase.get());
         return pLayout && pLayout->IsSizeRightToContent();
     }
     else
@@ -1074,19 +1060,13 @@ bool LwpMiddleLayout::IsSizeRightToContent()
 * @descr:   Get layout height
 *
 */
-double LwpMiddleLayout::GetHeight()
-{
-    return GetGeometryHeight();
-}
+double LwpMiddleLayout::GetHeight() { return GetGeometryHeight(); }
 
 /**
 * @descr:   Get layout height
 *
 */
-double LwpMiddleLayout::GetWidth()
-{
-    return GetGeometryWidth();
-}
+double LwpMiddleLayout::GetWidth() { return GetGeometryWidth(); }
 /**
 * @descr:   Get layout origin point
 *
@@ -1094,17 +1074,16 @@ double LwpMiddleLayout::GetWidth()
 LwpPoint LwpMiddleLayout::GetOrigin()
 {
     LwpLayoutGeometry* pGeo = GetGeometry();
-    if(pGeo)
+    if (pGeo)
     {
         sal_uInt8 nType = GetRelativeType();
-        if(nType == LwpLayoutRelativityGuts::LAY_INLINE
-            || nType == LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE )
+        if (nType == LwpLayoutRelativityGuts::LAY_INLINE
+            || nType == LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE)
         {
             return pGeo->GetAbsoluteOrigin();
         }
         else
             return pGeo->GetOrigin();
-
     }
 
     return LwpPoint();
@@ -1146,11 +1125,12 @@ std::unique_ptr<XFBGImage> LwpMiddleLayout::GetFillPattern()
 */
 bool LwpMiddleLayout::IsAutoGrow()
 {
-    if(m_nOverrideFlag & OVER_SIZE)
+    if (m_nOverrideFlag & OVER_SIZE)
     {
-        return (m_nDirection &
-            ((LAY_AUTOGROW << SHIFT_UP) | (LAY_AUTOGROW << SHIFT_DOWN) |
-            (LAY_AUTOGROW << SHIFT_RIGHT) | (LAY_AUTOGROW << SHIFT_LEFT))) != 0;
+        return (m_nDirection
+                & ((LAY_AUTOGROW << SHIFT_UP) | (LAY_AUTOGROW << SHIFT_DOWN)
+                   | (LAY_AUTOGROW << SHIFT_RIGHT) | (LAY_AUTOGROW << SHIFT_LEFT)))
+               != 0;
     }
     else
     {
@@ -1169,7 +1149,7 @@ bool LwpMiddleLayout::IsAutoGrow()
 */
 bool LwpMiddleLayout::IsAutoGrowDown()
 {
-    if(m_nOverrideFlag & OVER_SIZE)
+    if (m_nOverrideFlag & OVER_SIZE)
     {
         return (m_nDirection & (LAY_AUTOGROW << SHIFT_DOWN)) != 0;
     }
@@ -1219,7 +1199,7 @@ bool LwpMiddleLayout::IsAutoGrowUp()
 */
 bool LwpMiddleLayout::IsAutoGrowLeft()
 {
-    if(m_nOverrideFlag & OVER_SIZE)
+    if (m_nOverrideFlag & OVER_SIZE)
     {
         return (m_nDirection & (LAY_AUTOGROW << SHIFT_LEFT)) != 0;
     }
@@ -1240,7 +1220,7 @@ bool LwpMiddleLayout::IsAutoGrowLeft()
 */
 bool LwpMiddleLayout::IsAutoGrowRight()
 {
-    if(m_nOverrideFlag & OVER_SIZE)
+    if (m_nOverrideFlag & OVER_SIZE)
     {
         return (m_nDirection & (LAY_AUTOGROW << SHIFT_RIGHT)) != 0;
     }
@@ -1262,9 +1242,10 @@ bool LwpMiddleLayout::IsAutoGrowRight()
 sal_uInt8 LwpMiddleLayout::GetContentOrientation()
 {
     //content orientation in Graphic objects and OLE objects not supported now
-    if((m_nOverrideFlag & OVER_ROTATION)&& !m_LayGeometry.IsNull())
+    if ((m_nOverrideFlag & OVER_ROTATION) && !m_LayGeometry.IsNull())
     {
-        LwpLayoutGeometry* pLayGeometry = dynamic_cast<LwpLayoutGeometry*> (m_LayGeometry.obj().get());
+        LwpLayoutGeometry* pLayGeometry
+            = dynamic_cast<LwpLayoutGeometry*>(m_LayGeometry.obj().get());
         if (pLayGeometry)
             return pLayGeometry->GetContentOrientation();
     }
@@ -1285,18 +1266,19 @@ sal_uInt8 LwpMiddleLayout::GetContentOrientation()
 */
 bool LwpMiddleLayout::HonorProtection()
 {
-    if(m_nOverrideFlag & OVER_MISC)
+    if (m_nOverrideFlag & OVER_MISC)
     {
-        if(!(m_nAttributes2 & STYLE2_HONORPROTECTION))
+        if (!(m_nAttributes2 & STYLE2_HONORPROTECTION))
             return false;
 
-        rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xParent(
+            dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
         if (xParent.is() && !xParent->IsHeader())
         {
             return xParent->GetHonorProtection();
         }
 
-        if(m_pFoundry)//is null now
+        if (m_pFoundry) //is null now
         {
             LwpDocument* pDoc = m_pFoundry->GetDocument();
             if (pDoc)
@@ -1324,9 +1306,9 @@ bool LwpMiddleLayout::HonorProtection()
 bool LwpMiddleLayout::IsProtected()
 {
     bool bProtected = false;
-    if(m_nOverrideFlag & OVER_MISC)
+    if (m_nOverrideFlag & OVER_MISC)
     {
-        bProtected = (m_nAttributes & STYLE_PROTECTED)!=0;
+        bProtected = (m_nAttributes & STYLE_PROTECTED) != 0;
     }
     else
     {
@@ -1339,7 +1321,8 @@ bool LwpMiddleLayout::IsProtected()
             bProtected = LwpVirtualLayout::IsProtected();
     }
 
-    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+    rtl::Reference<LwpVirtualLayout> xParent(
+        dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
     if (xParent.is() && !xParent->IsHeader())
     {
         /* If a parent's protected then none of its children can be accessed. */
@@ -1351,12 +1334,11 @@ bool LwpMiddleLayout::IsProtected()
 
         /* If our parent isn't honoring protection then we aren't protected. */
         return false;
-
     }
-    if(m_pFoundry)//is null now
+    if (m_pFoundry) //is null now
     {
         LwpDocument* pDoc = m_pFoundry->GetDocument();
-        if(pDoc)
+        if (pDoc)
         {
             if (pDoc->GetHonorProtection())
                 return bProtected;
@@ -1375,7 +1357,8 @@ bool LwpMiddleLayout::IsProtected()
 */
 rtl::Reference<LwpVirtualLayout> LwpMiddleLayout::GetWaterMarkLayout()
 {
-    rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    rtl::Reference<LwpVirtualLayout> xLay(
+        dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
     o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
     while (xLay.is())
     {
@@ -1384,7 +1367,8 @@ rtl::Reference<LwpVirtualLayout> LwpMiddleLayout::GetWaterMarkLayout()
         {
             return xLay;
         }
-        rtl::Reference<LwpVirtualLayout> xNext(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xNext(
+            dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
         if (aSeen.find(xNext.get()) != aSeen.end())
             throw std::runtime_error("loop in conversion");
         xLay = xNext;
@@ -1402,18 +1386,19 @@ std::unique_ptr<XFBGImage> LwpMiddleLayout::GetXFBGImage()
 
     rtl::Reference<LwpVirtualLayout> xWaterMarkLayout(GetWaterMarkLayout());
     LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xWaterMarkLayout.get());
-    if(pLay)
+    if (pLay)
     {
         //test BGImage
         LwpGraphicObject* pGrfObj = dynamic_cast<LwpGraphicObject*>(pLay->GetContent().obj().get());
-        if(pGrfObj)
+        if (pGrfObj)
         {
             xXFBGImage.reset(new XFBGImage);
-            if(pGrfObj->IsLinked())
+            if (pGrfObj->IsLinked())
             {
                 //set file link
                 OUString linkedfilepath = pGrfObj->GetLinkedFilePath();
-                OUString fileURL = LwpTools::convertToFileUrl(OUStringToOString(linkedfilepath, osl_getThreadTextEncoding()));
+                OUString fileURL = LwpTools::convertToFileUrl(
+                    OUStringToOString(linkedfilepath, osl_getThreadTextEncoding()));
                 xXFBGImage->SetFileLink(fileURL);
             }
             else
@@ -1423,21 +1408,21 @@ std::unique_ptr<XFBGImage> LwpMiddleLayout::GetXFBGImage()
             }
 
             //automatic, top left
-            xXFBGImage->SetPosition(enumXFAlignStart,enumXFAlignTop);
-            if(pLay->GetScaleCenter())
+            xXFBGImage->SetPosition(enumXFAlignStart, enumXFAlignTop);
+            if (pLay->GetScaleCenter())
             {
                 //center
                 xXFBGImage->SetPosition();
             }
-            else if(pLay->GetScaleTile())
+            else if (pLay->GetScaleTile())
             {
                 //tile
                 xXFBGImage->SetRepeate();
             }
             //fit type, area type
-            if((pLay->GetScaleMode()& LwpLayoutScale::FIT_IN_FRAME)!=0)
+            if ((pLay->GetScaleMode() & LwpLayoutScale::FIT_IN_FRAME) != 0)
             {
-                if((pLay->GetScaleMode()& LwpLayoutScale::MAINTAIN_ASPECT_RATIO)==0)
+                if ((pLay->GetScaleMode() & LwpLayoutScale::MAINTAIN_ASPECT_RATIO) == 0)
                 {
                     xXFBGImage->SetStretch();
                 }
@@ -1459,7 +1444,7 @@ bool LwpMiddleLayout::GetUsePrinterSettings()
 
     bool bRet = false;
 
-    if(m_nOverrideFlag & OVER_SIZE)
+    if (m_nOverrideFlag & OVER_SIZE)
     {
         bRet = (m_nAttributes3 & STYLE3_USEPRINTERSETTINGS) != 0;
     }
@@ -1483,16 +1468,14 @@ bool LwpMiddleLayout::HasContent()
     return content.is();
 }
 
-LwpLayout::LwpLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+LwpLayout::LwpLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpMiddleLayout(objHdr, pStrm)
     , m_bGettingShadow(false)
     , m_bGettingNumCols(false)
 {
 }
 
-LwpLayout::~LwpLayout()
-{
-}
+LwpLayout::~LwpLayout() {}
 
 void LwpLayout::Read()
 {
@@ -1540,7 +1523,9 @@ sal_uInt16 LwpLayout::GetNumCols()
     m_bGettingNumCols = true;
 
     sal_uInt16 nRet = 0;
-    LwpLayoutColumns* pLayColumns = (m_nOverrideFlag & OVER_COLUMNS) ? dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj().get()) : nullptr;
+    LwpLayoutColumns* pLayColumns = (m_nOverrideFlag & OVER_COLUMNS)
+                                        ? dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj().get())
+                                        : nullptr;
     if (pLayColumns)
     {
         nRet = pLayColumns->GetNumCols();
@@ -1555,17 +1540,16 @@ sal_uInt16 LwpLayout::GetNumCols()
     return nRet;
 }
 
-
 /**
 * @descr:   Get gap between columns
 * @param:   the order of column
 */
 double LwpLayout::GetColGap(sal_uInt16 nIndex)
 {
-    if((m_nOverrideFlag & OVER_COLUMNS)||(m_nAttributes2 & STYLE2_LOCALCOLUMNINFO))
+    if ((m_nOverrideFlag & OVER_COLUMNS) || (m_nAttributes2 & STYLE2_LOCALCOLUMNINFO))
     {
         LwpLayoutColumns* pLayColumns = dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj().get());
-        if(pLayColumns)
+        if (pLayColumns)
         {
             return pLayColumns->GetColGap(nIndex);
         }
@@ -1589,7 +1573,7 @@ XFColumns* LwpLayout::GetXFColumns()
 {
     //if there is only one column, do not need insert columns
     sal_uInt16 nCols = GetNumCols();
-    if(nCols==1)
+    if (nCols == 1)
     {
         return nullptr;
     }
@@ -1608,22 +1592,22 @@ XFColumns* LwpLayout::GetXFColumns()
     xColumns->SetGap(fGap);
 
     //set xfcolumn
-    for(sal_uInt16 nIndex = 0; nIndex<nCols; nIndex++)
+    for (sal_uInt16 nIndex = 0; nIndex < nCols; nIndex++)
     {
         XFColumn aColumn;
-        sal_Int32 nWidth = 8305/nCols;  //relative width
+        sal_Int32 nWidth = 8305 / nCols; //relative width
         aColumn.SetRelWidth(nWidth);
 
         //the left and right margins is 0;
-        double nGap = GetColGap(nIndex)/2;
-        aColumn.SetMargins(nGap,nGap);
-        if(nIndex==0)
+        double nGap = GetColGap(nIndex) / 2;
+        aColumn.SetMargins(nGap, nGap);
+        if (nIndex == 0)
         {
-            aColumn.SetMargins(0,nGap);
+            aColumn.SetMargins(0, nGap);
         }
-        if(nIndex==(nCols-1))
+        if (nIndex == (nCols - 1))
         {
-            aColumn.SetMargins(nGap,0);
+            aColumn.SetMargins(nGap, 0);
         }
         xColumns->AddColumn(aColumn);
     }
@@ -1637,10 +1621,10 @@ XFColumns* LwpLayout::GetXFColumns()
 */
 XFColumnSep* LwpLayout::GetColumnSep()
 {
-
     //Get LwpLayoutGutters
-    LwpLayoutGutters* pLayoutGutters = dynamic_cast<LwpLayoutGutters*>(m_LayGutterStuff.obj().get());
-    if(!pLayoutGutters)
+    LwpLayoutGutters* pLayoutGutters
+        = dynamic_cast<LwpLayoutGutters*>(m_LayGutterStuff.obj().get());
+    if (!pLayoutGutters)
     {
         return nullptr;
     }
@@ -1648,8 +1632,8 @@ XFColumnSep* LwpLayout::GetColumnSep()
     LwpBorderStuff& rBorderStuff = pLayoutGutters->GetBorderStuff();
 
     LwpBorderStuff::BorderType eType = LwpBorderStuff::LEFT;
-    LwpColor    aColor = rBorderStuff.GetSideColor(eType);
-    double  fWidth = rBorderStuff.GetSideWidth(eType);
+    LwpColor aColor = rBorderStuff.GetSideColor(eType);
+    double fWidth = rBorderStuff.GetSideWidth(eType);
     //sal_uInt16    nType = rBorderStuff->GetSideType(eType);
 
     XFColumnSep* pColumnSep = new XFColumnSep();
@@ -1670,33 +1654,32 @@ LwpLayout::UseWhenType LwpLayout::GetUseWhenType()
 {
     UseWhenType eType = StartWithinPage;
     LwpUseWhen* pUseWhen = GetUseWhen();
-    if(pUseWhen)
+    if (pUseWhen)
     {
-        if(pUseWhen->IsStartOnThisHF())
+        if (pUseWhen->IsStartOnThisHF())
         {
-            eType =  StartWithinColume;
+            eType = StartWithinColume;
         }
-        else if(pUseWhen->IsStartOnThisPage())
+        else if (pUseWhen->IsStartOnThisPage())
         {
-            eType =  StartWithinPage;
+            eType = StartWithinPage;
         }
-        else if(pUseWhen->IsStartOnNextPage())
+        else if (pUseWhen->IsStartOnNextPage())
         {
             eType = StartOnNextPage;
         }
-        else if(pUseWhen->IsStartOnNextOddPage())
+        else if (pUseWhen->IsStartOnNextOddPage())
         {
-            eType =  StartOnOddPage;
+            eType = StartOnOddPage;
         }
-        else if(pUseWhen->IsStartOnNextEvenPage())
+        else if (pUseWhen->IsStartOnNextEvenPage())
         {
-            eType =   StartOnEvenPage;
+            eType = StartOnEvenPage;
         }
-
     }
     else
     {
-        eType =   StartOnNextPage;
+        eType = StartOnNextPage;
     }
     return eType;
 }
@@ -1707,10 +1690,10 @@ LwpLayout::UseWhenType LwpLayout::GetUseWhenType()
 */
 sal_uInt16 LwpLayout::GetUsePage()
 {
-    if(m_nOverrideFlag & OVER_PLACEMENT)
+    if (m_nOverrideFlag & OVER_PLACEMENT)
     {
         LwpUseWhen* pUseWhen = GetUseWhen();
-        if(pUseWhen)
+        if (pUseWhen)
             return pUseWhen->GetUsePage();
         else
             return 0;
@@ -1732,7 +1715,7 @@ sal_uInt16 LwpLayout::GetUsePage()
 */
 LwpUseWhen* LwpLayout::VirtualGetUseWhen()
 {
-    if(m_nOverrideFlag & OVER_PLACEMENT)
+    if (m_nOverrideFlag & OVER_PLACEMENT)
     {
         return &m_aUseWhen;
     }
@@ -1753,10 +1736,10 @@ LwpUseWhen* LwpLayout::VirtualGetUseWhen()
 */
 bool LwpLayout::IsUseOnAllPages()
 {
-    if(m_nOverrideFlag & OVER_PLACEMENT)
+    if (m_nOverrideFlag & OVER_PLACEMENT)
     {
         LwpUseWhen* pUseWhen = GetUseWhen();
-        if(pUseWhen)
+        if (pUseWhen)
             return pUseWhen->IsUseOnAllPages();
         else
             return false;
@@ -1778,10 +1761,10 @@ bool LwpLayout::IsUseOnAllPages()
 */
 bool LwpLayout::IsUseOnAllEvenPages()
 {
-    if(m_nOverrideFlag & OVER_PLACEMENT)
+    if (m_nOverrideFlag & OVER_PLACEMENT)
     {
         LwpUseWhen* pUseWhen = GetUseWhen();
-        if(pUseWhen)
+        if (pUseWhen)
             return pUseWhen->IsUseOnAllEvenPages();
         else
             return false;
@@ -1803,10 +1786,10 @@ bool LwpLayout::IsUseOnAllEvenPages()
 */
 bool LwpLayout::IsUseOnAllOddPages()
 {
-    if(m_nOverrideFlag & OVER_PLACEMENT)
+    if (m_nOverrideFlag & OVER_PLACEMENT)
     {
         LwpUseWhen* pUseWhen = GetUseWhen();
-        if(pUseWhen)
+        if (pUseWhen)
             return pUseWhen->IsUseOnAllOddPages();
         else
             return false;
@@ -1828,10 +1811,10 @@ bool LwpLayout::IsUseOnAllOddPages()
 */
 bool LwpLayout::IsUseOnPage()
 {
-    if(m_nOverrideFlag & OVER_PLACEMENT)
+    if (m_nOverrideFlag & OVER_PLACEMENT)
     {
         LwpUseWhen* pUseWhen = GetUseWhen();
-        if(pUseWhen)
+        if (pUseWhen)
             return pUseWhen->IsUseOnPage();
         else
             return false;
@@ -1856,7 +1839,7 @@ LwpShadow* LwpLayout::GetShadow()
         throw std::runtime_error("recursion in layout");
     m_bGettingShadow = true;
     LwpShadow* pRet = nullptr;
-    if(m_nOverrideFlag & OVER_SHADOW)
+    if (m_nOverrideFlag & OVER_SHADOW)
     {
         LwpLayoutShadow* pLayoutShadow = dynamic_cast<LwpLayoutShadow*>(m_LayShadow.obj().get());
         pRet = pLayoutShadow ? &pLayoutShadow->GetShadow() : nullptr;
@@ -1879,13 +1862,13 @@ LwpShadow* LwpLayout::GetShadow()
 XFShadow* LwpLayout::GetXFShadow()
 {
     LwpShadow* pShadow = GetShadow();
-    if( pShadow )
+    if (pShadow)
     {
         LwpColor color = pShadow->GetColor();
-        double  offsetX = pShadow->GetOffsetX();
-        double  offsetY = pShadow->GetOffsetY();
+        double offsetX = pShadow->GetOffsetX();
+        double offsetY = pShadow->GetOffsetY();
 
-        if( offsetX && offsetY && color.IsValidColor() )
+        if (offsetX && offsetY && color.IsValidColor())
         {
             XFShadow* pXFShadow = new XFShadow();
             enumXFShadowPos eXFShadowPos = enumXFShadowLeftTop;
@@ -1893,14 +1876,14 @@ XFShadow* LwpLayout::GetXFShadow()
 
             bool left = false;
             bool top = false;
-            if( offsetX < 0 )
+            if (offsetX < 0)
                 left = true;
-            if( offsetY < 0 )
+            if (offsetY < 0)
                 top = true;
-            if( left )
+            if (left)
             {
                 fOffset = -offsetX;
-                if( top )
+                if (top)
                     eXFShadowPos = enumXFShadowLeftTop;
                 else
                     eXFShadowPos = enumXFShadowLeftBottom;
@@ -1908,7 +1891,7 @@ XFShadow* LwpLayout::GetXFShadow()
             else
             {
                 fOffset = offsetX;
-                if( top )
+                if (top)
                     eXFShadowPos = enumXFShadowRightTop;
                 else
                     eXFShadowPos = enumXFShadowRightBottom;
@@ -1930,11 +1913,11 @@ XFShadow* LwpLayout::GetXFShadow()
  */
 rtl::Reference<LwpVirtualLayout> LwpLayout::GetContainerLayout()
 {
-    if(IsRelativeAnchored())
+    if (IsRelativeAnchored())
     {
         //get position
         LwpPara* pPara = dynamic_cast<LwpPara*>(GetPosition().obj().get());
-        if(pPara)
+        if (pPara)
         {
             LwpStory* pStory = pPara->GetStory();
             return pStory ? pStory->GetTabLayout() : nullptr;
@@ -1943,47 +1926,47 @@ rtl::Reference<LwpVirtualLayout> LwpLayout::GetContainerLayout()
     return GetParentLayout();
 }
 
-LwpPlacableLayout::LwpPlacableLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm )
+LwpPlacableLayout::LwpPlacableLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpLayout(objHdr, pStrm)
     , m_bGettingWrapType(false)
     , m_bGettingLayoutRelativity(false)
     , m_nWrapType(0)
     , m_nBuoyancy(0)
     , m_nBaseLineOffset(0)
-{}
+{
+}
 
-LwpPlacableLayout::~LwpPlacableLayout()
-{}
+LwpPlacableLayout::~LwpPlacableLayout() {}
 
 void LwpPlacableLayout::Read()
 {
     LwpObjectStream* pStrm = m_pObjStrm.get();
     LwpLayout::Read();
-    if(LwpFileHeader::m_nFileRevision < 0x000B)
+    if (LwpFileHeader::m_nFileRevision < 0x000B)
     {
         assert(false);
     }
     else
     {
         sal_uInt16 simple = pStrm->QuickReaduInt16();
-        if(!simple)
+        if (!simple)
         {
             m_nWrapType = pStrm->QuickReaduInt8();
             m_nBuoyancy = pStrm->QuickReaduInt8();
             m_nBaseLineOffset = pStrm->QuickReadInt32();
-            m_Script.Read( pStrm);
+            m_Script.Read(pStrm);
         }
         else
         {
             m_nWrapType = LAY_WRAP_AROUND;
             m_nBuoyancy = LAY_BUOYNEUTRAL;
-            m_nBaseLineOffset    = 0;
+            m_nBaseLineOffset = 0;
         }
-        m_LayRelativity.ReadIndexed( pStrm);
-        if(pStrm->CheckExtra())
+        m_LayRelativity.ReadIndexed(pStrm);
+        if (pStrm->CheckExtra())
         {
             sal_uInt16 count = pStrm->QuickReaduInt16();
-            if(count)
+            if (count)
             {
                 // temporarily added by  to avoid assertion
                 while (count)
@@ -2055,7 +2038,7 @@ LwpLayoutRelativity* LwpPlacableLayout::GetRelativityPiece()
 sal_uInt8 LwpPlacableLayout::GetRelativeType()
 {
     LwpLayoutRelativity* pLayRel = GetRelativityPiece();
-    if(pLayRel)
+    if (pLayRel)
     {
         return pLayRel->GetRelGuts().GetRelativeType();
     }
@@ -2068,7 +2051,7 @@ sal_uInt8 LwpPlacableLayout::GetRelativeType()
 sal_Int32 LwpPlacableLayout::GetBaseLineOffset()
 {
     /* The baseline is only valid if this is flow-with-text */
-    if(GetRelativeType()!=LwpLayoutRelativityGuts::LAY_INLINE)
+    if (GetRelativeType() != LwpLayoutRelativityGuts::LAY_INLINE)
     {
         return 0;
     }
@@ -2079,7 +2062,7 @@ sal_Int32 LwpPlacableLayout::GetBaseLineOffset()
         return Baseline;
     */
 
-    if(m_nOverrideFlag & OVER_PLACEMENT)
+    if (m_nOverrideFlag & OVER_PLACEMENT)
     {
         return m_nBaseLineOffset;
     }
@@ -2092,7 +2075,6 @@ sal_Int32 LwpPlacableLayout::GetBaseLineOffset()
         }
     }
     return 0;
-
 }
 /**
 * @descr:   whether the parent layout is page layout
@@ -2100,7 +2082,7 @@ sal_Int32 LwpPlacableLayout::GetBaseLineOffset()
 */
 bool LwpPlacableLayout::IsAnchorPage()
 {
-    if(IsRelativeAnchored())
+    if (IsRelativeAnchored())
         return false;
 
     rtl::Reference<LwpVirtualLayout> xLayout = GetParentLayout();
@@ -2112,7 +2094,7 @@ bool LwpPlacableLayout::IsAnchorPage()
 */
 bool LwpPlacableLayout::IsAnchorFrame()
 {
-    if(IsRelativeAnchored())
+    if (IsRelativeAnchored())
         return false;
 
     rtl::Reference<LwpVirtualLayout> xLayout = GetParentLayout();
@@ -2124,7 +2106,7 @@ bool LwpPlacableLayout::IsAnchorFrame()
 */
 bool LwpPlacableLayout::IsAnchorCell()
 {
-    if(IsRelativeAnchored())
+    if (IsRelativeAnchored())
         return false;
 
     rtl::Reference<LwpVirtualLayout> xLayout = GetParentLayout();
@@ -2135,9 +2117,6 @@ bool LwpPlacableLayout::IsAnchorCell()
 * @descr:   Set font style for setting position of frame
 *
 */
-void LwpPlacableLayout::SetFont(rtl::Reference<XFFont> const & pFont)
-{
-    m_pFont = pFont;
-}
+void LwpPlacableLayout::SetFont(rtl::Reference<XFFont> const& pFont) { m_pFont = pFont; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

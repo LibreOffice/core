@@ -75,45 +75,33 @@ public:
     void SetType(const OUString& sType);
     void SetDesc(const OUString& sDesc);
     void SetPrompt(const OUString& sText);
-    void ToXml(IXFStream *pStrm) override;
+    void ToXml(IXFStream* pStrm) override;
+
 private:
     OUString m_strType;
     OUString m_strDesc;
     OUString m_strText;
 };
 
-XFHolderStart::XFHolderStart()
-{
-}
+XFHolderStart::XFHolderStart() {}
 
-XFHolderStart::~XFHolderStart()
-{
-}
+XFHolderStart::~XFHolderStart() {}
 
-inline void XFHolderStart::SetType(const OUString& sType)
-{
-    m_strType = sType;
-}
+inline void XFHolderStart::SetType(const OUString& sType) { m_strType = sType; }
 
-inline void XFHolderStart::SetDesc(const OUString& sDesc)
-{
-    m_strDesc = sDesc;
-}
+inline void XFHolderStart::SetDesc(const OUString& sDesc) { m_strDesc = sDesc; }
 
-inline void XFHolderStart::SetPrompt(const OUString& sText)
-{
-    m_strText = sText;
-}
+inline void XFHolderStart::SetPrompt(const OUString& sText) { m_strText = sText; }
 
-inline void XFHolderStart::ToXml(IXFStream *pStrm)
+inline void XFHolderStart::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pAttrList->AddAttribute( "text:placeholder-type",m_strType);
+    pAttrList->AddAttribute("text:placeholder-type", m_strType);
     if (!m_strDesc.isEmpty())
-        pAttrList->AddAttribute( "text:description", m_strDesc);
-    pStrm->StartElement( "text:placeholder" );
-    if( !m_strText.isEmpty())
+        pAttrList->AddAttribute("text:description", m_strDesc);
+    pStrm->StartElement("text:placeholder");
+    if (!m_strText.isEmpty())
         pStrm->Characters(m_strText);
 }
 
@@ -122,21 +110,14 @@ class XFHolderEnd : public XFContent
 public:
     XFHolderEnd();
     virtual ~XFHolderEnd() override;
-    void ToXml(IXFStream *pStrm) override;
+    void ToXml(IXFStream* pStrm) override;
 };
 
-XFHolderEnd::XFHolderEnd()
-{
-}
+XFHolderEnd::XFHolderEnd() {}
 
-XFHolderEnd::~XFHolderEnd()
-{
-}
+XFHolderEnd::~XFHolderEnd() {}
 
-inline void XFHolderEnd::ToXml(IXFStream *pStrm)
-{
-    pStrm->EndElement( "text:placeholder" );
-}
+inline void XFHolderEnd::ToXml(IXFStream* pStrm) { pStrm->EndElement("text:placeholder"); }
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

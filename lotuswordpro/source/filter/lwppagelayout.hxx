@@ -60,19 +60,18 @@
 #include "lwplayout.hxx"
 #include <xfilter/xfmasterpage.hxx>
 
-
 class LwpHeaderLayout;
 class LwpFooterLayout;
 
 class LwpPageLayout final : public LwpLayout
 {
 public:
-    LwpPageLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpPageLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual ~LwpPageLayout() override;
     virtual void RegisterStyle() override;
     OUString RegisterEndnoteStyle();
     virtual void Parse(IXFStream* pOutputStream) override;
-    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_PAGE_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType() override { return LWP_PAGE_LAYOUT; }
 
 private:
     void Read() override;
@@ -92,59 +91,63 @@ private:
     void GetWidthAndHeight(double& fWidth, double& fHeight);
     double GetWidth() override;
     double GetHeight() override;
-    LwpAtomHolder   m_PrinterBinName;
-    sal_uInt16      m_nPrinterBin;
-    sal_Int32       m_nBdroffset;
-    LwpAtomHolder   m_PaperName;
-    XFPageMaster*   m_pXFPageMaster;
+    LwpAtomHolder m_PrinterBinName;
+    sal_uInt16 m_nPrinterBin;
+    sal_Int32 m_nBdroffset;
+    LwpAtomHolder m_PaperName;
+    XFPageMaster* m_pXFPageMaster;
+
 public:
     bool HasColumns();
-    bool HasFillerPageText(LwpFoundry const * pFoundry);
+    bool HasFillerPageText(LwpFoundry const* pFoundry);
     void ConvertFillerPageText(XFContentContainer* pCont);
     void ResetXFColumns();
     LwpPageLayout* GetOddChildLayout();
     virtual sal_Int32 GetPageNumber(sal_uInt16 nLayoutNumber) override;
-    bool operator <(LwpPageLayout& Other);
+    bool operator<(LwpPageLayout& Other);
     LwpPara* GetPagePosition();
 };
 
-class LwpHeaderLayout: public LwpPlacableLayout
+class LwpHeaderLayout : public LwpPlacableLayout
 {
 public:
-    LwpHeaderLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpHeaderLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual ~LwpHeaderLayout() override;
-    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_HEADER_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType() override { return LWP_HEADER_LAYOUT; }
     using LwpPlacableLayout::RegisterStyle;
-    void RegisterStyle( XFPageMaster* pm1 );
-    void RegisterStyle( XFMasterPage* mp1 );
+    void RegisterStyle(XFPageMaster* pm1);
+    void RegisterStyle(XFMasterPage* mp1);
+
 protected:
     void Read() override;
-    void ParseMargins( XFHeaderStyle* ph1 );
-    void ParseBorder( XFHeaderStyle* ph1 );
-    void ParseShadow( XFHeaderStyle* ph1 );
+    void ParseMargins(XFHeaderStyle* ph1);
+    void ParseBorder(XFHeaderStyle* ph1);
+    void ParseShadow(XFHeaderStyle* ph1);
     void ParsePatternFill(XFHeaderStyle* ph1);
     void ParseBackGround(XFHeaderStyle* ph1);
     void ParseBackColor(XFHeaderStyle* ph1);
 
     void ParseWaterMark(XFHeaderStyle* ph1);
+
 private:
     sal_Int32 m_nBorderOffset;
 };
 
-class LwpFooterLayout: public LwpPlacableLayout
+class LwpFooterLayout : public LwpPlacableLayout
 {
 public:
-    LwpFooterLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpFooterLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual ~LwpFooterLayout() override;
-    virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_FOOTER_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType() override { return LWP_FOOTER_LAYOUT; }
     using LwpPlacableLayout::RegisterStyle;
     void RegisterStyle(XFPageMaster* pm1);
     void RegisterStyle(XFMasterPage* mp1);
+
 protected:
     void Read() override;
-    void ParseMargins( XFFooterStyle* pFooterStyle );
-    void ParseBorder( XFFooterStyle* pFooterStyle );
-    void ParseShadow( XFFooterStyle* pFooterStyle );
+    void ParseMargins(XFFooterStyle* pFooterStyle);
+    void ParseBorder(XFFooterStyle* pFooterStyle);
+    void ParseShadow(XFFooterStyle* pFooterStyle);
     void ParsePatternFill(XFFooterStyle* pFooterStyle);
     void ParseBackGround(XFFooterStyle* pFooterStyle);
 

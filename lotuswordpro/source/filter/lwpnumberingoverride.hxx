@@ -72,13 +72,13 @@ public:
 
     enum
     {
-        NO_LEVEL        = 0x0001,
-        NO_POSITION     = 0x0002,
-        HEADING         = 0x0004,
-        SMARTLEVEL      = 0x0008
+        NO_LEVEL = 0x0001,
+        NO_POSITION = 0x0002,
+        HEADING = 0x0004,
+        SMARTLEVEL = 0x0008
     };
 
-    virtual void Read(LwpObjectStream *pStrm) override;
+    virtual void Read(LwpObjectStream* pStrm) override;
 
     inline sal_uInt16 GetLevel() const;
     inline sal_uInt16 GetPosition() const;
@@ -90,24 +90,15 @@ private:
     LwpNumberingOverride(LwpNumberingOverride const& rOther);
     LwpNumberingOverride& operator=(LwpNumberingOverride const& rOther) = delete;
 
-    sal_uInt16  m_nLevel;
-    sal_uInt16  m_nPosition;
+    sal_uInt16 m_nLevel;
+    sal_uInt16 m_nPosition;
 };
 
-inline sal_uInt16 LwpNumberingOverride::GetLevel() const
-{
-    return m_nLevel;
-}
+inline sal_uInt16 LwpNumberingOverride::GetLevel() const { return m_nLevel; }
 
-inline sal_uInt16 LwpNumberingOverride::GetPosition() const
-{
-    return m_nPosition;
-}
+inline sal_uInt16 LwpNumberingOverride::GetPosition() const { return m_nPosition; }
 
-inline bool LwpNumberingOverride::IsHeading() const
-{
-    return (m_nValues & HEADING) != 0;
-}
+inline bool LwpNumberingOverride::IsHeading() const { return (m_nValues & HEADING) != 0; }
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

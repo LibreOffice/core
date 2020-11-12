@@ -67,32 +67,30 @@ XFList::XFList()
     m_bContinueNumber = false;
 }
 
-XFList::~XFList()
-{
-}
+XFList::~XFList() {}
 
-void    XFList::ToXml(IXFStream *pStrm)
+void XFList::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
-    assert(nullptr!=pAttrList);
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
+    assert(nullptr != pAttrList);
 
     pAttrList->Clear();
-    if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
-    if( m_bContinueNumber )
-        pAttrList->AddAttribute( "text:continue-numbering", "true" );
+    if (!GetStyleName().isEmpty())
+        pAttrList->AddAttribute("text:style-name", GetStyleName());
+    if (m_bContinueNumber)
+        pAttrList->AddAttribute("text:continue-numbering", "true");
 
-    if( m_bOrdered )
-        pStrm->StartElement( "text:ordered-list" );
+    if (m_bOrdered)
+        pStrm->StartElement("text:ordered-list");
     else
-        pStrm->StartElement( "text:unordered-list" );
+        pStrm->StartElement("text:unordered-list");
 
     XFContentContainer::ToXml(pStrm);
 
-    if( m_bOrdered )
-        pStrm->EndElement( "text:ordered-list" );
+    if (m_bOrdered)
+        pStrm->EndElement("text:ordered-list");
     else
-        pStrm->EndElement( "text:unordered-list" );
+        pStrm->EndElement("text:unordered-list");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

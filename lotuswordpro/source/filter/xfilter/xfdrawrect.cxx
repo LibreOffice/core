@@ -60,20 +60,18 @@
 #include <xfilter/xfdrawrect.hxx>
 #include <xfilter/ixfattrlist.hxx>
 
-XFDrawRect::XFDrawRect()
-{
-}
+XFDrawRect::XFDrawRect() {}
 
-void XFDrawRect::ToXml(IXFStream *pStrm)
+void XFDrawRect::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
 
     XFDrawObject::ToXml(pStrm);
 
-    pStrm->StartElement( "draw:rect" );
+    pStrm->StartElement("draw:rect");
     ContentToXml(pStrm);
-    pStrm->EndElement( "draw:rect" );
+    pStrm->EndElement("draw:rect");
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

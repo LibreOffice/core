@@ -60,35 +60,27 @@
 #include <xfilter/xfcolstyle.hxx>
 #include <xfilter/ixfattrlist.hxx>
 
-XFColStyle::XFColStyle()
-{
-    m_fWidth = 0;
-}
+XFColStyle::XFColStyle() { m_fWidth = 0; }
 
-XFColStyle::~XFColStyle()
-{
-}
+XFColStyle::~XFColStyle() {}
 
-enumXFStyle XFColStyle::GetStyleFamily()
-{
-    return enumXFStyleTableCol;
-}
+enumXFStyle XFColStyle::GetStyleFamily() { return enumXFStyleTableCol; }
 
-void    XFColStyle::ToXml(IXFStream *pStrm)
+void XFColStyle::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( "style:name", GetStyleName() );
-    pAttrList->AddAttribute( "style:family", "table-column" );
-    pStrm->StartElement( "style:style" );
+    pAttrList->AddAttribute("style:name", GetStyleName());
+    pAttrList->AddAttribute("style:family", "table-column");
+    pStrm->StartElement("style:style");
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:column-width", OUString::number(m_fWidth) + "cm" );
-    pStrm->StartElement( "style:properties" );
-    pStrm->EndElement( "style:properties" );
+    pAttrList->AddAttribute("style:column-width", OUString::number(m_fWidth) + "cm");
+    pStrm->StartElement("style:properties");
+    pStrm->EndElement("style:properties");
 
-    pStrm->EndElement( "style:style" );
+    pStrm->EndElement("style:style");
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

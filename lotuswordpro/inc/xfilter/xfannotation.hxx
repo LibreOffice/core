@@ -71,37 +71,31 @@ public:
 
     void SetAuthor(const OUString& author);
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    OUString   m_strDate;
-    OUString   m_strAuthor;
+    OUString m_strDate;
+    OUString m_strAuthor;
 };
 
-inline void XFAnnotation::SetDate(const OUString& date)
-{
-    m_strDate = date;
-}
+inline void XFAnnotation::SetDate(const OUString& date) { m_strDate = date; }
 
-inline void XFAnnotation::SetAuthor(const OUString& author)
-{
-    m_strAuthor = author;
-}
+inline void XFAnnotation::SetAuthor(const OUString& author) { m_strAuthor = author; }
 
-inline void XFAnnotation::ToXml(IXFStream *pStrm)
+inline void XFAnnotation::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    if( !m_strDate.isEmpty() )
-        pAttrList->AddAttribute( "office:create-date", m_strDate );
-    if( !m_strAuthor.isEmpty() )
-        pAttrList->AddAttribute( "office:author", m_strAuthor);
-    pStrm->StartElement( "office:annotation" );
+    if (!m_strDate.isEmpty())
+        pAttrList->AddAttribute("office:create-date", m_strDate);
+    if (!m_strAuthor.isEmpty())
+        pAttrList->AddAttribute("office:author", m_strAuthor);
+    pStrm->StartElement("office:annotation");
 
     XFContentContainer::ToXml(pStrm);
 
-    pStrm->EndElement( "office:annotation" );
+    pStrm->EndElement("office:annotation");
 }
 
 #endif

@@ -69,16 +69,18 @@ class Lwp9Reader final
 {
 public:
     Lwp9Reader(LwpSvStream* InputStream, IXFStream* pStream);
+
 private:
-    LwpSvStream*      m_pDocStream;
-    IXFStream*        m_pStream;
+    LwpSvStream* m_pDocStream;
+    IXFStream* m_pStream;
     LwpObjectFactory* m_pObjMgr;
-    LwpFileHeader     m_LwpFileHdr;             //LWP7 object
+    LwpFileHeader m_LwpFileHdr; //LWP7 object
     bool ReadFileHeader();
     void ReadIndex();
     bool ParseDocument();
     void WriteDocHeader();
     void WriteDocEnd();
+
 public:
     bool Read();
 };

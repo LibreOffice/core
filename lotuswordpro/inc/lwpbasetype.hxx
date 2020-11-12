@@ -84,8 +84,10 @@ public:
         , m_nXHeight(0)
     {
     }
+
 public:
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
+
 private:
     sal_uInt8 m_nFamilyType;
     sal_uInt8 m_nSerifStyle;
@@ -105,19 +107,20 @@ class LwpPoint final
 {
 public:
     LwpPoint();
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
     void Reset();
-    sal_Int32 GetX() const {return m_nX;}
-    sal_Int32 GetY() const {return m_nY;}
+    sal_Int32 GetX() const { return m_nX; }
+    sal_Int32 GetY() const { return m_nY; }
     inline void SetX(sal_Int32 nX);
     inline void SetY(sal_Int32 nY);
+
 private:
     sal_Int32 m_nX;
     sal_Int32 m_nY;
 };
 
-void LwpPoint::SetX(sal_Int32 nX){m_nX = nX;}
-void LwpPoint::SetY(sal_Int32 nY){m_nY = nY;}
+void LwpPoint::SetX(sal_Int32 nX) { m_nX = nX; }
+void LwpPoint::SetY(sal_Int32 nY) { m_nY = nY; }
 
 #endif
 

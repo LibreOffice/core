@@ -73,9 +73,11 @@ public:
     virtual ~XFCrossRefStart() override;
     void SetRefType(sal_uInt8 nType);
     void SetMarkName(const OUString& sName);
-    void ToXml(IXFStream *pStrm) override;
+    void ToXml(IXFStream* pStrm) override;
+
 private:
-    enum{
+    enum
+    {
         CROSSREF_INVALID = 0,
         CROSSREF_TEXT = 1,
         CROSSREF_PAGE = 2,
@@ -85,22 +87,16 @@ private:
     OUString m_strMarkName;
 };
 
-inline void XFCrossRefStart::SetRefType(sal_uInt8 nType)
-{
-    m_nType = nType;
-}
+inline void XFCrossRefStart::SetRefType(sal_uInt8 nType) { m_nType = nType; }
 
-inline void XFCrossRefStart::SetMarkName(const OUString& sName)
-{
-    m_strMarkName = sName;
-}
+inline void XFCrossRefStart::SetMarkName(const OUString& sName) { m_strMarkName = sName; }
 
 class XFCrossRefEnd : public XFContent
 {
 public:
     XFCrossRefEnd();
     virtual ~XFCrossRefEnd() override;
-    void ToXml(IXFStream *pStrm) override;
+    void ToXml(IXFStream* pStrm) override;
 };
 
 #endif

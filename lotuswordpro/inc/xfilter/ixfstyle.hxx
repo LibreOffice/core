@@ -71,30 +71,30 @@ class IXFStyle
 {
 public:
     IXFStyle() = default;
-    IXFStyle(IXFStyle const &) = default;
-    IXFStyle(IXFStyle &&) = default;
-    IXFStyle & operator =(IXFStyle const &) = default;
-    IXFStyle & operator =(IXFStyle &&) = default;
+    IXFStyle(IXFStyle const&) = default;
+    IXFStyle(IXFStyle&&) = default;
+    IXFStyle& operator=(IXFStyle const&) = default;
+    IXFStyle& operator=(IXFStyle&&) = default;
 
-    virtual ~IXFStyle(){}
+    virtual ~IXFStyle() {}
     /**
      * @descr:  return the style name.
      */
-    virtual OUString   GetStyleName() = 0;
+    virtual OUString GetStyleName() = 0;
 
     /**
      * @descr:  set the name of the style.
      */
-    virtual void    SetStyleName(const OUString& styleName) = 0;
+    virtual void SetStyleName(const OUString& styleName) = 0;
 
     /**
      * @descr   return the parent style name.
      */
-    virtual OUString   GetParentStyleName() = 0;
+    virtual OUString GetParentStyleName() = 0;
     /**
      * @descr:  Parent paragraph style.
      */
-    virtual void    SetParentStyleName(const OUString& parent) = 0;
+    virtual void SetParentStyleName(const OUString& parent) = 0;
     /**
      * @descr:  return the style family. You can reference to enumXFStyle.
      */
@@ -105,9 +105,9 @@ public:
      * @param:  pStyle the style to be compared.
      * @return: return sal_True if equals, else sal_False.
      */
-    virtual bool    Equal(IXFStyle *pStyle) = 0;
+    virtual bool Equal(IXFStyle* pStyle) = 0;
 
-    virtual void ToXml(IXFStream * stream) = 0;
+    virtual void ToXml(IXFStream* stream) = 0;
 };
 
 #endif

@@ -60,26 +60,27 @@
  * @descr  construct lwpobject from stream
  */
 LwpObject::LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm)
-    : m_ObjHdr(objHdr), m_pFoundry(nullptr)
-    , m_pStrm(pStrm), m_bRegisteringStyle(false), m_bParsingStyle(false)
+    : m_ObjHdr(objHdr)
+    , m_pFoundry(nullptr)
+    , m_pStrm(pStrm)
+    , m_bRegisteringStyle(false)
+    , m_bParsingStyle(false)
     , m_bConvertingContent(false)
 {
-    m_pObjStrm.reset( new LwpObjectStream(pStrm, m_ObjHdr.IsCompressed(),
-            static_cast<sal_uInt16>(m_ObjHdr.GetSize()) ) );
+    m_pObjStrm.reset(new LwpObjectStream(pStrm, m_ObjHdr.IsCompressed(),
+                                         static_cast<sal_uInt16>(m_ObjHdr.GetSize())));
 }
 /**
  * @descr   dtor()
 */
-LwpObject::~LwpObject()
-{
-}
+LwpObject::~LwpObject() {}
 /**
  * @descr  QuickRead template
  */
 void LwpObject::QuickRead()
 {
     Read();
-    if(m_pObjStrm)
+    if (m_pObjStrm)
     {
         m_pObjStrm->ReadComplete();
         m_pObjStrm.reset();
@@ -88,24 +89,20 @@ void LwpObject::QuickRead()
 /**
  * @descr  default read function
  */
-void LwpObject::Read()
-{}
+void LwpObject::Read() {}
 /**
  * @descr  default parse function
  */
-void LwpObject::Parse(IXFStream* /*pOutputStream*/)
-{}
+void LwpObject::Parse(IXFStream* /*pOutputStream*/) {}
 /**
  * @descr  default register style function
  */
-void LwpObject::RegisterStyle()
-{}
+void LwpObject::RegisterStyle() {}
 
 /**
  * @descr  default XFConvert function
  * pCont is the XFContentContainer for the object conversion
  */
-void LwpObject::XFConvert(XFContentContainer* /*pCont*/)
-{}
+void LwpObject::XFConvert(XFContentContainer* /*pCont*/) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

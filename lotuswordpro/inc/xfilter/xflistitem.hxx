@@ -63,49 +63,43 @@
 #include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
 
-class   XFListItem : public XFContentContainer
+class XFListItem : public XFContentContainer
 {
 public:
     XFListItem();
 
 public:
-    void    SetIsHeader();
+    void SetIsHeader();
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    bool    m_bIsHeader;
+    bool m_bIsHeader;
 };
 
-inline XFListItem::XFListItem()
-{
-    m_bIsHeader = false;
-}
+inline XFListItem::XFListItem() { m_bIsHeader = false; }
 
-inline void XFListItem::SetIsHeader()
-{
-    m_bIsHeader = true;
-}
+inline void XFListItem::SetIsHeader() { m_bIsHeader = true; }
 
-inline void XFListItem::ToXml(IXFStream *pStrm)
+inline void XFListItem::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
+    if (!GetStyleName().isEmpty())
+        pAttrList->AddAttribute("text:style-name", GetStyleName());
 
-    if( !m_bIsHeader )
+    if (!m_bIsHeader)
     {
-        pStrm->StartElement( "text:list-item" );
+        pStrm->StartElement("text:list-item");
         XFContentContainer::ToXml(pStrm);
-        pStrm->EndElement( "text:list-item" );
+        pStrm->EndElement("text:list-item");
     }
     else
     {
-        pStrm->StartElement( "text:list-header" );
+        pStrm->StartElement("text:list-header");
         XFContentContainer::ToXml(pStrm);
-        pStrm->EndElement( "text:list-header" );
+        pStrm->EndElement("text:list-header");
     }
 }
 

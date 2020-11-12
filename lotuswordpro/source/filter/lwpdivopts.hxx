@@ -70,7 +70,8 @@ class LwpHyphenOptions
 public:
     LwpHyphenOptions();
     ~LwpHyphenOptions();
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
+
 private:
     sal_uInt16 m_nFlags;
     sal_uInt16 m_nZoneBefore;
@@ -92,7 +93,8 @@ class LwpTextLanguage
 public:
     LwpTextLanguage();
     ~LwpTextLanguage();
-    void Read(LwpObjectStream *pStrm);
+    void Read(LwpObjectStream* pStrm);
+
 private:
     static sal_uInt16 ConvertFrom96(sal_uInt16 orgLang);
     sal_uInt16 m_nLanguage;
@@ -101,9 +103,11 @@ private:
 class LwpDivisionOptions : public LwpObject
 {
 public:
-    LwpDivisionOptions(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpDivisionOptions(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
+
 protected:
     void Read() override;
+
 private:
     virtual ~LwpDivisionOptions() override;
 

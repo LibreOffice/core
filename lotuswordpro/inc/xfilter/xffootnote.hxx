@@ -75,41 +75,37 @@ public:
     XFFootNote();
 
 public:
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    OUString   m_strID;
-    OUString   m_strLabel;
+    OUString m_strID;
+    OUString m_strLabel;
 };
 
-inline XFFootNote::XFFootNote()
-{
-    m_strID = XFGlobal::GenNoteName();
-}
+inline XFFootNote::XFFootNote() { m_strID = XFGlobal::GenNoteName(); }
 
-
-inline void XFFootNote::ToXml(IXFStream *pStrm)
+inline void XFFootNote::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( "text:id", m_strID );
-    pStrm->StartElement( "text:footnote" );
+    pAttrList->AddAttribute("text:id", m_strID);
+    pStrm->StartElement("text:footnote");
 
     pAttrList->Clear();
-    if( !m_strLabel.isEmpty() )
-        pAttrList->AddAttribute( "text:label", m_strLabel );
-    pStrm->StartElement( "text:footnote-citation" );
-    if( !m_strLabel.isEmpty() )
+    if (!m_strLabel.isEmpty())
+        pAttrList->AddAttribute("text:label", m_strLabel);
+    pStrm->StartElement("text:footnote-citation");
+    if (!m_strLabel.isEmpty())
         pStrm->Characters(m_strLabel);
-    pStrm->EndElement( "text:footnote-citation" );
+    pStrm->EndElement("text:footnote-citation");
 
     pAttrList->Clear();
-    pStrm->StartElement( "text:footnote-body" );
+    pStrm->StartElement("text:footnote-body");
     XFContentContainer::ToXml(pStrm);
-    pStrm->EndElement( "text:footnote-body" );
+    pStrm->EndElement("text:footnote-body");
 
-    pStrm->EndElement( "text:footnote" );
+    pStrm->EndElement("text:footnote");
 }
 
 #endif

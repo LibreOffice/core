@@ -69,41 +69,32 @@ XFCrossRefStart::XFCrossRefStart()
 {
 }
 
-XFCrossRefStart::~XFCrossRefStart()
-{
-}
+XFCrossRefStart::~XFCrossRefStart() {}
 
-void XFCrossRefStart::ToXml(IXFStream *pStrm)
+void XFCrossRefStart::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    if( m_nType == CROSSREF_TEXT)
+    if (m_nType == CROSSREF_TEXT)
     {
-        pAttrList->AddAttribute( "text:reference-format","text" );
+        pAttrList->AddAttribute("text:reference-format", "text");
     }
-    else if( m_nType == CROSSREF_PAGE )
+    else if (m_nType == CROSSREF_PAGE)
     {
-        pAttrList->AddAttribute( "text:reference-format", "page" );
+        pAttrList->AddAttribute("text:reference-format", "page");
     }
-    else if( m_nType == CROSSREF_PARANUMBER )
+    else if (m_nType == CROSSREF_PARANUMBER)
     {
-        pAttrList->AddAttribute( "text:reference-format", "chapter" );
+        pAttrList->AddAttribute("text:reference-format", "chapter");
     }
-    pAttrList->AddAttribute( "text:ref-name", m_strMarkName);
-    pStrm->StartElement( "text:bookmark-ref" );
+    pAttrList->AddAttribute("text:ref-name", m_strMarkName);
+    pStrm->StartElement("text:bookmark-ref");
 }
 
-XFCrossRefEnd::XFCrossRefEnd()
-{
-}
+XFCrossRefEnd::XFCrossRefEnd() {}
 
-XFCrossRefEnd::~XFCrossRefEnd()
-{
-}
+XFCrossRefEnd::~XFCrossRefEnd() {}
 
-void XFCrossRefEnd::ToXml(IXFStream *pStrm)
-{
-    pStrm->EndElement( "text:bookmark-ref" );
-}
+void XFCrossRefEnd::ToXml(IXFStream* pStrm) { pStrm->EndElement("text:bookmark-ref"); }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -87,19 +87,19 @@ public:
     /**
      * @descr   Add content.
      */
-    virtual void    Add(XFContent *pContent);
+    virtual void Add(XFContent* pContent);
 
     rtl::Reference<XFContent> GetLastContent();
-    void    RemoveLastContent();
+    void RemoveLastContent();
     /**
      * @descr   convenience function for add text content.
      */
-    void    Add(const OUString& text);
+    void Add(const OUString& text);
 
     /**
      * @descr   return the number of contents in the container.
      */
-    int     GetCount() const;
+    int GetCount() const;
 
     /**
      * @descr   get content by index.
@@ -109,7 +109,7 @@ public:
     /**
      * @descr   clear all contents in the container.
      */
-    void    Reset();
+    void Reset();
 
     /**
      * @descr   helper function, find first content by type.
@@ -119,21 +119,21 @@ public:
     /**
      * @descr   return the content type.
      */
-    virtual enumXFContent   GetContentType() override;
+    virtual enumXFContent GetContentType() override;
     /**
      * @descr   Output to OOo model or local file.
      */
-    virtual void ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
-    bool HierarchyContains(const XFContent *pContent) const;
+    bool HierarchyContains(const XFContent* pContent) const;
 
 private:
-    std::vector< rtl::Reference<XFContent> >    m_aContents;
+    std::vector<rtl::Reference<XFContent>> m_aContents;
 };
 
 inline rtl::Reference<XFContent> XFContentContainer::GetContent(sal_uInt32 index) const
 {
-    if (index > m_aContents.size()-1)
+    if (index > m_aContents.size() - 1)
         return nullptr;
     return m_aContents[index];
 }

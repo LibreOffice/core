@@ -71,8 +71,9 @@ class LwpPageLayout;
 class LwpStory final : public LwpContent
 {
 public:
-    LwpStory(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpStory(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     virtual ~LwpStory() override;
+
 private:
     //File format members:
     LwpDLVListHeadTail m_ParaList;
@@ -80,13 +81,13 @@ private:
 
     // for bullet , 05/23/2005
     typedef std::pair<OUString, sal_uInt8> NamePosPair;
-    std::vector <NamePosPair> m_vBulletStyleNameList;
+    std::vector<NamePosPair> m_vBulletStyleNameList;
 
     // , 02/16/2005
     bool m_bPMModified;
-    LwpPageLayout* m_pCurrentLayout;    //for register page layout style
+    LwpPageLayout* m_pCurrentLayout; //for register page layout style
     std::vector<LwpPageLayout*> m_LayoutList;
-    LwpLayout* m_pTabLayout;    //for register tab style
+    LwpLayout* m_pTabLayout; //for register tab style
 
     bool m_bDropcap;
     std::unique_ptr<LwpHyperlinkMgr> m_pHyperlinkMgr;
@@ -106,12 +107,12 @@ public:
     void XFConvertFrameInPage(XFContentContainer* pCont);
     inline LwpObjectID& GetFirstPara();
     inline LwpObjectID& GetLastPara();
-     XFContentContainer* GetXFContent();
+    XFContentContainer* GetXFContent();
     void AddXFContent(XFContent* pContent);
 
     bool GetDropcapFlag() const { return m_bDropcap; }
     LwpPageLayout* GetCurrentLayout() { return m_pCurrentLayout; }
-    inline LwpMiddleLayout* GetTabLayout();//for register tab style
+    inline LwpMiddleLayout* GetTabLayout(); //for register tab style
     const OUString& GetSectionName() const { return m_CurrSectionName; }
     LwpHyperlinkMgr* GetHyperlinkMgr() { return m_pHyperlinkMgr.get(); }
 
@@ -135,36 +136,18 @@ public:
     OUString RegisterFirstFribStyle();
 };
 
-LwpObjectID& LwpStory::GetFirstPara()
-{
-    return m_ParaList.GetHead();
-}
-LwpObjectID& LwpStory::GetLastPara()
-{
-    return m_ParaList.GetTail();
-}
+LwpObjectID& LwpStory::GetFirstPara() { return m_ParaList.GetHead(); }
+LwpObjectID& LwpStory::GetLastPara() { return m_ParaList.GetTail(); }
 LwpMiddleLayout* LwpStory::GetTabLayout()
 {
-    if(m_pTabLayout)
+    if (m_pTabLayout)
         return m_pTabLayout;
     return dynamic_cast<LwpMiddleLayout*>(GetLayout(nullptr).get());
 }
-void LwpStory::SetPMModified(bool bPMModified)
-{
-    m_bPMModified = bPMModified;
-}
-void LwpStory::SetDropcapFlag(bool bFlag)
-{
-    m_bDropcap = bFlag;
-}
-void LwpStory::SetTabLayout(LwpLayout* pLayout)
-{
-    m_pTabLayout = pLayout;
-}
-void LwpStory::SetSectionName(const OUString& StyleName)
-{
-    m_CurrSectionName = StyleName;
-}
+void LwpStory::SetPMModified(bool bPMModified) { m_bPMModified = bPMModified; }
+void LwpStory::SetDropcapFlag(bool bFlag) { m_bDropcap = bFlag; }
+void LwpStory::SetTabLayout(LwpLayout* pLayout) { m_pTabLayout = pLayout; }
+void LwpStory::SetSectionName(const OUString& StyleName) { m_CurrSectionName = StyleName; }
 inline void LwpStory::AddBullStyleName2List(const OUString& rStyleName, sal_uInt8 nPos)
 {
     m_vBulletStyleNameList.push_back(std::make_pair(rStyleName, nPos));

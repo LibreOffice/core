@@ -76,33 +76,35 @@
 class LwpObjectStream
 {
 public:
-    LwpObjectStream(LwpSvStream *pStrm, bool isCompressed, sal_uInt16 size);
+    LwpObjectStream(LwpSvStream* pStrm, bool isCompressed, sal_uInt16 size);
     ~LwpObjectStream();
+
 private:
-    sal_uInt8* m_pContentBuf;           //The content buffer of the object
-    sal_uInt8 m_SmallBuffer[100];       //To avoid frequent new
+    sal_uInt8* m_pContentBuf; //The content buffer of the object
+    sal_uInt8 m_SmallBuffer[100]; //To avoid frequent new
     std::vector<sal_uInt8> m_BigBuffer; //otherwise use this
     enum
     {
-        IO_BUFFERSIZE = 0xFF00      //Refer to LWP, not sure if it is enough
+        IO_BUFFERSIZE = 0xFF00 //Refer to LWP, not sure if it is enough
     };
-    sal_uInt16 m_nBufSize;          //The total size of m_pContentBuf
-    sal_uInt16 m_nReadPos;          //The position of the quick read
+    sal_uInt16 m_nBufSize; //The total size of m_pContentBuf
+    sal_uInt16 m_nReadPos; //The position of the quick read
     LwpSvStream* m_pStrm;
     bool m_bCompressed;
+
 public:
     sal_uInt16 remainingSize() const;
     sal_uInt16 QuickRead(void* buf, sal_uInt16 len);
     sal_uInt16 GetPos() const { return m_nReadPos; }
     void SeekRel(sal_uInt16 pos);
-    void Seek( sal_uInt16 pos);
+    void Seek(sal_uInt16 pos);
     void SkipExtra();
     sal_uInt16 CheckExtra();
 
     bool QuickReadBool();
-    sal_uInt32 QuickReaduInt32(bool *pFailure=nullptr);
-    sal_uInt16 QuickReaduInt16(bool *pFailure=nullptr);
-    sal_uInt8 QuickReaduInt8(bool *pFailure=nullptr);
+    sal_uInt32 QuickReaduInt32(bool* pFailure = nullptr);
+    sal_uInt16 QuickReaduInt16(bool* pFailure = nullptr);
+    sal_uInt8 QuickReaduInt8(bool* pFailure = nullptr);
     sal_Int32 QuickReadInt32();
     sal_Int16 QuickReadInt16();
     double QuickReadDouble();
@@ -110,7 +112,8 @@ public:
     OUString QuickReadStringPtr();
 
     void ReadComplete();
-    LwpSvStream *GetStream();
+    LwpSvStream* GetStream();
+
 private:
     void Read2Buffer();
     sal_uInt8* AllocBuffer(sal_uInt16 size);
@@ -118,10 +121,7 @@ private:
     void ReleaseBuffer();
 };
 
-inline LwpSvStream *LwpObjectStream::GetStream()
-{
-    return m_pStrm;
-}
+inline LwpSvStream* LwpObjectStream::GetStream() { return m_pStrm; }
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

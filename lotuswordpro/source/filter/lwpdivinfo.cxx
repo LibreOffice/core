@@ -66,18 +66,17 @@
 #include "lwppagehint.hxx"
 #include <sal/log.hxx>
 
-LwpDivInfo::LwpDivInfo(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
+LwpDivInfo::LwpDivInfo(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
     , m_nFlags(0)
     , m_nPageNoStyle(0)
 {
 }
 
-LwpDivInfo::~LwpDivInfo(){}
+LwpDivInfo::~LwpDivInfo() {}
 
 void LwpDivInfo::Read()
 {
-
     SkipFront();
     m_ParentID.ReadIndexed(m_pObjStrm.get());
     if (LwpFileHeader::m_nFileRevision < 0x0006)
@@ -92,7 +91,7 @@ void LwpDivInfo::Read()
 
     m_LayoutID.ReadIndexed(m_pObjStrm.get());
     m_nFlags = m_pObjStrm->QuickReaduInt16();
-    if (LwpFileHeader::m_nFileRevision < 0x0010)  // In 98, graphic links count too
+    if (LwpFileHeader::m_nFileRevision < 0x0010) // In 98, graphic links count too
     {
         if ((m_nFlags & DI_ANYOLEDDELINKS) == 0)
             m_nFlags &= ~DI_KNOWIFANYOLEDDELINKS;
@@ -139,9 +138,9 @@ void LwpDivInfo::SkipFront()
     }
 }
 
-void LwpDivInfo::GetNumberOfPages(sal_uInt16 & nPageno)
+void LwpDivInfo::GetNumberOfPages(sal_uInt16& nPageno)
 {
-    if(IsGotoable())
+    if (IsGotoable())
     {
         if (IsOleDivision())
         {
@@ -158,13 +157,14 @@ void LwpDivInfo::GetNumberOfPages(sal_uInt16 & nPageno)
 sal_uInt16 LwpDivInfo::GetMaxNumberOfPages() const
 {
     LwpDocument* pDiv = dynamic_cast<LwpDocument*>(m_ParentID.obj().get());
-    if(!pDiv)
+    if (!pDiv)
         return 0;
-    LwpDLVListHeadTailHolder* pHeadTail = dynamic_cast<LwpDLVListHeadTailHolder*>(pDiv->GetPageHintsID().obj().get());
-    if(pHeadTail)
+    LwpDLVListHeadTailHolder* pHeadTail
+        = dynamic_cast<LwpDLVListHeadTailHolder*>(pDiv->GetPageHintsID().obj().get());
+    if (pHeadTail)
     {
         LwpPageHint* pPageHint = dynamic_cast<LwpPageHint*>(pHeadTail->GetTail().obj().get());
-        if(pPageHint && !pPageHint->GetPageLayoutID().IsNull())
+        if (pPageHint && !pPageHint->GetPageLayoutID().IsNull())
         {
             return pPageHint->GetPageNumber();
         }

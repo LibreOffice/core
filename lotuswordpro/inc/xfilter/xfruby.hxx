@@ -66,46 +66,44 @@
 class XFRubyStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 };
 
 class XFRubyEnd : public XFContent
 {
 public:
     void SetText(const OUString& sText);
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
+
 private:
     OUString m_strText;
 };
 
-void XFRubyStart::ToXml(IXFStream *pStrm)
+void XFRubyStart::ToXml(IXFStream* pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    if( !GetStyleName().isEmpty())
-        pAttrList->AddAttribute( "text:style-name", GetStyleName());
-    pStrm->StartElement( "text:ruby" );
+    if (!GetStyleName().isEmpty())
+        pAttrList->AddAttribute("text:style-name", GetStyleName());
+    pStrm->StartElement("text:ruby");
     pAttrList->Clear();
-    pStrm->StartElement( "text:ruby-base" );
+    pStrm->StartElement("text:ruby-base");
 }
 
-void XFRubyEnd::SetText(const OUString& sText)
-{
-    m_strText = sText;
-}
+void XFRubyEnd::SetText(const OUString& sText) { m_strText = sText; }
 
-void XFRubyEnd::ToXml(IXFStream *pStrm)
+void XFRubyEnd::ToXml(IXFStream* pStrm)
 {
-    pStrm->EndElement( "text:ruby-base" );
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    pStrm->EndElement("text:ruby-base");
+    IXFAttrList* pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    if( !GetStyleName().isEmpty())
-        pAttrList->AddAttribute( "text:style-name", GetStyleName());
-    pStrm->StartElement( "text:ruby-text" );
-    if( !m_strText.isEmpty() )
+    if (!GetStyleName().isEmpty())
+        pAttrList->AddAttribute("text:style-name", GetStyleName());
+    pStrm->StartElement("text:ruby-text");
+    if (!m_strText.isEmpty())
         pStrm->Characters(m_strText);
-    pStrm->EndElement( "text:ruby-text" );
-    pStrm->EndElement( "text:ruby" );
+    pStrm->EndElement("text:ruby-text");
+    pStrm->EndElement("text:ruby");
 }
 
 #endif
