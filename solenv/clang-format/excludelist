@@ -17782,11 +17782,9 @@ xmlreader/source/pad.cxx
 xmlreader/source/span.cxx
 xmlreader/source/xmlreader.cxx
 xmlscript/source/inc/misc.hxx
-xmlscript/source/inc/xml_import.hxx
 xmlscript/source/xml_helper/xml_byteseq.cxx
 xmlscript/source/xml_helper/xml_element.cxx
 xmlscript/source/xml_helper/xml_impctx.cxx
-xmlscript/source/xmldlg_imexp/common.hxx
 xmlscript/source/xmldlg_imexp/exp_share.hxx
 xmlscript/source/xmldlg_imexp/imp_share.hxx
 xmlscript/source/xmldlg_imexp/xmldlg_addfunc.cxx

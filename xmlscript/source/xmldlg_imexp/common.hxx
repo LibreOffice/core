@@ -21,8 +21,8 @@
 
 #include <sal/types.h>
 
-namespace xmlscript {
-
+namespace xmlscript
+{
 const sal_Int16 BORDER_NONE = 0;
 const sal_Int16 BORDER_3D = 1;
 const sal_Int16 BORDER_SIMPLE = 2;
@@ -30,14 +30,12 @@ const sal_Int16 BORDER_SIMPLE_COLOR = 3;
 
 struct StringTriple
 {
-    char const * first;
-    char const * second;
-    char const * third;
+    char const* first;
+    char const* second;
+    char const* third;
 };
 
-extern StringTriple const * const g_pEventTranslations;
-
+extern StringTriple const* const g_pEventTranslations;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
