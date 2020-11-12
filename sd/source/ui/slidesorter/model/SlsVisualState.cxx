@@ -19,19 +19,17 @@
 
 #include <model/SlsVisualState.hxx>
 
-namespace sd::slidesorter::model {
-
-VisualState::VisualState (const sal_Int32 nPageId)
-    : mnPageId(nPageId),
-      maLocationOffset(0,0)
+namespace sd::slidesorter::model
+{
+VisualState::VisualState(const sal_Int32 nPageId)
+    : mnPageId(nPageId)
+    , maLocationOffset(0, 0)
 {
 }
 
-VisualState::~VisualState()
-{
-}
+VisualState::~VisualState() {}
 
-void VisualState::SetLocationOffset (const Point& rOffset)
+void VisualState::SetLocationOffset(const Point& rOffset)
 {
     if (maLocationOffset != rOffset)
     {

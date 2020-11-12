@@ -22,20 +22,21 @@
 
 #include <framework/Pane.hxx>
 
-namespace com::sun::star::drawing::framework { class XResourceId; }
+namespace com::sun::star::drawing::framework
+{
+class XResourceId;
+}
 
-namespace sd::framework {
-
+namespace sd::framework
+{
 /** This subclass is not necessary anymore.  We can remove it if that
     remains so.
 */
-class FrameWindowPane
-    : public Pane
+class FrameWindowPane : public Pane
 {
 public:
-    FrameWindowPane (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        vcl::Window* pWindow);
+    FrameWindowPane(const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+                    vcl::Window* pWindow);
     virtual ~FrameWindowPane() throw() override;
 
     /** A frame window typically can (and should) exists on its own without

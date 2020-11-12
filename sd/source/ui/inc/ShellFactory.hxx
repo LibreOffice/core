@@ -22,18 +22,17 @@
 
 #include <sfx2/toolbarids.hxx>
 
-namespace sd {
-
+namespace sd
+{
 typedef ToolbarId ShellId;
 
-template<class ShellType>
-class ShellFactory
+template <class ShellType> class ShellFactory
 {
 public:
     /** This abstract virtual class needs a destructor so that the
         destructors of derived classes are called.
     */
-    virtual ~ShellFactory() {};
+    virtual ~ShellFactory(){};
 
     /** Create a new instance of a view shell for the given id that will
         be stacked onto the given view shell base.
@@ -46,7 +45,7 @@ public:
     /** Tell the factory that a shell is no longer in use.  It may destroy
         it or put it for future use in a cache.
     */
-    virtual void ReleaseShell (ShellType* pShell) = 0;
+    virtual void ReleaseShell(ShellType* pShell) = 0;
 };
 
 } // end of namespace sd

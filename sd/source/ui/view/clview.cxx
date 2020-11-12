@@ -20,8 +20,8 @@
 #include <ClientView.hxx>
 #include <drawview.hxx>
 
-namespace sd {
-
+namespace sd
+{
 class DrawDocShell;
 class DrawViewShell;
 
@@ -29,16 +29,12 @@ class DrawViewShell;
  * ClientView is used for DrawDocShell::Draw()
  */
 
-ClientView::ClientView(
-    DrawDocShell* pDocSh,
-    OutputDevice* pOutDev)
-    : DrawView (pDocSh, pOutDev, nullptr)
+ClientView::ClientView(DrawDocShell* pDocSh, OutputDevice* pOutDev)
+    : DrawView(pDocSh, pOutDev, nullptr)
 {
 }
 
-ClientView::~ClientView()
-{
-}
+ClientView::~ClientView() {}
 
 /**
  * If View should not Invalidate() the windows, this method has

@@ -23,32 +23,38 @@
 #include <cache/SlsCacheContext.hxx>
 #include <model/SlsSharedPageDescriptor.hxx>
 
-namespace sd::slidesorter::model { class SlideSorterModel; }
-namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter::model
+{
+class SlideSorterModel;
+}
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
 
-namespace sd::slidesorter::view {
-
+namespace sd::slidesorter::view
+{
 /** The cache context for the SlideSorter as used by Draw and Impress.  See
     the base class for documentation of the individual methods.
 */
 class ViewCacheContext : public cache::CacheContext
 {
 public:
-    explicit ViewCacheContext (SlideSorter& rSlideSorter);
+    explicit ViewCacheContext(SlideSorter& rSlideSorter);
     virtual ~ViewCacheContext() override;
-    virtual void NotifyPreviewCreation (cache::CacheKey aKey) override;
+    virtual void NotifyPreviewCreation(cache::CacheKey aKey) override;
     virtual bool IsIdle() override;
-    virtual bool IsVisible (cache::CacheKey aKey) override;
-    virtual const SdrPage* GetPage (cache::CacheKey aKey) override;
-    virtual std::shared_ptr<std::vector<cache::CacheKey> > GetEntryList (bool bVisible) override;
-    virtual sal_Int32 GetPriority (cache::CacheKey aKey) override;
+    virtual bool IsVisible(cache::CacheKey aKey) override;
+    virtual const SdrPage* GetPage(cache::CacheKey aKey) override;
+    virtual std::shared_ptr<std::vector<cache::CacheKey>> GetEntryList(bool bVisible) override;
+    virtual sal_Int32 GetPriority(cache::CacheKey aKey) override;
     virtual css::uno::Reference<css::uno::XInterface> GetModel() override;
 
 private:
     model::SlideSorterModel& mrModel;
     SlideSorter& mrSlideSorter;
 
-    model::SharedPageDescriptor GetDescriptor (cache::CacheKey aKey);
+    model::SharedPageDescriptor GetDescriptor(cache::CacheKey aKey);
 };
 
 } // end of namespace ::sd::slidesorter::view

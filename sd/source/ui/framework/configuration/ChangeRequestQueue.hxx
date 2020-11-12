@@ -24,16 +24,19 @@
 
 #include <queue>
 
-namespace com::sun::star::drawing::framework { class XConfigurationChangeRequest; }
+namespace com::sun::star::drawing::framework
+{
+class XConfigurationChangeRequest;
+}
 
-namespace sd::framework {
-
+namespace sd::framework
+{
 /** The ChangeRequestQueue stores the pending requests for changes to the
     requested configuration.  It is the task of the
     ChangeRequestQueueProcessor to process these requests.
 */
 class ChangeRequestQueue
-    : public ::std::queue<css::uno::Reference< css::drawing::framework::XConfigurationChangeRequest> >
+    : public ::std::queue<css::uno::Reference<css::drawing::framework::XConfigurationChangeRequest>>
 {
 public:
     /** Create an empty queue.

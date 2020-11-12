@@ -25,23 +25,26 @@
 #include <tools/gen.hxx>
 #include <vector>
 
-namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
 
-namespace sd::slidesorter::controller {
-
+namespace sd::slidesorter::controller
+{
 /** Manage requests for scrolling page objects into view.
 */
 class VisibleAreaManager
 {
 public:
-    explicit VisibleAreaManager (SlideSorter& rSlideSorter);
+    explicit VisibleAreaManager(SlideSorter& rSlideSorter);
     ~VisibleAreaManager();
     VisibleAreaManager(const VisibleAreaManager&) = delete;
     VisibleAreaManager& operator=(const VisibleAreaManager&) = delete;
 
     void ActivateCurrentSlideTracking();
     void DeactivateCurrentSlideTracking();
-    bool IsCurrentSlideTrackingActive() const { return mbIsCurrentSlideTrackingActive;}
+    bool IsCurrentSlideTrackingActive() const { return mbIsCurrentSlideTrackingActive; }
 
     /** Request the current slide to be moved into the visible area.
         This request is only obeyed when the current slide tracking is
@@ -52,17 +55,16 @@ public:
 
     /** Request to make the specified page object visible.
     */
-    void RequestVisible (
-        const model::SharedPageDescriptor& rpDescriptor,
-        const bool bForce = false);
+    void RequestVisible(const model::SharedPageDescriptor& rpDescriptor, const bool bForce = false);
 
     /** Temporarily disable the update of the visible area.
     */
     class TemporaryDisabler
     {
     public:
-        explicit TemporaryDisabler (SlideSorter const & rSlideSorter);
+        explicit TemporaryDisabler(SlideSorter const& rSlideSorter);
         ~TemporaryDisabler();
+
     private:
         VisibleAreaManager& mrVisibleAreaManager;
     };
@@ -78,7 +80,7 @@ private:
 
     Point maRequestedVisibleTopLeft;
     bool mbIsCurrentSlideTrackingActive;
-    int  mnDisableCount;
+    int mnDisableCount;
 
     void MakeVisible();
     ::std::optional<Point> GetRequestedTopLeft() const;

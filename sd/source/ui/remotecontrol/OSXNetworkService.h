@@ -13,18 +13,18 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
- #include <premac.h>
-  #import <CoreFoundation/CoreFoundation.h>
-  #import <Foundation/NSNetServices.h>
-  #import <Foundation/NSRunLoop.h>
- #include <postmac.h>
+#include <premac.h>
+#import <CoreFoundation/CoreFoundation.h>
+#import <Foundation/NSNetServices.h>
+#import <Foundation/NSRunLoop.h>
+#include <postmac.h>
 
-@interface OSXBonjourService : NSObject<NSNetServiceDelegate>
+@interface OSXBonjourService : NSObject <NSNetServiceDelegate>
 {
-    NSNetService *netService;
+    NSNetService* netService;
 }
 
-- (void) publishImpressRemoteServiceOnLocalNetworkWithName:(NSString *)sName;
+- (void)publishImpressRemoteServiceOnLocalNetworkWithName:(NSString*)sName;
 
 @end
 

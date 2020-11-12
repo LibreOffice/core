@@ -24,7 +24,6 @@
 
 namespace sd
 {
-
 class SlideLayoutController : public svt::PopupWindowController
 {
 public:
@@ -32,19 +31,18 @@ public:
                           bool bInsertPage);
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
-    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     bool mbInsertPage;
 };
-
 }
 
 #endif // INCLUDED_SD_SOURCE_UI_CONTROLLER_SLIDELAYOUTCONTROLLER_HXX

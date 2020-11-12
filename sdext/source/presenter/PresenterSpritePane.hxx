@@ -28,8 +28,8 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
-namespace sdext::presenter {
-
+namespace sdext::presenter
+{
 /** Use a sprite to display the contents and the border of a pane.  Windows
     are still used to define the locations and sizes of both the border and
     the pane content.  Note that every resize results in a disposed canvas.
@@ -38,9 +38,8 @@ namespace sdext::presenter {
 class PresenterSpritePane : public PresenterPaneBase
 {
 public:
-    PresenterSpritePane (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const ::rtl::Reference<PresenterController>& rpPresenterController);
+    PresenterSpritePane(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+                        const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSpritePane() override;
 
     virtual void SAL_CALL disposing() override;
@@ -55,23 +54,23 @@ public:
 
     // XWindowListener
 
-    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent) override;
+    virtual void SAL_CALL windowResized(const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent) override;
+    virtual void SAL_CALL windowMoved(const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent) override;
+    virtual void SAL_CALL windowShown(const css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent) override;
+    virtual void SAL_CALL windowHidden(const css::lang::EventObject& rEvent) override;
 
     // XPaintListener
 
-    virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent) override;
+    virtual void SAL_CALL windowPaint(const css::awt::PaintEvent& rEvent) override;
 
 private:
     css::uno::Reference<css::rendering::XSpriteCanvas> mxParentCanvas;
     std::shared_ptr<PresenterSprite> mpSprite;
 
-    virtual void CreateCanvases (
+    virtual void CreateCanvases(
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxParentCanvas) override;
     void UpdateCanvases();
 };

@@ -22,8 +22,8 @@
 
 #include <tools/color.hxx>
 
-namespace sd::slidesorter::controller {
-
+namespace sd::slidesorter::controller
+{
 /** An extensible set of properties used throughout the slide sorter.
 */
 class Properties
@@ -40,70 +40,73 @@ public:
     /** When this method returns <TRUE/> then the current slide is
         highlighted in the view.  The default value is <FALSE/>.
     */
-    bool IsHighlightCurrentSlide() const { return mbIsHighlightCurrentSlide;}
-    void SetHighlightCurrentSlide (const bool bIsHighlightCurrentSlide);
+    bool IsHighlightCurrentSlide() const { return mbIsHighlightCurrentSlide; }
+    void SetHighlightCurrentSlide(const bool bIsHighlightCurrentSlide);
 
     /** When this method returns <TRUE/> then the selection is indicated in
         the view (typically by drawing rectangles around the selected
         slides.)  The default value is <TRUE/>.
     */
-    bool IsShowSelection() const { return mbIsShowSelection;}
-    void SetShowSelection (const bool bIsShowSelection);
+    bool IsShowSelection() const { return mbIsShowSelection; }
+    void SetShowSelection(const bool bIsShowSelection);
 
     /** When this method returns <TRUE/> then the focusdselection is indicated in
         the view (typically by drawing dotted rectangles around the selected
         slides.)  The default value is <TRUE/>.
     */
-    bool IsShowFocus() const { return mbIsShowFocus;}
-    void SetShowFocus (const bool bIsShowFocus);
+    bool IsShowFocus() const { return mbIsShowFocus; }
+    void SetShowFocus(const bool bIsShowFocus);
 
     /** When this method returns <TRUE/> then on a selection change the
         visible area is adapted so that the selected slides are shown
         centered in the view.  This can be used to center the current slide
         by selecting only the current slide.  The default value is <FALSE/>.
     */
-    bool IsCenterSelection() const { return mbIsCenterSelection;}
-    void SetCenterSelection (const bool bIsCenterSelection);
+    bool IsCenterSelection() const { return mbIsCenterSelection; }
+    void SetCenterSelection(const bool bIsCenterSelection);
 
     /** When this method returns <TRUE/> then the view may try to change the
         visible area by scrolling it smoothly on the screen.  Experimental.
         Default value is <FALSE/>.
     */
-    bool IsSmoothSelectionScrolling() const { return mbIsSmoothSelectionScrolling;}
-    void SetSmoothSelectionScrolling (const bool bIsSmoothSelectionScrolling);
+    bool IsSmoothSelectionScrolling() const { return mbIsSmoothSelectionScrolling; }
+    void SetSmoothSelectionScrolling(const bool bIsSmoothSelectionScrolling);
 
     /** When this method returns <TRUE/> then during a full screen
         presentation the previews in a slide sorter are not updated.
         Default value is <TRUE/>.
     */
-    bool IsSuspendPreviewUpdatesDuringFullScreenPresentation() const { return mbIsSuspendPreviewUpdatesDuringFullScreenPresentation;}
-    void SetSuspendPreviewUpdatesDuringFullScreenPresentation (const bool bFlag);
+    bool IsSuspendPreviewUpdatesDuringFullScreenPresentation() const
+    {
+        return mbIsSuspendPreviewUpdatesDuringFullScreenPresentation;
+    }
+    void SetSuspendPreviewUpdatesDuringFullScreenPresentation(const bool bFlag);
 
     /** Return the background color.
     */
-    const Color& GetBackgroundColor() const { return maBackgroundColor;}
-    void SetBackgroundColor (const Color& rColor);
+    const Color& GetBackgroundColor() const { return maBackgroundColor; }
+    void SetBackgroundColor(const Color& rColor);
 
     /** Return the text color.
     */
-    const Color& GetTextColor() const { return maTextColor;}
-    void SetTextColor (const Color& rColor);
+    const Color& GetTextColor() const { return maTextColor; }
+    void SetTextColor(const Color& rColor);
 
     /** Return the color in which selections are to be painted.
     */
-    const Color& GetSelectionColor() const { return maSelectionColor;}
-    void SetSelectionColor (const Color& rColor);
+    const Color& GetSelectionColor() const { return maSelectionColor; }
+    void SetSelectionColor(const Color& rColor);
 
     /** Return the color used for highlighting e.g. the current slide.
     */
-    const Color& GetHighlightColor() const { return maHighlightColor;}
-    void SetHighlightColor (const Color& rColor);
+    const Color& GetHighlightColor() const { return maHighlightColor; }
+    void SetHighlightColor(const Color& rColor);
 
     /** The UI can be set to be read only independently from the model status.
         Used for instance in the presenter view.
     */
-    bool IsUIReadOnly() const { return mbIsUIReadOnly;}
-    void SetUIReadOnly (const bool bIsUIReadOnly);
+    bool IsUIReadOnly() const { return mbIsUIReadOnly; }
+    void SetUIReadOnly(const bool bIsUIReadOnly);
 
 private:
     bool mbIsHighlightCurrentSlide;

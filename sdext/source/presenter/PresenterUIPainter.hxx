@@ -24,8 +24,8 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 
-namespace sdext::presenter {
-
+namespace sdext::presenter
+{
 /** Functions for painting UI elements.
 */
 class PresenterUIPainter
@@ -35,23 +35,20 @@ public:
     PresenterUIPainter(const PresenterUIPainter&) = delete;
     PresenterUIPainter& operator=(const PresenterUIPainter&) = delete;
 
-    static void PaintHorizontalBitmapComposite (
+    static void PaintHorizontalBitmapComposite(
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const css::awt::Rectangle& rRepaintBox,
-        const css::awt::Rectangle& rBoundingBox,
+        const css::awt::Rectangle& rRepaintBox, const css::awt::Rectangle& rBoundingBox,
         const css::uno::Reference<css::rendering::XBitmap>& rxLeftBitmap,
         const css::uno::Reference<css::rendering::XBitmap>& rxRepeatableCenterBitmap,
         const css::uno::Reference<css::rendering::XBitmap>& rxRightBitmap);
 
-    static void PaintVerticalBitmapComposite (
+    static void PaintVerticalBitmapComposite(
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const css::awt::Rectangle& rRepaintBox,
-        const css::awt::Rectangle& rBoundingBox,
+        const css::awt::Rectangle& rRepaintBox, const css::awt::Rectangle& rBoundingBox,
         const css::uno::Reference<css::rendering::XBitmap>& rxTopBitmap,
         const css::uno::Reference<css::rendering::XBitmap>& rxRepeatableCenterBitmap,
         const css::uno::Reference<css::rendering::XBitmap>& rxBottomBitmap);
 };
-
 }
 
 #endif

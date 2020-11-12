@@ -26,10 +26,13 @@
 
 class SdPage;
 
-namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
 
-namespace sd::slidesorter::controller {
-
+namespace sd::slidesorter::controller
+{
 /** Manage the current slide.  This includes setting the according flags at
     the PageDescriptor objects and setting the current slide at the main
     view shell.
@@ -44,15 +47,15 @@ public:
     /** Create a new CurrentSlideManager object that manages the current
         slide for the given SlideSorter.
     */
-    CurrentSlideManager (SlideSorter& rSlideSorter);
+    CurrentSlideManager(SlideSorter& rSlideSorter);
 
     ~CurrentSlideManager();
 
     /** Call this when the current page of the main view shell has been
         switched.  Use SwitchCurrentSlide() to initiate such a switch.
     */
-    void NotifyCurrentSlideChange (const sal_Int32 nSlideIndex);
-    void NotifyCurrentSlideChange (const SdPage* pPage);
+    void NotifyCurrentSlideChange(const sal_Int32 nSlideIndex);
+    void NotifyCurrentSlideChange(const SdPage* pPage);
 
     /** Call this method to switch the current page of the main view shell
         to the given slide.  Use CurrentSlideHasChanged() when the current
@@ -62,15 +65,14 @@ public:
          The page selection is cleared and only the new
             current slide is selected.
     */
-    void SwitchCurrentSlide (const sal_Int32 nSlideIndex);
-    void SwitchCurrentSlide (
-        const model::SharedPageDescriptor& rpSlide,
-        const bool bUpdateSelection = false);
+    void SwitchCurrentSlide(const sal_Int32 nSlideIndex);
+    void SwitchCurrentSlide(const model::SharedPageDescriptor& rpSlide,
+                            const bool bUpdateSelection = false);
 
     /** Return the page descriptor for the current slide.  Note, that when
         there is no current slide then the returned pointer is empty.
     */
-    const model::SharedPageDescriptor& GetCurrentSlide() const { return mpCurrentSlide;}
+    const model::SharedPageDescriptor& GetCurrentSlide() const { return mpCurrentSlide; }
 
     /** Release all references to model data.
     */
@@ -89,9 +91,9 @@ private:
     */
     Timer maSwitchPageDelayTimer;
 
-    void SetCurrentSlideAtViewShellBase (const model::SharedPageDescriptor& rpSlide);
-    void SetCurrentSlideAtTabControl (const model::SharedPageDescriptor& rpSlide);
-    void SetCurrentSlideAtXController (const model::SharedPageDescriptor& rpSlide);
+    void SetCurrentSlideAtViewShellBase(const model::SharedPageDescriptor& rpSlide);
+    void SetCurrentSlideAtTabControl(const model::SharedPageDescriptor& rpSlide);
+    void SetCurrentSlideAtXController(const model::SharedPageDescriptor& rpSlide);
 
     /** When switching from one slide to a new current slide then this
         method releases all ties to the old slide.
@@ -101,7 +103,7 @@ private:
     /** When switching from one slide to a new current slide then this
         method connects to the new current slide.
     */
-    void AcquireCurrentSlide (const sal_Int32 nSlideIndex);
+    void AcquireCurrentSlide(const sal_Int32 nSlideIndex);
 
     DECL_LINK(SwitchPageCallback, Timer*, void);
 };

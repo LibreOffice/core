@@ -24,10 +24,13 @@
 
 class Point;
 
-namespace sd::slidesorter {  class SlideSorter; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
 
-namespace sd::slidesorter::controller {
-
+namespace sd::slidesorter::controller
+{
 /** A DragAndDropContext object handles an active drag and drop operation.
     When the mouse is moved from one slide sorter window to another the
     target SlideSorter object is exchanged accordingly.
@@ -38,7 +41,7 @@ public:
     /** Create a substitution display of the currently selected pages or,
         when provided, the pages in the transferable.
     */
-    explicit DragAndDropContext (SlideSorter& rSlideSorter);
+    explicit DragAndDropContext(SlideSorter& rSlideSorter);
     ~DragAndDropContext() COVERITY_NOEXCEPT_FALSE;
 
     /** Call this method (for example as reaction to ESC key press) to avoid
@@ -51,10 +54,8 @@ public:
         travelled since the last call to this method or to
         CreateSubstitution().  The given point becomes the new anchor.
     */
-    void UpdatePosition (
-        const Point& rMousePosition,
-        const InsertionIndicatorHandler::Mode eMode,
-        const bool bAllowAutoScroll);
+    void UpdatePosition(const Point& rMousePosition, const InsertionIndicatorHandler::Mode eMode,
+                        const bool bAllowAutoScroll);
 
     void SetTargetSlideSorter();
 

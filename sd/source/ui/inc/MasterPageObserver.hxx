@@ -26,12 +26,15 @@
 #include <memory>
 #include <set>
 
-namespace osl { class Mutex; }
+namespace osl
+{
+class Mutex;
+}
 
 class SdDrawDocument;
 
-namespace sd {
-
+namespace sd
+{
 class MasterPageObserverEvent;
 
 /** This singleton observes all registered documents for changes in the used
@@ -39,8 +42,7 @@ class MasterPageObserverEvent;
     listener is the master page selector control in the tool panel that
     shows the recently used master pages.
 */
-class MasterPageObserver
-    : public SdGlobalResource
+class MasterPageObserver : public SdGlobalResource
 {
 public:
     typedef ::std::set<OUString> MasterPageNameSet;
@@ -52,12 +54,12 @@ public:
     /** The master page observer will listen to events of this document and
         detect changes of the use of master pages.
     */
-    void RegisterDocument (SdDrawDocument& rDocument);
+    void RegisterDocument(SdDrawDocument& rDocument);
 
     /** The master page observer will stop to listen to events of this
         document.
     */
-    void UnregisterDocument (SdDrawDocument& rDocument);
+    void UnregisterDocument(SdDrawDocument& rDocument);
 
     /** Add a listener that is informed of master pages that are newly
         assigned to slides or become unassigned.
@@ -65,7 +67,7 @@ public:
             The event listener to call for future events.  Call
             RemoveEventListener() before the listener is destroyed.
     */
-    void AddEventListener (const Link<MasterPageObserverEvent&,void>& rEventListener);
+    void AddEventListener(const Link<MasterPageObserverEvent&, void>& rEventListener);
 
     /** Remove the given listener from the list of listeners.
         @param rEventListener
@@ -73,7 +75,7 @@ public:
             from this object.  Passing a listener that has not
             been registered before is safe and is silently ignored.
     */
-    void RemoveEventListener (const Link<MasterPageObserverEvent&,void>& rEventListener);
+    void RemoveEventListener(const Link<MasterPageObserverEvent&, void>& rEventListener);
 
 private:
     class Implementation;
@@ -82,9 +84,9 @@ private:
     MasterPageObserver();
     virtual ~MasterPageObserver() override;
 
-    MasterPageObserver (const MasterPageObserver&) = delete;
+    MasterPageObserver(const MasterPageObserver&) = delete;
 
-    MasterPageObserver& operator= (const MasterPageObserver&) = delete;
+    MasterPageObserver& operator=(const MasterPageObserver&) = delete;
 };
 
 /** Objects of this class are sent to listeners of the MasterPageObserver
@@ -93,7 +95,8 @@ private:
 class MasterPageObserverEvent
 {
 public:
-    enum EventType {
+    enum EventType
+    {
         /// Master page already exists when document is registered.
         ET_MASTER_PAGE_EXISTS,
         /// Master page has been added to a document.
@@ -105,13 +108,11 @@ public:
     EventType meType;
     const OUString& mrMasterPageName;
 
-    MasterPageObserverEvent (
-        EventType eType,
-        const OUString& rMasterPageName)
-        : meType(eType),
-          mrMasterPageName(rMasterPageName)
-    {}
-
+    MasterPageObserverEvent(EventType eType, const OUString& rMasterPageName)
+        : meType(eType)
+        , mrMasterPageName(rMasterPageName)
+    {
+    }
 };
 
 } // end of namespace sd

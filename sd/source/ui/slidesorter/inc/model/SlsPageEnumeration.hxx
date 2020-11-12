@@ -26,8 +26,8 @@
 #include <functional>
 #include <memory>
 
-namespace sd::slidesorter::model {
-
+namespace sd::slidesorter::model
+{
 class SlideSorterModel;
 
 /** Public class of page enumerations that delegates its calls to an
@@ -37,8 +37,7 @@ class SlideSorterModel;
         The PageEnumerationProvider has methods for creating different types
         of page enumerations.
 */
-class PageEnumeration
-    : public Enumeration<SharedPageDescriptor>
+class PageEnumeration : public Enumeration<SharedPageDescriptor>
 {
 public:
     /** Create a new page enumeration that enumerates a subset of the pages
@@ -50,22 +49,20 @@ public:
             enumeration.  Pages for which rPredicate returns <FALSE/> are
             exclude.
     */
-    typedef ::std::function<bool (const SharedPageDescriptor&)> PagePredicate;
-    static PageEnumeration Create (
-        const SlideSorterModel& rModel,
-        const PagePredicate& rPredicate);
+    typedef ::std::function<bool(const SharedPageDescriptor&)> PagePredicate;
+    static PageEnumeration Create(const SlideSorterModel& rModel, const PagePredicate& rPredicate);
 
     /** This copy constructor creates a copy of the given enumeration.
     */
-    PageEnumeration (const PageEnumeration& rEnumeration);
+    PageEnumeration(const PageEnumeration& rEnumeration);
 
     virtual ~PageEnumeration() override;
 
     /** Create and return an exact copy of the called object.
     */
-    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone() override;
+    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor>> Clone() override;
 
-    PageEnumeration& operator= (const PageEnumeration& rEnumeration);
+    PageEnumeration& operator=(const PageEnumeration& rEnumeration);
 
     /** Return <TRUE/> when the enumeration has more elements, i.e. it is
         save to call GetNextElement() at least one more time.
@@ -86,13 +83,12 @@ public:
 
 private:
     /// Implementation object.
-    ::std::unique_ptr<Enumeration<SharedPageDescriptor> > mpImpl;
+    ::std::unique_ptr<Enumeration<SharedPageDescriptor>> mpImpl;
 
     /** This constructor expects an implementation object that holds
         the predicate that filters the pages.
     */
-    PageEnumeration (::std::unique_ptr<Enumeration<SharedPageDescriptor> > && pImpl);
-
+    PageEnumeration(::std::unique_ptr<Enumeration<SharedPageDescriptor>>&& pImpl);
 };
 
 } // end of namespace ::sd::slidesorter::model

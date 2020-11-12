@@ -22,8 +22,8 @@
 
 #include <svtools/valueset.hxx>
 
-namespace sd::sidebar {
-
+namespace sd::sidebar
+{
 /** Adapt the svtools valueset to the needs of the master page controls.
 */
 class PreviewValueSet : public ValueSet
@@ -33,12 +33,12 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~PreviewValueSet() override;
 
-    void SetRightMouseClickHandler (const Link<const MouseEvent&,void>& rLink);
+    void SetRightMouseClickHandler(const Link<const MouseEvent&, void>& rLink);
     virtual void Resize() override;
 
-    void SetPreviewSize (const Size& rSize);
+    void SetPreviewSize(const Size& rSize);
 
-    sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
+    sal_Int32 GetPreferredHeight(sal_Int32 nWidth);
 
     /** Set the number of rows and columns according to the current number
         of items.  Call this method when new items have been inserted.
@@ -46,14 +46,14 @@ public:
     void Rearrange();
 
 protected:
-    virtual bool MouseButtonDown (const MouseEvent& rEvent) override;
+    virtual bool MouseButtonDown(const MouseEvent& rEvent) override;
 
 private:
-    Link<const MouseEvent&,void> maRightMouseClickHandler;
+    Link<const MouseEvent&, void> maRightMouseClickHandler;
     Size maPreviewSize;
 
-    sal_uInt16 CalculateColumnCount (int nWidth) const;
-    sal_uInt16 CalculateRowCount (sal_uInt16 nColumnCount) const;
+    sal_uInt16 CalculateColumnCount(int nWidth) const;
+    sal_uInt16 CalculateRowCount(sal_uInt16 nColumnCount) const;
 };
 
 } // end of namespace sd::sidebar

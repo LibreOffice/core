@@ -25,11 +25,11 @@
 #include <controller/SlsFocusManager.hxx>
 #include <sdpage.hxx>
 
-namespace sd::slidesorter::controller {
-
-SelectionObserver::Context::Context (SlideSorter const & rSlideSorter)
+namespace sd::slidesorter::controller
+{
+SelectionObserver::Context::Context(SlideSorter const& rSlideSorter)
     : mpSelectionObserver(
-        rSlideSorter.GetController().GetSelectionManager()->GetSelectionObserver())
+          rSlideSorter.GetController().GetSelectionManager()->GetSelectionObserver())
 {
     if (mpSelectionObserver)
         mpSelectionObserver->StartObservation();
@@ -52,7 +52,7 @@ void SelectionObserver::Context::Abort()
 
 //===== SelectionObserver =====================================================
 
-SelectionObserver::SelectionObserver (SlideSorter& rSlideSorter)
+SelectionObserver::SelectionObserver(SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter)
     , mbIsObservationActive(false)
     , mbPageEventOccurred(false)
@@ -60,11 +60,9 @@ SelectionObserver::SelectionObserver (SlideSorter& rSlideSorter)
 {
 }
 
-SelectionObserver::~SelectionObserver()
-{
-}
+SelectionObserver::~SelectionObserver() {}
 
-void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
+void SelectionObserver::NotifyPageEvent(const SdrPage* pSdrPage)
 {
     if (!mbIsObservationActive)
         return;
@@ -109,8 +107,8 @@ void SelectionObserver::EndObservation()
     if (!mbPageEventOccurred)
         return;
 
-    PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
-    PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
+    PageSelector& rSelector(mrSlideSorter.GetController().GetPageSelector());
+    PageSelector::UpdateLock aUpdateLock(mrSlideSorter);
     rSelector.DeselectAllPages();
     if (!maInsertedPages.empty())
     {

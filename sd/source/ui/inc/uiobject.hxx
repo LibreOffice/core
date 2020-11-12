@@ -14,13 +14,11 @@
 class ImpressWindowUIObject : public WindowUIObject
 {
 public:
-
     ImpressWindowUIObject(const VclPtr<sd::Window>& xWindow);
 
     virtual StringMap get_state() override;
 
-    virtual void execute(const OUString& rAction,
-            const StringMap& rParameters) override;
+    virtual void execute(const OUString& rAction, const StringMap& rParameters) override;
 
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID) override;
 
@@ -29,11 +27,9 @@ public:
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
-
     virtual OUString get_name() const override;
 
 private:
-
     VclPtr<sd::Window> mxWindow;
 };
 

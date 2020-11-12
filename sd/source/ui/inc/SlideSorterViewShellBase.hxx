@@ -22,13 +22,12 @@
 
 #include "ImpressViewShellBase.hxx"
 
-namespace sd {
-
+namespace sd
+{
 /** This class exists to be able to register a factory that creates a
     slide sorter view shell as default.
 */
-class SlideSorterViewShellBase
-    : public ImpressViewShellBase
+class SlideSorterViewShellBase : public ImpressViewShellBase
 {
 public:
     SFX_DECL_VIEWFACTORY(SlideSorterViewShellBase);
@@ -36,7 +35,7 @@ public:
     /** This constructor is used by the view factory of the SFX
         macros.
     */
-    SlideSorterViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
+    SlideSorterViewShellBase(SfxViewFrame* pFrame, SfxViewShell* pOldShell);
     virtual ~SlideSorterViewShellBase() override;
 };
 

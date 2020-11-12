@@ -25,12 +25,15 @@
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uno
+{
+class XInterface;
+}
 
 class SdrPage;
 
-namespace sd::slidesorter::cache {
-
+namespace sd::slidesorter::cache
+{
 typedef const SdrPage* CacheKey;
 
 /** This interface allows the individualisation of different instances of
@@ -46,7 +49,7 @@ public:
         @param aKey
             The key of the page for which the preview has been created.
     */
-    virtual void NotifyPreviewCreation (CacheKey aKey) = 0;
+    virtual void NotifyPreviewCreation(CacheKey aKey) = 0;
 
     /** Called to determine whether the system is idle and a preview can be
         created without annoying the user.
@@ -57,13 +60,13 @@ public:
         or not.  It is called when the cache becomes too large and some
         previews have to be released or scaled down.
     */
-    virtual bool IsVisible (CacheKey aKey) = 0;
+    virtual bool IsVisible(CacheKey aKey) = 0;
 
     /** Return the page associated with the given key.  Note that different
         keys may map to a single page (this may be the case with custom
         slide shows.)
     */
-    virtual const SdrPage* GetPage (CacheKey aKey) = 0;
+    virtual const SdrPage* GetPage(CacheKey aKey) = 0;
 
     /** This method is used when the request queue is filled.  It asks for
         the list of visible entries and maybe for the list of not visible
@@ -73,13 +76,13 @@ public:
             to allow rendering of previews that are not visible (ahead of
             time). When not then return an empty pointer or an empty vector.
     */
-    virtual std::shared_ptr<std::vector<CacheKey> > GetEntryList (bool bVisible) = 0;
+    virtual std::shared_ptr<std::vector<CacheKey>> GetEntryList(bool bVisible) = 0;
 
     /** Return the priority that defines the order in which previews are
         created for different keys/pages.  Typically the visible pages come
         first, then top-down, left-to-right.
     */
-    virtual sal_Int32 GetPriority (CacheKey aKey) = 0;
+    virtual sal_Int32 GetPriority(CacheKey aKey) = 0;
 
     /** Return the model to which the pages belong for which the called
         cache manages the previews.  Different caches that belong to the

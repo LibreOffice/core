@@ -26,7 +26,9 @@ typedef SdAbstractDialogFactory* (*SdFuncPtrCreateDialogFactory)();
 
 #ifndef DISABLE_DYNLOADING
 
-extern "C" { static void thisModule() {} }
+extern "C" {
+static void thisModule() {}
+}
 
 #else
 
@@ -40,13 +42,13 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
     static constexpr OUStringLiteral sLibName(u"" SDUI_DLL_NAME);
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName ) )
-        fp = reinterpret_cast<SdAbstractDialogFactory* (SAL_CALL*)()>(
-            aDialogLibrary.getFunctionSymbol( "SdCreateDialogFactory" ));
+    if (aDialogLibrary.is() || aDialogLibrary.loadRelative(&thisModule, sLibName))
+        fp = reinterpret_cast<SdAbstractDialogFactory*(SAL_CALL*)()>(
+            aDialogLibrary.getFunctionSymbol("SdCreateDialogFactory"));
 #else
     fp = SdCreateDialogFactory;
 #endif
-    if ( fp )
+    if (fp)
         return fp();
     return nullptr;
 }

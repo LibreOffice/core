@@ -13,7 +13,7 @@
 using namespace ::sd;
 using namespace ::std;
 
-RemoteDialog::RemoteDialog(weld::Window *pWindow)
+RemoteDialog::RemoteDialog(weld::Window* pWindow)
     : GenericDialogController(pWindow, "modules/simpress/ui/remotedialog.ui", "RemoteDialog")
     , m_xButtonConnect(m_xBuilder->weld_button("ok"))
     , m_xClientBox(new sd::ClientBox(m_xBuilder->weld_scrolled_window("scroll"),
@@ -22,9 +22,7 @@ RemoteDialog::RemoteDialog(weld::Window *pWindow)
     m_xButtonConnect->connect_clicked(LINK(this, RemoteDialog, HandleConnectButton));
 }
 
-RemoteDialog::~RemoteDialog()
-{
-}
+RemoteDialog::~RemoteDialog() {}
 
 IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton, weld::Button&, void)
 {

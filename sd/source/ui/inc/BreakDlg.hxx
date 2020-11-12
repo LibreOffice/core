@@ -25,8 +25,8 @@
 #include <svx/svdetc.hxx>
 #include <vcl/idle.hxx>
 
-namespace sd {
-
+namespace sd
+{
 class DrawDocShell;
 class DrawView;
 
@@ -49,9 +49,9 @@ private:
 
     DrawView* m_pDrView;
 
-    bool      m_bCancel;
+    bool m_bCancel;
 
-    Idle      m_aUpdateIdle;
+    Idle m_aUpdateIdle;
     std::unique_ptr<SvdProgressInfo> m_xProgrInfo;
     std::unique_ptr<SfxProgress> m_xProgress;
 

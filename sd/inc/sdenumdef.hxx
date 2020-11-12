@@ -22,7 +22,12 @@
 
 #define RET_SNAP_DELETE 111
 
-enum class SnapKind { Horizontal, Vertical, Point };
+enum class SnapKind
+{
+    Horizontal,
+    Vertical,
+    Point
+};
 
 #endif
 

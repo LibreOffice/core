@@ -23,7 +23,10 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <sfx2/tbxctrl.hxx>
 
-namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame
+{
+class XFrame;
+}
 class SfxUInt16Item;
 
 // SdPagesField:
@@ -45,7 +48,7 @@ public:
     void set_sensitive(bool bSensitive);
     virtual ~SdPagesField() override;
 
-    void            UpdatePagesField( const SfxUInt16Item* pItem );
+    void UpdatePagesField(const SfxUInt16Item* pItem);
 };
 
 // SdTbxCtlDiaPages:
@@ -53,13 +56,13 @@ public:
 class SdTbxCtlDiaPages : public SfxToolBoxControl
 {
 public:
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState ) override;
-    virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window *pParent ) override;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+                              const SfxPoolItem* pState) override;
+    virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SdTbxCtlDiaPages(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual ~SdTbxCtlDiaPages() override;
 };
 

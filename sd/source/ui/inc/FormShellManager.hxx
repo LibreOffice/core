@@ -28,12 +28,18 @@
 
 class VclWindowEvent;
 class FmFormShell;
-namespace vcl { class Window; }
+namespace vcl
+{
+class Window;
+}
 
-namespace sd::tools { class EventMultiplexerEvent; }
+namespace sd::tools
+{
+class EventMultiplexerEvent;
+}
 
-namespace sd {
-
+namespace sd
+{
 class ViewShellBase;
 
 /** This simple class is responsible for putting the form shell above or
@@ -48,11 +54,10 @@ class ViewShellBase;
     The form shell is created and destroyed by the ViewShellManager by using
     a factory object provided by the FormShellManager.
 */
-class FormShellManager
-    : public SfxListener
+class FormShellManager : public SfxListener
 {
 public:
-    FormShellManager (ViewShellBase& rBase);
+    FormShellManager(ViewShellBase& rBase);
     virtual ~FormShellManager() override;
 
     /** Typically called by a ShellFactory.  It tells the
@@ -61,14 +66,14 @@ public:
             This may be <NULL/> to disconnect the ViewShellManager from the
             form shell.
     */
-    void SetFormShell (FmFormShell* pFormShell);
+    void SetFormShell(FmFormShell* pFormShell);
 
     /** Return the form shell last set with SetFormShell().
         @return
             The result may be <NULL/> when the SetFormShell() method has not
             yet been called or was last called with <NULL/>.
     */
-    FmFormShell* GetFormShell() { return mpFormShell;}
+    FmFormShell* GetFormShell() { return mpFormShell; }
 
 private:
     ViewShellBase& mrBase;

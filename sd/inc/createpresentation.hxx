@@ -24,13 +24,14 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::presentation {
-    class XPresentation2;
+namespace com::sun::star::presentation
+{
+class XPresentation2;
 }
 class SdDrawDocument;
 
-css::uno::Reference<css::presentation::XPresentation2> CreatePresentation(
-    SdDrawDocument const & rDocument);
+css::uno::Reference<css::presentation::XPresentation2>
+CreatePresentation(SdDrawDocument const& rDocument);
 
 #endif
 

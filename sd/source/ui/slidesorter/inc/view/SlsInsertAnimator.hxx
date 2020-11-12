@@ -23,8 +23,8 @@
 #include <controller/SlsAnimator.hxx>
 #include <memory>
 
-namespace sd::slidesorter::view {
-
+namespace sd::slidesorter::view
+{
 class InsertPosition;
 
 /** Animate the positions of page objects to make room at the insert
@@ -33,14 +33,14 @@ class InsertPosition;
 class InsertAnimator
 {
 public:
-    explicit InsertAnimator (SlideSorter& rSlideSorter);
+    explicit InsertAnimator(SlideSorter& rSlideSorter);
     InsertAnimator(const InsertAnimator&) = delete;
     InsertAnimator& operator=(const InsertAnimator&) = delete;
 
     /** Set the position at which we have to make room for the display of an
         icon.
     */
-    void SetInsertPosition (const InsertPosition& rInsertPosition);
+    void SetInsertPosition(const InsertPosition& rInsertPosition);
 
     /** Restore the normal position of all page objects.
         @param eMode
@@ -48,7 +48,7 @@ public:
             normal positions of all slides (AM_Animated) or to restore the
             normal positions immediately (AM_Immediate).
     */
-    void Reset (const controller::Animator::AnimationMode eMode);
+    void Reset(const controller::Animator::AnimationMode eMode);
 
 private:
     class Implementation;

@@ -25,8 +25,8 @@
 class SdPage;
 class Size;
 
-namespace sd::slidesorter::cache {
-
+namespace sd::slidesorter::cache
+{
 /** This factory class creates preview bitmaps for page objects.  It is
     merely an adapter for the PreviewRenderer.
 */
@@ -36,10 +36,7 @@ public:
     BitmapFactory();
     ~BitmapFactory();
 
-    BitmapEx CreateBitmap (
-        const SdPage& rPage,
-        const Size& rPixelSize,
-        const bool bDoSuperSampling);
+    BitmapEx CreateBitmap(const SdPage& rPage, const Size& rPixelSize, const bool bDoSuperSampling);
 
 private:
     PreviewRenderer maRenderer;

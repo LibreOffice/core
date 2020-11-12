@@ -23,23 +23,16 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace sd::framework {
-
-FrameWindowPane::FrameWindowPane (
-    const Reference<XResourceId>& rxPaneId,
-    vcl::Window* pWindow)
-    : Pane(rxPaneId,pWindow)
+namespace sd::framework
+{
+FrameWindowPane::FrameWindowPane(const Reference<XResourceId>& rxPaneId, vcl::Window* pWindow)
+    : Pane(rxPaneId, pWindow)
 {
 }
 
-FrameWindowPane::~FrameWindowPane() throw()
-{
-}
+FrameWindowPane::~FrameWindowPane() throw() {}
 
-sal_Bool SAL_CALL FrameWindowPane::isAnchorOnly()
-{
-    return false;
-}
+sal_Bool SAL_CALL FrameWindowPane::isAnchorOnly() { return false; }
 
 } // end of namespace sd::framework
 

@@ -24,19 +24,21 @@
 #include <tools/link.hxx>
 #include <memory>
 
-namespace com::sun::star::rendering { class XSpriteCanvas; }
+namespace com::sun::star::rendering
+{
+class XSpriteCanvas;
+}
 
 struct ImplSVEvent;
 
-namespace sd::presenter {
-
+namespace sd::presenter
+{
 /** Each UpdateRequester handles update requests (calls to
     XCanvas::updateScreen()) for one shared canvas (a canvas that has one or
     more PresenterCanvas wrappers).  Multiple calls are collected and lead
     to a single call to updateScreen.
 */
-class CanvasUpdateRequester
-    : public std::enable_shared_from_this<CanvasUpdateRequester>
+class CanvasUpdateRequester : public std::enable_shared_from_this<CanvasUpdateRequester>
 {
 public:
     CanvasUpdateRequester(const CanvasUpdateRequester&) = delete;
@@ -45,20 +47,22 @@ public:
     /** @return the Canvas UpdateRequester object for the given shared canvas.
                 A new object is created when it does not already exist.
     */
-    static std::shared_ptr<CanvasUpdateRequester> Instance (
-        const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
+    static std::shared_ptr<CanvasUpdateRequester>
+    Instance(const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
 
-    void RequestUpdate (const bool bUpdateAll);
+    void RequestUpdate(const bool bUpdateAll);
 
 private:
-    explicit CanvasUpdateRequester (const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
+    explicit CanvasUpdateRequester(
+        const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
     ~CanvasUpdateRequester();
-    class Deleter; friend class Deleter;
+    class Deleter;
+    friend class Deleter;
 
     /// keep instance alive waiting for event dispatch
     std::shared_ptr<CanvasUpdateRequester> m_pThis;
     css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
-    ImplSVEvent * m_pUserEventId;
+    ImplSVEvent* m_pUserEventId;
     bool mbUpdateFlag;
 
     DECL_LINK(Callback, void*, void);

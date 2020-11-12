@@ -33,7 +33,6 @@ using namespace sd;
 
 namespace sd
 {
-
 SFX_IMPL_SUPERCLASS_INTERFACE(GraphicDocShell, SfxObjectShell)
 
 void GraphicDocShell::InitInterface_Impl()
@@ -41,23 +40,21 @@ void GraphicDocShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
 }
 
-SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), "sdraw" )
+SFX_IMPL_OBJECTFACTORY(GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), "sdraw")
 
-GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode) :
-    DrawDocShell(eMode, /*bDataObject*/true, DocumentType::Draw)
+GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode)
+    : DrawDocShell(eMode, /*bDataObject*/ true, DocumentType::Draw)
 {
-    SetStyleFamily( SfxStyleFamily::Para );
+    SetStyleFamily(SfxStyleFamily::Para);
 }
 
-GraphicDocShell::GraphicDocShell(SfxModelFlags nModelCreationFlags) :
-    DrawDocShell(nModelCreationFlags, /*bDataObject*/false, DocumentType::Draw)
+GraphicDocShell::GraphicDocShell(SfxModelFlags nModelCreationFlags)
+    : DrawDocShell(nModelCreationFlags, /*bDataObject*/ false, DocumentType::Draw)
 {
-    SetStyleFamily( SfxStyleFamily::Para );
+    SetStyleFamily(SfxStyleFamily::Para);
 }
 
-GraphicDocShell::~GraphicDocShell()
-{
-}
+GraphicDocShell::~GraphicDocShell() {}
 
 } // end of namespace sd
 

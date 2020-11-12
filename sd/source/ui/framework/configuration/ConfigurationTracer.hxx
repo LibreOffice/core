@@ -22,23 +22,32 @@
 
 #include <sal/types.h>
 
-namespace com::sun::star::drawing::framework { class XConfiguration; }
-namespace com::sun::star::drawing::framework { class XResourceId; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::drawing::framework
+{
+class XConfiguration;
+}
+namespace com::sun::star::drawing::framework
+{
+class XResourceId;
+}
+namespace com::sun::star::uno
+{
+template <typename> class Reference;
+}
 
-namespace sd::framework {
-
+namespace sd::framework
+{
 /** Print debug information about configurations to the standard error
     output channel.
 */
 class ConfigurationTracer
 {
 public:
-    static void TraceConfiguration (
+    static void TraceConfiguration(
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
         const char* pMessage);
-#if OSL_DEBUG_LEVEL >=1
-    static void TraceBoundResources (
+#if OSL_DEBUG_LEVEL >= 1
+    static void TraceBoundResources(
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
         const int nIndentation);

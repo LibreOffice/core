@@ -25,8 +25,8 @@
 class SdPage;
 class SdTransferable;
 
-namespace sd {
-
+namespace sd
+{
 class View;
 
 /** Handle clipboard related tasks for the draw view.
@@ -34,13 +34,13 @@ class View;
 class ViewClipboard
 {
 public:
-    ViewClipboard (::sd::View& rView);
+    ViewClipboard(::sd::View& rView);
     virtual ~ViewClipboard();
 
     /** Handle the drop of a drag-and-drop action where the transferable
         contains a set of pages.
     */
-    void HandlePageDrop (const SdTransferable& rTransferable);
+    void HandlePageDrop(const SdTransferable& rTransferable);
 
 protected:
     ::sd::View& mrView;
@@ -49,19 +49,17 @@ protected:
         bookmark list of the transferable contains at least one non-master
         page then NULL is returned.
     */
-    static SdPage* GetFirstMasterPage (const SdTransferable& rTransferable);
+    static SdPage* GetFirstMasterPage(const SdTransferable& rTransferable);
 
     /** Assign the (first) master page of the given transferable to the
         (...) slide.
     */
-    void AssignMasterPage (
-        const SdTransferable& rTransferable,
-        SdPage const * pMasterPage);
+    void AssignMasterPage(const SdTransferable& rTransferable, SdPage const* pMasterPage);
 
     /** Return an index of a page after which the pages of the transferable
         are to be inserted into the target document.
     */
-    virtual sal_uInt16 DetermineInsertPosition ();
+    virtual sal_uInt16 DetermineInsertPosition();
 
     /** Insert the slides in the given transferable behind the last selected
         slide or, when the selection is empty, behind the last slide.
@@ -73,9 +71,7 @@ protected:
         @return
             Returns the number of inserted slides.
     */
-    sal_uInt16 InsertSlides (
-        const SdTransferable& rTransferable,
-        sal_uInt16 nInsertPosition);
+    sal_uInt16 InsertSlides(const SdTransferable& rTransferable, sal_uInt16 nInsertPosition);
 };
 
 } // end of namespace ::sd

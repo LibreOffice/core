@@ -29,8 +29,8 @@
 class KeyEvent;
 class MouseEvent;
 
-namespace sd {
-
+namespace sd
+{
 class View;
 class SmartHdl;
 
@@ -46,20 +46,20 @@ class SmartTag : public SimpleReferenceComponent
     friend class SmartTagSet;
 
 public:
-    explicit SmartTag( ::sd::View& rView );
+    explicit SmartTag(::sd::View& rView);
     virtual ~SmartTag() override;
 
     /** returns true if the SmartTag consumes this event. */
-    virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& );
+    virtual bool MouseButtonDown(const MouseEvent&, SmartHdl&);
 
     /** returns true if the SmartTag consumes this event. */
-    virtual bool KeyInput( const KeyEvent& rKEvt );
+    virtual bool KeyInput(const KeyEvent& rKEvt);
 
     /** returns true if the SmartTag consumes this event. */
-    virtual bool Command( const CommandEvent& rCEvt );
+    virtual bool Command(const CommandEvent& rCEvt);
 
     /** returns true if this smart tag is currently selected */
-    bool isSelected() const { return mbSelected;}
+    bool isSelected() const { return mbSelected; }
 
     ::sd::View& getView() const { return mrView; }
 
@@ -70,10 +70,10 @@ protected:
     virtual void CheckPossibilities();
     virtual bool MarkPoints(const ::tools::Rectangle* pRect, bool bUnmark);
 
-    virtual void addCustomHandles( SdrHdlList& rHandlerList );
+    virtual void addCustomHandles(SdrHdlList& rHandlerList);
     virtual void select();
     virtual void deselect();
-    virtual bool getContext( SdrViewContext& rContext );
+    virtual bool getContext(SdrViewContext& rContext);
 
     virtual void disposing() override;
 
@@ -81,22 +81,23 @@ protected:
     bool mbSelected;
 
 private:
-    SmartTag( const SmartTag& ) = delete;
-    SmartTag& operator=( const SmartTag& ) = delete;
+    SmartTag(const SmartTag&) = delete;
+    SmartTag& operator=(const SmartTag&) = delete;
 };
 
-typedef rtl::Reference< SmartTag > SmartTagReference;
+typedef rtl::Reference<SmartTag> SmartTagReference;
 
 /** class to administrate the available smart tags for a single view. */
 class SmartTagSet
 {
     friend class SmartTag;
+
 public:
-    explicit SmartTagSet( ::sd::View& rView );
+    explicit SmartTagSet(::sd::View& rView);
     ~SmartTagSet();
 
     /** selects the given smart tag and updates all handles */
-    void select( const SmartTagReference& xTag );
+    void select(const SmartTagReference& xTag);
 
     /** deselects the current selected smart tag and updates all handles */
     void deselect();
@@ -105,23 +106,23 @@ public:
     const SmartTagReference& getSelected() const { return mxSelectedTag; }
 
     /** returns true if a SmartTag consumes this event. */
-    bool MouseButtonDown( const MouseEvent& );
+    bool MouseButtonDown(const MouseEvent&);
 
     /** returns true if a SmartTag consumes this event. */
-    bool KeyInput( const KeyEvent& rKEvt );
+    bool KeyInput(const KeyEvent& rKEvt);
 
     /** returns true if a SmartTag consumes this event. */
-    bool Command( const CommandEvent& rCEvt );
+    bool Command(const CommandEvent& rCEvt);
 
     /** disposes all smart tags and clears the set */
     void Dispose();
 
     /** adds the handles from all smart tags to the given list */
-    void addCustomHandles( SdrHdlList& rHandlerList );
+    void addCustomHandles(SdrHdlList& rHandlerList);
 
     /** returns true if the currently selected smart tag has
         a special context, returned in rContext. */
-    bool getContext( SdrViewContext& rContext ) const;
+    bool getContext(SdrViewContext& rContext) const;
 
     // support point editing
     bool HasMarkablePoints() const;
@@ -134,16 +135,16 @@ public:
     void CheckPossibilities();
 
 private:
-    SmartTagSet( const SmartTagSet& ) = delete;
-    SmartTagSet& operator=( const SmartTagSet& ) = delete;
+    SmartTagSet(const SmartTagSet&) = delete;
+    SmartTagSet& operator=(const SmartTagSet&) = delete;
 
     /** adds a new smart tag to this set */
-    void add( const SmartTagReference& xTag );
+    void add(const SmartTagReference& xTag);
 
     /** removes the given smart tag from this set */
-    void remove( const SmartTagReference& xTag );
+    void remove(const SmartTagReference& xTag);
 
-     std::set< SmartTagReference > maSet;
+    std::set<SmartTagReference> maSet;
 
     ::sd::View& mrView;
     SmartTagReference mxSelectedTag;
@@ -156,10 +157,12 @@ private:
 class SmartHdl : public SdrHdl
 {
 public:
-    SmartHdl( const SmartTagReference& xTag, SdrObject* pObject, const Point& rPnt, SdrHdlKind eNewKind );
-    SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind eNewKind );
+    SmartHdl(const SmartTagReference& xTag, SdrObject* pObject, const Point& rPnt,
+             SdrHdlKind eNewKind);
+    SmartHdl(const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind eNewKind);
 
     const SmartTagReference& getTag() const { return mxSmartTag; }
+
 private:
     SmartTagReference mxSmartTag;
 };

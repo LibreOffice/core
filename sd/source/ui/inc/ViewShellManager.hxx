@@ -27,8 +27,8 @@
 class FmFormShell;
 class SfxShell;
 
-namespace sd {
-
+namespace sd
+{
 class ViewShell;
 class ViewShellBase;
 
@@ -54,9 +54,9 @@ class ViewShellBase;
 class ViewShellManager
 {
 public:
-    typedef std::shared_ptr<ShellFactory<SfxShell> > SharedShellFactory;
+    typedef std::shared_ptr<ShellFactory<SfxShell>> SharedShellFactory;
 
-    ViewShellManager (ViewShellBase& rBase);
+    ViewShellManager(ViewShellBase& rBase);
 
     /** Before the destructor is called the method Shutdown() has to have
         been called.
@@ -72,32 +72,28 @@ public:
 
     /** Set the factory for sub shells of the specified view shell.
     */
-    void AddSubShellFactory (
-        ViewShell const * pViewShell,
-        const SharedShellFactory& rpFactory);
-    void RemoveSubShellFactory (
-        ViewShell const * pViewShell,
-        const SharedShellFactory& rpFactory);
+    void AddSubShellFactory(ViewShell const* pViewShell, const SharedShellFactory& rpFactory);
+    void RemoveSubShellFactory(ViewShell const* pViewShell, const SharedShellFactory& rpFactory);
 
     /** Activate the given view shell.
     */
-    void ActivateViewShell (ViewShell* pViewShell);
+    void ActivateViewShell(ViewShell* pViewShell);
 
     /** Activate the given shell which is not a view shell.  For view shells
         use the ActivateViewShell() method.
     */
-    void ActivateShell (SfxShell* pShell);
+    void ActivateShell(SfxShell* pShell);
 
     /** Deactivate the specified shell, i.e. take it and all of its
         object bars from the shell stack.
         @param pShell
             The shell to deactivate.
     */
-    void DeactivateViewShell (const ViewShell* pShell);
+    void DeactivateViewShell(const ViewShell* pShell);
 
     /** Deactivate the specified shell.  The shell is not destroyed.
     */
-    void DeactivateShell (const SfxShell* pShell);
+    void DeactivateShell(const SfxShell* pShell);
 
     /** Associate the form shell with a view shell and their relative
         position.  This method does not change the shell stack, it just
@@ -111,7 +107,7 @@ public:
             pViewShell on the SFX shell stack.  Otherwise the form shell is
             placed directly below the view shell.
     */
-    void SetFormShell (const ViewShell* pParentShell, FmFormShell* pFormShell, bool bAbove);
+    void SetFormShell(const ViewShell* pParentShell, FmFormShell* pFormShell, bool bAbove);
 
     /** Activate the specified shell as sub shell for the given view shell.
         The sub shell factory associated with the view shell is used to
@@ -122,17 +118,16 @@ public:
             This id is used only with the factory registered for the parent
             view shell.
     */
-    void ActivateSubShell (const ViewShell& rParentShell, ShellId nId);
+    void ActivateSubShell(const ViewShell& rParentShell, ShellId nId);
 
     /** Deactivate the specified sub shell.
     */
-    void DeactivateSubShell (const ViewShell& rParentShell, ShellId nId);
+    void DeactivateSubShell(const ViewShell& rParentShell, ShellId nId);
 
     /** Send all sub shells of the specified view shell an Invalidate()
         call.  This does not modify the shell stack.
     */
-    void InvalidateAllSubShells (
-        ViewShell const * pViewShell);
+    void InvalidateAllSubShells(ViewShell const* pViewShell);
 
     /** Move the specified view shell to the top most position on the stack
         of view shells in relation to the other view shells.  After this the
@@ -147,7 +142,7 @@ public:
         @param nId
             The id of the shell to move to the top.
     */
-    void MoveToTop (const ViewShell& rShell);
+    void MoveToTop(const ViewShell& rShell);
 
     /** Return the first, i.e. top most, view shell that has been activated
         under the given id.
@@ -157,7 +152,7 @@ public:
             When the specified shell is currently not active then NULL is
             returned.
     */
-    SfxShell* GetShell (ShellId nId) const;
+    SfxShell* GetShell(ShellId nId) const;
 
     /** Return the top-most shell on the SFX shell stack regardless of
         whether that is a view shell or a sub shell.
@@ -173,9 +168,13 @@ public:
     class UpdateLock
     {
     public:
-        UpdateLock (const std::shared_ptr<ViewShellManager>& rpManager)
-            : mpManager(rpManager) {mpManager->LockUpdate();}
-        ~UpdateLock() COVERITY_NOEXCEPT_FALSE {mpManager->UnlockUpdate();}
+        UpdateLock(const std::shared_ptr<ViewShellManager>& rpManager)
+            : mpManager(rpManager)
+        {
+            mpManager->LockUpdate();
+        }
+        ~UpdateLock() COVERITY_NOEXCEPT_FALSE { mpManager->UnlockUpdate(); }
+
     private:
         std::shared_ptr<ViewShellManager> mpManager;
     };
@@ -183,7 +182,9 @@ public:
 
 private:
     class Implementation;
-    std::unique_ptr<ViewShellManager::Implementation, o3tl::default_delete<ViewShellManager::Implementation>> mpImpl;
+    std::unique_ptr<ViewShellManager::Implementation,
+                    o3tl::default_delete<ViewShellManager::Implementation>>
+        mpImpl;
     bool mbValid;
 
     void LockUpdate();

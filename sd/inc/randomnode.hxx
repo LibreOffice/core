@@ -27,11 +27,10 @@
 
 #include "sddllapi.h"
 
-namespace sd {
-
+namespace sd
+{
 SD_DLLPUBLIC css::uno::Reference<css::uno::XInterface>
 RandomAnimationNode_createInstance(sal_Int16 nPresetClass);
-
 }
 
 #endif

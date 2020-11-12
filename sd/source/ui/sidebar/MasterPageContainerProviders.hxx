@@ -26,11 +26,17 @@
 class Image;
 class SdDrawDocument;
 class SdPage;
-namespace sd { class PreviewRenderer; }
-namespace sd { class DrawDocShell; }
+namespace sd
+{
+class PreviewRenderer;
+}
+namespace sd
+{
+class DrawDocShell;
+}
 
-namespace sd::sidebar {
-
+namespace sd::sidebar
+{
 /** Interface for a provider of page objects.  It is used by the
     MasterPageDescriptor to create master page objects on demand.
 */
@@ -43,7 +49,7 @@ public:
             The document of the MasterPageContainer.  It may be used to
             create new pages.
     */
-    virtual SdPage* operator() (SdDrawDocument* pDocument) = 0;
+    virtual SdPage* operator()(SdDrawDocument* pDocument) = 0;
 
     /** An abstract value for the expected cost of providing a master page
         object.
@@ -74,7 +80,7 @@ public:
             This PreviewRenderer may be used by the PreviewProvider to
             create a preview image.
     */
-    virtual Image operator() (int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer) = 0;
+    virtual Image operator()(int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer) = 0;
 
     /** Return a value that indicates how expensive the creation of a
         preview image is.  The higher the returned value the more expensive
@@ -99,9 +105,10 @@ class PagePreviewProvider : public PreviewProvider
 public:
     PagePreviewProvider();
     virtual ~PagePreviewProvider() {}
-    virtual Image operator () (int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer) override;
+    virtual Image operator()(int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer) override;
     virtual int GetCostIndex() override;
     virtual bool NeedsPageObject() override;
+
 private:
 };
 
@@ -111,14 +118,15 @@ private:
 class TemplatePageObjectProvider : public PageObjectProvider
 {
 public:
-    explicit TemplatePageObjectProvider (const OUString& rsURL);
-    virtual ~TemplatePageObjectProvider() {};
-    virtual SdPage* operator () (SdDrawDocument* pDocument) override;
+    explicit TemplatePageObjectProvider(const OUString& rsURL);
+    virtual ~TemplatePageObjectProvider(){};
+    virtual SdPage* operator()(SdDrawDocument* pDocument) override;
     virtual int GetCostIndex() override;
+
 private:
     OUString msURL;
     SfxObjectShellLock mxDocumentShell;
-    ::sd::DrawDocShell* LoadDocument (const OUString& sFileName);
+    ::sd::DrawDocShell* LoadDocument(const OUString& sFileName);
 };
 
 /** Provide previews for template documents by loading the thumbnails from
@@ -127,11 +135,12 @@ private:
 class TemplatePreviewProvider : public PreviewProvider
 {
 public:
-    explicit TemplatePreviewProvider (const OUString& rsURL);
-    virtual ~TemplatePreviewProvider() {};
-    virtual Image operator() (int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer) override;
+    explicit TemplatePreviewProvider(const OUString& rsURL);
+    virtual ~TemplatePreviewProvider(){};
+    virtual Image operator()(int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer) override;
     virtual int GetCostIndex() override;
     virtual bool NeedsPageObject() override;
+
 private:
     OUString msURL;
 };
@@ -143,7 +152,7 @@ class DefaultPageObjectProvider : public PageObjectProvider
 public:
     DefaultPageObjectProvider();
     virtual ~DefaultPageObjectProvider() {}
-    virtual SdPage* operator () (SdDrawDocument* pDocument) override;
+    virtual SdPage* operator()(SdDrawDocument* pDocument) override;
     virtual int GetCostIndex() override;
 };
 
@@ -153,10 +162,11 @@ public:
 class ExistingPageProvider : public PageObjectProvider
 {
 public:
-    explicit ExistingPageProvider (SdPage* pPage);
+    explicit ExistingPageProvider(SdPage* pPage);
     virtual ~ExistingPageProvider() {}
-    virtual SdPage* operator() (SdDrawDocument* pDocument) override;
+    virtual SdPage* operator()(SdDrawDocument* pDocument) override;
     virtual int GetCostIndex() override;
+
 private:
     SdPage* mpPage;
 };

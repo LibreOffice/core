@@ -25,12 +25,21 @@
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::drawing::framework { class XConfiguration; }
-namespace com::sun::star::drawing::framework { class XControllerManager; }
-namespace com::sun::star::drawing::framework { class XResourceId; }
+namespace com::sun::star::drawing::framework
+{
+class XConfiguration;
+}
+namespace com::sun::star::drawing::framework
+{
+class XControllerManager;
+}
+namespace com::sun::star::drawing::framework
+{
+class XResourceId;
+}
 
-namespace sd::framework {
-
+namespace sd::framework
+{
 class ConfigurationClassifier;
 class ConfigurationUpdaterLock;
 class ConfigurationControllerResourceManager;
@@ -51,11 +60,11 @@ public:
     /** Create a new ConfigurationUpdater object that notifies configuration
         changes and the start and end of updates via the given broadcaster.
     */
-    ConfigurationUpdater (
+    ConfigurationUpdater(
         const std::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster,
         const std::shared_ptr<ConfigurationControllerResourceManager>& rpResourceManager,
-        const css::uno::Reference<
-            css::drawing::framework::XControllerManager>& rxControllerManager);
+        const css::uno::Reference<css::drawing::framework::XControllerManager>&
+            rxControllerManager);
     ~ConfigurationUpdater();
 
     /** Request an update of the current configuration so that it looks like
@@ -64,11 +73,14 @@ public:
         if that is the case.  Otherwise it schedules a later call to
         UpdateConfiguration().
     */
-    void RequestUpdate (const css::uno::Reference<
-        css::drawing::framework::XConfiguration>& rxRequestedConfiguration);
+    void RequestUpdate(const css::uno::Reference<css::drawing::framework::XConfiguration>&
+                           rxRequestedConfiguration);
 
-    const css::uno::Reference<
-        css::drawing::framework::XConfiguration>& GetCurrentConfiguration() const { return mxCurrentConfiguration;}
+    const css::uno::Reference<css::drawing::framework::XConfiguration>&
+    GetCurrentConfiguration() const
+    {
+        return mxCurrentConfiguration;
+    }
 
     friend class ConfigurationUpdaterLock;
     /** Return a lock of the called ConfigurationUpdater.  While the
@@ -81,16 +93,14 @@ private:
     /** A reference to the XControllerManager is kept so that
         UpdateConfiguration() has access to the other sub controllers.
     */
-    css::uno::Reference<
-        css::drawing::framework::XControllerManager> mxControllerManager;
+    css::uno::Reference<css::drawing::framework::XControllerManager> mxControllerManager;
 
     std::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
 
     /** The current configuration holds the resources that are currently
         active.  It is modified during an update.
     */
-    css::uno::Reference<
-        css::drawing::framework::XConfiguration> mxCurrentConfiguration;
+    css::uno::Reference<css::drawing::framework::XConfiguration> mxCurrentConfiguration;
 
     /** The requested configuration holds the resources that have been
         requested to activate or to deactivate since the last update.  It is
@@ -98,8 +108,7 @@ private:
         maintained by the ConfigurationController and given to the
         ConfigurationUpdater in the RequestUpdate() method.
     */
-    css::uno::Reference<
-        css::drawing::framework::XConfiguration> mxRequestedConfiguration;
+    css::uno::Reference<css::drawing::framework::XConfiguration> mxRequestedConfiguration;
 
     /** This flag is set to </sal_True> when an update of the current
         configuration was requested (because the last request in the queue
@@ -127,7 +136,7 @@ private:
         This is used to overcome problems with resources that become
         available asynchronously.
     */
-    Timer  maUpdateTimer;
+    Timer maUpdateTimer;
 
     /** The number of failed updates (those after which the current
         configuration is not equivalent to the requested configuration) is
@@ -147,15 +156,15 @@ private:
     /** Basically calls UpdaterStart() andUpdateEnd() and makes some debug
         output.
     */
-    void UpdateCore (const ConfigurationClassifier& rClassifier);
+    void UpdateCore(const ConfigurationClassifier& rClassifier);
 
     /** Check for all pure anchors if they have at least one child.
         Childless pure anchors are deactivated.
         This affects only the current configuration.
     */
-    void CheckPureAnchors (
+    void CheckPureAnchors(
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
-        ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId> >&
+        ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId>>&
             rResourcesToDeactivate);
 
     /** Remove from the requested configuration all pure anchors that have no
@@ -174,7 +183,7 @@ private:
         prevent reentrance problems.  This method allows function objects
         easily and safely to modify the variable.
     */
-    void SetUpdateBeingProcessed (bool bValue);
+    void SetUpdateBeingProcessed(bool bValue);
 
     /** Return whether it is possible to do an update of the configuration.
         This takes into account whether another update is currently being
@@ -193,7 +202,7 @@ private:
     */
     void UnlockUpdates();
 
-    DECL_LINK(TimeoutHandler, Timer *, void);
+    DECL_LINK(TimeoutHandler, Timer*, void);
 };
 
 } // end of namespace sd::framework

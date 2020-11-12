@@ -30,13 +30,12 @@ class SdPage;
 
 namespace sd
 {
-
 struct UndoAnimationImpl;
 
 class UndoAnimation final : public SdrUndoAction
 {
 public:
-    UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage );
+    UndoAnimation(SdDrawDocument* pDoc, SdPage* pThePage);
     virtual ~UndoAnimation() override;
 
     virtual void Undo() override;
@@ -45,14 +44,15 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    std::unique_ptr<UndoAnimationImpl>  mpImpl;
+    std::unique_ptr<UndoAnimationImpl> mpImpl;
 };
 
 struct UndoAnimationPathImpl;
 class UndoAnimationPath final : public SdrUndoAction
 {
 public:
-    UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    UndoAnimationPath(SdDrawDocument* pDoc, SdPage* pThePage,
+                      const css::uno::Reference<css::animations::XAnimationNode>& xNode);
     virtual ~UndoAnimationPath() override;
 
     virtual void Undo() override;
@@ -69,7 +69,7 @@ struct UndoTransitionImpl;
 class UndoTransition final : public SdUndoAction
 {
 public:
-    UndoTransition( SdDrawDocument* pDoc, SdPage* pThePage );
+    UndoTransition(SdDrawDocument* pDoc, SdPage* pThePage);
     virtual ~UndoTransition() override;
 
     virtual void Undo() override;
@@ -80,7 +80,6 @@ public:
 private:
     std::unique_ptr<UndoTransitionImpl> mpImpl;
 };
-
 }
 
 #endif // INCLUDED_SD_INC_UNDOANIM_HXX

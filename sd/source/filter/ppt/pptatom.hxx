@@ -24,29 +24,28 @@
 
 namespace ppt
 {
-
 class Atom
 {
 public:
     ~Atom();
 
     /** imports this atom and its child atoms */
-    static Atom* import( const DffRecordHeader& rRootRecordHeader, SvStream& rStCtrl );
+    static Atom* import(const DffRecordHeader& rRootRecordHeader, SvStream& rStCtrl);
 
     /** @return true if at least one atom with the given nRecType is found */
-    inline bool hasChildAtom( sal_uInt16 nRecType ) const;
+    inline bool hasChildAtom(sal_uInt16 nRecType) const;
 
     /** @return the first child atom with nRecType or NULL */
-    inline const Atom* findFirstChildAtom( sal_uInt16 nRecType ) const;
+    inline const Atom* findFirstChildAtom(sal_uInt16 nRecType) const;
 
     /** @return the next child atom after pLast with nRecType or NULL */
-    const Atom* findNextChildAtom( sal_uInt16 nRecType, const Atom* pLast ) const;
+    const Atom* findNextChildAtom(sal_uInt16 nRecType, const Atom* pLast) const;
 
     /** @return the first child atom or NULL */
     inline const Atom* findFirstChildAtom() const;
 
     /** @return the next child atom after pLast or NULL */
-    static inline const Atom* findNextChildAtom( const Atom* pLast );
+    static inline const Atom* findNextChildAtom(const Atom* pLast);
 
     /** @return true if this atom is a container */
     inline bool isContainer() const;
@@ -64,7 +63,7 @@ public:
     inline sal_uInt32 getLength() const;
 
 private:
-    Atom( const DffRecordHeader& rRecordHeader, SvStream& rStCtrl );
+    Atom(const DffRecordHeader& rRecordHeader, SvStream& rStCtrl);
 
     SvStream& mrStream;
     DffRecordHeader maRecordHeader;
@@ -72,51 +71,36 @@ private:
     Atom* mpNextAtom;
 };
 
-inline bool Atom::hasChildAtom( sal_uInt16 nRecType ) const
+inline bool Atom::hasChildAtom(sal_uInt16 nRecType) const
 {
-    return findFirstChildAtom( nRecType ) != nullptr;
+    return findFirstChildAtom(nRecType) != nullptr;
 }
 
-inline const Atom* Atom::findFirstChildAtom( sal_uInt16 nRecType ) const
+inline const Atom* Atom::findFirstChildAtom(sal_uInt16 nRecType) const
 {
-    return findNextChildAtom( nRecType, nullptr );
+    return findNextChildAtom(nRecType, nullptr);
 }
 
-inline const Atom* Atom::findFirstChildAtom() const
-{
-    return mpFirstChild;
-}
+inline const Atom* Atom::findFirstChildAtom() const { return mpFirstChild; }
 
-inline const Atom* Atom::findNextChildAtom( const Atom* pLast )
+inline const Atom* Atom::findNextChildAtom(const Atom* pLast)
 {
     return pLast ? pLast->mpNextAtom : pLast;
 }
 
-inline bool Atom::isContainer() const
-{
-    return maRecordHeader.IsContainer();
-}
+inline bool Atom::isContainer() const { return maRecordHeader.IsContainer(); }
 
 inline bool Atom::seekToContent() const
 {
-    maRecordHeader.SeekToContent( mrStream );
+    maRecordHeader.SeekToContent(mrStream);
     return mrStream.GetError() == ERRCODE_NONE;
 }
 
-inline sal_uInt16 Atom::getType() const
-{
-    return maRecordHeader.nRecType;
-}
+inline sal_uInt16 Atom::getType() const { return maRecordHeader.nRecType; }
 
-inline sal_uInt16 Atom::getInstance() const
-{
-    return maRecordHeader.nRecInstance;
-}
+inline sal_uInt16 Atom::getInstance() const { return maRecordHeader.nRecInstance; }
 
-inline sal_uInt32 Atom::getLength() const
-{
-    return maRecordHeader.nRecLen;
-}
+inline sal_uInt32 Atom::getLength() const { return maRecordHeader.nRecLen; }
 
 } // namespace ppt
 

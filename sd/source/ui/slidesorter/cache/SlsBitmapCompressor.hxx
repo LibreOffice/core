@@ -25,8 +25,8 @@
 
 class BitmapEx;
 
-namespace sd::slidesorter::cache {
-
+namespace sd::slidesorter::cache
+{
 class BitmapReplacement;
 
 /** This interface class provides the minimal method set for classes that
@@ -38,7 +38,7 @@ public:
     /** Compress the given bitmap into a replacement format that is specific
         to the compressor class.
     */
-    virtual std::shared_ptr<BitmapReplacement> Compress (const BitmapEx& rBitmap) const = 0;
+    virtual std::shared_ptr<BitmapReplacement> Compress(const BitmapEx& rBitmap) const = 0;
 
     /** Decompress the given replacement data into a preview bitmap.
         Depending on the compression technique the returned bitmap may
@@ -47,7 +47,7 @@ public:
         task of the caller to create a new preview bitmap if the returned
         one is not as desired.
     */
-    virtual BitmapEx Decompress (const BitmapReplacement& rBitmapData)const=0;
+    virtual BitmapEx Decompress(const BitmapReplacement& rBitmapData) const = 0;
 
     /** Return whether the compression and decompression is lossless.  This
         value is used by the caller of Decompress() to decide whether to use
@@ -76,14 +76,14 @@ protected:
     instead of compressing them.
     This compressor is lossless.
 */
-class NoBitmapCompression
-    : public BitmapCompressor
+class NoBitmapCompression : public BitmapCompressor
 {
     class DummyReplacement;
+
 public:
     virtual ~NoBitmapCompression() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const BitmapEx& rpBitmap) const override;
-    virtual BitmapEx Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual std::shared_ptr<BitmapReplacement> Compress(const BitmapEx& rpBitmap) const override;
+    virtual BitmapEx Decompress(const BitmapReplacement& rBitmapData) const override;
     virtual bool IsLossless() const override;
 };
 
@@ -92,13 +92,12 @@ public:
     NULL pointer.  The caller has to create a new preview bitmap instead.
     This compressor clearly is not lossless.
 */
-class CompressionByDeletion
-    : public BitmapCompressor
+class CompressionByDeletion : public BitmapCompressor
 {
 public:
     virtual ~CompressionByDeletion() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const BitmapEx& rBitmap) const override;
-    virtual BitmapEx Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual std::shared_ptr<BitmapReplacement> Compress(const BitmapEx& rBitmap) const override;
+    virtual BitmapEx Decompress(const BitmapReplacement& rBitmapData) const override;
     virtual bool IsLossless() const override;
 };
 
@@ -107,31 +106,31 @@ public:
     pixels.
     This compressor is not lossless.
 */
-class ResolutionReduction
-    : public BitmapCompressor
+class ResolutionReduction : public BitmapCompressor
 {
     class ResolutionReducedReplacement;
     static const sal_Int32 mnWidth = 100;
+
 public:
     virtual ~ResolutionReduction() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const BitmapEx& rpBitmap) const override;
+    virtual std::shared_ptr<BitmapReplacement> Compress(const BitmapEx& rpBitmap) const override;
     /** Scale the replacement bitmap up to the original size.
     */
-    virtual BitmapEx Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual BitmapEx Decompress(const BitmapReplacement& rBitmapData) const override;
     virtual bool IsLossless() const override;
 };
 
 /** Compress preview bitmaps using the PNG format.
     This compressor is lossless.
 */
-class PngCompression
-    : public BitmapCompressor
+class PngCompression : public BitmapCompressor
 {
     class PngReplacement;
+
 public:
     virtual ~PngCompression() {}
-    virtual std::shared_ptr<BitmapReplacement> Compress (const BitmapEx& rBitmap) const override;
-    virtual BitmapEx Decompress (const BitmapReplacement& rBitmapData) const override;
+    virtual std::shared_ptr<BitmapReplacement> Compress(const BitmapEx& rBitmap) const override;
+    virtual BitmapEx Decompress(const BitmapReplacement& rBitmapData) const override;
     virtual bool IsLossless() const override;
 };
 

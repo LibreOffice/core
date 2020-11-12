@@ -26,8 +26,8 @@
 
 class Size;
 
-namespace sd::slidesorter::cache {
-
+namespace sd::slidesorter::cache
+{
 class GenericPageCache;
 
 /** The page cache is responsible for the creation and storage of preview
@@ -71,16 +71,12 @@ public:
         It is the task of the PageCacheManager to create new objects of this
         class.
     */
-    PageCache (
-        const Size& rPreviewSize,
-        const bool bDoSuperSampling,
-        const SharedCacheContext& rpCacheContext);
+    PageCache(const Size& rPreviewSize, const bool bDoSuperSampling,
+              const SharedCacheContext& rpCacheContext);
 
     ~PageCache();
 
-    void ChangeSize(
-        const Size& rPreviewSize,
-        const bool bDoSuperSampling);
+    void ChangeSize(const Size& rPreviewSize, const bool bDoSuperSampling);
 
     /** Request a preview bitmap for the specified page object in the
         specified size.  The returned bitmap may be a preview of the
@@ -102,21 +98,16 @@ public:
             Returns a bitmap that is either empty, contains a scaled (up or
             down) version or is the requested bitmap.
     */
-    BitmapEx GetPreviewBitmap (
-        const CacheKey aKey,
-        const bool bResize);
+    BitmapEx GetPreviewBitmap(const CacheKey aKey, const bool bResize);
 
-    BitmapEx GetMarkedPreviewBitmap (
-        const CacheKey aKey);
-    void SetMarkedPreviewBitmap (
-        const CacheKey aKey,
-        const BitmapEx& rBitmap);
+    BitmapEx GetMarkedPreviewBitmap(const CacheKey aKey);
+    void SetMarkedPreviewBitmap(const CacheKey aKey, const BitmapEx& rBitmap);
 
     /** When the requested preview bitmap does not yet exist or is not
         up-to-date then the rendering of one is scheduled.  Otherwise this
         method does nothing.
     */
-    void RequestPreviewBitmap (const CacheKey aKey);
+    void RequestPreviewBitmap(const CacheKey aKey);
 
     /** Tell the cache that the bitmap associated with the given request
         data is not up-to-date anymore.  This will invalidate all previews
@@ -124,20 +115,20 @@ public:
         A new preview is requested and will lead
         eventually to a repaint of the associated page object.
     */
-    void InvalidatePreviewBitmap (const CacheKey aKey);
+    void InvalidatePreviewBitmap(const CacheKey aKey);
 
     /** Call this method when all preview bitmaps have to be generated anew.
         This is the case when the size of the page objects on the screen has
         changed or when the model has changed.
     */
-    void InvalidateCache ();
+    void InvalidateCache();
 
     /** With the precious flag you can control whether a bitmap can be
         removed or reduced in size to make room for other bitmaps or is so
         precious that it will not touched.  A typical use is to set the
         precious flag for exactly the visible pages.
     */
-    void SetPreciousFlag (const CacheKey aKey, const bool bIsPrecious);
+    void SetPreciousFlag(const CacheKey aKey, const bool bIsPrecious);
 
     void Pause();
     void Resume();

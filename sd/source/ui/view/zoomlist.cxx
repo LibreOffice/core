@@ -25,13 +25,13 @@
 
 #include <ViewShell.hxx>
 
-namespace sd {
-
-#define MAX_ENTRIES  10
+namespace sd
+{
+#define MAX_ENTRIES 10
 
 ZoomList::ZoomList(ViewShell* pViewShell)
-: mpViewShell (pViewShell)
-, mnCurPos(0)
+    : mpViewShell(pViewShell)
+    , mnCurPos(0)
 {
 }
 
@@ -46,14 +46,14 @@ void ZoomList::InsertZoomRect(const ::tools::Rectangle& rRect)
     else
         mnCurPos++;
 
-    maRectangles.insert(maRectangles.begin()+mnCurPos,rRect);
+    maRectangles.insert(maRectangles.begin() + mnCurPos, rRect);
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
-    rBindings.Invalidate( SID_ZOOM_NEXT );
-    rBindings.Invalidate( SID_ZOOM_PREV );
+    rBindings.Invalidate(SID_ZOOM_NEXT);
+    rBindings.Invalidate(SID_ZOOM_PREV);
 }
 
-::tools::Rectangle const & ZoomList::GetNextZoomRect()
+::tools::Rectangle const& ZoomList::GetNextZoomRect()
 {
     mnCurPos++;
     size_t nRectCount = maRectangles.size();
@@ -62,20 +62,20 @@ void ZoomList::InsertZoomRect(const ::tools::Rectangle& rRect)
         mnCurPos = nRectCount - 1;
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
-    rBindings.Invalidate( SID_ZOOM_NEXT );
-    rBindings.Invalidate( SID_ZOOM_PREV );
+    rBindings.Invalidate(SID_ZOOM_NEXT);
+    rBindings.Invalidate(SID_ZOOM_PREV);
 
     return maRectangles[mnCurPos];
 }
 
-::tools::Rectangle const & ZoomList::GetPreviousZoomRect()
+::tools::Rectangle const& ZoomList::GetPreviousZoomRect()
 {
     if (mnCurPos > 0)
         mnCurPos--;
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
-    rBindings.Invalidate( SID_ZOOM_NEXT );
-    rBindings.Invalidate( SID_ZOOM_PREV );
+    rBindings.Invalidate(SID_ZOOM_NEXT);
+    rBindings.Invalidate(SID_ZOOM_PREV);
 
     return maRectangles[mnCurPos];
 }
@@ -87,10 +87,7 @@ bool ZoomList::IsNextPossible() const
     return nRectCount > 0 && mnCurPos < nRectCount - 1;
 }
 
-bool ZoomList::IsPreviousPossible() const
-{
-    return mnCurPos > 0;
-}
+bool ZoomList::IsPreviousPossible() const { return mnCurPos > 0; }
 
 } // end of namespace sd
 

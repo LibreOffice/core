@@ -26,10 +26,10 @@
 
 template <typename Arg, typename Ret> class Link;
 
-namespace sd {
+namespace sd
+{
 class ViewShellBase;
 }
-
 
 enum class EventMultiplexerEventId
 {
@@ -115,17 +115,15 @@ enum class EventMultiplexerEventId
     EditModeMaster,
 };
 
-namespace sd::tools {
-
+namespace sd::tools
+{
 class EventMultiplexerEvent
 {
 public:
     EventMultiplexerEventId meEventId;
     const void* mpUserData;
 
-    EventMultiplexerEvent (
-        EventMultiplexerEventId eEventId,
-        const void* pUserData);
+    EventMultiplexerEvent(EventMultiplexerEventId eEventId, const void* pUserData);
 };
 
 /** This convenience class makes it easy to listen to various events that
@@ -140,7 +138,7 @@ class EventMultiplexer
 public:
     /** Create new EventMultiplexer for the given ViewShellBase object.
     */
-    EventMultiplexer (ViewShellBase& rBase);
+    EventMultiplexer(ViewShellBase& rBase);
     ~EventMultiplexer();
 
     /** Add an event listener that will be informed about the specified
@@ -149,11 +147,11 @@ public:
             The callback to call as soon as one of the event specified by
             aEventTypeSet is received by the EventMultiplexer.
     */
-    void AddEventListener(const Link<EventMultiplexerEvent&,void>& rCallback);
+    void AddEventListener(const Link<EventMultiplexerEvent&, void>& rCallback);
 
     /** Remove an event listener for the specified event types.
     */
-    void RemoveEventListener(const Link<EventMultiplexerEvent&,void>& rCallback);
+    void RemoveEventListener(const Link<EventMultiplexerEvent&, void>& rCallback);
 
     /** This method is used for out-of-line events.  An event of the
         specified type will be sent to all listeners that are registered for
@@ -163,9 +161,7 @@ public:
         @param pUserData
             Some data sent to the listeners along with the event.
     */
-    void MultiplexEvent(
-        EventMultiplexerEventId eEventId,
-        void const * pUserData);
+    void MultiplexEvent(EventMultiplexerEventId eEventId, void const* pUserData);
 
 private:
     class Implementation;

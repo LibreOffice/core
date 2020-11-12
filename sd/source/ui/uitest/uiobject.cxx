@@ -16,8 +16,8 @@
 
 #include <svx/uiobject.hxx>
 
-namespace {
-
+namespace
+{
 class ImpressSdrObject : public SdrUIObject
 {
 public:
@@ -39,7 +39,7 @@ sd::DrawViewShell* getViewShell(const VclPtr<sd::Window>& xWindow)
     return pViewShell;
 }
 
-OUString getObjectName(SdrObject const * pObject)
+OUString getObjectName(SdrObject const* pObject)
 {
     if (pObject->GetName().isEmpty())
         return "Unnamed Drawinglayer object " + OUString::number(pObject->GetOrdNum());
@@ -64,24 +64,19 @@ SdrObject* getObject(const VclPtr<sd::Window>& xWindow, const OUString& rName)
 
     return nullptr;
 }
-
-
 }
 
-ImpressSdrObject::ImpressSdrObject(const VclPtr<sd::Window>& xImpressWin, const OUString& rName):
-    mxWindow(xImpressWin),
-    maName(rName)
+ImpressSdrObject::ImpressSdrObject(const VclPtr<sd::Window>& xImpressWin, const OUString& rName)
+    : mxWindow(xImpressWin)
+    , maName(rName)
 {
 }
 
-SdrObject* ImpressSdrObject::get_object()
-{
-    return getObject(mxWindow, maName);
-}
+SdrObject* ImpressSdrObject::get_object() { return getObject(mxWindow, maName); }
 
-ImpressWindowUIObject::ImpressWindowUIObject(const VclPtr<sd::Window>& xWindow):
-    WindowUIObject(xWindow),
-    mxWindow(xWindow)
+ImpressWindowUIObject::ImpressWindowUIObject(const VclPtr<sd::Window>& xWindow)
+    : WindowUIObject(xWindow)
+    , mxWindow(xWindow)
 {
 }
 
@@ -96,8 +91,7 @@ StringMap ImpressWindowUIObject::get_state()
     return aMap;
 }
 
-void ImpressWindowUIObject::execute(const OUString& rAction,
-        const StringMap& rParameters)
+void ImpressWindowUIObject::execute(const OUString& rAction, const StringMap& rParameters)
 {
     if (rAction == "SET")
     {
@@ -161,10 +155,7 @@ std::set<OUString> ImpressWindowUIObject::get_children() const
     return aRet;
 }
 
-OUString ImpressWindowUIObject::get_name() const
-{
-    return "ImpressWindowUIObject";
-}
+OUString ImpressWindowUIObject::get_name() const { return "ImpressWindowUIObject"; }
 
 std::unique_ptr<UIObject> ImpressWindowUIObject::create(vcl::Window* pWindow)
 {

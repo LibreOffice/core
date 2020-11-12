@@ -32,35 +32,35 @@ public:
     typedef ::std::vector<const SdPage*> PageVec;
 
 private:
-    PageVec         maPages;
-    OUString        aName;
+    PageVec maPages;
+    OUString aName;
 
     // this is a weak reference to a possible living api wrapper for this custom show
-    css::uno::WeakReference< css::uno::XInterface > mxUnoCustomShow;
+    css::uno::WeakReference<css::uno::XInterface> mxUnoCustomShow;
 
 public:
     SdCustomShow();
-    SdCustomShow(css::uno::Reference< css::uno::XInterface > const & xShow );
+    SdCustomShow(css::uno::Reference<css::uno::XInterface> const& xShow);
 
     ~SdCustomShow();
 
     // @@@ copy ctor, but no copy assignment? @@@
-    SdCustomShow( const SdCustomShow& rShow );
+    SdCustomShow(const SdCustomShow& rShow);
 
-    SdCustomShow& operator=( const SdCustomShow& rShow ) = delete;
+    SdCustomShow& operator=(const SdCustomShow& rShow) = delete;
 
     /** Provides a direct access to the collection of the SdPage objects. */
-    PageVec& PagesVector() { return maPages;}
+    PageVec& PagesVector() { return maPages; }
     /**
      * Replaces all occurrences of pOldPage with pNewPage.
      * If pNewPage is 0 then removes all occurrences of pOldPage.
      */
-    void ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage );
+    void ReplacePage(const SdPage* pOldPage, const SdPage* pNewPage);
 
-    void   SetName(const OUString& rName);
-    const OUString& GetName() const { return aName;}
+    void SetName(const OUString& rName);
+    const OUString& GetName() const { return aName; }
 
-    css::uno::Reference< css::uno::XInterface > getUnoCustomShow();
+    css::uno::Reference<css::uno::XInterface> getUnoCustomShow();
 };
 
 #endif // INCLUDED_SD_INC_CUSSHOW_HXX

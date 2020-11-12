@@ -22,23 +22,23 @@
 
 #include "DrawViewShell.hxx"
 
-namespace sd {
-
+namespace sd
+{
 /** This view shell is responsible for showing the presentation of an
     Impress document.
 */
 class PresentationViewShell : public DrawViewShell
 {
 public:
-
-    SFX_DECL_INTERFACE( SD_IF_SDPRESVIEWSHELL )
+    SFX_DECL_INTERFACE(SD_IF_SDPRESVIEWSHELL)
 
 private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
 
 public:
-    PresentationViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, FrameView* pFrameView);
+    PresentationViewShell(ViewShellBase& rViewShellBase, vcl::Window* pParentWindow,
+                          FrameView* pFrameView);
     virtual ~PresentationViewShell() override;
 
     /** This method is used by a simple class that passes some
@@ -48,7 +48,7 @@ public:
             The frame view that is typically used by the creating object and
             that shall be shared by the created view shell.
     */
-    void FinishInitialization( FrameView* pFrameView );
+    void FinishInitialization(FrameView* pFrameView);
 
     virtual void Resize() override;
 
@@ -57,11 +57,11 @@ protected:
     virtual VclPtr<SvxRuler> CreateVRuler(::sd::Window* pWin) override;
 
 private:
-    ::tools::Rectangle       maOldVisArea;
+    ::tools::Rectangle maOldVisArea;
     ImplSVEvent* mnAbortSlideShowEvent;
 
-    virtual void Activate (bool bIsMDIActivate) override;
-    virtual void Paint (const ::tools::Rectangle& rRect, ::sd::Window* pWin) override;
+    virtual void Activate(bool bIsMDIActivate) override;
+    virtual void Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin) override;
 
     DECL_LINK(AbortSlideShowHdl, void*, void);
 };

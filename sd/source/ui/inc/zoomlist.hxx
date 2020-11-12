@@ -24,25 +24,24 @@
 
 #include <tools/gen.hxx>
 
-namespace sd {
-
+namespace sd
+{
 class ViewShell;
 
 class ZoomList
 {
 public:
-
     ZoomList(ViewShell* pViewShell);
 
-    void        InsertZoomRect(const ::tools::Rectangle& rRect);
-    ::tools::Rectangle const & GetNextZoomRect();
-    ::tools::Rectangle const & GetPreviousZoomRect();
-    bool        IsNextPossible() const;
-    bool        IsPreviousPossible() const;
+    void InsertZoomRect(const ::tools::Rectangle& rRect);
+    ::tools::Rectangle const& GetNextZoomRect();
+    ::tools::Rectangle const& GetPreviousZoomRect();
+    bool IsNextPossible() const;
+    bool IsPreviousPossible() const;
 
 private:
-    ViewShell*  mpViewShell;
-    sal_uInt32  mnCurPos;
+    ViewShell* mpViewShell;
+    sal_uInt32 mnCurPos;
 
     std::vector<::tools::Rectangle> maRectangles;
 };

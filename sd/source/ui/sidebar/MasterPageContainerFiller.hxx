@@ -25,26 +25,27 @@
 #include "MasterPageDescriptor.hxx"
 #include <tools/AsynchronousTask.hxx>
 
-namespace sd {
+namespace sd
+{
 class TemplateScanner;
 class TemplateEntry;
 }
 
-namespace sd::sidebar {
-
+namespace sd::sidebar
+{
 /** Fill a MasterPageContainer with information about the available master
     pages.  These are provided by one default page and from the existing
     Impress templates.  This is done asynchronously.
 */
-class MasterPageContainerFiller
-    : public ::sd::tools::AsynchronousTask
+class MasterPageContainerFiller : public ::sd::tools::AsynchronousTask
 {
 public:
     class ContainerAdapter
     {
     public:
-        virtual MasterPageContainer::Token PutMasterPage (
-            const SharedMasterPageDescriptor& rpDescriptor) = 0;
+        virtual MasterPageContainer::Token
+        PutMasterPage(const SharedMasterPageDescriptor& rpDescriptor)
+            = 0;
         /** This method is called when all Impress templates have been added
             to the container via the PutMasterPage() method.
         */
@@ -54,7 +55,7 @@ public:
         ~ContainerAdapter() {}
     };
 
-    explicit MasterPageContainerFiller (ContainerAdapter& rContainerAdapter);
+    explicit MasterPageContainerFiller(ContainerAdapter& rContainerAdapter);
     virtual ~MasterPageContainerFiller();
 
     /** Run the next step of the task.  After HasNextStep() returns false
@@ -71,7 +72,8 @@ public:
 private:
     ContainerAdapter& mrContainerAdapter;
     // Remember what the next step has to do.
-    enum State {
+    enum State
+    {
         INITIALIZE_TEMPLATE_SCANNER,
         SCAN_TEMPLATE,
         ADD_TEMPLATE,

@@ -24,10 +24,13 @@
 #include <vcl/timer.hxx>
 #include <memory>
 
-namespace com::sun::star::container { class XNameAccess; }
+namespace com::sun::star::container
+{
+class XNameAccess;
+}
 
-namespace sd::slidesorter::cache {
-
+namespace sd::slidesorter::cache
+{
 /** A very simple and easy-to-use access to configuration entries regarding
     the slide sorter cache.
 */
@@ -46,7 +49,7 @@ public:
         MultiPaneGUI/SlideSorter/PreviewCache.   When the specified value
         does not exist then an empty Any is returned.
     */
-    css::uno::Any GetValue (const OUString& rName);
+    css::uno::Any GetValue(const OUString& rName);
 
 private:
     /** When a caller holds a reference after we have released ours we use
@@ -58,7 +61,7 @@ private:
 
     CacheConfiguration();
 
-    DECL_STATIC_LINK(CacheConfiguration, TimerCallback, Timer *, void);
+    DECL_STATIC_LINK(CacheConfiguration, TimerCallback, Timer*, void);
 };
 
 } // end of namespace ::sd::slidesorter::cache

@@ -39,10 +39,10 @@ class SdFileDialog_Imp;
  */
 class SD_DLLPUBLIC SdOpenSoundFileDialog
 {
-    const std::unique_ptr< SdFileDialog_Imp > mpImpl;
+    const std::unique_ptr<SdFileDialog_Imp> mpImpl;
 
-    SdOpenSoundFileDialog (const SdOpenSoundFileDialog &) = delete;
-    SdOpenSoundFileDialog & operator= (const SdOpenSoundFileDialog &) = delete;
+    SdOpenSoundFileDialog(const SdOpenSoundFileDialog&) = delete;
+    SdOpenSoundFileDialog& operator=(const SdOpenSoundFileDialog&) = delete;
 
 public:
     SdOpenSoundFileDialog(weld::Window* pParent);
@@ -50,7 +50,7 @@ public:
 
     ErrCode Execute();
     OUString GetPath() const;
-    void SetPath( const OUString& rPath );
+    void SetPath(const OUString& rPath);
     // WIP, please don't remove, dear Clang plugins
     bool IsInsertAsLinkSelected() const;
 };

@@ -27,10 +27,13 @@ class AbstractSvxNameDialog;
 class SfxItemSet;
 class SfxRequest;
 
-namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter
+{
+class SlideSorter;
+}
 
-namespace sd::slidesorter::controller {
-
+namespace sd::slidesorter::controller
+{
 /** This manager takes over the work of handling slot calls from the
     controller of the slide sorter.
 */
@@ -42,18 +45,18 @@ public:
         @param rController
             The controller for which to handle the slot calls.
     */
-    SlotManager (SlideSorter& rSlideSorter);
+    SlotManager(SlideSorter& rSlideSorter);
 
     ~SlotManager();
 
-    void FuTemporary (SfxRequest& rRequest);
-    void FuPermanent (SfxRequest& rRequest);
-    void FuSupport (SfxRequest& rRequest);
-    void GetMenuState (SfxItemSet &rSet);
-    void GetClipboardState (SfxItemSet &rSet);
-    void GetStatusBarState (SfxItemSet& rSet);
-    void ExecCtrl (SfxRequest& rRequest);
-    void GetAttrState (SfxItemSet& rSet);
+    void FuTemporary(SfxRequest& rRequest);
+    void FuPermanent(SfxRequest& rRequest);
+    void FuSupport(SfxRequest& rRequest);
+    void GetMenuState(SfxItemSet& rSet);
+    void GetClipboardState(SfxItemSet& rSet);
+    void GetStatusBarState(SfxItemSet& rSet);
+    void ExecCtrl(SfxRequest& rRequest);
+    void GetAttrState(SfxItemSet& rSet);
 
     /** Exclude or include one slide or all selected slides.
         @param rpDescriptor
@@ -61,9 +64,8 @@ public:
             selected pages.  Otherwise apply the new state to just the
             specified state.
     */
-    void ChangeSlideExclusionState (
-        const model::SharedPageDescriptor& rpDescriptor,
-        const bool bExcludeSlide);
+    void ChangeSlideExclusionState(const model::SharedPageDescriptor& rpDescriptor,
+                                   const bool bExcludeSlide);
 
     /** Call this after a change from normal mode to master mode or back.
         The affected slots are invalidated.
@@ -77,16 +79,16 @@ private:
     /** The implementation is a copy of the code for SID_RENAMEPAGE in
         drviews2.cxx.
     */
-    void RenameSlide( const SfxRequest& rRequest );
+    void RenameSlide(const SfxRequest& rRequest);
     DECL_LINK(RenameSlideHdl, AbstractSvxNameDialog&, bool);
     DECL_STATIC_LINK(SlotManager, RenameSlideTooltipHdl, AbstractSvxNameDialog&, OUString);
-    bool RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUString& rName);
+    bool RenameSlideFromDrawViewShell(sal_uInt16 nPageId, const OUString& rName);
 
     /** Handle SID_INSERTPAGE slot calls.
     */
-    void InsertSlide (SfxRequest& rRequest);
+    void InsertSlide(SfxRequest& rRequest);
 
-    void DuplicateSelectedSlides (SfxRequest& rRequest);
+    void DuplicateSelectedSlides(SfxRequest& rRequest);
 
     /** Use one of several ways to determine where to insert a new page.
         This can be the current selection or the insertion indicator.

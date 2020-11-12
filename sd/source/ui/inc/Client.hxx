@@ -23,21 +23,21 @@
 #include <sfx2/ipclient.hxx>
 class SdrOle2Obj;
 
-namespace sd {
-
+namespace sd
+{
 class ViewShell;
 
 class Client : public SfxInPlaceClient
 {
-    ViewShell*      mpViewShell;
-    SdrOle2Obj*     pSdrOle2Obj;
+    ViewShell* mpViewShell;
+    SdrOle2Obj* pSdrOle2Obj;
 
-    virtual void    ObjectAreaChanged() override;
-    virtual void    RequestNewObjectArea( ::tools::Rectangle& ) override;
-    virtual void    ViewChanged() override;
+    virtual void ObjectAreaChanged() override;
+    virtual void RequestNewObjectArea(::tools::Rectangle&) override;
+    virtual void ViewChanged() override;
 
 public:
-    Client (SdrOle2Obj* pObj, ViewShell* pSdViewShell, vcl::Window* pWindow);
+    Client(SdrOle2Obj* pObj, ViewShell* pSdViewShell, vcl::Window* pWindow);
     virtual ~Client() override;
 };
 

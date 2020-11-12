@@ -37,18 +37,18 @@ using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
 using ::com::sun::star::lang::DisposedException;
 
-namespace sd {
-
-PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
+namespace sd
 {
-     // Hide the left and right pane windows when a slideshow exists and is
+PaneHider::PaneHider(const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
+{
+    // Hide the left and right pane windows when a slideshow exists and is
     // not full screen.
-    if (pSlideShow==nullptr || pSlideShow->isFullScreen())
+    if (pSlideShow == nullptr || pSlideShow->isFullScreen())
         return;
 
     try
     {
-        Reference<XControllerManager> xControllerManager (
+        Reference<XControllerManager> xControllerManager(
             rViewShell.GetViewShellBase().GetController(), UNO_QUERY_THROW);
         mxConfigurationController = xControllerManager->getConfigurationController();
         if (mxConfigurationController.is())
@@ -58,14 +58,12 @@ PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
             if (mxConfiguration.is())
             {
                 // Iterate over the resources and deactivate the panes.
-                const Sequence<Reference<XResourceId> > aResources (
-                    mxConfiguration->getResources(
-                        nullptr,
-                        framework::FrameworkHelper::msPaneURLPrefix,
-                        AnchorBindingMode_DIRECT));
+                const Sequence<Reference<XResourceId>> aResources(mxConfiguration->getResources(
+                    nullptr, framework::FrameworkHelper::msPaneURLPrefix,
+                    AnchorBindingMode_DIRECT));
                 for (const Reference<XResourceId>& xPaneId : aResources)
                 {
-                    if ( xPaneId->getResourceURL() != FrameworkHelper::msCenterPaneURL )
+                    if (xPaneId->getResourceURL() != FrameworkHelper::msCenterPaneURL)
                     {
                         mxConfigurationController->requestResourceDeactivation(xPaneId);
                     }

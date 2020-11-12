@@ -23,14 +23,16 @@
 #include <sal/config.h>
 #include <vcl/vclptr.hxx>
 
-namespace vcl { class Window; }
+namespace vcl
+{
+class Window;
+}
 
 class ViewShellBase;
 
-namespace sd {
-
-VclPtr<vcl::Window> createTableDesignPanel (vcl::Window* pParent, ViewShellBase& rBase);
-
+namespace sd
+{
+VclPtr<vcl::Window> createTableDesignPanel(vcl::Window* pParent, ViewShellBase& rBase);
 }
 
 #endif

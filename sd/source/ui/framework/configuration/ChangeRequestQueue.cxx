@@ -19,11 +19,9 @@
 
 #include "ChangeRequestQueue.hxx"
 
-namespace sd::framework {
-
-ChangeRequestQueue::ChangeRequestQueue()
+namespace sd::framework
 {
-}
+ChangeRequestQueue::ChangeRequestQueue() {}
 
 } // end of namespace sd::framework
 

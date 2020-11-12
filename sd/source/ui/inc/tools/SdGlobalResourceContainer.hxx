@@ -24,15 +24,21 @@
 #include <sal/types.h>
 #include <o3tl/deleter.hxx>
 
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
-namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
+namespace com::sun::star::uno
+{
+class XInterface;
+}
 
-namespace sd {
-
+namespace sd
+{
 class SdGlobalResource
 {
 public:
-    virtual ~SdGlobalResource() COVERITY_NOEXCEPT_FALSE {};
+    virtual ~SdGlobalResource() COVERITY_NOEXCEPT_FALSE{};
 };
 
 /** The purpose of this container is to hold references to resources that
@@ -68,7 +74,7 @@ public:
 
         When in doubt, use the shared_ptr variant of this method.
     */
-    void AddResource (::std::unique_ptr<SdGlobalResource> pResource);
+    void AddResource(::std::unique_ptr<SdGlobalResource> pResource);
 
     /** Add a resource to the container.  By using a shared_ptr and
         releasing it only when the SgGlobalResourceContainer is destroyed
@@ -76,13 +82,13 @@ public:
         time of the destruction of SgGlobalResourceContainer no other
         references exist the resource is destroyed as well.
     */
-    void AddResource (const std::shared_ptr<SdGlobalResource>& pResource);
+    void AddResource(const std::shared_ptr<SdGlobalResource>& pResource);
 
     /** Add a resource that is implemented as UNO object.  Destruction
         (when the sd modules is unloaded) is done by a) calling dispose()
         when the XComponent is supported and by b) releasing the reference.
     */
-    void AddResource (const css::uno::Reference<css::uno::XInterface>& rxResource);
+    void AddResource(const css::uno::Reference<css::uno::XInterface>& rxResource);
 
 private:
     friend class SdGlobalResourceContainerInstance;

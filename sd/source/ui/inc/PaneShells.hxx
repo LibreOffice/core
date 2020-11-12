@@ -23,13 +23,12 @@
 #include <sfx2/shell.hxx>
 #include <glob.hxx>
 
-namespace sd {
-
+namespace sd
+{
 /** Shell that displays the left pane for Impress.  The shell does not do
     anything else and has especially no slots.
 */
-class LeftImpressPaneShell
-    : public SfxShell
+class LeftImpressPaneShell : public SfxShell
 {
 public:
     SFX_DECL_INTERFACE(SD_IF_SDLEFTIMPRESSPANESHELL)
@@ -46,8 +45,7 @@ public:
 /** Shell that displays the left pane for Draw.  The shell does not do
     anything else and has especially no slots.
 */
-class LeftDrawPaneShell
-    : public SfxShell
+class LeftDrawPaneShell : public SfxShell
 {
 public:
     SFX_DECL_INTERFACE(SD_IF_SDLEFTDRAWPANESHELL)

@@ -27,12 +27,11 @@ class SvxNumRule;
 class SD_DLLPUBLIC SdBulletMapper
 {
 public:
-/* #i35937#
+    /* #i35937#
     static void PreMapNumBulletForDialog( SfxItemSet& rSet );
     static void PostMapNumBulletForDialog( SfxItemSet& rSet );
 */
-    static void MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& rSet );
-
+    static void MapFontsInNumRule(SvxNumRule& aNumRule, const SfxItemSet& rSet);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

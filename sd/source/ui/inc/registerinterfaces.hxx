@@ -23,10 +23,9 @@
 #include <sal/config.h>
 #include <sfx2/module.hxx>
 
-namespace sd::ui::table {
-
-void RegisterInterfaces( const SfxModule* pMod );
-
+namespace sd::ui::table
+{
+void RegisterInterfaces(const SfxModule* pMod);
 }
 
 #endif

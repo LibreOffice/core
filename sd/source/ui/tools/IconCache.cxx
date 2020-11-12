@@ -25,8 +25,8 @@
 #include <osl/getglobalmutex.hxx>
 #include <unordered_map>
 
-namespace sd {
-
+namespace sd
+{
 //===== IconCache::Implementation =============================================
 
 class IconCache::Implementation
@@ -70,11 +70,11 @@ IconCache& IconCache::Instance()
     if (Implementation::s_pIconCache == nullptr)
     {
         ::osl::GetGlobalMutex aMutexFunctor;
-        ::osl::MutexGuard aGuard (aMutexFunctor());
+        ::osl::MutexGuard aGuard(aMutexFunctor());
         if (Implementation::s_pIconCache == nullptr)
         {
-            IconCache* pCache = new IconCache ();
-            SdGlobalResourceContainer::Instance().AddResource (
+            IconCache* pCache = new IconCache();
+            SdGlobalResourceContainer::Instance().AddResource(
                 ::std::unique_ptr<SdGlobalResource>(pCache));
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             Implementation::s_pIconCache = pCache;
@@ -85,18 +85,14 @@ IconCache& IconCache::Instance()
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
 
-    DBG_ASSERT(Implementation::s_pIconCache != nullptr,
-        "IconCache::Instance(): instance is NULL");
+    DBG_ASSERT(Implementation::s_pIconCache != nullptr, "IconCache::Instance(): instance is NULL");
     return *Implementation::s_pIconCache;
 }
 
-Image IconCache::GetIcon(const OUString& rResourceId)
-{
-    return mpImpl->GetIcon(rResourceId);
-}
+Image IconCache::GetIcon(const OUString& rResourceId) { return mpImpl->GetIcon(rResourceId); }
 
 IconCache::IconCache()
-    : mpImpl (new Implementation)
+    : mpImpl(new Implementation)
 {
 }
 

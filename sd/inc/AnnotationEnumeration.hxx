@@ -24,14 +24,15 @@
 
 #include "sdpage.hxx"
 
-namespace com::sun::star::office {
-    class XAnnotationEnumeration;
+namespace com::sun::star::office
+{
+class XAnnotationEnumeration;
 }
 
-namespace sd {
-
-css::uno::Reference< css::office::XAnnotationEnumeration > createAnnotationEnumeration( const AnnotationVector& );
-
+namespace sd
+{
+css::uno::Reference<css::office::XAnnotationEnumeration>
+createAnnotationEnumeration(const AnnotationVector&);
 }
 
 #endif

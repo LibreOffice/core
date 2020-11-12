@@ -23,8 +23,8 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <osl/diagnose.h>
 
-namespace accessibility {
-
+namespace accessibility
+{
 /** For the time being, the implementation of this class will not use the
     member mrDevice.  Instead the device is retrieved from the view
     every time it is used.  This is necessary because the device has to stay
@@ -32,17 +32,17 @@ namespace accessibility {
     May change in the future.
 */
 
-AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDevice& rDevice)
-    : mpView (pView),
-      mnWindowId (0)
+AccessibleViewForwarder::AccessibleViewForwarder(SdrPaintView* pView, OutputDevice& rDevice)
+    : mpView(pView)
+    , mnWindowId(0)
 {
     // Search the output device to determine its id.
-    for(sal_uInt32 a(0); a < mpView->PaintWindowCount(); a++)
+    for (sal_uInt32 a(0); a < mpView->PaintWindowCount(); a++)
     {
         SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(a);
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
 
-        if(&rOutDev == &rDevice)
+        if (&rOutDev == &rDevice)
         {
             mnWindowId = static_cast<sal_uInt16>(a);
             break;
@@ -59,7 +59,7 @@ AccessibleViewForwarder::~AccessibleViewForwarder()
 {
     ::tools::Rectangle aVisibleArea;
 
-    if(static_cast<sal_uInt32>(mnWindowId) < mpView->PaintWindowCount())
+    if (static_cast<sal_uInt32>(mnWindowId) < mpView->PaintWindowCount())
     {
         SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(static_cast<sal_uInt32>(mnWindowId));
         aVisibleArea = pPaintWindow->GetVisibleArea();
@@ -72,28 +72,29 @@ AccessibleViewForwarder::~AccessibleViewForwarder()
     coordinates of the window origin are added to make the point coordinates
     absolute.
 */
-Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
+Point AccessibleViewForwarder::LogicToPixel(const Point& rPoint) const
 {
-    OSL_ASSERT (mpView != nullptr);
-    if(static_cast<sal_uInt32>(mnWindowId) < mpView->PaintWindowCount())
+    OSL_ASSERT(mpView != nullptr);
+    if (static_cast<sal_uInt32>(mnWindowId) < mpView->PaintWindowCount())
     {
         SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(static_cast<sal_uInt32>(mnWindowId));
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-        ::tools::Rectangle aBBox(static_cast<vcl::Window&>(rOutDev).GetWindowExtentsRelative(nullptr));
-        return rOutDev.LogicToPixel (rPoint) + aBBox.TopLeft();
+        ::tools::Rectangle aBBox(
+            static_cast<vcl::Window&>(rOutDev).GetWindowExtentsRelative(nullptr));
+        return rOutDev.LogicToPixel(rPoint) + aBBox.TopLeft();
     }
     else
         return Point();
 }
 
-Size AccessibleViewForwarder::LogicToPixel (const Size& rSize) const
+Size AccessibleViewForwarder::LogicToPixel(const Size& rSize) const
 {
-    OSL_ASSERT (mpView != nullptr);
-    if(static_cast<sal_uInt32>(mnWindowId) < mpView->PaintWindowCount())
+    OSL_ASSERT(mpView != nullptr);
+    if (static_cast<sal_uInt32>(mnWindowId) < mpView->PaintWindowCount())
     {
         SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(static_cast<sal_uInt32>(mnWindowId));
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-        return rOutDev.LogicToPixel (rSize);
+        return rOutDev.LogicToPixel(rSize);
     }
     else
         return Size();

@@ -28,42 +28,33 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 
-namespace sd {
-
-
+namespace sd
+{
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new GraphicViewShellBase object has been constructed.
 
 SfxViewFactory* GraphicViewShellBase::pFactory;
-SfxViewShell* GraphicViewShellBase::CreateInstance (
-    SfxViewFrame *pFrame, SfxViewShell *pOldView)
+SfxViewShell* GraphicViewShellBase::CreateInstance(SfxViewFrame* pFrame, SfxViewShell* pOldView)
 {
     GraphicViewShellBase* pBase = new GraphicViewShellBase(pFrame, pOldView);
     pBase->LateInit(framework::FrameworkHelper::msDrawViewURL);
     return pBase;
 }
-void GraphicViewShellBase::RegisterFactory( SfxInterfaceId nPrio )
+void GraphicViewShellBase::RegisterFactory(SfxInterfaceId nPrio)
 {
-    pFactory = new SfxViewFactory(&CreateInstance,nPrio,"Default");
+    pFactory = new SfxViewFactory(&CreateInstance, nPrio, "Default");
     InitFactory();
 }
-void GraphicViewShellBase::InitFactory()
-{
-    SFX_VIEW_REGISTRATION(GraphicDocShell);
-}
+void GraphicViewShellBase::InitFactory() { SFX_VIEW_REGISTRATION(GraphicDocShell); }
 
-GraphicViewShellBase::GraphicViewShellBase (
-    SfxViewFrame* _pFrame,
-    SfxViewShell* pOldShell)
-    : ViewShellBase (_pFrame, pOldShell)
+GraphicViewShellBase::GraphicViewShellBase(SfxViewFrame* _pFrame, SfxViewShell* pOldShell)
+    : ViewShellBase(_pFrame, pOldShell)
 {
 }
 
-GraphicViewShellBase::~GraphicViewShellBase()
-{
-}
+GraphicViewShellBase::~GraphicViewShellBase() {}
 
-void GraphicViewShellBase::Execute (SfxRequest& rRequest)
+void GraphicViewShellBase::Execute(SfxRequest& rRequest)
 {
     sal_uInt16 nSlotId = rRequest.GetSlot();
 
@@ -86,16 +77,14 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
         case SID_LEFT_PANE_IMPRESS:
         default:
             // The remaining requests are forwarded to our base class.
-            ViewShellBase::Execute (rRequest);
+            ViewShellBase::Execute(rRequest);
             break;
     }
-
 }
 
 void GraphicViewShellBase::InitializeFramework()
 {
-    css::uno::Reference<css::frame::XController>
-        xController (GetController());
+    css::uno::Reference<css::frame::XController> xController(GetController());
     sd::framework::DrawModule::Initialize(xController);
 }
 

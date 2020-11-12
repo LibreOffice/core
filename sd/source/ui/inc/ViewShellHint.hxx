@@ -22,16 +22,16 @@
 
 #include <svl/hint.hxx>
 
-namespace sd {
-
+namespace sd
+{
 /** Local derivation of the SfxHint class that defines some hint ids that
     are used by the ViewShell class and its descendants.
 */
-class ViewShellHint
-    : public SfxHint
+class ViewShellHint : public SfxHint
 {
 public:
-    enum HintId {
+    enum HintId
+    {
         // Indicate that a page resize is about to begin.
         HINT_PAGE_RESIZE_START,
         // Indicate that a page resize has been completed.
@@ -45,9 +45,9 @@ public:
         HINT_COMPLEX_MODEL_CHANGE_END
     };
 
-    ViewShellHint (HintId nHintId);
+    ViewShellHint(HintId nHintId);
 
-    HintId GetHintId() const { return meHintId;}
+    HintId GetHintId() const { return meHintId; }
 
 private:
     HintId meHintId;

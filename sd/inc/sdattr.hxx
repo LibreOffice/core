@@ -26,40 +26,37 @@
 #include "sdattr.hrc"
 
 // layer attributes
-inline SfxStringItem makeSdAttrLayerName( const OUString& aStr )
+inline SfxStringItem makeSdAttrLayerName(const OUString& aStr)
 {
-    return SfxStringItem( ATTR_LAYER_NAME, aStr );
+    return SfxStringItem(ATTR_LAYER_NAME, aStr);
 }
 
-inline SfxStringItem makeSdAttrLayerTitle( const OUString& aStr = OUString() )
+inline SfxStringItem makeSdAttrLayerTitle(const OUString& aStr = OUString())
 {
-    return SfxStringItem( ATTR_LAYER_TITLE, aStr );
+    return SfxStringItem(ATTR_LAYER_TITLE, aStr);
 }
 
-inline SfxStringItem makeSdAttrLayerDesc( const OUString& aStr = OUString() )
+inline SfxStringItem makeSdAttrLayerDesc(const OUString& aStr = OUString())
 {
-    return SfxStringItem( ATTR_LAYER_DESC, aStr );
+    return SfxStringItem(ATTR_LAYER_DESC, aStr);
 }
 
-inline SfxBoolItem makeSdAttrLayerVisible( bool bValue = true )
+inline SfxBoolItem makeSdAttrLayerVisible(bool bValue = true)
 {
-    return SfxBoolItem( ATTR_LAYER_VISIBLE, bValue );
+    return SfxBoolItem(ATTR_LAYER_VISIBLE, bValue);
 }
 
-inline SfxBoolItem makeSdAttrLayerPrintable( bool bValue = true )
+inline SfxBoolItem makeSdAttrLayerPrintable(bool bValue = true)
 {
-    return SfxBoolItem( ATTR_LAYER_PRINTABLE, bValue );
+    return SfxBoolItem(ATTR_LAYER_PRINTABLE, bValue);
 }
 
-inline SfxBoolItem makeSdAttrLayerLocked( bool bValue = false )
+inline SfxBoolItem makeSdAttrLayerLocked(bool bValue = false)
 {
-    return SfxBoolItem( ATTR_LAYER_LOCKED, bValue );
+    return SfxBoolItem(ATTR_LAYER_LOCKED, bValue);
 }
 
-inline SfxBoolItem makeSdAttrLayerThisPage()
-{
-    return SfxBoolItem( ATTR_LAYER_THISPAGE, false );
-}
+inline SfxBoolItem makeSdAttrLayerThisPage() { return SfxBoolItem(ATTR_LAYER_THISPAGE, false); }
 
 #endif // INCLUDED_SD_INC_SDATTR_HXX
 

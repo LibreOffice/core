@@ -20,13 +20,13 @@
 #include <memory>
 #include <tools/AsynchronousCall.hxx>
 
-namespace sd::tools {
-
-AsynchronousCall::AsynchronousCall()
-    : maTimer(),
-      mpFunction()
+namespace sd::tools
 {
-    maTimer.SetInvokeHandler( LINK(this,AsynchronousCall,TimerCallback) );
+AsynchronousCall::AsynchronousCall()
+    : maTimer()
+    , mpFunction()
+{
+    maTimer.SetInvokeHandler(LINK(this, AsynchronousCall, TimerCallback));
 }
 
 AsynchronousCall::~AsynchronousCall()
@@ -35,14 +35,14 @@ AsynchronousCall::~AsynchronousCall()
     maTimer.Stop();
 }
 
-void AsynchronousCall::Post (const AsynchronousFunction& rFunction)
+void AsynchronousCall::Post(const AsynchronousFunction& rFunction)
 {
     mpFunction.reset(new AsynchronousFunction(rFunction));
     maTimer.SetTimeout(10);
     maTimer.Start();
 }
 
-IMPL_LINK(AsynchronousCall,TimerCallback,Timer*,pTimer,void)
+IMPL_LINK(AsynchronousCall, TimerCallback, Timer*, pTimer, void)
 {
     if (pTimer == &maTimer)
     {

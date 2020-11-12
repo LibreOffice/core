@@ -26,8 +26,8 @@
 
 class SdPage;
 
-namespace sd::sidebar {
-
+namespace sd::sidebar
+{
 class MasterPageDescriptor;
 class MasterPageContainerChangeEvent;
 
@@ -55,28 +55,38 @@ public:
     MasterPageContainer();
     ~MasterPageContainer();
 
-    void AddChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink);
-    void RemoveChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink);
+    void AddChangeListener(const Link<MasterPageContainerChangeEvent&, void>& rLink);
+    void RemoveChangeListener(const Link<MasterPageContainerChangeEvent&, void>& rLink);
 
-    enum PreviewSize { SMALL, LARGE };
+    enum PreviewSize
+    {
+        SMALL,
+        LARGE
+    };
     /** There are two different preview sizes, a small one and a large one.
         Which one is used by the called container can be changed with this
         method.
         When the preview size is changed then all change listeners are
         notified of this.
     */
-    void SetPreviewSize (PreviewSize eSize);
+    void SetPreviewSize(PreviewSize eSize);
 
     /** Returns the preview size.
     */
-    PreviewSize GetPreviewSize() const { return mePreviewSize;}
+    PreviewSize GetPreviewSize() const { return mePreviewSize; }
 
     /** Return the preview size in pixels.
     */
-    Size const & GetPreviewSizePixel() const;
+    Size const& GetPreviewSizePixel() const;
 
-    enum PreviewState { PS_AVAILABLE, PS_CREATABLE, PS_PREPARING, PS_NOT_AVAILABLE };
-    PreviewState GetPreviewState (Token aToken);
+    enum PreviewState
+    {
+        PS_AVAILABLE,
+        PS_CREATABLE,
+        PS_PREPARING,
+        PS_NOT_AVAILABLE
+    };
+    PreviewState GetPreviewState(Token aToken);
 
     /** This method is typically called for entries in the container for
         which GetPreviewState() returns OS_CREATABLE.  The creation of the
@@ -84,15 +94,16 @@ public:
         point in time.  When the preview is available the change listeners
         will be notified.
     */
-    bool RequestPreview (Token aToken);
+    bool RequestPreview(Token aToken);
 
     /** Each entry of the container is either the first page of a template
         document or is a master page of an Impress document.
     */
-    enum Origin {
-        MASTERPAGE,  // Master page of a document.
-        TEMPLATE,    // First page of a template file.
-        DEFAULT,     // Empty master page with default style.
+    enum Origin
+    {
+        MASTERPAGE, // Master page of a document.
+        TEMPLATE, // First page of a template file.
+        DEFAULT, // Empty master page with default style.
         UNKNOWN
     };
 
@@ -102,9 +113,9 @@ public:
         the existing entry is replaced/updated by the given one.  Otherwise
         a new entry is inserted.
     */
-    Token PutMasterPage (const std::shared_ptr<MasterPageDescriptor>& rDescriptor);
-    void AcquireToken (Token aToken);
-    void ReleaseToken (Token aToken);
+    Token PutMasterPage(const std::shared_ptr<MasterPageDescriptor>& rDescriptor);
+    void AcquireToken(Token aToken);
+    void ReleaseToken(Token aToken);
 
     /** This and the GetTokenForIndex() methods can be used to iterate over
         all members of the container.
@@ -113,26 +124,26 @@ public:
 
     /** Determine whether the container has a member for the given token.
     */
-    bool HasToken (Token aToken) const;
+    bool HasToken(Token aToken) const;
 
     /** Return a token for an index in the range
         0 <= index < GetTokenCount().
     */
-    Token GetTokenForIndex (int nIndex);
+    Token GetTokenForIndex(int nIndex);
 
-    Token GetTokenForURL (const OUString& sURL);
-    Token GetTokenForStyleName (const OUString& sStyleName);
-    Token GetTokenForPageObject (const SdPage* pPage);
+    Token GetTokenForURL(const OUString& sURL);
+    Token GetTokenForStyleName(const OUString& sStyleName);
+    Token GetTokenForPageObject(const SdPage* pPage);
 
-    OUString GetURLForToken (Token aToken);
-    OUString GetPageNameForToken (Token aToken);
-    OUString GetStyleNameForToken (Token aToken);
-    SdPage* GetPageObjectForToken (Token aToken, bool bLoad);
-    Origin GetOriginForToken (Token aToken);
-    sal_Int32 GetTemplateIndexForToken (Token aToken);
-    std::shared_ptr<MasterPageDescriptor> GetDescriptorForToken (Token aToken);
+    OUString GetURLForToken(Token aToken);
+    OUString GetPageNameForToken(Token aToken);
+    OUString GetStyleNameForToken(Token aToken);
+    SdPage* GetPageObjectForToken(Token aToken, bool bLoad);
+    Origin GetOriginForToken(Token aToken);
+    sal_Int32 GetTemplateIndexForToken(Token aToken);
+    std::shared_ptr<MasterPageDescriptor> GetDescriptorForToken(Token aToken);
 
-    void InvalidatePreview (Token aToken);
+    void InvalidatePreview(Token aToken);
 
     /** Return a preview for the specified token.  When the preview is not
         present then the PreviewProvider associated with the token is
@@ -146,7 +157,7 @@ public:
         @return
             The returned image is the requested preview or a substitution.
     */
-    Image GetPreviewForToken (Token aToken);
+    Image GetPreviewForToken(Token aToken);
 
 private:
     class Implementation;
@@ -163,7 +174,8 @@ private:
 class MasterPageContainerChangeEvent
 {
 public:
-    enum class EventType {
+    enum class EventType
+    {
         // A master page was added to the container.
         CHILD_ADDED,
         // A master page was removed from the container.
