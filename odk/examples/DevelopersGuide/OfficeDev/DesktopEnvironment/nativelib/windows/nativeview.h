@@ -47,16 +47,14 @@ extern "C" {
  * Method:    getNativeWindowSystemType
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_NativeView_getNativeWindowSystemType
-  (JNIEnv *, jobject);
+JNIEXPORT jint JNICALL Java_NativeView_getNativeWindowSystemType(JNIEnv*, jobject);
 
 /*
  * Class:     org_openoffice_OpenOffice
  * Method:    getNativeWindow
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_NativeView_getNativeWindow
-  (JNIEnv *, jobject);
+JNIEXPORT jlong JNICALL Java_NativeView_getNativeWindow(JNIEnv*, jobject);
 
 #ifdef __cplusplus
 }

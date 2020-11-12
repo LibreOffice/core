@@ -40,27 +40,25 @@
 class MyOWeakObject : public ::cppu::OWeakObject
 {
 public:
-    MyOWeakObject() { fprintf( stdout, "constructed\n" ); }
-    ~MyOWeakObject() { fprintf( stdout, "destructed\n" ); }
+    MyOWeakObject() { fprintf(stdout, "constructed\n"); }
+    ~MyOWeakObject() { fprintf(stdout, "destructed\n"); }
 };
-
 
 void simple_object_creation_and_destruction()
 {
     // create the UNO object
-    com::sun::star::uno::XInterface * p = new MyOWeakObject();
+    com::sun::star::uno::XInterface* p = new MyOWeakObject();
 
     // acquire it, refcount becomes one
     p->acquire();
 
-    fprintf( stdout, "before release\n" );
+    fprintf(stdout, "before release\n");
 
     // release it, refcount drops to zero
     p->release();
 
-    fprintf( stdout, "after release\n" );
+    fprintf(stdout, "after release\n");
 }
-
 
 int main()
 {

@@ -47,7 +47,7 @@
 #define _ATL_APARTMENT_THREADED
 #define _ATL_STATIC_REGISTRY
 
-#define min(a, b)  (((a) < (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
 
 #include <atlbase.h>
 //You may derive a class from CComModule and use it if you want to override
