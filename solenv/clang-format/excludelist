@@ -7414,7 +7414,6 @@ jurt/source/pipe/wrapper/wrapper.c
 jvmaccess/source/classpath.cxx
 jvmaccess/source/unovirtualmachine.cxx
 jvmaccess/source/virtualmachine.cxx
-jvmaccess/workbench/exceptiontest1.cxx
 jvmaccess/workbench/javainfo/javainfotest.cxx
 jvmfwk/inc/elements.hxx
 jvmfwk/inc/fwkbase.hxx
