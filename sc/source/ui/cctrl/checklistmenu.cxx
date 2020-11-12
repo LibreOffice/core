@@ -662,6 +662,18 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, TriStateHdl, weld::ToggleButton&, void)
     mePrevToggleAllState = mxChkToggleAll->get_state();
 }
 
+namespace
+{
+    void insertMember(weld::TreeView& rView, const weld::TreeIter& rIter, const ScCheckListMember& rMember, bool bChecked)
+    {
+        OUString aLabel = rMember.maName;
+        if (aLabel.isEmpty())
+            aLabel = ScResId(STR_EMPTYDATA);
+        rView.set_toggle(rIter, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+        rView.set_text(rIter, aLabel, 0);
+    }
+}
+
 IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
 {
     OUString aSearchText = mxEdSearch->get_text();
@@ -669,18 +681,15 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
     bool bSearchTextEmpty = aSearchText.isEmpty();
     size_t n = maMembers.size();
     size_t nSelCount = 0;
-    bool bSomeDateDeletes = false;
 
     mpChecks->freeze();
 
-    if (bSearchTextEmpty && !mbHasDates)
+    // This branch is the general case, the other is an optimized variant of
+    // this one where we can take advantage of knowing we have no hierarchy
+    if (mbHasDates)
     {
-        // when there are a lot of rows, it is cheaper to simply clear the tree and re-initialise
-        mpChecks->clear();
-        nSelCount = initMembers();
-    }
-    else
-    {
+        bool bSomeDateDeletes = false;
+
         for (size_t i = 0; i < n; ++i)
         {
             bool bIsDate = maMembers[i].mbDate;
@@ -725,19 +734,57 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
                     bSomeDateDeletes = true;
             }
         }
-    }
 
-    if ( bSomeDateDeletes )
-    {
-        for (size_t i = 0; i < n; ++i)
+        if ( bSomeDateDeletes )
         {
-            if (!maMembers[i].mbDate)
-                continue;
-            if (maMembers[i].meDatePartType != ScCheckListMember::DAY)
-                continue;
-            updateMemberParents(nullptr, i);
+            for (size_t i = 0; i < n; ++i)
+            {
+                if (!maMembers[i].mbDate)
+                    continue;
+                if (maMembers[i].meDatePartType != ScCheckListMember::DAY)
+                    continue;
+                updateMemberParents(nullptr, i);
+            }
         }
     }
+    else
+    {
+        // when there are a lot of rows, it is cheaper to simply clear the tree and either
+        // re-initialise or just insert the filtered lines
+        mpChecks->clear();
+
+        if (bSearchTextEmpty)
+            nSelCount = initMembers();
+        else
+        {
+            std::vector<size_t> aShownIndexes;
+
+            for (size_t i = 0; i < n; ++i)
+            {
+                assert(!maMembers[i].mbDate);
+
+                OUString aLabelDisp = maMembers[i].maName;
+                if ( aLabelDisp.isEmpty() )
+                    aLabelDisp = ScResId( STR_EMPTYDATA );
+
+                bool bPartialMatch = ScGlobal::getCharClassPtr()->lowercase( aLabelDisp ).indexOf( aSearchText ) != -1;
+
+                if (!bPartialMatch)
+                    continue;
+
+                aShownIndexes.push_back(i);
+            }
+
+            std::vector<int> aFixedWidths { mnCheckWidthReq };
+            // tdf#122419 insert in the fastest order, this might be backwards.
+            mpChecks->bulk_insert_for_each(aShownIndexes.size(), [this, &aShownIndexes, &nSelCount](weld::TreeIter& rIter, int i) {
+                size_t nIndex = aShownIndexes[i];
+                insertMember(*mpChecks, rIter, maMembers[nIndex], true);
+                ++nSelCount;
+            }, &aFixedWidths);
+        }
+    }
+
 
     mpChecks->thaw();
 
@@ -1167,18 +1214,6 @@ IMPL_LINK(ScCheckListMenuControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     return false;
 }
 
-namespace
-{
-    void insertMember(weld::TreeView& rView, const weld::TreeIter& rIter, const ScCheckListMember& rMember)
-    {
-        OUString aLabel = rMember.maName;
-        if (aLabel.isEmpty())
-            aLabel = ScResId(STR_EMPTYDATA);
-        rView.set_toggle(rIter, rMember.mbVisible ? TRISTATE_TRUE : TRISTATE_FALSE);
-        rView.set_text(rIter, aLabel, 0);
-    }
-}
-
 size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
 {
     size_t n = maMembers.size();
@@ -1195,7 +1230,7 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
         // inserted. We cannot retain pre-existing treeview content, only clear and fill it.
         mpChecks->bulk_insert_for_each(n, [this, &nVisMemCount](weld::TreeIter& rIter, int i) {
             assert(!maMembers[i].mbDate);
-            insertMember(*mpChecks, rIter, maMembers[i]);
+            insertMember(*mpChecks, rIter, maMembers[i], maMembers[i].mbVisible);
             if (maMembers[i].mbVisible)
                 ++nVisMemCount;
         }, &aFixedWidths);
@@ -1223,7 +1258,7 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
             else
             {
                 mpChecks->append(xEntry.get());
-                insertMember(*mpChecks, *xEntry, maMembers[i]);
+                insertMember(*mpChecks, *xEntry, maMembers[i], maMembers[i].mbVisible);
             }
 
             if (maMembers[i].mbVisible)
