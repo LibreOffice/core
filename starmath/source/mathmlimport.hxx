@@ -66,8 +66,6 @@ public:
 
 class SmXMLImport : public SvXMLImport
 {
-    std::unique_ptr<SvXMLTokenMap> pColorTokenMap;
-
         SmNodeStack aNodeStack;
         bool bSuccess;
         int nParseDepth;

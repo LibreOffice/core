@@ -104,6 +104,8 @@ codemaker/source/javamaker/classfile.cxx:508
      floatBytes float
 codemaker/source/javamaker/classfile.cxx:540
      doubleBytes double
+comphelper/qa/container/comphelper_ifcontainer.cxx:44
+    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *const
 comphelper/qa/unit/parallelsorttest.cxx:44
     ParallelSortTest mnThreads size_t
 comphelper/source/misc/asyncnotification.cxx:86
@@ -132,7 +134,7 @@ connectivity/source/inc/writer/WConnection.hxx:55
     connectivity::writer::OWriterConnection::CloseVetoButTerminateListener m_pCloseListener std::unique_ptr<utl::CloseVeto>
 cppcanvas/source/inc/implrenderer.hxx:207
     cppcanvas::internal::ImplRenderer aBaseTransform struct cppcanvas::internal::XForm
-cppu/source/typelib/typelib.cxx:906
+cppu/source/typelib/typelib.cxx:905
     (anonymous namespace)::BaseList set (anonymous namespace)::BaseList::Set
 cppu/source/uno/check.cxx:38
     (anonymous namespace)::C1 n1 sal_Int16
@@ -178,8 +180,6 @@ cppu/source/uno/copy.hxx:38
     cppu::(anonymous namespace)::SequencePrefix nRefCount sal_Int32
 cppu/source/uno/copy.hxx:39
     cppu::(anonymous namespace)::SequencePrefix nElements sal_Int32
-cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx:45
-    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *
 cppuhelper/source/access_control.cxx:79
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:80
@@ -204,12 +204,14 @@ dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:85
     dbaccess::OSingleSelectQueryComposer m_aTablesCollection std::vector<std::unique_ptr<OPrivateTables> >
 dbaccess/source/core/inc/TableDeco.hxx:65
     dbaccess::ODBTableDecorator m_xColumnMediator css::uno::Reference<css::container::XContainerListener>
-dbaccess/source/filter/xml/dbloader2.cxx:202
+dbaccess/source/filter/xml/dbloader2.cxx:200
     dbaxml::(anonymous namespace)::DBContentLoader m_xMySelf Reference<class com::sun::star::frame::XFrameLoader>
 dbaccess/source/ui/app/AppDetailView.hxx:107
     dbaui::OApplicationDetailView m_aExternalMnemonics class MnemonicGenerator
-dbaccess/source/ui/browser/dbloader.cxx:62
+dbaccess/source/ui/browser/dbloader.cxx:59
     (anonymous namespace)::DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
+desktop/qa/desktop_lib/test_desktop_lib.cxx:237
+    DesktopLOKTest m_bModified _Bool
 desktop/source/app/app.cxx:1209
     desktop::(anonymous namespace)::ExecuteGlobals pLanguageOptions std::unique_ptr<SvtLanguageOptions>
 desktop/source/app/app.cxx:1210
@@ -238,11 +240,11 @@ desktop/unx/source/splashx.c:371
      functions unsigned long
 desktop/unx/source/splashx.c:372
      input_mode long
-drawinglayer/inc/texture/texture.hxx:60
+drawinglayer/inc/texture/texture.hxx:58
     drawinglayer::texture::GeoTexSvxGradient maDefinitionRange basegfx::B2DRange
-drawinglayer/inc/texture/texture.hxx:63
+drawinglayer/inc/texture/texture.hxx:61
     drawinglayer::texture::GeoTexSvxGradient mfBorder double
-drawinglayer/inc/texture/texture.hxx:212
+drawinglayer/inc/texture/texture.hxx:210
     drawinglayer::texture::GeoTexSvxHatch mfAngle double
 drawinglayer/source/attribute/sdrfillgraphicattribute.cxx:45
     drawinglayer::attribute::ImpSdrFillGraphicAttribute mbLogSize _Bool
@@ -286,7 +288,7 @@ framework/source/layoutmanager/toolbarlayoutmanager.hxx:272
     framework::ToolbarLayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:276
     framework::ToolbarLayoutManager m_bGlobalSettings _Bool
-i18nutil/source/utility/paper.cxx:306
+i18nutil/source/utility/paper.cxx:307
     paperword string char *
 include/basegfx/DrawCommands.hxx:81
     gfx::LinearGradientInfo maMatrix basegfx::B2DHomMatrix
@@ -424,8 +426,6 @@ include/xmloff/shapeimport.hxx:181
     SdXML3DSceneAttributesHelper mbVPNUsed _Bool
 include/xmloff/shapeimport.hxx:182
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
-include/xmloff/xmlictxt.hxx:53
-    SvXMLImportContext m_pRewindMap std::unique_ptr<SvXMLNamespaceMap>
 io/source/stm/odata.cxx:243
     io_stm::(anonymous namespace)::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n1 sal_uInt32
 io/source/stm/odata.cxx:243
@@ -1084,9 +1084,9 @@ vcl/unx/gtk3/a11y/gtk3atkutil.cxx:138
     DocumentFocusListener m_aRefList o3tl::sorted_vector<uno::Reference<uno::XInterface> >
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1613
+vcl/unx/gtk3/gtk3gtkinst.cxx:1637
      in char *
-vcl/unx/gtk3/gtk3gtkinst.cxx:13964
+vcl/unx/gtk3/gtk3gtkinst.cxx:13997
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *
@@ -1116,15 +1116,15 @@ xmloff/source/forms/elementexport.hxx:47
     xmloff::OElementExport m_pXMLElement std::unique_ptr<SvXMLElementExport>
 xmloff/source/forms/elementexport.hxx:104
     xmloff::OControlExport m_pOuterElement std::unique_ptr<SvXMLElementExport>
-xmloff/source/forms/officeforms.hxx:67
+xmloff/source/forms/officeforms.hxx:69
     xmloff::OFormsRootExport m_pImplElement std::unique_ptr<SvXMLElementExport>
 xmloff/source/text/txtimp.cxx:513
     XMLTextImportHelper::Impl m_xFrameImpPrMap rtl::Reference<SvXMLImportPropertyMapper>
-xmlsecurity/inc/certificatechooser.hxx:53
+xmlsecurity/inc/certificatechooser.hxx:52
     CertificateChooser mvUserData std::vector<std::shared_ptr<UserData> >
-xmlsecurity/inc/certificateviewer.hxx:51
+xmlsecurity/inc/certificateviewer.hxx:50
     CertificateViewer mxGeneralPage std::unique_ptr<CertificateViewerGeneralTP>
-xmlsecurity/inc/certificateviewer.hxx:52
+xmlsecurity/inc/certificateviewer.hxx:51
     CertificateViewer mxDetailsPage std::unique_ptr<CertificateViewerDetailsTP>
 xmlsecurity/source/helper/pdfsignaturehelper.cxx:236
     (anonymous namespace)::PageChecksum m_nPageContent BitmapChecksum

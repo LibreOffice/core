@@ -160,7 +160,7 @@ dbaccess/source/core/inc/ContentHelper.hxx:102
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
 dbaccess/source/filter/hsqldb/parseschema.hxx:34
     dbahsql::SchemaParser m_PrimaryKeys std::map<OUString, std::vector<OUString> >
-dbaccess/source/ui/control/tabletree.cxx:132
+dbaccess/source/ui/control/tabletree.cxx:127
     dbaui::(anonymous namespace)::OViewSetter m_aEqualFunctor ::comphelper::UStringMixEqual
 dbaccess/source/ui/inc/charsetlistbox.hxx:43
     dbaui::CharSetListBox m_aCharSets class dbaui::OCharsetDisplay
@@ -348,9 +348,9 @@ io/source/stm/odata.cxx:559
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
 io/source/stm/odata.cxx:559
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:47
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:46
     (anonymous namespace)::GtvLokDialogPrivate m_nChildKeyModifier guint32
-libreofficekit/source/gtk/lokdocview.cxx:86
+libreofficekit/source/gtk/lokdocview.cxx:85
     (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading _Bool
 lingucomponent/source/languageguessing/simpleguesser.cxx:78
     (anonymous namespace)::textcat_t fprint void **
@@ -562,7 +562,7 @@ sw/inc/calc.hxx:204
     SwCalc m_aSysLocale class SvtSysLocale
 sw/inc/dpage.hxx:35
     SwDPage m_pGridLst std::unique_ptr<SdrPageGridFrameList>
-sw/inc/hints.hxx:237
+sw/inc/hints.hxx:241
     SwAttrSetChg m_bDelSet _Bool
 sw/inc/shellio.hxx:147
     SwReader mpStg tools::SvRef<SotStorage>
@@ -972,7 +972,7 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:75
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1613
+vcl/unx/gtk3/gtk3gtkinst.cxx:1637
      out gpointer *
 writerfilter/source/ooxml/OOXMLFactory.hxx:57
     writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t
