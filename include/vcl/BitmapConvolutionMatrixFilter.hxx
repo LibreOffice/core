@@ -20,7 +20,7 @@ class BitmapEx;
 class VCL_DLLPUBLIC BitmapConvolutionMatrixFilter : public BitmapFilter
 {
 public:
-    BitmapConvolutionMatrixFilter(const tools::Long (&rMatrix)[9])
+    BitmapConvolutionMatrixFilter(const sal_Int32 (&rMatrix)[9])
         : mrMatrix(rMatrix)
     {
     }
@@ -28,7 +28,7 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    const tools::Long (&mrMatrix)[9];
+    const sal_Int32 (&mrMatrix)[9];
 };
 
 #endif
