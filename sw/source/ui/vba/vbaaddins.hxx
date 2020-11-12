@@ -22,20 +22,21 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XAddins.hpp>
 
-typedef CollTestImplHelper< ooo::vba::word::XAddins > SwVbaAddins_BASE;
+typedef CollTestImplHelper<ooo::vba::word::XAddins> SwVbaAddins_BASE;
 
 class SwVbaAddins : public SwVbaAddins_BASE
 {
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaAddins( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    SwVbaAddins(const css::uno::Reference<ov::XHelperInterface>& xParent,
+                const css::uno::Reference<css::uno::XComponentContext>& xContext);
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
 
     // SwVbaAddins_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
+    virtual css::uno::Any createCollectionObject(const css::uno::Any& aSource) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };

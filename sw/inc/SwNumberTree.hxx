@@ -26,14 +26,14 @@
 
 class SwNumberTreeNode;
 
-bool SwNumberTreeNodeLessThan (const SwNumberTreeNode * pA,
-                               const SwNumberTreeNode * pB);
+bool SwNumberTreeNodeLessThan(const SwNumberTreeNode* pA, const SwNumberTreeNode* pB);
 
 struct compSwNumberTreeNodeLessThan
 {
-    bool operator()(const SwNumberTreeNode * pA,
-                    const SwNumberTreeNode * pB) const
-    { return SwNumberTreeNodeLessThan(pA, pB); }
+    bool operator()(const SwNumberTreeNode* pA, const SwNumberTreeNode* pB) const
+    {
+        return SwNumberTreeNodeLessThan(pA, pB);
+    }
 };
 
 /**
@@ -113,8 +113,7 @@ struct compSwNumberTreeNodeLessThan
 class SAL_DLLPUBLIC_RTTI SwNumberTreeNode
 {
 protected:
-    typedef std::set<SwNumberTreeNode *, compSwNumberTreeNodeLessThan>
-    tSwNumberTreeChildren;
+    typedef std::set<SwNumberTreeNode*, compSwNumberTreeNodeLessThan> tSwNumberTreeChildren;
 
 public:
     SwNumberTreeNode();
@@ -127,15 +126,14 @@ public:
        @param pChild   child to add
        @param nDepth   depth in which to add the child
      */
-    void AddChild( SwNumberTreeNode* pChild,
-                   const int nDepth );
+    void AddChild(SwNumberTreeNode* pChild, const int nDepth);
 
     /**
        Remove a child.
 
        @param pChild     child to be removed
      */
-    void RemoveChild( SwNumberTreeNode* pChild );
+    void RemoveChild(SwNumberTreeNode* pChild);
 
     /**
        Remove this child from the tree.
@@ -147,10 +145,7 @@ public:
 
        @return the parent
     */
-    SwNumberTreeNode* GetParent() const
-    {
-        return mpParent;
-    }
+    SwNumberTreeNode* GetParent() const { return mpParent; }
 
     /**
        Returns number of this node.
@@ -159,9 +154,9 @@ public:
 
        @return number of this node
      */
-    SwNumberTree::tSwNumTreeNumber GetNumber( bool bValidate = true ) const;
+    SwNumberTree::tSwNumTreeNumber GetNumber(bool bValidate = true) const;
 
-    bool IsContinueingPreviousSubTree() const { return mbContinueingPreviousSubTree;}
+    bool IsContinueingPreviousSubTree() const { return mbContinueingPreviousSubTree; }
 
     /**
        Returns level numbers of this node.
@@ -206,7 +201,7 @@ public:
        @retval true     pNode is first child of this node
        @retval false    else
      */
-    bool IsFirst(const SwNumberTreeNode * pNode) const;
+    bool IsFirst(const SwNumberTreeNode* pNode) const;
 
     /**
        Return if this node if the first non-phantom node in the tree.
@@ -222,13 +217,13 @@ public:
        @retval true this node is a phantom
        @retval false this node is NOT a phantom
      */
-    bool IsPhantom() const { return mbPhantom;}
+    bool IsPhantom() const { return mbPhantom; }
 
     /** set level of this node
 
         precondition: node is already member of a list tree
     */
-    void SetLevelInListTree( const int nLevel );
+    void SetLevelInListTree(const int nLevel);
 
     /**
        Return level of this node.
@@ -251,7 +246,7 @@ public:
        @retval true this node is less than rTreeNode
        @retval false else
     */
-    virtual bool LessThan(const SwNumberTreeNode & rTreeNode) const;
+    virtual bool LessThan(const SwNumberTreeNode& rTreeNode) const;
 
     /**
        Invalidate this node and all its descendants.
@@ -287,7 +282,7 @@ public:
     void NotifyInvalidSiblings();
 
     /** notification of all nodes in the list tree on certain list level */
-    void NotifyNodesOnListLevel( const int nListLevel );
+    void NotifyNodesOnListLevel(const int nListLevel);
 
     /** Invalidation and notification of complete numbering tree
 
@@ -297,7 +292,7 @@ public:
     */
     void InvalidateAndNotifyTree()
     {
-        if ( GetRoot() )
+        if (GetRoot())
         {
             GetRoot()->InvalidateTree();
             GetRoot()->Notify();
@@ -310,7 +305,7 @@ public:
 
        @return the predecessor
      */
-    SwNumberTreeNode* GetPred( bool bSibling = false ) const;
+    SwNumberTreeNode* GetPred(bool bSibling = false) const;
 
     /** determines the node, which is preceding the node
 
@@ -319,7 +314,7 @@ public:
         <this> node. To search the complete tree, the method has been called for
         the root of the tree.
     */
-    const SwNumberTreeNode* GetPrecedingNodeOf( const SwNumberTreeNode& rNode ) const;
+    const SwNumberTreeNode* GetPrecedingNodeOf(const SwNumberTreeNode& rNode) const;
 
 #ifdef DBG_UTIL
     /**
@@ -346,7 +341,7 @@ protected:
      */
     SwNumberTreeNode* GetRoot() const;
 
-     /**
+    /**
        Return if the notification is not disabled on global conditions
 
        @retval true   Notification enabled in general.
@@ -378,11 +373,11 @@ protected:
        @param bRecursive   descend to children
        @param rParents     vector for recording path
      */
-    void IsSane(bool bRecursive, std::vector<const SwNumberTreeNode *> rParents) const;
+    void IsSane(bool bRecursive, std::vector<const SwNumberTreeNode*> rParents) const;
 #endif // DBG_UTIL
 
     /** he parent node */
-    SwNumberTreeNode * mpParent;
+    SwNumberTreeNode* mpParent;
 
     /** the number of the node */
     mutable SwNumberTree::tSwNumTreeNumber mnNumber;
@@ -409,8 +404,8 @@ protected:
      */
     mutable tSwNumberTreeChildren::const_iterator mItLastValid;
 
-    SwNumberTreeNode(const SwNumberTreeNode& );
-    SwNumberTreeNode& operator=( const SwNumberTreeNode& );
+    SwNumberTreeNode(const SwNumberTreeNode&);
+    SwNumberTreeNode& operator=(const SwNumberTreeNode&);
 
     /**
        Calls GetNumberVector_ on parent and adds number of this node
@@ -419,8 +414,7 @@ protected:
        @param rVector     return value
        @param bValidate   validate the number?
      */
-    void GetNumberVector_( SwNumberTree::tNumberVector& rVector,
-                           bool bValidate = true ) const;
+    void GetNumberVector_(SwNumberTree::tNumberVector& rVector, bool bValidate = true) const;
 
     /**
        Invalidates a child.
@@ -430,16 +424,13 @@ protected:
 
        @param pChild      the child to invalidate
      */
-    void Invalidate( SwNumberTreeNode const * pChild );
+    void Invalidate(SwNumberTreeNode const* pChild);
 
     /** Invalidation of all children
 
         Usage: on <IsCounted()> state change the children have to be invalidated
     */
-    void InvalidateChildren()
-    {
-        SetLastValid( mChildren.end() );
-    }
+    void InvalidateChildren() { SetLastValid(mChildren.end()); }
 
     /**
        Set the last valid child of this node.
@@ -475,7 +466,7 @@ protected:
     void Notify();
 
     /** notification of children nodes on certain depth */
-    void NotifyChildrenOnDepth( const int nDepth );
+    void NotifyChildrenOnDepth(const int nDepth);
 
     /**
        Returns if a child A this node is valid.
@@ -488,7 +479,7 @@ protected:
        @retval true this node is valid
        @retval false this node is NOT valid
      */
-    bool IsValid(const SwNumberTreeNode * pChild) const;
+    bool IsValid(const SwNumberTreeNode* pChild) const;
 
     /**
        Returns if this node is valid.
@@ -505,7 +496,7 @@ protected:
 
        @attention All invalid children preceding pNode are validated, too.
      */
-    void Validate(const SwNumberTreeNode * pNode) const;
+    void Validate(const SwNumberTreeNode* pNode) const;
 
     /**
        Validates a child using hierarchical numbering.
@@ -514,7 +505,7 @@ protected:
 
        @attention All invalid children preceding pNode are validated, too.
      */
-    void ValidateHierarchical(const SwNumberTreeNode * pNode) const;
+    void ValidateHierarchical(const SwNumberTreeNode* pNode) const;
 
     /**
        Validates a child using continuous numbering.
@@ -523,21 +514,21 @@ protected:
 
        @attention All invalid children preceding pNode are validated, too.
      */
-    void ValidateContinuous(const SwNumberTreeNode * pNode) const;
+    void ValidateContinuous(const SwNumberTreeNode* pNode) const;
 
     /**
        Creates a new node of the same class.
 
        @return the new node
     */
-    virtual SwNumberTreeNode * Create() const = 0;
+    virtual SwNumberTreeNode* Create() const = 0;
 
     /**
        Creates a phantom.
 
        @return the created phantom
      */
-    SwNumberTreeNode * CreatePhantom();
+    SwNumberTreeNode* CreatePhantom();
 
     /**
        Return if phantoms are counted.
@@ -566,14 +557,14 @@ protected:
      */
     void ClearObsoletePhantoms();
 
-    tSwNumberTreeChildren::const_iterator GetIterator(const SwNumberTreeNode * pChild) const;
+    tSwNumberTreeChildren::const_iterator GetIterator(const SwNumberTreeNode* pChild) const;
 
     /**
        Moves all children to a given destination node.
 
        @param pDest    the destination node
      */
-    void MoveChildren(SwNumberTreeNode * pDest);
+    void MoveChildren(SwNumberTreeNode* pDest);
 
     /** Moves all children of this node that are greater than a given node
         to the destination node.
@@ -589,8 +580,7 @@ protected:
         input parameter - reference to the node, which is the destination for
         the greater children
     */
-    void MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
-                              SwNumberTreeNode& _rDestNode );
+    void MoveGreaterChildren(SwNumberTreeNode& _rCompareNode, SwNumberTreeNode& _rDestNode);
 
     /**
        Returns the last descendant of a node, if it has children.
@@ -598,7 +588,6 @@ protected:
        @return last descendant of the node
     */
     SwNumberTreeNode* GetLastDescendant() const;
-
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

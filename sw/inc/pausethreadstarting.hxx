@@ -28,14 +28,12 @@
 */
 class SwPauseThreadStarting
 {
-    public:
+public:
+    SwPauseThreadStarting();
+    ~SwPauseThreadStarting() COVERITY_NOEXCEPT_FALSE;
 
-        SwPauseThreadStarting();
-        ~SwPauseThreadStarting() COVERITY_NOEXCEPT_FALSE;
-
-    private:
-
-        bool mbPausedThreadStarting;
+private:
+    bool mbPausedThreadStarting;
 };
 #endif
 

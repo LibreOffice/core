@@ -24,20 +24,20 @@
 
 class SwBookmarkControl : public SfxStatusBarControl
 {
-    virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual void Command(const CommandEvent& rCEvt) override;
 
 public:
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) override;
-    virtual void    Paint( const UserDrawEvent& rEvt ) override;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+                              const SfxPoolItem* pState) override;
+    virtual void Paint(const UserDrawEvent& rEvt) override;
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SwBookmarkControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
+    SwBookmarkControl(sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb);
     virtual ~SwBookmarkControl() override;
 
 private:
-    OUString  sPageNumber;
+    OUString sPageNumber;
 };
 
 #endif

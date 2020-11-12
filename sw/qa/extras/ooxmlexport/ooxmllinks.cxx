@@ -26,7 +26,7 @@
     class TestName : public Test                                                                   \
     {                                                                                              \
     protected:                                                                                     \
-        virtual OUString getTestName() override { return #TestName; }                    \
+        virtual OUString getTestName() override { return #TestName; }                              \
         virtual void postLoad(const char*) override                                                \
         {                                                                                          \
             if (!bUseTempDir)                                                                      \
@@ -70,7 +70,7 @@
                 aOpt.SetSaveRelFSys(true);                                                         \
                 CPPUNIT_ASSERT(aOpt.IsSaveRelFSys());                                              \
             }                                                                                      \
-            executeLoadReloadVerify(FileName);                                               \
+            executeLoadReloadVerify(FileName);                                                     \
         }                                                                                          \
         void verify() override;                                                                    \
     };                                                                                             \
@@ -82,7 +82,7 @@
     class TestName : public Test                                                                   \
     {                                                                                              \
     protected:                                                                                     \
-        virtual OUString getTestName() override { return #TestName; }                    \
+        virtual OUString getTestName() override { return #TestName; }                              \
                                                                                                    \
     public:                                                                                        \
         CPPUNIT_TEST_SUITE(TestName);                                                              \
@@ -242,8 +242,9 @@ DECLARE_LINKS_EXPORT_TEST(testNon_ascii_link_export, "non_ascii_link.docx", USE_
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
-                INetURLObject::decode( OUString("file:///C:/TEMP/%C3%A9kezet.docx"), INetURLObject::DecodeMechanism::ToIUri,
-                RTL_TEXTENCODING_UTF8));
+                INetURLObject::decode(OUString("file:///C:/TEMP/%C3%A9kezet.docx"),
+                                      INetURLObject::DecodeMechanism::ToIUri,
+                                      RTL_TEXTENCODING_UTF8));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

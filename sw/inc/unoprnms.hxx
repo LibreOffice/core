@@ -724,7 +724,8 @@
 #define UNO_NAME_FILE_NAME_FROM_COLUMN "FileNameFromColumn"
 #define UNO_NAME_FILE_NAME_PREFIX "FileNamePrefix"
 #define UNO_NAME_CHAR_STYLE_NAMES "CharStyleNames"
-#define UNO_NAME_DAD_COMMAND "Command" /* DAD = DataAccessDescriptor (see com.sun.star.sdb.DataAccessDescriptor) */
+#define UNO_NAME_DAD_COMMAND                                                                       \
+    "Command" /* DAD = DataAccessDescriptor (see com.sun.star.sdb.DataAccessDescriptor) */
 #define UNO_NAME_DAD_COMMAND_TYPE "CommandType"
 #define UNO_NAME_CLSID "CLSID"
 #define UNO_NAME_COMPONENT "Component"

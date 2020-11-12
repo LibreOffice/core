@@ -22,7 +22,6 @@
 #include <charfmt.hxx>
 #include <docary.hxx>
 
-
 void SwCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwCharFormat"));

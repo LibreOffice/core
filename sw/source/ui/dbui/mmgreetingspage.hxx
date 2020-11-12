@@ -31,7 +31,7 @@ class SwMailMergeWizard;
 class SwGreetingsHandler
 {
 protected:
-    SwMailMergeWizard*  m_pWizard;
+    SwMailMergeWizard* m_pWizard;
     /// The mail merge state, available even when m_pWizard is nullptr.
     SwMailMergeConfigItem& m_rConfigItem;
     bool m_bIsTabPage;
@@ -79,12 +79,11 @@ protected:
     DECL_LINK(IndividualHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(GreetingHdl_Impl, weld::Button&, void);
 
-    void    Contains(bool bContainsGreeting);
-    virtual void    UpdatePreview();
+    void Contains(bool bContainsGreeting);
+    virtual void UpdatePreview();
 };
 
-class SwMailMergeGreetingsPage : public vcl::OWizardPage
-                               , public SwGreetingsHandler
+class SwMailMergeGreetingsPage : public vcl::OWizardPage, public SwGreetingsHandler
 {
     std::unique_ptr<SwAddressPreview> m_xPreview;
     std::unique_ptr<weld::Label> m_xPreviewFI;
@@ -94,7 +93,7 @@ class SwMailMergeGreetingsPage : public vcl::OWizardPage
     std::unique_ptr<weld::Button> m_xNextSetIB;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
 
-    OUString            m_sDocument;
+    OUString m_sDocument;
 
     DECL_LINK(ContainsHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(InsertDataHdl_Impl, weld::Button&, void);
@@ -102,9 +101,10 @@ class SwMailMergeGreetingsPage : public vcl::OWizardPage
     DECL_LINK(GreetingSelectListBoxHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(AssignHdl_Impl, weld::Button&, void);
 
-    virtual void        UpdatePreview() override;
-    virtual void        Activate() override;
-    virtual bool        commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
+    virtual void UpdatePreview() override;
+    virtual void Activate() override;
+    virtual bool commitPage(::vcl::WizardTypes::CommitPageReason _eReason) override;
+
 public:
     SwMailMergeGreetingsPage(weld::Container* pPage, SwMailMergeWizard* pWizard);
     virtual ~SwMailMergeGreetingsPage() override;
@@ -118,11 +118,12 @@ class SwMailBodyDialog : public SfxDialogController, public SwGreetingsHandler
 
     DECL_LINK(ContainsHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(OKHdl, weld::Button&, void);
+
 public:
     SwMailBodyDialog(weld::Window* pParent);
     virtual ~SwMailBodyDialog() override;
 
-    void SetBody(const OUString& rBody ) { m_xBodyMLE->set_text(rBody); }
+    void SetBody(const OUString& rBody) { m_xBodyMLE->set_text(rBody); }
     OUString GetBody() const { return m_xBodyMLE->get_text(); }
 };
 #endif

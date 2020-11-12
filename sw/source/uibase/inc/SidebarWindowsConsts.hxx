@@ -22,8 +22,8 @@
 
 #include <sal/types.h>
 
-namespace sw::sidebarwindows {
-
+namespace sw::sidebarwindows
+{
 const sal_Int8 ANCHORLINE_WIDTH = 1;
 
 } // end of namespace sw::sidebarwindows

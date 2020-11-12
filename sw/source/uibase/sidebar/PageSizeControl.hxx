@@ -26,12 +26,15 @@
 
 #include <vector>
 
-namespace svx::sidebar { class ValueSetWithTextControl; }
+namespace svx::sidebar
+{
+class ValueSetWithTextControl;
+}
 class PageSizePopup;
 class ValueSet;
 
-namespace sw::sidebar {
-
+namespace sw::sidebar
+{
 class PageSizeControl final : public WeldToolbarPopup
 {
 public:
@@ -47,9 +50,9 @@ private:
     std::unique_ptr<weld::CustomWeld> mxSizeValueSetWin;
     rtl::Reference<PageSizePopup> mxControl;
 
-    std::vector< Paper > maPaperList;
+    std::vector<Paper> maPaperList;
 
-    static void ExecuteSizeChange( const Paper ePaper );
+    static void ExecuteSizeChange(const Paper ePaper);
 
     DECL_LINK(ImplSizeHdl, ValueSet*, void);
     DECL_LINK(MoreButtonClickHdl_Impl, weld::Button&, void);

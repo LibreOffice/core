@@ -33,13 +33,13 @@ private:
     std::unique_ptr<weld::RadioButton> m_xBoxAttrCopyNoParaRB;
     std::unique_ptr<weld::RadioButton> m_xBorderCopyRB;
 
-    SwWrtShell            &rShell;
+    SwWrtShell& rShell;
     SplitTable_HeadlineOption m_nSplit;
 
     void Apply();
 
 public:
-    SwSplitTableDlg(weld::Window *pParent, SwWrtShell &rSh);
+    SwSplitTableDlg(weld::Window* pParent, SwWrtShell& rSh);
 
     virtual short run() override
     {

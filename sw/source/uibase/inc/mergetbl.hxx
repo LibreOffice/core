@@ -26,11 +26,12 @@ class SwMergeTableDlg : public weld::GenericDialogController
     bool& m_rMergePrev;
 
     std::unique_ptr<weld::RadioButton> m_xMergePrevRB;
+
 private:
     void Apply();
 
 public:
-    SwMergeTableDlg(weld::Window *pParent, bool& rWithPrev);
+    SwMergeTableDlg(weld::Window* pParent, bool& rWithPrev);
     virtual short run() override;
 };
 

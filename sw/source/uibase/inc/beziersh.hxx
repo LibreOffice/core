@@ -21,7 +21,7 @@
 
 #include "basesh.hxx"
 
-class SwBezierShell: public SwBaseShell
+class SwBezierShell : public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_BEZIERSHELL)
@@ -31,10 +31,10 @@ private:
     static void InitInterface_Impl();
 
 public:
-            SwBezierShell(SwView &rView);
+    SwBezierShell(SwView& rView);
 
-    void    GetState(SfxItemSet &);
-    void    Execute(SfxRequest const &);
+    void GetState(SfxItemSet&);
+    void Execute(SfxRequest const&);
 };
 
 #endif

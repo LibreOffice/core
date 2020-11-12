@@ -39,8 +39,8 @@ class SwFrame;
 
 class SwSelectionList
 {
-    std::list< SwPaM* > m_aList;  // container for the selected text portions
-    const SwFrame* m_pContext;      // the context of these text portions
+    std::list<SwPaM*> m_aList; // container for the selected text portions
+    const SwFrame* m_pContext; // the context of these text portions
 public:
     /** Ctor to create an empty list for a given context
 
@@ -48,7 +48,7 @@ public:
         The frame (normally a SwTextFrame) where the block cursor selection starts,
         it will be used to get the allowed context for the text selections.
     */
-    explicit SwSelectionList( const SwFrame* pInitCxt );
+    explicit SwSelectionList(const SwFrame* pInitCxt);
 
     /** Start of the container for the selected text portions
     */
@@ -63,7 +63,7 @@ public:
         @param pPam
         represents a text portion to select
     */
-    void insertPaM( SwPaM* pPam ) { m_aList.push_front( pPam ); }
+    void insertPaM(SwPaM* pPam) { m_aList.push_front(pPam); }
 
     /** Reports if the list does not contain any text portion
 
@@ -83,7 +83,7 @@ public:
 
         @return true, if the context of the frame is equal to the one of the list
     */
-    bool checkContext( const SwFrame* pCheck );
+    bool checkContext(const SwFrame* pCheck);
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SWSELECTIONLIST_HXX

@@ -27,7 +27,7 @@
 
 #include <sfx2/shell.hxx>
 
-class SwGrfShell: public SwBaseShell
+class SwGrfShell : public SwBaseShell
 {
     class SwExternalToolEdit;
     std::vector<std::unique_ptr<SwExternalToolEdit>> m_ExternalEdits;
@@ -41,13 +41,13 @@ private:
 
 public:
     void Execute(SfxRequest& rRequest);
-    void ExecAttr(SfxRequest const & rRequest);
+    void ExecAttr(SfxRequest const& rRequest);
     void GetAttrState(SfxItemSet& rRequest);
 
-    void ExecuteRotation(SfxRequest const &rRequest);
+    void ExecuteRotation(SfxRequest const& rRequest);
     void GetAttrStateForRotation(SfxItemSet& rRequest);
 
-    SwGrfShell(SwView &rView);
+    SwGrfShell(SwView& rView);
     virtual ~SwGrfShell() override;
 };
 

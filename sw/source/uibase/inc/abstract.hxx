@@ -30,8 +30,8 @@ public:
     SwInsertAbstractDlg(weld::Window* pParent);
     virtual ~SwInsertAbstractDlg() override;
 
-    sal_uInt8   GetLevel() const;
-    sal_uInt8   GetPara() const;
+    sal_uInt8 GetLevel() const;
+    sal_uInt8 GetPara() const;
 };
 
 #endif

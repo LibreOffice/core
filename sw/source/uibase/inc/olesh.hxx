@@ -21,7 +21,7 @@
 
 #include "frmsh.hxx"
 
-class SwOleShell: public SwFrameShell
+class SwOleShell : public SwFrameShell
 {
 public:
     SFX_DECL_INTERFACE(SW_OLESHELL)
@@ -31,7 +31,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    SwOleShell(SwView &rView);
+    SwOleShell(SwView& rView);
 };
 
 #endif

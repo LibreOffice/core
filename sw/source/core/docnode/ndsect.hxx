@@ -24,8 +24,7 @@
 
 class SwSectionNode;
 
-void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd );
-
+void sw_DeleteFootnote(SwSectionNode* pNd, sal_uLong nStt, sal_uLong nEnd);
 
 #endif
 

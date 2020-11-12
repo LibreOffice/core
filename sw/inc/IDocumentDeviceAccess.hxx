@@ -31,7 +31,6 @@ class OutputDevice;
 class IDocumentDeviceAccess
 {
 public:
-
     /** Return the printer set at the document.
 
        @param bCreate
@@ -40,7 +39,7 @@ public:
        @returns
        the printer set at the document.
     */
-    virtual SfxPrinter* getPrinter(/*[in]*/ bool bCreate ) const = 0;
+    virtual SfxPrinter* getPrinter(/*[in]*/ bool bCreate) const = 0;
 
     /** Set the printer at the document.
 
@@ -53,7 +52,9 @@ public:
        @param bCallPrtDataChanged
        [in] if set, triggers all necessary invalidations.
     */
-    virtual void setPrinter(/*[in]*/ SfxPrinter* pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged ) = 0;
+    virtual void setPrinter(/*[in]*/ SfxPrinter* pP, /*[in]*/ bool bDeleteOld,
+                            /*[in]*/ bool bCallPrtDataChanged)
+        = 0;
 
     /** Return the virtual device set at the document.
 
@@ -63,7 +64,7 @@ public:
        @returns
        the virtual device set at the document.
     */
-    virtual VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate ) const = 0;
+    virtual VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate) const = 0;
 
     /** Sets the current virtual device
 
@@ -73,7 +74,7 @@ public:
        The old virtual device will be deleted.
        Triggers all necessary invalidations.
      */
-    virtual void setVirtualDevice(/*[in]*/ VirtualDevice* pVd ) = 0;
+    virtual void setVirtualDevice(/*[in]*/ VirtualDevice* pVd) = 0;
 
     /** Returns the current reference device
 
@@ -83,7 +84,7 @@ public:
        @returns
        the current reference device
      */
-    virtual OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate ) const = 0;
+    virtual OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate) const = 0;
 
     /** Sets the type of the reference device used for formatting the document
 
@@ -94,7 +95,7 @@ public:
        @param bNewHiRes
        [in] if set, the virtual device will be the HiRes virtual device
      */
-    virtual void setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*[in]*/ bool bNewHiRes ) = 0;
+    virtual void setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*[in]*/ bool bNewHiRes) = 0;
 
     /** Returns the Jobsetup
 
@@ -108,14 +109,14 @@ public:
        @param rJobSetup
        [in] the new Jobsetup.
      */
-    virtual void  setJobsetup(/*[in]*/ const JobSetup& rJobSetup ) = 0;
+    virtual void setJobsetup(/*[in]*/ const JobSetup& rJobSetup) = 0;
 
     /** Returns the PrintData
 
        @returns
        the current PrintData
      */
-    virtual const SwPrintData & getPrintData() const = 0;
+    virtual const SwPrintData& getPrintData() const = 0;
 
     /** Sets the PrintData
 
@@ -125,7 +126,7 @@ public:
     virtual void setPrintData(/*[in]*/ const SwPrintData& rPrtData) = 0;
 
 protected:
-    virtual ~IDocumentDeviceAccess() {};
+    virtual ~IDocumentDeviceAccess(){};
 };
 
 #endif // INCLUDED_SW_INC_IDOCUMENTDEVICEACCESS_HXX

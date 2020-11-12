@@ -25,16 +25,16 @@ class SwXMLExport;
 
 class SwXMLBrushItemExport
 {
-    SwXMLExport&        rExport;
+    SwXMLExport& rExport;
 
     SwXMLExport& GetExport() { return rExport; }
-public:
 
-    explicit SwXMLBrushItemExport( SwXMLExport& rExport );
+public:
+    explicit SwXMLBrushItemExport(SwXMLExport& rExport);
     ~SwXMLBrushItemExport();
 
     // core API
-    void exportXML( const SvxBrushItem& rItem );
+    void exportXML(const SvxBrushItem& rItem);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLBRSHE_HXX

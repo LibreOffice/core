@@ -44,7 +44,7 @@ class SwGlossaryGroupDlg final : public SfxDialogController
     weld::Window* m_pParent;
     SwGlossaryHdl* pGlosHdl;
 
-    OUString        sCreatedGroup;
+    OUString sCreatedGroup;
 
     std::unique_ptr<weld::Entry> m_xNameED;
     std::unique_ptr<weld::ComboBox> m_xPathLB;
@@ -54,7 +54,7 @@ class SwGlossaryGroupDlg final : public SfxDialogController
     std::unique_ptr<weld::Button> m_xDelPB;
     std::unique_ptr<weld::Button> m_xRenamePB;
 
-    bool IsDeleteAllowed(const OUString &rGroup);
+    bool IsDeleteAllowed(const OUString& rGroup);
 
     void Apply();
     DECL_LINK(SelectHdl, weld::TreeView&, void);
@@ -67,13 +67,12 @@ class SwGlossaryGroupDlg final : public SfxDialogController
     DECL_LINK(EntrySizeAllocHdl, const Size&, void);
 
 public:
-    SwGlossaryGroupDlg(weld::Window* pParent,
-                       std::vector<OUString> const& rPathArr,
-                       SwGlossaryHdl *pGlosHdl);
+    SwGlossaryGroupDlg(weld::Window* pParent, std::vector<OUString> const& rPathArr,
+                       SwGlossaryHdl* pGlosHdl);
     virtual short run() override;
     virtual ~SwGlossaryGroupDlg() override;
 
-    const OUString&     GetCreatedGroupName() const {return sCreatedGroup;}
+    const OUString& GetCreatedGroupName() const { return sCreatedGroup; }
 };
 
 #endif

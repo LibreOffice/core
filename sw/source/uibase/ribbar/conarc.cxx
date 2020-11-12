@@ -28,11 +28,12 @@
 #include <conarc.hxx>
 
 ConstArc::ConstArc(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
-    : SwDrawBase(pWrtShell, pEditWin, pSwView), m_nButtonUpCount(0)
+    : SwDrawBase(pWrtShell, pEditWin, pSwView)
+    , m_nButtonUpCount(0)
 {
 }
 
-bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
+bool ConstArc::MouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bReturn = SwDrawBase::MouseButtonDown(rMEvt);
     if (bReturn && !m_nButtonUpCount)
@@ -40,7 +41,7 @@ bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
     return bReturn;
 }
 
-bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
+bool ConstArc::MouseButtonUp(const MouseEvent& rMEvt)
 {
     bool bReturn = false;
 
@@ -53,9 +54,10 @@ bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
             bReturn = true;
         }
         else
-        {   m_nButtonUpCount++;
+        {
+            m_nButtonUpCount++;
 
-            if (m_nButtonUpCount == 3)     // Generating of circular arc finished
+            if (m_nButtonUpCount == 3) // Generating of circular arc finished
             {
                 SwDrawBase::MouseButtonUp(rMEvt);
                 m_nButtonUpCount = 0;

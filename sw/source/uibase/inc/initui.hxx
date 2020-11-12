@@ -34,8 +34,8 @@ class SwGlossaryList;
 bool HasGlossaryList();
 SwGlossaryList* GetGlossaryList();
 
-extern  void InitUI();
-extern  void FinitUI();
+extern void InitUI();
+extern void FinitUI();
 
 #endif
 

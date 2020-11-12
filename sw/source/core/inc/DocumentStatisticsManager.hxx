@@ -27,25 +27,22 @@
 class SwDoc;
 struct SwDocStat;
 
-namespace sw {
-
+namespace sw
+{
 class DocumentStatisticsManager : public IDocumentStatistics
 {
-
 public:
-
-    DocumentStatisticsManager( SwDoc& i_rSwdoc );
+    DocumentStatisticsManager(SwDoc& i_rSwdoc);
 
     void DocInfoChgd(bool isEnableSetModified) override;
-    const SwDocStat &GetDocStat() const override;
+    const SwDocStat& GetDocStat() const override;
     void SetDocStatModified(bool bSet);
-    const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync, bool bFields) override;
+    const SwDocStat& GetUpdatedDocStat(bool bCompleteAsync, bool bFields) override;
     void SetDocStat(const SwDocStat& rStat) override;
     void UpdateDocStat(bool bCompleteAsync, bool bFields) override;
     virtual ~DocumentStatisticsManager() override;
 
 private:
-
     DocumentStatisticsManager(DocumentStatisticsManager const&) = delete;
     DocumentStatisticsManager& operator=(DocumentStatisticsManager const&) = delete;
 
@@ -60,13 +57,12 @@ private:
     bool IncrementalDocStatCalculate(tools::Long nChars, bool bFields = true);
 
     // Our own 'StatsUpdateTimer' calls the following method
-    DECL_LINK( DoIdleStatsUpdate, Timer *, void );
+    DECL_LINK(DoIdleStatsUpdate, Timer*, void);
 
-    std::unique_ptr<SwDocStat> mpDocStat;//< Statistics information
-    bool             mbInitialized;      //< allow first time update
-    SwDocIdle        maStatsUpdateIdle;  //< Idle for asynchronous stats calculation
+    std::unique_ptr<SwDocStat> mpDocStat; //< Statistics information
+    bool mbInitialized; //< allow first time update
+    SwDocIdle maStatsUpdateIdle; //< Idle for asynchronous stats calculation
 };
-
 }
 #endif
 

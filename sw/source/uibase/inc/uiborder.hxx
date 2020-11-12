@@ -25,11 +25,10 @@
 class SwBorderDlg : public SfxSingleTabDialogController
 {
 public:
-
-     // nType may be:
-     // SW_BORDER_MODE_PARA
-     // SW_BORDER_MODE_TABLE
-     // SW_BORDER_MODE_FRAME
+    // nType may be:
+    // SW_BORDER_MODE_PARA
+    // SW_BORDER_MODE_TABLE
+    // SW_BORDER_MODE_FRAME
 
     SwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType);
     virtual ~SwBorderDlg() override;

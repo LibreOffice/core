@@ -22,8 +22,8 @@
 
 class SwPaM;
 
-namespace sw {
-
+namespace sw
+{
 /** The Undo actions need to create new Shell cursors.
     Just creating new SwPaMs in the Undo actions is not sufficient,
     because only Shell cursors are corrected by doccorr.cxx.
@@ -31,9 +31,9 @@ namespace sw {
 class IShellCursorSupplier
 {
 public:
-    virtual ~IShellCursorSupplier() { }
-    virtual SwPaM & CreateNewShellCursor() = 0;
-    virtual SwPaM & GetCurrentShellCursor() = 0;
+    virtual ~IShellCursorSupplier() {}
+    virtual SwPaM& CreateNewShellCursor() = 0;
+    virtual SwPaM& GetCurrentShellCursor() = 0;
 };
 
 } // namespace sw

@@ -12,7 +12,10 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
+    Test()
+        : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text")
+    {
+    }
 
 protected:
     bool mustTestImportOf(const char* filename) const override
