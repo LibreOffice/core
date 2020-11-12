@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 
 #include <deque>
+#include <string_view>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -98,9 +99,9 @@ OUString convertLcTo32Path(OUString const & rPath)
     return aResult;
 }
 
-OUString createPath(OUString const & name, sal_Int32 pos, OUString const & locale)
+OUString createPath(std::u16string_view name, sal_Int32 pos, OUString const & locale)
 {
-    return name.subView(0, pos + 1) + locale + name.subView(pos);
+    return name.substr(0, pos + 1) + locale + name.substr(pos);
 }
 
 OUString getIconCacheUrl(OUString const & sVariant, ImageRequestParameters const & rParameters)

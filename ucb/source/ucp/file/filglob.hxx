@@ -19,6 +19,10 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILGLOB_HXX
 #define INCLUDED_UCB_SOURCE_UCP_FILE_FILGLOB_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -44,7 +48,7 @@ namespace fileaccess {
     // Changes the prefix in name
     extern OUString newName( const OUString& aNewPrefix,
                                            const OUString& aOldPrefix,
-                                           const OUString& old_Name );
+                                           std::u16string_view old_Name );
 
     // returns the last part of the given url as title
     extern OUString getTitle( const OUString& aPath );
