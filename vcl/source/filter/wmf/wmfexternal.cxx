@@ -21,16 +21,16 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 // formally known as WMF_EXTERNALHEADER
-WmfExternal::WmfExternal() :
-    xExt(0),
-    yExt(0),
-    mapMode(0)
+WmfExternal::WmfExternal()
+    : xExt(0)
+    , yExt(0)
+    , mapMode(0)
 {
 }
 
-css::uno::Sequence< css::beans::PropertyValue > WmfExternal::getSequence() const
+css::uno::Sequence<css::beans::PropertyValue> WmfExternal::getSequence() const
 {
-    css::uno::Sequence< css::beans::PropertyValue > aSequence;
+    css::uno::Sequence<css::beans::PropertyValue> aSequence;
 
     if (0 != xExt || 0 != yExt || 0 != mapMode)
     {
@@ -46,7 +46,7 @@ css::uno::Sequence< css::beans::PropertyValue > WmfExternal::getSequence() const
     return aSequence;
 }
 
-bool WmfExternal::setSequence(const css::uno::Sequence< css::beans::PropertyValue >& rSequence)
+bool WmfExternal::setSequence(const css::uno::Sequence<css::beans::PropertyValue>& rSequence)
 {
     bool bRetval(false);
 

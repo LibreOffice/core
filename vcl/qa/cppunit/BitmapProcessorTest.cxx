@@ -21,7 +21,6 @@
 
 namespace
 {
-
 class BitmapProcessorTest : public CppUnit::TestFixture
 {
     void testDisabledImage();

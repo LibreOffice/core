@@ -14,7 +14,10 @@
 class VclFontCharMapTest : public test::BootstrapFixture
 {
 public:
-    VclFontCharMapTest() : BootstrapFixture(true, false) {}
+    VclFontCharMapTest()
+        : BootstrapFixture(true, false)
+    {
+    }
 
     void testDefaultFontCharMap();
 
@@ -25,9 +28,9 @@ public:
 
 void VclFontCharMapTest::testDefaultFontCharMap()
 {
-    FontCharMapRef xfcmap( new FontCharMap() ); // gets default map
+    FontCharMapRef xfcmap(new FontCharMap()); // gets default map
 
-    CPPUNIT_ASSERT( xfcmap->IsDefaultMap() );
+    CPPUNIT_ASSERT(xfcmap->IsDefaultMap());
 
     sal_uInt32 nStartBMPPlane = xfcmap->GetFirstChar();
     sal_uInt32 nStartSupBMPPlane = xfcmap->GetNextChar(0xD800);
@@ -35,7 +38,7 @@ void VclFontCharMapTest::testDefaultFontCharMap()
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0x0020), nStartBMPPlane);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0xE000), nStartSupBMPPlane);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0xFFF0-1), nEndBMPPlane);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0xFFF0 - 1), nEndBMPPlane);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclFontCharMapTest);

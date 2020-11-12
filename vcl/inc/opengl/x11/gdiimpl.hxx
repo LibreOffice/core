@@ -22,17 +22,17 @@ struct TextureCombo;
 class X11OpenGLSalGraphicsImpl : public OpenGLSalGraphicsImpl, public X11GraphicsImpl
 {
 private:
-    X11SalGraphics&     mrX11Parent;
+    X11SalGraphics& mrX11Parent;
 
 public:
-    X11OpenGLSalGraphicsImpl( X11SalGraphics& rParent );
+    X11OpenGLSalGraphicsImpl(X11SalGraphics& rParent);
     virtual ~X11OpenGLSalGraphicsImpl() override;
 
 protected:
     virtual rtl::Reference<OpenGLContext> CreateWinContext() override;
 
 public:
-    virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
+    virtual void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
 
     virtual void Init() override;
 };

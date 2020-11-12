@@ -22,25 +22,25 @@
 #include <iconview.hxx>
 #include "iconviewimpl.hxx"
 
-IconView::IconView( vcl::Window* pParent, WinBits nBits )
-    : SvTreeListBox( pParent, nBits )
+IconView::IconView(vcl::Window* pParent, WinBits nBits)
+    : SvTreeListBox(pParent, nBits)
 {
     nColumns = 1;
     mbCenterAndClipText = true;
-    SetEntryHeight( 100 );
-    SetEntryWidth( 100 );
+    SetEntryHeight(100);
+    SetEntryWidth(100);
 
-    pImpl.reset( new IconViewImpl( this, GetModel(), GetStyle() ) );
+    pImpl.reset(new IconViewImpl(this, GetModel(), GetStyle()));
 }
 
 void IconView::Resize()
 {
     Size aBoxSize = Control::GetParent()->GetOutputSizePixel();
 
-    if ( !aBoxSize.Width() )
+    if (!aBoxSize.Width())
         return;
 
-    SetSizePixel( aBoxSize );
+    SetSizePixel(aBoxSize);
 
     nColumns = aBoxSize.Width() / nEntryWidth;
 
@@ -50,33 +50,32 @@ void IconView::Resize()
 tools::Rectangle IconView::GetFocusRect(const SvTreeListEntry*, tools::Long nEntryPos)
 {
     Size aSize;
-    aSize.setHeight( nEntryHeight );
-    aSize.setWidth( nEntryWidth );
+    aSize.setHeight(nEntryHeight);
+    aSize.setWidth(nEntryWidth);
 
     Point aPos;
-    aPos.setX( 0 );
-    aPos.setY( 0 );
+    aPos.setX(0);
+    aPos.setY(0);
 
     tools::Rectangle aRect;
 
     short nCols = GetColumnsCount();
 
-    if(nCols)
+    if (nCols)
     {
-        aPos.setY( ( nEntryPos / nCols ) * nEntryHeight );
-        aPos.setX( ( nEntryPos % nCols ) * nEntryWidth );
+        aPos.setY((nEntryPos / nCols) * nEntryHeight);
+        aPos.setX((nEntryPos % nCols) * nEntryWidth);
     }
 
-    aRect.SetPos( aPos );
-    aRect.SetSize( aSize );
+    aRect.SetPos(aPos);
+    aRect.SetSize(aSize);
 
     return aRect;
 }
 
 void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long nY,
-                            vcl::RenderContext& rRenderContext)
+                          vcl::RenderContext& rRenderContext)
 {
-
     tools::Rectangle aRect; // multi purpose
 
     pImpl->UpdateContextBmpWidthMax(&rEntry);
@@ -92,7 +91,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 
     bool bCurFontIsSel = false;
     const WinBits nWindowStyle = GetStyle();
-    const bool bHideSelection = (nWindowStyle & WB_HIDESELECTION) !=0 && !HasFocus();
+    const bool bHideSelection = (nWindowStyle & WB_HIDESELECTION) != 0 && !HasFocus();
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     vcl::Font aHighlightFont(rRenderContext.GetFont());
@@ -101,7 +100,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 
     Size aRectSize(nTempEntryWidth, nTempEntryHeight);
 
-    SvViewDataEntry* pViewDataEntry = GetViewDataEntry( &rEntry );
+    SvViewDataEntry* pViewDataEntry = GetViewDataEntry(&rEntry);
 
     sal_uInt16 nItemCount = rEntry.ItemCount();
     sal_uInt16 nCurItem = 0;
@@ -121,8 +120,8 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 
         auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nCurItem);
 
-        aEntryPos.setX( nX );
-        aEntryPos.setY( nY );
+        aEntryPos.setX(nX);
+        aEntryPos.setY(nY);
 
         // set background pattern/color
 
@@ -134,7 +133,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
             // if the face color is bright then the deactivate color is also bright
             // -> so you can't see any deactivate selection
             if (bHideSelection && !rSettings.GetFaceColor().IsBright()
-               && aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright())
+                && aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright())
             {
                 aNewWallColor = rSettings.GetDeactiveColor();
             }
@@ -147,7 +146,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
             }
             aWallpaper.SetColor(aNewWallColor);
         }
-        else  // no selection
+        else // no selection
         {
             if (bCurFontIsSel)
             {
@@ -178,9 +177,9 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         }
 
         // center vertically
-        aEntryPos.AdjustY((nTempEntryHeight - nItemHeight) / 2 );
+        aEntryPos.AdjustY((nTempEntryHeight - nItemHeight) / 2);
 
-        aEntryPos.AdjustY(15 );
+        aEntryPos.AdjustY(15);
 
         pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
 
@@ -190,21 +189,21 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     }
 
     // draw icon
-    if(nIconItem != nItemCount && nIconItem < nItemCount)
+    if (nIconItem != nItemCount && nIconItem < nItemCount)
     {
         SvLBoxItem* pItem = &rEntry.GetItem(nIconItem);
         auto nItemWidth = pItem->GetWidth(this, pViewDataEntry, nIconItem);
         auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nIconItem);
 
-        aEntryPos.setX( nX );
-        aEntryPos.setY( nY );
+        aEntryPos.setX(nX);
+        aEntryPos.setY(nY);
 
         // center horizontally
-        aEntryPos.AdjustX((nTempEntryWidth - nItemWidth) / 2 );
+        aEntryPos.AdjustX((nTempEntryWidth - nItemWidth) / 2);
         // center vertically
-        aEntryPos.AdjustY((nTempEntryHeight - nItemHeight) / 2 );
+        aEntryPos.AdjustY((nTempEntryHeight - nItemHeight) / 2);
 
-        aEntryPos.AdjustY( -10 );
+        aEntryPos.AdjustY(-10);
 
         pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
     }

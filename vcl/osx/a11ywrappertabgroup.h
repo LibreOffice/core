@@ -25,7 +25,7 @@
 @interface AquaA11yWrapperTabGroup : AquaA11yWrapper
 {
 }
--(NSArray *)accessibilityAttributeNames;
+- (NSArray*)accessibilityAttributeNames;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YWRAPPERTABGROUP_H

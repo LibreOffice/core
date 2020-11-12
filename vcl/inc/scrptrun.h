@@ -43,22 +43,22 @@
 #include <unicode/uscript.h>
 #include <vector>
 
-namespace vcl {
-
+namespace vcl
+{
 struct ParenStackEntry
 {
     int32_t pairIndex;
     UScriptCode scriptCode;
     ParenStackEntry()
-      : pairIndex(0)
-      , scriptCode(USCRIPT_INVALID_CODE)
+        : pairIndex(0)
+        , scriptCode(USCRIPT_INVALID_CODE)
     {
     }
 };
 
-class ScriptRun final : public icu::UObject {
+class ScriptRun final : public icu::UObject
+{
 public:
-
     ScriptRun(const UChar chars[], int32_t length);
 
     void reset();
@@ -87,13 +87,15 @@ s     * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
      * @stable ICU 2.2
      */
-    static UClassID getStaticClassID() { return static_cast<UClassID>(const_cast<char *>(&fgClassID)); }
+    static UClassID getStaticClassID()
+    {
+        return static_cast<UClassID>(const_cast<char*>(&fgClassID));
+    }
 
 private:
-
     int32_t charStart;
     int32_t charLimit;
-    const UChar *charArray;
+    const UChar* charArray;
 
     int32_t scriptStart;
     int32_t scriptEnd;
@@ -109,32 +111,20 @@ private:
     static const char fgClassID;
 };
 
-inline ScriptRun::ScriptRun(const UChar chars[], int32_t length)
-{
-    reset(chars, 0, length);
-}
+inline ScriptRun::ScriptRun(const UChar chars[], int32_t length) { reset(chars, 0, length); }
 
-inline int32_t ScriptRun::getScriptStart() const
-{
-    return scriptStart;
-}
+inline int32_t ScriptRun::getScriptStart() const { return scriptStart; }
 
-inline int32_t ScriptRun::getScriptEnd() const
-{
-    return scriptEnd;
-}
+inline int32_t ScriptRun::getScriptEnd() const { return scriptEnd; }
 
-inline UScriptCode ScriptRun::getScriptCode() const
-{
-    return scriptCode;
-}
+inline UScriptCode ScriptRun::getScriptCode() const { return scriptCode; }
 
 inline void ScriptRun::reset()
 {
     scriptStart = charStart;
-    scriptEnd   = charStart;
-    scriptCode  = USCRIPT_INVALID_CODE;
-    parenSP     = -1;
+    scriptEnd = charStart;
+    scriptCode = USCRIPT_INVALID_CODE;
+    parenSP = -1;
     parenStack.resize(128);
 }
 
@@ -152,7 +142,6 @@ inline void ScriptRun::reset(const UChar chars[], int32_t start, int32_t length)
 
     reset(start, length);
 }
-
 }
 
 #endif

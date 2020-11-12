@@ -25,11 +25,12 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-
 class KeyboardFocusListener : public salhelper::SimpleReferenceObject
 {
 public:
-    virtual void focusedObjectChanged(const css::uno::Reference< css::accessibility::XAccessible >& xAccessible) = 0;
+    virtual void
+    focusedObjectChanged(const css::uno::Reference<css::accessibility::XAccessible>& xAccessible)
+        = 0;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_KEYBOARDFOCUSLISTENER_HXX

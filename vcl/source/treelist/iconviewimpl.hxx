@@ -28,39 +28,39 @@ class Point;
 class IconViewImpl : public SvImpLBox
 {
 public:
-    IconViewImpl( SvTreeListBox* pTreeListBox, SvTreeList* pTreeList, WinBits nWinStyle );
+    IconViewImpl(SvTreeListBox* pTreeListBox, SvTreeList* pTreeList, WinBits nWinStyle);
 
-    void KeyDown( bool bPageDown ) override;
+    void KeyDown(bool bPageDown) override;
 
-    void KeyUp( bool bPageUp ) override;
+    void KeyUp(bool bPageUp) override;
 
     Point GetEntryPosition(const SvTreeListEntry* pEntry) const override;
 
-    SvTreeListEntry* GetClickedEntry( const Point& rPoint ) const override;
+    SvTreeListEntry* GetClickedEntry(const Point& rPoint) const override;
 
-    bool IsEntryInView( SvTreeListEntry* pEntry ) const override;
+    bool IsEntryInView(SvTreeListEntry* pEntry) const override;
 
-    void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
     // returns 0 if position is just past the last entry
-    SvTreeListEntry* GetEntry( const Point& rPoint ) const override;
+    SvTreeListEntry* GetEntry(const Point& rPoint) const override;
 
-    void UpdateAll( bool bInvalidateCompleteView ) override;
+    void UpdateAll(bool bInvalidateCompleteView) override;
 
-    bool KeyInput( const KeyEvent& ) override;
+    bool KeyInput(const KeyEvent&) override;
 
-    void InvalidateEntry( tools::Long nId ) const override;
+    void InvalidateEntry(tools::Long nId) const override;
 
 protected:
     tools::Long GetEntryLine(const SvTreeListEntry* pEntry) const override;
 
     void CursorUp() override;
     void CursorDown() override;
-    void PageDown( sal_uInt16 nDelta ) override;
-    void PageUp( sal_uInt16 nDelta ) override;
+    void PageDown(sal_uInt16 nDelta) override;
+    void PageUp(sal_uInt16 nDelta) override;
 
     void SyncVerThumb() override;
-    void AdjustScrollBars( Size& rSize ) override;
+    void AdjustScrollBars(Size& rSize) override;
 };
 
 #endif // INCLUDED_VCL_SOURCE_INC_ICONVIEWIMPL_HXX

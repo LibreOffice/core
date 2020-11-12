@@ -22,7 +22,7 @@
 #include <bmpfast.hxx>
 #include <bitmapwriteaccess.hxx>
 
-void BitmapWriteAccess::SetLineColor( const Color& rColor )
+void BitmapWriteAccess::SetLineColor(const Color& rColor)
 {
     if (rColor.GetTransparency() == 255)
     {
@@ -41,12 +41,9 @@ void BitmapWriteAccess::SetLineColor( const Color& rColor )
     }
 }
 
-void BitmapWriteAccess::SetFillColor()
-{
-    mpFillColor.reset();
-}
+void BitmapWriteAccess::SetFillColor() { mpFillColor.reset(); }
 
-void BitmapWriteAccess::SetFillColor( const Color& rColor )
+void BitmapWriteAccess::SetFillColor(const Color& rColor)
 {
     if (rColor.GetTransparency() == 255)
     {
@@ -65,7 +62,7 @@ void BitmapWriteAccess::SetFillColor( const Color& rColor )
     }
 }
 
-void BitmapWriteAccess::Erase( const Color& rColor )
+void BitmapWriteAccess::Erase(const Color& rColor)
 {
     // convert the color format from RGB to palette index if needed
     // TODO: provide and use Erase( BitmapColor& method)
@@ -97,7 +94,7 @@ void BitmapWriteAccess::Erase( const Color& rColor )
     }
 }
 
-void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
+void BitmapWriteAccess::DrawLine(const Point& rStart, const Point& rEnd)
 {
     if (!mpLineColor)
         return;
@@ -115,13 +112,13 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
 
         if (nEndY > nY)
         {
-            for (; nY <= nEndY; nY++ )
-                SetPixel( nY, nX, rLineColor );
+            for (; nY <= nEndY; nY++)
+                SetPixel(nY, nX, rLineColor);
         }
         else
         {
-            for (; nY >= nEndY; nY-- )
-                SetPixel( nY, nX, rLineColor );
+            for (; nY >= nEndY; nY--)
+                SetPixel(nY, nX, rLineColor);
         }
     }
     else if (rStart.Y() == rEnd.Y())
@@ -145,8 +142,8 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
     }
     else
     {
-        const tools::Long  nDX = labs( rEnd.X() - rStart.X() );
-        const tools::Long  nDY = labs( rEnd.Y() - rStart.Y() );
+        const tools::Long nDX = labs(rEnd.X() - rStart.X());
+        const tools::Long nDY = labs(rEnd.Y() - rStart.Y());
         tools::Long nX1;
         tools::Long nY1;
         tools::Long nX2;
@@ -208,8 +205,8 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
                 nY2 = rStart.Y();
             }
 
-            const tools::Long  nDYX = (nDX - nDY) << 1;
-            const tools::Long  nDY2 = nDX << 1;
+            const tools::Long nDYX = (nDX - nDY) << 1;
+            const tools::Long nDY2 = nDX << 1;
             tools::Long nD = nDY2 - nDY;
             bool bPos = nX1 < nX2;
 
@@ -233,7 +230,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
     }
 }
 
-void BitmapWriteAccess::FillRect( const tools::Rectangle& rRect )
+void BitmapWriteAccess::FillRect(const tools::Rectangle& rRect)
 {
     if (!mpFillColor)
         return;
@@ -253,7 +250,7 @@ void BitmapWriteAccess::FillRect( const tools::Rectangle& rRect )
 
     for (tools::Long nY = nStartY; nY <= nEndY; nY++)
     {
-        Scanline pScanline = GetScanline( nY );
+        Scanline pScanline = GetScanline(nY);
         for (tools::Long nX = nStartX; nX <= nEndX; nX++)
         {
             SetPixelOnData(pScanline, nX, rFillColor);
@@ -261,12 +258,12 @@ void BitmapWriteAccess::FillRect( const tools::Rectangle& rRect )
     }
 }
 
-void BitmapWriteAccess::DrawRect( const tools::Rectangle& rRect )
+void BitmapWriteAccess::DrawRect(const tools::Rectangle& rRect)
 {
     if (mpFillColor)
         FillRect(rRect);
 
-    if (mpLineColor && (!mpFillColor || ( *mpFillColor != *mpLineColor)))
+    if (mpLineColor && (!mpFillColor || (*mpFillColor != *mpLineColor)))
     {
         DrawLine(rRect.TopLeft(), rRect.TopRight());
         DrawLine(rRect.TopRight(), rRect.BottomRight());

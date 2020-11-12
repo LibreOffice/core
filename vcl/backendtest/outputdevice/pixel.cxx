@@ -10,12 +10,11 @@
 
 #include <test/outputdevice.hxx>
 
-namespace vcl::test {
-
+namespace vcl::test
+{
 namespace
 {
-
-void drawPixelOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int nOffset)
+void drawPixelOffset(OutputDevice& rDevice, tools::Rectangle const& rRect, int nOffset)
 {
     for (tools::Long x = 0 + nOffset; x < (rRect.GetWidth() - nOffset); ++x)
     {

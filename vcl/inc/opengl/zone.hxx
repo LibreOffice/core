@@ -19,23 +19,27 @@
  * We want to be able to detect if a given crash came
  * from the OpenGL code, so use this helper to track that.
  */
-class VCL_DLLPUBLIC OpenGLZone : public CrashZone< OpenGLZone > {
+class VCL_DLLPUBLIC OpenGLZone : public CrashZone<OpenGLZone>
+{
 public:
     static void hardDisable();
     static void relaxWatchdogTimings();
     static const CrashWatchdogTimingsValues& getCrashWatchdogTimingsValues();
-    static void checkDebug( int nUnchanged, const CrashWatchdogTimingsValues& aTimingValues );
+    static void checkDebug(int nUnchanged, const CrashWatchdogTimingsValues& aTimingValues);
     static const char* name() { return "OpenGL"; }
 };
 
 /// Create this to not only enter the zone, but set VCL context.
-class OpenGLVCLContextZone {
+class OpenGLVCLContextZone
+{
     OpenGLZone aZone;
+
 public:
     OpenGLVCLContextZone();
 };
 
-class VCL_DLLPUBLIC PreDefaultWinNoOpenGLZone {
+class VCL_DLLPUBLIC PreDefaultWinNoOpenGLZone
+{
 public:
     PreDefaultWinNoOpenGLZone();
     ~PreDefaultWinNoOpenGLZone();

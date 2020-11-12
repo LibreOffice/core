@@ -28,22 +28,19 @@ void IntroWindow::ImplInitIntroWindowData()
     pSVData->mpIntroWindow = this;
 }
 
-IntroWindow::IntroWindow( ) :
-    WorkWindow( WindowType::INTROWINDOW )
+IntroWindow::IntroWindow()
+    : WorkWindow(WindowType::INTROWINDOW)
 {
     ImplInitIntroWindowData();
-    WorkWindow::ImplInit( nullptr, WB_INTROWIN );
+    WorkWindow::ImplInit(nullptr, WB_INTROWIN);
 }
 
-IntroWindow::~IntroWindow()
-{
-    disposeOnce();
-}
+IntroWindow::~IntroWindow() { disposeOnce(); }
 
 void IntroWindow::dispose()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->mpIntroWindow.get() == this )
+    if (pSVData->mpIntroWindow.get() == this)
         pSVData->mpIntroWindow = nullptr;
 
     WorkWindow::dispose();

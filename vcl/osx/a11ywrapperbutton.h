@@ -25,9 +25,9 @@
 @interface AquaA11yWrapperButton : AquaA11yWrapper
 {
 }
--(id)valueAttribute;
--(id)descriptionAttribute;
--(NSArray *)accessibilityAttributeNames;
+- (id)valueAttribute;
+- (id)descriptionAttribute;
+- (NSArray*)accessibilityAttributeNames;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YWRAPPERBUTTON_H

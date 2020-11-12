@@ -21,8 +21,8 @@
 class VCL_PLUGIN_PUBLIC ScreenSaverInhibitor
 {
 public:
-    void inhibit( bool bInhibit, const OUString& sReason,
-                  bool bIsX11, const std::optional<unsigned int>& xid, std::optional<Display*> pDisplay );
+    void inhibit(bool bInhibit, const OUString& sReason, bool bIsX11,
+                 const std::optional<unsigned int>& xid, std::optional<Display*> pDisplay);
 
 private:
     // These are all used as guint, however this header may be included
@@ -56,14 +56,14 @@ private:
     //       (This is replaced by the GSM interface from Mate 1.12 onwards)
     //
     // Note: the Uninhibit call has different spelling in FDO (UnInhibit) vs GSM (Uninhibit)
-    void inhibitFDO( bool bInhibit, const char* appname, const char* reason );
-    void inhibitFDOPM( bool bInhibit, const char* appname, const char* reason );
-    void inhibitGSM( bool bInhibit, const char* appname, const char* reason, const unsigned int xid );
-    void inhibitMSM( bool bInhibit, const char* appname, const char* reason, const unsigned int xid );
+    void inhibitFDO(bool bInhibit, const char* appname, const char* reason);
+    void inhibitFDOPM(bool bInhibit, const char* appname, const char* reason);
+    void inhibitGSM(bool bInhibit, const char* appname, const char* reason, const unsigned int xid);
+    void inhibitMSM(bool bInhibit, const char* appname, const char* reason, const unsigned int xid);
 
-    void inhibitXScreenSaver( bool bInhibit, Display* pDisplay );
-    static void inhibitXAutoLock( bool bInhibit, Display* pDisplay );
-    void inhibitDPMS( bool bInhibit, Display* pDisplay );
+    void inhibitXScreenSaver(bool bInhibit, Display* pDisplay);
+    static void inhibitXAutoLock(bool bInhibit, Display* pDisplay);
+    void inhibitDPMS(bool bInhibit, Display* pDisplay);
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX

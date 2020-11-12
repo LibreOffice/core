@@ -26,31 +26,31 @@
 @interface AquaA11yTextWrapper : NSObject
 {
 }
-+(id)valueAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(id)numberOfCharactersAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(id)selectedTextAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(id)selectedTextRangeAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(id)visibleCharacterRangeAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(id)sharedTextUIElementsAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(id)sharedCharacterRangeAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(id)stringForRangeAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)range;
-+(id)attributedStringForRangeAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)range;
-+(id)rangeForIndexAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)index;
-+(id)rangeForPositionAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)point;
-+(id)boundsForRangeAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)range;
-+(id)styleRangeForIndexAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)index;
-+(id)rTFForRangeAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)range;
-+(id)lineForIndexAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)index;
-+(id)rangeForLineAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)line;
-+(void)addAttributeNamesTo:(NSMutableArray *)attributeNames;
-+(void)addParameterizedAttributeNamesTo:(NSMutableArray *)attributeNames;
-+(NSArray *)specialAttributeNames;
-+(NSArray *)specialParameterizedAttributeNames;
-+(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
-+(void)setVisibleCharacterRangeAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
-+(void)setSelectedTextRangeAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
-+(void)setSelectedTextAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
-+(void)setValueAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
++ (id)valueAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (id)numberOfCharactersAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (id)selectedTextAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (id)selectedTextRangeAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (id)visibleCharacterRangeAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (id)sharedTextUIElementsAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (id)sharedCharacterRangeAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (id)stringForRangeAttributeForElement:(AquaA11yWrapper*)wrapper forParameter:(id)range;
++ (id)attributedStringForRangeAttributeForElement:(AquaA11yWrapper*)wrapper forParameter:(id)range;
++ (id)rangeForIndexAttributeForElement:(AquaA11yWrapper*)wrapper forParameter:(id)index;
++ (id)rangeForPositionAttributeForElement:(AquaA11yWrapper*)wrapper forParameter:(id)point;
++ (id)boundsForRangeAttributeForElement:(AquaA11yWrapper*)wrapper forParameter:(id)range;
++ (id)styleRangeForIndexAttributeForElement:(AquaA11yWrapper*)wrapper forParameter:(id)index;
++ (id)rTFForRangeAttributeForElement:(AquaA11yWrapper*)wrapper forParameter:(id)range;
++ (id)lineForIndexAttributeForElement:(AquaA11yWrapper*)wrapper forParameter:(id)index;
++ (id)rangeForLineAttributeForElement:(AquaA11yWrapper*)wrapper forParameter:(id)line;
++ (void)addAttributeNamesTo:(NSMutableArray*)attributeNames;
++ (void)addParameterizedAttributeNamesTo:(NSMutableArray*)attributeNames;
++ (NSArray*)specialAttributeNames;
++ (NSArray*)specialParameterizedAttributeNames;
++ (BOOL)isAttributeSettable:(NSString*)attribute forElement:(AquaA11yWrapper*)wrapper;
++ (void)setVisibleCharacterRangeAttributeForElement:(AquaA11yWrapper*)wrapper to:(id)value;
++ (void)setSelectedTextRangeAttributeForElement:(AquaA11yWrapper*)wrapper to:(id)value;
++ (void)setSelectedTextAttributeForElement:(AquaA11yWrapper*)wrapper to:(id)value;
++ (void)setValueAttributeForElement:(AquaA11yWrapper*)wrapper to:(id)value;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YTEXTWRAPPER_H

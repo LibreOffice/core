@@ -23,7 +23,8 @@ public:
     TextureState()
         : mnCurrentTextureUnit(0)
         , maBoundTextures(4, 0)
-    {}
+    {
+    }
 
     static void generate(GLuint& nTexture)
     {
@@ -39,7 +40,6 @@ public:
             CHECK_GL_ERROR();
             mnCurrentTextureUnit = nTextureUnit;
         }
-
     }
 
     void bind(GLuint nTexture)
@@ -66,10 +66,7 @@ public:
                 maBoundTextures[i] = 0;
         }
     }
-
 };
-
-
 
 #endif // INCLUDED_VCL_INC_OPENGL_TEXTURE_STATE_H
 

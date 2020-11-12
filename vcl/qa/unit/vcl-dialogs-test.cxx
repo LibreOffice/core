@@ -36,19 +36,14 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-VclDialogsTest::VclDialogsTest()
-{
-}
+VclDialogsTest::VclDialogsTest() {}
 
 void VclDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
     // fill map of known dialogs
 }
 
-VclPtr<VclAbstractDialog> VclDialogsTest::createDialogByID(sal_uInt32 /*nID*/)
-{
-    return nullptr;
-}
+VclPtr<VclAbstractDialog> VclDialogsTest::createDialogByID(sal_uInt32 /*nID*/) { return nullptr; }
 
 void VclDialogsTest::openAnyDialog()
 {

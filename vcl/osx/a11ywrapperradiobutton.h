@@ -25,9 +25,9 @@
 @interface AquaA11yWrapperRadioButton : AquaA11yWrapper
 {
 }
--(id)valueAttribute;
--(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
--(NSArray *)accessibilityAttributeNames;
+- (id)valueAttribute;
+- (BOOL)accessibilityIsAttributeSettable:(NSString*)attribute;
+- (NSArray*)accessibilityAttributeNames;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YWRAPPERRADIOBUTTON_H

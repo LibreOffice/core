@@ -26,10 +26,10 @@
 @interface AquaA11ySelectionWrapper : NSObject
 {
 }
-+(id)selectedChildrenAttributeForElement:(AquaA11yWrapper *)wrapper;
-+(void)addAttributeNamesTo:(NSMutableArray *)attributeNames;
-+(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
-+(void)setSelectedChildrenAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
++ (id)selectedChildrenAttributeForElement:(AquaA11yWrapper*)wrapper;
++ (void)addAttributeNamesTo:(NSMutableArray*)attributeNames;
++ (BOOL)isAttributeSettable:(NSString*)attribute forElement:(AquaA11yWrapper*)wrapper;
++ (void)setSelectedChildrenAttributeForElement:(AquaA11yWrapper*)wrapper to:(id)value;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YSELECTIONWRAPPER_H

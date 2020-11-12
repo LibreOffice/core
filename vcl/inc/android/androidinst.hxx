@@ -22,22 +22,22 @@ class AndroidSalInstance : public SvpSalInstance
     // This JNIEnv is valid only in the thread where this
     // AndroidSalInstance object is created, which is the "LO" thread
     // in which soffice_main() runs
-    JNIEnv *m_pJNIEnv;
+    JNIEnv* m_pJNIEnv;
 
 public:
-    AndroidSalInstance( std::unique_ptr<SalYieldMutex> pMutex );
+    AndroidSalInstance(std::unique_ptr<SalYieldMutex> pMutex);
     virtual ~AndroidSalInstance();
-    static AndroidSalInstance *getInstance();
+    static AndroidSalInstance* getInstance();
 
     virtual SalSystem* CreateSalSystem();
 
     // frame management
-    void GetWorkArea( tools::Rectangle& rRect );
-    SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
-    SalFrame* CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle );
+    void GetWorkArea(tools::Rectangle& rRect);
+    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle);
+    SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle);
 
     // mainloop pieces
-    virtual bool AnyInput( VclInputFlags nType );
+    virtual bool AnyInput(VclInputFlags nType);
 
     virtual void updateMainThread();
     virtual void releaseMainThread();

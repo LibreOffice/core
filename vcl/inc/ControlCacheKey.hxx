@@ -37,20 +37,19 @@ public:
         , mnPart(nPart)
         , mnState(nState)
         , maSize(rSize)
-    {}
+    {
+    }
 
     bool operator==(ControlCacheKey const& aOther) const
     {
-        return mnType == aOther.mnType
-            && mnPart == aOther.mnPart
-            && mnState == aOther.mnState
-            && maSize.Width() == aOther.maSize.Width()
-            && maSize.Height() == aOther.maSize.Height();
+        return mnType == aOther.mnType && mnPart == aOther.mnPart && mnState == aOther.mnState
+               && maSize.Width() == aOther.maSize.Width()
+               && maSize.Height() == aOther.maSize.Height();
     }
 
     bool canCacheControl() const
     {
-        switch(mnType)
+        switch (mnType)
         {
             case ControlType::Checkbox:
             case ControlType::Radiobutton:

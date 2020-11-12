@@ -17,8 +17,8 @@ class ControlCacheKey;
 class X11GraphicsImpl
 {
 public:
-    virtual ~X11GraphicsImpl() {};
-    virtual void Flush() {};
+    virtual ~X11GraphicsImpl(){};
+    virtual void Flush(){};
 };
 
 #endif // INCLUDED_VCL_INC_UNX_X11_X11GDIIMPL_HXX
