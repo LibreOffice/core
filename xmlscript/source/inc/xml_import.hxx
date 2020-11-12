@@ -23,8 +23,6 @@
 
 namespace xmlscript
 {
-
-
 //  IMPORTING
 
 /** Creates a document handler to be used for SAX1 parser that can handle
@@ -39,12 +37,8 @@ namespace xmlscript
     @return
             document handler for parser
 */
-css::uno::Reference< css::xml::sax::XDocumentHandler >
-createDocumentHandler(
-    css::uno::Reference<
-    css::xml::input::XRoot > const & xRoot );
-
+css::uno::Reference<css::xml::sax::XDocumentHandler>
+createDocumentHandler(css::uno::Reference<css::xml::input::XRoot> const& xRoot);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
