@@ -26,7 +26,7 @@
 class ScDeleteContentsDlg : public weld::GenericDialogController
 {
 private:
-    bool                    m_bObjectsDisabled;
+    bool m_bObjectsDisabled;
 
     std::unique_ptr<weld::CheckButton> m_xBtnDelAll;
     std::unique_ptr<weld::CheckButton> m_xBtnDelStrings;
@@ -36,18 +36,18 @@ private:
     std::unique_ptr<weld::CheckButton> m_xBtnDelNotes;
     std::unique_ptr<weld::CheckButton> m_xBtnDelAttrs;
     std::unique_ptr<weld::CheckButton> m_xBtnDelObjects;
-    std::unique_ptr<weld::Button>      m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnOk;
 
-    static bool         bPreviousAllCheck;
+    static bool bPreviousAllCheck;
     static InsertDeleteFlags nPreviousChecks;
 
-    void DisableChecks( bool bDelAllChecked );
-    DECL_LINK( DelAllHdl, weld::Button&, void );
+    void DisableChecks(bool bDelAllChecked);
+    DECL_LINK(DelAllHdl, weld::Button&, void);
 
 public:
     ScDeleteContentsDlg(weld::Window* pParent);
     virtual ~ScDeleteContentsDlg() override;
-    void    DisableObjects();
+    void DisableObjects();
 
     InsertDeleteFlags GetDelContentsCmdBits() const;
 };

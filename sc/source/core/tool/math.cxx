@@ -14,19 +14,19 @@
 
 #include <o3tl/float_int_conversion.hxx>
 
-namespace sc {
-
-static double err_pow( const double& fVal1, const double& fVal2 )
+namespace sc
+{
+static double err_pow(const double& fVal1, const double& fVal2)
 {
     // pow() is expected to set domain error or pole error or range error (or
     // flag them via exceptions) or return NaN or Inf.
     assert((math_errhandling & (MATH_ERRNO | MATH_ERREXCEPT)) != 0);
     std::feclearexcept(FE_ALL_EXCEPT);
     errno = 0;
-    return pow( fVal1, fVal2);
+    return pow(fVal1, fVal2);
 }
 
-double power( const double& fVal1, const double& fVal2 )
+double power(const double& fVal1, const double& fVal2)
 {
     double fPow;
     if (fVal1 < 0 && fVal2 != 0.0)
@@ -36,32 +36,31 @@ double power( const double& fVal1, const double& fVal2 )
               && o3tl::convertsToAtMost(f, SAL_MAX_INT64)))
         {
             // Casting to int would be undefined behaviour.
-            fPow = err_pow( fVal1, fVal2);
+            fPow = err_pow(fVal1, fVal2);
         }
         else
         {
             const sal_Int64 i = static_cast<sal_Int64>(f);
             if (i % 2 != 0 && rtl::math::approxEqual(1 / static_cast<double>(i), fVal2))
-                fPow = -err_pow( -fVal1, fVal2);
+                fPow = -err_pow(-fVal1, fVal2);
             else
-                fPow = err_pow( fVal1, fVal2);
+                fPow = err_pow(fVal1, fVal2);
         }
     }
     else
     {
-        fPow = err_pow( fVal1, fVal2);
+        fPow = err_pow(fVal1, fVal2);
     }
     // The pow() call must had been the most recent call to check errno or exception.
     if ((((math_errhandling & MATH_ERRNO) != 0) && (errno == EDOM || errno == ERANGE))
-            || (((math_errhandling & MATH_ERREXCEPT) != 0)
-                && std::fetestexcept( FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
-            || !std::isfinite(fPow))
+        || (((math_errhandling & MATH_ERREXCEPT) != 0)
+            && std::fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
+        || !std::isfinite(fPow))
     {
-        fPow = CreateDoubleError( FormulaError::IllegalFPOperation);
+        fPow = CreateDoubleError(FormulaError::IllegalFPOperation);
     }
     return fPow;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

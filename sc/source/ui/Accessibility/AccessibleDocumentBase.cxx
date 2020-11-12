@@ -24,16 +24,13 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-    //=====  internal  ========================================================
+//=====  internal  ========================================================
 
-ScAccessibleDocumentBase::ScAccessibleDocumentBase(
-        const uno::Reference<XAccessible>& rxParent)
+ScAccessibleDocumentBase::ScAccessibleDocumentBase(const uno::Reference<XAccessible>& rxParent)
     : ScAccessibleContextBase(rxParent, AccessibleRole::DOCUMENT_SPREADSHEET)
 {
 }
 
-ScAccessibleDocumentBase::~ScAccessibleDocumentBase()
-{
-}
+ScAccessibleDocumentBase::~ScAccessibleDocumentBase() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

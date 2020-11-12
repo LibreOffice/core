@@ -29,17 +29,17 @@ public:
     ~ScMacroManager();
 
     SC_DLLPUBLIC void InitUserFuncData();
-    SC_DLLPUBLIC void SetUserFuncVolatile( const OUString& sName, bool isVolatile );
-    SC_DLLPUBLIC bool GetUserFuncVolatile( const OUString& sName );
+    SC_DLLPUBLIC void SetUserFuncVolatile(const OUString& sName, bool isVolatile);
+    SC_DLLPUBLIC bool GetUserFuncVolatile(const OUString& sName);
 
     void AddDependentCell(const OUString& aModuleName, ScFormulaCell* pCell);
     void RemoveDependentCell(const ScFormulaCell* pCell);
     void BroadcastModuleUpdate(const OUString& aModuleName);
 
 private:
-    typedef std::unordered_map< OUString, bool > NameBoolMap;
+    typedef std::unordered_map<OUString, bool> NameBoolMap;
     NameBoolMap mhFuncToVolatile;
-    css::uno::Reference< css::container::XContainerListener > mxContainerListener;
+    css::uno::Reference<css::container::XContainerListener> mxContainerListener;
 
     ::std::unique_ptr<ScUserMacroDepTracker> mpDepTracker;
     ScDocument& mrDoc;

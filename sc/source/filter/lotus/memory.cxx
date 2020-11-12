@@ -27,21 +27,21 @@
 #include <tool.h>
 #include <editeng/svxenum.hxx>
 
-bool MemNew(LotusContext &rContext)
+bool MemNew(LotusContext& rContext)
 {
     rContext.pValueFormCache = new FormCache(&rContext.rDoc);
 
     // for tool.cxx::PutFormString()
-    rContext.pAttrRight = new SvxHorJustifyItem( SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY );
-    rContext.pAttrLeft = new SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY );
-    rContext.pAttrCenter = new SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY );
-    rContext.pAttrRepeat = new SvxHorJustifyItem( SvxCellHorJustify::Repeat, ATTR_HOR_JUSTIFY );
-    rContext.pAttrStandard = new SvxHorJustifyItem( SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY );
+    rContext.pAttrRight = new SvxHorJustifyItem(SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY);
+    rContext.pAttrLeft = new SvxHorJustifyItem(SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY);
+    rContext.pAttrCenter = new SvxHorJustifyItem(SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY);
+    rContext.pAttrRepeat = new SvxHorJustifyItem(SvxCellHorJustify::Repeat, ATTR_HOR_JUSTIFY);
+    rContext.pAttrStandard = new SvxHorJustifyItem(SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY);
 
     return true;
 }
 
-void MemDelete(LotusContext &rContext)
+void MemDelete(LotusContext& rContext)
 {
     delete rContext.pValueFormCache;
     delete rContext.pAttrRight;

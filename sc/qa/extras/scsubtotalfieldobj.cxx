@@ -28,14 +28,14 @@ using namespace css;
 using namespace css::uno;
 using namespace com::sun::star;
 
-namespace sc_apitest {
-
+namespace sc_apitest
+{
 class ScSubTotalFieldObj : public CalcUnoApiTest, public apitest::XSubTotalField
 {
 public:
     ScSubTotalFieldObj();
 
-    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -48,8 +48,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< lang::XComponent > mxComponent;
-
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScSubTotalFieldObj::ScSubTotalFieldObj()
@@ -57,24 +56,25 @@ ScSubTotalFieldObj::ScSubTotalFieldObj()
 {
 }
 
-uno::Reference< uno::XInterface > ScSubTotalFieldObj::init()
+uno::Reference<uno::XInterface> ScSubTotalFieldObj::init()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    uno::Reference< container::XIndexAccess > xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference< sheet::XSubTotalCalculatable > xSubTotalCalc(xSheet, uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSubTotalDescriptor > xSubTotalDesc = xSubTotalCalc->createSubTotalDescriptor(true);
+    uno::Reference<sheet::XSubTotalCalculatable> xSubTotalCalc(xSheet, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSubTotalDescriptor> xSubTotalDesc
+        = xSubTotalCalc->createSubTotalDescriptor(true);
 
-    uno::Sequence< sheet::SubTotalColumn > xCols;
+    uno::Sequence<sheet::SubTotalColumn> xCols;
     xCols.realloc(1);
     xCols[0].Column = 5;
     xCols[0].Function = sheet::GeneralFunction_SUM;
     xSubTotalDesc->addNew(xCols, 1);
 
-    uno::Reference< container::XIndexAccess > xDescIndex(xSubTotalDesc, uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSubTotalField > xSTF(xDescIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xDescIndex(xSubTotalDesc, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSubTotalField> xSTF(xDescIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     return xSTF;
 }
@@ -84,7 +84,6 @@ void ScSubTotalFieldObj::setUp()
     CalcUnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
-
 }
 
 void ScSubTotalFieldObj::tearDown()

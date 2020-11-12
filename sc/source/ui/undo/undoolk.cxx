@@ -23,18 +23,18 @@
 #include <drwlayer.hxx>
 #include <undoolk.hxx>
 
-std::unique_ptr<SdrUndoAction> GetSdrUndoAction( ScDocument* pDoc )
+std::unique_ptr<SdrUndoAction> GetSdrUndoAction(ScDocument* pDoc)
 {
     ScDrawLayer* pLayer = pDoc->GetDrawLayer();
     if (pLayer)
-        return pLayer->GetCalcUndo();               // must exist
+        return pLayer->GetCalcUndo(); // must exist
     else
         return nullptr;
 }
 
-void DoSdrUndoAction( SdrUndoAction* pUndoAction, ScDocument* pDoc )
+void DoSdrUndoAction(SdrUndoAction* pUndoAction, ScDocument* pDoc)
 {
-    if ( pUndoAction )
+    if (pUndoAction)
         pUndoAction->Undo();
     else
     {
@@ -45,27 +45,27 @@ void DoSdrUndoAction( SdrUndoAction* pUndoAction, ScDocument* pDoc )
         // pages can just be created now.
 
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-        if ( pDrawLayer )
+        if (pDrawLayer)
         {
             SCTAB nTabCount = pDoc->GetTableCount();
             SCTAB nPages = static_cast<SCTAB>(pDrawLayer->GetPageCount());
-            while ( nPages < nTabCount )
+            while (nPages < nTabCount)
             {
-                pDrawLayer->ScAddPage( nPages );
+                pDrawLayer->ScAddPage(nPages);
                 ++nPages;
             }
         }
     }
 }
 
-void RedoSdrUndoAction( SdrUndoAction* pUndoAction )
+void RedoSdrUndoAction(SdrUndoAction* pUndoAction)
 {
     // DoSdrUndoAction/RedoSdrUndoAction is called even if the pointer is null
-    if ( pUndoAction )
+    if (pUndoAction)
         pUndoAction->Redo();
 }
 
-void EnableDrawAdjust( ScDocument* pDoc, bool bEnable )
+void EnableDrawAdjust(ScDocument* pDoc, bool bEnable)
 {
     ScDrawLayer* pLayer = pDoc->GetDrawLayer();
     if (pLayer)

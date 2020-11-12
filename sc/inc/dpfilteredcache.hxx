@@ -31,8 +31,14 @@
 
 #include <mdds/flat_segment_tree.hpp>
 
-namespace com::sun::star::uno { class Any; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace com::sun::star::uno
+{
+class Any;
+}
+namespace com::sun::star::uno
+{
+template <typename> class Sequence;
+}
 
 class ScDPCache;
 struct ScDPValue;
@@ -54,7 +60,7 @@ public:
         virtual ~FilterBase() {}
         /** returns true if the matching condition is met for a single cell
             value, or false otherwise. */
-        virtual bool match( const  ScDPItemData& rCellData ) const = 0;
+        virtual bool match(const ScDPItemData& rCellData) const = 0;
 
         virtual std::vector<ScDPItemData> getMatchValues() const = 0;
     };
@@ -63,7 +69,7 @@ public:
     class SingleFilter final : public FilterBase
     {
     public:
-        explicit SingleFilter(const ScDPItemData &rItem);
+        explicit SingleFilter(const ScDPItemData& rItem);
 
         virtual bool match(const ScDPItemData& rCellData) const override;
         virtual std::vector<ScDPItemData> getMatchValues() const override;
@@ -101,7 +107,7 @@ public:
     sal_Int32 getRowSize() const;
     sal_Int32 getColSize() const;
 
-    const ScDPCache& getCache() const { return mrCache;}
+    const ScDPCache& getCache() const { return mrCache; }
 
     void fillTable(const ScQueryParam& rQuery, bool bIgnoreEmptyRows, bool bRepeatIfEmpty);
 
@@ -114,32 +120,33 @@ public:
 
     /** Set filter on/off flag to each row to control visibility.  The caller
         must ensure that the table is filled before calling this function. */
-    void filterByPageDimension(const std::vector<Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
+    void filterByPageDimension(const std::vector<Criterion>& rCriteria,
+                               const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
     /** Get the cell instance at specified location within the data grid. Note
         that the data grid doesn't include the header row.  Don't delete the
         returned object! */
     const ScDPItemData* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
-    void  getValue( ScDPValue& rVal, SCCOL nCol, SCROW nRow) const;
+    void getValue(ScDPValue& rVal, SCCOL nCol, SCROW nRow) const;
     OUString getFieldName(SCCOL nIndex) const;
 
-   /** Get the unique entries for a field specified by index.  The caller must
+    /** Get the unique entries for a field specified by index.  The caller must
        make sure that the table is filled before calling function, or it will
        get an empty collection. */
-    const ::std::vector<SCROW>& getFieldEntries( sal_Int32 nColumn ) const;
+    const ::std::vector<SCROW>& getFieldEntries(sal_Int32 nColumn) const;
 
     /** Filter the table based on the specified criteria, and copy the
         result to rTabData.  This method is used, for example, to generate
         a drill-down data table. */
     void filterTable(const std::vector<Criterion>& rCriteria,
-                     css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& rTabData,
+                     css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& rTabData,
                      const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
     void clear();
     bool empty() const;
 
 #if DUMP_PIVOT_TABLE
-    static void dumpRowFlag( const RowFlagType& rFlag );
+    static void dumpRowFlag(const RowFlagType& rFlag);
     void dump() const;
 #endif
 
@@ -152,12 +159,12 @@ private:
      * @param nRow index of row to be tested.
      * @param rCriteria a list of criteria
      */
-    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
+    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria,
+                        const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
 
 private:
-
     /** unique field entries for each field (column). */
-    ::std::vector< ::std::vector<SCROW> > maFieldEntries;
+    ::std::vector<::std::vector<SCROW>> maFieldEntries;
 
     /** Rows visible by standard filter query. */
     RowFlagType maShowByFilter;

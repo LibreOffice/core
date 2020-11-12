@@ -17,8 +17,8 @@
 #include <unordered_map>
 #include <vector>
 
-namespace sc {
-
+namespace sc
+{
 /**
  * Store pivot table data that need to be post-processed at the end of the
  * import.
@@ -32,7 +32,7 @@ struct PivotTableSources
         ScDPObject* mpDP;
         SelectedPagesType maSelectedPages;
 
-        SelectedPages( ScDPObject* pObj, const SelectedPagesType& rSelected );
+        SelectedPages(ScDPObject* pObj, const SelectedPagesType& rSelected);
     };
 
     struct SheetSource
@@ -40,7 +40,7 @@ struct PivotTableSources
         ScDPObject* mpDP;
         ScSheetSourceDesc maDesc;
 
-        SheetSource( ScDPObject* pObj, const ScSheetSourceDesc& rDesc );
+        SheetSource(ScDPObject* pObj, const ScSheetSourceDesc& rDesc);
     };
 
     struct DBSource
@@ -48,7 +48,7 @@ struct PivotTableSources
         ScDPObject* mpDP;
         ScImportSourceDesc maDesc;
 
-        DBSource( ScDPObject* pObj, const ScImportSourceDesc& rDesc );
+        DBSource(ScDPObject* pObj, const ScImportSourceDesc& rDesc);
     };
 
     struct ServiceSource
@@ -56,25 +56,24 @@ struct PivotTableSources
         ScDPObject* mpDP;
         ScDPServiceDesc maDesc;
 
-        ServiceSource( ScDPObject* pObj, const ScDPServiceDesc& rDesc );
+        ServiceSource(ScDPObject* pObj, const ScDPServiceDesc& rDesc);
     };
 
-    std::vector<SelectedPages>  maSelectedPagesList;
-    std::vector<SheetSource>    maSheetSources;
-    std::vector<DBSource>       maDBSources;
-    std::vector<ServiceSource>  maServiceSources;
+    std::vector<SelectedPages> maSelectedPagesList;
+    std::vector<SheetSource> maSheetSources;
+    std::vector<DBSource> maDBSources;
+    std::vector<ServiceSource> maServiceSources;
 
     PivotTableSources();
 
-    void appendSheetSource( ScDPObject* pObj, const ScSheetSourceDesc& rDesc );
-    void appendDBSource( ScDPObject* pObj, const ScImportSourceDesc& rDesc );
-    void appendServiceSource( ScDPObject* pObj, const ScDPServiceDesc& rDesc );
+    void appendSheetSource(ScDPObject* pObj, const ScSheetSourceDesc& rDesc);
+    void appendDBSource(ScDPObject* pObj, const ScImportSourceDesc& rDesc);
+    void appendServiceSource(ScDPObject* pObj, const ScDPServiceDesc& rDesc);
 
-    void appendSelectedPages( ScDPObject* pObj, const SelectedPagesType& rSelected );
+    void appendSelectedPages(ScDPObject* pObj, const SelectedPagesType& rSelected);
 
     void process();
 };
-
 }
 
 #endif

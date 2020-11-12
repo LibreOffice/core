@@ -25,22 +25,22 @@ using namespace com::sun::star;
 
 //  everything is static...
 
-LanguageType ScUnoConversion::GetLanguage( const lang::Locale& rLocale )
+LanguageType ScUnoConversion::GetLanguage(const lang::Locale& rLocale)
 {
     //  empty language -> LANGUAGE_SYSTEM
-    if ( rLocale.Language.isEmpty() )
+    if (rLocale.Language.isEmpty())
         return LANGUAGE_SYSTEM;
 
-    LanguageType eRet = LanguageTag::convertToLanguageType( rLocale, false);
-    if ( eRet == LANGUAGE_NONE )
-        eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
+    LanguageType eRet = LanguageTag::convertToLanguageType(rLocale, false);
+    if (eRet == LANGUAGE_NONE)
+        eRet = LANGUAGE_SYSTEM; //! or throw an exception?
 
     return eRet;
 }
 
-void ScUnoConversion::FillLocale( lang::Locale& rLocale, LanguageType eLang )
+void ScUnoConversion::FillLocale(lang::Locale& rLocale, LanguageType eLang)
 {
-    rLocale = LanguageTag::convertToLocale( eLang );
+    rLocale = LanguageTag::convertToLocale(eLang);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

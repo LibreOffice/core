@@ -26,21 +26,21 @@ class ScDocument;
 class SfxObjectShell;
 namespace formula
 {
-    class RefEdit;
-    class RefButton;
+class RefEdit;
+class RefButton;
 }
 class SAL_NO_VTABLE IAnyRefDialog : public formula::IControlReferenceHandler
 {
 public:
     virtual ~IAnyRefDialog() COVERITY_NOEXCEPT_FALSE {}
 
-    virtual void SetReference( const ScRange& rRef, ScDocument& rDoc ) = 0;
-    virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) = 0;
-    virtual void RefInputDone( bool bForced = false ) = 0;
+    virtual void SetReference(const ScRange& rRef, ScDocument& rDoc) = 0;
+    virtual void RefInputStart(formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr) = 0;
+    virtual void RefInputDone(bool bForced = false) = 0;
     virtual bool IsTableLocked() const = 0;
     virtual bool IsRefInputMode() const = 0;
 
-    virtual bool IsDocAllowed( SfxObjectShell* pDocSh ) const = 0;
+    virtual bool IsDocAllowed(SfxObjectShell* pDocSh) const = 0;
     virtual void AddRefEntry() = 0;
     virtual void SetActive() = 0;
     virtual void ViewShellChanged() = 0;

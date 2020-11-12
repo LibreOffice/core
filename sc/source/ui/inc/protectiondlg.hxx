@@ -41,12 +41,12 @@ private:
 
     void EnableOptionalWidgets(bool bEnable);
 
-    OUString         m_aSelectLockedCells;
-    OUString         m_aSelectUnlockedCells;
-    OUString         m_aInsertColumns;
-    OUString         m_aInsertRows;
-    OUString         m_aDeleteColumns;
-    OUString         m_aDeleteRows;
+    OUString m_aSelectLockedCells;
+    OUString m_aSelectUnlockedCells;
+    OUString m_aInsertColumns;
+    OUString m_aInsertRows;
+    OUString m_aDeleteColumns;
+    OUString m_aDeleteRows;
 
     std::unique_ptr<weld::CheckButton> m_xBtnProtect;
     std::unique_ptr<weld::Container> m_xPasswords;

@@ -35,7 +35,7 @@ class ScQProReader
     sal_uInt16 mnId;
     sal_uInt16 mnLength;
     sal_uInt32 mnOffset;
-    SvStream *mpStream;
+    SvStream* mpStream;
     bool mbEndOfFile;
     const SCTAB mnMaxTab;
 
@@ -44,15 +44,15 @@ public:
     ~ScQProReader();
 
     bool recordsLeft();
-    void SetEof( bool bValue ){ mbEndOfFile = bValue; }
+    void SetEof(bool bValue) { mbEndOfFile = bValue; }
     bool nextRecord();
     sal_uInt16 getId() const { return mnId; }
     sal_uInt16 getLength() const { return mnLength; }
     OUString readString(sal_uInt16 nLength);
 
-    ErrCode parse( ScDocument& rDoc );
-    ErrCode import( ScDocument& rDoc ); //parse + CalcAfterLoad
-    ErrCode readSheet( SCTAB nTab, ScDocument& rDoc, ScQProStyle *pStyle );
+    ErrCode parse(ScDocument& rDoc);
+    ErrCode import(ScDocument& rDoc); //parse + CalcAfterLoad
+    ErrCode readSheet(SCTAB nTab, ScDocument& rDoc, ScQProStyle* pStyle);
 };
 #endif
 

@@ -32,12 +32,13 @@ struct ScSortKeyItem
     void EnableField();
 };
 
-typedef std::vector<std::unique_ptr<ScSortKeyItem> > ScSortKeyItems;
+typedef std::vector<std::unique_ptr<ScSortKeyItem>> ScSortKeyItems;
 
 class ScSortKeyWindow
 {
 public:
     ScSortKeyItems m_aSortKeyItems;
+
 private:
     weld::Container* m_pBox;
 
@@ -45,7 +46,7 @@ public:
     ScSortKeyWindow(weld::Container* pBox);
     ~ScSortKeyWindow();
 
-    void AddSortKey( sal_uInt16 nItem );
+    void AddSortKey(sal_uInt16 nItem);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SORTKEYDLG_HXX

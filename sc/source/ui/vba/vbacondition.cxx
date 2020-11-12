@@ -29,26 +29,30 @@ using namespace ::com::sun::star;
 
 const sal_Int32 ISFORMULA = 98765432;
 
-template< typename... Ifc >
-ScVbaCondition< Ifc... >::ScVbaCondition(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetCondition >& _xSheetCondition ) : ScVbaCondition_BASE( xParent, xContext ), mxSheetCondition( _xSheetCondition )
+template <typename... Ifc>
+ScVbaCondition<Ifc...>::ScVbaCondition(
+    const uno::Reference<XHelperInterface>& xParent,
+    const uno::Reference<uno::XComponentContext>& xContext,
+    const uno::Reference<sheet::XSheetCondition>& _xSheetCondition)
+    : ScVbaCondition_BASE(xParent, xContext)
+    , mxSheetCondition(_xSheetCondition)
 {
-    mxAddressable.set( xParent, uno::UNO_QUERY_THROW );
+    mxAddressable.set(xParent, uno::UNO_QUERY_THROW);
 }
 
-template< typename... Ifc >
-sheet::ConditionOperator
-ScVbaCondition< Ifc... >::retrieveAPIOperator( const uno::Any& _aOperator)
+template <typename... Ifc>
+sheet::ConditionOperator ScVbaCondition<Ifc...>::retrieveAPIOperator(const uno::Any& _aOperator)
 {
     sheet::ConditionOperator aRetAPIOperator = sheet::ConditionOperator_NONE;
     sal_Int32 nOperator = 0;
-    if ( _aOperator >>= nOperator )
+    if (_aOperator >>= nOperator)
     {
-        switch(nOperator)
+        switch (nOperator)
         {
             case excel::XlFormatConditionOperator::xlBetween:
                 aRetAPIOperator = sheet::ConditionOperator_BETWEEN;
                 break;
-            case  excel::XlFormatConditionOperator::xlNotBetween:
+            case excel::XlFormatConditionOperator::xlNotBetween:
                 aRetAPIOperator = sheet::ConditionOperator_NOT_BETWEEN;
                 break;
             case excel::XlFormatConditionOperator::xlEqual:
@@ -77,26 +81,20 @@ ScVbaCondition< Ifc... >::retrieveAPIOperator( const uno::Any& _aOperator)
     return aRetAPIOperator;
 }
 
-template< typename... Ifc >
-OUString
-ScVbaCondition< Ifc... >::Formula1( )
+template <typename... Ifc> OUString ScVbaCondition<Ifc...>::Formula1()
 {
-     return mxSheetCondition->getFormula1();
+    return mxSheetCondition->getFormula1();
 }
 
-template< typename... Ifc >
-OUString
-ScVbaCondition< Ifc... >::Formula2( )
+template <typename... Ifc> OUString ScVbaCondition<Ifc...>::Formula2()
 {
-     return mxSheetCondition->getFormula2();
+    return mxSheetCondition->getFormula2();
 }
 
-template< typename... Ifc >
-sal_Int32
-ScVbaCondition< Ifc... >::Operator(bool _bIncludeFormulaValue)
+template <typename... Ifc> sal_Int32 ScVbaCondition<Ifc...>::Operator(bool _bIncludeFormulaValue)
 {
     sal_Int32 retvalue = -1;
-    sheet::ConditionOperator aConditionalOperator =  mxSheetCondition->getOperator();
+    sheet::ConditionOperator aConditionalOperator = mxSheetCondition->getOperator();
     switch (aConditionalOperator)
     {
         case sheet::ConditionOperator_EQUAL:
@@ -135,11 +133,11 @@ ScVbaCondition< Ifc... >::Operator(bool _bIncludeFormulaValue)
         case sheet::ConditionOperator_NONE:
         default:
             DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, u"Operator not supported");
-        break;
+            break;
     }
     return retvalue;
 }
 
-template class ScVbaCondition< excel::XFormatCondition >;
+template class ScVbaCondition<excel::XFormatCondition>;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

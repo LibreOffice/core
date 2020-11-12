@@ -32,9 +32,9 @@ class ScFlatBoolRowSegments
 public:
     struct RangeData
     {
-        SCROW   mnRow1;
-        SCROW   mnRow2;
-        bool    mbValue;
+        SCROW mnRow1;
+        SCROW mnRow2;
+        bool mbValue;
     };
 
     class ForwardIterator
@@ -42,26 +42,26 @@ public:
     public:
         explicit ForwardIterator(ScFlatBoolRowSegments& rSegs);
 
-        [[nodiscard]]
-        bool getValue(SCROW nPos, bool& rVal);
-        SCROW getLastPos() const { return mnLastPos;}
+        [[nodiscard]] bool getValue(SCROW nPos, bool& rVal);
+        SCROW getLastPos() const { return mnLastPos; }
 
     private:
-        ScFlatBoolRowSegments&  mrSegs;
+        ScFlatBoolRowSegments& mrSegs;
 
-        SCROW   mnCurPos;
-        SCROW   mnLastPos;
-        bool    mbCurValue;
+        SCROW mnCurPos;
+        SCROW mnLastPos;
+        bool mbCurValue;
     };
 
     class RangeIterator
     {
     public:
-        explicit RangeIterator(ScFlatBoolRowSegments const & rSegs);
+        explicit RangeIterator(ScFlatBoolRowSegments const& rSegs);
         bool getFirst(RangeData& rRange);
         bool getNext(RangeData& rRange);
+
     private:
-        ScFlatBoolRowSegments const & mrSegs;
+        ScFlatBoolRowSegments const& mrSegs;
     };
 
     ScFlatBoolRowSegments(SCROW nMaxRow);
@@ -88,9 +88,9 @@ class ScFlatBoolColSegments
 public:
     struct RangeData
     {
-        SCCOL   mnCol1;
-        SCCOL   mnCol2;
-        bool    mbValue;
+        SCCOL mnCol1;
+        SCCOL mnCol2;
+        bool mbValue;
     };
     ScFlatBoolColSegments(SCCOL nMaxCol);
     ScFlatBoolColSegments(const ScFlatBoolColSegments& r);
@@ -115,9 +115,9 @@ class ScFlatUInt16RowSegments
 public:
     struct RangeData
     {
-        SCROW       mnRow1;
-        SCROW       mnRow2;
-        sal_uInt16  mnValue;
+        SCROW mnRow1;
+        SCROW mnRow2;
+        sal_uInt16 mnValue;
     };
 
     class ForwardIterator
@@ -126,14 +126,14 @@ public:
         explicit ForwardIterator(ScFlatUInt16RowSegments& rSegs);
 
         bool getValue(SCROW nPos, sal_uInt16& rVal);
-        SCROW getLastPos() const { return mnLastPos;}
+        SCROW getLastPos() const { return mnLastPos; }
 
     private:
-        ScFlatUInt16RowSegments&  mrSegs;
+        ScFlatUInt16RowSegments& mrSegs;
 
-        SCROW       mnCurPos;
-        SCROW       mnLastPos;
-        sal_uInt16  mnCurValue;
+        SCROW mnCurPos;
+        SCROW mnLastPos;
+        sal_uInt16 mnCurValue;
     };
 
     ScFlatUInt16RowSegments(SCROW nMaxRow, sal_uInt16 nDefault);
@@ -141,7 +141,8 @@ public:
     ~ScFlatUInt16RowSegments();
 
     void setValue(SCROW nRow1, SCROW nRow2, sal_uInt16 nValue);
-    void setValueIf(SCROW nRow1, SCROW nRow2, sal_uInt16 nValue, const std::function<bool(sal_uInt16)>& rPredicate);
+    void setValueIf(SCROW nRow1, SCROW nRow2, sal_uInt16 nValue,
+                    const std::function<bool(sal_uInt16)>& rPredicate);
     sal_uInt16 getValue(SCROW nRow);
     sal_uInt32 getSumValue(SCROW nRow1, SCROW nRow2);
     bool getRangeData(SCROW nRow, RangeData& rData);

@@ -12,21 +12,19 @@
 
 #include <dataprovider.hxx>
 
-namespace sc {
-
+namespace sc
+{
 class HTMLFetchThread;
 
 class HTMLDataProvider : public DataProvider
 {
 private:
-
     ScDocument* mpDocument;
     rtl::Reference<HTMLFetchThread> mxHTMLFetchThread;
 
     ScDocumentUniquePtr mpDoc;
 
 public:
-
     HTMLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);
     virtual ~HTMLDataProvider() override;
 
@@ -36,7 +34,6 @@ public:
 
     void ImportFinished();
 };
-
 }
 
 #endif

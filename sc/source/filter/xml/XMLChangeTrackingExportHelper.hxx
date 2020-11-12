@@ -25,7 +25,10 @@
 #include <memory>
 #include <tools/solar.h>
 
-namespace com::sun::star::text { class XText; }
+namespace com::sun::star::text
+{
+class XText;
+}
 
 class ScChangeAction;
 class ScChangeTrack;
@@ -37,9 +40,9 @@ class ScEditEngineTextObj;
 
 class ScChangeTrackingExportHelper
 {
-    ScXMLExport&    rExport;
+    ScXMLExport& rExport;
 
-    ScChangeTrack*  pChangeTrack;
+    ScChangeTrack* pChangeTrack;
     ScEditEngineTextObj* pEditTextObj;
     css::uno::Reference<css::text::XText> xText;
 
@@ -73,6 +76,7 @@ class ScChangeTrackingExportHelper
     void CollectCellAutoStyles(const ScCellValue& rCell);
     void CollectActionAutoStyles(const ScChangeAction* pAction);
     void WorkWithChangeAction(ScChangeAction* pAction);
+
 public:
     explicit ScChangeTrackingExportHelper(ScXMLExport& rExport);
     ~ScChangeTrackingExportHelper();

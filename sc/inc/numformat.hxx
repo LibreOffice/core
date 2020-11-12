@@ -16,8 +16,8 @@
 class ScPatternAttr;
 class ScDocument;
 
-namespace sc {
-
+namespace sc
+{
 class SC_DLLPUBLIC NumFmtUtil
 {
 public:
@@ -25,11 +25,10 @@ public:
      * Check if the attribute pattern has a number format that only produces
      * latin script output.
      */
-    static bool isLatinScript( const ScPatternAttr& rPat, ScDocument& rDoc );
+    static bool isLatinScript(const ScPatternAttr& rPat, ScDocument& rDoc);
 
-    static bool isLatinScript( sal_uLong nFormat, ScDocument& rDoc );
+    static bool isLatinScript(sal_uLong nFormat, ScDocument& rDoc);
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

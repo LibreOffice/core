@@ -32,7 +32,8 @@ class ScColumnTextWidthIterator
 public:
     ScColumnTextWidthIterator(const ScColumnTextWidthIterator&) = delete;
     const ScColumnTextWidthIterator& operator=(const ScColumnTextWidthIterator&) = delete;
-    ScColumnTextWidthIterator(const ScDocument& rDoc, ScColumn& rCol, SCROW nStartRow, SCROW nEndRow);
+    ScColumnTextWidthIterator(const ScDocument& rDoc, ScColumn& rCol, SCROW nStartRow,
+                              SCROW nEndRow);
 
     /**
      * @param rDoc document instance.
@@ -56,8 +57,8 @@ private:
     void checkEndRow();
 };
 
-namespace sc {
-
+namespace sc
+{
 /**
  * This iterator lets you iterate over cells over specified range in a
  * single column.  It does not modify the state of the cells, and therefore
@@ -70,7 +71,7 @@ class ColumnIterator
     bool mbComplete;
 
 public:
-    ColumnIterator( const CellStoreType& rCells, SCROW nRow1, SCROW nRow2 );
+    ColumnIterator(const CellStoreType& rCells, SCROW nRow1, SCROW nRow2);
     ~ColumnIterator();
 
     void next();
@@ -83,7 +84,6 @@ public:
 
     ScRefCellValue getCell() const;
 };
-
 }
 
 #endif

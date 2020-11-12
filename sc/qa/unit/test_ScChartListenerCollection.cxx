@@ -13,16 +13,15 @@
 #include <chartlis.hxx>
 #include <scdll.hxx>
 
-namespace {
-
+namespace
+{
 const ScRange RANGE_1(10, 10, 0, 19, 10, 0);
 const ScRange RANGE_2(20, 10, 0, 29, 10, 0);
 
 const ScRange RANGE_INTERSECTING_1_AND_2(10, 10, 0, 29, 10, 0);
 
-
-class ChartListenerCollectionTest : public test::BootstrapFixture {
-
+class ChartListenerCollectionTest : public test::BootstrapFixture
+{
 public:
     virtual void setUp() override
     {
@@ -47,21 +46,21 @@ private:
     CPPUNIT_TEST(ListenersStopListeningIndependently);
 
     CPPUNIT_TEST_SUITE_END();
-
 };
 
-struct MockedHiddenRangeListener : public ScChartHiddenRangeListener {
+struct MockedHiddenRangeListener : public ScChartHiddenRangeListener
+{
     unsigned mNotifyCount;
     MockedHiddenRangeListener()
-    : mNotifyCount(0) {
+        : mNotifyCount(0)
+    {
     }
 
-    void notify() override {
-        mNotifyCount++;
-    }
+    void notify() override { mNotifyCount++; }
 };
 
-void ChartListenerCollectionTest::ListenerGetsNotifiedWhenItsRangeIsSetDirty() {
+void ChartListenerCollectionTest::ListenerGetsNotifiedWhenItsRangeIsSetDirty()
+{
     MockedHiddenRangeListener listener;
     ScDocument aDoc;
     ScChartListenerCollection sut(aDoc);
@@ -72,7 +71,8 @@ void ChartListenerCollectionTest::ListenerGetsNotifiedWhenItsRangeIsSetDirty() {
     CPPUNIT_ASSERT_EQUAL(1u, listener.mNotifyCount);
 }
 
-void ChartListenerCollectionTest::ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes() {
+void ChartListenerCollectionTest::ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes()
+{
     MockedHiddenRangeListener listener;
     ScDocument aDoc;
     ScChartListenerCollection sut(aDoc);
@@ -84,7 +84,8 @@ void ChartListenerCollectionTest::ListenerGetsNotifiedTwiceWhenRegisteredTwoTime
     CPPUNIT_ASSERT_EQUAL(2u, listener.mNotifyCount);
 }
 
-void ChartListenerCollectionTest::ListenerDoesNotGetNotifiedWhenListeningStops() {
+void ChartListenerCollectionTest::ListenerDoesNotGetNotifiedWhenListeningStops()
+{
     MockedHiddenRangeListener listener;
     ScDocument aDoc;
     ScChartListenerCollection sut(aDoc);
@@ -94,10 +95,10 @@ void ChartListenerCollectionTest::ListenerDoesNotGetNotifiedWhenListeningStops()
     sut.SetRangeDirty(RANGE_INTERSECTING_1_AND_2);
 
     CPPUNIT_ASSERT_EQUAL(0u, listener.mNotifyCount);
-
 }
 
-void ChartListenerCollectionTest::ListenerStopsListeningForAllRanges() {
+void ChartListenerCollectionTest::ListenerStopsListeningForAllRanges()
+{
     MockedHiddenRangeListener listener;
     ScDocument aDoc;
     ScChartListenerCollection sut(aDoc);
@@ -110,7 +111,8 @@ void ChartListenerCollectionTest::ListenerStopsListeningForAllRanges() {
     CPPUNIT_ASSERT_EQUAL(0u, listener.mNotifyCount);
 }
 
-void ChartListenerCollectionTest::ListenersStopListeningIndependently() {
+void ChartListenerCollectionTest::ListenersStopListeningIndependently()
+{
     MockedHiddenRangeListener listener1;
     MockedHiddenRangeListener listener2;
     ScDocument aDoc;
@@ -125,11 +127,9 @@ void ChartListenerCollectionTest::ListenersStopListeningIndependently() {
     CPPUNIT_ASSERT_EQUAL(0u, listener1.mNotifyCount);
     CPPUNIT_ASSERT_EQUAL(1u, listener2.mNotifyCount);
 }
-
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ChartListenerCollectionTest);
-
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

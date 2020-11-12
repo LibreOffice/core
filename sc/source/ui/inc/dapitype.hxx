@@ -57,11 +57,11 @@ public:
     ScDataPilotServiceDlg(weld::Window* pParent, const std::vector<OUString>& rServices);
     virtual ~ScDataPilotServiceDlg() override;
 
-    OUString  GetServiceName() const;
-    OUString  GetParSource() const;
-    OUString  GetParName() const;
-    OUString  GetParUser() const;
-    OUString  GetParPass() const;
+    OUString GetServiceName() const;
+    OUString GetParSource() const;
+    OUString GetParName() const;
+    OUString GetParUser() const;
+    OUString GetParPass() const;
 };
 
 #endif

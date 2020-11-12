@@ -21,7 +21,7 @@
 
 #include <delcldlg.hxx>
 
-static sal_uInt8 nDelItemChecked=0;
+static sal_uInt8 nDelItemChecked = 0;
 
 ScDeleteCellDlg::ScDeleteCellDlg(weld::Window* pParent, bool bDisallowCellMove)
     : GenericDialogController(pParent, "modules/scalc/ui/deletecells.ui", "DeleteCellsDialog")
@@ -68,32 +68,30 @@ ScDeleteCellDlg::ScDeleteCellDlg(weld::Window* pParent, bool bDisallowCellMove)
     }
 }
 
-ScDeleteCellDlg::~ScDeleteCellDlg()
-{
-}
+ScDeleteCellDlg::~ScDeleteCellDlg() {}
 
 DelCellCmd ScDeleteCellDlg::GetDelCellCmd() const
 {
     DelCellCmd nReturn = DelCellCmd::NONE;
 
-    if ( m_xBtnCellsUp->get_active()   )
+    if (m_xBtnCellsUp->get_active())
     {
-        nDelItemChecked=0;
+        nDelItemChecked = 0;
         nReturn = DelCellCmd::CellsUp;
     }
-    else if ( m_xBtnCellsLeft->get_active() )
+    else if (m_xBtnCellsLeft->get_active())
     {
-        nDelItemChecked=1;
+        nDelItemChecked = 1;
         nReturn = DelCellCmd::CellsLeft;
     }
-    else if ( m_xBtnDelRows->get_active()   )
+    else if (m_xBtnDelRows->get_active())
     {
-        nDelItemChecked=2;
+        nDelItemChecked = 2;
         nReturn = DelCellCmd::Rows;
     }
-    else if ( m_xBtnDelCols->get_active()   )
+    else if (m_xBtnDelCols->get_active())
     {
-        nDelItemChecked=3;
+        nDelItemChecked = 3;
         nReturn = DelCellCmd::Cols;
     }
 

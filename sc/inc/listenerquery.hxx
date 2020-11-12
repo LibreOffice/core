@@ -17,8 +17,8 @@
 #include <unordered_map>
 #include <vector>
 
-namespace sc {
-
+namespace sc
+{
 /**
  * Used to collect positions of formula cells that belong to a formula
  * group.
@@ -27,14 +27,14 @@ class RefQueryFormulaGroup final : public SvtListener::QueryBase
 {
 public:
     typedef std::vector<SCROW> ColType;
-    typedef std::unordered_map<SCCOL,ColType> ColsType;
-    typedef std::unordered_map<SCTAB,ColsType> TabsType;
+    typedef std::unordered_map<SCCOL, ColType> ColsType;
+    typedef std::unordered_map<SCTAB, ColsType> TabsType;
 
     RefQueryFormulaGroup();
     virtual ~RefQueryFormulaGroup() override;
 
-    void setSkipRange( const ScRange& rRange );
-    void add( const ScAddress& rPos );
+    void setSkipRange(const ScRange& rRange);
+    void add(const ScAddress& rPos);
 
     /**
      * Row positions in each column may contain duplicates.  Caller must
@@ -51,18 +51,17 @@ class QueryRange final : public SvtListener::QueryBase
 {
     ScRangeList maRanges;
 
-    QueryRange( const QueryRange& ) = delete;
-    QueryRange& operator= ( const QueryRange& ) = delete;
+    QueryRange(const QueryRange&) = delete;
+    QueryRange& operator=(const QueryRange&) = delete;
 
 public:
     QueryRange();
     virtual ~QueryRange() override;
 
-    void add( const ScRange& rRange );
+    void add(const ScRange& rRange);
 
-    void swapRanges( ScRangeList& rRanges );
+    void swapRanges(ScRangeList& rRanges);
 };
-
 }
 
 #endif

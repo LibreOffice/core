@@ -35,9 +35,9 @@ class ScRefFinder
     sal_Int32 mnSelEnd;
 
 public:
-    ScRefFinder(
-        const OUString& rFormula, const ScAddress& rPos, ScDocument& rDoc,
-        formula::FormulaGrammar::AddressConvention eConvP = formula::FormulaGrammar::CONV_OOO );
+    ScRefFinder(const OUString& rFormula, const ScAddress& rPos, ScDocument& rDoc,
+                formula::FormulaGrammar::AddressConvention eConvP
+                = formula::FormulaGrammar::CONV_OOO);
     ~ScRefFinder();
 
     const OUString& GetText() const { return maFormula; }
@@ -45,7 +45,7 @@ public:
     sal_Int32 GetSelStart() const { return mnSelStart; }
     sal_Int32 GetSelEnd() const { return mnSelEnd; }
 
-    void ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos );
+    void ToggleRel(sal_Int32 nStartPos, sal_Int32 nEndPos);
 };
 
 #endif

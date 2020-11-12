@@ -28,13 +28,15 @@
 class ScTpFormulaOptions : public SfxTabPage
 {
 public:
-    explicit ScTpFormulaOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);
-    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet);
+    explicit ScTpFormulaOptions(weld::Container* pPage, weld::DialogController* pController,
+                                const SfxItemSet& rCoreSet);
+    static std::unique_ptr<SfxTabPage>
+    Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet);
     virtual ~ScTpFormulaOptions() override;
 
     virtual bool FillItemSet(SfxItemSet* rCoreSet) override;
-    virtual void Reset( const SfxItemSet* rCoreSet ) override;
-    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet ) override;
+    virtual void Reset(const SfxItemSet* rCoreSet) override;
+    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
 
 private:
     void ResetSeparators();
@@ -44,12 +46,12 @@ private:
 
     bool IsValidSeparator(const OUString& rSep) const;
 
-    DECL_LINK( ButtonHdl, weld::Button&, void );
-    DECL_LINK( SepInsertTextHdl, OUString&, bool );
-    DECL_LINK( ColSepInsertTextHdl, OUString&, bool );
-    DECL_LINK( RowSepInsertTextHdl, OUString&, bool );
-    DECL_LINK( SepModifyHdl, weld::Entry&, void );
-    DECL_LINK( SepEditOnFocusHdl, weld::Widget&, void );
+    DECL_LINK(ButtonHdl, weld::Button&, void);
+    DECL_LINK(SepInsertTextHdl, OUString&, bool);
+    DECL_LINK(ColSepInsertTextHdl, OUString&, bool);
+    DECL_LINK(RowSepInsertTextHdl, OUString&, bool);
+    DECL_LINK(SepModifyHdl, weld::Entry&, void);
+    DECL_LINK(SepEditOnFocusHdl, weld::Widget&, void);
 
 private:
     /** Stores old separator value of currently focused separator edit box.

@@ -24,52 +24,54 @@
 #include <ooo/vba/excel/XFont.hpp>
 #include <vbahelper/vbafontbase.hxx>
 
-namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::beans
+{
+class XPropertySet;
+}
 
 class ScCellRangeObj;
 class SfxItemSet;
 class ScVbaPalette;
 
-typedef cppu::ImplInheritanceHelper< VbaFontBase, ov::excel::XFont > ScVbaFont_BASE;
+typedef cppu::ImplInheritanceHelper<VbaFontBase, ov::excel::XFont> ScVbaFont_BASE;
 
 class ScVbaFont : public ScVbaFont_BASE
 {
     ScCellRangeObj* mpRangeObj;
-    SfxItemSet*  GetDataSet();
+    SfxItemSet* GetDataSet();
+
 public:
     /// @throws css::uno::RuntimeException
-    ScVbaFont(
-        const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const ScVbaPalette& dPalette,
-        const css::uno::Reference< css::beans::XPropertySet >& xPropertySet,
-        ScCellRangeObj* pRangeObj = nullptr, bool bFormControl = false );
-    virtual ~ScVbaFont() override;// {}
+    ScVbaFont(const css::uno::Reference<ov::XHelperInterface>& xParent,
+              const css::uno::Reference<css::uno::XComponentContext>& xContext,
+              const ScVbaPalette& dPalette,
+              const css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
+              ScCellRangeObj* pRangeObj = nullptr, bool bFormControl = false);
+    virtual ~ScVbaFont() override; // {}
 
     // Attributes
     virtual css::uno::Any SAL_CALL getSize() override;
     virtual css::uno::Any SAL_CALL getStandardFontSize() override;
-    virtual void SAL_CALL setStandardFontSize( const css::uno::Any& _standardfontsize ) override;
+    virtual void SAL_CALL setStandardFontSize(const css::uno::Any& _standardfontsize) override;
     virtual css::uno::Any SAL_CALL getStandardFont() override;
-    virtual void SAL_CALL setStandardFont( const css::uno::Any& _standardfont ) override;
+    virtual void SAL_CALL setStandardFont(const css::uno::Any& _standardfont) override;
     virtual css::uno::Any SAL_CALL getFontStyle() override;
-    virtual void SAL_CALL setFontStyle( const css::uno::Any& _fontstyle ) override;
+    virtual void SAL_CALL setFontStyle(const css::uno::Any& _fontstyle) override;
     virtual css::uno::Any SAL_CALL getColorIndex() override;
-    virtual void SAL_CALL setColorIndex( const css::uno::Any& _colorindex ) override;
+    virtual void SAL_CALL setColorIndex(const css::uno::Any& _colorindex) override;
     virtual css::uno::Any SAL_CALL getBold() override;
     virtual css::uno::Any SAL_CALL getUnderline() override;
-    virtual void SAL_CALL setUnderline( const css::uno::Any& _underline ) override;
+    virtual void SAL_CALL setUnderline(const css::uno::Any& _underline) override;
     virtual css::uno::Any SAL_CALL getStrikethrough() override;
     virtual css::uno::Any SAL_CALL getShadow() override;
     virtual css::uno::Any SAL_CALL getItalic() override;
     virtual css::uno::Any SAL_CALL getName() override;
-    virtual css::uno::Any SAL_CALL getColor() override ;
-    virtual css::uno::Any SAL_CALL getOutlineFont() override ;
-    virtual void SAL_CALL setOutlineFont( const css::uno::Any& _outlinefont ) override ;
+    virtual css::uno::Any SAL_CALL getColor() override;
+    virtual css::uno::Any SAL_CALL getOutlineFont() override;
+    virtual void SAL_CALL setOutlineFont(const css::uno::Any& _outlinefont) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
-
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAFONT_HXX

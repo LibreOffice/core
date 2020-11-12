@@ -15,8 +15,8 @@
 #include <unordered_map>
 #include <vector>
 
-namespace sc {
-
+namespace sc
+{
 /**
  * Simple container to keep track of sheet - column pair.
  */
@@ -29,10 +29,9 @@ class ColumnSet
 public:
     void set(SCTAB nTab, SCCOL nCol);
     void getColumns(SCTAB nTab, std::vector<SCCOL>& rCols) const;
-    bool hasTab( SCTAB nTab ) const;
+    bool hasTab(SCTAB nTab) const;
     bool empty() const;
 };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

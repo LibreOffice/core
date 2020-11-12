@@ -21,13 +21,11 @@ class ScGridWinUIObject : public WindowUIObject
     VclPtr<ScGridWindow> mxGridWindow;
 
 public:
-
     ScGridWinUIObject(const VclPtr<ScGridWindow>& xGridWin);
 
     virtual StringMap get_state() override;
 
-    virtual void execute(const OUString& rAction,
-            const StringMap& rParameters) override;
+    virtual void execute(const OUString& rAction, const StringMap& rParameters) override;
 
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID) override;
 
@@ -36,11 +34,9 @@ public:
     virtual std::set<OUString> get_children() const override;
 
 protected:
-
     virtual OUString get_name() const override;
 
 private:
-
     ScDBFunc* getDBFunc();
     ScDrawView* getDrawView();
     ScTabViewShell* getViewShell();
@@ -54,16 +50,13 @@ class ScNavigatorDlgUIObject : public WindowUIObject
     VclPtr<ScNavigatorDlg> mxScNavigatorDlg;
 
 public:
-
     ScNavigatorDlgUIObject(const VclPtr<ScNavigatorDlg>& xScNavigatorDlg);
 
-    virtual void execute(const OUString& rAction,
-            const StringMap& rParameters) override;
+    virtual void execute(const OUString& rAction, const StringMap& rParameters) override;
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
-
     virtual OUString get_name() const override;
 };
 

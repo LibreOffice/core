@@ -30,11 +30,11 @@ public:
     ScPageObj(SdrPage* pPage);
     virtual ~ScPageObj() throw() override;
 
-    virtual css::uno::Reference<css::drawing::XShape> CreateShape(SdrObject *pObj) const override;
+    virtual css::uno::Reference<css::drawing::XShape> CreateShape(SdrObject* pObj) const override;
 
-                            // XServiceInfo
+    // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 

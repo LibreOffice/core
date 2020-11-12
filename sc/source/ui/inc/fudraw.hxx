@@ -27,13 +27,13 @@ enum class PointerStyle;
 /** Base class for all Drawmodule specific functions */
 class FuDraw : public FuPoor
 {
- protected:
+protected:
     PointerStyle aNewPointer;
     PointerStyle aOldPointer;
 
- public:
-    FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, const SfxRequest& rReq);
+public:
+    FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView, SdrModel* pDoc,
+           const SfxRequest& rReq);
     virtual ~FuDraw() override;
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
@@ -45,13 +45,13 @@ class FuDraw : public FuPoor
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     bool IsEditingANote() const;
-    bool IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
+    bool IsSizingOrMovingNote(const MouseEvent& rMEvt) const;
 
- private:
-    void    DoModifiers(const MouseEvent& rMEvt);
-    void    ResetModifiers();
+private:
+    void DoModifiers(const MouseEvent& rMEvt);
+    void ResetModifiers();
 };
 
-#endif      // _SD_FUDRAW_HXX
+#endif // _SD_FUDRAW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

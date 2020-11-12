@@ -23,25 +23,26 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 
-typedef CollTestImplHelper< ov::excel::XOLEObjects > OLEObjectsImpl_BASE;
+typedef CollTestImplHelper<ov::excel::XOLEObjects> OLEObjectsImpl_BASE;
 
 class ScVbaOLEObjects : public OLEObjectsImpl_BASE
 {
 protected:
-    virtual css::uno::Any getItemByStringIndex( const OUString& sIndex ) override;
+    virtual css::uno::Any getItemByStringIndex(const OUString& sIndex) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
+
 public:
-    ScVbaOLEObjects( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    ScVbaOLEObjects(const css::uno::Reference<ov::XHelperInterface>& xParent,
+                    const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                    const css::uno::Reference<css::container::XIndexAccess>& xIndexAccess);
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
 
     // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
-
+    virtual css::uno::Any createCollectionObject(const css::uno::Any& aSource) override;
 };
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECTS_HXX
 

@@ -15,7 +15,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 
-class ScExcelBiffDetect : public cppu::WeakImplHelper<css::document::XExtendedFilterDetection, css::lang::XServiceInfo>
+class ScExcelBiffDetect
+    : public cppu::WeakImplHelper<css::document::XExtendedFilterDetection, css::lang::XServiceInfo>
 {
 public:
     explicit ScExcelBiffDetect();
@@ -23,11 +24,12 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& aName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( css::uno::Sequence<css::beans::PropertyValue>& lDescriptor ) override;
+    virtual OUString SAL_CALL
+    detect(css::uno::Sequence<css::beans::PropertyValue>& lDescriptor) override;
 };
 
 #endif
