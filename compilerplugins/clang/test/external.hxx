@@ -11,10 +11,9 @@
 
 extern int n0;
 
-namespace N {
-
+namespace N
+{
 extern int v1;
-
 }
 
 struct S;

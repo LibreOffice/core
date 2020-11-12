@@ -19,9 +19,10 @@ int main()
     css::uno::Any b;
     a = b;
     a = getAny();
-    a = css::uno::makeAny(true); // expected-error {{unnecessary copy, rather use <<= operator directly with the 'makeAny' argument [loplugin:unoany]}}
-    a = css::uno::Any(true); // expected-error {{unnecessary copy, rather use <<= operator directly with the 'Any' constructor argument [loplugin:unoany]}}
+    a = css::uno::makeAny(
+        true); // expected-error {{unnecessary copy, rather use <<= operator directly with the 'makeAny' argument [loplugin:unoany]}}
+    a = css::uno::Any(
+        true); // expected-error {{unnecessary copy, rather use <<= operator directly with the 'Any' constructor argument [loplugin:unoany]}}
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

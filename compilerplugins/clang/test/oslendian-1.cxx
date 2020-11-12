@@ -24,24 +24,24 @@
 
 #if !defined OSL_BIGENDIAN
 #define OSL_BIGENDIAN
-    // expected-error@-1 {{macro 'OSL_BIGENDIAN' defined in addition to 'OSL_LITENDIAN' [loplugin:oslendian]}}
-    // expected-note@osl/endian.h:* {{conflicting macro definition is here [loplugin:oslendian]}}
+// expected-error@-1 {{macro 'OSL_BIGENDIAN' defined in addition to 'OSL_LITENDIAN' [loplugin:oslendian]}}
+// expected-note@osl/endian.h:* {{conflicting macro definition is here [loplugin:oslendian]}}
 #endif
 
 #if !defined OSL_LITENDIAN
 #define OSL_LITENDIAN
-    // expected-error@-1 {{macro 'OSL_LITENDIAN' defined in addition to 'OSL_BIGENDIAN' [loplugin:oslendian]}}
-    // expected-note@osl/endian.h:* {{conflicting macro definition is here [loplugin:oslendian]}}
+// expected-error@-1 {{macro 'OSL_LITENDIAN' defined in addition to 'OSL_BIGENDIAN' [loplugin:oslendian]}}
+// expected-note@osl/endian.h:* {{conflicting macro definition is here [loplugin:oslendian]}}
 #endif
 
 #if defined OSL_BIGENDIAN
 #undef OSL_BIGENDIAN
-    // expected-error@-1 {{macro 'OSL_BIGENDIAN' undefinition [loplugin:oslendian]}}
+// expected-error@-1 {{macro 'OSL_BIGENDIAN' undefinition [loplugin:oslendian]}}
 #endif
 
 #if defined OSL_LITENDIAN
 #undef OSL_LITENDIAN
-    // expected-error@-1 {{macro 'OSL_LITENDIAN' undefinition [loplugin:oslendian]}}
+// expected-error@-1 {{macro 'OSL_LITENDIAN' undefinition [loplugin:oslendian]}}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

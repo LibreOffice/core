@@ -11,11 +11,13 @@
 
 #include <config_clang.h>
 
-struct Bar {
+struct Bar
+{
     int x; // expected-note {{superclass member here [loplugin:datamembershadow]}}
 };
 
-struct Foo : public Bar {
+struct Foo : public Bar
+{
     int x; // expected-error {{data member x is shadowing member in superclass, through inheritance path Foo->Bar [loplugin:datamembershadow]}}
 };
 
