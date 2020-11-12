@@ -542,8 +542,8 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         {
                             double fRadiusX((nHor * 2.0) / (aRange.getWidth() > 0.0 ? aRange.getWidth() : 1.0));
                             double fRadiusY((nVer * 2.0) / (aRange.getHeight() > 0.0 ? aRange.getHeight() : 1.0));
-                            fRadiusX = std::max(0.0, std::min(1.0, fRadiusX));
-                            fRadiusY = std::max(0.0, std::min(1.0, fRadiusY));
+                            fRadiusX = std::clamp(fRadiusX, 0.0, 1.0);
+                            fRadiusY = std::clamp(fRadiusY, 0.0, 1.0);
 
                             aOutline = basegfx::utils::createPolygonFromRect(aRange, fRadiusX, fRadiusY);
                         }

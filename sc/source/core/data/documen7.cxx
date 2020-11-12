@@ -106,8 +106,8 @@ bool ScDocument::LimitRangeToAvailableSheets( const ScRange& rRange, ScRange& o_
 
     // Limit the sheet range to bounds.
     o_bEntirelyOutOfBounds = false;
-    nTab1 = std::max<SCTAB>( 0, std::min( nMaxTab, nTab1));
-    nTab2 = std::max<SCTAB>( 0, std::min( nMaxTab, nTab2));
+    nTab1 = std::clamp<SCTAB>( nTab1, 0, nMaxTab);
+    nTab2 = std::clamp<SCTAB>( nTab2, 0, nMaxTab);
     o_rRange = rRange;
     o_rRange.aStart.SetTab(nTab1);
     o_rRange.aEnd.SetTab(nTab2);

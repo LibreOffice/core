@@ -432,7 +432,7 @@ bool ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
         if( mbTracking )
         {
             // on mouse tracking: keep position valid
-            nPos = std::max( std::min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 1 ) );
+            nPos = std::clamp( nPos, sal_Int32(1), GetPosCount() - 1 );
             MoveMouseTracking( nPos );
         }
         else

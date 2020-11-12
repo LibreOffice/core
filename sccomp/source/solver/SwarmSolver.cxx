@@ -373,7 +373,7 @@ void SwarmSolver::initializeVariables(std::vector<double>& rVariables, std::mt19
 double SwarmSolver::clampVariable(size_t nVarIndex, double fValue)
 {
     Bound const& rBound = maBounds[nVarIndex];
-    double fResult = std::max(std::min(fValue, rBound.upper), rBound.lower);
+    double fResult = std::clamp(fValue, rBound.lower, rBound.upper);
 
     if (mbInteger)
         return std::trunc(fResult);

@@ -288,7 +288,7 @@ void doubleToString(typename T::String ** pResult,
             if (nDecPlaces == rtl_math_DecimalPlaces_Max)
                 nDecPlaces = 0;
             else
-                nDecPlaces = ::std::max< sal_Int32 >(::std::min<sal_Int32>(nDecPlaces, 15), -15);
+                nDecPlaces = ::std::clamp< sal_Int32 >(nDecPlaces, -15, 15);
 
             if (bEraseTrailingDecZeros && nDecPlaces > 0)
                 nDecPlaces = 0;
@@ -437,7 +437,7 @@ void doubleToString(typename T::String ** pResult,
     // rtl_math_DecimalPlaces_Max was passed with rtl_math_StringFormat_F or
     // others, but we don't want to allocate/deallocate 2GB just to fill it
     // with trailing '0' characters..
-    nDecPlaces = std::max<sal_Int32>(std::min<sal_Int32>(nDecPlaces, 20), -20);
+    nDecPlaces = std::clamp<sal_Int32>(nDecPlaces, -20, 20);
 
     sal_Int32 nDigits = nDecPlaces + 1;
 

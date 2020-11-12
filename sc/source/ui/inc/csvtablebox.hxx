@@ -92,10 +92,10 @@ private:
 
     /** Calculates and sets valid position offset nearest to nPos. */
     SAL_DLLPRIVATE void                 ImplSetPosOffset( sal_Int32 nPos )
-                                    { maData.mnPosOffset = std::max( std::min( nPos, mxGrid->GetMaxPosOffset() ), sal_Int32( 0 ) ); }
+                                    { maData.mnPosOffset = std::clamp( nPos, sal_Int32(0), mxGrid->GetMaxPosOffset() ); }
     /** Calculates and sets valid line offset nearest to nLine. */
     SAL_DLLPRIVATE void                 ImplSetLineOffset( sal_Int32 nLine )
-                                    { maData.mnLineOffset = std::max( std::min( nLine, mxGrid->GetMaxLineOffset() ), sal_Int32( 0 ) ); }
+                                    { maData.mnLineOffset = std::clamp( nLine, sal_Int32(0), mxGrid->GetMaxLineOffset() ); }
     /** Moves controls (not cursors!) so that nPos becomes visible. */
     SAL_DLLPRIVATE void                        MakePosVisible( sal_Int32 nPos );
 
