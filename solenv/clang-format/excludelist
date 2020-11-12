@@ -11836,7 +11836,6 @@ sot/qa/cppunit/test_sot.cxx
 sot/source/base/exchange.cxx
 sot/source/base/filelist.cxx
 sot/source/base/formats.cxx
-sot/source/base/object.cxx
 sot/source/sdstor/stg.cxx
 sot/source/sdstor/stgavl.cxx
 sot/source/sdstor/stgavl.hxx
