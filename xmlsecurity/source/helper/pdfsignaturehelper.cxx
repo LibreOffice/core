@@ -35,6 +35,9 @@
 #include <svl/cryptosign.hxx>
 #include <config_features.h>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#if HAVE_FEATURE_PDFIUM
+#include <fpdf_signature.h>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -116,82 +119,91 @@ void GetSignatureLineShape(const uno::Reference<frame::XModel>& xModel, sal_Int3
     aStream.ReadBytes(rSignatureLineShape.data(), rSignatureLineShape.size());
 }
 
+#if HAVE_FEATURE_PDFIUM
+/// Represents a parsed signature.
+struct Signature
+{
+    FPDF_SIGNATURE m_pSignature;
+    /// Offset+length pairs.
+    std::vector<std::pair<size_t, size_t>> m_aByteRanges;
+};
+
 /// Turns an array of floats into offset + length pairs.
-bool GetByteRangesFromPDF(const vcl::filter::PDFArrayElement& rArray,
+void GetByteRangesFromPDF(FPDF_SIGNATURE pSignature,
                           std::vector<std::pair<size_t, size_t>>& rByteRanges)
 {
-    size_t nByteRangeOffset = 0;
-    const std::vector<vcl::filter::PDFElement*>& rByteRangeElements = rArray.GetElements();
-    for (size_t i = 0; i < rByteRangeElements.size(); ++i)
+    int nByteRangeLen = FPDFSignatureObj_GetByteRange(pSignature, nullptr, 0);
+    if (nByteRangeLen <= 0)
     {
-        auto pNumber = dynamic_cast<vcl::filter::PDFNumberElement*>(rByteRangeElements[i]);
-        if (!pNumber)
-        {
-            SAL_WARN("xmlsecurity.helper",
-                     "ValidateSignature: signature offset and length has to be a number");
-            return false;
-        }
-
-        if (i % 2 == 0)
-        {
-            nByteRangeOffset = pNumber->GetValue();
-            continue;
-        }
-        size_t nByteRangeLength = pNumber->GetValue();
-        rByteRanges.emplace_back(nByteRangeOffset, nByteRangeLength);
+        SAL_WARN("xmlsecurity.helper", "GetByteRangesFromPDF: no byte ranges");
+        return;
     }
 
-    return true;
+    std::vector<int> aByteRange(nByteRangeLen);
+    FPDFSignatureObj_GetByteRange(pSignature, aByteRange.data(), aByteRange.size());
+
+    size_t nByteRangeOffset = 0;
+    for (size_t i = 0; i < aByteRange.size(); ++i)
+    {
+        if (i % 2 == 0)
+        {
+            nByteRangeOffset = aByteRange[i];
+            continue;
+        }
+
+        size_t nLength = aByteRange[i];
+        rByteRanges.emplace_back(nByteRangeOffset, nLength);
+    }
 }
 
 /// Determines the last position that is covered by a signature.
-bool GetEOFOfSignature(vcl::filter::PDFObjectElement* pSignature, size_t& rEOF)
+bool GetEOFOfSignature(const Signature& rSignature, size_t& rEOF)
 {
-    vcl::filter::PDFObjectElement* pValue = pSignature->LookupObject("V");
-    if (!pValue)
+    if (rSignature.m_aByteRanges.size() < 2)
     {
         return false;
     }
 
-    auto pByteRange = dynamic_cast<vcl::filter::PDFArrayElement*>(pValue->Lookup("ByteRange"));
-    if (!pByteRange || pByteRange->GetElements().size() < 2)
-    {
-        return false;
-    }
-
-    std::vector<std::pair<size_t, size_t>> aByteRanges;
-    if (!GetByteRangesFromPDF(*pByteRange, aByteRanges))
-    {
-        return false;
-    }
-
-    rEOF = aByteRanges[1].first + aByteRanges[1].second;
+    rEOF = rSignature.m_aByteRanges[1].first + rSignature.m_aByteRanges[1].second;
     return true;
 }
 
-/// Checks if there are unsigned incremental updates between the signatures or after the last one.
-bool IsCompleteSignature(SvStream& rStream, vcl::filter::PDFDocument& rDocument,
-                         vcl::filter::PDFObjectElement* pSignature)
+/**
+ * Get the value of the "modification detection and prevention" permission:
+ * Valid values are 1, 2 and 3: only 3 allows annotations after signing.
+ */
+int GetMDPPerm(const std::vector<Signature>& rSignatures)
 {
-    std::set<size_t> aSignedEOFs;
-    for (const auto& i : rDocument.GetSignatureWidgets())
-    {
-        size_t nEOF = 0;
-        if (!GetEOFOfSignature(i, nEOF))
-        {
-            return false;
-        }
+    int nRet = 3;
 
-        aSignedEOFs.insert(nEOF);
+    if (rSignatures.empty())
+    {
+        return nRet;
     }
 
+    for (const auto& rSignature : rSignatures)
+    {
+        int nPerm = FPDFSignatureObj_GetDocMDPPermission(rSignature.m_pSignature);
+        if (nPerm != 0)
+        {
+            return nPerm;
+        }
+    }
+
+    return nRet;
+}
+
+/// Checks if there are unsigned incremental updates between the signatures or after the last one.
+bool IsCompleteSignature(SvStream& rStream, const Signature& rSignature,
+                         const std::set<unsigned int>& rSignedEOFs,
+                         const std::vector<unsigned int>& rAllEOFs)
+{
     size_t nSignatureEOF = 0;
-    if (!GetEOFOfSignature(pSignature, nSignatureEOF))
+    if (!GetEOFOfSignature(rSignature, nSignatureEOF))
     {
         return false;
     }
 
-    const std::vector<size_t>& rAllEOFs = rDocument.GetEOFs();
     bool bFoundOwn = false;
     for (const auto& rEOF : rAllEOFs)
     {
@@ -206,7 +218,7 @@ bool IsCompleteSignature(SvStream& rStream, vcl::filter::PDFDocument& rDocument,
             continue;
         }
 
-        if (aSignedEOFs.find(rEOF) == aSignedEOFs.end())
+        if (rSignedEOFs.find(rEOF) == rSignedEOFs.end())
         {
             // Unsigned incremental update found.
             return false;
@@ -224,8 +236,6 @@ bool IsCompleteSignature(SvStream& rStream, vcl::filter::PDFDocument& rDocument,
     size_t nFileEnd = rStream.Tell();
     return std::find(rAllEOFs.begin(), rAllEOFs.end(), nFileEnd) != rAllEOFs.end();
 }
-
-#if HAVE_FEATURE_PDFIUM
 
 /**
  * Contains checksums of a PDF page, which is rendered without annotations. It also contains
@@ -290,21 +300,19 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<PageChecksum>&
         rPageChecksums.push_back(aPageChecksum);
     }
 }
-#endif
 
 /**
  * Checks if incremental updates after singing performed valid modifications only.
  * nMDPPerm decides if annotations/commenting is OK, other changes are always not.
  */
-bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature, int nMDPPerm)
+bool IsValidSignature(SvStream& rStream, const Signature& rSignature, int nMDPPerm)
 {
     size_t nSignatureEOF = 0;
-    if (!GetEOFOfSignature(pSignature, nSignatureEOF))
+    if (!GetEOFOfSignature(rSignature, nSignatureEOF))
     {
         return false;
     }
 
-#if HAVE_FEATURE_PDFIUM
     SvMemoryStream aSignatureStream;
     sal_uInt64 nPos = rStream.Tell();
     rStream.Seek(0);
@@ -326,11 +334,6 @@ bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignatu
     // Fail if any page looks different after signing and at the end. Annotations/commenting doesn't
     // count, though.
     return aSignedPages == aAllPages;
-#else
-    (void)rStream;
-    (void)nMDPPerm;
-    return true;
-#endif
 }
 
 /**
@@ -338,116 +341,92 @@ bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignatu
  * @param rDocument the parsed document to see if the signature is partial.
  * @return If we can determinate a result.
  */
-bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature,
-                       SignatureInformation& rInformation, vcl::filter::PDFDocument& rDocument,
-                       int nMDPPerm)
+bool ValidateSignature(SvStream& rStream, const Signature& rSignature,
+                       SignatureInformation& rInformation, int nMDPPerm,
+                       const std::set<unsigned int>& rSignatureEOFs,
+                       const std::vector<unsigned int>& rTrailerEnds)
 {
-    vcl::filter::PDFObjectElement* pValue = pSignature->LookupObject("V");
-    if (!pValue)
-    {
-        SAL_WARN("xmlsecurity.helper", "ValidateSignature: no value");
-        return false;
-    }
-
-    auto pContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(pValue->Lookup("Contents"));
-    if (!pContents)
+    int nContentsLen = FPDFSignatureObj_GetContents(rSignature.m_pSignature, nullptr, 0);
+    if (nContentsLen <= 0)
     {
         SAL_WARN("xmlsecurity.helper", "ValidateSignature: no contents");
         return false;
     }
+    std::vector<unsigned char> aContents(nContentsLen);
+    FPDFSignatureObj_GetContents(rSignature.m_pSignature, aContents.data(), aContents.size());
 
-    auto pByteRange = dynamic_cast<vcl::filter::PDFArrayElement*>(pValue->Lookup("ByteRange"));
-    if (!pByteRange || pByteRange->GetElements().size() < 2)
-    {
-        SAL_WARN("xmlsecurity.helper", "ValidateSignature: no byte range or too few elements");
-        return false;
-    }
+    int nSubFilterLen = FPDFSignatureObj_GetSubFilter(rSignature.m_pSignature, nullptr, 0);
+    std::vector<char> aSubFilterBuf(nSubFilterLen);
+    FPDFSignatureObj_GetSubFilter(rSignature.m_pSignature, aSubFilterBuf.data(),
+                                  aSubFilterBuf.size());
+    // Buffer is NUL-terminated.
+    OString aSubFilter(aSubFilterBuf.data(), aSubFilterBuf.size() - 1);
 
-    auto pSubFilter = dynamic_cast<vcl::filter::PDFNameElement*>(pValue->Lookup("SubFilter"));
-    const bool bNonDetached = pSubFilter && pSubFilter->GetValue() == "adbe.pkcs7.sha1";
-    if (!pSubFilter
-        || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && !bNonDetached
-            && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
+    const bool bNonDetached = aSubFilter == "adbe.pkcs7.sha1";
+    if (aSubFilter.isEmpty()
+        || (aSubFilter != "adbe.pkcs7.detached" && !bNonDetached
+            && aSubFilter != "ETSI.CAdES.detached"))
     {
-        if (!pSubFilter)
+        if (aSubFilter.isEmpty())
             SAL_WARN("xmlsecurity.helper", "ValidateSignature: missing sub-filter");
         else
-            SAL_WARN("xmlsecurity.helper", "ValidateSignature: unsupported sub-filter: '"
-                                               << pSubFilter->GetValue() << "'");
+            SAL_WARN("xmlsecurity.helper",
+                     "ValidateSignature: unsupported sub-filter: '" << aSubFilter << "'");
         return false;
     }
 
     // Reason / comment / description is optional.
-    auto pReason = dynamic_cast<vcl::filter::PDFHexStringElement*>(pValue->Lookup("Reason"));
-    if (pReason)
+    int nReasonLen = FPDFSignatureObj_GetReason(rSignature.m_pSignature, nullptr, 0);
+    if (nReasonLen > 0)
     {
-        // See appendUnicodeTextString() for the export equivalent of this.
-        std::vector<unsigned char> aReason = vcl::filter::PDFDocument::DecodeHexString(pReason);
-        OUStringBuffer aBuffer;
-        sal_uInt16 nByte = 0;
-        for (size_t i = 0; i < aReason.size(); ++i)
-        {
-            if (i % 2 == 0)
-                nByte = aReason[i];
-            else
-            {
-                sal_Unicode nUnicode;
-                nUnicode = (nByte << 8);
-                nUnicode |= aReason[i];
-                aBuffer.append(nUnicode);
-            }
-        }
-
-        if (!aBuffer.isEmpty())
-            rInformation.ouDescription = aBuffer.makeStringAndClear();
+        std::vector<char16_t> aReasonBuf(nReasonLen);
+        FPDFSignatureObj_GetReason(rSignature.m_pSignature, aReasonBuf.data(), aReasonBuf.size());
+        rInformation.ouDescription = OUString(aReasonBuf.data(), aReasonBuf.size() - 1);
     }
 
     // Date: used only when the time of signing is not available in the
     // signature.
-    auto pM = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pValue->Lookup("M"));
-    if (pM)
+    int nTimeLen = FPDFSignatureObj_GetTime(rSignature.m_pSignature, nullptr, 0);
+    if (nTimeLen > 0)
     {
         // Example: "D:20161027100104".
-        const OString& rM = pM->GetValue();
-        if (rM.startsWith("D:") && rM.getLength() >= 16)
+        std::vector<char> aTimeBuf(nTimeLen);
+        FPDFSignatureObj_GetTime(rSignature.m_pSignature, aTimeBuf.data(), aTimeBuf.size());
+        OString aM(aTimeBuf.data(), aTimeBuf.size() - 1);
+        if (aM.startsWith("D:") && aM.getLength() >= 16)
         {
-            rInformation.stDateTime.Year = rM.copy(2, 4).toInt32();
-            rInformation.stDateTime.Month = rM.copy(6, 2).toInt32();
-            rInformation.stDateTime.Day = rM.copy(8, 2).toInt32();
-            rInformation.stDateTime.Hours = rM.copy(10, 2).toInt32();
-            rInformation.stDateTime.Minutes = rM.copy(12, 2).toInt32();
-            rInformation.stDateTime.Seconds = rM.copy(14, 2).toInt32();
+            rInformation.stDateTime.Year = aM.copy(2, 4).toInt32();
+            rInformation.stDateTime.Month = aM.copy(6, 2).toInt32();
+            rInformation.stDateTime.Day = aM.copy(8, 2).toInt32();
+            rInformation.stDateTime.Hours = aM.copy(10, 2).toInt32();
+            rInformation.stDateTime.Minutes = aM.copy(12, 2).toInt32();
+            rInformation.stDateTime.Seconds = aM.copy(14, 2).toInt32();
         }
     }
 
-    // Build a list of offset-length pairs, representing the signed bytes.
-    std::vector<std::pair<size_t, size_t>> aByteRanges;
-    if (!GetByteRangesFromPDF(*pByteRange, aByteRanges))
-    {
-        return false;
-    }
-
     // Detect if the byte ranges don't cover everything, but the signature itself.
-    if (aByteRanges.size() < 2)
+    if (rSignature.m_aByteRanges.size() < 2)
     {
         SAL_WARN("xmlsecurity.helper", "ValidateSignature: expected 2 byte ranges");
         return false;
     }
-    if (aByteRanges[0].first != 0)
+    if (rSignature.m_aByteRanges[0].first != 0)
     {
         SAL_WARN("xmlsecurity.helper", "ValidateSignature: first range start is not 0");
         return false;
     }
-    // 2 is the leading "<" and the trailing ">" around the hex string.
-    size_t nSignatureLength = static_cast<size_t>(pContents->GetValue().getLength()) + 2;
-    if (aByteRanges[1].first != (aByteRanges[0].second + nSignatureLength))
+    // Binary vs hex dump and 2 is the leading "<" and the trailing ">" around the hex string.
+    size_t nSignatureLength = aContents.size() * 2 + 2;
+    if (rSignature.m_aByteRanges[1].first
+        != (rSignature.m_aByteRanges[0].second + nSignatureLength))
     {
         SAL_WARN("xmlsecurity.helper",
                  "ValidateSignature: second range start is not the end of the signature");
         return false;
     }
-    rInformation.bPartialDocumentSignature = !IsCompleteSignature(rStream, rDocument, pSignature);
-    if (!IsValidSignature(rStream, pSignature, nMDPPerm))
+    rInformation.bPartialDocumentSignature
+        = !IsCompleteSignature(rStream, rSignature, rSignatureEOFs, rTrailerEnds);
+    if (!IsValidSignature(rStream, rSignature, nMDPPerm))
     {
         SAL_WARN("xmlsecurity.helper", "ValidateSignature: invalid incremental update detected");
         return false;
@@ -455,16 +434,10 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
 
     // At this point there is no obviously missing info to validate the
     // signature.
-    std::vector<unsigned char> aSignature = vcl::filter::PDFDocument::DecodeHexString(pContents);
-    if (aSignature.empty())
-    {
-        SAL_WARN("xmlsecurity.helper", "ValidateSignature: empty contents");
-        return false;
-    }
-
-    return svl::crypto::Signing::Verify(rStream, aByteRanges, bNonDetached, aSignature,
+    return svl::crypto::Signing::Verify(rStream, rSignature.m_aByteRanges, bNonDetached, aContents,
                                         rInformation);
 }
+#endif
 }
 
 PDFSignatureHelper::PDFSignatureHelper() = default;
@@ -484,30 +457,68 @@ bool PDFSignatureHelper::ReadAndVerifySignature(
 
 bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
 {
-    vcl::filter::PDFDocument aDocument;
-    if (!aDocument.Read(rStream))
+#if HAVE_FEATURE_PDFIUM
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    SvMemoryStream aStream;
+    sal_uInt64 nPos = rStream.Tell();
+    rStream.Seek(0);
+    aStream.WriteStream(rStream);
+    rStream.Seek(nPos);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPdfium->openDocument(aStream.GetData(), aStream.GetSize());
+    if (!pPdfDocument)
     {
         SAL_WARN("xmlsecurity.helper", "failed to read the document");
         return false;
     }
 
-    std::vector<vcl::filter::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
-    if (aSignatures.empty())
+    int nSignatureCount = FPDF_GetSignatureCount(pPdfDocument->getPointer());
+    if (nSignatureCount <= 0)
+    {
         return true;
+    }
+    std::vector<Signature> aSignatures(nSignatureCount);
+    for (int i = 0; i < nSignatureCount; ++i)
+    {
+        FPDF_SIGNATURE pSignature = FPDF_GetSignatureObject(pPdfDocument->getPointer(), i);
+        std::vector<std::pair<size_t, size_t>> aByteRanges;
+        GetByteRangesFromPDF(pSignature, aByteRanges);
+        aSignatures[i] = Signature{ pSignature, aByteRanges };
+    }
+
+    std::set<unsigned int> aSignatureEOFs;
+    for (const auto& rSignature : aSignatures)
+    {
+        size_t nEOF = 0;
+        if (GetEOFOfSignature(rSignature, nEOF))
+        {
+            aSignatureEOFs.insert(nEOF);
+        }
+    }
+
+    int nNumTrailers = FPDF_GetTrailerEnds(pPdfDocument->getPointer(), nullptr, 0);
+    std::vector<unsigned int> aTrailerEnds(nNumTrailers);
+    FPDF_GetTrailerEnds(pPdfDocument->getPointer(), aTrailerEnds.data(), aTrailerEnds.size());
 
     m_aSignatureInfos.clear();
 
-    int nMDPPerm = aDocument.GetMDPPerm();
+    int nMDPPerm = GetMDPPerm(aSignatures);
 
     for (size_t i = 0; i < aSignatures.size(); ++i)
     {
         SignatureInformation aInfo(i);
 
-        if (!ValidateSignature(rStream, aSignatures[i], aInfo, aDocument, nMDPPerm))
+        if (!ValidateSignature(rStream, aSignatures[i], aInfo, nMDPPerm, aSignatureEOFs,
+                               aTrailerEnds))
+        {
             SAL_WARN("xmlsecurity.helper", "failed to determine digest match");
+        }
 
         m_aSignatureInfos.push_back(aInfo);
     }
+#else
+    (void)rStream;
+#endif
 
     return true;
 }
