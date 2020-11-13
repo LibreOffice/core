@@ -3507,6 +3507,12 @@ namespace
             return vcl::KeyCode(KEY_RIGHT, bShift, bMod1, bMod2, bMod3);
         else if (rKey.first == "asterisk")
             return vcl::KeyCode(KEY_MULTIPLY, bShift, bMod1, bMod2, bMod3);
+        else if (rKey.first.getLength() > 1 && rKey.first[0] == 'F')
+        {
+            sal_uInt32 nIndex = rKey.first.copy(1).toUInt32();
+            assert(nIndex >= 1 && nIndex <= 26);
+            return vcl::KeyCode(KEY_F1 + nIndex - 1, bShift, bMod1, bMod2, bMod3);
+        }
 
         assert (rKey.first.getLength() == 1);
         char cChar = rKey.first.toChar();
