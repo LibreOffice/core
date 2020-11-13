@@ -1,0 +1,180 @@
+Revert "Backported CORE-5764"
+
+Installation of Firebird 3.0.3 on SLES 12 SP3 fails with
+"Could not find acceptable ICU library". Happens also on
+MacOS, so maybe this revert fixes this...
+  
+This reverts commit 4df43606a293ff3a9a6883a638b4559375449055.
+
+reverted:
+--- b/src/common/unicode_util.cpp
++++ a/src/common/unicode_util.cpp
+@@ -50,6 +50,9 @@
+ #	include <unicode/utf_old.h>
+ #endif
+ 
++// The next major ICU version after 4.8 is 49.
++#define ICU_NEW_VERSION_MEANING	49
++
+ 
+ using namespace Firebird;
+ 
+@@ -119,7 +122,7 @@
+ 
+ namespace Jrd {
+ 
++static void formatFilename(PathName& filename, const char* templateName,
+-static ModuleLoader::Module* formatAndLoad(const char* templateName,
+ 	int majorVersion, int minorVersion);
+ 
+ 
+@@ -227,7 +230,10 @@
+ 	ImplementConversionICU(int aMajorVersion, int aMinorVersion)
+ 		: BaseICU(aMajorVersion, aMinorVersion)
+ 	{
++		PathName filename;
++		formatFilename(filename, ucTemplate, aMajorVersion, aMinorVersion);
++
++		module = ModuleLoader::fixAndLoadModule(NULL, filename);
+-		module = formatAndLoad(ucTemplate, aMajorVersion, aMinorVersion);
+ 		if (!module)
+ 			return;
+ 
+@@ -337,27 +343,16 @@
+ static GlobalPtr<UnicodeUtil::ICUModules> icuModules;
+ 
+ 
++static void formatFilename(PathName& filename, const char* templateName,
+-static ModuleLoader::Module* formatAndLoad(const char* templateName,
+ 	int majorVersion, int minorVersion)
+ {
++	string s;
++	if (majorVersion >= ICU_NEW_VERSION_MEANING)
++		s.printf("%d", majorVersion);
++	else
++		s.printf("%d%d", majorVersion, minorVersion);
+-	// ICU has several schemas for placing version into file name
+-	const char* patterns[] =
+-	{
+-		"%d", "%d_%d", "%d%d", NULL
+-	};
+-
+-	PathName s, filename;
+-	for (const char** p = patterns; *p; ++p)
+-	{
+-		s.printf(*p, majorVersion, minorVersion);
+-		filename.printf(templateName, s.c_str());
+ 
++	filename.printf(templateName, s.c_str());
+-		ModuleLoader::Module* module = ModuleLoader::fixAndLoadModule(NULL, filename);
+-		if (module)
+-			return module;
+-	}
+-
+-	return NULL;
+ }
+ 
+ 
+@@ -980,14 +975,17 @@
+ 			continue;
+ 
+ 		string configVersion;
++
++		if (majorVersion >= ICU_NEW_VERSION_MEANING)
+-		configVersion.printf("%d.%d", majorVersion, minorVersion);
+-		if (version != configVersion)
+ 		{
+ 			minorVersion = 0;
+ 			configVersion.printf("%d", majorVersion);
+-			if (version != configVersion)
+-				continue;
+ 		}
++		else
++			configVersion.printf("%d.%d", majorVersion, minorVersion);
++
++		if (version != configVersion)
++			continue;
+ 
+ 		ReadLockGuard readGuard(icuModules->lock, "UnicodeUtil::loadICU");
+ 
+@@ -995,19 +993,27 @@
+ 		if (icuModules->modules.get(version, icu))
+ 			return icu;
+ 
++		PathName filename;
++		formatFilename(filename, ucTemplate, majorVersion, minorVersion);
++
+ 		icu = FB_NEW_POOL(*getDefaultMemoryPool()) ICU(majorVersion, minorVersion);
++
++		icu->ucModule = ModuleLoader::fixAndLoadModule(NULL, filename);
++
+-		icu->ucModule = formatAndLoad(ucTemplate, majorVersion, minorVersion);
+ 		if (!icu->ucModule)
+ 		{
++			gds__log("failed to load module %s", filename.c_str());
+-			gds__log("failed to load UC icu module version %s", configVersion.c_str());
+ 			delete icu;
+ 			continue;
+ 		}
+ 
++		formatFilename(filename, inTemplate, majorVersion, minorVersion);
++
++		icu->inModule = ModuleLoader::fixAndLoadModule(NULL, filename);
++
+-		icu->inModule = formatAndLoad(inTemplate, majorVersion, minorVersion);
+ 		if (!icu->inModule)
+ 		{
++			gds__log("failed to load module %s", filename.c_str());
+-			gds__log("failed to load IN icu module version %s", configVersion.c_str());
+ 			delete icu;
+ 			continue;
+ 		}
+@@ -1132,25 +1138,26 @@
+ 	LocalStatus ls;
+ 	CheckStatusWrapper lastError(&ls);
+ 	string version;
++	const int majorArray[] = {5, 4, 3, 6, 0};
+ 
++	for (const int* major = majorArray; *major; ++major)
+-	for (int major = 4; major <= 79; ++major)
+ 	{
+ 		for (int minor = 20; minor--; ) // from 19 down to 0
+ 		{
++			if ((*major == favMaj) && (minor == favMin))
+-			if ((major == favMaj) && (minor == favMin))
+ 			{
+ 				continue;
+ 			}
+ 
+ 			try
+ 			{
++				if ((convIcu = ImplementConversionICU::create(*major, minor)))
+-				if ((convIcu = ImplementConversionICU::create(major, minor)))
+ 					return *convIcu;
+ 			}
+ 			catch (const Exception& ex)
+ 			{
+ 				ex.stuffException(&lastError);
++				version.printf("Error loading ICU library version %d.%d", *major, minor);
+-				version.printf("Error loading ICU library version %d.%d", major, minor);
+ 			}
+ 		}
+ 	}
+@@ -1173,7 +1180,7 @@
+ 	string rc;
+ 	UnicodeUtil::ConversionICU& icu(UnicodeUtil::getConversionICU());
+ 
++	if (icu.vMajor >= ICU_NEW_VERSION_MEANING)
+-	if (icu.vMajor >= 10 && icu.vMinor == 0)
+ 		rc.printf("%d", icu.vMajor);
+ 	else
+ 		rc.printf("%d.%d", icu.vMajor, icu.vMinor);
+@@ -1418,7 +1425,7 @@
+ 				UErrorCode status = U_ZERO_ERROR;
+ 				int len = icu->usetGetItem(contractions, i, NULL, NULL, str, sizeof(str), &status);
+ 
++				if (len > srcLenLong)
+-				if (len > SLONG(srcLenLong))
+ 					len = srcLenLong;
+ 				else
+ 					--len;
