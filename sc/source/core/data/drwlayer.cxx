@@ -2178,10 +2178,24 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
 {
     if (!rObj.IsVisible())
         return;
+    // FixMe: There is a timining problem. If several hidden columns are marked to be shown and a
+    // shape is anchored at the left one, then the shape becomes visible before columns at the right
+    // get their original width. The snap rectangle of the object was calculated with not hidden
+    // columns and thus now goes far to the right, because actually some columns have zero width
+    // because they are hidden.
+    // This method is triggert via an "object change" event, catched by ScDrawView::Notify, and
+    // following call of adjustAnchoredPosition.
+    // As workaround a new anchor is only calculated, if the shape rectangle in the existing anchor
+    // differs significantly from the snap rectangle. In such case a real change in the object
+    // geometry is likely, not only change in visibility.
+    const ScDrawObjData* pOldAnchor = GetObjData(&rObj);
+    const tools::Rectangle aObjRect(rObj.GetSnapRect());
+    if (pOldAnchor && lcl_AreRectanglesApproxEqual(pOldAnchor->getShapeRect(), aObjRect))
+        return;
+
     ScDrawObjData aAnchor;
     // set anchor in terms of the visual ( SnapRect )
     // object ( e.g. for when object is rotated )
-    const tools::Rectangle aObjRect(rObj.GetSnapRect());
     GetCellAnchorFromPosition(
         aObjRect,
         aAnchor,

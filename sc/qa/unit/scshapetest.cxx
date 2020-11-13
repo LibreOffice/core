@@ -33,6 +33,7 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
+    void testHideColsShow();
     void testTdf138138_MoveCellWithRotatedShape();
     void testLoadVerticalFlip();
     void testTdf117948_CollapseBeforeShape();
@@ -42,6 +43,7 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testHideColsShow);
     CPPUNIT_TEST(testTdf138138_MoveCellWithRotatedShape);
     CPPUNIT_TEST(testLoadVerticalFlip);
     CPPUNIT_TEST(testTdf117948_CollapseBeforeShape);
@@ -99,6 +101,63 @@ static void lcl_AssertRectEqualWithTolerance(const OString& sInfo,
            + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            labs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
+}
+
+void ScShapeTest::testHideColsShow()
+{
+    // The document contains a shape anchored "To Cell (resive with cell)" with starts in cell C3 and
+    //ends in cell D5. Error was, that hiding cols C and D and then show them again extends the shape
+    // to column E
+
+    OUString aFileURL;
+    createFileURL("hideColsShow.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get document and shape
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("No object found", pObj);
+    CPPUNIT_ASSERT_MESSAGE("Load: Object should be visible", pObj->IsVisible());
+    tools::Rectangle aSnapRectOrig(pObj->GetSnapRect());
+
+    // Hide cols C and D.
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("ToPoint", OUString("$C$1:$D$1")),
+    };
+    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
+
+    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT_MESSAGE("No ScTabViewShell", pViewShell);
+    pViewShell->GetViewData().GetDispatcher().Execute(FID_COL_HIDE);
+
+    // Check object is invisible
+    CPPUNIT_ASSERT_MESSAGE("Hide: Object should be invisible", !pObj->IsVisible());
+
+    // Show cols C and D
+    aPropertyValues = {
+        comphelper::makePropertyValue("ToPoint", OUString("$C$1:$D$1")),
+    };
+    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
+    pViewShell->GetViewData().GetDispatcher().Execute(FID_COL_SHOW);
+
+    // Check object is visible and has old size
+    CPPUNIT_ASSERT_MESSAGE("Show: Object should be visible", pObj->IsVisible());
+    tools::Rectangle aSnapRectShow(pObj->GetSnapRect());
+    lcl_AssertRectEqualWithTolerance("Show: Object geometry should not change", aSnapRectOrig,
+                                     aSnapRectShow, 1);
+
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
