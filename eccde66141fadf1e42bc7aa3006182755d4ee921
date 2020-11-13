@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f092fbe5_7662f13a",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-11-13T12:51:23Z",
+      "side": 1,
+      "message": "it does not do its job, not work",
+      "range": {
+        "startLine": 2428,
+        "startChar": 4,
+        "endLine": 2428,
+        "endChar": 55
+      },
+      "revId": "eccde66141fadf1e42bc7aa3006182755d4ee921",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e9dbeed_9b4903db",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2438,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-11-13T12:51:23Z",
+      "side": 1,
+      "message": "so there it fails",
+      "range": {
+        "startLine": 2436,
+        "startChar": 4,
+        "endLine": 2438,
+        "endChar": 74
+      },
+      "revId": "eccde66141fadf1e42bc7aa3006182755d4ee921",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
