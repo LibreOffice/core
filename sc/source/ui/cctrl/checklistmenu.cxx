@@ -554,11 +554,14 @@ ScCheckListMenuControl::~ScCheckListMenuControl()
 }
 
 ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, bool bCanHaveSubMenu,
-                                             bool bTreeMode, int nWidth, ScCheckListMenuWindow* pParentMenu)
+                                             bool bTreeMode, int nWidth, ScCheckListMenuWindow* pParentMenu,
+                                             vcl::ILibreOfficeKitNotifier* pNotifier)
     : DockingWindow(pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
     , mxParentMenu(pParentMenu)
     , mxBox(get("box"))
 {
+    if (pNotifier)
+        SetLOKNotifier(pNotifier);
     setDeferredProperties();
     mxControl.reset(new ScCheckListMenuControl(this, mxBox.get(), pDoc, bCanHaveSubMenu, bTreeMode, nWidth));
     SetBackground(Application::GetSettings().GetStyleSettings().GetMenuColor());
