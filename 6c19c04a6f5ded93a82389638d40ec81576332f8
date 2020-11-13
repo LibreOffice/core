@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "781cb3aa_b504df33",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3606,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-13T07:03:56Z",
+      "side": 1,
+      "message": "\"is\" is missing after \"it\"",
+      "range": {
+        "startLine": 3606,
+        "startChar": 225,
+        "endLine": 3606,
+        "endChar": 227
+      },
+      "revId": "6c19c04a6f5ded93a82389638d40ec81576332f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
