@@ -304,7 +304,8 @@ class ScCheckListMenuWindow : public DockingWindow
 public:
     explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc,
                                    bool bCanHaveSubMenu, bool bTreeMode, int nWidth = -1,
-                                   ScCheckListMenuWindow* pParentMenu = nullptr);
+                                   ScCheckListMenuWindow* pParentMenu = nullptr,
+                                   vcl::ILibreOfficeKitNotifier* pNotifier = nullptr);
     virtual void dispose() override;
     virtual ~ScCheckListMenuWindow() override;
 

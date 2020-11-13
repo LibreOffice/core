@@ -639,13 +639,16 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     ScFilterEntries aFilterEntries;
     pDoc->GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
 
+    vcl::ILibreOfficeKitNotifier* pNotifier = nullptr;
+    if (bLOKActive)
+        pNotifier = SfxViewShell::Current();
+
     int nColWidth = ScViewData::ToPixel(pDoc->GetColWidth(nCol, nTab), pViewData->GetPPTX());
     mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc, false,
-                                                                  aFilterEntries.mbHasDates, nColWidth));
+                                                                  aFilterEntries.mbHasDates,
+                                                                  nColWidth, nullptr, pNotifier));
     ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
 
-    if (bLOKActive)
-        mpAutoFilterPopup->SetLOKNotifier(SfxViewShell::Current());
     rControl.setOKAction(new AutoFilterAction(this, AutoFilterMode::Normal));
     rControl.setPopupEndAction(
         new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
