@@ -56,13 +56,15 @@
  
  /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
     significant byte first (like Motorola and SPARC, unlike Intel). */
-@@ -703,3 +703,34 @@
+@@ -703,3 +703,36 @@
  #ifndef HAVE_SOCKLEN_T
  typedef int socklen_t;
  #endif
 +
 +/* taken from src/include/gen/autoconfig_msvc.h */
++#ifndef WIN32_LEAN_AND_MEAN
 +#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
++#endif
 +/* target architecture */
 +#if defined(_M_IX86)
 +/* sizeof(void *) */
@@ -84,7 +86,7 @@
 +#endif
 +
 +#define HAVE_IO_H
-+
++#define HAVE_CTIME_S
 +#define HAVE_GETPAGESIZE
 +
 +#if defined _MSC_VER
@@ -112,33 +114,25 @@
 diff -ur builds/posix/make.defaults builds/posix/make.defaults
 --- builds/posix/make.defaults	2016-07-07 13:56:13.036235166 +0200
 +++ builds/posix/make.defaults	2016-07-07 14:29:52.368289242 +0200
-@@ -55,7 +55,11 @@
+@@ -56,7 +56,7 @@
  else
    FIREBIRD=$(FB_BUILD)
  endif
 -FIREBIRD_LOCK=$(FIREBIRD)
-+ifeq (@PLATFORM@,win32)
-+  FIREBIRD_LOCK=$(shell cygpath -w $(FIREBIRD) )
-+else
-+  FIREBIRD_LOCK=$(FIREBIRD)
-+endif
++FIREBIRD_LOCK=$(shell cygpath -w $(FIREBIRD))
  
  export FIREBIRD
  export FIREBIRD_LOCK
-@@ -152,7 +156,11 @@
+@@ -153,7 +153,7 @@
  CD=			cd
  CAT=			cat
  AR=			ar @AR_OPTIONS@
 -LN=			@LN_S@
-+ifeq (@PLATFORM@,win32)
-+  LN=                   cp
-+else
-+  LN=		        @LN_S@
-+endif
++LN=			cp
  RANLIB=			@RANLIB@
  BTYACC=$(ROOT)/extern/btyacc/btyacc
  CLOOP=$(GEN_ROOT)/$(TARGET)/cloop/release/bin/cloop
-@@ -174,10 +182,10 @@
+@@ -175,10 +175,10 @@
  
  # Default extensions
  
@@ -151,15 +145,18 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  SHRLIB_FOREIGN_EXT=	$(SHRLIB_EXT)
  
  #_____________________________________________________________________________
-@@ -203,6 +211,7 @@
- vpath %.so $(LIB)
- vpath %.a $(LIB)
+@@ -201,9 +202,8 @@
+ 
+ # Search path for libraries
+ 
+-vpath %.so $(LIB)
+-vpath %.a $(LIB)
  vpath %.dll $(LIB)
 +vpath %.lib $(LIB)
  
  #_____________________________________________________________________________
  
-@@ -216,9 +225,9 @@
+@@ -217,9 +217,9 @@
  #
  
  #LibraryFileName=libfbclient
@@ -172,7 +169,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  LibraryBaseName=$(LibraryFileName).${SHRLIB_EXT}
  
  LIBFIREBIRD_FULLNAME = $(LIB)/$(LibraryFullName)
-@@ -227,7 +236,7 @@
+@@ -228,7 +228,7 @@
  
  # The firebird engine library name
  
@@ -181,17 +178,17 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  EngineSoName=$(EngineFileName).${SHRLIB_EXT}
  ENGINE_SONAME = $(PLUGINS)/$(EngineSoName)
  
-@@ -241,7 +250,7 @@
+@@ -242,7 +242,7 @@
    ifeq ($(STD_EDITLINE), true)
  	LIBEDITLINE := -l$(READLINE)
    else
 -	LIBEDITLINE := $(LIB)/libedit.a
-+	LIBEDITLINE := $(LIB)/edit.lib
++	LIBEDITLINE := $(LIB)/$(LIB_PREFIX)edit$(ARCH_EXT)
    endif
  endif
  
-@@ -289,7 +298,7 @@
- LIB_PATH_OPTS = $(call LIB_LINK_RPATH,lib) $(call LIB_LINK_RPATH,intl)
+@@ -313,7 +313,7 @@
+ 
  LIB_LINK_SONAME= -Wl,-soname,$(1)
  LIB_LINK_MAPFILE= -Wl,--version-script,$(1)
 -FIREBIRD_LIBRARY_LINK= -L$(LIB) -lfbclient $(MATHLIB)
@@ -199,30 +196,28 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  
  EXE_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) $(UNDEF_FLAGS) $(LIB_PATH_OPTS) $(LINK_EMPTY_SYMBOLS)
  LIB_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) -shared
-@@ -329,7 +338,8 @@
+@@ -355,7 +355,7 @@
  
  # Pay attention - we place common library into obj, not lib dir
  # It's just a set of object files, prepared to be used by ld, not an output library
 -COMMON_LIB	= $(OBJ)/common.a
-+
-+COMMON_LIB      = $(OBJ)/common.lib
++COMMON_LIB	= $(OBJ)/$(LIB_PREFIX)common$(ARCH_EXT)
  
  # From utilities
  CREATE_DB	= $(RBIN)/create_db$(EXEC_EXT)
 --- builds/posix/Makefile.in	2016-07-07 15:56:06.459221300 +0200
 +++ builds/posix/Makefile.in	2016-07-13 12:44:57.134217200 +0200
-@@ -33,7 +33,8 @@
+@@ -33,7 +33,7 @@
  #		Alex Peshkoff - created single makefile based on Mark's files
- # 
- 
+ #
+
 -ROOT=$(shell cd ..; pwd)
-+#ROOT=$(shell cd ..; pwd)
 +ROOT=$(shell cygpath -m '$(shell cd ..; pwd)')
 
  include     make.defaults
  ifeq ($(CROSS_OUT), Y)
-@@ -163,7 +164,7 @@
- .PHONY:	cross1 cross2 boot yvalve engine fbintl gpre utilities plugins rest codes ids examples cross_rest
+@@ -178,7 +178,7 @@
+ .PHONY:	cross1 cross2 boot yvalve engine fbintl gpre utilities plugins rest codes ids examples cross_rest preliminaryCheck
  
  master_process:
 -	ln -sf $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
@@ -230,30 +225,16 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  	$(MAKE) updateBuildNum
  	$(MAKE) export_lists
  	$(MAKE) extern
-@@ -186,10 +187,10 @@
- 	(cd $(BIN); $(LN) $(notdir $(GPRE)) $(notdir $(GPRE_CURRENT)))
- ifeq ($(IsDeveloper), Y)
- # In developer mode we must regenerate various files in include/gen
--	$(MAKE) codes
-+#	$(MAKE) codes
- endif
--	$(MAKE) plugins
--	$(MAKE) examples
-+#	$(MAKE) plugins
-+	$(MAKE) include_generic
- 	$(MAKE) rest
- 
- 
-@@ -198,7 +199,7 @@
+@@ -214,7 +215,7 @@
  	$(MAKE) CROSS_OUT=Y cross2
- 
+
  cross1:
 -	ln -sf $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
 +	cp -f $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
  	$(MAKE) updateBuildNum
  	$(MAKE) export_lists
  	$(MAKE) extern
-@@ -223,7 +224,7 @@
+@@ -239,7 +240,7 @@
  	$(MAKE) -f Makefile.examples -C $(GEN_ROOT)/examples/
  
  cross2:
@@ -262,91 +243,67 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  	$(MAKE) prerequisites
  	$(MAKE) tommath
  	$(MAKE) yvalve
-@@ -275,7 +275,8 @@
+@@ -310,7 +311,7 @@
  
  # remote redirector is statically linked in main FB library
  $(LIBFIREBIRD_FULLNAME):	$(YValve_Objects) $(Remote_Client_Objects) $(COMMON_LIB)
--	$(LINK_FIREBIRD) -o $@ $^ $(LINK_FIREBIRD_LIBS)
-+	@echo 'compile: $(LINK_FIREBIRD) $(CPPFLAGS) -o $@ $^ $(LINK_FIREBIRD_LIBS)'
-+	$(LINK_FIREBIRD) $(CPPFLAGS) -o $@ $^ $(LINK_FIREBIRD_LIBS)
+-	$(LINK_FIREBIRD) -o $@ $^ $(LINK_FIREBIRD_LIBS) $(call LIB_LINK_DARWIN_INSTALL_NAME,lib/libfbclient.$(SHRLIB_EXT))
++	$(LINK_FIREBIRD) $(CPPFLAGS) -o $@ $^ $(LINK_FIREBIRD_LIBS) $(call LIB_LINK_DARWIN_INSTALL_NAME,lib/libfbclient.$(SHRLIB_EXT))
  
  
  #___________________________________________________________________________
-@@ -284,7 +286,8 @@
+@@ -320,8 +321,8 @@
+ 
  engine: $(ENGINE_SONAME)
  
- $(ENGINE_SONAME):	$(Engine_Objects) $(SVC_Objects) $(COMMON_LIB)
--	$(LINK_ENGINE) -o $@ $^ $(LINK_ENGINE_LIBS)
-+	@echo 'compile engine: $(LINK_ENGINE) $(CPPFLAGS) -o $@ $^ $(LINK_ENGINE_LIBS)'
-+	$(LINK_ENGINE) $(CPPFLAGS) -o $@ $^ $(YValve_Objects) $(Remote_Client_Objects) $(LINK_ENGINE_LIBS)
+-$(ENGINE_SONAME):	$(Engine_Objects) $(SVC_Objects) $(COMMON_LIB)
+-	$(LINK_ENGINE) -o $@ $^ $(LINK_ENGINE_LIBS) $(call LIB_LINK_DARWIN_INSTALL_NAME,plugins/$(EngineSoName))
++$(ENGINE_SONAME):	$(Engine_Objects) $(SVC_Objects) $(YValve_Objects) $(Remote_Client_Objects) $(COMMON_LIB)
++	$(LINK_ENGINE) $(CPPFLAGS) -o $@ $^ $(LINK_ENGINE_LIBS) $(call LIB_LINK_DARWIN_INSTALL_NAME,plugins/$(EngineSoName))
  
  
  #___________________________________________________________________________
-@@ -294,7 +297,7 @@
+@@ -330,8 +331,8 @@
+ 
  fbintl: $(LIBFBINTL_SO)
  
- $(LIBFBINTL_SO):	$(INTL_Objects) $(COMMON_LIB)
--	$(LINK_INTL) -o $@ $^ $(LINK_INTL_LIBS)
-+	$(LINK_INTL) $(CPPFLAGS) -o $@ $^ $(YValve_Objects) $(Remote_Client_Objects) $(LINK_INTL_LIBS)
+-$(LIBFBINTL_SO):	$(INTL_Objects) $(COMMON_LIB)
+-	$(LINK_INTL) -o $@ $^ $(LINK_INTL_LIBS) $(call LIB_LINK_DARWIN_INSTALL_NAME,intl/libfbintl.$(SHRLIB_EXT))
++$(LIBFBINTL_SO):	$(INTL_Objects) $(YValve_Objects) $(Remote_Client_Objects) $(COMMON_LIB)
++	$(LINK_INTL) $(CPPFLAGS) -o $@ $^ $(LINK_INTL_LIBS) $(call LIB_LINK_DARWIN_INSTALL_NAME,intl/libfbintl.$(SHRLIB_EXT))
  
  
  #___________________________________________________________________________
-@@ -393,7 +396,7 @@
+@@ -427,12 +429,13 @@
  
  .PHONY:	firebird_server fb_lock_print fbguard fbsvcmgr fbtracemgr gbak gfix gsec gsplit gstat isql nbackup
  
 -utilities: firebird_server fb_lock_print fbguard fbsvcmgr fbtracemgr gbak gfix gsec gsplit gstat isql nbackup udfsupport
-+utilities: gbak gfix isql
++# fbguard currently fails to link, with missing fork etc, in util.cpp
++utilities: firebird_server fb_lock_print fbsvcmgr fbtracemgr gbak gfix gsec gsplit gstat isql nbackup udfsupport
  
  firebird_server:	$(FB_DAEMON)
  
-@@ -540,7 +543,7 @@
- GBAK_FILES := $(FDB_FILES:.fdb=.gbak) $(FIREBIRD)/msg.gbak
- GBAK_FILES := $(subst Native,$(TARGET),$(GBAK_FILES))
+-$(FB_DAEMON):	$(Remote_Server_Objects) $(COMMON_LIB)
+-	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS) $(call LINK_DARWIN_RPATH,..)
++$(FB_DAEMON):	$(Remote_Server_Objects) $(Remote_Client_Objects) $(COMMON_LIB)
++	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS) $(LIB_GUI) $(call LINK_DARWIN_RPATH,..)
  
--rest:	qli message_file
-+rest:	message_file
+ fb_lock_print:	$(LOCKPRINT)
  
- cross_rest:	qli gbak_files
- 	$(MAKE) $(BUILD_FILE)
-@@ -593,7 +595,7 @@
+@@ -633,7 +635,7 @@
  IBASE_ExtraFiles = include/types_pub.h include/consts_pub.h dsql/sqlda_pub.h common/dsc_pub.h jrd/ibase.h jrd/inf_pub.h jrd/blr.h include/gen/iberror.h
  SRC_IBASE_ExtraFiles = $(addprefix $(SRC_ROOT)/, $(IBASE_ExtraFiles))
  MAKE_HEADER_Src = $(addprefix $(SRC_ROOT)/, misc/makeHeader.cpp)
 -MAKE_HEADER_Bin = ./makeHeader
-+MAKE_HEADER_Bin = ./makeHeader.exe
++MAKE_HEADER_Bin = ./makeHeader$(EXEC_EXT)
  
  $(INCLUDE_DEST)/ibase.h: $(SRC_IBASE_ExtraFiles)
  	$(STATICEXE_LINK) -o $(MAKE_HEADER_Bin) $(MAKE_HEADER_Src)
-diff -ur builds/posix/Makefile.in.examples builds/posix/Makefile.in.examples
---- builds/posix/Makefile.in.examples	2016-07-07 13:56:13.048235166 +0200
-+++ builds/posix/Makefile.in.examples	2016-07-07 14:37:36.904301682 +0200
-@@ -65,10 +65,13 @@
- EXAMPLES_DEST=	$(GEN_ROOT)/examples
- EXAMPLES_SRC=	$(ROOT)/examples
-
--
-+ifeq ($(PLATFORM),win32)
-+EMPBLD_Objects=	$(EXAMPLES_DEST)/empbuild.obj
-+INTLBLD_Objects= $(EXAMPLES_DEST)/intlbld.obj
-+else
- EMPBLD_Objects=	$(EXAMPLES_DEST)/empbuild.o
--
- INTLBLD_Objects= $(EXAMPLES_DEST)/intlbld.o
-+endif
-
- INPUT_Files   =	empddl.sql empdml.sql indexoff.sql indexon.sql \
- 		job.inp lang.inp proj.inp qtr.inp
-@@ -172,3 +175,5 @@
- 
- $(EXAMPLES_DEST)/%.h: $(EXAMPLES_SRC)/common/%.h
- 	$(CP) $^ $@
-+$(EXAMPLES_DEST)/%.obj: $(EXAMPLES_DEST)/%.c
-+	$(CC) -c $(firstword $<) -Fo$@ $(WCFLAGS)
 diff -ur builds/posix/make.rules builds/posix/make.rules
 --- builds/posix/make.rules	2016-07-07 13:56:13.036235166 +0200
 +++ builds/posix/make.rules	2016-07-07 14:31:16.116291485 +0200
-@@ -88,22 +88,20 @@
+@@ -92,26 +92,23 @@
  
  $(OBJ)/%.o: $(SRC_ROOT)/%.c
  	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
@@ -358,6 +315,10 @@ diff -ur builds/posix/make.rules builds/posix/make.rules
  
  $(OBJ)/%.o: $(SRC_ROOT)/%.cpp
  	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
+-	@sed $(INLINE_EDIT_SED) -e "1,2s/:/: \$$(wildcard/" -e "\$$s/\(.*\)/\\1)/" $(patsubst %.o,%.d,$@)
+ 
+ $(OBJ)/%.o: $(ROOT)/%.cpp
+ 	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
 -	@sed $(INLINE_EDIT_SED) -e "1,2s/:/: \$$(wildcard/" -e "\$$s/\(.*\)/\\1)/" $(patsubst %.o,%.d,$@)
  
  .SUFFIXES: .epp .e
@@ -429,20 +390,21 @@ diff -ur builds/posix/prefix.mingw builds/posix/prefix.mingw
  # Generation of fbclient_ms.lib
  LIB_LINK_IMPLIB:=-Wl,--out-implib,firebird/lib/fbclient_ms.lib
  LIB_GUI:= -mwindows -lcomctl32 -lgdi32
-@@ -55,7 +59,8 @@
+@@ -55,7 +59,9 @@
  ClientLibrarySoName := $(ClientLibraryName)
 
  # Looks like MinGW 3 does not support version scripts but support def-files
 -LINK_FIREBIRD_SYMBOLS = $(BLD_ROOT)/win32/defs/fbclient_s.def $(BLD_ROOT)/win32/defs/fbclient.def
 +LINK_FIREBIRD_SYMBOLS = /def:$(BLD_ROOT)/win32/defs/fbclient_s.def /def:$(BLD_ROOT)/win32/defs/firebird.def
 +LINK_PLUGIN_SYMBOLS = /def:$(BLD_ROOT)/win32/defs/plugin.def
++LINK_IBUTIL_SYMBOLS = /def:$(BLD_ROOT)/win32/defs/ib_util.def
 
  # This is required for newly built executable to find newly built shared
  # libraries because on Win32 there is no such thing as LD_LIBRARY_PATH
 --- builds/posix/make.shared.variables	2016-07-22 17:07:46.650672300 +0200
 +++ builds/posix/make.shared.variables	2016-07-23 10:44:41.311454600 +0200
-@@ -56,6 +56,7 @@
- Remote_Server:= $(call dirObjects,remote/server) $(call dirObjects,auth/SecureRemotePassword/server)
+@@ -62,6 +62,7 @@
+				$(SecDbCache)
  Remote_Client:= $(call dirObjects,remote/client) $(call dirObjects,auth/SecureRemotePassword/client) \
  				$(call makeObjects,auth/SecurityDatabase,LegacyClient.cpp) \
 +				$(call dirObjects,auth/trusted) \
@@ -492,15 +454,24 @@ diff -ur extern/btyacc/main.c extern/btyacc/main.c
 diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
 --- extern/btyacc/Makefile	2016-07-07 13:55:55.448234695 +0200
 +++ extern/btyacc/Makefile	2016-07-07 14:57:42.284333961 +0200
-@@ -42,7 +42,7 @@
- all:		$(PROGRAM)
+@@ -30,7 +30,7 @@
  
- $(PROGRAM):     $(OBJS) $(LIBS)
--		$(CC) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
-+		$(CC) $(LDFLAGS) -o $(PROGRAM).exe $(OBJS) $(LIBS)
+ PRINT	      = pr -f -l88
  
- %.o: %.c
- 		$(CC) $(CCFLAGS) -c $< -o $@
+-PROGRAM	      = btyacc
++PROGRAM	      = btyacc.exe
+ 
+ SRCS	      = closure.c error.c lalr.c lr0.c main.c mkpar.c output.c	\
+ 		mstring.c reader.c readskel.c skeleton.c symtab.c verbose.c warshall.c
+@@ -58,7 +58,7 @@
+ index:;		ctags -wx $(HDRS) $(SRCS)
+ 
+ install:	$(PROGRAM)
+-		cp $(PROGRAM).exe /bin
++		cp $(PROGRAM) /bin
+ 
+ oldinstall:	$(PROGRAM)
+ 		@echo Installing $(PROGRAM) in $(DEST)
 --- extern/cloop/src/tests/test1/CppTest.cpp	2016-07-07 15:56:27.948015300 +0200
 +++ extern/cloop/src/tests/test1/CppTest.cpp	2016-07-13 18:58:48.529822600 +0200
 @@ -24,6 +24,7 @@
@@ -514,7 +485,7 @@ diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
 --- extern/cloop/src/tests/test1/CTest.c	2016-07-07 15:56:27.611791300 +0200
 +++ extern/cloop/src/tests/test1/CTest.c	2016-07-13 17:04:22.805090300 +0200
 @@ -23,6 +23,7 @@
- #include <malloc.h>
+ #include <stdlib.h>
  #include <stdio.h>
  
 +#define WIN32
@@ -660,3 +631,46 @@ diff -ur src/misc/makeHeader.cpp src/misc/makeHeader.cpp
 
 
 
+--- builds/posix/Makefile.in.plugins_examples.orig	2020-11-13 18:07:52.515550600 +0100
++++ builds/posix/Makefile.in.plugins_examples	2020-11-13 18:08:33.218626500 +0100
+@@ -28,7 +28,7 @@
+ #  Adriano dos Santos Fernandes
+ #
+ 
+-ROOT=$(shell cd ..; pwd)
++ROOT=$(shell cygpath -m '$(shell cd ..; pwd)')
+ 
+ ifeq ($(IsDeveloper), Y)
+   DefaultTarget := Debug
+--- examples/dbcrypt/CryptApplication.cpp.orig	2020-11-13 20:57:11.222938900 +0100
++++ examples/dbcrypt/CryptApplication.cpp	2020-11-13 21:01:19.332316100 +0100
+@@ -27,6 +27,13 @@
+ #include "../interfaces/ifaceExamples.h"
+ #include <firebird/Message.h>
+ 
++#include "gen/autoconfig.h"
++
++#ifdef WIN_NT
++#include <windows.h>
++#include <winbase.h>
++#endif
++
+ using namespace Firebird;
+ 
+ class CryptKey : public ICryptKeyCallbackImpl<CryptKey, CheckStatusWrapper>
+@@ -238,8 +238,15 @@
+ 		av++;
+ 	}
+ 
++#ifdef WIN_NT
++	if (!getenv("ISC_USER"))
++		SetEnvironmentVariable("ISC_USER", "sysdba");
++	if (!getenv("ISC_PASSWORD"))
++		SetEnvironmentVariable("ISC_PASSWORD", "masterkey");
++#else
+ 	setenv("ISC_USER", "sysdba", 0);
+ 	setenv("ISC_PASSWORD", "masterkey", 0);
++#endif
+ 
+ 	App app;
+ 	try

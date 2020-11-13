@@ -52,29 +52,12 @@
  
 --- src/common/os/posix/mod_loader.cpp
 +++ src/common/os/posix/mod_loader.cpp
-@@ -88,7 +88,7 @@
+@@ -92,7 +92,7 @@
  
- ModuleLoader::Module* ModuleLoader::loadModule(const Firebird::PathName& modPath)
+ ModuleLoader::Module* ModuleLoader::loadModule(ISC_STATUS* status, const Firebird::PathName& modPath)
  {
 -	void* module = dlopen(modPath.nullStr(), FB_RTLD_MODE);
 +	void* module = dlopen(modPath.nullStr(), FB_RTLD_MODE | RTLD_GLOBAL);
  	if (module == NULL)
  	{
- #ifdef DEV_BUILD
---- src/jrd/met.epp
-+++ src/jrd/met.epp
-@@ -1486,10 +1486,11 @@
- 			USHORT offset = p[0] | (p[1] << 8);
- 			p += 2;
- 
--			const Ods::Descriptor* odsDflDesc = (Ods::Descriptor*) p;
--			p = (UCHAR*) (odsDflDesc + 1);
-+			Ods::Descriptor odsDflDesc;
-+			memcpy(&odsDflDesc, p, sizeof (Ods::Descriptor));
-+			p = (UCHAR*) (((Ods::Descriptor*) p) + 1);
- 
--			dsc desc = *odsDflDesc;
-+			dsc desc = odsDflDesc;
- 			desc.dsc_address = const_cast<UCHAR*>(p);
- 			EVL_make_value(tdbb, &desc, &format->fmt_defaults[offset], relation->rel_pool);
- 
+		if (status)

@@ -1,9 +1,10 @@
 --- configure
 +++ configure
-@@ -18402,44 +18402,6 @@
+@@ -18430,44 +18430,6 @@
+   as_fn_error $? "ICU support not found - please install development ICU package" "$LINENO" 5
  fi
  
- 
+-
 -{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -licuuc" >&5
 -$as_echo_n "checking for main in -licuuc... " >&6; }
 -if ${ac_cv_lib_icuuc_main+:} false; then :
@@ -41,13 +42,12 @@
 -fi
 -
 -
--
- pre_save_restore_cflags=$CFLAGS
- pre_save_restore_cxxflags=$CXXFLAGS
- pre_save_restore_libs=$LIBS
+ if test "$TOMBUILD" = "Y"; then
+	MATHLIB=-ltommath
+ else
 --- src/common/unicode_util.cpp
 +++ src/common/unicode_util.cpp
-@@ -58,8 +58,13 @@
+@@ -55,8 +55,13 @@
  
  namespace {
  #if defined(WIN_NT)
@@ -59,5 +59,5 @@
  const char* const ucTemplate = "icuuc%s.dll";
 +#endif
  #elif defined(DARWIN)
- //const char* const inTemplate = "/Library/Frameworks/Firebird.framework/Versions/A/Libraries/libicui18n.dylib";
- //const char* const ucTemplate = "/Library/Frameworks/Firebird.framework/versions/A/Libraries/libicuuc.dylib";
+ const char* const inTemplate = "lib/libicui18n.%s.dylib";
+ const char* const ucTemplate = "lib/libicuuc.%s.dylib";
