@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "65ccc301_2a04cad1",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-11-13T10:21:01Z",
+      "side": 1,
+      "message": "In the .ui a scrolling treeview is described by a scrolledwindow parent and a treeview child but (IIRC) both gtk and vcl combine those two descriptions into a single scrolled-treeview so there is only one actual resulting widget, the treeview which internally manages scrolling.",
+      "parentUuid": "8bbafc06_c64d349c",
+      "range": {
+        "startLine": 550,
+        "startChar": 6,
+        "endLine": 550,
+        "endChar": 62
+      },
+      "revId": "465dc38d002379c9397e36e086f544e7f896065b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57e73b01_da368e74",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 1
