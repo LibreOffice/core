@@ -104,7 +104,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testViewBoxLeftTop)
     awt::Rectangle aBoundRectLR;
     xShapeLRProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectLR;
     // difference should be zero, but allow some rounding errors
-    CPPUNIT_ASSERT_LESS(static_cast<tools::Long>(3), labs(aFrameRectLR.X - aBoundRectLR.X));
+    CPPUNIT_ASSERT_LESS(3L, labs(aFrameRectLR.X - aBoundRectLR.X));
 
     // Get the shape "topbottom". Error was, that the identifier "top" was always set to zero, thus
     // the path was outside the frame rectangle for a viewBox having a positive "top" value.
@@ -116,7 +116,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testViewBoxLeftTop)
     awt::Rectangle aBoundRectTB;
     xShapeTBProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectTB;
     // difference should be zero, but allow some rounding errors
-    CPPUNIT_ASSERT_LESS(static_cast<tools::Long>(3), labs(aFrameRectTB.Y - aBoundRectTB.Y));
+    CPPUNIT_ASSERT_LESS(3L, labs(aFrameRectTB.Y - aBoundRectTB.Y));
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testAccuracyCommandX)

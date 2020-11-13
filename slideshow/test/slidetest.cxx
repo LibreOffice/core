@@ -317,13 +317,13 @@ public:
         mpLayerManager->removeShape(pShape4);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 1 must have refcount of 1",
-                                      tools::Long(1), mpTestShape.use_count() );
+                                      1L, mpTestShape.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 2 must have refcount of ",
-                                      tools::Long(1), pShape2.use_count() );
+                                      1L, pShape2.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 3 must have refcount of 1",
-                                      tools::Long(1), pShape3.use_count() );
+                                      1L, pShape3.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 4 must have refcount of",
-                                      tools::Long(1), pShape4.use_count() );
+                                      1L, pShape4.use_count() );
 
 
         mpLayerManager->addShape(mpTestShape);
@@ -340,13 +340,13 @@ public:
         mpLayerManager->removeShape(pShape4);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 1 must have refcount of 1",
-                                      tools::Long(1), mpTestShape.use_count() );
+                                      1L, mpTestShape.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 2 must have refcount of ",
-                                      tools::Long(1), pShape2.use_count() );
+                                      1L, pShape2.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 3 must have refcount of 1",
-                                      tools::Long(1), pShape3.use_count() );
+                                      1L, pShape3.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 4 must have refcount of 1",
-                                      tools::Long(1), pShape4.use_count() );
+                                      1L, pShape4.use_count() );
     }
 
     // hook up the test

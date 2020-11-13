@@ -195,13 +195,13 @@ void GraphicTest::testUnloadedGraphic()
     // check GetSizePixel doesn't load graphic
     aGraphic = makeUnloadedGraphic("png");
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
-    CPPUNIT_ASSERT_EQUAL(120L, aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(100L, aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
     // check GetPrefSize doesn't load graphic
-    CPPUNIT_ASSERT_EQUAL(6000L, aGraphic.GetPrefSize().Width());
-    CPPUNIT_ASSERT_EQUAL(5000L, aGraphic.GetPrefSize().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(6000), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(5000), aGraphic.GetPrefSize().Height());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
     // check GetSizeBytes loads graphic
@@ -228,8 +228,8 @@ void GraphicTest::testUnloadedGraphicLoading()
 
         // check available
         CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
-        CPPUNIT_ASSERT_EQUAL(120L, aGraphic.GetSizePixel().Width());
-        CPPUNIT_ASSERT_EQUAL(100L, aGraphic.GetSizePixel().Height());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
         CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
         CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0);
         CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
@@ -307,8 +307,8 @@ void GraphicTest::testSwapping()
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
 
-    CPPUNIT_ASSERT_EQUAL(120L, aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(100L, aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
 
     BitmapChecksum aChecksumBeforeSwapping = aGraphic.GetChecksum();
 
@@ -357,8 +357,8 @@ void GraphicTest::testSwapping()
     CPPUNIT_ASSERT_EQUAL(false, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
 
     // Check the bitmap
-    CPPUNIT_ASSERT_EQUAL(120L, aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(100L, aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(true, checkBitmap(aGraphic));
     CPPUNIT_ASSERT_EQUAL(true, checkBitmap(aGraphic));
 }

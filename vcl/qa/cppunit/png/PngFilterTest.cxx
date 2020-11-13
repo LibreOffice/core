@@ -61,8 +61,8 @@ void PngFilterTest::testPng()
         Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
             Bitmap::ScopedReadAccess pAccess(aBitmap);
-            CPPUNIT_ASSERT_EQUAL(4L, pAccess->Width());
-            CPPUNIT_ASSERT_EQUAL(4L, pAccess->Height());
+            CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Width());
+            CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Height());
 
             if (pAccess->GetBitCount() == 24 || pAccess->GetBitCount() == 32)
             {
@@ -94,8 +94,8 @@ void PngFilterTest::testPng()
         Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
             Bitmap::ScopedReadAccess pAccess(aBitmap);
-            CPPUNIT_ASSERT_EQUAL(4L, pAccess->Width());
-            CPPUNIT_ASSERT_EQUAL(4L, pAccess->Height());
+            CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Width());
+            CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Height());
             if (pAccess->GetBitCount() == 24 || pAccess->GetBitCount() == 32)
             {
                 CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF, 0x00), pAccess->GetPixel(0, 0));
@@ -125,8 +125,8 @@ void PngFilterTest::testPng()
         Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
             Bitmap::ScopedReadAccess pAccess(aBitmap);
-            CPPUNIT_ASSERT_EQUAL(4L, pAccess->Width());
-            CPPUNIT_ASSERT_EQUAL(4L, pAccess->Height());
+            CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Width());
+            CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Height());
 
             if (pAccess->GetBitCount() == 24)
             {
@@ -144,8 +144,8 @@ void PngFilterTest::testPng()
                 {
                     AlphaMask::ScopedReadAccess pAlphaAccess(aAlpha);
                     CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pAlphaAccess->GetBitCount());
-                    CPPUNIT_ASSERT_EQUAL(4L, pAlphaAccess->Width());
-                    CPPUNIT_ASSERT_EQUAL(4L, pAlphaAccess->Height());
+                    CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAlphaAccess->Width());
+                    CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAlphaAccess->Height());
 
                     CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x80, 0x00),
                                          pAlphaAccess->GetPixel(0, 0));
