@@ -69,6 +69,30 @@
       "revId": "38c127b105a5edd766e3ad63151252e4f157cf98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acc317e8_e8bb66d1",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3612,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-13T08:51:50Z",
+      "side": 1,
+      "message": "I\u0027d use \"match(es)\" consistently. E.g., because \"equals\" does not feels OK to me: the check is case-insensitive here, and I pedantically do nor agree that \"a\" *equals* \"A\", but I\u0027m OK with \"a\" matches \"A\".",
+      "parentUuid": "c275aefc_f757dc81",
+      "range": {
+        "startLine": 3612,
+        "startChar": 32,
+        "endLine": 3612,
+        "endChar": 100
+      },
+      "revId": "38c127b105a5edd766e3ad63151252e4f157cf98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
