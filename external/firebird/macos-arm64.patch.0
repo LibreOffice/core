@@ -2,7 +2,7 @@
 --- configure
 +++ configure
 @@ -2901,6 +2901,21 @@
-     EXPORT_SYMBOLS_STYLE=darwin
+     RAW_DEVICES_FLG=N
      ;;
  
 +  aarch64-*-darwin*)
@@ -24,14 +24,6 @@
      MAKEFILE_PREFIX=darwin_i386
      MAKEFILE_POSTFIX=darwin
 @@ -21344,6 +21344,7 @@
- else
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
- /* end confdefs.h.  */
-+#include <stdlib.h>
- main () {
-   struct s {
-     char a;
-@@ -21379,6 +21379,7 @@
  else
    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
