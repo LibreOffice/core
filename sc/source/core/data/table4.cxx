@@ -420,24 +420,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             }
             else if (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT)
             {
-                OUString aStr;
+                OUString aStr,aStr2;
                 GetString(nColCurr, nRowCurr, aStr);
-
-                bool bAllSame = true;
-                for (SCSIZE i = 0; i < nValueCount; ++i)
-                {
-                    OUString aTestStr;
-                    GetString(static_cast<SCCOL>(nCol1 + rNonOverlappedCellIdx[i] * nAddX),
-                              static_cast<SCROW>(nRow1 + rNonOverlappedCellIdx[i] * nAddY),
-                              aTestStr);
-                    if (aStr != aTestStr)
-                    {
-                        bAllSame = false;
-                        break;
-                    }
-                }
-                if (bAllSame && nValueCount > 1)
-                    return;
 
                 rListData = const_cast<ScUserListData*>(ScGlobal::GetUserList()->GetData(aStr));
                 if (rListData)
@@ -450,10 +434,10 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     {
                         nColCurr = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
                         nRowCurr = nRow1 + rNonOverlappedCellIdx[i] * nAddY;
-                        GetString(nColCurr, nRowCurr, aStr);
+                        GetString(nColCurr, nRowCurr, aStr2);
 
                         nPrevListIndex = rListIndex;
-                        if (!rListData->GetSubIndex(aStr, rListIndex, bMatchCase))
+                        if (!rListData->GetSubIndex(aStr2, rListIndex, bMatchCase))
                             rListData = nullptr;
                         else
                         {
@@ -472,7 +456,45 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         return;
                     }
                 }
-                // TODO: check / handle if it is a string containing a number
+                short nFlag1, nFlag2;
+                sal_Int32 nVal1, nVal2;
+                nFlag1 = lcl_DecompValueString(aStr, nVal1, &rMinDigits);
+                if (nFlag1)
+                {
+                    bool bVal = true;
+                    rInc = 1;
+                    for (SCSIZE i = 1; i < nValueCount && bVal; i++)
+                    {
+                        nColCurr = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
+                        nRowCurr = nRow1 + rNonOverlappedCellIdx[i] * nAddY;
+                        ScRefCellValue aCell = GetCellValue(nColCurr, nRowCurr);
+                        CellType eType = aCell.meType;
+                        if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)
+                        {
+                            aStr2 = aCell.getString(&rDocument);
+                            nFlag2 = lcl_DecompValueString(aStr2, nVal2, &rMinDigits);
+                            if (nFlag1 == nFlag2 && aStr == aStr2)
+                            {
+                                double nDiff = approxDiff(nVal2, nVal1);
+                                if (i == 1)
+                                    rInc = nDiff;
+                                else if (!::rtl::math::approxEqual(nDiff, rInc, 13))
+                                    bVal = false;
+                                nVal1 = nVal2;
+                            }
+                            else
+                                bVal = false;
+                        }
+                        else
+                            bVal = false;
+                    }
+                    if (bVal)
+                    {
+                        rCmd = FILL_LINEAR;
+                        rSkipOverlappedCells = true;
+                        return;
+                    }
+                }
             }
         }
     }
@@ -2341,16 +2363,25 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     tools::Long nIndex = 0;
                     bool bError = false;
                     bool bOverflow = false;
+                    bool bNonEmpty = true;
 
                     bool bIsOrdinalSuffix = aValue == ScGlobal::GetOrdinalSuffix(
                                 static_cast<sal_Int32>(nStartVal));
 
+                    sal_Int32 nFillerIdx = 0;
+                    if (bSkipOverlappedCells && !aIsNonEmptyCell[0])
+                        --nIndex;
                     rInner = nIStart;
                     while (true)
                     {
+                        if (bSkipOverlappedCells)
+                        {
+                            nFillerIdx = (nFillerIdx + 1) % nFillerCount;
+                            bNonEmpty = aIsNonEmptyCell[nFillerIdx];
+                        }
                         if(!ColHidden(nCol) && !RowHidden(nRow))
                         {
-                            if (!bError)
+                            if (!bError && bNonEmpty)
                             {
                                 switch (eFillCmd)
                                 {
@@ -2381,7 +2412,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                             if (bError)
                                 aCol[nCol].SetError(static_cast<SCROW>(nRow), FormulaError::NoValue);
-                            else if (!bOverflow)
+                            else if (!bOverflow && bNonEmpty)
                             {
                                 nStringValue = static_cast<sal_Int32>(nVal);
                                 if ( nHeadNoneTail < 0 )
