@@ -818,10 +818,10 @@
       </node>
       <node oor:name=".uno:InsertObjectStarMath" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Formula...</value>
+          <value xml:lang="en-US">~Formula Object...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Formula</value>
+          <value xml:lang="en-US">Insert Formula Object</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1802,7 +1802,10 @@
       </node>
       <node oor:name=".uno:InsertFormula" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fo~rmula</value>
+          <value xml:lang="en-US">Text Fo~rmula</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Text Formula</value>k
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
