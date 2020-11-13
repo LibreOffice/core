@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bbafc06_c64d349c",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-13T09:57:23Z",
+      "side": 1,
+      "message": "Tree has a payload, which can be smaller than the total canvas. I guess it could be solved with drawing the background of the scrollwindow accordingly, but my id\u0027s are never read. Starring holes in my screen but both list- and treeview stay empty.",
+      "range": {
+        "startLine": 550,
+        "startChar": 6,
+        "endLine": 550,
+        "endChar": 62
+      },
+      "revId": "465dc38d002379c9397e36e086f544e7f896065b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57e73b01_da368e74",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-13T09:57:23Z",
+      "side": 1,
+      "message": "Update doesn\u0027t work in all situations yet.",
+      "range": {
+        "startLine": 782,
+        "startChar": 3,
+        "endLine": 782,
+        "endChar": 35
+      },
+      "revId": "465dc38d002379c9397e36e086f544e7f896065b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
