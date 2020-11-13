@@ -7881,8 +7881,30 @@ void DocxAttributeOutput::RefField( const SwField&  rField, const OUString& rRef
     // There is nothing to do here for the set fields
 }
 
-void DocxAttributeOutput::HiddenField( const SwField& /*rField*/ )
+void DocxAttributeOutput::HiddenField(const SwField& rField)
 {
+    auto eSubType = static_cast<SwFieldTypesEnum>(rField.GetSubType());
+    if (eSubType == SwFieldTypesEnum::ConditionalText)
+    {
+        OUString aCond = rField.GetPar1();
+        OUString aTrueFalse = rField.GetPar2();
+        sal_Int32 nPos = aTrueFalse.indexOf('|');
+        OUString aTrue;
+        OUString aFalse;
+        if (nPos == -1)
+        {
+            aTrue = aTrueFalse;
+        }
+        else
+        {
+            aTrue = aTrueFalse.subView(0, nPos);
+            aFalse = aTrueFalse.subView(nPos + 1);
+        }
+        OUString aCmd = FieldString(ww::eIF) + aCond + " \"" + aTrue + "\" \"" + aFalse + "\"";
+        m_rExport.OutputField(&rField, ww::eIF, aCmd);
+        return;
+    }
+
     SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::HiddenField()" );
 }
 
