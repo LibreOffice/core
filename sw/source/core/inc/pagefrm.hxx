@@ -434,6 +434,9 @@ SwTextGridItem const* GetGridItem(SwPageFrame const*const);
 
 sal_uInt16 GetGridWidth(SwTextGridItem const&, SwDoc const&);
 
+namespace sw { bool IsPageFrameEmpty(SwPageFrame const& rPage); }
+
+
 #endif // INCLUDED_SW_SOURCE_CORE_INC_PAGEFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

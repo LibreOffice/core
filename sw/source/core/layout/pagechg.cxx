@@ -992,10 +992,65 @@ void SwPageFrame::PrepareRegisterChg()
     }
 }
 
+namespace sw {
+
+/// check if there's content on the page that requires it to exist
+bool IsPageFrameEmpty(SwPageFrame const& rPage)
+{
+    bool bExistEssentialObjs = (nullptr != rPage.GetSortedObjs());
+    if (bExistEssentialObjs)
+    {
+        // Only because the page has Flys does not mean that it is needed. If all Flys are
+        // attached to generic content it is also superfluous (checking DocBody should be enough)
+        // OD 19.06.2003 - consider that drawing objects in
+        // header/footer are supported now.
+        bool bOnlySuperfluousObjs = true;
+        SwSortedObjs const& rObjs = *rPage.GetSortedObjs();
+        for (size_t i = 0; bOnlySuperfluousObjs && i < rObjs.size(); ++i)
+        {
+            // #i28701#
+            SwAnchoredObject* pAnchoredObj = rObjs[i];
+            // do not consider hidden objects
+            if ( rPage.GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
+                                pAnchoredObj->GetDrawObj()->GetLayer() ) &&
+                 !pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() )
+            {
+                bOnlySuperfluousObjs = false;
+            }
+        }
+        bExistEssentialObjs = !bOnlySuperfluousObjs;
+    }
+
+    // optimization: check first if essential objects exist.
+    const SwLayoutFrame* pBody = nullptr;
+    if ( bExistEssentialObjs ||
+         rPage.FindFootnoteCont() ||
+         (nullptr != (pBody = rPage.FindBodyCont()) &&
+            ( pBody->ContainsContent() ||
+                // #i47580#
+                // Do not delete page if there's an empty tabframe
+                // left. I think it might be correct to use ContainsAny()
+                // instead of ContainsContent() to cover the empty-table-case,
+                // but I'm not fully sure, since ContainsAny() also returns
+                // SectionFrames. Therefore I prefer to do it the safe way:
+              ( pBody->Lower() && pBody->Lower()->IsTabFrame() ) ) ) )
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+} // namespace sw
+
 //FIXME: provide missing documentation
 /** Check all pages (starting from the given one) if they use the appropriate frame format.
  *
  * If "wrong" pages are found, try to fix this as simple as possible.
+ *
+ * Also delete pages that don't have content on them.
  *
  * @param pStart        the page from where to start searching
  * @param bNotifyFields
@@ -1034,7 +1089,10 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
         SwPageFrame *pNextPage = static_cast<SwPageFrame*>(pPage->GetNext());
 
         SwPageDesc *pDesc = pPage->FindPageDesc();
+        /// page is intentionally empty page
         bool bIsEmpty = pPage->IsEmptyPage();
+        // false for intentionally empty pages, they need additional check
+        bool isPageFrameEmpty(!bIsEmpty && sw::IsPageFrameEmpty(*pPage));
         bool bIsOdd = pPage->OnRightPage();
         bool bWantOdd = pPage->WannaRightPage();
         bool bFirst = pPage->OnFirstPage();
@@ -1131,6 +1189,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
                 pTmp->Paste( pRoot, pPage );
                 pTmp->PreparePage( false );
                 pPage = pTmp;
+                isPageFrameEmpty = false; // don't delete it right away!
             }
             else if ( pPage->GetPageDesc() != pDesc )           //4.
             {
@@ -1174,16 +1233,21 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
             }
 #endif
         }
-        if ( bIsEmpty )
+        assert(!bIsEmpty || !isPageFrameEmpty);
+        if (bIsEmpty || isPageFrameEmpty)
         {
             // It also might be that an empty page is not needed at all.
             // However, the algorithm above cannot determine that. It is not needed if the following
             // page can live without it. Do obtain that information, we need to dig deeper...
             SwPageFrame *pPg = static_cast<SwPageFrame*>(pPage->GetNext());
-            if( !pPg || pPage->OnRightPage() == pPg->WannaRightPage() )
+            if (isPageFrameEmpty || !pPg || pPage->OnRightPage() == pPg->WannaRightPage())
             {
                 // The following page can find a FrameFormat or has no successor -> empty page not needed
                 SwPageFrame *pTmp = static_cast<SwPageFrame*>(pPage->GetNext());
+                if (isPageFrameEmpty && pPage->GetPrev())
+                {   // check previous *again* vs. its new next! see "ooo321_stylepagenumber.odt"
+                    pTmp = static_cast<SwPageFrame*>(pPage->GetPrev());
+                }
                 pPage->Cut();
                 bool bUpdatePrev = false;
                 if (ppPrev && *ppPrev == pPage)
@@ -1443,44 +1507,7 @@ void SwRootFrame::RemoveSuperfluous()
     // Check the corresponding last page if it is empty and stop loop at the last non-empty page.
     do
     {
-        bool bExistEssentialObjs = ( nullptr != pPage->GetSortedObjs() );
-        if ( bExistEssentialObjs )
-        {
-            // Only because the page has Flys does not mean that it is needed. If all Flys are
-            // attached to generic content it is also superfluous (checking DocBody should be enough)
-            // OD 19.06.2003 #108784# - consider that drawing objects in
-            // header/footer are supported now.
-            bool bOnlySuperfluosObjs = true;
-            SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-            for ( size_t i = 0; bOnlySuperfluosObjs && i < rObjs.size(); ++i )
-            {
-                // #i28701#
-                SwAnchoredObject* pAnchoredObj = rObjs[i];
-                // OD 2004-01-19 #110582# - do not consider hidden objects
-                if ( pPage->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
-                                    pAnchoredObj->GetDrawObj()->GetLayer() ) &&
-                     !pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() )
-                {
-                    bOnlySuperfluosObjs = false;
-                }
-            }
-            bExistEssentialObjs = !bOnlySuperfluosObjs;
-        }
-
-        // OD 19.06.2003 #108784# - optimization: check first, if essential objects
-        // exists.
-        const SwLayoutFrame* pBody = nullptr;
-        if ( bExistEssentialObjs ||
-             pPage->FindFootnoteCont() ||
-             ( nullptr != ( pBody = pPage->FindBodyCont() ) &&
-                ( pBody->ContainsContent() ||
-                    // #i47580#
-                    // Do not delete page if there's an empty tabframe
-                    // left. I think it might be correct to use ContainsAny()
-                    // instead of ContainsContent() to cover the empty-table-case,
-                    // but I'm not fully sure, since ContainsAny() also returns
-                    // SectionFrames. Therefore I prefer to do it the safe way:
-                  ( pBody->Lower() && pBody->Lower()->IsTabFrame() ) ) ) )
+        if (!sw::IsPageFrameEmpty(*pPage))
         {
             if ( pPage->IsFootnotePage() )
             {
