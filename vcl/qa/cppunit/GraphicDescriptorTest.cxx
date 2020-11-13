@@ -64,8 +64,8 @@ void GraphicDescriptorTest::testDetectPNG()
 
     CPPUNIT_ASSERT_EQUAL(GraphicFileFormat::PNG, aDescriptor.GetFileFormat());
 
-    CPPUNIT_ASSERT_EQUAL(100L, aDescriptor.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(100L, aDescriptor.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Height());
 }
 
 void GraphicDescriptorTest::testDetectJPG()
@@ -78,8 +78,8 @@ void GraphicDescriptorTest::testDetectJPG()
 
     CPPUNIT_ASSERT_EQUAL(GraphicFileFormat::JPG, aDescriptor.GetFileFormat());
 
-    CPPUNIT_ASSERT_EQUAL(100L, aDescriptor.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(100L, aDescriptor.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Height());
 }
 
 void GraphicDescriptorTest::testDetectGIF()
@@ -92,8 +92,8 @@ void GraphicDescriptorTest::testDetectGIF()
 
     CPPUNIT_ASSERT_EQUAL(GraphicFileFormat::GIF, aDescriptor.GetFileFormat());
 
-    CPPUNIT_ASSERT_EQUAL(100L, aDescriptor.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(100L, aDescriptor.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Height());
 }
 
 } // namespace

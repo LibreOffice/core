@@ -228,20 +228,20 @@ void BitmapFilterTest::testGenerateStripRanges()
 
         CPPUNIT_ASSERT_EQUAL(size_t(4), aRanges.size());
 
-        CPPUNIT_ASSERT_EQUAL(0L, std::get<0>(aRanges[0]));
-        CPPUNIT_ASSERT_EQUAL(31L, std::get<1>(aRanges[0]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), std::get<0>(aRanges[0]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(31), std::get<1>(aRanges[0]));
         CPPUNIT_ASSERT_EQUAL(false, std::get<2>(aRanges[0]));
 
-        CPPUNIT_ASSERT_EQUAL(32L, std::get<0>(aRanges[1]));
-        CPPUNIT_ASSERT_EQUAL(63L, std::get<1>(aRanges[1]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(32), std::get<0>(aRanges[1]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(63), std::get<1>(aRanges[1]));
         CPPUNIT_ASSERT_EQUAL(false, std::get<2>(aRanges[1]));
 
-        CPPUNIT_ASSERT_EQUAL(64L, std::get<0>(aRanges[2]));
-        CPPUNIT_ASSERT_EQUAL(95L, std::get<1>(aRanges[2]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(64), std::get<0>(aRanges[2]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(95), std::get<1>(aRanges[2]));
         CPPUNIT_ASSERT_EQUAL(false, std::get<2>(aRanges[2]));
 
-        CPPUNIT_ASSERT_EQUAL(96L, std::get<0>(aRanges[3]));
-        CPPUNIT_ASSERT_EQUAL(100L, std::get<1>(aRanges[3]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(96), std::get<0>(aRanges[3]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(100), std::get<1>(aRanges[3]));
         CPPUNIT_ASSERT_EQUAL(true, std::get<2>(aRanges[3]));
     }
 
@@ -260,16 +260,16 @@ void BitmapFilterTest::testGenerateStripRanges()
 
         CPPUNIT_ASSERT_EQUAL(size_t(3), aRanges.size());
 
-        CPPUNIT_ASSERT_EQUAL(0L, std::get<0>(aRanges[0]));
-        CPPUNIT_ASSERT_EQUAL(31L, std::get<1>(aRanges[0]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), std::get<0>(aRanges[0]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(31), std::get<1>(aRanges[0]));
         CPPUNIT_ASSERT_EQUAL(false, std::get<2>(aRanges[0]));
 
-        CPPUNIT_ASSERT_EQUAL(32L, std::get<0>(aRanges[1]));
-        CPPUNIT_ASSERT_EQUAL(63L, std::get<1>(aRanges[1]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(32), std::get<0>(aRanges[1]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(63), std::get<1>(aRanges[1]));
         CPPUNIT_ASSERT_EQUAL(false, std::get<2>(aRanges[1]));
 
-        CPPUNIT_ASSERT_EQUAL(64L, std::get<0>(aRanges[2]));
-        CPPUNIT_ASSERT_EQUAL(95L, std::get<1>(aRanges[2]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(64), std::get<0>(aRanges[2]));
+        CPPUNIT_ASSERT_EQUAL(tools::Long(95), std::get<1>(aRanges[2]));
         CPPUNIT_ASSERT_EQUAL(true, std::get<2>(aRanges[2]));
     }
 }

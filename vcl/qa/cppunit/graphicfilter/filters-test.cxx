@@ -128,8 +128,8 @@ void VclFiltersTest::checkExportImport(const OUString& aFilterShortName)
     BitmapEx aLoadedBitmapEx = aLoadedGraphic.GetBitmapEx();
     Size aSize = aLoadedBitmapEx.GetSizePixel();
 
-    CPPUNIT_ASSERT_EQUAL(100L, aSize.Width());
-    CPPUNIT_ASSERT_EQUAL(100L, aSize.Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aSize.Height());
 }
 
 void VclFiltersTest::testExportImport()

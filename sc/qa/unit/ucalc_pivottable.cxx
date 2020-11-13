@@ -776,7 +776,7 @@ void Test::testPivotTableCache()
     ScDPCache aCache(*m_pDoc);
     aCache.InitFromDoc(*m_pDoc, aDataRange);
     tools::Long nDimCount = aCache.GetColumnCount();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension count.", 3L, nDimCount);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension count.", tools::Long(3), nDimCount);
     OUString aDimName = aCache.GetDimensionName(0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension name", OUString("F1"), aDimName);
     aDimName = aCache.GetDimensionName(1);
@@ -791,7 +791,7 @@ void Test::testPivotTableCache()
 
     // Dimension 0 - a mix of strings and values.
     tools::Long nMemCount = aCache.GetDimMemberCount(0);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", 6L, nMemCount);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", tools::Long(6), nMemCount);
     const ScDPItemData* pItem = aCache.GetItemDataById(0, 0);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::Value &&
@@ -821,7 +821,7 @@ void Test::testPivotTableCache()
 
     // Dimension 1 - duplicate values in source.
     nMemCount = aCache.GetDimMemberCount(1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", 3L, nMemCount);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", tools::Long(3), nMemCount);
     pItem = aCache.GetItemDataById(1, 0);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::String &&
@@ -839,7 +839,7 @@ void Test::testPivotTableCache()
 
     // Dimension 2 - values only.
     nMemCount = aCache.GetDimMemberCount(2);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", 6L, nMemCount);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", tools::Long(6), nMemCount);
     pItem = aCache.GetItemDataById(2, 0);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::Value &&

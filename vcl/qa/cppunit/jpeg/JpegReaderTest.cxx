@@ -112,8 +112,8 @@ void JpegReaderTest::testReadRGB()
     Graphic aGraphic = loadJPG(getFullUrl("JPEGTestRGB.jpeg"));
     Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
     Size aSize = aBitmap.GetSizePixel();
-    CPPUNIT_ASSERT_EQUAL(12L, aSize.Width());
-    CPPUNIT_ASSERT_EQUAL(12L, aSize.Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Height());
 
     int nMaxDelta = 1; // still acceptable color error
     CPPUNIT_ASSERT(checkRect(aBitmap, 0, 8, 8, Color(0xff, 0xff, 0xff), nMaxDelta));
@@ -129,8 +129,8 @@ void JpegReaderTest::testReadGray()
     Graphic aGraphic = loadJPG(getFullUrl("JPEGTestGray.jpeg"));
     Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
     Size aSize = aBitmap.GetSizePixel();
-    CPPUNIT_ASSERT_EQUAL(12L, aSize.Width());
-    CPPUNIT_ASSERT_EQUAL(12L, aSize.Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Height());
 
     aBitmap.Convert(BmpConversion::N24Bit); // convert to 24bit so we don't need to deal with palette
 
@@ -148,8 +148,8 @@ void JpegReaderTest::testReadCMYK()
     Graphic aGraphic = loadJPG(getFullUrl("JPEGTestCMYK.jpeg"));
     Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
     Size aSize = aBitmap.GetSizePixel();
-    CPPUNIT_ASSERT_EQUAL(12L, aSize.Width());
-    CPPUNIT_ASSERT_EQUAL(12L, aSize.Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Height());
 
     int maxDelta = 1;
     CPPUNIT_ASSERT(checkRect(aBitmap, 0, 8, 8, Color(0xff, 0xff, 0xff), maxDelta));
