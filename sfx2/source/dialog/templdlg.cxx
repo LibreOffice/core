@@ -33,6 +33,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
+#include <svtools/colorcfg.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/intlwrapper.hxx>
@@ -287,8 +288,8 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, CustomRenderHdl, weld::TreeView::render_
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else
-        rRenderContext.SetTextColor(rStyleSettings.GetDialogTextColor());
-
+        rRenderContext.SetTextColor(
+            svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor);
     bool bSuccess = false;
 
     SfxObjectShell* pShell = SfxObjectShell::Current();
@@ -546,6 +547,8 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     , mxTreeBox(pBuilder->weld_tree_view("treeview"))
     , mxPreviewCheckbox(pBuilder->weld_check_button("showpreview"))
     , mxFilterLb(pBuilder->weld_combo_box("filter"))
+    , mxListView(pBuilder->weld_scrolled_window("swListView"))
+    , mxTreeView(pBuilder->weld_scrolled_window("swTreeView"))
 
     , nActFamily(0xffff)
     , nActFilter(0)
@@ -775,6 +778,8 @@ void SfxCommonTemplateDialog_Impl::Initialize()
     mxFmtLb->set_visible(!bHierarchical);
     mxTreeBox->set_visible(bHierarchical);
 
+    //update colors
+    PreviewHdl(*mxPreviewCheckbox);
     Update_Impl();
 }
 
@@ -1940,10 +1945,18 @@ IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, PreviewHdl, weld::Button&, void)
     officecfg::Office::Common::StylesAndFormatting::Preview::set(bCustomPreview, batch );
     batch->commit();
 
+    const Color aPreviewColor(svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
+    const Color aDefaultColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
+
     mxFmtLb->clear();
     mxFmtLb->set_column_custom_renderer(0, bCustomPreview);
+    mxFmtLb->set_background( bCustomPreview ? aPreviewColor : aDefaultColor);
+    if (mxListView) mxListView->set_background( bCustomPreview ? aPreviewColor : aDefaultColor);
+
     mxTreeBox->clear();
     mxTreeBox->set_column_custom_renderer(0, bCustomPreview);
+    mxTreeBox->set_background( bCustomPreview ? aPreviewColor : aDefaultColor);
+    if (mxTreeView) mxTreeView->set_background( bCustomPreview ? aPreviewColor : aDefaultColor);
 
     FamilySelect(nActFamily, true);
 }
