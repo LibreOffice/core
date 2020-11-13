@@ -45,3 +45,23 @@ index 66bfe29331..034cd21838 100644
      const GrGLExtensions& extensions() const { return fInterface->fExtensions; }
  
  protected:
+diff --git a/src/gpu/gl/GrGLGpu.h b/src/gpu/gl/GrGLGpu.h
+index 8e550c36e6..27fb5efe9b 100644
+--- ./src/gpu/gl/GrGLGpu.h
++++ ./src/gpu/gl/GrGLGpu.h
+@@ -259,6 +259,7 @@ private:
+     // compatible stencil format, or negative if there is no compatible stencil format.
+     int getCompatibleStencilIndex(GrGLFormat format);
+ 
++#ifdef SK_GL
+     GrBackendFormat getPreferredStencilFormat(const GrBackendFormat& format) override {
+         int idx = this->getCompatibleStencilIndex(format.asGLFormat());
+         if (idx < 0) {
+@@ -267,6 +268,7 @@ private:
+         return GrBackendFormat::MakeGL(GrGLFormatToEnum(this->glCaps().stencilFormats()[idx]),
+                                        GR_GL_TEXTURE_NONE);
+     }
++#endif
+ 
+     void onFBOChanged();
+ 

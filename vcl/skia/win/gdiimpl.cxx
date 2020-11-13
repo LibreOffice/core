@@ -22,7 +22,6 @@
 #include <SkTypeface_win.h>
 #include <SkFont.h>
 #include <SkFontMgr.h>
-#include <SkFontLCDConfig.h>
 #include <tools/sk_app/win/WindowContextFactory_win.h>
 #include <tools/sk_app/WindowContext.h>
 
@@ -39,6 +38,9 @@ void WinSkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
 {
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
+    initFontInfo();
+    displayParams.fSurfaceProps
+        = SkSurfaceProps(displayParams.fSurfaceProps.flags(), pixelGeometry);
     switch (forceRaster ? SkiaHelper::RenderRaster : SkiaHelper::renderMethodToUse())
     {
         case SkiaHelper::RenderRaster:
@@ -209,10 +211,20 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     return true;
 }
 
+SkFont::Edging WinSkiaSalGraphicsImpl::fontEdging;
+SkPixelGeometry WinSkiaSalGraphicsImpl::pixelGeometry;
+bool WinSkiaSalGraphicsImpl::fontInfoDone = false;
+
 SkFont::Edging WinSkiaSalGraphicsImpl::getFontEdging()
 {
-    if (fontEdgingDone)
-        return fontEdging;
+    initFontInfo();
+    return fontEdging;
+}
+
+void WinSkiaSalGraphicsImpl::initFontInfo()
+{
+    if (fontInfoDone)
+        return;
     // Skia needs to be explicitly told what kind of antialiasing should be used,
     // get it from system settings. This does not actually matter for the text
     // rendering itself, since Skia has been patched to simply use the setting
@@ -222,7 +234,7 @@ SkFont::Edging WinSkiaSalGraphicsImpl::getFontEdging()
     // the glyphs will be rendered based on this setting (subpixel AA requires colors,
     // others do not).
     fontEdging = SkFont::Edging::kAlias;
-    SkFontLCDConfig::LCDOrder lcdOrder = SkFontLCDConfig::kNONE_LCDOrder;
+    pixelGeometry = kUnknown_SkPixelGeometry;
     BOOL set;
     if (SystemParametersInfo(SPI_GETFONTSMOOTHING, 0, &set, 0) && set)
     {
@@ -233,24 +245,23 @@ SkFont::Edging WinSkiaSalGraphicsImpl::getFontEdging()
             fontEdging = SkFont::Edging::kSubpixelAntiAlias;
             if (SystemParametersInfo(SPI_GETFONTSMOOTHINGORIENTATION, 0, &set2, 0)
                 && set2 == FE_FONTSMOOTHINGORIENTATIONBGR)
-                lcdOrder = SkFontLCDConfig::kBGR_LCDOrder;
+                // No idea how to tell if it's horizontal or vertical.
+                pixelGeometry = kBGR_H_SkPixelGeometry;
             else
-                lcdOrder = SkFontLCDConfig::kRGB_LCDOrder; // default
+                pixelGeometry = kRGB_H_SkPixelGeometry; // default
         }
         else
             fontEdging = SkFont::Edging::kAntiAlias;
     }
-    SkFontLCDConfig::SetSubpixelOrder(lcdOrder);
     // Cache this, it is actually visible a little bit when profiling.
-    fontEdgingDone = true;
-    return fontEdging;
+    fontInfoDone = true;
 }
 
 void WinSkiaSalGraphicsImpl::ClearDevFontCache()
 {
     dwriteFontMgr.reset();
     dwriteDone = false;
-    fontEdgingDone = false;
+    fontInfoDone = false;
 }
 
 SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int width, int height)

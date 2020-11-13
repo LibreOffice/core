@@ -77,12 +77,14 @@ protected:
     virtual void performFlush() override;
     sk_sp<SkTypeface> createDirectWriteTypeface(const LOGFONTW& logFont);
     SkFont::Edging getFontEdging();
+    void initFontInfo();
     IDWriteFactory* dwriteFactory;
     IDWriteGdiInterop* dwriteGdiInterop;
     sk_sp<SkFontMgr> dwriteFontMgr;
     bool dwriteDone = false;
-    SkFont::Edging fontEdging;
-    bool fontEdgingDone = false;
+    static SkFont::Edging fontEdging;
+    static SkPixelGeometry pixelGeometry;
+    static bool fontInfoDone;
 };
 
 typedef std::pair<ControlCacheKey, sk_sp<SkImage>> SkiaControlCachePair;
