@@ -1925,6 +1925,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137684)
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138135)
+{
+    load(DATA_DIRECTORY, "tdf132160.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+
+    // select and delete a word letter by letter by using backspace
+    dispatchCommand(mxComponent, ".uno:GoToNextWord", {});
+
+    for (int i = 0; i <= 10; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    }
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("support"));
+
+    // single Undo undoes the deletion of the whole word
+    //
+    // This was only a 1-character Undo because of missing
+    // joining of the deleted characters
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Encryption"));
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf52391)
 {
     load(DATA_DIRECTORY, "tdf52391.fodt");
