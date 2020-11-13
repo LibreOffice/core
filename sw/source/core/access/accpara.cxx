@@ -1120,7 +1120,7 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
     if( nStrLen > 0 )
     {
         SwFrame* pTFrame = const_cast<SwFrame*>(GetFrame());
-        tabs = pTFrame->GetTabStopInfo(aCoreRect.Left());
+        tabs = pTFrame->GetTabStopInfo(SwTwips(aCoreRect.Left()));
     }
 
     if( tabs.hasElements() )
@@ -1132,7 +1132,7 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
             throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
         }
 
-        SwRect aTmpRect(0, 0, tabs[0].Position, 0);
+        SwRect aTmpRect(SwTwips(0), SwTwips(0), SwTwips(tabs[0].Position), SwTwips(0));
 
         tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aTmpRect ));
         SwRect aFrameLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
@@ -2117,7 +2117,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     Point aPixPos( GetMap()->CoreToPixel( aLogBounds ).TopLeft() );
     aPoint.setX(aPoint.getX() + aPixPos.getX());
     aPoint.setY(aPoint.getY() + aPixPos.getY());
-    Point aCorePoint( GetMap()->PixelToCore( aPoint ) );
+    SwPoint aCorePoint( GetMap()->PixelToCore( aPoint ) );
     if( !aLogBounds.IsInside( aCorePoint ) )
     {
         // #i12332# rPoint is may also be in rectangle returned by
@@ -2517,8 +2517,8 @@ sal_Bool SwAccessibleParagraph::scrollSubstringTo( sal_Int32 nStartIndex,
     sP += aFramePixPos;
     eP += aFramePixPos;
 
-    Point startPoint(GetMap()->PixelToCore(sP));
-    Point endPoint(GetMap()->PixelToCore(eP));
+    SwPoint startPoint(GetMap()->PixelToCore(sP));
+    SwPoint endPoint(GetMap()->PixelToCore(eP));
 
     switch (aScrollType)
     {

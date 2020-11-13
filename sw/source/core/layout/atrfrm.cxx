@@ -230,7 +230,7 @@ bool SwFormatFrameSize::HasMetrics() const {
 
 // Partially implemented inline in hxx
 SwFormatFrameSize::SwFormatFrameSize( SwFrameSize eSize, SwTwips nWidth, SwTwips nHeight )
-    : SvxSizeItem( RES_FRM_SIZE, {nWidth, nHeight} ),
+    : SvxSizeItem( RES_FRM_SIZE, Size(tools::Long(nWidth), tools::Long(nHeight)) ),
     m_eFrameHeightType( eSize ),
     m_eFrameWidthType( SwFrameSize::Fixed )
 {
@@ -263,8 +263,8 @@ bool SwFormatFrameSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_FRMSIZE_SIZE:
         {
             awt::Size aTmp;
-            aTmp.Height = convertTwipToMm100(GetHeight());
-            aTmp.Width = convertTwipToMm100(GetWidth());
+            aTmp.Height = convertTwipToMm100(tools::Long(GetHeight()));
+            aTmp.Width = convertTwipToMm100(tools::Long(GetWidth()));
             rVal <<= aTmp;
         }
         break;
@@ -323,11 +323,11 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 bRet = false;
             else
             {
-                Size aTmp(aVal.Width, aVal.Height);
+                SwSize aTmp(SwTwips(aVal.Width), SwTwips(aVal.Height));
                 if(bConvert)
                 {
-                    aTmp.setHeight( convertMm100ToTwip(aTmp.Height()) );
-                    aTmp.setWidth( convertMm100ToTwip(aTmp.Width()) );
+                    aTmp.setHeight( convertMm100ToTwip(aVal.Height()) );
+                    aTmp.setWidth( convertMm100ToTwip(aVal.Width()) );
                 }
                 SetSize(aTmp);
             }
@@ -455,7 +455,7 @@ void SwFormatFrameSize::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
 
     std::stringstream aSize;
-    aSize << GetSize();
+    aSize << Size(GetSize());
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(aSize.str().c_str()));
 
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eFrameHeightType"), BAD_CAST(OString::number(static_cast<int>(m_eFrameHeightType)).getStr()));

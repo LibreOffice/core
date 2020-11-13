@@ -184,7 +184,7 @@ static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTab
         SwTableBoxFormat* pBoxFormat = rDoc.MakeTableBoxFormat();
         if( USHRT_MAX != nCols )
             pBoxFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable,
-                                            USHRT_MAX / nCols, 0 ));
+                                            SwTwips(USHRT_MAX / nCols), SwTwips(0) ));
         ::lcl_SetDfltBoxAttr( *pBoxFormat, nId );
         rBoxFormatArr[ nId ] = pBoxFormat;
     }
@@ -204,7 +204,7 @@ static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<Sw
                                 rDoc.GetNumberFormatter( ) );
         if( USHRT_MAX != nCols )
             pBoxFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable,
-                                            USHRT_MAX / nCols, 0 ));
+                                            SwTwips(USHRT_MAX / nCols), SwTwips(0) ));
         rBoxFormatArr[ nId ] = pBoxFormat;
     }
     return rBoxFormatArr[nId];
@@ -338,7 +338,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
                                    const SwPosition& rPos, sal_uInt16 nRows,
                                    sal_uInt16 nCols, sal_Int16 eAdjust,
                                    const SwTableAutoFormat* pTAFormat,
-                                   const std::vector<sal_uInt16> *pColArr,
+                                   const std::vector<SwTwips> *pColArr,
                                    bool bCalledFromShell,
                                    bool bNewModel )
 {
@@ -416,28 +416,28 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     }
 
     // Set Orientation at the Table's Format
-    pTableFormat->SetFormatAttr( SwFormatHoriOrient( 0, eAdjust ) );
+    pTableFormat->SetFormatAttr( SwFormatHoriOrient( SwTwips(0), eAdjust ) );
     // All lines use the left-to-right Fill-Order!
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
 
     // Set USHRT_MAX as the Table's default SSize
-    SwTwips nWidth = USHRT_MAX;
+    SwTwips nWidth(USHRT_MAX);
     if( pColArr )
     {
-        sal_uInt16 nSttPos = pColArr->front();
-        sal_uInt16 nLastPos = pColArr->back();
+        SwTwips nSttPos = pColArr->front();
+        SwTwips nLastPos = pColArr->back();
         if( text::HoriOrientation::NONE == eAdjust )
         {
-            sal_uInt16 nFrameWidth = nLastPos;
+            SwTwips nFrameWidth = nLastPos;
             nLastPos = (*pColArr)[ pColArr->size()-2 ];
-            pTableFormat->SetFormatAttr( SvxLRSpaceItem( nSttPos, nFrameWidth - nLastPos, 0, 0, RES_LR_SPACE ) );
+            pTableFormat->SetFormatAttr( SvxLRSpaceItem( tools::Long(nSttPos), tools::Long(nFrameWidth - nLastPos), 0, 0, RES_LR_SPACE ) );
         }
         nWidth = nLastPos - nSttPos;
     }
     else
     {
-        nWidth /= nCols;
-        nWidth *= nCols; // to avoid rounding problems
+        nWidth /= SwTwips(nCols);
+        nWidth *= SwTwips(nCols); // to avoid rounding problems
     }
     pTableFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, nWidth ));
     if( !(rInsTableOpts.mnInsMode & SwInsertTableFlags::SplitLayout) )
@@ -476,7 +476,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     if( !bDfltBorders && !pTAFormat )
     {
         pBoxFormat = MakeTableBoxFormat();
-        pBoxFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, USHRT_MAX / nCols, 0 ));
+        pBoxFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, SwTwips(USHRT_MAX / nCols), SwTwips(0) ));
     }
     else
     {
@@ -704,7 +704,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     // All Lines have a left-to-right Fill Order
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
     // The Table's SSize is USHRT_MAX
-    pTableFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, USHRT_MAX ));
+    pTableFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, SwTwips(USHRT_MAX) ));
     if( !(rInsTableOpts.mnInsMode & SwInsertTableFlags::SplitLayout) )
         pTableFormat->SetFormatAttr( SwFormatLayoutSplit( false ));
 
@@ -752,7 +752,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     }
 
     // Set Orientation in the Table's Format
-    pTableFormat->SetFormatAttr( SwFormatHoriOrient( 0, eAdjust ) );
+    pTableFormat->SetFormatAttr( SwFormatHoriOrient( SwTwips(0), eAdjust ) );
     rNdTable.RegisterToFormat(*pTableFormat);
 
     if( pTAFormat || ( rInsTableOpts.mnInsMode & SwInsertTableFlags::DefaultBorder) )
@@ -934,7 +934,7 @@ static void lcl_RemoveBreaks(SwContentNode & rNode, SwTableFormat *const pTableF
 static void
 lcl_BalanceTable(SwTable & rTable, size_t const nMaxBoxes,
     SwTableNode & rTableNd, SwTableBoxFormat & rBoxFormat, SwTextFormatColl & rTextColl,
-    SwUndoTextToTable *const pUndo, std::vector<sal_uInt16> *const pPositions)
+    SwUndoTextToTable *const pUndo, std::vector<SwTwips> *const pPositions)
 {
     for (size_t n = 0; n < rTable.GetTabLines().size(); ++n)
     {
@@ -965,12 +965,12 @@ lcl_BalanceTable(SwTable & rTable, size_t const nMaxBoxes,
 static void
 lcl_SetTableBoxWidths(SwTable & rTable, size_t const nMaxBoxes,
         SwTableBoxFormat & rBoxFormat, SwDoc & rDoc,
-        std::vector<sal_uInt16> *const pPositions)
+        std::vector<SwTwips> *const pPositions)
 {
     if (pPositions && !pPositions->empty())
     {
         SwTableLines& rLns = rTable.GetTabLines();
-        sal_uInt16 nLastPos = 0;
+        SwTwips nLastPos(0);
         for (size_t n = 0; n < pPositions->size(); ++n)
         {
             SwTableBoxFormat *pNewFormat = rDoc.MakeTableBoxFormat();
@@ -993,7 +993,7 @@ lcl_SetTableBoxWidths(SwTable & rTable, size_t const nMaxBoxes,
     }
     else
     {
-        size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
+        SwTwips nWidth = SwTwips(nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX);
         rBoxFormat.SetFormatAttr(SwFormatFrameSize(SwFrameSize::Variable, nWidth));
     }
 }
@@ -1012,7 +1012,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
     new SwEndNode( rRange.aEnd, *pTableNd );
 
     SwDoc& rDoc = GetDoc();
-    std::vector<sal_uInt16> aPosArr;
+    std::vector<SwTwips> aPosArr;
     SwTable& rTable = pTableNd->GetTable();
     SwTableBox* pBox;
     sal_uInt16 nBoxes, nLines, nMaxBoxes = 0;
@@ -1041,15 +1041,15 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                     {
                         // sw_redlinehide: no idea if this makes any sense...
                         TextFrameIndex const nPos(aFInfo.GetFrame()->MapModelToView(pTextNd, nChPos));
-                        aPosArr.push_back( o3tl::narrowing<sal_uInt16>(
-                            aFInfo.GetCharPos(nPos+TextFrameIndex(1), false)) );
+                        aPosArr.push_back(
+                            aFInfo.GetCharPos(nPos+TextFrameIndex(1), false) );
                     }
                 }
 
                 aPosArr.push_back(
-                                o3tl::narrowing<sal_uInt16>(aFInfo.GetFrame()->IsVertical() ?
+                                aFInfo.GetFrame()->IsVertical() ?
                                 aFInfo.GetFrame()->getFramePrintArea().Bottom() :
-                                aFInfo.GetFrame()->getFramePrintArea().Right()) );
+                                aFInfo.GetFrame()->getFramePrintArea().Right() );
 
             }
         }
@@ -1237,7 +1237,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     // All Lines have a left-to-right Fill Order
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
     // The Table's SSize is USHRT_MAX
-    pTableFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, USHRT_MAX ));
+    pTableFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable, SwTwips(USHRT_MAX) ));
 
     /* If the first node in the selection is a context node and if it
        has an item FRAMEDIR set (no default) propagate the item to the
@@ -1358,13 +1358,13 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
         {
             // default width for box at the end of an incomplete line
             SwTableBoxFormat *const pNewFormat = rDoc.MakeTableBoxFormat();
-            size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
+            SwTwips nWidth(nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX);
             pNewFormat->SetFormatAttr( SwFormatFrameSize(SwFrameSize::Variable,
-                        nWidth * (nMissing + 1)) );
+                        nWidth * SwTwips(nMissing + 1)) );
             pNewFormat->Add(rBoxes.back());
         }
     }
-    size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
+    SwTwips nWidth(nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX);
     // default width for all boxes not at the end of an incomplete line
     rBoxFormat.SetFormatAttr(SwFormatFrameSize(SwFrameSize::Variable, nWidth));
 }
@@ -2513,9 +2513,9 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     // Set fixed points, LeftMin in Document coordinates, all others relative
     SwRectFnSet aRectFnSet(pTab);
     const SwPageFrame* pPage = pTab->FindPageFrame();
-    const sal_uLong nLeftMin = aRectFnSet.GetLeft(pTab->getFrameArea()) -
+    const SwTwips nLeftMin = aRectFnSet.GetLeft(pTab->getFrameArea()) -
                            aRectFnSet.GetLeft(pPage->getFrameArea());
-    const sal_uLong nRightMax = aRectFnSet.GetRight(pTab->getFrameArea()) -
+    const SwTwips nRightMax = aRectFnSet.GetRight(pTab->getFrameArea()) -
                             aRectFnSet.GetLeft(pPage->getFrameArea());
 
     rFill.SetLeftMin ( nLeftMin );
@@ -2528,18 +2528,18 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
 
 // Here are some little helpers used in SwDoc::GetTabRows
 
-#define ROWFUZZY 25
+constexpr SwTwips ROWFUZZY(25);
 
 namespace {
 
 struct FuzzyCompare
 {
-    bool operator() ( tools::Long s1, tools::Long s2 ) const;
+    bool operator() ( SwTwips s1, SwTwips s2 ) const;
 };
 
 }
 
-bool FuzzyCompare::operator() ( tools::Long s1, tools::Long s2 ) const
+bool FuzzyCompare::operator() ( SwTwips s1, SwTwips s2 ) const
 {
     return ( s1 < s2 && std::abs( s1 - s2 ) > ROWFUZZY );
 }
@@ -2595,24 +2595,24 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     // Set fixed points, LeftMin in Document coordinates, all others relative
     SwRectFnSet aRectFnSet(pTab);
     const SwPageFrame* pPage = pTab->FindPageFrame();
-    const tools::Long nLeftMin  = ( aRectFnSet.IsVert() ?
+    const SwTwips nLeftMin  = ( aRectFnSet.IsVert() ?
                              pTab->GetPrtLeft() - pPage->getFrameArea().Left() :
                              pTab->GetPrtTop() - pPage->getFrameArea().Top() );
-    const tools::Long nLeft     = aRectFnSet.IsVert() ? LONG_MAX : 0;
-    const tools::Long nRight    = aRectFnSet.GetHeight(pTab->getFramePrintArea());
-    const tools::Long nRightMax = aRectFnSet.IsVert() ? nRight : LONG_MAX;
+    const SwTwips nLeft     = SwTwips(aRectFnSet.IsVert() ? LONG_MAX : 0);
+    const SwTwips nRight    = aRectFnSet.GetHeight(pTab->getFramePrintArea());
+    const SwTwips nRightMax = aRectFnSet.IsVert() ? nRight : SwTwips(LONG_MAX);
 
     rFill.SetLeftMin( nLeftMin );
     rFill.SetLeft( nLeft );
     rFill.SetRight( nRight );
     rFill.SetRightMax( nRightMax );
 
-    typedef std::map< tools::Long, std::pair< tools::Long, long >, FuzzyCompare > BoundaryMap;
+    typedef std::map< SwTwips, std::pair< SwTwips, SwTwips >, FuzzyCompare > BoundaryMap;
     BoundaryMap aBoundaries;
     BoundaryMap::iterator aIter;
-    std::pair< tools::Long, long > aPair;
+    std::pair< SwTwips, SwTwips > aPair;
 
-    typedef std::map< tools::Long, bool > HiddenMap;
+    typedef std::map< SwTwips, bool > HiddenMap;
     HiddenMap aHidden;
     HiddenMap::iterator aHiddenIter;
 
@@ -2621,14 +2621,14 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
         if ( pFrame->IsCellFrame() && pFrame->FindTabFrame() == pTab )
         {
             // upper and lower borders of current cell frame:
-            tools::Long nUpperBorder = aRectFnSet.GetTop(pFrame->getFrameArea());
-            tools::Long nLowerBorder = aRectFnSet.GetBottom(pFrame->getFrameArea());
+            SwTwips nUpperBorder = aRectFnSet.GetTop(pFrame->getFrameArea());
+            SwTwips nLowerBorder = aRectFnSet.GetBottom(pFrame->getFrameArea());
 
             // get boundaries for nUpperBorder:
             aIter = aBoundaries.find( nUpperBorder );
             if ( aIter == aBoundaries.end() )
             {
-                aPair.first = nUpperBorder; aPair.second = LONG_MAX;
+                aPair.first = nUpperBorder; aPair.second = SwTwips(LONG_MAX);
                 aBoundaries[ nUpperBorder ] = aPair;
             }
 
@@ -2636,18 +2636,18 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
             aIter = aBoundaries.find( nLowerBorder );
             if ( aIter == aBoundaries.end() )
             {
-                aPair.first = nUpperBorder; aPair.second = LONG_MAX;
+                aPair.first = nUpperBorder; aPair.second = SwTwips(LONG_MAX);
             }
             else
             {
                 nLowerBorder = (*aIter).first;
-                tools::Long nNewLowerBorderUpperBoundary = std::max( (*aIter).second.first, nUpperBorder );
-                aPair.first = nNewLowerBorderUpperBoundary; aPair.second = LONG_MAX;
+                SwTwips nNewLowerBorderUpperBoundary = std::max( (*aIter).second.first, nUpperBorder );
+                aPair.first = nNewLowerBorderUpperBoundary; aPair.second = SwTwips(LONG_MAX);
             }
             aBoundaries[ nLowerBorder ] = aPair;
 
             // calculate hidden flags for entry nUpperBorder/nLowerBorder:
-            tools::Long nTmpVal = nUpperBorder;
+            SwTwips nTmpVal = nUpperBorder;
             for ( sal_uInt8 i = 0; i < 2; ++i )
             {
                 aHiddenIter = aHidden.find( nTmpVal );
@@ -2670,11 +2670,11 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     size_t nIdx = 0;
     for ( const auto& rEntry : aBoundaries )
     {
-        const tools::Long nTabTop = aRectFnSet.GetPrtTop(*pTab);
-        const tools::Long nKey = aRectFnSet.YDiff( rEntry.first, nTabTop );
-        const std::pair< tools::Long, long > aTmpPair = rEntry.second;
-        const tools::Long nFirst = aRectFnSet.YDiff( aTmpPair.first, nTabTop );
-        const tools::Long nSecond = aTmpPair.second;
+        const SwTwips nTabTop = aRectFnSet.GetPrtTop(*pTab);
+        const SwTwips nKey = aRectFnSet.YDiff( rEntry.first, nTabTop );
+        const std::pair< SwTwips, SwTwips > aTmpPair = rEntry.second;
+        const SwTwips nFirst = aRectFnSet.YDiff( aTmpPair.first, nTabTop );
+        const SwTwips nSecond = aTmpPair.second;
 
         aHiddenIter = aHidden.find( rEntry.first );
         const bool bHidden = aHiddenIter != aHidden.end() && (*aHiddenIter).second;
@@ -2718,8 +2718,8 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     SwTwips nPrtWidth = aRectFnSet.GetWidth(pTab->getFramePrintArea());
     {
         SvxShadowItem aShadow( rTab.GetFrameFormat()->GetShadow() );
-        nPrtWidth += aShadow.CalcShadowSpace( SvxShadowItemSide::LEFT ) +
-                     aShadow.CalcShadowSpace( SvxShadowItemSide::RIGHT );
+        nPrtWidth += SwTwips(aShadow.CalcShadowSpace( SvxShadowItemSide::LEFT ) +
+                     aShadow.CalcShadowSpace( SvxShadowItemSide::RIGHT ));
     }
     if( nPrtWidth != rTableFrameSz.GetWidth() )
     {
@@ -2731,9 +2731,9 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     SwTabCols aOld( rNew.Count() );
 
     const SwPageFrame* pPage = pTab->FindPageFrame();
-    const sal_uLong nLeftMin = aRectFnSet.GetLeft(pTab->getFrameArea()) -
+    const SwTwips nLeftMin = aRectFnSet.GetLeft(pTab->getFrameArea()) -
                            aRectFnSet.GetLeft(pPage->getFrameArea());
-    const sal_uLong nRightMax = aRectFnSet.GetRight(pTab->getFrameArea()) -
+    const SwTwips nRightMax = aRectFnSet.GetRight(pTab->getFrameArea()) -
                             aRectFnSet.GetLeft(pPage->getFrameArea());
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
@@ -2770,19 +2770,19 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
     const SwPageFrame* pPage = pTab->FindPageFrame();
 
     aOld.SetRight( aRectFnSet.GetHeight(pTab->getFramePrintArea()) );
-    tools::Long nLeftMin;
+    SwTwips nLeftMin;
     if ( aRectFnSet.IsVert() )
     {
         nLeftMin = pTab->GetPrtLeft() - pPage->getFrameArea().Left();
-        aOld.SetLeft    ( LONG_MAX );
+        aOld.SetLeft    ( SwTwips(LONG_MAX) );
         aOld.SetRightMax( aOld.GetRight() );
 
     }
     else
     {
         nLeftMin = pTab->GetPrtTop() - pPage->getFrameArea().Top();
-        aOld.SetLeft    ( 0 );
-        aOld.SetRightMax( LONG_MAX );
+        aOld.SetLeft    ( SwTwips(0) );
+        aOld.SetRightMax( SwTwips(LONG_MAX) );
     }
     aOld.SetLeftMin ( nLeftMin );
 
@@ -2800,15 +2800,15 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
         const size_t nIdxStt = aRectFnSet.IsVert() ? nCount - i : i - 1;
         const size_t nIdxEnd = aRectFnSet.IsVert() ? nCount - i - 1 : i;
 
-        const tools::Long nOldRowStart = i == 0  ? 0 : aOld[ nIdxStt ];
-        const tools::Long nOldRowEnd =   i == nCount ? aOld.GetRight() : aOld[ nIdxEnd ];
-        const tools::Long nOldRowHeight = nOldRowEnd - nOldRowStart;
+        const SwTwips nOldRowStart = i == 0  ? SwTwips(0) : aOld[ nIdxStt ];
+        const SwTwips nOldRowEnd =   i == nCount ? aOld.GetRight() : aOld[ nIdxEnd ];
+        const SwTwips nOldRowHeight = nOldRowEnd - nOldRowStart;
 
-        const tools::Long nNewRowStart = i == 0  ? 0 : rNew[ nIdxStt ];
-        const tools::Long nNewRowEnd =   i == nCount ? rNew.GetRight() : rNew[ nIdxEnd ];
-        const tools::Long nNewRowHeight = nNewRowEnd - nNewRowStart;
+        const SwTwips nNewRowStart = i == 0  ? SwTwips(0) : rNew[ nIdxStt ];
+        const SwTwips nNewRowEnd =   i == nCount ? rNew.GetRight() : rNew[ nIdxEnd ];
+        const SwTwips nNewRowHeight = nNewRowEnd - nNewRowStart;
 
-        const tools::Long nDiff = nNewRowHeight - nOldRowHeight;
+        const SwTwips nDiff = nNewRowHeight - nOldRowHeight;
         if ( std::abs( nDiff ) >= ROWFUZZY )
         {
             // For the old table model pTextFrame and pLine will be set for every box.
@@ -2825,8 +2825,8 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
             {
                 if ( pFrame->IsCellFrame() && pFrame->FindTabFrame() == pTab )
                 {
-                    const tools::Long nLowerBorder = aRectFnSet.GetBottom(pFrame->getFrameArea());
-                    const sal_uLong nTabTop = aRectFnSet.GetPrtTop(*pTab);
+                    const SwTwips nLowerBorder = aRectFnSet.GetBottom(pFrame->getFrameArea());
+                    const SwTwips nTabTop = aRectFnSet.GetPrtTop(*pTab);
                     if ( std::abs( aRectFnSet.YInc( nTabTop, nOldRowEnd ) - nLowerBorder ) <= ROWFUZZY )
                     {
                         if ( !bCurColOnly || pFrame == pBoxFrame )
@@ -2845,7 +2845,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
                                 {
                                     // The new row height must not to be calculated from an overlapping box
                                     SwFormatFrameSize aNew( pLine->GetFrameFormat()->GetFrameSize() );
-                                    const tools::Long nNewSize = aRectFnSet.GetHeight(pFrame->getFrameArea()) + nDiff;
+                                    const SwTwips nNewSize = aRectFnSet.GetHeight(pFrame->getFrameArea()) + nDiff;
                                     if( nNewSize != aNew.GetHeight() )
                                     {
                                         aNew.SetHeight( nNewSize );
@@ -2921,7 +2921,7 @@ void SwCollectTableLineBoxes::AddBox( const SwTableBox& rBox )
     m_aPositionArr.push_back(m_nWidth);
     SwTableBox* p = const_cast<SwTableBox*>(&rBox);
     m_Boxes.push_back(p);
-    m_nWidth = m_nWidth + o3tl::narrowing<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
+    m_nWidth = m_nWidth + rBox.GetFrameFormat()->GetFrameSize().GetWidth();
 }
 
 const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
@@ -2944,17 +2944,17 @@ const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
         if( n >= m_aPositionArr.size() )
             --n;
 
-        m_nWidth = m_nWidth + o3tl::narrowing<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
+        m_nWidth = m_nWidth + rBox.GetFrameFormat()->GetFrameSize().GetWidth();
         pRet = m_Boxes[ n ];
     }
     return pRet;
 }
 
-bool SwCollectTableLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
+bool SwCollectTableLineBoxes::Resize( SwTwips nOffset, SwTwips nOldWidth )
 {
     if( !m_aPositionArr.empty() )
     {
-        std::vector<sal_uInt16>::size_type n;
+        std::vector<SwTwips>::size_type n;
         for( n = 0; n < m_aPositionArr.size(); ++n )
         {
             if( m_aPositionArr[ n ] == nOffset )
@@ -2973,16 +2973,16 @@ bool SwCollectTableLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
         size_t nArrSize = m_aPositionArr.size();
         if (nArrSize)
         {
-            if (nOldWidth == 0)
+            if (nOldWidth == SwTwips(0))
                 throw o3tl::divide_by_zero();
 
             // Adapt the positions to the new Size
             for( n = 0; n < nArrSize; ++n )
             {
-                sal_uLong nSize = m_nWidth;
+                SwTwips nSize = m_nWidth;
                 nSize *= ( m_aPositionArr[ n ] - nOffset );
                 nSize /= nOldWidth;
-                m_aPositionArr[ n ] = sal_uInt16( nSize );
+                m_aPositionArr[ n ] = nSize;
             }
         }
     }
@@ -3241,18 +3241,18 @@ static bool lcl_ChgTableSize( SwTable& rTable )
     SwFrameFormat* pFormat = rTable.GetFrameFormat();
     SwFormatFrameSize aTableMaxSz( pFormat->GetFrameSize() );
 
-    if( USHRT_MAX == aTableMaxSz.GetWidth() )
+    if( SwTwips(USHRT_MAX) == aTableMaxSz.GetWidth() )
         return false;
 
     bool bLocked = pFormat->IsModifyLocked();
     pFormat->LockModify();
 
-    aTableMaxSz.SetWidth( 0 );
+    aTableMaxSz.SetWidth( SwTwips(0) );
 
     SwTableLines& rLns = rTable.GetTabLines();
     for( auto pLn : rLns )
     {
-        SwTwips nMaxLnWidth = 0;
+        SwTwips nMaxLnWidth(0);
         SwTableBoxes& rBoxes = pLn->GetTabBoxes();
         for( auto pBox : rBoxes )
             nMaxLnWidth += pBox->GetFrameFormat()->GetFrameSize().GetWidth();

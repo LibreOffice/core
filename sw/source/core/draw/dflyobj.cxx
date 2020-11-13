@@ -320,12 +320,12 @@ basegfx::B2DRange SwVirtFlyDrawObj::getOuterBound() const
 
         if(pFlyFrame)
         {
-            const tools::Rectangle aOuterRectangle(pFlyFrame->getFrameArea().Pos(), pFlyFrame->getFrameArea().SSize());
+            const SwRect aOuterRectangle(pFlyFrame->getFrameArea().Pos(), pFlyFrame->getFrameArea().SSize());
 
             if(!aOuterRectangle.IsEmpty())
             {
-                aOuterRange.expand(basegfx::B2DTuple(aOuterRectangle.Left(), aOuterRectangle.Top()));
-                aOuterRange.expand(basegfx::B2DTuple(aOuterRectangle.Right(), aOuterRectangle.Bottom()));
+                aOuterRange.expand(basegfx::B2DTuple(tools::Long(aOuterRectangle.Left()), tools::Long(aOuterRectangle.Top())));
+                aOuterRange.expand(basegfx::B2DTuple(tools::Long(aOuterRectangle.Right()), tools::Long(aOuterRectangle.Bottom())));
             }
         }
     }
@@ -344,12 +344,12 @@ basegfx::B2DRange SwVirtFlyDrawObj::getInnerBound() const
 
         if(pFlyFrame)
         {
-            const tools::Rectangle aInnerRectangle(pFlyFrame->getFrameArea().Pos() + pFlyFrame->getFramePrintArea().Pos(), pFlyFrame->getFramePrintArea().SSize());
+            const SwRect aInnerRectangle(pFlyFrame->getFrameArea().Pos() + pFlyFrame->getFramePrintArea().Pos(), pFlyFrame->getFramePrintArea().SSize());
 
             if(!aInnerRectangle.IsEmpty())
             {
-                aInnerRange.expand(basegfx::B2DTuple(aInnerRectangle.Left(), aInnerRectangle.Top()));
-                aInnerRange.expand(basegfx::B2DTuple(aInnerRectangle.Right(), aInnerRectangle.Bottom()));
+                aInnerRange.expand(basegfx::B2DTuple(tools::Long(aInnerRectangle.Left()), tools::Long(aInnerRectangle.Top())));
+                aInnerRange.expand(basegfx::B2DTuple(tools::Long(aInnerRectangle.Right()), tools::Long(aInnerRectangle.Bottom())));
             }
         }
     }
@@ -645,8 +645,8 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
     }
 
     m_aOutRect.Move( rSiz );
-    const Point aOldPos( GetFlyFrame()->getFrameArea().Pos() );
-    const Point aNewPos( m_aOutRect.TopLeft() );
+    const SwPoint aOldPos( GetFlyFrame()->getFrameArea().Pos() );
+    const SwPoint aNewPos( m_aOutRect.TopLeft() );
     const SwRect aFlyRect( m_aOutRect );
 
     //If the Fly has an automatic align (right or top),
@@ -668,7 +668,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         const SwFrameFormat *pTmpFormat = GetFormat();
         const SwFormatVertOrient &rVert = pTmpFormat->GetVertOrient();
         const SwFormatHoriOrient &rHori = pTmpFormat->GetHoriOrient();
-        tools::Long lXDiff = aNewPos.X() - aOldPos.X();
+        SwTwips lXDiff = aNewPos.X() - aOldPos.X();
         if( rHori.IsPosToggle() && text::HoriOrientation::NONE == eHori &&
             !GetFlyFrame()->FindPageFrame()->OnRightPage() )
             lXDiff = -lXDiff;
@@ -677,7 +677,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             text::HoriOrientation::NONE == eHori )
             lXDiff = -lXDiff;
 
-        tools::Long lYDiff = aNewPos.Y() - aOldPos.Y();
+        SwTwips lYDiff = aNewPos.Y() - aOldPos.Y();
         if( GetFlyFrame()->GetAnchorFrame()->IsVertical() )
         {
             //lXDiff -= rVert.GetPos();
@@ -705,7 +705,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             lXDiff = GetFlyFrame()->GetAnchorFrame()->getFrameArea().Width() -
                      aFlyRect.Width() - lXDiff;
 
-        const Point aTmp( lXDiff, lYDiff );
+        const SwPoint aTmp( lXDiff, lYDiff );
         GetFlyFrame()->ChgRelPos( aTmp );
     }
 
@@ -737,7 +737,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
                 const bool bLeftFrame =
                     aFlyRect.Left() < pAnch->getFrameArea().Left() + pAnch->getFramePrintArea().Left(),
                     bLeftPrt = aFlyRect.Left() + aFlyRect.Width() <
-                               pAnch->getFrameArea().Left() + pAnch->getFramePrintArea().Width()/2;
+                               pAnch->getFrameArea().Left() + pAnch->getFramePrintArea().Width()/SwTwips(2);
                 if ( bLeftFrame || bLeftPrt )
                 {
                     aHori.SetHoriOrient( text::HoriOrientation::LEFT );
@@ -843,8 +843,8 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
     // the object to crop. OldRect is the inner frame, see getFullDragClone()
     // below where getFramePrintAreaTransformation is used as object geometry for Crop
     const tools::Rectangle aOldRect(
-        GetFlyFrame()->getFrameArea().TopLeft() + GetFlyFrame()->getFramePrintArea().TopLeft(),
-        GetFlyFrame()->getFramePrintArea().SSize());
+        Point(GetFlyFrame()->getFrameArea().TopLeft() + GetFlyFrame()->getFramePrintArea().TopLeft()),
+        Size(GetFlyFrame()->getFramePrintArea().SSize()));
     const tools::Long nOldWidth(aOldRect.GetWidth());
     const tools::Long nOldHeight(aOldRect.GetHeight());
 
@@ -853,11 +853,11 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
         return;
     }
 
-    // rRef is relative to the Crop-Action, si in X/Y-Ranges of [0.0 .. 1.0],
+    // rRef is relative to the Crop-Action, is in X/Y-Ranges of [0.0 .. 1.0],
     // to get the correct absolute position, transform using the old Rect
     const Point aRef(
-        aOldRect.Left() + basegfx::fround(aOldRect.GetWidth() * rRef.getX()),
-        aOldRect.Top() + basegfx::fround(aOldRect.GetHeight() * rRef.getY()));
+        tools::Long(aOldRect.Left()) + basegfx::fround(aOldRect.GetWidth() * rRef.getX()),
+        tools::Long(aOldRect.Top()) + basegfx::fround(aOldRect.GetHeight() * rRef.getY()));
 
     // apply transformation, use old ResizeRect for now
     tools::Rectangle aNewRect( aOldRect );
@@ -873,10 +873,10 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
     SwCropGrf aCrop( aSet.Get(RES_GRFATR_CROPGRF) );
 
     tools::Rectangle aCropRectangle(
-        convertTwipToMm100(aCrop.GetLeft()),
-        convertTwipToMm100(aCrop.GetTop()),
-        convertTwipToMm100(aCrop.GetRight()),
-        convertTwipToMm100(aCrop.GetBottom()) );
+        convertTwipToMm100(tools::Long(aCrop.GetLeft())),
+        convertTwipToMm100(tools::Long(aCrop.GetTop())),
+        convertTwipToMm100(tools::Long(aCrop.GetRight())),
+        convertTwipToMm100(tools::Long(aCrop.GetBottom())) );
 
     // Compute delta to apply
     double fScaleX = ( aGraphicSize.Width() - aCropRectangle.Left() - aCropRectangle.Right() ) / static_cast<double>(nOldWidth);
@@ -909,8 +909,8 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
     SwFormatFrameSize aSz( pFormat->GetFrameSize() );
     const tools::Long aNewWidth(aNewRect.GetWidth() + (m_aOutRect.GetWidth() - aOldRect.GetWidth()));
     const tools::Long aNewHeight(aNewRect.GetHeight() + (m_aOutRect.GetHeight() - aOldRect.GetHeight()));
-    aSz.SetWidth(aNewWidth);
-    aSz.SetHeight(aNewHeight);
+    aSz.SetWidth(SwTwips(aNewWidth));
+    aSz.SetHeight(SwTwips(aNewHeight));
     pFormat->GetDoc()->SetAttr( aSz, *pFormat );
 
     // add move - to make result look better. Fill with defaults
@@ -1029,34 +1029,34 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
     Size aSz( m_aOutRect.Right() - m_aOutRect.Left() + 1, m_aOutRect.Bottom()- m_aOutRect.Top()  + 1 );
 
     // compare with restored FrameArea
-    if( aSz != GetFlyFrame()->getFrameArea().SSize() )
+    if( SwSize(aSz) != GetFlyFrame()->getFrameArea().SSize() )
     {
         //The width of the columns should not be too narrow
         if ( GetFlyFrame()->Lower() && GetFlyFrame()->Lower()->IsColumnFrame() )
         {
             SwBorderAttrAccess aAccess( SwFrame::GetCache(), GetFlyFrame() );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
-            tools::Long nMin = rAttrs.CalcLeftLine()+rAttrs.CalcRightLine();
+            SwTwips nMin = rAttrs.CalcLeftLine()+rAttrs.CalcRightLine();
             const SwFormatCol& rCol = rAttrs.GetAttrSet().GetCol();
             if ( rCol.GetColumns().size() > 1 )
             {
                 for ( const auto &rC : rCol.GetColumns() )
                 {
-                    nMin += rC.GetLeft() + rC.GetRight() + MINFLY;
+                    nMin += SwTwips(rC.GetLeft() + rC.GetRight()) + MINFLY;
                 }
                 nMin -= MINFLY;
             }
-            aSz.setWidth( std::max( aSz.Width(), nMin ) );
+            aSz.setWidth( std::max( aSz.Width(), tools::Long(nMin) ) );
         }
 
         SwFrameFormat *pFormat = GetFormat();
         const SwFormatFrameSize aOldFrameSz( pFormat->GetFrameSize() );
-        GetFlyFrame()->ChgSize( aSz );
+        GetFlyFrame()->ChgSize( SwSize(aSz) );
         SwFormatFrameSize aFrameSz( pFormat->GetFrameSize() );
 
         if ( aFrameSz.GetWidthPercent() || aFrameSz.GetHeightPercent() )
         {
-            tools::Long nRelWidth, nRelHeight;
+            SwTwips nRelWidth, nRelHeight;
             const SwFrame *pRel = GetFlyFrame()->IsFlyLayFrame() ?
                                 GetFlyFrame()->GetAnchorFrame() :
                                 GetFlyFrame()->GetAnchorFrame()->GetUpper();
@@ -1069,7 +1069,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
                 nRelWidth  = pSh->GetBrowseWidth();
                 nRelHeight = pSh->VisArea().Height();
                 const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
-                nRelHeight -= 2*aBorder.Height();
+                nRelHeight -= SwTwips(2*aBorder.Height());
             }
             else
             {
@@ -1080,13 +1080,13 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
             if ( aFrameSz.GetWidthPercent() && aFrameSz.GetWidthPercent() != SwFormatFrameSize::SYNCED &&
                  aOldFrameSz.GetWidth() != aFrameSz.GetWidth() )
             {
-                aFrameSz.SetWidthPercent( sal_uInt8(aSz.Width() * 100.0 / nRelWidth + 0.5) );
+                aFrameSz.SetWidthPercent( sal_uInt8(double(aSz.Width()) * 100.0 / double(nRelWidth) + 0.5) );
             }
 
             if ( aFrameSz.GetHeightPercent() && aFrameSz.GetHeightPercent() != SwFormatFrameSize::SYNCED &&
                  aOldFrameSz.GetHeight() != aFrameSz.GetHeight() )
             {
-                aFrameSz.SetHeightPercent( sal_uInt8(aSz.Height() * 100.0 / nRelHeight + 0.5) );
+                aFrameSz.SetHeightPercent( sal_uInt8(double(aSz.Height()) * 100.0 / double(nRelHeight) + 0.5) );
             }
 
             pFormat->GetDoc()->SetAttr( aFrameSz, *pFormat );
@@ -1270,17 +1270,17 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
         else
             aRect = m_pFlyFrame->getFrameArea();
 
-        if( aRect.IsInside( rRec.aPos ) )
+        if( aRect.IsInside( SwPoint(rRec.aPos) ) )
         {
-            aRect.Pos().setX(aRect.Pos().getX() + rRec.nTol);
-            aRect.Pos().setY(aRect.Pos().getY() + rRec.nTol);
-            aRect.AddHeight( -(2 * rRec.nTol) );
-            aRect.AddWidth( -(2 * rRec.nTol) );
+            aRect.Pos().setX(aRect.Pos().getX() + SwTwips(rRec.nTol));
+            aRect.Pos().setY(aRect.Pos().getY() + SwTwips(rRec.nTol));
+            aRect.AddHeight( SwTwips(-(2 * rRec.nTol)) );
+            aRect.AddWidth( SwTwips(-(2 * rRec.nTol)) );
 
-            if( aRect.IsInside( rRec.aPos ) )
+            if( aRect.IsInside( SwPoint(rRec.aPos) ) )
             {
                 if( !rURL.GetMap() ||
-                    m_pFlyFrame->GetFormat()->GetIMapObject( rRec.aPos, m_pFlyFrame ))
+                    m_pFlyFrame->GetFormat()->GetIMapObject( SwPoint(rRec.aPos), m_pFlyFrame ))
                     return const_cast<SwVirtFlyDrawObj*>(this);
 
                 return nullptr;

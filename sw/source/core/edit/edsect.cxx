@@ -80,16 +80,16 @@ const SwSection* SwEditShell::GetCurrSection() const
  *
  * In footnotes it may not be the area within the footnote.
  */
-SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const Point* pPt )
+SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const SwPoint* pPt )
 {
     SwFrame *pFrame;
     if ( pPt )
     {
         SwPosition aPos( *GetCursor()->GetPoint() );
-        Point aPt( *pPt );
+        SwPoint aPt( *pPt );
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
         SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
-        std::pair<Point, bool> const tmp(*pPt, true);
+        std::pair<SwPoint, bool> const tmp(*pPt, true);
         pFrame = pNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
     }
     else

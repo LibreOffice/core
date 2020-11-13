@@ -633,7 +633,7 @@ public:
     void CheckDirChange();
     // returns upper left frame position for LTR and
     // upper right frame position for Asian / RTL frames
-    Point   GetFrameAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const;
+    SwPoint GetFrameAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const;
 
     /** determine, if frame is moveable in given environment
 
@@ -741,7 +741,7 @@ public:
     virtual void Calc(vcl::RenderContext* pRenderContext) const; // here might be "formatted"
     inline void OptCalc() const;    // here we assume (for optimization) that
                                     // the predecessors are already formatted
-    Point   GetRelPos() const;
+    SwPoint   GetRelPos() const;
 
     // PaintArea is the area where content might be displayed.
     // The margin of a page or the space between columns belongs to it.
@@ -751,7 +751,7 @@ public:
     // to the FrameArea except in case of negative Prt margins.
     SwRect UnionFrame( bool bBorder = false ) const;
 
-    virtual Size ChgSize( const Size& aNewSize );
+    virtual SwSize ChgSize( const SwSize& aNewSize );
 
     virtual void Cut() = 0;
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) = 0;
@@ -832,7 +832,7 @@ public:
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
-    virtual bool    GetModelPositionForViewPoint( SwPosition *, Point&,
+    virtual bool    GetModelPositionForViewPoint( SwPosition *, SwPoint&,
                                  SwCursorMoveState* = nullptr, bool bTestBackground = false ) const;
     virtual bool    GetCharRect( SwRect &, const SwPosition&,
                                  SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const;
@@ -889,20 +889,20 @@ public:
     bool IsInDtor() const { return mbInDtor; }
 
     // No inline cause we need the function pointers
-    tools::Long GetTopMargin() const;
-    tools::Long GetBottomMargin() const;
-    tools::Long GetLeftMargin() const;
-    tools::Long GetRightMargin() const;
-    void SetTopBottomMargins( tools::Long, tools::Long );
-    void SetLeftRightMargins( tools::Long, tools::Long );
-    void SetRightLeftMargins( tools::Long, tools::Long );
-    tools::Long GetPrtLeft() const;
-    tools::Long GetPrtBottom() const;
-    tools::Long GetPrtRight() const;
-    tools::Long GetPrtTop() const;
-    bool SetMinLeft( tools::Long );
-    bool SetMaxBottom( tools::Long );
-    bool SetMaxRight( tools::Long );
+    SwTwips GetTopMargin() const;
+    SwTwips GetBottomMargin() const;
+    SwTwips GetLeftMargin() const;
+    SwTwips GetRightMargin() const;
+    void SetTopBottomMargins( SwTwips, SwTwips );
+    void SetLeftRightMargins( SwTwips, SwTwips );
+    void SetRightLeftMargins( SwTwips, SwTwips );
+    SwTwips GetPrtLeft() const;
+    SwTwips GetPrtBottom() const;
+    SwTwips GetPrtRight() const;
+    SwTwips GetPrtTop() const;
+    bool SetMinLeft( SwTwips );
+    bool SetMaxBottom( SwTwips );
+    bool SetMaxRight( SwTwips );
     void MakeBelowPos( const SwFrame*, const SwFrame*, bool );
     void MakeLeftPos( const SwFrame*, const SwFrame*, bool );
     void MakeRightPos( const SwFrame*, const SwFrame*, bool );
@@ -1277,11 +1277,11 @@ public:
     SwFrameDeleteGuard& operator=(const SwFrameDeleteGuard&) =delete;
 };
 
-typedef tools::Long (SwFrame::*SwFrameGet)() const;
+typedef SwTwips (SwFrame::*SwFrameGet)() const;
 typedef bool (SwFrame::*SwFrameMax)( tools::Long );
 typedef void (SwFrame::*SwFrameMakePos)( const SwFrame*, const SwFrame*, bool );
-typedef tools::Long (*SwOperator)( tools::Long, tools::Long );
-typedef void (SwFrame::*SwFrameSet)( tools::Long, tools::Long );
+typedef SwTwips (*SwOperator)( SwTwips, SwTwips );
+typedef void (SwFrame::*SwFrameSet)( SwTwips, SwTwips );
 
 struct SwRectFnCollection
 {
@@ -1371,58 +1371,58 @@ public:
             || (rRect1.*m_fnRect->fnGetLeft)() != (rRect2.*m_fnRect->fnGetLeft)());
     }
 
-    tools::Long  GetTop   (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetTop)   (); }
-    tools::Long  GetBottom(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetBottom)(); }
-    tools::Long  GetLeft  (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetLeft)  (); }
-    tools::Long  GetRight (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetRight) (); }
-    tools::Long  GetWidth (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetWidth) (); }
-    tools::Long  GetHeight(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetHeight)(); }
-    Point GetPos   (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetPos)   (); }
-    Size  GetSize  (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetSize)  (); }
+    SwTwips  GetTop   (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetTop)   (); }
+    SwTwips  GetBottom(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetBottom)(); }
+    SwTwips  GetLeft  (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetLeft)  (); }
+    SwTwips  GetRight (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetRight) (); }
+    SwTwips  GetWidth (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetWidth) (); }
+    SwTwips  GetHeight(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetHeight)(); }
+    SwPoint GetPos   (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetPos)   (); }
+    SwSize  GetSize  (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetSize)  (); }
 
-    void SetTop   (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetTop)   (nNew); }
-    void SetBottom(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetBottom)(nNew); }
-    void SetLeft  (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetLeft)  (nNew); }
-    void SetRight (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetRight) (nNew); }
-    void SetWidth (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetWidth) (nNew); }
-    void SetHeight(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetHeight)(nNew); }
+    void SetTop   (SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnSetTop)   (nNew); }
+    void SetBottom(SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnSetBottom)(nNew); }
+    void SetLeft  (SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnSetLeft)  (nNew); }
+    void SetRight (SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnSetRight) (nNew); }
+    void SetWidth (SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnSetWidth) (nNew); }
+    void SetHeight(SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnSetHeight)(nNew); }
 
-    void SubTop   (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSubTop)   (nNew); }
-    void AddBottom(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnAddBottom)(nNew); }
-    void SubLeft  (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSubLeft)  (nNew); }
-    void AddRight (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnAddRight) (nNew); }
-    void AddWidth (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnAddWidth) (nNew); }
-    void AddHeight(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnAddHeight)(nNew); }
+    void SubTop   (SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnSubTop)   (nNew); }
+    void AddBottom(SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnAddBottom)(nNew); }
+    void SubLeft  (SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnSubLeft)  (nNew); }
+    void AddRight (SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnAddRight) (nNew); }
+    void AddWidth (SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnAddWidth) (nNew); }
+    void AddHeight(SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnAddHeight)(nNew); }
 
-    void SetPosX(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetPosX)(nNew); }
-    void SetPosY(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetPosY)(nNew); }
+    void SetPosX(SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnSetPosX)(nNew); }
+    void SetPosY(SwRect& rRect, SwTwips nNew) const { (rRect.*m_fnRect->fnSetPosY)(nNew); }
 
-    tools::Long  GetTopMargin   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetTopMargin)   (); }
-    tools::Long  GetBottomMargin(const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetBottomMargin)(); }
-    tools::Long  GetLeftMargin  (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetLeftMargin)  (); }
-    tools::Long  GetRightMargin (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetRightMargin) (); }
-    void  SetXMargins(SwFrame& rFrame, tools::Long nLeft, tools::Long nRight) const { (rFrame.*m_fnRect->fnSetXMargins)(nLeft, nRight); }
-    void  SetYMargins(SwFrame& rFrame, tools::Long nTop, tools::Long nBottom) const { (rFrame.*m_fnRect->fnSetYMargins)(nTop, nBottom); }
-    tools::Long  GetPrtTop      (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtTop)      (); }
-    tools::Long  GetPrtBottom   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtBottom)   (); }
-    tools::Long  GetPrtLeft     (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtLeft)     (); }
-    tools::Long  GetPrtRight    (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtRight)    (); }
-    tools::Long  TopDist   (const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnTopDist)    (nPos); }
-    tools::Long  BottomDist(const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnBottomDist) (nPos); }
-    tools::Long  LeftDist   (const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnLeftDist)    (nPos); }
-    tools::Long  RightDist   (const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnRightDist)    (nPos); }
+    SwTwips  GetTopMargin   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetTopMargin)   (); }
+    SwTwips  GetBottomMargin(const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetBottomMargin)(); }
+    SwTwips  GetLeftMargin  (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetLeftMargin)  (); }
+    SwTwips  GetRightMargin (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetRightMargin) (); }
+    void  SetXMargins(SwFrame& rFrame, SwTwips nLeft, SwTwips nRight) const { (rFrame.*m_fnRect->fnSetXMargins)(nLeft, nRight); }
+    void  SetYMargins(SwFrame& rFrame, SwTwips nTop, SwTwips nBottom) const { (rFrame.*m_fnRect->fnSetYMargins)(nTop, nBottom); }
+    SwTwips  GetPrtTop      (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtTop)      (); }
+    SwTwips  GetPrtBottom   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtBottom)   (); }
+    SwTwips  GetPrtLeft     (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtLeft)     (); }
+    SwTwips  GetPrtRight    (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtRight)    (); }
+    SwTwips  TopDist   (const SwRect& rRect, SwTwips nPos) const { return (rRect.*m_fnRect->fnTopDist)    (nPos); }
+    SwTwips  BottomDist(const SwRect& rRect, SwTwips nPos) const { return (rRect.*m_fnRect->fnBottomDist) (nPos); }
+    SwTwips  LeftDist   (const SwRect& rRect, SwTwips nPos) const { return (rRect.*m_fnRect->fnLeftDist)    (nPos); }
+    SwTwips  RightDist   (const SwRect& rRect, SwTwips nPos) const { return (rRect.*m_fnRect->fnRightDist)    (nPos); }
     void  SetLimit (SwFrame& rFrame, tools::Long nNew) const { (rFrame.*m_fnRect->fnSetLimit) (nNew); }
-    bool  OverStep  (const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnOverStep)   (nPos); }
+    bool  OverStep  (const SwRect& rRect, SwTwips nPos) const { return (rRect.*m_fnRect->fnOverStep)   (nPos); }
 
-    void SetPos(SwRect& rRect, const Point& rNew) const { (rRect.*m_fnRect->fnSetPos)(rNew); }
+    void SetPos(SwRect& rRect, const SwPoint& rNew) const { (rRect.*m_fnRect->fnSetPos)(rNew); }
     void MakePos(SwFrame& rFrame, const SwFrame* pUp, const SwFrame* pPrv, bool bNotify) const { (rFrame.*m_fnRect->fnMakePos)(pUp, pPrv, bNotify); }
-    tools::Long XDiff(tools::Long n1, tools::Long n2) const { return (m_fnRect->fnXDiff) (n1, n2); }
-    tools::Long YDiff(tools::Long n1, tools::Long n2) const { return (m_fnRect->fnYDiff) (n1, n2); }
-    tools::Long XInc (tools::Long n1, tools::Long n2) const { return (m_fnRect->fnXInc)  (n1, n2); }
-    tools::Long YInc (tools::Long n1, tools::Long n2) const { return (m_fnRect->fnYInc)  (n1, n2); }
+    SwTwips XDiff(SwTwips n1, SwTwips n2) const { return (m_fnRect->fnXDiff) (n1, n2); }
+    SwTwips YDiff(SwTwips n1, SwTwips n2) const { return (m_fnRect->fnYDiff) (n1, n2); }
+    SwTwips XInc (SwTwips n1, SwTwips n2) const { return (m_fnRect->fnXInc)  (n1, n2); }
+    SwTwips YInc (SwTwips n1, SwTwips n2) const { return (m_fnRect->fnYInc)  (n1, n2); }
 
-    void SetLeftAndWidth(SwRect& rRect, tools::Long nLeft, tools::Long nWidth) const { (rRect.*m_fnRect->fnSetLeftAndWidth)(nLeft, nWidth); }
-    void SetTopAndHeight(SwRect& rRect, tools::Long nTop, tools::Long nHeight) const { (rRect.*m_fnRect->fnSetTopAndHeight)(nTop, nHeight); }
+    void SetLeftAndWidth(SwRect& rRect, SwTwips nLeft, SwTwips nWidth) const { (rRect.*m_fnRect->fnSetLeftAndWidth)(nLeft, nWidth); }
+    void SetTopAndHeight(SwRect& rRect, SwTwips nTop, SwTwips nHeight) const { (rRect.*m_fnRect->fnSetTopAndHeight)(nTop, nHeight); }
 
 private:
     bool m_bVert;

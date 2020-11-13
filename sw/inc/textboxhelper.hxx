@@ -20,6 +20,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <svx/swframetypes.hxx>
 
+#include "swrect.hxx"
 #include "swdllapi.h"
 
 class SdrPage;
@@ -127,7 +128,7 @@ public:
     static css::uno::Reference<css::text::XTextFrame>
     getUnoTextFrame(css::uno::Reference<css::drawing::XShape> const& xShape);
     /// Return the textbox rectangle of a draw shape (in twips).
-    static tools::Rectangle getTextRectangle(SwFrameFormat* pShape, bool bAbsolute = true);
+    static SwRect getTextRectangle(SwFrameFormat* pShape, bool bAbsolute = true);
 
     /**
      * Is the frame format a text box?

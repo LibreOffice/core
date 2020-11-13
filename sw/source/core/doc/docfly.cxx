@@ -206,10 +206,10 @@ std::vector<SwFrameFormat const*> SwDoc::GetFlyFrameFormats(
     return ret;
 }
 
-static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
+static SwPoint lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
                             const SwFrameFormat* pFlyFormat )
 {
-    Point aRet;
+    SwPoint aRet;
     if( rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
         switch( rAnch.GetAnchorId() )
         {
@@ -228,7 +228,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
             {
                 const SwPosition *pPos = rAnch.GetContentAnchor();
                 const SwContentNode* pNd = pPos->nNode.GetNode().GetContentNode();
-                std::pair<Point, bool> const tmp(aRet, false);
+                std::pair<SwPoint, bool> const tmp(aRet, false);
                 const SwFrame* pOld = pNd ? pNd->getLayoutFrame(rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
                 if( pOld )
                     aRet = pOld->getFrameArea().Pos();
@@ -291,8 +291,8 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
     if( nOld == nNew )
         return DONTMAKEFRMS;
 
-    Point aOldAnchorPos( ::lcl_FindAnchorLayPos( *this, rOldAnch, &rFormat ));
-    Point aNewAnchorPos( ::lcl_FindAnchorLayPos( *this, aNewAnch, nullptr ));
+    SwPoint aOldAnchorPos( ::lcl_FindAnchorLayPos( *this, rOldAnch, &rFormat ));
+    SwPoint aNewAnchorPos( ::lcl_FindAnchorLayPos( *this, aNewAnch, nullptr ));
 
     // Destroy the old Frames.
     // The Views are hidden implicitly, so hiding them another time would be
@@ -378,7 +378,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
             if( text::HoriOrientation::NONE == aOldH.GetHoriOrient() && ( !pItem ||
                 aOldH.GetPos() == pItem->StaticWhichCast(RES_HORI_ORIENT).GetPos() ))
             {
-                SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldH.GetPos();
+                SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? SwTwips(0) : aOldH.GetPos();
                 nPos += aOldAnchorPos.getX() - aNewAnchorPos.getX();
 
                 if( pItem )
@@ -416,7 +416,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
             if( text::VertOrientation::NONE == aOldV.GetVertOrient() && (!pItem ||
                 aOldV.GetPos() == pItem->StaticWhichCast(RES_VERT_ORIENT).GetPos() ) )
             {
-                SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldV.GetPos();
+                SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? SwTwips(0) : aOldV.GetPos();
                 nPos += aOldAnchorPos.getY() - aNewAnchorPos.getY();
                 if( pItem )
                 {
@@ -783,15 +783,15 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
             SwFormatAnchor aNewAnch( _eAnchorType );
             SwAnchoredObject *pAnchoredObj = pContact->GetAnchoredObj(pObj);
-            tools::Rectangle aObjRect(pAnchoredObj->GetObjRect().SVRect());
-            const Point aPt( aObjRect.TopLeft() );
+            SwRect aObjRect(pAnchoredObj->GetObjRect());
+            const SwPoint aPt( aObjRect.TopLeft() );
 
             switch ( _eAnchorType )
             {
             case RndStdIds::FLY_AT_PARA:
             case RndStdIds::FLY_AT_CHAR:
                 {
-                    const Point aNewPoint = ( pOldAnchorFrame->IsVertical() ||
+                    const SwPoint aNewPoint = ( pOldAnchorFrame->IsVertical() ||
                                               pOldAnchorFrame->IsRightToLeft() )
                                             ? aObjRect.TopRight()
                                             : aPt;
@@ -825,12 +825,12 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     {
                         SwCursorMoveState aState( CursorMoveState::SetOnlyText );
                         SwPosition aPos( GetNodes() );
-                        Point aPoint( aPt );
-                        aPoint.setX(aPoint.getX() - 1);
+                        SwPoint aPoint( aPt );
+                        aPoint.setX(aPoint.getX() - SwTwips(1));
                         getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
                         // consider that drawing objects can be in
                         // header/footer. Thus, <GetFrame()> by left-top-corner
-                        std::pair<Point, bool> const tmp(aPt, false);
+                        std::pair<SwPoint, bool> const tmp(aPt, false);
                         pTextFrame = aPos.nNode.GetNode().
                             GetContentNode()->getLayoutFrame(
                                 getIDocumentLayoutAccess().GetCurrentLayout(),
@@ -882,8 +882,8 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     }
 
                     bUnmark = ( 0 != i );
-                    Point aPoint( aPt );
-                    aPoint.setX(aPoint.getX() - 1);    // Do not load in the DrawObj!
+                    SwPoint aPoint( aPt );
+                    aPoint.setX(aPoint.getX() - SwTwips(1));    // Do not load in the DrawObj!
                     aNewAnch.SetType( RndStdIds::FLY_AS_CHAR );
                     assert(pNewAnchorFrame->IsTextFrame()); // because AS_CHAR
                     SwTextFrame const*const pFrame(
@@ -912,7 +912,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     SetAttr( aNewAnch, *pContact->GetFormat() );
                     // #i26791# - adjust vertical positioning to 'center to
                     // baseline'
-                    SetAttr( SwFormatVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ), *pContact->GetFormat() );
+                    SetAttr( SwFormatVertOrient( SwTwips(0), text::VertOrientation::CENTER, text::RelOrientation::FRAME ), *pContact->GetFormat() );
                     SwTextNode *pNd = aPos.nNode.GetNode().GetTextNode();
                     OSL_ENSURE( pNd, "Cursor not positioned at TextNode." );
 

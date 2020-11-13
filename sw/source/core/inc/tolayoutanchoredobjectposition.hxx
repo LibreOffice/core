@@ -26,12 +26,12 @@ namespace objectpositioning
     {
         private:
             // calculated data for object position type TO_LAYOUT
-            Point       maRelPos;
+            SwPoint       maRelPos;
 
             // #i26791#
             // determine offset to frame anchor position according to the
             // positioning alignments
-            Point maOffsetToFrameAnchorPos;
+            SwPoint maOffsetToFrameAnchorPos;
 
         public:
             SwToLayoutAnchoredObjectPosition( SdrObject& _rDrawObj );
@@ -43,7 +43,7 @@ namespace objectpositioning
 
             /** calculated relative position for object
             */
-            const Point& GetRelPos() const { return maRelPos;}
+            const SwPoint& GetRelPos() const { return maRelPos;}
     };
 } // namespace objectpositioning
 

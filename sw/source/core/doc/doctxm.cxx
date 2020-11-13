@@ -257,8 +257,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
         if (!pTOXSrc)
             continue;
 
-        Point aPt;
-        std::pair<Point, bool> const tmp(aPt, false);
+        std::pair<SwPoint, bool> const tmp(SwPoint(), false);
         const SwContentFrame* pCFrame = pTOXSrc->getLayoutFrame(
                 getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
         if (!pCFrame)
@@ -724,7 +723,7 @@ static const SwTextNode* lcl_FindChapterNode( const SwNode& rNd,
     if( pNd->GetNodes().GetEndOfExtras().GetIndex() > pNd->GetIndex() )
     {
         // then find the "Anchor" (Body) position
-        Point aPt;
+        SwPoint aPt;
         SwNode2Layout aNode2Layout( *pNd, pNd->GetIndex() );
         const SwFrame* pFrame = aNode2Layout.GetFrame( &aPt );
 

@@ -87,6 +87,21 @@ public:
 
     bool IsEnumeration() const; // #i22362#
     bool IsItemize() const; // #i29560#
+
+    void SetAbsLSpace(SwTwips nSet) { SvxNumberFormat::SetAbsLSpace(o3tl::narrowing<sal_Int32>(tools::Long(nSet)));}
+    SwTwips GetAbsLSpace() const { return SwTwips(SvxNumberFormat::GetAbsLSpace()); }
+
+    void SetFirstLineOffset( SwTwips nSet ) { SvxNumberFormat::SetFirstLineOffset(o3tl::narrowing<sal_Int32>(tools::Long(nSet)));}
+    SwTwips GetFirstLineOffset() const { return SwTwips(SvxNumberFormat::GetFirstLineOffset()); }
+
+    void SetListtabPos( SwTwips nListtabPos ) { SvxNumberFormat::SetListtabPos(o3tl::narrowing<sal_Int32>(tools::Long(nListtabPos)));}
+    SwTwips GetListtabPos() const { return SwTwips(SvxNumberFormat::GetListtabPos()); }
+
+    void SetFirstLineIndent( SwTwips nFirstLineIndent ) { SvxNumberFormat::SetFirstLineIndent(o3tl::narrowing<sal_Int32>(tools::Long(nFirstLineIndent)));}
+    SwTwips GetFirstLineIndent() const { return SwTwips(SvxNumberFormat::GetFirstLineIndent()); }
+
+    void SetIndentAt( SwTwips nIndentAt ) { SvxNumberFormat::SetIndentAt(o3tl::narrowing<sal_Int32>(tools::Long(nIndentAt)));}
+    SwTwips GetIndentAt() const { return SwTwips(SvxNumberFormat::GetIndentAt()); }
 };
 
 enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
@@ -107,7 +122,7 @@ private:
     friend void FinitCore();
 
     static SwNumFormat* saBaseFormats [ RULE_END ][ MAXLEVEL ];
-    static const sal_uInt16 saDefNumIndents[ MAXLEVEL ];
+    static const SwTwips saDefNumIndents[ MAXLEVEL ];
     /// default list level properties for position-and-space mode LABEL_ALIGNMENT
     static SwNumFormat* saLabelAlignmentBaseFormats [ RULE_END ][ MAXLEVEL ];
     static sal_uInt16 snRefCount;
@@ -206,8 +221,8 @@ public:
 
     static OUString GetOutlineRuleName();
 
-    static sal_uInt16 GetNumIndent( sal_uInt8 nLvl );
-    static sal_uInt16 GetBullIndent( sal_uInt8 nLvl );
+    static SwTwips GetNumIndent( sal_uInt8 nLvl );
+    static SwTwips GetBullIndent( sal_uInt8 nLvl );
 
     SwNumRuleType GetRuleType() const           { return meRuleType; }
     void SetRuleType( SwNumRuleType eNew )      { meRuleType = eNew;
@@ -261,13 +276,13 @@ public:
     SvxNumRule  MakeSvxNumRule() const;
 
     /// change indent of all list levels by given difference
-    void ChangeIndent( const sal_Int32 nDiff );
+    void ChangeIndent( const SwTwips nDiff );
     /// set indent of certain list level to given value
-    void SetIndent( const short nNewIndent,
+    void SetIndent( const SwTwips nNewIndent,
                     const sal_uInt16 nListLevel );
     /** set indent of first list level to given value and change other list level's
        indents accordingly */
-    void SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent );
+    void SetIndentOfFirstListLevelAndChangeOthers( const SwTwips nNewIndent );
 
     void Validate(const SwDoc& rDoc);
     void dumpAsXml(xmlTextWriterPtr w) const;

@@ -169,7 +169,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
             const SwFormatURL &rURL = pFly->GetFormat()->GetURL();
             if( rURL.GetMap() )
             {
-                IMapObject *pTmpObj = pFly->GetFormat()->GetIMapObject( aPos, pFly );
+                IMapObject *pTmpObj = pFly->GetFormat()->GetIMapObject( SwPoint(aPos), pFly );
                 if( pTmpObj )
                 {
                     sText = pTmpObj->GetAltText();
@@ -189,7 +189,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
                 {
                     // then append the relative pixel position!!
                     Point aPt( aPos );
-                    aPt -= pFly->getFrameArea().Pos();
+                    aPt -= Point(pFly->getFrameArea().Pos());
                     // without MapMode-Offset !!!!!
                     // without MapMode-Offset, without Offset, w ... !!!!!
                     aPt = pWindow->LogicToPixel(

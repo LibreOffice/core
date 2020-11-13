@@ -623,7 +623,7 @@ bool SwAutoFormat::DoTable()
     SwTextFrameInfo aInfo( m_pCurTextFrame );
 
     TextFrameIndex n = nSttPlus;
-    std::vector<sal_uInt16> aPosArr;
+    std::vector<SwTwips> aPosArr;
 
     while (n < TextFrameIndex(rTmp.getLength()))
     {
@@ -638,7 +638,7 @@ bool SwAutoFormat::DoTable()
 
         case '+':
         case '|':
-            aPosArr.push_back( o3tl::narrowing<sal_uInt16>(aInfo.GetCharPos(n)) );
+            aPosArr.push_back( aInfo.GetCharPos(n) );
             break;
 
         default:
@@ -664,7 +664,7 @@ bool SwAutoFormat::DoTable()
             {
                 eHori = text::HoriOrientation::NONE;
                 // then - as last - we need to add the current frame width into the array
-                aPosArr.push_back( o3tl::narrowing<sal_uInt16>(m_pCurTextFrame->getFrameArea().Width()) );
+                aPosArr.push_back( m_pCurTextFrame->getFrameArea().Width() );
             }
             else
                 eHori = text::HoriOrientation::LEFT;
@@ -1487,7 +1487,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
         SwTextFrameInfo aInfo( m_pCurTextFrame );
         nLeftTextPos = aInfo.GetCharPos(nPos);
-        nLeftTextPos -= m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetLRSpace().GetLeft();
+        nLeftTextPos -= SwTwips(m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetLRSpace().GetLeft());
     }
 
     if( m_bMoreLines )
@@ -1556,9 +1556,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         }
                     }
 
-                    sal_Int32 nAbsPos = lBulletIndent;
+                    SwTwips nAbsPos = lBulletIndent;
                     SwTwips nSpaceSteps = nLvl
-                                            ? nLeftTextPos / nLvl
+                                            ? nLeftTextPos / SwTwips(nLvl)
                                             : lBulletIndent;
                     for( sal_uInt8 n = 0; n < MAXLEVEL; ++n, nAbsPos = nAbsPos + nSpaceSteps )
                     {
@@ -1579,9 +1579,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         aRule.Set( n, aFormat );
 
                         if( n == nLvl &&
-                            nFrameWidth < ( nSpaceSteps * MAXLEVEL ) )
+                            nFrameWidth < ( nSpaceSteps * SwTwips(MAXLEVEL) ) )
                             nSpaceSteps = ( nFrameWidth - nLeftTextPos ) /
-                                                ( MAXLEVEL - nLvl );
+                                                SwTwips( MAXLEVEL - nLvl );
                     }
                 }
             }
@@ -1608,7 +1608,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
             // Level 0 and Indentation, determine level by left indentation and default NumIndent
             if( !nDigitLevel && nLeftTextPos )
-                nLvl = std::min( sal_uInt16( nLeftTextPos / lNumberIndent ),
+                nLvl = std::min( sal_uInt16( tools::Long(nLeftTextPos / lNumberIndent) ),
                             sal_uInt16( MAXLEVEL - 1 ) );
             else
                 nLvl = nDigitLevel;
@@ -1642,7 +1642,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 }
                 else
                 {
-                    auto const nSpaceSteps = nLvl ? nLeftTextPos / nLvl : 0;
+                    auto const nSpaceSteps = nLvl ? nLeftTextPos / SwTwips(nLvl) : SwTwips(0);
                     sal_uInt16 n;
                     sal_Int32 nPostfixIdx{ 0 };
                     for( n = 0; n <= nLvl; ++n )
@@ -1657,7 +1657,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         if( n < aNumTypes.getLength() )
                             aFormat.SetNumberingType(static_cast<SvxNumType>(aNumTypes[ n ] - '0'));
 
-                        aFormat.SetAbsLSpace( nSpaceSteps * n
+                        aFormat.SetAbsLSpace( nSpaceSteps * SwTwips(n)
                                             + lNumberIndent );
 
                         if( !aFormat.GetCharFormat() )
@@ -1669,7 +1669,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                     }
 
                     // Does it fit completely into the frame?
-                    bool bDefStep = nFrameWidth < (nSpaceSteps * MAXLEVEL);
+                    bool bDefStep = nFrameWidth < (nSpaceSteps * SwTwips(MAXLEVEL));
                     for( ; n < MAXLEVEL; ++n )
                     {
                         SwNumFormat aFormat( aRule.Get( n ) );
@@ -1678,7 +1678,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                             aFormat.SetAbsLSpace( nLeftTextPos +
                                 SwNumRule::GetNumIndent(static_cast<sal_uInt8>(n-nLvl)));
                         else
-                            aFormat.SetAbsLSpace( nSpaceSteps * n
+                            aFormat.SetAbsLSpace( nSpaceSteps * SwTwips(n)
                                                 + lNumberIndent );
                         aRule.Set( n, aFormat );
                     }
@@ -2582,9 +2582,9 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
             if( m_bMoreLines && nLevel )
             {
                 SwTwips nSz = aFInfo.GetFirstIndent();
-                if( 0 < nSz )           // positive 1st line indentation
+                if( SwTwips(0) < nSz )           // positive 1st line indentation
                     BuildIndent();
-                else if( 0 > nSz )      // negative 1st line indentation
+                else if( SwTwips(0) > nSz )      // negative 1st line indentation
                     BuildNegIndent( aFInfo.GetLineStart() );
                 else                    // is indentation
                     BuildTextIndent();
@@ -2608,9 +2608,9 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                 if( m_bMoreLines && !nLevel )
                 {
                     SwTwips nSz = aFInfo.GetFirstIndent();
-                    if( 0 < nSz )           // positive 1st line indentation
+                    if( SwTwips(0) < nSz )           // positive 1st line indentation
                         BuildIndent();
-                    else if( 0 > nSz )      // negative 1st line indentation
+                    else if( SwTwips(0) > nSz )      // negative 1st line indentation
                         BuildNegIndent( aFInfo.GetLineStart() );
                     else                    // is _no_ indentation
                         BuildText();
@@ -2634,9 +2634,9 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                 if( m_bMoreLines )
                 {
                     SwTwips nSz = aFInfo.GetFirstIndent();
-                    if( 0 < nSz )           // positive 1st line indentation
+                    if( SwTwips(0) < nSz )           // positive 1st line indentation
                         BuildIndent();
-                    else if( 0 > nSz )      // negative 1st line indentation
+                    else if( SwTwips(0) > nSz )      // negative 1st line indentation
                         BuildNegIndent( aFInfo.GetLineStart() );
                     else if( nLevel )       // is indentation
                         BuildTextIndent();

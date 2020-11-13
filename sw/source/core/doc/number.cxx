@@ -65,10 +65,10 @@ SwNumFormat* SwNumRule::saBaseFormats[ RULE_END ][ MAXLEVEL ] = {
 SwNumFormat* SwNumRule::saLabelAlignmentBaseFormats[ RULE_END ][ MAXLEVEL ] = {
     {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr } };
 
-const sal_uInt16 SwNumRule::saDefNumIndents[ MAXLEVEL ] = {
+const SwTwips SwNumRule::saDefNumIndents[ MAXLEVEL ] = {
 //inch:   0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
-        1440/4, 1440/2, 1440*3/4, 1440, 1440*5/4, 1440*3/2, 1440*7/4, 1440*2,
-        1440*9/4, 1440*5/2
+        SwTwips(1440/4), SwTwips(1440/2), SwTwips(1440*3/4), SwTwips(1440), SwTwips(1440*5/4), SwTwips(1440*3/2), SwTwips(1440*7/4), SwTwips(1440*2),
+        SwTwips(1440*9/4), SwTwips(1440*5/2)
 };
 
 OUString SwNumRule::GetOutlineRuleName()
@@ -158,13 +158,13 @@ void SwNumRule::SetNumRuleMap(std::unordered_map<OUString, SwNumRule *> *
     mpNumRuleMap = pNumRuleMap;
 }
 
-sal_uInt16 SwNumRule::GetNumIndent( sal_uInt8 nLvl )
+SwTwips SwNumRule::GetNumIndent( sal_uInt8 nLvl )
 {
     OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
     return saDefNumIndents[ nLvl ];
 }
 
-sal_uInt16 SwNumRule::GetBullIndent( sal_uInt8 nLvl )
+SwTwips SwNumRule::GetBullIndent( sal_uInt8 nLvl )
 {
     OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
     return saDefNumIndents[ nLvl ];
@@ -179,7 +179,7 @@ static void lcl_SetRuleChgd( SwTextNode& rNd, sal_uInt8 nLevel )
 SwNumFormat::SwNumFormat() :
     SvxNumberFormat(SVX_NUM_ARABIC),
     SwClient( nullptr ),
-    m_pVertOrient(new SwFormatVertOrient( 0, text::VertOrientation::NONE))
+    m_pVertOrient(new SwFormatVertOrient( SwTwips(0), text::VertOrientation::NONE))
     ,m_cGrfBulletCP(USHRT_MAX)//For i120928,record the cp info of graphic within bullet
 {
 }
@@ -187,7 +187,7 @@ SwNumFormat::SwNumFormat() :
 SwNumFormat::SwNumFormat( const SwNumFormat& rFormat) :
     SvxNumberFormat(rFormat),
     SwClient( rFormat.GetRegisteredInNonConst() ),
-    m_pVertOrient(new SwFormatVertOrient( 0, rFormat.GetVertOrient()))
+    m_pVertOrient(new SwFormatVertOrient( SwTwips(0), rFormat.GetVertOrient()))
     ,m_cGrfBulletCP(rFormat.m_cGrfBulletCP)//For i120928,record the cp info of graphic within bullet
 {
     sal_Int16 eMyVertOrient = rFormat.GetVertOrient();
@@ -197,7 +197,7 @@ SwNumFormat::SwNumFormat( const SwNumFormat& rFormat) :
 
 SwNumFormat::SwNumFormat(const SvxNumberFormat& rNumFormat, SwDoc* pDoc)
     : SvxNumberFormat(rNumFormat)
-    , m_pVertOrient(new SwFormatVertOrient( 0, rNumFormat.GetVertOrient()))
+    , m_pVertOrient(new SwFormatVertOrient( SwTwips(0), rNumFormat.GetVertOrient()))
     , m_cGrfBulletCP(USHRT_MAX)
 {
     sal_Int16 eMyVertOrient = rNumFormat.GetVertOrient();
@@ -394,13 +394,13 @@ SwNumRule::SwNumRule( const OUString& rNm,
         }
         // position-and-space mode LABEL_ALIGNMENT
         // first line indent of general numbering in inch: -0,25 inch
-        const tools::Long cFirstLineIndent = -1440/4;
+        const SwTwips cFirstLineIndent(-1440/4);
         // indent values of general numbering in inch:
         //  0,5         0,75        1,0         1,25        1,5
         //  1,75        2,0         2,25        2,5         2,75
-        const tools::Long cIndentAt[ MAXLEVEL ] = {
-            1440/2,     1440*3/4,   1440,       1440*5/4,   1440*3/2,
-            1440*7/4,   1440*2,     1440*9/4,   1440*5/2,   1440*11/4 };
+        const SwTwips cIndentAt[ MAXLEVEL ] = {
+            SwTwips(1440/2),     SwTwips(1440*3/4),   SwTwips(1440),       SwTwips(1440*5/4),   SwTwips(1440*3/2),
+            SwTwips(1440*7/4),   SwTwips(1440*2),     SwTwips(1440*9/4),   SwTwips(1440*5/2),   SwTwips(1440*11/4) };
         for( n = 0; n < MAXLEVEL; ++n )
         {
             pFormat = new SwNumFormat;
@@ -946,7 +946,7 @@ void SwNumRule::SetInvalidRule(bool bFlag)
 }
 
 /// change indent of all list levels by given difference
-void SwNumRule::ChangeIndent( const sal_Int32 nDiff )
+void SwNumRule::ChangeIndent( const SwTwips nDiff )
 {
     for ( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
     {
@@ -958,9 +958,9 @@ void SwNumRule::ChangeIndent( const sal_Int32 nDiff )
         {
             auto nNewIndent = nDiff +
                                aTmpNumFormat.GetAbsLSpace();
-            if ( nNewIndent < 0 )
+            if ( nNewIndent < SwTwips(0) )
             {
-                nNewIndent = 0;
+                nNewIndent = SwTwips(0);
             }
             aTmpNumFormat.SetAbsLSpace( nNewIndent );
         }
@@ -969,12 +969,11 @@ void SwNumRule::ChangeIndent( const sal_Int32 nDiff )
             // adjust also the list tab position, if a list tab stop is applied
             if ( aTmpNumFormat.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
             {
-                const tools::Long nNewListTab = aTmpNumFormat.GetListtabPos() +  nDiff;
+                const SwTwips nNewListTab = aTmpNumFormat.GetListtabPos() +  nDiff;
                 aTmpNumFormat.SetListtabPos( nNewListTab );
             }
 
-            const tools::Long nNewIndent = nDiff +
-                              aTmpNumFormat.GetIndentAt();
+            const SwTwips nNewIndent = nDiff + aTmpNumFormat.GetIndentAt();
             aTmpNumFormat.SetIndentAt( nNewIndent );
         }
 
@@ -985,7 +984,7 @@ void SwNumRule::ChangeIndent( const sal_Int32 nDiff )
 }
 
 /// set indent of certain list level to given value
-void SwNumRule::SetIndent( const short nNewIndent,
+void SwNumRule::SetIndent( const SwTwips nNewIndent,
                            const sal_uInt16 nListLevel )
 {
     SwNumFormat aTmpNumFormat( Get(nListLevel) );
@@ -1001,7 +1000,7 @@ void SwNumRule::SetIndent( const short nNewIndent,
         // adjust also the list tab position, if a list tab stop is applied
         if ( aTmpNumFormat.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
         {
-            const tools::Long nNewListTab = aTmpNumFormat.GetListtabPos() +
+            const SwTwips nNewListTab = aTmpNumFormat.GetListtabPos() +
                                      ( nNewIndent - aTmpNumFormat.GetIndentAt() );
             aTmpNumFormat.SetListtabPos( nNewListTab );
         }
@@ -1014,11 +1013,11 @@ void SwNumRule::SetIndent( const short nNewIndent,
 
 /// set indent of first list level to given value and change other list level's
 /// indents accordingly
-void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent )
+void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const SwTwips nNewIndent )
 {
     SwNumFormat aTmpNumFormat( Get(0) );
 
-    sal_Int32 nDiff( 0 );
+    SwTwips nDiff( 0 );
     const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
                                         aTmpNumFormat.GetPositionAndSpaceMode() );
     if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -1031,7 +1030,7 @@ void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent
     {
         nDiff = nNewIndent - aTmpNumFormat.GetIndentAt();
     }
-    if ( nDiff != 0  )
+    if ( nDiff != SwTwips(0)  )
     {
         ChangeIndent( nDiff );
     }

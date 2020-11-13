@@ -54,7 +54,7 @@ class SwPosNotify
         explicit SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj );
         ~SwPosNotify() COVERITY_NOEXCEPT_FALSE;
         // #i32795#
-        Point const & LastObjPos() const;
+        SwPoint const & LastObjPos() const;
 };
 
 }
@@ -131,7 +131,7 @@ SwPosNotify::~SwPosNotify() COVERITY_NOEXCEPT_FALSE
 }
 
 // --> #i32795#
-Point const & SwPosNotify::LastObjPos() const
+SwPoint const & SwPosNotify::LastObjPos() const
 {
     return maOldObjRect.Pos();
 }
@@ -145,7 +145,7 @@ class SwObjPosOscillationControl
     private:
         const SwAnchoredDrawObject* mpAnchoredDrawObj;
 
-        std::vector<Point> maObjPositions;
+        std::vector<SwPoint> maObjPositions;
 
     public:
         explicit SwObjPosOscillationControl( const SwAnchoredDrawObject& _rAnchoredDrawObj );
@@ -172,7 +172,7 @@ bool SwObjPosOscillationControl::OscillationDetected()
     }
     else
     {
-        Point aNewObjPos = mpAnchoredDrawObj->GetObjRect().Pos();
+        SwPoint aNewObjPos = mpAnchoredDrawObj->GetObjRect().Pos();
         for ( auto const & pt : maObjPositions )
         {
             if ( aNewObjPos == pt )
@@ -349,17 +349,17 @@ void SwAnchoredDrawObject::MakeObjPos()
 
     SwRect aPageRect( GetPageFrame()->getFrameArea() );
     SwRect aObjRect( GetObjRect() );
-    if ( aObjRect.Right() >= aPageRect.Right() + 10 )
+    if ( aObjRect.Right() >= aPageRect.Right() + SwTwips(10) )
     {
-        Size aSize( aPageRect.Right() - aObjRect.Right(), 0 );
-        DrawObj()->Move( aSize );
+        SwSize aSize( aPageRect.Right() - aObjRect.Right(), SwTwips(0) );
+        DrawObj()->Move( Size(aSize) );
         aObjRect = GetObjRect();
     }
 
-    if ( aObjRect.Left() + 10 <= aPageRect.Left() )
+    if ( aObjRect.Left() + SwTwips(10) <= aPageRect.Left() )
     {
-        Size aSize( aPageRect.Left() - aObjRect.Left(), 0 );
-        DrawObj()->Move( aSize );
+        SwSize aSize( aPageRect.Left() - aObjRect.Left(), SwTwips(0) );
+        DrawObj()->Move( Size(aSize) );
     }
 
     mbCaptureAfterLayoutDirChange = false;
@@ -483,16 +483,16 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtLayout()
     // --> #i34995# - setting anchor position needed for filters,
     // especially for the xml-filter to the OpenOffice.org file format
     {
-        const Point aNewAnchorPos =
+        const SwPoint aNewAnchorPos =
                     GetAnchorFrame()->GetFrameAnchorPos( ::HasWrap( GetDrawObj() ) );
-        DrawObj()->SetAnchorPos( aNewAnchorPos );
+        DrawObj()->SetAnchorPos( Point(aNewAnchorPos) );
         // --> #i70122# - missing invalidation
         InvalidateObjRectWithSpaces();
     }
     SetCurrRelPos( aObjPositioning.GetRelPos() );
     const SwFrame* pAnchorFrame = GetAnchorFrame();
     SwRectFnSet aRectFnSet(pAnchorFrame);
-    const Point aAnchPos( aRectFnSet.GetPos(pAnchorFrame->getFrameArea()) );
+    const SwPoint aAnchPos( aRectFnSet.GetPos(pAnchorFrame->getFrameArea()) );
     SetObjLeft( aAnchPos.X() + GetCurrRelPos().X() );
     SetObjTop( aAnchPos.Y() + GetCurrRelPos().Y() );
 }
@@ -501,18 +501,18 @@ void SwAnchoredDrawObject::SetDrawObjAnchor()
 {
     // new anchor position
     // --> #i31698# -
-    Point aNewAnchorPos =
+    SwPoint aNewAnchorPos =
                 GetAnchorFrame()->GetFrameAnchorPos( ::HasWrap( GetDrawObj() ) );
-    Point aCurrAnchorPos = GetDrawObj()->GetAnchorPos();
+    SwPoint aCurrAnchorPos(GetDrawObj()->GetAnchorPos());
     if ( aNewAnchorPos != aCurrAnchorPos )
     {
         // determine movement to be applied after setting the new anchor position
-        Size aMove( aCurrAnchorPos.getX() - aNewAnchorPos.getX(),
+        SwSize aMove( aCurrAnchorPos.getX() - aNewAnchorPos.getX(),
                     aCurrAnchorPos.getY() - aNewAnchorPos.getY() );
         // set new anchor position
-        DrawObj()->SetAnchorPos( aNewAnchorPos );
+        DrawObj()->SetAnchorPos( Point(aNewAnchorPos) );
         // correct object position, caused by setting new anchor position
-        DrawObj()->Move( aMove );
+        DrawObj()->Move( Size(aMove) );
         // --> #i70122# - missing invalidation
         InvalidateObjRectWithSpaces();
     }
@@ -630,7 +630,7 @@ namespace
     // With mirrored margins, when relating the size of an object from the inside margin for example, on the
     // first page we calculate the new size of the object using the size of the right margin,
     // on second page the left margin, third page right margin, etc.
-    tools::Long getInsideOutsideRelativeWidth(bool isOutside, const SwPageFrame* const pPageFrame)
+    SwTwips getInsideOutsideRelativeWidth(bool isOutside, const SwPageFrame* const pPageFrame)
     {
         // Alternating between the only two possible cases: inside and outside.
         // Inside = false, Outside = true.
@@ -651,13 +651,13 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
     {
         tools::Rectangle aCurrObjRect = GetDrawObj()->GetCurrentBoundRect();
 
-        tools::Long nTargetWidth = aCurrObjRect.GetWidth( );
+        SwTwips nTargetWidth(aCurrObjRect.GetWidth( ));
         if ( GetDrawObj( )->GetRelativeWidth( ) )
         {
-            tools::Long nWidth = 0;
+            SwTwips nWidth(0);
             if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
-                nWidth = GetPageFrame()->getFramePrintArea().SVRect().GetWidth();
+                nWidth = GetPageFrame()->getFramePrintArea().Width();
             // Here we handle the relative size of the width of some shape.
             // The size of the shape's width is going to be relative to the size of the left margin.
             // E.g.: (left margin = 8 && relative size = 150%) -> width of some shape = 12.
@@ -679,8 +679,8 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
                 else
                     nWidth = GetPageFrame()->GetRightMargin();
             else
-                nWidth = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect().GetWidth();
-            nTargetWidth = nWidth * (*GetDrawObj( )->GetRelativeWidth());
+                nWidth = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).Width();
+            nTargetWidth = SwTwips(tools::Long(double(nWidth) * (*GetDrawObj( )->GetRelativeWidth())));
         }
 
         bool bCheck = GetDrawObj()->GetRelativeHeight();
@@ -693,10 +693,10 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
         tools::Long nTargetHeight = aCurrObjRect.GetHeight();
         if (bCheck)
         {
-            tools::Long nHeight = 0;
+            SwTwips nHeight(0);
             if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
-                nHeight = GetPageFrame()->getFramePrintArea().SVRect().GetHeight();
+                nHeight = GetPageFrame()->getFramePrintArea().Height();
             else if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::PAGE_PRINT_AREA)
             {
                 // count required height: print area top = top margin + header
@@ -716,11 +716,11 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
                 nHeight = GetPageFrame()->GetBottomMargin() + aFooterRect.Height();
             }
             else
-                nHeight = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect().GetHeight();
-            nTargetHeight = nHeight * (*GetDrawObj()->GetRelativeHeight());
+                nHeight = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).Height();
+            nTargetHeight = tools::Long(nHeight) * (*GetDrawObj()->GetRelativeHeight());
         }
 
-        if ( nTargetWidth != aCurrObjRect.GetWidth( ) || nTargetHeight != aCurrObjRect.GetHeight( ) )
+        if ( nTargetWidth != SwTwips(aCurrObjRect.GetWidth( )) || nTargetHeight != aCurrObjRect.GetHeight( ) )
         {
             SwDoc* pDoc = const_cast<SwDoc*>(GetPageFrame()->GetFormat()->GetDoc());
 
@@ -728,8 +728,8 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             pDoc->getIDocumentState().SetEnableSetModified(false);
             auto pObject = const_cast<SdrObject*>(GetDrawObj());
             pObject->Resize( aCurrObjRect.TopLeft(),
-                    Fraction( nTargetWidth, aCurrObjRect.GetWidth() ),
-                    Fraction( nTargetHeight, aCurrObjRect.GetHeight() ), false );
+                    Fraction( tools::Long(nTargetWidth), tools::Long(aCurrObjRect.GetWidth()) ),
+                    Fraction( tools::Long(nTargetHeight), tools::Long(aCurrObjRect.GetHeight()) ), false );
 
             if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
             {
@@ -752,16 +752,16 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 bool SwAnchoredDrawObject::SetObjTop_( const SwTwips _nTop )
 {
     SwTwips nDiff = _nTop - GetObjRect().Top();
-    DrawObj()->Move( Size( 0, nDiff ) );
+    DrawObj()->Move( Size( 0, tools::Long(nDiff) ) );
 
-    return nDiff != 0;
+    return nDiff != SwTwips(0);
 }
 bool SwAnchoredDrawObject::SetObjLeft_( const SwTwips _nLeft )
 {
     SwTwips nDiff = _nLeft - GetObjRect().Left();
-    DrawObj()->Move( Size( nDiff, 0 ) );
+    DrawObj()->Move( Size( tools::Long(nDiff), 0 ) );
 
-    return nDiff != 0;
+    return nDiff != SwTwips(0);
 }
 
 /** adjust positioning and alignment attributes for new anchor frame
@@ -771,9 +771,9 @@ bool SwAnchoredDrawObject::SetObjLeft_( const SwTwips _nLeft )
 void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrame* _pNewAnchorFrame,
                                                   const SwRect* _pNewObjRect )
 {
-    SwTwips nHoriRelPos = 0;
-    SwTwips nVertRelPos = 0;
-    const Point aAnchorPos = _pNewAnchorFrame->GetFrameAnchorPos( ::HasWrap( GetDrawObj() ) );
+    SwTwips nHoriRelPos(0);
+    SwTwips nVertRelPos(0);
+    const SwPoint aAnchorPos = _pNewAnchorFrame->GetFrameAnchorPos( ::HasWrap( GetDrawObj() ) );
     // --> #i33313#
     const SwRect aObjRect( _pNewObjRect ? *_pNewObjRect : GetObjRect() );
     const bool bVert = _pNewAnchorFrame->IsVertical();

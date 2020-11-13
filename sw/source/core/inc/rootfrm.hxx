@@ -107,7 +107,7 @@ class SW_DLLPUBLIC SwRootFrame final : public SwLayoutFrame
     static bool           s_isNoVirDev;// No virt. Device for SystemPaints
 
     /// Width of the HTML / Web document if not defined otherwise: 20cm.
-    static constexpr sal_Int64 MIN_BROWSE_WIDTH = convertMm100ToTwip(20000);
+    static constexpr SwTwips MIN_BROWSE_WIDTH = convertMm100ToTwip(20000);
 
     bool    mbCheckSuperfluous   :1; // Search for empty Pages?
     bool    mbIdleFormat         :1; // Trigger Idle Formatter?
@@ -227,7 +227,7 @@ public:
           SdrPage* GetDrawPage()       { return mpDrawPage; }
           void     SetDrawPage( SdrPage* pNew ){ mpDrawPage = pNew; }
 
-    virtual bool  GetModelPositionForViewPoint( SwPosition *, Point&,
+    virtual bool  GetModelPositionForViewPoint( SwPosition *, SwPoint&,
                                SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
@@ -241,9 +241,9 @@ public:
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 
-    Point  GetNextPrevContentPos( const Point &rPoint, bool bNext ) const;
+    SwPoint GetNextPrevContentPos( const SwPoint &rPoint, bool bNext ) const;
 
-    virtual Size ChgSize( const Size& aNewSize ) override;
+    virtual SwSize ChgSize( const SwSize& aNewSize ) override;
 
     void SetIdleFlags()
     {
@@ -320,7 +320,7 @@ public:
      * bool bExtend: Extend each page to the left/right/top/bottom up to the
      * next page margin
      */
-    const SwPageFrame* GetPageAtPos( const Point& rPt, const Size* pSize = nullptr, bool bExtend = false ) const;
+    const SwPageFrame* GetPageAtPos( const SwPoint& rPt, const SwSize* pSize = nullptr, bool bExtend = false ) const;
 
     /**
     * Point rPt: The point to test

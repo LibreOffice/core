@@ -170,11 +170,11 @@ static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrame* pOldSelFly)
         // --> assure consistent cursor
         pSh->KillPams();
         pSh->ClearMark();
-        pSh->SetCursor( pSh->Imp()->GetDrawView()->GetAllMarkedRect().TopLeft(), true);
+        pSh->SetCursor( SwPoint(pSh->Imp()->GetDrawView()->GetAllMarkedRect().TopLeft()), true);
     }
 }
 
-bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
+bool SwFEShell::SelectObj( const SwPoint& rPt, sal_uInt8 nFlag, SdrObject *pObj )
 {
     SwDrawView *pDView = Imp()->GetDrawView();
     if(!pDView)
@@ -188,7 +188,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
     const bool bAddSelect = 0 != (SW_ADD_SELECT & nFlag);
     const bool bEnterGroup = 0 != (SW_ENTER_GROUP & nFlag);
     SwFlyFrame* pOldSelFly = nullptr;
-    const Point aOldPos( pDView->GetAllMarkedRect().TopLeft() );
+    const SwPoint aOldPos( pDView->GetAllMarkedRect().TopLeft() );
 
     if( bHadSelection )
     {
@@ -211,8 +211,8 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                     // Similar if a fly with protected content is deselected.
                     // For simplicity we put the cursor next to the upper-left
                     // corner.
-                    Point aPt( pOldSelFly->getFrameArea().Pos() );
-                    aPt.setX(aPt.getX() - 1);
+                    SwPoint aPt( pOldSelFly->getFrameArea().Pos() );
+                    aPt.setX(aPt.getX() - SwTwips(1));
                     bool bUnLockView = !IsViewLocked();
                     LockView( true );
                     SetCursor( aPt, true );
@@ -255,7 +255,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
         // tolerance limit of Drawing-SS
         const auto nHdlSizePixel = Imp()->GetDrawView()->GetMarkHdlSizePixel();
         const short nMinMove = static_cast<short>(GetOut()->PixelToLogic(Size(nHdlSizePixel/2, 0)).Width());
-        pDView->MarkObj( rPt, nMinMove, bAddSelect, bEnterGroup );
+        pDView->MarkObj( Point(rPt), nMinMove, bAddSelect, bEnterGroup );
     }
 
     const bool bRet = 0 != rMrkList.GetMarkCount();
@@ -340,14 +340,14 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
  *  for the nearest fly frame in the given direction.
  */
 
-static bool LessX( Point const & aPt1, Point const & aPt2, bool bOld )
+static bool LessX( SwPoint const & aPt1, SwPoint const & aPt2, bool bOld )
 {
     return aPt1.getX() < aPt2.getX()
             || ( aPt1.getX() == aPt2.getX()
                 && ( aPt1.getY() < aPt2.getY()
                     || ( aPt1.getY() == aPt2.getY() && bOld ) ) );
 }
-static bool LessY( Point const & aPt1, Point const & aPt2, bool bOld )
+static bool LessY( SwPoint const & aPt1, SwPoint const & aPt2, bool bOld )
 {
     return aPt1.getY() < aPt2.getY()
             || ( aPt1.getY() == aPt2.getY()
@@ -482,9 +482,9 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                 if( pPage->GetSortedObjs() )
                 {
                     bool bOld = false;
-                    Point aCenter( pOld->getFrameArea().Left() + pOld->getFrameArea().Width()/2,
-                                   pOld->getFrameArea().Top() + pOld->getFrameArea().Height()/2 );
-                    Point aBest;
+                    SwPoint aCenter( pOld->getFrameArea().Left() + pOld->getFrameArea().Width()/SwTwips(2),
+                                   pOld->getFrameArea().Top() + pOld->getFrameArea().Height()/SwTwips(2) );
+                    SwPoint aBest;
                     for(SwAnchoredObject* pAnchObj : *pPage->GetSortedObjs())
                     {
                         if( auto pTmp = dynamic_cast<SwFlyFrame*>( pAnchObj) )
@@ -503,10 +503,10 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                                 }
                                 if( pCheck || pTmp->IsProtected() )
                                     continue;
-                                Point aNew( pTmp->getFrameArea().Left() +
-                                            pTmp->getFrameArea().Width()/2,
+                                SwPoint aNew( pTmp->getFrameArea().Left() +
+                                            pTmp->getFrameArea().Width()/SwTwips(2),
                                             pTmp->getFrameArea().Top() +
-                                            pTmp->getFrameArea().Height()/2 );
+                                            pTmp->getFrameArea().Height()/SwTwips(2) );
                                 bool bAccept = false;
                                 switch( nDir ) {
                                     case SwMove::RIGHT:
@@ -647,7 +647,7 @@ bool SwFEShell::IsSelContainsControl() const
     return bRet;
 }
 
-void SwFEShell::ScrollTo( const Point &rPt )
+void SwFEShell::ScrollTo( const SwPoint &rPt )
 {
     const SwRect aRect( rPt, rPt );
     if ( IsScrollMDI( this, aRect ) &&
@@ -710,27 +710,27 @@ void SwFEShell::StartCropImage()
     SetDragMode( SdrDragMode::Crop );
 }
 
-void SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
+void SwFEShell::BeginDrag( const SwPoint* pPt, bool bIsShift)
 {
     SdrView *pView = Imp()->GetDrawView();
     if ( pView && pView->AreObjectsMarked() )
     {
         m_pChainFrom.reset();
         m_pChainTo.reset();
-        SdrHdl* pHdl = pView->PickHandle( *pPt );
-        if (pView->BegDragObj( *pPt, nullptr, pHdl ))
+        SdrHdl* pHdl = pView->PickHandle( Point(*pPt) );
+        if (pView->BegDragObj( Point(*pPt), nullptr, pHdl ))
             pView->GetDragMethod()->SetShiftPressed( bIsShift );
         ::FrameNotify( this );
     }
 }
 
-void SwFEShell::Drag( const Point *pPt, bool )
+void SwFEShell::Drag( const SwPoint *pPt, bool )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "Drag without DrawView?" );
     if ( HasDrawViewDrag() )
     {
         ScrollTo( *pPt );
-        Imp()->GetDrawView()->MovDragObj( *pPt );
+        Imp()->GetDrawView()->MovDragObj( Point(*pPt) );
         Imp()->GetDrawView()->ShowDragAnchor();
         ::FrameNotify( this );
     }
@@ -853,7 +853,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
                 bCheckNeighbours = true;
                 pFly->InvalidatePos();
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pFly);
-                aFrm.Pos().AdjustY(1 );
+                aFrm.Pos().AdjustY(SwTwips(1));
             }
 
             pPage = pFly->FindPageFrame();
@@ -900,7 +900,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
                 {
                     pAct->InvalidatePos();
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pAct);
-                    aFrm.Pos().AdjustY(1 );
+                    aFrm.Pos().AdjustY(SwTwips(1));
                 }
             }
         }
@@ -1355,14 +1355,14 @@ void SwFEShell::EndTextEdit()
     EndAllAction();
 }
 
-bool SwFEShell::IsInsideSelectedObj( const Point &rPt )
+bool SwFEShell::IsInsideSelectedObj( const SwPoint &rPt )
 {
     if( Imp()->HasDrawView() )
     {
         SwDrawView *pDView = Imp()->GetDrawView();
 
         if( pDView->GetMarkedObjectList().GetMarkCount() &&
-            pDView->IsMarkedObjHit( rPt ) )
+            pDView->IsMarkedObjHit( Point(rPt) ) )
         {
             return true;
         }
@@ -1370,7 +1370,7 @@ bool SwFEShell::IsInsideSelectedObj( const Point &rPt )
     return false;
 }
 
-bool SwFEShell::IsObjSelectable( const Point& rPt )
+bool SwFEShell::IsObjSelectable( const SwPoint& rPt )
 {
     CurrShell aCurr(this);
     SwDrawView *pDView = Imp()->GetDrawView();
@@ -1381,13 +1381,13 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
         const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        bRet = pDView->PickObj(rPt, pDView->getHitTolLog(), pPV, SdrSearchOptions::PICKMARKABLE) != nullptr;
+        bRet = pDView->PickObj(Point(rPt), pDView->getHitTolLog(), pPV, SdrSearchOptions::PICKMARKABLE) != nullptr;
         pDView->SetHitTolerancePixel( nOld );
     }
     return bRet;
 }
 
-SdrObject* SwFEShell::GetObjAt( const Point& rPt )
+SdrObject* SwFEShell::GetObjAt( const SwPoint& rPt )
 {
     SdrObject* pRet = nullptr;
     CurrShell aCurr(this);
@@ -1398,14 +1398,14 @@ SdrObject* SwFEShell::GetObjAt( const Point& rPt )
         const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        pRet = pDView->PickObj(rPt, pDView->getHitTolLog(), pPV, SdrSearchOptions::PICKMARKABLE);
+        pRet = pDView->PickObj(Point(rPt), pDView->getHitTolLog(), pPV, SdrSearchOptions::PICKMARKABLE);
         pDView->SetHitTolerancePixel( nOld );
     }
     return pRet;
 }
 
 // Test if there is an object at that position and if it should be selected.
-bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
+bool SwFEShell::ShouldObjectBeSelected(const SwPoint& rPt)
 {
     CurrShell aCurr(this);
     SwDrawView *pDrawView = Imp()->GetDrawView();
@@ -1417,7 +1417,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
         const auto nOld(pDrawView->GetHitTolerancePixel());
 
         pDrawView->SetHitTolerancePixel(pDrawView->GetMarkHdlSizePixel()/2);
-        SdrObject* pObj = pDrawView->PickObj(rPt, pDrawView->getHitTolLog(), pPV, SdrSearchOptions::PICKMARKABLE);
+        SdrObject* pObj = pDrawView->PickObj(Point(rPt), pDrawView->getHitTolLog(), pPV, SdrSearchOptions::PICKMARKABLE);
         pDrawView->SetHitTolerancePixel(nOld);
 
         if (pObj)
@@ -1501,7 +1501,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                     SdrObject *pCandidate = pPage->GetObj(a);
 
                     SwVirtFlyDrawObj* pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pCandidate);
-                    if (pDrawObj && pDrawObj->GetCurrentBoundRect().IsInside(rPt))
+                    if (pDrawObj && pDrawObj->GetCurrentBoundRect().IsInside(Point(rPt)))
                     {
                         bRet = false;
                     }
@@ -1563,11 +1563,11 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
     const SdrObject *pBest  = nullptr,
                     *pTop   = nullptr;
 
-    const tools::Long nTmp = bNext ? LONG_MAX : 0;
-    Point aBestPos( nTmp, nTmp );
-    Point aTopPos(  nTmp, nTmp );
-    Point aCurPos;
-    Point aPos;
+    const SwTwips nTmp(bNext ? LONG_MAX : 0);
+    SwPoint aBestPos( nTmp, nTmp );
+    SwPoint aTopPos(  nTmp, nTmp );
+    SwPoint aCurPos;
+    SwPoint aPos;
     bool bNoDraw((GotoObjFlags::DrawAny & eType) == GotoObjFlags::NONE);
     bool bNoFly((GotoObjFlags::FlyAny & eType) == GotoObjFlags::NONE);
 
@@ -1594,7 +1594,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
             if( auto pVirtFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>( pStartObj) )
                 aPos = pVirtFlyDrawObj->GetFlyFrame()->getFrameArea().Pos();
             else
-                aPos = pStartObj->GetSnapRect().TopLeft();
+                aPos = SwPoint(pStartObj->GetSnapRect().TopLeft());
 
             // If an object inside a group is selected, we want to
             // iterate over the group members.
@@ -1665,7 +1665,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                 aCurPos = pFly->getFrameArea().Pos();
             }
             else
-                aCurPos = pObj->GetSnapRect().TopLeft();
+                aCurPos = SwPoint(pObj->GetSnapRect().TopLeft());
 
             // Special case if another object is on same Y.
             if( aCurPos != aPos &&          // only when it is not me
@@ -1673,7 +1673,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                 (bNext? (aCurPos.getX() > aPos.getX()) :  // lies next to me
                         (aCurPos.getX() < aPos.getX())) ) // " reverse
             {
-                aBestPos = Point( nTmp, nTmp );
+                aBestPos = SwPoint( nTmp, nTmp );
                 SdrObjListIter aTmpIter( pList, bFlat ? SdrIterMode::Flat : SdrIterMode::DeepNoGroups );
                 while ( aTmpIter.IsMore() )
                 {
@@ -1686,7 +1686,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                         aCurPos = pVirtO->GetFlyFrame()->getFrameArea().Pos();
                     }
                     else
-                        aCurPos = pTmpObj->GetCurrentBoundRect().TopLeft();
+                        aCurPos = SwPoint(pTmpObj->GetCurrentBoundRect().TopLeft());
 
                     if( aCurPos != aPos && aCurPos.Y() == aPos.Y() &&
                         (bNext? (aCurPos.getX() > aPos.getX()) :  // lies next to me
@@ -1727,7 +1727,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
             }
         }
         // unfortunately nothing found
-        if( bNext ? (aBestPos.getX() == LONG_MAX) : (aBestPos.getX() == 0) )
+        if( bNext ? (aBestPos.getX() == SwTwips(LONG_MAX)) : (aBestPos.getX() == SwTwips(0)) )
         {
             pBest = pTop;
             SvxSearchDialogWrapper::SetSearchLabel( bNext ? SearchLabel::EndWrapped : SearchLabel::StartWrapped );
@@ -1759,7 +1759,7 @@ bool SwFEShell::GotoObj( bool bNext, GotoObjFlags eType )
     }
     else
     {
-        SelectObj( Point(), 0, const_cast<SdrObject*>(pBest) );
+        SelectObj( SwPoint(), 0, const_cast<SdrObject*>(pBest) );
         if( !ActionPend() )
             MakeVisible( SwRect(pBest->GetCurrentBoundRect()) );
     }
@@ -1767,7 +1767,7 @@ bool SwFEShell::GotoObj( bool bNext, GotoObjFlags eType )
     return true;
 }
 
-bool SwFEShell::BeginCreate( SdrObjKind eSdrObjectKind, const Point &rPos )
+bool SwFEShell::BeginCreate( SdrObjKind eSdrObjectKind, const SwPoint &rPos )
 {
     bool bRet = false;
 
@@ -1779,10 +1779,10 @@ bool SwFEShell::BeginCreate( SdrObjKind eSdrObjectKind, const Point &rPos )
         Imp()->GetDrawView()->SetCurrentObj( eSdrObjectKind );
         if ( eSdrObjectKind == OBJ_CAPTION )
             bRet = Imp()->GetDrawView()->BegCreateCaptionObj(
-                        rPos, Size( lMinBorder - MINFLY, lMinBorder - MINFLY ),
+                        Point(rPos), Size(SwSize( lMinBorder - MINFLY, lMinBorder - MINFLY )),
                         GetOut() );
         else
-            bRet = Imp()->GetDrawView()->BegCreateObj( rPos, GetOut() );
+            bRet = Imp()->GetDrawView()->BegCreateObj( Point(rPos), GetOut() );
     }
     if ( bRet )
     {
@@ -1792,7 +1792,7 @@ bool SwFEShell::BeginCreate( SdrObjKind eSdrObjectKind, const Point &rPos )
 }
 
 bool SwFEShell::BeginCreate( SdrObjKind eSdrObjectKind, SdrInventor eObjInventor,
-                             const Point &rPos )
+                             const SwPoint &rPos )
 {
     bool bRet = false;
 
@@ -1802,20 +1802,20 @@ bool SwFEShell::BeginCreate( SdrObjKind eSdrObjectKind, SdrInventor eObjInventor
     if ( GetPageNumber( rPos ) )
     {
         Imp()->GetDrawView()->SetCurrentObj( eSdrObjectKind, eObjInventor );
-        bRet = Imp()->GetDrawView()->BegCreateObj( rPos, GetOut() );
+        bRet = Imp()->GetDrawView()->BegCreateObj( Point(rPos), GetOut() );
     }
     if ( bRet )
         ::FrameNotify( this, FLY_DRAG_START );
     return bRet;
 }
 
-void SwFEShell::MoveCreate( const Point &rPos )
+void SwFEShell::MoveCreate( const SwPoint &rPos )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "MoveCreate without DrawView?" );
     if ( GetPageNumber( rPos ) )
     {
         ScrollTo( rPos );
-        Imp()->GetDrawView()->MovCreateObj( rPos );
+        Imp()->GetDrawView()->MovCreateObj( Point(rPos) );
         ::FrameNotify( this );
     }
 }
@@ -1878,8 +1878,8 @@ bool SwFEShell::ImpEndCreate()
 
     Imp()->GetDrawView()->UnmarkAll();
 
-    const tools::Rectangle &rBound = rSdrObj.GetSnapRect();
-    Point aPt( rBound.TopRight() );
+    const SwRect rBound(rSdrObj.GetSnapRect());
+    SwPoint aPt( rBound.TopRight() );
 
     // alien identifier should end up on defaults
     // duplications possible!!
@@ -1895,24 +1895,24 @@ bool SwFEShell::ImpEndCreate()
     {
         SwPosition aPos( GetDoc()->GetNodes() );
         SwCursorMoveState aState( CursorMoveState::SetOnlyText );
-        Point aPoint( aPt.getX(), aPt.getY() + rBound.GetHeight()/2 );
+        SwPoint aPoint( aPt.getX(), aPt.getY() + rBound.Height()/SwTwips(2) );
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
 
         // characterbinding not allowed in readonly-content
         if( !aPos.nNode.GetNode().IsProtect() )
         {
-            std::pair<Point, bool> const tmp(aPoint, true);
+            std::pair<SwPoint, bool> const tmp(aPoint, true);
             pAnch = aPos.nNode.GetNode().GetContentNode()->getLayoutFrame(GetLayout(), &aPos, &tmp);
             SwRect aTmp;
             pAnch->GetCharRect( aTmp, aPos );
 
             // The crsr should not be too far away
             bCharBound = true;
-            tools::Rectangle aRect( aTmp.SVRect() );
-            aRect.AdjustLeft( -(MM50*2) );
-            aRect.AdjustTop( -(MM50*2) );
-            aRect.AdjustRight(MM50*2 );
-            aRect.AdjustBottom(MM50*2 );
+            SwRect aRect( aTmp );
+            aRect.AdjustLeft( -(MM50*SwTwips(2)) );
+            aRect.AdjustTop( -(MM50*SwTwips(2)) );
+            aRect.AdjustRight(MM50*SwTwips(2) );
+            aRect.AdjustBottom(MM50*SwTwips(2) );
 
             if( !aRect.IsOver( rBound ) && !::GetHtmlMode( GetDoc()->GetDocShell() ))
                 bCharBound = false;
@@ -1940,7 +1940,7 @@ bool SwFEShell::ImpEndCreate()
         bool bAtPage = false;
         const SwFrame* pPage = nullptr;
         SwCursorMoveState aState( CursorMoveState::SetOnlyText );
-        Point aPoint( aPt );
+        SwPoint aPoint( aPt );
         SwPosition aPos( GetDoc()->GetNodes() );
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
 
@@ -1953,7 +1953,7 @@ bool SwFEShell::ImpEndCreate()
         }
 
         SwContentNode* pCNode = aPos.nNode.GetNode().GetContentNode();
-        std::pair<Point, bool> const tmp(aPoint, false);
+        std::pair<SwPoint, bool> const tmp(aPoint, false);
         pAnch = pCNode ? pCNode->getLayoutFrame(GetLayout(), nullptr, &tmp) : nullptr;
         if (!pAnch)
         {
@@ -2061,10 +2061,10 @@ bool SwFEShell::ImpEndCreate()
     if( OBJ_NONE == nIdent )
     {
         // For OBJ_NONE a fly is inserted.
-        const tools::Long nWidth = rBound.Right()  - rBound.Left();
-        const tools::Long nHeight= rBound.Bottom() - rBound.Top();
-        aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum, std::max( nWidth,  tools::Long(MINFLY) ),
-                                              std::max( nHeight, tools::Long(MINFLY) )));
+        const SwTwips nWidth = rBound.Right()  - rBound.Left();
+        const SwTwips nHeight= rBound.Bottom() - rBound.Top();
+        aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum, std::max( nWidth, MINFLY ),
+                                              std::max( nHeight, MINFLY )));
 
         SwFormatHoriOrient aHori( nXOffset, text::HoriOrientation::NONE, text::RelOrientation::FRAME );
         SwFormatVertOrient aVert( nYOffset, text::VertOrientation::NONE, text::RelOrientation::FRAME );
@@ -2102,7 +2102,7 @@ bool SwFEShell::ImpEndCreate()
             const bool bLeftFrame = aFlyRect.Left() <
                                       pAnch->getFrameArea().Left() + pAnch->getFramePrintArea().Left(),
                            bLeftPrt = aFlyRect.Left() + aFlyRect.Width() <
-                                      pAnch->getFrameArea().Left() + pAnch->getFramePrintArea().Width()/2;
+                                      pAnch->getFrameArea().Left() + pAnch->getFramePrintArea().Width()/SwTwips(2);
             if( bLeftFrame || bLeftPrt )
             {
                 aHori.SetHoriOrient( text::HoriOrientation::LEFT );
@@ -2219,7 +2219,7 @@ bool SwFEShell::IsDrawCreate() const
     return Imp()->HasDrawView() && Imp()->GetDrawView()->IsCreateObj();
 }
 
-bool SwFEShell::BeginMark( const Point &rPos )
+bool SwFEShell::BeginMark( const SwPoint &rPos )
 {
     if ( !Imp()->HasDrawView() )
         Imp()->MakeDrawView();
@@ -2229,10 +2229,10 @@ bool SwFEShell::BeginMark( const Point &rPos )
         SwDrawView* pDView = Imp()->GetDrawView();
 
         if (pDView->HasMarkablePoints())
-            return pDView->BegMarkPoints( rPos );
+            return pDView->BegMarkPoints( Point(rPos) );
         else
         {
-            pDView->BegMarkObj( rPos );
+            pDView->BegMarkObj( Point(rPos) );
             return true;
         }
     }
@@ -2240,7 +2240,7 @@ bool SwFEShell::BeginMark( const Point &rPos )
         return false;
 }
 
-void SwFEShell::MoveMark( const Point &rPos )
+void SwFEShell::MoveMark( const SwPoint &rPos )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "MoveMark without DrawView?" );
 
@@ -2250,11 +2250,11 @@ void SwFEShell::MoveMark( const Point &rPos )
         SwDrawView* pDView = Imp()->GetDrawView();
 
         if (pDView->IsInsObjPoint())
-            pDView->MovInsObjPoint( rPos );
+            pDView->MovInsObjPoint( Point(rPos) );
         else if (pDView->IsMarkPoints())
-            pDView->MovMarkPoints( rPos );
+            pDView->MovMarkPoints( Point(rPos) );
         else
-            pDView->MovAction( rPos );
+            pDView->MovAction( Point(rPos) );
     }
 }
 
@@ -2376,7 +2376,7 @@ void SwFEShell::DelSelectedObj()
 }
 
 // For the statusline to request the current conditions
-Size SwFEShell::GetObjSize() const
+SwSize SwFEShell::GetObjSize() const
 {
     tools::Rectangle aRect;
     if ( Imp()->HasDrawView() )
@@ -2386,10 +2386,10 @@ Size SwFEShell::GetObjSize() const
         else
             aRect = Imp()->GetDrawView()->GetAllMarkedRect();
     }
-    return aRect.GetSize();
+    return SwSize(aRect.GetSize());
 }
 
-Point SwFEShell::GetAnchorObjDiff() const
+SwPoint SwFEShell::GetAnchorObjDiff() const
 {
     const SdrView *pView = Imp()->GetDrawView();
     OSL_ENSURE( pView, "GetAnchorObjDiff without DrawView?" );
@@ -2400,7 +2400,7 @@ Point SwFEShell::GetAnchorObjDiff() const
     else
         aRect = Imp()->GetDrawView()->GetAllMarkedRect();
 
-    Point aRet( aRect.TopLeft() );
+    SwPoint aRet( aRect.TopLeft() );
 
     if ( IsFrameSelected() )
     {
@@ -2412,16 +2412,16 @@ Point SwFEShell::GetAnchorObjDiff() const
         const SdrObject *pObj = pView->GetMarkedObjectList().GetMarkCount() == 1 ?
                                 pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() : nullptr;
         if ( pObj )
-            aRet -= pObj->GetAnchorPos();
+            aRet -= SwPoint(pObj->GetAnchorPos());
     }
 
     return aRet;
 }
 
-Point SwFEShell::GetObjAbsPos() const
+SwPoint SwFEShell::GetObjAbsPos() const
 {
     OSL_ENSURE( Imp()->GetDrawView(), "GetObjAbsPos() without DrawView?" );
-    return Imp()->GetDrawView()->GetDragStat().GetActionRect().TopLeft();
+    return SwPoint(Imp()->GetDrawView()->GetDragStat().GetActionRect().TopLeft());
 }
 
 bool SwFEShell::IsGroupSelected()
@@ -2807,7 +2807,7 @@ void SwFEShell::CheckUnboundObjects()
         if ( !GetUserCall(pObj) )
         {
             const tools::Rectangle &rBound = pObj->GetSnapRect();
-            const Point aPt( rBound.TopLeft() );
+            const SwPoint aPt( rBound.TopLeft() );
             const SwFrame *pPage = GetLayout()->Lower();
             const SwFrame *pLast = pPage;
             while ( pPage && !pPage->getFrameArea().IsInside( aPt ) )
@@ -2858,7 +2858,7 @@ void SwFEShell::SetCalcFieldValueHdl(Outliner* pOutliner)
 }
 
 SwChainRet SwFEShell::Chainable( SwRect &rRect, const SwFrameFormat &rSource,
-                            const Point &rPt ) const
+                            const SwPoint &rPt ) const
 {
     rRect.Clear();
 
@@ -2874,7 +2874,7 @@ SwChainRet SwFEShell::Chainable( SwRect &rRect, const SwFrameFormat &rSource,
         SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
         const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
-        SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPView, SdrSearchOptions::PICKMARKABLE);
+        SdrObject* pObj = pDView->PickObj(Point(rPt), pDView->getHitTolLog(), pPView, SdrSearchOptions::PICKMARKABLE);
         SwVirtFlyDrawObj* pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
         if (pDrawObj)
         {
@@ -2896,7 +2896,7 @@ void SwFEShell::Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest )
     GetDoc()->Chain(rSource, rDest);
 }
 
-SwChainRet SwFEShell::Chain( SwFrameFormat &rSource, const Point &rPt )
+SwChainRet SwFEShell::Chain( SwFrameFormat &rSource, const SwPoint &rPt )
 {
     SwRect aDummy;
     SwChainRet nErr = Chainable( aDummy, rSource, rPt );
@@ -2907,7 +2907,7 @@ SwChainRet SwFEShell::Chain( SwFrameFormat &rSource, const Point &rPt )
         SwDrawView *pDView = Imp()->GetDrawView();
         const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
-        SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPView, SdrSearchOptions::PICKMARKABLE);
+        SdrObject* pObj = pDView->PickObj(Point(rPt), pDView->getHitTolLog(), pPView, SdrSearchOptions::PICKMARKABLE);
         pDView->SetHitTolerancePixel( nOld );
         SwFlyFrame *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame();
 
@@ -2945,13 +2945,13 @@ void SwFEShell::SetChainMarker()
             bDelFrom = false;
             const SwFrame *pPre = pFly->GetPrevLink();
 
-            Point aStart( pPre->getFrameArea().Right(), pPre->getFrameArea().Bottom());
+            SwPoint aStart( pPre->getFrameArea().Right(), pPre->getFrameArea().Bottom());
             Point aEnd(pFly->getFrameArea().Pos());
 
             if (!m_pChainFrom)
             {
                 m_pChainFrom.reset(
-                    new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd ));
+                    new SdrDropMarkerOverlay( *GetDrawView(), Point(aStart), Point(aEnd) ));
             }
         }
         if ( pFly->GetNextLink() )
@@ -2959,13 +2959,13 @@ void SwFEShell::SetChainMarker()
             bDelTo = false;
             const SwFlyFrame *pNxt = pFly->GetNextLink();
 
-            Point aStart( pFly->getFrameArea().Right(), pFly->getFrameArea().Bottom());
+            SwPoint aStart( pFly->getFrameArea().Right(), pFly->getFrameArea().Bottom());
             Point aEnd(pNxt->getFrameArea().Pos());
 
             if (!m_pChainTo)
             {
                 m_pChainTo.reset(
-                    new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd ));
+                    new SdrDropMarkerOverlay( *GetDrawView(), Point(aStart), Point(aEnd) ));
             }
         }
     }
@@ -2981,7 +2981,7 @@ void SwFEShell::SetChainMarker()
     }
 }
 
-tools::Long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
+SwTwips SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
 {
     SwFrame *pFrame = GetCurrFrame();
     // Is the cursor at this moment in a SectionFrame?
@@ -3006,10 +3006,10 @@ tools::Long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
             return pSct->getFrameArea().Width();
         }
     }
-    return 0;
+    return SwTwips(0);
 }
 
-void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rectangle& rRect,
+void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const SwRect& rRect,
                 sal_uInt16 nSlotId)
 {
     SdrView* pDrawView = GetDrawView();
@@ -3021,27 +3021,27 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
 
     if(pObj)
     {
-        tools::Rectangle aRect(rRect);
+        SwRect aRect(rRect);
         if(OBJ_CARC == eSdrObjectKind || OBJ_CCUT == eSdrObjectKind)
         {
             // force quadratic
-            if(aRect.GetWidth() > aRect.GetHeight())
+            if(aRect.Width() > aRect.Height())
             {
-                aRect = tools::Rectangle(
-                    Point(aRect.Left() + ((aRect.GetWidth() - aRect.GetHeight()) / 2), aRect.Top()),
-                    Size(aRect.GetHeight(), aRect.GetHeight()));
+                aRect = SwRect(
+                    SwPoint(aRect.Left() + ((aRect.Width() - aRect.Height()) / SwTwips(2)), aRect.Top()),
+                    SwSize(aRect.Height(), aRect.Height()));
             }
             else
             {
-                aRect = tools::Rectangle(
-                    Point(aRect.Left(), aRect.Top() + ((aRect.GetHeight() - aRect.GetWidth()) / 2)),
-                    Size(aRect.GetWidth(), aRect.GetWidth()));
+                aRect = SwRect(
+                    SwPoint(aRect.Left(), aRect.Top() + ((aRect.Height() - aRect.Width()) / SwTwips(2))),
+                    SwSize(aRect.Width(), aRect.Width()));
             }
         }
-        pObj->SetLogicRect(aRect);
+        pObj->SetLogicRect(aRect.SVRect());
 
-        Point aStart = aRect.TopLeft();
-        Point aEnd = aRect.BottomRight();
+        SwPoint aStart = aRect.TopLeft();
+        SwPoint aEnd = aRect.BottomRight();
 
         if(dynamic_cast<const SdrCircObj*>( pObj) !=  nullptr)
         {
@@ -3061,19 +3061,19 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                 {
                     basegfx::B2DPolygon aInnerPoly;
 
-                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
+                    aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Left()), tools::Long(aRect.Bottom())));
 
-                    const basegfx::B2DPoint aCenterBottom(aRect.Center().getX(), aRect.Bottom());
+                    const basegfx::B2DPoint aCenterBottom(tools::Long(aRect.Center().getX()), tools::Long(aRect.Bottom()));
                     aInnerPoly.appendBezierSegment(
                         aCenterBottom,
                         aCenterBottom,
-                        basegfx::B2DPoint(aRect.Center().getX(), aRect.Center().getY()));
+                        basegfx::B2DPoint(tools::Long(aRect.Center().getX()), tools::Long(aRect.Center().getY())));
 
-                    const basegfx::B2DPoint aCenterTop(aRect.Center().getX(), aRect.Top());
+                    const basegfx::B2DPoint aCenterTop(tools::Long(aRect.Center().getX()), tools::Long(aRect.Top()));
                     aInnerPoly.appendBezierSegment(
                         aCenterTop,
                         aCenterTop,
-                        basegfx::B2DPoint(aRect.Right(), aRect.Top()));
+                        basegfx::B2DPoint(tools::Long(aRect.Right()), tools::Long(aRect.Top())));
 
                     aInnerPoly.setClosed(true);
                     aPoly.append(aInnerPoly);
@@ -3084,19 +3084,19 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                 {
                     basegfx::B2DPolygon aInnerPoly;
 
-                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
+                    aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Left()), tools::Long(aRect.Bottom())));
 
                     aInnerPoly.appendBezierSegment(
-                        basegfx::B2DPoint(aRect.Left(), aRect.Top()),
-                        basegfx::B2DPoint(aRect.Center().getX(), aRect.Top()),
-                        basegfx::B2DPoint(aRect.Center().getX(), aRect.Center().getY()));
+                        basegfx::B2DPoint(tools::Long(aRect.Left()), tools::Long(aRect.Top())),
+                        basegfx::B2DPoint(tools::Long(aRect.Center().getX()), tools::Long(aRect.Top())),
+                        basegfx::B2DPoint(tools::Long(aRect.Center().getX()), tools::Long(aRect.Center().getY())));
 
                     aInnerPoly.appendBezierSegment(
-                        basegfx::B2DPoint(aRect.Center().getX(), aRect.Bottom()),
-                        basegfx::B2DPoint(aRect.Right(), aRect.Bottom()),
-                        basegfx::B2DPoint(aRect.Right(), aRect.Top()));
+                        basegfx::B2DPoint(tools::Long(aRect.Center().getX()), tools::Long(aRect.Bottom())),
+                        basegfx::B2DPoint(tools::Long(aRect.Right()), tools::Long(aRect.Bottom())),
+                        basegfx::B2DPoint(tools::Long(aRect.Right()), tools::Long(aRect.Top())));
 
-                    aInnerPoly.append(basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));
+                    aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Right()), tools::Long(aRect.Bottom())));
                     aInnerPoly.setClosed(true);
                     aPoly.append(aInnerPoly);
                 }
@@ -3105,21 +3105,21 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                 case OBJ_PLIN:
                 {
                     basegfx::B2DPolygon aInnerPoly;
-                    sal_Int32 nWdt(aRect.GetWidth());
-                    sal_Int32 nHgt(aRect.GetHeight());
+                    sal_Int32 nWdt(tools::Long(aRect.Width()));
+                    sal_Int32 nHgt(tools::Long(aRect.Height()));
 
-                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
-                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left() + (nWdt * 30) / 100, aRect.Top() + (nHgt * 70) / 100));
-                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Top() + (nHgt * 15) / 100));
-                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left() + (nWdt * 65) / 100, aRect.Top()));
-                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left() + nWdt, aRect.Top() + (nHgt * 30) / 100));
-                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left() + (nWdt * 80) / 100, aRect.Top() + (nHgt * 50) / 100));
-                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left() + (nWdt * 80) / 100, aRect.Top() + (nHgt * 75) / 100));
-                    aInnerPoly.append(basegfx::B2DPoint(aRect.Bottom(), aRect.Right()));
+                    aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Left()), tools::Long(aRect.Bottom())));
+                    aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Left()) + (nWdt * 30) / 100, tools::Long(aRect.Top()) + (nHgt * 70) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Left()), tools::Long(aRect.Top()) + (nHgt * 15) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Left()) + (nWdt * 65) / 100, tools::Long(aRect.Top())));
+                    aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Left()) + nWdt, tools::Long(aRect.Top()) + (nHgt * 30) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Left()) + (nWdt * 80) / 100, tools::Long(aRect.Top()) + (nHgt * 50) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Left()) + (nWdt * 80) / 100, tools::Long(aRect.Top()) + (nHgt * 75) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Bottom()), tools::Long(aRect.Right())));
 
                     if(OBJ_PLIN == eSdrObjectKind)
                     {
-                        aInnerPoly.append(basegfx::B2DPoint(aRect.Center().getX(), aRect.Bottom()));
+                        aInnerPoly.append(basegfx::B2DPoint(tools::Long(aRect.Center().getX()), tools::Long(aRect.Bottom())));
                     }
                     else
                     {
@@ -3131,10 +3131,10 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                 break;
                 case OBJ_LINE :
                 {
-                    sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
+                    sal_Int32 nYMiddle(tools::Long(aRect.Top() + aRect.Bottom()) / 2);
                     basegfx::B2DPolygon aTempPoly;
-                    aTempPoly.append(basegfx::B2DPoint(aRect.TopLeft().getX(), nYMiddle));
-                    aTempPoly.append(basegfx::B2DPoint(aRect.BottomRight().getX(), nYMiddle));
+                    aTempPoly.append(basegfx::B2DPoint(tools::Long(aRect.TopLeft().getX()), nYMiddle));
+                    aTempPoly.append(basegfx::B2DPoint(tools::Long(aRect.BottomRight().getX()), nYMiddle));
                     aPoly.append(aTempPoly);
 
                     SfxItemSet aAttr(pObj->getSdrModelFromSdrObject().GetItemPool());
@@ -3150,9 +3150,9 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
         }
         else if(auto pMeasureObj = dynamic_cast<SdrMeasureObj*>( pObj))
         {
-            sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
-            pMeasureObj->SetPoint(Point(aStart.X(), nYMiddle), 0);
-            pMeasureObj->SetPoint(Point(aEnd.X(), nYMiddle), 1);
+            sal_Int32 nYMiddle(tools::Long(aRect.Top() + aRect.Bottom()) / 2);
+            pMeasureObj->SetPoint(Point(tools::Long(aStart.X()), nYMiddle), 0);
+            pMeasureObj->SetPoint(Point(tools::Long(aEnd.X()), nYMiddle), 1);
 
             SfxItemSet aAttr(pObj->getSdrModelFromSdrObject().GetItemPool());
             SetLineEnds(aAttr, *pObj, nSlotId);
@@ -3171,13 +3171,13 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                 pObj->SetMergedItemSet(aSet);
             }
 
-            pCaptionObj->SetLogicRect(aRect);
+            pCaptionObj->SetLogicRect(aRect.SVRect());
             pCaptionObj->SetTailPos(
-                aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
+                Point(aRect.TopLeft()) - Point(tools::Long(aRect.Width()) / 2, tools::Long(aRect.Height()) / 2));
         }
         else if(auto pText = dynamic_cast<SdrTextObj*>( pObj))
         {
-            pText->SetLogicRect(aRect);
+            pText->SetLogicRect(aRect.SVRect());
 
             bool bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotId);
             bool bMarquee = (SID_DRAW_TEXT_MARQUEE == nSlotId);
@@ -3315,9 +3315,9 @@ bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
     return bRet;
 }
 
-Point SwFEShell::GetRelativePagePosition(const Point& rDocPos)
+SwPoint SwFEShell::GetRelativePagePosition(const SwPoint& rDocPos)
 {
-    Point aRet(-1, -1);
+    SwPoint aRet(SwTwips(-1), SwTwips(-1));
     const SwFrame *pPage = GetLayout()->Lower();
     while ( pPage && !pPage->getFrameArea().IsInside( rDocPos ) )
     {

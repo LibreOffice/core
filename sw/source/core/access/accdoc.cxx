@@ -525,7 +525,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
     {
         OUString sDisplay;
         sal_uInt16 nPage, nLogPage;
-        pFEShell->GetPageNumber(-1,true,nPage,nLogPage,sDisplay);
+        pFEShell->GetPageNumber(SwTwips(-1),true,nPage,nLogPage,sDisplay);
 
         OUString sValue = "page-name:" + sDisplay +
             ";page-number:" +

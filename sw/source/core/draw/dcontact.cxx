@@ -394,14 +394,14 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
 
 namespace
 {
-    Point lcl_GetWW8Pos(SwAnchoredObject const * pAnchoredObj, const bool bFollowTextFlow, sw::WW8AnchorConv& reConv)
+    SwPoint lcl_GetWW8Pos(SwAnchoredObject const * pAnchoredObj, const bool bFollowTextFlow, sw::WW8AnchorConv& reConv)
     {
         switch(reConv)
         {
             case sw::WW8AnchorConv::CONV2PG:
             {
                 bool bRelToTableCell(false);
-                Point aPos(pAnchoredObj->GetRelPosToPageFrame(bFollowTextFlow, bRelToTableCell));
+                SwPoint aPos(pAnchoredObj->GetRelPosToPageFrame(bFollowTextFlow, bRelToTableCell));
                 if(bRelToTableCell)
                     reConv = sw::WW8AnchorConv::RELTOTABLECELL;
                 return aPos;
@@ -414,7 +414,7 @@ namespace
                 return pAnchoredObj->GetRelPosToLine();
             default: ;
         }
-        return Point();
+        return SwPoint();
     }
 }
 void SwContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
@@ -909,7 +909,7 @@ void SwDrawContact::NotifyBackgroundOfAllVirtObjs(const tools::Rectangle* pOldBo
             if( pOldBoundRect && pPage )
             {
                 SwRect aOldRect( *pOldBoundRect );
-                aOldRect.Pos() += pDrawVirtObj->GetOffset();
+                aOldRect.Pos() += SwPoint(pDrawVirtObj->GetOffset());
                 if( aOldRect.HasArea() )
                     ::Notify_Background( pDrawVirtObj, pPage,
                                          aOldRect, PrepareHint::FlyFrameLeave,true);
@@ -1237,7 +1237,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 SwFrameFormat::tLayoutDir eLayoutDir =
                                 pAnchoredDrawObj->GetFrameFormat().GetLayoutDir();
                 // use geometry of drawing object
-                tools::Rectangle aObjRect( rObj.GetSnapRect() );
+                SwRect aObjRect( rObj.GetSnapRect() );
                 // If drawing object is a member of a group, the adjustment
                 // of the positioning and the alignment attributes has to
                 // be done for the top group object.
@@ -1249,7 +1249,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                         pGroupObj = pGroupObj->getParentSdrObjectFromSdrObject();
                     }
                     // use geometry of drawing object
-                    aObjRect = pGroupObj->GetSnapRect();
+                    aObjRect = SwRect(pGroupObj->GetSnapRect());
                 }
                 SwTwips nXPosDiff(0);
                 SwTwips nYPosDiff(0);
@@ -1257,20 +1257,20 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 {
                     case SwFrameFormat::HORI_L2R:
                     {
-                        nXPosDiff = aObjRect.Left() - aOldObjRect.Left();
-                        nYPosDiff = aObjRect.Top() - aOldObjRect.Top();
+                        nXPosDiff = aObjRect.Left() - SwTwips(aOldObjRect.Left());
+                        nYPosDiff = aObjRect.Top() - SwTwips(aOldObjRect.Top());
                     }
                     break;
                     case SwFrameFormat::HORI_R2L:
                     {
-                        nXPosDiff = aOldObjRect.Right() - aObjRect.Right();
-                        nYPosDiff = aObjRect.Top() - aOldObjRect.Top();
+                        nXPosDiff = SwTwips(aOldObjRect.Right()) - aObjRect.Right();
+                        nYPosDiff = aObjRect.Top() - SwTwips(aOldObjRect.Top());
                     }
                     break;
                     case SwFrameFormat::VERT_R2L:
                     {
-                        nXPosDiff = aObjRect.Top() - aOldObjRect.Top();
-                        nYPosDiff = aOldObjRect.Right() - aObjRect.Right();
+                        nXPosDiff = aObjRect.Top() - SwTwips(aOldObjRect.Top());
+                        nYPosDiff = SwTwips(aOldObjRect.Right()) - aObjRect.Right();
                     }
                     break;
                     default:
@@ -1281,7 +1281,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 SfxItemSet aSet( GetFormat()->GetDoc()->GetAttrPool(),
                                  svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT>{} );
                 const SwFormatVertOrient& rVert = GetFormat()->GetVertOrient();
-                if ( nYPosDiff != 0 )
+                if ( nYPosDiff != SwTwips(0) )
                 {
                     if ( rVert.GetRelationOrient() == text::RelOrientation::CHAR ||
                          rVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE )
@@ -1294,7 +1294,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 }
 
                 const SwFormatHoriOrient& rHori = GetFormat()->GetHoriOrient();
-                if ( !bAnchoredAsChar && nXPosDiff != 0 )
+                if ( !bAnchoredAsChar && nXPosDiff != SwTwips(0) )
                 {
                     aSet.Put( SwFormatHoriOrient( rHori.GetPos()+nXPosDiff,
                                                text::HoriOrientation::NONE,
@@ -1302,7 +1302,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 }
 
                 if ( nYPosDiff ||
-                     ( !bAnchoredAsChar && nXPosDiff != 0 ) )
+                     ( !bAnchoredAsChar && nXPosDiff != SwTwips(0) ) )
                 {
                     GetFormat()->GetDoc()->SetFlyFrameAttr( *(GetFormat()), aSet );
                     // keep new object rectangle, to avoid multiple
@@ -1311,9 +1311,9 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     // #i34748# - use new method
                     // <SwAnchoredDrawObject::SetLastObjRect(..)>.
                     const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)
-                                    ->SetLastObjRect( aObjRect );
+                                    ->SetLastObjRect( aObjRect.SVRect() );
                 }
-                else if ( aObjRect.GetSize() != aOldObjRect.GetSize() )
+                else if ( aObjRect.SSize() != SwSize(aOldObjRect.GetSize()) )
                 {
                     InvalidateObjs_();
                     // #i35007# - notify anchor frame
@@ -1560,7 +1560,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             assert(pDrawModel);
             pDrawModel->GetPage(0)->InsertObject(pObj);
         }
-        pObj->SetRelativePos(pRestoreFlyAnchorHint->m_aPos);
+        pObj->SetRelativePos(Point(pRestoreFlyAnchorHint->m_aPos));
     }
     else if (auto pCreatePortionHint = dynamic_cast<const sw::CreatePortionHint*>(&rHint))
     {

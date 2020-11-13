@@ -36,7 +36,7 @@ class SW_DLLPUBLIC SwFormatVertOrient final : public SfxPoolItem
     sal_Int16       m_eOrient;
     sal_Int16       m_eRelation;
 public:
-    SwFormatVertOrient( SwTwips nY = 0, sal_Int16 eVert = css::text::VertOrientation::NONE,
+    SwFormatVertOrient( SwTwips nY = SwTwips(0), sal_Int16 eVert = css::text::VertOrientation::NONE,
                      sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA );
     SwFormatVertOrient(SwFormatVertOrient const &) = default; // SfxPoolItem copy function dichotomy
 
@@ -69,7 +69,7 @@ class SW_DLLPUBLIC SwFormatHoriOrient final : public SfxPoolItem
     sal_Int16       m_eRelation;
     bool            m_bPosToggle : 1; ///< Flip position on even pages.
 public:
-    SwFormatHoriOrient( SwTwips nX = 0, sal_Int16 eHori = css::text::HoriOrientation::NONE,
+    SwFormatHoriOrient( SwTwips nX = SwTwips(0), sal_Int16 eHori = css::text::HoriOrientation::NONE,
         sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA, bool bPos = false );
     SwFormatHoriOrient(SwFormatHoriOrient const &) = default; // SfxPoolItem copy function dichotomy
 

@@ -549,14 +549,14 @@ void SwPaM::Normalize(bool bPointFirst)
 }
 
 /// return page number at cursor (for reader and page bound frames)
-sal_uInt16 SwPaM::GetPageNum( bool bAtPoint, const Point* pLayPos )
+sal_uInt16 SwPaM::GetPageNum( bool bAtPoint, const SwPoint* pLayPos )
 {
     const SwContentFrame* pCFrame;
     const SwPageFrame *pPg;
     const SwContentNode *pNd ;
     const SwPosition* pPos = bAtPoint ? m_pPoint : m_pMark;
 
-    std::pair<Point, bool> tmp;
+    std::pair<SwPoint, bool> tmp;
     if (pLayPos)
     {
         tmp.first = *pLayPos;
@@ -603,8 +603,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     const SwContentFrame *pFrame = nullptr;
     if ( pNd != nullptr )
     {
-        Point aTmpPt;
-        std::pair<Point, bool> const tmp(aTmpPt, false);
+        std::pair<SwPoint, bool> const tmp(SwPoint(), false);
         pFrame = pNd->getLayoutFrame(
             pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             GetPoint(), &tmp);
@@ -649,8 +648,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         pFrame = nullptr;
         if ( pNd != nullptr )
         {
-            Point aTmpPt;
-            std::pair<Point, bool> const tmp(aTmpPt, false);
+            std::pair<SwPoint, bool> const tmp(SwPoint(), false);
             pFrame = pNd->getLayoutFrame(
                 pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
                 GetMark(), &tmp);

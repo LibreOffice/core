@@ -173,14 +173,14 @@ SwTwips SwAnchoredObject::GetRelCharY( const SwFrame* pFrame ) const
     return maLastCharRect.Bottom() - pFrame->getFrameArea().Top();
 }
 
-void SwAnchoredObject::AddLastCharY( tools::Long nDiff )
+void SwAnchoredObject::AddLastCharY( SwTwips nDiff )
 {
     maLastCharRect.Pos().AdjustY(nDiff );
 }
 
 void SwAnchoredObject::ResetLastCharRectHeight()
 {
-    maLastCharRect.Height( 0 );
+    maLastCharRect.Height( SwTwips(0) );
 }
 
 void SwAnchoredObject::SetVertPosOrientFrame( const SwLayoutFrame& _rVertPosOrientFrame )
@@ -313,7 +313,7 @@ void SwAnchoredObject::CheckCharRect( const SwFormatAnchor& _rAnch,
 void SwAnchoredObject::CheckTopOfLine( const SwFormatAnchor& _rAnch,
                                         const SwTextFrame& _rAnchorCharFrame )
 {
-    SwTwips nTopOfLine = 0;
+    SwTwips nTopOfLine(0);
     if ( !_rAnchorCharFrame.GetTopOfLine( nTopOfLine, *_rAnch.GetContentAnchor() ) )
         return;
 
@@ -339,10 +339,10 @@ void SwAnchoredObject::CheckTopOfLine( const SwFormatAnchor& _rAnch,
 void SwAnchoredObject::ClearCharRectAndTopOfLine()
 {
     maLastCharRect.Clear();
-    mnLastTopOfLine = 0;
+    mnLastTopOfLine = SwTwips(0);
 }
 
-void SwAnchoredObject::SetCurrRelPos( Point _aRelPos )
+void SwAnchoredObject::SetCurrRelPos( SwPoint _aRelPos )
 {
     maRelPos = _aRelPos;
 }
@@ -576,10 +576,10 @@ const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
         const SvxULSpaceItem& rUL = rFormat.GetULSpace();
         const SvxLRSpaceItem& rLR = rFormat.GetLRSpace();
         {
-            maObjRectWithSpaces.Top ( std::max( maObjRectWithSpaces.Top() - tools::Long(rUL.GetUpper()), tools::Long(0) ));
-            maObjRectWithSpaces.Left( std::max( maObjRectWithSpaces.Left()- rLR.GetLeft(),  tools::Long(0) ));
-            maObjRectWithSpaces.AddHeight(rUL.GetLower() );
-            maObjRectWithSpaces.AddWidth(rLR.GetRight() );
+            maObjRectWithSpaces.Top ( std::max( maObjRectWithSpaces.Top() - SwTwips(rUL.GetUpper()), SwTwips(0) ));
+            maObjRectWithSpaces.Left( std::max( maObjRectWithSpaces.Left()- SwTwips(rLR.GetLeft()),  SwTwips(0) ));
+            maObjRectWithSpaces.AddHeight(SwTwips(rUL.GetLower()) );
+            maObjRectWithSpaces.AddWidth(SwTwips(rLR.GetRight()) );
         }
 
         mbObjRectWithSpacesValid = true;
@@ -819,9 +819,9 @@ bool SwAnchoredObject::OverlapsPrevColumn() const
     #i30669#
     Usage: Needed layout information for WW8 export
 */
-Point SwAnchoredObject::GetRelPosToAnchorFrame() const
+SwPoint SwAnchoredObject::GetRelPosToAnchorFrame() const
 {
-    Point aRelPos;
+    SwPoint aRelPos;
 
     assert(GetAnchorFrame());
     aRelPos = GetObjRect().Pos();
@@ -841,10 +841,10 @@ Point SwAnchoredObject::GetRelPosToAnchorFrame() const
     the position relative to the table cell is determined. Output
     parameter <_obRelToTableCell> reflects this situation
 */
-Point SwAnchoredObject::GetRelPosToPageFrame( const bool _bFollowTextFlow,
+SwPoint SwAnchoredObject::GetRelPosToPageFrame( const bool _bFollowTextFlow,
                                             bool& _obRelToTableCell ) const
 {
-    Point aRelPos;
+    SwPoint aRelPos;
     _obRelToTableCell = false;
 
     assert(GetAnchorFrame());
@@ -885,9 +885,9 @@ Point SwAnchoredObject::GetRelPosToPageFrame( const bool _bFollowTextFlow,
     #i30669#
     Usage: Needed layout information for WW8 export
 */
-Point SwAnchoredObject::GetRelPosToChar() const
+SwPoint SwAnchoredObject::GetRelPosToChar() const
 {
-    Point aRelPos = GetObjRect().Pos();
+    SwPoint aRelPos = GetObjRect().Pos();
     aRelPos -= GetLastCharRect().Pos();
 
     return aRelPos;
@@ -899,9 +899,9 @@ Point SwAnchoredObject::GetRelPosToChar() const
     #i30669#
     Usage: Needed layout information for WW8 export
 */
-Point SwAnchoredObject::GetRelPosToLine() const
+SwPoint SwAnchoredObject::GetRelPosToLine() const
 {
-    Point aRelPos = GetObjRect().Pos();
+    SwPoint aRelPos = GetObjRect().Pos();
     aRelPos.AdjustY( -(GetLastTopOfLine()) );
 
     return aRelPos;

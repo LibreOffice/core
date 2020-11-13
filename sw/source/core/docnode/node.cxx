@@ -810,8 +810,7 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel(sal_uInt8 const nLvl,
 
             const SwContentNode* pCNd = GetContentNode();
 
-            Point aPt( 0, 0 );
-            std::pair<Point, bool> const tmp(aPt, false);
+            std::pair<SwPoint, bool> const tmp(SwPoint(), false);
             const SwFrame* pFrame = pRet->getLayoutFrame(pRet->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp),
                        * pMyFrame = pCNd ? pCNd->getLayoutFrame(pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
             const SwPageFrame* pPgFrame = pFrame ? pFrame->FindPageFrame() : nullptr;
@@ -1212,16 +1211,16 @@ bool SwContentNode::InvalidateNumRule()
 
 SwContentFrame *SwContentNode::getLayoutFrame( const SwRootFrame* _pRoot,
     const SwPosition *const pPos,
-    std::pair<Point, bool> const*const pViewPosAndCalcFrame) const
+    std::pair<SwPoint, bool> const*const pViewPosAndCalcFrame) const
 {
     return static_cast<SwContentFrame*>( ::GetFrameOfModify( _pRoot, *this, FRM_CNTNT,
                                             pPos, pViewPosAndCalcFrame));
 }
 
-SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint ) const
+SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const SwPoint* pPoint ) const
 {
     SwRect aRet;
-    std::pair<Point, bool> tmp;
+    std::pair<SwPoint, bool> tmp;
     if (pPoint)
     {
         tmp.first = *pPoint;
@@ -2029,16 +2028,16 @@ void SwContentNode::ChkCondColl(const SwTextFormatColl* pColl)
 
 // #i42921#
 SvxFrameDirection SwContentNode::GetTextDirection( const SwPosition& rPos,
-                                     const Point* pPt ) const
+                                     const SwPoint* pPt ) const
 {
     SvxFrameDirection nRet = SvxFrameDirection::Unknown;
 
-    Point aPt;
+    SwPoint aPt;
     if( pPt )
         aPt = *pPt;
 
     // #i72024# - No format of the frame, because this can cause recursive layout actions
-    std::pair<Point, bool> const tmp(aPt, false);
+    std::pair<SwPoint, bool> const tmp(aPt, false);
     SwFrame* pFrame = getLayoutFrame(GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), &rPos, &tmp);
 
     if ( pFrame )

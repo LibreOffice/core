@@ -217,7 +217,7 @@ void SwAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
 SwBoxAutoFormat::SwBoxAutoFormat()
 :   AutoFormatBase(),
     m_aTextOrientation(std::make_unique<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR)),
-    m_aVerticalAlignment(std::make_unique<SwFormatVertOrient>(0, css::text::VertOrientation::NONE, css::text::RelOrientation::FRAME)),
+    m_aVerticalAlignment(std::make_unique<SwFormatVertOrient>(SwTwips(0), css::text::VertOrientation::NONE, css::text::RelOrientation::FRAME)),
     m_sNumFormatString(),
     m_eSysLanguage(::GetAppLanguage()),
     m_eNumFormatLanguage(::GetAppLanguage()),

@@ -80,7 +80,7 @@ bool SwCursorShell::GoStartSentence()
     return CallCursorShellFN( &SwCursorShell::GoStartSentenceImpl );
 }
 
-bool SwCursorShell::SelectWord( const Point* pPt )
+bool SwCursorShell::SelectWord( const SwPoint* pPt )
 {
     return m_pCurrentCursor->SelectWord( this, pPt );
 }

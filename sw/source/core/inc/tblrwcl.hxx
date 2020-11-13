@@ -60,11 +60,11 @@ void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
  */
 class SwCollectTableLineBoxes
 {
-    std::vector<sal_uInt16> m_aPositionArr;
+    std::vector<SwTwips> m_aPositionArr;
     std::vector<SwTableBox*> m_Boxes;
     SwHistory* m_pHistory;
     SplitTable_HeadlineOption m_nMode;
-    sal_uInt16 m_nWidth;
+    SwTwips m_nWidth;
     bool m_bGetFromTop : 1;
     bool m_bGetValues : 1;
 
@@ -81,7 +81,7 @@ public:
     void AddToUndoHistory( const SwContentNode& rNd );
 
     size_t Count() const                { return m_Boxes.size(); }
-    const SwTableBox& GetBox( std::size_t nPos, sal_uInt16* pWidth = nullptr ) const
+    const SwTableBox& GetBox( std::size_t nPos, SwTwips* pWidth = nullptr ) const
         {
             // We need the EndPos of the column here!
             if( pWidth )
@@ -94,9 +94,9 @@ public:
     bool IsGetValues() const            { return m_bGetValues; }
 
     SplitTable_HeadlineOption GetMode() const { return m_nMode; }
-    void SetValues( bool bFlag )        { m_bGetValues = false; m_nWidth = 0;
+    void SetValues( bool bFlag )        { m_bGetValues = false; m_nWidth = SwTwips(0);
                                           m_bGetFromTop = bFlag; }
-    bool Resize( sal_uInt16 nOffset, sal_uInt16 nWidth );
+    bool Resize( SwTwips nOffset, SwTwips nWidth );
 };
 
 void sw_Box_CollectBox( const SwTableBox* pBox, SwCollectTableLineBoxes* pSplPara );
@@ -162,7 +162,7 @@ public:
 
     const SwFrameFormat& GetOldFormat() const { return *m_pOldFormat; }
 
-    SwFrameFormat* GetFormat( tools::Long nWidth ) const;
+    SwFrameFormat* GetFormat( SwTwips nWidth ) const;
     SwFrameFormat* GetFormat( const SfxPoolItem& rItem ) const;
     void AddFormat( SwFrameFormat& rFormat );
     /// @returns true, if we can delete
@@ -181,7 +181,7 @@ public:
     SwShareBoxFormats() {}
     ~SwShareBoxFormats();
 
-    SwFrameFormat* GetFormat( const SwFrameFormat& rFormat, tools::Long nWidth ) const;
+    SwFrameFormat* GetFormat( const SwFrameFormat& rFormat, SwTwips nWidth ) const;
     SwFrameFormat* GetFormat( const SwFrameFormat& rFormat, const SfxPoolItem& ) const;
 
     void AddFormat( const SwFrameFormat& rOld, SwFrameFormat& rNew );

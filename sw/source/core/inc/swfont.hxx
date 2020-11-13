@@ -948,7 +948,7 @@ inline void SwFont::SetHighlightColor( const Color& aNewColor )
 // Used for the "continuous underline" feature.
 class SwUnderlineFont
 {
-    Point m_aPos;
+    SwPoint m_aPos;
     TextFrameIndex m_nEnd;
     std::unique_ptr<SwFont> m_pFont;
 
@@ -956,7 +956,7 @@ public:
     // sets the font which should paint the common baseline,
     // index where continuous underline ends,
     // and the starting point of the common baseline
-    SwUnderlineFont(SwFont& rFnt, TextFrameIndex nEnd, const Point& rPoint);
+    SwUnderlineFont(SwFont& rFnt, TextFrameIndex nEnd, const SwPoint& rPoint);
     ~SwUnderlineFont();
 
     SwFont& GetFont()
@@ -964,10 +964,10 @@ public:
         OSL_ENSURE( m_pFont, "No underline font" );
         return *m_pFont;
     }
-    const Point& GetPos() const { return m_aPos; }
+    const SwPoint& GetPos() const { return m_aPos; }
     TextFrameIndex GetEnd() const { return m_nEnd; }
     // the x coordinate of the starting point has to be set for each portion
-    void SetPos( const Point& rPoint ) { m_aPos = rPoint;  }
+    void SetPos( const SwPoint& rPoint ) { m_aPos = rPoint;  }
 };
 
 #ifdef DBG_UTIL

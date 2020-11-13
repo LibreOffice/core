@@ -651,7 +651,7 @@ void SwDoc::CalculateNonBlankPages(
     const SwPageFrame *pStPage = dynamic_cast<const SwPageFrame*>( rLayout.Lower() );
     while (pStPage && nPageNum <= nDocPageCountWithBlank)
     {
-        if ( pStPage->getFrameArea().Height() == 0 )
+        if ( pStPage->getFrameArea().Height() == SwTwips(0) )
         {
             --nDocPageCount;
             if (nPageNum <= nActualPageWithBlank)
@@ -689,7 +689,7 @@ void SwDoc::CalculatePagesForPrinting(
     const SwPageFrame *pStPage = dynamic_cast<const SwPageFrame*>( rLayout.Lower() );
     while (pStPage && nPageNum <= nDocPageCount)
     {
-        const bool bNonEmptyPage = pStPage->getFrameArea().Height() != 0;
+        const bool bNonEmptyPage = pStPage->getFrameArea().Height() != SwTwips(0);
         const bool bPrintThisPage =
             ( (bPrintRightPages && pStPage->OnRightPage()) ||
               (bPrintLeftPages && !pStPage->OnRightPage()) ) &&

@@ -86,12 +86,12 @@ void SwCursorShell::MoveCursorToNum()
     CurrShell aCurr( this );
     // try to set cursor onto this position, at half of the char-
     // SRectangle's height
-    Point aPt( m_pCurrentCursor->GetPtPos() );
-    std::pair<Point, bool> const tmp(aPt, true);
+    std::pair<SwPoint, bool> const tmp(m_pCurrentCursor->GetPtPos(), true);
     SwContentFrame * pFrame = m_pCurrentCursor->GetContentNode()->getLayoutFrame(
                 GetLayout(), m_pCurrentCursor->GetPoint(), &tmp);
     pFrame->GetCharRect( m_aCharRect, *m_pCurrentCursor->GetPoint() );
     pFrame->Calc(GetOut());
+    SwPoint aPt;
     if( pFrame->IsVertical() )
     {
         aPt.setX(m_aCharRect.Center().getX());
@@ -145,7 +145,7 @@ bool SwCursorShell::GotoHeaderText()
         SwCursor *pTmpCursor = getShellCursor( true );
         SwCursorSaveState aSaveState( *pTmpCursor );
         pFrame->Calc(GetOut());
-        Point aPt( pFrame->getFrameArea().Pos() + pFrame->getFramePrintArea().Pos() );
+        SwPoint aPt( pFrame->getFrameArea().Pos() + pFrame->getFramePrintArea().Pos() );
         pFrame->GetModelPositionForViewPoint( pTmpCursor->GetPoint(), aPt );
         if( !pTmpCursor->IsSelOvr() )
             UpdateCursor();
@@ -177,7 +177,7 @@ bool SwCursorShell::GotoFooterText()
             SwCallLink aLk( *this ); // watch Cursor-Moves
             SwCursorSaveState aSaveState( *pTmpCursor );
             pLower->Calc(GetOut());
-            Point aPt( pLower->getFrameArea().Pos() + pLower->getFramePrintArea().Pos() );
+            SwPoint aPt( pLower->getFrameArea().Pos() + pLower->getFramePrintArea().Pos() );
             pLower->GetModelPositionForViewPoint( pTmpCursor->GetPoint(), aPt );
             if( !pTmpCursor->IsSelOvr() )
                 UpdateCursor();
@@ -240,7 +240,7 @@ bool SwCursorShell::SetCursorInHdFt( size_t nDescNo, bool bInHeader )
 
             Point aPt( m_pCurrentCursor->GetPtPos() );
 
-            std::pair<Point, bool> const tmp(aPt, false);
+            std::pair<SwPoint, bool> const tmp(aPt, false);
             if (pCNd && nullptr != pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp))
             {
                 // then we can set the cursor in here
@@ -417,7 +417,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
     if( rPos.nNode < GetDoc()->GetNodes().GetEndOfExtras() )
     {
         // also at collection use only the first frame
-        std::pair<Point, bool> const tmp(aPt, false);
+        std::pair<SwPoint, bool> const tmp(aPt, false);
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().GetContentNode()->getLayoutFrame( GetLayout(),
                                 &rPos, &tmp) );
     }
@@ -443,7 +443,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
                     {
                         SwNodeIndex aIdx( *pTBox->GetSttNd() );
                         const SwContentNode* pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-                        std::pair<Point, bool> const tmp(aPt, false);
+                        std::pair<SwPoint, bool> const tmp(aPt, false);
                         if (pCNd)
                         {
                             const SwContentFrame* pCFrame = pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
@@ -524,7 +524,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
     if( rPos.nNode.GetIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
     {
         // also at collection use only the first frame
-        std::pair<Point, bool> const tmp(aPt, false);
+        std::pair<SwPoint, bool> const tmp(aPt, false);
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().
                     GetContentNode()->getLayoutFrame(GetLayout(), &rPos, &tmp));
     }
@@ -548,7 +548,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
                     pTextNd = &pTextTOX->GetTextNode();
                     if( !pTextNd->GetNodes().IsDocNodes() )
                         continue;
-                    std::pair<Point, bool> const tmp(aPt, false);
+                    std::pair<SwPoint, bool> const tmp(aPt, false);
                     const SwContentFrame* pCFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
                     if( pCFrame && ( IsReadOnlyAvailable() || !pCFrame->IsProtected() ))
                     {
@@ -643,7 +643,7 @@ static void lcl_MakeFieldLst(
                   || static_cast<const SwSetExpField*>(pTextField->GetFormatField().GetField())->GetInputFlag() ) )
         {
             const SwTextNode& rTextNode = pTextField->GetTextNode();
-            std::pair<Point, bool> const tmp(aPt, false);
+            std::pair<SwPoint, bool> const tmp(aPt, false);
             const SwContentFrame* pCFrame =
                 rTextNode.getLayoutFrame(
                     rTextNode.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
@@ -681,7 +681,7 @@ lcl_FindField(bool & o_rFound, SetGetExpFields const& rSrtLst,
     {
         // also at collection use only the first frame
         Point aPt;
-        std::pair<Point, bool> const tmp(aPt, false);
+        std::pair<SwPoint, bool> const tmp(aPt, false);
         pSrch->SetBodyPos(*pTextNode->getLayoutFrame(pLayout, &rPos, &tmp));
     }
 
@@ -941,10 +941,10 @@ bool SwCursorShell::PosInsideInputField( const SwPosition& rPos )
     return dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos( &rPos, false )) != nullptr;
 }
 
-bool SwCursorShell::DocPtInsideInputField( const Point& rDocPt ) const
+bool SwCursorShell::DocPtInsideInputField( const SwPoint& rDocPt ) const
 {
     SwPosition aPos( *(GetCursor()->Start()) );
-    Point aDocPt( rDocPt );
+    SwPoint aDocPt( rDocPt );
     if ( GetLayout()->GetModelPositionForViewPoint( &aPos, aDocPt ) )
     {
         return PosInsideInputField( aPos );
@@ -1245,14 +1245,14 @@ bool SwCursorShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
     return false;
 }
 
-bool SwCursorShell::IsPageAtPos( const Point &rPt ) const
+bool SwCursorShell::IsPageAtPos( const SwPoint &rPt ) const
 {
     if( GetLayout() )
         return nullptr != GetLayout()->GetPageAtPos( rPt );
     return false;
 }
 
-bool SwCursorShell::GetContentAtPos( const Point& rPt,
+bool SwCursorShell::GetContentAtPos( const SwPoint& rPt,
                                    SwContentAtPos& rContentAtPos,
                                    bool bSetCursor,
                                    SwRect* pFieldRect )
@@ -1262,7 +1262,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
     if( !IsTableMode() )
     {
-        Point aPt( rPt );
+        SwPoint aPt( rPt );
         SwPosition aPos( *m_pCurrentCursor->GetPoint() );
 
         SwTextNode* pTextNd;
@@ -1352,7 +1352,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         {
                             rContentAtPos.eContentAtPos = IsAttrAtPos::SmartTag;
 
-                            std::pair<Point, bool> tmp(aPt, true);
+                            std::pair<SwPoint, bool> tmp(aPt, true);
                             if (pFieldRect)
                             {
                                 pFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
@@ -1381,7 +1381,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     {
                         if (pFieldRect)
                         {
-                            std::pair<Point, bool> tmp(aPt, true);
+                            std::pair<SwPoint, bool> tmp(aPt, true);
                             pFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
                             if (pFrame)
                             {
@@ -1492,7 +1492,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                             if (pFieldRect)
                             {
-                                std::pair<Point, bool> tmp(aPt, true);
+                                std::pair<SwPoint, bool> tmp(aPt, true);
                                 pFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
                                 if (pFrame)
                                     pFrame->GetCharRect( *pFieldRect, aPos, &aTmpState );
@@ -1561,7 +1561,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             rContentAtPos.pFndTextAttr = pTextAttr;
                             rContentAtPos.aFnd.pAttr = &pTextAttr->GetAttr();
 
-                            std::pair<Point, bool> tmp(aPt, true);
+                            std::pair<SwPoint, bool> tmp(aPt, true);
                             if (pFieldRect)
                             {
                                 pFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
@@ -1610,7 +1610,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                             if (pFieldRect)
                             {
-                                std::pair<Point, bool> tmp(aPt, true);
+                                std::pair<SwPoint, bool> tmp(aPt, true);
                                 pFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
                                 if (pFrame)
                                 {
@@ -1646,7 +1646,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                         if (pFieldRect)
                         {
-                            std::pair<Point, bool> tmp(aPt, true);
+                            std::pair<SwPoint, bool> tmp(aPt, true);
                             pFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
                             if( pFrame )
                             {
@@ -1709,7 +1709,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 #endif
                     )
                 {
-                    std::pair<Point, bool> tmp(aPt, true);
+                    std::pair<SwPoint, bool> tmp(aPt, true);
                     SwFrame* pF = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
                     if( pF )
                     {
@@ -2038,7 +2038,7 @@ bool SwCursorShell::GetShadowCursorPos( const Point& rPt, SwFillMode eFillMode,
     if (!IsTableMode() && !HasSelection()
         && GetDoc()->GetIDocumentUndoRedo().DoesUndo())
     {
-        Point aPt( rPt );
+        SwPoint aPt( rPt );
         SwPosition aPos( *m_pCurrentCursor->GetPoint() );
 
         SwFillCursorPos aFPos( eFillMode );
@@ -2064,7 +2064,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
     if (!IsTableMode() && !HasSelection()
         && GetDoc()->GetIDocumentUndoRedo().DoesUndo())
     {
-        Point aPt( rPt );
+        SwPoint aPt( rPt );
         SwPosition aPos( *m_pCurrentCursor->GetPoint() );
 
         SwFillCursorPos aFPos( eFillMode );
@@ -2443,14 +2443,14 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
     const SwNode* pBodyEndNd = &rNds.GetEndOfContent();
     const SwNode* pBodySttNd = pBodyEndNd->StartOfSectionNode();
     sal_uLong nBodySttNdIdx = pBodySttNd->GetIndex();
-    Point aPt;
+    SwPoint aPt;
 
     SetGetExpField aCmpPos( SwPosition( bNext ? *pBodyEndNd : *pBodySttNd ) );
     SetGetExpField aCurPos( bNext ? *m_pCurrentCursor->End() : *m_pCurrentCursor->Start() );
     if( aCurPos.GetNode() < nBodySttNdIdx )
     {
         const SwContentNode* pCNd = aCurPos.GetNodeFromContent()->GetContentNode();
-        std::pair<Point, bool> tmp(aPt, true);
+        std::pair<SwPoint, bool> tmp(aPt, true);
         if (pCNd)
         {
             SwContentFrame* pFrame = pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
@@ -2477,7 +2477,7 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
                     SetGetExpField aPos( aTmpPos.nNode, rAttr );
                     if (pTextNd->GetIndex() < nBodySttNdIdx)
                     {
-                        std::pair<Point, bool> tmp(aPt, true);
+                        std::pair<SwPoint, bool> tmp(aPt, true);
                         SwContentFrame* pFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
                         if (pFrame)
                         {
@@ -2561,7 +2561,7 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
             const SdrObject* pSObj = pFndFormat->FindSdrObject();
             if (pSObj)
             {
-                static_cast<SwFEShell*>(this)->SelectObj( pSObj->GetCurrentBoundRect().Center() );
+                static_cast<SwFEShell*>(this)->SelectObj(SwPoint(pSObj->GetCurrentBoundRect().Center()) );
                 MakeSelVisible();
                 bRet = true;
             }

@@ -53,7 +53,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         // note: no page frame for as-character anchored objects
         SwPageFrame* mpPageFrame;
         // current relative position (relative to anchor position of anchor frame)
-        Point maRelPos;
+        SwPoint maRelPos;
 
         // for to-character anchored objects:
         // Last known anchor character rectangle.
@@ -269,7 +269,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         const SwRect& GetLastCharRect() const { return maLastCharRect;}
         SwTwips GetRelCharX( const SwFrame* pFrame ) const;
         SwTwips GetRelCharY( const SwFrame* pFrame ) const;
-        void AddLastCharY( tools::Long nDiff );
+        void AddLastCharY( SwTwips nDiff );
         void ResetLastCharRectHeight();
 
         // accessor to member <nmLastTopOfLine>
@@ -311,8 +311,8 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         // accessors to the current relative position (relative to anchor
         // position of anchor frame)
-        const Point& GetCurrRelPos() const { return maRelPos;}
-        void SetCurrRelPos( Point _aRelPos );
+        const SwPoint& GetCurrRelPos() const { return maRelPos;}
+        void SetCurrRelPos( SwPoint _aRelPos );
 
         // accessors to the format
         virtual SwFrameFormat& GetFrameFormat() = 0;
@@ -439,7 +439,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             @return Point - determined relative position
         */
-        Point GetRelPosToAnchorFrame() const;
+        SwPoint GetRelPosToAnchorFrame() const;
 
         /** method to determine position of anchored object relative to
             page frame
@@ -460,7 +460,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             @return Point - determined relative position
         */
-        Point GetRelPosToPageFrame( const bool _bFollowTextFlow,
+        SwPoint GetRelPosToPageFrame( const bool _bFollowTextFlow,
                                   bool& _obRelToTableCell ) const;
 
         /** method to determine position of anchored object relative to
@@ -470,7 +470,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             @return Point - determined relative position
         */
-        Point GetRelPosToChar() const;
+        SwPoint GetRelPosToChar() const;
 
         /** method to determine position of anchored object relative to
             top of line
@@ -479,7 +479,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             @return Point - determined relative position
         */
-        Point GetRelPosToLine() const;
+        SwPoint GetRelPosToLine() const;
 
         /** Dump a bunch of useful data to an XML representation to ease
             layout understanding, debugging and testing.

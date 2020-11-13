@@ -230,7 +230,7 @@ public:
     virtual sal_Int32 Len() const override;
 
     /// Is in itratr.
-    void GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax, sal_uLong &rAbs ) const;
+    void GetMinMaxSize( sal_uLong nIndex, SwTwips& rMin, SwTwips &rMax, SwTwips &rAbs ) const;
 
     /// overriding to handle change of certain paragraph attributes
     virtual bool SetAttr( const SfxPoolItem& ) override;

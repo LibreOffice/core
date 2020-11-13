@@ -100,6 +100,8 @@ public:
     explicit operator bool() const { return m_value != 0; }
     UNDERLYING_TYPE get() const { return m_value; }
 
+    explicit constexpr operator double() const { return m_value; }
+
     bool operator<(strong_int const & other) const { return m_value < other.m_value; }
     bool operator<=(strong_int const & other) const { return m_value <= other.m_value; }
     bool operator>(strong_int const & other) const { return m_value > other.m_value; }
@@ -112,17 +114,21 @@ public:
     strong_int operator--(int) { UNDERLYING_TYPE nOldValue = m_value; --m_value; return strong_int(nOldValue); }
     strong_int& operator+=(strong_int const & other) { m_value += other.m_value; return *this; }
     strong_int& operator-=(strong_int const & other) { m_value -= other.m_value; return *this; }
-    strong_int& operator%=(strong_int const & other) { m_value %= other.m_value; return *this; }
     strong_int& operator*=(strong_int const & other) { m_value *= other.m_value; return *this; }
     strong_int& operator/=(strong_int const & other) { m_value /= other.m_value; return *this; }
+    strong_int& operator%=(strong_int const & other) { m_value %= other.m_value; return *this; }
     [[nodiscard]]
-    strong_int operator%(strong_int const & other) const { return strong_int(m_value % other.m_value); }
+    constexpr strong_int operator+(strong_int const & other) const { return strong_int(m_value + other.m_value); }
     [[nodiscard]]
-    strong_int operator-() const { return strong_int(-m_value); }
+    constexpr strong_int operator-(strong_int const & other) const { return strong_int(m_value - other.m_value); }
     [[nodiscard]]
-    strong_int operator*(strong_int const & other) const { return strong_int(m_value * other.m_value); }
+    constexpr strong_int operator-() const { return strong_int(-m_value); }
     [[nodiscard]]
-    strong_int operator/(strong_int const & other) const { return strong_int(m_value / other.m_value); }
+    constexpr strong_int operator*(strong_int const & other) const { return strong_int(m_value * other.m_value); }
+    [[nodiscard]]
+    constexpr strong_int operator/(strong_int const & other) const { return strong_int(m_value / other.m_value); }
+    [[nodiscard]]
+    constexpr strong_int operator%(strong_int const & other) const { return strong_int(m_value % other.m_value); }
 
     bool anyOf(strong_int v) const {
       return *this == v;
@@ -136,18 +142,6 @@ public:
 private:
     UNDERLYING_TYPE m_value;
 };
-
-template <typename UT, typename PT>
-strong_int<UT,PT> operator+(strong_int<UT,PT> const & lhs, strong_int<UT,PT> const & rhs)
-{
-    return strong_int<UT,PT>(lhs.get() + rhs.get());
-}
-
-template <typename UT, typename PT>
-strong_int<UT,PT> operator-(strong_int<UT,PT> const & lhs, strong_int<UT,PT> const & rhs)
-{
-    return strong_int<UT,PT>(lhs.get() - rhs.get());
-}
 
 }; // namespace o3tl
 

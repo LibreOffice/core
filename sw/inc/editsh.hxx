@@ -531,9 +531,9 @@ public:
     // #i90078#
     /// Remove unused default parameter <nLevel> and <bRelative>.
     // Adjust method name and parameter name
-    void ChangeIndentOfAllListLevels( sal_Int32 nDiff );
+    void ChangeIndentOfAllListLevels( SwTwips nDiff );
     // Adjust method name
-    void SetIndent(short nIndent, const SwPosition & rPos);
+    void SetIndent(SwTwips nIndent, const SwPosition & rPos);
     bool IsFirstOfNumRuleAtCursorPos() const;
 
     bool IsNoNum( bool bChkStart = true ) const;
@@ -645,7 +645,7 @@ public:
     void ClearAutomaticContour();
 
     /// @return the size of a graphic in Twips if cursor is in a graphic.
-    bool GetGrfSize(Size&) const;
+    bool GetGrfSize(SwSize&) const;
 
     /** @return name and filter of a graphic if the cursor is in a graphic,
      else give a rap on the knuckles!
@@ -786,16 +786,16 @@ public:
     static bool HasHyphIter();
 
     void HandleCorrectionError(const OUString& aText, SwPosition aPos, sal_Int32 nBegin,
-                               sal_Int32 nLen, const Point* pPt,
+                               sal_Int32 nLen, const SwPoint* pPt,
                                SwRect& rSelectRect);
     css::uno::Reference< css::linguistic2::XSpellAlternatives >
-            GetCorrection( const Point* pPt, SwRect& rSelectRect );
+            GetCorrection( const SwPoint* pPt, SwRect& rSelectRect );
 
     bool GetGrammarCorrection( css::linguistic2::ProofreadingResult /*out*/ &rResult,
             sal_Int32 /*out*/ &rErrorPosInText,
             sal_Int32 /*out*/ &rErrorIndexInResult,
             css::uno::Sequence< OUString > /*out*/ &rSuggestions,
-            const Point* pPt, SwRect& rSelectRect );
+            const SwPoint* pPt, SwRect& rSelectRect );
 
     static void IgnoreGrammarErrorAt( SwPaM& rErrorPosition );
     void SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd );
@@ -857,7 +857,7 @@ public:
      a footnote the reference of which is in a columned range.
      If bOutOfTab is set, the range comprising the table is searched
      and not an inner one. */
-    SwSection* GetAnySection( bool bOutOfTab = false, const Point* pPt = nullptr );
+    SwSection* GetAnySection( bool bOutOfTab = false, const SwPoint* pPt = nullptr );
 
     size_t GetSectionFormatCount() const;
     size_t GetSectionFormatPos(const SwSectionFormat&) const;

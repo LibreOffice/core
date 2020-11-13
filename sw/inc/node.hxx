@@ -28,6 +28,7 @@
 #include "ndtyp.hxx"
 #include "index.hxx"
 #include "fmtcol.hxx"
+#include "swrect.hxx"
 
 #include <memory>
 #include <vector>
@@ -404,11 +405,11 @@ public:
     /// @see GetFrameOfModify
     SwContentFrame *getLayoutFrame( const SwRootFrame*,
             const SwPosition *pPos = nullptr,
-            std::pair<Point, bool> const* pViewPosAndCalcFrame = nullptr) const;
+            std::pair<SwPoint, bool> const* pViewPosAndCalcFrame = nullptr) const;
     /** @return the real size of the frame or an empty rectangle if
        no layout exists. Needed for export filters. */
     SwRect FindLayoutRect( const bool bPrtArea = false,
-                            const Point* pPoint = nullptr  ) const;
+                            const SwPoint* pPoint = nullptr  ) const;
     SwRect FindPageFrameRect() const;
 
     /** Method creates all views of document for given node. The content
@@ -467,7 +468,7 @@ public:
     /** determines the text direction for a certain
        position. @return -1, if text direction could *not* be determined. */
     SvxFrameDirection GetTextDirection( const SwPosition& rPos,
-                            const Point* pPt ) const;
+                            const SwPoint* pPt ) const;
 
     void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }
     bool GetModifyAtAttr() const { return mbSetModifyAtAttr; }

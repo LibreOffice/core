@@ -146,7 +146,7 @@ void DocumentDrawModelManager::InitDrawModel()
             // mpDrawModel->InsertPage( pDrawPage );
             SdrPage* pDrawPage = pMasterPage.get();
             pRoot->SetDrawPage( pDrawPage );
-            pDrawPage->SetSize( pRoot->getFrameArea().SSize() );
+            pDrawPage->SetSize( Size(pRoot->getFrameArea().SSize()) );
         }
     }
 }
@@ -326,7 +326,7 @@ bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rS
             continue;
 
         // If so, then select highlight the search result.
-        pWrtShell->SelectObj(Point(), 0, pObject);
+        pWrtShell->SelectObj(SwPoint(), 0, pObject);
         SwView* pView = pDocShell->GetView();
         if (!pView)
             return false;

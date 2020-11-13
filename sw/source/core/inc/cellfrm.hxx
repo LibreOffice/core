@@ -40,7 +40,7 @@ class SwCellFrame final : public SwLayoutFrame
 public:
     SwCellFrame( const SwTableBox &, SwFrame*, bool bInsertContent );
 
-    virtual bool GetModelPositionForViewPoint( SwPosition *, Point&, SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
+    virtual bool GetModelPositionForViewPoint( SwPosition *, SwPoint&, SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual void CheckDirection( bool bVert ) override;

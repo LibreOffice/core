@@ -91,7 +91,7 @@
 
 using namespace ::com::sun::star;
 
-#define DEF_FLY_WIDTH    2268   // Default width for FlyFrames (2268 == 4cm)
+constexpr SwTwips DEF_FLY_WIDTH(2268);   // Default width for FlyFrames (2268 == 4cm)
 
 static bool lcl_IsItemSet(const SwContentNode & rNode, sal_uInt16 which)
 {
@@ -251,12 +251,12 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
 
     if( SfxItemState::SET != pFormat->GetAttrSet().GetItemState( RES_FRM_SIZE ))
     {
-        SwFormatFrameSize aFormatSize( SwFrameSize::Variable, 0, DEF_FLY_WIDTH );
+        SwFormatFrameSize aFormatSize( SwFrameSize::Variable, SwTwips(0), DEF_FLY_WIDTH );
         const SwNoTextNode* pNoTextNode = rNode.GetNoTextNode();
         if( pNoTextNode )
         {
             // Set size
-            Size aSize( pNoTextNode->GetTwipSize() );
+            SwSize aSize( pNoTextNode->GetTwipSize() );
             if( MINFLY > aSize.Width() )
                 aSize.setWidth( DEF_FLY_WIDTH );
             aFormatSize.SetWidth( aSize.Width() );
@@ -820,8 +820,8 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 pNewSet->Put( SvxOpaqueItem( RES_OPAQUE, true ) );
 
                 sal_Int16 eVert = bBefore ? text::VertOrientation::BOTTOM : text::VertOrientation::TOP;
-                pNewSet->Put( SwFormatVertOrient( 0, eVert ) );
-                pNewSet->Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER ) );
+                pNewSet->Put( SwFormatVertOrient( SwTwips(0), eVert ) );
+                pNewSet->Put( SwFormatHoriOrient( SwTwips(0), text::HoriOrientation::CENTER ) );
 
                 aFrameSize.reset(pOldFormat->GetFrameSize().Clone());
 
@@ -1082,7 +1082,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     pNewSet->Put( pOldFormat->GetAnchor() );
 
     // The new one should be variable in its height!
-    Size aSz( rSdrObj.GetCurrentBoundRect().GetSize() );
+    SwSize aSz( rSdrObj.GetCurrentBoundRect().GetSize() );
     SwFormatFrameSize aFrameSize( SwFrameSize::Minimum, aSz.Width(), aSz.Height() );
     pNewSet->Put( aFrameSize );
 
@@ -1149,8 +1149,8 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     pNewSet->Put( SvxULSpaceItem( RES_UL_SPACE ) );
 
     // #i26791# - set position of the drawing object, which is labeled.
-    pNewSet->Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
-    pNewSet->Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ) );
+    pNewSet->Put( SwFormatVertOrient( SwTwips(0), text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
+    pNewSet->Put( SwFormatHoriOrient( SwTwips(0), text::HoriOrientation::CENTER, text::RelOrientation::FRAME ) );
 
     // The old one is paragraph-bound to the new one's paragraph.
     SwFormatAnchor aAnch( RndStdIds::FLY_AT_PARA );
@@ -1609,7 +1609,7 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
 }
 
 SvxFrameDirection SwDoc::GetTextDirection( const SwPosition& rPos,
-                               const Point* pPt ) const
+                               const SwPoint* pPt ) const
 {
     SvxFrameDirection nRet = SvxFrameDirection::Unknown;
 

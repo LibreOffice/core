@@ -612,8 +612,8 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             // Attention: we always work with the PoolAttribute here, so that
             // we don't calculate the same value on the same TabStop (pooled!) for all sets.
             // We send a FormatChg to modify.
-            SwTwips nNewWidth = pTmpItem->StaticWhichCast(RES_PARATR_TABSTOP)[ 0 ].GetTabPos(),
-                    nOldWidth = aOld.Get(RES_PARATR_TABSTOP)[ 0 ].GetTabPos();
+            SwTwips nNewWidth(pTmpItem->StaticWhichCast(RES_PARATR_TABSTOP)[ 0 ].GetTabPos()),
+                    nOldWidth(aOld.Get(RES_PARATR_TABSTOP)[ 0 ].GetTabPos());
 
             bool bChg = false;
             for (const SfxPoolItem* pItem2 : GetAttrPool().GetItemSurrogates(RES_PARATR_TABSTOP))
@@ -1662,8 +1662,8 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
                         const SwNumFormat& rFormat = pRule->Get(o3tl::narrowing<sal_uInt16>(nListLevel));
                         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
                         {
-                            aLS.SetTextLeft( rFormat.GetIndentAt() );
-                            aLS.SetTextFirstLineOffset( static_cast<short>(rFormat.GetFirstLineIndent()) );
+                            aLS.SetTextLeft( tools::Long(rFormat.GetIndentAt()) );
+                            aLS.SetTextFirstLineOffset( static_cast<short>(tools::Long(rFormat.GetFirstLineIndent())) );
                         }
                     }
                 }

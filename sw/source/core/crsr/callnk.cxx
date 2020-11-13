@@ -48,7 +48,7 @@ SwCallLink::SwCallLink( SwCursorShell & rSh )
                                             !m_rShell.ActionPend() );
     else
     {
-        m_nLeftFramePos = 0;
+        m_nLeftFramePos = SwTwips(0);
 
         // A special treatment for SwFeShell:
         // When deleting the header/footer, footnotes SwFeShell sets the
@@ -221,7 +221,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
         m_rShell.GetFlyMacroLnk().Call( pFlyFrame->GetFormat() );
 }
 
-tools::Long SwCallLink::getLayoutFrame(const SwRootFrame* pRoot,
+SwTwips SwCallLink::getLayoutFrame(const SwRootFrame* pRoot,
         SwTextNode const & rNd, sal_Int32 nCntPos, bool /*bCalcFrame*/)
 {
     SwTextFrame* pFrame = static_cast<SwTextFrame*>(rNd.getLayoutFrame(pRoot, nullptr, nullptr));
@@ -242,7 +242,7 @@ tools::Long SwCallLink::getLayoutFrame(const SwRootFrame* pRoot,
 
         return pFrame->getFrameArea().Left();
     }
-    return 0;
+    return SwTwips(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

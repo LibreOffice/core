@@ -175,7 +175,7 @@ public:
 
     SwFlyAtContentFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
 
-    void SetAbsPos( const Point &rNew );
+    void SetAbsPos( const SwPoint &rNew );
 
     // #i26791#
     virtual void MakeObjPos() override;
@@ -193,7 +193,7 @@ public:
 // Flys that are bound to a character in Content
 class SwFlyInContentFrame final: public SwFlyFrame
 {
-    Point m_aRef;  // relative to this point AbsPos is being calculated
+    SwPoint m_aRef;  // relative to this point AbsPos is being calculated
 
     virtual void DestroyImpl() override;
     virtual ~SwFlyInContentFrame() override;
@@ -211,8 +211,8 @@ public:
 
     void SetRefPoint( const Point& rPoint, const Point &rRelAttr,
         const Point &rRelPos );
-    const Point &GetRefPoint() const { return m_aRef; }
-    Point const & GetRelPos() const;
+    const SwPoint &GetRefPoint() const { return m_aRef; }
+    SwPoint const & GetRelPos() const;
 
     // (26.11.93, see tabfrm.hxx, but might also be valid for others)
     // For creation of a Fly after a FlyCnt was created _and_ inserted.
@@ -222,8 +222,8 @@ public:
     void RegistFlys();
 
     //see layact.cxx
-    void AddRefOfst( tools::Long nOfst ) { m_aRef.AdjustY( nOfst ); }
-    void AddRefOfst(Point const& rOfst) { m_aRef += rOfst; }
+    void AddRefOfst( SwTwips nOfst ) { m_aRef.AdjustY( nOfst ); }
+    void AddRefOfst(SwPoint const& rOfst) { m_aRef += rOfst; }
 
     // #i26791#
     virtual void MakeObjPos() override;

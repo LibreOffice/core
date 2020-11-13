@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::sw::access;
 
-typedef o3tl::sorted_vector< sal_Int32 > Int32Set_Impl;
+typedef o3tl::sorted_vector< SwTwips > Int32Set_Impl;
 
 const unsigned int SELECTION_WITH_NUM = 10;
 
@@ -76,17 +76,17 @@ class SwAccessibleTableData_Impl
     SwAccessibleMap& mrAccMap;
     Int32Set_Impl   maRows;
     Int32Set_Impl   maColumns;
-    Point   maTabFramePos;
+    SwPoint   maTabFramePos;
     const SwTabFrame *mpTabFrame;
     bool mbIsInPagePreview;
     bool mbOnlyTableColumnHeader;
 
     void CollectData( const SwFrame *pFrame );
 
-    bool FindCell( const Point& rPos, const SwFrame *pFrame ,
+    bool FindCell( const SwPoint& rPos, const SwFrame *pFrame ,
                            bool bExact, const SwFrame *& rFrame ) const;
 
-    void GetSelection( const Point& rTabPos, const SwRect& rArea,
+    void GetSelection( const SwPoint& rTabPos, const SwRect& rArea,
                        const SwSelBoxes& rSelBoxes, const SwFrame *pFrame,
                        SwAccTableSelHandler_Impl& rSelHdl,
                        bool bColumns ) const;
@@ -113,7 +113,7 @@ public:
     /// @throws lang::IndexOutOfBoundsException
     /// @throws  uno::RuntimeException
     const SwFrame *GetCell( sal_Int32 nRow, sal_Int32 nColumn, SwAccessibleTable *pThis ) const;
-    const SwFrame *GetCellAtPos( sal_Int32 nLeft, sal_Int32 nTop ) const;
+    const SwFrame *GetCellAtPos( SwTwips nLeft, SwTwips nTop ) const;
     inline sal_Int32 GetRowCount() const;
     inline sal_Int32 GetColumnCount() const;
     bool CompareExtents( const SwAccessibleTableData_Impl& r ) const;
@@ -127,8 +127,8 @@ public:
     void CheckRowAndCol( sal_Int32 nRow, sal_Int32 nCol,
                          SwAccessibleTable *pThis ) const;
 
-    const Point& GetTablePos() const { return maTabFramePos; }
-    void SetTablePos( const Point& rPos ) { maTabFramePos = rPos; }
+    const SwPoint& GetTablePos() const { return maTabFramePos; }
+    void SetTablePos( const SwPoint& rPos ) { maTabFramePos = rPos; }
 };
 
 void SwAccessibleTableData_Impl::CollectData( const SwFrame *pFrame )
@@ -166,7 +166,7 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrame *pFrame )
 }
 
 bool SwAccessibleTableData_Impl::FindCell(
-        const Point& rPos, const SwFrame *pFrame, bool bExact,
+        const SwPoint& rPos, const SwFrame *pFrame, bool bExact,
         const SwFrame *& rRet ) const
 {
     bool bFound = false;
@@ -215,7 +215,7 @@ bool SwAccessibleTableData_Impl::FindCell(
 }
 
 void SwAccessibleTableData_Impl::GetSelection(
-            const Point& rTabPos,
+            const SwPoint& rTabPos,
             const SwRect& rArea,
             const SwSelBoxes& rSelBoxes,
             const SwFrame *pFrame,
@@ -245,7 +245,7 @@ void SwAccessibleTableData_Impl::GetSelection(
                     const Int32Set_Impl rRowsOrCols =
                         bColumns ? maColumns : maRows;
 
-                    sal_Int32 nPos = bColumns ? (rBox.Left() - rTabPos.X())
+                    SwTwips nPos = bColumns ? (rBox.Left() - rTabPos.X())
                                               : (rBox.Top() - rTabPos.Y());
                     Int32Set_Impl::const_iterator aSttRowOrCol(
                         rRowsOrCols.lower_bound( nPos ) );
@@ -299,7 +299,7 @@ void SwAccessibleTableData_Impl::GetSelection(
                        bool bColumns ) const
 {
     SwRect aArea( mpTabFrame->getFrameArea() );
-    Point aPos( aArea.Pos() );
+    SwPoint aPos( aArea.Pos() );
 
     const Int32Set_Impl& rRowsOrColumns = bColumns ? maColumns : maRows;
     if( nStart > 0 )
@@ -318,18 +318,18 @@ void SwAccessibleTableData_Impl::GetSelection(
         std::advance( aEnd,
             static_cast< Int32Set_Impl::difference_type >( nEnd ) );
         if( bColumns )
-            aArea.Right( *aEnd + aPos.getX() - 1 );
+            aArea.Right( *aEnd + aPos.getX() - SwTwips(1) );
         else
-            aArea.Bottom( *aEnd + aPos.getY() - 1 );
+            aArea.Bottom( *aEnd + aPos.getY() - SwTwips(1) );
     }
 
     GetSelection( aPos, aArea, rSelBoxes, mpTabFrame, rSelHdl, bColumns );
 }
 
 const SwFrame *SwAccessibleTableData_Impl::GetCellAtPos(
-        sal_Int32 nLeft, sal_Int32 nTop ) const
+        SwTwips nLeft, SwTwips nTop ) const
 {
-    Point aPos( mpTabFrame->getFrameArea().Pos() );
+    SwPoint aPos( mpTabFrame->getFrameArea().Pos() );
     aPos.Move( nLeft, nTop );
     const SwFrame *pRet = nullptr;
     FindCell( aPos, mpTabFrame, false/*bExact*/, pRet );
@@ -847,7 +847,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
     const SwFrame *pCellFrame = GetTableData().GetCellAtPos( *aSttCol, *aSttRow );
     if( pCellFrame )
     {
-        sal_Int32 nBottom = pCellFrame->getFrameArea().Bottom();
+        SwTwips nBottom = pCellFrame->getFrameArea().Bottom();
         nBottom -= GetFrame()->getFrameArea().Top();
         Int32Set_Impl::const_iterator aEndRow(
                 GetTableData().GetRows().upper_bound( nBottom ) );
@@ -877,7 +877,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnExtentAt(
     const SwFrame *pCellFrame = GetTableData().GetCellAtPos( *aSttCol, *aSttRow );
     if( pCellFrame )
     {
-        sal_Int32 nRight = pCellFrame->getFrameArea().Right();
+        SwTwips nRight = pCellFrame->getFrameArea().Right();
         nRight -= GetFrame()->getFrameArea().Left();
         Int32Set_Impl::const_iterator aEndCol(
                 GetTableData().GetColumns().upper_bound( nRight ) );
@@ -1101,7 +1101,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
     SwAccessibleChild aCell( GetChild( *(GetMap()), nChildIndex ) );
     if ( aCell.GetSwFrame()  )
     {
-        sal_Int32 nTop = aCell.GetSwFrame()->getFrameArea().Top();
+        SwTwips nTop = aCell.GetSwFrame()->getFrameArea().Top();
         nTop -= GetFrame()->getFrameArea().Top();
         Int32Set_Impl::const_iterator aRow(
                 GetTableData().GetRows().lower_bound( nTop ) );
@@ -1138,7 +1138,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
     SwAccessibleChild aCell( GetChild( *(GetMap()), nChildIndex ) );
     if ( aCell.GetSwFrame()  )
     {
-        sal_Int32 nLeft = aCell.GetSwFrame()->getFrameArea().Left();
+        SwTwips nLeft = aCell.GetSwFrame()->getFrameArea().Left();
         nLeft -= GetFrame()->getFrameArea().Left();
         Int32Set_Impl::const_iterator aCol(
                 GetTableData().GetColumns().lower_bound( nLeft ) );

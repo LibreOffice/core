@@ -210,7 +210,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout,
                        sw::BroadcastingModify const&,
                        SwFrameType const nFrameType,
                        const SwPosition *pPos = nullptr,
-                       std::pair<Point, bool> const* pViewPosAndCalcFrame = nullptr);
+                       std::pair<SwPoint, bool> const* pViewPosAndCalcFrame = nullptr);
 
 // Should extra data (redline stroke, line numbers) be painted?
 bool IsExtraData( const SwDoc *pDoc );
@@ -302,7 +302,7 @@ class SwBorderAttrs final : public SwCacheObj
     std::shared_ptr<SvxLRSpaceItem> m_rLR;
     const SvxBoxItem     &m_rBox;
     const SvxShadowItem  &m_rShadow;
-    const Size            m_aFrameSize;
+    const SwSize          m_aFrameSize;
 
     // the following bool values set the cached values to INVALID - until they
     // are calculated for the first time
@@ -330,7 +330,7 @@ class SwBorderAttrs final : public SwCacheObj
     bool m_bJoinedWithNext :1;
 
     // The cached values (un-defined until calculated for the first time)
-    sal_uInt16 m_nTopLine,
+    SwTwips m_nTopLine,
            m_nBottomLine,
            m_nLeftLine,
            m_nRightLine,
@@ -386,26 +386,26 @@ public:
     const SvxBoxItem     &GetBox()     const { return m_rBox;      }
     const SvxShadowItem  &GetShadow()  const { return m_rShadow;   }
 
-    inline sal_uInt16 CalcTopLine() const;
-    inline sal_uInt16 CalcBottomLine() const;
-    inline sal_uInt16 CalcLeftLine() const;
-    inline sal_uInt16 CalcRightLine() const;
-    inline sal_uInt16 CalcTop() const;
-    inline sal_uInt16 CalcBottom() const;
-    inline sal_uInt16 CalcLineSpacing() const;
-           tools::Long CalcLeft( const SwFrame *pCaller ) const;
-           tools::Long CalcRight( const SwFrame *pCaller ) const;
+    inline SwTwips CalcTopLine() const;
+    inline SwTwips CalcBottomLine() const;
+    inline SwTwips CalcLeftLine() const;
+    inline SwTwips CalcRightLine() const;
+    inline SwTwips CalcTop() const;
+    inline SwTwips CalcBottom() const;
+    inline SwTwips CalcLineSpacing() const;
+           SwTwips CalcLeft( const SwFrame *pCaller ) const;
+           SwTwips CalcRight( const SwFrame *pCaller ) const;
 
     inline bool IsLine() const;
 
-    const Size &GetSize()     const { return m_aFrameSize; }
+    const SwSize &GetSize()     const { return m_aFrameSize; }
 
     // Should upper (or lower) border be evaluated for this frame?
     // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
-    inline sal_uInt16 GetTopLine   ( const SwFrame& _rFrame,
+    inline SwTwips GetTopLine   ( const SwFrame& _rFrame,
                                  const SwFrame* _pPrevFrame = nullptr ) const;
-    inline sal_uInt16 GetBottomLine( const SwFrame& _rFrame ) const;
+    inline SwTwips GetBottomLine( const SwFrame& _rFrame ) const;
     inline void   SetGetCacheLine( bool bNew ) const;
 
     // Accessors for cached values <m_bJoinedWithPrev> and <m_bJoinedWithNext>
@@ -471,7 +471,7 @@ public:
 // Should upper (or lower) border be evaluated for this frame?
 // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
 // borders/shadow have to be joined with previous frame.
-inline sal_uInt16 SwBorderAttrs::GetTopLine ( const SwFrame& _rFrame,
+inline SwTwips SwBorderAttrs::GetTopLine ( const SwFrame& _rFrame,
                                           const SwFrame* _pPrevFrame ) const
 {
     if ( !m_bCachedGetTopLine || _pPrevFrame )
@@ -480,7 +480,7 @@ inline sal_uInt16 SwBorderAttrs::GetTopLine ( const SwFrame& _rFrame,
     }
     return m_nGetTopLine;
 }
-inline sal_uInt16 SwBorderAttrs::GetBottomLine( const SwFrame& _rFrame ) const
+inline SwTwips SwBorderAttrs::GetBottomLine( const SwFrame& _rFrame ) const
 {
     if ( !m_bCachedGetBottomLine )
         const_cast<SwBorderAttrs*>(this)->GetBottomLine_( _rFrame );
@@ -496,43 +496,43 @@ inline void SwBorderAttrs::SetGetCacheLine( bool bNew ) const
     m_bCachedJoinedWithNext = false;
 }
 
-inline sal_uInt16 SwBorderAttrs::CalcTopLine() const
+inline SwTwips SwBorderAttrs::CalcTopLine() const
 {
     if ( m_bTopLine )
         const_cast<SwBorderAttrs*>(this)->CalcTopLine_();
     return m_nTopLine;
 }
-inline sal_uInt16 SwBorderAttrs::CalcBottomLine() const
+inline SwTwips SwBorderAttrs::CalcBottomLine() const
 {
     if ( m_bBottomLine )
         const_cast<SwBorderAttrs*>(this)->CalcBottomLine_();
     return m_nBottomLine;
 }
-inline sal_uInt16 SwBorderAttrs::CalcLeftLine() const
+inline SwTwips SwBorderAttrs::CalcLeftLine() const
 {
     if ( m_bLeftLine )
         const_cast<SwBorderAttrs*>(this)->CalcLeftLine_();
     return m_nLeftLine;
 }
-inline sal_uInt16 SwBorderAttrs::CalcRightLine() const
+inline SwTwips SwBorderAttrs::CalcRightLine() const
 {
     if ( m_bRightLine )
         const_cast<SwBorderAttrs*>(this)->CalcRightLine_();
     return m_nRightLine;
 }
-inline sal_uInt16 SwBorderAttrs::CalcTop() const
+inline SwTwips SwBorderAttrs::CalcTop() const
 {
     if ( m_bTop )
         const_cast<SwBorderAttrs*>(this)->CalcTop_();
     return m_nTop;
 }
-inline sal_uInt16 SwBorderAttrs::CalcBottom() const
+inline SwTwips SwBorderAttrs::CalcBottom() const
 {
     if ( m_bBottom )
         const_cast<SwBorderAttrs*>(this)->CalcBottom_();
     return m_nBottom;
 }
-inline sal_uInt16 SwBorderAttrs::CalcLineSpacing() const
+inline SwTwips SwBorderAttrs::CalcLineSpacing() const
 {
     if ( m_bLineSpacing )
         const_cast<SwBorderAttrs*>(this)->CalcLineSpacing_();

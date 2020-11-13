@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include "swdllapi.h"
+#include "swrect.hxx"
 #include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/outdev.hxx>
@@ -48,33 +49,29 @@ class CharClass;
 class CollatorWrapper;
 class LanguageTag;
 
-typedef tools::Long SwTwips;
-#define INVALID_TWIPS   LONG_MAX
-#define TWIPS_MAX       (LONG_MAX - 1)
-
 // Converts Millimeters to Twips (1 mm == 56.905479 twips).
 template <typename T = SwTwips>
 constexpr T MmToTwips(const double mm) { return static_cast<T>(mm / 0.017573); }
 
-#define MM50   283  // 1/2 cm in TWIPS.
+constexpr SwTwips MM50(283);  // 1/2 cm in TWIPS.
 
 const sal_Int32 COMPLETE_STRING = SAL_MAX_INT32;
 
-const SwTwips cMinHdFtHeight = 56;
+constexpr SwTwips cMinHdFtHeight(56);
 
-#define MINFLY 23   // Minimal size for FlyFrames.
-#define MINLAY 23   // Minimal size for other Frames.
+constexpr SwTwips MINFLY(23);   // Minimal size for FlyFrames.
+constexpr SwTwips MINLAY(23);   // Minimal size for other Frames.
 
 // Default column distance of two text columns corresponds to 0.3 cm.
-#define DEF_GUTTER_WIDTH (MM50 / 5 * 3)
+constexpr SwTwips DEF_GUTTER_WIDTH = MM50 / SwTwips(5) * SwTwips(3);
 
 // Minimal distance (distance to text) for border attribute
 // in order not to crock up aligned lines.
 // 28 Twips == 0,4mm
-#define MIN_BORDER_DIST 28
+constexpr SwTwips MIN_BORDER_DIST(28);
 
 // Minimal document border: 20mm.
-const SwTwips lMinBorder = 1134;
+constexpr SwTwips lMinBorder(1134);
 
 // Margin left and above document.
 // Half of it is gap between the pages.
@@ -100,10 +97,10 @@ const sal_uInt8 NO_NUMLEVEL  = 0x20;    // "or" with the levels.
 //  (For more levels the values have to be multiplied with the levels+1;
 //  levels 0 ..4!)
 
-const short lBulletIndent = 1440/4;
-const short lBulletFirstLineOffset = -lBulletIndent;
-const sal_uInt16 lNumberIndent = 1440/4;
-const short lNumberFirstLineOffset = -lNumberIndent;
+constexpr SwTwips lBulletIndent(1440/4);
+constexpr SwTwips lBulletFirstLineOffset = -lBulletIndent;
+constexpr SwTwips lNumberIndent(1440/4);
+constexpr SwTwips lNumberFirstLineOffset(-lNumberIndent);
 const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 
 // Count of SystemField-types of SwDoc.
@@ -123,7 +120,7 @@ css::uno::Reference< css::linguistic2::XThesaurus >     GetThesaurus();
 css::uno::Reference< css::linguistic2::XLinguProperties > GetLinguPropertySet();
 
 // Returns the twip size of this graphic.
-SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, vcl::RenderContext* pOutDev );
+SW_DLLPUBLIC SwSize GetGraphicSizeTwip( const Graphic&, vcl::RenderContext* pOutDev );
 
 // Separator for jumps to different content types in document.
 const sal_Unicode cMarkSeparator = '|';

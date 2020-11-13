@@ -27,6 +27,7 @@
 #include "hintids.hxx"
 #include "swtypes.hxx"
 #include "format.hxx"
+#include "swrect.hxx"
 
 class IntlWrapper;
 
@@ -65,7 +66,7 @@ class SW_DLLPUBLIC SwFormatFrameSize final : public SvxSizeItem
 
 public:
     SwFormatFrameSize( SwFrameSize eSize = SwFrameSize::Variable,
-                  SwTwips nWidth = 0, SwTwips nHeight = 0 );
+                  SwTwips nWidth = SwTwips(0), SwTwips nHeight = SwTwips(0) );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwFormatFrameSize* Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -94,6 +95,13 @@ public:
     void    SetHeightPercentRelation ( sal_Int16 n ) { m_eHeightPercentRelation  = n; }
     void    SetWidthPercent ( sal_uInt8 n ) { m_nWidthPercent  = n; }
     void    SetWidthPercentRelation ( sal_Int16 n ) { m_eWidthPercentRelation  = n; }
+
+    SwTwips GetWidth() const { return SwTwips(SvxSizeItem::GetWidth()); }
+    SwTwips GetHeight() const { return SwTwips(SvxSizeItem::GetHeight()); }
+    void SetWidth(SwTwips w) { SvxSizeItem::SetWidth(tools::Long(w)); }
+    void SetHeight(SwTwips h) { SvxSizeItem::SetHeight(tools::Long(h)); }
+    SwSize GetSize() const { return SwSize(SvxSizeItem::GetSize()); }
+    void SetSize(SwSize h) { SvxSizeItem::SetSize(Size(h)); }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

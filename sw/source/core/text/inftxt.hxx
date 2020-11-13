@@ -343,7 +343,7 @@ class SwTextPaintInfo : public SwTextSizeInfo
     std::vector<tools::Long>* m_pSpaceAdd;
     const SvxBrushItem *m_pBrushItem; // For the background
     SwTextFly    m_aTextFly;    // Calculate the FlyFrame
-    Point       m_aPos;       // Paint position
+    SwPoint     m_aPos;       // Paint position
     SwRect      m_aPaintRect; // Original paint rect (from Layout paint)
 
     sal_uInt16 m_nSpaceIdx;
@@ -376,7 +376,7 @@ public:
     SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint );
 
     SwTwips X() const { return m_aPos.X(); }
-    void X( const tools::Long nNew ) { m_aPos.setX(nNew); }
+    void X( const SwTwips nNew ) { m_aPos.setX(nNew); }
     SwTwips Y() const { return m_aPos.Y(); }
     void Y( const SwTwips nNew ) { m_aPos.setY(nNew); }
 
@@ -425,8 +425,8 @@ public:
 
     inline SwTwips GetPaintOfst() const;
     inline void SetPaintOfst( const SwTwips nNew );
-    const Point &GetPos() const { return m_aPos; }
-    void SetPos( const Point &rNew ) { m_aPos = rNew; }
+    const SwPoint &GetPos() const { return m_aPos; }
+    void SetPos( const SwPoint &rNew ) { m_aPos = rNew; }
 
     const SwRect &GetPaintRect() const { return m_aPaintRect; }
 

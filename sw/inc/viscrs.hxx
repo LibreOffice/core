@@ -116,8 +116,8 @@ class SW_DLLPUBLIC SwShellCursor : public virtual SwCursor, public SwSelPaintRec
 {
 private:
     // Document positions of start/end characters of a SSelection.
-    Point m_MarkPt;
-    Point m_PointPt;
+    SwPoint m_MarkPt;
+    SwPoint m_PointPt;
     const SwPosition* m_pInitialPoint; // For assignment of GetPoint() to m_PointPt.
 
     using SwCursor::UpDown;
@@ -125,7 +125,7 @@ private:
 public:
     SwShellCursor( const SwCursorShell& rCursorSh, const SwPosition &rPos );
     SwShellCursor( const SwCursorShell& rCursorSh, const SwPosition &rPos,
-                    const Point& rPtPos, SwPaM* pRing );
+                    const SwPoint& rPtPos, SwPaM* pRing );
     // note: *intentionally* links the new shell cursor into the old one's Ring
     SwShellCursor( SwShellCursor& );
     virtual ~SwShellCursor() override;
@@ -138,14 +138,14 @@ public:
     void Hide();            // Hide all selections.
     void Invalidate( const SwRect& rRect );
 
-    const Point& GetPtPos() const   { return (SwPaM::GetPoint() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
-          Point& GetPtPos()         { return (SwPaM::GetPoint() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
-    const Point& GetMkPos() const   { return (SwPaM::GetMark() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
-          Point& GetMkPos()         { return (SwPaM::GetMark() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
-    const Point& GetSttPos() const  { return (SwPaM::Start() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
-          Point& GetSttPos()        { return (SwPaM::Start() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
-    const Point& GetEndPos() const  { return (SwPaM::End() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
-          Point& GetEndPos()        { return (SwPaM::End() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+    const SwPoint& GetPtPos() const   { return (SwPaM::GetPoint() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+          SwPoint& GetPtPos()         { return (SwPaM::GetPoint() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+    const SwPoint& GetMkPos() const   { return (SwPaM::GetMark() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+          SwPoint& GetMkPos()         { return (SwPaM::GetMark() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+    const SwPoint& GetSttPos() const  { return (SwPaM::Start() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+          SwPoint& GetSttPos()        { return (SwPaM::Start() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+    const SwPoint& GetEndPos() const  { return (SwPaM::End() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+          SwPoint& GetEndPos()        { return (SwPaM::End() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
 
     virtual void SetMark() override;
 
@@ -180,8 +180,8 @@ class SwShellTableCursor final : public virtual SwShellCursor, public virtual Sw
 public:
     SwShellTableCursor( const SwCursorShell& rCursorSh, const SwPosition& rPos );
     SwShellTableCursor( const SwCursorShell& rCursorSh,
-                    const SwPosition &rMkPos, const Point& rMkPt,
-                    const SwPosition &rPtPos, const Point& rPtPt );
+                    const SwPosition &rMkPos, const SwPoint& rMkPt,
+                    const SwPosition &rPtPos, const SwPoint& rPtPt );
     virtual ~SwShellTableCursor() override;
 
     virtual void FillRects() override;   // For table and normal cursor.
@@ -189,7 +189,7 @@ public:
     virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const override;
 
     // Check if SPoint is within table SSelection.
-    bool IsInside( const Point& rPt ) const;
+    bool IsInside( const SwPoint& rPt ) const;
 
     virtual void SetMark() override;
     virtual SwCursor* Create( SwPaM* pRing = nullptr ) const override;

@@ -130,13 +130,13 @@ OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
 void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 {
     SwRect aRect;
-    tools::Long nTmpY = m_pCursorShell->m_aCursorHeight.getY();
-    if( 0 > nTmpY )
+    SwTwips nTmpY = m_pCursorShell->m_aCursorHeight.getY();
+    if( SwTwips(0) > nTmpY )
     {
         nTmpY = -nTmpY;
         m_aTextCursor.SetOrientation( 900_deg10 );
         aRect = SwRect( m_pCursorShell->m_aCharRect.Pos(),
-           Size( m_pCursorShell->m_aCharRect.Height(), nTmpY ) );
+           SwSize( m_pCursorShell->m_aCharRect.Height(), nTmpY ) );
         aRect.Pos().setX(aRect.Pos().getX() + m_pCursorShell->m_aCursorHeight.getX());
         if( m_pCursorShell->IsOverwriteCursor() )
             aRect.Pos().setY(aRect.Pos().getY() + aRect.Width());
@@ -145,7 +145,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
     {
         m_aTextCursor.SetOrientation();
         aRect = SwRect( m_pCursorShell->m_aCharRect.Pos(),
-           Size( m_pCursorShell->m_aCharRect.Width(), nTmpY ) );
+           SwSize( m_pCursorShell->m_aCharRect.Width(), nTmpY ) );
         aRect.Pos().setY(aRect.Pos().getY() + m_pCursorShell->m_aCursorHeight.getX());
     }
 
@@ -177,8 +177,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
                     if ( pOut )
                     {
                         tools::Long nSize = pOut->GetSettings().GetStyleSettings().GetCursorSize();
-                        Size aSize( nSize, nSize );
-                        aSize = pOut->PixelToLogic( aSize );
+                        SwSize aSize( pOut->PixelToLogic( Size(nSize, nSize) ) );
                         aRect.Left( aRect.Left() - aSize.Width() );
                     }
                 }
@@ -197,11 +196,11 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
     }
     if( !m_pCursorShell->IsOverwriteCursor() || m_bIsDragCursor ||
         m_pCursorShell->IsSelection() )
-        aRect.Width( 0 );
+        aRect.Width( SwTwips(0) );
 
-    m_aTextCursor.SetSize( aRect.SSize() );
+    m_aTextCursor.SetSize( Size(aRect.SSize()) );
 
-    m_aTextCursor.SetPos( aRect.Pos() );
+    m_aTextCursor.SetPos( Point(aRect.Pos()) );
 
     bool bPostItActive = false;
     SwView* pView = dynamic_cast<SwView*>(m_pCursorShell->GetSfxViewShell());
@@ -226,7 +225,10 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         }
 
         // notify about the cursor position & size
-        tools::Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
+        tools::Rectangle aSVRect(
+            tools::Long(aRect.Pos().getX()), tools::Long(aRect.Pos().getY()),
+            tools::Long(aRect.Pos().getX() + aRect.SSize().Width()),
+            tools::Long(aRect.Pos().getY() + aRect.SSize().Height()));
         OString sRect = aSVRect.toString();
 
         // is cursor at a misspelled word ?
@@ -238,7 +240,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
             {
                 SwPaM* pCursor = m_pCursorShell->GetCursor();
                 SwPosition aPos(*pCursor->GetPoint());
-                Point aPt = aRect.Pos();
+                SwPoint aPt = aRect.Pos();
                 SwCursorMoveState eTmpState(CursorMoveState::SetOnlyText);
                 SwTextNode *pNode = nullptr;
                 if (m_pCursorShell->GetLayout()->GetModelPositionForViewPoint(&aPos, aPt, &eTmpState))
@@ -366,10 +368,10 @@ void SwSelPaintRects::Hide()
  * rPosition (there might be multiple frames for a single node)
  * @param rPosition the doc model position (paragraph / character index)
  */
-static SwRect lcl_getLayoutRect(const Point& rPoint, const SwPosition& rPosition)
+static SwRect lcl_getLayoutRect(const SwPoint& rPoint, const SwPosition& rPosition)
 {
     const SwContentNode* pNode = rPosition.nNode.GetNode().GetContentNode();
-    std::pair<Point, bool> const tmp(rPoint, true);
+    std::pair<SwPoint, bool> const tmp(rPoint, true);
     const SwContentFrame* pFrame = pNode->getLayoutFrame(
             pNode->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             &rPosition, &tmp);
@@ -580,9 +582,9 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
     {
         SwRect& rRectIt = *it;
         if( rRectIt.Right() == GetShell()->m_aOldRBPos.X() )
-            rRectIt.AddRight( s_nPixPtX );
+            rRectIt.AddRight( SwTwips(s_nPixPtX) );
         if( rRectIt.Bottom() == GetShell()->m_aOldRBPos.Y() )
-            rRectIt.AddBottom( s_nPixPtY );
+            rRectIt.AddBottom( SwTwips(s_nPixPtY) );
     }
 }
 
@@ -623,7 +625,7 @@ SwShellCursor::SwShellCursor(
 SwShellCursor::SwShellCursor(
     const SwCursorShell& rCShell,
     const SwPosition &rPos,
-    const Point& rPtPos,
+    const SwPoint& rPtPos,
     SwPaM* pRing )
     : SwCursor(rPos, pRing)
     , SwSelPaintRects(rCShell)
@@ -803,8 +805,8 @@ SwShellTableCursor::SwShellTableCursor( const SwCursorShell& rCursorSh,
 }
 
 SwShellTableCursor::SwShellTableCursor( const SwCursorShell& rCursorSh,
-                    const SwPosition& rMkPos, const Point& rMkPt,
-                    const SwPosition& rPtPos, const Point& rPtPt )
+                    const SwPosition& rMkPos, const SwPoint& rMkPt,
+                    const SwPosition& rPtPos, const SwPoint& rPtPt )
     : SwCursor(rPtPos,nullptr), SwShellCursor(rCursorSh, rPtPos), SwTableCursor(rPtPos)
 {
     SetMark();
@@ -866,7 +868,7 @@ void SwShellTableCursor::FillRects()
         if( !pCNd )
             continue;
 
-        std::pair<Point, bool> const tmp(GetSttPos(), false);
+        std::pair<SwPoint, bool> const tmp(GetSttPos(), false);
         SwFrame* pFrame = pCNd->getLayoutFrame(GetShell()->GetLayout(), nullptr, &tmp);
         while( pFrame && !pFrame->IsCellFrame() )
             pFrame = pFrame->GetUpper();
@@ -881,7 +883,7 @@ void SwShellTableCursor::FillRects()
                 if (bStart)
                 {
                     bStart = false;
-                    m_aStart = SwRect(pFrame->getFrameArea().Left(), pFrame->getFrameArea().Top(), 1, pFrame->getFrameArea().Height());
+                    m_aStart = SwRect(pFrame->getFrameArea().Left(), pFrame->getFrameArea().Top(), SwTwips(1), pFrame->getFrameArea().Height());
                 }
             }
 
@@ -890,7 +892,7 @@ void SwShellTableCursor::FillRects()
         }
     }
     if (pEndFrame)
-        m_aEnd = SwRect(pEndFrame->getFrameArea().Right(), pEndFrame->getFrameArea().Top(), 1, pEndFrame->getFrameArea().Height());
+        m_aEnd = SwRect(pEndFrame->getFrameArea().Right(), pEndFrame->getFrameArea().Top(), SwTwips(1), pEndFrame->getFrameArea().Height());
     aReg.Invert();
     insert( begin(), aReg.begin(), aReg.end() );
 }
@@ -902,7 +904,7 @@ void SwShellTableCursor::FillStartEnd(SwRect& rStart, SwRect& rEnd) const
 }
 
 // Check if the SPoint is within the Table-SSelection.
-bool SwShellTableCursor::IsInside( const Point& rPt ) const
+bool SwShellTableCursor::IsInside( const SwPoint& rPt ) const
 {
     // Calculate the new rectangles. If the cursor is still "parked" do nothing
     if (m_SelectedBoxes.empty() || m_bParked || !GetPoint()->nNode.GetIndex())
@@ -916,7 +918,7 @@ bool SwShellTableCursor::IsInside( const Point& rPt ) const
         if( !pCNd )
             continue;
 
-        std::pair<Point, bool> const tmp(GetPtPos(), true);
+        std::pair<SwPoint, bool> const tmp(GetPtPos(), true);
         SwFrame* pFrame = pCNd->getLayoutFrame(GetShell()->GetLayout(), nullptr, &tmp);
         while( pFrame && !pFrame->IsCellFrame() )
             pFrame = pFrame->GetUpper();

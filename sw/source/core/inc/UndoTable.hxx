@@ -27,6 +27,7 @@
 #include <set>
 #include <itabenum.hxx>
 #include <tblenum.hxx>
+#include <twips.hxx>
 #include <memory>
 #include <vector>
 
@@ -49,7 +50,7 @@ class SwUndoInsTable final : public SwUndo
     OUString m_sTableName;
     SwInsertTableOptions m_aInsTableOptions;
     std::unique_ptr<SwDDEFieldType> m_pDDEFieldType;
-    std::unique_ptr<std::vector<sal_uInt16>> m_pColumnWidth;
+    std::unique_ptr<std::vector<SwTwips>> m_pColumnWidth;
     std::unique_ptr<SwRedlineData>  m_pRedlineData;
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
     sal_uLong m_nStartNode;
@@ -59,7 +60,7 @@ class SwUndoInsTable final : public SwUndo
 public:
     SwUndoInsTable( const SwPosition&, sal_uInt16 nCols, sal_uInt16 nRows,
                     sal_uInt16 eAdjust, const SwInsertTableOptions& rInsTableOpts,
-                    const SwTableAutoFormat* pTAFormat, const std::vector<sal_uInt16> *pColArr,
+                    const SwTableAutoFormat* pTAFormat, const std::vector<SwTwips> *pColArr,
                   const OUString & rName);
 
     virtual ~SwUndoInsTable() override;

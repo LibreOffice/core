@@ -47,7 +47,7 @@ class SwWrtShell;
 
     implemented in layout/flycnt.cxx
  */
-const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
+const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const SwPoint &rNew,
                               const bool bBody = false );
 
 /** calculate rectangle in that the object can be moved or rather be resized */
@@ -175,8 +175,8 @@ public:
     virtual bool GetInfo( SfxPoolItem& ) const override;
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
-    virtual Size ChgSize( const Size& aNewSize ) override;
-    virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
+    virtual SwSize ChgSize( const SwSize& aNewSize ) override;
+    virtual bool GetModelPositionForViewPoint( SwPosition *, SwPoint&,
                               SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     virtual void CheckDirection( bool bVert ) override;
@@ -204,7 +204,7 @@ public:
     SwVirtFlyDrawObj *GetVirtDrawObj();
     void NotifyDrawObj();
 
-    void ChgRelPos( const Point &rAbsPos );
+    void ChgRelPos( const SwPoint &rAbsPos );
     bool IsInvalid() const { return m_bInvalid; }
     void Invalidate() const { const_cast<SwFlyFrame*>(this)->m_bInvalid = true; }
     void Validate() const { const_cast<SwFlyFrame*>(this)->m_bInvalid = false; }

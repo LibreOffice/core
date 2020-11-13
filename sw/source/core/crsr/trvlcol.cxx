@@ -84,7 +84,7 @@ void SwCursorShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 
     pCnt->Calc(GetOut());
 
-    Point aPt( pCnt->getFrameArea().Pos() + pCnt->getFramePrintArea().Pos() );
+    SwPoint aPt( pCnt->getFrameArea().Pos() + pCnt->getFramePrintArea().Pos() );
     if( fnPosCol == GetColumnEnd )
     {
         aPt.setX(aPt.getX() + pCnt->getFramePrintArea().Width());

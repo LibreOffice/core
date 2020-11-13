@@ -141,7 +141,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
     aFont.SetColor( aCol );
 
     const BitmapEx& rBmp = const_cast<SwViewShell&>(rSh).GetReplacementBitmap(bDefect);
-    Graphic::DrawEx(*rSh.GetOut(), rText, aFont, rBmp, rRect.Pos(), rRect.SSize());
+    Graphic::DrawEx(*rSh.GetOut(), rText, aFont, rBmp, Point(rRect.Pos()), Size(rRect.SSize()));
 }
 
 SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )
@@ -333,17 +333,17 @@ void SwNoTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
     @param Size   the graphic's size (also returned)
     @param nMirror the current mirror attribute
 */
-static void lcl_CalcRect( Point& rPt, Size& rDim, MirrorGraph nMirror )
+static void lcl_CalcRect( SwPoint& rPt, SwSize& rDim, MirrorGraph nMirror )
 {
     if( nMirror == MirrorGraph::Vertical || nMirror == MirrorGraph::Both )
     {
-        rPt.setX(rPt.getX() + rDim.Width() -1);
+        rPt.setX(rPt.getX() + rDim.Width() - SwTwips(1));
         rDim.setWidth( -rDim.Width() );
     }
 
     if( nMirror == MirrorGraph::Horizontal || nMirror == MirrorGraph::Both )
     {
-        rPt.setY(rPt.getY() + rDim.Height() -1);
+        rPt.setY(rPt.getY() + rDim.Height() - SwTwips(1));
         rDim.setHeight( -rDim.Height() );
     }
 }
@@ -382,8 +382,8 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
 
     // We read graphic from the Node, if needed.
     // It may fail, however.
-    tools::Long nLeftCrop, nRightCrop, nTopCrop, nBottomCrop;
-    Size aOrigSz( static_cast<const SwNoTextNode*>(GetNode())->GetTwipSize() );
+    SwTwips nLeftCrop, nRightCrop, nTopCrop, nBottomCrop;
+    SwSize aOrigSz( static_cast<const SwNoTextNode*>(GetNode())->GetTwipSize() );
     if ( !aOrigSz.Width() )
     {
         aOrigSz.setWidth( aFramePrintArea.Width() );
@@ -393,16 +393,16 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     else
     {
         nLeftCrop = std::max( aOrigSz.Width() -
-                            (rCrop.GetRight() + rCrop.GetLeft()), tools::Long(1) );
-        const double nScale = double(aFramePrintArea.Width())  / double(nLeftCrop);
-        nLeftCrop  = tools::Long(nScale * -rCrop.GetLeft() );
-        nRightCrop = tools::Long(nScale * -rCrop.GetRight() );
+                              (rCrop.GetRight() + rCrop.GetLeft()), SwTwips(1) );
+        const double nScale = double(aFramePrintArea.Width()) / double(nLeftCrop);
+        nLeftCrop  = SwTwips(tools::Long(nScale * tools::Long(-rCrop.GetLeft()) ));
+        nRightCrop = SwTwips(tools::Long(nScale * tools::Long(-rCrop.GetRight()) ));
     }
 
     // crop values have to be mirrored too
     if( nMirror == MirrorGraph::Vertical || nMirror == MirrorGraph::Both )
     {
-        tools::Long nTmpCrop = nLeftCrop;
+        SwTwips nTmpCrop = nLeftCrop;
         nLeftCrop = nRightCrop;
         nRightCrop= nTmpCrop;
     }
@@ -415,39 +415,39 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     }
     else
     {
-        nTopCrop = std::max( aOrigSz.Height() - (rCrop.GetTop() + rCrop.GetBottom()), tools::Long(1) );
+        nTopCrop = std::max( aOrigSz.Height() - (rCrop.GetTop() + rCrop.GetBottom()), SwTwips(1) );
         const double nScale = double(aFramePrintArea.Height()) / double(nTopCrop);
-        nTopCrop   = tools::Long(nScale * -rCrop.GetTop() );
-        nBottomCrop= tools::Long(nScale * -rCrop.GetBottom() );
+        nTopCrop   = SwTwips(tools::Long(nScale * tools::Long(-rCrop.GetTop()) ));
+        nBottomCrop= SwTwips(tools::Long(nScale * tools::Long(-rCrop.GetBottom()) ));
     }
 
     // crop values have to be mirrored too
     if( nMirror == MirrorGraph::Horizontal || nMirror == MirrorGraph::Both )
     {
-        tools::Long nTmpCrop = nTopCrop;
+        SwTwips nTmpCrop = nTopCrop;
         nTopCrop   = nBottomCrop;
         nBottomCrop= nTmpCrop;
     }
 
-    Size  aVisSz( aFramePrintArea.SSize() );
-    Size  aGrfSz( aVisSz );
-    Point aVisPt( aFrameArea.Pos() + aFramePrintArea.Pos() );
-    Point aGrfPt( aVisPt );
+    SwSize  aVisSz( aFramePrintArea.SSize() );
+    SwSize  aGrfSz( aVisSz );
+    SwPoint aVisPt( aFrameArea.Pos() + aFramePrintArea.Pos() );
+    SwPoint aGrfPt( aVisPt );
 
     // Set the "visible" rectangle first
-    if ( nLeftCrop > 0 )
+    if ( nLeftCrop > SwTwips(0) )
     {
         aVisPt.setX(aVisPt.getX() + nLeftCrop);
         aVisSz.AdjustWidth( -nLeftCrop );
     }
-    if ( nTopCrop > 0 )
+    if ( nTopCrop > SwTwips(0) )
     {
         aVisPt.setY(aVisPt.getY() + nTopCrop);
         aVisSz.AdjustHeight( -nTopCrop );
     }
-    if ( nRightCrop > 0 )
+    if ( nRightCrop > SwTwips(0) )
         aVisSz.AdjustWidth( -nRightCrop );
-    if ( nBottomCrop > 0 )
+    if ( nBottomCrop > SwTwips(0) )
         aVisSz.AdjustHeight( -nBottomCrop );
 
     rRect.Pos  ( aVisPt );
@@ -457,7 +457,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     if ( !pOrigRect )
         return;
 
-    Size aTmpSz( aGrfSz );
+    SwSize aTmpSz( aGrfSz );
     aGrfPt.setX(aGrfPt.getX() + nLeftCrop);
     aTmpSz.AdjustWidth( -(nLeftCrop + nRightCrop) );
     aGrfPt.setY(aGrfPt.getY() + nTopCrop);
@@ -471,7 +471,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
 }
 
 /** By returning the surrounding Fly's size which equals the graphic's size */
-const Size& SwNoTextFrame::GetSize() const
+const SwSize& SwNoTextFrame::GetSize() const
 {
     // Return the Frame's size
     const SwFrame *pFly = FindFlyFrame();
@@ -656,16 +656,16 @@ double SwNoTextFrame::getLocalFrameRotation() const
 /** Calculate the Bitmap's site, if needed */
 void SwNoTextFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {
-    const Size aNewSize( GetSize() );
+    const SwSize aNewSize( GetSize() );
 
     // Did the height change?
     SwTwips nChgHght = IsVertical() ?
         static_cast<SwTwips>(aNewSize.Width() - getFramePrintArea().Width()) :
         static_cast<SwTwips>(aNewSize.Height() - getFramePrintArea().Height());
-    if( nChgHght > 0)
+    if( nChgHght > SwTwips(0))
         Grow( nChgHght );
-    else if( nChgHght < 0)
-        Shrink( std::min(getFramePrintArea().Height(), tools::Long(-nChgHght)) );
+    else if( nChgHght < SwTwips(0))
+        Shrink( std::min(getFramePrintArea().Height(), -nChgHght) );
 }
 
 bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
@@ -687,7 +687,7 @@ bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
     {
         // If not, then the Cursor is on the Frame
         rRect = aFrameRect;
-        rRect.Width( 1 );
+        rRect.Width( SwTwips(1) );
     }
     else
         rRect.Intersection_( aFrameRect );
@@ -695,13 +695,13 @@ bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
     if ( pCMS && pCMS->m_bRealHeight )
     {
         pCMS->m_aRealHeight.setY(rRect.Height());
-        pCMS->m_aRealHeight.setX(0);
+        pCMS->m_aRealHeight.setX(SwTwips(0));
     }
 
     return true;
 }
 
-bool SwNoTextFrame::GetModelPositionForViewPoint(SwPosition* pPos, Point& ,
+bool SwNoTextFrame::GetModelPositionForViewPoint(SwPosition* pPos, SwPoint& ,
                              SwCursorMoveState*, bool ) const
 {
     SwContentNode* pCNd = const_cast<SwContentNode*>(GetNode());
@@ -853,22 +853,22 @@ static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInAr
     tools::Rectangle aNewPxRect( aPxRect );
     while( aNewPxRect.Left() < aPxRect.Left() )
     {
-        rAlignedGrfArea.AddLeft( 1 );
+        rAlignedGrfArea.AddLeft( SwTwips(1) );
         aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
     }
     while( aNewPxRect.Top() < aPxRect.Top() )
     {
-        rAlignedGrfArea.AddTop(+1);
+        rAlignedGrfArea.AddTop(SwTwips(+1));
         aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
     }
     while( aNewPxRect.Bottom() > aPxRect.Bottom() )
     {
-        rAlignedGrfArea.AddBottom( -1 );
+        rAlignedGrfArea.AddBottom(SwTwips(-1));
         aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
     }
     while( aNewPxRect.Right() > aPxRect.Right() )
     {
-        rAlignedGrfArea.AddRight(-1);
+        rAlignedGrfArea.AddRight(SwTwips(-1));
         aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
     }
 }
@@ -1174,7 +1174,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                       pGrfNd->IsLinkedFile() &&
                       pGrfNd->IsAsyncRetrieveInputStreamPossible() )
             {
-                Size aTmpSz;
+                SwSize aTmpSz;
                 ::sfx2::SvLinkSource* pGrfObj = pGrfNd->GetLink()->GetObj();
                 if( !pGrfObj ||
                     !pGrfObj->IsDataComplete() ||
@@ -1360,8 +1360,8 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             if(!aSequence.empty() && !aSourceRange.isEmpty())
             {
                 const basegfx::B2DRange aTargetRange(
-                    aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
-                    aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
+                    tools::Long(aAlignedGrfArea.Left()), tools::Long(aAlignedGrfArea.Top()),
+                    tools::Long(aAlignedGrfArea.Right()), tools::Long(aAlignedGrfArea.Bottom()));
 
                 bDone = paintUsingPrimitivesHelper(
                     *pOut,

@@ -106,7 +106,7 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool & )
         nMoveAnyway |= BwdMoveNecessary( pOldPage, getFrameArea() );
         {
             const IDocumentSettingAccess& rIDSA = pNewPage->GetFormat()->getIDocumentSettingAccess();
-            SwTwips nSpace = 0;
+            SwTwips nSpace(0);
             SwRect aRect( pNewUpper->getFramePrintArea() );
             aRect.Pos() += pNewUpper->getFrameArea().Pos();
             const SwFrame *pPrevFrame = pNewUpper->Lower();

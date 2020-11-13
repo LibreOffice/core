@@ -726,7 +726,7 @@ class SwAccPreviewData
     */
     static void AdjustLogicPgRectToVisibleArea( SwRect&         _iorLogicPgSwRect,
                                          const SwRect&   _rPreviewPgSwRect,
-                                         const Size&     _rPreviewWinSize );
+                                         const SwSize&     _rPreviewWinSize );
 
 public:
     SwAccPreviewData();
@@ -735,7 +735,7 @@ public:
                  const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
                  const Fraction&  _rScale,
                  const SwPageFrame* _pSelectedPageFrame,
-                 const Size&      _rPreviewWinSize );
+                 const SwSize&      _rPreviewWinSize );
 
     void InvalidateSelection( const SwPageFrame* _pSelectedPageFrame );
 
@@ -762,7 +762,7 @@ void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
                                const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
                                const Fraction&  _rScale,
                                const SwPageFrame* _pSelectedPageFrame,
-                               const Size&      _rPreviewWinSize )
+                               const SwSize&      _rPreviewWinSize )
 {
     // store preview scaling, maximal preview page size and selected page
     maScale = _rScale;
@@ -858,10 +858,10 @@ void SwAccPreviewData::DisposePage(const SwPageFrame *pPageFrame )
 void SwAccPreviewData::AdjustLogicPgRectToVisibleArea(
                             SwRect&         _iorLogicPgSwRect,
                             const SwRect&   _rPreviewPgSwRect,
-                            const Size&     _rPreviewWinSize )
+                            const SwSize&     _rPreviewWinSize )
 {
     // determine preview window rectangle
-    const SwRect aPreviewWinSwRect( Point( 0, 0 ), _rPreviewWinSize );
+    const SwRect aPreviewWinSwRect( SwPoint(), _rPreviewWinSize );
     // calculate visible preview page rectangle
     SwRect aVisPreviewPgSwRect( _rPreviewPgSwRect );
     aVisPreviewPgSwRect.Intersection( aPreviewWinSwRect );
@@ -1799,7 +1799,7 @@ uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
                                     const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
                                     const Fraction&  _rScale,
                                     const SwPageFrame* _pSelectedPageFrame,
-                                    const Size&      _rPreviewWinSize )
+                                    const SwSize&      _rPreviewWinSize )
 {
     // create & update preview data object
     if( mpPreview == nullptr )
@@ -2934,7 +2934,7 @@ sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrame& rParentFrame,
 void SwAccessibleMap::UpdatePreview( const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
                                      const Fraction&  _rScale,
                                      const SwPageFrame* _pSelectedPageFrame,
-                                     const Size&      _rPreviewWinSize )
+                                     const SwSize&      _rPreviewWinSize )
 {
     assert(GetShell()->IsPreview() && "no preview?");
     assert(mpPreview != nullptr && "no preview data?");
@@ -3179,14 +3179,14 @@ css::uno::Reference< XAccessible >
     return nullptr;
 }
 
-Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
+SwPoint SwAccessibleMap::PixelToCore( const Point& rPoint ) const
 {
-    Point aPoint;
+    SwPoint aPoint;
     if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
     {
         MapMode aMapMode;
         GetMapMode( rPoint, aMapMode );
-        aPoint = pWin->PixelToLogic( rPoint, aMapMode );
+        aPoint = SwPoint(pWin->PixelToLogic( rPoint, aMapMode ));
     }
     return aPoint;
 }
@@ -3211,16 +3211,16 @@ static tools::Long lcl_CorrectCoarseValue(tools::Long aCoarseValue, tools::Long 
 }
 
 static void lcl_CorrectRectangle(tools::Rectangle & rRect,
-                                        const tools::Rectangle & rSource,
+                                        const SwRect & rSource,
                                         const tools::Rectangle & rInGrid)
 {
-    rRect.SetLeft( lcl_CorrectCoarseValue(rRect.Left(), rSource.Left(),
+    rRect.SetLeft( lcl_CorrectCoarseValue(rRect.Left(), tools::Long(rSource.Left()),
                                           rInGrid.Left(), false) );
-    rRect.SetTop( lcl_CorrectCoarseValue(rRect.Top(), rSource.Top(),
+    rRect.SetTop( lcl_CorrectCoarseValue(rRect.Top(), tools::Long(rSource.Top()),
                                          rInGrid.Top(), false) );
-    rRect.SetRight( lcl_CorrectCoarseValue(rRect.Right(), rSource.Right(),
+    rRect.SetRight( lcl_CorrectCoarseValue(rRect.Right(), tools::Long(rSource.Right()),
                                            rInGrid.Right(), true) );
-    rRect.SetBottom( lcl_CorrectCoarseValue(rRect.Bottom(), rSource.Bottom(),
+    rRect.SetBottom( lcl_CorrectCoarseValue(rRect.Bottom(), tools::Long(rSource.Bottom()),
                                             rInGrid.Bottom(), true) );
 }
 
@@ -3230,11 +3230,11 @@ tools::Rectangle SwAccessibleMap::CoreToPixel( const SwRect& rRect ) const
     if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
     {
         MapMode aMapMode;
-        GetMapMode( rRect.TopLeft(), aMapMode );
+        GetMapMode( Point(rRect.TopLeft()), aMapMode );
         aRect = pWin->LogicToPixel( rRect.SVRect(), aMapMode );
 
         tools::Rectangle aTmpRect = pWin->PixelToLogic( aRect, aMapMode );
-        lcl_CorrectRectangle(aRect, rRect.SVRect(), aTmpRect);
+        lcl_CorrectRectangle(aRect, rRect, aTmpRect);
     }
 
     return aRect;
@@ -3260,7 +3260,7 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
     _orMapMode = aMapMode;
 }
 
-Size SwAccessibleMap::GetPreviewPageSize(sal_uInt16 const nPreviewPageNum) const
+SwSize SwAccessibleMap::GetPreviewPageSize(sal_uInt16 const nPreviewPageNum) const
 {
     assert(mpVSh->IsPreview());
     assert(mpPreview != nullptr);

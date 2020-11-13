@@ -26,6 +26,7 @@
 #include "format.hxx"
 #include "hintids.hxx"
 #include "swdllapi.h"
+#include "swrect.hxx"
 #include <list>
 
 class SwFlyFrame;
@@ -122,14 +123,14 @@ public:
         in the ImageMap at position Point.
         rPoint - test on DocPosition.
         pFly - optional FlyFrame, in case it is already known. */
-    IMapObject* GetIMapObject( const Point& rPoint,
+    IMapObject* GetIMapObject( const SwPoint& rPoint,
                                 const SwFlyFrame *pFly = nullptr ) const;
 
     /** @return the real size of the frame - or an empty rectangle
        if no layout exists.
        If pPoint is given, look for the frame closest to it. */
     SwRect FindLayoutRect( const bool bPrtArea = false,
-                           const Point* pPoint = nullptr ) const;
+                           const SwPoint* pPoint = nullptr ) const;
 
     /** @return the SdrObject, that is connected to the ContactObject.
        Only DrawFrameFormats are connected to the "real SdrObject". FlyFrameFormats
@@ -194,7 +195,7 @@ class SW_DLLPUBLIC SwFlyFrameFormat final : public SwFrameFormat
        it stores the previous position of Prt rectangle from RequestObjectResize
        so it can be used to move frames of non-resizable objects to align them correctly
        when they get borders (this is done in SwWrtShell::CalcAndGetScale) */
-    Point   m_aLastFlyFramePrtRectPos;
+    SwPoint   m_aLastFlyFramePrtRectPos;
     std::unique_ptr<SwFlyDrawContact> m_pContact;
 
     SwFlyFrameFormat( const SwFlyFrameFormat &rCpy ) = delete;
@@ -208,7 +209,7 @@ public:
     /// Creates the views.
     virtual void MakeFrames() override;
 
-    SwFlyFrame* GetFrame( const Point* pDocPos = nullptr ) const;
+    SwFlyFrame* GetFrame( const SwPoint* pDocPos = nullptr ) const;
 
     SwAnchoredObject* GetAnchoredObj() const;
 
@@ -243,8 +244,8 @@ public:
     */
     bool IsBackgroundBrushInherited() const;
 
-    const Point & GetLastFlyFramePrtRectPos() const       { return m_aLastFlyFramePrtRectPos; }
-    void SetLastFlyFramePrtRectPos( const Point &rPoint ) { m_aLastFlyFramePrtRectPos = rPoint; }
+    const SwPoint & GetLastFlyFramePrtRectPos() const       { return m_aLastFlyFramePrtRectPos; }
+    void SetLastFlyFramePrtRectPos( const SwPoint &rPoint ) { m_aLastFlyFramePrtRectPos = rPoint; }
 
     SwFlyDrawContact* GetOrCreateContact();
 };
@@ -307,7 +308,7 @@ namespace sw
         WW8AnchorConv m_eHoriConv;
         WW8AnchorConv m_eVertConv;
         bool m_bConverted;
-        Point m_aPos;
+        SwPoint m_aPos;
         WW8AnchorConvResult(WW8AnchorConv eHoriConv, WW8AnchorConv eVertConv) : m_eHoriConv(eHoriConv), m_eVertConv(eVertConv), m_bConverted(false) {};
     };
     struct SW_DLLPUBLIC WW8AnchorConvHint final : SfxHint
@@ -318,8 +319,8 @@ namespace sw
     };
     struct RestoreFlyAnchorHint final : SfxHint
     {
-        const Point m_aPos;
-        RestoreFlyAnchorHint(Point aPos) : m_aPos(aPos) {};
+        const SwPoint m_aPos;
+        RestoreFlyAnchorHint(SwPoint aPos) : m_aPos(aPos) {};
         virtual ~RestoreFlyAnchorHint() override;
     };
     struct CreatePortionHint final : SfxHint

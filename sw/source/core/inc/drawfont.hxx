@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwDrawTextInfo
     VclPtr<OutputDevice> m_pOut;
     SwViewShell const * m_pSh;
     const SwScriptInfo* m_pScriptInfo;
-    Point m_aPos;
+    SwPoint m_aPos;
     vcl::TextLayoutCache const* m_pCachedVclData;
     OUString m_aText;
     sw::WrongListIterator* m_pWrong;
@@ -192,7 +192,7 @@ public:
         return m_pScriptInfo;
     }
 
-    const Point &GetPos() const
+    const SwPoint &GetPos() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bPos, "DrawTextInfo: Undefined Position" );
@@ -394,7 +394,7 @@ public:
         m_pOut = &rNew;
     }
 
-    void SetPos( const Point &rNew )
+    void SetPos( const SwPoint &rNew )
     {
         m_aPos = rNew;
 #ifdef DBG_UTIL
