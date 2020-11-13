@@ -86,9 +86,9 @@ namespace SwPostItHelper
         const SwPosition& rAnchorPos,
         const sw::mark::IMark* pAnnotationMark = nullptr );
 
-    tools::Long getLayoutHeight( const SwRootFrame* pRoot );
+    SwTwips getLayoutHeight( const SwRootFrame* pRoot );
     void setSidebarChanged( SwRootFrame* pRoot, bool bBrowseMode );
-    tools::ULong getPageInfo( SwRect& rPageFrame, const SwRootFrame* , const Point& );
+    tools::ULong getPageInfo( SwRect& rPageFrame, const SwRootFrame* , const SwPoint& );
 }
 
 class SAL_DLLPUBLIC_RTTI SwSidebarItem

@@ -39,7 +39,7 @@ class SW_DLLPUBLIC SwLineNumberInfo final : public SwClient /**< purpose of deri
 {
     SvxNumberType       m_aType;                  ///< e.g. roman linenumbers
     OUString            m_aDivider;               ///< String for additional interval (vert. lines user defined)
-    sal_uInt16              m_nPosFromLeft;       ///< Position for paint
+    SwTwips             m_nPosFromLeft;       ///< Position for paint
     sal_uInt16              m_nCountBy;           ///< Paint only for every n line
     sal_uInt16              m_nDividerCountBy;    /**< Interval for display of an user defined
                                                        string every n lines */
@@ -68,8 +68,8 @@ public:
     sal_uInt16 GetDividerCountBy() const    { return m_nDividerCountBy; }
     void SetDividerCountBy( sal_uInt16 n )  { m_nDividerCountBy = n; }
 
-    sal_uInt16 GetPosFromLeft() const       { return m_nPosFromLeft; }
-    void   SetPosFromLeft( sal_uInt16 n)    { m_nPosFromLeft = n;    }
+    SwTwips GetPosFromLeft() const       { return m_nPosFromLeft; }
+    void   SetPosFromLeft( SwTwips n)    { m_nPosFromLeft = n;    }
 
     sal_uInt16 GetCountBy() const           { return m_nCountBy; }
     void   SetCountBy( sal_uInt16 n)        { m_nCountBy = n;    }

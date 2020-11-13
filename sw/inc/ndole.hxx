@@ -116,7 +116,7 @@ public:
     /// Is in ndcopy.cxx.
     virtual SwContentNode* MakeCopy(SwDoc&, const SwNodeIndex&, bool bNewFrames) const override;
 
-    virtual Size GetTwipSize() const override;
+    virtual SwSize GetTwipSize() const override;
 
     const Graphic* GetGraphic();
 

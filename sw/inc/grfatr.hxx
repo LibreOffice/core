@@ -27,6 +27,7 @@
 #include <svx/grfcrop.hxx>
 #include "swdllapi.h"
 #include "swatrset.hxx"
+#include "swrect.hxx"
 
 enum class MirrorGraph
 {
@@ -75,6 +76,11 @@ public:
 
     // "pure virtual methods" of SfxPoolItem
     virtual SwCropGrf* Clone( SfxItemPool *pPool = nullptr ) const override;
+
+    SwTwips GetLeft() const { return SwTwips(SvxGrfCrop::GetLeft()); }
+    SwTwips GetRight() const { return SwTwips(SvxGrfCrop::GetRight()); }
+    SwTwips GetTop() const { return SwTwips(SvxGrfCrop::GetTop()); }
+    SwTwips GetBottom() const { return SwTwips(SvxGrfCrop::GetBottom()); }
 };
 
 class SAL_DLLPUBLIC_RTTI SwRotationGrf : public SfxUInt16Item

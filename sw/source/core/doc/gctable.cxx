@@ -94,10 +94,10 @@ static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPa
 }
 
 // Find the "end" of the passed BorderLine. Returns the "Layout"Pos!
-static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTableLineBoxes& rCollTLB,
+static SwTwips lcl_FindEndPosOfBorder( const SwCollectTableLineBoxes& rCollTLB,
                         const SvxBorderLine& rBrdLn, size_t& rStt, bool bTop )
 {
-    sal_uInt16 nPos, nLastPos = 0;
+    SwTwips nPos, nLastPos = SwTwips(0);
     for( size_t nEnd = rCollTLB.Count(); rStt < nEnd; ++rStt )
     {
         const SfxPoolItem* pItem;
@@ -127,11 +127,11 @@ static void lcl_GCBorder_DelBorder( const SwCollectTableLineBoxes& rCollTLB,
                                 size_t& rStt, bool bTop,
                                 const SvxBorderLine& rLine,
                                 const SfxPoolItem* pItem,
-                                sal_uInt16 nEndPos,
+                                SwTwips nEndPos,
                                 SwShareBoxFormats* pShareFormats )
 {
     SwTableBox* pBox = const_cast<SwTableBox*>(&rCollTLB.GetBox( rStt ));
-    sal_uInt16 nNextPos;
+    SwTwips nNextPos;
     const SvxBorderLine* pLn = &rLine;
 
     do {
@@ -222,7 +222,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, SwGCLineBorder* pGCPara )
         sw_Line_CollectBox( pNextLine, &aTop );
 
         // remove all "duplicated" Lines that are the same
-        sal_uInt16 nBtmPos, nTopPos;
+        SwTwips nBtmPos, nTopPos;
 
         size_t nSttBtm {0};
         size_t nSttTop {0};
@@ -246,10 +246,10 @@ void sw_GC_Line_Border( const SwTableLine* pLine, SwGCLineBorder* pGCPara )
                 // We can remove one, but which one?
                 const size_t nSavSttBtm {nSttBtm};
                 const size_t nSavSttTop {nSttTop};
-                sal_uInt16 nBtmEndPos = ::lcl_FindEndPosOfBorder( aBottom,
+                SwTwips nBtmEndPos = ::lcl_FindEndPosOfBorder( aBottom,
                                                 *pTopLine, nSttBtm, false );
                 if( !nBtmEndPos ) nBtmEndPos = nBtmPos;
-                sal_uInt16 nTopEndPos = ::lcl_FindEndPosOfBorder( aTop,
+                SwTwips nTopEndPos = ::lcl_FindEndPosOfBorder( aTop,
                                                 *pTopLine, nSttTop, true );
                 if( !nTopEndPos ) nTopEndPos = nTopPos;
 

@@ -162,8 +162,8 @@ public:
 private:
 
     SwRect  m_aCharRect;          ///< Char-SRectangle on which the cursor is located
-    Point   m_aCursorHeight;        ///< height & offset from visible Cursor
-    Point   m_aOldRBPos;          ///< Right/Bottom of last VisArea
+    SwPoint m_aCursorHeight;        ///< height & offset from visible Cursor
+    SwPoint m_aOldRBPos;          ///< Right/Bottom of last VisArea
                                 // (used in Invalidate by Cursor)
 
     Link<const SwFlyFrameFormat*,void> m_aFlyMacroLnk;        /**< Link will be called, if the Cursor is set
@@ -184,9 +184,9 @@ private:
     SwNodeIndex* m_pBoxIdx;       ///< for recognizing of the changed
     SwTableBox* m_pBoxPtr;        ///< table row
 
-    tools::Long m_nUpDownX;              /**< try to move the cursor on up/down always
+    SwTwips m_nUpDownX;              /**< try to move the cursor on up/down always
                                    in the same column */
-    tools::Long m_nLeftFramePos;
+    SwTwips m_nLeftFramePos;
     sal_uLong m_nCurrentNode;     // save CursorPos at Start-Action
     sal_Int32 m_nCurrentContent;
     SwNodeType m_nCurrentNdTyp;
@@ -344,7 +344,7 @@ public:
     void EndAction( const bool bIdleEnd = false );
 
     // basic cursor travelling
-    tools::Long GetUpDownX() const             { return m_nUpDownX; }
+    SwTwips GetUpDownX() const             { return m_nUpDownX; }
 
     bool Left( sal_uInt16 nCnt, sal_uInt16 nMode, bool bAllowVisual = false )
         { return LeftRight( true, nCnt, nMode, bAllowVisual ); }
@@ -386,7 +386,7 @@ public:
     //  return values:
     //      CRSR_POSCHG: when cursor was corrected from SPoint by the layout
     //      CRSR_POSOLD: when the cursor was not changed
-    int SetCursor( const Point &rPt, bool bOnlyText = false, bool bBlock = true );
+    int SetCursor( const SwPoint &rPt, bool bOnlyText = false, bool bBlock = true );
 
     /*
      * Notification that the visible area was changed. m_aVisArea is reset, then
@@ -416,7 +416,7 @@ public:
     void NormalizePam(bool bPointFirst = true);
 
     void SwapPam();
-    bool TestCurrPam( const Point & rPt,
+    bool TestCurrPam( const SwPoint & rPt,
                       bool bTstHit = false);   // only exact matches
     void KillPams();
 
@@ -473,7 +473,7 @@ public:
     // Can the cursor be set to read only ranges?
     bool IsReadOnlyAvailable() const { return m_bSetCursorInReadOnly; }
     void SetReadOnlyAvailable( bool bFlag );
-    bool IsOverReadOnlyPos( const Point& rPt ) const;
+    bool IsOverReadOnlyPos( const SwPoint& rPt ) const;
 
     // Methods for aFlyMacroLnk.
     void        SetFlyMacroLnk( const Link<const SwFlyFrameFormat*,void>& rLnk ) { m_aFlyMacroLnk = rLnk; }
@@ -580,7 +580,7 @@ public:
 
     bool IsCursorInFootnote() const;
 
-    inline Point& GetCursorDocPos() const;
+    inline SwPoint& GetCursorDocPos() const;
     inline bool IsCursorPtAtEnd() const;
 
     inline const  SwPaM* GetTableCrs() const;
@@ -686,7 +686,7 @@ public:
     // Place only the visible cursor at the given position in the document.
     // Return false if SPoint was corrected by layout.
     // (This is needed for displaying the Drag&Drop/Copy-Cursor.)
-    bool SetVisibleCursor( const Point &rPt );
+    bool SetVisibleCursor( const SwPoint &rPt );
     inline void UnSetVisibleCursor();
     SwVisibleCursor* GetVisibleCursor() const;
 
@@ -711,7 +711,7 @@ public:
     SwField* GetCurField( const bool bIncludeInputFieldAtStart = false ) const;
     bool CursorInsideInputField() const;
     static bool PosInsideInputField( const SwPosition& rPos );
-    bool DocPtInsideInputField( const Point& rDocPt ) const;
+    bool DocPtInsideInputField( const SwPoint& rDocPt ) const;
     static sal_Int32 StartOfInputFieldAtPos( const SwPosition& rPos );
     static sal_Int32 EndOfInputFieldAtPos( const SwPosition& rPos );
 
@@ -727,7 +727,7 @@ public:
     bool GoNextSentence();
     bool GoStartSentence();
     bool GoEndSentence();
-    bool SelectWord( const Point* pPt );
+    bool SelectWord( const SwPoint* pPt );
     void ExpandToSentenceBorders();
 
     // get position from current cursor
@@ -767,7 +767,7 @@ public:
     // set the cursor to a NOT protected/hidden node
     bool FindValidContentNode( bool bOnlyText );
 
-    bool GetContentAtPos( const Point& rPt,
+    bool GetContentAtPos( const SwPoint& rPt,
                           SwContentAtPos& rContentAtPos,
                           bool bSetCursor = false,
                           SwRect* pFieldRect = nullptr );
@@ -775,14 +775,14 @@ public:
     const SwPostItField* GetPostItFieldAtCursor() const;
 
     // get smart tags rectangle for the given point
-    void GetSmartTagRect( const Point& rPt, SwRect& rSelectRect );
+    void GetSmartTagRect( const SwPoint& rPt, SwRect& rSelectRect );
 
     // get smart tags at current cursor position
     void GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
                           css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
                           css::uno::Reference<css::text::XTextRange>& rRange ) const;
 
-    bool IsPageAtPos( const Point &rPt ) const;
+    bool IsPageAtPos( const SwPoint &rPt ) const;
 
     bool SelectTextAttr( sal_uInt16 nWhich, bool bExpand, const SwTextAttr* pAttr = nullptr );
     bool GotoINetAttr( const SwTextINetFormat& rAttr );
@@ -813,9 +813,9 @@ public:
     const SwRangeRedline* SelPrevRedline();
     const SwRangeRedline* GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect );
 
-    SAL_DLLPRIVATE SvxFrameDirection GetTextDirection( const Point* pPt = nullptr ) const;
+    SAL_DLLPRIVATE SvxFrameDirection GetTextDirection( const SwPoint* pPt = nullptr ) const;
     // is cursor or the point in/over a vertical formatted text?
-    bool IsInVerticalText( const Point* pPt = nullptr ) const;
+    bool IsInVerticalText( const SwPoint* pPt = nullptr ) const;
     // is cursor or the point in/over a right to left formatted text?
     bool IsInRightToLeftText() const;
 
@@ -896,7 +896,7 @@ inline bool SwCursorShell::IsCursorPtAtEnd() const
     return m_pCurrentCursor->End() == m_pCurrentCursor->GetPoint();
 }
 
-inline Point& SwCursorShell::GetCursorDocPos() const
+inline SwPoint& SwCursorShell::GetCursorDocPos() const
 {
     return m_pCurrentCursor->GetPtPos();
 }

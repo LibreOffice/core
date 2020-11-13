@@ -835,7 +835,7 @@ void SwEditShell::HyphIgnore()
 }
 
 void SwEditShell::HandleCorrectionError(const OUString& aText, SwPosition aPos, sal_Int32 nBegin,
-                                        sal_Int32 nLen, const Point* pPt,
+                                        sal_Int32 nLen, const SwPoint* pPt,
                                         SwRect& rSelectRect)
 {
     // save the start and end positions of the line and the starting point
@@ -877,7 +877,7 @@ void SwEditShell::HandleCorrectionError(const OUString& aText, SwPosition aPos, 
     SwCursorMoveState aState;
     aState.m_bRealWidth = true;
     SwContentNode* pContentNode = pCursor->GetContentNode();
-    std::pair<Point, bool> tmp;
+    std::pair<SwPoint, bool> tmp;
     if (pPt)
     {
         tmp.first = *pPt;
@@ -902,7 +902,7 @@ void SwEditShell::HandleCorrectionError(const OUString& aText, SwPosition aPos, 
  * @return list or NULL pointer
  */
 uno::Reference< XSpellAlternatives >
-    SwEditShell::GetCorrection( const Point* pPt, SwRect& rSelectRect )
+    SwEditShell::GetCorrection( const SwPoint* pPt, SwRect& rSelectRect )
 {
     uno::Reference< XSpellAlternatives >  xSpellAlt;
 
@@ -913,7 +913,7 @@ uno::Reference< XSpellAlternatives >
     SwCursorMoveState eTmpState( CursorMoveState::SetOnlyText );
     SwTextNode *pNode = nullptr;
     SwWrongList *pWrong = nullptr;
-    if (pPt && GetLayout()->GetModelPositionForViewPoint( &aPos, *const_cast<Point*>(pPt), &eTmpState ))
+    if (pPt && GetLayout()->GetModelPositionForViewPoint( &aPos, *const_cast<SwPoint*>(pPt), &eTmpState ))
         pNode = aPos.nNode.GetNode().GetTextNode();
     if (nullptr == pNode)
         pNode = pCursor->GetNode().GetTextNode();
@@ -968,7 +968,7 @@ bool SwEditShell::GetGrammarCorrection(
     sal_Int32 /*out*/ &rErrorPosInText,               // offset of error position in string that was grammar checked...
     sal_Int32 /*out*/ &rErrorIndexInResult,           // index of error in rResult.aGrammarErrors
     uno::Sequence< OUString > /*out*/ &rSuggestions,  // suggestions to be used for the error found
-    const Point *pPt, SwRect &rSelectRect )
+    const SwPoint *pPt, SwRect &rSelectRect )
 {
     bool bRes = false;
 
@@ -980,7 +980,7 @@ bool SwEditShell::GetGrammarCorrection(
     SwCursorMoveState eTmpState( CursorMoveState::SetOnlyText );
     SwTextNode *pNode = nullptr;
     SwGrammarMarkUp *pWrong = nullptr;
-    if (pPt && GetLayout()->GetModelPositionForViewPoint( &aPos, *const_cast<Point*>(pPt), &eTmpState ))
+    if (pPt && GetLayout()->GetModelPositionForViewPoint( &aPos, *const_cast<SwPoint*>(pPt), &eTmpState ))
         pNode = aPos.nNode.GetNode().GetTextNode();
     if (nullptr == pNode)
         pNode = pCursor->GetNode().GetTextNode();

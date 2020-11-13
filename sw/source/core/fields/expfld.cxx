@@ -133,7 +133,7 @@ OUString ReplacePoint( const OUString& rTmpName, bool bWithCommandType )
 }
 
 static SwTextNode* GetFirstTextNode( const SwDoc& rDoc, SwPosition& rPos,
-                            const SwContentFrame *pCFrame, Point &rPt )
+                            const SwContentFrame *pCFrame, SwPoint &rPt )
 {
     SwTextNode* pTextNode = nullptr;
     if ( !pCFrame )
@@ -245,8 +245,8 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             }
             else
             {
-                Point aPt( pLayout->getFrameArea().Pos() );
-                aPt.AdjustY( 1 );      // get out of the header
+                SwPoint aPt( pLayout->getFrameArea().Pos() );
+                aPt.Move( SwTwips(0), SwTwips(1) );      // get out of the header
                 pContentFrame = pPgFrame->GetContentPos( aPt, false, true );
                 pTextNode = GetFirstTextNode( rDoc, rPos, pContentFrame, aPt );
             }

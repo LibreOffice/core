@@ -340,7 +340,7 @@ bool SwEditShell::IsFirstOfNumRuleAtCursorPos() const
 }
 
 // -> #i23725#, #i90078#
-void SwEditShell::ChangeIndentOfAllListLevels( const sal_Int32 nDiff )
+void SwEditShell::ChangeIndentOfAllListLevels( const SwTwips nDiff )
 {
     StartAllAction();
 
@@ -349,7 +349,7 @@ void SwEditShell::ChangeIndentOfAllListLevels( const sal_Int32 nDiff )
     {
         SwNumRule aRule(*pCurNumRule);
         const SwNumFormat& aRootNumFormat(aRule.Get(0));
-        if( nDiff > 0 || aRootNumFormat.GetIndentAt() + nDiff > 0) // fdo#42708
+        if( nDiff > SwTwips(0) || aRootNumFormat.GetIndentAt() + nDiff > SwTwips(0)) // fdo#42708
         {
             // #i90078#
             aRule.ChangeIndent( nDiff );
@@ -362,7 +362,7 @@ void SwEditShell::ChangeIndentOfAllListLevels( const sal_Int32 nDiff )
 }
 
 // #i90078#
-void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
+void SwEditShell::SetIndent(SwTwips nIndent, const SwPosition & rPos)
 {
     StartAllAction();
 

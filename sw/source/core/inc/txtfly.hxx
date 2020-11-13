@@ -124,7 +124,7 @@ class SwTextFly
     const SwTextFrame                * m_pMaster;
     std::unique_ptr<SwAnchoredObjList> mpAnchoredObjList;
 
-    tools::Long m_nMinBottom;
+    SwTwips m_nMinBottom;
     tools::Long m_nNextTop;  /// Stores the upper edge of the "next" frame
     sal_uLong m_nCurrFrameNodeIndex;
 

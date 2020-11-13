@@ -57,7 +57,7 @@ public:
 
     SwGrfFormatColl *GetGrfColl() const { return const_cast<SwGrfFormatColl*>(static_cast<const SwGrfFormatColl*>(GetRegisteredIn())); }
 
-    virtual Size GetTwipSize() const = 0;
+    virtual SwSize GetTwipSize() const = 0;
 
     virtual bool SavePersistentData();
     virtual bool RestorePersistentData();

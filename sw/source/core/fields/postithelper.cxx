@@ -221,9 +221,9 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
              : aRet;
 }
 
-tools::Long SwPostItHelper::getLayoutHeight( const SwRootFrame* pRoot )
+SwTwips SwPostItHelper::getLayoutHeight( const SwRootFrame* pRoot )
 {
-    tools::Long nRet = pRoot ? pRoot->getFrameArea().Height() : 0;
+    SwTwips nRet = pRoot ? pRoot->getFrameArea().Height() : SwTwips(0);
     return nRet;
 }
 
@@ -237,7 +237,7 @@ void SwPostItHelper::setSidebarChanged( SwRootFrame* pRoot, bool bBrowseMode )
     }
 }
 
-tools::ULong SwPostItHelper::getPageInfo( SwRect& rPageFrame, const SwRootFrame* pRoot, const Point& rPoint )
+tools::ULong SwPostItHelper::getPageInfo( SwRect& rPageFrame, const SwRootFrame* pRoot, const SwPoint& rPoint )
 {
     tools::ULong nRet = 0;
     const SwFrame* pPage = pRoot->GetPageAtPos( rPoint, nullptr, true );

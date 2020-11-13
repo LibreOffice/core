@@ -75,7 +75,7 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
     //locale
 
     SwFormatFrameSize aFrameSize( SwFrameSize::Fixed );
-    const Size aPhysSize = SvxPaperInfo::GetDefaultPaperSize();
+    const SwSize aPhysSize(SvxPaperInfo::GetDefaultPaperSize());
     aFrameSize.SetSize( aPhysSize );
 
     // Prepare for default margins.

@@ -89,7 +89,7 @@ bool SwCursorShell::GotoFootnoteText()
                    GetCursor_()->GetPoint()->nNode.GetNode().GetTextNode() : nullptr;
         if( pTextNd )
         {
-            std::pair<Point, bool> const tmp(GetCursor_()->GetSttPos(), true);
+            std::pair<SwPoint, bool> const tmp(GetCursor_()->GetSttPos(), true);
             const SwFrame *pFrame = pTextNd->getLayoutFrame( GetLayout(),
                                                  GetCursor_()->Start(), &tmp);
             const SwFootnoteBossFrame* pFootnoteBoss;
@@ -167,7 +167,7 @@ bool SwCursorShell::GotoFootnoteAnchor()
     if( bRet )
     {
         // special treatment for table header row
-        m_pCurrentCursor->GetPtPos() = Point();
+        m_pCurrentCursor->GetPtPos() = SwPoint();
         UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
                     SwCursorShell::READONLY );
     }
@@ -359,9 +359,9 @@ void SwCursorShell::GotoFlyAnchor()
     SwRect aTmpRect( m_aCharRect );
     if( !pFrame->getFrameArea().IsInside( aTmpRect ))
         aTmpRect = pFrame->getFrameArea();
-    Point aPt( aTmpRect.Left(), aTmpRect.Top() +
-                ( aTmpRect.Bottom() - aTmpRect.Top() ) / 2 );
-    aPt.setX(aPt.getX() > (pFrame->getFrameArea().Left() + (pFrame->getFrameArea().SSize().Width() / 2 ))
+    SwPoint aPt( aTmpRect.Left(), aTmpRect.Top() +
+                ( aTmpRect.Bottom() - aTmpRect.Top() ) / SwTwips(2) );
+    aPt.setX(aPt.getX() > (pFrame->getFrameArea().Left() + (pFrame->getFrameArea().SSize().Width() / SwTwips(2) ))
                 ? pFrame->getFrameArea().Right()
                 : pFrame->getFrameArea().Left());
 

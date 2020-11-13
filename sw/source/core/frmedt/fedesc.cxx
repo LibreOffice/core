@@ -145,7 +145,7 @@ SwPageDesc* SwFEShell::FindPageDescByName( const OUString& rName,
     return pDesc;
 }
 
-size_t SwFEShell::GetMousePageDesc( const Point &rPt ) const
+size_t SwFEShell::GetMousePageDesc( const SwPoint &rPt ) const
 {
     if( GetLayout() )
     {
@@ -187,8 +187,7 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
     const SwContentNode* pCNd;
     const SwFrame* pMkFrame, *pPtFrame;
     const SwPageDesc* pFnd, *pRetDesc = reinterpret_cast<SwPageDesc*>(sal_IntPtr(-1));
-    const Point aNulPt;
-    std::pair<Point, bool> const tmp(aNulPt, false);
+    std::pair<SwPoint, bool> const tmp(SwPoint(), false);
 
     for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
     {

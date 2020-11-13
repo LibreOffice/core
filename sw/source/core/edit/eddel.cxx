@@ -192,7 +192,7 @@ bool SwEditShell::Copy( SwEditShell& rDestShell )
                 if( nMove )
                 {
                     SwCursor aCursor( *pPos, nullptr);
-                    if (aCursor.UpDown(false, nMove, nullptr, 0, *GetLayout()))
+                    if (aCursor.UpDown(false, nMove, nullptr, SwTwips(0), *GetLayout()))
                     {
                         pInsertPos = std::make_shared<SwPosition>( *aCursor.GetPoint() );
                         aInsertList.push_back( pInsertPos );

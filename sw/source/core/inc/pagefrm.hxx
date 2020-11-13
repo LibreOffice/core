@@ -152,7 +152,7 @@ public:
     SwRect GetBoundRect(OutputDevice const * pOutputDevice) const;
 
     // Specialized GetContentPos() for Field in Frames
-    void GetContentPosition( const Point &rPt, SwPosition &rPos ) const;
+    void GetContentPosition( const SwPoint &rPt, SwPosition &rPos ) const;
 
     bool IsEmptyPage() const { return m_bEmptyPage; } // Explicitly empty page
 
@@ -173,7 +173,7 @@ public:
     //   this assertion. Thus, delete it.
     void PlaceFly( SwFlyFrame* pFly, SwFlyFrameFormat* pFormat );
 
-    virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
+    virtual bool GetModelPositionForViewPoint( SwPosition *, SwPoint&,
                               SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
     /// Get info from Client
     virtual bool GetInfo( SfxPoolItem& ) const override;

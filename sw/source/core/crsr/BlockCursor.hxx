@@ -39,8 +39,8 @@ struct SwPosition;
 class SwBlockCursor
 {
     SwShellCursor maCursor;
-    std::optional<Point> maStartPt;
-    std::optional<Point> maEndPt;
+    std::optional<SwPoint> maStartPt;
+    std::optional<SwPoint> maEndPt;
 
 public:
     SwBlockCursor( const SwCursorShell& rCursorSh, const SwPosition &rPos ) :
@@ -57,24 +57,24 @@ public:
         rPt should contain the document coordinates of the mouse cursor when
         the block selection starts (MouseButtonDown)
     */
-    void setStartPoint( const Point &rPt ) { maStartPt = rPt; }
+    void setStartPoint( const SwPoint &rPt ) { maStartPt = rPt; }
     /** Defines the ending vertex of the block selection
 
         @param rPt
         rPt should contain the document coordinates of the mouse cursor when
         the block selection has started and the mouse has been moved (MouseMove)
     */
-    void setEndPoint( const Point &rPt ) { maEndPt = rPt; }
+    void setEndPoint( const SwPoint &rPt ) { maEndPt = rPt; }
     /** The document coordinates where the block selection has been started
 
         @return 0, if no start point has been set
     */
-    std::optional<Point> const & getStartPoint() const { return maStartPt; }
+    std::optional<SwPoint> const & getStartPoint() const { return maStartPt; }
     /** The document coordinates where the block selection ends (at the moment)
 
         @return 0, if no end point has been set
     */
-    std::optional<Point> const & getEndPoint() const { return maEndPt; }
+    std::optional<SwPoint> const & getEndPoint() const { return maEndPt; }
     /** Deletion of the mouse created rectangle
 
         When start and end points exist, the block cursor depends on this. If the

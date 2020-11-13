@@ -65,7 +65,7 @@ namespace
 
     typedef std::vector< BoxSpanInfo > BoxStructure;
     typedef std::vector< BoxStructure > LineStructure;
-    typedef std::deque< sal_uLong > ColumnStructure;
+    typedef std::deque< SwTwips > ColumnStructure;
 
     struct SubBox
     {
@@ -86,7 +86,7 @@ namespace
         void addLine( sal_uInt16 &rLine, const SwTableBoxes&, const SwSelBoxes*,
                       bool bNewModel );
         void addBox( sal_uInt16 nLine, const SwSelBoxes*, SwTableBox *pBox,
-                     sal_uLong &rnB, sal_uInt16 &rnC, ColumnStructure::iterator& rpCl,
+                     SwTwips &rnB, sal_uInt16 &rnC, ColumnStructure::iterator& rpCl,
                      BoxStructure::iterator& rpSel, bool &rbSel, bool bCover );
         void incColSpan( sal_uInt16 nLine, sal_uInt16 nCol );
         explicit TableStructure( const SwTable& rTable );
@@ -167,7 +167,7 @@ namespace
         maLines( rTable.GetTabLines().size() ), mnStartCol(USHRT_MAX),
         mnAddLine(0)
     {
-        maCols.push_front(0);
+        maCols.push_front(SwTwips(0));
         sal_uInt16 nCnt = 0;
         for( auto pLine : rTable.GetTabLines() )
             addLine( nCnt, pLine->GetTabBoxes(), nullptr, rTable.IsNewModel() );
@@ -183,7 +183,7 @@ namespace
 
         bool bNoSelection = rSelBoxes.size() < 2;
         FndLines_t &rFndLines = rFndBox.GetLines();
-        maCols.push_front(0);
+        maCols.push_front(SwTwips(0));
         const SwTableLine* pLine = rFndLines.front()->GetLine();
         const sal_uInt16 nStartLn = rTable.GetTabLines().GetPos( pLine );
         SwTableLines::size_type nEndLn = nStartLn;
@@ -256,7 +256,7 @@ namespace
                 while( pStartLn != pEndLn )
                 {
                     bool bSelected = false;
-                    sal_uLong nBorder = 0;
+                    SwTwips nBorder(0);
                     sal_uInt16 nCol = 0;
                     maLines[rLine].reserve( pStartLn->size() );
                     BoxStructure::iterator pSel = maLines[rLine].end();
@@ -274,7 +274,7 @@ namespace
         else
         {
             bool bSelected = false;
-            sal_uLong nBorder = 0;
+            SwTwips nBorder(0);
             sal_uInt16 nCol = 0;
             maLines[rLine].reserve( rBoxes.size() );
             ColumnStructure::iterator pCol = maCols.begin();
@@ -287,7 +287,7 @@ namespace
     }
 
     void TableStructure::addBox( sal_uInt16 nLine, const SwSelBoxes* pSelBoxes,
-        SwTableBox *pBox, sal_uLong &rnBorder, sal_uInt16 &rnCol,
+        SwTableBox *pBox, SwTwips &rnBorder, sal_uInt16 &rnCol,
         ColumnStructure::iterator& rpCol, BoxStructure::iterator& rpSel,
         bool &rbSelected, bool bCovered )
     {

@@ -54,7 +54,7 @@ public:
     // Inserts a Frame under every pUpper of the array
     void RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
 
-    SwFrame* GetFrame( const Point* pDocPos ) const;
+    SwFrame* GetFrame( const SwPoint* pDocPos ) const;
 };
 
 static SwNode* GoNextWithFrame(const SwNodes& rNodes, SwNodeIndex *pIdx)
@@ -413,10 +413,10 @@ void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLon
     }
 }
 
-SwFrame* SwNode2LayImpl::GetFrame( const Point* pDocPos ) const
+SwFrame* SwNode2LayImpl::GetFrame( const SwPoint* pDocPos ) const
 {
     // test if change of member pIter -> pMod broke anything
-    std::pair<Point, bool> tmp;
+    std::pair<SwPoint, bool> tmp;
     if (pDocPos)
     {
         tmp.first = *pDocPos;
@@ -460,7 +460,7 @@ SwNode2LayoutSaveUpperFrames::~SwNode2LayoutSaveUpperFrames()
 {
 }
 
-SwFrame* SwNode2Layout::GetFrame( const Point* pDocPos ) const
+SwFrame* SwNode2Layout::GetFrame( const SwPoint* pDocPos ) const
 {
     return m_pImpl->GetFrame( pDocPos );
 }

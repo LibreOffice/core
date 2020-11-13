@@ -25,7 +25,7 @@
 
 using namespace com::sun::star;
 
-Size GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
+SwSize GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
 {
     const MapMode aMapTwip(MapUnit::MapTwip);
     Size aSize(rGraphic.GetPrefSize());
@@ -46,7 +46,7 @@ Size GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
     {
         aSize = OutputDevice::LogicToLogic(aSize, rGraphic.GetPrefMapMode(), aMapTwip);
     }
-    return aSize;
+    return SwSize(aSize);
 }
 
 uno::Reference<linguistic2::XSpellChecker1> GetSpellChecker()

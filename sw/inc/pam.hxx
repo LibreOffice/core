@@ -248,7 +248,7 @@ public:
                             { return bOne ? m_Bound1 : m_Bound2; }
 
     /// Get number of page which contains cursor.
-    sal_uInt16 GetPageNum( bool bAtPoint = true, const Point* pLayPos = nullptr );
+    sal_uInt16 GetPageNum( bool bAtPoint = true, const SwPoint* pLayPos = nullptr );
 
     /** Is in something protected (readonly) or selection contains
        something protected. */

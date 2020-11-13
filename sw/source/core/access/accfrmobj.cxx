@@ -228,7 +228,7 @@ SwRect SwAccessibleChild::GetBox( const SwAccessibleMap& rAccMap ) const
         if ( mpFrame->IsPageFrame() &&
              static_cast< const SwPageFrame * >( mpFrame )->IsEmptyPage() )
         {
-            aBox = SwRect( mpFrame->getFrameArea().Left(), mpFrame->getFrameArea().Top()-1, 1, 1 );
+            aBox = SwRect( mpFrame->getFrameArea().Left(), mpFrame->getFrameArea().Top()-SwTwips(1), SwTwips(1), SwTwips(1) );
         }
         else if ( mpFrame->IsTabFrame() )
         {
@@ -279,7 +279,7 @@ SwRect SwAccessibleChild::GetBounds( const SwAccessibleMap& rAccMap ) const
         if( mpFrame->IsPageFrame() &&
             static_cast< const SwPageFrame * >( mpFrame )->IsEmptyPage() )
         {
-            aBound = SwRect( mpFrame->getFrameArea().Left(), mpFrame->getFrameArea().Top()-1, 0, 0 );
+            aBound = SwRect( mpFrame->getFrameArea().Left(), mpFrame->getFrameArea().Top()-SwTwips(1), SwTwips(0), SwTwips(0) );
         }
         else
             aBound = mpFrame->GetPaintArea();

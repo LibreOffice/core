@@ -35,7 +35,7 @@ struct  SwPosition;
 class   SwFormatCol;
 class SvGlobalName;
 
-const SwTwips   DFLT_WIDTH      = MM50 * 4;
+const SwTwips   DFLT_WIDTH      = MM50 * SwTwips(4);
 const SwTwips   DFLT_HEIGHT     = MM50;
 
 enum class Frmmgr_Type
@@ -80,15 +80,15 @@ public:
     void                SetVertOrientation(sal_Int16 eOrient);
 
     // absolute position
-    void                SetAbsPos(const Point& rLPoint);
+    void                SetAbsPos(const SwPoint& rLPoint);
 
     // anchor's relative position
-    void                SetPos(const Point& rLPoint);
-    inline Point        GetPos() const;
+    void                SetPos(const SwPoint& rLPoint);
+    inline SwPoint      GetPos() const;
 
     // size
-    void                SetSize(const Size& rLSize);
-    inline const Size&  GetSize() const;
+    void                SetSize(const SwSize& rLSize);
+    inline SwSize       GetSize() const;
 
     void                SetHeightSizeType(SwFrameSize eType);
 
@@ -131,11 +131,11 @@ public:
     inline const SvxBoxItem      &GetBox() const;
     inline const SwFormatFrameSize    &GetFrameSize() const;
 
-    tools::Long CalcWidthBorder()  { return CalcLeftSpace()+CalcRightSpace(); }
-    tools::Long CalcHeightBorder() { return CalcTopSpace()+CalcBottomSpace(); }
+    SwTwips CalcWidthBorder()  { return CalcLeftSpace()+CalcRightSpace(); }
+    SwTwips CalcHeightBorder() { return CalcTopSpace()+CalcBottomSpace(); }
 };
 
-inline const Size& SwFlyFrameAttrMgr::GetSize() const
+inline SwSize SwFlyFrameAttrMgr::GetSize() const
 {
     return m_aSet.Get(RES_FRM_SIZE).GetSize();
 }
@@ -160,9 +160,9 @@ inline const SvxBoxItem &SwFlyFrameAttrMgr::GetBox() const
 {
     return m_aSet.Get(RES_BOX);
 }
-inline Point SwFlyFrameAttrMgr::GetPos() const
+inline SwPoint SwFlyFrameAttrMgr::GetPos() const
 {
-    return Point( GetHoriOrient().GetPos(), GetVertOrient().GetPos() );
+    return SwPoint( GetHoriOrient().GetPos(), GetVertOrient().GetPos() );
 }
 inline RndStdIds SwFlyFrameAttrMgr::GetAnchor()  const
 {

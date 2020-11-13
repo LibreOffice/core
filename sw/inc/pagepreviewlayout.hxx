@@ -45,8 +45,8 @@ private:
     friend class SwViewShell;
 
     /// number of horizontal and vertical twips for spacing between the pages.
-    static constexpr SwTwips gnXFree = 4 * 142;
-    static constexpr SwTwips gnYFree = 4 * 142;
+    static constexpr SwTwips gnXFree = SwTwips(4 * 142);
+    static constexpr SwTwips gnYFree = SwTwips(4 * 142);
 
     /// view shell the print preview is generated for.
     SwViewShell& mrParentViewShell;
@@ -454,7 +454,7 @@ public:
 
         @return an object of class <Size>
     */
-    Size GetPreviewPageSizeByPageNum( sal_uInt16 _nPageNum ) const;
+    SwSize GetPreviewPageSizeByPageNum( sal_uInt16 _nPageNum ) const;
 
     /** get virtual page number by its physical page number
 

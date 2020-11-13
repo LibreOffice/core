@@ -81,13 +81,13 @@ void SwFEShell::EndAllActionAndCall()
 }
 
 // Determine the Content's nearest to the point
-Point SwFEShell::GetContentPos( const Point& rPoint, bool bNext ) const
+SwPoint SwFEShell::GetContentPos( const SwPoint& rPoint, bool bNext ) const
 {
     CurrShell aCurr( const_cast<SwFEShell*>(this) );
     return GetLayout()->GetNextPrevContentPos( rPoint, bNext );
 }
 
-const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
+const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const SwPoint* pPt,
                                         const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
     const SwFrame *pFrame = Imp()->HasDrawView()
@@ -100,10 +100,10 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
         if( pPt )
         {
             SwPosition aPos( *GetCursor()->GetPoint() );
-            Point aPt( *pPt );
+            SwPoint aPt( *pPt );
             GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
             SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
-            std::pair<Point, bool> const tmp(*pPt, true);
+            std::pair<SwPoint, bool> const tmp(*pPt, true);
             pFrame = pNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
         }
         else
@@ -182,7 +182,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
     return bFrame ? pFrame->getFrameArea() : pFrame->getFramePrintArea();
 }
 
-sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
+sal_uInt16 SwFEShell::GetPageNumber( const SwPoint &rPoint ) const
 {
     const SwFrame *pPage = GetLayout()->Lower();
     while ( pPage && !pPage->getFrameArea().IsInside( rPoint ) )
@@ -193,7 +193,7 @@ sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
         return 0;
 }
 
-bool SwFEShell::GetPageNumber( tools::Long nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay) const
+bool SwFEShell::GetPageNumber( SwTwips nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay) const
 {
     const SwFrame *pPage;
 
@@ -203,7 +203,7 @@ bool SwFEShell::GetPageNumber( tools::Long nYPos, bool bAtCursorPos, sal_uInt16&
         if ( pPage )
             pPage = pPage->FindPageFrame();
     }
-    else if ( nYPos > -1 )              // determine page via the position
+    else if ( nYPos > SwTwips(-1) )              // determine page via the position
     {
         pPage = GetLayout()->Lower();
         while( pPage &&  (pPage->getFrameArea().Bottom() < nYPos ||
@@ -234,17 +234,17 @@ bool SwFEShell::IsDirectlyInSection() const
     return pFrame && pFrame->GetUpper() && pFrame->GetUpper()->IsSctFrame();
 }
 
-FrameTypeFlags SwFEShell::GetFrameType( const Point *pPt, bool bStopAtFly ) const
+FrameTypeFlags SwFEShell::GetFrameType( const SwPoint *pPt, bool bStopAtFly ) const
 {
     FrameTypeFlags nReturn = FrameTypeFlags::NONE;
     const SwFrame *pFrame;
     if ( pPt )
     {
         SwPosition aPos( *GetCursor()->GetPoint() );
-        Point aPt( *pPt );
+        SwPoint aPt( *pPt );
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
         SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
-        std::pair<Point, bool> const tmp(*pPt, true);
+        std::pair<SwPoint, bool> const tmp(*pPt, true);
         pFrame = pNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
     }
     else
@@ -505,7 +505,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
 
     if (pFlyFormat)
     {
-        const Point aPt(GetCursorDocPos());
+        const SwPoint aPt(GetCursorDocPos());
         if (SwFlyFrame* pFrame = pFlyFormat->GetFrame(&aPt))
             SelectFlyFrame(*pFrame);
     }
@@ -695,8 +695,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                const SwPosition* _pToCharContentPos,
                                const bool _bFollowTextFlow,
                                bool _bMirror,
-                               Point* _opRef,
-                               Size* _opPercent,
+                               SwPoint* _opRef,
+                               SwSize* _opPercent,
                                const SwFormatFrameSize* pFormatFrameSize) const
 {
     const SwFrame* pFrame;
@@ -725,7 +725,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     const SwPageFrame* pPage = pFrame->FindPageFrame();
     _bMirror = _bMirror && !pPage->OnRightPage();
 
-    Point aPos;
+    SwPoint aPos;
     bool bVertic = false;
     bool bRTL = false;
     bool bVerticalL2R = false;
@@ -988,7 +988,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                  ( _eVertRelOrient == text::RelOrientation::CHAR ||
                    _eVertRelOrient == text::RelOrientation::TEXT_LINE ) )
             {
-                SwTwips nTop = 0;
+                SwTwips nTop(0);
                 if ( _eVertRelOrient == text::RelOrientation::CHAR )
                 {
                     SwRect aChRect;
@@ -1034,7 +1034,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                  (_nAnchorId == RndStdIds::FLY_AT_CHAR) &&
                  _eHoriRelOrient == text::RelOrientation::CHAR )
             {
-                SwTwips nLeft = 0;
+                SwTwips nLeft(0);
                 SwRect aChRect;
                 if ( _pToCharContentPos )
                 {
@@ -1084,22 +1084,22 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 if ( pUpper->IsCellFrame() )//MA_FLY_HEIGHT
                 {
                     const SwFrame* pTab = pUpper->FindTabFrame();
-                    tools::Long nBottom = aRectFnSet.GetPrtBottom(*pTab->GetUpper());
+                    SwTwips nBottom = aRectFnSet.GetPrtBottom(*pTab->GetUpper());
                     aRectFnSet.SetBottom( _orRect, nBottom );
                 }
             }
             // only use 90% of height for character bound
             {
                 if( aRectFnSet.IsVert() || aRectFnSet.IsVertL2R() )
-                    _orRect.Width( (_orRect.Width()*9)/10 );
+                    _orRect.Width( (_orRect.Width()*SwTwips(9))/SwTwips(10) );
                 else
-                    _orRect.Height( (_orRect.Height()*9)/10 );
+                    _orRect.Height( (_orRect.Height()*SwTwips(9))/SwTwips(10) );
             }
         }
 
         const SwTwips nBaseOfstForFly = ( pFrame->IsTextFrame() && pFly ) ?
                                         static_cast<const SwTextFrame*>(pFrame)->GetBaseOffsetForFly( !bWrapThrough ) :
-                                         0;
+                                         SwTwips(0);
         if( aRectFnSet.IsVert() || aRectFnSet.IsVertL2R() )
         {
             bVertic = aRectFnSet.IsVert();
@@ -1239,9 +1239,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         _orRect.Pos( -_orRect.Right(), _orRect.Top() );
 }
 
-Size SwFEShell::GetGraphicDefaultSize() const
+SwSize SwFEShell::GetGraphicDefaultSize() const
 {
-    Size aRet;
+    SwSize aRet;
     SwFlyFrame *pFly = GetSelectedFlyFrame();
     if ( pFly )
     {
@@ -1312,7 +1312,7 @@ bool SwFEShell::IsFrameVertical(const bool bEnvironment, bool& bRTL, bool& bVert
     return bVert;
 }
 
-void SwFEShell::MoveObjectIfActive( svt::EmbeddedObjectRef&, const Point& )
+void SwFEShell::MoveObjectIfActive( svt::EmbeddedObjectRef&, const SwPoint& )
 {
     // does not do anything, only avoids crash if the method is used for wrong shell
 }

@@ -238,7 +238,7 @@ void SwDrawView::AddCustomHdl()
         SwRect aAutoPos = pAnchoredObj->GetLastCharRect();
         if ( aAutoPos.Height() )
         {
-            aPos = aAutoPos.Pos();
+            aPos = Point(aAutoPos.Pos());
         }
     }
 
@@ -721,11 +721,11 @@ const SwFrame* SwDrawView::CalcAnchor()
             // allow drawing objects in header/footer,
             // but exclude control objects.
             bool bBodyOnly = CheckControlLayer( pObj );
-            pAnch = ::FindAnchor( static_cast<const SwContentFrame*>(pAnch), aPt, bBodyOnly );
+            pAnch = ::FindAnchor( static_cast<const SwContentFrame*>(pAnch), SwPoint(aPt), bBodyOnly );
         }
         else if ( !pFlyDrawObj )
         {
-            const SwRect aRect( aPt.getX(), aPt.getY(), 1, 1 );
+            const SwRect aRect( SwTwips(aPt.getX()), SwTwips(aPt.getY()), SwTwips(1), SwTwips(1) );
 
             SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
             if ( pContact->GetAnchorFrame( pObj ) &&
@@ -736,7 +736,7 @@ const SwFrame* SwDrawView::CalcAnchor()
         }
     }
     if( pAnch && !pAnch->IsProtected() )
-        m_aAnchorPoint = pAnch->GetFrameAnchorPos( ::HasWrap( pObj ) );
+        m_aAnchorPoint = Point(pAnch->GetFrameAnchorPos( ::HasWrap( pObj ) ));
     else
         pAnch = nullptr;
     return pAnch;

@@ -137,7 +137,7 @@ public:
 
     // UI versions
     bool IsStartEndSentence(bool bEnd, SwRootFrame const* pLayout) const;
-    bool SelectWord( SwViewShell const * pViewShell, const Point* pPt );
+    bool SelectWord( SwViewShell const * pViewShell, const SwPoint* pPt );
 
     // API versions of above functions (will be used with a different
     // WordType for the break iterator)
@@ -148,7 +148,7 @@ public:
     bool GoEndWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr);
     bool GoNextWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr);
     bool GoPrevWordWT(sal_Int16 nWordType, SwRootFrame const* pLayout = nullptr);
-    bool SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType, const Point* pPt );
+    bool SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType, const SwPoint* pPt );
 
     enum SentenceMoveType
     {
@@ -163,7 +163,7 @@ public:
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
         SwRootFrame const* pLayout, bool isFieldNames);
-    bool UpDown(bool bUp, sal_uInt16 nCnt, Point const * pPt, tools::Long nUpDownX, SwRootFrame & rLayout);
+    bool UpDown(bool bUp, sal_uInt16 nCnt, SwPoint const * pPt, SwTwips nUpDownX, SwRootFrame & rLayout);
     bool LeftRightMargin(SwRootFrame const& rLayout, bool bLeftMargin, bool bAPI);
     bool IsAtLeftRightMargin(SwRootFrame const& rLayout, bool bLeftMargin, bool bAPI) const;
     bool SttEndDoc( bool bSttDoc );

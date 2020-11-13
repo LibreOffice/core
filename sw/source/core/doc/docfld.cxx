@@ -988,8 +988,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
     const SwDoc& rDoc = rTextNd.GetDoc();
 
     // always the first! (in tab headline, header-/footer)
-    Point aPt;
-    std::pair<Point, bool> const tmp(aPt, false);
+    std::pair<SwPoint, bool> const tmp(SwPoint(), false);
     const SwContentFrame* pFrame = rTextNd.getLayoutFrame(
         rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
 
@@ -1053,8 +1052,7 @@ void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
                 break;
 
             // always the first! (in tab headline, header-/footer)
-            Point aPt;
-            std::pair<Point, bool> const tmp(aPt, false);
+            std::pair<SwPoint, bool> const tmp(SwPoint(), false);
             const SwContentFrame* pFrame = pCNd->getLayoutFrame(
                     rDoc.getIDocumentLayoutAccess().GetCurrentLayout(),
                     nullptr, &tmp);

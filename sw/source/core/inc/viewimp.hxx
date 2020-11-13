@@ -179,8 +179,8 @@ public:
      */
 
     // Interface Drawing
-    bool IsDragPossible( const Point &rPoint );
-    void NotifySizeChg( const Size &rNewSz );
+    bool IsDragPossible( const SwPoint &rPoint );
+    void NotifySizeChg( const SwSize &rNewSz );
 
     /// SS for the Lay-/IdleAction and relatives
     bool  IsAction() const                   { return m_pLayAction  != nullptr; }

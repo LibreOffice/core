@@ -504,7 +504,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
     bool bRet = true;
 
     const SvxTabStopItem& rTabItem = GetDoc()->GetDefault( RES_PARATR_TABSTOP );
-    sal_uInt16 nDefDist = o3tl::narrowing<sal_uInt16>(rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134);
+    SwTwips nDefDist(rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134);
     if( !nDefDist )
         return false;
 
@@ -527,15 +527,15 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
                                             pCNd->GetAttr( RES_LR_SPACE ));
                 if( bRight )
                 {
-                    tools::Long nNext = rLS.GetTextLeft() + nDefDist;
+                    SwTwips nNext = SwTwips(rLS.GetTextLeft()) + nDefDist;
                     if( bModulus )
                         nNext = ( nNext / nDefDist ) * nDefDist;
                     SwFrame* pFrame = pCNd->getLayoutFrame( GetLayout() );
                     if ( pFrame )
                     {
-                        const sal_uInt16 nFrameWidth = o3tl::narrowing<sal_uInt16>( pFrame->IsVertical() ?
+                        const SwTwips nFrameWidth = pFrame->IsVertical() ?
                                                  pFrame->getFrameArea().Height() :
-                                                 pFrame->getFrameArea().Width() );
+                                                 pFrame->getFrameArea().Width();
                         bRet = nFrameWidth > ( nNext + MM50 );
                     }
                     else

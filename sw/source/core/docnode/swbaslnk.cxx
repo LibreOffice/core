@@ -45,7 +45,7 @@
 
 using namespace com::sun::star;
 
-static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size &rOrigGrfSize );
+static bool SetGrfFlySize( const SwSize& rGrfSz, SwGrfNode* pGrfNd, const SwSize &rOrigGrfSize );
 
 
 ::sfx2::SvBaseLink::UpdateResult SwBaseLink::DataChanged(
@@ -94,7 +94,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size &rO
 
     bool bUpdate = false;
     bool bFrameInPaint = false;
-    Size aGrfSz, aOldSz;
+    SwSize aGrfSz, aOldSz;
 
     SwGrfNode* pSwGrfNode = nullptr;
 
@@ -143,7 +143,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size &rO
     return SUCCESS;
 }
 
-static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rOrigGrfSize )
+static bool SetGrfFlySize( const SwSize& rGrfSz, SwGrfNode* pGrfNd, const SwSize& rOrigGrfSize )
 {
     bool bRet = false;
     SwViewShell *pSh = pGrfNd->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -151,7 +151,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
     if ( pGrfNd->GetDoc().GetEditShell() )
         pCurr.reset(new CurrShell( pSh ));
 
-    Size aSz = rOrigGrfSize;
+    SwSize aSz = rOrigGrfSize;
     if ( !(aSz.Width() && aSz.Height()) &&
             rGrfSz.Width() && rGrfSz.Height() )
     {
@@ -160,7 +160,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
             pFormat = pGrfNd->GetFlyFormat();
         if (nullptr != pFormat)
         {
-            Size aCalcSz( aSz );
+            SwSize aCalcSz( aSz );
             if ( !aSz.Height() && aSz.Width() )
                 // Calculate the right height
                 aCalcSz.setHeight( rGrfSz.Height() *
@@ -174,10 +174,10 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
                 aCalcSz = rGrfSz;
 
             const SvxBoxItem     &rBox = pFormat->GetBox();
-            aCalcSz.AdjustWidth(rBox.CalcLineSpace(SvxBoxItemLine::LEFT) +
-                               rBox.CalcLineSpace(SvxBoxItemLine::RIGHT) );
-            aCalcSz.AdjustHeight(rBox.CalcLineSpace(SvxBoxItemLine::TOP) +
-                               rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM) );
+            aCalcSz.AdjustWidth(SwTwips(rBox.CalcLineSpace(SvxBoxItemLine::LEFT) +
+                               rBox.CalcLineSpace(SvxBoxItemLine::RIGHT) ));
+            aCalcSz.AdjustHeight(SwTwips(rBox.CalcLineSpace(SvxBoxItemLine::TOP) +
+                               rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM) ));
             const SwFormatFrameSize& rOldAttr = pFormat->GetFrameSize();
             if( rOldAttr.GetSize() != aCalcSz )
             {
@@ -201,7 +201,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
                         pTableNd->GetTable().GetHTMLTableLayout();
                     if( pLayout )
                     {
-                        const sal_uInt16 nBrowseWidth =
+                        const SwTwips nBrowseWidth =
                                     pLayout->GetBrowseWidthByTable( rDoc );
                         if ( nBrowseWidth )
                         {

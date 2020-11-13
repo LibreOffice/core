@@ -65,11 +65,11 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
         {
             SdrObject* pSObj = pSelFormat->FindSdrObject();
             static_cast<SwFEShell*>(this)->SelectObj(
-                    pSObj->GetCurrentBoundRect().Center() );
+                    SwPoint(pSObj->GetCurrentBoundRect().Center()) );
         }
         else
         {
-            Point aPt;
+            SwPoint aPt;
             SwFlyFrame *const pFly =
                 static_cast<SwFlyFrameFormat*>(pSelFormat)->GetFrame(& aPt);
             if (pFly)
@@ -238,7 +238,7 @@ static void lcl_SelectSdrMarkList( SwEditShell* pShell,
         SdrObject *pObj = pSdrMarkList->GetMark( i )->GetMarkedSdrObj();
         if( pObj )
         {
-            pFEShell->SelectObj( Point(), bFirst ? 0 : SW_ADD_SELECT, pObj );
+            pFEShell->SelectObj( SwPoint(), bFirst ? 0 : SW_ADD_SELECT, pObj );
             bFirst = false;
         }
     }

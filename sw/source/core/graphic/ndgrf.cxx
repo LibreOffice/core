@@ -429,7 +429,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
     return new SwGrfNode( rWhere, rGrfObj, pGrfColl, nullptr );
 }
 
-Size SwGrfNode::GetTwipSize() const
+SwSize SwGrfNode::GetTwipSize() const
 {
     if( !mnGrfSize.Width() && !mnGrfSize.Height() )
     {
@@ -629,7 +629,7 @@ void SwGrfNode::ReleaseLink()
     }
 }
 
-void SwGrfNode::SetTwipSize( const Size& rSz )
+void SwGrfNode::SetTwipSize( const SwSize& rSz )
 {
     mnGrfSize = rSz;
     if( IsScaleImageMap() && mnGrfSize.Width() && mnGrfSize.Height() )
@@ -668,14 +668,14 @@ void SwGrfNode::ScaleImageMap()
     {
         SwTwips nWidth = rFrameSize.GetWidth();
 
-        nWidth -= rBox.CalcLineSpace(SvxBoxItemLine::LEFT) +
-                  rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
+        nWidth -= SwTwips(rBox.CalcLineSpace(SvxBoxItemLine::LEFT) +
+                  rBox.CalcLineSpace(SvxBoxItemLine::RIGHT));
 
-        OSL_ENSURE( nWidth>0, "Do any 0 twip wide graphics exist!?" );
+        OSL_ENSURE( nWidth>SwTwips(0), "Do any 0 twip wide graphics exist!?" );
 
         if( mnGrfSize.Width() != nWidth )
         {
-            aScaleX = Fraction( mnGrfSize.Width(), nWidth );
+            aScaleX = Fraction( tools::Long(mnGrfSize.Width()), nWidth );
             bScale = true;
         }
     }
@@ -683,10 +683,10 @@ void SwGrfNode::ScaleImageMap()
     {
         SwTwips nHeight = rFrameSize.GetHeight();
 
-        nHeight -= rBox.CalcLineSpace(SvxBoxItemLine::TOP) +
-                   rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
+        nHeight -= SwTwips(rBox.CalcLineSpace(SvxBoxItemLine::TOP) +
+                   rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM));
 
-        OSL_ENSURE( nHeight>0, "Do any 0 twip high graphics exist!?" );
+        OSL_ENSURE( nHeight>SwTwips(0), "Do any 0 twip high graphics exist!?" );
 
         if( mnGrfSize.Height() != nHeight )
         {

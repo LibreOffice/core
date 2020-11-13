@@ -63,7 +63,7 @@ public:
     SwFrame* NextFrame();
     SwLayoutFrame* UpperFrame(SwFrame*& rpFrame, const SwNode& rNode);
 
-    SwFrame* GetFrame(const Point* pDocPos) const;
+    SwFrame* GetFrame(const SwPoint* pDocPos) const;
 };
 
 class SwNode2LayoutSaveUpperFrames

@@ -38,7 +38,7 @@ class SW_DLLPUBLIC SwGrfNode final: public SwNoTextNode
     GraphicObject maGrfObj;
     std::unique_ptr<GraphicObject> mpReplacementGraphic;
     tools::SvRef<sfx2::SvBaseLink> mxLink;       ///< If graphics only as link then pointer is set.
-    Size mnGrfSize;
+    SwSize mnGrfSize;
     bool mbInSwapIn              :1; // to avoid recursion in SwGrfNode::SwapIn
     bool mbInBaseLinkSwapIn      :1; // to avoid recursion in SwBaseLink::SwapIn
 
@@ -83,12 +83,12 @@ public:
     void TriggerGraphicArrived();
 
     /// wrappers for non-const calls at GraphicObject
-    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, tools::Long nExtraData, OutputDevice* pFirstFrameOutDev)
-    { maGrfObj.StartAnimation(*pOut, rPt, rSz, nExtraData, pFirstFrameOutDev); }
+    void StartGraphicAnimation(OutputDevice* pOut, const SwPoint& rPt, const SwSize& rSz, tools::Long nExtraData, OutputDevice* pFirstFrameOutDev)
+    { maGrfObj.StartAnimation(*pOut, Point(rPt), Size(rSz), nExtraData, pFirstFrameOutDev); }
     void StopGraphicAnimation(const OutputDevice* pOut, tools::Long nExtraData) { maGrfObj.StopAnimation(pOut, nExtraData); }
 
-    virtual Size GetTwipSize() const override;
-    void SetTwipSize( const Size& rSz );
+    virtual SwSize GetTwipSize() const override;
+    void SetTwipSize( const SwSize& rSz );
 
     bool IsTransparent() const;
 

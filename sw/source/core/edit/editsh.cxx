@@ -132,8 +132,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
             if ( ! pSI )
             {
                 // seems to be an empty paragraph.
-                Point aPt;
-                std::pair<Point, bool> const tmp(aPt, false);
+                std::pair<SwPoint, bool> const tmp(SwPoint(), false);
                 pFrame = static_cast<SwTextFrame*>(
                         static_cast<SwTextNode&>(rNode).getLayoutFrame(
                             GetLayout(), pTmpCursor->GetPoint(), &tmp));
@@ -276,7 +275,7 @@ GraphicType SwEditShell::GetGraphicType() const
 
 // returns the size of a graphic in <rSz> if CurrentCursor->GetPoint() points to a SwGrfNode and
 // GetMark is not set or points to the same graphic
-bool SwEditShell::GetGrfSize(Size& rSz) const
+bool SwEditShell::GetGrfSize(SwSize& rSz) const
 {
     SwNoTextNode* pNoTextNd;
     SwPaM* pCurrentCursor = GetCursor();

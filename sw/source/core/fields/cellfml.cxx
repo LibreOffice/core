@@ -766,7 +766,7 @@ static const SwFrame* lcl_GetBoxFrame( const SwTableBox& rBox )
     SwContentNode* pCNd = aIdx.GetNodes().GoNext( &aIdx );
     OSL_ENSURE( pCNd, "Box has no TextNode" );
     Point aPt;      // get the first frame of the layout - table headline
-    std::pair<Point, bool> const tmp(aPt, false);
+    std::pair<SwPoint, bool> const tmp(aPt, false);
     return pCNd->getLayoutFrame(pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
 }
 

@@ -1213,7 +1213,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
 
     const bool bVisibleChildrenOnly = SwAccessibleChild( GetFrame() ).IsVisibleChildrenOnly();
     const bool bNew = rOldFrame.IsEmpty() ||
-                     ( rOldFrame.Left() == 0 && rOldFrame.Top() == 0 );
+                     ( rOldFrame.Left() == SwTwips(0) && rOldFrame.Top() == SwTwips(0) );
     if( IsShowing( *(GetMap()), rChildFrameOrObj ) )
     {
         // If the object could have existed before, then there is nothing to do,
@@ -1398,7 +1398,7 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
         if( pFEShell )
         {
             sal_uInt8 nFlags = bAdd ? SW_ADD_SELECT : 0;
-            pFEShell->SelectObj( Point(), nFlags, pObj );
+            pFEShell->SelectObj( SwPoint(), nFlags, pObj );
             bRet = true;
         }
     }
@@ -1410,7 +1410,7 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
         if( pFEShell && (pFEShell->IsFrameSelected() ||
                          pFEShell->IsObjSelected()) )
         {
-            Point aPt( LONG_MIN, LONG_MIN );
+            SwPoint aPt( SwTwips(LONG_MIN), SwTwips(LONG_MIN) );
             pFEShell->SelectObj( aPt );
             bCallShowCursor = true;
         }
