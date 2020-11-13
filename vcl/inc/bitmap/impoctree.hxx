@@ -24,9 +24,9 @@
 
 class ImpErrorQuad
 {
-    tools::Long nRed;
-    tools::Long nGreen;
-    tools::Long nBlue;
+    sal_uInt16 nRed;
+    sal_uInt16 nGreen;
+    sal_uInt16 nBlue;
 
 public:
     ImpErrorQuad()
@@ -37,9 +37,9 @@ public:
     }
 
     ImpErrorQuad(const BitmapColor& rColor)
-        : nRed(tools::Long(rColor.GetRed()) << 5)
-        , nGreen(tools::Long(rColor.GetGreen()) << 5)
-        , nBlue(tools::Long(rColor.GetBlue()) << 5)
+        : nRed(rColor.GetRed() << 5)
+        , nGreen(rColor.GetGreen() << 5)
+        , nBlue(rColor.GetBlue() << 5)
     {
     }
 
@@ -56,16 +56,16 @@ public:
 
 inline void ImpErrorQuad::operator=(const BitmapColor& rColor)
 {
-    nRed = tools::Long(rColor.GetRed()) << 5;
-    nGreen = tools::Long(rColor.GetGreen()) << 5;
-    nBlue = tools::Long(rColor.GetBlue()) << 5;
+    nRed = rColor.GetRed() << 5;
+    nGreen = rColor.GetGreen() << 5;
+    nBlue = rColor.GetBlue() << 5;
 }
 
 inline ImpErrorQuad& ImpErrorQuad::operator-=(const BitmapColor& rColor)
 {
-    nRed -= tools::Long(rColor.GetRed()) << 5;
-    nGreen -= tools::Long(rColor.GetGreen()) << 5;
-    nBlue -= tools::Long(rColor.GetBlue()) << 5;
+    nRed -= rColor.GetRed() << 5;
+    nGreen -= rColor.GetGreen() << 5;
+    nBlue -= rColor.GetBlue() << 5;
 
     return *this;
 }
@@ -100,9 +100,9 @@ inline void ImpErrorQuad::ImplAddColorError7(const ImpErrorQuad& rErrQuad)
 
 inline BitmapColor ImpErrorQuad::ImplGetColor()
 {
-    return BitmapColor(std::clamp(nRed, tools::Long(0), tools::Long(8160)) >> 5,
-                       std::clamp(nGreen, tools::Long(0), tools::Long(8160)) >> 5,
-                       std::clamp(nBlue, tools::Long(0), tools::Long(8160)) >> 5);
+    return BitmapColor(std::clamp<sal_uInt16>(nRed, 0, 8160) >> 5,
+                       std::clamp<sal_uInt16>(nGreen, 0, 8160) >> 5,
+                       std::clamp<sal_uInt16>(nBlue, 0, 8160) >> 5);
 }
 
 #endif // INCLUDED_VCL_INC_IMPOCTREE_HXX
