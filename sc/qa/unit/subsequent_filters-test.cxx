@@ -1069,7 +1069,7 @@ void ScFiltersTest::testBorderODS()
 
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pRight->GetBorderLineStyle());
-    CPPUNIT_ASSERT_EQUAL(20L, pRight->GetWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(20), pRight->GetWidth());
 
     rDoc.GetBorderLines( 2, 8, 0, &pLeft, &pTop, &pRight, &pBottom );
 
@@ -1078,7 +1078,7 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(pBottom);
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pRight->GetBorderLineStyle());
-    CPPUNIT_ASSERT_EQUAL(5L, pRight->GetWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(5), pRight->GetWidth());
     CPPUNIT_ASSERT_EQUAL(COL_BLUE, pRight->GetColor());
 
     xDocSh->DoClose();
