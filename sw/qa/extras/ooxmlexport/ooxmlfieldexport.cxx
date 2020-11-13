@@ -663,6 +663,19 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132185, "tdf132185.docx")
     assertXPathContent(pXmlDoc, "/w:ftr/w:p/w:r[2]/w:instrText", " PAGE \\* roman ");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testConditionalText, "conditional-text.fodt")
+{
+    // Load a document which has a conditional text field in it.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    std::u16string_view aExpected(u" IF 1 < 2 \"True\" \"False\"");
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expression: xmlXPathNodeSetGetLength(pXmlNodes) > 0
+    // - In <...>, XPath '/w:document/w:body/w:p/w:r[2]/w:instrText' not found
+    // i.e. the field was lost on export.
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", aExpected);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

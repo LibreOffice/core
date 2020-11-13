@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooow="http://openoffice.org/2004/writer" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p><text:conditional-text text:condition="ooow:1 &lt; 2" text:string-value-if-true="True" text:string-value-if-false="False">True</text:conditional-text></text:p>
+  </office:text>
+ </office:body>
+</office:document>
