@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "985e3418_fdd44b89",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2020-11-13T19:47:34Z",
+      "side": 1,
+      "message": "get_value() methods are not available for weld:Entry. They are only available for weld:spin_button.",
+      "parentUuid": "800981fd_96f37533",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 50
+      },
+      "revId": "01f0e6794fe8f14ec7f76b7fa6ff2fc7fe69ef5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b0e7c64e_c5b3c989",
         "filename": "sw/source/ui/table/instable.cxx",
         "patchSetId": 19
@@ -36,6 +60,30 @@
       "writtenOn": "2020-11-11T10:30:43Z",
       "side": 1,
       "message": "I don\u0027t see the need for this change.",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 60
+      },
+      "revId": "01f0e6794fe8f14ec7f76b7fa6ff2fc7fe69ef5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62e43b07_a2a60366",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2020-11-13T19:47:34Z",
+      "side": 1,
+      "message": "get_value() methods are not available for weld:Entry. They are only available for weld:spin_button.",
+      "parentUuid": "b0e7c64e_c5b3c989",
       "range": {
         "startLine": 117,
         "startChar": 4,
@@ -153,6 +201,30 @@
       "writtenOn": "2020-11-11T22:10:47Z",
       "side": 1,
       "message": "why?",
+      "range": {
+        "startLine": 256,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 21
+      },
+      "revId": "01f0e6794fe8f14ec7f76b7fa6ff2fc7fe69ef5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62be8a9a_6df5d4a0",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2020-11-13T19:47:34Z",
+      "side": 1,
+      "message": "This part of code was prewritten.\nI haven\u0027t modified it much.\nPlease see lines 234 to 236 in the original code.",
+      "parentUuid": "76e1b3ea_02421396",
       "range": {
         "startLine": 256,
         "startChar": 0,
