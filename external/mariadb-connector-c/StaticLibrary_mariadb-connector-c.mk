@@ -66,13 +66,15 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
 	UnpackedTarball/mariadb-connector-c/libmariadb/mariadb_stmt \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_client_plugin \
 	UnpackedTarball/mariadb-connector-c/plugins/auth/my_auth \
+	UnpackedTarball/mariadb-connector-c/plugins/auth/dialog \
 	UnpackedTarball/mariadb-connector-c/plugins/auth/caching_sha2_pw \
 	UnpackedTarball/mariadb-connector-c/plugins/pvio/pvio_socket \
 	$(if $(filter $(OS),WNT), \
 		UnpackedTarball/mariadb-connector-c/libmariadb/win32_errmsg \
 		UnpackedTarball/mariadb-connector-c/libmariadb/secure/win_crypt \
 		UnpackedTarball/mariadb-connector-c/win-iconv/win_iconv \
-		, \
+		UnpackedTarball/mariadb-connector-c/plugins/pvio/pvio_npipe \
+		UnpackedTarball/mariadb-connector-c/plugins/pvio/pvio_shmem \
 		UnpackedTarball/mariadb-connector-c/libmariadb/secure/openssl_crypt \
 	) \
 ))
