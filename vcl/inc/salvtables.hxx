@@ -275,6 +275,8 @@ public:
 
     virtual void set_accessible_name(const OUString& rName) override;
 
+    virtual void set_accessible_description(const OUString& rDescription) override;
+
     virtual OUString get_accessible_name() const override;
 
     virtual OUString get_accessible_description() const override;

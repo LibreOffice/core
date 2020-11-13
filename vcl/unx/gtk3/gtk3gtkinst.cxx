@@ -2731,6 +2731,14 @@ public:
         atk_object_set_name(pAtkObject, OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
     }
 
+    virtual void set_accessible_description(const OUString& rDescription) override
+    {
+        AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
+        if (!pAtkObject)
+            return;
+        atk_object_set_description(pAtkObject, OUStringToOString(rDescription, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
     virtual OUString get_accessible_name() const override
     {
         AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);

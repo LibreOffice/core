@@ -165,6 +165,7 @@ public:
                                          int& height) const = 0;
 
     virtual void set_accessible_name(const OUString& rName) = 0;
+    virtual void set_accessible_description(const OUString& rDescription) = 0;
     virtual OUString get_accessible_name() const = 0;
 
     virtual OUString get_accessible_description() const = 0;
