@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a44b5fec_9f5226a6",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3610,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-13T08:59:03Z",
+      "side": 1,
+      "message": "\u003e Won\u0027t you (and expert users) get tired of always being reminded about the default in the tooltip?\n\nNot to push you, just to answer your question: no. I don\u0027t care of the content of tooltips that I don\u0027t watch (i.e., I don\u0027t pay attention to them when I know what I write); and I definitely don\u0027t think that additional info is wrong for those that I *do* read (when I\u0027m unsure what it is for). If I pay attention to this tooltip, it means I don\u0027t remember its purpose \u003d\u003e it\u0027s fine to see all the related info.",
+      "parentUuid": "dcd70641_a69bf078",
+      "range": {
+        "startLine": 3610,
+        "startChar": 32,
+        "endLine": 3610,
+        "endChar": 79
+      },
+      "revId": "38c127b105a5edd766e3ad63151252e4f157cf98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c275aefc_f757dc81",
         "filename": "sc/inc/scfuncs.hrc",
         "patchSetId": 3
