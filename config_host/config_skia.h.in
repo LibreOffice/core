@@ -38,6 +38,9 @@ are the same.
 // Memory allocator for Vulkan.
 #define SK_USE_VMA 1
 
+// Set by Skia's BUILD.gn.
+#define GR_OP_ALLOCATE_USE_NEW
+
 #define SK_CODEC_DECODES_PNG 1
 #define SK_ENCODE_PNG 1
 

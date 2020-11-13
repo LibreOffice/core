@@ -321,7 +321,7 @@ void SkiaSalGraphicsImpl::createWindowSurface(bool forceRaster)
                 abort(); // This should not really happen, do not even try to cope with it.
         }
     }
-    mIsGPU = mSurface->getCanvas()->getGrContext() != nullptr;
+    mIsGPU = mSurface->getCanvas()->recordingContext() != nullptr;
 #ifdef DBG_UTIL
     SkiaHelper::prefillSurface(mSurface);
 #endif
@@ -346,7 +346,7 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
                 mSurface = SkiaHelper::createSkSurface(width, height);
                 if (mSurface)
                 {
-                    mIsGPU = mSurface->getCanvas()->getGrContext() != nullptr;
+                    mIsGPU = mSurface->getCanvas()->recordingContext() != nullptr;
                     return;
                 }
             }
@@ -358,7 +358,7 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
     // Create raster surface as a fallback.
     mSurface = SkiaHelper::createSkSurface(width, height);
     assert(mSurface);
-    assert(!mSurface->getCanvas()->getGrContext()); // is not GPU-backed
+    assert(!mSurface->getCanvas()->recordingContext()); // is not GPU-backed
     mIsGPU = false;
 }
 
@@ -410,7 +410,7 @@ void SkiaSalGraphicsImpl::postDraw()
     }
     SkiaZone::leave(); // matched in preDraw()
     // If there's a problem with the GPU context, abort.
-    if (GrContext* context = mSurface->getCanvas()->getGrContext())
+    if (GrDirectContext* context = GrAsDirectContext(mSurface->getCanvas()->recordingContext()))
     {
         // Running out of memory on the GPU technically could be possibly recoverable,
         // but we don't know the exact status of the surface (and what has or has not been drawn to it),
