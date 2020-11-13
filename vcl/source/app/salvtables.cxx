@@ -362,6 +362,11 @@ void SalInstanceWidget::set_accessible_name(const OUString& rName)
     m_xWidget->SetAccessibleName(rName);
 }
 
+void SalInstanceWidget::set_accessible_description(const OUString& rDescription)
+{
+    m_xWidget->SetAccessibleDescription(rDescription);
+}
+
 OUString SalInstanceWidget::get_accessible_name() const { return m_xWidget->GetAccessibleName(); }
 
 OUString SalInstanceWidget::get_accessible_description() const
