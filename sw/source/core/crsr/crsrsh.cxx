@@ -1255,7 +1255,7 @@ sal_uInt16 SwCursorShell::GetNextPrevPageNum( bool bNext )
     const SwPageFrame *pPg = Imp()->GetFirstVisPage(GetOut());
     if( pPg )
     {
-        const SwTwips nPageTop = pPg->getFrameArea().Top();
+        const SwTwips nPageTop = SwTwips(pPg->getFrameArea().Top());
 
         if( bNext )
         {
@@ -1264,7 +1264,7 @@ sal_uInt16 SwCursorShell::GetNextPrevPageNum( bool bNext )
             {
                 pPg = static_cast<const SwPageFrame *>(pPg->GetNext());
             }
-            while( pPg && pPg->getFrameArea().Top() == nPageTop );
+            while( pPg && SwTwips(pPg->getFrameArea().Top()) == nPageTop );
 
             while( pPg && pPg->IsEmptyPage() )
                 pPg = static_cast<const SwPageFrame *>(pPg->GetNext());
@@ -1276,7 +1276,7 @@ sal_uInt16 SwCursorShell::GetNextPrevPageNum( bool bNext )
             {
                 pPg = static_cast<const SwPageFrame *>(pPg->GetPrev());
             }
-            while( pPg && pPg->getFrameArea().Top() == nPageTop );
+            while( pPg && SwTwips(pPg->getFrameArea().Top()) == nPageTop );
 
             while( pPg && pPg->IsEmptyPage() )
                 pPg = static_cast<const SwPageFrame *>(pPg->GetPrev());

@@ -138,7 +138,7 @@ void SwRegionRects::Invert()
 
 static SwTwips CalcArea( const SwRect &rRect )
 {
-    return rRect.Width() * rRect.Height();
+    return SwTwips(rRect.Width() * rRect.Height());
 }
 
 // combine all adjacent rectangles
@@ -171,7 +171,7 @@ void SwRegionRects::Compress()
                 // paints), the area of the union can be a little bit larger:
                 // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
                 // than the width of an A4 page
-                const tools::Long nFuzzy = 1361513;
+                const SwTwips nFuzzy = SwTwips(1361513);
                 SwRect aUnion( (*this)[i] );
                 aUnion.Union( (*this)[j] );
                 SwRect aInter( (*this)[i] );
