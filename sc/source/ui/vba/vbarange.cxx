@@ -677,7 +677,7 @@ const char GREATERTHAN[] = ">";
 const char GREATERTHANEQUALS[] = ">=";
 const char LESSTHAN[] = "<";
 const char LESSTHANEQUALS[] = "<=";
-const char STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY[] = "The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again";
+constexpr OUStringLiteral STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY(u"The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again");
 const char CELLSTYLE[] = "CellStyle";
 
 namespace {
@@ -5521,7 +5521,7 @@ ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const uno::Any& _oValue)
     }
     catch (uno::Exception& )
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, "No cells were found");
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, u"No cells were found");
     }
     return xRange;
 }

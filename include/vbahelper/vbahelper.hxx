@@ -69,7 +69,7 @@ namespace ooo::vba
 
         /** Returns the VBA document implementation object representing the passed UNO document model. */
         VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getVBADocument( const css::uno::Reference< css::frame::XModel >& xModel );
-        VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getUnoDocModule( const OUString& aModName, SfxObjectShell const * pShell );
+        VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getUnoDocModule( std::u16string_view aModName, SfxObjectShell const * pShell );
         /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC SfxObjectShell* getSfxObjShell( const css::uno::Reference< css::frame::XModel >& xModel );
 
@@ -259,10 +259,10 @@ class VBAHELPER_DLLPUBLIC DebugHelper
 {
 public:
     /// @throws css::script::BasicErrorException
-    static void basicexception( const css::uno::Exception& ex, ErrCode err, const OUString& /*additionalArgument*/ );
+    static void basicexception( const css::uno::Exception& ex, ErrCode err, std::u16string_view /*additionalArgument*/ );
 
     /// @throws css::script::BasicErrorException
-    static void basicexception( ErrCode err,  const OUString& additionalArgument );
+    static void basicexception( ErrCode err, std::u16string_view additionalArgument );
 
     /// @throws css::script::BasicErrorException
     static void basicexception( const css::uno::Exception& ex );

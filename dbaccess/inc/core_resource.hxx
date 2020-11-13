@@ -54,7 +54,7 @@ namespace dbaccess
         static OUString  loadString(
                 const char* pResId,
                 const char* _pPlaceholderAscii,
-                const OUString&  _rReplace
+                std::u16string_view  _rReplace
         );
 
         /** loads a string from the resource file, substituting two placeholders with given strings
@@ -73,9 +73,9 @@ namespace dbaccess
         static OUString  loadString(
                 const char* pResId,
                 const char* _pPlaceholderAscii1,
-                const OUString& _rReplace1,
+                std::u16string_view _rReplace1,
                 const char* _pPlaceholderAscii2,
-                const OUString& _rReplace2
+                std::u16string_view _rReplace2
         );
     };
 }

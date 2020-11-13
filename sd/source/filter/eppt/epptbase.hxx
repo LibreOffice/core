@@ -183,7 +183,7 @@ public:
 
     ~FontCollection();
 
-    static short GetScriptDirection( const OUString& rText );
+    static short GetScriptDirection( std::u16string_view rText );
 
     sal_uInt32  GetId( FontCollectionEntry& rFontDescriptor );
 

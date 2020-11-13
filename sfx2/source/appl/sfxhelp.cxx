@@ -665,7 +665,7 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* p
     return sHelpText;
 }
 
-OUString SfxHelp::GetURLHelpText(const OUString& aURL)
+OUString SfxHelp::GetURLHelpText(std::u16string_view aURL)
 {
     SvtSecurityOptions aSecOpt;
     bool bCtrlClickHlink = aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);

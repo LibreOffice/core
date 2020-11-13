@@ -89,7 +89,7 @@ using namespace ::com::sun::star;
 */
 bool ToolBarMerger::IsCorrectContext(
     const OUString& rContext,
-    const OUString& rModuleIdentifier )
+    std::u16string_view rModuleIdentifier )
 {
     return ( rContext.isEmpty() || ( rContext.indexOf( rModuleIdentifier ) >= 0 ));
 }
@@ -301,7 +301,7 @@ bool ToolBarMerger::ProcessMergeOperation(
     ToolBox::ImplToolItems::size_type      nPos,
     sal_uInt16&                            rItemId,
     CommandToInfoMap&                      rCommandMap,
-    const OUString&                        rModuleIdentifier,
+    std::u16string_view                    rModuleIdentifier,
     const OUString&                        rMergeCommand,
     const OUString&                        rMergeCommandParameter,
     const AddonToolbarItemContainer&       rItems )
@@ -364,7 +364,7 @@ bool ToolBarMerger::ProcessMergeFallback(
     ToolBox*                         pToolbar,
     sal_uInt16&                      rItemId,
     CommandToInfoMap&                rCommandMap,
-    const OUString&           rModuleIdentifier,
+    std::u16string_view       rModuleIdentifier,
     const OUString&           rMergeCommand,
     const OUString&           rMergeFallback,
     const AddonToolbarItemContainer& rItems )
@@ -428,7 +428,7 @@ void ToolBarMerger::MergeItems(
     sal_uInt16                             nModIndex,
     sal_uInt16&                            rItemId,
     CommandToInfoMap&                      rCommandMap,
-    const OUString&                        rModuleIdentifier,
+    std::u16string_view                    rModuleIdentifier,
     const AddonToolbarItemContainer&       rAddonToolbarItems )
 {
     const sal_Int32 nSize( rAddonToolbarItems.size() );
@@ -509,7 +509,7 @@ void ToolBarMerger::ReplaceItem(
     ToolBox::ImplToolItems::size_type      nPos,
     sal_uInt16&                            rItemId,
     CommandToInfoMap&                      rCommandMap,
-    const OUString&                        rModuleIdentifier,
+    std::u16string_view                    rModuleIdentifier,
     const AddonToolbarItemContainer&       rAddonToolbarItems )
 {
     pToolbar->RemoveItem( nPos );

@@ -223,8 +223,8 @@ private:
 
 // debug methods
 
-    static bool impl_debug_checkParameter( const OUString& sTopic, const OUString& sText );    // addText, updateText
-    static bool impl_debug_checkParameter( const OUString& rTopic );                           // removeText
+    static bool impl_debug_checkParameter( std::u16string_view sTopic, std::u16string_view sText );    // addText, updateText
+    static bool impl_debug_checkParameter( std::u16string_view rTopic );                           // removeText
 
 // private variables
 

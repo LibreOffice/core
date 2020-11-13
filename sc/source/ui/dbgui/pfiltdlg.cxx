@@ -234,7 +234,7 @@ void ScPivotFilterDlg::FillFieldLists()
         aFieldName = pDoc->GetString(col, nFirstRow, nTab);
         if ( aFieldName.isEmpty() )
         {
-            aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
+            aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, u"%1", ScColToAlpha( col ));
         }
         m_xLbField1->append_text(aFieldName);
         m_xLbField2->append_text(aFieldName);

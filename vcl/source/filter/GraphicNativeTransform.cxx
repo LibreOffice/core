@@ -57,11 +57,11 @@ void GraphicNativeTransform::rotate(Degree10 aInputRotation)
     }
     else if (aLink.GetType() == GfxLinkType::NativePng)
     {
-        rotateGeneric(aRotation, "png");
+        rotateGeneric(aRotation, u"png");
     }
     else if (aLink.GetType() == GfxLinkType::NativeGif)
     {
-        rotateGeneric(aRotation, "gif");
+        rotateGeneric(aRotation, u"gif");
     }
     else if (aLink.GetType() == GfxLinkType::NONE)
     {
@@ -83,7 +83,7 @@ bool GraphicNativeTransform::rotateBitmapOnly(Degree10 aRotation)
     return true;
 }
 
-bool GraphicNativeTransform::rotateGeneric(Degree10 aRotation, const OUString& aType)
+bool GraphicNativeTransform::rotateGeneric(Degree10 aRotation, std::u16string_view aType)
 {
     // Can't rotate animations yet
     if (mrGraphic.IsAnimated())
@@ -124,7 +124,7 @@ void GraphicNativeTransform::rotateJPEG(Degree10 aRotation)
 
     if (aBitmap.GetSizePixel().Width() % 16 != 0 || aBitmap.GetSizePixel().Height() % 16 != 0)
     {
-        rotateGeneric(aRotation, "png");
+        rotateGeneric(aRotation, u"png");
     }
     else
     {

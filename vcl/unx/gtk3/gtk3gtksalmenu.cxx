@@ -1067,11 +1067,11 @@ void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const 
 #endif
 }
 
-void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName )
+void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, std::u16string_view rKeyName )
 {
     SolarMutexGuard aGuard;
 
-    if ( rKeyName.isEmpty() )
+    if ( rKeyName.empty() )
         return;
 
     guint nKeyCode;

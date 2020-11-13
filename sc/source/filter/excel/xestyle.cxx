@@ -3190,7 +3190,7 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
             "styles.xml",
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml",
-            OUStringToOString(oox::getRelationship(Relationship::STYLES), RTL_TEXTENCODING_UTF8).getStr());
+            oox::getRelationship(Relationship::STYLES));
     rStrm.PushStream( aStyleSheet );
 
     aStyleSheet->startElement(XML_styleSheet, XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)));

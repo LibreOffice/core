@@ -79,7 +79,7 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
             aTemplate.setTemplate(ScResId(STR_COLUMN_LABEL_TEMPLATE));
         else
             aTemplate.setTemplate(ScResId(STR_ROW_LABEL_TEMPLATE));
-        aTemplate.applyNumber("%NUMBER%", pIterator->index() + 1);
+        aTemplate.applyNumber(u"%NUMBER%", pIterator->index() + 1);
         output.writeBoldString(aTemplate.getTemplate());
         output.nextRow();
 
@@ -87,13 +87,13 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
         if ((false))
         {
             aTemplate.setTemplate("=AVERAGE(%RANGE%)");
-            aTemplate.applyRange("%RANGE%", aCurrentRange);
+            aTemplate.applyRange(u"%RANGE%", aCurrentRange);
             output.writeFormula(aTemplate.getTemplate());
         }
         else
         {
             aTemplate.setTemplate("=%VAR%");
-            aTemplate.applyAddress("%VAR%", aCurrentRange.aStart);
+            aTemplate.applyAddress(u"%VAR%", aCurrentRange.aStart);
             output.writeFormula(aTemplate.getTemplate());
         }
 
@@ -104,9 +104,9 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
         for (; aDataCellIterator.hasNext(); aDataCellIterator.next())
         {
             aTemplate.setTemplate("=%VALUE% * %PREVIOUS_INPUT% + (1 - %VALUE%) * %PREVIOUS_OUTPUT%");
-            aTemplate.applyAddress("%PREVIOUS_INPUT%",  aDataCellIterator.get());
-            aTemplate.applyAddress("%PREVIOUS_OUTPUT%", output.current(0, -1));
-            aTemplate.applyAddress("%VALUE%",           aSmoothingFactorAddress);
+            aTemplate.applyAddress(u"%PREVIOUS_INPUT%",  aDataCellIterator.get());
+            aTemplate.applyAddress(u"%PREVIOUS_OUTPUT%", output.current(0, -1));
+            aTemplate.applyAddress(u"%VALUE%",           aSmoothingFactorAddress);
 
             output.writeFormula(aTemplate.getTemplate());
             output.nextRow();

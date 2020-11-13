@@ -108,7 +108,7 @@ private:
     void dump( const char * pText, sal_Int64 nInt );
     static void dump( const char * pText, double fDouble );
     static void dump( const char * pText, const char * pText2 );
-    static void dump( const char * pText, const OUString& rString );
+    static void dump( const char * pText, std::u16string_view rString );
 };
 
 } // namespace ppt

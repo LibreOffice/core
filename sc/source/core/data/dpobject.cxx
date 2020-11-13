@@ -1169,7 +1169,7 @@ void ScDPObject::GetDrillDownData(const ScAddress& rPos, Sequence< Sequence<Any>
     rTableData = xDrillDownData->getDrillDownData(filters);
 }
 
-bool ScDPObject::IsDimNameInUse(const OUString& rName) const
+bool ScDPObject::IsDimNameInUse(std::u16string_view rName) const
 {
     if (!xSource.is())
         return false;

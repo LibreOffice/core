@@ -154,7 +154,7 @@ void SearchResultsDlg::FillResults( ScDocument& rDoc, const ScRangeList &rMatche
     OUString aTotal(ScResId(SCSTR_TOTAL, aList.mnCount));
     OUString aSearchResults = aTotal.replaceFirst("%1", OUString::number(aList.mnCount));
     if (aList.mnCount > ListWrapper::mnMaximum)
-        aSearchResults += " " + ScGlobal::ReplaceOrAppend( aSkipped, "%1", OUString::number( ListWrapper::mnMaximum ) );
+        aSearchResults += " " + ScGlobal::ReplaceOrAppend( aSkipped, u"%1", OUString::number( ListWrapper::mnMaximum ) );
     mxSearchResults->set_label(aSearchResults);
 
     mpDoc = &rDoc;

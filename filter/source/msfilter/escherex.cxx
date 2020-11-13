@@ -4195,7 +4195,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
                     const char* const pString = "MSOFFICE9.0";
                     aGIFStream.WriteBytes(pString, strlen(pString));
                     nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aGIFStream,
-                        rFilter.GetExportFormatNumberForShortName( "GIF" ) );
+                        rFilter.GetExportFormatNumberForShortName( u"GIF" ) );
                     SAL_WARN_IF(
                         nErrCode != ERRCODE_NONE, "filter.ms",
                         "ExportGraphic to GIF failed with " << nErrCode);
@@ -4216,7 +4216,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
                         aFilterProp.Value <<= aAdditionalChunkSequence;
                         aFilterData[ 0 ] = aFilterProp;
                         nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aStream,
-                                                          rFilter.GetExportFormatNumberForShortName( "PNG" ), &aFilterData );
+                                                          rFilter.GetExportFormatNumberForShortName( u"PNG" ), &aFilterData );
                     }
                 }
                 if ( nErrCode == ERRCODE_NONE )
