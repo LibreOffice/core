@@ -50,6 +50,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestDrawLine();
     void TestLinearGradient();
     void TestTextMapMode();
+    void TestCreatePen();
     void TestPdfInEmf();
 
     Primitive2DSequence parseEmf(const OUString& aSource);
@@ -66,6 +67,7 @@ public:
     CPPUNIT_TEST(TestDrawLine);
     CPPUNIT_TEST(TestLinearGradient);
     CPPUNIT_TEST(TestTextMapMode);
+    CPPUNIT_TEST(TestCreatePen);
     CPPUNIT_TEST(TestPdfInEmf);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -268,6 +270,57 @@ void Test::TestTextMapMode()
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/polygonstroke[20]/polygon", "2710,1113 2873,1330");
     assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke[20]/line", "color", "#666666");
     assertXPath(pDocument, "/primitive2D/metafile/transform/polygonstroke[20]/line", "width", "11");
+}
+
+
+void Test::TestCreatePen()
+{
+    // Check import of EMF image with records: RESTOREDC, SAVEDC, MOVETOEX, LINETO, POLYLINE16, EXTTEXTOUTW with DxBuffer
+    // The CREATEPEN record is used with PS_COSMETIC line style, which will be displayed as solid hairline
+    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestCreatePen.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon", "path", "m0 0h31250v18192h-31250z");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke", 3);
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[1]/polygon", "17898,5693 20172,5693");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[1]/line", "color", "#008000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[1]/line", "width", "3");
+
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[2]/polygon", "17898,6959 20172,6959");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[2]/line", "color", "#000080");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[2]/line", "width", "3");
+
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[3]/polygon", "17898,7381 20172,7381");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[3]/line", "color", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[3]/line", "width", "3");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline", 755);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[10]", "color", "#ff0000");
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[10]/polygon", "27925,14180 27875,14180");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[100]", "color", "#008000");
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[100]/polygon", "26100,14414 26050,14414");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion", 69);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[1]", "width", "374");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[1]", "x", "28124");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[1]", "y", "16581");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[1]", "text", "0.0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[1]", "fontcolor", "#000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[10]", "width", "266");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[10]", "x", "28000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[10]", "y", "428");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[10]", "text", "-6");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/textsimpleportion[10]", "fontcolor", "#000000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/pointarray", 8);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/pointarray[1]", "color", "#008000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/pointarray[1]/point", "x", "25844");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/pointarray[1]/point", "y", "8918");
 }
 
 void Test::TestPdfInEmf()
