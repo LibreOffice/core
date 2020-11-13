@@ -174,7 +174,7 @@ void VCLXAccessibleList::notifyVisibleStates(bool _bSetNew )
     }
 }
 
-void VCLXAccessibleList::UpdateSelection_Acc (const OUString& /*sTextOfSelectedItem*/, bool b_IsDropDownList)
+void VCLXAccessibleList::UpdateSelection_Acc (std::u16string_view /*sTextOfSelectedItem*/, bool b_IsDropDownList)
 {
     if ( m_aBoxType != COMBOBOX )
         return;

@@ -240,7 +240,7 @@ BitmapEx TemplateSearchView::getDefaultThumbnail( const OUString& rPath )
     return aImg;
 }
 
-void TemplateSearchView::RemoveDefaultTemplateIcon(const OUString& rPath)
+void TemplateSearchView::RemoveDefaultTemplateIcon(std::u16string_view rPath)
 {
     for (const std::unique_ptr<ThumbnailViewItem>& pItem : mItemList)
     {

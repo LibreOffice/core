@@ -2081,7 +2081,7 @@ bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunct
     return aFind.first != aFind.second;
 }
 
-void GeometryHandler::impl_createFunction(const OUString& _sFunctionName,const OUString& _sDataField,const DefaultFunction& _aFunction)
+void GeometryHandler::impl_createFunction(const OUString& _sFunctionName,std::u16string_view _sDataField,const DefaultFunction& _aFunction)
 {
     if ( m_bNewFunction )
         removeFunction();

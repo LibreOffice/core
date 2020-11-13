@@ -4001,7 +4001,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     {
         if( aLinkFileName.getLength() )
         {
-            static_cast<SdrGrafObj*>(pRet)->SetGraphicLink( aLinkFileName, ""/*TODO?*/, aLinkFilterName );
+            static_cast<SdrGrafObj*>(pRet)->SetGraphicLink( aLinkFileName, u""/*TODO?*/, aLinkFilterName );
             Graphic aGraphic(static_cast<SdrGrafObj*>(pRet)->GetGraphic());
             aGraphic.setOriginURL(aLinkFileName);
         }

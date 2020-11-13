@@ -908,7 +908,7 @@ bool TemplateLocalView::IsDefaultTemplate(const OUString& rPath)
         return SfxObjectFactory::GetStandardTemplate(rName).match(rPath); });
 }
 
-void TemplateLocalView::RemoveDefaultTemplateIcon(const OUString& rPath)
+void TemplateLocalView::RemoveDefaultTemplateIcon(std::u16string_view rPath)
 {
     for (const std::unique_ptr<ThumbnailViewItem>& pItem : mItemList)
     {

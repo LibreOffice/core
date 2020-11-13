@@ -194,7 +194,7 @@ public:
 
     /** If the secondary calendar, if any, is of the name passed AND number
         formats using it usually use the E or EE keyword (EC|EEC). */
-    bool doesSecondaryCalendarUseEC( const OUString& rName ) const;
+    bool doesSecondaryCalendarUseEC( std::u16string_view rName ) const;
 
     /** Obtain digit grouping. The usually known grouping by thousands (#,###)
         is actually only one of possible groupings. Another one, for example,

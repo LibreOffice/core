@@ -204,7 +204,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
     // See #i37444#.
     if (bSuccess && bAsLink)
-        pObj->SetGraphicLink( rFileName, ""/*TODO?*/, rFilterName );
+        pObj->SetGraphicLink( rFileName, u""/*TODO?*/, rFilterName );
 }
 
 static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,

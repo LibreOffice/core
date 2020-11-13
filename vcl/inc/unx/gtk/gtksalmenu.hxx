@@ -102,7 +102,7 @@ public:
                                                       bool bIsSubmenu );
     void                        NativeSetEnableItem( gchar const * aCommand, gboolean bEnable );
     void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck );
-    void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName );
+    void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, std::u16string_view rKeyName );
 
     static void                 DispatchCommand(const gchar* pMenuCommand);
     static void                 Activate(const gchar* pMenuCommand);

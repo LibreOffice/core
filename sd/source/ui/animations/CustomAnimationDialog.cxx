@@ -863,7 +863,7 @@ private:
     void updateControlStates();
     void fillSoundListBox();
     void clearSoundListBox();
-    sal_Int32 getSoundObject( const OUString& rStr );
+    sal_Int32 getSoundObject( std::u16string_view rStr );
     void openSoundFileDialog();
     void onSoundPreview();
     weld::Window* GetFrameWeld() const { return mpDialog; }
@@ -1317,7 +1317,7 @@ void CustomAnimationEffectTabPage::clearSoundListBox()
     mxLBSound->clear();
 }
 
-sal_Int32 CustomAnimationEffectTabPage::getSoundObject( const OUString& rStr )
+sal_Int32 CustomAnimationEffectTabPage::getSoundObject( std::u16string_view rStr )
 {
     size_t i;
     const size_t nCount = maSoundList.size();

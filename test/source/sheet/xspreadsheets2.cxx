@@ -356,7 +356,7 @@ void XSpreadsheets2::importSheetToCopy()
     xDestSheet.set( xDestSheetIndexAccess->getByIndex(nDestPosEffective), UNO_QUERY_THROW);
 }
 
-bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, const OUString& aSrcContent )
+bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, std::u16string_view aSrcContent )
 {
     CPPUNIT_ASSERT(aDestContent.startsWith("'file://"));
 

@@ -833,7 +833,7 @@ public:
         css::uno::Reference< css::uno::XInterface > const & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     static void handleAuthor
-        (OUString const& rFirstParam,
+        (std::u16string_view rFirstParam,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
         FieldId eFieldId);
     void handleDocProperty

@@ -27,7 +27,7 @@ private:
     DECL_LINK(ChangedHdl, weld::Entry&, void);
     DECL_LINK(TryAutoComplete, Timer*, void);
 
-    bool Match(const OUString& rText);
+    bool Match(std::u16string_view rText);
 
 public:
     AutocompleteEdit(std::unique_ptr<weld::Entry> xEntry);

@@ -229,7 +229,7 @@ SvXMLImportContextRef ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
         {
             GetScImport().GetFormImport()->startPage(GetScImport().GetTables().GetCurrentXDrawPage());
             bStartFormPage = true;
-            pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext( GetScImport(), nPrefix, rLName );
+            pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext( GetScImport() );
         }
         break;
     default:

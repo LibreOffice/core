@@ -344,7 +344,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
             aFieldName = rDoc.GetString(col, nFirstSortRow, nTab);
             if ( !bHasHeader || aFieldName.isEmpty() )
             {
-                aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
+                aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, u"%1", ScColToAlpha( col ));
             }
             nFieldArr.push_back( col );
 
@@ -365,7 +365,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
             aFieldName = rDoc.GetString(nFirstSortCol, row, nTab);
             if ( !bHasHeader || aFieldName.isEmpty() )
             {
-                aFieldName = ScGlobal::ReplaceOrAppend( aStrRow, "%1", OUString::number( row+1));
+                aFieldName = ScGlobal::ReplaceOrAppend( aStrRow, u"%1", OUString::number( row+1));
             }
             nFieldArr.push_back( row );
 

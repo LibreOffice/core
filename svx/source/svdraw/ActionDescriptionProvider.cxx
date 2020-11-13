@@ -23,7 +23,7 @@
 #include <svx/strings.hrc>
 
 OUString ActionDescriptionProvider::createDescription( ActionType eActionType
-                        , const OUString& rObjectName )
+                        , std::u16string_view rObjectName )
 {
     const char* pResID = nullptr;
     switch( eActionType )
