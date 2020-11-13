@@ -706,12 +706,12 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     //  and can't be changed directly
 
                     const Fraction& rOldY = GetViewData().GetZoomY();
-                    long nOld = static_cast<long>(rOldY * 100);
-                    long nNew;
+                    tools::Long nOld = tools::Long(rOldY * 100);
+                    tools::Long nNew;
                     if (SID_ZOOM_OUT == nSlot)
-                        nNew = std::max(long(MINZOOM), basegfx::zoomtools::zoomOut(nOld));
+                        nNew = std::max(tools::Long(MINZOOM), basegfx::zoomtools::zoomOut(nOld));
                     else
-                        nNew = std::min(long(MAXZOOM), basegfx::zoomtools::zoomIn(nOld));
+                        nNew = std::min(tools::Long(MAXZOOM), basegfx::zoomtools::zoomIn(nOld));
                     if ( nNew != nOld)
                     {
                         bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
