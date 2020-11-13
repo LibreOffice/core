@@ -365,6 +365,13 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 aRect.SetRight( aPt.X() );
                 aRect.SetBottom( aPt.Y() );
 
+                // tdf#136336 ensure tooltip area surrounds the current mouse position with at least a pixel margin
+                aRect.Union(tools::Rectangle(rEvt.GetMousePosPixel(), Size(1, 1)));
+                aRect.AdjustLeft(-1);
+                aRect.AdjustRight(1);
+                aRect.AdjustTop(-1);
+                aRect.AdjustBottom(1);
+
                 if( bBalloon )
                     Help::ShowBalloon( this, rEvt.GetMousePosPixel(), aRect, sText );
                 else
