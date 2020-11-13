@@ -82,7 +82,7 @@ public:
     void            incBusy() { m_aBusy.incBusy(m_pWindow); }
     void            decBusy() { m_aBusy.decBusy(); }
     bool            isBusy() const { return m_aBusy.isBusy(); }
-    bool            installExtensionWarn(const OUString &rExtensionURL);
+    bool            installExtensionWarn(std::u16string_view rExtensionURL);
     bool            installForAllUsers(bool &bInstallForAll);
 };
 
@@ -123,7 +123,7 @@ class ExtMgrDialog : public weld::GenericDialogController
     std::unique_ptr<weld::ProgressBar> m_xProgressBar;
     std::unique_ptr<weld::Button> m_xCancelBtn;
 
-    bool removeExtensionWarn(const OUString &rExtensionTitle);
+    bool removeExtensionWarn(std::u16string_view rExtensionTitle);
 
     DECL_LINK( HandleOptionsBtn, weld::Button&, void );
     DECL_LINK( HandleAddBtn, weld::Button&, void );

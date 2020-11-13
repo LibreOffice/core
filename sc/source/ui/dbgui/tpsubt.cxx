@@ -264,7 +264,7 @@ void ScTpSubTotalGroup::FillListBoxes()
         aFieldName = pDoc->GetString(col, nFirstRow, nTab);
         if ( aFieldName.isEmpty() )
         {
-            aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
+            aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, u"%1", ScColToAlpha( col ));
         }
         nFieldArr[i] = col;
         mxLbGroup->insert_text(i+1, aFieldName);

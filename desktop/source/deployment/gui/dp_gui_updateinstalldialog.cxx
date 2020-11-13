@@ -232,7 +232,7 @@ void UpdateInstallDialog::updateDone()
 
 // make sure the solar mutex is locked before calling
 //sets an error message in the text area
-void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtension,
+void UpdateInstallDialog::setError(INSTALL_ERROR err, std::u16string_view sExtension,
     OUString const & exceptionMessage)
 {
     OUString sError;

@@ -1086,7 +1086,7 @@ void StarBASIC::Clear()
     pModules.clear();
 }
 
-SbModule* StarBASIC::FindModule( const OUString& rName )
+SbModule* StarBASIC::FindModule( std::u16string_view rName )
 {
     for (const auto& pModule: pModules)
     {

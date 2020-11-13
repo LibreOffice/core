@@ -991,7 +991,7 @@ void SAL_CALL ODatabaseDocument::store(  )
     }
 }
 
-void ODatabaseDocument::impl_throwIOExceptionCausedBySave_throw( const Any& i_rError, const OUString& i_rTargetURL ) const
+void ODatabaseDocument::impl_throwIOExceptionCausedBySave_throw( const Any& i_rError, std::u16string_view i_rTargetURL ) const
 {
     OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, i_rError );
     sErrorMessage = ResourceManager::loadString(

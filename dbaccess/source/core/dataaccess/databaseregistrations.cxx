@@ -94,7 +94,7 @@ namespace dbaccess
 
     private:
         void
-                impl_checkValidName_common(const OUString& _rName);
+                impl_checkValidName_common(std::u16string_view _rName);
         ::utl::OConfigurationNode
                 impl_checkValidName_throw_must_exist(const OUString& _rName);
         ::utl::OConfigurationNode
@@ -201,12 +201,12 @@ namespace dbaccess
         return aNewNode;
     }
 
-    void DatabaseRegistrations::impl_checkValidName_common(const OUString& _rName)
+    void DatabaseRegistrations::impl_checkValidName_common(std::u16string_view _rName)
     {
         if ( !m_aConfigurationRoot.isValid() )
             throw RuntimeException( OUString(), *this );
 
-        if ( _rName.isEmpty() )
+        if ( _rName.empty() )
             throw IllegalArgumentException( OUString(), *this, 1 );
     }
 

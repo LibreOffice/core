@@ -48,7 +48,7 @@ void SfxFrameDescriptor::SetURL( const OUString& rURL )
     SetActualURL(aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ));
 }
 
-void SfxFrameDescriptor::SetActualURL( const OUString& )
+void SfxFrameDescriptor::SetActualURL( std::u16string_view )
 {
     if ( m_pArgs )
         m_pArgs->ClearItem();

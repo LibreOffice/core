@@ -483,7 +483,7 @@ bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
     return true;
 }
 
-void SvIdlDataBase::StartNewFile( const OUString& rName )
+void SvIdlDataBase::StartNewFile( std::u16string_view rName )
 {
     bExport = aExportFile.equalsIgnoreAsciiCase( rName );
     assert ( !bExport );

@@ -304,7 +304,7 @@ bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
     return bRet;
 }
 
-void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const SearchResult& rResult ) const
+void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, std::u16string_view rStr, const SearchResult& rResult ) const
 {
     if( rResult.subRegExpressions <= 0 )
         return;
@@ -318,7 +318,7 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
         {
             sal_Int32 nStart = rResult.startOffset[0];
             sal_Int32 nLength = rResult.endOffset[0] - rResult.startOffset[0];
-            sBuff.append(std::u16string_view(rStr).substr(nStart, nLength));
+            sBuff.append(rStr.substr(nStart, nLength));
         }
         else if((i < rReplaceStr.getLength() - 1) && rReplaceStr[i] == '$')
         {
@@ -355,7 +355,7 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
                             nSttReg = rResult.endOffset[j];
                         }
                         // Copy reference from found string
-                        sBuff.append(std::u16string_view(rStr).substr(nSttReg, nRegLen));
+                        sBuff.append(rStr.substr(nSttReg, nRegLen));
                     }
                     i += 1;
                 }

@@ -2975,7 +2975,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 short ImpEditEngine::ReplaceTextOnly(
     ContentNode* pNode,
     sal_Int32 nCurrentStart,
-    const OUString& rNewText,
+    std::u16string_view rNewText,
     const uno::Sequence< sal_Int32 >& rOffsets )
 {
     // Change text without losing the attributes

@@ -381,7 +381,7 @@ namespace slideshow::internal
 
         void ViewMediaShape::implInitializePlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams,
-                                                                 const OUString& )
+                                                                 std::u16string_view )
         {
             SAL_INFO("slideshow", "ViewMediaShape::implInitializePlayerWindow" );
             if( mpMediaWindow || rBounds.isEmpty() )

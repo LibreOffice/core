@@ -208,7 +208,7 @@ public:
                     const css::lang::Locale& rLocale );
 
     /* replace back references in the replace string by the sub expressions from the search result */
-    void ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const css::util::SearchResult& rResult ) const;
+    void ReplaceBackReferences( OUString& rReplaceStr, std::u16string_view rStr, const css::util::SearchResult& rResult ) const;
 
     /** Upgrade SearchOptions to SearchOptions2 for places that don't handle
         SearchOptions2 yet. Better fix your module if you want to support

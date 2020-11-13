@@ -627,7 +627,7 @@ private:
     void functionExecuted( const OUString &rCommand ) override;
     void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
     void SAL_CALL execute( sal_Int16 KeyModifier ) override;
-    sal_uInt16 getMenuIdForCommand( const OUString &rCommand );
+    sal_uInt16 getMenuIdForCommand( std::u16string_view rCommand );
 
     sal_uInt16 m_nMenuId;
 };
@@ -719,9 +719,9 @@ void NewToolbarController::functionExecuted( const OUString &rCommand )
     updateImage();
 }
 
-sal_uInt16 NewToolbarController::getMenuIdForCommand( const OUString &rCommand )
+sal_uInt16 NewToolbarController::getMenuIdForCommand( std::u16string_view rCommand )
 {
-    if ( m_xPopupMenu.is() && !rCommand.isEmpty() )
+    if ( m_xPopupMenu.is() && !rCommand.empty() )
     {
         Menu* pVclMenu( comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu() );
         sal_uInt16 nCount = pVclMenu->GetItemCount();

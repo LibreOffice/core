@@ -115,7 +115,7 @@ private:
 
     void FillCertLB(const bool bShowWarnings = false);
     void ImplCheckButtons();
-    void ShowBrokenCertificateError(const OUString& rData);
+    void ShowBrokenCertificateError(std::u16string_view rData);
 
 public:
     MacroSecurityTrustedSourcesTP(weld::Container* pParent, MacroSecurity* pDlg);

@@ -59,7 +59,7 @@ struct ReferenceToolbarPathInfo
 class ToolBarMerger
 {
     public:
-        static bool       IsCorrectContext( const OUString& aContext, const OUString& aModuleIdentifier );
+        static bool       IsCorrectContext( const OUString& aContext, std::u16string_view aModuleIdentifier );
 
         static void       ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
                                                  AddonToolbarItemContainer& rContainer );
@@ -79,7 +79,7 @@ class ToolBarMerger
                                                  ToolBox::ImplToolItems::size_type nPos,
                                                  sal_uInt16&               rItemId,
                                                  CommandToInfoMap&         rCommandMap,
-                                                 const OUString&           rModuleIdentifier,
+                                                 std::u16string_view       rModuleIdentifier,
                                                  const OUString&           rMergeCommand,
                                                  const OUString&           rMergeCommandParameter,
                                                  const AddonToolbarItemContainer& rItems );
@@ -87,7 +87,7 @@ class ToolBarMerger
         static bool       ProcessMergeFallback( ToolBox*                         pToolbar,
                                                 sal_uInt16&                      rItemId,
                                                 CommandToInfoMap&                rCommandMap,
-                                                const OUString&           rModuleIdentifier,
+                                                std::u16string_view       rModuleIdentifier,
                                                 const OUString&           rMergeCommand,
                                                 const OUString&           rMergeFallback,
                                                 const AddonToolbarItemContainer& rItems );
@@ -97,14 +97,14 @@ class ToolBarMerger
                                       sal_uInt16                nModIndex,
                                       sal_uInt16&               rItemId,
                                       CommandToInfoMap&         rCommandMap,
-                                      const OUString&           rModuleIdentifier,
+                                      std::u16string_view       rModuleIdentifier,
                                       const AddonToolbarItemContainer& rAddonToolbarItems );
 
         static void       ReplaceItem( ToolBox*                  pToolbar,
                                        ToolBox::ImplToolItems::size_type nPos,
                                        sal_uInt16&               rItemId,
                                        CommandToInfoMap&         rCommandMap,
-                                       const OUString&           rModuleIdentifier,
+                                       std::u16string_view       rModuleIdentifier,
                                        const AddonToolbarItemContainer& rAddonToolbarItems );
 
         static void       RemoveItems( ToolBox*           pToolbar,

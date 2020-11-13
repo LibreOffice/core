@@ -33,7 +33,7 @@ namespace oox::core {
 /** Expands to an OUString containing an 'officeDocument' transitional relation type created
     from the passed literal(!) ASCII(!) character array. */
 #define CREATE_OFFICEDOC_RELATION_TYPE( ascii ) \
-    ( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/" ascii )
+    ( u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/" ascii )
 
 /** Expands to an OUString containing an 'officeDocument' strict relation type created
     from the passed literal(!) ASCII(!) character array. */
@@ -43,7 +43,7 @@ namespace oox::core {
 /** Expands to an OUString containing an MS Office specific relation type
     created from the passed literal(!) ASCII(!) character array. */
 #define CREATE_MSOFFICE_RELATION_TYPE( ascii ) \
-    ( "http://schemas.microsoft.com/office/2006/relationships/" ascii )
+    ( u"http://schemas.microsoft.com/office/2006/relationships/" ascii )
 
 #define CREATE_XL_CONTENT_TYPE( ascii ) \
     ( "application/vnd.openxmlformats-officedocument.spreadsheetml." ascii "+xml" )
@@ -89,7 +89,7 @@ public:
     /** Returns the relation with the passed relation identifier. */
     const Relation*     getRelationFromRelId( const OUString& rId ) const;
     /** Returns the first relation with the passed type. */
-    const Relation*     getRelationFromFirstType( const OUString& rType ) const;
+    const Relation*     getRelationFromFirstType( std::u16string_view rType ) const;
     /** Finds all relations associated with the passed type. */
     RelationsRef        getRelationsFromTypeFromOfficeDoc( const OUString& rType ) const;
 
@@ -103,7 +103,7 @@ public:
     /** Returns the full fragment path for the passed relation identifier. */
     OUString     getFragmentPathFromRelId( const OUString& rRelId ) const;
     /** Returns the full fragment path for the first relation of the passed type. */
-    OUString     getFragmentPathFromFirstType( const OUString& rType ) const;
+    OUString     getFragmentPathFromFirstType( std::u16string_view rType ) const;
     OUString     getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rType ) const;
 
 private:

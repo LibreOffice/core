@@ -119,7 +119,7 @@ namespace rptui
         * \param _sDataField the data field
         * \param _aFunction the function template
         */
-        void impl_createFunction(const OUString& _sFunctionName,const OUString& _sDataField,const DefaultFunction& _aFunction);
+        void impl_createFunction(const OUString& _sFunctionName,std::u16string_view _sDataField,const DefaultFunction& _aFunction);
 
         /** check whether the given function name is a counter function.
         *

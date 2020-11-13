@@ -62,7 +62,7 @@ typedef ::cppu::WeakImplHelper<
 
             static void CreateUIElement(const OUString& ResourceURL
                         ,const css::uno::Sequence< css::beans::PropertyValue >& Args
-                        ,const OUString& ResourceType
+                        ,std::u16string_view ResourceType
                         ,const css::uno::Reference< css::ui::XUIElement >& _xMenuBar
                         ,const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 

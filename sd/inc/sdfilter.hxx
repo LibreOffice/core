@@ -60,7 +60,7 @@ protected:
 
 private:
 
-    static OUString             ImplGetFullLibraryName( const OUString& rLibraryName );
+    static OUString             ImplGetFullLibraryName( std::u16string_view rLibraryName );
 
 };
 

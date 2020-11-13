@@ -1115,7 +1115,7 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
     const Graphic& rGraphic,
     const OUString& rBeginUndoText,
     const OUString& rFile,
-    const OUString& rFilter)
+    std::u16string_view rFilter)
 {
     if(dynamic_cast< SdrGrafObj* >(&rHitObject))
     {
@@ -1126,7 +1126,7 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
         ReplaceObjectAtView(&rHitObject, *GetSdrPageView(), pNewGrafObj);
 
         // set in all cases - the Clone() will have copied an existing link (!)
-        pNewGrafObj->SetGraphicLink( rFile, ""/*TODO?*/, rFilter );
+        pNewGrafObj->SetGraphicLink( rFile, u""/*TODO?*/, rFilter );
 
         EndUndo();
         return pNewGrafObj;

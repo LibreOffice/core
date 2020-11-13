@@ -148,7 +148,7 @@ public:
 
     void updateThumbnailDimensions(tools::Long itemMaxSize);
 
-    void RemoveDefaultTemplateIcon( const OUString& rPath);
+    void RemoveDefaultTemplateIcon( std::u16string_view rPath);
 
     static BitmapEx scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height);
 

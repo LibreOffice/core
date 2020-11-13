@@ -1020,13 +1020,13 @@ void ShapeHelper::setTop(double _fTop)
     xShape->setPosition(aPoint);
 }
 
-void DebugHelper::basicexception( const css::uno::Exception& ex, ErrCode err, const OUString& /*additionalArgument*/ )
+void DebugHelper::basicexception( const css::uno::Exception& ex, ErrCode err, std::u16string_view /*additionalArgument*/ )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
     throw css::script::BasicErrorException( ex.Message, css::uno::Reference< css::uno::XInterface >(), sal_uInt32(err), OUString() );
 }
 
-void DebugHelper::basicexception( ErrCode err,  const OUString& additionalArgument )
+void DebugHelper::basicexception( ErrCode err,  std::u16string_view additionalArgument )
 {
     basicexception( css::uno::Exception(), err, additionalArgument );
 }
@@ -1085,7 +1085,7 @@ uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::
     return xIf;
 }
 
-uno::Reference< XHelperInterface > getUnoDocModule( const OUString& aModName, SfxObjectShell const * pShell )
+uno::Reference< XHelperInterface > getUnoDocModule( std::u16string_view aModName, SfxObjectShell const * pShell )
 {
     uno::Reference< XHelperInterface > xIf;
     if ( pShell )
