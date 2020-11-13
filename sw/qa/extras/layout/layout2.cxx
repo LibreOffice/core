@@ -1937,6 +1937,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138039)
     assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/anchored", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134298)
+{
+    createDoc("tdf134298.ott");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // there are 2 pages
+    assertXPath(pXmlDoc, "/root/page", 2);
+    // table and first para on first page
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored", 0);
+    // paragraph with large fly on second page
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab", 0);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "top", "17897");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "height",
+                "15819");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testShapeAllowOverlap)
 {
 // Need to find out why this fails on macOS and why this is unstable on Windows.
