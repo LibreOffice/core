@@ -1,66 +1,67 @@
---- firebird.org/extern/cloop/src/tests/test1/CTest.c	2016-08-01 22:55:35.000000000 +0200
-+++ firebird/extern/cloop/src/tests/test1/CTest.c	2016-08-02 21:11:31.000000000 +0200
-@@ -20,7 +20,7 @@
-  */
+--- firebird.org/builds/posix/Makefile.in.examples
++++ firebird/builds/posix/Makefile.in.examples
+@@ -134,7 +134,7 @@
+ 	$(LN) $(ISQL) $(EXAMPLES_DEST)/isql$(EXEC_EXT)
  
- #include "CalcCApi.h"
--#include <malloc.h>
-+#include <stdlib.h>
- #include <stdio.h>
+ $(EXAMPLES_DEST)/empbuild$(EXEC_EXT): $(EMPBLD_Objects) $(COMMON_LIB)
+-	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ -L$(LIB) $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS)
++	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ -L$(LIB) $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS) $(call LINK_DARWIN_RPATH,../$(if $(ENABLE_DEBUG),Debug,Release)/firebird)
  
- #ifdef WIN32
+ $(EXAMPLES_DEST)/empbuild.c:	$(EXAMPLES_DEST)/empbuild.fdb $(EXAMPLES_DEST)/empbuild.e
+ 
 --- firebird.org/builds/posix/prefix.darwin_x86_64	2016-08-01 20:02:48.000000000 +0200
 +++ firebird/builds/posix/prefix.darwin_x86_64	2016-08-01 21:42:45.000000000 +0200
-@@ -19,8 +19,6 @@
- #
- # Default build from 10.7 using Clang
+@@ -27,9 +27,6 @@
+ # configure using --with-builtin-tommath
+ # or add the relevant -I, -L for an installed version of libtommath
  
 -DYLD_LIBRARY_PATH=$(HOME)/icu54/icu/source/lib
 -export DYLD_LIBRARY_PATH
- 
+-
  #DYLD_PRINT_ENV=1
  #export DYLD_PRINT_ENV
+
 @@ -31,8 +31,8 @@
- MACOSX_DEPLOYMENT_TARGET=10.7
+ MACOSX_DEPLOYMENT_TARGET=10.9
  export MACOSX_DEPLOYMENT_TARGET
  
--PROD_FLAGS=-O1 -DDARWIN -pipe -MMD -fPIC -fno-common -mmacosx-version-min=10.7
--DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -mmacosx-version-min=10.7 -Wno-non-virtual-dtor
-+PROD_FLAGS=-O1 -DDARWIN -pipe -MMD -fPIC -fno-common
+-PROD_FLAGS=-DDARWIN -pipe -O2 -MMD -fPIC -fno-common -mmacosx-version-min=10.9
+-DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -mmacosx-version-min=10.9 -Wno-non-virtual-dtor
++PROD_FLAGS=-DDARWIN -pipe -O2 -MMD -fPIC -fno-common
 +DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -Wno-non-virtual-dtor
- CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden 
+ CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -stdlib=libc++ -msse4
  
- EXE_LINK_OPTIONS:= 
+ EXE_LINK_OPTIONS:=
 --- firebird.org/src/common/unicode_util.cpp	2016-07-07 13:55:55.992234709 +0200
 +++ firebird/src/common/unicode_util.cpp	2016-08-10 11:25:46.422331020 +0200
 @@ -63,8 +63,8 @@
+ const char* const ucTemplate = "icuuc%s.dll";
+ #endif
  #elif defined(DARWIN)
- //const char* const inTemplate = "/Library/Frameworks/Firebird.framework/Versions/A/Libraries/libicui18n.dylib";
- //const char* const ucTemplate = "/Library/Frameworks/Firebird.framework/versions/A/Libraries/libicuuc.dylib";
--const char* const inTemplate = "libicui18n.dylib";
--const char* const ucTemplate = "libicuuc.dylib";
+-const char* const inTemplate = "lib/libicui18n.%s.dylib";
+-const char* const ucTemplate = "lib/libicuuc.%s.dylib";
 +const char* const inTemplate = "libicui18n.dylib.%s";
 +const char* const ucTemplate = "libicuuc.dylib.%s";
  #elif defined(HPUX)
  const char* const inTemplate = "libicui18n.sl.%s";
  const char* const ucTemplate = "libicuuc.sl.%s";
-@@ -353,6 +353,16 @@
- 		s.printf("%d%d", majorVersion, minorVersion);
+@@ -354,6 +354,16 @@
+ 	{
+ 		s.printf(*p, majorVersion, minorVersion);
+ 		filename.printf(templateName, s.c_str());
++		const char * envpath = getenv("LIBREOFFICE_FIREBIRD_LIB");
++		if(envpath == nullptr)
++		{
++			envpath = getenv("LIBREOFFICE_ICU_LIB");
++		}
++		if(envpath != nullptr)
++		{
++			s = filename.c_str();
++			PathUtils::concatPath(filename, envpath, s.c_str());
++		}
  
- 	filename.printf(templateName, s.c_str());
-+	const char * envpath = getenv("LIBREOFFICE_FIREBIRD_LIB");
-+	if(envpath == nullptr)
-+	{
-+		envpath = getenv("LIBREOFFICE_ICU_LIB");
-+	}
-+	if(envpath != nullptr)
-+	{
-+		s = filename.c_str();
-+		PathUtils::concatPath(filename, envpath, s.c_str());
-+	}
- }
- 
- 
+ 		ModuleLoader::Module* module = ModuleLoader::fixAndLoadModule(NULL, filename);
+ 		if (module)
 --- firebird.org/src/common/utils.cpp	2016-08-16 10:11:10.000000000 +0200
 +++ firebird/src/common/utils.cpp	2016-08-16 11:27:09.000000000 +0200
 @@ -1027,10 +1027,18 @@

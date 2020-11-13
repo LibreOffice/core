@@ -25,12 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
 		external/firebird/firebird-Engine12.patch \
 		external/firebird/firebird-rpath.patch.0 \
-		external/firebird/firebird-cloop-compiler.patch.1 \
-		external/firebird/firebird-gcc6.patch.1 \
 		external/firebird/wnt-dbgutil.patch \
-		external/firebird/libc++.patch \
-		external/firebird/0001-Avoid-hangup-in-SS-when-error-happens-at-system-atta.patch.1 \
-		external/firebird/0002-Backported-fix-for-CORE-5452-Segfault-when-engine-s-.patch.1 \
 		external/firebird/c++17.patch \
 		external/firebird/ubsan.patch \
 		external/firebird/asan.patch \
@@ -39,18 +34,19 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
     external/firebird/0001-Fix-warning-on-Win64-build-231.patch.1 \
 		external/firebird/macos-arm64.patch.0 \
     external/firebird/firebird-btyacc-add-explicit-rule.patch \
+    external/firebird/firebird-307.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	external/firebird/firebird-cygwin-msvc.patch \
+	external/firebird/firebird-cygwin-msvc-warnings.patch \
 	external/firebird/firebird-vs2017.patch.1 \
 ))
 endif
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
-	external/firebird/firebird-configure-x86-64-macosx.patch.1 \
 	external/firebird/firebird-macosx.patch.1 \
 	external/firebird/macosx-elcapitan-dyld.patch \
 ))

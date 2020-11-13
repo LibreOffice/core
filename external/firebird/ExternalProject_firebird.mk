@@ -23,7 +23,7 @@ $(eval $(call gb_ExternalProject_register_targets,firebird,\
 ))
 
 firebird_BUILDDIR = $(EXTERNAL_WORKDIR)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird
-firebird_VERSION := 3.0.0
+firebird_VERSION := 3.0.7
 
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_Trace_StartRange,firebird,EXTERNAL)
@@ -85,10 +85,12 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)))' \
 		$(if $(filter MACOSX,$(OS)), \
 			&& install_name_tool -id @__________________________________________________OOO/libfbclient.dylib.$(firebird_VERSION) \
+				-delete_rpath @loader_path/.. \
 				$(firebird_BUILDDIR)/lib/libfbclient.dylib.$(firebird_VERSION) \
 			&& install_name_tool -id @__________________________________________________OOO/libEngine12.dylib \
+				-delete_rpath @loader_path/.. \
 				$(firebird_BUILDDIR)/plugins/libEngine12.dylib \
-			&& install_name_tool -change $(firebird_BUILDDIR)/lib/libfbclient.dylib.$(firebird_VERSION) \
+			&& install_name_tool -change @rpath/lib/libfbclient.dylib \
 				@loader_path/libfbclient.dylib.$(firebird_VERSION) $(firebird_BUILDDIR)/plugins/libEngine12.dylib \
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 				$(firebird_BUILDDIR)/lib/libfbclient.dylib.$(firebird_VERSION) \
