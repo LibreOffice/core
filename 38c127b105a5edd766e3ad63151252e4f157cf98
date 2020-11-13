@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22885c12_e522642c",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3610,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-13T08:20:26Z",
+      "side": 1,
+      "message": "*Possibly* this is worth expanding with \"if no \"result\" follows, this is used as default result\". But no hard feelings.",
+      "range": {
+        "startLine": 3610,
+        "startChar": 32,
+        "endLine": 3610,
+        "endChar": 79
+      },
+      "revId": "38c127b105a5edd766e3ad63151252e4f157cf98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
