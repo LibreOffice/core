@@ -56,6 +56,7 @@
 #include <sortedobjs.hxx>
 #include <frmatr.hxx>
 #include <frmtool.hxx>
+#include <layact.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 
@@ -1207,6 +1208,21 @@ void SwContentFrame::Cut()
             if ( pRoot )
             {
                 pRoot->SetSuperfluous();
+                // RemoveSuperfluous can only remove empty pages at the end;
+                // find if there are pages without content following pPage
+                // and if so request a call to CheckPageDescs()
+                SwPageFrame const* pNext(pPage);
+                if (pRoot->GetCurrShell()->Imp()->IsAction())
+                {
+                    while ((pNext = static_cast<SwPageFrame const*>(pNext->GetNext())))
+                    {
+                        if (!sw::IsPageFrameEmpty(*pNext) && !pNext->IsFootnotePage())
+                        {
+                            pRoot->GetCurrShell()->Imp()->GetLayAction().SetCheckPageNum(pPage->GetPhyPageNum());
+                            break;
+                        }
+                    }
+                }
                 GetUpper()->SetCompletePaint();
                 GetUpper()->InvalidatePage( pPage );
             }
