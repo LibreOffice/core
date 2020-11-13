@@ -206,7 +206,15 @@ static FieldContextPtr GetParentFieldContext(const std::deque<FieldContextPtr>& 
 static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldContextPtr& pInner)
 {
     std::optional<FieldId> oOuterFieldId = pOuter->GetFieldId();
-    if (!oOuterFieldId && pOuter->GetCommand().startsWith(" IF "))
+    OUString aCommand = pOuter->GetCommand();
+
+    // Ignore leading space before the field name, but don't accept IFF when we check for IF.
+    if (!aCommand.isEmpty() && aCommand[0] == ' ')
+    {
+        aCommand = aCommand.subView(1);
+    }
+
+    if (!oOuterFieldId && aCommand.startsWith("IF "))
     {
         // This will be FIELD_IF once the command is closed.
         oOuterFieldId = FIELD_IF;
