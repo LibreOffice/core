@@ -1116,19 +1116,23 @@ namespace emfio
                         mpInputStream->ReadUInt32( nIndex );
                         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                         {
-
                             LineInfo    aLineInfo;
                             sal_uInt32      nStyle;
-                            Size        aSize;
-                            // #fdo39428 Remove SvStream operator>>(long&)
-                            sal_Int32 nTmpW(0), nTmpH(0);
+                            sal_Int32 nPenWidth, nIgnored;
 
-                            mpInputStream->ReadUInt32( nStyle ).ReadInt32( nTmpW ).ReadInt32( nTmpH );
-                            aSize.setWidth( nTmpW );
-                            aSize.setHeight( nTmpH );
+                            mpInputStream->ReadUInt32( nStyle ).ReadInt32( nPenWidth ).ReadInt32( nIgnored );
 
-                            if ( aSize.Width() )
-                                aLineInfo.SetWidth( aSize.Width() );
+                            SAL_INFO("emfio", "\t\tIndex: " << nIndex << " nStyle: 0x" << std::hex << nStyle << std::dec << " nPenWidth: " << nPenWidth);
+                            // nStyle = PS_COSMETIC = 0x0 - line with a width of one logical unit and a style that is a solid color
+                            if ( !nStyle )
+                            {
+                                // Width 0 means default width for LineInfo (HairLine) with 1 pixel wide
+                                aLineInfo.SetWidth( 0 );
+                            }
+                            else
+                            {
+                                aLineInfo.SetWidth( nPenWidth );
+                            }
 
                             bool bTransparent = false;
                             switch( nStyle & PS_STYLE_MASK )
@@ -1165,14 +1169,14 @@ namespace emfio
                             switch( nStyle & PS_ENDCAP_STYLE_MASK )
                             {
                                 case PS_ENDCAP_ROUND :
-                                    if ( aSize.Width() )
+                                    if ( nPenWidth )
                                     {
                                         aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
                                         break;
                                     }
                                     [[fallthrough]];
                                 case PS_ENDCAP_SQUARE :
-                                    if ( aSize.Width() )
+                                    if ( nPenWidth )
                                     {
                                         aLineInfo.SetLineCap( css::drawing::LineCap_SQUARE );
                                         break;
@@ -1209,6 +1213,9 @@ namespace emfio
                             sal_uInt32  offBmi, cbBmi, offBits, cbBits, nStyle, nWidth, nBrushStyle, elpNumEntries;
                             sal_Int32   elpHatch;
                             mpInputStream->ReadUInt32( offBmi ).ReadUInt32( cbBmi ).ReadUInt32( offBits ).ReadUInt32( cbBits ). ReadUInt32( nStyle ).ReadUInt32( nWidth ).ReadUInt32( nBrushStyle );
+
+                            SAL_INFO("emfio", "\t\tStyle: 0x" << std::hex << nStyle << std::dec);
+                            SAL_INFO("emfio", "\t\tWidth: " << nWidth);
                             Color aColorRef = ReadColor();
                             mpInputStream->ReadInt32( elpHatch ).ReadUInt32( elpNumEntries );
 
