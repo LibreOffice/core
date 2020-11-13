@@ -1,0 +1,300 @@
+diff -ur builds/posix/make.defaults builds/posix/make.defaults
+--- builds/posix/make.defaults	2016-07-07 13:56:13.036235166 +0200
++++ builds/posix/make.defaults	2016-07-07 14:29:52.368289242 +0200
+@@ -102,7 +102,7 @@
+ #____________________________________________________________________________
+ 
+ # Firebird needs no RTTI
+-RTTI_FLAG:= -fno-rtti
++RTTI_FLAG:=
+ 
+ # If this is defined then we use special rules useful for developers only
+ IsDeveloper = @DEVEL_FLG@
+@@ -175,6 +175,7 @@
+ # Default extensions
+ 
+ ARCH_EXT=		.lib
++OBJ_EXT=		obj
+ EXEC_EXT=		@EXEEXT@
+ SHRLIB_EXT=@SHRLIB_EXT@
+ LIB_PREFIX=
+--- builds/posix/Makefile.in	2016-07-07 15:56:06.459221300 +0200
++++ builds/posix/Makefile.in	2016-07-13 12:44:57.134217200 +0200
+@@ -665,7 +666,7 @@
+ 
+ include $(ROOT)/gen/make.shared.targets
+ 
+-Dependencies = $(AllObjects:.o=.d)
++Dependencies = $(AllObjects:.$(OBJ_EXT)=.d)
+ -include $(Dependencies)
+ 
+ 
+@@ -729,14 +730,14 @@
+ 	-$(MAKE) -C $(ROOT)/extern/libtommath clean
+ 
+ clean_objects:
+-	$(RM) `find $(TMP_ROOT)/ -type f -name '*.o' -print`
++	$(RM) `find $(TMP_ROOT)/ -type f -name '*.$(OBJ_EXT)' -print`
+ 	$(RM) `find $(TMP_ROOT)/ -type f -name '*.a' -print`
+ 	$(RM) `find $(TMP_ROOT)/ -type f -name '*.cpp' -print`
+ 	$(RM) `find $(TMP_ROOT)/ -type f -name '*.pas' -print`
+ 
+ clean_extern_objects:
+ 	$(RM) `find $(ROOT)/extern/ -type f -name '*.lo' -print`
+-	$(RM) `find $(ROOT)/extern/ -type f -name '*.o' -print`
++	$(RM) `find $(ROOT)/extern/ -type f -name '*.$(OBJ_EXT)' -print`
+ 
+ # Clear out dependancies files created by the gcc compiler
+ # since when .o and other files are deleted the dependant
+diff -ur builds/posix/make.rules builds/posix/make.rules
+--- builds/posix/make.rules	2016-07-07 13:56:13.036235166 +0200
++++ builds/posix/make.rules	2016-07-07 14:31:16.116291485 +0200
+@@ -92,21 +92,21 @@
+ 	$(LIBO_TUNNEL_LIBRARY_PATH) $(GPRE_CURRENT) $(GPRE_FLAGS) $(firstword $<) $@
+ 
+ 
+-.SUFFIXES: .lo .o .cpp .c
++.SUFFIXES: .lo .$(OBJ_EXT) .cpp .c
+ 
+-%.o: %.c
++%.$(OBJ_EXT): %.c
+ 	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
+ 
+-$(OBJ)/%.o: $(SRC_ROOT)/%.c
++$(OBJ)/%.$(OBJ_EXT): $(SRC_ROOT)/%.c
+ 	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
+ 
+-$(OBJ)/%.o: $(OBJ)/%.cpp
++$(OBJ)/%.$(OBJ_EXT): $(OBJ)/%.cpp
+ 	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
+ 
+-$(OBJ)/%.o: $(SRC_ROOT)/%.cpp
++$(OBJ)/%.$(OBJ_EXT): $(SRC_ROOT)/%.cpp
+ 	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
+ 
+-$(OBJ)/%.o: $(ROOT)/%.cpp
++$(OBJ)/%.$(OBJ_EXT): $(ROOT)/%.cpp
+ 	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
+ 
+ .SUFFIXES: .epp .e
+--- builds/posix/make.shared.variables.orig	2020-11-12 19:36:29.773409900 +0100
++++ builds/posix/make.shared.variables	2020-11-12 19:37:14.976503300 +0100
+@@ -1,5 +1,5 @@
+ # Helper functions
+-doObjects= $(patsubst %.y,%.o,$(patsubst %.epp,%.o,$(patsubst %.c,%.o,$(1:.cpp=.o))))
++doObjects= $(patsubst %.y,%.$(OBJ_EXT),$(patsubst %.epp,%.$(OBJ_EXT),$(patsubst %.c,%.$(OBJ_EXT),$(1:.cpp=.$(OBJ_EXT)))))
+ makeObjects= $(addprefix $(OBJ)/$(patsubst ../%,%,$(1))/,$(call doObjects,$2))
+ dirFiles= $(notdir $(wildcard ../src/$(1)/*.cpp)) $(notdir $(wildcard ../src/$(1)/*.c)) \
+ 		  $(notdir $(wildcard ../src/$(1)/*.epp)) $(notdir $(wildcard ../src/$(1)/*.y))
+--- src/include/gen/autoconfig.h.in.orig	2020-11-12 20:52:49.835722200 +0100
++++ src/include/gen/autoconfig.h.in	2020-11-12 20:53:18.148311100 +0100
+@@ -773,7 +773,9 @@
+ #pragma warning(disable:4996)  // 'identificator' was declared deprecated
+ #endif
+ 
++#ifndef WIN32_LEAN_AND_MEAN
+ #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
++#endif
+ 
+ //#ifdef _MSC_VER // don't know if this is useful for MinGW
+ #define NOATOM
+--- builds/posix/prefix.mingw.orig	2020-11-12 21:37:39.574461300 +0100
++++ builds/posix/prefix.mingw	2020-11-12 21:37:55.448422500 +0100
+@@ -20,8 +20,8 @@
+ # 
+ 
+ # -Wno-unused-variable is used due to unused gpre generated variables
+-PROD_FLAGS=-O2  -DMINGW  -Dlint -DWIN32_LEAN_AND_MEAN
+-DEV_FLAGS=-ggdb  -DMINGW -Dlint -DWIN32_LEAN_AND_MEAN
++PROD_FLAGS=-O2  -DMINGW  -Dlint -DWIN32_LEAN_AND_MEAN -wd4291 -wd4477
++DEV_FLAGS=-ggdb  -DMINGW -Dlint -DWIN32_LEAN_AND_MEAN -wd4291 -wd4477
+ 
+ PLATFORM_PATH=os/win32
+ 
+--- extern/btyacc/Makefile.orig	2020-11-12 21:39:13.833012400 +0100
++++ extern/btyacc/Makefile	2020-11-12 21:39:54.861473300 +0100
+@@ -25,8 +25,8 @@
+ 
+ MAKEFILE      = Makefile
+ 
+-OBJS	      = closure.o error.o lalr.o lr0.o main.o mkpar.o output.o	\
+-		mstring.o reader.o readskel.o skeleton.o symtab.o verbose.o warshall.o
++OBJS	      = closure.obj error.obj lalr.obj lr0.obj main.obj mkpar.obj output.obj	\
++		mstring.obj reader.obj readskel.obj skeleton.obj symtab.obj verbose.obj warshall.obj
+ 
+ PRINT	      = pr -f -l88
+ 
+@@ -44,7 +44,7 @@
+ $(PROGRAM):     $(OBJS) $(LIBS)
+ 		$(CC) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
+ 
+-%.o: %.c
++%.obj: %.c
+ 		$(CC) $(CCFLAGS) -c $< -o $@
+ 
+ clean:;		rm -f $(OBJS)
+@@ -93,16 +93,16 @@
+ 		etags *.c *.h
+ 
+ ###
+-closure.o: defs.h
+-error.o: defs.h
+-lalr.o: defs.h
+-lr0.o: defs.h
+-main.o: defs.h
+-mkpar.o: defs.h
+-mstring.o: mstring.h
+-output.o: defs.h
+-reader.o: defs.h mstring.h
+-skeleton.o: defs.h
+-symtab.o: defs.h
+-verbose.o: defs.h
+-warshall.o: defs.h
++closure.obj: defs.h
++error.obj: defs.h
++lalr.obj: defs.h
++lr0.obj: defs.h
++main.obj: defs.h
++mkpar.obj: defs.h
++mstring.obj: mstring.h
++output.obj: defs.h
++reader.obj: defs.h mstring.h
++skeleton.obj: defs.h
++symtab.obj: defs.h
++verbose.obj: defs.h
++warshall.obj: defs.h
+--- extern/cloop/Makefile.orig	2020-11-13 10:59:53.282923700 +0100
++++ extern/cloop/Makefile	2020-11-13 11:00:24.267079900 +0100
+@@ -24,8 +24,8 @@
+ SRCS_C := $(foreach sdir,$(SRC_DIRS),$(wildcard $(sdir)/*.c))
+ SRCS_CPP := $(foreach sdir,$(SRC_DIRS),$(wildcard $(sdir)/*.cpp))
+ 
+-OBJS_C := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS_C))
+-OBJS_CPP := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS_CPP))
++OBJS_C := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.obj,$(SRCS_C))
++OBJS_CPP := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.obj,$(SRCS_CPP))
+ 
+ C_FLAGS := -fPIC
+ CXX_FLAGS := $(C_FLAGS)
+@@ -43,10 +43,10 @@
+ vpath %.cpp $(SRC_DIRS)
+ 
+ define compile
+-$1/%.o: %.c
++$1/%.obj: %.c
+ 	$(CC) -c $$(C_FLAGS) $$< -o $$@
+ 
+-$1/%.o: %.cpp
++$1/%.obj: %.cpp
+ 	$(CXX) -c $$(CXX_FLAGS) $$< -o $$@
+ endef
+ 
+@@ -75,11 +75,11 @@
+ -include $(addsuffix .d,$(basename $(OBJS_CPP)))
+ 
+ $(BIN_DIR)/cloop$(EXE_EXT): \
+-	$(OBJ_DIR)/cloop/Expr.o \
+-	$(OBJ_DIR)/cloop/Generator.o \
+-	$(OBJ_DIR)/cloop/Lexer.o \
+-	$(OBJ_DIR)/cloop/Parser.o \
+-	$(OBJ_DIR)/cloop/Main.o \
++	$(OBJ_DIR)/cloop/Expr.obj \
++	$(OBJ_DIR)/cloop/Generator.obj \
++	$(OBJ_DIR)/cloop/Lexer.obj \
++	$(OBJ_DIR)/cloop/Parser.obj \
++	$(OBJ_DIR)/cloop/Main.obj \
+ 
+ 	$(LD) $^ -o $@
+ 
+@@ -105,24 +105,24 @@
+ $(SRC_DIR)/tests/test1/CppTest.cpp: $(SRC_DIR)/tests/test1/CalcCppApi.h
+ 
+ $(BIN_DIR)/test1-c$(SHRLIB_EXT): \
+-	$(OBJ_DIR)/tests/test1/CalcCApi.o \
+-	$(OBJ_DIR)/tests/test1/CTest.o \
++	$(OBJ_DIR)/tests/test1/CalcCApi.obj \
++	$(OBJ_DIR)/tests/test1/CTest.obj \
+ 
+ 	$(LD) $^ -o $@
+ 
+ $(BIN_DIR)/test1-c$(EXE_EXT): \
+-	$(OBJ_DIR)/tests/test1/CalcCApi.o \
+-	$(OBJ_DIR)/tests/test1/CTest.o \
++	$(OBJ_DIR)/tests/test1/CalcCApi.obj \
++	$(OBJ_DIR)/tests/test1/CTest.obj \
+ 
+ 	$(LD) $^ -o $@
+ 
+ $(BIN_DIR)/test1-cpp$(SHRLIB_EXT): \
+-	$(OBJ_DIR)/tests/test1/CppTest.o \
++	$(OBJ_DIR)/tests/test1/CppTest.obj \
+ 
+ 	$(LD) $^ -o $@
+ 
+ $(BIN_DIR)/test1-cpp$(EXE_EXT): \
+-	$(OBJ_DIR)/tests/test1/CppTest.o \
++	$(OBJ_DIR)/tests/test1/CppTest.obj \
+ 
+ 	$(LD) $^ -o $@
+ 
+--- src/include/gen/autoconfig_msvc.h.orig	2020-11-13 12:42:36.231813100 +0100
++++ src/include/gen/autoconfig_msvc.h	2020-11-13 12:43:12.669012900 +0100
+@@ -68,7 +68,9 @@
+ #pragma warning(disable:4996)  // 'identificator' was declared deprecated
+ 
+ 
++#ifndef WIN32_LEAN_AND_MEAN
+ #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
++#endif
+ 
+ #ifdef _MSC_VER // don't know if this is useful for MinGW
+ #define NOATOM
+diff -ur builds/posix/Makefile.in.examples builds/posix/Makefile.in.examples
+--- builds/posix/Makefile.in.examples	2016-07-07 13:56:13.048235166 +0200
++++ builds/posix/Makefile.in.examples	2016-07-07 14:37:36.904301682 +0200
+@@ -65,9 +65,9 @@
+ EXAMPLES_SRC=	$(ROOT)/examples
+ 
+ 
+-EMPBLD_Objects=	$(EXAMPLES_DEST)/empbuild.o
++EMPBLD_Objects=	$(EXAMPLES_DEST)/empbuild.$(OBJ_EXT)
+ 
+-INTLBLD_Objects= $(EXAMPLES_DEST)/intlbld.o
++INTLBLD_Objects= $(EXAMPLES_DEST)/intlbld.$(OBJ_EXT)
+ 
+ INPUT_Files   =	empddl.sql empdml.sql indexoff.sql indexon.sql \
+ 		job.inp lang.inp proj.inp qtr.inp
+@@ -172,3 +175,6 @@
+ 
+ $(EXAMPLES_DEST)/%.h: $(EXAMPLES_SRC)/common/%.h
+ 	$(CP) $^ $@
++
++$(EXAMPLES_DEST)/%.$(OBJ_EXT): $(EXAMPLES_DEST)/%.c
++	$(CC) -c $(firstword $<) -Fo$@ $(WCFLAGS)
+--- src/lock/lock.cpp.orig	2020-11-13 17:57:23.485241200 +0100
++++ src/lock/lock.cpp	2020-11-13 17:57:51.001010600 +0100
+@@ -463,6 +463,7 @@
+ 
+ 	LockTableGuard guard(This, FB_FUNCTION, owner_offset);
+ 
++#undef SRQ_BASE
+ #define SRQ_BASE                    ((UCHAR*) This->m_sharedMemory->getHeader())
+ 	own* owner = (own*) SRQ_ABS_PTR(owner_offset);
+ 	if (!owner->own_count)
+@@ -486,6 +487,7 @@
+ 	// released before destroying the lock owner. This is not strictly required,
+ 	// but it enforces the proper object lifetime discipline through the codebase.
+ 	fb_assert(SRQ_EMPTY(owner->own_requests));
++#undef SRQ_BASE
+ #define SRQ_BASE                    ((UCHAR*) m_sharedMemory->getHeader())
+ 
+ 	This->purge_owner(owner_offset, owner);
+--- builds/posix/Makefile.in.plugins_examples.orig	2020-11-13 20:25:55.865485400 +0100
++++ builds/posix/Makefile.in.plugins_examples	2020-11-13 20:26:13.084191800 +0100
+@@ -104,5 +104,5 @@
+ 
+ include $(ROOT)/gen/make.shared.targets
+ 
+-Dependencies = $(AllObjects:.o=.d)
++Dependencies = $(AllObjects:.$(OBJ_EXT)=.d)
+ -include $(Dependencies)
