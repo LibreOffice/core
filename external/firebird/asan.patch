@@ -230,7 +230,7 @@
  			static const unsigned INCREASE_FACTOR = 50;
  			unsigned size;
 -			AutoPtr<UCHAR> data;
-+			AutoPtr<UCHAR, ArrayDelete<UCHAR>> data;
++			AutoPtr<UCHAR, ArrayDelete> data;
  			T* end;
  		};
  #endif	// RECURSIVE_SIMILAR
