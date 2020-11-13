@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40d02ed5_fed6615f",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-11-13T04:17:27Z",
+      "side": 1,
+      "message": "don\u0027t add blank line",
+      "revId": "8c6231b331015bb5aab65231a36deed6037c15e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
