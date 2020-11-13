@@ -1173,6 +1173,30 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf138039)
+{
+    createDoc("tdf138039.odt");
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // there are 3 pages
+    assertXPath(pXmlDoc, "/root/page", 3);
+    // table on first page
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 0);
+    // paragraph with large fly on second page
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab", 0);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "top", "17915");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "height",
+                "15819");
+    // paragraph on third page
+    assertXPath(pXmlDoc, "/root/page[3]/body/tab", 0);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/anchored", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableOverlapFooterFly)
 {
     // Load a document that has a fly anchored in the footer.

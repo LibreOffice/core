@@ -2724,6 +2724,21 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         aNotify.SetInvaKeep();
 }
 
+static bool IsNextOnSamePage(SwPageFrame const& rPage,
+        SwTabFrame const& rTabFrame, SwTextFrame const& rAnchorFrame)
+{
+    for (SwContentFrame const* pContentFrame = rTabFrame.FindNextCnt();
+        pContentFrame && pContentFrame->FindPageFrame() == &rPage;
+        pContentFrame = pContentFrame->FindNextCnt())
+    {
+        if (pContentFrame == &rAnchorFrame)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 /// Calculate the offsets arising because of FlyFrames
 bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                                long& rLeftOffset,
@@ -2823,10 +2838,25 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                     const SwFormatHoriOrient &rHori= pFly->GetFormat()->GetHoriOrient();
                     if ( css::text::WrapTextMode_NONE == rSur.GetSurround() )
                     {
+                        // possible cases:
+                        //        both in body
+                        //        both in same fly
+                        //        any comb. of body, footnote, header/footer
+                        // to keep it safe, check only in doc body vs page margin for now
                         long nBottom = aRectFnSet.GetBottom(aFlyRect);
-                        if( aRectFnSet.YDiff( nPrtPos, nBottom ) < 0 )
-                            nPrtPos = nBottom;
-                        bInvalidatePrtArea = true;
+                        // tdf#138039 don't grow beyond the page body
+                        // if the fly is anchored below the table; the fly
+                        // must move with its anchor frame to the next page
+                        SwRectFnSet fnPage(pPage);
+                        if (!IsInDocBody() // TODO
+                            || fnPage.YDiff(fnPage.GetBottom(aFlyRect), fnPage.GetPrtBottom(*pPage)) <= 0
+                            || !IsNextOnSamePage(*pPage, *this,
+                                *static_cast<SwTextFrame*>(pFly->GetAnchorFrameContainingAnchPos())))
+                        {
+                            if (aRectFnSet.YDiff( nPrtPos, nBottom ) < 0)
+                                nPrtPos = nBottom;
+                            bInvalidatePrtArea = true;
+                        }
                     }
                     if ( (css::text::WrapTextMode_RIGHT    == rSur.GetSurround() ||
                           css::text::WrapTextMode_PARALLEL == rSur.GetSurround())&&
