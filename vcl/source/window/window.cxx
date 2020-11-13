@@ -75,6 +75,8 @@
 #endif
 
 
+// TEMP TINY FIX FOR TESTING
+//
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
