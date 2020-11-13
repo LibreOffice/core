@@ -621,21 +621,6 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         OUString aStr;
         GetString(nCol, nRow, aStr);
 
-        // fdo#39500 don't deduce increment from multiple equal list entries
-        bool bAllSame = true;
-        for (SCSIZE i = 0; i < nCount; ++i)
-        {
-            OUString aTestStr;
-            GetString(static_cast<SCCOL>(nCol + i* nAddX), static_cast<SCROW>(nRow + i * nAddY), aTestStr);
-            if(aStr != aTestStr)
-            {
-                bAllSame = false;
-                break;
-            }
-        }
-        if(bAllSame && nCount > 1)
-            return;
-
         rListData = const_cast<ScUserListData*>(ScGlobal::GetUserList()->GetData(aStr));
         if (rListData)
         {
