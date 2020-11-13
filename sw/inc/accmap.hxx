@@ -27,6 +27,7 @@
 
 #include <svx/AccessibleControlShape.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <swrect.hxx>
 
 #include <vector>
 #include <memory>
@@ -148,7 +149,7 @@ public:
                             const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
                             const Fraction&  _rScale,
                             const SwPageFrame* _pSelectedPageFrame,
-                            const Size&      _rPreviewWinSize );
+                            const SwSize&      _rPreviewWinSize );
 
     ::rtl::Reference < SwAccessibleContext > GetContextImpl(
                                                  const SwFrame *pFrame,
@@ -187,7 +188,7 @@ public:
 
         @return an object of class <Size>
     */
-    Size GetPreviewPageSize( sal_uInt16 _nPreviewPageNum ) const;
+    SwSize GetPreviewPageSize( sal_uInt16 _nPreviewPageNum ) const;
 
     void RemoveContext( const SwFrame *pFrame );
     void RemoveContext( const SdrObject *pObj );
@@ -245,7 +246,7 @@ public:
     void UpdatePreview( const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
                         const Fraction&  _rScale,
                         const SwPageFrame* _pSelectedPageFrame,
-                        const Size&      _rPreviewWinSize );
+                        const SwSize&      _rPreviewWinSize );
 
     void InvalidatePreviewSelection( sal_uInt16 nSelPage );
     bool IsPageSelected( const SwPageFrame *pPageFrame ) const;
@@ -274,7 +275,7 @@ public:
 
     // additional Core/Pixel conversions for internal use; also works
     // for preview
-    Point PixelToCore (const Point& rPoint) const;
+    SwPoint PixelToCore (const Point& rPoint) const;
     tools::Rectangle CoreToPixel (const SwRect& rRect) const;
 
     // is there a known accessibility impl cached for the frame

@@ -24,6 +24,7 @@
 
 #include "swdllapi.h"
 #include <tools/long.hxx>
+#include "swrect.hxx"
 
 struct SwTabColsEntry
 {
@@ -40,9 +41,9 @@ typedef std::vector< SwTabColsEntry > SwTabColsEntries;
 
 class SW_DLLPUBLIC SwTabCols
 {
-    tools::Long m_nLeftMin;  // Leftmost border (reference point) for
-                      // document coordinates.
-                      // All other values are relative to this point!
+    SwTwips m_nLeftMin;  // Leftmost border (reference point) for
+                         // document coordinates.
+                         // All other values are relative to this point!
     tools::Long m_nLeft;     // Left border of table.
     tools::Long m_nRight;    // Right border of table.
     tools::Long m_nRightMax; // Maximum right border of table.
@@ -74,12 +75,12 @@ public:
     const SwTabColsEntry& GetEntry( size_t nPos ) const { return m_aData[nPos]; }
           SwTabColsEntry& GetEntry( size_t nPos )  { return m_aData[nPos]; }
 
-    tools::Long GetLeftMin() const { return m_nLeftMin; }
+    SwTwips GetLeftMin() const { return m_nLeftMin; }
     tools::Long GetLeft()  const { return m_nLeft;    }
     tools::Long GetRight() const { return m_nRight;   }
     tools::Long GetRightMax()const { return m_nRightMax;}
 
-    void SetLeftMin ( tools::Long nNew )   { m_nLeftMin = nNew; }
+    void SetLeftMin ( SwTwips nNew )   { m_nLeftMin = nNew; }
     void SetLeft    ( tools::Long nNew )   { m_nLeft = nNew;    }
     void SetRight   ( tools::Long nNew )   { m_nRight = nNew;   }
     void SetRightMax( tools::Long nNew )   { m_nRightMax = nNew;}

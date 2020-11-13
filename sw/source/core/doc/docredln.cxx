@@ -298,7 +298,7 @@ namespace
 {
 
 void lcl_LOKInvalidateFrames(const sw::BroadcastingModify& rMod, const SwRootFrame* pLayout,
-        SwFrameType const nFrameType, const Point* pPoint)
+        SwFrameType const nFrameType, const SwPoint* pPoint)
 {
     SwIterator<SwFrame, sw::BroadcastingModify, sw::IteratorMode::UnwrapMulti> aIter(rMod);
 
@@ -627,7 +627,7 @@ void SwRedlineTable::Remove( size_type nP )
     {
         SwViewShell* pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
         if( pSh )
-            pSh->InvalidateWindows( SwRect( 0, 0, SAL_MAX_INT32, SAL_MAX_INT32 ) );
+            pSh->InvalidateWindows( SwRect( SwTwips(0), SwTwips(0), SwTwips(SAL_MAX_INT32), SwTwips(SAL_MAX_INT32) ) );
     }
 }
 

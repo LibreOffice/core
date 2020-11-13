@@ -96,7 +96,7 @@ public:
     SplitTable_HeadlineOption GetMode() const { return m_nMode; }
     void SetValues( bool bFlag )        { m_bGetValues = false; m_nWidth = 0;
                                           m_bGetFromTop = bFlag; }
-    bool Resize( sal_uInt16 nOffset, sal_uInt16 nWidth );
+    bool Resize( SwTwips nOffset, SwTwips nWidth );
 };
 
 void sw_Box_CollectBox( const SwTableBox* pBox, SwCollectTableLineBoxes* pSplPara );
@@ -162,7 +162,7 @@ public:
 
     const SwFrameFormat& GetOldFormat() const { return *m_pOldFormat; }
 
-    SwFrameFormat* GetFormat( tools::Long nWidth ) const;
+    SwFrameFormat* GetFormat( SwTwips nWidth ) const;
     SwFrameFormat* GetFormat( const SfxPoolItem& rItem ) const;
     void AddFormat( SwFrameFormat& rFormat );
     /// @returns true, if we can delete
@@ -181,7 +181,7 @@ public:
     SwShareBoxFormats() {}
     ~SwShareBoxFormats();
 
-    SwFrameFormat* GetFormat( const SwFrameFormat& rFormat, tools::Long nWidth ) const;
+    SwFrameFormat* GetFormat( const SwFrameFormat& rFormat, SwTwips nWidth ) const;
     SwFrameFormat* GetFormat( const SwFrameFormat& rFormat, const SfxPoolItem& ) const;
 
     void AddFormat( const SwFrameFormat& rOld, SwFrameFormat& rNew );

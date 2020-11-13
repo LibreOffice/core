@@ -235,7 +235,7 @@ void SwCursorShell::StartAction()
         if( rNd.IsTextNode() )
             m_nLeftFramePos = SwCallLink::getLayoutFrame( GetLayout(), *rNd.GetTextNode(), m_nCurrentContent, true );
         else
-            m_nLeftFramePos = 0;
+            m_nLeftFramePos = SwTwips(0);
     }
     SwViewShell::StartAction(); // to the SwViewShell
 }
@@ -579,7 +579,7 @@ bool SwCursorShell::SttEndDoc( bool bStt )
     if( bRet )
     {
         if( bStt )
-            pTmpCursor->GetPtPos().setY( 0 ); // set to 0 explicitly (table header)
+            pTmpCursor->GetPtPos().setY( SwTwips(0) ); // set to 0 explicitly (table header)
         if( m_pBlockCursor )
         {
             m_pBlockCursor->clearPoints();
@@ -641,7 +641,7 @@ bool SwCursorShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
         CurrShell aCurr( this );
 
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
-        Point& rPt = m_pCurrentCursor->GetPtPos();
+        SwPoint& rPt = m_pCurrentCursor->GetPtPos();
         std::pair<Point, bool> tmp(rPt, false);
         SwContentFrame * pFrame = m_pCurrentCursor->GetContentNode()->
             getLayoutFrame(GetLayout(), m_pCurrentCursor->GetPoint(), &tmp);
@@ -730,7 +730,7 @@ bool SwCursorShell::MoveSection( SwWhichSection fnWhichSect,
 
 // position cursor
 
-static SwFrame* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
+static SwFrame* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, SwPoint& rPt )
 {
     SwFrame* pFrame = nullptr;
     SwContentNode* pCNd = rIdx.GetNode().GetContentNode();
@@ -750,21 +750,21 @@ static SwFrame* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
 
 bool SwCursorShell::IsInHeaderFooter( bool* pbInHeader ) const
 {
-    Point aPt;
+    SwPoint aPt;
     SwFrame* pFrame = ::lcl_IsInHeaderFooter( m_pCurrentCursor->GetPoint()->nNode, aPt );
     if( pFrame && pbInHeader )
         *pbInHeader = pFrame->IsHeaderFrame();
     return nullptr != pFrame;
 }
 
-int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
+int SwCursorShell::SetCursor( const SwPoint &rLPt, bool bOnlyText, bool bBlock )
 {
     CurrShell aCurr( this );
 
     SwShellCursor* pCursor = getShellCursor( bBlock );
     SwPosition aPos( *pCursor->GetPoint() );
-    Point aPt( rLPt );
-    Point & rCurrentCursorPt = pCursor->GetPtPos();
+    SwPoint aPt( rLPt );
+    SwPoint & rCurrentCursorPt = pCursor->GetPtPos();
     SwCursorMoveState aTmpState( IsTableMode() ? CursorMoveState::TableSel :
                                     bOnlyText ?  CursorMoveState::SetOnlyText : CursorMoveState::NONE );
     aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
@@ -826,7 +826,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
                 std::pair<Point, bool> tmp(m_aCharRect.Pos(), false);
                 SwFrame* pOld = static_cast<SwContentNode&>(aPos.nNode.GetNode()).getLayoutFrame(
                                 GetLayout(), nullptr, &tmp);
-                tmp.first = aPt;
+                tmp.first = Point(aPt);
                 SwFrame* pNew = static_cast<SwContentNode&>(aPos.nNode.GetNode()).getLayoutFrame(
                                 GetLayout(), nullptr, &tmp);
                 if( pNew == pOld )
@@ -988,7 +988,7 @@ void SwCursorShell::SwapPam()
     @param bTstHit ???
 */
 bool SwCursorShell::TestCurrPam(
-    const Point & rPt,
+    const SwPoint & rPt,
     bool bTstHit )
 {
     CurrShell aCurr( this );
@@ -1000,7 +1000,7 @@ bool SwCursorShell::TestCurrPam(
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     // search position <rPt> in document
     SwPosition aPtPos( *m_pCurrentCursor->GetPoint() );
-    Point aPt( rPt );
+    SwPoint aPt( rPt );
 
     SwCursorMoveState aTmpState( CursorMoveState::NONE );
     aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
@@ -1256,7 +1256,7 @@ sal_uInt16 SwCursorShell::GetNextPrevPageNum( bool bNext )
     const SwPageFrame *pPg = Imp()->GetFirstVisPage(GetOut());
     if( pPg )
     {
-        const SwTwips nPageTop = pPg->getFrameArea().Top();
+        const SwTwips nPageTop = SwTwips(pPg->getFrameArea().Top());
 
         if( bNext )
         {
@@ -1265,7 +1265,7 @@ sal_uInt16 SwCursorShell::GetNextPrevPageNum( bool bNext )
             {
                 pPg = static_cast<const SwPageFrame *>(pPg->GetNext());
             }
-            while( pPg && pPg->getFrameArea().Top() == nPageTop );
+            while( pPg && SwTwips(pPg->getFrameArea().Top()) == nPageTop );
 
             while( pPg && pPg->IsEmptyPage() )
                 pPg = static_cast<const SwPageFrame *>(pPg->GetNext());
@@ -1277,7 +1277,7 @@ sal_uInt16 SwCursorShell::GetNextPrevPageNum( bool bNext )
             {
                 pPg = static_cast<const SwPageFrame *>(pPg->GetPrev());
             }
-            while( pPg && pPg->getFrameArea().Top() == nPageTop );
+            while( pPg && SwTwips(pPg->getFrameArea().Top()) == nPageTop );
 
             while( pPg && pPg->IsEmptyPage() )
                 pPg = static_cast<const SwPageFrame *>(pPg->GetPrev());
@@ -1301,13 +1301,13 @@ OUString SwCursorShell::getPageRectangles()
     OUStringBuffer aBuf;
     for (const SwFrame* pFrame = pLayout->GetLower(); pFrame; pFrame = pFrame->GetNext())
     {
-        aBuf.append(pFrame->getFrameArea().Left());
+        aBuf.append(tools::Long(pFrame->getFrameArea().Left()));
         aBuf.append(", ");
-        aBuf.append(pFrame->getFrameArea().Top());
+        aBuf.append(tools::Long(pFrame->getFrameArea().Top()));
         aBuf.append(", ");
-        aBuf.append(pFrame->getFrameArea().Width());
+        aBuf.append(tools::Long(pFrame->getFrameArea().Width()));
         aBuf.append(", ");
-        aBuf.append(pFrame->getFrameArea().Height());
+        aBuf.append(tools::Long(pFrame->getFrameArea().Height()));
         aBuf.append("; ");
     }
     if (!aBuf.isEmpty())
@@ -1600,8 +1600,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             pTstCursor->GetNode( false ).StartOfSectionNode() ) && !mbSelectAll)
     {
         SwShellCursor* pITmpCursor = getShellCursor( true );
-        Point aTmpPt( pITmpCursor->GetPtPos() );
-        Point aTmpMk( pITmpCursor->GetMkPos() );
+        SwPoint aTmpPt( pITmpCursor->GetPtPos() );
+        SwPoint aTmpMk( pITmpCursor->GetMkPos() );
         SwPosition* pPos = pITmpCursor->GetPoint();
 
         // Bug 65475 (1999) - if Point/Mark in hidden sections, move them out
@@ -1702,7 +1702,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
                 DisableCallbackAction a(*GetLayout());
                 if (!pTableFrame->GetCharRect( m_aCharRect, *m_pTableCursor->GetPoint(), &aTmpState))
                 {
-                    Point aCentrPt( m_aCharRect.Center() );
+                    SwPoint aCentrPt( m_aCharRect.Center() );
                     aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
                     pTableFrame->GetModelPositionForViewPoint(m_pTableCursor->GetPoint(), aCentrPt, &aTmpState);
                     bool const bResult =
@@ -1738,8 +1738,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
             if( m_bSVCursorVis )
             {
-                m_aCursorHeight.setX(0);
-                m_aCursorHeight.setY(aTmpState.m_aRealHeight.getY() < 0 ?
+                m_aCursorHeight.setX(SwTwips(0));
+                m_aCursorHeight.setY(aTmpState.m_aRealHeight.getY() < SwTwips(0) ?
                                   -m_aCharRect.Width() : m_aCharRect.Height());
                 m_pVisibleCursor->Show(); // show again
             }
@@ -1929,7 +1929,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             DisableCallbackAction a(*GetLayout()); // tdf#91602 prevent recursive Action
             if (!pFrame->GetCharRect(m_aCharRect, *pShellCursor->GetPoint(), &aTmpState))
             {
-                Point& rPt = pShellCursor->GetPtPos();
+                SwPoint& rPt = pShellCursor->GetPtPos();
                 rPt = m_aCharRect.Center();
                 pFrame->GetModelPositionForViewPoint( pShellCursor->GetPoint(), rPt, &aTmpState );
             }
@@ -1940,8 +1940,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             m_aCursorHeight = aTmpState.m_aRealHeight;
         else
         {
-            m_aCursorHeight.setX(0);
-            m_aCursorHeight.setY(aTmpState.m_aRealHeight.getY() < 0 ?
+            m_aCursorHeight.setX(SwTwips(0));
+            m_aCursorHeight.setY(aTmpState.m_aRealHeight.getY() < SwTwips(0) ?
                               -m_aCharRect.Width() : m_aCharRect.Height());
         }
 
@@ -2066,7 +2066,7 @@ void SwCursorShell::sendLOKCursorUpdates()
             SwTabCols aTabCols;
             pShell->GetTabCols(aTabCols);
 
-            const int nColumnOffset = aTabCols.GetLeftMin() + rPageRect.Left();
+            const int nColumnOffset = tools::Long(aTabCols.GetLeftMin() + rPageRect.Left());
 
             aTableColumns.put("left", aTabCols.GetLeft());
             aTableColumns.put("right", aTabCols.GetRight());
@@ -2091,7 +2091,7 @@ void SwCursorShell::sendLOKCursorUpdates()
             SwTabCols aTabRows;
             pShell->GetTabRows(aTabRows);
 
-            const int nRowOffset = aTabRows.GetLeftMin() + rPageRect.Top();
+            const int nRowOffset = tools::Long(aTabRows.GetLeftMin() + rPageRect.Top());
 
             aTableRows.put("left", aTabRows.GetLeft());
             aTableRows.put("right", aTabRows.GetRight());
@@ -2124,11 +2124,11 @@ void SwCursorShell::RefreshBlockCursor()
 {
     assert(m_pBlockCursor);
     SwShellCursor &rBlock = m_pBlockCursor->getShellCursor();
-    Point aPt = rBlock.GetPtPos();
+    SwPoint aPt = rBlock.GetPtPos();
     std::pair<Point, bool> const tmp(aPt, false);
     SwContentFrame* pFrame = rBlock.GetContentNode()->getLayoutFrame(
             GetLayout(), rBlock.GetPoint(), &tmp);
-    Point aMk;
+    SwPoint aMk;
     if( m_pBlockCursor->getEndPoint() && m_pBlockCursor->getStartPoint() )
     {
         aPt = *m_pBlockCursor->getStartPoint();
@@ -2282,7 +2282,7 @@ bool SwCursorShell::Pop(PopMode const eDelete)
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
         // If the visible SSelection was not changed
-        const Point& rPoint = pOldStack->GetPtPos();
+        const SwPoint& rPoint = pOldStack->GetPtPos();
         if (rPoint == m_pCurrentCursor->GetPtPos() || rPoint == m_pCurrentCursor->GetMkPos())
         {
             // move "Selections Rectangles"
@@ -2653,10 +2653,10 @@ bool SwCursorShell::ExtendSelection( bool bEnd, sal_Int32 nCount )
     @param rPt The position to move the visible cursor to.
     @return <false> if SPoint was corrected by the layout.
 */
-bool SwCursorShell::SetVisibleCursor( const Point &rPt )
+bool SwCursorShell::SetVisibleCursor( const SwPoint &rPt )
 {
     CurrShell aCurr( this );
-    Point aPt( rPt );
+    SwPoint aPt( rPt );
     SwPosition aPos( *m_pCurrentCursor->GetPoint() );
     SwCursorMoveState aTmpState( CursorMoveState::SetOnlyText );
     aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
@@ -2701,7 +2701,7 @@ bool SwCursorShell::SetVisibleCursor( const Point &rPt )
             m_aCursorHeight = aTmpState.m_aRealHeight;
         else
         {
-            m_aCursorHeight.setX(0);
+            m_aCursorHeight.setX(SwTwips(0));
             m_aCursorHeight.setY(m_aCharRect.Height());
         }
 
@@ -2716,9 +2716,9 @@ SwVisibleCursor* SwCursorShell::GetVisibleCursor() const
     return m_pVisibleCursor;
 }
 
-bool SwCursorShell::IsOverReadOnlyPos( const Point& rPt ) const
+bool SwCursorShell::IsOverReadOnlyPos( const SwPoint& rPt ) const
 {
-    Point aPt( rPt );
+    SwPoint aPt( rPt );
     SwPaM aPam( *m_pCurrentCursor->GetPoint() );
     GetLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aPt );
     // form view
@@ -3077,7 +3077,7 @@ void SwCursorShell::MakeSelVisible()
     if( m_aCursorHeight.Y() < m_aCharRect.Height() && m_aCharRect.Height() > VisArea().Height() )
     {
         SwRect aTmp( m_aCharRect );
-        tools::Long nDiff = m_aCharRect.Height() - VisArea().Height();
+        SwTwips nDiff = m_aCharRect.Height() - VisArea().Height();
         if( nDiff < m_aCursorHeight.getX() )
             aTmp.Top( nDiff + m_aCharRect.Top() );
         else
@@ -3087,8 +3087,8 @@ void SwCursorShell::MakeSelVisible()
         }
         if( !aTmp.HasArea() )
         {
-            aTmp.AddHeight(1 );
-            aTmp.AddWidth(1 );
+            aTmp.AddHeight(SwTwips(1));
+            aTmp.AddWidth(SwTwips(1));
         }
         MakeVisible( aTmp );
     }
@@ -3099,8 +3099,8 @@ void SwCursorShell::MakeSelVisible()
         else
         {
             SwRect aTmp( m_aCharRect );
-            aTmp.AddHeight(1 );
-            aTmp.AddWidth(1 );
+            aTmp.AddHeight(SwTwips(1));
+            aTmp.AddWidth(SwTwips(1));
             MakeVisible( aTmp );
         }
     }
@@ -3416,10 +3416,10 @@ bool SwCursorShell::IsSelFullPara() const
     return bRet;
 }
 
-SvxFrameDirection SwCursorShell::GetTextDirection( const Point* pPt ) const
+SvxFrameDirection SwCursorShell::GetTextDirection( const SwPoint* pPt ) const
 {
     SwPosition aPos( *m_pCurrentCursor->GetPoint() );
-    Point aPt( pPt ? *pPt : m_pCurrentCursor->GetPtPos() );
+    SwPoint aPt( pPt ? *pPt : m_pCurrentCursor->GetPtPos() );
     if( pPt )
     {
         SwCursorMoveState aTmpState( CursorMoveState::NONE );
@@ -3431,7 +3431,7 @@ SvxFrameDirection SwCursorShell::GetTextDirection( const Point* pPt ) const
     return mxDoc->GetTextDirection( aPos, &aPt );
 }
 
-bool SwCursorShell::IsInVerticalText( const Point* pPt ) const
+bool SwCursorShell::IsInVerticalText( const SwPoint* pPt ) const
 {
     const SvxFrameDirection nDir = GetTextDirection( pPt );
     return SvxFrameDirection::Vertical_RL_TB == nDir || SvxFrameDirection::Vertical_LR_TB == nDir
@@ -3767,11 +3767,11 @@ void SwCursorShell::GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
 }
 
 // see also SwEditShell::GetCorrection( const Point* pPt, SwRect& rSelectRect )
-void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
+void SwCursorShell::GetSmartTagRect( const SwPoint& rPt, SwRect& rSelectRect )
 {
     SwPaM* pCursor = GetCursor();
     SwPosition aPos( *pCursor->GetPoint() );
-    Point aPt( rPt );
+    SwPoint aPt( rPt );
     SwCursorMoveState eTmpState( CursorMoveState::SetOnlyText );
     SwSpecialPos aSpecialPos;
     eTmpState.m_pSpecialPos = &aSpecialPos;

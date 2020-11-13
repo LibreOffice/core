@@ -33,7 +33,7 @@ class SwNoTextFrame final : public SwContentFrame
 {
 private:
     friend void FrameFinit();
-    const Size& GetSize() const;
+    const SwSize& GetSize() const;
 
     void Format ( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     void PaintPicture( vcl::RenderContext*, const SwRect& ) const;
@@ -75,7 +75,7 @@ public:
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual bool GetCharRect( SwRect &, const SwPosition&,
                               SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const override;
-    virtual bool GetModelPositionForViewPoint(SwPosition* pPos, Point& aPoint,
+    virtual bool GetModelPositionForViewPoint(SwPosition* pPos, SwPoint& aPoint,
                      SwCursorMoveState* = nullptr, bool bTestBackground = false) const override;
 
     void GetGrfArea( SwRect &rRect, SwRect * ) const;

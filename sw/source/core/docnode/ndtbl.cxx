@@ -184,7 +184,7 @@ static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTab
         SwTableBoxFormat* pBoxFormat = rDoc.MakeTableBoxFormat();
         if( USHRT_MAX != nCols )
             pBoxFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable,
-                                            USHRT_MAX / nCols, 0 ));
+                                            USHRT_MAX / nCols, SwTwips(0) ));
         ::lcl_SetDfltBoxAttr( *pBoxFormat, nId );
         rBoxFormatArr[ nId ] = pBoxFormat;
     }
@@ -204,7 +204,7 @@ static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<Sw
                                 rDoc.GetNumberFormatter( ) );
         if( USHRT_MAX != nCols )
             pBoxFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable,
-                                            USHRT_MAX / nCols, 0 ));
+                                            USHRT_MAX / nCols, SwTwips(0) ));
         rBoxFormatArr[ nId ] = pBoxFormat;
     }
     return rBoxFormatArr[nId];
@@ -338,7 +338,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
                                    const SwPosition& rPos, sal_uInt16 nRows,
                                    sal_uInt16 nCols, sal_Int16 eAdjust,
                                    const SwTableAutoFormat* pTAFormat,
-                                   const std::vector<sal_uInt16> *pColArr,
+                                   const std::vector<SwTwips> *pColArr,
                                    bool bCalledFromShell,
                                    bool bNewModel )
 {
@@ -416,16 +416,16 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     }
 
     // Set Orientation at the Table's Format
-    pTableFormat->SetFormatAttr( SwFormatHoriOrient( 0, eAdjust ) );
+    pTableFormat->SetFormatAttr( SwFormatHoriOrient( SwTwips(0), eAdjust ) );
     // All lines use the left-to-right Fill-Order!
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
 
     // Set USHRT_MAX as the Table's default SSize
-    SwTwips nWidth = USHRT_MAX;
+    SwTwips nWidth(USHRT_MAX);
     if( pColArr )
     {
-        sal_uInt16 nSttPos = pColArr->front();
-        sal_uInt16 nLastPos = pColArr->back();
+        SwTwips nSttPos = pColArr->front();
+        SwTwips nLastPos = pColArr->back();
         if( text::HoriOrientation::NONE == eAdjust )
         {
             sal_uInt16 nFrameWidth = nLastPos;

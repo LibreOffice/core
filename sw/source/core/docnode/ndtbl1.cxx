@@ -118,7 +118,7 @@ static void lcl_GetStartEndCell( const SwCursor& rCursor,
     OSL_ENSURE( rCursor.GetContentNode() && rCursor.GetContentNode( false ),
             "Tab selection not at ContentNode" );
 
-    Point aPtPos, aMkPos;
+    SwPoint aPtPos, aMkPos;
     const SwShellCursor* pShCursor = dynamic_cast<const SwShellCursor*>(&rCursor);
     if( pShCursor )
     {
@@ -312,7 +312,7 @@ static void lcl_ProcessBoxSize(std::vector<std::unique_ptr<SwTableFormatCmp>>& r
     if ( !rLines.empty() )
     {
         SwFormatFrameSize aSz( rNew );
-        aSz.SetHeight( rNew.GetHeight() ? rNew.GetHeight() / rLines.size() : 0 );
+        aSz.SetHeight( rNew.GetHeight() ? rNew.GetHeight() / SwTwips(rLines.size()) : SwTwips(0) );
         for ( auto pLine : rLines )
             ::lcl_ProcessRowSize( rFormatCmp, pLine, aSz );
     }
@@ -443,8 +443,8 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly, const bool
         {
             if( !bTstOnly )
             {
-                tools::Long nHeight = 0;
-                sal_Int32 nTotalHeight = 0;
+                SwTwips nHeight(0);
+                SwTwips nTotalHeight(0);
                 for ( auto pLn : aRowArr )
                 {
                     SwIterator<SwFrame,SwFormat> aIter( *pLn->GetFrameFormat() );
@@ -1287,7 +1287,7 @@ void SwDoc::SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign )
     OSL_ENSURE( nAlign == text::VertOrientation::NONE   ||
             nAlign == text::VertOrientation::CENTER ||
             nAlign == text::VertOrientation::BOTTOM, "Wrong alignment" );
-    SwFormatVertOrient aVertOri( 0, nAlign );
+    SwFormatVertOrient aVertOri( SwTwips(0), nAlign );
     SetBoxAttr( rCursor, aVertOri );
 }
 
@@ -1314,9 +1314,9 @@ sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor )
     return nAlign;
 }
 
-static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
+static SwTwips lcl_CalcCellFit( const SwLayoutFrame *pCell )
 {
-    SwTwips nRet = 0;
+    SwTwips nRet(0);
     const SwFrame *pFrame = pCell->Lower(); // The whole Line
     SwRectFnSet aRectFnSet(pCell);
     while ( pFrame )
@@ -1339,7 +1339,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
     // To compensate for the accuracy of calculation later on in SwTable::SetTabCols
     // we keep adding up a little.
     nRet += COLFUZZY;
-    return o3tl::narrowing<sal_uInt16>(std::max( SwTwips(MINLAY), nRet ));
+    return std::max( MINLAY, nRet );
 }
 
 /* The Line is within the Selection but not outlined by the TabCols.

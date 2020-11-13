@@ -28,6 +28,7 @@
 #include "ndtyp.hxx"
 #include "index.hxx"
 #include "fmtcol.hxx"
+#include "swrect.hxx"
 
 #include <memory>
 #include <vector>
@@ -469,7 +470,7 @@ public:
     /** determines the text direction for a certain
        position. @return -1, if text direction could *not* be determined. */
     SvxFrameDirection GetTextDirection( const SwPosition& rPos,
-                            const Point* pPt ) const;
+                            const SwPoint* pPt ) const;
 
     void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }
     bool GetModifyAtAttr() const { return mbSetModifyAtAttr; }

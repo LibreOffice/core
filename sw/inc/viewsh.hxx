@@ -495,7 +495,7 @@ public:
     void InvalidateLayout(bool bSizeChanged);
 
     const Size& GetBrowseBorder() const;
-    sal_Int32 GetBrowseWidth() const;
+    SwTwips GetBrowseWidth() const;
     void SetBrowseBorder( const Size& rNew );
 
     css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();

@@ -86,12 +86,12 @@ void SwCursorShell::MoveCursorToNum()
     CurrShell aCurr( this );
     // try to set cursor onto this position, at half of the char-
     // SRectangle's height
-    Point aPt( m_pCurrentCursor->GetPtPos() );
-    std::pair<Point, bool> const tmp(aPt, true);
+    std::pair<Point, bool> const tmp(m_pCurrentCursor->GetPtPos(), true);
     SwContentFrame * pFrame = m_pCurrentCursor->GetContentNode()->getLayoutFrame(
                 GetLayout(), m_pCurrentCursor->GetPoint(), &tmp);
     pFrame->GetCharRect( m_aCharRect, *m_pCurrentCursor->GetPoint() );
     pFrame->Calc(GetOut());
+    SwPoint aPt;
     if( pFrame->IsVertical() )
     {
         aPt.setX(m_aCharRect.Center().getX());
@@ -145,7 +145,7 @@ bool SwCursorShell::GotoHeaderText()
         SwCursor *pTmpCursor = getShellCursor( true );
         SwCursorSaveState aSaveState( *pTmpCursor );
         pFrame->Calc(GetOut());
-        Point aPt( pFrame->getFrameArea().Pos() + pFrame->getFramePrintArea().Pos() );
+        SwPoint aPt( pFrame->getFrameArea().Pos() + pFrame->getFramePrintArea().Pos() );
         pFrame->GetModelPositionForViewPoint( pTmpCursor->GetPoint(), aPt );
         if( !pTmpCursor->IsSelOvr() )
             UpdateCursor();
@@ -177,7 +177,7 @@ bool SwCursorShell::GotoFooterText()
             SwCallLink aLk( *this ); // watch Cursor-Moves
             SwCursorSaveState aSaveState( *pTmpCursor );
             pLower->Calc(GetOut());
-            Point aPt( pLower->getFrameArea().Pos() + pLower->getFramePrintArea().Pos() );
+            SwPoint aPt( pLower->getFrameArea().Pos() + pLower->getFramePrintArea().Pos() );
             pLower->GetModelPositionForViewPoint( pTmpCursor->GetPoint(), aPt );
             if( !pTmpCursor->IsSelOvr() )
                 UpdateCursor();
@@ -941,10 +941,10 @@ bool SwCursorShell::PosInsideInputField( const SwPosition& rPos )
     return dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos( &rPos, false )) != nullptr;
 }
 
-bool SwCursorShell::DocPtInsideInputField( const Point& rDocPt ) const
+bool SwCursorShell::DocPtInsideInputField( const SwPoint& rDocPt ) const
 {
     SwPosition aPos( *(GetCursor()->Start()) );
-    Point aDocPt( rDocPt );
+    SwPoint aDocPt( rDocPt );
     if ( GetLayout()->GetModelPositionForViewPoint( &aPos, aDocPt ) )
     {
         return PosInsideInputField( aPos );
@@ -1253,7 +1253,7 @@ bool SwCursorShell::IsPageAtPos( const Point &rPt ) const
     return false;
 }
 
-bool SwCursorShell::GetContentAtPos( const Point& rPt,
+bool SwCursorShell::GetContentAtPos( const SwPoint& rPt,
                                    SwContentAtPos& rContentAtPos,
                                    bool bSetCursor,
                                    SwRect* pFieldRect )
@@ -1263,7 +1263,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
     if( !IsTableMode() )
     {
-        Point aPt( rPt );
+        SwPoint aPt( rPt );
         SwPosition aPos( *m_pCurrentCursor->GetPoint() );
 
         SwTextNode* pTextNd;
@@ -2039,7 +2039,7 @@ bool SwCursorShell::GetShadowCursorPos( const Point& rPt, SwFillMode eFillMode,
     if (!IsTableMode() && !HasSelection()
         && GetDoc()->GetIDocumentUndoRedo().DoesUndo())
     {
-        Point aPt( rPt );
+        SwPoint aPt( rPt );
         SwPosition aPos( *m_pCurrentCursor->GetPoint() );
 
         SwFillCursorPos aFPos( eFillMode );
@@ -2065,7 +2065,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
     if (!IsTableMode() && !HasSelection()
         && GetDoc()->GetIDocumentUndoRedo().DoesUndo())
     {
-        Point aPt( rPt );
+        SwPoint aPt( rPt );
         SwPosition aPos( *m_pCurrentCursor->GetPoint() );
 
         SwFillCursorPos aFPos( eFillMode );
@@ -2444,7 +2444,7 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
     const SwNode* pBodyEndNd = &rNds.GetEndOfContent();
     const SwNode* pBodySttNd = pBodyEndNd->StartOfSectionNode();
     sal_uLong nBodySttNdIdx = pBodySttNd->GetIndex();
-    Point aPt;
+    SwPoint aPt;
 
     SetGetExpField aCmpPos( SwPosition( bNext ? *pBodyEndNd : *pBodySttNd ) );
     SetGetExpField aCurPos( bNext ? *m_pCurrentCursor->End() : *m_pCurrentCursor->Start() );

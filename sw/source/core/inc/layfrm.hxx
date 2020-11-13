@@ -79,7 +79,7 @@ public:
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 
-    virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
+    virtual bool GetModelPositionForViewPoint( SwPosition *, SwPoint&,
                                SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     virtual void Cut() override;
@@ -89,7 +89,7 @@ public:
      * Finds the closest Content for the SPoint
      * Is used for Pages, Flys and Cells if GetModelPositionForViewPoint failed
      */
-    const SwContentFrame* GetContentPos( Point &rPoint, const bool bDontLeave,
+    const SwContentFrame* GetContentPos( SwPoint &rPoint, const bool bDontLeave,
                                    const bool bBodyOnly = false,
                                    SwCursorMoveState *pCMS = nullptr,
                                    const bool bDefaultExpand = true ) const;
@@ -139,7 +139,7 @@ public:
      * calculated using percentages.
      * Frames that are anchored to this or inner Frames, are also invalidated.
      */
-    void InvaPercentLowers( SwTwips nDiff = 0 );
+    void InvaPercentLowers( SwTwips nDiff = SwTwips(0) );
 
     /// Called by Format for Frames and Areas with columns
     void FormatWidthCols( const SwBorderAttrs &, const SwTwips nBorder,

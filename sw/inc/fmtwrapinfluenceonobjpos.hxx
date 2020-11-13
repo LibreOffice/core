@@ -32,7 +32,7 @@ private:
     /// Allow objects to overlap, permitted by default.
     bool mbAllowOverlap = true;
     /// Vertical offset added during positioning to avoid an overlap.
-    SwTwips mnOverlapVertOffset = 0;
+    SwTwips mnOverlapVertOffset = SwTwips(0);
 
 public:
 

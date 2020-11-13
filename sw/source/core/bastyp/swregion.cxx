@@ -74,32 +74,32 @@ void SwRegionRects::operator-=( const SwRect &rRect )
 
             // now split; only those rectangles should be left over that are in
             // the "old" but not in the "new" area; hence, not in intersection.
-            tools::Long nTmp = aInter.Top() - aTmp.Top();
-            if ( 0 < nTmp )
+            SwTwips nTmp = aInter.Top() - aTmp.Top();
+            if ( SwTwips(0) < nTmp )
             {
-                const tools::Long nOldVal = aTmp.Height();
+                const SwTwips nOldVal = aTmp.Height();
                 aTmp.Height(nTmp);
                 InsertRect( aTmp, i, bDel );
                 aTmp.Height( nOldVal );
             }
 
             aTmp.Top( aInter.Top() + aInter.Height() );
-            if ( aTmp.Height() > 0 )
+            if ( aTmp.Height() > SwTwips(0) )
                 InsertRect( aTmp, i, bDel );
 
             aTmp.Top( aInter.Top() );
             aTmp.Bottom( aInter.Bottom() );
             nTmp = aInter.Left() - aTmp.Left();
-            if ( 0 < nTmp )
+            if ( SwTwips(0) < nTmp )
             {
-                const tools::Long nOldVal = aTmp.Width();
+                const SwTwips nOldVal = aTmp.Width();
                 aTmp.Width( nTmp );
                 InsertRect( aTmp, i, bDel );
                 aTmp.Width( nOldVal );
             }
 
             aTmp.Left( aInter.Left() + aInter.Width() ); //+1?
-            if ( aTmp.Width() > 0 )
+            if ( aTmp.Width() > SwTwips(0) )
                 InsertRect( aTmp, i, bDel );
 
             if( bDel )
@@ -138,7 +138,7 @@ void SwRegionRects::Invert()
 
 static SwTwips CalcArea( const SwRect &rRect )
 {
-    return rRect.Width() * rRect.Height();
+    return SwTwips(rRect.Width() * rRect.Height());
 }
 
 // combine all adjacent rectangles
@@ -171,7 +171,7 @@ void SwRegionRects::Compress()
                 // paints), the area of the union can be a little bit larger:
                 // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
                 // than the width of an A4 page
-                const tools::Long nFuzzy = 1361513;
+                const SwTwips nFuzzy = SwTwips(1361513);
                 SwRect aUnion( (*this)[i] );
                 aUnion.Union( (*this)[j] );
                 SwRect aInter( (*this)[i] );

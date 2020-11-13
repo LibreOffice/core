@@ -41,6 +41,7 @@
 #include "tblenum.hxx"
 #include "ndarr.hxx"
 #include "ndtyp.hxx"
+#include "swrect.hxx"
 #include <memory>
 #include <mutex>
 #include <set>
@@ -661,7 +662,7 @@ public:
 
     bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
     SvxFrameDirection GetTextDirection( const SwPosition& rPos,
-                            const Point* pPt = nullptr ) const;
+                            const SwPoint* pPt = nullptr ) const;
     bool IsInVerticalText( const SwPosition& rPos ) const;
 
     // Database  and DB-Manager

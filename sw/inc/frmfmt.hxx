@@ -26,6 +26,7 @@
 #include "format.hxx"
 #include "hintids.hxx"
 #include "swdllapi.h"
+#include "swrect.hxx"
 #include <list>
 
 class SwFlyFrame;
@@ -208,7 +209,7 @@ public:
     /// Creates the views.
     virtual void MakeFrames() override;
 
-    SwFlyFrame* GetFrame( const Point* pDocPos = nullptr ) const;
+    SwFlyFrame* GetFrame( const SwPoint* pDocPos = nullptr ) const;
 
     SwAnchoredObject* GetAnchoredObj() const;
 

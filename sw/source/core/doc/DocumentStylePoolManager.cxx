@@ -114,7 +114,7 @@ namespace
         const SvxLRSpaceItem& rLR = rPgDscFormat.GetLRSpace();
         const tools::Long nLeft = rLR.GetLeft();
         const tools::Long nRight = rLR.GetRight();
-        const tools::Long nWidth = rPgDscFormat.GetFrameSize().GetWidth();
+        const tools::Long nWidth(rPgDscFormat.GetFrameSize().GetWidth());
         return nWidth - nLeft - nRight;
     }
 
@@ -208,9 +208,9 @@ namespace
                         ( rNFormat.GetAbsLSpace() || rNFormat.GetFirstLineOffset() ) )
                 {
                     SvxLRSpaceItem aLR( pColl->GetFormatAttr( RES_LR_SPACE ) );
-                    aLR.SetTextFirstLineOffsetValue( rNFormat.GetFirstLineOffset() );
+                    aLR.SetTextFirstLineOffsetValue( tools::Long(rNFormat.GetFirstLineOffset()) );
                         //TODO: overflow
-                    aLR.SetTextLeft( rNFormat.GetAbsLSpace() );
+                    aLR.SetTextLeft( tools::Long(rNFormat.GetAbsLSpace()) );
                     pColl->SetFormatAttr( aLR );
                 }
 
@@ -255,10 +255,10 @@ namespace
 
         SvxLRSpaceItem aLR( RES_LR_SPACE );
         SvxULSpaceItem aUL( RES_UL_SPACE );
-        aLR.SetTextFirstLineOffset( sal_uInt16(nEZ) );
-        aLR.SetTextLeft( sal_uInt16(nLeft) );
-        aUL.SetUpper( sal_uInt16(nUpper) );
-        aUL.SetLower( sal_uInt16(nLower) );
+        aLR.SetTextFirstLineOffset( sal_uInt16(tools::Long(nEZ)) );
+        aLR.SetTextLeft( sal_uInt16(tools::Long(nLeft)) );
+        aUL.SetUpper( sal_uInt16(tools::Long(nUpper)) );
+        aUL.SetLower( sal_uInt16(tools::Long(nLower)) );
         rSet.Put( aLR );
         rSet.Put( aUL );
 
@@ -1119,193 +1119,193 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_NUM_LEVEL1S:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
-                            PT_12, PT_6 );
+                            SwTwips(PT_12), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL1:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
-                            0, PT_6 );
+                            SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL1E:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
-                            0, PT_12 );
+                            SwTwips(0), SwTwips(PT_12) );
             break;
         case RES_POOLCOLL_NUM_NONUM1:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM1,
-                            0, SwNumRule::GetNumIndent( 0 ), 0, PT_6 );
+                            SwTwips(0), SwNumRule::GetNumIndent( 0 ), SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL2S:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
-                            PT_12, PT_6 );
+                            SwTwips(PT_12), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL2:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
-                            0, PT_6 );
+                            SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL2E:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
-                            0, PT_12 );
+                            SwTwips(0), SwTwips(PT_12) );
             break;
         case RES_POOLCOLL_NUM_NONUM2:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM2,
-                            0, SwNumRule::GetNumIndent( 1 ), 0, PT_6 );
+                            SwTwips(0), SwNumRule::GetNumIndent( 1 ), SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL3S:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
-                            PT_12, PT_6 );
+                            SwTwips(PT_12), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL3:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
-                            0, PT_6 );
+                            SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL3E:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
-                            0, PT_12 );
+                            SwTwips(0), SwTwips(PT_12) );
             break;
         case RES_POOLCOLL_NUM_NONUM3:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM3,
-                            0, SwNumRule::GetNumIndent( 2 ), 0, PT_6 );
+                            SwTwips(0), SwNumRule::GetNumIndent( 2 ), SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL4S:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
-                            PT_12, PT_6 );
+                            SwTwips(PT_12), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL4:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
-                            0, PT_6 );
+                            SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL4E:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
-                            0, PT_12 );
+                            SwTwips(0), SwTwips(PT_12) );
             break;
         case RES_POOLCOLL_NUM_NONUM4:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM4,
-                            0, SwNumRule::GetNumIndent( 3 ), 0, PT_6 );
+                            SwTwips(0), SwNumRule::GetNumIndent( 3 ), SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL5S:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
-                            PT_12, PT_6 );
+                            SwTwips(PT_12), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL5:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
-                            0, PT_6 );
+                            SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_NUM_LEVEL5E:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
-                            0, PT_12 );
+                            SwTwips(0), SwTwips(PT_12) );
             break;
         case RES_POOLCOLL_NUM_NONUM5:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM5,
-                            0, SwNumRule::GetNumIndent( 4 ), 0, PT_6 );
+                            SwTwips(0), SwNumRule::GetNumIndent( 4 ), SwTwips(0), SwTwips(PT_6) );
             break;
 
         case RES_POOLCOLL_BULLET_LEVEL1S:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL1,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
-                            PT_12, PT_6 );
+                            SwTwips(PT_12), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL1:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL1,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
-                            0, PT_6 );
+                            SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL1E:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL1,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
-                            0, PT_12 );
+                            SwTwips(0), SwTwips(PT_12) );
             break;
         case RES_POOLCOLL_BULLET_NONUM1:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM1,
-                            0, SwNumRule::GetBullIndent( 0 ), 0, PT_6 );
+                            SwTwips(0), SwNumRule::GetBullIndent( 0 ), SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL2S:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL2,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
-                            PT_12, PT_6 );
+                            SwTwips(PT_12), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL2:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL2,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
-                            0, PT_6 );
+                            SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL2E:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL2,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
-                            0, PT_12 );
+                            SwTwips(0), SwTwips(PT_12) );
             break;
         case RES_POOLCOLL_BULLET_NONUM2:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM2,
-                            0, SwNumRule::GetBullIndent( 1 ), 0, PT_6 );
+                            SwTwips(0), SwNumRule::GetBullIndent( 1 ), SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL3S:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL3,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
-                            PT_12, PT_6 );
+                            SwTwips(PT_12), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL3:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL3,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
-                            0, PT_6 );
+                            SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL3E:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL3,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
-                            0, PT_12 );
+                            SwTwips(0), SwTwips(PT_12) );
             break;
         case RES_POOLCOLL_BULLET_NONUM3:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM3,
-                            0, SwNumRule::GetBullIndent( 2 ), 0, PT_6 );
+                            SwTwips(0), SwNumRule::GetBullIndent( 2 ), SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL4S:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL4,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
-                            PT_12, PT_6 );
+                            SwTwips(PT_12), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL4:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL4,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
-                            0, PT_6 );
+                            SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL4E:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL4,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
-                            0, PT_12 );
+                            SwTwips(0), SwTwips(PT_12) );
             break;
         case RES_POOLCOLL_BULLET_NONUM4:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM4,
-                            0, SwNumRule::GetBullIndent( 3 ), 0, PT_6 );
+                            SwTwips(0), SwNumRule::GetBullIndent( 3 ), SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL5S:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL5,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
-                            PT_12, PT_6 );
+                            SwTwips(PT_12), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL5:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL5,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
-                            0, PT_6 );
+                            SwTwips(0), SwTwips(PT_6) );
             break;
         case RES_POOLCOLL_BULLET_LEVEL5E:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL5,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
-                            0, PT_12 );
+                            SwTwips(0), SwTwips(PT_12) );
             break;
         case RES_POOLCOLL_BULLET_NONUM5:
             lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM5,
-                            0, SwNumRule::GetBullIndent( 4 ), 0, PT_6 );
+                            SwTwips(0), SwNumRule::GetBullIndent( 4 ), SwTwips(0), SwTwips(PT_6) );
             break;
 
         case RES_POOLCOLL_DOC_TITLE:            // Document Title
@@ -1613,15 +1613,15 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             if ( m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE) )
             {
                 aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ));
-                aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::LINE_CENTER, text::RelOrientation::PRINT_AREA ) );
+                aSet.Put( SwFormatVertOrient( SwTwips(0), text::VertOrientation::LINE_CENTER, text::RelOrientation::PRINT_AREA ) );
                 aSet.Put( SwFormatSurround( css::text::WrapTextMode_NONE ) );
             }
             else
             {
                 aSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PARA ));
                 aSet.Put( SwFormatSurround( css::text::WrapTextMode_PARALLEL ) );
-                aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::PRINT_AREA ) );
-                aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
+                aSet.Put( SwFormatHoriOrient( SwTwips(0), text::HoriOrientation::CENTER, text::RelOrientation::PRINT_AREA ) );
+                aSet.Put( SwFormatVertOrient( SwTwips(0), text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
                 Color aCol( COL_BLACK );
                 SvxBorderLine aLine( &aCol, DEF_LINE_WIDTH_0 );
                 SvxBoxItem aBox( RES_BOX );
@@ -1643,35 +1643,35 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     case RES_POOLFRM_OLE:
         {
             aSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PARA ));
-            aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
-            aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
+            aSet.Put( SwFormatHoriOrient( SwTwips(0), text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
+            aSet.Put( SwFormatVertOrient( SwTwips(0), text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_DYNAMIC ));
         }
         break;
     case RES_POOLFRM_FORMEL:
         {
             aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
-            aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
+            aSet.Put( SwFormatVertOrient( SwTwips(0), text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
         }
         break;
     case RES_POOLFRM_MARGINAL:
         {
             aSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PARA ));
-            aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME ));
-            aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
+            aSet.Put( SwFormatHoriOrient( SwTwips(0), text::HoriOrientation::LEFT, text::RelOrientation::FRAME ));
+            aSet.Put( SwFormatVertOrient( SwTwips(0), text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_PARALLEL ));
             // Set the default width to 3.5 cm, use the minimum value for the height
             aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum,
-                    o3tl::convert(35, o3tl::Length::mm, o3tl::Length::twip),
+                    SwTwips(o3tl::convert(35, o3tl::Length::mm, o3tl::Length::twip)),
                     MM50 ));
         }
         break;
     case RES_POOLFRM_WATERSIGN:
         {
             aSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE ));
-            aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
-            aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ));
+            aSet.Put( SwFormatHoriOrient( SwTwips(0), text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
+            aSet.Put( SwFormatVertOrient( SwTwips(0), text::VertOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SvxOpaqueItem( RES_OPAQUE, false ));
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGH ));
         }
@@ -1679,7 +1679,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     case RES_POOLFRM_LABEL:
         {
             aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
-            aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
+            aSet.Put( SwFormatVertOrient( SwTwips(0), text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
 
             SvxProtectItem aProtect( RES_PROTECT );
@@ -1809,7 +1809,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
         {
             Size aPSize( SvxPaperInfo::GetPaperSize( PAPER_ENV_C65 ) );
             LandscapeSwap( aPSize );
-            aSet.Put( SwFormatFrameSize( SwFrameSize::Fixed, aPSize.Width(), aPSize.Height() ));
+            aSet.Put( SwFormatFrameSize( SwFrameSize::Fixed, SwTwips(aPSize.Width()), SwTwips(aPSize.Height()) ));
             aLR.SetLeft( 0 ); aLR.SetRight( 0 );
             aUL.SetUpper( 0 ); aUL.SetLower( 0 );
             aSet.Put( aLR );
@@ -1842,8 +1842,8 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
             pNewPgDsc->SetUseOn( UseOnPage::All );
             SwPageFootnoteInfo aInf( pNewPgDsc->GetFootnoteInfo() );
             aInf.SetLineWidth( 0 );
-            aInf.SetTopDist( 0 );
-            aInf.SetBottomDist( 0 );
+            aInf.SetTopDist( SwTwips(0) );
+            aInf.SetBottomDist( SwTwips(0) );
             pNewPgDsc->SetFootnoteInfo( aInf );
         }
         break;
@@ -1943,12 +1943,12 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetIncludeUpperLevels( 1 );
             aFormat.SetSuffix( "." );
 
-            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
+            static const SwTwips aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 0.7 cm intervals, with 1 cm = 567
-                    397, 794, 1191, 1588, 1985, 2381, 2778, 3175, 3572, 3969
+                    SwTwips(397), SwTwips(794), SwTwips(1191), SwTwips(1588), SwTwips(1985), SwTwips(2381), SwTwips(2778), SwTwips(3175), SwTwips(3572), SwTwips(3969)
                 };
-            const sal_uInt16* pArr = aAbsSpace;
+            const SwTwips* pArr = aAbsSpace;
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -1957,19 +1957,19 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 aFormat.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
-                aFormat.SetFirstLineIndent( - (*pArr) );
+                aFormat.SetFirstLineIndent( SwTwips(- (*pArr)) );
             }
 
             for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFormat.SetAbsLSpace( *pArr + 357 ); // 357 is indent of 0.63 cm
+                    aFormat.SetAbsLSpace( *pArr + SwTwips(357) ); // 357 is indent of 0.63 cm
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
                     aFormat.SetListtabPos( *pArr );
-                    aFormat.SetIndentAt( *pArr + 357 );
+                    aFormat.SetIndentAt( *pArr + SwTwips(357) );
                 }
 
                 pNewRule->Set( n, aFormat );
@@ -1979,14 +1979,14 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
     case RES_POOLNUMRULE_NUM2:
         {
-            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
+            static const SwTwips aAbsSpace[ MAXLEVEL ] =
                 {
-                    397,  397,  397,  397,      // 0.70 cm intervals
-                    397, 397, 397, 397,
-                   397, 397
+                    SwTwips(397), SwTwips(397), SwTwips(397), SwTwips(397),      // 0.70 cm intervals
+                    SwTwips(397), SwTwips(397), SwTwips(397), SwTwips(397),
+                    SwTwips(397), SwTwips(397)
                 };
 
-            const sal_uInt16* pArr = aAbsSpace;
+            const SwTwips* pArr = aAbsSpace;
             SwNumFormat aFormat;
 
             aFormat.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
@@ -2001,21 +2001,21 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
                 aFormat.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
             }
 
-            sal_uInt16 nSpace = 357; // indent of 0.63 cm
+            SwTwips nSpace(357); // indent of 0.63 cm
             for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    nSpace += pArr[ n ];
+                    nSpace += SwTwips(pArr[ n ]);
                     aFormat.SetAbsLSpace( nSpace );
                     aFormat.SetFirstLineOffset( - pArr[ n ] );
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    nSpace += pArr[ n ];
+                    nSpace += SwTwips(pArr[ n ]);
                     aFormat.SetListtabPos( nSpace );
                     aFormat.SetIndentAt( nSpace );
-                    aFormat.SetFirstLineIndent( - pArr[ n ] );
+                    aFormat.SetFirstLineIndent( SwTwips(- pArr[ n ]) );
                 }
 
                 pNewRule->Set( n, aFormat );
@@ -2033,7 +2033,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetIncludeUpperLevels( 1 );
             aFormat.SetSuffix( "." );
 
-            tools::Long const nOffs = 397; // 0.70 cm
+            constexpr SwTwips nOffs(397); // 0.70 cm
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2049,13 +2049,13 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFormat.SetAbsLSpace( (n+1) * nOffs + 357 ); // 357 is indent of 0.63 cm
+                    aFormat.SetAbsLSpace( SwTwips(SwTwips(n+1) * nOffs + SwTwips(357)) ); // 357 is indent of 0.63 cm
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    tools::Long nPos = (n+1) * nOffs;
-                    aFormat.SetListtabPos(nPos + 357);
-                    aFormat.SetIndentAt(nPos + 357);
+                    SwTwips nPos = SwTwips(n+1) * nOffs;
+                    aFormat.SetListtabPos(nPos + SwTwips(357));
+                    aFormat.SetIndentAt(nPos + SwTwips(357));
                 }
 
                 pNewRule->Set( n, aFormat );
@@ -2074,21 +2074,21 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetSuffix( "." );
             aFormat.SetNumAdjust( SvxAdjust::Right );
 
-            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
+            static const SwTwips aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 1.33 cm intervals
-                    754, 1508, 1191, 2262, 3016, 3771, 4525, 5279, 6033, 6787
+                    SwTwips(754), SwTwips(1508), SwTwips(1191), SwTwips(2262), SwTwips(3016), SwTwips(3771), SwTwips(4525), SwTwips(5279), SwTwips(6033), SwTwips(6787)
                 };
-            const sal_uInt16* pArr = aAbsSpace;
+            const SwTwips* pArr = aAbsSpace;
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                aFormat.SetFirstLineOffset( 580 - (*pArr) ); // 1 cm space
+                aFormat.SetFirstLineOffset( SwTwips(580) - (*pArr) ); // 1 cm space
             }
             else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 aFormat.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
-                aFormat.SetFirstLineIndent( 580 - (*pArr) );
+                aFormat.SetFirstLineIndent( SwTwips(580) - (*pArr) );
             }
 
             for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
@@ -2096,12 +2096,12 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFormat.SetAbsLSpace( *pArr );
+                    aFormat.SetAbsLSpace( SwTwips(*pArr) );
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    aFormat.SetListtabPos( *pArr );
-                    aFormat.SetIndentAt( *pArr );
+                    aFormat.SetListtabPos( SwTwips(*pArr) );
+                    aFormat.SetIndentAt( SwTwips(*pArr) );
                 }
 
                 pNewRule->Set( n, aFormat );
@@ -2111,14 +2111,14 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
     case RES_POOLNUMRULE_NUM5:
         {
             // [ First, LSpace ]
-            static const sal_uInt16 aAbsSpace0to2[] =
+            static const SwTwips aAbsSpace0to2[] =
                 {
-                    174,  754,      // 0.33, 1.33,
-                    567,  1151,      // 1.03, 2.03,
-                    397,  1548       // 2.03, 2.73
+                    SwTwips(174),  SwTwips(754),      // 0.33, 1.33,
+                    SwTwips(567),  SwTwips(1151),      // 1.03, 2.03,
+                    SwTwips(397),  SwTwips(1548)       // 2.03, 2.73
                 };
 
-            const sal_uInt16* pArr0to2 = aAbsSpace0to2;
+            const SwTwips* pArr0to2 = aAbsSpace0to2;
             SwNumFormat aFormat;
 
             aFormat.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
@@ -2136,7 +2136,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFormat.SetFirstLineOffset( -pArr0to2[0] );    // == 0.33 cm
-                aFormat.SetAbsLSpace( pArr0to2[1] );           // == 1.33 cm
+                aFormat.SetAbsLSpace( SwTwips(pArr0to2[1]) );           // == 1.33 cm
             }
             else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
@@ -2154,7 +2154,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFormat.SetFirstLineOffset( -pArr0to2[2] );    // == 1.03 cm
-                aFormat.SetAbsLSpace( pArr0to2[3] );           // == 2.03 cm
+                aFormat.SetAbsLSpace( SwTwips(pArr0to2[3]) );           // == 2.03 cm
             }
             else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
@@ -2173,7 +2173,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFormat.SetFirstLineOffset( - pArr0to2[4] );   // == 2.03 cm
-                aFormat.SetAbsLSpace( pArr0to2[5] );           // == 2.73 cm
+                aFormat.SetAbsLSpace( SwTwips(pArr0to2[5]) );           // == 2.73 cm
             }
             else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
@@ -2188,8 +2188,8 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetCharFormat( pBullCFormat );
             aFormat.SetBulletFont(  &numfunc::GetDefBulletFont() );
             aFormat.SetBulletChar( cBulletChar );
-            sal_Int16 nOffs = o3tl::convert(4, o3tl::Length::mm, o3tl::Length::twip),
-                      nOffs2 = o3tl::convert(2, o3tl::Length::cm, o3tl::Length::twip);
+            SwTwips nOffs(o3tl::convert(4, o3tl::Length::mm, o3tl::Length::twip)),
+                    nOffs2(o3tl::convert(2, o3tl::Length::cm, o3tl::Length::twip));
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2207,11 +2207,11 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFormat.SetAbsLSpace( nOffs2 + ((n-3) * nOffs) );
+                    aFormat.SetAbsLSpace(SwTwips(nOffs2 + (SwTwips(n-3) * nOffs)));
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    tools::Long nPos = nOffs2 + ((n-3) * static_cast<tools::Long>(nOffs));
+                    SwTwips nPos = nOffs2 + (SwTwips(n-3) * nOffs);
                     aFormat.SetListtabPos(nPos);
                     aFormat.SetIndentAt(nPos);
                 }
@@ -2233,12 +2233,12 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetBulletFont( &numfunc::GetDefBulletFont() );
             aFormat.SetBulletChar( cBulletChar );
 
-            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
+            static const SwTwips aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 0,4  0,8  1,2  1,6  2,0   2,4   2,8   3,2   3,6   4,0
-                    227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
+                    SwTwips(227), SwTwips(454), SwTwips(680), SwTwips(907), SwTwips(1134), SwTwips(1361), SwTwips(1587), SwTwips(1814), SwTwips(2041), SwTwips(2268)
                 };
-            const sal_uInt16* pArr = aAbsSpace;
+            const SwTwips* pArr = aAbsSpace;
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2254,7 +2254,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFormat.SetAbsLSpace( *pArr );
+                    aFormat.SetAbsLSpace( SwTwips(*pArr) );
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
@@ -2278,12 +2278,12 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetBulletFont(  &numfunc::GetDefBulletFont() );
             aFormat.SetBulletChar( 0x2013 );
 
-            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
+            static const SwTwips aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 0,3  0,6  0,9  1,2  1,5  1,8   2,1   2,4   2,7   3,0
-                    170, 340, 510, 680, 850, 1020, 1191, 1361, 1531, 1701
+                    SwTwips(170), SwTwips(340), SwTwips(510), SwTwips(680), SwTwips(850), SwTwips(1020), SwTwips(1191), SwTwips(1361), SwTwips(1531), SwTwips(1701)
                 };
-            const sal_uInt16* pArr = aAbsSpace;
+            const SwTwips* pArr = aAbsSpace;
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2299,7 +2299,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFormat.SetAbsLSpace( *pArr );
+                    aFormat.SetAbsLSpace( SwTwips(*pArr) );
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
@@ -2323,7 +2323,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetIncludeUpperLevels( 1 );
             aFormat.SetBulletFont(  &numfunc::GetDefBulletFont() );
 
-            sal_uInt16 nOffs = o3tl::convert(4, o3tl::Length::mm, o3tl::Length::twip);
+            SwTwips nOffs( o3tl::convert(4, o3tl::Length::mm, o3tl::Length::twip) );
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2341,11 +2341,11 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFormat.SetAbsLSpace( ((n & 1) +1) * nOffs );
+                    aFormat.SetAbsLSpace( SwTwips(SwTwips((n & 1) + 1) * nOffs) );
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    tools::Long nPos = ((n & 1) +1) * static_cast<tools::Long>(nOffs);
+                    SwTwips nPos = SwTwips((n & 1) + 1) * nOffs;
                     aFormat.SetListtabPos(nPos);
                     aFormat.SetIndentAt(nPos);
                 }
@@ -2365,13 +2365,13 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetIncludeUpperLevels( 1 );
             aFormat.SetBulletFont(  &numfunc::GetDefBulletFont() );
 
-            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
+            static const SwTwips aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 0,4  0,8  1,2  1,6  2,0   2,4   2,8   3,2   3,6   4,0
-                    227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
+                    SwTwips(227), SwTwips(454), SwTwips(680), SwTwips(907), SwTwips(1134), SwTwips(1361), SwTwips(1587), SwTwips(1814), SwTwips(2041), SwTwips(2268)
                 };
 
-            const sal_uInt16* pArr = aAbsSpace;
+            const SwTwips* pArr = aAbsSpace;
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2394,7 +2394,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFormat.SetAbsLSpace( *pArr );
+                    aFormat.SetAbsLSpace( SwTwips(*pArr) );
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
@@ -2418,12 +2418,12 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetBulletChar( 0x2717 );
             aFormat.SetBulletFont( &numfunc::GetDefBulletFont() );
 
-            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
+            static const SwTwips aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 0,4  0,8  1,2  1,6  2,0   2,4   2,8   3,2   3,6   4,0
-                    227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
+                    SwTwips(227), SwTwips(454), SwTwips(680), SwTwips(907), SwTwips(1134), SwTwips(1361), SwTwips(1587), SwTwips(1814), SwTwips(2041), SwTwips(2268)
                 };
-            const sal_uInt16* pArr = aAbsSpace;
+            const SwTwips* pArr = aAbsSpace;
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {

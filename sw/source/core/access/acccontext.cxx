@@ -1213,7 +1213,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
 
     const bool bVisibleChildrenOnly = SwAccessibleChild( GetFrame() ).IsVisibleChildrenOnly();
     const bool bNew = rOldFrame.IsEmpty() ||
-                     ( rOldFrame.Left() == 0 && rOldFrame.Top() == 0 );
+                     ( rOldFrame.Left() == SwTwips(0) && rOldFrame.Top() == SwTwips(0) );
     if( IsShowing( *(GetMap()), rChildFrameOrObj ) )
     {
         // If the object could have existed before, then there is nothing to do,

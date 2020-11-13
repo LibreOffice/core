@@ -86,7 +86,7 @@ class SwHTMLTableLayoutCell
 
     sal_uInt16 m_nRowSpan;               ///< ROWSPAN of cell.
     sal_uInt16 m_nColSpan;               ///< COLSPAN of cell.
-    sal_uInt16 m_nWidthOption;           ///< Given width of cell in Twip or %.
+    SwTwips m_nWidthOption;           ///< Given width of cell in Twip or %.
 
     bool m_bPercentWidthOption : 1;  ///< nWidth is %-value.
     bool m_bNoWrapOption : 1;        ///< NOWRAP-option.
@@ -109,7 +109,7 @@ public:
     sal_uInt16 GetRowSpan() const { return m_nRowSpan; }
     sal_uInt16 GetColSpan() const { return m_nColSpan; }
 
-    sal_uInt16 GetWidthOption() const { return m_nWidthOption; }
+    SwTwips GetWidthOption() const { return m_nWidthOption; }
     bool IsPercentWidthOption() const { return m_bPercentWidthOption; }
 
     bool HasNoWrapOption() const { return m_bNoWrapOption; }
@@ -119,16 +119,16 @@ class SwHTMLTableLayoutColumn
 {
 
     /// Interim values of AutoLayoutPass1,
-    sal_uLong m_nMinNoAlign, m_nMaxNoAlign, m_nAbsMinNoAlign;
+    SwTwips m_nMinNoAlign, m_nMaxNoAlign, m_nAbsMinNoAlign;
 
     /// Results of AutoLayoutPass1
-    sal_uLong m_nMin, m_nMax;
+    SwTwips m_nMin, m_nMax;
 
     /// Results of Pass 2.
-    sal_uInt16 m_nAbsColWidth;                ///< In Twips.
-    sal_uInt16 m_nRelColWidth;                ///< In Twips or relative to USHRT_MAX.
+    SwTwips m_nAbsColWidth;                ///< In Twips.
+    SwTwips m_nRelColWidth;                ///< In Twips or relative to USHRT_MAX.
 
-    sal_uInt16 m_nWidthOption;                ///< Options of <COL> or <TD>/<TH>.
+    SwTwips m_nWidthOption;                ///< Options of <COL> or <TD>/<TH>.
 
     bool m_bRelWidthOption : 1;
     bool m_bLeftBorder : 1;
@@ -138,30 +138,30 @@ public:
     SwHTMLTableLayoutColumn( sal_uInt16 nColWidthOpt, bool bRelColWidthOpt,
                              bool bLBorder );
 
-    inline void MergeCellWidthOption( sal_uInt16 nWidth, bool bPercent );
-    inline void SetWidthOption( sal_uInt16 nWidth );
+    inline void MergeCellWidthOption( SwTwips nWidth, bool bPercent );
+    inline void SetWidthOption( SwTwips nWidth );
 
-    sal_uInt16 GetWidthOption() const { return m_nWidthOption; }
+    SwTwips GetWidthOption() const { return m_nWidthOption; }
     bool IsRelWidthOption() const { return m_bRelWidthOption; }
 
-    inline void MergeMinMaxNoAlign( sal_uLong nMin, sal_uLong nMax, sal_uLong nAbsMin );
-    sal_uLong GetMinNoAlign() const { return m_nMinNoAlign; }
-    sal_uLong GetMaxNoAlign() const { return m_nMaxNoAlign; }
-    sal_uLong GetAbsMinNoAlign() const { return m_nAbsMinNoAlign; }
+    inline void MergeMinMaxNoAlign( SwTwips nMin, SwTwips nMax, SwTwips nAbsMin );
+    SwTwips GetMinNoAlign() const { return m_nMinNoAlign; }
+    SwTwips GetMaxNoAlign() const { return m_nMaxNoAlign; }
+    SwTwips GetAbsMinNoAlign() const { return m_nAbsMinNoAlign; }
     inline void ClearPass1Info( bool bWidthOpt );
 
-    inline void SetMinMax( sal_uLong nMin, sal_uLong nMax );
-    void SetMax( sal_uLong nVal ) { m_nMax = nVal; }
-    void AddToMin( sal_uLong nVal ) { m_nMin += nVal; }
-    void AddToMax( sal_uLong nVal ) { m_nMax += nVal; }
-    sal_uLong GetMin() const { return m_nMin; }
-    sal_uLong GetMax() const { return m_nMax; }
+    inline void SetMinMax( SwTwips nMin, SwTwips nMax );
+    void SetMax( SwTwips nVal ) { m_nMax = nVal; }
+    void AddToMin( SwTwips nVal ) { m_nMin += nVal; }
+    void AddToMax( SwTwips nVal ) { m_nMax += nVal; }
+    SwTwips GetMin() const { return m_nMin; }
+    SwTwips GetMax() const { return m_nMax; }
 
-    void SetAbsColWidth( sal_uInt16 nWidth ) { m_nAbsColWidth = nWidth; }
-    sal_uInt16 GetAbsColWidth() const { return m_nAbsColWidth; }
+    void SetAbsColWidth( SwTwips nWidth ) { m_nAbsColWidth = nWidth; }
+    SwTwips GetAbsColWidth() const { return m_nAbsColWidth; }
 
-    void SetRelColWidth( sal_uInt16 nWidth ) { m_nRelColWidth = nWidth; }
-    sal_uInt16 GetRelColWidth() const { return m_nRelColWidth; }
+    void SetRelColWidth( SwTwips nWidth ) { m_nRelColWidth = nWidth; }
+    SwTwips GetRelColWidth() const { return m_nRelColWidth; }
 
     bool HasLeftBorder() const { return m_bLeftBorder; }
 };
@@ -175,37 +175,37 @@ class SwHTMLTableLayout
 
     const SwTable *m_pSwTable;            ///< SwTable (Top-Table only).
 
-    sal_uLong m_nMin;                     ///< Minimal width of table (Twips).
-    sal_uLong m_nMax;                     ///< Maximal width of table (Twips).
+    SwTwips m_nMin;                     ///< Minimal width of table (Twips).
+    SwTwips m_nMax;                     ///< Maximal width of table (Twips).
 
     sal_uInt16 m_nRows;                   ///< Row count.
     sal_uInt16 m_nCols;                   ///< Column count.
 
-    sal_uInt16 m_nLeftMargin;             ///< Space to left margin (from paragraph).
-    sal_uInt16 m_nRightMargin;            ///< Space to left margin (from paragraph).
+    SwTwips m_nLeftMargin;             ///< Space to left margin (from paragraph).
+    SwTwips m_nRightMargin;            ///< Space to left margin (from paragraph).
 
-    sal_uInt16 m_nInhAbsLeftSpace;        ///< Space inherited from surrounding box
-    sal_uInt16 m_nInhAbsRightSpace;       ///< that was added to boxes.
+    SwTwips m_nInhAbsLeftSpace;        ///< Space inherited from surrounding box
+    SwTwips m_nInhAbsRightSpace;       ///< that was added to boxes.
 
-    sal_uInt16 m_nRelLeftFill;            ///< Width of boxes relative to alignment
-    sal_uInt16 m_nRelRightFill;           ///< of tables in tables.
+    SwTwips m_nRelLeftFill;            ///< Width of boxes relative to alignment
+    SwTwips m_nRelRightFill;           ///< of tables in tables.
 
-    sal_uInt16 m_nRelTabWidth;            ///< Relative width of table.
+    SwTwips m_nRelTabWidth;            ///< Relative width of table.
 
-    sal_uInt16 m_nWidthOption;            ///< Width of table (in Twips or %).
-    sal_uInt16 m_nCellPadding;            ///< Space to contents (in Twips).
-    sal_uInt16 m_nCellSpacing;            ///< Cell spacing (in Twips).
-    sal_uInt16 m_nBorder;                 /** Line strength of outer border, or rather the
+    SwTwips m_nWidthOption;            ///< Width of table (in Twips or %).
+    SwTwips m_nCellPadding;            ///< Space to contents (in Twips).
+    SwTwips m_nCellSpacing;            ///< Cell spacing (in Twips).
+    SwTwips m_nBorder;                 /** Line strength of outer border, or rather the
                                         space needed for it as calculated by Netscape. */
 
     SwTwips m_nLeftBorderWidth;
     SwTwips m_nRightBorderWidth;
-    sal_uInt16 m_nInhLeftBorderWidth;
-    sal_uInt16 m_nInhRightBorderWidth;
+    SwTwips m_nInhLeftBorderWidth;
+    SwTwips m_nInhRightBorderWidth;
     SwTwips m_nBorderWidth;
 
-    sal_uInt16 m_nDelayedResizeAbsAvail;  ///< Param for delayed Resize.
-    sal_uInt16 m_nLastResizeAbsAvail;
+    SwTwips m_nDelayedResizeAbsAvail;  ///< Param for delayed Resize.
+    SwTwips m_nLastResizeAbsAvail;
 
     sal_uInt8 m_nPass1Done;               ///< Reference-values for
     sal_uInt8 m_nWidthSet;                ///< the runs through loop.
@@ -226,7 +226,7 @@ class SwHTMLTableLayout
     bool m_bMustNotResize : 1;        ///< Table may not be resized.
     bool m_bMustNotRecalc : 1;        ///< Table may not be adapted to its contents.
 
-    void AddBorderWidth( sal_uLong &rMin, sal_uLong &rMax, sal_uLong& rAbsMin,
+    void AddBorderWidth( SwTwips &rMin, SwTwips &rMax, SwTwips& rAbsMin,
                          sal_uInt16 nCol, sal_uInt16 nColSpan,
                          bool bSwBorders=true ) const;
     void SetBoxWidth( SwTableBox *pBox, sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
@@ -235,11 +235,11 @@ class SwHTMLTableLayout
     SwFrameFormat *FindFlyFrameFormat() const;
     const SwDoc& GetDoc() const { return GetAnyBoxStartNode()->GetDoc(); }
 
-    void Resize_( sal_uInt16 nAbsAvail, bool bRecalc );
+    void Resize_( SwTwips nAbsAvail, bool bRecalc );
 
     DECL_LINK( DelayedResize_Impl, Timer*, void );
 
-    static sal_uInt16 GetBrowseWidthByVisArea( const SwDoc& rDoc );
+    static SwTwips GetBrowseWidthByVisArea( const SwDoc& rDoc );
 public:
 
     SwHTMLTableLayout( const SwTable *pSwTable,
@@ -251,25 +251,25 @@ public:
 
     ~SwHTMLTableLayout();
 
-    sal_uInt16 GetLeftCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
+    SwTwips GetLeftCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
                              bool bSwBorders=true ) const;
-    sal_uInt16 GetRightCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
+    SwTwips GetRightCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
                               bool bSwBorders=true ) const;
-    inline sal_uInt16 GetInhCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
+    inline SwTwips GetInhCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
 
-    inline void SetInhBorderWidths( sal_uInt16 nLeft, sal_uInt16 nRight );
+    inline void SetInhBorderWidths( SwTwips nLeft, SwTwips nRight );
 
-    void GetAvail( sal_uInt16 nCol, sal_uInt16 nColSpan, sal_uInt16& rAbsAvail,
-                   sal_uInt16& rRelAvail ) const;
+    void GetAvail( sal_uInt16 nCol, sal_uInt16 nColSpan, SwTwips& rAbsAvail,
+                   SwTwips& rRelAvail ) const;
 
     void AutoLayoutPass1();
-    void AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAvail,
-                          sal_uInt16 nAbsLeftSpace, sal_uInt16 nAbsRightSpace,
-                          sal_uInt16 nParentInhSpace );
-    void SetWidths( bool bCallPass2=false, sal_uInt16 nAbsAvail=0,
-                    sal_uInt16 nRelAvail=0, sal_uInt16 nAbsLeftSpace=0,
-                    sal_uInt16 nAbsRightSpace=0,
-                    sal_uInt16 nParentInhSpace=0 );
+    void AutoLayoutPass2( SwTwips nAbsAvail, SwTwips nRelAvail,
+                          SwTwips nAbsLeftSpace, SwTwips nAbsRightSpace,
+                          SwTwips nParentInhSpace );
+    void SetWidths( bool bCallPass2=false, SwTwips nAbsAvail=SwTwips(0),
+                    SwTwips nRelAvail=SwTwips(0), SwTwips nAbsLeftSpace=SwTwips(0),
+                    SwTwips nAbsRightSpace=SwTwips(0),
+                    SwTwips nParentInhSpace=SwTwips(0) );
 
     inline SwHTMLTableLayoutColumn *GetColumn( sal_uInt16 nCol ) const;
     inline void SetColumn( std::unique_ptr<SwHTMLTableLayoutColumn> pCol, sal_uInt16 nCol );
@@ -277,10 +277,10 @@ public:
     inline SwHTMLTableLayoutCell *GetCell( sal_uInt16 nRow, sal_uInt16 nCol ) const;
     inline void SetCell( std::unique_ptr<SwHTMLTableLayoutCell> pCell, sal_uInt16 nRow, sal_uInt16 nCol );
 
-    sal_uLong GetMin() const { return m_nMin; }
-    sal_uLong GetMax() const { return m_nMax; }
+    SwTwips GetMin() const { return m_nMin; }
+    SwTwips GetMax() const { return m_nMax; }
 
-    inline tools::Long GetBrowseWidthMin() const;
+    inline SwTwips GetBrowseWidthMin() const;
 
     bool HasColsOption() const { return m_bColsOption; }
     bool HasColTags() const { return m_bColTags; }
@@ -301,30 +301,30 @@ public:
      - If nDelay == HTMLTABLE_RESIZE_NOW, resize immediately and do not
        consider any resize-calls that might possibly be in order.
      - The return value indicates whether the table has been changed. */
-    bool Resize( sal_uInt16 nAbsAvail, bool bRecalc=false, bool bForce=false,
+    bool Resize( SwTwips nAbsAvail, bool bRecalc=false, bool bForce=false,
                  sal_uLong nDelay=0 );
 
-    void BordersChanged( sal_uInt16 nAbsAvail );
+    void BordersChanged( SwTwips nAbsAvail );
 
     /** Calculate available width. This works only if a layout or a
      SwViewShell exists. Otherwise returns 0.
      This is needed by HTML-filter because it doesn't have access to the layout.) */
-    static sal_uInt16 GetBrowseWidth( const SwDoc& rDoc );
+    static SwTwips GetBrowseWidth( const SwDoc& rDoc );
 
     /// Calculates available width by table-frame.
-    sal_uInt16 GetBrowseWidthByTabFrame( const SwTabFrame& rTabFrame ) const;
+    SwTwips GetBrowseWidthByTabFrame( const SwTabFrame& rTabFrame ) const;
 
     /** Calculates available width by the table-frame or
      static GetBrowseWidth if no layout exists. */
-    sal_uInt16 GetBrowseWidthByTable( const SwDoc& rDoc ) const;
+    SwTwips GetBrowseWidthByTable( const SwDoc& rDoc ) const;
 
     /// For Export.
-    sal_uInt16 GetWidthOption() const { return m_nWidthOption; }
+    SwTwips GetWidthOption() const { return m_nWidthOption; }
     bool   HasPercentWidthOption() const { return m_bPercentWidthOption; }
 
-    sal_uInt16 GetCellPadding() const { return m_nCellPadding; }
-    sal_uInt16 GetCellSpacing() const { return m_nCellSpacing; }
-    sal_uInt16 GetBorder() const { return m_nBorder; }
+    SwTwips GetCellPadding() const { return m_nCellPadding; }
+    SwTwips GetCellSpacing() const { return m_nCellSpacing; }
+    SwTwips GetBorder() const { return m_nBorder; }
 
     sal_uInt16 GetRowCount() const { return m_nRows; }
     sal_uInt16 GetColCount() const { return m_nCols; }
@@ -345,8 +345,8 @@ inline void SwHTMLTableLayoutCell::SetProtected()
     m_xContents.reset();
 }
 
-inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( sal_uLong nCMin,
-    sal_uLong nCMax,    sal_uLong nAbsMin )
+inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( SwTwips nCMin,
+    SwTwips nCMax,    SwTwips nAbsMin )
 {
     if( nCMin > m_nMinNoAlign )
         m_nMinNoAlign = nCMin;
@@ -359,16 +359,16 @@ inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( sal_uLong nCMin,
 inline void SwHTMLTableLayoutColumn::ClearPass1Info( bool bWidthOpt )
 {
     m_nMinNoAlign = m_nMaxNoAlign = m_nAbsMinNoAlign = MINLAY;
-    m_nMin = m_nMax = 0;
+    m_nMin = m_nMax = SwTwips(0);
     if( bWidthOpt )
     {
-        m_nWidthOption = 0;
+        m_nWidthOption = SwTwips(0);
         m_bRelWidthOption = false;
     }
 }
 
 inline void SwHTMLTableLayoutColumn::MergeCellWidthOption(
-    sal_uInt16 nWidth, bool bRel )
+    SwTwips nWidth, bool bRel )
 {
     if( !m_nWidthOption ||
         (bRel==m_bRelWidthOption && m_nWidthOption < nWidth) )
@@ -378,16 +378,16 @@ inline void SwHTMLTableLayoutColumn::MergeCellWidthOption(
     }
 }
 
-inline void SwHTMLTableLayoutColumn::SetMinMax( sal_uLong nMn, sal_uLong nMx )
+inline void SwHTMLTableLayoutColumn::SetMinMax( SwTwips nMn, SwTwips nMx )
 {
     m_nMin = nMn;
     m_nMax = nMx;
 }
 
-inline sal_uInt16 SwHTMLTableLayout::GetInhCellSpace( sal_uInt16 nCol,
+inline SwTwips SwHTMLTableLayout::GetInhCellSpace( sal_uInt16 nCol,
                                                   sal_uInt16 nColSpan ) const
 {
-    sal_uInt16 nSpace = 0;
+    SwTwips nSpace(0);
     if( nCol==0 )
         nSpace = nSpace + m_nInhAbsLeftSpace;
     if( nCol+nColSpan==m_nCols )
@@ -401,7 +401,7 @@ inline SwHTMLTableLayoutColumn *SwHTMLTableLayout::GetColumn( sal_uInt16 nCol ) 
     return m_aColumns[nCol].get();
 }
 
-inline void SwHTMLTableLayoutColumn::SetWidthOption( sal_uInt16 nWidth )
+inline void SwHTMLTableLayoutColumn::SetWidthOption( SwTwips nWidth )
 {
     m_nWidthOption = nWidth;
     m_bRelWidthOption = true;
@@ -423,12 +423,12 @@ inline void SwHTMLTableLayout::SetCell( std::unique_ptr<SwHTMLTableLayoutCell> p
     m_aCells[static_cast<size_t>(nRow)*m_nCols+nCol] = std::move(pCell);
 }
 
-inline tools::Long SwHTMLTableLayout::GetBrowseWidthMin() const
+inline SwTwips SwHTMLTableLayout::GetBrowseWidthMin() const
 {
-    return static_cast<tools::Long>( (!m_nWidthOption || m_bPercentWidthOption) ? m_nMin : m_nRelTabWidth );
+    return (!m_nWidthOption || m_bPercentWidthOption) ? m_nMin : SwTwips(m_nRelTabWidth);
 }
 
-void SwHTMLTableLayout::SetInhBorderWidths( sal_uInt16 nLeft, sal_uInt16 nRight )
+void SwHTMLTableLayout::SetInhBorderWidths( SwTwips nLeft, SwTwips nRight )
 {
     m_nInhLeftBorderWidth = nLeft;
     m_nInhRightBorderWidth = nRight;

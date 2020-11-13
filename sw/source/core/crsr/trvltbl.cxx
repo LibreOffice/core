@@ -711,7 +711,7 @@ bool SwCursorShell::MoveTable( SwWhichTable fnWhichTable, SwMoveFnCollection con
     if( bRet )
     {
         // #i45028# - set "top" position for repeated headline rows
-        pCursor->GetPtPos() = Point();
+        pCursor->GetPtPos() = SwPoint();
 
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
 
@@ -797,7 +797,7 @@ bool SwCursorShell::GotoTable( const OUString& rName )
     bool bRet = !m_pTableCursor && m_pCurrentCursor->GotoTable( rName );
     if( bRet )
     {
-        m_pCurrentCursor->GetPtPos() = Point();
+        m_pCurrentCursor->GetPtPos() = SwPoint();
         UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
                     SwCursorShell::READONLY );
     }

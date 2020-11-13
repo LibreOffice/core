@@ -69,8 +69,8 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
     OSL_ENSURE( pContact, "<lcl_AdjustPositioningAttr(..)> - missing contact object." );
 
     // determine position of new group object relative to its anchor frame position
-    SwTwips nHoriRelPos = 0;
-    SwTwips nVertRelPos = 0;
+    SwTwips nHoriRelPos(0);
+    SwTwips nVertRelPos(0);
     {
         const SwFrame* pAnchorFrame = pContact->GetAnchoredObj( &_rSdrObj )->GetAnchorFrame();
         OSL_ENSURE( !pAnchorFrame ||
@@ -80,7 +80,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
         bool bVert = false;
         bool bR2L = false;
         // #i45952# - use anchor position of anchor frame, if it exist.
-        Point aAnchorPos;
+        SwPoint aAnchorPos;
         if ( pAnchorFrame )
         {
             // #i45952#
@@ -91,7 +91,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
         else
         {
             // #i45952#
-            aAnchorPos = _rSdrObj.GetAnchorPos();
+            aAnchorPos = SwPoint(_rSdrObj.GetAnchorPos());
             // If no anchor frame exist - e.g. because no layout exists - the
             // default layout direction is taken.
             const SvxFrameDirectionItem& rDirItem =
@@ -135,7 +135,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
 
         }
         // use geometry of drawing object
-        const tools::Rectangle aObjRect = _rSdrObj.GetSnapRect();
+        const SwRect aObjRect( _rSdrObj.GetSnapRect() );
 
         if ( bVert )
         {

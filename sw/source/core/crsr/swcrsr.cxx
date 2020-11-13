@@ -350,7 +350,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             for (;;)
             {
                 pFrame = bGoNxt ? pFrame->GetNextContentFrame() : pFrame->GetPrevContentFrame();
-                if (!pFrame || 0 != pFrame->getFrameArea().Height() )
+                if (!pFrame || SwTwips(0) != pFrame->getFrameArea().Height() )
                     break;
             }
 
@@ -360,7 +360,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             {
                 bGoNxt = !bGoNxt;
                 pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
-                while ( pFrame && 0 == pFrame->getFrameArea().Height() )
+                while ( pFrame && SwTwips(0) == pFrame->getFrameArea().Height() )
                 {
                     pFrame = bGoNxt ? pFrame->GetNextContentFrame()
                         :   pFrame->GetPrevContentFrame();
@@ -1204,7 +1204,7 @@ struct HideWrapper
 
 } // namespace
 
-bool SwCursor::SelectWord( SwViewShell const * pViewShell, const Point* pPt )
+bool SwCursor::SelectWord( SwViewShell const * pViewShell, const SwPoint* pPt )
 {
     return SelectWordWT( pViewShell, WordType::ANYWORD_IGNOREWHITESPACES, pPt );
 }
@@ -1415,7 +1415,7 @@ bool SwCursor::GoPrevWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout
     return bRet;
 }
 
-bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType, const Point* pPt )
+bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType, const SwPoint* pPt )
 {
     SwCursorSaveState aSave( *this );
 
@@ -1425,7 +1425,7 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
     if( pPt && nullptr != pLayout )
     {
         // set the cursor to the layout position
-        Point aPt( *pPt );
+        SwPoint aPt( *pPt );
         pLayout->GetModelPositionForViewPoint( GetPoint(), aPt );
     }
 
@@ -2002,7 +2002,7 @@ void SwCursor::DoSetBidiLevelUpDown()
 }
 
 bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
-                       Point const * pPt, tools::Long nUpDownX,
+                       SwPoint const * pPt, SwTwips nUpDownX,
                        SwRootFrame & rLayout)
 {
     SwTableCursor* pTableCursor = dynamic_cast<SwTableCursor*>(this);
@@ -2019,7 +2019,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
     }
 
     bool bRet = false;
-    Point aPt;
+    SwPoint aPt;
     if( pPt )
         aPt = *pPt;
     std::pair<Point, bool> const temp(aPt, true);
@@ -2035,9 +2035,9 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             pFrame->GetCharRect( aTmpRect, *GetPoint() );
             aPt = aTmpRect.Pos();
 
-            nUpDownX = pFrame->IsVertical() ?
+            nUpDownX = SwTwips(pFrame->IsVertical() ?
                 aPt.getY() - pFrame->getFrameArea().Top() :
-                aPt.getX() - pFrame->getFrameArea().Left();
+                aPt.getX() - pFrame->getFrameArea().Left());
         }
 
         // It is allowed to move footnotes in other footnotes but not sections

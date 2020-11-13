@@ -229,7 +229,7 @@ public:
           SdrPage* GetDrawPage()       { return mpDrawPage; }
           void     SetDrawPage( SdrPage* pNew ){ mpDrawPage = pNew; }
 
-    virtual bool  GetModelPositionForViewPoint( SwPosition *, Point&,
+    virtual bool  GetModelPositionForViewPoint( SwPosition *, SwPoint&,
                                SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,

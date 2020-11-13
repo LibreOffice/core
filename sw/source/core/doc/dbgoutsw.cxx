@@ -370,13 +370,13 @@ static OUString lcl_dbg_out(const SwRect & rRect)
 {
     OUString aResult =
         "[ [" +
-        OUString::number(rRect.Left()) +
+        OUString::number(tools::Long(rRect.Left())) +
         ", " +
-        OUString::number(rRect.Top()) +
+        OUString::number(tools::Long(rRect.Top())) +
         "], [" +
-        OUString::number(rRect.Right()) +
+        OUString::number(tools::Long(rRect.Right())) +
         ", " +
-        OUString::number(rRect.Bottom()) +
+        OUString::number(tools::Long(rRect.Bottom())) +
         "] ]";
 
     return aResult;

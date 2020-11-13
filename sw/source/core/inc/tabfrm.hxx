@@ -227,8 +227,8 @@ public:
 
     bool CalcFlyOffsets(
         SwTwips& rUpper,
-        tools::Long& rLeftOffset,
-        tools::Long& rRightOffset ) const;
+        SwTwips& rLeftOffset,
+        SwTwips& rRightOffset ) const;
 
     SwTwips CalcHeightOfFirstContentLine() const;
 
