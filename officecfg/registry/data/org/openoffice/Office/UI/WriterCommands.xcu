@@ -367,7 +367,7 @@
       </node>
       <node oor:name=".uno:ViewTrackChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Track Changes</value>
+          <value xml:lang="en-US">Show ~Tracked Changes</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:ShowTrackedChanges</value>
