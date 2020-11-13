@@ -2485,6 +2485,110 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportPDF)
 
 #endif
 }
+
+// Check we correctly copy more complex resources (Fonts describing
+// glyphs in recursive arrays) to the target PDF
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportDocumentWithComplexResources)
+{
+// setenv only works on unix based systems
+#ifndef _WIN32
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            unsetenv("LO_IMPORT_USE_PDFIUM");
+    });
+
+    // Load the PDF and save as PDF
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ComplexContentDictionary.pdf";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // Assert that the XObject in the page resources dictionary is a reference XObject.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+
+    // Go directly to the Font object (24 0) (number could change if we change how PDF export works)
+    auto pFont = aDocument.LookupObject(23);
+    CPPUNIT_ASSERT(pFont);
+
+    // Check it is the Font object (Type = Font)
+    auto pName
+        = dynamic_cast<vcl::filter::PDFNameElement*>(pFont->GetDictionary()->LookupElement("Type"));
+    CPPUNIT_ASSERT(pName);
+    CPPUNIT_ASSERT_EQUAL(OString("Font"), pName->GetValue());
+
+    // Check BaseFont is what we expect
+    auto pBaseFont = dynamic_cast<vcl::filter::PDFNameElement*>(
+        pFont->GetDictionary()->LookupElement("BaseFont"));
+    CPPUNIT_ASSERT(pBaseFont);
+    CPPUNIT_ASSERT_EQUAL(OString("HOTOMR+Calibri,Italic"), pBaseFont->GetValue());
+
+    // Check and get the W array
+    auto pWArray
+        = dynamic_cast<vcl::filter::PDFArrayElement*>(pFont->GetDictionary()->LookupElement("W"));
+    CPPUNIT_ASSERT(pWArray);
+    CPPUNIT_ASSERT_EQUAL(size_t(26), pWArray->GetElements().size());
+
+    // Check the content of W array
+    // ObjectCopier didn't copy this array correctly and the document
+    // had glyphs at the wrong places
+    {
+        // first 2 elements
+        auto pNumberAtIndex0 = dynamic_cast<vcl::filter::PDFNumberElement*>(pWArray->GetElement(0));
+        CPPUNIT_ASSERT(pNumberAtIndex0);
+        CPPUNIT_ASSERT_EQUAL(3.0, pNumberAtIndex0->GetValue());
+
+        auto pArrayAtIndex1 = dynamic_cast<vcl::filter::PDFArrayElement*>(pWArray->GetElement(1));
+        CPPUNIT_ASSERT(pArrayAtIndex1);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pArrayAtIndex1->GetElements().size());
+
+        {
+            auto pNumber
+                = dynamic_cast<vcl::filter::PDFNumberElement*>(pArrayAtIndex1->GetElement(0));
+            CPPUNIT_ASSERT(pNumber);
+            CPPUNIT_ASSERT_EQUAL(226.0, pNumber->GetValue());
+        }
+
+        // last 2 elements
+        auto pNumberAtIndex24
+            = dynamic_cast<vcl::filter::PDFNumberElement*>(pWArray->GetElement(24));
+        CPPUNIT_ASSERT(pNumberAtIndex24);
+        CPPUNIT_ASSERT_EQUAL(894.0, pNumberAtIndex24->GetValue());
+
+        auto pArrayAtIndex25 = dynamic_cast<vcl::filter::PDFArrayElement*>(pWArray->GetElement(25));
+        CPPUNIT_ASSERT(pArrayAtIndex25);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pArrayAtIndex25->GetElements().size());
+
+        {
+            auto pNumber1
+                = dynamic_cast<vcl::filter::PDFNumberElement*>(pArrayAtIndex25->GetElement(0));
+            CPPUNIT_ASSERT(pNumber1);
+            CPPUNIT_ASSERT_EQUAL(303.0, pNumber1->GetValue());
+
+            auto pNumber2
+                = dynamic_cast<vcl::filter::PDFNumberElement*>(pArrayAtIndex25->GetElement(1));
+            CPPUNIT_ASSERT(pNumber2);
+            CPPUNIT_ASSERT_EQUAL(303.0, pNumber2->GetValue());
+        }
+    }
+#endif
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
