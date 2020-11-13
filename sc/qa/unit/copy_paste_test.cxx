@@ -48,6 +48,7 @@ public:
     void tdf137621_autofillMergedBool();
     void tdf137205_autofillDatesInMergedCells();
     void tdf137625_autofillMergedUserlist();
+    void tdf137624_autofillMergedMixed();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
@@ -62,6 +63,7 @@ public:
     CPPUNIT_TEST(tdf137621_autofillMergedBool);
     CPPUNIT_TEST(tdf137205_autofillDatesInMergedCells);
     CPPUNIT_TEST(tdf137625_autofillMergedUserlist);
+    CPPUNIT_TEST(tdf137624_autofillMergedMixed);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -807,7 +809,57 @@ void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
     }
 }
 
+void ScCopyPasteTest::tdf137624_autofillMergedMixed()
+{
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController("tdf137624_autofillMergedMixed.", FORMAT_ODS, true);
+    ScDocument& rDoc = xDocSh->GetDocument();
 
+    // Get the document controller
+    ScTabViewShell* pView = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pView != nullptr);
+
+    // add 1aa,2bb,3cc,4dd,5ee,6ff to userlist, to test that autofill won't confuse it with 1aa,3aa
+    // delete every userlist to make sure there won't be any string that is in 2 different userlist
+    ScGlobal::GetUserList()->clear();
+    addToUserList({ "1aa,2bb,3cc,4dd,5ee,6ff" });
+
+    // fillauto mixed (string + number), these areas contain only merged cells
+    pView->FillAuto(FILL_TO_RIGHT, 7, 5, 12, 7, 6);   //H6:M8
+    pView->FillAuto(FILL_TO_LEFT, 7, 5, 12, 7, 6);    //H6:M8
+    pView->FillAuto(FILL_TO_BOTTOM, 1, 20, 3, 23, 4); //B21:D24
+    pView->FillAuto(FILL_TO_TOP, 1, 20, 3, 23, 4);    //B21:D24
+
+    // compare the results of fill-right / -left with the reference stored in the test file
+    // this compares the whole area blindly, for specific test cases, check the test file
+    for (int nCol = 1; nCol <= 18; nCol++)
+    {
+        for (int nRow = 5; nRow <= 7; nRow++)
+        {
+            CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
+            CellType nType2 = rDoc.GetCellType(ScAddress(nCol, nRow + 4, 0));
+            OUString aStr1 = rDoc.GetString(nCol, nRow, 0);
+            OUString aStr2 = rDoc.GetString(nCol, nRow + 4, 0);
+
+            CPPUNIT_ASSERT_EQUAL(nType1, nType2);
+            CPPUNIT_ASSERT_EQUAL(aStr1, aStr2);
+        }
+    }
+
+    // compare the results of fill-up / -down
+    for (int nCol = 1; nCol <= 3; nCol++)
+    {
+        for (int nRow = 16; nRow <= 27; nRow++)
+        {
+            CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
+            CellType nType2 = rDoc.GetCellType(ScAddress(nCol + 4, nRow, 0));
+            OUString aStr1 = rDoc.GetString(nCol, nRow, 0);
+            OUString aStr2 = rDoc.GetString(nCol + 4, nRow, 0);
+
+            CPPUNIT_ASSERT_EQUAL(nType1, nType2);
+            CPPUNIT_ASSERT_EQUAL(aStr1, aStr2);
+        }
+    }
+}
 
 ScCopyPasteTest::ScCopyPasteTest()
       : ScBootstrapFixture( "sc/qa/unit/data" )
