@@ -139,7 +139,7 @@ public:
      * calculated using percentages.
      * Frames that are anchored to this or inner Frames, are also invalidated.
      */
-    void InvaPercentLowers( SwTwips nDiff = 0 );
+    void InvaPercentLowers( SwTwips nDiff = SwTwips(0) );
 
     /// Called by Format for Frames and Areas with columns
     void FormatWidthCols( const SwBorderAttrs &, const SwTwips nBorder,

@@ -1124,7 +1124,7 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
     if( nStrLen > 0 )
     {
         SwFrame* pTFrame = const_cast<SwFrame*>(GetFrame());
-        tabs = pTFrame->GetTabStopInfo(aCoreRect.Left());
+        tabs = pTFrame->GetTabStopInfo(SwTwips(aCoreRect.Left()));
     }
 
     if( tabs.hasElements() )

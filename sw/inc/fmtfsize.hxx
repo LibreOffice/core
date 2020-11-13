@@ -65,7 +65,7 @@ class SW_DLLPUBLIC SwFormatFrameSize: public SvxSizeItem
 
 public:
     SwFormatFrameSize( SwFrameSize eSize = SwFrameSize::Variable,
-                  SwTwips nWidth = 0, SwTwips nHeight = 0 );
+                  SwTwips nWidth = SwTwips(0), SwTwips nHeight = SwTwips(0) );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwFormatFrameSize* Clone( SfxItemPool *pPool = nullptr ) const override;

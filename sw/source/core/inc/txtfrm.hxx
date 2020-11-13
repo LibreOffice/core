@@ -836,7 +836,7 @@ inline SwTwips SwTextFrame::GetFootnoteFrameHeight() const
     if(  !IsFollow() && IsInFootnote() && HasPara() )
         return GetFootnoteFrameHeight_();
     else
-        return 0;
+        return SwTwips(0);
 }
 
 inline const SwTextFrame *SwTextFrame::GetFollow() const
@@ -1015,7 +1015,7 @@ public:
 };
 
 
-const SwTwips WIDOW_MAGIC = (SAL_MAX_INT32 - 1)/2;
+constexpr SwTwips WIDOW_MAGIC((SAL_MAX_INT32 - 1)/2);
 
 } // namespace sw
 

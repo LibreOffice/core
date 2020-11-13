@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include "swdllapi.h"
+#include "twips.hxx"
 #include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/outdev.hxx>
@@ -48,10 +49,6 @@ class CharClass;
 class CollatorWrapper;
 class LanguageTag;
 
-typedef tools::Long SwTwips;
-#define INVALID_TWIPS   LONG_MAX
-#define TWIPS_MAX       (LONG_MAX - 1)
-
 // Converts Millimeters to Twips (1 mm == 56.905479 twips).
 template <typename T = SwTwips>
 constexpr T MmToTwips(const double mm) { return static_cast<T>(mm / 0.017573); }
@@ -60,7 +57,7 @@ constexpr T MmToTwips(const double mm) { return static_cast<T>(mm / 0.017573); }
 
 const sal_Int32 COMPLETE_STRING = SAL_MAX_INT32;
 
-const SwTwips cMinHdFtHeight = 56;
+constexpr SwTwips cMinHdFtHeight(56);
 
 #define MINFLY 23   // Minimal size for FlyFrames.
 #define MINLAY 23   // Minimal size for other Frames.
@@ -74,7 +71,7 @@ const SwTwips cMinHdFtHeight = 56;
 #define MIN_BORDER_DIST 28
 
 // Minimal document border: 20mm.
-const SwTwips lMinBorder = 1134;
+constexpr SwTwips lMinBorder(1134);
 
 // Margin left and above document.
 // Half of it is gap between the pages.

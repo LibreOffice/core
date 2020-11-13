@@ -163,7 +163,7 @@ public:
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
         SwRootFrame const* pLayout, bool isFieldNames);
-    bool UpDown(bool bUp, sal_uInt16 nCnt, Point const * pPt, tools::Long nUpDownX, SwRootFrame & rLayout);
+    bool UpDown(bool bUp, sal_uInt16 nCnt, Point const * pPt, SwTwips nUpDownX, SwRootFrame & rLayout);
     bool LeftRightMargin(SwRootFrame const& rLayout, bool bLeftMargin, bool bAPI);
     bool IsAtLeftRightMargin(SwRootFrame const& rLayout, bool bLeftMargin, bool bAPI) const;
     bool SttEndDoc( bool bSttDoc );

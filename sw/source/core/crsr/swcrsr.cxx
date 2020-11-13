@@ -1960,7 +1960,7 @@ void SwCursor::DoSetBidiLevelUpDown()
 }
 
 bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
-                       Point const * pPt, tools::Long nUpDownX,
+                       Point const * pPt, SwTwips nUpDownX,
                        SwRootFrame & rLayout)
 {
     SwTableCursor* pTableCursor = dynamic_cast<SwTableCursor*>(this);
@@ -1993,9 +1993,9 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             pFrame->GetCharRect( aTmpRect, *GetPoint() );
             aPt = aTmpRect.Pos();
 
-            nUpDownX = pFrame->IsVertical() ?
+            nUpDownX = SwTwips(pFrame->IsVertical() ?
                 aPt.getY() - pFrame->getFrameArea().Top() :
-                aPt.getX() - pFrame->getFrameArea().Left();
+                aPt.getX() - pFrame->getFrameArea().Left());
         }
 
         // It is allowed to move footnotes in other footnotes but not sections

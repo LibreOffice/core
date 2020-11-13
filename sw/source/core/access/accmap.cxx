@@ -866,7 +866,7 @@ void SwAccPreviewData::AdjustLogicPgRectToVisibleArea(
     SwRect aVisPreviewPgSwRect( _rPreviewPgSwRect );
     aVisPreviewPgSwRect.Intersection( aPreviewWinSwRect );
     // adjust logic page rectangle
-    SwTwips nTmpDiff;
+    tools::Long nTmpDiff;
     // left
     nTmpDiff = aVisPreviewPgSwRect.Left() - _rPreviewPgSwRect.Left();
     _iorLogicPgSwRect.AddLeft( nTmpDiff );
