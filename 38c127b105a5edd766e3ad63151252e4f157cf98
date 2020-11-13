@@ -22,6 +22,53 @@
       "revId": "38c127b105a5edd766e3ad63151252e4f157cf98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcd70641_a69bf078",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3610,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-13T08:46:03Z",
+      "side": 1,
+      "message": "Fair enough.  The OP suggested something similar - but wanted it only to appear only from Value2 and up.  \n\nI argued against the idea - partly because (in Function Wizard at least), there will be a full explanation of SWITCH (also of default) that will remain in view, and partly because it will also be a tooltip.  Won\u0027t you (and expert users) get tired of always being reminded about the default in the tooltip?  I will follow Kaganski\u0027s hill-climbing principle:  make an improvement, until a better improvement comes.  (-:",
+      "parentUuid": "22885c12_e522642c",
+      "range": {
+        "startLine": 3610,
+        "startChar": 32,
+        "endLine": 3610,
+        "endChar": 79
+      },
+      "revId": "38c127b105a5edd766e3ad63151252e4f157cf98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c275aefc_f757dc81",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3612,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-13T08:46:03Z",
+      "side": 1,
+      "message": "And once that Pandora\u0027s box of covering the default case is opened, then why not modify the \"result\" tooltip for the default condition as well?  (-:  \n\nBut there is one thing that I would like to check with you about this particular tip.  \nIs \"matches\" ok there?  The help page and in the def. of SWITCH here use \"equal\" the expression. I have no opinion if it is correct, but I would (naively) think that it would be better to use the same term consistently.",
+      "range": {
+        "startLine": 3612,
+        "startChar": 32,
+        "endLine": 3612,
+        "endChar": 100
+      },
+      "revId": "38c127b105a5edd766e3ad63151252e4f157cf98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
