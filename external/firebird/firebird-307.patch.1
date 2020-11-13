@@ -1,0 +1,33 @@
+diff -ur firebird.org/src/jrd/SimilarToMatcher.h firebird/src/jrd/SimilarToMatcher.h
+--- firebird.org/src/jrd/SimilarToMatcher.h	2020-11-08 13:45:11.661112774 +0100
++++ firebird/src/jrd/SimilarToMatcher.h	2020-11-08 13:52:54.396296686 +0100
+@@ -36,6 +36,8 @@
+ // #define RECURSIVE_SIMILAR	// useless in production due to stack overflow
+ #endif
+ 
++typedef Firebird::AutoPtr<UCHAR, Firebird::ArrayDelete> UCharArrayAutoPtr;
++
+ namespace Firebird
+ {
+ 
+@@ -338,7 +340,7 @@
+ 		private:
+ 			static const unsigned INCREASE_FACTOR = 50;
+ 			unsigned size;
+-			AutoPtr<UCHAR, ArrayDelete<UCHAR>> data;
++			UCharArrayAutoPtr data;
+ 			T* end;
+ 		};
+ #endif	// RECURSIVE_SIMILAR
+diff -ur firebird.org/builds/posix/Makefile.in firebird/builds/posix/Makefile.in
+--- firebird.org/builds/posix/Makefile.in       2020-11-08 15:11:29.262993342 +0100
++++ firebird/builds/posix/Makefile.in   2020-11-08 15:16:53.628545143 +0100
+@@ -264,7 +264,7 @@
+ ODS_TEST:=$(GEN_ROOT)/odstest$(EXEC_EXT)
+
+ preliminaryCheck:	$(STD_SIZES) $(RUN_SIZES)
+-	diff -u $^
++	diff -u --strip-trailing-cr $^
+
+ $(RUN_SIZES): $(ODS_H) $(ODS_AWK)
+	awk -f $(ODS_AWK) <$(ODS_H) >$(ODS_TEST_CPP)

@@ -1,0 +1,12 @@
+--- extern/btyacc/Makefile.orig	2020-11-13 18:57:44.831455058 +0100
++++ extern/btyacc/Makefile	2020-11-13 18:59:19.071078333 +0100
+@@ -44,6 +44,9 @@
+ $(PROGRAM):     $(OBJS) $(LIBS)
+ 		$(CC) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
+ 
++%.o: %.c
++		$(CC) $(CCFLAGS) -c $< -o $@
++
+ clean:;		rm -f $(OBJS)
+ 
+ clobber:;	rm -f $(OBJS) $(PROGRAM)
