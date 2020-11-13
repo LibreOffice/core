@@ -22,6 +22,30 @@
       "revId": "6525a7da49150c4143985c8a012f3baab41f20b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0280b05c_511f74bf",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3612,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-13T10:30:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "347c2d9d_c8de896f",
+      "range": {
+        "startLine": 3612,
+        "startChar": 101,
+        "endLine": 3612,
+        "endChar": 174
+      },
+      "revId": "6525a7da49150c4143985c8a012f3baab41f20b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
