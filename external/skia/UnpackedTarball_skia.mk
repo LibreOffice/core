@@ -22,9 +22,7 @@ skia_patches := \
     fix-alpha-difference-copy.patch.1 \
     libvulkan-name.patch.1 \
     share-grcontext.patch.1 \
-    Wdeprecated-copy-dtor.patch.0 \
     fix-gcc-x86.patch.1	\
-    fix-sse.patch.1 \
     clang11-flax-vector-conversion.patch.0 \
     clang-attributes-warning.patch.1 \
     fontconfig-get-typeface.patch.0 \
@@ -35,7 +33,6 @@ skia_patches := \
     windows-typeface-directwrite.patch.0 \
     windows-raster-surface-no-copies.patch.1 \
     fix-windows-dwrite.patch.1 \
-    public-make-from-backend-texture.patch.1 \
     c++20.patch.0 \
     constexpr-debug-std-max.patch.1 \
     swap-buffers-rect.patch.1
