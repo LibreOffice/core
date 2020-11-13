@@ -108,6 +108,7 @@ protected:
 
     bool m_bInCnt :1;        ///< RndStdIds::FLY_AS_CHAR, anchored as character
     bool m_bAtCnt :1;        ///< RndStdIds::FLY_AT_PARA, anchored at paragraph
+                             ///< or RndStdIds::FLY_AT_CHAR
     bool m_bLayout :1;       ///< RndStdIds::FLY_AT_PAGE, RndStdIds::FLY_AT_FLY, at page or at frame
     bool m_bAutoPosition :1; ///< RndStdIds::FLY_AT_CHAR, anchored at character
 

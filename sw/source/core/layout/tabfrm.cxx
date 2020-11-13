@@ -2770,7 +2770,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                     // #i46807# - do not consider invalid
                     // Writer fly frames.
                     (pFly->isFrameAreaDefinitionValid() || bAddVerticalFlyOffsets) &&
-                    // fly anchored at character
+                    // fly anchored at character or at paragraph
                     pFly->IsFlyAtContentFrame() &&
                     // fly overlaps with corresponding table rectangle
                     aFlyRect.IsOver( aRect ) &&
