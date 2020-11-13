@@ -1112,13 +1112,13 @@ void SdExportTest::testBulletsAsImage()
 
         if (nExportFormat == ODP || nExportFormat == PPT)
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), 16L, aGraphic.GetSizePixel().Width());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), 16L, aGraphic.GetSizePixel().Height());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), tools::Long(16), aGraphic.GetSizePixel().Width());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), tools::Long(16), aGraphic.GetSizePixel().Height());
         }
         else // FIXME: what happened here
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), 64L, aGraphic.GetSizePixel().Width());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), 64L, aGraphic.GetSizePixel().Height());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), tools::Long(64), aGraphic.GetSizePixel().Width());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), tools::Long(64), aGraphic.GetSizePixel().Height());
         }
 
         // Graphic Size

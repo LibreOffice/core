@@ -1875,7 +1875,7 @@ void ScFiltersTest::testChartImportXLS()
     const SdrOle2Obj* pOleObj = getSingleChartObject(rDoc, 0);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve a chart object from the 2nd sheet.", pOleObj);
 
-    CPPUNIT_ASSERT_EQUAL(11137L, pOleObj->GetLogicRect().getWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(11137), pOleObj->GetLogicRect().getWidth());
     CPPUNIT_ASSERT(8640L > pOleObj->GetLogicRect().getHeight());
 
     xDocSh->DoClose();

@@ -1795,10 +1795,10 @@ void SdImportTest::testTdf103473()
     SdrTextObj *const pObj = dynamic_cast<SdrTextObj *const>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pObj);
     ::tools::Rectangle aRect = pObj->GetGeoRect();
-    CPPUNIT_ASSERT_EQUAL(3629L, aRect.Left());
-    CPPUNIT_ASSERT_EQUAL(4431L, aRect.Top());
-    CPPUNIT_ASSERT_EQUAL(8353L, aRect.Right());
-    CPPUNIT_ASSERT_EQUAL(9155L, aRect.Bottom());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(3629), aRect.Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(4431), aRect.Top());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(8353), aRect.Right());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(9155), aRect.Bottom());
 
     xDocShRef->DoClose();
 }
@@ -2226,8 +2226,8 @@ bool SdImportTest::checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeN
             ReadDIB(aBitmap, aBitmapStream, true);
         }
     }
-    CPPUNIT_ASSERT_EQUAL(8L, aBitmap.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(8L, aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(8), aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(8), aBitmap.GetSizePixel().Height());
     return checkPatternValues(rExpected, aBitmap);
 }
 

@@ -1707,8 +1707,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121615)
     CPPUNIT_ASSERT( jpegFormat != GRFILTER_FORMAT_NOTFOUND );
     CPPUNIT_ASSERT_EQUAL( jpegFormat, format );
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
-    CPPUNIT_ASSERT_EQUAL( 200L, aBitmap.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL( 300L, aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL( tools::Long(200), aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL( tools::Long(300), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL( 8, int(aBitmap.GetBitCount()));
     // tdf#121615 was caused by broken handling of data width with 8bit color,
     // so the test image has some black in the bottomright corner, check it's there
