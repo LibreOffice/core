@@ -16,6 +16,24 @@
       "revId": "69d828377d7e57ca78a661dfa25abe42676aacd1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca7f63eb_d3d7e8e6",
+        "filename": "configmgr/source/groupnode.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-13T07:30:10Z",
+      "side": 1,
+      "message": "(in *this specific case* the comment might go to the previous line after the commented declaration, which was not possible before we increased line limit to 100 ch)",
+      "parentUuid": "c580116d_60430d8d",
+      "revId": "69d828377d7e57ca78a661dfa25abe42676aacd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
