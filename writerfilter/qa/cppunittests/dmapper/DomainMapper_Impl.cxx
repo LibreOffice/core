@@ -179,6 +179,15 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldIfInsideIf)
     // - Actual  : 0** Expression is faulty **2
     // i.e. some of the inner fields escaped outside the outer field.
     CPPUNIT_ASSERT_EQUAL(OUString("2"), xCell->getString());
+
+    // Test the second cell: it contains "IF ", not the usual " IF ".
+    xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 25
+    // - Actual  : 025
+    // i.e. some of the inner fields escaped outside the outer field.
+    CPPUNIT_ASSERT_EQUAL(OUString("25"), xCell->getString());
 }
 }
 
