@@ -294,16 +294,16 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_ZOOM_IN:
                 {
                     const Fraction& rZoomY = GetViewData().GetZoomY();
-                    long nZoom = static_cast<long>(rZoomY * 100);
-                    if (nZoom >= long(MAXZOOM))
+                    tools::Long nZoom = tools::Long(rZoomY * 100);
+                    if (nZoom >= tools::Long(MAXZOOM))
                         rSet.DisableItem(nWhich);
                 }
                 break;
             case SID_ZOOM_OUT:
                 {
                     const Fraction& rZoomY = GetViewData().GetZoomY();
-                    long nZoom = static_cast<long>(rZoomY * 100);
-                    if (nZoom <= long(MINZOOM))
+                    tools::Long nZoom = tools::Long(rZoomY * 100);
+                    if (nZoom <= tools::Long(MINZOOM))
                         rSet.DisableItem(nWhich);
                 }
                 break;
