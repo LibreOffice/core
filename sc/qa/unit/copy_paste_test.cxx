@@ -49,6 +49,7 @@ public:
     void tdf137621_autofillMergedBool();
     void tdf137205_autofillDatesInMergedCells();
     void tdf137653_137654_autofillUserlist();
+    void tdf113500_autofillMixed();
     void tdf137625_autofillMergedUserlist();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
@@ -64,6 +65,7 @@ public:
     CPPUNIT_TEST(tdf137621_autofillMergedBool);
     CPPUNIT_TEST(tdf137205_autofillDatesInMergedCells);
     CPPUNIT_TEST(tdf137653_137654_autofillUserlist);
+    CPPUNIT_TEST(tdf113500_autofillMixed);
     CPPUNIT_TEST(tdf137625_autofillMergedUserlist);
     CPPUNIT_TEST_SUITE_END();
 
@@ -816,6 +818,55 @@ void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
             CPPUNIT_ASSERT_EQUAL(nType1, nType2);
             CPPUNIT_ASSERT(bHasIdx1 && bHasIdx2);
             CPPUNIT_ASSERT_EQUAL(nIdx1, nIdx2);   // userlist index value of cells
+        }
+    }
+}
+
+void ScCopyPasteTest::tdf113500_autofillMixed()
+{
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController("tdf113500_autofillMixed.", FORMAT_ODS, true);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get the document controller
+    ScTabViewShell* pView = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pView != nullptr);
+
+    // fillauto userlist, these areas contain only merged cells
+    pView->FillAuto(FILL_TO_RIGHT, 4, 5, 6, 7, 3);   //E6:G8
+    pView->FillAuto(FILL_TO_LEFT, 4, 5, 6, 7, 3);    //E6:G8
+    pView->FillAuto(FILL_TO_BOTTOM, 1, 18, 3, 19, 2); //B19:D20
+    pView->FillAuto(FILL_TO_TOP, 1, 18, 3, 19, 2);    //B19:D20
+
+    // compare the results of fill-right / -left with the reference stored in the test file
+    // this compares the whole area blindly, for specific test cases, check the test file
+    // do not check the 3. row: a1,b2,a3. It is an other bug to fix
+    for (int nCol = 1; nCol <= 9; nCol++)
+    {
+        for (int nRow = 5; nRow <= 6; nRow++)
+        {
+            CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
+            CellType nType2 = rDoc.GetCellType(ScAddress(nCol, nRow + 4, 0));
+            OUString aStr1 = rDoc.GetString(nCol, nRow, 0);
+            OUString aStr2 = rDoc.GetString(nCol, nRow + 4, 0);
+
+            CPPUNIT_ASSERT_EQUAL(nType1, nType2);
+            CPPUNIT_ASSERT_EQUAL(aStr1, aStr2);
+        }
+    }
+
+    // compare the results of fill-up / -down
+    // do not check the 2. column: 1st,3st. It is an other bug to fix
+    for (int nCol = 1; nCol <= 3; nCol+=2)
+    {
+        for (int nRow = 16; nRow <= 21; nRow++)
+        {
+            CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
+            CellType nType2 = rDoc.GetCellType(ScAddress(nCol + 4, nRow, 0));
+            OUString aStr1 = rDoc.GetString(nCol, nRow, 0);
+            OUString aStr2 = rDoc.GetString(nCol + 4, nRow, 0);
+
+            CPPUNIT_ASSERT_EQUAL(nType1, nType2);
+            CPPUNIT_ASSERT_EQUAL(aStr1, aStr2);
         }
     }
 }
