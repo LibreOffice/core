@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae79702d_be21e329",
+        "filename": "canvas/source/directx/dx_surfacegraphics.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-13T07:13:31Z",
+      "side": 1,
+      "message": "This change makes the comment be formatted inconsistently. clang-format does not check the formatting *inside* comments - but in this case, the indent inside should be changed accordingly.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 7
+      },
+      "revId": "448f7d829b471b19c2598bc25415cee1be182b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
