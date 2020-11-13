@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "024229cb_0afa58ca",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-13T10:25:19Z",
+      "side": 1,
+      "message": "I see, all weld_scrolled_window are parenting GtkDrawinArea/CustomWeld. Any advice how to change the whole background?",
+      "parentUuid": "65ccc301_2a04cad1",
+      "range": {
+        "startLine": 550,
+        "startChar": 6,
+        "endLine": 550,
+        "endChar": 62
+      },
+      "revId": "465dc38d002379c9397e36e086f544e7f896065b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57e73b01_da368e74",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 1
