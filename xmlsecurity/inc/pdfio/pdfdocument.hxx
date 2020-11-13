@@ -36,7 +36,7 @@ namespace pdfio
 XMLSECURITY_DLLPUBLIC bool ValidateSignature(SvStream& rStream,
                                              vcl::filter::PDFObjectElement* pSignature,
                                              SignatureInformation& rInformation,
-                                             vcl::filter::PDFDocument& rDocument);
+                                             vcl::filter::PDFDocument& rDocument, int nMDPPerm);
 
 } // namespace pdfio
 } // namespace xmlsecurity

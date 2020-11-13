@@ -59,8 +59,10 @@ public:
             FPDF_ClosePage(mpPage);
     }
 
+    FPDF_PAGE getPointer() { return mpPage; }
+
     /// Get bitmap checksum of the page, without annotations/commenting.
-    BitmapChecksum getChecksum();
+    BitmapChecksum getChecksum(int nMDPPerm);
 };
 
 class VCL_DLLPUBLIC PDFiumDocument final
