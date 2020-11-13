@@ -453,8 +453,8 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.d
     uno::Reference<graphic::XGraphic> xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
     Graphic aVclGraphic(xGraphic);
     BitmapEx aBitmap(aVclGraphic.GetBitmapEx());
-    CPPUNIT_ASSERT_EQUAL(341L, aBitmap.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(181L, aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(341), aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(181), aBitmap.GetSizePixel().Height());
     Color aColor(aBitmap.GetPixelColor(120, 30));
     CPPUNIT_ASSERT_EQUAL(aColor, Color( 0xb1, 0xc8, 0xdd ));
     aColor = aBitmap.GetPixelColor(260, 130);
@@ -647,8 +647,8 @@ DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx"
     imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
     Graphic aVclGraphic(graphic);
     BitmapEx aBitmap(aVclGraphic.GetBitmapEx());
-    CPPUNIT_ASSERT_EQUAL(58L, aBitmap.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(320L, aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(58), aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(320), aBitmap.GetSizePixel().Height());
     Color aColor(aBitmap.GetPixelColor(20, 30));
     CPPUNIT_ASSERT_EQUAL(Color( 0xce, 0xce, 0xce ), aColor);
 }

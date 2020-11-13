@@ -155,6 +155,8 @@ void ToolsLong::run()
     if (loplugin::isSamePathname(fn,
                                  SRCDIR "/writerperfect/source/calc/MSWorksCalcImportFilter.cxx"))
         return;
+    if (loplugin::isSamePathname(fn, SRCDIR "/writerperfect/qa/unit/WPXSvStreamTest.cxx"))
+        return;
     if (loplugin::isSamePathname(fn, SRCDIR "/desktop/source/lib/init.cxx"))
         return;
 
