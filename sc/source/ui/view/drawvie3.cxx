@@ -138,6 +138,21 @@ ScAnchorType ScDrawView::GetAnchorType() const
 
 namespace {
 
+bool lcl_AreRectanglesApproxEqual(const tools::Rectangle& rRectA, const tools::Rectangle& rRectB)
+{
+    // Twips <-> Hmm conversions introduce +-1 differences although the rectangles should actually
+    // be equal. Therefore test with == is not appropriate in some cases.
+    if (std::labs(rRectA.Left() - rRectB.Left()) > 1)
+        return false;
+    if (std::labs(rRectA.Top() - rRectB.Top()) > 1)
+        return false;
+    if (std::labs(rRectA.Right() - rRectB.Right()) > 1)
+        return false;
+    if (std::labs(rRectA.Bottom() - rRectB.Bottom()) > 1)
+        return false;
+    return true;
+}
+
 /**
  * Updated the anchors of any non-note object that is cell anchored which
  * has been moved since the last anchors for its position was calculated.
@@ -157,8 +172,7 @@ void adjustAnchoredPosition(const SdrHint& rHint, const ScDocument& rDoc, SCTAB 
 
     if (pAnchor->meType == ScDrawObjData::CellNote)
         return;
-
-    if (pAnchor->getShapeRect() == pObj->GetSnapRect())
+    if (lcl_AreRectanglesApproxEqual(pAnchor->getShapeRect(), pObj->GetSnapRect()))
         return;
 
     if (pAnchor->maStart.Tab() != nTab)
