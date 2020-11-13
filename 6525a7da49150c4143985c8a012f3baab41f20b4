@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "347c2d9d_c8de896f",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3612,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-13T10:11:44Z",
+      "side": 1,
+      "message": "I\u0027m afraid that this is confusing.\n\nI support the OP\u0027s idea of having different tooltips for 1st pair and the following ones... like\n\n\u003e Value1 \"Value to compare against expression.\"\n\u003e Result1 \"Value to return when corresponding value argument matches expression.\"\n\u003e DefaultOrValue2 \"Value to compare against expression. If no result is given, then value is returned as default result.\"\n\u003e Result2 \"Value to return when corresponding value argument matches expression.\"\n\nThe result tooltips are not required to be clarified (or else they need to be \"if this is not given, then previous value is returned\" - but having the tooltip for this one already implies that user pressed argument separator, and so *already started to provide this*)...\n\nThis likely could be made possible by providing two more elements to the array, and changing something in the code that uses the array...\n\nBut again, not really required to do it all at once. I just think that the clarification in the value is not OK, and should be removed - but everything else is fine as is.",
+      "range": {
+        "startLine": 3612,
+        "startChar": 101,
+        "endLine": 3612,
+        "endChar": 174
+      },
+      "revId": "6525a7da49150c4143985c8a012f3baab41f20b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
