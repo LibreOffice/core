@@ -831,21 +831,21 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, b
 
 // addText, updateText
 bool ProgressMonitor::impl_debug_checkParameter (
-    const OUString& rTopic,
-    const OUString& rText
+    std::u16string_view rTopic,
+    std::u16string_view rText
 ) {
-    if ( rTopic.isEmpty()       ) return false;    // ""
+    if ( rTopic.empty()       ) return false;    // ""
 
-    if ( rText.isEmpty()       ) return false;    // ""
+    if ( rText.empty()       ) return false;    // ""
 
     // Parameter OK ... return true.
     return true;
 }
 
 // removeText
-bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic )
+bool ProgressMonitor::impl_debug_checkParameter ( std::u16string_view rTopic )
 {
-    if ( rTopic.isEmpty()      ) return false;    // ""
+    if ( rTopic.empty()      ) return false;    // ""
 
     // Parameter OK ... return true.
     return true;

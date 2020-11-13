@@ -51,7 +51,7 @@ public:
     // Check for built-in help
     static bool             IsHelpInstalled();
 
-    static OUString GetURLHelpText(const OUString&);
+    static OUString GetURLHelpText(std::u16string_view);
 };
 
 #endif // INCLUDED_SFX2_SFXHELP_HXX

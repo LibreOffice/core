@@ -90,7 +90,7 @@ BitmapEx createBitmap(bool alpha = false)
     }
 }
 
-void createBitmapAndExportForType(SvStream& rStream, OUString const& sType, bool alpha)
+void createBitmapAndExportForType(SvStream& rStream, std::u16string_view sType, bool alpha)
 {
     BitmapEx aBitmapEx = createBitmap(alpha);
 
@@ -102,7 +102,7 @@ void createBitmapAndExportForType(SvStream& rStream, OUString const& sType, bool
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 }
 
-Graphic makeUnloadedGraphic(OUString const& sType, bool alpha = false)
+Graphic makeUnloadedGraphic(std::u16string_view sType, bool alpha = false)
 {
     SvMemoryStream aStream;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
@@ -181,7 +181,7 @@ char const PDFEXPORT_DATA_DIRECTORY[] = "/vcl/qa/cppunit/pdfexport/data/";
 void GraphicTest::testUnloadedGraphic()
 {
     // make unloaded test graphic
-    Graphic aGraphic = makeUnloadedGraphic("png");
+    Graphic aGraphic = makeUnloadedGraphic(u"png");
     Graphic aGraphic2 = aGraphic;
 
     // check available
@@ -193,7 +193,7 @@ void GraphicTest::testUnloadedGraphic()
     CPPUNIT_ASSERT_EQUAL(true, aGraphic2.isAvailable());
 
     // check GetSizePixel doesn't load graphic
-    aGraphic = makeUnloadedGraphic("png");
+    aGraphic = makeUnloadedGraphic(u"png");
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
@@ -210,7 +210,7 @@ void GraphicTest::testUnloadedGraphic()
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
 
     //check Type
-    aGraphic = makeUnloadedGraphic("png");
+    aGraphic = makeUnloadedGraphic(u"png");
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
@@ -245,7 +245,7 @@ void GraphicTest::testUnloadedGraphicWmf()
     BitmapEx aBitmapEx = createBitmap();
     SvMemoryStream aStream;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-    sal_uInt16 nFilterFormat = rGraphicFilter.GetExportFormatNumberForShortName("wmf");
+    sal_uInt16 nFilterFormat = rGraphicFilter.GetExportFormatNumberForShortName(u"wmf");
     Graphic aGraphic(aBitmapEx);
     aGraphic.SetPrefSize(Size(99, 99));
     aGraphic.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
@@ -267,14 +267,14 @@ void GraphicTest::testUnloadedGraphicWmf()
 void GraphicTest::testUnloadedGraphicAlpha()
 {
     // make unloaded test graphic with alpha
-    Graphic aGraphic = makeUnloadedGraphic("png", true);
+    Graphic aGraphic = makeUnloadedGraphic(u"png", true);
 
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsAlpha());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsTransparent());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
     // make unloaded test graphic without alpha
-    aGraphic = makeUnloadedGraphic("png", false);
+    aGraphic = makeUnloadedGraphic(u"png", false);
 
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsAlpha());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsTransparent());
@@ -301,7 +301,7 @@ void GraphicTest::testUnloadedGraphicSizeUnit()
 void GraphicTest::testSwapping()
 {
     // Prepare Graphic from a PNG image first
-    Graphic aGraphic = makeUnloadedGraphic("png");
+    Graphic aGraphic = makeUnloadedGraphic(u"png");
 
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());

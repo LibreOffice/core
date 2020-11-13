@@ -167,7 +167,7 @@ public:
 
     const Graphic&          GetGraphic() const;
     void                    SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj = nullptr);
-    void                    SetGraphic( const Graphic& rGraphic, const OUString& rLink );
+    void                    SetGraphic( const Graphic& rGraphic, std::u16string_view rLink );
 
     /** Get graphic transformed according to given attributes
 

@@ -62,7 +62,7 @@ const Relation* Relations::getRelationFromRelId( const OUString& rId ) const
     return (aIt == maMap.end()) ? nullptr : &aIt->second;
 }
 
-const Relation* Relations::getRelationFromFirstType( const OUString& rType ) const
+const Relation* Relations::getRelationFromFirstType( std::u16string_view rType ) const
 {
     for (auto const& elem : maMap)
         if( elem.second.maType.equalsIgnoreAsciiCase( rType ) )
@@ -131,7 +131,7 @@ OUString Relations::getFragmentPathFromRelId( const OUString& rRelId ) const
     return pRelation ? getFragmentPathFromRelation( *pRelation ) : OUString();
 }
 
-OUString Relations::getFragmentPathFromFirstType( const OUString& rType ) const
+OUString Relations::getFragmentPathFromFirstType( std::u16string_view rType ) const
 {
     const Relation* pRelation = getRelationFromFirstType( rType );
     return pRelation ? getFragmentPathFromRelation( *pRelation ) : OUString();

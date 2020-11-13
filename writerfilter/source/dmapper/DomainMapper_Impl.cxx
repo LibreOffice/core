@@ -4553,7 +4553,7 @@ void DomainMapper_Impl::handleAutoNum
 }
 
 void DomainMapper_Impl::handleAuthor
-    (OUString const& rFirstParam,
+    (std::u16string_view rFirstParam,
      uno::Reference< beans::XPropertySet > const& xFieldProperties,
      FieldId  eFieldId )
 {
@@ -4561,7 +4561,7 @@ void DomainMapper_Impl::handleAuthor
         xFieldProperties->setPropertyValue
             ( getPropertyName(PROP_FULL_NAME), uno::makeAny( true ));
 
-    if (!rFirstParam.isEmpty())
+    if (!rFirstParam.empty())
     {
         xFieldProperties->setPropertyValue(
                 getPropertyName( PROP_IS_FIXED ),

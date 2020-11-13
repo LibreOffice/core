@@ -103,7 +103,7 @@ class SbxBasicFormater {
     void   LeftShiftDecimalPoint( OUStringBuffer& sStrg );
     void   StrRoundDigit( OUStringBuffer& sStrg, short nPos, bool& bOverflow );
     void   StrRoundDigit( OUStringBuffer& sStrg, short nPos );
-    static void ParseBack( OUStringBuffer& sStrg, const OUString& sFormatStrg,
+    static void ParseBack( OUStringBuffer& sStrg, std::u16string_view sFormatStrg,
                                        short nFormatPos );
     // Methods for string conversion with sprintf():
     void   InitScan( double _dNum );

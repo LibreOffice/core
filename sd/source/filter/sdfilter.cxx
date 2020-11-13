@@ -50,7 +50,7 @@ SdFilter::~SdFilter()
 {
 }
 
-OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName )
+OUString SdFilter::ImplGetFullLibraryName( std::u16string_view rLibraryName )
 {
     return OUString(SVLIBRARY("?")).replaceFirst( "?", rLibraryName );
 }

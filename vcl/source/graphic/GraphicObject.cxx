@@ -607,7 +607,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* /*
     maGraphic = rGraphic;
 }
 
-void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& /*rLink*/ )
+void GraphicObject::SetGraphic( const Graphic& rGraphic, std::u16string_view /*rLink*/ )
 {
     SetGraphic( rGraphic );
 }

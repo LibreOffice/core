@@ -362,7 +362,7 @@ void DialogHelper::openWebBrowser(const OUString& sURL, const OUString& sTitle)
     }
 }
 
-bool DialogHelper::installExtensionWarn(const OUString &rExtensionName)
+bool DialogHelper::installExtensionWarn(std::u16string_view rExtensionName)
 {
     const SolarMutexGuard guard;
 
@@ -535,7 +535,7 @@ void ExtMgrDialog::checkEntries()
     m_xExtensionBox->checkEntries();
 }
 
-bool ExtMgrDialog::removeExtensionWarn(const OUString &rExtensionName)
+bool ExtMgrDialog::removeExtensionWarn(std::u16string_view rExtensionName)
 {
     const SolarMutexGuard guard;
     incBusy();

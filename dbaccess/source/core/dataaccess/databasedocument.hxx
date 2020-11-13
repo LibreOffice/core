@@ -625,7 +625,7 @@ private:
     */
     void        impl_throwIOExceptionCausedBySave_throw(
                     const css::uno::Any& i_rError,
-                    const OUString& i_rTargetURL
+                    std::u16string_view i_rTargetURL
                 ) const;
 };
 

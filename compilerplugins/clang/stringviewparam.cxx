@@ -158,6 +158,7 @@ DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
 
 DeclRefExpr const* relevantCXXOperatorCallExpr(CXXOperatorCallExpr const* expr)
 {
+    // TODO OO_EqualEqual and similar
     if (expr->getOperator() != OO_Subscript)
     {
         return nullptr;
@@ -201,6 +202,48 @@ public:
             }
         }
         auto const ret = FunctionAddress::TraverseFunctionDecl(decl);
+        if (ret)
+        {
+            for (unsigned i = 0; i != n; ++i)
+            {
+                auto const d1 = decl->getParamDecl(i);
+                if (currentParams_.find(d1) == currentParams_.end())
+                {
+                    continue;
+                }
+                if (containsPreprocessingConditionalInclusion(decl->getSourceRange()))
+                {
+                    break;
+                }
+                badParams_.push_back(d1);
+            }
+        }
+        currentParams_ = oldParams;
+        return ret;
+    }
+
+    // TODO Need to duplicate this method for CXXConstructorDecl
+    bool TraverseCXXMethodDecl(CXXMethodDecl* decl)
+    {
+        if (ignoreLocation(decl))
+        {
+            return true;
+        }
+        if (!relevantFunctionDecl(decl))
+        {
+            return FunctionAddress::TraverseCXXMethodDecl(decl);
+        }
+        auto const oldParams = currentParams_;
+        auto const n = decl->getNumParams();
+        for (unsigned i = 0; i != n; ++i)
+        {
+            auto const d = decl->getParamDecl(i);
+            if (relevantParmVarDecl(d))
+            {
+                currentParams_.insert(d);
+            }
+        }
+        auto const ret = FunctionAddress::TraverseCXXMethodDecl(decl);
         if (ret)
         {
             for (unsigned i = 0; i != n; ++i)
@@ -300,6 +343,12 @@ private:
         {
             return;
         }
+        StringRef fn(handler.getMainFileName());
+        // leave the string QA tests alone
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/"))
+        {
+            return;
+        }
         if (!TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()))
         {
             return;
@@ -345,6 +394,10 @@ private:
             {
                 return false;
             }
+        }
+        if (decl->isOverloadedOperator()) // e.g. operator()(const OUString&, const OUString&)
+        {
+            return false;
         }
         if (decl->isFunctionTemplateSpecialization())
         {

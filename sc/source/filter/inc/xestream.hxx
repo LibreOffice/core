@@ -311,7 +311,7 @@ public:
                                         const OUString& sRelativeStream,
                                         const css::uno::Reference< css::io::XOutputStream >& xParentRelation,
                                         const char* sContentType,
-                                        const char* sRelationshipType,
+                                        std::u16string_view sRelationshipType,
                                         OUString* pRelationshipId = nullptr );
 
     // ignore

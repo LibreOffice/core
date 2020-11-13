@@ -60,7 +60,7 @@ IMPL_LINK_NOARG(AutocompleteEdit, TryAutoComplete, Timer *, void)
     }
 }
 
-bool AutocompleteEdit::Match( const OUString& rText )
+bool AutocompleteEdit::Match( std::u16string_view rText )
 {
     bool bRet = false;
 

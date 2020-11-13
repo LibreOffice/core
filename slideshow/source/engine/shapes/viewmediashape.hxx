@@ -146,7 +146,7 @@ namespace slideshow::internal
             void implInitializeMediaPlayer( const OUString& rMediaURL, const OUString& rMimeType );
             void implInitializePlayerWindow( const ::basegfx::B2DRectangle& rBounds,
                                              const css::uno::Sequence< css::uno::Any >& rVCLDeviceParams,
-                                             const OUString& rMimeType );
+                                             std::u16string_view rMimeType );
             ViewLayerSharedPtr                    mpViewLayer;
             VclPtr< SystemChildWindow >           mpMediaWindow;
             mutable css::awt::Point               maWindowOffset;

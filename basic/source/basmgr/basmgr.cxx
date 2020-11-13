@@ -126,7 +126,7 @@ public:
     static void insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont, BasicManager* pMgr,
                                    const uno::Any& aLibAny, const OUString& aLibName );
     static void addLibraryModulesImpl( BasicManager const * pMgr, const uno::Reference< container::XNameAccess >& xLibNameAccess,
-                                       const OUString& aLibName );
+                                       std::u16string_view aLibName );
 
 
     // XEventListener
@@ -172,7 +172,7 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
 
 
 void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager const * pMgr,
-    const uno::Reference< container::XNameAccess >& xLibNameAccess, const OUString& aLibName )
+    const uno::Reference< container::XNameAccess >& xLibNameAccess, std::u16string_view aLibName )
 {
     uno::Sequence< OUString > aModuleNames = xLibNameAccess->getElementNames();
     sal_Int32 nModuleCount = aModuleNames.getLength();
@@ -823,7 +823,7 @@ BasicManager::~BasicManager()
     Broadcast( SfxHint( SfxHintId::Dying) );
 }
 
-bool BasicManager::HasExeCode( const OUString& sLib )
+bool BasicManager::HasExeCode( std::u16string_view sLib )
 {
     StarBASIC* pLib = GetLib(sLib);
     if ( pLib )
@@ -1199,7 +1199,7 @@ StarBASIC* BasicManager::GetStdLib() const
     return pLib;
 }
 
-StarBASIC* BasicManager::GetLib( const OUString& rName ) const
+StarBASIC* BasicManager::GetLib( std::u16string_view rName ) const
 {
     for (auto const& rpLib : mpImpl->aLibs)
     {
@@ -1211,7 +1211,7 @@ StarBASIC* BasicManager::GetLib( const OUString& rName ) const
     return nullptr;
 }
 
-sal_uInt16 BasicManager::GetLibId( const OUString& rName ) const
+sal_uInt16 BasicManager::GetLibId( std::u16string_view rName ) const
 {
     for (size_t i = 0; i < mpImpl->aLibs.size(); i++)
     {
@@ -1223,7 +1223,7 @@ sal_uInt16 BasicManager::GetLibId( const OUString& rName ) const
     return LIB_NOTFOUND;
 }
 
-bool BasicManager::HasLib( const OUString& rName ) const
+bool BasicManager::HasLib( std::u16string_view rName ) const
 {
     for (const auto& rpLib : mpImpl->aLibs)
     {

@@ -244,7 +244,7 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
             XclXmlUtils::GetStreamName( "../", "drawings/drawing", nDrawing ),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.drawing+xml",
-            OUStringToOString(oox::getRelationship(Relationship::DRAWING), RTL_TEXTENCODING_UTF8).getStr(),
+            oox::getRelationship(Relationship::DRAWING),
             &sId );
 
     rStrm.GetCurrentStream()->singleElement(XML_drawing, FSNS(XML_r, XML_id), sId.toUtf8());
@@ -330,7 +330,7 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nV
             XclXmlUtils::GetStreamName( "../", "drawings/vmlDrawing", nDrawing ),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.vmlDrawing",
-            OUStringToOString(oox::getRelationship(Relationship::VMLDRAWING), RTL_TEXTENCODING_UTF8).getStr(),
+            oox::getRelationship(Relationship::VMLDRAWING),
             &sId );
 
     rStrm.GetCurrentStream()->singleElement(XML_legacyDrawing, FSNS(XML_r, XML_id), sId.toUtf8());
@@ -1383,7 +1383,7 @@ void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
             XclXmlUtils::GetStreamName( nullptr, "worksheets/sheet", nTab+1),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml",
-            OUStringToOString(oox::getRelationship(Relationship::WORKSHEET), RTL_TEXTENCODING_UTF8).getStr(),
+            oox::getRelationship(Relationship::WORKSHEET),
             &sId );
 
     rStrm.GetCurrentStream()->singleElement( XML_sheet,

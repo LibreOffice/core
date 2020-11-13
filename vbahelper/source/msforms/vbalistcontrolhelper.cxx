@@ -166,9 +166,9 @@ ListControlHelper::Clear(  )
 }
 
 void
-ListControlHelper::setRowSource( const OUString& _rowsource )
+ListControlHelper::setRowSource( std::u16string_view _rowsource )
 {
-    if ( _rowsource.isEmpty() )
+    if ( _rowsource.empty() )
         Clear();
 }
 

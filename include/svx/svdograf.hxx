@@ -163,7 +163,7 @@ private:
     void                    ForceSwapIn() const;
 
 public:
-    void                    SetGraphicLink(const OUString& rFileName, const OUString& rReferer, const OUString& rFilterName);
+    void                    SetGraphicLink(const OUString& rFileName, std::u16string_view rReferer, std::u16string_view rFilterName);
     void                    ReleaseGraphicLink();
     bool IsLinkedGraphic() const;
 

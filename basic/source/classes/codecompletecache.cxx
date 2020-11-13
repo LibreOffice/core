@@ -147,7 +147,7 @@ void CodeCompleteDataCache::InsertLocalVar( const OUString& sProcName, const OUS
     }
 }
 
-OUString CodeCompleteDataCache::GetVarType( const OUString& sVarName ) const
+OUString CodeCompleteDataCache::GetVarType( std::u16string_view sVarName ) const
 {
     for (auto const& varScope : aVarScopes)
     {
@@ -169,7 +169,7 @@ OUString CodeCompleteDataCache::GetVarType( const OUString& sVarName ) const
     return OUString(); //not found
 }
 
-OUString CodeCompleteDataCache::GetCorrectCaseVarName( const OUString& sVarName, const OUString& sActProcName ) const
+OUString CodeCompleteDataCache::GetCorrectCaseVarName( std::u16string_view sVarName, std::u16string_view sActProcName ) const
 {
     for (auto const& varScope : aVarScopes)
     {

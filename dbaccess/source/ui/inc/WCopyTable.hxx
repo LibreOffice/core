@@ -402,7 +402,7 @@ namespace dbaui
         OUString createUniqueName(const OUString& _sName);
 
         // displays an error message that a column type is not supported
-        void showColumnTypeNotSupported(const OUString& _rColumnName);
+        void showColumnTypeNotSupported(std::u16string_view _rColumnName);
 
         void removeColumnNameFromNameMap(const OUString& _sName);
         void showError(const OUString& _sErrorMessage);

@@ -70,7 +70,7 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
         else
             aTemplate.setTemplate(ScResId(STR_ROW_LABEL_TEMPLATE));
 
-        aTemplate.applyNumber("%NUMBER%", pIterator->index() + 1);
+        aTemplate.applyNumber(u"%NUMBER%", pIterator->index() + 1);
         output.writeBoldString(aTemplate.getTemplate());
         output.nextRow();
 
@@ -98,7 +98,7 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
             if(aIntervalStart.IsValid() && aIntervalEnd.IsValid())
             {
                 aTemplate.setTemplate("=AVERAGE(%RANGE%)");
-                aTemplate.applyRange("%RANGE%", ScRange(aIntervalStart, aIntervalEnd));
+                aTemplate.applyRange(u"%RANGE%", ScRange(aIntervalStart, aIntervalEnd));
                 aFormulas.push_back(aTemplate.getTemplate());
             }
             else

@@ -48,7 +48,7 @@ lcl_getStyleProps( const OUString& sStyleName, const uno::Reference< frame::XMod
 void ScVbaStyle::initialise()
 {
     if (!mxModel.is() )
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, "XModel Interface could not be retrieved" );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, u"XModel Interface could not be retrieved" );
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxPropertySet, uno::UNO_QUERY_THROW );
     if ( !xServiceInfo->supportsService("com.sun.star.style.CellStyle") )
     {

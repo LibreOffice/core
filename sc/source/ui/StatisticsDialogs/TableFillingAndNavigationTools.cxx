@@ -60,33 +60,33 @@ void FormulaTemplate::autoReplaceAddress(const OUString& aVariable, ScAddress co
     mAddressReplacementMap[aVariable] = aAddress;
 }
 
-void FormulaTemplate::applyRange(const OUString& aVariable, const ScRange& aRange, bool b3D)
+void FormulaTemplate::applyRange(std::u16string_view aVariable, const ScRange& aRange, bool b3D)
 {
     ScRefFlags nFlag = b3D ? ScRefFlags::RANGE_ABS_3D : ScRefFlags::RANGE_ABS;
     OUString aString = aRange.Format(*mpDoc, nFlag, mpDoc->GetAddressConvention());
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
-void FormulaTemplate::applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList, sal_Unicode cDelimiter)
+void FormulaTemplate::applyRangeList(std::u16string_view aVariable, const ScRangeList& aRangeList, sal_Unicode cDelimiter)
 {
     OUString aString;
     aRangeList.Format(aString, ScRefFlags::RANGE_ABS_3D, *mpDoc, mpDoc->GetAddressConvention(), cDelimiter);
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
-void FormulaTemplate::applyAddress(const OUString& aVariable, const ScAddress& aAddress, bool b3D)
+void FormulaTemplate::applyAddress(std::u16string_view aVariable, const ScAddress& aAddress, bool b3D)
 {
     ScRefFlags nFlag = b3D ? ScRefFlags::ADDR_ABS_3D : ScRefFlags::ADDR_ABS;
     OUString aString = aAddress.Format(nFlag, mpDoc, mpDoc->GetAddressConvention());
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
-void FormulaTemplate::applyString(const OUString& aVariable, const OUString& aValue)
+void FormulaTemplate::applyString(std::u16string_view aVariable, std::u16string_view aValue)
 {
     mTemplate = mTemplate.replaceAll(aVariable, aValue);
 }
 
-void FormulaTemplate::applyNumber(const OUString& aVariable, sal_Int32 aValue)
+void FormulaTemplate::applyNumber(std::u16string_view aVariable, sal_Int32 aValue)
 {
     mTemplate = mTemplate.replaceAll(aVariable, OUString::number(aValue));
 }

@@ -1068,7 +1068,7 @@ ScFieldEditEngine& ScGlobal::GetStaticFieldEditEngine()
 }
 
 OUString ScGlobal::ReplaceOrAppend( const OUString& rString,
-        const OUString& rPlaceholder, const OUString& rReplacement )
+        std::u16string_view rPlaceholder, const OUString& rReplacement )
 {
     if (rString.isEmpty())
         return rReplacement;

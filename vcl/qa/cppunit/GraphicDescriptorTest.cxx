@@ -42,7 +42,7 @@ BitmapEx createBitmap()
     return BitmapEx(aBitmap);
 }
 
-void createBitmapAndExportForType(SvStream& rStream, OUString const& sType)
+void createBitmapAndExportForType(SvStream& rStream, std::u16string_view sType)
 {
     BitmapEx aBitmapEx = createBitmap();
 
@@ -57,7 +57,7 @@ void createBitmapAndExportForType(SvStream& rStream, OUString const& sType)
 void GraphicDescriptorTest::testDetectPNG()
 {
     SvMemoryStream aStream;
-    createBitmapAndExportForType(aStream, "png");
+    createBitmapAndExportForType(aStream, u"png");
 
     GraphicDescriptor aDescriptor(aStream, nullptr);
     aDescriptor.Detect(true);
@@ -71,7 +71,7 @@ void GraphicDescriptorTest::testDetectPNG()
 void GraphicDescriptorTest::testDetectJPG()
 {
     SvMemoryStream aStream;
-    createBitmapAndExportForType(aStream, "jpg");
+    createBitmapAndExportForType(aStream, u"jpg");
 
     GraphicDescriptor aDescriptor(aStream, nullptr);
     aDescriptor.Detect(true);
@@ -85,7 +85,7 @@ void GraphicDescriptorTest::testDetectJPG()
 void GraphicDescriptorTest::testDetectGIF()
 {
     SvMemoryStream aStream;
-    createBitmapAndExportForType(aStream, "gif");
+    createBitmapAndExportForType(aStream, u"gif");
 
     GraphicDescriptor aDescriptor(aStream, nullptr);
     aDescriptor.Detect(true);

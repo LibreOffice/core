@@ -315,7 +315,7 @@ public:
 
     void                    Resort_Impl( sal_Int16 nColumn, bool bAscending );
     bool                    SearchNextEntry( sal_uInt32 &nIndex,
-                                             const OUString& rTitle,
+                                             std::u16string_view rTitle,
                                              bool bWrapAround );
 
     void                    SetSelectHandler( const Link<SvtFileView*,void>& rHdl );
@@ -1756,7 +1756,7 @@ void SvtFileView_Impl::SetViewMode( FileViewMode eMode )
     };
 }
 
-bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& rTitle, bool bWrapAround )
+bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, std::u16string_view rTitle, bool bWrapAround )
 {
     ::osl::MutexGuard aGuard( maMutex );
 

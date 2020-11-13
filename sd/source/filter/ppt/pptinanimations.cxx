@@ -3264,7 +3264,7 @@ void AnimationImporter::dump( const char * , const char *  )
 {
 }
 
-void AnimationImporter::dump( const char * , const OUString&  )
+void AnimationImporter::dump( const char * , std::u16string_view  )
 {
 }
 

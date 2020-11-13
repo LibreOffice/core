@@ -147,8 +147,8 @@ public:
 
     sal_uInt16      GetLibCount() const;
     StarBASIC*      GetLib( sal_uInt16 nLib ) const;
-    StarBASIC*      GetLib( const OUString& rName ) const;
-    sal_uInt16      GetLibId( const OUString& rName ) const;
+    StarBASIC*      GetLib( std::u16string_view rName ) const;
+    sal_uInt16      GetLibId( std::u16string_view rName ) const;
 
     OUString        GetLibName( sal_uInt16 nLib );
 
@@ -188,7 +188,7 @@ public:
             takes the names of modules whose size exceeds the legacy limit
     */
     bool            LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out_rModuleNames );
-    bool HasExeCode( const OUString& );
+    bool HasExeCode( std::u16string_view );
     /// determines whether the Basic Manager has a given macro, given by fully qualified name
     bool            HasMacro( OUString const& i_fullyQualifiedName ) const;
     /// executes a given macro
@@ -202,7 +202,7 @@ private:
     BASIC_DLLPRIVATE StarBASIC* GetStdLib() const;
     BASIC_DLLPRIVATE StarBASIC* AddLib( SotStorage& rStorage, const OUString& rLibName, bool bReference );
     BASIC_DLLPRIVATE void RemoveLib( sal_uInt16 nLib );
-    BASIC_DLLPRIVATE bool HasLib( const OUString& rName ) const;
+    BASIC_DLLPRIVATE bool HasLib( std::u16string_view rName ) const;
 
     BASIC_DLLPRIVATE StarBASIC* CreateLibForLibContainer( const OUString& rLibName,
                         const css::uno::Reference< css::script::XLibraryContainer >& xScriptCont );

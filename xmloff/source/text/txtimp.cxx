@@ -2283,7 +2283,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         break;
 
     case XML_TOK_TEXT_FORMS:
-        pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext(rImport, nPrefix, rLocalName);
+        pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext(rImport);
         bContent = false;
         break;
 

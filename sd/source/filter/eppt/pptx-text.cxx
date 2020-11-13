@@ -1352,7 +1352,7 @@ FontCollection::FontCollection() :
     xPPTBreakIter = css::i18n::BreakIterator::create( ::comphelper::getProcessComponentContext() );
 }
 
-short FontCollection::GetScriptDirection( const OUString& rString )
+short FontCollection::GetScriptDirection( std::u16string_view rString )
 {
     short nRet = ScriptTypeDetector::getScriptDirection( rString, 0, css::i18n::ScriptDirection::NEUTRAL );
     return nRet;
