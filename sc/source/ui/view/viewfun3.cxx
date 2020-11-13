@@ -788,7 +788,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 
             const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
-            if(pScDrawView->ApplyGraphicToObject( rHitObj, aGraphic, aBeginUndo, "", "" ))
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, aGraphic, aBeginUndo, "", u"" ))
             {
                 return true;
             }
@@ -803,7 +803,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
         {
             const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
-            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aMtf), aBeginUndo, "", "" ))
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aMtf), aBeginUndo, "", u"" ))
             {
                 return true;
             }
@@ -818,7 +818,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
         {
             const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
-            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aBmpEx), aBeginUndo, "", "" ))
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aBmpEx), aBeginUndo, "", u"" ))
             {
                 return true;
             }

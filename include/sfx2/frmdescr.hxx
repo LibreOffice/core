@@ -66,7 +66,7 @@ public:
     const INetURLObject&    GetURL() const
                             { return aURL; }
     void                    SetURL( const OUString& rURL );
-    void                    SetActualURL( const OUString& rURL );
+    void                    SetActualURL( std::u16string_view rURL );
 
                             // FrameName
     const OUString&         GetName() const

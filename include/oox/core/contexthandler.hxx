@@ -71,7 +71,7 @@ public:
     /** Returns the full fragment path for the passed relation identifier. */
     OUString     getFragmentPathFromRelId( const OUString& rRelId ) const;
     /** Returns the full fragment path for the first relation of the passed type. */
-    OUString     getFragmentPathFromFirstType( const OUString& rType ) const;
+    OUString     getFragmentPathFromFirstType( std::u16string_view rType ) const;
     OUString     getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rType ) const;
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------

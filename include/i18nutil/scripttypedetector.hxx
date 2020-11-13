@@ -27,10 +27,10 @@ class I18NUTIL_DLLPUBLIC ScriptTypeDetector
 public:
     static sal_Int32 beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection );
     static sal_Int32 endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection );
-    static sal_Int16 getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection );
+    static sal_Int16 getScriptDirection( std::u16string_view Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection );
     static sal_Int32 beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos );
     static sal_Int32 endOfCTLScriptType( const OUString& Text, sal_Int32 nPos );
-    static sal_Int16 getCTLScriptType( const OUString& Text, sal_Int32 nPos );
+    static sal_Int16 getCTLScriptType(std::u16string_view Text, sal_Int32 nPos );
 };
 
 #endif

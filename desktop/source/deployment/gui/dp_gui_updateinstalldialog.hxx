@@ -78,7 +78,7 @@ private:
         ERROR_INSTALLATION,
         ERROR_LICENSE_DECLINED
     };
-    void setError(INSTALL_ERROR err, OUString const & sExtension, OUString const & exceptionMessage);
+    void setError(INSTALL_ERROR err, std::u16string_view sExtension, OUString const & exceptionMessage);
     void setError(OUString const & exceptionMessage);
     const css::uno::Reference< css::deployment::XExtensionManager >& getExtensionManager() const
             { return m_xExtensionManager; }

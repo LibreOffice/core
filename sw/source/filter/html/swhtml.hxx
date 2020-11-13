@@ -759,8 +759,8 @@ private:
     void NewStyle();
     void EndStyle();
 
-    static inline bool HasStyleOptions( const OUString &rStyle, const OUString &rId,
-                                 const OUString &rClass, const OUString *pLang=nullptr,
+    static inline bool HasStyleOptions( std::u16string_view rStyle, std::u16string_view rId,
+                                 std::u16string_view rClass, const OUString *pLang=nullptr,
                                  const OUString *pDir=nullptr );
     bool ParseStyleOptions( const OUString &rStyle, const OUString &rId,
                             const OUString &rClass, SfxItemSet &rItemSet,
@@ -1008,13 +1008,13 @@ inline void HTMLAttrContext::GetULSpace( sal_uInt16& rUpper,
     }
 }
 
-inline bool SwHTMLParser::HasStyleOptions( const OUString &rStyle,
-                                            const OUString &rId,
-                                            const OUString &rClass,
+inline bool SwHTMLParser::HasStyleOptions( std::u16string_view rStyle,
+                                            std::u16string_view rId,
+                                            std::u16string_view rClass,
                                             const OUString *pLang,
                                                const OUString *pDir )
 {
-    return !rStyle.isEmpty() || !rId.isEmpty() || !rClass.isEmpty() ||
+    return !rStyle.empty() || !rId.empty() || !rClass.empty() ||
            (pLang && !pLang->isEmpty()) || (pDir && !pDir->isEmpty());
 }
 

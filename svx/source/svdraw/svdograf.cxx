@@ -487,7 +487,7 @@ void SdrGrafObj::ImpDeregisterLink()
     }
 }
 
-void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& /*rReferer*/, const OUString& /*rFilterName*/)
+void SdrGrafObj::SetGraphicLink(const OUString& rFileName, std::u16string_view /*rReferer*/, std::u16string_view /*rFilterName*/)
 {
     Graphic aGraphic;
     aGraphic.setOriginURL(rFileName);

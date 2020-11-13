@@ -43,7 +43,7 @@ public:
 
     static BitmapEx getDefaultThumbnail( const OUString& rPath );
 
-    void RemoveDefaultTemplateIcon(const OUString& rPath);
+    void RemoveDefaultTemplateIcon(std::u16string_view rPath);
 
 private:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;

@@ -838,17 +838,17 @@ sal_uInt16 GraphicFilter::GetImportFormatCount() const
     return pConfig->GetImportFormatCount();
 }
 
-sal_uInt16 GraphicFilter::GetImportFormatNumber( const OUString& rFormatName )
+sal_uInt16 GraphicFilter::GetImportFormatNumber( std::u16string_view rFormatName )
 {
     return pConfig->GetImportFormatNumber( rFormatName );
 }
 
-sal_uInt16 GraphicFilter::GetImportFormatNumberForShortName( const OUString& rShortName )
+sal_uInt16 GraphicFilter::GetImportFormatNumberForShortName( std::u16string_view rShortName )
 {
     return pConfig->GetImportFormatNumberForShortName( rShortName );
 }
 
-sal_uInt16 GraphicFilter::GetImportFormatNumberForTypeName( const OUString& rType )
+sal_uInt16 GraphicFilter::GetImportFormatNumberForTypeName( std::u16string_view rType )
 {
     return pConfig->GetImportFormatNumberForTypeName( rType );
 }
@@ -885,17 +885,17 @@ sal_uInt16 GraphicFilter::GetExportFormatCount() const
     return pConfig->GetExportFormatCount();
 }
 
-sal_uInt16 GraphicFilter::GetExportFormatNumber( const OUString& rFormatName )
+sal_uInt16 GraphicFilter::GetExportFormatNumber( std::u16string_view rFormatName )
 {
     return pConfig->GetExportFormatNumber( rFormatName );
 }
 
-sal_uInt16 GraphicFilter::GetExportFormatNumberForMediaType( const OUString& rMediaType )
+sal_uInt16 GraphicFilter::GetExportFormatNumberForMediaType( std::u16string_view rMediaType )
 {
     return pConfig->GetExportFormatNumberForMediaType( rMediaType );
 }
 
-sal_uInt16 GraphicFilter::GetExportFormatNumberForShortName( const OUString& rShortName )
+sal_uInt16 GraphicFilter::GetExportFormatNumberForShortName( std::u16string_view rShortName )
 {
     return pConfig->GetExportFormatNumberForShortName( rShortName );
 }
@@ -905,7 +905,7 @@ OUString GraphicFilter::GetExportInternalFilterName( sal_uInt16 nFormat )
     return pConfig->GetExportInternalFilterName( nFormat );
 }
 
-sal_uInt16 GraphicFilter::GetExportFormatNumberForTypeName( const OUString& rType )
+sal_uInt16 GraphicFilter::GetExportFormatNumberForTypeName( std::u16string_view rType )
 {
     return pConfig->GetExportFormatNumberForTypeName( rType );
 }
@@ -2210,7 +2210,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
     bool bRet = false;
 
     sal_uInt16      nFormat = GRFILTER_FORMAT_DONTKNOW;
-    OString aShortName;
+    OUString aShortName;
     css::uno::Sequence< css::beans::PropertyValue > aFilterData;
     switch( rData.mnFormat )
     {
@@ -2232,7 +2232,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
     if( GraphicType::NONE == rData.maGraphic.GetType() || rData.maGraphic.GetReaderContext() ) // Import
     {
         // Import
-        nFormat = GetImportFormatNumberForShortName( OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );
+        nFormat = GetImportFormatNumberForShortName( aShortName );
         bRet = ImportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == ERRCODE_NONE;
     }
     else if( !aShortName.isEmpty() )
@@ -2247,7 +2247,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
             aFilterData[aFilterData.getLength() - 1].Value <<= static_cast<sal_Int32>(1);
         }
 #endif
-        nFormat = GetExportFormatNumberForShortName( OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );
+        nFormat = GetExportFormatNumberForShortName( aShortName );
         bRet = ExportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat, &aFilterData ) == ERRCODE_NONE;
     }
 
@@ -2330,7 +2330,7 @@ ErrCode GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutputS
     aFilterData[0].Name = "Compression";
     aFilterData[0].Value <<= sal_uInt32(9);
 
-    sal_uInt16 nFilterFormat = GetExportFormatNumberForShortName("PNG");
+    sal_uInt16 nFilterFormat = GetExportFormatNumberForShortName(u"PNG");
     return ExportGraphic(rGraphic, OUString(), rOutputStream, nFilterFormat, &aFilterData);
 }
 

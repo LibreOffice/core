@@ -152,7 +152,7 @@ public:
         const Graphic& rGraphic,
         const OUString& rBeginUndoText,
         const OUString& rFile,
-        const OUString& rFilter);
+        std::u16string_view rFilter);
 
     static void CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle );
 

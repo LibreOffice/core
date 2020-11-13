@@ -41,7 +41,7 @@ class AddonMenuManager
         static bool       HasAddonMenuElements();
 
         // Check if the context string matches the provided xModel context
-        static bool IsCorrectContext(const OUString& rModuleIdentifier, const OUString& rContext);
+        static bool IsCorrectContext(std::u16string_view rModuleIdentifier, const OUString& rContext);
 
         // Create the Add-Ons menu
         static VclPtr<PopupMenu> CreateAddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame );

@@ -941,14 +941,14 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     const OUString& sRelativeStream,
     const uno::Reference< XOutputStream >& xParentRelation,
     const char* sContentType,
-    const char* sRelationshipType,
+    std::u16string_view sRelationshipType,
     OUString* pRelationshipId )
 {
     OUString sRelationshipId;
     if (xParentRelation.is())
-        sRelationshipId = addRelation( xParentRelation, OUString::createFromAscii( sRelationshipType), sRelativeStream );
+        sRelationshipId = addRelation( xParentRelation, sRelationshipType, sRelativeStream );
     else
-        sRelationshipId = addRelation( OUString::createFromAscii( sRelationshipType ), sRelativeStream );
+        sRelationshipId = addRelation( sRelationshipType, sRelativeStream );
 
     if( pRelationshipId )
         *pRelationshipId = sRelationshipId;
@@ -1074,7 +1074,7 @@ bool XclExpXmlStream::exportDocument()
     PushStream( CreateOutputStream( workbook, workbook,
                                     uno::Reference <XOutputStream>(),
                                     pWorkbookContentType,
-                                    OUStringToOString(oox::getRelationship(Relationship::OFFICEDOCUMENT), RTL_TEXTENCODING_UTF8).getStr() ) );
+                                    oox::getRelationship(Relationship::OFFICEDOCUMENT) ) );
 
     if (mbExportVBA)
     {

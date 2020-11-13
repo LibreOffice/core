@@ -697,7 +697,7 @@ public:
         in the result string.
      */
     SC_DLLPUBLIC static OUString    ReplaceOrAppend( const OUString& rString,
-                                                     const OUString& rPlaceholder,
+                                                     std::u16string_view rPlaceholder,
                                                      const OUString& rReplacement );
 
 

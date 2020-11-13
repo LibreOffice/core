@@ -45,7 +45,7 @@ void SvxConfigPageHelper::RemoveEntry(SvxEntries* pEntries, SvxConfigEntry const
 }
 
 OUString SvxConfigPageHelper::replaceSaveInName(const OUString& rMessage,
-                                                const OUString& rSaveInName)
+                                                std::u16string_view rSaveInName)
 {
     OUString name = rMessage.replaceFirst("%SAVE IN SELECTION%", rSaveInName);
 

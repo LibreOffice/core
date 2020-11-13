@@ -28,7 +28,7 @@ class SvxConfigPageHelper
 public:
     static void RemoveEntry(SvxEntries* pEntries, SvxConfigEntry const* pChildEntry);
 
-    static OUString replaceSaveInName(const OUString& rMessage, const OUString& rSaveInName);
+    static OUString replaceSaveInName(const OUString& rMessage, std::u16string_view rSaveInName);
     static OUString stripHotKey(const OUString& str);
     static OUString replaceSixteen(const OUString& str, sal_Int32 nReplacement);
 

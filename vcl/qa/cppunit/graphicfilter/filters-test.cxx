@@ -35,7 +35,7 @@ public:
         const OUString &rURL, const OUString &,
         SfxFilterFlags, SotClipboardFormatId, unsigned int) override;
 
-    void checkExportImport(const OUString& aFilterShortName);
+    void checkExportImport(std::u16string_view aFilterShortName);
 
     /**
      * Ensure CVEs remain unbroken
@@ -99,7 +99,7 @@ void VclFiltersTest::testScaling()
     }
 }
 
-void VclFiltersTest::checkExportImport(const OUString& aFilterShortName)
+void VclFiltersTest::checkExportImport(std::u16string_view aFilterShortName)
 {
     Bitmap aBitmap( Size( 100, 100 ), 24 );
     aBitmap.Erase(COL_WHITE);
@@ -135,11 +135,11 @@ void VclFiltersTest::checkExportImport(const OUString& aFilterShortName)
 void VclFiltersTest::testExportImport()
 {
     fprintf(stderr, "Check ExportImport JPG\n");
-    checkExportImport("jpg");
+    checkExportImport(u"jpg");
     fprintf(stderr, "Check ExportImport PNG\n");
-    checkExportImport("png");
+    checkExportImport(u"png");
     fprintf(stderr, "Check ExportImport BMP\n");
-    checkExportImport("bmp");
+    checkExportImport(u"bmp");
 }
 
 void VclFiltersTest::testCVEs()

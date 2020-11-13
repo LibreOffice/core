@@ -47,7 +47,7 @@ public:
 
 public:
     static OUString createDescription( ActionType eActionType
-                        , const OUString& rObjectName );
+                        , std::u16string_view rObjectName );
 };
 
 #endif

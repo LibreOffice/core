@@ -1254,7 +1254,7 @@ OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) c
                     XclXmlUtils::GetStreamName( "../", "ctrlProps/ctrlProps", nDrawing ),
                     rStrm.GetCurrentStream()->getOutputStream(),
                     "application/vnd.ms-excel.controlproperties+xml",
-                    OUStringToOString(oox::getRelationship(Relationship::CTRLPROP), RTL_TEXTENCODING_UTF8).getStr(),
+                    oox::getRelationship(Relationship::CTRLPROP),
                     &sIdFormControlPr );
 
             rStrm.PushStream( pFormControl );
@@ -1714,7 +1714,7 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
             XclXmlUtils::GetStreamName( "../", "comments", mnTab + 1 ),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml",
-            OUStringToOString(oox::getRelationship(Relationship::COMMENTS), RTL_TEXTENCODING_UTF8).getStr());
+            oox::getRelationship(Relationship::COMMENTS));
     rStrm.PushStream( rComments );
 
     if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )

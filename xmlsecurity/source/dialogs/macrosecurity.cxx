@@ -197,7 +197,7 @@ void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
     m_xRemoveLocPB->set_sensitive( bLocationSelected && !mbURLsReadonly);
 }
 
-void MacroSecurityTrustedSourcesTP::ShowBrokenCertificateError(const OUString& rData)
+void MacroSecurityTrustedSourcesTP::ShowBrokenCertificateError(std::u16string_view rData)
 {
     OUString aMsg = XsResId(STR_BROKEN_MACRO_CERTIFICATE_DATA);
     aMsg = aMsg.replaceFirst("%{data}", rData);
