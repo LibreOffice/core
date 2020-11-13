@@ -65,10 +65,10 @@ public:
 
     sal_uInt16  GetImportFormatCount() const
         { return sal::static_int_cast< sal_uInt16 >(aImport.size()); };
-    sal_uInt16  GetImportFormatNumber( const OUString& rFormatName );
-    sal_uInt16  GetImportFormatNumberForShortName( const OUString& rShortName );
-    sal_uInt16  GetImportFormatNumberForTypeName( const OUString& rType );
-    sal_uInt16  GetImportFormatNumberForExtension( const OUString& rExt );
+    sal_uInt16  GetImportFormatNumber( std::u16string_view rFormatName );
+    sal_uInt16  GetImportFormatNumberForShortName( std::u16string_view rShortName );
+    sal_uInt16  GetImportFormatNumberForTypeName( std::u16string_view rType );
+    sal_uInt16  GetImportFormatNumberForExtension( std::u16string_view rExt );
     OUString    GetImportFilterName( sal_uInt16 nFormat );
     OUString    GetImportFormatName( sal_uInt16 nFormat );
     OUString    GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);
@@ -84,10 +84,10 @@ public:
 
     sal_uInt16  GetExportFormatCount() const
         { return sal::static_int_cast< sal_uInt16 >(aExport.size()); };
-    sal_uInt16  GetExportFormatNumber( const OUString& rFormatName );
-    sal_uInt16  GetExportFormatNumberForMediaType( const OUString& rMediaType );
-    sal_uInt16  GetExportFormatNumberForShortName( const OUString& rShortName );
-    sal_uInt16  GetExportFormatNumberForTypeName( const OUString& rType );
+    sal_uInt16  GetExportFormatNumber( std::u16string_view rFormatName );
+    sal_uInt16  GetExportFormatNumberForMediaType( std::u16string_view rMediaType );
+    sal_uInt16  GetExportFormatNumberForShortName( std::u16string_view rShortName );
+    sal_uInt16  GetExportFormatNumberForTypeName( std::u16string_view rType );
     OUString    GetExportFilterName( sal_uInt16 nFormat );
     OUString    GetExportFormatName( sal_uInt16 nFormat );
     OUString    GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );

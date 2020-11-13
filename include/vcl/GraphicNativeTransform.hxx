@@ -32,7 +32,7 @@ class VCL_DLLPUBLIC GraphicNativeTransform final
 
     bool rotateBitmapOnly(Degree10 aRotation);
     void rotateJPEG(Degree10 aRotation);
-    bool rotateGeneric(Degree10 aRotation, const OUString& aType);
+    bool rotateGeneric(Degree10 aRotation, std::u16string_view aType);
 
 public:
     GraphicNativeTransform(Graphic& rGraphic);

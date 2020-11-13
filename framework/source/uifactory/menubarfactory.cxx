@@ -57,13 +57,13 @@ Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(
 {
     Reference< css::ui::XUIElement > xMenuBar(
             static_cast<OWeakObject *>(new MenuBarWrapper(m_xContext)), UNO_QUERY);
-    CreateUIElement(ResourceURL, Args, "private:resource/menubar/", xMenuBar, m_xContext);
+    CreateUIElement(ResourceURL, Args, u"private:resource/menubar/", xMenuBar, m_xContext);
     return xMenuBar;
 }
 
 void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
                                      ,const Sequence< PropertyValue >& Args
-                                     ,const OUString& ResourceType
+                                     ,std::u16string_view ResourceType
                                      ,const Reference< css::ui::XUIElement >& _xMenuBar
                                      ,const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
 {

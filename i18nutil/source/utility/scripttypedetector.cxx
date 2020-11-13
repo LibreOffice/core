@@ -47,7 +47,7 @@ const sal_Int16 scriptDirection[] = {
     ScriptDirection::NEUTRAL,           // DirectionProperty_BOUNDARY_NEUTRAL = 18,
 };
 
-sal_Int16 ScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection )
+sal_Int16 ScriptTypeDetector::getScriptDirection( std::u16string_view Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection )
 {
     sal_Int16 dir = scriptDirection[unicode::getUnicodeDirection(Text[nPos])];
     return (dir == ScriptDirection::NEUTRAL) ? defaultScriptDirection : dir;
@@ -81,7 +81,7 @@ sal_Int32 ScriptTypeDetector::endOfScriptDirection( const OUString& Text, sal_In
         return cPos == nPos ? -1 : cPos;
 }
 
-sal_Int16 ScriptTypeDetector::getCTLScriptType( const OUString& Text, sal_Int32 nPos )
+sal_Int16 ScriptTypeDetector::getCTLScriptType( std::u16string_view Text, sal_Int32 nPos )
 {
     static const ScriptTypeList typeList[] = {
         { UnicodeScript_kHebrew,      UnicodeScript_kHebrew,      CTLScriptType::CTL_HEBREW },    // 10

@@ -306,7 +306,7 @@ OUString FilterConfigCache::GetImportFilterName( sal_uInt16 nFormat )
     return OUString();
 }
 
-sal_uInt16 FilterConfigCache::GetImportFormatNumber( const OUString& rFormatName )
+sal_uInt16 FilterConfigCache::GetImportFormatNumber( std::u16string_view rFormatName )
 {
     sal_uInt16 nPos = 0;
     for (auto const& elem : aImport)
@@ -319,7 +319,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumber( const OUString& rFormatName
 }
 
 /// get the index of the filter that matches this extension
-sal_uInt16 FilterConfigCache::GetImportFormatNumberForExtension( const OUString& rExt )
+sal_uInt16 FilterConfigCache::GetImportFormatNumberForExtension( std::u16string_view rExt )
 {
     sal_uInt16 nPos = 0;
     for (auto const& elem : aImport)
@@ -334,7 +334,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForExtension( const OUString&
     return GRFILTER_FORMAT_NOTFOUND;
 }
 
-sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const OUString& rShortName )
+sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( std::u16string_view rShortName )
 {
     sal_uInt16 nPos = 0;
     for (auto & elem : aImport)
@@ -346,7 +346,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const OUString&
     return GRFILTER_FORMAT_NOTFOUND;
 }
 
-sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( const OUString& rType )
+sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( std::u16string_view rType )
 {
     sal_uInt16 nPos = 0;
     for (auto const& elem : aImport)
@@ -435,7 +435,7 @@ OUString FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
     return OUString();
 }
 
-sal_uInt16 FilterConfigCache::GetExportFormatNumber(const OUString& rFormatName)
+sal_uInt16 FilterConfigCache::GetExportFormatNumber(std::u16string_view rFormatName)
 {
     sal_uInt16 nPos = 0;
     for (auto const& elem : aExport)
@@ -447,7 +447,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumber(const OUString& rFormatName)
     return GRFILTER_FORMAT_NOTFOUND;
 }
 
-sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const OUString& rMediaType )
+sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( std::u16string_view rMediaType )
 {
     sal_uInt16 nPos = 0;
     for (auto const& elem : aExport)
@@ -459,7 +459,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const OUString&
     return GRFILTER_FORMAT_NOTFOUND;
 }
 
-sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const OUString& rShortName )
+sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( std::u16string_view rShortName )
 {
     sal_uInt16 nPos = 0;
     for (auto & elem : aExport)
@@ -471,7 +471,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const OUString&
     return GRFILTER_FORMAT_NOTFOUND;
 }
 
-sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( const OUString& rType )
+sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( std::u16string_view rType )
 {
     sal_uInt16 nPos = 0;
     for (auto const& elem : aExport)

@@ -214,7 +214,7 @@ void SbxBasicFormater::StrRoundDigit( OUStringBuffer& sStrg, short nPos )
     StrRoundDigit( sStrg, nPos, bOverflow );
 }
 
-void SbxBasicFormater::ParseBack( OUStringBuffer& sStrg, const OUString& sFormatStrg,
+void SbxBasicFormater::ParseBack( OUStringBuffer& sStrg, std::u16string_view sFormatStrg,
                                   short nFormatPos )
 {
     for( sal_Int32 i = nFormatPos;

@@ -64,7 +64,7 @@ class CommandEnvironmentImpl
 
     /// @throws RuntimeException
     void update_( Any const & Status );
-    void printLicense(const OUString & sName,const OUString& sLicense,
+    void printLicense(std::u16string_view sName,const OUString& sLicense,
                       bool & accept, bool & decline);
 
 public:
@@ -125,7 +125,7 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
 
 //May throw exceptions
 void CommandEnvironmentImpl::printLicense(
-    const OUString & sName, const OUString& sLicense, bool & accept, bool &decline)
+    std::u16string_view sName, const OUString& sLicense, bool & accept, bool &decline)
 {
     OUString s1tmp(DpResId(RID_STR_UNOPKG_ACCEPT_LIC_1));
     OUString s1(s1tmp.replaceAll("$NAME", sName));

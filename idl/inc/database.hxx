@@ -92,7 +92,7 @@ public:
     // list of used types while writing
     SvRefMemberList<SvMetaType *>    aUsedTypes;
 
-    void                    StartNewFile( const OUString& rName );
+    void                    StartNewFile( std::u16string_view rName );
     void                    SetExportFile( const OUString& rName )
                             { aExportFile = rName; }
     void                    AppendSlot( SvMetaSlot *pSlot );

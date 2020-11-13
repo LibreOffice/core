@@ -175,7 +175,7 @@ public:
      */
     bool                IsDataDescriptionCell(const ScAddress& rPos);
 
-    bool                IsDimNameInUse(const OUString& rName) const;
+    bool                IsDimNameInUse(std::u16string_view rName) const;
     OUString GetDimName( tools::Long nDim, bool& rIsDataLayout, sal_Int32* pFlags = nullptr );
     bool                IsDuplicated( tools::Long nDim );
     tools::Long                GetDimCount();

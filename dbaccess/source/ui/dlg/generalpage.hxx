@@ -90,7 +90,7 @@ namespace dbaui
 
         void implSetCurrentType( const OUString& _eType );
 
-        void switchMessage(const OUString& _sURLPrefix);
+        void switchMessage(std::u16string_view _sURLPrefix);
 
         /// sets the title of the parent dialog
         virtual void setParentTitle( const OUString& _sURLPrefix );

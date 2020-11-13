@@ -1525,7 +1525,7 @@ OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
     return sName;
 }
 
-void OCopyTableWizard::showColumnTypeNotSupported(const OUString& _rColumnName)
+void OCopyTableWizard::showColumnTypeNotSupported(std::u16string_view _rColumnName)
 {
     OUString sMessage( DBA_RES( STR_UNKNOWN_TYPE_FOUND ) );
     sMessage = sMessage.replaceFirst("#1",_rColumnName);

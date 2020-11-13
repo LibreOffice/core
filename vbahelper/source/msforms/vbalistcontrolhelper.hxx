@@ -33,7 +33,7 @@ public:
     /// @throws css::uno::RuntimeException
     void removeItem( const css::uno::Any& index );
     /// @throws css::uno::RuntimeException
-        void setRowSource( const OUString& _rowsource );
+        void setRowSource( std::u16string_view _rowsource );
     /// @throws css::uno::RuntimeException
     ::sal_Int32 getListCount();
     /// @throws css::uno::RuntimeException

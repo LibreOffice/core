@@ -83,8 +83,8 @@ public:
 
     void InsertGlobalVar( const OUString& sVarName, const OUString& sVarType );
     void InsertLocalVar( const OUString& sProcName, const OUString& sVarName, const OUString& sVarType );
-    OUString GetVarType( const OUString& sVarName ) const;
-    OUString GetCorrectCaseVarName( const OUString& sVarName, const OUString& sActProcName ) const;
+    OUString GetVarType( std::u16string_view sVarName ) const;
+    OUString GetCorrectCaseVarName( std::u16string_view sVarName, std::u16string_view sActProcName ) const;
     void Clear();
 };
 

@@ -93,7 +93,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
         else
             aTemplate.setTemplate(ScResId(STR_ROW_LABEL_TEMPLATE));
 
-        aTemplate.applyNumber("%NUMBER%", pIterator->index() + 1);
+        aTemplate.applyNumber(u"%NUMBER%", pIterator->index() + 1);
         aOutput.writeBoldString(aTemplate.getTemplate());
         aOutput.nextColumn();
     }
@@ -119,7 +119,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
         for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != nullptr; i++)
         {
             aTemplate.setTemplate(lclCalcDefinitions[i].aFormula);
-            aTemplate.applyRange("%RANGE%", pIterator->get(), b3DAddress);
+            aTemplate.applyRange(u"%RANGE%", pIterator->get(), b3DAddress);
             aOutput.writeFormula(aTemplate.getTemplate());
             aOutput.nextRow();
         }

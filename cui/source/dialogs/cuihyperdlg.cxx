@@ -286,7 +286,7 @@ void SvxHpLinkDlg::SetReadOnlyMode( bool bRdOnly )
 |* late-initialization of newly created pages
 |*
 |************************************************************************/
-void SvxHpLinkDlg::PageCreated(const OString& /*rId*/, IconChoicePage& rPage)
+void SvxHpLinkDlg::PageCreated(std::string_view /*rId*/, IconChoicePage& rPage)
 {
     SvxHyperlinkTabPageBase& rHyperlinkPage = dynamic_cast< SvxHyperlinkTabPageBase& >( rPage );
     Reference< XFrame > xDocumentFrame = GetBindings().GetActiveFrame();

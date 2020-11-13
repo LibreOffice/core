@@ -488,9 +488,9 @@ void LocaleDataWrapper::getSecondaryCalendarImpl()
     }
 }
 
-bool LocaleDataWrapper::doesSecondaryCalendarUseEC( const OUString& rName ) const
+bool LocaleDataWrapper::doesSecondaryCalendarUseEC( std::u16string_view rName ) const
 {
-    if (rName.isEmpty())
+    if (rName.empty())
         return false;
 
     // Check language tag first to avoid loading all calendars of this locale.

@@ -86,18 +86,18 @@ namespace o3tl
 #define EXP_PDF                 "SVEPDF"
 #define EXP_PNG                 "SVEPNG"
 
-#define BMP_SHORTNAME           "BMP"
-#define GIF_SHORTNAME           "GIF"
-#define JPG_SHORTNAME           "JPG"
-#define MET_SHORTNAME           "MET"
-#define PCT_SHORTNAME           "PCT"
-#define PNG_SHORTNAME           "PNG"
-#define SVM_SHORTNAME           "SVM"
-#define TIF_SHORTNAME           "TIF"
-#define WMF_SHORTNAME           "WMF"
-#define EMF_SHORTNAME           "EMF"
-#define SVG_SHORTNAME           "SVG"
-#define PDF_SHORTNAME           "PDF"
+#define BMP_SHORTNAME           u"BMP"
+#define GIF_SHORTNAME           u"GIF"
+#define JPG_SHORTNAME           u"JPG"
+#define MET_SHORTNAME           u"MET"
+#define PCT_SHORTNAME           u"PCT"
+#define PNG_SHORTNAME           u"PNG"
+#define SVM_SHORTNAME           u"SVM"
+#define TIF_SHORTNAME           u"TIF"
+#define WMF_SHORTNAME           u"WMF"
+#define EMF_SHORTNAME           u"EMF"
+#define SVG_SHORTNAME           u"SVG"
+#define PDF_SHORTNAME           u"PDF"
 
 //  Info class for all supported file formats
 
@@ -241,9 +241,9 @@ public:
                     ~GraphicFilter();
 
     sal_uInt16      GetImportFormatCount() const;
-    sal_uInt16      GetImportFormatNumber( const OUString& rFormatName );
-    sal_uInt16      GetImportFormatNumberForShortName( const OUString& rShortName );
-    sal_uInt16      GetImportFormatNumberForTypeName( const OUString& rType );
+    sal_uInt16      GetImportFormatNumber( std::u16string_view rFormatName );
+    sal_uInt16      GetImportFormatNumberForShortName( std::u16string_view rShortName );
+    sal_uInt16      GetImportFormatNumberForTypeName( std::u16string_view rType );
     OUString        GetImportFormatName( sal_uInt16 nFormat );
     OUString        GetImportFormatTypeName( sal_uInt16 nFormat );
 #ifdef _WIN32
@@ -253,11 +253,11 @@ public:
     OUString        GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
 
     sal_uInt16      GetExportFormatCount() const;
-    sal_uInt16      GetExportFormatNumber( const OUString& rFormatName );
-    sal_uInt16      GetExportFormatNumberForMediaType( const OUString& rShortName );
-    sal_uInt16      GetExportFormatNumberForShortName( const OUString& rShortName );
+    sal_uInt16      GetExportFormatNumber( std::u16string_view rFormatName );
+    sal_uInt16      GetExportFormatNumberForMediaType( std::u16string_view rShortName );
+    sal_uInt16      GetExportFormatNumberForShortName( std::u16string_view rShortName );
     OUString        GetExportInternalFilterName( sal_uInt16 nFormat );
-    sal_uInt16      GetExportFormatNumberForTypeName( const OUString& rType );
+    sal_uInt16      GetExportFormatNumberForTypeName( std::u16string_view rType );
     OUString        GetExportFormatName( sal_uInt16 nFormat );
     OUString        GetExportFormatMediaType( sal_uInt16 nFormat );
     OUString        GetExportFormatShortName( sal_uInt16 nFormat );

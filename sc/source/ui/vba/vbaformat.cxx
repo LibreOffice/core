@@ -72,7 +72,7 @@ ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xP
     try
     {
         if ( !mxModel.is() )
-            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, "XModel Interface could not be retrieved" );
+            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, u"XModel Interface could not be retrieved" );
         // mxServiceInfo is unused,
         // mxNumberFormatsSupplier is initialized when needed in initializeNumberFormats.
     }

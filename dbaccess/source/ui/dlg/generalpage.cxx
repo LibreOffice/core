@@ -171,10 +171,10 @@ namespace dbaui
     {
     }
 
-    void OGeneralPage::switchMessage(const OUString& _sURLPrefix)
+    void OGeneralPage::switchMessage(std::u16string_view _sURLPrefix)
     {
         SPECIAL_MESSAGE eMessage = smNone;
-        if ( _sURLPrefix.isEmpty()/*_eType == m_eNotSupportedKnownType*/ )
+        if ( _sURLPrefix.empty()/*_eType == m_eNotSupportedKnownType*/ )
         {
             eMessage = smUnsupportedType;
         }
