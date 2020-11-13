@@ -1,15 +1,15 @@
 --- configure
 +++ configure
-@@ -21349,7 +21349,7 @@
+@@ -21506,7 +21468,7 @@
      char a;
-     long long b;
+     union { long long x; sem_t y; } b;
    };
 -  exit((int)&((struct s*)0)->b);
 +  exit((int)&((struct s*)1024)->b - 1024);
  }
  _ACEOF
  if ac_fn_c_try_run "$LINENO"; then :
-@@ -21384,7 +21384,7 @@
+@@ -21541,7 +21503,7 @@
      char a;
      double b;
    };
@@ -125,8 +125,8 @@
  
  	cachedLock = FB_NEW_RPT(getPool(), lockLen)
  		Lock(tdbb, lockLen, lckType, this, lockCaching ? blocking_ast_cached_lock : NULL);
--	memcpy(&cachedLock->lck_key, lockStr, lockLen);
-+	if (lockLen != 0) memcpy(&cachedLock->lck_key, lockStr, lockLen);
+-	memcpy(cachedLock->getKeyString(), lockStr, lockLen);
++	if (lockLen != 0) memcpy(cachedLock->getKeyString(), lockStr, lockLen);
  }
  
  GlobalRWLock::~GlobalRWLock()

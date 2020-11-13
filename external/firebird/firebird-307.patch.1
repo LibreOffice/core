@@ -1,0 +1,12 @@
+diff -ur firebird.org/builds/posix/Makefile.in firebird/builds/posix/Makefile.in
+--- firebird.org/builds/posix/Makefile.in       2020-11-08 15:11:29.262993342 +0100
++++ firebird/builds/posix/Makefile.in   2020-11-08 15:16:53.628545143 +0100
+@@ -264,7 +264,7 @@
+ ODS_TEST:=$(GEN_ROOT)/odstest$(EXEC_EXT)
+
+ preliminaryCheck:	$(STD_SIZES) $(RUN_SIZES)
+-	diff -u $^
++	diff -u --strip-trailing-cr $^
+
+ $(RUN_SIZES): $(ODS_H) $(ODS_AWK)
+	awk -f $(ODS_AWK) <$(ODS_H) >$(ODS_TEST_CPP)

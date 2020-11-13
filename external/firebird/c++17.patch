@@ -67,7 +67,7 @@
  }
 --- src/common/StatusArg.h
 +++ src/common/StatusArg.h
-@@ -86,7 +86,7 @@
+@@ -87,7 +87,7 @@
  		virtual ~ImplBase() { }
  	};
  
@@ -76,7 +76,7 @@
  	explicit Base(ImplBase* i) throw() : implementation(i) { }
  	~Base() throw() { delete implementation; }
  
-@@ -142,13 +142,13 @@
+@@ -144,13 +144,13 @@
  		explicit ImplStatusVector(const Exception& ex) throw();
  	};
  
@@ -97,7 +97,7 @@
  	const ISC_STATUS* value() const throw() { return implementation->value(); }
 --- src/common/classes/alloc.cpp
 +++ src/common/classes/alloc.cpp
-@@ -1431,7 +1431,7 @@
+@@ -1635,7 +1635,7 @@
  
  	~FreeObjects();
  
@@ -106,7 +106,7 @@
  	{
  		size_t full_size = size + (from ? 0 : ListBuilder::MEM_OVERHEAD);
  		if (full_size > Limits::TOP_LIMIT)
-@@ -1498,7 +1498,7 @@
+@@ -1705,7 +1705,7 @@
  	ListBuilder listBuilder;
  	Extent* currentExtent;
  
@@ -115,13 +115,13 @@
  };
  
  
-@@ -1538,26 +1538,26 @@
- 	AtomicCounter used_memory, mapped_memory;
+@@ -1787,26 +1787,26 @@
+	};
+ #endif // VALIDATE_POOL
  
- private:
 -	MemBlock* alloc(size_t from, size_t& length, bool flagRedirect) throw (OOM_EXCEPTION);
 +	MemBlock* alloc(size_t from, size_t& length, bool flagRedirect);
- 	void releaseBlock(MemBlock *block) throw ();
+	void releaseBlock(MemBlock *block, bool flagDecr) throw ();
  
  public:
 -	void* allocate(size_t size ALLOC_PARAMS) throw (OOM_EXCEPTION);
@@ -134,8 +134,8 @@
 -	void* allocRaw(size_t length) throw (OOM_EXCEPTION);
 +	virtual void memoryIsExhausted(void);
 +	void* allocRaw(size_t length);
- 	static void release(void* block, bool flagDecr) throw ();
- 	static void releaseRaw(bool destroying, void *block, size_t size, bool use_cache = true) throw ();
+	static void releaseMemory(void* block, bool flagExtent) throw ();
+	static void releaseRaw(bool destroying, void *block, size_t size, bool use_cache = true) throw ();
 -	void* getExtent(size_t from, size_t& to) throw (OOM_EXCEPTION);
 +	void* getExtent(size_t from, size_t& to);
  
@@ -149,7 +149,7 @@
  
  private:
  #ifdef USE_VALGRIND
-@@ -1667,7 +1667,7 @@
+@@ -1942,7 +1942,7 @@
  
  
  template <class ListBuilder, class Limits>
@@ -158,7 +158,7 @@
  {
  	size_t size = Limits::getSize(slot);
  
-@@ -1902,7 +1902,7 @@
+@@ -2151,7 +2151,7 @@
  }
  
  template <class Extent>
@@ -167,16 +167,16 @@
  {
  	// No large enough block found. We need to extend the pool
  	void* memory = NULL;
-@@ -1967,7 +1967,7 @@
+@@ -2216,7 +2216,7 @@
  	pool->setStatsGroup(newStats);
  }
  
 -MemBlock* MemPool::alloc(size_t from, size_t& length, bool flagRedirect) throw (OOM_EXCEPTION)
 +MemBlock* MemPool::alloc(size_t from, size_t& length, bool flagRedirect)
  {
- 	MutexEnsureUnlock guard(mutex, "MemPool::alloc");
+	MutexEnsureUnlock guard(mutex, "MemPool::alloc");
  	guard.enter();
-@@ -2026,7 +2026,7 @@
+@@ -2275,7 +2275,7 @@
  #ifdef DEBUG_GDS_ALLOC
  	, const char* fileName, int line
  #endif
@@ -185,16 +185,16 @@
  {
  	size_t length = from ? size : ROUNDUP(size + VALGRIND_REDZONE, roundingSize) + GUARD_BYTES;
  	MemBlock* memory = alloc(from, length, true);
-@@ -2055,7 +2055,7 @@
+@@ -2305,7 +2305,7 @@
  }
  
  
 -void* MemPool::allocate(size_t size ALLOC_PARAMS) throw (OOM_EXCEPTION)
 +void* MemPool::allocate(size_t size ALLOC_PARAMS)
  {
- 	MemBlock* memory = allocate2(0, size ALLOC_PASS_ARGS);
- 
-@@ -2180,12 +2180,12 @@
+ #ifdef VALIDATE_POOL
+	MutexLockGuard guard(mutex, "MemPool::allocate");
+@@ -2445,12 +2445,12 @@
  	releaseRaw(pool_destroying, hunk, hunk->length, false);
  }
  
@@ -209,16 +209,16 @@
  {
  #ifndef USE_VALGRIND
  	if (size == DEFAULT_ALLOCATION)
-@@ -2245,7 +2245,7 @@
+@@ -2530,7 +2530,7 @@
  }
  
  
 -void* MemPool::getExtent(size_t from, size_t& to) throw(OOM_EXCEPTION)		// pass desired minimum size, return actual extent size
-+void* MemPool::getExtent(size_t from, size_t& to)                     		// pass desired minimum size, return actual extent size
++void* MemPool::getExtent(size_t from, size_t& to)		// pass desired minimum size, return actual extent size
  {
- 	MemBlock* extent = allocate2(from, to ALLOC_ARGS);
- 	return &extent->body;
-@@ -2348,7 +2348,7 @@
+ #ifdef VALIDATE_POOL
+	MutexLockGuard guard(mutex, "MemPool::getExtent");
+@@ -2653,7 +2653,7 @@
  	deallocate(block);
  }
  
@@ -227,7 +227,16 @@
  {
  	void* block = allocate(size ALLOC_PASS_ARGS);
  	memset(block, 0, size);
-@@ -2489,7 +2489,7 @@
+@@ -2800,7 +2800,7 @@
+ }
+
+ #ifdef LIBC_CALLS_NEW
+-void* MemoryPool::globalAlloc(size_t s ALLOC_PARAMS) throw (OOM_EXCEPTION)
++void* MemoryPool::globalAlloc(size_t s ALLOC_PARAMS)
+ {
+	if (!defaultMemoryManager)
+	{
+@@ -2818,7 +2818,7 @@
  	MemPool::globalFree(block);
  }
  
@@ -236,7 +245,7 @@
  {
  	return pool->allocate(size ALLOC_PASS_ARGS);
  }
-@@ -2547,11 +2547,11 @@
+@@ -2876,11 +2876,11 @@
  // in a case when we actually need "new" only with file/line information
  // this version should be also present as a pair for "delete".
  #ifdef DEBUG_GDS_ALLOC
@@ -260,7 +269,8 @@
 +	void* calloc(size_t size ALLOC_PARAMS);
  
  #ifdef LIBC_CALLS_NEW
- 	static void* globalAlloc(size_t s ALLOC_PARAMS) throw (OOM_EXCEPTION);
+-	static void* globalAlloc(size_t s ALLOC_PARAMS) throw (OOM_EXCEPTION);
++	static void* globalAlloc(size_t s ALLOC_PARAMS);
  #else
 -	static void* globalAlloc(size_t s ALLOC_PARAMS) throw (OOM_EXCEPTION)
 +	static void* globalAlloc(size_t s ALLOC_PARAMS)
@@ -274,7 +284,7 @@
  
  	static void globalFree(void* mem) throw ();
  	void deallocate(void* mem) throw ();
-@@ -295,20 +295,20 @@
+@@ -289,20 +289,20 @@
  
  // operators new and delete
  

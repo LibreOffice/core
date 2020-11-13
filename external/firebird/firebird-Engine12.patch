@@ -5,12 +5,12 @@
  			return s;
  		}
 +
-+                // Set relative path to Engine12 dynamic library
-+                if(prefType == Firebird::IConfigManager::DIR_PLUGINS)
-+                {
-+                    s = name;
-+                    return s;
-+                }
++		// Set relative path to Engine12 dynamic library
++		if (prefType == Firebird::IConfigManager::DIR_PLUGINS)
++		{
++			s = name;
++			return s;
++		}
  	}
  
  	switch(prefType)
