@@ -3992,6 +3992,15 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
                     // within a paragraph TODO: fix also for paragraph join
                     pRedline->GetPoint()->nNode == pRedline->GetMark()->nNode)
             {
+                // show hidden previous deletion for joining
+                SwRedlineTable::size_type index = 0;
+                const SwRangeRedline* pPrevRedline = rTable.FindAtPosition(
+                                *pRedline->End(), index, /*bNext=*/false, /*bGetVisible=*/false );
+                if ( pPrevRedline && RedlineType::Delete == pPrevRedline->GetType() )
+                {
+                    SwRangeRedline* pPrevRed = rTable[ index ];
+                    pPrevRed->Show(1, index, /*bForced=*/true);
+                }
                 pRedline->Show(0, rTable.GetPos(pRedline), /*bForced=*/false);
                 pRedline->Show(1, rTable.GetPos(pRedline), /*bForced=*/false);
             }
