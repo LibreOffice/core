@@ -59,45 +59,6 @@ using ::com::sun::star::document::XEventsSupplier;
 
 namespace {
 
-enum XMLImageMapToken: decltype(XML_TOK_UNKNOWN)
-{
-    XML_TOK_IMAP_URL,
-    XML_TOK_IMAP_X,
-    XML_TOK_IMAP_Y,
-    XML_TOK_IMAP_CENTER_X,
-    XML_TOK_IMAP_CENTER_Y,
-    XML_TOK_IMAP_WIDTH,
-    XML_TOK_IMAP_HEIGHT,
-    XML_TOK_IMAP_POINTS,
-    XML_TOK_IMAP_VIEWBOX,
-    XML_TOK_IMAP_NOHREF,
-    XML_TOK_IMAP_NAME,
-    XML_TOK_IMAP_RADIUS,
-    XML_TOK_IMAP_TARGET
-};
-
-}
-
-const SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
-{
-    { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_IMAP_URL            },
-    { XML_NAMESPACE_OFFICE, XML_NAME,           XML_TOK_IMAP_NAME           },
-    { XML_NAMESPACE_DRAW,   XML_NOHREF,         XML_TOK_IMAP_NOHREF         },
-    { XML_NAMESPACE_SVG,    XML_X,              XML_TOK_IMAP_X              },
-    { XML_NAMESPACE_SVG,    XML_Y,              XML_TOK_IMAP_Y              },
-    { XML_NAMESPACE_SVG,    XML_CX,             XML_TOK_IMAP_CENTER_X       },
-    { XML_NAMESPACE_SVG,    XML_CY,             XML_TOK_IMAP_CENTER_Y       },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,          XML_TOK_IMAP_WIDTH          },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,         XML_TOK_IMAP_HEIGHT         },
-    { XML_NAMESPACE_SVG,    XML_R,              XML_TOK_IMAP_RADIUS         },
-    { XML_NAMESPACE_SVG,    XML_VIEWBOX,        XML_TOK_IMAP_VIEWBOX        },
-    { XML_NAMESPACE_DRAW,   XML_POINTS,         XML_TOK_IMAP_POINTS         },
-    { XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, XML_TOK_IMAP_TARGET      },
-    XML_TOKEN_MAP_END
-};
-
-namespace {
-
 class XMLImageMapObjectContext : public SvXMLImportContext
 {
 
@@ -122,8 +83,8 @@ public:
         css::uno::Reference<css::container::XIndexContainer> const & xMap,
         const char* pServiceName);
 
-    void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
@@ -133,9 +94,7 @@ public:
 
 protected:
 
-    virtual void ProcessAttribute(
-        enum XMLImageMapToken eToken,
-        const OUString& rValue);
+    virtual void ProcessAttribute(sal_Int32 nAttrToken, const OUString& rValue);
 
     virtual void Prepare(
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet);
@@ -172,23 +131,11 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
     // else: can't even get factory -> ignore
 }
 
-void XMLImageMapObjectContext::StartElement(
-    const Reference<XAttributeList >& xAttrList )
+void XMLImageMapObjectContext::startFastElement( sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    static const SvXMLTokenMap aMap(aImageMapObjectTokenMap);
-
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
-    {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        OUString sValue = xAttrList->getValueByIndex(nAttr);
-
-        ProcessAttribute(
-            static_cast<enum XMLImageMapToken>(aMap.Get(nPrefix, sLocalName)), sValue);
-    }
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+        ProcessAttribute(aIter.getToken(), aIter.toString());
 }
 
 void XMLImageMapObjectContext::endFastElement(sal_Int32 )
@@ -232,28 +179,29 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImageMapObjectConte
 }
 
 void XMLImageMapObjectContext::ProcessAttribute(
-    enum XMLImageMapToken eToken,
+    sal_Int32 nAttrToken,
     const OUString& rValue)
 {
-    switch (eToken)
+    switch (nAttrToken)
     {
-        case XML_TOK_IMAP_URL:
+        case XML_ELEMENT(XLINK, XML_HREF):
             sUrl = GetImport().GetAbsoluteReference(rValue);
             break;
 
-        case XML_TOK_IMAP_TARGET:
+        case XML_ELEMENT(OFFICE, XML_TARGET_FRAME_NAME):
             sTargt = rValue;
             break;
 
-        case XML_TOK_IMAP_NOHREF:
+        case XML_ELEMENT(DRAW, XML_NOHREF):
             bIsActive = ! IsXMLToken(rValue, XML_NOHREF);
             break;
 
-        case XML_TOK_IMAP_NAME:
+        case XML_ELEMENT(OFFICE, XML_NAME):
             sNam = rValue;
             break;
         default:
             // do nothing
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, rValue);
             break;
     }
 }
@@ -288,7 +236,7 @@ public:
 
 protected:
     virtual void ProcessAttribute(
-        enum XMLImageMapToken eToken,
+        sal_Int32 nAttrToken,
         const OUString& rValue) override;
 
     virtual void Prepare(
@@ -310,13 +258,14 @@ XMLImageMapRectangleContext::XMLImageMapRectangleContext(
 }
 
 void XMLImageMapRectangleContext::ProcessAttribute(
-    enum XMLImageMapToken eToken,
+    sal_Int32 nAttrToken,
     const OUString& rValue)
 {
     sal_Int32 nTmp;
-    switch (eToken)
+    switch (nAttrToken)
     {
-        case XML_TOK_IMAP_X:
+        case XML_ELEMENT(SVG, XML_X):
+        case XML_ELEMENT(SVG_COMPAT, XML_X):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
@@ -324,7 +273,8 @@ void XMLImageMapRectangleContext::ProcessAttribute(
                 bXOK = true;
             }
             break;
-        case XML_TOK_IMAP_Y:
+        case  XML_ELEMENT(SVG, XML_Y):
+        case  XML_ELEMENT(SVG_COMPAT, XML_Y):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
@@ -332,7 +282,8 @@ void XMLImageMapRectangleContext::ProcessAttribute(
                 bYOK = true;
             }
             break;
-        case XML_TOK_IMAP_WIDTH:
+        case XML_ELEMENT(SVG, XML_WIDTH):
+        case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
@@ -340,7 +291,8 @@ void XMLImageMapRectangleContext::ProcessAttribute(
                 bWidthOK = true;
             }
             break;
-        case XML_TOK_IMAP_HEIGHT:
+        case  XML_ELEMENT(SVG, XML_HEIGHT):
+        case  XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
@@ -349,7 +301,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
             }
             break;
         default:
-            XMLImageMapObjectContext::ProcessAttribute(eToken, rValue);
+            XMLImageMapObjectContext::ProcessAttribute(nAttrToken, rValue);
     }
 
     bValid = bHeightOK && bXOK && bYOK && bWidthOK;
@@ -382,7 +334,7 @@ public:
 
 protected:
     virtual void ProcessAttribute(
-        enum XMLImageMapToken eToken,
+        sal_Int32 nAttrToken,
         const OUString& rValue) override;
 
     virtual void Prepare(
@@ -402,21 +354,22 @@ XMLImageMapPolygonContext::XMLImageMapPolygonContext(
 }
 
 void XMLImageMapPolygonContext::ProcessAttribute(
-    enum XMLImageMapToken eToken,
+    sal_Int32 nAttrToken,
     const OUString& rValue)
 {
-    switch (eToken)
+    switch (nAttrToken)
     {
-        case XML_TOK_IMAP_POINTS:
+        case XML_ELEMENT(DRAW, XML_POINTS):
             sPointsString = rValue;
             bPointsOK = true;
             break;
-        case XML_TOK_IMAP_VIEWBOX:
+        case XML_ELEMENT(SVG, XML_VIEWBOX):
+        case XML_ELEMENT(SVG_COMPAT, XML_VIEWBOX):
             sViewBoxString = rValue;
             bViewBoxOK = true;
             break;
         default:
-            XMLImageMapObjectContext::ProcessAttribute(eToken, rValue);
+            XMLImageMapObjectContext::ProcessAttribute(nAttrToken, rValue);
             break;
     }
 
@@ -464,7 +417,7 @@ public:
 
 protected:
     virtual void ProcessAttribute(
-        enum XMLImageMapToken eToken,
+        sal_Int32 nAttrToken,
         const OUString& rValue) override;
 
     virtual void Prepare(
@@ -486,13 +439,14 @@ XMLImageMapCircleContext::XMLImageMapCircleContext(
 }
 
 void XMLImageMapCircleContext::ProcessAttribute(
-    enum XMLImageMapToken eToken,
+    sal_Int32 nAttrToken,
     const OUString& rValue)
 {
     sal_Int32 nTmp;
-    switch (eToken)
+    switch (nAttrToken)
     {
-        case XML_TOK_IMAP_CENTER_X:
+        case XML_ELEMENT(SVG, XML_CX):
+        case XML_ELEMENT(SVG_COMPAT, XML_CX):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
@@ -500,7 +454,8 @@ void XMLImageMapCircleContext::ProcessAttribute(
                 bXOK = true;
             }
             break;
-        case XML_TOK_IMAP_CENTER_Y:
+        case XML_ELEMENT(SVG, XML_CY):
+        case XML_ELEMENT(SVG_COMPAT, XML_CY):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
@@ -508,7 +463,8 @@ void XMLImageMapCircleContext::ProcessAttribute(
                 bYOK = true;
             }
             break;
-        case XML_TOK_IMAP_RADIUS:
+        case XML_ELEMENT(SVG, XML_R):
+        case XML_ELEMENT(SVG_COMPAT, XML_R):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
@@ -517,7 +473,7 @@ void XMLImageMapCircleContext::ProcessAttribute(
             }
             break;
         default:
-            XMLImageMapObjectContext::ProcessAttribute(eToken, rValue);
+            XMLImageMapObjectContext::ProcessAttribute(nAttrToken, rValue);
     }
 
     bValid = bRadiusOK && bXOK && bYOK;
