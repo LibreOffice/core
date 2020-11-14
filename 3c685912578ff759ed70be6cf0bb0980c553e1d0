@@ -45,6 +45,30 @@
       "revId": "3c685912578ff759ed70be6cf0bb0980c553e1d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d8fa54c_1ca06608",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-11-14T11:00:55Z",
+      "side": 1,
+      "message": "Is there a possibility to reuse the variable names after the saveAndReload?\nBecause if I do the following, the variable will obviously be redefined.\n\nsaveAndReload(xComponent, \"\");\nCPPUNIT_ASSERT(xComponent);\n\nuno::Reference\u003csheet::XSpreadsheetDocument\u003e xDoc(xComponent, uno::UNO_QUERY_THROW);",
+      "parentUuid": "651c79ad_9ca6717c",
+      "range": {
+        "startLine": 829,
+        "startChar": 52,
+        "endLine": 829,
+        "endChar": 58
+      },
+      "revId": "3c685912578ff759ed70be6cf0bb0980c553e1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
