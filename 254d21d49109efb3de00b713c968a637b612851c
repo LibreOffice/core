@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99d3576a_9c32ef66",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T20:54:55Z",
+      "side": 1,
+      "message": "It should have a ctor taking a name and a type... for later.",
+      "range": {
+        "startLine": 444,
+        "startChar": 18,
+        "endLine": 444,
+        "endChar": 26
+      },
+      "revId": "254d21d49109efb3de00b713c968a637b612851c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b159fbd_db0a5d25",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T20:54:55Z",
+      "side": 1,
+      "message": "Honestly, I\u0027d prefer if we also have these strings in inspectorproperties.hrc ... but on the second thought, it\u0027s OK for now, and may be changed later if required...",
+      "range": {
+        "startLine": 449,
+        "startChar": 34,
+        "endLine": 449,
+        "endChar": 58
+      },
+      "revId": "254d21d49109efb3de00b713c968a637b612851c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
