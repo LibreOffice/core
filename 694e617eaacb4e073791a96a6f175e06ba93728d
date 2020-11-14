@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be41e401_34a63bdd",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 29
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T12:02:02Z",
+      "side": 1,
+      "message": "The inner elements here are not properly indented: e.g. \u003cobject ...\u003e should be indented by two spaces related to \u003cchild\u003e...",
+      "range": {
+        "startLine": 241,
+        "startChar": 24,
+        "endLine": 251,
+        "endChar": 32
+      },
+      "revId": "694e617eaacb4e073791a96a6f175e06ba93728d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
