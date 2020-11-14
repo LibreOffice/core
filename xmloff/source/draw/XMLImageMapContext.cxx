@@ -127,10 +127,9 @@ public:
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 protected:
 
@@ -207,30 +206,28 @@ void XMLImageMapObjectContext::endFastElement(sal_Int32 )
     // else: not valid -> don't create and insert
 }
 
-SvXMLImportContextRef XMLImageMapObjectContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImageMapObjectContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-         IsXMLToken(rLocalName, XML_EVENT_LISTENERS) )
+    switch (nElement)
     {
-        Reference<XEventsSupplier> xEvents( xMapEntry, UNO_QUERY );
-        return new XMLEventsImportContext(
-            GetImport(), nPrefix, rLocalName, xEvents);
+        case XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS):
+        {
+            Reference<XEventsSupplier> xEvents( xMapEntry, UNO_QUERY );
+            return new XMLEventsImportContext(
+                GetImport(), xEvents);
+        }
+        case XML_ELEMENT(SVG, XML_TITLE):
+        case XML_ELEMENT(SVG_COMPAT, XML_TITLE):
+            return new XMLStringBufferImportContext(
+                GetImport(), sTitleBuffer);
+        case XML_ELEMENT(SVG, XML_DESC):
+        case XML_ELEMENT(SVG_COMPAT, XML_DESC):
+            return new XMLStringBufferImportContext(
+                GetImport(), sDescriptionBuffer);
     }
-    else if ( (XML_NAMESPACE_SVG == nPrefix) &&
-              IsXMLToken(rLocalName, XML_TITLE) )
-    {
-        return new XMLStringBufferImportContext(
-            GetImport(), nPrefix, rLocalName, sTitleBuffer);
-    }
-    else if ( (XML_NAMESPACE_SVG == nPrefix) &&
-              IsXMLToken(rLocalName, XML_DESC) )
-    {
-        return new XMLStringBufferImportContext(
-            GetImport(), nPrefix, rLocalName, sDescriptionBuffer);
-    }
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 
