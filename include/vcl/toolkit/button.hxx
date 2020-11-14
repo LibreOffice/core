@@ -166,6 +166,126 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
+class VCL_DLLPUBLIC RadioButton : public Button
+{
+private:
+    friend class VclBuilder;
+
+    std::shared_ptr< std::vector< VclPtr< RadioButton > > > m_xGroup;
+    tools::Rectangle       maStateRect;
+    tools::Rectangle       maMouseRect;
+    Image           maImage;
+    bool            mbChecked;
+    bool            mbRadioCheck;
+    bool            mbStateChanged;
+    bool            mbUsesExplicitGroup;
+    Link<RadioButton&,void> maToggleHdl;
+    SAL_DLLPRIVATE void     ImplInitRadioButtonData();
+    SAL_DLLPRIVATE WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
+    SAL_DLLPRIVATE void     ImplInitSettings( bool bBackground );
+    SAL_DLLPRIVATE void     ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
+                              const Point& rPos, const Size& rSize,
+                              const Size& rImageSize, tools::Rectangle& rStateRect,
+                              tools::Rectangle& rMouseRect );
+    SAL_DLLPRIVATE void     ImplDrawRadioButton(vcl::RenderContext& rRenderContext );
+    SAL_DLLPRIVATE void     ImplUncheckAllOther();
+    SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
+    SAL_DLLPRIVATE tools::Long     ImplGetImageToTextDistance() const;
+
+                            RadioButton(const RadioButton &) = delete;
+                            RadioButton& operator= (const RadioButton &) = delete;
+
+protected:
+    using Control::ImplInitSettings;
+    using Window::ImplInit;
+    SAL_DLLPRIVATE void     ImplInit( vcl::Window* pParent, WinBits nStyle );
+
+public:
+    SAL_DLLPRIVATE void     ImplCallClick( bool bGrabFocus = false, GetFocusFlags nFocusFlags = GetFocusFlags::NONE );
+
+protected:
+    virtual void    FillLayoutData() const override;
+    virtual const vcl::Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
+    void            ImplAdjustNWFSizes() override;
+
+public:
+    /*
+     bUsesExplicitGroup of true means that group() is used to set what radiobuttons are part of a group
+     while false means that contiguous radiobuttons are considered part of a group where WB_GROUP designates
+     the start of the group and all contiguous radiobuttons without WB_GROUP set form the rest of the group.
+
+     true is fairly straightforward, false leads to trick situations and is the legacy case
+    */
+    explicit        RadioButton(vcl::Window* pParent, bool bUsesExplicitGroup = true, WinBits nWinStyle = 0);
+    virtual         ~RadioButton() override;
+    virtual void    dispose() override;
+
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) override;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void    KeyUp( const KeyEvent& rKEvt ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
+    virtual void    Resize() override;
+    virtual void    GetFocus() override;
+    virtual void    LoseFocus() override;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+
+    void            Toggle();
+
+    bool            IsStateChanged() const { return mbStateChanged; }
+
+    void            EnableRadioCheck( bool bRadioCheck ) { mbRadioCheck = bRadioCheck; }
+    bool            IsRadioCheckEnabled() const { return mbRadioCheck; }
+
+    void            SetModeRadioImage( const Image& rImage );
+
+    void            SetState( bool bCheck );
+    void            Check( bool bCheck = true );
+    bool            IsChecked() const { return mbChecked; }
+
+    static Image    GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
+
+    Size            CalcMinimumSize( tools::Long nMaxWidth = 0 ) const;
+    virtual Size    GetOptimalSize() const override;
+
+    void            SetToggleHdl( const Link<RadioButton&,void>& rLink ) { maToggleHdl = rLink; }
+
+    /** GetRadioButtonGroup returns a list of pointers to <code>RadioButton</code>s in the same group.
+
+    The pointers in the returned list are valid at the time call returns. However rescheduling
+    or giving up the SolarMutex may mean events get executed that lead to the pointers getting
+    invalid.
+
+    @param bIncludeThis
+    defines whether <code>this</code> is contained in the returned list
+
+    @return
+    on return contains the <code>RadioButton</code>s
+    in the same group as this <code>RadioButton</code>.
+    */
+    std::vector<VclPtr<RadioButton> > GetRadioButtonGroup(bool bIncludeThis = true) const;
+
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+
+    /*
+     * Group this RadioButton with another
+     */
+    void group(RadioButton &rOther);
+    virtual void ShowFocus(const tools::Rectangle& rRect) override;
+
+    /// Button hes additional stuff that we need to dump too.
+    void DumpAsPropertyTree(tools::JsonWriter&) override;
+
+    virtual FactoryFunction GetUITestFactory() const override;
+};
+
 class VCL_DLLPUBLIC ImageButton final : public PushButton
 {
 private:
