@@ -81,6 +81,7 @@
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
+                      <!-- n-columns=1 n-rows=1 -->
                       <object class="GtkGrid" id="search_grid">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -88,6 +89,7 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
+                          <!-- n-columns=1 n-rows=1 -->
                           <object class="GtkGrid" id="grid12">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -330,6 +332,7 @@
                     <property name="hexpand">True</property>
                     <property name="left_padding">12</property>
                     <child>
+                      <!-- n-columns=1 n-rows=1 -->
                       <object class="GtkGrid" id="replace_grid">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -338,6 +341,7 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
+                          <!-- n-columns=1 n-rows=1 -->
                           <object class="GtkGrid" id="grid11">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -630,6 +634,7 @@
               </packing>
             </child>
             <child>
+              <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid" id="optionsgrid">
                 <property name="visible">False</property>
                 <property name="can_focus">False</property>
@@ -659,6 +664,7 @@
                             <property name="orientation">vertical</property>
                             <property name="spacing">12</property>
                             <child>
+                              <!-- n-columns=1 n-rows=1 -->
                               <object class="GtkGrid" id="grid4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -963,6 +969,7 @@
                               </packing>
                             </child>
                             <child>
+                              <!-- n-columns=1 n-rows=1 -->
                               <object class="GtkGrid" id="calcgrid">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>

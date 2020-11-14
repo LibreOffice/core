@@ -44,7 +44,7 @@
       <column type="gboolean"/>
     </columns>
   </object>
-  <!-- n-columns=3 n-rows=3 -->
+  <!-- n-columns=1 n-rows=1 -->
   <object class="GtkGrid" id="OptLinguPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -69,7 +69,7 @@
             <property name="top-padding">6</property>
             <property name="left-padding">12</property>
             <child>
-              <!-- n-columns=3 n-rows=3 -->
+              <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -77,7 +77,7 @@
                 <property name="vexpand">True</property>
                 <property name="column-spacing">12</property>
                 <child>
-                  <!-- n-columns=3 n-rows=3 -->
+                  <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -251,7 +251,7 @@
             <property name="top-padding">6</property>
             <property name="left-padding">12</property>
             <child>
-              <!-- n-columns=3 n-rows=3 -->
+              <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -445,7 +445,7 @@
             <property name="top-padding">6</property>
             <property name="left-padding">12</property>
             <child>
-              <!-- n-columns=3 n-rows=3 -->
+              <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>

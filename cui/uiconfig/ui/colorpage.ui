@@ -63,6 +63,7 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
+              <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -151,6 +152,7 @@
                   </packing>
                 </child>
                 <child>
+                  <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -369,6 +371,7 @@
                   </packing>
                 </child>
                 <child>
+                  <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="rgbpreset">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -485,6 +488,7 @@
                   </packing>
                 </child>
                 <child>
+                  <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="cmykpreset">
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
@@ -688,6 +692,7 @@
                   </packing>
                 </child>
                 <child>
+                  <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="rgbcustom">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -808,6 +813,7 @@
                   </packing>
                 </child>
                 <child>
+                  <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="cmykcustom">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>

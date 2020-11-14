@@ -119,6 +119,7 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
+                  <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -426,6 +427,7 @@
                         <property name="can_focus">False</property>
                         <property name="left_padding">12</property>
                         <child>
+                          <!-- n-columns=1 n-rows=1 -->
                           <object class="GtkGrid" id="grid2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -1350,6 +1352,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
                                 <child>
+                                  <!-- n-columns=1 n-rows=1 -->
                                   <object class="GtkGrid" id="grid3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -1662,6 +1665,7 @@
                         <property name="can_focus">False</property>
                         <property name="left_padding">12</property>
                         <child>
+                          <!-- n-columns=1 n-rows=1 -->
                           <object class="GtkGrid" id="grid4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -1847,6 +1851,7 @@
                 <property name="can_focus">True</property>
                 <property name="resize_toplevel">True</property>
                 <child>
+                  <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>

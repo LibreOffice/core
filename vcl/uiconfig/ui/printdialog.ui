@@ -501,11 +501,13 @@
                                     <property name="top_padding">6</property>
                                     <property name="left_padding">12</property>
                                     <child>
+                                      <!-- n-columns=1 n-rows=1 -->
                                       <object class="GtkGrid">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="row_spacing">6</property>
                                         <child>
+                                          <!-- n-columns=1 n-rows=1 -->
                                           <object class="GtkGrid" id="rangegrid">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
@@ -636,6 +638,7 @@
                                             <property name="can_focus">True</property>
                                             <property name="hexpand">True</property>
                                             <child>
+                                              <!-- n-columns=1 n-rows=1 -->
                                               <object class="GtkGrid" id="gdCopiesExtra">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
@@ -892,11 +895,13 @@
                                     <property name="top_padding">6</property>
                                     <property name="left_padding">12</property>
                                     <child>
+                                      <!-- n-columns=1 n-rows=1 -->
                                       <object class="GtkGrid">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="row_spacing">6</property>
                                         <child>
+                                          <!-- n-columns=1 n-rows=1 -->
                                           <object class="GtkGrid" id="pagegrid">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
@@ -982,6 +987,7 @@
                                             <property name="can_focus">True</property>
                                             <property name="hexpand">True</property>
                                             <child>
+                                              <!-- n-columns=1 n-rows=1 -->
                                               <object class="GtkGrid" id="expandpagegrid">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
