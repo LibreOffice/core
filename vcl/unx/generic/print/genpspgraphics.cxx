@@ -345,12 +345,12 @@ void GenPspGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nDX, 
     m_pPrinterGfx->DrawRect (tools::Rectangle(Point(nX, nY), Size(nDX, nDY)));
 }
 
-void GenPspGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
+void GenPspGraphics::drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry )
 {
     m_pPrinterGfx->DrawPolyLine (nPoints, reinterpret_cast<const Point *>(pPtAry));
 }
 
-void GenPspGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void GenPspGraphics::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
 {
     // Point must be equal to SalPoint! see include/vcl/salgtype.hxx
     m_pPrinterGfx->DrawPolygon (nPoints, reinterpret_cast<const Point *>(pPtAry));
@@ -358,7 +358,7 @@ void GenPspGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 
 void GenPspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
                                    const sal_uInt32   *pPoints,
-                                   PCONSTSALPOINT  *pPtAry )
+                                   const Point  **pPtAry )
 {
     m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, reinterpret_cast<const Point**>(pPtAry));
 }
@@ -387,13 +387,13 @@ bool GenPspGraphics::drawPolyLine(
     return false;
 }
 
-bool GenPspGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
+bool GenPspGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
 {
     m_pPrinterGfx->DrawPolyLineBezier (nPoints, reinterpret_cast<Point const *>(pPtAry), pFlgAry);
     return true;
 }
 
-bool GenPspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
+bool GenPspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
 {
     m_pPrinterGfx->DrawPolygonBezier (nPoints, reinterpret_cast<Point const *>(pPtAry), pFlgAry);
     return true;
@@ -401,7 +401,7 @@ bool GenPspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtA
 
 bool GenPspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
-                                             const SalPoint* const* pPtAry,
+                                             const Point* const* pPtAry,
                                              const PolyFlags* const* pFlgAry )
 {
     // Point must be equal to SalPoint! see include/vcl/salgtype.hxx
@@ -410,7 +410,7 @@ bool GenPspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
 }
 
 void GenPspGraphics::invert( sal_uInt32,
-                          const SalPoint*,
+                          const Point*,
                           SalInvert )
 {
     SAL_WARN( "vcl", "Error: PrinterGfx::Invert() not implemented" );

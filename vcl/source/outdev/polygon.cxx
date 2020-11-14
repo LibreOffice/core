@@ -230,7 +230,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
     }
 
     tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
-    const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
+    const Point* pPtAry = aPoly.GetConstPointAry();
 
     // #100127# Forward beziers to sal, if any
     if( aPoly.HasFlags() )
@@ -239,7 +239,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
         if( !mpGraphics->DrawPolygonBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
             aPoly = tools::Polygon::SubdivideBezier(aPoly);
-            pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
+            pPtAry = aPoly.GetConstPointAry();
             mpGraphics->DrawPolygon( aPoly.GetSize(), pPtAry, this );
         }
     }
@@ -356,10 +356,10 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
         return;
 
     sal_uInt32 aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
-    PCONSTSALPOINT aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
+    const Point* aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
     PolyFlags* aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
     sal_uInt32* pPointAry;
-    PCONSTSALPOINT*    pPointAryAry;
+    const Point**    pPointAryAry;
     const PolyFlags**  pFlagAryAry;
     sal_uInt16 i = 0;
     sal_uInt16 j = 0;
@@ -368,7 +368,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
     if ( nPoly > OUTDEV_POLYPOLY_STACKBUF )
     {
         pPointAry       = new sal_uInt32[nPoly];
-        pPointAryAry    = new PCONSTSALPOINT[nPoly];
+        pPointAryAry    = new const Point*[nPoly];
         pFlagAryAry     = new const PolyFlags*[nPoly];
     }
     else
@@ -385,7 +385,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
         if ( nSize )
         {
             pPointAry[j] = nSize;
-            pPointAryAry[j] = reinterpret_cast<PCONSTSALPOINT>(rPoly.GetConstPointAry());
+            pPointAryAry[j] = rPoly.GetConstPointAry();
             pFlagAryAry[j] = rPoly.GetConstFlagAry();
             last = i;
 
@@ -406,7 +406,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
             if( !mpGraphics->DrawPolygonBezier( *pPointAry, *pPointAryAry, *pFlagAryAry, this ) )
             {
                 tools::Polygon aPoly = tools::Polygon::SubdivideBezier( rPolyPoly.GetObject( last ) );
-                mpGraphics->DrawPolygon( aPoly.GetSize(), reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry()), this );
+                mpGraphics->DrawPolygon( aPoly.GetSize(), aPoly.GetConstPointAry(), this );
             }
         }
         else
@@ -452,7 +452,7 @@ void OutputDevice::ImplDrawPolygon( const tools::Polygon& rPoly, const tools::Po
         if ( nPoints < 2 )
             return;
 
-        const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(rPoly.GetConstPointAry());
+        const Point* pPtAry = rPoly.GetConstPointAry();
         mpGraphics->DrawPolygon( nPoints, pPtAry, this );
     }
 }
@@ -477,7 +477,7 @@ void OutputDevice::ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, con
 
         if( nSize >= 2 )
         {
-            const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(rPoly.GetConstPointAry());
+            const Point* pPtAry = rPoly.GetConstPointAry();
             mpGraphics->DrawPolygon( nSize, pPtAry, this );
         }
     }
@@ -485,7 +485,7 @@ void OutputDevice::ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, con
     {
         sal_uInt16 nCount = pPolyPoly->Count();
         std::unique_ptr<sal_uInt32[]> pPointAry(new sal_uInt32[nCount]);
-        std::unique_ptr<PCONSTSALPOINT[]> pPointAryAry(new PCONSTSALPOINT[nCount]);
+        std::unique_ptr<const Point*[]> pPointAryAry(new const Point*[nCount]);
         sal_uInt16 i = 0;
         do
         {
@@ -494,7 +494,7 @@ void OutputDevice::ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, con
             if ( nSize )
             {
                 pPointAry[i] = nSize;
-                pPointAryAry[i] = reinterpret_cast<PCONSTSALPOINT>(rPoly.GetConstPointAry());
+                pPointAryAry[i] = rPoly.GetConstPointAry();
                 i++;
             }
             else

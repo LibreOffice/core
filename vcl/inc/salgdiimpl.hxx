@@ -95,11 +95,11 @@ public:
 
     virtual void drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) = 0;
 
-    virtual void drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) = 0;
 
-    virtual void drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) = 0;
 
-    virtual void drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
+    virtual void drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry ) = 0;
 
     virtual bool drawPolyPolygon(
         const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -119,18 +119,18 @@ public:
 
     virtual bool drawPolyLineBezier(
                 sal_uInt32 nPoints,
-                const SalPoint* pPtAry,
+                const Point* pPtAry,
                 const PolyFlags* pFlgAry ) = 0;
 
     virtual bool drawPolygonBezier(
                 sal_uInt32 nPoints,
-                const SalPoint* pPtAry,
+                const Point* pPtAry,
                 const PolyFlags* pFlgAry ) = 0;
 
     virtual bool drawPolyPolygonBezier(
                 sal_uInt32 nPoly,
                 const sal_uInt32* pPoints,
-                const SalPoint* const* pPtAry,
+                const Point* const* pPtAry,
                 const PolyFlags* const* pFlgAry ) = 0;
 
     // CopyArea --> No RasterOp, but ClipRegion
@@ -166,7 +166,7 @@ public:
                 tools::Long nWidth, tools::Long nHeight,
                 SalInvert nFlags) = 0;
 
-    virtual void invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) = 0;
+    virtual void invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) = 0;
 
     virtual bool drawEPS(
                 tools::Long nX, tools::Long nY,

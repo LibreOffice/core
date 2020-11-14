@@ -155,13 +155,13 @@ public:
     virtual void                    drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override;
     virtual void                    drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) override;
     virtual void                    drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-    virtual void                    drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
-    virtual void                    drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
+    virtual void                    drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
+    virtual void                    drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
 
     virtual void                    drawPolyPolygon(
                                         sal_uInt32 nPoly,
                                         const sal_uInt32* pPoints,
-                                        PCONSTSALPOINT* pPtAry ) override;
+                                        const Point** pPtAry ) override;
 
     virtual bool                    drawPolyPolygon(
                                         const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -186,18 +186,18 @@ public:
 #if 1 // TODO: remove these obsolete methods
     virtual bool                    drawPolyLineBezier(
                                         sal_uInt32 nPoints,
-                                        const SalPoint* pPtAry,
+                                        const Point* pPtAry,
                                         const PolyFlags* pFlgAry ) override;
 
     virtual bool                    drawPolygonBezier(
                                         sal_uInt32 nPoints,
-                                        const SalPoint* pPtAry,
+                                        const Point* pPtAry,
                                         const PolyFlags* pFlgAry ) override;
 
     virtual bool                    drawPolyPolygonBezier(
                                         sal_uInt32 nPoly,
                                         const sal_uInt32* pPoints,
-                                        const SalPoint* const* pPtAry,
+                                        const Point* const* pPtAry,
                                         const PolyFlags* const* pFlgAry ) override;
 #endif
 
@@ -231,7 +231,7 @@ public:
     virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     virtual Color                   getPixel( tools::Long nX, tools::Long nY ) override;
     virtual void                    invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, SalInvert nFlags ) override;
-    virtual void                    invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) override;
+    virtual void                    invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) override;
 
     virtual bool                    drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize ) override;
 
