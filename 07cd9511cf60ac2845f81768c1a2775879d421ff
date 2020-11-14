@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87f1f7ec_6489a975",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 22
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T08:53:46Z",
+      "side": 1,
+      "message": "Please move this spin button back to the original place - after its label with id \"3\". I don\u0027t see the reason to move this child below, as you did.\n\nThe general order of the elements *originally* was this (all elements in order):\n\n    GtkLabel \"3\" (left_attach 0 top_attach 1)\n    GtkSpinButton \"colspin\" (left_attach 1 top_attach 1)\n    GtkLabel \"4\" (left_attach 2 top_attach 1)\n    GtkSpinButton \"rowspin\" (left_attach 3 top_attach 1)\n\nYou changed it to\n\n    GtkLabel \"3\" (left_attach 0 top_attach 1) (kept in place)\n    GtkLabel \"4\" (left_attach 2 top_attach 1) (kept in place, out of order)\n    GtkLabel \"lbwarning\" (left_attach 0 top_attach 2) (new, out of order)\n    GtkSpinButton \"colspin\" (left_attach 1 top_attach 1) (moved, out of order)\n    GtkSpinButton \"rowspin\" (left_attach 3 top_attach 1) (kept in place)\n\ninstead of logical (with all elements in order):\n\n    GtkLabel \"3\" (left_attach 0 top_attach 1) (kept in place)\n    GtkSpinButton \"colspin\" (left_attach 1 top_attach 1) (kept in place)\n    GtkLabel \"4\" (left_attach 2 top_attach 1) (kept in place)\n    GtkSpinButton \"rowspin\" (left_attach 3 top_attach 1) (kept in place)\n    GtkLabel \"lbwarning\" (left_attach 0 top_attach 2) (new)",
+      "range": {
+        "startLine": 214,
+        "startChar": 24,
+        "endLine": 232,
+        "endChar": 32
+      },
+      "revId": "07cd9511cf60ac2845f81768c1a2775879d421ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
