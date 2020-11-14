@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d7b2d6c_5d5630b6",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 27
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T11:03:20Z",
+      "side": 1,
+      "message": "Please recall that in one of older comments I asked you to not only remove the content of the line, but also the line itself.",
+      "revId": "a64d2e99a7a6d48057021839d1c0aaec34d58fb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0767536e_f5ece4b4",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 27
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T11:03:20Z",
+      "side": 1,
+      "message": "Please look at this. Do you see the light-red to the left vs. light-green to the right, with the different line count? You have removed the ending newline. Please restore. We need no unrelated changes.",
+      "revId": "a64d2e99a7a6d48057021839d1c0aaec34d58fb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
