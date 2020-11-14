@@ -68,6 +68,30 @@
       "revId": "38b1497dded22a6e4176f103256b27d7f5917aba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6f4210a_f7bedfe7",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 24
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2020-11-14T10:54:15Z",
+      "side": 0,
+      "message": "No done by mistake",
+      "parentUuid": "5f4f8e2d_12d520bb",
+      "range": {
+        "startLine": 546,
+        "startChar": 0,
+        "endLine": 546,
+        "endChar": 12
+      },
+      "revId": "38b1497dded22a6e4176f103256b27d7f5917aba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
