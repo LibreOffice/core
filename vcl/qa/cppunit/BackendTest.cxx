@@ -84,7 +84,6 @@ public:
 // silently in case a new backend is added.
 #define SHOULD_ASSERT                                                                              \
     (assertBackendNameNotEmpty(aOutDevTest.getRenderBackendName())                                 \
-     && aOutDevTest.getRenderBackendName() != "svp"                                                \
      && aOutDevTest.getRenderBackendName() != "opengl"                                             \
      && aOutDevTest.getRenderBackendName() != "qt5"                                                \
      && aOutDevTest.getRenderBackendName() != "qt5svp"                                             \
@@ -373,7 +372,7 @@ public:
         Bitmap aBitmap = aOutDevTest.setupInvert_N50();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkInvertN50Rectangle(aBitmap);
         exportImage("05-02_invert_N50_test-rectangle.png", aBitmap);
-        if (SHOULD_ASSERT)
+        if (SHOULD_ASSERT && aOutDevTest.getRenderBackendName() != "svp")
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
@@ -383,7 +382,7 @@ public:
         Bitmap aBitmap = aOutDevTest.setupInvert_TrackFrame();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkInvertTrackFrameRectangle(aBitmap);
         exportImage("05-03_invert_TrackFrame_test-rectangle.png", aBitmap);
-        if (SHOULD_ASSERT)
+        if (SHOULD_ASSERT && aOutDevTest.getRenderBackendName() != "svp")
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
