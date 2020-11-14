@@ -41,6 +41,7 @@
 #include <tools/debug.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -118,8 +119,6 @@ public:
 
     XMLImageMapObjectContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
         css::uno::Reference<css::container::XIndexContainer> const & xMap,
         const char* pServiceName);
 
@@ -147,11 +146,9 @@ protected:
 
 XMLImageMapObjectContext::XMLImageMapObjectContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     Reference<XIndexContainer> const & xMap,
     const char* pServiceName) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
+        SvXMLImportContext(rImport),
         xImageMap(xMap),
         bIsActive(true),
         bValid(false)
@@ -290,8 +287,6 @@ public:
 
     XMLImageMapRectangleContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
         css::uno::Reference<css::container::XIndexContainer> const & xMap);
 
 protected:
@@ -307,10 +302,8 @@ protected:
 
 XMLImageMapRectangleContext::XMLImageMapRectangleContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     Reference<XIndexContainer> const & xMap) :
-        XMLImageMapObjectContext(rImport, nPrefix, rLocalName, xMap,
+        XMLImageMapObjectContext(rImport, xMap,
                                  "com.sun.star.image.ImageMapRectangleObject"),
         bXOK(false),
         bYOK(false),
@@ -388,8 +381,6 @@ public:
 
     XMLImageMapPolygonContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
         css::uno::Reference<css::container::XIndexContainer> const & xMap);
 
 protected:
@@ -405,10 +396,8 @@ protected:
 
 XMLImageMapPolygonContext::XMLImageMapPolygonContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     Reference<XIndexContainer> const & xMap) :
-        XMLImageMapObjectContext(rImport, nPrefix, rLocalName, xMap,
+        XMLImageMapObjectContext(rImport, xMap,
                                  "com.sun.star.image.ImageMapPolygonObject"),
         bViewBoxOK(false),
         bPointsOK(false)
@@ -474,8 +463,6 @@ public:
 
     XMLImageMapCircleContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
         css::uno::Reference<css::container::XIndexContainer> const & xMap);
 
 protected:
@@ -491,10 +478,8 @@ protected:
 
 XMLImageMapCircleContext::XMLImageMapCircleContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     Reference<XIndexContainer> const & xMap)
-    : XMLImageMapObjectContext(rImport, nPrefix, rLocalName, xMap,
+    : XMLImageMapObjectContext(rImport, xMap,
           "com.sun.star.image.ImageMapCircleObject")
     , nRadius(0)
     , bXOK(false)
@@ -582,33 +567,26 @@ XMLImageMapContext::~XMLImageMapContext()
 {
 }
 
-SvXMLImportContextRef XMLImageMapContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImageMapContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    SvXMLImportContextRef xContext;
-
-    if ( XML_NAMESPACE_DRAW == nPrefix )
+    switch (nElement)
     {
-        if ( IsXMLToken(rLocalName, XML_AREA_RECTANGLE) )
-        {
-            xContext = new XMLImageMapRectangleContext(
-                GetImport(), nPrefix, rLocalName, xImageMap);
-        }
-        else if ( IsXMLToken(rLocalName, XML_AREA_POLYGON) )
-        {
-            xContext = new XMLImageMapPolygonContext(
-                GetImport(), nPrefix, rLocalName, xImageMap);
-        }
-        else if ( IsXMLToken(rLocalName, XML_AREA_CIRCLE) )
-        {
-            xContext = new XMLImageMapCircleContext(
-                GetImport(), nPrefix, rLocalName, xImageMap);
-        }
+        case XML_ELEMENT(DRAW, XML_AREA_RECTANGLE):
+            return new XMLImageMapRectangleContext(
+                GetImport(), xImageMap);
+        case XML_ELEMENT(DRAW, XML_AREA_POLYGON):
+            return new XMLImageMapPolygonContext(
+                GetImport(), xImageMap);
+        case XML_ELEMENT(DRAW, XML_AREA_CIRCLE):
+            return new XMLImageMapCircleContext(
+                GetImport(), xImageMap);
+        default:
+            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
-    return xContext;
+    return nullptr;
 }
 
 void XMLImageMapContext::endFastElement(sal_Int32 )
