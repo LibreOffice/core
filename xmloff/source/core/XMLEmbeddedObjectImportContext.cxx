@@ -51,13 +51,12 @@ class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
 
 public:
 
-    XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const OUString& rLName,
+    XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport,
                                     const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& rHandler );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void SAL_CALL startFastElement(
                         sal_Int32 nElement,
@@ -71,19 +70,17 @@ public:
 }
 
 XMLEmbeddedObjectImportContext_Impl::XMLEmbeddedObjectImportContext_Impl(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
+        SvXMLImport& rImport,
         const Reference< XFastDocumentHandler >& rHandler ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     mxFastHandler( rHandler )
 {
     assert(mxFastHandler);
 }
 
-SvXMLImportContextRef XMLEmbeddedObjectImportContext_Impl::CreateChildContext(
-        sal_uInt16 /*nPrefix*/,
-        const OUString& /*rLocalName*/,
-        const Reference< XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEmbeddedObjectImportContext_Impl::createFastChildContext(
+    sal_Int32 ,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     // we carry no state, so just re-use the same instance
     return this;
@@ -231,14 +228,12 @@ XMLEmbeddedObjectImportContext::~XMLEmbeddedObjectImportContext()
 {
 }
 
-SvXMLImportContextRef XMLEmbeddedObjectImportContext::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEmbeddedObjectImportContext::createFastChildContext(
+    sal_Int32 ,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     if( mxFastHandler.is() )
-        return new XMLEmbeddedObjectImportContext_Impl( GetImport(),
-                                                        nPrefix, rLocalName,
-                                                        mxFastHandler );
+        return new XMLEmbeddedObjectImportContext_Impl( GetImport(), mxFastHandler );
     return nullptr;
 }
 
