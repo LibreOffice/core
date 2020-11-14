@@ -29,7 +29,6 @@
 #include <sfx2/childwin.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/stringtransfer.hxx>
-#include <vcl/button.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/window.hxx>
 #include <vcl/transfer.hxx>
