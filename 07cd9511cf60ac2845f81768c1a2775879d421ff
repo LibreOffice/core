@@ -22,6 +22,29 @@
       "revId": "07cd9511cf60ac2845f81768c1a2775879d421ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14bf43a2_5bfa0ff0",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 22
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T10:10:58Z",
+      "side": 1,
+      "message": "There were some changes in your previous patches, like this where you replaces \"out\" with \"none\", or \"accessible-description\" with \"accessible-name\" below. Now you have dropped all those changes. Was that intentional? (Possibly yes, but just wanted to make sure.)",
+      "range": {
+        "startLine": 238,
+        "startChar": 57,
+        "endLine": 238,
+        "endChar": 61
+      },
+      "revId": "07cd9511cf60ac2845f81768c1a2775879d421ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
