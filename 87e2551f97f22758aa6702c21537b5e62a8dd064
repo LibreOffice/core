@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2e10d3c_d11227c0",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T07:00:06Z",
+      "side": 1,
+      "message": "Well of course, why do you initialize a weld::SpinButton with result of weld_entry()? You need to keep using weld_spin_button().",
+      "range": {
+        "startLine": 70,
+        "startChar": 23,
+        "endLine": 70,
+        "endChar": 56
+      },
+      "revId": "87e2551f97f22758aa6702c21537b5e62a8dd064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e4a527a_7fcc701c",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T07:00:06Z",
+      "side": 1,
+      "message": "And *this* is the correct change, the one that Jim advised you initially.",
+      "range": {
+        "startLine": 93,
+        "startChar": 22,
+        "endLine": 93,
+        "endChar": 37
+      },
+      "revId": "87e2551f97f22758aa6702c21537b5e62a8dd064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9916b861_688ded2d",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T07:00:06Z",
+      "side": 1,
+      "message": "And *this* is the correct change, the one that Jim advised you initially.",
+      "range": {
+        "startLine": 94,
+        "startChar": 22,
+        "endLine": 94,
+        "endChar": 37
+      },
+      "revId": "87e2551f97f22758aa6702c21537b5e62a8dd064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48186e33_2d8b5d52",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T07:00:06Z",
+      "side": 1,
+      "message": "And *this* is the correct change, the one that Jim advised you initially.",
+      "range": {
+        "startLine": 228,
+        "startChar": 40,
+        "endLine": 228,
+        "endChar": 51
+      },
+      "revId": "87e2551f97f22758aa6702c21537b5e62a8dd064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0a942d8_707d07e5",
+        "filename": "sw/source/uibase/inc/instable.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T07:00:06Z",
+      "side": 1,
+      "message": "Why have you changed *order* of col-\u003erow into row-\u003ecol?",
+      "range": {
+        "startLine": 52,
+        "startChar": 38,
+        "endLine": 53,
+        "endChar": 54
+      },
+      "revId": "87e2551f97f22758aa6702c21537b5e62a8dd064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67db5e01_6948af02",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 21
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T07:00:06Z",
+      "side": 1,
+      "message": "Why have you changed the type of the element, again? We seem to have discussed that we shouldn\u0027t have changed the types of the elements - keep them spin buttons!",
+      "range": {
+        "startLine": 204,
+        "startChar": 41,
+        "endLine": 204,
+        "endChar": 49
+      },
+      "revId": "87e2551f97f22758aa6702c21537b5e62a8dd064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
