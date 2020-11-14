@@ -38,6 +38,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/settings.hxx>
 #include <inspectorproperties.hrc>
+#include <strings.hrc>
 
 namespace sw::sidebar
 {
@@ -440,16 +441,16 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
 {
     SwDoc* pDoc = pDocSh->GetDoc();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
-    svx::sidebar::TreeNode aDFNode;
+    svx::sidebar::TreeNode aCharDFNode;
     svx::sidebar::TreeNode aCharNode;
     svx::sidebar::TreeNode aParaNode;
     svx::sidebar::TreeNode aParaDFNode;
 
-    aDFNode.sNodeName = "Direct Formatting";
-    aCharNode.sNodeName = "Character Styles";
-    aParaNode.sNodeName = "Paragraph Styles";
-    aParaDFNode.sNodeName = "Paragraph Direct Formatting";
-    aDFNode.NodeType = svx::sidebar::TreeNode::Category;
+    aCharNode.sNodeName = SwResId(STR_CHARACTERSTYLEFAMILY);
+    aParaNode.sNodeName = SwResId(STR_PARAGRAPHSTYLEFAMILY);
+    aCharDFNode.sNodeName = SwResId(RID_CHAR_DIRECTFORMAT);
+    aParaDFNode.sNodeName = SwResId(RID_PARA_DIRECTFORMAT);
+    aCharDFNode.NodeType = svx::sidebar::TreeNode::Category;
     aCharNode.NodeType = svx::sidebar::TreeNode::Category;
     aParaNode.NodeType = svx::sidebar::TreeNode::Category;
     aParaDFNode.NodeType = svx::sidebar::TreeNode::Category;
@@ -471,7 +472,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
                                                    UNO_NAME_NUMBERING_LEVEL,
                                                    UNO_NAME_PARRSID };
 
-    InsertValues(xRange, aIsDefined, aDFNode, false, aHiddenProperties);
+    InsertValues(xRange, aIsDefined, aCharDFNode, false, aHiddenProperties);
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocSh->GetBaseModel(),
                                                                          uno::UNO_QUERY);
@@ -536,7 +537,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     aStore.push_back(aParaNode);
     aStore.push_back(aParaDFNode);
     aStore.push_back(aCharNode);
-    aStore.push_back(aDFNode);
+    aStore.push_back(aCharDFNode);
 }
 
 IMPL_LINK(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, pLink, void)

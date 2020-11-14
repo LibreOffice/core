@@ -27,6 +27,10 @@
     and Text cursor properties
  --------------------------------------------------------------------*/
 
+// Node names
+#define RID_CHAR_DIRECTFORMAT                               NC_("RID_CHAR_DIRECTFORMAT", "Character Direct Formatting")
+#define RID_PARA_DIRECTFORMAT                               NC_("RID_PARA_DIRECTFORMAT", "Paragraph Direct Formatting")
+
 // Format names
 #define RID_BORDER_COLOR                                    NC_("RID_ATTRIBUTE_NAMES_MAP", "Color")
 #define RID_BORDER_DISTANCE                                 NC_("RID_ATTRIBUTE_NAMES_MAP", "Border Distance")
