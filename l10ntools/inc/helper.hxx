@@ -28,7 +28,11 @@ OString escapeAll(
     const OString& rText, const OString& rUnEscaped, const OString& rEscaped );
 /// Unescape all given character in the text
 OString unEscapeAll(
+#ifdef DEBUG
     const OString& rText, const OString& rEscaped, const OString& rUnEscaped  );
+#else
+    const OString& rText, const OString& rEscaped, std::string_view rUnEscaped  );
+#endif
 
 /// Convert special characters to XML entity references
 OString QuotHTML( const OString &rString );
