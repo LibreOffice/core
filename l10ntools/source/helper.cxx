@@ -31,7 +31,11 @@ OString escapeAll(
 
 
 OString unEscapeAll(
+#ifdef DEBUG
     const OString& rText, const OString& rEscaped, const OString& rUnEscaped)
+#else
+    const OString& rText, const OString& rEscaped, std::string_view rUnEscaped)
+#endif
 {
     assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
     OStringBuffer sReturn;
