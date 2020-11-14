@@ -69,6 +69,30 @@
       "revId": "3c685912578ff759ed70be6cf0bb0980c553e1d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16be91c2_70e50d44",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T11:15:11Z",
+      "side": 1,
+      "message": "You have two possibilities.\n\n1:\n\n    uno::Reference\u003clang::XComponent\u003e xComponent \u003d loadFromDesktop(\"private:factory/scalc\");\n    CPPUNIT_ASSERT(xComponent);\n\n    {\n        uno::Reference\u003csheet::XSpreadsheetDocument\u003e xDoc(xComponent, uno::UNO_QUERY_THROW);\n        uno::Reference\u003ccontainer::XIndexAccess\u003e xIndex(xDoc-\u003egetSheets(), uno::UNO_QUERY_THROW);\n        uno::Reference\u003csheet::XSpreadsheet\u003e xSheet(xIndex-\u003egetByIndex(0), uno::UNO_QUERY_THROW);\n\n        uno::Reference\u003cbeans::XPropertySet\u003e xPropsBefore(xSheet, uno::UNO_QUERY_THROW);\n        uno::Any aValue;\n        aValue \u003c\u003c\u003d OUString(\"NewCodeName\");\n        xPropsBefore-\u003esetPropertyValue(\"ScriptConfiguration\", aValue);\n    }\n\n    saveAndReload(xComponent, \"\");\n    CPPUNIT_ASSERT(xComponent);\n\n    {\n        uno::Reference\u003csheet::XSpreadsheetDocument\u003e xDoc(xComponent, uno::UNO_QUERY_THROW);\n        uno::Reference\u003ccontainer::XIndexAccess\u003e xIndex(xDoc-\u003egetSheets(), uno::UNO_QUERY_THROW);\n        uno::Reference\u003csheet::XSpreadsheet\u003e xSheet(xIndex-\u003egetByIndex(0), uno::UNO_QUERY_THROW);\n\n        OUString sCodeName;\n        uno::Reference\u003cbeans::XPropertySet\u003e xPropsAfter(xSheet, uno::UNO_QUERY_THROW);\n        xPropsAfter-\u003egetPropertyValue(\"ScriptConfiguration\") \u003e\u003e\u003d sCodeName;\n        CPPUNIT_ASSERT_EQUAL(OUString(\"NewCodeName\"), sCodeName);\n    }\n\n    css::uno::Reference\u003ccss::util::XCloseable\u003e xCloseable(xComponent, css::uno::UNO_QUERY_THROW);\n    xCloseable-\u003eclose(true);\n\n2:\n\n    uno::Reference\u003clang::XComponent\u003e xComponent \u003d loadFromDesktop(\"private:factory/scalc\");\n    CPPUNIT_ASSERT_MESSAGE(\"Failed to create the doc\", xComponent.is());\n\n    uno::Reference\u003csheet::XSpreadsheetDocument\u003e xDoc(xComponent, uno::UNO_QUERY_THROW);\n    uno::Reference\u003ccontainer::XIndexAccess\u003e xIndex(xDoc-\u003egetSheets(), uno::UNO_QUERY_THROW);\n    uno::Reference\u003csheet::XSpreadsheet\u003e xSheet(xIndex-\u003egetByIndex(0), uno::UNO_QUERY_THROW);\n\n    uno::Reference\u003cbeans::XPropertySet\u003e xPropsBefore(xSheet, uno::UNO_QUERY_THROW);\n    uno::Any aValue;\n    aValue \u003c\u003c\u003d \"NewCodeName\";\n    xPropsBefore-\u003esetPropertyValue(\"ScriptConfiguration\", aValue);\n\n    saveAndReload(xComponent, \"\");\n    CPPUNIT_ASSERT(xComponent);\n\n    xDoc.set(xComponent, uno::UNO_QUERY_THROW);\n    xIndex.set(xDoc-\u003egetSheets(), uno::UNO_QUERY_THROW);\n    xSheet.set(xIndex-\u003egetByIndex(0), uno::UNO_QUERY_THROW);\n    OUString sCodeName;\n    uno::Reference\u003cbeans::XPropertySet\u003e xPropsAfter(xSheet, uno::UNO_QUERY_THROW);\n    xPropsAfter-\u003egetPropertyValue(\"ScriptConfiguration\") \u003e\u003e\u003d sCodeName;\n    CPPUNIT_ASSERT_EQUAL(OUString(\"NewCodeName\"), sCodeName);\n\n    css::uno::Reference\u003ccss::util::XCloseable\u003e xCloseable(xComponent, css::uno::UNO_QUERY_THROW);\n    xCloseable-\u003eclose(true);\n\nThe second one reuses the same variables, while the former creates two separate scopes, so objects are destroyed when leave the scope. I prefer the former.",
+      "parentUuid": "4d8fa54c_1ca06608",
+      "range": {
+        "startLine": 829,
+        "startChar": 52,
+        "endLine": 829,
+        "endChar": 58
+      },
+      "revId": "3c685912578ff759ed70be6cf0bb0980c553e1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
