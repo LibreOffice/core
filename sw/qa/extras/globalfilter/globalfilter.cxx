@@ -1289,8 +1289,8 @@ void Test::testBulletAsImage()
             Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), GraphicType::Bitmap, aGraphic.GetType());
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), aGraphic.GetSizeBytes() > o3tl::make_unsigned(0));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Width());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Height());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), tools::Long(16), aGraphic.GetSizePixel().Width());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), tools::Long(16), aGraphic.GetSizePixel().Height());
 
             // Graphic Size
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(400), aSize.Width);
@@ -1349,8 +1349,8 @@ void Test::testBulletAsImage()
             Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), GraphicType::Bitmap, aGraphic.GetType());
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), aGraphic.GetSizeBytes() > o3tl::make_unsigned(0));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Width());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Height());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), tools::Long(16), aGraphic.GetSizePixel().Width());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), tools::Long(16), aGraphic.GetSizePixel().Height());
 
             // Graphic Size
             if (rFilterName == "write8") // ODT is correct
