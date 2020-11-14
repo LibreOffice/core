@@ -57,40 +57,38 @@ void BigIntTest::testConstructionFromLongLong()
     }
 
 #if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
-    // positive number just fitting to long
+    // positive number just fitting to sal_Int32
     {
-        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<tools::Long>::max()));
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<sal_Int32>::max()));
         CPPUNIT_ASSERT(bi.IsSet());
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(!bi.IsNeg());
         CPPUNIT_ASSERT(bi.IsLong());
-        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<tools::Long>::max(), static_cast<tools::Long>(bi));
+        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<sal_Int32>::max(), static_cast<sal_Int32>(bi));
     }
 
-    // negative number just fitting to long
+    // negative number just fitting to sal_Int32
     {
-        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<tools::Long>::min()));
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<sal_Int32>::min()));
         CPPUNIT_ASSERT(bi.IsSet());
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(bi.IsNeg());
         CPPUNIT_ASSERT(bi.IsLong());
-        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<tools::Long>::min(), static_cast<tools::Long>(bi));
+        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<sal_Int32>::min(), static_cast<sal_Int32>(bi));
     }
 
-    // positive number not fitting to long
+    // positive number not fitting to sal_Int32
     {
-        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<tools::Long>::max())
-                  + static_cast<sal_Int64>(1));
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<sal_Int32>::max()) + 1);
         CPPUNIT_ASSERT(bi.IsSet());
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(!bi.IsNeg());
         CPPUNIT_ASSERT(!bi.IsLong());
     }
 
-    // negative number not fitting to long
+    // negative number not fitting to sal_Int32
     {
-        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<tools::Long>::min())
-                  - static_cast<sal_Int64>(1));
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<sal_Int32>::min()) - 1);
         CPPUNIT_ASSERT(bi.IsSet());
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(bi.IsNeg());
