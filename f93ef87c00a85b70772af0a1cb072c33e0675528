@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "730e8da5_a0dd3730",
+        "filename": "filter/source/graphicfilter/ipsd/ipsd.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T08:08:01Z",
+      "side": 1,
+      "message": "This looks suspicious. Previously, the code handled negative values, and clamped them to 0. Now it casts negative values to unsigned sal_uInt8 on passing to the clamp, so they would become \"large\" positive... And then the clamp would effectively do nothing, because the passed values will all be in the 0..255 range.",
+      "range": {
+        "startLine": 688,
+        "startChar": 50,
+        "endLine": 688,
+        "endChar": 59
+      },
+      "revId": "f93ef87c00a85b70772af0a1cb072c33e0675528",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
