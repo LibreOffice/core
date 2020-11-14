@@ -8156,6 +8156,16 @@ public:
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
     }
 
+    virtual OString get_id(int pos) const override
+    {
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
+        gpointer pMenuItem = g_list_nth_data(pChildren, pos);
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pMenuItem));
+        OString id(pStr, pStr ? strlen(pStr) : 0);
+        g_list_free(pChildren);
+        return id;
+    }
+
     virtual int n_children() const override
     {
         GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));

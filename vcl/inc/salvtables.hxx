@@ -151,6 +151,7 @@ public:
                         TriState eCheckRadioFalse) override;
     virtual void insert_separator(int pos, const OUString& rId) override;
     virtual void remove(const OString& rId) override;
+    virtual OString get_id(int pos) const override;
     virtual int n_children() const override;
     PopupMenu* getMenu() const;
     virtual ~SalInstanceMenu() override;

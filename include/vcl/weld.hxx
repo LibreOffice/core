@@ -2174,6 +2174,8 @@ public:
     // return the number of toplevel nodes
     virtual int n_children() const = 0;
 
+    virtual OString get_id(int pos) const = 0;
+
     virtual ~Menu() {}
 };
 

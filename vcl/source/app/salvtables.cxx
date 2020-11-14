@@ -763,6 +763,10 @@ void SalInstanceMenu::remove(const OString& rId)
     m_xMenu->RemoveItem(m_xMenu->GetItemPos(m_xMenu->GetItemId(rId)));
 }
 int SalInstanceMenu::n_children() const { return m_xMenu->GetItemCount(); }
+OString SalInstanceMenu::get_id(int pos) const
+{
+    return m_xMenu->GetItemIdent(m_xMenu->GetItemId(pos));
+}
 PopupMenu* SalInstanceMenu::getMenu() const { return m_xMenu.get(); }
 SalInstanceMenu::~SalInstanceMenu()
 {
