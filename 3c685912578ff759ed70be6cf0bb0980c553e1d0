@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c56cf312_66812b2d",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T06:01:48Z",
+      "side": 1,
+      "message": "1. As the error tells, the \u003c\u003c\u003d operator is confused which argument you are passing - it\u0027s not an OUString, but C-style array of characters. Please use OUString(\"NewCodeName\") there instead.",
+      "range": {
+        "startLine": 822,
+        "startChar": 4,
+        "endLine": 822,
+        "endChar": 29
+      },
+      "revId": "3c685912578ff759ed70be6cf0bb0980c553e1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "651c79ad_9ca6717c",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-14T06:01:48Z",
+      "side": 1,
+      "message": "2. xSheet here is the *same* object that you created above in line 818, for the document *before* save-and-reload. So you don\u0027t test here what you expect to test (and if save-and-reload has unloaded the old document, it should throw here).\n\nYou need to re-acquire the sheet from the *updated* xComponent, to test the correct object.\n\nNote that the intermediate xSheets object is redundant - you can create xIndex right from xDoc-\u003egetSheets().",
+      "range": {
+        "startLine": 829,
+        "startChar": 52,
+        "endLine": 829,
+        "endChar": 58
+      },
+      "revId": "3c685912578ff759ed70be6cf0bb0980c553e1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
