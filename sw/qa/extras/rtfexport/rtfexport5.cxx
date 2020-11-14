@@ -25,6 +25,7 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -1249,6 +1250,14 @@ DECLARE_RTFEXPORT_TEST(testTdf129513, "tdf129513.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getCellNames().getLength());
     uno::Reference<text::XText> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("In table"), xCell->getString());
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf138210, "tdf138210.rtf")
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

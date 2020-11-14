@@ -918,46 +918,43 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     }
 
     // Creating CustomShapeGeometry property
-    std::vector<beans::PropertyValue> aGeometry;
-    if (aViewBox.X || aViewBox.Y || aViewBox.Width || aViewBox.Height)
+    if (bCustom && xPropertySet.is())
     {
-        aViewBox.Width -= aViewBox.X;
-        aViewBox.Height -= aViewBox.Y;
-        aPropertyValue.Name = "ViewBox";
-        aPropertyValue.Value <<= aViewBox;
-        aGeometry.push_back(aPropertyValue);
-    }
-    if (!aPath.empty())
-    {
-        aPropertyValue.Name = "Path";
-        aPropertyValue.Value <<= comphelper::containerToSequence(aPath);
-        aGeometry.push_back(aPropertyValue);
-    }
-    if (!aGeometry.empty() && xPropertySet.is() && !m_bTextFrame)
-        xPropertySet->setPropertyValue("CustomShapeGeometry",
-                                       uno::Any(comphelper::containerToSequence(aGeometry)));
+        bool bChanged = false;
+        comphelper::SequenceAsHashMap aCustomShapeGeometry(
+            xPropertySet->getPropertyValue("CustomShapeGeometry"));
 
-    if (!aShapeText.isEmpty())
-    {
-        auto aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry")
-                                .get<uno::Sequence<beans::PropertyValue>>();
-        auto aGeomPropVec
-            = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
-        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-            { "TextPath", uno::makeAny(true) },
-        }));
-        auto it = std::find_if(
-            aGeomPropVec.begin(), aGeomPropVec.end(),
-            [](const beans::PropertyValue& rValue) { return rValue.Name == "TextPath"; });
-        if (it == aGeomPropVec.end())
-            aGeomPropVec.push_back(comphelper::makePropertyValue("TextPath", aPropertyValues));
-        else
-            it->Value <<= aPropertyValues;
+        if (aViewBox.X || aViewBox.Y || aViewBox.Width || aViewBox.Height)
+        {
+            aViewBox.Width -= aViewBox.X;
+            aViewBox.Height -= aViewBox.Y;
+            aCustomShapeGeometry["ViewBox"] <<= aViewBox;
+            bChanged = true;
+        }
 
-        xPropertySet->setPropertyValue("CustomShapeGeometry",
-                                       uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
-        xPropertySet->setPropertyValue("TextAutoGrowHeight", uno::makeAny(false));
-        xPropertySet->setPropertyValue("TextAutoGrowWidth", uno::makeAny(false));
+        if (!aPath.empty())
+        {
+            aCustomShapeGeometry["Path"] <<= comphelper::containerToSequence(aPath);
+            bChanged = true;
+        }
+
+        if (!aShapeText.isEmpty())
+        {
+            uno::Sequence<beans::PropertyValue> aSequence(comphelper::InitPropertySequence({
+                { "TextPath", uno::makeAny(true) },
+            }));
+            aCustomShapeGeometry["TextPath"] <<= aSequence;
+            xPropertySet->setPropertyValue("TextAutoGrowHeight", uno::makeAny(false));
+            xPropertySet->setPropertyValue("TextAutoGrowWidth", uno::makeAny(false));
+            bChanged = true;
+        }
+
+        if (bChanged)
+        {
+            xPropertySet->setPropertyValue(
+                "CustomShapeGeometry",
+                uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
+        }
     }
 
     if (!boost::logic::indeterminate(obRelFlipV) && xPropertySet.is())
@@ -1033,8 +1030,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 
         if (obFlipH == true || obFlipV == true)
         {
-            // Line shapes have no CustomShapeGeometry.
-            if (nType != ESCHER_ShpInst_Line)
+            if (bCustom)
             {
                 // This has to be set after position and size is set, otherwise flip will affect the position.
                 comphelper::SequenceAsHashMap aCustomShapeGeometry(
