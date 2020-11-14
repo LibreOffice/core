@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "447f47f9_5542c145",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 30
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2020-11-14T15:00:37Z",
+      "side": 1,
+      "message": "Need a context attribute here with context for translators. For inspiration, see the other instances of context in the same file.",
+      "revId": "a4ebd2e428b6a63380c72f80813683655ebd4ee0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
