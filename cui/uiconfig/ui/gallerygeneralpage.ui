@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.22.2 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
+  <!-- n-columns=1 n-rows=1 -->
   <object class="GtkGrid" id="GalleryGeneralPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -10,6 +11,7 @@
     <property name="border_width">6</property>
     <property name="row_spacing">24</property>
     <child>
+      <!-- n-columns=1 n-rows=1 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -44,6 +46,7 @@
       </packing>
     </child>
     <child>
+      <!-- n-columns=1 n-rows=1 -->
       <object class="GtkGrid" id="grid2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -125,6 +128,7 @@
       </packing>
     </child>
     <child>
+      <!-- n-columns=1 n-rows=1 -->
       <object class="GtkGrid" id="grid3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

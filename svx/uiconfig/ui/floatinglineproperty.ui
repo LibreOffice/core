@@ -7,6 +7,7 @@
     <property name="no_show_all">True</property>
     <property name="border_width">4</property>
     <child>
+      <!-- n-columns=1 n-rows=1 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -44,6 +45,7 @@
           </packing>
         </child>
         <child>
+          <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
