@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b43db21_67916437",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3788,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-11-14T09:12:21Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem right.",
+      "range": {
+        "startLine": 3779,
+        "startChar": 20,
+        "endLine": 3788,
+        "endChar": 21
+      },
+      "revId": "4c5d1d618a8551e2e36aacf8f388457290e497d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
