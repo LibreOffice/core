@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "acc39c80_ffa6f0d0",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-11-14T10:14:36Z",
+      "side": 1,
+      "message": "This block was useful when m_xRowNF-\u003eset_max(ROW_COL_PROD/nCol) was in it. Since we are not doing that anymore it should be removed and replaced with logic that will execute the else block when appropriate.",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 260,
+        "endChar": 8
+      },
+      "revId": "4540187ee2147f660557a3fa36d86a1d9b5df178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
