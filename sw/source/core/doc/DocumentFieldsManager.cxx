@@ -179,11 +179,6 @@ namespace
     #endif
         }
     }
-    void lcl_SwClientNotify(sw::BroadcastingModify& rModify, const SfxPoolItem* pNew)
-    {
-        const sw::LegacyModifyHint aHint(nullptr, pNew);
-        rModify.SwClientNotifyCall(rModify, aHint);
-    }
 }
 
 namespace sw
@@ -409,7 +404,7 @@ void DocumentFieldsManager::UpdateFields( bool bCloseDB )
         case SwFieldIds::Dde:
         {
             SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-            lcl_SwClientNotify(*pFieldType, &aUpdateDDE );
+            pFieldType->CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aUpdateDDE));
             break;
         }
         case SwFieldIds::GetExp:
@@ -419,7 +414,7 @@ void DocumentFieldsManager::UpdateFields( bool bCloseDB )
             // Expression fields are treated separately
             break;
         default:
-            lcl_SwClientNotify(*pFieldType, nullptr );
+            pFieldType->CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
         }
     }
 
@@ -567,7 +562,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
                     if (bUpdateFields)
                         UpdateTableFields( &aTableUpdate );
                     else
-                        lcl_SwClientNotify(*pNewField->GetTyp(), &aTableUpdate);
+                        pNewField->GetTyp()->CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aTableUpdate));
 
                     if (! bUpdateFields)
                         bTableSelBreak = true;
@@ -577,7 +572,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
 
         case SwFieldIds::Macro:
             if( bUpdateFields && pDstTextField->GetpTextNode() )
-                lcl_SwClientNotify(*pDstTextField->GetpTextNode(), pDstFormatField);
+                pDstTextField->GetpTextNode()->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, pDstFormatField));
             break;
 
         case SwFieldIds::DatabaseName:
@@ -620,9 +615,9 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
 /// Update reference and table fields
 void DocumentFieldsManager::UpdateRefFields()
 {
-    for( auto const & pFieldType : *mpFieldTypes )
-        if( SwFieldIds::GetRef == pFieldType->Which() )
-            lcl_SwClientNotify(*pFieldType, nullptr );
+    for(auto const& pFieldType: *mpFieldTypes)
+        if(SwFieldIds::GetRef == pFieldType->Which())
+            static_cast<SwGetRefFieldType*>(pFieldType.get())->UpdateGetReferences();
 }
 
 void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
@@ -1355,10 +1350,10 @@ void DocumentFieldsManager::UpdatePageFields( SfxPoolItem* pMsgHint )
         case SwFieldIds::Chapter:
         case SwFieldIds::GetExp:
         case SwFieldIds::RefPageGet:
-            lcl_SwClientNotify(*pFieldType, pMsgHint);
+            pFieldType->CallSwClientNotify(sw::LegacyModifyHint(nullptr, pMsgHint));
             break;
         case SwFieldIds::DocStat:
-            lcl_SwClientNotify(*pFieldType, nullptr);
+            pFieldType->CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
             break;
         default: break;
         }
