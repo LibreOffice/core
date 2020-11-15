@@ -30,8 +30,6 @@
 #include <svx/rulritem.hxx>
 #include <svx/svdouno.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/flditem.hxx>
-#include <editeng/outlobj.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/urlfieldhelper.hxx>
 #include <officecfg/Office/Impress.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <sal/types.h>
-#include <sal/log.hxx>
 #include <sot/formats.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svditer.hxx>
@@ -51,8 +50,6 @@
 #include <svtools/embedtransfer.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <tools/diagnose_ex.h>
-#include <comphelper/scopeguard.hxx>
 
 
 using namespace com::sun::star;

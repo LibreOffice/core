@@ -17,8 +17,6 @@
 
 #include "sdmodeltestbase.hxx"
 
-#include <o3tl/cppunittraitshelper.hxx>
-#include <svl/stritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
@@ -28,8 +26,6 @@
 #include <editeng/colritem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/unoprnms.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <svl/style.hxx>
 
 #include <svx/svdotext.hxx>

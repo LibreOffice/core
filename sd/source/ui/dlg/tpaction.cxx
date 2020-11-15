@@ -35,7 +35,6 @@
 #include <sfx2/app.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/svdograf.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/docfile.hxx>

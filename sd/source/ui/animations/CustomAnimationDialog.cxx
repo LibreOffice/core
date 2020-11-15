@@ -42,7 +42,6 @@
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 
-#include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/debug.hxx>
