@@ -35,36 +35,10 @@
  
  LINK_LIBS+=-liconv
 -MATHLIB=/opt/local/lib/libtommath.a
-+MATHLIB=-ltommath
++MATHLIB=$(LIBTOMATH_LIBDIR) -ltommath
  SO_LINK_LIBS+=-liconv
  
  include $(ROOT)/gen/darwin.defaults
---- firebird.org/builds/posix/postfix.darwin	2016-08-01 20:02:48.000000000 +0200
-+++ firebird/builds/posix/postfix.darwin	2016-08-01 22:17:49.000000000 +0200
-@@ -54,9 +54,9 @@
- 	cp -r ../gen/firebird/include $(FB_FW)/Versions/A/Headers
- 	cp ../gen/firebird/lib/libfbembed.dylib $(FB_FW)/Versions/A/Firebird
- 	cp ../gen/firebird/lib/libfbclient.dylib $(FB_FW)/Versions/A/Libraries/libfbclient.dylib
--	cp ../gen/firebird/lib/libicudata.dylib $(FB_FW)/Versions/A/Libraries/libicudata.dylib
--	cp ../gen/firebird/lib/libicui18n.dylib $(FB_FW)/Versions/A/Libraries/libicui18n.dylib
--	cp ../gen/firebird/lib/libicuuc.dylib $(FB_FW)/Versions/A/Libraries/libicuuc.dylib
-+#	cp ../gen/firebird/lib/libicudata.dylib $(FB_FW)/Versions/A/Libraries/libicudata.dylib
-+#	cp ../gen/firebird/lib/libicui18n.dylib $(FB_FW)/Versions/A/Libraries/libicui18n.dylib
-+#	cp ../gen/firebird/lib/libicuuc.dylib $(FB_FW)/Versions/A/Libraries/libicuuc.dylib
- 	cp ../gen/firebird/lib/libib_util.dylib $(FB_FW)/Versions/A/Libraries/libib_util.dylib
- 	cp ../gen/firebird/firebird.msg \
- 			$(FB_FW)/Resources/English.lproj/var/firebird.msg
-@@ -68,8 +68,8 @@
- 		$(FB_FW)/Resources/English.lproj/var/intl/fbintl.conf
- 	chmod a+rx $(FB_FW)/Resources/English.lproj/var/intl/fbintl
- 	mkdir -p $(FB_FW)/Resources/English.lproj/var/plugins
--	cp ../gen/firebird/plugins/libfbtrace.dylib \
--		$(FB_FW)/Resources/English.lproj/var/plugins/libfbtrace.dylib
-+#	cp ../gen/firebird/plugins/libfbtrace.dylib \
-+#		$(FB_FW)/Resources/English.lproj/var/plugins/libfbtrace.dylib
- 	cp -r ../gen/firebird/help $(FB_FW)/Resources/English.lproj/var/help
- 	cp ../gen/firebird/security2.fdb $(FB_FW)/Resources/English.lproj/var
- 	mkdir -p $(FB_FW)/Resources/doc
 --- firebird.org/builds/posix/Makefile.in	2016-08-08 17:58:20.000000000 +0200
 +++ firebird/builds/posix/Makefile.in	2016-08-08 17:57:17.000000000 +0200
 @@ -191,6 +191,9 @@
