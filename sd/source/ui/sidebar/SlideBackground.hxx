@@ -21,13 +21,11 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_SLIDEBACKGROUND_HXX
 
 #include <memory>
-#include <svl/intitem.hxx>
-#include <svx/dlgutil.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include <svx/itemwin.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/papersizelistbox.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <vcl/EnumContext.hxx>
 
 namespace sd { class ViewShellBase; }
 namespace sd::tools { class EventMultiplexerEvent; }
