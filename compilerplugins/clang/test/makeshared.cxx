@@ -54,9 +54,9 @@ void test2()
     (void)y;
 
     std::unique_ptr<int> u1;
-    // expected-error-re@+1 {{rather use make_shared than constructing from {{.+}} (aka 'std{{.*}}::unique_ptr<int, std{{.*}}::default_delete<int>{{ ?}}>') [loplugin:makeshared]}}
+    // expected-error-re@+1 {{rather use make_shared than constructing from {{.+}} (aka 'std{{.*}}::unique_ptr<int{{.*}}>') [loplugin:makeshared]}}
     std::shared_ptr<int> z = std::move(u1);
-    // expected-error-re@+1 {{rather use make_shared than constructing from {{.+}} (aka 'std{{.*}}::unique_ptr<int, std{{.*}}::default_delete<int>{{ ?}}>') [loplugin:makeshared]}}
+    // expected-error-re@+1 {{rather use make_shared than constructing from {{.+}} (aka 'std{{.*}}::unique_ptr<int{{.*}}>') [loplugin:makeshared]}}
     z = std::move(u1);
 }
 

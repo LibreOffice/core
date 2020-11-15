@@ -129,18 +129,18 @@ enum E : int
 }
 }
 
-// expected-note@+1 {{a function associating 'N::I1::E' is declared here [loplugin:external]}}
+// expected-note-re@+1 {{a function associating 'N{{(::I1)?}}::E' is declared here [loplugin:external]}}
 static void g(std::vector<E>)
 {
     // expected-note@+1 {{another declaration is here [loplugin:external]}}
     void f(E const*);
 }
 
-// expected-note@+1 {{a function associating 'N::I1::E' is declared here [loplugin:external]}}
+// expected-note-re@+1 {{a function associating 'N{{(::I1)?}}::E' is declared here [loplugin:external]}}
 void f(E const*);
 
 extern "C++" {
-// expected-note@+1 {{a function associating 'N::I1::E' is declared here [loplugin:external]}}
+// expected-note-re@+1 {{a function associating 'N{{(::I1)?}}::E' is declared here [loplugin:external]}}
 void fc(E const*);
 }
 
@@ -163,12 +163,12 @@ struct S3
 
 inline namespace I2
 {
-// expected-note@+1 {{a function associating 'N::I1::E' is declared here [loplugin:external]}}
+// expected-note-re@+1 {{a function associating 'N{{(::I1)?}}::E' is declared here [loplugin:external]}}
 void f3(E);
 
 inline namespace I3
 {
-// expected-note@+1 {{a function associating 'N::I1::E' is declared here [loplugin:external]}}
+// expected-note-re@+1 {{a function associating 'N{{(::I1)?}}::E' is declared here [loplugin:external]}}
 void f4(E);
 }
 }
