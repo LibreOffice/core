@@ -106,6 +106,10 @@ string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
     // note: always use -debug so a PDB file is created
     string linkargs(" -link -debug");
 
+    // instead of using synced PDB access (-FS), use inidividual PDB files based on output
+    const char *const pEnvIndividualPDBs(getenv("MSVC_USE_INDIVIDUAL_PDBS"));
+    const bool bIndividualPDBs = (pEnvIndividualPDBs && !strcmp(pEnvIndividualPDBs, "TRUE"));
+
     for(vector<string>::iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
         if (env_prefix_next_arg)
         {
@@ -145,10 +149,19 @@ string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
                      << (*i) << "\"" << endl;
                 exit(1);
             }
+
+            if (bIndividualPDBs)
+            {
+                if (dot == string::npos)
+                    args.append(" -Fd" + *i + ".pdb");
+                else
+                    args.append(" -Fd" + (*i).substr(0, dot) + ".pdb");
+            }
         }
         else if(*i == "-g" || !(*i).compare(0,5,"-ggdb")) {
             args.append("-Zi");
-            args.append(" -FS");
+            if (!bIndividualPDBs)
+                args.append(" -FS");
         }
         else if(!(*i).compare(0,2,"-D")) {
             // need to re-escape strings for preprocessor
