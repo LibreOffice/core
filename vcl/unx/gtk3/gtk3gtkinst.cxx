@@ -8182,7 +8182,8 @@ public:
             auto iter = std::find(m_aExtraItems.begin(), m_aExtraItems.end(), pMenuItem);
             if (iter != m_aExtraItems.end())
             {
-                m_pTopLevelMenuHelper->remove_from_map(pMenuItem);
+                if (m_pTopLevelMenuHelper)
+                    m_pTopLevelMenuHelper->remove_from_map(pMenuItem);
                 m_aExtraItems.erase(iter);
             }
         }
