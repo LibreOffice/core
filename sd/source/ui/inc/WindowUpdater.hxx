@@ -22,7 +22,6 @@
 
 #include <svl/ctloptions.hxx>
 #include <vcl/vclptr.hxx>
-#include <sddllapi.h>
 
 #include <vector>
 

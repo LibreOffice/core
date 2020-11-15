@@ -42,7 +42,6 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdobj.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/writingmodeitem.hxx>

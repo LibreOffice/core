@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONDIALOG_HXX
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONDIALOG_HXX
 
-#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
 namespace sd {

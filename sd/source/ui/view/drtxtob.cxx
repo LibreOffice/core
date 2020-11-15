@@ -44,7 +44,6 @@
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <comphelper/lok.hxx>
 
 #include <sfx2/objface.hxx>
 
