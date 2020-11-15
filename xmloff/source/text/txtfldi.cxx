@@ -2449,24 +2449,20 @@ XMLMacroFieldImportContext::XMLMacroFieldImportContext(
 {
 }
 
-SvXMLImportContextRef XMLMacroFieldImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLMacroFieldImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    SvXMLImportContextRef xContext;
-
-    if ( (nPrefix == XML_NAMESPACE_OFFICE) &&
-         IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
+    if ( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
     {
         // create events context and remember it!
-        xEventContext = new XMLEventsImportContext(
-            GetImport(), nPrefix, rLocalName );
+        xEventContext = new XMLEventsImportContext( GetImport() );
         bValid = true;
-        return xEventContext;
+        return xEventContext.get();
     }
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
-    return xContext;
+    return nullptr;
 }
 
 void XMLMacroFieldImportContext::ProcessAttribute(
