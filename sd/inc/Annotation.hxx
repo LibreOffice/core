@@ -28,7 +28,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 
-#include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "textapi.hxx"
 #include "sddllapi.h"

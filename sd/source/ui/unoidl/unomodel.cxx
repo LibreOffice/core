@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
@@ -46,7 +45,6 @@
 #include "unopool.hxx"
 #include <sfx2/lokhelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <editeng/UnoForbiddenCharsTable.hxx>
@@ -58,7 +56,6 @@
 #include <svx/svdundo.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
-#include <editeng/flditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <svx/svdpool.hxx>

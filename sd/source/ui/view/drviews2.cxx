@@ -75,18 +75,13 @@
 #include <svx/sdtagitm.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdmetitm.hxx>
-#include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnedwit.hxx>
-#include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/xlnclit.hxx>
@@ -180,13 +175,12 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sdmod.hxx>
+#include <model/SlsPageDescriptor.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
 #include <SlideSorter.hxx>
+#include <view/SlideSorterView.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <controller/SlideSorterController.hxx>
-#include <model/SlideSorterModel.hxx>
-#include <controller/SlsSelectionManager.hxx>
-#include <controller/SlsInsertionIndicatorHandler.hxx>
 #include <controller/SlsPageSelector.hxx>
 
 #include <ViewShellBase.hxx>

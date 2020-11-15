@@ -29,7 +29,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sot/storage.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <Outliner.hxx>
@@ -56,7 +55,6 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>

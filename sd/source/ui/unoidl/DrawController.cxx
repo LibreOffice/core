@@ -18,7 +18,6 @@
  */
 
 #include <DrawController.hxx>
-#include <DrawDocShell.hxx>
 
 #include <sdpage.hxx>
 #include <ViewShell.hxx>
@@ -38,7 +37,6 @@
 #include <com/sun/star/drawing/framework/ModuleController.hpp>
 #include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/drawing/XLayer.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 
 #include <slideshow.hxx>
 

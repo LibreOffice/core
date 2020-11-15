@@ -22,10 +22,8 @@
 
 #include <osl/interlck.h>
 
-#include <sddllapi.h>
+namespace sd {
 
-namespace sd
-{
 /** A simple base implementation for reference-counted components.
     acts like sal::SimpleReferenceObject but calls the virtual disposing()
     methods before the ref count switches from 1 to zero.
