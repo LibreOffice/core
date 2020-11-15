@@ -51,8 +51,6 @@
 #include <View.hxx>
 #include <drawdoc.hxx>
 
-#include <fupoor.hxx>
-#include <fusearch.hxx>
 #include <ViewShell.hxx>
 #include <unomodel.hxx>
 #include <undo/undomanager.hxx>

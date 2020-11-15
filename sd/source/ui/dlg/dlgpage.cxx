@@ -29,7 +29,6 @@
 #include <sdresid.hxx>
 #include <strings.hrc>
 
-#include <svl/aeitem.hxx>
 #include <svl/eitem.hxx>
 #include <svx/flagsdef.hxx>
 

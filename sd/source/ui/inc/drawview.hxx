@@ -22,6 +22,8 @@
 
 #include "View.hxx"
 
+#include <sddllapi.h>
+
 namespace sd {
 
 class DrawDocShell;

@@ -20,9 +20,6 @@
 #include <unotools/mediadescriptor.hxx>
 #include <rtl/ustring.hxx>
 
-#include <vcl/opengl/OpenGLWrapper.hxx>
-#include <vcl/skia/SkiaHelper.hxx>
-
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

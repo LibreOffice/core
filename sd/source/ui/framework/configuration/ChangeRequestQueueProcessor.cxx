@@ -25,7 +25,6 @@
 
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 

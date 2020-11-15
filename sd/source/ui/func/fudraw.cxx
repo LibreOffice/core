@@ -23,7 +23,6 @@
 #include <vcl/ptrstyle.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/svdoole2.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <svx/bmpmask.hxx>

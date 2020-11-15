@@ -24,7 +24,6 @@
 #include <svx/svdotext.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/numitem.hxx>
 #include <svl/whiter.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>

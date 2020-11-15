@@ -14,6 +14,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -33,7 +34,6 @@
 #include <vcl/scheduler.hxx>
 
 #include <DrawDocShell.hxx>
-#include <DrawController.hxx>
 #include <ViewShell.hxx>
 #include <app.hrc>
 #include <drawdoc.hxx>

@@ -60,11 +60,6 @@
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
 #include <memory>
-#include <svx/xfillit0.hxx>
-#include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-
-#include <com/sun/star/drawing/FillStyle.hpp>
 
 using namespace com::sun::star::drawing;
 using namespace svx::sidebar;

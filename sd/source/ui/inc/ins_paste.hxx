@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_INS_PASTE_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_INS_PASTE_HXX
 
-#include <sddllapi.h>
-
 #include <vcl/weld.hxx>
 
 // SdInsertPasteDlg

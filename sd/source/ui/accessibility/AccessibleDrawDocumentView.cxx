@@ -25,9 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>

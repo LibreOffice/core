@@ -22,6 +22,8 @@
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
+#include <svtools/ehdl.hxx>
+#include <vcl/errcode.hxx>
 #include "sderror.hxx"
 
 const ErrMsgCode RID_SD_ERRHDL[] =

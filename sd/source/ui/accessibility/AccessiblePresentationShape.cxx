@@ -25,7 +25,6 @@
 #include <sdresid.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 
-#include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
 using namespace ::com::sun::star;

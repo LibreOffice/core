@@ -10,12 +10,9 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
-#include <svdpdf.hxx>
-
 #include <config_features.h>
 
 #include <comphelper/scopeguard.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 
 #include <unotools/tempfile.hxx>
@@ -24,11 +21,11 @@
 #include <svx/svdograf.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
 
 #include <DrawDocShell.hxx>
-#include <DrawController.hxx>
 #include <ViewShell.hxx>
-#include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 

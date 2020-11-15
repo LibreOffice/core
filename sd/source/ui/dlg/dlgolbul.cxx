@@ -37,7 +37,6 @@
 #include <strings.hxx>
 #include <bulmaper.hxx>
 #include <DrawDocShell.hxx>
-#include <svl/aeitem.hxx>
 
 namespace sd {
 

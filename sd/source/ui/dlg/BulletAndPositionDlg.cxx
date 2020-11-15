@@ -37,7 +37,6 @@
 #include <sfx2/opengrf.hxx>
 
 #include <strings.hrc>
-#include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <sal/log.hxx>
 #include <vcl/virdev.hxx>
