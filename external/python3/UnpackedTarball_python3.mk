@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/ubsan.patch.0 \
 	external/python3/python-3.5.tweak.strip.soabi.patch \
 	external/python3/darwin.patch.0 \
+	external/python3/macos-11.patch.0 \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)
