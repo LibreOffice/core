@@ -1052,7 +1052,7 @@ SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
                 }
                 uno::Reference< drawing::XShape > xTitleShape = xDoc->getTitle();
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
-                                                   rLocalName, maMainTitle, xTitleShape );
+                                                   maMainTitle, xTitleShape );
             }
             break;
 
@@ -1065,7 +1065,7 @@ SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
                 }
                 uno::Reference< drawing::XShape > xTitleShape = xDoc->getSubTitle();
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
-                                                   rLocalName, maSubTitle, xTitleShape );
+                                                   maSubTitle, xTitleShape );
             }
             break;
 
@@ -1162,10 +1162,9 @@ void SchXMLChartContext::InitChart(
 }
 
 SchXMLTitleContext::SchXMLTitleContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
-                                        const OUString& rLocalName,
                                         OUString& rTitle,
                                         uno::Reference< drawing::XShape > const & xTitleShape ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mrTitle( rTitle ),
         mxTitleShape( xTitleShape )
