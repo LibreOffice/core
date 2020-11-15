@@ -80,8 +80,6 @@ private:
 
 public:
     SchXMLCategoriesContext( SvXMLImport& rImport,
-                                   sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
                                    OUString& rAddress );
     virtual void StartElement( const Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
@@ -90,7 +88,6 @@ class DateScaleContext : public SvXMLImportContext
 {
 public:
     DateScaleContext( SvXMLImport& rImport,
-                        sal_uInt16 nPrefix, const OUString& rLocalName,
                         const Reference< beans::XPropertySet >& rAxisProps );
 
     virtual void StartElement( const Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -611,92 +608,51 @@ void SchXMLAxisContext::SetAxisTitle()
     }
 }
 
-namespace
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLAxisContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-enum AxisChildTokens
-{
-    XML_TOK_AXIS_TITLE,
-    XML_TOK_AXIS_CATEGORIES,
-    XML_TOK_AXIS_GRID,
-    XML_TOK_AXIS_DATE_SCALE,
-    XML_TOK_AXIS_DATE_SCALE_EXT
-};
-
-const SvXMLTokenMapEntry aAxisChildTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,      XML_TITLE,              XML_TOK_AXIS_TITLE          },
-    { XML_NAMESPACE_CHART,      XML_CATEGORIES,         XML_TOK_AXIS_CATEGORIES     },
-    { XML_NAMESPACE_CHART,      XML_GRID,               XML_TOK_AXIS_GRID           },
-    { XML_NAMESPACE_CHART,      XML_DATE_SCALE,         XML_TOK_AXIS_DATE_SCALE     },
-    { XML_NAMESPACE_CHART_EXT,  XML_DATE_SCALE,         XML_TOK_AXIS_DATE_SCALE_EXT },
-    XML_TOKEN_MAP_END
-};
-
-class AxisChildTokenMap : public SvXMLTokenMap
-{
-public:
-    AxisChildTokenMap(): SvXMLTokenMap( aAxisChildTokenMap ) {}
-    virtual ~AxisChildTokenMap() {}
-};
-
-//a AxisChildTokenMap Singleton
-struct theAxisChildTokenMap : public rtl::Static< AxisChildTokenMap, theAxisChildTokenMap > {};
-}
-
-SvXMLImportContextRef SchXMLAxisContext::CreateChildContext(
-    sal_uInt16 p_nPrefix,
-    const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList >& xAttrList )
-{
-    SvXMLImportContext* pContext = nullptr;
-    const SvXMLTokenMap& rTokenMap = theAxisChildTokenMap::get();
-
-    switch( rTokenMap.Get( p_nPrefix, rLocalName ))
+    switch( nElement )
     {
-        case XML_TOK_AXIS_TITLE:
+        case XML_ELEMENT(CHART, XML_TITLE):
         {
             Reference< drawing::XShape > xTitleShape = getTitleShape();
-            pContext = new SchXMLTitleContext( m_rImportHelper, GetImport(), rLocalName,
+            return new SchXMLTitleContext( m_rImportHelper, GetImport(),
                                                m_aCurrentAxis.aTitle,
                                                xTitleShape );
         }
         break;
 
-        case XML_TOK_AXIS_CATEGORIES:
-            pContext = new SchXMLCategoriesContext( GetImport(),
-                                                          p_nPrefix, rLocalName,
-                                                          m_rCategoriesAddress );
+        case XML_ELEMENT(CHART, XML_CATEGORIES):
             m_aCurrentAxis.bHasCategories = true;
+            return new SchXMLCategoriesContext( GetImport(),
+                                                m_rCategoriesAddress );
             break;
 
-        case XML_TOK_AXIS_DATE_SCALE:
-        case XML_TOK_AXIS_DATE_SCALE_EXT:
-            pContext = new DateScaleContext( GetImport(),
-                            p_nPrefix, rLocalName, m_xAxisProps );
+        case  XML_ELEMENT(CHART, XML_DATE_SCALE):
+        case  XML_ELEMENT(CHART_EXT, XML_DATE_SCALE):
             m_bDateScaleImported = true;
+            return new DateScaleContext( GetImport(), m_xAxisProps );
             break;
 
-        case XML_TOK_AXIS_GRID:
+        case XML_ELEMENT(CHART, XML_GRID):
         {
-            sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
             bool bIsMajor = true;       // default value for class is "major"
             OUString sAutoStyleName;
 
-            for( sal_Int16 i = 0; i < nAttrCount; i++ )
+            for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
             {
-                OUString sAttrName = xAttrList->getNameByIndex( i );
-                OUString aLocalName;
-                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-                if( nPrefix == XML_NAMESPACE_CHART )
+                switch (aIter.getToken())
                 {
-                    if( IsXMLToken( aLocalName, XML_CLASS ) )
-                    {
-                        if( IsXMLToken( xAttrList->getValueByIndex( i ), XML_MINOR ) )
+                    case XML_ELEMENT(CHART, XML_CLASS):
+                        if( IsXMLToken( aIter.toString(), XML_MINOR ) )
                             bIsMajor = false;
-                    }
-                    else if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
-                        sAutoStyleName = xAttrList->getValueByIndex( i );
+                        break;
+                    case XML_ELEMENT(CHART, XML_STYLE_NAME):
+                        sAutoStyleName = aIter.toString();
+                        break;
+                    default:
+                        XMLOFF_WARN_UNKNOWN("xmloff", aIter);
                 }
             }
 
@@ -707,10 +663,11 @@ SvXMLImportContextRef SchXMLAxisContext::CreateChildContext(
         break;
 
         default:
+            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
             break;
     }
 
-    return pContext;
+    return nullptr;
 }
 
 void SchXMLAxisContext::endFastElement(sal_Int32 )
@@ -868,10 +825,8 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
 
 SchXMLCategoriesContext::SchXMLCategoriesContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     OUString& rAddress ) :
-        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrAddress( rAddress )
 {
 }
@@ -896,10 +851,8 @@ void SchXMLCategoriesContext::StartElement( const Reference< xml::sax::XAttribut
 
 DateScaleContext::DateScaleContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     const Reference< beans::XPropertySet >& rAxisProps ) :
-        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        SvXMLImportContext( rImport ),
         m_xAxisProps( rAxisProps )
 {
 }

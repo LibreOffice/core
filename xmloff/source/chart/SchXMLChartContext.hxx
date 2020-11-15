@@ -134,7 +134,7 @@ private:
 
 public:
     SchXMLTitleContext( SchXMLImportHelper& rImpHelper,
-                        SvXMLImport& rImport, const OUString& rLocalName,
+                        SvXMLImport& rImport,
                         OUString& rTitle,
                         css::uno::Reference< css::drawing::XShape > const & xTitleShape );
     virtual ~SchXMLTitleContext() override;
