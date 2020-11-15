@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/outlobj.hxx>
-
 #include <controller/SlsSlotManager.hxx>
 #include <SlideSorter.hxx>
 #include <SlideSorterViewShell.hxx>

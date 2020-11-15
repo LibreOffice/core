@@ -23,7 +23,7 @@
 #include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svl/style.hxx>
-#include <svx/svdobj.hxx>
+#include <svx/svdobjkind.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/cjkoptions.hxx>

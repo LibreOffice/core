@@ -14,10 +14,8 @@
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 
-#include <sfx2/sfxdlg.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <svl/aeitem.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/xfillit0.hxx>
 #include <vcl/svapp.hxx>

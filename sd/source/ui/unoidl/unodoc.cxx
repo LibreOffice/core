@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustring.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <sddll.hxx>
 #include <DrawDocShell.hxx>

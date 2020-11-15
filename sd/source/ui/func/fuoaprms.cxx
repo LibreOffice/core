@@ -26,7 +26,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svdopath.hxx>
