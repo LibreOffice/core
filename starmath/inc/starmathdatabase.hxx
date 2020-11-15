@@ -43,7 +43,7 @@ constexpr Color COL_SM_BLUE(0x0000FF);
 constexpr Color COL_SM_TEAL(0x008080);
 constexpr Color COL_SM_AQUA(0x00FFFF);
 /* CSS Level 2 */
-// TODO
+constexpr Color COL_SM_ORANGE(0xFFA500);
 /* CSS Level 3 */
 // TODO
 /* CSS Level 4 */
