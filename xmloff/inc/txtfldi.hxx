@@ -361,10 +361,9 @@ public:
         const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 
     /// handle database-location children
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /** import database name fields (<text:database-name>) */
