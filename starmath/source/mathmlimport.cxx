@@ -698,7 +698,9 @@ void SmXMLContext_Helper::ApplyAttrs()
     {
         std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
         aSmColorTokenTableEntry = starmathdatabase::Identify_ColorName_HTML( sColor );
-        if( aSmColorTokenTableEntry )
+        if( aSmColorTokenTableEntry->eType == TRGB )
+            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( sal_uInt32(aSmColorTokenTableEntry->cColor) );
+        if( aSmColorTokenTableEntry->eType != TERROR )
         {
             aToken = aSmColorTokenTableEntry;
             std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));

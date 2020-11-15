@@ -64,6 +64,7 @@ namespace o3tl {
 // Tokens identifiers. Allow to know what kind of information the node contains.
 enum SmTokenType
 {
+    // clang-format off
     // Uncategorized
     TEND,           TSPECIAL,       TNONE,          TESCAPE,        TUNKNOWN,
     TBLANK,         TSBLANK,        TPLACE,         TNOSPACE,       TDOTSDOWN,
@@ -139,6 +140,7 @@ enum SmTokenType
     // Color
     TRGB,           TRGBA,          THEX,           THTMLCOL,       TDVIPSNAMESCOL,
     TICONICCOL
+    // clang-format on
 };
 
 struct SmTokenTableEntry
