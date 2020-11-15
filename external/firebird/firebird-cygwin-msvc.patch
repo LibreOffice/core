@@ -492,18 +492,15 @@ diff -ur extern/btyacc/main.c extern/btyacc/main.c
 diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
 --- extern/btyacc/Makefile	2016-07-07 13:55:55.448234695 +0200
 +++ extern/btyacc/Makefile	2016-07-07 14:57:42.284333961 +0200
-@@ -42,7 +42,10 @@
+@@ -42,7 +42,7 @@
  all:		$(PROGRAM)
-
+ 
  $(PROGRAM):     $(OBJS) $(LIBS)
 -		$(CC) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
-+		$(CC) -o $(PROGRAM).exe $(OBJS) $(LIBS) $(LDFLAGS)
-+
-+%.o: %.c
-+		$(CC)  -c $< -Fo$@ $(CCFLAGS)
-
- clean:;		rm -f $(OBJS)
-
++		$(CC) $(LDFLAGS) -o $(PROGRAM).exe $(OBJS) $(LIBS)
+ 
+ %.o: %.c
+ 		$(CC) $(CCFLAGS) -c $< -o $@
 --- extern/cloop/src/tests/test1/CppTest.cpp	2016-07-07 15:56:27.948015300 +0200
 +++ extern/cloop/src/tests/test1/CppTest.cpp	2016-07-13 18:58:48.529822600 +0200
 @@ -24,6 +24,7 @@
@@ -555,6 +552,17 @@ diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
  	$(BIN_DIR)/test1-c$(SHRLIB_EXT)	\
  	$(BIN_DIR)/test1-c$(EXE_EXT)	\
  	$(BIN_DIR)/test1-cpp$(SHRLIB_EXT)	\
+@@ -63,6 +63,10 @@
+ 
+ mkdirs: $(OBJ_DIRS) $(BIN_DIR) $(LIB_DIR)
+ 
++# These files have the same basename, so various conflicting intermediate files break the build
++$(BIN_DIR)/test1-c$(EXE_EXT): | $(BIN_DIR)/test1-c$(SHRLIB_EXT)
++$(BIN_DIR)/test1-cpp$(EXE_EXT): | $(BIN_DIR)/test1-cpp$(SHRLIB_EXT)
++
+ $(OBJ_DIRS) $(BIN_DIR) $(LIB_DIR):
+ 	@mkdir -p $@
+ 
 @@ -74,7 +74,7 @@
  -include $(addsuffix .d,$(basename $(OBJS_C)))
  -include $(addsuffix .d,$(basename $(OBJS_CPP)))
