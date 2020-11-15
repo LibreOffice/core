@@ -20,7 +20,7 @@
  
  #DYLD_PRINT_ENV=1
  #export DYLD_PRINT_ENV
-@@ -31,15 +31,15 @@
+@@ -31,8 +31,8 @@
  MACOSX_DEPLOYMENT_TARGET=10.7
  export MACOSX_DEPLOYMENT_TARGET
  
@@ -31,52 +31,6 @@
  CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden 
  
  EXE_LINK_OPTIONS:= 
- UNDEF_PLATFORM=
- 
- LINK_LIBS+=-liconv
--MATHLIB=/opt/local/lib/libtommath.a
-+MATHLIB=-ltommath
- SO_LINK_LIBS+=-liconv
- 
- include $(ROOT)/gen/darwin.defaults
---- firebird.org/builds/posix/postfix.darwin	2016-08-01 20:02:48.000000000 +0200
-+++ firebird/builds/posix/postfix.darwin	2016-08-01 22:17:49.000000000 +0200
-@@ -54,9 +54,9 @@
- 	cp -r ../gen/firebird/include $(FB_FW)/Versions/A/Headers
- 	cp ../gen/firebird/lib/libfbembed.dylib $(FB_FW)/Versions/A/Firebird
- 	cp ../gen/firebird/lib/libfbclient.dylib $(FB_FW)/Versions/A/Libraries/libfbclient.dylib
--	cp ../gen/firebird/lib/libicudata.dylib $(FB_FW)/Versions/A/Libraries/libicudata.dylib
--	cp ../gen/firebird/lib/libicui18n.dylib $(FB_FW)/Versions/A/Libraries/libicui18n.dylib
--	cp ../gen/firebird/lib/libicuuc.dylib $(FB_FW)/Versions/A/Libraries/libicuuc.dylib
-+#	cp ../gen/firebird/lib/libicudata.dylib $(FB_FW)/Versions/A/Libraries/libicudata.dylib
-+#	cp ../gen/firebird/lib/libicui18n.dylib $(FB_FW)/Versions/A/Libraries/libicui18n.dylib
-+#	cp ../gen/firebird/lib/libicuuc.dylib $(FB_FW)/Versions/A/Libraries/libicuuc.dylib
- 	cp ../gen/firebird/lib/libib_util.dylib $(FB_FW)/Versions/A/Libraries/libib_util.dylib
- 	cp ../gen/firebird/firebird.msg \
- 			$(FB_FW)/Resources/English.lproj/var/firebird.msg
-@@ -68,8 +68,8 @@
- 		$(FB_FW)/Resources/English.lproj/var/intl/fbintl.conf
- 	chmod a+rx $(FB_FW)/Resources/English.lproj/var/intl/fbintl
- 	mkdir -p $(FB_FW)/Resources/English.lproj/var/plugins
--	cp ../gen/firebird/plugins/libfbtrace.dylib \
--		$(FB_FW)/Resources/English.lproj/var/plugins/libfbtrace.dylib
-+#	cp ../gen/firebird/plugins/libfbtrace.dylib \
-+#		$(FB_FW)/Resources/English.lproj/var/plugins/libfbtrace.dylib
- 	cp -r ../gen/firebird/help $(FB_FW)/Resources/English.lproj/var/help
- 	cp ../gen/firebird/security2.fdb $(FB_FW)/Resources/English.lproj/var
- 	mkdir -p $(FB_FW)/Resources/doc
---- firebird.org/builds/posix/Makefile.in	2016-08-08 17:58:20.000000000 +0200
-+++ firebird/builds/posix/Makefile.in	2016-08-08 17:57:17.000000000 +0200
-@@ -191,6 +191,9 @@
- 	$(MAKE) plugins
- 	$(MAKE) examples
- 	$(MAKE) rest
-+	install_name_tool -id @__________________________________________________OOO/libfbclient.dylib.3.0.0 $(LIB)/libfbclient.dylib.3.0.0
-+	install_name_tool -id @__________________________________________________OOO/libEngine12.dylib $(PLUGINS)/libEngine12.dylib
-+	install_name_tool -change $(LIB)/libfbclient.dylib.3.0.0 @loader_path/libfbclient.dylib.3.0.0 $(PLUGINS)/libEngine12.dylib
- 
- 
- cross_process:
 --- firebird.org/src/common/unicode_util.cpp	2016-07-07 13:55:55.992234709 +0200
 +++ firebird/src/common/unicode_util.cpp	2016-08-10 11:25:46.422331020 +0200
 @@ -63,8 +63,8 @@
