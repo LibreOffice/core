@@ -38,6 +38,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/0001-Make-comparison-operator-member-functions-const.patch.1 \
     external/firebird/0001-Fix-warning-on-Win64-build-231.patch.1 \
 		external/firebird/macos-arm64.patch.0 \
+    external/firebird/firebird-btyacc-add-explicit-rule.patch \
 ))
 
 ifeq ($(OS),WNT)

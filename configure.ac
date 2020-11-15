@@ -9932,7 +9932,7 @@ int fb_api_is_30(void) { return 0; }
             dnl ===================================================================
             dnl Check for system libatomic_ops
             dnl ===================================================================
-            libo_CHECK_SYSTEM_MODULE([libatomic_ops],[ATOMIC_OPS],[atomic_ops >= 0.7.2])
+            libo_CHECK_SYSTEM_MODULE([libatomic_ops],[LIBATOMIC_OPS],[atomic_ops >= 0.7.2])
             if test "$with_system_libatomic_ops" = "yes"; then
                 SYSTEM_LIBATOMIC_OPS=TRUE
                 AC_CHECK_HEADERS(atomic_ops.h, [],
@@ -9955,7 +9955,7 @@ int fb_api_is_30(void) { return 0; }
             dnl check for tommath presence
             save_LIBS=$LIBS
             AC_CHECK_HEADER(tommath.h,,AC_MSG_ERROR(Include file for tommath not found - please install development tommath package))
-            AC_CHECK_LIB(tommath, mp_init, TOMMATH_LIBS=-ltommath, AC_MSG_ERROR(Library tommath not found - please install development tommath package))
+            AC_CHECK_LIB(tommath, mp_init, LIBTOMMATH_LIBS=-ltommath, AC_MSG_ERROR(Library tommath not found - please install development tommath package))
             LIBS=$save_LIBS
         else
             SYSTEM_LIBTOMMATH=
@@ -9976,8 +9976,9 @@ AC_SUBST(LIBATOMIC_OPS_LIBS)
 AC_SUBST(SYSTEM_FIREBIRD)
 AC_SUBST(FIREBIRD_CFLAGS)
 AC_SUBST(FIREBIRD_LIBS)
-AC_SUBST([TOMMATH_CFLAGS])
-AC_SUBST([TOMMATH_LIBS])
+AC_SUBST(SYSTEM_LIBTOMMATH)
+AC_SUBST(LIBTOMMATH_CFLAGS)
+AC_SUBST(LIBTOMMATH_LIBS)
 
 dnl ===================================================================
 dnl Check for system curl
