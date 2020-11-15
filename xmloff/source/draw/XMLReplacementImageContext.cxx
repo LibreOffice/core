@@ -26,12 +26,14 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <XMLReplacementImageContext.hxx>
+#include <sal/log.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 using namespace css;
+using namespace ::xmloff::token;
 
 XMLReplacementImageContext::XMLReplacementImageContext(
         SvXMLImport& rImport,
@@ -98,25 +100,21 @@ void XMLReplacementImageContext::endFastElement(sal_Int32 )
     }
 }
 
-SvXMLImportContextRef XMLReplacementImageContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLReplacementImageContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( XML_NAMESPACE_OFFICE == nPrefix &&
-        IsXMLToken( rLocalName, ::xmloff::token::XML_BINARY_DATA ) &&
+    if( nElement == XML_ELEMENT(OFFICE, XML_BINARY_DATA) &&
         !m_xBase64Stream.is() )
     {
         m_xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
         if( m_xBase64Stream.is() )
-            pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
+            return new XMLBase64ImportContext( GetImport(),
                                                     m_xBase64Stream );
     }
 
-    return pContext;
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+    return nullptr;
 }
 
 
