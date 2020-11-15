@@ -67,7 +67,7 @@ class SAL_DLLPUBLIC_RTTI SwGetRefFieldType final : public SwFieldType
     SwDoc& m_rDoc;
 
     /// Overlay in order to update all ref-fields.
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 public:
     SwGetRefFieldType(SwDoc& rDoc );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
@@ -80,6 +80,7 @@ public:
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
                                         sal_Int32* pStt, sal_Int32* pEnd = nullptr,
                                         SwRootFrame const* pLayout = nullptr);
+    void UpdateGetReferences();
 };
 
 class SW_DLLPUBLIC SwGetRefField final : public SwField
