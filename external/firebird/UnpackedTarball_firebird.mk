@@ -37,6 +37,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/firebird-tdf125284.patch.1 \
 		external/firebird/0001-Make-comparison-operator-member-functions-const.patch.1 \
     external/firebird/firebird-fix-win-thread-handle-type.patch \
+    external/firebird/firebird-btyacc-add-explicit-rule.patch \
 ))
 
 ifeq ($(OS),WNT)
