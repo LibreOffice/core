@@ -16,6 +16,24 @@
       "revId": "a4ebd2e428b6a63380c72f80813683655ebd4ee0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad17fbbb_8fd4c1f6",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 30
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2020-11-15T06:35:04Z",
+      "side": 1,
+      "message": "Okay...I understood the issue.. I will correct it.",
+      "parentUuid": "447f47f9_5542c145",
+      "revId": "a4ebd2e428b6a63380c72f80813683655ebd4ee0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
