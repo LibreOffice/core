@@ -1070,33 +1070,42 @@ std::unique_ptr<SwFieldType> SwGetRefFieldType::Copy() const
     return std::make_unique<SwGetRefFieldType>( m_rDoc );
 }
 
-void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwGetRefFieldType::UpdateGetReferences()
 {
-    // update to all GetReference fields
-    if( !pNew && !pOld )
+    std::vector<SwFormatField*> vFields;
+    GatherFields(vFields, false);
+    for(auto pFormatField: vFields)
     {
-        std::vector<SwFormatField*> vFields;
-        GatherFields(vFields, false);
-        for(auto pFormatField: vFields)
+        // update only the GetRef fields
+        //JP 3.4.2001: Task 71231 - we need the correct language
+        SwGetRefField* pGRef = static_cast<SwGetRefField*>(pFormatField->GetField());
+        const SwTextField* pTField;
+        if(!pGRef->GetLanguage() &&
+            nullptr != (pTField = pFormatField->GetTextField()) &&
+            pTField->GetpTextNode())
         {
-            // update only the GetRef fields
-            //JP 3.4.2001: Task 71231 - we need the correct language
-            SwGetRefField* pGRef = static_cast<SwGetRefField*>(pFormatField->GetField());
-            const SwTextField* pTField;
-            if( !pGRef->GetLanguage() &&
-                nullptr != ( pTField = pFormatField->GetTextField()) &&
-                pTField->GetpTextNode() )
-            {
-                pGRef->SetLanguage( pTField->GetpTextNode()->GetLang(
-                                                pTField->GetStart() ) );
-            }
-
-            // #i81002#
-            pGRef->UpdateField( pFormatField->GetTextField() );
+            pGRef->SetLanguage(pTField->GetpTextNode()->GetLang(pTField->GetStart()));
         }
+
+        // #i81002#
+        pGRef->UpdateField(pFormatField->GetTextField());
     }
-    // forward to text fields, they "expand" the text
-    NotifyClients( pOld, pNew );
+    NotifyClients(nullptr, nullptr);
+}
+
+void SwGetRefFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
+{
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    if(!pLegacy->m_pNew && !pLegacy->m_pOld)
+        // update to all GetReference fields
+        // hopefully, this codepath is soon dead code, and
+        // UpdateGetReferences gets only called directly
+        UpdateGetReferences();
+    else
+        // forward to text fields, they "expand" the text
+        NotifyClients(pLegacy->m_pOld, pLegacy->m_pNew);
 }
 
 namespace sw {
