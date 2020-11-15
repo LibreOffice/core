@@ -5322,7 +5322,6 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
                 DrawTextFlags const nStyle =
                         DrawTextFlags::Center
                         | DrawTextFlags::VCenter
-                        | DrawTextFlags::Bottom
                         | DrawTextFlags::MultiLine
                         | DrawTextFlags::WordBreak;// | DrawTextFlags::WordBreakHyphenation ;
 
