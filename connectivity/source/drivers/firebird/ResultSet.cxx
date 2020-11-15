@@ -665,10 +665,32 @@ sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 nColumnIndex)
     return safelyRetrieveValue< ORowSetValue >(nColumnIndex);
 }
 
-Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32)
+Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 nColumnIndex)
 {
-    return Sequence< sal_Int8 >(); // TODO: implement
-    //return safelyRetrieveValue(columnIndex);
+    // &~1 to remove the "can contain NULL" indicator
+    int aSqlType = m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1;
+    if ( aSqlType == SQL_BLOB )
+    {
+        Reference< XBlob> xBlob = getBlob(nColumnIndex);
+        if (xBlob.is())
+        {
+            const sal_Int64 aBlobLength = xBlob->length();
+            if (aBlobLength > SAL_MAX_INT32)
+            {
+                SAL_WARN("connectivity.firebird", "getBytes can't return " << aBlobLength << " bytes but only max " << SAL_MAX_INT32);
+                return xBlob->getBytes(1, SAL_MAX_INT32);
+            }
+            return xBlob->getBytes(1, static_cast<sal_Int32>(aBlobLength));
+        }
+        else
+            return Sequence< sal_Int8 >();
+    }
+    // TODO implement SQL_VARYING and SQL_TEXT
+    // as it's the counterpart as OPreparedStatement::setBytes
+    else
+    {
+        return Sequence< sal_Int8 >(); // TODO: implement
+    }
 }
 
 sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 columnIndex)
