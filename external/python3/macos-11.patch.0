@@ -36,3 +36,15 @@
          system_include_dirs = ['/usr/include']
          # lib_dirs and inc_dirs are used to search for files;
          # if a file is found in one of those directories, it can
+--- Modules/_decimal/libmpdec/mpdecimal.h
++++ Modules/_decimal/libmpdec/mpdecimal.h
+@@ -135,6 +135,9 @@
+   #elif defined(__x86_64__)
+     #define CONFIG_64
+     #define ASM
++  #elif defined(__arm64__)
++    #define CONFIG_64
++    #define ANSI
+   #else
+     #error "unknown architecture for universal build."
+   #endif
