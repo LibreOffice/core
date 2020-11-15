@@ -21,7 +21,6 @@
 #include <svx/svdpagv.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
-#include <svl/aeitem.hxx>
 #include <svtools/unitconv.hxx>
 #include <tools/debug.hxx>
 

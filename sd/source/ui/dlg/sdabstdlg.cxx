@@ -20,7 +20,6 @@
 #include <sdabstdlg.hxx>
 
 #include <osl/module.hxx>
-#include <rtl/ustring.hxx>
 
 typedef SdAbstractDialogFactory* (*SdFuncPtrCreateDialogFactory)();
 

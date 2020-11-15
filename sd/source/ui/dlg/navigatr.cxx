@@ -28,25 +28,20 @@
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <vcl/menu.hxx>
-
 #include <sfx2/viewfrm.hxx>
 
 #include <pres.hxx>
 #include <navigatr.hxx>
 #include <pgjump.hxx>
 #include <app.hrc>
-#include <strings.hrc>
 
 #include <bitmaps.hlst>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
-#include <sdresid.hxx>
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <slideshow.hxx>
 #include <FrameView.hxx>
-#include <helpids.h>
 #include <Window.hxx>
 
 /**

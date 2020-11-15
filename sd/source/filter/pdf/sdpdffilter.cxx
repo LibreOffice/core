@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <svx/svxids.hrc>
 #include <sfx2/docfile.hxx>
 #include <svx/svdograf.hxx>
 

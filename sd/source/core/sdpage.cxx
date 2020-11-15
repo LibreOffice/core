@@ -22,8 +22,8 @@
 
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
-#include <comphelper/lok.hxx>
 
+#include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
@@ -37,7 +37,6 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdopage.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <editeng/pbinitem.hxx>
 #include <svx/svdundo.hxx>
 #include <svl/hint.hxx>
@@ -86,8 +85,6 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/unoapi.hxx>
 #include <unokywds.hxx>
-
-#include <set>
 
 using namespace ::sd;
 using namespace ::com::sun::star;

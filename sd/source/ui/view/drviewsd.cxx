@@ -20,7 +20,6 @@
 #include <DrawViewShell.hxx>
 
 #include <svx/svxids.hrc>
-#include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/docfile.hxx>

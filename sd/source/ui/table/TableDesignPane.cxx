@@ -50,7 +50,6 @@
 #include <editeng/eeitem.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <o3tl/enumrange.hxx>
-#include <o3tl/string_view.hxx>
 
 #include "TableDesignPane.hxx"
 #include <createtabledesignpanel.hxx>

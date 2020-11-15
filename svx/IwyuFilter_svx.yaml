@@ -1,11 +1,6 @@
 ---
 assumeFilename: svx/source/svdraw/svdobj.cxx
 excludelist:
-    svx/source/inc/svdpdf.hxx:
-    # Needed for SdrPdfImportTest in sd to compile on WIN
-    - prewin.h
-    - postwin.h
-    - fpdfview.h
     svx/source/accessibility/ChildrenManagerImpl.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
