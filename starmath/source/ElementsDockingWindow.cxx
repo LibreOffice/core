@@ -191,7 +191,14 @@ const SmElementDescr SmElementsControl::m_aAttributesList[] =
     {RID_COLORX_NAVY, RID_COLORX_NAVY_HELP}, {RID_COLORX_OLIVE, RID_COLORX_OLIVE_HELP},
     {RID_COLORX_PURPLE, RID_COLORX_PURPLE_HELP}, {RID_COLORX_SILVER, RID_COLORX_SILVER_HELP},
     {RID_COLORX_TEAL, RID_COLORX_TEAL_HELP},{RID_COLORX_RGB, RID_COLORX_RGB_HELP},
-    {RID_COLORX_HEX, RID_COLORX_HEX_HELP}
+    {RID_COLORX_HEX, RID_COLORX_HEX_HELP},
+    {nullptr, nullptr},
+    {RID_COLORX_CORAL, RID_COLORX_CORAL_HELP}, {RID_COLORX_MIDNIGHT, RID_COLORX_MIDNIGHT_HELP},
+    {RID_COLORX_CRIMSON, RID_COLORX_CRIMSON_HELP}, {RID_COLORX_VIOLET, RID_COLORX_VIOLET_HELP},
+    {RID_COLORX_ORANGE, RID_COLORX_ORANGE_HELP}, {RID_COLORX_ORANGERED, RID_COLORX_ORANGERED_HELP},
+    {RID_COLORX_SEAGREEN, RID_COLORX_SEAGREEN_HELP}, {RID_COLORX_INDIGO, RID_COLORX_INDIGO_HELP},
+    {RID_COLORX_HOTPINK, RID_COLORX_HOTPINK_HELP}, {RID_COLORX_LAVENDER, RID_COLORX_LAVENDER_HELP},
+    {RID_COLORX_SNOW, RID_COLORX_SNOW_HELP},
 };
 
 const SmElementDescr SmElementsControl::m_aBracketsList[] =
@@ -933,6 +940,28 @@ void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_u
                 addElement(aParser, "color silver { \"" + SmResId(STR_SILVER) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_TEAL)
                 addElement(aParser, "color teal { \"" + SmResId(STR_TEAL) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_CORAL)
+                addElement(aParser, "color coral { \"" + SmResId(STR_CORAL) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_CRIMSON)
+                addElement(aParser, "color crimson { \"" + SmResId(STR_CRIMSON) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_MIDNIGHT)
+                addElement(aParser, "color midnightblue { \"" + SmResId(STR_MIDNIGHT) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_VIOLET)
+                addElement(aParser, "color violet { \"" + SmResId(STR_VIOLET) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_ORANGE)
+                addElement(aParser, "color orange { \"" + SmResId(STR_ORANGE) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_ORANGERED)
+                addElement(aParser, "color orangered { \"" + SmResId(STR_ORANGERED) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_SEAGREEN)
+                addElement(aParser, "color seagreen { \"" + SmResId(STR_SEAGREEN) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_INDIGO)
+                addElement(aParser, "color indigo { \"" + SmResId(STR_INDIGO) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_HOTPINK)
+                addElement(aParser, "color hotpink { \"" + SmResId(STR_HOTPINK) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_SNOW)
+                addElement(aParser, "color snow { \"" + SmResId(STR_SNOW) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_LAVENDER)
+                addElement(aParser, "color lavender { \"" + SmResId(STR_LAVENDER) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_RGB)
                 addElement(aParser, "color rgb 0 0 0 { \"" + SmResId(STR_RGB) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_RGBA)
