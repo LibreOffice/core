@@ -81,7 +81,8 @@ private:
 public:
     SchXMLCategoriesContext( SvXMLImport& rImport,
                                    OUString& rAddress );
-    virtual void StartElement( const Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class DateScaleContext : public SvXMLImportContext
@@ -90,7 +91,8 @@ public:
     DateScaleContext( SvXMLImport& rImport,
                         const Reference< beans::XPropertySet >& rAxisProps );
 
-    virtual void StartElement( const Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
     Reference< beans::XPropertySet > m_xAxisProps;
@@ -227,65 +229,27 @@ void SchXMLAxisContext::CreateGrid( const OUString& sAutoStyleName, bool bIsMajo
     }
 }
 
-namespace
-{
-enum AxisAttributeTokens
-{
-    XML_TOK_AXIS_DIMENSION,
-    XML_TOK_AXIS_NAME,
-    XML_TOK_AXIS_STYLE_NAME,
-    XML_TOK_AXIS_TYPE,
-    XML_TOK_AXIS_TYPE_EXT
-};
-
-const SvXMLTokenMapEntry aAxisAttributeTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,      XML_DIMENSION,  XML_TOK_AXIS_DIMENSION      },
-    { XML_NAMESPACE_CHART,      XML_NAME,       XML_TOK_AXIS_NAME           },
-    { XML_NAMESPACE_CHART,      XML_STYLE_NAME, XML_TOK_AXIS_STYLE_NAME     },
-    { XML_NAMESPACE_CHART,      XML_AXIS_TYPE,  XML_TOK_AXIS_TYPE           },
-    { XML_NAMESPACE_CHART_EXT,  XML_AXIS_TYPE,  XML_TOK_AXIS_TYPE_EXT       },
-    XML_TOKEN_MAP_END
-};
-
-class AxisAttributeTokenMap : public SvXMLTokenMap
-{
-public:
-    AxisAttributeTokenMap(): SvXMLTokenMap( aAxisAttributeTokenMap ) {}
-    virtual ~AxisAttributeTokenMap() {}
-};
-
-//a AxisAttributeTokenMap Singleton
-struct theAxisAttributeTokenMap : public rtl::Static< AxisAttributeTokenMap, theAxisAttributeTokenMap > {};
-}
-
-void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLAxisContext::startFastElement( sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    const SvXMLTokenMap& rAttrTokenMap = theAxisAttributeTokenMap::get();
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        OUString aValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            case XML_TOK_AXIS_DIMENSION:
+            case XML_ELEMENT(CHART, XML_DIMENSION):
                 {
                     SchXMLAxisDimension nEnumVal;
                     if( SvXMLUnitConverter::convertEnum( nEnumVal, aValue, aXMLAxisDimensionMap ))
                         m_aCurrentAxis.eDimension = nEnumVal;
                 }
                 break;
-            case XML_TOK_AXIS_NAME:
+            case XML_ELEMENT(CHART, XML_NAME):
                 m_aCurrentAxis.aName = aValue;
                 break;
-            case XML_TOK_AXIS_TYPE:
-            case XML_TOK_AXIS_TYPE_EXT:
+            case XML_ELEMENT(CHART, XML_AXIS_TYPE):
+            case XML_ELEMENT(CHART_EXT, XML_AXIS_TYPE):
                 sal_uInt16 nEnumVal;
                 if( SvXMLUnitConverter::convertEnum( nEnumVal, aValue, aXMLAxisTypeMap ))
                 {
@@ -293,9 +257,11 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
                     m_bAxisTypeImported = true;
                 }
                 break;
-            case XML_TOK_AXIS_STYLE_NAME:
+            case XML_ELEMENT(CHART, XML_STYLE_NAME):
                 m_aAutoStyleName = aValue;
                 break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -831,21 +797,15 @@ SchXMLCategoriesContext::SchXMLCategoriesContext(
 {
 }
 
-void SchXMLCategoriesContext::StartElement( const Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLCategoriesContext::startFastElement( sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_TABLE &&
-            IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
-        {
-            mrAddress = xAttrList->getValueByIndex( i );
-        }
+        if( aIter.getToken() == XML_ELEMENT(TABLE, XML_CELL_RANGE_ADDRESS) )
+            mrAddress = aIter.toString();
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 }
 
@@ -868,25 +828,6 @@ enum DateScaleAttributeTokens
     XML_TOK_DATESCALE_MINOR_INTERVAL_UNIT
 };
 
-const SvXMLTokenMapEntry aDateScaleAttributeTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_BASE_TIME_UNIT,         XML_TOK_DATESCALE_BASE_TIME_UNIT  },
-    { XML_NAMESPACE_CHART,  XML_MAJOR_INTERVAL_VALUE,   XML_TOK_DATESCALE_MAJOR_INTERVAL_VALUE  },
-    { XML_NAMESPACE_CHART,  XML_MAJOR_INTERVAL_UNIT,    XML_TOK_DATESCALE_MAJOR_INTERVAL_UNIT  },
-    { XML_NAMESPACE_CHART,  XML_MINOR_INTERVAL_VALUE,   XML_TOK_DATESCALE_MINOR_INTERVAL_VALUE  },
-    { XML_NAMESPACE_CHART,  XML_MINOR_INTERVAL_UNIT,    XML_TOK_DATESCALE_MINOR_INTERVAL_UNIT  },
-    XML_TOKEN_MAP_END
-};
-
-class DateScaleAttributeTokenMap : public SvXMLTokenMap
-{
-public:
-    DateScaleAttributeTokenMap(): SvXMLTokenMap( aDateScaleAttributeTokenMap ) {}
-    virtual ~DateScaleAttributeTokenMap() {}
-};
-
-struct theDateScaleAttributeTokenMap : public rtl::Static< DateScaleAttributeTokenMap, theDateScaleAttributeTokenMap > {};
-
 sal_Int32 lcl_getTimeUnit( const OUString& rValue )
 {
     sal_Int32 nTimeUnit = css::chart::TimeUnit::DAY;
@@ -901,35 +842,29 @@ sal_Int32 lcl_getTimeUnit( const OUString& rValue )
 
 }
 
-void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >& xAttrList )
+void DateScaleContext::startFastElement( sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( !m_xAxisProps.is() )
         return;
 
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    const SvXMLTokenMap& rAttrTokenMap = theDateScaleAttributeTokenMap::get();
-
     bool bSetNewIncrement=false;
     chart::TimeIncrement aIncrement;
     m_xAxisProps->getPropertyValue("TimeIncrement") >>= aIncrement;
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        OUString aValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-            case XML_TOK_DATESCALE_BASE_TIME_UNIT:
+            case  XML_ELEMENT(CHART, XML_BASE_TIME_UNIT):
                 {
                     aIncrement.TimeResolution <<= lcl_getTimeUnit(aValue);
                     bSetNewIncrement = true;
                 }
                 break;
-            case XML_TOK_DATESCALE_MAJOR_INTERVAL_VALUE:
+            case XML_ELEMENT(CHART, XML_MAJOR_INTERVAL_VALUE):
                 {
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MajorTimeInterval >>= aInterval;
@@ -938,7 +873,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
                     bSetNewIncrement = true;
                 }
                 break;
-            case XML_TOK_DATESCALE_MAJOR_INTERVAL_UNIT:
+            case  XML_ELEMENT(CHART, XML_MAJOR_INTERVAL_UNIT):
                 {
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MajorTimeInterval >>= aInterval;
@@ -947,7 +882,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
                     bSetNewIncrement = true;
                 }
                 break;
-            case XML_TOK_DATESCALE_MINOR_INTERVAL_VALUE:
+            case XML_ELEMENT(CHART, XML_MINOR_INTERVAL_VALUE):
                 {
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MinorTimeInterval >>= aInterval;
@@ -956,7 +891,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
                     bSetNewIncrement = true;
                 }
                 break;
-            case XML_TOK_DATESCALE_MINOR_INTERVAL_UNIT:
+            case  XML_ELEMENT(CHART, XML_MINOR_INTERVAL_UNIT):
                 {
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MinorTimeInterval >>= aInterval;
@@ -965,6 +900,8 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
                     bSetNewIncrement = true;
                 }
                 break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
