@@ -1214,34 +1214,32 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
     }
 }
 
-SvXMLImportContextRef XMLDatabaseFieldImportContext::CreateChildContext(
-    sal_uInt16 p_nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLDatabaseFieldImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if( ( p_nPrefix == XML_NAMESPACE_FORM ) &&
-        IsXMLToken( rLocalName, XML_CONNECTION_RESOURCE ) )
+    if (nElement == XML_ELEMENT(FORM, XML_CONNECTION_RESOURCE) )
     {
-        // process attribute list directly
-        sal_Int16 nLength = xAttrList->getLength();
-        for( sal_Int16 n = 0; n < nLength; n++ )
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         {
-            OUString sLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                GetKeyByAttrName( xAttrList->getNameByIndex(n), &sLocalName );
-
-            if( ( nPrefix == XML_NAMESPACE_XLINK ) &&
-                IsXMLToken( sLocalName, XML_HREF ) )
+            switch (aIter.getToken())
             {
-                m_sDatabaseURL = xAttrList->getValueByIndex(n);
-                m_bDatabaseOK = true;
-                m_bDatabaseURLOK = true;
+                case XML_ELEMENT(XLINK, XML_HREF):
+                {
+                    m_sDatabaseURL = aIter.toString();
+                    m_bDatabaseOK = true;
+                    m_bDatabaseURLOK = true;
+                }
+                break;
+                default:;
             }
         }
 
         // we call ProcessAttribute in order to set bValid appropriately
         ProcessAttribute( XML_TOKEN_INVALID, OUString() );
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     return nullptr;
 }
