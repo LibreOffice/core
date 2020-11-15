@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5ab6e19_0651ea36",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-15T10:10:45Z",
+      "side": 1,
+      "message": "I\u0027m sorry for not catching this overly verbose construct earlier. It\u0027s OK syntactically, but is better written in one line:\n\n    xProps-\u003esetPropertyValue(\"CodeName\", uno::Any(OUString(\"...\")));",
+      "range": {
+        "startLine": 820,
+        "startChar": 8,
+        "endLine": 822,
+        "endChar": 53
+      },
+      "revId": "d02f5da38a8c6babf6c279a8fbc531ff3bf7366f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
