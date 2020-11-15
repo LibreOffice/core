@@ -1,0 +1,11 @@
+--- builds/posix/make.defaults.orig	2020-11-15 20:27:13.237727048 +0100
++++ builds/posix/make.defaults	2020-11-15 20:28:11.877113339 +0100
+@@ -130,7 +130,7 @@
+ CAS_OPTIONS=@CAS_OPTIONS@
+ 
+ # multiple-precision integer library
+-MATHLIB=@MATHLIB@
++MATHLIB=$(LIBTOMATH_LIBDIR) @MATHLIB@
+ 
+ # switch to make sed edit files inplace
+ INLINE_EDIT_SED:= -i
