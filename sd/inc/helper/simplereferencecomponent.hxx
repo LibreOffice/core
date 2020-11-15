@@ -22,8 +22,6 @@
 
 #include <osl/interlck.h>
 
-#include <sddllapi.h>
-
 namespace sd
 {
 /** A simple base implementation for reference-counted components.

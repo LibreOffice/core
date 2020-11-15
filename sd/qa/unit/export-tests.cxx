@@ -20,8 +20,10 @@
 #include <unotools/mediadescriptor.hxx>
 #include <rtl/ustring.hxx>
 
+#ifdef _WIN32
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
+#endif
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>

@@ -16,17 +16,11 @@
 #include <test/helper/transferable.hxx>
 #include <test/xmltesttools.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
-#include <svl/stritem.hxx>
 #include <vcl/scheduler.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShell.hxx>

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <Window.hxx>
 #include <DrawDocShell.hxx>
 
 #include <svx/svxids.hrc>
@@ -38,7 +37,6 @@
 #include <editeng/editobj.hxx>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
-#include <drawview.hxx>
 #include <editeng/editeng.hxx>
 
 #include <sdmod.hxx>

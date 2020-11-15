@@ -31,7 +31,6 @@
 #include <osl/conditn.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/srchitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <comphelper/lok.hxx>

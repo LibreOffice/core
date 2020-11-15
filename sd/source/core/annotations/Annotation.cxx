@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <Annotation.hxx>
+#include <drawdoc.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 

@@ -31,16 +31,16 @@
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
-#include <sdmod.hxx>
-#include <optsitem.hxx>
 #include "PageMarginUtils.hxx"
 #include <strings.hrc>
 #include <pageformatpanel.hrc>
 #include <DrawViewShell.hxx>
+#include <svl/intitem.hxx>
 #include <svx/colorbox.hxx>
+#include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/itemwin.hxx>
 #include <svx/pageitem.hxx>
-#include <tools/urlobj.hxx>
 #include <app.hrc>
 #include <editeng/paperinf.hxx>
 #include <svx/xflgrit.hxx>
@@ -62,10 +62,8 @@
 
 #include <editeng/sizeitem.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unomodel.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <boost/property_tree/ptree.hpp>
 
 using namespace ::com::sun::star;
 

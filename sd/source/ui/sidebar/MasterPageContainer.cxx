@@ -24,14 +24,12 @@
 #include "MasterPageContainerFiller.hxx"
 #include "MasterPageContainerQueue.hxx"
 #include <PreviewRenderer.hxx>
-#include <tools/AsynchronousTask.hxx>
 #include <tools/SdGlobalResourceContainer.hxx>
 #include <strings.hrc>
 #include <algorithm>
 #include <memory>
 
 #include <unomodel.hxx>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>

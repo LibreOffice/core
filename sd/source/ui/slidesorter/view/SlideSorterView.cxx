@@ -35,7 +35,6 @@
 #include <model/SlsPageDescriptor.hxx>
 #include <cache/SlsPageCache.hxx>
 #include <cache/SlsPageCacheManager.hxx>
-#include <cache/SlsCacheContext.hxx>
 #include <PaneDockingWindow.hxx>
 
 #include <sdpage.hxx>

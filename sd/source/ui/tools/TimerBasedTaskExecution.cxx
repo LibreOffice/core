@@ -20,7 +20,6 @@
 #include <tools/TimerBasedTaskExecution.hxx>
 #include <tools/AsynchronousTask.hxx>
 #include <tools/time.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <memory>
 

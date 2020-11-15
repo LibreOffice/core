@@ -1,6 +1,22 @@
 ---
 assumeFilename: sd/source/core/drawdoc.cxx
 excludelist:
+    sd/qa/unit/SdrPdfImportTest.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    # Needed on WIN to compile
+    - prewin.h
+    - postwin.h
+    - fpdfview.h
+    sd/sdi/sdslots.hrc:
+    # Needed for sdi files to compile
+    - sfx2/sfxsids.hrc
+    - editeng/editids.hrc
+    - editeng/memberids.h
+    - svx/svxids.hrc
+    - svx/unomid.hxx
+    - app.hrc
+    - sdattr.hrc
     sd/inc/CustomAnimationCloner.hxx:
     # base class has to be a complete type
     - com/sun/star/animations/XAnimationNode.hpp
@@ -414,6 +430,9 @@ excludelist:
     - svx/xlnwtit.hxx
     - svx/xtextit0.hxx
     - svx/zoomslideritem.hxx
+    sd/source/core/drawdoc.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sd/source/core/text/textapi.cxx:
     # Needed for macro defines
     - editeng/unoprnms.hxx
@@ -423,6 +442,9 @@ excludelist:
     sd/source/filter/eppt/pptx-animations.hxx:
     # Needed for typedef
     - sax/fshelper.hxx
+    sd/source/filter/eppt/pptexanimations.cxx:
+    # Needed for template
+    - com/sun/star/drawing/XDrawPage.hpp
     sd/source/filter/eppt/pptx-epptooxml.cxx:
     # Needed for direct member access
     - com/sun/star/task/XStatusIndicator.hpp
@@ -433,12 +455,21 @@ excludelist:
     - com/sun/star/beans/XPropertyState.hpp
     - com/sun/star/style/TabStop.hpp
     - com/sun/star/graphic/XGraphic.hpp
+    sd/source/filter/eppt/epptso.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sd/source/filter/ppt/pptinanimations.cxx:
+    # Needed for template
+    - com/sun/star/drawing/XDrawPage.hpp
     sd/source/filter/xml/sdxmlwrp.cxx:
     # Needed for implicit dtor
     - editeng/outlobj.hxx
     sd/source/filter/xml/sdtransform.cxx:
     # Needed for implicit dtor
     - editeng/outlobj.hxx
+    sd/source/ui/annotations/annotationtag.cxx:
+    # Needed for template
+    - com/sun/star/office/XAnnotation.hpp
     sd/source/ui/framework/configuration/ChangeRequestQueueProcessor.cxx:
     # Needed for DEBUG_SD_CONFIGURATION_TRACE
     - ConfigurationTracer.hxx
@@ -463,15 +494,56 @@ excludelist:
     sd/source/ui/func/fuhhconv.cxx:
     # Needed for direct member access
     - com/sun/star/awt/XWindow.hpp
+    sd/source/ui/dlg/RemoteDialogClientBox.cxx:
+    # Actually used
+    - vector
+    sd/source/ui/dlg/sdtreelb.cxx:
+    # Needed for template
+    - com/sun/star/embed/XEmbeddedObject.hpp
+    sd/source/ui/func/futempl.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sd/source/ui/presenter/PresenterHelper.cxx:
+    # Needed for template
+    - com/sun/star/awt/XWindowPeer.hpp
+    sd/source/ui/sidebar/MasterPageObserver.cxx:
+    # Actually used
+    - set
+    sd/source/ui/slideshow/PaneHider.cxx:
+    # Needed for template
+    - com/sun/star/frame/XController.hpp
     sd/source/ui/slidesorter/view/SlsInsertionIndicatorOverlay.cxx:
     # Needed for instantiation of function template specialization
     - Window.hxx
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    sd/source/ui/slidesorter/cache/SlsRequestQueue.cxx:
+    # Needed for  OSL_DEBUG_LEVEL >=2
+    - sal/log.hxx
+    sd/source/ui/slidesorter/controller/SlsCurrentSlideManager.cxx:
+    # Needed for template
+    - com/sun/star/frame/XController.hpp
+    sd/source/ui/slidesorter/controller/SlsListener.cxx:
+    # Needed for template
+    - com/sun/star/frame/FrameActionEvent.hpp
+    sd/source/ui/unoidl/sddetect.cxx:
+    # Needed for template
+    - com/sun/star/beans/PropertyValue.hpp
+    sd/source/ui/unoidl/unoobj.cxx:
+    # Needed for template
+    - com/sun/star/beans/PropertyState.hpp
+    sd/source/ui/unoidl/unodoc.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sd/source/ui/view/GraphicObjectBar.cxx:
     # Needed by a sdslots.hxx constant
     - svx/svxids.hrc
     sd/source/ui/view/Outliner.cxx:
     # comphelper::ScopeGuard is actually used
     - comphelper/scopeguard.hxx
+    sd/source/ui/view/PresentationViewShellBase.cxx:
+    # Needed for template
+    - com/sun/star/frame/XFrame.hpp
     sd/source/ui/view/drviews1.cxx:
     # comphelper::ScopeGuard is actually used
     - comphelper/scopeguard.hxx
@@ -481,6 +553,9 @@ excludelist:
     sd/source/ui/view/drvwshrg.cxx:
     # Needed by a sdslots.hxx constant
     - app.hrc
+    sd/source/ui/view/sdview2.cxx:
+    # Needed for template
+    - com/sun/star/embed/XEmbeddedObject.hpp
     sd/source/ui/view/presvish.cxx:
     # Needed by a sdslots.hxx constant
     - svx/svxids.hrc
