@@ -21,6 +21,9 @@
 
 bool ReadDffRecordHeader(SvStream& rIn, DffRecordHeader& rRec)
 {
+    if (rIn.remainingSize() < 8)
+        return false;
+
     rRec.nFilePos = rIn.Tell();
     sal_uInt16 nTmp(0);
     rIn.ReadUInt16(nTmp);
