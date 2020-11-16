@@ -3624,10 +3624,12 @@ OUString GetLogicBase(std::unique_ptr<SfxMedium_Impl> const & pImpl)
 {
     OUString aLogicBase;
 
-// In a sandboxed environment we don't want to attempt to create temporary files in the same
-// directory where the user has selected an output file to be stored. The sandboxed process has
-// permission only to create the specifically named output file in that directory.
-#if !HAVE_FEATURE_MACOSX_SANDBOX
+#if HAVE_FEATURE_MACOSX_SANDBOX
+    // In a sandboxed environment we don't want to attempt to create temporary files in the same
+    // directory where the user has selected an output file to be stored. The sandboxed process has
+    // permission only to create the specifically named output file in that directory.
+    (void) pImpl;
+#else
 
     if (comphelper::isFileUrl(pImpl->m_aLogicName) && !pImpl->m_pInStream)
     {
