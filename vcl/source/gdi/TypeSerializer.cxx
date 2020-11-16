@@ -220,12 +220,13 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
         {
             sal_uInt32 nMagic1 = 0;
             sal_uInt32 nMagic2 = 0;
-            sal_uInt64 nBeginPosition = mrStream.Tell();
-
-            mrStream.ReadUInt32(nMagic1);
-            mrStream.ReadUInt32(nMagic2);
-            mrStream.Seek(nBeginPosition);
-
+            if (mrStream.remainingSize() >= 8)
+            {
+                sal_uInt64 nBeginPosition = mrStream.Tell();
+                mrStream.ReadUInt32(nMagic1);
+                mrStream.ReadUInt32(nMagic2);
+                mrStream.Seek(nBeginPosition);
+            }
             if (!mrStream.GetError())
             {
                 if (nMagic1 == 0x5344414e && nMagic2 == 0x494d4931)
