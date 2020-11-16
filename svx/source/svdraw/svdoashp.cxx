@@ -2325,12 +2325,16 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                 bWdtGrow = false;
             if ( nHgtGrow == 0 )
                 bHgtGrow=false;
-            if ( bWdtGrow || bHgtGrow )
+            if ( bWdtGrow || bHgtGrow || !m_aSuggestedTextFrameSize.IsEmpty())
             {
-                if ( bWdtGrow )
+                if ( bWdtGrow || m_aSuggestedTextFrameSize.Width() )
                 {
                     SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
-                    if ( eHAdj == SDRTEXTHORZADJUST_LEFT )
+                    if (m_aSuggestedTextFrameSize.Width())
+                    {
+                        rR.SetRight(rR.Left() + m_aSuggestedTextFrameSize.Width());
+                    }
+                    else if ( eHAdj == SDRTEXTHORZADJUST_LEFT )
                         rR.AdjustRight(nWdtGrow );
                     else if ( eHAdj == SDRTEXTHORZADJUST_RIGHT )
                         rR.AdjustLeft( -nWdtGrow );
@@ -2341,10 +2345,14 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                         rR.SetRight(rR.Left()+nWdt );
                     }
                 }
-                if ( bHgtGrow )
+                if ( bHgtGrow || m_aSuggestedTextFrameSize.Height() )
                 {
                     SdrTextVertAdjust eVAdj=GetTextVerticalAdjust();
-                    if ( eVAdj == SDRTEXTVERTADJUST_TOP )
+                    if (m_aSuggestedTextFrameSize.Height())
+                    {
+                        rR.SetBottom(rR.Top() + m_aSuggestedTextFrameSize.Height());
+                    }
+                    else if ( eVAdj == SDRTEXTVERTADJUST_TOP )
                         rR.AdjustBottom(nHgtGrow );
                     else if ( eVAdj == SDRTEXTVERTADJUST_BOTTOM )
                         rR.AdjustTop( -nHgtGrow );
