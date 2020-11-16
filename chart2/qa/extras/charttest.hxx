@@ -19,6 +19,7 @@
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/table/XTableChart.hpp>
 #include <com/sun/star/table/XTablePivotChartsSupplier.hpp>
@@ -612,6 +613,31 @@ awt::Size ChartTest::getSize(css::uno::Reference<chart2::XDiagram> xDiagram, con
     aSize.Width = static_cast< sal_Int32 >( ::rtl::math::round( fX ) );
     aSize.Height = static_cast< sal_Int32 >( ::rtl::math::round( fY ) );
     return aSize;
+}
+
+uno::Reference<drawing::XShape>
+getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& rName,
+               const std::function<bool(const uno::Reference<drawing::XShape>&)>& pCondition
+               = nullptr)
+{
+    for (sal_Int32 i = 0; i < rShapes->getCount(); ++i)
+    {
+        uno::Reference<drawing::XShapes> xShapes(rShapes->getByIndex(i), uno::UNO_QUERY);
+        if (xShapes.is())
+        {
+            uno::Reference<drawing::XShape> xRet = getShapeByName(xShapes, rName, pCondition);
+            if (xRet.is())
+                return xRet;
+        }
+        uno::Reference<container::XNamed> xNamedShape(rShapes->getByIndex(i), uno::UNO_QUERY);
+        if (xNamedShape->getName() == rName)
+        {
+            uno::Reference<drawing::XShape> xShape(xNamedShape, uno::UNO_QUERY);
+            if (pCondition == nullptr || pCondition(xShape))
+                return xShape;
+        }
+    }
+    return uno::Reference<drawing::XShape>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

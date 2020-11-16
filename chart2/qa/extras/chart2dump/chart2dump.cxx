@@ -10,7 +10,6 @@
 #include <charttest.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
@@ -250,28 +249,6 @@ protected:
         return OUString::number(rTransform.Line1.Column1) + ";" + OUString::number(rTransform.Line1.Column2) + ";" + OUString::number(rTransform.Line1.Column3) + ";" +
             OUString::number(rTransform.Line2.Column1) + ";" + OUString::number(rTransform.Line2.Column2) + ";" + OUString::number(rTransform.Line2.Column3) + ";" +
             OUString::number(rTransform.Line3.Column1) + ";" + OUString::number(rTransform.Line3.Column2) + ";" + OUString::number(rTransform.Line3.Column3);
-    }
-
-    uno::Reference<drawing::XShape> getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& rName, bool (*pCondition)(const uno::Reference<drawing::XShape>&) = nullptr)
-    {
-        for (sal_Int32 i = 0; i < rShapes->getCount(); ++i)
-        {
-            uno::Reference<drawing::XShapes> xShapes(rShapes->getByIndex(i), uno::UNO_QUERY);
-            if (xShapes.is())
-            {
-                uno::Reference<drawing::XShape> xRet = getShapeByName(xShapes, rName, pCondition);
-                if (xRet.is())
-                    return xRet;
-            }
-            uno::Reference<container::XNamed> xNamedShape(rShapes->getByIndex(i), uno::UNO_QUERY);
-            if (xNamedShape->getName() == rName)
-            {
-                uno::Reference<drawing::XShape> xShape(xNamedShape, uno::UNO_QUERY);
-                if (pCondition == nullptr || (*pCondition)(xShape))
-                    return xShape;
-            }
-        }
-        return uno::Reference<drawing::XShape>();
     }
 
 private:

@@ -27,7 +27,6 @@
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -298,31 +297,6 @@ public:
 private:
 
 };
-
-static uno::Reference<drawing::XShape>
-getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& rName,
-               const std::function<bool(const uno::Reference<drawing::XShape>&)>& pCondition
-               = nullptr)
-{
-    for (sal_Int32 i = 0; i < rShapes->getCount(); ++i)
-    {
-        uno::Reference<drawing::XShapes> xShapes(rShapes->getByIndex(i), uno::UNO_QUERY);
-        if (xShapes.is())
-        {
-            uno::Reference<drawing::XShape> xRet = getShapeByName(xShapes, rName, pCondition);
-            if (xRet.is())
-                return xRet;
-        }
-        uno::Reference<container::XNamed> xNamedShape(rShapes->getByIndex(i), uno::UNO_QUERY);
-        if (xNamedShape->getName() == rName)
-        {
-            uno::Reference<drawing::XShape> xShape(xNamedShape, uno::UNO_QUERY);
-            if (pCondition == nullptr || pCondition(xShape))
-                return xShape;
-        }
-    }
-    return uno::Reference<drawing::XShape>();
-}
 
 // error bar import
 // split method up into smaller chunks for more detailed tests
