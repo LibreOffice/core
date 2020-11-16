@@ -33,45 +33,45 @@
 
 class SwLooping
 {
-    sal_uInt16 nMinPage;
-    sal_uInt16 nMaxPage;
-    sal_uInt16 nCount;
+    sal_uInt16 mnMinPage;
+    sal_uInt16 mnMaxPage;
+    sal_uInt16 mnCount;
     sal_uInt16 mnLoopControlStage;
 public:
     explicit SwLooping( SwPageFrame const * pPage );
     void Control( SwPageFrame* pPage );
     void Drastic( SwFrame* pFrame );
-    bool IsLoopingLouieLight() const { return nCount > LOOP_DETECT - 30; };
+    bool IsLoopingLouieLight() const { return mnCount > LOOP_DETECT - 30; };
 };
 
 class SwEndnoter
 {
-    SwLayouter*                        pMaster;
-    SwSectionFrame*                    pSect;
-    std::unique_ptr<SwFootnoteFrames>  pEndArr;
+    SwLayouter*                        m_pMaster;
+    SwSectionFrame*                    m_pSect;
+    std::unique_ptr<SwFootnoteFrames>  m_pEndArr;
 public:
     explicit SwEndnoter( SwLayouter* pLay )
-        : pMaster( pLay ), pSect( nullptr ) {}
+        : m_pMaster( pLay ), m_pSect( nullptr ) {}
     void CollectEndnotes( SwSectionFrame* pSct );
     void CollectEndnote( SwFootnoteFrame* pFootnote );
-    const SwSectionFrame* GetSect() const { return pSect; }
+    const SwSectionFrame* GetSect() const { return m_pSect; }
     void InsertEndnotes();
-    bool HasEndnotes() const { return pEndArr && !pEndArr->empty(); }
+    bool HasEndnotes() const { return m_pEndArr && !m_pEndArr->empty(); }
 };
 
 void SwEndnoter::CollectEndnotes( SwSectionFrame* pSct )
 {
     OSL_ENSURE( pSct, "CollectEndnotes: Which section?" );
-    if( !pSect )
-        pSect = pSct;
-    else if( pSct != pSect )
+    if( !m_pSect )
+        m_pSect = pSct;
+    else if( pSct != m_pSect )
         return;
-    pSect->CollectEndnotes( pMaster );
+    m_pSect->CollectEndnotes( m_pMaster );
 }
 
 void SwEndnoter::CollectEndnote( SwFootnoteFrame* pFootnote )
 {
-    if( pEndArr && pEndArr->end() != std::find( pEndArr->begin(), pEndArr->end(), pFootnote ) )
+    if( m_pEndArr && m_pEndArr->end() != std::find( m_pEndArr->begin(), m_pEndArr->end(), pFootnote ) )
         return;
 
     if( pFootnote->GetUpper() )
@@ -103,9 +103,9 @@ void SwEndnoter::CollectEndnote( SwFootnoteFrame* pFootnote )
             return;
         pFootnote->Cut();
     }
-    else if( pEndArr )
+    else if( m_pEndArr )
     {
-        for (SwFootnoteFrame* pEndFootnote : *pEndArr)
+        for (SwFootnoteFrame* pEndFootnote : *m_pEndArr)
         {
             if( pEndFootnote->GetAttr() == pFootnote->GetAttr() )
             {
@@ -114,36 +114,36 @@ void SwEndnoter::CollectEndnote( SwFootnoteFrame* pFootnote )
             }
         }
     }
-    if( !pEndArr )
-        pEndArr.reset( new SwFootnoteFrames );  // deleted from the SwLayouter
-    pEndArr->push_back( pFootnote );
+    if( !m_pEndArr )
+        m_pEndArr.reset( new SwFootnoteFrames );  // deleted from the SwLayouter
+    m_pEndArr->push_back( pFootnote );
 }
 
 void SwEndnoter::InsertEndnotes()
 {
-    if( !pSect )
+    if( !m_pSect )
         return;
-    if( !pEndArr || pEndArr->empty() )
+    if( !m_pEndArr || m_pEndArr->empty() )
     {
-        pSect = nullptr;
+        m_pSect = nullptr;
         return;
     }
-    OSL_ENSURE( pSect->Lower() && pSect->Lower()->IsFootnoteBossFrame(),
+    OSL_ENSURE( m_pSect->Lower() && m_pSect->Lower()->IsFootnoteBossFrame(),
             "InsertEndnotes: Where's my column?" );
-    SwFrame* pRef = pSect->FindLastContent( SwFindMode::MyLast );
+    SwFrame* pRef = m_pSect->FindLastContent( SwFindMode::MyLast );
     SwFootnoteBossFrame *pBoss = pRef ? pRef->FindFootnoteBossFrame()
-                               : static_cast<SwFootnoteBossFrame*>(pSect->Lower());
-    pBoss->MoveFootnotes_( *pEndArr );
-    pEndArr.reset();
-    pSect = nullptr;
+                               : static_cast<SwFootnoteBossFrame*>(m_pSect->Lower());
+    pBoss->MoveFootnotes_( *m_pEndArr );
+    m_pEndArr.reset();
+    m_pSect = nullptr;
 }
 
 SwLooping::SwLooping( SwPageFrame const * pPage )
 {
     OSL_ENSURE( pPage, "Where's my page?" );
-    nMinPage = pPage->GetPhyPageNum();
-    nMaxPage = nMinPage;
-    nCount = 0;
+    mnMinPage = pPage->GetPhyPageNum();
+    mnMaxPage = mnMinPage;
+    mnCount = 0;
     mnLoopControlStage = 0;
 }
 
@@ -161,23 +161,23 @@ void SwLooping::Control( SwPageFrame* pPage )
     if( !pPage )
         return;
     const sal_uInt16 nNew = pPage->GetPhyPageNum();
-    if( nNew > nMaxPage )
-        nMaxPage = nNew;
-    if( nNew < nMinPage )
+    if (nNew > mnMaxPage)
+        mnMaxPage = nNew;
+    if (nNew < mnMinPage)
     {
-        nMinPage = nNew;
-        nMaxPage = nNew;
-        nCount = 0;
+        mnMinPage = nNew;
+        mnMaxPage = nNew;
+        mnCount = 0;
         mnLoopControlStage = 0;
     }
-    else if( nNew > nMinPage + 2 )
+    else if (nNew > mnMinPage + 2)
     {
-        nMinPage = nNew - 2;
-        nMaxPage = nNew;
-        nCount = 0;
+        mnMinPage = nNew - 2;
+        mnMaxPage = nNew;
+        mnCount = 0;
         mnLoopControlStage = 0;
     }
-    else if( ++nCount > LOOP_DETECT )
+    else if (++mnCount > LOOP_DETECT)
     {
 #if OSL_DEBUG_LEVEL > 1
         static bool bNoLouie = false;
@@ -191,13 +191,13 @@ void SwLooping::Control( SwPageFrame* pPage )
 #endif
 
         Drastic( pPage->Lower() );
-        if( nNew > nMinPage && pPage->GetPrev() )
+        if (nNew > mnMinPage && pPage->GetPrev())
             Drastic( static_cast<SwPageFrame*>(pPage->GetPrev())->Lower() );
-        if( nNew < nMaxPage && pPage->GetNext() )
+        if (nNew < mnMaxPage && pPage->GetNext())
             Drastic( static_cast<SwPageFrame*>(pPage->GetNext())->Lower() );
 
         ++mnLoopControlStage;
-        nCount = 0;
+        mnCount = 0;
     }
 }
 

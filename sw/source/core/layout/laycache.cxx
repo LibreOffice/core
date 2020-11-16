@@ -80,9 +80,9 @@ void SwLayoutCache::Read( SvStream &rStream )
 
 void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset )
 {
-    aType.push_back( nType );
+    m_aType.push_back( nType );
     mIndices.push_back( nIndex );
-    aOffset.push_back( nOffset );
+    m_aOffset.push_back( nOffset );
 }
 
 bool SwLayCacheImpl::Read( SvStream& rStream )
@@ -95,7 +95,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
     // sizes of fly frames which have been written using the "old" layout cache.
     // This flag should indicate that we do not want to trust the width and
     // height of fly frames
-    bUseFlyCache = aIo.GetMinorVersion() >= 1;
+    m_bUseFlyCache = aIo.GetMinorVersion() >= 1;
 
     aIo.OpenRec( SW_LAYCACHE_IO_REC_PAGES );
     aIo.OpenFlagRec();
@@ -1047,46 +1047,46 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
 }
 
 SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
-    pStream( &rStrm ),
-    nFlagRecEnd ( 0 ),
-    nMajorVersion(SW_LAYCACHE_IO_VERSION_MAJOR),
-    nMinorVersion(SW_LAYCACHE_IO_VERSION_MINOR),
-    bWriteMode( bWrtMd ),
-    bError( false  )
+    m_pStream( &rStrm ),
+    m_nFlagRecEnd ( 0 ),
+    m_nMajorVersion(SW_LAYCACHE_IO_VERSION_MAJOR),
+    m_nMinorVersion(SW_LAYCACHE_IO_VERSION_MINOR),
+    m_bWriteMode( bWrtMd ),
+    m_bError( false  )
 {
-    if( bWriteMode )
-        pStream->WriteUInt16( nMajorVersion )
-                .WriteUInt16( nMinorVersion );
+    if( m_bWriteMode )
+        m_pStream->WriteUInt16( m_nMajorVersion )
+                .WriteUInt16( m_nMinorVersion );
 
     else
-        pStream->ReadUInt16( nMajorVersion )
-                .ReadUInt16( nMinorVersion );
+        m_pStream->ReadUInt16( m_nMajorVersion )
+                .ReadUInt16( m_nMinorVersion );
 }
 
 void SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 {
-    sal_uInt32 nPos = pStream->Tell();
-    if( bWriteMode )
+    sal_uInt32 nPos = m_pStream->Tell();
+    if( m_bWriteMode )
     {
-        aRecords.emplace_back(cType, nPos );
-        pStream->WriteUInt32( 0 );
+        m_aRecords.emplace_back(cType, nPos );
+        m_pStream->WriteUInt32( 0 );
     }
     else
     {
         sal_uInt32 nVal(0);
-        pStream->ReadUInt32( nVal );
+        m_pStream->ReadUInt32( nVal );
         sal_uInt8 cRecTyp = static_cast<sal_uInt8>(nVal);
-        if (!nVal || cRecTyp != cType || !pStream->good())
+        if (!nVal || cRecTyp != cType || !m_pStream->good())
         {
             OSL_ENSURE( nVal, "OpenRec: Record-Header is 0" );
             OSL_ENSURE( cRecTyp == cType, "OpenRec: Wrong Record Type" );
-            aRecords.emplace_back(0, pStream->Tell() );
-            bError = true;
+            m_aRecords.emplace_back(0, m_pStream->Tell() );
+            m_bError = true;
         }
         else
         {
             sal_uInt32 nSize = nVal >> 8;
-            aRecords.emplace_back(cRecTyp, nPos+nSize );
+            m_aRecords.emplace_back(cRecTyp, nPos+nSize );
         }
     }
 }
@@ -1095,48 +1095,48 @@ void SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 void SwLayCacheIoImpl::CloseRec()
 {
     bool bRes = true;
-    OSL_ENSURE( !aRecords.empty(), "CloseRec: no levels" );
-    if( !aRecords.empty() )
+    OSL_ENSURE( !m_aRecords.empty(), "CloseRec: no levels" );
+    if( !m_aRecords.empty() )
     {
-        sal_uInt32 nPos = pStream->Tell();
-        if( bWriteMode )
+        sal_uInt32 nPos = m_pStream->Tell();
+        if( m_bWriteMode )
         {
-            sal_uInt32 nBgn = aRecords.back().size;
-            pStream->Seek( nBgn );
+            sal_uInt32 nBgn = m_aRecords.back().size;
+            m_pStream->Seek( nBgn );
             sal_uInt32 nSize = nPos - nBgn;
-            sal_uInt32 nVal = ( nSize << 8 ) | aRecords.back().type;
-            pStream->WriteUInt32( nVal );
-            pStream->Seek( nPos );
-            if( pStream->GetError() != ERRCODE_NONE )
+            sal_uInt32 nVal = ( nSize << 8 ) | m_aRecords.back().type;
+            m_pStream->WriteUInt32( nVal );
+            m_pStream->Seek( nPos );
+            if( m_pStream->GetError() != ERRCODE_NONE )
                  bRes = false;
         }
         else
         {
-            sal_uInt32 n = aRecords.back().size;
+            sal_uInt32 n = m_aRecords.back().size;
             OSL_ENSURE( n >= nPos, "CloseRec: too much data read" );
             if( n != nPos )
             {
-                pStream->Seek( n );
+                m_pStream->Seek( n );
                 if( n < nPos )
                      bRes = false;
             }
-            if( pStream->GetErrorCode() != ERRCODE_NONE )
+            if( m_pStream->GetErrorCode() != ERRCODE_NONE )
                 bRes = false;
         }
-        aRecords.pop_back();
+        m_aRecords.pop_back();
     }
 
     if( !bRes )
-        bError = true;
+        m_bError = true;
 }
 
 sal_uInt32 SwLayCacheIoImpl::BytesLeft()
 {
     sal_uInt32 n = 0;
-    if( !bError && !aRecords.empty() )
+    if( !m_bError && !m_aRecords.empty() )
     {
-        sal_uInt32 nEndPos = aRecords.back().size;
-        sal_uInt32 nPos = pStream->Tell();
+        sal_uInt32 nEndPos = m_aRecords.back().size;
+        sal_uInt32 nPos = m_pStream->Tell();
         if( nEndPos > nPos )
             n = nEndPos - nPos;
     }
@@ -1146,15 +1146,15 @@ sal_uInt32 SwLayCacheIoImpl::BytesLeft()
 sal_uInt8 SwLayCacheIoImpl::Peek()
 {
     sal_uInt8 c(0);
-    if( !bError )
+    if( !m_bError )
     {
-        sal_uInt32 nPos = pStream->Tell();
-        pStream->ReadUChar( c );
-        pStream->Seek( nPos );
-        if( pStream->GetErrorCode() != ERRCODE_NONE )
+        sal_uInt32 nPos = m_pStream->Tell();
+        m_pStream->ReadUChar( c );
+        m_pStream->Seek( nPos );
+        if( m_pStream->GetErrorCode() != ERRCODE_NONE )
         {
             c = 0;
-            bError = true;
+            m_bError = true;
         }
     }
     return c;
@@ -1164,40 +1164,40 @@ void SwLayCacheIoImpl::SkipRec()
 {
     sal_uInt8 c = Peek();
     OpenRec( c );
-    pStream->Seek( aRecords.back().size );
+    m_pStream->Seek( m_aRecords.back().size );
     CloseRec();
 }
 
 sal_uInt8 SwLayCacheIoImpl::OpenFlagRec()
 {
-    OSL_ENSURE( !bWriteMode, "OpenFlagRec illegal in write  mode" );
+    OSL_ENSURE( !m_bWriteMode, "OpenFlagRec illegal in write  mode" );
     sal_uInt8 cFlags(0);
-    pStream->ReadUChar( cFlags );
-    nFlagRecEnd = pStream->Tell() + ( cFlags & 0x0F );
+    m_pStream->ReadUChar( cFlags );
+    m_nFlagRecEnd = m_pStream->Tell() + ( cFlags & 0x0F );
     return (cFlags >> 4);
 }
 
 void SwLayCacheIoImpl::OpenFlagRec( sal_uInt8 nFlags, sal_uInt8 nLen )
 {
-    OSL_ENSURE( bWriteMode, "OpenFlagRec illegal in read  mode" );
+    OSL_ENSURE( m_bWriteMode, "OpenFlagRec illegal in read  mode" );
     OSL_ENSURE( (nFlags & 0xF0) == 0, "illegal flags set" );
     OSL_ENSURE( nLen < 16, "wrong flag record length" );
     sal_uInt8 cFlags = (nFlags << 4) + nLen;
-    pStream->WriteUChar( cFlags );
-    nFlagRecEnd = pStream->Tell() + nLen;
+    m_pStream->WriteUChar( cFlags );
+    m_nFlagRecEnd = m_pStream->Tell() + nLen;
 }
 
 void SwLayCacheIoImpl::CloseFlagRec()
 {
-    if( bWriteMode )
+    if( m_bWriteMode )
     {
-        OSL_ENSURE( pStream->Tell() == nFlagRecEnd, "Wrong amount of data written" );
+        OSL_ENSURE( m_pStream->Tell() == m_nFlagRecEnd, "Wrong amount of data written" );
     }
     else
     {
-        OSL_ENSURE( pStream->Tell() <= nFlagRecEnd, "Too many data read" );
-        if( pStream->Tell() != nFlagRecEnd )
-            pStream->Seek( nFlagRecEnd );
+        OSL_ENSURE( m_pStream->Tell() <= m_nFlagRecEnd, "Too many data read" );
+        if( m_pStream->Tell() != m_nFlagRecEnd )
+            m_pStream->Seek( m_nFlagRecEnd );
     }
 }
 

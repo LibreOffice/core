@@ -56,27 +56,27 @@ class SwLayCacheImpl
 {
     std::vector<sal_uLong> mIndices;
     /// either a textframe character offset, or a row index inside a table
-    std::deque<sal_Int32> aOffset;
-    std::vector<sal_uInt16> aType;
+    std::deque<sal_Int32> m_aOffset;
+    std::vector<sal_uInt16> m_aType;
     SwPageFlyCache m_FlyCache;
-    bool bUseFlyCache;
+    bool m_bUseFlyCache;
     void Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset );
 
 public:
-    SwLayCacheImpl() : bUseFlyCache(false) {}
+    SwLayCacheImpl() : m_bUseFlyCache(false) {}
 
     size_t size() const { return mIndices.size(); }
 
     bool Read( SvStream& rStream );
 
     sal_uLong GetBreakIndex( size_t nIdx ) const { return mIndices[ nIdx ]; }
-    sal_Int32 GetBreakOfst( size_t nIdx ) const { return aOffset[ nIdx ]; }
-    sal_uInt16 GetBreakType( size_t nIdx ) const { return aType[ nIdx ]; }
+    sal_Int32 GetBreakOfst( size_t nIdx ) const { return m_aOffset[ nIdx ]; }
+    sal_uInt16 GetBreakType( size_t nIdx ) const { return m_aType[ nIdx ]; }
 
     size_t GetFlyCount() const { return m_FlyCache.size(); }
     SwFlyCache& GetFlyCache( size_t nIdx ) { return m_FlyCache[ nIdx ]; }
 
-    bool IsUseFlyCache() const { return bUseFlyCache; }
+    bool IsUseFlyCache() const { return m_bUseFlyCache; }
 };
 
 // Helps to create the sectionframes during the InsertCnt_-function
@@ -150,23 +150,23 @@ private:
         sal_uLong size;
         RecTypeSize(sal_uInt8 typ, sal_uLong siz) : type(typ), size(siz) {}
     };
-    std::vector<RecTypeSize> aRecords;
+    std::vector<RecTypeSize> m_aRecords;
 
-    SvStream        *pStream;
+    SvStream        *m_pStream;
 
-    sal_uLong           nFlagRecEnd;
+    sal_uLong           m_nFlagRecEnd;
 
-    sal_uInt16          nMajorVersion;
-    sal_uInt16          nMinorVersion;
+    sal_uInt16          m_nMajorVersion;
+    sal_uInt16          m_nMinorVersion;
 
-    bool            bWriteMode : 1;
-    bool            bError : 1;
+    bool            m_bWriteMode : 1;
+    bool            m_bError : 1;
 
 public:
     SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd );
 
     /// Get input or output stream
-    SvStream& GetStream() const { return *pStream; }
+    SvStream& GetStream() const { return *m_pStream; }
 
     /// Open a record of type "nType"
     void OpenRec( sal_uInt8 nType );
@@ -196,10 +196,10 @@ public:
     /// Close a flag record. Any bytes left are skipped.
     void CloseFlagRec();
 
-    bool HasError() const { return bError; }
+    bool HasError() const { return m_bError; }
 
-    sal_uInt16 GetMajorVersion() const { return nMajorVersion; }
-    sal_uInt16 GetMinorVersion() const { return nMinorVersion; }
+    sal_uInt16 GetMajorVersion() const { return m_nMajorVersion; }
+    sal_uInt16 GetMinorVersion() const { return m_nMinorVersion; }
 };
 
 // Stored information about text frames:
