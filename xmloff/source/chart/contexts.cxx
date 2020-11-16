@@ -170,10 +170,7 @@ SvXMLImportContextRef SchXMLBodyContext::CreateChildContext(
     if( nPrefix == XML_NAMESPACE_CHART &&
         IsXMLToken( rLocalName, XML_CHART ) )
     {
-        xContext = mrImportHelper.CreateChartContext( GetImport(),
-                                                      nPrefix, rLocalName,
-                                                      GetImport().GetModel(),
-                                                      xAttrList );
+        xContext = mrImportHelper.CreateChartContext( GetImport(), GetImport().GetModel() );
     }
     else if(nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( rLocalName, XML_CALCULATION_SETTINGS ))
