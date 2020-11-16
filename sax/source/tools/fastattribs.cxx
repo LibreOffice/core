@@ -75,6 +75,10 @@ FastAttributeList::FastAttributeList( const css::uno::Reference< css::xml::sax::
     maUnknownAttributes = rOther.maUnknownAttributes;
 }
 
+css::uno::Reference< ::css::util::XCloneable > FastAttributeList::createClone()
+{
+    return new FastAttributeList(this);
+}
 
 FastAttributeList::~FastAttributeList()
 {
