@@ -98,6 +98,8 @@ void LwpSvStream::SeekRel(sal_Int64 pos) { m_pStream->SeekRel(pos); }
  * @descr       Get the current position in stream
 */
 sal_Int64 LwpSvStream::Tell() { return m_pStream->Tell(); }
+
+sal_uInt64 LwpSvStream::remainingSize() { return m_pStream->remainingSize(); }
 /**
  * @descr       Seek to pos
 */
