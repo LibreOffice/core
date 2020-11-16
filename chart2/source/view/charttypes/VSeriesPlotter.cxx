@@ -2669,9 +2669,22 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
         ViewLegendEntry aEntry;
         OUString aLabelText;
         bool bVaryColorsByPoint = rSeries.isVaryColorsByPoint();
-        if (bVaryColorsByPoint
-            || m_xChartTypeModel->getChartType().equalsIgnoreAsciiCase(
-                CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+        bool bIsPie = m_xChartTypeModel->getChartType().equalsIgnoreAsciiCase(
+            CHART2_SERVICE_NAME_CHARTTYPE_PIE);
+        try
+        {
+            if (bIsPie && m_xChartTypeModelProps.is())
+            {
+                bool bDonut = false;
+                if ((m_xChartTypeModelProps->getPropertyValue("UseRings") >>= bDonut) && bDonut)
+                    bIsPie = false;
+            }
+        }
+        catch (const uno::Exception&)
+        {
+        }
+
+        if (bVaryColorsByPoint || bIsPie)
         {
             Sequence< OUString > aCategoryNames;
             if( m_pExplicitCategoriesProvider )
