@@ -30,5 +30,8 @@
         <entry os="windows" vendor="nvidia" compare="less" version="457.36.0">
             <device id="all"/>
         </entry>
+        <entry os="7" vendor="all">
+            <device id="all"/>
+        </entry>
     </denylist>
 </root>
