@@ -341,8 +341,15 @@ ScCTBWrapper::Read( SvStream &rS)
 {
     SAL_INFO("sc.filter", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
-    if (!ctbSet.Read(rS))
+    try
+    {
+        if (!ctbSet.Read(rS))
+            return false;
+    }
+    catch(SvStreamEOFException&)
+    {
         return false;
+    }
 
     //ScCTB is 1 TB which is min 15bytes, nViews TBVisualData which is min 20bytes
     //and one 32bit number (4 bytes)
