@@ -1,11 +1,17 @@
 diff -ur icu.org/source/data/Makefile.in icu/source/data/Makefile.in
---- icu.org/source/data/Makefile.in	2019-04-17 21:42:15.000000000 +0200
-+++ icu/source/data/Makefile.in	2019-10-28 12:57:15.033649494 +0100
-@@ -226,6 +226,7 @@
+--- icu.org/source/data/Makefile.in	2020-10-28 22:21:12.000000000 +0100
++++ icu/source/data/Makefile.in	2020-11-17 10:18:37.960032668 +0100
+@@ -239,6 +239,13 @@
+ 
+ ifeq ($(ENABLE_SO_VERSION_DATA),1)
  ifeq ($(PKGDATA_MODE),dll)
++
++# This should be in the included rules.mk but that is generated empty by
++# configure because we have no data/locales/root.txt with prebuilt data/in/
++$(TMP_DIR)/dirs.timestamp:
++	$(MKINSTALLDIRS) $(OUTTMPDIR) $(TMP_DIR)
++	echo timestamp > $@
++
  SO_VERSION_DATA = $(OUTTMPDIR)/icudata.res
- $(SO_VERSION_DATA) : $(MISCSRCDIR)/icudata.rc
-+	mkdir -p $(OUTTMPDIR)
+ $(SO_VERSION_DATA) : $(MISCSRCDIR)/icudata.rc | $(TMP_DIR)/dirs.timestamp
  ifeq ($(MSYS_RC_MODE),1)
- 	rc.exe -i$(srcdir)/../common -i$(top_builddir)/common -fo$@ $(CPPFLAGS) $<
- else
