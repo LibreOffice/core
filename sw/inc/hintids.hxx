@@ -424,7 +424,6 @@ constexpr TypedWhichId<SwMsgPoolItem> RES_TBLHEADLINECHG (170);
 constexpr TypedWhichId<SwAutoFormatGetDocNode> RES_AUTOFMT_DOCNODE (171);
 constexpr TypedWhichId<SwMsgPoolItem> RES_SECTION_HIDDEN (172);
 constexpr TypedWhichId<SwMsgPoolItem> RES_SECTION_NOT_HIDDEN (173);
-constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_ARRIVED (174);
 constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_PIECE_ARRIVED (175);
 constexpr TypedWhichId<SwMsgPoolItem> RES_HIDDENPARA_PRINT (176);
 constexpr TypedWhichId<SwVirtPageNumInfo> RES_VIRTPAGENUM_INFO (178);

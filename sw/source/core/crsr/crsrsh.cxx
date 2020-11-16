@@ -73,6 +73,7 @@
 #include <wrtsh.hxx>
 #include <undobj.hxx>
 #include <boost/property_tree/json_parser.hpp>
+#include <hints.hxx>
 
 using namespace com::sun::star;
 using namespace util;
@@ -2471,14 +2472,19 @@ SwContentFrame *SwCursorShell::GetCurrFrame( const bool bCalcFrame ) const
     @param pOld ???
     @param pNew ???
 */
-void SwCursorShell::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    const sal_uInt16 nWhich = pOld ?
-                          pOld->Which() :
-                          pNew ?
-                          pNew->Which() :
-                          sal::static_int_cast<sal_uInt16>(RES_MSG_BEGIN);
-
+    if(dynamic_cast<const sw::PostGraphicArrivedHint*>(&rHint) && m_aGrfArrivedLnk.IsSet())
+    {
+        m_aGrfArrivedLnk.Call(*this);
+        return;
+    }
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    auto nWhich = pLegacy->GetWhich();
+    if(!nWhich)
+        nWhich = sal::static_int_cast<sal_uInt16>(RES_MSG_BEGIN);
     if( m_bCallChgLnk &&
         ( nWhich < RES_MSG_BEGIN || nWhich >= RES_MSG_END ||
             nWhich == RES_FMT_CHG || nWhich == RES_UPDATE_ATTR ||
@@ -2489,8 +2495,7 @@ void SwCursorShell::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         // not need to send the expensive RES_FMT_CHG in Insert.
         CallChgLnk();
 
-    if( m_aGrfArrivedLnk.IsSet() &&
-        ( RES_GRAPHIC_ARRIVED == nWhich || RES_GRAPHIC_SWAPIN == nWhich ))
+    if(m_aGrfArrivedLnk.IsSet() && RES_GRAPHIC_SWAPIN == nWhich)
         m_aGrfArrivedLnk.Call( *this );
 }
 

@@ -2531,6 +2531,23 @@ Size SwViewShell::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
     return aSize;
 }
 
+void SwViewShell::OnGraphicArrived(const SwRect& rRect)
+{
+    for(SwViewShell& rShell : GetRingContainer())
+    {
+        CurrShell aCurr(&rShell);
+        if(rShell.IsPreview())
+        {
+            if(rShell.GetWin())
+                ::RepaintPagePreview(&rShell, rRect);
+        }
+        else if(rShell.VisArea().IsOver(rRect) && OUTDEV_WINDOW == rShell.GetOut()->GetOutDevType())
+        {
+            // invalidate instead of painting
+            rShell.GetWin()->Invalidate(rRect.SVRect());
+        }
+    }
+}
 // #i12836# enhanced pdf export
 sal_Int32 SwViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const
 {

@@ -720,6 +720,21 @@ void SwNoTextFrame::ClearCache()
     }
 }
 
+void SwNoTextFrame::OnGraphicArrived()
+{
+    if(GetNode()->GetNodeType() != SwNodeType::Grf)
+    {
+        InvalidatePrt();
+        SetCompletePaint();
+        return;
+    }
+    SwGrfNode* pNd = static_cast<SwGrfNode*>(GetNode());
+    ClearCache();
+    auto pVSh = pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
+    if(pVSh)
+        pVSh->OnGraphicArrived(getFrameArea());
+}
+
 void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
     if(dynamic_cast<const sw::GrfRereadAndInCacheHint*>(&rHint))
@@ -731,6 +746,11 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
         }
         return;
     }
+    if(dynamic_cast<const sw::PreGraphicArrivedHint*>(&rHint))
+    {
+        OnGraphicArrived();
+        return;
+    }
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
         return;
@@ -739,7 +759,6 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
     // #i73788#
     // no <SwContentFrame::Modify(..)> for RES_LINKED_GRAPHIC_STREAM_ARRIVED
     if ( RES_GRAPHIC_PIECE_ARRIVED != nWhich &&
-         RES_GRAPHIC_ARRIVED != nWhich &&
          RES_LINKED_GRAPHIC_STREAM_ARRIVED != nWhich )
     {
         SwContentFrame::SwClientNotify(rModify, rHint);
@@ -749,6 +768,11 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
 
     switch( nWhich )
     {
+    case RES_GRAPHIC_PIECE_ARRIVED:
+    case RES_LINKED_GRAPHIC_STREAM_ARRIVED:
+        OnGraphicArrived();
+        return;
+
     case RES_OBJECTDYING:
         break;
 
@@ -805,41 +829,6 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
                 }
             if( RES_GRFATR_END == n )           // not found
                 return ;
-        }
-        break;
-
-    case RES_GRAPHIC_PIECE_ARRIVED:
-    case RES_GRAPHIC_ARRIVED:
-    // i73788# - handle RES_LINKED_GRAPHIC_STREAM_ARRIVED as RES_GRAPHIC_ARRIVED
-    case RES_LINKED_GRAPHIC_STREAM_ARRIVED:
-        if ( GetNode()->GetNodeType() == SwNodeType::Grf )
-        {
-            bComplete = false;
-            SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
-
-            ClearCache();
-
-            SwRect aRect( getFrameArea() );
-
-            SwViewShell *pVSh = pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
-            if( !pVSh )
-                break;
-
-            for(SwViewShell& rShell : pVSh->GetRingContainer())
-            {
-                CurrShell aCurr( &rShell );
-                if( rShell.IsPreview() )
-                {
-                    if( rShell.GetWin() )
-                        ::RepaintPagePreview( &rShell, aRect );
-                }
-                else if ( rShell.VisArea().IsOver( aRect ) &&
-                   OUTDEV_WINDOW == rShell.GetOut()->GetOutDevType() )
-                {
-                    // invalidate instead of painting
-                    rShell.GetWin()->Invalidate( aRect.SVRect() );
-                }
-            }
         }
         break;
 
