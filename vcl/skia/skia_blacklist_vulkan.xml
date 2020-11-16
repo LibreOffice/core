@@ -30,5 +30,8 @@
         <entry os="windows" vendor="nvidia">
             <device id="all"/>
         </entry>
+        <entry os="7" vendor="all">
+            <device id="all"/>
+        </entry>
     </blacklist>
 </root>
