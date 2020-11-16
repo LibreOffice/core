@@ -3137,7 +3137,12 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
         }
         SdrPageView* pPageView = pDrawView->GetSdrPageView();
         SdrCreateView::SetupObjLayer(pPageView, pDrawView->GetActiveLayer(), pObj);
+        // switch undo off or this combined with ImpEndCreate will cause two undos
+        // see comment made in SwFEShell::EndCreate (we create our own undo-object!)
+        const bool bUndo(GetDoc()->GetIDocumentUndoRedo().DoesUndo());
+        GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
         pDrawView->InsertObjectAtView(pObj, *pPageView);
+        GetDoc()->GetIDocumentUndoRedo().DoUndo(bUndo);
     }
     ImpEndCreate();
 }
