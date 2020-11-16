@@ -38,9 +38,7 @@ void WinSkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
 {
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
-    initFontInfo();
-    displayParams.fSurfaceProps
-        = SkSurfaceProps(displayParams.fSurfaceProps.flags(), pixelGeometry);
+    displayParams.fSurfaceProps = *SkiaHelper::surfaceProps();
     switch (forceRaster ? SkiaHelper::RenderRaster : SkiaHelper::renderMethodToUse())
     {
         case SkiaHelper::RenderRaster:
@@ -198,7 +196,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     if (fontHeight < 0)
         fontHeight = -fontHeight;
     SkFont font(typeface, fontHeight, fHScale, 0);
-    font.setEdging(getFontEdging());
+    font.setEdging(fontEdging);
     assert(dynamic_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl()));
     SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl());
     COLORREF color = ::GetTextColor(mWinParent.getHDC());
@@ -209,19 +207,9 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
 }
 
 SkFont::Edging WinSkiaSalGraphicsImpl::fontEdging;
-SkPixelGeometry WinSkiaSalGraphicsImpl::pixelGeometry;
-bool WinSkiaSalGraphicsImpl::fontInfoDone = false;
-
-SkFont::Edging WinSkiaSalGraphicsImpl::getFontEdging()
-{
-    initFontInfo();
-    return fontEdging;
-}
 
 void WinSkiaSalGraphicsImpl::initFontInfo()
 {
-    if (fontInfoDone)
-        return;
     // Skia needs to be explicitly told what kind of antialiasing should be used,
     // get it from system settings. This does not actually matter for the text
     // rendering itself, since Skia has been patched to simply use the setting
@@ -231,7 +219,7 @@ void WinSkiaSalGraphicsImpl::initFontInfo()
     // the glyphs will be rendered based on this setting (subpixel AA requires colors,
     // others do not).
     fontEdging = SkFont::Edging::kAlias;
-    pixelGeometry = kUnknown_SkPixelGeometry;
+    SkPixelGeometry pixelGeometry = kUnknown_SkPixelGeometry;
     BOOL set;
     if (SystemParametersInfo(SPI_GETFONTSMOOTHING, 0, &set, 0) && set)
     {
@@ -250,15 +238,14 @@ void WinSkiaSalGraphicsImpl::initFontInfo()
         else
             fontEdging = SkFont::Edging::kAntiAlias;
     }
-    // Cache this, it is actually visible a little bit when profiling.
-    fontInfoDone = true;
+    SkiaHelper::setPixelGeometry(pixelGeometry);
 }
 
 void WinSkiaSalGraphicsImpl::ClearDevFontCache()
 {
     dwriteFontMgr.reset();
     dwriteDone = false;
-    fontInfoDone = false;
+    initFontInfo(); // get font info again, just in case
 }
 
 SkiaCompatibleDC::SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int width, int height)
@@ -405,6 +392,10 @@ std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool /*temporar
 }
 }
 
-void WinSkiaSalGraphicsImpl::prepareSkia() { SkiaHelper::prepareSkia(createVulkanWindowContext); }
+void WinSkiaSalGraphicsImpl::prepareSkia()
+{
+    initFontInfo();
+    SkiaHelper::prepareSkia(createVulkanWindowContext);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

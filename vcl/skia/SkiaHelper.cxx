@@ -392,9 +392,9 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type, SkAlph
         {
             if (GrDirectContext* grDirectContext = getSharedGrDirectContext())
             {
-                surface
-                    = SkSurface::MakeRenderTarget(grDirectContext, SkBudgeted::kNo,
-                                                  SkImageInfo::Make(width, height, type, alpha));
+                surface = SkSurface::MakeRenderTarget(grDirectContext, SkBudgeted::kNo,
+                                                      SkImageInfo::Make(width, height, type, alpha),
+                                                      0, surfaceProps());
                 if (surface)
                 {
 #ifdef DBG_UTIL
@@ -411,7 +411,7 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type, SkAlph
             break;
     }
     // Create raster surface as a fallback.
-    surface = SkSurface::MakeRaster(SkImageInfo::Make(width, height, type, alpha));
+    surface = SkSurface::MakeRaster(SkImageInfo::Make(width, height, type, alpha), surfaceProps());
     assert(surface);
     if (surface)
     {
@@ -435,9 +435,9 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
         {
             if (GrDirectContext* grDirectContext = getSharedGrDirectContext())
             {
-                sk_sp<SkSurface> surface
-                    = SkSurface::MakeRenderTarget(grDirectContext, SkBudgeted::kNo,
-                                                  bitmap.info().makeAlphaType(kPremul_SkAlphaType));
+                sk_sp<SkSurface> surface = SkSurface::MakeRenderTarget(
+                    grDirectContext, SkBudgeted::kNo,
+                    bitmap.info().makeAlphaType(kPremul_SkAlphaType), 0, surfaceProps());
                 if (surface)
                 {
                     SkPaint paint;
@@ -561,6 +561,14 @@ void cleanup()
     delete imageCache;
     imageCache = nullptr;
     imageCacheSize = 0;
+}
+
+static SkSurfaceProps commonSurfaceProps;
+const SkSurfaceProps* surfaceProps() { return &commonSurfaceProps; }
+
+void setPixelGeometry(SkPixelGeometry pixelGeometry)
+{
+    commonSurfaceProps = SkSurfaceProps(commonSurfaceProps.flags(), pixelGeometry);
 }
 
 // Skia should not be used from VCL backends that do not actually support it, as there will be setup missing.
