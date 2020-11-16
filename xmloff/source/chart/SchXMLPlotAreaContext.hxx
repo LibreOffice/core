@@ -85,7 +85,7 @@ class SchXMLPlotAreaContext : public SvXMLImportContext
 {
 public:
     SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
-                           SvXMLImport& rImport, const OUString& rLocalName,
+                           SvXMLImport& rImport,
                            const OUString& rXLinkHRefAttributeToIndicateDataProvider,
                            OUString& rCategoriesAddress,
                            OUString& rChartAddress,

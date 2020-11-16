@@ -27,7 +27,7 @@
 class SchXMLLegendContext : public SvXMLImportContext
 {
 public:
-    SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport, const OUString& rLocalName );
+    SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport );
     virtual ~SchXMLLegendContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;

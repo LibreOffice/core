@@ -197,9 +197,8 @@ bool lcl_tableOfRangeMatches(
 // class SchXMLTableContext
 SchXMLTableContext::SchXMLTableContext( SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport,
-                                        const OUString& rLName,
                                         SchXMLTable& aTable ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLName ),
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mrTable( aTable ),
         mbHasRowPermutation( false ),
