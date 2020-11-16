@@ -893,6 +893,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134121)
     assertXPath(pXmlDoc, "//polyline", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138018)
+{
+    SwDoc* pDoc = createDoc("tdf138018.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. the leader line was visible.
+    assertXPath(pXmlDoc, "//polyline", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130380)
 {
     SwDoc* pDoc = createDoc("tdf130380.docx");
