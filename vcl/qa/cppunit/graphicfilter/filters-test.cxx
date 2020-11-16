@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
@@ -95,7 +99,7 @@ void VclFiltersTest::testScaling()
         CPPUNIT_ASSERT( aBitmapEx.Scale( 0.1937046, 0.193154, i ) );
         Size aAfter( aBitmapEx.GetSizePixel() );
         fprintf( stderr, "size %" SAL_PRIdINT64 ", %" SAL_PRIdINT64 "\n", sal_Int64(aAfter.Width()), sal_Int64(aAfter.Height()) );
-        CPPUNIT_ASSERT( labs (aAfter.Height() - aAfter.Width()) <= 1 );
+        CPPUNIT_ASSERT( std::abs (aAfter.Height() - aAfter.Width()) <= 1 );
     }
 }
 

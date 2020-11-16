@@ -75,6 +75,7 @@
 #include <vcl/fieldvalues.hxx>
 #include <memory>
 #include <algorithm>
+#include <cstdlib>
 
 namespace com::sun::star::embed { class XEmbeddedObject; }
 
@@ -646,13 +647,13 @@ bool lcl_AreRectanglesApproxEqual(const tools::Rectangle& rRectA, const tools::R
 {
     // Twips <-> Hmm conversions introduce +-1 differences although there are no real changes in the object.
     // Therefore test with == is not appropriate in some cases.
-    if (std::labs(rRectA.Left() - rRectB.Left()) > 1)
+    if (std::abs(rRectA.Left() - rRectB.Left()) > 1)
         return false;
-    if (std::labs(rRectA.Top() - rRectB.Top()) > 1)
+    if (std::abs(rRectA.Top() - rRectB.Top()) > 1)
         return false;
-    if (std::labs(rRectA.Right() - rRectB.Right()) > 1)
+    if (std::abs(rRectA.Right() - rRectB.Right()) > 1)
         return false;
-    if (std::labs(rRectA.Bottom() - rRectB.Bottom()) > 1)
+    if (std::abs(rRectA.Bottom() - rRectB.Bottom()) > 1)
         return false;
     return true;
 }

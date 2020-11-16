@@ -20,6 +20,7 @@
 #include <wmfreader.hxx>
 #include <emfreader.hxx>
 
+#include <cstdlib>
 #include <memory>
 #include <optional>
 #include <o3tl/safeint.hxx>
@@ -1328,18 +1329,19 @@ namespace emfio
         }
 
         SetWinOrg( aPlaceableBound.TopLeft() );
-        Size aWMFSize( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
+        Size aWMFSize(
+            std::abs( aPlaceableBound.GetWidth() ), std::abs( aPlaceableBound.GetHeight() ) );
         SetWinExt( aWMFSize );
 
         SAL_INFO("vcl.wmf", "WMF size  w: " << aWMFSize.Width()    << " h: " << aWMFSize.Height());
 
         Size aDevExt( 10000, 10000 );
-        if( ( labs( aWMFSize.Width() ) > 1 ) && ( labs( aWMFSize.Height() ) > 1 ) )
+        if( ( std::abs( aWMFSize.Width() ) > 1 ) && ( std::abs( aWMFSize.Height() ) > 1 ) )
         {
             const Fraction  aFrac( 1, mnUnitsPerInch);
             MapMode         aWMFMap( MapUnit::MapInch, Point(), aFrac, aFrac );
             Size            aSize100(OutputDevice::LogicToLogic(aWMFSize, aWMFMap, MapMode(MapUnit::Map100thMM)));
-            aDevExt = Size( labs( aSize100.Width() ), labs( aSize100.Height() ) );
+            aDevExt = Size( std::abs( aSize100.Width() ), std::abs( aSize100.Height() ) );
         }
         SetDevExt( aDevExt );
 

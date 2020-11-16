@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <tools/stream.hxx>
 #include <regionband.hxx>
 #include <osl/diagnose.h>
@@ -480,8 +484,8 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, tools::L
     }
     else if ( rStartPt.Y() != rEndPt.Y() )
     {
-        const tools::Long  nDX = labs( rEndPt.X() - rStartPt.X() );
-        const tools::Long  nDY = labs( rEndPt.Y() - rStartPt.Y() );
+        const tools::Long  nDX = std::abs( rEndPt.X() - rStartPt.X() );
+        const tools::Long  nDY = std::abs( rEndPt.Y() - rStartPt.Y() );
         const tools::Long  nStartX = rStartPt.X();
         const tools::Long  nStartY = rStartPt.Y();
         const tools::Long  nEndX = rEndPt.X();

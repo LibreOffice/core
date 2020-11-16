@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
@@ -529,9 +532,9 @@ void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
     UpperLeft = aOutRect.TopLeft();
     LowerRight = aOutRect.BottomRight();
 
-    tools::Long dxOutRectHalf = labs(UpperLeft.X() - LowerRight.X());
+    tools::Long dxOutRectHalf = std::abs(UpperLeft.X() - LowerRight.X());
     dxOutRectHalf /= 2;
-    tools::Long dyOutRectHalf = labs(UpperLeft.Y() - LowerRight.Y());
+    tools::Long dyOutRectHalf = std::abs(UpperLeft.Y() - LowerRight.Y());
     dyOutRectHalf /= 2;
 
         // Only the center is moved. The corners are moved by NbcMove. For the

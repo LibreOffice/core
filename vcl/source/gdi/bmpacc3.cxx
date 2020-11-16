@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <vcl/bitmap.hxx>
 
 #include <bmpfast.hxx>
@@ -145,8 +149,8 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
     }
     else
     {
-        const tools::Long  nDX = labs( rEnd.X() - rStart.X() );
-        const tools::Long  nDY = labs( rEnd.Y() - rStart.Y() );
+        const tools::Long  nDX = std::abs( rEnd.X() - rStart.X() );
+        const tools::Long  nDY = std::abs( rEnd.Y() - rStart.Y() );
         tools::Long nX1;
         tools::Long nY1;
         tools::Long nX2;

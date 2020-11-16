@@ -19,6 +19,7 @@
 
 #include <mtftools.hxx>
 
+#include <cstdlib>
 #include <memory>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -1160,7 +1161,7 @@ namespace emfio
         UpdateClipRegion();
         UpdateLineStyle();
         UpdateFillStyle();
-        mpGDIMetaFile->AddAction( new MetaRoundRectAction( ImplMap( rRect ), labs( ImplMap( rSize ).Width() ), labs( ImplMap( rSize ).Height() ) ) );
+        mpGDIMetaFile->AddAction( new MetaRoundRectAction( ImplMap( rRect ), std::abs( ImplMap( rSize ).Width() ), std::abs( ImplMap( rSize ).Height() ) ) );
     }
 
     void MtfTools::DrawEllipse( const tools::Rectangle& rRect )

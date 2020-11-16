@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstdlib>
 
 #include <controller/SlsClipboard.hxx>
 
@@ -699,9 +700,9 @@ sal_Int8 Clipboard::ExecuteDrop (
             SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
             const Point aEventModelPosition (
                 pTargetWindow->PixelToLogic (rEvent.maPosPixel));
-            const sal_Int32 nXOffset (labs (pDragTransferable->GetStartPos().X()
+            const sal_Int32 nXOffset (std::abs (pDragTransferable->GetStartPos().X()
                 - aEventModelPosition.X()));
-            const sal_Int32 nYOffset (labs (pDragTransferable->GetStartPos().Y()
+            const sal_Int32 nYOffset (std::abs (pDragTransferable->GetStartPos().Y()
                 - aEventModelPosition.Y()));
             bool bContinue =
                 ( pDragTransferable->GetView() != &mrSlideSorter.GetView() )

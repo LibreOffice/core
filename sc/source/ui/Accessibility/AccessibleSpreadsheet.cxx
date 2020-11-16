@@ -42,6 +42,7 @@
 #include <strings.hrc>
 
 #include <algorithm>
+#include <cstdlib>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -535,7 +536,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 refScMarkData.FillRangeListWithMarks(mpMarkedRanges.get(), true);
 
                 //For Whole Col Row
-                bool bWholeRow = ::labs(aMarkRange.aStart.Row() - aMarkRange.aEnd.Row()) == pDoc->MaxRow() ;
+                bool bWholeRow = std::abs(aMarkRange.aStart.Row() - aMarkRange.aEnd.Row()) == pDoc->MaxRow() ;
                 bool bWholeCol = ::abs(aMarkRange.aStart.Col() - aMarkRange.aEnd.Col()) == pDoc->MaxCol() ;
                 if ((bNewMarked || bIsMark || bIsMultMark ) && (bWholeCol || bWholeRow))
                 {
@@ -547,7 +548,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                             CommitFocusCell(aNewCell);
                         }
                         bool bLastIsWholeColRow =
-                            (::labs(m_aLastWithInMarkRange.aStart.Row() - m_aLastWithInMarkRange.aEnd.Row()) == pDoc->MaxRow() && bWholeRow) ||
+                            (std::abs(m_aLastWithInMarkRange.aStart.Row() - m_aLastWithInMarkRange.aEnd.Row()) == pDoc->MaxRow() && bWholeRow) ||
                             (::abs(m_aLastWithInMarkRange.aStart.Col() - m_aLastWithInMarkRange.aEnd.Col()) == pDoc->MaxCol() && bWholeCol);
                         bool bSelSmaller=
                             bLastIsWholeColRow &&
