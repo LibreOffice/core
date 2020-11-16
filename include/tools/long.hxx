@@ -13,13 +13,16 @@
 /**
  * We have an unfortunate problem in that, on Windows (both 32 and 64-bit), long is always 32-bit.
  * But on Linux (64-bit) long is 64-bit. Which leads to nasty situations where things that work
- * on Linux, fail on Windows.
+ * on Linux, failed on Windows.
  * So.....,
- * (1) introduce a typedef that will replace all usage of long in our codebase.
- * (2) to start with, that typedef acts that same as the long it replaces
- * (3) once the replacement is complete, this typedef will, on windows, become 64-bit.
- * (4) and once the fallout from (3) is fixed, we can start replacing tools::Long with things
- *     like sal_Int64.
+ * (1) introduce a typedef that replaces (almost) all previous usage
+ * (2) on 64-bit Windows, this typedef is forced to 64-bit (32-bit platforms, including 32-bit Windows, are left alone)
+ * (3) fix fallout from (2)
+ *
+ * As a consequence of the above, it would be best, over the long term, to regard usage
+ * of tools::Long in the codebase as meaning "we're not sure what the ideal size of the datatype is",
+ * and where possible, replace it with a better datatype like sal_Int32/sal_Int64/etc.
+ *
  */
 namespace tools
 {
