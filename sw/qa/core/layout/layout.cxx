@@ -10,8 +10,11 @@
 #include <swmodeltestbase.hxx>
 
 #include <vcl/gdimtf.hxx>
+#include <svx/svdpage.hxx>
 
 #include <wrtsh.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <drawdoc.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/core/layout/data/";
 
@@ -144,6 +147,28 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testContinuousEndnotesMoveBackwards)
     assertXPath(pLayout, "/root/page[1]/ftncont", 0);
     // All endnotes are in a container on page 2.
     assertXPath(pLayout, "/root/page[2]/ftncont", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
+{
+    load(DATA_DIRECTORY, "textbox-autogrow-vertical.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pShape = pPage->GetObj(0);
+    tools::Rectangle aShapeRect = pShape->GetCurrentBoundRect();
+
+    discardDumpedLayout();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    CPPUNIT_ASSERT(pLayout);
+    sal_Int32 nFlyLeft = getXPath(pLayout, "//fly/infos/bounds", "left").toInt32();
+    sal_Int32 nFlyTop = getXPath(pLayout, "//fly/infos/bounds", "top").toInt32();
+    sal_Int32 nFlyRight = getXPath(pLayout, "//fly/infos/bounds", "right").toInt32();
+    sal_Int32 nFlyBottom = getXPath(pLayout, "//fly/infos/bounds", "bottom").toInt32();
+    tools::Rectangle aFlyRect(nFlyLeft, nFlyTop, nFlyRight, nFlyBottom);
+    // Without the accompanying fix in place, this test would have failed, as aFlyRect was too wide,
+    // so it was not inside aShapeRect anymore.
+    CPPUNIT_ASSERT(aShapeRect.IsInside(aFlyRect));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
