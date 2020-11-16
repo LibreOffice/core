@@ -61,7 +61,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
 {
     osl::Directory aDir(rURL);
 
-    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, aDir.open());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Failed to open directory " + rURL).toUtf8().getStr(), osl::FileBase::E_None, aDir.open());
     osl::DirectoryItem aItem;
     osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
     std::set<OUString> dirs;
