@@ -69,6 +69,24 @@
       "revId": "aceda2231e7afa282f6fc4b3430dabbf6e4d4495",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5238160f_a458e943",
+        "filename": "cui/source/dialogs/cuihyperdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-16T09:15:47Z",
+      "side": 1,
+      "message": "\"If they can be removed, I did so.\":  In a prerequisite commit of its own.",
+      "parentUuid": "70439456_ea091b83",
+      "revId": "aceda2231e7afa282f6fc4b3430dabbf6e4d4495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
