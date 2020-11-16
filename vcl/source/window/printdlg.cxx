@@ -925,7 +925,7 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
         mnCurPage = nPages-1;
     if( mnCurPage < 0 )
         mnCurPage = 0;
-
+    mxPageEdit->set_text(OUString::number(mnCurPage + 1));
 
     const MapMode aMapMode( MapUnit::Map100thMM );
     if( nPages > 0 )
