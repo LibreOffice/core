@@ -22,6 +22,30 @@
       "revId": "aa7729d93933495604e31d5bba28223c4b9ab992",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc80cd57_8ad8a028",
+        "filename": "external/firebird/firebird-macosx.patch.1",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-11-16T20:22:11Z",
+      "side": 0,
+      "message": "I thought this was somehow handled by macosx-change-install-names.pl, but looking at it again, it just handles the @__________________________________________________* paths.",
+      "parentUuid": "46026fd0_0306ee25",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 124
+      },
+      "revId": "aa7729d93933495604e31d5bba28223c4b9ab992",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
