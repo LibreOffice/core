@@ -453,6 +453,7 @@ bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
 
 bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
 {
+    assert(good() && "reading past end of file");
     char    buf[256+1];
     bool        bEnd        = false;
     sal_uInt64  nOldFilePos = Tell();
@@ -527,6 +528,7 @@ bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
 
 bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead )
 {
+    assert(good() && "reading past end of file");
     sal_Unicode buf[256+1];
     bool        bEnd        = false;
     sal_uInt64  nOldFilePos = Tell();
@@ -819,6 +821,7 @@ sal_uInt64 SvStream::SeekRel(sal_Int64 const nPos)
 
 SvStream& SvStream::ReadUInt16(sal_uInt16& r)
 {
+    assert(remainingSize() >= 2 && "reading past end of file");
     sal_uInt16 n = 0;
     readNumberWithoutSwap(n);
     if (good())
@@ -832,6 +835,7 @@ SvStream& SvStream::ReadUInt16(sal_uInt16& r)
 
 SvStream& SvStream::ReadUInt32(sal_uInt32& r)
 {
+    assert(remainingSize() >= 4 && "reading past end of file");
     sal_uInt32 n = 0;
     readNumberWithoutSwap(n);
     if (good())
@@ -845,6 +849,7 @@ SvStream& SvStream::ReadUInt32(sal_uInt32& r)
 
 SvStream& SvStream::ReadUInt64(sal_uInt64& r)
 {
+    assert(remainingSize() >= 8 && "reading past end of file");
     sal_uInt64 n = 0;
     readNumberWithoutSwap(n);
     if (good())
@@ -858,6 +863,7 @@ SvStream& SvStream::ReadUInt64(sal_uInt64& r)
 
 SvStream& SvStream::ReadInt16(sal_Int16& r)
 {
+    assert(remainingSize() >= 2 && "reading past end of file");
     sal_Int16 n = 0;
     readNumberWithoutSwap(n);
     if (good())
@@ -871,6 +877,7 @@ SvStream& SvStream::ReadInt16(sal_Int16& r)
 
 SvStream& SvStream::ReadInt32(sal_Int32& r)
 {
+    assert(remainingSize() >= 4 && "reading past end of file");
     sal_Int32 n = 0;
     readNumberWithoutSwap(n);
     if (good())
@@ -884,6 +891,7 @@ SvStream& SvStream::ReadInt32(sal_Int32& r)
 
 SvStream& SvStream::ReadInt64(sal_Int64& r)
 {
+    assert(remainingSize() >= 8 && "reading past end of file");
     sal_Int64 n = 0;
     readNumberWithoutSwap(n);
     if (good())
@@ -892,6 +900,8 @@ SvStream& SvStream::ReadInt64(sal_Int64& r)
             SwapInt64(n);
         r = n;
     }
+    else
+        assert(false && "reading past end of file");
     return *this;
 }
 
@@ -941,6 +951,7 @@ SvStream& SvStream::ReadUChar( unsigned char& r )
 
 SvStream& SvStream::ReadUtf16(sal_Unicode& r)
 {
+    assert(remainingSize() >= 2 && "reading past end of file");
     sal_uInt16 n = 0;
     readNumberWithoutSwap(n);
     if (good())
@@ -977,6 +988,7 @@ SvStream& SvStream::ReadCharAsBool( bool& r )
 
 SvStream& SvStream::ReadFloat(float& r)
 {
+    assert(remainingSize() >= 4 && "reading past end of file");
     float n = 0;
     readNumberWithoutSwap(n);
     if (good())
@@ -992,6 +1004,7 @@ SvStream& SvStream::ReadFloat(float& r)
 
 SvStream& SvStream::ReadDouble(double& r)
 {
+    assert(remainingSize() >= 8 && "reading past end of file");
     double n = 0;
     readNumberWithoutSwap(n);
     if (good())
