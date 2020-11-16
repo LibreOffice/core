@@ -827,7 +827,7 @@ bool SwRedlineItr::CheckLine(
         pRedline->CalcStartEnd( m_nNdIdx, m_nStart, m_nEnd );
         if (nChkEnd < m_nStart)
             break;
-        if (nChkStart <= m_nEnd && (nChkEnd > m_nStart || COMPLETE_STRING == m_nEnd))
+        if (nChkStart <= m_nEnd && (nChkEnd >= m_nStart || COMPLETE_STRING == m_nEnd))
         {
             bRet = true;
             if ( rRedlineText.isEmpty() && pRedline->GetType() == RedlineType::Delete )
