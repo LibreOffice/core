@@ -18,8 +18,12 @@
  * (1) introduce a typedef that will replace all usage of long in our codebase.
  * (2) to start with, that typedef acts that same as the long it replaces
  * (3) once the replacement is complete, this typedef will, on windows, become 64-bit.
- * (4) and once the fallout from (3) is fixed, we can start replacing tools::Long with things
- *     like sal_Int64.
+ * (4) fix fallout from (3)
+ *
+ * As a consequence of the above, it would be best, over the long term, to regard usage
+ * of tools::Long in the codebase as meaning "we're not sure what the ideal size of the datatype is",
+ * and where possible, replace it with a better datatype like sal_Int32/sal_Int64/etc.
+ *
  */
 namespace tools
 {
