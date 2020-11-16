@@ -182,6 +182,7 @@ public:
     void testTdf136267();
     void testDataLabelPlacementPieChart();
     void testTdf137917();
+    void testTdf138181();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -326,6 +327,7 @@ public:
     CPPUNIT_TEST(testTdf136267);
     CPPUNIT_TEST(testDataLabelPlacementPieChart);
     CPPUNIT_TEST(testTdf137917);
+    CPPUNIT_TEST(testTdf138181);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2968,7 +2970,6 @@ void Chart2ExportTest::testDataLabelPlacementPieChart()
     sal_Int32 nLabelPlacement = 0;
     CPPUNIT_ASSERT(aAny >>= nLabelPlacement);
     CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::OUTSIDE, nLabelPlacement);
-
 }
 
 void Chart2ExportTest::testTdf137917()
@@ -2982,6 +2983,32 @@ void Chart2ExportTest::testTdf137917()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:majorTimeUnit", "val", "months");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:minorUnit", "val", "7");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:minorTimeUnit", "val", "days");
+}
+
+void Chart2ExportTest::testTdf138181()
+{
+    load("/chart2/qa/extras/data/xlsx/", "piechart_deleted_legendentry.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+                                               UNO_QUERY_THROW);
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xLegendEntry1, xLegendEntry2, xLegendEntry3;
+
+    // first legend entry is visible
+    xLegendEntry1
+        = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0:LegendEntry=0");
+    CPPUNIT_ASSERT(xLegendEntry1.is());
+
+    // second legend entry is not visible
+    xLegendEntry2
+        = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=1:LegendEntry=0");
+    CPPUNIT_ASSERT(!xLegendEntry2.is());
+
+    // third legend entry is visible
+    xLegendEntry3
+        = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=2:LegendEntry=0");
+    CPPUNIT_ASSERT(xLegendEntry3.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);

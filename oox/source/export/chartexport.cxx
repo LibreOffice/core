@@ -1183,6 +1183,8 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                 if (!xDSCont.is())
                     continue;
 
+                OUString aChartType(rCT->getChartType());
+                bool bIsPieOrDonut = lcl_getChartType(aChartType) == chart::TYPEID_PIE;
                 const Sequence<Reference<chart2::XDataSeries>> aDataSeriesSeq = xDSCont->getDataSeries();
                 if (bSwapXAndY)
                     nIndex += aDataSeriesSeq.getLength() - 1;
@@ -1190,7 +1192,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                 {
                     PropertySet aSeriesProp(rDataSeries);
                     bool bVaryColorsByPoint = aSeriesProp.getBoolProperty(PROP_VaryColorsByPoint);
-                    if (bVaryColorsByPoint)
+                    if (bVaryColorsByPoint || bIsPieOrDonut)
                     {
                         Sequence<sal_Int32> deletedLegendEntriesSeq;
                         aSeriesProp.getProperty(deletedLegendEntriesSeq, PROP_DeletedLegendEntries);
