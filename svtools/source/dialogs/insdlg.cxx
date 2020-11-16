@@ -34,6 +34,14 @@
 
 using namespace ::com::sun::star;
 
+#if defined _WIN32
+#include <prewin.h>
+#include <oleidl.h>
+#include <postwin.h>
+#else
+typedef Size SIZEL;
+typedef Point POINTL;
+#endif
 
 // this struct conforms to the Microsoft
 // OBJECTDESCRIPTOR -> see oleidl.h
@@ -46,12 +54,21 @@ struct OleObjectDescriptor
     sal_uInt32  cbSize;
     ClsId       clsid;
     sal_uInt32  dwDrawAspect;
-    Size        sizel;
-    Point       pointl;
+    SIZEL       sizel;
+    POINTL      pointl;
     sal_uInt32  dwStatus;
     sal_uInt32  dwFullUserTypeName;
     sal_uInt32  dwSrcOfCopy;
 };
+
+#if defined _WIN32
+static_assert(sizeof(OleObjectDescriptor) == sizeof(OBJECTDESCRIPTOR));
+// check the two fields that we use here
+static_assert(offsetof(OleObjectDescriptor, dwFullUserTypeName)
+              == offsetof(OBJECTDESCRIPTOR, dwFullUserTypeName));
+static_assert(offsetof(OleObjectDescriptor, dwSrcOfCopy)
+              == offsetof(OBJECTDESCRIPTOR, dwSrcOfCopy));
+#endif
 
 }
 
