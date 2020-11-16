@@ -259,12 +259,6 @@ SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl()
 
 void SkiaSalGraphicsImpl::Init() {}
 
-void SkiaSalGraphicsImpl::recreateSurface()
-{
-    destroySurface();
-    createSurface();
-}
-
 void SkiaSalGraphicsImpl::createSurface()
 {
     SkiaZone zone;
@@ -419,13 +413,23 @@ void SkiaSalGraphicsImpl::checkSurface()
 {
     if (!mSurface)
     {
-        recreateSurface();
+        createSurface();
         SAL_INFO("vcl.skia.trace",
                  "create(" << this << "): " << Size(mSurface->width(), mSurface->height()));
     }
     else if (GetWidth() != mSurface->width() || GetHeight() != mSurface->height())
     {
-        if (!avoidRecreateByResize())
+        if (avoidRecreateByResize())
+            return;
+
+        if (!GetWidth() || !GetHeight())
+        {
+            SAL_WARN("vcl.skia", "recreate(" << this << "): can't create empty surface "
+                                             << Size(GetWidth(), GetHeight())
+                                             << " => keeping old one!");
+            return;
+        }
+
         {
             Size oldSize(mSurface->width(), mSurface->height());
             // Recreating a surface means that the old SkSurface contents will be lost.
@@ -440,7 +444,10 @@ void SkiaSalGraphicsImpl::checkSurface()
                 flushDrawing();
                 snapshot = SkiaHelper::makeCheckedImageSnapshot(mSurface);
             }
-            recreateSurface();
+
+            destroySurface();
+            createSurface();
+
             if (snapshot)
             {
                 SkPaint paint;
