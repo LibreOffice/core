@@ -112,7 +112,6 @@ sed -i \
     export PRODUCTVERSION=
     export KDEMAINDIR=$PREFIXDIR
     export PREFIXDIR=${PREFIXDIR}
-    export GNOME_MIME_THEME=hicolor
     export APPDATA_SOURCE_DIR="${SRCDIR?}"/sysui/desktop/appstream-appdata
     bash ./create_tree.sh
 )
