@@ -303,11 +303,10 @@ static void lcl_setDataProvider(uno::Reference<chart2::XChartDocument> const & x
     }
 }
 
-void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetChartAttrTokenMap();
 
     uno::Reference< embed::XVisualObject > xVisualObject( mrImportHelper.GetChartDocument(), uno::UNO_QUERY);
     SAL_WARN_IF(!xVisualObject.is(), "xmloff.chart", "need xVisualObject for page size");
@@ -318,22 +317,18 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     OUString aOldChartTypeName;
     bool bHasAddin = false;
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        OUString aValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-            case XML_TOK_CHART_DATA_PILOT_SOURCE:
+            case XML_ELEMENT(LO_EXT, XML_DATA_PILOT_SOURCE):
                 msDataPilotSource = aValue;
                 break;
-            case XML_TOK_CHART_HREF:
+            case XML_ELEMENT(XLINK, XML_HREF):
                 m_aXLinkHRefAttributeToIndicateDataProvider = aValue;
                 break;
-            case XML_TOK_CHART_CLASS:
+            case XML_ELEMENT(CHART, XML_CLASS):
                 {
                     OUString sClassName;
                     sal_uInt16 nClassPrefix =
@@ -367,26 +362,30 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 }
                 break;
 
-            case XML_TOK_CHART_WIDTH:
+            case XML_ELEMENT(SVG, XML_WIDTH):
+            case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         maChartSize.Width, aValue );
                 break;
 
-            case XML_TOK_CHART_HEIGHT:
+            case XML_ELEMENT(SVG, XML_HEIGHT):
+            case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         maChartSize.Height, aValue );
                 break;
 
-            case XML_TOK_CHART_STYLE_NAME:
+            case XML_ELEMENT(CHART, XML_STYLE_NAME):
                 sAutoStyleName = aValue;
                 break;
 
-            case XML_TOK_CHART_COL_MAPPING:
+            case XML_ELEMENT(CHART, XML_COLUMN_MAPPING):
                 msColTrans = aValue;
                 break;
-            case XML_TOK_CHART_ROW_MAPPING:
+            case XML_ELEMENT(CHART,  XML_ROW_MAPPING):
                 msRowTrans = aValue;
                 break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -1019,20 +1018,18 @@ void SchXMLChartContext::MergeSeriesForStockChart()
     }
 }
 
-SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     SvXMLImportContext* pContext = nullptr;
-    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetChartElemTokenMap();
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
     uno::Reference< beans::XPropertySet > xProp( xDoc, uno::UNO_QUERY );
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ))
+    switch(nElement)
     {
-        case XML_TOK_CHART_PLOT_AREA:
-            pContext = new SchXMLPlotAreaContext( mrImportHelper, GetImport(), rLocalName,
+        case XML_ELEMENT(CHART, XML_PLOT_AREA):
+            pContext = new SchXMLPlotAreaContext( mrImportHelper, GetImport(),
                                                   m_aXLinkHRefAttributeToIndicateDataProvider,
                                                   msCategoriesAddress,
                                                   msChartAddress, m_bHasRangeAtPlotArea, mbAllRangeAddressesAvailable,
@@ -1043,7 +1040,7 @@ SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
                                                   maLSequencesPerIndex, maChartSize );
             break;
 
-        case XML_TOK_CHART_TITLE:
+        case XML_ELEMENT(CHART, XML_TITLE):
             if( xDoc.is())
             {
                 if( xProp.is())
@@ -1056,7 +1053,7 @@ SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
             }
             break;
 
-        case XML_TOK_CHART_SUBTITLE:
+        case XML_ELEMENT(CHART, XML_SUBTITLE):
             if( xDoc.is())
             {
                 if( xProp.is())
@@ -1069,14 +1066,14 @@ SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
             }
             break;
 
-        case XML_TOK_CHART_LEGEND:
-            pContext = new SchXMLLegendContext( mrImportHelper, GetImport(), rLocalName );
+        case XML_ELEMENT(CHART, XML_LEGEND):
+            pContext = new SchXMLLegendContext( mrImportHelper, GetImport() );
             break;
 
-        case XML_TOK_CHART_TABLE:
+        case  XML_ELEMENT(TABLE, XML_TABLE):
             {
                 SchXMLTableContext * pTableContext =
-                    new SchXMLTableContext( mrImportHelper, GetImport(), rLocalName, maTable );
+                    new SchXMLTableContext( mrImportHelper, GetImport(), maTable );
                 m_bHasTableElement = true;
                 // #i85913# take into account column- and row- mapping for
                 // charts with own data only for those which were not copied
@@ -1103,6 +1100,40 @@ SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
                 }
                 pContext = pTableContext;
             }
+            break;
+
+        default:
+            break;
+    }
+
+    return pContext;
+}
+
+SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    SvXMLImportContext* pContext = nullptr;
+    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetChartElemTokenMap();
+    uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
+    uno::Reference< beans::XPropertySet > xProp( xDoc, uno::UNO_QUERY );
+
+    switch( rTokenMap.Get( nPrefix, rLocalName ))
+    {
+        case XML_TOK_CHART_PLOT_AREA:
+            break;
+
+        case XML_TOK_CHART_TITLE:
+            break;
+
+        case XML_TOK_CHART_SUBTITLE:
+            break;
+
+        case XML_TOK_CHART_LEGEND:
+            break;
+
+        case XML_TOK_CHART_TABLE:
             break;
 
         default:

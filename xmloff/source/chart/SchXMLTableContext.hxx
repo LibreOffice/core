@@ -50,7 +50,6 @@ private:
 public:
     SchXMLTableContext( SchXMLImportHelper& rImpHelper,
                         SvXMLImport& rImport,
-                        const OUString& rLocalName,
                         SchXMLTable& aTable );
     virtual ~SchXMLTableContext() override;
 
