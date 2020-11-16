@@ -6962,6 +6962,9 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
 // it will return a null pointer.
 std::unique_ptr<WW8_STD> WW8Style::Read1STDFixed(sal_uInt16& rSkip)
 {
+    if (m_rStream.remainingSize() < 2)
+        return nullptr;
+
     std::unique_ptr<WW8_STD> pStd;
 
     sal_uInt16 cbStd(0);

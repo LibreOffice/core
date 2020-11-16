@@ -1724,15 +1724,14 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
     rImpGraphic.ImplClear();
 
-    // read Id
-    rIStm.ReadUInt32( nTmp );
-
     // if there is no more data, avoid further expensive
     // reading which will create VDevs and other stuff, just to
-    // read nothing. CAUTION: Eof is only true AFTER reading another
-    // byte, a speciality of SvMemoryStream (!)
-    if (!rIStm.good())
+    // read nothing.
+    if (rIStm.remainingSize() < 4)
         return;
+
+    // read Id
+    rIStm.ReadUInt32( nTmp );
 
     if (NATIVE_FORMAT_50 == nTmp)
     {
@@ -1788,8 +1787,11 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
         sal_uInt32  nMagic1(0), nMagic2(0);
         sal_uLong   nActPos = rIStm.Tell();
 
-        rIStm.ReadUInt32( nMagic1 ).ReadUInt32( nMagic2 );
-        rIStm.Seek( nActPos );
+        if (rIStm.remainingSize() >= 8)
+        {
+            rIStm.ReadUInt32( nMagic1 ).ReadUInt32( nMagic2 );
+            rIStm.Seek( nActPos );
+        }
 
         rImpGraphic = ImpGraphic( aBmpEx );
 

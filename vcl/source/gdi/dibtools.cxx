@@ -151,6 +151,8 @@ bool isBitfieldCompression( ScanlineFormat nScanlineFormat )
 
 bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown, bool bMSOFormat)
 {
+    if (rIStm.remainingSize() <= 4)
+        return false;
     // BITMAPINFOHEADER or BITMAPCOREHEADER or BITMAPV5HEADER
     sal_uInt64 const aStartPos(rIStm.Tell());
     rIStm.ReadUInt32( rHeader.nSize );
@@ -1757,7 +1759,8 @@ bool ReadDIBBitmapEx(
         sal_uInt32 nMagic2(0);
 
         rTarget = BitmapEx(aBmp);
-        rIStm.ReadUInt32( nMagic1 ).ReadUInt32( nMagic2 );
+        if (rIStm.remainingSize() >= 4)
+            rIStm.ReadUInt32( nMagic1 ).ReadUInt32( nMagic2 );
         bRetval = (0x25091962 == nMagic1) && (0xACB20201 == nMagic2) && !rIStm.GetError();
 
         if(bRetval)
