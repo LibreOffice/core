@@ -80,8 +80,8 @@ struct theLegendAttributeTokenMap : public rtl::Static< LegendAttributeTokenMap,
 
 }//end anonymous namespace
 
-SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport, const OUString& rLocalName ) :
-    SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
+SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport ) :
+    SvXMLImportContext( rImport ),
     mrImportHelper( rImpHelper )
 {
 }

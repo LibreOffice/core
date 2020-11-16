@@ -119,7 +119,7 @@ SchXML3DSceneAttributesHelper::~SchXML3DSceneAttributesHelper()
 
 SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     SchXMLImportHelper& rImpHelper,
-    SvXMLImport& rImport, const OUString& rLocalName,
+    SvXMLImport& rImport,
     const OUString& rXLinkHRefAttributeToIndicateDataProvider,
     OUString& rCategoriesAddress,
     OUString& rChartAddress,
@@ -132,7 +132,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     const OUString& aChartTypeServiceName,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
     const awt::Size & rChartSize ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mrCategoriesAddress( rCategoriesAddress ),
         mrSeriesDefaultsAndStyles( rSeriesDefaultsAndStyles ),
