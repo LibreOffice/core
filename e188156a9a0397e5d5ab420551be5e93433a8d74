@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31dfcee5_737f87ab",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1587,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2020-11-16T08:01:14Z",
+      "side": 1,
+      "message": "I prepared more generic mechanism for porting dialogs in JSON form to online. see \nvcl/source/window/builder.cxx Application::CreateBuilder method. you can add there .ui file to enable and it should work out of the box...",
+      "revId": "e188156a9a0397e5d5ab420551be5e93433a8d74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
