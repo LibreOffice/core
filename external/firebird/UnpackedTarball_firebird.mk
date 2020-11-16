@@ -36,6 +36,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/asan.patch \
 		external/firebird/firebird-tdf125284.patch.1 \
 		external/firebird/0001-Make-comparison-operator-member-functions-const.patch.1 \
+		external/firebird/macos-arm64.patch.0 \
 ))
 
 ifeq ($(OS),WNT)
