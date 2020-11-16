@@ -16,6 +16,7 @@
 #include <unotxdoc.hxx>
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentState.hxx>
 #include <svx/svdpage.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/core/layout/data/";
@@ -178,6 +179,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
     // - Actual  : 7476
     assertXPath(pXmlDoc, "//fly/infos/bounds", "top", "1932");
     assertXPath(pXmlDoc, "//fly/infos/bounds", "bottom", "7184");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxNotModifiedOnOpen)
+{
+    // tdf#138050: a freshly opened document containing a shape with a text box
+    // should not appear to be modified
+    load(DATA_DIRECTORY, "textbox-phantom-change.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    // Without the fix in place this test would have shown that the document
+    // was modified due to a fix to tdf#135198
+    CPPUNIT_ASSERT(!pDoc->getIDocumentState().IsModified());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
