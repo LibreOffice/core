@@ -9,6 +9,7 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_row
+from uitest.uihelper.calc import enter_text_to_cell
 import org.libreoffice.unotest
 import pathlib
 
@@ -140,4 +141,69 @@ class AutofilterTest(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_differentSearches(self):
+        self.ui_test.create_doc_in_start_center("calc")
+        document = self.ui_test.get_component()
+        calcDoc = self.xUITest.getTopFocusWindow()
+
+        xGridWindow = calcDoc.getChild("grid_window")
+        enter_text_to_cell(xGridWindow, "A1", "X")
+        enter_text_to_cell(xGridWindow, "A2", "11")
+        enter_text_to_cell(xGridWindow, "A3", "22")
+        xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A3"}))
+
+        self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
+
+        xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+
+        xFloatWindow = self.xUITest.getFloatWindow()
+
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+
+        xList = xCheckListMenu.getChild("check_list_box")
+
+        self.assertEqual(2, len(xList.getChildren()))
+        self.assertEqual("11", get_state_as_dict(xList.getChild('0'))['Text'])
+        self.assertEqual("22", get_state_as_dict(xList.getChild('1'))['Text'])
+
+        xSearchEdit = xFloatWindow.getChild("search_edit")
+        xSearchEdit.executeAction("TYPE", mkPropertyValues({"TEXT" : "11"}))
+
+        self.assertEqual(1, len(xList.getChildren()))
+        self.assertEqual("11", get_state_as_dict(xList.getChild('0'))['Text'])
+
+        xOkBtn = xFloatWindow.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        self.assertFalse(is_row_hidden(document, 0))
+        self.assertFalse(is_row_hidden(document, 1))
+        self.assertTrue(is_row_hidden(document, 2))
+
+        xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+
+        xFloatWindow = self.xUITest.getFloatWindow()
+
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+
+        xList = xCheckListMenu.getChild("check_list_box")
+
+        self.assertEqual(2, len(xList.getChildren()))
+        self.assertEqual("11", get_state_as_dict(xList.getChild('0'))['Text'])
+        self.assertEqual("22", get_state_as_dict(xList.getChild('1'))['Text'])
+
+        xSearchEdit = xFloatWindow.getChild("search_edit")
+        xSearchEdit.executeAction("TYPE", mkPropertyValues({"TEXT" : "22"}))
+
+        self.assertEqual(1, len(xList.getChildren()))
+        self.assertEqual("22", get_state_as_dict(xList.getChild('0'))['Text'])
+
+        xOkBtn = xFloatWindow.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
+
+
+        self.assertFalse(is_row_hidden(document, 0))
+        self.assertTrue(is_row_hidden(document, 1))
+        self.assertFalse(is_row_hidden(document, 2))
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
