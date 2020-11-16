@@ -738,8 +738,16 @@ IMPL_LINK(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, rButton, void)
     if ( bNeedsRestart )
     {
         SolarMutexGuard aGuard;
+        weld::Window* pParent;
+        if (!bOkPressed)
+            pParent = m_xDialog.get();
+        else
+        {
+            m_xDialog->hide();
+            pParent = m_pParent;
+        }
         ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                        m_pParent, eRestartReason);
+                                        pParent, eRestartReason);
     }
 }
 
