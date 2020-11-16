@@ -735,11 +735,21 @@ IMPL_LINK(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, rButton, void)
         SelectHdl_Impl();
     }
 
-    if ( bNeedsRestart )
+    if (bNeedsRestart)
     {
         SolarMutexGuard aGuard;
-        ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                        m_pParent, eRestartReason);
+        weld::Window* pParent;
+        if (!bOkPressed)
+            pParent = m_xDialog.get();
+        else
+        {
+            m_xDialog->hide();
+            pParent = m_pParent;
+        }
+        bool bRestart = ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
+                                                        pParent, eRestartReason);
+        if (bRestart && !bOkPressed)
+            m_xDialog->response(RET_OK);
     }
 }
 
