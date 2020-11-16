@@ -221,8 +221,8 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const OUString& rStr
 } // anonymous namespace
 
 SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
-                                        SvXMLImport& rImport, const OUString& rLocalName ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
+                                        SvXMLImport& rImport ) :
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         m_bHasRangeAtPlotArea( false ),
         m_bHasTableElement( false ),

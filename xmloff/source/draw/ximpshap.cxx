@@ -2550,7 +2550,7 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
             uno::Reference< frame::XModel > xChartModel;
             if( aAny >>= xChartModel )
             {
-                mxChartContext.set( GetImport().GetChartImport()->CreateChartContext( GetImport(), XML_NAMESPACE_SVG, GetXMLToken(XML_CHART), xChartModel, xAttrList ) );
+                mxChartContext.set( GetImport().GetChartImport()->CreateChartContext( GetImport(), xChartModel ) );
             }
         }
     }
