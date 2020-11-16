@@ -139,6 +139,14 @@ public:
 class GrfRereadAndInCacheHint final : public SfxHint
 {
 };
+
+class PreGraphicArrivedHint final : public SfxHint
+{
+};
+
+class PostGraphicArrivedHint final : public SfxHint
+{
+};
 }
 
 class SwUpdateAttr final : public SwMsgPoolItem

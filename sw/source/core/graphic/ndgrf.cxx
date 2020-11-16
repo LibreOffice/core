@@ -362,23 +362,8 @@ void SwGrfNode::SetGraphic(const Graphic& rGraphic)
 
 void SwGrfNode::TriggerGraphicArrived()
 {
-    const SwMsgPoolItem aMsgHint(RES_GRAPHIC_ARRIVED);
-    // FIXME: instead of hacking the notification to only handle specific clients.
-    // this should have been implemented cleanly with two hints, e.g.
-    // RES_GRAPHIC_ARRIVED_PREP and RES_GRAPHIC_ARRIVED.
-    LockModify();
-    {
-        SwIterator<sw::BroadcastingModify,SwGrfNode> aIter(*this);
-        for(sw::BroadcastingModify* pLast = aIter.First(); pLast; pLast = aIter.Next())
-            if(dynamic_cast<const SwContentFrame*>(pLast) ==  nullptr)
-                pLast->SwClientNotifyCall(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
-    }
-    {
-        SwIterator<SwContentFrame,SwGrfNode> aIter(*this);
-        for(SwContentFrame* pLast = aIter.First(); pLast; pLast = aIter.Next())
-            pLast->SwClientNotifyCall(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
-    }
-    UnlockModify();
+    CallSwClientNotify(sw::PreGraphicArrivedHint());
+    CallSwClientNotify(sw::PostGraphicArrivedHint());
 }
 
 const Graphic& SwGrfNode::GetGrf(bool bWait) const

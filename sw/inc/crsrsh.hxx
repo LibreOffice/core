@@ -291,7 +291,7 @@ protected:
     SAL_DLLPRIVATE void UpdateMarkedListLevel();
 
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     SwCursorShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt );

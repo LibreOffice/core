@@ -55,6 +55,7 @@ private:
     // MM02
     std::unique_ptr<sdr::contact::ViewContact> mpViewContact;
     sdr::contact::ViewContact& GetViewContact() const;
+    void OnGraphicArrived();
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;

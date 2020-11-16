@@ -566,6 +566,7 @@ public:
 
     void setOutputToWindow(bool bOutputToWindow);
     bool isOutputToWindow() const;
+    void OnGraphicArrived(const SwRect&);
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
