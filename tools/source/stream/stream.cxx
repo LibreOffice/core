@@ -453,6 +453,7 @@ bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
 
 bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
 {
+    assert(good() && "reading past end of file");
     char    buf[256+1];
     bool        bEnd        = false;
     sal_uInt64  nOldFilePos = Tell();
@@ -527,6 +528,7 @@ bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
 
 bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead )
 {
+    assert(good() && "reading past end of file");
     sal_Unicode buf[256+1];
     bool        bEnd        = false;
     sal_uInt64  nOldFilePos = Tell();
@@ -827,6 +829,8 @@ SvStream& SvStream::ReadUInt16(sal_uInt16& r)
             SwapUShort(n);
         r = n;
     }
+    else
+        assert(false && "reading past end of file");
     return *this;
 }
 
@@ -840,6 +844,8 @@ SvStream& SvStream::ReadUInt32(sal_uInt32& r)
             SwapULong(n);
         r = n;
     }
+    else
+        assert(false && "reading past end of file");
     return *this;
 }
 
@@ -853,6 +859,8 @@ SvStream& SvStream::ReadUInt64(sal_uInt64& r)
             SwapUInt64(n);
         r = n;
     }
+    else
+        assert(false && "reading past end of file");
     return *this;
 }
 
@@ -866,6 +874,8 @@ SvStream& SvStream::ReadInt16(sal_Int16& r)
             SwapShort(n);
         r = n;
     }
+    else
+        assert(false && "reading past end of file");
     return *this;
 }
 
@@ -879,6 +889,8 @@ SvStream& SvStream::ReadInt32(sal_Int32& r)
             SwapLongInt(n);
         r = n;
     }
+    else
+        assert(false && "reading past end of file");
     return *this;
 }
 
@@ -892,6 +904,8 @@ SvStream& SvStream::ReadInt64(sal_Int64& r)
             SwapInt64(n);
         r = n;
     }
+    else
+        assert(false && "reading past end of file");
     return *this;
 }
 
@@ -949,6 +963,8 @@ SvStream& SvStream::ReadUtf16(sal_Unicode& r)
             SwapUShort(n);
         r = sal_Unicode(n);
     }
+    else
+        assert(false && "reading past end of file");
     return *this;
 }
 
@@ -987,6 +1003,8 @@ SvStream& SvStream::ReadFloat(float& r)
 #endif
         r = n;
     }
+    else
+        assert(false && "reading past of end of file");
     return *this;
 }
 
@@ -1002,6 +1020,8 @@ SvStream& SvStream::ReadDouble(double& r)
 #endif
         r = n;
     }
+    else
+        assert(false && "reading past end of file");
     return *this;
 }
 
@@ -1234,6 +1254,7 @@ void SvStream::FlushBuffer()
 std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
 {
     std::size_t nSaveCount = nCount;
+    assert(good() && "reading past end of file");
 
     if (!m_pRWBuf)
     {
