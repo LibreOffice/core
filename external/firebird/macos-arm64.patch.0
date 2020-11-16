@@ -1,0 +1,123 @@
+-*- Mode: diff -*-
+--- configure
++++ configure
+@@ -2901,6 +2901,21 @@
+     EXPORT_SYMBOLS_STYLE=darwin
+     ;;
+ 
++  aarch64-*-darwin*)
++    MAKEFILE_PREFIX=darwin_arm64
++    MAKEFILE_POSTFIX=darwin
++    PLATFORM=DARWIN
++    INSTALL_PREFIX=darwin
++
++$as_echo "#define DARWIN 1" >>confdefs.h
++
++	LIBS="$LIBS -framework CoreFoundation"
++    EDITLINE_FLG=Y
++    SHRLIB_EXT=dylib
++    CPU_TYPE=arm64
++    EXPORT_SYMBOLS_STYLE=darwin
++    ;;
++
+   i*86-*-darwin*)
+     MAKEFILE_PREFIX=darwin_i386
+     MAKEFILE_POSTFIX=darwin
+@@ -21344,6 +21344,7 @@
+ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
++#include <stdlib.h>
+ main () {
+   struct s {
+     char a;
+@@ -21379,6 +21379,7 @@
+ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
++#include <stdlib.h>
+ main () {
+   struct s {
+     char a;
+--- src/common/common.h
++++ src/common/common.h
+@@ -234,6 +234,10 @@
+ #define DARWINPPC64
+ #define FB_CPU CpuPowerPc64
+ #endif
++#ifdef ARM64
++#define DARWIN64
++#define FB_CPU CpuArm64
++#endif
+ #define IEEE
+ #define QUADCONST(n) (n##LL)
+ #define QUADFORMAT "q"
+--- src/jrd/license.h
++++ src/jrd/license.h
+@@ -128,6 +128,9 @@
+ #if defined(ARM)
+ #define FB_PLATFORM     "UA"
+ #endif
++#if defined(ARM64)
++#define FB_PLATFORM     "UB"
++#endif
+ #endif
+ 
+ #ifdef DEV_BUILD
+--- /dev/null
++++ builds/posix/prefix.darwin_arm64
+@@ -0,0 +0,43 @@
++# The contents of this file are subject to the Interbase Public
++# License Version 1.0 (the "License"); you may not use this file
++# except in compliance with the License. You may obtain a copy
++# of the License at http://www.Inprise.com/IPL.html
++#
++# Software distributed under the License is distributed on an
++# "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express
++# or implied. See the License for the specific language governing
++# rights and limitations under the License.
++#
++# The Original Code was created by Inprise Corporation
++# and its predecessors. Portions created by Inprise Corporation are
++#
++# Copyright (C) 2000 Inprise Corporation
++# All Rights Reserved.
++# Contributor(s): ______________________________________.
++# Start of file prefix.darwin:	$(VERSION)	@PLATFORM@
++# 2 Oct 2002, Nickolay Samofatov - Major Cleanup
++#
++# Default build from 10.7 using Clang
++
++
++#DYLD_PRINT_ENV=1
++#export DYLD_PRINT_ENV
++
++#DYLD_PRINT_LIBRARIES=1
++#export DYLD_PRINT_LIBRARIES
++
++MACOSX_DEPLOYMENT_TARGET=11.0
++export MACOSX_DEPLOYMENT_TARGET
++
++PROD_FLAGS=-O1 -DDARWIN -DARM64 -pipe -MMD -fPIC -fno-common
++DEV_FLAGS=-ggdb -DDARWIN -DARM64 -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -Wno-non-virtual-dtor
++CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden 
++
++EXE_LINK_OPTIONS:= 
++UNDEF_PLATFORM=
++
++LINK_LIBS+=-liconv
++MATHLIB=-ltommath
++SO_LINK_LIBS+=-liconv
++
++include $(ROOT)/gen/darwin.defaults
+--- src/isql/InputDevices.cpp
++++ src/isql/InputDevices.cpp
+@@ -23,7 +23,7 @@
+ 
+ #include "firebird.h"
+ #if defined(DARWIN) && !defined(IOS)
+-#if defined(i386) || defined(__x86_64__)
++#if defined(i386) || defined(__x86_64__) || defined(__arm64__)
+ #include <architecture/i386/io.h>
+ #else
+ #include <io.h>
