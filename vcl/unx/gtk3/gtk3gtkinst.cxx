@@ -750,6 +750,7 @@ public:
     void ClipboardClear();
     void OwnerPossiblyChanged(GtkClipboard *clipboard);
     void SetGtkClipboard();
+    void SyncGtkClipboard();
 };
 
 }
@@ -835,6 +836,7 @@ namespace
 
 void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard)
 {
+    SyncGtkClipboard(); // tdf#138183 do any pending SetGtkClipboard calls
     if (!m_aContents.is())
         return;
 
@@ -1047,6 +1049,17 @@ IMPL_LINK_NOARG(VclGtkClipboard, AsyncSetGtkClipboard, void*, void)
     osl::ClearableMutexGuard aGuard( m_aMutex );
     m_pSetClipboardEvent = nullptr;
     SetGtkClipboard();
+}
+
+void VclGtkClipboard::SyncGtkClipboard()
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+    if (m_pSetClipboardEvent)
+    {
+        Application::RemoveUserEvent(m_pSetClipboardEvent);
+        m_pSetClipboardEvent = nullptr;
+        SetGtkClipboard();
+    }
 }
 
 void VclGtkClipboard::SetGtkClipboard()
