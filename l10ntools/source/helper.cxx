@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
+
 #include <helper.hxx>
 
 namespace helper {
@@ -31,15 +35,9 @@ OString escapeAll(
 
 
 OString unEscapeAll(
-#ifdef DEBUG
-    const OString& rText, const OString& rEscaped, const OString& rUnEscaped)
-#else
     const OString& rText, const OString& rEscaped, std::string_view rUnEscaped)
-#endif
 {
-#ifdef DEBUG
-    assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
-#endif
+    assert( o3tl::make_unsigned(rEscaped.getLength()) == 2*rUnEscaped.length() );
     OStringBuffer sReturn;
     const sal_Int32 nLength = rText.getLength();
     for ( sal_Int32 nIndex = 0; nIndex < nLength; ++nIndex )
