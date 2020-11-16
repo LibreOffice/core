@@ -29,6 +29,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <tools/solar.h>
+#include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
 
@@ -5709,7 +5710,14 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
     SetDefaultPropSet( rStCtrl, nOffsDgg );
 
     // read control stream, if successful set nBLIPCount
-    GetCtrlData( nOffsDgg );
+    try
+    {
+        GetCtrlData( nOffsDgg );
+    }
+    catch(SvStreamEOFException&)
+    {
+        TOOLS_WARN_EXCEPTION("filter.ms", "");
+    }
 
     // check Text-Box-Story-Chain-Infos
     CheckTxBxStoryChain();

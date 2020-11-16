@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -105,6 +104,8 @@ bool LwpObjectHeader::Read(LwpSvStream& rStrm)
     {
         sal_uInt8 nFlagBits = 0;
         sal_uInt16 VOType = 0;
+        if (rStrm.remainingSize() < 3)
+            return false;
         rStrm.ReadUInt16(VOType);
         rStrm.ReadUInt8(nFlagBits);
 

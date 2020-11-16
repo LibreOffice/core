@@ -72,6 +72,7 @@ public:
     size_t Read(void* bytes, size_t nBytesToRead);
     void SeekRel(sal_Int64 pos);
     sal_Int64 Tell();
+    sal_uInt64 remainingSize();
     sal_Int64 Seek(sal_Int64 pos);
     bool CheckSeek(sal_Int64 pos);
 

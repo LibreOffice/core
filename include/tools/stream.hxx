@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_STREAM_HXX
-#define INCLUDED_TOOLS_STREAM_HXX
+#pragma once
 
 #include <tools/toolsdllapi.h>
 #include <tools/lineend.hxx>
@@ -673,6 +672,11 @@ public:
     virtual sal_uInt64 TellEnd() override { FlushBuffer(); return nEndOfData; }
 };
 
-#endif
+/** thrown when reading past the end of file */
+class TOOLS_DLLPUBLIC SvStreamEOFException : public std::exception
+{
+public:
+    virtual const char * what() const throw() override;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
