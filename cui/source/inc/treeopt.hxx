@@ -112,6 +112,7 @@ struct OptionsPageInfo;
 struct Module;
 class ExtensionsTabPage;
 class SvxColorTabPage;
+struct OptionsGroupInfo;
 
 class OfaTreeOptionsDialog final: public SfxOkDialogController
 {
@@ -164,6 +165,8 @@ private:
     DECL_LINK(HelpHdl_Impl, weld::Widget&, bool);
     void ResetCurrentPageFromConfig();
     void SelectHdl_Impl();
+
+    void InitItemSets(OptionsGroupInfo& rGroupInfo);
 
     virtual short run() override;
 

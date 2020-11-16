@@ -449,8 +449,6 @@ struct OptionsPageInfo
     explicit OptionsPageInfo( sal_uInt16 nId ) : m_nPageId( nId ) {}
 };
 
-namespace {
-
 struct OptionsGroupInfo
 {
     std::unique_ptr<SfxItemSet> m_pInItemSet;
@@ -464,8 +462,6 @@ struct OptionsGroupInfo
         m_pModule( pMod ), m_nDialogId( nId ) {}
 };
 
-}
-
 #define INI_LIST() \
     , m_pParent           ( pParent )\
     , sTitle              ( m_xDialog->get_title() )\
@@ -474,7 +470,6 @@ struct OptionsGroupInfo
     , bIsForSetDocumentLanguage( false ) \
     , bNeedsRestart ( false ) \
     , eRestartReason( svtools::RESTART_REASON_NONE )
-
 
 void OfaTreeOptionsDialog::InitWidgets()
 {
@@ -695,6 +690,8 @@ IMPL_LINK(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, rButton, void)
 {
     bool bOkPressed = &rButton == xOkPB.get();
 
+    OptionsGroupInfo* pGroupInfo = nullptr;
+
     if (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
     {
         OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
@@ -703,7 +700,7 @@ IMPL_LINK(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, rButton, void)
             std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xCurrentPageEntry.get());
             xTreeLB->iter_parent(*xParent);
 
-            OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
+            pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
             if ( RID_SVXPAGE_COLOR != pPageInfo->m_nPageId
                 && pPageInfo->m_xPage->HasExchangeSupport() )
             {
@@ -727,6 +724,15 @@ IMPL_LINK(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, rButton, void)
         m_xDialog->response(RET_OK);
     else
     {
+        // tdf#137930 rebuild the in and out itemsets
+        // to reflect the current post-apply state
+        if (pGroupInfo && pGroupInfo->m_pInItemSet)
+        {
+            pGroupInfo->m_pInItemSet.reset();
+            pGroupInfo->m_pOutItemSet.reset();
+            InitItemSets(*pGroupInfo);
+        }
+
         // for the Apply case, now that the settings are saved to config,
         // reload the current page so it knows what the config now states
         ResetCurrentPageFromConfig();
@@ -878,6 +884,18 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     SelectHdl_Impl();
 }
 
+void OfaTreeOptionsDialog::InitItemSets(OptionsGroupInfo& rGroupInfo)
+{
+    if (!rGroupInfo.m_pInItemSet)
+        rGroupInfo.m_pInItemSet = rGroupInfo.m_pShell
+            ? rGroupInfo.m_pShell->CreateItemSet( rGroupInfo.m_nDialogId )
+            : CreateItemSet( rGroupInfo.m_nDialogId );
+    if (!rGroupInfo.m_pOutItemSet)
+        rGroupInfo.m_pOutItemSet = std::make_unique<SfxItemSet>(
+            *rGroupInfo.m_pInItemSet->GetPool(),
+            rGroupInfo.m_pInItemSet->GetRanges());
+}
+
 void OfaTreeOptionsDialog::SelectHdl_Impl()
 {
     std::unique_ptr<weld::TreeIter> xEntry(xTreeLB->make_iterator());
@@ -930,14 +948,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
     if(!pPageInfo->m_xPage && pPageInfo->m_nPageId > 0)
     {
-        if(!pGroupInfo->m_pInItemSet)
-            pGroupInfo->m_pInItemSet = pGroupInfo->m_pShell
-                ? pGroupInfo->m_pShell->CreateItemSet( pGroupInfo->m_nDialogId )
-                : CreateItemSet( pGroupInfo->m_nDialogId );
-        if(!pGroupInfo->m_pOutItemSet)
-            pGroupInfo->m_pOutItemSet = std::make_unique<SfxItemSet>(
-                *pGroupInfo->m_pInItemSet->GetPool(),
-                pGroupInfo->m_pInItemSet->GetRanges());
+        InitItemSets(*pGroupInfo);
 
         pPageInfo->m_xPage = ::CreateGeneralTabPage(pPageInfo->m_nPageId, xTabBox.get(), this, *pGroupInfo->m_pInItemSet);
 
