@@ -87,6 +87,24 @@
       "revId": "aceda2231e7afa282f6fc4b3430dabbf6e4d4495",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13b61c44_eb841b7f",
+        "filename": "cui/source/dialogs/cuihyperdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-16T10:17:24Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/105914",
+      "parentUuid": "5238160f_a458e943",
+      "revId": "aceda2231e7afa282f6fc4b3430dabbf6e4d4495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
