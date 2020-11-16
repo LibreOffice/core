@@ -49,6 +49,8 @@
 #include <unodraw.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentState.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <doc.hxx>
 #include <hints.hxx>
 #include <txtfrm.hxx>
@@ -1260,7 +1262,6 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 const SwFormatVertOrient& rVert = GetFormat()->GetVertOrient();
                 if ( nYPosDiff != 0 )
                 {
-
                     if ( rVert.GetRelationOrient() == text::RelOrientation::CHAR ||
                          rVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE )
                     {
@@ -1312,6 +1313,32 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     // notify about the size change, as an adjustment change
                     // may affect the size of the underlying textbox.
                     lcl_textBoxSizeNotify(GetFormat());
+            }
+
+            // tdf#135198: keep text box together with its shape
+            SwRect aObjRect(rObj.GetSnapRect());
+            const SwPageFrame* rPageFrame = pAnchoredDrawObj->GetPageFrame();
+            if (rPageFrame && rPageFrame->isFrameAreaPositionValid())
+            {
+                SwDoc* const pDoc = GetFormat()->GetDoc();
+
+                // avoid Undo creation
+                ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
+
+                // hide any artificial "changes" made by synchronizing the textbox position
+                const bool bEnableSetModified = pDoc->getIDocumentState().IsEnableSetModified();
+                pDoc->getIDocumentState().SetEnableSetModified(false);
+
+                SfxItemSet aSyncSet(pDoc->GetAttrPool(),
+                                    svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
+                aSyncSet.Put(SwFormatVertOrient(aObjRect.Top() - rPageFrame->getFrameArea().Top(),
+                                                text::VertOrientation::NONE,
+                                                text::RelOrientation::PAGE_FRAME));
+                aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, pAnchoredDrawObj->GetPageFrame()->GetPhyPageNum()));
+
+                SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet);
+
+                pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
             }
         }
         break;
