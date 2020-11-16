@@ -143,7 +143,7 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
                 if (pItemWin)
                 {
                     sFindText = pItemWin->get_active_text();
-                    if (aFindAll)
+                    if (aFindAll && !pItemWin->ControlHasFocus())
                         pItemWin->GetFocus();
                 }
             } else if ( sItemCommand == COMMAND_MATCHCASE )
