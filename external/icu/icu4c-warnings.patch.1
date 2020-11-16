@@ -1,10 +1,10 @@
 diff -ur icu.org/source/common/unicode/utf16.h icu/source/common/unicode/utf16.h
---- icu.org/source/common/unicode/utf16.h	2019-10-03 13:16:41.000000000 +0200
-+++ icu/source/common/unicode/utf16.h	2019-10-28 18:03:07.967208272 +0100
-@@ -397,6 +397,7 @@
+--- icu.org/source/common/unicode/utf16.h	2020-10-28 22:21:12.000000000 +0100
++++ icu/source/common/unicode/utf16.h	2020-11-16 19:31:03.356478154 +0100
+@@ -398,6 +398,7 @@
          (s)[(i)++]=(uint16_t)(((c)&0x3ff)|0xdc00); \
      } else /* c>0x10ffff or not enough space */ { \
-         (isError)=TRUE; \
+         (isError)=true; \
 +        (void)(isError); \
      } \
  } UPRV_BLOCK_MACRO_END
