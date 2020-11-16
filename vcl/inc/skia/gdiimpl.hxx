@@ -237,7 +237,6 @@ protected:
     // Call to ensure that mSurface is valid. If mSurface is going to be modified,
     // use preDraw() instead of this.
     void checkSurface();
-    void recreateSurface();
     void destroySurface();
     // Reimplemented for X11.
     virtual bool avoidRecreateByResize() const { return false; }
