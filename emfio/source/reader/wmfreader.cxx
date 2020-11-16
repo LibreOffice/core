@@ -1398,7 +1398,7 @@ namespace emfio
             if( mnEndPos - mnStartPos )
             {
                 bool bEMFAvailable = false;
-                while( true )
+                while( !mpInputStream->eof() )
                 {
                     mpInputStream->ReadUInt32(mnRecSize).ReadUInt16( nFunction );
 
