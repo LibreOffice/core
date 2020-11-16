@@ -16,6 +16,24 @@
       "revId": "639b759c2d35d14c4676e618a482d0fc93d9fc76",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24890276_d1998bf7",
+        "filename": "starmath/source/starmathdatabase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-16T18:22:38Z",
+      "side": 1,
+      "message": "It sounds strange. Doesn\u0027t it?\nIt was for distinguishing colors from dvipsnames from html when they had the same name.\nRewritten it: color dvip colorname.\nIt sounds less strange and also allows to add colors from other places.\nIt should not be a problem since 7.1 has not been published yet.",
+      "parentUuid": "4bc75108_b857fd76",
+      "revId": "639b759c2d35d14c4676e618a482d0fc93d9fc76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
