@@ -286,6 +286,7 @@ Try:
 			Case V_OBJECT	&apos;	com.sun.star.lang.XComponent
 				bFound = True
 				vWindow = oUi._IdentifyWindow(vContainer)
+				Set oComp = vContainer
 		End Select
 		If Not bFound Then GoTo CatchNotFound
 		If Len(vWindow.DocumentType) = 0 Then GoTo CatchNotFound
