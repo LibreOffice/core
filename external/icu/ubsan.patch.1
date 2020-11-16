@@ -1,27 +1,6 @@
---- source/common/uloc.cpp
-+++ source/common/uloc.cpp
-@@ -1203,7 +1203,8 @@
-         return 0;
-     }
-     int32_t reslen = result.length();
--    uprv_memcpy(language, result.data(), std::min(reslen, languageCapacity));
-+    auto const n = std::min(reslen, languageCapacity);
-+    if (n != 0) uprv_memcpy(language, result.data(), n);
-     return reslen;
- }
- 
-@@ -1251,7 +1252,8 @@
-         return 0;
-     }
-     int32_t reslen = result.length();
--    uprv_memcpy(script, result.data(), std::min(reslen, scriptCapacity));
-+    auto const n = std::min(reslen, scriptCapacity);
-+    if (n != 0) uprv_memcpy(script, result.data(), n);
-     return reslen;
- }
- 
---- source/tools/genrb/rbutil.c
-+++ source/tools/genrb/rbutil.c
+diff -ur icu.org/source/tools/genrb/rbutil.c icu/source/tools/genrb/rbutil.c
+--- icu.org/source/tools/genrb/rbutil.c	2020-10-28 22:21:12.000000000 +0100
++++ icu/source/tools/genrb/rbutil.c	2020-11-16 19:50:44.005119253 +0100
 @@ -30,7 +30,12 @@
  get_dirname(char *dirname,
              const char *filename)

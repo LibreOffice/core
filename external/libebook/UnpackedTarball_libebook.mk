@@ -13,4 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libebook,$(EBOOK_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libebook))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libebook, \
+    external/libebook/libebook-no-icu-boolean.patch.1 \
+))
+
 # vim: set noet sw=4 ts=4:

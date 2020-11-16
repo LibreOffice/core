@@ -1,0 +1,12 @@
+diff -ur libebook.org/src/lib/EBOOKCharsetConverter.cpp libebook/src/lib/EBOOKCharsetConverter.cpp
+--- libebook.org/src/lib/EBOOKCharsetConverter.cpp	2018-01-01 12:16:28.000000000 +0100
++++ libebook/src/lib/EBOOKCharsetConverter.cpp	2020-11-16 21:19:46.699315299 +0100
+@@ -124,7 +124,7 @@
+       m_converterToUTF8.get(), m_converterToUnicode.get(),
+       &outText, outText + out.size(), &inText, inText + length,
+       nullptr, nullptr, nullptr, nullptr,
+-      TRUE, TRUE, &status)
++      true, true, &status)
+     ;
+     if (status==U_BUFFER_OVERFLOW_ERROR)
+     {
