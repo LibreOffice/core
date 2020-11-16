@@ -10,6 +10,13 @@
 #include <swmodeltestbase.hxx>
 
 #include <vcl/gdimtf.hxx>
+
+#include <wrtsh.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
+#include <drawdoc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentState.hxx>
 #include <svx/svdpage.hxx>
 
 #include <wrtsh.hxx>
@@ -147,6 +154,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testContinuousEndnotesMoveBackwards)
     assertXPath(pLayout, "/root/page[1]/ftncont", 0);
     // All endnotes are in a container on page 2.
     assertXPath(pLayout, "/root/page[2]/ftncont", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxNotModifiedOnOpen)
+{
+    // tdf#138050: a freshly opened document containing a shape with a text box
+    // should not appear to be modified
+    load(DATA_DIRECTORY, "textbox-phantom-change.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    // Without the fix in place this test would have shown that the document
+    // was modified due to a fix to tdf#135198
+    CPPUNIT_ASSERT(!pDoc->getIDocumentState().IsModified());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)

@@ -1018,7 +1018,7 @@ DECLARE_OOXMLIMPORT_TEST(textboxWpsOnly, "textbox-wps-only.docx")
     if ( nsScreen.frame.size.width * scaleFactor > 4000 )
         return;
 #endif
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2805), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5304), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeRelsize, "groupshape-relsize.docx")
