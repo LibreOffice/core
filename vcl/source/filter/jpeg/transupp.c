@@ -1232,9 +1232,9 @@ adjust_exif_parameters (JOCTET FAR * data, unsigned int length,
     }
     if (tagnum == 0xA002 || tagnum == 0xA003) {
       if (tagnum == 0xA002)
-    new_value = new_width; /* ExifImageWidth Tag */
+        new_value = new_width; /* ExifImageWidth Tag */
       else
-    new_value = new_height; /* ExifImageHeight Tag */
+        new_value = new_height; /* ExifImageHeight Tag */
       if (is_motorola) {
     data[offset+2] = 0; /* Format = unsigned long (4 octets) */
     data[offset+3] = 4;
