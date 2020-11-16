@@ -125,7 +125,7 @@ public:
     void                Start();
     bool                QueryClose();
 
-    void                PageCreated(const OString& rId, IconChoicePage& rPage);
+    void                PageCreated(IconChoicePage& rPage);
 
     void                SetPage( SvxHyperlinkItem const * pItem );
     void                SetReadOnlyMode( bool bReadOnly );
