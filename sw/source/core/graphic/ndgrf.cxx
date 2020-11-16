@@ -52,15 +52,6 @@
 
 using namespace com::sun::star;
 
-
-namespace
-{
-    void lcl_SwClientNotify(sw::BroadcastingModify& rModify, const SfxPoolItem& rOldNew)
-    {
-        const sw::LegacyModifyHint aHint(&rOldNew, &rOldNew);
-        rModify.SwClientNotifyCall(rModify, aHint);
-    }
-}
 SwGrfNode::SwGrfNode(
         const SwNodeIndex & rWhere,
         const OUString& rGrfName,
@@ -273,7 +264,7 @@ bool SwGrfNode::ReRead(
     if( bReadGrf && bNewGrf )
     {
         const SwUpdateAttr aHint(0,0,0);
-        lcl_SwClientNotify(*this, aHint);
+        CallSwClientNotify(sw::LegacyModifyHint(&aHint, &aHint));
     }
 
     return bReadGrf;
@@ -491,7 +482,7 @@ bool SwGrfNode::SwapIn(bool bWaitForData)
                 maGrfObj.SetGraphic( Graphic() );
                 onGraphicChanged();
                 SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
-                lcl_SwClientNotify(*this, aMsgHint);
+                CallSwClientNotify(sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
             }
         }
         else
@@ -861,7 +852,7 @@ void SwGrfNode::ApplyInputStream(
             mbIsStreamReadOnly = bIsStreamReadOnly;
             mbLinkedInputStreamReady = true;
             SwMsgPoolItem aMsgHint( RES_LINKED_GRAPHIC_STREAM_ARRIVED );
-            lcl_SwClientNotify(*this, aMsgHint);
+            CallSwClientNotify(sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
         }
     }
 }
