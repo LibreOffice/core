@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46026fd0_0306ee25",
+        "filename": "external/firebird/firebird-macosx.patch.1",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-16T19:21:54Z",
+      "side": 0,
+      "message": "This line is still needed (here or in ExternalProject_firebird.mk), otherwise libEngine12.dylib will record its dependency on libfbclient.dylib.3.0.0 with the build\u0027s /full-path-to/workdir/UnpackedTarball/firebird/gen/*/firebird/lib/libfbclient.dylib.3.0.0.",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 124
+      },
+      "revId": "aa7729d93933495604e31d5bba28223c4b9ab992",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
