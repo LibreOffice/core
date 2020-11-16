@@ -1976,6 +1976,50 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf52391)
     CPPUNIT_ASSERT_EQUAL(OUString("Portion1Portion2"), xRun->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
+{
+    load(DATA_DIRECTORY, "tdf132160.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+
+    // delete a word at the end of the paragraph.
+    dispatchCommand(mxComponent, ".uno:GotoEndOfPara", {});
+    for (int i = 0; i < 6; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    }
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().endsWith("to be "));
+
+    // Dump the rendering of the first page as an XML file.
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This was 12 (missing vertical redline mark)
+    assertXPath(pXmlDoc, "/metafile/push/push/push/line", 13);
+
+    // This was the content of the next <text> (missing deletion on margin)
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[16]/text", " saved.");
+
+    // this would crash due to bad redline range
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT(getParagraph(1)->getString().endsWith("to be saved."));
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126206)
 {
     load(DATA_DIRECTORY, "tdf126206.docx");
