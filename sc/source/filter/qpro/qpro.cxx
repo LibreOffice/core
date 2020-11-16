@@ -227,7 +227,15 @@ ErrCode ScQProReader::parse(ScDocument& rDoc)
 
 ErrCode ScQProReader::import( ScDocument& rDoc)
 {
-    ErrCode eRet = parse(rDoc);
+    ErrCode eRet;
+    try
+    {
+        eRet = parse(rDoc);
+    }
+    catch (SvStreamEOFException&)
+    {
+        eRet = SCERR_IMPORT_OPEN;
+    }
     rDoc.CalcAfterLoad();
     return eRet;
 }
