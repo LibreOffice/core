@@ -22,6 +22,7 @@
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <sax/saxdllapi.h>
@@ -69,7 +70,7 @@ class SAX_DLLPUBLIC FastTokenHandlerBase :
 };
 
 
-class SAX_DLLPUBLIC FastAttributeList final : public cppu::WeakImplHelper< css::xml::sax::XFastAttributeList >
+class SAX_DLLPUBLIC FastAttributeList final : public cppu::WeakImplHelper< css::xml::sax::XFastAttributeList, css::util::XCloneable >
 {
 public:
     FastAttributeList( FastTokenHandlerBase *pTokenHandler );
@@ -112,6 +113,9 @@ public:
     virtual OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) override;
     virtual css::uno::Sequence< css::xml::Attribute > SAL_CALL getUnknownAttributes(  ) override;
     virtual css::uno::Sequence< css::xml::FastAttribute > SAL_CALL getFastAttributes() override;
+
+    // XCloneable
+    virtual ::css::uno::Reference< ::css::util::XCloneable > SAL_CALL createClone() override;
 
     sal_Int32 getAttributeIndex( ::sal_Int32 Token )
     {
