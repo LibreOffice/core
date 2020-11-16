@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26937abc_811fa97e",
+        "filename": "include/sfx2/listview.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-11-16T10:53:09Z",
+      "side": 1,
+      "message": "please use\n#pragma once",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 34
+      },
+      "revId": "7eb044078ff16741f9d784aba853c5d5284cced4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3903831_46a274e8",
+        "filename": "include/sfx2/templatedlglocalview.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-11-16T10:53:09Z",
+      "side": 1,
+      "message": "#pragma once",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 46
+      },
+      "revId": "7eb044078ff16741f9d784aba853c5d5284cced4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
