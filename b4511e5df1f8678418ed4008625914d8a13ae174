@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37eb2ff1_66ead454",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 36
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-11-16T20:25:18Z",
+      "side": 1,
+      "message": "2) change these to connect_value_changed instead of connect_changed",
+      "revId": "b4511e5df1f8678418ed4008625914d8a13ae174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fd870e9_b6b3cd32",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 36
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-11-16T20:25:18Z",
+      "side": 1,
+      "message": "3) change these to be weld::SpinButton instead of weld::Entry and the matching DECL lines",
+      "revId": "b4511e5df1f8678418ed4008625914d8a13ae174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd3595e8_944dbb67",
+        "filename": "sw/source/uibase/inc/instable.hxx",
+        "patchSetId": 36
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-11-16T20:25:18Z",
+      "side": 1,
+      "message": "1) you already have a spinbutton here, you don\u0027t need to do anything more to get one",
+      "revId": "b4511e5df1f8678418ed4008625914d8a13ae174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
