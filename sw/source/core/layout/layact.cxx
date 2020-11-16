@@ -450,15 +450,19 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
     sal_uInt16 nPercentPageNum = 0;
     while ( (pPage && !IsInterrupt()) || m_nCheckPageNum != USHRT_MAX )
     {
-        if (!pPage && m_nCheckPageNum != USHRT_MAX)
+        // note: this is the only place that consumes and resets m_nCheckPageNum
+        if ((IsInterrupt() || !pPage) && m_nCheckPageNum != USHRT_MAX)
         {
-            SwPageFrame *pPg = static_cast<SwPageFrame*>(m_pRoot->Lower());
-            while (pPg && pPg->GetPhyPageNum() < m_nCheckPageNum)
-                pPg = static_cast<SwPageFrame*>(pPg->GetNext());
-            if (pPg)
-                pPage = pPg;
-            if (!pPage)
-                break;
+            if (!pPage || m_nCheckPageNum < pPage->GetPhyPageNum())
+            {
+                SwPageFrame *pPg = static_cast<SwPageFrame*>(m_pRoot->Lower());
+                while (pPg && pPg->GetPhyPageNum() < m_nCheckPageNum)
+                    pPg = static_cast<SwPageFrame*>(pPg->GetNext());
+                if (pPg)
+                    pPage = pPg;
+                if (!pPage)
+                    break;
+            }
 
             SwPageFrame *pTmp = pPage->GetPrev() ?
                                         static_cast<SwPageFrame*>(pPage->GetPrev()) : pPage;
