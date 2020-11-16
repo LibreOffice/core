@@ -323,14 +323,21 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWKS(SvStream& rStream)
     LotusContext aContext(aDocument, RTL_TEXTENCODING_ASCII_US);
     ImportLotus aLotusImport(aContext, rStream, RTL_TEXTENCODING_ASCII_US);
 
-    ErrCode eRet = aLotusImport.parse();
-    if (eRet == ErrCode(0xFFFFFFFF))
+    try
     {
-        rStream.Seek(0);
-        eRet = ScImportLotus123old(aContext, rStream, RTL_TEXTENCODING_ASCII_US);
+        ErrCode eRet = aLotusImport.parse();
+        if (eRet == ErrCode(0xFFFFFFFF))
+        {
+            rStream.Seek(0);
+            eRet = ScImportLotus123old(aContext, rStream, RTL_TEXTENCODING_ASCII_US);
+        }
+        return eRet == ERRCODE_NONE;
+    }
+    catch(SvStreamEOFException&)
+    {
+        return false;
     }
 
-    return eRet == ERRCODE_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
