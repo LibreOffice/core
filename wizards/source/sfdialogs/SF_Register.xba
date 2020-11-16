@@ -246,7 +246,8 @@ Check:
 	If IsMissing(pvArgs) Or IsEmpty(pvArgs) Then pvArgs = Array()
 	If Not IsArray(pvArgs) Then pvArgs = Array(pvArgs)		&apos;	Needed when _NewDialog called from _EventManager
 	If UBound(pvArgs) &gt;= 0 Then vContainer = pvArgs(0) Else vContainer = &quot;&quot;
-	If UBound(pvArgs) &gt;= 1 Then vLibrary = pvArgs(1) Else vLibrary = &quot;Standard&quot;
+	If UBound(pvArgs) &gt;= 1 Then vLibrary = pvArgs(1)
+	If IsEmpty(vLibrary) Then vLibrary = &quot;Standard&quot;
 	If UBound(pvArgs) &gt;= 2 Then vDialogName = pvArgs(2) Else vDialogName = Empty	&apos;	Use Empty to force mandatory status
 	If Not ScriptForge.SF_Utils._Validate(vContainer, &quot;Container&quot;, Array(V_STRING, ScriptForge.V_OBJECT)) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(vLibrary, &quot;Library&quot;, V_STRING) Then GoTo Finally
