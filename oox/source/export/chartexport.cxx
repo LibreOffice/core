@@ -3397,6 +3397,9 @@ OUString getFieldTypeString( const chart2::DataPointCustomLabelFieldType aType )
     case chart2::DataPointCustomLabelFieldType_CELLREF:
         return "CELLREF";
 
+    case chart2::DataPointCustomLabelFieldType_CELLRANGE:
+        return "CELLRANGE";
+
     default:
         break;
     }

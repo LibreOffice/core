@@ -182,6 +182,7 @@ public:
     void testTdf136267();
     void testDataLabelPlacementPieChart();
     void testTdf137917();
+    void testTdf138204();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -326,6 +327,7 @@ public:
     CPPUNIT_TEST(testTdf136267);
     CPPUNIT_TEST(testDataLabelPlacementPieChart);
     CPPUNIT_TEST(testTdf137917);
+    CPPUNIT_TEST(testTdf138204);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2982,6 +2984,31 @@ void Chart2ExportTest::testTdf137917()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:majorTimeUnit", "val", "months");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:minorUnit", "val", "7");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:minorTimeUnit", "val", "days");
+}
+
+void Chart2ExportTest::testTdf138204()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf138204.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Check the first data label field type
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLbl/c:tx/c:rich/a:p/a:fld", "type", "CELLRANGE");
+
+    Reference< chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 1));
+    CPPUNIT_ASSERT(xDataSeries.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aFields.getLength());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE, aFields[0]->getFieldType());
+    //CPPUNIT_ASSERT_EQUAL(OUString("67.5%"), aFields[0]->getString()); TODO: Not implemented yet
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
