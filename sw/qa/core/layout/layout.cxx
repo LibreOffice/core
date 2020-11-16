@@ -10,6 +10,16 @@
 #include <swmodeltestbase.hxx>
 
 #include <vcl/gdimtf.hxx>
+<<<<<<< HEAD   (a6d366 tdf#138137 sc: remove red circle in merged cell)
+=======
+
+#include <wrtsh.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
+#include <drawdoc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentState.hxx>
+>>>>>>> CHANGE (59fec7 tdf#135198 tdf#138050 sw editing: fix text box position sync)
 #include <svx/svdpage.hxx>
 
 #include <wrtsh.hxx>
@@ -149,6 +159,51 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testContinuousEndnotesMoveBackwards)
     assertXPath(pLayout, "/root/page[2]/ftncont", 1);
 }
 
+<<<<<<< HEAD   (a6d366 tdf#138137 sc: remove red circle in merged cell)
+=======
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testAnchorPositionBasedOnParagraph)
+{
+    // tdf#134783 check whether position of shape is good if it is anchored to paragraph and
+    // the "Don't add space between paragraphs of the same style" option is set
+    load(DATA_DIRECTORY, "tdf134783_testAnchorPositionBasedOnParagraph.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "top", "1671");
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "bottom", "1732");
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "top", "1947");
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "bottom", "2008");
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "top", "3783");
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "bottom", "3844");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
+{
+    // tdf#135198: check whether text box stays inside shape after moving it upwards
+    load(DATA_DIRECTORY, "shape-textbox.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1932
+    // - Actual  : 7476
+    assertXPath(pXmlDoc, "//fly/infos/bounds", "top", "1932");
+    assertXPath(pXmlDoc, "//fly/infos/bounds", "bottom", "7184");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxNotModifiedOnOpen)
+{
+    // tdf#138050: a freshly opened document containing a shape with a text box
+    // should not appear to be modified
+    load(DATA_DIRECTORY, "textbox-phantom-change.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    // Without the fix in place this test would have shown that the document
+    // was modified due to a fix to tdf#135198
+    CPPUNIT_ASSERT(!pDoc->getIDocumentState().IsModified());
+}
+
+>>>>>>> CHANGE (59fec7 tdf#135198 tdf#138050 sw editing: fix text box position sync)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
 {
     load(DATA_DIRECTORY, "textbox-autogrow-vertical.docx");
