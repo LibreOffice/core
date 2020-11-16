@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bc75108_b857fd76",
+        "filename": "starmath/source/starmathdatabase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-16T07:59:32Z",
+      "side": 1,
+      "message": "daquamarine?",
+      "revId": "639b759c2d35d14c4676e618a482d0fc93d9fc76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
