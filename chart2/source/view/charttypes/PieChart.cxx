@@ -492,23 +492,31 @@ void PieChart::createTextLabelShape(
         else if (nY1 > aRect.getMaxY())
             nY2 = aRect.getMaxY();
 
-        drawing::PointSequenceSequence aPoints(1);
-        aPoints[0].realloc(2);
-        aPoints[0][0].X = nX1;
-        aPoints[0][0].Y = nY1;
-        aPoints[0][1].X = nX2;
-        aPoints[0][1].Y = nY2;
+        sal_Int32 nSquaredDistanceFromOrigin
+            = (nX2 - aOrigin.X) * (nX2 - aOrigin.X) + (nY2 - aOrigin.Y) * (nY2 - aOrigin.Y);
 
-        uno::Reference<beans::XPropertySet> xProp(aPieLabelInfo.xTextShape, uno::UNO_QUERY);
-        VLineProperties aVLineProperties;
-        if (xProp.is())
+        // tdf#138018 Don't show leader line when custom positioned data label is inside pie chart
+        if (nSquaredDistanceFromOrigin > fSquaredPieRadius)
         {
-            sal_Int32 nColor = 0;
-            xProp->getPropertyValue("CharColor") >>= nColor;
-            if (nColor != -1) //automatic font color does not work for lines -> fallback to black
-                aVLineProperties.Color <<= nColor;
+            drawing::PointSequenceSequence aPoints(1);
+            aPoints[0].realloc(2);
+            aPoints[0][0].X = nX1;
+            aPoints[0][0].Y = nY1;
+            aPoints[0][1].X = nX2;
+            aPoints[0][1].Y = nY2;
+
+            uno::Reference<beans::XPropertySet> xProp(aPieLabelInfo.xTextShape, uno::UNO_QUERY);
+            VLineProperties aVLineProperties;
+            if (xProp.is())
+            {
+                sal_Int32 nColor = 0;
+                xProp->getPropertyValue("CharColor") >>= nColor;
+                //automatic font color does not work for lines -> fallback to black
+                if (nColor != -1)
+                    aVLineProperties.Color <<= nColor;
+            }
+            m_pShapeFactory->createLine2D(xTextTarget, aPoints, &aVLineProperties);
         }
-        m_pShapeFactory->createLine2D(xTextTarget, aPoints, &aVLineProperties);
     }
 
     aPieLabelInfo.fValue = nVal;
