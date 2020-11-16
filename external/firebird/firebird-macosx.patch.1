@@ -71,7 +71,7 @@
  	$(MAKE) plugins
  	$(MAKE) examples
  	$(MAKE) rest
-+	install_name_tool -id @__________________________________________________OOO/libfbclient.dylib.3.0.0 $(LIB)/libfbclient.dylib
++	install_name_tool -id @__________________________________________________OOO/libfbclient.dylib.3.0.0 $(LIB)/libfbclient.dylib.3.0.0
 +	install_name_tool -id @__________________________________________________OOO/libEngine12.dylib $(PLUGINS)/libEngine12.dylib
 +	install_name_tool -change $(LIB)/libfbclient.dylib.3.0.0 @loader_path/libfbclient.dylib.3.0.0 $(PLUGINS)/libEngine12.dylib
  
