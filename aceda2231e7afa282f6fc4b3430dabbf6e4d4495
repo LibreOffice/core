@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a8f5b47_fed8ae42",
+        "filename": "compilerplugins/clang/stringviewparam.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-16T08:50:49Z",
+      "side": 1,
+      "message": "Because I don\u0027t understand the potential ramifications well enough.",
+      "parentUuid": "3df273d8_7ca0a0a3",
+      "revId": "aceda2231e7afa282f6fc4b3430dabbf6e4d4495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7815c16d_6d2d23c8",
         "filename": "cui/source/dialogs/cuihyperdlg.cxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2020-11-16T08:42:04Z",
       "side": 1,
       "message": "When I came across unused parameters with my original loplugin:stirngviewparam work, I tracked down why they are unused.  If they can be removed, I did so.  If they need to stay for whatever reason, I either changed the plugin to no longer report them, or used e.g. [[maybe_unused]] to mark them.",
+      "revId": "aceda2231e7afa282f6fc4b3430dabbf6e4d4495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70439456_ea091b83",
+        "filename": "cui/source/dialogs/cuihyperdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-16T08:50:49Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "7815c16d_6d2d23c8",
       "revId": "aceda2231e7afa282f6fc4b3430dabbf6e4d4495",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
