@@ -1721,6 +1721,10 @@ itiGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     {
         return aTIFFReader.ReadTIFF(rStream, rGraphic);
     }
+    catch (const SvStreamEOFException &)
+    {
+        return false;
+    }
     catch (const std::bad_alloc &)
     {
         return false;
