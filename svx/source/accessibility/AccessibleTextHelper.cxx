@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-// Global header
-
-
+#include <cstdlib>
 #include <memory>
 #include <utility>
 #include <algorithm>
@@ -1043,7 +1042,7 @@ namespace accessibility
         // repeat that later on, e.g. for PARA_MOVED events)
         bool            bEverythingUpdated( false );
 
-        if( labs( nNewParas - nCurrParas ) == 1 &&
+        if( std::abs( nNewParas - nCurrParas ) == 1 &&
             aFunctor.GetNumberOfParasChanged() == 1 )
         {
             // #103483# Exactly one paragraph added/removed. This is

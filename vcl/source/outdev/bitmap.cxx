@@ -18,6 +18,7 @@
  */
 
 #include <cassert>
+#include <cstdlib>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -203,7 +204,7 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
             Size aDstSizeTwip( PixelToLogic(LogicToPixel(rDstSz), MapMode(MapUnit::MapTwip)) );
 
             // #103209# Normalize size (mirroring has to happen outside of this method)
-            aDstSizeTwip = Size( labs(aDstSizeTwip.Width()), labs(aDstSizeTwip.Height()) );
+            aDstSizeTwip = Size( std::abs(aDstSizeTwip.Width()), std::abs(aDstSizeTwip.Height()) );
 
             const Size      aBmpSize( aBmp.GetSizePixel() );
             const double    fBmpPixelX = aBmpSize.Width();

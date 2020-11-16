@@ -18,6 +18,7 @@
  */
 
 #include <cassert>
+#include <cstdlib>
 
 #include <osl/diagnose.h>
 #include <tools/line.hxx>
@@ -255,7 +256,7 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
     }
     else if( nAngle >= Degree10(-450) && nAngle <= Degree10(450) )
     {
-        const double    fAngle = F_PI1800 * labs( nAngle.get() );
+        const double    fAngle = F_PI1800 * std::abs( nAngle.get() );
         const double    fTan = tan( fAngle );
         const tools::Long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
         tools::Long            nPY;
@@ -288,7 +289,7 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
     }
     else
     {
-        const double fAngle = F_PI1800 * labs( nAngle.get() );
+        const double fAngle = F_PI1800 * std::abs( nAngle.get() );
         const double fTan = tan( fAngle );
         const tools::Long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
         tools::Long         nPX;

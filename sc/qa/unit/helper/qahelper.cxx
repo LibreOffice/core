@@ -39,6 +39,7 @@
 
 #include <orcus/csv_parser.hpp>
 
+#include <cstdlib>
 #include <fstream>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -99,7 +100,7 @@ const FileFormat ScBootstrapFixture::aFileFormats[] = {
 
 bool testEqualsWithTolerance( tools::Long nVal1, tools::Long nVal2, tools::Long nTol )
 {
-    return ( labs( nVal1 - nVal2 ) <= nTol );
+    return ( std::abs( nVal1 - nVal2 ) <= nTol );
 }
 
 void loadFile(const OUString& aFileName, std::string& aContent)

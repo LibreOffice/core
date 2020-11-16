@@ -39,6 +39,7 @@
 #include <rtl/math.hxx>
 
 #include <cassert>
+#include <cstdlib>
 #include <math.h>
 #include <memory>
 #include <float.h>
@@ -871,7 +872,7 @@ bool IsPointInLine(const Point &rPoint1,
     static const double eps = 5.0 * DBL_EPSILON;
 
     double fLambda;
-    if (labs(rHeading2.X()) > labs(rHeading2.Y()))
+    if (std::abs(rHeading2.X()) > std::abs(rHeading2.Y()))
     {
         fLambda = (rPoint1.X() - rPoint2.X()) / static_cast<double>(rHeading2.X());
         bRes = fabs(rPoint1.Y() - (rPoint2.Y() + fLambda * rHeading2.Y())) < eps;

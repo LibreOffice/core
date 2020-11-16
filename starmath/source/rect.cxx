@@ -30,6 +30,7 @@
 #include <smmod.hxx>
 
 #include <cassert>
+#include <cstdlib>
 
 namespace {
 
@@ -588,8 +589,8 @@ tools::Long SmRect::OrientedDist(const Point &rPoint) const
     // build distance vector
     Point  aDist (aRef - rPoint);
 
-    tools::Long nAbsX = labs(aDist.X()),
-         nAbsY = labs(aDist.Y());
+    tools::Long nAbsX = std::abs(aDist.X()),
+         nAbsY = std::abs(aDist.Y());
 
     return bIsInside ? - std::min(nAbsX, nAbsY) : std::max (nAbsX, nAbsY);
 }

@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <cstdlib>
 #include <memory>
 #include <numeric>
 
@@ -801,8 +802,8 @@ std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( tools::Long nX, tools:
 
     std::shared_ptr<WinSalBitmap> pSalBitmap;
 
-    nDX = labs( nDX );
-    nDY = labs( nDY );
+    nDX = std::abs( nDX );
+    nDY = std::abs( nDY );
 
     HDC     hDC = mrParent.getHDC();
     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );

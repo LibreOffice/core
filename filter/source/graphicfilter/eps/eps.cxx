@@ -39,6 +39,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
+#include <cstdlib>
 #include <memory>
 
 using namespace ::com::sun::star::uno;
@@ -2369,7 +2370,7 @@ void PSWriter::ImplWriteLong(sal_Int32 nNumber, NMode nMode)
 void PSWriter::ImplWriteDouble( double fNumber )
 {
     sal_Int32   nPTemp = static_cast<sal_Int32>(fNumber);
-    sal_Int32   nATemp = labs( static_cast<sal_Int32>( ( fNumber - nPTemp ) * 100000 ) );
+    sal_Int32   nATemp = std::abs( static_cast<sal_Int32>( ( fNumber - nPTemp ) * 100000 ) );
 
     if ( !nPTemp && nATemp && ( fNumber < 0.0 ) )
         mpPS->WriteChar( '-' );

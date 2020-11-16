@@ -19,6 +19,7 @@
 
 #include <scitems.hxx>
 
+#include <cstdlib>
 #include <memory>
 #include <editeng/adjustitem.hxx>
 #include <sot/storage.hxx>
@@ -3676,8 +3677,8 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
         {
             if ( &rThisDoc == pSourceDoc && nTab == aSourceRange.aStart.Tab() )
             {
-                tools::Long nDeltaX = labs( static_cast< tools::Long >( nNewDragX - nSourceStartX ) );
-                tools::Long nDeltaY = labs( static_cast< tools::Long >( nNewDragY - nSourceStartY ) );
+                tools::Long nDeltaX = std::abs( static_cast< tools::Long >( nNewDragX - nSourceStartX ) );
+                tools::Long nDeltaY = std::abs( static_cast< tools::Long >( nNewDragY - nSourceStartY ) );
                 if ( nDeltaX <= nDeltaY )
                 {
                     eDragInsertMode = INS_CELLSDOWN;

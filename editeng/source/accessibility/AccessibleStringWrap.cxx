@@ -19,6 +19,8 @@
 
 
 #include <algorithm>
+#include <cstdlib>
+
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 
@@ -58,7 +60,7 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, tools::Rectangl
         mrDev.GetCaretPositions( maText, aXArray, nIndex, 1 );
         rRect.SetLeft( 0 );
         rRect.SetTop( 0 );
-        rRect.SetSize( Size(mrDev.GetTextHeight(), labs(aXArray[0] - aXArray[1])) );
+        rRect.SetSize( Size(mrDev.GetTextHeight(), std::abs(aXArray[0] - aXArray[1])) );
         rRect.Move( std::min(aXArray[0], aXArray[1]), 0 );
     }
 

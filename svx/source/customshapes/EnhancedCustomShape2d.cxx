@@ -58,6 +58,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <cstdlib>
 #include <math.h>
 #include <unordered_set>
 
@@ -552,8 +553,8 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
     {
         nCoordLeft    = aViewBox.X;
         nCoordTop     = aViewBox.Y;
-        nCoordWidthG  = labs( aViewBox.Width );
-        nCoordHeightG = labs( aViewBox.Height);
+        nCoordWidthG  = std::abs( aViewBox.Width );
+        nCoordHeightG = std::abs( aViewBox.Height);
     }
     const OUString sPath( "Path" );
 

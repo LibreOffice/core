@@ -41,6 +41,8 @@
 
 #include <sdpage.hxx>
 #include <cfloat>
+#include <cstdlib>
+
 #include <rtl/character.hxx>
 
 using namespace css;
@@ -2695,14 +2697,14 @@ void SdOOXMLExportTest2::testTdf1225573_FontWorkScaleX()
     awt::Rectangle aBoundRectArch;
     xShapeArchProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectArch;
     // difference should be zero, but allow some range for stroke thickness
-    CPPUNIT_ASSERT_LESS(50L, labs(aBoundRectArch.Width - 13081));
+    CPPUNIT_ASSERT_LESS(sal_Int32(50), std::abs(aBoundRectArch.Width - 13081));
 
     // Error was, that text in shapes of category "Warp" was not scaled to the path.
     uno::Reference<beans::XPropertySet> xShapeWaveProps(getShapeFromPage(0, 1, xDocShRef));
     awt::Rectangle aBoundRectWave;
     xShapeWaveProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectWave;
     // difference should be zero, but allow some range for stroke thickness
-    CPPUNIT_ASSERT_LESS(50L, labs(aBoundRectWave.Width - 11514));
+    CPPUNIT_ASSERT_LESS(sal_Int32(50), std::abs(aBoundRectWave.Width - 11514));
 
     xDocShRef->DoClose();
 }

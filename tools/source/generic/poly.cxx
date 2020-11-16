@@ -40,6 +40,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
+#include <cstdlib>
 #include <cstring>
 #include <limits.h>
 #include <cmath>
@@ -122,8 +123,8 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, 
         tools::Rectangle aRect( rRect );
         aRect.Justify();            // SJ: i9140
 
-        nHorzRound = std::min( nHorzRound, static_cast<sal_uInt32>(labs( aRect.GetWidth() >> 1 )) );
-        nVertRound = std::min( nVertRound, static_cast<sal_uInt32>(labs( aRect.GetHeight() >> 1 )) );
+        nHorzRound = std::min( nHorzRound, static_cast<sal_uInt32>(std::abs( aRect.GetWidth() >> 1 )) );
+        nVertRound = std::min( nVertRound, static_cast<sal_uInt32>(std::abs( aRect.GetHeight() >> 1 )) );
 
         if( !nHorzRound && !nVertRound )
         {
@@ -179,7 +180,7 @@ ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long n
         {
             nPoints = static_cast<sal_uInt16>(MinMax(
                 ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
-                           sqrt( static_cast<double>(labs(nRadXY)) ) ) ),
+                           sqrt( static_cast<double>(std::abs(nRadXY)) ) ) ),
                 32, 256 ));
         }
         else
@@ -242,7 +243,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         {
             nPoints = static_cast<sal_uInt16>(MinMax(
                 ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
-                           sqrt( static_cast<double>(labs(nRadXY)) ) ) ),
+                           sqrt( static_cast<double>(std::abs(nRadXY)) ) ) ),
                 32, 256 ));
         }
         else

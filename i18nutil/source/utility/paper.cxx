@@ -173,10 +173,10 @@ void PaperInfo::doSloppyFit()
     {
         if (i == PAPER_USER) continue;
 
-        tools::Long lDiffW = labs(aDinTab[i].m_nWidth - m_nPaperWidth);
-        tools::Long lDiffH = labs(aDinTab[i].m_nHeight - m_nPaperHeight);
-        tools::Long lFlipDiffW = labs(aDinTab[i].m_nHeight - m_nPaperWidth);
-        tools::Long lFlipDiffH = labs(aDinTab[i].m_nWidth - m_nPaperHeight);
+        tools::Long lDiffW = std::abs(aDinTab[i].m_nWidth - m_nPaperWidth);
+        tools::Long lDiffH = std::abs(aDinTab[i].m_nHeight - m_nPaperHeight);
+        tools::Long lFlipDiffW = std::abs(aDinTab[i].m_nHeight - m_nPaperWidth);
+        tools::Long lFlipDiffH = std::abs(aDinTab[i].m_nWidth - m_nPaperHeight);
 
         if ( (lDiffW < MAXSLOPPY && lDiffH < MAXSLOPPY) ||
             (lFlipDiffW < MAXSLOPPY && lFlipDiffH < MAXSLOPPY) )
@@ -193,8 +193,8 @@ bool PaperInfo::sloppyEqual(const PaperInfo &rOther) const
 {
     return
     (
-      (labs(m_nPaperWidth - rOther.m_nPaperWidth) < MAXSLOPPY) &&
-      (labs(m_nPaperHeight - rOther.m_nPaperHeight) < MAXSLOPPY)
+      (std::abs(m_nPaperWidth - rOther.m_nPaperWidth) < MAXSLOPPY) &&
+      (std::abs(m_nPaperHeight - rOther.m_nPaperHeight) < MAXSLOPPY)
     );
 }
 
@@ -205,11 +205,11 @@ tools::Long PaperInfo::sloppyFitPageDimension(tools::Long nDimension)
         if (i == PAPER_USER) continue;
         tools::Long lDiff;
 
-        lDiff = labs(aDinTab[i].m_nWidth - nDimension);
+        lDiff = std::abs(aDinTab[i].m_nWidth - nDimension);
         if ( lDiff < MAXSLOPPY )
             return aDinTab[i].m_nWidth;
 
-        lDiff = labs(aDinTab[i].m_nHeight - nDimension);
+        lDiff = std::abs(aDinTab[i].m_nHeight - nDimension);
         if ( lDiff < MAXSLOPPY )
             return aDinTab[i].m_nHeight;
     }
