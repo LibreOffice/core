@@ -1206,7 +1206,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
         m_xRemoveButton->set_sensitive(false);
         m_xChangeButton->set_sensitive(false);
 
-        // #i36994 First selected can return zero!
+        // #i36994 First selected can return null!
         TAccInfo* pEntry = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_selected_id().toInt64());
         if (pEntry)
         {
@@ -1216,19 +1216,23 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
             {
                 if (pEntry->isConfigured())
                     m_xRemoveButton->set_sensitive(true);
-                m_xChangeButton->set_sensitive(pEntry->m_sCommand != sPossibleNewCommand);
+                m_xChangeButton->set_sensitive(pEntry->m_sCommand != sPossibleNewCommand
+                                               && !sPossibleNewCommand.isEmpty());
             }
 
             // update key box
             m_xKeyBox->clear();
-            for (int i = 0, nCount = m_xEntriesBox->n_children(); i < nCount; ++i)
+            if (!sPossibleNewCommand.isEmpty())
             {
-                TAccInfo* pUserData
-                    = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_id(i).toInt64());
-                if (pUserData && pUserData->m_sCommand == sPossibleNewCommand)
+                for (int i = 0, nCount = m_xEntriesBox->n_children(); i < nCount; ++i)
                 {
-                    m_xKeyBox->append(OUString::number(reinterpret_cast<sal_Int64>(pUserData)),
-                                      pUserData->m_aKey.GetName());
+                    TAccInfo* pUserData
+                        = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_id(i).toInt64());
+                    if (pUserData && pUserData->m_sCommand == sPossibleNewCommand)
+                    {
+                        m_xKeyBox->append(OUString::number(reinterpret_cast<sal_Int64>(pUserData)),
+                                          pUserData->m_aKey.GetName());
+                    }
                 }
             }
         }
