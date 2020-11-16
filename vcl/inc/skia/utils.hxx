@@ -75,6 +75,11 @@ sk_sp<SkImage> findCachedImage(const OString& key);
 void removeCachedImage(sk_sp<SkImage> image);
 constexpr int MAX_CACHE_SIZE = 4 * 2000 * 2000 * 4; // 4x 2000px 32bpp images, 64MiB
 
+// SkSurfaceProps to be used by all Skia surfaces.
+VCL_DLLPUBLIC const SkSurfaceProps* surfaceProps();
+// Set pixel geometry to be used by SkSurfaceProps.
+VCL_DLLPUBLIC void setPixelGeometry(SkPixelGeometry pixelGeometry);
+
 #ifdef DBG_UTIL
 void prefillSurface(const sk_sp<SkSurface>& surface);
 VCL_DLLPUBLIC void dump(const SkBitmap& bitmap, const char* file);

@@ -1403,7 +1403,8 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             SkRect area;
             aPath.getBounds().roundOut(&area);
             SkRect size = SkRect::MakeWH(area.width(), area.height());
-            sk_sp<SkSurface> surface = SkSurface::MakeRasterN32Premul(area.width(), area.height());
+            sk_sp<SkSurface> surface = SkSurface::MakeRasterN32Premul(area.width(), area.height(),
+                                                                      SkiaHelper::surfaceProps());
             SkPaint copy;
             copy.setBlendMode(SkBlendMode::kSrc);
             flushDrawing();
@@ -1450,7 +1451,8 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             SkRect area;
             aPath.getBounds().roundOut(&area);
             SkRect size = SkRect::MakeWH(area.width(), area.height());
-            sk_sp<SkSurface> surface = SkSurface::MakeRasterN32Premul(area.width(), area.height());
+            sk_sp<SkSurface> surface = SkSurface::MakeRasterN32Premul(area.width(), area.height(),
+                                                                      SkiaHelper::surfaceProps());
             SkPaint copy;
             copy.setBlendMode(SkBlendMode::kSrc);
             flushDrawing();
