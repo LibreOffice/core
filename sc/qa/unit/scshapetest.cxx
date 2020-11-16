@@ -184,7 +184,7 @@ void ScShapeTest::testMeasurelineHideColSave()
 
 void ScShapeTest::testHideColsShow()
 {
-    // The document contains a shape anchored "To Cell (resive with cell)" with starts in cell C3 and
+    // The document contains a shape anchored "To Cell (resize with cell)" with starts in cell C3 and
     //ends in cell D5. Error was, that hiding cols C and D and then show them again extends the shape
     // to column E
 
@@ -340,7 +340,7 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
 {
     // The document contains a column group left from the image. The group is expanded. Collapse the
     // group, save and reload. The original error was, that the line was on wrong position after reload.
-    // After the fix for 'resive with cell', the custom shape had wrong position and size too.
+    // After the fix for 'resize with cell', the custom shape had wrong position and size too.
     OUString aFileURL;
     createFileURL("tdf117948_CollapseBeforeShape.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
