@@ -1,0 +1,18 @@
+Fix Thread handle type on Windows
+
+MSVC compiler complains about 'warning C4312: "reinterpret_cast":
+conversion from "unsigned long" to "HANDLE" of greater size'.
+Seems like an real error, if real_handle is too small to hold the
+full "HANDLE" value, returned by _beginthreadex.
+
+--- src/common/ThreadStart.cpp.orig	2020-11-16 11:15:31.147722738 +0100
++++ src/common/ThreadStart.cpp	2020-11-16 11:16:23.691247361 +0100
+@@ -309,7 +309,7 @@
+ 	 * Advanced Windows by Richter pg. # 109. */
+ 
+ 	unsigned thread_id;
+-	unsigned long real_handle =
++	uintptr_t real_handle =
+ 		_beginthreadex(NULL, 0, THREAD_ENTRYPOINT, THREAD_ARG, CREATE_SUSPENDED, &thread_id);
+ 	if (!real_handle)
+ 	{
