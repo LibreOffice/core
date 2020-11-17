@@ -6,9 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
-#ifndef INCLUDED_SVX_SOURCE_DIALOG_CRASHREPORTDLG_HXX
-#define INCLUDED_SVX_SOURCE_DIALOG_CRASHREPORTDLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -24,6 +22,7 @@ private:
     std::unique_ptr<weld::Button> mxBtnCancel;
     std::unique_ptr<weld::Button> mxBtnClose;
     std::unique_ptr<weld::Label> mxEditPreUpload;
+    std::unique_ptr<weld::LinkButton> mxEditPostUploadURL;
     std::unique_ptr<weld::TextView> mxEditPostUpload;
     std::unique_ptr<weld::TextView> mxFtBugReport;
     std::unique_ptr<weld::CheckButton> mxCBSafeMode;
@@ -32,7 +31,5 @@ private:
 
     DECL_LINK(BtnHdl, weld::Button&, void);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -383,6 +383,8 @@
 
 #define RID_SVXSTR_EDIT_PATHS                       NC_("optpathspage|editpaths", "Edit Paths: %1")
 
+#define RID_SVXSTR_CRASHDLG_URL_PREFIX              NC_("crashdialog|crashurlprefix", "https://crashreport.libreoffice.org/stats/crash_details/")
+
 #define RID_SVXSTR_COMMANDLABEL                     NC_("RID_SVXSTR_COMMANDLABEL", "Label")
 #define RID_SVXSTR_COMMANDNAME                      NC_("RID_SVXSTR_COMMANDLABEL", "Command")
 #define RID_SVXSTR_COMMANDTIP                       NC_("RID_SVXSTR_COMMANDLABEL", "Tooltip")
