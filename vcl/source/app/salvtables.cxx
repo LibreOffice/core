@@ -5320,36 +5320,27 @@ IMPL_LINK(SalInstanceTextView, CursorListener, VclWindowEvent&, rEvent, void)
         signal_cursor_position();
 }
 
-class SalInstanceExpander : public SalInstanceContainer, public virtual weld::Expander
+SalInstanceExpander::SalInstanceExpander(VclExpander* pExpander, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceContainer(pExpander, pBuilder, bTakeOwnership)
+    , m_xExpander(pExpander)
 {
-private:
-    VclPtr<VclExpander> m_xExpander;
+    m_xExpander->SetExpandedHdl(LINK(this, SalInstanceExpander, ExpandedHdl));
+}
 
-    DECL_LINK(ExpandedHdl, VclExpander&, void);
+bool SalInstanceExpander::get_expanded() const
+{
+    return m_xExpander->get_expanded();
+}
 
-public:
-    SalInstanceExpander(VclExpander* pExpander, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceContainer(pExpander, pBuilder, bTakeOwnership)
-        , m_xExpander(pExpander)
-    {
-        m_xExpander->SetExpandedHdl(LINK(this, SalInstanceExpander, ExpandedHdl));
-    }
+void SalInstanceExpander::set_expanded(bool bExpand)
+{
+    m_xExpander->set_expanded(bExpand);
+}
 
-    virtual bool get_expanded() const override
-    {
-        return m_xExpander->get_expanded();
-    }
-
-    virtual void set_expanded(bool bExpand) override
-    {
-        m_xExpander->set_expanded(bExpand);
-    }
-
-    virtual ~SalInstanceExpander() override
-    {
-        m_xExpander->SetExpandedHdl(Link<VclExpander&, void>());
-    }
-};
+SalInstanceExpander::~SalInstanceExpander()
+{
+    m_xExpander->SetExpandedHdl(Link<VclExpander&, void>());
+}
 
 IMPL_LINK_NOARG(SalInstanceExpander, ExpandedHdl, VclExpander&, void)
 {
