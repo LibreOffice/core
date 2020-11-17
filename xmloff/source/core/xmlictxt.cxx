@@ -144,9 +144,4 @@ css::uno::Sequence< sal_Int8 > SAL_CALL SvXMLImportContext::getImplementationId(
     return css::uno::Sequence<sal_Int8>();
 }
 
-void XMLOFF_WARN_UNKNOWN(const char *area, sax_fastparser::FastAttributeList::FastAttributeIter const & rIter)
-{
-    SAL_WARN(area, "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(rIter.getToken()) << " value=" << rIter.toString());
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
