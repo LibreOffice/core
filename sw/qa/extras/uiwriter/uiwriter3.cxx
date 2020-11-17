@@ -1426,6 +1426,56 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestTextBoxCrashAfterLineDel)
     xCursor->setString(OUString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
+{
+    load(DATA_DIRECTORY, "tdf134626.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Apple"), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+    Scheduler::ProcessEventsToIdle();
+    TransferableDataHelper aHelper(xTransfer.get());
+
+    // Create a new document
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    // Without the fix in place, this test would have crashed here
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        SwTransferable::Paste(*pWrtShell, aHelper);
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(OUString("Apple"), getParagraph(1)->getString());
+
+        SwTransferable::Paste(*pWrtShell, aHelper);
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(OUString("AppleApple"), getParagraph(1)->getString());
+
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(OUString("Apple"), getParagraph(1)->getString());
+
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf96067)
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
