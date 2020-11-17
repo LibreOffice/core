@@ -1121,15 +1121,24 @@ OUString SwPaM::GetText() const
 
 void SwPaM::InvalidatePaM()
 {
-    const SwNode& pNd = GetNode();
-    SwTextNode* pTextNd = const_cast<SwTextNode*>(pNd.GetTextNode());
-    if(!pTextNd)
-        return;
-    // pretend that the PaM marks inserted text to recalc the portion...
-    SwInsText aHint(
-            Start()->nContent.GetIndex(),
-            End()->nContent.GetIndex() - Start()->nContent.GetIndex() + 1);
-    pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, &aHint));
+    for (SwNodeIndex index = Start()->nNode; index != End()->nNode; ++index)
+    {
+        if (SwTextNode *const pTextNode = index.GetNode().GetTextNode())
+        {
+            // pretend that the PaM marks changed formatting to reformat...
+            sal_Int32 const nStart(
+                index == Start()->nNode ? Start()->nContent.GetIndex() : 0);
+            // this should work even for length of 0
+            SwUpdateAttr const aHint(
+                nStart,
+                index == End()->nNode
+                    ? End()->nContent.GetIndex() - nStart
+                    : End()->nNode.GetNode().GetTextNode()->Len() - nStart,
+                0);
+            pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, &aHint));
+        }
+        // other node types not invalidated
+    }
 }
 
 void SwPaM::dumpAsXml(xmlTextWriterPtr pWriter) const
