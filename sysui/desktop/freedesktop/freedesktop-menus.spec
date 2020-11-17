@@ -391,5 +391,5 @@ fi
 /usr/share/icons/hicolor/*/apps/*png
 /usr/share/icons/hicolor/*/apps/*svg
 /usr/share/icons/hicolor/*/mimetypes/*png
+/usr/share/metainfo/*
 /usr/share/mime/packages/*
-/usr/share/appdata/*
