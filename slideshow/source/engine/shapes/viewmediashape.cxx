@@ -291,7 +291,7 @@ namespace slideshow::internal
 
                         if( ::canvas::tools::getDeviceInfo( xCanvas, aDeviceParams ).getLength() > 1 )
                         {
-                            implInitializePlayerWindow( rBounds, aDeviceParams, sMimeType );
+                            implInitializePlayerWindow( rBounds, aDeviceParams );
                         }
 
                         // set player properties
@@ -380,8 +380,7 @@ namespace slideshow::internal
 
 
         void ViewMediaShape::implInitializePlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
-                                                                 const uno::Sequence< uno::Any >& rVCLDeviceParams,
-                                                                 std::u16string_view )
+                                                                 const uno::Sequence< uno::Any >& rVCLDeviceParams )
         {
             SAL_INFO("slideshow", "ViewMediaShape::implInitializePlayerWindow" );
             if( mpMediaWindow || rBounds.isEmpty() )
