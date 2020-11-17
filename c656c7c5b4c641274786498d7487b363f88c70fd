@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18fc890e_d7451fc8",
+        "filename": "connectivity/source/drivers/firebird/ResultSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2020-11-17T00:38:26Z",
+      "side": 1,
+      "message": "xBlob-\u003elength() returns a sal_Int64...",
+      "revId": "c656c7c5b4c641274786498d7487b363f88c70fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae5d48b4_eaf5acdd",
+        "filename": "connectivity/source/drivers/firebird/ResultSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2020-11-17T00:38:26Z",
+      "side": 1,
+      "message": "...but getBytes wants a sal_Int32. Let\u0027s try to handle that gracefully.",
+      "revId": "c656c7c5b4c641274786498d7487b363f88c70fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
