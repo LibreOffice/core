@@ -4322,7 +4322,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
             auto eMode(sw::FrameMode::Existing);
             for (SwTextFrame * pFrame : frames)
             {
-                if (rLayout.IsHideRedlines())
+                if (rLayout.HasMergedParas())
                 {
                     assert(!pFrame->GetMergedPara() ||
                         !rNode.IsCreateFrameWhenHidingRedlines());
@@ -4435,7 +4435,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
         }
         if (!rNode.IsCreateFrameWhenHidingRedlines())
         {
-            if (rLayout.IsHideRedlines())
+            if (rLayout.HasMergedParas())
             {
                 if (rNode.IsContentNode())
                 {
@@ -4548,14 +4548,14 @@ static void UnHide(SwRootFrame & rLayout)
     std::set<sal_uLong> skippedFlys;
     UnHideRedlinesExtras(rLayout, rNodes, rNodes.GetEndOfAutotext(),
         // when un-hiding, delay all fly frame creation to AppendAllObjs below
-                         rLayout.IsHideRedlines() ? &skippedFlys : nullptr);
+                         rLayout.HasMergedParas() ? &skippedFlys : nullptr);
     // Footnotes are created automatically (after invalidation etc.) by
     // ConnectFootnote(), but need to be deleted manually. Footnotes do not
     // occur in flys or headers/footers.
     UnHideRedlinesExtras(rLayout, rNodes, rNodes.GetEndOfInserts(), nullptr);
     UnHideRedlines(rLayout, rNodes, rNodes.GetEndOfContent(), nullptr);
 
-    if (!rLayout.IsHideRedlines())
+    if (!rLayout.HasMergedParas())
     {   // create all previously hidden flys at once:
         // * Flys on first node of pre-existing merged frames that are hidden
         //   (in delete redline), to be added to the existing frame
@@ -4608,7 +4608,7 @@ static void UnHide(SwRootFrame & rLayout)
 
     // update SwPostItMgr / notes in the margin
     // note: as long as all shells share layout, broadcast to all shells!
-    rDoc.GetDocShell()->Broadcast( SwFormatFieldHint(nullptr, rLayout.IsHideRedlines()
+    rDoc.GetDocShell()->Broadcast( SwFormatFieldHint(nullptr, rLayout.HasMergedParas()
             ? SwFormatFieldHintWhich::REMOVED
             : SwFormatFieldHintWhich::INSERTED) );
 
