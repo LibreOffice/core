@@ -21,7 +21,7 @@
 #include <unotools/saveopt.hxx>
 #include <alienwarn.hxx>
 
-SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent, const OUString& _rFormatName,
+SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent, std::u16string_view _rFormatName,
                                              const OUString& _rDefaultExtension, bool rDefaultIsAlien)
     : MessageDialogController(pParent, "sfx/ui/alienwarndialog.ui", "AlienWarnDialog", "ask")
     , m_xKeepCurrentBtn(m_xBuilder->weld_button("save"))

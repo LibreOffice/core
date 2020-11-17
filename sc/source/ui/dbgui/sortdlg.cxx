@@ -33,7 +33,7 @@ ScSortDlg::ScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
 }
 
 ScSortWarningDlg::ScSortWarningDlg(weld::Window* pParent,
-    const OUString& rExtendText, const OUString& rCurrentText)
+    std::u16string_view rExtendText, std::u16string_view rCurrentText)
     : GenericDialogController(pParent, "modules/scalc/ui/sortwarning.ui", "SortWarning")
     , m_xFtText(m_xBuilder->weld_label("sorttext"))
     , m_xBtnExtSort(m_xBuilder->weld_button("extend"))

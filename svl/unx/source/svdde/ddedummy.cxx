@@ -33,7 +33,7 @@ DdeData::DdeData()
 {
 }
 
-DdeData::DdeData( const OUString& )
+DdeData::DdeData( SAL_UNUSED_PARAMETER const OUString& )
 {
 }
 
@@ -89,7 +89,7 @@ tools::Long DdeConnection::GetError() const
     return 0L;
 }
 
-DdeConnection::DdeConnection( const OUString&, const OUString& )
+DdeConnection::DdeConnection( SAL_UNUSED_PARAMETER const OUString&, SAL_UNUSED_PARAMETER const OUString& )
     : pService(nullptr)
     , pTopic(nullptr)
 {
@@ -109,7 +109,7 @@ OUString DdeConnection::GetTopicName() const
     return OUString();
 }
 
-DdeTransaction::DdeTransaction( DdeConnection& rConnection, const OUString&, tools::Long )
+DdeTransaction::DdeTransaction( DdeConnection& rConnection, SAL_UNUSED_PARAMETER const OUString&, tools::Long )
     : rDde(rConnection)
     , pName(nullptr)
     , nType(0)
@@ -151,7 +151,7 @@ DdePoke::DdePoke( DdeConnection& rConnection, const OUString& rString, const Dde
 }
 
 
-DdeTopic::DdeTopic( const OUString& )
+DdeTopic::DdeTopic( SAL_UNUSED_PARAMETER const OUString& )
     : pName(nullptr)
 {
 }
@@ -203,7 +203,7 @@ OUString DdeTopic::GetName() const
     return OUString();
 }
 
-DdeService::DdeService( const OUString& )
+DdeService::DdeService( SAL_UNUSED_PARAMETER const OUString& )
     : pSysTopic(nullptr)
     , pName(nullptr)
     , nStatus(0)
@@ -261,7 +261,7 @@ DdeServices& DdeService::GetServices()
   return theDdeServices::get();
 }
 
-DdeItem::DdeItem( const OUString& )
+DdeItem::DdeItem( SAL_UNUSED_PARAMETER const OUString& )
     : pName(nullptr)
     , pMyTopic(nullptr)
     , pImpData(nullptr)
