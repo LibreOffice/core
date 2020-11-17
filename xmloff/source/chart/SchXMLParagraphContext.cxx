@@ -32,20 +32,11 @@ using namespace com::sun::star;
 using namespace ::xmloff::token;
 
 SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
-                                                const OUString& rLocalName,
                                                 OUString& rText,
                                                 OUString * pOutId /* = 0 */ ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_TEXT, rLocalName ),
-        mrText( rText ),
-        mpId( pOutId )
-{
-}
-
-SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
-                                                OUString& rText ) :
         SvXMLImportContext( rImport ),
         mrText( rText ),
-        mpId( nullptr )
+        mpId( pOutId )
 {
 }
 

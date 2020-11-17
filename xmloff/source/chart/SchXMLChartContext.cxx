@@ -1205,40 +1205,39 @@ SchXMLTitleContext::SchXMLTitleContext( SchXMLImportHelper& rImpHelper, SvXMLImp
 SchXMLTitleContext::~SchXMLTitleContext()
 {}
 
-void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLTitleContext::startFastElement( sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-
     css::awt::Point aPosition;
     bool bHasXPosition=false;
     bool bHasYPosition=false;
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_SVG )
+        OUString aValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            if( IsXMLToken( aLocalName, XML_X ) )
+            case XML_ELEMENT(SVG, XML_X):
+            case XML_ELEMENT(SVG_COMPAT, XML_X):
             {
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         aPosition.X, aValue );
                 bHasXPosition = true;
+                break;
             }
-            else if( IsXMLToken( aLocalName, XML_Y ) )
+            case XML_ELEMENT(SVG, XML_Y):
+            case XML_ELEMENT(SVG_COMPAT, XML_Y):
             {
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         aPosition.Y, aValue );
                 bHasYPosition = true;
+                break;
             }
-        }
-        else if( nPrefix == XML_NAMESPACE_CHART )
-        {
-            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
+            case XML_ELEMENT(CHART, XML_STYLE_NAME):
                 msAutoStyleName = aValue;
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -1252,19 +1251,19 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
     }
 }
 
-SvXMLImportContextRef SchXMLTitleContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTitleContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext* pContext = nullptr;
 
-    if( (nPrefix == XML_NAMESPACE_TEXT ||
-                nPrefix == XML_NAMESPACE_LO_EXT) &&
-        IsXMLToken( rLocalName, XML_P ) )
+    if( nElement == XML_ELEMENT(TEXT, XML_P) ||
+        nElement == XML_ELEMENT(LO_EXT, XML_P) )
     {
-        pContext = new SchXMLParagraphContext( GetImport(), rLocalName, mrTitle );
+        pContext = new SchXMLParagraphContext( GetImport(), mrTitle );
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     return pContext;
 }
