@@ -209,6 +209,18 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 }
             }
         }
+        else if (sControlType == "expander")
+        {
+            auto pExpander = dynamic_cast<weld::Expander*>(pWidget);
+            if (pExpander)
+            {
+                if (sAction == "toggle")
+                {
+                    pExpander->set_expanded(!pExpander->get_expanded());
+                    return true;
+                }
+            }
+        }
     }
 
     return false;

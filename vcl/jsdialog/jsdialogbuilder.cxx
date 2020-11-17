@@ -452,6 +452,20 @@ std::unique_ptr<weld::TreeView> JSInstanceBuilder::weld_tree_view(const OString&
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::Expander> JSInstanceBuilder::weld_expander(const OString& id)
+{
+    VclExpander* pExpander = m_xBuilder->get<VclExpander>(id);
+    auto pWeldWidget = pExpander
+                           ? std::make_unique<JSExpander>(GetNotifierWindow(), GetContentWindow(),
+                                                          pExpander, this, false, m_sTypeOfJSON)
+                           : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -777,6 +791,20 @@ void JSTreeView::select(int pos)
         }
     }
     enable_notify_events();
+}
+
+JSExpander::JSExpander(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                       ::VclExpander* pExpander, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                       std::string sTypeOfJSON)
+    : JSWidget<SalInstanceExpander, ::VclExpander>(aNotifierWindow, aContentWindow, pExpander,
+                                                   pBuilder, bTakeOwnership, sTypeOfJSON)
+{
+}
+
+void JSExpander::set_expanded(bool bExpand)
+{
+    SalInstanceExpander::set_expanded(bExpand);
+    notifyDialogState();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
