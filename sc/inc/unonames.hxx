@@ -248,6 +248,7 @@
 #define SC_UNONAME_PRMETRICS        "UsePrinterMetrics"
 #define SC_UNONAME_PRALLSH          "PrintAllSheets"
 #define SC_UNONAME_PREMPTY          "PrintEmptyPages"
+#define SC_UNONAME_PRSINGLEJ        "PrintSingleJobs"
 #define SC_UNONAME_REPLWARN         "ReplaceCellsWarning"
 
 //  data pilot field

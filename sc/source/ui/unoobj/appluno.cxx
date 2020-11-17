@@ -68,6 +68,7 @@ static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
         {u"" SC_UNONAME_MOVESEL,  0,  cppu::UnoType<bool>::get(),              0, 0},
         {u"" SC_UNONAME_PRALLSH,  0,  cppu::UnoType<bool>::get(),              0, 0},
         {u"" SC_UNONAME_PREMPTY,  0,  cppu::UnoType<bool>::get(),              0, 0},
+        {u"" SC_UNONAME_PRSINGLEJ,0,  cppu::UnoType<bool>::get(),              0, 0},
         {u"" SC_UNONAME_RANGEFIN, 0,  cppu::UnoType<bool>::get(),              0, 0},
         {u"" SC_UNONAME_SCALE,    0,  cppu::UnoType<sal_Int16>::get(),        0, 0},
         {u"" SC_UNONAME_STBFUNC,  0,  cppu::UnoType<sal_Int16>::get(),        0, 0},
@@ -279,6 +280,13 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
         pScMod->SetPrintOptions( aPrintOpt );
         SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScPrintOptions ) );    // update previews
     }
+    else if (aPropertyName == SC_UNONAME_PRSINGLEJ)
+    {
+        ScPrintOptions aPrintOpt(pScMod->GetPrintOptions());
+        aPrintOpt.SetSingleJob(ScUnoHelpFunctions::GetBoolFromAny(aValue));
+        pScMod->SetPrintOptions(aPrintOpt);
+        SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScPrintOptions));
+    }
 
     if ( bSaveApp )
         pScMod->SetAppOptions( aAppOpt );
@@ -346,6 +354,8 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
         aRet <<= pScMod->GetPrintOptions().GetAllSheets();
     else if (aPropertyName == SC_UNONAME_PREMPTY )
         aRet <<= !pScMod->GetPrintOptions().GetSkipEmpty();    // reversed
+    else if (aPropertyName == SC_UNONAME_PRSINGLEJ )
+        aRet <<= pScMod->GetPrintOptions().GetSingleJob();
 
     return aRet;
 }
