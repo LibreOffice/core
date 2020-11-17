@@ -36,11 +36,8 @@ private:
 
 public:
     SchXMLParagraphContext( SvXMLImport& rImport,
-                            const OUString& rLocalName,
                             OUString& rText,
                             OUString * pOutId = nullptr );
-    SchXMLParagraphContext( SvXMLImport& rImport,
-                            OUString& rText );
     virtual ~SchXMLParagraphContext() override;
 
     virtual void SAL_CALL startFastElement(

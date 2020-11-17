@@ -62,7 +62,7 @@ SvXMLImportContextRef SchXMLListItemContext::CreateChildContext(
     SvXMLImportContext* pContext = nullptr;
     if( (nPrefix == XML_NAMESPACE_TEXT ||
                 nPrefix == XML_NAMESPACE_LO_EXT) && IsXMLToken( rLocalName, XML_P ) )
-        pContext = new SchXMLParagraphContext( GetImport(), rLocalName, m_rText );
+        pContext = new SchXMLParagraphContext( GetImport(), m_rText );
     return pContext;
 }
 

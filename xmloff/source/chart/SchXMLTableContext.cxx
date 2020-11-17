@@ -664,7 +664,7 @@ SvXMLImportContextRef SchXMLTableCellContext::CreateChildContext(
     else if( (nPrefix == XML_NAMESPACE_TEXT ||
                 nPrefix == XML_NAMESPACE_LO_EXT) && IsXMLToken( rLocalName, XML_P ) )
     {
-        pContext = new SchXMLParagraphContext( GetImport(), rLocalName, maCellContent, &maRangeId );
+        pContext = new SchXMLParagraphContext( GetImport(), maCellContent, &maRangeId );
     }
     // <draw:g> element - read range
     else if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_G ) )
