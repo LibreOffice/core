@@ -3178,6 +3178,9 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit));
             }
         }
+
+        WriteShape3DEffects( rXPropSet );
+
         mpFS->endElementNS((nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr);
     }
 
@@ -4245,12 +4248,12 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
     // extract the relevant properties from the grab bag
     Sequence< PropertyValue > aGrabBag, aEffectProps, aLightRigProps, aShape3DProps;
     mAny >>= aGrabBag;
-    auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
+    auto pShapeProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
         [](const PropertyValue& rProp) { return rProp.Name == "3DEffectProperties"; });
-    if (pProp != std::cend(aGrabBag))
+    if (pShapeProp != std::cend(aGrabBag))
     {
         Sequence< PropertyValue > a3DEffectProps;
-        pProp->Value >>= a3DEffectProps;
+        pShapeProp->Value >>= a3DEffectProps;
         for( const auto& r3DEffectProp : std::as_const(a3DEffectProps) )
         {
             if( r3DEffectProp.Name == "Camera" )
@@ -4261,6 +4264,25 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
                 r3DEffectProp.Value >>= aShape3DProps;
         }
     }
+
+    auto pTextProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
+        [](const PropertyValue& rProp) { return rProp.Name == "Text3DEffectProperties"; });
+
+    if (pTextProp != std::cend(aGrabBag))
+    {
+        Sequence< PropertyValue > a3DEffectProps;
+        pTextProp->Value >>= a3DEffectProps;
+        for( const auto& r3DEffectProp : std::as_const(a3DEffectProps) )
+        {
+            if( r3DEffectProp.Name == "Camera" )
+                r3DEffectProp.Value >>= aEffectProps;
+            else if( r3DEffectProp.Name == "LightRig" )
+                r3DEffectProp.Value >>= aLightRigProps;
+            else if( r3DEffectProp.Name == "Shape3D" )
+                r3DEffectProp.Value >>= aShape3DProps;
+        }
+    }
+
     if( !aEffectProps.hasElements() && !aLightRigProps.hasElements() && !aShape3DProps.hasElements() )
         return;
 

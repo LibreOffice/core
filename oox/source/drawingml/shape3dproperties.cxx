@@ -30,7 +30,7 @@ using namespace ::com::sun::star::graphic;
 
 namespace oox::drawingml {
 
-OUString Shape3DProperties::getCameraPrstName( sal_Int32 nElement )
+OUString Generic3DProperties::getCameraPrstName( sal_Int32 nElement )
 {
     switch( nElement )
     {
@@ -97,11 +97,11 @@ OUString Shape3DProperties::getCameraPrstName( sal_Int32 nElement )
         case XML_perspectiveRelaxed:                    return "perspectiveRelaxed";
         case XML_perspectiveRelaxedModerately:          return "perspectiveRelaxedModerately";
     }
-    SAL_WARN( "oox.drawingml", "Shape3DProperties::getCameraPrstName - unexpected prst type" );
+    SAL_WARN( "oox.drawingml", "Generic3DProperties::getCameraPrstName - unexpected prst type" );
     return OUString();
 }
 
-OUString Shape3DProperties::getLightRigName( sal_Int32 nElement )
+OUString Generic3DProperties::getLightRigName( sal_Int32 nElement )
 {
     switch( nElement )
     {
@@ -133,11 +133,11 @@ OUString Shape3DProperties::getLightRigName( sal_Int32 nElement )
         case XML_glow:              return "glow";
         case XML_brightRoom:        return "brightRoom";
     }
-    SAL_WARN( "oox.drawingml", "Shape3DProperties::getLightRigName - unexpected token" );
+    SAL_WARN( "oox.drawingml", "Generic3DProperties::getLightRigName - unexpected token" );
     return OUString();
 }
 
-OUString Shape3DProperties::getLightRigDirName( sal_Int32 nElement )
+OUString Generic3DProperties::getLightRigDirName( sal_Int32 nElement )
 {
     switch( nElement )
     {
@@ -150,11 +150,11 @@ OUString Shape3DProperties::getLightRigDirName( sal_Int32 nElement )
         case XML_b:     return "b";
         case XML_br:    return "br";
     }
-    SAL_WARN( "oox.drawingml", "Shape3DProperties::getLightRigDirName - unexpected token" );
+    SAL_WARN( "oox.drawingml", "Generic3DProperties::getLightRigDirName - unexpected token" );
     return OUString();
 }
 
-OUString Shape3DProperties::getBevelPresetTypeString( sal_Int32 nType )
+OUString Generic3DProperties::getBevelPresetTypeString( sal_Int32 nType )
 {
     switch (nType)
     {
@@ -171,11 +171,11 @@ OUString Shape3DProperties::getBevelPresetTypeString( sal_Int32 nType )
         case XML_hardEdge:      return "hardEdge";
         case XML_artDeco:       return "artDeco";
     }
-    SAL_WARN( "oox.drawingml", "Shape3DProperties::getBevelPresetTypeString - unexpected token" );
+    SAL_WARN( "oox.drawingml", "Generic3DProperties::getBevelPresetTypeString - unexpected token" );
     return OUString();
 }
 
-OUString Shape3DProperties::getPresetMaterialTypeString( sal_Int32 nType )
+OUString Generic3DProperties::getPresetMaterialTypeString( sal_Int32 nType )
 {
     switch (nType)
     {
@@ -196,11 +196,11 @@ OUString Shape3DProperties::getPresetMaterialTypeString( sal_Int32 nType )
         case XML_softmetal:         return "softmetal";
         case XML_none:              return "none";
     }
-    SAL_WARN( "oox.drawingml", "Shape3DProperties::getPresetMaterialTypeString - unexpected token" );
+    SAL_WARN( "oox.drawingml", "Generic3DProperties::getPresetMaterialTypeString - unexpected token" );
     return OUString();
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getCameraAttributes()
+css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getCameraAttributes()
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(6);
     sal_Int32 nSize = 0;
@@ -244,7 +244,7 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getCameraAttr
     return aSeq;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getLightRigAttributes()
+css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getLightRigAttributes()
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(5);
     sal_Int32 nSize = 0;
@@ -282,7 +282,7 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getLightRigAt
     return aSeq;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getBevelAttributes( BevelProperties rProps )
+css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getBevelAttributes( BevelProperties rProps )
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(3);
     sal_Int32 nSize = 0;
@@ -308,7 +308,7 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getBevelAttri
     return aSeq;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getColorAttributes(
+css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getColorAttributes(
         const Color& rColor, const GraphicHelper& rGraphicHelper, ::Color rPhClr )
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(2);
@@ -332,7 +332,7 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getColorAttri
     return aSeq;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAttributes(
+css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getShape3DAttributes(
         const GraphicHelper& rGraphicHelper, ::Color rPhClr )
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(8);

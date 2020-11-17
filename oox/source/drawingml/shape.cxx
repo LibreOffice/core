@@ -1377,6 +1377,24 @@ Reference< XShape > const & Shape::createAndInsert(
                 putPropertyToGrabBag( "3DEffectProperties", Any( a3DEffectsGrabBag ) );
             }
 
+            if( bIsCustomShape && getTextBody())
+            {
+
+                Sequence< PropertyValue > aTextCamera3DEffects = getTextBody()->get3DProperties().getCameraAttributes();
+                Sequence< PropertyValue > aTextLightRig3DEffects = getTextBody()->get3DProperties().getLightRigAttributes();
+                Sequence< PropertyValue > aTextShape3DEffects = getTextBody()->get3DProperties().getShape3DAttributes( rGraphicHelper, nFillPhClr );
+                if( aTextCamera3DEffects.hasElements() || aTextLightRig3DEffects.hasElements() || aTextShape3DEffects.hasElements() )
+                {
+                    uno::Sequence<beans::PropertyValue> aText3DEffectsGrabBag = comphelper::InitPropertySequence(
+                    {
+                        {"Camera", uno::makeAny(aTextCamera3DEffects)},
+                        {"LightRig", uno::makeAny(aTextLightRig3DEffects)},
+                        {"Shape3D", uno::makeAny(aTextShape3DEffects)}
+                    });
+                    putPropertyToGrabBag( "Text3DEffectProperties", Any( aText3DEffectsGrabBag ) );
+                }
+            }
+
             // store bitmap artistic effects in the grab bag
             if( !mpGraphicPropertiesPtr->maBlipProps.maEffect.isEmpty() )
                 putPropertyToGrabBag( "ArtisticEffectProperties",
@@ -1403,7 +1421,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setMirroredY( true );
             if( getTextBody() )
             {
-                sal_Int32 nTextCameraZRotation = static_cast< sal_Int32 >( get3DProperties().maCameraRotation.mnRevolution.get() );
+                sal_Int32 nTextCameraZRotation = static_cast< sal_Int32 >( getTextBody()->get3DProperties().maCameraRotation.mnRevolution.get() );
                 mpCustomShapePropertiesPtr->setTextCameraZRotateAngle( nTextCameraZRotation / 60000 );
 
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );

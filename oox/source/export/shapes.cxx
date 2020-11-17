@@ -993,7 +993,17 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         WriteFill( rXPropSet );
         WriteOutline( rXPropSet );
         WriteShapeEffects( rXPropSet );
-        WriteShape3DEffects( rXPropSet );
+
+        bool bHas3DEffectinShape = false;
+        uno::Sequence<beans::PropertyValue> grabBag;
+        rXPropSet->getPropertyValue("InteropGrabBag") >>= grabBag;
+
+        for (auto const& it : std::as_const(grabBag))
+            if (it.Name == "3DEffectProperties")
+                bHas3DEffectinShape = true;
+
+        if( bHas3DEffectinShape)
+            WriteShape3DEffects( rXPropSet );
     }
 
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
