@@ -490,15 +490,8 @@ public:
     bool Write(SvStream& rStream);
     /// Get a list of signatures embedded into this document.
     std::vector<PDFObjectElement*> GetSignatureWidgets();
-    /**
-     * Get the value of the "modification detection and prevention" permission:
-     * Valid values are 1, 2 and 3: only 3 allows annotations after signing.
-     */
-    int GetMDPPerm();
     /// Remove the nth signature from read document in the edit buffer.
     bool RemoveSignature(size_t nPosition);
-    /// Get byte offsets of the end of incremental updates.
-    const std::vector<size_t>& GetEOFs() const;
     //@}
 
     /// See vcl::PDFObjectContainer::createObject().
