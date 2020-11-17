@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7f3d623_555090fc",
+        "filename": "external/icu/ubsan.patch.1",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-17T19:35:17Z",
+      "side": 1,
+      "message": "Was there any particular reason for that rename and content change?  (Asking because, for me all that does is make it less convenient to edit the file :)",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 0
+      },
+      "revId": "8335c8c20765d4f167d9b48e6a2757864a3bc7fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
