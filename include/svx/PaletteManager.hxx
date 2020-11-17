@@ -45,7 +45,7 @@ class SVXCORE_DLLPUBLIC PaletteManager
     std::deque<NamedColor>  maRecentColors;
     std::vector<std::unique_ptr<Palette>> m_Palettes;
 
-    std::function<void(const OUString&, const NamedColor&)> maColorSelectFunction;
+    ColorSelectFunction maColorSelectFunction;
     css::uno::Reference < css::uno::XComponentContext > m_context;
 public:
     PaletteManager();
@@ -69,7 +69,7 @@ public:
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdaterBase* pBtnUpdater);
     void        PopupColorPicker(weld::Window* pParent, const OUString& aCommand, const Color& rInitialColor);
 
-    void        SetColorSelectFunction(const std::function<void(const OUString&, const NamedColor&)>& aColorSelectFunction);
+    void        SetColorSelectFunction(const ColorSelectFunction& aColorSelectFunction);
 
     static void DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor);
 };

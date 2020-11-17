@@ -292,7 +292,7 @@ void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdaterBase* pBtnUpdat
     mpBtnUpdater = pBtnUpdater;
 }
 
-void PaletteManager::SetColorSelectFunction(const std::function<void(const OUString&, const NamedColor&)>& aColorSelectFunction)
+void PaletteManager::SetColorSelectFunction(const ColorSelectFunction& aColorSelectFunction)
 {
     maColorSelectFunction = aColorSelectFunction;
 }
