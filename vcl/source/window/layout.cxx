@@ -1652,6 +1652,13 @@ void VclExpander::StateChanged(StateChangedType nType)
     }
 }
 
+boost::property_tree::ptree VclExpander::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(VclContainer::DumpAsPropertyTree());
+    aTree.put("type", "expander");
+    return aTree;
+}
+
 IMPL_LINK( VclExpander, ClickHdl, CheckBox&, rBtn, void )
 {
     vcl::Window *pChild = get_child();

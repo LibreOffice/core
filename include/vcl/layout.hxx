@@ -493,6 +493,7 @@ public:
     }
     virtual void StateChanged(StateChangedType nType) override;
     void  SetExpandedHdl( const Link<VclExpander&,void>& rLink ) { maExpandedHdl = rLink; }
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
