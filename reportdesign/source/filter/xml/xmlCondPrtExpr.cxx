@@ -22,6 +22,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <strings.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 namespace rptxml
 {

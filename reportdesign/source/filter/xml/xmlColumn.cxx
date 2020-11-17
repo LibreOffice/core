@@ -32,6 +32,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <strings.hxx>
+#include <sal/log.hxx>
 
 #define PROPERTY_ID_WIDTH      1
 #define PROPERTY_ID_HEIGHT     2
