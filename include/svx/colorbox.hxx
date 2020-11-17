@@ -21,6 +21,7 @@ class ListBoxColorWrapper
 public:
     ListBoxColorWrapper(ColorListBox* pControl);
     void operator()(const OUString& rCommand, const NamedColor& rColor);
+        // ColorSelectFunction signature
 private:
     ColorListBox* mpControl;
 };
