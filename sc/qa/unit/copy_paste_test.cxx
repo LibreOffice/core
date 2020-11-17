@@ -841,7 +841,7 @@ void ScCopyPasteTest::tdf113500_autofillMixed()
 
     // compare the results of fill-right / -left with the reference stored in the test file
     // this compares the whole area blindly, for specific test cases, check the test file
-    // do not check the 3. row: a1,b2,a3. It is an other bug to fix
+    // do not check the 3. row: a1,b2,a3. It is another bug to fix
     for (int nCol = 1; nCol <= 9; nCol++)
     {
         for (int nRow = 5; nRow <= 6; nRow++)
@@ -857,7 +857,7 @@ void ScCopyPasteTest::tdf113500_autofillMixed()
     }
 
     // compare the results of fill-up / -down
-    // do not check the 2. column: 1st,3st. It is an other bug to fix
+    // do not check the 2. column: 1st,3st. It is another bug to fix
     for (int nCol = 1; nCol <= 3; nCol+=2)
     {
         for (int nRow = 16; nRow <= 21; nRow++)
