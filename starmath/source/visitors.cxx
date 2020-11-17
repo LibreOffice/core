@@ -20,532 +20,385 @@
 
 // SmDefaultingVisitor
 
-void SmDefaultingVisitor::Visit( SmTableNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmTableNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmBraceNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmBraceNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmBracebodyNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmBracebodyNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmOperNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmOperNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmAlignNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmAlignNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmAttributNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmAttributNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmFontNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmFontNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmUnHorNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmUnHorNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmBinHorNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmBinHorNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmBinVerNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmBinVerNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmBinDiagonalNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmBinDiagonalNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmSubSupNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmSubSupNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmMatrixNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmMatrixNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmPlaceNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmPlaceNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmTextNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmTextNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmSpecialNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmSpecialNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmGlyphSpecialNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmGlyphSpecialNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmMathSymbolNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmMathSymbolNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmBlankNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmBlankNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmErrorNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmErrorNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmLineNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmLineNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmExpressionNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmExpressionNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmPolyLineNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmPolyLineNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmRootNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmRootNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmRootSymbolNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmRootSymbolNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmRectangleNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmRectangleNode* pNode) { DefaultVisit(pNode); }
 
-void SmDefaultingVisitor::Visit( SmVerticalBraceNode* pNode )
-{
-    DefaultVisit( pNode );
-}
+void SmDefaultingVisitor::Visit(SmVerticalBraceNode* pNode) { DefaultVisit(pNode); }
 
 // SmCaretDrawingVisitor
 
-SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
-                                             SmCaretPos position,
-                                             Point offset,
-                                             bool caretVisible )
-    : mrDev( rDevice )
-    , maPos( position )
-    , maOffset( offset )
-    , mbCaretVisible( caretVisible )
+SmCaretDrawingVisitor::SmCaretDrawingVisitor(OutputDevice& rDevice, SmCaretPos position,
+                                             Point offset, bool caretVisible)
+    : mrDev(rDevice)
+    , maPos(position)
+    , maOffset(offset)
+    , mbCaretVisible(caretVisible)
 {
-    SAL_WARN_IF( !position.IsValid(), "starmath", "Cannot draw invalid position!" );
-    if( !position.IsValid( ) )
+    SAL_WARN_IF(!position.IsValid(), "starmath", "Cannot draw invalid position!");
+    if (!position.IsValid())
         return;
 
     //Save device state
-    mrDev.Push( PushFlags::FONT | PushFlags::MAPMODE | PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTCOLOR );
+    mrDev.Push(PushFlags::FONT | PushFlags::MAPMODE | PushFlags::LINECOLOR | PushFlags::FILLCOLOR
+               | PushFlags::TEXTCOLOR);
 
-    maPos.pSelectedNode->Accept( this );
+    maPos.pSelectedNode->Accept(this);
     //Restore device state
-    mrDev.Pop( );
+    mrDev.Pop();
 }
 
-void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
+void SmCaretDrawingVisitor::Visit(SmTextNode* pNode)
 {
     tools::Long i = maPos.nIndex;
 
-    mrDev.SetFont( pNode->GetFont( ) );
+    mrDev.SetFont(pNode->GetFont());
 
     //Find the line
-    SmNode* pLine = SmCursor::FindTopMostNodeInLine( pNode );
+    SmNode* pLine = SmCursor::FindTopMostNodeInLine(pNode);
 
     //Find coordinates
-    tools::Long left = pNode->GetLeft( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, i ) + maOffset.X( );
-    tools::Long top = pLine->GetTop( ) + maOffset.Y( );
-    tools::Long height = pLine->GetHeight( );
-    tools::Long left_line = pLine->GetLeft( ) + maOffset.X( );
-    tools::Long right_line = pLine->GetRight( ) + maOffset.X( );
+    tools::Long left = pNode->GetLeft() + mrDev.GetTextWidth(pNode->GetText(), 0, i) + maOffset.X();
+    tools::Long top = pLine->GetTop() + maOffset.Y();
+    tools::Long height = pLine->GetHeight();
+    tools::Long left_line = pLine->GetLeft() + maOffset.X();
+    tools::Long right_line = pLine->GetRight() + maOffset.X();
 
     //Set color
-    mrDev.SetLineColor( COL_BLACK );
+    mrDev.SetLineColor(COL_BLACK);
 
-    if ( mbCaretVisible ) {
+    if (mbCaretVisible)
+    {
         //Draw vertical line
-        Point p1( left, top );
-        Point p2( left, top + height );
-        mrDev.DrawLine( p1, p2 );
+        Point p1(left, top);
+        Point p2(left, top + height);
+        mrDev.DrawLine(p1, p2);
     }
 
     //Underline the line
-    Point aLeft( left_line, top + height );
-    Point aRight( right_line, top + height );
-    mrDev.DrawLine( aLeft, aRight );
+    Point aLeft(left_line, top + height);
+    Point aRight(right_line, top + height);
+    mrDev.DrawLine(aLeft, aRight);
 }
 
-void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
+void SmCaretDrawingVisitor::DefaultVisit(SmNode* pNode)
 {
     //Find the line
-    SmNode* pLine = SmCursor::FindTopMostNodeInLine( pNode );
+    SmNode* pLine = SmCursor::FindTopMostNodeInLine(pNode);
 
     //Find coordinates
-    tools::Long left = pNode->GetLeft( ) + maOffset.X( ) + ( maPos.nIndex == 1 ? pNode->GetWidth( ) : 0 );
-    tools::Long top = pLine->GetTop( ) + maOffset.Y( );
-    tools::Long height = pLine->GetHeight( );
-    tools::Long left_line = pLine->GetLeft( ) + maOffset.X( );
-    tools::Long right_line = pLine->GetRight( ) + maOffset.X( );
+    tools::Long left
+        = pNode->GetLeft() + maOffset.X() + (maPos.nIndex == 1 ? pNode->GetWidth() : 0);
+    tools::Long top = pLine->GetTop() + maOffset.Y();
+    tools::Long height = pLine->GetHeight();
+    tools::Long left_line = pLine->GetLeft() + maOffset.X();
+    tools::Long right_line = pLine->GetRight() + maOffset.X();
 
     //Set color
-    mrDev.SetLineColor( COL_BLACK );
+    mrDev.SetLineColor(COL_BLACK);
 
-    if ( mbCaretVisible ) {
+    if (mbCaretVisible)
+    {
         //Draw vertical line
-        Point p1( left, top );
-        Point p2( left, top + height );
-        mrDev.DrawLine( p1, p2 );
+        Point p1(left, top);
+        Point p2(left, top + height);
+        mrDev.DrawLine(p1, p2);
     }
 
     //Underline the line
-    Point aLeft( left_line, top + height );
-    Point aRight( right_line, top + height );
-    mrDev.DrawLine( aLeft, aRight );
+    Point aLeft(left_line, top + height);
+    Point aRight(right_line, top + height);
+    mrDev.DrawLine(aLeft, aRight);
 }
 
 // SmCaretPos2LineVisitor
 
-void SmCaretPos2LineVisitor::Visit( SmTextNode* pNode )
+void SmCaretPos2LineVisitor::Visit(SmTextNode* pNode)
 {
     //Save device state
-    mpDev->Push( PushFlags::FONT | PushFlags::TEXTCOLOR );
+    mpDev->Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
     tools::Long i = maPos.nIndex;
 
-    mpDev->SetFont( pNode->GetFont( ) );
+    mpDev->SetFont(pNode->GetFont());
 
     //Find coordinates
-    tools::Long left = pNode->GetLeft( ) + mpDev->GetTextWidth( pNode->GetText( ), 0, i );
-    tools::Long top = pNode->GetTop( );
-    tools::Long height = pNode->GetHeight( );
+    tools::Long left = pNode->GetLeft() + mpDev->GetTextWidth(pNode->GetText(), 0, i);
+    tools::Long top = pNode->GetTop();
+    tools::Long height = pNode->GetHeight();
 
-    maLine = SmCaretLine( left, top, height );
+    maLine = SmCaretLine(left, top, height);
 
     //Restore device state
-    mpDev->Pop( );
+    mpDev->Pop();
 }
 
-void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
+void SmCaretPos2LineVisitor::DefaultVisit(SmNode* pNode)
 {
     //Vertical line ( code from SmCaretDrawingVisitor )
-    Point p1 = pNode->GetTopLeft( );
-    if( maPos.nIndex == 1 )
-        p1.Move( pNode->GetWidth( ), 0 );
+    Point p1 = pNode->GetTopLeft();
+    if (maPos.nIndex == 1)
+        p1.Move(pNode->GetWidth(), 0);
 
-    maLine = SmCaretLine( p1.X( ), p1.Y( ), pNode->GetHeight( ) );
+    maLine = SmCaretLine(p1.X(), p1.Y(), pNode->GetHeight());
 }
-
 
 // SmDrawingVisitor
 
-void SmDrawingVisitor::Visit( SmTableNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmTableNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmBraceNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmBraceNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmBracebodyNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmBracebodyNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmOperNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmOperNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmAlignNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmAlignNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmAttributNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmAttributNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmFontNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmFontNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmUnHorNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmUnHorNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmBinHorNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmBinHorNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmBinVerNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmBinVerNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmBinDiagonalNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmBinDiagonalNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmSubSupNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmSubSupNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmMatrixNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmMatrixNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmPlaceNode* pNode )
-{
-    DrawSpecialNode( pNode );
-}
+void SmDrawingVisitor::Visit(SmPlaceNode* pNode) { DrawSpecialNode(pNode); }
 
-void SmDrawingVisitor::Visit( SmTextNode* pNode )
-{
-    DrawTextNode( pNode );
-}
+void SmDrawingVisitor::Visit(SmTextNode* pNode) { DrawTextNode(pNode); }
 
-void SmDrawingVisitor::Visit( SmSpecialNode* pNode )
-{
-    DrawSpecialNode( pNode );
-}
+void SmDrawingVisitor::Visit(SmSpecialNode* pNode) { DrawSpecialNode(pNode); }
 
-void SmDrawingVisitor::Visit( SmGlyphSpecialNode* pNode )
-{
-    DrawSpecialNode( pNode );
-}
+void SmDrawingVisitor::Visit(SmGlyphSpecialNode* pNode) { DrawSpecialNode(pNode); }
 
-void SmDrawingVisitor::Visit( SmMathSymbolNode* pNode )
-{
-    DrawSpecialNode( pNode );
-}
+void SmDrawingVisitor::Visit(SmMathSymbolNode* pNode) { DrawSpecialNode(pNode); }
 
-void SmDrawingVisitor::Visit( SmBlankNode* )
-{
-}
+void SmDrawingVisitor::Visit(SmBlankNode*) {}
 
-void SmDrawingVisitor::Visit( SmErrorNode* pNode )
-{
-    DrawSpecialNode( pNode );
-}
+void SmDrawingVisitor::Visit(SmErrorNode* pNode) { DrawSpecialNode(pNode); }
 
-void SmDrawingVisitor::Visit( SmLineNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmLineNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmExpressionNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmExpressionNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmRootNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmRootNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmVerticalBraceNode* pNode )
-{
-    DrawChildren( pNode );
-}
+void SmDrawingVisitor::Visit(SmVerticalBraceNode* pNode) { DrawChildren(pNode); }
 
-void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
+void SmDrawingVisitor::Visit(SmRootSymbolNode* pNode)
 {
-    if ( pNode->IsPhantom( ) )
+    if (pNode->IsPhantom())
         return;
 
     // draw root-sign itself
-    DrawSpecialNode( pNode );
+    DrawSpecialNode(pNode);
 
-    SmTmpDevice aTmpDev( mrDev, true );
-    aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
-    mrDev.SetLineColor( );
-    aTmpDev.SetFont( pNode->GetFont( ) );
+    SmTmpDevice aTmpDev(mrDev, true);
+    aTmpDev.SetFillColor(pNode->GetFont().GetColor());
+    mrDev.SetLineColor();
+    aTmpDev.SetFont(pNode->GetFont());
 
     // since the width is always unscaled it corresponds to the _original_
     // _unscaled_ font height to be used, we use that to calculate the
     // bar height. Thus it is independent of the arguments height.
     // ( see display of sqrt QQQ versus sqrt stack{Q#Q#Q#Q} )
-    tools::Long nBarHeight = pNode->GetWidth( ) * 7 / 100;
-    tools::Long nBarWidth = pNode->GetBodyWidth( ) + pNode->GetBorderWidth( );
-    Point aBarOffset( pNode->GetWidth( ), +pNode->GetBorderWidth( ) );
-    Point aBarPos( maPosition + aBarOffset );
+    tools::Long nBarHeight = pNode->GetWidth() * 7 / 100;
+    tools::Long nBarWidth = pNode->GetBodyWidth() + pNode->GetBorderWidth();
+    Point aBarOffset(pNode->GetWidth(), +pNode->GetBorderWidth());
+    Point aBarPos(maPosition + aBarOffset);
 
-    tools::Rectangle  aBar( aBarPos, Size( nBarWidth, nBarHeight ) );
+    tools::Rectangle aBar(aBarPos, Size(nBarWidth, nBarHeight));
     //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
     //! increasing zoomfactor.
     //  This is done by shifting its output-position to a point that
     //  corresponds exactly to a pixel on the output device.
-    Point  aDrawPos( mrDev.PixelToLogic( mrDev.LogicToPixel( aBar.TopLeft( ) ) ) );
-    aBar.SetPos( aDrawPos );
+    Point aDrawPos(mrDev.PixelToLogic(mrDev.LogicToPixel(aBar.TopLeft())));
+    aBar.SetPos(aDrawPos);
 
-    mrDev.DrawRect( aBar );
+    mrDev.DrawRect(aBar);
 }
 
-void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
+void SmDrawingVisitor::Visit(SmPolyLineNode* pNode)
 {
-    if ( pNode->IsPhantom( ) )
+    if (pNode->IsPhantom())
         return;
 
-    tools::Long nBorderwidth = pNode->GetFont( ).GetBorderWidth( );
+    tools::Long nBorderwidth = pNode->GetFont().GetBorderWidth();
 
-    LineInfo  aInfo;
-    aInfo.SetWidth( pNode->GetWidth( ) - 2 * nBorderwidth );
+    LineInfo aInfo;
+    aInfo.SetWidth(pNode->GetWidth() - 2 * nBorderwidth);
 
-    Point aOffset ( Point( ) - pNode->GetPolygon( ).GetBoundRect( ).TopLeft( )
-                   + Point( nBorderwidth, nBorderwidth ) ),
-          aPos ( maPosition + aOffset );
-    pNode->GetPolygon( ).Move( aPos.X( ), aPos.Y( ) );    //Works because Polygon wraps a pointer
+    Point aOffset(Point() - pNode->GetPolygon().GetBoundRect().TopLeft()
+                  + Point(nBorderwidth, nBorderwidth)),
+        aPos(maPosition + aOffset);
+    pNode->GetPolygon().Move(aPos.X(), aPos.Y()); //Works because Polygon wraps a pointer
 
-    SmTmpDevice aTmpDev ( mrDev, false );
-    aTmpDev.SetLineColor( pNode->GetFont( ).GetColor( ) );
+    SmTmpDevice aTmpDev(mrDev, false);
+    aTmpDev.SetLineColor(pNode->GetFont().GetColor());
 
-    mrDev.DrawPolyLine( pNode->GetPolygon( ), aInfo );
+    mrDev.DrawPolyLine(pNode->GetPolygon(), aInfo);
 }
 
-void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
+void SmDrawingVisitor::Visit(SmRectangleNode* pNode)
 {
-    if ( pNode->IsPhantom( ) )
+    if (pNode->IsPhantom())
         return;
 
-    SmTmpDevice aTmpDev ( mrDev, false );
-    aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
-    mrDev.SetLineColor( );
-    aTmpDev.SetFont( pNode->GetFont( ) );
+    SmTmpDevice aTmpDev(mrDev, false);
+    aTmpDev.SetFillColor(pNode->GetFont().GetColor());
+    mrDev.SetLineColor();
+    aTmpDev.SetFont(pNode->GetFont());
 
-    sal_uLong  nTmpBorderWidth = pNode->GetFont( ).GetBorderWidth( );
+    sal_uLong nTmpBorderWidth = pNode->GetFont().GetBorderWidth();
 
     // get rectangle and remove borderspace
-    tools::Rectangle  aTmp ( pNode->AsRectangle( ) + maPosition - pNode->GetTopLeft( ) );
-    aTmp.AdjustLeft(nTmpBorderWidth );
-    aTmp.AdjustRight( -sal_Int32(nTmpBorderWidth) );
-    aTmp.AdjustTop(nTmpBorderWidth );
-    aTmp.AdjustBottom( -sal_Int32(nTmpBorderWidth) );
+    tools::Rectangle aTmp(pNode->AsRectangle() + maPosition - pNode->GetTopLeft());
+    aTmp.AdjustLeft(nTmpBorderWidth);
+    aTmp.AdjustRight(-sal_Int32(nTmpBorderWidth));
+    aTmp.AdjustTop(nTmpBorderWidth);
+    aTmp.AdjustBottom(-sal_Int32(nTmpBorderWidth));
 
-    SAL_WARN_IF( aTmp.IsEmpty(), "starmath", "Empty rectangle" );
+    SAL_WARN_IF(aTmp.IsEmpty(), "starmath", "Empty rectangle");
 
     //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
     //! increasing zoomfactor.
     //  This is done by shifting its output-position to a point that
     //  corresponds exactly to a pixel on the output device.
-    Point  aPos ( mrDev.PixelToLogic( mrDev.LogicToPixel( aTmp.TopLeft( ) ) ) );
-    aTmp.SetPos( aPos );
+    Point aPos(mrDev.PixelToLogic(mrDev.LogicToPixel(aTmp.TopLeft())));
+    aTmp.SetPos(aPos);
 
-    mrDev.DrawRect( aTmp );
+    mrDev.DrawRect(aTmp);
 }
 
-void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
+void SmDrawingVisitor::DrawTextNode(SmTextNode* pNode)
 {
-    if ( pNode->IsPhantom() || pNode->GetText().isEmpty() || pNode->GetText()[0] == '\0' )
+    if (pNode->IsPhantom() || pNode->GetText().isEmpty() || pNode->GetText()[0] == '\0')
         return;
 
-    SmTmpDevice aTmpDev ( mrDev, false );
-    aTmpDev.SetFont( pNode->GetFont( ) );
+    SmTmpDevice aTmpDev(mrDev, false);
+    aTmpDev.SetFont(pNode->GetFont());
 
-    Point  aPos ( maPosition );
-    aPos.AdjustY(pNode->GetBaselineOffset( ) );
+    Point aPos(maPosition);
+    aPos.AdjustY(pNode->GetBaselineOffset());
     // round to pixel coordinate
-    aPos = mrDev.PixelToLogic( mrDev.LogicToPixel( aPos ) );
+    aPos = mrDev.PixelToLogic(mrDev.LogicToPixel(aPos));
 
-    mrDev.DrawStretchText( aPos, pNode->GetWidth( ), pNode->GetText( ) );
+    mrDev.DrawStretchText(aPos, pNode->GetWidth(), pNode->GetText());
 }
 
-void SmDrawingVisitor::DrawSpecialNode( SmSpecialNode* pNode )
+void SmDrawingVisitor::DrawSpecialNode(SmSpecialNode* pNode)
 {
     //! since this chars might come from any font, that we may not have
     //! set to ALIGN_BASELINE yet, we do it now.
-    pNode->GetFont( ).SetAlignment( ALIGN_BASELINE );
+    pNode->GetFont().SetAlignment(ALIGN_BASELINE);
 
-    DrawTextNode( pNode );
+    DrawTextNode(pNode);
 }
 
-void SmDrawingVisitor::DrawChildren( SmStructureNode* pNode )
+void SmDrawingVisitor::DrawChildren(SmStructureNode* pNode)
 {
-    if ( pNode->IsPhantom( ) )
+    if (pNode->IsPhantom())
         return;
 
     Point rPosition = maPosition;
 
-    for( auto pChild : *pNode )
+    for (auto pChild : *pNode)
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        Point  aOffset ( pChild->GetTopLeft( ) - pNode->GetTopLeft( ) );
+        Point aOffset(pChild->GetTopLeft() - pNode->GetTopLeft());
         maPosition = rPosition + aOffset;
-        pChild->Accept( this );
+        pChild->Accept(this);
     }
 }
 
 // SmSetSelectionVisitor
 
-SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pTree)
+SmSetSelectionVisitor::SmSetSelectionVisitor(SmCaretPos startPos, SmCaretPos endPos, SmNode* pTree)
     : maStartPos(startPos)
     , maEndPos(endPos)
     , mbSelecting(false)
 {
     //Assume that pTree is a SmTableNode
-    SAL_WARN_IF(pTree->GetType() != SmNodeType::Table, "starmath", "pTree should be a SmTableNode!");
+    SAL_WARN_IF(pTree->GetType() != SmNodeType::Table, "starmath",
+                "pTree should be a SmTableNode!");
     //Visit root node, this is special as this node cannot be selected, but its children can!
-    if(pTree->GetType() == SmNodeType::Table){
+    if (pTree->GetType() == SmNodeType::Table)
+    {
         //Change state if maStartPos is in front of this node
-        if( maStartPos.pSelectedNode == pTree && maStartPos.nIndex == 0 )
+        if (maStartPos.pSelectedNode == pTree && maStartPos.nIndex == 0)
             mbSelecting = !mbSelecting;
         //Change state if maEndPos is in front of this node
-        if( maEndPos.pSelectedNode == pTree && maEndPos.nIndex == 0 )
+        if (maEndPos.pSelectedNode == pTree && maEndPos.nIndex == 0)
             mbSelecting = !mbSelecting;
-        SAL_WARN_IF(mbSelecting, "starmath", "Caret positions needed to set mbSelecting about, shouldn't be possible!");
+        SAL_WARN_IF(mbSelecting, "starmath",
+                    "Caret positions needed to set mbSelecting about, shouldn't be possible!");
 
         //Visit lines
-        for( auto pChild : *static_cast<SmStructureNode*>(pTree) )
+        for (auto pChild : *static_cast<SmStructureNode*>(pTree))
         {
-            if(!pChild)
+            if (!pChild)
                 continue;
-            pChild->Accept( this );
+            pChild->Accept(this);
             //If we started a selection in this line and it haven't ended, we do that now!
-            if(mbSelecting) {
+            if (mbSelecting)
+            {
                 mbSelecting = false;
                 SetSelectedOnAll(pChild);
                 //Set maStartPos and maEndPos to invalid positions, this ensures that an unused
@@ -556,32 +409,35 @@ SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos en
         //Check if pTree isn't selected
         SAL_WARN_IF(pTree->IsSelected(), "starmath", "pTree should never be selected!");
         //Discard the selection if there's a bug (it's better than crashing)
-        if(pTree->IsSelected())
+        if (pTree->IsSelected())
             SetSelectedOnAll(pTree, false);
-    }else //This shouldn't happen, but I don't see any reason to die if it does
+    }
+    else //This shouldn't happen, but I don't see any reason to die if it does
         pTree->Accept(this);
 }
 
-void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected ) {
-    pSubTree->SetSelected( IsSelected );
+void SmSetSelectionVisitor::SetSelectedOnAll(SmNode* pSubTree, bool IsSelected)
+{
+    pSubTree->SetSelected(IsSelected);
 
-    if(pSubTree->GetNumSubNodes() == 0)
+    if (pSubTree->GetNumSubNodes() == 0)
         return;
     //Quick BFS to set all selections
-    for( auto pChild : *static_cast<SmStructureNode*>(pSubTree) )
+    for (auto pChild : *static_cast<SmStructureNode*>(pSubTree))
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        SetSelectedOnAll( pChild, IsSelected );
+        SetSelectedOnAll(pChild, IsSelected);
     }
 }
 
-void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
+void SmSetSelectionVisitor::DefaultVisit(SmNode* pNode)
+{
     //Change state if maStartPos is in front of this node
-    if( maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 0 )
+    if (maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 0)
         mbSelecting = !mbSelecting;
     //Change state if maEndPos is in front of this node
-    if( maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 0 )
+    if (maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 0)
         mbSelecting = !mbSelecting;
 
     //Cache current state
@@ -589,31 +445,30 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
     bool ChangedState = false;
 
     //Set selected
-    pNode->SetSelected( mbSelecting );
+    pNode->SetSelected(mbSelecting);
 
     //Visit children
-    if(pNode->GetNumSubNodes() > 0)
+    if (pNode->GetNumSubNodes() > 0)
     {
-        for( auto pChild : *static_cast<SmStructureNode*>(pNode) )
+        for (auto pChild : *static_cast<SmStructureNode*>(pNode))
         {
-            if(!pChild)
+            if (!pChild)
                 continue;
-            pChild->Accept( this );
-            ChangedState = ( WasSelecting != mbSelecting ) || ChangedState;
+            pChild->Accept(this);
+            ChangedState = (WasSelecting != mbSelecting) || ChangedState;
         }
     }
 
     //If state changed
-    if( ChangedState )
+    if (ChangedState)
     {
         //Select this node and all of its children
         //(Make exception for SmBracebodyNode)
-        if( pNode->GetType() != SmNodeType::Bracebody ||
-            !pNode->GetParent() ||
-            pNode->GetParent()->GetType() != SmNodeType::Brace )
-            SetSelectedOnAll( pNode );
+        if (pNode->GetType() != SmNodeType::Bracebody || !pNode->GetParent()
+            || pNode->GetParent()->GetType() != SmNodeType::Brace)
+            SetSelectedOnAll(pNode);
         else
-            SetSelectedOnAll( pNode->GetParent() );
+            SetSelectedOnAll(pNode->GetParent());
         /* If the equation is:      sqrt{2 + 4} + 5
          * And the selection is:    sqrt{2 + [4} +] 5
          *      Where [ denotes maStartPos and ] denotes maEndPos
@@ -624,148 +479,151 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
     }
 
     //Change state if maStartPos is after this node
-    if( maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 1 )
+    if (maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 1)
     {
         mbSelecting = !mbSelecting;
     }
     //Change state if maEndPos is after of this node
-    if( maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 1 )
+    if (maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 1)
     {
         mbSelecting = !mbSelecting;
     }
 }
 
-void SmSetSelectionVisitor::VisitCompositionNode( SmStructureNode* pNode )
+void SmSetSelectionVisitor::VisitCompositionNode(SmStructureNode* pNode)
 {
     //Change state if maStartPos is in front of this node
-    if( maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 0 )
+    if (maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 0)
         mbSelecting = !mbSelecting;
     //Change state if maEndPos is in front of this node
-    if( maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 0 )
+    if (maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 0)
         mbSelecting = !mbSelecting;
 
     //Cache current state
     bool WasSelecting = mbSelecting;
 
     //Visit children
-    for( auto pChild : *pNode )
+    for (auto pChild : *pNode)
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        pChild->Accept( this );
+        pChild->Accept(this);
     }
 
     //Set selected, if everything was selected
-    pNode->SetSelected( WasSelecting && mbSelecting );
+    pNode->SetSelected(WasSelecting && mbSelecting);
 
     //Change state if maStartPos is after this node
-    if( maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 1 )
+    if (maStartPos.pSelectedNode == pNode && maStartPos.nIndex == 1)
         mbSelecting = !mbSelecting;
     //Change state if maEndPos is after of this node
-    if( maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 1 )
+    if (maEndPos.pSelectedNode == pNode && maEndPos.nIndex == 1)
         mbSelecting = !mbSelecting;
 }
 
-void SmSetSelectionVisitor::Visit( SmTextNode* pNode ) {
-    tools::Long    i1 = -1,
-            i2 = -1;
-    if( maStartPos.pSelectedNode == pNode )
+void SmSetSelectionVisitor::Visit(SmTextNode* pNode)
+{
+    tools::Long i1 = -1, i2 = -1;
+    if (maStartPos.pSelectedNode == pNode)
         i1 = maStartPos.nIndex;
-    if( maEndPos.pSelectedNode == pNode )
+    if (maEndPos.pSelectedNode == pNode)
         i2 = maEndPos.nIndex;
 
     tools::Long start, end;
     pNode->SetSelected(true);
-    if( i1 != -1 && i2 != -1 ) {
+    if (i1 != -1 && i2 != -1)
+    {
         start = std::min(i1, i2);
-        end   = std::max(i1, i2);
-    } else if( mbSelecting && i1 != -1 ) {
+        end = std::max(i1, i2);
+    }
+    else if (mbSelecting && i1 != -1)
+    {
         start = 0;
         end = i1;
         mbSelecting = false;
-    } else if( mbSelecting && i2 != -1 ) {
+    }
+    else if (mbSelecting && i2 != -1)
+    {
         start = 0;
         end = i2;
         mbSelecting = false;
-    } else if( !mbSelecting && i1 != -1 ) {
+    }
+    else if (!mbSelecting && i1 != -1)
+    {
         start = i1;
         end = pNode->GetText().getLength();
         mbSelecting = true;
-    } else if( !mbSelecting && i2 != -1 ) {
+    }
+    else if (!mbSelecting && i2 != -1)
+    {
         start = i2;
         end = pNode->GetText().getLength();
         mbSelecting = true;
-    } else if( mbSelecting ) {
+    }
+    else if (mbSelecting)
+    {
         start = 0;
         end = pNode->GetText().getLength();
-    } else {
-        pNode->SetSelected( false );
+    }
+    else
+    {
+        pNode->SetSelected(false);
         start = 0;
         end = 0;
     }
-    pNode->SetSelected( start != end );
-    pNode->SetSelectionStart( start );
-    pNode->SetSelectionEnd( end );
+    pNode->SetSelected(start != end);
+    pNode->SetSelectionStart(start);
+    pNode->SetSelectionEnd(end);
 }
 
-void SmSetSelectionVisitor::Visit( SmExpressionNode* pNode ) {
-    VisitCompositionNode( pNode );
-}
+void SmSetSelectionVisitor::Visit(SmExpressionNode* pNode) { VisitCompositionNode(pNode); }
 
-void SmSetSelectionVisitor::Visit( SmLineNode* pNode ) {
-    VisitCompositionNode( pNode );
-}
+void SmSetSelectionVisitor::Visit(SmLineNode* pNode) { VisitCompositionNode(pNode); }
 
-void SmSetSelectionVisitor::Visit( SmAlignNode* pNode ) {
-    VisitCompositionNode( pNode );
-}
+void SmSetSelectionVisitor::Visit(SmAlignNode* pNode) { VisitCompositionNode(pNode); }
 
-void SmSetSelectionVisitor::Visit( SmBinHorNode* pNode ) {
-    VisitCompositionNode( pNode );
-}
+void SmSetSelectionVisitor::Visit(SmBinHorNode* pNode) { VisitCompositionNode(pNode); }
 
-void SmSetSelectionVisitor::Visit( SmUnHorNode* pNode ) {
-    VisitCompositionNode( pNode );
-}
+void SmSetSelectionVisitor::Visit(SmUnHorNode* pNode) { VisitCompositionNode(pNode); }
 
-void SmSetSelectionVisitor::Visit( SmFontNode* pNode ) {
-    VisitCompositionNode( pNode );
-}
+void SmSetSelectionVisitor::Visit(SmFontNode* pNode) { VisitCompositionNode(pNode); }
 
 // SmCaretPosGraphBuildingVisitor
 
-SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNode )
+SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor(SmNode* pRootNode)
     : mpRightMost(nullptr)
     , mpGraph(new SmCaretPosGraph)
 {
     //pRootNode should always be a table
-    SAL_WARN_IF( pRootNode->GetType( ) != SmNodeType::Table, "starmath", "pRootNode must be a table node");
+    SAL_WARN_IF(pRootNode->GetType() != SmNodeType::Table, "starmath",
+                "pRootNode must be a table node");
     //Handle the special case where SmNodeType::Table is used a rootnode
-    if( pRootNode->GetType( ) == SmNodeType::Table ){
+    if (pRootNode->GetType() == SmNodeType::Table)
+    {
         //Children are SmLineNodes
         //Or so I thought... Apparently, the children can be instances of SmExpression
         //especially if there's an error in the formula... So here we go, a simple work around.
-        for( auto pChild : *static_cast<SmStructureNode*>(pRootNode) )
+        for (auto pChild : *static_cast<SmStructureNode*>(pRootNode))
         {
-            if(!pChild)
+            if (!pChild)
                 continue;
-            mpRightMost = mpGraph->Add( SmCaretPos( pChild, 0 ) );
-            pChild->Accept( this );
+            mpRightMost = mpGraph->Add(SmCaretPos(pChild, 0));
+            pChild->Accept(this);
         }
-    }else
+    }
+    else
         pRootNode->Accept(this);
 }
 
-SmCaretPosGraphBuildingVisitor::~SmCaretPosGraphBuildingVisitor()
-{
-}
+SmCaretPosGraphBuildingVisitor::~SmCaretPosGraphBuildingVisitor() {}
 
-void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
-    for( auto pChild : *pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmLineNode* pNode)
+{
+    for (auto pChild : *pNode)
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        pChild->Accept( this );
+        pChild->Accept(this);
     }
 }
 
@@ -774,20 +632,20 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
  * the special case where it is used as root node for the entire formula is
  * handled in the constructor.
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmTableNode* pNode ){
-    SmCaretPosGraphEntry *left  = mpRightMost,
-                         *right = mpGraph->Add( SmCaretPos( pNode, 1) );
+void SmCaretPosGraphBuildingVisitor::Visit(SmTableNode* pNode)
+{
+    SmCaretPosGraphEntry *left = mpRightMost, *right = mpGraph->Add(SmCaretPos(pNode, 1));
     bool bIsFirst = true;
-    for( auto pChild : *pNode )
+    for (auto pChild : *pNode)
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        mpRightMost = mpGraph->Add( SmCaretPos( pChild, 0 ), left);
-        if(bIsFirst)
+        mpRightMost = mpGraph->Add(SmCaretPos(pChild, 0), left);
+        if (bIsFirst)
             left->SetRight(mpRightMost);
-        pChild->Accept( this );
+        pChild->Accept(this);
         mpRightMost->SetRight(right);
-        if(bIsFirst)
+        if (bIsFirst)
             right->SetLeft(mpRightMost);
         bIsFirst = false;
     }
@@ -824,96 +682,99 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmTableNode* pNode ){
  * \enddot
  *
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmSubSupNode* pNode)
 {
-    SmCaretPosGraphEntry *left,
-                         *right,
-                         *bodyLeft,
-                         *bodyRight;
+    SmCaretPosGraphEntry *left, *right, *bodyLeft, *bodyRight;
 
     assert(mpRightMost);
     left = mpRightMost;
 
     //Create bodyLeft
-    SAL_WARN_IF( !pNode->GetBody(), "starmath", "SmSubSupNode Doesn't have a body!" );
-    bodyLeft = mpGraph->Add( SmCaretPos( pNode->GetBody( ), 0 ), left );
-    left->SetRight( bodyLeft ); //TODO: Don't make this if LSUP or LSUB are NULL ( not sure??? )
+    SAL_WARN_IF(!pNode->GetBody(), "starmath", "SmSubSupNode Doesn't have a body!");
+    bodyLeft = mpGraph->Add(SmCaretPos(pNode->GetBody(), 0), left);
+    left->SetRight(bodyLeft); //TODO: Don't make this if LSUP or LSUB are NULL ( not sure??? )
 
     //Create right
-    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add(SmCaretPos(pNode, 1));
 
     //Visit the body, to get bodyRight
     mpRightMost = bodyLeft;
-    pNode->GetBody( )->Accept( this );
+    pNode->GetBody()->Accept(this);
     bodyRight = mpRightMost;
-    bodyRight->SetRight( right );
-    right->SetLeft( bodyRight );
+    bodyRight->SetRight(right);
+    right->SetLeft(bodyRight);
 
     //If there's an LSUP
-    SmNode* pChild = pNode->GetSubSup( LSUP );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+    SmNode* pChild = pNode->GetSubSup(LSUP);
+    if (pChild)
+    {
+        SmCaretPosGraphEntry* cLeft; //Child left
+        cLeft = mpGraph->Add(SmCaretPos(pChild, 0), left);
 
         mpRightMost = cLeft;
-        pChild->Accept( this );
+        pChild->Accept(this);
 
-        mpRightMost->SetRight( bodyLeft );
+        mpRightMost->SetRight(bodyLeft);
     }
     //If there's an LSUB
-    pChild = pNode->GetSubSup( LSUB );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+    pChild = pNode->GetSubSup(LSUB);
+    if (pChild)
+    {
+        SmCaretPosGraphEntry* cLeft; //Child left
+        cLeft = mpGraph->Add(SmCaretPos(pChild, 0), left);
 
         mpRightMost = cLeft;
-        pChild->Accept( this );
+        pChild->Accept(this);
 
-        mpRightMost->SetRight( bodyLeft );
+        mpRightMost->SetRight(bodyLeft);
     }
     //If there's a CSUP
-    pChild = pNode->GetSubSup( CSUP );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+    pChild = pNode->GetSubSup(CSUP);
+    if (pChild)
+    {
+        SmCaretPosGraphEntry* cLeft; //Child left
+        cLeft = mpGraph->Add(SmCaretPos(pChild, 0), left);
 
         mpRightMost = cLeft;
-        pChild->Accept( this );
+        pChild->Accept(this);
 
-        mpRightMost->SetRight( right );
+        mpRightMost->SetRight(right);
     }
     //If there's a CSUB
-    pChild = pNode->GetSubSup( CSUB );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+    pChild = pNode->GetSubSup(CSUB);
+    if (pChild)
+    {
+        SmCaretPosGraphEntry* cLeft; //Child left
+        cLeft = mpGraph->Add(SmCaretPos(pChild, 0), left);
 
         mpRightMost = cLeft;
-        pChild->Accept( this );
+        pChild->Accept(this);
 
-        mpRightMost->SetRight( right );
+        mpRightMost->SetRight(right);
     }
     //If there's an RSUP
-    pChild = pNode->GetSubSup( RSUP );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
+    pChild = pNode->GetSubSup(RSUP);
+    if (pChild)
+    {
+        SmCaretPosGraphEntry* cLeft; //Child left
+        cLeft = mpGraph->Add(SmCaretPos(pChild, 0), bodyRight);
 
         mpRightMost = cLeft;
-        pChild->Accept( this );
+        pChild->Accept(this);
 
-        mpRightMost->SetRight( right );
+        mpRightMost->SetRight(right);
     }
     //If there's an RSUB
-    pChild = pNode->GetSubSup( RSUB );
-    if( pChild ){
-        SmCaretPosGraphEntry *cLeft; //Child left
-        cLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
+    pChild = pNode->GetSubSup(RSUB);
+    if (pChild)
+    {
+        SmCaretPosGraphEntry* cLeft; //Child left
+        cLeft = mpGraph->Add(SmCaretPos(pChild, 0), bodyRight);
 
         mpRightMost = cLeft;
-        pChild->Accept( this );
+        pChild->Accept(this);
 
-        mpRightMost->SetRight( right );
+        mpRightMost->SetRight(right);
     }
 
     //Set return parameters
@@ -957,96 +818,100 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
  *  };
  * \enddot
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmOperNode* pNode)
 {
-    SmNode *pOper = pNode->GetSubNode( 0 ),
-           *pBody = pNode->GetSubNode( 1 );
+    SmNode *pOper = pNode->GetSubNode(0), *pBody = pNode->GetSubNode(1);
 
-    SmCaretPosGraphEntry *left = mpRightMost,
-                         *bodyLeft,
-                         *bodyRight,
-                         *right;
+    SmCaretPosGraphEntry *left = mpRightMost, *bodyLeft, *bodyRight, *right;
     //Create body left
-    bodyLeft = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
-    left->SetRight( bodyLeft );
+    bodyLeft = mpGraph->Add(SmCaretPos(pBody, 0), left);
+    left->SetRight(bodyLeft);
 
     //Visit body, get bodyRight
     mpRightMost = bodyLeft;
-    pBody->Accept( this );
+    pBody->Accept(this);
     bodyRight = mpRightMost;
 
     //Create right
-    right = mpGraph->Add( SmCaretPos( pNode, 1 ), bodyRight );
-    bodyRight->SetRight( right );
+    right = mpGraph->Add(SmCaretPos(pNode, 1), bodyRight);
+    bodyRight->SetRight(right);
 
     //Get subsup pNode if any
-    SmSubSupNode* pSubSup = pOper->GetType( ) == SmNodeType::SubSup ? static_cast<SmSubSupNode*>(pOper) : nullptr;
+    SmSubSupNode* pSubSup
+        = pOper->GetType() == SmNodeType::SubSup ? static_cast<SmSubSupNode*>(pOper) : nullptr;
 
-    if( pSubSup ) {
-        SmNode* pChild = pSubSup->GetSubSup( LSUP );
-        if( pChild ) {
+    if (pSubSup)
+    {
+        SmNode* pChild = pSubSup->GetSubSup(LSUP);
+        if (pChild)
+        {
             //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            SmCaretPosGraphEntry* childLeft = mpGraph->Add(SmCaretPos(pChild, 0), left);
             //Visit pChild
             mpRightMost = childLeft;
-            pChild->Accept( this );
+            pChild->Accept(this);
             //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
+            mpRightMost->SetRight(bodyLeft);
         }
 
-        pChild = pSubSup->GetSubSup( LSUB );
-        if( pChild ) {
+        pChild = pSubSup->GetSubSup(LSUB);
+        if (pChild)
+        {
             //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            SmCaretPosGraphEntry* childLeft = mpGraph->Add(SmCaretPos(pChild, 0), left);
             //Visit pChild
             mpRightMost = childLeft;
-            pChild->Accept( this );
+            pChild->Accept(this);
             //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
+            mpRightMost->SetRight(bodyLeft);
         }
 
-        pChild = pSubSup->GetSubSup( CSUP );
-        if ( pChild ) {//TO
+        pChild = pSubSup->GetSubSup(CSUP);
+        if (pChild)
+        { //TO
             //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            SmCaretPosGraphEntry* childLeft = mpGraph->Add(SmCaretPos(pChild, 0), left);
             //Visit pChild
             mpRightMost = childLeft;
-            pChild->Accept( this );
+            pChild->Accept(this);
             //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
+            mpRightMost->SetRight(bodyLeft);
         }
 
-        pChild = pSubSup->GetSubSup( CSUB );
-        if( pChild ) { //FROM
+        pChild = pSubSup->GetSubSup(CSUB);
+        if (pChild)
+        { //FROM
             //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            SmCaretPosGraphEntry* childLeft = mpGraph->Add(SmCaretPos(pChild, 0), left);
             //Visit pChild
             mpRightMost = childLeft;
-            pChild->Accept( this );
+            pChild->Accept(this);
             //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
+            mpRightMost->SetRight(bodyLeft);
         }
 
-        pChild = pSubSup->GetSubSup( RSUP );
-        if ( pChild ) {
+        pChild = pSubSup->GetSubSup(RSUP);
+        if (pChild)
+        {
             //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            SmCaretPosGraphEntry* childLeft = mpGraph->Add(SmCaretPos(pChild, 0), left);
             //Visit pChild
             mpRightMost = childLeft;
-            pChild->Accept( this );
+            pChild->Accept(this);
             //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
+            mpRightMost->SetRight(bodyLeft);
         }
 
-        pChild = pSubSup->GetSubSup( RSUB );
-        if ( pChild ) {
+        pChild = pSubSup->GetSubSup(RSUB);
+        if (pChild)
+        {
             //Create position in front of pChild
-            SmCaretPosGraphEntry *childLeft = mpGraph->Add( SmCaretPos( pChild, 0 ), left );
+            SmCaretPosGraphEntry* childLeft = mpGraph->Add(SmCaretPos(pChild, 0), left);
             //Visit pChild
             mpRightMost = childLeft;
-            pChild->Accept( this );
+            pChild->Accept(this);
             //Set right on mpRightMost from pChild
-            mpRightMost->SetRight( bodyLeft );
+            mpRightMost->SetRight(bodyLeft);
         }
     }
 
@@ -1054,29 +919,28 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
     mpRightMost = right;
 }
 
-void SmCaretPosGraphBuildingVisitor::Visit( SmMatrixNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmMatrixNode* pNode)
 {
-    SmCaretPosGraphEntry *left  = mpRightMost,
-                         *right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
+    SmCaretPosGraphEntry *left = mpRightMost, *right = mpGraph->Add(SmCaretPos(pNode, 1));
 
-    for (size_t i = 0;  i < pNode->GetNumRows(); ++i)
+    for (size_t i = 0; i < pNode->GetNumRows(); ++i)
     {
         SmCaretPosGraphEntry* r = left;
-        for (size_t j = 0;  j < pNode->GetNumCols(); ++j)
+        for (size_t j = 0; j < pNode->GetNumCols(); ++j)
         {
-            SmNode* pSubNode = pNode->GetSubNode( i * pNode->GetNumCols( ) + j );
+            SmNode* pSubNode = pNode->GetSubNode(i * pNode->GetNumCols() + j);
 
-            mpRightMost = mpGraph->Add( SmCaretPos( pSubNode, 0 ), r );
-            if( j != 0 || ( pNode->GetNumRows() - 1U ) / 2 == i )
-                r->SetRight( mpRightMost );
+            mpRightMost = mpGraph->Add(SmCaretPos(pSubNode, 0), r);
+            if (j != 0 || (pNode->GetNumRows() - 1U) / 2 == i)
+                r->SetRight(mpRightMost);
 
-            pSubNode->Accept( this );
+            pSubNode->Accept(this);
 
             r = mpRightMost;
         }
-        mpRightMost->SetRight( right );
-        if( ( pNode->GetNumRows() - 1U ) / 2 == i )
-            right->SetLeft( mpRightMost );
+        mpRightMost->SetRight(right);
+        if ((pNode->GetNumRows() - 1U) / 2 == i)
+            right->SetLeft(mpRightMost);
     }
 
     mpRightMost = right;
@@ -1100,15 +964,16 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmMatrixNode* pNode )
  * \enddot
  * Notice that C and right is the same position here.
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmTextNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmTextNode* pNode)
 {
-    SAL_WARN_IF( pNode->GetText().isEmpty(), "starmath", "Empty SmTextNode is bad" );
+    SAL_WARN_IF(pNode->GetText().isEmpty(), "starmath", "Empty SmTextNode is bad");
 
     int size = pNode->GetText().getLength();
-    for( int i = 1; i <= size; i++ ){
+    for (int i = 1; i <= size; i++)
+    {
         SmCaretPosGraphEntry* pRight = mpRightMost;
-        mpRightMost = mpGraph->Add( SmCaretPos( pNode, i ), pRight );
-        pRight->SetRight( mpRightMost );
+        mpRightMost = mpGraph->Add(SmCaretPos(pNode, i), pRight);
+        pRight->SetRight(mpRightMost);
     }
 }
 
@@ -1130,41 +995,37 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmTextNode* pNode )
  *  };
  * \enddot
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmBinVerNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmBinVerNode* pNode)
 {
     //None if these children can be NULL, see SmBinVerNode::Arrange
-    SmNode  *pNum   = pNode->GetSubNode( 0 ),
-            *pDenom = pNode->GetSubNode( 2 );
+    SmNode *pNum = pNode->GetSubNode(0), *pDenom = pNode->GetSubNode(2);
 
-    SmCaretPosGraphEntry *left,
-                         *right,
-                         *numLeft,
-                         *denomLeft;
+    SmCaretPosGraphEntry *left, *right, *numLeft, *denomLeft;
 
     assert(mpRightMost);
     //Set left
     left = mpRightMost;
 
     //Create right
-    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add(SmCaretPos(pNode, 1));
 
     //Create numLeft
-    numLeft = mpGraph->Add( SmCaretPos( pNum, 0 ), left );
-    left->SetRight( numLeft );
+    numLeft = mpGraph->Add(SmCaretPos(pNum, 0), left);
+    left->SetRight(numLeft);
 
     //Visit pNum
     mpRightMost = numLeft;
-    pNum->Accept( this );
-    mpRightMost->SetRight( right );
-    right->SetLeft( mpRightMost );
+    pNum->Accept(this);
+    mpRightMost->SetRight(right);
+    right->SetLeft(mpRightMost);
 
     //Create denomLeft
-    denomLeft = mpGraph->Add( SmCaretPos( pDenom, 0 ), left );
+    denomLeft = mpGraph->Add(SmCaretPos(pDenom, 0), left);
 
     //Visit pDenom
     mpRightMost = denomLeft;
-    pDenom->Accept( this );
-    mpRightMost->SetRight( right );
+    pDenom->Accept(this);
+    mpRightMost->SetRight(right);
 
     //Set return parameter
     mpRightMost = right;
@@ -1181,35 +1042,31 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinVerNode* pNode )
  * \endcode
  *
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmVerticalBraceNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmVerticalBraceNode* pNode)
 {
-    SmNode  *pBody   = pNode->Body(),
-            *pScript = pNode->Script();
+    SmNode *pBody = pNode->Body(), *pScript = pNode->Script();
     //None of these children can be NULL
 
-    SmCaretPosGraphEntry  *left,
-                        *bodyLeft,
-                        *scriptLeft,
-                        *right;
+    SmCaretPosGraphEntry *left, *bodyLeft, *scriptLeft, *right;
 
     left = mpRightMost;
 
     //Create right
-    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add(SmCaretPos(pNode, 1));
 
     //Create bodyLeft
-    bodyLeft = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
-    left->SetRight( bodyLeft );
+    bodyLeft = mpGraph->Add(SmCaretPos(pBody, 0), left);
+    left->SetRight(bodyLeft);
     mpRightMost = bodyLeft;
-    pBody->Accept( this );
-    mpRightMost->SetRight( right );
-    right->SetLeft( mpRightMost );
+    pBody->Accept(this);
+    mpRightMost->SetRight(right);
+    right->SetLeft(mpRightMost);
 
     //Create script
-    scriptLeft = mpGraph->Add( SmCaretPos( pScript, 0 ), left );
+    scriptLeft = mpGraph->Add(SmCaretPos(pScript, 0), left);
     mpRightMost = scriptLeft;
-    pScript->Accept( this );
-    mpRightMost->SetRight( right );
+    pScript->Accept(this);
+    mpRightMost->SetRight(right);
 
     //Set return value
     mpRightMost = right;
@@ -1227,83 +1084,78 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmVerticalBraceNode* pNode )
  *
  * Used in formulas such as "A wideslash B"
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmBinDiagonalNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmBinDiagonalNode* pNode)
 {
-    SmNode  *A = pNode->GetSubNode( 0 ),
-            *B = pNode->GetSubNode( 1 );
+    SmNode *A = pNode->GetSubNode(0), *B = pNode->GetSubNode(1);
 
-    SmCaretPosGraphEntry  *left,
-                        *leftA,
-                        *rightA,
-                        *leftB,
-                        *right;
+    SmCaretPosGraphEntry *left, *leftA, *rightA, *leftB, *right;
     left = mpRightMost;
 
     //Create right
-    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add(SmCaretPos(pNode, 1));
 
     //Create left A
-    leftA = mpGraph->Add( SmCaretPos( A, 0 ), left );
-    left->SetRight( leftA );
+    leftA = mpGraph->Add(SmCaretPos(A, 0), left);
+    left->SetRight(leftA);
 
     //Visit A
     mpRightMost = leftA;
-    A->Accept( this );
+    A->Accept(this);
     rightA = mpRightMost;
 
     //Create left B
-    leftB = mpGraph->Add( SmCaretPos( B, 0 ), rightA );
-    rightA->SetRight( leftB );
+    leftB = mpGraph->Add(SmCaretPos(B, 0), rightA);
+    rightA->SetRight(leftB);
 
     //Visit B
     mpRightMost = leftB;
-    B->Accept( this );
-    mpRightMost->SetRight( right );
-    right->SetLeft( mpRightMost );
+    B->Accept(this);
+    mpRightMost->SetRight(right);
+    right->SetLeft(mpRightMost);
 
     //Set return value
     mpRightMost = right;
 }
 
 //Straight forward ( I think )
-void SmCaretPosGraphBuildingVisitor::Visit( SmBinHorNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmBinHorNode* pNode)
 {
-    for( auto pChild : *pNode )
+    for (auto pChild : *pNode)
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        pChild->Accept( this );
+        pChild->Accept(this);
     }
 }
-void SmCaretPosGraphBuildingVisitor::Visit( SmUnHorNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmUnHorNode* pNode)
 {
     // Unary operator node
-    for( auto pChild : *pNode )
+    for (auto pChild : *pNode)
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        pChild->Accept( this );
+        pChild->Accept(this);
     }
 }
 
-void SmCaretPosGraphBuildingVisitor::Visit( SmExpressionNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmExpressionNode* pNode)
 {
-    for( auto pChild : *pNode )
+    for (auto pChild : *pNode)
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        pChild->Accept( this );
+        pChild->Accept(this);
     }
 }
 
-void SmCaretPosGraphBuildingVisitor::Visit( SmFontNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmFontNode* pNode)
 {
     //Has only got one child, should act as an expression if possible
-    for( auto pChild : *pNode )
+    for (auto pChild : *pNode)
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        pChild->Accept( this );
+        pChild->Accept(this);
     }
 }
 
@@ -1347,29 +1199,29 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmFontNode* pNode )
  * }
  * \enddot
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmBracebodyNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmBracebodyNode* pNode)
 {
-    for( auto pChild : *pNode )
+    for (auto pChild : *pNode)
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        SmCaretPosGraphEntry* pStart = mpGraph->Add( SmCaretPos( pChild, 0), mpRightMost );
-        mpRightMost->SetRight( pStart );
+        SmCaretPosGraphEntry* pStart = mpGraph->Add(SmCaretPos(pChild, 0), mpRightMost);
+        mpRightMost->SetRight(pStart);
         mpRightMost = pStart;
-        pChild->Accept( this );
+        pChild->Accept(this);
     }
 }
 
 /** Build SmCaretPosGraph for SmAlignNode
  * Acts as an SmExpressionNode, as it only has one child this okay
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmAlignNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmAlignNode* pNode)
 {
-    for( auto pChild : *pNode )
+    for (auto pChild : *pNode)
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        pChild->Accept( this );
+        pChild->Accept(this);
     }
 }
 
@@ -1394,53 +1246,50 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmAlignNode* pNode )
  *  }
  * \enddot
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmRootNode* pNode)
 {
-    SmNode  *pExtra = pNode->GetSubNode( 0 ), //Argument, NULL for sqrt, and SmTextNode if cubicroot
-            *pBody  = pNode->GetSubNode( 2 ); //Body of the root
+    SmNode *pExtra = pNode->GetSubNode(0), //Argument, NULL for sqrt, and SmTextNode if cubicroot
+        *pBody = pNode->GetSubNode(2); //Body of the root
     assert(pBody);
 
-    SmCaretPosGraphEntry  *left,
-                        *right,
-                        *bodyLeft,
-                        *bodyRight;
+    SmCaretPosGraphEntry *left, *right, *bodyLeft, *bodyRight;
 
     //Get left and save it
     assert(mpRightMost);
     left = mpRightMost;
 
     //Create body left
-    bodyLeft = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
-    left->SetRight( bodyLeft );
+    bodyLeft = mpGraph->Add(SmCaretPos(pBody, 0), left);
+    left->SetRight(bodyLeft);
 
     //Create right
-    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add(SmCaretPos(pNode, 1));
 
     //Visit body
     mpRightMost = bodyLeft;
-    pBody->Accept( this );
+    pBody->Accept(this);
     bodyRight = mpRightMost;
-    bodyRight->SetRight( right );
-    right->SetLeft( bodyRight );
+    bodyRight->SetRight(right);
+    right->SetLeft(bodyRight);
 
     //Visit pExtra
-    if( pExtra ){
-        mpRightMost = mpGraph->Add( SmCaretPos( pExtra, 0 ), left );
-        pExtra->Accept( this );
-        mpRightMost->SetRight( bodyLeft );
+    if (pExtra)
+    {
+        mpRightMost = mpGraph->Add(SmCaretPos(pExtra, 0), left);
+        pExtra->Accept(this);
+        mpRightMost->SetRight(bodyLeft);
     }
 
     mpRightMost = right;
 }
 
-
 /** Build SmCaretPosGraph for SmPlaceNode
  * Consider this a single character.
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmPlaceNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmPlaceNode* pNode)
 {
-    SmCaretPosGraphEntry* right = mpGraph->Add( SmCaretPos( pNode, 1 ), mpRightMost );
-    mpRightMost->SetRight( right );
+    SmCaretPosGraphEntry* right = mpGraph->Add(SmCaretPos(pNode, 1), mpRightMost);
+    mpRightMost->SetRight(right);
     mpRightMost = right;
 }
 
@@ -1450,17 +1299,15 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmPlaceNode* pNode )
  * of SmErrorNode as it may not exist in another context! Thus there are no
  * positions to select an SmErrorNode.
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmErrorNode* )
-{
-}
+void SmCaretPosGraphBuildingVisitor::Visit(SmErrorNode*) {}
 
 /** Build SmCaretPosGraph for SmBlankNode
  * Consider this a single character, as it is only a blank space
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmBlankNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmBlankNode* pNode)
 {
-    SmCaretPosGraphEntry* right = mpGraph->Add( SmCaretPos( pNode, 1 ), mpRightMost );
-    mpRightMost->SetRight( right );
+    SmCaretPosGraphEntry* right = mpGraph->Add(SmCaretPos(pNode, 1), mpRightMost);
+    mpRightMost->SetRight(right);
     mpRightMost = right;
 }
 
@@ -1482,22 +1329,23 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBlankNode* pNode )
  *  }
  * \enddot
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmBraceNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmBraceNode* pNode)
 {
     SmNode* pBody = pNode->Body();
 
-    SmCaretPosGraphEntry  *left = mpRightMost,
-                        *right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
+    SmCaretPosGraphEntry *left = mpRightMost, *right = mpGraph->Add(SmCaretPos(pNode, 1));
 
-    if( pBody->GetType() != SmNodeType::Bracebody ) {
-        mpRightMost = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
-        left->SetRight( mpRightMost );
-    }else
+    if (pBody->GetType() != SmNodeType::Bracebody)
+    {
+        mpRightMost = mpGraph->Add(SmCaretPos(pBody, 0), left);
+        left->SetRight(mpRightMost);
+    }
+    else
         mpRightMost = left;
 
-    pBody->Accept( this );
-    mpRightMost->SetRight( right );
-    right->SetLeft( mpRightMost );
+    pBody->Accept(this);
+    mpRightMost->SetRight(right);
+    right->SetLeft(mpRightMost);
 
     mpRightMost = right;
 }
@@ -1514,645 +1362,661 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBraceNode* pNode )
  * and "^" is the attribute ( note GetScaleMode( ) on SmAttributNode tells how the attribute should be
  * scaled ).
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmAttributNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmAttributNode* pNode)
 {
-    SmNode  *pAttr = pNode->Attribute(),
-            *pBody = pNode->Body();
+    SmNode *pAttr = pNode->Attribute(), *pBody = pNode->Body();
     assert(pAttr);
     assert(pBody);
 
-    SmCaretPosGraphEntry  *left = mpRightMost,
-                        *attrLeft,
-                        *bodyLeft,
-                        *bodyRight,
-                        *right;
+    SmCaretPosGraphEntry *left = mpRightMost, *attrLeft, *bodyLeft, *bodyRight, *right;
 
     //Creating bodyleft
-    bodyLeft = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
-    left->SetRight( bodyLeft );
+    bodyLeft = mpGraph->Add(SmCaretPos(pBody, 0), left);
+    left->SetRight(bodyLeft);
 
     //Creating right
-    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
+    right = mpGraph->Add(SmCaretPos(pNode, 1));
 
     //Visit the body
     mpRightMost = bodyLeft;
-    pBody->Accept( this );
+    pBody->Accept(this);
     bodyRight = mpRightMost;
-    bodyRight->SetRight( right );
-    right->SetLeft( bodyRight );
+    bodyRight->SetRight(right);
+    right->SetLeft(bodyRight);
 
     //Create attrLeft
-    attrLeft = mpGraph->Add( SmCaretPos( pAttr, 0 ), left );
+    attrLeft = mpGraph->Add(SmCaretPos(pAttr, 0), left);
 
     //Visit attribute
     mpRightMost = attrLeft;
-    pAttr->Accept( this );
-    mpRightMost->SetRight( right );
+    pAttr->Accept(this);
+    mpRightMost->SetRight(right);
 
     //Set return value
     mpRightMost = right;
 }
 
 //Consider these single symbols
-void SmCaretPosGraphBuildingVisitor::Visit( SmSpecialNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmSpecialNode* pNode)
 {
-    SmCaretPosGraphEntry* right = mpGraph->Add( SmCaretPos( pNode, 1 ), mpRightMost );
-    mpRightMost->SetRight( right );
+    SmCaretPosGraphEntry* right = mpGraph->Add(SmCaretPos(pNode, 1), mpRightMost);
+    mpRightMost->SetRight(right);
     mpRightMost = right;
 }
-void SmCaretPosGraphBuildingVisitor::Visit( SmGlyphSpecialNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmGlyphSpecialNode* pNode)
 {
-    SmCaretPosGraphEntry* right = mpGraph->Add( SmCaretPos( pNode, 1 ), mpRightMost );
-    mpRightMost->SetRight( right );
+    SmCaretPosGraphEntry* right = mpGraph->Add(SmCaretPos(pNode, 1), mpRightMost);
+    mpRightMost->SetRight(right);
     mpRightMost = right;
 }
-void SmCaretPosGraphBuildingVisitor::Visit( SmMathSymbolNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit(SmMathSymbolNode* pNode)
 {
-    SmCaretPosGraphEntry* right = mpGraph->Add( SmCaretPos( pNode, 1 ), mpRightMost );
-    mpRightMost->SetRight( right );
+    SmCaretPosGraphEntry* right = mpGraph->Add(SmCaretPos(pNode, 1), mpRightMost);
+    mpRightMost->SetRight(right);
     mpRightMost = right;
 }
 
-void SmCaretPosGraphBuildingVisitor::Visit( SmRootSymbolNode* )
+void SmCaretPosGraphBuildingVisitor::Visit(SmRootSymbolNode*)
 {
     //Do nothing
 }
 
-void SmCaretPosGraphBuildingVisitor::Visit( SmRectangleNode* )
+void SmCaretPosGraphBuildingVisitor::Visit(SmRectangleNode*)
 {
     //Do nothing
 }
-void SmCaretPosGraphBuildingVisitor::Visit( SmPolyLineNode* )
+void SmCaretPosGraphBuildingVisitor::Visit(SmPolyLineNode*)
 {
     //Do nothing
 }
 
 // SmCloningVisitor
 
-SmNode* SmCloningVisitor::Clone( SmNode* pNode )
+SmNode* SmCloningVisitor::Clone(SmNode* pNode)
 {
     SmNode* pCurrResult = mpResult;
-    pNode->Accept( this );
+    pNode->Accept(this);
     SmNode* pClone = mpResult;
     mpResult = pCurrResult;
     return pClone;
 }
 
-void SmCloningVisitor::CloneNodeAttr( SmNode const * pSource, SmNode* pTarget )
+void SmCloningVisitor::CloneNodeAttr(SmNode const* pSource, SmNode* pTarget)
 {
-    pTarget->SetScaleMode( pSource->GetScaleMode( ) );
+    pTarget->SetScaleMode(pSource->GetScaleMode());
     //Other attributes are set when prepare or arrange is executed
     //and may depend on stuff not being cloned here.
 }
 
-void SmCloningVisitor::CloneKids( SmStructureNode* pSource, SmStructureNode* pTarget )
+void SmCloningVisitor::CloneKids(SmStructureNode* pSource, SmStructureNode* pTarget)
 {
     //Cache current result
     SmNode* pCurrResult = mpResult;
 
     //Create array for holding clones
-    size_t nSize = pSource->GetNumSubNodes( );
-    SmNodeArray aNodes( nSize );
+    size_t nSize = pSource->GetNumSubNodes();
+    SmNodeArray aNodes(nSize);
 
     //Clone children
     for (size_t i = 0; i < nSize; ++i)
     {
         SmNode* pKid;
-        if( nullptr != ( pKid = pSource->GetSubNode( i ) ) )
-            pKid->Accept( this );
+        if (nullptr != (pKid = pSource->GetSubNode(i)))
+            pKid->Accept(this);
         else
             mpResult = nullptr;
         aNodes[i] = mpResult;
     }
 
     //Set subnodes of pTarget
-    pTarget->SetSubNodes( std::move(aNodes) );
+    pTarget->SetSubNodes(std::move(aNodes));
 
     //Restore result as where prior to call
     mpResult = pCurrResult;
 }
 
-void SmCloningVisitor::Visit( SmTableNode* pNode )
+void SmCloningVisitor::Visit(SmTableNode* pNode)
 {
-    SmTableNode* pClone = new SmTableNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmTableNode* pClone = new SmTableNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmBraceNode* pNode )
+void SmCloningVisitor::Visit(SmBraceNode* pNode)
 {
-    SmBraceNode* pClone = new SmBraceNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmBraceNode* pClone = new SmBraceNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmBracebodyNode* pNode )
+void SmCloningVisitor::Visit(SmBracebodyNode* pNode)
 {
-    SmBracebodyNode* pClone = new SmBracebodyNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmBracebodyNode* pClone = new SmBracebodyNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmOperNode* pNode )
+void SmCloningVisitor::Visit(SmOperNode* pNode)
 {
-    SmOperNode* pClone = new SmOperNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmOperNode* pClone = new SmOperNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmAlignNode* pNode )
+void SmCloningVisitor::Visit(SmAlignNode* pNode)
 {
-    SmAlignNode* pClone = new SmAlignNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmAlignNode* pClone = new SmAlignNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmAttributNode* pNode )
+void SmCloningVisitor::Visit(SmAttributNode* pNode)
 {
-    SmAttributNode* pClone = new SmAttributNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmAttributNode* pClone = new SmAttributNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmFontNode* pNode )
+void SmCloningVisitor::Visit(SmFontNode* pNode)
 {
-    SmFontNode* pClone = new SmFontNode( pNode->GetToken( ) );
-    pClone->SetSizeParameter( pNode->GetSizeParameter( ), pNode->GetSizeType( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmFontNode* pClone = new SmFontNode(pNode->GetToken());
+    pClone->SetSizeParameter(pNode->GetSizeParameter(), pNode->GetSizeType());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmUnHorNode* pNode )
+void SmCloningVisitor::Visit(SmUnHorNode* pNode)
 {
-    SmUnHorNode* pClone = new SmUnHorNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmUnHorNode* pClone = new SmUnHorNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmBinHorNode* pNode )
+void SmCloningVisitor::Visit(SmBinHorNode* pNode)
 {
-    SmBinHorNode* pClone = new SmBinHorNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmBinHorNode* pClone = new SmBinHorNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmBinVerNode* pNode )
+void SmCloningVisitor::Visit(SmBinVerNode* pNode)
 {
-    SmBinVerNode* pClone = new SmBinVerNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmBinVerNode* pClone = new SmBinVerNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmBinDiagonalNode* pNode )
+void SmCloningVisitor::Visit(SmBinDiagonalNode* pNode)
 {
-    SmBinDiagonalNode *pClone = new SmBinDiagonalNode( pNode->GetToken( ) );
-    pClone->SetAscending( pNode->IsAscending( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmBinDiagonalNode* pClone = new SmBinDiagonalNode(pNode->GetToken());
+    pClone->SetAscending(pNode->IsAscending());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmSubSupNode* pNode )
+void SmCloningVisitor::Visit(SmSubSupNode* pNode)
 {
-    SmSubSupNode *pClone = new SmSubSupNode( pNode->GetToken( ) );
-    pClone->SetUseLimits( pNode->IsUseLimits( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmSubSupNode* pClone = new SmSubSupNode(pNode->GetToken());
+    pClone->SetUseLimits(pNode->IsUseLimits());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmMatrixNode* pNode )
+void SmCloningVisitor::Visit(SmMatrixNode* pNode)
 {
-    SmMatrixNode *pClone = new SmMatrixNode( pNode->GetToken( ) );
-    pClone->SetRowCol( pNode->GetNumRows( ), pNode->GetNumCols( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmMatrixNode* pClone = new SmMatrixNode(pNode->GetToken());
+    pClone->SetRowCol(pNode->GetNumRows(), pNode->GetNumCols());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmPlaceNode* pNode )
+void SmCloningVisitor::Visit(SmPlaceNode* pNode)
 {
-    mpResult = new SmPlaceNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, mpResult );
+    mpResult = new SmPlaceNode(pNode->GetToken());
+    CloneNodeAttr(pNode, mpResult);
 }
 
-void SmCloningVisitor::Visit( SmTextNode* pNode )
+void SmCloningVisitor::Visit(SmTextNode* pNode)
 {
-    SmTextNode* pClone = new SmTextNode( pNode->GetToken( ), pNode->GetFontDesc( ) );
-    pClone->ChangeText( pNode->GetText( ) );
-    CloneNodeAttr( pNode, pClone );
+    SmTextNode* pClone = new SmTextNode(pNode->GetToken(), pNode->GetFontDesc());
+    pClone->ChangeText(pNode->GetText());
+    CloneNodeAttr(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmSpecialNode* pNode )
+void SmCloningVisitor::Visit(SmSpecialNode* pNode)
 {
-    mpResult = new SmSpecialNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, mpResult );
+    mpResult = new SmSpecialNode(pNode->GetToken());
+    CloneNodeAttr(pNode, mpResult);
 }
 
-void SmCloningVisitor::Visit( SmGlyphSpecialNode* pNode )
+void SmCloningVisitor::Visit(SmGlyphSpecialNode* pNode)
 {
-    mpResult = new SmGlyphSpecialNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, mpResult );
+    mpResult = new SmGlyphSpecialNode(pNode->GetToken());
+    CloneNodeAttr(pNode, mpResult);
 }
 
-void SmCloningVisitor::Visit( SmMathSymbolNode* pNode )
+void SmCloningVisitor::Visit(SmMathSymbolNode* pNode)
 {
-    mpResult = new SmMathSymbolNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, mpResult );
+    mpResult = new SmMathSymbolNode(pNode->GetToken());
+    CloneNodeAttr(pNode, mpResult);
 }
 
-void SmCloningVisitor::Visit( SmBlankNode* pNode )
+void SmCloningVisitor::Visit(SmBlankNode* pNode)
 {
-    SmBlankNode* pClone = new SmBlankNode( pNode->GetToken( ) );
-    pClone->SetBlankNum( pNode->GetBlankNum( ) );
+    SmBlankNode* pClone = new SmBlankNode(pNode->GetToken());
+    pClone->SetBlankNum(pNode->GetBlankNum());
     mpResult = pClone;
-    CloneNodeAttr( pNode, mpResult );
+    CloneNodeAttr(pNode, mpResult);
 }
 
-void SmCloningVisitor::Visit( SmErrorNode* pNode )
+void SmCloningVisitor::Visit(SmErrorNode* pNode)
 {
-    mpResult = new SmErrorNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, mpResult );
+    mpResult = new SmErrorNode(pNode->GetToken());
+    CloneNodeAttr(pNode, mpResult);
 }
 
-void SmCloningVisitor::Visit( SmLineNode* pNode )
+void SmCloningVisitor::Visit(SmLineNode* pNode)
 {
-    SmLineNode* pClone = new SmLineNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
-    mpResult = pClone;
-}
-
-void SmCloningVisitor::Visit( SmExpressionNode* pNode )
-{
-    SmExpressionNode* pClone = new SmExpressionNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmLineNode* pClone = new SmLineNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmPolyLineNode* pNode )
+void SmCloningVisitor::Visit(SmExpressionNode* pNode)
 {
-    mpResult = new SmPolyLineNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, mpResult );
-}
-
-void SmCloningVisitor::Visit( SmRootNode* pNode )
-{
-    SmRootNode* pClone = new SmRootNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    SmExpressionNode* pClone = new SmExpressionNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmRootSymbolNode* pNode )
+void SmCloningVisitor::Visit(SmPolyLineNode* pNode)
 {
-    mpResult = new SmRootSymbolNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, mpResult );
+    mpResult = new SmPolyLineNode(pNode->GetToken());
+    CloneNodeAttr(pNode, mpResult);
 }
 
-void SmCloningVisitor::Visit( SmRectangleNode* pNode )
+void SmCloningVisitor::Visit(SmRootNode* pNode)
 {
-    mpResult = new SmRectangleNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, mpResult );
+    SmRootNode* pClone = new SmRootNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
+    mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmVerticalBraceNode* pNode )
+void SmCloningVisitor::Visit(SmRootSymbolNode* pNode)
 {
-    SmVerticalBraceNode* pClone = new SmVerticalBraceNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
+    mpResult = new SmRootSymbolNode(pNode->GetToken());
+    CloneNodeAttr(pNode, mpResult);
+}
+
+void SmCloningVisitor::Visit(SmRectangleNode* pNode)
+{
+    mpResult = new SmRectangleNode(pNode->GetToken());
+    CloneNodeAttr(pNode, mpResult);
+}
+
+void SmCloningVisitor::Visit(SmVerticalBraceNode* pNode)
+{
+    SmVerticalBraceNode* pClone = new SmVerticalBraceNode(pNode->GetToken());
+    CloneNodeAttr(pNode, pClone);
+    CloneKids(pNode, pClone);
     mpResult = pClone;
 }
 
 // SmSelectionDrawingVisitor
 
-SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, const Point& rOffset )
-    : mrDev( rDevice )
-    , mbHasSelectionArea( false )
+SmSelectionDrawingVisitor::SmSelectionDrawingVisitor(OutputDevice& rDevice, SmNode* pTree,
+                                                     const Point& rOffset)
+    : mrDev(rDevice)
+    , mbHasSelectionArea(false)
 {
     //Visit everything
-    SAL_WARN_IF( !pTree, "starmath", "pTree can't be null!" );
-    if( pTree )
-        pTree->Accept( this );
+    SAL_WARN_IF(!pTree, "starmath", "pTree can't be null!");
+    if (pTree)
+        pTree->Accept(this);
 
     //Draw selection if there's any
-    if( !mbHasSelectionArea )        return;
+    if (!mbHasSelectionArea)
+        return;
 
-    maSelectionArea.Move( rOffset.X( ), rOffset.Y( ) );
+    maSelectionArea.Move(rOffset.X(), rOffset.Y());
 
     //Save device state
-    mrDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+    mrDev.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
     //Change colors
-    mrDev.SetLineColor( );
-    mrDev.SetFillColor( COL_LIGHTGRAY );
+    mrDev.SetLineColor();
+    mrDev.SetFillColor(COL_LIGHTGRAY);
 
     //Draw rectangle
-    mrDev.DrawRect( maSelectionArea );
+    mrDev.DrawRect(maSelectionArea);
 
     //Restore device state
-    mrDev.Pop( );
+    mrDev.Pop();
 }
 
 void SmSelectionDrawingVisitor::ExtendSelectionArea(const tools::Rectangle& rArea)
 {
-    if ( ! mbHasSelectionArea ) {
+    if (!mbHasSelectionArea)
+    {
         maSelectionArea = rArea;
         mbHasSelectionArea = true;
-    } else
+    }
+    else
         maSelectionArea.Union(rArea);
 }
 
-void SmSelectionDrawingVisitor::DefaultVisit( SmNode* pNode )
+void SmSelectionDrawingVisitor::DefaultVisit(SmNode* pNode)
 {
-    if( pNode->IsSelected( ) )
-        ExtendSelectionArea( pNode->AsRectangle( ) );
-    VisitChildren( pNode );
+    if (pNode->IsSelected())
+        ExtendSelectionArea(pNode->AsRectangle());
+    VisitChildren(pNode);
 }
 
-void SmSelectionDrawingVisitor::VisitChildren( SmNode* pNode )
+void SmSelectionDrawingVisitor::VisitChildren(SmNode* pNode)
 {
-    if(pNode->GetNumSubNodes() == 0)
+    if (pNode->GetNumSubNodes() == 0)
         return;
-    for( auto pChild : *static_cast<SmStructureNode*>(pNode) )
+    for (auto pChild : *static_cast<SmStructureNode*>(pNode))
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        pChild->Accept( this );
+        pChild->Accept(this);
     }
 }
 
-void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
+void SmSelectionDrawingVisitor::Visit(SmTextNode* pNode)
 {
-    if( !pNode->IsSelected())
+    if (!pNode->IsSelected())
         return;
 
-    mrDev.Push( PushFlags::TEXTCOLOR | PushFlags::FONT );
+    mrDev.Push(PushFlags::TEXTCOLOR | PushFlags::FONT);
 
-    mrDev.SetFont( pNode->GetFont( ) );
-    Point Position = pNode->GetTopLeft( );
-    tools::Long left   = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionStart( ) );
-    tools::Long right  = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionEnd( ) );
-    tools::Long top    = Position.getY( );
-    tools::Long bottom = top + pNode->GetHeight( );
-    tools::Rectangle rect( left, top, right, bottom );
+    mrDev.SetFont(pNode->GetFont());
+    Point Position = pNode->GetTopLeft();
+    tools::Long left
+        = Position.getX() + mrDev.GetTextWidth(pNode->GetText(), 0, pNode->GetSelectionStart());
+    tools::Long right
+        = Position.getX() + mrDev.GetTextWidth(pNode->GetText(), 0, pNode->GetSelectionEnd());
+    tools::Long top = Position.getY();
+    tools::Long bottom = top + pNode->GetHeight();
+    tools::Rectangle rect(left, top, right, bottom);
 
-    ExtendSelectionArea( rect );
+    ExtendSelectionArea(rect);
 
-    mrDev.Pop( );
+    mrDev.Pop();
 }
 
 // SmNodeToTextVisitor
 
-SmNodeToTextVisitor::SmNodeToTextVisitor( SmNode* pNode, OUString &rText )
+SmNodeToTextVisitor::SmNodeToTextVisitor(SmNode* pNode, OUString& rText)
 {
-    pNode->Accept( this );
+    pNode->Accept(this);
     maCmdText.stripEnd(' ');
     rText = maCmdText.makeStringAndClear();
 }
 
-void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
+void SmNodeToTextVisitor::Visit(SmTableNode* pNode)
 {
-    if( pNode->GetToken( ).eType == TBINOM ) {
-        Append( "{ binom" );
-        LineToText( pNode->GetSubNode( 0 ) );
-        LineToText( pNode->GetSubNode( 1 ) );
+    if (pNode->GetToken().eType == TBINOM)
+    {
+        Append("{ binom");
+        LineToText(pNode->GetSubNode(0));
+        LineToText(pNode->GetSubNode(1));
         Append("} ");
-    } else if( pNode->GetToken( ).eType == TSTACK ) {
-        Append( "stack{ " );
+    }
+    else if (pNode->GetToken().eType == TSTACK)
+    {
+        Append("stack{ ");
         bool bFirst = true;
-        for( auto pChild : *pNode )
+        for (auto pChild : *pNode)
         {
-            if(!pChild)
+            if (!pChild)
                 continue;
-            if(bFirst)
+            if (bFirst)
                 bFirst = false;
             else
             {
-                Separate( );
-                Append( "# " );
+                Separate();
+                Append("# ");
             }
-            LineToText( pChild );
+            LineToText(pChild);
         }
-        Separate( );
-        Append( "}" );
-    } else { //Assume it's a toplevel table, containing lines
+        Separate();
+        Append("}");
+    }
+    else
+    { //Assume it's a toplevel table, containing lines
         bool bFirst = true;
-        for( auto pChild : *pNode )
+        for (auto pChild : *pNode)
         {
-            if(!pChild)
+            if (!pChild)
                 continue;
-            if(bFirst)
+            if (bFirst)
                 bFirst = false;
             else
             {
-                Separate( );
-                Append( "newline" );
+                Separate();
+                Append("newline");
             }
-            Separate( );
-            pChild->Accept( this );
+            Separate();
+            pChild->Accept(this);
         }
     }
 }
 
-void SmNodeToTextVisitor::Visit( SmBraceNode* pNode )
+void SmNodeToTextVisitor::Visit(SmBraceNode* pNode)
 {
-    if ( pNode->GetToken().eType == TEVALUATE )
+    if (pNode->GetToken().eType == TEVALUATE)
     {
-        SmNode *pBody = pNode->Body();
-        Append( "evaluate { " );
-        pBody->Accept( this );
+        SmNode* pBody = pNode->Body();
+        Append("evaluate { ");
+        pBody->Accept(this);
         Append("} ");
     }
-    else{
-        SmNode *pLeftBrace  = pNode->OpeningBrace(),
-               *pBody       = pNode->Body(),
+    else
+    {
+        SmNode *pLeftBrace = pNode->OpeningBrace(), *pBody = pNode->Body(),
                *pRightBrace = pNode->ClosingBrace();
         //Handle special case where it's absolute function
-        if( pNode->GetToken( ).eType == TABS ) {
-            Append( "abs" );
-            LineToText( pBody );
-        } else {
-            if( pNode->GetScaleMode( ) == SmScaleMode::Height )
-                Append( "left " );
-            pLeftBrace->Accept( this );
-            Separate( );
-            pBody->Accept( this );
-            Separate( );
-            if( pNode->GetScaleMode( ) == SmScaleMode::Height )
-                Append( "right " );
-            pRightBrace->Accept( this );
+        if (pNode->GetToken().eType == TABS)
+        {
+            Append("abs");
+            LineToText(pBody);
         }
-    }
-}
-
-void SmNodeToTextVisitor::Visit( SmBracebodyNode* pNode )
-{
-    for( auto pChild : *pNode )
-    {
-        if(!pChild)
-            continue;
-        Separate( );
-        pChild->Accept( this );
-    }
-}
-
-void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
-{
-    Append( pNode->GetToken( ).aText );
-    Separate( );
-    if( pNode->GetToken( ).eType == TOPER ){
-        //There's an SmGlyphSpecialNode if eType == TOPER
-        if( pNode->GetSubNode( 0 )->GetType( ) == SmNodeType::SubSup )
-            Append( pNode->GetSubNode( 0 )->GetSubNode( 0 )->GetToken( ).aText );
         else
-            Append( pNode->GetSubNode( 0 )->GetToken( ).aText );
-    }
-    if( pNode->GetSubNode( 0 )->GetType( ) == SmNodeType::SubSup ) {
-        SmSubSupNode *pSubSup = static_cast<SmSubSupNode*>( pNode->GetSubNode( 0 ) );
-        SmNode* pChild = pSubSup->GetSubSup( LSUP );
-        if( pChild ) {
-            Separate( );
-            Append( "lsup { " );
-            LineToText( pChild );
-            Append( "} " );
-        }
-        pChild = pSubSup->GetSubSup( LSUB );
-        if( pChild ) {
-            Separate( );
-            Append( "lsub { " );
-            LineToText( pChild );
-            Append( "} " );
-        }
-        pChild = pSubSup->GetSubSup( RSUP );
-        if( pChild ) {
-            Separate( );
-            Append( "^ { " );
-            LineToText( pChild );
-            Append( "} " );
-        }
-        pChild = pSubSup->GetSubSup( RSUB );
-        if( pChild ) {
-            Separate( );
-            Append( "_ { " );
-            LineToText( pChild );
-            Append( "} " );
-        }
-        pChild = pSubSup->GetSubSup( CSUP );
-        if( pChild ) {
-            Separate( );
-            if (pSubSup->IsUseLimits())
-                Append( "to { " );
-            else
-                Append( "csup { " );
-            LineToText( pChild );
-            Append( "} " );
-        }
-        pChild = pSubSup->GetSubSup( CSUB );
-        if( pChild ) {
-            Separate( );
-            if (pSubSup->IsUseLimits())
-                Append( "from { " );
-            else
-                Append( "csub { " );
-            LineToText( pChild );
-            Append( "} " );
+        {
+            if (pNode->GetScaleMode() == SmScaleMode::Height)
+                Append("left ");
+            pLeftBrace->Accept(this);
+            Separate();
+            pBody->Accept(this);
+            Separate();
+            if (pNode->GetScaleMode() == SmScaleMode::Height)
+                Append("right ");
+            pRightBrace->Accept(this);
         }
     }
-    LineToText( pNode->GetSubNode( 1 ) );
 }
 
-void SmNodeToTextVisitor::Visit( SmAlignNode* pNode )
+void SmNodeToTextVisitor::Visit(SmBracebodyNode* pNode)
 {
-    Append( pNode->GetToken( ).aText );
-    LineToText( pNode->GetSubNode( 0 ) );
+    for (auto pChild : *pNode)
+    {
+        if (!pChild)
+            continue;
+        Separate();
+        pChild->Accept(this);
+    }
 }
 
-void SmNodeToTextVisitor::Visit( SmAttributNode* pNode )
+void SmNodeToTextVisitor::Visit(SmOperNode* pNode)
 {
-    Append( pNode->GetToken( ).aText );
-    LineToText( pNode->Body() );
+    Append(pNode->GetToken().aText);
+    Separate();
+    if (pNode->GetToken().eType == TOPER)
+    {
+        //There's an SmGlyphSpecialNode if eType == TOPER
+        if (pNode->GetSubNode(0)->GetType() == SmNodeType::SubSup)
+            Append(pNode->GetSubNode(0)->GetSubNode(0)->GetToken().aText);
+        else
+            Append(pNode->GetSubNode(0)->GetToken().aText);
+    }
+    if (pNode->GetSubNode(0)->GetType() == SmNodeType::SubSup)
+    {
+        SmSubSupNode* pSubSup = static_cast<SmSubSupNode*>(pNode->GetSubNode(0));
+        SmNode* pChild = pSubSup->GetSubSup(LSUP);
+        if (pChild)
+        {
+            Separate();
+            Append("lsup { ");
+            LineToText(pChild);
+            Append("} ");
+        }
+        pChild = pSubSup->GetSubSup(LSUB);
+        if (pChild)
+        {
+            Separate();
+            Append("lsub { ");
+            LineToText(pChild);
+            Append("} ");
+        }
+        pChild = pSubSup->GetSubSup(RSUP);
+        if (pChild)
+        {
+            Separate();
+            Append("^ { ");
+            LineToText(pChild);
+            Append("} ");
+        }
+        pChild = pSubSup->GetSubSup(RSUB);
+        if (pChild)
+        {
+            Separate();
+            Append("_ { ");
+            LineToText(pChild);
+            Append("} ");
+        }
+        pChild = pSubSup->GetSubSup(CSUP);
+        if (pChild)
+        {
+            Separate();
+            if (pSubSup->IsUseLimits())
+                Append("to { ");
+            else
+                Append("csup { ");
+            LineToText(pChild);
+            Append("} ");
+        }
+        pChild = pSubSup->GetSubSup(CSUB);
+        if (pChild)
+        {
+            Separate();
+            if (pSubSup->IsUseLimits())
+                Append("from { ");
+            else
+                Append("csub { ");
+            LineToText(pChild);
+            Append("} ");
+        }
+    }
+    LineToText(pNode->GetSubNode(1));
 }
 
-void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
+void SmNodeToTextVisitor::Visit(SmAlignNode* pNode)
+{
+    Append(pNode->GetToken().aText);
+    LineToText(pNode->GetSubNode(0));
+}
+
+void SmNodeToTextVisitor::Visit(SmAttributNode* pNode)
+{
+    Append(pNode->GetToken().aText);
+    LineToText(pNode->Body());
+}
+
+void SmNodeToTextVisitor::Visit(SmFontNode* pNode)
 {
     sal_uInt32 nc;
-    sal_uInt8  nr, ng, nb;
+    sal_uInt8 nr, ng, nb;
     std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
-    switch ( pNode->GetToken( ).eType )
+    switch (pNode->GetToken().eType)
     {
         case TBOLD:
-            Append( "bold " );
+            Append("bold ");
             break;
         case TNBOLD:
-            Append( "nbold " );
+            Append("nbold ");
             break;
         case TITALIC:
-            Append( "italic " );
+            Append("italic ");
             break;
         case TNITALIC:
-            Append( "nitalic " );
+            Append("nitalic ");
             break;
         case TPHANTOM:
-            Append( "phantom " );
+            Append("phantom ");
             break;
         case TSIZE:
+        {
+            Append("size ");
+            switch (pNode->GetSizeType())
             {
-                Append( "size " );
-                switch ( pNode->GetSizeType( ) )
-                {
-                    case FontSizeType::PLUS:
-                        Append( "+" );
-                        break;
-                    case FontSizeType::MINUS:
-                        Append( "-" );
-                        break;
-                    case FontSizeType::MULTIPLY:
-                        Append( "*" );
-                        break;
-                    case FontSizeType::DIVIDE:
-                        Append( "/" );
-                        break;
-                    case FontSizeType::ABSOLUT:
-                    default:
-                        break;
-                }
-                Append( ::rtl::math::doubleToUString(
-                            static_cast<double>( pNode->GetSizeParameter( ) ),
-                            rtl_math_StringFormat_Automatic,
-                            rtl_math_DecimalPlaces_Max, '.', true ) );
-                Separate( );
+                case FontSizeType::PLUS:
+                    Append("+");
+                    break;
+                case FontSizeType::MINUS:
+                    Append("-");
+                    break;
+                case FontSizeType::MULTIPLY:
+                    Append("*");
+                    break;
+                case FontSizeType::DIVIDE:
+                    Append("/");
+                    break;
+                case FontSizeType::ABSOLUT:
+                default:
+                    break;
             }
-            break;
+            Append(::rtl::math::doubleToUString(static_cast<double>(pNode->GetSizeParameter()),
+                                                rtl_math_StringFormat_Automatic,
+                                                rtl_math_DecimalPlaces_Max, '.', true));
+            Separate();
+        }
+        break;
 
         case TDVIPSNAMESCOL:
-            Append( "color dvip " );
+            Append("color dvip ");
             nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
-            Append( aSmColorTokenTableEntry->pIdent );
+            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser(nc);
+            Append(aSmColorTokenTableEntry->pIdent);
             break;
         case THTMLCOL:
         case TICONICCOL:
-            Append( "color " );
+            Append("color ");
             nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
-            Append( aSmColorTokenTableEntry->pIdent );
+            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser(nc);
+            Append(aSmColorTokenTableEntry->pIdent);
             break;
         case TRGB:
             nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
-            Append( "color rgb " );
+            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser(nc);
+            Append("color rgb ");
             nb = nc % 256;
             nc /= 256;
             ng = nc % 256;
@@ -2167,8 +2031,8 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             break;
         case TRGBA:
             nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
-            Append( "color rgba " );
+            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser(nc);
+            Append("color rgba ");
             nc = pNode->GetToken().aText.toUInt32(16);
             nb = nc % 256;
             nc /= 256;
@@ -2187,236 +2051,241 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             break;
         case THEX:
             nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
-            Append( "color hex " );
+            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser(nc);
+            Append("color hex ");
             nc = pNode->GetToken().aText.toUInt32(16);
-            Append(OUString::number(nc,16));
+            Append(OUString::number(nc, 16));
             Separate();
             break;
         case TSANS:
-            Append( "font sans " );
+            Append("font sans ");
             break;
         case TSERIF:
-            Append( "font serif " );
+            Append("font serif ");
             break;
         case TFIXED:
-            Append( "font fixed " );
+            Append("font fixed ");
             break;
         default:
             break;
     }
-    LineToText( pNode->GetSubNode( 1 ) );
+    LineToText(pNode->GetSubNode(1));
 }
 
-void SmNodeToTextVisitor::Visit( SmUnHorNode* pNode )
+void SmNodeToTextVisitor::Visit(SmUnHorNode* pNode)
 {
-    if(pNode->GetSubNode( 1 )->GetToken( ).eType == TFACT)
+    if (pNode->GetSubNode(1)->GetToken().eType == TFACT)
     {
         // visit children in the reverse order
-        for( auto it = pNode->rbegin(); it != pNode->rend(); ++it )
+        for (auto it = pNode->rbegin(); it != pNode->rend(); ++it)
         {
             auto pChild = *it;
-            if(!pChild)
+            if (!pChild)
                 continue;
-            Separate( );
-            pChild->Accept( this );
+            Separate();
+            pChild->Accept(this);
         }
     }
     else
     {
-        for( auto pChild : *pNode )
+        for (auto pChild : *pNode)
         {
-            if(!pChild)
+            if (!pChild)
                 continue;
-            Separate( );
-            pChild->Accept( this );
+            Separate();
+            pChild->Accept(this);
         }
     }
 }
 
-void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
+void SmNodeToTextVisitor::Visit(SmBinHorNode* pNode)
 {
-    const SmNode *pParent = pNode->GetParent();
+    const SmNode* pParent = pNode->GetParent();
     bool bBraceNeeded = pParent && pParent->GetType() == SmNodeType::Font;
-    SmNode *pLeft  = pNode->LeftOperand(),
-           *pOper  = pNode->Symbol(),
-           *pRight = pNode->RightOperand();
-    Separate( );
+    SmNode *pLeft = pNode->LeftOperand(), *pOper = pNode->Symbol(), *pRight = pNode->RightOperand();
+    Separate();
     if (bBraceNeeded)
-        Append( "{ " );
-    pLeft->Accept( this );
-    Separate( );
-    pOper->Accept( this );
-    Separate( );
-    pRight->Accept( this );
-    Separate( );
+        Append("{ ");
+    pLeft->Accept(this);
+    Separate();
+    pOper->Accept(this);
+    Separate();
+    pRight->Accept(this);
+    Separate();
     if (bBraceNeeded)
-        Append( "} " );
+        Append("} ");
 }
 
-void SmNodeToTextVisitor::Visit( SmBinVerNode* pNode )
+void SmNodeToTextVisitor::Visit(SmBinVerNode* pNode)
 {
-    if( pNode->GetToken().eType == TOVER ){
-        SmNode *pNum    = pNode->GetSubNode( 0 ),
-               *pDenom  = pNode->GetSubNode( 2 );
-        Append( "{ " );
-        LineToText( pNum );
-        Append( "over" );
-        LineToText( pDenom );
-        Append( "} " );
-    } else{
-        SmNode *pNum    = pNode->GetSubNode( 0 ),
-               *pDenom  = pNode->GetSubNode( 2 );
-        Append( "frac {" );
-        LineToText( pNum );
-        Append( "} {" );
-        LineToText( pDenom );
-        Append( "}" );
+    if (pNode->GetToken().eType == TOVER)
+    {
+        SmNode *pNum = pNode->GetSubNode(0), *pDenom = pNode->GetSubNode(2);
+        Append("{ ");
+        LineToText(pNum);
+        Append("over");
+        LineToText(pDenom);
+        Append("} ");
+    }
+    else
+    {
+        SmNode *pNum = pNode->GetSubNode(0), *pDenom = pNode->GetSubNode(2);
+        Append("frac {");
+        LineToText(pNum);
+        Append("} {");
+        LineToText(pDenom);
+        Append("}");
     }
 }
 
-void SmNodeToTextVisitor::Visit( SmBinDiagonalNode* pNode )
+void SmNodeToTextVisitor::Visit(SmBinDiagonalNode* pNode)
 {
-    SmNode *pLeftOperand  = pNode->GetSubNode( 0 ),
-           *pRightOperand = pNode->GetSubNode( 1 );
-    Append( "{ " );
-    LineToText( pLeftOperand );
-    Separate( );
-    Append( "wideslash " );
-    LineToText( pRightOperand );
-    Append( "} " );
+    SmNode *pLeftOperand = pNode->GetSubNode(0), *pRightOperand = pNode->GetSubNode(1);
+    Append("{ ");
+    LineToText(pLeftOperand);
+    Separate();
+    Append("wideslash ");
+    LineToText(pRightOperand);
+    Append("} ");
 }
 
-void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
+void SmNodeToTextVisitor::Visit(SmSubSupNode* pNode)
 {
-    if( pNode->GetToken().eType == TEVALUATE )
+    if (pNode->GetToken().eType == TEVALUATE)
     {
         Append("evaluate { ");
-        pNode->GetSubNode( 0 )->GetSubNode( 1 )->Accept(this);
+        pNode->GetSubNode(0)->GetSubNode(1)->Accept(this);
         Append("} ");
-        SmNode* pChild = pNode->GetSubSup( RSUP );
-        if( pChild ) {
-            Separate( );
-            Append( "to { " );
-            LineToText( pChild );
-            Append( "} " );
+        SmNode* pChild = pNode->GetSubSup(RSUP);
+        if (pChild)
+        {
+            Separate();
+            Append("to { ");
+            LineToText(pChild);
+            Append("} ");
         }
-        pChild = pNode->GetSubSup( RSUB );
-        if( pChild ) {
-            Separate( );
-            Append( "from { " );
-            LineToText( pChild );
-            Append( "} " );
+        pChild = pNode->GetSubSup(RSUB);
+        if (pChild)
+        {
+            Separate();
+            Append("from { ");
+            LineToText(pChild);
+            Append("} ");
         }
     }
     else
     {
-        LineToText( pNode->GetBody( ) );
-        SmNode *pChild = pNode->GetSubSup( LSUP );
-        if( pChild ) {
-            Separate( );
-            Append( "lsup " );
-            LineToText( pChild );
+        LineToText(pNode->GetBody());
+        SmNode* pChild = pNode->GetSubSup(LSUP);
+        if (pChild)
+        {
+            Separate();
+            Append("lsup ");
+            LineToText(pChild);
         }
-        pChild = pNode->GetSubSup( LSUB );
-        if( pChild ) {
-            Separate( );
-            Append( "lsub " );
-            LineToText( pChild );
+        pChild = pNode->GetSubSup(LSUB);
+        if (pChild)
+        {
+            Separate();
+            Append("lsub ");
+            LineToText(pChild);
         }
-        pChild = pNode->GetSubSup( RSUP );
-        if( pChild ) {
-            Separate( );
-            Append( "^ " );
-            LineToText( pChild );
+        pChild = pNode->GetSubSup(RSUP);
+        if (pChild)
+        {
+            Separate();
+            Append("^ ");
+            LineToText(pChild);
         }
-        pChild = pNode->GetSubSup( RSUB );
-        if( pChild ) {
-            Separate( );
-            Append( "_ " );
-            LineToText( pChild );
+        pChild = pNode->GetSubSup(RSUB);
+        if (pChild)
+        {
+            Separate();
+            Append("_ ");
+            LineToText(pChild);
         }
-        pChild = pNode->GetSubSup( CSUP );
-        if( pChild ) {
-            Separate( );
+        pChild = pNode->GetSubSup(CSUP);
+        if (pChild)
+        {
+            Separate();
             if (pNode->IsUseLimits())
-                Append( "to " );
+                Append("to ");
             else
-                Append( "csup " );
-            LineToText( pChild );
+                Append("csup ");
+            LineToText(pChild);
         }
-        pChild = pNode->GetSubSup( CSUB );
-        if( pChild ) {
-            Separate( );
+        pChild = pNode->GetSubSup(CSUB);
+        if (pChild)
+        {
+            Separate();
             if (pNode->IsUseLimits())
-                Append( "from " );
+                Append("from ");
             else
-                Append( "csub " );
-            LineToText( pChild );
+                Append("csub ");
+            LineToText(pChild);
         }
     }
 }
 
-void SmNodeToTextVisitor::Visit( SmMatrixNode* pNode )
+void SmNodeToTextVisitor::Visit(SmMatrixNode* pNode)
 {
-    Append( "matrix{" );
+    Append("matrix{");
     for (size_t i = 0; i < pNode->GetNumRows(); ++i)
     {
-        for (size_t j = 0; j < pNode->GetNumCols( ); ++j)
+        for (size_t j = 0; j < pNode->GetNumCols(); ++j)
         {
-            SmNode* pSubNode = pNode->GetSubNode( i * pNode->GetNumCols( ) + j );
-            Separate( );
+            SmNode* pSubNode = pNode->GetSubNode(i * pNode->GetNumCols() + j);
+            Separate();
             if (pSubNode)
-                pSubNode->Accept( this );
-            Separate( );
+                pSubNode->Accept(this);
+            Separate();
             if (j != pNode->GetNumCols() - 1U)
-                Append( "#" );
+                Append("#");
         }
-        Separate( );
+        Separate();
         if (i != pNode->GetNumRows() - 1U)
-            Append( "##" );
+            Append("##");
     }
-    Append( "} " );
+    Append("} ");
 }
 
-void SmNodeToTextVisitor::Visit( SmPlaceNode* )
-{
-    Append( "<?>" );
-}
+void SmNodeToTextVisitor::Visit(SmPlaceNode*) { Append("<?>"); }
 
-void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
+void SmNodeToTextVisitor::Visit(SmTextNode* pNode)
 {
-    SmTokenType type = pNode->GetToken( ).eType;
-    switch(type){
+    SmTokenType type = pNode->GetToken().eType;
+    switch (type)
+    {
         case TTEXT:
-            Append( "\"" );
-            Append( pNode->GetToken().aText );
-            Append( "\"" );
+            Append("\"");
+            Append(pNode->GetToken().aText);
+            Append("\"");
             break;
         case TNUMBER:
-            Append( pNode->GetToken().aText );
+            Append(pNode->GetToken().aText);
             break;
         case TIDENT:
-            Append( pNode->GetToken().aText );
+            Append(pNode->GetToken().aText);
             break;
         case TFUNC:
             Append("func ");
-            Append( pNode->GetToken().aText );
+            Append(pNode->GetToken().aText);
             break;
         case THEX:
             Append("hex ");
-            Append( pNode->GetToken().aText );
+            Append(pNode->GetToken().aText);
             break;
         default:
-            Append( pNode->GetToken().aText );
+            Append(pNode->GetToken().aText);
     }
-    Separate( );
+    Separate();
 }
 
-void SmNodeToTextVisitor::Visit( SmSpecialNode* pNode )
+void SmNodeToTextVisitor::Visit(SmSpecialNode* pNode)
 {
     SmTokenType type = pNode->GetToken().eType;
-    switch(type){
+    switch (type)
+    {
         case TLIMSUP:
             Append("lim sup ");
             break;
@@ -2424,37 +2293,35 @@ void SmNodeToTextVisitor::Visit( SmSpecialNode* pNode )
             Append("lim inf ");
             break;
         default:
-            Append( pNode->GetToken().aText );
+            Append(pNode->GetToken().aText);
             break;
     }
 }
 
-void SmNodeToTextVisitor::Visit( SmGlyphSpecialNode* pNode )
+void SmNodeToTextVisitor::Visit(SmGlyphSpecialNode* pNode)
 {
-    if( pNode->GetToken( ).eType == TBOPER )
-        Append( "boper " );
+    if (pNode->GetToken().eType == TBOPER)
+        Append("boper ");
     else
-        Append( "uoper " );
-    Append( pNode->GetToken( ).aText );
+        Append("uoper ");
+    Append(pNode->GetToken().aText);
 }
 
 //TODO to improve this it is required to improve mathmlimport.
-void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
+void SmNodeToTextVisitor::Visit(SmMathSymbolNode* pNode)
 {
-    if (    ( pNode->GetToken().nGroup & TG::LBrace )
-         || ( pNode->GetToken().nGroup & TG::RBrace )
-         || ( pNode->GetToken().nGroup & TG::Sum )
-         || ( pNode->GetToken().nGroup & TG::Product )
-         || ( pNode->GetToken().nGroup & TG::Relation )
-         || ( pNode->GetToken().nGroup & TG::UnOper )
-         || ( pNode->GetToken().nGroup & TG::Oper )
-    ) {
-        Append( pNode->GetToken().aText );
+    if ((pNode->GetToken().nGroup & TG::LBrace) || (pNode->GetToken().nGroup & TG::RBrace)
+        || (pNode->GetToken().nGroup & TG::Sum) || (pNode->GetToken().nGroup & TG::Product)
+        || (pNode->GetToken().nGroup & TG::Relation) || (pNode->GetToken().nGroup & TG::UnOper)
+        || (pNode->GetToken().nGroup & TG::Oper))
+    {
+        Append(pNode->GetToken().aText);
         return;
     }
     sal_Unicode cChar = pNode->GetToken().cMathChar;
-    Separate( );
-    switch(cChar){
+    Separate();
+    switch (cChar)
+    {
         case MS_NONE:
             Append("none");
             break;
@@ -2471,8 +2338,10 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
             Append("\"~\"");
             break;
         case MS_RIGHTARROW:
-            if( pNode->GetToken().eType == TTOWARD ) Append("toward");
-            else Append("rightarrow");
+            if (pNode->GetToken().eType == TTOWARD)
+                Append("toward");
+            else
+                Append("rightarrow");
             break;
         case MS_LEFTARROW:
             Append("leftarrow");
@@ -2594,16 +2463,16 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case 0xe098:
             Append("widevec");
             break;
-        case 0xeb01:    //no space
-        case 0xeb08:    //normal space
+        case 0xeb01: //no space
+        case 0xeb08: //normal space
             break;
-        case 0xef04:    //tiny space
-        case 0xef05:    //tiny space
-        case 0xeb02:    //small space
-        case 0xeb04:    //medium space
+        case 0xef04: //tiny space
+        case 0xef05: //tiny space
+        case 0xeb02: //small space
+        case 0xeb04: //medium space
             Append("`");
             break;
-        case 0xeb05:    //large space
+        case 0xeb05: //large space
             Append("~");
             break;
         case 0x3a9:
@@ -2615,7 +2484,7 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
     }
 }
 
-void SmNodeToTextVisitor::Visit( SmBlankNode* pNode )
+void SmNodeToTextVisitor::Visit(SmBlankNode* pNode)
 {
     sal_uInt16 nNum = pNode->GetBlankNum();
     if (nNum <= 0)
@@ -2623,86 +2492,80 @@ void SmNodeToTextVisitor::Visit( SmBlankNode* pNode )
     sal_uInt16 nWide = nNum / 4;
     sal_uInt16 nNarrow = nNum % 4;
     for (sal_uInt16 i = 0; i < nWide; i++)
-        Append( "~" );
+        Append("~");
     for (sal_uInt16 i = 0; i < nNarrow; i++)
-        Append( "`" );
-    Append( " " );
+        Append("`");
+    Append(" ");
 }
 
-void SmNodeToTextVisitor::Visit( SmErrorNode* )
-{
-}
+void SmNodeToTextVisitor::Visit(SmErrorNode*) {}
 
-void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
+void SmNodeToTextVisitor::Visit(SmLineNode* pNode)
 {
-    for( auto pChild : *pNode )
+    for (auto pChild : *pNode)
     {
-        if(!pChild)
+        if (!pChild)
             continue;
-        Separate( );
-        pChild->Accept( this );
+        Separate();
+        pChild->Accept(this);
     }
 }
 
-void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
+void SmNodeToTextVisitor::Visit(SmExpressionNode* pNode)
 {
-    bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() == SmNodeType::BinHor;
+    bool bracketsNeeded
+        = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() == SmNodeType::BinHor;
     if (!bracketsNeeded)
     {
-        const SmNode *pParent = pNode->GetParent();
+        const SmNode* pParent = pNode->GetParent();
         // nested subsups
-        bracketsNeeded =
-            pParent && pParent->GetType() == SmNodeType::SubSup &&
-            pNode->GetNumSubNodes() == 1 &&
-            pNode->GetSubNode(0)->GetType() == SmNodeType::SubSup;
+        bracketsNeeded = pParent && pParent->GetType() == SmNodeType::SubSup
+                         && pNode->GetNumSubNodes() == 1
+                         && pNode->GetSubNode(0)->GetType() == SmNodeType::SubSup;
     }
 
-    if (bracketsNeeded) {
-        Append( "{ " );
-    }
-    for( auto pChild : *pNode )
+    if (bracketsNeeded)
     {
-        if(!pChild)
+        Append("{ ");
+    }
+    for (auto pChild : *pNode)
+    {
+        if (!pChild)
             continue;
-        pChild->Accept( this );
-        Separate( );
+        pChild->Accept(this);
+        Separate();
     }
-    if (bracketsNeeded) {
-        Append( "} " );
+    if (bracketsNeeded)
+    {
+        Append("} ");
     }
 }
 
-void SmNodeToTextVisitor::Visit( SmPolyLineNode* )
+void SmNodeToTextVisitor::Visit(SmPolyLineNode*) {}
+
+void SmNodeToTextVisitor::Visit(SmRootNode* pNode)
 {
+    SmNode *pExtra = pNode->GetSubNode(0), *pBody = pNode->GetSubNode(2);
+    if (pExtra)
+    {
+        Append("nroot");
+        LineToText(pExtra);
+    }
+    else
+        Append("sqrt");
+    LineToText(pBody);
 }
 
-void SmNodeToTextVisitor::Visit( SmRootNode* pNode )
-{
-    SmNode *pExtra   = pNode->GetSubNode( 0 ),
-           *pBody    = pNode->GetSubNode( 2 );
-    if( pExtra ) {
-        Append( "nroot" );
-        LineToText( pExtra );
-    } else
-        Append( "sqrt" );
-    LineToText( pBody );
-}
+void SmNodeToTextVisitor::Visit(SmRootSymbolNode*) {}
 
-void SmNodeToTextVisitor::Visit( SmRootSymbolNode* )
-{
-}
+void SmNodeToTextVisitor::Visit(SmRectangleNode*) {}
 
-void SmNodeToTextVisitor::Visit( SmRectangleNode* )
+void SmNodeToTextVisitor::Visit(SmVerticalBraceNode* pNode)
 {
-}
-
-void SmNodeToTextVisitor::Visit( SmVerticalBraceNode* pNode )
-{
-    SmNode *pBody   = pNode->Body(),
-           *pScript = pNode->Script();
-    LineToText( pBody );
-    Append( pNode->GetToken( ).aText );
-    LineToText( pScript );
+    SmNode *pBody = pNode->Body(), *pScript = pNode->Script();
+    LineToText(pBody);
+    Append(pNode->GetToken().aText);
+    LineToText(pScript);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,12 +44,11 @@ enum class SmParseError
     NumberExpected
 };
 
-
 struct SmErrorDesc
 {
     SmParseError m_eType;
-    SmNode      *m_pNode;
-    OUString     m_aText;
+    SmNode* m_pNode;
+    OUString m_aText;
 };
 
 #endif

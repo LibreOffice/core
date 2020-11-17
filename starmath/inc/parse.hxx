@@ -47,22 +47,21 @@ class SmTextNode;
 
 class SmParser
 {
-    OUString        m_aBufferString;
-    SmToken         m_aCurToken;
+    OUString m_aBufferString;
+    SmToken m_aCurToken;
     std::vector<std::unique_ptr<SmErrorDesc>> m_aErrDescList;
-    int             m_nCurError;
-    sal_Int32       m_nBufferIndex,
-                    m_nTokenIndex;
-    sal_Int32       m_nRow,    // 1-based
-                    m_nColOff; // 0-based
-    bool            m_bImportSymNames,
-                    m_bExportSymNames;
-    sal_Int32       m_nParseDepth;
+    int m_nCurError;
+    sal_Int32 m_nBufferIndex, m_nTokenIndex;
+    sal_Int32 m_nRow; // 1-based
+    sal_Int32 m_nColOff; // 0-based
+    bool m_bImportSymNames, m_bExportSymNames;
+    sal_Int32 m_nParseDepth;
 
     class DepthProtect
     {
     private:
         sal_Int32& m_rParseDepth;
+
     public:
         DepthProtect(sal_Int32& rParseDepth)
             : m_rParseDepth(rParseDepth)
@@ -70,14 +69,11 @@ class SmParser
             ++m_rParseDepth;
         }
         bool TooDeep() const { return m_rParseDepth > DEPTH_LIMIT; }
-        ~DepthProtect()
-        {
-            --m_rParseDepth;
-        }
+        ~DepthProtect() { --m_rParseDepth; }
     };
 
     // map of used symbols (used to reduce file size by exporting only actually used symbols)
-    std::set< OUString >   m_aUsedSymbols;
+    std::set<OUString> m_aUsedSymbols;
 
     // CharClass representing a locale for parsing numbers
     CharClass m_aNumCC;
@@ -88,13 +84,13 @@ class SmParser
     SmParser& operator=(const SmParser&) = delete;
 
     // Moves between tokens inside starmath code.
-    void            NextToken();
-    void            NextTokenColor(bool dvipload);
-    void            NextTokenFontSize();
-    sal_Int32       GetTokenIndex() const   { return m_nTokenIndex; }
-    void            Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText );
+    void NextToken();
+    void NextTokenColor(bool dvipload);
+    void NextTokenFontSize();
+    sal_Int32 GetTokenIndex() const { return m_nTokenIndex; }
+    void Replace(sal_Int32 nPos, sal_Int32 nLen, const OUString& rText);
 
-    inline bool     TokenInGroup( TG nGroup );
+    inline bool TokenInGroup(TG nGroup);
 
     // grammar
     std::unique_ptr<SmTableNode> DoTable();
@@ -103,8 +99,8 @@ class SmParser
     std::unique_ptr<SmNode> DoRelation();
     std::unique_ptr<SmNode> DoSum();
     std::unique_ptr<SmNode> DoProduct();
-    std::unique_ptr<SmNode> DoSubSup(TG nActiveGroup, SmNode *pGivenNode);
-    std::unique_ptr<SmNode> DoSubSupEvaluate(SmNode *pGivenNode);
+    std::unique_ptr<SmNode> DoSubSup(TG nActiveGroup, SmNode* pGivenNode);
+    std::unique_ptr<SmNode> DoSubSupEvaluate(SmNode* pGivenNode);
     std::unique_ptr<SmNode> DoOpSubSup();
     std::unique_ptr<SmNode> DoPower();
     std::unique_ptr<SmBlankNode> DoBlank();
@@ -133,33 +129,28 @@ class SmParser
     // end of grammar
 
 public:
-                 SmParser();
+    SmParser();
 
     /** Parse rBuffer to formula tree */
-    std::unique_ptr<SmTableNode> Parse(const OUString &rBuffer);
+    std::unique_ptr<SmTableNode> Parse(const OUString& rBuffer);
     /** Parse rBuffer to formula subtree that constitutes an expression */
-    std::unique_ptr<SmNode> ParseExpression(const OUString &rBuffer);
+    std::unique_ptr<SmNode> ParseExpression(const OUString& rBuffer);
 
-    const OUString & GetText() const { return m_aBufferString; };
+    const OUString& GetText() const { return m_aBufferString; };
 
-    bool        IsImportSymbolNames() const        { return m_bImportSymNames; }
-    void        SetImportSymbolNames(bool bVal)    { m_bImportSymNames = bVal; }
-    bool        IsExportSymbolNames() const        { return m_bExportSymNames; }
-    void        SetExportSymbolNames(bool bVal)    { m_bExportSymNames = bVal; }
+    bool IsImportSymbolNames() const { return m_bImportSymNames; }
+    void SetImportSymbolNames(bool bVal) { m_bImportSymNames = bVal; }
+    bool IsExportSymbolNames() const { return m_bExportSymNames; }
+    void SetExportSymbolNames(bool bVal) { m_bExportSymNames = bVal; }
 
-    void        AddError(SmParseError Type, SmNode *pNode);
-    const SmErrorDesc*  NextError();
-    const SmErrorDesc*  PrevError();
-    const SmErrorDesc*  GetError();
-    const std::set< OUString >&   GetUsedSymbols() const      { return m_aUsedSymbols; }
+    void AddError(SmParseError Type, SmNode* pNode);
+    const SmErrorDesc* NextError();
+    const SmErrorDesc* PrevError();
+    const SmErrorDesc* GetError();
+    const std::set<OUString>& GetUsedSymbols() const { return m_aUsedSymbols; }
 };
 
-
-inline bool SmParser::TokenInGroup( TG nGroup)
-{
-    return bool(m_aCurToken.nGroup & nGroup);
-}
-
+inline bool SmParser::TokenInGroup(TG nGroup) { return bool(m_aCurToken.nGroup & nGroup); }
 
 #endif
 

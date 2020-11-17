@@ -37,40 +37,39 @@
 class SmVisitor
 {
 public:
-    virtual void Visit( SmTableNode* pNode ) = 0;
-    virtual void Visit( SmBraceNode* pNode ) = 0;
-    virtual void Visit( SmBracebodyNode* pNode ) = 0;
-    virtual void Visit( SmOperNode* pNode ) = 0;
-    virtual void Visit( SmAlignNode* pNode ) = 0;
-    virtual void Visit( SmAttributNode* pNode ) = 0;
-    virtual void Visit( SmFontNode* pNode ) = 0;
-    virtual void Visit( SmUnHorNode* pNode ) = 0;
-    virtual void Visit( SmBinHorNode* pNode ) = 0;
-    virtual void Visit( SmBinVerNode* pNode ) = 0;
-    virtual void Visit( SmBinDiagonalNode* pNode ) = 0;
-    virtual void Visit( SmSubSupNode* pNode ) = 0;
-    virtual void Visit( SmMatrixNode* pNode ) = 0;
-    virtual void Visit( SmPlaceNode* pNode ) = 0;
-    virtual void Visit( SmTextNode* pNode ) = 0;
-    virtual void Visit( SmSpecialNode* pNode ) = 0;
-    virtual void Visit( SmGlyphSpecialNode* pNode ) = 0;
-    virtual void Visit( SmMathSymbolNode* pNode ) = 0;
-    virtual void Visit( SmBlankNode* pNode ) = 0;
-    virtual void Visit( SmErrorNode* pNode ) = 0;
-    virtual void Visit( SmLineNode* pNode ) = 0;
-    virtual void Visit( SmExpressionNode* pNode ) = 0;
-    virtual void Visit( SmPolyLineNode* pNode ) = 0;
-    virtual void Visit( SmRootNode* pNode ) = 0;
-    virtual void Visit( SmRootSymbolNode* pNode ) = 0;
-    virtual void Visit( SmRectangleNode* pNode ) = 0;
-    virtual void Visit( SmVerticalBraceNode* pNode ) = 0;
+    virtual void Visit(SmTableNode* pNode) = 0;
+    virtual void Visit(SmBraceNode* pNode) = 0;
+    virtual void Visit(SmBracebodyNode* pNode) = 0;
+    virtual void Visit(SmOperNode* pNode) = 0;
+    virtual void Visit(SmAlignNode* pNode) = 0;
+    virtual void Visit(SmAttributNode* pNode) = 0;
+    virtual void Visit(SmFontNode* pNode) = 0;
+    virtual void Visit(SmUnHorNode* pNode) = 0;
+    virtual void Visit(SmBinHorNode* pNode) = 0;
+    virtual void Visit(SmBinVerNode* pNode) = 0;
+    virtual void Visit(SmBinDiagonalNode* pNode) = 0;
+    virtual void Visit(SmSubSupNode* pNode) = 0;
+    virtual void Visit(SmMatrixNode* pNode) = 0;
+    virtual void Visit(SmPlaceNode* pNode) = 0;
+    virtual void Visit(SmTextNode* pNode) = 0;
+    virtual void Visit(SmSpecialNode* pNode) = 0;
+    virtual void Visit(SmGlyphSpecialNode* pNode) = 0;
+    virtual void Visit(SmMathSymbolNode* pNode) = 0;
+    virtual void Visit(SmBlankNode* pNode) = 0;
+    virtual void Visit(SmErrorNode* pNode) = 0;
+    virtual void Visit(SmLineNode* pNode) = 0;
+    virtual void Visit(SmExpressionNode* pNode) = 0;
+    virtual void Visit(SmPolyLineNode* pNode) = 0;
+    virtual void Visit(SmRootNode* pNode) = 0;
+    virtual void Visit(SmRootSymbolNode* pNode) = 0;
+    virtual void Visit(SmRectangleNode* pNode) = 0;
+    virtual void Visit(SmVerticalBraceNode* pNode) = 0;
 
 protected:
     ~SmVisitor() {}
 };
 
 // SmDefaultingVisitor
-
 
 /** Visitor that uses DefaultVisit for handling visits by default
  *
@@ -80,38 +79,39 @@ protected:
 class SmDefaultingVisitor : public SmVisitor
 {
 public:
-    void Visit( SmTableNode* pNode ) override;
-    void Visit( SmBraceNode* pNode ) override;
-    void Visit( SmBracebodyNode* pNode ) override;
-    void Visit( SmOperNode* pNode ) override;
-    void Visit( SmAlignNode* pNode ) override;
-    void Visit( SmAttributNode* pNode ) override;
-    void Visit( SmFontNode* pNode ) override;
-    void Visit( SmUnHorNode* pNode ) override;
-    void Visit( SmBinHorNode* pNode ) override;
-    void Visit( SmBinVerNode* pNode ) override;
-    void Visit( SmBinDiagonalNode* pNode ) override;
-    void Visit( SmSubSupNode* pNode ) override;
-    void Visit( SmMatrixNode* pNode ) override;
-    void Visit( SmPlaceNode* pNode ) override;
-    void Visit( SmTextNode* pNode ) override;
-    void Visit( SmSpecialNode* pNode ) override;
-    void Visit( SmGlyphSpecialNode* pNode ) override;
-    void Visit( SmMathSymbolNode* pNode ) override;
-    void Visit( SmBlankNode* pNode ) override;
-    void Visit( SmErrorNode* pNode ) override;
-    void Visit( SmLineNode* pNode ) override;
-    void Visit( SmExpressionNode* pNode ) override;
-    void Visit( SmPolyLineNode* pNode ) override;
-    void Visit( SmRootNode* pNode ) override;
-    void Visit( SmRootSymbolNode* pNode ) override;
-    void Visit( SmRectangleNode* pNode ) override;
-    void Visit( SmVerticalBraceNode* pNode ) override;
+    void Visit(SmTableNode* pNode) override;
+    void Visit(SmBraceNode* pNode) override;
+    void Visit(SmBracebodyNode* pNode) override;
+    void Visit(SmOperNode* pNode) override;
+    void Visit(SmAlignNode* pNode) override;
+    void Visit(SmAttributNode* pNode) override;
+    void Visit(SmFontNode* pNode) override;
+    void Visit(SmUnHorNode* pNode) override;
+    void Visit(SmBinHorNode* pNode) override;
+    void Visit(SmBinVerNode* pNode) override;
+    void Visit(SmBinDiagonalNode* pNode) override;
+    void Visit(SmSubSupNode* pNode) override;
+    void Visit(SmMatrixNode* pNode) override;
+    void Visit(SmPlaceNode* pNode) override;
+    void Visit(SmTextNode* pNode) override;
+    void Visit(SmSpecialNode* pNode) override;
+    void Visit(SmGlyphSpecialNode* pNode) override;
+    void Visit(SmMathSymbolNode* pNode) override;
+    void Visit(SmBlankNode* pNode) override;
+    void Visit(SmErrorNode* pNode) override;
+    void Visit(SmLineNode* pNode) override;
+    void Visit(SmExpressionNode* pNode) override;
+    void Visit(SmPolyLineNode* pNode) override;
+    void Visit(SmRootNode* pNode) override;
+    void Visit(SmRootSymbolNode* pNode) override;
+    void Visit(SmRectangleNode* pNode) override;
+    void Visit(SmVerticalBraceNode* pNode) override;
+
 protected:
     ~SmDefaultingVisitor() {}
 
     /** Method invoked by Visit methods by default */
-    virtual void DefaultVisit( SmNode* pNode ) = 0;
+    virtual void DefaultVisit(SmNode* pNode) = 0;
 };
 
 // SmCaretDrawingVisitor
@@ -121,19 +121,21 @@ class SmCaretDrawingVisitor final : public SmDefaultingVisitor
 {
 public:
     /** Given position and device this constructor will draw the caret */
-    SmCaretDrawingVisitor( OutputDevice& rDevice, SmCaretPos position, Point offset, bool caretVisible );
+    SmCaretDrawingVisitor(OutputDevice& rDevice, SmCaretPos position, Point offset,
+                          bool caretVisible);
     virtual ~SmCaretDrawingVisitor() {}
-    void Visit( SmTextNode* pNode ) override;
+    void Visit(SmTextNode* pNode) override;
     using SmDefaultingVisitor::Visit;
+
 private:
-    OutputDevice &mrDev;
+    OutputDevice& mrDev;
     SmCaretPos maPos;
     /** Offset to draw from */
-    Point  maOffset;
-    bool  mbCaretVisible;
+    Point maOffset;
+    bool mbCaretVisible;
 
     /** Default method for drawing pNodes */
-    void DefaultVisit( SmNode* pNode ) override;
+    void DefaultVisit(SmNode* pNode) override;
 };
 
 // SmCaretPos2LineVisitor
@@ -143,27 +145,26 @@ class SmCaretPos2LineVisitor final : public SmDefaultingVisitor
 {
 public:
     /** Given position and device this constructor will compute a line for the caret */
-    SmCaretPos2LineVisitor( OutputDevice *pDevice, SmCaretPos position )
-        : mpDev( pDevice )
-        , maPos( position )
+    SmCaretPos2LineVisitor(OutputDevice* pDevice, SmCaretPos position)
+        : mpDev(pDevice)
+        , maPos(position)
     {
-        SAL_WARN_IF( !position.IsValid(), "starmath", "Cannot draw invalid position!" );
+        SAL_WARN_IF(!position.IsValid(), "starmath", "Cannot draw invalid position!");
 
-        maPos.pSelectedNode->Accept( this );
+        maPos.pSelectedNode->Accept(this);
     }
     virtual ~SmCaretPos2LineVisitor() {}
-    void Visit( SmTextNode* pNode ) override;
+    void Visit(SmTextNode* pNode) override;
     using SmDefaultingVisitor::Visit;
-    const SmCaretLine& GetResult( ) const {
-        return maLine;
-    }
+    const SmCaretLine& GetResult() const { return maLine; }
+
 private:
     SmCaretLine maLine;
     VclPtr<OutputDevice> mpDev;
     SmCaretPos maPos;
 
     /** Default method for computing lines for pNodes */
-    void DefaultVisit( SmNode* pNode ) override;
+    void DefaultVisit(SmNode* pNode) override;
 };
 
 // SmDrawingVisitor
@@ -178,50 +179,51 @@ public:
      * @param pTree     Formula tree to draw
      * @remarks This constructor will do the drawing, no need to anything more.
      */
-    SmDrawingVisitor( OutputDevice &rDevice, Point position, SmNode* pTree )
-        : mrDev( rDevice )
-        , maPosition( position )
+    SmDrawingVisitor(OutputDevice& rDevice, Point position, SmNode* pTree)
+        : mrDev(rDevice)
+        , maPosition(position)
     {
-        pTree->Accept( this );
+        pTree->Accept(this);
     }
     virtual ~SmDrawingVisitor() {}
-    void Visit( SmTableNode* pNode ) override;
-    void Visit( SmBraceNode* pNode ) override;
-    void Visit( SmBracebodyNode* pNode ) override;
-    void Visit( SmOperNode* pNode ) override;
-    void Visit( SmAlignNode* pNode ) override;
-    void Visit( SmAttributNode* pNode ) override;
-    void Visit( SmFontNode* pNode ) override;
-    void Visit( SmUnHorNode* pNode ) override;
-    void Visit( SmBinHorNode* pNode ) override;
-    void Visit( SmBinVerNode* pNode ) override;
-    void Visit( SmBinDiagonalNode* pNode ) override;
-    void Visit( SmSubSupNode* pNode ) override;
-    void Visit( SmMatrixNode* pNode ) override;
-    void Visit( SmPlaceNode* pNode ) override;
-    void Visit( SmTextNode* pNode ) override;
-    void Visit( SmSpecialNode* pNode ) override;
-    void Visit( SmGlyphSpecialNode* pNode ) override;
-    void Visit( SmMathSymbolNode* pNode ) override;
-    void Visit( SmBlankNode* pNode ) override;
-    void Visit( SmErrorNode* pNode ) override;
-    void Visit( SmLineNode* pNode ) override;
-    void Visit( SmExpressionNode* pNode ) override;
-    void Visit( SmPolyLineNode* pNode ) override;
-    void Visit( SmRootNode* pNode ) override;
-    void Visit( SmRootSymbolNode* pNode ) override;
-    void Visit( SmRectangleNode* pNode ) override;
-    void Visit( SmVerticalBraceNode* pNode ) override;
+    void Visit(SmTableNode* pNode) override;
+    void Visit(SmBraceNode* pNode) override;
+    void Visit(SmBracebodyNode* pNode) override;
+    void Visit(SmOperNode* pNode) override;
+    void Visit(SmAlignNode* pNode) override;
+    void Visit(SmAttributNode* pNode) override;
+    void Visit(SmFontNode* pNode) override;
+    void Visit(SmUnHorNode* pNode) override;
+    void Visit(SmBinHorNode* pNode) override;
+    void Visit(SmBinVerNode* pNode) override;
+    void Visit(SmBinDiagonalNode* pNode) override;
+    void Visit(SmSubSupNode* pNode) override;
+    void Visit(SmMatrixNode* pNode) override;
+    void Visit(SmPlaceNode* pNode) override;
+    void Visit(SmTextNode* pNode) override;
+    void Visit(SmSpecialNode* pNode) override;
+    void Visit(SmGlyphSpecialNode* pNode) override;
+    void Visit(SmMathSymbolNode* pNode) override;
+    void Visit(SmBlankNode* pNode) override;
+    void Visit(SmErrorNode* pNode) override;
+    void Visit(SmLineNode* pNode) override;
+    void Visit(SmExpressionNode* pNode) override;
+    void Visit(SmPolyLineNode* pNode) override;
+    void Visit(SmRootNode* pNode) override;
+    void Visit(SmRootSymbolNode* pNode) override;
+    void Visit(SmRectangleNode* pNode) override;
+    void Visit(SmVerticalBraceNode* pNode) override;
+
 private:
     /** Draw the children of a pNode
      * This the default method, use by most pNodes
      */
-    void DrawChildren( SmStructureNode* pNode );
+    void DrawChildren(SmStructureNode* pNode);
 
     /** Draw an SmTextNode or a subclass of this */
-    void DrawTextNode( SmTextNode* pNode );
+    void DrawTextNode(SmTextNode* pNode);
     /** Draw an SmSpecialNode or a subclass of this  */
-    void DrawSpecialNode( SmSpecialNode* pNode );
+    void DrawSpecialNode(SmSpecialNode* pNode);
     /** OutputDevice to draw on */
     OutputDevice& mrDev;
     /** Position to draw on the mrDev
@@ -240,18 +242,19 @@ private:
 class SmSetSelectionVisitor final : public SmDefaultingVisitor
 {
 public:
-    SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pNode);
+    SmSetSelectionVisitor(SmCaretPos startPos, SmCaretPos endPos, SmNode* pNode);
     virtual ~SmSetSelectionVisitor() {}
-    void Visit( SmBinHorNode* pNode ) override;
-    void Visit( SmUnHorNode* pNode ) override;
-    void Visit( SmFontNode* pNode ) override;
-    void Visit( SmTextNode* pNode ) override;
-    void Visit( SmExpressionNode* pNode ) override;
-    void Visit( SmLineNode* pNode ) override;
-    void Visit( SmAlignNode* pNode ) override;
+    void Visit(SmBinHorNode* pNode) override;
+    void Visit(SmUnHorNode* pNode) override;
+    void Visit(SmFontNode* pNode) override;
+    void Visit(SmTextNode* pNode) override;
+    void Visit(SmExpressionNode* pNode) override;
+    void Visit(SmLineNode* pNode) override;
+    void Visit(SmAlignNode* pNode) override;
     using SmDefaultingVisitor::Visit;
     /** Set IsSelected on all pNodes of pSubTree */
-    static void SetSelectedOnAll( SmNode* pSubTree, bool IsSelected = true );
+    static void SetSelectedOnAll(SmNode* pSubTree, bool IsSelected = true);
+
 private:
     /** Visit a selectable pNode
      * Can be used to handle pNodes that can be selected, that doesn't have more SmCaretPos'
@@ -259,8 +262,8 @@ private:
      * Also note that pNodes such as SmBinVerNode cannot be selected, don't this method for
      * it.
      */
-    void DefaultVisit( SmNode* pNode ) override;
-    void VisitCompositionNode( SmStructureNode* pNode );
+    void DefaultVisit(SmNode* pNode) override;
+    void VisitCompositionNode(SmStructureNode* pNode);
     /** Caret position where the selection starts */
     SmCaretPos maStartPos;
     /** Caret position where the selection ends */
@@ -273,9 +276,7 @@ private:
     bool mbSelecting;
 };
 
-
 // SmCaretPosGraphBuildingVisitor
-
 
 /** A visitor for building a SmCaretPosGraph
  *
@@ -300,39 +301,37 @@ class SmCaretPosGraphBuildingVisitor final : public SmVisitor
 {
 public:
     /** Builds a caret position graph for pRootNode */
-    explicit SmCaretPosGraphBuildingVisitor( SmNode* pRootNode );
+    explicit SmCaretPosGraphBuildingVisitor(SmNode* pRootNode);
     virtual ~SmCaretPosGraphBuildingVisitor();
-    void Visit( SmTableNode* pNode ) override;
-    void Visit( SmBraceNode* pNode ) override;
-    void Visit( SmBracebodyNode* pNode ) override;
-    void Visit( SmOperNode* pNode ) override;
-    void Visit( SmAlignNode* pNode ) override;
-    void Visit( SmAttributNode* pNode ) override;
-    void Visit( SmFontNode* pNode ) override;
-    void Visit( SmUnHorNode* pNode ) override;
-    void Visit( SmBinHorNode* pNode ) override;
-    void Visit( SmBinVerNode* pNode ) override;
-    void Visit( SmBinDiagonalNode* pNode ) override;
-    void Visit( SmSubSupNode* pNode ) override;
-    void Visit( SmMatrixNode* pNode ) override;
-    void Visit( SmPlaceNode* pNode ) override;
-    void Visit( SmTextNode* pNode ) override;
-    void Visit( SmSpecialNode* pNode ) override;
-    void Visit( SmGlyphSpecialNode* pNode ) override;
-    void Visit( SmMathSymbolNode* pNode ) override;
-    void Visit( SmBlankNode* pNode ) override;
-    void Visit( SmErrorNode* pNode ) override;
-    void Visit( SmLineNode* pNode ) override;
-    void Visit( SmExpressionNode* pNode ) override;
-    void Visit( SmPolyLineNode* pNode ) override;
-    void Visit( SmRootNode* pNode ) override;
-    void Visit( SmRootSymbolNode* pNode ) override;
-    void Visit( SmRectangleNode* pNode ) override;
-    void Visit( SmVerticalBraceNode* pNode ) override;
-    SmCaretPosGraph* takeGraph()
-    {
-        return mpGraph.release();
-    }
+    void Visit(SmTableNode* pNode) override;
+    void Visit(SmBraceNode* pNode) override;
+    void Visit(SmBracebodyNode* pNode) override;
+    void Visit(SmOperNode* pNode) override;
+    void Visit(SmAlignNode* pNode) override;
+    void Visit(SmAttributNode* pNode) override;
+    void Visit(SmFontNode* pNode) override;
+    void Visit(SmUnHorNode* pNode) override;
+    void Visit(SmBinHorNode* pNode) override;
+    void Visit(SmBinVerNode* pNode) override;
+    void Visit(SmBinDiagonalNode* pNode) override;
+    void Visit(SmSubSupNode* pNode) override;
+    void Visit(SmMatrixNode* pNode) override;
+    void Visit(SmPlaceNode* pNode) override;
+    void Visit(SmTextNode* pNode) override;
+    void Visit(SmSpecialNode* pNode) override;
+    void Visit(SmGlyphSpecialNode* pNode) override;
+    void Visit(SmMathSymbolNode* pNode) override;
+    void Visit(SmBlankNode* pNode) override;
+    void Visit(SmErrorNode* pNode) override;
+    void Visit(SmLineNode* pNode) override;
+    void Visit(SmExpressionNode* pNode) override;
+    void Visit(SmPolyLineNode* pNode) override;
+    void Visit(SmRootNode* pNode) override;
+    void Visit(SmRootSymbolNode* pNode) override;
+    void Visit(SmRectangleNode* pNode) override;
+    void Visit(SmVerticalBraceNode* pNode) override;
+    SmCaretPosGraph* takeGraph() { return mpGraph.release(); }
+
 private:
     SmCaretPosGraphEntry* mpRightMost;
     std::unique_ptr<SmCaretPosGraph> mpGraph;
@@ -349,45 +348,46 @@ class SmCloningVisitor final : public SmVisitor
 public:
     SmCloningVisitor()
         : mpResult(nullptr)
-    {}
+    {
+    }
     virtual ~SmCloningVisitor() {}
-    void Visit( SmTableNode* pNode ) override;
-    void Visit( SmBraceNode* pNode ) override;
-    void Visit( SmBracebodyNode* pNode ) override;
-    void Visit( SmOperNode* pNode ) override;
-    void Visit( SmAlignNode* pNode ) override;
-    void Visit( SmAttributNode* pNode ) override;
-    void Visit( SmFontNode* pNode ) override;
-    void Visit( SmUnHorNode* pNode ) override;
-    void Visit( SmBinHorNode* pNode ) override;
-    void Visit( SmBinVerNode* pNode ) override;
-    void Visit( SmBinDiagonalNode* pNode ) override;
-    void Visit( SmSubSupNode* pNode ) override;
-    void Visit( SmMatrixNode* pNode ) override;
-    void Visit( SmPlaceNode* pNode ) override;
-    void Visit( SmTextNode* pNode ) override;
-    void Visit( SmSpecialNode* pNode ) override;
-    void Visit( SmGlyphSpecialNode* pNode ) override;
-    void Visit( SmMathSymbolNode* pNode ) override;
-    void Visit( SmBlankNode* pNode ) override;
-    void Visit( SmErrorNode* pNode ) override;
-    void Visit( SmLineNode* pNode ) override;
-    void Visit( SmExpressionNode* pNode ) override;
-    void Visit( SmPolyLineNode* pNode ) override;
-    void Visit( SmRootNode* pNode ) override;
-    void Visit( SmRootSymbolNode* pNode ) override;
-    void Visit( SmRectangleNode* pNode ) override;
-    void Visit( SmVerticalBraceNode* pNode ) override;
+    void Visit(SmTableNode* pNode) override;
+    void Visit(SmBraceNode* pNode) override;
+    void Visit(SmBracebodyNode* pNode) override;
+    void Visit(SmOperNode* pNode) override;
+    void Visit(SmAlignNode* pNode) override;
+    void Visit(SmAttributNode* pNode) override;
+    void Visit(SmFontNode* pNode) override;
+    void Visit(SmUnHorNode* pNode) override;
+    void Visit(SmBinHorNode* pNode) override;
+    void Visit(SmBinVerNode* pNode) override;
+    void Visit(SmBinDiagonalNode* pNode) override;
+    void Visit(SmSubSupNode* pNode) override;
+    void Visit(SmMatrixNode* pNode) override;
+    void Visit(SmPlaceNode* pNode) override;
+    void Visit(SmTextNode* pNode) override;
+    void Visit(SmSpecialNode* pNode) override;
+    void Visit(SmGlyphSpecialNode* pNode) override;
+    void Visit(SmMathSymbolNode* pNode) override;
+    void Visit(SmBlankNode* pNode) override;
+    void Visit(SmErrorNode* pNode) override;
+    void Visit(SmLineNode* pNode) override;
+    void Visit(SmExpressionNode* pNode) override;
+    void Visit(SmPolyLineNode* pNode) override;
+    void Visit(SmRootNode* pNode) override;
+    void Visit(SmRootSymbolNode* pNode) override;
+    void Visit(SmRectangleNode* pNode) override;
+    void Visit(SmVerticalBraceNode* pNode) override;
     /** Clone a pNode */
-    SmNode* Clone( SmNode* pNode );
+    SmNode* Clone(SmNode* pNode);
+
 private:
     SmNode* mpResult;
     /** Clone children of pSource and give them to pTarget */
-    void CloneKids( SmStructureNode* pSource, SmStructureNode* pTarget );
+    void CloneKids(SmStructureNode* pSource, SmStructureNode* pTarget);
     /** Clone attributes on a pNode */
-    static void CloneNodeAttr( SmNode const * pSource, SmNode* pTarget );
+    static void CloneNodeAttr(SmNode const* pSource, SmNode* pTarget);
 };
-
 
 // SmSelectionDrawingVisitor
 
@@ -395,10 +395,11 @@ class SmSelectionDrawingVisitor final : public SmDefaultingVisitor
 {
 public:
     /** Draws a selection on rDevice for the selection on pTree */
-    SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, const Point& rOffset );
+    SmSelectionDrawingVisitor(OutputDevice& rDevice, SmNode* pTree, const Point& rOffset);
     virtual ~SmSelectionDrawingVisitor() {}
-    void Visit( SmTextNode* pNode ) override;
+    void Visit(SmTextNode* pNode) override;
     using SmDefaultingVisitor::Visit;
+
 private:
     /** Reference to drawing device */
     OutputDevice& mrDev;
@@ -409,9 +410,9 @@ private:
     /** Extend the area that must be selected  */
     void ExtendSelectionArea(const tools::Rectangle& rArea);
     /** Default visiting method */
-    void DefaultVisit( SmNode* pNode ) override;
+    void DefaultVisit(SmNode* pNode) override;
     /** Visit the children of a given pNode */
-    void VisitChildren( SmNode* pNode );
+    void VisitChildren(SmNode* pNode);
 };
 
 // SmNodeToTextVisitor
@@ -420,47 +421,49 @@ private:
 class SmNodeToTextVisitor final : public SmVisitor
 {
 public:
-    SmNodeToTextVisitor( SmNode* pNode, OUString &rText );
+    SmNodeToTextVisitor(SmNode* pNode, OUString& rText);
     virtual ~SmNodeToTextVisitor() {}
 
-    void Visit( SmTableNode* pNode ) override;
-    void Visit( SmBraceNode* pNode ) override;
-    void Visit( SmBracebodyNode* pNode ) override;
-    void Visit( SmOperNode* pNode ) override;
-    void Visit( SmAlignNode* pNode ) override;
-    void Visit( SmAttributNode* pNode ) override;
-    void Visit( SmFontNode* pNode ) override;
-    void Visit( SmUnHorNode* pNode ) override;
-    void Visit( SmBinHorNode* pNode ) override;
-    void Visit( SmBinVerNode* pNode ) override;
-    void Visit( SmBinDiagonalNode* pNode ) override;
-    void Visit( SmSubSupNode* pNode ) override;
-    void Visit( SmMatrixNode* pNode ) override;
-    void Visit( SmPlaceNode* pNode ) override;
-    void Visit( SmTextNode* pNode ) override;
-    void Visit( SmSpecialNode* pNode ) override;
-    void Visit( SmGlyphSpecialNode* pNode ) override;
-    void Visit( SmMathSymbolNode* pNode ) override;
-    void Visit( SmBlankNode* pNode ) override;
-    void Visit( SmErrorNode* pNode ) override;
-    void Visit( SmLineNode* pNode ) override;
-    void Visit( SmExpressionNode* pNode ) override;
-    void Visit( SmPolyLineNode* pNode ) override;
-    void Visit( SmRootNode* pNode ) override;
-    void Visit( SmRootSymbolNode* pNode ) override;
-    void Visit( SmRectangleNode* pNode ) override;
-    void Visit( SmVerticalBraceNode* pNode ) override;
-private:
+    void Visit(SmTableNode* pNode) override;
+    void Visit(SmBraceNode* pNode) override;
+    void Visit(SmBracebodyNode* pNode) override;
+    void Visit(SmOperNode* pNode) override;
+    void Visit(SmAlignNode* pNode) override;
+    void Visit(SmAttributNode* pNode) override;
+    void Visit(SmFontNode* pNode) override;
+    void Visit(SmUnHorNode* pNode) override;
+    void Visit(SmBinHorNode* pNode) override;
+    void Visit(SmBinVerNode* pNode) override;
+    void Visit(SmBinDiagonalNode* pNode) override;
+    void Visit(SmSubSupNode* pNode) override;
+    void Visit(SmMatrixNode* pNode) override;
+    void Visit(SmPlaceNode* pNode) override;
+    void Visit(SmTextNode* pNode) override;
+    void Visit(SmSpecialNode* pNode) override;
+    void Visit(SmGlyphSpecialNode* pNode) override;
+    void Visit(SmMathSymbolNode* pNode) override;
+    void Visit(SmBlankNode* pNode) override;
+    void Visit(SmErrorNode* pNode) override;
+    void Visit(SmLineNode* pNode) override;
+    void Visit(SmExpressionNode* pNode) override;
+    void Visit(SmPolyLineNode* pNode) override;
+    void Visit(SmRootNode* pNode) override;
+    void Visit(SmRootSymbolNode* pNode) override;
+    void Visit(SmRectangleNode* pNode) override;
+    void Visit(SmVerticalBraceNode* pNode) override;
 
+private:
     /**
       * Extract text from a pNode that constitutes a line.
       * @param pNode
       * @return
       */
-    void LineToText( SmNode* pNode ) {
-        Separate( );
-        if( pNode ) pNode->Accept( this );
-        Separate( );
+    void LineToText(SmNode* pNode)
+    {
+        Separate();
+        if (pNode)
+            pNode->Accept(this);
+        Separate();
     }
 
     /**
@@ -468,26 +471,23 @@ private:
       * @param rText
       * @return
       */
-    void Append( const OUString &rText ) {
-        maCmdText.append( rText );
-    }
+    void Append(const OUString& rText) { maCmdText.append(rText); }
 
     /**
       * Appends rText to the OUStringBuffer ( maCmdText ).
       * @param rText
       * @return
       */
-    void Append( const char* rText ) {
-        maCmdText.append( OUString::createFromAscii(rText) );
-    }
+    void Append(const char* rText) { maCmdText.append(OUString::createFromAscii(rText)); }
 
     /**
      * Append a blank for separation, if needed.
      * It is needed if last char is not ' '.
      * @return
      */
-    void Separate( ){
-        if( !maCmdText.isEmpty() && maCmdText[ maCmdText.getLength() - 1 ] != ' ' )
+    void Separate()
+    {
+        if (!maCmdText.isEmpty() && maCmdText[maCmdText.getLength() - 1] != ' ')
             maCmdText.append(' ');
     }
 
