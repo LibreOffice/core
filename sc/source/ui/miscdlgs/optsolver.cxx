@@ -202,6 +202,7 @@ ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , m_xBtnOpt(m_xBuilder->weld_button("options"))
     , m_xBtnCancel(m_xBuilder->weld_button("close"))
     , m_xBtnSolve(m_xBuilder->weld_button("ok"))
+    , m_xBtnResetAll(m_xBuilder->weld_button("resetall"))
     , m_xResultFT(m_xBuilder->weld_label("result"))
     , m_xContents(m_xBuilder->weld_widget("grid"))
 {
@@ -273,6 +274,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     m_xBtnOpt->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
     m_xBtnCancel->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
     m_xBtnSolve->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
+    m_xBtnResetAll->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
 
     Link<formula::RefEdit&,void> aEditLink = LINK( this, ScOptSolverDlg, GetEditFocusHdl );
     Link<formula::RefButton&,void> aButtonLink = LINK( this, ScOptSolverDlg, GetButtonFocusHdl );
@@ -544,6 +546,29 @@ IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
             }
             m_xOptDlg.reset();
         });
+    }
+    else if (&rBtn == m_xBtnResetAll.get())
+    {
+        OUString sEmpty;
+        m_xEdObjectiveCell->SetText(sEmpty);
+        m_xEdTargetValue->SetText(sEmpty);
+        m_xEdVariableCells->SetText(sEmpty);
+
+        // Get default property values of solver implementations
+        maEngine = maImplNames[0];
+        maProperties = ScSolverUtil::GetDefaults( maEngine );
+
+        // Clear all conditions (Constraints)
+        maConditions.clear();
+        std::unique_ptr<ScOptSolverSave> pEmpty( new ScOptSolverSave(
+                        sEmpty, true, false, false,
+                        sEmpty, sEmpty, maConditions, maEngine, maProperties ) );
+        mpDocShell->SetSolverSaveData( std::move(pEmpty) );
+        ShowConditions();
+
+        m_xRbMax->set_active(true);
+        m_xEdObjectiveCell->GrabFocus();
+        mpEdActive = m_xEdObjectiveCell.get();
     }
 }
 
