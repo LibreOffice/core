@@ -864,7 +864,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
             if( aCtrlProp.GetProperty( nApiValue, "ScrollValueMin" ) )
                 mnScrollMin = limit_cast< sal_uInt16 >( nApiValue, EXC_OBJ_SCROLLBAR_MIN, EXC_OBJ_SCROLLBAR_MAX );
             if( aCtrlProp.GetProperty( nApiValue, "ScrollValueMax" ) )
-                mnScrollMax = limit_cast< sal_uInt16 >( nApiValue, mnScrollMin, EXC_OBJ_SCROLLBAR_MIN );
+                mnScrollMax = limit_cast< sal_uInt16 >( nApiValue, mnScrollMin, EXC_OBJ_SCROLLBAR_MAX );
             if( aCtrlProp.GetProperty( nApiValue, "ScrollValue" ) )
                 mnScrollValue = limit_cast< sal_uInt16 >( nApiValue, mnScrollMin, mnScrollMax );
             if( aCtrlProp.GetProperty( nApiValue, "LineIncrement" ) )
