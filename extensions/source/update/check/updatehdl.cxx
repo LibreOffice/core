@@ -916,7 +916,7 @@ bool UpdateHandler::showWarning( const OUString &rWarningText,
 }
 
 
-bool UpdateHandler::showOverwriteWarning( const OUString& rFileName ) const
+bool UpdateHandler::showOverwriteWarning( std::u16string_view rFileName ) const
 {
     return showWarning(
         (msReloadWarning

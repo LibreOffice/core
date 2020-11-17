@@ -20,6 +20,10 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
@@ -172,7 +176,7 @@ public:
     OUString           getDefaultInstErrMsg();
     bool                    showWarning( const OUString &rWarning ) const;
     bool                    showWarning( const OUString &rWarning, const OUString& rBtnText_1, const OUString& rBtnText_2 ) const;
-    bool                    showOverwriteWarning( const OUString &rFileName ) const;
+    bool                    showOverwriteWarning( std::u16string_view rFileName ) const;
     bool                    showOverwriteWarning() const;
 
     // Allows runtime exceptions to be thrown by const methods
