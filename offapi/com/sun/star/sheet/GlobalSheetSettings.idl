@@ -34,6 +34,11 @@ module com {  module sun {  module star {  module sheet {
  */
 published service GlobalSheetSettings : XGlobalSheetSettings;
 
+    /**
+     * Additionally, the following properties can be retrieved/set via ::com::sun::star::beans::XPropertySet :
+     *
+     * <code>boolean PrintSingleJobs</code> - Specifies whether single print jobs are created.
+     */
 
 }; }; }; };
 
