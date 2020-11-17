@@ -119,12 +119,14 @@ public:
     weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
                       FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,
                       bool bTakeOwnership = false) override;
-    std::unique_ptr<weld::Toolbar> weld_toolbar(const OString& id,
-                                                bool bTakeOwnership = true) override;
-    std::unique_ptr<weld::TextView> weld_text_view(const OString& id,
-                                                   bool bTakeOwnership = false) override;
-    std::unique_ptr<weld::TreeView> weld_tree_view(const OString& id,
-                                                   bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString& id,
+                                                        bool bTakeOwnership = true) override;
+    virtual std::unique_ptr<weld::TextView> weld_text_view(const OString& id,
+                                                           bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString& id,
+                                                           bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Expander> weld_expander(const OString& id,
+                                                          bool bTakeOwnership = false) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -321,6 +323,16 @@ public:
     using SalInstanceTreeView::select;
     /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
     virtual void select(int pos) override;
+};
+
+class JSExpander : public JSWidget<SalInstanceExpander, ::VclExpander>
+{
+public:
+    JSExpander(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+               ::VclExpander* pExpander, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+               std::string sTypeOfJSON);
+
+    virtual void set_expanded(bool bExpand) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
