@@ -32,8 +32,7 @@ private:
     sal_uInt16      nNum[MAX_DIGITS];
     sal_uInt8       nLen        : 5;    // current length
     bool            bIsNeg      : 1,    // Is Sign negative?
-                    bIsBig      : 1,    // sal_True == BigInt
-                    bIsSet      : 1;    // Not "Null" (not "not 0")
+                    bIsBig      : 1;    // if true , value is in nNum array
 
     TOOLS_DLLPRIVATE void MakeBigInt(BigInt const &);
     TOOLS_DLLPRIVATE void Normalize();
@@ -53,7 +52,6 @@ public:
         , nLen(0)
         , bIsNeg(false)
         , bIsBig(false)
-        , bIsSet(false)
     {
     }
 
@@ -62,7 +60,6 @@ public:
         , nLen(0)
         , bIsNeg(false)
         , bIsBig(false)
-        , bIsSet(true)
     {
     }
 
@@ -72,7 +69,6 @@ public:
         , nLen(0)
         , bIsNeg(false)
         , bIsBig(false)
-        , bIsSet(true)
     {
     }
 #endif
@@ -92,7 +88,6 @@ public:
     operator        tools::Long() const;
 #endif
 
-    bool            IsSet() const { return bIsSet; }
     bool            IsNeg() const;
     bool            IsZero() const;
     bool            IsLong() const { return !bIsBig; }
@@ -169,7 +164,6 @@ inline BigInt::operator tools::Long() const
 
 inline BigInt& BigInt::operator =( sal_Int32 nValue )
 {
-    bIsSet = true;
     bIsBig = false;
     nVal   = nValue;
 

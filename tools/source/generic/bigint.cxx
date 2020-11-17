@@ -477,7 +477,6 @@ BigInt::BigInt( const BigInt& rBigInt )
         memcpy( static_cast<void*>(this), static_cast<const void*>(&rBigInt), sizeof( BigInt ) );
     else
     {
-        bIsSet = rBigInt.bIsSet;
         bIsBig = false;
         nVal   = rBigInt.nVal;
     }
@@ -486,7 +485,6 @@ BigInt::BigInt( const BigInt& rBigInt )
 BigInt::BigInt( const OUString& rString )
     : nLen(0)
 {
-    bIsSet = true;
     bIsNeg = false;
     bIsBig = false;
     nVal   = 0;
@@ -513,8 +511,6 @@ BigInt::BigInt( const OUString& rString )
 BigInt::BigInt( double nValue )
     : nVal(0)
 {
-    bIsSet = true;
-
     if ( nValue < 0 )
     {
         nValue *= -1;
@@ -557,7 +553,6 @@ BigInt::BigInt( double nValue )
 BigInt::BigInt( sal_uInt32 nValue )
     : nVal(0)
 {
-    bIsSet  = true;
     if ( nValue & 0x80000000U )
     {
         bIsBig  = true;
@@ -578,7 +573,6 @@ BigInt::BigInt( sal_uInt32 nValue )
 BigInt::BigInt( sal_Int64 nValue )
     : nVal(0)
 {
-    bIsSet = true;
     bIsNeg = nValue < 0;
     nLen = 0;
 
@@ -632,7 +626,6 @@ BigInt& BigInt::operator=( const BigInt& rBigInt )
         memcpy( static_cast<void*>(this), static_cast<const void*>(&rBigInt), sizeof( BigInt ) );
     else
     {
-        bIsSet = rBigInt.bIsSet;
         bIsBig = false;
         nVal   = rBigInt.nVal;
     }
