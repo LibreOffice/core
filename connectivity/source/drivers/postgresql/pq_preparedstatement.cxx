@@ -481,7 +481,7 @@ void PreparedStatement::setBytes(
     checkClosed();
     checkColumnIndex( parameterIndex );
     size_t len;
-    std::unique_ptr<unsigned char, o3tl::free_delete> escapedString(
+    const std::unique_ptr<unsigned char, deleter_from_fn<PQfreemem>> escapedString(
         PQescapeBytea( reinterpret_cast<unsigned char const *>(x.getConstArray()), x.getLength(), &len));
     if( ! escapedString )
     {

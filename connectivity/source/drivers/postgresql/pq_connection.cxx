@@ -41,6 +41,7 @@
 
 #include "pq_connection.hxx"
 #include "pq_statement.hxx"
+#include "pq_tools.hxx"
 #include "pq_preparedstatement.hxx"
 #include "pq_databasemetadata.hxx"
 #include "pq_xtables.hxx"
@@ -460,7 +461,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 if ( err != nullptr)
                 {
                     errorMessage = OUString( err, strlen(err), ConnectionSettings::encoding );
-                    free(err);
+                    PQfreemem(err);
                 }
                 else
                     errorMessage = "#no error message#";
