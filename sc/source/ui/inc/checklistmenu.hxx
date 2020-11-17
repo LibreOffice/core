@@ -164,6 +164,12 @@ public:
     void setPopupEndAction(Action* p);
 
     int GetTextWidth(const OUString& rsName) const;
+
+    int GetCheckBoxWidth() const
+    {
+        return mpChecks->get_checkbox_column_width();
+    }
+
     int IncreaseWindowWidthToFitText(int nMaxTextWidth);
 
 private:
