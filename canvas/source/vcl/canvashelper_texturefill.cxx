@@ -39,6 +39,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/gradient.hxx>
 
 #include <canvas/canvastools.hxx>
 #include <parametricpolypolygon.hxx>
@@ -143,6 +144,49 @@ namespace vclcanvas
 
             // render gradient
             // ===============
+
+            // First try to use directly VCL's DrawGradient(), as that one is generally
+            // a better choice than here decomposing to polygons. The VCL API allows
+            // only 2 colors, but that should generally do.
+            // Do not use nStepCount, it limits optimized implementations, and it's computed
+            // by vclcanvas based on number of colors, so it's practically irrelevant.
+
+            // 2 colors and 2 stops (at 0 and 1) is a linear gradient:
+            if( rColors.size() == 2 && rValues.maStops.size() == 2 && rValues.maStops[0] == 0 && rValues.maStops[1] == 1)
+            {
+                Gradient vclGradient( GradientStyle::Linear, rColors[ 0 ], rColors[ 1 ] );
+                ::tools::Polygon aTempPoly( static_cast<sal_uInt16>(5) );
+                aTempPoly[0] = ::Point( ::basegfx::fround( aLeftTop.getX() ),
+                                        ::basegfx::fround( aLeftTop.getY() ) );
+                aTempPoly[1] = ::Point( ::basegfx::fround( aRightTop.getX() ),
+                                        ::basegfx::fround( aRightTop.getY() ) );
+                aTempPoly[2] = ::Point( ::basegfx::fround( aRightBottom.getX() ),
+                                        ::basegfx::fround( aRightBottom.getY() ) );
+                aTempPoly[3] = ::Point( ::basegfx::fround( aLeftBottom.getX() ),
+                                        ::basegfx::fround( aLeftBottom.getY() ) );
+                aTempPoly[4] = aTempPoly[0];
+                rOutDev.DrawGradient( aTempPoly, vclGradient );
+                return;
+            }
+            // 3 colors with first and last being equal and 3 stops (at 0, 0.5 and 1) is an axial gradient:
+            if( rColors.size() == 3 && rColors[ 0 ] == rColors[ 2 ]
+                && rValues.maStops.size() == 3 && rValues.maStops[0] == 0
+                && rValues.maStops[1] == 0.5 && rValues.maStops[2] == 1)
+            {
+                Gradient vclGradient( GradientStyle::Axial, rColors[ 1 ], rColors[ 0 ] );
+                ::tools::Polygon aTempPoly( static_cast<sal_uInt16>(5) );
+                aTempPoly[0] = ::Point( ::basegfx::fround( aLeftTop.getX() ),
+                                        ::basegfx::fround( aLeftTop.getY() ) );
+                aTempPoly[1] = ::Point( ::basegfx::fround( aRightTop.getX() ),
+                                        ::basegfx::fround( aRightTop.getY() ) );
+                aTempPoly[2] = ::Point( ::basegfx::fround( aRightBottom.getX() ),
+                                        ::basegfx::fround( aRightBottom.getY() ) );
+                aTempPoly[3] = ::Point( ::basegfx::fround( aLeftBottom.getX() ),
+                                        ::basegfx::fround( aLeftBottom.getY() ) );
+                aTempPoly[4] = aTempPoly[0];
+                rOutDev.DrawGradient( aTempPoly, vclGradient );
+                return;
+            }
 
             // for linear gradients, it's easy to render
             // non-overlapping polygons: just split the gradient into
