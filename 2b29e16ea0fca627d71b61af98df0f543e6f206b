@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8724c261_f140b8aa",
+        "filename": "starmath/inc/strings.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2020-11-17T17:17:17Z",
+      "side": 1,
+      "message": "Noticed this while translating new strings.  I think this (and the same string in two other places) should be RID_EXAMPLE_CHAOS_HELP (i.e. CAOS \u003d\u003e CHAOS) instead.  Is this a simple typo or did I miss something?",
+      "range": {
+        "startLine": 305,
+        "startChar": 8,
+        "endLine": 305,
+        "endChar": 29
+      },
+      "revId": "2b29e16ea0fca627d71b61af98df0f543e6f206b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
