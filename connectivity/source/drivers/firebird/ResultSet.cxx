@@ -674,8 +674,13 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 nColumnIndex)
         Reference< XBlob> xBlob = getBlob(nColumnIndex);
         if (xBlob.is())
         {
-            sal_Int32 aBlobLength = static_cast<sal_Int32>(xBlob->length());
-            return xBlob->getBytes(1, aBlobLength);
+            const sal_Int64 aBlobLength = xBlob->length();
+            if (aBlobLength > SAL_MAX_INT32)
+            {
+                SAL_WARN("connectivity.firebird", "getBytes can't return " << aBlobLength << " bytes but only max " << SAL_MAX_INT32);
+                return xBlob->getBytes(1, SAL_MAX_INT32);
+            }
+            return xBlob->getBytes(1, static_cast<sal_Int32>(aBlobLength));
         }
         else
             return Sequence< sal_Int8 >();
