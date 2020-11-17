@@ -216,7 +216,7 @@ Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sq
     MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
 
-    OString byteSql = OUStringToOString( sql, ConnectionSettings::encoding );
+    OString byteSql = pq_sdbc_driver::OUStringToOString( sql, ConnectionSettings );
     PreparedStatement *stmt = new PreparedStatement( m_xMutex, this, &m_settings, byteSql );
     Reference< XPreparedStatement > ret = stmt;
 
@@ -414,7 +414,7 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         {
             OUString value;
             tc->convertTo( prop.Value, cppu::UnoType<decltype(value)>::get() ) >>= value;
-            char *v = strdup(OUStringToOString(value, enc).getStr());
+            char *v = strdup(rtl::OUStringToOString(value, enc).getStr());
             values.push_back ( v );
         }
         else
@@ -460,7 +460,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         nColon = url.indexOf( ':' , 1+ nColon );
         if( nColon != -1 )
         {
-             o = OUStringToOString( url.getStr()+nColon+1, ConnectionSettings::encoding );
+             o = pq_sdbc_driver::OUStringToOString( url.getStr()+nColon+1, ConnectionSettings );
         }
     }
     {
@@ -477,7 +477,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 if ( err != nullptr)
                 {
                     errorMessage = OUString( err, strlen(err), ConnectionSettings::encoding );
-                    free(err);
+                    PQfreemem(err);
                 }
                 else
                     errorMessage = "#no error message#";
