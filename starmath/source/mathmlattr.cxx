@@ -11,7 +11,7 @@
 
 #include <unordered_map>
 
-static sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction& rUN)
+static sal_Int32 ParseMathMLUnsignedNumber(const OUString& rStr, Fraction& rUN)
 {
     auto nLen = rStr.getLength();
     sal_Int32 nDecimalPoint = -1;
@@ -37,7 +37,7 @@ static sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction& rUN)
     return nIdx;
 }
 
-static sal_Int32 ParseMathMLNumber(const OUString &rStr, Fraction& rN)
+static sal_Int32 ParseMathMLNumber(const OUString& rStr, Fraction& rN)
 {
     if (rStr.isEmpty())
         return -1;
@@ -51,7 +51,7 @@ static sal_Int32 ParseMathMLNumber(const OUString &rStr, Fraction& rN)
     return nOffset + nIdx;
 }
 
-sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeLengthValue& rV)
+sal_Int32 ParseMathMLAttributeLengthValue(const OUString& rStr, MathMLAttributeLengthValue& rV)
 {
     auto nIdx = ParseMathMLNumber(rStr, rV.aNumber);
     if (nIdx <= 0)
@@ -110,27 +110,27 @@ sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeL
     return nIdx;
 }
 
-bool GetMathMLMathvariantValue(const OUString &rStr, MathMLMathvariantValue& rV)
+bool GetMathMLMathvariantValue(const OUString& rStr, MathMLMathvariantValue& rV)
 {
     static const std::unordered_map<OUString, MathMLMathvariantValue> aMap{
-        {"normal", MathMLMathvariantValue::Normal},
-        {"bold", MathMLMathvariantValue::Bold},
-        {"italic", MathMLMathvariantValue::Italic},
-        {"bold-italic", MathMLMathvariantValue::BoldItalic},
-        {"double-struck", MathMLMathvariantValue::DoubleStruck},
-        {"bold-fraktur", MathMLMathvariantValue::BoldFraktur},
-        {"script", MathMLMathvariantValue::Script},
-        {"bold-script", MathMLMathvariantValue::BoldScript},
-        {"fraktur", MathMLMathvariantValue::Fraktur},
-        {"sans-serif", MathMLMathvariantValue::SansSerif},
-        {"bold-sans-serif", MathMLMathvariantValue::BoldSansSerif},
-        {"sans-serif-italic", MathMLMathvariantValue::SansSerifItalic},
-        {"sans-serif-bold-italic", MathMLMathvariantValue::SansSerifBoldItalic},
-        {"monospace", MathMLMathvariantValue::Monospace},
-        {"initial", MathMLMathvariantValue::Initial},
-        {"tailed", MathMLMathvariantValue::Tailed},
-        {"looped", MathMLMathvariantValue::Looped},
-        {"stretched", MathMLMathvariantValue::Stretched}
+        { "normal", MathMLMathvariantValue::Normal },
+        { "bold", MathMLMathvariantValue::Bold },
+        { "italic", MathMLMathvariantValue::Italic },
+        { "bold-italic", MathMLMathvariantValue::BoldItalic },
+        { "double-struck", MathMLMathvariantValue::DoubleStruck },
+        { "bold-fraktur", MathMLMathvariantValue::BoldFraktur },
+        { "script", MathMLMathvariantValue::Script },
+        { "bold-script", MathMLMathvariantValue::BoldScript },
+        { "fraktur", MathMLMathvariantValue::Fraktur },
+        { "sans-serif", MathMLMathvariantValue::SansSerif },
+        { "bold-sans-serif", MathMLMathvariantValue::BoldSansSerif },
+        { "sans-serif-italic", MathMLMathvariantValue::SansSerifItalic },
+        { "sans-serif-bold-italic", MathMLMathvariantValue::SansSerifBoldItalic },
+        { "monospace", MathMLMathvariantValue::Monospace },
+        { "initial", MathMLMathvariantValue::Initial },
+        { "tailed", MathMLMathvariantValue::Tailed },
+        { "looped", MathMLMathvariantValue::Looped },
+        { "stretched", MathMLMathvariantValue::Stretched }
     };
 
     auto it = aMap.find(rStr);
