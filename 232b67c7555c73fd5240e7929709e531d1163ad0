@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c37c05fa_c9b90b2b",
+        "filename": "svx/uiconfig/ui/crashreportdlg.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-17T15:49:29Z",
+      "side": 1,
+      "message": "tdf#113286 asks to make this link clickable -- which seems like a good idea.\nBut is there a simple technique for doing this from a .ui file?\n\nIn addition, I wonder if \"https://\" should be added in front of\ncrashreport.  (from own experience, I was at first uncertain that it was a URL)",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 57
+      },
+      "revId": "232b67c7555c73fd5240e7929709e531d1163ad0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "508489b6_fb7d11f1",
         "filename": "svx/uiconfig/ui/crashreportdlg.ui",
         "patchSetId": 2
