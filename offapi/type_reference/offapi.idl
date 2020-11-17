@@ -11890,7 +11890,9 @@ module com {
      [attribute] boolean UsePrinterMetrics;
      [attribute] boolean ReplaceCellsWarning;
     };
-    published service GlobalSheetSettings: ::com::sun::star::sheet::XGlobalSheetSettings;
+    published service GlobalSheetSettings {
+         interface ::com::sun::star::sheet::XGlobalSheetSettings;
+    };
     published struct GoalResult {
      double Divergence;
      double Result;
