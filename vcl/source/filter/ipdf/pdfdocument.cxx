@@ -180,8 +180,6 @@ bool PDFDocument::RemoveSignature(size_t nPosition)
     return m_aEditBuffer.good();
 }
 
-const std::vector<size_t>& PDFDocument::GetEOFs() const { return m_aEOFs; }
-
 sal_Int32 PDFDocument::createObject()
 {
     sal_Int32 nObject = m_aXRef.size();
@@ -2161,71 +2159,6 @@ std::vector<PDFObjectElement*> PDFDocument::GetSignatureWidgets()
     }
 
     return aRet;
-}
-
-int PDFDocument::GetMDPPerm()
-{
-    int nRet = 3;
-
-    std::vector<PDFObjectElement*> aSignatures = GetSignatureWidgets();
-    if (aSignatures.empty())
-    {
-        return nRet;
-    }
-
-    for (const auto& pSignature : aSignatures)
-    {
-        vcl::filter::PDFObjectElement* pSig = pSignature->LookupObject("V");
-        if (!pSig)
-        {
-            SAL_WARN("vcl.filter", "PDFDocument::GetMDPPerm: can't find signature object");
-            continue;
-        }
-
-        auto pReference = dynamic_cast<PDFArrayElement*>(pSig->Lookup("Reference"));
-        if (!pReference || pReference->GetElements().empty())
-        {
-            continue;
-        }
-
-        auto pFirstReference = dynamic_cast<PDFDictionaryElement*>(pReference->GetElements()[0]);
-        if (!pFirstReference)
-        {
-            SAL_WARN("vcl.filter",
-                     "PDFDocument::GetMDPPerm: reference array doesn't contain a dictionary");
-            continue;
-        }
-
-        PDFElement* pTransformParams = pFirstReference->LookupElement("TransformParams");
-        auto pTransformParamsDict = dynamic_cast<PDFDictionaryElement*>(pTransformParams);
-        if (!pTransformParamsDict)
-        {
-            auto pTransformParamsRef = dynamic_cast<PDFReferenceElement*>(pTransformParams);
-            if (pTransformParamsRef)
-            {
-                PDFObjectElement* pTransformParamsObj = pTransformParamsRef->LookupObject();
-                if (pTransformParamsObj)
-                {
-                    pTransformParamsDict = pTransformParamsObj->GetDictionary();
-                }
-            }
-        }
-
-        if (!pTransformParamsDict)
-        {
-            continue;
-        }
-
-        auto pP = dynamic_cast<PDFNumberElement*>(pTransformParamsDict->LookupElement("P"));
-        if (!pP)
-        {
-            return 2;
-        }
-
-        return pP->GetValue();
-    }
-
-    return nRet;
 }
 
 std::vector<unsigned char> PDFDocument::DecodeHexString(PDFHexStringElement const* pElement)
