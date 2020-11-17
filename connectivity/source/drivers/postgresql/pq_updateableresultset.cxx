@@ -481,7 +481,7 @@ void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const css::uno::Se
 
     m_updateableField[columnIndex-1].value <<=
         OUString( reinterpret_cast<char*>(escapedString), len, RTL_TEXTENCODING_ASCII_US );
-    free( escapedString );
+    PQfreemem( escapedString );
 }
 
 void UpdateableResultSet::updateDate( sal_Int32 columnIndex, const css::util::Date& x )
