@@ -2745,22 +2745,21 @@ SvStream& GDIMetaFile::Read( SvStream& rIStm )
 
 SvStream& GDIMetaFile::Write( SvStream& rOStm )
 {
-    VersionCompat*   pCompat;
     const SvStreamCompressFlags nStmCompressMode = rOStm.GetCompressMode();
     SvStreamEndian   nOldFormat = rOStm.GetEndian();
 
     rOStm.SetEndian( SvStreamEndian::LITTLE );
     rOStm.WriteBytes( "VCLMTF", 6 );
 
-    pCompat = new VersionCompat( rOStm, StreamMode::WRITE, 1 );
+    {
+        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 
-    rOStm.WriteUInt32( static_cast<sal_uInt32>(nStmCompressMode) );
-    WriteMapMode( rOStm, m_aPrefMapMode );
-    TypeSerializer aSerializer(rOStm);
-    aSerializer.writeSize(m_aPrefSize);
-    rOStm.WriteUInt32( GetActionSize() );
-
-    delete pCompat;
+        rOStm.WriteUInt32(static_cast<sal_uInt32>(nStmCompressMode));
+        WriteMapMode(rOStm, m_aPrefMapMode);
+        TypeSerializer aSerializer(rOStm);
+        aSerializer.writeSize(m_aPrefSize);
+        rOStm.WriteUInt32(GetActionSize());
+    } // VersionCompat dtor writes stuff into the header
 
     ImplMetaWriteData aWriteData;
 
