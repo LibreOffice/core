@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "508489b6_fb7d11f1",
+        "filename": "svx/uiconfig/ui/crashreportdlg.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-17T15:33:37Z",
+      "side": 1,
+      "message": "Please don\u0027t forget the accelerator _n. And buttons use title style capitalization, so it should be \"Do _Not Send\".",
+      "range": {
+        "startLine": 50,
+        "startChar": 97,
+        "endLine": 50,
+        "endChar": 98
+      },
+      "revId": "232b67c7555c73fd5240e7929709e531d1163ad0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
