@@ -1621,24 +1621,12 @@ SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
 
     rPoly.mpImplPolygon->ImplSetSize( nPoints, false );
 
-    // Determine whether we need to write through operators
-#if (SAL_TYPES_SIZEOFLONG) == 4
-#ifdef OSL_BIGENDIAN
-    if ( rIStream.GetEndian() == SvStreamEndian::BIG )
-#else
-    if ( rIStream.GetEndian() == SvStreamEndian::LITTLE )
-#endif
-       rIStream.ReadBytes(rPoly.mpImplPolygon->mxPointAry.get(), nPoints*sizeof(Point));
-    else
-#endif
+    for (i = 0; i < nPoints; i++)
     {
-        for( i = 0; i < nPoints; i++ )
-        {
-            sal_Int32 nTmpX(0), nTmpY(0);
-            rIStream.ReadInt32( nTmpX ).ReadInt32( nTmpY );
-            rPoly.mpImplPolygon->mxPointAry[i].setX( nTmpX );
-            rPoly.mpImplPolygon->mxPointAry[i].setY( nTmpY );
-        }
+        sal_Int32 nTmpX(0), nTmpY(0);
+        rIStream.ReadInt32(nTmpX).ReadInt32(nTmpY);
+        rPoly.mpImplPolygon->mxPointAry[i].setX(nTmpX);
+        rPoly.mpImplPolygon->mxPointAry[i].setY(nTmpY);
     }
 
     return rIStream;
@@ -1652,25 +1640,10 @@ SvStream& WritePolygon( SvStream& rOStream, const tools::Polygon& rPoly )
     // Write number of points
     rOStream.WriteUInt16( nPoints );
 
-    // Determine whether we need to write through operators
-#if (SAL_TYPES_SIZEOFLONG) == 4
-#ifdef OSL_BIGENDIAN
-    if ( rOStream.GetEndian() == SvStreamEndian::BIG )
-#else
-    if ( rOStream.GetEndian() == SvStreamEndian::LITTLE )
-#endif
+    for (i = 0; i < nPoints; i++)
     {
-        if ( nPoints )
-            rOStream.WriteBytes(rPoly.mpImplPolygon->mxPointAry.get(), nPoints*sizeof(Point));
-    }
-    else
-#endif
-    {
-        for( i = 0; i < nPoints; i++ )
-        {
-            rOStream.WriteInt32( rPoly.mpImplPolygon->mxPointAry[i].X() )
-                    .WriteInt32( rPoly.mpImplPolygon->mxPointAry[i].Y() );
-        }
+        rOStream.WriteInt32(rPoly.mpImplPolygon->mxPointAry[i].X())
+            .WriteInt32(rPoly.mpImplPolygon->mxPointAry[i].Y());
     }
 
     return rOStream;
