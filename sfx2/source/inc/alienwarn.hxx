@@ -29,7 +29,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
 
 public:
-    SfxAlienWarningDialog(weld::Window* pParent, const OUString& _rFormatName,
+    SfxAlienWarningDialog(weld::Window* pParent, std::u16string_view _rFormatName,
                           const OUString& _rDefaultExtension, bool rDefaultIsAlien);
     virtual ~SfxAlienWarningDialog() override;
 };

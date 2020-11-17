@@ -61,7 +61,7 @@ class OPasswordDialog : public weld::GenericDialogController
     DECL_LINK(ModifiedHdl, weld::Entry&, void);
 
 public:
-    OPasswordDialog(weld::Window* pParent,const OUString& rUserName);
+    OPasswordDialog(weld::Window* pParent, std::u16string_view rUserName);
 
     OUString        GetOldPassword() const { return m_xEDOldPassword->get_text(); }
     OUString        GetNewPassword() const { return m_xEDPassword->get_text(); }
@@ -69,7 +69,7 @@ public:
 
 }
 
-OPasswordDialog::OPasswordDialog(weld::Window* _pParent,const OUString& rUserName)
+OPasswordDialog::OPasswordDialog(weld::Window* _pParent, std::u16string_view rUserName)
     : GenericDialogController(_pParent, "dbaccess/ui/password.ui", "PasswordDialog")
     , m_xUser(m_xBuilder->weld_frame("userframe"))
     , m_xEDOldPassword(m_xBuilder->weld_entry("oldpassword"))

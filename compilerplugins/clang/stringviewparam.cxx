@@ -222,7 +222,6 @@ public:
         return ret;
     }
 
-    // TODO Need to duplicate this method for CXXConstructorDecl
     bool TraverseCXXMethodDecl(CXXMethodDecl* decl)
     {
         if (ignoreLocation(decl))
@@ -244,6 +243,47 @@ public:
             }
         }
         auto const ret = FunctionAddress::TraverseCXXMethodDecl(decl);
+        if (ret)
+        {
+            for (unsigned i = 0; i != n; ++i)
+            {
+                auto const d1 = decl->getParamDecl(i);
+                if (currentParams_.find(d1) == currentParams_.end())
+                {
+                    continue;
+                }
+                if (containsPreprocessingConditionalInclusion(decl->getSourceRange()))
+                {
+                    break;
+                }
+                badParams_.push_back(d1);
+            }
+        }
+        currentParams_ = oldParams;
+        return ret;
+    }
+
+    bool TraverseCXXConstructorDecl(CXXConstructorDecl* decl)
+    {
+        if (ignoreLocation(decl))
+        {
+            return true;
+        }
+        if (!relevantFunctionDecl(decl))
+        {
+            return FunctionAddress::TraverseCXXConstructorDecl(decl);
+        }
+        auto const oldParams = currentParams_;
+        auto const n = decl->getNumParams();
+        for (unsigned i = 0; i != n; ++i)
+        {
+            auto const d = decl->getParamDecl(i);
+            if (relevantParmVarDecl(d))
+            {
+                currentParams_.insert(d);
+            }
+        }
+        auto const ret = FunctionAddress::TraverseCXXConstructorDecl(decl);
         if (ret)
         {
             for (unsigned i = 0; i != n; ++i)

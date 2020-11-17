@@ -41,7 +41,7 @@ private:
 class ScSortWarningDlg : public weld::GenericDialogController
 {
 public:
-    ScSortWarningDlg(weld::Window* pParent, const OUString& rExtendText,const OUString& rCurrentText);
+    ScSortWarningDlg(weld::Window* pParent, std::u16string_view rExtendText, std::u16string_view rCurrentText);
     virtual ~ScSortWarningDlg() override;
     DECL_LINK(BtnHdl, weld::Button&, void);
 private:

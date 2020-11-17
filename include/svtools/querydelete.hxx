@@ -40,7 +40,7 @@ private:
     std::unique_ptr<weld::Button> m_xAllButton;
 
 public:
-    QueryDeleteDlg_Impl(weld::Widget* pParent, const OUString& rName);
+    QueryDeleteDlg_Impl(weld::Widget* pParent, std::u16string_view rName);
     virtual ~QueryDeleteDlg_Impl() override;
 
     void EnableAllButton() { m_xAllButton->set_sensitive(true); }

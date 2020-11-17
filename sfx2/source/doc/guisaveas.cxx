@@ -1799,7 +1799,7 @@ void SfxStoringHelper::SetDocInfoState(
 
 // static
 bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XModel >& xModel,
-                                                    const OUString& aOldUIName,
+                                                    std::u16string_view aOldUIName,
                                                     const OUString& aDefExtension,
                                                     bool bDefIsAlien )
 {
