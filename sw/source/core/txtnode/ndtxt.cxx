@@ -111,10 +111,6 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
 
     SwNodeIndex aIdx( *pNode );
 
-    // call method <UpdateOutlineNode(..)> only for the document nodes array
-    if ( IsDocNodes() )
-        UpdateOutlineNode(*pNode);
-
     // if there is no layout or it is in a hidden section, MakeFrames is not needed
     const SwSectionNode* pSectNd;
     if (!bNewFrames ||
@@ -221,7 +217,10 @@ SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, 
         }
         AddToList();
     }
-    GetNodes().UpdateOutlineNode(*this);
+
+    // call method <UpdateOutlineNode(..)> only for the document nodes array
+    if (GetNodes().IsDocNodes())
+        GetNodes().UpdateOutlineNode(*this);
 
     m_bNotifiable = true;
 
@@ -3924,8 +3923,6 @@ SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
     {
         ChgTextCollUpdateNum( pOldColl, static_cast<SwTextFormatColl *>(pNewColl) );
     }
-
-    GetNodes().UpdateOutlineNode(*this);
 
     return pOldColl;
 }
