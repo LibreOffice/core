@@ -27,6 +27,7 @@ public:
             const OUString& rPropertyName);
 
     void operator()(const OUString& rCommand, const NamedColor& rColor);
+        // ColorSelectFunction signature
 
     void updateModel(const css::uno::Reference<css::frame::XModel>& xModel);
 

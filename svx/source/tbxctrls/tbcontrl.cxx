@@ -3798,7 +3798,8 @@ ListBoxColorWrapper::ListBoxColorWrapper(ColorListBox* pControl)
 {
 }
 
-void ListBoxColorWrapper::operator()(const OUString& /*rCommand*/, const NamedColor& rColor)
+void ListBoxColorWrapper::operator()(
+    [[maybe_unused]] const OUString& /*rCommand*/, const NamedColor& rColor)
 {
     mpControl->Selected(rColor);
 }

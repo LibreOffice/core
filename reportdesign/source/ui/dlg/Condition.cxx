@@ -73,7 +73,8 @@ ConditionColorWrapper::ConditionColorWrapper(Condition* pControl, sal_uInt16 nSl
 {
 }
 
-void ConditionColorWrapper::operator()(const OUString& /*rCommand*/, const NamedColor& rNamedColor)
+void ConditionColorWrapper::operator()(
+    [[maybe_unused]] const OUString& /*rCommand*/, const NamedColor& rNamedColor)
 {
     mpControl->ApplyCommand(mnSlotId, rNamedColor);
 }
