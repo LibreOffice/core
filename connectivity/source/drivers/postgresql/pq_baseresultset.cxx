@@ -456,7 +456,7 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
         char * res = reinterpret_cast<char*>(PQunescapeBytea( reinterpret_cast<unsigned char const *>(val.getStr()), &length));
         ret = Sequence< sal_Int8 > ( reinterpret_cast<sal_Int8*>(res), length );
         if( res )
-            free( res );
+            PQfreemem( res );
     }
     return ret;
 }
