@@ -30,6 +30,7 @@
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <strings.hxx>
 #include "xmlTable.hxx"
 #include "xmlFormattedField.hxx"

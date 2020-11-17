@@ -25,6 +25,7 @@
 #include <com/sun/star/report/ReportPrintOption.hpp>
 #include "xmlTable.hxx"
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 
 namespace rptxml

@@ -23,6 +23,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
+#include <sal/log.hxx>
 
 
 namespace rptxml

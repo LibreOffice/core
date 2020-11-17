@@ -37,6 +37,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #define TYPE_DATE       1
 #define TYPE_TIME       2
