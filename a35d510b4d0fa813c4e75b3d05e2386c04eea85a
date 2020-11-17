@@ -319,6 +319,24 @@
       "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ebb4ab1_09971093",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-17T09:00:17Z",
+      "side": 1,
+      "message": "\u003e (Which only leaves open here to update the above (1)--(4) comment.)\n\nsee comment at \u003chttps://gerrit.libreoffice.org/c/core/+/105933/1#message-525b4bff4de2362d9bbf4846f52921cc8c149a51\u003e \"improve comment in tools::Long header\"",
+      "parentUuid": "8f8c63a2_89a24da3",
+      "revId": "a35d510b4d0fa813c4e75b3d05e2386c04eea85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
