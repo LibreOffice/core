@@ -46,6 +46,30 @@
       "revId": "aa7729d93933495604e31d5bba28223c4b9ab992",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfcfd678_cd54213f",
+        "filename": "external/firebird/firebird-macosx.patch.1",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-11-17T11:38:11Z",
+      "side": 0,
+      "message": "Done in the latest patch.",
+      "parentUuid": "cc80cd57_8ad8a028",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 124
+      },
+      "revId": "aa7729d93933495604e31d5bba28223c4b9ab992",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
