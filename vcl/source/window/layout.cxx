@@ -28,7 +28,6 @@
 #include <svdata.hxx>
 #include <window.h>
 #include <boost/multi_array.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include <vcl/toolkit/vclmedit.hxx>
 #include <sal/log.hxx>
 #include <tools/json_writer.hxx>
@@ -1788,6 +1787,11 @@ vcl::Window *VclExpander::get_label_widget()
     return const_cast<vcl::Window*>(const_cast<const VclExpander*>(this)->get_label_widget());
 }
 
+void VclExpander::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    VclContainer::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("type", "expander");
+}
 
 IMPL_LINK( VclExpander, ClickHdl, CheckBox&, rBtn, void )
 {
