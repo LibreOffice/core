@@ -30,6 +30,7 @@ private:
     bool    bSkipEmpty;
     bool    bAllSheets;
     bool    bForceBreaks;
+    bool    bSingleJob;
 
 public:
                 ScPrintOptions();
@@ -40,6 +41,8 @@ public:
     void    SetAllSheets( bool bVal )       { bAllSheets = bVal; }
     bool    GetForceBreaks() const              { return bForceBreaks; }
     void    SetForceBreaks( bool bVal )     { bForceBreaks = bVal; }
+    bool    GetSingleJob() const            { return bSingleJob; }
+    void    SetSingleJob( bool bVal )       { bSingleJob = bVal; }
 
     void    SetDefaults();
 

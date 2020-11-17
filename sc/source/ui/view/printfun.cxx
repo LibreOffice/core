@@ -964,6 +964,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     //  skip empty pages only if options with that flag are passed
     aTableParam.bSkipEmpty = pOptions && pOptions->GetSkipEmpty();
+    aTableParam.bSingleJob = pOptions && pOptions->GetSingleJob();
     if ( pPageData )
         aTableParam.bSkipEmpty = false;
     // If pPageData is set, only the breaks are interesting for the

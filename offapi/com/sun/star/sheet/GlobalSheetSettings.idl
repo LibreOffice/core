@@ -31,6 +31,12 @@ module com {  module sun {  module star {  module sheet {
 
     For backwards compatibility, the attributes of XGlobalSheetSettings can
     still be accessed via com::sun::star::beans::XPropertySet, too.
+
+    Additionally, the following properties can be retrieved/set via ::com::sun::star::beans::XPropertySet :
+
+    <ul>
+        <li><code>boolean PrintSingleJobs</code> - Specifies whether single print jobs are created.</li>
+    </ul>
  */
 published service GlobalSheetSettings : XGlobalSheetSettings;
 

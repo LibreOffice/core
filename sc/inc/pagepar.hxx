@@ -41,6 +41,7 @@ struct ScPageTableParam
     bool        bScaleTo;
     bool        bScalePageNum;
     bool        bForceBreaks;
+    bool        bSingleJob;
     sal_uInt16  nScaleAll;
     sal_uInt16  nScaleWidth;
     sal_uInt16  nScaleHeight;
