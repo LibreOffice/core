@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b217620_89fb5508",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-11-17T12:49:02Z",
+      "side": 1,
+      "message": "Writer does ~everything in twips, so I would expect this case is not an exception.",
+      "revId": "ba701d0f8931f82d61f7296a7fe70c307f933cb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
