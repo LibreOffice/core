@@ -22,6 +22,30 @@
       "revId": "2b29e16ea0fca627d71b61af98df0f543e6f206b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cedfbf4_94595f33",
+        "filename": "starmath/inc/strings.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-17T19:22:15Z",
+      "side": 1,
+      "message": "It is a simple typo. Sorry for the inconvenience.",
+      "parentUuid": "8724c261_f140b8aa",
+      "range": {
+        "startLine": 305,
+        "startChar": 8,
+        "endLine": 305,
+        "endChar": 29
+      },
+      "revId": "2b29e16ea0fca627d71b61af98df0f543e6f206b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
