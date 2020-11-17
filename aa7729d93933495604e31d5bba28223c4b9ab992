@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c2e7fe9_0f316cea",
+        "filename": "external/firebird/UnpackedTarball_firebird.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-17T06:22:46Z",
+      "side": 1,
+      "message": "A small inconsistency (spaces where previous lines used tabs)",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 4
+      },
+      "revId": "aa7729d93933495604e31d5bba28223c4b9ab992",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
