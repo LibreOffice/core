@@ -45,10 +45,10 @@ SfxItemSet* SfxFrameDescriptor::GetArgs()
 void SfxFrameDescriptor::SetURL( const OUString& rURL )
 {
     aURL = INetURLObject(rURL);
-    SetActualURL(aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ));
+    SetActualURL();
 }
 
-void SfxFrameDescriptor::SetActualURL( std::u16string_view )
+void SfxFrameDescriptor::SetActualURL()
 {
     if ( m_pArgs )
         m_pArgs->ClearItem();

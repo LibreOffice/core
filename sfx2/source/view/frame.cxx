@@ -308,7 +308,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell const *pDoc )
     assert(pDoc && "NULL-Document inserted ?!");
 
     const SfxMedium *pMed = pDoc->GetMedium();
-    GetDescriptor()->SetActualURL( pMed->GetOrigURL() );
+    GetDescriptor()->SetActualURL();
 
     // Mark FileOpen parameter
     SfxItemSet* pItemSet = pMed->GetItemSet();
