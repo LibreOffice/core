@@ -460,7 +460,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 if ( err != nullptr)
                 {
                     errorMessage = OUString( err, strlen(err), ConnectionSettings::encoding );
-                    free(err);
+                    PQfreemem(err);
                 }
                 else
                     errorMessage = "#no error message#";
