@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e1c19b7_40092265",
+        "filename": "offapi/com/sun/star/chart2/DataPointCustomLabelFieldType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-11-17T10:10:01Z",
+      "side": 1,
+      "message": "missing @since",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 13
+      },
+      "revId": "5ae33bc6fe85e5f4cf9d9a2fd84aea378a34cb32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
