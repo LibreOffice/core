@@ -128,7 +128,8 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) final override;
 };
 
-void XMLOFF_DLLPUBLIC XMLOFF_WARN_UNKNOWN(const char *area, sax_fastparser::FastAttributeList::FastAttributeIter const & rIter);
+#define XMLOFF_WARN_UNKNOWN(area, rIter) \
+    SAL_WARN(area, "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(rIter.getToken()) << " value=" << rIter.toString());
 
 #define XMLOFF_WARN_UNKNOWN_ATTR(area, token, value) \
     SAL_WARN(area, "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(token) << "=" << value);
