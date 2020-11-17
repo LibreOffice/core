@@ -1139,7 +1139,7 @@
       </node>
       <node oor:name=".uno:WordRightSel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select to Word Right</value>
+          <value xml:lang="en-US">Select to End of Word</value>
         </prop>
       </node>
       <node oor:name=".uno:WordLeftSel" oor:op="replace">
