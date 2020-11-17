@@ -36,32 +36,27 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport& rImport,
-                                    sal_uInt16 p_nPrefix,
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
-: SvXMLImportContext ( rImport, p_nPrefix, rLocalName )
+                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+: SvXMLImportContext ( rImport )
 {
-    const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        const sal_uInt16 nPrefix = rMap.GetKeyByAttrName(sAttrName, &aLocalName );
-        if ( nPrefix == XML_NAMESPACE_TABLE && IsXMLToken( aLocalName, XML_DATE_VALUE ) )
+        if ( aIter.getToken() == XML_ELEMENT(TABLE, XML_DATE_VALUE) )
         {
             util::DateTime aNullDate;
-            const OUString sValue = xAttrList->getValueByIndex( i );
-            ::sax::Converter::parseDateTime(aNullDate, sValue);
+            ::sax::Converter::parseDateTime(aNullDate, aIter.toString());
             m_aNullDate <<= aNullDate;
         }
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 }
-SvXMLImportContextRef SchXMLCalculationSettingsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLCalculationSettingsContext::createFastChildContext(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    return new SchXMLCalculationSettingsContext(GetImport(),nPrefix,rLocalName,xAttrList);
+    return new SchXMLCalculationSettingsContext(GetImport(),xAttrList);
 }
 
 void SchXMLCalculationSettingsContext::endFastElement(sal_Int32 )

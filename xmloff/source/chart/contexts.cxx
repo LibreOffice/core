@@ -159,25 +159,24 @@ SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
 SchXMLBodyContext::~SchXMLBodyContext()
 {}
 
-SvXMLImportContextRef SchXMLBodyContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLBodyContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
     // <chart:chart> element
-    if( nPrefix == XML_NAMESPACE_CHART &&
-        IsXMLToken( rLocalName, XML_CHART ) )
+    if( nElement == XML_ELEMENT(CHART, XML_CHART) )
     {
         xContext = mrImportHelper.CreateChartContext( GetImport(), GetImport().GetModel() );
     }
-    else if(nPrefix == XML_NAMESPACE_TABLE &&
-            IsXMLToken( rLocalName, XML_CALCULATION_SETTINGS ))
+    else if(nElement == XML_ELEMENT(TABLE, XML_CALCULATION_SETTINGS ))
     {
         // i99104 handle null date correctly
-        xContext = new SchXMLCalculationSettingsContext ( GetImport(), nPrefix, rLocalName, xAttrList);
+        xContext = new SchXMLCalculationSettingsContext ( GetImport(), xAttrList);
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     return xContext;
 }
