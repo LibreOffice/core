@@ -1885,7 +1885,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, AtPageTextBoxCrash)
 
     // The page anchored objects must not have content anchor
     // unless this will lead to crash later, for example on
-    // removing the paragraph where it is achored to...
+    // removing the paragraph where it is anchored to...
     CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_PAGE, pTxBxFrm->GetAnchor().GetAnchorId());
     CPPUNIT_ASSERT(!pTxBxFrm->GetAnchor().GetContentAnchor());
 
