@@ -642,9 +642,9 @@ TestResult OutputDeviceTestCommon::checkAxialGradient(Bitmap& bitmap)
     for(int y = 1; y <= 11; ++y)
     {
         // Middle horizontal line is white, gradients to the sides.
-        checkValue(pAccess, 6, y, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, false);
-        checkValue(pAccess, 1, y, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, false);
-        checkValue(pAccess, 11, y, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, false);
+        checkValue(pAccess, 6, y, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
+        checkValue(pAccess, 1, y, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
+        checkValue(pAccess, 11, y, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
         if( !checkGradient( pAccess, 1, y, 6, 1, 0 ))
             return TestResult::Failed;
         if( !checkGradient( pAccess, 11, y, 6, -1, 0 ))
