@@ -1807,6 +1807,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
                                        const Gradient& rGradient)
 {
     if (rGradient.GetStyle() != GradientStyle::Linear
+        && rGradient.GetStyle() != GradientStyle::Axial
         && rGradient.GetStyle() != GradientStyle::Radial)
         return false; // unsupported
     if (rGradient.GetSteps() != 0)
@@ -1851,6 +1852,18 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
         SkColor colors[2] = { startColor, endColor };
         SkScalar pos[2] = { SkDoubleToScalar(aGradient.GetBorder() / 100.0), 1.0 };
         shader = SkGradientShader::MakeLinear(points, colors, pos, 2, SkTileMode::kClamp);
+    }
+    else if (rGradient.GetStyle() == GradientStyle::Axial)
+    {
+        tools::Polygon aPoly(aBoundRect);
+        aPoly.Rotate(aCenter, aGradient.GetAngle() % Degree10(3600));
+        SkPoint points[2] = { SkPoint::Make(toSkX(aPoly[0].X()), toSkY(aPoly[0].Y())),
+                              SkPoint::Make(toSkX(aPoly[1].X()), toSkY(aPoly[1].Y())) };
+        SkColor colors[3] = { endColor, startColor, endColor };
+        SkScalar border = SkDoubleToScalar(aGradient.GetBorder() / 100.0);
+        SkScalar pos[3]
+            = { std::min<SkScalar>(border, 0.5), 0.5, std::max<SkScalar>(1 - border, 0.5) };
+        shader = SkGradientShader::MakeLinear(points, colors, pos, 3, SkTileMode::kClamp);
     }
     else
     {
