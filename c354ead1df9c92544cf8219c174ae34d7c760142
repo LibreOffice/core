@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f52a0ec_2c32cf37",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-17T08:58:36Z",
+      "side": 1,
+      "message": "\"fail\" -\u003e \"failed\"",
+      "range": {
+        "startLine": 16,
+        "startChar": 13,
+        "endLine": 16,
+        "endChar": 17
+      },
+      "revId": "c354ead1df9c92544cf8219c174ae34d7c760142",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "510502ec_1640cbd6",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-17T08:58:36Z",
+      "side": 1,
+      "message": "\"will replace all usage\" -\u003e \"replaces (almost) all previous usage\"",
+      "range": {
+        "startLine": 18,
+        "startChar": 32,
+        "endLine": 18,
+        "endChar": 54
+      },
+      "revId": "c354ead1df9c92544cf8219c174ae34d7c760142",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e57241df_803ab87b",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-17T08:58:36Z",
+      "side": 1,
+      "message": "remove obsolete (2)",
+      "range": {
+        "startLine": 19,
+        "startChar": 3,
+        "endLine": 19,
+        "endChar": 73
+      },
+      "revId": "c354ead1df9c92544cf8219c174ae34d7c760142",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb072f6f_915b5c4b",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-17T08:58:36Z",
+      "side": 1,
+      "message": "reword: \"on 64-bit Windows, this typedef is forced to 64-bit (32-bit platforms, including 32-bit Windows, are left alone)\"",
+      "range": {
+        "startLine": 20,
+        "startChar": 7,
+        "endLine": 20,
+        "endChar": 85
+      },
+      "revId": "c354ead1df9c92544cf8219c174ae34d7c760142",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
