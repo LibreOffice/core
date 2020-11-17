@@ -177,6 +177,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnOpt;
     std::unique_ptr<weld::Button> m_xBtnCancel;
     std::unique_ptr<weld::Button> m_xBtnSolve;
+    std::unique_ptr<weld::Button> m_xBtnResetAll;
 
     std::unique_ptr<weld::Label> m_xResultFT;
     std::unique_ptr<weld::Widget> m_xContents;
