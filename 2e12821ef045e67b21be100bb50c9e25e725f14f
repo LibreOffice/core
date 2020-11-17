@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3242cc2d_eca09232",
+        "filename": "offapi/com/sun/star/sheet/GlobalSheetSettings.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-17T22:22:24Z",
+      "side": 1,
+      "message": "This changes GlobalSheetSettings from a \"new-style\" service (which will have a constructor in the UNO language bindings, see e.g. uses of css::sheet::GlobalSheetSettings::create in the LO C++ code) to an \"old-style\" one (which lacks the constructor).  Having to manually modify offapi/type_reference/offapi.idl is always a sign that one is doing something fishy.\n\nBetter document in a comment that the implementation of this service will optionally provide (via XPropertySet or wahtever) access to a boolean \"PrintSingleJobs\" property.  (If that is what actually is implemented; I didn\u0027t check that.)",
+      "revId": "2e12821ef045e67b21be100bb50c9e25e725f14f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
