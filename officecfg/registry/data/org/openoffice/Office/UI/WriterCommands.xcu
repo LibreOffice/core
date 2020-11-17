@@ -1144,7 +1144,7 @@
       </node>
       <node oor:name=".uno:WordLeftSel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select to Begin of Word</value>
+          <value xml:lang="en-US">Select to Word Left</value>
         </prop>
       </node>
       <node oor:name=".uno:GotoNextSentenceSel" oor:op="replace">
