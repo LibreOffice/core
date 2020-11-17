@@ -63,7 +63,7 @@ done
 
 mkdir -p /app/share/appdata
 "${SRCDIR?}"/solenv/bin/assemble-flatpak-appdata-step1.sh /app/share/appdata/ 1
-"${SRCDIR?}"/solenv/bin/assemble-flatpak-appdata-step2.sh "${PREFIXDIR?}"/share/appdata/ \
+"${SRCDIR?}"/solenv/bin/assemble-flatpak-appdata-step2.sh "${PREFIXDIR?}"/share/metainfo/ \
  /app/share/appdata/
 
 ## see <https://github.com/flatpak/flatpak/blob/master/app/

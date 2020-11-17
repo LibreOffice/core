@@ -19,7 +19,7 @@
 set -e
 
 ## org.libreoffice.LibreOffice.appdata.xml is manually derived from the various
-## inst/share/appdata/libreoffice-*.appdata.xml (at least recent GNOME Software
+## inst/share/metainfo/libreoffice-*.appdata.xml (at least recent GNOME Software
 ## doesn't show more than five screenshots anyway, so restrict to one each from
 ## the five libreoffice-*.appdata.xml: Writer, Calc, Impress, Draw, Base):
 cat <<\EOF >"${1?}"org.libreoffice.LibreOffice.appdata.xml
