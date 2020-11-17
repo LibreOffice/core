@@ -56,9 +56,9 @@ for i in `cat launcherlist`; do
   ln -sf "${office_root}/share/xdg/${i}" "${DESTDIR}/${PREFIXDIR}/share/applications/${PREFIX}-${i}"
 done
 
-mkdir -p "${DESTDIR}/${PREFIXDIR}/share/appdata"
+mkdir -p "${DESTDIR}/${PREFIXDIR}/share/metainfo"
 for i in base calc draw impress writer; do
-    cp "${APPDATA_SOURCE_DIR}/libreoffice-${i}.appdata.xml" "${DESTDIR}/${PREFIXDIR}/share/appdata/${PREFIX}-${i}.appdata.xml"
+    cp "${APPDATA_SOURCE_DIR}/libreoffice-${i}.appdata.xml" "${DESTDIR}/${PREFIXDIR}/share/metainfo/${PREFIX}-${i}.appdata.xml"
 done
-cp "${APPDATA_SOURCE_DIR}/org.libreoffice.kde.metainfo.xml" "${DESTDIR}/${PREFIXDIR}/share/appdata/org.${PREFIX}.kde.metainfo.xml"
+cp "${APPDATA_SOURCE_DIR}/org.libreoffice.kde.metainfo.xml" "${DESTDIR}/${PREFIXDIR}/share/metainfo/org.${PREFIX}.kde.metainfo.xml"
 
