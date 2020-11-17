@@ -453,7 +453,8 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         if ( o.getLength() > 0 )
         {
             char *err;
-            std::shared_ptr<PQconninfoOption> oOpts(PQconninfoParse(o.getStr(), &err), PQconninfoFree);
+            const std::unique_ptr<PQconninfoOption, deleter_from_fn<PQconninfoFree>>
+                oOpts(PQconninfoParse(o.getStr(), &err));
             if (oOpts == nullptr)
             {
                 OUString errorMessage;
