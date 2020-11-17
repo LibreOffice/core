@@ -49,6 +49,16 @@ private:
     Shape3DProperties& mr3DProperties;
 };
 
+class SceneText3DPropertiesContext final : public ::oox::core::ContextHandler2
+{
+public:
+    SceneText3DPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, Text3DProperties& rText3DProperties ) throw();
+    ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
+
+private:
+    Text3DProperties& mr3DProperties;
+};
+
 class Shape3DPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:

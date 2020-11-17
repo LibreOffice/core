@@ -23,6 +23,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/textbodyproperties.hxx>
 #include <drawingml/textliststyle.hxx>
+#include <drawingml/shape3dproperties.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace text { class XText; }
@@ -54,6 +55,9 @@ public:
     const TextBodyProperties&           getTextProperties() const { return maTextProperties; }
     TextBodyProperties&                 getTextProperties() { return maTextProperties; }
 
+    Text3DProperties&                   get3DProperties() { return ma3DProperties; }
+    const Text3DProperties&             get3DProperties() const { return ma3DProperties; }
+
     /** insert the text body at the text cursor */
     void                insertAt(
                             const ::oox::core::XmlFilterBase& rFilterBase,
@@ -73,6 +77,7 @@ protected:
     TextParagraphVector maParagraphs;
     TextBodyProperties  maTextProperties;
     TextListStyle       maTextListStyle;
+    Text3DProperties    ma3DProperties;
 };
 
 } }
