@@ -19,12 +19,18 @@
 #ifndef INCLUDED_SVX_PALETTE_HXX
 #define INCLUDED_SVX_PALETTE_HXX
 
+#include <sal/config.h>
+
+#include <functional>
+
 #include <rtl/ustring.hxx>
 
 class Color;
 class SvxColorValueSet;
 
 typedef std::pair<Color, OUString> NamedColor;
+
+typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 
 class Palette
 {

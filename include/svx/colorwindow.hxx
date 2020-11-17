@@ -26,8 +26,6 @@
 #include <svx/Palette.hxx>
 #include <vcl/toolbox.hxx>
 
-#include <functional>
-
 namespace com::sun::star::frame { class XFrame; }
 
 class PaletteManager;
@@ -45,7 +43,6 @@ public:
 };
 
 class Button;
-typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 
 #define COL_NONE_COLOR    ::Color(0x80, 0xFF, 0xFF, 0xFF)
 
