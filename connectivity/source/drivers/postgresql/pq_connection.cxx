@@ -42,6 +42,7 @@
 
 #include "pq_connection.hxx"
 #include "pq_statement.hxx"
+#include "pq_tools.hxx"
 #include "pq_preparedstatement.hxx"
 #include "pq_databasemetadata.hxx"
 #include "pq_xtables.hxx"
@@ -216,7 +217,7 @@ Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sq
     MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
 
-    OString byteSql = OUStringToOString( sql, ConnectionSettings::encoding );
+    OString byteSql = rtl::OUStringToOString( sql, ConnectionSettings::encoding );
     PreparedStatement *stmt = new PreparedStatement( m_xMutex, this, &m_settings, byteSql );
     Reference< XPreparedStatement > ret = stmt;
 
@@ -414,7 +415,7 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         {
             OUString value;
             tc->convertTo( prop.Value, cppu::UnoType<decltype(value)>::get() ) >>= value;
-            char *v = strdup(OUStringToOString(value, enc).getStr());
+            char *v = strdup(rtl::OUStringToOString(value, enc).getStr());
             values.push_back ( v );
         }
         else
@@ -460,7 +461,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         nColon = url.indexOf( ':' , 1+ nColon );
         if( nColon != -1 )
         {
-             o = OUStringToOString( url.getStr()+nColon+1, ConnectionSettings::encoding );
+             o = rtl::OUStringToOString( url.getStr()+nColon+1, ConnectionSettings::encoding );
         }
     }
     {
@@ -477,7 +478,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 if ( err != nullptr)
                 {
                     errorMessage = OUString( err, strlen(err), ConnectionSettings::encoding );
-                    free(err);
+                    PQfreemem(err);
                 }
                 else
                     errorMessage = "#no error message#";
