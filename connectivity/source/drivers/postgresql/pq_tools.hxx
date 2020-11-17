@@ -51,6 +51,14 @@
 #include <string_view>
 #include <vector>
 
+namespace
+{
+// helper to create one-time deleters
+template <auto fn>
+using deleter_from_fn = std::integral_constant<decltype(fn), fn>;
+
+}
+
 namespace pq_sdbc_driver
 {
 bool isWhitespace( sal_Unicode c );
