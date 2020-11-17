@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="SolverDialog">
@@ -10,6 +10,9 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -19,25 +22,6 @@
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="options">
-                <property name="label" translatable="yes" context="solverdlg|options">O_ptions...</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="options-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|options">Opens the Solver Options dialog.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
@@ -49,8 +33,41 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">0</property>
                 <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="redefine">
+                <property name="label" translatable="yes">_Reset All</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="options">
+                <property name="label" translatable="yes" context="solverdlg|options">O_ptions...</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="options-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes">Opens the Solver Options dialog.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -66,7 +83,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -80,7 +97,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
@@ -161,7 +178,7 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="min-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|min">Enter the cell range that can be changed.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes">Enter the cell range that can be changed.</property>
                       </object>
                     </child>
                   </object>
@@ -186,7 +203,7 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="max-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|max">Enter the cell range that can be changed.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes">Enter the cell range that can be changed.</property>
                       </object>
                     </child>
                   </object>
@@ -210,7 +227,7 @@
                         <property name="width_chars">32</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="changeedit-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|changeedit">Enter the cell range that can be changed.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes">Enter the cell range that can be changed.</property>
                           </object>
                         </child>
                       </object>
@@ -252,7 +269,7 @@
                         <property name="width_chars">32</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="targetedit-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|targetedit">Enter or click the cell reference of the target cell. This field takes the address of the cell whose value is to be optimized.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes">Enter or click the cell reference of the target cell. This field takes the address of the cell whose value is to be optimized.</property>
                           </object>
                         </child>
                       </object>
@@ -301,7 +318,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="value-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|value">Enter the cell range that can be changed.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes">Enter the cell range that can be changed.</property>
                           </object>
                         </child>
                       </object>
@@ -325,7 +342,7 @@
                             <property name="activates_default">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="valueedit-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|valueedit">Enter the cell range that can be changed.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes">Enter the cell range that can be changed.</property>
                               </object>
                             </child>
                           </object>
@@ -462,7 +479,7 @@
                                         <property name="width_chars">20</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="ref1edit-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref1edit-atkobject">Cell reference</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
                                           </object>
                                         </child>
                                       </object>
@@ -480,7 +497,7 @@
                                         <property name="width_chars">20</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="ref2edit-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref2edit-atkobject">Cell reference</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
                                           </object>
                                         </child>
                                       </object>
@@ -498,7 +515,7 @@
                                         <property name="width_chars">20</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="ref3edit-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref3edit-atkobject">Cell reference</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
                                           </object>
                                         </child>
                                       </object>
@@ -516,7 +533,7 @@
                                         <property name="width_chars">20</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="ref4edit-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref4edit-atkobject">Cell reference</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
                                           </object>
                                         </child>
                                       </object>
@@ -582,7 +599,7 @@
                                         </items>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="op1list-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|op1list-atkobject">Operator</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
                                           </object>
                                         </child>
                                       </object>
@@ -604,7 +621,7 @@
                                         </items>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="op2list-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|op2list-atkobject">Operator</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
                                           </object>
                                         </child>
                                       </object>
@@ -626,7 +643,7 @@
                                         </items>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="op3list-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|op3list-atkobject">Operator</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
                                           </object>
                                         </child>
                                       </object>
@@ -648,7 +665,7 @@
                                         </items>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="op4list-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|op4list-atkobject">Operator</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
                                           </object>
                                         </child>
                                       </object>
@@ -667,7 +684,7 @@
                                         <property name="width_chars">15</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="val1edit-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val1edit-atkobject">Value</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Value</property>
                                           </object>
                                         </child>
                                       </object>
@@ -686,7 +703,7 @@
                                         <property name="width_chars">15</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="val2edit-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val2edit-atkobject">Value</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Value</property>
                                           </object>
                                         </child>
                                       </object>
@@ -705,7 +722,7 @@
                                         <property name="width_chars">15</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="val3edit-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val3edit-atkobject">Value</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Value</property>
                                           </object>
                                         </child>
                                       </object>
@@ -724,7 +741,7 @@
                                         <property name="width_chars">15</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="val4edit-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val4edit-atkobject">Value</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes">Value</property>
                                           </object>
                                         </child>
                                       </object>
@@ -866,17 +883,14 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="101">options</action-widget>
       <action-widget response="-11">help</action-widget>
+      <action-widget response="101">options</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="SolverDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|SolverDialog">Opens the Solver dialog. A solver allows you to solve mathematical problems with multiple unknown variables and a set of constraints on the variables by goal-seeking methods.</property>
+        <property name="AtkObject::accessible-description" translatable="yes">Opens the Solver dialog. A solver allows you to solve mathematical problems with multiple unknown variables and a set of constraints on the variables by goal-seeking methods.</property>
       </object>
     </child>
   </object>
