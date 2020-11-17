@@ -24,6 +24,7 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
     , mxBtnCancel(m_xBuilder->weld_button("btn_cancel"))
     , mxBtnClose(m_xBuilder->weld_button("btn_close"))
     , mxEditPreUpload(m_xBuilder->weld_label("ed_pre"))
+    , mxEditPostUploadURL(m_xBuilder->weld_link_view("ed_crashurl"))
     , mxEditPostUpload(m_xBuilder->weld_text_view("ed_post"))
     , mxFtBugReport(m_xBuilder->weld_text_view("ed_bugreport"))
     , mxCBSafeMode(m_xBuilder->weld_check_button("check_safemode"))
@@ -72,16 +73,17 @@ IMPL_LINK(CrashReportDialog, BtnHdl, weld::Button&, rBtn, void)
             OUString aProcessedMessage = maSuccessMsg.replaceAll("%CRASHID", aCrashID.replaceAll("Crash-ID=",""));
 
             // vclbuilder seems to replace _ with ~ even in text
-            mxEditPostUpload->set_text(aProcessedMessage.replaceAll("~", "_"));
+            mxEditPostUploadURL->set_text(aProcessedMessage.replaceAll("~", "_"));
         }
         else
         {
-            mxEditPostUpload->set_text(aCrashID);
+            mxEditPostUploadURL->set_text(aCrashID);
         }
 
         mxBtnClose->show();
         mxFtBugReport->show();
         mxEditPostUpload->show();
+        mxEditPostUploadURL->show();
         mxBtnSend->set_sensitive(false);
         mxBtnCancel->set_sensitive(false);
         mxBtnClose->grab_focus();
