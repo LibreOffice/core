@@ -1246,13 +1246,23 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         // 12. Comments -- may be omitted
         {
             OUString aDescription;
-            uno::Reference< XBlob > xDescriptionBlob = xRow->getBlob(3);
-            if (xDescriptionBlob.is())
+            uno::Reference< XBlob > xBlob = xRow->getBlob(3);
+            if (xBlob.is())
             {
-                sal_Int32 aBlobLength = static_cast<sal_Int32>(xDescriptionBlob->length());
-                aDescription = OUString(reinterpret_cast<char*>(xDescriptionBlob->getBytes(1, aBlobLength).getArray()),
-                                        aBlobLength,
-                                        RTL_TEXTENCODING_UTF8);
+                const sal_Int64 aBlobLength = xBlob->length();
+                if (aBlobLength > SAL_MAX_INT32)
+                {
+                    SAL_WARN("connectivity.firebird", "getBytes can't return " << aBlobLength << " bytes but only max " << SAL_MAX_INT32);
+                    aDescription = OUString(reinterpret_cast<char*>(xBlob->getBytes(1, SAL_MAX_INT32).getArray()),
+                                            SAL_MAX_INT32,
+                                            RTL_TEXTENCODING_UTF8);
+                }
+                else
+                {
+                    aDescription = OUString(reinterpret_cast<char*>(xBlob->getBytes(1, static_cast<sal_Int32>(aBlobLength)).getArray()),
+                                            aBlobLength,
+                                            RTL_TEXTENCODING_UTF8);
+                }
             }
             aCurrentRow[12] = new ORowSetValueDecorator(aDescription);
         }
