@@ -170,7 +170,7 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
             case A_TOKEN( scene3d ):        // CT_Scene3D
             {
                 if(mpShapePtr && mpShapePtr->getServiceName() == "com.sun.star.drawing.CustomShape")
-                    return new Scene3DPropertiesContext( *this, mpShapePtr->get3DProperties() );
+                    return new SceneText3DPropertiesContext( *this, mpShapePtr->getTextBody()->get3DProperties() );
 
                 break;
             }
