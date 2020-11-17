@@ -1430,4 +1430,21 @@ public:
     virtual ~SalInstanceTreeView() override;
 };
 
+class SalInstanceExpander : public SalInstanceContainer, public virtual weld::Expander
+{
+private:
+    VclPtr<VclExpander> m_xExpander;
+
+    DECL_LINK(ExpandedHdl, VclExpander&, void);
+
+public:
+    SalInstanceExpander(VclExpander* pExpander, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual bool get_expanded() const override;
+
+    virtual void set_expanded(bool bExpand) override;
+
+    virtual ~SalInstanceExpander() override;
+};
+
 #endif
