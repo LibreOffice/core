@@ -45,7 +45,7 @@ struct BevelProperties
     OptValue< sal_Int32 > mnHeight;
 };
 
-struct Shape3DProperties
+struct Generic3DProperties
 {
     OptValue< sal_Int32 > mnPreset;
     OptValue< float > mfFieldOfVision;
@@ -80,6 +80,11 @@ struct Shape3DProperties
             const Color& rColor, const GraphicHelper& rGraphicHelper, ::Color rPhClr );
 };
 
+struct Shape3DProperties : Generic3DProperties
+{};
+
+struct Text3DProperties : Generic3DProperties
+{};
 
 } // namespace drawingml
 } // namespace oox

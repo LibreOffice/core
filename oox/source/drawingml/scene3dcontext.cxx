@@ -63,6 +63,39 @@ ContextHandlerRef Scene3DPropertiesContext::onCreateContext( sal_Int32 aElementT
     return nullptr;
 }
 
+SceneText3DPropertiesContext::SceneText3DPropertiesContext( ContextHandler2Helper const & rParent, Text3DProperties& r3DProperties ) throw()
+: ContextHandler2( rParent )
+, mr3DProperties( r3DProperties )
+{
+}
+
+ContextHandlerRef SceneText3DPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+{
+    switch( aElementToken )
+    {
+    case A_TOKEN( camera ):
+        if( rAttribs.hasAttribute( XML_fov ) )
+            mr3DProperties.mfFieldOfVision = rAttribs.getInteger( XML_fov, 0 ) / 60000.0; // 60000ths of degree
+        if( rAttribs.hasAttribute( XML_zoom ) )
+            mr3DProperties.mfZoom = rAttribs.getInteger( XML_zoom, 100000 ) / 100000.0;
+        if( rAttribs.hasAttribute( XML_prst ) )
+            mr3DProperties.mnPreset = rAttribs.getToken( XML_prst, XML_none );
+
+        return new Scene3DRotationPropertiesContext( *this, mr3DProperties.maCameraRotation );
+
+    case A_TOKEN( lightRig ):
+        mr3DProperties.mnLightRigDirection = rAttribs.getToken( XML_dir, XML_none );
+        mr3DProperties.mnLightRigType = rAttribs.getToken( XML_rig, XML_none );
+
+        return new Scene3DRotationPropertiesContext( *this, mr3DProperties.maLightRigRotation );
+
+    case A_TOKEN( backdrop ):
+    case A_TOKEN( extLst ):
+        return nullptr; // TODO: later (backdrop is not supported by core anyway)
+    }
+    return nullptr;
+}
+
 Shape3DPropertiesContext::Shape3DPropertiesContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, Shape3DProperties& r3DProperties ) throw()
 : ContextHandler2( rParent )
 , mr3DProperties( r3DProperties )
