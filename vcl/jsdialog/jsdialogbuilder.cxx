@@ -365,6 +365,9 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
     std::unique_ptr<weld::Dialog> pRet(pDialog ? new JSDialog(m_aOwnedToplevel, m_aOwnedToplevel,
                                                               pDialog, this, false, m_sTypeOfJSON)
                                                : nullptr);
+
+    RememberWidget("__DIALOG__", pRet.get());
+
     if (pDialog)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
