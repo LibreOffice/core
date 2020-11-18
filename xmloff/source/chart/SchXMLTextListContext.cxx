@@ -22,6 +22,9 @@
 
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/xmlictxt.hxx>
+#include <sal/log.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -33,12 +36,11 @@ namespace {
 class SchXMLListItemContext : public SvXMLImportContext
 {
 public:
-    SchXMLListItemContext( SvXMLImport& rImport, const OUString& rLocalName, OUString& rText );
+    SchXMLListItemContext( SvXMLImport& rImport, OUString& rText );
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 private:
     OUString& m_rText;
@@ -48,21 +50,22 @@ private:
 
 SchXMLListItemContext::SchXMLListItemContext(
         SvXMLImport& rImport
-        , const OUString& rLocalName
         , OUString& rText )
-        : SvXMLImportContext( rImport, XML_NAMESPACE_TEXT, rLocalName )
+        : SvXMLImportContext( rImport )
         , m_rText( rText )
 {
 }
 
-SvXMLImportContextRef SchXMLListItemContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLListItemContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
-    if( (nPrefix == XML_NAMESPACE_TEXT ||
-                nPrefix == XML_NAMESPACE_LO_EXT) && IsXMLToken( rLocalName, XML_P ) )
+    if( nElement == XML_ELEMENT(TEXT, XML_P) ||
+        nElement == XML_ELEMENT(LO_EXT, XML_P) )
         pContext = new SchXMLParagraphContext( GetImport(), m_rText );
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return pContext;
 }
 
@@ -87,16 +90,18 @@ void SchXMLTextListContext::endFastElement(sal_Int32 )
         m_rTextList[nN]=m_aTextVector[nN];
 }
 
-SvXMLImportContextRef SchXMLTextListContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTextListContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
-    if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_LIST_ITEM ) )
+    if( nElement == XML_ELEMENT(TEXT, XML_LIST_ITEM) )
     {
         m_aTextVector.emplace_back( );
-        pContext = new SchXMLListItemContext( GetImport(), rLocalName, m_aTextVector.back() );
+        pContext = new SchXMLListItemContext( GetImport(), m_aTextVector.back() );
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return pContext;
 }
 
