@@ -66,11 +66,10 @@ namespace legacy::SwFormatVert
 
         SvStream& Store(const SwFormatVertOrient& rItem, SvStream& rStrm, sal_uInt16)
         {
-#if SAL_TYPES_SIZEOFLONG == 8
-            rStrm.WriteInt64(rItem.GetPos());
-#else
-            rStrm.WriteInt32(rItem.GetPos());
-#endif
+            if constexpr(sizeof(rItem.GetPos()) >= 8)
+                rStrm.WriteInt64(rItem.GetPos());
+            else
+                rStrm.WriteInt32(rItem.GetPos());
             rStrm.WriteInt16(rItem.GetVertOrient()).WriteInt16(rItem.GetRelationOrient());
             return rStrm;
         }
