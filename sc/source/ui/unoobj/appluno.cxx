@@ -20,7 +20,6 @@
 #include <appluno.hxx>
 #include <sal/types.h>
 #include <osl/diagnose.h>
-#include <cppuhelper/factory.hxx>
 #include <formula/funcvarargs.h>
 
 #include <vcl/svapp.hxx>
@@ -36,7 +35,6 @@
 #include <unonames.hxx>
 #include <funcdesc.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/sheet/FunctionArgument.hpp>
 #include <memory>
 

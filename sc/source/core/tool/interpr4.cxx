@@ -21,13 +21,10 @@
 
 #include <interpre.hxx>
 
-#include <rangelst.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/docfilt.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
@@ -39,7 +36,6 @@
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
 #include <string.h>
-#include <signal.h>
 
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
@@ -55,7 +51,6 @@
 #include <docoptio.hxx>
 #include <scmatrix.hxx>
 #include <adiasync.hxx>
-#include <sc.hrc>
 #include <cellsuno.hxx>
 #include <optuno.hxx>
 #include <rangeseq.hxx>
@@ -70,14 +65,11 @@
 #include <tokenarray.hxx>
 #include <compiler.hxx>
 
-#include <math.h>
-#include <float.h>
 #include <map>
 #include <algorithm>
 #include <basic/basmgr.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <memory>
-#include <stack>
 
 using namespace com::sun::star;
 using namespace formula;

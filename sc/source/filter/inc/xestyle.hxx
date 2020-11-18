@@ -30,7 +30,6 @@
 #include <fonthelper.hxx>
 #include <memory>
 #include <vector>
-#include <o3tl/sorted_vector.hxx>
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF, STYLE).

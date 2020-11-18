@@ -23,6 +23,7 @@
 #include <memory>
 #include "anyrefdg.hxx"
 
+#include <scmod.hxx>
 #include <formula/formula.hxx>
 #include "IAnyRefDialog.hxx"
 

@@ -9,14 +9,12 @@
  */
 
 #include <interpre.hxx>
-#include <global.hxx>
-#include <dociter.hxx>
+#include <cellvalue.hxx>
 #include <scmatrix.hxx>
 #include <comphelper/random.hxx>
 #include <formula/token.hxx>
 #include <sal/log.hxx>
 
-#include <stack>
 #include <cmath>
 #include <memory>
 #include <vector>

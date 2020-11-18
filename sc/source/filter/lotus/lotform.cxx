@@ -22,7 +22,6 @@
 #include "lotfilter.hxx"
 #include <lotrange.hxx>
 #include <namebuff.hxx>
-#include <root.hxx>
 #include <ftools.hxx>
 #include <tool.h>
 #include <document.hxx>

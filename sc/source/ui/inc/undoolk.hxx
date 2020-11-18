@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_UNDOOLK_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_UNDOOLK_HXX
 
+#include <memory>
+
 class SdrUndoAction;
 class ScDocument;
 

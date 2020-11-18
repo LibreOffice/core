@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SCUITPHFEDIT_HXX
 
 #include "tphfedit.hxx"
+#include <sfx2/tabdlg.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 

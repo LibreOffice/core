@@ -29,12 +29,10 @@
 #include <basic/sbstar.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
-#include <tools/solar.h>
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -49,7 +47,6 @@
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <stdlib.h>
-#include <string.h>
 #include <math.h>
 #include <rangenam.hxx>
 #include <dbdata.hxx>
@@ -57,7 +54,6 @@
 #include <callform.hxx>
 #include <addincol.hxx>
 #include <refupdat.hxx>
-#include <sc.hrc>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <formulacell.hxx>

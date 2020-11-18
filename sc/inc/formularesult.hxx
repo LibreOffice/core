@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_FORMULARESULT_HXX
 #define INCLUDED_SC_INC_FORMULARESULT_HXX
 
-#include "scdllapi.h"
 #include "global.hxx"
 #include "calcmacros.hxx"
 #include <svl/sharedstring.hxx>

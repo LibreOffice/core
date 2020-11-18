@@ -34,7 +34,6 @@
 #include <svx/dialogs.hrc>
 #include <svl/intitem.hxx>
 #include <editeng/flstitem.hxx>
-#include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
 
 ScStyleDlg::ScStyleDlg(weld::Window* pParent,

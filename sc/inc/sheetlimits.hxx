@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_SHEETLIMITS_HXX
 
 #include <salhelper/simplereferenceobject.hxx>
+#include "address.hxx"
 
 // Because some stuff needs this info, and those objects lifetimes sometimes exceeds the lifetime
 // of the ScDocument.

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_AUTOSTYL_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_AUTOSTYL_HXX
 
+#include <address.hxx>
 #include <vector>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
