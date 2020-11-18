@@ -1606,7 +1606,6 @@ bool Polygon::IsEqual( const tools::Polygon& rPoly ) const
 
 SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
 {
-    sal_uInt16          i;
     sal_uInt16          nPoints(0);
 
     // read all points and create array
@@ -1621,7 +1620,7 @@ SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
 
     rPoly.mpImplPolygon->ImplSetSize( nPoints, false );
 
-    for (i = 0; i < nPoints; i++)
+    for (sal_uInt16 i = 0; i < nPoints; i++)
     {
         sal_Int32 nTmpX(0), nTmpY(0);
         rIStream.ReadInt32(nTmpX).ReadInt32(nTmpY);
@@ -1634,13 +1633,12 @@ SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
 
 SvStream& WritePolygon( SvStream& rOStream, const tools::Polygon& rPoly )
 {
-    sal_uInt16          i;
     sal_uInt16          nPoints = rPoly.GetSize();
 
     // Write number of points
     rOStream.WriteUInt16( nPoints );
 
-    for (i = 0; i < nPoints; i++)
+    for (sal_uInt16 i = 0; i < nPoints; i++)
     {
         rOStream.WriteInt32(rPoly.mpImplPolygon->mxPointAry[i].X())
             .WriteInt32(rPoly.mpImplPolygon->mxPointAry[i].Y());
