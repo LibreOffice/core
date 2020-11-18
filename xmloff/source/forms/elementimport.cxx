@@ -877,8 +877,8 @@ namespace xmloff
         {
             // we have exactly 2 properties where this type class is allowed:
             SAL_WARN_IF(
-                    _rPropValue.Name == PROPERTY_EFFECTIVE_VALUE
-                ||  _rPropValue.Name == PROPERTY_EFFECTIVE_DEFAULT, "xmloff",
+                    _rPropValue.Name != PROPERTY_EFFECTIVE_VALUE
+                &&  _rPropValue.Name != PROPERTY_EFFECTIVE_DEFAULT, "xmloff",
                 "OControlImport::implTranslateValueProperty: invalid property type/name combination, Any and " << _rPropValue.Name);
 
             // Both properties are allowed to have a double or a string value,
