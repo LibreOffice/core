@@ -22,6 +22,7 @@
 #include <SchXMLImport.hxx>
 
 #include <sax/tools/converter.hxx>
+#include <sal/log.hxx>
 
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -85,31 +86,26 @@ void SchXMLRegressionCurveObjectContext::StartElement( const uno::Reference< xml
     mrRegressionStyleVector.push_back( aStyle );
 }
 
-SvXMLImportContextRef SchXMLRegressionCurveObjectContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLRegressionCurveObjectContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    SvXMLImportContextRef xContext;
-
-    if( nPrefix == XML_NAMESPACE_CHART && IsXMLToken( rLocalName, XML_EQUATION ) )
+    if( nElement == XML_ELEMENT(CHART, XML_EQUATION) )
     {
-        xContext = new SchXMLEquationContext(
-            mrImportHelper, GetImport(), nPrefix, rLocalName, maChartSize, mrRegressionStyleVector.back());
+        return new SchXMLEquationContext(
+            mrImportHelper, GetImport(), maChartSize, mrRegressionStyleVector.back());
     }
-
-    return xContext;
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+    return nullptr;
 }
 
 SchXMLEquationContext::SchXMLEquationContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     const awt::Size& rChartSize,
     RegressionStyle& rRegressionStyle ) :
-
-        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mrRegressionStyle( rRegressionStyle ),
         maChartSize( rChartSize )
