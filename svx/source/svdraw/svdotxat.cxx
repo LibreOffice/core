@@ -278,7 +278,8 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight()
             GetTextEditOutliner() &&
             GetTextEditOutliner()->hasEditViewCallbacks());
 
-        if (!bSuppressChangeWhenEditOnOverlay)
+        // tdf#114956 always broadcast change for ScPostIts
+        if (!bSuppressChangeWhenEditOnOverlay || GetName() == "ScPostIt")
         {
             SetChanged();
             BroadcastObjectChange();
