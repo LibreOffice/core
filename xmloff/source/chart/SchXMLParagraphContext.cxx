@@ -81,22 +81,20 @@ void SchXMLParagraphContext::endFastElement(sal_Int32 )
     mrText = maBuffer.makeStringAndClear();
 }
 
-SvXMLImportContextRef SchXMLParagraphContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLParagraphContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    if( nPrefix == XML_NAMESPACE_TEXT )
+    if( nElement == XML_ELEMENT(TEXT, XML_TAB_STOP) )
     {
-        if( rLocalName == ::xmloff::token::GetXMLToken( ::xmloff::token::XML_TAB_STOP ))
-        {
-            maBuffer.append( u'\x0009');  // tabulator
-        }
-        else if( rLocalName == ::xmloff::token::GetXMLToken( ::xmloff::token::XML_LINE_BREAK ))
-        {
-            maBuffer.append( u'\x000A');  // linefeed
-        }
+        maBuffer.append( u'\x0009');  // tabulator
     }
+    else if( nElement == XML_ELEMENT(TEXT, XML_LINE_BREAK) )
+    {
+        maBuffer.append( u'\x000A');  // linefeed
+    }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     return nullptr;
 }
