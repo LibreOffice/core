@@ -98,7 +98,8 @@ void ScMyOLEFixer::CreateChartListener(ScDocument& rDoc,
         rDoc.InterpretDirtyCells( *pCL->GetRangeList() );
     }
 
-    pCollection->insert( pCL );
+    bool bSuccess = pCollection->insert(pCL);
+    assert(bSuccess && "failed to insert listener"); (void)bSuccess;
     pCL->StartListeningTo();
 }
 

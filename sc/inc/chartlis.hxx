@@ -154,7 +154,7 @@ public:
                     // only needed after copy-ctor, if newly added to doc
     void            StartAllListeners();
 
-    void insert(ScChartListener* pListener);
+    bool insert(ScChartListener* pListener);
     ScChartListener* findByName(const OUString& rName);
     const ScChartListener* findByName(const OUString& rName) const;
     bool hasListeners() const;

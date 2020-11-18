@@ -384,12 +384,12 @@ void ScChartListenerCollection::StartAllListeners()
     }
 }
 
-void ScChartListenerCollection::insert(ScChartListener* pListener)
+bool ScChartListenerCollection::insert(ScChartListener* pListener)
 {
     if (meModifiedDuringUpdate == SC_CLCUPDATE_RUNNING)
         meModifiedDuringUpdate =  SC_CLCUPDATE_MODIFIED;
     OUString aName = pListener->GetName();
-    m_Listeners.insert(std::make_pair(aName, std::unique_ptr<ScChartListener>(pListener)));
+    return m_Listeners.insert(std::make_pair(aName, std::unique_ptr<ScChartListener>(pListener))).second;
 }
 
 void ScChartListenerCollection::removeByName(const OUString& rName)
