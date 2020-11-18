@@ -8,15 +8,12 @@
  */
 
 #include <spellcheckcontext.hxx>
-#include <i18nlangtag/languagetag.hxx>
 #include <svl/sharedstring.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/unolingu.hxx>
 
 #include <scitems.hxx>
-#include <attarray.hxx>
 #include <document.hxx>
 #include <cellvalue.hxx>
 #include <editutil.hxx>

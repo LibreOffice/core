@@ -23,6 +23,8 @@
 #include <types.hxx>
 #include "ftools.hxx"
 
+#include <tools/long.hxx>
+
 class SfxObjectShell;
 enum class FormulaError : sal_uInt16;
 

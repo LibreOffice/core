@@ -21,10 +21,8 @@
 
 #include <comphelper/lok.hxx>
 #include <editeng/boxitem.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <o3tl/temporary.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>

@@ -21,9 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCHANGETRACKINGEXPORTHELPER_HXX
 
 #include <xmloff/xmltoken.hxx>
-#include <map>
-#include <memory>
-#include <tools/solar.h>
 
 namespace com::sun::star::text
 {

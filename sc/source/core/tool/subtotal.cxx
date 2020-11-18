@@ -18,7 +18,7 @@
  */
 
 #include <subtotal.hxx>
-#include <interpre.hxx>
+#include <sal/mathconf.h>
 #include <cfloat>
 
 bool SubTotal::SafePlus(double& fVal1, double fVal2)

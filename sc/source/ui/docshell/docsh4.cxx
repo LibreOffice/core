@@ -87,7 +87,6 @@ using namespace ::com::sun::star;
 #include <reffact.hxx>
 #include <chartlis.hxx>
 #include <chartpos.hxx>
-#include <waitoff.hxx>
 #include <tablink.hxx>
 #include <drwlayer.hxx>
 #include <docoptio.hxx>

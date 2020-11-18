@@ -66,7 +66,6 @@
 #include <refupdatecontext.hxx>
 #include <scopetools.hxx>
 #include <filterentries.hxx>
-#include <docsh.hxx>
 #include <queryparam.hxx>
 
 #include <globalnames.hxx>

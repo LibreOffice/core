@@ -20,6 +20,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SCUIAUTOFMT_HXX
 
 #include <vcl/customweld.hxx>
+#include <autoform.hxx>
 #include "autofmt.hxx"
 
 class ScAutoFormatDlg : public weld::GenericDialogController

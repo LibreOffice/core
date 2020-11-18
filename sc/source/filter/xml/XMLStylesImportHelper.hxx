@@ -22,9 +22,7 @@
 
 #include <rangelst.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/ref.hxx>
 
-#include <list>
 #include <memory>
 #include <set>
 #include <map>

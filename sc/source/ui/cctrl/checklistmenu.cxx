@@ -20,8 +20,6 @@
 #include <checklistmenu.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <strings.hrc>
-#include <bitmaps.hlst>
 
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
@@ -30,7 +28,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/math.hxx>
-#include <tools/wintypes.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

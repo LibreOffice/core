@@ -24,7 +24,6 @@
 #include <editeng/justifyitem.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/thread.h>
-#include <svx/algitem.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -57,22 +56,18 @@
 #include <rangeutl.hxx>
 #include <compiler.hxx>
 #include <externalrefmgr.hxx>
-#include <basic/sbstar.hxx>
 #include <doubleref.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
 #include <tokenarray.hxx>
 #include <compare.hxx>
 
-#include <com/sun/star/util/SearchResult.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <svl/sharedstringpool.hxx>
 
 #include <stdlib.h>
-#include <string.h>
-#include <math.h>
 #include <vector>
 #include <memory>
 #include <limits>

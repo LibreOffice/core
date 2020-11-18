@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <memory>
-#include <cppuhelper/weakref.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/InterimItemWindow.hxx>
@@ -30,7 +29,6 @@
 #include <svl/lstner.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <vcl/window.hxx>
-#include <vcl/transfer.hxx>
 #include <vcl/menu.hxx>
 #include <formula/opcode.hxx>
 #include <svx/weldeditview.hxx>

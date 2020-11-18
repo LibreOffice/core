@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XEHELPER_HXX
 
 #include <memory>
+#include "ftools.hxx"
 #include <rangelst.hxx>
 #include "xladdress.hxx"
 #include "xeroot.hxx"

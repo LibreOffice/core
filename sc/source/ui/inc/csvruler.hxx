@@ -22,7 +22,6 @@
 
 #include "csvcontrol.hxx"
 #include "csvsplits.hxx"
-#include <scdllapi.h>
 
 #include <vcl/virdev.hxx>
 

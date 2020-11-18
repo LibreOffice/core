@@ -7,12 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/lok.hxx>
 #include <condformatdlg.hxx>
 
 #include <sfx2/dispatch.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <anyrefdg.hxx>

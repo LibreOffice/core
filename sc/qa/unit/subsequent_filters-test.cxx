@@ -11,7 +11,6 @@
 #include <sal/config.h>
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
-#include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <config_features.h>
 
@@ -80,7 +79,6 @@
 #include <unotools/syslocaleoptions.hxx>
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
-#include <cellsuno.hxx>
 
 namespace com::sun::star::frame { class XModel; }
 

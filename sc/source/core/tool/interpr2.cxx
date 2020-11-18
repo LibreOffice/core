@@ -22,28 +22,22 @@
 
 #include <comphelper/string.hxx>
 #include <o3tl/float_int_conversion.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
-#include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
-#include <svl/sharedstringpool.hxx>
 #include <sal/macros.h>
 #include <osl/diagnose.h>
 
-#include <attrib.hxx>
 #include <sc.hrc>
 #include <ddelink.hxx>
 #include <scmatrix.hxx>
-#include <compiler.hxx>
 #include <formulacell.hxx>
 #include <document.hxx>
 #include <dociter.hxx>
-#include <docoptio.hxx>
 #include <unitconv.hxx>
 #include <hints.hxx>
 #include <dpobject.hxx>
-#include <postit.hxx>
 #include <tokenarray.hxx>
 #include <globalnames.hxx>
 #include <stlsheet.hxx>
@@ -51,9 +45,7 @@
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
-#include <limits>
 #include <string.h>
-#include <math.h>
 
 using ::std::vector;
 using namespace com::sun::star;

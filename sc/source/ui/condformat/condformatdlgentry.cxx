@@ -20,11 +20,9 @@
 #include <svl/style.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/frame.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/colorbox.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <formula/token.hxx>
 #include <formula/errorcodes.hxx>
@@ -32,7 +30,6 @@
 #include <stlpool.hxx>
 #include <tabvwsh.hxx>
 #include <unotools/charclass.hxx>
-#include <comphelper/lok.hxx>
 
 #include <colorformat.hxx>
 #include <scresid.hxx>
