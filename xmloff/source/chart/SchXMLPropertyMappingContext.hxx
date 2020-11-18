@@ -26,7 +26,7 @@ class SchXMLPropertyMappingContext : public SvXMLImportContext
 public:
 
     SchXMLPropertyMappingContext( SchXMLImportHelper& rImpHelper,
-                          SvXMLImport& rImport, const OUString& rLocalName,
+                          SvXMLImport& rImport,
                           tSchXMLLSequencesPerIndex& rLSequencesPerIndex,
                               css::uno::Reference<
                               css::chart2::XDataSeries > const & xSeries );

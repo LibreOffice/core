@@ -31,8 +31,6 @@ public:
     SchXMLRegressionCurveObjectContext(
         SchXMLImportHelper& rImportHelper,
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
         std::vector< RegressionStyle >& rRegressionStyleVector,
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         const css::awt::Size & rChartSize );
