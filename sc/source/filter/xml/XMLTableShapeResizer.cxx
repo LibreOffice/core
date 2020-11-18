@@ -87,7 +87,8 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
         *pRefTokens, aRangeStr, pDoc, cSep, pDoc->GetGrammar());
     if (!pRefTokens->empty())
     {
-        ScChartListener* pCL(new ScChartListener(rName, pDoc, std::move(pRefTokens)));
+        OUString sName = !rName.isEmpty() ? rName : pCollection->getUniqueName("OLEFixer ");
+        ScChartListener* pCL(new ScChartListener(sName, pDoc, std::move(pRefTokens)));
 
         //for loading binary files e.g.
         //if we have the flat filter we need to set the dirty flag thus the visible charts get repainted
