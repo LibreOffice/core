@@ -1053,15 +1053,13 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
 SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     const OUString &rSeriesStyleName,
     ::std::vector< DataRowPointStyle >& rStyleVector,
     const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
     ContextType eContextType,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex) :
 
-        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mrStyleVector( rStyleVector ),
         m_xSeries( xSeries ),

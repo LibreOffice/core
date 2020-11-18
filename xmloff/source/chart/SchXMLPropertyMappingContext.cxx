@@ -61,11 +61,11 @@ Reference< chart2::data::XLabeledDataSequence2 > createAndAddSequenceToSeries( c
 }
 
 SchXMLPropertyMappingContext::SchXMLPropertyMappingContext( SchXMLImportHelper& rImpHelper,
-        SvXMLImport& rImport, const OUString& rLocalName,
+        SvXMLImport& rImport,
         tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
         uno::Reference<
         chart2::XDataSeries > const & xSeries ):
-    SvXMLImportContext( rImport, XML_NAMESPACE_LO_EXT, rLocalName ),
+    SvXMLImportContext( rImport ),
     mrImportHelper( rImpHelper ),
     mxDataSeries(xSeries),
     mrLSequencesPerIndex(rLSequencesPerIndex)

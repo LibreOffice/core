@@ -73,18 +73,14 @@ private:
 
 public:
     SchXMLDomain2Context( SvXMLImport& rImport,
-                          sal_uInt16 nPrefix,
-                          const OUString& rLocalName,
                           ::std::vector< OUString > & rAddresses );
     virtual void StartElement( const Reference< xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 SchXMLDomain2Context::SchXMLDomain2Context(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     ::std::vector< OUString > & rAddresses ) :
-        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrAddresses( rAddresses )
 {
 }
@@ -677,66 +673,64 @@ void SchXMLSeries2Context::endFastElement(sal_Int32 )
     maPostponedSequences.clear();
 }
 
-SvXMLImportContextRef SchXMLSeries2Context::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >&  )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLSeries2Context::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
-    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetSeriesElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ))
+    switch(nElement)
     {
-        case XML_TOK_SERIES_DOMAIN:
+        case XML_ELEMENT(CHART, XML_DOMAIN):
             if( m_xSeries.is())
             {
                 m_bHasDomainContext = true;
                 pContext = new SchXMLDomain2Context(
-                    GetImport(),
-                    nPrefix, rLocalName,
-                    maDomainAddresses );
+                    GetImport(), maDomainAddresses );
             }
             break;
 
-        case XML_TOK_SERIES_MEAN_VALUE_LINE:
+        case XML_ELEMENT(CHART, XML_MEAN_VALUE):
             pContext = new SchXMLStatisticsObjectContext(
                 mrImportHelper, GetImport(),
-                nPrefix, rLocalName, msAutoStyleName,
+                msAutoStyleName,
                 mrStyleVector, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_MEAN_VALUE_LINE,
                 mrLSequencesPerIndex );
             break;
-        case XML_TOK_SERIES_REGRESSION_CURVE:
+        case XML_ELEMENT(CHART, XML_REGRESSION_CURVE):
             pContext = new SchXMLRegressionCurveObjectContext(
                 mrImportHelper, GetImport(),
-                nPrefix, rLocalName, mrRegressionStyleVector,
+                mrRegressionStyleVector,
                 m_xSeries, maChartSize );
             break;
-        case XML_TOK_SERIES_ERROR_INDICATOR:
+        case XML_ELEMENT(CHART, XML_ERROR_INDICATOR):
             pContext = new SchXMLStatisticsObjectContext(
                 mrImportHelper, GetImport(),
-                nPrefix, rLocalName, msAutoStyleName,
+                msAutoStyleName,
                 mrStyleVector, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_ERROR_INDICATOR,
                 mrLSequencesPerIndex );
             break;
 
-        case XML_TOK_SERIES_DATA_POINT:
+        case XML_ELEMENT(CHART, XML_DATA_POINT):
             pContext = new SchXMLDataPointContext( GetImport(),
                                                    mrStyleVector, m_xSeries, mnDataPointIndex, mbSymbolSizeIsMissingInFile );
             break;
-        case XML_TOK_SERIES_DATA_LABEL:
+        case XML_ELEMENT(CHART, XML_DATA_LABEL):
             // CustomLabels are useless for a data label element as child of a series, because it serves as default
             // for all data labels. But the ctor expects it, so use that of the mDataLabel struct as ersatz.
             pContext = new SchXMLDataLabelContext(GetImport(), mDataLabel.mCustomLabels,
                                                   mDataLabel);
             break;
 
-        case XML_TOK_SERIES_PROPERTY_MAPPING:
+        case XML_ELEMENT(LO_EXT, XML_PROPERTY_MAPPING):
             pContext = new SchXMLPropertyMappingContext( mrImportHelper,
-                    GetImport(), rLocalName,
+                    GetImport(),
                     mrLSequencesPerIndex, m_xSeries );
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
     return pContext;
