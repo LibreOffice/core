@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_INSDLG_HXX
-#define INCLUDED_SVTOOLS_INSDLG_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <tools/globname.hxx>
@@ -68,7 +67,5 @@ public:
     static OUString GetSotFormatUIName( SotClipboardFormatId nId );
     static bool GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotClipboardFormatId const & _nFormat);
 };
-
-#endif // INCLUDED_SVTOOLS_INSDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_BORDERLINE_HXX
-#define INCLUDED_SVTOOLS_BORDERLINE_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -75,7 +74,5 @@ public:
     bool IsEmpty( ) const { return (0 == m_nRate1) && (0 == m_nRate2); }
     bool IsDouble( ) const { return (0 != m_nRate1) && (0 != m_nRate2);  }
 };
-
-#endif // INCLUDED_SVTOOLS_BORDERLINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_HELPIDS_H
-#define INCLUDED_SVTOOLS_HELPIDS_H
+#pragma once
 
 #define HID_FILEDLG_LINK_CB                                    "SVT_HID_FILEDLG_LINK_CB"
 #define HID_FILEDLG_PREVIEW_CB                                 "SVT_HID_FILEDLG_PREVIEW_CB"
@@ -44,7 +43,5 @@
 #define HID_FILEOPEN_VERSION                                   "SVT_HID_FILEOPEN_VERSION"
 #define HID_FILEOPEN_IMAGE_TEMPLATE                            "SVT_HID_FILEOPEN_IMAGE_TEMPLATE"
 #define HID_FILEOPEN_IMAGE_ANCHOR                              "SVT_HID_FILEOPEN_IMAGE_ANCHOR"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

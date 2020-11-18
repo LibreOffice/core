@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SLIDESORTERBAROPT_HXX
-#define INCLUDED_SVTOOLS_SLIDESORTERBAROPT_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <unotools/options.hxx>
@@ -71,7 +70,5 @@ class SVT_DLLPUBLIC SvtSlideSorterBarOptions final : public utl::detail::Options
     private:
         std::shared_ptr<SvtSlideSorterBarOptions_Impl> m_pImpl;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_EMBEDTRANSFER_HXX
-#define INCLUDED_SVTOOLS_EMBEDTRANSFER_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <vcl/transfer.hxx>
@@ -55,7 +54,5 @@ public:
                             const Graphic* pGraphic,
                             sal_Int64 nAspect );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

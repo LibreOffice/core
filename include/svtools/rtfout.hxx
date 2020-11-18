@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_RTFOUT_HXX
-#define INCLUDED_SVTOOLS_RTFOUT_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 
@@ -34,8 +33,5 @@ SVT_DLLPUBLIC SvStream& Out_String(
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
 
 }
-
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

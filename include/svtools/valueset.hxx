@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_VALUESET_HXX
-#define INCLUDED_SVTOOLS_VALUESET_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <tools/wintypes.hxx>
@@ -412,8 +411,5 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 };
-
-
-#endif // INCLUDED_SVTOOLS_VALUESET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

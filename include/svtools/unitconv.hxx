@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_UNITCONV_HXX
-#define INCLUDED_SVTOOLS_UNITCONV_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <tools/mapunit.hxx>
@@ -50,7 +49,5 @@ SVT_DLLPUBLIC int       GetCoreValue(const weld::MetricSpinButton& rField, MapUn
 SVT_DLLPUBLIC tools::Long  PointToTwips( tools::Long nIn );
 
 SVT_DLLPUBLIC tools::Long  TransformMetric( tools::Long nVal, FieldUnit aOld, FieldUnit aNew );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

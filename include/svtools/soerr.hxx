@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_SOERR_HXX
-#define INCLUDED_SVTOOLS_SOERR_HXX
+#pragma once
 
 #include <svtools/ehdl.hxx>
 #include <svtools/svtdllapi.h>
@@ -36,7 +35,5 @@
 
 SVT_DLLPUBLIC extern const ErrMsgCode RID_SO_ERROR_HANDLER[];
 SVT_DLLPUBLIC extern const ErrMsgCode RID_SO_ERRCTX[];
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

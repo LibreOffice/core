@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_HTMLKYWD_HXX
-#define INCLUDED_SVTOOLS_HTMLKYWD_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -685,7 +684,5 @@
 #define OOO_STRING_SVTOOLS_HTML_ET_url "application/x-www-form-urlencoded"
 #define OOO_STRING_SVTOOLS_HTML_ET_multipart "multipart/form-data"
 #define OOO_STRING_SVTOOLS_HTML_ET_text "text/plain"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

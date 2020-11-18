@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_RTFKEYWD_HXX
-#define INCLUDED_SVTOOLS_RTFKEYWD_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -1224,7 +1223,5 @@
 #define LO_STRING_SVTOOLS_RTF_SBAUTO "\\sbauto"
 #define LO_STRING_SVTOOLS_RTF_SAAUTO "\\saauto"
 #define LO_STRING_SVTOOLS_RTF_HTMAUTSP "\\htmautsp"
-
-#endif // INCLUDED_SVTOOLS_RTFKEYWD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
