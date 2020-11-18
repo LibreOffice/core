@@ -422,8 +422,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     }
     else
     {
-        if (!GetMergedPara() &&
-            SwRedlineTable::npos == rIDRA.GetRedlinePos(*GetTextNodeFirst(), RedlineType::Any))
+        if (SwRedlineTable::npos == rIDRA.GetRedlinePos(*GetTextNodeFirst(), RedlineType::Any))
         {
             bRedLine = false;
         }
