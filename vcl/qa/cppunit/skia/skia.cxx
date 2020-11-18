@@ -35,6 +35,7 @@ public:
     void testInterpretAs8Bit();
     void testAlphaBlendWith();
     void testBitmapCopyOnWrite();
+    void testTdf137329();
 
     CPPUNIT_TEST_SUITE(SkiaTest);
     CPPUNIT_TEST(testBitmapErase);
@@ -42,6 +43,7 @@ public:
     CPPUNIT_TEST(testInterpretAs8Bit);
     CPPUNIT_TEST(testAlphaBlendWith);
     CPPUNIT_TEST(testBitmapCopyOnWrite);
+    CPPUNIT_TEST(testTdf137329);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -301,6 +303,27 @@ void SkiaTest::testBitmapCopyOnWrite()
     CPPUNIT_ASSERT(bitmap.unittestGetAlphaImage() != bitmap2.unittestGetAlphaImage());
     CPPUNIT_ASSERT(bitmap.unittestGetImage() != oldImage);
     CPPUNIT_ASSERT(bitmap.unittestGetAlphaImage() != oldAlphaImage);
+}
+
+void SkiaTest::testTdf137329()
+{
+    // Draw a filled polygon in the entire device, with AA enabled.
+    // All pixels in the device should be black, even those at edges (i.e. not affected by AA).
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    device->SetOutputSizePixel(Size(10, 10));
+    device->SetBackground(Wallpaper(COL_WHITE));
+    device->SetAntialiasing(AntialiasingFlags::Enable);
+    device->Erase();
+    device->SetLineColor();
+    device->SetFillColor(COL_BLACK);
+    device->DrawPolyPolygon(
+        basegfx::B2DPolyPolygon(basegfx::B2DPolygon{ { 0, 0 }, { 10, 0 }, { 10, 10 }, { 0, 10 } }));
+    // savePNG("/tmp/tdf137329.png", device);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(9, 0)));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(9, 9)));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(0, 9)));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(4, 4)));
 }
 
 } // namespace
