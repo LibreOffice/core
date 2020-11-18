@@ -1242,7 +1242,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         return;
     bool bIsOwnDocument = lcl_IsOwnDocument( *this );
     sal_Int32 nLength = rSequence.getLength();
-    if (nLength)
     {
         SET_CURR_SHELL(m_pWrtShell);
         const beans::PropertyValue *pValue = rSequence.getConstArray();

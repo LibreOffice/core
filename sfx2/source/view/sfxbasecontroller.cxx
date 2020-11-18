@@ -1384,12 +1384,18 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                             break;
                         }
                     }
-                    if ( nViewDataIndex < nCount )
+                    if (nViewDataIndex < nCount || !xViewData.is())
                     {
                         Sequence< PropertyValue > aViewData;
-                        OSL_VERIFY( xViewData->getByIndex( nViewDataIndex ) >>= aViewData );
-                        if ( aViewData.getLength() > 0 )
+                        if (xViewData.is())
+                        {
+                            OSL_VERIFY(xViewData->getByIndex(nViewDataIndex) >>= aViewData);
+                        }
+                        if (aViewData.getLength() > 0 || !xViewData.is())
+                        {
+                            // Tolerate empty xViewData, ReadUserDataSequence() has side effects.
                             m_pData->m_pViewShell->ReadUserDataSequence( aViewData );
+                        }
                     }
                 }
                 catch (const Exception&)
