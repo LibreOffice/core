@@ -547,7 +547,7 @@ namespace
  * Takes the connection list from rLayoutNode, navigates from rFrom on an edge
  * of type nType, using a direction determined by bSourceToDestination.
  */
-OUString navigate(LayoutNode& rLayoutNode, sal_Int32 nType, const OUString& rFrom,
+OUString navigate(LayoutNode& rLayoutNode, sal_Int32 nType, std::u16string_view rFrom,
                   bool bSourceToDestination)
 {
     for (const auto& rConnection : rLayoutNode.getDiagram().getData()->getConnections())
@@ -570,7 +570,7 @@ OUString navigate(LayoutNode& rLayoutNode, sal_Int32 nType, const OUString& rFro
     return OUString();
 }
 
-sal_Int32 calcMaxDepth(const OUString& rNodeName, const dgm::Connections& rConnections)
+sal_Int32 calcMaxDepth(std::u16string_view rNodeName, const dgm::Connections& rConnections)
 {
     sal_Int32 nMaxLength = 0;
     for (auto const& aCxn : rConnections)

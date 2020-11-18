@@ -291,7 +291,7 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OString&, rIdent, void)
     pPage->Reset(GetOutputItemSet());
 }
 
-sal_uInt16  SwOutlineTabDialog::GetLevel(const OUString &rFormatName) const
+sal_uInt16  SwOutlineTabDialog::GetLevel(std::u16string_view rFormatName) const
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {

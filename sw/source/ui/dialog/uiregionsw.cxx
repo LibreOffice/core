@@ -535,7 +535,7 @@ SwEditRegionDlg::~SwEditRegionDlg( )
     }
 }
 
-void SwEditRegionDlg::SelectSection(const OUString& rSectionName)
+void SwEditRegionDlg::SelectSection(std::u16string_view rSectionName)
 {
     std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
     if (!m_xTree->get_iter_first(*xIter))

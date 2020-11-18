@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 namespace unogallery {
 
 
-GalleryTheme::GalleryTheme( const OUString& rThemeName )
+GalleryTheme::GalleryTheme( std::u16string_view rThemeName )
 {
     mpGallery = ::Gallery::GetGalleryInstance();
     mpTheme = ( mpGallery ? mpGallery->AcquireTheme( rThemeName, *this ) : nullptr );

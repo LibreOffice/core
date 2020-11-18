@@ -29,7 +29,7 @@ namespace framework{
 #define SPECIALTARGET_TOP             "_top"                              // Search at our parents for the first task (if any exist) or a frame without a parent.
 #define SPECIALTARGET_BLANK           "_blank"                            // Create a new task.
 #define SPECIALTARGET_DEFAULT         "_default"                          // Create a new task or recycle an existing one
-#define SPECIALTARGET_BEAMER          "_beamer"                           // special frame in hierarchy
+#define SPECIALTARGET_BEAMER          u"_beamer"                           // special frame in hierarchy
 #define SPECIALTARGET_HELPTASK        "OFFICE_HELP_TASK"                  // special name for our help task
 
 }       //  namespace framework

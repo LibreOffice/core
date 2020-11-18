@@ -440,7 +440,7 @@ uno::Reference<drawing::XShape> SwModelTestBase::getShape(int number)
     return xShape;
 }
 
-uno::Reference<drawing::XShape> SwModelTestBase::getShapeByName(const OUString& aName)
+uno::Reference<drawing::XShape> SwModelTestBase::getShapeByName(std::u16string_view aName)
 {
     uno::Reference<drawing::XShape> xRet;
 

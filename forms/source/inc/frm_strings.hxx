@@ -122,7 +122,7 @@ namespace frm
     #define PROPERTY_TIMEMAX                  "TimeMax"
     #define PROPERTY_LINECOUNT                "LineCount"
     #define PROPERTY_BOUNDCOLUMN              "BoundColumn"
-    #define PROPERTY_FONT                     "FontDescriptor"
+    #define PROPERTY_FONT                     u"FontDescriptor"
     #define PROPERTY_FILLCOLOR                "FillColor"
     #define PROPERTY_LINECOLOR                "LineColor"
     #define PROPERTY_DROPDOWN                 "Dropdown"
@@ -213,7 +213,7 @@ namespace frm
     #define PROPERTY_RICH_TEXT                "RichText"
     #define PROPERTY_ENFORCE_FORMAT           "EnforceFormat"
     #define PROPERTY_LINEEND_FORMAT           "LineEndFormat"
-    #define PROPERTY_WRITING_MODE             "WritingMode"
+    #define PROPERTY_WRITING_MODE             u"WritingMode"
     #define PROPERTY_CONTEXT_WRITING_MODE     "ContextWritingMode"
 
     #define PROPERTY_NATIVE_LOOK              "NativeWidgetLook"

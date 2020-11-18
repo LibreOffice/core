@@ -141,7 +141,7 @@ XPropertyEntry* XPropertyList::Get( tools::Long nIndex ) const
     return maList[nIndex].get();
 }
 
-tools::Long XPropertyList::GetIndex(const OUString& rName) const
+tools::Long XPropertyList::GetIndex(std::u16string_view rName) const
 {
     if( mbListDirty )
     {

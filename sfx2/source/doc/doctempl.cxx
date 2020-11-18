@@ -206,7 +206,7 @@ public:
 
     size_t              GetRegionCount() const
                             { return maRegions.size(); }
-    RegionData_Impl*    GetRegion( const OUString& rName ) const;
+    RegionData_Impl*    GetRegion( std::u16string_view rName ) const;
     RegionData_Impl*    GetRegion( size_t nIndex ) const;
 
     bool            GetTitleFromURL( const OUString& rURL, OUString& aTitle );
@@ -1089,7 +1089,7 @@ bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, s
 
 bool SfxDocumentTemplates::GetFull
 (
-    const OUString &rRegion,      // Region Name
+    std::u16string_view rRegion,      // Region Name
     const OUString &rName,        // Template Name
     OUString &rPath               // Out: Path + File name
 )
@@ -1126,7 +1126,7 @@ bool SfxDocumentTemplates::GetFull
         RegionData_Impl *pRegion = pImp->GetRegion( i );
 
         if( pRegion &&
-            ( rRegion.isEmpty() || ( rRegion == pRegion->GetTitle() ) ) )
+            ( rRegion.empty() || ( rRegion == pRegion->GetTitle() ) ) )
         {
             pEntry = pRegion->GetEntry( rName );
 
@@ -1450,7 +1450,7 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegion( size_t nIndex ) const
 }
 
 
-RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
+RegionData_Impl* SfxDocTemplate_Impl::GetRegion( std::u16string_view rName )
     const
 {
     for (auto& pData : maRegions)

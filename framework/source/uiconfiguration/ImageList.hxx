@@ -53,7 +53,7 @@ public:
 
     Image           GetImage( const OUString& rImageName ) const;
 
-    sal_uInt16      GetImagePos( const OUString& rImageName ) const;
+    sal_uInt16      GetImagePos( std::u16string_view rImageName ) const;
 
     sal_uInt16      GetImageId( sal_uInt16 nPos ) const;
 

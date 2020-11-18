@@ -759,7 +759,7 @@ public:
     // is the whole document protected/hidden (for UI...)
     bool IsAllProtect() const { return m_bAllProtect; }
 
-    bool GotoRegion( const OUString& rName );
+    bool GotoRegion( std::u16string_view rName );
 
     // show the current selection
     virtual void MakeSelVisible();
@@ -786,7 +786,7 @@ public:
 
     bool SelectTextAttr( sal_uInt16 nWhich, bool bExpand, const SwTextAttr* pAttr = nullptr );
     bool GotoINetAttr( const SwTextINetFormat& rAttr );
-    const SwFormatINetFormat* FindINetAttr( const OUString& rName ) const;
+    const SwFormatINetFormat* FindINetAttr( std::u16string_view rName ) const;
 
     bool SelectText( const sal_Int32 nStart,
                         const sal_Int32 nEnd );

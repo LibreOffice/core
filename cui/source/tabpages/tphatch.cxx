@@ -199,7 +199,7 @@ DeactivateRC SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-sal_Int32 SvxHatchTabPage::SearchHatchList(const OUString& rHatchName)
+sal_Int32 SvxHatchTabPage::SearchHatchList(std::u16string_view rHatchName)
 {
     tools::Long nCount = m_pHatchingList->Count();
     bool bValidHatchName = true;

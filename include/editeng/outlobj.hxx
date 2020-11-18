@@ -104,9 +104,9 @@ public:
     void ClearPortionInfo();
 
     // StyleSheet support
-    bool ChangeStyleSheets(const OUString& rOldName, SfxStyleFamily eOldFamily,
+    bool ChangeStyleSheets(std::u16string_view rOldName, SfxStyleFamily eOldFamily,
         const OUString& rNewName, SfxStyleFamily eNewFamily);
-    void ChangeStyleSheetName(SfxStyleFamily eFamily, const OUString& rOldName,
+    void ChangeStyleSheetName(SfxStyleFamily eFamily, std::u16string_view rOldName,
         const OUString& rNewName);
     void SetStyleSheets(sal_uInt16 nLevel, const OUString& rNewName,
         const SfxStyleFamily& rNewFamily);

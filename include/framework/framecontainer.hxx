@@ -82,7 +82,7 @@ class FrameContainer final
 
         /// special helper for Frame::findFrame()
         css::uno::Reference< css::frame::XFrame > searchOnAllChildrens   ( const OUString& sName ) const;
-        css::uno::Reference< css::frame::XFrame > searchOnDirectChildrens( const OUString& sName ) const;
+        css::uno::Reference< css::frame::XFrame > searchOnDirectChildrens( std::u16string_view sName ) const;
 
 }; // class FrameContainer
 

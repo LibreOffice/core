@@ -47,7 +47,7 @@ public:
 
     static css::uno::Any GetProperty(
         const css::uno::Sequence<css::beans::PropertyValue > & aArguments,
-        const OUString & rName );
+        std::u16string_view rName );
 
     static bool HasCategories(
         const css::uno::Sequence< css::beans::PropertyValue > & rArguments,

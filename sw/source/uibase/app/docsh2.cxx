@@ -648,7 +648,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     // 3 - file saved in non-HTML -> QueryBox to save as HTML
                     std::shared_ptr<const SfxFilter> pHtmlFlt =
                                     SwIoSystem::GetFilterOfFormat(
-                                        "HTML",
+                                        u"HTML",
                                         SwWebDocShell::Factory().GetFilterContainer() );
                     bool bLocalHasName = HasName();
                     if(bLocalHasName)
@@ -976,7 +976,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         // for HTML there is only one filter!!
                         pFlt = SwIoSystem::GetFilterOfFormat(
-                                "HTML",
+                                u"HTML",
                                 SwWebDocShell::Factory().GetFilterContainer() );
                         pStrId = STR_LOAD_HTML_DOC;
                     }

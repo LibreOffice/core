@@ -508,10 +508,10 @@ namespace dbaui
         return true;
     }
 
-    bool SubComponentManager::closeSubFrames( const OUString& i_rName, const sal_Int32 _nComponentType )
+    bool SubComponentManager::closeSubFrames( std::u16string_view i_rName, const sal_Int32 _nComponentType )
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
-        ENSURE_OR_RETURN_FALSE( !i_rName.isEmpty(), "SubComponentManager::closeSubFrames: illegal name!" );
+        ENSURE_OR_RETURN_FALSE( !i_rName.empty(), "SubComponentManager::closeSubFrames: illegal name!" );
 
         SubComponents aWorkingCopy( m_pData->m_aComponents );
         for (auto const& elem : aWorkingCopy)

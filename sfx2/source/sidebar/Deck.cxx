@@ -323,7 +323,7 @@ vcl::Window* Deck::GetPanelParentWindow()
     return mpScrollContainer.get();
 }
 
-Panel* Deck::GetPanel(const OUString & panelId)
+Panel* Deck::GetPanel(std::u16string_view panelId)
 {
     for (const VclPtr<Panel> & pPanel : maPanels)
     {

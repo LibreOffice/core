@@ -1992,7 +1992,7 @@ void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
     maRanges.DeleteArea( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
 }
 
-void ScConditionalFormat::RenameCellStyle(const OUString& rOld, const OUString& rNew)
+void ScConditionalFormat::RenameCellStyle(std::u16string_view rOld, const OUString& rNew)
 {
     for(const auto& rxEntry : maEntries)
         if(rxEntry->GetType() == ScFormatEntry::Type::Condition ||
@@ -2156,7 +2156,7 @@ void ScConditionalFormatList::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
     }
 }
 
-void ScConditionalFormatList::RenameCellStyle( const OUString& rOld, const OUString& rNew )
+void ScConditionalFormatList::RenameCellStyle( std::u16string_view rOld, const OUString& rNew )
 {
     for (auto const& it : m_ConditionalFormats)
     {

@@ -159,7 +159,7 @@ static ModuleToGroupNameMap_Impl ModuleMap[] =
     { u"Base", OUString(), SID_SB_STARBASEOPTIONS },
 };
 
-static void setGroupName( const OUString& rModule, const OUString& rGroupName )
+static void setGroupName( std::u16string_view rModule, const OUString& rGroupName )
 {
     for (ModuleToGroupNameMap_Impl& rEntry : ModuleMap)
     {
@@ -209,7 +209,7 @@ static void deleteGroupNames()
         rEntry.m_sGroupName.clear();
 }
 
-static sal_uInt16 getGroupNodeId( const OUString& rModule )
+static sal_uInt16 getGroupNodeId( std::u16string_view rModule )
 {
     sal_uInt16 nNodeId = 0xFFFF;
     for (const ModuleToGroupNameMap_Impl& rEntry : ModuleMap)
@@ -496,7 +496,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, const Referenc
 
     InitTreeAndHandler();
     Initialize( _xFrame );
-    LoadExtensionOptions( OUString() );
+    LoadExtensionOptions( u"" );
     if (bActivateLastSelection)
         ActivateLastSelection();
 
@@ -504,13 +504,13 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, const Referenc
 }
 
 // Ctor() with ExtensionId -----------------------------------------------
-OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, const OUString& rExtensionId)
+OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, std::u16string_view rExtensionId)
     : SfxOkDialogController(pParent, "cui/ui/optionsdialog.ui", "OptionsDialog")
     INI_LIST()
 {
     InitWidgets();
 
-    bIsFromExtensionManager = ( !rExtensionId.isEmpty() );
+    bIsFromExtensionManager = ( !rExtensionId.empty() );
     InitTreeAndHandler();
     LoadExtensionOptions( rExtensionId );
     ActivateLastSelection();
@@ -1359,7 +1359,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     // %PRODUCTNAME options
     if ( !lcl_isOptionHidden( SID_GENERAL_OPTIONS, aOptionsDlgOpt ) )
     {
-        setGroupName("ProductName", CuiResId(SID_GENERAL_OPTIONS_RES[0].first));
+        setGroupName(u"ProductName", CuiResId(SID_GENERAL_OPTIONS_RES[0].first));
         nGroup = AddGroup(CuiResId(SID_GENERAL_OPTIONS_RES[0].first), nullptr, nullptr, SID_GENERAL_OPTIONS );
         const sal_uInt16 nEnd = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_GENERAL_OPTIONS_RES));
 
@@ -1399,7 +1399,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     // Load and Save options
     if ( !lcl_isOptionHidden( SID_FILTER_DLG, aOptionsDlgOpt ) )
     {
-        setGroupName( "LoadSave", CuiResId(SID_FILTER_DLG_RES[0].first) );
+        setGroupName( u"LoadSave", CuiResId(SID_FILTER_DLG_RES[0].first) );
         nGroup = AddGroup( CuiResId(SID_FILTER_DLG_RES[0].first), nullptr, nullptr, SID_FILTER_DLG );
         for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_FILTER_DLG_RES); ++i )
         {
@@ -1413,7 +1413,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     SvtLanguageOptions aLanguageOptions;
     if ( !lcl_isOptionHidden( SID_LANGUAGE_OPTIONS, aOptionsDlgOpt ) )
     {
-        setGroupName("LanguageSettings", CuiResId(SID_LANGUAGE_OPTIONS_RES[0].first));
+        setGroupName(u"LanguageSettings", CuiResId(SID_LANGUAGE_OPTIONS_RES[0].first));
         nGroup = AddGroup(CuiResId(SID_LANGUAGE_OPTIONS_RES[0].first), nullptr, nullptr, SID_LANGUAGE_OPTIONS );
         for (size_t i = 1; i < SAL_N_ELEMENTS(SID_LANGUAGE_OPTIONS_RES); ++i)
         {
@@ -1443,9 +1443,9 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( !lcl_isOptionHidden( SID_SW_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 if ( aFactory == "com.sun.star.text.WebDocument" )
-                    setGroupName( "WriterWeb", CuiResId(SID_SW_EDITOPTIONS_RES[0].first) );
+                    setGroupName( u"WriterWeb", CuiResId(SID_SW_EDITOPTIONS_RES[0].first) );
                 else
-                    setGroupName( "Writer", CuiResId(SID_SW_EDITOPTIONS_RES[0].first) );
+                    setGroupName( u"Writer", CuiResId(SID_SW_EDITOPTIONS_RES[0].first) );
                 nGroup = AddGroup(CuiResId(SID_SW_EDITOPTIONS_RES[0].first), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
                 for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_SW_EDITOPTIONS_RES); ++i )
                 {
@@ -1487,7 +1487,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( !lcl_isOptionHidden( SID_SC_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 SfxModule* pScMod = SfxApplication::GetModule( SfxToolsModule::Calc );
-                setGroupName( "Calc", CuiResId(SID_SC_EDITOPTIONS_RES[0].first) );
+                setGroupName( u"Calc", CuiResId(SID_SC_EDITOPTIONS_RES[0].first) );
                 nGroup = AddGroup( CuiResId(SID_SC_EDITOPTIONS_RES[0].first), pScMod, pScMod, SID_SC_EDITOPTIONS );
                 const sal_uInt16 nCount = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_SC_EDITOPTIONS_RES));
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
@@ -1510,7 +1510,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         {
             if ( !lcl_isOptionHidden( SID_SD_EDITOPTIONS, aOptionsDlgOpt ) )
             {
-                setGroupName( "Impress", CuiResId(SID_SD_EDITOPTIONS_RES[0].first) );
+                setGroupName( u"Impress", CuiResId(SID_SD_EDITOPTIONS_RES[0].first) );
                 nGroup = AddGroup( CuiResId(SID_SD_EDITOPTIONS_RES[0].first), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
                 const sal_uInt16 nCount = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_SD_EDITOPTIONS_RES));
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
@@ -1532,7 +1532,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         {
             if ( !lcl_isOptionHidden( SID_SD_GRAPHIC_OPTIONS, aOptionsDlgOpt ) )
             {
-                setGroupName( "Draw", CuiResId(SID_SD_GRAPHIC_OPTIONS_RES[0].first) );
+                setGroupName( u"Draw", CuiResId(SID_SD_GRAPHIC_OPTIONS_RES[0].first) );
                 nGroup = AddGroup( CuiResId(SID_SD_GRAPHIC_OPTIONS_RES[0].first), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
                 const sal_uInt16 nCount = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_SD_GRAPHIC_OPTIONS_RES));
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
@@ -1555,7 +1555,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( !lcl_isOptionHidden( SID_SM_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 SfxModule* pSmMod = SfxApplication::GetModule(SfxToolsModule::Math);
-                setGroupName( "Math", CuiResId(SID_SM_EDITOPTIONS_RES[0].first) );
+                setGroupName( u"Math", CuiResId(SID_SM_EDITOPTIONS_RES[0].first) );
                 nGroup = AddGroup(CuiResId(SID_SM_EDITOPTIONS_RES[0].first), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
                 for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_SM_EDITOPTIONS_RES); ++i )
                 {
@@ -1574,7 +1574,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         ||  aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC )
         ) )
     {
-        setGroupName( "Base", CuiResId(SID_SB_STARBASEOPTIONS_RES[0].first) );
+        setGroupName( u"Base", CuiResId(SID_SB_STARBASEOPTIONS_RES[0].first) );
         nGroup = AddGroup( CuiResId(SID_SB_STARBASEOPTIONS_RES[0].first), nullptr, nullptr, SID_SB_STARBASEOPTIONS );
         for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_SB_STARBASEOPTIONS_RES); ++i )
         {
@@ -1587,7 +1587,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     // Chart options (always installed and active)
     if ( !lcl_isOptionHidden( SID_SCH_EDITOPTIONS, aOptionsDlgOpt ) )
     {
-        setGroupName( "Charts", CuiResId(SID_SCH_EDITOPTIONS_RES[0].first) );
+        setGroupName( u"Charts", CuiResId(SID_SCH_EDITOPTIONS_RES[0].first) );
         nGroup = AddGroup( CuiResId(SID_SCH_EDITOPTIONS_RES[0].first), nullptr, nullptr, SID_SCH_EDITOPTIONS );
         for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_SCH_EDITOPTIONS_RES); ++i )
         {
@@ -1601,7 +1601,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( lcl_isOptionHidden( SID_INET_DLG, aOptionsDlgOpt ) )
         return;
 
-    setGroupName("Internet", CuiResId(SID_INET_DLG_RES[0].first));
+    setGroupName(u"Internet", CuiResId(SID_INET_DLG_RES[0].first));
     nGroup = AddGroup(CuiResId(SID_INET_DLG_RES[0].first), nullptr, nullptr, SID_INET_DLG );
 
     for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_INET_DLG_RES); ++i )
@@ -1645,12 +1645,12 @@ static bool isNodeActive( OptionsNode const * pNode, Module* pModule )
     return false;
 }
 
-void OfaTreeOptionsDialog::LoadExtensionOptions( const OUString& rExtensionId )
+void OfaTreeOptionsDialog::LoadExtensionOptions( std::u16string_view rExtensionId )
 {
     std::unique_ptr<Module> pModule;
 
     // when called by Tools - Options then load nodes of active module
-    if ( rExtensionId.isEmpty() )
+    if ( rExtensionId.empty() )
     {
         pModule = LoadModule( GetModuleIdentifier( Reference< XFrame >() ) );
     }
@@ -1691,7 +1691,7 @@ OUString OfaTreeOptionsDialog::GetModuleIdentifier( const Reference< XFrame >& r
 }
 
 std::unique_ptr<Module> OfaTreeOptionsDialog::LoadModule(
-    const OUString& rModuleIdentifier )
+    std::u16string_view rModuleIdentifier )
 {
     std::unique_ptr<Module> pModule;
     Reference< XNameAccess > xSet(
@@ -1754,7 +1754,7 @@ std::unique_ptr<Module> OfaTreeOptionsDialog::LoadModule(
 }
 
 VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
-    Module* pModule, const OUString& rExtensionId)
+    Module* pModule, std::u16string_view rExtensionId)
 {
     VectorOfNodes aOutNodeList;
 
@@ -1780,12 +1780,12 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
 
             if ( sLabel.isEmpty() )
                 sLabel = sGroupName;
-            OUString sTemp = getGroupName( sLabel, !rExtensionId.isEmpty() );
+            OUString sTemp = getGroupName( sLabel, !rExtensionId.empty() );
             if ( !sTemp.isEmpty() )
                 sLabel = sTemp;
             std::unique_ptr<OptionsNode> pNode(new OptionsNode(sNodeId, sLabel, bAllModules));
 
-            if ( rExtensionId.isEmpty() && !isNodeActive( pNode.get(), pModule ) )
+            if ( rExtensionId.empty() && !isNodeActive( pNode.get(), pModule ) )
             {
                 continue;
             }
@@ -1812,7 +1812,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                         xLeaveAccess->getByName( "GroupId" ) >>= sLeafGrpId;
                         xLeaveAccess->getByName( "GroupIndex" ) >>= nLeafGrpIdx;
 
-                        if ( rExtensionId.isEmpty() || sId == rExtensionId )
+                        if ( rExtensionId.empty() || sId == rExtensionId )
                         {
                             std::unique_ptr<OptionsLeaf> pLeaf(new OptionsLeaf(
                                 sLeafLabel, sLeafURL, sEventHdl, sLeafGrpId, nLeafGrpIdx ));
@@ -1883,7 +1883,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
     return aOutNodeList;
 }
 
-static sal_uInt16 lcl_getGroupId( const OUString& rGroupName, const weld::TreeView& rTreeLB )
+static sal_uInt16 lcl_getGroupId( std::u16string_view rGroupName, const weld::TreeView& rTreeLB )
 {
     sal_uInt16 nRet = 0;
 

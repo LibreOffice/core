@@ -712,7 +712,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4ClipBoardId( SotCli
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
-std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4UIName( const OUString& rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4UIName( std::u16string_view rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     m_rImpl.InitForIterating();
     std::shared_ptr<const SfxFilter> pFirstFilter;

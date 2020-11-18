@@ -46,7 +46,7 @@ private:
     std::vector< SvObjectServer > aObjectServerList;
 
 public:
-    const SvObjectServer *  Get( const OUString & rHumanName ) const;
+    const SvObjectServer *  Get( std::u16string_view rHumanName ) const;
     const SvObjectServer *  Get( const SvGlobalName & ) const;
     void                    Remove( const SvGlobalName & );
     void                    FillInsertObjects();

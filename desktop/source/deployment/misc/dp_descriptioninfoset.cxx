@@ -430,7 +430,7 @@ void DescriptionInfoset::checkDenylist() const
 }
 
 bool DescriptionInfoset::checkDenylistVersion(
-    const OUString& currentversion,
+    std::u16string_view currentversion,
     css::uno::Sequence< OUString > const & versions)
 {
     sal_Int32 nLen = versions.getLength();

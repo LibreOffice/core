@@ -206,8 +206,8 @@ public:
         m_aRowActivatedHdl = rLink;
     }
 
-    bool HasSelectedChildren(const OUString& rName);
-    bool SelectEntry(const OUString& rName);
+    bool HasSelectedChildren(std::u16string_view rName);
+    bool SelectEntry(std::u16string_view rName);
 
     OUString get_selected_text() const
     {
@@ -266,7 +266,7 @@ public:
     bool IsEqualToDoc(const SdDrawDocument* pInDoc);
     /// Visits rList recursively and tries to advance rEntry accordingly.
     bool IsEqualToShapeList(std::unique_ptr<weld::TreeIter>& rEntry, const SdrObjList& rList,
-                            const OUString& rListName);
+                            std::u16string_view rListName);
 
     static bool             IsInDrag();
 

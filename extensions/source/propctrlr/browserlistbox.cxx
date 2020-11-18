@@ -404,7 +404,7 @@ namespace pcr
         }
     }
 
-    sal_uInt16 OBrowserListBox::GetPropertyPos( const OUString& _rEntryName ) const
+    sal_uInt16 OBrowserListBox::GetPropertyPos( std::u16string_view _rEntryName ) const
     {
         sal_uInt16 nPos = 0;
         for (auto const& line : m_aLines)

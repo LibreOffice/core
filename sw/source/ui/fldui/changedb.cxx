@@ -80,7 +80,7 @@ void SwChangeDBDlg::FillDBPopup()
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
     const SwDBData& rDBData = pSh->GetDBData();
-    m_xAvailDBTLB->Select(rDBData.sDataSource, rDBData.sCommand, OUString());
+    m_xAvailDBTLB->Select(rDBData.sDataSource, rDBData.sCommand, u"");
     TreeSelect();
 
     Sequence< OUString > aDBNames = xDBContext->getElementNames();

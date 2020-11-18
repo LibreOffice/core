@@ -661,7 +661,7 @@ void ToolbarLayoutManager::destroyToolbars()
     }
 }
 
-bool ToolbarLayoutManager::showToolbar( const OUString& rResourceURL )
+bool ToolbarLayoutManager::showToolbar( std::u16string_view rResourceURL )
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
 
@@ -692,7 +692,7 @@ bool ToolbarLayoutManager::showToolbar( const OUString& rResourceURL )
     return false;
 }
 
-bool ToolbarLayoutManager::hideToolbar( const OUString& rResourceURL )
+bool ToolbarLayoutManager::hideToolbar( std::u16string_view rResourceURL )
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
 
@@ -795,7 +795,7 @@ void ToolbarLayoutManager::setVisible( bool bVisible )
         resetDockingArea();
 }
 
-bool ToolbarLayoutManager::dockToolbar( const OUString& rResourceURL, ui::DockingArea eDockingArea, const awt::Point& aPos )
+bool ToolbarLayoutManager::dockToolbar( std::u16string_view rResourceURL, ui::DockingArea eDockingArea, const awt::Point& aPos )
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
 
@@ -1614,7 +1614,7 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
                         LOOKUP PART FOR TOOLBARS
 ******************************************************************************/
 
-UIElement& ToolbarLayoutManager::impl_findToolbar( const OUString& aName )
+UIElement& ToolbarLayoutManager::impl_findToolbar( std::u16string_view aName )
 {
     static UIElement aEmptyElement;
 
@@ -1628,7 +1628,7 @@ UIElement& ToolbarLayoutManager::impl_findToolbar( const OUString& aName )
     return aEmptyElement;
 }
 
-UIElement ToolbarLayoutManager::implts_findToolbar( const OUString& aName )
+UIElement ToolbarLayoutManager::implts_findToolbar( std::u16string_view aName )
 {
     SolarMutexGuard g;
     return impl_findToolbar( aName );
@@ -1655,7 +1655,7 @@ UIElement ToolbarLayoutManager::implts_findToolbar( const uno::Reference< uno::X
     return aToolbar;
 }
 
-uno::Reference< awt::XWindow > ToolbarLayoutManager::implts_getXWindow( const OUString& aName )
+uno::Reference< awt::XWindow > ToolbarLayoutManager::implts_getXWindow( std::u16string_view aName )
 {
     uno::Reference< awt::XWindow > xWindow;
 
@@ -1672,7 +1672,7 @@ uno::Reference< awt::XWindow > ToolbarLayoutManager::implts_getXWindow( const OU
     return xWindow;
 }
 
-vcl::Window* ToolbarLayoutManager::implts_getWindow( const OUString& aName )
+vcl::Window* ToolbarLayoutManager::implts_getWindow( std::u16string_view aName )
 {
     uno::Reference< awt::XWindow > xWindow = implts_getXWindow( aName );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
@@ -2138,7 +2138,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
     ui::DockingArea DockingArea,
     const SingleRowColumnWindowData& rRowColumnWindowData,
     const ::Point& rMousePos,
-    const OUString& rExcludeElementName )
+    std::u16string_view rExcludeElementName )
 {
     ::tools::Rectangle aWinRect;
 
@@ -2186,7 +2186,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
     ui::DockingArea        eDockingArea,
     sal_Int32              nRowCol,
     const ::tools::Rectangle&     rDockedElementRect,
-    const OUString& rMovedElementName,
+    std::u16string_view rMovedElementName,
     const ::tools::Rectangle&     rMovedElementRect )
 {
     SingleRowColumnWindowData aRowColumnWindowData;
@@ -3916,7 +3916,7 @@ void SAL_CALL ToolbarLayoutManager::elementReplaced( const ui::ConfigurationEven
         pParentLayouter->requestLayout();
 }
 
-uno::Reference< ui::XUIElement > ToolbarLayoutManager::getToolbar( const OUString& aName )
+uno::Reference< ui::XUIElement > ToolbarLayoutManager::getToolbar( std::u16string_view aName )
 {
     return implts_findToolbar( aName ).m_xUIElement;
 }
@@ -3943,7 +3943,7 @@ uno::Sequence< uno::Reference< ui::XUIElement > > ToolbarLayoutManager::getToolb
     return aSeq;
 }
 
-bool ToolbarLayoutManager::floatToolbar( const OUString& rResourceURL )
+bool ToolbarLayoutManager::floatToolbar( std::u16string_view rResourceURL )
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
     if ( aUIElement.m_xUIElement.is() )
@@ -3970,7 +3970,7 @@ bool ToolbarLayoutManager::floatToolbar( const OUString& rResourceURL )
     return false;
 }
 
-bool ToolbarLayoutManager::lockToolbar( const OUString& rResourceURL )
+bool ToolbarLayoutManager::lockToolbar( std::u16string_view rResourceURL )
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
     if ( aUIElement.m_xUIElement.is() )
@@ -3997,7 +3997,7 @@ bool ToolbarLayoutManager::lockToolbar( const OUString& rResourceURL )
     return false;
 }
 
-bool ToolbarLayoutManager::unlockToolbar( const OUString& rResourceURL )
+bool ToolbarLayoutManager::unlockToolbar( std::u16string_view rResourceURL )
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
     if ( aUIElement.m_xUIElement.is() )
@@ -4024,30 +4024,30 @@ bool ToolbarLayoutManager::unlockToolbar( const OUString& rResourceURL )
     return false;
 }
 
-bool ToolbarLayoutManager::isToolbarVisible( const OUString& rResourceURL )
+bool ToolbarLayoutManager::isToolbarVisible( std::u16string_view rResourceURL )
 {
     uno::Reference< awt::XWindow2 > xWindow2( implts_getXWindow( rResourceURL ), uno::UNO_QUERY );
     return ( xWindow2.is() && xWindow2->isVisible() );
 }
 
-bool ToolbarLayoutManager::isToolbarFloating( const OUString& rResourceURL )
+bool ToolbarLayoutManager::isToolbarFloating( std::u16string_view rResourceURL )
 {
     uno::Reference< awt::XDockableWindow > xDockWindow( implts_getXWindow( rResourceURL ), uno::UNO_QUERY );
     return ( xDockWindow.is() && xDockWindow->isFloating() );
 }
 
-bool ToolbarLayoutManager::isToolbarDocked( const OUString& rResourceURL )
+bool ToolbarLayoutManager::isToolbarDocked( std::u16string_view rResourceURL )
 {
     return !isToolbarFloating( rResourceURL );
 }
 
-bool ToolbarLayoutManager::isToolbarLocked( const OUString& rResourceURL )
+bool ToolbarLayoutManager::isToolbarLocked( std::u16string_view rResourceURL )
 {
     uno::Reference< awt::XDockableWindow > xDockWindow( implts_getXWindow( rResourceURL ), uno::UNO_QUERY );
     return ( xDockWindow.is() && xDockWindow->isLocked() );
 }
 
-awt::Size ToolbarLayoutManager::getToolbarSize( const OUString& rResourceURL )
+awt::Size ToolbarLayoutManager::getToolbarSize( std::u16string_view rResourceURL )
 {
     vcl::Window* pWindow = implts_getWindow( rResourceURL );
 
@@ -4064,7 +4064,7 @@ awt::Size ToolbarLayoutManager::getToolbarSize( const OUString& rResourceURL )
     return awt::Size();
 }
 
-awt::Point ToolbarLayoutManager::getToolbarPos( const OUString& rResourceURL )
+awt::Point ToolbarLayoutManager::getToolbarPos( std::u16string_view rResourceURL )
 {
     awt::Point aPos;
     UIElement  aUIElement = implts_findToolbar( rResourceURL );
@@ -4085,7 +4085,7 @@ awt::Point ToolbarLayoutManager::getToolbarPos( const OUString& rResourceURL )
     return aPos;
 }
 
-void ToolbarLayoutManager::setToolbarSize( const OUString& rResourceURL, const awt::Size& aSize )
+void ToolbarLayoutManager::setToolbarSize( std::u16string_view rResourceURL, const awt::Size& aSize )
 {
     uno::Reference< awt::XWindow2 > xWindow( implts_getXWindow( rResourceURL ), uno::UNO_QUERY );
     uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
@@ -4101,7 +4101,7 @@ void ToolbarLayoutManager::setToolbarSize( const OUString& rResourceURL, const a
     }
 }
 
-void ToolbarLayoutManager::setToolbarPos( const OUString& rResourceURL, const awt::Point& aPos )
+void ToolbarLayoutManager::setToolbarPos( std::u16string_view rResourceURL, const awt::Point& aPos )
 {
     uno::Reference< awt::XWindow > xWindow( implts_getXWindow( rResourceURL ));
     uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
@@ -4117,7 +4117,7 @@ void ToolbarLayoutManager::setToolbarPos( const OUString& rResourceURL, const aw
     }
 }
 
-void ToolbarLayoutManager::setToolbarPosSize( const OUString& rResourceURL, const awt::Point& aPos, const awt::Size& aSize )
+void ToolbarLayoutManager::setToolbarPosSize( std::u16string_view rResourceURL, const awt::Point& aPos, const awt::Size& aSize )
 {
     setToolbarPos( rResourceURL, aPos );
     setToolbarSize( rResourceURL, aSize );

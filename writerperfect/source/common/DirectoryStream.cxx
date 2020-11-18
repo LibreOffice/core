@@ -49,7 +49,7 @@ namespace writerperfect
 {
 namespace
 {
-uno::Reference<io::XInputStream> findStream(ucbhelper::Content& rContent, const OUString& rName)
+uno::Reference<io::XInputStream> findStream(ucbhelper::Content& rContent, std::u16string_view rName)
 {
     uno::Reference<io::XInputStream> xInputStream;
 

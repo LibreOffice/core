@@ -231,7 +231,7 @@ public:
 }
 
 static sal_uInt16 lcl_FindLogicalName(BibConfig const * pConfig ,
-                                      const OUString& rLogicalColumnName)
+                                      std::u16string_view rLogicalColumnName)
 {
     for(sal_uInt16 i = 0; i < COLUMN_COUNT; i++)
     {

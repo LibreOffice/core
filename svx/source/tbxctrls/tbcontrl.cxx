@@ -219,7 +219,7 @@ protected:
     void            ReleaseFocus();
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
     static void     UserDrawEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const OUString &rStyleName);
-    void            SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected);
+    void            SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, std::u16string_view rStyleName, bool bIsNotSelected);
     static bool     AdjustFontForItemHeight(OutputDevice& rDevice, tools::Rectangle const & rTextRect, tools::Long nHeight);
     DECL_LINK(MenuSelectHdl, const OString&, void);
     DECL_STATIC_LINK(SvxStyleBox_Base, ShowMoreHdl, void*, void);
@@ -933,7 +933,7 @@ IMPL_STATIC_LINK_NOARG(SvxStyleBox_Base, ShowMoreHdl, void*, void)
     if (!pViewFrm)
         return;
     pViewFrm->ShowChildWindow(SID_SIDEBAR);
-    ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel", pViewFrm->GetFrame().GetFrameInterface(), true);
+    ::sfx2::sidebar::Sidebar::ShowPanel(u"StyleListPanel", pViewFrm->GetFrame().GetFrameInterface(), true);
 }
 
 IMPL_LINK(SvxStyleBox_Base, SelectHdl, weld::ComboBox&, rCombo, void)
@@ -1127,7 +1127,7 @@ void SvxStyleBox_Base::UserDrawEntry(vcl::RenderContext& rRenderContext, const t
     rRenderContext.DrawText(aPos, rStyleName);
 }
 
-void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected)
+void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, std::u16string_view rStyleName, bool bIsNotSelected)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (!bIsNotSelected)

@@ -183,7 +183,7 @@ DlgFilterCrit::~DlgFilterCrit()
 #define LbText(x)       ((x).get_active_text())
 #define LbPos(x)        ((x).get_active())
 
-sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const
+sal_Int32 DlgFilterCrit::GetOSQLPredicateType( std::u16string_view _rSelectedPredicate ) const
 {
     sal_Int32 nPredicateIndex = -1;
     for ( size_t i=0; i < m_aSTR_COMPARE_OPERATORS.size(); ++i)
@@ -493,7 +493,7 @@ void DlgFilterCrit::SetLine( int nIdx, const PropertyValue& _rItem, bool _bOr )
     pPredicateValueControl->set_text( aString );
 }
 
-void DlgFilterCrit::SelectField(weld::ComboBox& rBox, const OUString& rField)
+void DlgFilterCrit::SelectField(weld::ComboBox& rBox, std::u16string_view rField)
 {
     const sal_Int32 nCnt = rBox.get_count();
 

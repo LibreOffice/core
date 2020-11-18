@@ -104,7 +104,7 @@ void LwpFribCHBlock::XFConvert(XFContentContainer* pXFPara, LwpStory* pStory)
             if (pHyperlink)
             {
                 pHyperlink->SetHyperlinkFlag(true);
-                pHyperlink->SetHyperlink(pMarker->GetNamedProperty("URL"));
+                pHyperlink->SetHyperlink(pMarker->GetNamedProperty(u"URL"));
             }
         }
         else if (type == MARKER_END) //or none

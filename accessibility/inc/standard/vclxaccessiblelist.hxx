@@ -74,7 +74,7 @@ public:
             This string contains the text of the currently selected
             item.  It is used to retrieve the index of that item.
     */
-    void UpdateSelection (const OUString& sTextOfSelectedItem);
+    void UpdateSelection (std::u16string_view sTextOfSelectedItem);
 
     // XInterface
     DECLARE_XINTERFACE()

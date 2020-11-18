@@ -737,7 +737,7 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
     return aStr.makeStringAndClear();
 }
 
-const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const OUString& rNm )
+const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, std::u16string_view rNm )
 {
     const SwFrameFormats& rTableFormats = *rDoc.GetTableFrameFormats();
     const SwTable* pTmpTable = nullptr, *pRet = nullptr;

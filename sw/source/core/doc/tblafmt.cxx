@@ -992,7 +992,7 @@ std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(con
     return pRet;
 }
 
-SwTableAutoFormat* SwTableAutoFormatTable::FindAutoFormat(const OUString& rName) const
+SwTableAutoFormat* SwTableAutoFormatTable::FindAutoFormat(std::u16string_view rName) const
 {
     for (const auto &rFormat : m_pImpl->m_AutoFormats)
     {
@@ -1218,7 +1218,7 @@ OUString SwCellStyleTable::GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) c
     return OUString();
 }
 
-SwBoxAutoFormat* SwCellStyleTable::GetBoxFormat(const OUString& sName) const
+SwBoxAutoFormat* SwCellStyleTable::GetBoxFormat(std::u16string_view sName) const
 {
     for (size_t i=0; i < m_aCellStyles.size(); ++i)
     {
@@ -1229,7 +1229,7 @@ SwBoxAutoFormat* SwCellStyleTable::GetBoxFormat(const OUString& sName) const
     return nullptr;
 }
 
-void SwCellStyleTable::ChangeBoxFormatName(const OUString& sFromName, const OUString& sToName)
+void SwCellStyleTable::ChangeBoxFormatName(std::u16string_view sFromName, const OUString& sToName)
 {
     if (!GetBoxFormat(sToName))
     {

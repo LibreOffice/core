@@ -54,7 +54,7 @@ class PropertySetInfo :
     ContentImplHelper*          m_pContent;
 
 private:
-    bool queryProperty( const OUString& rName,
+    bool queryProperty( std::u16string_view rName,
                             css::beans::Property& rProp );
 
 public:
@@ -94,7 +94,7 @@ class CommandProcessorInfo :
     ContentImplHelper*          m_pContent;
 
 private:
-    bool queryCommand( const OUString& rName,
+    bool queryCommand( std::u16string_view rName,
                            css::ucb::CommandInfo& rCommand );
     bool queryCommand( sal_Int32 nHandle,
                            css::ucb::CommandInfo& rCommand );

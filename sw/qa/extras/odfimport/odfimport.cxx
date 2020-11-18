@@ -897,9 +897,9 @@ DECLARE_ODFIMPORT_TEST(testTdf107392, "tdf107392.odt")
     // as sorting failed.
     // So instead of 0, 1, 2 these were 2, 0, 1.
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShapeByName("Bitmap"), "ZOrder"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(getShapeByName("Frame"), "ZOrder"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(getShapeByName("SVG"), "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShapeByName(u"Bitmap"), "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(getShapeByName(u"Frame"), "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(getShapeByName(u"SVG"), "ZOrder"));
 }
 
 DECLARE_ODFIMPORT_TEST(testTdf100033_1, "tdf100033_1.odt")

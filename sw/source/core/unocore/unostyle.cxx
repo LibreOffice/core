@@ -208,7 +208,7 @@ namespace sw
         SfxStyleSheetBasePool* m_pBasePool;
         SwDocShell* m_pDocShell;
 
-        SwXStyle* FindStyle(const OUString& rStyleName) const;
+        SwXStyle* FindStyle(std::u16string_view rStyleName) const;
         sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32)
             { return m_rEntry.m_fGetCountOrName(*m_pDocShell->GetDoc(), pString, nIndex); };
         static const StyleFamilyEntry& InitEntry(SfxStyleFamily eFamily)
@@ -1090,7 +1090,7 @@ uno::Any SAL_CALL XStyleFamily::getPropertyValue( const OUString& sPropertyName 
 }
 
 
-SwXStyle* XStyleFamily::FindStyle(const OUString& rStyleName) const
+SwXStyle* XStyleFamily::FindStyle(std::u16string_view rStyleName) const
 {
     const size_t nLCount = m_pBasePool->GetSizeOfVector();
     for(size_t i = 0; i < nLCount; ++i)
@@ -4367,7 +4367,7 @@ SwTableAutoFormat* SwXTextTableStyle::GetTableFormat()
     return m_pTableAutoFormat;
 }
 
-SwTableAutoFormat* SwXTextTableStyle::GetTableAutoFormat(SwDocShell* pDocShell, const OUString& sName)
+SwTableAutoFormat* SwXTextTableStyle::GetTableAutoFormat(SwDocShell* pDocShell, std::u16string_view sName)
 {
     const size_t nStyles = pDocShell->GetDoc()->GetTableStyles().size();
     for(size_t i=0; i < nStyles; ++i)

@@ -55,7 +55,7 @@ namespace StatusbarMerger
                                        AddonStatusbarItemContainer& rContainer );
 
     sal_uInt16 FindReferencePos( StatusBar* pStatusbar,
-                                        const OUString& rReferencePoint );
+                                        std::u16string_view rReferencePoint );
 
     bool ProcessMergeOperation( StatusBar* pStatusbar,
                                        sal_uInt16 nPos,

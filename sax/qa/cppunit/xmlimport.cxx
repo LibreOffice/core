@@ -75,7 +75,7 @@ private:
     stack<sal_uInt16> m_aCountStack;
 
     OUString canonicalform(const OUString &sName, const OUString &sValue, bool isElement);
-    OUString getNamespace(const OUString &sName);
+    OUString getNamespace(std::u16string_view sName);
 
 public:
     TestDocumentHandler() {}
@@ -107,12 +107,12 @@ OUString TestDocumentHandler::canonicalform(const OUString &sName, const OUStrin
     {
         if ( nIndex >= 0 )
         {
-            OUString sNamespace = getNamespace( sName.copy( 0, nIndex ) );
+            OUString sNamespace = getNamespace( sName.subView( 0, nIndex ) );
             return sNamespace + sName.subView(nIndex);
         }
         else
         {
-            OUString sDefaultns = getNamespace( "default" );
+            OUString sDefaultns = getNamespace( u"default" );
             if ( !isElement || sDefaultns.isEmpty() )
                 return sName;
             else
@@ -122,7 +122,7 @@ OUString TestDocumentHandler::canonicalform(const OUString &sName, const OUStrin
     return OUString();
 }
 
-OUString TestDocumentHandler::getNamespace(const OUString &sName)
+OUString TestDocumentHandler::getNamespace(std::u16string_view sName)
 {
     for (sal_Int16 i = m_aNamespaceStack.size() - 1; i>=0; i--)
     {

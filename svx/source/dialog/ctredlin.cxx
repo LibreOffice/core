@@ -260,14 +260,14 @@ void SvxRedlinTable::SetCommentParams( const utl::SearchParam* pSearchPara )
     }
 }
 
-bool SvxRedlinTable::IsValidEntry(const OUString &rAuthorStr,
+bool SvxRedlinTable::IsValidEntry(std::u16string_view rAuthorStr,
                                   const DateTime &rDateTime,
                                   const OUString &rCommentStr)
 {
     return IsValidEntry(rAuthorStr, rDateTime) && IsValidComment(rCommentStr);
 }
 
-bool SvxRedlinTable::IsValidEntry(const OUString &rAuthorStr, const DateTime &rDateTime)
+bool SvxRedlinTable::IsValidEntry(std::u16string_view rAuthorStr, const DateTime &rDateTime)
 {
     if (bAuthor && aAuthor!=rAuthorStr)
         return false;

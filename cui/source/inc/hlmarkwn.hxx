@@ -47,7 +47,7 @@ protected:
     bool RefreshFromDoc( const OUString& aURL );
     void RestoreLastSelection();
 
-    std::unique_ptr<weld::TreeIter> FindEntry(const OUString& aStrName);
+    std::unique_ptr<weld::TreeIter> FindEntry(std::u16string_view aStrName);
     void ClearTree();
     int FillTree( const css::uno::Reference< css::container::XNameAccess >& xLinks, const weld::TreeIter* pParentEntry =nullptr );
 
@@ -61,7 +61,7 @@ public:
 
     void MoveTo(const Point& rNewPos);
     void RefreshTree(const OUString& aStrURL);
-    bool SelectEntry(const OUString& aStrMark);
+    bool SelectEntry(std::u16string_view aStrMark);
 
     sal_uInt16 SetError( sal_uInt16 nError);
 };

@@ -339,8 +339,8 @@ void SwGlossaryDlg::EnableShortName(bool bOn)
 }
 
 // does the title exist in the selected group?
-std::unique_ptr<weld::TreeIter> SwGlossaryDlg::DoesBlockExist(const OUString& rBlock,
-                                                              const OUString& rShort)
+std::unique_ptr<weld::TreeIter> SwGlossaryDlg::DoesBlockExist(std::u16string_view rBlock,
+                                                              std::u16string_view rShort)
 {
     // look for possible entry in TreeListBox
     std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->make_iterator();
@@ -353,7 +353,7 @@ std::unique_ptr<weld::TreeIter> SwGlossaryDlg::DoesBlockExist(const OUString& rB
         do
         {
             if (rBlock == m_xCategoryBox->get_text(*xEntry) &&
-                (rShort.isEmpty() ||
+                (rShort.empty() ||
                  rShort == m_xCategoryBox->get_id(*xEntry))
                )
             {

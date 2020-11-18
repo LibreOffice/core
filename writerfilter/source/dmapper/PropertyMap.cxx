@@ -1145,26 +1145,26 @@ bool SectionPropertyMap::FloatingTableConversion( const DomainMapper_Impl& rDM_I
         nTableWidth *= nTextAreaWidth / 100.0;
     }
     sal_Int32 nLeftMargin = 0;
-    if ( rInfo.getPropertyValue( "LeftMargin" ) >>= nLeftMargin )
+    if ( rInfo.getPropertyValue( u"LeftMargin" ) >>= nLeftMargin )
         nTableWidth += nLeftMargin;
     sal_Int32 nRightMargin = 0;
-    if ( rInfo.getPropertyValue( "RightMargin" ) >>= nRightMargin )
+    if ( rInfo.getPropertyValue( u"RightMargin" ) >>= nRightMargin )
         nTableWidth += nRightMargin;
 
-    sal_Int16 nHoriOrientRelation = rInfo.getPropertyValue( "HoriOrientRelation" ).get<sal_Int16>();
-    sal_Int16 nVertOrientRelation = rInfo.getPropertyValue( "VertOrientRelation" ).get<sal_Int16>();
+    sal_Int16 nHoriOrientRelation = rInfo.getPropertyValue( u"HoriOrientRelation" ).get<sal_Int16>();
+    sal_Int16 nVertOrientRelation = rInfo.getPropertyValue( u"VertOrientRelation" ).get<sal_Int16>();
     if ( nHoriOrientRelation == text::RelOrientation::PAGE_FRAME && nVertOrientRelation == text::RelOrientation::PAGE_FRAME )
     {
-        sal_Int16 nHoriOrient = rInfo.getPropertyValue( "HoriOrient" ).get<sal_Int16>();
-        sal_Int16 nVertOrient = rInfo.getPropertyValue( "VertOrient" ).get<sal_Int16>();
+        sal_Int16 nHoriOrient = rInfo.getPropertyValue( u"HoriOrient" ).get<sal_Int16>();
+        sal_Int16 nVertOrient = rInfo.getPropertyValue( u"VertOrient" ).get<sal_Int16>();
         if ( nHoriOrient == text::HoriOrientation::NONE && nVertOrient == text::VertOrientation::NONE )
         {
             // Anchor position is relative to the page horizontally and vertically as well and is an absolute position.
             // The more close we are to the left edge, the less likely there will be any wrapping.
             // The more close we are to the bottom, the more likely the table will span over to the next page
             // So if we're in the bottom left quarter, don't do any conversion.
-            sal_Int32 nHoriOrientPosition = rInfo.getPropertyValue( "HoriOrientPosition" ).get<sal_Int32>();
-            sal_Int32 nVertOrientPosition = rInfo.getPropertyValue( "VertOrientPosition" ).get<sal_Int32>();
+            sal_Int32 nHoriOrientPosition = rInfo.getPropertyValue( u"HoriOrientPosition" ).get<sal_Int32>();
+            sal_Int32 nVertOrientPosition = rInfo.getPropertyValue( u"VertOrientPosition" ).get<sal_Int32>();
             sal_Int32 nPageHeight = getProperty( PROP_HEIGHT )->second.get<sal_Int32>();
             if ( nHoriOrientPosition < (nPageWidth / 2) && nVertOrientPosition >( nPageHeight / 2 ) )
                 return false;
@@ -1717,7 +1717,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
-        const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( "Standard" );
+        const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( u"Standard" );
         if ( pEntry )
         {
             std::optional< PropertyMap::Property > pPropHeight = pEntry->pProperties->getProperty( PROP_CHAR_HEIGHT_ASIAN );

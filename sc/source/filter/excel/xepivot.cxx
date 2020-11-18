@@ -130,9 +130,9 @@ XclExpPCItem::XclExpPCItem( bool bValue, const OUString& rText ) :
     SetBool( bValue, rText );
 }
 
-bool XclExpPCItem::EqualsText( const OUString& rText ) const
+bool XclExpPCItem::EqualsText( std::u16string_view rText ) const
 {
-    return rText.isEmpty() ? IsEmpty() : (GetText() && (*GetText() == rText));
+    return rText.empty() ? IsEmpty() : (GetText() && (*GetText() == rText));
 }
 
 bool XclExpPCItem::EqualsDouble( double fValue ) const
@@ -268,7 +268,7 @@ const XclExpPCItem* XclExpPCField::GetItem( sal_uInt16 nItemIdx ) const
     return GetVisItemList().GetRecord( nItemIdx );
 }
 
-sal_uInt16 XclExpPCField::GetItemIndex( const OUString& rItemName ) const
+sal_uInt16 XclExpPCField::GetItemIndex( std::u16string_view rItemName ) const
 {
     const XclExpPCItemList& rItemList = GetVisItemList();
     for( size_t nPos = 0, nSize = rItemList.GetSize(); nPos < nSize; ++nPos )
@@ -961,7 +961,7 @@ sal_uInt16 XclExpPTField::GetLastDataInfoIndex() const
     return static_cast< sal_uInt16 >( maDataInfoVec.size() - 1 );
 }
 
-sal_uInt16 XclExpPTField::GetItemIndex( const OUString& rName, sal_uInt16 nDefaultIdx ) const
+sal_uInt16 XclExpPTField::GetItemIndex( std::u16string_view rName, sal_uInt16 nDefaultIdx ) const
 {
     for( size_t nPos = 0, nSize = maItemList.GetSize(); nPos < nSize; ++nPos )
         if( maItemList.GetRecord( nPos )->GetItemName() == rName )
@@ -1144,7 +1144,7 @@ void XclExpPTField::Save( XclExpStream& rStrm )
 
 // private --------------------------------------------------------------------
 
-XclExpPTItem* XclExpPTField::GetItemAcc( const OUString& rName )
+XclExpPTItem* XclExpPTField::GetItemAcc( std::u16string_view rName )
 {
     XclExpPTItem* pItem = nullptr;
     for( size_t nPos = 0, nSize = maItemList.GetSize(); !pItem && (nPos < nSize); ++nPos )
@@ -1240,7 +1240,7 @@ const XclExpPTField* XclExpPivotTable::GetField( sal_uInt16 nFieldIdx ) const
     return (nFieldIdx == EXC_SXIVD_DATA) ? &maDataOrientField : maFieldList.GetRecord( nFieldIdx );
 }
 
-const XclExpPTField* XclExpPivotTable::GetField( const OUString& rName ) const
+const XclExpPTField* XclExpPivotTable::GetField( std::u16string_view rName ) const
 {
     return const_cast< XclExpPivotTable* >( this )->GetFieldAcc( rName );
 }
@@ -1284,7 +1284,7 @@ void XclExpPivotTable::Save( XclExpStream& rStrm )
     WriteSxViewEx9( rStrm );
 }
 
-XclExpPTField* XclExpPivotTable::GetFieldAcc( const OUString& rName )
+XclExpPTField* XclExpPivotTable::GetFieldAcc( std::u16string_view rName )
 {
     XclExpPTField* pField = nullptr;
     for( size_t nPos = 0, nSize = maFieldList.GetSize(); !pField && (nPos < nSize); ++nPos )

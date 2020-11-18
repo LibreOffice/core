@@ -3092,9 +3092,9 @@ void SwContentTree::HideTree()
 }
 
 static void lcl_SelectByContentTypeAndName(SwContentTree* pThis, weld::TreeView& rContentTree,
-                                           const OUString& rContentTypeName, const OUString& rName)
+                                           std::u16string_view rContentTypeName, std::u16string_view rName)
 {
-    if (!rName.isEmpty())
+    if (!rName.empty())
     {
         // find content type entry
         std::unique_ptr<weld::TreeIter> xIter(rContentTree.make_iterator());

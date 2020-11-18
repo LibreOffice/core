@@ -627,10 +627,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119201, "tdf119201.docx")
     auto xShape(getShape(1));
     CPPUNIT_ASSERT_MESSAGE("First shape should be visible.", getProperty<bool>(xShape, "Visible"));
     CPPUNIT_ASSERT_MESSAGE("First shape should be printable.", getProperty<bool>(xShape, "Printable"));
-    xShape = getShapeByName("Rectangle 1");
+    xShape = getShapeByName(u"Rectangle 1");
     CPPUNIT_ASSERT_MESSAGE("Second shape should not be visible.", !getProperty<bool>(xShape, "Visible"));
     CPPUNIT_ASSERT_MESSAGE("Second shape should not be printable.", !getProperty<bool>(xShape, "Printable"));
-    xShape = getShapeByName("Oval 2");
+    xShape = getShapeByName(u"Oval 2");
     CPPUNIT_ASSERT_MESSAGE("Third shape should be visible.", getProperty<bool>(xShape, "Visible"));
     CPPUNIT_ASSERT_MESSAGE("Third shape should be printable.", getProperty<bool>(xShape, "Printable"));
 }

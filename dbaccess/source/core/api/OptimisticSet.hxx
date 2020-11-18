@@ -39,7 +39,7 @@ namespace dbaccess
 
         mutable bool m_bResultSetChanged;
 
-        void executeDelete(const ORowSetRow& _rDeleteRow,const OUString& i_sSQL,const OUString& i_sTableName);
+        void executeDelete(const ORowSetRow& _rDeleteRow,const OUString& i_sSQL,std::u16string_view i_sTableName);
         void fillJoinedColumns_throw(const std::vector< ::connectivity::TNodePair>& i_aJoinColumns);
         void fillJoinedColumns_throw(const OUString& i_sLeftColumn,const OUString& i_sRightColumn);
     protected:

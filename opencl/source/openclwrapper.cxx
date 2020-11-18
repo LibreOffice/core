@@ -703,7 +703,7 @@ const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo()
 
 namespace {
 
-cl_device_id findDeviceIdByDeviceString(const OUString& rString, const std::vector<OpenCLPlatformInfo>& rPlatforms)
+cl_device_id findDeviceIdByDeviceString(std::u16string_view rString, const std::vector<OpenCLPlatformInfo>& rPlatforms)
 {
     for (const OpenCLPlatformInfo& rPlatform : rPlatforms)
     {

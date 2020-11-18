@@ -58,7 +58,7 @@ OUString getProperty(uno::Reference<beans::XPropertyContainer> const& rxProperty
     return OUString();
 }
 
-bool containsProperty(uno::Sequence<beans::Property> const& rProperties, OUString const& rName)
+bool containsProperty(uno::Sequence<beans::Property> const& rProperties, std::u16string_view rName)
 {
     return std::any_of(rProperties.begin(), rProperties.end(),
                        [&](const beans::Property& rProperty) { return rProperty.Name == rName; });

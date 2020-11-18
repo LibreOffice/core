@@ -42,13 +42,13 @@ public:
 };
 
 SdrOle2Obj* findChartsByName(ScDocShell* pDocShell, SCTAB nTab,
-                             OUString const & rName,
+                             std::u16string_view rName,
                              ChartSourceType eChartSourceType);
 
 SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab,
                             ::tools::Long nIndex, ChartSourceType eChartSourceType);
 
-std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(OUString const & sPivotTableName, ScDocShell* pDocShell);
+std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(std::u16string_view sPivotTableName, ScDocShell* pDocShell);
 
 } // end sc::tools
 

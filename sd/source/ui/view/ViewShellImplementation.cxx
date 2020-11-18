@@ -114,7 +114,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             mrViewShell.GetDrawView()->UnmarkAll();
             mrViewShell.GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
             sfx2::sidebar::Sidebar::TogglePanel(
-                "SdLayoutsPanel",
+                u"SdLayoutsPanel",
                 mrViewShell.GetViewFrame()->GetFrame().GetFrameInterface());
             break;
         }

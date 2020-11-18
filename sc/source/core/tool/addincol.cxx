@@ -595,7 +595,7 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
     return false;
 }
 
-static bool IsTypeName( const OUString& rName, const uno::Type& rType )
+static bool IsTypeName( std::u16string_view rName, const uno::Type& rType )
 {
     return rName == rType.getTypeName();
 }
@@ -930,7 +930,7 @@ static void lcl_UpdateFunctionList( const ScFunctionList& rFunctionList, const S
     }
 }
 
-static const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncData, const OUString& rArgIntName )
+static const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncData, std::u16string_view rArgIntName )
 {
     tools::Long nArgCount = rFuncData.GetArgumentCount();
     const ScAddInArgDesc* pArguments = rFuncData.GetArguments();

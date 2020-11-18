@@ -136,7 +136,7 @@ bool LogicalFontInstance::GetFallbackForUnicode( sal_UCS4 cChar, FontWeight eWei
     return true;
 }
 
-void LogicalFontInstance::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
+void LogicalFontInstance::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, std::u16string_view rFontName )
 {
     UnicodeFallbackList::iterator it = mpUnicodeFallbackList->find( std::pair< sal_UCS4,FontWeight >(cChar,eWeight) );
     if( it == mpUnicodeFallbackList->end() )

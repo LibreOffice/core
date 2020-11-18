@@ -122,7 +122,7 @@ class SdXMLExport : public SvXMLExport
     void ImpWritePageMasterInfos();
     void ImpPrepAutoLayoutInfos();
     HeaderFooterPageSettingsImpl ImpPrepDrawPageHeaderFooterDecls( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage );
-    ImpXMLEXPPageMasterInfo* ImpGetPageMasterInfoByName(const OUString& rName);
+    ImpXMLEXPPageMasterInfo* ImpGetPageMasterInfoByName(std::u16string_view rName);
 
     void ImpPrepDrawPageInfos();
     void ImpPrepMasterPageInfos();

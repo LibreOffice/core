@@ -400,7 +400,7 @@ static const char* STR_POOLPAGE[] =
     STR_POOLPAGE_LANDSCAPE
 };
 
-SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
+SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, std::u16string_view rName)
 {
     const size_t nDCount = rDoc.GetPageDescCnt();
 

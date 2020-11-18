@@ -226,10 +226,10 @@ class SfxDocTplService_Impl
                                                                   const OUString& aNewFolderName );
     bool                    ReplaceUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                   const OUString& aFsysGroupName,
-                                                                  const OUString& aOldGroupName,
+                                                                  std::u16string_view aOldGroupName,
                                                                   const OUString& aNewGroupName );
     void                    RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
-                                                                  const OUString& aGroupName );
+                                                                  std::u16string_view aGroupName );
     bool                    WriteUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                 const std::vector< beans::StringPair >& aUINames );
 
@@ -1242,7 +1242,7 @@ bool SfxDocTplService_Impl::UpdateUINamesForTemplateDir_Impl( const OUString& aU
 
 bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                   const OUString& aDefaultFsysGroupName,
-                                                                  const OUString& aOldGroupName,
+                                                                  std::u16string_view aOldGroupName,
                                                                   const OUString& aNewGroupName )
 {
     std::vector< beans::StringPair > aUINames = ReadUINamesForTemplateDir_Impl( aUserPath );
@@ -1267,7 +1267,7 @@ bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( const OUString& a
 
 
 void SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
-                                                                  const OUString& aGroupName )
+                                                                  std::u16string_view aGroupName )
 {
     std::vector< beans::StringPair > aUINames = ReadUINamesForTemplateDir_Impl( aUserPath );
     sal_Int32 nLen = aUINames.size();

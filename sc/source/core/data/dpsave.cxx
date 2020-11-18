@@ -842,7 +842,7 @@ ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const OUString& rName)
     return AppendNewDimension(rName, false);
 }
 
-ScDPSaveDimension* ScDPSaveData::GetExistingDimensionByName(const OUString& rName) const
+ScDPSaveDimension* ScDPSaveData::GetExistingDimensionByName(std::u16string_view rName) const
 {
     for (auto const& iter : m_DimList)
     {
@@ -882,7 +882,7 @@ ScDPSaveDimension* ScDPSaveData::GetExistingDataLayoutDimension() const
     return nullptr;
 }
 
-ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const OUString& rName)
+ScDPSaveDimension* ScDPSaveData::DuplicateDimension(std::u16string_view rName)
 {
     // always insert new
 
@@ -1292,7 +1292,7 @@ void ScDPSaveData::SyncAllDimensionMembers(ScDPTableData* pData)
     }
 }
 
-bool ScDPSaveData::HasInvisibleMember(const OUString& rDimName) const
+bool ScDPSaveData::HasInvisibleMember(std::u16string_view rDimName) const
 {
     ScDPSaveDimension* pDim = GetExistingDimensionByName(rDimName);
     if (!pDim)

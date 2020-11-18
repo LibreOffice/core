@@ -986,7 +986,7 @@ void ScCheckListMenuControl::addMember(const OUString& rName, bool bVisible)
     maMembers.emplace_back(std::move(aMember));
 }
 
-std::unique_ptr<weld::TreeIter> ScCheckListMenuControl::FindEntry(const weld::TreeIter* pParent, const OUString& sNode)
+std::unique_ptr<weld::TreeIter> ScCheckListMenuControl::FindEntry(const weld::TreeIter* pParent, std::u16string_view sNode)
 {
     std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator(pParent);
     bool bEntry = pParent ? mpChecks->iter_children(*xEntry) : mpChecks->get_iter_first(*xEntry);
@@ -1051,13 +1051,13 @@ std::unordered_set<OUString> ScCheckListMenuControl::GetAllChecked()
     return vResults;
 }
 
-bool ScCheckListMenuControl::IsChecked(const OUString& sName, const weld::TreeIter* pParent)
+bool ScCheckListMenuControl::IsChecked(std::u16string_view sName, const weld::TreeIter* pParent)
 {
     std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pParent, sName);
     return xEntry && mpChecks->get_toggle(*xEntry) == TRISTATE_TRUE;
 }
 
-void ScCheckListMenuControl::CheckEntry(const OUString& sName, const weld::TreeIter* pParent, bool bCheck)
+void ScCheckListMenuControl::CheckEntry(std::u16string_view sName, const weld::TreeIter* pParent, bool bCheck)
 {
     std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pParent, sName);
     if (xEntry)

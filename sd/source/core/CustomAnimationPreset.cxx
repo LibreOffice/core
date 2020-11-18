@@ -193,7 +193,7 @@ std::vector<OUString> CustomAnimationPreset::getProperties() const
     return aPropertyList;
 }
 
-bool CustomAnimationPreset::hasProperty( const OUString& rProperty )const
+bool CustomAnimationPreset::hasProperty( std::u16string_view rProperty )const
 {
     if (maProperty.isEmpty())
         return false;

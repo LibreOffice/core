@@ -91,7 +91,7 @@ public:
     void            RemoveEntryAt(sal_Int32  nPos);
 
     void            Clear();
-    sal_Int32       GetEntryPos( const OUString& rStr ) const;
+    sal_Int32       GetEntryPos( std::u16string_view rStr ) const;
     Image           GetEntryImage( sal_Int32  nPos ) const;
     OUString        GetEntry( sal_Int32  nPos ) const;
     sal_Int32       GetEntryCount() const;

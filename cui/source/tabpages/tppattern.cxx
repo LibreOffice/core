@@ -534,7 +534,7 @@ void SvxPatternTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint)
     m_xPatternLB->SetNoSelection();
 }
 
-sal_Int32 SvxPatternTabPage::SearchPatternList(const OUString& rPatternName)
+sal_Int32 SvxPatternTabPage::SearchPatternList(std::u16string_view rPatternName)
 {
     tools::Long nCount = m_pPatternList->Count();
     bool bValidPatternName = true;

@@ -64,7 +64,7 @@ namespace dbaui
         void enableButtons();
 
         sal_Int32 adjustColumnPosition(weld::TreeView const * _pLeft,
-                                    const OUString&  _sColumnName,
+                                    std::u16string_view  _sColumnName,
                                     ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                     const ::comphelper::UStringMixEqual& _aCase);
 

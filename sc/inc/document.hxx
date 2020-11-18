@@ -844,21 +844,21 @@ public:
     SdrObject*      GetObjectAtPoint( SCTAB nTab, const Point& rPos );
     bool            HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName );
 
-    css::uno::Reference< css::chart2::XChartDocument > GetChartByName( const OUString& rChartName );
+    css::uno::Reference< css::chart2::XChartDocument > GetChartByName( std::u16string_view rChartName );
 
-    SC_DLLPUBLIC void GetChartRanges( const OUString& rChartName, std::vector< ScRangeList >& rRanges, const ScDocument& rSheetNameDoc );
-    void              SetChartRanges( const OUString& rChartName, const std::vector< ScRangeList >& rRanges );
+    SC_DLLPUBLIC void GetChartRanges( std::u16string_view rChartName, std::vector< ScRangeList >& rRanges, const ScDocument& rSheetNameDoc );
+    void              SetChartRanges( std::u16string_view rChartName, const std::vector< ScRangeList >& rRanges );
 
     void              UpdateChartArea( const OUString& rChartName, const ScRange& rNewArea,
                                        bool bColHeaders, bool bRowHeaders, bool bAdd );
     void              UpdateChartArea( const OUString& rChartName,
                                        const ScRangeListRef& rNewList,
                                        bool bColHeaders, bool bRowHeaders, bool bAdd );
-    void              GetOldChartParameters( const OUString& rName,
+    void              GetOldChartParameters( std::u16string_view rName,
                                              ScRangeList& rRanges, bool& rColHeaders, bool& rRowHeaders );
     css::uno::Reference<
             css::embed::XEmbeddedObject >
-                    FindOleObjectByName( const OUString& rName );
+                    FindOleObjectByName( std::u16string_view rName );
 
     SC_DLLPUBLIC void MakeTable( SCTAB nTab,bool _bNeedsNameCheck = true );
 
@@ -1000,8 +1000,8 @@ public:
     void                                                    SetLink( SCTAB nTab, ScLinkMode nMode, const OUString& rDoc,
                                                                      const OUString& rFilter, const OUString& rOptions,
                                                                      const OUString& rTabName, sal_uLong nRefreshDelay );
-    bool                                                    HasLink( const OUString& rDoc,
-                                                                     const OUString& rFilter, const OUString& rOptions ) const;
+    bool                                                    HasLink( std::u16string_view rDoc,
+                                                                     std::u16string_view rFilter, std::u16string_view rOptions ) const;
     SC_DLLPUBLIC bool                                       LinkExternalTab( SCTAB& nTab, const OUString& aDocTab,
                                                                              const OUString& aFileName,
                                                                              const OUString& aTabName );
@@ -1030,8 +1030,8 @@ public:
     /** Tries to find a DDE link with the specified connection data.
         @param rnDdePos  (out-param) Returns the index of the DDE link (does not include other links from link manager).
         @return  true = DDE link found, rnDdePos valid. */
-    SC_DLLPUBLIC bool FindDdeLink( const OUString& rAppl, const OUString& rTopic,
-                                   const OUString& rItem, sal_uInt8 nMode, size_t& rnDdePos );
+    SC_DLLPUBLIC bool FindDdeLink( std::u16string_view rAppl, std::u16string_view rTopic,
+                                   std::u16string_view rItem, sal_uInt8 nMode, size_t& rnDdePos );
 
     /** Returns the connection data of the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
@@ -1081,7 +1081,7 @@ public:
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCCOL nDx, SCROW nDy, SCTAB nDz );
                     //! only assigns the new RangeList, no ChartListener or the like
-    void            SetChartRangeList( const OUString& rChartName,
+    void            SetChartRangeList( std::u16string_view rChartName,
                                        const ScRangeListRef& rNewRangeListRef );
 
     void            StartAnimations( SCTAB nTab );
@@ -2012,9 +2012,9 @@ public:
     void            RemoveManualBreaks( SCTAB nTab );
     bool            HasManualBreaks( SCTAB nTab ) const;
 
-    bool            IsPageStyleInUse( const OUString& rStrPageStyle, SCTAB* pInTab );
-    bool            RemovePageStyleInUse( const OUString& rStrPageStyle );
-    bool            RenamePageStyleInUse( const OUString& rOld, const OUString& rNew );
+    bool            IsPageStyleInUse( std::u16string_view rStrPageStyle, SCTAB* pInTab );
+    bool            RemovePageStyleInUse( std::u16string_view rStrPageStyle );
+    bool            RenamePageStyleInUse( std::u16string_view rOld, const OUString& rNew );
     void            ModifyStyleSheet( SfxStyleSheetBase& rPageStyle,
                                       const SfxItemSet&  rChanges );
 
@@ -2111,7 +2111,7 @@ public:
                                   SCCOL nCol, SCROW nRow, SCTAB nTab,
                                   const ScMarkData& rMark);
 
-    void            InvalidateTextWidth( const OUString& rStyleName );
+    void            InvalidateTextWidth( std::u16string_view rStyleName );
     void            InvalidateTextWidth( SCTAB nTab );
     void            InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo, bool bNumFormatChanged );
 

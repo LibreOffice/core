@@ -2627,7 +2627,7 @@ void OQueryDesignView::TableDeleted(const OUString& rAliasName)
     static_cast<OQueryController&>(getController()).InvalidateFeature(ID_BROWSER_ADDTABLE); // inform the view again
 }
 
-bool OQueryDesignView::HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef const & rInfo)  const
+bool OQueryDesignView::HasFieldByAliasName(std::u16string_view rFieldName, OTableFieldDescRef const & rInfo)  const
 {
     return m_pSelectionBox->HasFieldByAliasName( rFieldName, rInfo);
 }
@@ -2646,11 +2646,11 @@ sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos) const
     return nWidth;
 }
 
-void OQueryDesignView::fillValidFields(const OUString& sAliasName, weld::ComboBox& rFieldList)
+void OQueryDesignView::fillValidFields(std::u16string_view sAliasName, weld::ComboBox& rFieldList)
 {
     rFieldList.clear();
 
-    bool bAllTables = sAliasName.isEmpty();
+    bool bAllTables = sAliasName.empty();
 
     OJoinTableView::OTableWindowMap& rTabWins = m_pTableView->GetTabWinMap();
     OUString strCurrentPrefix;

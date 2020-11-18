@@ -349,7 +349,7 @@ Reference< chart2::data::XDataSequence > getLabelDataSequenceFromDoc(
 }
 
 Reference< chart2::data::XDataSequence > getDataSequenceFromDocByRole(
-        Reference< chart2::XChartDocument > const & xChartDoc, const OUString& rRole,
+        Reference< chart2::XChartDocument > const & xChartDoc, std::u16string_view rRole,
         sal_Int32 nDataSeries = 0, sal_Int32 nChartType = 0 )
 {
     Reference< chart2::XDataSeries > xDataSeries =

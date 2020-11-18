@@ -118,7 +118,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf97038, "tdf97038.docx")
 {
     // Without the accompanying fix in place, this test would have failed, as the importer lost the
     // fLayoutInCell shape property for wrap-though shapes.
-    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Kep2"), "IsFollowingTextFlow"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Kep2"), "IsFollowingTextFlow"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf114212, "tdf114212.docx")
@@ -511,8 +511,8 @@ DECLARE_OOXMLIMPORT_TEST(testTdf115094v2, "tdf115094v2.docx")
 {
     // layoutInCell="1" combined with <wp:wrapNone/>
 
-    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 18"), "IsFollowingTextFlow"));
-    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 19"), "IsFollowingTextFlow"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 18"), "IsFollowingTextFlow"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 19"), "IsFollowingTextFlow"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf122224, "tdf122224.docx")

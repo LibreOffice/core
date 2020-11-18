@@ -791,7 +791,7 @@ void SfxStyleSheetBasePool::Clear()
     pImpl->mxIndexedStyleSheets->Clear(cleanup);
 }
 
-void SfxStyleSheetBasePool::ChangeParent(const OUString& rOld,
+void SfxStyleSheetBasePool::ChangeParent(std::u16string_view rOld,
                                          const OUString& rNew,
                                          SfxStyleFamily eFamily,
                                          bool bVirtual)

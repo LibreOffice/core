@@ -1695,7 +1695,7 @@ private:
     // #i84783#
     // determine object attribute "Layout in Table Cell"
     bool IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTableCell ) const;
-    void ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const css::uno::Reference< css::container::XNameContainer >& xPrjNameMap );
+    void ReadGlobalTemplateSettings( std::u16string_view sCreatedFrom, const css::uno::Reference< css::container::XNameContainer >& xPrjNameMap );
     SwWW8ImplReader(const SwWW8ImplReader &) = delete;
     SwWW8ImplReader& operator=(const SwWW8ImplReader&) = delete;
 public:     // really private, but can only be done public
@@ -1896,7 +1896,7 @@ public:     // really private, but can only be done public
     void SetNCurrentColl( sal_uInt16 nColl ) { m_nCurrentColl = nColl;    }
     std::unique_ptr<SfxItemSet> SetCurrentItemSet(std::unique_ptr<SfxItemSet> pItemSet);
     sal_uInt16 StyleUsingLFO( sal_uInt16 nLFOIndex ) const ;
-    const SwFormat* GetStyleWithOrgWWName( OUString const & rName ) const ;
+    const SwFormat* GetStyleWithOrgWWName( std::u16string_view rName ) const ;
 
     static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);

@@ -268,7 +268,7 @@ namespace frm
 
     namespace
     {
-        void lcl_removeProperty( Sequence< Property >& _rSeq, const OUString& _rPropertyName )
+        void lcl_removeProperty( Sequence< Property >& _rSeq, std::u16string_view _rPropertyName )
         {
             Property* pLoop = _rSeq.getArray();
             Property* pEnd = _rSeq.getArray() + _rSeq.getLength();

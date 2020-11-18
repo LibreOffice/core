@@ -237,7 +237,7 @@ void SmFontFormatList::AddFontFormat( const OUString &rFntFmtId,
 }
 
 
-void SmFontFormatList::RemoveFontFormat( const OUString &rFntFmtId )
+void SmFontFormatList::RemoveFontFormat( std::u16string_view rFntFmtId )
 {
 
     // search for entry
@@ -254,7 +254,7 @@ void SmFontFormatList::RemoveFontFormat( const OUString &rFntFmtId )
 }
 
 
-const SmFontFormat * SmFontFormatList::GetFontFormat( const OUString &rFntFmtId ) const
+const SmFontFormat * SmFontFormatList::GetFontFormat( std::u16string_view rFntFmtId ) const
 {
     const SmFontFormat *pRes = nullptr;
 

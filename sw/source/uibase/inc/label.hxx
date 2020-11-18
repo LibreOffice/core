@@ -51,7 +51,7 @@ public:
              SwDBManager* pDBManager, bool bLabel);
     virtual ~SwLabDlg() override;
 
-    SwLabRec*   GetRecord(const OUString &rRecName, bool bCont);
+    SwLabRec*   GetRecord(std::u16string_view rRecName, bool bCont);
     void        GetLabItem(SwLabItem &rItem);
 
           SwLabRecs &Recs()           { return *m_pRecs; }

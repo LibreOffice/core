@@ -1084,7 +1084,7 @@ tools::Long ScDPCache::GetDimMemberCount(tools::Long nDim) const
     return maFields[nDim]->maItems.size();
 }
 
-SCCOL ScDPCache::GetDimensionIndex(const OUString& sName) const
+SCCOL ScDPCache::GetDimensionIndex(std::u16string_view sName) const
 {
     for (size_t i = 1; i < maLabelNames.size(); ++i)
     {

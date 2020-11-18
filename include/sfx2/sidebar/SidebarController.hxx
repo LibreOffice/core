@@ -113,7 +113,7 @@ public:
     const static sal_Int32 SwitchFlag_ForceNewDeck = 0x02;
     const static sal_Int32 SwitchFlag_ForceNewPanels = 0x02;
 
-    void OpenThenSwitchToDeck(const OUString& rsDeckId);
+    void OpenThenSwitchToDeck(std::u16string_view rsDeckId);
     void OpenThenToggleDeck(const OUString& rsDeckId);
 
     /** Show only the tab bar, not the deck.
@@ -126,7 +126,7 @@ public:
 
     /** Returns true when the given deck is the currently visible deck
      */
-    bool IsDeckVisible(const OUString& rsDeckId);
+    bool IsDeckVisible(std::u16string_view rsDeckId);
 
     bool IsDeckOpen(const sal_Int32 nIndex = -1);
 
@@ -140,18 +140,18 @@ public:
     const Context& GetCurrentContext() const { return maCurrentContext;}
     bool IsDocumentReadOnly (void) const { return mbIsDocumentReadOnly;}
 
-    void SwitchToDeck(const OUString& rsDeckId);
+    void SwitchToDeck(std::u16string_view rsDeckId);
     void SwitchToDefaultDeck();
     bool WasFloatingDeckClosed() const { return mbFloatingDeckClosed; }
     void SetFloatingDeckClosed(bool bWasClosed) { mbFloatingDeckClosed = bWasClosed; }
 
-    void CreateDeck(const OUString& rDeckId);
-    void CreateDeck(const OUString& rDeckId, const Context& rContext, bool bForceCreate = false);
+    void CreateDeck(std::u16string_view rDeckId);
+    void CreateDeck(std::u16string_view rDeckId, const Context& rContext, bool bForceCreate = false);
 
     ResourceManager::DeckContextDescriptorContainer GetMatchingDecks();
-    ResourceManager::PanelContextDescriptorContainer GetMatchingPanels(const OUString& rDeckId);
+    ResourceManager::PanelContextDescriptorContainer GetMatchingPanels(std::u16string_view rDeckId);
 
-    void notifyDeckTitle(const OUString& targetDeckId);
+    void notifyDeckTitle(std::u16string_view targetDeckId);
 
     void updateModel(const css::uno::Reference<css::frame::XModel>& xModel);
 
@@ -232,10 +232,10 @@ private:
         const Context& rContext);
 
     void CreatePanels(
-        const OUString& rDeckId,
+        std::u16string_view rDeckId,
         const Context& rContext);
     VclPtr<Panel> CreatePanel (
-        const OUString& rsPanelId,
+        std::u16string_view rsPanelId,
         vcl::Window* pParentWindow,
         const bool bIsInitiallyExpanded,
         const Context& rContext,

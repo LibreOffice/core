@@ -175,7 +175,7 @@ public:
     bool GoPrevCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( false, nCnt ); }
     virtual bool GotoTable( const OUString& rName );
     bool GotoTableBox( const OUString& rName );
-    bool GotoRegion( const OUString& rName );
+    bool GotoRegion( std::u16string_view rName );
     bool GotoFootnoteAnchor();
     bool GotoFootnoteText();
     bool GotoNextFootnoteAnchor();

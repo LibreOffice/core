@@ -4223,7 +4223,7 @@ void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::
 
 // XNameContainer
 
-static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const OUString& rName )
+static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, std::u16string_view rName )
 {
     sal_uInt16 nCount = rNamedEntries.size();
     for ( sal_uInt16 n=nCount; n--; )
@@ -4283,7 +4283,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::A
 }
 
 static bool lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDocSh,
-                            const OUString& rName, size_t& rIndex )
+                            std::u16string_view rName, size_t& rIndex )
 {
     if (pDocSh)
     {

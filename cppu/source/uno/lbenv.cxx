@@ -121,7 +121,7 @@ struct EnvironmentsData
     void registerEnvironment( uno_Environment ** ppEnv );
     void getRegisteredEnvironments(
         uno_Environment *** pppEnvs, sal_Int32 * pnLen,
-        uno_memAlloc memAlloc, const OUString & rEnvDcp );
+        uno_memAlloc memAlloc, std::u16string_view rEnvDcp );
 
     bool isDisposing;
 };
@@ -968,7 +968,7 @@ void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
 
 void EnvironmentsData::getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
-    const OUString & rEnvDcp )
+    std::u16string_view rEnvDcp )
 {
     assert(pppEnvs && pnLen && memAlloc && "### null ptr!");
 
@@ -980,8 +980,8 @@ void EnvironmentsData::getRegisteredEnvironments(
     for ( const auto& rEntry : aName2EnvMap )
     {
         uno_Environment * pWeak = rEntry.second;
-        if (rEnvDcp.isEmpty() ||
-            rEnvDcp == pWeak->pTypeName )
+        if (rEnvDcp.empty() ||
+            rEnvDcp == OUString::unacquired(&pWeak->pTypeName) )
         {
             aFounds[nSize] = nullptr;
             (*pWeak->harden)( &aFounds[nSize], pWeak );

@@ -374,10 +374,10 @@ private:
 
     bool
     impl_queryProperty(
-            const OUString& rName
+            std::u16string_view rName
             , css::beans::Property& rProp ) const;
     sal_Int32
-    impl_getPos( const OUString& rName ) const;
+    impl_getPos( std::u16string_view rName ) const;
 
     static bool
     impl_isMyPropertyName( const OUString& rName );
@@ -411,8 +411,8 @@ public:
 //some helping variables ( names for my special properties )
 const char g_sPropertyNameForCount[] = "RowCount";
 const char g_sPropertyNameForFinalCount[] = "IsRowCountFinal";
-const char g_sPropertyNameForFetchSize[] = "FetchSize";
-const char g_sPropertyNameForFetchDirection[] = "FetchDirection";
+constexpr OUStringLiteral g_sPropertyNameForFetchSize(u"FetchSize");
+constexpr OUStringLiteral g_sPropertyNameForFetchDirection(u"FetchDirection");
 
 CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         Reference< XPropertySetInfo > const & xInfo )
@@ -543,7 +543,7 @@ sal_Bool SAL_CALL CCRS_PropertySetInfo
 
 
 sal_Int32 CCRS_PropertySetInfo
-            ::impl_getPos( const OUString& rName ) const
+            ::impl_getPos( std::u16string_view rName ) const
 {
     for( sal_Int32 nN = m_pProperties->getLength(); nN--; )
     {
@@ -555,7 +555,7 @@ sal_Int32 CCRS_PropertySetInfo
 }
 
 bool CCRS_PropertySetInfo
-        ::impl_queryProperty( const OUString& rName, Property& rProp ) const
+        ::impl_queryProperty( std::u16string_view rName, Property& rProp ) const
 {
     for( const Property& rMyProp : std::as_const(*m_pProperties) )
     {

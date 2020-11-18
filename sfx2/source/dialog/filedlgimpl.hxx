@@ -200,8 +200,8 @@ namespace sfx2
         bool                    isShowFilterExtensionEnabled() const;
         void                    addFilterPair( const OUString& rFilter,
                                                const OUString& rFilterWithExtension );
-        OUString                getFilterName( const OUString& rFilterWithExtension ) const;
-        OUString                getFilterWithExtension( const OUString& rFilter ) const;
+        OUString                getFilterName( std::u16string_view rFilterWithExtension ) const;
+        OUString                getFilterWithExtension( std::u16string_view rFilter ) const;
 
         void                    SetContext( FileDialogHelper::Context _eNewContext );
 

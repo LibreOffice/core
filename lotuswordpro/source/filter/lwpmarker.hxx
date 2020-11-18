@@ -70,7 +70,7 @@ class LwpMarker : public LwpDLNFPVList
 public:
     LwpMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm);
     void Read() override;
-    OUString GetNamedProperty(const OUString& name);
+    OUString GetNamedProperty(std::u16string_view name);
 protected:
     enum{
         MARKER_START=1,

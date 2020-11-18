@@ -546,8 +546,8 @@ void ScDocument::SetLink( SCTAB nTab, ScLinkMode nMode, const OUString& rDoc,
         maTabs[nTab]->SetLink( nMode, rDoc, rFilter, rOptions, rTabName, nRefreshDelay );
 }
 
-bool ScDocument::HasLink( const OUString& rDoc,
-                            const OUString& rFilter, const OUString& rOptions ) const
+bool ScDocument::HasLink( std::u16string_view rDoc,
+                            std::u16string_view rFilter, std::u16string_view rOptions ) const
 {
     SCTAB nCount = static_cast<SCTAB>(maTabs.size());
     for (SCTAB i=0; i<nCount; i++)

@@ -63,7 +63,7 @@ public:
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    static bool nameExists( const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString & name, SCTAB& nTab );
+    static bool nameExists( const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc, std::u16string_view name, SCTAB& nTab );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAWORKSHEETS_HXX

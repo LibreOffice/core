@@ -404,7 +404,7 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
     return bCanUseNewName;
 }
 
-bool DrawDocShell::IsPageNameUnique( const OUString & rPageName ) const
+bool DrawDocShell::IsPageNameUnique( std::u16string_view rPageName ) const
 {
     return mpDoc->IsPageNameUnique(rPageName);
 }

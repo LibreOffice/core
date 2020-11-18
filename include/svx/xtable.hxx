@@ -180,7 +180,7 @@ public:
     void Remove(tools::Long nIndex);
 
     XPropertyEntry* Get(tools::Long nIndex) const;
-    tools::Long GetIndex(const OUString& rName) const;
+    tools::Long GetIndex(std::u16string_view rName) const;
     BitmapEx GetUiBitmap(tools::Long nIndex) const;
 
     const OUString& GetName() const { return maName; }

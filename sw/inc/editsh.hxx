@@ -294,7 +294,7 @@ public:
     SwCharFormat* GetCurCharFormat() const;
     void FillByEx(SwCharFormat*);
     SwCharFormat* MakeCharFormat( const OUString& rName );
-    SwCharFormat* FindCharFormatByName( const OUString& rName ) const;
+    SwCharFormat* FindCharFormatByName( std::u16string_view rName ) const;
 
     /* FormatCollections (new) - Explaining the general naming pattern:
      * GetXXXCount() returns the count of xxx in the document.
@@ -337,7 +337,7 @@ public:
     SwTextFormatColl *MakeTextFormatColl(const OUString &rFormatCollName,
         SwTextFormatColl *pDerivedFrom = nullptr);
     void FillByEx(SwTextFormatColl*);
-    SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const;
+    SwTextFormatColl* FindTextFormatCollByName( std::u16string_view rName ) const;
 
     /// @return "Auto-Collection" with given Id. If it does not exist create it.
     SwTextFormatColl* GetTextCollFromPool( sal_uInt16 nId );
@@ -676,13 +676,13 @@ public:
     svt::EmbeddedObjectRef&  GetOLEObject() const;
 
     /// Is there an OLEObject with this name (SwFormat)?
-    bool HasOLEObj( const OUString &rName ) const;
+    bool HasOLEObj( std::u16string_view rName ) const;
 
     /// @return pointer to the data of the chart in which Cursr is.
     void SetChartName( const OUString &rName );
 
     /// Update content of all charts for table with given name.
-    void UpdateCharts( const OUString &rName );
+    void UpdateCharts( std::u16string_view rName );
 
     OUString GetCurWord() const;
 
@@ -806,7 +806,7 @@ public:
     void SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd );
 
     /// @return reference set in document according to given name.
-    const SwFormatRefMark* GetRefMark( const OUString& rName ) const;
+    const SwFormatRefMark* GetRefMark( std::u16string_view rName ) const;
 
     /**  @return names of all references set in document.
       If ArrayPointer == 0 then return only whether a RefMark is set in document. */

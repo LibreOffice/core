@@ -374,7 +374,7 @@ public:
 
     virtual std::shared_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet& rItemSet);
 
-    ErrCode                     CallBasic( const OUString& rMacro, const OUString& rBasicName,
+    ErrCode                     CallBasic( std::u16string_view rMacro, std::u16string_view rBasicName,
                                     SbxArray* pArgs, SbxValue* pRet = nullptr );
 
     ErrCode     CallXScript(

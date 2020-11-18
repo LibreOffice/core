@@ -125,8 +125,8 @@ public:
     VclPtr<SfxInfoBarWindow> appendInfoBar(const OUString& sId, const OUString& sPrimaryMessage,
                                            const OUString& sSecondaryMessage, InfobarType ibType,
                                            bool bShowCloseButton);
-    VclPtr<SfxInfoBarWindow> getInfoBar(const OUString& sId);
-    bool hasInfoBarWithID(const OUString& sId);
+    VclPtr<SfxInfoBarWindow> getInfoBar(std::u16string_view sId);
+    bool hasInfoBarWithID(std::u16string_view sId);
     void removeInfoBar(VclPtr<SfxInfoBarWindow> const& pInfoBar);
     static bool isInfobarEnabled(const OUString& sId);
 

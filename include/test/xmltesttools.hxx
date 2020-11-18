@@ -84,8 +84,8 @@ protected:
     /**
      * Assert that rXPath exists and it has an rNSPrefix=rNSHref namespace definition.
      */
-    void          assertXPathNSDef(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OUString& rNSPrefix,
-                          const OUString& rNSHref);
+    void          assertXPathNSDef(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, std::u16string_view rNSPrefix,
+                          std::u16string_view rNSHref);
     /**
      * Assert that rXPath exists, and has exactly nNumberOfChildNodes child nodes.
      * Useful for checking that we do have a no child nodes to a specific node (nNumberOfChildNodes == 0).

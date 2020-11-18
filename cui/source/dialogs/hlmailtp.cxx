@@ -167,7 +167,7 @@ void SvxHyperlinkMailTp::SetInitFocus()
 
 /*************************************************************************
 |************************************************************************/
-void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
+void SvxHyperlinkMailTp::SetScheme(std::u16string_view rScheme)
 {
     //update target:
     RemoveImproperProtocol(rScheme);
@@ -183,7 +183,7 @@ void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
 |* Remove protocol if it does not fit to the current button selection
 |*
 |************************************************************************/
-void SvxHyperlinkMailTp::RemoveImproperProtocol(const OUString& aProperScheme)
+void SvxHyperlinkMailTp::RemoveImproperProtocol(std::u16string_view aProperScheme)
 {
     OUString aStrURL(m_xCbbReceiver->get_active_text());
     if ( !aStrURL.isEmpty() )

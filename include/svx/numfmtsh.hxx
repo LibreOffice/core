@@ -108,7 +108,7 @@ public:
                                    short&                rFmtSelPos,
                                    std::vector<OUString>& rFmtEntries );
 
-    void                RemoveFormat( const OUString&       rFormat,
+    void                RemoveFormat( std::u16string_view   rFormat,
                                       sal_uInt16&           rCatLbSelPos,
                                       short&                rFmtSelPos,
                                       std::vector<OUString>& rFmtEntries );
@@ -127,7 +127,7 @@ public:
                                     sal_uInt16&     rLeadingZeroes,
                                     sal_uInt16&     rCatLbPos );
 
-    sal_uInt16          GetFormatIntegerDigits( const OUString&  rFormat ) const;
+    sal_uInt16          GetFormatIntegerDigits( std::u16string_view  rFormat ) const;
 
     void                MakePreviewString( const OUString& rFormatStr,
                                            OUString&       rPreviewStr,
@@ -164,13 +164,13 @@ public:
     sal_uInt16          FindCurrencyFormat( const OUString& rFmtString );
     sal_uInt16          FindCurrencyFormat(const NfCurrencyEntry* pTmpCurrencyEntry,bool bTmpBanking);
     void                SetCurCurrencyEntry(NfCurrencyEntry*);
-    short               GetListPos4Entry( sal_uInt32 nIdx, const OUString& rFmtString );
+    short               GetListPos4Entry( sal_uInt32 nIdx, std::u16string_view rFmtString );
 
     void                GetCurrencySymbols(std::vector<OUString>& rList, sal_uInt16* pPos );
 
     sal_uInt16          FindCurrencyTableEntry( const OUString& rFmtString, bool &bTestBanking );
     bool                IsInTable(sal_uInt16 nPos, bool bTmpBanking,
-                            OUString const& rFmtString);
+                            std::u16string_view rFmtString);
 
     void                SetUseStarFormat( bool bUse ) { bUseStarFormat = bUse; }
 private:

@@ -158,7 +158,7 @@ public:
     OutgoingRequest lastOutgoingRequest(rtl::ByteSequence const & tid);
 
     bool isProtocolPropertiesRequest(
-        OUString const & oid,
+        std::u16string_view oid,
         com::sun::star::uno::TypeDescription const & type) const;
 
     void setCurrentContextMode();

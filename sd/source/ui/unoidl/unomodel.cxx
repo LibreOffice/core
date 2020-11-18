@@ -3375,7 +3375,7 @@ sal_Bool SAL_CALL SdDocLinkTargets::hasElements()
     return mpModel->GetDoc() != nullptr;
 }
 
-SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const
+SdPage* SdDocLinkTargets::FindPage( std::u16string_view rName ) const
 {
     SdDrawDocument* pDoc = mpModel->GetDoc();
     if( pDoc == nullptr )

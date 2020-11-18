@@ -267,7 +267,7 @@ public:
     OUString const &    GetFactory() const { return xIPage->GetFactory(); }
     OUString            GetSelectedEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
-    bool                IsValidFactory( const OUString& _rFactory );
+    bool                IsValidFactory( std::u16string_view _rFactory );
     OUString            GetActiveFactoryTitle() const { return m_xActiveLB->get_active_text(); }
     void                ClearSearchPage();
     void                GrabFocusBack();

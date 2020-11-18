@@ -139,7 +139,7 @@ public:
 
     void        AddGroupDimension( const ScDPGroupDimension& rGroup );
     void        SetNumGroupDimension( sal_Int32 nIndex, const ScDPNumGroupDimension& rGroup );
-    sal_Int32        GetDimensionIndex( const OUString& rName );
+    sal_Int32        GetDimensionIndex( std::u16string_view rName );
 
     virtual sal_Int32                    GetColumnCount() override;
     virtual sal_Int32                    GetMembersCount( sal_Int32 nDim ) override;

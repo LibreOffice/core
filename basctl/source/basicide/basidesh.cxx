@@ -563,7 +563,7 @@ void Shell::CheckWindows()
 }
 
 
-void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName )
+void Shell::RemoveWindows( const ScriptDocument& rDocument, std::u16string_view rLibName )
 {
     bool bChangeCurWindow = pCurWin;
     std::vector<VclPtr<BaseWindow> > aDeleteVec;

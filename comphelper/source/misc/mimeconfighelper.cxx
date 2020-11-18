@@ -443,9 +443,9 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByFilt
 }
 
 
-uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocumentName( const OUString& aDocName )
+uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocumentName( std::u16string_view aDocName )
 {
-    if ( !aDocName.isEmpty() )
+    if ( !aDocName.empty() )
     {
         uno::Reference< container::XNameAccess > xObjConfig = GetObjConfiguration();
         if ( xObjConfig.is() )
@@ -507,11 +507,11 @@ OUString MimeConfigurationHelper::GetFactoryNameByStringClassID( const OUString&
 }
 
 
-OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( const OUString& aDocName )
+OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( std::u16string_view aDocName )
 {
     OUString aResult;
 
-    if ( !aDocName.isEmpty() )
+    if ( !aDocName.empty() )
     {
         uno::Reference< container::XNameAccess > xObjConfig = GetObjConfiguration();
         if ( xObjConfig.is() )

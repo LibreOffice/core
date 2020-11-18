@@ -223,7 +223,7 @@ private:
 
     void update();
 
-    void createSlideList( bool bAll, const OUString& rPresSlide );
+    void createSlideList( bool bAll, std::u16string_view rPresSlide );
 
     void displayCurrentSlide (const bool bSkipAllMainSequenceEffects = false);
 

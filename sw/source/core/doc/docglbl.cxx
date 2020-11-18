@@ -207,7 +207,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     switch( eDocType )
     {
     case SPLITDOC_TO_HTML:
-        pFilter = SwIoSystem::GetFilterOfFormat("HTML");
+        pFilter = SwIoSystem::GetFilterOfFormat(u"HTML");
         break;
 
     default:

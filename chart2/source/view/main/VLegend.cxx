@@ -291,7 +291,7 @@ awt::Size lcl_placeLegendEntries(
     const sal_Int32 nSymbolToTextDistance = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.22 ) );//minimum 1mm
     const sal_Int32 nSymbolPlusDistanceWidth = rMaxSymbolExtent.Width + nSymbolToTextDistance;
     sal_Int32 nMaxTextWidth = rRemainingSpace.Width - nSymbolPlusDistanceWidth;
-    uno::Any* pFrameWidthAny = PropertyMapper::getValuePointer( rTextProperties.second, rTextProperties.first, "TextMaximumFrameWidth");
+    uno::Any* pFrameWidthAny = PropertyMapper::getValuePointer( rTextProperties.second, rTextProperties.first, u"TextMaximumFrameWidth");
     if(pFrameWidthAny)
     {
         if( eExpansion == css::chart::ChartLegendExpansion_HIGH )

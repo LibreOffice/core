@@ -3944,7 +3944,7 @@ OUString SwDoc::GetUniqueTableName() const
     return aName + OUString::number( ++nNum );
 }
 
-SwTableFormat* SwDoc::FindTableFormatByName( const OUString& rName, bool bAll ) const
+SwTableFormat* SwDoc::FindTableFormatByName( std::u16string_view rName, bool bAll ) const
 {
     const SwFormat* pRet = nullptr;
     if( bAll )
@@ -4441,7 +4441,7 @@ bool SwDoc::UnProtectTableCells( SwTable& rTable )
     return bChgd;
 }
 
-void SwDoc::UnProtectCells( const OUString& rName )
+void SwDoc::UnProtectCells( std::u16string_view rName )
 {
     SwTableFormat* pFormat = FindTableFormatByName( rName );
     if( pFormat )

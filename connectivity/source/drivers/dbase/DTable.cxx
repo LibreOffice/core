@@ -589,7 +589,7 @@ void ODbaseTable::ReadMemoHeader()
     }
 }
 
-OUString ODbaseTable::getEntry(file::OConnection const * _pConnection,const OUString& _sName )
+OUString ODbaseTable::getEntry(file::OConnection const * _pConnection, std::u16string_view _sName )
 {
     OUString sURL;
     try

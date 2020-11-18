@@ -103,32 +103,32 @@ public:
     static bool                 FillThemeList( std::vector<OUString>& rThemeList );
 
                                 // FillObjList is filling rObjList with Strings of the internal Gallery Object URL
-    static bool                 FillObjList( const OUString& rThemeName, std::vector<OUString> &rObjList );
+    static bool                 FillObjList( std::u16string_view rThemeName, std::vector<OUString> &rObjList );
     static bool                 FillObjList( const sal_uInt32 nThemeId, std::vector<OUString> &rObjList );
 
                                 // FillObjTitleList is filling the rList with the title for each gallery object
     static bool                 FillObjListTitle( const sal_uInt32 nThemeId, std::vector< OUString >& rList );
 
-    static bool                 InsertURL( const OUString& rThemeName, const OUString& rURL );
+    static bool                 InsertURL( std::u16string_view rThemeName, const OUString& rURL );
     static bool                 InsertURL( sal_uInt32 nThemeId, const OUString& rURL );
 
-    static bool                 GetGraphicObj( const OUString& rThemeName, sal_uInt32 nPos,
+    static bool                 GetGraphicObj( std::u16string_view rThemeName, sal_uInt32 nPos,
                                                Graphic* pGraphic );
     static bool                 GetGraphicObj( sal_uInt32 nThemeId, sal_uInt32 nPos,
                                                Graphic* pGraphic );
 
-    static sal_uInt32           GetSdrObjCount( const OUString& rThemeName );
+    static sal_uInt32           GetSdrObjCount( std::u16string_view rThemeName );
     static sal_uInt32           GetSdrObjCount( sal_uInt32 nThemeId );
 
-    static bool                 GetSdrObj( const OUString& rThemeName, sal_uInt32 nSdrModelPos,
+    static bool                 GetSdrObj( std::u16string_view rThemeName, sal_uInt32 nSdrModelPos,
                                            SdrModel* pModel, BitmapEx* pThumb = nullptr );
     static bool                 GetSdrObj( sal_uInt32 nThemeId, sal_uInt32 nSdrModelPos,
                                            SdrModel* pModel, BitmapEx* pThumb = nullptr );
 
-    static bool                 BeginLocking( const OUString& rThemeName );
+    static bool                 BeginLocking( std::u16string_view rThemeName );
     static bool                 BeginLocking( sal_uInt32 nThemeId );
 
-    static bool                 EndLocking( const OUString& rThemeName );
+    static bool                 EndLocking( std::u16string_view rThemeName );
     static bool                 EndLocking( sal_uInt32 nThemeId );
 };
 

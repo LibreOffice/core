@@ -659,7 +659,7 @@ void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserNam
 
 UrlRecord SAL_CALL PasswordContainer::find( const OUString& aURL, const Reference< XInteractionHandler >& aHandler  )
 {
-    return find( aURL, OUString(), false, aHandler );
+    return find( aURL, u"", false, aHandler );
 }
 
 
@@ -669,7 +669,7 @@ UrlRecord SAL_CALL PasswordContainer::findForName( const OUString& aURL, const O
 }
 
 
-Sequence< UserRecord > PasswordContainer::FindUsr( const std::vector< NamePassRecord >& userlist, const OUString& aName, const Reference< XInteractionHandler >& aHandler )
+Sequence< UserRecord > PasswordContainer::FindUsr( const std::vector< NamePassRecord >& userlist, std::u16string_view aName, const Reference< XInteractionHandler >& aHandler )
 {
     sal_uInt32 nInd = 0;
     for (auto const& aNPIter : userlist)
@@ -692,7 +692,7 @@ Sequence< UserRecord > PasswordContainer::FindUsr( const std::vector< NamePassRe
 bool PasswordContainer::createUrlRecord(
     const PassMap::iterator & rIter,
     bool bName,
-    const OUString & aName,
+    std::u16string_view aName,
     const Reference< XInteractionHandler >& aHandler,
     UrlRecord & rRec )
 {
@@ -719,7 +719,7 @@ bool PasswordContainer::createUrlRecord(
 
 UrlRecord PasswordContainer::find(
     const OUString& aURL,
-    const OUString& aName,
+    std::u16string_view aName,
     bool bName, // only needed to support empty user names
     const Reference< XInteractionHandler >& aHandler  )
 {

@@ -334,7 +334,7 @@ sal_uInt16 SfxObjectFactory::GetViewNo_Impl( const SfxInterfaceId i_nViewId, con
     return i_nFallback;
 }
 
-SfxViewFactory* SfxObjectFactory::GetViewFactoryByViewName( const OUString& i_rViewName ) const
+SfxViewFactory* SfxObjectFactory::GetViewFactoryByViewName( std::u16string_view i_rViewName ) const
 {
     for (   sal_uInt16 nViewNo = 0;
             nViewNo < GetViewFactoryCount();

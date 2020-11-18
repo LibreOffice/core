@@ -233,9 +233,9 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
     return sCurrentHelpURL;
 }
 
-bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
+bool HelpOnStartup::its_isHelpUrlADefaultOne(std::u16string_view sHelpURL)
 {
-    if (sHelpURL.isEmpty())
+    if (sHelpURL.empty())
         return false;
 
     // SAFE ->

@@ -429,7 +429,7 @@ sal_Bool SAL_CALL SdXCustomPresentationAccess::hasElements()
     return pList && !pList->empty();
 }
 
-SdCustomShow * SdXCustomPresentationAccess::getSdCustomShow( const OUString& rName ) const throw()
+SdCustomShow * SdXCustomPresentationAccess::getSdCustomShow( std::u16string_view rName ) const throw()
 {
     sal_uInt32 nIdx = 0;
 

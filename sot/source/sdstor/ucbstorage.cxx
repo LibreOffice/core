@@ -1799,7 +1799,7 @@ sal_Int32 UCBStorage_Impl::GetObjectCount()
     return nCount;
 }
 
-static OUString Find_Impl( const Sequence < Sequence < PropertyValue > >& rSequence, const OUString& rPath )
+static OUString Find_Impl( const Sequence < Sequence < PropertyValue > >& rSequence, std::u16string_view rPath )
 {
     bool bFound = false;
     for ( const Sequence < PropertyValue >& rMyProps : rSequence )
@@ -2427,9 +2427,9 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl const & rElemen
     return Good() && pDest->Good();
 }
 
-UCBStorageElement_Impl* UCBStorage::FindElement_Impl( const OUString& rName ) const
+UCBStorageElement_Impl* UCBStorage::FindElement_Impl( std::u16string_view rName ) const
 {
-    DBG_ASSERT( !rName.isEmpty(), "Name is empty!" );
+    DBG_ASSERT( !rName.empty(), "Name is empty!" );
     for (const auto& pElement : pImp->GetChildrenList())
     {
         if ( pElement->m_aName == rName && !pElement->m_bIsRemoved )

@@ -91,29 +91,29 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         bool destroyToolbar( const OUString& rResourceURL );
 
         // visibility
-        bool showToolbar( const OUString& rResourceURL );
-        bool hideToolbar( const OUString& rResourceURL );
+        bool showToolbar( std::u16string_view rResourceURL );
+        bool hideToolbar( std::u16string_view rResourceURL );
 
         void refreshToolbarsVisibility( bool bAutomaticToolbars );
         void setFloatingToolbarsVisibility( bool bVisible );
         void setVisible(bool bVisible);
 
         // docking and further functions
-        bool dockToolbar( const OUString& rResourceURL, css::ui::DockingArea eDockingArea, const css::awt::Point& aPos );
+        bool dockToolbar( std::u16string_view rResourceURL, css::ui::DockingArea eDockingArea, const css::awt::Point& aPos );
         bool dockAllToolbars();
-        bool floatToolbar( const OUString& rResourceURL );
-        bool lockToolbar( const OUString& rResourceURL );
-        bool unlockToolbar( const OUString& rResourceURL );
-        void setToolbarPos( const OUString& rResourceURL, const css::awt::Point& aPos );
-        void setToolbarSize( const OUString& rResourceURL, const css::awt::Size& aSize );
-        void setToolbarPosSize( const OUString& rResourceURL, const css::awt::Point& aPos, const css::awt::Size& aSize );
-        bool isToolbarVisible( const OUString& rResourceURL );
-        bool isToolbarFloating( const OUString& rResourceURL );
-        bool isToolbarDocked( const OUString& rResourceURL );
-        bool isToolbarLocked( const OUString& rResourceURL );
-        css::awt::Point getToolbarPos( const OUString& rResourceURL );
-        css::awt::Size getToolbarSize( const OUString& rResourceURL );
-        css::uno::Reference< css::ui::XUIElement > getToolbar( const OUString& aName );
+        bool floatToolbar( std::u16string_view rResourceURL );
+        bool lockToolbar( std::u16string_view rResourceURL );
+        bool unlockToolbar( std::u16string_view rResourceURL );
+        void setToolbarPos( std::u16string_view rResourceURL, const css::awt::Point& aPos );
+        void setToolbarSize( std::u16string_view rResourceURL, const css::awt::Size& aSize );
+        void setToolbarPosSize( std::u16string_view rResourceURL, const css::awt::Point& aPos, const css::awt::Size& aSize );
+        bool isToolbarVisible( std::u16string_view rResourceURL );
+        bool isToolbarFloating( std::u16string_view rResourceURL );
+        bool isToolbarDocked( std::u16string_view rResourceURL );
+        bool isToolbarLocked( std::u16string_view rResourceURL );
+        css::awt::Point getToolbarPos( std::u16string_view rResourceURL );
+        css::awt::Size getToolbarSize( std::u16string_view rResourceURL );
+        css::uno::Reference< css::ui::XUIElement > getToolbar( std::u16string_view aName );
         css::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > getToolbars();
 
         // child window notifications
@@ -201,11 +201,11 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
 
         // lookup/container methods
 
-        UIElement        implts_findToolbar( const OUString& aName );
+        UIElement        implts_findToolbar( std::u16string_view aName );
         UIElement        implts_findToolbar( const css::uno::Reference< css::uno::XInterface >& xToolbar );
-        UIElement&       impl_findToolbar( const OUString& aName );
-        css::uno::Reference< css::awt::XWindow > implts_getXWindow( const OUString& aName );
-        vcl::Window*     implts_getWindow( const OUString& aName );
+        UIElement&       impl_findToolbar( std::u16string_view aName );
+        css::uno::Reference< css::awt::XWindow > implts_getXWindow( std::u16string_view aName );
+        vcl::Window*     implts_getWindow( std::u16string_view aName );
         bool             implts_insertToolbar( const UIElement& rUIElement );
         void             implts_setToolbar( const UIElement& rUIElement );
         ::Size           implts_getTopBottomDockingAreaSizes();
@@ -216,11 +216,11 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         ::tools::Rectangle      implts_calcHotZoneRect( const ::tools::Rectangle& rRect, sal_Int32 nHotZoneOffset );
         void             implts_calcDockingPosSize( UIElement& aUIElement, DockingOperation& eDockOperation, ::tools::Rectangle& rTrackingRect, const Point& rMousePos );
         DockingOperation implts_determineDockingOperation( css::ui::DockingArea DockingArea, const ::tools::Rectangle& rRowColRect, const Point& rMousePos );
-        ::tools::Rectangle      implts_getWindowRectFromRowColumn( css::ui::DockingArea DockingArea, const SingleRowColumnWindowData& rRowColumnWindowData, const ::Point& rMousePos, const OUString& rExcludeElementName );
+        ::tools::Rectangle      implts_getWindowRectFromRowColumn( css::ui::DockingArea DockingArea, const SingleRowColumnWindowData& rRowColumnWindowData, const ::Point& rMousePos, std::u16string_view rExcludeElementName );
         ::tools::Rectangle      implts_determineFrontDockingRect( css::ui::DockingArea eDockingArea,
                                                            sal_Int32 nRowCol,
                                                            const ::tools::Rectangle& rDockedElementRect,
-                                                           const OUString& rMovedElementName,
+                                                           std::u16string_view rMovedElementName,
                                                            const ::tools::Rectangle& rMovedElementRect );
         ::tools::Rectangle      implts_calcTrackingAndElementRect( css::ui::DockingArea eDockingArea,
                                                             sal_Int32 nRowCol,

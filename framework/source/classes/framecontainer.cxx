@@ -273,7 +273,7 @@ FrameContainer::searchOnAllChildrens(const OUString& sName) const
     @threadsafe yes
  *****************************************************************************************************************/
 css::uno::Reference<css::frame::XFrame>
-FrameContainer::searchOnDirectChildrens(const OUString& sName) const
+FrameContainer::searchOnDirectChildrens(std::u16string_view sName) const
 {
     SolarMutexGuard g;
     css::uno::Reference<css::frame::XFrame> xSearchedFrame;

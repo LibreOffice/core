@@ -645,7 +645,7 @@ void ScDrawView::UpdateUserViewOptions()
                        rGrid.GetFieldDrawY() / (rGrid.GetFieldDivisionY() + 1) ) );
 }
 
-SdrObject* ScDrawView::GetObjectByName(const OUString& rName)
+SdrObject* ScDrawView::GetObjectByName(std::u16string_view rName)
 {
     SfxObjectShell* pShell = rDoc.GetDocumentShell();
     if (pShell)
@@ -676,7 +676,7 @@ SdrObject* ScDrawView::GetObjectByName(const OUString& rName)
 
 //realize multi-selection of objects
 
-void ScDrawView::SelectCurrentViewObject( const OUString& rName )
+void ScDrawView::SelectCurrentViewObject( std::u16string_view rName )
 {
     sal_uInt16 nObjectTab = 0;
     SdrObject* pFound = nullptr;
@@ -727,7 +727,7 @@ void ScDrawView::SelectCurrentViewObject( const OUString& rName )
     MarkObj( pFound, pPV, bUnMark);
 }
 
-bool ScDrawView::SelectObject( const OUString& rName )
+bool ScDrawView::SelectObject( std::u16string_view rName )
 {
     UnmarkAll();
 

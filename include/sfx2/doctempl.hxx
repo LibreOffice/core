@@ -94,7 +94,7 @@ public:
     bool            CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const OUString &rName) const;
     bool            CopyFrom(sal_uInt16 nRegion, sal_uInt16 nIdx, OUString &rName);
 
-    bool            GetFull( const OUString& rRegion, const OUString& rName, OUString& rPath );
+    bool            GetFull( std::u16string_view rRegion, const OUString& rName, OUString& rPath );
     bool            GetLogicNames( const OUString& rPath, OUString& rRegion, OUString& rName ) const;
 
     /** updates the configuration where the document templates structure is stored.

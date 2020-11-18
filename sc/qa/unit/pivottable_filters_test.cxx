@@ -320,7 +320,7 @@ void ScPivotTableFiltersTest::testPivotTableNamedRangeSourceODS()
 namespace
 {
 bool checkVisiblePageFieldMember(const ScDPSaveDimension::MemberList& rMembers,
-                                 const OUString& rVisibleMember)
+                                 std::u16string_view rVisibleMember)
 {
     bool bFound = false;
     for (const ScDPSaveMember* pMem : rMembers)
@@ -356,23 +356,23 @@ void ScPivotTableFiltersTest::testPivotTableSharedCacheGroupODS()
     CPPUNIT_ASSERT_MESSAGE("There should be a pivot table here.", pDPObj);
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT_MESSAGE("Save data is expected.", pSaveData);
-    ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName("Project Name");
+    ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName(u"Project Name");
     CPPUNIT_ASSERT_MESSAGE("Failed to get page field named 'Project Name'.", pDim);
     const ScDPSaveDimension::MemberList* pMembers = &pDim->GetMembers();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), pMembers->size());
     CPPUNIT_ASSERT_MESSAGE("Incorrect member visibility.",
-                           checkVisiblePageFieldMember(*pMembers, "APL-01-1"));
+                           checkVisiblePageFieldMember(*pMembers, u"APL-01-1"));
 
     pDPObj = rDoc.GetDPAtCursor(0, 1, 2); // A2 on 3rd sheet
     CPPUNIT_ASSERT_MESSAGE("There should be a pivot table here.", pDPObj);
     pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT_MESSAGE("Save data is expected.", pSaveData);
-    pDim = pSaveData->GetExistingDimensionByName("Project Name");
+    pDim = pSaveData->GetExistingDimensionByName(u"Project Name");
     CPPUNIT_ASSERT_MESSAGE("Failed to get page field named 'Project Name'.", pDim);
     pMembers = &pDim->GetMembers();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), pMembers->size());
     CPPUNIT_ASSERT_MESSAGE("Incorrect member visibility.",
-                           checkVisiblePageFieldMember(*pMembers, "VEN-01-1"));
+                           checkVisiblePageFieldMember(*pMembers, u"VEN-01-1"));
 
     // These two pivot tables share the same data range. We should only have
     // one pivot cache.
@@ -389,7 +389,7 @@ void ScPivotTableFiltersTest::testPivotTableSharedCacheGroupODS()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(9), pCache->GetFieldCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pCache->GetGroupFieldCount());
 
-    SCCOL nDim = pCache->GetDimensionIndex("StartDate");
+    SCCOL nDim = pCache->GetDimensionIndex(u"StartDate");
     CPPUNIT_ASSERT_MESSAGE("Dimension 'StartDate' doesn't exist in the cache.", nDim >= 0);
     sal_Int32 nGrpType = pCache->GetGroupType(nDim);
     CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldGroupBy::DAYS, nGrpType);
@@ -1490,7 +1490,7 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilter()
         CPPUNIT_ASSERT(pDPObj);
         ScDPSaveData* pSaveData = pDPObj->GetSaveData();
         CPPUNIT_ASSERT(pSaveData);
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double field1");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Double field1");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1515,7 +1515,7 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilter()
         CPPUNIT_ASSERT(pDPObj);
         ScDPSaveData* pSaveData = pDPObj->GetSaveData();
         CPPUNIT_ASSERT(pSaveData);
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double field2");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Double field2");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1540,7 +1540,7 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilter()
         CPPUNIT_ASSERT(pDPObj);
         ScDPSaveData* pSaveData = pDPObj->GetSaveData();
         CPPUNIT_ASSERT(pSaveData);
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double field3");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Double field3");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1581,7 +1581,7 @@ void ScPivotTableFiltersTest::testPivotTableStringFieldFilter()
     CPPUNIT_ASSERT(pDPObj);
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT(pSaveData);
-    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Country");
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Country");
     CPPUNIT_ASSERT(pSaveDim);
 
     const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1616,7 +1616,7 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilter()
     CPPUNIT_ASSERT(pSaveData);
 
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Date");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Date");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1636,7 +1636,7 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilter()
     }
 
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Date2");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Date2");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1656,7 +1656,7 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilter()
     }
 
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Date3");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Date3");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1697,7 +1697,7 @@ void ScPivotTableFiltersTest::testPivotTableBoolFieldFilter()
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT(pSaveData);
 
-    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Bool field");
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Bool field");
     CPPUNIT_ASSERT(pSaveDim);
 
     const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1733,7 +1733,7 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilter()
 
     // Row field
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Order ID");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Order ID");
         CPPUNIT_ASSERT(pSaveDim);
         CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldOrientation_ROW, pSaveDim->GetOrientation());
 
@@ -1752,7 +1752,7 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilter()
 
     // Column field
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double2 field");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Double2 field");
         CPPUNIT_ASSERT(pSaveDim);
         CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldOrientation_COLUMN, pSaveDim->GetOrientation());
 
@@ -1771,7 +1771,7 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilter()
 
     // Page field
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double3 field");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Double3 field");
         CPPUNIT_ASSERT(pSaveDim);
         CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldOrientation_PAGE, pSaveDim->GetOrientation());
 
@@ -1790,7 +1790,7 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilter()
 
     // Hidden field
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double4 field");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Double4 field");
         CPPUNIT_ASSERT(pSaveDim);
         CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldOrientation_HIDDEN, pSaveDim->GetOrientation());
 
@@ -1829,7 +1829,7 @@ void ScPivotTableFiltersTest::testPivotTableEmptyItem()
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT(pSaveData);
 
-    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Category");
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Category");
     CPPUNIT_ASSERT(pSaveDim);
 
     const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1868,7 +1868,7 @@ void ScPivotTableFiltersTest::testPivotTablePageFieldFilter()
 
     // Only one item is selected (an empty item)
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Product");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Product");
         CPPUNIT_ASSERT(pSaveDim);
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
@@ -1885,7 +1885,7 @@ void ScPivotTableFiltersTest::testPivotTablePageFieldFilter()
 
     // More items are selected, but not all
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Category");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Category");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1903,7 +1903,7 @@ void ScPivotTableFiltersTest::testPivotTablePageFieldFilter()
 
     // All items are selected
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Order ID");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Order ID");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1921,7 +1921,7 @@ void ScPivotTableFiltersTest::testPivotTablePageFieldFilter()
 
     // Only one item is selected (a non-empty item)
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Country");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Country");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -1986,7 +1986,7 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilterXLSX()
         CPPUNIT_ASSERT(pDPObj);
         ScDPSaveData* pSaveData = pDPObj->GetSaveData();
         CPPUNIT_ASSERT(pSaveData);
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double field1");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Double field1");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -2011,7 +2011,7 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilterXLSX()
         CPPUNIT_ASSERT(pDPObj);
         ScDPSaveData* pSaveData = pDPObj->GetSaveData();
         CPPUNIT_ASSERT(pSaveData);
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double field2");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Double field2");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -2036,7 +2036,7 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilterXLSX()
         CPPUNIT_ASSERT(pDPObj);
         ScDPSaveData* pSaveData = pDPObj->GetSaveData();
         CPPUNIT_ASSERT(pSaveData);
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double field3");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Double field3");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -2077,7 +2077,7 @@ void ScPivotTableFiltersTest::testPivotTableStringFieldFilterXLSX()
     CPPUNIT_ASSERT(pDPObj);
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT(pSaveData);
-    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Country");
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Country");
     CPPUNIT_ASSERT(pSaveDim);
 
     const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -2112,7 +2112,7 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilterXLSX()
     CPPUNIT_ASSERT(pSaveData);
 
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Date");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Date");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -2128,7 +2128,7 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilterXLSX()
     }
 
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Date2");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Date2");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -2144,7 +2144,7 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilterXLSX()
     }
 
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Date3");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Date3");
         CPPUNIT_ASSERT(pSaveDim);
 
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -2181,7 +2181,7 @@ void ScPivotTableFiltersTest::testPivotTableBoolFieldFilterXLSX()
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT(pSaveData);
 
-    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Bool field");
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Bool field");
     CPPUNIT_ASSERT(pSaveDim);
 
     const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
@@ -2217,7 +2217,7 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilterXLSX()
 
     // Row field
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Order ID");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Order ID");
         CPPUNIT_ASSERT(pSaveDim);
         CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldOrientation_ROW, pSaveDim->GetOrientation());
 
@@ -2236,7 +2236,7 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilterXLSX()
 
     // Column field
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double2 field");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Double2 field");
         CPPUNIT_ASSERT(pSaveDim);
         CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldOrientation_COLUMN, pSaveDim->GetOrientation());
 
@@ -2255,7 +2255,7 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilterXLSX()
 
     // Page field
     {
-        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double3 field");
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"Double3 field");
         CPPUNIT_ASSERT(pSaveDim);
         CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldOrientation_PAGE, pSaveDim->GetOrientation());
 
@@ -2314,7 +2314,7 @@ void ScPivotTableFiltersTest::testPivotTableErrorItemFilterXLSX()
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT(pSaveData);
 
-    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("b");
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"b");
     CPPUNIT_ASSERT(pSaveDim);
     const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
     CPPUNIT_ASSERT_EQUAL(size_t(4), rMembers.size());

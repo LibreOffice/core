@@ -91,7 +91,7 @@ public:
                         }
 
     void                GetAllEntryIdentifiers( std::vector<OUString>& rToFill ) const;
-    SwAuthEntry*        GetEntryByIdentifier(const OUString& rIdentifier) const;
+    SwAuthEntry*        GetEntryByIdentifier(std::u16string_view rIdentifier) const;
 
     bool                ChangeEntryContent(const SwAuthEntry* pNewEntry);
     // import interface

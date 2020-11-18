@@ -366,19 +366,19 @@ DECLARE_DUMP_TEST(ChartDataTest, Chart2DumpTest, false)
         // Check source ranges
         for (size_t nIndex = 0; nIndex < aDataSeriesYValues.size(); ++nIndex)
         {
-            Reference< chart2::data::XDataSequence > xDataSeq = getDataSequenceFromDocByRole(xChartDoc2, "values-x", nIndex);
+            Reference< chart2::data::XDataSequence > xDataSeq = getDataSequenceFromDocByRole(xChartDoc2, u"values-x", nIndex);
             if (xDataSeq.is())
             {
                 OUString aXValuesSourceRange = xDataSeq->getSourceRangeRepresentation();
                 CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(aXValuesSourceRange);
             }
-            xDataSeq.set(getDataSequenceFromDocByRole(xChartDoc2, "values-y", nIndex));
+            xDataSeq.set(getDataSequenceFromDocByRole(xChartDoc2, u"values-y", nIndex));
             if (xDataSeq.is())
             {
                 OUString aYValuesSourceRange = xDataSeq->getSourceRangeRepresentation();
                 CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(aYValuesSourceRange);
             }
-            xDataSeq.set(getDataSequenceFromDocByRole(xChartDoc2, "categories", nIndex));
+            xDataSeq.set(getDataSequenceFromDocByRole(xChartDoc2, u"categories", nIndex));
             if (xDataSeq.is())
             {
                 OUString aCategoriesSourceRange = xDataSeq->getSourceRangeRepresentation();

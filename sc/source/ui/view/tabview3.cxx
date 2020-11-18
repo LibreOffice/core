@@ -2598,7 +2598,7 @@ void ScTabView::DoChartSelection(
         ScInputHandler::SendReferenceMarks( aViewData.GetViewShell(), aReferenceMarks );
 }
 
-void ScTabView::DoDPFieldPopup(OUString const & rPivotTableName, sal_Int32 nDimensionIndex, Point aPoint, Size aSize)
+void ScTabView::DoDPFieldPopup(std::u16string_view rPivotTableName, sal_Int32 nDimensionIndex, Point aPoint, Size aSize)
 {
     ScDocument& rDocument = aViewData.GetDocShell()->GetDocument();
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()].get();

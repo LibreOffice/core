@@ -44,7 +44,7 @@ class GalleryTheme : public ::cppu::WeakImplHelper<
 
 public:
 
-    explicit GalleryTheme( const OUString& rThemeName );
+    explicit GalleryTheme( std::u16string_view rThemeName );
     virtual ~GalleryTheme() override;
 
 protected:

@@ -127,7 +127,7 @@ void ResourceManager::InitDeckContext(const Context& rContext)
     }
 }
 
-std::shared_ptr<DeckDescriptor> ResourceManager::ImplGetDeckDescriptor(const OUString& rsDeckId) const
+std::shared_ptr<DeckDescriptor> ResourceManager::ImplGetDeckDescriptor(std::u16string_view rsDeckId) const
 {
     for (auto const& deck : maDecks)
     {
@@ -139,12 +139,12 @@ std::shared_ptr<DeckDescriptor> ResourceManager::ImplGetDeckDescriptor(const OUS
     return nullptr;
 }
 
-std::shared_ptr<DeckDescriptor> ResourceManager::GetDeckDescriptor(const OUString& rsDeckId) const
+std::shared_ptr<DeckDescriptor> ResourceManager::GetDeckDescriptor(std::u16string_view rsDeckId) const
 {
     return ImplGetDeckDescriptor( rsDeckId );
 }
 
-std::shared_ptr<PanelDescriptor> ResourceManager::ImplGetPanelDescriptor(const OUString& rsPanelId) const
+std::shared_ptr<PanelDescriptor> ResourceManager::ImplGetPanelDescriptor(std::u16string_view rsPanelId) const
 {
     for (auto const& panel : maPanels)
     {
@@ -154,7 +154,7 @@ std::shared_ptr<PanelDescriptor> ResourceManager::ImplGetPanelDescriptor(const O
     return nullptr;
 }
 
-std::shared_ptr<PanelDescriptor> ResourceManager::GetPanelDescriptor(const OUString& rsPanelId) const
+std::shared_ptr<PanelDescriptor> ResourceManager::GetPanelDescriptor(std::u16string_view rsPanelId) const
 {
     return ImplGetPanelDescriptor( rsPanelId );
 }
@@ -198,7 +198,7 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
 const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatchingPanels (
                                                             PanelContextDescriptorContainer& rPanelIds,
                                                             const Context& rContext,
-                                                            const OUString& sDeckId,
+                                                            std::u16string_view sDeckId,
                                                             const Reference<frame::XController>& rxController)
 {
     ReadLegacyAddons(rxController);
@@ -697,7 +697,7 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
 }
 
 void ResourceManager::StorePanelExpansionState (
-                        const OUString& rsPanelId,
+                        std::u16string_view rsPanelId,
                         const bool bExpansionState,
                         const Context& rContext)
 {
@@ -746,7 +746,7 @@ void ResourceManager::GetToolPanelNodeNames (
 }
 
 bool ResourceManager::IsDeckEnabled (
-                        const OUString& rsDeckId,
+                        std::u16string_view rsDeckId,
                         const Context& rContext,
                         const Reference<frame::XController>& rxController)
 {

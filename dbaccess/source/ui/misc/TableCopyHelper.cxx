@@ -61,10 +61,10 @@ OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pController)
 {
 }
 
-void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const Reference<XConnection>& i_rSourceConnection,
+void OTableCopyHelper::insertTable( std::u16string_view i_rSourceDataSource, const Reference<XConnection>& i_rSourceConnection,
         const OUString& i_rCommand, const sal_Int32 i_nCommandType,
         const Reference< XResultSet >& i_rSourceRows, const Sequence< Any >& i_rSelection, const bool i_bBookmarkSelection,
-        const OUString& i_rDestDataSource, const Reference<XConnection>& i_rDestConnection)
+        std::u16string_view i_rDestDataSource, const Reference<XConnection>& i_rDestConnection)
 {
     if ( CommandType::QUERY != i_nCommandType && CommandType::TABLE != i_nCommandType )
     {
@@ -121,7 +121,7 @@ void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const R
     }
 }
 
-void OTableCopyHelper::pasteTable( const svx::ODataAccessDescriptor& _rPasteData, const OUString& i_rDestDataSourceName,
+void OTableCopyHelper::pasteTable( const svx::ODataAccessDescriptor& _rPasteData, std::u16string_view i_rDestDataSourceName,
                                   const SharedConnection& i_rDestConnection )
 {
     OUString sSrcDataSourceName = _rPasteData.getDataSource();
@@ -166,7 +166,7 @@ void OTableCopyHelper::pasteTable( const svx::ODataAccessDescriptor& _rPasteData
 
 void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
                                   ,const TransferableDataHelper& _rTransData
-                                  ,const OUString& i_rDestDataSource
+                                  ,std::u16string_view i_rDestDataSource
                                   ,const SharedConnection& _xConnection)
 {
     if ( _nFormatId == SotClipboardFormatId::DBACCESS_TABLE || _nFormatId == SotClipboardFormatId::DBACCESS_QUERY )
@@ -208,7 +208,7 @@ void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
 }
 
 void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
-                                  ,const OUString& i_rDestDataSource
+                                  ,std::u16string_view i_rDestDataSource
                                   ,const SharedConnection& _xConnection)
 {
     if ( _rTransData.HasFormat(SotClipboardFormatId::DBACCESS_TABLE) || _rTransData.HasFormat(SotClipboardFormatId::DBACCESS_QUERY) )
@@ -286,7 +286,7 @@ bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
 }
 
 void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
-                                ,const OUString& i_rDestDataSource
+                                ,std::u16string_view i_rDestDataSource
                                 ,const SharedConnection& _xConnection)
 {
     if ( _rDesc.aHtmlRtfStorage.is() )

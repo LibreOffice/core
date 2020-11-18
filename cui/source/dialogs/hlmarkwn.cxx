@@ -382,7 +382,7 @@ void SvxHlinkDlgMarkWnd::ClearTree()
 }
 
 // Find Entry for String
-std::unique_ptr<weld::TreeIter> SvxHlinkDlgMarkWnd::FindEntry (const OUString& aStrName)
+std::unique_ptr<weld::TreeIter> SvxHlinkDlgMarkWnd::FindEntry (std::u16string_view aStrName)
 {
     bool bFound=false;
     std::unique_ptr<weld::TreeIter> xEntry = mxLbTree->make_iterator();
@@ -404,7 +404,7 @@ std::unique_ptr<weld::TreeIter> SvxHlinkDlgMarkWnd::FindEntry (const OUString& a
 }
 
 // Select Entry
-bool SvxHlinkDlgMarkWnd::SelectEntry(const OUString& aStrMark)
+bool SvxHlinkDlgMarkWnd::SelectEntry(std::u16string_view aStrMark)
 {
     std::unique_ptr<weld::TreeIter> xEntry = FindEntry(aStrMark);
     if (!xEntry)
