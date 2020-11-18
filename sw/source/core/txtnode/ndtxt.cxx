@@ -3712,8 +3712,11 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
     SwDelText aDelHint( nStartPos, nDelLen );
     NotifyClients( nullptr, &aDelHint );
 
-    SwInsText aHint( nStartPos, sInserted.getLength() );
-    NotifyClients( nullptr, &aHint );
+    if (sInserted.getLength())
+    {
+        SwInsText aHint( nStartPos, sInserted.getLength() );
+        NotifyClients( nullptr, &aHint );
+    }
 }
 
 namespace {
