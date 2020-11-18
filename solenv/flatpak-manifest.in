@@ -597,10 +597,10 @@
                     "dest-filename": "external/tarballs/box2d-2.3.1.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/extern/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-opens___.ttf",
-                    "sha256": "884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc",
+                    "url": "https://dev-www.libreoffice.org/extern/f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf",
+                    "sha256": "f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140",
                     "type": "file",
-                    "dest-filename": "external/tarballs/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-opens___.ttf"
+                    "dest-filename": "external/tarballs/f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf"
                 }
             ],
             "buildsystem": "simple",
