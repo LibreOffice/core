@@ -18,7 +18,6 @@
  */
 
 #include "xmlstyli.hxx"
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/families.hxx>

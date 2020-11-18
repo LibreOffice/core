@@ -18,14 +18,12 @@
  */
 
 #include <parclass.hxx>
-#include <token.hxx>
 #include <global.hxx>
 #include <callform.hxx>
 #include <addincol.hxx>
-#include <funcdesc.hxx>
+#include <formula/token.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 #include <string.h>
 

@@ -23,7 +23,6 @@
 #include <document.hxx>
 #include "XMLConverter.hxx"
 
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>

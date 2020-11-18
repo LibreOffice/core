@@ -19,7 +19,6 @@
 
 #include <chartpos.hxx>
 #include <document.hxx>
-#include <rechead.hxx>
 #include <osl/diagnose.h>
 
 #include <memory>

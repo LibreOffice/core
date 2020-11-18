@@ -18,7 +18,6 @@
  */
 
 #include <addinhelpid.hxx>
-#include <sc.hrc>
 #include <helpids.h>
 
 // A struct containing the built-in function name and the built-in help ID.

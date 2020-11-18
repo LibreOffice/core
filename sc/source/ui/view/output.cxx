@@ -38,7 +38,6 @@
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <output.hxx>
 #include <document.hxx>

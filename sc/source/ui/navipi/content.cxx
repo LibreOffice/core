@@ -28,7 +28,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>

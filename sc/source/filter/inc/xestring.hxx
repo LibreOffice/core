@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XESTRING_HXX
 
 #include "xlstring.hxx"
+#include "ftools.hxx"
 
 class XclExpStream;
 class XclExpXmlStream;

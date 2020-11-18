@@ -30,7 +30,6 @@
 #include <sheetevents.hxx>
 #include <tokenarray.hxx>
 #include <listenercontext.hxx>
-#include <refhint.hxx>
 
 void ScDocument::StartListeningArea(
     const ScRange& rRange, bool bGroupListening, SvtListener* pListener )

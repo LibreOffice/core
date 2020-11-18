@@ -26,7 +26,6 @@
 #include <document.hxx>
 
 #include <tool.h>
-#include <root.hxx>
 #include <lotrange.hxx>
 #include <namebuff.hxx>
 #include <stringutil.hxx>

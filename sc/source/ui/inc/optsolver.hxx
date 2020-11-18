@@ -22,6 +22,7 @@
 
 #include <address.hxx>
 #include "anyrefdg.hxx"
+#include "docsh.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <vector>
