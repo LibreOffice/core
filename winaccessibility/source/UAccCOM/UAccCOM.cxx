@@ -33,8 +33,8 @@
 
 #if defined __clang__
 #pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wextra-tokens"
-// "#endif !_MIDL_USE_GUIDDEF_" in midl-generated code
+#pragma clang diagnostic ignored                                                                   \
+    "-Wextra-tokens" // "#endif !_MIDL_USE_GUIDDEF_" in midl-generated code
 #endif
 #include <UAccCOM_i.c>
 #include <ia2_api_all_i.c>
