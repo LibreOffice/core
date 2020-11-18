@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d82fd76_01e4f20e",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 38
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-11-18T04:18:14Z",
+      "side": 1,
+      "message": "I don\u0027t see the need to change get_value() here. Do you?",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "0286180d789cf99a8c59e0f5d1d885c3e89a9150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
