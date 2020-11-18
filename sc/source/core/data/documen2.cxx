@@ -53,7 +53,6 @@
 #include <validat.hxx>
 #include <detdata.hxx>
 #include <defaultsoptions.hxx>
-#include <sc.hrc>
 #include <ddelink.hxx>
 #include <chgtrack.hxx>
 #include <chgviset.hxx>

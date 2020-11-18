@@ -16,7 +16,6 @@
 #include <cellmergeoption.hxx>
 #include <tabvwsh.hxx>
 #include <impex.hxx>
-#include <viewfunc.hxx>
 #include <scitems.hxx>
 #include <attrib.hxx>
 #include <userlist.hxx>

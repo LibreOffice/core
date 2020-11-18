@@ -11,7 +11,6 @@
 #define INCLUDED_SC_INC_DPRESFILTER_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/long.hxx>
 #include "calcmacros.hxx"
 
 #include <memory>

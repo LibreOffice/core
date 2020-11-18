@@ -41,7 +41,6 @@
 #include <scmatrix.hxx>
 #include <rowheightcontext.hxx>
 #include <tokenstringcontext.hxx>
-#include <recursionhelper.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <o3tl/safeint.hxx>

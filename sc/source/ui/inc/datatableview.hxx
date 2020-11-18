@@ -23,7 +23,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
-#include <scdllapi.h>
 #include <types.hxx>
 #include "hdrcont.hxx"
 

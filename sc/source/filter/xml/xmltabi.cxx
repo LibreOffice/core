@@ -39,7 +39,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
-#include <sal/log.hxx>
 
 #include <tools/urlobj.hxx>
 #include <sax/fastattribs.hxx>

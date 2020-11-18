@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXP_OP_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXP_OP_HXX
 
+#include <tools/stream.hxx>
 #include <memory>
 #include "xeroot.hxx"
 

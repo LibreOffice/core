@@ -22,8 +22,6 @@
 #include <ooo/vba/excel/XFileDialog.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-#include <vbahelper/vbacollectionimpl.hxx>
-
 namespace com::sun::star::uno { class XComponentContext; }
 namespace ooo::vba { class XHelperInterface; }
 namespace ooo::vba::excel { class XFileDialogSelectedItems; }

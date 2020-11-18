@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_ROOT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_ROOT_HXX
 
-#include <address.hxx>
 #include "flttypes.hxx"
 #include <memory>
 

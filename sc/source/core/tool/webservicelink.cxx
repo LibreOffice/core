@@ -8,7 +8,6 @@
  */
 
 #include <comphelper/processfactory.hxx>
-#include <osl/thread.h>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 
@@ -19,12 +18,7 @@
 #include <webservicelink.hxx>
 #include <brdcst.hxx>
 #include <document.hxx>
-#include <scmatrix.hxx>
-#include <patattr.hxx>
-#include <rechead.hxx>
-#include <rangeseq.hxx>
 #include <sc.hrc>
-#include <hints.hxx>
 
 ScWebServiceLink::ScWebServiceLink(ScDocument* pD, const OUString& rURL)
     : ::sfx2::SvBaseLink(SfxLinkUpdateMode::ALWAYS, SotClipboardFormatId::STRING)

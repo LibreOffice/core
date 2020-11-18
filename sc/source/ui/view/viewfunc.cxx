@@ -26,7 +26,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>

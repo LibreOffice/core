@@ -12,7 +12,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTDATA_HXX
 
 #include "PivotLayoutTreeListBase.hxx"
-#include <tools/solar.h>
 #include <vector>
 #include <memory>
 

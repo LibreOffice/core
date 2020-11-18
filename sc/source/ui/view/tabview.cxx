@@ -48,7 +48,6 @@
 #include <attrib.hxx>
 #include <spellcheckcontext.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>
 
 #include <boost/property_tree/ptree.hpp>

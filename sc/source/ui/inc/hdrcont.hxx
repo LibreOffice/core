@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_HDRCONT_HXX
 
 #include <vcl/window.hxx>
-#include <scdllapi.h>
 #include <types.hxx>
 
 #define HDR_SIZE_OPTIMUM    0xFFFF

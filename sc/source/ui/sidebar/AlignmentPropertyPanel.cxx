@@ -26,13 +26,8 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/sdangitm.hxx>
 #include <svtools/unitconv.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <sfx2/lokhelper.hxx>
-#include <comphelper/lok.hxx>
 
 using namespace css;
 using namespace css::uno;

@@ -47,8 +47,6 @@
 #include <drtxtob.hxx>
 #include <gridwin.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdocapt.hxx>
-#include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -56,8 +54,6 @@
 #include <svx/xflclit.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <sfx2/ipclient.hxx>
-
-#include <com/sun/star/drawing/FillStyle.hpp>
 
 using namespace com::sun::star::drawing;
 using namespace com::sun::star;

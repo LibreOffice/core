@@ -32,7 +32,6 @@
 #include <globalnames.hxx>
 #include <tokenarray.hxx>
 
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <formula/errorcodes.hxx>
 #include <unotools/charclass.hxx>

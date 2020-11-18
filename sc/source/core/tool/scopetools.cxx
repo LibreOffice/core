@@ -10,7 +10,6 @@
 #include <scopetools.hxx>
 #include <document.hxx>
 #include <column.hxx>
-#include <vcl/window.hxx>
 
 namespace sc {
 

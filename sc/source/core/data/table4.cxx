@@ -20,7 +20,6 @@
 #include <scitems.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/editobj.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/escapementitem.hxx>

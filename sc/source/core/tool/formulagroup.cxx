@@ -13,21 +13,13 @@
 #include <formulagroupcl.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
-#include <tokenarray.hxx>
-#include <compiler.hxx>
 #include <interpre.hxx>
-#include <scmatrix.hxx>
 #include <globalnames.hxx>
-#include <comphelper/threadpool.hxx>
-#include <tools/cpuid.hxx>
 
-#include <formula/vectortoken.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <officecfg/Office/Calc.hxx>
 #if HAVE_FEATURE_OPENCL
 #include <opencl/platforminfo.hxx>
 #endif
-#include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 
 #include <cstdio>

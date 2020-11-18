@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_GRIDMERG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_GRIDMERG_HXX
 
+#include <tools/long.hxx>
+#include <vcl/vclptr.hxx>
+
 class OutputDevice;
 
 class ScGridMerger

@@ -15,9 +15,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
-#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -31,11 +29,9 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <svx/svdpage.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/unohelp2.hxx>
 #include <sc.hrc>
 #include <comphelper/string.hxx>
 #include <tools/json_writer.hxx>

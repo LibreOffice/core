@@ -11,10 +11,6 @@
 #include <osl/diagnose.h>
 
 #include <defaultsoptions.hxx>
-#include <miscuno.hxx>
-#include <global.hxx>
-#include <attrib.hxx>
-#include <scitems.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <sc.hrc>

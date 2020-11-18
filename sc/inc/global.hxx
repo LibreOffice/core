@@ -34,7 +34,7 @@
 // HACK: <atomic> includes <stdbool.h>, which in some Clang versions does '#define bool bool',
 // which confuses clang plugins.
 #undef bool
-#include <map>
+
 #include <memory>
 
 namespace com::sun::star::uno { template <typename > class Reference; }

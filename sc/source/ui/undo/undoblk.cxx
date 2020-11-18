@@ -45,13 +45,10 @@
 #include <refundo.hxx>
 #include <undoolk.hxx>
 #include <clipparam.hxx>
-#include <brdcst.hxx>
 #include <rowheightcontext.hxx>
-#include <refhint.hxx>
 #include <refupdatecontext.hxx>
 #include <validat.hxx>
 #include <gridwin.hxx>
-#include <svl/listener.hxx>
 #include <columnspanset.hxx>
 
 #include <memory>

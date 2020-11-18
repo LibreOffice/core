@@ -24,6 +24,7 @@
 
 #include <vector>
 #include "xladdress.hxx"
+#include "xecontent.hxx"
 #include "xerecord.hxx"
 #include "xestyle.hxx"
 #include "xlformula.hxx"

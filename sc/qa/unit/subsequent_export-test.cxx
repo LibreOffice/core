@@ -11,12 +11,8 @@
 #include <sal/config.h>
 #include <config_features.h>
 
-#include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <sfx2/docfilt.hxx>
 
-#include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 #include "helper/xpath.hxx"
 #include "helper/shared_test_impl.hxx"
@@ -74,6 +70,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+
+#include <iostream>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/strbuf.hxx>
 #include <sal/config.h>
 #include <sal/macros.h>
 #include <sal/log.hxx>

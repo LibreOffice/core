@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>

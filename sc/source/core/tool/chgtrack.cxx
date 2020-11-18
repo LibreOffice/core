@@ -23,8 +23,6 @@
 #include <document.hxx>
 #include <dociter.hxx>
 #include <global.hxx>
-#include <rechead.hxx>
-#include <scerrors.hxx>
 #include <scmod.hxx>
 #include <inputopt.hxx>
 #include <patattr.hxx>
@@ -39,18 +37,12 @@
 
 #include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
-#include <svl/itemset.hxx>
-#include <svl/isethint.hxx>
-#include <svl/itempool.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/datetime.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <tools/json_writer.hxx>
 #include <algorithm>
 #include <memory>
-#include <boost/property_tree/json_parser.hpp>
 
 ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange )
         :

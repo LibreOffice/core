@@ -68,8 +68,6 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/notebookbar.hxx>
 
-#include <sfx2/sfxsids.hrc>
-
 //  for mouse wheel
 #define MINZOOM_SLIDER 10
 #define MAXZOOM_SLIDER 400

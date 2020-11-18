@@ -14,6 +14,7 @@
 #include <address.hxx>
 #include <rangelst.hxx>
 
+#include <map>
 #include <vector>
 
 class FormulaTemplate

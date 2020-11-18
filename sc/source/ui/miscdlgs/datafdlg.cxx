@@ -14,7 +14,6 @@
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
 #define HDL(hdl)            LINK( this, ScDataFormDlg, hdl )

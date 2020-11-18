@@ -55,7 +55,6 @@
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <editeng/itemtype.hxx>
 
 #include <formatsh.hxx>
 #include <sc.hrc>

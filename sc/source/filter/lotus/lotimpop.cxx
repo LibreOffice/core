@@ -26,7 +26,6 @@
 #include <formulacell.hxx>
 #include <global.hxx>
 
-#include <root.hxx>
 #include <lotfntbf.hxx>
 #include <lotform.hxx>
 #include <tool.h>
@@ -34,8 +33,6 @@
 #include <lotattr.hxx>
 #include <stringutil.hxx>
 #include <config_fuzzers.h>
-
-#include <unotools/configmgr.hxx>
 
 
 static osl::Mutex aLotImpSemaphore;

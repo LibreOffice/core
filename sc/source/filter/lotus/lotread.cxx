@@ -22,7 +22,6 @@
 
 #include <scdll.hxx>
 #include <scerrors.hxx>
-#include <root.hxx>
 #include "lotfilter.hxx"
 #include <lotimpop.hxx>
 #include <lotattr.hxx>

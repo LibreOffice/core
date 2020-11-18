@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_SCFOBJ_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_SCFOBJ_HXX
 
+#include <types.hxx>
+
 class ScDocument;
 namespace tools { class Rectangle; }
 

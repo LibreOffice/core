@@ -37,7 +37,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <sfx2/objsh.hxx>
-#include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svtools/parhtml.hxx>

@@ -12,8 +12,6 @@
 
 #include <vcl/weld.hxx>
 
-#include <map>
-
 class ScDocument;
 class ScConditionalFormat;
 class ScConditionalFormatList;

@@ -21,10 +21,8 @@
 #include <editeng/memberids.h>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/justifyitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <svx/unomid.hxx>

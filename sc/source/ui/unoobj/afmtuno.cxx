@@ -20,13 +20,10 @@
 #include <scitems.hxx>
 #include <editeng/memberids.h>
 #include <osl/diagnose.h>
-#include <svl/intitem.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/justifyitem.hxx>
 #include <svx/unomid.hxx>
 #include <unowids.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

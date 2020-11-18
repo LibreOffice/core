@@ -23,8 +23,8 @@
 #include <global.hxx>
 #include <userlist.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/calendarwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <com/sun/star/i18n/Calendar2.hpp>
 
 #include <algorithm>
 

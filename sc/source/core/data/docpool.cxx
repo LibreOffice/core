@@ -31,7 +31,6 @@
 #include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>
 #include <svx/algitem.hxx>
-#include <svx/sdangitm.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/brushitem.hxx>

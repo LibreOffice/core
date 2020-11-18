@@ -23,8 +23,6 @@
 
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <comphelper/string.hxx>
-#include <vcl/svapp.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -45,7 +43,6 @@
 #include <sfx2/childwin.hxx>
 #include <reffact.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 
 
 #define IS_MOBILE (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())

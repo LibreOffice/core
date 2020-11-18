@@ -23,7 +23,6 @@
 #include <scdllapi.h>
 #include <address.hxx>
 #include "csvsplits.hxx"
-#include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/customweld.hxx>

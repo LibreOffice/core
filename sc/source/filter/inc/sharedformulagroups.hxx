@@ -11,6 +11,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_SHAREDFORMULAGROUPS_HXX
 
 #include <address.hxx>
+#include <tokenarray.hxx>
 #include <memory>
 #include <map>
 class ScTokenArray;

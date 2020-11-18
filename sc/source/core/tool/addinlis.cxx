@@ -24,7 +24,6 @@
 #include <miscuno.hxx>
 #include <document.hxx>
 #include <brdcst.hxx>
-#include <sc.hrc>
 
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 

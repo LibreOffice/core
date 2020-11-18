@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SIZEDEV_HXX
 
 #include <vcl/mapmod.hxx>
+#include <vcl/vclptr.hxx>
 
 class OutputDevice;
 class ScDocShell;

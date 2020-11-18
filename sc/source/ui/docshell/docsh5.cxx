@@ -51,7 +51,6 @@
 #include <docpool.hxx>
 #include <uiitems.hxx>
 #include <sc.hrc>
-#include <waitoff.hxx>
 #include <sizedev.hxx>
 #include <clipparam.hxx>
 #include <rowheightcontext.hxx>

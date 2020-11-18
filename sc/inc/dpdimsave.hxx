@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_INC_DPDIMSAVE_HXX
 #define INCLUDED_SC_INC_DPDIMSAVE_HXX
 
+#include <tools/long.hxx>
+
 #include <vector>
 #include <map>
 #include "dpitemdata.hxx"

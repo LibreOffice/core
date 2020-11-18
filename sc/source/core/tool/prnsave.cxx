@@ -18,7 +18,6 @@
  */
 
 #include <prnsave.hxx>
-#include <global.hxx>
 #include <address.hxx>
 
 #include <osl/diagnose.h>

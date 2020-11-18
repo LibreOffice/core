@@ -23,7 +23,6 @@
 #include <sal/types.h>
 #include "dpitemdata.hxx"
 #include "calcmacros.hxx"
-#include "scdllapi.h"
 #include "types.hxx"
 
 #include <unordered_set>

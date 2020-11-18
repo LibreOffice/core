@@ -21,7 +21,7 @@
 
 #include <unitconv.hxx>
 #include <global.hxx>
-#include <viewopti.hxx>
+#include <optutil.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;

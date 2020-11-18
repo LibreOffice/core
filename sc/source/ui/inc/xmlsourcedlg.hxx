@@ -15,7 +15,6 @@
 
 #include <set>
 #include <memory>
-#include <vector>
 
 class ScDocument;
 class ScRange;

@@ -59,7 +59,6 @@
 #include <scmod.hxx>
 #include <spelleng.hxx>
 #include <patattr.hxx>
-#include <sc.hrc>
 #include <tabvwsh.hxx>
 #include <impex.hxx>
 #include <editutil.hxx>

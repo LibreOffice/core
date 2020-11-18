@@ -22,8 +22,6 @@
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/settings.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <iterator>
 #include <set>

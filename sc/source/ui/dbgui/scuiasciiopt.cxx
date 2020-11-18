@@ -37,7 +37,6 @@
 #include <miscuno.hxx>
 #include <osl/diagnose.h>
 
-#include <unicode/uclean.h>
 #include <unicode/ucsdet.h>
 
 //! TODO make dynamic

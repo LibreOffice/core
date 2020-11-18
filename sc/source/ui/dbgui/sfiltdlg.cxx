@@ -33,7 +33,6 @@
 #include <strings.hrc>
 
 #include <filtdlg.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

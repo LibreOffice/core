@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
 #include <sal/config.h>
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -23,7 +22,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include "helper/qahelper.hxx"
-#include "helper/shared_test_impl.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

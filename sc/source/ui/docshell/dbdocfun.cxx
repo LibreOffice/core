@@ -56,7 +56,6 @@
 #include <chartlis.hxx>
 #include <ChartTools.hxx>
 
-#include <set>
 #include <memory>
 
 using namespace ::com::sun::star;

@@ -12,8 +12,10 @@
 #define INCLUDED_SC_SOURCE_CORE_INC_ARRAYSUMFUNCTOR_HXX
 
 #include <cstdint>
-#include <rtl/math.hxx>
+#include <cmath>
 
+#include <sal/mathconf.h>
+#include <sal/types.h>
 #include <tools/simd.hxx>
 #include <tools/cpuid.hxx>
 
