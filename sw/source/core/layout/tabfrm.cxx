@@ -3849,40 +3849,54 @@ void SwRowFrame::RegistFlys( SwPageFrame *pPage )
     ::RegistFlys( pPage ? pPage : FindPageFrame(), this );
 }
 
-void SwRowFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
+void SwRowFrame::OnFrameSize(const SwFormatFrameSize& rSize)
 {
-    bool bAttrSetChg = pNew && RES_ATTRSET_CHG == pNew->Which();
-    const SfxPoolItem *pItem = nullptr;
-
-    if( bAttrSetChg )
+    SwTabFrame* pTab = FindTabFrame();
+    if(pTab)
     {
-        const SwAttrSet* pChgSet = static_cast<const SwAttrSetChg*>(pNew)->GetChgSet();
-        pChgSet->GetItemState( RES_FRM_SIZE, false, &pItem);
-        if ( !pItem )
-            pChgSet->GetItemState( RES_ROW_SPLIT, false, &pItem);
+        const bool bInFirstNonHeadlineRow = pTab->IsFollow() && this == pTab->GetFirstNonHeadlineRow();
+        // #i35063#
+        // Invalidation required is pRow is last row
+        if(bInFirstNonHeadlineRow)
+            pTab = pTab->FindMaster();
+        if(bInFirstNonHeadlineRow || !GetNext())
+            pTab->InvalidatePos();
     }
-    else if (pNew && (RES_FRM_SIZE == pNew->Which() || RES_ROW_SPLIT == pNew->Which()))
-        pItem = pNew;
+    const sw::BroadcastingModify aMod;
+    SwLayoutFrame::SwClientNotify(aMod, sw::LegacyModifyHint(nullptr, &rSize));
+}
 
-    if ( pItem )
+void SwRowFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    if(!pLegacy->m_pNew)
     {
-        SwTabFrame *pTab = FindTabFrame();
-        if ( pTab )
+        // possibly not needed?
+        SwLayoutFrame::SwClientNotify(rModify, rHint);
+        return;
+    }
+    switch(pLegacy->m_pNew->Which())
+    {
+        case RES_ATTRSET_CHG:
         {
-            const bool bInFirstNonHeadlineRow = pTab->IsFollow() &&
-                                                this == pTab->GetFirstNonHeadlineRow();
-            // #i35063#
-            // Invalidation required is pRow is last row
-            if ( bInFirstNonHeadlineRow || !GetNext() )
-            {
-                if ( bInFirstNonHeadlineRow )
-                    pTab = pTab->FindMaster();
-                pTab->InvalidatePos();
-            }
-        }
+            const SwAttrSet* pChgSet = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet();
+            const SfxPoolItem* pItem = nullptr;
+            pChgSet->GetItemState(RES_FRM_SIZE, false, &pItem);
+            if(!pItem)
+                pChgSet->GetItemState(RES_ROW_SPLIT, false, &pItem);
+            if(pItem)
+                OnFrameSize(*static_cast<const SwFormatFrameSize*>(pItem));
+            else
+                SwLayoutFrame::SwClientNotify(rModify, rHint); // possibly not needed?
+            return;
+       }
+       case RES_FRM_SIZE:
+       case RES_ROW_SPLIT:
+            OnFrameSize(*static_cast<const SwFormatFrameSize*>(pLegacy->m_pNew));
+            return;
     }
-
-    SwLayoutFrame::Modify( pOld, pNew );
 }
 
 void SwRowFrame::MakeAll(vcl::RenderContext* pRenderContext)
