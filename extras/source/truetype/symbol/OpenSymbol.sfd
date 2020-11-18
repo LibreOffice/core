@@ -3,8 +3,8 @@ FontName: OpenSymbol
 FullName: OpenSymbol
 FamilyName: OpenSymbol
 Weight: Book
-Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot\nPRIME <-> TRIPLE PRIME (c) 2013 Mathias Hasselmann\nphi <-> phi1 (c) 2015 Khaled Hosny\n(c) 2016 Mike Kaganski\nzero, one, two, three, four, five, six, seven, eight, nine, question, underscore, copyright, registered, uni2215, angle, therefore, lozenge (c) 2010 Google Corporation\nuni20D1 (c) 2019 Takeshi Abe
-Version: 102.11
+Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot\nPRIME <-> TRIPLE PRIME (c) 2013 Mathias Hasselmann\nphi <-> phi1 (c) 2015 Khaled Hosny\n(c) 2016 Mike Kaganski\nzero, one, two, three, four, five, six, seven, eight, nine, question, underscore, copyright, registered, uni2215, angle, therefore, lozenge (c) 2010 Google Corporation\nuni20D1 (c) 2019 Takeshi Abe\nuniF030 <-> uniF039 (c) 2020 Ming Hua
+Version: 102.12
 ItalicAngle: 0
 UnderlinePosition: -143
 UnderlineWidth: 20
@@ -20,7 +20,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1144938807
-ModificationTime: 1558881510
+ModificationTime: 1605567303
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -784,7 +784,7 @@ FitToEm: 1
 WinInfo: 0 34 12
 BeginPrivate: 0
 EndPrivate
-BeginChars: 1053 1053
+BeginChars: 1063 1063
 
 StartChar: Alpha
 Encoding: 0 913 0
@@ -108723,6 +108723,96 @@ SplineSet
  1026 1313 l 1,4,-1
  98 1313 l 1,0,-1
 EndSplineSet
+EndChar
+
+StartChar: uniF030
+Encoding: 1053 61488 1053
+Width: 1024
+Flags: W
+LayerCount: 2
+Fore
+Refer: 1031 48 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniF031
+Encoding: 1054 61489 1054
+Width: 1024
+Flags: W
+LayerCount: 2
+Fore
+Refer: 1032 49 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniF032
+Encoding: 1055 61490 1055
+Width: 1024
+Flags: W
+LayerCount: 2
+Fore
+Refer: 1033 50 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniF033
+Encoding: 1056 61491 1056
+Width: 1024
+Flags: W
+LayerCount: 2
+Fore
+Refer: 1034 51 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniF034
+Encoding: 1057 61492 1057
+Width: 1024
+Flags: W
+LayerCount: 2
+Fore
+Refer: 1035 52 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniF035
+Encoding: 1058 61493 1058
+Width: 1024
+Flags: W
+LayerCount: 2
+Fore
+Refer: 1036 53 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniF036
+Encoding: 1059 61494 1059
+Width: 1024
+Flags: W
+LayerCount: 2
+Fore
+Refer: 1037 54 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniF037
+Encoding: 1060 61495 1060
+Width: 1024
+Flags: W
+LayerCount: 2
+Fore
+Refer: 1038 55 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniF038
+Encoding: 1061 61496 1061
+Width: 1024
+Flags: W
+LayerCount: 2
+Fore
+Refer: 1039 56 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniF039
+Encoding: 1062 61497 1062
+Width: 1024
+Flags: W
+LayerCount: 2
+Fore
+Refer: 1040 57 N 1 0 0 1 0 0 2
 EndChar
 EndChars
 EndSplineFont
