@@ -274,8 +274,6 @@ public:
     SchXMLStatisticsObjectContext(
         SchXMLImportHelper& rImportHelper,
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
         const OUString &rSeriesStyleName,
         ::std::vector< DataRowPointStyle >& rStyleVector,
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,

@@ -43,13 +43,11 @@ using namespace xmloff::token;
 SchXMLRegressionCurveObjectContext::SchXMLRegressionCurveObjectContext(
                                         SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport,
-                                        sal_uInt16 nPrefix,
-                                        const OUString& rLocalName,
                                         std::vector< RegressionStyle >& rRegressionStyleVector,
                                         const css::uno::Reference<
                                                     css::chart2::XDataSeries >& xSeries,
                                         const awt::Size & rChartSize) :
-    SvXMLImportContext( rImport, nPrefix, rLocalName ),
+    SvXMLImportContext( rImport ),
     mrImportHelper( rImpHelper ),
     mxSeries( xSeries ),
     maChartSize( rChartSize ),
