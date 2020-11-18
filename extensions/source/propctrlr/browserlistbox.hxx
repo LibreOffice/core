@@ -102,7 +102,7 @@ namespace pcr
         void                        ChangeEntry( const OLineDescriptor&, ListBoxLines::size_type nPos );
 
         void                        SetPropertyValue( const OUString& rEntryName, const css::uno::Any& rValue, bool _bUnknownValue );
-        sal_uInt16                  GetPropertyPos( const OUString& rEntryName ) const;
+        sal_uInt16                  GetPropertyPos( std::u16string_view rEntryName ) const;
         css::uno::Reference< css::inspection::XPropertyControl >
                                     GetPropertyControl( const OUString& rEntryName );
         void                        EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );

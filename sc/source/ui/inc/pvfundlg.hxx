@@ -67,7 +67,7 @@ private:
     const OUString& GetBaseItemName(const OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
-    sal_Int32 FindBaseItemPos( const OUString& rEntry, sal_Int32 nStartPos ) const;
+    sal_Int32 FindBaseItemPos( std::u16string_view rEntry, sal_Int32 nStartPos ) const;
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(DblClickHdl, weld::TreeView&, bool);
@@ -140,7 +140,7 @@ private:
     ScDPName GetFieldName(const OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
-    sal_Int32 FindListBoxEntry( const weld::ComboBox& rLBox, const OUString& rEntry, sal_Int32 nStartPos ) const;
+    sal_Int32 FindListBoxEntry( const weld::ComboBox& rLBox, std::u16string_view rEntry, sal_Int32 nStartPos ) const;
 
     DECL_LINK( RadioClickHdl, weld::Button&, void );
     DECL_LINK( CheckHdl, weld::Button&, void );

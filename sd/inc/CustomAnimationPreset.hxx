@@ -53,7 +53,7 @@ public:
     std::vector<OUString> getSubTypes();
     std::vector<OUString> getProperties() const;
 
-    bool hasProperty( const OUString& rProperty ) const;
+    bool hasProperty( std::u16string_view rProperty ) const;
     bool isTextOnly() const { return mbIsTextOnly; }
 
 private:

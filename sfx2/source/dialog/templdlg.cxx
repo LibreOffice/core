@@ -475,7 +475,7 @@ static void MakeTree_Impl(StyleTreeArr_Impl& rArr, const OUString& aUIName)
 }
 
 static bool IsExpanded_Impl( const std::vector<OUString>& rEntries,
-                             const OUString &rStr)
+                             std::u16string_view rStr)
 {
     for (const auto & rEntry : rEntries)
     {

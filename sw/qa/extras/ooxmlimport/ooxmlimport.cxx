@@ -1324,7 +1324,7 @@ DECLARE_OOXMLIMPORT_TEST(testFdo87488, "fdo87488.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testTdf85232, "tdf85232.docx")
 {
-    uno::Reference<drawing::XShapes> xShapes(getShapeByName("Group 219"), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xShapes(getShapeByName(u"Group 219"), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xShapes->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = xShape;
     // Make sure we're not testing the ellipse child.

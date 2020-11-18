@@ -287,7 +287,7 @@ void XclImpNameManager::ReadName( XclImpStream& rStrm )
         maNameList.push_back( std::make_unique<XclImpName>( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
 }
 
-const XclImpName* XclImpNameManager::FindName( const OUString& rXclName, SCTAB nScTab ) const
+const XclImpName* XclImpNameManager::FindName( std::u16string_view rXclName, SCTAB nScTab ) const
 {
     const XclImpName* pGlobalName = nullptr;   // a found global name
     const XclImpName* pLocalName = nullptr;    // a found local name

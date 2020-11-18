@@ -90,7 +90,7 @@ namespace dbaui
                 exist.
         */
         bool        closeSubFrames(
-                        const OUString& _rName,
+                        std::u16string_view _rName,
                         const sal_Int32 _nComponentType
                     );
 

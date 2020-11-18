@@ -600,7 +600,7 @@ bool GalleryBrowser2::KeyInput(const KeyEvent& rKEvt)
     return bRet;
 }
 
-void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
+void GalleryBrowser2::SelectTheme( std::u16string_view rThemeName )
 {
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );

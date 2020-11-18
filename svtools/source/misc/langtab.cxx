@@ -49,7 +49,7 @@ public:
 
     bool            HasType( const LanguageType eType ) const;
     OUString        GetString( const LanguageType eType ) const;
-    LanguageType    GetType( const OUString& rStr ) const;
+    LanguageType    GetType( std::u16string_view rStr ) const;
     sal_uInt32      GetEntryCount() const;
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
     sal_uInt32      AddItem(const OUString& rLanguage, const LanguageType eType)
@@ -235,7 +235,7 @@ OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
     return theLanguageTable::get().GetString( eType );
 }
 
-LanguageType SvtLanguageTableImpl::GetType( const OUString& rStr ) const
+LanguageType SvtLanguageTableImpl::GetType( std::u16string_view rStr ) const
 {
     LanguageType eType = LANGUAGE_DONTKNOW;
     sal_uInt32 nCount = GetEntryCount();
@@ -251,7 +251,7 @@ LanguageType SvtLanguageTableImpl::GetType( const OUString& rStr ) const
     return eType;
 }
 
-LanguageType SvtLanguageTable::GetLanguageType( const OUString& rStr )
+LanguageType SvtLanguageTable::GetLanguageType( std::u16string_view rStr )
 {
     return theLanguageTable::get().GetType( rStr );
 }

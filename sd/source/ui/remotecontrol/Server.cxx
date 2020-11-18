@@ -260,7 +260,7 @@ std::vector< std::shared_ptr< ClientInfo > > RemoteServer::getClients()
     return aClients;
 }
 
-bool RemoteServer::connectClient( const std::shared_ptr< ClientInfo >& pClient, const OUString& aPin )
+bool RemoteServer::connectClient( const std::shared_ptr< ClientInfo >& pClient, std::u16string_view aPin )
 {
     SAL_INFO( "sdremote", "RemoteServer::connectClient called" );
     if ( !spServer )

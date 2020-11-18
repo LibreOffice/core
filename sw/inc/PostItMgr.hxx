@@ -207,7 +207,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         void ExecuteFormatAllDialog(SwView& rView);
         void FormatAll(const SfxItemSet &rNewAttr);
 
-        void Hide( const OUString& rAuthor );
+        void Hide( std::u16string_view rAuthor );
         void Hide();
         void Show();
         void UpdateResolvedStatus(const sw::annotation::SwAnnotationWin* topNote);

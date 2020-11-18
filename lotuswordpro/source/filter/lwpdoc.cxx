@@ -785,7 +785,7 @@ void LwpDocument::XFConvertFrameInPage(XFContentContainer* pCont)
 void LwpDocument::ChangeStyleName()
 {
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    XFTextStyle* pStyle = dynamic_cast<XFTextStyle*>(pXFStyleManager->FindStyle("ClickHere"));
+    XFTextStyle* pStyle = dynamic_cast<XFTextStyle*>(pXFStyleManager->FindStyle(u"ClickHere"));
     if (pStyle)
     {
         pStyle->SetStyleName("Placeholder");

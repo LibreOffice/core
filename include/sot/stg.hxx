@@ -307,7 +307,7 @@ public:
     virtual bool                ValidateMode( StreamMode ) const override;
     virtual bool                Equals( const BaseStorage& rStream ) const override;
 
-    UCBStorageElement_Impl*     FindElement_Impl( const OUString& rName ) const;
+    UCBStorageElement_Impl*     FindElement_Impl( std::u16string_view rName ) const;
     bool                        CopyStorageElement_Impl( UCBStorageElement_Impl const & rElement,
                                                          BaseStorage* pDest, const OUString& rNew ) const;
     BaseStorage*                OpenStorage_Impl( const OUString & rEleName,

@@ -113,7 +113,7 @@ void LayerTabBar::SetPageText( sal_uInt16 nPageId, const OUString& rText )
     TabBar::SetPageText(nPageId, sLocalizedName);
 }
 
-bool LayerTabBar::IsLocalizedNameOfStandardLayer(const OUString& rName)
+bool LayerTabBar::IsLocalizedNameOfStandardLayer(std::u16string_view rName)
 {
     return (   rName == SdResId(STR_LAYER_LAYOUT)
             || rName == SdResId(STR_LAYER_CONTROLS)

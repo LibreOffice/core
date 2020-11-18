@@ -187,10 +187,10 @@ std::set< OUString > SmSymbolManager::GetSymbolSetNames() const
 }
 
 
-SymbolPtrVec_t SmSymbolManager::GetSymbolSet( const OUString& rSymbolSetName )
+SymbolPtrVec_t SmSymbolManager::GetSymbolSet( std::u16string_view rSymbolSetName )
 {
     SymbolPtrVec_t aRes;
-    if (!rSymbolSetName.isEmpty())
+    if (!rSymbolSetName.empty())
     {
         for (const auto& rEntry : m_aSymbols)
         {

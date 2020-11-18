@@ -210,7 +210,7 @@ void prepareLink( const Reference < XSimpleRegistry > & xDest,
 OUString searchImplForLink(
     const Reference < XRegistryKey > & xRootKey,
     const OUString& linkName,
-    const OUString& implName )
+    std::u16string_view implName )
     // throw ( InvalidRegistryException, RuntimeException )
 {
     Reference < XRegistryKey > xKey = xRootKey->openKey( slash_IMPLEMENTATIONS );
@@ -349,7 +349,7 @@ bool deleteSubEntry(const Reference < XRegistryKey >& xSuperKey, const OUString&
 void prepareUserLink(const Reference < XSimpleRegistry >& xDest,
                                 const OUString& linkName,
                                 const OUString& linkTarget,
-                                const OUString& implName)
+                                std::u16string_view implName)
 {
     Reference < XRegistryKey > xRootKey = xDest->getRootKey();
 
@@ -399,7 +399,7 @@ void deletePathIfPossible(const Reference < XRegistryKey >& xRootKey,
 
 void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
                                const OUString& linkName,
-                               const OUString& linkTarget,
+                               std::u16string_view linkTarget,
                                const OUString& implName)
     // throw ( InvalidRegistryException, RuntimeException )
 {
@@ -571,7 +571,7 @@ void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
 
 void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
                                         const Reference < XRegistryKey >& xSource,
-                                        const OUString& locationUrl,
+                                        std::u16string_view locationUrl,
                                         std::vector<OUString> & implNames)
     // throw (InvalidRegistryException, RuntimeException)
 {
@@ -1091,7 +1091,7 @@ private: // helper methods
                    CannotRegisterImplementationException, RuntimeException ) */
 
     static void doRevoke( const Reference < XSimpleRegistry >& xDest,
-                          const OUString& locationUrl );
+                          std::u16string_view locationUrl );
         // throw( InvalidRegistryException, RuntimeException )
     Reference< XSimpleRegistry > getRegistryFromServiceManager() const;
 
@@ -1452,7 +1452,7 @@ Sequence< OUString > ImplementationRegistration::checkInstantiation(const OUStri
 
 void ImplementationRegistration::doRevoke(
     const Reference < XSimpleRegistry >& xDest,
-    const OUString& locationUrl)
+    std::u16string_view locationUrl)
     // throw ( InvalidRegistryException, RuntimeException )
 {
     if( !xDest.is() )

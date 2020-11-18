@@ -66,7 +66,7 @@ namespace MenuBarMerger
         void       RetrieveReferencePath( const OUString&,
                                                  std::vector< OUString >& aReferencePath );
         ReferencePathInfo FindReferencePath( const std::vector< OUString >& aReferencePath, Menu* pMenu );
-        sal_uInt16 FindMenuItem( const OUString& rCmd,
+        sal_uInt16 FindMenuItem( std::u16string_view rCmd,
                                  Menu const * pMenu );
         void       GetMenuEntry( const css::uno::Sequence< css::beans::PropertyValue >& rAddonMenuEntry,
                                         AddonMenuItem& aAddonMenu );

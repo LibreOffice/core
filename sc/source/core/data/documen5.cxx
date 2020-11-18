@@ -134,7 +134,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
     UpdateChartArea( rChartName, aRLR, bColHeaders, bRowHeaders, bAdd );
 }
 
-uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const OUString& rChartName )
+uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( std::u16string_view rChartName )
 {
     uno::Reference< chart2::XChartDocument > xReturn;
 
@@ -164,7 +164,7 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const OUStr
     return xReturn;
 }
 
-void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRangeList >& rRangesVector, const ScDocument& rSheetNameDoc )
+void ScDocument::GetChartRanges( std::u16string_view rChartName, ::std::vector< ScRangeList >& rRangesVector, const ScDocument& rSheetNameDoc )
 {
     rRangesVector.clear();
     uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( rChartName ) );
@@ -181,7 +181,7 @@ void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRa
     }
 }
 
-void ScDocument::SetChartRanges( const OUString& rChartName, const ::std::vector< ScRangeList >& rRangesVector )
+void ScDocument::SetChartRanges( std::u16string_view rChartName, const ::std::vector< ScRangeList >& rRangesVector )
 {
     uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( rChartName ) );
     if ( !xChartDoc.is() )
@@ -199,7 +199,7 @@ void ScDocument::SetChartRanges( const OUString& rChartName, const ::std::vector
     ScChartHelper::SetChartRanges( xChartDoc, aRangeStrings );
 }
 
-void ScDocument::GetOldChartParameters( const OUString& rName,
+void ScDocument::GetOldChartParameters( std::u16string_view rName,
             ScRangeList& rRanges, bool& rColHeaders, bool& rRowHeaders )
 {
     // used for undo of changing chart source area
@@ -479,7 +479,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
     }
 }
 
-void ScDocument::SetChartRangeList( const OUString& rChartName,
+void ScDocument::SetChartRangeList( std::u16string_view rChartName,
             const ScRangeListRef& rNewRangeListRef )
 {
     // called from ChartListener
@@ -533,7 +533,7 @@ bool ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
 }
 
 uno::Reference< embed::XEmbeddedObject >
-    ScDocument::FindOleObjectByName( const OUString& rName )
+    ScDocument::FindOleObjectByName( std::u16string_view rName )
 {
     if (!mpDrawLayer)
         return uno::Reference< embed::XEmbeddedObject >();

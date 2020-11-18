@@ -265,7 +265,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
     ImplInsertByName( aName, aElement );
 }
 
-static bool getByNameFromPool( const OUString& rSearchName, SfxItemPool const * pPool, sal_uInt16 nWhich, uno::Any& rAny )
+static bool getByNameFromPool( std::u16string_view rSearchName, SfxItemPool const * pPool, sal_uInt16 nWhich, uno::Any& rAny )
 {
     if (pPool)
         for (const SfxPoolItem* p : pPool->GetItemSurrogates(nWhich))

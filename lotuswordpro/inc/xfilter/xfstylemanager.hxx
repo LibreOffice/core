@@ -95,11 +95,11 @@ public:
 
     IXFStyleRet AddStyle(std::unique_ptr<IXFStyle> pStyle);
 
-    IXFStyle*   FindStyle(const OUString& name);
+    IXFStyle*   FindStyle(std::u16string_view name);
 
-    XFParaStyle*    FindParaStyle(const OUString& name);
+    XFParaStyle*    FindParaStyle(std::u16string_view name);
 
-    XFTextStyle*    FindTextStyle(const OUString& name);
+    XFTextStyle*    FindTextStyle(std::u16string_view name);
 
     void        SetLineNumberConfig(XFLineNumberConfig *pLNConfig);
 

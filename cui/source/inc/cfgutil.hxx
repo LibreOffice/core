@@ -196,7 +196,7 @@ class CuiConfigGroupListBox
 
     static css::uno::Reference< css::uno::XInterface  > getDocumentModel(
         css::uno::Reference< css::uno::XComponentContext > const & xCtx,
-        OUString const & docName);
+        std::u16string_view docName);
 
     void InitModule();
     void FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,

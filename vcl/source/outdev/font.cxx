@@ -628,7 +628,7 @@ void ImplDirectFontSubstitution::RemoveFontsSubstitute()
 }
 
 bool ImplDirectFontSubstitution::FindFontSubstitute( OUString& rSubstName,
-    const OUString& rSearchName ) const
+    std::u16string_view rSearchName ) const
 {
     // TODO: get rid of O(N) searches
     std::vector<ImplFontSubstEntry>::const_iterator it = std::find_if (

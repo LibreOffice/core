@@ -167,7 +167,7 @@ public:
 
     OUString getRendererList();
     double   getAndResetBenchmark(RenderStyle style);
-    void     selectRenderer(const OUString &rName);
+    void     selectRenderer(std::u16string_view rName);
     int      selectNextRenderer();
     void     setIterCount(sal_Int32 iterCount);
     sal_Int32 getIterCount() const;
@@ -1691,7 +1691,7 @@ void DemoRenderer::addTime(int i, double t)
     maRenderers[i]->countTime++;
 }
 
-void DemoRenderer::selectRenderer(const OUString &rName )
+void DemoRenderer::selectRenderer(std::u16string_view rName )
 {
     for (size_t i = 0; i < maRenderers.size(); i++)
     {

@@ -137,7 +137,7 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
                     sal_True if the given URL is any default one ...
                     sal_False otherwise.
          */
-        bool its_isHelpUrlADefaultOne(const OUString& sHelpURL);
+        bool its_isHelpUrlADefaultOne(std::u16string_view sHelpURL);
 
         /** @short  checks, if the help module should be shown automatically for the
                     currently opened office module.

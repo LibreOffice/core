@@ -154,7 +154,7 @@ public:
                                     bool bIsTable, const OUString& rFieldName);
 
     // organise RefMark with names
-    bool            CanInsertRefMark( const OUString& rStr );
+    bool            CanInsertRefMark( std::u16string_view rStr );
 
     // access to field types via ResId
     size_t          GetFieldTypeCount() const;

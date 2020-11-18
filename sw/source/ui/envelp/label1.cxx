@@ -184,7 +184,7 @@ void SwLabDlg::GetLabItem(SwLabItem &rItem)
     }
 }
 
-SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, bool bCont)
+SwLabRec* SwLabDlg::GetRecord(std::u16string_view rRecName, bool bCont)
 {
     SwLabRec* pRec = nullptr;
     bool bFound = false;

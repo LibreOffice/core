@@ -166,7 +166,7 @@ DictionaryEntry* DictionaryList::getEntryOnPos(sal_Int32 nPos) const
     return reinterpret_cast<DictionaryEntry*>(sLBEntry.toInt64());
 }
 
-DictionaryEntry* DictionaryList::getTermEntry( const OUString& rTerm ) const
+DictionaryEntry* DictionaryList::getTermEntry( std::u16string_view rTerm ) const
 {
     int nRowCount = m_xControl->n_children();
     for( sal_Int32 nN = nRowCount; nN--; )
@@ -178,7 +178,7 @@ DictionaryEntry* DictionaryList::getTermEntry( const OUString& rTerm ) const
     return nullptr;
 }
 
-bool DictionaryList::hasTerm( const OUString& rTerm ) const
+bool DictionaryList::hasTerm( std::u16string_view rTerm ) const
 {
     return getTermEntry(rTerm) !=nullptr ;
 }
@@ -211,7 +211,7 @@ void DictionaryList::deleteEntryOnPos( sal_Int32 nPos  )
     }
 }
 
-int DictionaryList::deleteEntries( const OUString& rTerm )
+int DictionaryList::deleteEntries( std::u16string_view rTerm )
 {
     int nPos = -1;
     int nRowCount = m_xControl->n_children();

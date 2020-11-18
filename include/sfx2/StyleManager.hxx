@@ -37,7 +37,7 @@ public:
     virtual ~StyleManager()
     {}
 
-    SfxStyleSheetBase* Search(const OUString& rStyleName, SfxStyleFamily eFamily);
+    SfxStyleSheetBase* Search(std::u16string_view rStyleName, SfxStyleFamily eFamily);
 
     virtual std::unique_ptr<StylePreviewRenderer> CreateStylePreviewRenderer(
                     OutputDevice& rOutputDev, SfxStyleSheetBase* pStyle,

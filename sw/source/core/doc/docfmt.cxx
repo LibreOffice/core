@@ -731,7 +731,7 @@ void SwDoc::DelTableFrameFormat( SwTableFormat *pFormat )
     delete pFormat;
 }
 
-SwFrameFormat* SwDoc::FindFrameFormatByName( const OUString& rName ) const
+SwFrameFormat* SwDoc::FindFrameFormatByName( std::u16string_view rName ) const
 {
     return static_cast<SwFrameFormat*>(FindFormatByName( static_cast<SwFormatsBase&>(*mpFrameFormatTable), rName ));
 }
@@ -1608,7 +1608,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
 }
 
 SwFormat* SwDoc::FindFormatByName( const SwFormatsBase& rFormatArr,
-                                   const OUString& rName )
+                                   std::u16string_view rName )
 {
     SwFormat* pFnd = nullptr;
     for( size_t n = 0; n < rFormatArr.GetFormatCount(); ++n )

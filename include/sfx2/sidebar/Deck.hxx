@@ -50,7 +50,7 @@ public:
     void ResetPanels(const SharedPanelContainer& rPanels);
     const SharedPanelContainer& GetPanels() const { return maPanels; }
 
-    Panel* GetPanel(OUString const& panelId);
+    Panel* GetPanel(std::u16string_view panelId);
 
     void RequestLayout();
     vcl::Window* GetPanelParentWindow();

@@ -60,7 +60,7 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
 
     ::chart::PropertyMapper::getMultiPropertyListsFromValueMap( rNames, rValues, aValueMap );
 
-    uno::Any* pLineWidthAny = ::chart::PropertyMapper::getValuePointer(rValues,rNames,"LineWidth");
+    uno::Any* pLineWidthAny = ::chart::PropertyMapper::getValuePointer(rValues,rNames,u"LineWidth");
     sal_Int32 nLineWidth = 0;
     if( pLineWidthAny && (*pLineWidthAny>>=nLineWidth) )
     {

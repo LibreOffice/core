@@ -810,7 +810,7 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     }
 }
 
-bool SettingsTable::GetCompatSettingValue( const OUString& sCompatName ) const
+bool SettingsTable::GetCompatSettingValue( std::u16string_view sCompatName ) const
 {
     bool bRet = false;
     for (const auto& rProp : m_pImpl->m_aCompatSettings)

@@ -139,9 +139,9 @@ sal_uInt16 ImageList::GetImageCount() const
     return static_cast< sal_uInt16 >( maImages.size() );
 }
 
-sal_uInt16 ImageList::GetImagePos( const OUString& rImageName ) const
+sal_uInt16 ImageList::GetImagePos( std::u16string_view rImageName ) const
 {
-    if( !rImageName.isEmpty() )
+    if( !rImageName.empty() )
     {
         for( size_t i = 0; i < maImages.size(); i++ )
         {

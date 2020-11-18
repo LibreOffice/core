@@ -31,7 +31,7 @@ using namespace css;
 
 namespace sfx2::sidebar {
 
-void Sidebar::ToggleDeck(const OUString& rsDeckId, SfxViewFrame* pViewFrame)
+void Sidebar::ToggleDeck(std::u16string_view rsDeckId, SfxViewFrame* pViewFrame)
 {
     if (!pViewFrame)
         return;
@@ -61,7 +61,7 @@ void Sidebar::ToggleDeck(const OUString& rsDeckId, SfxViewFrame* pViewFrame)
 }
 
 void Sidebar::ShowPanel (
-    const OUString& rsPanelId,
+    std::u16string_view rsPanelId,
     const css::uno::Reference<frame::XFrame>& rxFrame, bool bFocus)
 {
     SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
@@ -86,7 +86,7 @@ void Sidebar::ShowPanel (
 }
 
 void Sidebar::TogglePanel (
-    const OUString& rsPanelId,
+    std::u16string_view rsPanelId,
     const css::uno::Reference<frame::XFrame>& rxFrame)
 {
     SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
@@ -108,7 +108,7 @@ void Sidebar::TogglePanel (
 }
 
 bool Sidebar::IsPanelVisible(
-    const OUString& rsPanelId,
+    std::u16string_view rsPanelId,
     const css::uno::Reference<frame::XFrame>& rxFrame)
 {
     SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);

@@ -620,7 +620,7 @@ void SvxColorTabPage::UpdateColorValues( bool bUpdatePreset )
     }
 }
 
-sal_Int32 SvxColorTabPage::FindInCustomColors(OUString const & aColorName)
+sal_Int32 SvxColorTabPage::FindInCustomColors(std::u16string_view aColorName)
 {
     css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
     tools::Long nCount = aCustomColorNameList.getLength();

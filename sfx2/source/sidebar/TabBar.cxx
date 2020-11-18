@@ -155,7 +155,7 @@ void TabBar::UpdateButtonIcons()
     }
 }
 
-void TabBar::HighlightDeck(const OUString& rsDeckId)
+void TabBar::HighlightDeck(std::u16string_view rsDeckId)
 {
     for (auto const& item : maItems)
         item->mxButton->set_item_active("toggle", item->msDeckId == rsDeckId);

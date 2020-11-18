@@ -127,8 +127,8 @@ public:
     SAL_DLLPRIVATE bool            getAutoReverse() const { return mbAutoReverse; }
     SAL_DLLPRIVATE void            setAutoReverse( bool bAutoReverse );
 
-    SAL_DLLPRIVATE css::uno::Any  getProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue );
-    SAL_DLLPRIVATE bool           setProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue, const css::uno::Any& rValue );
+    SAL_DLLPRIVATE css::uno::Any  getProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue );
+    SAL_DLLPRIVATE bool           setProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue, const css::uno::Any& rValue );
 
     SAL_DLLPRIVATE css::uno::Any  getTransformationProperty( sal_Int32 nTransformType, EValue eValue );
     SAL_DLLPRIVATE bool           setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const css::uno::Any& rValue );

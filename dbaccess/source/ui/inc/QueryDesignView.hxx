@@ -105,12 +105,12 @@ namespace dbaui
         const OUString&               getDecimalSeparator() const { return m_sDecimalSep;}
 
         SqlParseError   InsertField( const OTableFieldDescRef& rInfo, bool bActivate = true);
-        bool            HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef const & rInfo) const;
+        bool            HasFieldByAliasName(std::u16string_view rFieldName, OTableFieldDescRef const & rInfo) const;
         // called when a table from tabview was deleted
         void TableDeleted(const OUString& rAliasName);
 
         sal_Int32 getColWidth( sal_uInt16 _nColPos) const;
-        void fillValidFields(const OUString& strTableName, weld::ComboBox& rFieldList);
+        void fillValidFields(std::u16string_view strTableName, weld::ComboBox& rFieldList);
 
         void SaveUIConfig();
         void stopTimer();

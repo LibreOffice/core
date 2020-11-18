@@ -234,7 +234,7 @@ void ImplEntryList::RemoveEntry( sal_Int32 nPos )
     }
 }
 
-sal_Int32 ImplEntryList::FindEntry( const OUString& rString, bool bSearchMRUArea ) const
+sal_Int32 ImplEntryList::FindEntry( std::u16string_view rString, bool bSearchMRUArea ) const
 {
     const sal_Int32 nEntries = static_cast<sal_Int32>(maEntries.size());
     for ( sal_Int32 n = bSearchMRUArea ? 0 : GetMRUCount(); n < nEntries; n++ )

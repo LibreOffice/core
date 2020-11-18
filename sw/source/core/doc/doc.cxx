@@ -1043,7 +1043,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 }
 
 /// @return the reference in the doc for the name
-const SwFormatRefMark* SwDoc::GetRefMark( const OUString& rName ) const
+const SwFormatRefMark* SwDoc::GetRefMark( std::u16string_view rName ) const
 {
     for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
     {
@@ -1200,7 +1200,7 @@ void SwDoc::InvalidateAutoCompleteFlag()
         aLayout->SetIdleFlags();
 }
 
-const SwFormatINetFormat* SwDoc::FindINetAttr( const OUString& rName ) const
+const SwFormatINetFormat* SwDoc::FindINetAttr( std::u16string_view rName ) const
 {
     for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
     {

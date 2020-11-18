@@ -2402,7 +2402,7 @@ SwNumRule* SwDoc::GetNumRuleAtPos(SwPosition& rPos,
     return pRet;
 }
 
-sal_uInt16 SwDoc::FindNumRule( const OUString& rName ) const
+sal_uInt16 SwDoc::FindNumRule( std::u16string_view rName ) const
 {
     for( sal_uInt16 n = mpNumRuleTable->size(); n; )
         if( (*mpNumRuleTable)[ --n ]->GetName() == rName )

@@ -150,7 +150,7 @@ namespace chelp {
         StaticModuleInformation* getStaticInformationForModule( const OUString& Module,
                                                                 const OUString& Language );
 
-        bool checkModuleMatchForExtension( const OUString& Database, const OUString& doclist );
+        bool checkModuleMatchForExtension( std::u16string_view Database, const OUString& doclist );
         KeywordInfo* getKeyword( const OUString& Module,
                                  const OUString& Language );
 

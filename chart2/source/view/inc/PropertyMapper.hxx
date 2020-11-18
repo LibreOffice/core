@@ -82,7 +82,7 @@ public:
     static css::uno::Any*
                 getValuePointer( tAnySequence& rPropValues
                          , const tNameSequence& rPropNames
-                         , const OUString& rPropName );
+                         , std::u16string_view rPropName );
 
     static css::uno::Any*
                 getValuePointerForLimitedSpace( tAnySequence& rPropValues

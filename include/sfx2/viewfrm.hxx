@@ -158,11 +158,11 @@ public:
                                     const OUString& sSecondaryMessage,
                                     InfobarType aInfobarType,
                                     bool bShowCloseButton=true);
-    void              RemoveInfoBar(const OUString& sId);
-    void              UpdateInfoBar(const OUString& sId, const OUString& sPrimaryMessage,
+    void              RemoveInfoBar(std::u16string_view sId);
+    void              UpdateInfoBar(std::u16string_view sId, const OUString& sPrimaryMessage,
                                     const OUString& sSecondaryMessage,
                                     InfobarType eType);
-    bool              HasInfoBarWithID(const OUString& sId);
+    bool              HasInfoBarWithID(std::u16string_view sId);
     void AppendReadOnlyInfobar();
 
     SAL_DLLPRIVATE void GetDocNumber_Impl();

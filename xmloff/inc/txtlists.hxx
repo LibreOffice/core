@@ -86,7 +86,7 @@ class XMLTextListsHelper
         void PushListOnStack( const OUString& sListId,
                               const OUString& sListStyleName );
         void PopListFromStack();
-        bool EqualsToTopListStyleOnStack( const OUString& sListId ) const;
+        bool EqualsToTopListStyleOnStack( std::u16string_view sListId ) const;
 
         /** for importing numbered-paragraph
             note that the ID namespace for numbered-paragraph and regular list
@@ -101,7 +101,7 @@ class XMLTextListsHelper
         /// get ID of the last numbered-paragraph iff it has given style-name
         OUString GetNumberedParagraphListId(
             const sal_uInt16 i_Level,
-            const OUString& i_StyleName);
+            std::u16string_view i_StyleName);
 
         /** Creates a NumRule from given style-name.
             @param i_rImport        the SvXMLImport

@@ -74,7 +74,7 @@ public:
     /// Get the currently selected category abbreviation for eType. Returns full name if no abbreviation defined.
     const OUString& GetAbbreviatedBACName(const OUString& sFullName);
     /// Get the currently selected category for the identifier.
-    OUString GetBACNameForIdentifier(const OUString& sIdentifier);
+    OUString GetBACNameForIdentifier(std::u16string_view sIdentifier);
     /// Return all possible valid abbreviated category names, based on the policy.
     std::vector<OUString> GetAbbreviatedBACNames();
     /// Setting this sets all the other properties, based on the policy.

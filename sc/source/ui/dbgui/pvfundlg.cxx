@@ -363,7 +363,7 @@ const OUString& ScDPFunctionDlg::GetBaseItemName(const OUString& rLayoutName) co
     return itr == maBaseItemNameMap.end() ? rLayoutName : itr->second;
 }
 
-sal_Int32 ScDPFunctionDlg::FindBaseItemPos( const OUString& rEntry, sal_Int32 nStartPos ) const
+sal_Int32 ScDPFunctionDlg::FindBaseItemPos( std::u16string_view rEntry, sal_Int32 nStartPos ) const
 {
     sal_Int32 nPos = nStartPos;
     bool bFound = false;
@@ -801,7 +801,7 @@ ScDPName ScDPSubtotalOptDlg::GetFieldName(const OUString& rLayoutName) const
 }
 
 sal_Int32 ScDPSubtotalOptDlg::FindListBoxEntry(
-    const weld::ComboBox& rLBox, const OUString& rEntry, sal_Int32 nStartPos ) const
+    const weld::ComboBox& rLBox, std::u16string_view rEntry, sal_Int32 nStartPos ) const
 {
     sal_Int32 nPos = nStartPos;
     bool bFound = false;

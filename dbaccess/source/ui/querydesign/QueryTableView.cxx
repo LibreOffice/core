@@ -353,7 +353,7 @@ void OQueryTableView::AddTabWin(const OUString& _rTableName, const OUString& _rA
 }
 
 // find the table which has a foreign key with this referencedTable name
-static Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKeys,const OUString& _rReferencedTable)
+static Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKeys,std::u16string_view _rReferencedTable)
 {
     if(!_rxKeys.is())
         return Reference<XPropertySet>();

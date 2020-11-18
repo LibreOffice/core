@@ -116,7 +116,7 @@ void ODbaseIndexDialog::implInsertIndex(const OTableIndex& _rIndex, TableIndexLi
     _rDisplay.select(0);
 }
 
-OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, const OUString& _rIndexName )
+OTableIndex ODbaseIndexDialog::RemoveTableIndex( std::u16string_view _rTableName, const OUString& _rIndexName )
 {
     OTableIndex aReturn;
 
@@ -130,7 +130,7 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, co
     return implRemoveIndex(_rIndexName, aTablePos->aIndexList, *m_xLB_TableIndexes, true/*_bMustExist*/);
 }
 
-void ODbaseIndexDialog::InsertTableIndex( const OUString& _rTableName, const OTableIndex& _rIndex)
+void ODbaseIndexDialog::InsertTableIndex( std::u16string_view _rTableName, const OTableIndex& _rIndex)
 {
     TableInfoList::iterator aTablePos = std::find_if(m_aTableInfoList.begin(), m_aTableInfoList.end(),
                                            [&] (const OTableInfo& arg) { return arg.aTableName == _rTableName; });

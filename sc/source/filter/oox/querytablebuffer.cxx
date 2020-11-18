@@ -101,7 +101,7 @@ OUString lclBuildWebQueryTables( const WebPrModel::TablesVector& rTables )
 
 Reference< XAreaLink > lclFindAreaLink(
         const Reference< XAreaLinks >& rxAreaLinks, const ScAddress& rDestPos,
-        const OUString& rFileUrl, const OUString& rTables, const OUString& rFilterName, const OUString& rFilterOptions )
+        std::u16string_view rFileUrl, std::u16string_view rTables, std::u16string_view rFilterName, std::u16string_view rFilterOptions )
 {
     try
     {
@@ -252,7 +252,7 @@ void QueryTable::finalizeImport()
         sal_Int32 nRefreshPeriod = xConnection->getModel().mnInterval * 60;
         if( nRefreshPeriod > 0 )
         {
-            PropertySet aPropSet( lclFindAreaLink( xAreaLinks, aDestRange.aStart, aFileUrl, aTables, aFilterName, /*aFilterOptions*/"" ) );
+            PropertySet aPropSet( lclFindAreaLink( xAreaLinks, aDestRange.aStart, aFileUrl, aTables, aFilterName, /*aFilterOptions*/u"" ) );
             aPropSet.setProperty( PROP_RefreshPeriod, nRefreshPeriod );
         }
     }

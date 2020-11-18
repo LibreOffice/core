@@ -399,7 +399,7 @@ VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::appendInfoBar(const OUString
     return pInfoBar;
 }
 
-VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::getInfoBar(const OUString& sId)
+VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::getInfoBar(std::u16string_view sId)
 {
     for (auto const& infoBar : m_pInfoBars)
     {
@@ -409,7 +409,7 @@ VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::getInfoBar(const OUString& s
     return nullptr;
 }
 
-bool SfxInfoBarContainerWindow::hasInfoBarWithID(const OUString& sId)
+bool SfxInfoBarContainerWindow::hasInfoBarWithID(std::u16string_view sId)
 {
     return (getInfoBar(sId) != nullptr);
 }

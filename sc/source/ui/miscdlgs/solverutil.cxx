@@ -95,7 +95,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
     }
 }
 
-uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const OUString& rImplName )
+uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( std::u16string_view rImplName )
 {
     uno::Reference<sheet::XSolver> xSolver;
 
@@ -133,7 +133,7 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const OUString& rImplNam
     return xSolver;
 }
 
-uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( const OUString& rImplName )
+uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( std::u16string_view rImplName )
 {
     uno::Sequence<beans::PropertyValue> aDefaults;
 

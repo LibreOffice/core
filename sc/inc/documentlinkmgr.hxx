@@ -57,7 +57,7 @@ public:
 
     bool updateDdeOrOleOrWebServiceLinks(weld::Window* pWin);
 
-    void updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem );
+    void updateDdeLink( std::u16string_view rAppl, std::u16string_view rTopic, std::u16string_view rItem );
 
     size_t getDdeLinkCount() const;
 

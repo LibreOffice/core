@@ -341,7 +341,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_FUNCTION_BOX:
             {
-                const bool bBoxOpen = ::sfx2::sidebar::Sidebar::IsPanelVisible("ScFunctionsPanel",
+                const bool bBoxOpen = ::sfx2::sidebar::Sidebar::IsPanelVisible(u"ScFunctionsPanel",
                                                     pThisFrame->GetFrame().GetFrameInterface());
                 rSet.Put(SfxBoolItem(nWhich, bBoxOpen));
                 break;

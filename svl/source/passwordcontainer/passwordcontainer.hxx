@@ -231,20 +231,20 @@ private:
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::task::UserRecord > FindUsr(
                                         const ::std::vector< NamePassRecord >& userlist,
-                                        const OUString& name,
+                                        std::u16string_view name,
                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 /// @throws css::uno::RuntimeException
 bool createUrlRecord(
     const PassMap::iterator & rIter,
     bool bName,
-    const OUString & aName,
+    std::u16string_view aName,
     const css::uno::Reference< css::task::XInteractionHandler >& aHandler,
     css::task::UrlRecord & rRec  );
 
 /// @throws css::uno::RuntimeException
 css::task::UrlRecord find(
     const OUString& aURL,
-    const OUString& aName,
+    std::u16string_view aName,
     bool bName, // only needed to support empty user names
     const css::uno::Reference< css::task::XInteractionHandler >& aHandler  );
 

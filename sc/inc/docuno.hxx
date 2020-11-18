@@ -715,9 +715,9 @@ private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;
 
-    bool                    GetScenarioIndex_Impl( const OUString& rName, SCTAB& rIndex );
+    bool                    GetScenarioIndex_Impl( std::u16string_view rName, SCTAB& rIndex );
     ScTableSheetObj*        GetObjectByIndex_Impl(sal_Int32 nIndex);
-    ScTableSheetObj*        GetObjectByName_Impl(const OUString& aName);
+    ScTableSheetObj*        GetObjectByName_Impl(std::u16string_view aName);
 
 public:
                             ScScenariosObj(ScDocShell* pDocSh, SCTAB nT);

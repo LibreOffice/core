@@ -275,7 +275,7 @@ public:
     SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
 
     /// This function looks for a SwTableAutoFormat with given name. Returns nullptr if could not be found.
-    static SwTableAutoFormat* GetTableAutoFormat(SwDocShell* pDocShell, const OUString& sName);
+    static SwTableAutoFormat* GetTableAutoFormat(SwDocShell* pDocShell, std::u16string_view sName);
     /// Returns box format assigned to this style
     SwTableAutoFormat* GetTableFormat();
     void SetPhysical();

@@ -45,7 +45,7 @@ namespace linguistic
 
 static bool SeqHasEntry(
         const std::vector< OUString > &rSeq,
-        const OUString &rTxt)
+        std::u16string_view rTxt)
 {
     bool bRes = false;
     sal_Int32 nLen = rSeq.size();

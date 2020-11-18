@@ -109,7 +109,7 @@ public:
     bool IsDefault() const { return DerivedFrom() == nullptr; }
 
     const OUString& GetName() const                  { return m_aFormatName; }
-    bool HasName(const OUString &rName) const { return m_aFormatName == rName; }
+    bool HasName(std::u16string_view rName) const { return m_aFormatName == rName; }
     virtual void SetName( const OUString& rNewName, bool bBroadcast=false );
 
     /// For querying the attribute array.

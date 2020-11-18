@@ -2783,7 +2783,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted(const ContainerEvent& rEvent
         SbaXDataBrowserController::elementInserted(rEvent);
 }
 
-bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(const OUString& rName, const weld::TreeIter& rContainer)
+bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(std::u16string_view rName, const weld::TreeIter& rContainer)
 {
     if (!m_xCurrentlyDisplayed)
         return false;
@@ -3758,7 +3758,7 @@ void SAL_CALL SbaTableQueryBrowser::registeredDatabaseLocation( const DatabaseRe
     implAddDatasource( Event.Name, SharedConnection() );
 }
 
-void SbaTableQueryBrowser::impl_cleanupDataSourceEntry(const OUString& rDataSourceName)
+void SbaTableQueryBrowser::impl_cleanupDataSourceEntry(std::u16string_view rDataSourceName)
 {
     // get the top-level representing the removed data source
     weld::TreeView& rTreeView = m_pTreeView->GetWidget();

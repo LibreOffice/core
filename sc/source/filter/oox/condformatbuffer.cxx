@@ -345,7 +345,7 @@ void IconSetRule::importFormula(const OUString& rFormula)
 
 namespace {
 
-ScIconSetType getType(const OUString& rName)
+ScIconSetType getType(std::u16string_view rName)
 {
     ScIconSetType eIconSetType = IconSet_3TrafficLights1;
     const ScIconSetMap* pIconSetMap = ScIconSetFormat::g_IconSetMap;

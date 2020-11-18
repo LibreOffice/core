@@ -570,7 +570,7 @@ void SdExportTest::testUnknownAttributes()
 // TODO: if the namespace is *known*, the attribute is not preserved, but that seems to be a pre-existing problem, or maybe it's even intentional?
 //    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/style:graphic-properties[@svg:non-existent-att='blah']");
     // this was on style:graphic-properties on the import, but the export moves it to root node which is OK
-    assertXPathNSDef(pXmlDoc, "/office:document-content", "foo", "http://example.com/");
+    assertXPathNSDef(pXmlDoc, "/office:document-content", u"foo", u"http://example.com/");
 }
 
 void SdExportTest::testTdf80020()

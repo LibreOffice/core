@@ -96,7 +96,7 @@ namespace SchXMLTools
         sal_Int32 nDimensionIndex,
         tSchXMLLSequencesPerIndex * pLSequencesPerIndex = nullptr );
 
-    css::uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
+    css::uno::Any getPropertyFromContext( std::u16string_view rPropertyName, const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
 
     void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsLFs );
 

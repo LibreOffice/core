@@ -267,7 +267,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectComboBoxHdl, weld::ComboBox&, rBox, void)
 namespace
 {
     // search in the "font" column
-    int findText(const weld::TreeView& rTreeView, const OUString& rCol)
+    int findText(const weld::TreeView& rTreeView, std::u16string_view rCol)
     {
         for (int i = 0, nEntryCount = rTreeView.n_children(); i < nEntryCount; ++i)
         {
@@ -277,7 +277,7 @@ namespace
         return -1;
     }
 
-    bool findRow(const weld::TreeView& rTreeView, const OUString& rCol1, const OUString& rCol2)
+    bool findRow(const weld::TreeView& rTreeView, std::u16string_view rCol1, std::u16string_view rCol2)
     {
         int nRow = findText(rTreeView, rCol1);
         if (nRow == -1)

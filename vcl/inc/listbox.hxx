@@ -115,7 +115,7 @@ public:
     void                    Clear();
 
     sal_Int32           FindMatchingEntry( const OUString& rStr, sal_Int32  nStart, bool bLazy ) const;
-    sal_Int32           FindEntry( const OUString& rStr, bool bSearchMRUArea = false ) const;
+    sal_Int32           FindEntry( std::u16string_view rStr, bool bSearchMRUArea = false ) const;
 
     /// helper: add up heights up to index nEndIndex.
     /// GetAddedHeight( 0 ) @return 0

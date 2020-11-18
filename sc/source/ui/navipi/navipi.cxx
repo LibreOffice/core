@@ -611,7 +611,7 @@ void ScNavigatorDlg::SetCurrentTable( SCTAB nTabNo )
     }
 }
 
-void ScNavigatorDlg::SetCurrentTableStr( const OUString& rName )
+void ScNavigatorDlg::SetCurrentTableStr( std::u16string_view rName )
 {
     if (!GetViewData()) return;
 

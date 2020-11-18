@@ -146,7 +146,7 @@ IMPL_LINK_NOARG( ScDocShell, ReloadAllLinksHdl, weld::Button&, void )
     ScTabViewShell* pViewSh = GetBestViewShell();
     SfxViewFrame* pViewFrame = pViewSh ? pViewSh->GetFrame() : nullptr;
     if (pViewFrame)
-        pViewFrame->RemoveInfoBar("enablecontent");
+        pViewFrame->RemoveInfoBar(u"enablecontent");
     SAL_WARN_IF(!pViewFrame, "sc", "expected there to be a ViewFrame");
 }
 
@@ -500,7 +500,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     SfxViewFrame* pViewFrame = pViewSh ? pViewSh->GetFrame() : nullptr;
                     if (pViewFrame)
                     {
-                        pViewFrame->RemoveInfoBar("enablecontent");
+                        pViewFrame->RemoveInfoBar(u"enablecontent");
                         auto pInfoBar = pViewFrame->AppendInfoBar("enablecontent", "", ScResId(STR_RELOAD_TABLES), InfobarType::WARNING);
                         if (pInfoBar)
                         {
@@ -1712,7 +1712,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
     return bChange;
 }
 
-void ScDocShell::PageStyleModified( const OUString& rStyleName, bool bApi )
+void ScDocShell::PageStyleModified( std::u16string_view rStyleName, bool bApi )
 {
     ScDocShellModificator aModificator( *this );
 

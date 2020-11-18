@@ -96,7 +96,7 @@ public:
 
     void                SetPlaceHolder(const OUString& sPlaceHolder) { aPlaceHolder = sPlaceHolder; }
     const OUString&     GetPlaceHolder() const { return aPlaceHolder; }
-    bool                MatchesPlaceHolder(const OUString& sToMatch) const
+    bool                MatchesPlaceHolder(std::u16string_view sToMatch) const
     {
         return (!aPlaceHolder.isEmpty() && aPlaceHolder == sToMatch);
     }

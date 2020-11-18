@@ -239,7 +239,7 @@ Any PresenterConfigurationAccess::Find (
 }
 
 bool PresenterConfigurationAccess::IsStringPropertyEqual (
-    const OUString& rsValue,
+    std::u16string_view rsValue,
     const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XPropertySet>& rxNode)
 {

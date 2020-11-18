@@ -137,7 +137,7 @@ public:
     sal_uInt16          InsertEuroTool( const OUString& rName );
     /** Inserts a DDE link.
         @return  The 1-based (Excel-like) list index of the DDE link. */
-    sal_uInt16          InsertDde( const OUString& rApplic, const OUString& rTopic, const OUString& rItem );
+    sal_uInt16          InsertDde( std::u16string_view rApplic, std::u16string_view rTopic, const OUString& rItem );
 
     sal_uInt16          InsertExtName( const XclExpSupbook& rSupbook, const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray );
 
@@ -148,7 +148,7 @@ public:
 
 private:
     /** Returns the 1-based (Excel-like) list index of the external name or 0, if not found. */
-    sal_uInt16          GetIndex( const OUString& rName ) const;
+    sal_uInt16          GetIndex( std::u16string_view rName ) const;
     /** Appends the passed newly crested external name.
         @return  The 1-based (Excel-like) list index of the appended name. */
     sal_uInt16          AppendNew( XclExpExtNameBase* pExtName );
@@ -300,9 +300,9 @@ public:
     explicit            XclExpSupbook( const XclExpRoot& rRoot, const OUString& rApplic, const OUString& rTopic );
 
     /** Returns true, if this SUPBOOK contains the passed URL of an external document. */
-    bool                IsUrlLink( const OUString& rUrl ) const;
+    bool                IsUrlLink( std::u16string_view rUrl ) const;
     /** Returns true, if this SUPBOOK contains the passed DDE link. */
-    bool                IsDdeLink( const OUString& rApplic, const OUString& rTopic ) const;
+    bool                IsDdeLink( std::u16string_view rApplic, std::u16string_view rTopic ) const;
     /** Fills the passed reference log entry with the URL and sheet names. */
     void                FillRefLogEntry( XclExpRefLogEntry& rRefLogEntry,
                             sal_uInt16 nFirstSBTab, sal_uInt16 nLastSBTab ) const;
@@ -460,13 +460,13 @@ private:
         @param rnIndex  (out-param) Returns the list index, if the SUPBOOK exists.
         @return  True, if the SUPBOOK record exists (out-parameters are valid). */
     bool                GetSupbookUrl( XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex,
-                            const OUString& rUrl ) const;
+                            std::u16string_view rUrl ) const;
     /** Searches for the SUPBOOK record containing the passed DDE link.
         @param rxSupbook  (out-param) Returns a reference to the SUPBOOK record, or 0.
         @param rnIndex  (out-param) Returns the list index, if the SUPBOOK exists.
         @return  True, if the SUPBOOK record exists (out-parameters are valid). */
     bool                GetSupbookDde( XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex,
-                            const OUString& rApplic, const OUString& rTopic ) const;
+                            std::u16string_view rApplic, std::u16string_view rTopic ) const;
 
     /** Appends a new SUPBOOK to the list.
         @return  The list index of the SUPBOOK record. */
@@ -1090,7 +1090,7 @@ sal_uInt16 XclExpExtNameBuffer::InsertEuroTool( const OUString& rName )
 }
 
 sal_uInt16 XclExpExtNameBuffer::InsertDde(
-        const OUString& rApplic, const OUString& rTopic, const OUString& rItem )
+        std::u16string_view rApplic, std::u16string_view rTopic, const OUString& rItem )
 {
     sal_uInt16 nIndex = GetIndex( rItem );
     if( nIndex == 0 )
@@ -1128,7 +1128,7 @@ void XclExpExtNameBuffer::SaveXml(XclExpXmlStream& rStrm)
     maNameList.SaveXml(rStrm);
 }
 
-sal_uInt16 XclExpExtNameBuffer::GetIndex( const OUString& rName ) const
+sal_uInt16 XclExpExtNameBuffer::GetIndex( std::u16string_view rName ) const
 {
     for( size_t nPos = 0, nSize = maNameList.GetSize(); nPos < nSize; ++nPos )
         if( maNameList.GetRecord( nPos )->GetName() == rName )
@@ -1562,12 +1562,12 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rApplic, 
     SetRecSize( 2 + maUrlEncoded.GetSize() );
 }
 
-bool XclExpSupbook::IsUrlLink( const OUString& rUrl ) const
+bool XclExpSupbook::IsUrlLink( std::u16string_view rUrl ) const
 {
     return (meType == XclSupbookType::Extern || meType == XclSupbookType::Eurotool) && (maUrl == rUrl);
 }
 
-bool XclExpSupbook::IsDdeLink( const OUString& rApplic, const OUString& rTopic ) const
+bool XclExpSupbook::IsDdeLink( std::u16string_view rApplic, std::u16string_view rTopic ) const
 {
     return (meType == XclSupbookType::Special) && (maUrl == rApplic) && (maDdeTopic == rTopic);
 }
@@ -2127,7 +2127,7 @@ bool XclExpSupbookBuffer::HasExternalReferences() const
 }
 
 bool XclExpSupbookBuffer::GetSupbookUrl(
-        XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex, const OUString& rUrl ) const
+        XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex, std::u16string_view rUrl ) const
 {
     for( size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos )
     {
@@ -2142,7 +2142,7 @@ bool XclExpSupbookBuffer::GetSupbookUrl(
 }
 
 bool XclExpSupbookBuffer::GetSupbookDde( XclExpSupbookRef& rxSupbook,
-        sal_uInt16& rnIndex, const OUString& rApplic, const OUString& rTopic ) const
+        sal_uInt16& rnIndex, std::u16string_view rApplic, std::u16string_view rTopic ) const
 {
     for( size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos )
     {

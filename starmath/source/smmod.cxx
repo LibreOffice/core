@@ -61,7 +61,7 @@ OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportName )
     return aRes;
 }
 
-OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiName )
+OUString SmLocalizedSymbolData::GetExportSymbolName( std::u16string_view rUiName )
 {
     OUString aRes;
 
@@ -94,7 +94,7 @@ OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExportName 
     return aRes;
 }
 
-OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rUiName )
+OUString SmLocalizedSymbolData::GetExportSymbolSetName( std::u16string_view rUiName )
 {
     OUString aRes;
 

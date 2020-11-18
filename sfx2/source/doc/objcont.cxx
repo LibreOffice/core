@@ -476,7 +476,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         if( aFoundName.isEmpty() && !aTemplName.isEmpty() )
             // if the template filename did not lead to success,
             // try to get a file name for the logical template name
-            aTempl.GetFull( OUString(), aTemplName, aFoundName );
+            aTempl.GetFull( u"", aTemplName, aFoundName );
     }
 
     if ( aFoundName.isEmpty() )
@@ -588,7 +588,7 @@ void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUS
         return;
 
     OUString aFoundName;
-    if( SfxGetpApp()->Get_Impl()->GetDocumentTemplates()->GetFull( OUString(), rTemplateName, aFoundName ) )
+    if( SfxGetpApp()->Get_Impl()->GetDocumentTemplates()->GetFull( u"", rTemplateName, aFoundName ) )
     {
         INetURLObject aObj( rFileName );
         xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) );

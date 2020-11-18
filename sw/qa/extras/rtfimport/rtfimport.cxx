@@ -1354,22 +1354,22 @@ CPPUNIT_TEST_FIXTURE(Test, testFlip)
 {
     load(mpTestDocumentPath, "flip.rtf");
     comphelper::SequenceAsHashMap aMap = getProperty<uno::Sequence<beans::PropertyValue>>(
-        getShapeByName("h-and-v"), "CustomShapeGeometry");
+        getShapeByName(u"h-and-v"), "CustomShapeGeometry");
     // This resulted in a uno::RuntimeException, as MirroredX wasn't set at all, so could not extract void to boolean.
     CPPUNIT_ASSERT_EQUAL(true, aMap["MirroredX"].get<bool>());
     CPPUNIT_ASSERT_EQUAL(true, aMap["MirroredY"].get<bool>());
 
-    aMap = getProperty<uno::Sequence<beans::PropertyValue>>(getShapeByName("h-only"),
+    aMap = getProperty<uno::Sequence<beans::PropertyValue>>(getShapeByName(u"h-only"),
                                                             "CustomShapeGeometry");
     CPPUNIT_ASSERT_EQUAL(true, aMap["MirroredX"].get<bool>());
     CPPUNIT_ASSERT(!aMap["MirroredY"].hasValue());
 
-    aMap = getProperty<uno::Sequence<beans::PropertyValue>>(getShapeByName("v-only"),
+    aMap = getProperty<uno::Sequence<beans::PropertyValue>>(getShapeByName(u"v-only"),
                                                             "CustomShapeGeometry");
     CPPUNIT_ASSERT(!aMap["MirroredX"].hasValue());
     CPPUNIT_ASSERT_EQUAL(true, aMap["MirroredY"].get<bool>());
 
-    aMap = getProperty<uno::Sequence<beans::PropertyValue>>(getShapeByName("neither-h-nor-v"),
+    aMap = getProperty<uno::Sequence<beans::PropertyValue>>(getShapeByName(u"neither-h-nor-v"),
                                                             "CustomShapeGeometry");
     CPPUNIT_ASSERT(!aMap["MirroredX"].hasValue());
     CPPUNIT_ASSERT(!aMap["MirroredY"].hasValue());

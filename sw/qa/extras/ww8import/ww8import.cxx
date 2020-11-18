@@ -90,8 +90,8 @@ DECLARE_WW8IMPORT_TEST(testTdf124601, "tdf124601.doc")
 {
     // Without the accompanying fix in place, this test would have failed, as the importer lost the
     // fLayoutInCell shape property for wrap-though shapes.
-    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 18"), "IsFollowingTextFlow"));
-    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 19"), "IsFollowingTextFlow"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 18"), "IsFollowingTextFlow"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 19"), "IsFollowingTextFlow"));
 }
 
 DECLARE_WW8IMPORT_TEST(testImageLazyRead, "image-lazy-read.doc")

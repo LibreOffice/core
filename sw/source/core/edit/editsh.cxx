@@ -369,7 +369,7 @@ svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
     return rOObj.GetObject();
 }
 
-bool SwEditShell::HasOLEObj( const OUString &rName ) const
+bool SwEditShell::HasOLEObj( std::u16string_view rName ) const
 {
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -394,7 +394,7 @@ void SwEditShell::SetChartName( const OUString &rName )
     pONd->SetChartTableName( rName );
 }
 
-void SwEditShell::UpdateCharts( const OUString &rName )
+void SwEditShell::UpdateCharts( std::u16string_view rName )
 {
     GetDoc()->UpdateCharts( rName );
 }
@@ -438,7 +438,7 @@ const SwDocStat& SwEditShell::GetUpdatedDocStat()
 }
 
 /// get the reference of a given name in the Doc
-const SwFormatRefMark* SwEditShell::GetRefMark( const OUString& rName ) const
+const SwFormatRefMark* SwEditShell::GetRefMark( std::u16string_view rName ) const
 {
     return GetDoc()->GetRefMark( rName );
 }

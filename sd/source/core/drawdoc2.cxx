@@ -65,7 +65,7 @@ const ::tools::Long PRINT_OFFSET = 30;       // see /svx/source/dialog/page.cxx
 using namespace com::sun::star;
 
 // Looks up an object by name
-SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
+SdrObject* SdDrawDocument::GetObj(std::u16string_view rObjName) const
 {
     SdrObject* pObj = nullptr;
     SdrObject* pObjFound = nullptr;
@@ -125,7 +125,7 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
 }
 
 // Find SdPage by name
-sal_uInt16 SdDrawDocument::GetPageByName(const OUString& rPgName, bool& rbIsMasterPage) const
+sal_uInt16 SdDrawDocument::GetPageByName(std::u16string_view rPgName, bool& rbIsMasterPage) const
 {
     SdPage* pPage = nullptr;
     sal_uInt16 nPage = 0;
@@ -172,7 +172,7 @@ sal_uInt16 SdDrawDocument::GetPageByName(const OUString& rPgName, bool& rbIsMast
     return nPageNum;
 }
 
-bool SdDrawDocument::IsPageNameUnique( const OUString& rPgName ) const
+bool SdDrawDocument::IsPageNameUnique( std::u16string_view rPgName ) const
 {
     sal_uInt16 nCount = 0;
     SdPage* pPage = nullptr;

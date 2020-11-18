@@ -1403,7 +1403,7 @@ OUString PPDParser::getDefaultPaperDimension() const
 }
 
 bool PPDParser::getMargins(
-                           const OUString& rPaperName,
+                           std::u16string_view rPaperName,
                            int& rLeft, int& rRight,
                            int& rUpper, int& rLower ) const
 {
@@ -1439,7 +1439,7 @@ bool PPDParser::getMargins(
 }
 
 bool PPDParser::getPaperDimension(
-                                  const OUString& rPaperName,
+                                  std::u16string_view rPaperName,
                                   int& rWidth, int& rHeight ) const
 {
     if( ! m_pPaperDimensions )

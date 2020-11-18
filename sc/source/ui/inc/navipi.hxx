@@ -138,7 +138,7 @@ private:
     void    SetCurrentCell( SCCOL nCol, SCROW Row );
     void    SetCurrentCellStr( const OUString& rName );
     void    SetCurrentTable( SCTAB nTab );
-    void    SetCurrentTableStr( const OUString& rName );
+    void    SetCurrentTableStr( std::u16string_view rName );
     void    SetCurrentObject( const OUString& rName );
     void    SetCurrentDoc( const OUString& rDocName );
     void    UpdateSelection();

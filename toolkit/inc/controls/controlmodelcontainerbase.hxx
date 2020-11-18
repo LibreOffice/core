@@ -92,7 +92,7 @@ protected:
     css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper() override;
 
-    UnoControlModelHolderVector::iterator         ImplFindElement( const OUString& rName );
+    UnoControlModelHolderVector::iterator         ImplFindElement( std::u16string_view rName );
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::container::ElementExistException

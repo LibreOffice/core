@@ -38,7 +38,7 @@ private:
     std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
 
     void Initialize();
-    css::uno::Any getControlShape( const OUString& sName );
+    css::uno::Any getControlShape( std::u16string_view sName );
     css::uno::Reference< css::container::XNameAccess > getFormControls() const;
 
 public:

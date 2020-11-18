@@ -195,7 +195,7 @@ void XmlTestTools::assertXPathContent(const xmlDocUniquePtr& pXmlDoc, const OStr
 }
 
 void XmlTestTools::assertXPathNSDef(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
-                                    const OUString& rNSPrefix, const OUString& rNSHref)
+                                    std::u16string_view rNSPrefix, std::u16string_view rNSHref)
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;

@@ -241,7 +241,7 @@ void ScInterpreter::ScFilterXML()
     }
 }
 
-static ScWebServiceLink* lcl_GetWebServiceLink(const sfx2::LinkManager* pLinkMgr, const OUString& rURL)
+static ScWebServiceLink* lcl_GetWebServiceLink(const sfx2::LinkManager* pLinkMgr, std::u16string_view rURL)
 {
     size_t nCount = pLinkMgr->GetLinks().size();
     for (size_t i=0; i<nCount; ++i)

@@ -134,12 +134,12 @@ static const SmFontStyles & GetFontStyles()
     return aImpl;
 }
 
-void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
+void SetFontStyle(std::u16string_view rStyleName, vcl::Font &rFont)
 {
     // Find index related to StyleName. For an empty StyleName it's assumed to be
     // 0 (neither bold nor italic).
     sal_uInt16  nIndex = 0;
-    if (!rStyleName.isEmpty())
+    if (!rStyleName.empty())
     {
         sal_uInt16 i;
         const SmFontStyles &rStyles = GetFontStyles();
@@ -1952,7 +1952,7 @@ bool SmSymDefineDialog::SelectSymbol(weld::ComboBox& rComboBox,
 }
 
 
-void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyleName)
+void SmSymDefineDialog::SetFont(const OUString &rFontName, std::u16string_view rStyleName)
 {
     // get Font (FontInfo) matching name and style
     FontMetric aFontMetric;

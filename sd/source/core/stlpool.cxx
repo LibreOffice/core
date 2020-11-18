@@ -84,9 +84,9 @@ OUString lcl_findRenamedStyleName(std::vector< std::pair< OUString, OUString > >
     return OUString();
 }
 
-SfxStyleSheet *lcl_findStyle(StyleSheetCopyResultVector& rStyles, const OUString& aStyleName)
+SfxStyleSheet *lcl_findStyle(StyleSheetCopyResultVector& rStyles, std::u16string_view aStyleName)
 {
-    if( aStyleName.isEmpty() )
+    if( aStyleName.empty() )
         return nullptr;
     for (const auto& a : rStyles)
     {

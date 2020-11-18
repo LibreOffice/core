@@ -110,7 +110,7 @@ public:
     SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh);
     virtual ~SwEditRegionDlg() override;
 
-    void    SelectSection(const OUString& rSectionName);
+    void    SelectSection(std::u16string_view rSectionName);
 
 };
 

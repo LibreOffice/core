@@ -2055,7 +2055,7 @@ OUString ScDrawLayer::GetVisibleName( const SdrObject* pObj )
     return aName;
 }
 
-static bool IsNamedObject( const SdrObject* pObj, const OUString& rName )
+static bool IsNamedObject( const SdrObject* pObj, std::u16string_view rName )
 {
     //  sal_True if rName is the object's Name or PersistName
     //  (used to find a named object)
@@ -2065,7 +2065,7 @@ static bool IsNamedObject( const SdrObject* pObj, const OUString& rName )
               static_cast<const SdrOle2Obj*>(pObj)->GetPersistName() == rName ) );
 }
 
-SdrObject* ScDrawLayer::GetNamedObject( const OUString& rName, sal_uInt16 nId, SCTAB& rFoundTab ) const
+SdrObject* ScDrawLayer::GetNamedObject( std::u16string_view rName, sal_uInt16 nId, SCTAB& rFoundTab ) const
 {
     sal_uInt16 nTabCount = GetPageCount();
     for (sal_uInt16 nTab=0; nTab<nTabCount; nTab++)

@@ -292,7 +292,7 @@ void ScDocument::CopyStdStylesFrom( const ScDocument& rSrcDoc )
     mxPoolHelper->GetStylePool()->CopyStdStylesFrom( rSrcDoc.mxPoolHelper->GetStylePool() );
 }
 
-void ScDocument::InvalidateTextWidth( const OUString& rStyleName )
+void ScDocument::InvalidateTextWidth( std::u16string_view rStyleName )
 {
     const SCTAB nCount = GetTableCount();
     for ( SCTAB i=0; i<nCount && maTabs[i]; i++ )
@@ -307,7 +307,7 @@ void ScDocument::InvalidateTextWidth( SCTAB nTab )
     InvalidateTextWidth( &aAdrFrom, &aAdrTo, false );
 }
 
-bool ScDocument::IsPageStyleInUse( const OUString& rStrPageStyle, SCTAB* pInTab )
+bool ScDocument::IsPageStyleInUse( std::u16string_view rStrPageStyle, SCTAB* pInTab )
 {
     bool         bInUse = false;
     const SCTAB nCount = GetTableCount();
@@ -322,7 +322,7 @@ bool ScDocument::IsPageStyleInUse( const OUString& rStrPageStyle, SCTAB* pInTab 
     return bInUse;
 }
 
-bool ScDocument::RemovePageStyleInUse( const OUString& rStyle )
+bool ScDocument::RemovePageStyleInUse( std::u16string_view rStyle )
 {
     bool bWasInUse = false;
     const SCTAB nCount = GetTableCount();
@@ -337,7 +337,7 @@ bool ScDocument::RemovePageStyleInUse( const OUString& rStyle )
     return bWasInUse;
 }
 
-bool ScDocument::RenamePageStyleInUse( const OUString& rOld, const OUString& rNew )
+bool ScDocument::RenamePageStyleInUse( std::u16string_view rOld, const OUString& rNew )
 {
     bool bWasInUse = false;
     const SCTAB nCount = GetTableCount();
@@ -903,7 +903,7 @@ namespace {
     @return  The DDE link, if it exists, otherwise 0. */
 ScDdeLink* lclGetDdeLink(
         const sfx2::LinkManager* pLinkManager,
-        const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode,
+        std::u16string_view rAppl, std::u16string_view rTopic, std::u16string_view rItem, sal_uInt8 nMode,
         size_t* pnDdePos = nullptr )
 {
     if( pLinkManager )
@@ -954,7 +954,7 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, size_t nDdePos 
 
 } // namespace
 
-bool ScDocument::FindDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem,
+bool ScDocument::FindDdeLink( std::u16string_view rAppl, std::u16string_view rTopic, std::u16string_view rItem,
         sal_uInt8 nMode, size_t& rnDdePos )
 {
     return lclGetDdeLink( GetLinkManager(), rAppl, rTopic, rItem, nMode, &rnDdePos ) != nullptr;

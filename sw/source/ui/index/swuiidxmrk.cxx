@@ -1081,7 +1081,7 @@ const TextInfo aTextInfoArr[] =
     {AUTH_FIELD_CUSTOM5,         HID_AUTH_FIELD_CUSTOM5         }
 };
 
-static OUString lcl_FindColumnEntry(const uno::Sequence<beans::PropertyValue>& rFields, const OUString& rColumnTitle)
+static OUString lcl_FindColumnEntry(const uno::Sequence<beans::PropertyValue>& rFields, std::u16string_view rColumnTitle)
 {
     for(const auto& rField : rFields)
     {

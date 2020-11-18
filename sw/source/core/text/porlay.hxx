@@ -293,7 +293,7 @@ public:
     TextFrameIndex GetParLen() const;
 
     // For Prepare()
-    bool UpdateQuoVadis( const OUString &rQuo );
+    bool UpdateQuoVadis( std::u16string_view rQuo );
 
     // Flags
     void SetFly() { m_bFlys = true; }

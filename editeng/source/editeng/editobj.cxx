@@ -304,13 +304,13 @@ void EditTextObject::SetStyleSheet(sal_Int32 nPara, const OUString& rName, const
 }
 
 bool EditTextObject::ChangeStyleSheets(
-    const OUString& rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily)
+    std::u16string_view rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily)
 {
     return mpImpl->ChangeStyleSheets(rOldName, eOldFamily, rNewName, eNewFamily);
 }
 
 void EditTextObject::ChangeStyleSheetName(
-    SfxStyleFamily eFamily, const OUString& rOldName, const OUString& rNewName)
+    SfxStyleFamily eFamily, std::u16string_view rOldName, const OUString& rNewName)
 {
     mpImpl->ChangeStyleSheetName(eFamily, rOldName, rNewName);
 }
@@ -1000,7 +1000,7 @@ void EditTextObjectImpl::SetStyleSheet(sal_Int32 nPara, const OUString& rName, c
 }
 
 bool EditTextObjectImpl::ImpChangeStyleSheets(
-                    const OUString& rOldName, SfxStyleFamily eOldFamily,
+                    std::u16string_view rOldName, SfxStyleFamily eOldFamily,
                     const OUString& rNewName, SfxStyleFamily eNewFamily )
 {
     const size_t nParagraphs = aContents.size();
@@ -1023,7 +1023,7 @@ bool EditTextObjectImpl::ImpChangeStyleSheets(
 }
 
 bool EditTextObjectImpl::ChangeStyleSheets(
-                    const OUString& rOldName, SfxStyleFamily eOldFamily,
+                    std::u16string_view rOldName, SfxStyleFamily eOldFamily,
                     const OUString& rNewName, SfxStyleFamily eNewFamily)
 {
     bool bChanges = ImpChangeStyleSheets( rOldName, eOldFamily, rNewName, eNewFamily );
@@ -1034,7 +1034,7 @@ bool EditTextObjectImpl::ChangeStyleSheets(
 }
 
 void EditTextObjectImpl::ChangeStyleSheetName( SfxStyleFamily eFamily,
-                const OUString& rOldName, const OUString& rNewName )
+                std::u16string_view rOldName, const OUString& rNewName )
 {
     ImpChangeStyleSheets( rOldName, eFamily, rNewName, eFamily );
 }

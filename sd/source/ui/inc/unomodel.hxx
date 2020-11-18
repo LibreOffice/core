@@ -399,7 +399,7 @@ public:
 
     // intern
     /// @throws std::exception
-    SdPage* FindPage( const OUString& rName ) const;
+    SdPage* FindPage( std::u16string_view rName ) const;
 };
 
 #endif

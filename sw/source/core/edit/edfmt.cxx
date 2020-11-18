@@ -146,12 +146,12 @@ const SwFlyFrameFormat* SwEditShell::FindFlyByName( const OUString& rName ) cons
     return mxDoc->FindFlyByName(rName);
 }
 
-SwCharFormat* SwEditShell::FindCharFormatByName( const OUString& rName ) const
+SwCharFormat* SwEditShell::FindCharFormatByName( std::u16string_view rName ) const
 {
     return mxDoc->FindCharFormatByName( rName );
 }
 
-SwTextFormatColl* SwEditShell::FindTextFormatCollByName( const OUString& rName ) const
+SwTextFormatColl* SwEditShell::FindTextFormatCollByName( std::u16string_view rName ) const
 {
     return mxDoc->FindTextFormatCollByName( rName );
 }

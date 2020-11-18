@@ -1756,7 +1756,7 @@ void DialogImport::addStyle(
 }
 
 Reference< xml::input::XElement > DialogImport::getStyle(
-    OUString const & rStyleId ) const
+    std::u16string_view rStyleId ) const
 {
     for ( size_t nPos = 0; nPos < (*_pStyleNames).size(); ++nPos )
     {

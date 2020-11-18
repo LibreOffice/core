@@ -330,7 +330,7 @@ void
 lcl_maybeRemoveScript(
         bool const bExists,
         OUString const& rName,
-        OUString const& rScriptURL,
+        std::u16string_view rScriptURL,
         Reference<css::script::XLibraryContainer3> const& xScriptLibs)
 {
     if (bExists && xScriptLibs.is() && xScriptLibs->hasByName(rName))

@@ -1102,7 +1102,7 @@ static bool canSkipReset(const OUString &rName, const XMLPropStyleContext* pProp
         bool bOldStyleTextAutoGrowHeight(false);
         rPropSet->getPropertyValue("TextAutoGrowHeight") >>= bOldStyleTextAutoGrowHeight;
 
-        sal_Int32 nIndexStyle = rPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, "auto-grow-height", 0);
+        sal_Int32 nIndexStyle = rPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, u"auto-grow-height", 0);
         if (nIndexStyle != -1)
         {
             const ::std::vector< XMLPropertyState > &rProperties = pPropStyle->GetProperties();

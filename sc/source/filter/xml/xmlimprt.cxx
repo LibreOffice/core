@@ -1026,7 +1026,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const OUString& r
     return nKey;
 }
 
-bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString& sCurrentCurrency, const OUString& sBankSymbol)
+bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString& sCurrentCurrency, std::u16string_view sBankSymbol)
 {
     uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier(GetNumberFormatsSupplier());
     if (xNumberFormatsSupplier.is())

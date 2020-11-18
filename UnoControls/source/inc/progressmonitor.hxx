@@ -219,7 +219,7 @@ private:
 
     void impl_cleanMemory();
 
-    IMPL_TextlistItem* impl_searchTopic( const OUString& sTopic , bool bbeforeProgress );
+    IMPL_TextlistItem* impl_searchTopic( std::u16string_view sTopic , bool bbeforeProgress );
 
 // debug methods
 

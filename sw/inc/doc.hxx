@@ -756,18 +756,18 @@ public:
     // Remove all language dependencies from all existing formats
     void RemoveAllFormatLanguageDependencies();
 
-    static SwFormat* FindFormatByName(const SwFormatsBase& rFormatArr, const OUString& rName);
+    static SwFormat* FindFormatByName(const SwFormatsBase& rFormatArr, std::u16string_view rName);
 
     SwFrameFormat  *MakeFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom,
                           bool bBroadcast = false, bool bAuto = true);
     void       DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast = false );
-    SwFrameFormat* FindFrameFormatByName( const OUString& rName ) const;
+    SwFrameFormat* FindFrameFormatByName( std::u16string_view rName ) const;
 
     SwCharFormat *MakeCharFormat(const OUString &rFormatName, SwCharFormat *pDerivedFrom,
                            bool bBroadcast = false );
     void       DelCharFormat(size_t nFormat, bool bBroadcast = false);
     void       DelCharFormat(SwCharFormat const * pFormat, bool bBroadcast = false);
-    SwCharFormat* FindCharFormatByName( const OUString& rName ) const
+    SwCharFormat* FindCharFormatByName( std::u16string_view rName ) const
         {   return static_cast<SwCharFormat*>(FindFormatByName( *mpCharFormatTable, rName )); }
 
     // Formatcollections (styles)
@@ -795,7 +795,7 @@ public:
                        const bool bReset = true,
                        const bool bResetListAttrs = false,
                        SwRootFrame const* pLayout = nullptr);
-    SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const
+    SwTextFormatColl* FindTextFormatCollByName( std::u16string_view rName ) const
         {   return static_cast<SwTextFormatColl*>(FindFormatByName( *mpTextFormatCollTable, rName )); }
 
     void ChkCondColls();
@@ -813,7 +813,7 @@ public:
     SwFrameFormat& GetTableFrameFormat(size_t nFormat, bool bUsed ) const;
     SwTableFormat* MakeTableFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom);
     void        DelTableFrameFormat( SwTableFormat* pFormat );
-    SwTableFormat* FindTableFormatByName( const OUString& rName, bool bAll = false ) const;
+    SwTableFormat* FindTableFormatByName( std::u16string_view rName, bool bAll = false ) const;
 
     /** Access to frames.
     Iterate over Flys - for Basic-Collections. */
@@ -1077,7 +1077,7 @@ public:
         bool bBroadcast = false,
         const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-    sal_uInt16 FindNumRule( const OUString& rName ) const;
+    sal_uInt16 FindNumRule( std::u16string_view rName ) const;
     SwNumRule* FindNumRulePtr( const OUString& rName ) const;
 
     // Deletion only possible if Rule is not used!
@@ -1268,7 +1268,7 @@ public:
                         const SwTable* pCpyTable, bool bCpyName = false,
                         bool bCorrPos = false );
 
-    void UnProtectCells( const OUString& rTableName );
+    void UnProtectCells( std::u16string_view rTableName );
     bool UnProtectCells( const SwSelBoxes& rBoxes );
     void UnProtectTables( const SwPaM& rPam );
     bool HasTableAnyProtection( const SwPosition* pPos,
@@ -1285,7 +1285,7 @@ public:
                         sal_uInt16 nMode = 0 );
 
     // Make charts of given table update.
-    void UpdateCharts( const OUString &rName ) const;
+    void UpdateCharts( std::u16string_view rName ) const;
 
     // Update all charts, for that exists any table.
     void UpdateAllCharts()          { DoUpdateAllCharts(); }
@@ -1294,7 +1294,7 @@ public:
     void SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName );
 
     // @return the reference in document that is set for name.
-    const SwFormatRefMark* GetRefMark( const OUString& rName ) const;
+    const SwFormatRefMark* GetRefMark( std::u16string_view rName ) const;
 
     // @return RefMark via index - for UNO.
     const SwFormatRefMark* GetRefMark( sal_uInt16 nIndex ) const;
@@ -1390,7 +1390,7 @@ public:
     SwAutoCorrExceptWord* GetAutoCorrExceptWord()       { return mpACEWord.get(); }
     void DeleteAutoCorrExceptWord();
 
-    const SwFormatINetFormat* FindINetAttr( const OUString& rName ) const;
+    const SwFormatINetFormat* FindINetAttr( std::u16string_view rName ) const;
 
     // Call into intransparent Basic; expect possible Return String.
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );

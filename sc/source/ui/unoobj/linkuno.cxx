@@ -1218,7 +1218,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
     return nullptr;
 }
 
-ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(const OUString& aName)
+ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(std::u16string_view aName)
 {
     if (pDocShell)
     {

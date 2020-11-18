@@ -172,8 +172,8 @@ void ScAreaLink::SetSource(const OUString& rDoc, const OUString& rFlt, const OUS
     SetName( aNewLinkName );
 }
 
-bool ScAreaLink::IsEqual( const OUString& rFile, const OUString& rFilter, const OUString& rOpt,
-                            const OUString& rSource, const ScRange& rDest ) const
+bool ScAreaLink::IsEqual( std::u16string_view rFile, std::u16string_view rFilter, std::u16string_view rOpt,
+                            std::u16string_view rSource, const ScRange& rDest ) const
 {
     return aFileName == rFile && aFilterName == rFilter && aOptions == rOpt &&
             aSourceArea == rSource && aDestArea.aStart == rDest.aStart;

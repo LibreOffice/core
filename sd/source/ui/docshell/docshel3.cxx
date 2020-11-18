@@ -109,7 +109,7 @@ static void lcl_setLanguageForObj( SdrObject *pObj, LanguageType nLang, bool bLa
     }
 }
 
-static void lcl_setLanguage( const SdDrawDocument *pDoc, const OUString &rLanguage, bool bLanguageNone = false )
+static void lcl_setLanguage( const SdDrawDocument *pDoc, std::u16string_view rLanguage, bool bLanguageNone = false )
 {
     LanguageType nLang = SvtLanguageTable::GetLanguageType( rLanguage );
 
@@ -313,9 +313,9 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                             aNewLangTxt = aNewLangTxt.replaceAt( nPos, aDocumentLangPrefix.getLength(), "" );
 
                             if (aNewLangTxt == "LANGUAGE_NONE")
-                                lcl_setLanguage( pDoc, OUString(), true );
+                                lcl_setLanguage( pDoc, u"", true );
                             else if (aNewLangTxt == "RESET_LANGUAGES")
-                                lcl_setLanguage( pDoc, OUString() );
+                                lcl_setLanguage( pDoc, u"" );
                             else
                                 lcl_setLanguage( pDoc, aNewLangTxt );
                         }

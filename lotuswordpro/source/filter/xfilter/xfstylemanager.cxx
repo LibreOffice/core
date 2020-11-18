@@ -219,7 +219,7 @@ IXFStyleRet XFStyleManager::AddStyle(std::unique_ptr<IXFStyle> pStyle)
     return aRet;
 }
 
-IXFStyle*   XFStyleManager::FindStyle(const OUString& name)
+IXFStyle*   XFStyleManager::FindStyle(std::u16string_view name)
 {
     IXFStyle *pStyle = FindParaStyle(name);
     if( pStyle )
@@ -272,7 +272,7 @@ IXFStyle*   XFStyleManager::FindStyle(const OUString& name)
     return nullptr;
 }
 
-XFParaStyle*    XFStyleManager::FindParaStyle(const OUString& name)
+XFParaStyle*    XFStyleManager::FindParaStyle(std::u16string_view name)
 {
     IXFStyle *pStyle = s_aParaStyles.FindStyle(name);
     if( pStyle )
@@ -281,7 +281,7 @@ XFParaStyle*    XFStyleManager::FindParaStyle(const OUString& name)
         return static_cast<XFParaStyle*>(s_aStdParaStyles.FindStyle(name));
 }
 
-XFTextStyle*    XFStyleManager::FindTextStyle(const OUString& name)
+XFTextStyle*    XFStyleManager::FindTextStyle(std::u16string_view name)
 {
     IXFStyle *pStyle = s_aTextStyles.FindStyle(name);
     if( pStyle )

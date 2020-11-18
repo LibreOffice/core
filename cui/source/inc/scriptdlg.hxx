@@ -115,7 +115,7 @@ protected:
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();
 
-    void        Init(const OUString& language);
+    void        Init(std::u16string_view language);
     void        delUserData(const weld::TreeIter& rIter);
     void        deleteTree(weld::TreeIter& rIter);
     void        deleteAllTree();
@@ -135,9 +135,9 @@ protected:
                                   css::uno::Reference< css::frame::XModel>& model);
 
     static css::uno::Reference< css::script::browse::XBrowseNode >
-        getLangNodeFromRootNode( css::uno::Reference< css::script::browse::XBrowseNode > const & root, OUString const & language );
+        getLangNodeFromRootNode( css::uno::Reference< css::script::browse::XBrowseNode > const & root, std::u16string_view language );
 
-    static css::uno::Reference< css::uno::XInterface  > getDocumentModel( css::uno::Reference< css::uno::XComponentContext > const & xCtx, OUString const & docName );
+    static css::uno::Reference< css::uno::XInterface  > getDocumentModel( css::uno::Reference< css::uno::XComponentContext > const & xCtx, std::u16string_view docName );
 
 public:
     // prob need another arg in the ctor

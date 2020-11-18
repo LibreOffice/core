@@ -169,7 +169,7 @@ void GalleryBrowser1::ImplGetExecuteVector(std::vector<OString>& o_aExec)
     mpGallery->ReleaseTheme( pTheme, *this );
 }
 
-void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, bool bCreateNew )
+void GalleryBrowser1::ImplGalleryThemeProperties( std::u16string_view rThemeName, bool bCreateNew )
 {
     DBG_ASSERT(!mpThemePropsDlgItemSet, "mpThemePropsDlgItemSet already set!");
     mpThemePropsDlgItemSet.reset(new SfxItemSet( SfxGetpApp()->GetPool() ));

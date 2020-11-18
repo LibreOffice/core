@@ -87,7 +87,7 @@ public:
 
     // symbol sets are for UI purpose only, thus we assemble them here
     std::set< OUString >      GetSymbolSetNames() const;
-    SymbolPtrVec_t          GetSymbolSet(  const OUString& rSymbolSetName );
+    SymbolPtrVec_t          GetSymbolSet(  std::u16string_view rSymbolSetName );
 
     SymbolPtrVec_t          GetSymbols() const;
     bool                    AddOrReplaceSymbol( const SmSym & rSymbol, bool bForceChange = false );

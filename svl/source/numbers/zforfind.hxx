@@ -277,7 +277,7 @@ private:
                                 sal_Int32& nPos,
                                 sal_uInt16 nStringPos ) const;
     // Get boolean value
-    short GetLogical( const OUString& rString ) const;
+    short GetLogical( std::u16string_view rString ) const;
 
     // Get month and advance string position
     short GetMonth( const OUString& rString,

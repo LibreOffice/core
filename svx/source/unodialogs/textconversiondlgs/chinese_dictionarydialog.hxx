@@ -55,12 +55,12 @@ public:
     void refillFromDictionary( sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );
     void save();
 
-    DictionaryEntry* getTermEntry( const OUString& rTerm ) const;
-    bool hasTerm( const OUString& rTerm ) const;
+    DictionaryEntry* getTermEntry( std::u16string_view rTerm ) const;
+    bool hasTerm( std::u16string_view rTerm ) const;
 
     void addEntry( const OUString& rTerm, const OUString& rMapping
             , sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/, int nPos = -1);
-    int deleteEntries( const OUString& rTerm ); //return lowest position of deleted entries or -1 if no entry was deleted
+    int deleteEntries( std::u16string_view rTerm ); //return lowest position of deleted entries or -1 if no entry was deleted
     void deleteEntryOnPos( sal_Int32 nPos  );
     DictionaryEntry* getEntryOnPos( sal_Int32 nPos ) const;
     DictionaryEntry* getFirstSelectedEntry() const;

@@ -33,7 +33,7 @@ namespace {
 template<class T>
 bool
 getRequestArgument(uno::Sequence< uno::Any > const & rArguments,
-                   OUString const & rKey,
+                   std::u16string_view rKey,
                    T * pValue)
 {
     for (const auto& rArgument : rArguments)
@@ -57,11 +57,11 @@ bool
 getResourceNameRequestArgument(uno::Sequence< uno::Any > const & rArguments,
                                OUString * pValue)
 {
-    if (!getRequestArgument(rArguments, "Uri",  pValue))
+    if (!getRequestArgument(rArguments, u"Uri",  pValue))
         return false;
     // Use the resource name only for file URLs, to avoid confusion:
     if (pValue && comphelper::isFileUrl(*pValue))
-        getRequestArgument(rArguments, "ResourceName", pValue);
+        getRequestArgument(rArguments, u"ResourceName", pValue);
     return true;
 }
 
@@ -162,7 +162,7 @@ UUIInteractionHelper::handleInteractiveIOException(
         case ucb::IOErrorCode_CANT_CREATE:
             {
                 OUString aArgFolder;
-                if (getRequestArgument(aRequestArguments, "Folder", &aArgFolder))
+                if (getRequestArgument(aRequestArguments, u"Folder", &aArgFolder))
                 {
                     OUString aArgUri;
                     if (getResourceNameRequestArgument(aRequestArguments,
@@ -191,9 +191,9 @@ UUIInteractionHelper::handleInteractiveIOException(
                                                    &aArgUri))
                 {
                     OUString aResourceType;
-                    getRequestArgument(aRequestArguments, "ResourceType", &aResourceType);
+                    getRequestArgument(aRequestArguments, u"ResourceType", &aResourceType);
                     bool bRemovable = false;
-                    getRequestArgument(aRequestArguments, "Removable", &bRemovable);
+                    getRequestArgument(aRequestArguments, u"Removable", &bRemovable);
                     nErrorCode = aResourceType == "volume"
                         ? (bRemovable
                            ? ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE
@@ -212,8 +212,8 @@ UUIInteractionHelper::handleInteractiveIOException(
             {
                 OUString aArgVolume;
                 OUString aArgOtherVolume;
-                if (getRequestArgument(aRequestArguments, "Volume", &aArgVolume)
-                    && getRequestArgument(aRequestArguments, "OtherVolume",
+                if (getRequestArgument(aRequestArguments, u"Volume", &aArgVolume)
+                    && getRequestArgument(aRequestArguments, u"OtherVolume",
                         &aArgOtherVolume))
                 {
                     nErrorCode = aErrorCode[static_cast<sal_Int32>(aIoException.Code)][1];
@@ -233,7 +233,7 @@ UUIInteractionHelper::handleInteractiveIOException(
                            &aArgUri))
                 {
                     OUString aResourceType;
-                    getRequestArgument(aRequestArguments, "ResourceType",
+                    getRequestArgument(aRequestArguments, u"ResourceType",
                                             &aResourceType);
                     nErrorCode = aResourceType == "volume"
                         ? ERRCODE_UUI_IO_NOTEXISTS_VOLUME

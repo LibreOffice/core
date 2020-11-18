@@ -109,7 +109,7 @@ public:
     /**
      * @descr   get style by name.
      */
-    IXFStyle* FindStyle(const OUString& name);
+    IXFStyle* FindStyle(std::u16string_view name);
 
     /**
      * @descr   clear container.

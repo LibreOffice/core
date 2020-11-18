@@ -795,7 +795,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103573, "tdf103573.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106132, "tdf106132.docx")
 {
-    uno::Reference<beans::XPropertySet> xShape(getShapeByName("Frame1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShapeByName(u"Frame1"), uno::UNO_QUERY);
     // This was 250, <wps:bodyPr ... rIns="0" ...> was ignored for an outer shape.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xShape, "TextRightDistance"));
 }

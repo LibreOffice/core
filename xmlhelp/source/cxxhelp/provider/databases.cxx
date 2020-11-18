@@ -639,7 +639,7 @@ KeywordInfo::KeywordInfo( const std::vector< KeywordElement >& aVec )
 }
 
 bool Databases::checkModuleMatchForExtension
-    ( const OUString& Database, const OUString& doclist )
+    ( std::u16string_view Database, const OUString& doclist )
 {
     bool bBelongsToDatabase = true;
 

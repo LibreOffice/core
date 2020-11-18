@@ -145,7 +145,7 @@ namespace dbaui
         virtual bool                            isAutoIncrementValueEnabled() const = 0;
         virtual OUString                        getAutoIncrementValue() const = 0;
 
-        OUString                                BoolStringPersistent(const OUString& rUIString) const;
+        OUString                                BoolStringPersistent(std::u16string_view rUIString) const;
         OUString                                BoolStringUI(const OUString& rPersistentString) const;
 
         const OPropColumnEditCtrl*              getColumnCtrl() const { return m_xColumnName.get(); }

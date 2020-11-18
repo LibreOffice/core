@@ -151,7 +151,7 @@ void PropertySetInfo::reset()
 
 
 bool PropertySetInfo::queryProperty(
-    const OUString& rName, beans::Property& rProp )
+    std::u16string_view rName, beans::Property& rProp )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -280,7 +280,7 @@ void CommandProcessorInfo::reset()
 
 
 bool CommandProcessorInfo::queryCommand(
-    const OUString& rName,
+    std::u16string_view rName,
     css::ucb::CommandInfo& rCommand )
 {
     osl::MutexGuard aGuard( m_aMutex );

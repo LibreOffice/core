@@ -713,7 +713,7 @@ public:
     /** Converts the passed data series for stock charts. */
     bool                ConvertStockSeries(
                             css::uno::Reference< css::chart2::XDataSeries > const & xDataSeries,
-                            const OUString& rValueRole,
+                            std::u16string_view rValueRole,
                             sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx, bool bCloseSymbol );
     /** Converts the passed error bar settings (called at trend line child series). */
     bool                ConvertTrendLine( const XclExpChSeries& rParent,
@@ -919,7 +919,7 @@ private:
                             css::uno::Reference< css::chart2::XDataSeries > const & xDataSeries );
     /** Creates a single data series of a stock chart. */
     bool                CreateStockSeries( css::uno::Reference< css::chart2::XDataSeries > const & xDataSeries,
-                            const OUString& rValueRole, bool bCloseSymbol );
+                            std::u16string_view rValueRole, bool bCloseSymbol );
 
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 

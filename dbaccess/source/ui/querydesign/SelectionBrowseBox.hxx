@@ -86,7 +86,7 @@ namespace dbaui
         void                        RemoveColumn( sal_uInt16 _nColumnId );
         void                        DeleteFields( const OUString& rAliasName );
 
-        bool                        HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef const & rInfo) const;
+        bool                        HasFieldByAliasName(std::u16string_view rFieldName, OTableFieldDescRef const & rInfo) const;
 
         // AddGroupBy:: inserts a field with function == grouping. If the fields already exists and uses an aggregate function,
         // the flag is not set
@@ -219,8 +219,8 @@ namespace dbaui
         sal_Int32       GetRealRow(sal_Int32 nRow) const;
         sal_Int32       GetBrowseRow(sal_Int32 nRowId) const;
         bool            GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString& rFkt);
-        void            appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow, bool& _bListAction);
-        void            appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow);
+        void            appendUndoAction(const OUString& _rOldValue,std::u16string_view _rNewValue,sal_Int32 _nRow, bool& _bListAction);
+        void            appendUndoAction(const OUString& _rOldValue,std::u16string_view _rNewValue,sal_Int32 _nRow);
         OTableFields&   getFields() const;
         static void     enableControl(const OTableFieldDescRef& _rEntry,Window* _pControl);
         void            setTextCellContext(const OTableFieldDescRef& _rEntry,const OUString& _sText,const OString& _sHelpId);
@@ -281,7 +281,7 @@ namespace dbaui
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
         */
-        void            notifyTableFieldChanged(const OUString& _sOldAlias,const OUString& _sAlias, bool& _bListAction,sal_uInt16 _nColumnId);
+        void            notifyTableFieldChanged(const OUString& _sOldAlias,std::u16string_view _sAlias, bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** append an undo action for the function field
             @param  _sOldFunctionName
@@ -291,7 +291,7 @@ namespace dbaui
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
         */
-        void            notifyFunctionFieldChanged(const OUString& _sOldFunctionName,const OUString& _sFunctionName, bool& _bListAction,sal_uInt16 _nColumnId);
+        void            notifyFunctionFieldChanged(const OUString& _sOldFunctionName,std::u16string_view _sFunctionName, bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** clears the function fields of the submitted entry if it doesn't match the SQL standard and append an undo action.
             E.q. AGGREGATE functions are only valid when the field name isn't an asterisk

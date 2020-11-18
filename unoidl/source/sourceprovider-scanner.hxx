@@ -163,7 +163,7 @@ private:
 
     bool checkMemberClashes(
         YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
-        OUString const & interfaceName, OUString const & memberName,
+        std::u16string_view interfaceName, OUString const & memberName,
         bool checkOptional) const;
 
     bool addBase(

@@ -639,7 +639,7 @@ void AnnotationManagerImpl::DeleteAnnotation( const Reference< XAnnotation >& xA
     }
 }
 
-void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const OUString& sAuthor )
+void AnnotationManagerImpl::DeleteAnnotationsByAuthor( std::u16string_view sAuthor )
 {
     if( mpDoc->IsUndoEnabled() )
         mpDoc->BegUndo( SdResId( STR_ANNOTATION_UNDO_DELETE ) );

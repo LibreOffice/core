@@ -1529,7 +1529,7 @@ void SwParaPortion::SetErgoSumNum( const OUString& rErgo )
 /**
  * Is called in SwTextFrame::Prepare()
  */
-bool SwParaPortion::UpdateQuoVadis( const OUString &rQuo )
+bool SwParaPortion::UpdateQuoVadis( std::u16string_view rQuo )
 {
     SwLineLayout *pLay = this;
     while( pLay->GetNext() )

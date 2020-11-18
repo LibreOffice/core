@@ -105,7 +105,7 @@ private:
 
     // intern
     inline SdCustomShowList* GetCustomShowList() const throw();
-    SdCustomShow * getSdCustomShow( const OUString& Name ) const throw();
+    SdCustomShow * getSdCustomShow( std::u16string_view Name ) const throw();
 
 public:
     explicit SdXCustomPresentationAccess(SdXImpressDocument& rMyModel) throw();

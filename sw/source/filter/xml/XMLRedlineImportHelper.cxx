@@ -374,7 +374,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
 }
 
 void XMLRedlineImportHelper::Add(
-    const OUString& rType,
+    std::u16string_view rType,
     const OUString& rId,
     const OUString& rAuthor,
     const OUString& rComment,

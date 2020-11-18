@@ -69,7 +69,7 @@ public:
     static bool IsRealNameOfStandardLayer(const OUString& rName);
 
     // Used e.g. in validity test of user entered names
-    static bool IsLocalizedNameOfStandardLayer(const OUString& rName);
+    static bool IsLocalizedNameOfStandardLayer(std::u16string_view rName);
 
     // In case rName is one of the sUNO_LayerName_*, it generates a localized name,
     // otherwise it returns value of rName.

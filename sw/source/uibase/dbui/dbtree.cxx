@@ -164,7 +164,7 @@ void SwDBTreeList::InitTreeList()
             m_xTreeView->set_image(*m_xScratchIter, aImg);
         }
     }
-    Select(OUString(), OUString(), OUString());
+    Select(u"", u"", u"");
 
     bInitialized = true;
 }
@@ -320,7 +320,7 @@ OUString SwDBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sa
 }
 
 // Format: database.table
-void SwDBTreeList::Select(const OUString& rDBName, const OUString& rTableName, const OUString& rColumnName)
+void SwDBTreeList::Select(std::u16string_view rDBName, std::u16string_view rTableName, std::u16string_view rColumnName)
 {
     std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator());
     if (!m_xTreeView->get_iter_first(*xParent))
@@ -345,7 +345,7 @@ void SwDBTreeList::Select(const OUString& rDBName, const OUString& rTableName, c
                     m_xTreeView->copy_iterator(*xChild, *xParent);
 
                     bool bNoChild = false;
-                    if (bShowColumns && !rColumnName.isEmpty())
+                    if (bShowColumns && !rColumnName.empty())
                     {
                         if (!m_xTreeView->iter_has_child(*xParent))
                         {

@@ -44,11 +44,11 @@ private:
     Map certMap;
     Map certTrustMap;
 
-    static bool searchMap(const OUString& url, const OUString& certificate_name, Map& _certMap);
+    static bool searchMap(const OUString& url, std::u16string_view certificate_name, Map& _certMap);
     /// @throws css::uno::RuntimeException
-    bool isTemporaryCertificate(const OUString& url, const OUString& certificate_name);
+    bool isTemporaryCertificate(const OUString& url, std::u16string_view certificate_name);
     /// @throws css::uno::RuntimeException
-    bool isCertificateTrust(const OUString& url, const OUString& certificate_name);
+    bool isCertificateTrust(const OUString& url, std::u16string_view certificate_name);
 
 public:
     explicit CertificateContainer(const uno::Reference<uno::XComponentContext>&) {}
@@ -67,7 +67,7 @@ public:
 }
 
 bool
-CertificateContainer::searchMap( const OUString & url, const OUString & certificate_name, Map &_certMap )
+CertificateContainer::searchMap( const OUString & url, std::u16string_view certificate_name, Map &_certMap )
 {
     Map::iterator p = _certMap.find(url);
 
@@ -85,13 +85,13 @@ CertificateContainer::searchMap( const OUString & url, const OUString & certific
 }
 
 bool
-CertificateContainer::isTemporaryCertificate ( const OUString & url, const OUString & certificate_name )
+CertificateContainer::isTemporaryCertificate ( const OUString & url, std::u16string_view certificate_name )
 {
     return searchMap( url, certificate_name, certMap);
 }
 
 bool
-CertificateContainer::isCertificateTrust ( const OUString & url, const OUString & certificate_name )
+CertificateContainer::isCertificateTrust ( const OUString & url, std::u16string_view certificate_name )
 {
     return searchMap( url, certificate_name, certTrustMap);
 }

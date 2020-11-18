@@ -880,7 +880,7 @@ void ExecuteOrientationChange()
         mxUndoManager->leaveUndoContext();
 }
 
-void setupSidebar(const OUString& sidebarDeckId = "")
+void setupSidebar(std::u16string_view sidebarDeckId = u"")
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SfxViewFrame* pViewFrame = pViewShell ? pViewShell->GetViewFrame() : nullptr;
@@ -908,7 +908,7 @@ void setupSidebar(const OUString& sidebarDeckId = "")
         if (currentDeckId == "ChartDeck")
             switchToDefault = false;
 
-        if (!sidebarDeckId.isEmpty())
+        if (!sidebarDeckId.empty())
         {
             pDockingWin->GetSidebarController()->SwitchToDeck(sidebarDeckId);
         }
@@ -3954,7 +3954,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
     else if (gImpl && aCommand == ".uno:LOKSidebarWriterPage")
     {
-        setupSidebar("WriterPageDeck");
+        setupSidebar(u"WriterPageDeck");
         return;
     }
     else if (gImpl && aCommand == ".uno:SidebarShow")

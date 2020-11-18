@@ -918,7 +918,7 @@ void Chart2ImportTest::testDelayedCellImport()
     load("/chart2/qa/extras/data/xlsx/", "fdo70609.xlsx");
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
     Reference< chart2::data::XDataSequence > xDataSeq =
-        getDataSequenceFromDocByRole(xChartDoc, "values-x");
+        getDataSequenceFromDocByRole(xChartDoc, u"values-x");
 
     OUString aRange = xDataSeq->getSourceRangeRepresentation();
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$C$5:$C$9"), aRange);
@@ -2399,7 +2399,7 @@ void Chart2ImportTest::testXaxisValues()
     uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    const uno::Reference< chart2::data::XDataSequence > xDataSeq = getDataSequenceFromDocByRole(xChartDoc, "values-x");
+    const uno::Reference< chart2::data::XDataSequence > xDataSeq = getDataSequenceFromDocByRole(xChartDoc, u"values-x");
     Sequence<uno::Any> xSequence = xDataSeq->getData();
     // test X values
     CPPUNIT_ASSERT_EQUAL(uno::Any(0.04), xSequence[0]);

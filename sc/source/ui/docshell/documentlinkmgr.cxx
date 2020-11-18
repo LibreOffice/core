@@ -214,7 +214,7 @@ bool DocumentLinkManager::updateDdeOrOleOrWebServiceLinks(weld::Window* pWin)
     return bAny;
 }
 
-void DocumentLinkManager::updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem )
+void DocumentLinkManager::updateDdeLink( std::u16string_view rAppl, std::u16string_view rTopic, std::u16string_view rItem )
 {
     sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
     if (!pMgr)

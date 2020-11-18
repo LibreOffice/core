@@ -93,7 +93,7 @@ private:
     void                InitTabBar();
     void                InitScrollBars();
     void                CheckWindows();
-    void                RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName );
+    void                RemoveWindows( const ScriptDocument& rDocument, std::u16string_view rLibName );
     void                UpdateWindows();
     static void         InvalidateBasicIDESlots();
     void                StoreAllWindowData( bool bPersistent = true );
@@ -183,7 +183,7 @@ public:
     bool                CallBasicErrorHdl( StarBASIC const * pBasic );
     BasicDebugFlags     CallBasicBreakHdl( StarBASIC const * pBasic );
 
-    VclPtr<BaseWindow>   FindWindow( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, ItemType nType, bool bFindSuspended = false );
+    VclPtr<BaseWindow>   FindWindow( const ScriptDocument& rDocument, std::u16string_view rLibName, std::u16string_view rName, ItemType nType, bool bFindSuspended = false );
     VclPtr<DialogWindow> FindDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
     VclPtr<ModulWindow>  FindBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
     VclPtr<BaseWindow>   FindApplicationWindow();

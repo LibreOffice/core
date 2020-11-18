@@ -156,7 +156,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
             GetStyles()->GetImportPropertyMapper(GetFamily())
                 ->getPropertySetMapper());
         sal_Int32 const nStrokeIndex(
-            pImpPrMap->GetEntryIndex(XML_NAMESPACE_SVG, "stroke-color", 0));
+            pImpPrMap->GetEntryIndex(XML_NAMESPACE_SVG, u"stroke-color", 0));
         if (std::none_of(GetProperties().begin(), GetProperties().end(),
                          XMLPropertyByIndex(nStrokeIndex)))
         {
@@ -167,7 +167,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         Color const nFillColor( bIsAOO4
             ? Color(0xCF, 0xE7, 0xF5) : Color(153, 204, 255));
         sal_Int32 const nFillIndex(
-            pImpPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, "fill-color", 0));
+            pImpPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, u"fill-color", 0));
         if (std::none_of(GetProperties().begin(), GetProperties().end(),
                          XMLPropertyByIndex(nFillIndex)))
         {
@@ -176,7 +176,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         if (xInfo->hasPropertyByName("FillColor2"))
         {
             sal_Int32 const nFill2Index(pImpPrMap->GetEntryIndex(
-                        XML_NAMESPACE_DRAW, "secondary-fill-color", 0));
+                        XML_NAMESPACE_DRAW, u"secondary-fill-color", 0));
             if (std::none_of(GetProperties().begin(), GetProperties().end(),
                              XMLPropertyByIndex(nFill2Index)))
             {

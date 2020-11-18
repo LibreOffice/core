@@ -138,7 +138,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
             if(pSh)
             {
                 SwDBData aTmp(pSh->GetDBData());
-                m_xDatabaseTLB->Select(aTmp.sDataSource, aTmp.sCommand, OUString());
+                m_xDatabaseTLB->Select(aTmp.sDataSource, aTmp.sCommand, u"");
             }
         }
     }
@@ -506,7 +506,7 @@ void SwFieldDBPage::ActivateMailMergeAddress()
     m_xTypeLB->select_id(OUString::number(static_cast<sal_uInt16>(SwFieldTypesEnum::Database)));
     TypeListBoxHdl(*m_xTypeLB);
     const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
-    m_xDatabaseTLB->Select(rData.sDataSource, rData.sCommand, OUString());
+    m_xDatabaseTLB->Select(rData.sDataSource, rData.sCommand, u"");
 }
 
 void SwFieldDBPage::SetWrtShell(SwWrtShell& rSh)

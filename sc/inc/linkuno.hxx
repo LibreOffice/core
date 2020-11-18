@@ -327,7 +327,7 @@ private:
     ScDocShell*             pDocShell;
 
     ScDDELinkObj*           GetObjectByIndex_Impl(sal_Int32 nIndex);
-    ScDDELinkObj*           GetObjectByName_Impl(const OUString& aName);
+    ScDDELinkObj*           GetObjectByName_Impl(std::u16string_view aName);
 
 public:
                             ScDDELinksObj(ScDocShell* pDocSh);
