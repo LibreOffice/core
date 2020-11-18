@@ -166,8 +166,7 @@ public:
     bool                    operator!=( const GraphicObject& rCacheObj ) const { return !( *this == rCacheObj ); }
 
     const Graphic&          GetGraphic() const;
-    void                    SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj = nullptr);
-    void                    SetGraphic( const Graphic& rGraphic, std::u16string_view rLink );
+    void                    SetGraphic( const Graphic& rGraphic);
 
     /** Get graphic transformed according to given attributes
 

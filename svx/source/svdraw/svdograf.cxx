@@ -749,7 +749,7 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     if (mbIsSignatureLine && rObj.mpSignatureLineUnsignedGraphic)
         mpGraphicObject->SetGraphic(rObj.mpSignatureLineUnsignedGraphic);
     else
-        mpGraphicObject->SetGraphic( rObj.GetGraphic(), &rObj.GetGraphicObject() );
+        mpGraphicObject->SetGraphic( rObj.GetGraphic() );
 
     if( rObj.IsLinkedGraphic() )
     {
