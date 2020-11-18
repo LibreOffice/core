@@ -10,6 +10,7 @@
 #include <driverblocklist.hxx>
 
 #include <algorithm>
+#include <string_view>
 
 #include <sal/log.hxx>
 
@@ -562,7 +563,10 @@ struct compareIgnoreAsciiCase
     {
     }
 
-    bool operator()(const OUString& rCompare) { return maString.equalsIgnoreAsciiCase(rCompare); }
+    bool operator()(std::u16string_view rCompare)
+    {
+        return maString.equalsIgnoreAsciiCase(rCompare);
+    }
 
 private:
     OUString maString;

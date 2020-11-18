@@ -68,6 +68,7 @@
 #include <root.hxx>
 #include <colrowst.hxx>
 
+#include <string_view>
 #include <vector>
 
 #include <cppuhelper/implbase.hxx>
@@ -1598,7 +1599,7 @@ namespace {
 /** Functor for case-insensitive string comparison, usable in maps etc. */
 struct IgnoreCaseCompare
 {
-    bool operator()( const OUString& rName1, const OUString& rName2 ) const
+    bool operator()( const OUString& rName1, std::u16string_view rName2 ) const
         { return rName1.compareToIgnoreAsciiCase( rName2 ) < 0; }
 };
 

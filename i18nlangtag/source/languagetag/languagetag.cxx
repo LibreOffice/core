@@ -23,6 +23,7 @@
 #include <tools/long.hxx>
 #include <algorithm>
 #include <map>
+#include <string_view>
 #include <unordered_set>
 
 //#define erDEBUG
@@ -88,7 +89,7 @@ static const KnownTagSet & getKnowns()
 namespace {
 struct compareIgnoreAsciiCaseLess
 {
-    bool operator()( const OUString& r1, const OUString& r2 ) const
+    bool operator()( const OUString& r1, std::u16string_view r2 ) const
     {
         return r1.compareToIgnoreAsciiCase( r2) < 0;
     }

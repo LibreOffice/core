@@ -30,6 +30,7 @@
 
 #include <vector>
 #include <stack>
+#include <string_view>
 #include <deque>
 #include <map>
 #include <utility>
@@ -441,7 +442,7 @@ namespace SwWW8
 {
     struct ltstr
     {
-        bool operator()(const OUString &r1, const OUString &r2) const
+        bool operator()(const OUString &r1, std::u16string_view r2) const
         {
             return r1.compareToIgnoreAsciiCase(r2)<0;
         }

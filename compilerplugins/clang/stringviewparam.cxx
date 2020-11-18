@@ -435,10 +435,6 @@ private:
                 return false;
             }
         }
-        if (decl->isOverloadedOperator()) // e.g. operator()(const OUString&, const OUString&)
-        {
-            return false;
-        }
         if (decl->isFunctionTemplateSpecialization())
         {
             return false;

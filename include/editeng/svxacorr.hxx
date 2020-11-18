@@ -31,6 +31,7 @@
 #include <optional>
 #include <map>
 #include <memory>
+#include <string_view>
 
 class CharClass;
 class SfxPoolItem;
@@ -43,7 +44,7 @@ namespace tools { template <typename T> class SvRef; }
 
 struct CompareSvStringsISortDtor
 {
-    bool operator()( OUString const& lhs, OUString const& rhs ) const
+    bool operator()( OUString const& lhs, std::u16string_view rhs ) const
     {
         return lhs.compareToIgnoreAsciiCase( rhs ) < 0;
     }

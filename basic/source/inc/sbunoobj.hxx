@@ -31,6 +31,8 @@
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <rtl/ustring.hxx>
+
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 #include <map>
@@ -63,7 +65,7 @@ class SbUnoStructRefObject: public SbxObject
 {
     struct caseLessComp
     {
-        bool operator() (const OUString& rProp, const OUString& rOtherProp ) const
+        bool operator() (const OUString& rProp, std::u16string_view rOtherProp ) const
         {
             return rProp.compareToIgnoreAsciiCase( rOtherProp ) < 0;
         }

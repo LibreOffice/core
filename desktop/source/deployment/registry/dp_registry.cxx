@@ -44,6 +44,7 @@
 #include <com/sun/star/deployment/XPackageTypeInfo.hpp>
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
 #include <set>
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -69,7 +70,7 @@ class PackageRegistryImpl : private MutexHolder, public t_helper
         }
     };
     struct ci_string_equals {
-        bool operator () ( OUString const & str1, OUString const & str2 ) const{
+        bool operator () ( OUString const & str1, std::u16string_view str2 ) const{
             return str1.equalsIgnoreAsciiCase( str2 );
         }
     };
