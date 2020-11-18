@@ -24,6 +24,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/jsdialog/executor.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
                                        VclPtr<vcl::Window> aContentWindow, std::string sTypeOfJSON)
@@ -96,6 +97,102 @@ vcl::Window* extract_sal_widget(weld::Widget* pParent)
 }
 }
 
+// Drag and drop
+
+namespace
+{
+class JSDropTargetDropContext
+    : public cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>
+{
+public:
+    JSDropTargetDropContext() {}
+
+    // XDropTargetDropContext
+    virtual void SAL_CALL acceptDrop(sal_Int8 /*dragOperation*/) override {}
+
+    virtual void SAL_CALL rejectDrop() override {}
+
+    virtual void SAL_CALL dropComplete(sal_Bool /*bSuccess*/) override {}
+};
+}
+
+static JSTreeView* g_DragSource;
+
+JSDropTarget::JSDropTarget()
+    : WeakComponentImplHelper(m_aMutex)
+{
+}
+
+void JSDropTarget::initialize(const css::uno::Sequence<css::uno::Any>& /*rArgs*/) {}
+
+void JSDropTarget::addDropTargetListener(
+    const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
+{
+    ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
+
+    m_aListeners.push_back(xListener);
+}
+
+void JSDropTarget::removeDropTargetListener(
+    const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
+{
+    ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
+
+    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), xListener),
+                       m_aListeners.end());
+}
+
+sal_Bool JSDropTarget::isActive() { return false; }
+
+void JSDropTarget::setActive(sal_Bool /*active*/) {}
+
+sal_Int8 JSDropTarget::getDefaultActions() { return 0; }
+
+void JSDropTarget::setDefaultActions(sal_Int8 /*actions*/) {}
+
+OUString JSDropTarget::getImplementationName()
+{
+    return "com.sun.star.datatransfer.dnd.JSDropTarget";
+}
+
+sal_Bool JSDropTarget::supportsService(OUString const& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> JSDropTarget::getSupportedServiceNames()
+{
+    css::uno::Sequence<OUString> aRet{ "com.sun.star.datatransfer.dnd.JSDropTarget" };
+    return aRet;
+}
+
+void JSDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
+{
+    osl::ClearableGuard<osl::Mutex> aGuard(m_aMutex);
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
+        m_aListeners);
+    aGuard.clear();
+
+    for (auto const& listener : aListeners)
+    {
+        listener->drop(dtde);
+    }
+}
+
+void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
+{
+    osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
+        m_aListeners);
+    aGuard.clear();
+
+    for (auto const& listener : aListeners)
+    {
+        listener->dragEnter(dtde);
+    }
+}
+
+// used for dialogs
 JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
                                      const OUString& rUIFile)
     : SalInstanceBuilder(extract_sal_widget(pParent), rUIRoot, rUIFile)
@@ -791,6 +888,32 @@ void JSTreeView::select(int pos)
         }
     }
     enable_notify_events();
+}
+
+weld::TreeView* JSTreeView::get_drag_source() const { return g_DragSource; }
+
+void JSTreeView::drag_start() { g_DragSource = this; }
+
+void JSTreeView::drag_end()
+{
+    css::datatransfer::dnd::XDropTarget* xDropTarget = m_xDropTarget.get();
+    if (xDropTarget)
+    {
+        css::datatransfer::dnd::DropTargetDropEvent aEvent;
+        aEvent.Source = xDropTarget;
+        aEvent.Context = new JSDropTargetDropContext();
+        // dummy values
+        aEvent.LocationX = 50;
+        aEvent.LocationY = 50;
+        aEvent.DropAction = css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
+        aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
+
+        m_xDropTarget->fire_drop(aEvent);
+
+        notifyDialogState();
+    }
+
+    g_DragSource = nullptr;
 }
 
 JSExpander::JSExpander(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
