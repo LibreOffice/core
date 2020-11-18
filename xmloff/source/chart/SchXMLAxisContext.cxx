@@ -101,7 +101,7 @@ private:
 }
 
 SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
-                                      SvXMLImport& rImport, const OUString& rLocalName,
+                                      SvXMLImport& rImport,
                                       Reference< chart::XDiagram > const & xDiagram,
                                       std::vector< SchXMLAxis >& rAxes,
                                       OUString & rCategoriesAddress,
@@ -109,7 +109,7 @@ SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                                       bool bAdaptWrongPercentScaleValues,
                                       bool bAdaptXAxisOrientationForOld2DBarCharts,
                                       bool& rbAxisPositionAttributeImported ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
+        SvXMLImportContext( rImport ),
         m_rImportHelper( rImpHelper ),
         m_xDiagram( xDiagram ),
         m_rAxes( rAxes ),

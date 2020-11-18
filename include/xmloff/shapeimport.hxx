@@ -142,9 +142,7 @@ class SdXML3DLightContext final : public SvXMLImportContext
 public:
     SdXML3DLightContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
     virtual ~SdXML3DLightContext() override;
 
     sal_Int32 GetDiffuseColor() const { return maDiffuseColor; }
@@ -185,7 +183,7 @@ public:
     SdXML3DSceneAttributesHelper( SvXMLImport& rImporter );
 
     /** creates a 3d light context and adds it to the internal list for later processing */
-    SvXMLImportContext * create3DLightContext( sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
+    SvXMLImportContext * create3DLightContext( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
 
     /** this should be called for each scene attribute */
     void processSceneAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );

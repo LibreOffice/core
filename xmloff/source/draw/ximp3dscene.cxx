@@ -39,33 +39,25 @@ using namespace ::xmloff::token;
 
 SdXML3DLightContext::SdXML3DLightContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList)
-:   SvXMLImportContext( rImport, nPrfx, rLName),
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+:   SvXMLImportContext( rImport ),
     maDiffuseColor(0x00000000),
     maDirection(0.0, 0.0, 1.0),
     mbEnabled(false),
     mbSpecular(false)
 {
     // read attributes for the 3DScene
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->Get3DLightAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            case XML_TOK_3DLIGHT_DIFFUSE_COLOR:
+            case XML_ELEMENT(DR3D, XML_DIFFUSE_COLOR):
             {
                 ::sax::Converter::convertColor(maDiffuseColor, sValue);
                 break;
             }
-            case XML_TOK_3DLIGHT_DIRECTION:
+            case XML_ELEMENT(DR3D, XML_DIRECTION):
             {
                 ::basegfx::B3DVector aVal;
                 SvXMLUnitConverter::convertB3DVector(aVal, sValue);
@@ -79,16 +71,18 @@ SdXML3DLightContext::SdXML3DLightContext(
                 }
                 break;
             }
-            case XML_TOK_3DLIGHT_ENABLED:
+            case XML_ELEMENT(DR3D, XML_ENABLED):
             {
                 (void)::sax::Converter::convertBool(mbEnabled, sValue);
                 break;
             }
-            case XML_TOK_3DLIGHT_SPECULAR:
+            case XML_ELEMENT(DR3D, XML_SPECULAR):
             {
                 (void)::sax::Converter::convertBool(mbSpecular, sValue);
                 break;
             }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
@@ -169,6 +163,30 @@ void SdXML3DSceneShapeContext::endFastElement(sal_Int32 nElement)
     SdXMLShapeContext::endFastElement(nElement);
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXML3DSceneShapeContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    SvXMLImportContextRef xContext;
+    switch (nElement)
+    {
+        // #i68101#
+        case XML_ELEMENT(SVG, XML_TITLE):
+        case XML_ELEMENT(SVG_COMPAT, XML_TITLE):
+        case XML_ELEMENT(SVG, XML_DESC):
+        case XML_ELEMENT(SVG_COMPAT, XML_DESC):
+            break;
+        case XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS):
+            break;
+        // look for local light context first
+        case XML_ELEMENT(DR3D, XML_LIGHT):
+            // dr3d:light inside dr3d:scene context
+            xContext = create3DLightContext( xAttrList );
+            break;
+    }
+    return xContext.get();
+}
+
 SvXMLImportContextRef SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
@@ -184,12 +202,6 @@ SvXMLImportContextRef SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 n
     else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         xContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
-    }
-    // look for local light context first
-    else if(nPrefix == XML_NAMESPACE_DR3D && IsXMLToken( rLocalName, XML_LIGHT ) )
-    {
-        // dr3d:light inside dr3d:scene context
-        xContext = create3DLightContext( nPrefix, rLocalName, xAttrList );
     }
 
     // call GroupChildContext function at common ShapeImport
@@ -222,9 +234,9 @@ SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImport
 }
 
 /** creates a 3d light context and adds it to the internal list for later processing */
-SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList)
+SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
-    const rtl::Reference<SdXML3DLightContext> xContext{new SdXML3DLightContext(mrImport, nPrfx, rLName, xAttrList)};
+    const rtl::Reference<SdXML3DLightContext> xContext{new SdXML3DLightContext(mrImport, xAttrList)};
 
     // remember SdXML3DLightContext for later evaluation
     maList.push_back(xContext);

@@ -262,7 +262,7 @@ XMLPropStyleContext* lcl_GetStylePropContext(
 
 SchXMLSeries2Context::SchXMLSeries2Context(
     SchXMLImportHelper& rImpHelper,
-    SvXMLImport& rImport, const OUString& rLocalName,
+    SvXMLImport& rImport,
     const Reference< chart2::XChartDocument > & xNewDoc,
     std::vector< SchXMLAxis >& rAxes,
     ::std::vector< DataRowPointStyle >& rStyleVector,
@@ -274,7 +274,7 @@ SchXMLSeries2Context::SchXMLSeries2Context(
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
     bool& rGlobalChartTypeUsedBySeries,
     const awt::Size & rChartSize ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mxNewDoc( xNewDoc ),
         mrAxes( rAxes ),
