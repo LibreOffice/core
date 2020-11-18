@@ -1229,7 +1229,8 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
 #endif
         }
         assert(!bIsEmpty || !isPageFrameEmpty);
-        if (bIsEmpty || isPageFrameEmpty)
+        const bool bWantRemovePage = bIsEmpty || isPageFrameEmpty;
+        if (bWantRemovePage && !pPage->IsDeleteForbidden())
         {
             // It also might be that an empty page is not needed at all.
             // However, the algorithm above cannot determine that. It is not needed if the following
