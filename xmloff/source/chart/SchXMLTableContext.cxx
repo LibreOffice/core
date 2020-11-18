@@ -214,37 +214,37 @@ SchXMLTableContext::~SchXMLTableContext()
 {
 }
 
-SvXMLImportContextRef SchXMLTableContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
-    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetTableElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ))
+    switch(nElement)
     {
-        case XML_TOK_TABLE_HEADER_COLS:
+        case XML_ELEMENT(TABLE, XML_TABLE_HEADER_COLUMNS):
             mrTable.bHasHeaderColumn = true;
             [[fallthrough]];
-        case XML_TOK_TABLE_COLUMNS:
-            pContext = new SchXMLTableColumnsContext( GetImport(), rLocalName, mrTable );
+        case XML_ELEMENT(TABLE, XML_TABLE_COLUMNS):
+            pContext = new SchXMLTableColumnsContext( GetImport(), mrTable );
             break;
 
-        case XML_TOK_TABLE_COLUMN:
-            pContext = new SchXMLTableColumnContext( GetImport(), rLocalName, mrTable );
+        case XML_ELEMENT(TABLE, XML_TABLE_COLUMN):
+            pContext = new SchXMLTableColumnContext( GetImport(), mrTable );
             break;
 
-        case XML_TOK_TABLE_HEADER_ROWS:
+        case XML_ELEMENT(TABLE, XML_TABLE_HEADER_ROWS):
             mrTable.bHasHeaderRow = true;
             [[fallthrough]];
-        case XML_TOK_TABLE_ROWS:
-            pContext = new SchXMLTableRowsContext( mrImportHelper, GetImport(), rLocalName, mrTable );
+        case XML_ELEMENT(TABLE, XML_TABLE_ROWS):
+            pContext = new SchXMLTableRowsContext( mrImportHelper, GetImport(), mrTable );
             break;
 
-        case XML_TOK_TABLE_ROW:
-            pContext = new SchXMLTableRowContext( mrImportHelper, GetImport(), rLocalName, mrTable );
+        case XML_ELEMENT(TABLE, XML_TABLE_ROW):
+            pContext = new SchXMLTableRowContext( mrImportHelper, GetImport(), mrTable );
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
     return pContext;
@@ -386,9 +386,8 @@ void SchXMLTableContext::setColumnPermutation( const uno::Sequence< sal_Int32 > 
 // class SchXMLTableColumnsContext
 SchXMLTableColumnsContext::SchXMLTableColumnsContext(
     SvXMLImport& rImport,
-    const OUString& rLocalName,
     SchXMLTable& aTable ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrTable( aTable )
 {
 }
@@ -397,18 +396,16 @@ SchXMLTableColumnsContext::~SchXMLTableColumnsContext()
 {
 }
 
-SvXMLImportContextRef SchXMLTableColumnsContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableColumnsContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
 
-    if( nPrefix == XML_NAMESPACE_TABLE &&
-        IsXMLToken( rLocalName, XML_TABLE_COLUMN ) )
-    {
-        pContext = new SchXMLTableColumnContext( GetImport(), rLocalName, mrTable );
-    }
+    if( nElement == XML_ELEMENT(TABLE, XML_TABLE_COLUMN) )
+        pContext = new SchXMLTableColumnContext( GetImport(), mrTable );
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     return pContext;
 }
@@ -416,9 +413,8 @@ SvXMLImportContextRef SchXMLTableColumnsContext::CreateChildContext(
 // class SchXMLTableColumnContext
 SchXMLTableColumnContext::SchXMLTableColumnContext(
     SvXMLImport& rImport,
-    const OUString& rLocalName,
     SchXMLTable& aTable ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrTable( aTable )
 {
 }
@@ -477,9 +473,8 @@ SchXMLTableColumnContext::~SchXMLTableColumnContext()
 SchXMLTableRowsContext::SchXMLTableRowsContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
-    const OUString& rLocalName,
     SchXMLTable& aTable ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mrTable( aTable )
 {
@@ -489,18 +484,16 @@ SchXMLTableRowsContext::~SchXMLTableRowsContext()
 {
 }
 
-SvXMLImportContextRef SchXMLTableRowsContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableRowsContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
 
-    if( nPrefix == XML_NAMESPACE_TABLE &&
-        IsXMLToken( rLocalName, XML_TABLE_ROW ) )
-    {
-        pContext = new SchXMLTableRowContext( mrImportHelper, GetImport(), rLocalName, mrTable );
-    }
+    if( nElement == XML_ELEMENT(TABLE, XML_TABLE_ROW) )
+        pContext = new SchXMLTableRowContext( mrImportHelper, GetImport(), mrTable );
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     return pContext;
 }
@@ -509,9 +502,8 @@ SvXMLImportContextRef SchXMLTableRowsContext::CreateChildContext(
 SchXMLTableRowContext::SchXMLTableRowContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
-    const OUString& rLocalName,
     SchXMLTable& aTable ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mrTable( aTable )
 {
@@ -528,21 +520,20 @@ SchXMLTableRowContext::~SchXMLTableRowContext()
 {
 }
 
-SvXMLImportContextRef SchXMLTableRowContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableRowContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
 
     // <table:table-cell> element
-    if( nPrefix == XML_NAMESPACE_TABLE &&
-        IsXMLToken(rLocalName, XML_TABLE_CELL ) )
+    if( nElement == XML_ELEMENT(TABLE, XML_TABLE_CELL) )
     {
-        pContext = new SchXMLTableCellContext( mrImportHelper, GetImport(), rLocalName, mrTable );
+        pContext = new SchXMLTableCellContext( mrImportHelper, GetImport(), mrTable );
     }
     else
     {
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
         assert(false);
     }
 
@@ -564,14 +555,11 @@ private:
 
 public:
     SchXMLRangeSomewhereContext( SvXMLImport& rImport,
-                            sal_uInt16 nPrefix,
-                            const OUString& rLocalName,
                             OUString& rRangeString );
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
@@ -581,8 +569,8 @@ public:
 // class SchXMLTableCellContext
 SchXMLTableCellContext::SchXMLTableCellContext(
     SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
-    const OUString& rLocalName, SchXMLTable& aTable)
-    : SvXMLImportContext(rImport, XML_NAMESPACE_TABLE, rLocalName)
+    SchXMLTable& aTable)
+    : SvXMLImportContext(rImport)
     , mrImportHelper(rImpHelper)
     , mrTable(aTable)
     , mbReadText(false)
@@ -644,35 +632,36 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
         mrTable.nMaxColumnIndex = mrTable.nColumnIndex;
 }
 
-SvXMLImportContextRef SchXMLTableCellContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableCellContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
 
     // <text:list> element
-    if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_LIST ) && mbReadText )
+    if( nElement == XML_ELEMENT(TEXT, XML_LIST ) && mbReadText )
     {
         SchXMLCell& rCell = mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ];
         rCell.aComplexString = Sequence< OUString >();
         rCell.eType = SCH_CELL_TYPE_COMPLEX_STRING;
-        pContext = new SchXMLTextListContext( GetImport(), rLocalName, rCell.aComplexString );
+        pContext = new SchXMLTextListContext( GetImport(), rCell.aComplexString );
         mbReadText = false;//don't apply text from <text:p>
     }
     // <text:p> element - read text (and range from text:id old version)
-    else if( (nPrefix == XML_NAMESPACE_TEXT ||
-                nPrefix == XML_NAMESPACE_LO_EXT) && IsXMLToken( rLocalName, XML_P ) )
+    else if( nElement == XML_ELEMENT(TEXT, XML_P) ||
+            nElement == XML_ELEMENT(LO_EXT, XML_P) )
     {
         pContext = new SchXMLParagraphContext( GetImport(), maCellContent, &maRangeId );
     }
     // <draw:g> element - read range
-    else if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_G ) )
+    else if( nElement == XML_ELEMENT(DRAW, XML_G) )
     {
         //#i113950# previously the range was exported to attribute text:id, but that attribute does not allow arbitrary strings anymore
         //so we need to find an alternative to save that range info for copy/paste scenario ... -> use description at an empty group element for now
-        pContext = new SchXMLRangeSomewhereContext( GetImport(), nPrefix, rLocalName, maRangeId );
+        pContext = new SchXMLRangeSomewhereContext( GetImport(), maRangeId );
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     return pContext;
 }
@@ -1044,24 +1033,22 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
 }
 
 SchXMLRangeSomewhereContext::SchXMLRangeSomewhereContext( SvXMLImport& rImport,
-                                                sal_uInt16 nPrefix,
-                                                const OUString& rLocalName,
                                                 OUString& rRangeString ) :
-        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrRangeString( rRangeString )
 {
 }
 
-SvXMLImportContextRef SchXMLRangeSomewhereContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLRangeSomewhereContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    if( XML_NAMESPACE_SVG == nPrefix && IsXMLToken( rLocalName, XML_DESC ) )
+    if( nElement == XML_ELEMENT(SVG, XML_DESC) )
     {
-        return new XMLStringBufferImportContext(
-            GetImport(), nPrefix, rLocalName, maRangeStringBuffer );
+        return new XMLStringBufferImportContext( GetImport(), maRangeStringBuffer );
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 

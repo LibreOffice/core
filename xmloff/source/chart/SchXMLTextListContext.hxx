@@ -31,7 +31,6 @@ class SchXMLTextListContext : public SvXMLImportContext
 {
 public:
     SchXMLTextListContext( SvXMLImport& rImport,
-                            const OUString& rLocalName,
                             css::uno::Sequence< OUString>& rTextList );
     virtual ~SchXMLTextListContext() override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
