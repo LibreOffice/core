@@ -722,13 +722,13 @@ SvXMLImportContextRef SchXMLSeries2Context::CreateChildContext(
             break;
 
         case XML_TOK_SERIES_DATA_POINT:
-            pContext = new SchXMLDataPointContext( mrImportHelper, GetImport(), rLocalName,
+            pContext = new SchXMLDataPointContext( GetImport(),
                                                    mrStyleVector, m_xSeries, mnDataPointIndex, mbSymbolSizeIsMissingInFile );
             break;
         case XML_TOK_SERIES_DATA_LABEL:
             // CustomLabels are useless for a data label element as child of a series, because it serves as default
             // for all data labels. But the ctor expects it, so use that of the mDataLabel struct as ersatz.
-            pContext = new SchXMLDataLabelContext(GetImport(), rLocalName, mDataLabel.mCustomLabels,
+            pContext = new SchXMLDataLabelContext(GetImport(), mDataLabel.mCustomLabels,
                                                   mDataLabel);
             break;
 

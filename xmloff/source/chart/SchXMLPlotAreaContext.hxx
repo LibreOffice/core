@@ -144,7 +144,7 @@ private:
     ::std::vector<OUString>& mrLabels;
     OUStringBuffer maCharBuffer;
 public:
-    SchXMLDataLabelSpanContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels);
+    SchXMLDataLabelSpanContext( SvXMLImport& rImport, ::std::vector<OUString>& rLabels);
     virtual void SAL_CALL characters( const OUString& rChars ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
@@ -154,11 +154,10 @@ class SchXMLDataLabelParaContext: public SvXMLImportContext
 private:
     ::std::vector<OUString>& mrLabels;
 public:
-    SchXMLDataLabelParaContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels);
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    SchXMLDataLabelParaContext( SvXMLImport& rImport, ::std::vector<OUString>& rLabels);
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 class SchXMLDataLabelContext: public SvXMLImportContext
@@ -167,20 +166,19 @@ private:
     ::std::vector<OUString>& mrLabels;
     DataRowPointStyle& mrDataLabelStyle;
 public:
-    SchXMLDataLabelContext(SvXMLImport& rImport, const OUString& rLocalName,
+    SchXMLDataLabelContext(SvXMLImport& rImport,
                             ::std::vector<OUString>& rLabels, DataRowPointStyle& rDataLabel);
 
     virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 class SchXMLDataPointContext : public SvXMLImportContext
 {
 private:
-    SchXMLImportHelper& mrImportHelper;
     ::std::vector<DataRowPointStyle>& mrStyleVector;
     bool mbHasLabelParagraph = false;
     sal_Int32& mrIndex;
@@ -189,8 +187,7 @@ private:
     DataRowPointStyle mDataLabel;
 
 public:
-    SchXMLDataPointContext(  SchXMLImportHelper& rImportHelper,
-                             SvXMLImport& rImport, const OUString& rLocalName,
+    SchXMLDataPointContext(  SvXMLImport& rImport,
                              ::std::vector< DataRowPointStyle >& rStyleVector,
                              const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
                              sal_Int32& rIndex,
@@ -199,10 +196,9 @@ public:
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
