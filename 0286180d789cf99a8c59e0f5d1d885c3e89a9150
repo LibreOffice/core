@@ -22,6 +22,30 @@
       "revId": "0286180d789cf99a8c59e0f5d1d885c3e89a9150",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ede5956_d9f14e5c",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 38
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2020-11-18T05:14:54Z",
+      "side": 1,
+      "message": "I wanted to maintain a uniformity in accessing the number of of rows and columns.\nIt might be helpful for other developers as well.\nBut if you suggest, I will change it back to to_value().\nLet me know your thoughts on it.",
+      "parentUuid": "4d82fd76_01e4f20e",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "0286180d789cf99a8c59e0f5d1d885c3e89a9150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
