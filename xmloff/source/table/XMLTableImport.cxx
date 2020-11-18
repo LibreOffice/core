@@ -104,7 +104,7 @@ public:
 
     void InitColumns();
 
-    SvXMLImportContextRef ImportColumn( sal_uInt16 nPrefix, std::u16string_view rLocalName, const Reference< XAttributeList >& xAttrList );
+    SvXMLImportContextRef ImportColumn( const Reference< XAttributeList >& xAttrList );
     SvXMLImportContext * ImportRow( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
     SvXMLImportContextRef ImportCell( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
 
@@ -368,7 +368,7 @@ XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImpo
 {
 }
 
-SvXMLImportContextRef XMLTableImportContext::ImportColumn( sal_uInt16 /*nPrefix*/, std::u16string_view /*rLocalName*/, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContextRef XMLTableImportContext::ImportColumn( const Reference< XAttributeList >& xAttrList )
 {
     if( mxColumns.is() && (mnCurrentRow == -1) ) try
     {
@@ -571,7 +571,7 @@ SvXMLImportContextRef XMLTableImportContext::CreateChildContext( sal_uInt16 nPre
     if( nPrefix == XML_NAMESPACE_TABLE )
     {
         if( IsXMLToken( rLocalName, XML_TABLE_COLUMN ) )
-            return ImportColumn( nPrefix, rLocalName, xAttrList );
+            return ImportColumn( xAttrList );
         else if( IsXMLToken( rLocalName, XML_TABLE_ROW ) )
             return ImportRow( nPrefix, rLocalName, xAttrList );
         else if( IsXMLToken( rLocalName, XML_TABLE_CELL ) || IsXMLToken( rLocalName, XML_COVERED_TABLE_CELL ) )
