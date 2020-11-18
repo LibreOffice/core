@@ -149,7 +149,7 @@ public:
     bool            PasteBitmapEx( const Point&, const BitmapEx& );
     bool            PasteMetaFile( const Point&, const GDIMetaFile& );
     bool            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
-                                    const OUString& rFile, std::u16string_view rFilter );
+                                    const OUString& rFile );
     bool            PasteBookmark( SotClipboardFormatId nFormatId,
                                 const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY );

@@ -365,17 +365,17 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
 bool ScViewFunc::PasteBitmapEx( const Point& rPos, const BitmapEx& rBmpEx )
 {
     Graphic aGraphic(rBmpEx);
-    return PasteGraphic( rPos, aGraphic, "", u"" );
+    return PasteGraphic( rPos, aGraphic, "" );
 }
 
 bool ScViewFunc::PasteMetaFile( const Point& rPos, const GDIMetaFile& rMtf )
 {
     Graphic aGraphic(rMtf);
-    return PasteGraphic( rPos, aGraphic, "", u"" );
+    return PasteGraphic( rPos, aGraphic, "" );
 }
 
 bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
-                                const OUString& rFile, std::u16string_view rFilter )
+                                const OUString& rFile )
 {
     MakeDrawLayer();
     ScDrawView* pScDrawView = GetScDrawView();
@@ -397,8 +397,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
                 *pPickObj,
                 rGraphic,
                 aBeginUndo,
-                rFile,
-                rFilter);
+                rFile);
 
             if (pResult)
             {
@@ -448,7 +447,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
     // See #i37444#.
     if (bSuccess && !rFile.isEmpty())
-        pGrafObj->SetGraphicLink( rFile, u""/*TODO?*/, rFilter );
+        pGrafObj->SetGraphicLink( rFile );
 
     return bSuccess;
 }

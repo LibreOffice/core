@@ -427,7 +427,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
                 SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, maDropPos, nullptr, nullptr );
                 if(pGrafObj && bLink)
                 {
-                    pGrafObj->SetGraphicLink( aCurrentDropFile, u""/*TODO?*/, OUString() );
+                    pGrafObj->SetGraphicLink( aCurrentDropFile );
                 }
 
                 // return action from first inserted graphic
