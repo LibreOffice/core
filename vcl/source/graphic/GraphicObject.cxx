@@ -602,14 +602,9 @@ const Graphic& GraphicObject::GetGraphic() const
     return maGraphic;
 }
 
-void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* /*pCopyObj*/)
+void GraphicObject::SetGraphic( const Graphic& rGraphic)
 {
     maGraphic = rGraphic;
-}
-
-void GraphicObject::SetGraphic( const Graphic& rGraphic, std::u16string_view /*rLink*/ )
-{
-    SetGraphic( rGraphic );
 }
 
 Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const

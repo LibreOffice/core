@@ -106,7 +106,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     mbIsStreamReadOnly( false )
 {
     Graphic aGrf; aGrf.SetDefaultType();
-    maGrfObj.SetGraphic( aGrf, rGrfName );
+    maGrfObj.SetGraphic( aGrf );
 
     mbInSwapIn = mbChangeTwipSize =
         mbFrameInPaint = mbScaleImageMap = false;
@@ -190,7 +190,7 @@ bool SwGrfNode::ReRead(
 
         if( pGraphic )
         {
-            maGrfObj.SetGraphic( *pGraphic, sURLLink );
+            maGrfObj.SetGraphic( *pGraphic );
             onGraphicChanged();
             bReadGrf = true;
         }
@@ -199,7 +199,7 @@ bool SwGrfNode::ReRead(
             // reset data of the old graphic so that the correct placeholder is
             // shown in case the new link could not be loaded
             Graphic aGrf; aGrf.SetDefaultType();
-            maGrfObj.SetGraphic( aGrf, sURLLink );
+            maGrfObj.SetGraphic( aGrf );
 
             if( mxLink.is() )
             {
@@ -235,7 +235,7 @@ bool SwGrfNode::ReRead(
         {
             if( pGraphic )
             {
-                maGrfObj.SetGraphic( *pGraphic, sURLLink );
+                maGrfObj.SetGraphic( *pGraphic );
                 onGraphicChanged();
                 bReadGrf = true;
                 // create connection without update, as we have the graphic
@@ -245,7 +245,7 @@ bool SwGrfNode::ReRead(
             {
                 Graphic aGrf;
                 aGrf.SetDefaultType();
-                maGrfObj.SetGraphic( aGrf, sURLLink );
+                maGrfObj.SetGraphic( aGrf );
                 onGraphicChanged();
                 if ( bNewGrf )
                 {
@@ -356,7 +356,7 @@ void SwGrfNode::onGraphicChanged()
 
 void SwGrfNode::SetGraphic(const Graphic& rGraphic)
 {
-    maGrfObj.SetGraphic(rGraphic, OUString());
+    maGrfObj.SetGraphic(rGraphic);
     onGraphicChanged();
 }
 
