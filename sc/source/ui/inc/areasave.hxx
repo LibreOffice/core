@@ -23,6 +23,7 @@
 #include <address.hxx>
 #include <tools/solar.h>
 
+#include <memory>
 #include <vector>
 
 class ScDocument;

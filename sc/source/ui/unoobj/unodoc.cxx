@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustring.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <appluno.hxx>
 #include <scdll.hxx>
 #include <vcl/svapp.hxx>
 

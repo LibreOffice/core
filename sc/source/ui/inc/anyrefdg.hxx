@@ -23,9 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <address.hxx>
 #include <formula/funcutl.hxx>
-#include <vcl/accel.hxx>
 #include "IAnyRefDialog.hxx"
-#include <scmod.hxx>
 
 #include <memory>
 

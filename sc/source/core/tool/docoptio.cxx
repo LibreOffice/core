@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 #include <osl/diagnose.h>
 
@@ -25,8 +24,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <docoptio.hxx>
-#include <rechead.hxx>
-#include <sc.hrc>
 #include <miscuno.hxx>
 #include <global.hxx>
 

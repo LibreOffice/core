@@ -21,15 +21,11 @@
 #include <editeng/eeitem.hxx>
 
 #include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <vcl/cursor.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 
 #include <tphfedit.hxx>
 #include <editutil.hxx>

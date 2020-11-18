@@ -26,9 +26,6 @@
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/app.hxx>
 #include <avmedia/mediatoolbox.hxx>
-#include <svx/ParaLineSpacingPopup.hxx>
-#include <svx/TextCharacterSpacingPopup.hxx>
-#include <svx/TextUnderlinePopup.hxx>
 #include <NumberFormatControl.hxx>
 
 #include <unotools/resmgr.hxx>
@@ -62,7 +59,7 @@
 #include <svx/tbxctl.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/linectrl.hxx>
-#include <svx/tbcontrl.hxx>
+//#include <svx/tbcontrl.hxx>
 #include <svx/selctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/zoomctrl.hxx>
@@ -70,13 +67,9 @@
 #include <svx/pszctrl.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/clipboardctl.hxx>
-#include <svx/lboxctrl.hxx>
-#include <svx/verttexttbxctrl.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
 #include <tbzoomsliderctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
-#include <sfx2/emojipopup.hxx>
-#include <sfx2/charmappopup.hxx>
 
 #include <svx/xmlsecctrl.hxx>
 // Child windows

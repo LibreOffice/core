@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TABVWSH_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TABVWSH_HXX
 
-#include <com/sun/star/drawing/QRCode.hpp>
 #include <formula/errorcodes.hxx>
 #include <formula/opcode.hxx>
 #include <svx/fmshell.hxx>
@@ -32,7 +31,7 @@
 #include "target.hxx"
 #include <shellids.hxx>
 #include <tabprotection.hxx>
-#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
+#include <com/sun/star/ui/dialogs/DialogClosedEvent.hpp>
 
 #include <memory>
 #include <map>

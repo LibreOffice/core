@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 #include <formdata.hxx>
 
 #include <sfx2/app.hxx>
@@ -56,7 +54,6 @@
 #include <inputwin.hxx>
 #include <dbdata.hxx>
 #include <reffact.hxx>
-#include <fuinsert.hxx>
 #include <viewuno.hxx>
 #include <dispuno.hxx>
 #include <chgtrack.hxx>

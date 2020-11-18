@@ -18,7 +18,6 @@
  */
 
 #include <doubleref.hxx>
-#include <formulacell.hxx>
 #include <global.hxx>
 #include <document.hxx>
 #include <queryparam.hxx>

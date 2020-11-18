@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_OPTSOLVER_HXX
 
 #include <address.hxx>
+#include <docsh.hxx>
 #include "anyrefdg.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 

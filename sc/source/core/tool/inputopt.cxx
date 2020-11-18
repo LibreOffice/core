@@ -22,9 +22,7 @@
 #include <osl/diagnose.h>
 
 #include <inputopt.hxx>
-#include <rechead.hxx>
 #include <global.hxx>
-#include <sc.hrc>
 #include <miscuno.hxx>
 
 using namespace utl;

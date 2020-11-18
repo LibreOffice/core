@@ -1,6 +1,15 @@
 ---
 assumeFilename: sc/source/core/data/document.cxx
 excludelist:
+    sc/sdi/scslots.hrc:
+    # Needed for sdi files to compile
+    - sfx2/sfxsids.hrc
+    - svx/svxids.hrc
+    - svx/unomid.hxx
+    - editeng/editids.hrc
+    - editeng/memberids.h
+    - sc.hrc
+    - mid.h
     sc/inc/addruno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
@@ -64,8 +73,6 @@ excludelist:
     sc/inc/conditio.hxx:
     # base class has to be a complete type
     - tools/link.hxx
-    # Used as type for a boost::optional variable
-    - tools/color.hxx
     sc/inc/dapiuno.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XEnumerationAccess.hpp
@@ -351,10 +358,24 @@ excludelist:
     sc/qa/unit/functions_test.hxx:
     # Needed for css shortcut
     - sal/types.h
+    sc/qa/unit/screenshots/screenshots.cxx:
+    # Needed for template
+    - sfx2/sfxdlg.hxx
+    sc/qa/unit/subsequent_filters-test.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    sc/qa/unit/subsequent_export-test.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    # Needed for namespace shortcuts
+    - helper/debughelper.hxx
     sc/source/core/inc/addinlis.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/XResultListener.hpp
+    sc/source/core/inc/arraysumfunctor.hxx:
+    # Needed for uintptr_t
+    - cstdint
     sc/source/core/opencl/formulagroupcl.cxx:
     # Needed for implicit dtor in inverseMatrix()
     - scmatrix.hxx
@@ -555,8 +576,6 @@ excludelist:
     sc/source/ui/vba/vbafiledialog.hxx:
     # base class has to be a complete type
     - ooo/vba/excel/XFileDialog.hpp
-    # FIXME IWYU segfaults after removing this
-    - vbahelper/vbacollectionimpl.hxx
     sc/source/ui/vba/vbafiledialogitems.hxx:
     # base class has to be a complete type
     - ooo/vba/excel/XFileDialogSelectedItems.hpp
@@ -667,9 +686,18 @@ excludelist:
     sc/source/core/data/documentimport.cxx:
     # Needed for member access in assert()
     - stringutil.hxx
+    sc/source/core/data/dpresfilter.cxx:
+    # Actually used
+    - com/sun/star/uno/Sequence.hxx
+    sc/source/core/data/dpoutputgeometry.cxx:
+    # Actually used
+    - vector
     sc/source/core/data/dptabres.cxx:
     # Used in #if DUMP_PIVOT_TABLE
     - document.hxx
+    sc/source/core/data/dptabsrc.cxx:
+    # Actually used
+    - com/sun/star/sheet/DataPilotFieldFilter.hpp
     sc/source/core/data/formulacell.cxx:
     # Used in #if DBG_UTIL
     - com/sun/star/sheet/FormulaLanguage.hpp
@@ -682,6 +710,27 @@ excludelist:
     sc/source/core/data/types.cxx:
     # Complete type is needed for complex data type
     - scmatrix.hxx
+    sc/source/core/data/tabprotection.cxx:
+    # Actually used
+    - vector
+    sc/source/core/tool/addincol.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sc/source/core/tool/autoform.cxx:
+    # Don't propose hxx -> h in URE headers
+    - osl/thread.hxx
+    sc/source/core/tool/cellkeytranslator.cxx:
+    # Needed for localized keywords
+    - cellkeywords.inl
+    sc/source/core/tool/formularesult.cxx:
+    # Complete type needed for boost::intrusive_ptr
+    - scmatrix.hxx
+    sc/source/core/tool/formulaparserpool.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sc/source/core/tool/interpr4.cxx:
+    # Needed for template
+    - com/sun/star/script/XInvocation.hpp
     sc/source/filter/xml/XMLCodeNameProvider.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNameAccess.hpp
@@ -691,13 +740,24 @@ excludelist:
     sc/source/filter/ftools/sharedformulagroups.cxx:
     # Needed for implicit dtor
     - tokenarray.hxx
+    sc/source/filter/excel/excdoc.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sc/source/filter/excel/excimp8.cxx:
     # base class has to be a complete type
     - com/sun/star/container/XIndexContainer.hpp
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sc/source/filter/excel/expop2.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sc/source/filter/excel/xechart.cxx:
     # Complex type needs complete type
     - com/sun/star/chart2/RelativePosition.hpp
     - com/sun/star/chart2/RelativeSize.hpp
+    sc/source/filter/excel/xecontent.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sc/source/filter/excel/xeescher.cxx:
     # base class has to be a complete type
     - com/sun/star/chart/XChartDocument.hpp
@@ -714,6 +774,17 @@ excludelist:
     sc/source/filter/excel/xistyle.cxx:
     # Needed for direct member access
     - xladdress.hxx
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sc/source/filter/excel/xlpage.cxx:
+    # Needed for template
+    - editeng/brushitem.hxx
+    sc/source/filter/excel/xlstyle.cxx:
+    # Needed for template
+    - com/sun/star/awt/FontSlant.hpp
+    sc/source/filter/ftools/fapihelper.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sc/source/filter/lotus/filter.cxx:
     # Needed to avoid loplugin:unreffun error
     - filter.hxx
@@ -723,15 +794,62 @@ excludelist:
     sc/source/filter/lotus/op.cxx:
     # Needed to avoid loplugin:unreffun error
     - op.h
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    sc/source/filter/html/htmlpars.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sc/source/filter/html/htmlexp.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sc/source/filter/oox/defnamesbuffer.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheet.hpp
+    sc/source/filter/oox/externallinkbuffer.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheetDocument.hpp
+    sc/source/filter/oox/numberformatsbuffer.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheetDocument.hpp
     sc/source/filter/oox/ooxformulaparser.cxx:
     # Needed for direct member access
     - com/sun/star/lang/XComponent.hpp
+    sc/source/filter/oox/pagesettings.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheet.hpp
+    sc/source/filter/oox/querytablebuffer.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheetDocument.hpp
     sc/source/filter/oox/richstring.cxx:
     # Complete type needed for unique_ptr
     - editeng/editobj.hxx
+    sc/source/filter/oox/sheetdatabuffer.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheetDocument.hpp
+    - com/sun/star/table/XCell.hpp
+    - com/sun/star/table/XCellRange.hpp
+    sc/source/filter/oox/stylesbuffer.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheetDocument.hpp
+    sc/source/filter/oox/tablebuffer.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheetDocument.hpp
+    sc/source/filter/oox/unitconverter.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheetDocument.hpp
+    sc/source/filter/oox/viewsettings.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheetDocument.hpp
+    - com/sun/star/sheet/XSpreadsheet.hpp
+    sc/source/filter/oox/workbooksettings.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheetDocument.hpp
     sc/source/filter/oox/worksheethelper.cxx:
     # Needed for implicit dtor
     - editeng/editobj.hxx
+    sc/source/filter/oox/worksheetsettings.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheet.hpp
     sc/source/filter/orcus/orcusfiltersimpl.cxx:
     # Needed for implicit dtor
     - tokenarray.hxx
@@ -740,14 +858,50 @@ excludelist:
     sc/source/filter/orcus/xmlcontext.cxx:
     # Needed for implicit dtor
     - tokenarray.hxx
+    sc/source/filter/xcl97/xcl97rec.cxx:
+    # Needed for template
+    - com/sun/star/chart/XChartDocument.hpp
+    - sax/fastattribs.hxx
+    sc/source/filter/xml/XMLCalculationSettingsContext.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sc/source/filter/xml/XMLExportIterator.cxx:
     # Needed for direct member access
     - com/sun/star/table/XCellRange.hpp
+    - com/sun/star/sheet/XSpreadsheet.hpp
+    sc/source/filter/xml/XMLExportDatabaseRanges.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sc/source/filter/xml/XMLTableHeaderFooterContext.cxx:
+    # Needed for template
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/sheet/XHeaderFooterContent.hpp
+    # Needed for macro XMLOFF_WARN_UNKNOWN
+    - sal/log.hxx
+    sc/source/filter/xml/XMLTableMasterPageExport.cxx:
+     # Needed for template
+     - com/sun/star/text/XText.hpp
+     - com/sun/star/beans/XPropertySet.hpp
+    sc/source/filter/xml/XMLTableShapeResizer.cxx:
+    # Actually used
+    - vector
+    sc/source/filter/xml/XMLTableSourceContext.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSpreadsheet.hpp
+    sc/source/filter/xml/xmldpimp.cxx:
+    # Actually used
+    - com/sun/star/sheet/DataPilotFieldOrientation.hpp
+    sc/source/filter/xml/xmldrani.cxx:
+    # Actually used
+    - com/sun/star/sheet/DataImportMode.hpp
     sc/source/filter/xml/xmlimprt.cxx:
     # Needed to avoid loplugin:unreffun error
     - appluno.hxx
     sc/source/filter/xml/xmlsubti.cxx:
     # Needed for direct member access
+    - com/sun/star/sheet/XSpreadsheet.hpp
+    sc/source/filter/xml/xmltabi.cxx:
+    # Needed for template
     - com/sun/star/sheet/XSpreadsheet.hpp
     sc/source/ui/attrdlg/scdlgfact.cxx:
     # Complete type needed for unique_ptr & ScConditionalFormatList
@@ -768,6 +922,7 @@ excludelist:
     # Needed for MID* macros
     - mid.h
     - editeng/memberids.h
+    - svx/unomid.hxx
     # Needed by scslots.hxx
     - sfx2/msg.hxx
     - svl/slstitm.hxx
@@ -846,6 +1001,8 @@ excludelist:
     sc/source/ui/docshell/docsh.cxx:
     # Needed for method parameter
     - ooo/vba/excel/XWorkbook.hpp
+    # Needed for SID* macros in workdir/SdiTarget/sc/sdi/scslots.hxx
+    - sc.hrc
     sc/source/ui/docshell/docsh4.cxx:
     # Needed on WIN32
     - impex.hxx
@@ -864,6 +1021,12 @@ excludelist:
     # Complete type is needed
     - com/sun/star/sheet/XFormulaParser.hpp
     - com/sun/star/sheet/XFormulaOpCodeMapper.hpp
+    sc/source/ui/miscdlgs/solveroptions.cxx:
+    # Needed for template
+    - com/sun/star/sheet/XSolver.hpp
+    sc/source/ui/StatisticsDialogs/RandomNumberGeneratorDialog.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     sc/source/ui/StatisticsDialogs/TableFillingAndNavigationTools.cxx:
     # Needed for implicit dtor
     - editeng/editobj.hxx
@@ -879,12 +1042,48 @@ excludelist:
     sc/source/ui/unoobj/notesuno.cxx:
     # Needed for macro defines
     - editeng/unoprnms.hxx
+    sc/source/ui/unoobj/scdetect.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
     sc/source/ui/unoobj/textuno.cxx:
     # Needed for macro defines
     - editeng/unoprnms.hxx
     sc/source/ui/view/tabview.cxx:
     # Needed for direct member access
     - pagedata.hxx
+    sc/source/ui/vba/vbaformatconditions.cxx:
+    # Needed for template
+    - ooo/vba/excel/XRange.hpp
+    sc/source/ui/vba/vbahyperlink.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sc/source/ui/vba/vbaformat.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    sc/source/ui/vba/vbainterior.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    sc/source/ui/vba/vbanames.cxx:
+    # Actually used
+    - com/sun/star/sheet/XNamedRanges.hpp
+    sc/source/ui/vba/vbapagebreaks.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    sc/source/ui/vba/vbaworkbooks.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    sc/source/ui/vba/vbawsfunction.cxx:
+    # Actually used
+    - com/sun/star/beans/XIntrospectionAccess.hpp
+    sc/source/ui/vba/vbarange.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    sc/source/ui/vba/vbaworksheet.cxx:
+    # Actually used
+    - com/sun/star/beans/XIntrospectionAccess.hpp
     sc/source/ui/view/viewfun4.cxx:
     # Needed for direct member access
     - refundo.hxx
+    sc/source/ui/view/tabvwshc.cxx:
+    # Needed for ScFormulaDlg instantiation for some weird reason
+    - funcdesc.hxx
