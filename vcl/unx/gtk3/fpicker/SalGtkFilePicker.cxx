@@ -1880,7 +1880,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
     return filter;
 }
 
-void SalGtkFilePicker::implAddFilterGroup( std::u16string_view /*_rFilter*/, const Sequence< StringPair >& _rFilters )
+void SalGtkFilePicker::implAddFilterGroup( const Sequence< StringPair >& _rFilters )
 {
     // Gtk+ has no filter group concept I think so ...
     // implAddFilter( _rFilter, String() );
@@ -1936,7 +1936,7 @@ void SalGtkFilePicker::SetFilters()
                 css::uno::Sequence< css::beans::StringPair > aSubFilters;
                 filter.getSubFilters( aSubFilters );
 
-                implAddFilterGroup( filter.getTitle(), aSubFilters );
+                implAddFilterGroup( aSubFilters );
             }
             else
             {
