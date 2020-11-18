@@ -68,9 +68,8 @@ SvXMLImportContextRef SchXMLListItemContext::CreateChildContext(
 
 SchXMLTextListContext::SchXMLTextListContext(
         SvXMLImport& rImport
-        , const OUString& rLocalName
         , Sequence< OUString>& rTextList )
-        : SvXMLImportContext( rImport, XML_NAMESPACE_TEXT, rLocalName )
+        : SvXMLImportContext( rImport )
         , m_rTextList( rTextList )
         , m_aTextVector()
 {
