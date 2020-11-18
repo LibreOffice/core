@@ -242,6 +242,18 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 }
             }
         }
+        else if (sControlType == "dialog")
+        {
+            auto pDialog = dynamic_cast<weld::Dialog*>(pWidget);
+            if (pDialog)
+            {
+                if (sAction == "close")
+                {
+                    pDialog->response(RET_CANCEL);
+                    return true;
+                }
+            }
+        }
     }
 
     return false;
