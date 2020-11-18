@@ -40,8 +40,7 @@ private:
 
     Manager();
 
-    void registerGraphic(const std::shared_ptr<ImpGraphic>& rImpGraphic,
-                         std::u16string_view rsContext);
+    void registerGraphic(const std::shared_ptr<ImpGraphic>& rImpGraphic);
 
     DECL_LINK(SwapOutTimerHandler, Timer*, void);
 

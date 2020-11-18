@@ -124,8 +124,7 @@ IMPL_LINK(Manager, SwapOutTimerHandler, Timer*, pTimer, void)
     pTimer->Start();
 }
 
-void Manager::registerGraphic(const std::shared_ptr<ImpGraphic>& pImpGraphic,
-                              std::u16string_view /*rsContext*/)
+void Manager::registerGraphic(const std::shared_ptr<ImpGraphic>& pImpGraphic)
 {
     std::scoped_lock<std::recursive_mutex> aGuard(maMutex);
 
@@ -167,28 +166,28 @@ void Manager::unregisterGraphic(ImpGraphic* pImpGraphic)
 std::shared_ptr<ImpGraphic> Manager::copy(std::shared_ptr<ImpGraphic> const& rImpGraphicPtr)
 {
     auto pReturn = std::make_shared<ImpGraphic>(*rImpGraphicPtr);
-    registerGraphic(pReturn, u"Copy");
+    registerGraphic(pReturn);
     return pReturn;
 }
 
 std::shared_ptr<ImpGraphic> Manager::newInstance()
 {
     auto pReturn = std::make_shared<ImpGraphic>();
-    registerGraphic(pReturn, u"Empty");
+    registerGraphic(pReturn);
     return pReturn;
 }
 
 std::shared_ptr<ImpGraphic> Manager::newInstance(const BitmapEx& rBitmapEx)
 {
     auto pReturn = std::make_shared<ImpGraphic>(rBitmapEx);
-    registerGraphic(pReturn, u"BitmapEx");
+    registerGraphic(pReturn);
     return pReturn;
 }
 
 std::shared_ptr<ImpGraphic> Manager::newInstance(const Animation& rAnimation)
 {
     auto pReturn = std::make_shared<ImpGraphic>(rAnimation);
-    registerGraphic(pReturn, u"Animation");
+    registerGraphic(pReturn);
     return pReturn;
 }
 
@@ -196,21 +195,21 @@ std::shared_ptr<ImpGraphic>
 Manager::newInstance(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr)
 {
     auto pReturn = std::make_shared<ImpGraphic>(rVectorGraphicDataPtr);
-    registerGraphic(pReturn, u"VectorGraphic");
+    registerGraphic(pReturn);
     return pReturn;
 }
 
 std::shared_ptr<ImpGraphic> Manager::newInstance(const GDIMetaFile& rMetaFile)
 {
     auto pReturn = std::make_shared<ImpGraphic>(rMetaFile);
-    registerGraphic(pReturn, u"Metafile");
+    registerGraphic(pReturn);
     return pReturn;
 }
 
 std::shared_ptr<ImpGraphic> Manager::newInstance(const GraphicExternalLink& rGraphicLink)
 {
     auto pReturn = std::make_shared<ImpGraphic>(rGraphicLink);
-    registerGraphic(pReturn, u"GraphicExternalLink");
+    registerGraphic(pReturn);
     return pReturn;
 }
 
