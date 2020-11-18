@@ -213,7 +213,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         void implChangeType( GtkTreeSelection *selection );
         GtkFileFilter * implAddFilter( const OUString& rFilter, const OUString& rType );
-        void implAddFilterGroup( std::u16string_view rFilter,
+        void implAddFilterGroup(
                      const css::uno::Sequence< css::beans::StringPair>& _rFilters );
         void updateCurrentFilterFromName(const gchar* filtername);
         void unselect_type();
