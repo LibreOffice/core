@@ -39,6 +39,9 @@ namespace legacy::SwFormatVert
             {
                 // compatibility hack for Table Auto Format: SwTwips is "long" :(
                 // (this means that the file format is platform dependent)
+                // Should these be 12 and 8 respectively? See SwBoxAutoFormat::Save, which calls
+                // legacy::SvxFrameDirection::Store and legacy::SwFormatVert::Store, which write
+                // 16 bits and ((64 or 32) + 16) bits respectively.
                 case 14:
                 {
                     sal_Int64 n(0);
