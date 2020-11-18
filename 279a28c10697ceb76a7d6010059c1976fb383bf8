@@ -34,6 +34,24 @@
       "revId": "279a28c10697ceb76a7d6010059c1976fb383bf8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "007b9c95_0fe02649",
+        "filename": "sw/source/core/layout/legacyitem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-18T10:28:54Z",
+      "side": 1,
+      "message": "\u003e \u003e if this uncovered a binary-incompatible change on 64-bit Windows, depending on how those streams are used by LO\n\u003e \n\u003e No. I have just routinely checked mentions of SAL_TYPES_SIZEOFLONG in the code. This code writes the value, and the accompanying code above (Create) reads what was there in the format - so takes the length of the block into account. The code is used in SwBoxAutoFormat::Load / SwBoxAutoFormat::Save. Thus it\u0027s OK to write the correct value, not truncated on _WIN64.\n\nah, so that\u0027s already covered :)\n\n\u003e \u003e Cosmetic nitpick\n\u003e \n\u003e May I keep this? It tells *me* (and makes it greppable) that this is the C++ way of conditional compilation.\n\nat least technically, it shouldn\u0027t hurt",
+      "parentUuid": "69095b57_65f3ad5e",
+      "revId": "279a28c10697ceb76a7d6010059c1976fb383bf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
