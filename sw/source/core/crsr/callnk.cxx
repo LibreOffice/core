@@ -85,9 +85,8 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell & rShell)
         return;
     }
 
-    SwFormatFrameSize aSize = pLine->GetFrameFormat()->GetFrameSize();
-    sw::BroadcastingModify aMod;
-    pRow->SwClientNotifyCall(aMod, sw::LegacyModifyHint(nullptr, &aSize));
+    const SwFormatFrameSize aSize = pLine->GetFrameFormat()->GetFrameSize();
+    pRow->OnFrameSize(aSize);
 }
 
 SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE

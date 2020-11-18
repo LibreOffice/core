@@ -51,7 +51,7 @@ class SwRowFrame: public SwLayoutFrame
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     SwRowFrame( const SwTableLine &, SwFrame*, bool bInsertContent = true );
@@ -120,6 +120,7 @@ public:
     // height to fit the rest of space.
     bool IsInSplit() const { return m_bIsInSplit; }
     void SetInSplit(bool bNew = true) { m_bIsInSplit = bNew; }
+    void OnFrameSize(const SwFormatFrameSize&);
 };
 
 #endif
