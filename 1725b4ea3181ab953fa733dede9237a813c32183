@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1107a703_2a01d2ae",
+        "filename": "offapi/com/sun/star/sheet/GlobalSheetSettings.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-18T09:29:14Z",
+      "side": 1,
+      "message": "did you check that doxygen actually attaches that doc comment to the GlobalSheetSettings documentation?",
+      "revId": "1725b4ea3181ab953fa733dede9237a813c32183",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
