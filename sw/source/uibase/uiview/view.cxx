@@ -1281,8 +1281,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     if(GetDocShell()->IsPreview()||m_bIsPreviewDoubleClick)
         return;
     bool bIsOwnDocument = lcl_IsOwnDocument( *this );
-    if (!rSequence.hasElements())
-        return;
 
     SET_CURR_SHELL(m_pWrtShell.get());
     const SwRect& rRect = m_pWrtShell->GetCharRect();
