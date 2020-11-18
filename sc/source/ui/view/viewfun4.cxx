@@ -626,22 +626,20 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     // 2. can the file be inserted using the graphics filter?
     // (as a link, since the Gallery provides it in this way)
 
-    sal_uInt16 nFilterFormat;
     Graphic aGraphic;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
 
     if (!rGraphicFilter.ImportGraphic(aGraphic, aURL,
-            GRFILTER_FORMAT_DONTKNOW, &nFilterFormat ))
+            GRFILTER_FORMAT_DONTKNOW ))
     {
         if ( bLink )
         {
-            OUString aFltName = rGraphicFilter.GetImportFormatName(nFilterFormat);
-            return PasteGraphic( rPos, aGraphic, aStrURL, aFltName );
+            return PasteGraphic( rPos, aGraphic, aStrURL );
         }
         else
         {
             // #i76709# if bLink isn't set, pass empty URL/filter, so a non-linked image is inserted
-            return PasteGraphic( rPos, aGraphic, EMPTY_OUSTRING, EMPTY_OUSTRING );
+            return PasteGraphic( rPos, aGraphic, EMPTY_OUSTRING );
         }
     }
 

@@ -151,8 +151,7 @@ public:
         SdrObject& rHitObject,
         const Graphic& rGraphic,
         const OUString& rBeginUndoText,
-        const OUString& rFile,
-        std::u16string_view rFilter);
+        const OUString& rFile);
 
     static void CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle );
 

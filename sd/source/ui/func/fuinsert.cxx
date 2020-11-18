@@ -105,7 +105,6 @@ rtl::Reference<FuPoor> FuInsertGraphic::Create( ViewShell* pViewSh, ::sd::Window
 void FuInsertGraphic::DoExecute( SfxRequest& rReq )
 {
     OUString aFileName;
-    OUString aFilterName;
     Graphic aGraphic;
 
     bool bAsLink = false;
@@ -119,6 +118,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
     {
         aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
+        OUString aFilterName;
         if ( pArgs->GetItemState( FN_PARAM_FILTER, true, &pItem ) == SfxItemState::SET )
             aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
@@ -137,7 +137,6 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         nError = aDlg.GetGraphic(aGraphic);
         bAsLink = aDlg.IsAsLink();
         aFileName = aDlg.GetPath();
-        aFilterName = aDlg.GetDetectedFilter();
     }
 
     if( nError == ERRCODE_NONE )
@@ -185,11 +184,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
                 }
 
                 // store as link
-                OUString aReferer;
-                if (mpDocSh->HasName()) {
-                    aReferer = mpDocSh->GetMedium()->GetName();
-                }
-                pGrafObj->SetGraphicLink(aFileName, aReferer, aFilterName);
+                pGrafObj->SetGraphicLink(aFileName);
             }
         }
     }

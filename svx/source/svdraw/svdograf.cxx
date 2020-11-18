@@ -313,7 +313,6 @@ void SdrGrafObj::SetGraphic( const Graphic& rGraphic )
     {
         ImpDeregisterLink();
         aFileName = rGraphic.getOriginURL();
-        aReferer = "";
         aFilterName = "";
     }
     NbcSetGraphic(rGraphic);
@@ -487,7 +486,7 @@ void SdrGrafObj::ImpDeregisterLink()
     }
 }
 
-void SdrGrafObj::SetGraphicLink(const OUString& rFileName, std::u16string_view /*rReferer*/, std::u16string_view /*rFilterName*/)
+void SdrGrafObj::SetGraphicLink(const OUString& rFileName)
 {
     Graphic aGraphic;
     aGraphic.setOriginURL(rFileName);
@@ -498,7 +497,6 @@ void SdrGrafObj::ReleaseGraphicLink()
 {
     ImpDeregisterLink();
     aFileName.clear();
-    aReferer.clear();
     aFilterName.clear();
 }
 
@@ -726,7 +724,6 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     SdrRectObj::operator=( rObj );
 
     aFileName = rObj.aFileName;
-    aFilterName = rObj.aFilterName;
     bMirrored = rObj.bMirrored;
 
     mbIsSignatureLine = rObj.mbIsSignatureLine;
@@ -756,7 +753,7 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
 
     if( rObj.IsLinkedGraphic() )
     {
-        SetGraphicLink( aFileName, rObj.aReferer, aFilterName );
+        SetGraphicLink( aFileName );
     }
 
     ImpSetAttrToGrafInfo();

@@ -503,7 +503,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         {
             Graphic aGraphic;
             ReadGraphic( *xStm, aGraphic );
-            bRet = PasteGraphic( aPos, aGraphic, EMPTY_OUSTRING, EMPTY_OUSTRING );
+            bRet = PasteGraphic( aPos, aGraphic, EMPTY_OUSTRING );
         }
     }
     else if ( nFormatId == SotClipboardFormatId::DRAWING )
