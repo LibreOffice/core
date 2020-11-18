@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9311e5c9_a48913fd",
+        "filename": "i18npool/source/transliteration/hiraganaToKatakana.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-18T11:51:11Z",
+      "side": 1,
+      "message": "unrelated to the patch, but the URLs are 404 and should be updated to\nhttps://unicode.org/charts/PDF/U3040.pdf and https://www.unicode.org/charts/PDF/U30A0.pdf respectively.\nAnd also a weired way to write the condition for the characters that way 0x3040 is empty and the shifted Katakana endpoint is the double-hyphen, → exclude 0x3040\n0x3097 and 0x2098 are empty in Hiragana range/no equivalent exists for small ke and va in Katanaka → why those two are exlcuded.",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 37
+      },
+      "revId": "594f269ea118f704c2d8a9c6fc3623846d1f155a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4688a2af_fe3d2252",
+        "filename": "i18npool/source/transliteration/katakanaToHiragana.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-18T11:51:11Z",
+      "side": 1,
+      "message": "see comment for toKatakana - same applies here",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 0
+      },
+      "revId": "594f269ea118f704c2d8a9c6fc3623846d1f155a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
