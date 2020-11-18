@@ -1057,9 +1057,9 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
 
     double fMaxWidth = maWorkArea.getWidth() - (maRect.getWidth() - fLeft);
     double fMaxHeight = maWorkArea.getHeight() - (maRect.getHeight() - fTop);
-    mxMtrWidth->set_max(basegfx::fround64(fMaxWidth*100), FieldUnit::NONE);
+    mxMtrWidth->set_max(std::min<sal_Int64>(INT_MAX, basegfx::fround64(fMaxWidth*100)), FieldUnit::NONE);
     limitWidth(*mxMtrWidth);
-    mxMtrHeight->set_max(basegfx::fround64(fMaxHeight*100), FieldUnit::NONE);
+    mxMtrHeight->set_max(std::min<sal_Int64>(INT_MAX, basegfx::fround64(fMaxHeight*100)), FieldUnit::NONE);
     limitWidth(*mxMtrHeight);
 }
 
