@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7b82d18_ec7ef62a",
+        "filename": "svx/uiconfig/ui/findreplacedialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-18T08:08:31Z",
+      "side": 1,
+      "message": "No accelerator at all now?",
+      "range": {
+        "startLine": 1017,
+        "startChar": 116,
+        "endLine": 1017,
+        "endChar": 124
+      },
+      "revId": "ddd945145e24a3aac1fc1b01d2a49f655be6a35f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
