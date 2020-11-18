@@ -58,6 +58,7 @@ namespace pcr
             m_xEntry->connect_focus_in( LINK( this, CommonBehaviourControlHelper, GetFocusHdl ) );
             m_xEntry->connect_focus_out( LINK( this, CommonBehaviourControlHelper, LoseFocusHdl ) );
             m_xSpinButton->connect_value_changed(LINK(this, CommonBehaviourControlHelper, FormattedModifiedHdl));
+            m_xSpinButton->connect_changed(LINK(this, CommonBehaviourControlHelper, EditModifiedHdl));
         }
 
         void SetFormatSupplier(const SvNumberFormatsSupplierObj* pSupplier);
@@ -105,6 +106,7 @@ namespace pcr
         {
             OFormattedNumericControl_Base::SetModifyHandler();
             getTypedControlWindow()->connect_value_changed(LINK(this, CommonBehaviourControlHelper, FormattedModifiedHdl));
+            getTypedControlWindow()->connect_changed(LINK(this, CommonBehaviourControlHelper, EditModifiedHdl));
         }
 
         virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
