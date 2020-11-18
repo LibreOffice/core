@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_PRNSETUP_HXX
-#define INCLUDED_SVTOOLS_PRNSETUP_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <vcl/print.hxx>
@@ -76,7 +75,5 @@ Printer* ImplPrnDlgListBoxSelect( weld::ComboBox const * pBox, weld::Button* pPr
 Printer* ImplPrnDlgUpdatePrinter( Printer const * pPrinter, Printer* pTempPrinter );
 void ImplPrnDlgUpdateQueueInfo( weld::ComboBox const * pBox, QueueInfo& rInfo );
 OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo );
-
-#endif // INCLUDED_SVTOOLS_PRNSETUP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

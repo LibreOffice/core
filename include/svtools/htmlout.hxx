@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_HTMLOUT_HXX
-#define INCLUDED_SVTOOLS_HTMLOUT_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <tools/solar.h>
@@ -107,7 +106,5 @@ struct HtmlWriterHelper
     SVT_DLLPUBLIC static void applyColor( HtmlWriter& rHtmlWriter, const OString &aAttributeName, const Color& rColor);
     SVT_DLLPUBLIC static void applyEvents(HtmlWriter& rHtmlWriter, const SvxMacroTableDtor& rMacroTable, const HTMLOutEvent* pEventTable, bool bOutStarBasic);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

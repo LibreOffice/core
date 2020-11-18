@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_RESTARTDIALOG_HXX
-#define INCLUDED_SVTOOLS_RESTARTDIALOG_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -76,7 +75,5 @@ SVT_DLLPUBLIC bool executeRestartDialog(
     weld::Window* parent, RestartReason reason);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

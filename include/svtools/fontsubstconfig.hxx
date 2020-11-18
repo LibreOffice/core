@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_FONTSUBSTCONFIG_HXX
-#define INCLUDED_SVTOOLS_FONTSUBSTCONFIG_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <unotools/configitem.hxx>
@@ -57,8 +56,5 @@ public:
     void                        AddSubstitution(const SubstitutionStruct&   rToAdd);
     void                        Apply();
 };
-
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

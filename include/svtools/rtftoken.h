@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_RTFTOKEN_H
-#define INCLUDED_SVTOOLS_RTFTOKEN_H
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -1264,7 +1263,5 @@ enum RTF_TOKEN_IDS {
 */
 
 };
-
-#endif // INCLUDED_SVTOOLS_RTFTOKEN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

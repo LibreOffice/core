@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_SFXECODE_HXX
-#define INCLUDED_SVTOOLS_SFXECODE_HXX
+#pragma once
 
 class ErrCode;
 
@@ -70,8 +69,5 @@ class ErrCode;
 
 // Addressbook
 #define ERRCTX_SFX_SEARCHADDRESS        90
-
-#endif // INCLUDED_SVTOOLS_SFXECODE_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
