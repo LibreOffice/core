@@ -206,6 +206,27 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
 
                     pTreeView->select(nRow);
                     LOKTrigger::trigger_row_activated(*pTreeView);
+                    return true;
+                }
+                else if (sAction == "dragstart")
+                {
+                    OString nRowString
+                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    int nRow = std::atoi(nRowString.getStr());
+
+                    pTreeView->select(nRow);
+
+                    JSTreeView* pJSTreeView = dynamic_cast<JSTreeView*>(pTreeView);
+                    if (pJSTreeView)
+                        pJSTreeView->drag_start();
+                    return true;
+                }
+                else if (sAction == "dragend")
+                {
+                    JSTreeView* pJSTreeView = dynamic_cast<JSTreeView*>(pTreeView);
+                    if (pJSTreeView)
+                        pJSTreeView->drag_end();
+                    return true;
                 }
             }
         }

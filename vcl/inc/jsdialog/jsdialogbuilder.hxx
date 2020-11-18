@@ -19,6 +19,11 @@
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <cppuhelper/compbase.hxx>
+
 class ToolBox;
 class ComboBox;
 class VclMultiLineEdit;
@@ -56,6 +61,40 @@ public:
     }
 
     void notifyDialogState(bool bForce = false);
+};
+
+class JSDropTarget final
+    : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
+                                           css::lang::XInitialization, css::lang::XServiceInfo>
+{
+    osl::Mutex m_aMutex;
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
+
+public:
+    JSDropTarget();
+
+    // XInitialization
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArgs) override;
+
+    // XDropTarget
+    virtual void SAL_CALL addDropTargetListener(
+        const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
+    virtual void SAL_CALL removeDropTargetListener(
+        const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
+    virtual sal_Bool SAL_CALL isActive() override;
+    virtual void SAL_CALL setActive(sal_Bool active) override;
+    virtual sal_Int8 SAL_CALL getDefaultActions() override;
+    virtual void SAL_CALL setDefaultActions(sal_Int8 actions) override;
+
+    OUString SAL_CALL getImplementationName() override;
+
+    sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
+
+    void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
 };
 
 class JSInstanceBuilder : public SalInstanceBuilder
@@ -128,6 +167,9 @@ private:
 template <class BaseInstanceClass, class VclClass>
 class JSWidget : public BaseInstanceClass, public JSDialogSender
 {
+protected:
+    rtl::Reference<JSDropTarget> m_xDropTarget;
+
 public:
     JSWidget(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
              VclClass* pObject, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
@@ -154,6 +196,14 @@ public:
     {
         BaseInstanceClass::set_sensitive(sensitive);
         notifyDialogState();
+    }
+
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
+    {
+        if (!m_xDropTarget)
+            m_xDropTarget.set(new JSDropTarget);
+
+        return m_xDropTarget.get();
     }
 };
 
@@ -309,6 +359,11 @@ public:
     using SalInstanceTreeView::select;
     /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
     virtual void select(int pos) override;
+
+    virtual weld::TreeView* get_drag_source() const override;
+
+    void drag_start();
+    void drag_end();
 };
 
 class JSExpander : public JSWidget<SalInstanceExpander, ::VclExpander>
