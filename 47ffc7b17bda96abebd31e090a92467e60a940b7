@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f9d400d8_2e9dbd8a",
+        "filename": "store/source/storcach.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-18T09:57:24Z",
+      "side": 1,
+      "message": "Let me wait for your reply to my reply there :-)\n\nBut that allows me to add sal/rtl/alloc_impl.hxx into this patch with plain if. Thank you!",
+      "parentUuid": "10205b94_5269c475",
+      "range": {
+        "startLine": 139,
+        "startChar": 7,
+        "endLine": 139,
+        "endChar": 16
+      },
+      "revId": "47ffc7b17bda96abebd31e090a92467e60a940b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff6a74cb_0fad95dd",
         "filename": "store/source/storcach.cxx",
         "patchSetId": 2
