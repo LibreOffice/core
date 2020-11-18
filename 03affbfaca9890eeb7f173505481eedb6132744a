@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4460b36b_e4e101b7",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-18T08:04:16Z",
+      "side": 1,
+      "message": "If I run this command in \"Lo|rem\" it selects \"Lo\", and WordRightSel \"rem \". In case of Arabic text WordLeftSel goes to the right while WordRightSel will be left. So my understanding is that we have to change the label of WordRightSel to \"Select to End of Word\" and keep this.",
+      "range": {
+        "startLine": 1147,
+        "startChar": 49,
+        "endLine": 1147,
+        "endChar": 53
+      },
+      "revId": "03affbfaca9890eeb7f173505481eedb6132744a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
