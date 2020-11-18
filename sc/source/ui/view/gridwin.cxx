@@ -28,8 +28,6 @@
 #include <editeng/editstat.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <editeng/unolingu.hxx>
-#include <editeng/langitem.hxx>
 #include <editeng/misspellrange.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/dispatch.hxx>
@@ -117,13 +115,12 @@
 #include <queryentry.hxx>
 #include <markdata.hxx>
 #include <externalrefmgr.hxx>
-#include <dociter.hxx>
-#include <hints.hxx>
 #include <spellcheckcontext.hxx>
 #include <uiobject.hxx>
 #include <undoblk.hxx>
 #include <datamapper.hxx>
 #include <inputopt.hxx>
+#include <queryparam.hxx>
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -131,7 +128,6 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
-#include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 

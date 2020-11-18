@@ -8,22 +8,17 @@
  */
 
 #include <ostream>
-#include <set>
 
 #include <formula/FormulaCompiler.hxx>
 #include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <sfx2/objsh.hxx>
 #include <unotools/configmgr.hxx>
 
 #include <calcconfig.hxx>
-#include <compiler.hxx>
-#include <docsh.hxx>
 
 #include <comphelper/configurationlistener.hxx>
-#include <com/sun/star/datatransfer/XTransferable2.hpp>
 
 using comphelper::ConfigurationListener;
 

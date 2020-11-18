@@ -9,8 +9,6 @@
 
 #include <xeextlst.hxx>
 #include <xeroot.hxx>
-#include <stlsheet.hxx>
-#include <ftools.hxx>
 #include <xestyle.hxx>
 #include <stlpool.hxx>
 #include <scitems.hxx>
@@ -19,7 +17,6 @@
 
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace ::oox;
 

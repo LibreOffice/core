@@ -16,7 +16,6 @@
 #include <listenercontext.hxx>
 #include <tokenstringcontext.hxx>
 #include <poolhelp.hxx>
-#include <bcaslot.hxx>
 #include <cellvalues.hxx>
 #include <docpool.hxx>
 #include <columniterator.hxx>

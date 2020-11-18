@@ -67,7 +67,6 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
-#include <set>
 #include <algorithm>
 
 using namespace com::sun::star;

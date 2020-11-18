@@ -74,7 +74,6 @@
 #include <memory>
 #include <map>
 #include <vector>
-#include <unordered_set>
 
 using namespace formula;
 

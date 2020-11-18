@@ -23,6 +23,8 @@
 #include <refdata.hxx>
 #include <types.hxx>
 
+#include <memory>
+
 typedef sal_uInt16  LR_ID;
 
 #define ID_FAIL 0xFFFF

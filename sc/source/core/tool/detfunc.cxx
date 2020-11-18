@@ -20,7 +20,6 @@
 #include <scitems.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/outlobj.hxx>
 #include <formula/errorcodes.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdsxyitm.hxx>
@@ -42,13 +41,9 @@
 #include <svx/xlnstit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svx/xtable.hxx>
 #include <svx/sdtagitm.hxx>
-#include <editeng/outliner.hxx>
-#include <editeng/editobj.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svl/whiter.hxx>
-#include <editeng/writingmodeitem.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -63,10 +58,8 @@
 #include <formulacell.hxx>
 #include <docpool.hxx>
 #include <patattr.hxx>
-#include <attrib.hxx>
 #include <scmod.hxx>
 #include <postit.hxx>
-#include <rangelst.hxx>
 #include <reftokenhelper.hxx>
 #include <formulaiter.hxx>
 #include <cellvalue.hxx>

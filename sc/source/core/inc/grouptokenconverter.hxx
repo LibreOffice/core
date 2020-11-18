@@ -10,7 +10,6 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_GROUPTOKENCONVERTER_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_GROUPTOKENCONVERTER_HXX
 
-#include <scdllapi.h>
 #include <types.hxx>
 #include <formulalogger.hxx>
 

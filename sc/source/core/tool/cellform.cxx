@@ -19,7 +19,6 @@
 
 #include <cellform.hxx>
 
-#include <sfx2/objsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
 
@@ -27,7 +26,6 @@
 #include <document.hxx>
 #include <cellvalue.hxx>
 #include <formula/errorcodes.hxx>
-#include <sc.hrc>
 #include <editutil.hxx>
 
 void ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString,

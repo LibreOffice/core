@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_EEPARSER_HXX
 
 #include <tools/gen.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/graph.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/editdata.hxx>

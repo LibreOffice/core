@@ -30,7 +30,6 @@
 
 #include <interpre.hxx>
 #include <global.hxx>
-#include <compiler.hxx>
 #include <formulacell.hxx>
 #include <document.hxx>
 #include <dociter.hxx>

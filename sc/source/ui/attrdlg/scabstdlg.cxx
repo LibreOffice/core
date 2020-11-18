@@ -21,7 +21,6 @@
 
 #include <osl/module.hxx>
 #include <tools/svlibrary.h>
-#include <rtl/ustrbuf.hxx>
 
 typedef ScAbstractDialogFactory* (*ScFuncPtrCreateDialogFactory)();
 

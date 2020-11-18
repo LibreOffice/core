@@ -34,7 +34,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/langitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <editeng/udlnitem.hxx>

@@ -18,9 +18,7 @@
  */
 
 #include <csvtablebox.hxx>
-#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
-#include <AccessibleCsvControl.hxx>
 
 ScCsvTableBox::ScCsvTableBox(weld::Builder& rBuilder)
     : mxRuler(new ScCsvRuler(maData, this))

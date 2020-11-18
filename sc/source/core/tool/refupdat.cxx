@@ -19,9 +19,8 @@
 
 #include <refupdat.hxx>
 #include <document.hxx>
-#include <compiler.hxx>
 #include <bigrange.hxx>
-#include <chgtrack.hxx>
+#include <refdata.hxx>
 
 #include <osl/diagnose.h>
 

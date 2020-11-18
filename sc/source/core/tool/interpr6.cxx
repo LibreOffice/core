@@ -23,7 +23,7 @@
 #include <document.hxx>
 #include <cellvalue.hxx>
 #include <dociter.hxx>
-#include <mtvcellfunc.hxx>
+#include <mtvfunctions.hxx>
 #include <scmatrix.hxx>
 
 #include <arraysumfunctor.hxx>

@@ -27,7 +27,6 @@
 #include <dbdata.hxx>
 #include <globalnames.hxx>
 #include <refupdat.hxx>
-#include <rechead.hxx>
 #include <document.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>

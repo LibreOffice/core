@@ -32,7 +32,6 @@
 #include <editeng/postitem.hxx>
 #include <editeng/langitem.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
@@ -43,7 +42,6 @@
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
 #include <unotools/charclass.hxx>
 
 #include <inputwin.hxx>

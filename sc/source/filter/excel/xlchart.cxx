@@ -37,8 +37,8 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <rtl/math.hxx>
 #include <sal/macros.h>
+#include <sal/mathconf.h>
 #include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>

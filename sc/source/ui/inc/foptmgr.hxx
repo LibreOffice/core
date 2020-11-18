@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_FOPTMGR_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_FOPTMGR_HXX
 
+#include <vcl/weld.hxx>
+
 namespace formula
 {
     class RefButton;

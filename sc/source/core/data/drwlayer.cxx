@@ -35,10 +35,8 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/svxids.hrc>

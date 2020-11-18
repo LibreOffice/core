@@ -20,7 +20,6 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/zforlist.hxx>
 #include <editeng/editeng.hxx>
-#include <osl/diagnose.h>
 
 #include <poolhelp.hxx>
 #include <document.hxx>

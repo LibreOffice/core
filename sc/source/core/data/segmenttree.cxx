@@ -23,7 +23,6 @@
 #include <sal/log.hxx>
 #include <algorithm>
 #include <limits>
-#include <address.hxx>
 
 using ::std::numeric_limits;
 

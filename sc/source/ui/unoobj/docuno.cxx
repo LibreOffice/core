@@ -19,8 +19,6 @@
 
 #include <config_feature_opencl.h>
 
-#include <boost/property_tree/json_parser.hpp>
-
 #include <scitems.hxx>
 #include <comphelper/sequence.hxx>
 #include <editeng/editview.hxx>

@@ -18,10 +18,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-
 #include <officecfg/Office/Common.hxx>
 #include <libxml/xpath.h>
 #include <datastreamgettime.hxx>

@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <arraysumfunctor.hxx>
 #include <scmatrix.hxx>
 #include <global.hxx>
 #include <address.hxx>
 #include <formula/errorcodes.hxx>
-#include <formula/vectortoken.hxx>
 #include <interpre.hxx>
 #include <mtvelements.hxx>
 #include <compare.hxx>
@@ -31,12 +29,9 @@
 
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
-#include <tools/stream.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-
-#include <math.h>
 
 #include <memory>
 #include <vector>
@@ -44,7 +39,6 @@
 
 #include <mdds/multi_type_matrix.hpp>
 #include <mdds/multi_type_vector_types.hpp>
-#include <mdds/multi_type_vector_trait.hpp>
 
 #if DEBUG_MATRIX
 #include <iostream>

@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
-
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <appoptio.hxx>
-#include <rechead.hxx>
 #include <global.hxx>
 #include <userlist.hxx>
-#include <sc.hrc>
 #include <formula/compiler.hxx>
 #include <miscuno.hxx>
 #include <memory>

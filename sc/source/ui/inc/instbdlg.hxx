@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_INSTBDLG_HXX
 
 #include <sfx2/objsh.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 #include <types.hxx>
 

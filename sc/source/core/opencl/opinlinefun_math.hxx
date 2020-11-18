@@ -10,6 +10,8 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OPINLINEFUN_MATH_HXX
 #define INCLUDED_SC_SOURCE_CORE_OPENCL_OPINLINEFUN_MATH_HXX
 
+#include <string>
+
 std::string Math_Intg_Str=
 "\ndouble Intg(double n)\n\
 {\n\

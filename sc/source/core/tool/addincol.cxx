@@ -29,6 +29,7 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -47,12 +48,9 @@
 
 #include <addincol.hxx>
 #include <addinhelpid.hxx>
-#include <compiler.hxx>
 #include <scmatrix.hxx>
-#include <addinlis.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/funcvarargs.h>
-#include <sc.hrc>
 #include <optutil.hxx>
 #include <addincfg.hxx>
 #include <scmod.hxx>

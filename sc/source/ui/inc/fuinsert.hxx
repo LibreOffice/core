@@ -22,9 +22,7 @@
 
 #include "fupoor.hxx"
 #include <scdllapi.h>
-#include <svx/svdoole2.hxx>
 #include <com/sun/star/ui/dialogs/DialogClosedEvent.hpp>
-#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 
 class FuInsertGraphic : public FuPoor
 {

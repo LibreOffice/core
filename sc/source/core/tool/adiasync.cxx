@@ -25,9 +25,7 @@
 
 #include <adiasync.hxx>
 #include <brdcst.hxx>
-#include <global.hxx>
 #include <document.hxx>
-#include <sc.hrc>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 

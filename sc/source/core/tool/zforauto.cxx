@@ -24,7 +24,6 @@
 #include <osl/diagnose.h>
 
 #include <zforauto.hxx>
-#include <global.hxx>
 #include <tools/stream.hxx>
 
 ScNumFormatAbbrev::ScNumFormatAbbrev() :

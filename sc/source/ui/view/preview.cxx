@@ -65,8 +65,6 @@
 
 #include <memory>
 
-#include <sfx2/sfxsids.hrc>
-
 #define SC_PREVIEW_SHADOWSIZE   2
 
 static tools::Long lcl_GetDisplayStart( SCTAB nTab, const ScDocument* pDoc, std::vector<tools::Long>& nPages )

@@ -37,7 +37,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/objsh.hxx>
-#include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>

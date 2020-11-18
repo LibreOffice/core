@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_PROTECTIONDLG_HXX
 
 #include <vcl/weld.hxx>
-#include <scdllapi.h>
 
 class ScTableProtection;
 

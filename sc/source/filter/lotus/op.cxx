@@ -41,7 +41,6 @@
 #include "lotfilter.hxx"
 #include <lotform.hxx>
 #include <lotrange.hxx>
-#include <root.hxx>
 #include <ftools.hxx>
 
 #include <vector>

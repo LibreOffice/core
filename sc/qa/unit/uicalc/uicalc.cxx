@@ -10,14 +10,17 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/processfactory.hxx>
+#include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <dbfunc.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
-#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <viewdata.hxx>
 
 using namespace ::com::sun::star;
 

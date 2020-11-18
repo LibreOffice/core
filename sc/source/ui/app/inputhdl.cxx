@@ -26,7 +26,6 @@
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <formula/errorcodes.hxx>
 #include <editeng/adjustitem.hxx>

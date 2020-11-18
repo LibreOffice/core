@@ -27,7 +27,7 @@
 #include <tabpages.hxx>
 #include <attrdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/svxids.hrc>
+#include <editeng/editids.hrc>
 #include <editeng/flstitem.hxx>
 #include <osl/diagnose.h>
 

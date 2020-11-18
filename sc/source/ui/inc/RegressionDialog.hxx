@@ -12,6 +12,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_REGRESSIONDIALOG_HXX
 
 #include "StatisticsTwoVariableDialog.hxx"
+#include "TableFillingAndNavigationTools.hxx"
 
 class ScRegressionDialog : public ScStatisticsTwoVariableDialog
 {

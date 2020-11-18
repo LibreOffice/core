@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <tools/gen.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -34,8 +35,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
-#include <vcl/vclptr.hxx>
-#include "AccessibleContextBase.hxx"
 #include <map>
 
 class ScCsvControl;

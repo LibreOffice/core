@@ -23,7 +23,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/urlobj.hxx>
-#include <editeng/editobj.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -80,7 +79,6 @@
 #include <globalnames.hxx>
 #include <stringutil.hxx>
 #include <documentlinkmgr.hxx>
-#include <scopetools.hxx>
 #include <tokenarray.hxx>
 
 #include <memory>

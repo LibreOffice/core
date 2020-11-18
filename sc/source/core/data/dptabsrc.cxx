@@ -20,8 +20,6 @@
 #include <dptabsrc.hxx>
 
 #include <algorithm>
-#include <set>
-#include <unordered_set>
 #include <vector>
 
 #include <comphelper/sequence.hxx>

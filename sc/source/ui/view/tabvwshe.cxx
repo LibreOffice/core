@@ -26,7 +26,6 @@
 #include <svx/hlnkitem.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 
@@ -37,9 +36,7 @@
 #include <editsh.hxx>
 #include <dociter.hxx>
 #include <inputhdl.hxx>
-#include <svx/srchdlg.hxx>
 #include <document.hxx>
-#include <gridwin.hxx>
 
 OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
 {

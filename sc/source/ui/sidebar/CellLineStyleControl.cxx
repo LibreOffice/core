@@ -24,7 +24,6 @@
 #include <vcl/svapp.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/lineitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>

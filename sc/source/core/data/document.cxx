@@ -25,7 +25,6 @@
 #include <svx/sdrundomanager.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -40,6 +39,7 @@
 #include <com/sun/star/lang/NotInitializedException.hpp>
 
 #include <document.hxx>
+#include <docuno.hxx>
 #include <table.hxx>
 #include <column.hxx>
 #include <attrib.hxx>
@@ -83,8 +83,6 @@
 #include <formulagroup.hxx>
 #include <tokenstringcontext.hxx>
 #include <compressedarray.hxx>
-#include <docsh.hxx>
-#include <brdcst.hxx>
 #include <recursionhelper.hxx>
 
 #include <formula/vectortoken.hxx>
@@ -94,7 +92,7 @@
 #include <utility>
 
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/servicehelper.hxx>
 
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>

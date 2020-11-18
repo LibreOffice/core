@@ -25,7 +25,6 @@
 #include <unotools/textsearch.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/tokenarray.hxx>
-#include <scdllapi.h>
 #include <types.hxx>
 #include <externalrefmgr.hxx>
 #include <calcconfig.hxx>

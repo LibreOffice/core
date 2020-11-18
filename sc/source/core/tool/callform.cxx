@@ -22,8 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/module.hxx>
-#include <osl/file.hxx>
-#include <unotools/transliterationwrapper.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <memory>
 
 #include <callform.hxx>

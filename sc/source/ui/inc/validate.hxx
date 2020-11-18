@@ -24,6 +24,7 @@
 
 #include "anyrefdg.hxx"
 #include <sc.hrc>
+#include <scmod.hxx>
 
 struct  ScRefHandlerCaller{
     virtual ~ScRefHandlerCaller(){}

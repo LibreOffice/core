@@ -27,8 +27,6 @@
 #include <gridwin.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <formulacell.hxx>
-#include <dociter.hxx>
 #include <inputhdl.hxx>
 
 // ---  Referenz-Eingabe / Fill-Cursor

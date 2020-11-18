@@ -21,7 +21,6 @@
 
 #include <scabstdlg.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <vcl/virdev.hxx>
 
 #include <corodlg.hxx>
 #include <condformatmgr.hxx>

@@ -22,6 +22,7 @@
 
 #include "worksheethelper.hxx"
 #include <tools/color.hxx>
+#include <colorscale.hxx>
 #include <conditio.hxx>
 #include <rangelst.hxx>
 

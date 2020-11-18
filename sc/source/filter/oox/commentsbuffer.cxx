@@ -17,17 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 
 #include <commentsbuffer.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
-#include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
-#include <com/sun/star/sheet/XSheetAnnotations.hpp>
-#include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>
@@ -36,7 +30,6 @@
 #include <drawingfragment.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/unoshape.hxx>
 #include <tools/diagnose_ex.h>
 #include <document.hxx>
 #include <drwlayer.hxx>

@@ -23,17 +23,13 @@
 
 #include <svx/algitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>
-#include <editeng/escapementitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/editobj.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <svl/inethist.hxx>
-#include <unotools/syslocale.hxx>
 #include <sfx2/objsh.hxx>
 #include <osl/diagnose.h>
 

@@ -22,8 +22,8 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include "CellBorderStyleControl.hxx"
-#include "CellLineStyleControl.hxx"
+#include <vcl/EnumContext.hxx>
+#include <vcl/image.hxx>
 
 class ToolbarUnoDispatcher;
 class ToolbarPopupContainer;

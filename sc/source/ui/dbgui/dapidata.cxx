@@ -32,7 +32,6 @@
 using namespace com::sun::star;
 
 #include <dapidata.hxx>
-#include <miscuno.hxx>
 #include <dpsdbtab.hxx>
 
 //  entries in the "type" ListBox

@@ -24,6 +24,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
@@ -50,7 +51,6 @@
 #include <scmatrix.hxx>
 #include <cellvalue.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 
 #include <math.h>
 #include <memory>

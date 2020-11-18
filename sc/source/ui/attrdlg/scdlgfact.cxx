@@ -70,6 +70,8 @@
 #include <sfx2/sfxdlg.hxx>
 #include <conditio.hxx>
 
+#include <vcl/virdev.hxx>
+
 short AbstractScImportAsciiDlg_Impl::Execute()
 {
     return m_xDlg->run();

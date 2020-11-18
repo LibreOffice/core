@@ -11,7 +11,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CHILDWINDOWWRAPPER_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CHILDWINDOWWRAPPER_HXX
 
-#include <sfx2/basedlgs.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>

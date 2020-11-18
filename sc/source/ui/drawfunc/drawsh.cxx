@@ -58,7 +58,6 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
-#include <editeng/colritem.hxx>
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 

@@ -10,14 +10,12 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CHECKLISTMENU_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CHECKLISTMENU_HXX
 
-#include <vcl/InterimItemWindow.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>
 #include <unordered_set>
-#include <unordered_map>
 #include <map>
 #include <set>
 

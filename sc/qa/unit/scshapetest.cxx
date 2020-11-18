@@ -9,11 +9,8 @@
 
 #include <sal/config.h>
 
-#include <cstdlib>
-
 #include <test/calc_unoapi_test.hxx>
 
-#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdoashp.hxx>

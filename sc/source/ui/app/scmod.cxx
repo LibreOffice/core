@@ -81,7 +81,6 @@
 #include <inputhdl.hxx>
 #include <inputwin.hxx>
 #include <msgpool.hxx>
-#include <formdata.hxx>
 #include <detfunc.hxx>
 #include <preview.hxx>
 #include <dragdata.hxx>

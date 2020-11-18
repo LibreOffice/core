@@ -21,6 +21,8 @@
 #define INCLUDED_SC_SOURCE_UI_INC_ACREDLIN_HXX
 
 #include <svx/ctredlin.hxx>
+#include <sfx2/basedlgs.hxx>
+#include <sfx2/bindings.hxx>
 #include <chgtrack.hxx>
 #include <chgviset.hxx>
 #include <vcl/idle.hxx>

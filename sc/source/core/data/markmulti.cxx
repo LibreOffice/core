@@ -22,8 +22,6 @@
 #include <rangelst.hxx>
 #include <segmenttree.hxx>
 #include <sheetlimits.hxx>
-#include <sal/log.hxx>
-#include <o3tl/sorted_vector.hxx>
 
 #include <algorithm>
 

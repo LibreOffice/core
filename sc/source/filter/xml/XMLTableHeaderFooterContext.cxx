@@ -20,7 +20,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "XMLTableHeaderFooterContext.hxx"

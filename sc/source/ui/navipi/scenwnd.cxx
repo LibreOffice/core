@@ -26,7 +26,6 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/settings.hxx>
 #include <navipi.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>

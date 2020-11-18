@@ -29,6 +29,7 @@
 #include <rtl/ref.hxx>
 #include <sot/formats.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 #include <tools/solar.h>
 
 class SvxClipboardFormatItem;

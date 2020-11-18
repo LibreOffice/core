@@ -24,6 +24,8 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <tools/long.hxx>
+
 #include "address.hxx"
 
 #include "dptypes.hxx"

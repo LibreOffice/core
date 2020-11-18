@@ -22,10 +22,8 @@
 
 #include <scdllapi.h>
 #include <cppuhelper/weakref.hxx>
-#include <tools/wintypes.hxx>
 #include <svx/weldeditview.hxx>
 #include <editeng/svxenum.hxx>
-#include <vcl/customweld.hxx>
 
 #include <functional>
 

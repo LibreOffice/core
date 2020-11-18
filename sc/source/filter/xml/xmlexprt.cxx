@@ -138,7 +138,6 @@
 #include <com/sun/star/sheet/XSheetCellRanges.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>

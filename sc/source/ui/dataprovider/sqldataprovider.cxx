@@ -16,7 +16,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <miscuno.hxx>
 #include <dbdocutl.hxx>
 #include <datamapper.hxx>
 #include <vcl/svapp.hxx>
