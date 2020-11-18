@@ -53,7 +53,8 @@ namespace
 // bottom-most line of pixels of the bounding rectangle (see
 // https://lists.freedesktop.org/archives/libreoffice/2019-November/083709.html).
 // So be careful with rectangle->polygon conversions (generally avoid them).
-void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
+void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath,
+                      bool* hasOnlyOrthogonal = nullptr)
 {
     const sal_uInt32 nPointCount(rPolygon.count());
 
@@ -88,6 +89,11 @@ void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
         else if (!bHasCurves)
         {
             rPath.lineTo(aCurrentPoint.getX(), aCurrentPoint.getY());
+            // If asked for, check whether the polygon has a line that is not
+            // strictly horizontal or vertical.
+            if (hasOnlyOrthogonal != nullptr && aCurrentPoint.getX() != aPreviousPoint.getX()
+                && aCurrentPoint.getY() != aPreviousPoint.getY())
+                *hasOnlyOrthogonal = false;
         }
         else
         {
@@ -96,7 +102,12 @@ void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
 
             if (aPreviousControlPoint.equal(aPreviousPoint)
                 && aCurrentControlPoint.equal(aCurrentPoint))
+            {
                 rPath.lineTo(aCurrentPoint.getX(), aCurrentPoint.getY()); // a straight line
+                if (hasOnlyOrthogonal != nullptr && aCurrentPoint.getX() != aPreviousPoint.getX()
+                    && aCurrentPoint.getY() != aPreviousPoint.getY())
+                    *hasOnlyOrthogonal = false;
+            }
             else
             {
                 if (aPreviousControlPoint.equal(aPreviousPoint))
@@ -112,6 +123,8 @@ void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
                 rPath.cubicTo(aPreviousControlPoint.getX(), aPreviousControlPoint.getY(),
                               aCurrentControlPoint.getX(), aCurrentControlPoint.getY(),
                               aCurrentPoint.getX(), aCurrentPoint.getY());
+                if (hasOnlyOrthogonal != nullptr)
+                    *hasOnlyOrthogonal = false;
             }
         }
         aPreviousPoint = aCurrentPoint;
@@ -123,7 +136,8 @@ void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
     }
 }
 
-void addPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& rPath)
+void addPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& rPath,
+                          bool* hasOnlyOrthogonal = nullptr)
 {
     const sal_uInt32 nPolygonCount(rPolyPolygon.count());
 
@@ -132,7 +146,7 @@ void addPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& r
 
     for (const auto& rPolygon : rPolyPolygon)
     {
-        addPolygonToPath(rPolygon, rPath);
+        addPolygonToPath(rPolygon, rPath, hasOnlyOrthogonal);
     }
 }
 
@@ -852,36 +866,47 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
     preDraw();
 
     SkPath polygonPath;
-    addPolyPolygonToPath(aPolyPolygon, polygonPath);
+    bool hasOnlyOrthogonal = true;
+    addPolyPolygonToPath(aPolyPolygon, polygonPath, &hasOnlyOrthogonal);
     polygonPath.setFillType(SkPathFillType::kEvenOdd);
     addUpdateRegion(polygonPath.getBounds());
 
     SkPaint aPaint;
     aPaint.setAntiAlias(useAA);
-    // We normally use pixel at their center positions, but slightly off (see toSkX/Y()).
-    // With AA lines that "slightly off" causes tiny changes of color, making some tests
-    // fail. Since moving AA-ed line slightly to a side doesn't cause any real visual
-    // difference, just place exactly at the center. tdf#134346
-    const SkScalar posFix = useAA ? toSkXYFix : 0;
+
+    // For lines we use toSkX()/toSkY() in order to pass centers of pixels to Skia,
+    // as that leads to better results with floating-point coordinates
+    // (e.g. https://bugs.chromium.org/p/skia/issues/detail?id=9611).
+    // But that means that we generally need to use it also for areas, so that they
+    // line up properly if used together (tdf#134346).
+    // On the other hand, with AA enabled and rectangular areas, this leads to fuzzy
+    // edges (tdf#137329). But since rectangular areas line up perfectly to pixels
+    // everywhere, it shouldn't be necessary to do this for them.
+    // So if AA is enabled, avoid this fixup for rectangular areas.
+    if (!useAA || !hasOnlyOrthogonal)
+    {
+        // We normally use pixel at their center positions, but slightly off (see toSkX/Y()).
+        // With AA lines that "slightly off" causes tiny changes of color, making some tests
+        // fail. Since moving AA-ed line slightly to a side doesn't cause any real visual
+        // difference, just place exactly at the center. tdf#134346
+        const SkScalar posFix = useAA ? toSkXYFix : 0;
+        polygonPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
+    }
     if (mFillColor != SALCOLOR_NONE)
     {
-        SkPath path;
-        polygonPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, &path);
         aPaint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
         aPaint.setStyle(SkPaint::kFill_Style);
         // HACK: If the polygon is just a line, it still should be drawn. But when filling
         // Skia doesn't draw empty polygons, so in that case ensure the line is drawn.
-        if (mLineColor == SALCOLOR_NONE && path.getBounds().isEmpty())
+        if (mLineColor == SALCOLOR_NONE && polygonPath.getBounds().isEmpty())
             aPaint.setStyle(SkPaint::kStroke_Style);
-        getDrawCanvas()->drawPath(path, aPaint);
+        getDrawCanvas()->drawPath(polygonPath, aPaint);
     }
     if (mLineColor != SALCOLOR_NONE)
     {
-        SkPath path;
-        polygonPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, &path);
         aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
         aPaint.setStyle(SkPaint::kStroke_Style);
-        getDrawCanvas()->drawPath(path, aPaint);
+        getDrawCanvas()->drawPath(polygonPath, aPaint);
     }
     postDraw();
 #if defined LINUX

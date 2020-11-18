@@ -836,6 +836,27 @@ public:
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(4, 4)));
     }
 
+    void testTdf137329()
+    {
+        ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        device->SetOutputSizePixel(Size(10, 10));
+        device->SetBackground(Wallpaper(COL_WHITE));
+        device->SetAntialiasing(AntialiasingFlags::Enable);
+        device->Erase();
+        device->SetLineColor();
+        device->SetFillColor(COL_BLACK);
+        // Draw a filled polygon in the entire device, with AA enabled.
+        device->DrawPolyPolygon(basegfx::B2DPolyPolygon(
+            basegfx::B2DPolygon{ { 0, 0 }, { 10, 0 }, { 10, 10 }, { 0, 10 } }));
+        exportDevice("/tmp/tdf137329.png", device);
+        // All pixels in the device now should be black, even those at edges (i.e. not affected by AA).
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(0, 0)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(9, 0)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(9, 9)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(0, 9)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(4, 4)));
+    }
+
     CPPUNIT_TEST_SUITE(BackendTest);
     CPPUNIT_TEST(testDrawRectWithRectangle);
     CPPUNIT_TEST(testDrawRectWithPixel);
@@ -904,6 +925,7 @@ public:
 
     CPPUNIT_TEST(testTdf124848);
     CPPUNIT_TEST(testTdf136171);
+    CPPUNIT_TEST(testTdf137329);
 
     CPPUNIT_TEST_SUITE_END();
 };
