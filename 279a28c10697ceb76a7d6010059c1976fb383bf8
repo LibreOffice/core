@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37d1020a_5ddcfe70",
+        "filename": "sw/source/core/layout/legacyitem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-18T09:43:39Z",
+      "side": 1,
+      "message": "* I wonder if this uncovered a binary-incompatible change on 64-bit Windows, depending on how those streams are used by LO?\n\n* Cosmetic nitpick:  There is no real need to use `if constexpr` here, as the branch not taken (and eliminated by any decent compiler) would compile just fine.  (`if constexpr` is mostly useful in template code.)",
+      "revId": "279a28c10697ceb76a7d6010059c1976fb383bf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
