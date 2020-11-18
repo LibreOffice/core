@@ -12,6 +12,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -85,6 +86,30 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
 
     CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Components"));
     CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Components_1"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateReplacementNosetting)
+{
+    // Load a copy of the document in hidden mode.
+    OUString aSourceURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "update-replacement-nosetting.odt";
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::File::copy(aSourceURL, maTempFile.GetURL()));
+    mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument",
+                                  { comphelper::makePropertyValue("Hidden", true) });
+
+    // Update "everything" (including object replacements) and save it.
+    dispatchCommand(mxComponent, ".uno:UpdateAll", {});
+    uno::Reference<frame::XStorable2> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeSelf({});
+
+    // Check the contents of the updated copy.
+    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(xContext, maTempFile.GetURL());
+
+    // Without the accompanying fix in place, this test would have failed, because the embedded
+    // object replacement image was not generated.
+    CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Components"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
