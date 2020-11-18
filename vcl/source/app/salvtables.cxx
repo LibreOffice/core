@@ -5486,6 +5486,10 @@ class SalInstanceFormattedSpinButton : public SalInstanceEntry,
 private:
     VclPtr<FormattedField> m_xButton;
     weld::EntryFormatter* m_pFormatter;
+    Link<weld::Widget&, void> m_aLoseFocusHdl;
+
+    DECL_LINK(UpDownHdl, SpinField&, void);
+    DECL_LINK(LoseFocusHdl, Control&, void);
 
 public:
     SalInstanceFormattedSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
@@ -5494,6 +5498,9 @@ public:
         , m_xButton(pButton)
         , m_pFormatter(nullptr)
     {
+        m_xButton->SetUpHdl(LINK(this, SalInstanceFormattedSpinButton, UpDownHdl));
+        m_xButton->SetDownHdl(LINK(this, SalInstanceFormattedSpinButton, UpDownHdl));
+        m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceFormattedSpinButton, LoseFocusHdl));
     }
 
     virtual void set_text(const OUString& rText) override
@@ -5517,7 +5524,7 @@ public:
     {
         if (!m_pFormatter) // once a formatter is set, it takes over "focus-out"
         {
-            SalInstanceEntry::connect_focus_out(rLink);
+            m_aLoseFocusHdl = rLink;
             return;
         }
         m_pFormatter->connect_focus_out(rLink);
@@ -5548,7 +5555,22 @@ public:
     {
         return m_xButton->GetFormatter();
     }
+
+    virtual ~SalInstanceFormattedSpinButton() override
+    {
+        m_xButton->SetLoseFocusHdl(Link<Control&, void>());
+        m_xButton->SetDownHdl(Link<SpinField&, void>());
+        m_xButton->SetUpHdl(Link<SpinField&, void>());
+    }
 };
+
+IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, UpDownHdl, SpinField&, void) { signal_value_changed(); }
+
+IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, LoseFocusHdl, Control&, void)
+{
+    signal_value_changed();
+    m_aLoseFocusHdl.Call(*this);
+}
 
 }
 
