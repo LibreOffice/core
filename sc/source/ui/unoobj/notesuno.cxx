@@ -32,7 +32,6 @@
 #include <cellsuno.hxx>
 #include <docsh.hxx>
 #include <docfunc.hxx>
-#include <hints.hxx>
 #include <editsrc.hxx>
 #include <miscuno.hxx>
 

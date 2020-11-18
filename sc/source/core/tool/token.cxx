@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstddef>
-#include <cstdio>
 #include <functional>
 
 #include <string.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <sfx2/docfile.hxx>
-#include <officecfg/Office/Calc.hxx>
 
 #include <token.hxx>
 #include <tokenarray.hxx>
@@ -35,11 +31,7 @@
 #include <interpre.hxx>
 #include <formula/FormulaCompiler.hxx>
 #include <formula/compiler.hxx>
-#include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
-#include <formulagroup.hxx>
-#include <rechead.hxx>
-#include <parclass.hxx>
 #include <jumpmatrix.hxx>
 #include <rangeseq.hxx>
 #include <externalrefmgr.hxx>

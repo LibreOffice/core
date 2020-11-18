@@ -25,7 +25,6 @@
 #include "xlstream.hxx"
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
-#include <type_traits>
 
 // Base classes to export Excel records =======================================
 

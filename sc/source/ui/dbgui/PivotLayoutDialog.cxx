@@ -19,6 +19,7 @@
 #include <dbdocfun.hxx>
 #include <dpsave.hxx>
 #include <dpshttab.hxx>
+#include <scmod.hxx>
 
 #include <memory>
 #include <vector>

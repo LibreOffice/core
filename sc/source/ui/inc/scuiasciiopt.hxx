@@ -23,7 +23,6 @@
 #include <svx/langbox.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
 #include "asciiopt.hxx"

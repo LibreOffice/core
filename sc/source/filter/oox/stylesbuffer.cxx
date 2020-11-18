@@ -30,7 +30,6 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XFont2.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>

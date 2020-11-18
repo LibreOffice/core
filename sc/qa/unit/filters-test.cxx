@@ -30,6 +30,7 @@
 #include <scmod.hxx>
 
 #include <svx/svdpage.hxx>
+#include <tools/stream.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

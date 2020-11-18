@@ -29,7 +29,6 @@
 #include <sal/config.h>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/editobj.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdpage.hxx>
 #include <rtl/math.hxx>

@@ -20,18 +20,14 @@
 #include <memory>
 #include <autoform.hxx>
 
-#include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/algitem.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/rotmodit.hxx>
-#include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 #include <editeng/adjustitem.hxx>
 #include <editeng/borderline.hxx>
@@ -55,16 +51,13 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
 #include <osl/diagnose.h>
+#include <osl/thread.hxx>
 
 #include <attrib.hxx>
 #include <globstr.hrc>
 #include <scitems.hxx>
 #include <scresid.hxx>
 #include <document.hxx>
-
-#include <svl/legacyitem.hxx>
-#include <editeng/legacyitem.hxx>
-#include <svx/legacyitem.hxx>
 
 /*
  * XXX: BIG RED NOTICE! Changes MUST be binary file format compatible and MUST

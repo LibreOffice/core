@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "gridwin.hxx"
+#include "navipi.hxx"
 #include <memory>
 #include <vcl/uitest/uiobject.hxx>
 

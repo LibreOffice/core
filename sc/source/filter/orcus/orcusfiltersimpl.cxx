@@ -11,7 +11,6 @@
 #include <orcusinterface.hxx>
 #include <tokenarray.hxx>
 
-#include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>

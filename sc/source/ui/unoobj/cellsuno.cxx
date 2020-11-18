@@ -26,10 +26,8 @@
 #include <svx/algitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/justifyitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/unoipset.hxx>
 #include <editeng/langitem.hxx>
