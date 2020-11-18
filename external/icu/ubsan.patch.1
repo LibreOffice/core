@@ -1,3 +1,41 @@
+--- a/source/common/rbbitblb.cpp
++++ a/source/common/rbbitblb.cpp
+@@ -1402,12 +1402,13 @@
+             U_ASSERT (sd->fAccepting <= 255);
+             U_ASSERT (sd->fLookAhead <= 255);
+             U_ASSERT (0 <= sd->fTagsIdx && sd->fTagsIdx <= 255);
+-            row->r8.fAccepting = sd->fAccepting;
+-            row->r8.fLookAhead = sd->fLookAhead;
+-            row->r8.fTagsIdx   = sd->fTagsIdx;
++            RBBIStateTableRow8 *row8 = reinterpret_cast<RBBIStateTableRow8 *>(row);
++            row8->fAccepting = sd->fAccepting;
++            row8->fLookAhead = sd->fLookAhead;
++            row8->fTagsIdx   = sd->fTagsIdx;
+             for (col=0; col<catCount; col++) {
+                 U_ASSERT (sd->fDtran->elementAti(col) <= kMaxStateFor8BitsTable);
+-                row->r8.fNextState[col] = sd->fDtran->elementAti(col);
++                row8->fNextState[col] = sd->fDtran->elementAti(col);
+             }
+         } else {
+             U_ASSERT (sd->fAccepting <= 0xffff);
+@@ -1603,12 +1603,13 @@
+         UnicodeString *rowString = (UnicodeString *)fSafeTable->elementAt(state);
+         RBBIStateTableRow   *row = (RBBIStateTableRow *)(table->fTableData + state*table->fRowLen);
+         if (use8BitsForSafeTable()) {
+-            row->r8.fAccepting = 0;
+-            row->r8.fLookAhead = 0;
+-            row->r8.fTagsIdx    = 0;
++            RBBIStateTableRow8 *row8 = reinterpret_cast<RBBIStateTableRow8 *>(row);
++            row8->fAccepting = 0;
++            row8->fLookAhead = 0;
++            row8->fTagsIdx    = 0;
+             for (col=0; col<catCount; col++) {
+                 U_ASSERT(rowString->charAt(col) <= kMaxStateFor8BitsTable);
+-                row->r8.fNextState[col] = static_cast<uint8_t>(rowString->charAt(col));
++                row8->fNextState[col] = static_cast<uint8_t>(rowString->charAt(col));
+             }
+         } else {
+             row->r16.fAccepting = 0;
 diff -ur icu.org/source/tools/genrb/rbutil.c icu/source/tools/genrb/rbutil.c
 --- icu.org/source/tools/genrb/rbutil.c	2020-10-28 22:21:12.000000000 +0100
 +++ icu/source/tools/genrb/rbutil.c	2020-11-16 19:50:44.005119253 +0100
