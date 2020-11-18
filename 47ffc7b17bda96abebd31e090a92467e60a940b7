@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10205b94_5269c475",
+        "filename": "store/source/storcach.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-18T09:53:03Z",
+      "side": 1,
+      "message": "there should be no need for `constexpr` here (see discussion in comment at \u003chttps://gerrit.libreoffice.org/c/core/+/105996/2#message-a551d59117c5f5d2df9e9e3a2a86ab059119a36b\u003e \"This doesn\u0027t depend on SAL_TYPES_SIZEOFLONG anymore\")",
+      "range": {
+        "startLine": 139,
+        "startChar": 7,
+        "endLine": 139,
+        "endChar": 16
+      },
+      "revId": "47ffc7b17bda96abebd31e090a92467e60a940b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff6a74cb_0fad95dd",
+        "filename": "store/source/storcach.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-18T09:53:03Z",
+      "side": 1,
+      "message": "just drop the `ull` suffix completely? (`u` is already implied by `0x` anyway, and without suffix it should automatically pick an unsigned type large enough to hold 0xffffffff00000000, and then promotion should automatically pick a type large enough for `\u0026`)",
+      "range": {
+        "startLine": 141,
+        "startChar": 34,
+        "endLine": 141,
+        "endChar": 37
+      },
+      "revId": "47ffc7b17bda96abebd31e090a92467e60a940b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
