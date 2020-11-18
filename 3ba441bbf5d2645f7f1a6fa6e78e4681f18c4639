@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f557e662_75edeae7",
+        "filename": "sc/uiconfig/scalc/ui/solverdlg.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-18T10:04:13Z",
+      "side": 1,
+      "message": "I think you\u0027re going to need to re-edit this file with a newer version of glade, it seems to have lost some properties, e.g. the context attributes",
+      "revId": "3ba441bbf5d2645f7f1a6fa6e78e4681f18c4639",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
