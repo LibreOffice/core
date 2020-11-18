@@ -21,6 +21,8 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_WORKBOOKHELPER_HXX
 
 #include <memory>
+#include <string_view>
+
 #include <oox/helper/storagebase.hxx>
 #include <address.hxx>
 
@@ -61,7 +63,7 @@ class ExcelFilter;
 /** Functor for case-insensitive string comparison, usable in maps etc. */
 struct IgnoreCaseCompare
 {
-    bool operator()( const OUString& rName1, const OUString& rName2 ) const;
+    bool operator()( const OUString& rName1, std::u16string_view rName2 ) const;
 };
 
 class AddressConverter;

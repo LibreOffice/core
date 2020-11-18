@@ -94,7 +94,7 @@ using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler;
 using ::oox::core::XmlFilterBase;
 
-bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
+bool IgnoreCaseCompare::operator()( const OUString& rName1, std::u16string_view rName2 ) const
 {
     // TODO: compare with collator
     return rName1.compareToIgnoreAsciiCase(rName2 ) < 0;

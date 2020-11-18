@@ -150,6 +150,7 @@
 
 #include <algorithm>
 #include <stdarg.h>
+#include <string_view>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unicode/regex.h>
@@ -6288,7 +6289,7 @@ namespace {
 /// Functor to do case-insensitive ordering of OUString instances.
 struct OUStringIgnoreCase
 {
-    bool operator() (const OUString& lhs, const OUString& rhs) const
+    bool operator() (const OUString& lhs, std::u16string_view rhs) const
     {
         return lhs.compareToIgnoreAsciiCase(rhs) < 0;
     }
