@@ -100,7 +100,7 @@ void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 }
 
 static void lcl_InsertGraphic( const Graphic& rGraphic,
-                        const OUString& rFileName, const OUString& rFilterName, bool bAsLink, bool bApi,
+                        const OUString& rFileName, bool bAsLink, bool bApi,
                         ScTabViewShell& rViewSh, const vcl::Window* pWindow, SdrView* pView,
                         ScAnchorType aAnchorType = SCA_CELL )
 {
@@ -138,8 +138,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
                 *pPickObj,
                 rGraphic1,
                 aBeginUndo,
-                bAsLink ? rFileName : OUString(),
-                bAsLink ? rFilterName : OUString());
+                bAsLink ? rFileName : OUString());
 
             if(pResult)
             {
@@ -204,7 +203,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
     // See #i37444#.
     if (bSuccess && bAsLink)
-        pObj->SetGraphicLink( rFileName, u""/*TODO?*/, rFilterName );
+        pObj->SetGraphicLink( rFileName );
 }
 
 static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
@@ -283,7 +282,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
         ErrCode nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
         if ( nError == ERRCODE_NONE )
         {
-            lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, true, rViewSh, pWindow, pView );
+            lcl_InsertGraphic( aGraphic, aFileName, bAsLink, true, rViewSh, pWindow, pView );
         }
     }
     else
@@ -349,7 +348,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
                 else
                     aAnchorType = SCA_DONTKNOW;
 
-                lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, false, rViewSh, pWindow, pView, aAnchorType );
+                lcl_InsertGraphic( aGraphic, aFileName, bAsLink, false, rViewSh, pWindow, pView, aAnchorType );
 
                 //  append items for recording
                 rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );

@@ -3759,7 +3759,7 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
 SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, const DffObjData& rObjData )
 {
     SdrObject*  pRet = nullptr;
-    OUString    aLinkFileName, aLinkFilterName;
+    OUString    aLinkFileName;
     tools::Rectangle   aVisArea;
 
     auto eFlags = GetPropertyValue(DFF_Prop_pibFlags, mso_blipflagDefault);
@@ -3968,9 +3968,6 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 }
                 if( aAbsURL.GetProtocol() != INetProtocol::NotValid )
                 {
-                    GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
-                    aLinkFilterName = rGrfFilter.GetImportFormatName(
-                        rGrfFilter.GetImportFormatNumberForShortName( aAbsURL.getExtension() ) );
                     aLinkFileName = aAbsURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
                 }
                 else
@@ -4001,7 +3998,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     {
         if( aLinkFileName.getLength() )
         {
-            static_cast<SdrGrafObj*>(pRet)->SetGraphicLink( aLinkFileName, u""/*TODO?*/, aLinkFilterName );
+            static_cast<SdrGrafObj*>(pRet)->SetGraphicLink( aLinkFileName );
             Graphic aGraphic(static_cast<SdrGrafObj*>(pRet)->GetGraphic());
             aGraphic.setOriginURL(aLinkFileName);
         }

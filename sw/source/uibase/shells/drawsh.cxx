@@ -144,17 +144,9 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
         // triggers the same assertion (I tried it), so stay at the view method
         pSdrView->ReplaceObjectAtView(&rObject, *pSdrView->GetSdrPageView(), pNewGrafObj);
 
-        OUString aReferer;
-        SwDocShell *pDocShell = rSh.GetDoc()->GetDocShell();
-        if (pDocShell->HasName()) {
-            aReferer = pDocShell->GetMedium()->GetName();
-        }
-
         // set in all cases - the Clone() will have copied an existing link (!)
         pNewGrafObj->SetGraphicLink(
-            bAsLink ? aDlg.GetPath() : OUString(),
-            aReferer,
-            bAsLink ? aDlg.GetDetectedFilter() : OUString());
+            bAsLink ? aDlg.GetPath() : OUString());
 
         pResult = pNewGrafObj;
     }

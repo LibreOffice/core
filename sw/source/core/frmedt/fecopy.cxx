@@ -1586,14 +1586,8 @@ bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
             // triggers the same assertion (I tried it), so stay at the view method
             pView->ReplaceObjectAtView(pObj, *pView->GetSdrPageView(), pNewGrafObj);
 
-            OUString aReferer;
-            SwDocShell *pDocShell = GetDoc()->GetDocShell();
-            if (pDocShell->HasName()) {
-                aReferer = pDocShell->GetMedium()->GetName();
-            }
-
             // set in all cases - the Clone() will have copied an existing link (!)
-            pNewGrafObj->SetGraphicLink(rURL, aReferer, OUString());
+            pNewGrafObj->SetGraphicLink(rURL);
 
             pResult = pNewGrafObj;
         }

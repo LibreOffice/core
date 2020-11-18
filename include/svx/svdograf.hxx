@@ -92,7 +92,6 @@ private:
     GraphicAttr aGrafInfo;
 
     OUString aFileName; // If it's a Link, the filename can be found in here
-    OUString aReferer;
     OUString aFilterName;
     std::unique_ptr<GraphicObject> mpGraphicObject; // In order to speed up output of bitmaps, especially rotated ones
     std::unique_ptr<GraphicObject> mpReplacementGraphicObject;
@@ -163,7 +162,7 @@ private:
     void                    ForceSwapIn() const;
 
 public:
-    void                    SetGraphicLink(const OUString& rFileName, std::u16string_view rReferer, std::u16string_view rFilterName);
+    void                    SetGraphicLink(const OUString& rFileName);
     void                    ReleaseGraphicLink();
     bool IsLinkedGraphic() const;
 
