@@ -31,7 +31,7 @@ lcl_getScVbaFormatConditionsPtr( const uno::Reference< excel::XFormatConditions 
 {
     ScVbaFormatConditions* pFormatConditions = static_cast< ScVbaFormatConditions* >( xFormatConditions.get() );
     if ( !pFormatConditions )
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     return pFormatConditions;
 }
 
@@ -69,7 +69,7 @@ ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const uno::Any& _aOperator, co
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
 }
 
@@ -103,7 +103,7 @@ ScVbaFormatCondition::retrieveAPIType(sal_Int32 _nVBAType, const uno::Reference<
                 aAPIType = sheet::ConditionOperator_NONE;
             break;
         default:
-            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
+            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
     return aAPIType;
 }
@@ -134,7 +134,7 @@ ScVbaFormatCondition::notifyRange()
     }
     catch (uno::Exception& )
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
 }
 

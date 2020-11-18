@@ -52,7 +52,7 @@ void ScVbaStyle::initialise()
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxPropertySet, uno::UNO_QUERY_THROW );
     if ( !xServiceInfo->supportsService("com.sun.star.style.CellStyle") )
     {
-            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
+            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
     mxStyle.set( mxPropertySet, uno::UNO_QUERY_THROW );
 
@@ -72,7 +72,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent,
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
 }
 
@@ -88,7 +88,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent,
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
 }
 
@@ -133,7 +133,7 @@ ScVbaStyle::getNameLocal()
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
     return sName;
 }
@@ -147,20 +147,20 @@ ScVbaStyle::Delete()
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
 }
 
 void SAL_CALL
 ScVbaStyle::setMergeCells( const uno::Any& /*MergeCells*/ )
 {
-    DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
+    DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
 }
 
 uno::Any SAL_CALL
 ScVbaStyle::getMergeCells(  )
 {
-    DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
+    DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
     return uno::Any();
 }
 

@@ -149,7 +149,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
             case word::WdTabAlignment::wdAlignTabBar:
             case word::WdTabAlignment::wdAlignTabList:
             {
-                DebugHelper::basicexception( ERRCODE_BASIC_NOT_IMPLEMENTED, OUString() );
+                DebugHelper::basicexception( ERRCODE_BASIC_NOT_IMPLEMENTED, {} );
                 break;
             }
             default:

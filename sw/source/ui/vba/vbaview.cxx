@@ -313,7 +313,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType )
                 while( hasNextPage && ( xStyle == word::getCurrentPageStyle( mxModel ) ) );
 
                 if( !hasNextPage )
-                    DebugHelper::basicexception( ERRCODE_BASIC_BAD_ACTION, OUString() );
+                    DebugHelper::basicexception( ERRCODE_BASIC_BAD_ACTION, {} );
             }
             break;
         }
@@ -353,7 +353,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType )
         if( nType == word::WdSeekView::wdSeekEvenPagesFooter
             || nType == word::WdSeekView::wdSeekEvenPagesHeader )
         {
-            DebugHelper::basicexception( ERRCODE_BASIC_BAD_ACTION, OUString() );
+            DebugHelper::basicexception( ERRCODE_BASIC_BAD_ACTION, {} );
         }
         xText.set( xPageProps->getPropertyValue( aPropText ), uno::UNO_QUERY_THROW );
     }
@@ -361,7 +361,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType )
     mxModel->unlockControllers();
     if( !xText.is() )
     {
-        DebugHelper::basicexception( ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
+        DebugHelper::basicexception( ERRCODE_BASIC_INTERNAL_ERROR, {} );
     }
     uno::Reference< text::XTextRange > xTextRange = word::getFirstObjectPosition( xText );
     return xTextRange;

@@ -190,10 +190,10 @@ void SAL_CALL SwVbaRange::InsertBreak(const uno::Any& _breakType)
         case word::WdBreakType::wdSectionBreakNextPage:
         case word::WdBreakType::wdSectionBreakOddPage:
         case word::WdBreakType::wdTextWrappingBreak:
-            DebugHelper::basicexception( ERRCODE_BASIC_NOT_IMPLEMENTED, OUString() );
+            DebugHelper::basicexception( ERRCODE_BASIC_NOT_IMPLEMENTED, {} );
             break;
         default:
-            DebugHelper::basicexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+            DebugHelper::basicexception( ERRCODE_BASIC_BAD_PARAMETER, {} );
     }
 
     if( eBreakType != style::BreakType_NONE )
