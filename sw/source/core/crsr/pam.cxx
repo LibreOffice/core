@@ -1121,7 +1121,7 @@ OUString SwPaM::GetText() const
 
 void SwPaM::InvalidatePaM()
 {
-    for (SwNodeIndex index = Start()->nNode; index != End()->nNode; ++index)
+    for (SwNodeIndex index = Start()->nNode; index <= End()->nNode; ++index)
     {
         if (SwTextNode *const pTextNode = index.GetNode().GetTextNode())
         {
@@ -1133,9 +1133,9 @@ void SwPaM::InvalidatePaM()
                 nStart,
                 index == End()->nNode
                     ? End()->nContent.GetIndex() - nStart
-                    : End()->nNode.GetNode().GetTextNode()->Len() - nStart,
+                    : pTextNode->Len() - nStart,
                 0);
-            pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, &aHint));
+            pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aHint, &aHint));
         }
         // other node types not invalidated
     }
