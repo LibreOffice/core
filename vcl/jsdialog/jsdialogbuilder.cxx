@@ -359,6 +359,7 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
 {
     ::Dialog* pDialog = m_xBuilder->get<::Dialog>(id);
     m_nWindowId = pDialog->GetLOKWindowId();
+    pDialog->SetLOKTunnelingState(false);
 
     InsertWindowToMap(m_nWindowId);
 
