@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc86ca80_2bf599a9",
+        "filename": "extensions/source/activex/StdAfx2.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-18T11:36:42Z",
+      "side": 1,
+      "message": "comment should be moved above the line to remain clarity of scope",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 0
+      },
+      "revId": "b34792a5debbbbf4c28d859c9cf196717f62118c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
