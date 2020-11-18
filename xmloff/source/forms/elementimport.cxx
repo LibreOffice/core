@@ -356,16 +356,21 @@ namespace xmloff
 
                 if ( bValueIsSequence )
                 {
-                    OSL_ENSURE( eValueTypeClass == TypeClass_ANY,
+                    Sequence< Any > aXMLValueList;
+                    rPropValues.Value >>= aXMLValueList;
+                    // just skip this part if empty sequence
+                    if (!aXMLValueList.getLength())
+                        continue;
+
+                    Sequence< sal_Int16 > aPropertyValueList( aXMLValueList.getLength() );
+
+                    SAL_WARN_IF( eValueTypeClass != TypeClass_ANY, "xmloff",
                         "OElementImport::implApplyGenericProperties: only ANYs should have been imported as generic list property!" );
                         // (OPropertyImport should produce only Sequencer< Any >, since it cannot know the real type
 
-                    OSL_ENSURE( ePropTypeClass == TypeClass_SHORT,
+                    SAL_WARN_IF( ePropTypeClass != TypeClass_SHORT, "xmloff",
                         "OElementImport::implApplyGenericProperties: conversion to sequences other than 'sequence< short >' not implemented, yet!" );
 
-                    Sequence< Any > aXMLValueList;
-                    rPropValues.Value >>= aXMLValueList;
-                    Sequence< sal_Int16 > aPropertyValueList( aXMLValueList.getLength() );
 
                     std::transform(aXMLValueList.begin(), aXMLValueList.end(), aPropertyValueList.begin(),
                         [](const Any& rXMLValue) -> sal_Int16 {
