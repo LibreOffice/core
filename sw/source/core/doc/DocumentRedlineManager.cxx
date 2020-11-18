@@ -137,6 +137,10 @@ static void UpdateFieldsForRedline(IDocumentFieldsAccess & rIDFA)
 
 void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 {
+    if (rDoc.IsClipBoard())
+    {
+        return;
+    }
     // no need to call UpdateFootnoteNums for FTNNUM_PAGE:
     // the AppendFootnote/RemoveFootnote will do it by itself!
     rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
@@ -144,6 +148,7 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
     SwTextNode * pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
     while (!pStartNode)
     {
+        // note: branch only taken for redlines, not fieldmarks
         SwStartNode *const pTableOrSectionNode(
             currentStart.nNode.GetNode().IsTableNode()
                 ? static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetTableNode())
@@ -155,7 +160,7 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
         }
         for (SwRootFrame const*const pLayout : rDoc.GetAllLayouts())
         {
-            if (pLayout->IsHideRedlines())
+            if (pLayout->HasMergedParas())
             {
                 if (pTableOrSectionNode->IsTableNode())
                 {
@@ -180,7 +185,7 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pNode);
             for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
             {
-                if (pFrame->getRootFrame()->IsHideRedlines())
+                if (pFrame->getRootFrame()->HasMergedParas())
                 {
                     frames.push_back(pFrame);
                 }
@@ -233,12 +238,17 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 
 void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 {
+    if (rDoc.IsClipBoard())
+    {
+        return;
+    }
     bool isAppendObjsCalled(false);
     rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
     SwPosition currentStart(*rPam.Start());
     SwTextNode * pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
     while (!pStartNode)
     {
+        // note: branch only taken for redlines, not fieldmarks
         SwStartNode const*const pTableOrSectionNode(
             currentStart.nNode.GetNode().IsTableNode()
                 ? static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetTableNode())
@@ -248,7 +258,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
         {
             pTableOrSectionNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::None);
         }
-        if (rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines())
+        if (rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->HasMergedParas())
         {
             // note: this will also create frames for all currently hidden flys
             // because it calls AppendAllObjs
@@ -269,7 +279,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pNode);
             for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
             {
-                if (pFrame->getRootFrame()->IsHideRedlines())
+                if (pFrame->getRootFrame()->HasMergedParas())
                 {
                     frames.push_back(pFrame);
                 }
@@ -329,7 +339,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
     {   // recreate flys in the one node the hard way...
         for (auto const& pLayout : rDoc.GetAllLayouts())
         {
-            if (pLayout->IsHideRedlines())
+            if (pLayout->HasMergedParas())
             {
                 AppendAllObjs(rDoc.GetSpzFrameFormats(), pLayout);
                 break;
