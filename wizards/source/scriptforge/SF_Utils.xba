@@ -398,7 +398,7 @@ Dim vNodePath As Variant
 				Set _GetUNOService = .PathSubstitution
 			Case &quot;ScriptProvider&quot;
 				If IsMissing(pvArg) Then pvArg = SF_Session.SCRIPTISAPPLICATION
-				Select Case pvArg
+				Select Case LCase(pvArg)
 					Case SF_Session.SCRIPTISEMBEDDED	&apos;	Document
 						If Not IsNull(ThisComponent) Then Set _GetUNOService = ThisComponent.getScriptProvider()
 					Case Else
