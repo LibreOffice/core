@@ -40,6 +40,7 @@
 #include <DropDownFormFieldButton.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <comphelper/lok.hxx>
+#include <txtfrm.hxx>
 #include <view.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <wrtsh.hxx>
@@ -556,8 +557,6 @@ namespace sw::mark
         if (eMode == sw::mark::InsertMode::New)
         {
             lcl_SetFieldMarks(*this, io_rDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, pSepPos);
-            // no need to invalidate text frames here, the insertion of the
-            // CH_TXT_ATR already invalidates
         }
         else
         {
@@ -574,6 +573,9 @@ namespace sw::mark
         }
         ::sw::UndoGuard const ug(rIDUR); // prevent SwUndoDeletes
         lcl_RemoveFieldMarks(*this, rDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+        // notify layouts to unhide - for the entire fieldmark, as in InitDoc()
+        SwPaM const tmp(GetMarkPos(), GetOtherMarkPos());
+        sw::UpdateFramesForRemoveDeleteRedline(rDoc, tmp);
     }
 
     NonTextFieldmark::NonTextFieldmark(const SwPaM& rPaM)
@@ -806,6 +808,9 @@ namespace sw::mark
         }
         ::sw::UndoGuard const ug(rIDUR); // prevent SwUndoDeletes
         lcl_RemoveFieldMarks(*this, rDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+        // notify layouts to unhide - for the entire fieldmark, as in InitDoc()
+        SwPaM const tmp(GetMarkPos(), GetOtherMarkPos());
+        sw::UpdateFramesForRemoveDeleteRedline(rDoc, tmp);
     }
 
     void DateFieldmark::ShowButton(SwEditWin* pEditWin)

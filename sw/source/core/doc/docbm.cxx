@@ -42,6 +42,7 @@
 #include <sal/log.hxx>
 #include <UndoBookmark.hxx>
 #include <tools/datetimeutils.hxx>
+#include <txtfrm.hxx>
 #include <view.hxx>
 
 #include <libxml/xmlstring.h>
@@ -687,6 +688,20 @@ namespace sw::mark
                 // no special array for these
                 break;
         }
+        if (eType == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
+            || eType == IDocumentMarkAccess::MarkType::DATE_FIELDMARK)
+        {
+            // due to SwInsText notifications everything is visible now - tell
+            // layout to hide as appropriate
+            // note: we don't know how many layouts there are and which
+            // parts they hide, so just notify the entire fieldmark, it
+            // should give the right result if not in the most efficient way
+            // note2: can't be done in InitDoc() because it requires the mark
+            // to be inserted in the vectors.
+            SwPaM const tmp(pMark->GetMarkPos(), pMark->GetOtherMarkPos());
+            sw::UpdateFramesForAddDeleteRedline(m_rDoc, tmp);
+        }
+
         SAL_INFO("sw.core", "--- makeType ---");
         SAL_INFO("sw.core", "Marks");
         lcl_DebugMarks(m_vAllMarks);
