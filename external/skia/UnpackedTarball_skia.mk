@@ -35,7 +35,8 @@ skia_patches := \
     fix-windows-dwrite.patch.1 \
     c++20.patch.0 \
     constexpr-debug-std-max.patch.1 \
-    swap-buffers-rect.patch.1
+    swap-buffers-rect.patch.1 \
+    ubsan.patch.0
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

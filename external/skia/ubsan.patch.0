@@ -1,0 +1,32 @@
+--- include/private/GrContext_Base.h
++++ include/private/GrContext_Base.h
+@@ -20,7 +20,7 @@
+ class GrImageContext;
+ class GrRecordingContext;
+ 
+-class GrContext_Base : public SkRefCnt {
++class SK_API GrContext_Base : public SkRefCnt {
+ public:
+     ~GrContext_Base() override;
+ 
+@@ -32,7 +32,7 @@
+     /*
+      * The 3D API backing this context
+      */
+-    SK_API GrBackendApi backend() const;
++    GrBackendApi backend() const;
+ 
+     /*
+      * Retrieve the default GrBackendFormat for a given SkColorType and renderability.
+@@ -41,9 +41,9 @@
+      *
+      * The caller should check that the returned format is valid.
+      */
+-    SK_API GrBackendFormat defaultBackendFormat(SkColorType, GrRenderable) const;
++    GrBackendFormat defaultBackendFormat(SkColorType, GrRenderable) const;
+ 
+-    SK_API GrBackendFormat compressedBackendFormat(SkImage::CompressionType) const;
++    GrBackendFormat compressedBackendFormat(SkImage::CompressionType) const;
+ 
+     // TODO: When the public version is gone, rename to refThreadSafeProxy and add raw ptr ver.
+     sk_sp<GrContextThreadSafeProxy> threadSafeProxy();
