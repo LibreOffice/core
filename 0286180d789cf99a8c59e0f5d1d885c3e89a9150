@@ -70,6 +70,30 @@
       "revId": "0286180d789cf99a8c59e0f5d1d885c3e89a9150",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4825e5ab_f18d3cc2",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 38
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-18T06:22:45Z",
+      "side": 1,
+      "message": "\u003e I wanted to maintain a uniformity in accessing the number\n\nThis is a good thinking. However, Jim is completely right that it\u0027s better to use get_value here.\n\nWe need to use get_text in `IMPL_LINK( SwInsTableDlg, ModifyName, weld::Entry\u0026, rEdit, void )` not because get_text is better, but because that link is for weld::Entry (from which spin button is derived), not for spin button itself; so in that event, we only can rely on the guarantees defined for weld::Entry, not for weld::SpinButton. It\u0027s natural, since the Link is called from weld::Entry code, which has no idea what was derived from it, and if the descendants have their invariants settled at this point or not. In fact, the parameter passed to this function is weld::Entry\u0026 rEdit, and you access m_xRowSpinButton and m_xColSpinButton explicitly.\n\nActually, this would be better to mention all that in a comment at the top of the Link: why is that specific kind of link is used (and not the kind for spin button that was used in early versions of the patch); and why is get_text is used in it, not get_value. That would help others to understand (like you described answering to Caolan), and avoid regressions from optimizations.\n\nAnd all the other places, where we are not working in the context of ancestor class, we need to use normal get_value method.",
+      "parentUuid": "71d46b5d_2f022954",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "0286180d789cf99a8c59e0f5d1d885c3e89a9150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
