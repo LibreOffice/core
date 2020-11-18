@@ -34,59 +34,14 @@
 using namespace ::xmloff::token;
 using namespace com::sun::star;
 
-namespace
-{
-
-enum LegendAttributeTokens
-{
-    XML_TOK_LEGEND_POSITION,
-    XML_TOK_LEGEND_OVERLAY,
-    XML_TOK_LEGEND_X,
-    XML_TOK_LEGEND_Y,
-    XML_TOK_LEGEND_STYLE_NAME,
-    XML_TOK_LEGEND_EXPANSION,
-    XML_TOK_LEGEND_EXPANSION_ASPECT_RATIO,
-    XML_TOK_LEGEND_WIDTH,
-    XML_TOK_LEGEND_WIDTH_EXT,
-    XML_TOK_LEGEND_HEIGHT,
-    XML_TOK_LEGEND_HEIGHT_EXT
-};
-
-const SvXMLTokenMapEntry aLegendAttributeTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,      XML_LEGEND_POSITION,    XML_TOK_LEGEND_POSITION     },
-    { XML_NAMESPACE_LO_EXT,     XML_OVERLAY,            XML_TOK_LEGEND_OVERLAY      },
-    { XML_NAMESPACE_SVG,        XML_X,                  XML_TOK_LEGEND_X            },
-    { XML_NAMESPACE_SVG,        XML_Y,                  XML_TOK_LEGEND_Y            },
-    { XML_NAMESPACE_CHART,      XML_STYLE_NAME,         XML_TOK_LEGEND_STYLE_NAME   },
-    { XML_NAMESPACE_STYLE,      XML_LEGEND_EXPANSION,   XML_TOK_LEGEND_EXPANSION    },
-    { XML_NAMESPACE_STYLE,      XML_LEGEND_EXPANSION_ASPECT_RATIO,   XML_TOK_LEGEND_EXPANSION_ASPECT_RATIO    },
-    { XML_NAMESPACE_SVG,        XML_WIDTH,              XML_TOK_LEGEND_WIDTH        },
-    { XML_NAMESPACE_CHART_EXT,  XML_WIDTH,              XML_TOK_LEGEND_WIDTH_EXT    },
-    { XML_NAMESPACE_SVG,        XML_HEIGHT,             XML_TOK_LEGEND_HEIGHT       },
-    { XML_NAMESPACE_CHART_EXT,  XML_HEIGHT,             XML_TOK_LEGEND_HEIGHT_EXT   },
-    XML_TOKEN_MAP_END
-};
-
-class LegendAttributeTokenMap : public SvXMLTokenMap
-{
-public:
-    LegendAttributeTokenMap(): SvXMLTokenMap( aLegendAttributeTokenMap ) {}
-    virtual ~LegendAttributeTokenMap() {}
-};
-
-//a LegendAttributeTokenMap Singleton
-struct theLegendAttributeTokenMap : public rtl::Static< LegendAttributeTokenMap, theLegendAttributeTokenMap > {};
-
-}//end anonymous namespace
-
 SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport ) :
     SvXMLImportContext( rImport ),
     mrImportHelper( rImpHelper )
 {
 }
 
-void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
     if( !xDoc.is() )
@@ -115,9 +70,6 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     }
 
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    const SvXMLTokenMap& rAttrTokenMap = theLegendAttributeTokenMap::get();
-
     awt::Point aLegendPos;
     bool bOverlay = false;
     bool bHasXPosition=false;
@@ -131,16 +83,12 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     OUString sAutoStyleName;
     uno::Any aAny;
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        OUString aValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            case XML_TOK_LEGEND_POSITION:
+            case XML_ELEMENT(CHART, XML_LEGEND_POSITION):
                 try
                 {
                     if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aValue, aAny, GetImport().GetMM100UnitConverter() ) )
@@ -151,10 +99,10 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                     SAL_INFO("xmloff.chart", "Property Alignment (legend) not found" );
                 }
                 break;
-            case XML_TOK_LEGEND_OVERLAY:
+            case  XML_ELEMENT(LO_EXT, XML_OVERLAY):
                 try
                 {
-                    bOverlay = xAttrList->getValueByIndex(i).toBoolean();
+                    bOverlay = aValue.toBoolean();
                     xLegendProps->setPropertyValue("Overlay", uno::makeAny(bOverlay));
                 }
                 catch(const beans::UnknownPropertyException&)
@@ -162,38 +110,43 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                     SAL_INFO("xmloff.chart", "Property Overlay (legend) not found" );
                 }
                 break;
-            case XML_TOK_LEGEND_X:
+            case XML_ELEMENT(SVG, XML_X):
+            case XML_ELEMENT(SVG_COMPAT, XML_X):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         aLegendPos.X, aValue );
                 bHasXPosition = true;
                 break;
-            case XML_TOK_LEGEND_Y:
+            case XML_ELEMENT(SVG, XML_Y):
+            case XML_ELEMENT(SVG_COMPAT, XML_Y):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         aLegendPos.Y, aValue );
                 bHasYPosition = true;
                 break;
-            case XML_TOK_LEGEND_STYLE_NAME:
+            case XML_ELEMENT(CHART, XML_STYLE_NAME):
                 sAutoStyleName = aValue;
                 break;
-            case XML_TOK_LEGEND_EXPANSION:
+            case  XML_ELEMENT(STYLE, XML_LEGEND_EXPANSION):
                 SchXMLEnumConverter::getLegendPositionConverter().importXML( aValue, aAny, GetImport().GetMM100UnitConverter() );
                 bHasExpansion = (aAny>>=nLegendExpansion);
                 break;
-            case XML_TOK_LEGEND_EXPANSION_ASPECT_RATIO:
+            case XML_ELEMENT(STYLE, XML_LEGEND_EXPANSION_ASPECT_RATIO):
                 break;
-            case XML_TOK_LEGEND_WIDTH:
-            case XML_TOK_LEGEND_WIDTH_EXT:
+            case XML_ELEMENT(SVG, XML_WIDTH):
+            case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
+            case XML_ELEMENT(CHART_EXT, XML_WIDTH):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         aLegendSize.Width, aValue );
                 bHasWidth = true;
                 break;
-            case XML_TOK_LEGEND_HEIGHT:
-            case XML_TOK_LEGEND_HEIGHT_EXT:
+            case XML_ELEMENT(SVG, XML_HEIGHT):
+            case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
+            case XML_ELEMENT(CHART_EXT, XML_HEIGHT):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         aLegendSize.Height, aValue );
                 bHasHeight = true;
                 break;
             default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
                 break;
         }
     }
