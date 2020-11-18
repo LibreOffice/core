@@ -2124,7 +2124,7 @@ void GeometryHandler::impl_setCounterFunction_throw()
     const OUString sQuotedFunctionName = lcl_getQuotedFunctionName(sFunctionName);
     OUString sScope;
     if ( !(!sFunctionName.isEmpty() && m_aFunctionNames.find(sQuotedFunctionName) != m_aFunctionNames.end() && impl_isCounterFunction_throw(sQuotedFunctionName,sScope)) )
-        impl_createFunction(sFunctionName,OUString(),m_aCounterFunction);
+        impl_createFunction(sFunctionName,{},m_aCounterFunction);
 
     OBlocker aBlocker(m_bIn);
     m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny(impl_convertToFormula( uno::makeAny(sQuotedFunctionName))));

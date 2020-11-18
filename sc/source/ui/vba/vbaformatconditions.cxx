@@ -38,7 +38,7 @@ ScVbaFormatConditions::Delete(  )
     {
         ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
         if ( !pStyles )
-            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
+            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
         sal_Int32 nCount = mxSheetConditionalEntries->getCount();
         for (sal_Int32 i = nCount - 1; i >= 0; i--)
         {
@@ -50,7 +50,7 @@ ScVbaFormatConditions::Delete(  )
     }
     catch (uno::Exception& )
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
 }
 
@@ -198,7 +198,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
     catch (uno::Exception& )
     {
     }
-    DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
+    DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     return xFormatCondition;
 }
 
@@ -217,7 +217,7 @@ ScVbaFormatConditions::notifyRange()
     }
     catch (uno::Exception& )
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
 }
 
@@ -227,7 +227,7 @@ ScVbaFormatConditions::getA1Formula(const css::uno::Any& _aFormula)
     // #TODO, #FIXME hook-in proper formula conversion detection & logic
     OUString sFormula;
     if ( !( _aFormula >>= sFormula ) )
-        DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, {} );
     return sFormula;
 }
 
@@ -236,7 +236,7 @@ ScVbaFormatConditions::getStyleName()
 {
     ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
     if ( !pStyles )
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     uno::Sequence< OUString > sCellStyleNames = pStyles->getStyleNames();
     return ContainerUtilities::getUniqueName(sCellStyleNames, "Excel_CondFormat", "_");
 }
@@ -257,7 +257,7 @@ ScVbaFormatConditions::removeFormatCondition( const OUString& _sStyleName, bool 
                 {
                     ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
                     if ( !pStyles )
-                        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+                        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
                     pStyles->Delete( _sStyleName );
                 }
                 return;
@@ -266,7 +266,7 @@ ScVbaFormatConditions::removeFormatCondition( const OUString& _sStyleName, bool 
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
 }
 

@@ -82,7 +82,7 @@ SwVbaOptions::DefaultFilePath( sal_Int32 _path )
         }
         default:
         {
-            DebugHelper::basicexception( ERRCODE_BASIC_NOT_IMPLEMENTED, OUString() );
+            DebugHelper::basicexception( ERRCODE_BASIC_NOT_IMPLEMENTED, {} );
             break;
         }
     }

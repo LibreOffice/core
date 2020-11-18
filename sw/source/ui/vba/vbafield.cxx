@@ -366,7 +366,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUS
                     aReadParam.SkipToNextToken();
                     break;
                 default:
-                    DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString());
+                    DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, {});
                     break;
             }
         }

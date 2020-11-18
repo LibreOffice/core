@@ -3959,7 +3959,7 @@ void SwHTMLParser::NewPara()
 
     // parse styles (Don't consider class. This is only possible as long as none of
     // the CSS1 properties of the class must be formatted hard!!!)
-    if (HasStyleOptions(aStyle, aId, OUString(), &aLang, &aDir))
+    if (HasStyleOptions(aStyle, aId, {}, &aLang, &aDir))
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
@@ -4093,7 +4093,7 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
     std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nTextColl, aClass));
 
     // parse styles (regarding class see also NewPara)
-    if (HasStyleOptions(aStyle, aId, OUString(), &aLang, &aDir))
+    if (HasStyleOptions(aStyle, aId, {}, &aLang, &aDir))
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
@@ -4229,7 +4229,7 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
     std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nColl, aClass));
 
     // parse styles (regarding class see also NewPara)
-    if (HasStyleOptions(aStyle, aId, OUString(), &aLang, &aDir))
+    if (HasStyleOptions(aStyle, aId, {}, &aLang, &aDir))
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
@@ -4833,7 +4833,7 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
     OSL_ENSURE( pCFormat, "No character format found for token" );
 
     // parse styles (regarding class see also NewPara)
-    if (HasStyleOptions(aStyle, aId, OUString(), &aLang, &aDir))
+    if (HasStyleOptions(aStyle, aId, {}, &aLang, &aDir))
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;

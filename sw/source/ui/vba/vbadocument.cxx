@@ -163,7 +163,7 @@ SwVbaDocument::Range( const uno::Any& rStart, const uno::Any& rEnd )
         }
         catch(const uno::Exception&)
         {
-            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
         }
     }
     return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, xStart, xEnd ) );

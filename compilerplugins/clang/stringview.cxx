@@ -52,6 +52,7 @@ public:
     bool VisitCXXConstructExpr(CXXConstructExpr const*);
     bool VisitFunctionDecl(FunctionDecl const*);
     bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const*);
+    bool VisitImplicitCastExpr(ImplicitCastExpr const*);
 };
 
 bool StringView::VisitCallExpr(CallExpr const* callExpr)
@@ -177,6 +178,39 @@ bool StringView::VisitCXXConstructExpr(CXXConstructExpr const* constructExpr)
             << argExpr->getSourceRange();
     }
 
+    return true;
+}
+
+bool StringView::VisitImplicitCastExpr(ImplicitCastExpr const* expr)
+{
+    if (ignoreLocation(expr))
+    {
+        return true;
+    }
+    if (!loplugin::TypeCheck(expr->getType()).ClassOrStruct("basic_string_view").StdNamespace())
+    {
+        return true;
+    }
+    auto const e = dyn_cast<CXXConstructExpr>(expr->getSubExprAsWritten()->IgnoreParens());
+    if (e == nullptr)
+    {
+        return true;
+    }
+    if (e->getNumArgs() != 0)
+    {
+        return true;
+    }
+    auto const tc = loplugin::TypeCheck(e->getType());
+    if (!(tc.Class("OString").Namespace("rtl").GlobalNamespace()
+          || tc.Class("OUString").Namespace("rtl").GlobalNamespace()))
+    {
+        return true;
+    }
+    report(DiagnosticsEngine::Warning,
+           "instead of an empty %0, pass an empty '%select{std::string_view|std::u16string_view}1'",
+           e->getLocation())
+        << e->getType() << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1)
+        << e->getSourceRange();
     return true;
 }
 

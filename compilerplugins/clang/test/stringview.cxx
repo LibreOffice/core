@@ -93,4 +93,12 @@ void f4(OUString s1, OUString s2)
 }
 }
 
+void f5()
+{
+    // expected-error@+1 {{instead of an empty 'rtl::OString', pass an empty 'std::string_view' [loplugin:stringview]}}
+    call_view(OString());
+    // expected-error@+1 {{instead of an empty 'rtl::OUString', pass an empty 'std::u16string_view' [loplugin:stringview]}}
+    call_view(OUString());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

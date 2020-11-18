@@ -380,7 +380,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
 OUString createSqlCreateTableStatement(  const Reference< XPropertySet >& descriptor,
                                          const Reference< XConnection>& _xConnection)
 {
-    OUString aSql = ::dbtools::createStandardCreateStatement(descriptor,_xConnection,nullptr,OUString());
+    OUString aSql = ::dbtools::createStandardCreateStatement(descriptor,_xConnection,nullptr,{});
     const OUString sKeyStmt = ::dbtools::createStandardKeyStatement(descriptor,_xConnection);
     if ( !sKeyStmt.isEmpty() )
         aSql += sKeyStmt;

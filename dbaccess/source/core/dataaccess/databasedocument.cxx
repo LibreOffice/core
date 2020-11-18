@@ -987,7 +987,7 @@ void SAL_CALL ODatabaseDocument::store(  )
             // allowed to leave
             throw;
         }
-        impl_throwIOExceptionCausedBySave_throw( aError, OUString() );
+        impl_throwIOExceptionCausedBySave_throw( aError, {} );
     }
 }
 

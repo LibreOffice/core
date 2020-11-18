@@ -1177,7 +1177,7 @@ uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Intersect(
         const uno::Any& rArg27, const uno::Any& rArg28, const uno::Any& rArg29, const uno::Any& rArg30 )
 {
     if( !rArg1.is() || !rArg2.is() )
-        DebugHelper::basicexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+        DebugHelper::basicexception( ERRCODE_BASIC_BAD_PARAMETER, {} );
 
     // initialize the result list with 1st parameter, join its ranges together
     ListOfScRange aList;
@@ -1230,7 +1230,7 @@ uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Union(
         const uno::Any& rArg27, const uno::Any& rArg28, const uno::Any& rArg29, const uno::Any& rArg30 )
 {
     if( !rArg1.is() || !rArg2.is() )
-        DebugHelper::basicexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+        DebugHelper::basicexception( ERRCODE_BASIC_BAD_PARAMETER, {} );
 
     ListOfScRange aList;
     lclAddToListOfScRange( aList, uno::Any( rArg1 ) );

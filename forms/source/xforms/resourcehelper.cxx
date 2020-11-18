@@ -30,20 +30,20 @@ namespace xforms
 
 OUString getResource(const char* pResourceId)
 {
-    return getResource(pResourceId, OUString(), OUString(), OUString());
+    return getResource(pResourceId, {}, {}, {});
 }
 
 OUString getResource(const char* pResourceId,
                      std::u16string_view rInfo1)
 {
-    return getResource(pResourceId, rInfo1, OUString(), OUString());
+    return getResource(pResourceId, rInfo1, {}, {});
 }
 
 OUString getResource(const char* pResourceId,
                      std::u16string_view rInfo1,
                      std::u16string_view rInfo2)
 {
-    return getResource(pResourceId, rInfo1, rInfo2, OUString());
+    return getResource(pResourceId, rInfo1, rInfo2, {});
 }
 
 OUString getResource(const char* pResourceId,

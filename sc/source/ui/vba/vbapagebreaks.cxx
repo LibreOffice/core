@@ -173,7 +173,7 @@ uno::Any RangePageBreaks::Add( const css::uno::Any& Before )
     Before >>= xRange;
     if( !xRange.is() )
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, {});
     }
 
     sal_Int32 nAPIRowColIndex = getAPIStartofRange( xRange );

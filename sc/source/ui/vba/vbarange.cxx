@@ -4723,7 +4723,7 @@ ScVbaRange::Autofit()
     // if the range is a not a row or column range autofit will
     // throw an error
     if ( !( mbIsColumns || mbIsRows ) )
-            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     ScDocShell* pDocShell = getDocShellFromRange( mxRange );
     if ( !pDocShell )
         return;
@@ -5150,7 +5150,7 @@ ScVbaRange::Item( const uno::Any& row, const uno::Any& column )
     if ( mbIsRows || mbIsColumns )
     {
         if ( column.hasValue() )
-            DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+            DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, {} );
         uno::Reference< excel::XRange > xRange;
         if ( mbIsColumns )
             xRange = Columns( row );
@@ -5182,7 +5182,7 @@ ScVbaRange::AutoOutline(  )
         xSheetOutline->autoOutline( thisAddress );
     }
     else
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
 }
 
 void SAL_CALL
@@ -5373,13 +5373,13 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
     uno::Reference< excel::XRange > xUsedRange( getWorksheet()->getUsedRange() );
     sal_Int32 nType = 0;
     if ( !( _oType >>= nType ) )
-        DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, {} );
     switch(nType)
     {
         case excel::XlCellType::xlCellTypeSameFormatConditions:
         case excel::XlCellType::xlCellTypeAllValidation:
         case excel::XlCellType::xlCellTypeSameValidation:
-            DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
+            DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
             break;
         case excel::XlCellType::xlCellTypeBlanks:
         case excel::XlCellType::xlCellTypeComments:
@@ -5435,11 +5435,11 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
             break;
         }
         default:
-        DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, {} );
             break;
     }
     if ( !pRangeToUse )
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     return pRangeToUse->SpecialCellsImpl( nType, _oValue );
 }
 
@@ -5466,7 +5466,7 @@ static sal_Int32 lcl_getFormulaResultFlags(const uno::Any& aType)
             nRes = sheet::FormulaResult::STRING;
             break;
         default:
-            DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+            DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, {} );
     }
     return nRes;
 }
@@ -5487,7 +5487,7 @@ ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const uno::Any& _oValue)
             case excel::XlCellType::xlCellTypeSameValidation:
                 // Shouldn't get here ( should be filtered out by
                 // ScVbaRange::SpecialCells()
-                DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
+                DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
                 break;
             case excel::XlCellType::xlCellTypeBlanks:
                 xLocSheetCellRanges = xQuery->queryEmptyCells();
@@ -5511,7 +5511,7 @@ ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const uno::Any& _oValue)
                 xLocSheetCellRanges = xQuery->queryVisibleCells();
                 break;
             default:
-                DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+                DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, {} );
                 break;
         }
         if (xLocSheetCellRanges.is())
@@ -5591,7 +5591,7 @@ ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::
                     aColumns[i].Function = sheet::GeneralFunction_VARP;
                     break;
                 default:
-                    DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, OUString()) ;
+                    DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, {}) ;
                     return;
             }
         }
@@ -5600,7 +5600,7 @@ ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
 }
 

@@ -540,7 +540,7 @@ sal_Int32 SwVbaParagraphFormat::getMSWordAlignment( style::ParagraphAdjust _alig
         }
         default:
         {
-            DebugHelper::basicexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+            DebugHelper::basicexception( ERRCODE_BASIC_BAD_PARAMETER, {} );
         }
     }
     return wdAlignment;

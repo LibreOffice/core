@@ -1033,7 +1033,7 @@ void DebugHelper::basicexception( ErrCode err,  std::u16string_view additionalAr
 
 void DebugHelper::basicexception( const css::uno::Exception& ex )
 {
-    basicexception( ex, ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
+    basicexception( ex, ERRCODE_BASIC_INTERNAL_ERROR, {} );
 }
 
 void DebugHelper::runtimeexception( ErrCode err )
