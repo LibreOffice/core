@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8eb0f7ec_9a27f5b4",
+        "filename": "svx/uiconfig/ui/crashreportdlg.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-18T10:11:22Z",
+      "side": 0,
+      "message": "Have studied the matter now.  But (as usual) a few bumps in the road. Your suggestion will work for menuitems, but this is a dialog box.  \n\nI believe this is (approx.) what has to happen\n\nCURRENT in  svx/uiconfig/ui/crashreportdlg.ui \n\n  \u003cobject class\u003d\"GtkTextBuffer\" id\u003d\"textbuffer1\"\u003e\n    \u003cproperty name\u003d\"text\" translatable\u003d\"yes\" context\u003d\"crashreportdlg|ed_post\"\u003eThe crash report was successfully uploaded.\nYou can soon find the report at:\ncrashreport.libreoffice.org/stats/crash_details/%CRASHID\u003c/property\u003e\n\u003c/object\u003e\n\nPROPOSED (in  svx/uiconfig/ui/crashreportdlg.ui)\n\nClip out last line and put into GTkLinkButton - like this.\n\n\u003cobject class\u003d\"GtkTextBuffer\" id\u003d\"textbuffer1\"\u003e\n  \u003cproperty name\u003d\"text\" translatable\u003d\"yes\" context\u003d\"crashreportdlg|ed_post\"\u003eThe crash report was successfully uploaded.\nYou can soon find the report at:\n\u003c/object\u003e\n\n\u003cobject class\u003d\"GtkLinkButton\" id\u003d\"LinkCrashURL\"\u003e\n  \u003cproperty name\u003d\"label\" translatable\u003d\"yes\" context\u003d\"crashreportdlg|ed_crashurl\"\u003e%CRASHURL\u003c/property\u003e\n  \u003cproperty name\u003d\"visible\"\u003eTrue\u003c/property\u003e\n  \u003cproperty name\u003d\"can_focus\"\u003eTrue\u003c/property\u003e\n  \u003cproperty name\u003d\"receives_default\"\u003eTrue\u003c/property\u003e\n  \u003cproperty name\u003d\"relief\"\u003enone\u003c/property\u003e\n  \u003cproperty name\u003d\"xalign\"\u003e0\u003c/property\u003e\n\u003c/object\u003e\n\n\nThen add a line to the CrashReportDialog in /core/svx/source/dialog/crashreportdlg.cxx\n\nmxEditPostUploadURL(m_xBuilder-\u003eweld_link_view(\"ed_crashurl\"))\n\nThen modfy IMPL_LINK(CrashReportDialog #72 to provide the url  and show the linkbutton -- but there does not seem to be a strings.hrc that is being called here (which would be the obvious place to add the prefix to the crashID (i.e.,  https://crashreport.libreoffice.org/stats/crash_details )\n\nIs your idea to use (the functional equivalent) of  (from sfx2/source/appl/appserv.cxx  #517)\n\n    sURL(officecfg::Office::Common::Menus::SendFeedbackURL::get()\n\nto compose the URL in CrashReportDialog (but it didn\u0027t seem like this URL should be placed in the registry and I could not find an obvious place to put such a string)\n\nSeemed better to ask about preferred solutions in such a case --",
+      "revId": "0979798658ff536defe537f57cc6b32278d32414",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
