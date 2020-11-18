@@ -2567,7 +2567,7 @@ std::unique_ptr<SmSpecialNode> SmParser::DoSpecial()
         }
         else if (IsExportSymbolNames())
         {
-            aNewName = SmLocalizedSymbolData::GetExportSymbolName(rName.copy(1));
+            aNewName = SmLocalizedSymbolData::GetExportSymbolName(rName.subView(1));
             bReplace = true;
         }
     }

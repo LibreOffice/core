@@ -45,7 +45,7 @@ public:
 
     sal_uInt16   GetTypeFlag() const { return mnTypeFlag; }
 
-    bool                EqualsText( const OUString& rText ) const;
+    bool                EqualsText( std::u16string_view rText ) const;
     bool                EqualsDouble( double fValue ) const;
     bool                EqualsDateTime( const DateTime& rDateTime ) const;
     bool                EqualsBool( bool bValue ) const;
@@ -82,7 +82,7 @@ public:
     /** Returns the specified pivot cache item (returns visible items in groupings). */
     const XclExpPCItem* GetItem( sal_uInt16 nItemIdx ) const;
     /** Returns the index of a pivot cache item, or EXC_PC_NOITEM on error. */
-    sal_uInt16          GetItemIndex( const OUString& rItemName ) const;
+    sal_uInt16          GetItemIndex( std::u16string_view rItemName ) const;
 
     /** Returns the size an item index needs to write out. */
     std::size_t         GetIndexSize() const;
@@ -268,7 +268,7 @@ public:
 
     /** Returns the list index of an item by its name.
         @param nDefaultIdx  This value will be returned, if the item could not be found. */
-    sal_uInt16          GetItemIndex( const OUString& rName, sal_uInt16 nDefaultIdx ) const;
+    sal_uInt16          GetItemIndex( std::u16string_view rName, sal_uInt16 nDefaultIdx ) const;
 
     // fill data --------------------------------------------------------------
 
@@ -292,7 +292,7 @@ public:
 
 private:
     /** Returns an item by its name. */
-    XclExpPTItem*       GetItemAcc( const OUString& rName );
+    XclExpPTItem*       GetItemAcc( std::u16string_view rName );
 
     /** Appends a special item describing a field subtotal entry. */
     void                AppendSubtotalItem( sal_uInt16 nItemType );
@@ -330,7 +330,7 @@ public:
     /** Returns a pivot table field by its name. */
     const XclExpPTField* GetField( sal_uInt16 nFieldIdx ) const;
     /** Returns a pivot table field by its name. */
-    const XclExpPTField* GetField( const OUString& rName ) const;
+    const XclExpPTField* GetField( std::u16string_view rName ) const;
 
     /** Returns the data-field-only index of the first data field with the passed name.
         @param nDefaultIdx  This value will be returned, if the field could not be found. */
@@ -341,7 +341,7 @@ public:
 
 private:
     /** Returns a pivot table field by its name. */
-    XclExpPTField*      GetFieldAcc( const OUString& rName );
+    XclExpPTField*      GetFieldAcc( std::u16string_view rName );
     /** Returns a pivot table field corresponding to the passed save dimension. */
     XclExpPTField*      GetFieldAcc( const ScDPSaveDimension& rSaveDim );
 

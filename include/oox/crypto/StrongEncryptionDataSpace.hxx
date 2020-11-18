@@ -33,7 +33,7 @@ class StrongEncryptionDataSpace final
 
     css::uno::Reference<css::io::XInputStream>
     getStream(const css::uno::Sequence<css::beans::NamedValue>& rStreams,
-              const rtl::OUString sStreamName);
+              std::u16string_view sStreamName);
 
 public:
     StrongEncryptionDataSpace(const css::uno::Reference<css::uno::XComponentContext>& rxContext);

@@ -435,7 +435,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
     state of the associated accessibility objects accordingly we exploit the
     fact that the
 */
-void VCLXAccessibleList::UpdateSelection (const OUString& sTextOfSelectedItem)
+void VCLXAccessibleList::UpdateSelection (std::u16string_view sTextOfSelectedItem)
 {
     if ( m_aBoxType != COMBOBOX )
         return;

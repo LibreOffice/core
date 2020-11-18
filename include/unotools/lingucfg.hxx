@@ -194,7 +194,7 @@ public:
 
     css::uno::Sequence< OUString > GetDisabledDictionaries() const;
 
-    std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const OUString &rFormatName ) const;
+    std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( std::u16string_view rFormatName ) const;
 
     // functions returning file URLs to the respective images (if found) and empty string otherwise
     OUString     GetSpellAndGrammarContextSuggestionImage( const OUString &rServiceImplName ) const;

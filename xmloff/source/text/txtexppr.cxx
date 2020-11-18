@@ -349,7 +349,7 @@ void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
 namespace {
 
 // helper method; implementation below
-bool lcl_IsOutlineStyle(const SvXMLExport&, const OUString&);
+bool lcl_IsOutlineStyle(const SvXMLExport&, std::u16string_view);
 
 void
 lcl_checkMultiProperty(XMLPropertyState *const pState,
@@ -1173,7 +1173,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
 namespace {
 
-bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rName)
+bool lcl_IsOutlineStyle(const SvXMLExport &rExport, std::u16string_view rName)
 {
     Reference< XChapterNumberingSupplier >
         xCNSupplier(rExport.GetModel(), UNO_QUERY);

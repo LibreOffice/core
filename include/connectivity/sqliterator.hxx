@@ -139,7 +139,7 @@ namespace connectivity
             @return
         */
         css::uno::Reference< css::beans::XPropertySet > findSelectColumn(
-            const OUString & rColumnName );
+            std::u16string_view rColumnName );
 
         void setSelectColumnName(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt=false, sal_Int32 _nType = css::sdbc::DataType::VARCHAR, bool bAggFkt=false);
         void appendColumns(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable);

@@ -165,7 +165,7 @@ public:
 
     bool                        SubTotalAllowed(sal_Int32 nColumn);      //! move to ScDPResultData
 
-    ScDPDimension* AddDuplicated(const OUString& rNewName);
+    ScDPDimension* AddDuplicated(std::u16string_view rNewName);
     sal_Int32                    GetDupCount() const { return nDupCount; }
 
     sal_Int32                    GetSourceDim(sal_Int32 nDim);

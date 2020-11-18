@@ -1426,7 +1426,7 @@ void ScDPObject::GetMemberResultNames(ScDPUniqueStringSet& rNames, tools::Long n
     pOutput->GetMemberResultNames(rNames, nDimension);    // used only with table data -> level not needed
 }
 
-OUString ScDPObject::GetFormattedString(const OUString& rDimName, const double fValue)
+OUString ScDPObject::GetFormattedString(std::u16string_view rDimName, const double fValue)
 {
     ScDPTableData* pTableData = GetTableData();
     if(!pTableData)
@@ -3689,7 +3689,7 @@ const ScDPObject& ScDPCollection::operator [](size_t nIndex) const
     return *maTables[nIndex];
 }
 
-ScDPObject* ScDPCollection::GetByName(const OUString& rName) const
+ScDPObject* ScDPCollection::GetByName(std::u16string_view rName) const
 {
     for (std::unique_ptr<ScDPObject> const & pObject : maTables)
     {
@@ -3872,7 +3872,7 @@ void ScDPCollection::GetAllTables(const ScRange& rSrcRange, o3tl::sorted_vector<
     rRefs.swap(aRefs);
 }
 
-void ScDPCollection::GetAllTables(const OUString& rSrcName, o3tl::sorted_vector<ScDPObject*>& rRefs) const
+void ScDPCollection::GetAllTables(std::u16string_view rSrcName, o3tl::sorted_vector<ScDPObject*>& rRefs) const
 {
     o3tl::sorted_vector<ScDPObject*> aRefs;
     for (const auto& rxTable : maTables)
@@ -3901,7 +3901,7 @@ void ScDPCollection::GetAllTables(const OUString& rSrcName, o3tl::sorted_vector<
 }
 
 void ScDPCollection::GetAllTables(
-    sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
+    sal_Int32 nSdbType, std::u16string_view rDBName, std::u16string_view rCommand,
     o3tl::sorted_vector<ScDPObject*>& rRefs) const
 {
     o3tl::sorted_vector<ScDPObject*> aRefs;

@@ -554,14 +554,14 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, sal
     Controller()->SaveValue();
 }
 
-void OSelectionBrowseBox::notifyTableFieldChanged(const OUString& _sOldAlias, const OUString& _sAlias, bool& _bListAction, sal_uInt16 _nColumnId)
+void OSelectionBrowseBox::notifyTableFieldChanged(const OUString& _sOldAlias, std::u16string_view _sAlias, bool& _bListAction, sal_uInt16 _nColumnId)
 {
     appendUndoAction(_sOldAlias,_sAlias,BROW_TABLE_ROW,_bListAction);
     if ( m_bVisibleRow[BROW_TABLE_ROW] )
         RowModified(GetBrowseRow(BROW_TABLE_ROW), _nColumnId);
 }
 
-void OSelectionBrowseBox::notifyFunctionFieldChanged(const OUString& _sOldFunctionName, const OUString& _sFunctionName, bool& _bListAction, sal_uInt16 _nColumnId)
+void OSelectionBrowseBox::notifyFunctionFieldChanged(const OUString& _sOldFunctionName, std::u16string_view _sFunctionName, bool& _bListAction, sal_uInt16 _nColumnId)
 {
     appendUndoAction(_sOldFunctionName,_sFunctionName,BROW_FUNCTION_ROW,_bListAction);
     if ( !m_bVisibleRow[BROW_FUNCTION_ROW] )
@@ -1056,7 +1056,7 @@ bool OSelectionBrowseBox::SaveModified()
                             // we have to change the visible flag, so we must append also an undo action
                             pEntry->SetVisible();
                             m_pVisibleCell->GetBox().set_active(true);
-                            appendUndoAction("0","1",BROW_VIS_ROW,bListAction);
+                            appendUndoAction("0",u"1",BROW_VIS_ROW,bListAction);
                             RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
                         }
 
@@ -1197,7 +1197,7 @@ bool OSelectionBrowseBox::SaveModified()
     {
         // Default to visible
         pEntry->SetVisible();
-        appendUndoAction("0","1",BROW_VIS_ROW,bListAction);
+        appendUndoAction("0",u"1",BROW_VIS_ROW,bListAction);
         RowModified(BROW_VIS_ROW, GetCurColumnId());
 
         // if required add empty columns
@@ -2461,7 +2461,7 @@ void OSelectionBrowseBox::copy()
     }
 }
 
-void OSelectionBrowseBox::appendUndoAction(const OUString& _rOldValue, const OUString& _rNewValue, sal_Int32 _nRow, bool& _bListAction)
+void OSelectionBrowseBox::appendUndoAction(const OUString& _rOldValue, std::u16string_view _rNewValue, sal_Int32 _nRow, bool& _bListAction)
 {
     if ( !m_bInUndoMode && _rNewValue != _rOldValue )
     {
@@ -2474,7 +2474,7 @@ void OSelectionBrowseBox::appendUndoAction(const OUString& _rOldValue, const OUS
     }
 }
 
-void OSelectionBrowseBox::appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow)
+void OSelectionBrowseBox::appendUndoAction(const OUString& _rOldValue,std::u16string_view _rNewValue,sal_Int32 _nRow)
 {
     if ( !m_bInUndoMode && _rNewValue != _rOldValue )
     {
@@ -2691,7 +2691,7 @@ Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _n
     return EditBrowseBox::CreateAccessibleCell( _nRow, _nColumnPos );
 }
 
-bool OSelectionBrowseBox::HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef const & rInfo) const
+bool OSelectionBrowseBox::HasFieldByAliasName(std::u16string_view rFieldName, OTableFieldDescRef const & rInfo) const
 {
     for (auto const& field : getFields())
     {

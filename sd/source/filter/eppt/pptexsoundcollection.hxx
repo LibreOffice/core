@@ -42,7 +42,7 @@ class ExSoundEntry
 
     public:
 
-        bool                IsSameURL(const OUString& rURL) const;
+        bool                IsSameURL(std::u16string_view rURL) const;
         sal_uInt32          GetFileSize( ) const { return nFileSize; };
 
                             ExSoundEntry(const OUString& rSoundURL);

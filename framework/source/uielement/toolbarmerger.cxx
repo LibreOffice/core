@@ -224,7 +224,7 @@ void ToolBarMerger::ConvertSequenceToValues(
 */
 ReferenceToolbarPathInfo ToolBarMerger::FindReferencePoint(
     const ToolBox*   pToolbar,
-    const OUString& rReferencePoint )
+    std::u16string_view rReferencePoint )
 {
     ReferenceToolbarPathInfo aResult;
     aResult.bResult  = false;

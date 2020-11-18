@@ -284,7 +284,7 @@ public:
     virtual ~SdPageLinkTargets() throw() override;
 
     // intern
-    SdrObject* FindObject( const OUString& rName ) const throw();
+    SdrObject* FindObject( std::u16string_view rName ) const throw();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

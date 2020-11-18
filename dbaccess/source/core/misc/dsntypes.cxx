@@ -152,7 +152,7 @@ OUString ODsnTypeCollection::getMediaType(const OUString& _sURL) const
     return aFeatures.getOrDefault("MediaType",OUString());
 }
 
-OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(const OUString& _sMediaType,const OUString& _sExtension)
+OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(std::u16string_view _sMediaType,std::u16string_view _sExtension)
 {
     OUString sURL, sFallbackURL;
     const uno::Sequence< OUString > aURLs = m_aDriverConfig.getURLs();
@@ -169,7 +169,7 @@ OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(const OUString& _s
                 sURL = *pIter;
                 break;
             }
-            if ( sFileExtension.isEmpty() && !_sExtension.isEmpty() )
+            if ( sFileExtension.isEmpty() && !_sExtension.empty() )
                 sFallbackURL = *pIter;
         }
     }

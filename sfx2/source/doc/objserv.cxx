@@ -328,7 +328,7 @@ void SfxObjectShell::CheckOut( )
 
         // Remove the info bar
         SfxViewFrame* pViewFrame = GetFrame();
-        pViewFrame->RemoveInfoBar( "checkout" );
+        pViewFrame->RemoveInfoBar( u"checkout" );
     }
     catch ( const uno::RuntimeException& e )
     {
@@ -1079,7 +1079,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 {
                     SfxViewFrame *pFrame = GetFrame();
                     if (pFrame)
-                        pFrame->RemoveInfoBar("readonly");
+                        pFrame->RemoveInfoBar(u"readonly");
                     SetReadOnlyUI(false);
                 }
             }
@@ -1426,7 +1426,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     }
 
                     // new info bar
-                    if ( !pFrame->HasInfoBarWithID("signature") )
+                    if ( !pFrame->HasInfoBarWithID(u"signature") )
                     {
                         if ( !sMessage.isEmpty() )
                         {
@@ -1441,9 +1441,9 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     else // info bar exists already
                     {
                         if ( eState == SignatureState::NOSIGNATURES )
-                            pFrame->RemoveInfoBar("signature");
+                            pFrame->RemoveInfoBar(u"signature");
                         else
-                            pFrame->UpdateInfoBar("signature", "", sMessage, aInfobarType);
+                            pFrame->UpdateInfoBar(u"signature", "", sMessage, aInfobarType);
                     }
                 }
 

@@ -92,7 +92,7 @@ class HostnameCache
     std::deque< HostListEntry >    m_aHostList;
 
 public:
-    bool get( const OUString & rKey, OUString & rValue ) const
+    bool get( std::u16string_view rKey, OUString & rValue ) const
     {
         for (auto const& host : m_aHostList)
         {

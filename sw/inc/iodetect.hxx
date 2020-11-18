@@ -28,11 +28,11 @@
 
 #define FILTER_RTF      "RTF"       ///< RTF filter
 #define sRtfWH          "WH_RTF"
-#define FILTER_TEXT     "TEXT"      ///< text filter with default codeset
+#define FILTER_TEXT     u"TEXT"      ///< text filter with default codeset
 #define FILTER_BAS      "BAS"       ///< StarBasic (identical to ANSI)
 #define FILTER_WW8      "CWW8"      ///< WinWord 97 filter
 #define FILTER_TEXT_DLG "TEXT_DLG"  ///< text filter with encoding dialog
-#define FILTER_XML      "CXML"      ///< XML filter
+#define FILTER_XML      u"CXML"      ///< XML filter
 #define FILTER_XMLV     "CXMLV"     ///< XML filter
 #define FILTER_XMLVW    "CXMLVWEB"  ///< XML filter
 #define FILTER_DOCX     "OXML"
@@ -92,7 +92,7 @@ class SwIoSystem
 public:
     /// find for an internal format name the corresponding filter entry
     SW_DLLPUBLIC static std::shared_ptr<const SfxFilter>
-        GetFilterOfFormat( const OUString& rFormat,
+        GetFilterOfFormat( std::u16string_view rFormat,
             const SfxFilterContainer* pCnt = nullptr );
 
     /** Detect for the given file which filter should be used. The filter name

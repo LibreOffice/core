@@ -279,7 +279,7 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::RemoveImproperProtocol(const OUString& aProperScheme)
+void SvxHyperlinkInternetTp::RemoveImproperProtocol(std::u16string_view aProperScheme)
 {
     OUString aStrURL ( m_xCbbTarget->get_active_text() );
     if ( !aStrURL.isEmpty() )

@@ -95,7 +95,7 @@ SdrOle2Obj* ChartIterator::next()
     return nullptr;
 }
 
-SdrOle2Obj* findChartsByName(ScDocShell* pDocShell, SCTAB nTab, OUString const & rName, ChartSourceType eChartSourceType)
+SdrOle2Obj* findChartsByName(ScDocShell* pDocShell, SCTAB nTab, std::u16string_view rName, ChartSourceType eChartSourceType)
 {
     if (!pDocShell)
         return nullptr;
@@ -139,7 +139,7 @@ SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab, ::tools::Long nIn
     return nullptr;
 }
 
-std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(OUString const & sPivotTableName, ScDocShell* pDocShell)
+std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(std::u16string_view sPivotTableName, ScDocShell* pDocShell)
 {
     std::vector<SdrOle2Obj*> aObjects;
 

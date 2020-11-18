@@ -75,7 +75,7 @@ static_assert(offsetof(OleObjectDescriptor, dwSrcOfCopy)
 /********************** SvObjectServerList ********************************
 **************************************************************************/
 
-const SvObjectServer * SvObjectServerList::Get( const OUString & rHumanName ) const
+const SvObjectServer * SvObjectServerList::Get( std::u16string_view rHumanName ) const
 {
     for(const auto & i : aObjectServerList)
     {

@@ -129,7 +129,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     SetModified( _bNewFile );
 
-    aName = mpGalleryStorageEngineEntry->ReadStrFromIni( "name" );
+    aName = mpGalleryStorageEngineEntry->ReadStrFromIni( u"name" );
 
     // This is awful - we shouldn't use these resources if we
     // possibly can avoid them
@@ -476,9 +476,9 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
     }
 }
 
-GalleryThemeEntry* Gallery::ImplGetThemeEntry( const OUString& rThemeName )
+GalleryThemeEntry* Gallery::ImplGetThemeEntry( std::u16string_view rThemeName )
 {
-    if( !rThemeName.isEmpty() )
+    if( !rThemeName.empty() )
     {
         for ( size_t i = 0, n = aThemeList.size(); i < n; ++i )
             if( rThemeName == aThemeList[ i ]->GetThemeName() )
@@ -567,7 +567,7 @@ OUString Gallery::GetThemeName( sal_uInt32 nThemeId ) const
     return( pFound ? pFound->GetThemeName() : OUString() );
 }
 
-bool Gallery::HasTheme( const OUString& rThemeName )
+bool Gallery::HasTheme( std::u16string_view rThemeName )
 {
     return( ImplGetThemeEntry( rThemeName ) != nullptr );
 }
@@ -691,7 +691,7 @@ void Gallery::ImplDeleteCachedTheme( GalleryTheme const * pTheme )
     }
 }
 
-GalleryTheme* Gallery::AcquireTheme( const OUString& rThemeName, SfxListener& rListener )
+GalleryTheme* Gallery::AcquireTheme( std::u16string_view rThemeName, SfxListener& rListener )
 {
     GalleryTheme*           pTheme = nullptr;
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rThemeName );

@@ -267,7 +267,7 @@ public:
     /// Given a SwNode return the pagedesc in use at that location.
     static const SwPageDesc* GetPageDescOfNode(const SwNode& rNd);
 
-    static SwPageDesc* GetByName(SwDoc& rDoc, const OUString& rName);
+    static SwPageDesc* GetByName(SwDoc& rDoc, std::u16string_view rName);
 
     SwPageDesc& operator=( const SwPageDesc& );
 
@@ -280,9 +280,9 @@ public:
 namespace std {
     template<>
     struct less<SwPageDesc*> {
-        bool operator()(const SwPageDesc *pPageDesc, const OUString &rName) const
+        bool operator()(const SwPageDesc *pPageDesc, std::u16string_view rName) const
             { return pPageDesc->GetName() < rName; }
-        bool operator()(const OUString &rName, const SwPageDesc *pPageDesc) const
+        bool operator()(std::u16string_view rName, const SwPageDesc *pPageDesc) const
             { return rName < pPageDesc->GetName(); }
         bool operator()(const SwPageDesc *lhs, const SwPageDesc *rhs) const
             { return lhs->GetName() < rhs->GetName(); }

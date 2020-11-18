@@ -185,7 +185,7 @@ private:
     DECL_LINK(RemoveHdl_Impl, weld::Button&, void);
     DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
 
-    bool IsPathDuplicate(const OUString& _rPath);
+    bool IsPathDuplicate(std::u16string_view _rPath);
     void EnableRemoveButton()
     {
         m_xRemoveBtn->set_sensitive(m_xPathList->get_selected_index() != -1);

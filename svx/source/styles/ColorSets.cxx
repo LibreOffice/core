@@ -92,7 +92,7 @@ void ColorSets::init()
     }
 }
 
-const ColorSet& ColorSets::getColorSet(const OUString& rName)
+const ColorSet& ColorSets::getColorSet(std::u16string_view rName)
 {
     for (const ColorSet & rColorSet : maColorSets)
     {

@@ -80,7 +80,7 @@ private:
     uno::Reference< uno::XComponentContext> mxContext;
 
     OUString getPackageLocation( const OUString& repository,
-                                      const OUString& _sExtensionId );
+                                      std::u16string_view _sExtensionId );
 
     uno::Reference< deployment::XUpdateInformationProvider > mxUpdateInformation;
 };
@@ -112,7 +112,7 @@ css::uno::Sequence< OUString > PackageInformationProvider::getSupportedServiceNa
 
 OUString PackageInformationProvider::getPackageLocation(
     const OUString & repository,
-    const OUString& _rExtensionId )
+    std::u16string_view _rExtensionId )
 {
     OUString aLocationURL;
     uno::Reference<deployment::XExtensionManager> xManager =

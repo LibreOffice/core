@@ -166,11 +166,11 @@ SotClipboardFormatId SdPageObjsTLV::SdPageObjsTransferable::GetListBoxDropFormat
 /**
  * @return true if children of the specified string are selected
  */
-bool SdPageObjsTLV::HasSelectedChildren( const OUString& rName )
+bool SdPageObjsTLV::HasSelectedChildren( std::u16string_view rName )
 {
     bool bChildren = false;
 
-    if( !rName.isEmpty() )
+    if( !rName.empty() )
     {
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
         OUString aTmp;
@@ -216,7 +216,7 @@ void SdPageObjsTLV::SetShowAllShapes (
 }
 
 bool SdPageObjsTLV::IsEqualToShapeList(std::unique_ptr<weld::TreeIter>& rEntry, const SdrObjList& rList,
-                                       const OUString& rListName)
+                                       std::u16string_view rListName)
 {
     if (!rEntry)
         return false;
@@ -1144,11 +1144,11 @@ void SdPageObjsTLV::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
 /**
  * select an entry in TreeLB
  */
-bool SdPageObjsTLV::SelectEntry( const OUString& rName )
+bool SdPageObjsTLV::SelectEntry( std::u16string_view rName )
 {
     bool bFound = false;
 
-    if (!rName.isEmpty())
+    if (!rName.empty())
     {
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
         OUString aTmp;

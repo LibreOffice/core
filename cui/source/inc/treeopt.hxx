@@ -150,11 +150,11 @@ private:
     void            Initialize( const css::uno::Reference< css::frame::XFrame >& _xFrame );
     void            InitWidgets();
 
-    void            LoadExtensionOptions( const OUString& rExtensionId );
+    void            LoadExtensionOptions( std::u16string_view rExtensionId );
     static OUString GetModuleIdentifier( const css::uno::Reference<
                                             css::frame::XFrame >& xFrame );
-    static std::unique_ptr<Module>  LoadModule( const OUString& rModuleIdentifier );
-    static VectorOfNodes LoadNodes( Module* pModule, const OUString& rExtensionId );
+    static std::unique_ptr<Module>  LoadModule( std::u16string_view rModuleIdentifier );
+    static VectorOfNodes LoadNodes( Module* pModule, std::u16string_view rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
     void            ApplyOptions();
@@ -177,7 +177,7 @@ public:
     OfaTreeOptionsDialog(weld::Window* pParent,
         const css::uno::Reference< css::frame::XFrame >& _xFrame,
         bool bActivateLastSelection);
-    OfaTreeOptionsDialog(weld::Window* pParent, const OUString& rExtensionId);
+    OfaTreeOptionsDialog(weld::Window* pParent, std::u16string_view rExtensionId);
     virtual ~OfaTreeOptionsDialog() override;
 
     OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup );

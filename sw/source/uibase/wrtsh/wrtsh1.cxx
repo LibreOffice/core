@@ -1526,7 +1526,7 @@ SwCharFormat *SwWrtShell::GetCharStyle(const OUString &rFormatName, GetStyle eCr
 //            frame format with this name exists or
 //            this is a default format or the format is automatic.
 
-SwFrameFormat *SwWrtShell::GetTableStyle(const OUString &rFormatName)
+SwFrameFormat *SwWrtShell::GetTableStyle(std::u16string_view rFormatName)
 {
     for( size_t i = GetTableFrameFormatCount(); i; )
     {
@@ -1804,7 +1804,7 @@ void SwWrtShell::SetReadonlyOption(bool bSet)
 // given all styles are changed
 
 void SwWrtShell::ChangeHeaderOrFooter(
-    const OUString& rStyleName, bool bHeader, bool bOn, bool bShowWarning)
+    std::u16string_view rStyleName, bool bHeader, bool bOn, bool bShowWarning)
 {
     SdrView *const pSdrView = GetDrawView();
     if (pSdrView && pSdrView->IsTextEdit())
@@ -1821,7 +1821,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
     {
         SwPageDesc aDesc( GetPageDesc( nFrom ));
         OUString sTmp(aDesc.GetName());
-        if( rStyleName.isEmpty() || rStyleName == sTmp )
+        if( rStyleName.empty() || rStyleName == sTmp )
         {
             bool bChgd = false;
 
@@ -1872,7 +1872,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
                     if ( !IsHeaderFooterEdit() )
                         ToggleHeaderFooterEdit();
                     bCursorSet = SetCursorInHdFt(
-                            rStyleName.isEmpty() ? SIZE_MAX : nFrom,
+                            rStyleName.empty() ? SIZE_MAX : nFrom,
                             bHeader );
                 }
             }

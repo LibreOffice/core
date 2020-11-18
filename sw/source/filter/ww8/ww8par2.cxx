@@ -3566,7 +3566,7 @@ sal_uInt16 SwWW8ImplReader::StyleUsingLFO( sal_uInt16 nLFOIndex ) const
     return nRes;
 }
 
-const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( OUString const & rName ) const
+const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( std::u16string_view rName ) const
 {
     SwFormat* pRet = nullptr;
     if( !m_vColl.empty() )

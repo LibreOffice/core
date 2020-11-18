@@ -199,14 +199,14 @@ void OutlinerParaObject::ClearPortionInfo()
     mpImpl->mpEditTextObject->ClearPortionInfo();
 }
 
-bool OutlinerParaObject::ChangeStyleSheets(const OUString& rOldName,
+bool OutlinerParaObject::ChangeStyleSheets(std::u16string_view rOldName,
     SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily)
 {
     return mpImpl->mpEditTextObject->ChangeStyleSheets(rOldName, eOldFamily, rNewName, eNewFamily);
 }
 
 void OutlinerParaObject::ChangeStyleSheetName(SfxStyleFamily eFamily,
-    const OUString& rOldName, const OUString& rNewName)
+    std::u16string_view rOldName, const OUString& rNewName)
 {
     mpImpl->mpEditTextObject->ChangeStyleSheetName(eFamily, rOldName, rNewName);
 }

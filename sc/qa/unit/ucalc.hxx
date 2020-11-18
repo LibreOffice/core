@@ -43,7 +43,7 @@ public:
         sal_uInt16 mnIndex;
     };
 
-    static ScDocShell* findLoadedDocShellByName(const OUString& rName);
+    static ScDocShell* findLoadedDocShellByName(std::u16string_view rName);
     static bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,
                                  const RangeNameDef* pEnd);
     static void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);

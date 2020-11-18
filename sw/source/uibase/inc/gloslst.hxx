@@ -50,7 +50,7 @@ class SwGlossaryList : public AutoTimer
     OUString        sPath;
     bool            bFilled;
 
-    AutoTextGroup*  FindGroup(const OUString& rGroupName);
+    AutoTextGroup*  FindGroup(std::u16string_view rGroupName);
     static void     FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGloss);
 
 public:
@@ -59,7 +59,7 @@ public:
 
     void            HasLongName(const std::vector<OUString>& rBeginCandidates,
                                 std::vector<std::pair<OUString, sal_uInt16>>& rLongNames);
-    bool            GetShortName(const OUString& rLongName,
+    bool            GetShortName(std::u16string_view rLongName,
                                        OUString& rShortName, OUString& rGroupName );
 
     size_t          GetGroupCount();

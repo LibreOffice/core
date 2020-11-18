@@ -102,7 +102,7 @@ private:
     int             GetLBInsertPos(const OUString &rDicWord);
 
 public:
-    SvxEditDictionaryDialog(weld::Window* pParent, const OUString& rName);
+    SvxEditDictionaryDialog(weld::Window* pParent, std::u16string_view rName);
     virtual ~SvxEditDictionaryDialog() override;
 };
 

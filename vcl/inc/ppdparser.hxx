@@ -193,7 +193,7 @@ public:
     OUString        getDefaultPaperDimension() const;
     void            getDefaultPaperDimension( int& rWidth, int& rHeight ) const
     { getPaperDimension( getDefaultPaperDimension(), rWidth, rHeight ); }
-    bool getPaperDimension( const OUString& rPaperName,
+    bool getPaperDimension( std::u16string_view rPaperName,
                             int& rWidth, int& rHeight ) const;
     // width and height in pt
     // returns false if paper not found
@@ -201,7 +201,7 @@ public:
     // match the best paper for width and height
     OUString        matchPaper( int nWidth, int nHeight ) const;
 
-    bool getMargins( const OUString& rPaperName,
+    bool getMargins( std::u16string_view rPaperName,
                      int &rLeft, int& rRight,
                      int &rUpper, int& rLower ) const;
     // values in pt

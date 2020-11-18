@@ -2152,7 +2152,7 @@ void RTFDocumentImpl::resetAttributes()
 }
 
 static bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties,
-                                 const OUString& rName)
+                                 std::u16string_view rName)
 {
     return std::any_of(rProperties.begin(), rProperties.end(),
                        [&](const beans::Property& rProperty) { return rProperty.Name == rName; });

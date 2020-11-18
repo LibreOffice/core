@@ -144,7 +144,7 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
     return aResult;
 }
 
-sal_uInt16 MenuBarMerger::FindMenuItem( const OUString& rCmd, Menu const * pCurrMenu )
+sal_uInt16 MenuBarMerger::FindMenuItem( std::u16string_view rCmd, Menu const * pCurrMenu )
 {
     for ( sal_uInt16 i = 0; i < pCurrMenu->GetItemCount(); i++ )
     {

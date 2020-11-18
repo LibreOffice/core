@@ -127,9 +127,9 @@ class NewVersionUIInfo
 {
 public:
 
-    css::uno::Reference< css::ui::XUIConfigurationManager > getConfigManager(const OUString& sModuleShortName) const;
-    css::uno::Reference< css::container::XIndexContainer > getNewMenubarSettings(const OUString& sModuleShortName) const;
-    css::uno::Reference< css::container::XIndexContainer > getNewToolbarSettings(const OUString& sModuleShortName, const OUString& sToolbarName) const;
+    css::uno::Reference< css::ui::XUIConfigurationManager > getConfigManager(std::u16string_view sModuleShortName) const;
+    css::uno::Reference< css::container::XIndexContainer > getNewMenubarSettings(std::u16string_view sModuleShortName) const;
+    css::uno::Reference< css::container::XIndexContainer > getNewToolbarSettings(std::u16string_view sModuleShortName, std::u16string_view sToolbarName) const;
     void init(const std::vector< MigrationModuleInfo >& vModulesInfo);
 
 private:

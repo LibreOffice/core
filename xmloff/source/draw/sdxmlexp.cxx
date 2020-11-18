@@ -1271,9 +1271,9 @@ void SdXMLExport::ImpWritePageMasterInfos()
     }
 }
 
-ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetPageMasterInfoByName(const OUString& rName)
+ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetPageMasterInfoByName(std::u16string_view rName)
 {
-    if(!rName.isEmpty())
+    if(!rName.empty())
     {
         for(const auto & pInfo : mvPageMasterInfoList)
         {

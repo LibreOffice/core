@@ -38,8 +38,8 @@ private:
         ///< Button : Address book
     DECL_LINK (ModifiedReceiverHdl_Impl, weld::ComboBox&, void ); ///< Combobox "receiver" modified
 
-    void    SetScheme(const OUString& rScheme);
-    void    RemoveImproperProtocol(const OUString& aProperScheme);
+    void    SetScheme(std::u16string_view rScheme);
+    void    RemoveImproperProtocol(std::u16string_view aProperScheme);
 
     OUString  CreateAbsoluteURL() const;
 

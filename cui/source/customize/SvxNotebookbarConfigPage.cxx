@@ -49,8 +49,8 @@ namespace container = com::sun::star::container;
 namespace beans = com::sun::star::beans;
 namespace graphic = com::sun::star::graphic;
 
-static bool isCategoryAvailable(const OUString& sClassId, const OUString& sUIItemId,
-                                const OUString& sActiveCategory, bool& isCategory)
+static bool isCategoryAvailable(const OUString& sClassId, std::u16string_view sUIItemId,
+                                std::u16string_view sActiveCategory, bool& isCategory)
 {
     if (sUIItemId == sActiveCategory)
         return true;
@@ -474,7 +474,7 @@ SvxNotebookbarEntriesListBox::SvxNotebookbarEntriesListBox(std::unique_ptr<weld:
 
 SvxNotebookbarEntriesListBox::~SvxNotebookbarEntriesListBox() {}
 
-static void EditRegistryFile(const OUString& sUIItemId, const OUString& sSetEntry,
+static void EditRegistryFile(std::u16string_view sUIItemId, const OUString& sSetEntry,
                              const OUString& sNotebookbarInterface)
 {
     int nFlag = 0;

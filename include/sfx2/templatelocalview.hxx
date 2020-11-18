@@ -86,17 +86,17 @@ public:
 
     void showRegion (TemplateContainerItem const *pItem);
 
-    void showRegion (const OUString &rName);
+    void showRegion (std::u16string_view rName);
 
     void createContextMenu(const bool bIsDefault );
 
     void ContextMenuSelectHdl(const OString& rIdent);
 
-    TemplateContainerItem* getRegion(OUString const & sStr);
+    TemplateContainerItem* getRegion(std::u16string_view sStr);
 
     sal_uInt16 getRegionId (size_t pos) const;
 
-    sal_uInt16 getRegionId (OUString const & sRegionName) const;
+    sal_uInt16 getRegionId (std::u16string_view sRegionName) const;
 
     OUString getRegionName(const sal_uInt16 nRegionId) const;
 
@@ -109,7 +109,7 @@ public:
 
     sal_uInt16 createRegion (const OUString &rName);
 
-    bool renameRegion(const OUString &rTitle, const OUString &rNewTitle);
+    bool renameRegion(std::u16string_view rTitle, const OUString &rNewTitle);
 
     bool removeRegion (const sal_uInt16 nItemId);
 

@@ -1068,10 +1068,10 @@ namespace basctl
     }
 
 
-    ScriptDocument ScriptDocument::getDocumentWithURLOrCaption( const OUString& _rUrlOrCaption )
+    ScriptDocument ScriptDocument::getDocumentWithURLOrCaption( std::u16string_view _rUrlOrCaption )
     {
         ScriptDocument aDocument( getApplicationScriptDocument() );
-        if ( _rUrlOrCaption.isEmpty() )
+        if ( _rUrlOrCaption.empty() )
             return aDocument;
 
         docs::Documents aDocuments;

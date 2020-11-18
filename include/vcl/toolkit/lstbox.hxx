@@ -156,12 +156,12 @@ public:
 
     void                Clear();
 
-    sal_Int32           GetEntryPos( const OUString& rStr ) const;
+    sal_Int32           GetEntryPos( std::u16string_view rStr ) const;
     Image               GetEntryImage( sal_Int32  nPos ) const;
     OUString            GetEntry( sal_Int32  nPos ) const;
     sal_Int32           GetEntryCount() const;
 
-    void                SelectEntry( const OUString& rStr, bool bSelect = true );
+    void                SelectEntry( std::u16string_view rStr, bool bSelect = true );
     void                SelectEntryPos( sal_Int32  nPos, bool bSelect = true );
     void                SelectEntriesPos( const std::vector<sal_Int32>& rPositions, bool bSelect = true );
 

@@ -1175,7 +1175,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
     m_xNewReplacePB->set_sensitive(bEnableNew);
 }
 
-static bool lcl_FindInArray(std::vector<OUString>& rStrings, const OUString& rString)
+static bool lcl_FindInArray(std::vector<OUString>& rStrings, std::u16string_view rString)
 {
     for (auto const& elem : rStrings)
     {

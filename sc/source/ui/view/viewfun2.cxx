@@ -2636,7 +2636,7 @@ void ScViewFunc::InsertAreaLink( const OUString& rFile,
 
 void ScViewFunc::InsertTableLink( const OUString& rFile,
                                     const OUString& rFilter, const OUString& rOptions,
-                                    const OUString& rTabName )
+                                    std::u16string_view rTabName )
 {
     OUString aFilterName = rFilter;
     OUString aOpt = rOptions;
@@ -2647,7 +2647,7 @@ void ScViewFunc::InsertTableLink( const OUString& rFile,
     ScDocShell* pSrcSh = aLoader.GetDocShell();
     ScDocument& rSrcDoc = pSrcSh->GetDocument();
     SCTAB nTab = MAXTAB+1;
-    if (rTabName.isEmpty())                // no name given -> first table
+    if (rTabName.empty())                // no name given -> first table
         nTab = 0;
     else
     {

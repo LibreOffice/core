@@ -183,7 +183,7 @@ public:
 
         @return true, if the name is unique and the slide exists
     */
-    bool                    IsPageNameUnique(const OUString& rPagName) const;
+    bool                    IsPageNameUnique(std::u16string_view rPagName) const;
 
     /** Return the reference device for the current document.  When the
         inherited implementation returns a device then this is passed to the

@@ -802,7 +802,7 @@ sal_Int32 SvxBitmapTabPage::SearchBitmapList(const GraphicObject& rGraphicObject
     return nPos;
 }
 
-sal_Int32 SvxBitmapTabPage::SearchBitmapList(const OUString& rBitmapName)
+sal_Int32 SvxBitmapTabPage::SearchBitmapList(std::u16string_view rBitmapName)
 {
     tools::Long nCount = m_pBitmapList->Count();
     bool bValidBitmapName = true;

@@ -62,7 +62,7 @@ namespace
             }
     };
 
-    bool checkOSandCPU(OUString const & os, OUString const & cpu)
+    bool checkOSandCPU(std::u16string_view os, std::u16string_view cpu)
     {
         return (os == StrOperatingSystem::get())
             && (cpu == StrCPU::get());
@@ -74,83 +74,83 @@ namespace
         if (token == PLATFORM_ALL)
             ret = true;
         else if (token == "windows_x86")
-            ret = checkOSandCPU("Windows", "x86");
+            ret = checkOSandCPU(u"Windows", u"x86");
         else if (token == "windows_x86_64")
-            ret = checkOSandCPU("Windows", "X86_64");
+            ret = checkOSandCPU(u"Windows", u"X86_64");
         else if (token == "solaris_sparc")
-            ret = checkOSandCPU("Solaris", "SPARC");
+            ret = checkOSandCPU(u"Solaris", u"SPARC");
         else if (token == "solaris_sparc64")
-            ret = checkOSandCPU("Solaris", "SPARC64");
+            ret = checkOSandCPU(u"Solaris", u"SPARC64");
         else if (token == "solaris_x86")
-            ret = checkOSandCPU("Solaris", "x86");
+            ret = checkOSandCPU(u"Solaris", u"x86");
         else if (token == "aix_powerpc")
-            ret = checkOSandCPU("AIX", "PowerPC");
+            ret = checkOSandCPU(u"AIX", u"PowerPC");
         else if (token == "macosx_x86_64")
-            ret = checkOSandCPU("MacOSX", "X86_64");
+            ret = checkOSandCPU(u"MacOSX", u"X86_64");
         else if (token == "linux_x86")
-            ret = checkOSandCPU("Linux", "x86");
+            ret = checkOSandCPU(u"Linux", u"x86");
         else if (token == "linux_x86_64")
-            ret = checkOSandCPU("Linux", "X86_64");
+            ret = checkOSandCPU(u"Linux", u"X86_64");
         else if (token == "linux_sparc")
-            ret = checkOSandCPU("Linux", "SPARC");
+            ret = checkOSandCPU(u"Linux", u"SPARC");
         else if (token == "linux_sparc64")
-            ret = checkOSandCPU("Linux", "SPARC64");
+            ret = checkOSandCPU(u"Linux", u"SPARC64");
         else if (token == "linux_powerpc")
-            ret = checkOSandCPU("Linux", "PowerPC");
+            ret = checkOSandCPU(u"Linux", u"PowerPC");
         else if (token == "linux_powerpc64")
-            ret = checkOSandCPU("Linux", "PowerPC_64");
+            ret = checkOSandCPU(u"Linux", u"PowerPC_64");
         else if (token == "linux_powerpc64_le")
-            ret = checkOSandCPU("Linux", "PowerPC_64_LE");
+            ret = checkOSandCPU(u"Linux", u"PowerPC_64_LE");
         else if (token == "linux_arm_eabi")
-            ret = checkOSandCPU("Linux", "ARM_EABI");
+            ret = checkOSandCPU(u"Linux", u"ARM_EABI");
         else if (token == "linux_arm_oabi")
-            ret = checkOSandCPU("Linux", "ARM_OABI");
+            ret = checkOSandCPU(u"Linux", u"ARM_OABI");
         else if (token == "linux_mips_el")
-            ret = checkOSandCPU("Linux", "MIPS_EL");
+            ret = checkOSandCPU(u"Linux", u"MIPS_EL");
         else if (token == "linux_mips64_el")
-            ret = checkOSandCPU("Linux", "MIPS64_EL");
+            ret = checkOSandCPU(u"Linux", u"MIPS64_EL");
         else if (token == "linux_mips_eb")
-            ret = checkOSandCPU("Linux", "MIPS_EB");
+            ret = checkOSandCPU(u"Linux", u"MIPS_EB");
         else if (token == "linux_mips64_eb")
-            ret = checkOSandCPU("Linux", "MIPS64_EB");
+            ret = checkOSandCPU(u"Linux", u"MIPS64_EB");
         else if (token == "linux_ia64")
-            ret = checkOSandCPU("Linux", "IA64");
+            ret = checkOSandCPU(u"Linux", u"IA64");
         else if (token == "linux_m68k")
-            ret = checkOSandCPU("Linux", "M68K");
+            ret = checkOSandCPU(u"Linux", u"M68K");
         else if (token == "linux_s390")
-            ret = checkOSandCPU("Linux", "S390");
+            ret = checkOSandCPU(u"Linux", u"S390");
         else if (token == "linux_s390x")
-            ret = checkOSandCPU("Linux", "S390x");
+            ret = checkOSandCPU(u"Linux", u"S390x");
         else if (token == "linux_hppa")
-            ret = checkOSandCPU("Linux", "HPPA");
+            ret = checkOSandCPU(u"Linux", u"HPPA");
         else if (token == "linux_alpha")
-            ret = checkOSandCPU("Linux", "ALPHA");
+            ret = checkOSandCPU(u"Linux", u"ALPHA");
         else if (token == "linux_aarch64")
-            ret = checkOSandCPU("Linux", "AARCH64");
+            ret = checkOSandCPU(u"Linux", u"AARCH64");
         else if (token == "freebsd_x86")
-            ret = checkOSandCPU("FreeBSD", "x86");
+            ret = checkOSandCPU(u"FreeBSD", u"x86");
         else if (token == "freebsd_x86_64")
-            ret = checkOSandCPU("FreeBSD", "X86_64");
+            ret = checkOSandCPU(u"FreeBSD", u"X86_64");
         else if (token == "freebsd_powerpc")
-            ret = checkOSandCPU("FreeBSD", "PowerPC");
+            ret = checkOSandCPU(u"FreeBSD", u"PowerPC");
         else if (token == "freebsd_powerpc64")
-            ret = checkOSandCPU("FreeBSD", "PowerPC64");
+            ret = checkOSandCPU(u"FreeBSD", u"PowerPC64");
         else if (token == "kfreebsd_x86")
-            ret = checkOSandCPU("kFreeBSD", "x86");
+            ret = checkOSandCPU(u"kFreeBSD", u"x86");
         else if (token == "kfreebsd_x86_64")
-            ret = checkOSandCPU("kFreeBSD", "X86_64");
+            ret = checkOSandCPU(u"kFreeBSD", u"X86_64");
         else if (token == "netbsd_x86")
-            ret = checkOSandCPU("NetBSD", "x86");
+            ret = checkOSandCPU(u"NetBSD", u"x86");
         else if (token == "netbsd_x86_64")
-            ret = checkOSandCPU("NetBSD", "X86_64");
+            ret = checkOSandCPU(u"NetBSD", u"X86_64");
         else if (token == "openbsd_x86")
-            ret = checkOSandCPU("OpenBSD", "x86");
+            ret = checkOSandCPU(u"OpenBSD", u"x86");
         else if (token == "openbsd_x86_64")
-            ret = checkOSandCPU("OpenBSD", "X86_64");
+            ret = checkOSandCPU(u"OpenBSD", u"X86_64");
         else if (token == "dragonfly_x86")
-            ret = checkOSandCPU("DragonFly", "x86");
+            ret = checkOSandCPU(u"DragonFly", u"x86");
         else if (token == "dragonfly_x86_64")
-            ret = checkOSandCPU("DragonFly", "X86_64");
+            ret = checkOSandCPU(u"DragonFly", u"X86_64");
         else
         {
             OSL_FAIL("Extension Manager: The extension supports an unknown platform. "

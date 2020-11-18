@@ -244,7 +244,7 @@ ExtensionManager::getPackageManager(OUString const & repository)
 void ExtensionManager::addExtensionsToMap(
     id2extensions & mapExt,
     uno::Sequence<Reference<css::deployment::XPackage> > const & seqExt,
-    OUString const & repository)
+    std::u16string_view repository)
 {
     //Determine the index in the vector where these extensions are to be
     //added.
@@ -1095,13 +1095,13 @@ uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > >
 
         uno::Sequence<Reference<css::deployment::XPackage> > userExt =
             getUserRepository()->getDeployedPackages(xAbort, xCmdEnv);
-        addExtensionsToMap(mapExt, userExt, "user");
+        addExtensionsToMap(mapExt, userExt, u"user");
         uno::Sequence<Reference<css::deployment::XPackage> > sharedExt =
             getSharedRepository()->getDeployedPackages(xAbort, xCmdEnv);
-        addExtensionsToMap(mapExt, sharedExt, "shared");
+        addExtensionsToMap(mapExt, sharedExt, u"shared");
         uno::Sequence<Reference<css::deployment::XPackage> > bundledExt =
             getBundledRepository()->getDeployedPackages(xAbort, xCmdEnv);
-        addExtensionsToMap(mapExt, bundledExt, "bundled");
+        addExtensionsToMap(mapExt, bundledExt, u"bundled");
 
         // Create the tmp repository to trigger its clean up (deletion
         // of old temporary data.)

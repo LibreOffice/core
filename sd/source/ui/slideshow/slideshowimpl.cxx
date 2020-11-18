@@ -2216,7 +2216,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow()
     return xShow;
 }
 
-void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
+void SlideshowImpl::createSlideList( bool bAll, std::u16string_view rPresSlide )
 {
     const sal_uInt16 nSlideCount = mpDoc->GetSdPageCount( PageKind::Standard );
 
@@ -2244,7 +2244,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
         sal_Int32 nFirstVisibleSlide = 0;
 
         // normal presentation
-        if( !rPresSlide.isEmpty() )
+        if( !rPresSlide.empty() )
         {
             sal_Int32 nSlide;
             bool bTakeNextAvailable = false;
@@ -2280,7 +2280,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
     }
     else
     {
-        if( meAnimationMode != ANIMATIONMODE_SHOW && !rPresSlide.isEmpty() )
+        if( meAnimationMode != ANIMATIONMODE_SHOW && !rPresSlide.empty() )
         {
             sal_Int32 nSlide;
             for( nSlide = 0; nSlide < nSlideCount; nSlide++ )

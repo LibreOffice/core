@@ -61,7 +61,7 @@ public:
         return maColorSets[nIndex];
     }
 
-    const ColorSet& getColorSet(const OUString& rName);
+    const ColorSet& getColorSet(std::u16string_view rName);
 };
 
 } // end of namespace svx

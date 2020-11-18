@@ -121,7 +121,7 @@ namespace basctl
             @see getApplicationScriptDocument
         */
         static ScriptDocument
-                    getDocumentWithURLOrCaption( const OUString& _rUrlOrCaption );
+                    getDocumentWithURLOrCaption( std::u16string_view _rUrlOrCaption );
 
         /** operation mode for getAllScriptDocuments
         */

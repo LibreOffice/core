@@ -113,7 +113,7 @@ void SvxScriptOrgDialog::deleteAllTree()
     while (bNextEntry);
 }
 
-void SvxScriptOrgDialog::Init( const OUString& language  )
+void SvxScriptOrgDialog::Init( std::u16string_view language  )
 {
     m_xScriptsBox->freeze();
 
@@ -202,7 +202,7 @@ void SvxScriptOrgDialog::Init( const OUString& language  )
 }
 
 Reference< XInterface  >
-SvxScriptOrgDialog::getDocumentModel( Reference< XComponentContext > const & xCtx, OUString const & docName )
+SvxScriptOrgDialog::getDocumentModel( Reference< XComponentContext > const & xCtx, std::u16string_view docName )
 {
     Reference< XInterface > xModel;
     Reference< frame::XDesktop2 > desktop  = frame::Desktop::create(xCtx);
@@ -229,7 +229,7 @@ SvxScriptOrgDialog::getDocumentModel( Reference< XComponentContext > const & xCt
 }
 
 Reference< browse::XBrowseNode >
-SvxScriptOrgDialog::getLangNodeFromRootNode( Reference< browse::XBrowseNode > const & rootNode, OUString const & language )
+SvxScriptOrgDialog::getLangNodeFromRootNode( Reference< browse::XBrowseNode > const & rootNode, std::u16string_view language )
 {
     Reference< browse::XBrowseNode > langNode;
 

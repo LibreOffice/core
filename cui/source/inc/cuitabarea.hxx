@@ -392,7 +392,7 @@ private:
     void ModifiedHdl_Impl(void const *);
 
     void SetControlState_Impl( css::awt::GradientStyle eXGS );
-    sal_Int32 SearchGradientList(const OUString& rGradientName);
+    sal_Int32 SearchGradientList(std::u16string_view rGradientName);
 
 public:
     SvxGradientTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
@@ -460,7 +460,7 @@ private:
     DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
     DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
 
-    sal_Int32 SearchHatchList(const OUString& rHatchName);
+    sal_Int32 SearchHatchList(std::u16string_view rHatchName);
 
 public:
     SvxHatchTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
@@ -538,7 +538,7 @@ private:
     DECL_LINK( ClickImportHdl, weld::Button&, void );
     void ClickBitmapHdl_Impl();
     void CalculateBitmapPresetSize();
-    sal_Int32 SearchBitmapList(const OUString& rBitmapName);
+    sal_Int32 SearchBitmapList(std::u16string_view rBitmapName);
     sal_Int32 SearchBitmapList(const GraphicObject& rGraphicObject);
 
 public:
@@ -593,7 +593,7 @@ private:
     DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
     DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
 
-    sal_Int32 SearchPatternList(const OUString& rPatternName);
+    sal_Int32 SearchPatternList(std::u16string_view rPatternName);
 
 public:
     SvxPatternTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
@@ -706,7 +706,7 @@ private:
 
     void UpdateModified();
 
-    static sal_Int32 FindInCustomColors( OUString const & aColorName );
+    static sal_Int32 FindInCustomColors( std::u16string_view aColorName );
     sal_Int32 FindInPalette( const Color& rColor );
 
 public:

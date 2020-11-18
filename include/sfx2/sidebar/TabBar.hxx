@@ -77,7 +77,7 @@ public:
 
     void SetDecks (
         const ResourceManager::DeckContextDescriptorContainer& rDecks);
-    void HighlightDeck (const OUString& rsDeckId);
+    void HighlightDeck (std::u16string_view rsDeckId);
     void RemoveDeckHighlight ();
     OUString const & GetDeckIdForIndex (const sal_Int32 nIndex) const;
     void ToggleHideFlag (const sal_Int32 nIndex);

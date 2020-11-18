@@ -90,7 +90,7 @@ protected:
     DECL_LINK(FocusRectLocalHdl, weld::Widget&, tools::Rectangle);
     DECL_LINK(FocusRectSearchHdl, weld::Widget&, tools::Rectangle);
 
-    void OnTemplateImportCategory(const OUString& sCategory);
+    void OnTemplateImportCategory(std::u16string_view sCategory);
     //    static void OnTemplateLink ();
     void OnTemplateOpen();
     void OnTemplateExport();

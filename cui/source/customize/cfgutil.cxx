@@ -757,7 +757,7 @@ OUString CuiConfigGroupListBox::GetImage(
 }
 
 Reference< XInterface  >
-CuiConfigGroupListBox::getDocumentModel( Reference< XComponentContext > const & xCtx, OUString const & docName )
+CuiConfigGroupListBox::getDocumentModel( Reference< XComponentContext > const & xCtx, std::u16string_view docName )
 {
     Reference< XInterface > xModel;
     Reference< frame::XDesktop2 > desktop = frame::Desktop::create( xCtx );

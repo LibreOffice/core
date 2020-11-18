@@ -52,7 +52,7 @@ void TemplateDlgLocalView::showRegion(TemplateContainerItem const* pItem)
     maOpenRegionHdl.Call(nullptr);
 }
 
-void TemplateDlgLocalView::showRegion(const OUString& rName)
+void TemplateDlgLocalView::showRegion(std::u16string_view rName)
 {
     for (auto const& pRegion : maRegions)
     {

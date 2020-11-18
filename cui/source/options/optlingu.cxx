@@ -75,7 +75,7 @@ const char cThes[]    = SN_THESAURUS;
 // static ----------------------------------------------------------------
 
 static sal_Int32 lcl_SeqGetEntryPos(
-    const Sequence< OUString > &rSeq, const OUString &rEntry )
+    const Sequence< OUString > &rSeq, std::u16string_view rEntry )
 {
     sal_Int32 i;
     sal_Int32 nLen = rSeq.getLength();
@@ -357,7 +357,7 @@ public:
     uno::Reference<XLinguServiceManager2> &   GetManager() { return xLinguSrvcMgr; }
 
     void SetChecked( const Sequence< OUString > &rConfiguredServices );
-    void Reconfigure( const OUString &rDisplayName, bool bEnable );
+    void Reconfigure( std::u16string_view rDisplayName, bool bEnable );
 
     const Sequence<Locale> &    GetAllSupportedLocales() const { return aAllServiceLocales; }
 
@@ -380,11 +380,11 @@ public:
     // language.
     Sequence< OUString > GetSortedImplNames( LanguageType nLang, sal_uInt8 nType );
 
-    ServiceInfo_Impl * GetInfoByImplName( const OUString &rSvcImplName );
+    ServiceInfo_Impl * GetInfoByImplName( std::u16string_view rSvcImplName );
 };
 
 
-static sal_Int32 lcl_SeqGetIndex( const Sequence< OUString > &rSeq, const OUString &rTxt )
+static sal_Int32 lcl_SeqGetIndex( const Sequence< OUString > &rSeq, std::u16string_view rTxt )
 {
     sal_Int32 nRes = -1;
     sal_Int32 nLen = rSeq.getLength();
@@ -449,7 +449,7 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( LanguageType nLang, 
 }
 
 
-ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( const OUString &rSvcImplName )
+ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( std::u16string_view rSvcImplName )
 {
     for (sal_uInt32 i = 0;  i < nDisplayServices;  ++i)
     {
@@ -730,9 +730,9 @@ bool SvxLinguData_Impl::AddRemove(
 }
 
 
-void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable )
+void SvxLinguData_Impl::Reconfigure( std::u16string_view rDisplayName, bool bEnable )
 {
-    DBG_ASSERT( !rDisplayName.isEmpty(), "empty DisplayName" );
+    DBG_ASSERT( !rDisplayName.empty(), "empty DisplayName" );
 
     ServiceInfo_Impl *pInfo = nullptr;
     for (sal_uInt32 i = 0;  i < nDisplayServices;  ++i)

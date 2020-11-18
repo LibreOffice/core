@@ -90,7 +90,7 @@ public:
     /** Returns the index of an entry with the given XML-name and namespace
         If there is no matching entry the method returns -1 */
     sal_Int32 GetEntryIndex(
-        sal_uInt16 nNamespace, const OUString& rStrName, sal_uInt32 nPropType,
+        sal_uInt16 nNamespace, std::u16string_view rStrName, sal_uInt32 nPropType,
         sal_Int32 nStartAt = -1 ) const;
 
     /** Returns the index of an entry with the given XML-name and namespace
@@ -114,7 +114,7 @@ public:
 
     /** searches for an entry that matches the given api name, namespace and local name or -1 if nothing found */
     sal_Int32 FindEntryIndex(
-        const char* sApiName, sal_uInt16 nNameSpace, const OUString& sXMLName ) const;
+        const char* sApiName, sal_uInt16 nNameSpace, std::u16string_view sXMLName ) const;
 
     /** searches for an entry that matches the given ContextId or gives -1 if nothing found */
     sal_Int32 FindEntryIndex( const sal_Int16 nContextId ) const;

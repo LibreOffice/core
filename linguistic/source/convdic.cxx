@@ -244,7 +244,7 @@ void ConvDic::Save()
 }
 
 
-ConvMap::iterator ConvDic::GetEntry( ConvMap &rMap, const OUString &rFirstText, const OUString &rSecondText )
+ConvMap::iterator ConvDic::GetEntry( ConvMap &rMap, const OUString &rFirstText, std::u16string_view rSecondText )
 {
     pair< ConvMap::iterator, ConvMap::iterator > aRange =
             rMap.equal_range( rFirstText );
@@ -260,7 +260,7 @@ ConvMap::iterator ConvDic::GetEntry( ConvMap &rMap, const OUString &rFirstText, 
 }
 
 
-bool ConvDic::HasEntry( const OUString &rLeftText, const OUString &rRightText )
+bool ConvDic::HasEntry( const OUString &rLeftText, std::u16string_view rRightText )
 {
     if (bNeedEntries)
         Load();

@@ -575,7 +575,7 @@ inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
  *  "false"=> -1:
  *  else   =>  0:
  */
-short ImpSvNumberInputScan::GetLogical( const OUString& rString ) const
+short ImpSvNumberInputScan::GetLogical( std::u16string_view rString ) const
 {
     short res;
 

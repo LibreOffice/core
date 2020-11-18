@@ -1146,7 +1146,7 @@ void CustomAnimationEffect::setPath( const OUString& rPath )
     }
 }
 
-Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue )
+Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue )
 {
     Any aProperty;
     if( mxNode.is() ) try
@@ -1186,7 +1186,7 @@ Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAt
     return aProperty;
 }
 
-bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue, const Any& rValue )
+bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue, const Any& rValue )
 {
     bool bChanged = false;
     if( mxNode.is() ) try

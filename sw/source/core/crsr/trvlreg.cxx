@@ -242,7 +242,7 @@ bool SwCursorShell::MoveRegion( SwWhichRegion fnWhichRegion, SwMoveFnCollection 
     return bRet;
 }
 
-bool SwCursor::GotoRegion( const OUString& rName )
+bool SwCursor::GotoRegion( std::u16string_view rName )
 {
     bool bRet = false;
     const SwSectionFormats& rFormats = GetDoc().GetSections();
@@ -267,7 +267,7 @@ bool SwCursor::GotoRegion( const OUString& rName )
     return bRet;
 }
 
-bool SwCursorShell::GotoRegion( const OUString& rName )
+bool SwCursorShell::GotoRegion( std::u16string_view rName )
 {
     SwCallLink aLk( *this ); // watch Cursor-Moves;call Link if needed
     bool bRet = !m_pTableCursor && m_pCurrentCursor->GotoRegion( rName );

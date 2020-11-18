@@ -501,9 +501,9 @@ void FuConstructRectangle::Deactivate()
 
     // Update infobar to offer "finish signing".
     SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
-    if (pFrame && pFrame->HasInfoBarWithID("readonly"))
+    if (pFrame && pFrame->HasInfoBarWithID(u"readonly"))
     {
-        pFrame->RemoveInfoBar("readonly");
+        pFrame->RemoveInfoBar(u"readonly");
         pFrame->AppendReadOnlyInfobar();
     }
 }

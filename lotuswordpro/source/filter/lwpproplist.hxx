@@ -69,7 +69,7 @@ class LwpPropListElement : public LwpDLVList
 public:
     LwpPropListElement(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     void Read() override;
-    bool IsNamed(const OUString& name);
+    bool IsNamed(std::u16string_view name);
     LwpPropListElement* GetNext();
     const LwpAtomHolder& GetValue() const { return m_Value; }
     const LwpAtomHolder& GetName() const { return m_Name; }
@@ -87,11 +87,11 @@ public:
     LwpPropList() {}
     using LwpDLVListHead::Read;
     LwpPropListElement* GetFirst();
-    OUString GetNamedProperty(const OUString& name);
+    OUString GetNamedProperty(std::u16string_view name);
     OUString EnumNamedProperty(OUString& name, OUString& value);
 
 private:
-    LwpPropListElement* FindPropByName(const OUString& name);
+    LwpPropListElement* FindPropByName(std::u16string_view name);
 };
 
 #endif

@@ -53,7 +53,7 @@ void ScSheetEventsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-static ScSheetEventId lcl_GetEventFromName( const OUString& aName )
+static ScSheetEventId lcl_GetEventFromName( std::u16string_view aName )
 {
     for (sal_Int32 nEvent=0; nEvent<static_cast<sal_Int32>(ScSheetEventId::COUNT); ++nEvent)
         if ( aName == ScSheetEvents::GetEventName(static_cast<ScSheetEventId>(nEvent)) )

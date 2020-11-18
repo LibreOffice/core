@@ -75,7 +75,7 @@ public:
     // (The redline will be inserted into the document after both start
     //  and end cursor has been set.)
     void Add(
-        const OUString& rType,       // redline type (insert, del,... )
+        std::u16string_view rType,       // redline type (insert, del,... )
         const OUString& rId,         // use to identify this redline
         const OUString& rAuthor,     // name of the author
         const OUString& rComment,    // redline comment

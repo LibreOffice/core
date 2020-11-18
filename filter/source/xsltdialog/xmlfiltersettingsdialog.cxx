@@ -1187,7 +1187,7 @@ std::vector< application_info_impl > const & getApplicationInfos()
     return aInfos;
 }
 
-const application_info_impl* getApplicationInfo( const OUString& rServiceName )
+const application_info_impl* getApplicationInfo( std::u16string_view rServiceName )
 {
     std::vector< application_info_impl > const & rInfos = getApplicationInfos();
     for (auto const& info : rInfos)

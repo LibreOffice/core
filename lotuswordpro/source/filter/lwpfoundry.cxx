@@ -264,7 +264,7 @@ LwpObjectID * LwpFoundry::GetDefaultTextStyle()
 * @descr:   Get paragraph style object id according to its style name
 *
 */
-LwpObjectID * LwpFoundry::FindParaStyleByName(const OUString& name)
+LwpObjectID * LwpFoundry::FindParaStyleByName(std::u16string_view name)
 {
     LwpDLVListHeadHolder* pParaStyleHolder = dynamic_cast<LwpDLVListHeadHolder*>(GetTextStyleHead().obj().get());
     if(pParaStyleHolder)

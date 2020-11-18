@@ -547,7 +547,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 nObjCount += pPage->GetObjCount();          // count group object only once
             }
 
-            PasteDraw(aPos, pModel.get(), (nObjCount > 1), "A", "B");     // grouped if more than 1 object
+            PasteDraw(aPos, pModel.get(), (nObjCount > 1), u"A", u"B");     // grouped if more than 1 object
             pModel.reset();
             aDragShellRef->DoClose();
             bRet = true;

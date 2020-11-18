@@ -47,7 +47,7 @@ OUString getObjectName(SdrObject const* pObject)
         return pObject->GetName();
 }
 
-SdrObject* getObject(const VclPtr<sd::Window>& xWindow, const OUString& rName)
+SdrObject* getObject(const VclPtr<sd::Window>& xWindow, std::u16string_view rName)
 {
     SdrPage* pPage = getViewShell(xWindow)->getCurrentPage();
 

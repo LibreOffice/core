@@ -75,13 +75,13 @@ namespace dbaui
         std::unique_ptr<weld::ComboBox> m_xLB_WHERECOMP3;
         std::unique_ptr<weld::Entry> m_xET_WHEREVALUE3;
 
-        static void SelectField(weld::ComboBox& rBox, const OUString& rField);
+        static void SelectField(weld::ComboBox& rBox, std::u16string_view rField);
         DECL_LINK(ListSelectHdl, weld::ComboBox&, void);
         DECL_LINK(ListSelectCompHdl, weld::ComboBox&, void);
 
         void            SetLine( int nIdx, const css::beans::PropertyValue& _rItem, bool _bOr );
         void            EnableLines();
-        sal_Int32       GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const;
+        sal_Int32       GetOSQLPredicateType( std::u16string_view _rSelectedPredicate ) const;
         static sal_Int32  GetSelectionPos(sal_Int32 eType, const weld::ComboBox& rListBox);
         bool            getCondition(const weld::ComboBox& _rField, const weld::ComboBox& _rComp, const weld::Entry& _rValue, css::beans::PropertyValue& _rFilter) const;
         void            fillLines(int &i, const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& _aValues);

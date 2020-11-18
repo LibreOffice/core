@@ -542,7 +542,7 @@ SwVbaDocument::SavePreviewPngAs( const uno::Any& FileName )
 }
 
 uno::Any
-SwVbaDocument::getControlShape( const OUString& sName )
+SwVbaDocument::getControlShape( std::u16string_view sName )
 {
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xIndexAccess( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );

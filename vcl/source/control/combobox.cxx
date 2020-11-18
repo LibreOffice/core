@@ -941,7 +941,7 @@ Image ComboBox::GetEntryImage( sal_Int32 nPos ) const
     return Image();
 }
 
-sal_Int32 ComboBox::GetEntryPos( const OUString& rStr ) const
+sal_Int32 ComboBox::GetEntryPos( std::u16string_view rStr ) const
 {
     sal_Int32 nPos = m_pImpl->m_pImplLB->GetEntryList()->FindEntry( rStr );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )

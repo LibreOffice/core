@@ -609,7 +609,7 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
     }
 }
 
-sal_Int32 SvxGradientTabPage::SearchGradientList(const OUString& rGradientName)
+sal_Int32 SvxGradientTabPage::SearchGradientList(std::u16string_view rGradientName)
 {
     tools::Long nCount = m_pGradientList->Count();
     bool bValidGradientName = true;

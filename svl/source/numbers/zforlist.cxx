@@ -548,7 +548,7 @@ const OUString& SvNumberFormatter::GetNumThousandSep() const { return aThousandS
 
 const OUString& SvNumberFormatter::GetDateSep() const { return aDateSep; }
 
-bool SvNumberFormatter::IsDecimalSep( const OUString& rStr ) const
+bool SvNumberFormatter::IsDecimalSep( std::u16string_view rStr ) const
 {
     if (rStr == GetNumDecimalSep())
         return true;
@@ -937,7 +937,7 @@ sal_uInt32 SvNumberFormatter::ImpGetCLOffset(LanguageType eLnge) const
     return nOffset;
 }
 
-sal_uInt32 SvNumberFormatter::ImpIsEntry(const OUString& rString,
+sal_uInt32 SvNumberFormatter::ImpIsEntry(std::u16string_view rString,
                                          sal_uInt32 nCLOffset,
                                          LanguageType eLnge)
 {
@@ -3224,7 +3224,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     return sString.makeStringAndClear();
 }
 
-bool SvNumberFormatter::IsUserDefined(const OUString& sStr,
+bool SvNumberFormatter::IsUserDefined(std::u16string_view sStr,
                                       LanguageType eLnge)
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
@@ -3244,7 +3244,7 @@ bool SvNumberFormatter::IsUserDefined(const OUString& sStr,
     return pEntry && (pEntry->GetType() & SvNumFormatType::DEFINED);
 }
 
-sal_uInt32 SvNumberFormatter::GetEntryKey(const OUString& sStr,
+sal_uInt32 SvNumberFormatter::GetEntryKey(std::u16string_view sStr,
                                           LanguageType eLnge)
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
@@ -3542,7 +3542,7 @@ const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang )
 
 
 // static
-const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(const OUString& rAbbrev, LanguageType eLang )
+const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(std::u16string_view rAbbrev, LanguageType eLang )
 {
     eLang = MsLangId::getRealLanguage( eLang );
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
@@ -3560,8 +3560,8 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(const OUString& rAbbr
 
 
 // static
-const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry( const OUString& rSymbol,
-                                                                      const OUString& rAbbrev )
+const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry( std::u16string_view rSymbol,
+                                                                      std::u16string_view rAbbrev )
 {
     GetTheCurrencyTable();      // just for initialization
     const NfCurrencyTable& rTable = theLegacyOnlyCurrencyTable::get();
@@ -3589,7 +3589,7 @@ IMPL_STATIC_LINK_NOARG( SvNumberFormatter, CurrencyChangeLink, LinkParamNone*, v
 
 
 // static
-void SvNumberFormatter::SetDefaultSystemCurrency( const OUString& rAbbrev, LanguageType eLang )
+void SvNumberFormatter::SetDefaultSystemCurrency( std::u16string_view rAbbrev, LanguageType eLang )
 {
     ::osl::MutexGuard aGuard( GetGlobalMutex() );
     if ( eLang == LANGUAGE_SYSTEM )
@@ -3598,7 +3598,7 @@ void SvNumberFormatter::SetDefaultSystemCurrency( const OUString& rAbbrev, Langu
     }
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
     sal_uInt16 nCount = rTable.size();
-    if ( !rAbbrev.isEmpty() )
+    if ( !rAbbrev.empty() )
     {
         for ( sal_uInt16 j = 0; j < nCount; j++ )
         {
@@ -3719,7 +3719,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
 // true: continue; false: break loop, if pFoundEntry==NULL dupe found
 bool SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(
     const NfCurrencyEntry*& pFoundEntry, bool& bFoundBank, const NfCurrencyEntry* pData,
-    sal_uInt16 nPos, const OUString& rSymbol )
+    sal_uInt16 nPos, std::u16string_view rSymbol )
 {
     bool bFound;
     if ( pData->GetSymbol() == rSymbol )
@@ -3827,7 +3827,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString
 
 // static
 const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
-                                                            const OUString& rSymbol,
+                                                            std::u16string_view rSymbol,
                                                             const OUString& rExtension,
                                                             LanguageType eFormatLanguage,
                                                             bool bOnlyStringLanguage )

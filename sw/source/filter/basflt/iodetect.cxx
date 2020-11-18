@@ -66,7 +66,7 @@ OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
     return OUString();
 }
 
-std::shared_ptr<const SfxFilter> SwIoSystem::GetFilterOfFormat(const OUString& rFormatNm,
+std::shared_ptr<const SfxFilter> SwIoSystem::GetFilterOfFormat(std::u16string_view rFormatNm,
     const SfxFilterContainer* pCnt)
 {
     SfxFilterContainer aCntSw( sSWRITER );

@@ -211,7 +211,7 @@ const SvxFieldItem* findField(editeng::Section const & rSection)
     return nullptr;
 }
 
-bool hasCustomPropertyField(std::vector<editeng::Section> const & aSections, OUString const & rName)
+bool hasCustomPropertyField(std::vector<editeng::Section> const & aSections, std::u16string_view rName)
 {
     for (editeng::Section const & rSection : aSections)
     {

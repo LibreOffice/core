@@ -342,7 +342,7 @@ public:
                             const Point* pInsPos );
     void    InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget );
 
-    bool    SelectObject( const OUString& rName );
+    bool    SelectObject( std::u16string_view rName );
 
     void    SetInFormatDialog(bool bFlag) {bInFormatDialog=bFlag;}
 

@@ -133,19 +133,19 @@ class XclRoot;
 #define EXC_CHPROP_WHITEDAY                 "WhiteDay"
 
 // data series roles
-#define EXC_CHPROP_ROLE_CATEG               "categories"
-#define EXC_CHPROP_ROLE_ERRORBARS_NEGX      "error-bars-x-negative"
-#define EXC_CHPROP_ROLE_ERRORBARS_NEGY      "error-bars-y-negative"
-#define EXC_CHPROP_ROLE_ERRORBARS_POSX      "error-bars-x-positive"
-#define EXC_CHPROP_ROLE_ERRORBARS_POSY      "error-bars-y-positive"
-#define EXC_CHPROP_ROLE_LABEL               "label"
-#define EXC_CHPROP_ROLE_XVALUES             "values-x"
-#define EXC_CHPROP_ROLE_YVALUES             "values-y"
-#define EXC_CHPROP_ROLE_OPENVALUES          "values-first"
-#define EXC_CHPROP_ROLE_CLOSEVALUES         "values-last"
-#define EXC_CHPROP_ROLE_LOWVALUES           "values-min"
-#define EXC_CHPROP_ROLE_HIGHVALUES          "values-max"
-#define EXC_CHPROP_ROLE_SIZEVALUES          "values-size"
+#define EXC_CHPROP_ROLE_CATEG               u"categories"
+#define EXC_CHPROP_ROLE_ERRORBARS_NEGX      u"error-bars-x-negative"
+#define EXC_CHPROP_ROLE_ERRORBARS_NEGY      u"error-bars-y-negative"
+#define EXC_CHPROP_ROLE_ERRORBARS_POSX      u"error-bars-x-positive"
+#define EXC_CHPROP_ROLE_ERRORBARS_POSY      u"error-bars-y-positive"
+#define EXC_CHPROP_ROLE_LABEL               u"label"
+#define EXC_CHPROP_ROLE_XVALUES             u"values-x"
+#define EXC_CHPROP_ROLE_YVALUES             u"values-y"
+#define EXC_CHPROP_ROLE_OPENVALUES          u"values-first"
+#define EXC_CHPROP_ROLE_CLOSEVALUES         u"values-last"
+#define EXC_CHPROP_ROLE_LOWVALUES           u"values-min"
+#define EXC_CHPROP_ROLE_HIGHVALUES          u"values-max"
+#define EXC_CHPROP_ROLE_SIZEVALUES          u"values-size"
 
 // Constants and Enumerations =================================================
 

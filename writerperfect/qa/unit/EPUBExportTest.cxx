@@ -55,7 +55,7 @@ public:
     std::map<OUString, std::vector<OUString>> parseCss(const OUString& rName);
     /// Looks up a key of a class in rCss.
     static OUString getCss(std::map<OUString, std::vector<OUString>>& rCss, const OUString& rClass,
-                           const OUString& rKey);
+                           std::u16string_view rKey);
 };
 
 void EPUBExportTest::setUp()
@@ -135,7 +135,7 @@ std::map<OUString, std::vector<OUString>> EPUBExportTest::parseCss(const OUStrin
 }
 
 OUString EPUBExportTest::getCss(std::map<OUString, std::vector<OUString>>& rCss,
-                                const OUString& rClass, const OUString& rKey)
+                                const OUString& rClass, std::u16string_view rKey)
 {
     OUString aRet;
 
@@ -412,11 +412,11 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testNamedStyleInheritance)
     std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     OUString aBlue = getXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span[2]", "class");
 
-    CPPUNIT_ASSERT_EQUAL(OUString("#0000ff"), EPUBExportTest::getCss(aCssDoc, aBlue, "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("#0000ff"), EPUBExportTest::getCss(aCssDoc, aBlue, u"color"));
     // This failed, the span only had the properties from its style, but not
     // from the style's parent(s).
     CPPUNIT_ASSERT_EQUAL(OUString("'Liberation Mono'"),
-                         EPUBExportTest::getCss(aCssDoc, aBlue, "font-family"));
+                         EPUBExportTest::getCss(aCssDoc, aBlue, u"font-family"));
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testNestedSpan)
@@ -432,9 +432,9 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testNestedSpan)
     // Check formatting of nested span.
     OUString aRed = getXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class");
     // This failed, direct formatting on top of named style was lost.
-    CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), EPUBExportTest::getCss(aCssDoc, aRed, "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), EPUBExportTest::getCss(aCssDoc, aRed, u"color"));
     CPPUNIT_ASSERT_EQUAL(OUString("'Liberation Mono'"),
-                         EPUBExportTest::getCss(aCssDoc, aRed, "font-family"));
+                         EPUBExportTest::getCss(aCssDoc, aRed, u"font-family"));
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testLineBreak)
@@ -473,10 +473,11 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testParaCharProps)
     // Check formatting of the middle span.
     OUString aMiddle = getXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class");
     CPPUNIT_ASSERT_EQUAL(OUString("italic"),
-                         EPUBExportTest::getCss(aCssDoc, aMiddle, "font-style"));
+                         EPUBExportTest::getCss(aCssDoc, aMiddle, u"font-style"));
     // Direct para formatting was lost, only direct char formatting was
     // written, so this failed.
-    CPPUNIT_ASSERT_EQUAL(OUString("bold"), EPUBExportTest::getCss(aCssDoc, aMiddle, "font-weight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("bold"),
+                         EPUBExportTest::getCss(aCssDoc, aMiddle, u"font-weight"));
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSection)
@@ -517,7 +518,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testImageBorder)
     OUString aClass = getXPath(mpXmlDoc, "//xhtml:img", "class");
     // This failed, image had no border.
     CPPUNIT_ASSERT_EQUAL(OUString("0.99pt dashed #ed1c24"),
-                         EPUBExportTest::getCss(aCssDoc, aClass, "border"));
+                         EPUBExportTest::getCss(aCssDoc, aClass, u"border"));
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testImageNospan)
@@ -557,7 +558,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableCellBorder)
         = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[1]", "class");
     // This failed, cell border wasn't exported.
     CPPUNIT_ASSERT_EQUAL(OUString("0.05pt solid #000000"),
-                         EPUBExportTest::getCss(aCssDoc, aClass, "border-left"));
+                         EPUBExportTest::getCss(aCssDoc, aClass, u"border-left"));
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableCellWidth)
@@ -573,10 +574,10 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableCellWidth)
     OUString aClass3
         = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]/xhtml:td[3]", "class");
     // These failed, all widths were 0.
-    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass2, "width").toDouble(),
-                           EPUBExportTest::getCss(aCssDoc, aClass1, "width").toDouble());
-    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass3, "width").toDouble(),
-                           EPUBExportTest::getCss(aCssDoc, aClass1, "width").toDouble());
+    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass2, u"width").toDouble(),
+                           EPUBExportTest::getCss(aCssDoc, aClass1, u"width").toDouble());
+    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass3, u"width").toDouble(),
+                           EPUBExportTest::getCss(aCssDoc, aClass1, u"width").toDouble());
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableRowHeight)
@@ -588,8 +589,8 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableRowHeight)
     OUString aClass1 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[1]", "class");
     OUString aClass2 = getXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr[2]", "class");
     // These failed, both heights were 0.
-    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass2, "height").toDouble(),
-                           EPUBExportTest::getCss(aCssDoc, aClass1, "height").toDouble());
+    CPPUNIT_ASSERT_GREATER(EPUBExportTest::getCss(aCssDoc, aClass2, u"height").toDouble(),
+                           EPUBExportTest::getCss(aCssDoc, aClass1, u"height").toDouble());
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testLink)
@@ -632,7 +633,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testLinkNamedCharFormat)
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "http://libreoffice.org/");
 
     OUString aClass = getXPath(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "class");
-    CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), EPUBExportTest::getCss(aCssDoc, aClass, "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("#ff0000"), EPUBExportTest::getCss(aCssDoc, aClass, u"color"));
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableWidth)
@@ -644,7 +645,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTableWidth)
 
     OUString aClass = getXPath(mpXmlDoc, "//xhtml:table", "class");
     // This failed, relative total width of table was lost.
-    CPPUNIT_ASSERT_EQUAL(OUString("50%"), EPUBExportTest::getCss(aCssDoc, aClass, "width"));
+    CPPUNIT_ASSERT_EQUAL(OUString("50%"), EPUBExportTest::getCss(aCssDoc, aClass, u"width"));
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTextBox)
@@ -664,7 +665,8 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTextBox)
 
     OUString aClass = getXPath(mpXmlDoc, "//xhtml:div/xhtml:p/xhtml:span[3]", "class");
     // This failed, the 3rd span was not italic.
-    CPPUNIT_ASSERT_EQUAL(OUString("italic"), EPUBExportTest::getCss(aCssDoc, aClass, "font-style"));
+    CPPUNIT_ASSERT_EQUAL(OUString("italic"),
+                         EPUBExportTest::getCss(aCssDoc, aClass, u"font-style"));
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testFontEmbedding)
@@ -676,7 +678,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testFontEmbedding)
     // librevenge:name
     std::map<OUString, std::vector<OUString>> aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
     // 'SketchFlow Print' or ''SketchFlow Print1'
-    CPPUNIT_ASSERT(EPUBExportTest::getCss(aCssDoc, "font-face", "font-family")
+    CPPUNIT_ASSERT(EPUBExportTest::getCss(aCssDoc, "font-face", u"font-family")
                        .startsWith("'SketchFlow Print"));
     // librevenge:mime-type
     mpXmlDoc = parseExport("OEBPS/content.opf");
@@ -686,10 +688,10 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testFontEmbedding)
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/fonts/font0001.otf"));
     // librevenge:font-style
     CPPUNIT_ASSERT_EQUAL(OUString("normal"),
-                         EPUBExportTest::getCss(aCssDoc, "font-face", "font-style"));
+                         EPUBExportTest::getCss(aCssDoc, "font-face", u"font-style"));
     // librevenge:font-weight
     CPPUNIT_ASSERT_EQUAL(OUString("normal"),
-                         EPUBExportTest::getCss(aCssDoc, "font-face", "font-weight"));
+                         EPUBExportTest::getCss(aCssDoc, "font-face", u"font-weight"));
 #endif
 }
 
@@ -807,7 +809,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSVG)
     // This failed, we used the xlink attribute namespace, but we did not
     // define its URL.
     mpXmlDoc = parseExport("OEBPS/images/image0001.svg");
-    assertXPathNSDef(mpXmlDoc, "/svg:svg", "xlink", "http://www.w3.org/1999/xlink");
+    assertXPathNSDef(mpXmlDoc, "/svg:svg", u"xlink", u"http://www.w3.org/1999/xlink");
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTdf115623SingleWritingMode)
@@ -818,7 +820,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTdf115623SingleWritingMode)
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
     CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"),
-                         EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+                         EPUBExportTest::getCss(aCssDoc, aClass, u"writing-mode"));
 }
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTdf115623SplitByChapter)
@@ -829,14 +831,14 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTdf115623SplitByChapter)
         mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
         OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
         CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"),
-                             EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+                             EPUBExportTest::getCss(aCssDoc, aClass, u"writing-mode"));
     }
     // Split HTML should keep the same writing-mode.
     {
         mpXmlDoc = parseExport("OEBPS/sections/section0002.xhtml");
         OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
         CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"),
-                             EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+                             EPUBExportTest::getCss(aCssDoc, aClass, u"writing-mode"));
     }
 }
 
@@ -849,13 +851,13 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testTdf115623ManyPageSpans)
         mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
         OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
         CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"),
-                             EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+                             EPUBExportTest::getCss(aCssDoc, aClass, u"writing-mode"));
     }
     {
         mpXmlDoc = parseExport("OEBPS/sections/section0002.xhtml");
         OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
         CPPUNIT_ASSERT_EQUAL(OUString("horizontal-tb"),
-                             EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+                             EPUBExportTest::getCss(aCssDoc, aClass, u"writing-mode"));
     }
 }
 

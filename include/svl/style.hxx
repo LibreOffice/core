@@ -236,7 +236,7 @@ protected:
 
     SfxItemPool&                rPool;
 
-    void                        ChangeParent(const OUString& rOld, const OUString& rNew, SfxStyleFamily eFamily, bool bVirtual = true);
+    void                        ChangeParent(std::u16string_view rOld, const OUString& rNew, SfxStyleFamily eFamily, bool bVirtual = true);
     virtual SfxStyleSheetBase*  Create( const OUString&, SfxStyleFamily, SfxStyleSearchBits );
     virtual SfxStyleSheetBase*  Create( const SfxStyleSheetBase& );
 

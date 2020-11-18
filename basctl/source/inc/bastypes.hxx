@@ -236,7 +236,7 @@ public:
     virtual char const* GetHid () const = 0;
     virtual ItemType GetType () const = 0;
     void InsertLibInfo () const;
-    bool Is (ScriptDocument const&, OUString const&, OUString const&, ItemType, bool bFindSuspended);
+    bool Is (ScriptDocument const&, std::u16string_view, std::u16string_view, ItemType, bool bFindSuspended);
     virtual bool HasActiveEditor () const;
 };
 

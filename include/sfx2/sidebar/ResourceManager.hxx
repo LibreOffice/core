@@ -44,8 +44,8 @@ public:
      ResourceManager();
     ~ResourceManager();
 
-    std::shared_ptr<DeckDescriptor> GetDeckDescriptor(const OUString& rsDeckId) const;
-    std::shared_ptr<PanelDescriptor> GetPanelDescriptor(const OUString& rsPanelId) const;
+    std::shared_ptr<DeckDescriptor> GetDeckDescriptor(std::u16string_view rsDeckId) const;
+    std::shared_ptr<PanelDescriptor> GetPanelDescriptor(std::u16string_view rsPanelId) const;
 
     void UpdateModel(const css::uno::Reference<css::frame::XModel>& xModel);
 
@@ -83,7 +83,7 @@ public:
     const PanelContextDescriptorContainer& GetMatchingPanels(
                                             PanelContextDescriptorContainer& rPanelDescriptors,
                                             const Context& rContext,
-                                            const OUString& rsDeckId,
+                                            std::u16string_view rsDeckId,
                                             const css::uno::Reference<css::frame::XController>& rxController);
 
     const OUString& GetLastActiveDeck( const Context& rContext );
@@ -91,7 +91,7 @@ public:
 
     /** Remember the expansions state per panel and context.
     */
-    void StorePanelExpansionState(const OUString& rsPanelId,
+    void StorePanelExpansionState(std::u16string_view rsPanelId,
                                   const bool bExpansionState,
                                   const Context& rContext);
 
@@ -117,12 +117,12 @@ private:
     static utl::OConfigurationTreeRoot GetLegacyAddonRootNode(const OUString& rsModuleName);
     static void GetToolPanelNodeNames(std::vector<OUString>& rMatchingNames,
                                const utl::OConfigurationTreeRoot& aRoot);
-    bool IsDeckEnabled(const OUString& rsDeckId,
+    bool IsDeckEnabled(std::u16string_view rsDeckId,
                        const Context& rContext,
                        const css::uno::Reference<css::frame::XController>& rxController);
 
-    std::shared_ptr<DeckDescriptor> ImplGetDeckDescriptor(const OUString& rsDeckId) const;
-    std::shared_ptr<PanelDescriptor> ImplGetPanelDescriptor(const OUString& rsPanelId) const;
+    std::shared_ptr<DeckDescriptor> ImplGetDeckDescriptor(std::u16string_view rsDeckId) const;
+    std::shared_ptr<PanelDescriptor> ImplGetPanelDescriptor(std::u16string_view rsPanelId) const;
 };
 
 } // end of namespace sfx2::sidebar

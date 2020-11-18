@@ -72,7 +72,7 @@ public:
     css::uno::Reference<css::awt::XWindow> GetElementWindow();
     void SetExpanded(const bool bIsExpanded);
     bool IsExpanded() const { return mbIsExpanded; }
-    bool HasIdPredicate(const OUString& rsId) const;
+    bool HasIdPredicate(std::u16string_view rsId) const;
     const OUString& GetId() const { return msPanelId; }
     void TriggerDeckLayouting() { maDeckLayoutTrigger(); }
 

@@ -85,7 +85,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
             return "_default";
         }
 
-        static Index getIndex( const OUString& rName )
+        static Index getIndex( std::u16string_view rName )
         {
             for ( int i = static_cast<int>(Index::Name); i < static_cast<int>(Index::INVALID); ++i )
                 if ( getName( Index(i) ) == rName )

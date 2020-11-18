@@ -186,9 +186,9 @@ CURL* FTPContentProvider::handle()
 }
 
 
-void FTPContentProvider::forHost( const OUString& host,
-                                  const OUString& port,
-                                  const OUString& username,
+void FTPContentProvider::forHost( std::u16string_view host,
+                                  std::u16string_view port,
+                                  std::u16string_view username,
                                   OUString& password,
                                   OUString& account)
 {

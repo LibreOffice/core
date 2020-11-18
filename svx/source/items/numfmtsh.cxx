@@ -277,7 +277,7 @@ bool SvxNumberFormatShell::AddFormat(OUString& rFormat, sal_Int32& rErrPos,
     return bInserted;
 }
 
-void SvxNumberFormatShell::RemoveFormat(const OUString& rFormat, sal_uInt16& rCatLbSelPos,
+void SvxNumberFormatShell::RemoveFormat(std::u16string_view rFormat, sal_uInt16& rCatLbSelPos,
                                         short& rFmtSelPos, std::vector<OUString>& rFmtEntries)
 {
     sal_uInt32 nDelKey = pFormatter->GetEntryKey(rFormat, eCurLanguage);
@@ -338,7 +338,7 @@ void SvxNumberFormatShell::MakeFormat(OUString& rFormat, bool bThousand, bool bN
     }
 }
 
-sal_uInt16 SvxNumberFormatShell::GetFormatIntegerDigits(const OUString& rFormat) const
+sal_uInt16 SvxNumberFormatShell::GetFormatIntegerDigits(std::u16string_view rFormat) const
 {
     sal_uInt32 nFmtKey = pFormatter->GetEntryKey(rFormat, eCurLanguage);
 
@@ -1333,7 +1333,7 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
  * Input:      Number of the entry
  * Output:     Category number
  */
-short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx, const OUString& rFmtString)
+short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx, std::u16string_view rFmtString)
 {
     short nSelP = SELPOS_NONE;
     if (nIdx != NUMBERFORMAT_ENTRY_NEW_CURRENCY)
@@ -1560,7 +1560,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat(const NfCurrencyEntry* pTmpC
 }
 
 bool SvxNumberFormatShell::IsInTable(sal_uInt16 const nPos, bool const bTmpBanking,
-                                     OUString const& rFmtString)
+                                     std::u16string_view rFmtString)
 {
     bool bFlag = false;
 

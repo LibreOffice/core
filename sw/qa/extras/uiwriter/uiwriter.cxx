@@ -2162,7 +2162,7 @@ void SwUiWriterTest::testTextCursorInvalidation()
     // can't go right in empty header
     CPPUNIT_ASSERT(!xCursor->goRight(1, false));
 // this does not actually delete the header:    xPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(false));
-    pWrtShell->ChangeHeaderOrFooter("Default Page Style", true, false, false);
+    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
     // must be disposed after deleting header
     CPPUNIT_ASSERT_THROW(xCursor->goRight(1, false), uno::RuntimeException);
 }
@@ -2506,7 +2506,7 @@ void SwUiWriterTest::testTdf79236()
     SwDoc* pDoc = createDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     //Getting some paragraph style
-    SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName("Text Body");
+    SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName(u"Text Body");
     const SwAttrSet& rAttrSet = pTextFormat->GetAttrSet();
     std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
     sal_uInt16 initialCount = pNewSet->Count();
@@ -2527,7 +2527,7 @@ void SwUiWriterTest::testTdf79236()
     //Setting the updated item set on the style
     pDoc->ChgFormat(*pTextFormat, *pNewSet);
     //Checking the Changes
-    SwTextFormatColl* pTextFormat2 = pDoc->FindTextFormatCollByName("Text Body");
+    SwTextFormatColl* pTextFormat2 = pDoc->FindTextFormatCollByName(u"Text Body");
     const SwAttrSet& rAttrSet2 = pTextFormat2->GetAttrSet();
     const SvxAdjustItem& rAdjustItem2 = rAttrSet2.GetAdjust();
     SvxAdjust Adjust2 = rAdjustItem2.GetAdjust();
@@ -2535,7 +2535,7 @@ void SwUiWriterTest::testTdf79236()
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, Adjust2);
     //Undo the changes
     rUndoManager.Undo();
-    SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName("Text Body");
+    SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName(u"Text Body");
     const SwAttrSet& rAttrSet3 = pTextFormat3->GetAttrSet();
     const SvxAdjustItem& rAdjustItem3 = rAttrSet3.GetAdjust();
     SvxAdjust Adjust3 = rAdjustItem3.GetAdjust();
@@ -2543,7 +2543,7 @@ void SwUiWriterTest::testTdf79236()
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, Adjust3);
     //Redo the changes
     rUndoManager.Redo();
-    SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName("Text Body");
+    SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName(u"Text Body");
     const SwAttrSet& rAttrSet4 = pTextFormat4->GetAttrSet();
     const SvxAdjustItem& rAdjustItem4 = rAttrSet4.GetAdjust();
     SvxAdjust Adjust4 = rAdjustItem4.GetAdjust();
@@ -2551,7 +2551,7 @@ void SwUiWriterTest::testTdf79236()
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, Adjust4);
     //Undo the changes
     rUndoManager.Undo();
-    SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName("Text Body");
+    SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName(u"Text Body");
     const SwAttrSet& rAttrSet5 = pTextFormat5->GetAttrSet();
     const SvxAdjustItem& rAdjustItem5 = rAttrSet5.GetAdjust();
     SvxAdjust Adjust5 = rAdjustItem5.GetAdjust();
@@ -2960,7 +2960,7 @@ void SwUiWriterTest::testTdf60967()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    pWrtShell->ChangeHeaderOrFooter("Default Page Style", true, true, true);
+    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, true, true);
     //Inserting table
     SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(TableOpt, 2, 2);
@@ -4372,7 +4372,7 @@ void SwUiWriterTest::testTdf86639()
 {
     SwDoc* pDoc = createDoc("tdf86639.rtf");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwTextFormatColl* pColl = pDoc->FindTextFormatCollByName("Heading");
+    SwTextFormatColl* pColl = pDoc->FindTextFormatCollByName(u"Heading");
     pWrtShell->SetTextFormatColl(pColl);
     OUString aExpected = pColl->GetAttrSet().GetFont().GetFamilyName();
     // This was Calibri, should be Liberation Sans.
@@ -5690,7 +5690,7 @@ void SwUiWriterTest::testTableStyleUndo()
     rUndoManager.Redo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount + 1);
     // check if attributes are preserved
-    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    pStyle = pDoc->GetTableStyles().FindAutoFormat(u"Test Style");
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground));
 
@@ -5698,7 +5698,7 @@ void SwUiWriterTest::testTableStyleUndo()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount);
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount + 1);
-    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    pStyle = pDoc->GetTableStyles().FindAutoFormat(u"Test Style");
     // check if attributes are preserved
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground));
@@ -5708,7 +5708,7 @@ void SwUiWriterTest::testTableStyleUndo()
     // undo delete so we can replace the style
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount +1 );
-    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    pStyle = pDoc->GetTableStyles().FindAutoFormat(u"Test Style");
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground));
 
@@ -5717,15 +5717,15 @@ void SwUiWriterTest::testTableStyleUndo()
     aNewStyle.GetBoxFormat(0).SetBackground(aBackground2);
 
     pDoc->ChgTableStyle("Test Style", aNewStyle);
-    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    pStyle = pDoc->GetTableStyles().FindAutoFormat(u"Test Style");
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground2));
     rUndoManager.Undo();
-    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    pStyle = pDoc->GetTableStyles().FindAutoFormat(u"Test Style");
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground));
     rUndoManager.Redo();
-    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    pStyle = pDoc->GetTableStyles().FindAutoFormat(u"Test Style");
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground2));
 }

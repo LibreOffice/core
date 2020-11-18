@@ -159,7 +159,7 @@ void PropertyMapper::getMultiPropertyListsFromValueMap(
 
 uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
                          , const tNameSequence& rPropNames
-                         , const OUString& rPropName )
+                         , std::u16string_view rPropName )
 {
     sal_Int32 nCount = rPropNames.getLength();
     for( sal_Int32 nN = 0; nN < nCount; nN++ )

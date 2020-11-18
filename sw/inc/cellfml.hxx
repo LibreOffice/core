@@ -84,7 +84,7 @@ typedef void (SwTableFormula::*FnScanFormula)( const SwTable&, OUStringBuffer&,
     OUString ScanString( FnScanFormula fnFormula, const SwTable& rTable,
                         void*) const;
 
-    static const SwTable* FindTable( SwDoc& rDoc, const OUString& rNm );
+    static const SwTable* FindTable( SwDoc& rDoc, std::u16string_view rNm );
 
 protected:
     enum NameType { EXTRNL_NAME, INTRNL_NAME, REL_NAME };

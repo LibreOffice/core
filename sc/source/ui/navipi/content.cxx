@@ -1128,7 +1128,7 @@ static bool lcl_GetRange( const ScDocument& rDoc, ScContentId nType, const OUStr
     return bFound;
 }
 
-static bool lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScContentId nType, weld::TreeView& rTreeView )
+static bool lcl_DoDragObject( ScDocShell* pSrcShell, std::u16string_view rName, ScContentId nType, weld::TreeView& rTreeView )
 {
     bool bDisallow = true;
 
@@ -1542,7 +1542,7 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName like shown in
     }
 }
 
-void ScContentTree::SelectEntryByName(const ScContentId nRoot, const OUString& rName)
+void ScContentTree::SelectEntryByName(const ScContentId nRoot, std::u16string_view rName)
 {
     weld::TreeIter* pParent = m_aRootNodes[nRoot].get();
 

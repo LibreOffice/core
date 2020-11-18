@@ -123,7 +123,7 @@ public:
 
 
 sal_Int32 lcl_findInstance( const InstanceCollection*,
-                            const OUString& );
+                            std::u16string_view );
 
 
 // get values from Sequence<PropertyValue> describing an Instance

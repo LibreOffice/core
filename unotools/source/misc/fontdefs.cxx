@@ -474,7 +474,7 @@ OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
     return rTokenStr.copy( nTokenStart, nTokenLen );
 }
 
-static bool ImplIsFontToken( const OUString& rName, const OUString& rToken )
+static bool ImplIsFontToken( const OUString& rName, std::u16string_view rToken )
 {
     OUString      aTempName;
     sal_Int32  nIndex = 0;

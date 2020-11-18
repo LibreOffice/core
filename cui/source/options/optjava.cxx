@@ -893,7 +893,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, SelectHdl_Impl, weld::TreeView&, void)
     EnableRemoveButton();
 }
 
-bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
+bool SvxJavaClassPathDlg::IsPathDuplicate( std::u16string_view _rPath )
 {
     bool bRet = false;
     int nCount = m_xPathList->n_children();

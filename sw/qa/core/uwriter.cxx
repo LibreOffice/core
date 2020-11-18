@@ -1403,7 +1403,7 @@ void SwDocTest::testTableAutoFormats()
     CPPUNIT_ASSERT_EQUAL( size_t(2),  aLoadTAFT.size() );
 
     //assert the values
-    SwTableAutoFormat* pLoadAF = aLoadTAFT.FindAutoFormat( "TestItemStyle" );
+    SwTableAutoFormat* pLoadAF = aLoadTAFT.FindAutoFormat( u"TestItemStyle" );
     CPPUNIT_ASSERT( pLoadAF );
     //GetFont
     CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetFont() == aFont ) );

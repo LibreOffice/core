@@ -39,7 +39,7 @@ getProperty(css::uno::Reference<css::beans::XPropertyContainer> const& rxPropert
             OUString const& rName);
 
 SVX_DLLPUBLIC bool containsProperty(css::uno::Sequence<css::beans::Property> const& rProperties,
-                                    OUString const& rName);
+                                    std::u16string_view rName);
 
 SVX_DLLPUBLIC void
 removeAllProperties(css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer);

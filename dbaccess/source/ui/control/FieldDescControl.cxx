@@ -133,7 +133,7 @@ void OFieldDescControl::dispose()
     m_xBuilder.reset();
 }
 
-OUString OFieldDescControl::BoolStringPersistent(const OUString& rUIString) const
+OUString OFieldDescControl::BoolStringPersistent(std::u16string_view rUIString) const
 {
     if (rUIString == aNo)
         return OUString('0');

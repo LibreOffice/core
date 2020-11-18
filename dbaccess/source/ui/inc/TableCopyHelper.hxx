@@ -96,7 +96,7 @@ namespace dbaui
                 The name of the dest data source.
         */
         void pasteTable( const TransferableDataHelper& _rTransData
-                        ,const OUString& _sDestDataSourceName
+                        ,std::u16string_view _sDestDataSourceName
                         ,const SharedConnection& _xConnection);
 
         /** pastes a table into the data source
@@ -109,7 +109,7 @@ namespace dbaui
         */
         void pasteTable( SotClipboardFormatId _nFormatId
                         ,const TransferableDataHelper& _rTransData
-                        ,const OUString& _sDestDataSourceName
+                        ,std::u16string_view _sDestDataSourceName
                         ,const SharedConnection& _xConnection);
 
         /** copies a table which was constructed by tags like HTML or RTF
@@ -133,7 +133,7 @@ namespace dbaui
                 The connection
         */
         void asyncCopyTagTable(  DropDescriptor& _rDesc
-                                ,const OUString& _sDestDataSourceName
+                                ,std::u16string_view _sDestDataSourceName
                                 ,const SharedConnection& _xConnection);
 
         /** copies a table which was constructed by tags like HTML or RTF
@@ -164,21 +164,21 @@ namespace dbaui
         */
         void pasteTable(
             const svx::ODataAccessDescriptor& _rPasteData,
-            const OUString& _sDestDataSourceName,
+            std::u16string_view _sDestDataSourceName,
             const SharedConnection& _xDestConnection
         );
 
         /** insert a table into the data source. The source can either be a table or a query
         */
         void insertTable(
-            const OUString& i_rSourceDataSource,
+            std::u16string_view i_rSourceDataSource,
             const css::uno::Reference< css::sdbc::XConnection>& i_rSourceConnection,
             const OUString& i_rCommand,
             const sal_Int32 i_nCommandType,
             const css::uno::Reference< css::sdbc::XResultSet >& i_rSourceRows,
             const css::uno::Sequence< css::uno::Any >& i_rSelection,
             const bool i_bBookmarkSelection,
-            const OUString& i_rDestDataSource,
+            std::u16string_view i_rDestDataSource,
             const css::uno::Reference< css::sdbc::XConnection>& i_rDestConnection
         );
 

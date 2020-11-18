@@ -1055,7 +1055,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
 
     // check content of the first page
     {
-        uno::Reference<beans::XPropertySet> xFrame(getShapeByName("Marco1"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrame(getShapeByName(u"Marco1"), uno::UNO_QUERY);
 
         // no border
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xFrame, "LineWidth"));

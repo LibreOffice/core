@@ -1013,10 +1013,10 @@ uno::Sequence< OUString > SvtLinguConfig::GetDisabledDictionaries() const
 }
 
 std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionariesByFormat(
-    const OUString &rFormatName ) const
+    std::u16string_view rFormatName ) const
 {
     std::vector< SvtLinguConfigDictionaryEntry > aRes;
-    if (rFormatName.isEmpty())
+    if (rFormatName.empty())
         return aRes;
 
     try

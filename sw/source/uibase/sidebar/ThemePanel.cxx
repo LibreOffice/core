@@ -104,7 +104,7 @@ public:
         maStyles.push_back(aRedefinition);
     }
 
-    StyleRedefinition* get(const OUString& aString)
+    StyleRedefinition* get(std::u16string_view aString)
     {
         for (StyleRedefinition & rStyle : maStyles)
         {
@@ -315,7 +315,7 @@ std::vector<FontSet> initFontSets()
     return aFontSets;
 }
 
-FontSet getFontSet(const OUString& rFontVariant, std::vector<FontSet>& aFontSets)
+FontSet getFontSet(std::u16string_view rFontVariant, std::vector<FontSet>& aFontSets)
 {
     for (const FontSet & rFontSet : aFontSets)
     {
@@ -325,7 +325,7 @@ FontSet getFontSet(const OUString& rFontVariant, std::vector<FontSet>& aFontSets
     return aFontSets[0];
 }
 
-void applyTheme(SfxStyleSheetBasePool* pPool, const OUString& sFontSetName, const OUString& sColorSetName,
+void applyTheme(SfxStyleSheetBasePool* pPool, std::u16string_view sFontSetName, std::u16string_view sColorSetName,
                 StyleSet& rStyleSet, svx::ColorSets& rColorSets)
 {
     SwDocStyleSheet* pStyle;

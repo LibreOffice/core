@@ -33,8 +33,8 @@ class ScSolverUtil
 public:
     static void GetImplementations( css::uno::Sequence<OUString>& rImplNames,
                                     css::uno::Sequence<OUString>& rDescriptions );
-    static css::uno::Reference<css::sheet::XSolver> GetSolver( const OUString& rImplName );
-    static css::uno::Sequence<css::beans::PropertyValue> GetDefaults( const OUString& rImplName );
+    static css::uno::Reference<css::sheet::XSolver> GetSolver( std::u16string_view rImplName );
+    static css::uno::Sequence<css::beans::PropertyValue> GetDefaults( std::u16string_view rImplName );
 };
 
 #endif

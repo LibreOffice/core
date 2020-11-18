@@ -1462,9 +1462,9 @@ bool ScUndoRefreshLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-static ScAreaLink* lcl_FindAreaLink( const sfx2::LinkManager* pLinkManager, const OUString& rDoc,
-                            const OUString& rFlt, const OUString& rOpt,
-                            const OUString& rSrc, const ScRange& rDest )
+static ScAreaLink* lcl_FindAreaLink( const sfx2::LinkManager* pLinkManager, std::u16string_view rDoc,
+                            std::u16string_view rFlt, std::u16string_view rOpt,
+                            std::u16string_view rSrc, const ScRange& rDest )
 {
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     sal_uInt16 nCount = pLinkManager->GetLinks().size();

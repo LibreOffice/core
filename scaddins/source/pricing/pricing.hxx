@@ -92,7 +92,7 @@ public:
     bool                 IsDouble() const        { return bDouble; }
 
     sal_uInt16                  GetStrIndex( sal_uInt16 nParam ) const;
-    bool                 Is( const OUString& rCompare ) const
+    bool                 Is( std::u16string_view rCompare ) const
                                                     { return aIntName == rCompare; }
 
     const std::vector<OUString>& GetCompNameList() const { return aCompList; }

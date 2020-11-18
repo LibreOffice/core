@@ -415,7 +415,7 @@ void SfxClassificationHelper::Impl::parsePolicy()
     m_aIPPartNumbers = xClassificationParser->m_aIPPartNumbers;
 }
 
-static bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, const OUString& rName)
+static bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, std::u16string_view rName)
 {
     return std::any_of(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
     {
@@ -622,9 +622,9 @@ const OUString& SfxClassificationHelper::GetAbbreviatedBACName(const OUString& s
     return sFullName;
 }
 
-OUString SfxClassificationHelper::GetBACNameForIdentifier(const OUString& sIdentifier)
+OUString SfxClassificationHelper::GetBACNameForIdentifier(std::u16string_view sIdentifier)
 {
-    if (sIdentifier.isEmpty())
+    if (sIdentifier.empty())
         return "";
 
     for (const auto& category : m_pImpl->m_aCategories)
@@ -884,7 +884,7 @@ void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
         OUString aMessage = SfxResId(STR_CLASSIFIED_DOCUMENT);
         aMessage = aMessage.replaceFirst("%1", aBACName);
 
-        rViewFrame.RemoveInfoBar("classification");
+        rViewFrame.RemoveInfoBar(u"classification");
         rViewFrame.AppendInfoBar("classification", "", aMessage, GetImpactLevelType());
     }
 }

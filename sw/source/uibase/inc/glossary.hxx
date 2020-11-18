@@ -95,7 +95,7 @@ class SwGlossaryDlg : public SfxDialogController
 
     void            Apply();
     void            Init();
-    std::unique_ptr<weld::TreeIter> DoesBlockExist(const OUString& sBlock, const OUString& rShort);
+    std::unique_ptr<weld::TreeIter> DoesBlockExist(std::u16string_view sBlock, std::u16string_view rShort);
     void            ShowAutoText(const OUString& rGroup, const OUString& rShortName);
     void            ResumeShowAutoText();
 

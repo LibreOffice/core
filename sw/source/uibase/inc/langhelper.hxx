@@ -38,8 +38,8 @@ namespace SwLangHelper
     extern void GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet );
     extern bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh );
 
-    extern void SetLanguage( SwWrtShell &rWrtSh, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
-    extern void SetLanguage( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
+    extern void SetLanguage( SwWrtShell &rWrtSh, std::u16string_view rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
+    extern void SetLanguage( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, std::u16string_view rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
     extern void SetLanguage_None( SwWrtShell &rWrtSh, bool bIsForSelection, SfxItemSet &rCoreSet );
     extern void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet  );
     extern void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView const * pOLV = nullptr );

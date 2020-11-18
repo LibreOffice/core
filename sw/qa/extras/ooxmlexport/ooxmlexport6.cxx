@@ -244,13 +244,13 @@ DECLARE_OOXMLEXPORT_TEST(testDMLTextFrameVertAdjust, "dml-textframe-vertadjust.d
     // TextVerticalAdjust attribute so far.
 
     // 1st frame's context is adjusted to the top
-    uno::Reference<beans::XPropertySet> xFrame(getShapeByName("Rectangle 1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShapeByName(u"Rectangle 1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
     // 2nd frame's context is adjusted to the center
-    xFrame.set(getShapeByName("Rectangle 2"), uno::UNO_QUERY);
+    xFrame.set(getShapeByName(u"Rectangle 2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_CENTER, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
     // 3rd frame's context is adjusted to the bottom
-    xFrame.set(getShapeByName("Rectangle 3"), uno::UNO_QUERY);
+    xFrame.set(getShapeByName(u"Rectangle 3"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
 }
 

@@ -2275,7 +2275,7 @@ void disableLinkedNumberFormat(
     }
 
     // Entry not found.  Insert a new entry for this.
-    sal_Int32 nIndex = rMapper->GetEntryIndex(XML_NAMESPACE_CHART, "link-data-style-to-source", 0);
+    sal_Int32 nIndex = rMapper->GetEntryIndex(XML_NAMESPACE_CHART, u"link-data-style-to-source", 0);
     XMLPropertyState aState(nIndex);
     aState.maValue <<= false;
     rPropStates.push_back(aState);

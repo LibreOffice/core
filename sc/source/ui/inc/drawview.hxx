@@ -113,7 +113,7 @@ public:
     void            SetMarkedOriginalSize();
     void            FitToCellSize();
 
-    bool            SelectObject( const OUString& rName );
+    bool            SelectObject( std::u16string_view rName );
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 
@@ -140,9 +140,9 @@ public:
     SdrEndTextEditKind  ScEndTextEdit();    // calls SetDrawTextUndo(0)
     css::uno::Reference< css::datatransfer::XTransferable > CopyToTransferable();
 
-    SdrObject*  GetObjectByName(const OUString& rName);
+    SdrObject*  GetObjectByName(std::u16string_view rName);
     bool        GetObjectIsMarked( const SdrObject * pObject );
-    void        SelectCurrentViewObject( const OUString& rName );
+    void        SelectCurrentViewObject( std::u16string_view rName );
 
     // #i123922# helper which checks if a Graphic may be applied to an existing
     // SdrObject; if it's a SdrGrafObj the fill will be replaced. If it's a

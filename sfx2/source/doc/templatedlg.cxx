@@ -950,7 +950,7 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
     }
 }
 
-void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
+void SfxTemplateManagerDlg::OnTemplateImportCategory(std::u16string_view sCategory)
 {
     sfx2::FileDialogHelper aFileDlg(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                     FileDialogFlags::MultiSelection, m_xDialog.get());

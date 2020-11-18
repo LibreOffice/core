@@ -67,7 +67,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
     LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
         , rAxisLabelProperties.m_aFontReferenceSize );
 
-    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,"CharColor");
+    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,u"CharColor");
     Color nColor = COL_AUTO;
     if(pColorAny)
         *pColorAny >>= nColor;

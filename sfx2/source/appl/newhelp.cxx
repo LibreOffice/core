@@ -1505,7 +1505,7 @@ void SfxHelpIndexWindow_Impl::AddBookmarks( const OUString& rTitle, const OUStri
     GetBookmarksPage()->AddBookmarks( rTitle, rURL );
 }
 
-bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
+bool SfxHelpIndexWindow_Impl::IsValidFactory( std::u16string_view _rFactory )
 {
     bool bValid = false;
     for (sal_Int32 i = 0, nEntryCount = m_xActiveLB->get_count(); i < nEntryCount; ++i)

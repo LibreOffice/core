@@ -493,7 +493,7 @@ void ScDPGroupTableData::SetNumGroupDimension( sal_Int32 nIndex, const ScDPNumGr
     }
 }
 
-sal_Int32 ScDPGroupTableData::GetDimensionIndex( const OUString& rName )
+sal_Int32 ScDPGroupTableData::GetDimensionIndex( std::u16string_view rName )
 {
     for (tools::Long i = 0; i < nSourceCount; ++i)                         // nSourceCount excludes data layout
         if (pSourceData->getDimensionName(i) == rName)        //TODO: ignore case?

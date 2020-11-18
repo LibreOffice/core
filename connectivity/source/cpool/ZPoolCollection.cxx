@@ -188,7 +188,7 @@ Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const OUString& _
     return xDriver;
 }
 
-bool OPoolCollection::isDriverPoolingEnabled(const OUString& _sDriverImplName,
+bool OPoolCollection::isDriverPoolingEnabled(std::u16string_view _sDriverImplName,
                                                  Reference< XInterface >& _rxDriverNode)
 {
     bool bEnabled = false;

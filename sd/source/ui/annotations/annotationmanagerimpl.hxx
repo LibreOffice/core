@@ -79,7 +79,7 @@ public:
 
     void InsertAnnotation(const OUString& rText);
     void DeleteAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
-    void DeleteAnnotationsByAuthor( const OUString& sAuthor );
+    void DeleteAnnotationsByAuthor( std::u16string_view sAuthor );
     void DeleteAllAnnotations();
 
     void ExecuteAnnotationContextMenu( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, vcl::Window* pParent, const ::tools::Rectangle& rContextRect, bool bButtonMenu = false );

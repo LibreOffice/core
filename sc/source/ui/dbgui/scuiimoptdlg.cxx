@@ -39,7 +39,7 @@ public:
                 nDelIdx   ( 0 )
             {}
 
-    sal_uInt16  GetCode( const OUString& rDelimiter ) const;
+    sal_uInt16  GetCode( std::u16string_view rDelimiter ) const;
     OUString  GetDelimiter( sal_Unicode nCode ) const;
 
     OUString  FirstDel()  { nDelIdx = 0; return theDelTab.getToken( 0, cSep, nDelIdx ); }
@@ -51,7 +51,7 @@ private:
     sal_Int32           nDelIdx;
 };
 
-sal_uInt16 ScDelimiterTable::GetCode( const OUString& rDel ) const
+sal_uInt16 ScDelimiterTable::GetCode( std::u16string_view rDel ) const
 {
     if (!theDelTab.isEmpty())
     {

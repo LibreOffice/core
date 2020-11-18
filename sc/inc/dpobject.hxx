@@ -186,7 +186,7 @@ public:
                                        tools::Rectangle& rPosRect, css::sheet::DataPilotFieldOrientation& rOrient, tools::Long& rDimPos );
     bool                IsFilterButton( const ScAddress& rPos );
 
-    OUString            GetFormattedString( const OUString& rDimName, const double fValue );
+    OUString            GetFormattedString( std::u16string_view rDimName, const double fValue );
 
     double GetPivotData(
         const OUString& rDataFieldName,
@@ -392,7 +392,7 @@ public:
     SC_DLLPUBLIC ScDPObject& operator[](size_t nIndex);
     SC_DLLPUBLIC const ScDPObject& operator[](size_t nIndex) const;
 
-    ScDPObject* GetByName(const OUString& rName) const;
+    ScDPObject* GetByName(std::u16string_view rName) const;
 
     void DeleteOnTab( SCTAB nTab );
     void UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -434,9 +434,9 @@ private:
     void RemoveCache(const ScDPCache* pCache);
 
     void GetAllTables(const ScRange& rSrcRange, o3tl::sorted_vector<ScDPObject*>& rRefs) const;
-    void GetAllTables(const OUString& rSrcName, o3tl::sorted_vector<ScDPObject*>& rRefs) const;
+    void GetAllTables(std::u16string_view rSrcName, o3tl::sorted_vector<ScDPObject*>& rRefs) const;
     void GetAllTables(
-        sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
+        sal_Int32 nSdbType, std::u16string_view rDBName, std::u16string_view rCommand,
         o3tl::sorted_vector<ScDPObject*>& rRefs) const;
 
 private:

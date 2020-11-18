@@ -790,7 +790,7 @@ bool VCartesianAxis::createTextShapes(
     tAnySequence aPropValues;
     getAxisLabelProperties(aPropNames, aPropValues, m_aAxisProperties, rAxisLabelProperties, nLimitedSpaceForText, bLimitedHeight);
 
-    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,"CharColor");
+    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,u"CharColor");
     Color nColor = COL_AUTO;
     if(pColorAny)
         *pColorAny >>= nColor;
@@ -981,7 +981,7 @@ bool VCartesianAxis::createTextShapesSimple(
     tAnySequence aPropValues;
     getAxisLabelProperties(aPropNames, aPropValues, m_aAxisProperties, rAxisLabelProperties, -1, bLimitedHeight);
 
-    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,"CharColor");
+    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,u"CharColor");
     Color nColor = COL_AUTO;
     if(pColorAny)
         *pColorAny >>= nColor;

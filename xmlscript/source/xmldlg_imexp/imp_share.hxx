@@ -134,7 +134,7 @@ public:
         OUString const & rStyleId,
         css::uno::Reference< css::xml::input::XElement > const & xStyle );
     css::uno::Reference< css::xml::input::XElement > getStyle(
-        OUString const & rStyleId ) const;
+        std::u16string_view rStyleId ) const;
 
     css::uno::Reference< css::uno::XComponentContext >
     const & getComponentContext() const { return _xContext; }

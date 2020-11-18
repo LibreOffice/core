@@ -59,7 +59,7 @@ class ProposalList
 {
     std::vector< OUString > aVec;
 
-    bool    HasEntry( const OUString &rText ) const;
+    bool    HasEntry( std::u16string_view rText ) const;
 
 public:
     ProposalList()  {}
@@ -76,7 +76,7 @@ public:
 
 }
 
-bool ProposalList::HasEntry( const OUString &rText ) const
+bool ProposalList::HasEntry( std::u16string_view rText ) const
 {
     bool bFound = false;
     size_t nCnt = aVec.size();

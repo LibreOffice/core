@@ -715,7 +715,7 @@ void OCommonEmbeddedObject::SwitchDocToStorage_Impl( const uno::Reference< docum
 
 namespace {
 
-OUString getStringPropertyValue( const uno::Sequence<beans::PropertyValue>& rProps, const OUString& rName )
+OUString getStringPropertyValue( const uno::Sequence<beans::PropertyValue>& rProps, std::u16string_view rName )
 {
     OUString aStr;
 
@@ -775,9 +775,9 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
         aArgs[2].Name = "DocumentBaseURL";
         aArgs[2].Value <<= aBaseURL;
         aArgs[3].Name = "SourceShellID";
-        aArgs[3].Value <<= getStringPropertyValue(rObjArgs, "SourceShellID");
+        aArgs[3].Value <<= getStringPropertyValue(rObjArgs, u"SourceShellID");
         aArgs[4].Name = "DestinationShellID";
-        aArgs[4].Value <<= getStringPropertyValue(rObjArgs, "DestinationShellID");
+        aArgs[4].Value <<= getStringPropertyValue(rObjArgs, u"DestinationShellID");
 
         xDoc->storeToStorage( xStorage, aArgs );
         if ( bAttachToTheStorage )

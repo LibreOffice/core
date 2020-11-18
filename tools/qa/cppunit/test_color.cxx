@@ -103,7 +103,7 @@ void Test::test_asRGBColor()
     CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aColor.AsRGBHexString());
 }
 
-OUString createTintShade(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, OUString const & sReference, sal_Int16 nTintShade)
+OUString createTintShade(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, std::u16string_view sReference, sal_Int16 nTintShade)
 {
     Color aColor(nR, nG, nB);
     if (sReference != aColor.AsRGBHexString())
@@ -117,48 +117,48 @@ void Test::test_ApplyTintOrShade()
     // BLACK reference
 
     // 5% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("0d0d0d"), createTintShade(0x00, 0x00, 0x00, "000000",  500));
+    CPPUNIT_ASSERT_EQUAL(OUString("0d0d0d"), createTintShade(0x00, 0x00, 0x00, u"000000",  500));
     // 15% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("262626"), createTintShade(0x00, 0x00, 0x00, "000000",  1500));
+    CPPUNIT_ASSERT_EQUAL(OUString("262626"), createTintShade(0x00, 0x00, 0x00, u"000000",  1500));
     // 25% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("404040"), createTintShade(0x00, 0x00, 0x00, "000000",  2500));
+    CPPUNIT_ASSERT_EQUAL(OUString("404040"), createTintShade(0x00, 0x00, 0x00, u"000000",  2500));
     // 50% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("808080"), createTintShade(0x00, 0x00, 0x00, "000000",  5000));
+    CPPUNIT_ASSERT_EQUAL(OUString("808080"), createTintShade(0x00, 0x00, 0x00, u"000000",  5000));
     // 100% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), createTintShade(0x00, 0x00, 0x00, "000000", 10000));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), createTintShade(0x00, 0x00, 0x00, u"000000", 10000));
 
     // WHITE reference
 
     // 5% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("f2f2f2"), createTintShade(0xff, 0xff, 0xff, "ffffff",   -500));
+    CPPUNIT_ASSERT_EQUAL(OUString("f2f2f2"), createTintShade(0xff, 0xff, 0xff, u"ffffff",   -500));
     // 15% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("d9d9d9"), createTintShade(0xff, 0xff, 0xff, "ffffff",  -1500));
+    CPPUNIT_ASSERT_EQUAL(OUString("d9d9d9"), createTintShade(0xff, 0xff, 0xff, u"ffffff",  -1500));
     // 25% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("bfbfbf"), createTintShade(0xff, 0xff, 0xff, "ffffff",  -2500));
+    CPPUNIT_ASSERT_EQUAL(OUString("bfbfbf"), createTintShade(0xff, 0xff, 0xff, u"ffffff",  -2500));
     // 50% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("808080"), createTintShade(0xff, 0xff, 0xff, "ffffff",  -5000));
+    CPPUNIT_ASSERT_EQUAL(OUString("808080"), createTintShade(0xff, 0xff, 0xff, u"ffffff",  -5000));
     // 100% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"), createTintShade(0xff, 0xff, 0xff, "ffffff", -10000));
+    CPPUNIT_ASSERT_EQUAL(OUString("000000"), createTintShade(0xff, 0xff, 0xff, u"ffffff", -10000));
 
     // GREY reference
 
     // 0% - no change
-    CPPUNIT_ASSERT_EQUAL(OUString("808080"), createTintShade(0x80, 0x80, 0x80, "808080",      0));
+    CPPUNIT_ASSERT_EQUAL(OUString("808080"), createTintShade(0x80, 0x80, 0x80, u"808080",      0));
 
     // 25% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("a0a0a0"), createTintShade(0x80, 0x80, 0x80, "808080",   2500));
+    CPPUNIT_ASSERT_EQUAL(OUString("a0a0a0"), createTintShade(0x80, 0x80, 0x80, u"808080",   2500));
     // 50% tint
     //CPPUNIT_ASSERT_EQUAL(OUString("c0c0c0"), createTintShade(0x80, 0x80, 0x80, "808080",   5000));
     // disable for now - a rounding error happens on come platforms...
     // 100% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), createTintShade(0x80, 0x80, 0x80, "808080",  10000));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), createTintShade(0x80, 0x80, 0x80, u"808080",  10000));
 
     // 25% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("606060"), createTintShade(0x80, 0x80, 0x80, "808080",  -2500));
+    CPPUNIT_ASSERT_EQUAL(OUString("606060"), createTintShade(0x80, 0x80, 0x80, u"808080",  -2500));
     // 50% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("404040"), createTintShade(0x80, 0x80, 0x80, "808080",  -5000));
+    CPPUNIT_ASSERT_EQUAL(OUString("404040"), createTintShade(0x80, 0x80, 0x80, u"808080",  -5000));
     // 100% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"), createTintShade(0x80, 0x80, 0x80, "808080", -10000));
+    CPPUNIT_ASSERT_EQUAL(OUString("000000"), createTintShade(0x80, 0x80, 0x80, u"808080", -10000));
 }
 
 void Test::testGetColorError()

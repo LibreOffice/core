@@ -24,7 +24,7 @@ public:
 
     void showRegion(TemplateContainerItem const* pItem);
 
-    void showRegion(const OUString& rName);
+    void showRegion(std::u16string_view rName);
 
     void createContextMenu(const bool bIsDefault);
 

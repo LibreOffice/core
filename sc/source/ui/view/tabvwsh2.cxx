@@ -445,7 +445,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
     }
 }
 
-bool ScTabViewShell::SelectObject( const OUString& rName )
+bool ScTabViewShell::SelectObject( std::u16string_view rName )
 {
     ScDrawView* pView = GetViewData().GetScDrawView();
     if (!pView)

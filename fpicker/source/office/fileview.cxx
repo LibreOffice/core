@@ -301,13 +301,13 @@ public:
     void                    CreateDisplayText_Impl();
     void                    SortFolderContent_Impl();
 
-    void                    EntryRemoved( const OUString& rURL );
+    void                    EntryRemoved( std::u16string_view rURL );
     void                    EntryRenamed( OUString& rURL,
                                           const OUString& rName );
     const SortingData_Impl& FolderInserted( const OUString& rURL,
                                             const OUString& rTitle );
 
-    int                     GetEntryPos( const OUString& rURL );
+    int                     GetEntryPos( std::u16string_view rURL );
 
     void                    SetViewMode( FileViewMode eMode );
 
@@ -1668,7 +1668,7 @@ void SvtFileView_Impl::SortFolderContent_Impl()
 }
 
 
-void SvtFileView_Impl::EntryRemoved( const OUString& rURL )
+void SvtFileView_Impl::EntryRemoved( std::u16string_view rURL )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -1727,7 +1727,7 @@ const SortingData_Impl& SvtFileView_Impl::FolderInserted( const OUString& rURL, 
     return *maContent.back();
 }
 
-int SvtFileView_Impl::GetEntryPos(const OUString& rURL)
+int SvtFileView_Impl::GetEntryPos(std::u16string_view rURL)
 {
     ::osl::MutexGuard aGuard( maMutex );
 

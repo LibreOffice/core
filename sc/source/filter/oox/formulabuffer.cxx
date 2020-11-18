@@ -57,7 +57,7 @@ public:
     explicit CachedTokenArray( const ScDocument& rDoc ) :
         maCxt(rDoc, formula::FormulaGrammar::GRAM_OOXML) {}
 
-    Item* get( const ScAddress& rPos, const OUString& rFormula )
+    Item* get( const ScAddress& rPos, std::u16string_view rFormula )
     {
         // Check if a token array is cached for this column.
         ColCacheType::iterator it = maCache.find(rPos.Col());

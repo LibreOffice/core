@@ -137,7 +137,7 @@ IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
     return nullptr;
 }
 
-IXFStyle*   XFStyleContainer::FindStyle(const OUString& name)
+IXFStyle*   XFStyleContainer::FindStyle(std::u16string_view name)
 {
     for (auto const& style : m_aStyles)
     {

@@ -2588,7 +2588,7 @@ const NameToId constNameToIdMapping[] =
     { OUString("styleSet"),     FSNS( XML_w14, XML_styleSet ) },
 };
 
-std::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
+std::optional<sal_Int32> lclGetElementIdForName(std::u16string_view rName)
 {
     for (auto const & i : constNameToIdMapping)
     {

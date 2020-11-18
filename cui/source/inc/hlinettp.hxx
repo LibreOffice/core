@@ -55,7 +55,7 @@ private:
 
 
     void    SetScheme(const OUString& rScheme);
-    void    RemoveImproperProtocol(const OUString& rProperScheme);
+    void    RemoveImproperProtocol(std::u16string_view rProperScheme);
     OUString  GetSchemeFromButtons() const;
     INetProtocol GetSmartProtocolFromButtons() const;
 

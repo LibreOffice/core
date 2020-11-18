@@ -65,7 +65,7 @@ sal_Bool StrongEncryptionDataSpace::decrypt(const Reference<XInputStream>& rxInp
 }
 
 Reference<XInputStream> StrongEncryptionDataSpace::getStream(const Sequence<NamedValue>& rStreams,
-                                                             const OUString sStreamName)
+                                                             std::u16string_view sStreamName)
 {
     for (const auto& aStream : rStreams)
     {
@@ -84,7 +84,7 @@ Reference<XInputStream> StrongEncryptionDataSpace::getStream(const Sequence<Name
 
 sal_Bool StrongEncryptionDataSpace::readEncryptionInfo(const Sequence<NamedValue>& aStreams)
 {
-    Reference<XInputStream> xEncryptionInfo = getStream(aStreams, "EncryptionInfo");
+    Reference<XInputStream> xEncryptionInfo = getStream(aStreams, u"EncryptionInfo");
     if (!xEncryptionInfo.is())
         return false;
 

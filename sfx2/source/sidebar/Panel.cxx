@@ -146,7 +146,7 @@ void Panel::SetExpanded (const bool bIsExpanded)
     }
 }
 
-bool Panel::HasIdPredicate (const OUString& rsId) const
+bool Panel::HasIdPredicate (std::u16string_view rsId) const
 {
     return msPanelId == rsId;
 }

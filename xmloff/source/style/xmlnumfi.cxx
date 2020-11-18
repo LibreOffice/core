@@ -77,7 +77,7 @@ public:
 
     SvNumberFormatter*      GetNumberFormatter() const  { return pFormatter; }
     const LocaleDataWrapper&    GetLocaleData( LanguageType nLang );
-    sal_uInt32              GetKeyForName( const OUString& rName );
+    sal_uInt32              GetKeyForName( std::u16string_view rName );
     void                    AddKey( sal_uInt32 nKey, const OUString& rName, bool bRemoveAfterUse );
     void                    SetUsed( sal_uInt32 nKey );
     void                    RemoveVolatileFormats();
@@ -292,7 +292,7 @@ SvXMLNumImpData::SvXMLNumImpData(
     SAL_WARN_IF( !rxContext.is(), "xmloff", "got no service manager" );
 }
 
-sal_uInt32 SvXMLNumImpData::GetKeyForName( const OUString& rName )
+sal_uInt32 SvXMLNumImpData::GetKeyForName( std::u16string_view rName )
 {
     for (const auto& rObj : m_NameEntries)
     {

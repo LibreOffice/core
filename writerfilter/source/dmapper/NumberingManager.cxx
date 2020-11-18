@@ -56,7 +56,7 @@ static beans::PropertyValue lcl_makePropVal(PropertyIds nNameID, T const & aValu
     return {getPropertyName(nNameID), 0, uno::makeAny(aValue), beans::PropertyState_DIRECT_VALUE};
 }
 
-static sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, const OUString& sName )
+static sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, std::u16string_view sName )
 {
     sal_Int32 i = 0;
     sal_Int32 nLen = aProps.getLength( );

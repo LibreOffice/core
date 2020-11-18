@@ -571,7 +571,7 @@ public:
     bool isValidRangeName(sal_uInt16 nFileId, const OUString& rName);
 
     OUString getOwnDocumentName() const;
-    bool isOwnDocument(const OUString& rFile) const;
+    bool isOwnDocument(std::u16string_view rFile) const;
 
     /**
      * Takes a flat file name, and convert it to an absolute URL path.  An

@@ -613,7 +613,7 @@ struct ImpFilterLibCacheEntry
     PFilterCall             mpfnImport;
 
     ImpFilterLibCacheEntry(const OUString& rPathname, const OUString& rFiltername, const OUString& rFormatName);
-    bool                    operator==( const OUString& rFiltername ) const { return maFiltername == rFiltername; }
+    bool                    operator==( std::u16string_view rFiltername ) const { return maFiltername == rFiltername; }
 
     PFilterCall             GetImportFunction();
 };

@@ -296,7 +296,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     {
                         m_pSh->SetReadOnlyUI(m_bSetRO);
                         if (!m_bSetRO)
-                            m_pFrame->RemoveInfoBar("readonly");
+                            m_pFrame->RemoveInfoBar(u"readonly");
                         if (m_pMed)
                         {
                             // tdf#116066: DoSaveCompleted should be called after SetReadOnlyUI
@@ -3157,7 +3157,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         // First make sure that the sidebar is visible
         ShowChildWindow(SID_SIDEBAR);
 
-        ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel",
+        ::sfx2::sidebar::Sidebar::ShowPanel(u"StyleListPanel",
                                             GetFrame().GetFrameInterface(), true);
         rReq.Done();
         return;
@@ -3330,7 +3330,7 @@ VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar(const OUString& sId,
     return pInfoBar;
 }
 
-void SfxViewFrame::UpdateInfoBar(const OUString& sId, const OUString& sPrimaryMessage,
+void SfxViewFrame::UpdateInfoBar(std::u16string_view sId, const OUString& sPrimaryMessage,
                                  const OUString& sSecondaryMessage, InfobarType eType)
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
@@ -3350,7 +3350,7 @@ void SfxViewFrame::UpdateInfoBar(const OUString& sId, const OUString& sPrimaryMe
     }
 }
 
-void SfxViewFrame::RemoveInfoBar( const OUString& sId )
+void SfxViewFrame::RemoveInfoBar( std::u16string_view sId )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 
@@ -3368,7 +3368,7 @@ void SfxViewFrame::RemoveInfoBar( const OUString& sId )
     }
 }
 
-bool SfxViewFrame::HasInfoBarWithID( const OUString& sId )
+bool SfxViewFrame::HasInfoBarWithID( std::u16string_view sId )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 

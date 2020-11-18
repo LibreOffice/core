@@ -70,7 +70,7 @@ static void lcl_AdjustInsertPos( ScViewData& rData, Point& rPos, const Size& rSi
 }
 
 void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
-        bool bGroup, const OUString& rSrcShellID, const OUString& rDestShellID )
+        bool bGroup, std::u16string_view rSrcShellID, std::u16string_view rDestShellID )
 {
     bool bSameDocClipboard = rSrcShellID == rDestShellID;
 

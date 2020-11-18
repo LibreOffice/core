@@ -1756,9 +1756,9 @@ SwTextField* SwTextNode::GetFieldTextAttrAt(
     return pTextField;
 }
 
-static SwCharFormat* lcl_FindCharFormat( const SwCharFormats* pCharFormats, const OUString& rName )
+static SwCharFormat* lcl_FindCharFormat( const SwCharFormats* pCharFormats, std::u16string_view rName )
 {
-    if( !rName.isEmpty() )
+    if( !rName.empty() )
     {
         const size_t nArrLen = pCharFormats->size();
         for( size_t i = 1; i < nArrLen; i++ )

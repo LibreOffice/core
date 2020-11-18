@@ -95,8 +95,8 @@ protected:
 
     OTableIndex RemoveFreeIndex( const OUString& _rName, bool _bMustExist ) { return implRemoveIndex(_rName, m_aFreeIndexList, *m_xLB_FreeIndexes, _bMustExist); }
     void        InsertFreeIndex( const OTableIndex& _rIndex ) { implInsertIndex(_rIndex, m_aFreeIndexList, *m_xLB_FreeIndexes); }
-    OTableIndex RemoveTableIndex( const OUString& _rTableName, const OUString& _rIndexName );
-    void        InsertTableIndex( const OUString& _rTableName, const OTableIndex& _rIndex );
+    OTableIndex RemoveTableIndex( std::u16string_view _rTableName, const OUString& _rIndexName );
+    void        InsertTableIndex( std::u16string_view _rTableName, const OTableIndex& _rIndex );
 
     void checkButtons();
 

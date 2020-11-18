@@ -56,7 +56,7 @@ public:
     virtual ~SwOutlineTabDialog() override;
 
     SwNumRule*          GetNumRule() { return xNumRule.get(); }
-    sal_uInt16          GetLevel(const OUString &rFormatName) const;
+    sal_uInt16          GetLevel(std::u16string_view rFormatName) const;
     OUString*           GetCollNames() {return aCollNames;}
 
     static sal_uInt16   GetActNumLevel() {return nNumLevel;}
