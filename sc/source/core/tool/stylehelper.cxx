@@ -21,7 +21,6 @@
 #include <osl/diagnose.h>
 
 #include <stylehelper.hxx>
-#include <global.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 

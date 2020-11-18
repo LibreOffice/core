@@ -11,10 +11,7 @@
 #include <sal/config.h>
 #include <config_features.h>
 
-#include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <sfx2/docfilt.hxx>
 
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"

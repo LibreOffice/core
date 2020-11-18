@@ -19,11 +19,8 @@
 
 #include <markarr.hxx>
 #include <address.hxx>
-#include <rangelst.hxx>
 #include <sheetlimits.hxx>
 #include <vector>
-
-#include <osl/diagnose.h>
 
 ScMarkArray::ScMarkArray(const ScSheetLimits& rLimits) :
     mrSheetLimits(rLimits)

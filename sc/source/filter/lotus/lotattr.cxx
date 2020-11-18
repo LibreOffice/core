@@ -32,7 +32,6 @@
 #include <lotfntbf.hxx>
 #include "lotfilter.hxx"
 #include <patattr.hxx>
-#include <root.hxx>
 #include <scitems.hxx>
 
 using namespace ::com::sun::star;

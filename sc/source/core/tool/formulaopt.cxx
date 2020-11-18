@@ -13,7 +13,6 @@
 #include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <formulaopt.hxx>
-#include <miscuno.hxx>
 #include <global.hxx>
 #include <formulagroup.hxx>
 #include <sc.hrc>

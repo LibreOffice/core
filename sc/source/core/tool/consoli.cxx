@@ -27,7 +27,6 @@
 #include <osl/diagnose.h>
 #include <refdata.hxx>
 
-#include <math.h>
 #include <string.h>
 #include <memory>
 

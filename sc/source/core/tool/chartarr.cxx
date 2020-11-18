@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
-#include <svl/intitem.hxx>
-#include <svl/zforlist.hxx>
 #include <float.h>
 
 #include <chartarr.hxx>
 #include <cellvalue.hxx>
 #include <document.hxx>
-#include <rechead.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <formulacell.hxx>

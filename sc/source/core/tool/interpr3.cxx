@@ -19,12 +19,9 @@
 
 #include <tools/solar.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include <interpre.hxx>
 #include <global.hxx>
-#include <compiler.hxx>
-#include <formulacell.hxx>
 #include <document.hxx>
 #include <dociter.hxx>
 #include <matrixoperators.hxx>

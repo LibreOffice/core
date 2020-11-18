@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <types.hxx>
+
 #include <vcl/InterimItemWindow.hxx>
 
 class ScGridWindow;

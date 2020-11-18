@@ -24,7 +24,6 @@
 #include <sfx2/sfxdlg.hxx>
 #include <svl/style.hxx>
 #include <svx/pageitem.hxx>
-#include <vcl/svapp.hxx>
 
 #include <attrib.hxx>
 #include <tphf.hxx>

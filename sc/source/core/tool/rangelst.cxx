@@ -19,13 +19,11 @@
 
 #include <stdlib.h>
 #include <unotools/collatorwrapper.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 #include <rangelst.hxx>
 #include <document.hxx>
 #include <refupdat.hxx>
-#include <rechead.hxx>
 #include <compiler.hxx>
 #include <algorithm>
 #include <memory>

@@ -19,7 +19,6 @@
 #include <attrib.hxx>
 #include <docsh.hxx>
 #include <drwlayer.hxx>
-#include <scitems.hxx>
 #include <svx/svdocirc.hxx>
 #include <vcl/scheduler.hxx>
 #include <tabvwsh.hxx>
