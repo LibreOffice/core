@@ -583,8 +583,8 @@ void SchXMLPlotAreaContext::endFastElement(sal_Int32 )
     SchXMLAxisContext::CorrectAxisPositions( uno::Reference< chart2::XChartDocument >( mrImportHelper.GetChartDocument(), uno::UNO_QUERY ), maChartTypeServiceName, GetImport().GetODFVersion(), m_bAxisPositionAttributeImported );
 }
 
-SchXMLDataLabelSpanContext::SchXMLDataLabelSpanContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels):
-    SvXMLImportContext( rImport, XML_NAMESPACE_TEXT, rLocalName),
+SchXMLDataLabelSpanContext::SchXMLDataLabelSpanContext( SvXMLImport& rImport, ::std::vector<OUString>& rLabels):
+    SvXMLImportContext( rImport ),
     mrLabels(rLabels)
 {
 }
@@ -599,42 +599,41 @@ void SchXMLDataLabelSpanContext::endFastElement(sal_Int32 )
     mrLabels.push_back(maCharBuffer.makeStringAndClear());
 }
 
-SchXMLDataLabelParaContext::SchXMLDataLabelParaContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels):
-    SvXMLImportContext( rImport, XML_NAMESPACE_TEXT, rLocalName),
+SchXMLDataLabelParaContext::SchXMLDataLabelParaContext( SvXMLImport& rImport, ::std::vector<OUString>& rLabels):
+    SvXMLImportContext( rImport ),
     mrLabels(rLabels)
 {
 }
 
-SvXMLImportContextRef SchXMLDataLabelParaContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelParaContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    SvXMLImportContextRef xContext;
-    if ( IsXMLToken( rLocalName, XML_SPAN ) && nPrefix == XML_NAMESPACE_TEXT )
-        xContext = new SchXMLDataLabelSpanContext(GetImport(), rLocalName, mrLabels);
-    return xContext;
+    if ( nElement == XML_ELEMENT(TEXT, XML_SPAN) )
+        return new SchXMLDataLabelSpanContext(GetImport(), mrLabels);
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+    return nullptr;
 }
 
-SchXMLDataLabelContext::SchXMLDataLabelContext(SvXMLImport& rImport, const OUString& rLocalName,
+SchXMLDataLabelContext::SchXMLDataLabelContext(SvXMLImport& rImport,
                                                ::std::vector<OUString>& rLabels,
                                                DataRowPointStyle& rDataLabelStyle)
-    : SvXMLImportContext(rImport, XML_NAMESPACE_CHART, rLocalName)
+    : SvXMLImportContext(rImport)
     , mrLabels(rLabels)
     , mrDataLabelStyle(rDataLabelStyle)
 {
 }
 
-SvXMLImportContextRef SchXMLDataLabelContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    SvXMLImportContextRef xContext;
-    if ( IsXMLToken( rLocalName, XML_P ) && nPrefix == XML_NAMESPACE_TEXT )
-        xContext = new SchXMLDataLabelParaContext(GetImport(), rLocalName, mrLabels);
-
-    return xContext;
+    if ( nElement == XML_ELEMENT(TEXT, XML_P) )
+        return new SchXMLDataLabelParaContext(GetImport(), mrLabels);
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+    return nullptr;
 }
 
 void SchXMLDataLabelContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
@@ -674,14 +673,12 @@ void SchXMLDataLabelContext::StartElement(const uno::Reference<xml::sax::XAttrib
 }
 
 
-SchXMLDataPointContext::SchXMLDataPointContext(  SchXMLImportHelper& rImportHelper,
-                                                 SvXMLImport& rImport, const OUString& rLocalName,
+SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport,
                                                  ::std::vector< DataRowPointStyle >& rStyleVector,
                                                  const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
                                                  sal_Int32& rIndex,
                                                  bool bSymbolSizeForSeriesIsMissingInFile ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
-        mrImportHelper( rImportHelper ),
+        SvXMLImportContext( rImport ),
         mrStyleVector( rStyleVector ),
         mrIndex( rIndex ),
         mDataPoint(DataRowPointStyle::DATA_POINT, xSeries, rIndex, 1, OUString{}),
@@ -690,21 +687,20 @@ SchXMLDataPointContext::SchXMLDataPointContext(  SchXMLImportHelper& rImportHelp
     mDataPoint.mbSymbolSizeForSeriesIsMissingInFile = bSymbolSizeForSeriesIsMissingInFile;
 }
 
-SvXMLImportContextRef SchXMLDataPointContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataPointContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     SvXMLImportContext* pContext = nullptr;
-    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetSeriesElemTokenMap();
-
-    switch( rTokenMap.Get( nPrefix, rLocalName ))
+    switch(nElement)
     {
-        case XML_TOK_SERIES_DATA_LABEL:
+        case XML_ELEMENT(CHART, XML_DATA_LABEL):
             mbHasLabelParagraph = true;
-            pContext = new SchXMLDataLabelContext(GetImport(), rLocalName, mDataPoint.mCustomLabels,
+            pContext = new SchXMLDataLabelContext(GetImport(), mDataPoint.mCustomLabels,
                                                   mDataLabel);
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
     return pContext;
 }
