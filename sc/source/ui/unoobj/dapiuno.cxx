@@ -245,7 +245,7 @@ void ScDataPilotConversion::FillGroupInfo( DataPilotFieldGroupInfo& rInfo, const
     rInfo.Step          = rGroupInfo.mfStep;
 }
 
-static ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUString& rName )
+static ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, std::u16string_view rName )
 {
     if (pDocShell)
     {

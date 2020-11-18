@@ -880,7 +880,7 @@ void ScXMLExport::ExportColumns(const sal_Int32 nTable, const ScRange& aColumnHe
 void ScXMLExport::ExportExternalRefCacheStyles()
 {
     sal_Int32 nEntryIndex = GetCellStylesPropertySetMapper()->FindEntryIndex(
-        "NumberFormat", XML_NAMESPACE_STYLE, "data-style-name");
+        "NumberFormat", XML_NAMESPACE_STYLE, u"data-style-name");
 
     if (nEntryIndex < 0)
         // No entry index for the number format is found.
@@ -929,7 +929,7 @@ namespace {
 
 void handleFont(
     std::vector<XMLPropertyState>& rPropStates,
-    const SfxPoolItem* p, const rtl::Reference<XMLPropertySetMapper>& xMapper, const OUString& rXMLName )
+    const SfxPoolItem* p, const rtl::Reference<XMLPropertySetMapper>& xMapper, std::u16string_view rXMLName )
 {
     sal_Int32 nEntryCount = xMapper->GetEntryCount();
 
@@ -977,13 +977,13 @@ const SvxFieldData* toXMLPropertyStates(
         switch (p->Which())
         {
             case EE_CHAR_FONTINFO:
-                handleFont(rPropStates, p, xMapper, "font-name");
+                handleFont(rPropStates, p, xMapper, u"font-name");
             break;
             case EE_CHAR_FONTINFO_CJK:
-                handleFont(rPropStates, p, xMapper, "font-name-asian");
+                handleFont(rPropStates, p, xMapper, u"font-name-asian");
             break;
             case EE_CHAR_FONTINFO_CTL:
-                handleFont(rPropStates, p, xMapper, "font-name-complex");
+                handleFont(rPropStates, p, xMapper, u"font-name-complex");
             break;
             case EE_CHAR_WEIGHT:
             case EE_CHAR_WEIGHT_CJK:
@@ -1018,23 +1018,23 @@ const SvxFieldData* toXMLPropertyStates(
             case EE_CHAR_UNDERLINE:
             {
                 // Underline attribute needs to export multiple entries.
-                sal_Int32 nIndexStyle = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-underline-style", 0);
+                sal_Int32 nIndexStyle = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, u"text-underline-style", 0);
                 if (nIndexStyle == -1 || nIndexStyle > nEntryCount)
                     break;
 
-                sal_Int32 nIndexWidth = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-underline-width", 0);
+                sal_Int32 nIndexWidth = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, u"text-underline-width", 0);
                 if (nIndexWidth == -1 || nIndexWidth > nEntryCount)
                     break;
 
-                sal_Int32 nIndexType = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-underline-type", 0);
+                sal_Int32 nIndexType = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, u"text-underline-type", 0);
                 if (nIndexType == -1 || nIndexType > nEntryCount)
                     break;
 
-                sal_Int32 nIndexColor = xMapper->FindEntryIndex("CharUnderlineColor", XML_NAMESPACE_STYLE, "text-underline-color");
+                sal_Int32 nIndexColor = xMapper->FindEntryIndex("CharUnderlineColor", XML_NAMESPACE_STYLE, u"text-underline-color");
                 if (nIndexColor == -1 || nIndexColor > nEntryCount)
                     break;
 
-                sal_Int32 nIndexHasColor = xMapper->FindEntryIndex("CharUnderlineHasColor", XML_NAMESPACE_STYLE, "text-underline-color");
+                sal_Int32 nIndexHasColor = xMapper->FindEntryIndex("CharUnderlineHasColor", XML_NAMESPACE_STYLE, u"text-underline-color");
                 if (nIndexHasColor == -1 || nIndexHasColor > nEntryCount)
                     break;
 
@@ -1054,23 +1054,23 @@ const SvxFieldData* toXMLPropertyStates(
             case EE_CHAR_OVERLINE:
             {
                 // Same with overline.  Do just as we do with underline attributes.
-                sal_Int32 nIndexStyle = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-overline-style", 0);
+                sal_Int32 nIndexStyle = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, u"text-overline-style", 0);
                 if (nIndexStyle == -1 || nIndexStyle > nEntryCount)
                     break;
 
-                sal_Int32 nIndexWidth = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-overline-width", 0);
+                sal_Int32 nIndexWidth = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, u"text-overline-width", 0);
                 if (nIndexWidth == -1 || nIndexWidth > nEntryCount)
                     break;
 
-                sal_Int32 nIndexType = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-overline-type", 0);
+                sal_Int32 nIndexType = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, u"text-overline-type", 0);
                 if (nIndexType == -1 || nIndexType > nEntryCount)
                     break;
 
-                sal_Int32 nIndexColor = xMapper->FindEntryIndex("CharOverlineColor", XML_NAMESPACE_STYLE, "text-overline-color");
+                sal_Int32 nIndexColor = xMapper->FindEntryIndex("CharOverlineColor", XML_NAMESPACE_STYLE, u"text-overline-color");
                 if (nIndexColor == -1 || nIndexColor > nEntryCount)
                     break;
 
-                sal_Int32 nIndexHasColor = xMapper->FindEntryIndex("CharOverlineHasColor", XML_NAMESPACE_STYLE, "text-overline-color");
+                sal_Int32 nIndexHasColor = xMapper->FindEntryIndex("CharOverlineHasColor", XML_NAMESPACE_STYLE, u"text-overline-color");
                 if (nIndexHasColor == -1 || nIndexHasColor > nEntryCount)
                     break;
 
@@ -1167,11 +1167,11 @@ const SvxFieldData* toXMLPropertyStates(
             break;
             case EE_CHAR_ESCAPEMENT:
             {
-                sal_Int32 nIndexEsc = xMapper->FindEntryIndex("CharEscapement", XML_NAMESPACE_STYLE, "text-position");
+                sal_Int32 nIndexEsc = xMapper->FindEntryIndex("CharEscapement", XML_NAMESPACE_STYLE, u"text-position");
                 if (nIndexEsc == -1 || nIndexEsc > nEntryCount)
                     break;
 
-                sal_Int32 nIndexEscHeight = xMapper->FindEntryIndex("CharEscapementHeight", XML_NAMESPACE_STYLE, "text-position");
+                sal_Int32 nIndexEscHeight = xMapper->FindEntryIndex("CharEscapementHeight", XML_NAMESPACE_STYLE, u"text-position");
                 if (nIndexEscHeight == -1 || nIndexEscHeight > nEntryCount)
                     break;
 
@@ -1205,22 +1205,22 @@ const SvxFieldData* toXMLPropertyStates(
                 switch (p->Which())
                 {
                     case EE_CHAR_LANGUAGE:
-                        nIndexLanguage = xMapper->GetEntryIndex( XML_NAMESPACE_FO, "language", 0);
-                        nIndexCountry = xMapper->GetEntryIndex( XML_NAMESPACE_FO, "country", 0);
-                        nIndexScript = xMapper->GetEntryIndex( XML_NAMESPACE_FO, "script", 0);
-                        nIndexTag = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "rfc-language-tag", 0);
+                        nIndexLanguage = xMapper->GetEntryIndex( XML_NAMESPACE_FO, u"language", 0);
+                        nIndexCountry = xMapper->GetEntryIndex( XML_NAMESPACE_FO, u"country", 0);
+                        nIndexScript = xMapper->GetEntryIndex( XML_NAMESPACE_FO, u"script", 0);
+                        nIndexTag = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, u"rfc-language-tag", 0);
                     break;
                     case EE_CHAR_LANGUAGE_CJK:
-                        nIndexLanguage = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "language-asian", 0);
-                        nIndexCountry = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "country-asian", 0);
-                        nIndexScript = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "script-asian", 0);
-                        nIndexTag = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "rfc-language-tag-asian", 0);
+                        nIndexLanguage = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, u"language-asian", 0);
+                        nIndexCountry = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, u"country-asian", 0);
+                        nIndexScript = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, u"script-asian", 0);
+                        nIndexTag = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, u"rfc-language-tag-asian", 0);
                     break;
                     case EE_CHAR_LANGUAGE_CTL:
-                        nIndexLanguage = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "language-complex", 0);
-                        nIndexCountry = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "country-complex", 0);
-                        nIndexScript = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "script-complex", 0);
-                        nIndexTag = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, "rfc-language-tag-complex", 0);
+                        nIndexLanguage = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, u"language-complex", 0);
+                        nIndexCountry = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, u"country-complex", 0);
+                        nIndexScript = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, u"script-complex", 0);
+                        nIndexTag = xMapper->GetEntryIndex( XML_NAMESPACE_STYLE, u"rfc-language-tag-complex", 0);
                     break;
                     default:
                         nIndexLanguage = nIndexCountry = nIndexScript = nIndexTag = -1;

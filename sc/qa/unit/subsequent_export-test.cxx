@@ -2817,7 +2817,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
             return true;
         }
 
-        bool checkRevisionUserAndTime( ScDocument& rDoc, const OUString& rOwnerName )
+        bool checkRevisionUserAndTime( ScDocument& rDoc, std::u16string_view rOwnerName )
         {
             ScChangeTrack* pCT = rDoc.GetChangeTrack();
             if (!pCT)

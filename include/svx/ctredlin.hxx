@@ -127,8 +127,8 @@ public:
     void            SetCalcView();
     void            SetWriterView();
 
-    bool            IsValidEntry(const OUString &rAuthor, const DateTime &rDateTime, const OUString &rComment);
-    bool            IsValidEntry(const OUString &rAuthor, const DateTime &rDateTime);
+    bool            IsValidEntry(std::u16string_view rAuthor, const DateTime &rDateTime, const OUString &rComment);
+    bool            IsValidEntry(std::u16string_view rAuthor, const DateTime &rDateTime);
     bool            IsValidComment(const OUString &rComment);
 
     DECL_LINK(HeaderBarClick, int, void);

@@ -306,10 +306,10 @@ public:
     SC_DLLPUBLIC ScDPSaveDimension* GetDataLayoutDimension();
     SC_DLLPUBLIC ScDPSaveDimension* GetExistingDataLayoutDimension() const;
 
-    ScDPSaveDimension* DuplicateDimension(const OUString& rName);
+    ScDPSaveDimension* DuplicateDimension(std::u16string_view rName);
     SC_DLLPUBLIC ScDPSaveDimension& DuplicateDimension(const ScDPSaveDimension& rDim);
 
-    SC_DLLPUBLIC ScDPSaveDimension* GetExistingDimensionByName(const OUString& rName) const;
+    SC_DLLPUBLIC ScDPSaveDimension* GetExistingDimensionByName(std::u16string_view rName) const;
     SC_DLLPUBLIC ScDPSaveDimension* GetNewDimensionByName(const OUString& rName);
 
     void RemoveDimensionByName(const OUString& rName);
@@ -361,7 +361,7 @@ public:
      *
      * @param rDimName dimension name
      */
-    SC_DLLPUBLIC bool HasInvisibleMember(const OUString& rDimName) const;
+    SC_DLLPUBLIC bool HasInvisibleMember(std::u16string_view rDimName) const;
 
 #if DUMP_PIVOT_TABLE
     void Dump() const;

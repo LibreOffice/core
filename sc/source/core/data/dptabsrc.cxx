@@ -310,7 +310,7 @@ void ScDPSource::SetDupCount( tools::Long nNew )
     nDupCount = nNew;
 }
 
-ScDPDimension* ScDPSource::AddDuplicated(const OUString& rNewName)
+ScDPDimension* ScDPSource::AddDuplicated(std::u16string_view rNewName)
 {
     OSL_ENSURE( pDimensions.is(), "AddDuplicated without dimensions?" );
 

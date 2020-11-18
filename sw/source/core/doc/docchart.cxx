@@ -117,7 +117,7 @@ void SwDoc::UpdateCharts_( const SwTable& rTable, SwViewShell const & rVSh ) con
     }
 }
 
-void SwDoc::UpdateCharts( const OUString &rName ) const
+void SwDoc::UpdateCharts( std::u16string_view rName ) const
 {
     SwTable* pTmpTable = SwTable::FindTable( FindTableFormatByName( rName ) );
     if( pTmpTable )

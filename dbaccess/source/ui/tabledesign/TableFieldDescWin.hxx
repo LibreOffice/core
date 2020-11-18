@@ -64,7 +64,7 @@ namespace dbaui
         void SetControlText( sal_uInt16 nControlId, const OUString& rText )
                 { m_xFieldControl->SetControlText(nControlId,rText); }
 
-        OUString  BoolStringPersistent(const OUString& rUIString) const { return m_xFieldControl->BoolStringPersistent(rUIString); }
+        OUString  BoolStringPersistent(std::u16string_view rUIString) const { return m_xFieldControl->BoolStringPersistent(rUIString); }
         OUString  BoolStringUI(const OUString& rPersistentString) const { return m_xFieldControl->BoolStringUI(rPersistentString); }
 
         virtual bool HasChildPathFocus() const override;

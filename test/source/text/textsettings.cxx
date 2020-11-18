@@ -27,7 +27,7 @@ bool extstsProperty(css::uno::Reference<css::beans::XPropertySet> const& rxPrope
 }
 
 bool isPropertyReadOnly(css::uno::Reference<css::beans::XPropertySet> const& rxPropertySet,
-                        OUString const& rPropertyName)
+                        std::u16string_view rPropertyName)
 {
     css::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo(
         rxPropertySet->getPropertySetInfo());

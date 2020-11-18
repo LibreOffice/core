@@ -223,7 +223,7 @@ public:
     inline const OUString&  GetSuffix() const;
 
     sal_uInt16              GetStrIndex( sal_uInt16 nParamNum ) const;
-    inline bool             Is( const OUString& rCompareTo ) const;
+    inline bool             Is( std::u16string_view rCompareTo ) const;
 
     inline const std::vector<OUString> &
                             GetCompNameList() const;
@@ -618,7 +618,7 @@ inline const OUString& FuncData::GetSuffix() const
 }
 
 
-inline bool FuncData::Is( const OUString& r ) const
+inline bool FuncData::Is( std::u16string_view r ) const
 {
     return aIntName == r;
 }

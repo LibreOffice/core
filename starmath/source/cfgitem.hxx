@@ -77,9 +77,9 @@ public:
 
     void    Clear();
     void    AddFontFormat( const OUString &rFntFmtId, const SmFontFormat &rFntFmt );
-    void    RemoveFontFormat( const OUString &rFntFmtId );
+    void    RemoveFontFormat( std::u16string_view rFntFmtId );
 
-    const SmFontFormat *    GetFontFormat( const OUString &rFntFmtId ) const;
+    const SmFontFormat *    GetFontFormat( std::u16string_view rFntFmtId ) const;
     const SmFontFormat *    GetFontFormat( size_t nPos ) const;
     OUString                GetFontFormatId( const SmFontFormat &rFntFmt ) const;
     OUString                GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd );

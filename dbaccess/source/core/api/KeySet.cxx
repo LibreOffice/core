@@ -527,10 +527,10 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
         ::dbtools::throwSQLException( DBA_RES( RID_STR_NO_CONDITION_FOR_PK ), StandardSQLState::GENERAL_ERROR, m_xConnection );
 
     // now create end execute the prepared statement
-    executeUpdate(_rInsertRow ,_rOriginalRow,aSql.makeStringAndClear(),"",aIndexColumnPositions);
+    executeUpdate(_rInsertRow ,_rOriginalRow,aSql.makeStringAndClear(),u"",aIndexColumnPositions);
 }
 
-void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const OUString& i_sSQL,const OUString& i_sTableName,const std::vector<sal_Int32>& _aIndexColumnPositions)
+void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const OUString& i_sSQL,std::u16string_view i_sTableName,const std::vector<sal_Int32>& _aIndexColumnPositions)
 {
     // now create end execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(i_sSQL));
@@ -542,7 +542,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     // first the set values
     for (auto const& columnName : *m_pColumnNames)
     {
-        if ( i_sTableName.isEmpty() || columnName.second.sTableName == i_sTableName )
+        if ( i_sTableName.empty() || columnName.second.sTableName == i_sTableName )
         {
             sal_Int32 nPos = columnName.second.nPosition;
             if((*_rInsertRow)[nPos].isModified())
@@ -560,7 +560,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     // and then the values of the where condition
     for (auto const& keyColumnName : *m_pKeyColumnNames)
     {
-        if ( i_sTableName.isEmpty() || keyColumnName.second.sTableName == i_sTableName )
+        if ( i_sTableName.empty() || keyColumnName.second.sTableName == i_sTableName )
         {
             setParameter(i++,xParameter,(*_rOriginalRow)[keyColumnName.second.nPosition],keyColumnName.second.nType,keyColumnName.second.nScale);
         }
@@ -621,10 +621,10 @@ void OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLT
     aValues[aValues.getLength() - 1] = ')';
     aSql.append(aValues.makeStringAndClear());
     // now create,fill and execute the prepared statement
-    executeInsert(_rInsertRow,aSql.makeStringAndClear(),"",bRefetch);
+    executeInsert(_rInsertRow,aSql.makeStringAndClear(),u"",bRefetch);
 }
 
-void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQL,const OUString& i_sTableName,bool bRefetch )
+void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQL,std::u16string_view i_sTableName,bool bRefetch )
 {
     // now create,fill and execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(i_sSQL));
@@ -633,7 +633,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
     sal_Int32 i = 1;
     for (auto const& columnName : *m_pColumnNames)
     {
-        if ( i_sTableName.isEmpty() || columnName.second.sTableName == i_sTableName )
+        if ( i_sTableName.empty() || columnName.second.sTableName == i_sTableName )
         {
             const sal_Int32 nPos = columnName.second.nPosition;
             if((*_rInsertRow)[nPos].isModified())
@@ -703,7 +703,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
 
     ::comphelper::disposeComponent(xPrep);
 
-    if ( i_sTableName.isEmpty() && !bAutoValuesFetched && m_bInserted )
+    if ( i_sTableName.empty() && !bAutoValuesFetched && m_bInserted )
     {
         // first check if all key column values were set
         const OUString sQuote = getIdentifierQuoteString();

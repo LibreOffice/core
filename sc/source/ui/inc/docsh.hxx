@@ -253,7 +253,7 @@ public:
 
     void            LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellStyles, bool bPageStyles );
 
-    void            PageStyleModified( const OUString& rStyleName, bool bApi );
+    void            PageStyleModified( std::u16string_view rStyleName, bool bApi );
 
     void            NotifyStyle( const SfxStyleSheetHint& rHint );
     void            DoAutoStyle( const ScRange& rRange, const OUString& rStyle );

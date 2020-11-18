@@ -94,12 +94,12 @@ public:
                                                 const OUString& aFilterName );
 
     css::uno::Sequence< css::beans::NamedValue > GetObjectPropsByDocumentName(
-                                                const OUString& aDocumentName );
+                                                std::u16string_view aDocumentName );
 
     // retrieving object factory from configuration
     OUString GetFactoryNameByStringClassID( const OUString& aStringClassID );
     OUString GetFactoryNameByClassID( const css::uno::Sequence< sal_Int8 >& aClassID );
-    OUString GetFactoryNameByDocumentName( const OUString& aDocName );
+    OUString GetFactoryNameByDocumentName( std::u16string_view aDocName );
     OUString GetFactoryNameByMediaType( const OUString& aMediaType );
 
     // typedetection related

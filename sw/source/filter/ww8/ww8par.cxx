@@ -4932,7 +4932,7 @@ void WW8Customizations::Import( SwDocShell* pShell )
     }
 }
 
-void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const uno::Reference< container::XNameContainer >& xPrjNameCache )
+void SwWW8ImplReader::ReadGlobalTemplateSettings( std::u16string_view sCreatedFrom, const uno::Reference< container::XNameContainer >& xPrjNameCache )
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
@@ -4957,7 +4957,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
                 aURL = rGlobalTemplate;
         else
                 osl::FileBase::getFileURLFromSystemPath( rGlobalTemplate, aURL );
-        if ( !aURL.endsWithIgnoreAsciiCase( ".dot" ) || ( !sCreatedFrom.isEmpty() && sCreatedFrom == aURL ) )
+        if ( !aURL.endsWithIgnoreAsciiCase( ".dot" ) || ( !sCreatedFrom.empty() && sCreatedFrom == aURL ) )
             continue; // don't try and read the same document as ourselves
 
         tools::SvRef<SotStorage> rRoot = new SotStorage( aURL, StreamMode::STD_READWRITE );

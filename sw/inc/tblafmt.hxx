@@ -292,7 +292,7 @@ public:
     std::unique_ptr<SwTableAutoFormat> ReleaseAutoFormat(const OUString& rName);
 
     /// Find table style with the provided name, return nullptr when not found.
-    SwTableAutoFormat* FindAutoFormat(const OUString& rName) const;
+    SwTableAutoFormat* FindAutoFormat(std::u16string_view rName) const;
 
     void Load();
     bool Save() const;
@@ -321,11 +321,11 @@ public:
     /// Add a copy of rBoxFormat
     void AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const OUString& sName);
     void RemoveBoxFormat(const OUString& sName);
-    void ChangeBoxFormatName(const OUString& sFromName, const OUString& sToName);
+    void ChangeBoxFormatName(std::u16string_view sFromName, const OUString& sToName);
     /// If found returns its name. If not found returns an empty OUString
     OUString GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const;
     /// If found returns a ptr to a BoxFormat. If not found returns nullptr
-    SwBoxAutoFormat* GetBoxFormat(const OUString& sName) const;
+    SwBoxAutoFormat* GetBoxFormat(std::u16string_view sName) const;
 };
 
 #endif

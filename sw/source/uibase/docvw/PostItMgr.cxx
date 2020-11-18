@@ -1726,7 +1726,7 @@ void SwPostItMgr::FormatAll(const SfxItemSet &rNewAttr)
     LayoutPostIts();
 }
 
-void SwPostItMgr::Hide( const OUString& rAuthor )
+void SwPostItMgr::Hide( std::u16string_view rAuthor )
 {
     for (auto const& postItField : mvPostItFields)
     {

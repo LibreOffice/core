@@ -475,7 +475,7 @@ void SbTreeListBox::ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLi
     }
 }
 
-bool SbTreeListBox::ImpFindEntry(weld::TreeIter& rIter, const OUString& rText)
+bool SbTreeListBox::ImpFindEntry(weld::TreeIter& rIter, std::u16string_view rText)
 {
     bool bValidIter = m_xControl->iter_children(rIter);
     while (bValidIter)
@@ -599,7 +599,7 @@ void SbTreeListBox::RemoveEntry (ScriptDocument const& rDocument)
     }
 }
 
-bool SbTreeListBox::FindEntry(const OUString& rText, EntryType eType, weld::TreeIter& rIter)
+bool SbTreeListBox::FindEntry(std::u16string_view rText, EntryType eType, weld::TreeIter& rIter)
 {
     bool bValidIter = m_xControl->iter_children(rIter);
     while (bValidIter)

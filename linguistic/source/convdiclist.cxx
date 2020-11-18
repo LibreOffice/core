@@ -74,7 +74,7 @@ class ConvDicNameContainer :
 {
     std::vector< uno::Reference< XConversionDictionary > >   aConvDics;
 
-    sal_Int32 GetIndexByName_Impl( const OUString& rName );
+    sal_Int32 GetIndexByName_Impl( std::u16string_view rName );
 
 public:
     ConvDicNameContainer();
@@ -105,7 +105,7 @@ public:
     void    FlushDics() const;
 
     sal_Int32   GetCount() const    { return aConvDics.size(); }
-    uno::Reference< XConversionDictionary > GetByName( const OUString& rName );
+    uno::Reference< XConversionDictionary > GetByName( std::u16string_view rName );
 
     const uno::Reference< XConversionDictionary >&  GetByIndex( sal_Int32 nIdx )
     {
@@ -138,7 +138,7 @@ void ConvDicNameContainer::FlushDics() const
 }
 
 sal_Int32 ConvDicNameContainer::GetIndexByName_Impl(
-        const OUString& rName )
+        std::u16string_view rName )
 {
     sal_Int32 nRes = -1;
     sal_Int32 nLen = aConvDics.size();
@@ -151,7 +151,7 @@ sal_Int32 ConvDicNameContainer::GetIndexByName_Impl(
 }
 
 uno::Reference< XConversionDictionary > ConvDicNameContainer::GetByName(
-        const OUString& rName )
+        std::u16string_view rName )
 {
     uno::Reference< XConversionDictionary > xRes;
     sal_Int32 nIdx = GetIndexByName_Impl( rName );
@@ -370,9 +370,9 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
         // since there is no UI to active/deactivate the dictionaries
         // for chinese text conversion they should be activated by default
         uno::Reference< XConversionDictionary > xS2TDic =
-                    mxNameContainer->GetByName( "ChineseS2T" );
+                    mxNameContainer->GetByName( u"ChineseS2T" );
         uno::Reference< XConversionDictionary > xT2SDic =
-                    mxNameContainer->GetByName( "ChineseT2S" );
+                    mxNameContainer->GetByName( u"ChineseT2S" );
         if (xS2TDic.is())
             xS2TDic->setActive( true );
         if (xT2SDic.is())

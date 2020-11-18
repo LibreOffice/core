@@ -246,7 +246,7 @@ bool XMLPropertySetMapper::importXML(
 // If there is no matching entry the method returns -1
 sal_Int32 XMLPropertySetMapper::GetEntryIndex(
         sal_uInt16 nNamespace,
-        const OUString& rStrName,
+        std::u16string_view rStrName,
         sal_uInt32 nPropType,
         sal_Int32 nStartAt /* = -1 */ ) const
 {
@@ -306,7 +306,7 @@ sal_Int32 XMLPropertySetMapper::GetEntryIndex(
 sal_Int32 XMLPropertySetMapper::FindEntryIndex(
         const char* sApiName,
         sal_uInt16 nNameSpace,
-        const OUString& sXMLName ) const
+        std::u16string_view sXMLName ) const
 {
     sal_Int32 nIndex = 0;
     sal_Int32 nEntries = GetEntryCount();

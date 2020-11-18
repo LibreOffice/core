@@ -346,7 +346,7 @@ void OWizColumnSelect::moveColumn(  weld::TreeView* _pRight,
 // been removed earlier and adjust accordingly. Based on the
 // algorithm employed in moveColumn().
 sal_Int32 OWizColumnSelect::adjustColumnPosition(weld::TreeView const * _pLeft,
-                                                 const OUString&   _sColumnName,
+                                                 std::u16string_view  _sColumnName,
                                                  ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                                  const ::comphelper::UStringMixEqual& _aCase)
 {

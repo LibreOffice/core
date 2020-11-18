@@ -1973,7 +1973,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasByName( const OUString& aName )
     return FindObject( aName ) != nullptr;
 }
 
-SdrObject* SdPageLinkTargets::FindObject( const OUString& rName ) const throw()
+SdrObject* SdPageLinkTargets::FindObject( std::u16string_view rName ) const throw()
 {
     SdPage* pPage = mpUnoPage->GetPage();
     if( pPage == nullptr )

@@ -46,7 +46,7 @@ class ScAutoFormatsObj final : public ::cppu::WeakImplHelper<
 {
 private:
     static ScAutoFormatObj* GetObjectByIndex_Impl(sal_uInt16 nIndex);
-    static ScAutoFormatObj* GetObjectByName_Impl(const OUString& aName);
+    static ScAutoFormatObj* GetObjectByName_Impl(std::u16string_view aName);
 
 public:
                             ScAutoFormatsObj();

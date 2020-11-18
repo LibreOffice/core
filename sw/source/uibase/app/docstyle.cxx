@@ -330,7 +330,7 @@ static SwTableAutoFormat* lcl_FindTableStyle(SwDoc& rDoc, const OUString& rName,
     return pFormat;
 }
 
-static const SwBoxAutoFormat* lcl_FindCellStyle(SwDoc& rDoc, const OUString& rName, SwDocStyleSheet *pStyle)
+static const SwBoxAutoFormat* lcl_FindCellStyle(SwDoc& rDoc, std::u16string_view rName, SwDocStyleSheet *pStyle)
 {
     const SwBoxAutoFormat* pFormat = rDoc.GetCellStyles().GetBoxFormat(rName);
 

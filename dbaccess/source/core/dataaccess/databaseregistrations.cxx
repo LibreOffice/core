@@ -131,7 +131,7 @@ namespace dbaccess
 
 
         ::utl::OConfigurationNode
-                impl_getNodeForName_nothrow(const OUString& _rName);
+                impl_getNodeForName_nothrow(std::u16string_view _rName);
 
     private:
         Reference<XComponentContext>        m_aContext;
@@ -155,7 +155,7 @@ namespace dbaccess
     {
     }
 
-    ::utl::OConfigurationNode DatabaseRegistrations::impl_getNodeForName_nothrow( const OUString& _rName )
+    ::utl::OConfigurationNode DatabaseRegistrations::impl_getNodeForName_nothrow( std::u16string_view _rName )
     {
         const Sequence< OUString > aNames( m_aConfigurationRoot.getNodeNames() );
         for ( auto const & nodeName : aNames )

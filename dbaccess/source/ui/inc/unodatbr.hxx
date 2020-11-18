@@ -268,7 +268,7 @@ namespace dbaui
         void    implAddDatasource( const OUString& _rDataSourceName, const SharedConnection& _rxConnection );
 
         /// removes (and cleans up) the entry for the given data source
-        void        impl_cleanupDataSourceEntry( const OUString& _rDataSourceName );
+        void        impl_cleanupDataSourceEntry( std::u16string_view _rDataSourceName );
 
         /// clears the tree list box
         void clearTreeModel();
@@ -430,7 +430,7 @@ namespace dbaui
             @return
                     <TRUE/> if it is the currently displayed otherwise <FALSE/>
         */
-        bool isCurrentlyDisplayedChanged(const OUString& rName, const weld::TreeIter& rContainer);
+        bool isCurrentlyDisplayedChanged(std::u16string_view rName, const weld::TreeIter& rContainer);
 
         /** called whenever the content of the browser is used for preview, as the very last action
             of the load process

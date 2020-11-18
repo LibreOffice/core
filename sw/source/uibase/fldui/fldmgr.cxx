@@ -373,7 +373,7 @@ SwFieldMgr::~SwFieldMgr()
 }
 
 // organise RefMark by names
-bool  SwFieldMgr::CanInsertRefMark( const OUString& rStr )
+bool  SwFieldMgr::CanInsertRefMark( std::u16string_view rStr )
 {
     bool bRet = false;
     SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : lcl_GetShell();

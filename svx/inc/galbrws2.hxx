@@ -128,7 +128,7 @@ public:
     GalleryBrowser2(weld::Builder& rBuilder, Gallery* pGallery);
     ~GalleryBrowser2();
 
-    void                SelectTheme( const OUString& rThemeName );
+    void                SelectTheme( std::u16string_view rThemeName );
 
     GalleryBrowserMode  GetMode() const { return meMode; }
     void                SetMode( GalleryBrowserMode eMode );

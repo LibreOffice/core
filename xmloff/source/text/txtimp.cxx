@@ -1280,7 +1280,7 @@ static bool lcl_HasListStyle( const OUString& sStyleName,
                               const Reference < XNameContainer >& xParaStyles,
                               SvXMLImport const & rImport,
                               const OUString& sNumberingStyleName,
-                              const OUString& sOutlineStyleName )
+                              std::u16string_view sOutlineStyleName )
 {
     bool bRet( false );
 
@@ -1818,8 +1818,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 {
                     if ( !lcl_HasListStyle( sStyleName,
                                     m_xImpl->m_xParaStyles, GetXMLImport(),
-                                    "NumberingStyleName",
-                                    "" ) )
+                                    u"NumberingStyleName",
+                                    u"" ) )
                     {
                         // heading not in a list --> apply outline style
                         xPropSet->setPropertyValue( s_NumberingRules,

@@ -1178,7 +1178,7 @@ void SwView::Execute(SfxRequest &rReq)
             GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
 
             ::sfx2::sidebar::Sidebar::ShowPanel(
-                "GalleryPanel",
+                u"GalleryPanel",
                 GetViewFrame()->GetFrame().GetFrameInterface());
         break;
         case SID_AVMEDIA_PLAYER :

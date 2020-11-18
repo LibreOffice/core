@@ -335,7 +335,7 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
 
 uno::Any DataInterpreter::GetProperty(
     const Sequence< beans::PropertyValue > & aArguments,
-    const OUString & rName )
+    std::u16string_view rName )
 {
     for( sal_Int32 i=aArguments.getLength(); i--; )
     {
@@ -352,7 +352,7 @@ bool DataInterpreter::HasCategories(
     bool bHasCategories = false;
 
     if( rArguments.hasElements() )
-        GetProperty( rArguments, "HasCategories" ) >>= bHasCategories;
+        GetProperty( rArguments, u"HasCategories" ) >>= bHasCategories;
 
     for( sal_Int32 nLSeqIdx=0; ! bHasCategories && nLSeqIdx<rData.getLength(); ++nLSeqIdx )
         bHasCategories = ( rData[nLSeqIdx].is() && GetRole( rData[nLSeqIdx]->getValues() ) == "categories");
@@ -364,7 +364,7 @@ bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > &
 {
     bool bUseCategoriesAsX = true;
     if( rArguments.hasElements() )
-        GetProperty( rArguments, "UseCategoriesAsX" ) >>= bUseCategoriesAsX;
+        GetProperty( rArguments, u"UseCategoriesAsX" ) >>= bUseCategoriesAsX;
     return bUseCategoriesAsX;
 }
 

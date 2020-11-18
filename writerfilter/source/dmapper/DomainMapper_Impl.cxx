@@ -255,7 +255,7 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
     return true;
 }
 
-uno::Any FloatingTableInfo::getPropertyValue(const OUString &propertyName)
+uno::Any FloatingTableInfo::getPropertyValue(std::u16string_view propertyName)
 {
     for( beans::PropertyValue const & propVal : std::as_const(m_aFrameProperties) )
         if( propVal.Name == propertyName )

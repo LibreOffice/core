@@ -367,7 +367,7 @@ public:
     /*
      * For signature verification
      */
-    void collectToVerify( const OUString& referenceId );
+    void collectToVerify( std::u16string_view referenceId );
     void addSignature( sal_Int32 nSignatureId );
     css::uno::Reference< css::xml::sax::XDocumentHandler > const & createSignatureReader(XMLSignatureHelper& rXMLSignatureHelper, sal_Int32 nType = 0);
     void releaseSignatureReader();

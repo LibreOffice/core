@@ -299,7 +299,7 @@ void XMLTextListsHelper::PopListFromStack()
     }
 }
 
-bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const OUString& sListId ) const
+bool XMLTextListsHelper::EqualsToTopListStyleOnStack( std::u16string_view sListId ) const
 {
     return mpListStack && sListId == mpListStack->back().second;
 }
@@ -307,12 +307,12 @@ bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const OUString& sListId ) 
 OUString
 XMLTextListsHelper::GetNumberedParagraphListId(
     const sal_uInt16 i_Level,
-    const OUString& i_StyleName)
+    std::u16string_view i_StyleName)
 {
-    if (i_StyleName.isEmpty()) {
+    if (i_StyleName.empty()) {
         SAL_INFO("xmloff.text", "invalid numbered-paragraph: no style-name");
     }
-    if (!i_StyleName.isEmpty()
+    if (!i_StyleName.empty()
         && (i_Level < mLastNumberedParagraphs.size())
         && (mLastNumberedParagraphs[i_Level].first == i_StyleName) )
     {

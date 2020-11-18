@@ -355,7 +355,7 @@ public:
 
     void   CloseBookmarkDoc();
 
-    SAL_DLLPRIVATE SdrObject*          GetObj(const OUString& rObjName) const;
+    SAL_DLLPRIVATE SdrObject*          GetObj(std::u16string_view rObjName) const;
 
     /** Return the first page that has the given name.  Regular pages and
         notes pages are searched first.  When not found then the master
@@ -370,14 +370,14 @@ public:
             Returns the index of the page with the given name or
             SDRPAGE_NOTFOUND (=0xffff) when such a page does not exist.
     */
-    SAL_DLLPRIVATE sal_uInt16 GetPageByName(const OUString& rPgName, bool& rbIsMasterPage ) const;
+    SAL_DLLPRIVATE sal_uInt16 GetPageByName(std::u16string_view rPgName, bool& rbIsMasterPage ) const;
     /** checks, if the given name is a *unique* name for an *existing* slide
 
         @param rPageName the name of an existing slide
 
         @return true, if the name is unique and the slide exists
     */
-    bool IsPageNameUnique( const OUString& rPageName ) const;
+    bool IsPageNameUnique( std::u16string_view rPageName ) const;
     SdPage*GetSdPage(sal_uInt16 nPgNum, PageKind ePgKind) const;
     sal_uInt16 GetSdPageCount(PageKind ePgKind) const;
 

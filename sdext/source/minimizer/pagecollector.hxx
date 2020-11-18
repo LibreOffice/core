@@ -33,8 +33,8 @@ class PageCollector
         css::uno::Reference< css::drawing::XDrawPage > xMasterPage;
         bool bUsed;
     };
-    static void CollectCustomShowPages( const css::uno::Reference< css::frame::XModel >&, const OUString& rCustomShow, std::vector< css::uno::Reference< css::drawing::XDrawPage > >& );
-    static void CollectNonCustomShowPages( const css::uno::Reference< css::frame::XModel >&, const OUString& rCustomShow, std::vector< css::uno::Reference< css::drawing::XDrawPage > >& );
+    static void CollectCustomShowPages( const css::uno::Reference< css::frame::XModel >&, std::u16string_view rCustomShow, std::vector< css::uno::Reference< css::drawing::XDrawPage > >& );
+    static void CollectNonCustomShowPages( const css::uno::Reference< css::frame::XModel >&, std::u16string_view rCustomShow, std::vector< css::uno::Reference< css::drawing::XDrawPage > >& );
     static void CollectMasterPages( const css::uno::Reference< css::frame::XModel >&, std::vector< MasterPageEntity >& );
 };
 

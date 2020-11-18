@@ -963,7 +963,7 @@ Image ListBox::GetEntryImage( sal_Int32 nPos ) const
     return Image();
 }
 
-sal_Int32 ListBox::GetEntryPos( const OUString& rStr ) const
+sal_Int32 ListBox::GetEntryPos( std::u16string_view rStr ) const
 {
     if (!mpImplLB)
         return LISTBOX_ENTRY_NOTFOUND;
@@ -1019,7 +1019,7 @@ bool ListBox::IsEntryPosSelected( sal_Int32 nPos ) const
     return mpImplLB->GetEntryList()->IsEntryPosSelected( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
-void ListBox::SelectEntry( const OUString& rStr, bool bSelect )
+void ListBox::SelectEntry( std::u16string_view rStr, bool bSelect )
 {
     SelectEntryPos( GetEntryPos( rStr ), bSelect );
 }

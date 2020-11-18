@@ -2218,7 +2218,7 @@ void FileDialogHelper_Impl::addFilterPair( const OUString& rFilter,
 
 }
 
-OUString FileDialogHelper_Impl::getFilterName( const OUString& rFilterWithExtension ) const
+OUString FileDialogHelper_Impl::getFilterName( std::u16string_view rFilterWithExtension ) const
 {
     OUString sRet;
     for (auto const& filter : maFilters)
@@ -2232,7 +2232,7 @@ OUString FileDialogHelper_Impl::getFilterName( const OUString& rFilterWithExtens
     return sRet;
 }
 
-OUString FileDialogHelper_Impl::getFilterWithExtension( const OUString& rFilter ) const
+OUString FileDialogHelper_Impl::getFilterWithExtension( std::u16string_view rFilter ) const
 {
     OUString sRet;
     for (auto const& filter : maFilters)

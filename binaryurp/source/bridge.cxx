@@ -818,7 +818,7 @@ OutgoingRequest Bridge::lastOutgoingRequest(rtl::ByteSequence const & tid) {
 }
 
 bool Bridge::isProtocolPropertiesRequest(
-    OUString const & oid, css::uno::TypeDescription const & type) const
+    std::u16string_view oid, css::uno::TypeDescription const & type) const
 {
     return oid == protPropOid_ && type.equals(protPropType_);
 }

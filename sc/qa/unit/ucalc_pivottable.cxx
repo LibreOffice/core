@@ -1629,7 +1629,7 @@ void Test::testPivotTableTextNumber()
     // Set the Name dimension to page dimension.
     pDPObj->BuildAllDimensionMembers();
     ScDPSaveData aSaveData(*pDPObj->GetSaveData());
-    ScDPSaveDimension* pDim = aSaveData.GetExistingDimensionByName("Name");
+    ScDPSaveDimension* pDim = aSaveData.GetExistingDimensionByName(u"Name");
     CPPUNIT_ASSERT(pDim);
     pDim->SetOrientation(sheet::DataPilotFieldOrientation_PAGE);
     OUString aVisiblePage("0004");
@@ -2407,9 +2407,9 @@ void Test::testPivotTableDPCollection()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be no DP table", size_t(0), pDPs->GetCount());
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("DP1"));
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u"DP1"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(""));
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u""));
 
     // Add 2 DP objects
     ScDPObject* pDPObj = createDPFromRange(m_pDoc, aDataRange , aFields, nFieldCount, false);
@@ -2424,36 +2424,36 @@ void Test::testPivotTableDPCollection()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be two DP tables", size_t(2), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("should return first DPObject",
-                                 pDPObj, pDPs->GetByName("DP1"));
+                                 pDPObj, pDPs->GetByName(u"DP1"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("should return second DPObject",
-                                 pDPObj2, pDPs->GetByName("DP2"));
+                                 pDPObj2, pDPs->GetByName(u"DP2"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("empty string should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(""));
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u""));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("non existent name should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("Non"));
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u"Non"));
     // Remove first DP Object
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one DP table", size_t(1), pDPs->GetCount());
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("first DP object was deleted, should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("DP1"));
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u"DP1"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("should return second DPObject",
-                                 pDPObj2, pDPs->GetByName("DP2"));
+                                 pDPObj2, pDPs->GetByName(u"DP2"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("empty string should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(""));
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u""));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("non existent name should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("Non"));
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u"Non"));
 
     // Remove second DP Object
     pDPs->FreeTable(pDPObj2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("first DP object was deleted, should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("DP1"));
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u"DP1"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("second DP object was deleted, should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("DP2"));
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u"DP2"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("empty string should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(""));
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u""));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("non existent name should return nullptr",
-                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("Non"));
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(u"Non"));
 
     // Clean-up
     m_pDoc->DeleteTab(1);

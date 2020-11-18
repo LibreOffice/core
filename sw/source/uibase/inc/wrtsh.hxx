@@ -358,7 +358,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
                                     GetStyle eCreate = GETSTYLE_NOCREATE);
     SwCharFormat*      GetCharStyle(const OUString &rFormatName,
                                     GetStyle eCreate = GETSTYLE_NOCREATE);
-    SwFrameFormat*       GetTableStyle(const OUString &rFormatName);
+    SwFrameFormat*       GetTableStyle(std::u16string_view rFormatName);
 
     void            SetPageStyle(const OUString &rCollName);
 
@@ -475,7 +475,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool GotoINetAttr( const SwTextINetFormat& rAttr );
     void GotoOutline( SwOutlineNodes::size_type nIdx );
     bool GotoOutline( const OUString& rName );
-    bool GotoRegion( const OUString& rName );
+    bool GotoRegion( std::u16string_view rName );
     bool GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType = 0,
         sal_uInt16 nSeqNo = 0 );
     bool GotoNextTOXBase( const OUString* pName = nullptr);
@@ -483,7 +483,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void GotoFormatField( const SwFormatField& rField );
     const SwRangeRedline* GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect);
 
-    void ChangeHeaderOrFooter(const OUString& rStyleName, bool bHeader, bool bOn, bool bShowWarning);
+    void ChangeHeaderOrFooter(std::u16string_view rStyleName, bool bHeader, bool bOn, bool bShowWarning);
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) override;
 
     /// Inserts a new annotation/comment at the current cursor position / selection.

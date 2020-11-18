@@ -105,7 +105,7 @@ private:
     SAL_DLLPRIVATE void         ImplLoad( const OUString& rMultiPath );
     SAL_DLLPRIVATE void         ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbIsReadOnly );
 
-    GalleryThemeEntry*          ImplGetThemeEntry( const OUString& rThemeName );
+    GalleryThemeEntry*          ImplGetThemeEntry( std::u16string_view rThemeName );
 
     SAL_DLLPRIVATE GalleryTheme* ImplGetCachedTheme( GalleryThemeEntry* pThemeEntry );
     SAL_DLLPRIVATE void         ImplDeleteCachedTheme( GalleryTheme const * pTheme );
@@ -123,16 +123,16 @@ public:
     size_t                      GetThemeCount() const { return aThemeList.size(); }
     SAL_DLLPRIVATE const GalleryThemeEntry* GetThemeInfo( size_t nPos )
                                 { return nPos < aThemeList.size() ? aThemeList[ nPos ].get() : nullptr; }
-    const GalleryThemeEntry* GetThemeInfo( const OUString& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
+    const GalleryThemeEntry* GetThemeInfo( std::u16string_view rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
-    bool                        HasTheme( const OUString& rThemeName );
+    bool                        HasTheme( std::u16string_view rThemeName );
     SAL_DLLPRIVATE OUString     GetThemeName( sal_uInt32 nThemeId ) const;
 
     bool                        CreateTheme( const OUString& rThemeName );
     void                        RenameTheme( const OUString& rOldName, const OUString& rNewName );
     bool                        RemoveTheme( const OUString& rThemeName );
 
-    GalleryTheme*               AcquireTheme( const OUString& rThemeName, SfxListener& rListener );
+    GalleryTheme*               AcquireTheme( std::u16string_view rThemeName, SfxListener& rListener );
     void                        ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener );
 
 public:

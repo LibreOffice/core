@@ -626,11 +626,11 @@ public:
     OUString GetCalcCellReturn( sal_uInt32 nFormat ) const;
 
     /// Check if format code string may be deleted by user
-    bool IsUserDefined( const OUString& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
+    bool IsUserDefined( std::u16string_view sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Return the format index of the format code string for language/country,
         or NUMBERFORMAT_ENTRY_NOT_FOUND */
-    sal_uInt32 GetEntryKey( const OUString& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
+    sal_uInt32 GetEntryKey( std::u16string_view sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /// Return the format for a format index
     const SvNumberformat* GetEntry( sal_uInt32 nKey ) const;
@@ -767,7 +767,7 @@ public:
             <NULL/> if not found
             else pointer to NfCurrencyEntry
      */
-    static const NfCurrencyEntry*  GetCurrencyEntry( const OUString& rAbbrev,
+    static const NfCurrencyEntry*  GetCurrencyEntry( std::u16string_view rAbbrev,
                                                      LanguageType eLang );
 
     /** Return a NfCurrencyEntry pointer matching the symbol
@@ -779,14 +779,14 @@ public:
         @return
             A matching entry, or else <NULL/>.
      */
-    static const NfCurrencyEntry* GetLegacyOnlyCurrencyEntry( const OUString& rSymbol, const OUString& rAbbrev );
+    static const NfCurrencyEntry* GetLegacyOnlyCurrencyEntry( std::u16string_view rSymbol, std::u16string_view rAbbrev );
 
     /** Set the default system currency. The combination of abbreviation and
         language must match an existent element of theCurrencyTable. If not,
         the SYSTEM (current locale) entry becomes the default.
         This method is meant for the configuration of the default currency.
      */
-    static void SetDefaultSystemCurrency( const OUString& rAbbrev, LanguageType eLang );
+    static void SetDefaultSystemCurrency( std::u16string_view rAbbrev, LanguageType eLang );
 
     /** Get all standard formats for a specific currency, formats are
         appended to the NfWSStringsDtor list.
@@ -845,7 +845,7 @@ public:
              else <NULL/>.
      */
     static const NfCurrencyEntry* GetCurrencyEntry( bool & bFoundBank,
-                                                    const OUString& rSymbol,
+                                                    std::u16string_view rSymbol,
                                                     const OUString& rExtension,
                                                     LanguageType eFormatLanguage,
                                                     bool bOnlyStringLanguage = false );
@@ -974,7 +974,7 @@ private:
 
     // Test whether format code already exists, then return index key,
     // otherwise NUMBERFORMAT_ENTRY_NOT_FOUND
-    SVL_DLLPRIVATE sal_uInt32 ImpIsEntry( const OUString& rString,
+    SVL_DLLPRIVATE sal_uInt32 ImpIsEntry( std::u16string_view rString,
                                           sal_uInt32 CLOffset,
                                           LanguageType eLnge );
 
@@ -1017,7 +1017,7 @@ private:
     // used as a loop body inside of GetNewCurrencySymbolString() and GetCurrencyEntry()
     static bool ImpLookupCurrencyEntryLoopBody(
         const NfCurrencyEntry*& pFoundEntry, bool& bFoundBank, const NfCurrencyEntry* pData,
-        sal_uInt16 nPos, const OUString& rSymbol );
+        sal_uInt16 nPos, std::u16string_view rSymbol );
 
     // link to be set at <method>SvtSysLocaleOptions::SetCurrencyChangeLink()</method>
     DECL_DLLPRIVATE_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, LinkParamNone*, void );
@@ -1090,7 +1090,7 @@ public:
     const OUString& GetDateSep() const;
 
     // checks for decimal separator and optional alternative
-    bool IsDecimalSep( const OUString& rStr ) const;
+    bool IsDecimalSep( std::u16string_view rStr ) const;
 };
 
 #endif // INCLUDED_SVL_ZFORLIST_HXX

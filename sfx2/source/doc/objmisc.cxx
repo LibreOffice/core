@@ -1309,8 +1309,8 @@ SfxModule* SfxObjectShell::GetModule() const
     return GetFactory().GetModule();
 }
 
-ErrCode SfxObjectShell::CallBasic( const OUString& rMacro,
-    const OUString& rBasic, SbxArray* pArgs,
+ErrCode SfxObjectShell::CallBasic( std::u16string_view rMacro,
+    std::u16string_view rBasic, SbxArray* pArgs,
     SbxValue* pRet )
 {
     SfxApplication* pApp = SfxGetpApp();

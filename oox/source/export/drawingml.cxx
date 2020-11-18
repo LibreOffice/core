@@ -2597,7 +2597,7 @@ bool DrawingML::IsDiagram(const Reference<XShape>& rXShape)
         });
 }
 
-sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >& rXPropSet,sal_Int16 nLevel, const OUString& propName)
+sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName)
 {
     if (nLevel < 0 || !GetProperty(rXPropSet, "NumberingRules"))
         return 0;
@@ -2712,8 +2712,8 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     if (GetProperty(rXPropSet, "ParaBottomMargin"))
         mAny >>= nParaBottomMargin;
 
-    sal_Int32 nLeftMargin =  getBulletMarginIndentation ( rXPropSet, nLevel,"LeftMargin");
-    sal_Int32 nLineIndentation = getBulletMarginIndentation ( rXPropSet, nLevel,"FirstLineOffset");
+    sal_Int32 nLeftMargin =  getBulletMarginIndentation ( rXPropSet, nLevel,u"LeftMargin");
+    sal_Int32 nLineIndentation = getBulletMarginIndentation ( rXPropSet, nLevel,u"FirstLineOffset");
 
     if( !(nLevel != -1
         || nAlignment != style::ParagraphAdjust_LEFT

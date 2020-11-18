@@ -201,7 +201,7 @@ void TabBar::Layout()
     Invalidate();
 }
 
-void TabBar::HighlightDeck (const OUString& rsDeckId)
+void TabBar::HighlightDeck (std::u16string_view rsDeckId)
 {
     for (auto const& item : maItems)
     {

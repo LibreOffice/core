@@ -45,8 +45,8 @@ public:
 
     OUString GetDBName(OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable = nullptr);
 
-    void    Select( const OUString& rDBName, const OUString& rTableName,
-                    const OUString& rColumnName );
+    void    Select( std::u16string_view rDBName, std::u16string_view rTableName,
+                    std::u16string_view rColumnName );
 
     void    ShowColumns(bool bShowCol);
 

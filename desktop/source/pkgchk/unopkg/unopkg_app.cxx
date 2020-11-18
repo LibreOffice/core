@@ -162,7 +162,7 @@ Reference<deployment::XPackage> findPackage(
     OUString const & repository,
     Reference<deployment::XExtensionManager> const & manager,
     Reference<ucb::XCommandEnvironment > const & environment,
-    OUString const & idOrFileName )
+    std::u16string_view idOrFileName )
 {
     const Sequence< Reference<deployment::XPackage> > ps(
         manager->getDeployedExtensions(repository,

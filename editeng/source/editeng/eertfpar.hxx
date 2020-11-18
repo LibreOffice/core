@@ -47,7 +47,7 @@ private:
     virtual void        CalcValue() override;
     void                CreateStyleSheets();
     SfxStyleSheet*      CreateStyleSheet( SvxRTFStyleType const * pRTFStyle );
-    SvxRTFStyleType*    FindStyleSheet( const OUString& rName );
+    SvxRTFStyleType*    FindStyleSheet( std::u16string_view rName );
     void                AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& rEnd );
     void                ReadField();
     void                SkipGroup();

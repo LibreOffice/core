@@ -451,7 +451,7 @@ void XSecController::setPropertyId( OUString const & ouPropertyId )
 }
 
 /* public: for signature verify */
-void XSecController::collectToVerify( const OUString& referenceId )
+void XSecController::collectToVerify( std::u16string_view referenceId )
 {
     /* SAL_WARN_IF( !m_xSAXEventKeeper.is(), "xmlsecurity", "the SAXEventKeeper is NULL" ); */
 

@@ -273,7 +273,7 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
         if (".uno:DesignerDialog" == aCommand)
         {
             std::shared_ptr<PanelDescriptor> xPanelDescriptor =
-                    mpSidebarController->GetResourceManager()->GetPanelDescriptor( "StyleListPanel" );
+                    mpSidebarController->GetResourceManager()->GetPanelDescriptor( u"StyleListPanel" );
             if ( xPanelDescriptor && mpSidebarController->IsDeckVisible( xPanelDescriptor->msDeckId ) )
                 Close();
             return true;

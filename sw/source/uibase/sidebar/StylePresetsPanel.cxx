@@ -33,7 +33,7 @@ namespace sw::sidebar {
 namespace {
 
 void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevice,
-                   OUString const & sName, sal_Int32 nHeight, tools::Rectangle const & aRect)
+                   std::u16string_view sName, sal_Int32 nHeight, tools::Rectangle const & aRect)
 {
     SfxStyleSheetBase* pStyleSheet = pStyleManager->Search(sName, SfxStyleFamily::Para);
 
@@ -98,18 +98,18 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString const & aName)
 
     {
         tools::Rectangle aRenderRect(Point(nMargin, y), aSize);
-        renderPreview(pStyleManager, *pVirtualDev, "Title", nTitleHeight, aRenderRect);
+        renderPreview(pStyleManager, *pVirtualDev, u"Title", nTitleHeight, aRenderRect);
         y += nTitleHeight;
     }
 
     {
         tools::Rectangle aRenderRect(Point(nMargin, y), aSize);
-        renderPreview(pStyleManager, *pVirtualDev, "Heading 1", nHeadingHeight, aRenderRect);
+        renderPreview(pStyleManager, *pVirtualDev, u"Heading 1", nHeadingHeight, aRenderRect);
         y += nHeadingHeight;
     }
     {
         tools::Rectangle aRenderRect(Point(nMargin, y), aSize);
-        renderPreview(pStyleManager, *pVirtualDev, "Text Body", nTextBodyHeight, aRenderRect);
+        renderPreview(pStyleManager, *pVirtualDev, u"Text Body", nTextBodyHeight, aRenderRect);
     }
 
     return pVirtualDev->GetBitmapEx(Point(), aSize);

@@ -71,7 +71,7 @@ sal_Int32 CustomShapeProperties::SetCustomShapeGuideValue( std::vector< CustomSh
 
 // returns the index into the guidelist for a given formula name,
 // if the return value is < 0 then the guide value could not be found
-sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const OUString& rFormulaName )
+sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, std::u16string_view rFormulaName )
 {
     // traverse the list from the end, because guide names can be reused
     // and current is the last one

@@ -78,7 +78,7 @@ public:
 
     const ScUserListData* GetData(const OUString& rSubStr) const;
     /// If the list in rStr is already inserted
-    bool HasEntry(const OUString& rStr) const;
+    bool HasEntry(std::u16string_view rStr) const;
 
     const ScUserListData& operator[](size_t nIndex) const;
     ScUserListData& operator[](size_t nIndex);

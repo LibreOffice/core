@@ -56,7 +56,7 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     css::uno::Reference< ov::excel::XRange > getSheetRange();
 
     css::uno::Reference< css::container::XNameAccess > getFormControls() const;
-    css::uno::Any getControlShape( const OUString& sName );
+    css::uno::Any getControlShape( std::u16string_view sName );
 
     css::uno::Any getButtons( const css::uno::Any &rIndex, bool bOptionButtons );
 

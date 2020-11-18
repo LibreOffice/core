@@ -199,7 +199,7 @@ private:
     void addExtensionsToMap(
         id2extensions & mapExt,
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
-        OUString const & repository);
+        std::u16string_view repository);
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException

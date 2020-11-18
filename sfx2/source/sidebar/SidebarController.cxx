@@ -114,7 +114,7 @@ namespace {
 
     /** When in doubt, show this deck.
     */
-    const char gsDefaultDeckId[] = "PropertyDeck";
+    constexpr OUStringLiteral gsDefaultDeckId(u"PropertyDeck");
 }
 
 SidebarController::SidebarController (
@@ -620,7 +620,7 @@ void SidebarController::OpenThenToggleDeck (
 }
 
 void SidebarController::OpenThenSwitchToDeck (
-    const OUString& rsDeckId)
+    std::u16string_view rsDeckId)
 {
     RequestOpenDeck();
     SwitchToDeck(rsDeckId);
@@ -633,7 +633,7 @@ void SidebarController::SwitchToDefaultDeck()
 }
 
 void SidebarController::SwitchToDeck (
-    const OUString& rsDeckId)
+    std::u16string_view rsDeckId)
 {
     if (  msCurrentDeckId != rsDeckId
         || ! mbIsDeckOpen
@@ -646,11 +646,11 @@ void SidebarController::SwitchToDeck (
     }
 }
 
-void SidebarController::CreateDeck(const OUString& rDeckId) {
+void SidebarController::CreateDeck(std::u16string_view rDeckId) {
     CreateDeck(rDeckId, maCurrentContext);
 }
 
-void SidebarController::CreateDeck(const OUString& rDeckId, const Context& rContext, bool bForceCreate)
+void SidebarController::CreateDeck(std::u16string_view rDeckId, const Context& rContext, bool bForceCreate)
 {
     std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
@@ -672,7 +672,7 @@ void SidebarController::CreateDeck(const OUString& rDeckId, const Context& rCont
     CreatePanels(rDeckId, rContext);
 }
 
-void SidebarController::CreatePanels(const OUString& rDeckId, const Context& rContext)
+void SidebarController::CreatePanels(std::u16string_view rDeckId, const Context& rContext)
 {
     std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
@@ -873,7 +873,7 @@ void SidebarController::SwitchToDeck (
     UpdateTitleBarIcons();
 }
 
-void SidebarController::notifyDeckTitle(const OUString& targetDeckId)
+void SidebarController::notifyDeckTitle(std::u16string_view targetDeckId)
 {
     if (msCurrentDeckId == targetDeckId)
     {
@@ -884,7 +884,7 @@ void SidebarController::notifyDeckTitle(const OUString& targetDeckId)
 }
 
 VclPtr<Panel> SidebarController::CreatePanel (
-    const OUString& rsPanelId,
+    std::u16string_view rsPanelId,
     vcl::Window* pParentWindow,
     const bool bIsInitiallyExpanded,
     const Context& rContext,
@@ -1268,7 +1268,7 @@ bool SidebarController::IsDeckOpen(const sal_Int32 nIndex)
     return mbIsDeckOpen && *mbIsDeckOpen;
 }
 
-bool SidebarController::IsDeckVisible(const OUString& rsDeckId)
+bool SidebarController::IsDeckVisible(std::u16string_view rsDeckId)
 {
     return mbIsDeckOpen && *mbIsDeckOpen && msCurrentDeckId == rsDeckId;
 }
@@ -1544,7 +1544,7 @@ ResourceManager::DeckContextDescriptorContainer SidebarController::GetMatchingDe
     return aDecks;
 }
 
-ResourceManager::PanelContextDescriptorContainer SidebarController::GetMatchingPanels(const OUString& rDeckId)
+ResourceManager::PanelContextDescriptorContainer SidebarController::GetMatchingPanels(std::u16string_view rDeckId)
 {
     ResourceManager::PanelContextDescriptorContainer aPanels;
 

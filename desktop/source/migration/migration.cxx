@@ -1016,7 +1016,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
         xUIConfigurationPersistence->store();
 }
 
-uno::Reference< ui::XUIConfigurationManager > NewVersionUIInfo::getConfigManager(const OUString& sModuleShortName) const
+uno::Reference< ui::XUIConfigurationManager > NewVersionUIInfo::getConfigManager(std::u16string_view sModuleShortName) const
 {
     uno::Reference< ui::XUIConfigurationManager > xCfgManager;
 
@@ -1030,7 +1030,7 @@ uno::Reference< ui::XUIConfigurationManager > NewVersionUIInfo::getConfigManager
     return xCfgManager;
 }
 
-uno::Reference< container::XIndexContainer > NewVersionUIInfo::getNewMenubarSettings(const OUString& sModuleShortName) const
+uno::Reference< container::XIndexContainer > NewVersionUIInfo::getNewMenubarSettings(std::u16string_view sModuleShortName) const
 {
     uno::Reference< container::XIndexContainer > xNewMenuSettings;
 
@@ -1044,7 +1044,7 @@ uno::Reference< container::XIndexContainer > NewVersionUIInfo::getNewMenubarSett
     return xNewMenuSettings;
 }
 
-uno::Reference< container::XIndexContainer > NewVersionUIInfo::getNewToolbarSettings(const OUString& sModuleShortName, const OUString& sToolbarName) const
+uno::Reference< container::XIndexContainer > NewVersionUIInfo::getNewToolbarSettings(std::u16string_view sModuleShortName, std::u16string_view sToolbarName) const
 {
     uno::Reference< container::XIndexContainer > xNewToolbarSettings;
 

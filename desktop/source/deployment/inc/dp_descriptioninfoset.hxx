@@ -260,7 +260,7 @@ private:
     /** Helper method to compare the versions with the current version
      */
     SAL_DLLPRIVATE static bool
-        checkDenylistVersion(const OUString& currentversion,
+        checkDenylistVersion(std::u16string_view currentversion,
                               css::uno::Sequence< OUString > const & versions);
 
     css::uno::Reference< css::uno::XComponentContext > m_context;

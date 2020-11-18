@@ -83,7 +83,7 @@ protected:
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
-    void OnTemplateImportCategory(const OUString& sCategory);
+    void OnTemplateImportCategory(std::u16string_view sCategory);
 //    static void OnTemplateLink ();
     void OnTemplateOpen ();
     void OnTemplateExport ();

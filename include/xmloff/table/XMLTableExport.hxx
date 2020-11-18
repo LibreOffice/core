@@ -88,7 +88,7 @@ private:
 
     SAL_DLLPRIVATE void ImpExportText( const css::uno::Reference < css::table::XCell >& xCell );
 
-    void ExportCell( const css::uno::Reference < css::table::XCell >& xCell, const std::shared_ptr< XMLTableInfo >& pTableInfo, const OUString& sDefaultCellStyle  );
+    void ExportCell( const css::uno::Reference < css::table::XCell >& xCell, const std::shared_ptr< XMLTableInfo >& pTableInfo, std::u16string_view sDefaultCellStyle  );
     void ExportTableColumns( const css::uno::Reference < css::container::XIndexAccess >& xtableColumns, const std::shared_ptr< XMLTableInfo >& pTableInfo );
 
 };

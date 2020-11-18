@@ -396,7 +396,7 @@ struct FloatingTableInfo
         m_nTableWidthType(nTableWidthType)
     {
     }
-    css::uno::Any getPropertyValue(const OUString &propertyName);
+    css::uno::Any getPropertyValue(std::u16string_view propertyName);
 };
 
 /// Stores original/in-file-format info about a single anchored object.

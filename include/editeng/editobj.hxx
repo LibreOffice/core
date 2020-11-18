@@ -125,8 +125,8 @@ public:
     void GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& eFamily) const;
     void SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& eFamily);
     bool ChangeStyleSheets(
-        const OUString& rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily);
-    void ChangeStyleSheetName(SfxStyleFamily eFamily, const OUString& rOldName, const OUString& rNewName);
+        std::u16string_view rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily);
+    void ChangeStyleSheetName(SfxStyleFamily eFamily, std::u16string_view rOldName, const OUString& rNewName);
 
     editeng::FieldUpdater GetFieldUpdater() const;
 

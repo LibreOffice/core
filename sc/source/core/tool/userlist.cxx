@@ -325,7 +325,7 @@ bool ScUserList::operator!=( const ScUserList& r ) const
     return !operator==( r );
 }
 
-bool ScUserList::HasEntry( const OUString& rStr ) const
+bool ScUserList::HasEntry( std::u16string_view rStr ) const
 {
     return ::std::any_of(maData.begin(), maData.end(),
         [&] (std::unique_ptr<ScUserListData> const& pData)

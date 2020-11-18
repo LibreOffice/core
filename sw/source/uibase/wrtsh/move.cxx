@@ -624,7 +624,7 @@ bool SwWrtShell::GotoOutline( const OUString& rName )
     return bRet;
 }
 
-bool SwWrtShell::GotoRegion( const OUString& rName )
+bool SwWrtShell::GotoRegion( std::u16string_view rName )
 {
     SwPosition aPos = *GetCursor()->GetPoint();
     bool bRet = SwCursorShell::GotoRegion (rName);

@@ -74,9 +74,9 @@ namespace ftp
         /** host is in the form host:port.
          */
 
-        void forHost(const OUString& host,
-                             const OUString& port,
-                             const OUString& username,
+        void forHost(std::u16string_view host,
+                             std::u16string_view port,
+                             std::u16string_view username,
                              OUString& password,
                              OUString& account);
 

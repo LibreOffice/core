@@ -63,8 +63,8 @@ public:
     void    SetSource(const OUString& rDoc, const OUString& rFlt, const OUString& rOpt,
                         const OUString& rArea);
 
-    bool IsEqual( const OUString& rFile, const OUString& rFilter, const OUString& rOpt,
-                  const OUString& rSource, const ScRange& rDest ) const;
+    bool IsEqual( std::u16string_view rFile, std::u16string_view rFilter, std::u16string_view rOpt,
+                  std::u16string_view rSource, const ScRange& rDest ) const;
 
     const OUString& GetFile() const         { return aFileName;     }
     const OUString& GetFilter() const       { return aFilterName;   }

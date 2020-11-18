@@ -106,9 +106,14 @@ DeclRefExpr const* relevantDeclRefExpr(Expr const* expr)
     return e;
 }
 
+bool isStringView(QualType qt)
+{
+    return bool(loplugin::TypeCheck(qt).ClassOrStruct("basic_string_view").StdNamespace());
+}
+
 DeclRefExpr const* relevantImplicitCastExpr(ImplicitCastExpr const* expr)
 {
-    if (!loplugin::TypeCheck(expr->getType()).ClassOrStruct("basic_string_view").StdNamespace())
+    if (!isStringView(expr->getType()))
     {
         return nullptr;
     }
@@ -158,17 +163,38 @@ DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
 
 DeclRefExpr const* relevantCXXOperatorCallExpr(CXXOperatorCallExpr const* expr)
 {
-    // TODO OO_EqualEqual and similar
-    if (expr->getOperator() != OO_Subscript)
+    if (expr->getOperator() == OO_Subscript)
     {
-        return nullptr;
+        auto const e = expr->getArg(0);
+        if (relevantStringType(e->getType()) == StringType::None)
+        {
+            return nullptr;
+        }
+        return relevantDeclRefExpr(e);
     }
-    auto const e = expr->getArg(0);
-    if (relevantStringType(e->getType()) == StringType::None)
+    else if (compat::isComparisonOp(expr))
     {
-        return nullptr;
+        // TODO Can't currently convert rtl::OString because we end up with ambiguous operator==
+        // (one in string_view header and one in rtl/string.hxx header)
+        auto st1 = relevantStringType(compat::IgnoreImplicit(expr->getArg(0))->getType());
+        auto st2 = relevantStringType(compat::IgnoreImplicit(expr->getArg(1))->getType());
+        if (st1 == StringType::RtlOustring && st2 == StringType::RtlOustring)
+        {
+            auto e1 = relevantDeclRefExpr(expr->getArg(0));
+            if (e1)
+                return e1;
+            return relevantDeclRefExpr(expr->getArg(1));
+        }
+        if (st1 == StringType::RtlOustring && isStringView(expr->getArg(1)->getType()))
+        {
+            return relevantDeclRefExpr(expr->getArg(0));
+        }
+        if (st2 == StringType::RtlOustring && isStringView(expr->getArg(0)->getType()))
+        {
+            return relevantDeclRefExpr(expr->getArg(1));
+        }
     }
-    return relevantDeclRefExpr(e);
+    return nullptr;
 }
 
 class StringViewParam final

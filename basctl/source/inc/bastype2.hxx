@@ -189,7 +189,7 @@ protected:
     void                    ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
     void                    ImpCreateLibSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
     void                    ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
-    bool                    ImpFindEntry(weld::TreeIter& rIter, const OUString& rText);
+    bool                    ImpFindEntry(weld::TreeIter& rIter, std::u16string_view rText);
 
     // DocumentEventListener
     virtual void onDocumentCreated( const ScriptDocument& _rDocument ) override;
@@ -218,7 +218,7 @@ public:
     SbModule*       FindModule(const weld::TreeIter* pEntry);
     SbxVariable*    FindVariable(const weld::TreeIter* pEntry);
     bool            FindRootEntry(const ScriptDocument& rDocument, LibraryLocation eLocation, weld::TreeIter& rIter);
-    bool            FindEntry(const OUString& rText, EntryType eType, weld::TreeIter& rIter);
+    bool            FindEntry(std::u16string_view rText, EntryType eType, weld::TreeIter& rIter);
     EntryDescriptor GetEntryDescriptor(const weld::TreeIter* pEntry);
 
     static ItemType ConvertType (EntryType eType);

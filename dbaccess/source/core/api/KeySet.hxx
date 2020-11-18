@@ -136,8 +136,8 @@ namespace dbaccess
         /// @throws css::uno::RuntimeException
         bool doTryRefetch_throw();
         void tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch);
-        void executeUpdate(const ORowSetRow& _rInsertRow, const ORowSetRow& _rOriginalRow, const OUString& i_sSQL, const OUString& i_sTableName,const std::vector<sal_Int32>& _aIndexColumnPositions = std::vector<sal_Int32>());
-        void executeInsert( const ORowSetRow& _rInsertRow, const OUString& i_sSQL, const OUString& i_sTableName, bool bRefetch = false);
+        void executeUpdate(const ORowSetRow& _rInsertRow, const ORowSetRow& _rOriginalRow, const OUString& i_sSQL, std::u16string_view i_sTableName,const std::vector<sal_Int32>& _aIndexColumnPositions = std::vector<sal_Int32>());
+        void executeInsert( const ORowSetRow& _rInsertRow, const OUString& i_sSQL, std::u16string_view i_sTableName, bool bRefetch = false);
         void executeStatement(OUStringBuffer& io_aFilter, css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& io_xAnalyzer);
 
         virtual ~OKeySet() override;

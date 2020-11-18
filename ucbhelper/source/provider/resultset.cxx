@@ -94,7 +94,7 @@ class PropertySetInfo :
 
 private:
     bool queryProperty(
-        const OUString& aName, beans::Property& rProp ) const;
+        std::u16string_view aName, beans::Property& rProp ) const;
 
 public:
     PropertySetInfo(
@@ -1488,7 +1488,7 @@ sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
 
 
 bool PropertySetInfo::queryProperty(
-    const OUString& aName, beans::Property& rProp ) const
+    std::u16string_view aName, beans::Property& rProp ) const
 {
     sal_Int32 nCount = m_pProps->getLength();
     const beans::Property* pProps = m_pProps->getConstArray();

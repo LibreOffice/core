@@ -37,7 +37,7 @@ public:
     virtual ~SwSelectDBTableDialog() override;
 
     OUString    GetSelectedTable(bool& bIsTable);
-    void        SetSelectedTable(const OUString& rTable, bool bIsTable);
+    void        SetSelectedTable(std::u16string_view rTable, bool bIsTable);
 };
 #endif
 

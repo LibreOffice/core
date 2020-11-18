@@ -318,7 +318,7 @@ static bool GetTableAndCellsFromRangeRep(
     return bSuccess;
 }
 
-static void GetTableByName( const SwDoc &rDoc, const OUString &rTableName,
+static void GetTableByName( const SwDoc &rDoc, std::u16string_view rTableName,
         SwFrameFormat **ppTableFormat, SwTable **ppTable)
 {
     SwFrameFormat *pTableFormat = nullptr;

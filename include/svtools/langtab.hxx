@@ -30,7 +30,7 @@ public:
 
     static bool         HasLanguageType( const LanguageType eType );
     static OUString     GetLanguageString( const LanguageType eType );
-    static LanguageType GetLanguageType( const OUString& rStr );
+    static LanguageType GetLanguageType( std::u16string_view rStr );
     static sal_uInt32   GetLanguageEntryCount();
     static LanguageType GetLanguageTypeAtIndex( sal_uInt32 nIndex );
 

@@ -59,12 +59,12 @@ struct RedactionTarget
 class TargetsTable
 {
     std::unique_ptr<weld::TreeView> m_xControl;
-    int GetRowByTargetName(const OUString& sName);
+    int GetRowByTargetName(std::u16string_view sName);
 
 public:
     TargetsTable(std::unique_ptr<weld::TreeView> xControl);
     void InsertTarget(RedactionTarget* pTarget);
-    RedactionTarget* GetTargetByName(const OUString& sName);
+    RedactionTarget* GetTargetByName(std::u16string_view sName);
     OUString GetNameProposal() const;
 
     int get_selected_index() const { return m_xControl->get_selected_index(); }

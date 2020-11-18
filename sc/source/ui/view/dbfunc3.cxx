@@ -1332,7 +1332,7 @@ void ScDBFunc::UngroupDataPilot()
     Unmark();
 }
 
-static OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, const OUString& rMemberName)
+static OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, std::u16string_view rMemberName)
 {
     sal_Int32 n = rSubtotal.getLength();
     const sal_Unicode* p = rSubtotal.getStr();

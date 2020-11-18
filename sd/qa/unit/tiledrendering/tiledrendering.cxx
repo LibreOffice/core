@@ -2309,7 +2309,7 @@ void SdTiledRenderingTest::testTdf115873()
     pNavigator->InitTreeLB(pXImpressDocument->GetDoc());
     pNavigator->Show();
     SdPageObjsTLV& rObjects = pNavigator->GetObjects();
-    rObjects.SelectEntry("Slide 1");
+    rObjects.SelectEntry(u"Slide 1");
     rObjects.Select();
     sd::ViewShell* pSdViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pSdrView = pSdViewShell->GetView();
@@ -2323,7 +2323,7 @@ void SdTiledRenderingTest::testTdf115873()
     // Single-click with the mouse.
     MouseEvent aMouseEvent(Point(0, 0), /*nClicks=*/1, MouseEventModifiers::NONE, MOUSE_LEFT);
     rObjects.MousePressHdl(aMouseEvent);
-    rObjects.SelectEntry("Rectangle");
+    rObjects.SelectEntry(u"Rectangle");
     rObjects.Select();
     rObjects.MouseReleaseHdl(aMouseEvent);
     Scheduler::ProcessEventsToIdle();

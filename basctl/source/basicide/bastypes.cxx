@@ -226,14 +226,14 @@ void BaseWindow::InsertLibInfo () const
 
 bool BaseWindow::Is (
     ScriptDocument const& rDocument,
-    OUString const& rLibName, OUString const& rName,
+    std::u16string_view rLibName, std::u16string_view rName,
     ItemType eType, bool bFindSuspended
 )
 {
     if (bFindSuspended || !IsSuspended())
     {
         // any non-suspended window is ok
-        if (rLibName.isEmpty() || rName.isEmpty() || eType == TYPE_UNKNOWN)
+        if (rLibName.empty() || rName.empty() || eType == TYPE_UNKNOWN)
             return true;
         // ok if the parameters match
         if (m_aDocument == rDocument && m_aLibName == rLibName && m_aName == rName && GetType() == eType)

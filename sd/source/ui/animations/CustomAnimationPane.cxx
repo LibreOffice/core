@@ -956,7 +956,7 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, const CustomAnimati
         }
 
     case nPropertyTypeFont:
-        return pEffect->getProperty( AnimationNodeType::SET, "CharFontName" , EValue::To );
+        return pEffect->getProperty( AnimationNodeType::SET, u"CharFontName" , EValue::To );
 
     case nPropertyTypeCharHeight:
         {
@@ -971,7 +971,7 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, const CustomAnimati
         return pEffect->getTransformationProperty( AnimationTransformType::ROTATE, EValue::By);
 
     case nPropertyTypeTransparency:
-        return pEffect->getProperty( AnimationNodeType::SET, "Opacity" , EValue::To );
+        return pEffect->getProperty( AnimationNodeType::SET, u"Opacity" , EValue::To );
 
     case nPropertyTypeScale:
         return pEffect->getTransformationProperty( AnimationTransformType::SCALE, EValue::By );
@@ -979,9 +979,9 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, const CustomAnimati
     case nPropertyTypeCharDecoration:
         {
             Sequence< Any > aValues(3);
-            aValues[0] = pEffect->getProperty( AnimationNodeType::SET, "CharWeight" , EValue::To );
-            aValues[1] = pEffect->getProperty( AnimationNodeType::SET, "CharPosture" , EValue::To );
-            aValues[2] = pEffect->getProperty( AnimationNodeType::SET, "CharUnderline" , EValue::To );
+            aValues[0] = pEffect->getProperty( AnimationNodeType::SET, u"CharWeight" , EValue::To );
+            aValues[1] = pEffect->getProperty( AnimationNodeType::SET, u"CharPosture" , EValue::To );
+            aValues[2] = pEffect->getProperty( AnimationNodeType::SET, u"CharUnderline" , EValue::To );
             return makeAny( aValues );
         }
     }
@@ -1027,7 +1027,7 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, const CustomAnimat
         break;
 
     case nPropertyTypeFont:
-        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "CharFontName" , EValue::To, rValue );
+        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, u"CharFontName" , EValue::To, rValue );
         break;
 
     case nPropertyTypeCharHeight:
@@ -1043,7 +1043,7 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, const CustomAnimat
         break;
 
     case nPropertyTypeTransparency:
-        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "Opacity" , EValue::To, rValue );
+        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, u"Opacity" , EValue::To, rValue );
         break;
 
     case nPropertyTypeScale:
@@ -1054,9 +1054,9 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, const CustomAnimat
         {
             Sequence< Any > aValues(3);
             rValue >>= aValues;
-            bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "CharWeight" , EValue::To, aValues[0] );
-            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, "CharPosture" , EValue::To, aValues[1] );
-            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, "CharUnderline" , EValue::To, aValues[2] );
+            bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, u"CharWeight" , EValue::To, aValues[0] );
+            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, u"CharPosture" , EValue::To, aValues[1] );
+            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, u"CharUnderline" , EValue::To, aValues[2] );
         }
         break;
 
@@ -1185,17 +1185,17 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
                 addValue( pSet, nHandleProperty1Value, getProperty1Value( nType, pEffect ) );
             }
 
-            if( pDescriptor->hasProperty( "Accelerate" ) )
+            if( pDescriptor->hasProperty( u"Accelerate" ) )
             {
                 addValue( pSet, nHandleAccelerate, makeAny( pEffect->getAcceleration() ) );
             }
 
-            if( pDescriptor->hasProperty( "Decelerate" ) )
+            if( pDescriptor->hasProperty( u"Decelerate" ) )
             {
                 addValue( pSet, nHandleDecelerate, makeAny( pEffect->getDecelerate() ) );
             }
 
-            if( pDescriptor->hasProperty( "AutoReverse" ) )
+            if( pDescriptor->hasProperty( u"AutoReverse" ) )
             {
                 addValue( pSet, nHandleAutoReverse, makeAny( pEffect->getAutoReverse() ) );
             }

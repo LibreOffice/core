@@ -25,7 +25,7 @@
 
 #define FILEDIALOG_FILTER_JSON "*.json"
 
-int TargetsTable::GetRowByTargetName(const OUString& sName)
+int TargetsTable::GetRowByTargetName(std::u16string_view sName)
 {
     for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
     {
@@ -137,7 +137,7 @@ void TargetsTable::InsertTarget(RedactionTarget* pTarget)
         nRow, pTarget->bWholeWords ? SfxResId(STR_REDACTION_YES) : SfxResId(STR_REDACTION_NO), 4);
 }
 
-RedactionTarget* TargetsTable::GetTargetByName(const OUString& sName)
+RedactionTarget* TargetsTable::GetTargetByName(std::u16string_view sName)
 {
     int nEntry = GetRowByTargetName(sName);
     if (nEntry == -1)

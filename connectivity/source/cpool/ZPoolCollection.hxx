@@ -88,7 +88,7 @@ namespace connectivity
         static css::uno::Reference< css::uno::XInterface > openNode( const OUString& _rPath,
                                                                                         const css::uno::Reference< css::uno::XInterface >& _xTreeNode) throw();
         bool isPoolingEnabled();
-        bool isDriverPoolingEnabled(const OUString& _sDriverImplName,
+        bool isDriverPoolingEnabled(std::u16string_view _sDriverImplName,
                                         css::uno::Reference< css::uno::XInterface >& _rxDriverNode);
         bool isPoolingEnabledByUrl( const OUString& _sUrl,
                                         css::uno::Reference< css::sdbc::XDriver >& _rxDriver,

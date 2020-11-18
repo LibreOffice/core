@@ -2687,7 +2687,7 @@ OUString ScExternalRefManager::getOwnDocumentName() const
     return pMed->GetName();
 }
 
-bool ScExternalRefManager::isOwnDocument(const OUString& rFile) const
+bool ScExternalRefManager::isOwnDocument(std::u16string_view rFile) const
 {
     return getOwnDocumentName() == rFile;
 }

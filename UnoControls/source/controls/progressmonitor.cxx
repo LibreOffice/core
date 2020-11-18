@@ -788,7 +788,7 @@ void ProgressMonitor::impl_cleanMemory ()
 }
 
 //  private method
-IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, bool bbeforeProgress )
+IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( std::u16string_view rTopic, bool bbeforeProgress )
 {
     // Get right textlist for following operations.
     ::std::vector< std::unique_ptr<IMPL_TextlistItem> >* pTextList;

@@ -267,7 +267,7 @@ public:
     LwpSection* EnumSections(LwpSection* pSection);
     LwpBulletStyleMgr* GetBulletStyleMgr() { return m_xBulletStyleMgr.get(); }
 
-    LwpObjectID* FindParaStyleByName(const OUString& name);
+    LwpObjectID* FindParaStyleByName(std::u16string_view name);
     OUString FindActuralStyleName(const OUString& name);
 };
 

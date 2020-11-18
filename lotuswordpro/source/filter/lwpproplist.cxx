@@ -78,12 +78,12 @@ void LwpPropListElement::Read()
     m_pObjStrm->SkipExtra();
 }
 
-bool LwpPropListElement::IsNamed(const OUString& name)
+bool LwpPropListElement::IsNamed(std::u16string_view name)
 {
     return name == m_Name.str();
 }
 
-OUString LwpPropList::GetNamedProperty(const OUString& name)
+OUString LwpPropList::GetNamedProperty(std::u16string_view name)
 {
     LwpPropListElement* pProp = FindPropByName(name);
     if (pProp)
@@ -93,7 +93,7 @@ OUString LwpPropList::GetNamedProperty(const OUString& name)
     return OUString();
 }
 
-LwpPropListElement* LwpPropList::FindPropByName(const OUString& name)
+LwpPropListElement* LwpPropList::FindPropByName(std::u16string_view name)
 {
     LwpPropListElement* pElement = GetFirst();
 

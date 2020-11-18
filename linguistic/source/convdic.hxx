@@ -77,7 +77,7 @@ protected:
     ConvDic(const ConvDic &);
     ConvDic & operator = (const ConvDic &);
 
-    static ConvMap::iterator GetEntry( ConvMap &rMap, const OUString &rFirstText, const OUString &rSecondText );
+    static ConvMap::iterator GetEntry( ConvMap &rMap, const OUString &rFirstText, std::u16string_view rSecondText );
     void    Load();
     void    Save();
 
@@ -116,7 +116,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-    bool    HasEntry( const OUString &rLeftText, const OUString &rRightText );
+    bool    HasEntry( const OUString &rLeftText, std::u16string_view rRightText );
     void    AddEntry( const OUString &rLeftText, const OUString &rRightText );
     void    RemoveEntry( const OUString &rLeftText, const OUString &rRightText );
 };

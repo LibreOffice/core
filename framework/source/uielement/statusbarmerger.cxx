@@ -173,7 +173,7 @@ bool StatusbarMerger::ConvertSeqSeqToVector(
 
 sal_uInt16 StatusbarMerger::FindReferencePos(
     StatusBar* pStatusbar,
-    const OUString& rReferencePoint )
+    std::u16string_view rReferencePoint )
 {
     for ( sal_uInt16 nPos = 0; nPos < pStatusbar->GetItemCount(); nPos++ )
     {

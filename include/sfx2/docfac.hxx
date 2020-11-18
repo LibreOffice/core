@@ -59,7 +59,7 @@ public:
     SfxViewFactory& GetViewFactory(sal_uInt16 i = 0) const;
 
     /// returns the view factory whose GetAPIViewName or GetLegacyViewName delivers the requested logical name
-    SfxViewFactory* GetViewFactoryByViewName( const OUString& i_rViewName ) const;
+    SfxViewFactory* GetViewFactoryByViewName( std::u16string_view i_rViewName ) const;
 
     // Filter
     std::shared_ptr<const SfxFilter> GetTemplateFilter() const;

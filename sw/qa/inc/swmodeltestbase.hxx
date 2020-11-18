@@ -333,7 +333,7 @@ protected:
     css::uno::Reference<css::drawing::XShape> getShape(int number);
 
     /// Get shape by name
-    css::uno::Reference<css::drawing::XShape> getShapeByName(const OUString& aName);
+    css::uno::Reference<css::drawing::XShape> getShapeByName(std::u16string_view aName);
 
     /// Get TextFrame by name
     css::uno::Reference<css::drawing::XShape> getTextFrameByName(const OUString& aName);

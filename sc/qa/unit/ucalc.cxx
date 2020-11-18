@@ -6647,7 +6647,7 @@ void Test::testEmptyCalcDocDefaults()
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasManualBreaks(tab) );
 }
 
-ScDocShell* Test::findLoadedDocShellByName(const OUString& rName)
+ScDocShell* Test::findLoadedDocShellByName(std::u16string_view rName)
 {
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
     while (pShell)

@@ -271,7 +271,7 @@ rtl::Reference<UnoControlModel> ControlModelContainerBase::Clone() const
     return pClone;
 }
 
-ControlModelContainerBase::UnoControlModelHolderVector::iterator ControlModelContainerBase::ImplFindElement( const OUString& rName )
+ControlModelContainerBase::UnoControlModelHolderVector::iterator ControlModelContainerBase::ImplFindElement( std::u16string_view rName )
 {
     return ::std::find_if( maModels.begin(), maModels.end(), [&](const UnoControlModelHolder& elem) { return elem.second == rName; });
 }

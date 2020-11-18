@@ -169,7 +169,7 @@ void lcl_setSymbolSizeIfNeeded( const uno::Reference< beans::XPropertySet >& xSe
 void lcl_resetSymbolSizeForPointsIfNecessary( const uno::Reference< beans::XPropertySet >& xPointProp, const SvXMLImport& rImport
     , const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {
-    uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( "SymbolSize", pPropStyleContext, pStylesCtxt ) );
+    uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( u"SymbolSize", pPropStyleContext, pStylesCtxt ) );
     if( !aASymbolSize.hasValue() )
         lcl_setSymbolSizeIfNeeded( xPointProp, rImport );
 }
@@ -177,7 +177,7 @@ void lcl_resetSymbolSizeForPointsIfNecessary( const uno::Reference< beans::XProp
 void lcl_setLinkNumberFormatToSourceIfNeeded( const uno::Reference< beans::XPropertySet >& xPointProp
     , const XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {
-    uno::Any aAny( SchXMLTools::getPropertyFromContext("LinkNumberFormatToSource", pPropStyleContext, pStylesCtxt) );
+    uno::Any aAny( SchXMLTools::getPropertyFromContext(u"LinkNumberFormatToSource", pPropStyleContext, pStylesCtxt) );
     if( aAny.hasValue() )
         return;
 
@@ -515,7 +515,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
                 const XMLPropStyleContext* pPropStyleContext = dynamic_cast< const XMLPropStyleContext * >( pStyle );
 
-                uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( "SymbolSize"
+                uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( u"SymbolSize"
                     , pPropStyleContext, pStylesCtxt ) );
                 mbSymbolSizeIsMissingInFile = !aASymbolSize.hasValue();
             }
@@ -979,7 +979,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
                 if( pCurrent )
                 {
                     pPropStyleContext = pCurrent;
-                    uno::Any aAny = SchXMLTools::getPropertyFromContext("RegressionType", pPropStyleContext, pStylesCtxt);
+                    uno::Any aAny = SchXMLTools::getPropertyFromContext(u"RegressionType", pPropStyleContext, pStylesCtxt);
                     if ( aAny.hasValue() )
                     {
                         aAny >>= aServiceName;
@@ -993,7 +993,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
                 if( pCurrent )
                 {
                     pPropStyleContext = pCurrent;
-                    uno::Any aAny = SchXMLTools::getPropertyFromContext("RegressionType", pPropStyleContext, pStylesCtxt);
+                    uno::Any aAny = SchXMLTools::getPropertyFromContext(u"RegressionType", pPropStyleContext, pStylesCtxt);
                     if ( aAny.hasValue() )
                     {
                         aAny >>= aServiceName;

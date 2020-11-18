@@ -178,7 +178,7 @@ void TemplateLocalView::showRegion(TemplateContainerItem const *pItem)
     maOpenRegionHdl.Call(nullptr);
 }
 
-void TemplateLocalView::showRegion(const OUString &rName)
+void TemplateLocalView::showRegion(std::u16string_view rName)
 {
     for (auto const & pRegion : maRegions)
     {
@@ -190,7 +190,7 @@ void TemplateLocalView::showRegion(const OUString &rName)
     }
 }
 
-TemplateContainerItem* TemplateLocalView::getRegion(OUString const & rName)
+TemplateContainerItem* TemplateLocalView::getRegion(std::u16string_view rName)
 {
     for (auto const & pRegion : maRegions)
         if (pRegion->maTitle == rName)
@@ -263,7 +263,7 @@ sal_uInt16 TemplateLocalView::getRegionId(size_t pos) const
     return maRegions[pos]->mnId;
 }
 
-sal_uInt16 TemplateLocalView::getRegionId(OUString const & sRegion) const
+sal_uInt16 TemplateLocalView::getRegionId(std::u16string_view sRegion) const
 {
     for (auto const & pRegion : maRegions)
     {
@@ -349,7 +349,7 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
     return nItemId;
 }
 
-bool TemplateLocalView::renameRegion(const OUString &rTitle, const OUString &rNewTitle)
+bool TemplateLocalView::renameRegion(std::u16string_view rTitle, const OUString &rNewTitle)
 {
     TemplateContainerItem *pRegion = getRegion(rTitle);
 

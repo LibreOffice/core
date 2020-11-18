@@ -65,7 +65,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 
-static void ImpExtractCustomShow( const Reference< XModel >& rxModel, const OUString& rCustomShowName )
+static void ImpExtractCustomShow( const Reference< XModel >& rxModel, std::u16string_view rCustomShowName )
 {
     vector< Reference< XDrawPage > > vNonUsedPageList;
     try

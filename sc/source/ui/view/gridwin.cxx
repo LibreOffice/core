@@ -4453,7 +4453,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
         bPasteIsMove = bIsMove;
 
         mrViewData.GetView()->PasteDraw(
-            aLogicPos, rData.pDrawTransfer->GetModel(), false, "A", "B");
+            aLogicPos, rData.pDrawTransfer->GetModel(), false, u"A", u"B");
 
         if (bPasteIsMove)
             rData.pDrawTransfer->SetDragWasInternal();

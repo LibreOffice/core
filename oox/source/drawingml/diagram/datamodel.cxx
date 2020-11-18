@@ -289,7 +289,7 @@ OString normalizeDotName( const OUString& rStr )
 }
 #endif
 
-static sal_Int32 calcDepth( const OUString& rNodeName,
+static sal_Int32 calcDepth( std::u16string_view rNodeName,
                             const dgm::Connections& rCnx )
 {
     // find length of longest path in 'isChild' graph, ending with rNodeName

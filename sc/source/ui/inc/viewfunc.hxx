@@ -133,7 +133,7 @@ public:
 
     void            PasteDraw();
     void            PasteDraw( const Point& rLogicPos, SdrModel* pModel, bool bGroup,
-                        const OUString& rSrcShellID, const OUString& rDestShellID );
+                        std::u16string_view rSrcShellID, std::u16string_view rDestShellID );
 
     bool            PasteOnDrawObjectLinked(
                         const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
@@ -279,7 +279,7 @@ public:
 
     void            InsertTableLink( const OUString& rFile,
                                         const OUString& rFilter, const OUString& rOptions,
-                                        const OUString& rTabName );
+                                        std::u16string_view rTabName );
     void            InsertAreaLink( const OUString& rFile,
                                         const OUString& rFilter, const OUString& rOptions,
                                         const OUString& rSource );

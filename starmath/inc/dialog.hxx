@@ -34,7 +34,7 @@ class SvxShowCharSet;
 
 /**************************************************************************/
 
-void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont);
+void SetFontStyle(std::u16string_view rStyleName, vcl::Font &rFont);
 
 /**************************************************************************/
 
@@ -432,7 +432,7 @@ class SmSymDefineDialog final : public weld::GenericDialogController
     void    FillStyles();
 
     void    SetSymbolSetManager(const SmSymbolManager &rMgr);
-    void    SetFont(const OUString &rFontName, const OUString &rStyleName);
+    void    SetFont(const OUString &rFontName, std::u16string_view rStyleName);
     void    SetOrigSymbol(const SmSym *pSymbol, const OUString &rSymbolSetName);
     void    UpdateButtons();
 

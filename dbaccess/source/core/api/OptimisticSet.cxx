@@ -336,7 +336,7 @@ void OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::
     }
 }
 
-void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const OUString& i_sSQL,const OUString& i_sTableName)
+void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const OUString& i_sSQL,std::u16string_view i_sTableName)
 {
     // now create and execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(i_sSQL));

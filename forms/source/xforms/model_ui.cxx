@@ -411,7 +411,7 @@ css::uno::Reference<css::xml::dom::XDocument> Model::newInstance( const OUString
 
 static sal_Int32 lcl_findProp( const PropertyValue* pValues,
                         sal_Int32 nLength,
-                        const OUString& rName )
+                        std::u16string_view rName )
 {
     bool bFound = false;
     sal_Int32 n = 0;
@@ -423,7 +423,7 @@ static sal_Int32 lcl_findProp( const PropertyValue* pValues,
 }
 
 sal_Int32 xforms::lcl_findInstance( const InstanceCollection* pInstances,
-                                    const OUString& rName )
+                                    std::u16string_view rName )
 {
     sal_Int32 nLength = pInstances->countItems();
     sal_Int32 n = 0;
@@ -450,7 +450,7 @@ void Model::renameInstance( const OUString& sFrom,
     PropertyValue* pSeq = aSeq.getArray();
     sal_Int32 nLength = aSeq.getLength();
 
-    sal_Int32 nProp = lcl_findProp( pSeq, nLength, "ID" );
+    sal_Int32 nProp = lcl_findProp( pSeq, nLength, u"ID" );
     if( nProp == -1 )
     {
         // add name property
@@ -464,12 +464,12 @@ void Model::renameInstance( const OUString& sFrom,
     pSeq[ nProp ].Value <<= sTo;
 
     // change url
-    nProp = lcl_findProp( pSeq, nLength, "URL" );
+    nProp = lcl_findProp( pSeq, nLength, u"URL" );
     if(nProp != -1)
         pSeq[ nProp ].Value <<= sURL;
 
     // change urlonce
-    nProp = lcl_findProp( pSeq, nLength, "URLOnce" );
+    nProp = lcl_findProp( pSeq, nLength, u"URLOnce" );
     if(nProp != -1)
         pSeq[ nProp ].Value <<= bURLOnce;
 

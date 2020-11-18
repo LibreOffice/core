@@ -267,7 +267,7 @@ public:
     /// Given a SwNode return the pagedesc in use at that location.
     static const SwPageDesc* GetPageDescOfNode(const SwNode& rNd);
 
-    static SwPageDesc* GetByName(SwDoc& rDoc, const OUString& rName);
+    static SwPageDesc* GetByName(SwDoc& rDoc, std::u16string_view rName);
 
     SwPageDesc& operator=( const SwPageDesc& );
 

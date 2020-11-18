@@ -135,7 +135,7 @@ std::vector<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)
 }
 
 /// Search for a field named rFieldName of type rServiceName in xText and return it.
-uno::Reference<text::XTextField> lcl_findField(const uno::Reference<text::XText>& xText, const OUString& rServiceName, const OUString& rFieldName)
+uno::Reference<text::XTextField> lcl_findField(const uno::Reference<text::XText>& xText, const OUString& rServiceName, std::u16string_view rFieldName)
 {
     uno::Reference<text::XTextField> xField;
     uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xText, uno::UNO_QUERY);
@@ -172,7 +172,7 @@ uno::Reference<text::XTextField> lcl_findField(const uno::Reference<text::XText>
 }
 
 /// Search for a field named rFieldName of type rServiceName in xText and return true iff found.
-bool lcl_hasField(const uno::Reference<text::XText>& xText, const OUString& rServiceName, const OUString& rFieldName)
+bool lcl_hasField(const uno::Reference<text::XText>& xText, const OUString& rServiceName, std::u16string_view rFieldName)
 {
     return lcl_findField(xText, rServiceName, rFieldName).is();
 }
@@ -314,7 +314,7 @@ bool lcl_IsParagraphSignatureField(const uno::Reference<frame::XModel>& xModel,
 uno::Reference<text::XTextField> lcl_findFieldByRDF(const uno::Reference<frame::XModel>& xModel,
                                                     const uno::Reference<text::XTextContent>& xParagraph,
                                                     const OUString& sRDFName,
-                                                    const OUString& sRDFValue)
+                                                    std::u16string_view sRDFValue)
 {
     uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraph, uno::UNO_QUERY);
     if (!xTextPortionEnumerationAccess.is())
@@ -339,7 +339,7 @@ uno::Reference<text::XTextField> lcl_findFieldByRDF(const uno::Reference<frame::
 
         uno::Reference<text::XTextField> xField(xTextField, uno::UNO_QUERY);
         const std::pair<OUString, OUString> pair = lcl_getRDF(xModel, xField, sRDFName);
-        if (pair.first == sRDFName && (sRDFValue.isEmpty() || sRDFValue == pair.second))
+        if (pair.first == sRDFName && (sRDFValue.empty() || sRDFValue == pair.second))
             return xField;
     }
 
@@ -532,15 +532,15 @@ void lcl_RemoveParagraphMetadataField(const uno::Reference<css::text::XTextField
 /// Note: must have associated RDF, since classifications are otherwise just metadata fields.
 bool lcl_IsParagraphClassificationField(const uno::Reference<frame::XModel>& xModel,
                                         const uno::Reference<css::text::XTextField>& xField,
-                                        const OUString& sKey)
+                                        std::u16string_view sKey)
 {
     const std::pair<OUString, OUString> rdfPair = lcl_getRDF(xModel, xField, ParagraphClassificationNameRDFName);
-    return rdfPair.first == ParagraphClassificationNameRDFName && (sKey.isEmpty() || rdfPair.second == sKey);
+    return rdfPair.first == ParagraphClassificationNameRDFName && (sKey.empty() || rdfPair.second == sKey);
 }
 
 uno::Reference<text::XTextField> lcl_FindParagraphClassificationField(const uno::Reference<frame::XModel>& xModel,
                                                                       const uno::Reference<text::XTextContent>& xParagraph,
-                                                                      const OUString& sKey = OUString())
+                                                                      std::u16string_view sKey = u"")
 {
     uno::Reference<text::XTextField> xTextField;
 
@@ -1113,7 +1113,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
 
             if (bHeaderIsNeeded)
             {
-                if (!lcl_hasField(xHeaderText, DocInfoServiceName, SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER()))
+                if (!lcl_hasField(xHeaderText, DocInfoServiceName, OUString(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER())))
                 {
                     // Append a field to the end of the header text.
                     uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(DocInfoServiceName), uno::UNO_QUERY);

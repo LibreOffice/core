@@ -57,10 +57,10 @@ public:
     SmLocalizedSymbolData() = delete;
 
     static OUString GetUiSymbolName( const OUString &rExportName );
-    static OUString GetExportSymbolName( const OUString &rUiName );
+    static OUString GetExportSymbolName( std::u16string_view rUiName );
 
     static OUString GetUiSymbolSetName( const OUString &rExportName );
-    static OUString GetExportSymbolSetName( const OUString &rUiName );
+    static OUString GetExportSymbolSetName( std::u16string_view rUiName );
 };
 
 class SmModule final : public SfxModule, public utl::ConfigurationListener

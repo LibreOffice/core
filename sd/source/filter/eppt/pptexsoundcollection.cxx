@@ -65,7 +65,7 @@ OUString ExSoundEntry::ImplGetExtension() const
     return aExtension;
 }
 
-bool ExSoundEntry::IsSameURL(const OUString& rURL) const
+bool ExSoundEntry::IsSameURL(std::u16string_view rURL) const
 {
     return ( rURL == aSoundURL );
 }

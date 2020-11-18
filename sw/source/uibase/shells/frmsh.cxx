@@ -80,7 +80,7 @@ using namespace ::com::sun::star::uno;
 
 // Prototypes
 static void lcl_FrameGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
-static const SwFrameFormat* lcl_GetFrameFormatByName(SwWrtShell const & rSh, const OUString& rName)
+static const SwFrameFormat* lcl_GetFrameFormatByName(SwWrtShell const & rSh, std::u16string_view rName)
 {
     const size_t nCount = rSh.GetFlyCount(FLYCNTTYPE_FRM);
     for( size_t i = 0; i < nCount; ++i )

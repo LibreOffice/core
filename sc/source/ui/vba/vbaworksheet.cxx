@@ -943,7 +943,7 @@ ScVbaWorksheet::hasProperty( const OUString& aName )
 }
 
 uno::Any
-ScVbaWorksheet::getControlShape( const OUString& sName )
+ScVbaWorksheet::getControlShape( std::u16string_view sName )
 {
     // ideally we would get an XControl object but it appears an XControl
     // implementation only exists for a Control implementation obtained from the

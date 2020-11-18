@@ -2011,7 +2011,7 @@ bool SwCursorShell::GotoINetAttr( const SwTextINetFormat& rAttr )
     return bRet;
 }
 
-const SwFormatINetFormat* SwCursorShell::FindINetAttr( const OUString& rName ) const
+const SwFormatINetFormat* SwCursorShell::FindINetAttr( std::u16string_view rName ) const
 {
     return mxDoc->FindINetAttr( rName );
 }

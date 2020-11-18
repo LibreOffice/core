@@ -524,7 +524,7 @@ void CreateCategories(
     }
 }
 
-uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
+uno::Any getPropertyFromContext( std::u16string_view rPropertyName, const XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {
     uno::Any aRet;
     if( !pPropStyleContext || !pStylesCtxt )

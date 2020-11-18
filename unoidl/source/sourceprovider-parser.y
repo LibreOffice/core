@@ -4086,7 +4086,7 @@ bool SourceProviderInterfaceTypeEntityPad::addDirectMember(
     OUString const & name)
 {
     assert(data != nullptr);
-    if (!checkMemberClashes(location, yyscanner, data, "", name, true)) {
+    if (!checkMemberClashes(location, yyscanner, data, u"", name, true)) {
         return false;
     }
     allMembers.emplace(name, Member(data->currentName));
@@ -4228,7 +4228,7 @@ bool SourceProviderInterfaceTypeEntityPad::checkBaseClashes(
 
 bool SourceProviderInterfaceTypeEntityPad::checkMemberClashes(
     YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
-    OUString const & interfaceName, OUString const & memberName,
+    std::u16string_view interfaceName, OUString const & memberName,
     bool checkOptional) const
 {
     std::map<OUString, Member>::const_iterator i(allMembers.find(memberName));

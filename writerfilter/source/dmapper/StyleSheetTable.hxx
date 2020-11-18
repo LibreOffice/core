@@ -91,8 +91,8 @@ public:
 
     void ApplyNumberingStyleNameToParaStyles();
     void ApplyStyleSheets( const FontTablePtr& rFontTable );
-    StyleSheetEntryPtr FindStyleSheetByISTD(const OUString& sIndex);
-    StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(const OUString& rIndex);
+    StyleSheetEntryPtr FindStyleSheetByISTD(std::u16string_view sIndex);
+    StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(std::u16string_view rIndex);
     StyleSheetEntryPtr FindDefaultParaStyle();
 
     OUString ConvertStyleName( const OUString& rWWName, bool bExtendedSearch = false );

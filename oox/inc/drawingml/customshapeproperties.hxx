@@ -120,7 +120,7 @@ public:
     void                                setTextCameraZRotateAngle( sal_Int32 nAngle ) { mnTextCameraZRotateAngle = nAngle; };
 
     static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
-    static sal_Int32 GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const OUString& rFormulaName );
+    static sal_Int32 GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, std::u16string_view rFormulaName );
 
     sal_Int32 getArcNum() { return mnArcNum++; }
 

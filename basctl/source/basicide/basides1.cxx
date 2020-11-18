@@ -1250,12 +1250,12 @@ void Shell::ManageToolbars()
 
 VclPtr<BaseWindow> Shell::FindApplicationWindow()
 {
-    return FindWindow( ScriptDocument::getApplicationScriptDocument(), "", "", TYPE_UNKNOWN );
+    return FindWindow( ScriptDocument::getApplicationScriptDocument(), u"", u"", TYPE_UNKNOWN );
 }
 
 VclPtr<BaseWindow> Shell::FindWindow(
     ScriptDocument const& rDocument,
-    OUString const& rLibName, OUString const& rName,
+    std::u16string_view rLibName, std::u16string_view rName,
     ItemType eType, bool bFindSuspended
 )
 {

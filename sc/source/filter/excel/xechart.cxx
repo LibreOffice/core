@@ -1953,7 +1953,7 @@ bool XclExpChSeries::ConvertDataSeries(
 }
 
 bool XclExpChSeries::ConvertStockSeries( css::uno::Reference< css::chart2::XDataSeries > const & xDataSeries,
-        const OUString& rValueRole, sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx, bool bCloseSymbol )
+        std::u16string_view rValueRole, sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx, bool bCloseSymbol )
 {
     bool bOk = false;
     Reference< XDataSource > xDataSource( xDataSeries, UNO_QUERY );
@@ -2569,7 +2569,7 @@ void XclExpChTypeGroup::CreateAllStockSeries(
 }
 
 bool XclExpChTypeGroup::CreateStockSeries( Reference< XDataSeries > const & xDataSeries,
-        const OUString& rValueRole, bool bCloseSymbol )
+        std::u16string_view rValueRole, bool bCloseSymbol )
 {
     bool bOk = false;
     // let chart create series object with correct series index

@@ -90,7 +90,7 @@ namespace dbaui
         TreeListBox(std::unique_ptr<weld::TreeView> xTreeView, bool bSQLType);
         virtual ~TreeListBox();
 
-        std::unique_ptr<weld::TreeIter> GetEntryPosByName(const OUString& rName,
+        std::unique_ptr<weld::TreeIter> GetEntryPosByName(std::u16string_view rName,
                                                           const weld::TreeIter* pStart = nullptr,
                                                           const IEntryFilter* pFilter = nullptr) const;
 

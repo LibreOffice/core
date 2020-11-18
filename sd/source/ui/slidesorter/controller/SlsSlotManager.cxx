@@ -184,7 +184,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             // First make sure that the sidebar is visible
             pShell->GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
             ::sfx2::sidebar::Sidebar::ShowPanel(
-                "SdSlideTransitionPanel",
+                u"SdSlideTransitionPanel",
                 pShell->GetViewFrame()->GetFrame().GetFrameInterface());
             rRequest.Ignore ();
             break;
@@ -195,7 +195,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             // First make sure that the sidebar is visible
             pShell->GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
             ::sfx2::sidebar::Sidebar::ShowPanel(
-                "SdAllMasterPagesPanel",
+                u"SdAllMasterPagesPanel",
                 pShell->GetViewFrame()->GetFrame().GetFrameInterface());
             rRequest.Ignore ();
             break;

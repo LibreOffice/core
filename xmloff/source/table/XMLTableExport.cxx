@@ -417,7 +417,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
 // ODF export for a table cell.
 
- void XMLTableExport::ExportCell( const Reference < XCell >& xCell, const std::shared_ptr< XMLTableInfo >& rTableInfo, const OUString& rDefaultCellStyle )
+ void XMLTableExport::ExportCell( const Reference < XCell >& xCell, const std::shared_ptr< XMLTableInfo >& rTableInfo, std::u16string_view rDefaultCellStyle )
  {
     bool bIsMerged = false;
     sal_Int32 nRowSpan = 0;

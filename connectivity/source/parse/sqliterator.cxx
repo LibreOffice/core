@@ -1919,7 +1919,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getSimpleHavingTree() const
 }
 
 
-Reference< XPropertySet > OSQLParseTreeIterator::findSelectColumn( const OUString & rColumnName )
+Reference< XPropertySet > OSQLParseTreeIterator::findSelectColumn( std::u16string_view rColumnName )
 {
     for (auto const& lookupColumn : *m_aSelectColumns)
     {

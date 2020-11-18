@@ -132,7 +132,7 @@ OUString SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)
     return OUString();
 }
 
-void SwSelectDBTableDialog::SetSelectedTable(const OUString& rTable, bool bIsTable)
+void SwSelectDBTableDialog::SetSelectedTable(std::u16string_view rTable, bool bIsTable)
 {
     for (int i = 0, nCount = m_xTable->n_children(); i < nCount; ++i)
     {

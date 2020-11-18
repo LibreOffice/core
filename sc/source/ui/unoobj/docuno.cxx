@@ -4630,7 +4630,7 @@ void ScScenariosObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XScenarios
 
-bool ScScenariosObj::GetScenarioIndex_Impl( const OUString& rName, SCTAB& rIndex )
+bool ScScenariosObj::GetScenarioIndex_Impl( std::u16string_view rName, SCTAB& rIndex )
 {
     //! Case-insensitive ????
 
@@ -4660,7 +4660,7 @@ ScTableSheetObj* ScScenariosObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
     return nullptr;    // no document or wrong index
 }
 
-ScTableSheetObj* ScScenariosObj::GetObjectByName_Impl(const OUString& aName)
+ScTableSheetObj* ScScenariosObj::GetObjectByName_Impl(std::u16string_view aName)
 {
     SCTAB nIndex;
     if ( pDocShell && GetScenarioIndex_Impl( aName, nIndex ) )

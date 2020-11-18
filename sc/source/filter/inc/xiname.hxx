@@ -91,7 +91,7 @@ public:
         @param nScTab  The sheet index for local names or SCTAB_MAX for global names.
         If no local name is found, tries to find a matching global name.
         @return  Pointer to the defined name or 0 on error. */
-    const XclImpName*   FindName( const OUString& rXclName, SCTAB nScTab ) const;
+    const XclImpName*   FindName( std::u16string_view rXclName, SCTAB nScTab ) const;
 
     /** Returns the defined name specified by its Excel index.
         @param nXclNameIdx  The index of the internal defined name.

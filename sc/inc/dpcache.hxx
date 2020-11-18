@@ -163,7 +163,7 @@ public:
      */
     sal_Int32 GetGroupType(tools::Long nDim) const;
 
-    SCCOL GetDimensionIndex(const OUString& sName) const;
+    SCCOL GetDimensionIndex(std::u16string_view sName) const;
     sal_uInt32 GetNumberFormat( tools::Long nDim ) const;
     bool  IsDateDimension( tools::Long nDim ) const ;
     tools::Long GetDimMemberCount(tools::Long nDim) const;

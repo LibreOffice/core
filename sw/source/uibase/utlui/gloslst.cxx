@@ -100,7 +100,7 @@ SwGlossaryList::~SwGlossaryList()
 // will be filled. Otherwise also rGroupName will be set and
 // on demand asked for the right group.
 
-bool SwGlossaryList::GetShortName(const OUString& rLongName,
+bool SwGlossaryList::GetShortName(std::u16string_view rLongName,
                                   OUString& rShortName, OUString& rGroupName )
 {
     if(!bFilled)
@@ -336,7 +336,7 @@ void SwGlossaryList::Invoke()
         Update();
 }
 
-AutoTextGroup* SwGlossaryList::FindGroup(const OUString& rGroupName)
+AutoTextGroup* SwGlossaryList::FindGroup(std::u16string_view rGroupName)
 {
     for(const auto & pRet : aGroupArr)
     {

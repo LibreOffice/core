@@ -48,7 +48,7 @@ struct ProviderRequest
     {
     }
 
-    bool CREATE_PROVIDER(const OUString& Implname, const Sequence<OUString>& Services,
+    bool CREATE_PROVIDER(std::u16string_view Implname, const Sequence<OUString>& Services,
                          ::cppu::ComponentInstantiation Factory, createFactoryFunc creator)
     {
         if (!xRet.is() && (Implname == sImplementationName))

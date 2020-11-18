@@ -198,7 +198,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, ModifyHdl_Impl, weld::Entry&, void)
 
 // class SvxEditDictionaryDialog -------------------------------------------
 
-SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, const OUString& rName)
+SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, std::u16string_view rName)
     : GenericDialogController(pParent, "cui/ui/editdictionarydialog.ui", "EditDictionaryDialog")
     , sModify(CuiResId(STR_MODIFY))
     , bFirstSelect(false)

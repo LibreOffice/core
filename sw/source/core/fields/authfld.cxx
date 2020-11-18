@@ -133,7 +133,7 @@ void SwAuthorityFieldType::GetAllEntryIdentifiers(
 }
 
 SwAuthEntry* SwAuthorityFieldType::GetEntryByIdentifier(
-                                const OUString& rIdentifier)const
+                                std::u16string_view rIdentifier)const
 {
     for (const auto &rpTemp : m_DataArr)
     {

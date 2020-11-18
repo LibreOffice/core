@@ -100,7 +100,7 @@ public:
     void    AddFontSubstitute( const OUString& rFontName, const OUString& rSubstName, AddFontSubstituteFlags nFlags );
     void    RemoveFontsSubstitute();
 
-    bool    FindFontSubstitute( OUString& rSubstName, const OUString& rFontName ) const;
+    bool    FindFontSubstitute( OUString& rSubstName, std::u16string_view rFontName ) const;
 };
 
 // PreMatchFontSubstitution

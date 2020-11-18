@@ -131,7 +131,7 @@ SC_SIMPLE_SERVICE_INFO( ScAutoFormatFieldObj, "ScAutoFormatFieldObj", "com.sun.s
 SC_SIMPLE_SERVICE_INFO( ScAutoFormatObj, "ScAutoFormatObj", "com.sun.star.sheet.TableAutoFormat" )
 SC_SIMPLE_SERVICE_INFO( ScAutoFormatsObj, "stardiv.StarCalc.ScAutoFormatsObj", SCAUTOFORMATSOBJ_SERVICE )
 
-static bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const OUString& rName, sal_uInt16& rOutIndex )
+static bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, std::u16string_view rName, sal_uInt16& rOutIndex )
 {
     ScAutoFormat::const_iterator itBeg = rFormats.begin(), itEnd = rFormats.end();
     for (ScAutoFormat::const_iterator it = itBeg; it != itEnd; ++it)
@@ -176,7 +176,7 @@ ScAutoFormatObj* ScAutoFormatsObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
     return nullptr;    // wrong index
 }
 
-ScAutoFormatObj* ScAutoFormatsObj::GetObjectByName_Impl(const OUString& aName)
+ScAutoFormatObj* ScAutoFormatsObj::GetObjectByName_Impl(std::u16string_view aName)
 {
     sal_uInt16 nIndex;
     if (lcl_FindAutoFormatIndex(
