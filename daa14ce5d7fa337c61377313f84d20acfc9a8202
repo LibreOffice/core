@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6547c2d_7aeb433c",
+        "filename": "filter/source/graphicfilter/itiff/lzwdecom.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-18T11:34:39Z",
+      "side": 1,
+      "message": "comments should be moved to above the function to keep clarity wrt scope",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "daa14ce5d7fa337c61377313f84d20acfc9a8202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
