@@ -356,26 +356,31 @@ namespace xmloff
 
                 if ( bValueIsSequence )
                 {
-                    OSL_ENSURE( eValueTypeClass == TypeClass_ANY,
-                        "OElementImport::implApplyGenericProperties: only ANYs should have been imported as generic list property!" );
-                        // (OPropertyImport should produce only Sequencer< Any >, since it cannot know the real type
-
-                    OSL_ENSURE( ePropTypeClass == TypeClass_SHORT,
-                        "OElementImport::implApplyGenericProperties: conversion to sequences other than 'sequence< short >' not implemented, yet!" );
-
                     Sequence< Any > aXMLValueList;
                     rPropValues.Value >>= aXMLValueList;
-                    Sequence< sal_Int16 > aPropertyValueList( aXMLValueList.getLength() );
+                    // just avoid this part if empty sequence
+                    if (aXMLValueList.getLength())
+                    {
+                        Sequence< sal_Int16 > aPropertyValueList( aXMLValueList.getLength() );
 
-                    std::transform(aXMLValueList.begin(), aXMLValueList.end(), aPropertyValueList.begin(),
-                        [](const Any& rXMLValue) -> sal_Int16 {
-                            // only value sequences of numeric types implemented so far.
-                            double nVal( 0 );
-                            OSL_VERIFY( rXMLValue >>= nVal );
-                            return static_cast< sal_Int16 >( nVal );
-                        });
+                        SAL_WARN_IF( eValueTypeClass != TypeClass_ANY, "xmloff",
+                            "OElementImport::implApplyGenericProperties: only ANYs should have been imported as generic list property!" );
+                            // (OPropertyImport should produce only Sequencer< Any >, since it cannot know the real type
 
-                    rPropValues.Value <<= aPropertyValueList;
+                        SAL_WARN_IF( ePropTypeClass != TypeClass_SHORT, "xmloff",
+                            "OElementImport::implApplyGenericProperties: conversion to sequences other than 'sequence< short >' not implemented, yet!" );
+
+
+                        std::transform(aXMLValueList.begin(), aXMLValueList.end(), aPropertyValueList.begin(),
+                            [](const Any& rXMLValue) -> sal_Int16 {
+                                // only value sequences of numeric types implemented so far.
+                                double nVal( 0 );
+                                OSL_VERIFY( rXMLValue >>= nVal );
+                                return static_cast< sal_Int16 >( nVal );
+                            });
+
+                        rPropValues.Value <<= aPropertyValueList;
+                    }
                 }
                 else if ( ePropTypeClass != eValueTypeClass )
                 {
