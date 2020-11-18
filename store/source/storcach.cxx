@@ -136,13 +136,14 @@ static int highbit(std::size_t n)
 
     if (n == 0)
         return 0;
-#if SAL_TYPES_SIZEOFLONG == 8
-    if (n & 0xffffffff00000000ul)
+    if constexpr (sizeof(n) == 8)
     {
-        k |= 32;
-        n >>= 32;
+        if (n & 0xffffffff00000000)
+        {
+            k |= 32;
+            n >>= 32;
+        }
     }
-#endif
     if (n & 0xffff0000)
     {
         k |= 16;
