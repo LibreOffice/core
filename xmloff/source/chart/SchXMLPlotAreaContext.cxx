@@ -399,24 +399,22 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     }
 }
 
-SvXMLImportContextRef SchXMLPlotAreaContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLPlotAreaContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
-    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetPlotAreaElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ))
+    switch(nElement)
     {
-        case XML_TOK_PA_COORDINATE_REGION_EXT:
-        case XML_TOK_PA_COORDINATE_REGION:
+        case XML_ELEMENT(CHART_EXT, XML_COORDINATE_REGION):
+        case XML_ELEMENT(CHART, XML_COORDINATE_REGION):
         {
-            pContext = new SchXMLCoordinateRegionContext( GetImport(), nPrefix, rLocalName, m_aInnerPositioning );
+            pContext = new SchXMLCoordinateRegionContext( GetImport(), m_aInnerPositioning );
         }
         break;
 
-        case XML_TOK_PA_AXIS:
+        case XML_ELEMENT(CHART, XML_AXIS):
         {
             bool bAddMissingXAxisForNetCharts = false;
             bool bAdaptWrongPercentScaleValues = false;
@@ -442,17 +440,17 @@ SvXMLImportContextRef SchXMLPlotAreaContext::CreateChildContext(
                     bAdaptXAxisOrientationForOld2DBarCharts = true;
             }
 
-            pContext = new SchXMLAxisContext( mrImportHelper, GetImport(), rLocalName, mxDiagram, maAxes, mrCategoriesAddress,
+            pContext = new SchXMLAxisContext( mrImportHelper, GetImport(), mxDiagram, maAxes, mrCategoriesAddress,
                                               bAddMissingXAxisForNetCharts, bAdaptWrongPercentScaleValues, bAdaptXAxisOrientationForOld2DBarCharts, m_bAxisPositionAttributeImported );
         }
         break;
 
-        case XML_TOK_PA_SERIES:
+        case XML_ELEMENT(CHART, XML_SERIES):
             {
                 if( mxNewDoc.is())
                 {
                     pContext = new SchXMLSeries2Context(
-                        mrImportHelper, GetImport(), rLocalName,
+                        mrImportHelper, GetImport(),
                         mxNewDoc, maAxes,
                         mrSeriesDefaultsAndStyles.maSeriesStyleVector,
                         mrSeriesDefaultsAndStyles.maRegressionStyleVector,
@@ -467,32 +465,34 @@ SvXMLImportContextRef SchXMLPlotAreaContext::CreateChildContext(
             }
             break;
 
-        case XML_TOK_PA_WALL:
-            pContext = new SchXMLWallFloorContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
+        case XML_ELEMENT(CHART, XML_WALL):
+            pContext = new SchXMLWallFloorContext( mrImportHelper, GetImport(), mxDiagram,
                                                    SchXMLWallFloorContext::CONTEXT_TYPE_WALL );
             break;
-        case XML_TOK_PA_FLOOR:
-            pContext = new SchXMLWallFloorContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
+        case XML_ELEMENT(CHART, XML_FLOOR):
+            pContext = new SchXMLWallFloorContext( mrImportHelper, GetImport(), mxDiagram,
                                                    SchXMLWallFloorContext::CONTEXT_TYPE_FLOOR );
             break;
 
-        case XML_TOK_PA_LIGHT_SOURCE:
-            pContext = maSceneImportHelper.create3DLightContext( nPrefix, rLocalName, xAttrList );
+        case XML_ELEMENT(DR3D, XML_LIGHT):
+            pContext = maSceneImportHelper.create3DLightContext( xAttrList );
             break;
 
         // elements for stock charts
-        case XML_TOK_PA_STOCK_GAIN:
-            pContext = new SchXMLStockContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
+        case XML_ELEMENT(CHART, XML_STOCK_GAIN_MARKER):
+            pContext = new SchXMLStockContext( mrImportHelper, GetImport(), mxDiagram,
                                                SchXMLStockContext::CONTEXT_TYPE_GAIN );
             break;
-        case XML_TOK_PA_STOCK_LOSS:
-            pContext = new SchXMLStockContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
+        case XML_ELEMENT(CHART, XML_STOCK_LOSS_MARKER):
+            pContext = new SchXMLStockContext( mrImportHelper, GetImport(), mxDiagram,
                                                SchXMLStockContext::CONTEXT_TYPE_LOSS );
             break;
-        case XML_TOK_PA_STOCK_RANGE:
-            pContext = new SchXMLStockContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
+        case XML_ELEMENT(CHART, XML_STOCK_RANGE_LINE):
+            pContext = new SchXMLStockContext( mrImportHelper, GetImport(), mxDiagram,
                                                SchXMLStockContext::CONTEXT_TYPE_RANGE );
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
     return pContext;
@@ -866,10 +866,8 @@ void SchXMLPositionAttributesHelper::readAutomaticPositioningProperties( XMLProp
 
 SchXMLCoordinateRegionContext::SchXMLCoordinateRegionContext(
           SvXMLImport& rImport
-        , sal_uInt16 nPrefix
-        , const OUString& rLocalName
         , SchXMLPositionAttributesHelper& rPositioning )
-        : SvXMLImportContext( rImport, nPrefix, rLocalName )
+        : SvXMLImportContext( rImport )
         , m_rPositioning( rPositioning )
 {
 }
@@ -896,11 +894,9 @@ void SchXMLCoordinateRegionContext::StartElement( const uno::Reference< xml::sax
 SchXMLWallFloorContext::SchXMLWallFloorContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     uno::Reference< chart::XDiagram > const & xDiagram,
     ContextType eContextType ) :
-        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mxWallFloorSupplier( xDiagram, uno::UNO_QUERY ),
         meContextType( eContextType )
@@ -944,11 +940,9 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
 SchXMLStockContext::SchXMLStockContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     uno::Reference< chart::XDiagram > const & xDiagram,
     ContextType eContextType ) :
-        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mxStockPropProvider( xDiagram, uno::UNO_QUERY ),
         meContextType( eContextType )

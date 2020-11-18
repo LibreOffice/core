@@ -71,7 +71,7 @@ private:
 
 public:
     SchXMLSeries2Context( SchXMLImportHelper& rImpHelper,
-                          SvXMLImport& rImport, const OUString& rLocalName,
+                          SvXMLImport& rImport,
                           const css::uno::Reference< css::chart2::XChartDocument > & xNewDoc,
                           std::vector< SchXMLAxis >& rAxes,
                           ::std::vector< DataRowPointStyle >& rStyleVector,

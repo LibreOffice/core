@@ -31,7 +31,7 @@ class SchXMLAxisContext : public SvXMLImportContext
 {
 public:
     SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
-                       SvXMLImport& rImport, const OUString& rLocalName,
+                       SvXMLImport& rImport,
                        css::uno::Reference< css::chart::XDiagram > const & xDiagram,
                        std::vector< SchXMLAxis >& aAxes,
                        OUString& rCategoriesAddress,

@@ -101,10 +101,9 @@ public:
     virtual ~SchXMLPlotAreaContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
 private:
@@ -212,8 +211,6 @@ class SchXMLCoordinateRegionContext : public SvXMLImportContext
 public:
     SchXMLCoordinateRegionContext(
             SvXMLImport& rImport
-            , sal_uInt16 nPrefix
-            , const OUString& rLocalName
             , SchXMLPositionAttributesHelper& rPositioning );
     virtual ~SchXMLCoordinateRegionContext() override;
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -239,8 +236,6 @@ private:
 public:
     SchXMLWallFloorContext( SchXMLImportHelper& rImportHelper,
                             SvXMLImport& rImport,
-                            sal_uInt16 nPrefix,
-                            const OUString& rLocalName,
                             css::uno::Reference< css::chart::XDiagram > const & xDiagram,
                             ContextType eContextType );
     virtual ~SchXMLWallFloorContext() override;
@@ -265,8 +260,6 @@ private:
 public:
     SchXMLStockContext( SchXMLImportHelper& rImportHelper,
                         SvXMLImport& rImport,
-                        sal_uInt16 nPrefix,
-                        const OUString& rLocalName,
                         css::uno::Reference< css::chart::XDiagram > const & xDiagram,
                         ContextType eContextType );
     virtual ~SchXMLStockContext() override;
