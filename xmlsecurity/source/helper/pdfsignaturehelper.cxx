@@ -472,7 +472,7 @@ bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
         return false;
     }
 
-    int nSignatureCount = FPDF_GetSignatureCount(pPdfDocument->getPointer());
+    int nSignatureCount = pPdfDocument->getSignatureCount();
     if (nSignatureCount <= 0)
     {
         return true;
@@ -480,7 +480,7 @@ bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
     std::vector<Signature> aSignatures(nSignatureCount);
     for (int i = 0; i < nSignatureCount; ++i)
     {
-        FPDF_SIGNATURE pSignature = FPDF_GetSignatureObject(pPdfDocument->getPointer(), i);
+        FPDF_SIGNATURE pSignature = pPdfDocument->getSignature(i);
         std::vector<std::pair<size_t, size_t>> aByteRanges;
         GetByteRangesFromPDF(pSignature, aByteRanges);
         aSignatures[i] = Signature{ pSignature, aByteRanges };
@@ -496,9 +496,7 @@ bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
         }
     }
 
-    int nNumTrailers = FPDF_GetTrailerEnds(pPdfDocument->getPointer(), nullptr, 0);
-    std::vector<unsigned int> aTrailerEnds(nNumTrailers);
-    FPDF_GetTrailerEnds(pPdfDocument->getPointer(), aTrailerEnds.data(), aTrailerEnds.size());
+    std::vector<unsigned int> aTrailerEnds = pPdfDocument->getTrailerEnds();
 
     m_aSignatureInfos.clear();
 

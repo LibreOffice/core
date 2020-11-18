@@ -19,6 +19,7 @@
 #include <fpdf_edit.h>
 #include <fpdf_text.h>
 #include <fpdf_save.h>
+#include <fpdf_signature.h>
 
 #include <osl/endian.h>
 #include <vcl/bitmap.hxx>
@@ -212,6 +213,19 @@ std::unique_ptr<PDFiumPage> PDFiumDocument::openPage(int nIndex)
     return pPDFiumPage;
 }
 
+FPDF_SIGNATURE PDFiumDocument::getSignature(int nIndex)
+{
+    return FPDF_GetSignatureObject(mpPdfDocument, nIndex);
+}
+
+std::vector<unsigned int> PDFiumDocument::getTrailerEnds()
+{
+    int nNumTrailers = FPDF_GetTrailerEnds(mpPdfDocument, nullptr, 0);
+    std::vector<unsigned int> aTrailerEnds(nNumTrailers);
+    FPDF_GetTrailerEnds(mpPdfDocument, aTrailerEnds.data(), aTrailerEnds.size());
+    return aTrailerEnds;
+}
+
 basegfx::B2DSize PDFiumDocument::getPageSize(int nIndex)
 {
     basegfx::B2DSize aSize;
@@ -224,6 +238,8 @@ basegfx::B2DSize PDFiumDocument::getPageSize(int nIndex)
 }
 
 int PDFiumDocument::getPageCount() { return FPDF_GetPageCount(mpPdfDocument); }
+
+int PDFiumDocument::getSignatureCount() { return FPDF_GetSignatureCount(mpPdfDocument); }
 
 int PDFiumDocument::getFileVersion()
 {
