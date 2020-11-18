@@ -16,6 +16,24 @@
       "revId": "1725b4ea3181ab953fa733dede9237a813c32183",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46a7345c_9f023a13",
+        "filename": "offapi/com/sun/star/sheet/GlobalSheetSettings.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-11-18T10:20:45Z",
+      "side": 1,
+      "message": "Now it does, thx for the hint!",
+      "parentUuid": "1107a703_2a01d2ae",
+      "revId": "1725b4ea3181ab953fa733dede9237a813c32183",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
