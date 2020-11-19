@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <boost/property_tree/json_parser.hpp>
 
 #include <hintids.hxx>
 #include <sfx2/request.hxx>

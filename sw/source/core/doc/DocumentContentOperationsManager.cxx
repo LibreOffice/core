@@ -22,6 +22,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <UndoManager.hxx>

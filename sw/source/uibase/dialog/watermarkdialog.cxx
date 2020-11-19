@@ -20,7 +20,7 @@
 #include <sfx2/watermarkitem.hxx>
 #include <svtools/ctrltool.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/viewsh.hxx>
 
 #define IS_MOBILE (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())
 

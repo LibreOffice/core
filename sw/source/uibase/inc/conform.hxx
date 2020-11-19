@@ -19,6 +19,7 @@
 #pragma once
 
 #include "drawbase.hxx"
+#include <svx/svdobjkind.hxx>
 
 class ConstFormControl : public SwDrawBase
 {

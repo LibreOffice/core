@@ -28,6 +28,7 @@
 
 #include <movedfwdfrmsbyobjpos.hxx>
 #include "objstmpconsiderwrapinfl.hxx"
+#include <osl/diagnose.h>
 
 #define LOOP_DETECT 250
 

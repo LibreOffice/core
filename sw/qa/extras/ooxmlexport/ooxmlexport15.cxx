@@ -12,8 +12,6 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <tools/color.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>

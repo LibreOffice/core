@@ -54,7 +54,6 @@
 #include <unomid.h>
 #include <cmdid.h>
 #include <unofldmid.h>
-#include <editeng/colritem.hxx>
 #include <editeng/memberids.h>
 #include <editeng/unoprnms.hxx>
 #include <svl/itemprop.hxx>

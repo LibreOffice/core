@@ -22,8 +22,8 @@
 
 #include <DocumentContentOperationsManager.hxx>
 #include <hintids.hxx>
-#include <editeng/xmlcnitm.hxx>
 #include <editeng/rsiditem.hxx>
+#include <osl/diagnose.h>
 #include <svl/whiter.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/charhiddenitem.hxx>

@@ -42,7 +42,6 @@
 #include <frmfmt.hxx>
 #include <grfatr.hxx>
 #include <ndole.hxx>
-#include <ndtxt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 

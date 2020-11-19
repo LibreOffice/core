@@ -23,7 +23,6 @@
 
 #include <abstract.hxx>
 #include <ascfldlg.hxx>
-#include <break.hxx>
 #include <cnttab.hxx>
 #include <colwd.hxx>
 #include <convert.hxx>
@@ -35,7 +34,6 @@
 #include <glossary.hxx>
 #include <inpdlg.hxx>
 #include <insfnote.hxx>
-#include <instable.hxx>
 #include <javaedit.hxx>
 #include <label.hxx>
 #include <mailmergewizard.hxx>

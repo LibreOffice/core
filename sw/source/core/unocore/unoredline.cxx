@@ -37,6 +37,7 @@
 #include <unoport.hxx>
 #include <unoredline.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 

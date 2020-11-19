@@ -23,8 +23,6 @@
 #include <o3tl/any.hxx>
 #include <tools/svlibrary.h>
 #include <sot/storage.hxx>
-#include <doc.hxx>
-#include <docary.hxx>
 #include <shellio.hxx>
 #include <fltini.hxx>
 #include <init.hxx>

@@ -38,7 +38,6 @@
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/memberids.h>
-#include <hints.hxx>
 #include <swtypes.hxx>
 #include <shellres.hxx>
 #include <viewsh.hxx>

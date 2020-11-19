@@ -21,7 +21,6 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
-#include <xmloff/namespacemap.hxx>
 #include <fmtcol.hxx>
 #include <hints.hxx>
 #include <doc.hxx>
@@ -50,7 +49,6 @@
 #include "xmlimp.hxx"
 #include <cellatr.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <xmloff/attrlist.hxx>
 #include <ccoll.hxx>
 
 #include <memory>

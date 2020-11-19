@@ -26,6 +26,7 @@
 #include <txtfrm.hxx>
 #include <swundo.hxx>
 #include <numrule.hxx>
+#include <osl/diagnose.h>
 
 SwPamRanges::SwPamRanges( const SwPaM& rRing )
 {

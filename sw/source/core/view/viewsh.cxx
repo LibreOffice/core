@@ -72,7 +72,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/svdpagv.hxx>
 #include <comphelper/lok.hxx>

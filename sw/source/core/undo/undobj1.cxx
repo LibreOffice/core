@@ -32,7 +32,6 @@
 #include <rolbck.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <docary.hxx>
 #include <rootfrm.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>

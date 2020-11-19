@@ -19,21 +19,17 @@
 
 #include "WrapPropertyPanel.hxx"
 
-#include <cmdid.h>
+#include <editeng/editids.hrc>
 #include <svx/spacinglistbox.hxx>
 #include <svx/svdtrans.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svl/eitem.hxx>
-#include <vcl/commandinfoprovider.hxx>
-#include <vcl/settings.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <hintids.hxx>
 #include <strings.hrc>
 #include <uitool.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <comphelper/lok.hxx>
 
 namespace sw::sidebar {
 

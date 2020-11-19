@@ -11,7 +11,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>

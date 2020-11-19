@@ -20,7 +20,6 @@
 #include <sal/config.h>
 #include <config_features.h>
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <swdll.hxx>
 #include <docsh.hxx>

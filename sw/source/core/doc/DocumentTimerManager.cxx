@@ -26,7 +26,6 @@
 #include <viewsh.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
-#include <set>
 #include <fldupde.hxx>
 #include <sfx2/progress.hxx>
 #include <viewopt.hxx>

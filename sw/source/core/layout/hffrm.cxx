@@ -32,6 +32,7 @@
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <ndindex.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 static SwTwips lcl_GetFrameMinHeight(const SwLayoutFrame & rFrame)

@@ -31,7 +31,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 
 #define IS_MOBILE_PHONE (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())
 

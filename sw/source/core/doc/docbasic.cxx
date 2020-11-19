@@ -28,7 +28,6 @@
 #include <fmtinfmt.hxx>
 #include <fmturl.hxx>
 #include <frmatr.hxx>
-#include <docary.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <swevent.hxx>

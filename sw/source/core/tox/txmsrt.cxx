@@ -18,6 +18,7 @@
  */
 
 #include <unotools/charclass.hxx>
+#include <osl/diagnose.h>
 #include <txtfld.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>

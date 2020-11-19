@@ -29,8 +29,10 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <fltshell.hxx>
+#include <swtypes.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <memory>
 #include <vector>

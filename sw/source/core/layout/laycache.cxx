@@ -24,7 +24,6 @@
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <docstat.hxx>
-#include <docary.hxx>
 #include <fmtpdsc.hxx>
 #include <laycache.hxx>
 #include "layhelp.hxx"
@@ -49,7 +48,6 @@
 #include <frameformats.hxx>
 
 #include <limits>
-#include <set>
 
 using namespace ::com::sun::star;
 

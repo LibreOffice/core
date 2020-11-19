@@ -81,7 +81,6 @@
 #include <fmtinfmt.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <fmtornt.hxx>
-#include <docary.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>

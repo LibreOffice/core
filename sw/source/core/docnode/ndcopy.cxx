@@ -24,7 +24,6 @@
 #include <ndtxt.hxx>
 #include <swtblfmt.hxx>
 #include <cellatr.hxx>
-#include <docary.hxx>
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
 #include <ndindex.hxx>

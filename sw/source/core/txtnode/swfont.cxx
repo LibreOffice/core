@@ -23,7 +23,6 @@
 #include <vcl/outdev.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/wrlmitem.hxx>
-#include <editeng/blinkitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/langitem.hxx>

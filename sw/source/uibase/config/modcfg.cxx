@@ -26,7 +26,6 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
-#include <tools/mapunit.hxx>
 #include <tools/globname.hxx>
 #include <tools/UnitConversion.hxx>
 #include <itabenum.hxx>

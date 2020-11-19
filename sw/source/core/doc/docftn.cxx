@@ -25,7 +25,6 @@
 #include <pagedesc.hxx>
 #include <charfmt.hxx>
 #include <UndoAttribute.hxx>
-#include <hints.hxx>
 #include <rolbck.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>

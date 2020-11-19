@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWTABLEREP_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWTABLEREP_HXX
 
-#include <memory>
 #include <swdllapi.h>
 #include <swtypes.hxx>
 

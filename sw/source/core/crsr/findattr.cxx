@@ -22,6 +22,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/searchopt.hxx>
+#include <osl/diagnose.h>
 #include <unotools/syslocale.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>

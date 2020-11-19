@@ -21,6 +21,7 @@
 #include <prevwpage.hxx>
 
 #include <algorithm>
+#include <osl/diagnose.h>
 #include <tools/fract.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>

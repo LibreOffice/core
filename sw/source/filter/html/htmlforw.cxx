@@ -48,7 +48,6 @@
 #include <editeng/crossedoutitem.hxx>
 #include <docsh.hxx>
 #include <fmtanchr.hxx>
-#include <docary.hxx>
 #include <viewsh.hxx>
 #include <pam.hxx>
 #include <doc.hxx>

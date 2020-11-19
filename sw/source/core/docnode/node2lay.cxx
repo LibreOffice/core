@@ -28,6 +28,7 @@
 #include <frmtool.hxx>
 #include <section.hxx>
 #include <node2lay.hxx>
+#include <osl/diagnose.h>
 
 /**
  * The SwNode2LayImpl class does the actual work, the SwNode2Layout class is

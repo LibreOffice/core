@@ -36,7 +36,6 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/autokernitem.hxx>
-#include <editeng/blinkitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/charscaleitem.hxx>

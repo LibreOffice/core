@@ -22,8 +22,8 @@
 #include <hintids.hxx>
 
 #include <comphelper/string.hxx>
+#include <osl/diagnose.h>
 #include <unotools/charclass.hxx>
-#include <unotools/transliterationwrapper.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
@@ -50,8 +50,6 @@
 #include <authfld.hxx>
 #include <txtinet.hxx>
 #include <fmtcntnt.hxx>
-
-#include <calbck.hxx>
 
 using namespace ::com::sun::star::uno;
 
