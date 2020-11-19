@@ -648,8 +648,6 @@ using HTML_ColorEntry = TokenEntry<sal_uInt32>;
 // Flag: color table has already been sorted
 static bool bSortColorKeyWords = false;
 
-#define HTML_NO_COLOR 0xffffffffUL
-
 // Color names are not exported (source:
 // "http://www.uio.no/~mnbjerke/colors_w.html")
 // "http://www.infi.net/wwwimages/colorindex.html" seem to be buggy.
@@ -807,7 +805,7 @@ sal_uInt32 GetHTMLColor( const OUString& rName )
 
     OUString aLowerCase(rName.toAsciiLowerCase());
 
-    return search<sal_uInt32>( aHTMLColorNameTab, aLowerCase, HTML_NO_COLOR);
+    return search<sal_uInt32>( aHTMLColorNameTab, aLowerCase, SAL_MAX_UINT32);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
