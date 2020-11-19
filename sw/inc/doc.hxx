@@ -43,6 +43,7 @@
 #include <atomic>
 #include <memory>
 #include <set>
+#include <tuple>
 #include <unordered_map>
 #include <vector>
 
@@ -139,6 +140,7 @@ enum class RndStdIds;
 namespace sw::mark { class MarkManager; }
 namespace sw {
     enum class RedlineMode;
+    enum class FieldmarkMode;
     class MetaFieldManager;
     class UndoManager;
     class IShellCursorSupplier;
@@ -1326,7 +1328,7 @@ public:
 
     // insert section (the ODF kind of section, not the nodesarray kind)
     SwSection * InsertSwSection(SwPaM const& rRange, SwSectionData &,
-            std::pair<SwTOXBase const*, sw::RedlineMode> const* pTOXBase,
+            std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode> const* pTOXBase,
             SfxItemSet const*const pAttr, bool const bUpdate = true);
     static sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
                                 const SwNode** ppSttNd = nullptr );
