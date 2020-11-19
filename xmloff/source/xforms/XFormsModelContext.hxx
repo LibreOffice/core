@@ -38,9 +38,6 @@ class XFormsModelContext : public TokenContext
     css::uno::Reference<css::xforms::XModel2> mxModel;
 
 public:
-    XFormsModelContext( SvXMLImport& rImport,
-                        sal_uInt16 nPrfx,
-                        const OUString& rLName );
     XFormsModelContext( SvXMLImport& rImport );
 
     // implement SvXMLImportContext & TokenContext methods:
@@ -53,10 +50,8 @@ protected:
         const OUString& rValue ) override;
 
     virtual SvXMLImportContext* HandleChild(
-        sal_uInt16 nToken,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+        sal_Int32 nElementToken,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
 
 #endif

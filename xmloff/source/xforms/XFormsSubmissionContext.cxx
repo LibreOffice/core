@@ -63,10 +63,8 @@ const struct SvXMLTokenMapEntry aAttributeMap[] =
 
 XFormsSubmissionContext::XFormsSubmissionContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     const Reference<XModel2>& xModel ) :
-        TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
+        TokenContext( rImport, aAttributeMap ),
         mxSubmission()
 {
     // register submission with model
@@ -150,10 +148,8 @@ void XFormsSubmissionContext::HandleAttribute( sal_uInt16 nToken,
 
 /** will be called for each child element */
 SvXMLImportContext* XFormsSubmissionContext::HandleChild(
-    sal_uInt16,
-    sal_uInt16,
-    const OUString&,
-    const Reference<XAttributeList>& )
+    sal_Int32,
+    const Reference<css::xml::sax::XFastAttributeList>& )
 {
     OSL_FAIL( "no children supported" );
     return nullptr;

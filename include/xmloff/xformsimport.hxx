@@ -36,10 +36,6 @@ namespace com::sun::star {
 
 /** create import context for xforms:model element. */
 XMLOFF_DLLPUBLIC SvXMLImportContext* createXFormsModelContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName );
-XMLOFF_DLLPUBLIC SvXMLImportContext* createXFormsModelContext(
     SvXMLImport& rImport );
 
 /** perform the actual binding of an XForms-binding with the suitable control

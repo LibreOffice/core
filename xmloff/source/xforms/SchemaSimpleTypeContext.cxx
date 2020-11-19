@@ -25,11 +25,12 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmlimp.hxx>
 
 #include <osl/diagnose.h>
 
 using com::sun::star::uno::Reference;
-using com::sun::star::xml::sax::XAttributeList;
+using com::sun::star::xml::sax::XFastAttributeList;
 using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
 
@@ -40,18 +41,10 @@ const SvXMLTokenMapEntry aAttributes[] =
     XML_TOKEN_MAP_END
 };
 
-const SvXMLTokenMapEntry aChildren[] =
-{
-    TOKEN_MAP_ENTRY( XSD, RESTRICTION ),
-    XML_TOKEN_MAP_END
-};
-
 SchemaSimpleTypeContext::SchemaSimpleTypeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     const Reference<XDataTypeRepository>& rRepository ) :
-        TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
+        TokenContext( rImport, aAttributes ),
         mxRepository( rRepository )
 {
 }
@@ -67,16 +60,13 @@ void SchemaSimpleTypeContext::HandleAttribute(
 }
 
 SvXMLImportContext* SchemaSimpleTypeContext::HandleChild(
-    sal_uInt16 nToken,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& )
+    sal_Int32 nElementToken,
+    const Reference<XFastAttributeList>& )
 {
-    switch( nToken )
+    switch( nElementToken )
     {
-    case XML_RESTRICTION:
+    case XML_ELEMENT(XSD, XML_RESTRICTION):
         return new SchemaRestrictionContext( GetImport(),
-                                                 nPrefix, rLocalName,
                                                  mxRepository, msTypeName );
         break;
     }

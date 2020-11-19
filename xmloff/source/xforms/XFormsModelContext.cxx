@@ -51,26 +51,8 @@ const SvXMLTokenMapEntry aAttributes[] =
     XML_TOKEN_MAP_END
 };
 
-const SvXMLTokenMapEntry aChildren[] =
-{
-    TOKEN_MAP_ENTRY( XFORMS, INSTANCE ),
-    TOKEN_MAP_ENTRY( XFORMS, BIND ),
-    TOKEN_MAP_ENTRY( XFORMS, SUBMISSION ),
-    TOKEN_MAP_ENTRY( XSD,    SCHEMA ),
-    XML_TOKEN_MAP_END
-};
-
-
-XFormsModelContext::XFormsModelContext( SvXMLImport& rImport,
-                                        sal_uInt16 nPrefix,
-                                        const OUString& rLocalName ) :
-    TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
-    mxModel( xforms_createXFormsModel() )
-{
-}
-
 XFormsModelContext::XFormsModelContext( SvXMLImport& rImport ) :
-    TokenContext( rImport, aAttributes, aChildren ),
+    TokenContext( rImport, aAttributes ),
     mxModel( xforms_createXFormsModel() )
 {
 }
@@ -94,30 +76,24 @@ void XFormsModelContext::HandleAttribute(
 }
 
 SvXMLImportContext* XFormsModelContext::HandleChild(
-    sal_uInt16 nToken,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& )
+    sal_Int32 nElementToken,
+    const Reference<css::xml::sax::XFastAttributeList>& )
 {
     SvXMLImportContext* pContext = nullptr;
 
-    switch( nToken )
+    switch( nElementToken )
     {
-    case XML_INSTANCE:
-        pContext = new XFormsInstanceContext( GetImport(), nPrefix, rLocalName,
-                                              mxModel );
+    case XML_ELEMENT(XFORMS, XML_INSTANCE):
+        pContext = new XFormsInstanceContext( GetImport(), mxModel );
         break;
-    case XML_BIND:
-        pContext = new XFormsBindContext( GetImport(), nPrefix, rLocalName,
-                                          mxModel );
+    case XML_ELEMENT(XFORMS, XML_BIND):
+        pContext = new XFormsBindContext( GetImport(), mxModel );
         break;
-    case XML_SUBMISSION:
-        pContext = new XFormsSubmissionContext( GetImport(), nPrefix,
-                                                rLocalName, mxModel );
+    case XML_ELEMENT(XFORMS, XML_SUBMISSION):
+        pContext = new XFormsSubmissionContext( GetImport(), mxModel );
         break;
-    case XML_SCHEMA:
-        pContext = new SchemaContext(
-            GetImport(), nPrefix, rLocalName, mxModel->getDataTypeRepository() );
+    case XML_ELEMENT(XSD, XML_SCHEMA):
+        pContext = new SchemaContext( GetImport(), mxModel->getDataTypeRepository() );
         break;
     default:
         OSL_FAIL( "Boooo!" );

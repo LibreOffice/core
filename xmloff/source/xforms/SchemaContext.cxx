@@ -25,11 +25,12 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmlimp.hxx>
 
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 
 using com::sun::star::uno::Reference;
-using com::sun::star::xml::sax::XAttributeList;
+using com::sun::star::xml::sax::XFastAttributeList;
 using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
 
@@ -39,18 +40,10 @@ const SvXMLTokenMapEntry aAttributes[] =
     XML_TOKEN_MAP_END
 };
 
-const SvXMLTokenMapEntry aChildren[] =
-{
-    TOKEN_MAP_ENTRY( XSD, SIMPLETYPE ),
-    XML_TOKEN_MAP_END
-};
-
 SchemaContext::SchemaContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     const Reference<XDataTypeRepository>& rRepository ) :
-        TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
+        TokenContext( rImport, aAttributes ),
         mxRepository( rRepository )
 {
 }
@@ -62,14 +55,11 @@ void SchemaContext::HandleAttribute(
 }
 
 SvXMLImportContext* SchemaContext::HandleChild(
-    sal_uInt16 nToken,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& )
+    sal_Int32 nElementToken,
+    const Reference<XFastAttributeList>& )
 {
-    if ( nToken == XML_SIMPLETYPE )
-        return new SchemaSimpleTypeContext( GetImport(), nPrefix, rLocalName,
-                                       mxRepository );
+    if ( nElementToken == XML_ELEMENT(XSD, XML_SIMPLETYPE) )
+        return new SchemaSimpleTypeContext( GetImport(), mxRepository );
     return nullptr;
 }
 
