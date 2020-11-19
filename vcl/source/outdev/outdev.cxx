@@ -117,11 +117,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     maMapRes.mnMapScNumY            = 1;
     maMapRes.mnMapScDenomX          = 1;
     maMapRes.mnMapScDenomY          = 1;
-    // struct ImplThresholdRes
-    maThresRes.mnThresLogToPixX     = 0;
-    maThresRes.mnThresLogToPixY     = 0;
-    maThresRes.mnThresPixToLogX     = 0;
-    maThresRes.mnThresPixToLogY     = 0;
 
     // struct ImplOutDevData- see #i82615#
     mpOutDevData.reset(new ImplOutDevData);
