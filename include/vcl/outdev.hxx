@@ -353,7 +353,6 @@ private:
     DrawModeFlags                   mnDrawMode;
     ComplexTextLayoutFlags           mnTextLayoutMode;
     ImplMapRes                      maMapRes;
-    ImplThresholdRes                maThresRes;
     const OutDevType                meOutDevType;
     OutDevViewType                  meOutDevViewType;
     vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)

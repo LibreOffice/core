@@ -30,14 +30,6 @@ struct ImplMapRes
     tools::Long                mnMapScDenomY;      // Scaling factor - denominator in Y direction
 };
 
-struct ImplThresholdRes
-{
-    tools::Long                mnThresLogToPixX;   // Thresholds for calculation
-    tools::Long                mnThresLogToPixY;   // with BigInts
-    tools::Long                mnThresPixToLogX;   // ""
-    tools::Long                mnThresPixToLogY;   // ""
-};
-
 #endif // INCLUDED_VCL_OUTDEVMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
