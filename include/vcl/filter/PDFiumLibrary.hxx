@@ -230,6 +230,20 @@ public:
     bool hasTransparency();
 };
 
+/// Represents one digital signature, as exposed by PDFium.
+class VCL_DLLPUBLIC PDFiumSignature final
+{
+private:
+    FPDF_SIGNATURE mpSignature;
+    PDFiumSignature(const PDFiumSignature&) = delete;
+    PDFiumSignature& operator=(const PDFiumSignature&) = delete;
+
+public:
+    PDFiumSignature(FPDF_SIGNATURE pSignature);
+
+    FPDF_SIGNATURE getPointer() { return mpSignature; }
+};
+
 class VCL_DLLPUBLIC PDFiumDocument final
 {
 private:
@@ -251,7 +265,7 @@ public:
     bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion);
 
     std::unique_ptr<PDFiumPage> openPage(int nIndex);
-    FPDF_SIGNATURE getSignature(int nIndex);
+    std::unique_ptr<PDFiumSignature> getSignature(int nIndex);
     std::vector<unsigned int> getTrailerEnds();
 };
 
