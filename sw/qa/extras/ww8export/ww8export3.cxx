@@ -79,7 +79,7 @@ DECLARE_WW8EXPORT_TEST(testTdf138345_paraCharHighlight, "tdf138345_paraCharHighl
 
     xRun.set(getRun(getParagraph(9), 2), uno::UNO_QUERY_THROW);
     // Character style formatting must not contain a highlight setting at all.
-    //CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharBackColor"));
 }
 

@@ -731,6 +731,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137683_charHighlightTests, "tdf137683_charHighli
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf138345_charStyleHighlight, "tdf138345_charStyleHighlight.docx")
+{
+    // MS Word ignores the w:highlight setting in character styles. So shall we.
+    // Without the fix, there would be an orange or yellow background on some words.
+    const uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 2, "orange background"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharBackColor"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
