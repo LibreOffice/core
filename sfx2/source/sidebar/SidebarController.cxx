@@ -252,6 +252,8 @@ void SidebarController::disposeDecks()
 
 void SAL_CALL SidebarController::disposing()
 {
+    SolarMutexGuard aSolarMutexGuard;
+
     mpCloseIndicator.disposeAndClear();
 
     maFocusManager.Clear();
@@ -307,6 +309,8 @@ void SAL_CALL SidebarController::disposing()
 
 void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
 {
+    SolarMutexGuard aSolarMutexGuard;
+
     // Update to the requested new context asynchronously to avoid
     // subtle errors caused by SFX2 which in rare cases can not
     // properly handle a synchronous update.
@@ -318,7 +322,9 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
     if (maRequestedContext != maCurrentContext)
     {
         mxCurrentController.set(rEvent.Source, css::uno::UNO_QUERY);
-        maContextChangeUpdate.RequestCall();
+        maContextChangeUpdate.RequestCall(); // async call, not a prob
+                                             // calling with held
+                                             // solarmutex
         // TODO: this call is redundant but mandatory for unit test to update context on document loading
         UpdateConfigurations();
     }
@@ -326,16 +332,24 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
 
 void SAL_CALL SidebarController::disposing (const css::lang::EventObject& )
 {
+    SolarMutexGuard aSolarMutexGuard;
+
     dispose();
 }
 
 void SAL_CALL SidebarController::propertyChange (const css::beans::PropertyChangeEvent& )
 {
-    maPropertyChangeForwarder.RequestCall();
+    SolarMutexGuard aSolarMutexGuard;
+
+    maPropertyChangeForwarder.RequestCall(); // async call, not a prob
+                                             // to call with held
+                                             // solarmutex
 }
 
 void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEvent& rEvent)
 {
+    SolarMutexGuard aSolarMutexGuard;
+
     bool bIsReadWrite (true);
     if (rEvent.IsEnabled)
         rEvent.State >>= bIsReadWrite;
@@ -349,12 +363,15 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
             SwitchToDefaultDeck();
 
         mnRequestedForceFlags |= SwitchFlag_ForceSwitch;
-        maContextChangeUpdate.RequestCall();
+        maContextChangeUpdate.RequestCall(); // async call, ok to call
+                                             // with held solarmutex
     }
 }
 
 void SAL_CALL SidebarController::requestLayout()
 {
+    SolarMutexGuard aSolarMutexGuard;
+
     sal_Int32 nMinimalWidth = 0;
     if (mpCurrentDeck && !mpCurrentDeck->isDisposed())
     {

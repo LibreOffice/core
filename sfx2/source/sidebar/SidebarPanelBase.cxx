@@ -78,6 +78,8 @@ SidebarPanelBase::~SidebarPanelBase()
 
 void SAL_CALL SidebarPanelBase::disposing()
 {
+    SolarMutexGuard aGuard;
+
     mpControl.disposeAndClear();
 
     if (mxFrame.is())
@@ -94,6 +96,8 @@ void SAL_CALL SidebarPanelBase::disposing()
 void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
     const ui::ContextChangeEventObject& rEvent)
 {
+    SolarMutexGuard aGuard;
+
     IContextChangeReceiver* pContextChangeReceiver
         = dynamic_cast<IContextChangeReceiver*>(mpControl.get());
     if (pContextChangeReceiver != nullptr)
@@ -108,6 +112,8 @@ void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
 void SAL_CALL SidebarPanelBase::disposing (
     const css::lang::EventObject&)
 {
+    SolarMutexGuard aGuard;
+
     mxFrame = nullptr;
     mpControl = nullptr;
 }
@@ -141,6 +147,8 @@ Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessibl
 
 Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow()
 {
+    SolarMutexGuard aGuard;
+
     if (mpControl != nullptr)
         return Reference<awt::XWindow>(
             mpControl->GetComponentInterface(),
@@ -151,6 +159,8 @@ Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow()
 
 ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWidth)
 {
+    SolarMutexGuard aGuard;
+
     if (maLayoutSize.Minimum >= 0)
         return maLayoutSize;
     else
@@ -176,6 +186,8 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
 
 sal_Int32 SAL_CALL SidebarPanelBase::getMinimalWidth ()
 {
+    SolarMutexGuard aGuard;
+
     if (isLayoutEnabled(mpControl))
     {
         // widget layout-based sidebar
@@ -187,6 +199,8 @@ sal_Int32 SAL_CALL SidebarPanelBase::getMinimalWidth ()
 
 void SAL_CALL SidebarPanelBase::updateModel(const css::uno::Reference<css::frame::XModel>& xModel)
 {
+    SolarMutexGuard aGuard;
+
     SidebarModelUpdate* pModelUpdate = dynamic_cast<SidebarModelUpdate*>(mpControl.get());
     if (!pModelUpdate)
         return;
