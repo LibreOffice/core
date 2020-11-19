@@ -28,6 +28,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <fmtclds.hxx>
 #include <viewimp.hxx>
 #include <sortedobjs.hxx>
@@ -452,6 +453,13 @@ void SwTextFrame::RegisterToNode(SwTextNode & rNode, bool const isForceNodeAsFir
         assert(m_pMergedPara->pFirstNode->GetIndex() + 1 == rNode.GetIndex());
         assert(rNode.GetDoc().getIDocumentRedlineAccess().GetRedlinePos(
             *m_pMergedPara->pFirstNode, RedlineType::Delete) == SwRedlineTable::npos);
+        assert(std::find_if(
+            rNode.GetDoc().getIDocumentMarkAccess()->getFieldmarksBegin(),
+            rNode.GetDoc().getIDocumentMarkAccess()->getFieldmarksEnd(),
+            [this](::sw::mark::IMark const*const pMark) {
+                return pMark->GetMarkStart().nNode == *m_pMergedPara->pFirstNode
+                    && pMark->GetMarkEnd().nNode != *m_pMergedPara->pFirstNode;
+            }) == rNode.GetDoc().getIDocumentMarkAccess()->getFieldmarksEnd());
     }
     assert(&rNode != GetDep());
     assert(!m_pMergedPara
