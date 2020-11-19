@@ -44,7 +44,7 @@ public:
     // implement TokenContext methods:
 
 protected:
-    virtual void HandleAttribute( sal_uInt16 nToken,
+    virtual void HandleAttribute( sal_Int32 nAttributeToken,
                                   const OUString& rValue ) override;
 
     virtual SvXMLImportContext* HandleChild(

@@ -35,21 +35,16 @@ using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
 
 
-const SvXMLTokenMapEntry aAttributes[] =
-{
-    XML_TOKEN_MAP_END
-};
-
 SchemaContext::SchemaContext(
     SvXMLImport& rImport,
     const Reference<XDataTypeRepository>& rRepository ) :
-        TokenContext( rImport, aAttributes ),
+        TokenContext( rImport ),
         mxRepository( rRepository )
 {
 }
 
 void SchemaContext::HandleAttribute(
-    sal_uInt16,
+    sal_Int32,
     const OUString& )
 {
 }

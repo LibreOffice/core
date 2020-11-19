@@ -53,17 +53,11 @@ using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
 
 
-const SvXMLTokenMapEntry aAttributes[] =
-{
-    TOKEN_MAP_ENTRY( NONE, BASE ),
-    XML_TOKEN_MAP_END
-};
-
 SchemaRestrictionContext::SchemaRestrictionContext(
     SvXMLImport& rImport,
     Reference<css::xforms::XDataTypeRepository> const & rRepository,
     const OUString& sTypeName ) :
-        TokenContext( rImport, aAttributes ),
+        TokenContext( rImport ),
         mxRepository( rRepository ),
         msTypeName( sTypeName ),
         msBaseName()
@@ -97,10 +91,10 @@ void SchemaRestrictionContext::CreateDataType()
 }
 
 void SchemaRestrictionContext::HandleAttribute(
-    sal_uInt16 nToken,
+    sal_Int32 nAttributeToken,
     const OUString& rValue )
 {
-    if( nToken == XML_BASE )
+    if( nAttributeToken == XML_ELEMENT(NONE, XML_BASE) )
     {
         msBaseName = rValue;
     }
