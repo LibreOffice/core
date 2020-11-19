@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10a7e733_573ec6ca",
+        "filename": "sc/uiconfig/scalc/ui/pivottablelayoutdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-11-19T00:37:03Z",
+      "side": 1,
+      "message": "Please remove this translatable string in a follow-up patch for 7-0 ASAP. You need to respect the string freeze.",
+      "revId": "6d9cc23a057ceccae1398e0c89596c5599404666",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
