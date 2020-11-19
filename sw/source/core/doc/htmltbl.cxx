@@ -39,6 +39,7 @@
 #include <htmltbl.hxx>
 #include <calbck.hxx>
 #include <o3tl/numeric.hxx>
+#include <osl/diagnose.h>
 #ifdef DBG_UTIL
 #include <tblrwcl.hxx>
 #endif

@@ -19,6 +19,7 @@
 
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <node.hxx>
 #include <editsh.hxx>
 #include <viscrs.hxx>

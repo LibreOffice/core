@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_ATTRIBUTEOUTPUTBASE_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_ATTRIBUTEOUTPUTBASE_HXX
 
-#include "fields.hxx"
 #include "WW8TableInfo.hxx"
 #include "wrtww8.hxx"
 
@@ -32,7 +31,6 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <swtypes.hxx>
 #include <fldbas.hxx>
-#include <IDocumentRedlineAccess.hxx>
 #include <unotools/saveopt.hxx>
 
 class Point;

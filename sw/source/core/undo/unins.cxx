@@ -21,7 +21,6 @@
 
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
-#include <sot/storage.hxx>
 #include <editeng/keepitem.hxx>
 #include <svx/svdobj.hxx>
 

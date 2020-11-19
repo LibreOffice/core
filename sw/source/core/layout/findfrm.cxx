@@ -36,6 +36,7 @@
 #include <calbck.hxx>
 #include <viewopt.hxx>
 #include <ndtxt.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 /// Searches the first ContentFrame in BodyText below the page.

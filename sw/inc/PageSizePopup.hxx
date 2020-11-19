@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_PAGESIZEPOPUP_HXX
 
 #include <svtools/popupwindowcontroller.hxx>
-#include "swdllapi.h"
 
 class PageSizePopup final : public svt::PopupWindowController
 {

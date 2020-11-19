@@ -35,6 +35,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>

@@ -33,8 +33,7 @@
 #include <ftnfrm.hxx>
 #include <fmtornt.hxx>
 #include <textboxhelper.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdpage.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

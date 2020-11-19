@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbafind.hxx"
-#include <vbahelper/vbahelper.hxx>
 #include "vbareplacement.hxx"
 #include <ooo/vba/word/WdFindWrap.hpp>
 #include <ooo/vba/word/WdReplace.hpp>

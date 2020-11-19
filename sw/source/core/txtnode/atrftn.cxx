@@ -40,6 +40,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <unotextrange.hxx>
+#include <osl/diagnose.h>
 
 namespace {
     /// Get a sorted list of the used footnote reference numbers.

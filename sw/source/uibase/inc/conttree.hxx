@@ -20,6 +20,9 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONTTREE_HXX
 
 #include <svl/lstner.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/weld.hxx>
 #include <ndarr.hxx>
 #include "swcont.hxx"
 

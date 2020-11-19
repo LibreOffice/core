@@ -29,6 +29,7 @@
 #include <cntfrm.hxx>
 #include <tabfrm.hxx>
 #include <rootfrm.hxx>
+#include <osl/diagnose.h>
 
 SwSection const*
 SwEditShell::InsertSection(

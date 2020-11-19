@@ -103,7 +103,6 @@
 #include <svx/xfillit0.hxx>
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <editeng/langitem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;

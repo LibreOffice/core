@@ -32,9 +32,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <sal/log.hxx>
 #include <frmfmt.hxx>
-#include <fmtpdsc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <comphelper/propertysequence.hxx>
 
 using namespace com::sun::star;
 using namespace oox;

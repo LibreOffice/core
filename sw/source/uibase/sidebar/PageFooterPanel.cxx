@@ -22,6 +22,8 @@
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/svdtrans.hxx>
+#include <svx/spacinglistbox.hxx>
+#include <svx/samecontentlistbox.hxx>
 #include "PageFooterPanel.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>

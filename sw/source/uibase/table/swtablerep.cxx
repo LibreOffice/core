@@ -18,7 +18,6 @@
  */
 
 #include <tabcol.hxx>
-#include "tablepg.hxx"
 
 #include <swtablerep.hxx>
 #include <memory>

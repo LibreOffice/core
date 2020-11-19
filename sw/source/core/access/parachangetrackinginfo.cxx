@@ -21,6 +21,7 @@
 
 #include <wrong.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
+#include <osl/diagnose.h>
 
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>

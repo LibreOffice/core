@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/text/ChapterFormat.hpp>
+#include <osl/diagnose.h>
 #include <doc.hxx>
 #include <frame.hxx>
 #include <rootfrm.hxx>

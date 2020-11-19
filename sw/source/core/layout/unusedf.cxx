@@ -20,6 +20,7 @@
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
 #include <flyfrm.hxx>
+#include <osl/diagnose.h>
 
 void SwFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {

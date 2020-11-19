@@ -19,6 +19,7 @@
 
 #include <UndoRedline.hxx>
 #include <hintids.hxx>
+#include <osl/diagnose.h>
 #include <unotools/charclass.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>

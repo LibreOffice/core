@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <o3tl/any.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/classids.hxx>

@@ -20,13 +20,13 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <tools/urlobj.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <pam.hxx>
-#include <docary.hxx>
 #include <editsh.hxx>
 #include <frmfmt.hxx>
 #include <rootfrm.hxx>

@@ -58,7 +58,6 @@
 #include <layouter.hxx>
 #include <calbck.hxx>
 #include <DocumentSettingManager.hxx>
-#include <docary.hxx>
 #include <sal/log.hxx>
 #include <frmatr.hxx>
 #include <frmtool.hxx>

@@ -72,7 +72,6 @@
 #include <bodyfrm.hxx>
 #include <FrameControlsManager.hxx>
 #include <ndtxt.hxx>
-#include <officecfg/Office/Compatibility.hxx>
 
 using namespace ::com::sun::star;
 

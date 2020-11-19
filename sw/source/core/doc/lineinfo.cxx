@@ -25,7 +25,7 @@
 #include <charfmt.hxx>
 #include <poolfmt.hxx>
 #include <rootfrm.hxx>
-#include <set>
+#include <osl/diagnose.h>
 
 void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
 {

@@ -24,18 +24,19 @@
 #include <tools/solar.h>
 #include <tools/gen.hxx>
 #include <editeng/editdata.hxx>
+#include <filter/msfilter/ww8fields.hxx>
 
 #include <shellio.hxx>
 
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"
-#include "fields.hxx"
 #include "types.hxx"
 #include "writerhelper.hxx"
 #include <msfilter.hxx>
 #include <expfld.hxx>
 #include "WW8TableInfo.hxx"
 #include <calbck.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 #include <vcl/graph.hxx>
 

@@ -31,7 +31,6 @@
 #include <txtatr.hxx>
 #include <fmtruby.hxx>
 #include <charfmt.hxx>
-#include <hints.hxx>
 #include <unoevent.hxx>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>

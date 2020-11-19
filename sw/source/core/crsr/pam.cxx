@@ -44,6 +44,7 @@
 #include <DocumentSettingManager.hxx>
 #include <hints.hxx>
 #include <txatbase.hxx>
+#include <osl/diagnose.h>
 #include <xmloff/odffields.hxx>
 #include <rtl/ustrbuf.hxx>
 

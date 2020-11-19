@@ -99,8 +99,6 @@
 #include <xmloff/odffields.hxx>
 #include <bookmrk.hxx>
 #include <linguistic/misc.hxx>
-#include <editeng/splwrap.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;

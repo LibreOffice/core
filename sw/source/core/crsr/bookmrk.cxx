@@ -27,6 +27,7 @@
 #include <pam.hxx>
 #include <swserv.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/viewsh.hxx>
 #include <UndoBookmark.hxx>
 #include <unobookmark.hxx>
 #include <xmloff/odffields.hxx>
@@ -41,11 +42,8 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <comphelper/lok.hxx>
 #include <txtfrm.hxx>
-#include <view.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <wrtsh.hxx>
 #include <rtl/strbuf.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <strings.hrc>
 
 using namespace ::sw::mark;

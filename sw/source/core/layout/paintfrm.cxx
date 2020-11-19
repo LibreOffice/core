@@ -89,7 +89,6 @@
 #include <bitmaps.hlst>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
-#include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>

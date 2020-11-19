@@ -55,7 +55,6 @@
 #include <ndole.hxx>
 #include <swregion.hxx>
 #include <poolfmt.hxx>
-#include <mdiexp.hxx>
 #include <strings.hrc>
 #include <accessibilityoptions.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>

@@ -24,6 +24,7 @@
 #include <UndoTable.hxx>
 #include <hintids.hxx>
 #include <o3tl/any.hxx>
+#include <osl/diagnose.h>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/langitem.hxx>
@@ -57,7 +58,6 @@
 #include <SwStyleNameMapper.hxx>
 #include <unofldmid.h>
 #include <numrule.hxx>
-#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

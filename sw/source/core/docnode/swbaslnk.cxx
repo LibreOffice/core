@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <vcl/svapp.hxx>
 
-#include <sfx2/docfile.hxx>
+#include <osl/diagnose.h>
 #include <sfx2/lnkbase.hxx>
-#include <sfx2/objsh.hxx>
 #include <editeng/boxitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/event.hxx>
@@ -32,8 +30,8 @@
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
-#include <DocumentLinksAdministrationManager.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <swevent.hxx>
@@ -41,10 +39,7 @@
 #include <swserv.hxx>
 #include <viewsh.hxx>
 #include <ndgrf.hxx>
-#include <hints.hxx>
-#include <cntfrm.hxx>
 #include <htmltbl.hxx>
-#include <calbck.hxx>
 #include <dialoghelp.hxx>
 #include <memory>
 

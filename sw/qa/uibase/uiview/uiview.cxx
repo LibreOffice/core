@@ -9,20 +9,16 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <comphelper/propertyvalue.hxx>
 
-#include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/frame/XDispatchHelper.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
-
-#include <unotxdoc.hxx>
-#include <docsh.hxx>
-#include <wrtsh.hxx>
-#include <swdtflvr.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/uibase/uiview/data/";
 

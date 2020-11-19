@@ -31,6 +31,7 @@
 
 #include <strings.hrc>
 #include <hintids.hxx>
+#include <osl/diagnose.h>
 #include <unotools/linguprops.hxx>
 #include <linguistic/lngprops.hxx>
 #include <editeng/langitem.hxx>

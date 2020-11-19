@@ -36,6 +36,7 @@
 #include <ndindex.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <IDocumentSettingAccess.hxx>
 

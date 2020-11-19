@@ -27,7 +27,6 @@
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <o3tl/any.hxx>
-#include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/sdtaitm.hxx>

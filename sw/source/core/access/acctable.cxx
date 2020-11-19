@@ -36,7 +36,6 @@
 #include <swtable.hxx>
 #include <crsrsh.hxx>
 #include <viscrs.hxx>
-#include <hints.hxx>
 #include "accfrmobjslist.hxx"
 #include <accmap.hxx>
 #include <strings.hrc>

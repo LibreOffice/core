@@ -18,7 +18,6 @@
  */
 #include <PageColumnPopup.hxx>
 #include "PageColumnControl.hxx"
-#include <svl/intitem.hxx>
 #include <vcl/toolbox.hxx>
 
 PageColumnPopup::PageColumnPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)

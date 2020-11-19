@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_INC_WRTSWTBL_HXX
 
 #include <tools/color.hxx>
+#include <tools/long.hxx>
 #include <o3tl/sorted_vector.hxx>
 
 #include <swdllapi.h>

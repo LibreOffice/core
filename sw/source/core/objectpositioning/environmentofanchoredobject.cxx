@@ -20,6 +20,7 @@
 #include <environmentofanchoredobject.hxx>
 #include <frame.hxx>
 #include <pagefrm.hxx>
+#include <osl/diagnose.h>
 
 using namespace objectpositioning;
 

@@ -35,7 +35,6 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/nhypitem.hxx>
-#include <editeng/blinkitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charscaleitem.hxx>

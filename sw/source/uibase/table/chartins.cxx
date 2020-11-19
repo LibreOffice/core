@@ -19,7 +19,6 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 
 #include <swmodule.hxx>
@@ -47,7 +46,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

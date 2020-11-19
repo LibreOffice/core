@@ -90,7 +90,6 @@
 #include <frmatr.hxx>
 #include <swtable.hxx>
 #include <fmtinfmt.hxx>
-#include <txtfld.hxx>
 #include <txtftn.hxx>
 #include <poolfmt.hxx>
 #include <doc.hxx>

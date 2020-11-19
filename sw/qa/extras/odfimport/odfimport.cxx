@@ -30,7 +30,6 @@
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/view/XControlAccess.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>

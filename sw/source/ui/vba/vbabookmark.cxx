@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbabookmark.hxx"
-#include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
