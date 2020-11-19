@@ -3981,7 +3981,7 @@ void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::
             xProps->getPropertyValue("Model"), uno::UNO_QUERY );
 
         if( xColumnRowRange.is() )
-            mxTableImportContext = xTableImport->CreateTableContext( GetPrefix(), GetLocalName(), xColumnRowRange );
+            mxTableImportContext = xTableImport->CreateTableContext( xColumnRowRange );
 
         if( mxTableImportContext.is() )
             mxTableImportContext->StartElement( xAttrList );
