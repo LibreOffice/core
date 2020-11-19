@@ -1602,6 +1602,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     case NS_ooxml::LN_EG_RPrBase_highlight:
         {
+            // MS Word completely ignores character highlighting in character styles.
+            if ( IsStyleSheetImport() )
+            {
+                const StyleSheetEntryPtr pCurrStyle = GetStyleSheetTable()->GetCurrentEntry();
+                if ( pCurrStyle && pCurrStyle->nStyleTypeCode == STYLE_TYPE_CHAR )
+                    break;
+            }
+
             // OOXML import uses an ID
             if( IsOOXMLImport() )
             {

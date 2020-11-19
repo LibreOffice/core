@@ -4115,6 +4115,10 @@ void SwWW8ImplReader::Read_TextBackColor(sal_uInt16, const sal_uInt8* pData, sho
 
 void SwWW8ImplReader::Read_CharHighlight(sal_uInt16, const sal_uInt8* pData, short nLen)
 {
+    // MS Word completely ignores character highlighting in character styles.
+    if ( m_pCurrentColl && m_pCurrentColl->Which() == RES_CHRFMT )
+        return;
+
     if (nLen < 1)
     {
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_HIGHLIGHT );
