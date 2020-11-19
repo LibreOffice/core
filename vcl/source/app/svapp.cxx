@@ -73,6 +73,7 @@
 #include <osl/process.h>
 
 #include <cassert>
+#include <limits>
 #include <string_view>
 #include <utility>
 #include <thread>
@@ -1259,7 +1260,7 @@ tools::Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
 }
 
 namespace {
-unsigned long calcDistSquare( const Point& i_rPoint, const tools::Rectangle& i_rRect )
+tools::Long calcDistSquare( const Point& i_rPoint, const tools::Rectangle& i_rRect )
 {
     const Point aRectCenter( (i_rRect.Left() + i_rRect.Right())/2,
                        (i_rRect.Top() + i_rRect.Bottom())/ 2 );
@@ -1301,11 +1302,11 @@ unsigned int Application::GetBestScreen( const tools::Rectangle& i_rRect )
     // finally the screen which center is nearest to the rect is the best
     const Point aCenter( (i_rRect.Left() + i_rRect.Right())/2,
                          (i_rRect.Top() + i_rRect.Bottom())/2 );
-    unsigned long nDist = ULONG_MAX;
+    tools::Long nDist = std::numeric_limits<tools::Long>::max();
     for( unsigned int i = 0; i < nScreens; i++ )
     {
         const tools::Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
-        const unsigned long nCurDist( calcDistSquare( aCenter, aCurScreenRect ) );
+        const tools::Long nCurDist( calcDistSquare( aCenter, aCurScreenRect ) );
         if( nCurDist < nDist )
         {
             nBestMatchScreen = i;
