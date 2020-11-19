@@ -31,7 +31,6 @@
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
 #include <editeng/paravertalignitem.hxx>
-#include <sal/log.hxx>
 
 namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 

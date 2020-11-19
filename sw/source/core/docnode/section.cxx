@@ -21,6 +21,7 @@
 #include <libxml/xmlwriter.h>
 #include <stdlib.h>
 #include <hintids.hxx>
+#include <osl/diagnose.h>
 #include <sot/exchange.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
@@ -53,7 +54,6 @@
 #include <poolfmt.hxx>
 #include <swbaslnk.hxx>
 #include <mvsave.hxx>
-#include <fmtftntx.hxx>
 #include <ftnidx.hxx>
 #include <doctxm.hxx>
 #include <fmteiro.hxx>

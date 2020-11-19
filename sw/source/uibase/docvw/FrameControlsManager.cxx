@@ -8,6 +8,7 @@
  */
 
 #include <edtwin.hxx>
+#include <cntfrm.hxx>
 #include <FrameControlsManager.hxx>
 #include <HeaderFooterWin.hxx>
 #include <PageBreakWin.hxx>
@@ -17,7 +18,6 @@
 #include <viewopt.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <txtfrm.hxx>
 #include <OutlineContentVisibilityWin.hxx>
 #include <ndtxt.hxx>
 #include <IDocumentOutlineNodes.hxx>

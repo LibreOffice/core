@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <tools/long.hxx>
 #include <memory>
 #include <set>
 #include <vector>

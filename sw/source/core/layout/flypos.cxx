@@ -19,7 +19,6 @@
 
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <docary.hxx>
 #include <fmtanchr.hxx>
 #include <ndindex.hxx>
 #include <frameformats.hxx>

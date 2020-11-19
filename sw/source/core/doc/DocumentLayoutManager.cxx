@@ -35,7 +35,6 @@
 #include <fmtflcnt.hxx>
 #include <ndtxt.hxx>
 #include <unoframe.hxx>
-#include <docary.hxx>
 #include <textboxhelper.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>

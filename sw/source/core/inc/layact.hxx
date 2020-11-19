@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <vcl/inputtypes.hxx>
 #include <vcl/TaskStopwatch.hxx>
 #include <tools/color.hxx>
 

@@ -42,7 +42,6 @@
 #include <ftnidx.hxx>
 #include <ftninfo.hxx>
 #include <fmtftn.hxx>
-#include <fmtmeta.hxx>
 #include <charfmt.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>

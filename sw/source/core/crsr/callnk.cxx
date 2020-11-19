@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <osl/diagnose.h>
 #include <fmtcntnt.hxx>
 #include <txatbase.hxx>
 #include "callnk.hxx"

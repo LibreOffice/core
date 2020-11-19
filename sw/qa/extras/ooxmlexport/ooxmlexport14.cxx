@@ -30,16 +30,11 @@
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <tools/lineend.hxx>
 #include <unotools/mediadescriptor.hxx>
-
-#include <IDocumentSettingAccess.hxx>
-#include <editsh.hxx>
-#include <frmatr.hxx>
 
 using namespace com::sun::star;
 

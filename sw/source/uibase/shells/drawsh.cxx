@@ -21,7 +21,6 @@
 #include <svx/svdotext.hxx>
 #include <svl/whiter.hxx>
 #include <svx/fontwork.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
@@ -33,8 +32,6 @@
 #include <textboxhelper.hxx>
 #include <wview.hxx>
 #include <swmodule.hxx>
-#include <doc.hxx>
-#include <docsh.hxx>
 
 #include <svx/svdoashp.hxx>
 #include <svx/xfillit0.hxx>

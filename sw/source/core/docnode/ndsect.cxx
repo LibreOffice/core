@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <osl/diagnose.h>
 #include <sfx2/linkmgr.hxx>
 #include <svl/itemiter.hxx>
 #include <sal/log.hxx>
@@ -28,6 +29,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <rootfrm.hxx>
 #include <pam.hxx>
@@ -52,7 +54,6 @@
 #include <strings.hrc>
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
-#include <hints.hxx>
 #include <memory>
 #include "ndsect.hxx"
 #include <tools/datetimeutils.hxx>

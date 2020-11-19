@@ -21,10 +21,8 @@
 #include <vcl/graph.hxx>
 
 #include <sal/log.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <editeng/brushitem.hxx>
 #include <xmloff/xmluconv.hxx>

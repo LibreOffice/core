@@ -9,7 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -23,9 +23,7 @@
 #include <editeng/unolingu.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
-#include <fmtcntnt.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>

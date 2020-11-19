@@ -22,6 +22,7 @@
 #include <libxml/xmlwriter.h>
 
 #include <hintids.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/charclass.hxx>
 #include <frmfmt.hxx>

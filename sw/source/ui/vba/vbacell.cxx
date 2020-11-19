@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbacell.hxx"
-#include <vbahelper/vbahelper.hxx>
 #include "vbatablehelper.hxx"
 #include "vbarow.hxx"
 

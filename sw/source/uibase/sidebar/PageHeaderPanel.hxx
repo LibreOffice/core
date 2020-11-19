@@ -31,8 +31,6 @@
 #include <svl/intitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
-#include <svx/spacinglistbox.hxx>
-#include <svx/samecontentlistbox.hxx>
 
 namespace sw::sidebar {
 

@@ -67,7 +67,6 @@
 #include <pagedesc.hxx>
 #include <grfatr.hxx>
 #include <ndnotxt.hxx>
-#include <docary.hxx>
 #include <node2lay.hxx>
 #include <fmtclbl.hxx>
 #include <swunohelper.hxx>

@@ -25,7 +25,6 @@
 #include <hints.hxx>
 #include <node.hxx>
 #include <rolbck.hxx>
-#include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <calbck.hxx>
 #include <swtable.hxx>

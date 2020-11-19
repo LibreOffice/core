@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustring.hxx>
 #include "xmlitmap.hxx"
 #include <xmloff/xmlimp.hxx>
 

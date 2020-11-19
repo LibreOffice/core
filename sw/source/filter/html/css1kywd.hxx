@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_CSS1KYWD_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_CSS1KYWD_HXX
 
-#include <sal/types.h>
-
 extern const char* const sCSS_mimetype;
 
 extern const char* const sCSS1_page;

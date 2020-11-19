@@ -22,7 +22,6 @@
 #include <editeng/paperinf.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <svtools/unitconv.hxx>
 
 #include <cmdid.h>

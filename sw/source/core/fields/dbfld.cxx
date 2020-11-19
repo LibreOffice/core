@@ -29,11 +29,9 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
 #include <fldbas.hxx>
-#include <ndtxt.hxx>
 #include <dbfld.hxx>
 #include <dbmgr.hxx>
 #include <unofldmid.h>
-#include <calbck.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;

@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_PAGECOLUMNPOPUP_HXX
 
 #include <svtools/popupwindowcontroller.hxx>
-#include "swdllapi.h"
 
 class PageColumnPopup final : public svt::PopupWindowController
 {

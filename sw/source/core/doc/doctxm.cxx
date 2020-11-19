@@ -59,7 +59,6 @@
 #include <node2lay.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <breakit.hxx>
-#include <scriptinfo.hxx>
 #include <calbck.hxx>
 #include <ToxTextGenerator.hxx>
 #include <ToxTabStopTokenHandler.hxx>
@@ -68,6 +67,7 @@
 #include <tools/globname.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 
 #include <memory>
 

@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NAVICONT_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 class SwDocShell;
 class TransferDataContainer;

@@ -33,7 +33,6 @@
 #include <svl/undo.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
-#include <unotools/saveopt.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>

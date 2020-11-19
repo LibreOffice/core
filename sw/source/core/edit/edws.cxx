@@ -20,6 +20,7 @@
 #include <editsh.hxx>
 
 #include <officecfg/Office/Common.hxx>
+#include <osl/diagnose.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/window.hxx>
 
@@ -27,7 +28,6 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
 #include <pam.hxx>
-#include <docary.hxx>
 #include <acorrect.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>

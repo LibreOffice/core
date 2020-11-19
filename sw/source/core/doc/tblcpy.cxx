@@ -36,7 +36,6 @@
 #include <poolfmt.hxx>
 #include <cellatr.hxx>
 #include <mvsave.hxx>
-#include <docary.hxx>
 #include <fmtanchr.hxx>
 #include <hints.hxx>
 #include <UndoTable.hxx>

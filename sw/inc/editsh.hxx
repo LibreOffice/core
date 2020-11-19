@@ -31,7 +31,6 @@
 
 #include <memory>
 #include <vector>
-#include <set>
 #include <o3tl/sorted_vector.hxx>
 
 namespace tools { class PolyPolygon; }

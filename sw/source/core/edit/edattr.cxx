@@ -23,6 +23,7 @@
 #include <editeng/lrspitem.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <osl/diagnose.h>
 #include <txatbase.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>

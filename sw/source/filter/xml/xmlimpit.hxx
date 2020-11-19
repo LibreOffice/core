@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLIMPIT_HXX
 #define INCLUDED_SW_SOURCE_FILTER_XML_XMLIMPIT_HXX
 
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include "xmlitmap.hxx"
 
 class SvXMLUnitConverter;

@@ -26,7 +26,6 @@
 #include <strings.hrc>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <boost/property_tree/json_parser.hpp>
 
 #define CONTROL_BORDER_WIDTH 1
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <IDocumentRedlineAccess.hxx>
 #include <docary.hxx>
 #include <redline.hxx>
 #include <doc.hxx>

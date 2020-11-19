@@ -27,6 +27,7 @@
 #include <hints.hxx>
 #include <swcache.hxx>
 #include <frmatr.hxx>
+#include <osl/diagnose.h>
 #include <svl/grabbagitem.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/unobrushitemhelper.hxx>

@@ -25,7 +25,6 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
 #include <svx/svdomedia.hxx>
-#include <sfx2/filedlghelper.hxx>
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>

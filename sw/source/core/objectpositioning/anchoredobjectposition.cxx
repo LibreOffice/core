@@ -30,7 +30,6 @@
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <fmtornt.hxx>
-#include <fmtfsize.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -38,7 +37,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include <textboxhelper.hxx>
 #include <fmtsrnd.hxx>
-#include <svx/sdtagitm.hxx>
 
 using namespace ::com::sun::star;
 using namespace objectpositioning;

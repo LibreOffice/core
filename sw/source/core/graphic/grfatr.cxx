@@ -19,7 +19,7 @@
 
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <o3tl/any.hxx>
-#include <vcl/GraphicObject.hxx>
+#include <vcl/GraphicAttributes.hxx>
 #include <grfatr.hxx>
 #include <swunohelper.hxx>
 #include <osl/diagnose.h>

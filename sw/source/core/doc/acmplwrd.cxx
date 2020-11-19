@@ -19,7 +19,6 @@
 
 #include <tools/urlobj.hxx>
 #include <hintids.hxx>
-#include <hints.hxx>
 #include <acmplwrd.hxx>
 #include <doc.hxx>
 #include <pagedesc.hxx>
