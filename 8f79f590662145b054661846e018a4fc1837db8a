@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a3d8bbbc_b98f9c9d",
+        "filename": "vcl/source/outdev/map.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-19T08:43:41Z",
+      "side": 0,
+      "message": "I would keep them separate (to keep the history of each of their occurrences more obvious), but maybe work a bit more aggressively towards getting rid of them :)",
+      "parentUuid": "e6e5fc73_6d6901c1",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 17
+      },
+      "revId": "8f79f590662145b054661846e018a4fc1837db8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09534751_ab84fad0",
         "filename": "vcl/source/outdev/map.cxx",
         "patchSetId": 1
