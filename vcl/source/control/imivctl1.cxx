@@ -2731,7 +2731,7 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::FindEntryPredecessor( SvxIconCho
     Point aNewPos( aCenterRect.Center() );
     sal_uLong nGrid = GetPredecessorGrid( aNewPos );
     size_t nCount = maEntries.size();
-    if( nGrid == ULONG_MAX )
+    if( nGrid == GRID_NOT_FOUND )
         return nullptr;
     if( nGrid >= nCount )
         nGrid = nCount - 1;
@@ -2764,7 +2764,7 @@ sal_uLong SvxIconChoiceCtrl_Impl::GetPredecessorGrid( const Point& rPos) const
     if( rPos.X() < nMiddle )
     {
         if( !nGrid )
-            nGrid = ULONG_MAX;
+            nGrid = GRID_NOT_FOUND;
         else
             nGrid--;
     }
