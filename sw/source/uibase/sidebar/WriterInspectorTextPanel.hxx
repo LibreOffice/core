@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <sfx2/weldutils.hxx>
 #include <svx/sidebar/InspectorTextPanel.hxx>
 
 class SwWrtShell;

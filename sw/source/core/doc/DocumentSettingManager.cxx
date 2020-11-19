@@ -26,6 +26,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
+#include <osl/diagnose.h>
 #include <svx/svdmodel.hxx>
 #include <svl/asiancfg.hxx>
 #include <unotools/compatibility.hxx>

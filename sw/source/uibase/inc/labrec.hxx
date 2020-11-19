@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_LABREC_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 #include <memory>
 #include <vector>

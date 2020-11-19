@@ -27,14 +27,12 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 
-#include <editeng/brushitem.hxx>
 #include <editeng/memberids.h>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 
 #include <hintids.hxx>
 #include <unomid.h>
-#include "xmlbrshi.hxx"
 #include "xmlimp.hxx"
 #include "xmlitmap.hxx"
 #include "xmlimpit.hxx"

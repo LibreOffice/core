@@ -30,6 +30,7 @@
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 #include <redline.hxx>

@@ -21,7 +21,7 @@
 #include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/GraphicObject.hxx>
+#include <vcl/GraphicAttributes.hxx>
 
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>

@@ -22,10 +22,10 @@
 #include <i18nlangtag/lang.h>
 #include "swdllapi.h"
 #include "calbck.hxx"
-#include "ndindex.hxx"
 
 #include <cppuhelper/weakref.hxx>
 #include <editeng/svxenum.hxx>
+#include <tools/solar.h>
 #include <vector>
 #include <climits>
 

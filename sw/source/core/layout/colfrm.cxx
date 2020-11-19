@@ -18,6 +18,7 @@
  */
 
 #include <editeng/ulspitem.hxx>
+#include <osl/diagnose.h>
 #include <fmtclds.hxx>
 #include <fmtfordr.hxx>
 #include <frmfmt.hxx>

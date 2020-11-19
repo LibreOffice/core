@@ -51,7 +51,6 @@
 #include <charatr.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
-#include <docary.hxx>
 #include <docsh.hxx>
 #include <pam.hxx>
 #include <doc.hxx>

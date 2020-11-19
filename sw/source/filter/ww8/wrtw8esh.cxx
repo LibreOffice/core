@@ -61,7 +61,6 @@
 #include <drawdoc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <docary.hxx>
 #include <pam.hxx>
 #include <swrect.hxx>
 #include <ndgrf.hxx>

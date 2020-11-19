@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbarevision.hxx"
-#include <vbahelper/vbahelper.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

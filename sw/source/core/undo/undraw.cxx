@@ -26,7 +26,6 @@
 #include <svx/svdview.hxx>
 
 #include <hintids.hxx>
-#include <hints.hxx>
 #include <fmtanchr.hxx>
 #include <fmtflcnt.hxx>
 #include <txtflcnt.hxx>
@@ -34,7 +33,6 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <docary.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>

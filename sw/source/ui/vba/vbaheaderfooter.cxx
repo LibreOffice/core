@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbaheaderfooter.hxx"
-#include <vbahelper/vbahelper.hxx>
 #include <ooo/vba/word/WdHeaderFooterIndex.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XText.hpp>

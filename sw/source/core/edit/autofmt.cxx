@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 
+#include <osl/diagnose.h>
 #include <unotools/charclass.hxx>
 
 #include <editeng/boxitem.hxx>

@@ -24,7 +24,6 @@
 #include <vector>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-#include <svl/poolitem.hxx>
 #include <svl/listener.hxx>
 
 #include "acccontext.hxx"

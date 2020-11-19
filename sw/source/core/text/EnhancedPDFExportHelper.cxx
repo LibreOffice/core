@@ -54,7 +54,6 @@
 #include <reffld.hxx>
 #include <doc.hxx>
 #include <IDocumentOutlineNodes.hxx>
-#include <docary.hxx>
 #include <mdiexp.hxx>
 #include <docufld.hxx>
 #include <ftnidx.hxx>

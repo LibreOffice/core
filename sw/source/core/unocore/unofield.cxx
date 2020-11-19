@@ -32,7 +32,6 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
-#include <hints.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <ndtxt.hxx>

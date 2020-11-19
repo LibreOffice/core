@@ -18,6 +18,7 @@
  */
 
 #include <tools/fract.hxx>
+#include <osl/diagnose.h>
 #include <viewsh.hxx>
 #include <pagefrm.hxx>
 #include <viewimp.hxx>

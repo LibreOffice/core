@@ -59,6 +59,7 @@
 #include <unocrsrhelper.hxx>
 #include <docary.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <redline.hxx>
 #include <swundo.hxx>

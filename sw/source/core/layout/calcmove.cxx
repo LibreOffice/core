@@ -28,6 +28,7 @@
 #include <ndtxt.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/keepitem.hxx>
+#include <osl/diagnose.h>
 #include <svx/sdtaitm.hxx>
 
 #include <fmtfsize.hxx>

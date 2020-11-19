@@ -29,8 +29,6 @@
 #include <o3tl/enumrange.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/help.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/weldutils.hxx>
 #include <sot/formats.hxx>
 #include <uiitems.hxx>

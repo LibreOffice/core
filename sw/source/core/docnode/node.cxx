@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <editeng/protitem.hxx>
+#include <osl/diagnose.h>
 #include <tools/gen.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -28,7 +29,6 @@
 #include <txtftn.hxx>
 #include <ftnfrm.hxx>
 #include <doc.hxx>
-#include <docary.hxx>
 #include <node.hxx>
 #include <ndindex.hxx>
 #include <numrule.hxx>

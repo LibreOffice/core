@@ -28,6 +28,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <node.hxx>
 #include <pam.hxx>

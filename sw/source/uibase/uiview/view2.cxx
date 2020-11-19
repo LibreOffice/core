@@ -80,6 +80,7 @@
 #include <doc.hxx>
 #include <printdata.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -125,7 +126,6 @@
 #include <docstat.hxx>
 #include <wordcountdialog.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
-#include <sfx2/sidebar/SidebarController.hxx>
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>

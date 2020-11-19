@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbalistgallery.hxx"
-#include <vbahelper/vbahelper.hxx>
 #include "vbalisttemplates.hxx"
 
 using namespace ::ooo::vba;

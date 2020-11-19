@@ -21,7 +21,6 @@
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <docary.hxx>
 #include <ndindex.hxx>
 #include <swtable.hxx>
 #include <viewsh.hxx>
@@ -30,6 +29,7 @@
 #include <tblsel.hxx>
 #include <frameformats.hxx>
 #include <unochart.hxx>
+#include <osl/diagnose.h>
 
 void SwTable::UpdateCharts() const
 {

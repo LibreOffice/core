@@ -25,6 +25,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
+#include <svx/itemwin.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include "PageStylesPanel.hxx"
 #include <sfx2/dispatch.hxx>

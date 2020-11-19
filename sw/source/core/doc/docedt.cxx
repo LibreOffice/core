@@ -43,6 +43,7 @@
 #include <vector>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;

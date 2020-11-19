@@ -46,6 +46,7 @@
 
 #include <EnhancedPDFExportHelper.hxx>
 
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 
 #define REDLINE_DISTANCE 567/4

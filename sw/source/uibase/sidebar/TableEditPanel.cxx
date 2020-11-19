@@ -15,7 +15,6 @@
 #include <svl/intitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/unitconv.hxx>
 #include <svx/dlgctrl.hxx>
 #include <swmodule.hxx>
 #include <usrpref.hxx>

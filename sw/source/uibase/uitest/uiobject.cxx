@@ -18,7 +18,6 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <AnnotationWin.hxx>
-#include <comphelper/string.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 

@@ -77,7 +77,6 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/sdmetitm.hxx>
-#include <svx/sdooitm.hxx>
 #include <svx/sdprcitm.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>

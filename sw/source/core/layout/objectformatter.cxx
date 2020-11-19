@@ -27,6 +27,7 @@
 #include <txtfrm.hxx>
 #include <layact.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <osl/diagnose.h>
 
 #include <vector>
 

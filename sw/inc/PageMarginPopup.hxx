@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_PAGEMARGINPOPUP_HXX
 
 #include <svtools/popupwindowcontroller.hxx>
-#include "swdllapi.h"
 
 class PageMarginPopup final : public svt::PopupWindowController
 {

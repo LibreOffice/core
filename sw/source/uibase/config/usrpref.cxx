@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cstring>
 #include <osl/diagnose.h>
 #include <o3tl/any.hxx>
 #include <tools/UnitConversion.hxx>

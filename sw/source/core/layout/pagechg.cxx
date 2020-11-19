@@ -35,7 +35,6 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
-#include <docary.hxx>
 #include <frameformats.hxx>
 
 #include <viewimp.hxx>

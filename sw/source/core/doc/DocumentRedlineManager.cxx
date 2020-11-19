@@ -37,6 +37,7 @@
 #include <authfld.hxx>
 #include <strings.hrc>
 #include <swmodule.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

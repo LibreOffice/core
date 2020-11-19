@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <hintids.hxx>
-#include <editeng/lrspitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
@@ -54,7 +53,6 @@
 #include <hints.hxx>
 #include <txtfrm.hxx>
 #include <frameformats.hxx>
-#include <docary.hxx>
 #include <sortedobjs.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

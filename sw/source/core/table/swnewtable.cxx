@@ -31,13 +31,9 @@
 #include <fmtfsize.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <IDocumentMarkAccess.hxx>
-#include <IDocumentRedlineAccess.hxx>
-#include <ftnidx.hxx>
 #include <cstdlib>
 #include <vector>
 #include <set>
@@ -48,6 +44,7 @@
 #include <swtblfmt.hxx>
 #include <calbck.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();

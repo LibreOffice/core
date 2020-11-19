@@ -29,7 +29,6 @@
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <wrtsh.hxx>
-#include <edtdd.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>

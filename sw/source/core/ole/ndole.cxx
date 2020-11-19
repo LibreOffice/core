@@ -55,6 +55,7 @@
 #include <deque>
 #include <libxml/xmlwriter.h>
 #include <sfx2/xmldump.hxx>
+#include <osl/diagnose.h>
 
 using namespace utl;
 using namespace com::sun::star::uno;

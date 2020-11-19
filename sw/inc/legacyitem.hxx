@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_LEGACYITEM_HXX
 #define INCLUDED_SW_LEGACYITEM_HXX
 
-#include "swdllapi.h"
+#include <sal/types.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // // sw

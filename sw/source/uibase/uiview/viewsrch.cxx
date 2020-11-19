@@ -35,7 +35,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
-#include <edtwin.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <workctrl.hxx>

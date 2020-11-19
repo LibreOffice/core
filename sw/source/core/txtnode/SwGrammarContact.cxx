@@ -18,7 +18,6 @@
  */
 
 #include <vcl/timer.hxx>
-#include <hints.hxx>
 #include <IGrammarContact.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>

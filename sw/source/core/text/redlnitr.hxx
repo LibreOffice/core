@@ -19,8 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_REDLNITR_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_REDLNITR_HXX
 
-#include <IDocumentRedlineAccess.hxx>
-
+#include <docary.hxx>
 #include <swfont.hxx>
 
 #include <vcl/commandevent.hxx>

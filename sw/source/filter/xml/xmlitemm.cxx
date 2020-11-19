@@ -18,7 +18,6 @@
  */
 
 #include <editeng/memberids.h>
-#include <editeng/xmlcnitm.hxx>
 #include <hintids.hxx>
 #include <svx/unomid.hxx>
 #include <xmloff/xmlnamespace.hxx>

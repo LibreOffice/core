@@ -27,11 +27,9 @@
 #include <sfx2/docfilt.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/help.hxx>
 #include <sot/filelist.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/settings.hxx>
 
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>

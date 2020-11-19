@@ -52,6 +52,7 @@
 #include <vcl/svapp.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>

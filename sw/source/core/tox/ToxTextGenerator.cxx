@@ -39,6 +39,7 @@
 #include <txatbase.hxx>
 #include <modeltoviewhelper.hxx>
 
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <svl/itemiter.hxx>
 

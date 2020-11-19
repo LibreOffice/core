@@ -22,7 +22,6 @@
 #include "swdllapi.h"
 #include "fldbas.hxx"
 #include "cellfml.hxx"
-#include <set>
 #include <memory>
 #include <vector>
 #include <tools/solar.h>

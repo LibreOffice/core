@@ -23,7 +23,6 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <svl/itempool.hxx>
 #include <tools/lineend.hxx>
@@ -55,6 +54,7 @@
 #include <swmodule.hxx>
 #include <xmloff/odffields.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>

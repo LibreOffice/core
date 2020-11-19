@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <osl/diagnose.h>
 #include <tools/poly.hxx>
 #include <svl/stritem.hxx>
 #include <svx/contdlg.hxx>

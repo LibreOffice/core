@@ -28,7 +28,6 @@
 #include <editeng/outliner.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <editeng/colritem.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>

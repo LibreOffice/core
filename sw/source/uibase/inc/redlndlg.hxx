@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_REDLNDLG_HXX
 #include <swdllapi.h>
 #include "chldwrap.hxx"
+#include <docary.hxx>
 #include <redline.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/basedlgs.hxx>

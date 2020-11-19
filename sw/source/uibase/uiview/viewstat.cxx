@@ -52,7 +52,6 @@
 
 #include <cmdid.h>
 #include <IDocumentRedlineAccess.hxx>
-#include <IDocumentState.hxx>
 
 #include <doc.hxx>
 
