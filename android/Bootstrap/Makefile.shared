@@ -72,6 +72,7 @@ $(SODEST)/nss-libraries :
 	$(foreach lib,$(NSSLIBS),$(STRIP) -o $(SODEST)/lib$(lib).so $(INSTDIR)/$(LIBO_LIB_FOLDER)/lib$(lib).so;)
 
 $(SODEST)/libc++_shared.so : $(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_APP_ABI)/libc++_shared.so
+	mkdir -p $(SODEST)
 	cp $< $@
 
 link-so: $(SODEST)/liblo-native-code.so $(SODEST)/nss-libraries $(SODEST)/libc++_shared.so
