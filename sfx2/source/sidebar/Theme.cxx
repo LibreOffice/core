@@ -256,6 +256,8 @@ void Theme::UpdateTheme()
 
 void SAL_CALL Theme::disposing()
 {
+    SolarMutexGuard aGuard;
+
     ChangeListeners aListeners;
     aListeners.swap(maChangeListeners);
 
@@ -290,6 +292,8 @@ void SAL_CALL Theme::setPropertyValue (
     const OUString& rsPropertyName,
     const css::uno::Any& rValue)
 {
+    SolarMutexGuard aGuard;
+
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
         throw beans::UnknownPropertyException(rsPropertyName);
@@ -332,6 +336,8 @@ void SAL_CALL Theme::setPropertyValue (
 Any SAL_CALL Theme::getPropertyValue (
     const OUString& rsPropertyName)
 {
+    SolarMutexGuard aGuard;
+
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
         throw beans::UnknownPropertyException(rsPropertyName);
@@ -349,6 +355,8 @@ void SAL_CALL Theme::addPropertyChangeListener(
     const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
 {
+    SolarMutexGuard aGuard;
+
     ThemeItem eItem (AnyItem_);
     if (rsPropertyName.getLength() > 0)
     {
@@ -371,6 +379,8 @@ void SAL_CALL Theme::removePropertyChangeListener(
     const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
 {
+    SolarMutexGuard aGuard;
+
     ThemeItem eItem (AnyItem_);
     if (rsPropertyName.getLength() > 0)
     {
@@ -403,6 +413,8 @@ void SAL_CALL Theme::addVetoableChangeListener(
     const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
 {
+    SolarMutexGuard aGuard;
+
     ThemeItem eItem (AnyItem_);
     if (rsPropertyName.getLength() > 0)
     {
@@ -425,6 +437,8 @@ void SAL_CALL Theme::removeVetoableChangeListener(
     const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
 {
+    SolarMutexGuard aGuard;
+
     ThemeItem eItem (AnyItem_);
     if (rsPropertyName.getLength() > 0)
     {
@@ -454,6 +468,8 @@ void SAL_CALL Theme::removeVetoableChangeListener(
 
 css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
 {
+    SolarMutexGuard aGuard;
+
     ::std::vector<beans::Property> aProperties;
 
     sal_Int32 const nEnd(End_);
@@ -479,6 +495,8 @@ css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
 
 beans::Property SAL_CALL Theme::getPropertyByName (const OUString& rsPropertyName)
 {
+    SolarMutexGuard aGuard;
+
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
         throw beans::UnknownPropertyException(rsPropertyName);
@@ -498,6 +516,8 @@ beans::Property SAL_CALL Theme::getPropertyByName (const OUString& rsPropertyNam
 
 sal_Bool SAL_CALL Theme::hasPropertyByName (const OUString& rsPropertyName)
 {
+    SolarMutexGuard aGuard;
+
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
         return false;
