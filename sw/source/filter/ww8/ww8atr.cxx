@@ -5557,6 +5557,22 @@ void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
     bool bConvertToShading = SvtFilterOptions::Get().IsCharBackground2Shading();
     bool bHasShadingMarker = false;
 
+    // MS Word doesn't support highlight in character styles. Always export those as shading.
+    //MacOS is failing testing when using SwCharFormat, but works with SwFormat which is not para-style
+    if ( !bConvertToShading && GetExport().m_bStyDef )
+    {
+        bConvertToShading = dynamic_cast< const SwCharFormat *>( GetExport().m_pOutFormatNode )
+                            && !dynamic_cast< const SwTextFormatColl *>( GetExport().m_pOutFormatNode );
+#ifdef MACOSX
+        //Yup - got here.  assert (false && "verify that the MAC actually does get here....");
+        assert (!dynamic_cast< const SwCharFormat *>( GetExport().m_pOutFormatNode ) && "Mac doesn't seem to recognize SwCharFormat for character style?");
+        bConvertToShading = dynamic_cast< const SwFormat *>( GetExport().m_pOutFormatNode )
+                            && !dynamic_cast< const SwTextFormatColl *>( GetExport().m_pOutFormatNode );
+#else
+        bConvertToShading = dynamic_cast< const SwCharFormat *>( GetExport().m_pOutFormatNode );
+#endif
+    }
+
     // Check shading marker
     const SfxPoolItem* pItem = GetExport().HasItem(RES_CHRATR_GRABBAG);
     if( pItem )
