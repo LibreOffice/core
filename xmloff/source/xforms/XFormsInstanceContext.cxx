@@ -46,17 +46,10 @@ using com::sun::star::xml::sax::XAttributeList;
 using xmloff::token::XML_SRC;
 using xmloff::token::XML_ID;
 
-const SvXMLTokenMapEntry aAttributes[] =
-{
-    TOKEN_MAP_ENTRY( NONE, SRC ),
-    TOKEN_MAP_ENTRY( NONE, ID ),
-    XML_TOKEN_MAP_END
-};
-
 XFormsInstanceContext::XFormsInstanceContext(
     SvXMLImport& rImport,
     const Reference<XModel2> & xModel ) :
-        TokenContext( rImport, aAttributes ),
+        TokenContext( rImport ),
         mxModel( xModel )
 {
     SAL_WARN_IF( !mxModel.is(), "xmloff", "need model" );
@@ -104,15 +97,15 @@ void XFormsInstanceContext::endFastElement(sal_Int32 )
 
 
 void XFormsInstanceContext::HandleAttribute(
-    sal_uInt16 nToken,
+    sal_Int32 nAttributeToken,
     const OUString& rValue )
 {
-    switch( nToken )
+    switch( nAttributeToken )
     {
-    case XML_SRC:
+    case XML_ELEMENT(NONE, XML_SRC):
         msURL = rValue;
         break;
-    case XML_ID:
+    case XML_ELEMENT(NONE, XML_ID):
         msId = rValue;
         break;
     default:

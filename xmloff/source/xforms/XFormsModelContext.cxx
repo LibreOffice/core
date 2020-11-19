@@ -38,35 +38,27 @@
 #include <com/sun/star/xforms/XModel2.hpp>
 
 
-using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::util::XUpdatable;
 using namespace com::sun::star::uno;
 using namespace xmloff::token;
 
 
-const SvXMLTokenMapEntry aAttributes[] =
-{
-    TOKEN_MAP_ENTRY( NONE, ID ),
-    TOKEN_MAP_ENTRY( NONE, SCHEMA ),
-    XML_TOKEN_MAP_END
-};
-
 XFormsModelContext::XFormsModelContext( SvXMLImport& rImport ) :
-    TokenContext( rImport, aAttributes ),
+    TokenContext( rImport ),
     mxModel( xforms_createXFormsModel() )
 {
 }
 
 void XFormsModelContext::HandleAttribute(
-    sal_uInt16 nToken,
+    sal_Int32 nAttributeToken,
     const OUString& rValue )
 {
-    switch( nToken )
+    switch( nAttributeToken )
     {
-    case XML_ID:
+    case XML_ELEMENT(NONE, XML_ID):
         mxModel->setPropertyValue( "ID", makeAny( rValue ) );
         break;
-    case XML_SCHEMA:
+    case XML_ELEMENT(NONE, XML_SCHEMA):
         GetImport().SetError( XMLERROR_XFORMS_NO_SCHEMA_SUPPORT );
         break;
     default:

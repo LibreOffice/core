@@ -24,34 +24,26 @@
 #include <xmloff/xmltkmap.hxx>
 
 namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
     namespace xml::sax { class XFastAttributeList; }
     namespace uno { template<typename T> class Reference; }
 }
 
 class SvXMLImport;
 
-#define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }
-
-extern const SvXMLTokenMapEntry aEmptyMap[1];
-
 /** handle attributes through an SvXMLTokenMap */
 class TokenContext : public SvXMLImportContext
 {
-protected:
-    const SvXMLTokenMapEntry* mpAttributes;    /// static token map
-
 public:
-    TokenContext( SvXMLImport& rImport,
-                  const SvXMLTokenMapEntry* pAttributes );
+    TokenContext( SvXMLImport& rImport );
 
     // implement SvXMLImportContext methods:
 
     /** call HandleAttribute for each attribute in the token map;
      * create a warning for all others. Classes that wish to override
      * StartElement need to call the parent method. */
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     /** call HandleChild for each child element in the token map;
      * create a warning for all others. Classes that wish to override
@@ -69,7 +61,7 @@ public:
 protected:
     /** will be called for each attribute */
     virtual void HandleAttribute(
-        sal_uInt16 nToken,
+        sal_Int32 nAttributeToken,
         const OUString& rValue ) = 0;
 
     /** will be called for each child element */

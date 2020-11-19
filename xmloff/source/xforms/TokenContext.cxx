@@ -29,56 +29,23 @@
 #include <algorithm>
 
 using com::sun::star::uno::Reference;
-using com::sun::star::xml::sax::XAttributeList;
 
-const SvXMLTokenMapEntry aEmptyMap[1] =
-{
-    XML_TOKEN_MAP_END
-};
-
-TokenContext::TokenContext( SvXMLImport& rImport,
-                            const SvXMLTokenMapEntry* pAttributes )
-    : SvXMLImportContext( rImport ),
-      mpAttributes( pAttributes )
+TokenContext::TokenContext( SvXMLImport& rImport )
+    : SvXMLImportContext( rImport )
 {
 }
 
-void TokenContext::StartElement(
-    const Reference<XAttributeList>& xAttributeList )
+void TokenContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // iterate over attributes
     // - if in map: call HandleAttribute
     // - xmlns:... : ignore
     // - other: warning
-    SAL_WARN_IF( mpAttributes == nullptr, "xmloff", "no token map for attributes" );
-    SvXMLTokenMap aMap( mpAttributes );
 
-    sal_Int16 nCount = xAttributeList->getLength();
-    for( sal_Int16 i = 0; i < nCount; i++ )
-    {
-        // get key/local-name pair from namespace map
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttributeList->getNameByIndex(i), &sLocalName );
-
-        // get token from token map
-        sal_uInt16 nToken = aMap.Get( nPrefix, sLocalName );
-
-        // and the value...
-        const OUString& rValue = xAttributeList->getValueByIndex(i);
-
-        if( nToken != XML_TOK_UNKNOWN )
-        {
-            HandleAttribute( nToken, rValue );
-        }
-        else if( nPrefix != XML_NAMESPACE_XMLNS )
-        {
-            // error handling, for all attribute that are not
-            // namespace declarations
-            GetImport().SetError( XMLERROR_UNKNOWN_ATTRIBUTE,
-                                  sLocalName, rValue);
-        }
-    }
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+        HandleAttribute( aIter.getToken(), aIter.toString() );
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > TokenContext::createFastChildContext(

@@ -44,11 +44,12 @@ public:
 
     // implement SvXMLImportContext & TokenContext methods:
 
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 protected:
-    virtual void HandleAttribute( sal_uInt16 nToken,
+    virtual void HandleAttribute( sal_Int32 nAttributeToken,
                                   const OUString& rValue ) override;
 
     virtual SvXMLImportContext* HandleChild(

@@ -39,24 +39,9 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::container::XNameContainer;
-using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XFastAttributeList;
 using com::sun::star::xforms::XModel2;
 using namespace xmloff::token;
-
-
-const struct SvXMLTokenMapEntry aAttributeMap[] =
-{
-    TOKEN_MAP_ENTRY( NONE, NODESET ),
-    TOKEN_MAP_ENTRY( NONE, ID ),
-    TOKEN_MAP_ENTRY( NONE, READONLY ),
-    TOKEN_MAP_ENTRY( NONE, RELEVANT ),
-    TOKEN_MAP_ENTRY( NONE, REQUIRED ),
-    TOKEN_MAP_ENTRY( NONE, CONSTRAINT ),
-    TOKEN_MAP_ENTRY( NONE, CALCULATE ),
-    TOKEN_MAP_ENTRY( NONE, TYPE ),
-    XML_TOKEN_MAP_END
-};
 
 // helper function; see below
 static void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
@@ -65,7 +50,7 @@ static void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
 XFormsBindContext::XFormsBindContext(
     SvXMLImport& rImport,
     const Reference<XModel2>& xModel ) :
-        TokenContext( rImport, aAttributeMap ),
+        TokenContext( rImport ),
         mxModel( xModel )
 {
     // attach binding to model
@@ -74,10 +59,10 @@ XFormsBindContext::XFormsBindContext(
     mxModel->getBindings()->insert( makeAny( mxBinding ) );
 }
 
-void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
+void XFormsBindContext::HandleAttribute( sal_Int32 nAttributeToken,
                                          const OUString& rValue )
 {
-    switch( nToken )
+    switch( nAttributeToken & TOKEN_MASK )
     {
     case XML_NODESET:
         xforms_setValue( mxBinding, "BindingExpression", rValue );
@@ -112,8 +97,9 @@ void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
     }
 }
 
-void XFormsBindContext::StartElement(
-    const Reference<XAttributeList>& xAttributeList )
+void XFormsBindContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // we need to register the namespaces
     Reference<XNameContainer> xContainer(
@@ -125,7 +111,7 @@ void XFormsBindContext::StartElement(
         lcl_fillNamespaceContainer( GetImport().GetNamespaceMap(), xContainer);
 
     // call super-class for attribute handling
-    TokenContext::StartElement( xAttributeList );
+    TokenContext::startFastElement( nElement, xAttrList );
 }
 
 /** will be called for each child element */

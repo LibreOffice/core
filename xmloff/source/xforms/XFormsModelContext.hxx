@@ -46,7 +46,7 @@ public:
 
 protected:
     virtual void HandleAttribute(
-        sal_uInt16 nToken,
+        sal_Int32 nAttributeToken,
         const OUString& rValue ) override;
 
     virtual SvXMLImportContext* HandleChild(
