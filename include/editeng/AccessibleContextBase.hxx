@@ -250,6 +250,14 @@ public:
     virtual css::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId() override;
 
+    /** Check whether or not the object has been disposed (or is in the
+        state of being disposed).
+
+        @return TRUE, if the object is disposed or in the course
+        of being disposed. Otherwise, FALSE is returned.
+    */
+    bool IsDisposed() const;
+
 protected:
     /** The state set.
     */
@@ -281,14 +289,6 @@ protected:
         @throws css::lang::DisposedException
     */
     void ThrowIfDisposed();
-
-    /** Check whether or not the object has been disposed (or is in the
-        state of being disposed).
-
-        @return TRUE, if the object is disposed or in the course
-        of being disposed. Otherwise, FALSE is returned.
-    */
-    bool IsDisposed() const;
 
     /** sets the role as returned by XaccessibleContext::getAccessibleRole
 
