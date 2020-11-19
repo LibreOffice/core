@@ -3353,11 +3353,9 @@ if test $_os = Darwin; then
 
     AC_MSG_CHECKING([whether to sandbox the application])
 
-    if test -z "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
-        AC_MSG_ERROR([macOS sandboxing requires code signing])
-    elif test -n "$ENABLE_JAVA" -a "$enable_macosx_sandbox" = yes; then
+    if test -n "$ENABLE_JAVA" -a "$enable_macosx_sandbox" = yes; then
         AC_MSG_ERROR([macOS sandboxing (actually App Store rules) disallows use of Java])
-    elif test -n "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
+    elif test "$enable_macosx_sandbox" = yes; then
         ENABLE_MACOSX_SANDBOX=TRUE
         AC_DEFINE(HAVE_FEATURE_MACOSX_SANDBOX)
         AC_MSG_RESULT([yes])
