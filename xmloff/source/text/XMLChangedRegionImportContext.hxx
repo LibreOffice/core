@@ -53,10 +53,7 @@ class XMLChangedRegionImportContext : public SvXMLImportContext
 public:
 
 
-    XMLChangedRegionImportContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName);
+    XMLChangedRegionImportContext(SvXMLImport& rImport);
 
     virtual ~XMLChangedRegionImportContext() override;
 
