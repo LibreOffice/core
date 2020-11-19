@@ -54,6 +54,7 @@ public:
         weld::Builder& rBuilder,
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XController>& rxController,
         bool bSideBar);
 
 private:

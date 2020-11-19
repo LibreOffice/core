@@ -734,7 +734,7 @@ void SidebarController::CreatePanels(const OUString& rDeckId, const Context& rCo
                     {
                         pTitleBar->SetMoreOptionsCommand(
                             rPanelContexDescriptor.msMenuCommand,
-                            mxFrame);
+                            mxFrame, xController);
                     }
                     ++nWriteIndex;
                 }

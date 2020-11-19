@@ -44,6 +44,7 @@ PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
       mxExpander(m_xBuilder->weld_expander("expander")),
       mpPanel(pPanel),
       mxFrame(),
+      msIdent("button"),
       msMoreOptionsCommand()
 {
     mxExpander->set_label(rsTitle);
@@ -80,49 +81,52 @@ PanelTitleBar::~PanelTitleBar()
 
 void PanelTitleBar::dispose()
 {
+    Reference<lang::XComponent> xComponent(mxController, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
+    mxController.clear();
     mpPanel.clear();
     mxExpander.reset();
     TitleBar::dispose();
 }
 
 void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
-                                          const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                          const css::uno::Reference<css::frame::XController>& rxController)
 {
     if (rsCommandName == msMoreOptionsCommand)
         return;
 
-    if (msMoreOptionsCommand.getLength() > 0)
-        mxToolBox->set_item_visible("button", false);
+    if (!msMoreOptionsCommand.isEmpty())
+        mxToolBox->set_item_visible(msIdent, false);
 
     msMoreOptionsCommand = rsCommandName;
     mxFrame = rxFrame;
 
-    if (msMoreOptionsCommand.getLength() <= 0)
+    if (msMoreOptionsCommand.isEmpty())
         return;
 
-    mxToolBox->set_item_visible("button", true);
-    mxToolBox->set_item_icon_name("button", "sfx2/res/symphony/morebutton.png");
-    mxToolBox->set_item_tooltip_text(
-        "button",
-        SfxResId(SFX_STR_SIDEBAR_MORE_OPTIONS));
+    msIdent = msMoreOptionsCommand.toUtf8();
+    mxToolBox->set_item_ident(0, msIdent);
+
+    Reference<lang::XComponent> xComponent(mxController, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
+    mxController =
+        ControllerFactory::CreateToolBoxController(
+            *mxToolBox, *m_xBuilder, msMoreOptionsCommand, rxFrame, rxController, true);
+
+    mxToolBox->set_item_visible(msIdent, true);
+    mxToolBox->set_item_icon_name(msIdent, "sfx2/res/symphony/morebutton.png");
+    mxToolBox->set_item_tooltip_text(msIdent, SfxResId(SFX_STR_SIDEBAR_MORE_OPTIONS));
 }
 
 void PanelTitleBar::HandleToolBoxItemClick()
 {
-    if (msMoreOptionsCommand.getLength() <= 0)
+    if (!mxController)
         return;
-
-    try
-    {
-        const util::URL aURL (Tools::GetURL(msMoreOptionsCommand));
-        Reference<frame::XDispatch> xDispatch (Tools::GetDispatch(mxFrame, aURL));
-        if (xDispatch.is())
-            xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
-    }
-    catch(Exception const &)
-    {
-        DBG_UNHANDLED_EXCEPTION("sfx");
-    }
+    mxController->click();
+    mxController->execute(0);
 }
 
 IMPL_LINK(PanelTitleBar, ExpandHdl, weld::Expander&, rExpander, void)
@@ -134,7 +138,7 @@ IMPL_LINK(PanelTitleBar, ExpandHdl, weld::Expander&, rExpander, void)
 
 void PanelTitleBar::DataChanged (const DataChangedEvent& rEvent)
 {
-    mxToolBox->set_item_icon_name("button", "sfx2/res/symphony/morebutton.png");
+    mxToolBox->set_item_icon_name(msIdent, "sfx2/res/symphony/morebutton.png");
     TitleBar::DataChanged(rEvent);
 }
 
