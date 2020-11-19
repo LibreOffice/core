@@ -2083,30 +2083,25 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     else if (nType == ControlType::Frame && nPart == ControlPart::Border)
     {
         aEditRect = rControlRegion;
-        DrawFrameFlags nStyle = static_cast<DrawFrameFlags>(rValue.getNumericVal() & 0xfff0);
-        if (nStyle & DrawFrameFlags::NoDraw)
-        {
-            GtkBorder padding;
-            gtk_style_context_get_padding(mpFrameInStyle, gtk_style_context_get_state(mpFrameInStyle), &padding);
 
-            GtkBorder border;
-            gtk_style_context_get_border(mpFrameInStyle, gtk_style_context_get_state(mpFrameInStyle), &border);
+        GtkBorder padding;
+        gtk_style_context_get_padding(mpFrameInStyle, gtk_style_context_get_state(mpFrameInStyle), &padding);
 
-            int x1 = aEditRect.Left();
-            int y1 = aEditRect.Top();
-            int x2 = aEditRect.Right();
-            int y2 = aEditRect.Bottom();
+        GtkBorder border;
+        gtk_style_context_get_border(mpFrameInStyle, gtk_style_context_get_state(mpFrameInStyle), &border);
 
-            rNativeBoundingRegion = aEditRect;
-            rNativeContentRegion = tools::Rectangle(x1 + (padding.left + border.left),
-                                             y1 + (padding.top + border.top),
-                                             x2 - (padding.right + border.right),
-                                             y2 - (padding.bottom + border.bottom));
+        int x1 = aEditRect.Left();
+        int y1 = aEditRect.Top();
+        int x2 = aEditRect.Right();
+        int y2 = aEditRect.Bottom();
 
-            return true;
-        }
-        else
-            rNativeContentRegion = rControlRegion;
+        rNativeBoundingRegion = aEditRect;
+        rNativeContentRegion = tools::Rectangle(x1 + (padding.left + border.left),
+                                         y1 + (padding.top + border.top),
+                                         x2 - (padding.right + border.right),
+                                         y2 - (padding.bottom + border.bottom));
+
+        return true;
     }
     else
     {

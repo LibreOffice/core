@@ -901,13 +901,8 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
         {
             if (part == ControlPart::Border)
             {
-                auto nStyle = static_cast<DrawFrameFlags>(val.getNumericVal() & 0xFFF0);
-                if (nStyle & DrawFrameFlags::NoDraw)
-                {
-                    int nFrameWidth
-                        = upscale(pixelMetric(QStyle::PM_DefaultFrameWidth), Round::Ceil);
-                    contentRect.adjust(nFrameWidth, nFrameWidth, -nFrameWidth, -nFrameWidth);
-                }
+                int nFrameWidth = upscale(pixelMetric(QStyle::PM_DefaultFrameWidth), Round::Ceil);
+                contentRect.adjust(nFrameWidth, nFrameWidth, -nFrameWidth, -nFrameWidth);
                 retVal = true;
             }
             break;
