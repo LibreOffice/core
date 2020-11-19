@@ -46,6 +46,7 @@ PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
       mxFrame(),
       msMoreOptionsCommand()
 {
+    SetStyle(GetStyle() & ~WB_TABSTOP);
     mxExpander->set_label(rsTitle);
     mxExpander->connect_expanded(LINK(this, PanelTitleBar, ExpandHdl));
 

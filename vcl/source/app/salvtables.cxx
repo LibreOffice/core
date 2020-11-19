@@ -5812,6 +5812,8 @@ public:
 
     virtual void set_expanded(bool bExpand) override { m_xExpander->set_expanded(bExpand); }
 
+    virtual void grab_focus() override { m_xExpander->get_label_widget()->GrabFocus(); }
+
     virtual ~SalInstanceExpander() override
     {
         m_xExpander->SetExpandedHdl(Link<VclExpander&, void>());

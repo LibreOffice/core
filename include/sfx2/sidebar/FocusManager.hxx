@@ -77,8 +77,6 @@ private:
 
     enum PanelComponent
     {
-        PC_DeckTitle,
-        PC_DeckToolBox,
         PC_PanelTitle,
         PC_PanelToolBox,
         PC_PanelContent,
@@ -111,29 +109,24 @@ private:
     */
     void RemoveWindow(vcl::Window& rWindow);
 
-    void FocusDeckTitle();
-    bool IsDeckTitleVisible() const;
     bool IsPanelTitleVisible(const sal_Int32 nPanelIndex) const;
 
     /** Set the focus to the title bar of the panel or, if the
         title bar is not visible, directly to the panel.
         @param nPanelIndex
             Index of the panel to focus.
-        @param bFallbackToDeckTitle
+        @param bFallbackToMenuButton
             When the panel title bar is not visible then The fallback
-            bias defines whether to focus the deck (true) or the panel
+            bias defines whether to focus the menu button (true) or the panel
             content (false) will be focused instead.
     */
     void FocusPanel(const sal_Int32 nPanelIndex,
-                    const bool bFallbackToDeckTitle);
+                    const bool bFallbackToMenuButton);
 
     void FocusPanelContent(const sal_Int32 nPanelIndex);
     void FocusButton(const sal_Int32 nButtonIndex);
     void ClickButton(const sal_Int32 nButtonIndex);
-    void MoveFocusInsidePanel(const FocusLocation& rLocation,
-                              const sal_Int32 nDirection);
-    void MoveFocusInsideDeckTitle(const FocusLocation& rLocation,
-                                  const sal_Int32 nDirection);
+    void MoveFocusInsidePanel(const FocusLocation& rLocation);
 
     void HandleKeyEvent(const vcl::KeyCode& rKeyCode,
                          const vcl::Window& rWindow);
