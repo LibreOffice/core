@@ -127,6 +127,12 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 
 endif
 
+# If you want to run Python's own unit tests, add this to the chain of commands above:
+#		&& MAKEFLAGS= $(MAKE) \
+#			$(if $(filter MACOSX,$(OS)),DESTDIR=$(EXTERNAL_WORKDIR)/python-inst) \
+#			$(if $(SYSTEM_ZLIB),,ZLIB_INCDIR=$(WORKDIR)/UnpackedTarball/zlib) \
+#			test \
+
 ifeq ($(OS),MACOSX)
 
 python3_fw_prefix=$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO/LibreOfficePython.framework
