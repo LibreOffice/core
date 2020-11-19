@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d4fc541_045248ce",
+        "filename": "sc/uiconfig/scalc/ui/solverdlg.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-19T11:35:07Z",
+      "side": 1,
+      "message": "translatable strings also need a context attribute",
+      "revId": "2769fbfb857f73dd23609be096ccae6da56729f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
