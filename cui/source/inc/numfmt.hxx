@@ -76,7 +76,7 @@ public:
 private:
     std::unique_ptr<SvxNumberInfoItem>    pNumItem;
     std::unique_ptr<SvxNumberFormatShell> pNumFmtShell;
-    sal_uLong           nInitFormat;
+    sal_uInt32          nInitFormat;
     short               m_nLbFormatSelPosEdComment;
 
     bool                bNumItemFlag; ///< for handling with DocShell
