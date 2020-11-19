@@ -99,10 +99,12 @@ while read framework; do
         if test ! -L "$version" -a -d "$version"; then
 	    # Assume the framework has a XML (and not binary) Info.plist
 	    id=`grep -A 1 '<key>CFBundleIdentifier</key>' $version/Resources/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
-            # files in bin are not covered by signing the framework...
-            for scriptorexecutable in $(find $version/bin/ -type f); do
-                codesign --verbose --options=runtime --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$scriptorexecutable" >> "/tmp/codesign_${fn}.log" 2>&1
-            done
+	    if test -d $version/bin; then
+		# files in bin are not covered by signing the framework...
+		for scriptorexecutable in $(find $version/bin/ -type f); do
+		    codesign --verbose --options=runtime --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$scriptorexecutable" >> "/tmp/codesign_${fn}.log" 2>&1
+		done
+	    fi
             codesign --verbose --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$version" >> "/tmp/codesign_${fn}.log" 2>&1
 	    if [ "$?" != "0" ] ; then
 		exit 1
