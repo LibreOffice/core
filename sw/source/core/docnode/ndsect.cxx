@@ -149,7 +149,7 @@ static void lcl_CheckEmptyLayFrame( SwNodes const & rNds, SwSectionData& rSectio
 
 SwSection *
 SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
-       std::pair<SwTOXBase const*, sw::RedlineMode> const*const pTOXBaseAndMode,
+       std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode> const*const pTOXBaseAndMode,
                        SfxItemSet const*const pAttr, bool const bUpdate)
 {
     const SwNode* pPrvNd = nullptr;
@@ -197,7 +197,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         pFormat->SetFormatAttr( *pAttr );
     }
 
-    SwTOXBase const*const pTOXBase(pTOXBaseAndMode ? pTOXBaseAndMode->first : nullptr);
+    SwTOXBase const*const pTOXBase(pTOXBaseAndMode ? std::get<0>(*pTOXBaseAndMode) : nullptr);
     SwSectionNode* pNewSectNode = nullptr;
 
     RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();

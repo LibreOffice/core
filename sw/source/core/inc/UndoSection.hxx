@@ -22,6 +22,7 @@
 
 #include <o3tl/deleter.hxx>
 #include <undobj.hxx>
+#include <tuple>
 #include <memory>
 
 class SfxItemSet;
@@ -32,13 +33,14 @@ class SwTOXBase;
 
 namespace sw {
     enum class RedlineMode;
+    enum class FieldmarkMode;
 };
 
 class SwUndoInsSection : public SwUndo, private SwUndRng
 {
 private:
     const std::unique_ptr<SwSectionData> m_pSectionData;
-    const std::unique_ptr<std::pair<SwTOXBase *, sw::RedlineMode>> m_pTOXBase; /// set iff section is TOX
+    const std::unique_ptr<std::tuple<SwTOXBase *, sw::RedlineMode, sw::FieldmarkMode>> m_pTOXBase; /// set iff section is TOX
     const std::unique_ptr<SfxItemSet> m_pAttrSet;
     std::unique_ptr<SwHistory> m_pHistory;
     std::unique_ptr<SwRedlineData> m_pRedlData;
@@ -53,7 +55,7 @@ private:
 public:
     SwUndoInsSection(SwPaM const&, SwSectionData const&,
         SfxItemSet const* pSet,
-        std::pair<SwTOXBase const*, sw::RedlineMode> const* pTOXBase);
+        std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode> const* pTOXBase);
 
     virtual ~SwUndoInsSection() override;
 
