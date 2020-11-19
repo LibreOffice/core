@@ -38,6 +38,7 @@ public:
 
     virtual void SetTitle (const OUString& rsTitle) override;
     virtual OUString GetTitle() const override;
+    virtual void GetFocus() override { mxExpander->grab_focus(); }
 
     void SetMoreOptionsCommand(const OUString& rsCommandName,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame,
