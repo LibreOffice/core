@@ -38,7 +38,7 @@ SVT_DLLPUBLIC HtmlTokenId GetHTMLToken( const rtl::OUString& rName );
 // search the TokenId for an attribute token
 HtmlOptionId GetHTMLOption( const rtl::OUString& rName );
 
-// search the 24-bit color for a color name (not found = ULONG_MAX)
+// search the 24-bit color for a color name (not found = SAL_MAX_UINT32)
 SVT_DLLPUBLIC sal_uInt32 GetHTMLColor( const rtl::OUString& rName );
 
 enum class HtmlTokenId : sal_Int16
