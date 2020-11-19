@@ -22,6 +22,29 @@
       "revId": "8f79f590662145b054661846e018a4fc1837db8a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09534751_ab84fad0",
+        "filename": "vcl/source/outdev/map.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-19T08:39:18Z",
+      "side": 0,
+      "message": "Here the use of LONG_* seems also wrong...",
+      "range": {
+        "startLine": 1531,
+        "startChar": 9,
+        "endLine": 1531,
+        "endChar": 17
+      },
+      "revId": "8f79f590662145b054661846e018a4fc1837db8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
