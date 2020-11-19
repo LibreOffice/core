@@ -1602,6 +1602,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     case NS_ooxml::LN_EG_RPrBase_highlight:
         {
+            // Note: sw silently doesn't accept this setting for character styles since Word also ignores it.
+
             // OOXML import uses an ID
             if( IsOOXMLImport() )
             {
