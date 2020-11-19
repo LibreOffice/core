@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_ASYNCHRONOUSCALL_HXX
-#define INCLUDED_SFX2_SOURCE_SIDEBAR_ASYNCHRONOUSCALL_HXX
+#pragma once
 
 #include <tools/link.hxx>
 
@@ -49,7 +48,5 @@ private:
 };
 
 } // end of namespace sfx2::sidebar
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
