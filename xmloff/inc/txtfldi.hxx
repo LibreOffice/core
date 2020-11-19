@@ -890,10 +890,9 @@ public:
                                   sal_uInt16 nPrfx,
                                   const OUString& sLocalName);
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /** import dde field declaration (<text:dde-connection-decl>) */
@@ -901,9 +900,7 @@ class XMLDdeFieldDeclImportContext final : public SvXMLImportContext
 {
 public:
 
-    XMLDdeFieldDeclImportContext(SvXMLImport& rImport,
-                                 sal_uInt16 nPrfx,
-                                 const OUString& sLocalName);
+    XMLDdeFieldDeclImportContext(SvXMLImport& rImport);
 
     // create fieldmaster
     virtual void SAL_CALL startFastElement(
@@ -1137,10 +1134,8 @@ public:
                                     sal_uInt16 nPrfx,
                                     const OUString& sLocalName);
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 private:
     /// process attribute values
