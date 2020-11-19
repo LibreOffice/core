@@ -21,9 +21,12 @@
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
+#include <tools/long.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
+
+#include <limits>
 #include <vector>
 
 #define MIN_COLUMNWIDTH  2
@@ -82,14 +85,14 @@ public:
 
 class BrowserScrollBar: public ScrollBar
 {
-    sal_uLong           _nLastPos;
+    tools::Long _nLastPos;
     VclPtr<BrowserDataWin> _pDataWin;
 
 public:
                     BrowserScrollBar( vcl::Window* pParent, WinBits nStyle,
                                       BrowserDataWin *pDataWin )
                     :   ScrollBar( pParent, nStyle ),
-                        _nLastPos( ULONG_MAX ),
+                        _nLastPos( std::numeric_limits<tools::Long>::max() ),
                         _pDataWin( pDataWin )
                     {}
    virtual          ~BrowserScrollBar() override;
