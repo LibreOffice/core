@@ -1642,7 +1642,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     for (const auto& rpShape : vecxShapeRemove)
     {
         ::accessibility::AccessibleShape *pAccShape = rpShape.get();
-        if (pAccShape)
+        if (pAccShape && !pAccShape->IsDisposed())
         {
             uno::Reference< XAccessible > xPara = pAccShape->getAccessibleParent();
             uno::Reference< XAccessibleContext > xParaContext = xPara->getAccessibleContext();
