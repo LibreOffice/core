@@ -48,55 +48,14 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
-    bool VisitCallExpr(CallExpr const*);
-    bool VisitCXXConstructExpr(CXXConstructExpr const*);
     bool VisitFunctionDecl(FunctionDecl const*);
     bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const*);
     bool VisitImplicitCastExpr(ImplicitCastExpr const*);
+
+private:
+    void handleCXXConstructExpr(CXXConstructExpr const* expr);
+    void handleCXXMemberCallExpr(CXXMemberCallExpr const* expr);
 };
-
-bool StringView::VisitCallExpr(CallExpr const* callExpr)
-{
-    if (ignoreLocation(callExpr))
-        return true;
-
-    const FunctionDecl* functionDecl;
-    if (isa<CXXMemberCallExpr>(callExpr))
-        functionDecl = dyn_cast<CXXMemberCallExpr>(callExpr)->getMethodDecl();
-    else
-        functionDecl = callExpr->getDirectCallee();
-    if (!functionDecl)
-        return true;
-
-    unsigned len = std::min(callExpr->getNumArgs(), functionDecl->getNumParams());
-    for (unsigned i = 0; i < len; ++i)
-    {
-        const Expr* argExpr = callExpr->getArg(i);
-        auto paramDecl = functionDecl->getParamDecl(i);
-        auto paramRecordDecl = dyn_cast_or_null<RecordDecl>(
-            paramDecl->getType()->getUnqualifiedDesugaredType()->getAsTagDecl());
-        if (!paramRecordDecl || !paramRecordDecl->getIdentifier()
-            || paramRecordDecl->getName() != "basic_string_view")
-            continue;
-        // unwrap the operator that converts to std::u16string_view
-        auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(argExpr->IgnoreImpCasts());
-        if (!memberCallExpr)
-            continue;
-        // unwrap the call to copy()
-        auto memberCallExpr2 = dyn_cast<CXXMemberCallExpr>(
-            compat::IgnoreImplicit(memberCallExpr->getImplicitObjectArgument()));
-        if (!memberCallExpr2)
-            continue;
-        auto methodDecl = memberCallExpr2->getMethodDecl();
-        if (!methodDecl->getIdentifier() || methodDecl->getName() != "copy")
-            continue;
-        report(DiagnosticsEngine::Warning, "rather than copy, pass with a view using subView()",
-               compat::getBeginLoc(argExpr))
-            << argExpr->getSourceRange();
-    }
-
-    return true;
-}
 
 bool StringView::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOperatorCallExpr)
 {
@@ -142,45 +101,6 @@ bool StringView::VisitFunctionDecl(FunctionDecl const* functionDecl)
     return true;
 }
 
-bool StringView::VisitCXXConstructExpr(CXXConstructExpr const* constructExpr)
-{
-    if (ignoreLocation(constructExpr))
-        return true;
-
-    const CXXConstructorDecl* constructorDecl = constructExpr->getConstructor();
-    if (!constructorDecl)
-        return true;
-
-    unsigned len = std::min(constructExpr->getNumArgs(), constructorDecl->getNumParams());
-    for (unsigned i = 0; i < len; ++i)
-    {
-        const Expr* argExpr = constructExpr->getArg(i);
-        auto paramDecl = constructorDecl->getParamDecl(i);
-        auto paramRecordDecl = dyn_cast_or_null<RecordDecl>(
-            paramDecl->getType()->getUnqualifiedDesugaredType()->getAsTagDecl());
-        if (!paramRecordDecl || !paramRecordDecl->getIdentifier()
-            || paramRecordDecl->getName() != "basic_string_view")
-            continue;
-        // unwrap the operator that converts to std::u16string_view
-        auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(argExpr->IgnoreImpCasts());
-        if (!memberCallExpr)
-            continue;
-        // unwrap the call to copy()
-        auto memberCallExpr2 = dyn_cast<CXXMemberCallExpr>(
-            compat::IgnoreImplicit(memberCallExpr->getImplicitObjectArgument()));
-        if (!memberCallExpr2)
-            continue;
-        auto methodDecl = memberCallExpr2->getMethodDecl();
-        if (!methodDecl->getIdentifier() || methodDecl->getName() != "copy")
-            continue;
-        report(DiagnosticsEngine::Warning, "rather than copy, pass with a view using subView()",
-               compat::getBeginLoc(argExpr))
-            << argExpr->getSourceRange();
-    }
-
-    return true;
-}
-
 bool StringView::VisitImplicitCastExpr(ImplicitCastExpr const* expr)
 {
     if (ignoreLocation(expr))
@@ -191,27 +111,55 @@ bool StringView::VisitImplicitCastExpr(ImplicitCastExpr const* expr)
     {
         return true;
     }
-    auto const e = dyn_cast<CXXConstructExpr>(expr->getSubExprAsWritten()->IgnoreParens());
-    if (e == nullptr)
-    {
-        return true;
-    }
-    if (e->getNumArgs() != 0)
-    {
-        return true;
-    }
+    auto const e = expr->getSubExprAsWritten()->IgnoreParens();
     auto const tc = loplugin::TypeCheck(e->getType());
     if (!(tc.Class("OString").Namespace("rtl").GlobalNamespace()
           || tc.Class("OUString").Namespace("rtl").GlobalNamespace()))
     {
         return true;
     }
+    if (auto const e1 = dyn_cast<CXXConstructExpr>(e))
+    {
+        handleCXXConstructExpr(e1);
+    }
+    else if (auto const e2 = dyn_cast<CXXMemberCallExpr>(e))
+    {
+        handleCXXMemberCallExpr(e2);
+    }
+    return true;
+}
+
+void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
+{
+    if (expr->getNumArgs() != 0)
+    {
+        return;
+    }
     report(DiagnosticsEngine::Warning,
            "instead of an empty %0, pass an empty '%select{std::string_view|std::u16string_view}1'",
-           e->getLocation())
-        << e->getType() << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1)
-        << e->getSourceRange();
-    return true;
+           expr->getExprLoc())
+        << expr->getType()
+        << (loplugin::TypeCheck(expr->getType()).Class("OString").Namespace("rtl").GlobalNamespace()
+                ? 0
+                : 1)
+        << expr->getSourceRange();
+}
+
+void StringView::handleCXXMemberCallExpr(CXXMemberCallExpr const* expr)
+{
+    auto const dc = loplugin::DeclCheck(expr->getMethodDecl()).Function("copy");
+    if (!dc)
+    {
+        return;
+    }
+    if (!(dc.Class("OString").Namespace("rtl").GlobalNamespace()
+          || dc.Class("OUString").Namespace("rtl").GlobalNamespace()))
+    {
+        return;
+    }
+    report(DiagnosticsEngine::Warning, "rather than copy, pass with a view using subView()",
+           expr->getExprLoc())
+        << expr->getSourceRange();
 }
 
 loplugin::Plugin::Registration<StringView> stringview("stringview");
