@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sidebar/TitleBar.hxx>
+#include <com/sun/star/frame/XToolbarController.hpp>
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XFrame; }
@@ -39,7 +40,8 @@ public:
     virtual OUString GetTitle() const override;
 
     void SetMoreOptionsCommand(const OUString& rsCommandName,
-                               const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                               const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                               const css::uno::Reference<css::frame::XController>& rxController);
 
     void UpdateExpandedState();
 
@@ -51,10 +53,11 @@ private:
     DECL_LINK(ExpandHdl, weld::Expander&, void);
 
     std::unique_ptr<weld::Expander> mxExpander;
+    css::uno::Reference<css::frame::XToolbarController> mxController;
 
     VclPtr<Panel> mpPanel;
-    static const sal_uInt16 mnMenuItemIndex = 1;
     css::uno::Reference<css::frame::XFrame> mxFrame;
+    OString msIdent;
     OUString msMoreOptionsCommand;
 };
 

@@ -142,7 +142,9 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
 Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     weld::Toolbar& rToolbar, weld::Builder& rBuilder,
     const OUString& rsCommandName,
-    const Reference<frame::XFrame>& rxFrame, bool bSideBar)
+    const Reference<frame::XFrame>& rxFrame,
+    const Reference<frame::XController>& rxController,
+    bool bSideBar)
 {
     css::uno::Reference<css::awt::XWindow> xWidget(new weld::TransportAsXWindow(&rToolbar, &rBuilder));
 
@@ -150,7 +152,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
         CreateToolBarController(
             xWidget,
             rsCommandName,
-            rxFrame, rxFrame->getController(),
+            rxFrame, rxController,
             -1, bSideBar));
 
     if (!xController.is())

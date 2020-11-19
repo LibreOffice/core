@@ -115,8 +115,8 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builde
 void ToolbarUnoDispatcher::CreateController(const OUString& rCommand)
 {
     css::uno::Reference<css::frame::XToolbarController> xController(
-        sfx2::sidebar::ControllerFactory::CreateToolBoxController(*m_pToolbar, *m_pBuilder,
-                                                                  rCommand, m_xFrame, m_bSideBar));
+        sfx2::sidebar::ControllerFactory::CreateToolBoxController(
+            *m_pToolbar, *m_pBuilder, rCommand, m_xFrame, m_xFrame->getController(), m_bSideBar));
 
     if (xController.is())
         maControllers.insert(std::make_pair(rCommand, xController));
