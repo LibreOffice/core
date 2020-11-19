@@ -523,6 +523,7 @@ private:
     void InitScrollBars(const Size &rRequest);
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
     bool m_bUserManagedScrolling;
+    const static tools::Long m_nBorderWidth;
     DrawFrameStyle m_eDrawFrameStyle;
     DrawFrameFlags m_eDrawFrameFlags;
     VclPtr<ScrollBar> m_pVScroll;

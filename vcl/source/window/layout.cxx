@@ -1803,6 +1803,8 @@ IMPL_LINK( VclExpander, ClickHdl, CheckBox&, rBtn, void )
     maExpandedHdl.Call(*this);
 }
 
+const tools::Long VclScrolledWindow::m_nBorderWidth = 1;
+
 VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
     : VclBin(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL | WB_TABSTOP)
     , m_bUserManagedScrolling(false)
@@ -1876,8 +1878,8 @@ Size VclScrolledWindow::calculateRequisition() const
     if (GetStyle() & WB_HSCROLL)
         aRet.AdjustHeight(getLayoutRequisition(*m_pHScroll).Height() );
 
-    aRet.AdjustHeight(2);
-    aRet.AdjustWidth(2);
+    aRet.AdjustHeight(2 * m_nBorderWidth);
+    aRet.AdjustWidth(2 * m_nBorderWidth);
 
     return aRet;
 }
@@ -1910,8 +1912,8 @@ void VclScrolledWindow::doSetAllocation(const Size &rAllocation, bool bRetryOnFa
     if (pChild && pChild->IsVisible())
         aChildReq = getLayoutRequisition(*pChild);
 
-    tools::Long nAvailHeight = rAllocation.Height() - 2;
-    tools::Long nAvailWidth = rAllocation.Width() - 2;
+    tools::Long nAvailHeight = rAllocation.Height() - 2 * m_nBorderWidth;
+    tools::Long nAvailWidth = rAllocation.Width() - 2 * m_nBorderWidth;
     // vert. ScrollBar
     if (GetStyle() & WB_AUTOVSCROLL)
     {
@@ -1939,8 +1941,8 @@ void VclScrolledWindow::doSetAllocation(const Size &rAllocation, bool bRetryOnFa
         m_pHScroll->Show((GetStyle() & WB_HSCROLL) != 0);
 
     Size aInnerSize(rAllocation);
-    aInnerSize.AdjustWidth(-2);
-    aInnerSize.AdjustHeight(-2);
+    aInnerSize.AdjustWidth(-2 * m_nBorderWidth);
+    aInnerSize.AdjustHeight(-2 * m_nBorderWidth);
 
     bool bBothVisible = m_pVScroll->IsVisible() && m_pHScroll->IsVisible();
     auto nScrollBarWidth = getLayoutRequisition(*m_pVScroll).Width();
@@ -1948,8 +1950,8 @@ void VclScrolledWindow::doSetAllocation(const Size &rAllocation, bool bRetryOnFa
 
     if (m_pVScroll->IsVisible())
     {
-        Point aScrollPos(rAllocation.Width() - nScrollBarWidth - 1, 1);
-        Size aScrollSize(nScrollBarWidth, rAllocation.Height() - 2);
+        Point aScrollPos(rAllocation.Width() - nScrollBarWidth - m_nBorderWidth, m_nBorderWidth);
+        Size aScrollSize(nScrollBarWidth, rAllocation.Height() - 2 * m_nBorderWidth);
         if (bBothVisible)
             aScrollSize.AdjustHeight(-nScrollBarHeight);
         setLayoutAllocation(*m_pVScroll, aScrollPos, aScrollSize);
@@ -1958,8 +1960,8 @@ void VclScrolledWindow::doSetAllocation(const Size &rAllocation, bool bRetryOnFa
 
     if (m_pHScroll->IsVisible())
     {
-        Point aScrollPos(1, rAllocation.Height() - nScrollBarHeight);
-        Size aScrollSize(rAllocation.Width() - 2, nScrollBarHeight);
+        Point aScrollPos(m_nBorderWidth, rAllocation.Height() - nScrollBarHeight);
+        Size aScrollSize(rAllocation.Width() - 2 * m_nBorderWidth, nScrollBarHeight);
         if (bBothVisible)
             aScrollSize.AdjustWidth(-nScrollBarWidth);
         setLayoutAllocation(*m_pHScroll, aScrollPos, aScrollSize);
@@ -1968,7 +1970,7 @@ void VclScrolledWindow::doSetAllocation(const Size &rAllocation, bool bRetryOnFa
 
     if (bBothVisible)
     {
-        Point aBoxPos(aInnerSize.Width() + 1, aInnerSize.Height() + 1);
+        Point aBoxPos(aInnerSize.Width() + m_nBorderWidth, aInnerSize.Height() + m_nBorderWidth);
         m_aScrollBarBox->SetPosSizePixel(aBoxPos, Size(nScrollBarWidth, nScrollBarHeight));
         m_aScrollBarBox->Show();
     }
@@ -1983,7 +1985,7 @@ void VclScrolledWindow::doSetAllocation(const Size &rAllocation, bool bRetryOnFa
 
         WinBits nOldBits = (GetStyle() & (WB_AUTOVSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_HSCROLL));
 
-        setLayoutAllocation(*pChild, Point(1, 1), aInnerSize);
+        setLayoutAllocation(*pChild, Point(m_nBorderWidth, m_nBorderWidth), aInnerSize);
 
         // tdf#128758 if the layout allocation triggered some callback that
         // immediately invalidates the layout by adding scrollbars then
@@ -2014,8 +2016,8 @@ Size VclScrolledWindow::getVisibleChildSize() const
         aRet.AdjustWidth( -(m_pVScroll->GetSizePixel().Width()) );
     if (m_pHScroll->IsVisible())
         aRet.AdjustHeight( -(m_pHScroll->GetSizePixel().Height()) );
-    aRet.AdjustHeight(-2);
-    aRet.AdjustWidth(-2);
+    aRet.AdjustHeight(-2 * m_nBorderWidth);
+    aRet.AdjustWidth(-2 * m_nBorderWidth);
     return aRet;
 }
 
