@@ -623,7 +623,7 @@ void ImplDrawFrame( OutputDevice *const pDev, tools::Rectangle& rRect,
             // if bNoDraw is true then don't call the drawing routine
             // but just update the target rectangle
             if( bNoDraw ||
-                pWin->DrawNativeControl( ControlType::Frame, ControlPart::Border, aContent, ControlState::ENABLED,
+                pWin->DrawNativeControl( ControlType::Frame, ControlPart::Border, aBound, ControlState::ENABLED,
                                          aControlValue, OUString()) )
             {
                 rRect = aContent;
