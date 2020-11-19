@@ -1803,11 +1803,10 @@ IMPL_LINK( VclExpander, ClickHdl, CheckBox&, rBtn, void )
     maExpandedHdl.Call(*this);
 }
 
-const tools::Long VclScrolledWindow::m_nBorderWidth = 1;
-
 VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
     : VclBin(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL | WB_TABSTOP)
     , m_bUserManagedScrolling(false)
+    , m_nBorderWidth(1)
     , m_eDrawFrameStyle(DrawFrameStyle::NONE)
     , m_eDrawFrameFlags(DrawFrameFlags::NONE)
     , m_pVScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_VERT))
@@ -2068,11 +2067,27 @@ bool VclScrolledWindow::EventNotify(NotifyEvent& rNEvt)
     return bDone || VclBin::EventNotify( rNEvt );
 }
 
+void VclScrolledWindow::updateBorderWidth(tools::Long nBorderWidth)
+{
+    if (m_nBorderWidth == nBorderWidth || nBorderWidth < 1)
+        return;
+
+    m_nBorderWidth = nBorderWidth;
+    // update scrollbars and child window
+    doSetAllocation(GetSizePixel(), false);
+};
+
 void VclScrolledWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    VclBin::Paint(rRenderContext, rRect);
+    const tools::Rectangle aRect(tools::Rectangle(Point(0,0), GetSizePixel()));
     DecorationView aDecoView(&rRenderContext);
-    aDecoView.DrawFrame(tools::Rectangle(Point(0,0), GetSizePixel()), m_eDrawFrameStyle, m_eDrawFrameFlags);
+    const tools::Rectangle aContentRect = aDecoView.DrawFrame(aRect, m_eDrawFrameStyle, m_eDrawFrameFlags);
+
+    // take potentially changed frame size into account before rendering content
+    const tools::Long nFrameWidth = (aRect.GetWidth() - aContentRect.GetWidth()) / 2;
+    updateBorderWidth(nFrameWidth);
+
+    VclBin::Paint(rRenderContext, rRect);
 }
 
 void VclViewport::setAllocation(const Size &rAllocation)

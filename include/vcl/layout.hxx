@@ -519,11 +519,13 @@ public:
 private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
+    // sets new border size and adapts scrollbar and child widget position/size as needed
+    void updateBorderWidth(tools::Long nBorderWidth);
     DECL_LINK(ScrollBarHdl, ScrollBar*, void);
     void InitScrollBars(const Size &rRequest);
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
     bool m_bUserManagedScrolling;
-    const static tools::Long m_nBorderWidth;
+    tools::Long m_nBorderWidth;
     DrawFrameStyle m_eDrawFrameStyle;
     DrawFrameFlags m_eDrawFrameFlags;
     VclPtr<ScrollBar> m_pVScroll;
