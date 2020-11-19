@@ -196,7 +196,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     rStm.WriteInt32( 0 );       //Compression
     rStm.WriteInt32( aSize.Width() );
     rStm.WriteInt32( aSize.Height() );
-    sal_uLong nPos = rStm.Tell();
+    sal_uInt64 nPos = rStm.Tell();
     rStm.WriteInt32( 0 );
 
     if( nFormat == SotClipboardFormatId::GDIMETAFILE && pMtf )
@@ -226,7 +226,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     {
         OSL_FAIL( "unknown format" );
     }
-    sal_uLong nEndPos = rStm.Tell();
+    sal_uInt64 nEndPos = rStm.Tell();
     rStm.Seek( nPos );
     rStm.WriteUInt32( nEndPos - nPos - 4 );
     rStm.Seek( nEndPos );
@@ -243,7 +243,7 @@ DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan )
 void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDgg ) const
 {
     const_cast<DffPropertyReader*>(this)->pDefaultPropSet.reset();
-    sal_uInt32 nOldPos = rStCtrl.Tell();
+    sal_uInt64 nOldPos = rStCtrl.Tell();
     bool bOk = checkSeek(rStCtrl, nOffsDgg);
     DffRecordHeader aRecHd;
     if (bOk)
@@ -265,7 +265,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, SvxMSDffClientData* pClientD
 void DffPropertyReader::ReadPropSet( SvStream& rIn, SvxMSDffClientData* pClientData ) const
 #endif
 {
-    sal_uLong nFilePos = rIn.Tell();
+    sal_uInt64 nFilePos = rIn.Tell();
     ReadDffPropSet( rIn, const_cast<DffPropertyReader&>(*this) );
 
     if ( IsProperty( DFF_Prop_hspMaster ) )
@@ -1114,7 +1114,7 @@ struct ShadeColor
 
 static void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& rProperties, SvStream& rIn, std::vector< ShadeColor >& rShadeColors )
 {
-    sal_uInt32 nPos = rIn.Tell();
+    sal_uInt64 nPos = rIn.Tell();
     if ( rProperties.IsProperty( DFF_Prop_fillShadeColors ) )
     {
         sal_uInt16 i = 0, nNumElem = 0;
@@ -1276,7 +1276,7 @@ static void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, S
     if ( nFix16Angle )
     {
         bool bRotateWithShape = true;   // sal_True seems to be default
-        sal_uInt32 nPos = rIn.Tell();
+        sal_uInt64 nPos = rIn.Tell();
         if ( const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.SeekToContent( rIn, DFF_msofbtUDefProp, SEEK_FROM_CURRENT_AND_RESTART ) )
         {
             const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.Current()->SeekToBegOfRecord( rIn );
@@ -2218,7 +2218,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 sal_uInt16 nElemSizeSeg = 2;
                 rIn.ReadUInt16( nNumElemSeg ).ReadUInt16( nNumElemMemSeg ).ReadUInt16( nElemSizeSeg );
             }
-            std::size_t nMaxEntriesPossible = rIn.remainingSize() / sizeof(sal_uInt16);
+            sal_uInt64 nMaxEntriesPossible = rIn.remainingSize() / sizeof(sal_uInt16);
             if (nNumElemSeg > nMaxEntriesPossible)
             {
                 SAL_WARN("filter.ms", "NumElem list is longer than remaining bytes, ppt or parser is wrong");
@@ -2916,7 +2916,7 @@ DffRecordManager::DffRecordManager( SvStream& rIn ) :
 void DffRecordManager::Consume( SvStream& rIn, sal_uInt32 nStOfs )
 {
     Clear();
-    sal_uInt32 nOldPos = rIn.Tell();
+    sal_uInt64 nOldPos = rIn.Tell();
     if ( !nStOfs )
     {
         DffRecordHeader aHd;
@@ -3184,14 +3184,14 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, SvxMSDffClientData* /* pClient
     bool bRet = false;
     if ( !maFidcls.empty() )
     {
-        sal_uInt32 nOldPos = rSt.Tell();
+        sal_uInt64 nOldPos = rSt.Tell();
         sal_uInt32 nSec = ( nId >> 10 ) - 1;
         if ( nSec < mnIdClusters )
         {
             OffsetMap::const_iterator it = maDgOffsetTable.find( maFidcls[ nSec ].dgid );
             if ( it != maDgOffsetTable.end() )
             {
-                sal_IntPtr nOfs = it->second;
+                sal_uInt64 nOfs = it->second;
                 rSt.Seek( nOfs );
                 DffRecordHeader aEscherF002Hd;
                 bool bOk = ReadDffRecordHeader( rSt, aEscherF002Hd );
@@ -3237,7 +3237,7 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, SvxMSDffClientData* /* pClient
 bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount )
 {
     bool bRet = false;
-    sal_uLong nOldFPos = rSt.Tell(); // store FilePos to restore it later if necessary
+    sal_uInt64 nOldFPos = rSt.Tell(); // store FilePos to restore it later if necessary
     do
     {
         DffRecordHeader aHd;
@@ -3281,7 +3281,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
 bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos ) const
 {
     bool bRet = false;
-    sal_uLong nOldFPos = rStCtrl.Tell();   // remember FilePos for conditionally later restoration
+    sal_uInt64 nOldFPos = rStCtrl.Tell();   // remember FilePos for conditionally later restoration
     do
     {
         DffRecordHeader aHd;
@@ -5698,8 +5698,8 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
     SetModel( pSdrModel_, nApplicationScale );
 
     // remember FilePos of the stream(s)
-    sal_uLong nOldPosCtrl = rStCtrl.Tell();
-    sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
+    sal_uInt64 nOldPosCtrl = rStCtrl.Tell();
+    sal_uInt64 nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
 
     // if no data stream is given we assume that the BLIPs
     // are in the control stream
@@ -5751,7 +5751,7 @@ void SvxMSDffManager::InitSvxMSDffManager( sal_uInt32 nOffsDgg_, SvStream* pStDa
     nSvxMSDffOLEConvFlags = nOleConvFlags;
 
     // remember FilePos of the stream(s)
-    sal_uLong nOldPosCtrl = rStCtrl.Tell();
+    sal_uInt64 nOldPosCtrl = rStCtrl.Tell();
 
     SetDefaultPropSet( rStCtrl, nOffsDgg );
 
@@ -5770,7 +5770,7 @@ void SvxMSDffManager::InitSvxMSDffManager( sal_uInt32 nOffsDgg_, SvStream* pStDa
 
 void SvxMSDffManager::SetDgContainer( SvStream& rSt )
 {
-    sal_uInt32 nFilePos = rSt.Tell();
+    sal_uInt64 nFilePos = rSt.Tell();
     DffRecordHeader aDgContHd;
     bool bOk = ReadDffRecordHeader(rSt, aDgContHd);
     // insert this container only if there is also a DggAtom
@@ -5791,7 +5791,7 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
     if (!nOffsDggL)
         return;
 
-    sal_uInt32 nOldPos = rStCtrl.Tell();
+    sal_uInt64 nOldPos = rStCtrl.Tell();
 
     if (nOffsDggL == rStCtrl.Seek(nOffsDggL))
     {
@@ -5814,10 +5814,10 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
                 const std::size_t nFIDCLsize = sizeof(sal_uInt32) * 2;
                 if ( aDggAtomHd.nRecLen == ( mnIdClusters * nFIDCLsize + 16 ) )
                 {
-                    std::size_t nMaxEntriesPossible = rStCtrl.remainingSize() / nFIDCLsize;
+                    sal_uInt64 nMaxEntriesPossible = rStCtrl.remainingSize() / nFIDCLsize;
                     SAL_WARN_IF(nMaxEntriesPossible < mnIdClusters,
                         "filter.ms", "FIDCL list longer than remaining bytes, ppt or parser is wrong");
-                    mnIdClusters = std::min(nMaxEntriesPossible, static_cast<std::size_t>(mnIdClusters));
+                    mnIdClusters = std::min(nMaxEntriesPossible, static_cast<sal_uInt64>(mnIdClusters));
 
                     maFidcls.resize(mnIdClusters);
                     for (sal_uInt32 i = 0; i < mnIdClusters; ++i)
@@ -5914,7 +5914,7 @@ void SvxMSDffManager::GetCtrlData(sal_uInt32 nOffsDggL)
     bool bOk;
     GetDrawingGroupContainerData( rStCtrl, nLength );
 
-    sal_uInt32 nMaxStrPos = rStCtrl.TellEnd();
+    sal_uInt64 nMaxStrPos = rStCtrl.TellEnd();
 
     nPos += nLength;
     sal_uInt16 nDrawingContainerId = 1;
@@ -6057,7 +6057,8 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uInt32 nLenDg,
         // empty Shape Container ? (outside of shape group container)
         else if (DFF_msofbtSpContainer == nFbt)
         {
-            if (!GetShapeContainerData(rSt, nLength, ULONG_MAX, nDrawingContainerId))
+            if (!GetShapeContainerData(
+                    rSt, nLength, std::numeric_limits<sal_uInt64>::max(), nDrawingContainerId))
                 return;
         }
         else
@@ -6076,7 +6077,7 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
                                                   sal_uInt16 nDrawingContainerId )
 {
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
-    tools::Long nStartShapeGroupCont = rSt.Tell();
+    sal_uInt64 nStartShapeGroupCont = rSt.Tell();
     // We are now in a shape group container (conditionally multiple per page)
     // and we now have to iterate through all contained shape containers
     bool  bFirst = !bPatriarch;
@@ -6089,7 +6090,7 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
         // Shape Container?
         if( DFF_msofbtSpContainer == nFbt )
         {
-            sal_uLong nGroupOffs = bFirst ? nStartShapeGroupCont - DFF_COMMON_RECORD_HEADER_SIZE : ULONG_MAX;
+            sal_uInt64 nGroupOffs = bFirst ? nStartShapeGroupCont - DFF_COMMON_RECORD_HEADER_SIZE : std::numeric_limits<sal_uInt64>::max();
             if ( !GetShapeContainerData( rSt, nLength, nGroupOffs, nDrawingContainerId ) )
                 return false;
             bFirst = false;
@@ -6115,11 +6116,11 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
 
 bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
                                              sal_uInt32 nLenShapeCont,
-                                             sal_uLong nPosGroup,
+                                             sal_uInt64 nPosGroup,
                                              sal_uInt16 nDrawingContainerId )
 {
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
-    tools::Long  nStartShapeCont = rSt.Tell();
+    sal_uInt64 nStartShapeCont = rSt.Tell();
 
     // We are in a shape container (possibly more than one per shape group) and we now
     // have to fetch the shape id and file position (to be able to access them again later)
@@ -6128,13 +6129,13 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     sal_uLong nReadSpCont = 0;
 
     // Store file offset of the shape containers or respectively the group(!).
-    sal_uLong nStartOffs = (ULONG_MAX > nPosGroup) ?
+    sal_uInt64 nStartOffs = (std::numeric_limits<sal_uInt64>::max() > nPosGroup) ?
                             nPosGroup : nStartShapeCont - DFF_COMMON_RECORD_HEADER_SIZE;
     SvxMSDffShapeInfo aInfo( nStartOffs );
 
     // Can the shape be replaced with a frame?
     // (provided that it is a TextBox and the text is not rotated)
-    bool bCanBeReplaced = nPosGroup >= ULONG_MAX;
+    bool bCanBeReplaced = nPosGroup >= std::numeric_limits<sal_uInt64>::max();
 
     // we don't know yet whether it's a TextBox
     MSO_SPT         eShapeType      = mso_sptNil;
@@ -6317,10 +6318,10 @@ bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
         if( rStCtrl.GetError() )
             rStCtrl.ResetError();
         // store FilePos of the stream(s)
-        sal_uLong nOldPosCtrl = rStCtrl.Tell();
-        sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
+        sal_uInt64 nOldPosCtrl = rStCtrl.Tell();
+        sal_uInt64 nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
         // jump to the shape in the control stream
-        sal_uLong const nFilePos((*it)->nFilePos);
+        sal_uInt64 const nFilePos((*it)->nFilePos);
         bool bSeeked = (nFilePos == rStCtrl.Seek(nFilePos));
 
         // if it failed, reset error statusF
@@ -6378,8 +6379,8 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rGraphic, tools::Rectan
             pStData->ResetError();
 
         // remember FilePos of the stream(s)
-        sal_uLong nOldPosCtrl = rStCtrl.Tell();
-        sal_uLong nOldPosData = pStData->Tell();
+        sal_uInt64 nOldPosCtrl = rStCtrl.Tell();
+        sal_uInt64 nOldPosData = pStData->Tell();
 
         // fetch matching info struct out of the pointer array
         SvxMSDffBLIPInfo& rInfo = (*m_pBLIPInfos)[ nIdx-1 ];
@@ -6396,7 +6397,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rGraphic, tools::Rectan
             //         data stream in which the graphic could be stored!
             if( pStData2->GetError() )
                 pStData2->ResetError();
-            sal_uLong nOldPosData2 = pStData2->Tell();
+            sal_uInt64 nOldPosData2 = pStData2->Tell();
             // jump to the BLIP atom in the second data stream
             bOk = checkSeek(*pStData2, rInfo.nFilePos);
             // reset error status if necessary
@@ -6427,7 +6428,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rGraphic, tools::Rectan
 ******************************************************************************/
 bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tools::Rectangle* pVisArea )
 {
-    sal_uLong nOldPos = rBLIPStream.Tell();
+    sal_uInt64 nOldPos = rBLIPStream.Tell();
 
     ErrCode nRes = ERRCODE_GRFILTER_OPENERROR;  // initialize error variable
 
@@ -6910,7 +6911,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
             }
             else if( nRecType == 5 && !pMtf )
             {
-                sal_uLong nPos = rStm.Tell();
+                sal_uInt64 nPos = rStm.Tell();
                 sal_uInt16 sz[4];
                 rStm.ReadBytes( sz, 8 );
                 Graphic aGraphic;

@@ -425,7 +425,7 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
     void GetFidclData(sal_uInt32 nOffsDgg);
 
 protected:
-    typedef std::map<sal_uInt32, sal_uInt32> OffsetMap;
+    typedef std::map<sal_uInt32, sal_uInt64> OffsetMap;
 
     OUString        maBaseURL;
     sal_uInt32      mnIdClusters;       // while only knowing the shapeid
@@ -478,7 +478,7 @@ protected:
                                      sal_uInt16 nDrawingContainerId );
     bool GetShapeContainerData( SvStream& rSt,
                                 sal_uInt32 nLenShapeCont,
-                                sal_uLong nPosGroup,
+                                sal_uInt64 nPosGroup,
                                 sal_uInt16 nDrawingContainerId );
 
     SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& );
@@ -754,13 +754,13 @@ public:
 struct SvxMSDffShapeInfo
 {
     sal_uInt32 nShapeId; ///< shape id, used in PLCF SPA and in mso_fbtSp (FSP)
-    sal_uLong nFilePos;  ///< offset of the shape in control stream for
+    sal_uInt64 nFilePos;  ///< offset of the shape in control stream for
                          ///< potential later access to it
     sal_uInt32 nTxBxComp;
 
     bool bReplaceByFly  :1; ///< shape can be replaced by a frame in Writer
 
-    explicit SvxMSDffShapeInfo(sal_uLong nFPos, sal_uInt32 nId=0, // sal_uLong nBIdx=0,
+    explicit SvxMSDffShapeInfo(sal_uInt64 nFPos, sal_uInt32 nId=0, // sal_uLong nBIdx=0,
                       sal_uInt16 nSeqId=0, sal_uInt16 nBoxId=0):
         nShapeId( nId ),
         nFilePos( nFPos ),
