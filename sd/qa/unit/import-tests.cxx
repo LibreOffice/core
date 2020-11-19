@@ -171,6 +171,7 @@ public:
     void testTdf127129();
     void testTdf93097();
     void testTdf62255();
+    void testTdf113163();
     void testTdf93124();
     void testTdf99729();
     void testTdf89927();
@@ -283,6 +284,7 @@ public:
     CPPUNIT_TEST(testTdf127129);
     CPPUNIT_TEST(testTdf93097);
     CPPUNIT_TEST(testTdf62255);
+    CPPUNIT_TEST(testTdf113163);
     CPPUNIT_TEST(testTdf93124);
     CPPUNIT_TEST(testTdf99729);
     CPPUNIT_TEST(testTdf89927);
@@ -1577,6 +1579,57 @@ void SdImportTest::testTdf62255()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, aFillStyle);
     }
 
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf113163()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf113163.pptx"), PPTX);
+    uno::Reference < uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
+
+    uno::Sequence< beans::PropertyValue > aFilterData(2);
+    aFilterData[0].Name = "PixelWidth";
+    aFilterData[0].Value <<= sal_Int32(100);
+    aFilterData[1].Name = "PixelHeight";
+    aFilterData[1].Value <<= sal_Int32(100);
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    uno::Sequence< beans::PropertyValue > aDescriptor(3);
+    aDescriptor[0].Name = "URL";
+    aDescriptor[0].Value <<= aTempFile.GetURL();
+    aDescriptor[1].Name = "FilterName";
+    aDescriptor[1].Value <<= OUString("PNG");
+    aDescriptor[2].Name = "FilterData";
+    aDescriptor[2].Value <<= aFilterData;
+
+    uno::Reference< lang::XComponent > xPage(getPage(0, xDocShRef), uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xPage);
+    xGraphicExporter->filter(aDescriptor);
+
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    vcl::PNGReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.Read();
+
+    // make sure the bitmap is not empty and correct size (PNG export->import was successful)
+    CPPUNIT_ASSERT_EQUAL(Size(100, 100), aBMPEx.GetSizePixel());
+    Bitmap aBMP = aBMPEx.GetBitmap();
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBMP);
+        int nNonBlackCount = 0;
+        for (tools::Long nY = 1; nY < 99; ++nY)
+        {
+            for (tools::Long nX = 1; nX < 99; ++nX)
+            {
+                const Color aColor = pReadAccess->GetColor(nY, nX);
+                if ((aColor.GetRed() != 0x00) || (aColor.GetGreen() != 0x00) || (aColor.GetBlue() != 0x00))
+                    ++nNonBlackCount;
+            }
+        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Tdf113163: EMF image is not transparent", 0, nNonBlackCount);
+    }
     xDocShRef->DoClose();
 }
 
