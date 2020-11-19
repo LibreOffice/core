@@ -43,6 +43,7 @@
 #include <vector>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <limits>
 #include <memory>
 
 using ::com::sun::star::uno::Reference;
@@ -194,7 +195,7 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
 SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/numberingformatpage.ui", "NumberingFormatPage", &rCoreAttrs)
-    , nInitFormat(ULONG_MAX)
+    , nInitFormat(std::numeric_limits<sal_uInt32>::max())
     , m_nLbFormatSelPosEdComment(SELPOS_NONE)
     , bLegacyAutomaticCurrency(false)
     , sAutomaticLangEntry(CuiResId(RID_SVXSTR_AUTO_ENTRY))
@@ -471,7 +472,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     nInitFormat = pValFmtAttr                   // memorize init key
                     ? pValFmtAttr->GetValue()   // (for FillItemSet())
-                    : ULONG_MAX;                // == DONT_KNOW
+                    : std::numeric_limits<sal_uInt32>::max(); // == DONT_KNOW
 
 
     if ( eValType == SvxNumberValueType::String )
