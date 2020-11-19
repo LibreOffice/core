@@ -491,31 +491,28 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
     }
 }
 
-bool DdeService::HasCbFormat( sal_uInt16 nFmt )
+bool DdeService::HasCbFormat( sal_uInt32 nFmt )
 {
-    return std::any_of(aFormats.begin(), aFormats.end(),
-        [nFmt](const long nFormat) { return nFormat == nFmt; });
+    return std::find(aFormats.begin(), aFormats.end(), nFmt) != aFormats.end();
 }
 
 bool DdeService::HasFormat(SotClipboardFormatId nFmt)
 {
-    return HasCbFormat( static_cast<sal_uInt16>(DdeData::GetExternalFormat( nFmt )));
+    return HasCbFormat( DdeData::GetExternalFormat( nFmt ));
 }
 
 void DdeService::AddFormat(SotClipboardFormatId nFmt)
 {
-    sal_uLong nExternalFmt = DdeData::GetExternalFormat( nFmt );
-    if (std::any_of(aFormats.begin(), aFormats.end(),
-            [nExternalFmt](const long nFormat) { return static_cast<sal_uLong>(nFormat) == nExternalFmt; }))
+    sal_uInt32 nExternalFmt = DdeData::GetExternalFormat( nFmt );
+    if (HasCbFormat(nExternalFmt))
         return;
     aFormats.push_back( nExternalFmt );
 }
 
 void DdeService::RemoveFormat(SotClipboardFormatId nFmt)
 {
-    sal_uLong nExternalFmt = DdeData::GetExternalFormat( nFmt );
-    auto it = std::find_if(aFormats.begin(), aFormats.end(),
-        [nExternalFmt](const long nFormat) { return static_cast<sal_uLong>(nFormat) == nExternalFmt; });
+    sal_uInt32 nExternalFmt = DdeData::GetExternalFormat( nFmt );
+    auto it = std::find(aFormats.begin(), aFormats.end(), nExternalFmt);
     if (it != aFormats.end())
         aFormats.erase( it );
 }
@@ -822,11 +819,11 @@ OUString DdeService::Formats()
 
     for (size_t i = 0; i < aFormats.size(); ++i, ++n)
     {
-        long f = aFormats[ i ];
+        sal_uInt32 f = aFormats[ i ];
         if ( n )
             s += "\t";
 
-        switch( static_cast<sal_uInt16>(f) )
+        switch( f )
         {
         case CF_TEXT:
             s += "TEXT";
@@ -837,7 +834,7 @@ OUString DdeService::Formats()
         default:
             {
                 WCHAR buf[128];
-                GetClipboardFormatNameW( static_cast<UINT>(f), buf, SAL_N_ELEMENTS(buf) );
+                GetClipboardFormatNameW( f, buf, SAL_N_ELEMENTS(buf) );
                 s += o3tl::toU(buf);
             }
             break;

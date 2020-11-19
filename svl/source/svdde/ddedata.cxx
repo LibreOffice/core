@@ -121,7 +121,7 @@ DdeData& DdeData::operator=(DdeData&& rData) noexcept
     return *this;
 }
 
-sal_uLong DdeData::GetExternalFormat(SotClipboardFormatId nFmt)
+sal_uInt32 DdeData::GetExternalFormat(SotClipboardFormatId nFmt)
 {
     switch( nFmt )
     {
@@ -140,7 +140,7 @@ sal_uLong DdeData::GetExternalFormat(SotClipboardFormatId nFmt)
 #endif
         }
     }
-    return static_cast<sal_uLong>(nFmt);
+    return static_cast<sal_uInt32>(nFmt);
 }
 
 SotClipboardFormatId DdeData::GetInternalFormat(sal_uLong nFmt)

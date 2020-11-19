@@ -71,7 +71,7 @@ public:
     DdeData&        operator=(const DdeData&);
     DdeData&        operator=(DdeData&&) noexcept;
 
-    static sal_uLong GetExternalFormat(SotClipboardFormatId nFmt);
+    static sal_uInt32 GetExternalFormat(SotClipboardFormatId nFmt);
     static SotClipboardFormatId GetInternalFormat(sal_uLong nFmt);
 };
 
@@ -286,14 +286,14 @@ protected:
     const DdeTopic* GetSysTopic() const { return pSysTopic; }
 private:
     std::vector<DdeTopic*> aTopics;
-    std::vector< tools::Long >    aFormats;
+    std::vector< sal_uInt32 > aFormats;
     DdeTopic*       pSysTopic;
     DdeString*      pName;
     std::vector<std::unique_ptr<Conversation>>
                     m_vConv;
     short           nStatus;
 
-    SVL_DLLPRIVATE bool HasCbFormat( sal_uInt16 );
+    SVL_DLLPRIVATE bool HasCbFormat( sal_uInt32 );
 
 public:
                     DdeService( SAL_UNUSED_PARAMETER const OUString& );
