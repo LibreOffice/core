@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70767340_34c2bdeb",
+        "filename": "sdext/source/presenter/PresenterHelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-19T13:32:42Z",
+      "side": 1,
+      "message": "also move remainder of comment",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 6
+      },
+      "revId": "2fbc994f4b96700f0b06d1f258529ffec47fd321",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
