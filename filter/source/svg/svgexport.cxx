@@ -706,9 +706,10 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
         if (!xTransformedGraphic.is())
             return false;
         const Graphic aTransformedGraphic(xTransformedGraphic);
-        bool bChecksumMatches = aOriginalGraphic.GetChecksum() == aTransformedGraphic.GetChecksum();
-        const Graphic aGraphic = bChecksumMatches ? aOriginalGraphic : aTransformedGraphic;
-        uno::Reference<graphic::XGraphic> xGraphic = bChecksumMatches ? xOriginalGraphic : xTransformedGraphic;
+        bool bSameGraphic = aTransformedGraphic == aOriginalGraphic ||
+            aOriginalGraphic.GetChecksum() == aTransformedGraphic.GetChecksum();
+        const Graphic aGraphic = bSameGraphic ? aOriginalGraphic : aTransformedGraphic;
+        uno::Reference<graphic::XGraphic> xGraphic = bSameGraphic ? xOriginalGraphic : xTransformedGraphic;
 
         // Calculate size from Graphic
         Point aPos( OutputDevice::LogicToLogic(aGraphic.GetPrefMapMode().GetOrigin(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
