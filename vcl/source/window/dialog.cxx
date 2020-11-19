@@ -1607,4 +1607,11 @@ void TopLevelWindowLocker::decBusy()
     m_aBusyStack.pop();
 }
 
+boost::property_tree::ptree Dialog::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(SystemWindow::DumpAsPropertyTree());
+    aTree.put("title", GetText());
+    return aTree;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
