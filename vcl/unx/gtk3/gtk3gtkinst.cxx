@@ -8572,8 +8572,12 @@ public:
 
     virtual void set_item_ident(int nIndex, const OString& rIdent) override
     {
+        m_aMap.erase(m_aMap.find(get_item_ident(nIndex)));
+
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
         gtk_buildable_set_name(GTK_BUILDABLE(pItem), rIdent.getStr());
+
+        m_aMap[rIdent] = pItem;
     }
 
     virtual void set_item_label(int nIndex, const OUString& rLabel) override
