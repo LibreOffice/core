@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5fce9b70_057fd193",
+        "filename": "sfx2/source/control/listview.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-19T09:46:32Z",
+      "side": 1,
+      "message": "With the saved space we could auto-size most columns like using { -1, -1, 110, -1, -1, -1 };",
+      "range": {
+        "startLine": 59,
+        "startChar": 31,
+        "endLine": 59,
+        "endChar": 62
+      },
+      "revId": "0ef0c2bcae8b1a11ccc71aaa8482ea3968c6bcb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a95dd83f_86636075",
+        "filename": "sfx2/source/control/listview.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-19T09:46:32Z",
+      "side": 1,
+      "message": "Better use ::Single since you cannot open multiple templates anyway.",
+      "range": {
+        "startLine": 61,
+        "startChar": 50,
+        "endLine": 61,
+        "endChar": 58
+      },
+      "revId": "0ef0c2bcae8b1a11ccc71aaa8482ea3968c6bcb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86d51725_45e28abd",
+        "filename": "sfx2/source/control/listview.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-19T09:46:32Z",
+      "side": 1,
+      "message": "Not sure if this does the trick...\n\nmxTreeView-\u003econnect_query_tooltip(LINK(this, ListView, QueryTooltipHdl));\n\nIMPL_LINK(ListView, QueryTooltipHdl, const weld::TreeIter\u0026, rIter, OUString)\n{\n    return (\"Hello World\"); //pItem has the path information\n}",
+      "revId": "0ef0c2bcae8b1a11ccc71aaa8482ea3968c6bcb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
