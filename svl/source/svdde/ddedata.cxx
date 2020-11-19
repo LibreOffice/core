@@ -133,11 +133,9 @@ sal_uLong DdeData::GetExternalFormat(SotClipboardFormatId nFmt)
         return CF_METAFILEPICT;
     default:
         {
-#if defined(_WIN32)
             OUString aName( SotExchange::GetFormatName( nFmt ) );
             if( !aName.isEmpty() )
                 return RegisterClipboardFormatW( o3tl::toW(aName.getStr()) );
-#endif
         }
     }
     return static_cast<sal_uLong>(nFmt);
@@ -154,7 +152,6 @@ SotClipboardFormatId DdeData::GetInternalFormat(sal_uLong nFmt)
     case CF_METAFILEPICT:
         return SotClipboardFormatId::GDIMETAFILE;
     default:
-#if defined(_WIN32)
         if( nFmt >= CF_MAX )
         {
             WCHAR szName[ 256 ];
@@ -162,7 +159,6 @@ SotClipboardFormatId DdeData::GetInternalFormat(sal_uLong nFmt)
             if(GetClipboardFormatNameW( nFmt, szName, SAL_N_ELEMENTS(szName) ))
                 return SotExchange::RegisterFormatName( OUString(o3tl::toU(szName)) );
         }
-#endif
         break;
     }
     return static_cast<SotClipboardFormatId>(nFmt);
