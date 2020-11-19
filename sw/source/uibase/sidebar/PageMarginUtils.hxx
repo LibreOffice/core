@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <cmath>
+#include <tools/long.hxx>
+
 #define SWPAGE_NO_MARGIN       0
 #define SWPAGE_NARROW_VALUE    720
 #define SWPAGE_MODERATE_LR     1080

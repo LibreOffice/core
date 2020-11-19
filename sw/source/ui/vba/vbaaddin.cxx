@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbaaddin.hxx"
-#include <vbahelper/vbahelper.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 

@@ -20,11 +20,10 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 
-#include <viscrs.hxx>
-#include <wrtsh.hxx>
 #include <ndgrf.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
+#include <viewsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT

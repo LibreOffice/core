@@ -93,9 +93,6 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xlnwtit.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svl/grabbagitem.hxx>

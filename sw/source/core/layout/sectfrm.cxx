@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 #include <svl/itemiter.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>

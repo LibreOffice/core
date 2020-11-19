@@ -23,6 +23,7 @@
 #include <pagefrm.hxx>
 
 #include <layact.hxx>
+#include <osl/diagnose.h>
 
 SwObjectFormatterLayFrame::SwObjectFormatterLayFrame( SwLayoutFrame& _rAnchorLayFrame,
                                                   const SwPageFrame& _rPageFrame,

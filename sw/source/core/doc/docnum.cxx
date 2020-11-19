@@ -18,13 +18,13 @@
  */
 
 #include <hintids.hxx>
-#include <editeng/lrspitem.hxx>
 #include <ftninfo.hxx>
 #include <ftnidx.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentListsAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <pam.hxx>
@@ -49,6 +49,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/random.hxx>
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 #include <tools/datetimeutils.hxx>
 
 #include <map>

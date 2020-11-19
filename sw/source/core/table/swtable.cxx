@@ -23,6 +23,7 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/colritem.hxx>
+#include <osl/diagnose.h>
 #include <sfx2/linkmgr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>

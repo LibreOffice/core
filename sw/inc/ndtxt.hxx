@@ -33,7 +33,6 @@
 #include <o3tl/sorted_vector.hxx>
 #include <memory>
 #include <vector>
-#include <set>
 #include <functional>
 
 class SfxHint;

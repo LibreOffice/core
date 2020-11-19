@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_PAMTYP_HXX
 
 #include <unotools/textsearch.hxx>
-#include <swdllapi.h>
 
 #include <memory>
 

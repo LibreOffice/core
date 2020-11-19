@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_INC_CELLFML_HXX
 #define INCLUDED_SW_INC_CELLFML_HXX
 
+#include "swdllapi.h"
+
 #include <memory>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>

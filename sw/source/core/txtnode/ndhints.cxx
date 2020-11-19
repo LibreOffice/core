@@ -26,7 +26,6 @@
 #ifdef DBG_UTIL
 #include <pam.hxx>
 #include <fmtautofmt.hxx>
-#include <set>
 #endif
 
 /// sort order: Start, End (reverse), Which (reverse),

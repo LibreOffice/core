@@ -22,7 +22,6 @@
 
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
-#include <sfx2/docfile.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdouno.hxx>
@@ -34,13 +33,13 @@
 #include <svx/unomodel.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
+#include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtornt.hxx>
 #include <fmtflcnt.hxx>
 #include <frmfmt.hxx>
-#include <docary.hxx>
 #include <txtfrm.hxx>
 #include <txtflcnt.hxx>
 #include <fesh.hxx>

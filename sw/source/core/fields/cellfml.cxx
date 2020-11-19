@@ -32,7 +32,6 @@
 #include <tabfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <docary.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <tblsel.hxx>
@@ -46,6 +45,7 @@
 #include <frameformats.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 
 namespace
 {

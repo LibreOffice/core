@@ -22,6 +22,7 @@
 #include "swcont.hxx"
 
 #include <ndarr.hxx>
+#include <tools/long.hxx>
 
 class SwWrtShell;
 class SwContentArr;

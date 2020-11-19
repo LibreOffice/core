@@ -12,8 +12,6 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 
-#include <memory>
-
 #include <IDocumentOutlineNodes.hxx>
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>

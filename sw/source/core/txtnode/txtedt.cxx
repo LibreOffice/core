@@ -28,6 +28,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 #include <officecfg/Office/Writer.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/charclass.hxx>

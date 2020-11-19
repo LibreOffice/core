@@ -18,6 +18,7 @@
  */
 
 #include <hints.hxx>
+#include <osl/diagnose.h>
 #include <o3tl/safeint.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/brushitem.hxx>

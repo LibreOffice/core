@@ -21,7 +21,6 @@
 #include "accportions.hxx"
 
 #include <vector>
-#include <algorithm>
 
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>

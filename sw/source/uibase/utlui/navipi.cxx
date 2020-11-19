@@ -35,7 +35,6 @@
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <navipi.hxx>
-#include <workctrl.hxx>
 #include <edtwin.hxx>
 #include <sfx2/app.hxx>
 #include <cmdid.h>

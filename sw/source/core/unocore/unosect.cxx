@@ -47,6 +47,7 @@
 #include <unomap.hxx>
 #include <section.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>

@@ -21,6 +21,7 @@
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
+#include <osl/diagnose.h>
 #include <swtypes.hxx>
 #include <strings.hrc>
 #include <authfld.hxx>
@@ -38,7 +39,6 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <unofldmid.h>
 #include <unoprnms.hxx>
-#include <calbck.hxx>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 

@@ -21,15 +21,14 @@
 
 #include <hintids.hxx>
 #include <svl/listener.hxx>
+#include <svx/ctredlin.hxx>
 #include <tools/datetime.hxx>
 #include <mdiexp.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
 #include <strings.hrc>
-#include <IDocumentRedlineAccess.hxx>
 
 #include <cstddef>
-#include <limits>
 #include <memory>
 
 class SwTOXBase;

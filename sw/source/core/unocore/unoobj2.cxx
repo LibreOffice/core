@@ -41,7 +41,6 @@
 #include <swundo.hxx>
 #include <rootfrm.hxx>
 #include <ftnidx.hxx>
-#include <docary.hxx>
 #include <pam.hxx>
 #include <swtblfmt.hxx>
 #include <docsh.hxx>

@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 
-#include <svx/svxids.hrc>
 #include <svx/unomid.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -74,7 +73,6 @@
 #include <unoprnms.hxx>
 #include <unomid.h>
 #include <cmdid.h>
-#include <editeng/colritem.hxx>
 #include <editeng/memberids.h>
 #include <editeng/unoprnms.hxx>
 #include <svl/itemprop.hxx>

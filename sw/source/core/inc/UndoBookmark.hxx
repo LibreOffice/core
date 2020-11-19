@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <undobj.hxx>
+#include "rolbck.hxx"
 
 class SwHistoryBookmark;
 class SwHistoryNoTextFieldmark;

@@ -32,6 +32,7 @@
 #include <shellres.hxx>
 #include <cellfrm.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <osl/diagnose.h>
 #include <svx/srchdlg.hxx>
 
 /// set cursor into next/previous cell

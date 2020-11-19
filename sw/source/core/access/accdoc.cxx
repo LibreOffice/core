@@ -44,7 +44,6 @@
 #include <txtfrm.hxx>
 #include <sectfrm.hxx>
 #include <section.hxx>
-#include <svx/unoapi.hxx>
 #include <swmodule.hxx>
 #include <svtools/colorcfg.hxx>
 

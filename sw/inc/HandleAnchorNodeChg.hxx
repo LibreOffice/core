@@ -19,6 +19,9 @@
 #ifndef INCLUDED_SW_INC_HANDLEANCHORNODECHG_HXX
 #define INCLUDED_SW_INC_HANDLEANCHORNODECHG_HXX
 
+#include "pam.hxx"
+#include <wrtsh.hxx>
+
 class SwFlyFrameFormat;
 class SwFormatAnchor;
 class SwFlyFrame;

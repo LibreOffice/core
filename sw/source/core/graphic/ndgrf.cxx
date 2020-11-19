@@ -42,7 +42,6 @@
 #include <hints.hxx>
 #include <swbaslnk.hxx>
 #include <pagefrm.hxx>
-#include <cntfrm.hxx>
 
 #include <rtl/ustring.hxx>
 #include <o3tl/deleter.hxx>

@@ -25,7 +25,6 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <initui.hxx>

@@ -11,8 +11,7 @@
 #include <AccessibilityCheck.hxx>
 #include <AccessibilityIssue.hxx>
 #include <AccessibilityCheckStrings.hrc>
-#include <ndgrf.hxx>
-#include <ndole.hxx>
+#include <ndnotxt.hxx>
 #include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <IDocumentDrawModelAccess.hxx>

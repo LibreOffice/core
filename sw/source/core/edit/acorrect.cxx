@@ -31,16 +31,12 @@
 #include <shellio.hxx>
 #include <swundo.hxx>
 #include <viscrs.hxx>
-#include <com/sun/star/i18n/BreakType.hpp>
-#include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
+#include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
-#include <svl/zformat.hxx>
 
 #include <editeng/acorrcfg.hxx>
-#include <redline.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <rootfrm.hxx>
 

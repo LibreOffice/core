@@ -36,12 +36,9 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <editeng/crossedoutitem.hxx>
-#include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/contouritem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/urlfieldhelper.hxx>
 #include <svx/svdoutl.hxx>

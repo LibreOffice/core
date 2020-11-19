@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <osl/diagnose.h>
 #include <vcl/commandevent.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbareplacement.hxx"
-#include <vbahelper/vbahelper.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

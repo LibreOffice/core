@@ -35,7 +35,6 @@
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
 #include <fmtfsize.hxx>
-#include <docary.hxx>
 #include <fesh.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>

@@ -8,36 +8,13 @@
  */
 
 #include <swmodeltestbase.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
-#include <com/sun/star/text/WrapTextMode.hpp>
 #include <comphelper/scopeguard.hxx>
-#include <unotools/syslocaleoptions.hxx>
-#include <i18nlangtag/languagetag.hxx>
-#include <vcl/event.hxx>
-#include <vcl/scheduler.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/unolingu.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtcntnt.hxx>
 #include <wrtsh.hxx>
-#include <edtwin.hxx>
-#include <view.hxx>
-#include <txtfrm.hxx>
-#include <pagefrm.hxx>
-#include <bodyfrm.hxx>
-#include <sortedobjs.hxx>
-#include <anchoredobject.hxx>
-#include <ndtxt.hxx>
-#include <frmatr.hxx>
-#include <IDocumentSettingAccess.hxx>
-#include <config_features.h>
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
 #include <docsh.hxx>

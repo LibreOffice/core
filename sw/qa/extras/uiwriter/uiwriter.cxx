@@ -69,6 +69,7 @@
 #include <txtftn.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <unofldmid.h>
 #include <UndoManager.hxx>
@@ -100,7 +101,6 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
-#include <o3tl/make_shared.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <paratr.hxx>

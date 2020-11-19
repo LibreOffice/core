@@ -12,13 +12,11 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
-#include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/style/BreakType.hpp>

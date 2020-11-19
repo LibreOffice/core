@@ -29,7 +29,6 @@
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <unicode/ucsdet.h>
-#include <unicode/uclean.h>
 
 using namespace ::com::sun::star;
 

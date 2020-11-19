@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/property_tree/json_parser.hpp>
-
 #include <sal/config.h>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/string.hxx>

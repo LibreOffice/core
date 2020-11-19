@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_PAGEORIENTATIONPOPUP_HXX
 
 #include <svtools/popupwindowcontroller.hxx>
-#include "swdllapi.h"
 
 class PageOrientationPopup final : public svt::PopupWindowController
 {

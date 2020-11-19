@@ -20,6 +20,9 @@
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORDROP_HXX
 
 #include "portxt.hxx"
+#include <swfont.hxx>
+
+#include <memory>
 
 class SwFont;
 

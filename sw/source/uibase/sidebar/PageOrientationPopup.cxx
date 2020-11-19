@@ -18,7 +18,6 @@
  */
 #include <PageOrientationPopup.hxx>
 #include "PageOrientationControl.hxx"
-#include <svx/pageitem.hxx>
 #include <vcl/toolbox.hxx>
 
 PageOrientationPopup::PageOrientationPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)

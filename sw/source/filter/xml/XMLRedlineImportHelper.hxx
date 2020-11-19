@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_XML_XMLREDLINEIMPORTHELPER_HXX
 
 #include <rtl/ustring.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/util/DateTime.hpp>

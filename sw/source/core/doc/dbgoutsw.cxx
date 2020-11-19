@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemiter.hxx>
-#include <string>
 #include <map>
 #include <node.hxx>
 #include <ndtxt.hxx>
@@ -31,7 +30,6 @@
 #include <txatbase.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>
 #include <undobj.hxx>
 #include <numrule.hxx>
 #include <doc.hxx>

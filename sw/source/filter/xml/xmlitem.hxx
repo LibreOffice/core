@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLITEM_HXX
 #define INCLUDED_SW_SOURCE_FILTER_XML_XMLITEM_HXX
 
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <svl/itemset.hxx>
 #include <xmloff/xmlictxt.hxx>
 

@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
-#include <svx/svxids.hrc>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>

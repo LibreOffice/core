@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTPAGE_HXX
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTPAGE_HXX
 
-#include <vcl/wizardmachine.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/print.hxx>
 #include <sfx2/basedlgs.hxx>

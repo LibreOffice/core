@@ -81,6 +81,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <shellio.hxx>
 #include <pview.hxx>

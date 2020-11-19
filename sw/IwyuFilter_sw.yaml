@@ -1,6 +1,15 @@
 ---
 assumeFilename: sw/source/core/doc/docnew.cxx
 excludelist:
+    sw/sdi/swslots.hrc:
+    # Needed for sdi files to compile
+    - editeng/memberids.h
+    - editeng/editids.hrc
+    - svx/svxids.hrc
+    - svx/unomid.hxx
+    - globals.hrc
+    - cmdid.h
+    - unomid.h
     sw/inc/extinput.hxx:
     - vector
     sw/inc/fmtmeta.hxx:
@@ -439,18 +448,48 @@ excludelist:
     sw/qa/extras/layout/layout.cxx:
     - comphelper/scopeguard.hxx
     - com/sun/star/linguistic2/LinguServiceManager.hpp
+    sw/source/core/access/acccontext.cxx:
+    # Actually used
+    - com/sun/star/accessibility/XAccessibleStateSet.hpp
+    sw/source/core/access/AccessibilityCheck.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/core/access/accnotextframe.cxx:
+    # Actually used
+    - com/sun/star/accessibility/XAccessibleRelationSet.hpp
+    sw/source/core/access/accpara.cxx:
+    # Actually used
+    - com/sun/star/accessibility/AccessibleScrollType.hpp
+    sw/source/core/access/acctextframe.cxx:
+    # Actually used
+    - com/sun/star/accessibility/XAccessibleRelationSet.hpp
     sw/source/core/doc/DocumentFieldsManager.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
+    sw/source/core/doc/DocumentStatisticsManager.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sw/source/core/doc/docbm.cxx:
     # Needed for implicit dtor SwHistoryTextFieldmark
     - rolbck.hxx
     sw/source/core/doc/docredln.cxx:
     # Needed for linker visibility of sw_DebugRedline
     - docredln.hxx
+    sw/source/core/doc/doccomp.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/core/doc/docglbl.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/core/doc/docglos.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sw/source/core/docnode/threadmanager.cxx:
     # Actually used
     - com/sun/star/util/XJobManager.hpp
+    sw/source/core/draw/drawdoc.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sw/source/filter/html/htmlreqifreader.cxx:
     - comphelper/scopeguard.hxx
     sw/source/uibase/sidebar/PageMarginUtils.hxx:
@@ -478,6 +517,9 @@ excludelist:
     sw/source/core/swg/SwXMLSectionList.cxx:
     # Actually used
     - vector
+    sw/source/core/text/txtftn.cxx:
+    # Needed for template
+    - com/sun/star/text/XTextRange.hpp
     sw/source/core/undo/unsect.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
@@ -511,15 +553,32 @@ excludelist:
     # Actually used
     - com/sun/star/text/TextMarkupDescriptor.hpp
     - com/sun/star/text/XTextRange.hpp
+    sw/source/core/unocore/unotbl.cxx:
+    # No .hxx -> .h replacement in URE headers
+    - cppuhelper/interfacecontainer.hxx
+    sw/source/core/unocore/unoredline.cxx:
+    # Needed for template
+    - com/sun/star/text/XTextSection.hpp
+    sw/source/core/unocore/unostyle.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sw/source/filter/basflt/iodetect.cxx:
     # Actually used
     - com/sun/star/embed/XStorage.hpp
     sw/source/filter/html/SwAppletImpl.cxx:
     # Needed for direct member access
     - com/sun/star/embed/XEmbeddedObject.hpp
+    sw/source/filter/html/htmlfld.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/html/htmlforw.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sw/source/filter/html/wrthtml.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sw/source/filter/html/swhtml.cxx:
     # Actually used
     - com/sun/star/document/XDocumentProperties.hpp
@@ -546,6 +605,24 @@ excludelist:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
     - com/sun/star/frame/XModel.hpp
+    sw/source/filter/xml/xmlbrsh.cxx:
+    # Needed for XMLOFF_WARN_UNKNOWN_ELEMENT
+    - sal/log.hxx
+    sw/source/filter/xml/xmlexp.hxx:
+    # Needed for typedef
+    - vector
+    sw/source/filter/xml/xmlfmt.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/xml/xmlitem.cxx:
+    # Needed for XMLOFF_WARN_UNKNOWN_ELEMENT
+    - sal/log.hxx
+    sw/source/filter/xml/xmlmeta.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/xml/xmltbli.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sw/source/filter/xml/wrtxml.cxx:
     # Actually used
     - com/sun/star/task/XStatusIndicator.hpp
@@ -555,6 +632,9 @@ excludelist:
     sw/source/uibase/app/docsh2.cxx:
     # Needed for direct member access
     - ooo/vba/word/XDocument.hpp
+    sw/source/uibase/app/docst.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sw/source/uibase/dbui/mmconfigitem.cxx:
     # Actually used
     - com/sun/star/sdbc/XDataSource.hpp
@@ -564,6 +644,15 @@ excludelist:
     sw/source/uibase/dochdl/swdtflvr.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
+    sw/source/uibase/docvw/edtdd.cxx:
+    # Needed for extern variable
+    - edtdd.hxx
+    sw/source/uibase/docvw/srcedtw.cxx:
+    # Needed for template
+    - com/sun/star/container/XHierarchicalNameAccess.hpp
+    sw/source/uibase/misc/glshell.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sw/source/uibase/shells/basesh.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
@@ -626,6 +715,8 @@ excludelist:
     - editeng/boxitem.hxx
     - editeng/sizeitem.hxx
     - editeng/lrspitem.hxx
+    - svx/sdmetitm.hxx
+    - svx/sdprcitm.hxx
     - svx/xlnstit.hxx
     - svx/xlnedit.hxx
     - svx/xfillit0.hxx
@@ -671,6 +762,9 @@ excludelist:
     sw/source/uibase/shells/textsh.cxx:
     # Needed for defines in swslots.hxx
     - globals.hrc
+    sw/source/uibase/uiview/srcview.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sw/source/uibase/uiview/view0.cxx:
     # Needed for defines in swslots.hxx
     - globals.hrc
@@ -702,6 +796,12 @@ excludelist:
     # Needed for defines in swslots.hxx
     - cmdid.h
     - globals.hrc
+    sw/source/ui/dialog/wordcountdialog.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    sw/source/ui/fldui/fldedt.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sw/source/ui/fldui/flddinf.cxx:
     # Needed for direct member access
     - com/sun/star/beans/XPropertySet.hpp
@@ -727,6 +827,9 @@ excludelist:
     sw/source/ui/vba/vbaglobals.cxx:
     # Needed for extern functions
     - service.hxx
+    sw/source/ui/vba/vbalistformat.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
     sw/source/ui/vba/vbalisttemplate.cxx:
     # Actually needed
     - com/sun/star/beans/XPropertySet.hpp
@@ -773,3 +876,15 @@ excludelist:
     sw/qa/extras/uiwriter/uiwriter.cxx:
     # Required in C++20 mode.
     - o3tl/cppunittraitshelper.hxx
+    sw/qa/extras/uiwriter/uiwriter2.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    sw/qa/extras/rtfexport/rtfexport4.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sw/qa/extras/txtexport/txtexport.cxx:
+    # No .hxx -> .h replacement in URE headers
+    - osl/thread.hxx
+    sw/qa/extras/layout/layout2.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx

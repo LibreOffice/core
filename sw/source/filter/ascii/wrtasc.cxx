@@ -23,7 +23,6 @@
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
-#include <docary.hxx>
 #include <fmtcntnt.hxx>
 #include <frmfmt.hxx>
 #include "wrtasc.hxx"

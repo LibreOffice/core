@@ -49,7 +49,6 @@
 #include <viewopt.hxx>
 
 #include <langhelper.hxx>
-#include <memory>
 
 using namespace ::com::sun::star;
 

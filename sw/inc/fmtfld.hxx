@@ -26,7 +26,6 @@
 
 #include "swdllapi.h"
 #include "calbck.hxx"
-#include "ndindex.hxx"
 #include "reffld.hxx"
 
 class SwField;

@@ -8,7 +8,6 @@
  */
 
 #include <swmodeltestbase.hxx>
-#include <wrtsh.hxx>
 #include <AccessibilityCheck.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>

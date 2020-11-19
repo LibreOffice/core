@@ -20,7 +20,6 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>

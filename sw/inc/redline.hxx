@@ -19,12 +19,11 @@
 #ifndef INCLUDED_SW_INC_REDLINE_HXX
 #define INCLUDED_SW_INC_REDLINE_HXX
 
+#include <svx/ctredlin.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/ustring.hxx>
 
 #include "pam.hxx"
-
-#include "IDocumentRedlineAccess.hxx"
 
 #include <cstddef>
 #include <memory>

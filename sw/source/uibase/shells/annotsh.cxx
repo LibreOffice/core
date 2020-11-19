@@ -44,16 +44,12 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <editeng/crossedoutitem.hxx>
-#include <editeng/shdditem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/contouritem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>

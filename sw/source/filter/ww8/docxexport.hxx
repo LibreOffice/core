@@ -26,7 +26,6 @@
 #include <sax/fshelper.hxx>
 #include <rtl/ustring.hxx>
 
-#include <cstdio>
 #include <memory>
 #include <ndole.hxx>
 

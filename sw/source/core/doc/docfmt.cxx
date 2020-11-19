@@ -26,6 +26,7 @@
 #include <editeng/rsiditem.hxx>
 #include <editeng/colritem.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
 #include <comphelper/doublecheckedinit.hxx>
 #include <comphelper/processfactory.hxx>
@@ -47,6 +48,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>

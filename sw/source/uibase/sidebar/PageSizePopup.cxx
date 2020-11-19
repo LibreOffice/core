@@ -18,7 +18,6 @@
  */
 #include <PageSizePopup.hxx>
 #include "PageSizeControl.hxx"
-#include <editeng/sizeitem.hxx>
 #include <vcl/toolbox.hxx>
 
 PageSizePopup::PageSizePopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)

@@ -19,6 +19,7 @@
 
 #include <editeng/boxitem.hxx>
 #include <editeng/protitem.hxx>
+#include <osl/diagnose.h>
 
 #include <hintids.hxx>
 #include <fmtanchr.hxx>
@@ -29,7 +30,6 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>

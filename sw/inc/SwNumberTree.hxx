@@ -21,7 +21,6 @@
 
 #include <set>
 #include <vector>
-#include "swdllapi.h"
 #include "SwNumberTreeTypes.hxx"
 
 class SwNumberTreeNode;

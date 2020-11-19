@@ -23,9 +23,9 @@
 #include <vector>
 #include <algorithm>
 
+#include <cppuhelper/interfacecontainer.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/memberids.h>
 #include <float.h>
 #include <swtypes.hxx>
@@ -42,12 +42,12 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <shellres.hxx>
 #include <docary.hxx>
 #include <ndole.hxx>
-#include <ndtxt.hxx>
 #include <frame.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtfsize.hxx>
@@ -105,7 +105,6 @@
 #include <docsh.hxx>
 #include <fesh.hxx>
 #include <itabenum.hxx>
-#include <poolfmt.hxx>
 #include <frameformats.hxx>
 
 using namespace ::com::sun::star;

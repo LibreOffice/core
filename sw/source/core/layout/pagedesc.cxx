@@ -24,6 +24,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <fmtclds.hxx>
 #include <fmtfsize.hxx>
@@ -39,7 +40,6 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <poolfmt.hxx>
 #include <calbck.hxx>
-#include <hints.hxx>
 
 SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *const pDoc)
     : sw::BroadcastingModify()
