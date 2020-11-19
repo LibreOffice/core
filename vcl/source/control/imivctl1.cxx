@@ -2729,7 +2729,7 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::FindEntryPredecessor( SvxIconCho
     Point aPos( rPosTopLeft ); //TopLeft
     tools::Rectangle aCenterRect( CalcBmpRect( pEntry, &aPos ));
     Point aNewPos( aCenterRect.Center() );
-    sal_uLong nGrid = GetPredecessorGrid( aNewPos );
+    GridId nGrid = GetPredecessorGrid( aNewPos );
     size_t nCount = maEntries.size();
     if( nGrid == GRID_NOT_FOUND )
         return nullptr;
@@ -2740,13 +2740,13 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::FindEntryPredecessor( SvxIconCho
 
     SvxIconChoiceCtrlEntry* pCur = pHead; // Grid 0
     // TODO: go through list from the end if nGrid > nCount/2
-    for( sal_uLong nCur = 0; nCur < nGrid; nCur++ )
+    for( GridId nCur = 0; nCur < nGrid; nCur++ )
         pCur = pCur->pflink;
 
     return pCur;
 }
 
-sal_uLong SvxIconChoiceCtrl_Impl::GetPredecessorGrid( const Point& rPos) const
+GridId SvxIconChoiceCtrl_Impl::GetPredecessorGrid( const Point& rPos) const
 {
     Point aPos( rPos );
     aPos.AdjustX( -(LROFFS_WINBORDER) );
@@ -2759,7 +2759,7 @@ sal_uLong SvxIconChoiceCtrl_Impl::GetPredecessorGrid( const Point& rPos) const
         nGridX = nMaxCol;
     tools::Long nGridY = aPos.Y() / nGridDY;
     tools::Long nGridsX = aOutputSize.Width() / nGridDX;
-    sal_uLong nGrid = (nGridY * nGridsX) + nGridX;
+    GridId nGrid = (nGridY * nGridsX) + nGridX;
     tools::Long nMiddle = (nGridX * nGridDX) + (nGridDX / 2);
     if( rPos.X() < nMiddle )
     {
