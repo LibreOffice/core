@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6e5fc73_6d6901c1",
+        "filename": "vcl/source/outdev/map.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-19T08:29:50Z",
+      "side": 0,
+      "message": "Should sal_uLong be replaced with tools::ULong? To drop one of them?",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 17
+      },
+      "revId": "8f79f590662145b054661846e018a4fc1837db8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
