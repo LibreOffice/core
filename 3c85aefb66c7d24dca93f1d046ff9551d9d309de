@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea2fcde4_b5ad6c03",
+        "filename": "chart2/source/controller/inc/ConfigurationAccess.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-19T13:05:49Z",
+      "side": 1,
+      "message": "also move rest of the comment",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 6
+      },
+      "revId": "3c85aefb66c7d24dca93f1d046ff9551d9d309de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
