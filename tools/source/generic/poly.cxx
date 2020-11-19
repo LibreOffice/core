@@ -1425,6 +1425,10 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
 
 void Polygon::Clip( const tools::Rectangle& rRect )
 {
+    // This algorithm is broken for bezier curves, they would get converted to lines.
+    // Use PolyPolygon::Clip().
+    assert( !HasFlags());
+
     // #105251# Justify rect before edge filtering
     tools::Rectangle               aJustifiedRect( rRect );
     aJustifiedRect.Justify();

@@ -262,6 +262,36 @@ public:
      explicit PolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon);
 };
 
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Polygon& poly )
+{
+    stream << "<" << poly.GetSize() << ":";
+    for (sal_uInt16 i = 0; i < poly.GetSize(); i++)
+    {
+        if (i > 0)
+            stream << "--";
+        stream << poly.GetPoint(i);
+    }
+    stream << ">";
+    return stream;
+}
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const PolyPolygon& poly )
+{
+    stream << "[" << poly.Count() << ":";
+    for (sal_uInt16 i = 0; i < poly.Count(); i++)
+    {
+        if (i > 0)
+            stream << ",";
+        stream << poly.GetObject(i);
+    }
+    stream << "]";
+    return stream;
+}
+
 } /* namespace tools */
 
 typedef std::vector< tools::PolyPolygon > PolyPolyVector;
