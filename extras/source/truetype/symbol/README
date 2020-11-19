@@ -24,6 +24,9 @@ fonts for interoperability purposes. See
 unotools/source/misc/fontcvt.cxx pwrt, the StarSymbol conversion
 tables.
 
+Generate the ttf from updated sfd:
+fontforge -lang=ff -c 'Open($1); Generate($2)' extras/source/truetype/symbol/OpenSymbol.sfd opens___.ttf
+
 Update opens___.ttf on TDF server:
 scp opens___.ttf libreoffice@dev-www.libreoffice.org:/srv/www/dev-www.libreoffice.org/extern/$(sha256sum opens___.ttf | awk '{ print $1 }')-opens___.ttf
 
