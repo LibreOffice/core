@@ -104,6 +104,7 @@ public:
     virtual void tearDown() override;
 
     //ods, xls, xlsx filter tests
+    void testDeleteCircleInMergedCellODS();
     void testBooleanFormatXLSX();
     void testBasicCellContentODS();
     void testRangeNameXLS();
@@ -292,6 +293,7 @@ public:
     void testDeleteCirclesInRowAndCol();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testDeleteCircleInMergedCellODS);
     CPPUNIT_TEST(testBooleanFormatXLSX);
     CPPUNIT_TEST(testBasicCellContentODS);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -522,6 +524,40 @@ void testRangeNameImpl(const ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("formula Global5 should reference Global6 ( which is evaluated as local1 )", 5.0, aValue);
 }
 
+}
+
+void ScFiltersTest::testDeleteCircleInMergedCellODS()
+{
+    ScDocShellRef xDocSh = loadDoc("deleteCircleInMergedCell.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load deleteCircleInMergedCell.ods", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+
+    // There should be a circle object!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+
+    ScRefCellValue aMergedCell;
+    ScAddress aPosMergedCell(0, 0, 0);
+    aMergedCell.assign(rDoc, aPosMergedCell);
+
+    // The value of merged cell change to 6.
+    aMergedCell.mfValue = 6;
+
+    // Check that the data is valid.(True if the value = 6)
+    const ScValidationData* pData = rDoc.GetValidationEntry(1);
+    bool bValidA1 = pData->IsDataValid(aMergedCell, aPosMergedCell);
+    // if valid, delete circle.
+    if (bValidA1)
+        ScDetectiveFunc(rDoc, 0).DeleteCirclesAt(aPosMergedCell.Col(), aPosMergedCell.Row());
+
+    // There should not be a circle object!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testBasicCellContentODS()

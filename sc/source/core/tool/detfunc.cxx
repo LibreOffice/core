@@ -1240,7 +1240,7 @@ bool ScDetectiveFunc::DeletePred( SCCOL nCol, SCROW nRow )
 
 bool ScDetectiveFunc::DeleteCirclesAt( SCCOL nCol, SCROW nRow )
 {
-    tools::Rectangle aRect = GetDrawRect(nCol, nRow);
+    tools::Rectangle aRect = ScDrawLayer::GetCellRect(rDoc, ScAddress(nCol, nRow, nTab), true);
     aRect.AdjustLeft(-250);
     aRect.AdjustRight(250);
     aRect.AdjustTop(-70);
