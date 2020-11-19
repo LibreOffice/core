@@ -200,6 +200,7 @@ public:
     void testTdf108926();
     void testTdf100065();
     void testTdf90626();
+    void testTdf138148();
     void testTdf114488();
     void testTdf134174();
     void testTdf114913();
@@ -312,6 +313,7 @@ public:
     CPPUNIT_TEST(testTdf108926);
     CPPUNIT_TEST(testTdf100065);
     CPPUNIT_TEST(testTdf90626);
+    CPPUNIT_TEST(testTdf138148);
     CPPUNIT_TEST(testTdf114488);
     CPPUNIT_TEST(testTdf134174);
     CPPUNIT_TEST(testTdf114913);
@@ -2638,6 +2640,28 @@ void SdImportTest::testTdf90626()
         const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(i).GetItem(EE_PARA_NUMBULLET);
         CPPUNIT_ASSERT(pNumFmt);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(371), pNumFmt->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight(), tools::Long(1));
+    }
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf138148()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf138148.pptx"), PPTX);
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    for(int i = 0; i < 2; i++)
+    {
+        const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(i).GetItem(EE_PARA_NUMBULLET);
+        CPPUNIT_ASSERT(pNumFmt);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(444), pNumFmt->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight(), tools::Long(1));
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: 148
+        // - Actual  : 444
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(148), pNumFmt->GetNumRule()->GetLevel(0).GetGraphicSize().getWidth(), tools::Long(1));
     }
 
     xDocShRef->DoClose();
