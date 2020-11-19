@@ -5945,14 +5945,15 @@ void SvxMSDffManager::GetCtrlData(sal_uInt32 nOffsDggL)
 
 // from here on: Drawing Group Container  i.e. document-wide valid data
 
-void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLenDgg )
+void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uInt32 nLenDgg )
 {
     sal_uInt8   nVer;
     sal_uInt16 nInst;
     sal_uInt16 nFbt;
     sal_uInt32 nLength;
 
-    sal_uLong nLenBStoreCont = 0, nLenFBSE = 0, nRead = 0;
+    sal_uInt32 nLenBStoreCont = 0, nLenFBSE = 0;
+    sal_uLong nRead = 0;
 
     // search for a  BStore Container
     bool bOk = true;
@@ -6032,7 +6033,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
 // from now on: Drawing Container  which means Pages (Sheet, Slide) - wide valid data
 //                      =================               ======
 
-void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
+void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uInt32 nLenDg,
                                                sal_uInt16 nDrawingContainerId )
 {
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
@@ -6069,7 +6070,7 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
 }
 
 bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
-                                                  sal_uLong nLenShapeGroupCont,
+                                                  sal_uInt32 nLenShapeGroupCont,
                                                   bool bPatriarch,
                                                   sal_uInt16 nDrawingContainerId )
 {
@@ -6112,7 +6113,7 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
 }
 
 bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
-                                             sal_uLong nLenShapeCont,
+                                             sal_uInt32 nLenShapeCont,
                                              sal_uLong nPosGroup,
                                              sal_uInt16 nDrawingContainerId )
 {
@@ -6122,7 +6123,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     // We are in a shape container (possibly more than one per shape group) and we now
     // have to fetch the shape id and file position (to be able to access them again later)
     // and the first BStore reference (if present).
-    sal_uLong nLenShapePropTbl = 0;
+    sal_uInt32 nLenShapePropTbl = 0;
     sal_uLong nReadSpCont = 0;
 
     // Store file offset of the shape containers or respectively the group(!).
