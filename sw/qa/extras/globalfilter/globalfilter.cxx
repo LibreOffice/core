@@ -48,6 +48,7 @@ public:
     void testCharHighlight();
     void testCharHighlightODF();
     void testCharHighlightBody();
+    void testCharStyleHighlight();
     void testMSCharBackgroundEditing();
     void testCharBackgroundToHighlighting();
 #if !defined(_WIN32)
@@ -574,16 +575,61 @@ void Test::testCharHighlightBody()
     }
 }
 
+void Test::testCharStyleHighlight()
+{
+    // MS Word has two kind of character backgrounds called character shading and highlighting.
+    // However, their character style can only accept shading. It ignores the highlighting value.
+
+    const OUString aFilterNames[] = {
+        "Rich Text Format",
+        "MS Word 97",
+        "Office Open XML Text",
+    };
+
+    for (OUString const & rFilterName : aFilterNames)
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/tdf138345_charstyle_highlight.odt"),
+                                      "com.sun.star.text.TextDocument");
+
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
+
+        // Export the document and import again for a check
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= rFilterName;
+
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        uno::Reference<beans::XPropertySet> xCharStyle;
+        getStyles("CharacterStyles")->getByName("charBackground") >>= xCharStyle;
+        const sal_Int32 nBackColor(0xFFDBB6); //orange-y
+
+        // Always export character style's background colour as shading, never as highlighting.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xCharStyle,"CharHighlight"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nBackColor, getProperty<sal_Int32>(xCharStyle,"CharBackColor"));
+    }
+}
+
 void Test::testCharHighlight()
 {
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
     rOpt.SetCharBackground2Shading();
 
     testCharHighlightBody();
+    testCharStyleHighlight();
 
     rOpt.SetCharBackground2Highlighting();
 
     testCharHighlightBody();
+    testCharStyleHighlight();
 }
 
 void Test::testCharHighlightODF()
