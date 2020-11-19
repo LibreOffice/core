@@ -465,7 +465,7 @@ public:
 
 typedef sal_uLong GridId;
 
-#define GRID_NOT_FOUND  ((GridId)ULONG_MAX)
+#define GRID_NOT_FOUND  (GridId(ULONG_MAX))
 
 class IcnGridMap_Impl
 {
