@@ -55,16 +55,14 @@ using com::sun::star::xml::dom::NodeType_ELEMENT_NODE;
 // helper functions; implemented below
 static Reference<XNode> lcl_createDomInstance();
 static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
-                                    sal_uInt16 nPrefix,
-                                    const OUString& rLocalName,
+                                    sal_Int32 nElement,
                                     const Reference<XNode>& xParent);
 
 
 DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
-                                      sal_uInt16 nPrefix,
-                                      const OUString& rLocalName ) :
-    SvXMLImportContext( rImport, nPrefix, rLocalName ),
-    mxNode( lcl_createElement( rImport, nPrefix, rLocalName,
+                                      sal_Int32 nElement ) :
+    SvXMLImportContext( rImport ),
+    mxNode( lcl_createElement( rImport, nElement,
                                lcl_createDomInstance() ) )
 {
     SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
@@ -73,11 +71,10 @@ DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
 }
 
 DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
-                                      sal_uInt16 nPrefix,
-                                      const OUString& rLocalName,
+                                      sal_Int32 nElement,
                                       Reference<XNode> const & xParent ) :
-    SvXMLImportContext( rImport, nPrefix, rLocalName ),
-    mxNode( lcl_createElement( rImport, nPrefix, rLocalName, xParent ) )
+    SvXMLImportContext( rImport ),
+    mxNode( lcl_createElement( rImport, nElement, xParent ) )
 {
     SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
     SAL_WARN_IF( !Reference<XElement>( mxNode, UNO_QUERY ).is(), "xmloff", "need element" );
@@ -94,13 +91,11 @@ Reference<XDocument> DomBuilderContext::getTree()
     return mxNode->getOwnerDocument();
 }
 
-SvXMLImportContextRef DomBuilderContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > DomBuilderContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     // create DomBuilder for subtree
-    return new DomBuilderContext( GetImport(), nPrefix, rLocalName, mxNode );
+    return new DomBuilderContext( GetImport(), nElement, mxNode );
 }
 
 
@@ -184,8 +179,7 @@ static Reference<XNode> lcl_createDomInstance()
 }
 
 static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
-                                    sal_uInt16 nPrefix,
-                                    const OUString& rLocalName,
+                                    sal_Int32 nElement,
                                     const Reference<XNode>& xParent)
 {
     SAL_WARN_IF( !xParent.is(), "xmloff", "need parent node" );
@@ -198,7 +192,10 @@ static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
     // multiple prefixes for the same namespace. Fortunately, those are rare.
 
     Reference<XElement> xElement;
-    switch( nPrefix )
+    sal_uInt16 nNamespace = (nElement >> NMSP_SHIFT) - 1;
+    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(nElement, &rImport.GetNamespaceMap());
+    const OUString& rLocalName = SvXMLImport::getNameFromToken( nElement );
+    switch( nNamespace )
     {
     case XML_NAMESPACE_NONE:
         // no namespace: use local name
@@ -219,9 +216,9 @@ static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
         // the namespace map to create a qualified name for us. Technically,
         // this is a bug, since this will fail for multiple prefixes used for
         // the same namespace.
-        xElement = xDocument->createElementNS(
-            rImport.GetNamespaceMap().GetNameByKey( nPrefix ),
-            rImport.GetNamespaceMap().GetQNameByKey( nPrefix, rLocalName ) );
+        OUString namespaceURI = SvXMLImport::getNamespaceURIFromToken(nElement);
+        OUString qualifiedName = rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName;
+        xElement = xDocument->createElementNS(namespaceURI, qualifiedName);
         break;
     }
     SAL_WARN_IF( !xElement.is(), "xmloff", "can't create element" );
