@@ -107,9 +107,11 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, bool bIsPara)
     {
         // Always use the visible background
         const SfxPoolItem *pTmpBrush;
+SAL_WARN("JCL","::ConvertAttrCharToGen always use visible background Highlight isPara["<<bIsPara<<"]");
         if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_HIGHLIGHT, true, &pTmpBrush ) )
         {
             SvxBrushItem aTmpBrush( *static_cast<const SvxBrushItem*>(pTmpBrush) );
+SAL_WARN("JCL","---highlight["<<aTmpBrush.GetColor()<<"]");
             if( aTmpBrush.GetColor() != COL_TRANSPARENT )
             {
                 aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
@@ -142,12 +144,13 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
 {
     // Background / highlighting
     const SfxPoolItem *pTmpItem;
+SAL_WARN("JCL","::ConvertAttrGenToChar isPara["<<bIsPara<<"]");
     if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND, false, &pTmpItem ) )
     {
         // Highlight is an MS specific thing, so remove it at the first time when LO modifies
         // this part of the imported document.
         rSet.Put( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
-
+SAL_WARN("JCL","---background has been changed. Set Highlight to COL_AUTO");
         // Remove shading marker
         if (SfxItemState::SET == rOrigSet.GetItemState(RES_CHRATR_GRABBAG, false, &pTmpItem))
         {

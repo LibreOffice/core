@@ -576,6 +576,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
     if( SfxStyleFamily::Para == m_nFamily )
     {
         SfxItemSet aSet( *m_pDlg->GetOutputItemSet() );
+SAL_WARN("JCL","Para-family ConvertAttrGenToChar");
         ::ConvertAttrGenToChar(aSet, m_xTmp->GetItemSet(), /*bIsPara=*/true);
         ::SfxToSwPageDescAttr( *pWrtShell, aSet  );
         // reset indent attributes at paragraph style, if a list style
@@ -850,7 +851,7 @@ void SwDocShell::Edit(
         ::SwToSfxPageDescAttr( rSet );
         // merge list level indent attributes into the item set if needed
         xTmp->MergeIndentAttrsOfListStyle( rSet );
-
+SAL_WARN("JCL","family-para ConvertAttrCharToGen");
         ::ConvertAttrCharToGen(xTmp->GetItemSet(), /*bIsPara=*/true);
     }
     else if( SfxStyleFamily::Char == nFamily )
