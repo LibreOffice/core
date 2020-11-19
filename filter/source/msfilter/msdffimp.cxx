@@ -21,6 +21,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <math.h>
+#include <limits>
 #include <limits.h>
 #include <vector>
 
@@ -5836,7 +5837,7 @@ void SvxMSDffManager::CheckTxBxStoryChain()
 {
     m_xShapeInfosById.reset(new SvxMSDffShapeInfos_ById);
     // mangle old Info array, sorted by nTxBxComp
-    sal_uLong nChain    = ULONG_MAX;
+    sal_uInt32 nChain = std::numeric_limits<sal_uInt32>::max();
     bool bSetReplaceFALSE = false;
     for (SvxMSDffShapeInfos_ByTxBxComp::iterator iter =
                 m_xShapeInfosByTxBxComp->begin(),
