@@ -5556,6 +5556,13 @@ void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
     bool bConvertToShading = SvtFilterOptions::Get().IsCharBackground2Shading();
     bool bHasShadingMarker = false;
 
+    // MS Word doesn't support highlight in character styles. Always export those as shading.
+    if ( !bConvertToShading && GetExport().m_bStyDef )
+    {
+        const SwFormat* pFormat = dynamic_cast<const SwFormat*>( GetExport().m_pOutFormatNode );
+        bConvertToShading = pFormat && pFormat->Which() == RES_CHRFMT;
+    }
+
     // Check shading marker
     const SfxPoolItem* pItem = GetExport().HasItem(RES_CHRATR_GRABBAG);
     if( pItem )
