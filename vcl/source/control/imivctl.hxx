@@ -99,6 +99,10 @@ struct LocalFocus
 };
 
 
+typedef sal_uLong GridId;
+
+#define GRID_NOT_FOUND  (GridId(ULONG_MAX))
+
 // Implementation-class of IconChoiceCtrl
 
 
@@ -210,7 +214,7 @@ class SvxIconChoiceCtrl_Impl
     tools::Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
     void                ClipAtVirtOutRect( tools::Rectangle& rRect ) const;
-    sal_uLong           GetPredecessorGrid( const Point& rDocPos) const;
+    GridId              GetPredecessorGrid( const Point& rDocPos) const;
 
     void                InitPredecessors();
     void                ClearPredecessors();
@@ -461,11 +465,6 @@ public:
     SvxIconChoiceCtrlEntry* GoUpDown( SvxIconChoiceCtrlEntry*, bool bDown );
     SvxIconChoiceCtrlEntry* GoPageUpDown( SvxIconChoiceCtrlEntry*, bool bDown );
 };
-
-
-typedef sal_uLong GridId;
-
-#define GRID_NOT_FOUND  (GridId(ULONG_MAX))
 
 class IcnGridMap_Impl
 {
