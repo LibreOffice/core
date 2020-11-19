@@ -64,10 +64,8 @@ XFormsInstanceContext::XFormsInstanceContext(
     SAL_WARN_IF( !mxModel.is(), "xmloff", "need model" );
 }
 
-SvXMLImportContextRef XFormsInstanceContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XFormsInstanceContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -76,13 +74,13 @@ SvXMLImportContextRef XFormsInstanceContext::CreateChildContext(
     // ignored.
     if( mxInstance.is() )
     {
+        const OUString& rLocalName = SvXMLImport::getNameFromToken( nElement );
         GetImport().SetError( XMLERROR_XFORMS_ONLY_ONE_INSTANCE_ELEMENT, rLocalName );
     }
     else
     {
         // create new DomBuilderContext. Save reference to tree in Model.
-        DomBuilderContext* pInstance =
-            new DomBuilderContext( GetImport(), nPrefix, rLocalName );
+        DomBuilderContext* pInstance = new DomBuilderContext( GetImport(), nElement );
         mxInstance = pInstance->getTree();
         pContext = pInstance;
     }
