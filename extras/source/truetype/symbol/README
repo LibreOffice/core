@@ -1,5 +1,6 @@
 Modify the OpenSymbol.sfd and generate opens___.ttf from it with FontForge. The
-.sfd is the canonical source for the .ttf.
+.sfd is the canonical source for the .ttf. See .sfd format documentation at
+https://fontforge.org/docs/techref/sfdformat.html.
 Use TTX/FontTools, which can dump the content of .ttf as an XML file, in order
 to make sure that the resulting .ttf differs only deliberately from the original
 one.
