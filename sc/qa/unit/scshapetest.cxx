@@ -17,6 +17,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdomeas.hxx>
 #include <svx/svdpage.hxx>
 #include <unotools/tempfile.hxx>
 
@@ -37,6 +38,7 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
+    void testMeasurelineHideColSave();
     void testHideColsShow();
     void testTdf138138_MoveCellWithRotatedShape();
     void testLoadVerticalFlip();
@@ -47,6 +49,7 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testMeasurelineHideColSave);
     CPPUNIT_TEST(testHideColsShow);
     CPPUNIT_TEST(testTdf138138_MoveCellWithRotatedShape);
     CPPUNIT_TEST(testLoadVerticalFlip);
@@ -106,6 +109,77 @@ static void lcl_AssertRectEqualWithTolerance(const OString& sInfo,
            + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
+}
+
+static void lcl_AssertPointEqualWithTolerance(const OString& sInfo, const Point rExpected,
+                                              const Point rActual, const sal_Int32 nTolerance)
+{
+    // X
+    OString sMsg = sInfo + " X expected " + OString::number(rExpected.X()) + " actual "
+                   + OString::number(rActual.X()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.X() - rActual.X()) <= nTolerance);
+    // Y
+    sMsg = sInfo + " Y expected " + OString::number(rExpected.Y()) + " actual "
+           + OString::number(rActual.Y()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Y() - rActual.Y()) <= nTolerance);
+}
+
+void ScShapeTest::testMeasurelineHideColSave()
+{
+    // The document contains a SdrMeasureObj anchored "To Cell (resive with cell)" with start in cell
+    // D11 and end in cell I5. Error was, that after hiding col A and saving, start and end point
+    // position were lost.
+    OUString aFileURL;
+    createFileURL("measurelineHideColSave.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get document and shape
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("No object found", pObj);
+
+    // Make sure loading is correct
+    Point aStartPoint(7500, 15000); // according UI
+    Point aEndPoint(17500, 8000);
+    lcl_AssertPointEqualWithTolerance("Load start: ", aStartPoint, pObj->GetPoint(0), 1);
+    lcl_AssertPointEqualWithTolerance("Load end: ", aEndPoint, pObj->GetPoint(1), 1);
+
+    // Hide column A, save and reload
+    rDoc.SetColHidden(0, 0, 0, true);
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get ScDocShell
+    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Reload: Failed to access document shell", pFoundShell);
+    pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get document and object
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    pDrawLayer = rDoc2.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: custom shape no longer exists", pObj);
+
+    // Check that start and end point are unchanged
+    lcl_AssertPointEqualWithTolerance("Reload start: ", aStartPoint, pObj->GetPoint(0), 1);
+    lcl_AssertPointEqualWithTolerance("Reload end: ", aEndPoint, pObj->GetPoint(1), 1);
+
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testHideColsShow()

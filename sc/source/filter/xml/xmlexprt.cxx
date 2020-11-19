@@ -3475,12 +3475,12 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
     if( !(rMyCell.bHasShape && !rMyCell.aShapeList.empty() && pDoc) )
         return;
 
-    tools::Rectangle aRectFull = pDoc->GetMMRect(rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(),
-        rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab(),
-        false /*bHiddenAsZero*/);
-    tools::Rectangle aRectReduced = pDoc->GetMMRect(rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(),
-        rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab(),
-        true /*bHiddenAsZero*/);
+    tools::Rectangle aRectFull = pDoc->GetMMRect(
+        rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Col(),
+        rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab(), false /*bHiddenAsZero*/);
+    tools::Rectangle aRectReduced = pDoc->GetMMRect(
+        rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Col(),
+        rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab(), true /*bHiddenAsZero*/);
 
     // Reference point
     awt::Point aPoint;
@@ -3495,10 +3495,11 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
     {
         if (rShape.xShape.is())
         {
-            basegfx::B2DPolyPolygon aPolyPolygonOrig;
-            basegfx::B2DHomMatrix aMatrixOrig;
             bool bNeedsRestore = false;
             SdrObject* pObj = GetSdrObjectFromXShape(rShape.xShape);
+            SdrObjGeoData* pGeoData = nullptr;
+            if (pObj)
+                pGeoData = pObj->GetGeoData();
 
             if (pObj && aRectFull != aRectReduced)
             {
@@ -3507,11 +3508,8 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                 // needs it as if there were no hidden rows or columns.
                 // We shift the object and restore it later.
                 bNeedsRestore = true;
-                pObj->TRGetBaseGeometry(aMatrixOrig, aPolyPolygonOrig);
-                basegfx::B2DHomMatrix aMatrixFull(aMatrixOrig);
-                aMatrixFull.translate(aRectFull.Left() - aRectReduced.Left(),
-                                      aRectFull.Top() - aRectReduced.Top());
-                pObj->TRSetBaseGeometry(aMatrixFull, aPolyPolygonOrig);
+                pObj->NbcMove(Size(aRectFull.Left() - aRectReduced.Left(),
+                                   aRectFull.Top() - aRectReduced.Top()));
             }
             // ToDo: Adapt object skew and rotation to bHiddenAsZero=false, tdf#137033
 
@@ -3537,8 +3535,8 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             ExportShape(rShape.xShape, &aPoint);
 
             // Restore object geometry
-            if (bNeedsRestore)
-                pObj->TRSetBaseGeometry(aMatrixOrig, aPolyPolygonOrig);
+            if (bNeedsRestore && pObj && pGeoData)
+                pObj->SetGeoData(*pGeoData);
         }
     }
 }
