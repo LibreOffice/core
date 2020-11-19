@@ -123,16 +123,16 @@ void GetSignatureLineShape(const uno::Reference<frame::XModel>& xModel, sal_Int3
 /// Represents a parsed signature.
 struct Signature
 {
-    FPDF_SIGNATURE m_pSignature;
+    std::unique_ptr<vcl::pdf::PDFiumSignature> m_pSignature;
     /// Offset+length pairs.
     std::vector<std::pair<size_t, size_t>> m_aByteRanges;
 };
 
 /// Turns an array of floats into offset + length pairs.
-void GetByteRangesFromPDF(FPDF_SIGNATURE pSignature,
+void GetByteRangesFromPDF(std::unique_ptr<vcl::pdf::PDFiumSignature>& pSignature,
                           std::vector<std::pair<size_t, size_t>>& rByteRanges)
 {
-    int nByteRangeLen = FPDFSignatureObj_GetByteRange(pSignature, nullptr, 0);
+    int nByteRangeLen = FPDFSignatureObj_GetByteRange(pSignature->getPointer(), nullptr, 0);
     if (nByteRangeLen <= 0)
     {
         SAL_WARN("xmlsecurity.helper", "GetByteRangesFromPDF: no byte ranges");
@@ -140,7 +140,7 @@ void GetByteRangesFromPDF(FPDF_SIGNATURE pSignature,
     }
 
     std::vector<int> aByteRange(nByteRangeLen);
-    FPDFSignatureObj_GetByteRange(pSignature, aByteRange.data(), aByteRange.size());
+    FPDFSignatureObj_GetByteRange(pSignature->getPointer(), aByteRange.data(), aByteRange.size());
 
     size_t nByteRangeOffset = 0;
     for (size_t i = 0; i < aByteRange.size(); ++i)
@@ -183,7 +183,7 @@ int GetMDPPerm(const std::vector<Signature>& rSignatures)
 
     for (const auto& rSignature : rSignatures)
     {
-        int nPerm = FPDFSignatureObj_GetDocMDPPermission(rSignature.m_pSignature);
+        int nPerm = FPDFSignatureObj_GetDocMDPPermission(rSignature.m_pSignature->getPointer());
         if (nPerm != 0)
         {
             return nPerm;
@@ -346,18 +346,21 @@ bool ValidateSignature(SvStream& rStream, const Signature& rSignature,
                        const std::set<unsigned int>& rSignatureEOFs,
                        const std::vector<unsigned int>& rTrailerEnds)
 {
-    int nContentsLen = FPDFSignatureObj_GetContents(rSignature.m_pSignature, nullptr, 0);
+    int nContentsLen
+        = FPDFSignatureObj_GetContents(rSignature.m_pSignature->getPointer(), nullptr, 0);
     if (nContentsLen <= 0)
     {
         SAL_WARN("xmlsecurity.helper", "ValidateSignature: no contents");
         return false;
     }
     std::vector<unsigned char> aContents(nContentsLen);
-    FPDFSignatureObj_GetContents(rSignature.m_pSignature, aContents.data(), aContents.size());
+    FPDFSignatureObj_GetContents(rSignature.m_pSignature->getPointer(), aContents.data(),
+                                 aContents.size());
 
-    int nSubFilterLen = FPDFSignatureObj_GetSubFilter(rSignature.m_pSignature, nullptr, 0);
+    int nSubFilterLen
+        = FPDFSignatureObj_GetSubFilter(rSignature.m_pSignature->getPointer(), nullptr, 0);
     std::vector<char> aSubFilterBuf(nSubFilterLen);
-    FPDFSignatureObj_GetSubFilter(rSignature.m_pSignature, aSubFilterBuf.data(),
+    FPDFSignatureObj_GetSubFilter(rSignature.m_pSignature->getPointer(), aSubFilterBuf.data(),
                                   aSubFilterBuf.size());
     // Buffer is NUL-terminated.
     OString aSubFilter(aSubFilterBuf.data(), aSubFilterBuf.size() - 1);
@@ -376,22 +379,24 @@ bool ValidateSignature(SvStream& rStream, const Signature& rSignature,
     }
 
     // Reason / comment / description is optional.
-    int nReasonLen = FPDFSignatureObj_GetReason(rSignature.m_pSignature, nullptr, 0);
+    int nReasonLen = FPDFSignatureObj_GetReason(rSignature.m_pSignature->getPointer(), nullptr, 0);
     if (nReasonLen > 0)
     {
         std::vector<char16_t> aReasonBuf(nReasonLen);
-        FPDFSignatureObj_GetReason(rSignature.m_pSignature, aReasonBuf.data(), aReasonBuf.size());
+        FPDFSignatureObj_GetReason(rSignature.m_pSignature->getPointer(), aReasonBuf.data(),
+                                   aReasonBuf.size());
         rInformation.ouDescription = OUString(aReasonBuf.data(), aReasonBuf.size() - 1);
     }
 
     // Date: used only when the time of signing is not available in the
     // signature.
-    int nTimeLen = FPDFSignatureObj_GetTime(rSignature.m_pSignature, nullptr, 0);
+    int nTimeLen = FPDFSignatureObj_GetTime(rSignature.m_pSignature->getPointer(), nullptr, 0);
     if (nTimeLen > 0)
     {
         // Example: "D:20161027100104".
         std::vector<char> aTimeBuf(nTimeLen);
-        FPDFSignatureObj_GetTime(rSignature.m_pSignature, aTimeBuf.data(), aTimeBuf.size());
+        FPDFSignatureObj_GetTime(rSignature.m_pSignature->getPointer(), aTimeBuf.data(),
+                                 aTimeBuf.size());
         OString aM(aTimeBuf.data(), aTimeBuf.size() - 1);
         if (aM.startsWith("D:") && aM.getLength() >= 16)
         {
@@ -480,10 +485,10 @@ bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
     std::vector<Signature> aSignatures(nSignatureCount);
     for (int i = 0; i < nSignatureCount; ++i)
     {
-        FPDF_SIGNATURE pSignature = pPdfDocument->getSignature(i);
+        std::unique_ptr<vcl::pdf::PDFiumSignature> pSignature = pPdfDocument->getSignature(i);
         std::vector<std::pair<size_t, size_t>> aByteRanges;
         GetByteRangesFromPDF(pSignature, aByteRanges);
-        aSignatures[i] = Signature{ pSignature, aByteRanges };
+        aSignatures[i] = Signature{ std::move(pSignature), aByteRanges };
     }
 
     std::set<unsigned int> aSignatureEOFs;

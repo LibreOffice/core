@@ -191,6 +191,11 @@ std::unique_ptr<PDFiumBitmap> PDFium::createBitmap(int nWidth, int nHeight, int 
     return pPDFiumBitmap;
 }
 
+PDFiumSignature::PDFiumSignature(FPDF_SIGNATURE pSignature)
+    : mpSignature(pSignature)
+{
+}
+
 PDFiumDocument::PDFiumDocument(FPDF_DOCUMENT pPdfDocument)
     : mpPdfDocument(pPdfDocument)
 {
@@ -213,9 +218,15 @@ std::unique_ptr<PDFiumPage> PDFiumDocument::openPage(int nIndex)
     return pPDFiumPage;
 }
 
-FPDF_SIGNATURE PDFiumDocument::getSignature(int nIndex)
+std::unique_ptr<PDFiumSignature> PDFiumDocument::getSignature(int nIndex)
 {
-    return FPDF_GetSignatureObject(mpPdfDocument, nIndex);
+    std::unique_ptr<PDFiumSignature> pPDFiumSignature;
+    FPDF_SIGNATURE pSignature = FPDF_GetSignatureObject(mpPdfDocument, nIndex);
+    if (pSignature)
+    {
+        pPDFiumSignature = std::make_unique<PDFiumSignature>(pSignature);
+    }
+    return pPDFiumSignature;
 }
 
 std::vector<unsigned int> PDFiumDocument::getTrailerEnds()
