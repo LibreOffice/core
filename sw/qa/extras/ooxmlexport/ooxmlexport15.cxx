@@ -22,6 +22,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <unotools/fltrcfg.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/ooxmlexport/data/";
 
@@ -29,6 +30,21 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
+
+    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
+    {
+        if (OString(filename) == "tdf138345_highlightInStyles.odt" )
+        {
+            std::unique_ptr<Resetter> pResetter(new Resetter(
+                [] () {
+                    // reset to LO 7.2 default after test has run
+                    SvtFilterOptions::Get().SetCharBackground2Shading();
+                }));
+            SvtFilterOptions::Get().SetCharBackground2Highlighting();
+            return pResetter;
+        }
+        return nullptr;
+    }
 
 protected:
     /**
@@ -708,6 +724,51 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136441_commentInFootnote, "tdf136441_
 {
     // failed to load without error if footnote contained a comment.
     // (MS Word's UI doesn't allow adding comments to a footnote.)
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf138345_highlightInStyles, "tdf138345_highlightInStyles.odt")
+{
+    // MS Word can format character backgrounds as either highlight or shading.
+    // Highlighting is problematic in styles.
+
+    // see preTest() where filter options SetCharBackground2Highlighting()
+    CPPUNIT_ASSERT(SvtFilterOptions::Get().IsCharBackground2Highlighting());
+
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY_THROW);
+    // The paragraph style sets a pale yellow background (0xFFDE59).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(16768601), getProperty<sal_Int32>(xRun, "CharBackColor"));
+
+    xRun.set(getRun(getParagraph(3), 2, "overridden"), uno::UNO_QUERY_THROW);
+    // MS Word doesn't accept highlight in char styles. This must be as shading instead of highlight.
+    // The character style overrides with a light blue background (0xB4C7DC)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11847644), getProperty<sal_Int32>(xRun, "CharBackColor"));
+
+    xRun.set(getRun(getParagraph(3), 4, "cancelled"), uno::UNO_QUERY_THROW);
+    // The character style cancels the inheritted background color completely.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharBackColor"));
+
+    xRun.set(getRun(getParagraph(5), 2, "none"), uno::UNO_QUERY_THROW);
+    // Direct formatting removes the inheritted background color completely.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharBackColor"));
+
+    xRun.set(getRun(getParagraph(7), 1), uno::UNO_QUERY_THROW);
+    // A Paragraph style removes the background color completely.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharBackColor"));
+
+    xRun.set(getRun(getParagraph(9), 2), uno::UNO_QUERY_THROW);
+    // The character style overrides the paragraph style with a light blue background (0xB4C7DC).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11847644), getProperty<sal_Int32>(xRun, "CharBackColor"));
+
+    xRun.set(getRun(getParagraph(9), 3, "none"), uno::UNO_QUERY_THROW);
+    // Direct formatting removes the inheritted background color completely.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharBackColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")

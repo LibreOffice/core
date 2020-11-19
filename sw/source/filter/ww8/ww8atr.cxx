@@ -5554,7 +5554,12 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTex
 
 void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
 {
-    bool bConvertToShading = SvtFilterOptions::Get().IsCharBackground2Shading();
+    // MS Word doesn't support highlight in character styles. Always export those as shading.
+    // In fact, there doesn't seem to be any reason to export paragraph styles as highlight either.
+    // and so so any styles (or direct formatting that cancels a style-setting) should be shading.
+    bool bConvertToShading = SvtFilterOptions::Get().IsCharBackground2Shading()
+                             || GetExport().m_bStyDef
+                             || rBrush.GetColor() == COL_AUTO;
     bool bHasShadingMarker = false;
 
     // Check shading marker
