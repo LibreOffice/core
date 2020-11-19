@@ -464,20 +464,20 @@ protected:
 
     void GetCtrlData(sal_uInt32 nOffsDgg);
     void GetDrawingGroupContainerData( SvStream& rSt,
-                                       sal_uLong nLenDgg );
+                                       sal_uInt32 nLenDgg );
     // Add internal drawing container id as parameter to the sub methods of
     // reading the control information about the drawing objects.
     // The drawing container id is used to distinguish the text ids of drawing
     // objects in different drawing containers.
     void GetDrawingContainerData( SvStream& rSt,
-                                  sal_uLong nLenDg,
+                                  sal_uInt32 nLenDg,
                                   sal_uInt16 nDrawingContainerId );
     bool GetShapeGroupContainerData( SvStream& rSt,
-                                     sal_uLong nLenShapeGroupCont,
+                                     sal_uInt32 nLenShapeGroupCont,
                                      bool bPatriarch,
                                      sal_uInt16 nDrawingContainerId );
     bool GetShapeContainerData( SvStream& rSt,
-                                sal_uLong nLenShapeCont,
+                                sal_uInt32 nLenShapeCont,
                                 sal_uLong nPosGroup,
                                 sal_uInt16 nDrawingContainerId );
 
