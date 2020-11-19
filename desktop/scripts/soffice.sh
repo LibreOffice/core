@@ -78,8 +78,8 @@ for arg in "$@" $EXTRAOPT ; do
     case "$arg" in
         --record)
             if which rr >/dev/null 2>&1 ; then
-                # smoketest may already be recorded => use ignore-nested
-                RRCHECK="rr record --ignore-nested"
+                # smoketest may already be recorded => ignore nested
+                RRCHECK="rr record --nested=ignore"
                 checks="c$checks"
             else
                 echo "Error: Can't find the tool \"rr\", --record option will be ignored."
