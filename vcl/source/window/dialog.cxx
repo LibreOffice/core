@@ -60,6 +60,7 @@
 #include <vcl/IDialogRenderable.hxx>
 #include <messagedialog.hxx>
 #include <salframe.hxx>
+#include <tools/json_writer.hxx>
 
 #include <iostream>
 #include <utility>
@@ -1612,6 +1613,12 @@ void TopLevelWindowLocker::decBusy()
         a->ImplGetFrame()->NotifyModalHierarchy(false);
     }
     m_aBusyStack.pop();
+}
+
+void Dialog::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    SystemWindow::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("title", GetText());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
