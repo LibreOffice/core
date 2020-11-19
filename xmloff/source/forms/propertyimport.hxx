@@ -160,9 +160,8 @@ namespace xmloff
         OPropertyElementsContext(SvXMLImport& _rImport,
                 const OPropertyImportRef& _rPropertyImporter);
 
-        virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 #if OSL_DEBUG_LEVEL > 0
         virtual void StartElement(
@@ -179,7 +178,7 @@ namespace xmloff
         OPropertyImportRef          m_xPropertyImporter;    // to add the properties
 
     public:
-        OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
+        OSinglePropertyContext(SvXMLImport& _rImport,
                 const OPropertyImportRef& _rPropertyImporter);
 
         virtual void StartElement(
@@ -195,7 +194,7 @@ namespace xmloff
         ::std::vector< OUString >    m_aListValues;
 
     public:
-        OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
+        OListPropertyContext( SvXMLImport& _rImport,
                 const OPropertyImportRef& _rPropertyImporter );
 
         virtual void StartElement(
@@ -203,9 +202,8 @@ namespace xmloff
 
         virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-        virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     };
 
     //= OListValueContext
@@ -214,8 +212,7 @@ namespace xmloff
         OUString& m_rListValueHolder;
 
     public:
-        OListValueContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
-            OUString& _rListValueHolder );
+        OListValueContext( SvXMLImport& _rImport, OUString& _rListValueHolder );
 
         virtual void StartElement(
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList ) override;

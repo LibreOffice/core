@@ -41,6 +41,8 @@
 #include <unotools/datetime.hxx>
 #include <rtl/strbuf.hxx>
 
+using namespace ::xmloff::token;
+
 namespace xmloff
 {
 
@@ -343,16 +345,16 @@ OPropertyElementsContext::OPropertyElementsContext(SvXMLImport& _rImport,
 {
 }
 
-SvXMLImportContextRef OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
-    const Reference< XAttributeList >&)
+css::uno::Reference< css::xml::sax::XFastContextHandler > OPropertyElementsContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    if( token::IsXMLToken( _rLocalName, token::XML_PROPERTY ) )
+    if( (nElement & TOKEN_MASK) == XML_PROPERTY )
     {
-        return new OSinglePropertyContext(GetImport(), _nPrefix, _rLocalName, m_xPropertyImporter);
+        return new OSinglePropertyContext(GetImport(), m_xPropertyImporter);
     }
-    else if( token::IsXMLToken( _rLocalName, token::XML_LIST_PROPERTY ) )
+    else if( (nElement & TOKEN_MASK) == XML_LIST_PROPERTY )
     {
-        return new OListPropertyContext( GetImport(), _nPrefix, _rLocalName, m_xPropertyImporter );
+        return new OListPropertyContext( GetImport(), m_xPropertyImporter );
     }
     return nullptr;
 }
@@ -370,9 +372,9 @@ SvXMLImportContextRef OPropertyElementsContext::CreateChildContext(sal_uInt16 _n
 #endif
 
 //= OSinglePropertyContext
-OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
+OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport,
         const OPropertyImportRef& _rPropertyImporter)
-    :SvXMLImportContext(_rImport, _nPrefix, _rName)
+    :SvXMLImportContext(_rImport)
     ,m_xPropertyImporter(_rPropertyImporter)
 {
 }
@@ -435,9 +437,9 @@ void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rx
 }
 
 //= OListPropertyContext
-OListPropertyContext::OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
+OListPropertyContext::OListPropertyContext( SvXMLImport& _rImport,
     const OPropertyImportRef& _rPropertyImporter )
-    :SvXMLImportContext( _rImport, _nPrefix, _rName )
+    :SvXMLImportContext( _rImport )
     ,m_xPropertyImporter( _rPropertyImporter )
 {
 }
@@ -497,19 +499,20 @@ void OListPropertyContext::endFastElement(sal_Int32 )
     m_xPropertyImporter->implPushBackGenericPropertyValue( aSequenceValue );
 }
 
-SvXMLImportContextRef OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName, const Reference< XAttributeList >& /*_rxAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OListPropertyContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    if ( token::IsXMLToken( _rLocalName, token::XML_LIST_VALUE ) )
+    if ( (nElement & TOKEN_MASK) == XML_LIST_VALUE )
     {
         m_aListValues.emplace_back();
-        return new OListValueContext( GetImport(), _nPrefix, _rLocalName, *m_aListValues.rbegin() );
+        return new OListValueContext( GetImport(), *m_aListValues.rbegin() );
     }
     return nullptr;
 }
 
 //= OListValueContext
-OListValueContext::OListValueContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName, OUString& _rListValueHolder )
-    :SvXMLImportContext( _rImport, _nPrefix, _rName )
+OListValueContext::OListValueContext( SvXMLImport& _rImport, OUString& _rListValueHolder )
+    :SvXMLImportContext( _rImport )
     ,m_rListValueHolder( _rListValueHolder )
 {
 }
