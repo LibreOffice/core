@@ -2719,16 +2719,16 @@ XMLDdeFieldDeclsImportContext::XMLDdeFieldDeclsImportContext(
 {
 }
 
-SvXMLImportContextRef XMLDdeFieldDeclsImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLDdeFieldDeclsImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         (IsXMLToken(rLocalName, XML_DDE_CONNECTION_DECL)) )
+    if ( nElement == XML_ELEMENT(TEXT, XML_DDE_CONNECTION_DECL) )
     {
-        return new XMLDdeFieldDeclImportContext(GetImport(), nPrefix, rLocalName);
+        return new XMLDdeFieldDeclImportContext(GetImport());
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 
@@ -2736,13 +2736,9 @@ SvXMLImportContextRef XMLDdeFieldDeclsImportContext::CreateChildContext(
 // import dde field declaration
 
 
-XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(
-    SvXMLImport& rImport, sal_uInt16 nPrfx,
-    const OUString& sLocalName)
-:   SvXMLImportContext(rImport, nPrfx, sLocalName)
+XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(SvXMLImport& rImport)
+:   SvXMLImportContext(rImport)
 {
-    DBG_ASSERT(XML_NAMESPACE_TEXT == nPrfx, "wrong prefix");
-    DBG_ASSERT(IsXMLToken(sLocalName, XML_DDE_CONNECTION_DECL), "wrong name");
 }
 
 void XMLDdeFieldDeclImportContext::startFastElement(
@@ -3628,56 +3624,52 @@ XMLDropDownFieldImportContext::XMLDropDownFieldImportContext(
     bValid = true;
 }
 
-static bool lcl_ProcessLabel( const SvXMLImport& rImport,
-                       const Reference<XAttributeList>& xAttrList,
+static bool lcl_ProcessLabel(
+                       const Reference<XFastAttributeList>& xAttrList,
                        OUString& rLabel,
                        bool& rIsSelected )
 {
     bool bValid = false;
-    sal_Int16 nLength = xAttrList->getLength();
-    for( sal_Int16 n = 0; n < nLength; n++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(n), &sLocalName );
-        OUString sValue = xAttrList->getValueByIndex(n);
-
-        if( nPrefix == XML_NAMESPACE_TEXT )
+        OUString sValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            if( IsXMLToken( sLocalName, XML_VALUE ) )
+            case XML_ELEMENT(TEXT, XML_VALUE):
             {
                 rLabel = sValue;
                 bValid = true;
+                break;
             }
-            else if( IsXMLToken( sLocalName, XML_CURRENT_SELECTED ) )
+            case XML_ELEMENT(TEXT, XML_CURRENT_SELECTED):
             {
                 bool bTmp(false);
                 if (::sax::Converter::convertBool( bTmp, sValue ))
                     rIsSelected = bTmp;
+                break;
             }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
     return bValid;
 }
 
-SvXMLImportContextRef XMLDropDownFieldImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLDropDownFieldImportContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if( nPrefix == XML_NAMESPACE_TEXT  &&
-        IsXMLToken( rLocalName, XML_LABEL ) )
+    if( nElement == XML_ELEMENT(TEXT, XML_LABEL) )
     {
         OUString sLabel;
         bool bIsSelected = false;
-        if( lcl_ProcessLabel( GetImport(), xAttrList, sLabel, bIsSelected ) )
+        if( lcl_ProcessLabel( xAttrList, sLabel, bIsSelected ) )
         {
             if( bIsSelected )
                 nSelected = static_cast<sal_Int32>( aLabels.size() );
             aLabels.push_back( sLabel );
         }
     }
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return new SvXMLImportContext( GetImport() );
 }
 
 void XMLDropDownFieldImportContext::ProcessAttribute(
