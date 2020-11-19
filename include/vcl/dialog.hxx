@@ -155,6 +155,8 @@ public:
     void            set_default_response(int nResponse);
     int             get_default_response() const;
     vcl::Window*    get_widget_for_response(int nResponse);
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 #endif // INCLUDED_VCL_DIALOG_HXX
