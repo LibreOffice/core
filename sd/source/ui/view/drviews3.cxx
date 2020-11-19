@@ -911,7 +911,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     if( mpDrawView->IsTextEdit() )
     {
         Point aPnt1 = GetActiveWindow()->GetWinViewPos();
-        ::tools::Rectangle aMinMaxRect( aPnt1, Size(ULONG_MAX, ULONG_MAX) );
+        ::tools::Rectangle aMinMaxRect( aPnt1, Size(-1, -1) );
         rSet.Put( SfxRectangleItem(SID_RULER_LR_MIN_MAX, aMinMaxRect) );
     }
     else
