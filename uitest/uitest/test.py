@@ -48,6 +48,16 @@ class UITest(object):
             if component is not None:
                 return component
 
+    def wait_until_child_in_current_dialog_is_available(self, childName):
+        time_ = 0
+        while time_ < MAX_WAIT:
+            xDialog = self._xUITest.getTopFocusWindow()
+            if childName in xDialog.getChildren():
+                break
+            else:
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
+
     def wait_until_child_is_available(self, parent, childName):
         time_ = 0
         while time_ < MAX_WAIT:
