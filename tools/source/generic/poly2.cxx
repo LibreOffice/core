@@ -27,6 +27,7 @@
 #include <tools/gen.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
 
 namespace tools {
 
@@ -279,6 +280,27 @@ void PolyPolygon::Clip( const tools::Rectangle& rRect )
 
     if ( !nPolyCount )
         return;
+
+    // If there are bezier curves involved, Polygon::Clip() is broken.
+    // Use a temporary B2DPolyPolygon for the clipping.
+    for ( i = 0; i < nPolyCount; i++ )
+    {
+        if(mpImplPolyPolygon->mvPolyAry[i].HasFlags())
+        {
+            const basegfx::B2DPolyPolygon aPoly(
+                basegfx::utils::clipPolyPolygonOnRange(
+                    getB2DPolyPolygon(),
+                    basegfx::B2DRange(
+                        rRect.Left(),
+                        rRect.Top(),
+                        rRect.Right() + 1,
+                        rRect.Bottom() + 1),
+                    true,
+                    false));
+            *this = PolyPolygon( aPoly );
+            return;
+        }
+    }
 
     // Clip every polygon, deleting the empty ones
     for ( i = 0; i < nPolyCount; i++ )
