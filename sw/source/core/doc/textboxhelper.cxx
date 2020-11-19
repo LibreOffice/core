@@ -798,13 +798,10 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
         || ((aAnchId == RndStdIds::FLY_AT_PARA || aAnchId == RndStdIds::FLY_AT_CHAR)
             && rShape.GetAnchor().GetContentAnchor()))
     {
-        SwFormatAnchor aNewAnch = pFormat->GetAnchor();
-        if (rShape.GetAnchor().GetContentAnchor())
-            aNewAnch.SetAnchor(rShape.GetAnchor().GetContentAnchor());
-        if (rShape.GetAnchor().GetPageNum() > 0)
-            aNewAnch.SetPageNum(rShape.GetAnchor().GetPageNum());
-        aNewAnch.SetType(rShape.GetAnchor().GetAnchorId());
-        aTextBoxSet.Put(aNewAnch);
+        aTextBoxSet.Put(
+            aAnchId == RndStdIds::FLY_AT_PAGE
+                ? SwFormatAnchor(RndStdIds::FLY_AT_PAGE, rShape.GetAnchor().GetPageNum())
+                : rShape.GetAnchor());
     }
     do
     {
