@@ -37,22 +37,9 @@ const SvXMLTokenMapEntry aEmptyMap[1] =
 };
 
 TokenContext::TokenContext( SvXMLImport& rImport,
-                            sal_uInt16 nPrefix,
-                            const OUString& rLocalName,
-                            const SvXMLTokenMapEntry* pAttributes,
-                            const SvXMLTokenMapEntry* pChildren )
-    : SvXMLImportContext( rImport, nPrefix, rLocalName ),
-      mpAttributes( pAttributes ),
-      mpChildren( pChildren )
-{
-}
-
-TokenContext::TokenContext( SvXMLImport& rImport,
-                            const SvXMLTokenMapEntry* pAttributes,
-                            const SvXMLTokenMapEntry* pChildren )
+                            const SvXMLTokenMapEntry* pAttributes )
     : SvXMLImportContext( rImport ),
-      mpAttributes( pAttributes ),
-      mpChildren( pChildren )
+      mpAttributes( pAttributes )
 {
 }
 
@@ -94,28 +81,15 @@ void TokenContext::StartElement(
     }
 }
 
-SvXMLImportContextRef TokenContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > TokenContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    // call HandleChild for elements in token map. Ignore other content.
-
-    SvXMLImportContext* pContext = nullptr;
-
-    SAL_WARN_IF( mpChildren == nullptr, "xmloff", "no token map for child elements" );
-    SvXMLTokenMap aMap( mpChildren );
-    sal_uInt16 nToken = aMap.Get( nPrefix, rLocalName );
-    if( nToken != XML_TOK_UNKNOWN )
-    {
-        // call handle child, and pass down arguments
-        pContext = HandleChild( nToken, nPrefix, rLocalName, xAttrList );
-    }
-
+    // call handle child, and pass down arguments
+    SvXMLImportContext* pContext = HandleChild( nElement, xAttrList );
     // error handling: create default context and generate warning
     if( pContext == nullptr )
     {
-        GetImport().SetError( XMLERROR_UNKNOWN_ELEMENT, rLocalName );
+        GetImport().SetError( XMLERROR_UNKNOWN_ELEMENT, SvXMLImport::getNameFromToken( nElement ) );
     }
     return pContext;
 }

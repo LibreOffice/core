@@ -253,7 +253,7 @@ SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
     case XML_TOK_DOC_XFORMS:
-        pContext = createXFormsModelContext(GetImport(), nPrefix, rLocalName);
+        pContext = createXFormsModelContext(GetImport());
         break;
     }
 

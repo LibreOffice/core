@@ -55,10 +55,8 @@ const SvXMLTokenMapEntry aAttributes[] =
 
 XFormsInstanceContext::XFormsInstanceContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     const Reference<XModel2> & xModel ) :
-        TokenContext( rImport, nPrefix, rLocalName, aAttributes, aEmptyMap ),
+        TokenContext( rImport, aAttributes ),
         mxModel( xModel )
 {
     SAL_WARN_IF( !mxModel.is(), "xmloff", "need model" );
@@ -124,10 +122,8 @@ void XFormsInstanceContext::HandleAttribute(
 }
 
 SvXMLImportContext* XFormsInstanceContext::HandleChild(
-    sal_uInt16,
-    sal_uInt16,
-    const OUString&,
-    const Reference<XAttributeList>& )
+    sal_Int32,
+    const Reference<css::xml::sax::XFastAttributeList>& )
 {
     OSL_FAIL( "to be handled by CreateChildContext" );
     return nullptr;

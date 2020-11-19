@@ -55,14 +55,6 @@ using com::sun::star::form::submission::XSubmission;
 using com::sun::star::form::submission::XSubmissionSupplier;
 
 SvXMLImportContext* createXFormsModelContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName )
-{
-    return new XFormsModelContext( rImport, nPrefix, rLocalName );
-}
-
-SvXMLImportContext* createXFormsModelContext(
     SvXMLImport& rImport )
 {
     return new XFormsModelContext( rImport );

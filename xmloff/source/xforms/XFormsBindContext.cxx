@@ -40,6 +40,7 @@ using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::sax::XAttributeList;
+using com::sun::star::xml::sax::XFastAttributeList;
 using com::sun::star::xforms::XModel2;
 using namespace xmloff::token;
 
@@ -63,10 +64,8 @@ static void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
 
 XFormsBindContext::XFormsBindContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     const Reference<XModel2>& xModel ) :
-        TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
+        TokenContext( rImport, aAttributeMap ),
         mxModel( xModel )
 {
     // attach binding to model
@@ -131,10 +130,8 @@ void XFormsBindContext::StartElement(
 
 /** will be called for each child element */
 SvXMLImportContext* XFormsBindContext::HandleChild(
-    sal_uInt16,
-    sal_uInt16,
-    const OUString&,
-    const Reference<XAttributeList>& )
+    sal_Int32,
+    const Reference<XFastAttributeList>& )
 {
     OSL_FAIL( "no children supported" );
     return nullptr;

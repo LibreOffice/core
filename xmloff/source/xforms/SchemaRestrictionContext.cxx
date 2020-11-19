@@ -48,7 +48,7 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using namespace com::sun::star;
 using com::sun::star::util::Duration;
-using com::sun::star::xml::sax::XAttributeList;
+using com::sun::star::xml::sax::XFastAttributeList;
 using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
 
@@ -59,31 +59,11 @@ const SvXMLTokenMapEntry aAttributes[] =
     XML_TOKEN_MAP_END
 };
 
-const SvXMLTokenMapEntry aChildren[] =
-{
-    TOKEN_MAP_ENTRY( XSD, LENGTH         ),
-    TOKEN_MAP_ENTRY( XSD, MINLENGTH      ),
-    TOKEN_MAP_ENTRY( XSD, MAXLENGTH      ),
-    TOKEN_MAP_ENTRY( XSD, MININCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, MINEXCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, MAXINCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, MAXEXCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, PATTERN        ),
-    // ??? XML_ENUMERATION
-    TOKEN_MAP_ENTRY( XSD, WHITESPACE     ),
-    TOKEN_MAP_ENTRY( XSD, TOTALDIGITS    ),
-    TOKEN_MAP_ENTRY( XSD, FRACTIONDIGITS ),
-    XML_TOKEN_MAP_END
-};
-
-
 SchemaRestrictionContext::SchemaRestrictionContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     Reference<css::xforms::XDataTypeRepository> const & rRepository,
     const OUString& sTypeName ) :
-        TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
+        TokenContext( rImport, aAttributes ),
         mxRepository( rRepository ),
         msTypeName( sTypeName ),
         msBaseName()
@@ -212,24 +192,24 @@ static Any xforms_time( const OUString& rValue )
 
 
 SvXMLImportContext* SchemaRestrictionContext::HandleChild(
-    sal_uInt16 nToken,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& xAttrList )
+    sal_Int32 nElementToken,
+    const Reference<XFastAttributeList>& xAttrList )
 {
     // find value
     OUString sValue;
-    sal_Int16 nLength = xAttrList->getLength();
-    for( sal_Int16 n = 0; n < nLength; n++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        if( IsXMLToken( xAttrList->getNameByIndex( n ), XML_VALUE ) )
-            sValue = xAttrList->getValueByIndex( n );
+        if( ( aIter.getToken() & TOKEN_MASK) == XML_VALUE )
+        {
+            sValue = aIter.toString();
+            break;
+        }
     }
 
     // determine property name + suitable converter
     OUString sPropertyName;
     convert_t pConvert = nullptr;
-    switch( nToken )
+    switch( nElementToken & TOKEN_MASK )
     {
     case XML_LENGTH:
         sPropertyName = "Length";
@@ -270,7 +250,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
             // converter is only type dependent.
 
             // first, attribute-dependent prefix
-            switch( nToken )
+            switch( nElementToken )
             {
             case XML_MININCLUSIVE:
                 sPropertyName = "MinInclusive";
@@ -356,7 +336,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
         }
     }
 
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return new SvXMLImportContext( GetImport() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
