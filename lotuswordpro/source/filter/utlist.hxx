@@ -71,8 +71,7 @@ public: // Methods
     explicit CUtListElmt(CUtListElmt* pPrev) { InsertAfter(pPrev); }
     explicit CUtListElmt(CUtList* pList);
     virtual ~CUtListElmt();
-    void MakeNotOnList() { cpNext = nullptr; } // Same as Remove but doesn't
-    // patch up list
+    void MakeNotOnList() { cpNext = nullptr; } // Same as Remove but doesn't patch up list
     CUtListElmt* GetNext() const { return cpNext; }
     void SetNext(CUtListElmt* pNext) { cpNext = pNext; }
     CUtListElmt* GetPrev() const { return cpPrev; }
