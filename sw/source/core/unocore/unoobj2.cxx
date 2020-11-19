@@ -759,7 +759,7 @@ void SwXTextRange::DeleteAndInsert(
     if (RANGE_IS_TABLE == m_pImpl->m_eRangePosition)
     {
         // setString on table not allowed
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("not possible for table");
     }
 
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
@@ -872,7 +872,7 @@ SwXTextRange::getStart()
     }
     else
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("disposed?");
     }
     return xRet;
 }
@@ -900,7 +900,7 @@ SwXTextRange::getEnd()
     }
     else
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("disposed?");
     }
     return xRet;
 }
@@ -1184,18 +1184,18 @@ SwXTextRange::createContentEnumeration(const OUString& rServiceName)
 
     if ( rServiceName != "com.sun.star.text.TextContent" )
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("unsupported service");
     }
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("range has no mark (table?)");
     }
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
     const auto pNewCursor(m_pImpl->m_rDoc.CreateUnoCursor(aPos));
     if (!GetPositions(*pNewCursor))
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("range has no positions");
     }
 
     return SwXParaFrameEnumeration::Create(*pNewCursor, PARAFRAME_PORTION_TEXTRANGE);
@@ -1208,13 +1208,13 @@ SwXTextRange::createEnumeration()
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("range has no mark (table?)");
     }
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
     auto pNewCursor(m_pImpl->m_rDoc.CreateUnoCursor(aPos));
     if (!GetPositions(*pNewCursor))
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("range has no positions");
     }
     if (!m_pImpl->m_xParentText.is())
     {
@@ -1261,7 +1261,7 @@ SwXTextRange::setPropertyValue(
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("range has no mark (table?)");
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1276,7 +1276,7 @@ SwXTextRange::getPropertyValue(const OUString& rPropertyName)
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("range has no mark (table?)");
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1323,7 +1323,7 @@ SwXTextRange::getPropertyState(const OUString& rPropertyName)
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("range has no mark (table?)");
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1338,7 +1338,7 @@ SwXTextRange::getPropertyStates(const uno::Sequence< OUString >& rPropertyName)
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("range has no mark (table?)");
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1352,7 +1352,7 @@ void SAL_CALL SwXTextRange::setPropertyToDefault(const OUString& rPropertyName)
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("range has no mark (table?)");
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1367,7 +1367,7 @@ SwXTextRange::getPropertyDefault(const OUString& rPropertyName)
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("range has no mark (table?)");
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1384,7 +1384,7 @@ SwXTextRange::makeRedline(
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("range has no mark (table?)");
     }
     SwPaM aPaM(GetDoc().GetNodes());
     SwXTextRange::GetPositions(aPaM);
