@@ -669,7 +669,7 @@ void BrowserScrollBar::dispose()
 
 void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
 {
-    sal_uLong nPos = GetThumbPos();
+    tools::Long nPos = GetThumbPos();
     if ( nPos != _nLastPos )
     {
         OUString aTip = OUString::number(nPos) + "/";
