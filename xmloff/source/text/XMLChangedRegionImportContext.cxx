@@ -39,11 +39,8 @@ using namespace ::com::sun::star;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-XMLChangedRegionImportContext::XMLChangedRegionImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
+XMLChangedRegionImportContext::XMLChangedRegionImportContext(SvXMLImport& rImport) :
+        SvXMLImportContext(rImport),
         bMergeLastPara(true)
 {
 }

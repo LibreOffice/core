@@ -25,6 +25,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <sal/log.hxx>
 
 
 using ::com::sun::star::uno::Reference;
@@ -76,21 +77,16 @@ void XMLTrackedChangesImportContext::StartElement(
 }
 
 
-SvXMLImportContextRef XMLTrackedChangesImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/)
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTrackedChangesImportContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    SvXMLImportContextRef xContext;
-
-    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         IsXMLToken( rLocalName, XML_CHANGED_REGION ) )
+    if ( nElement == XML_ELEMENT(TEXT, XML_CHANGED_REGION) )
     {
-        xContext = new XMLChangedRegionImportContext(GetImport(),
-                                                     nPrefix, rLocalName);
+        return new XMLChangedRegionImportContext(GetImport());
     }
-
-    return xContext;
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
