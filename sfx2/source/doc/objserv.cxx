@@ -443,20 +443,23 @@ uno::Reference<security::XCertificate> SfxObjectShell::GetSignPDFCertificate() c
 
 static void sendErrorToLOK(ErrCode error)
 {
-    boost::property_tree::ptree aTree;
-    aTree.put("code", error);
-    aTree.put("kind", "");
-    aTree.put("cmd", "");
+    if (error.GetClass() != ErrCodeClass::NONE)
+    {
+        boost::property_tree::ptree aTree;
+        aTree.put("code", error);
+        aTree.put("kind", "");
+        aTree.put("cmd", "");
 
-    std::unique_ptr<ErrorInfo> pInfo = ErrorInfo::GetErrorInfo(error);
-    OUString aErr;
-    if (ErrorStringFactory::CreateString(pInfo.get(), aErr))
-        aTree.put("message", aErr.toUtf8());
+        std::unique_ptr<ErrorInfo> pInfo = ErrorInfo::GetErrorInfo(error);
+        OUString aErr;
+        if (ErrorStringFactory::CreateString(pInfo.get(), aErr))
+            aTree.put("message", aErr.toUtf8());
 
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
 
-    SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aStream.str().c_str());
+        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aStream.str().c_str());
+    }
 }
 
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
