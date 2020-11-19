@@ -99,33 +99,30 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > DomBuilderContext::cre
 }
 
 
-void DomBuilderContext::StartElement(
-    const Reference<XAttributeList>& xAttrList )
+void SAL_CALL DomBuilderContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
     SAL_WARN_IF( !mxNode->getOwnerDocument().is(), "xmloff", "XNode must have XDocument" );
 
     // add attribute nodes to new node
-    sal_Int16 nAttributeCount = xAttrList->getLength();
-    for( sal_Int16 i = 0; i < nAttributeCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
+        sal_Int32 nAttrToken = aIter.getToken();
         // get name & value for attribute
-        const OUString& rName = xAttrList->getNameByIndex( i );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        // namespace handling: determine namespace & namespace key
-        OUString sNamespace;
-        sal_uInt16 nNamespaceKey =
-            GetImport().GetNamespaceMap().GetKeyByAttrName(
-                rName, nullptr, nullptr, &sNamespace);
+        sal_uInt16 nNamespace = (nAttrToken >> NMSP_SHIFT) - 1;
+        const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(nAttrToken, &GetImport().GetNamespaceMap());
+        const OUString& rLocalName = SvXMLImport::getNameFromToken( nAttrToken );
+        OUString aValue = aIter.toString();
 
         // create attribute node and set value
         Reference<XElement> xElement( mxNode, UNO_QUERY_THROW );
-        switch( nNamespaceKey )
+        switch( nNamespace )
         {
         case XML_NAMESPACE_NONE:
             // no namespace: create a non-namespaced attribute
-            xElement->setAttribute( rName, rValue );
+            xElement->setAttribute( rLocalName, aValue );
             break;
         case XML_NAMESPACE_XMLNS:
             // namespace declaration: ignore, since the DOM tree handles these
@@ -135,15 +132,19 @@ void DomBuilderContext::StartElement(
             // unknown namespace: illegal input. Raise Warning.
             {
                 Sequence<OUString> aSeq(2);
-                aSeq[0] = rName;
-                aSeq[1] = rValue;
+                aSeq[0] = rLocalName;
+                aSeq[1] = aValue;
                 GetImport().SetError(
                     XMLERROR_FLAG_WARNING | XMLERROR_NAMESPACE_TROUBLE, aSeq );
             }
             break;
         default:
-            // a real and proper namespace: create namespaced attribute
-            xElement->setAttributeNS( sNamespace, rName, rValue );
+            {
+                // a real and proper namespace: create namespaced attribute
+                OUString namespaceURI = SvXMLImport::getNamespaceURIFromToken(nElement);
+                OUString qualifiedName = rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName;
+                xElement->setAttributeNS( namespaceURI, qualifiedName, aValue );
+            }
             break;
         }
     }
