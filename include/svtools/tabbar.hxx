@@ -267,7 +267,9 @@ carried out over an item resp. over which item the mouse click has
 been carried out.
 */
 
+namespace weld {
 class Button;
+}
 
 #define WB_RANGESELECT      (WinBits(0x00200000))
 #define WB_MULTISELECT      (WinBits(0x00400000))
@@ -308,7 +310,6 @@ struct TabBar_Impl;
 
 class SVT_DLLPUBLIC TabBar : public vcl::Window
 {
-    friend class    ImplTabButton;
     friend class    ImplTabSizer;
 
 private:
@@ -363,9 +364,10 @@ private:
     SVT_DLLPRIVATE void            ImplPrePaint();
     SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( sal_uInt16 nItemCount );
 
-    DECL_DLLPRIVATE_LINK(ImplClickHdl, Button*, void);
-
-    DECL_DLLPRIVATE_LINK(ImplAddClickHandler, Button*, void);
+    DECL_DLLPRIVATE_LINK(ImplClickHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ImplAddClickHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_DLLPRIVATE_LINK(ContextMenuHdl, const CommandEvent&, void);
 
     ImplTabBarItem* seek( size_t i );
     ImplTabBarItem* prev();
