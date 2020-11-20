@@ -288,6 +288,11 @@ void SlideBackground::HandleContextChange(
             mpFillStyle->Hide();
             mpBackgroundLabel->Hide();
             mpInsertImage->Show();
+
+            mpFillLB->Hide();
+            mpFillAttr->Hide();
+            mpFillGrad1->Hide();
+            mpFillGrad2->Hide();
         }
         else if ( maContext == maImpressHandoutContext  || maContext == maImpressNotesContext )
         {
