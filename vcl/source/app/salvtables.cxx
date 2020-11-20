@@ -5839,6 +5839,16 @@ public:
 
     virtual void set_expanded(bool bExpand) override { m_xExpander->set_expanded(bExpand); }
 
+    virtual bool has_focus() const override
+    {
+        return m_xExpander->get_label_widget()->HasFocus() || SalInstanceContainer::has_focus();
+    }
+
+    virtual void grab_focus() override
+    {
+        return m_xExpander->get_label_widget()->GrabFocus();
+    }
+
     virtual ~SalInstanceExpander() override
     {
         m_xExpander->SetExpandedHdl(Link<VclExpander&, void>());
