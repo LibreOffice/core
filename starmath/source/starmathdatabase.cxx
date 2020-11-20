@@ -360,14 +360,14 @@ SmToken starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl(sal_U
 const SmColorTokenTableEntry starmathdatabase::aColorTokenTableParse[]
     = { { "aliceblue", "aliceblue", THTMLCOL, COL_SM_ALICEBLUE },
         { "antiquewhite", "antiquewhite", THTMLCOL, COL_SM_ANTIQUEWHITE },
-        { "aqua", "aqua", THTMLCOL, COL_SM_AQUA },
+        { "aqua", "aqua", TMATHMLCOL, COL_SM_AQUA },
         { "aquamarine", "aquamarine", THTMLCOL, COL_SM_AQUAMARINE },
         { "azure", "azure", THTMLCOL, COL_SM_AZURE },
         { "beige", "beige", THTMLCOL, COL_SM_BEIGE },
         { "bisque", "bisque", THTMLCOL, COL_SM_BISQUE },
-        { "black", "black", THTMLCOL, COL_SM_BLACK },
+        { "black", "black", TMATHMLCOL, COL_SM_BLACK },
         { "blanchedalmond", "blanchedalmond", THTMLCOL, COL_SM_BLANCHEDALMOND },
-        { "blue", "blue", THTMLCOL, COL_SM_BLUE },
+        { "blue", "blue", TMATHMLCOL, COL_SM_BLUE },
         { "blueviolet", "blueviolet", THTMLCOL, COL_SM_BLUEVIOLET },
         { "brown", "brown", THTMLCOL, COL_SM_BROWN },
         { "burlywood", "burlywood", THTMLCOL, COL_SM_BURLYWOOD },
@@ -378,7 +378,7 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableParse[]
         { "cornflowerblue", "cornflowerblue", THTMLCOL, COL_SM_CORNFLOWERBLUE },
         { "cornsilk", "cornsilk", THTMLCOL, COL_SM_CORNSILK },
         { "crimson", "crimson", THTMLCOL, COL_SM_CRIMSON },
-        { "cyan", "cyan", THTMLCOL, COL_SM_CYAN },
+        { "cyan", "cyan", TMATHMLCOL, COL_SM_CYAN },
         { "darkblue", "darkblue", THTMLCOL, COL_SM_DARKBLUE },
         { "darkcyan", "darkcyan", THTMLCOL, COL_SM_DARKCYAN },
         { "darkgoldenrod", "darkgoldenrod", THTMLCOL, COL_SM_DARKGOLDENROD },
@@ -408,13 +408,13 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableParse[]
         { "firebrick", "firebrick", THTMLCOL, COL_SM_FIREBRICK },
         { "floralwhite", "floralwhite", THTMLCOL, COL_SM_FLORALWHITE },
         { "forestgreen", "forestgreen", THTMLCOL, COL_SM_FORESTGREEN },
-        { "fuchsia", "fuchsia", THTMLCOL, COL_SM_FUCHSIA },
+        { "fuchsia", "fuchsia", TMATHMLCOL, COL_SM_FUCHSIA },
         { "gainsboro", "gainsboro", THTMLCOL, COL_SM_GAINSBORO },
         { "ghostwhite", "ghostwhite", THTMLCOL, COL_SM_GHOSTWHITE },
         { "gold", "gold", THTMLCOL, COL_SM_GOLD },
         { "goldenrod", "goldenrod", THTMLCOL, COL_SM_GOLDENROD },
-        { "gray", "gray", THTMLCOL, COL_SM_GRAY },
-        { "green", "green", THTMLCOL, COL_SM_GREEN },
+        { "gray", "gray", TMATHMLCOL, COL_SM_GRAY },
+        { "green", "green", TMATHMLCOL, COL_SM_GREEN },
         { "greenyellow", "greenyellow", THTMLCOL, COL_SM_GREENYELLOW },
         { "grey", "grey", THTMLCOL, COL_SM_GREY },
         { "hex", "hex", THEX, COL_SM_BLACK },
@@ -447,8 +447,8 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableParse[]
         { "limegreen", "limegreen", THTMLCOL, COL_SM_LIMEGREEN },
         { "linen", "linen", THTMLCOL, COL_SM_LINEN },
         { "lo", "", TICONICCOL, COL_SM_LO_GREEN },
-        { "magenta", "magenta", THTMLCOL, COL_SM_MAGENTA },
-        { "maroon", "maroon", THTMLCOL, COL_SM_MAROON },
+        { "magenta", "magenta", TMATHMLCOL, COL_SM_MAGENTA },
+        { "maroon", "maroon", TMATHMLCOL, COL_SM_MAROON },
         { "mediumaquamarine", "mediumaquamarine", THTMLCOL, COL_SM_MEDIUMAQUAMARINE },
         { "mediumblue", "mediumblue", THTMLCOL, COL_SM_MEDIUMBLUE },
         { "mediumorchid", "mediumorchid", THTMLCOL, COL_SM_MEDIUMORCHID },
@@ -463,9 +463,9 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableParse[]
         { "mistyrose", "mistyrose", THTMLCOL, COL_SM_MISTYROSE },
         { "moccasin", "moccasin", THTMLCOL, COL_SM_MOCCASIN },
         { "navajowhite", "navajowhite", THTMLCOL, COL_SM_NAVAJOWHITE },
-        { "navy", "navy", THTMLCOL, COL_SM_NAVY },
+        { "navy", "navy", TMATHMLCOL, COL_SM_NAVY },
         { "oldlace", "oldlace", THTMLCOL, COL_SM_OLDLACE },
-        { "olive", "olive", THTMLCOL, COL_SM_OLIVE },
+        { "olive", "olive", TMATHMLCOL, COL_SM_OLIVE },
         { "olivedrab", "olivedrab", THTMLCOL, COL_SM_OLIVEDRAB },
         { "orange", "orange", THTMLCOL, COL_SM_ORANGE },
         { "orangered", "orangered", THTMLCOL, COL_SM_ORANGERED },
@@ -480,9 +480,9 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableParse[]
         { "pink", "pink", THTMLCOL, COL_SM_PINK },
         { "plum", "plum", THTMLCOL, COL_SM_PLUM },
         { "powderblue", "powderblue", THTMLCOL, COL_SM_POWDERBLUE },
-        { "purple", "purple", THTMLCOL, COL_SM_PURPLE },
+        { "purple", "purple", TMATHMLCOL, COL_SM_PURPLE },
         { "rebeccapurple", "rebeccapurple", THTMLCOL, COL_SM_REBECCAPURPLE },
-        { "red", "red", THTMLCOL, COL_SM_RED },
+        { "red", "red", TMATHMLCOL, COL_SM_RED },
         { "rgb", "rgb", TRGB, COL_AUTO },
         { "rgba", "rgba", TRGBA, COL_AUTO },
         { "rosybrown", "rosybrown", THTMLCOL, COL_SM_ROSYBROWN },
@@ -493,7 +493,7 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableParse[]
         { "seagreen", "seagreen", THTMLCOL, COL_SM_SEAGREEN },
         { "seashell", "seashell", THTMLCOL, COL_SM_SEASHELL },
         { "sienna", "sienna", THTMLCOL, COL_SM_SIENNA },
-        { "silver", "silver", THTMLCOL, COL_SM_SILVER },
+        { "silver", "silver", TMATHMLCOL, COL_SM_SILVER },
         { "skyblue", "skyblue", THTMLCOL, COL_SM_SKYBLUE },
         { "slateblue", "slateblue", THTMLCOL, COL_SM_SLATEBLUE },
         { "slategray", "slategray", THTMLCOL, COL_SM_SLATEGRAY },
@@ -502,29 +502,29 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableParse[]
         { "springgreen", "springgreen", THTMLCOL, COL_SM_SPRINGGREEN },
         { "steelblue", "steelblue", THTMLCOL, COL_SM_STEELBLUE },
         { "tan", "tan", THTMLCOL, COL_SM_TAN },
-        { "teal", "teal", THTMLCOL, COL_SM_TEAL },
+        { "teal", "teal", TMATHMLCOL, COL_SM_TEAL },
         { "thistle", "thistle", THTMLCOL, COL_SM_THISTLE },
         { "tomato", "tomato", THTMLCOL, COL_SM_TOMATO },
         { "turquoise", "turquoise", THTMLCOL, COL_SM_TURQUOISE },
         { "ubuntu", "", TICONICCOL, COL_SM_UBUNTU_ORANGE },
         { "violet", "COL_SM_VIOLET", THTMLCOL, COL_SM_VIOLET },
         { "wheat", "wheat", THTMLCOL, COL_SM_WHEAT },
-        { "white", "white", THTMLCOL, COL_SM_WHITE },
+        { "white", "white", TMATHMLCOL, COL_SM_WHITE },
         { "whitesmoke", "whitesmoke", THTMLCOL, COL_SM_WHITESMOKE },
-        { "yellow", "yellow", THTMLCOL, COL_SM_YELLOW },
+        { "yellow", "yellow", TMATHMLCOL, COL_SM_YELLOW },
         { "yellowgreen", "yellowgreen", THTMLCOL, COL_SM_YELLOWGREEN } };
 
 const SmColorTokenTableEntry starmathdatabase::aColorTokenTableHTML[]
     = { { "aliceblue", "aliceblue", THTMLCOL, COL_SM_ALICEBLUE },
         { "antiquewhite", "antiquewhite", THTMLCOL, COL_SM_ANTIQUEWHITE },
-        { "aqua", "aqua", THTMLCOL, COL_SM_AQUA },
+        { "aqua", "aqua", TMATHMLCOL, COL_SM_AQUA },
         { "aquamarine", "aquamarine", THTMLCOL, COL_SM_AQUAMARINE },
         { "azure", "azure", THTMLCOL, COL_SM_AZURE },
         { "beige", "beige", THTMLCOL, COL_SM_BEIGE },
         { "bisque", "bisque", THTMLCOL, COL_SM_BISQUE },
-        { "black", "black", THTMLCOL, COL_SM_BLACK },
+        { "black", "black", TMATHMLCOL, COL_SM_BLACK },
         { "blanchedalmond", "blanchedalmond", THTMLCOL, COL_SM_BLANCHEDALMOND },
-        { "blue", "blue", THTMLCOL, COL_SM_BLUE },
+        { "blue", "blue", TMATHMLCOL, COL_SM_BLUE },
         { "blueviolet", "blueviolet", THTMLCOL, COL_SM_BLUEVIOLET },
         { "brown", "brown", THTMLCOL, COL_SM_BROWN },
         { "burlywood", "burlywood", THTMLCOL, COL_SM_BURLYWOOD },
@@ -535,7 +535,7 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableHTML[]
         { "cornflowerblue", "cornflowerblue", THTMLCOL, COL_SM_CORNFLOWERBLUE },
         { "cornsilk", "cornsilk", THTMLCOL, COL_SM_CORNSILK },
         { "crimson", "crimson", THTMLCOL, COL_SM_CRIMSON },
-        { "cyan", "cyan", THTMLCOL, COL_SM_CYAN },
+        { "cyan", "cyan", TMATHMLCOL, COL_SM_CYAN },
         { "darkblue", "darkblue", THTMLCOL, COL_SM_DARKBLUE },
         { "darkcyan", "darkcyan", THTMLCOL, COL_SM_DARKCYAN },
         { "darkgoldenrod", "darkgoldenrod", THTMLCOL, COL_SM_DARKGOLDENROD },
@@ -563,13 +563,13 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableHTML[]
         { "firebrick", "firebrick", THTMLCOL, COL_SM_FIREBRICK },
         { "floralwhite", "floralwhite", THTMLCOL, COL_SM_FLORALWHITE },
         { "forestgreen", "forestgreen", THTMLCOL, COL_SM_FORESTGREEN },
-        { "fuchsia", "fuchsia", THTMLCOL, COL_SM_FUCHSIA },
+        { "fuchsia", "fuchsia", TMATHMLCOL, COL_SM_FUCHSIA },
         { "gainsboro", "gainsboro", THTMLCOL, COL_SM_GAINSBORO },
         { "ghostwhite", "ghostwhite", THTMLCOL, COL_SM_GHOSTWHITE },
         { "gold", "gold", THTMLCOL, COL_SM_GOLD },
         { "goldenrod", "goldenrod", THTMLCOL, COL_SM_GOLDENROD },
-        { "gray", "gray", THTMLCOL, COL_SM_GRAY },
-        { "green", "green", THTMLCOL, COL_SM_GREEN },
+        { "gray", "gray", TMATHMLCOL, COL_SM_GRAY },
+        { "green", "green", TMATHMLCOL, COL_SM_GREEN },
         { "greenyellow", "greenyellow", THTMLCOL, COL_SM_GREENYELLOW },
         { "grey", "grey", THTMLCOL, COL_SM_GREY },
         { "honeydew", "honeydew", THTMLCOL, COL_SM_HONEYDEW },
@@ -597,11 +597,11 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableHTML[]
         { "lightslategrey", "lightslategrey", THTMLCOL, COL_SM_LIGHTSLATEGREY },
         { "lightsteelblue", "lightsteelblue", THTMLCOL, COL_SM_LIGHTSTEELBLUE },
         { "lightyellow", "lightyellow", THTMLCOL, COL_SM_LIGHTYELLOW },
-        { "lime", "lime", THTMLCOL, COL_SM_LIME },
+        { "lime", "lime", TMATHMLCOL, COL_SM_LIME },
         { "limegreen", "limegreen", THTMLCOL, COL_SM_LIMEGREEN },
         { "linen", "linen", THTMLCOL, COL_SM_LINEN },
-        { "magenta", "magenta", THTMLCOL, COL_SM_MAGENTA },
-        { "maroon", "maroon", THTMLCOL, COL_SM_MAROON },
+        { "magenta", "magenta", TMATHMLCOL, COL_SM_MAGENTA },
+        { "maroon", "maroon", TMATHMLCOL, COL_SM_MAROON },
         { "mediumaquamarine", "mediumaquamarine", THTMLCOL, COL_SM_MEDIUMAQUAMARINE },
         { "mediumblue", "mediumblue", THTMLCOL, COL_SM_MEDIUMBLUE },
         { "mediumorchid", "mediumorchid", THTMLCOL, COL_SM_MEDIUMORCHID },
@@ -616,9 +616,9 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableHTML[]
         { "mistyrose", "mistyrose", THTMLCOL, COL_SM_MISTYROSE },
         { "moccasin", "moccasin", THTMLCOL, COL_SM_MOCCASIN },
         { "navajowhite", "navajowhite", THTMLCOL, COL_SM_NAVAJOWHITE },
-        { "navy", "navy", THTMLCOL, COL_SM_NAVY },
+        { "navy", "navy", TMATHMLCOL, COL_SM_NAVY },
         { "oldlace", "oldlace", THTMLCOL, COL_SM_OLDLACE },
-        { "olive", "olive", THTMLCOL, COL_SM_OLIVE },
+        { "olive", "olive", TMATHMLCOL, COL_SM_OLIVE },
         { "olivedrab", "olivedrab", THTMLCOL, COL_SM_OLIVEDRAB },
         { "orange", "orange", THTMLCOL, COL_SM_ORANGE },
         { "orangered", "orangered", THTMLCOL, COL_SM_ORANGERED },
@@ -633,9 +633,9 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableHTML[]
         { "pink", "pink", THTMLCOL, COL_SM_PINK },
         { "plum", "plum", THTMLCOL, COL_SM_PLUM },
         { "powderblue", "powderblue", THTMLCOL, COL_SM_POWDERBLUE },
-        { "purple", "purple", THTMLCOL, COL_SM_PURPLE },
+        { "purple", "purple", TMATHMLCOL, COL_SM_PURPLE },
         { "rebeccapurple", "rebeccapurple", THTMLCOL, COL_SM_REBECCAPURPLE },
-        { "red", "red", THTMLCOL, COL_SM_RED },
+        { "red", "red", TMATHMLCOL, COL_SM_RED },
         { "rosybrown", "rosybrown", THTMLCOL, COL_SM_ROSYBROWN },
         { "royalblue", "royalblue", THTMLCOL, COL_SM_ROYALBLUE },
         { "saddlebrown", "saddlebrown", THTMLCOL, COL_SM_SADDLEBROWN },
@@ -644,7 +644,7 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableHTML[]
         { "seagreen", "seagreen", THTMLCOL, COL_SM_SEAGREEN },
         { "seashell", "seashell", THTMLCOL, COL_SM_SEASHELL },
         { "sienna", "sienna", THTMLCOL, COL_SM_SIENNA },
-        { "silver", "silver", THTMLCOL, COL_SM_SILVER },
+        { "silver", "silver", TMATHMLCOL, COL_SM_SILVER },
         { "skyblue", "skyblue", THTMLCOL, COL_SM_SKYBLUE },
         { "slateblue", "slateblue", THTMLCOL, COL_SM_SLATEBLUE },
         { "slategray", "slategray", THTMLCOL, COL_SM_SLATEGRAY },
@@ -653,15 +653,15 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableHTML[]
         { "springgreen", "springgreen", THTMLCOL, COL_SM_SPRINGGREEN },
         { "steelblue", "steelblue", THTMLCOL, COL_SM_STEELBLUE },
         { "tan", "tan", THTMLCOL, COL_SM_TAN },
-        { "teal", "teal", THTMLCOL, COL_SM_TEAL },
+        { "teal", "teal", TMATHMLCOL, COL_SM_TEAL },
         { "thistle", "thistle", THTMLCOL, COL_SM_THISTLE },
         { "tomato", "tomato", THTMLCOL, COL_SM_TOMATO },
         { "turquoise", "turquoise", THTMLCOL, COL_SM_TURQUOISE },
         { "violet", "COL_SM_VIOLET", THTMLCOL, COL_SM_VIOLET },
         { "wheat", "wheat", THTMLCOL, COL_SM_WHEAT },
-        { "white", "white", THTMLCOL, COL_SM_WHITE },
+        { "white", "white", TMATHMLCOL, COL_SM_WHITE },
         { "whitesmoke", "whitesmoke", THTMLCOL, COL_SM_WHITESMOKE },
-        { "yellow", "yellow", THTMLCOL, COL_SM_YELLOW },
+        { "yellow", "yellow", TMATHMLCOL, COL_SM_YELLOW },
         { "yellowgreen", "yellowgreen", THTMLCOL, COL_SM_YELLOWGREEN } };
 
 const SmColorTokenTableEntry starmathdatabase::aColorTokenTableDVIPSNAMES[]
@@ -670,6 +670,24 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableDVIPSNAMES[]
         { "bittersweet", "Bittersweet", TDVIPSNAMESCOL, COL_SM_DIV_BITTERSWEET },
         { "black", "Black", TDVIPSNAMESCOL, COL_SM_BLACK },
         { "blue", "Blue", TDVIPSNAMESCOL, COL_SM_BLACK } };
+
+const SmColorTokenTableEntry starmathdatabase::aColorTokenTableMATHML[]
+    = { { "aqua", "aqua", TMATHMLCOL, COL_SM_AQUA },
+        { "black", "black", TMATHMLCOL, COL_SM_BLACK },
+        { "blue", "blue", TMATHMLCOL, COL_SM_BLUE },
+        { "fuchsia", "fuchsia", TMATHMLCOL, COL_SM_FUCHSIA },
+        { "gray", "gray", TMATHMLCOL, COL_SM_GRAY },
+        { "green", "green", TMATHMLCOL, COL_SM_GREEN },
+        { "lime", "lime", TMATHMLCOL, COL_SM_LIME },
+        { "maroon", "maroon", TMATHMLCOL, COL_SM_MAROON },
+        { "navy", "navy", TMATHMLCOL, COL_SM_NAVY },
+        { "olive", "olive", TMATHMLCOL, COL_SM_OLIVE },
+        { "purple", "purple", TMATHMLCOL, COL_SM_PURPLE },
+        { "red", "red", TMATHMLCOL, COL_SM_RED },
+        { "silver", "silver", TMATHMLCOL, COL_SM_SILVER },
+        { "teal", "teal", TMATHMLCOL, COL_SM_TEAL },
+        { "white", "white", TMATHMLCOL, COL_SM_WHITE },
+        { "yellow", "yellow", TMATHMLCOL, COL_SM_YELLOW } };
 
 std::unique_ptr<SmColorTokenTableEntry> starmathdatabase::Identify_Color_Parser(sal_uInt32 cColor)
 {
@@ -691,6 +709,19 @@ std::unique_ptr<SmColorTokenTableEntry> starmathdatabase::Identify_Color_Parser(
 std::unique_ptr<SmColorTokenTableEntry> starmathdatabase::Identify_Color_HTML(sal_uInt32 cColor)
 {
     for (auto i = std::begin(aColorTokenTableHTML); i < std::end(aColorTokenTableHTML); ++i)
+        if (i->equals(cColor))
+            return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry(i));
+    if ((cColor & 0x00FFFFFF) == cColor)
+        return std::unique_ptr<SmColorTokenTableEntry>(
+            new SmColorTokenTableEntry("", "", TRGB, cColor));
+    else
+        return std::unique_ptr<SmColorTokenTableEntry>(
+            new SmColorTokenTableEntry("", "", TRGBA, cColor));
+}
+
+std::unique_ptr<SmColorTokenTableEntry> starmathdatabase::Identify_Color_MATHML(sal_uInt32 cColor)
+{
+    for (auto i = std::begin(aColorTokenTableMATHML); i < std::end(aColorTokenTableMATHML); ++i)
         if (i->equals(cColor))
             return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry(i));
     if ((cColor & 0x00FFFFFF) == cColor)
@@ -738,9 +769,12 @@ starmathdatabase::Identify_ColorName_HTML(const OUString& colorname)
     for (auto i = std::begin(aColorTokenTableHTML); i < std::end(aColorTokenTableHTML); ++i)
         if (i->equals(colorname))
             return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry(i));
-    if (colorname[0] == '#' && colorname.getLength() == 7)
+    if (colorname[0] == '#')
+    {
+        Color col = Color::STRtoRGB(colorname);
         return std::unique_ptr<SmColorTokenTableEntry>(
-            new SmColorTokenTableEntry("", "", TRGB, colorname.copy(1, 6).toUInt32(16)));
+            new SmColorTokenTableEntry("", "", TRGB, col));
+    }
     return std::unique_ptr<SmColorTokenTableEntry>(
         new SmColorTokenTableEntry("", "", TERROR, COL_SM_BLACK));
 }
