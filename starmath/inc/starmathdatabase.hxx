@@ -199,6 +199,7 @@ namespace starmathdatabase
 // Variables containing color information.
 extern const SmColorTokenTableEntry aColorTokenTableParse[159];
 extern const SmColorTokenTableEntry aColorTokenTableHTML[148];
+extern const SmColorTokenTableEntry aColorTokenTableMATHML[16];
 extern const SmColorTokenTableEntry aColorTokenTableDVIPSNAMES[5];
 
 /**
@@ -248,6 +249,18 @@ std::unique_ptr<SmColorTokenTableEntry> Identify_Color_Parser(sal_uInt32 cColor)
   * @param parser color
   */
 std::unique_ptr<SmColorTokenTableEntry> Identify_Color_HTML(sal_uInt32 cColor);
+
+/**
+  * Identifies color from color code cColor.
+  * It will be returned with the MATHML syntax.
+  *
+  * This is used to export mathml.
+  * Identifies the color and allows it to export it in proper mathml code.
+  *
+  * @param cColor
+  * @param parser color
+  */
+std::unique_ptr<SmColorTokenTableEntry> Identify_Color_MATHML(sal_uInt32 cColor);
 
 /**
   * Identifies color from color code cColor.
