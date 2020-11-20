@@ -77,6 +77,7 @@ public:
     void testFdo78080();
     void testFdo54361();
     void testFdo54361_1();
+    void testTdf127811();
     void testTdf86624(); // manually placed legends
     void testTdf105517();
     void testTdf106217();
@@ -204,6 +205,7 @@ public:
     CPPUNIT_TEST(testFdo78080);
     CPPUNIT_TEST(testFdo54361);
     CPPUNIT_TEST(testFdo54361_1);
+    CPPUNIT_TEST(testTdf127811);
     CPPUNIT_TEST(testTdf86624);
     CPPUNIT_TEST(testTdf105517);
     CPPUNIT_TEST(testTdf106217);
@@ -948,6 +950,25 @@ void Chart2ImportTest::testFdo78080()
     Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
     Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(!xTitle.is());
+}
+
+void Chart2ImportTest::testTdf127811()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf127811.pptx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xCT.is());
+
+    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aLabels.size());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1. first
+    // - Actual  : 2. second
+    CPPUNIT_ASSERT_EQUAL(OUString("1. first"), aLabels[0][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("2. second"), aLabels[1][0].get<OUString>());
 }
 
 void Chart2ImportTest::testTdf86624()
