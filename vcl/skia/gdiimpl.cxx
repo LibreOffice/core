@@ -1664,7 +1664,27 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBit
                                      SkBlendMode blendMode)
 {
     if (bitmap.PreferSkShader())
+    {
         drawShader(rPosAry, bitmap.GetSkShader(), blendMode);
+        return;
+    }
+    // In raster mode use mergeCacheBitmaps(), which will cache the result, avoiding repeated
+    // scaling. In GPU mode it is simpler to just use SkShader.
+    SalTwoRect imagePosAry(rPosAry);
+    Size imageSize = bitmap.GetSize();
+    // If the bitmap will be scaled, prefer to do it in mergeCacheBitmaps(), if possible.
+    if ((rPosAry.mnSrcWidth != rPosAry.mnDestWidth || rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
+        && rPosAry.mnSrcX == 0 && rPosAry.mnSrcY == 0
+        && rPosAry.mnSrcWidth == bitmap.GetSize().Width()
+        && rPosAry.mnSrcHeight == bitmap.GetSize().Height())
+    {
+        imagePosAry.mnSrcWidth = imagePosAry.mnDestWidth;
+        imagePosAry.mnSrcHeight = imagePosAry.mnDestHeight;
+        imageSize = Size(imagePosAry.mnSrcWidth, imagePosAry.mnSrcHeight);
+    }
+    sk_sp<SkImage> image = mergeCacheBitmaps(bitmap, nullptr, imageSize);
+    if (image)
+        drawImage(imagePosAry, image, blendMode);
     else
         drawImage(rPosAry, bitmap.GetSkImage(), blendMode);
 }
