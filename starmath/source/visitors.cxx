@@ -2006,6 +2006,7 @@ void SmNodeToTextVisitor::Visit(SmFontNode* pNode)
             aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser(nc);
             Append(aSmColorTokenTableEntry->pIdent);
             break;
+        case TMATHMLCOL:
         case THTMLCOL:
         case TICONICCOL:
             Append("color ");

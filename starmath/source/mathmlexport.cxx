@@ -1139,11 +1139,11 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
         case TPHANTOM:
             // No attribute needed. An <mphantom> element will be used below.
             break;
-        case THTMLCOL:
+        case TMATHMLCOL:
         {
             std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
             nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_HTML(nc);
+            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_MATHML(nc);
             OUString sssStr = OUString::createFromAscii(aSmColorTokenTableEntry->cIdent);
             AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, sssStr);
         }
@@ -1151,6 +1151,7 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
         case TRGB:
         case TRGBA:
         case THEX:
+        case THTMLCOL:
         case TDVIPSNAMESCOL:
         case TICONICCOL:
         {
@@ -1158,8 +1159,7 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
             sStrBuf.append('#');
             std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
             nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_HTML(nc);
-            sStrBuf.append(aSmColorTokenTableEntry->cColor.AsRGBHexString());
+            sStrBuf.append(Color(nc).AsRGBHEXString());
             OUString ssStr(sStrBuf.makeStringAndClear());
             AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, ssStr);
         }
