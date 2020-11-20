@@ -309,6 +309,11 @@ void SlideBackground::HandleContextChange(
             mxFillStyle->hide();
             mxBackgroundLabel->hide();
             mxInsertImage->show();
+
+            mxFillLB->hide();
+            mxFillAttr->hide();
+            mxFillGrad1->hide();
+            mxFillGrad2->hide();
         }
         else if ( maContext == maImpressHandoutContext  || maContext == maImpressNotesContext )
         {
