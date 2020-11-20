@@ -22,6 +22,30 @@
       "revId": "daa14ce5d7fa337c61377313f84d20acfc9a8202",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c75116f2_de7dbbed",
+        "filename": "filter/source/graphicfilter/itiff/lzwdecom.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-20T11:55:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6547c2d_7aeb433c",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "daa14ce5d7fa337c61377313f84d20acfc9a8202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
