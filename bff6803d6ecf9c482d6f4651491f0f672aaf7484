@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c5a99c0_7ffef421",
+        "filename": "svx/uiconfig/ui/crashreportdlg.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-20T13:16:58Z",
+      "side": 1,
+      "message": "@Adolfo -- maybe it makes no sense for this URL to be translatable, because, well, it is a URL. (-:",
+      "range": {
+        "startLine": 11,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 158
+      },
+      "revId": "bff6803d6ecf9c482d6f4651491f0f672aaf7484",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
