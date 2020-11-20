@@ -1,1 +1,43 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(0 -1 -1 0 25 25)"><path d="m7.5 19.5v-10h-5v10z" fill="#fafafa" stroke="#3a3a38" stroke-linecap="round" stroke-linejoin="round"/><rect fill="#1e8bcd" height="1" ry=".5" width="20" x="2" y="21"/><path d="m15.5 19.5v-16h-5v16z" fill="#fafafa" stroke="#3a3a38" stroke-linecap="round" stroke-linejoin="round"/><path d="m23.999977 16.515829c.0115-.454319-.540283-.686848-.857422-.361329l-2.144531 2.148437.002-8.777343c.0179-.350177-.241558-.525391-.500047-.525391s-.51795.175214-.5.525391l.002 8.777343-2.144532-2.148436c-.317139-.32552-.868926-.09299-.857422.361328.0041.130048.05875.25337.152344.34375l2.912113 2.916016c.160599.173289.266379.223009.435497.224609.169118-.0016.274898-.05132.435547-.224609l2.912109-2.916016c.09359-.09038.148244-.213702.152344-.34375z" fill="#1e8bcd" fill-rule="evenodd"/></g></svg>
+<?xml-stylesheet type="text/css" href="icons.css" ?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path
+	 class="icn icn--area-color"
+     d="m 5.5,22.5 v -5 h 10 v 5 z"
+     fill="#fafafa"
+     stroke="#3a3a38" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+  <path
+	 class="icn icn--area-color"
+     d="m 5.5,14.5 v -5 h 16 v 5 z"
+     fill="#fafafa"
+     stroke="#3a3a38" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+  <path
+	 class="icn icn--highlight-color-line"
+     d="M 3.5,22.5 V 3.5"
+     fill="none"
+     stroke="#1e8bcd" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+  <path
+	 class="icn icn--highlight-color-line"
+     d="m 5.5,4.5 h 10"
+     fill="none"
+     stroke="#1e8bcd" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+  <path
+	 class="icn icn--highlight-color-line"
+     d="m 8.5,7.5 -3,-3 3,-3"
+     fill="none"
+     stroke="#1e8bcd" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+</svg>
