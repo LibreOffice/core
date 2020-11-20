@@ -19,8 +19,8 @@
 #include <document.hxx>
 #include <smdll.hxx>
 
-namespace {
-
+namespace
+{
 using namespace ::com::sun::star;
 
 typedef tools::SvRef<SmDocShell> SmDocShellRef;
@@ -52,30 +52,27 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void loadURL(const OUString &rURL)
+    void loadURL(const OUString& rURL)
     {
         // Cf.
         // filter/source/config/fragments/filters/MathML_XML__Math_.xcu
-        auto pFilter = std::make_shared<SfxFilter>(MATHML_XML,
-                                           OUString(),
-                                           SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE,
-                                           SotClipboardFormatId::STARCALC_8,
-                                           "MathML 2.0",
-                                           OUString(),
-                                           OUString(),
-                                           "private:factory/smath*");
+        auto pFilter = std::make_shared<SfxFilter>(
+            MATHML_XML, OUString(),
+            SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE,
+            SotClipboardFormatId::STARCALC_8, "MathML 2.0", OUString(), OUString(),
+            "private:factory/smath*");
         pFilter->SetVersion(SOFFICE_FILEFORMAT_60);
 
-        mxDocShell = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT |
-                                    SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-                                    SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+        mxDocShell = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT
+                                    | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                                    | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
         SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ);
         pSrcMed->SetFilter(pFilter);
         pSrcMed->UseInteractionHandler(false);
         bool bLoaded = mxDocShell->DoLoad(pSrcMed);
-        CPPUNIT_ASSERT_MESSAGE(OUStringToOString("failed to load " + rURL, RTL_TEXTENCODING_UTF8).getStr(),
-                               bLoaded);
+        CPPUNIT_ASSERT_MESSAGE(
+            OUStringToOString("failed to load " + rURL, RTL_TEXTENCODING_UTF8).getStr(), bLoaded);
     }
 
     SmDocShellRef mxDocShell;
@@ -89,7 +86,8 @@ void Test::setUp()
 
 void Test::tearDown()
 {
-    if (mxDocShell.is()) mxDocShell->DoClose();
+    if (mxDocShell.is())
+        mxDocShell->DoClose();
     BootstrapFixture::tearDown();
 }
 
@@ -111,26 +109,33 @@ void Test::testColor()
                                   " color navy n"
                                   " color teal t"
                                   " color aqua a"
-                                  " color fuchsia f }"),
+                                  " color fuchsia f"
+                                  " color crimson c"
+                                  " color dvip apricot"
+                                  " a color yellow y"
+                                  " color rgb 220 20 61 x }"),
                          mxDocShell->GetText());
 }
 
 void Test::testSimple()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/simple.mml"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"), mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"),
+                                 mxDocShell->GetText());
 }
 
 void Test::testNsPrefixMath()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/ns-prefix-math.mml"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"), mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"),
+                                 mxDocShell->GetText());
 }
 
 void Test::testMaction()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/maction.mml"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("matrix{ 1 ## 2 ## 3 }"), mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("matrix{ 1 ## 2 ## 3 }"),
+                                 mxDocShell->GetText());
 }
 
 void Test::testMspace()
@@ -148,20 +153,20 @@ void Test::testtdf99556()
 void Test::testTdf103430()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf103430.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("frac { { nitalic d ^ 2 nitalic color blue y } } { { color dvip apricot nitalic d font sans bold italic color red x } }"),
+    CPPUNIT_ASSERT_EQUAL(OUString("frac { { nitalic d ^ 2 nitalic color blue y } } { { color dvip "
+                                  "apricot nitalic d font sans bold italic color red x } }"),
                          mxDocShell->GetText());
 }
 
 void Test::testTdf103500()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf103500.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("{ { int csup b csub a { frac { 1 } { x } ` nitalic d x } } = { intd csup b csub a { frac { 1 } { y } ` nitalic d y } } }"),
+    CPPUNIT_ASSERT_EQUAL(OUString("{ { int csup b csub a { frac { 1 } { x } ` nitalic d x } } = { "
+                                  "intd csup b csub a { frac { 1 } { y } ` nitalic d y } } }"),
                          mxDocShell->GetText());
 }
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
