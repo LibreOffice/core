@@ -1665,6 +1665,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             bool bClosedBezier = mType == "drawing.ClosedBezier";
             bool bPolyPolygon  = mType == "drawing.PolyPolygon";
             bool bPolyLine = mType == "drawing.PolyLine";
+            OUString aGraphicPropertyName("Graphic");
 
             const css::awt::Size   aSize100thmm( mXShape->getSize() );
             const css::awt::Point  aPoint100thmm( mXShape->getPosition() );
@@ -1699,6 +1700,20 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 {
                     aAny >>= eFS;
                     bIsHatching = eFS == css::drawing::FillStyle_HATCH;
+                    if (mType == "drawing.Custom" && eFS == drawing::FillStyle_BITMAP)
+                    {
+                        ShapeFlag nMirrorFlags;
+                        OUString sCustomShapeType;
+                        MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType(
+                            mXShape, nMirrorFlags, sCustomShapeType);
+                        if (eShapeType == mso_sptMax)
+                        {
+                            // We can't map this custom shape to a PPT preset and it has a bitmap
+                            // fill. Make sure that at least the bitmap fill is not lost.
+                            mType = "drawing.GraphicObject";
+                            aGraphicPropertyName = "FillBitmap";
+                        }
+                    }
                 }
                 if ( bIsHatching || bIsFontwork || ( mType == "drawing.Measure" ) || ( mType == "drawing.Caption" ) )
                 {
@@ -2215,7 +2230,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                          ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
                                          aSolverContainer );
 
-                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, "Graphic", false, true ) )
+                        if (aPropOpt.CreateGraphicProperties(mXPropSet, aGraphicPropertyName, false,
+                                                             true))
                         {
                             aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                         }
