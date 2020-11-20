@@ -522,7 +522,7 @@ class </xsl:text>
               <xsl:value-of select="$mask"/>
             </xsl:if>
             <xsl:text>)</xsl:text>
-            <xsl:if test="$shift>0">
+            <xsl:if test="string-length($shift)>0 and $shift>0">
               <xsl:text>&gt;&gt; </xsl:text>
               <xsl:value-of select="$shift"/>
             </xsl:if>
