@@ -1917,8 +1917,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137684)
     {
         dispatchCommand(mxComponent, ".uno:Undo", {});
     }
-    // TODO: fix order of the characters after Undo
-    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith(" noitpyrcnE"));
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Encryption "));
 
     // switch off "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
