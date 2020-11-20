@@ -27,17 +27,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_P;
 
-
-XMLStringBufferImportContext::XMLStringBufferImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& sLocalName,
-    OUStringBuffer& rBuffer) :
-    SvXMLImportContext(rImport, nPrefix, sLocalName),
-    rTextBuffer(rBuffer)
-{
-}
-
 XMLStringBufferImportContext::XMLStringBufferImportContext(
     SvXMLImport& rImport,
     OUStringBuffer& rBuffer) :
