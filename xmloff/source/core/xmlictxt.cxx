@@ -27,21 +27,16 @@
 
 using namespace ::com::sun::star;
 
-SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
-                              const OUString& rLName )
+SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 ,
+                             SAL_UNUSED_PARAMETER const OUString&  )
     : mrImport(rImp)
-    , maLocalName(rLName)
     , m_nRefCount(0)
-    , mnPrefix(nPrfx)
-    , mbPrefixAndLocalNameFilledIn(true)
 {
 }
 
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp )
     : mrImport(rImp)
     , m_nRefCount(0)
-    , mnPrefix(0)
-    , mbPrefixAndLocalNameFilledIn(false)
 {
 }
 

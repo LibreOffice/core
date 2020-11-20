@@ -45,7 +45,7 @@ SdXMLDescriptionContext::~SdXMLDescriptionContext()
 {
 }
 
-void SdXMLDescriptionContext::endFastElement(sal_Int32 )
+void SdXMLDescriptionContext::endFastElement(sal_Int32 nElement)
 {
     if( msText.isEmpty() )
         return;
@@ -53,7 +53,7 @@ void SdXMLDescriptionContext::endFastElement(sal_Int32 )
     try
     {
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY_THROW);
-        if(IsXMLToken(GetLocalName(),XML_TITLE))
+        if( (nElement & TOKEN_MASK) == XML_TITLE)
         {
             xPropSet->setPropertyValue("Title", Any(msText));
         }

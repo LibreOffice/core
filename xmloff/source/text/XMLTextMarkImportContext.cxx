@@ -150,15 +150,16 @@ static OUString lcl_getFieldmarkName(OUString const& name)
 }
 
 
-void XMLTextMarkImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLTextMarkImportContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if (!FindName(GetImport(), xAttrList))
+    if (!FindName(xAttrList))
     {
         m_sBookmarkName.clear();
     }
 
-    if (IsXMLToken(GetLocalName(), XML_FIELDMARK_START) || IsXMLToken(GetLocalName(), XML_FIELDMARK))
+    if ( (nElement & TOKEN_MASK) == XML_FIELDMARK_START || (nElement & TOKEN_MASK) == XML_FIELDMARK)
     {
         if (m_sBookmarkName.isEmpty())
         {
@@ -166,13 +167,14 @@ void XMLTextMarkImportContext::StartElement(
         }
         m_rHelper.pushFieldCtx( m_sBookmarkName, m_sFieldName );
     }
-
-    if (IsXMLToken(GetLocalName(), XML_BOOKMARK_START))
+    else if ( (nElement & TOKEN_MASK) == XML_BOOKMARK_START)
     {
-        const OUString sHidden    = xAttrList->getValueByName("loext:hidden");
-        const OUString sCondition = xAttrList->getValueByName("loext:condition");
+        const OUString sHidden    = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_HIDDEN));
+        const OUString sCondition = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_CONDITION));
         m_rHelper.setBookmarkAttributes(m_sBookmarkName, sHidden == "true", sCondition);
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 }
 
 static auto InsertFieldmark(SvXMLImport & rImport,
@@ -242,12 +244,12 @@ static auto PopFieldmark(XMLTextImportHelper & rHelper) -> void
     }
 }
 
-void XMLTextMarkImportContext::endFastElement(sal_Int32 )
+void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
 {
     static const char sAPI_bookmark[] = "com.sun.star.text.Bookmark";
 
     lcl_MarkType nTmp{};
-    if (!SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(), lcl_aMarkTypeMap))
+    if (!SvXMLUnitConverter::convertEnum(nTmp, SvXMLImport::getNameFromToken(nElement), lcl_aMarkTypeMap))
         return;
 
     if (m_sBookmarkName.isEmpty() && TypeFieldmarkEnd != nTmp)
@@ -500,56 +502,46 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
 }
 
 bool XMLTextMarkImportContext::FindName(
-    SvXMLImport& rImport,
-    const Reference<XAttributeList> & xAttrList)
+    const Reference<XFastAttributeList> & xAttrList)
 {
     bool bNameOK = false;
 
     // find name attribute first
-    const sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sLocalName;
-        const sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-
-        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             IsXMLToken(sLocalName, XML_NAME)   )
+        OUString sValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            m_sBookmarkName = xAttrList->getValueByIndex(nAttr);
-            bNameOK = true;
-        }
-        else if ( (XML_NAMESPACE_XML == nPrefix) &&
-             IsXMLToken(sLocalName, XML_ID)   )
-        {
-            m_sXmlId = xAttrList->getValueByIndex(nAttr);
-        }
-        else if ( XML_NAMESPACE_XHTML == nPrefix )
-        {
+            case XML_ELEMENT(TEXT, XML_NAME):
+            {
+                m_sBookmarkName = sValue;
+                bNameOK = true;
+                break;
+            }
+            case XML_ELEMENT(XML, XML_ID):
+                m_sXmlId = sValue;
+                break;
             // RDFa
-            if ( IsXMLToken( sLocalName, XML_ABOUT) )
+            case XML_ELEMENT(XHTML, XML_ABOUT):
             {
-                m_sAbout = xAttrList->getValueByIndex(nAttr);
+                m_sAbout = sValue;
                 m_bHaveAbout = true;
+                break;
             }
-            else if ( IsXMLToken( sLocalName, XML_PROPERTY) )
-            {
-                m_sProperty = xAttrList->getValueByIndex(nAttr);
-            }
-            else if ( IsXMLToken( sLocalName, XML_CONTENT) )
-            {
-                m_sContent = xAttrList->getValueByIndex(nAttr);
-            }
-            else if ( IsXMLToken( sLocalName, XML_DATATYPE) )
-            {
-                m_sDatatype = xAttrList->getValueByIndex(nAttr);
-            }
-        }
-        else if ( (XML_NAMESPACE_FIELD == nPrefix) &&
-             IsXMLToken(sLocalName, XML_TYPE)   )
-        {
-            m_sFieldName = xAttrList->getValueByIndex(nAttr);
+            case XML_ELEMENT(XHTML, XML_PROPERTY):
+                m_sProperty = sValue;
+                break;
+            case XML_ELEMENT(XHTML, XML_CONTENT):
+                m_sContent = sValue;
+                break;
+            case XML_ELEMENT(XHTML, XML_DATATYPE):
+                m_sDatatype = sValue;
+                break;
+            case XML_ELEMENT(FIELD, XML_TYPE):
+                m_sFieldName = sValue;
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 

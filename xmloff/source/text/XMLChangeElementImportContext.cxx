@@ -55,7 +55,7 @@ SvXMLImportContextRef XMLChangeElementImportContext::CreateChildContext(
          IsXMLToken( rLocalName, XML_CHANGE_INFO) )
     {
         xContext = new XMLChangeInfoContext(GetImport(), nPrefix, rLocalName,
-                                            rChangedRegion, GetLocalName());
+                                            rChangedRegion, rLocalName);
     }
     else
     {

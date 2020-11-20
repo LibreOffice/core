@@ -49,10 +49,7 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public css::xml::sax::XFastContextHa
     friend class SvXMLImport;
 
     SvXMLImport&                       mrImport;
-    OUString                           maLocalName;
     oslInterlockedCount                m_nRefCount;
-    sal_uInt16                         mnPrefix;
-    bool                               mbPrefixAndLocalNameFilledIn;
 
 protected:
 
@@ -60,10 +57,6 @@ protected:
     const SvXMLImport& GetImport() const { return mrImport; }
 
 public:
-
-    bool IsPrefixFilledIn() const { return mnPrefix != 0; }
-    sal_uInt16 GetPrefix() const { assert(mbPrefixAndLocalNameFilledIn && "those fields not filled, probably fast-parser context"); return mnPrefix; }
-    const OUString& GetLocalName() const { assert(mbPrefixAndLocalNameFilledIn && "those fields not filled, probably fast-parser context"); return maLocalName; }
 
     /** A contexts constructor does anything that is required if an element
      * starts. Namespace processing has been done already.

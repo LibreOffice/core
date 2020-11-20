@@ -219,10 +219,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::c
             return GetSwImport().CreateStylesContext( false );
             break;
         case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
-            // don't use the autostyles from the styles-document for the progress
-            if ( !IsPrefixFilledIn() || ! IsXMLToken( GetLocalName(), XML_DOCUMENT_STYLES ) )
-                GetSwImport().GetProgressBarHelper()->Increment
-                    ( PROGRESS_BAR_STEP );
+            GetSwImport().GetProgressBarHelper()->Increment
+                ( PROGRESS_BAR_STEP );
             return GetSwImport().CreateStylesContext( true );
             break;
         case XML_ELEMENT(OFFICE, XML_MASTER_STYLES):
