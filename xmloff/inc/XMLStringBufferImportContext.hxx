@@ -29,20 +29,12 @@
 /**
  * Import all text into a string buffer.  Paragraph elements (<text:p>)
  * are recognized and cause a return character (0x0a) to be added.
- *
- * Supports both old and fast-parser.
  */
 class XMLStringBufferImportContext final : public SvXMLImportContext
 {
     OUStringBuffer& rTextBuffer;
 
 public:
-
-    XMLStringBufferImportContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& sLocalName,
-        OUStringBuffer& rBuffer);
 
     XMLStringBufferImportContext(
         SvXMLImport& rImport,
