@@ -1363,13 +1363,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesConte
 SvXMLImportContextRef SdXMLMasterStylesContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList)
+    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/)
 {
     SvXMLImportContextRef xContext;
 
     if( (nPrefix == XML_NAMESPACE_DRAW) && IsXMLToken( rLocalName, XML_LAYER_SET ) )
     {
-        xContext = new SdXMLLayerSetContext( GetImport(), nPrefix, rLocalName, xAttrList );
+        xContext = new SdXMLLayerSetContext( GetImport() );
     }
 
     return xContext;
