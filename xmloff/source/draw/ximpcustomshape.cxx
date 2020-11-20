@@ -1299,85 +1299,76 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
         SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maHandles, EASGet( EAS_Handles ) );
 }
 
-SvXMLImportContextRef XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt16 /*nPrefix*/,const OUString& rLocalName,
-                                                                    const uno::Reference< xml::sax::XAttributeList> & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEnhancedCustomShapeContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    EnhancedCustomShapeTokenEnum aTokenEnum = EASGet( rLocalName );
+    EnhancedCustomShapeTokenEnum aTokenEnum = EASGet( nElement );
     if ( aTokenEnum == EAS_equation )
     {
-        sal_Int16 nLength = xAttrList->getLength();
-        if ( nLength )
+        OUString aFormula;
+        OUString aFormulaName;
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         {
-            OUString aFormula;
-            OUString aFormulaName;
-            for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
+            OUString sValue = aIter.toString();
+            switch( EASGet( aIter.getToken() ) )
             {
-                OUString aLocalName;
-                const OUString& rValue = xAttrList->getValueByIndex( nAttr );
-                /* fixme sven, this needs to be checked! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
-
-                switch( EASGet( aLocalName ) )
-                {
-                    case EAS_formula :
-                        aFormula = rValue;
+                case EAS_formula :
+                    aFormula = sValue;
+                break;
+                case EAS_name :
+                    aFormulaName = sValue;
+                break;
+                default:
                     break;
-                    case EAS_name :
-                        aFormulaName = rValue;
-                    break;
-                    default:
-                        break;
-                }
             }
-            if ( !aFormulaName.isEmpty() || !aFormula.isEmpty() )
-            {
-                maEquations.push_back( aFormula );
-                maEquationNames.push_back( aFormulaName );
-            }
+        }
+        if ( !aFormulaName.isEmpty() || !aFormula.isEmpty() )
+        {
+            maEquations.push_back( aFormula );
+            maEquationNames.push_back( aFormulaName );
         }
     }
     else if ( aTokenEnum == EAS_handle )
     {
         std::vector< css::beans::PropertyValue > aHandle;
-        const sal_Int16 nLength = xAttrList->getLength();
-        for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         {
-            OUString aLocalName;
-            const OUString& rValue = xAttrList->getValueByIndex( nAttr );
-            /* fixme sven, this needs to be checked! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
-            switch( EASGet( aLocalName ) )
+            OUString sValue = aIter.toString();
+            switch( EASGet( aIter.getToken() ) )
             {
                 case EAS_handle_mirror_vertical :
-                    GetBool( aHandle, rValue, EAS_MirroredY );
+                    GetBool( aHandle, sValue, EAS_MirroredY );
                 break;
                 case EAS_handle_mirror_horizontal :
-                    GetBool( aHandle, rValue, EAS_MirroredX );
+                    GetBool( aHandle, sValue, EAS_MirroredX );
                 break;
                 case EAS_handle_switched :
-                    GetBool( aHandle, rValue, EAS_Switched );
+                    GetBool( aHandle, sValue, EAS_Switched );
                 break;
                 case EAS_handle_position :
-                    GetEnhancedParameterPair( aHandle, rValue, EAS_Position );
+                    GetEnhancedParameterPair( aHandle, sValue, EAS_Position );
                 break;
                 case EAS_handle_range_x_minimum :
-                    GetEnhancedParameter( aHandle, rValue, EAS_RangeXMinimum );
+                    GetEnhancedParameter( aHandle, sValue, EAS_RangeXMinimum );
                 break;
                 case EAS_handle_range_x_maximum :
-                    GetEnhancedParameter( aHandle, rValue, EAS_RangeXMaximum );
+                    GetEnhancedParameter( aHandle, sValue, EAS_RangeXMaximum );
                 break;
                 case EAS_handle_range_y_minimum :
-                    GetEnhancedParameter( aHandle, rValue, EAS_RangeYMinimum );
+                    GetEnhancedParameter( aHandle, sValue, EAS_RangeYMinimum );
                 break;
                 case EAS_handle_range_y_maximum :
-                    GetEnhancedParameter( aHandle, rValue, EAS_RangeYMaximum );
+                    GetEnhancedParameter( aHandle, sValue, EAS_RangeYMaximum );
                 break;
                 case EAS_handle_polar :
-                    GetEnhancedParameterPair( aHandle, rValue, EAS_Polar );
+                    GetEnhancedParameterPair( aHandle, sValue, EAS_Polar );
                 break;
                 case EAS_handle_radius_range_minimum :
-                    GetEnhancedParameter( aHandle, rValue, EAS_RadiusRangeMinimum );
+                    GetEnhancedParameter( aHandle, sValue, EAS_RadiusRangeMinimum );
                 break;
                 case EAS_handle_radius_range_maximum :
-                    GetEnhancedParameter( aHandle, rValue, EAS_RadiusRangeMaximum );
+                    GetEnhancedParameter( aHandle, sValue, EAS_RadiusRangeMaximum );
                 break;
                 default:
                     break;

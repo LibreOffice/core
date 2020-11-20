@@ -154,6 +154,7 @@ namespace xmloff::EnhancedCustomShapeToken {
     };
 
     EnhancedCustomShapeTokenEnum EASGet( const OUString& );
+    EnhancedCustomShapeTokenEnum EASGet( sal_Int32 nToken );
     OUString EASGet( const EnhancedCustomShapeTokenEnum );
 }
 
