@@ -29,6 +29,8 @@ public:
         rTreeView.signal_row_activated();
     }
 
+    static void trigger_changed(weld::TreeView& rTreeView) { rTreeView.signal_changed(); }
+
     static void trigger_clicked(weld::Toolbar& rToolbar, const OString& rIdent)
     {
         rToolbar.signal_clicked(rIdent);

@@ -35,6 +35,8 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/json_writer.hxx>
+#include <sfx2/viewsh.hxx>
+#include <vcl/jsdialog/executor.hxx>
 
 #include <document.hxx>
 
@@ -170,8 +172,14 @@ ScCheckListMenuWindow* ScCheckListMenuControl::addSubMenuItem(const OUString& rT
     MenuItemData aItem;
     aItem.mbEnabled = bEnabled;
     vcl::Window *pContainer = mxFrame->GetWindow(GetWindowType::FirstChild);
+
+    vcl::ILibreOfficeKitNotifier* pNotifier = nullptr;
+    if (comphelper::LibreOfficeKit::isActive())
+        pNotifier = SfxViewShell::Current();
+
     aItem.mxSubMenuWin.reset(VclPtr<ScCheckListMenuWindow>::Create(pContainer, mpDoc, false,
-                                                                   false, -1, mxFrame.get()));
+                                                                   false, -1, mxFrame.get(),
+                                                                   pNotifier));
     maMenuItems.emplace_back(std::move(aItem));
 
     mxMenu->append_text(rText);
@@ -288,6 +296,16 @@ void ScCheckListMenuControl::launchSubMenu(bool bSetMenuPos)
 
     mxMenu->select(*mxScratchIter);
     rSubMenuControl.GrabFocus();
+
+    // TODO: something better to retrigger JSON dialog invalidation
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        StringMap args;
+        args["cmd"] = "change";
+        args["type"] = "checkbox";
+        args["data"] = "true";
+        jsdialog::ExecuteAction(pSubMenu->GetLOKWindowId(), "toggle_all", args);
+    }
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, PostPopdownHdl, void*, void)
