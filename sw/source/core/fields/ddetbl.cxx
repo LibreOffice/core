@@ -31,6 +31,7 @@
 #include <swtblfmt.hxx>
 #include <fieldhint.hxx>
 #include <osl/diagnose.h>
+#include <pam.hxx>
 
 /// Ctor moves all lines/boxes from a SwTable into itself.
 /// Afterwards the SwTable is empty and must be deleted.
@@ -92,9 +93,12 @@ void SwDDETable::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 void SwDDETable::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
     SwClient::SwClientNotify(rModify, rHint);
-    if(dynamic_cast<const SwFieldHint*>(&rHint))
+    if(auto pFieldHint = dynamic_cast<const SwFieldHint*>(&rHint))
+    {
+        pFieldHint->m_pPaM->DeleteMark(); // TODO: this is really hackish
         // replace DDETable by real table
         NoDDETable();
+    }
     else if(const auto pLinkAnchorHint = dynamic_cast<const sw::LinkAnchorSearchHint*>(&rHint))
     {
         if(pLinkAnchorHint->m_rpFoundNode)

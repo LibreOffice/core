@@ -224,11 +224,13 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     SwClient::SwClientNotify(rModify, rHint);
     if (const auto pFieldHint = dynamic_cast<const SwFieldHint*>( &rHint ))
     {
+        // replace field content by text
+        SwPaM* pPaM = pFieldHint->m_pPaM;
+        pPaM->DeleteMark(); // TODO: this is really hackish
+
         if( !mpTextField )
             return;
 
-        // replace field content by text
-        SwPaM* pPaM = pFieldHint->m_pPaM;
         SwDoc& rDoc = pPaM->GetDoc();
         const SwTextNode& rTextNode = mpTextField->GetTextNode();
         pPaM->GetPoint()->nNode = rTextNode;
