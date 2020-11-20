@@ -215,6 +215,7 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<PageChecksum>&
 #else
     (void)rStream;
     (void)rPageChecksums;
+    (void)nMDPPerm;
 #endif
 }
 
