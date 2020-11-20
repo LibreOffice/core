@@ -139,7 +139,7 @@ enum SmTokenType
     TSQRT,          TNROOT,         TFACT,          TABS,           // roots, n! |z|
     // Color
     TRGB,           TRGBA,          THEX,           THTMLCOL,       TDVIPSNAMESCOL,
-    TICONICCOL
+    TICONICCOL,     TMATHMLCOL
     // clang-format on
 };
 
