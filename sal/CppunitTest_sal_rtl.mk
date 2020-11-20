@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl,\
 	sal/qa/rtl/ref/rtl_ref \
 	sal/qa/rtl/strings/nonconstarray \
 	sal/qa/rtl/strings/test_strings_replace \
+	sal/qa/rtl/strings/test_strings_defaultstringview \
 	sal/qa/rtl/strings/test_ostring \
 	sal/qa/rtl/strings/test_ostring_concat \
 	sal/qa/rtl/strings/test_ostring_stringliterals \

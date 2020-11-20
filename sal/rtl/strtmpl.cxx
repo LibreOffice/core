@@ -145,9 +145,13 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
         sal_Int32 nRet = nStr1Len - nStr2Len;
         int nCount = (nRet <= 0) ? nStr1Len : nStr2Len;
 
-        --pStr1;
-        --pStr2;
-        while( (--nCount >= 0) && (*++pStr1 == *++pStr2) ) ;
+        while( --nCount >= 0 ) {
+            if (*pStr1 != *pStr2) {
+                break;
+            }
+            ++pStr1;
+            ++pStr2;
+        }
 
         if( nCount >= 0 )
             nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr1 ))
