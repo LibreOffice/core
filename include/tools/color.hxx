@@ -333,6 +333,19 @@ public:
       */
     static Color HSBtoRGB(sal_uInt16 nHue, sal_uInt16 nSaturation, sal_uInt16 nBrightness);
 
+    /** Converts a string into a color. Supports:
+      * #RRGGBB
+      * #rrggbb
+      * #RGB
+      * #rgb
+      * RRGGBB
+      * rrggbb
+      * RGB
+      * rgb
+      * If fails returns Color().
+      */
+    static Color STRtoRGB(const OUString& colorname);
+
     /** Color space conversion tools
       * @param nHue
       * @param nSaturation
@@ -340,11 +353,17 @@ public:
       */
     void RGBtoHSB(sal_uInt16& nHue, sal_uInt16& nSaturation, sal_uInt16& nBrightness) const;
 
-    /* Return color as RGB hex string
+    /* Return color as RGB hex string: rrggbb
      * for example "00ff00" for green color
      * @return hex string
      */
     OUString AsRGBHexString() const;
+
+    /* Return color as RGB hex string: RRGGBB
+     * for example "00FF00" for green color
+     * @return hex string
+     */
+    OUString AsRGBHEXString() const;
 
     /* get ::basegfx::BColor from this color
      * @return basegfx color

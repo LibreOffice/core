@@ -158,10 +158,49 @@ Color Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
     return Color( cR, cG, cB );
 }
 
+Color Color::STRtoRGB(const OUString& colorname)
+{
+    Color col;
+    if(colorname.isEmpty()) return col;
+
+    switch(colorname.getLength()){
+        case 7:
+            col.mValue = colorname.copy(1,6).toUInt32(16);
+            break;
+        case 6:
+            col.mValue = colorname.toUInt32(16);
+            break;
+        case 4:
+        {
+            sal_Unicode data[6] = { colorname[1], colorname[1], colorname[2],
+                                     colorname[2], colorname[3], colorname[3] };
+            col.mValue = OUString(data,6).toUInt32(16);
+            break;
+        }
+        case 3:
+        {
+            sal_Unicode data[6] = { colorname[0], colorname[0], colorname[1],
+                                     colorname[1], colorname[2], colorname[2] };
+            col.mValue = OUString(data,6).toUInt32(16);
+            break;
+        }
+        default:
+            break;
+    }
+    return col;
+}
+
 OUString Color::AsRGBHexString() const
 {
     std::stringstream ss;
     ss << std::hex << std::setfill ('0') << std::setw(6) << sal_uInt32(GetRGBColor());
+    return OUString::createFromAscii(ss.str().c_str());
+}
+
+OUString Color::AsRGBHEXString() const
+{
+    std::stringstream ss;
+    ss << std::hex << std::uppercase << std::setfill ('0') << std::setw(6) << sal_uInt32(GetRGBColor());
     return OUString::createFromAscii(ss.str().c_str());
 }
 
