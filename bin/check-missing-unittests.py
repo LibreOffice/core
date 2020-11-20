@@ -26,7 +26,8 @@ def main(ignoredBugs):
             'writer': {}
         },
         'import': {
-            'calc': {}
+            'calc': {},
+            'drawingml': {}
         },
 
     }
@@ -98,6 +99,9 @@ def main(ignoredBugs):
 
             elif 'sc/source/core/tool/interpr' in changedFiles:
                 results['import']['calc'][bugId] = infoList
+
+            elif 'drawingml' in changedFiles:
+                results['import']['drawingml'][bugId] = infoList
 
             # Add others here
 
