@@ -24,7 +24,7 @@
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
 
-#include <climits>
+#include <limits>
 
 ScfProgressBar::ScfProgressSegment::ScfProgressSegment( std::size_t nSize ) :
     mnSize( nSize ),
@@ -65,7 +65,7 @@ void ScfProgressBar::Init( SfxObjectShell* pDocShell )
     mpParentProgress = nullptr;
     mpParentSegment = mpCurrSegment = nullptr;
     mnTotalSize = mnTotalPos = mnUnitSize = mnNextUnitPos = 0;
-    mnSysProgressScale = 1;     // used to workaround the ULONG_MAX/100 limit
+    mnSysProgressScale = 1;     // used to workaround the SfxProgress sal_uInt32 limit
     mbInProgress = false;
 }
 
@@ -89,10 +89,10 @@ void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
     }
     else if( !mxSysProgress && (mnTotalSize > 0) )
     {
-        // System progress has an internal limit of ULONG_MAX/100.
+        // SfxProgress has a limit of sal_uInt32.
         mnSysProgressScale = 1;
-        sal_uLong nSysTotalSize = static_cast< sal_uLong >( mnTotalSize );
-        while( nSysTotalSize >= ULONG_MAX / 100 )
+        std::size_t nSysTotalSize = mnTotalSize;
+        while( nSysTotalSize > std::numeric_limits<sal_uInt32>::max() )
         {
             nSysTotalSize /= 2;
             mnSysProgressScale *= 2;
