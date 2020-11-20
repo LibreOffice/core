@@ -1125,7 +1125,8 @@ ErrCode UcbLockBytes::WriteAt(sal_uInt64 const nPos, const void *pBuffer,
 
     Reference <XSeekable> xSeekable = getSeekable_Impl();
     Reference <XOutputStream> xOutputStream = getOutputStream_Impl();
-    if ( !xOutputStream.is() || !xSeekable.is() )
+    Reference <XInputStream> xInputStream = getInputStream_Impl();
+    if ( !xOutputStream.is() || !xSeekable.is() || !xInputStream.is())
         return ERRCODE_IO_CANTWRITE;
 
     try
@@ -1139,11 +1140,20 @@ ErrCode UcbLockBytes::WriteAt(sal_uInt64 const nPos, const void *pBuffer,
 
     sal_Int8 const * pData = static_cast<sal_Int8 const *>(pBuffer);
     Sequence<sal_Int8> aData( pData, nCount );
+    sal_Int32 nRead;
     try
     {
-        xOutputStream->writeBytes( aData );
+        nRead = xInputStream->readBytes( aData, nCount );
+        if ( nRead < nCount )
+        {
+            Sequence < sal_Int8 > aTempBuf ( aData.getConstArray(), nRead );
+            xOutputStream->writeBytes ( aTempBuf );
+        }
+        else
+            xOutputStream->writeBytes( aData );
+
         if ( pWritten )
-            *pWritten = nCount;
+            *pWritten = nRead;
     }
     catch (const Exception&)
     {
