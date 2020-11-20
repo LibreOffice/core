@@ -444,6 +444,7 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableParse[]
         { "lightsteelblue", "lightsteelblue", THTMLCOL, COL_SM_LIGHTSTEELBLUE },
         { "lightyellow", "lightyellow", THTMLCOL, COL_SM_LIGHTYELLOW },
         { "lime", "lime", THTMLCOL, COL_SM_LIME },
+        { "lime", "lime", THTMLCOL, COL_SM_LIME },
         { "limegreen", "limegreen", THTMLCOL, COL_SM_LIMEGREEN },
         { "linen", "linen", THTMLCOL, COL_SM_LINEN },
         { "lo", "", TICONICCOL, COL_SM_LO_GREEN },
@@ -536,7 +537,6 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableHTML[]
         { "cornsilk", "cornsilk", THTMLCOL, COL_SM_CORNSILK },
         { "crimson", "crimson", THTMLCOL, COL_SM_CRIMSON },
         { "cyan", "cyan", THTMLCOL, COL_SM_CYAN },
-        { "darkblue", "darkblue", THTMLCOL, COL_SM_DARKBLUE },
         { "darkcyan", "darkcyan", THTMLCOL, COL_SM_DARKCYAN },
         { "darkgoldenrod", "darkgoldenrod", THTMLCOL, COL_SM_DARKGOLDENROD },
         { "darkgray", "darkgray", THTMLCOL, COL_SM_DARKGRAY },
@@ -671,6 +671,24 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableDVIPSNAMES[]
         { "black", "Black", TDVIPSNAMESCOL, COL_SM_BLACK },
         { "blue", "Blue", TDVIPSNAMESCOL, COL_SM_BLACK } };
 
+const SmColorTokenTableEntry starmathdatabase::aColorTokenTableMATHML[]
+    = { { "aqua", "aqua", TMATHMLCOL, COL_SM_AQUA },
+        { "black", "black", TMATHMLCOL, COL_SM_BLACK },
+        { "blue", "blue", TMATHMLCOL, COL_SM_BLUE },
+        { "fuchsia", "fuchsia", TMATHMLCOL, COL_SM_FUCHSIA },
+        { "gray", "gray", TMATHMLCOL, COL_SM_GRAY },
+        { "green", "green", TMATHMLCOL, COL_SM_GREEN },
+        { "lime", "lime", TMATHMLCOL, COL_SM_LIME },
+        { "maroon", "maroon", TMATHMLCOL, COL_SM_MAROON },
+        { "navy", "navy", TMATHMLCOL, COL_SM_NAVY },
+        { "olive", "olive", TMATHMLCOL, COL_SM_OLIVE },
+        { "purple", "purple", TMATHMLCOL, COL_SM_PURPLE },
+        { "red", "red", TMATHMLCOL, COL_SM_RED },
+        { "silver", "silver", TMATHMLCOL, COL_SM_SILVER },
+        { "teal", "teal", TMATHMLCOL, COL_SM_TEAL },
+        { "white", "white", TMATHMLCOL, COL_SM_WHITE },
+        { "yellow", "yellow", TMATHMLCOL, COL_SM_YELLOW } };
+
 std::unique_ptr<SmColorTokenTableEntry> starmathdatabase::Identify_Color_Parser(sal_uInt32 cColor)
 {
     for (auto i = std::begin(aColorTokenTableParse); i < std::end(aColorTokenTableParse); ++i)
@@ -691,6 +709,19 @@ std::unique_ptr<SmColorTokenTableEntry> starmathdatabase::Identify_Color_Parser(
 std::unique_ptr<SmColorTokenTableEntry> starmathdatabase::Identify_Color_HTML(sal_uInt32 cColor)
 {
     for (auto i = std::begin(aColorTokenTableHTML); i < std::end(aColorTokenTableHTML); ++i)
+        if (i->equals(cColor))
+            return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry(i));
+    if ((cColor & 0x00FFFFFF) == cColor)
+        return std::unique_ptr<SmColorTokenTableEntry>(
+            new SmColorTokenTableEntry("", "", TRGB, cColor));
+    else
+        return std::unique_ptr<SmColorTokenTableEntry>(
+            new SmColorTokenTableEntry("", "", TRGBA, cColor));
+}
+
+std::unique_ptr<SmColorTokenTableEntry> starmathdatabase::Identify_Color_MATHML(sal_uInt32 cColor)
+{
+    for (auto i = std::begin(aColorTokenTableMATHML); i < std::end(aColorTokenTableMATHML); ++i)
         if (i->equals(cColor))
             return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry(i));
     if ((cColor & 0x00FFFFFF) == cColor)
