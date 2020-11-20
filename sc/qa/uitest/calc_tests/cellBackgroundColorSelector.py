@@ -77,7 +77,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
         color_selector.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
         self.assertEqual(get_state_as_dict(color_selector)["CurrColorId"], "1")
         self.assertEqual(get_state_as_dict(color_selector)["CurrColorPos"], "0")
-        self.assertEqual(get_state_as_dict(color_selector)["ColorsCount"], "138")
+        self.assertEqual(get_state_as_dict(color_selector)["ColorsCount"], "139")
         self.assertEqual(get_state_as_dict(color_selector)["ColCount"], "12")
         self.assertEqual(get_state_as_dict(color_selector)["ColorText"], "White")
         # Select Color with id 120
