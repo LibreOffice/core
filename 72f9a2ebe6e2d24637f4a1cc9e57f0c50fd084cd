@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2edb3354_69f79dd8",
+        "filename": "vcl/source/app/ITiledRenderable.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-20T11:17:37Z",
+      "side": 1,
+      "message": "move remainder of comment as well",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 0
+      },
+      "revId": "72f9a2ebe6e2d24637f4a1cc9e57f0c50fd084cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
