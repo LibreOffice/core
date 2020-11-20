@@ -22,9 +22,7 @@
 #include <sidebar/DeckTitleBar.hxx>
 #include <sidebar/PanelTitleBar.hxx>
 #include <sidebar/TitleBar.hxx>
-#include <vcl/button.hxx>
 #include <vcl/event.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
