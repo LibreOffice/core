@@ -59,28 +59,14 @@ protected:
 
 public:
 
-
-    XMLEventsImportContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName);
-
     XMLEventsImportContext(SvXMLImport& rImport);
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         const css::uno::Reference<css::document::XEventsSupplier> & xEventsSupplier);
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
-        const css::uno::Reference<css::document::XEventsSupplier> & xEventsSupplier);
-
-    XMLEventsImportContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         const css::uno::Reference<css::container::XNameReplace> & xNameRepl);
 
     virtual ~XMLEventsImportContext() override;
@@ -106,11 +92,6 @@ public:
         css::uno::Sequence<css::beans::PropertyValue> & rSequence );
 
 protected:
-
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
             sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;

@@ -502,8 +502,7 @@ SvXMLImportContextRef XMLImpHyperlinkContext_Impl::CreateChildContext(
     if ( (nPrefix == XML_NAMESPACE_OFFICE) &&
          IsXMLToken(rLocalName, XML_EVENT_LISTENERS) )
     {
-        XMLEventsImportContext* pCtxt = new XMLEventsImportContext(
-            GetImport(), nPrefix, rLocalName);
+        XMLEventsImportContext* pCtxt = new XMLEventsImportContext(GetImport());
         if (mpHint)
             mpHint->SetEventsContext(pCtxt);
         return pCtxt;

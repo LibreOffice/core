@@ -1651,8 +1651,7 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
                 if (xEventsSupplier.is())
                 {
                     // OK, we have the events, so create the context
-                    xContext = new XMLEventsImportContext(GetImport(), p_nPrefix,
-                                                      rLocalName, xEventsSupplier);
+                    xContext = new XMLEventsImportContext(GetImport(), xEventsSupplier);
                 }
             }
         }

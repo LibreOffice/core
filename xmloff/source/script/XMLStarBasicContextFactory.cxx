@@ -27,7 +27,7 @@
 
 using namespace ::xmloff::token;
 
-using ::com::sun::star::xml::sax::XAttributeList;
+using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -48,28 +48,17 @@ XMLStarBasicContextFactory::~XMLStarBasicContextFactory()
 
 SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
     SvXMLImport& rImport,
-    const Reference<XAttributeList> & xAttrList,
+    const Reference<XFastAttributeList> & xAttrList,
     XMLEventsImportContext* rEvents,
     const OUString& rApiEventName)
 {
     OUString sLibraryVal;
     OUString sMacroNameVal;
 
-    sal_Int16 nCount = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), &sLocalName );
-
-        if (XML_NAMESPACE_SCRIPT == nPrefix)
-        {
-            if (IsXMLToken(sLocalName, XML_MACRO_NAME))
-            {
-                sMacroNameVal = xAttrList->getValueByIndex(nAttr);
-            }
-            // else: ignore
-        }
+        if (aIter.getToken() == XML_ELEMENT(SCRIPT, XML_MACRO_NAME))
+            sMacroNameVal = aIter.toString();
         // else: ignore
     }
 

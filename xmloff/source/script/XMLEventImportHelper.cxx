@@ -99,7 +99,7 @@ void XMLEventImportHelper::PopTranslationTable()
 
 SvXMLImportContext* XMLEventImportHelper::CreateContext(
     SvXMLImport& rImport,
-    const Reference<XAttributeList> & xAttrList,
+    const Reference<css::xml::sax::XFastAttributeList> & xAttrList,
     XMLEventsImportContext* rEvents,
     const OUString& rXmlEventName,
     const OUString& rLanguage)

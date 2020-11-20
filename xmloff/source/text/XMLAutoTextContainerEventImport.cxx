@@ -56,8 +56,7 @@ SvXMLImportContextRef XMLAutoTextContainerEventImport::CreateChildContext(
     if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
          IsXMLToken( rLocalName, XML_EVENT_LISTENERS)   )
     {
-        return new XMLEventsImportContext(GetImport(), nPrefix, rLocalName,
-                                          rEvents);
+        return new XMLEventsImportContext(GetImport(), rEvents);
     }
     return nullptr;
 }

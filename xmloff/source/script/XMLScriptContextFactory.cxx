@@ -26,7 +26,7 @@
 
 using namespace ::xmloff::token;
 
-using ::com::sun::star::xml::sax::XAttributeList;
+using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -40,25 +40,16 @@ XMLScriptContextFactory::XMLScriptContextFactory() {}
 XMLScriptContextFactory::~XMLScriptContextFactory() {}
 
 SvXMLImportContext* XMLScriptContextFactory::CreateContext(
-    SvXMLImport& rImport, const Reference<XAttributeList>& xAttrList,
+    SvXMLImport& rImport, const Reference<XFastAttributeList>& xAttrList,
     XMLEventsImportContext* rEvents, const OUString& rApiEventName)
 {
     OUString sURLVal;
 
-    sal_Int16 nCount = xAttrList->getLength();
-    for (sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
+    for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
-            xAttrList->getNameByIndex(nAttr), &sLocalName);
-
-        if (XML_NAMESPACE_XLINK == nPrefix)
-        {
-            if (IsXMLToken(sLocalName, XML_HREF))
-                sURLVal = xAttrList->getValueByIndex(nAttr);
-            // else: ignore
-        }
-        // else ignore
+        if (aIter.getToken() == XML_ELEMENT(XLINK, XML_HREF))
+            sURLVal = aIter.toString();
+        // else: ignore
     }
 
     Sequence<PropertyValue> aValues(2);
