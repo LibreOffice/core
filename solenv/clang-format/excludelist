@@ -11414,8 +11414,7 @@ starmath/qa/cppunit/mock-visitor.hxx
 starmath/qa/cppunit/test_node.cxx
 starmath/qa/cppunit/test_parse.cxx
 starmath/qa/cppunit/test_starmath.cxx
-starmath/qa/extras/mmlexport-test.cxx
-starmath/qa/extras/mmlimport-test.cxx
+starmath/qa/unit/starmath-dialogs-test.cxx
 starmath/source/ElementsDockingWindow.cxx
 starmath/source/accessibility.cxx
 starmath/source/accessibility.hxx
