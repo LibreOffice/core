@@ -23,8 +23,8 @@
 
 #include <memory>
 
-namespace {
-
+namespace
+{
 using namespace ::com::sun::star;
 
 typedef tools::SvRef<SmDocShell> SmDocShellRef;
@@ -46,7 +46,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 protected:
-    virtual void registerNamespaces(xmlXPathContextPtr &pXmlXPathCtx) override;
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
 
 private:
     xmlDocUniquePtr exportAndParse();
@@ -58,9 +58,9 @@ void MathMLExportTest::setUp()
 {
     BootstrapFixture::setUp();
     SmGlobals::ensure();
-    mxDocShell = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT |
-                                SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-                                SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    mxDocShell
+        = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 }
 
 void MathMLExportTest::tearDown()
@@ -70,7 +70,7 @@ void MathMLExportTest::tearDown()
     BootstrapFixture::tearDown();
 }
 
-void MathMLExportTest::registerNamespaces(xmlXPathContextPtr &pXmlXPathCtx)
+void MathMLExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
     xmlXPathRegisterNs(pXmlXPathCtx, BAD_CAST("m"), BAD_CAST("http://www.w3.org/1998/Math/MathML"));
 }
@@ -109,28 +109,32 @@ void MathMLExportTest::testTdf97049()
 
 void MathMLExportTest::testTdf101022()
 {
-#define CHECK_MATHVARIANT(capital, small) do                            \
-    {                                                                   \
-        mxDocShell->SetText("%GAMMA %iGAMMA {ital %GAMMA} {nitalic %iGAMMA} " \
-                            "%gamma %igamma {ital %gamma} {nitalic %igamma}"); \
-        xmlDocUniquePtr pDoc = exportAndParse();                              \
-        if (capital)                                                    \
-            assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mi[1]", "mathvariant"); \
-        else                                                            \
-            assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mi[1]", "mathvariant", "normal"); \
-        assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mstyle[1]/m:mi[1]", "mathvariant"); \
-        assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mi[2]", "mathvariant"); \
-        assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mstyle[2]/m:mi[1]", "mathvariant", "normal"); \
-        if (small)                                                      \
-            assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mi[3]", "mathvariant"); \
-        else                                                            \
-            assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mi[3]", "mathvariant", "normal"); \
-        assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mstyle[3]/m:mi[1]", "mathvariant"); \
-        assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mi[4]", "mathvariant"); \
-        assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mstyle[4]/m:mi[1]", "mathvariant", "normal"); \
-        mxDocShell->SetText("");                                        \
-    }                                                                   \
-    while (false)
+#define CHECK_MATHVARIANT(capital, small)                                                          \
+    do                                                                                             \
+    {                                                                                              \
+        mxDocShell->SetText("%GAMMA %iGAMMA {ital %GAMMA} {nitalic %iGAMMA} "                      \
+                            "%gamma %igamma {ital %gamma} {nitalic %igamma}");                     \
+        xmlDocUniquePtr pDoc = exportAndParse();                                                   \
+        if (capital)                                                                               \
+            assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mi[1]", "mathvariant");     \
+        else                                                                                       \
+            assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mi[1]", "mathvariant", "normal");      \
+        assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mstyle[1]/m:mi[1]",             \
+                               "mathvariant");                                                     \
+        assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mi[2]", "mathvariant");         \
+        assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mstyle[2]/m:mi[1]", "mathvariant",         \
+                    "normal");                                                                     \
+        if (small)                                                                                 \
+            assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mi[3]", "mathvariant");     \
+        else                                                                                       \
+            assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mi[3]", "mathvariant", "normal");      \
+        assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mstyle[3]/m:mi[1]",             \
+                               "mathvariant");                                                     \
+        assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mi[4]", "mathvariant");         \
+        assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mstyle[4]/m:mi[1]", "mathvariant",         \
+                    "normal");                                                                     \
+        mxDocShell->SetText("");                                                                   \
+    } while (false)
 
     CHECK_MATHVARIANT(false, true); // default mode 2
 
@@ -144,7 +148,6 @@ void MathMLExportTest::testTdf101022()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MathMLExportTest);
-
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
