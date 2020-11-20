@@ -93,23 +93,35 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
     // fix PaM for deletions shown in margin
     SwRedlineTable::size_type nCurRedlinePos;
     const SwRangeRedline * pRedline =
-            rDoc.getIDocumentRedlineAccess().GetRedline( *rPam.End(), &nCurRedlinePos );
+            rDoc.getIDocumentRedlineAccess().GetRedline( *rPam.GetPoint(), &nCurRedlinePos );
     if ( pRedline && !pRedline->IsVisible() )
     {
         const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
-        // skip older redlines in the same position
-        while ( nCurRedlinePos + 1 < rTable.size() &&
-            *pRedline->GetPoint() == *rTable[nCurRedlinePos + 1]->GetPoint() )
+        // count invisible (DELETE) redlines in the same position
+        SwRedlineTable::size_type nPos = nCurRedlinePos + 1;
+        while ( nPos < rTable.size() && !rTable[nPos]->IsVisible() &&
+            *pRedline->GetPoint() == *rTable[nPos]->GetPoint() )
         {
-            ++nCurRedlinePos;
+            ++nPos;
         }
         SwRangeRedline * pHiddenRedline( rTable[nCurRedlinePos] );
         pHiddenRedline->Show(0, rTable.GetPos(pHiddenRedline), /*bForced=*/true);
         pHiddenRedline->Show(1, rTable.GetPos(pHiddenRedline), /*bForced=*/true);
         rPam = *pHiddenRedline;
-    }
 
-    UndoRedlineImpl(rDoc, rPam);
+        SwContentNode *pNd = rPam.GetContentNode();
+        const sal_Int32 nStart = rPam.Start()->nContent.GetIndex();
+        UndoRedlineImpl(rDoc, rPam);
+
+        // restore redline ranges to the start of the hidden deletion
+        // TODO fix the other cases
+        for (SwRedlineTable::size_type nIdx = nCurRedlinePos; nIdx + 1 < nPos; ++nIdx) {
+            SwRangeRedline * pHiddenRedline2( rTable[nIdx] );
+            pHiddenRedline2->GetPoint()->nContent.Assign(pNd, nStart);
+        }
+    }
+    else
+        UndoRedlineImpl(rDoc, rPam);
 
     if( mpRedlSaveData )
     {
