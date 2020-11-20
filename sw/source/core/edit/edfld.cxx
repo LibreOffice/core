@@ -130,14 +130,8 @@ void SwEditShell::FieldToText( SwFieldType const * pType )
     StartUndo( SwUndoId::DELETE );
     Push();
     SwPaM* pPaM = GetCursor();
-    // TODO: this is really hackish
-    SwFieldHint aHint(pPaM, GetLayout());
-    SwIterator<SwClient,SwFieldType> aIter(*pType);
-    for( SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next() )
-    {
-        pPaM->DeleteMark();
-        pClient->SwClientNotifyCall( *pType, aHint );
-    }
+    const SwFieldHint aHint(pPaM, GetLayout());
+    CallSwClientNotify(aHint);
 
     Pop(PopMode::DeleteCurrent);
     EndAllAction();
