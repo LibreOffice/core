@@ -29,6 +29,7 @@
 #include <scopetools.hxx>
 #include <scmod.hxx>
 
+#include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>
 
 using namespace ::com::sun::star;
@@ -71,6 +72,7 @@ public:
     void testSharedFormulaRefUpdateXLSX();
     void testSheetNamesXLSX();
     void testTdf79998();
+    void testCommentSize();
     void testLegacyCellAnchoredRotatedShape();
     void testEnhancedProtectionXLS();
     void testEnhancedProtectionXLSX();
@@ -98,6 +100,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaRefUpdateXLSX);
     CPPUNIT_TEST(testSheetNamesXLSX);
     CPPUNIT_TEST(testTdf79998);
+    CPPUNIT_TEST(testCommentSize);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
     CPPUNIT_TEST(testEnhancedProtectionXLS);
     CPPUNIT_TEST(testEnhancedProtectionXLSX);
@@ -484,6 +487,39 @@ void ScFiltersTest::testTdf79998()
     ScDocument& rDoc2 = xDocSh->GetDocument();
     const std::vector<OUString> aTabNames2 = rDoc2.GetAllTableNames();
     CPPUNIT_ASSERT_EQUAL(OUString("Utilities (FX Kurse, Kreditkart"), aTabNames2[1]);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCommentSize()
+{
+    ScDocShellRef xDocSh = loadDoc("comment.", FORMAT_ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScAddress aPos(0,0,0);
+    ScPostIt *pNote = rDoc.GetNote(aPos);
+    CPPUNIT_ASSERT(pNote);
+
+    pNote->ShowCaption(aPos, true);
+    CPPUNIT_ASSERT(pNote->IsCaptionShown());
+
+    SdrCaptionObj* pCaption = pNote->GetCaption();
+    CPPUNIT_ASSERT(pCaption);
+
+    const tools::Rectangle& rOldRect = pCaption->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2899), rOldRect.getWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(939), rOldRect.getHeight());
+
+    pNote->SetText(aPos, "first\nsecond\nthird");
+
+    const tools::Rectangle& rNewRect = pCaption->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(rOldRect.getWidth(), rNewRect.getWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1605), rNewRect.getHeight());
+
+    rDoc.GetUndoManager()->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(rOldRect.getWidth(), pCaption->GetLogicRect().getWidth());
+    CPPUNIT_ASSERT_EQUAL(rOldRect.getHeight(), pCaption->GetLogicRect().getHeight());
 
     xDocSh->DoClose();
 }
