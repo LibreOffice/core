@@ -1,1 +1,19 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m3 3 1.0605469 4.5957031 1.3710937-1.3710937 13.1718754 13.1718746a.56205618.56205618 0 1 0 .792968-.792968l-13.1718746-13.1718754 1.3710937-1.3710937z" fill="#1e8bcd"/></svg>
+<?xml-stylesheet type="text/css" href="icons.css" ?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path
+	 class="icn icn--highlight-color-line"
+     d="M 6,6 18,18"
+	 fill="none"
+	 stroke="#1e8bcd"
+	 stroke-linecap="round"
+	 stroke-linejoin="round"
+     />
+  <path
+	 class="icn icn--highlight-color"
+     d="m 2.5,2.5 5,2 -3,3 z"
+	 fill="#83beec"
+	 stroke="#1e8bcd"
+	 stroke-linecap="round"
+	 stroke-linejoin="round"
+     />
+</svg>
