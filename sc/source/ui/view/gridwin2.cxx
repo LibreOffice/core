@@ -467,8 +467,14 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
     const ScDPLabelData& rLabelData = pDPData->maLabels;
 
     mpDPFieldPopup.disposeAndClear();
+
+    vcl::ILibreOfficeKitNotifier* pNotifier = nullptr;
+    if (comphelper::LibreOfficeKit::isActive())
+        pNotifier = SfxViewShell::Current();
+
     mpDPFieldPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &mrViewData.GetDocument(),
-                                                               bDimOrientNotPage, false));
+                                                               bDimOrientNotPage, false, -1,
+                                                               nullptr, pNotifier));
 
     ScCheckListMenuControl& rControl = mpDPFieldPopup->get_widget();
     rControl.setExtendedData(std::move(pDPData));

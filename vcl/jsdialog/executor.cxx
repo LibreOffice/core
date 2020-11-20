@@ -205,6 +205,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                     int nRow = std::atoi(nRowString.getStr());
 
                     pTreeView->select(nRow);
+                    LOKTrigger::trigger_changed(*pTreeView);
                     LOKTrigger::trigger_row_activated(*pTreeView);
                     return true;
                 }
