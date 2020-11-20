@@ -205,6 +205,10 @@ extern const SmColorTokenTableEntry aColorTokenTableDVIPSNAMES[5];
 /**
   * Identifies operator chars tokens for importing mathml.
   * Identifies from char cChar
+  *
+  * While loading MO or MI elements might find an unicode16 symbol.
+  * This code allows to generate apropiate token for them.
+  *
   * @param cChar
   * @return closing fences' token
   */
@@ -213,6 +217,10 @@ SmToken Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, bool bIsStretchy =
 /**
   * Identifies opening / closing brace tokens for importing mathml.
   * Identifies from char cChar
+  *
+  * While loading MO fenced elements might find braces symbols.
+  * This code allows to generate apropiate token for them.
+  *
   * @param cChar
   * @return closing fences' token
   */
@@ -221,6 +229,10 @@ SmToken Identify_PrefixPostfix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
 /**
   * Identifies opening brace tokens for importing mathml.
   * Identifies from char cChar
+  *
+  * While loading MO elements ( with prefix value for form attribute ) might find braces symbols.
+  * This code allows to generate apropiate token for them.
+  *
   * @param cChar
   * @return closing fences' token
   */
@@ -229,6 +241,10 @@ SmToken Identify_Prefix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
 /**
   * Identifies closing brace tokens for importing mathml.
   * Identifies from char cChar
+  *
+  * While loading MO elements ( with postfix value for form attribute ) might find braces symbols.
+  * This code allows to generate apropiate token for them.
+  *
   * @param cChar
   * @return closing fences' token
   */
@@ -237,6 +253,10 @@ SmToken Identify_Postfix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
 /**
   * Identifies color from color code cColor.
   * It will be returned with the parser syntax.
+  *
+  * For a given color returns the way it would be in the parser.
+  * Used for nodes to text visitors.
+  *
   * @param cColor
   * @param parser color
   */
@@ -273,6 +293,9 @@ std::unique_ptr<SmColorTokenTableEntry> Identify_Color_DVIPSNAMES(sal_uInt32 cCo
 /**
   * Identifies color from color name.
   * It will be returned with the parser syntax.
+  *
+  * This finds color values for the color names loaded by the parser.
+  *
   * @param cColor
   * @param parser color
   */
@@ -281,6 +304,11 @@ std::unique_ptr<SmColorTokenTableEntry> Identify_ColorName_Parser(const OUString
 /**
   * Identifies color from color name.
   * It will be returned with the HTML syntax.
+  *
+  * This finds color values for the color names loaded by mathmlimport.
+  * In theory mathml only supports HTML4 colors, but most browsers support all HTML5 colors.
+  * Thats why there is a hight risk of finding them inside mathml and have to give support.
+  *
   * @param cColor
   * @param parser color
   */
@@ -289,6 +317,9 @@ std::unique_ptr<SmColorTokenTableEntry> Identify_ColorName_HTML(const OUString& 
 /**
   * Identifies color from color name.
   * It will be returned with the dvipsnames syntax.
+  *
+  * This code has been implemented to add a compatibility layer to import / export latex.
+  *
   * @param cColor
   * @param parser color
   */
