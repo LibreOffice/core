@@ -55,10 +55,16 @@ public:
 
 namespace sw {
 
+    enum class TextRangeMode {
+        RequireTextNode,
+        AllowNonTextNode
+    };
+
     void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget);
 
     SW_DLLPUBLIC bool XTextRangeToSwPaM(SwUnoInternalPaM& rToFill,
-            const css::uno::Reference< css::text::XTextRange > & xTextRange);
+            const css::uno::Reference<css::text::XTextRange> & xTextRange,
+            TextRangeMode eMode = TextRangeMode::RequireTextNode);
 
     css::uno::Reference< css::text::XText >
         CreateParentXText(SwDoc & rDoc, const SwPosition& rPos);
@@ -95,6 +101,7 @@ private:
         RANGE_IN_TEXT,  // "ordinary" css::text::TextRange
         RANGE_IN_CELL,  // position created with a cell that has no uno object
         RANGE_IS_TABLE, // anchor of a table
+        RANGE_IS_SECTION, // anchor of a section
     };
 
     void    SetPositions(SwPaM const& rPam);
@@ -112,11 +119,14 @@ public:
             const css::uno::Reference< css::text::XText > & xParent,
             const enum RangePosition eRange = RANGE_IN_TEXT);
     // only for RANGE_IS_TABLE
-    SwXTextRange(SwFrameFormat& rTableFormat);
+    SwXTextRange(SwTableFormat& rTableFormat);
+    // only for RANGE_IS_SECTION
+    SwXTextRange(SwSectionFormat& rSectionFormat);
 
     const SwDoc& GetDoc() const;
           SwDoc& GetDoc();
-    bool GetPositions(SwPaM & rToFill) const;
+    bool GetPositions(SwPaM & rToFill,
+        ::sw::TextRangeMode eMode = ::sw::TextRangeMode::RequireTextNode) const;
 
     static css::uno::Reference< css::text::XTextRange > CreateXTextRange(
             SwDoc & rDoc,

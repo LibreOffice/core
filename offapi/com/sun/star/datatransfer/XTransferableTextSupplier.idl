@@ -1,0 +1,44 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#ifndef __com_sun_star_datatransfer_XTransferableTextSupplier_idl__
+#define __com_sun_star_datatransfer_XTransferableTextSupplier_idl__
+
+#include <com/sun/star/datatransfer/XTransferable.idl>
+#include <com/sun/star/text/XTextRange.idl>
+
+
+module com { module sun { module star { module datatransfer {
+
+/** @since LO 7.2
+ */
+interface XTransferableTextSupplier
+{
+    /** Provide access to a transferable representation of a given text
+        range.
+
+        @param xRange   a text range known to the supplier.
+
+        @returns
+        a transferable object representing the given text range.
+
+        @see com::sun::star::datatransfer::XTransferable
+    */
+    XTransferable getTransferableForTextRange(
+        [in] com::sun::star::text::XTextRange xRange);
+
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

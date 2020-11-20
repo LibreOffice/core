@@ -650,20 +650,23 @@ public:
     const enum RangePosition m_eRangePosition;
     SwDoc& m_rDoc;
     uno::Reference<text::XText> m_xParentText;
-    const SwFrameFormat* m_pTableFormat;
+    const SwFrameFormat* m_pTableOrSectionFormat;
     const ::sw::mark::IMark* m_pMark;
 
     Impl(SwDoc& rDoc, const enum RangePosition eRange,
-            SwFrameFormat* const pTableFormat,
+            SwFrameFormat* const pTableOrSectionFormat,
             const uno::Reference<text::XText>& xParent = nullptr)
         : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eRangePosition(eRange)
         , m_rDoc(rDoc)
         , m_xParentText(xParent)
-        , m_pTableFormat(pTableFormat)
+        , m_pTableOrSectionFormat(pTableOrSectionFormat)
         , m_pMark(nullptr)
     {
-        m_pTableFormat && StartListening(pTableFormat->GetNotifier());
+        if (m_pTableOrSectionFormat)
+        {
+            StartListening(pTableOrSectionFormat->GetNotifier());
+        }
     }
 
     virtual ~Impl() override
@@ -679,7 +682,7 @@ public:
             m_rDoc.getIDocumentMarkAccess()->deleteMark(m_pMark);
             m_pMark = nullptr;
         }
-        m_pTableFormat = nullptr;
+        m_pTableOrSectionFormat = nullptr;
         EndListeningAll();
     }
 
@@ -687,7 +690,7 @@ public:
     void SetMark(::sw::mark::IMark& rMark)
     {
         EndListeningAll();
-        m_pTableFormat = nullptr;
+        m_pTableOrSectionFormat = nullptr;
         m_pMark = &rMark;
         StartListening(rMark.GetNotifier());
     }
@@ -701,7 +704,7 @@ void SwXTextRange::Impl::Notify(const SfxHint& rHint)
     if(rHint.GetId() == SfxHintId::Dying)
     {
         EndListeningAll();
-        m_pTableFormat = nullptr;
+        m_pTableOrSectionFormat = nullptr;
         m_pMark = nullptr;
     }
 }
@@ -714,7 +717,7 @@ SwXTextRange::SwXTextRange(SwPaM const & rPam,
     SetPositions(rPam);
 }
 
-SwXTextRange::SwXTextRange(SwFrameFormat& rTableFormat)
+SwXTextRange::SwXTextRange(SwTableFormat& rTableFormat)
     : m_pImpl(
         new SwXTextRange::Impl(*rTableFormat.GetDoc(), RANGE_IS_TABLE, &rTableFormat) )
 {
@@ -724,6 +727,13 @@ SwXTextRange::SwXTextRange(SwFrameFormat& rTableFormat)
     SwPaM aPam( aPosition );
 
     SetPositions( aPam );
+}
+
+SwXTextRange::SwXTextRange(SwSectionFormat& rSectionFormat)
+    : m_pImpl(
+        new SwXTextRange::Impl(*rSectionFormat.GetDoc(), RANGE_IS_SECTION, &rSectionFormat) )
+{
+    // no SetPositions here for now
 }
 
 SwXTextRange::~SwXTextRange()
@@ -753,6 +763,18 @@ void SwXTextRange::SetPositions(const SwPaM& rPam)
     m_pImpl->SetMark(*pMark);
 }
 
+static void DeleteTable(SwDoc & rDoc, SwTable& rTable)
+{
+    SwSelBoxes aSelBoxes;
+    for (auto& rBox : rTable.GetTabSortBoxes())
+    {
+        aSelBoxes.insert(rBox);
+    }
+    // note: if the table is the content in the section, this will create
+    // a new text node - that's desirable here
+    rDoc.DeleteRowCol(aSelBoxes);
+}
+
 void SwXTextRange::DeleteAndInsert(
         const OUString& rText, const bool bForceExpandHints)
 {
@@ -764,11 +786,80 @@ void SwXTextRange::DeleteAndInsert(
 
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
     SwCursor aCursor(aPos, nullptr);
-    if (!GetPositions(aCursor))
-        return;
 
     UnoActionContext aAction(& m_pImpl->m_rDoc);
-    m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+
+    if (RANGE_IS_SECTION == m_pImpl->m_eRangePosition)
+    {
+        if (!m_pImpl->m_pTableOrSectionFormat)
+        {
+            throw uno::RuntimeException("disposed?");
+        }
+        m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+        SwSectionFormat const& rFormat(
+            *static_cast<SwSectionFormat const*>(m_pImpl->m_pTableOrSectionFormat));
+        SwNodeIndex const start(*rFormat.GetSectionNode());
+        SwNodeIndex const end(*start.GetNode().EndOfSectionNode());
+
+        // delete tables at start
+        for (SwNodeIndex i = start; i < end; )
+        {
+            SwNode & rNode(i.GetNode());
+            if (rNode.IsSectionNode())
+            {
+                ++i;
+                continue;
+            }
+            else if (SwTableNode *const pTableNode = rNode.GetTableNode())
+            {
+                DeleteTable(m_pImpl->m_rDoc, pTableNode->GetTable());
+                // where does that leave index? presumably behind?
+            }
+            else
+            {
+                assert(rNode.IsTextNode());
+                break;
+            }
+        }
+        // delete tables at end
+        for (SwNodeIndex i = end; start <= i; )
+        {
+            --i;
+            SwNode & rNode(i.GetNode());
+            if (rNode.IsEndNode())
+            {
+                if (SwTableNode *const pTableNode = rNode.StartOfSectionNode()->GetTableNode())
+                {
+                    DeleteTable(m_pImpl->m_rDoc, pTableNode->GetTable());
+                }
+                else
+                {
+                    assert(rNode.StartOfSectionNode()->IsSectionNode());
+                    continue;
+                }
+            }
+            else
+            {
+                assert(rNode.IsTextNode());
+                break;
+            }
+        }
+        // now there should be a text node at the start and end of it!
+        *aCursor.GetPoint() = SwPosition(start);
+        aCursor.Move( fnMoveForward, GoInContent );
+        assert(aCursor.GetPoint()->nNode <= end);
+        aCursor.SetMark();
+        *aCursor.GetPoint() = SwPosition(end);
+        aCursor.Move( fnMoveBackward, GoInContent );
+        assert(start <= aCursor.GetPoint()->nNode);
+    }
+    else
+    {
+        if (!GetPositions(aCursor))
+            return;
+        m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+    }
+
     if (aCursor.HasMark())
     {
         m_pImpl->m_rDoc.getIDocumentContentOperations().DeleteAndJoin(aCursor);
@@ -836,9 +927,9 @@ SwXTextRange::getText()
     if (!m_pImpl->m_xParentText.is())
     {
         if (m_pImpl->m_eRangePosition == RANGE_IS_TABLE &&
-            m_pImpl->m_pTableFormat)
+            m_pImpl->m_pTableOrSectionFormat)
         {
-            SwTable const*const pTable = SwTable::FindTable( m_pImpl->m_pTableFormat );
+            SwTable const*const pTable = SwTable::FindTable( m_pImpl->m_pTableOrSectionFormat );
             SwTableNode const*const pTableNode = pTable->GetTableNode();
             const SwPosition aPosition( *pTableNode );
             m_pImpl->m_xParentText =
@@ -870,6 +961,15 @@ SwXTextRange::getStart()
         // start and end are this, if it's a table
         xRet = this;
     }
+    else if (RANGE_IS_SECTION == m_pImpl->m_eRangePosition
+            && m_pImpl->m_pTableOrSectionFormat)
+    {
+        auto const pSectFormat(static_cast<SwSectionFormat const*>(m_pImpl->m_pTableOrSectionFormat));
+        SwPaM aPaM(*pSectFormat->GetContent().GetContentIdx());
+        aPaM.Move( fnMoveForward, GoInContent );
+        assert(aPaM.GetPoint()->nNode < *pSectFormat->GetContent().GetContentIdx()->GetNode().EndOfSectionNode());
+        xRet = new SwXTextRange(aPaM, m_pImpl->m_xParentText);
+    }
     else
     {
         throw uno::RuntimeException("disposed?");
@@ -898,6 +998,15 @@ SwXTextRange::getEnd()
         // start and end are this, if it's a table
         xRet = this;
     }
+    else if (RANGE_IS_SECTION == m_pImpl->m_eRangePosition
+            && m_pImpl->m_pTableOrSectionFormat)
+    {
+        auto const pSectFormat(static_cast<SwSectionFormat const*>(m_pImpl->m_pTableOrSectionFormat));
+        SwPaM aPaM(*pSectFormat->GetContent().GetContentIdx()->GetNode().EndOfSectionNode());
+        aPaM.Move( fnMoveBackward, GoInContent );
+        assert(*pSectFormat->GetContent().GetContentIdx() < aPaM.GetPoint()->nNode);
+        xRet = new SwXTextRange(aPaM, m_pImpl->m_xParentText);
+    }
     else
     {
         throw uno::RuntimeException("disposed?");
@@ -913,7 +1022,7 @@ OUString SAL_CALL SwXTextRange::getString()
     // for tables there is no bookmark, thus also no text
     // one could export the table as ASCII here maybe?
     SwPaM aPaM(GetDoc().GetNodes());
-    if (GetPositions(aPaM) && aPaM.HasMark())
+    if (GetPositions(aPaM, sw::TextRangeMode::AllowNonTextNode) && aPaM.HasMark())
     {
         SwUnoCursorHelper::GetTextFromPam(aPaM, sRet);
     }
@@ -927,8 +1036,27 @@ void SAL_CALL SwXTextRange::setString(const OUString& rString)
     DeleteAndInsert(rString, false);
 }
 
-bool SwXTextRange::GetPositions(SwPaM& rToFill) const
+bool SwXTextRange::GetPositions(SwPaM& rToFill, ::sw::TextRangeMode const eMode) const
 {
+    if (RANGE_IS_SECTION == m_pImpl->m_eRangePosition
+        && eMode == ::sw::TextRangeMode::AllowNonTextNode)
+    {
+        if (auto const pSectFormat = static_cast<SwSectionFormat const*>(m_pImpl->m_pTableOrSectionFormat))
+        {
+            SwNodeIndex const*const pSectionNode(pSectFormat->GetContent().GetContentIdx());
+            assert(pSectionNode);
+            assert(pSectionNode->GetNodes().IsDocNodes());
+            rToFill.GetPoint()->nNode = *pSectionNode;
+            ++rToFill.GetPoint()->nNode;
+            rToFill.GetPoint()->nContent.Assign(rToFill.GetPoint()->nNode.GetNode().GetContentNode(), 0);
+            rToFill.SetMark();
+            rToFill.GetMark()->nNode = *pSectionNode->GetNode().EndOfSectionNode();
+            --rToFill.GetMark()->nNode;
+            rToFill.GetMark()->nContent.Assign(rToFill.GetMark()->nNode.GetNode().GetContentNode(),
+                rToFill.GetMark()->nNode.GetNode().GetContentNode() ? rToFill.GetMark()->nNode.GetNode().GetContentNode()->Len() : 0);
+            return true;
+        }
+    }
     ::sw::mark::IMark const * const pBkmk = m_pImpl->GetBookmark();
     if(pBkmk)
     {
@@ -950,7 +1078,8 @@ bool SwXTextRange::GetPositions(SwPaM& rToFill) const
 namespace sw {
 
 bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
-        const uno::Reference< text::XTextRange > & xTextRange)
+        const uno::Reference<text::XTextRange> & xTextRange,
+        ::sw::TextRangeMode const eMode)
 {
     bool bRet = false;
 
@@ -984,7 +1113,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     }
     if(pRange && &pRange->GetDoc() == &rToFill.GetDoc())
     {
-        bRet = pRange->GetPositions(rToFill);
+        bRet = pRange->GetPositions(rToFill, eMode);
     }
     else
     {
