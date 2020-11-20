@@ -175,12 +175,6 @@
 #define STR_SVT_FONTMAP_STYLENOTAVAILABLE       NC_("STR_SVT_FONTMAP_STYLENOTAVAILABLE", "This font style will be simulated or the closest matching style will be used.")
 #define STR_SVT_FONTMAP_NOTAVAILABLE            NC_("STR_SVT_FONTMAP_NOTAVAILABLE", "This font has not been installed. The closest available font will be used.")
 
-#define STR_TABBAR_PUSHBUTTON_MOVET0HOME        NC_("STR_TABBAR_PUSHBUTTON_MOVET0HOME", "Move To Home")
-#define STR_TABBAR_PUSHBUTTON_MOVELEFT          NC_("STR_TABBAR_PUSHBUTTON_MOVELEFT", "Move Left")
-#define STR_TABBAR_PUSHBUTTON_MOVERIGHT         NC_("STR_TABBAR_PUSHBUTTON_MOVERIGHT", "Move Right")
-#define STR_TABBAR_PUSHBUTTON_MOVETOEND         NC_("STR_TABBAR_PUSHBUTTON_MOVETOEND", "Move To End")
-#define STR_TABBAR_PUSHBUTTON_ADDTAB            NC_("STR_TABBAR_PUSHBUTTON_ADDTAB", "Add")
-
 #define STR_SVT_ACC_RULER_HORZ_NAME             NC_("STR_SVT_ACC_RULER_HORZ_NAME", "Horizontal Ruler")
 #define STR_SVT_ACC_RULER_VERT_NAME             NC_("STR_SVT_ACC_RULER_VERT_NAME", "Vertical Ruler")
 
