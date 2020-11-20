@@ -2143,6 +2143,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             Append( aSmColorTokenTableEntry->pIdent );
             break;
         case THTMLCOL:
+        case TMATHMLCOL:
         case TICONICCOL:
             Append( "color " );
             nc = pNode->GetToken().aText.toUInt32(16);
