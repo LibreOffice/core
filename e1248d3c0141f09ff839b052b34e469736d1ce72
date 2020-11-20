@@ -22,6 +22,30 @@
       "revId": "e1248d3c0141f09ff839b052b34e469736d1ce72",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12ec8827_42d1edbb",
+        "filename": "sal/textenc/unichars.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-20T12:28:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd61c9a4_51e553dd",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 0
+      },
+      "revId": "e1248d3c0141f09ff839b052b34e469736d1ce72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
