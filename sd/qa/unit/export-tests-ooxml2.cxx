@@ -159,6 +159,7 @@ public:
     void testTdf115005_FallBack_Images_On();
     void testTdf115005_FallBack_Images_Off();
     void testTdf118806();
+    void testTdf130058();
     void testTdf111789();
     void testTdf100348_convert_Fontwork2TextWarp();
     void testTdf1225573_FontWorkScaleX();
@@ -280,6 +281,7 @@ public:
     CPPUNIT_TEST(testTdf115005_FallBack_Images_On);
     CPPUNIT_TEST(testTdf115005_FallBack_Images_Off);
     CPPUNIT_TEST(testTdf118806);
+    CPPUNIT_TEST(testTdf130058);
     CPPUNIT_TEST(testTdf111789);
     CPPUNIT_TEST(testTdf100348_convert_Fontwork2TextWarp);
     CPPUNIT_TEST(testTdf1225573_FontWorkScaleX);
@@ -1993,6 +1995,37 @@ void SdOOXMLExportTest2::testTdf118806()
     xDocShRef->DoClose();
 }
 
+void SdOOXMLExportTest2::testTdf130058()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf130058.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    bool bHasShadow = false;
+    xShape->getPropertyValue("Shadow") >>= bHasShadow;
+    CPPUNIT_ASSERT(bHasShadow);
+    double fShadowDist = 0.0;
+    xShape->getPropertyValue("ShadowXDistance") >>= fShadowDist;
+    CPPUNIT_ASSERT_EQUAL(static_cast<double>(0), fShadowDist);
+    xShape->getPropertyValue("ShadowYDistance") >>= fShadowDist;
+    CPPUNIT_ASSERT_EQUAL(static_cast<double>(141), fShadowDist);
+    sal_Int32 nColor = 0;
+    xShape->getPropertyValue("ShadowColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x000000), nColor);
+    sal_Int32 nTransparency = 0;
+    xShape->getPropertyValue("ShadowTransparence") >>= nTransparency;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(57), nTransparency);
+    double fShadowSizeX = 0.0;
+    xShape->getPropertyValue("ShadowSizeX") >>= fShadowSizeX;
+    CPPUNIT_ASSERT_EQUAL(static_cast<double>(1000), fShadowSizeX);
+    double fShadowSizeY = 0.0;
+    xShape->getPropertyValue("ShadowSizeY") >>= fShadowSizeY;
+    CPPUNIT_ASSERT_EQUAL(static_cast<double>(1000), fShadowSizeY);
+
+    xDocShRef->DoClose();
+}
+
 void SdOOXMLExportTest2::testTdf111789()
 {
     // Shadow properties were not exported for text shapes.
@@ -2017,6 +2050,12 @@ void SdOOXMLExportTest2::testTdf111789()
         sal_Int32 nTransparency = 0;
         xShape->getPropertyValue("ShadowTransparence") >>= nTransparency;
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7), nTransparency);
+        double fShadowSizeX = 0.0;
+        xShape->getPropertyValue("ShadowSizeX") >>= fShadowSizeX;
+        CPPUNIT_ASSERT_EQUAL(static_cast<double>(100000), fShadowSizeX);
+        double fShadowSizeY = 0.0;
+        xShape->getPropertyValue("ShadowSizeY") >>= fShadowSizeY;
+        CPPUNIT_ASSERT_EQUAL(static_cast<double>(100000), fShadowSizeY);
     }
 
     // Second text shape has no shadow
