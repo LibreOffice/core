@@ -92,6 +92,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
@@ -876,6 +877,80 @@ void SwTransferable::DeleteSelection()
     m_pWrtShell->EndUndo( SwUndoId::END );
 }
 
+static void DeleteDDEMarks(SwDoc & rDest)
+{
+    IDocumentMarkAccess* const pMarkAccess = rDest.getIDocumentMarkAccess();
+    std::vector< ::sw::mark::IMark* > vDdeMarks;
+    // find all DDE-Bookmarks
+    for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
+        ppMark != pMarkAccess->getAllMarksEnd();
+        ++ppMark)
+    {
+        if(IDocumentMarkAccess::MarkType::DDE_BOOKMARK == IDocumentMarkAccess::GetType(**ppMark))
+            vDdeMarks.push_back(*ppMark);
+    }
+    // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
+    for(const auto& rpMark : vDdeMarks)
+        pMarkAccess->deleteMark(rpMark);
+}
+
+void SwTransferable::PrepareForCopyTextRange(SwPaM & rPaM)
+{
+    std::unique_ptr<SwWait> pWait;
+    if (m_pWrtShell->ShouldWait())
+    {
+        pWait.reset(new SwWait( *m_pWrtShell->GetView().GetDocShell(), true ));
+    }
+
+    m_pClpDocFac.reset(new SwDocFac);
+
+    SwDoc& rDest(*lcl_GetDoc(*m_pClpDocFac));
+    rDest.getIDocumentFieldsAccess().LockExpFields(); // Never update fields - leave text as is
+    {
+        SwDoc const& rSrc(*m_pWrtShell->GetDoc());
+        assert(&rSrc == rPaM.GetDoc());
+
+        rDest.ReplaceCompatibilityOptions(rSrc);
+        rDest.ReplaceDefaults(rSrc);
+
+        //It would probably make most sense here to only insert the styles used
+        //by the selection, e.g. apply SwDoc::IsUsed on styles ?
+        rDest.ReplaceStyles(rSrc, false);
+
+        // relevant bits of rSrcWrtShell.Copy(rDest);
+        rDest.GetIDocumentUndoRedo().DoUndo(false); // always false!
+        rDest.getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::DeleteRedlines );
+
+        SwNodeIndex const aIdx(rDest.GetNodes().GetEndOfContent(), -1);
+        SwContentNode *const pContentNode(aIdx.GetNode().GetContentNode());
+        SwPosition aPos(aIdx,
+            SwIndex(pContentNode, pContentNode ? pContentNode->Len() : 0));
+
+        rSrc.getIDocumentContentOperations().CopyRange(rPaM, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false);
+
+        rDest.getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::NONE );
+
+        rDest.GetMetaFieldManager().copyDocumentProperties(rSrc);
+    }
+
+    DeleteDDEMarks(rDest);
+
+    // a new one was created in core (OLE objects copied!)
+    m_aDocShellRef = rDest.GetTmpDocShell();
+    if (m_aDocShellRef.Is())
+        SwTransferable::InitOle( m_aDocShellRef );
+    rDest.SetTmpDocShell( nullptr );
+
+    // let's add some formats
+    AddFormat( SotClipboardFormatId::EMBED_SOURCE );
+    AddFormat( SotClipboardFormatId::RTF );
+#if HAVE_FEATURE_DESKTOP
+    AddFormat( SotClipboardFormatId::RICHTEXT );
+    AddFormat( SotClipboardFormatId::HTML );
+#endif
+    AddFormat( SotClipboardFormatId::STRING );
+}
+
 int SwTransferable::PrepareForCopy( bool bIsCut )
 {
     int nRet = 1;
@@ -983,21 +1058,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         pTmpDoc->getIDocumentFieldsAccess().LockExpFields();     // Never update fields - leave text as is
         lclOverWriteDoc(*m_pWrtShell, *pTmpDoc);
 
-        {
-            IDocumentMarkAccess* const pMarkAccess = pTmpDoc->getIDocumentMarkAccess();
-            std::vector< ::sw::mark::IMark* > vDdeMarks;
-            // find all DDE-Bookmarks
-            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
-                ppMark != pMarkAccess->getAllMarksEnd();
-                ++ppMark)
-            {
-                if(IDocumentMarkAccess::MarkType::DDE_BOOKMARK == IDocumentMarkAccess::GetType(**ppMark))
-                    vDdeMarks.push_back(*ppMark);
-            }
-            // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
-            for(const auto& rpMark : vDdeMarks)
-                pMarkAccess->deleteMark(rpMark);
-        }
+        DeleteDDEMarks(*pTmpDoc);
 
         // a new one was created in CORE (OLE objects copied!)
         m_aDocShellRef = pTmpDoc->GetTmpDocShell();

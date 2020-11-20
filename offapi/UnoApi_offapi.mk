@@ -2129,6 +2129,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/datatransfer,\
 	XTransferableEx \
 	XTransferableSource \
 	XTransferableSupplier \
+	XTransferableTextSupplier \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/datatransfer/clipboard,\
 	ClipboardEvent \
