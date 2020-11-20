@@ -84,7 +84,7 @@ public:
 
 public:
 
-    SdXMLEventContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList, const Reference< XShape >& rxShape );
+    SdXMLEventContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList>& xAttrList, const Reference< XShape >& rxShape );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
@@ -121,15 +121,17 @@ XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, const Reference< 
     }
 }
 
-SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const Reference< XShape >& rxShape )
-    : SvXMLImportContext(rImp, nPrfx, rLocalName)
+SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,
+    sal_Int32 nElement,
+    const Reference< XFastAttributeList >& xAttrList, const Reference< XShape >& rxShape )
+    : SvXMLImportContext(rImp)
     , maData(rxShape)
 {
-    if( nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_EVENT_LISTENER ) )
+    if( nElement == XML_ELEMENT(PRESENTATION, XML_EVENT_LISTENER) )
     {
         maData.mbValid = true;
     }
-    else if( nPrfx == XML_NAMESPACE_SCRIPT && IsXMLToken( rLocalName, XML_EVENT_LISTENER ) )
+    else if( nElement == XML_ELEMENT(SCRIPT, XML_EVENT_LISTENER) )
     {
         maData.mbScript = true;
         maData.mbValid = true;
@@ -141,54 +143,42 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
 
     // read attributes
     OUString sEventName;
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; (i < nAttrCount) && maData.mbValid; i++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aAttrLocalName;
-        sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aAttrLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-
-        switch( nAttrPrefix )
+        OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-        case XML_NAMESPACE_PRESENTATION:
-            if( IsXMLToken( aAttrLocalName, XML_ACTION ) )
-            {
-                SvXMLUnitConverter::convertEnum( maData.meClickAction, sValue, aXML_EventActions_EnumMap );
-            }
-            if( IsXMLToken( aAttrLocalName, XML_EFFECT ) )
-            {
-                SvXMLUnitConverter::convertEnum( maData.meEffect, sValue, aXML_AnimationEffect_EnumMap );
-            }
-            else if( IsXMLToken( aAttrLocalName, XML_DIRECTION ) )
-            {
-                SvXMLUnitConverter::convertEnum( maData.meDirection, sValue, aXML_AnimationDirection_EnumMap );
-            }
-            else if( IsXMLToken( aAttrLocalName, XML_START_SCALE ) )
+        case XML_ELEMENT(PRESENTATION, XML_ACTION):
+            SvXMLUnitConverter::convertEnum( maData.meClickAction, sValue, aXML_EventActions_EnumMap );
+            break;
+        case XML_ELEMENT(PRESENTATION, XML_EFFECT):
+            SvXMLUnitConverter::convertEnum( maData.meEffect, sValue, aXML_AnimationEffect_EnumMap );
+            break;
+        case XML_ELEMENT(PRESENTATION, XML_DIRECTION):
+            SvXMLUnitConverter::convertEnum( maData.meDirection, sValue, aXML_AnimationDirection_EnumMap );
+            break;
+        case XML_ELEMENT(PRESENTATION, XML_START_SCALE):
             {
                 sal_Int32 nScale;
                 if (::sax::Converter::convertPercent( nScale, sValue ))
                     maData.mnStartScale = static_cast<sal_Int16>(nScale);
             }
-            else if( IsXMLToken( aAttrLocalName, XML_SPEED ) )
-            {
-                SvXMLUnitConverter::convertEnum( maData.meSpeed, sValue, aXML_AnimationSpeed_EnumMap );
-            }
-            else if( IsXMLToken( aAttrLocalName, XML_VERB ) )
-            {
-                ::sax::Converter::convertNumber( maData.mnVerb, sValue );
-            }
             break;
-
-        case XML_NAMESPACE_SCRIPT:
-            if( IsXMLToken( aAttrLocalName, XML_EVENT_NAME ) )
+        case XML_ELEMENT(PRESENTATION, XML_SPEED):
+            SvXMLUnitConverter::convertEnum( maData.meSpeed, sValue, aXML_AnimationSpeed_EnumMap );
+            break;
+        case XML_ELEMENT(PRESENTATION, XML_VERB):
+            ::sax::Converter::convertNumber( maData.mnVerb, sValue );
+            break;
+        case XML_ELEMENT(SCRIPT, XML_EVENT_NAME):
             {
                 sEventName = sValue;
                 sal_uInt16 nScriptPrefix =
                     GetImport().GetNamespaceMap().GetKeyByAttrValueQName(sValue, &sEventName);
                 maData.mbValid = XML_NAMESPACE_DOM == nScriptPrefix && sEventName == "click";
             }
-            else if( IsXMLToken( aAttrLocalName, XML_LANGUAGE ) )
+            break;
+        case XML_ELEMENT(SCRIPT, XML_LANGUAGE):
             {
                 // language is not evaluated!
                 OUString aScriptLanguage;
@@ -198,14 +188,11 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                 if( XML_NAMESPACE_OOO == nScriptPrefix )
                     maData.msLanguage = aScriptLanguage;
             }
-            else if( IsXMLToken( aAttrLocalName, XML_MACRO_NAME ) )
-            {
-                maData.msMacroName = sValue;
-            }
             break;
-
-        case XML_NAMESPACE_XLINK:
-            if( IsXMLToken( aAttrLocalName, XML_HREF ) )
+        case XML_ELEMENT(SCRIPT, XML_MACRO_NAME):
+            maData.msMacroName = sValue;
+            break;
+        case XML_ELEMENT(XLINK, XML_HREF):
             {
                 if ( maData.mbScript )
                 {
@@ -459,10 +446,11 @@ SdXMLEventsContext::~SdXMLEventsContext()
 {
 }
 
-SvXMLImportContextRef SdXMLEventsContext::CreateChildContext( sal_uInt16 nPrfx, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLEventsContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    return new SdXMLEventContext( GetImport(), nPrfx, rLocalName,  xAttrList, mxShape );
+    return new SdXMLEventContext( GetImport(), nElement, xAttrList, mxShape );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
