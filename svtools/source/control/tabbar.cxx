@@ -22,16 +22,17 @@
 #include <tools/time.hxx>
 #include <tools/poly.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/weldutils.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
 #include <limits>
@@ -48,7 +49,6 @@ constexpr sal_uInt16 TABBAR_DRAG_SCROLLOFF = 5;
 constexpr sal_uInt16 TABBAR_MINSIZE = 5;
 
 constexpr sal_uInt16 ADDNEWPAGE_AREAWIDTH = 10;
-constexpr sal_uInt16 BUTTON_MARGIN = 6;
 
 class TabDrawer
 {
@@ -233,68 +233,6 @@ struct ImplTabBarItem
     }
 };
 
-class ImplTabButton : public PushButton
-{
-    bool mbModKey : 1;
-
-public:
-    ImplTabButton(TabBar* pParent, WinBits nWinStyle = 0)
-        : PushButton(pParent, nWinStyle | WB_FLATBUTTON | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOLIGHTBORDER | WB_NOPOINTERFOCUS)
-        , mbModKey(false)
-    {}
-
-    TabBar* GetParent() const
-    {
-        return static_cast<TabBar*>(Window::GetParent());
-    }
-
-    bool isModKeyPressed() const
-    {
-        return mbModKey;
-    }
-
-    virtual bool PreNotify(NotifyEvent& rNotifyEvent) override;
-    virtual void MouseButtonDown(const MouseEvent& rMouseEvent) override;
-    virtual void MouseButtonUp(const MouseEvent& rMouseEvent) override;
-    virtual void Command(const CommandEvent& rCommandEvent) override;
-};
-
-void ImplTabButton::MouseButtonDown(const MouseEvent& rMouseEvent)
-{
-    mbModKey = rMouseEvent.IsMod1();
-    PushButton::MouseButtonDown(rMouseEvent);
-}
-
-void ImplTabButton::MouseButtonUp(const MouseEvent& rMouseEvent)
-{
-    mbModKey = false;
-    PushButton::MouseButtonUp(rMouseEvent);
-}
-
-void ImplTabButton::Command(const CommandEvent& rCommandEvent)
-{
-    if (rCommandEvent.GetCommand() == CommandEventId::ContextMenu)
-    {
-        TabBar* pParent = GetParent();
-        pParent->maScrollAreaContextHdl.Call(rCommandEvent);
-    }
-    PushButton::Command(rCommandEvent);
-}
-
-bool ImplTabButton::PreNotify(NotifyEvent& rNotifyEvent)
-{
-    if (rNotifyEvent.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN)
-    {
-        if (GetParent()->IsInEditMode())
-        {
-            GetParent()->EndEditMode();
-            return true;
-        }
-    }
-
-    return PushButton::PreNotify(rNotifyEvent);
-}
-
 class ImplTabSizer : public vcl::Window
 {
 public:
@@ -471,14 +409,74 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl, Timer *, void)
     GetParent()->EndEditMode( true );
 }
 
+namespace {
+
+class TabButtons final : public InterimItemWindow
+{
+public:
+    std::unique_ptr<weld::Button> m_xFirstButton;
+    std::unique_ptr<weld::Button> m_xPrevButton;
+    std::unique_ptr<weld::Button> m_xNextButton;
+    std::unique_ptr<weld::Button> m_xLastButton;
+    std::unique_ptr<weld::Button> m_xAddButton;
+    std::unique_ptr<weld::ButtonPressRepeater> m_xAddRepeater;
+    std::unique_ptr<weld::ButtonPressRepeater> m_xPrevRepeater;
+    std::unique_ptr<weld::ButtonPressRepeater> m_xNextRepeater;
+
+    TabButtons(TabBar* pParent)
+        : InterimItemWindow(pParent,
+                            pParent->IsMirrored() ? OUString("svt/ui/tabbuttonsmirrored.ui")
+                                                  : OUString("svt/ui/tabbuttons.ui"),
+                            "TabButtons")
+        , m_xFirstButton(m_xBuilder->weld_button("first"))
+        , m_xPrevButton(m_xBuilder->weld_button("prev"))
+        , m_xNextButton(m_xBuilder->weld_button("next"))
+        , m_xLastButton(m_xBuilder->weld_button("last"))
+        , m_xAddButton(m_xBuilder->weld_button("add"))
+    {
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        SetPaintTransparent(false);
+        SetBackground(rStyleSettings.GetFaceColor());
+
+        m_xFirstButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_MOVET0HOME));
+        m_xPrevButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_MOVELEFT));
+        m_xNextButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_MOVERIGHT));
+        m_xLastButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_MOVETOEND));
+        m_xAddButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_ADDTAB));
+    }
+
+    void AdaptToHeight(int nHeight)
+    {
+        if (m_xFirstButton->get_preferred_size() == Size(nHeight, nHeight))
+            return;
+        m_xFirstButton->set_size_request(nHeight, nHeight);
+        m_xPrevButton->set_size_request(nHeight, nHeight);
+        m_xNextButton->set_size_request(nHeight, nHeight);
+        m_xLastButton->set_size_request(nHeight, nHeight);
+        m_xAddButton->set_size_request(nHeight, nHeight);
+        InvalidateChildSizeCache();
+    }
+
+    virtual void dispose() override
+    {
+        m_xNextRepeater.reset();
+        m_xPrevRepeater.reset();
+        m_xAddRepeater.reset();
+        m_xAddButton.reset();
+        m_xLastButton.reset();
+        m_xNextButton.reset();
+        m_xPrevButton.reset();
+        m_xFirstButton.reset();
+        InterimItemWindow::dispose();
+    }
+};
+
+}
+
 struct TabBar_Impl
 {
     ScopedVclPtr<ImplTabSizer>  mpSizer;
-    ScopedVclPtr<ImplTabButton> mpFirstButton;
-    ScopedVclPtr<ImplTabButton> mpPrevButton;
-    ScopedVclPtr<ImplTabButton> mpNextButton;
-    ScopedVclPtr<ImplTabButton> mpLastButton;
-    ScopedVclPtr<ImplTabButton> mpAddButton;
+    ScopedVclPtr<TabButtons>    mxButtonBox;
     ScopedVclPtr<TabBarEdit>    mxEdit;
     std::vector<std::unique_ptr<ImplTabBarItem>> mpItemList;
 
@@ -540,18 +538,6 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mbScrollAlwaysEnabled = false;
 
     ImplInitControls();
-
-    if (mpImpl->mpFirstButton)
-        mpImpl->mpFirstButton->SetAccessibleName(SvtResId(STR_TABBAR_PUSHBUTTON_MOVET0HOME));
-    if (mpImpl->mpPrevButton)
-        mpImpl->mpPrevButton->SetAccessibleName(SvtResId(STR_TABBAR_PUSHBUTTON_MOVELEFT));
-    if (mpImpl->mpNextButton)
-        mpImpl->mpNextButton->SetAccessibleName(SvtResId(STR_TABBAR_PUSHBUTTON_MOVERIGHT));
-    if (mpImpl->mpLastButton)
-        mpImpl->mpLastButton->SetAccessibleName(SvtResId(STR_TABBAR_PUSHBUTTON_MOVETOEND));
-
-    if (mpImpl->mpAddButton)
-        mpImpl->mpAddButton->SetAccessibleName(SvtResId(STR_TABBAR_PUSHBUTTON_ADDTAB));
 
     SetSizePixel( Size( 100, CalcWindowSizePixel().Height() ) );
     ImplInitSettings( true, true );
@@ -753,6 +739,18 @@ sal_uInt16 TabBar::ImplGetLastFirstPos()
     return nLastFirstPos;
 }
 
+IMPL_LINK(TabBar, ContextMenuHdl, const CommandEvent&, rCommandEvent, void)
+{
+    maScrollAreaContextHdl.Call(rCommandEvent);
+}
+
+IMPL_LINK(TabBar, MousePressHdl, const MouseEvent&, rMouseEvent, bool)
+{
+    if (rMouseEvent.IsRight())
+        ContextMenuHdl(CommandEvent(rMouseEvent.GetPosPixel(), CommandEventId::ContextMenu, true));
+    return false;
+}
+
 void TabBar::ImplInitControls()
 {
     if (mnWinStyle & WB_SIZEABLE)
@@ -768,65 +766,43 @@ void TabBar::ImplInitControls()
         mpImpl->mpSizer.disposeAndClear();
     }
 
-    if ((mnWinStyle & WB_INSERTTAB) && !mpImpl->mpAddButton)
+    mpImpl->mxButtonBox.disposeAndReset(VclPtr<TabButtons>::Create(this));
+
+    Link<const CommandEvent&, void> aContextLink = LINK( this, TabBar, ContextMenuHdl );
+
+    if (mnWinStyle & WB_INSERTTAB)
     {
-        Link<Button*,void> aLink = LINK(this, TabBar, ImplAddClickHandler);
-        mpImpl->mpAddButton.disposeAndReset(VclPtr<ImplTabButton>::Create(this, WB_REPEAT));
-        mpImpl->mpAddButton->SetClickHdl(aLink);
-        mpImpl->mpAddButton->SetSymbol(SymbolType::PLUS);
-        mpImpl->mpAddButton->Show();
+        Link<weld::Button&,void> aLink = LINK(this, TabBar, ImplAddClickHandler);
+        mpImpl->mxButtonBox->m_xAddRepeater.reset(new weld::ButtonPressRepeater(
+                    *mpImpl->mxButtonBox->m_xAddButton, aLink, aContextLink));
+        mpImpl->mxButtonBox->m_xAddButton->show();
     }
 
-
-    Link<Button*,void> aLink = LINK( this, TabBar, ImplClickHdl );
+    Link<weld::Button&,void> aLink = LINK( this, TabBar, ImplClickHdl );
 
     if (mnWinStyle & (WB_MINSCROLL | WB_SCROLL))
     {
-        if (!mpImpl->mpPrevButton)
-        {
-            mpImpl->mpPrevButton.disposeAndReset(VclPtr<ImplTabButton>::Create(this, WB_REPEAT));
-            mpImpl->mpPrevButton->SetClickHdl(aLink);
-        }
-        mpImpl->mpPrevButton->SetSymbol(mbMirrored ? SymbolType::NEXT : SymbolType::PREV);
-        mpImpl->mpPrevButton->Show();
-
-        if (!mpImpl->mpNextButton)
-        {
-            mpImpl->mpNextButton.disposeAndReset(VclPtr<ImplTabButton>::Create(this, WB_REPEAT));
-            mpImpl->mpNextButton->SetClickHdl(aLink);
-        }
-        mpImpl->mpNextButton->SetSymbol(mbMirrored ? SymbolType::PREV : SymbolType::NEXT);
-        mpImpl->mpNextButton->Show();
-    }
-    else
-    {
-        mpImpl->mpPrevButton.disposeAndClear();
-        mpImpl->mpNextButton.disposeAndClear();
+        mpImpl->mxButtonBox->m_xPrevRepeater.reset(new weld::ButtonPressRepeater(
+                    *mpImpl->mxButtonBox->m_xPrevButton, aLink, aContextLink));
+        mpImpl->mxButtonBox->m_xPrevButton->show();
+        mpImpl->mxButtonBox->m_xNextRepeater.reset(new weld::ButtonPressRepeater(
+                    *mpImpl->mxButtonBox->m_xNextButton, aLink, aContextLink));
+        mpImpl->mxButtonBox->m_xNextButton->show();
     }
 
     if (mnWinStyle & WB_SCROLL)
     {
-        if (!mpImpl->mpFirstButton)
-        {
-            mpImpl->mpFirstButton.disposeAndReset(VclPtr<ImplTabButton>::Create(this));
-            mpImpl->mpFirstButton->SetClickHdl(aLink);
-        }
-        mpImpl->mpFirstButton->SetSymbol(mbMirrored ? SymbolType::LAST : SymbolType::FIRST);
-        mpImpl->mpFirstButton->Show();
+        Link<const MouseEvent&, bool> aBtnContextLink = LINK(this, TabBar, MousePressHdl);
 
-        if (!mpImpl->mpLastButton)
-        {
-            mpImpl->mpLastButton.disposeAndReset(VclPtr<ImplTabButton>::Create(this));
-            mpImpl->mpLastButton->SetClickHdl(aLink);
-        }
-        mpImpl->mpLastButton->SetSymbol(mbMirrored ? SymbolType::FIRST : SymbolType::LAST);
-        mpImpl->mpLastButton->Show();
+        mpImpl->mxButtonBox->m_xFirstButton->connect_clicked(aLink);
+        mpImpl->mxButtonBox->m_xFirstButton->connect_mouse_press(aBtnContextLink);
+        mpImpl->mxButtonBox->m_xFirstButton->show();
+        mpImpl->mxButtonBox->m_xLastButton->connect_clicked(aLink);
+        mpImpl->mxButtonBox->m_xLastButton->connect_mouse_press(aBtnContextLink);
+        mpImpl->mxButtonBox->m_xLastButton->show();
     }
-    else
-    {
-        mpImpl->mpFirstButton.disposeAndClear();
-        mpImpl->mpLastButton.disposeAndClear();
-    }
+
+    mpImpl->mxButtonBox->Show();
 }
 
 void TabBar::ImplEnableControls()
@@ -836,16 +812,15 @@ void TabBar::ImplEnableControls()
 
     // enable/disable buttons
     bool bEnableBtn = mbScrollAlwaysEnabled || mnFirstPos > 0;
-    if (mpImpl->mpFirstButton)
-        mpImpl->mpFirstButton->Enable(bEnableBtn);
-    if (mpImpl->mpPrevButton)
-        mpImpl->mpPrevButton->Enable(bEnableBtn);
-
+    mpImpl->mxButtonBox->m_xFirstButton->set_sensitive(bEnableBtn);
+    mpImpl->mxButtonBox->m_xPrevButton->set_sensitive(bEnableBtn);
+    if (!bEnableBtn && mpImpl->mxButtonBox->m_xPrevRepeater)
+        mpImpl->mxButtonBox->m_xPrevRepeater->Stop();
     bEnableBtn = mbScrollAlwaysEnabled || mnFirstPos < ImplGetLastFirstPos();
-    if (mpImpl->mpNextButton)
-        mpImpl->mpNextButton->Enable(bEnableBtn);
-    if (mpImpl->mpLastButton)
-        mpImpl->mpLastButton->Enable(bEnableBtn);
+    mpImpl->mxButtonBox->m_xLastButton->set_sensitive(bEnableBtn);
+    mpImpl->mxButtonBox->m_xNextButton->set_sensitive(bEnableBtn);
+    if (!bEnableBtn && mpImpl->mxButtonBox->m_xNextRepeater)
+        mpImpl->mxButtonBox->m_xNextRepeater->Stop();
 }
 
 void TabBar::SetScrollAlwaysEnabled(bool bScrollAlwaysEnabled)
@@ -878,29 +853,30 @@ void TabBar::ImplShowPage( sal_uInt16 nPos )
     }
 }
 
-IMPL_LINK( TabBar, ImplClickHdl, Button*, pButton, void )
+IMPL_LINK( TabBar, ImplClickHdl, weld::Button&, rBtn, void )
 {
-    ImplTabButton* pBtn = static_cast<ImplTabButton*>(pButton);
     EndEditMode();
 
     sal_uInt16 nNewPos = mnFirstPos;
 
-    if (pBtn == mpImpl->mpFirstButton.get() || (pBtn == mpImpl->mpPrevButton.get() && pBtn->isModKeyPressed()))
+    if (&rBtn == mpImpl->mxButtonBox->m_xFirstButton.get() || (&rBtn == mpImpl->mxButtonBox->m_xPrevButton.get() &&
+                                                               mpImpl->mxButtonBox->m_xPrevRepeater->IsModKeyPressed()))
     {
         nNewPos = 0;
     }
-    else if (pBtn == mpImpl->mpLastButton.get() || (pBtn == mpImpl->mpNextButton.get() && pBtn->isModKeyPressed()))
+    else if (&rBtn == mpImpl->mxButtonBox->m_xLastButton.get() || (&rBtn == mpImpl->mxButtonBox->m_xNextButton.get() &&
+                                                                   mpImpl->mxButtonBox->m_xNextRepeater->IsModKeyPressed()))
     {
         sal_uInt16 nCount = GetPageCount();
         if (nCount)
             nNewPos = nCount - 1;
     }
-    else if (pBtn == mpImpl->mpPrevButton.get())
+    else if (&rBtn == mpImpl->mxButtonBox->m_xPrevButton.get())
     {
         if (mnFirstPos)
             nNewPos = mnFirstPos - 1;
     }
-    else if (pBtn == mpImpl->mpNextButton.get())
+    else if (&rBtn == mpImpl->mxButtonBox->m_xNextButton.get())
     {
         sal_uInt16 nCount = GetPageCount();
         if (mnFirstPos <  nCount)
@@ -915,8 +891,9 @@ IMPL_LINK( TabBar, ImplClickHdl, Button*, pButton, void )
         SetFirstPageId(GetPageId(nNewPos));
 }
 
-IMPL_LINK_NOARG(TabBar, ImplAddClickHandler, Button*, void)
+IMPL_LINK_NOARG(TabBar, ImplAddClickHandler, weld::Button&, void)
 {
+    EndEditMode();
     AddTabClick();
 }
 
@@ -1242,7 +1219,6 @@ void TabBar::Resize()
     Size aNewSize = GetOutputSizePixel();
 
     tools::Long nSizerWidth = 0;
-    tools::Long nButtonWidth = 0;
 
     // order the Sizer
     if ( mpImpl->mpSizer )
@@ -1259,35 +1235,11 @@ void TabBar::Resize()
     // adapt font height?
     ImplInitSettings( true, false );
 
-    tools::Long nButtonMargin = BUTTON_MARGIN * GetDPIScaleFactor();
-
-    tools::Long nX = mbMirrored ? (aNewSize.Width() - nHeight - nButtonMargin) : nButtonMargin;
-    tools::Long const nXDiff = mbMirrored ? -nHeight : nHeight;
-
-    nButtonWidth += nButtonMargin;
-
-    Size const aBtnSize( nHeight, nHeight );
-    auto setButton = [aBtnSize, nXDiff, nHeight, &nX, &nButtonWidth](
-        ScopedVclPtr<ImplTabButton> const & button)
-    {
-        if (button) {
-            button->SetPosSizePixel(Point(nX, 0), aBtnSize);
-            nX += nXDiff;
-            nButtonWidth += nHeight;
-        }
-    };
-
-    setButton(mpImpl->mpFirstButton);
-    setButton(mpImpl->mpPrevButton);
-    setButton(mpImpl->mpNextButton);
-    setButton(mpImpl->mpLastButton);
-
-    nButtonWidth += nButtonMargin;
-    nX += mbMirrored ? -nButtonMargin : nButtonMargin;
-
-    setButton(mpImpl->mpAddButton);
-
-    nButtonWidth += nButtonMargin;
+    mpImpl->mxButtonBox->AdaptToHeight(nHeight);
+    Size const aBtnsSize(mpImpl->mxButtonBox->get_preferred_size().Width(), nHeight);
+    Point aPos(mbMirrored ? (aNewSize.Width() - aBtnsSize.Width()) : 0, 0);
+    mpImpl->mxButtonBox->SetPosSizePixel(aPos, aBtnsSize);
+    auto nButtonWidth = aBtnsSize.Width();
 
     // store size
     maWinSize = aNewSize;
@@ -1433,23 +1385,22 @@ void TabBar::StateChanged(StateChangedType nType)
     }
     else if (nType == StateChangedType::Mirroring)
     {
+        bool bIsRTLEnabled = IsRTLEnabled();
         // reacts on calls of EnableRTL, have to mirror all child controls
-        if (mpImpl->mpFirstButton)
-            mpImpl->mpFirstButton->EnableRTL(IsRTLEnabled());
-        if (mpImpl->mpPrevButton)
-            mpImpl->mpPrevButton->EnableRTL(IsRTLEnabled());
-        if (mpImpl->mpNextButton)
-            mpImpl->mpNextButton->EnableRTL(IsRTLEnabled());
-        if (mpImpl->mpLastButton)
-            mpImpl->mpLastButton->EnableRTL(IsRTLEnabled());
         if (mpImpl->mpSizer)
-            mpImpl->mpSizer->EnableRTL(IsRTLEnabled());
-        if (mpImpl->mpAddButton)
-            mpImpl->mpAddButton->EnableRTL(IsRTLEnabled());
+            mpImpl->mpSizer->EnableRTL(bIsRTLEnabled);
+        if (mpImpl->mxButtonBox)
+        {
+            mpImpl->mxButtonBox->m_xFirstButton->set_direction(bIsRTLEnabled);
+            mpImpl->mxButtonBox->m_xPrevButton->set_direction(bIsRTLEnabled);
+            mpImpl->mxButtonBox->m_xNextButton->set_direction(bIsRTLEnabled);
+            mpImpl->mxButtonBox->m_xLastButton->set_direction(bIsRTLEnabled);
+            mpImpl->mxButtonBox->m_xAddButton->set_direction(bIsRTLEnabled);
+        }
         if (mpImpl->mxEdit)
         {
             weld::Entry& rEntry = mpImpl->mxEdit->get_widget();
-            rEntry.set_direction(IsRTLEnabled());
+            rEntry.set_direction(bIsRTLEnabled);
         }
     }
 }
@@ -2491,6 +2442,8 @@ void TabBar::EndSwitchPage()
 
 void TabBar::SetStyle(WinBits nStyle)
 {
+    if (mnWinStyle == nStyle)
+        return;
     mnWinStyle = nStyle;
     ImplInitControls();
     // order possible controls

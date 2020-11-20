@@ -13,6 +13,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/builderpage.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
@@ -548,9 +549,11 @@ void WidgetStatusListener::dispose()
     mWidget = nullptr;
 }
 
-ButtonPressRepeater::ButtonPressRepeater(weld::Button& rButton, const Link<Button&, void>& rLink)
+ButtonPressRepeater::ButtonPressRepeater(weld::Button& rButton, const Link<Button&, void>& rLink,
+                                         const Link<const CommandEvent&, void>& rContextLink)
     : m_rButton(rButton)
     , m_aLink(rLink)
+    , m_aContextLink(rContextLink)
     , m_bModKey(false)
 {
     // instead of connect_clicked because we want a button held down to
@@ -563,6 +566,12 @@ ButtonPressRepeater::ButtonPressRepeater(weld::Button& rButton, const Link<Butto
 
 IMPL_LINK(ButtonPressRepeater, MousePressHdl, const MouseEvent&, rMouseEvent, bool)
 {
+    if (rMouseEvent.IsRight())
+    {
+        m_aContextLink.Call(
+            CommandEvent(rMouseEvent.GetPosPixel(), CommandEventId::ContextMenu, true));
+        return false;
+    }
     m_bModKey = rMouseEvent.IsMod1();
     if (!m_rButton.get_sensitive())
         return false;
