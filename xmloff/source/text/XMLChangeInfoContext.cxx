@@ -24,6 +24,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <sal/log.hxx>
 
 
 using namespace ::xmloff::token;
@@ -48,31 +49,29 @@ XMLChangeInfoContext::~XMLChangeInfoContext()
 {
 }
 
-SvXMLImportContextRef XMLChangeInfoContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList >& /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangeInfoContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     SvXMLImportContextRef xContext;
 
-    if( XML_NAMESPACE_DC == nPrefix )
+    switch (nElement)
     {
-        if( IsXMLToken( rLocalName, XML_CREATOR ) )
-            xContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
-                                            rLocalName, sAuthorBuffer);
-        else if( IsXMLToken( rLocalName, XML_DATE ) )
-            xContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
-                                            rLocalName, sDateTimeBuffer);
-    }
-    else if ( ( XML_NAMESPACE_TEXT == nPrefix ||
-                XML_NAMESPACE_LO_EXT == nPrefix ) &&
-         IsXMLToken( rLocalName, XML_P )       )
-    {
-        xContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
-                                                   rLocalName, sCommentBuffer);
+        case XML_ELEMENT(DC, XML_CREATOR):
+            xContext = new XMLStringBufferImportContext(GetImport(), sAuthorBuffer);
+            break;
+        case XML_ELEMENT(DC, XML_DATE):
+            xContext = new XMLStringBufferImportContext(GetImport(), sDateTimeBuffer);
+            break;
+        case XML_ELEMENT(TEXT, XML_P):
+        case XML_ELEMENT(LO_EXT, XML_P):
+            xContext = new XMLStringBufferImportContext(GetImport(), sCommentBuffer);
+            break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
-    return xContext;
+    return xContext.get();
 }
 
 void XMLChangeInfoContext::endFastElement(sal_Int32 )
