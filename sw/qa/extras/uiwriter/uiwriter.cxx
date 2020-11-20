@@ -1374,7 +1374,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
 
     uno::Reference<text::XTextContent> xTextContent(xSections->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
+    CPPUNIT_ASSERT_EQUAL(OUString("foo" SAL_NEWLINE_STRING "bar"),
+            xTextContent->getAnchor()->getString());
 
     // select all with table at start -> 3 times
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
@@ -1403,7 +1404,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
 
     // Without the fix in place, section's content would have been gone after undo
-    CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
+    CPPUNIT_ASSERT_EQUAL(OUString("foo" SAL_NEWLINE_STRING "bar"),
+            xTextContent->getAnchor()->getString());
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
@@ -1416,7 +1418,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
-    CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
+    CPPUNIT_ASSERT_EQUAL(OUString("foo" SAL_NEWLINE_STRING "bar"),
+            xTextContent->getAnchor()->getString());
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
