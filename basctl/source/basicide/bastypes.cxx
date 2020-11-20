@@ -422,7 +422,7 @@ void DockingWindow::DockThis ()
 }
 
 TabBar::TabBar( vcl::Window* pParent ) :
-    ::TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
+    ::TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_DRAG ) )
 {
     EnableEditMode();
 
