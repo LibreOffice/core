@@ -651,7 +651,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                             }
                         }
                         OString pathString = aPath.makeStringAndClear();
-                        if ( !aPath.isEmpty() && pathString != "xe" )
+                        if ( pathString != "" && pathString != "xe" )
                             m_pShapeAttrList->add( XML_path, pathString );
                     }
                     else
