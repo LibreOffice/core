@@ -25,6 +25,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
+#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star;
@@ -48,16 +49,16 @@ XMLAutoTextContainerEventImport::~XMLAutoTextContainerEventImport()
 {
 }
 
-SvXMLImportContextRef XMLAutoTextContainerEventImport::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAutoTextContainerEventImport::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
-    if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-         IsXMLToken( rLocalName, XML_EVENT_LISTENERS)   )
+    if ( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
     {
         return new XMLEventsImportContext(GetImport(), rEvents);
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 
