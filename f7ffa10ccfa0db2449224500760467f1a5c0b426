@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3705a11_23f01786",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2318,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-11-20T18:44:34Z",
+      "side": 1,
+      "message": "Why is SetWidthOrHeight() called with Undo recording on? This creates unnecessary overhead and confusingly makes the Column Width action available as Undo/Redo in the Edit menu.\n\nAnd why is it ScViewFunc::SetWidthOrHeight() instead of ScDocFunc::SetWidthOrHeight() that could/should also be invoked with bApi\u003dtrue to not raise unwanted dialogs in case it runs into protected read-only or otherwise not editable content.\n\nAlso, only page breaks on the current sheet are calculated, switching to another sheet does not display calculated page breaks. This is due to not passing a properly prepared ScMarkData to SetWidthOrHeight() so only the currently active sheet is asked.\n\nHowever, why is SetWidthOrHeight() with all its overhead of setting widths called at all instead of calculating the page size and then calling ScDocument::UpdatePageBreaks() followed by a PostPaint, or some such (possibly in a new ScViewFunc member function).\nThis looks as if SetWidthOrHeight() is abused for side effects, but I didn\u0027t investigate deeper what actually is needed from SetWidthOrHeight() and what could be omitted, or if an additional parameter to SetWidthOrHeight() would be better than a new function with only some duplicated code.",
+      "range": {
+        "startLine": 2318,
+        "startChar": 35,
+        "endLine": 2318,
+        "endChar": 51
+      },
+      "revId": "f7ffa10ccfa0db2449224500760467f1a5c0b426",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "733c10a4_fc8e91ae",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-11-20T18:44:34Z",
+      "side": 1,
+      "message": "Rather than unconditionally resetting modified, ask whether the document was modified already before modifying it. It is undetermined when the timer actually times out, before or after any event that might modify the document.",
+      "revId": "f7ffa10ccfa0db2449224500760467f1a5c0b426",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
