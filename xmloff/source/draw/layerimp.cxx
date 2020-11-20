@@ -55,7 +55,9 @@ class SdXMLLayerContext : public SvXMLImportContext
 public:
     SdXMLLayerContext( SvXMLImport& rImport, const Reference< XFastAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
 private:
@@ -94,16 +96,20 @@ SdXMLLayerContext::SdXMLLayerContext( SvXMLImport& rImport, const Reference< XFa
 
 }
 
-SvXMLImportContextRef SdXMLLayerContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLLayerContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    if( (XML_NAMESPACE_SVG == nPrefix) && IsXMLToken(rLocalName, XML_TITLE) )
+    if( nElement == XML_ELEMENT(SVG, XML_TITLE) )
     {
-        return new XMLStringBufferImportContext( GetImport(), nPrefix, rLocalName, sTitleBuffer);
+        return new XMLStringBufferImportContext( GetImport(), sTitleBuffer);
     }
-    else if( (XML_NAMESPACE_SVG == nPrefix) && IsXMLToken(rLocalName, XML_DESC) )
+    else if( nElement == XML_ELEMENT(SVG, XML_DESC) )
     {
-        return new XMLStringBufferImportContext( GetImport(), nPrefix, rLocalName, sDescriptionBuffer);
+        return new XMLStringBufferImportContext( GetImport(), sDescriptionBuffer);
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
 }
 
