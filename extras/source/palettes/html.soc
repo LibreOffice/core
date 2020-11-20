@@ -151,4 +151,5 @@
  <draw:color draw:name="DarkSlateBlue" draw:color="#483d8b"/>
  <draw:color draw:name="SlateBlue" draw:color="#6a5acd"/>
  <draw:color draw:name="MediumSlateBlue" draw:color="#7b68ee"/>
+ <draw:color draw:name="RebeccaPurple" draw:color="#663399"/>
 </office:color-table>
