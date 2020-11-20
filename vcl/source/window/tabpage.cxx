@@ -259,7 +259,8 @@ void TabPage::SetScrollTop( tools::Long nTop )
 {
     Point aOld = mnScrollPos;
     lcl_Scroll( mnScrollPos.X() , mnScrollPos.Y() - nTop );
-    m_pHScroll->SetThumbPos( 0 );
+    if( m_pHScroll )
+        m_pHScroll->SetThumbPos( 0 );
     // new pos is 0,0
     mnScrollPos = aOld;
 }
@@ -267,7 +268,8 @@ void TabPage::SetScrollLeft( tools::Long nLeft )
 {
     Point aOld = mnScrollPos;
     lcl_Scroll( mnScrollPos.X() - nLeft , mnScrollPos.Y() );
-    m_pVScroll->SetThumbPos( 0 );
+    if( m_pVScroll )
+        m_pVScroll->SetThumbPos( 0 );
     // new pos is 0,0
     mnScrollPos = aOld;
 }
