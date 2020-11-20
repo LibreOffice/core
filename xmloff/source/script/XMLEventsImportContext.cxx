@@ -39,29 +39,11 @@ using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::lang::IllegalArgumentException;
 
 
-XMLEventsImportContext::XMLEventsImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName)
-{
-}
-
 XMLEventsImportContext::XMLEventsImportContext(SvXMLImport& rImport) :
     SvXMLImportContext(rImport)
 {
 }
 
-
-XMLEventsImportContext::XMLEventsImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const Reference<XEventsSupplier> & xEventsSupplier) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        xEvents(xEventsSupplier->getEvents())
-{
-}
 
 XMLEventsImportContext::XMLEventsImportContext(
     SvXMLImport& rImport,
@@ -74,10 +56,8 @@ XMLEventsImportContext::XMLEventsImportContext(
 
 XMLEventsImportContext::XMLEventsImportContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const Reference<XNameReplace> & xNameReplace) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
+        SvXMLImportContext(rImport),
         xEvents(xNameReplace)
 {
 }
@@ -88,47 +68,6 @@ XMLEventsImportContext::~XMLEventsImportContext()
 //  // we need to delete the collected events
 }
 
-
-SvXMLImportContextRef XMLEventsImportContext::CreateChildContext(
-    sal_uInt16 /*p_nPrefix*/,
-    const OUString& /*rLocalName*/,
-    const Reference<XAttributeList> & xAttrList )
-{
-    // a) search for script:language and script:event-name attribute
-    // b) delegate to factory. The factory will:
-    //    1) translate XML event name into API event name
-    //    2) get proper event context factory from import
-    //    3) instantiate context
-
-    // a) search for script:language and script:event-name attribute
-    OUString sLanguage;
-    OUString sEventName;
-    sal_Int16 nCount = xAttrList->getLength();
-    for (sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
-    {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), &sLocalName );
-
-        if (XML_NAMESPACE_SCRIPT == nPrefix)
-        {
-            if (IsXMLToken(sLocalName, XML_EVENT_NAME))
-            {
-                sEventName = xAttrList->getValueByIndex(nAttr);
-            }
-            else if (IsXMLToken(sLocalName, XML_LANGUAGE))
-            {
-                sLanguage = xAttrList->getValueByIndex(nAttr);
-            }
-            // else: ignore -> let child context handle this
-        }
-        // else: ignore -> let child context handle this
-    }
-
-    // b) delegate to factory
-    return GetImport().GetEventImport().CreateContext(
-        GetImport(), xAttrList, this, sEventName, sLanguage);
-}
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEventsImportContext::createFastChildContext(
     sal_Int32 /*nElement*/,
@@ -159,22 +98,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEventsImportContext
         // else: ignore -> let child context handle this
     }
 
-    rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
-    const Sequence< css::xml::FastAttribute > fastAttribs = xAttrList->getFastAttributes();
-    for (const auto& rAttr : fastAttribs)
-    {
-        const OUString& rAttrValue = rAttr.Value;
-        sal_Int32 nToken = rAttr.Token;
-        const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken( nToken, nullptr );
-        OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
-        if ( !rAttrNamespacePrefix.isEmpty() )
-            sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
-        rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
-    }
-
     // b) delegate to factory
     return GetImport().GetEventImport().CreateContext(
-        GetImport(), rAttrList.get(), this, sEventName, sLanguage);
+        GetImport(), xAttrList, this, sEventName, sLanguage);
 }
 
 void XMLEventsImportContext::SetEvents(

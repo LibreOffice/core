@@ -33,7 +33,7 @@ namespace com::sun::star::uno { template <typename > class Sequence; }
  */
 
 namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
+    namespace xml::sax { class XFastAttributeList; }
     namespace beans { struct PropertyValue; }
 }
 
@@ -128,7 +128,7 @@ public:
 
     virtual SvXMLImportContext* CreateContext(
         SvXMLImport& rImport,               /// import context
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList, /// attribute list
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList, /// attribute list
         /// the context for the enclosing <script:events> element
         XMLEventsImportContext* rEvents,
         /// the event name (as understood by the API)

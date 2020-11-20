@@ -39,7 +39,7 @@ public:
 
     virtual SvXMLImportContext* CreateContext(
         SvXMLImport& rImport,               /// import context
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList,/// attribute list
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList,/// attribute list
         /// the context for the enclosing <script:events> element
         XMLEventsImportContext* rEvents,
         /// the event name (as understood by the API)
