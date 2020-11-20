@@ -140,7 +140,7 @@ void FrameBorder::SetCoreStyle( const SvxBorderLine* pStyle )
 
     // from twips to points
     maUIStyle.Set( &maCoreStyle, FrameBorder::GetDefaultPatternScale(), FRAMESEL_GEOM_WIDTH );
-    meState = maUIStyle.IsUsed() ? FrameBorderState::Show : FrameBorderState::Hide;
+    meState = maUIStyle.IsUsed() ? meState == FrameBorderState::DontCare ? FrameBorderState::DontCare : FrameBorderState::Show : FrameBorderState::Hide;
 }
 
 void FrameBorder::SetState( FrameBorderState eState )
@@ -786,6 +786,7 @@ void FrameSelectorImpl::ToggleBorderState( FrameBorder& rBorder )
         break;
         case FrameBorderState::DontCare:
             SetBorderState( rBorder, FrameBorderState::Hide );
+            SelectBorder(rBorder, false);
         break;
     }
 }
