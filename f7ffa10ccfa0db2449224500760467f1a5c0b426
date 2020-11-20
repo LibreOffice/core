@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f67cf1f1_5b9a0ee6",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2318,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-11-20T18:58:59Z",
+      "side": 1,
+      "message": "\u003e Also, only page breaks on the current sheet are calculated, switching to another sheet does not display calculated page breaks. This is due to not passing a properly prepared ScMarkData to SetWidthOrHeight() so only the currently active sheet is asked.\n\nThen again, if all sheets were calculated we could run into performance issues again with large documents, so that might not be a good idea.",
+      "parentUuid": "e3705a11_23f01786",
+      "range": {
+        "startLine": 2318,
+        "startChar": 35,
+        "endLine": 2318,
+        "endChar": 51
+      },
+      "revId": "f7ffa10ccfa0db2449224500760467f1a5c0b426",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "733c10a4_fc8e91ae",
         "filename": "sc/source/ui/view/gridwin4.cxx",
         "patchSetId": 11
