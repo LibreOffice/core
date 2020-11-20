@@ -40,6 +40,7 @@ class INetImage;
 class SfxAbstractPasteDialog;
 class SwDoc;
 class SwDocFac;
+class SwPaM;
 class SwTextBlocks;
 class SwWrtShell;
 class SvxClipboardFormatItem;
@@ -181,6 +182,7 @@ public:
     int  Cut();
     int  Copy( bool bIsCut = false );
     int  PrepareForCopy( bool bIsCut = false );
+    void PrepareForCopyTextRange(SwPaM & rPaM);
     void  CalculateAndCopy();                // special for Calculator
     bool  CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr );
 

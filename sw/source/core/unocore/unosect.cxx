@@ -457,14 +457,35 @@ SwXTextSection::getAnchor()
             nullptr != ( pIdx = pSectFormat->GetContent().GetContentIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {
+            bool isMoveIntoTable(false);
             SwPaM aPaM(*pIdx);
             aPaM.Move( fnMoveForward, GoInContent );
+            assert(pIdx->GetNode().IsSectionNode());
+            if (aPaM.GetPoint()->nNode.GetNode().FindTableNode() != pIdx->GetNode().FindTableNode()
+                || aPaM.GetPoint()->nNode.GetNode().FindSectionNode() != &pIdx->GetNode())
+            {
+                isMoveIntoTable = true;
+            }
 
             const SwEndNode* pEndNode = pIdx->GetNode().EndOfSectionNode();
             SwPaM aEnd(*pEndNode);
             aEnd.Move( fnMoveBackward, GoInContent );
-            xRet = SwXTextRange::CreateXTextRange(*pSectFormat->GetDoc(),
-                *aPaM.Start(), aEnd.Start());
+            if (aEnd.GetPoint()->nNode.GetNode().FindTableNode() != pIdx->GetNode().FindTableNode()
+                || aEnd.GetPoint()->nNode.GetNode().FindSectionNode() != &pIdx->GetNode())
+            {
+                isMoveIntoTable = true;
+            }
+            if (isMoveIntoTable)
+            {
+                uno::Reference<text::XText> const xParentText(
+                    ::sw::CreateParentXText(*pSectFormat->GetDoc(), SwPosition(*pIdx)));
+                xRet = new SwXTextRange(*pSectFormat);
+            }
+            else // for compatibility, keep the old way in this case
+            {
+                xRet = SwXTextRange::CreateXTextRange(*pSectFormat->GetDoc(),
+                    *aPaM.Start(), aEnd.Start());
+            }
         }
     }
     return xRet;

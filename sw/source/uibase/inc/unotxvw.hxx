@@ -36,6 +36,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
+#include <com/sun/star/datatransfer/XTransferableTextSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svl/itemprop.hxx>
 #include <TextCursorHelper.hxx>
@@ -55,6 +56,7 @@ class SwXTextView :
     public css::view::XViewSettingsSupplier,
     public css::beans::XPropertySet,
     public css::datatransfer::XTransferableSupplier,
+    public css::datatransfer::XTransferableTextSupplier,
     public SfxBaseController
 {
     ::comphelper::OInterfaceContainerHelper2 m_SelChangedListeners;
@@ -128,6 +130,9 @@ public:
     //XTransferableSupplier
     virtual css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getTransferable(  ) override;
     virtual void SAL_CALL insertTransferable( const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
+
+    // XTransferableTextSupplier
+    virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getTransferableForTextRange(css::uno::Reference<css::text::XTextRange> const& xTextRange) override;
 
     void                    NotifySelChanged();
     void                    NotifyDBChanged();
