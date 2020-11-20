@@ -3318,19 +3318,16 @@ SvXMLImportContextRef XMLAnnotationImportContext::CreateChildContext(
     if( XML_NAMESPACE_DC == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_CREATOR ) )
-            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
-                                            rLocalName, aAuthorBuffer);
+            pContext = new XMLStringBufferImportContext(GetImport(), aAuthorBuffer);
         else if( IsXMLToken( rLocalName, XML_DATE ) )
-            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
-                                            rLocalName, aDateBuffer);
+            pContext = new XMLStringBufferImportContext(GetImport(), aDateBuffer);
     }
     else if (((XML_NAMESPACE_TEXT == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix)
                  && IsXMLToken(rLocalName, XML_SENDER_INITIALS))
              || (XML_NAMESPACE_META == nPrefix
                  && IsXMLToken(rLocalName, XML_CREATOR_INITIALS)))
     {
-        pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
-                                        rLocalName, aInitialsBuffer);
+        pContext = new XMLStringBufferImportContext(GetImport(), aInitialsBuffer);
     }
 
     if( !pContext )
@@ -3367,7 +3364,7 @@ SvXMLImportContextRef XMLAnnotationImportContext::CreateChildContext(
         }
 
         if( !pContext )
-            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,  rLocalName, aTextBuffer);
+            pContext = new XMLStringBufferImportContext(GetImport(), aTextBuffer);
     }
 
     return pContext;
