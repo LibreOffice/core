@@ -19,6 +19,7 @@
 
 #include <EnhancedCustomShapeToken.hxx>
 #include <osl/mutex.hxx>
+#include <xmloff/xmlimp.hxx>
 #include <unordered_map>
 #include <memory>
 
@@ -194,6 +195,11 @@ EnhancedCustomShapeTokenEnum EASGet( const OUString& rShapeType )
     if ( aHashIter != pHashMap->end() )
         eRetValue = (*aHashIter).second;
     return eRetValue;
+}
+
+EnhancedCustomShapeTokenEnum EASGet( sal_Int32 nToken )
+{
+    return EASGet(SvXMLImport::getNameFromToken(nToken));
 }
 
 OUString EASGet( const EnhancedCustomShapeTokenEnum eToken )
