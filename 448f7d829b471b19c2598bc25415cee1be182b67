@@ -22,6 +22,30 @@
       "revId": "448f7d829b471b19c2598bc25415cee1be182b67",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01c9c4bc_c58b2534",
+        "filename": "canvas/source/directx/dx_surfacegraphics.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-20T11:51:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae79702d_be21e329",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 7
+      },
+      "revId": "448f7d829b471b19c2598bc25415cee1be182b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
