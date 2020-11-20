@@ -140,7 +140,7 @@ void FrameBorder::SetCoreStyle( const SvxBorderLine* pStyle )
 
     // from twips to points
     maUIStyle.Set( &maCoreStyle, FrameBorder::GetDefaultPatternScale(), FRAMESEL_GEOM_WIDTH );
-    meState = maUIStyle.IsUsed() ? FrameBorderState::Show : FrameBorderState::Hide;
+//    meState = maUIStyle.IsUsed() ? meState == FrameBorderState::DontCare ? FrameBorderState::DontCare : FrameBorderState::Show : FrameBorderState::Hide;
 }
 
 void FrameBorder::SetState( FrameBorderState eState )
@@ -758,8 +758,9 @@ void FrameSelectorImpl::SetBorderState( FrameBorder& rBorder, FrameBorderState e
 
     if( eState == FrameBorderState::Show )
         SetBorderCoreStyle( rBorder, &maCurrStyle );
-    else
-        rBorder.SetState( eState );
+
+    rBorder.SetState( eState );
+
     if (xRet.is())
         xRet->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOld, aNew );
     DoInvalidate( true );
@@ -1242,7 +1243,7 @@ void FrameSelector::GetFocus()
         SelectBorder(borderType);
     }
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
-            mxImpl->SetBorderState( **aIt, FrameBorderState::Show );
+            mxImpl->SetBorderState( **aIt, (*aIt)->GetState());
     CustomWidgetController::GetFocus();
 }
 
