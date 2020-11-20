@@ -120,11 +120,11 @@ namespace
         const Tcoretype* const m_pCore;
         mutable Tunotype* m_pResult;
     };
-    SwFrameFormat* lcl_EnsureCoreConnected(SwFrameFormat* pFormat, cppu::OWeakObject* pObject)
+    SwTableFormat* lcl_EnsureCoreConnected(SwFrameFormat* pFormat, cppu::OWeakObject* pObject)
     {
         if(!pFormat)
             throw uno::RuntimeException("Lost connection to core objects", pObject);
-        return pFormat;
+        return static_cast<SwTableFormat*>(pFormat);
     }
     SwTable* lcl_EnsureTableNotComplex(SwTable* pTable, cppu::OWeakObject* pObject)
     {
@@ -2179,7 +2179,7 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
 uno::Reference<text::XTextRange>  SwXTextTable::getAnchor()
 {
     SolarMutexGuard aGuard;
-    SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
+    SwTableFormat *const pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
     return new SwXTextRange(*pFormat);
 }
 

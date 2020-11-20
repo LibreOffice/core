@@ -1704,6 +1704,29 @@ SwPaM*  SwXTextViewCursor::GetPaM()
     return rSh.GetCursor();
 }
 
+uno::Reference<datatransfer::XTransferable> SAL_CALL
+SwXTextView::getTransferableForTextRange(uno::Reference<text::XTextRange> const& xTextRange)
+{
+    SolarMutexGuard aGuard;
+
+    // the point is we can copy PaM that wouldn't be legal as shell cursor
+    SwUnoInternalPaM aPam(*m_pView->GetDocShell()->GetDoc());
+    if (!::sw::XTextRangeToSwPaM(aPam, xTextRange, ::sw::TextRangeMode::AllowNonTextNode))
+    {
+        throw uno::RuntimeException("invalid text range");
+    }
+
+    //force immediate shell update
+    GetView()->StopShellTimer();
+    SwWrtShell& rSh = GetView()->GetWrtShell();
+    SwTransferable* pTransfer = new SwTransferable( rSh );
+    const bool bLockedView = rSh.IsViewLocked();
+    rSh.LockView( true );    //lock visible section
+    pTransfer->PrepareForCopyTextRange(aPam);
+    rSh.LockView( bLockedView );
+    return uno::Reference<datatransfer::XTransferable>(pTransfer);
+}
+
 uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransferable()
 {
     SolarMutexGuard aGuard;
