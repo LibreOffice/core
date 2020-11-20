@@ -397,6 +397,7 @@ private:
     weld::Button& m_rButton;
     AutoTimer m_aRepeat;
     const Link<Button&, void> m_aLink;
+    const Link<const CommandEvent&, void> m_aContextLink;
     bool m_bModKey;
 
     DECL_LINK(MousePressHdl, const MouseEvent&, bool);
@@ -404,7 +405,9 @@ private:
     DECL_LINK(RepeatTimerHdl, Timer*, void);
 
 public:
-    ButtonPressRepeater(weld::Button& rButton, const Link<Button&, void>& rLink);
+    ButtonPressRepeater(weld::Button& rButton, const Link<Button&, void>& rLink,
+                        const Link<const CommandEvent&, void>& rContextLink
+                        = Link<const CommandEvent&, void>());
     void Stop() { m_aRepeat.Stop(); }
     bool IsModKeyPressed() const { return m_bModKey; }
 };
