@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "361a7a12_5f04878c",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2429,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-11-20T21:15:45Z",
+      "side": 1,
+      "message": "failed",
+      "range": {
+        "startLine": 2429,
+        "startChar": 27,
+        "endLine": 2429,
+        "endChar": 34
+      },
+      "revId": "9fcaecb6f7ebd4664579d96d65fab69064d6e2c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "517877a1_56943bd9",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-11-20T21:15:45Z",
+      "side": 1,
+      "message": "content",
+      "range": {
+        "startLine": 59,
+        "startChar": 30,
+        "endLine": 59,
+        "endChar": 36
+      },
+      "revId": "9fcaecb6f7ebd4664579d96d65fab69064d6e2c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
