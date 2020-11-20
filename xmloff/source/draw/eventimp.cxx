@@ -86,7 +86,9 @@ public:
 
     SdXMLEventContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList, const Reference< XShape >& rxShape );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,    const Reference< XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
@@ -94,38 +96,27 @@ class XMLEventSoundContext : public SvXMLImportContext
 {
 public:
 
-    XMLEventSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent );
+    XMLEventSoundContext( SvXMLImport& rImport, const Reference< XFastAttributeList >& xAttrList, SdXMLEventContext* pParent );
 };
 
 }
 
-XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent )
-: SvXMLImportContext( rImp, nPrfx, rLocalName )
+XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, const Reference< XFastAttributeList >& xAttrList, SdXMLEventContext* pParent )
+: SvXMLImportContext( rImp )
 {
-    if( !(pParent && nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SOUND )) )
-        return;
-
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aAttrLocalName;
-        sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aAttrLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-
-        switch( nAttrPrefix )
+        OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-        case XML_NAMESPACE_XLINK:
-            if( IsXMLToken( aAttrLocalName, XML_HREF ) )
-            {
+            case XML_ELEMENT(XLINK, XML_HREF):
                 pParent->maData.msSoundURL = rImp.GetAbsoluteReference(sValue);
-            }
-            break;
-        case XML_NAMESPACE_PRESENTATION:
-            if( IsXMLToken( aAttrLocalName, XML_PLAY_FULL ) )
-            {
+                break;
+            case XML_ELEMENT(PRESENTATION, XML_PLAY_FULL):
                 pParent->maData.mbPlayFull = IsXMLToken( sValue, XML_TRUE );
-            }
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
@@ -236,9 +227,15 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
         maData.mbValid = !sEventName.isEmpty();
 }
 
-SvXMLImportContextRef SdXMLEventContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLEventContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    return new XMLEventSoundContext( GetImport(), nPrefix, rLocalName, xAttrList, this );
+    if( nElement == XML_ELEMENT(PRESENTATION, XML_SOUND) )
+        return new XMLEventSoundContext( GetImport(), xAttrList, this );
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+    return nullptr;
 }
 
 void SdXMLEventContext::endFastElement(sal_Int32 )
