@@ -1495,8 +1495,8 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newConcatAsciiL(
 
     @param left a valid string.
 
-    @param right must not be null and must point to memory of at least
-    \p rightLength UTF-16 code units
+    @param right must point to memory of at least \p rightLength UTF-16 code units; may be null if
+    \p rigthLength is zero
 
     @param rightLength the length of the \p right string; must be non-negative
 
@@ -1763,13 +1763,13 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceFirstUtf16LAsciiL(
 
     @param str  pointer to the original string; must not be null
 
-    @param from  pointer to the substring to be replaced; must not be null and
-    must point to memory of at least \p fromLength UTF-16 code units
+    @param from  pointer to the substring to be replaced; must point to memory of at least
+    \p fromLength UTF-16 code units; may be null if \p toLength is zero
 
     @param fromLength  the length of the \p from substring; must be non-negative
 
-    @param to  pointer to the substring to be replaced; must not be null and
-    must point to memory of at least \p toLength UTF-16 code units
+    @param to  pointer to the substring to be replaced; must point to memory of at least \p toLength
+    UTF-16 code units; may be null if \p toLength is zero
 
     @param toLength  the length of the \p to substring; must be non-negative
 
@@ -1927,8 +1927,8 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllAsciiLAsciiL(
 
     @param fromLength  the length of the \p from substring; must be non-negative
 
-    @param to  pointer to the substring to be replaced; must not be null and
-    must point to memory of at least \p toLength UTF-16 code units
+    @param to  pointer to the substring to be replaced; must point to memory of at least \p toLength
+    UTF-16 code units; may be null if \p toLength is zero
 
     @param toLength  the length of the \p to substring; must be non-negative
 
