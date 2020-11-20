@@ -1,1 +1,11 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m12 2c-5.5169252 0-10 4.4830748-10 10 0 5.516925 4.4830748 10 10 10 5.516925 0 10-4.483075 10-10h-1c0 4.976485-4.023515 9-9 9-4.9764851 0-9-4.023515-9-9 0-4.9764851 4.0235149-9 9-9z" fill="#1e8bcd"/></svg>
+<?xml-stylesheet type="text/css" href="icons.css" ?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path
+	 class="icn icn--shape-color" 
+   d="M 21.498553,12.165798 A 9.5,9.5 0 0 1 11.889465,21.499357 9.5,9.5 0 0 1 2.5001608,11.944731 9.5,9.5 0 0 1 12,2.5"
+   fill="#fafafa" 
+	 stroke="#3a3a38" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+</svg>
