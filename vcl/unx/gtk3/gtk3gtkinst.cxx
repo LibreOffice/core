@@ -8685,6 +8685,32 @@ public:
         return gtk_toolbar_get_drop_index(m_pToolbar, rPoint.X(), rPoint.Y());
     }
 
+    virtual bool has_focus() const override
+    {
+        if (gtk_widget_has_focus(m_pWidget))
+            return true;
+        GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pWidget);
+        if (!GTK_IS_WINDOW(pTopLevel))
+            return false;
+        GtkWidget* pFocus = gtk_window_get_focus(GTK_WINDOW(pTopLevel));
+        if (!pFocus)
+            return false;
+        return gtk_widget_is_ancestor(pFocus, m_pWidget);
+    }
+
+    virtual void grab_focus() override
+    {
+        disable_notify_events();
+        gtk_widget_grab_focus(m_pWidget);
+        if (!gtk_container_get_focus_child(GTK_CONTAINER(m_pWidget)))
+        {
+            GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, 0);
+            gtk_container_set_focus_child(GTK_CONTAINER(m_pWidget), GTK_WIDGET(pItem));
+        }
+        gtk_widget_child_focus(gtk_container_get_focus_child(GTK_CONTAINER(m_pWidget)), GTK_DIR_TAB_FORWARD);
+        enable_notify_events();
+    }
+
     virtual ~GtkInstanceToolbar() override
     {
         for (auto& a : m_aMap)
