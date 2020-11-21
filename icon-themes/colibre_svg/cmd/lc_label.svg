@@ -1,1 +1,19 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m13.386719 4-9.9375002 9.035156 7.5839842 7.583985 9.966797-9.060547v-7.558594zm3.613281 2c1.104569 0 2 .8954305 2 2s-.895431 2-2 2-2-.8954305-2-2 .895431-2 2-2z" fill="#fafafa"/><g fill="#3a3a38"><path d="m13 3-11 10 9 9 11-10v-9zm.386719 1h7.613281v7.558594l-9.966797 9.060547-7.5839842-7.583985z"/><path d="m17 6a2 2 0 0 0 -2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 -2-2zm0 1a1 1 0 0 1 1 1 1 1 0 0 1 -1 1 1 1 0 0 1 -1-1 1 1 0 0 1 1-1z"/></g></svg>
+<?xml-stylesheet type="text/css" href="icons.css" ?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path
+     class="icn icn--area-color"
+	 d="m 2.5,13.5 11,-10 h 8 v 8 l -11,10 z"
+     fill="#fafafa"
+     stroke="#3a3a38" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+  <path
+	 class="icn icn--area-color"
+     d="M 18.5,8 A 1.5,1.5 0 0 1 17,9.5 1.5,1.5 0 0 1 15.5,8 1.5,1.5 0 0 1 17,6.5 1.5,1.5 0 0 1 18.5,8 Z"
+     fill="#fafafa"
+     stroke="#3a3a38" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+</svg>
