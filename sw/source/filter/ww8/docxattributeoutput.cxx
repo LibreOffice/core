@@ -7076,6 +7076,7 @@ OString DocxAttributeOutput::TransHighlightColor( sal_uInt8 nIco )
 {
     switch (nIco)
     {
+        case 0: return "none"; break;
         case 1: return "black"; break;
         case 2: return "blue"; break;
         case 3: return "cyan"; break;
