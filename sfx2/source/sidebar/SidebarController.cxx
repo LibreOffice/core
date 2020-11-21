@@ -885,7 +885,6 @@ void SidebarController::SwitchToDeck (
 
     // Tell the focus manager about the new panels and tab bar
     // buttons.
-    maFocusManager.SetDeckTitle(mpCurrentDeck->GetTitleBar());
     maFocusManager.SetPanels(mpCurrentDeck->GetPanels());
 
     mpTabBar->UpdateFocusManager(maFocusManager);
@@ -896,7 +895,6 @@ void SidebarController::notifyDeckTitle(const OUString& targetDeckId)
 {
     if (msCurrentDeckId == targetDeckId)
     {
-        maFocusManager.SetDeckTitle(mpCurrentDeck->GetTitleBar());
         mpTabBar->UpdateFocusManager(maFocusManager);
         UpdateTitleBarIcons();
     }
