@@ -1,1 +1,25 @@
-<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><radialGradient id="a" cx="17.62254" cy="17.133432" gradientTransform="matrix(.83535196 -.54971548 .69152542 1.0508475 -8.874312 8.25903)" gradientUnits="userSpaceOnUse" r="10"><stop offset="0" stop-color="#83beec"/><stop offset="1" stop-color="#0063b1"/></radialGradient><path d="m12 2-9.53125 13.476625c-.3030738.4775-.46875.995625-.46875 1.523375 0 2.761375 4.4771525 5 10 5 5.522847 0 10-2.238625 10-5 0-.604-.232441-1.182625-.625-1.71875z" fill="url(#a)" opacity=".986928"/></svg>
+<?xml-stylesheet type="text/css" href="icons.css" ?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <linearGradient
+       id="linearGradient">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.6"
+         />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="0.5"
+         />
+    </linearGradient>
+  <path
+	 class="icn icn--highlight-color"
+     d="m 2.5,16.5 c 0,3.5 5,5 9.5,5 4,0 9.5,-1.5 9.5,-4.5 C 21.5,16 12,2.5 12,2.5 c 0,0 -9.5,13 -9.5,14 z"
+	 fill="#117acc"
+	 stroke="#0063b1"
+	 stroke-linecap="round"
+	 stroke-linejoin="round"
+     />
+  <path
+     style="fill:url(#linearGradient)"
+     d="m 12,3.4 c -3,4 -6.2,8.5 -9,13.1 0,1.5 1,2.5 2.8,3.3 1.7,0.8 4,1.2 6.2,1.2 1.9,0 4.3,-0.4 6,-1.1 0.9,-0.4 1.6,-0.8 2.2,-1.3 0.225147,-0.225147 1.1,-1.1 0.5,-2 L 12.5,4.2 C 12.5,4.2 15,8 12,3.4 Z"
+     />
+</svg>
