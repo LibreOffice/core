@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_THEMEPANEL_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_THEMEPANEL_HXX
+#pragma once
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <sfx2/sidebar/PanelLayout.hxx>
@@ -57,7 +56,5 @@ private:
 };
 
 } // end of namespace sw::sidebar
-
-#endif // INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_THEMEPANEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
