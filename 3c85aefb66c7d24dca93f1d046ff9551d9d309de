@@ -22,6 +22,30 @@
       "revId": "3c85aefb66c7d24dca93f1d046ff9551d9d309de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf9cbddf_b75018b1",
+        "filename": "chart2/source/controller/inc/ConfigurationAccess.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-21T18:19:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ea2fcde4_b5ad6c03",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 6
+      },
+      "revId": "3c85aefb66c7d24dca93f1d046ff9551d9d309de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
