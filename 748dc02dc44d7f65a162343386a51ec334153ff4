@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1dcc8b5_f167fe3a",
+        "filename": "sfx2/source/appl/appquit.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-21T19:59:04Z",
+      "side": 1,
+      "message": "move comment",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 36
+      },
+      "revId": "748dc02dc44d7f65a162343386a51ec334153ff4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
