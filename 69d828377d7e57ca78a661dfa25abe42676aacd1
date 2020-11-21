@@ -34,6 +34,24 @@
       "revId": "69d828377d7e57ca78a661dfa25abe42676aacd1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "320f3dfc_a305cbbd",
+        "filename": "configmgr/source/groupnode.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-21T18:13:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca7f63eb_d3d7e8e6",
+      "revId": "69d828377d7e57ca78a661dfa25abe42676aacd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
