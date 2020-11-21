@@ -143,7 +143,7 @@ public:
     class GroupScope
     {
     public:
-        void addMessage( const OUString& /*rMsg*/ ) { (void) this; /* loplugin:staticmethods */ }
+        void addMessage( [[maybe_unused]] const OUString& /*rMsg*/ ) { (void) this; /* loplugin:staticmethods */ }
 
         void addRefMessage(
             const ScAddress& /*rCellPos*/, const ScAddress& /*rRefPos*/, size_t /*nLen*/,
