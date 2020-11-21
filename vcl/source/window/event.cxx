@@ -462,7 +462,10 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
     else if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
+        {
             CallEventListeners( VclEventId::WindowKeyInput, const_cast<KeyEvent *>(rNEvt.GetKeyEvent()) );
+            return; // prevents check made below for 'part of compound control' from notifying again
+        }
     }
     else if( rNEvt.GetType() == MouseNotifyEvent::KEYUP )
     {

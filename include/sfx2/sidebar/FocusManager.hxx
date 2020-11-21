@@ -28,24 +28,35 @@ class Widget;
 
 namespace sfx2::sidebar {
 
-class DeckTitleBar;
-
 /** Concentrate all focus handling in this class.
 
     There is one ring of windows that accept the input focus which are
-    cycled through with the arrow keys:
-    - the closer in the deck title (present only when docked)
+    cycled through with the tab key:
     - the panel title bars
-    - the tab bar items
+    - the tab bar
 
-    When the focus is in a panel title then focus travels over
-    - the panel title
-    - the panel closer
-    - the panel content
+    When the focus is on a panel expander:
+    - tab key moves the focus to the next or previous panel or the tab bar
+    - arrow keys move the focus to the panel toolbox
+    - enter key moves the focus to the panel content
+    - escape key moves the focus to the document
 
-    Once the focus is in the panel content then focus cycles through
-    all controls inside the panel but not back to the title bar of
-    the panel.  Escape places the focus back in the panel title.
+    When the focus is on a panel toolbox:
+    - tab key moves the focus to the next or previous panel or the tab bar
+    - arrow keys move the focus to the panel expander
+    - escape key moves the focus to the document
+
+    When the focus is in the panel content:
+    - normal keyboard navigation for dialogs applies to controls inside the panel
+    - escape key moves the focus to the panel expander or the tab bar menu button for single panel
+      decks
+
+    When the focus is on the tab bar:
+    - tab key moves the focus to the first or last panel expander or panel content for single panel
+      decks
+    - arrow keys move the focus among the tab bar buttons
+    - escape key moves the focus to the document
+
 */
 class FocusManager
 {
@@ -64,19 +75,16 @@ public:
     void GrabFocus();
     void GrabFocusPanel();
 
-    void SetDeckTitle(DeckTitleBar* pDeckTitleBar);
     void SetPanels(const SharedPanelContainer& rPanels);
     void SetButtons(const std::vector<weld::Widget*>& rButtons);
 
 private:
-    VclPtr<DeckTitleBar> mpDeckTitleBar;
     std::vector<VclPtr<Panel> > maPanels;
     std::vector<weld::Widget*> maButtons;
     const std::function<void(const Panel&)> maShowPanelFunctor;
 
     enum PanelComponent
     {
-        PC_DeckToolBox,
         PC_PanelTitle,
         PC_PanelToolBox,
         PC_PanelContent,
@@ -105,28 +113,22 @@ private:
     void RegisterWindow(weld::Widget& rWidget);
     static void UnregisterWindow(weld::Widget& rWidget);
 
-    void FocusDeckTitle();
-    bool IsDeckTitleVisible() const;
     bool IsPanelTitleVisible(const sal_Int32 nPanelIndex) const;
 
     /** Set the focus to the title bar of the panel or, if the
         title bar is not visible, directly to the panel.
         @param nPanelIndex
             Index of the panel to focus.
-        @param bFallbackToDeckTitle
-            When the panel title bar is not visible then The fallback
-            bias defines whether to focus the deck (true) or the panel
+        @param bFallbackToMenuButton
+            When the panel title bar is not visible then the fallback
+            bias defines whether to focus the menu button (true) or the panel
             content (false) will be focused instead.
     */
     void FocusPanel(const sal_Int32 nPanelIndex,
-                    const bool bFallbackToDeckTitle);
+                    const bool bFallbackToMenuButton);
 
     void FocusPanelContent(const sal_Int32 nPanelIndex);
     void FocusButton(const sal_Int32 nButtonIndex);
-    void MoveFocusInsidePanel(const FocusLocation& rLocation,
-                              const sal_Int32 nDirection);
-    void MoveFocusInsideDeckTitle(const FocusLocation& rLocation,
-                                  const sal_Int32 nDirection);
 
     bool HandleKeyEvent(const vcl::KeyCode& rKeyCode,
                         const FocusLocation& rLocation);
