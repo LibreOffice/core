@@ -721,10 +721,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136441_commentInFootnote, "tdf136441_
 
 DECLARE_OOXMLEXPORT_TEST(testTdf137683_charHighlightTests, "tdf137683_charHighlightTests.docx")
 {
+    // Don't export unnecessary w:highlight="none" (Unnecessary one intentionally hand-added to original .docx)
+    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
+    if (pXmlStyles)
+        assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:rPr/w:highlight", 0);
+
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(10), 2, "no highlight"), uno::UNO_QUERY_THROW);
     // This test was failing with a cyan charHighlight of 65535 (0x00FFFF), instead of COL_TRANSPARENT (0xFFFFFFFF)
-    if ( !mbExported ) //TODO: export COL_TRANSPARENT
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
