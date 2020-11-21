@@ -11132,10 +11132,6 @@ starmath/source/edit.cxx
 starmath/source/eqnolefilehdr.cxx
 starmath/source/eqnolefilehdr.hxx
 starmath/source/format.cxx
-starmath/source/mathmlexport.cxx
-starmath/source/mathmlexport.hxx
-starmath/source/mathmlimport.cxx
-starmath/source/mathmlimport.hxx
 starmath/source/mathtype.cxx
 starmath/source/mathtype.hxx
 starmath/source/node.cxx

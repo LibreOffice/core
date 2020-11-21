@@ -73,38 +73,35 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-namespace {
+namespace
+{
+bool IsInPrivateUseArea(sal_Unicode cChar) { return 0xE000 <= cChar && cChar <= 0xF8FF; }
 
-bool IsInPrivateUseArea( sal_Unicode cChar ) { return 0xE000 <= cChar  &&  cChar <= 0xF8FF; }
-
-sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
+sal_Unicode ConvertMathToMathML(sal_Unicode cChar)
 {
     sal_Unicode cRes = cChar;
-    if (IsInPrivateUseArea( cChar ))
+    if (IsInPrivateUseArea(cChar))
     {
-        SAL_WARN("starmath", "Error: private use area characters should no longer be in use!" );
+        SAL_WARN("starmath", "Error: private use area characters should no longer be in use!");
         cRes = u'@'; // just some character that should easily be notice as odd in the context
     }
     return cRes;
 }
-
 }
 
-bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
+bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
 {
-    bool bRet=true;
+    bool bRet = true;
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
     //Get model
-    uno::Reference< lang::XComponent > xModelComp = xModel;
+    uno::Reference<lang::XComponent> xModelComp = xModel;
 
     bool bEmbedded = false;
-    SmModel *pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
 
-    SmDocShell *pDocShell = pModel ?
-            static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
-    if ( pDocShell &&
-        SfxObjectCreateMode::EMBEDDED == pDocShell->GetCreateMode() )
+    SmDocShell* pDocShell = pModel ? static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
+    if (pDocShell && SfxObjectCreateMode::EMBEDDED == pDocShell->GetCreateMode())
         bEmbedded = true;
 
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
@@ -112,14 +109,13 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     {
         if (pDocShell /*&& pDocShell->GetMedium()*/)
         {
-            OSL_ENSURE( pDocShell->GetMedium() == &rMedium,
-                    "different SfxMedium found" );
+            OSL_ENSURE(pDocShell->GetMedium() == &rMedium, "different SfxMedium found");
 
             SfxItemSet* pSet = rMedium.GetItemSet();
             if (pSet)
             {
                 const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
-                    pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+                    pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
                 if (pItem)
                     pItem->GetValue() >>= xStatusIndicator;
             }
@@ -129,111 +125,97 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
         if (xStatusIndicator.is())
         {
             sal_Int32 nProgressRange = bFlat ? 1 : 3;
-            xStatusIndicator->start(SmResId(STR_STATSTR_WRITING),
-                nProgressRange);
+            xStatusIndicator->start(SmResId(STR_STATSTR_WRITING), nProgressRange);
         }
     }
 
-
     // create XPropertySet with three properties for status indicator
-    comphelper::PropertyMapEntry aInfoMap[] =
-    {
-        { OUString("UsePrettyPrinting"), 0,
-              cppu::UnoType<bool>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("BaseURI"), 0,
-              ::cppu::UnoType<OUString>::get(),
+    comphelper::PropertyMapEntry aInfoMap[]
+        = { { OUString("UsePrettyPrinting"), 0, cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamRelPath"), 0,
-              ::cppu::UnoType<OUString>::get(),
+            { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0,
-              ::cppu::UnoType<OUString>::get(),
+            { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
-    };
-    uno::Reference< beans::XPropertySet > xInfoSet(
-                comphelper::GenericPropertySet_CreateInstance(
-                            new comphelper::PropertySetInfo( aInfoMap ) ) );
+            { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString(), 0, css::uno::Type(), 0, 0 } };
+    uno::Reference<beans::XPropertySet> xInfoSet(
+        comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
 
     SvtSaveOptions aSaveOpt;
-    bool bUsePrettyPrinting( bFlat || aSaveOpt.IsPrettyPrinting() );
-    xInfoSet->setPropertyValue( "UsePrettyPrinting", Any(bUsePrettyPrinting) );
+    bool bUsePrettyPrinting(bFlat || aSaveOpt.IsPrettyPrinting());
+    xInfoSet->setPropertyValue("UsePrettyPrinting", Any(bUsePrettyPrinting));
 
     // Set base URI
-    OUString sPropName( "BaseURI" );
-    xInfoSet->setPropertyValue( sPropName, makeAny( rMedium.GetBaseURL( true ) ) );
+    OUString sPropName("BaseURI");
+    xInfoSet->setPropertyValue(sPropName, makeAny(rMedium.GetBaseURL(true)));
 
-    sal_Int32 nSteps=0;
+    sal_Int32 nSteps = 0;
     if (xStatusIndicator.is())
-            xStatusIndicator->setValue(nSteps++);
+        xStatusIndicator->setValue(nSteps++);
     if (!bFlat) //Storage (Package) of Stream
     {
-        uno::Reference < embed::XStorage > xStg = rMedium.GetOutputStorage();
-        bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
+        uno::Reference<embed::XStorage> xStg = rMedium.GetOutputStorage();
+        bool bOASIS = (SotStorage::GetVersion(xStg) > SOFFICE_FILEFORMAT_60);
 
         // TODO/LATER: handle the case of embedded links gracefully
-        if ( bEmbedded ) //&& !pStg->IsRoot() )
+        if (bEmbedded) //&& !pStg->IsRoot() )
         {
             OUString aName;
-            if ( rMedium.GetItemSet() )
+            if (rMedium.GetItemSet())
             {
                 const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                    rMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
-                if ( pDocHierarchItem )
+                    rMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME));
+                if (pDocHierarchItem)
                     aName = pDocHierarchItem->GetValue();
             }
 
-            if ( !aName.isEmpty() )
+            if (!aName.isEmpty())
             {
                 sPropName = "StreamRelPath";
-                xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+                xInfoSet->setPropertyValue(sPropName, makeAny(aName));
             }
         }
 
-        if ( !bEmbedded )
+        if (!bEmbedded)
         {
             if (xStatusIndicator.is())
                 xStatusIndicator->setValue(nSteps++);
 
-            bRet = WriteThroughComponent(
-                    xStg, xModelComp, "meta.xml", xContext, xInfoSet,
-                    (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaExporter"
-                            : "com.sun.star.comp.Math.XMLMetaExporter"));
+            bRet = WriteThroughComponent(xStg, xModelComp, "meta.xml", xContext, xInfoSet,
+                                         (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaExporter"
+                                                 : "com.sun.star.comp.Math.XMLMetaExporter"));
         }
-        if ( bRet )
+        if (bRet)
         {
             if (xStatusIndicator.is())
                 xStatusIndicator->setValue(nSteps++);
 
-            bRet = WriteThroughComponent(
-                    xStg, xModelComp, "content.xml", xContext, xInfoSet,
-                    "com.sun.star.comp.Math.XMLContentExporter");
+            bRet = WriteThroughComponent(xStg, xModelComp, "content.xml", xContext, xInfoSet,
+                                         "com.sun.star.comp.Math.XMLContentExporter");
         }
 
-        if ( bRet )
+        if (bRet)
         {
             if (xStatusIndicator.is())
                 xStatusIndicator->setValue(nSteps++);
 
-            bRet = WriteThroughComponent(
-                    xStg, xModelComp, "settings.xml", xContext, xInfoSet,
-                    (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsExporter"
-                            : "com.sun.star.comp.Math.XMLSettingsExporter") );
+            bRet = WriteThroughComponent(xStg, xModelComp, "settings.xml", xContext, xInfoSet,
+                                         (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsExporter"
+                                                 : "com.sun.star.comp.Math.XMLSettingsExporter"));
         }
     }
     else
     {
-        SvStream *pStream = rMedium.GetOutStream();
-        uno::Reference<io::XOutputStream> xOut(
-            new utl::OOutputStreamWrapper(*pStream) );
+        SvStream* pStream = rMedium.GetOutStream();
+        uno::Reference<io::XOutputStream> xOut(new utl::OOutputStreamWrapper(*pStream));
 
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
 
-        bRet = WriteThroughComponent(
-            xOut, xModelComp, xContext, xInfoSet,
-            "com.sun.star.comp.Math.XMLContentExporter");
+        bRet = WriteThroughComponent(xOut, xModelComp, xContext, xInfoSet,
+                                     "com.sun.star.comp.Math.XMLContentExporter");
     }
 
     if (xStatusIndicator.is())
@@ -242,179 +224,183 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     return bRet;
 }
 
-
 /// export through an XML exporter component (output stream version)
-bool SmXMLExportWrapper::WriteThroughComponent(
-    const Reference<io::XOutputStream>& xOutputStream,
-    const Reference<XComponent>& xComponent,
-    Reference<uno::XComponentContext> const & rxContext,
-    Reference<beans::XPropertySet> const & rPropSet,
-    const char* pComponentName )
+bool SmXMLExportWrapper::WriteThroughComponent(const Reference<io::XOutputStream>& xOutputStream,
+                                               const Reference<XComponent>& xComponent,
+                                               Reference<uno::XComponentContext> const& rxContext,
+                                               Reference<beans::XPropertySet> const& rPropSet,
+                                               const char* pComponentName)
 {
     OSL_ENSURE(xOutputStream.is(), "I really need an output stream!");
     OSL_ENSURE(xComponent.is(), "Need component!");
     OSL_ENSURE(nullptr != pComponentName, "Need component name!");
 
     // get component
-    Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(rxContext );
+    Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(rxContext);
 
     // connect XML writer to output stream
-    xSaxWriter->setOutputStream( xOutputStream );
+    xSaxWriter->setOutputStream(xOutputStream);
 
     // prepare arguments (prepend doc handler to given arguments)
-    Sequence<Any> aArgs( 2 );
+    Sequence<Any> aArgs(2);
     aArgs[0] <<= xSaxWriter;
     aArgs[1] <<= rPropSet;
 
     // get filter component
-    Reference< document::XExporter > xExporter(
-        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(OUString::createFromAscii(pComponentName), aArgs, rxContext),
+    Reference<document::XExporter> xExporter(
+        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            OUString::createFromAscii(pComponentName), aArgs, rxContext),
         UNO_QUERY);
-    OSL_ENSURE( xExporter.is(),
-            "can't instantiate export filter component" );
-    if ( !xExporter.is() )
+    OSL_ENSURE(xExporter.is(), "can't instantiate export filter component");
+    if (!xExporter.is())
         return false;
 
-
     // connect model and filter
-    xExporter->setSourceDocument( xComponent );
+    xExporter->setSourceDocument(xComponent);
 
     // filter!
-    Reference < XFilter > xFilter( xExporter, UNO_QUERY );
-    uno::Sequence< PropertyValue > aProps(0);
-    xFilter->filter( aProps );
+    Reference<XFilter> xFilter(xExporter, UNO_QUERY);
+    uno::Sequence<PropertyValue> aProps(0);
+    xFilter->filter(aProps);
 
     auto pFilter = comphelper::getUnoTunnelImplementation<SmXMLExport>(xFilter);
     return pFilter == nullptr || pFilter->GetSuccess();
 }
 
-
 /// export through an XML exporter component (storage version)
-bool SmXMLExportWrapper::WriteThroughComponent(
-    const Reference < embed::XStorage >& xStorage,
-    const Reference<XComponent>& xComponent,
-    const char* pStreamName,
-    Reference<uno::XComponentContext> const & rxContext,
-    Reference<beans::XPropertySet> const & rPropSet,
-    const char* pComponentName
-    )
+bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>& xStorage,
+                                               const Reference<XComponent>& xComponent,
+                                               const char* pStreamName,
+                                               Reference<uno::XComponentContext> const& rxContext,
+                                               Reference<beans::XPropertySet> const& rPropSet,
+                                               const char* pComponentName)
 {
     OSL_ENSURE(xStorage.is(), "Need storage!");
     OSL_ENSURE(nullptr != pStreamName, "Need stream name!");
 
     // open stream
-    Reference < io::XStream > xStream;
+    Reference<io::XStream> xStream;
     OUString sStreamName = OUString::createFromAscii(pStreamName);
     try
     {
-        xStream = xStorage->openStreamElement( sStreamName,
-            embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+        xStream = xStorage->openStreamElement(sStreamName, embed::ElementModes::READWRITE
+                                                               | embed::ElementModes::TRUNCATE);
     }
-    catch ( const uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION("starmath", "Can't create output stream in package" );
+        DBG_UNHANDLED_EXCEPTION("starmath", "Can't create output stream in package");
         return false;
     }
 
-    uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
-    xSet->setPropertyValue( "MediaType", Any(OUString( "text/xml" )) );
+    uno::Reference<beans::XPropertySet> xSet(xStream, uno::UNO_QUERY);
+    xSet->setPropertyValue("MediaType", Any(OUString("text/xml")));
 
     // all streams must be encrypted in encrypted document
-    xSet->setPropertyValue( "UseCommonStoragePasswordEncryption", Any(true) );
+    xSet->setPropertyValue("UseCommonStoragePasswordEncryption", Any(true));
 
     // set Base URL
-    if ( rPropSet.is() )
+    if (rPropSet.is())
     {
-        rPropSet->setPropertyValue( "StreamName", makeAny( sStreamName ) );
+        rPropSet->setPropertyValue("StreamName", makeAny(sStreamName));
     }
 
     // write the stuff
-    bool bRet = WriteThroughComponent( xStream->getOutputStream(), xComponent, rxContext,
-        rPropSet, pComponentName );
+    bool bRet = WriteThroughComponent(xStream->getOutputStream(), xComponent, rxContext, rPropSet,
+                                      pComponentName);
 
     return bRet;
 }
 
-SmXMLExport::SmXMLExport(
-    const css::uno::Reference< css::uno::XComponentContext >& rContext,
-    OUString const & implementationName, SvXMLExportFlags nExportFlags)
-    : SvXMLExport(rContext, implementationName, util::MeasureUnit::INCH, XML_MATH,
-                  nExportFlags)
+SmXMLExport::SmXMLExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+                         OUString const& implementationName, SvXMLExportFlags nExportFlags)
+    : SvXMLExport(rContext, implementationName, util::MeasureUnit::INCH, XML_MATH, nExportFlags)
     , pTree(nullptr)
     , bSuccess(false)
 {
 }
 
-sal_Int64 SAL_CALL SmXMLExport::getSomething(
-    const uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SAL_CALL SmXMLExport::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if ( isUnoTunnelId<SmXMLExport>(rId) )
-        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
+    if (isUnoTunnelId<SmXMLExport>(rId))
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
 
-    return SvXMLExport::getSomething( rId );
+    return SvXMLExport::getSomething(rId);
 }
 
 namespace
 {
-    class theSmXMLExportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSmXMLExportUnoTunnelId> {};
+class theSmXMLExportUnoTunnelId : public rtl::Static<UnoTunnelIdInit, theSmXMLExportUnoTunnelId>
+{
+};
 }
 
-const uno::Sequence< sal_Int8 > & SmXMLExport::getUnoTunnelId() throw()
+const uno::Sequence<sal_Int8>& SmXMLExport::getUnoTunnelId() throw()
 {
     return theSmXMLExportUnoTunnelId::get().getSeq();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
+Math_XMLExporter_get_implementation(css::uno::XComponentContext* context,
+                                    css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLExporter", SvXMLExportFlags::OASIS|SvXMLExportFlags::ALL));
+    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLExporter",
+                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::ALL));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
+Math_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context,
+                                        css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLMetaExporter", SvXMLExportFlags::META));
+    return cppu::acquire(
+        new SmXMLExport(context, "com.sun.star.comp.Math.XMLMetaExporter", SvXMLExportFlags::META));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
+Math_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
+                                             css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLOasisMetaExporter", SvXMLExportFlags::OASIS|SvXMLExportFlags::META));
+    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLOasisMetaExporter",
+                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
+Math_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context,
+                                            css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLSettingsExporter", SvXMLExportFlags::SETTINGS));
+    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLSettingsExporter",
+                                         SvXMLExportFlags::SETTINGS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
+Math_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context,
+                                                 css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLOasisSettingsExporter", SvXMLExportFlags::OASIS|SvXMLExportFlags::SETTINGS));
+    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLOasisSettingsExporter",
+                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLContentExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
+Math_XMLContentExporter_get_implementation(css::uno::XComponentContext* context,
+                                           css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLContentExporter", SvXMLExportFlags::OASIS|SvXMLExportFlags::CONTENT));
+    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLContentExporter",
+                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::CONTENT));
 }
 
 ErrCode SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 {
-    if ( !(getExportFlags() & SvXMLExportFlags::CONTENT) )
+    if (!(getExportFlags() & SvXMLExportFlags::CONTENT))
     {
-        SvXMLExport::exportDoc( eClass );
+        SvXMLExport::exportDoc(eClass);
     }
     else
     {
-        uno::Reference <frame::XModel> xModel = GetModel();
-        SmModel *pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+        uno::Reference<frame::XModel> xModel = GetModel();
+        SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
 
         if (pModel)
         {
-            SmDocShell *pDocShell =
-                static_cast<SmDocShell*>(pModel->GetObjectShell());
+            SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
             pTree = pDocShell->GetFormulaTree();
             aText = pDocShell->GetText();
         }
@@ -424,31 +410,30 @@ ErrCode SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
         addChaffWhenEncryptedStorage();
 
         /*Add xmlns line*/
-        SvXMLAttributeList &rList = GetAttrList();
+        SvXMLAttributeList& rList = GetAttrList();
 
         // make use of a default namespace
-        ResetNamespaceMap();    // Math doesn't need namespaces from xmloff, since it now uses default namespaces (because that is common with current MathML usage in the web)
-        GetNamespaceMap_().Add( OUString(), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
+        ResetNamespaceMap(); // Math doesn't need namespaces from xmloff, since it now uses default namespaces (because that is common with current MathML usage in the web)
+        GetNamespaceMap_().Add(OUString(), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH);
 
         rList.AddAttribute(GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_MATH),
-                GetNamespaceMap().GetNameByKey( XML_NAMESPACE_MATH));
+                           GetNamespaceMap().GetNameByKey(XML_NAMESPACE_MATH));
 
         //I think we need something like ImplExportEntities();
         ExportContent_();
         GetDocHandler()->endDocument();
     }
 
-    bSuccess=true;
+    bSuccess = true;
     return ERRCODE_NONE;
 }
 
 void SmXMLExport::ExportContent_()
 {
-    uno::Reference <frame::XModel> xModel = GetModel();
-    SmModel *pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
-    SmDocShell *pDocShell = pModel ?
-        static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
-    OSL_ENSURE( pDocShell, "doc shell missing" );
+    uno::Reference<frame::XModel> xModel = GetModel();
+    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+    SmDocShell* pDocShell = pModel ? static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
+    OSL_ENSURE(pDocShell, "doc shell missing");
 
     if (pDocShell && !pDocShell->GetFormat().IsTextmode())
     {
@@ -462,8 +447,8 @@ void SmXMLExport::ExportContent_()
 
     if (!aText.isEmpty())
     {
-        pSemantics.reset( new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-            XML_SEMANTICS, true, true) );
+        pSemantics.reset(
+            new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_SEMANTICS, true, true));
     }
 
     ExportNodes(pTree, 0);
@@ -474,43 +459,40 @@ void SmXMLExport::ExportContent_()
     // Convert symbol names
     if (pDocShell)
     {
-        SmParser &rParser = pDocShell->GetParser();
+        SmParser& rParser = pDocShell->GetParser();
         bool bVal = rParser.IsExportSymbolNames();
-        rParser.SetExportSymbolNames( true );
-        auto pTmpTree = rParser.Parse( aText );
+        rParser.SetExportSymbolNames(true);
+        auto pTmpTree = rParser.Parse(aText);
         aText = rParser.GetText();
         pTmpTree.reset();
-        rParser.SetExportSymbolNames( bVal );
+        rParser.SetExportSymbolNames(bVal);
     }
 
-    AddAttribute(XML_NAMESPACE_MATH, XML_ENCODING,
-        OUString("StarMath 5.0"));
-    SvXMLElementExport aAnnotation(*this, XML_NAMESPACE_MATH,
-        XML_ANNOTATION, true, false);
-    GetDocHandler()->characters( aText );
+    AddAttribute(XML_NAMESPACE_MATH, XML_ENCODING, OUString("StarMath 5.0"));
+    SvXMLElementExport aAnnotation(*this, XML_NAMESPACE_MATH, XML_ANNOTATION, true, false);
+    GetDocHandler()->characters(aText);
 }
 
-void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
+void SmXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
-    uno::Reference <frame::XModel> xModel = GetModel();
-    if ( !xModel.is() )
+    uno::Reference<frame::XModel> xModel = GetModel();
+    if (!xModel.is())
         return;
 
-    SmModel *pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
 
-    if ( !pModel )
+    if (!pModel)
         return;
 
-    SmDocShell *pDocShell =
-        static_cast<SmDocShell*>(pModel->GetObjectShell());
-    if ( !pDocShell )
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    if (!pDocShell)
         return;
 
-    aProps.realloc( 4 );
-    PropertyValue *pValue = aProps.getArray();
+    aProps.realloc(4);
+    PropertyValue* pValue = aProps.getArray();
     sal_Int32 nIndex = 0;
 
-    tools::Rectangle aRect( pDocShell->GetVisArea() );
+    tools::Rectangle aRect(pDocShell->GetVisArea());
 
     pValue[nIndex].Name = "ViewAreaTop";
     pValue[nIndex++].Value <<= aRect.Top();
@@ -525,17 +507,17 @@ void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
     pValue[nIndex++].Value <<= aRect.GetHeight();
 }
 
-void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
+void SmXMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
 {
-    Reference < XPropertySet > xProps ( GetModel(), UNO_QUERY );
-    if ( !xProps.is() )
+    Reference<XPropertySet> xProps(GetModel(), UNO_QUERY);
+    if (!xProps.is())
         return;
 
-    Reference< XPropertySetInfo > xPropertySetInfo = xProps->getPropertySetInfo();
+    Reference<XPropertySetInfo> xPropertySetInfo = xProps->getPropertySetInfo();
     if (!xPropertySetInfo.is())
         return;
 
-    Sequence< Property > aProps = xPropertySetInfo->getProperties();
+    Sequence<Property> aProps = xPropertySetInfo->getProperties();
     const sal_Int32 nCount = aProps.getLength();
     if (!nCount)
         return;
@@ -548,8 +530,7 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                    [bUsedSymbolsOnly, &xProps](Property& prop) {
                        PropertyValue aRet;
                        if (prop.Name != "Formula" && prop.Name != "BasicLibraries"
-                           && prop.Name != "DialogLibraries"
-                           && prop.Name != "RuntimeUID")
+                           && prop.Name != "DialogLibraries" && prop.Name != "RuntimeUID")
                        {
                            aRet.Name = prop.Name;
                            OUString aActualName(prop.Name);
@@ -562,12 +543,9 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                    });
 }
 
-void SmXMLExport::ExportLine(const SmNode *pNode, int nLevel)
-{
-    ExportExpression(pNode, nLevel);
-}
+void SmXMLExport::ExportLine(const SmNode* pNode, int nLevel) { ExportExpression(pNode, nLevel); }
 
-void SmXMLExport::ExportBinaryHorizontal(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportBinaryHorizontal(const SmNode* pNode, int nLevel)
 {
     TG nGroup = pNode->GetToken().nGroup;
 
@@ -581,15 +559,15 @@ void SmXMLExport::ExportBinaryHorizontal(const SmNode *pNode, int nLevel)
     //  a*b*c*d+e*f*g*h+i*j*k*l = a*b*c*d+e*f*g*h+i*j*k*l"
 
     // See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=66081
-    ::std::stack< const SmNode* > s;
+    ::std::stack<const SmNode*> s;
     s.push(pNode);
     while (!s.empty())
     {
-        const SmNode *node = s.top();
+        const SmNode* node = s.top();
         s.pop();
         if (node->GetType() != SmNodeType::BinHor || node->GetToken().nGroup != nGroup)
         {
-            ExportNodes(node, nLevel+1);
+            ExportNodes(node, nLevel + 1);
             continue;
         }
         const SmBinHorNode* binNode = static_cast<const SmBinHorNode*>(node);
@@ -599,54 +577,53 @@ void SmXMLExport::ExportBinaryHorizontal(const SmNode *pNode, int nLevel)
     }
 }
 
-void SmXMLExport::ExportUnaryHorizontal(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportUnaryHorizontal(const SmNode* pNode, int nLevel)
 {
     ExportExpression(pNode, nLevel);
 }
 
-void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel,
+void SmXMLExport::ExportExpression(const SmNode* pNode, int nLevel,
                                    bool bNoMrowContainer /*=false*/)
 {
     std::unique_ptr<SvXMLElementExport> pRow;
     size_t nSize = pNode->GetNumSubNodes();
 
     // #i115443: nodes of type expression always need to be grouped with mrow statement
-    if (!bNoMrowContainer &&
-        (nSize > 1 || pNode->GetType() == SmNodeType::Expression))
+    if (!bNoMrowContainer && (nSize > 1 || pNode->GetType() == SmNodeType::Expression))
         pRow.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW, true, true));
 
     for (size_t i = 0; i < nSize; ++i)
     {
-        if (const SmNode *pTemp = pNode->GetSubNode(i))
-            ExportNodes(pTemp, nLevel+1);
+        if (const SmNode* pTemp = pNode->GetSubNode(i))
+            ExportNodes(pTemp, nLevel + 1);
     }
 }
 
-void SmXMLExport::ExportBinaryVertical(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportBinaryVertical(const SmNode* pNode, int nLevel)
 {
     assert(pNode->GetNumSubNodes() == 3);
-    const SmNode *pNum = pNode->GetSubNode(0);
-    const SmNode *pDenom = pNode->GetSubNode(2);
+    const SmNode* pNum = pNode->GetSubNode(0);
+    const SmNode* pDenom = pNode->GetSubNode(2);
     if (pNum->GetType() == SmNodeType::Align && pNum->GetToken().eType != TALIGNC)
     {
         // A left or right alignment is specified on the numerator:
         // attach the corresponding numalign attribute.
         AddAttribute(XML_NAMESPACE_MATH, XML_NUMALIGN,
-            pNum->GetToken().eType == TALIGNL ? XML_LEFT : XML_RIGHT);
+                     pNum->GetToken().eType == TALIGNL ? XML_LEFT : XML_RIGHT);
     }
     if (pDenom->GetType() == SmNodeType::Align && pDenom->GetToken().eType != TALIGNC)
     {
         // A left or right alignment is specified on the denominator:
         // attach the corresponding denomalign attribute.
         AddAttribute(XML_NAMESPACE_MATH, XML_DENOMALIGN,
-            pDenom->GetToken().eType == TALIGNL ? XML_LEFT : XML_RIGHT);
+                     pDenom->GetToken().eType == TALIGNL ? XML_LEFT : XML_RIGHT);
     }
     SvXMLElementExport aFraction(*this, XML_NAMESPACE_MATH, XML_MFRAC, true, true);
     ExportNodes(pNum, nLevel);
     ExportNodes(pDenom, nLevel);
 }
 
-void SmXMLExport::ExportBinaryDiagonal(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportBinaryDiagonal(const SmNode* pNode, int nLevel)
 {
     assert(pNode->GetNumSubNodes() == 3);
 
@@ -655,8 +632,7 @@ void SmXMLExport::ExportBinaryDiagonal(const SmNode *pNode, int nLevel)
         // wideslash
         // export the node as <mfrac bevelled="true">
         AddAttribute(XML_NAMESPACE_MATH, XML_BEVELLED, XML_TRUE);
-        SvXMLElementExport aFraction(*this, XML_NAMESPACE_MATH, XML_MFRAC,
-            true, true);
+        SvXMLElementExport aFraction(*this, XML_NAMESPACE_MATH, XML_MFRAC, true, true);
         ExportNodes(pNode->GetSubNode(0), nLevel);
         ExportNodes(pNode->GetSubNode(1), nLevel);
     }
@@ -669,17 +645,16 @@ void SmXMLExport::ExportBinaryDiagonal(const SmNode *pNode, int nLevel)
         ExportNodes(pNode->GetSubNode(0), nLevel);
 
         { // Scoping for <mo> creation
-        SvXMLElementExport aMo(*this, XML_NAMESPACE_MATH, XML_MO,
-            true, true);
-        sal_Unicode const nArse[2] = {MS_BACKSLASH,0x00};
-        GetDocHandler()->characters(nArse);
+            SvXMLElementExport aMo(*this, XML_NAMESPACE_MATH, XML_MO, true, true);
+            sal_Unicode const nArse[2] = { MS_BACKSLASH, 0x00 };
+            GetDocHandler()->characters(nArse);
         }
 
         ExportNodes(pNode->GetSubNode(1), nLevel);
     }
 }
 
-void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportTable(const SmNode* pNode, int nLevel)
 {
     std::unique_ptr<SvXMLElementExport> pTable;
 
@@ -691,21 +666,21 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     //table
     if (nSize >= 1)
     {
-        const SmNode *pLine = pNode->GetSubNode(nSize-1);
-        if (pLine->GetType() == SmNodeType::Line && pLine->GetNumSubNodes() == 1 &&
-            pLine->GetSubNode(0) != nullptr &&
-            pLine->GetSubNode(0)->GetToken().eType == TNEWLINE)
+        const SmNode* pLine = pNode->GetSubNode(nSize - 1);
+        if (pLine->GetType() == SmNodeType::Line && pLine->GetNumSubNodes() == 1
+            && pLine->GetSubNode(0) != nullptr
+            && pLine->GetSubNode(0)->GetToken().eType == TNEWLINE)
             --nSize;
     }
 
     // try to avoid creating a mtable element when the formula consists only
     // of a single output line
-    if (nLevel || (nSize >1))
+    if (nLevel || (nSize > 1))
         pTable.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTABLE, true, true));
 
     for (size_t i = 0; i < nSize; ++i)
     {
-        if (const SmNode *pTemp = pNode->GetSubNode(i))
+        if (const SmNode* pTemp = pNode->GetSubNode(i))
         {
             std::unique_ptr<SvXMLElementExport> pRow;
             std::unique_ptr<SvXMLElementExport> pCell;
@@ -721,10 +696,9 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
                     // stack{alignl ... ## alignr ... ## ...}
                     eAlign = pTemp->GetToken().eType;
                 }
-                else if (pTemp->GetType() == SmNodeType::Line &&
-                         pTemp->GetNumSubNodes() == 1 &&
-                         pTemp->GetSubNode(0) &&
-                         pTemp->GetSubNode(0)->GetType() == SmNodeType::Align)
+                else if (pTemp->GetType() == SmNodeType::Line && pTemp->GetNumSubNodes() == 1
+                         && pTemp->GetSubNode(0)
+                         && pTemp->GetSubNode(0)->GetType() == SmNodeType::Align)
                 {
                     // For the Table() construction, the SmNodeType::Align node is a child
                     // of an SmNodeType::Line node.
@@ -736,18 +710,18 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
                     // If a left or right alignment is specified on this line,
                     // attach the corresponding columnalign attribute.
                     AddAttribute(XML_NAMESPACE_MATH, XML_COLUMNALIGN,
-                        eAlign == TALIGNL ? XML_LEFT : XML_RIGHT);
+                                 eAlign == TALIGNL ? XML_LEFT : XML_RIGHT);
                 }
                 pCell.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTD, true, true));
             }
-            ExportNodes(pTemp, nLevel+1);
+            ExportNodes(pTemp, nLevel + 1);
         }
     }
 }
 
-void SmXMLExport::ExportMath(const SmNode *pNode)
+void SmXMLExport::ExportMath(const SmNode* pNode)
 {
-    const SmTextNode *pTemp = static_cast<const SmTextNode *>(pNode);
+    const SmTextNode* pTemp = static_cast<const SmTextNode*>(pNode);
     std::unique_ptr<SvXMLElementExport> pMath;
 
     if (pNode->GetType() == SmNodeType::Math || pNode->GetType() == SmNodeType::GlyphSpecial)
@@ -776,17 +750,17 @@ void SmXMLExport::ExportMath(const SmNode *pNode)
         pMath.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, true, false));
     }
     sal_Unicode nArse = pTemp->GetText()[0];
-    sal_Unicode cTmp = ConvertMathToMathML( nArse );
+    sal_Unicode cTmp = ConvertMathToMathML(nArse);
     if (cTmp != 0)
         nArse = cTmp;
-    OSL_ENSURE(nArse != 0xffff,"Non existent symbol");
+    OSL_ENSURE(nArse != 0xffff, "Non existent symbol");
     GetDocHandler()->characters(OUString(nArse));
 }
 
-void SmXMLExport::ExportText(const SmNode *pNode)
+void SmXMLExport::ExportText(const SmNode* pNode)
 {
     std::unique_ptr<SvXMLElementExport> pText;
-    const SmTextNode *pTemp = static_cast<const SmTextNode *>(pNode);
+    const SmTextNode* pTemp = static_cast<const SmTextNode*>(pNode);
     switch (pNode->GetToken().eType)
     {
         default:
@@ -794,7 +768,7 @@ void SmXMLExport::ExportText(const SmNode *pNode)
         {
             //Note that we change the fontstyle to italic for strings that
             //are italic and longer than a single character.
-            bool bIsItalic = IsItalic( pTemp->GetFont() );
+            bool bIsItalic = IsItalic(pTemp->GetFont());
             if ((pTemp->GetText().getLength() > 1) && bIsItalic)
                 AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_ITALIC);
             else if ((pTemp->GetText().getLength() == 1) && !bIsItalic)
@@ -808,13 +782,13 @@ void SmXMLExport::ExportText(const SmNode *pNode)
         case TTEXT:
             pText.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTEXT, true, false));
             break;
-        }
+    }
     GetDocHandler()->characters(pTemp->GetText());
 }
 
-void SmXMLExport::ExportBlank(const SmNode *pNode)
+void SmXMLExport::ExportBlank(const SmNode* pNode)
 {
-    const SmBlankNode *pTemp = static_cast<const SmBlankNode *>(pNode);
+    const SmBlankNode* pTemp = static_cast<const SmBlankNode*>(pNode);
     //!! exports an <mspace> element. Note that for example "~_~" is allowed in
     //!! Math (so it has no sense at all) but must not result in an empty
     //!! <msub> tag in MathML !!
@@ -830,20 +804,19 @@ void SmXMLExport::ExportBlank(const SmNode *pNode)
         AddAttribute(XML_NAMESPACE_MATH, XML_WIDTH, sStrBuf.makeStringAndClear());
     }
 
-    SvXMLElementExport aTextExport(*this, XML_NAMESPACE_MATH, XML_MSPACE,
-                                true, false);
+    SvXMLElementExport aTextExport(*this, XML_NAMESPACE_MATH, XML_MSPACE, true, false);
 
-    GetDocHandler()->characters( OUString() );
+    GetDocHandler()->characters(OUString());
 }
 
-void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportSubSupScript(const SmNode* pNode, int nLevel)
 {
-    const SmNode *pSub  = nullptr;
-    const SmNode *pSup  = nullptr;
-    const SmNode *pCSub = nullptr;
-    const SmNode *pCSup = nullptr;
-    const SmNode *pLSub = nullptr;
-    const SmNode *pLSup = nullptr;
+    const SmNode* pSub = nullptr;
+    const SmNode* pSup = nullptr;
+    const SmNode* pCSub = nullptr;
+    const SmNode* pCSup = nullptr;
+    const SmNode* pLSub = nullptr;
+    const SmNode* pLSup = nullptr;
     std::unique_ptr<SvXMLElementExport> pThing2;
 
     //if we have prescripts at all then we must use the tensor notation
@@ -851,51 +824,48 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
     //This is one of those excellent locations where scope is vital to
     //arrange the construction and destruction of the element helper
     //classes correctly
-    pLSub = pNode->GetSubNode(LSUB+1);
-    pLSup = pNode->GetSubNode(LSUP+1);
+    pLSub = pNode->GetSubNode(LSUB + 1);
+    pLSup = pNode->GetSubNode(LSUP + 1);
     if (pLSub || pLSup)
     {
-        SvXMLElementExport aMultiScripts(*this, XML_NAMESPACE_MATH,
-            XML_MMULTISCRIPTS, true, true);
+        SvXMLElementExport aMultiScripts(*this, XML_NAMESPACE_MATH, XML_MMULTISCRIPTS, true, true);
 
-
-        if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1))
-            && nullptr != (pCSup = pNode->GetSubNode(CSUP+1)))
+        if (nullptr != (pCSub = pNode->GetSubNode(CSUB + 1))
+            && nullptr != (pCSup = pNode->GetSubNode(CSUP + 1)))
         {
-            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDEROVER, true, true));
+            pThing2.reset(
+                new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MUNDEROVER, true, true));
         }
-        else if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1)))
+        else if (nullptr != (pCSub = pNode->GetSubNode(CSUB + 1)))
         {
-            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDER, true, true));
+            pThing2.reset(
+                new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MUNDER, true, true));
         }
-        else if (nullptr != (pCSup = pNode->GetSubNode(CSUP+1)))
+        else if (nullptr != (pCSup = pNode->GetSubNode(CSUP + 1)))
         {
-            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MOVER, true, true));
+            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MOVER, true, true));
         }
 
-        ExportNodes(pNode->GetSubNode(0), nLevel+1);    //Main Term
+        ExportNodes(pNode->GetSubNode(0), nLevel + 1); //Main Term
 
         if (pCSub)
-            ExportNodes(pCSub, nLevel+1);
+            ExportNodes(pCSub, nLevel + 1);
         if (pCSup)
-            ExportNodes(pCSup, nLevel+1);
+            ExportNodes(pCSup, nLevel + 1);
         pThing2.reset();
 
-        pSub = pNode->GetSubNode(RSUB+1);
-        pSup = pNode->GetSubNode(RSUP+1);
+        pSub = pNode->GetSubNode(RSUB + 1);
+        pSup = pNode->GetSubNode(RSUP + 1);
         if (pSub || pSup)
         {
             if (pSub)
-                ExportNodes(pSub, nLevel+1);
+                ExportNodes(pSub, nLevel + 1);
             else
             {
                 SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE, true, true);
             }
             if (pSup)
-                ExportNodes(pSup, nLevel+1);
+                ExportNodes(pSup, nLevel + 1);
             else
             {
                 SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE, true, true);
@@ -904,84 +874,76 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
 
         //Separator element between suffix and prefix sub/sup pairs
         {
-            SvXMLElementExport aPrescripts(*this, XML_NAMESPACE_MATH,
-                XML_MPRESCRIPTS, true, true);
+            SvXMLElementExport aPrescripts(*this, XML_NAMESPACE_MATH, XML_MPRESCRIPTS, true, true);
         }
 
         if (pLSub)
-            ExportNodes(pLSub, nLevel+1);
+            ExportNodes(pLSub, nLevel + 1);
         else
         {
-            SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE,
-                true, true);
-
+            SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE, true, true);
         }
         if (pLSup)
-            ExportNodes(pLSup, nLevel+1);
+            ExportNodes(pLSup, nLevel + 1);
         else
         {
-            SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE,
-                true, true);
-
+            SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE, true, true);
         }
     }
     else
     {
         std::unique_ptr<SvXMLElementExport> pThing;
-        if (nullptr != (pSub = pNode->GetSubNode(RSUB+1)) &&
-            nullptr != (pSup = pNode->GetSubNode(RSUP+1)))
+        if (nullptr != (pSub = pNode->GetSubNode(RSUB + 1))
+            && nullptr != (pSup = pNode->GetSubNode(RSUP + 1)))
         {
-            pThing.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MSUBSUP, true, true));
+            pThing.reset(
+                new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUBSUP, true, true));
         }
-        else if (nullptr != (pSub = pNode->GetSubNode(RSUB+1)))
+        else if (nullptr != (pSub = pNode->GetSubNode(RSUB + 1)))
         {
-            pThing.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUB,
-                true, true));
+            pThing.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUB, true, true));
         }
-        else if (nullptr != (pSup = pNode->GetSubNode(RSUP+1)))
+        else if (nullptr != (pSup = pNode->GetSubNode(RSUP + 1)))
         {
-            pThing.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUP,
-                true, true));
+            pThing.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUP, true, true));
         }
 
-        if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1))
-            && nullptr != (pCSup=pNode->GetSubNode(CSUP+1)))
+        if (nullptr != (pCSub = pNode->GetSubNode(CSUB + 1))
+            && nullptr != (pCSup = pNode->GetSubNode(CSUP + 1)))
         {
-            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDEROVER, true, true));
+            pThing2.reset(
+                new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MUNDEROVER, true, true));
         }
-        else if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1)))
+        else if (nullptr != (pCSub = pNode->GetSubNode(CSUB + 1)))
         {
-            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDER, true, true));
+            pThing2.reset(
+                new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MUNDER, true, true));
         }
-        else if (nullptr != (pCSup = pNode->GetSubNode(CSUP+1)))
+        else if (nullptr != (pCSup = pNode->GetSubNode(CSUP + 1)))
         {
-            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MOVER, true, true));
+            pThing2.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MOVER, true, true));
         }
-        ExportNodes(pNode->GetSubNode(0), nLevel+1);    //Main Term
+        ExportNodes(pNode->GetSubNode(0), nLevel + 1); //Main Term
 
         if (pCSub)
-            ExportNodes(pCSub, nLevel+1);
+            ExportNodes(pCSub, nLevel + 1);
         if (pCSup)
-            ExportNodes(pCSup, nLevel+1);
+            ExportNodes(pCSup, nLevel + 1);
         pThing2.reset();
 
         if (pSub)
-            ExportNodes(pSub, nLevel+1);
+            ExportNodes(pSub, nLevel + 1);
         if (pSup)
-            ExportNodes(pSup, nLevel+1);
+            ExportNodes(pSup, nLevel + 1);
         pThing.reset();
     }
 }
 
-void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportBrace(const SmNode* pNode, int nLevel)
 {
-    const SmNode *pTemp;
-    const SmNode *pLeft=pNode->GetSubNode(0);
-    const SmNode *pRight=pNode->GetSubNode(2);
+    const SmNode* pTemp;
+    const SmNode* pLeft = pNode->GetSubNode(0);
+    const SmNode* pRight = pNode->GetSubNode(2);
 
     // This used to generate <mfenced> or <mrow>+<mo> elements according to
     // the stretchiness of fences. The MathML recommendation defines an
@@ -992,8 +954,7 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
     // See #fdo 66282.
 
     // <mrow>
-    SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MROW,
-                                    true, true);
+    SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MROW, true, true);
 
     //   <mo fence="true"> opening-fence </mo>
     if (pLeft && (pLeft->GetToken().eType != TNONE))
@@ -1004,15 +965,14 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
         else
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_FALSE);
-        ExportNodes(pLeft, nLevel+1);
+        ExportNodes(pLeft, nLevel + 1);
     }
 
     if (nullptr != (pTemp = pNode->GetSubNode(1)))
     {
         // <mrow>
-        SvXMLElementExport aRowExport(*this, XML_NAMESPACE_MATH, XML_MROW,
-            true, true);
-        ExportNodes(pTemp, nLevel+1);
+        SvXMLElementExport aRowExport(*this, XML_NAMESPACE_MATH, XML_MROW, true, true);
+        ExportNodes(pTemp, nLevel + 1);
         // </mrow>
     }
 
@@ -1025,120 +985,108 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
         else
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_FALSE);
-        ExportNodes(pRight, nLevel+1);
+        ExportNodes(pRight, nLevel + 1);
     }
 
     // </mrow>
 }
 
-void SmXMLExport::ExportRoot(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportRoot(const SmNode* pNode, int nLevel)
 {
     if (pNode->GetSubNode(0))
     {
-        SvXMLElementExport aRoot(*this, XML_NAMESPACE_MATH, XML_MROOT, true,
-            true);
-        ExportNodes(pNode->GetSubNode(2), nLevel+1);
-        ExportNodes(pNode->GetSubNode(0), nLevel+1);
+        SvXMLElementExport aRoot(*this, XML_NAMESPACE_MATH, XML_MROOT, true, true);
+        ExportNodes(pNode->GetSubNode(2), nLevel + 1);
+        ExportNodes(pNode->GetSubNode(0), nLevel + 1);
     }
     else
     {
-        SvXMLElementExport aSqrt(*this, XML_NAMESPACE_MATH, XML_MSQRT, true,
-            true);
-        ExportNodes(pNode->GetSubNode(2), nLevel+1);
+        SvXMLElementExport aSqrt(*this, XML_NAMESPACE_MATH, XML_MSQRT, true, true);
+        ExportNodes(pNode->GetSubNode(2), nLevel + 1);
     }
 }
 
-void SmXMLExport::ExportOperator(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportOperator(const SmNode* pNode, int nLevel)
 {
     /*we need to either use content or font and size attributes
      *here*/
-    SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MROW,
-        true, true);
-    ExportNodes(pNode->GetSubNode(0), nLevel+1);
-    ExportNodes(pNode->GetSubNode(1), nLevel+1);
+    SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MROW, true, true);
+    ExportNodes(pNode->GetSubNode(0), nLevel + 1);
+    ExportNodes(pNode->GetSubNode(1), nLevel + 1);
 }
 
-void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportAttributes(const SmNode* pNode, int nLevel)
 {
     std::unique_ptr<SvXMLElementExport> pElement;
 
     if (pNode->GetToken().eType == TUNDERLINE)
     {
-        AddAttribute(XML_NAMESPACE_MATH, XML_ACCENTUNDER,
-            XML_TRUE);
-        pElement.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MUNDER,
-            true, true));
+        AddAttribute(XML_NAMESPACE_MATH, XML_ACCENTUNDER, XML_TRUE);
+        pElement.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MUNDER, true, true));
     }
     else if (pNode->GetToken().eType == TOVERSTRIKE)
     {
         // export as <menclose notation="horizontalstrike">
         AddAttribute(XML_NAMESPACE_MATH, XML_NOTATION, XML_HORIZONTALSTRIKE);
-        pElement.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-            XML_MENCLOSE, true, true));
+        pElement.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MENCLOSE, true, true));
     }
     else
     {
-        AddAttribute(XML_NAMESPACE_MATH, XML_ACCENT,
-            XML_TRUE);
-        pElement.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MOVER,
-            true, true));
+        AddAttribute(XML_NAMESPACE_MATH, XML_ACCENT, XML_TRUE);
+        pElement.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MOVER, true, true));
     }
 
-    ExportNodes(pNode->GetSubNode(1), nLevel+1);
+    ExportNodes(pNode->GetSubNode(1), nLevel + 1);
     switch (pNode->GetToken().eType)
     {
         case TOVERLINE:
-            {
+        {
             //proper entity support required
-            SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO,
-                true, true);
-            sal_Unicode const nArse[2] = {0xAF,0x00};
+            SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO, true, true);
+            sal_Unicode const nArse[2] = { 0xAF, 0x00 };
             GetDocHandler()->characters(nArse);
-            }
-            break;
+        }
+        break;
         case TUNDERLINE:
-            {
+        {
             //proper entity support required
-            SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO,
-                true, true);
-            sal_Unicode const nArse[2] = {0x0332,0x00};
+            SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO, true, true);
+            sal_Unicode const nArse[2] = { 0x0332, 0x00 };
             GetDocHandler()->characters(nArse);
-            }
-            break;
+        }
+        break;
         case TOVERSTRIKE:
             break;
         case TWIDETILDE:
         case TWIDEHAT:
         case TWIDEVEC:
         case TWIDEHARPOON:
-            {
+        {
             // make these wide accents stretchy
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
-            ExportNodes(pNode->GetSubNode(0), nLevel+1);
-            }
-            break;
+            ExportNodes(pNode->GetSubNode(0), nLevel + 1);
+        }
+        break;
         default:
-            ExportNodes(pNode->GetSubNode(0), nLevel+1);
+            ExportNodes(pNode->GetSubNode(0), nLevel + 1);
             break;
     }
 }
 
-static bool lcl_HasEffectOnMathvariant( const SmTokenType eType )
+static bool lcl_HasEffectOnMathvariant(const SmTokenType eType)
 {
-    return  eType == TBOLD || eType == TNBOLD ||
-            eType == TITALIC || eType == TNITALIC ||
-            eType == TSANS || eType == TSERIF || eType == TFIXED;
+    return eType == TBOLD || eType == TNBOLD || eType == TITALIC || eType == TNITALIC
+           || eType == TSANS || eType == TSERIF || eType == TFIXED;
 }
 
-void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
 {
-
     // gather the mathvariant attribute relevant data from all
     // successively following SmFontNodes...
 
-    int nBold   = -1;   // for the following variables: -1 = yet undefined; 0 = false; 1 = true;
-    int nItalic = -1;   // for the following variables: -1 = yet undefined; 0 = false; 1 = true;
-    int nSansSerifFixed   = -1;
+    int nBold = -1; // for the following variables: -1 = yet undefined; 0 = false; 1 = true;
+    int nItalic = -1; // for the following variables: -1 = yet undefined; 0 = false; 1 = true;
+    int nSansSerifFixed = -1;
     SmTokenType eNodeType = TUNKNOWN;
 
     for (;;)
@@ -1148,21 +1096,35 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             break;
         switch (eNodeType)
         {
-            case TBOLD      : nBold   = 1; break;
-            case TNBOLD     : nBold   = 0; break;
-            case TITALIC    : nItalic = 1; break;
-            case TNITALIC   : nItalic = 0; break;
-            case TSANS      : nSansSerifFixed  = 0; break;
-            case TSERIF     : nSansSerifFixed  = 1; break;
-            case TFIXED     : nSansSerifFixed  = 2; break;
+            case TBOLD:
+                nBold = 1;
+                break;
+            case TNBOLD:
+                nBold = 0;
+                break;
+            case TITALIC:
+                nItalic = 1;
+                break;
+            case TNITALIC:
+                nItalic = 0;
+                break;
+            case TSANS:
+                nSansSerifFixed = 0;
+                break;
+            case TSERIF:
+                nSansSerifFixed = 1;
+                break;
+            case TFIXED:
+                nSansSerifFixed = 2;
+                break;
             default:
                 SAL_WARN("starmath", "unexpected case");
         }
         // According to the parser every node that is to be evaluated here
         // has a single non-zero subnode at index 1!! Thus we only need to check
         // that single node for follow-up nodes that have an effect on the attribute.
-        if (pNode->GetNumSubNodes() > 1 && pNode->GetSubNode(1) &&
-            lcl_HasEffectOnMathvariant( pNode->GetSubNode(1)->GetToken().eType))
+        if (pNode->GetNumSubNodes() > 1 && pNode->GetSubNode(1)
+            && lcl_HasEffectOnMathvariant(pNode->GetSubNode(1)->GetToken().eType))
         {
             pNode = pNode->GetSubNode(1);
         }
@@ -1184,7 +1146,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             OUString sssStr = OUString::createFromAscii(aSmColorTokenTableEntry->cIdent);
             AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, sssStr);
         }
-            break;
+        break;
         case TRGB:
         case TRGBA:
         case THEX:
@@ -1200,59 +1162,57 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             OUString ssStr(sStrBuf.makeStringAndClear());
             AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, ssStr);
         }
-            break;
+        break;
         case TSIZE:
+        {
+            const SmFontNode* pFontNode = static_cast<const SmFontNode*>(pNode);
+            const Fraction& aFrac = pFontNode->GetSizeParameter();
+
+            OUStringBuffer sStrBuf;
+            switch (pFontNode->GetSizeType())
             {
-                const SmFontNode *pFontNode = static_cast<const SmFontNode *>(pNode);
-                const Fraction &aFrac = pFontNode->GetSizeParameter();
-
-                OUStringBuffer sStrBuf;
-                switch(pFontNode->GetSizeType())
+                case FontSizeType::MULTIPLY:
+                    ::sax::Converter::convertDouble(sStrBuf,
+                                                    static_cast<double>(aFrac * Fraction(100.00)));
+                    sStrBuf.append('%');
+                    break;
+                case FontSizeType::DIVIDE:
+                    ::sax::Converter::convertDouble(sStrBuf,
+                                                    static_cast<double>(Fraction(100.00) / aFrac));
+                    sStrBuf.append('%');
+                    break;
+                case FontSizeType::ABSOLUT:
+                    ::sax::Converter::convertDouble(sStrBuf, static_cast<double>(aFrac));
+                    sStrBuf.append(GetXMLToken(XML_UNIT_PT));
+                    break;
+                default:
                 {
-                    case FontSizeType::MULTIPLY:
-                        ::sax::Converter::convertDouble(sStrBuf,
-                            static_cast<double>(aFrac*Fraction(100.00)));
-                        sStrBuf.append('%');
-                        break;
-                    case FontSizeType::DIVIDE:
-                        ::sax::Converter::convertDouble(sStrBuf,
-                            static_cast<double>(Fraction(100.00)/aFrac));
-                        sStrBuf.append('%');
-                        break;
-                    case FontSizeType::ABSOLUT:
-                        ::sax::Converter::convertDouble(sStrBuf,
-                            static_cast<double>(aFrac));
-                        sStrBuf.append(
-                            GetXMLToken(XML_UNIT_PT));
-                        break;
-                    default:
-                        {
-                            //The problem here is that the wheels fall off because
-                            //font size is stored in 100th's of a mm not pts, and
-                            //rounding errors take their toll on the original
-                            //value specified in points.
+                    //The problem here is that the wheels fall off because
+                    //font size is stored in 100th's of a mm not pts, and
+                    //rounding errors take their toll on the original
+                    //value specified in points.
 
-                            //Must fix StarMath to retain the original pt values
-                            Fraction aTemp = Sm100th_mmToPts(pFontNode->GetFont().GetFontSize().Height());
+                    //Must fix StarMath to retain the original pt values
+                    Fraction aTemp = Sm100th_mmToPts(pFontNode->GetFont().GetFontSize().Height());
 
-                            if (pFontNode->GetSizeType() == FontSizeType::MINUS)
-                                aTemp-=aFrac;
-                            else
-                                aTemp+=aFrac;
+                    if (pFontNode->GetSizeType() == FontSizeType::MINUS)
+                        aTemp -= aFrac;
+                    else
+                        aTemp += aFrac;
 
-                            double mytest = static_cast<double>(aTemp);
+                    double mytest = static_cast<double>(aTemp);
 
-                            mytest = ::rtl::math::round(mytest,1);
-                            ::sax::Converter::convertDouble(sStrBuf,mytest);
-                            sStrBuf.append(GetXMLToken(XML_UNIT_PT));
-                        }
-                        break;
+                    mytest = ::rtl::math::round(mytest, 1);
+                    ::sax::Converter::convertDouble(sStrBuf, mytest);
+                    sStrBuf.append(GetXMLToken(XML_UNIT_PT));
                 }
-
-                OUString sStr(sStrBuf.makeStringAndClear());
-                AddAttribute(XML_NAMESPACE_MATH, XML_MATHSIZE, sStr);
+                break;
             }
-            break;
+
+            OUString sStr(sStrBuf.makeStringAndClear());
+            AddAttribute(XML_NAMESPACE_MATH, XML_MATHSIZE, sStr);
+        }
+        break;
         case TBOLD:
         case TITALIC:
         case TNBOLD:
@@ -1260,57 +1220,55 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
         case TFIXED:
         case TSANS:
         case TSERIF:
+        {
+            // nBold:   -1 = yet undefined; 0 = false; 1 = true;
+            // nItalic: -1 = yet undefined; 0 = false; 1 = true;
+            // nSansSerifFixed: -1 = undefined; 0 = sans; 1 = serif; 2 = fixed;
+            const char* pText = "normal";
+            if (nSansSerifFixed == -1 || nSansSerifFixed == 1)
             {
-                // nBold:   -1 = yet undefined; 0 = false; 1 = true;
-                // nItalic: -1 = yet undefined; 0 = false; 1 = true;
-                // nSansSerifFixed: -1 = undefined; 0 = sans; 1 = serif; 2 = fixed;
-                const char *pText = "normal";
-                if (nSansSerifFixed == -1 || nSansSerifFixed == 1)
-                {
-                    pText = "normal";
-                    if (nBold == 1 && nItalic != 1)
-                        pText = "bold";
-                    else if (nBold != 1 && nItalic == 1)
-                        pText = "italic";
-                    else if (nBold == 1 && nItalic == 1)
-                        pText = "bold-italic";
-                }
-                else if (nSansSerifFixed == 0)
-                {
-                    pText = "sans-serif";
-                    if (nBold == 1 && nItalic != 1)
-                        pText = "bold-sans-serif";
-                    else if (nBold != 1 && nItalic == 1)
-                        pText = "sans-serif-italic";
-                    else if (nBold == 1 && nItalic == 1)
-                        pText = "sans-serif-bold-italic";
-                }
-                else if (nSansSerifFixed == 2)
-                    pText = "monospace";    // no modifiers allowed for monospace ...
-                else
-                {
-                    SAL_WARN("starmath", "unexpected case");
-                }
-                AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, OUString::createFromAscii( pText ));
+                pText = "normal";
+                if (nBold == 1 && nItalic != 1)
+                    pText = "bold";
+                else if (nBold != 1 && nItalic == 1)
+                    pText = "italic";
+                else if (nBold == 1 && nItalic == 1)
+                    pText = "bold-italic";
             }
-            break;
+            else if (nSansSerifFixed == 0)
+            {
+                pText = "sans-serif";
+                if (nBold == 1 && nItalic != 1)
+                    pText = "bold-sans-serif";
+                else if (nBold != 1 && nItalic == 1)
+                    pText = "sans-serif-italic";
+                else if (nBold == 1 && nItalic == 1)
+                    pText = "sans-serif-bold-italic";
+            }
+            else if (nSansSerifFixed == 2)
+                pText = "monospace"; // no modifiers allowed for monospace ...
+            else
+            {
+                SAL_WARN("starmath", "unexpected case");
+            }
+            AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, OUString::createFromAscii(pText));
+        }
+        break;
         default:
             break;
-
     }
     {
         // Wrap everything in an <mphantom> or <mstyle> element. These elements
         // are mrow-like, so ExportExpression doesn't need to add an explicit
         // <mrow> element. See #fdo 66283.
         SvXMLElementExport aElement(*this, XML_NAMESPACE_MATH,
-            pNode->GetToken().eType == TPHANTOM ? XML_MPHANTOM : XML_MSTYLE,
-            true, true);
+                                    pNode->GetToken().eType == TPHANTOM ? XML_MPHANTOM : XML_MSTYLE,
+                                    true, true);
         ExportExpression(pNode, nLevel, true);
     }
 }
 
-
-void SmXMLExport::ExportVerticalBrace(const SmVerticalBraceNode *pNode, int nLevel)
+void SmXMLExport::ExportVerticalBrace(const SmVerticalBraceNode* pNode, int nLevel)
 {
     // "[body] overbrace [script]"
 
@@ -1336,12 +1294,12 @@ void SmXMLExport::ExportVerticalBrace(const SmVerticalBraceNode *pNode, int nLev
             break;
     }
 
-    SvXMLElementExport aOver1(*this, XML_NAMESPACE_MATH,which, true, true);
-    {//Scoping
+    SvXMLElementExport aOver1(*this, XML_NAMESPACE_MATH, which, true, true);
+    { //Scoping
         // using accents will draw the over-/underbraces too close to the base
         // see http://www.w3.org/TR/MathML2/chapter3.html#id.3.4.5.2
         // also XML_ACCENT is illegal with XML_MUNDER. Thus no XML_ACCENT attribute here!
-        SvXMLElementExport aOver2(*this, XML_NAMESPACE_MATH,which, true, true);
+        SvXMLElementExport aOver2(*this, XML_NAMESPACE_MATH, which, true, true);
         ExportNodes(pNode->Body(), nLevel);
         AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
         ExportNodes(pNode->Brace(), nLevel);
@@ -1349,39 +1307,37 @@ void SmXMLExport::ExportVerticalBrace(const SmVerticalBraceNode *pNode, int nLev
     ExportNodes(pNode->Script(), nLevel);
 }
 
-void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportMatrix(const SmNode* pNode, int nLevel)
 {
     SvXMLElementExport aTable(*this, XML_NAMESPACE_MATH, XML_MTABLE, true, true);
-    const SmMatrixNode *pMatrix = static_cast<const SmMatrixNode *>(pNode);
+    const SmMatrixNode* pMatrix = static_cast<const SmMatrixNode*>(pNode);
     size_t i = 0;
     for (sal_uInt16 y = 0; y < pMatrix->GetNumRows(); y++)
     {
         SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MTR, true, true);
         for (sal_uInt16 x = 0; x < pMatrix->GetNumCols(); x++)
         {
-            if (const SmNode *pTemp = pNode->GetSubNode(i++))
+            if (const SmNode* pTemp = pNode->GetSubNode(i++))
             {
-                if (pTemp->GetType() == SmNodeType::Align &&
-                    pTemp->GetToken().eType != TALIGNC)
+                if (pTemp->GetType() == SmNodeType::Align && pTemp->GetToken().eType != TALIGNC)
                 {
                     // A left or right alignment is specified on this cell,
                     // attach the corresponding columnalign attribute.
                     AddAttribute(XML_NAMESPACE_MATH, XML_COLUMNALIGN,
-                        pTemp->GetToken().eType == TALIGNL ?
-                        XML_LEFT : XML_RIGHT);
+                                 pTemp->GetToken().eType == TALIGNL ? XML_LEFT : XML_RIGHT);
                 }
                 SvXMLElementExport aCell(*this, XML_NAMESPACE_MATH, XML_MTD, true, true);
-                ExportNodes(pTemp, nLevel+1);
+                ExportNodes(pTemp, nLevel + 1);
             }
         }
     }
 }
 
-void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportNodes(const SmNode* pNode, int nLevel)
 {
     if (!pNode)
         return;
-    switch(pNode->GetType())
+    switch (pNode->GetType())
     {
         case SmNodeType::Table:
             ExportTable(pNode, nLevel);
@@ -1399,54 +1355,54 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             break;
         case SmNodeType::GlyphSpecial:
         case SmNodeType::Math:
+        {
+            sal_Unicode cTmp = 0;
+            const SmTextNode* pTemp = static_cast<const SmTextNode*>(pNode);
+            if (!pTemp->GetText().isEmpty())
+                cTmp = ConvertMathToMathML(pTemp->GetText()[0]);
+            if (cTmp == 0)
             {
-                sal_Unicode cTmp = 0;
-                const SmTextNode *pTemp = static_cast< const SmTextNode * >(pNode);
-                if (!pTemp->GetText().isEmpty())
-                    cTmp = ConvertMathToMathML( pTemp->GetText()[0] );
-                if (cTmp == 0)
-                {
-                    // no conversion to MathML implemented -> export it as text
-                    // thus at least it will not vanish into nothing
-                    ExportText(pNode);
-                }
-                else
-                {
-                    switch (pNode->GetToken().eType)
-                    {
-                        case TINTD:
-                            AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
-                            break;
-                        default:
-                            break;
-                    }
-                    //To fully handle generic MathML we need to implement the full
-                    //operator dictionary, we will generate MathML with explicit
-                    //stretchiness for now.
-                    sal_Int16 nLength = GetAttrList().getLength();
-                    bool bAddStretch=true;
-                    for ( sal_Int16 i = 0; i < nLength; i++ )
-                    {
-                        OUString sLocalName;
-                        sal_uInt16 nPrefix = GetNamespaceMap().GetKeyByAttrName(
-                            GetAttrList().getNameByIndex(i), &sLocalName );
-
-                        if ( ( XML_NAMESPACE_MATH == nPrefix ) &&
-                            IsXMLToken(sLocalName, XML_STRETCHY) )
-                        {
-                            bAddStretch = false;
-                            break;
-                        }
-                    }
-                    if (bAddStretch)
-                    {
-                        AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_FALSE);
-                    }
-                    ExportMath(pNode);
-                }
+                // no conversion to MathML implemented -> export it as text
+                // thus at least it will not vanish into nothing
+                ExportText(pNode);
             }
-            break;
-        case SmNodeType::Special: //SmNodeType::Special requires some sort of Entity preservation in the XML engine.
+            else
+            {
+                switch (pNode->GetToken().eType)
+                {
+                    case TINTD:
+                        AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
+                        break;
+                    default:
+                        break;
+                }
+                //To fully handle generic MathML we need to implement the full
+                //operator dictionary, we will generate MathML with explicit
+                //stretchiness for now.
+                sal_Int16 nLength = GetAttrList().getLength();
+                bool bAddStretch = true;
+                for (sal_Int16 i = 0; i < nLength; i++)
+                {
+                    OUString sLocalName;
+                    sal_uInt16 nPrefix = GetNamespaceMap().GetKeyByAttrName(
+                        GetAttrList().getNameByIndex(i), &sLocalName);
+
+                    if ((XML_NAMESPACE_MATH == nPrefix) && IsXMLToken(sLocalName, XML_STRETCHY))
+                    {
+                        bAddStretch = false;
+                        break;
+                    }
+                }
+                if (bAddStretch)
+                {
+                    AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_FALSE);
+                }
+                ExportMath(pNode);
+            }
+        }
+        break;
+        case SmNodeType::
+            Special: //SmNodeType::Special requires some sort of Entity preservation in the XML engine.
         case SmNodeType::MathIdent:
         case SmNodeType::Place:
             ExportMath(pNode);
@@ -1482,7 +1438,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             ExportFont(pNode, nLevel);
             break;
         case SmNodeType::VerticalBrace:
-            ExportVerticalBrace(static_cast<const SmVerticalBraceNode *>(pNode), nLevel);
+            ExportVerticalBrace(static_cast<const SmVerticalBraceNode*>(pNode), nLevel);
             break;
         case SmNodeType::Matrix:
             ExportMatrix(pNode, nLevel);
@@ -1490,10 +1446,9 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
         case SmNodeType::Blank:
             ExportBlank(pNode);
             break;
-       default:
+        default:
             SAL_WARN("starmath", "Warning: failed to export a node?");
             break;
-
     }
 }
 
