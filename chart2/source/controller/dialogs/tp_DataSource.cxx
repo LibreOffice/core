@@ -841,6 +841,9 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                                     aRange = xNewSeq->getSourceRangeRepresentation();
                                     Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
                                     xProp->setPropertyValue( "Role" , uno::Any( OUString(lcl_aLabelRole) ));
+
+                                    //Labels should always include hidden cells, regardless of the setting chosen
+                                    xProp->setPropertyValue( "IncludeHiddenCells", uno::Any(true));
                                     xLabeledSeq->setLabel( xNewSeq );
                                 }
                             }

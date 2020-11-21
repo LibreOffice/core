@@ -1031,7 +1031,8 @@ uno::Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequen
             }
             if ( bHasLabel )
             {
-                uno::Reference< chart2::data::XDataSequence > xLabelSeq( new ScChart2DataSequence( pDoc, std::move(aLabelTokens), bIncludeHiddenCells ) );
+                //Labels should always include hidden cells, regardless of the bIncludeHiddenCells setting
+                uno::Reference< chart2::data::XDataSequence > xLabelSeq( new ScChart2DataSequence( pDoc, std::move(aLabelTokens), true ) );
                 xResult->setLabel( xLabelSeq );
             }
         }
