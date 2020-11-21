@@ -22,6 +22,30 @@
       "revId": "748dc02dc44d7f65a162343386a51ec334153ff4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "871d098c_ab4d8fa9",
+        "filename": "sfx2/source/appl/appquit.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-21T20:00:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1dcc8b5_f167fe3a",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 36
+      },
+      "revId": "748dc02dc44d7f65a162343386a51ec334153ff4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
