@@ -64,7 +64,6 @@ public:
     void GrabFocus();
     void GrabFocusPanel();
 
-    void SetDeckTitle(DeckTitleBar* pDeckTitleBar);
     void SetPanels(const SharedPanelContainer& rPanels);
     void SetButtons(const std::vector<weld::Widget*>& rButtons);
 
@@ -109,29 +108,23 @@ private:
     */
     void RemoveWindow(vcl::Window& rWindow);
 
-    void FocusDeckTitle();
-    bool IsDeckTitleVisible() const;
     bool IsPanelTitleVisible(const sal_Int32 nPanelIndex) const;
 
     /** Set the focus to the title bar of the panel or, if the
         title bar is not visible, directly to the panel.
         @param nPanelIndex
             Index of the panel to focus.
-        @param bFallbackToDeckTitle
-            When the panel title bar is not visible then The fallback
-            bias defines whether to focus the deck (true) or the panel
+        @param bFallbackToMenuButton
+            When the panel title bar is not visible then the fallback
+            bias defines whether to focus the menu button (true) or the panel
             content (false) will be focused instead.
     */
     void FocusPanel(const sal_Int32 nPanelIndex,
-                    const bool bFallbackToDeckTitle);
+                    const bool bFallbackToMenuButton);
 
     void FocusPanelContent(const sal_Int32 nPanelIndex);
     void FocusButton(const sal_Int32 nButtonIndex);
     void ClickButton(const sal_Int32 nButtonIndex);
-    void MoveFocusInsidePanel(const FocusLocation& rLocation,
-                              const sal_Int32 nDirection);
-    void MoveFocusInsideDeckTitle(const FocusLocation& rLocation,
-                                  const sal_Int32 nDirection);
 
     bool HandleKeyEvent(const vcl::KeyCode& rKeyCode,
                         const FocusLocation& rLocation);
