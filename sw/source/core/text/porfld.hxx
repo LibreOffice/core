@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORFLD_HXX
-#define INCLUDED_SW_SOURCE_CORE_TEXT_PORFLD_HXX
+
+#pragma once
 
 #include <swtypes.hxx>
 #include <swfont.hxx>
@@ -252,7 +252,5 @@ private:
     sw::mark::IFieldmark* m_pFieldMark;
     bool m_bStart;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
