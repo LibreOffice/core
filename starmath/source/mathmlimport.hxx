@@ -28,11 +28,13 @@
 
 class SmNode;
 class SfxMedium;
-namespace com::sun::star {
-    namespace beans {
-        class XPropertySet; }
+namespace com::sun::star
+{
+namespace beans
+{
+class XPropertySet;
 }
-
+}
 
 typedef std::deque<std::unique_ptr<SmNode>> SmNodeStack;
 
@@ -41,67 +43,64 @@ class SmXMLImportWrapper
     css::uno::Reference<css::frame::XModel> xModel;
 
 public:
-    explicit SmXMLImportWrapper(css::uno::Reference<css::frame::XModel> const &rRef)
-        : xModel(rRef) {}
+    explicit SmXMLImportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
+        : xModel(rRef)
+    {
+    }
 
-    ErrCode Import(SfxMedium &rMedium);
+    ErrCode Import(SfxMedium& rMedium);
+
+    static ErrCode
+    ReadThroughComponent(const css::uno::Reference<css::io::XInputStream>& xInputStream,
+                         const css::uno::Reference<css::lang::XComponent>& xModelComponent,
+                         css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                         css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                         const char* pFilterName, bool bEncrypted);
 
     static ErrCode ReadThroughComponent(
-        const css::uno::Reference< css::io::XInputStream >& xInputStream,
-        const css::uno::Reference< css::lang::XComponent >& xModelComponent,
-        css::uno::Reference< css::uno::XComponentContext > const & rxContext,
-        css::uno::Reference< css::beans::XPropertySet > const & rPropSet,
-        const char* pFilterName,
-        bool bEncrypted );
-
-    static ErrCode ReadThroughComponent(
-        const css::uno::Reference< css::embed::XStorage >& xStorage,
-        const css::uno::Reference< css::lang::XComponent >& xModelComponent,
-        const char* pStreamName,
-        css::uno::Reference< css::uno::XComponentContext > const & rxContext,
-        css::uno::Reference< css::beans::XPropertySet > const & rPropSet,
-        const char* pFilterName );
+        const css::uno::Reference<css::embed::XStorage>& xStorage,
+        const css::uno::Reference<css::lang::XComponent>& xModelComponent, const char* pStreamName,
+        css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+        css::uno::Reference<css::beans::XPropertySet> const& rPropSet, const char* pFilterName);
 };
-
 
 class SmXMLImport : public SvXMLImport
 {
-        SmNodeStack aNodeStack;
-        bool bSuccess;
-        int nParseDepth;
-        OUString aText;
+    SmNodeStack aNodeStack;
+    bool bSuccess;
+    int nParseDepth;
+    OUString aText;
 
 public:
-    SmXMLImport(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        OUString const & implementationName, SvXMLImportFlags nImportFlags);
-    virtual ~SmXMLImport() throw () override;
+    SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+                OUString const& implementationName, SvXMLImportFlags nImportFlags);
+    virtual ~SmXMLImport() throw() override;
 
     // XUnoTunnel
-    sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rId) override;
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() throw();
 
     void SAL_CALL endDocument() override;
 
-    SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
-        const css::uno::Reference<
-        css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    SvXMLImportContext* CreateFastContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 
-    SmNodeStack & GetNodeStack()    { return aNodeStack; }
+    SmNodeStack& GetNodeStack() { return aNodeStack; }
 
-    bool GetSuccess() const              { return bSuccess; }
+    bool GetSuccess() const { return bSuccess; }
     [[nodiscard]] const OUString& GetText() const { return aText; }
-    void SetText(const OUString &rStr) { aText = rStr; }
+    void SetText(const OUString& rStr) { aText = rStr; }
 
-    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
-    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+    virtual void
+    SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+    virtual void SetConfigurationSettings(
+        const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
 
     void IncParseDepth() { ++nParseDepth; }
     bool TooDeep() const { return nParseDepth >= 2048; }
     void DecParseDepth() { --nParseDepth; }
 };
-
-
 
 #endif
 
