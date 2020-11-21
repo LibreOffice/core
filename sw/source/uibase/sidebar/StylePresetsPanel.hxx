@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_STYLEPRESETSPANEL_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_STYLEPRESETSPANEL_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -66,6 +65,5 @@ private:
 
 } // end of namespace sw::sidebar
 
-#endif // INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_STYLEPRESETSPANEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
