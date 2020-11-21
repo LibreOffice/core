@@ -278,6 +278,23 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
                     AttrOutput().OutputItem( *pItem );
                 }
              }
+             else if (nWhich == RES_CHRATR_HIGHLIGHT)
+             {
+                const SvxBrushItem& rBrush = static_cast< const SvxBrushItem& >( *pItem );
+                // The UI easily adds unnecessary highlights, so identify and avoid exporting those.
+                // Highlight is not valid in character styles, so must not check there.
+                // Check the (para) style hierarchy to find the nearest defined highlight.
+                const SfxPoolItem* pInherited = nullptr;
+                if ( auto pNd = dynamic_cast< const SwContentNode *>( m_pOutFormatNode ) ) //paragraph
+                    pInherited = static_cast<SwTextFormatColl&>( pNd->GetAnyFormatColl() ).GetAttrSet().GetItem(nWhich);
+                else if ( m_bStyDef && m_pCurrentStyle && m_pCurrentStyle->DerivedFrom() ) //style
+                    pInherited = &m_pCurrentStyle->DerivedFrom()->GetFormatAttr(nWhich);
+
+                // Ignore highlight if style already sets the same one.
+                // Also ignore a transparent highlight if there is no inherited highlight to cancel
+                if ( (pInherited && *pInherited != *pItem) || (!pInherited && rBrush.GetColor() != COL_TRANSPARENT) )
+                     AttrOutput().OutputItem( *pItem );
+             }
              else
              {
                 AttrOutput().OutputItem( *pItem );
@@ -1235,13 +1252,9 @@ void WW8AttributeOutput::CharBorder( const SvxBorderLine* pAllBorder, const sal_
 
 void WW8AttributeOutput::CharHighlight( const SvxBrushItem& rBrush )
 {
-    if (rBrush.GetColor() != COL_TRANSPARENT)
-    {
-        sal_uInt8 nColor = msfilter::util::TransColToIco( rBrush.GetColor() );
-        // sprmCHighlight
-        m_rWW8Export.InsUInt16( NS_sprm::CHighlight::val );
-        m_rWW8Export.pO->push_back( nColor );
-    }
+    sal_uInt8 nColor = msfilter::util::TransColToIco( rBrush.GetColor() );
+    m_rWW8Export.InsUInt16( NS_sprm::CHighlight::val );
+    m_rWW8Export.pO->push_back( nColor );
 }
 
 void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )

@@ -69,6 +69,19 @@ DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.d
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Last printed date", sal_Int16(2009), xDPS->getDocumentProperties()->getPrintDate().Year);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf138345_paraCharHighlight, "tdf138345_paraCharHighlight.doc")
+{
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(9), 1, "A side benefit is that "), uno::UNO_QUERY_THROW);
+    // Paragraph style paraNoCharBackground cancel paraCharBackground using COL_TRANSPARENT. Focus is on CharHighlight
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharBackColor"));
+
+    //xRun.set(getRun(getParagraph(9), 3, "none"), uno::UNO_QUERY_THROW);
+    // Direct formatting removes the inheritted background color completely.
+    //CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
+    //CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharBackColor"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf104596_wrapInHeaderTable, "tdf104596_wrapInHeaderTable.doc")
 {
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
