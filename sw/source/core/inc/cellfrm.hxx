@@ -36,7 +36,7 @@ class SwCellFrame: public SwLayoutFrame
 
 protected:
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     SwCellFrame( const SwTableBox &, SwFrame*, bool bInsertContent );

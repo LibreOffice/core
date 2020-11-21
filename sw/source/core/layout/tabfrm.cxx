@@ -3868,6 +3868,16 @@ void SwRowFrame::OnFrameSize(const SwFormatFrameSize& rSize)
 
 void SwRowFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
+    if(auto pMoveTableLineHint = dynamic_cast<const sw::MoveTableLineHint*>(&rHint))
+    {
+
+        if(GetTabLine() != &pMoveTableLineHint->m_rTableLine)
+            return;
+        const_cast<SwFrameFormat*>(&pMoveTableLineHint->m_rNewFormat)->Add(this);
+        InvalidateAll();
+        ReinitializeFrameSizeAttrFlags();
+        return;
+    }
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
         return;
@@ -5369,72 +5379,98 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
     }
 }
 
-void SwCellFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
+void SwCellFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    bool bAttrSetChg = pNew && RES_ATTRSET_CHG == pNew->Which();
-    const SfxPoolItem *pItem = nullptr;
-
-    if( bAttrSetChg )
-        static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_VERT_ORIENT, false, &pItem);
-    else if (pNew && RES_VERT_ORIENT == pNew->Which())
-        pItem = pNew;
-
-    if ( pItem )
+    if(auto pMoveTableBoxHint = dynamic_cast<const sw::MoveTableBoxHint*>(&rHint))
     {
-        bool bInva = true;
-        if ( text::VertOrientation::NONE == static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() &&
-             // OD 04.11.2003 #112910#
-             Lower() && Lower()->IsContentFrame() )
-        {
-            SwRectFnSet aRectFnSet(this);
-            const tools::Long lYStart = aRectFnSet.GetPrtTop(*this);
-            bInva = lcl_ArrangeLowers( this, lYStart, false );
-        }
-        if ( bInva )
-        {
-            SetCompletePaint();
-            InvalidatePrt();
-        }
-    }
-
-    if ( ( bAttrSetChg &&
-           SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_PROTECT, false ) ) ||
-         ( pNew && RES_PROTECT == pNew->Which()) )
-    {
-        SwViewShell *pSh = getRootFrame()->GetCurrShell();
-        if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
-            pSh->Imp()->InvalidateAccessibleEditableState( true, this );
-    }
-
-    if ( bAttrSetChg &&
-         SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_FRAMEDIR, false, &pItem ) )
-    {
-        SetDerivedVert( false );
+        if(GetTabBox() != &pMoveTableBoxHint->m_rTableBox)
+            return;
+        const_cast<SwFrameFormat*>(&pMoveTableBoxHint->m_rNewFormat)->Add(this);
+        InvalidateAll();
+        ReinitializeFrameSizeAttrFlags();
+        SetDerivedVert(false);
         CheckDirChange();
+        return;
     }
-
-    // #i29550#
-    if ( bAttrSetChg &&
-         SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_BOX, false, &pItem ) )
+    else if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        SwFrame* pTmpUpper = GetUpper();
-        while ( pTmpUpper->GetUpper() && !pTmpUpper->GetUpper()->IsTabFrame() )
-            pTmpUpper = pTmpUpper->GetUpper();
-
-        SwTabFrame* pTabFrame = static_cast<SwTabFrame*>(pTmpUpper->GetUpper());
-        if ( pTabFrame->IsCollapsingBorders() )
+        const SfxPoolItem* pVertOrientItem = nullptr;
+        const SfxPoolItem* pProtectItem = nullptr;
+        const SfxPoolItem* pFrameDirItem = nullptr;
+        const SfxPoolItem* pBoxItem = nullptr;
+        const auto nWhich = pLegacy->m_pNew ? pLegacy->m_pNew->Which() : 0;
+        switch(nWhich)
         {
-            // Invalidate lowers of this and next row:
-            lcl_InvalidateAllLowersPrt( static_cast<SwRowFrame*>(pTmpUpper) );
-            pTmpUpper = pTmpUpper->GetNext();
-            if ( pTmpUpper )
-                lcl_InvalidateAllLowersPrt( static_cast<SwRowFrame*>(pTmpUpper) );
-            else
-                pTabFrame->InvalidatePrt();
+            case RES_ATTRSET_CHG:
+            {
+                auto& rChgSet = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet();
+                rChgSet.GetItemState(RES_VERT_ORIENT, false, &pVertOrientItem);
+                rChgSet.GetItemState(RES_PROTECT, false, &pProtectItem);
+                rChgSet.GetItemState(RES_FRAMEDIR, false, &pFrameDirItem);
+                rChgSet.GetItemState(RES_BOX, false, &pBoxItem);
+                break;
+            }
+            case RES_VERT_ORIENT:
+                pVertOrientItem = pLegacy->m_pNew;
+                break;
+            case RES_PROTECT:
+                pProtectItem = pLegacy->m_pNew;
+                break;
+            case RES_FRAMEDIR:
+                pFrameDirItem = pLegacy->m_pNew;
+                break;
+            case RES_BOX:
+                pBoxItem = pLegacy->m_pNew;
+                break;
         }
-    }
+        if(pVertOrientItem)
+        {
+            bool bInva = true;
+            const auto eVertOrient = static_cast<const SwFormatVertOrient*>(pVertOrientItem)->GetVertOrient();
+            if(text::VertOrientation::NONE == eVertOrient && Lower() && Lower()->IsContentFrame())
+            {
+                SwRectFnSet aRectFnSet(this);
+                const tools::Long lYStart = aRectFnSet.GetPrtTop(*this);
+                bInva = lcl_ArrangeLowers(this, lYStart, false);
+            }
+            if (bInva)
+            {
+                SetCompletePaint();
+                InvalidatePrt();
+            }
+        }
+        if(pProtectItem)
+        {
+            SwViewShell* pSh = getRootFrame()->GetCurrShell();
+            if(pSh && pSh->GetLayout()->IsAnyShellAccessible())
+                pSh->Imp()->InvalidateAccessibleEditableState(true, this);
+        }
+        if(pFrameDirItem)
+        {
+            SetDerivedVert(false);
+            CheckDirChange();
+        }
+        // #i29550#
+        if(pBoxItem)
+        {
+            SwFrame* pTmpUpper = GetUpper();
+            while(pTmpUpper->GetUpper() && !pTmpUpper->GetUpper()->IsTabFrame())
+                pTmpUpper = pTmpUpper->GetUpper();
 
-    SwLayoutFrame::Modify( pOld, pNew );
+            SwTabFrame* pTabFrame = static_cast<SwTabFrame*>(pTmpUpper->GetUpper());
+            if(pTabFrame->IsCollapsingBorders())
+            {
+                // Invalidate lowers of this and next row:
+                lcl_InvalidateAllLowersPrt(static_cast<SwRowFrame*>(pTmpUpper));
+                pTmpUpper = pTmpUpper->GetNext();
+                if(pTmpUpper)
+                    lcl_InvalidateAllLowersPrt(static_cast<SwRowFrame*>(pTmpUpper));
+                else
+                    pTabFrame->InvalidatePrt();
+            }
+        }
+        SwLayoutFrame::Modify(pLegacy->m_pOld, pLegacy->m_pNew);
+    }
 }
 
 tools::Long SwCellFrame::GetLayoutRowSpan() const

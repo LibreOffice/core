@@ -1089,23 +1089,10 @@ void SaveTable::NewFrameFormat( const SwTableLine* pTableLn, const SwTableBox* p
     }
 
     // first re-assign Frames
-    SwIterator<SwLayoutFrame,SwFormat> aIter( *pOldFormat );
-    for( SwFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
-    {
-        if( pTableLn ? static_cast<SwRowFrame*>(pLast)->GetTabLine() == pTableLn
-                    : static_cast<SwCellFrame*>(pLast)->GetTabBox() == pTableBx )
-        {
-            pLast->RegisterToFormat(*pFormat);
-            pLast->InvalidateAll();
-            pLast->ReinitializeFrameSizeAttrFlags();
-            if ( !pTableLn )
-            {
-                static_cast<SwCellFrame*>(pLast)->SetDerivedVert( false );
-                static_cast<SwCellFrame*>(pLast)->CheckDirChange();
-            }
-        }
-    }
-
+    if(pTableLn)
+        pOldFormat->CallSwClientNotify(sw::MoveTableLineHint(*pFormat, *pTableLn));
+    else
+        pOldFormat->CallSwClientNotify(sw::MoveTableBoxHint(*pFormat, *pTableBx));
     // than re-assign myself
     if ( pTableLn )
         const_cast<SwTableLine*>(pTableLn)->RegisterToFormat( *pFormat );
