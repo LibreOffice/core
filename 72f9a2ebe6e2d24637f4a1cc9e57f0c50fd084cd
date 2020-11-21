@@ -22,6 +22,30 @@
       "revId": "72f9a2ebe6e2d24637f4a1cc9e57f0c50fd084cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6adeec0_353c8fa5",
+        "filename": "vcl/source/app/ITiledRenderable.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-21T18:24:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2edb3354_69f79dd8",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 0
+      },
+      "revId": "72f9a2ebe6e2d24637f4a1cc9e57f0c50fd084cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
