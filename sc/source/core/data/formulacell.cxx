@@ -4599,13 +4599,13 @@ bool ScFormulaCell::InterpretFormulaGroup(SCROW nStartOffset, SCROW nEndOffset)
 
     if (mxGroup->mbPartOfCycle)
     {
-        aScope.addMessage("This formula-group is part of a cycle");
+        aScope.addMessage(u"This formula-group is part of a cycle");
         return false;
     }
 
     if (mxGroup->meCalcState == sc::GroupCalcDisabled)
     {
-        aScope.addMessage("group calc disabled");
+        aScope.addMessage(u"group calc disabled");
         return false;
     }
 
@@ -4624,7 +4624,7 @@ bool ScFormulaCell::InterpretFormulaGroup(SCROW nStartOffset, SCROW nEndOffset)
     if (cMatrixFlag != ScMatrixMode::NONE)
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
-        aScope.addMessage("matrix skipped");
+        aScope.addMessage(u"matrix skipped");
         return false;
     }
 
@@ -4638,7 +4638,7 @@ bool ScFormulaCell::InterpretFormulaGroup(SCROW nStartOffset, SCROW nEndOffset)
         if( rDocument.GetFormulaCell( aPos ) != this )
         {
             mxGroup->meCalcState = sc::GroupCalcDisabled;
-            aScope.addMessage("cell not in document");
+            aScope.addMessage(u"cell not in document");
             return false;
         }
     }
@@ -4698,7 +4698,7 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
         if (mxGroup->mbPartOfCycle)
         {
             mxGroup->meCalcState = sc::GroupCalcDisabled;
-            rScope.addMessage("found circular formula-group dependencies");
+            rScope.addMessage(u"found circular formula-group dependencies");
             return false;
         }
 
@@ -4711,14 +4711,14 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
     if (rRecursionHelper.IsInRecursionReturn())
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
-        rScope.addMessage("Recursion limit reached, cannot thread this formula group now");
+        rScope.addMessage(u"Recursion limit reached, cannot thread this formula group now");
         return false;
     }
 
     if (mxGroup->mbPartOfCycle)
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
-        rScope.addMessage("found circular formula-group dependencies");
+        rScope.addMessage(u"found circular formula-group dependencies");
         return false;
     }
 
@@ -4726,14 +4726,14 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
     {
         // This call resulted from a dependency calculation for a multigroup-threading attempt,
         // but found dependency among the groups.
-        rScope.addMessage("multi-group-dependency failed");
+        rScope.addMessage(u"multi-group-dependency failed");
         return false;
     }
 
     if (!bOKToParallelize)
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
-        rScope.addMessage("could not do new dependencies calculation thing");
+        rScope.addMessage(u"could not do new dependencies calculation thing");
         return false;
     }
 
@@ -4978,18 +4978,18 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
 
         // Not good.
         case FormulaVectorDisabledByOpCode:
-            aScope.addMessage("group calc disabled due to vector state (non-vector-supporting opcode)");
+            aScope.addMessage(u"group calc disabled due to vector state (non-vector-supporting opcode)");
             break;
         case FormulaVectorDisabledByStackVariable:
-            aScope.addMessage("group calc disabled due to vector state (non-vector-supporting stack variable)");
+            aScope.addMessage(u"group calc disabled due to vector state (non-vector-supporting stack variable)");
             break;
         case FormulaVectorDisabledNotInSubSet:
-            aScope.addMessage("group calc disabled due to vector state (opcode not in subset)");
+            aScope.addMessage(u"group calc disabled due to vector state (opcode not in subset)");
             break;
         case FormulaVectorDisabled:
         case FormulaVectorUnknown:
         default:
-            aScope.addMessage("group calc disabled due to vector state (unknown)");
+            aScope.addMessage(u"group calc disabled due to vector state (unknown)");
             return false;
     }
 
@@ -4998,7 +4998,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
 
     if (!ScCalcConfig::isOpenCLEnabled())
     {
-        aScope.addMessage("opencl not enabled");
+        aScope.addMessage(u"opencl not enabled");
         return false;
     }
 
@@ -5094,7 +5094,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
                 mxGroup->mpCode = std::move(xGroup->mpCode);
             }
 
-            aScope.addMessage("group token conversion failed");
+            aScope.addMessage(u"group token conversion failed");
             return false;
         }
 
@@ -5118,7 +5118,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
                 mxGroup->mpCode = std::move(xGroup->mpCode);
             }
 
-            aScope.addMessage("group interpretation unsuccessful");
+            aScope.addMessage(u"group interpretation unsuccessful");
             return false;
         }
 
