@@ -37,6 +37,7 @@ class IMapObject;
 class SwRect;
 class SdrObject;
 class SwRootFrame;
+class SwTableBox;
 
 namespace sw
 {
@@ -178,6 +179,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     virtual void SetName( const OUString& rNewName, bool bBroadcast=false ) override;
+    void MoveTableBox(SwTableBox& rTableBox, const SwFrameFormat* pOldFormat);
 };
 
 // The FlyFrame-Format
