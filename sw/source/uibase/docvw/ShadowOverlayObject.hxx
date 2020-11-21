@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_DOCVW_SHADOWOVERLAYOBJECT_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_DOCVW_SHADOWOVERLAYOBJECT_HXX
+#pragma once
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 
@@ -60,7 +59,5 @@ public:
 };
 
 } // end of namespace sw::sidebarwindows
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
