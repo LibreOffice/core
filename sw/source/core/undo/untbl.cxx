@@ -95,6 +95,12 @@ namespace {
 class SaveBox;
 class SaveLine;
 
+void KillEmptyFrameFormat(SwFrameFormat& rFormat)
+{
+    if(!rFormat.HasWriterListeners())
+        delete &rFormat;
+};
+
 }
 
 class SaveTable
@@ -113,14 +119,15 @@ class SaveTable
 
     SaveTable(const SaveTable&) = delete;
     SaveTable& operator=(const SaveTable&) = delete;
+    SwFrameFormat& CreateNewFormat(SwFrameFormat& rFormat, sal_uInt16 nFormatPos);
 
 public:
     SaveTable( const SwTable& rTable, sal_uInt16 nLnCnt = USHRT_MAX,
                 bool bSaveFormula = true );
 
     sal_uInt16 AddFormat( SwFrameFormat* pFormat, bool bIsLine );
-    void NewFrameFormat( const SwTableLine* , const SwTableBox*, sal_uInt16 nFormatPos,
-                    SwFrameFormat* pOldFormat );
+    void NewFrameFormatForLine(const SwTableLine&, sal_uInt16 nFormatPos, SwFrameFormat* pOldFormat);
+    void NewFrameFormatForBox(const SwTableBox&, sal_uInt16 nFormatPos, SwFrameFormat* pOldFormat);
 
     void RestoreAttr( SwTable& rTable, bool bModifyBox = false );
     void SaveContentAttrs( SwDoc* pDoc );
@@ -1072,43 +1079,31 @@ void SaveTable::CreateNew( SwTable& rTable, bool bCreateFrames,
     }
 }
 
-void SaveTable::NewFrameFormat( const SwTableLine* pTableLn, const SwTableBox* pTableBx,
-                            sal_uInt16 nFormatPos, SwFrameFormat* pOldFormat )
+SwFrameFormat& SaveTable::CreateNewFormat(SwFrameFormat& rFormat, sal_uInt16 nFormatPos)
 {
-    SwDoc* pDoc = pOldFormat->GetDoc();
+    rFormat.SetFormatAttr(*m_aSets[nFormatPos]);
+    m_aFrameFormats[nFormatPos] = &rFormat;
+    return rFormat;
+}
 
-    SwFrameFormat* pFormat = m_aFrameFormats[ nFormatPos ];
-    if( !pFormat )
-    {
-        if( pTableLn )
-            pFormat = pDoc->MakeTableLineFormat();
-        else
-            pFormat = pDoc->MakeTableBoxFormat();
-        pFormat->SetFormatAttr(*m_aSets[nFormatPos]);
-        m_aFrameFormats[nFormatPos] = pFormat;
-    }
+void SaveTable::NewFrameFormatForLine(const SwTableLine& rTableLn, sal_uInt16 nFormatPos, SwFrameFormat* pOldFormat)
+{
+    SwFrameFormat* pFormat = m_aFrameFormats[nFormatPos];
+    if(!pFormat)
+        pFormat = &CreateNewFormat(*pOldFormat->GetDoc()->MakeTableLineFormat(), nFormatPos);
+    pOldFormat->CallSwClientNotify(sw::MoveTableLineHint(*pFormat, rTableLn));
+    pFormat->Add(const_cast<SwTableLine*>(&rTableLn));
+    KillEmptyFrameFormat(*pOldFormat);
+}
 
-    // first re-assign Frames
-    if(pTableLn)
-        pOldFormat->CallSwClientNotify(sw::MoveTableLineHint(*pFormat, *pTableLn));
-    else
-        pOldFormat->CallSwClientNotify(sw::MoveTableBoxHint(*pFormat, *pTableBx));
-    // than re-assign myself
-    if ( pTableLn )
-        const_cast<SwTableLine*>(pTableLn)->RegisterToFormat( *pFormat );
-    else if ( pTableBx )
-        const_cast<SwTableBox*>(pTableBx)->RegisterToFormat( *pFormat );
-
-    if (m_bModifyBox && !pTableLn)
-    {
-        const SfxPoolItem& rOld = pOldFormat->GetFormatAttr( RES_BOXATR_FORMAT ),
-                         & rNew = pFormat->GetFormatAttr( RES_BOXATR_FORMAT );
-        if( rOld != rNew )
-            pFormat->SwClientNotifyCall(*pFormat, sw::LegacyModifyHint(&rOld, &rNew));
-    }
-
-    if( !pOldFormat->HasWriterListeners() )
-        delete pOldFormat;
+void SaveTable::NewFrameFormatForBox(const SwTableBox& rTableBx, sal_uInt16 nFormatPos, SwFrameFormat* pOldFormat)
+{
+    SwFrameFormat* pFormat = m_aFrameFormats[nFormatPos];
+    if(!pFormat)
+        pFormat = &CreateNewFormat(*pOldFormat->GetDoc()->MakeTableBoxFormat(), nFormatPos);
+    pOldFormat->CallSwClientNotify(sw::MoveTableBoxHint(*pFormat, rTableBx));
+    pFormat->MoveTableBox(*const_cast<SwTableBox*>(&rTableBx), m_bModifyBox ? pOldFormat : nullptr);
+    KillEmptyFrameFormat(*pOldFormat);
 }
 
 SaveLine::SaveLine( SaveLine* pPrev, const SwTableLine& rLine, SaveTable& rSTable )
@@ -1133,7 +1128,7 @@ SaveLine::~SaveLine()
 
 void SaveLine::RestoreAttr( SwTableLine& rLine, SaveTable& rSTable )
 {
-    rSTable.NewFrameFormat( &rLine, nullptr, nItemSet, rLine.GetFrameFormat() );
+    rSTable.NewFrameFormatForLine( rLine, nItemSet, rLine.GetFrameFormat() );
 
     SaveBox* pBx = pBox;
     for( size_t n = 0; n < rLine.GetTabBoxes().size(); ++n, pBx = pBx->pNext )
@@ -1210,7 +1205,7 @@ SaveBox::~SaveBox()
 
 void SaveBox::RestoreAttr( SwTableBox& rBox, SaveTable& rSTable )
 {
-    rSTable.NewFrameFormat( nullptr, &rBox, nItemSet, rBox.GetFrameFormat() );
+    rSTable.NewFrameFormatForBox( rBox, nItemSet, rBox.GetFrameFormat() );
 
     if( ULONG_MAX == nSttNode )     // no EndBox
     {
