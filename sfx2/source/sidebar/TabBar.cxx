@@ -243,7 +243,6 @@ TabBar::Item::~Item()
     mrTabBar.GetContainer()->move(mxButton.get(), nullptr);
 }
 
-
 IMPL_LINK_NOARG(TabBar::Item, HandleClick, const OString&, void)
 {
     mrTabBar.GrabFocusToDocument();
