@@ -29,6 +29,7 @@
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
+// clang-format off
 #define RID_PLUSX_HELP                      NC_("RID_PLUSX_HELP", "+ Sign" )
 #define RID_MINUSX_HELP                     NC_("RID_MINUSX_HELP", "- Sign" )
 #define RID_PLUSMINUSX_HELP                 NC_("RID_PLUSMINUSX_HELP", "+- Sign" )
@@ -397,6 +398,7 @@
 #define RID_PRINTUIOPT_ORIGSIZE             NC_("RID_PRINTUIOPT_ORIGSIZE", "O~riginal size" )
 #define RID_PRINTUIOPT_FITTOPAGE            NC_("RID_PRINTUIOPT_FITTOPAGE", "Fit to ~page" )
 #define RID_PRINTUIOPT_SCALING              NC_("RID_PRINTUIOPT_SCALING", "~Scaling" )
+// clang-format on
 
 #endif
 
