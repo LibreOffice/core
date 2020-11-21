@@ -36,7 +36,7 @@ class SdXMLShapeLinkContext : public SvXMLShapeContext
 
 public:
 
-    SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
+    SdXMLShapeLinkContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLShapeLinkContext() override;

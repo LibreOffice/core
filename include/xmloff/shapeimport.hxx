@@ -201,8 +201,7 @@ protected:
     OUString                                      msHyperlink;
 
 public:
-    SvXMLShapeContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
-        const OUString& rLName, bool bTemporaryShape ) : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
+    SvXMLShapeContext( SvXMLImport& rImp, bool bTemporaryShape ) : SvXMLImportContext( rImp ), mbTemporaryShape(bTemporaryShape) {}
 
 
     const css::uno::Reference< css::drawing::XShape >& getShape() const { return mxShape; }

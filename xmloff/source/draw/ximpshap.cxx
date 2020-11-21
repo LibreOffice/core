@@ -141,12 +141,10 @@ static bool ImpIsEmptyURL( const OUString& rURL )
 
 SdXMLShapeContext::SdXMLShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-    : SvXMLShapeContext( rImport, nPrfx, rLocalName, bTemporaryShape )
+    : SvXMLShapeContext( rImport, bTemporaryShape )
     , mxShapes( rShapes )
     , mxAttrList(xAttrList)
     , mbListContextPushed( false )
@@ -944,12 +942,10 @@ bool SdXMLShapeContext::isPresentationShape() const
 
 SdXMLRectShapeContext::SdXMLRectShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
     mnRadius( 0 )
 {
 }
@@ -1009,12 +1005,10 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
 SdXMLLineShapeContext::SdXMLLineShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
     mnX1( 0 ),
     mnY1( 0 ),
     mnX2( 1 ),
@@ -1122,12 +1116,10 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
 SdXMLEllipseShapeContext::SdXMLEllipseShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
     mnCX( 0 ),
     mnCY( 0 ),
     mnRX( 1 ),
@@ -1246,11 +1238,9 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
 SdXMLPolygonShapeContext::SdXMLPolygonShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes, bool bClosed, bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
     mbClosed( bClosed )
 {
 }
@@ -1355,12 +1345,10 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
 SdXMLPathShapeContext::SdXMLPathShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape )
 {
 }
 
@@ -1508,11 +1496,9 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
 SdXMLTextBoxShapeContext::SdXMLTextBoxShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ ),
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ ),
     mnRadius(0),
     maChainNextName("")
 {
@@ -1696,12 +1682,10 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
 SdXMLControlShapeContext::SdXMLControlShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape )
 {
 }
 
@@ -1760,12 +1744,10 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
 SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
     maStart(0,0),
     maEnd(1,1),
     mnType( drawing::ConnectorType_STANDARD ),
@@ -2066,12 +2048,10 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
 
 SdXMLMeasureShapeContext::SdXMLMeasureShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
     maStart(0,0),
     maEnd(1,1)
 {
@@ -2171,12 +2151,10 @@ void SdXMLMeasureShapeContext::endFastElement(sal_Int32 nElement)
 
 SdXMLPageShapeContext::SdXMLPageShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ), mnPageNumber(0)
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ), mnPageNumber(0)
 {
     mbClearDefaultAttributes = false;
 }
@@ -2258,12 +2236,10 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
 SdXMLCaptionShapeContext::SdXMLCaptionShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
     // #86616# for correct edge rounding import mnRadius needs to be initialized
     mnRadius( 0 )
 {
@@ -2358,11 +2334,9 @@ void SdXMLCaptionShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
 
 SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ ),
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ ),
     maURL()
 {
 }
@@ -2509,12 +2483,10 @@ SdXMLGraphicObjectShapeContext::~SdXMLGraphicObjectShapeContext()
 
 SdXMLChartShapeContext::SdXMLChartShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape )
 {
 }
 
@@ -2602,11 +2574,10 @@ SvXMLImportContextRef SdXMLChartShapeContext::CreateChildContext( sal_uInt16 nPr
 }
 
 
-SdXMLObjectShapeContext::SdXMLObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+SdXMLObjectShapeContext::SdXMLObjectShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes)
-: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ )
+: SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ )
 {
 }
 
@@ -2812,11 +2783,10 @@ SvXMLImportContextRef SdXMLObjectShapeContext::CreateChildContext(
     return xContext;
 }
 
-SdXMLAppletShapeContext::SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+SdXMLAppletShapeContext::SdXMLAppletShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes)
-: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ ),
+: SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ ),
   mbIsScript( false )
 {
 }
@@ -2963,11 +2933,10 @@ SvXMLImportContextRef SdXMLAppletShapeContext::CreateChildContext( sal_uInt16 p_
 }
 
 
-SdXMLPluginShapeContext::SdXMLPluginShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+SdXMLPluginShapeContext::SdXMLPluginShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes) :
-SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ ),
+SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ ),
 mbMedia( false )
 {
 }
@@ -3229,11 +3198,10 @@ SvXMLImportContextRef SdXMLPluginShapeContext::CreateChildContext( sal_uInt16 p_
 }
 
 
-SdXMLFloatingFrameShapeContext::SdXMLFloatingFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+SdXMLFloatingFrameShapeContext::SdXMLFloatingFrameShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes)
-: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ )
+: SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ )
 {
 }
 
@@ -3315,12 +3283,11 @@ void SdXMLFloatingFrameShapeContext::endFastElement(sal_Int32 nElement)
 }
 
 
-SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape)
-: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+: SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
     MultiImageImportHelper(),
     mbSupportsReplacement( false ),
     mxImplContext(),
@@ -3662,11 +3629,9 @@ void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix,
 
 SdXMLCustomShapeContext::SdXMLCustomShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ )
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ )
 {
     // See the XMLTextFrameContext ctor, a frame has Writer content (and not
     // editeng) if its autostyle has a parent style. Do the same for shapes as well.
@@ -3896,8 +3861,8 @@ SvXMLImportContextRef SdXMLCustomShapeContext::CreateChildContext(
     return xContext;
 }
 
-SdXMLTableShapeContext::SdXMLTableShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList, css::uno::Reference< css::drawing::XShapes > const & rShapes )
-: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false )
+SdXMLTableShapeContext::SdXMLTableShapeContext( SvXMLImport& rImport, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList, css::uno::Reference< css::drawing::XShapes > const & rShapes )
+: SdXMLShapeContext( rImport, xAttrList, rShapes, false )
 {
 }
 

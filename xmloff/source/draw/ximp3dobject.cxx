@@ -34,11 +34,9 @@ using namespace ::com::sun::star;
 
 SdXML3DObjectContext::SdXML3DObjectContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ ),
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ ),
     mbSetTransform( false )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -90,11 +88,9 @@ void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttribu
 
 SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+:   SdXML3DObjectContext( rImport, xAttrList, rShapes ),
     maMinEdge(-2500.0, -2500.0, -2500.0),
     maMaxEdge(2500.0, 2500.0, 2500.0)
 {
@@ -172,11 +168,9 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
 
 SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+:   SdXML3DObjectContext( rImport, xAttrList, rShapes ),
     maCenter(0.0, 0.0, 0.0),
     maSphereSize(5000.0, 5000.0, 5000.0)
 {
@@ -251,11 +245,9 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
 
 SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXML3DObjectContext( rImport, xAttrList, rShapes )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -328,11 +320,9 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
 
 SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXML3DPolygonBasedShapeContext( rImport, xAttrList, rShapes )
 {
 }
 
@@ -354,11 +344,9 @@ void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax
 
 SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXML3DPolygonBasedShapeContext( rImport, xAttrList, rShapes )
 {
 }
 

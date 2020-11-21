@@ -99,8 +99,6 @@ protected:
 public:
 
     SdXMLShapeContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -125,8 +123,7 @@ class SdXMLRectShapeContext : public SdXMLShapeContext
 
 public:
 
-    SdXMLRectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLRectShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -148,8 +145,7 @@ class SdXMLLineShapeContext : public SdXMLShapeContext
 
 public:
 
-    SdXMLLineShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLLineShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -174,8 +170,7 @@ class SdXMLEllipseShapeContext : public SdXMLShapeContext
     sal_Int32                   mnEndAngle;
 public:
 
-    SdXMLEllipseShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLEllipseShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -196,8 +191,7 @@ class SdXMLPolygonShapeContext : public SdXMLShapeContext
 
 public:
 
-    SdXMLPolygonShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLPolygonShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes, bool bClosed, bool bTemporaryShape);
     virtual ~SdXMLPolygonShapeContext() override;
@@ -216,8 +210,7 @@ class SdXMLPathShapeContext : public SdXMLShapeContext
 
 public:
 
-    SdXMLPathShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLPathShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -237,8 +230,7 @@ class SdXMLTextBoxShapeContext : public SdXMLShapeContext
 
 public:
 
-    SdXMLTextBoxShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLTextBoxShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLTextBoxShapeContext() override;
@@ -257,8 +249,7 @@ private:
 
 public:
 
-    SdXMLControlShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLControlShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -293,8 +284,7 @@ private:
 
 public:
 
-    SdXMLConnectorShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLConnectorShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -315,8 +305,7 @@ private:
 
 public:
 
-    SdXMLMeasureShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLMeasureShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -336,8 +325,7 @@ private:
     sal_Int32   mnPageNumber;
 public:
 
-    SdXMLPageShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLPageShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -358,8 +346,7 @@ private:
 
 public:
 
-    SdXMLCaptionShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLCaptionShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -380,8 +367,7 @@ private:
 
 public:
 
-    SdXMLGraphicObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLGraphicObjectShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLGraphicObjectShapeContext() override;
@@ -403,8 +389,7 @@ class SdXMLChartShapeContext : public SdXMLShapeContext
 
 public:
 
-    SdXMLChartShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLChartShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -428,8 +413,7 @@ private:
 
 public:
 
-    SdXMLObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLObjectShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLObjectShapeContext() override;
@@ -458,8 +442,7 @@ private:
 
 public:
 
-    SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLAppletShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLAppletShapeContext() override;
@@ -487,8 +470,7 @@ private:
 
 public:
 
-    SdXMLPluginShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLPluginShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLPluginShapeContext() override;
@@ -515,8 +497,7 @@ private:
 
 public:
 
-    SdXMLFloatingFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLFloatingFrameShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLFloatingFrameShapeContext() override;
@@ -545,8 +526,7 @@ protected:
 
 public:
 
-    SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLFrameShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
@@ -571,7 +551,7 @@ class SdXMLCustomShapeContext : public SdXMLShapeContext
 public:
 
 
-    SdXMLCustomShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
+    SdXMLCustomShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLCustomShapeContext() override;
@@ -592,8 +572,7 @@ class SdXMLTableShapeContext : public SdXMLShapeContext
 {
 public:
 
-    SdXMLTableShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+    SdXMLTableShapeContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes );
     virtual ~SdXMLTableShapeContext() override;
