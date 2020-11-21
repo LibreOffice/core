@@ -92,6 +92,7 @@
 #include <svl/itemiter.hxx>
 #include <wrtsh.hxx>
 #include <txtfld.hxx>
+#include <cellatr.hxx>
 
 using namespace ::com::sun::star;
 
@@ -3559,6 +3560,18 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrameFormat::getSdrAllF
 
     return maFillAttributes;
 }
+
+void SwFrameFormat::MoveTableBox(SwTableBox& rTableBox, const SwFrameFormat* pOldFormat)
+{
+    Add(&rTableBox);
+    if(!pOldFormat)
+        return;
+    const auto& rOld = pOldFormat->GetFormatAttr(RES_BOXATR_FORMAT);
+    const auto& rNew = GetFormatAttr(RES_BOXATR_FORMAT);
+    if(rOld != rNew)
+        SwClientNotify(*this, sw::LegacyModifyHint(&rOld, &rNew));
+}
+
 
 namespace sw {
 

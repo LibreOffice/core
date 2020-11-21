@@ -1075,11 +1075,10 @@ void SaveTable::CreateNew( SwTable& rTable, bool bCreateFrames,
 void SaveTable::NewFrameFormat( const SwTableLine* pTableLn, const SwTableBox* pTableBx,
                             sal_uInt16 nFormatPos, SwFrameFormat* pOldFormat )
 {
-    SwDoc* pDoc = pOldFormat->GetDoc();
-
-    SwFrameFormat* pFormat = m_aFrameFormats[ nFormatPos ];
-    if( !pFormat )
+    SwFrameFormat* pFormat = m_aFrameFormats[nFormatPos];
+    if(!pFormat)
     {
+        SwDoc* pDoc = pOldFormat->GetDoc();
         if( pTableLn )
             pFormat = pDoc->MakeTableLineFormat();
         else
@@ -1088,26 +1087,19 @@ void SaveTable::NewFrameFormat( const SwTableLine* pTableLn, const SwTableBox* p
         m_aFrameFormats[nFormatPos] = pFormat;
     }
 
-    // first re-assign Frames
+    // first re-assign frame, then the format
     if(pTableLn)
-        pOldFormat->CallSwClientNotify(sw::MoveTableLineHint(*pFormat, *pTableLn));
-    else
-        pOldFormat->CallSwClientNotify(sw::MoveTableBoxHint(*pFormat, *pTableBx));
-    // than re-assign myself
-    if ( pTableLn )
-        const_cast<SwTableLine*>(pTableLn)->RegisterToFormat( *pFormat );
-    else if ( pTableBx )
-        const_cast<SwTableBox*>(pTableBx)->RegisterToFormat( *pFormat );
-
-    if (m_bModifyBox && !pTableLn)
     {
-        const SfxPoolItem& rOld = pOldFormat->GetFormatAttr( RES_BOXATR_FORMAT ),
-                         & rNew = pFormat->GetFormatAttr( RES_BOXATR_FORMAT );
-        if( rOld != rNew )
-            pFormat->SwClientNotifyCall(*pFormat, sw::LegacyModifyHint(&rOld, &rNew));
+        pOldFormat->CallSwClientNotify(sw::MoveTableLineHint(*pFormat, *pTableLn));
+        pFormat->Add(const_cast<SwTableLine*>(pTableLn));
+    }
+    else if(pTableBx)
+    {
+        pOldFormat->CallSwClientNotify(sw::MoveTableBoxHint(*pFormat, *pTableBx));
+        pFormat->MoveTableBox(*const_cast<SwTableBox*>(pTableBx), m_bModifyBox ? pOldFormat : nullptr);
     }
 
-    if( !pOldFormat->HasWriterListeners() )
+    if(!pOldFormat->HasWriterListeners())
         delete pOldFormat;
 }
 
