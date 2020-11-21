@@ -480,6 +480,14 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 xSequenceLabel.set(SchXMLTools::CreateDataSequenceWithoutConvert(aSeriesLabelString, mxNewDoc));
             }
         }
+
+        //Labels should always include hidden cells
+        Reference<beans::XPropertySet> xSeqLabelProp(xSequenceLabel, uno::UNO_QUERY);
+        if (xSeqLabelProp.is() && xSeqLabelProp->getPropertySetInfo()->hasPropertyByName("IncludeHiddenCells"))
+        {
+            xSeqLabelProp->setPropertyValue( "IncludeHiddenCells", uno::Any(true));
+        }
+
         xLabeledSeq->setLabel(xSequenceLabel);
 
         // Note: Even if we have no label, we have to register the label
