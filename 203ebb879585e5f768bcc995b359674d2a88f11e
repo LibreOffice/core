@@ -22,6 +22,30 @@
       "revId": "203ebb879585e5f768bcc995b359674d2a88f11e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e99338c_cb8eb885",
+        "filename": "sdext/source/presenter/PresenterHelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-11-21T18:22:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15c4a751_b8582263",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 6
+      },
+      "revId": "203ebb879585e5f768bcc995b359674d2a88f11e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
