@@ -2797,11 +2797,11 @@ void RtfAttributeOutput::CharBorder(const editeng::SvxBorderLine* pAllBorder,
 
 void RtfAttributeOutput::CharHighlight(const SvxBrushItem& rBrush)
 {
+    sal_Int32 nColor = 0; //COL_AUTO
     if (!rBrush.GetColor().GetTransparency())
-    {
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HIGHLIGHT);
-        m_aStyles.append(static_cast<sal_Int32>(msfilter::util::TransColToIco(rBrush.GetColor())));
-    }
+        nColor = msfilter::util::TransColToIco(rBrush.GetColor());
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HIGHLIGHT);
+    m_aStyles.append(nColor);
 }
 
 void RtfAttributeOutput::TextINetFormat(const SwFormatINetFormat& rURL)
