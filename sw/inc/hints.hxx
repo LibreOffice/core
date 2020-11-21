@@ -33,6 +33,9 @@ class SwFrame;
 class SwHistory;
 class SwTextNode;
 class SwTextFormatColl;
+class SwFrameFormat;
+class SwTableLine;
+class SwTableBox;
 
 // Base class for all Message-Hints:
 // "Overhead" of SfxPoolItem is handled here
@@ -146,6 +149,22 @@ class PreGraphicArrivedHint final : public SfxHint
 
 class PostGraphicArrivedHint final : public SfxHint
 {
+};
+
+class MoveTableLineHint final : public SfxHint
+{
+public:
+    const SwFrameFormat& m_rNewFormat;
+    const SwTableLine& m_rTableLine;
+    MoveTableLineHint(const SwFrameFormat& rNewFormat, const SwTableLine& rTableLine): m_rNewFormat(rNewFormat), m_rTableLine(rTableLine) {};
+};
+
+class MoveTableBoxHint final : public SfxHint
+{
+public:
+    const SwFrameFormat& m_rNewFormat;
+    const SwTableBox& m_rTableBox;
+    MoveTableBoxHint(const SwFrameFormat& rNewFormat, const SwTableBox& rTableBox): m_rNewFormat(rNewFormat), m_rTableBox(rTableBox) {};
 };
 }
 
