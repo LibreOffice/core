@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_DOCVW_ANNOTATIONMENUBUTTON_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_DOCVW_ANNOTATIONMENUBUTTON_HXX
+#pragma once
 
 #include <vcl/menubtn.hxx>
 
@@ -48,7 +47,5 @@ class AnnotationMenuButton : public MenuButton
 };
 
 } // end of namespace sw::annotation
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
