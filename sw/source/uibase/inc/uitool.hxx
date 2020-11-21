@@ -44,8 +44,9 @@ SW_DLLPUBLIC void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);
  * Convert character specific attributes to general ones used by tab pages.
  *
  * @param[in,out]   rSet    the set in which character attributes are stored
+ * @param[in]       bIsPara is called by a paragraph style
 **/
-SW_DLLPUBLIC void ConvertAttrCharToGen(SfxItemSet& rSet);
+SW_DLLPUBLIC void ConvertAttrCharToGen(SfxItemSet& rSet, bool bPara = false);
 
 /**
  * Convert general attributes to the corresponding character attributes.
@@ -53,8 +54,9 @@ SW_DLLPUBLIC void ConvertAttrCharToGen(SfxItemSet& rSet);
  *
  * @param[in,out]   rSet    the set in which character attributes are stored
  * @param[in]       rOrigSet    original itemset used as input for the dialog
+ * @param[in]       bIsPara is called by a paragraph style
 **/
-SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet);
+SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bPara = false);
 
 
 /**
