@@ -36,8 +36,6 @@ public:
 
     SdXML3DSceneShapeContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);

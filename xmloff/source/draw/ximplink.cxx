@@ -26,8 +26,8 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 
-SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList>& xAttrList, uno::Reference< drawing::XShapes > const & rShapes)
-: SvXMLShapeContext( rImport, nPrfx, rLocalName, false )
+SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, const uno::Reference< xml::sax::XAttributeList>& xAttrList, uno::Reference< drawing::XShapes > const & rShapes)
+: SvXMLShapeContext( rImport, false )
 , mxParent( rShapes )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
