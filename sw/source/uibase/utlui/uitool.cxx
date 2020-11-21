@@ -101,7 +101,7 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
     rSet.Put(*aBoxInfo);
 }
 
-void ConvertAttrCharToGen(SfxItemSet& rSet)
+void ConvertAttrCharToGen(SfxItemSet& rSet, bool bIsPara)
 {
     // Background / highlight
     {
@@ -117,6 +117,9 @@ void ConvertAttrCharToGen(SfxItemSet& rSet)
             }
         }
     }
+
+    if ( bIsPara )
+        return;
 
     // Tell dialogs to use character-specific slots/whichIds
     // tdf#126684: We use RES_PARATR_GRABBAG, because RES_CHRATR_GRABBAG may be overwritten later in
@@ -135,7 +138,7 @@ void ConvertAttrCharToGen(SfxItemSet& rSet)
     rSet.Put(aGrabBag);
 }
 
-void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet)
+void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIsPara)
 {
     // Background / highlighting
     const SfxPoolItem *pTmpItem;
@@ -158,6 +161,10 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet)
             rSet.Put( aGrabBag );
         }
     }
+
+    if ( bIsPara )
+        return;
+
     rSet.ClearItem( RES_BACKGROUND );
 
     if (SfxItemState::SET == rOrigSet.GetItemState(RES_PARATR_GRABBAG, false, &pTmpItem))
