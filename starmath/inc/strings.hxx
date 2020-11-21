@@ -16,8 +16,9 @@
 #ifndef INCLUDED_STARMATH_INC_STRINGS_HXX
 #define INCLUDED_STARMATH_INC_STRINGS_HXX
 
-#define RID_UNDOFORMATNAME      "Format"
+#define RID_UNDOFORMATNAME "Format"
 
+// clang-format off
 #define RID_PLUSX               "+<?> "
 #define RID_MINUSX              "-<?> "
 #define RID_PLUSMINUSX          "+-<?> "
@@ -298,6 +299,7 @@
 #define RID_XSUCCEEDSEQUIVY     "<?> succsim <?> "
 #define RID_XNOTPRECEDESY       "<?> nprec <?> "
 #define RID_XNOTSUCCEEDSY       "<?> nsucc <?> "
+// clang-format on
 
 #endif
 

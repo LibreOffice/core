@@ -11794,9 +11794,7 @@ starmath/inc/rect.hxx
 starmath/inc/scrwin.hxx
 starmath/inc/smdll.hxx
 starmath/inc/smmod.hxx
-starmath/inc/strings.hxx
 starmath/inc/symbol.hxx
-starmath/inc/token.hxx
 starmath/inc/types.hxx
 starmath/inc/unomodel.hxx
 starmath/inc/utility.hxx
