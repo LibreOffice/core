@@ -3801,7 +3801,7 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::to
 bool DomainMapper::getColorFromId(const Id nId, sal_Int32 &nColor)
 {
     nColor = 0;
-    if ((nId < NS_ooxml::LN_Value_ST_HighlightColor_black) || (nId > NS_ooxml::LN_Value_ST_HighlightColor_lightGray))
+    if ((nId < NS_ooxml::LN_Value_ST_HighlightColor_black) || (nId > NS_ooxml::LN_Value_ST_HighlightColor_none))
         return false;
 
     switch (nId)
@@ -3822,6 +3822,7 @@ bool DomainMapper::getColorFromId(const Id nId, sal_Int32 &nColor)
     case NS_ooxml::LN_Value_ST_HighlightColor_darkYellow: nColor=0x808000; break;
     case NS_ooxml::LN_Value_ST_HighlightColor_darkGray: nColor=0x808080; break;
     case NS_ooxml::LN_Value_ST_HighlightColor_lightGray: nColor=0xC0C0C0; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_none: nColor=0xFFFFFFFF; break; //COL_AUTO
     default:
         return false;
     }
