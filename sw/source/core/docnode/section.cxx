@@ -929,79 +929,37 @@ bool SwSectionFormat::IsInNodesArr() const
 // Parent was changed
 void SwSectionFormat::UpdateParent()
 {
-    if( !HasWriterListeners() )
+    if(!HasWriterListeners())
         return;
 
-    SwSection* pSection = nullptr;
-    const SvxProtectItem* pProtect(nullptr);
+    const SwSection* pSection = GetSection();
+    const SvxProtectItem* pProtect = &GetProtect();
     // edit in readonly sections
-    const SwFormatEditInReadonly* pEditInReadonly = nullptr;
-    bool bIsHidden = false;
-
-    SwIterator<SwClient,SwSectionFormat> aIter(*this);
-    for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
+    const SwFormatEditInReadonly* pEditInReadonly = &GetEditInReadonly();
+    bool bIsHidden = pSection->IsHidden();
+    if(GetRegisteredIn())
     {
-        if( dynamic_cast<const SwSectionFormat*>(pLast) !=  nullptr )
-        {
-            if( !pSection )
-            {
-                pSection = GetSection();
-                if( GetRegisteredIn() )
-                {
-                    const SwSection* pPS = GetParentSection();
-                    pProtect = &pPS->GetFormat()->GetProtect();
-                    // edit in readonly sections
-                    pEditInReadonly = &pPS->GetFormat()->GetEditInReadonly();
-                    bIsHidden = pPS->IsHiddenFlag();
-                }
-                else
-                {
-                    pProtect = &GetProtect();
-                    // edit in readonly sections
-                    pEditInReadonly = &GetEditInReadonly();
-                    bIsHidden = pSection->IsHidden();
-                }
-            }
-            if (!pProtect->IsContentProtected() !=
-                !pSection->IsProtectFlag())
-            {
-                lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), static_cast<SfxPoolItem const *>(pProtect));
-            }
+        const SwSection* pPS = GetParentSection();
+        pProtect = &pPS->GetFormat()->GetProtect();
+        pEditInReadonly = &pPS->GetFormat()->GetEditInReadonly();
+        bIsHidden = pPS->IsHiddenFlag();
+    }
+    SwIterator<SwSectionFormat,SwSectionFormat> aIter(*this);
+    for(SwSectionFormat* pLast = aIter.First(); pLast; pLast = aIter.Next())
+    {
+        if(!pProtect->IsContentProtected() != !pSection->IsProtectFlag())
+            lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), static_cast<SfxPoolItem const *>(pProtect));
 
-            // edit in readonly sections
-            if (!pEditInReadonly->GetValue() !=
-                !pSection->IsEditInReadonlyFlag())
-            {
-                lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), static_cast<SfxPoolItem const *>(pEditInReadonly));
-            }
+        // edit in readonly sections
+        if(!pEditInReadonly->GetValue() != !pSection->IsEditInReadonlyFlag())
+            lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), static_cast<SfxPoolItem const *>(pEditInReadonly));
 
-            if( bIsHidden == pSection->IsHiddenFlag() )
-            {
-                SwMsgPoolItem aMsgItem( static_cast<sal_uInt16>(bIsHidden
-                            ? RES_SECTION_HIDDEN
-                            : RES_SECTION_NOT_HIDDEN ) );
-                lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), &aMsgItem);
-            }
-        }
-        else if( !pSection &&
-                dynamic_cast<const SwSection*>(pLast) !=  nullptr )
+        if(bIsHidden == pSection->IsHiddenFlag())
         {
-            pSection = static_cast<SwSection*>(pLast);
-            if( GetRegisteredIn() )
-            {
-                const SwSection* pPS = GetParentSection();
-                pProtect = &pPS->GetFormat()->GetProtect();
-                // edit in readonly sections
-                pEditInReadonly = &pPS->GetFormat()->GetEditInReadonly();
-                bIsHidden = pPS->IsHiddenFlag();
-            }
-            else
-            {
-                pProtect = &GetProtect();
-                // edit in readonly sections
-                pEditInReadonly = &GetEditInReadonly();
-                bIsHidden = pSection->IsHidden();
-            }
+            SwMsgPoolItem aMsgItem( static_cast<sal_uInt16>(bIsHidden
+                        ? RES_SECTION_HIDDEN
+                        : RES_SECTION_NOT_HIDDEN ) );
+            lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), &aMsgItem);
         }
     }
 }
