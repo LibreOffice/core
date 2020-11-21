@@ -9,7 +9,7 @@
      />
   <path
 	 class="icn icn--highlight-color-line"
-     d="M 8,17 11.5,13.5 15,17"
+     d="m 7.5,17.5 4,-4 4,4"
      fill="none"
      stroke="#1e8bcd" 
 	 stroke-linecap="round" 

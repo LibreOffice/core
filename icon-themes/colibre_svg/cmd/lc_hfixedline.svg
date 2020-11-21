@@ -1,1 +1,11 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m2.9646366 12.000001h18.0707264" fill="none" stroke="#1e8bcd" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+<?xml-stylesheet type="text/css" href="icons.css" ?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path
+	 class="icn icn--highlight-color"
+     d="M 2.5,11.5 H 21.5 v 1 H 2.5 Z"
+     fill="#83beec"
+     stroke="#1e8bcd" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+</svg>
