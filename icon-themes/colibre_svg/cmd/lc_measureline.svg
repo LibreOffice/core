@@ -1,1 +1,35 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#1e8bcd" stroke-linecap="round" stroke-linejoin="round"><path d="m21.502491 20.490315v-12.9806311" stroke-width="1.004882"/><path d="m2.5024912 20.490315v-12.9806311" stroke-width="1.004882"/><path d="m7.5071212 7.4949501-4 3.9999999 4 4"/><path d="m3.5071212 11.49495h16.9928788"/><path d="m16.50505 7.4949501 4 3.9999999-4 4"/></g></svg>
+<?xml-stylesheet type="text/css" href="icons.css" ?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path
+	 class="icn icn--highlight-color-line"
+     d="m 16.5,7.5 4,4 -4,4"
+     fill="none"
+     stroke="#1e8bcd" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+  <path
+	 class="icn icn--highlight-color-line"
+     d="m 3.5,11.5 h 17"
+     fill="none"
+     stroke="#1e8bcd" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+  <path
+	 class="icn icn--highlight-color-line"
+     d="m 7.5,7.5 -4,4 4,4"
+     fill="none"
+     stroke="#1e8bcd" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+  <path
+	 class="icn icn--highlight-color-line"
+     d="M 2.5 7.5 L 2.5 20.5 L 2.5 7.5 z M 21.5 7.5 L 21.5 20.5 L 21.5 7.5 z "
+     fill="none"
+     stroke="#1e8bcd" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+     />
+</svg>

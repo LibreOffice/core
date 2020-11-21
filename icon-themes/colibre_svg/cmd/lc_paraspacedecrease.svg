@@ -17,7 +17,7 @@
      />
   <path
 	 class="icn icn--highlight-color-line"
-     d="M 15,6 18.5,9.5 22,6"
+     d="m 14.5,5.5 4,4 4,-4"
      fill="none"
      stroke="#1e8bcd" 
 	 stroke-linecap="round" 
@@ -25,7 +25,7 @@
      />
   <path
 	 class="icn icn--highlight-color-line"
-     d="m 18.5,9.5000003 v -8"
+     d="m 18.5,9.5 v -8"
      fill="none"
      stroke="#1e8bcd" 
 	 stroke-linecap="round" 
@@ -33,7 +33,7 @@
      />
   <path
 	 class="icn icn--highlight-color-line"
-     d="m 15,17.999979 3.5,-3.5 3.5,3.5"
+     d="m 14.5,18.5 4,-4 4,4"
      fill="none"
      stroke="#1e8bcd" 
 	 stroke-linecap="round" 
