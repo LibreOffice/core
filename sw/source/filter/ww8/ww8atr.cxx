@@ -1236,13 +1236,12 @@ void WW8AttributeOutput::CharBorder( const SvxBorderLine* pAllBorder, const sal_
 
 void WW8AttributeOutput::CharHighlight( const SvxBrushItem& rBrush )
 {
+    sal_Int32 nColor = 0; //COL_AUTO
     if (rBrush.GetColor() != COL_TRANSPARENT)
-    {
-        sal_uInt8 nColor = msfilter::util::TransColToIco( rBrush.GetColor() );
-        // sprmCHighlight
-        m_rWW8Export.InsUInt16( NS_sprm::CHighlight::val );
-        m_rWW8Export.pO->push_back( nColor );
-    }
+        nColor = msfilter::util::TransColToIco(rBrush.GetColor());
+    // sprmCHighlight
+    m_rWW8Export.InsUInt16( NS_sprm::CHighlight::val );
+    m_rWW8Export.pO->push_back( nColor );
 }
 
 void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
