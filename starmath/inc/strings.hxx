@@ -199,7 +199,7 @@
 #define RID_COLORX_HEX          "color hex 000000 {<?>} "
 #define RID_COLORX_CORAL        "color coral {<?>} "
 #define RID_COLORX_CRIMSON      "color crimson {<?>} "
-#define RID_COLORX_MIDNIGHT     "color mignightblue {<?>} "
+#define RID_COLORX_MIDNIGHT     "color midnightblue {<?>} "
 #define RID_COLORX_VIOLET       "color violet {<?>} "
 #define RID_COLORX_ORANGE       "color orange {<?>} "
 #define RID_COLORX_ORANGERED    "color orangered {<?>} "
