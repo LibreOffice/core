@@ -63,7 +63,6 @@ class SwXMLImport: public SvXMLImport
 
     std::unique_ptr<SvXMLUnitConverter> m_pTwipUnitConv;
     std::unique_ptr<SvXMLImportItemMapper> m_pTableItemMapper;// paragraph item import
-    std::unique_ptr<SvXMLTokenMap> m_pDocElemTokenMap;
     std::unique_ptr<SvXMLTokenMap> m_pTableElemTokenMap;
     std::unique_ptr<SvXMLTokenMap> m_pTableCellAttrTokenMap;
 
@@ -150,7 +149,6 @@ public:
                 const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
                 XmlStyleFamily nSubFamily, SfxItemSet& rItemSet );
 
-    const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();
     const SvXMLTokenMap& GetTableCellAttrTokenMap();
 

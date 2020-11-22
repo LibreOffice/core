@@ -92,37 +92,6 @@ using namespace ::std;
 
 namespace {
 
-enum SwXMLDocTokens
-{
-    XML_TOK_DOC_FONTDECLS,
-    XML_TOK_DOC_STYLES,
-    XML_TOK_DOC_AUTOSTYLES,
-    XML_TOK_DOC_MASTERSTYLES,
-    XML_TOK_DOC_META,
-    XML_TOK_DOC_BODY,
-    XML_TOK_DOC_SCRIPT,
-    XML_TOK_DOC_SETTINGS,
-    XML_TOK_DOC_XFORMS,
-};
-
-}
-
-const SvXMLTokenMapEntry aDocTokenMap[] =
-{
-    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,     XML_TOK_DOC_FONTDECLS  },
-    { XML_NAMESPACE_OFFICE, XML_STYLES,         XML_TOK_DOC_STYLES      },
-    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES    },
-    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,   XML_TOK_DOC_MASTERSTYLES   },
-    { XML_NAMESPACE_OFFICE, XML_META,           XML_TOK_DOC_META        },
-    { XML_NAMESPACE_OFFICE, XML_BODY,           XML_TOK_DOC_BODY        },
-    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,        XML_TOK_DOC_SCRIPT      },
-    { XML_NAMESPACE_OFFICE, XML_SETTINGS,       XML_TOK_DOC_SETTINGS    },
-    { XML_NAMESPACE_XFORMS, XML_MODEL,          XML_TOK_DOC_XFORMS      },
-    XML_TOKEN_MAP_END
-};
-
-namespace {
-
 class SwXMLBodyContext_Impl : public SvXMLImportContext
 {
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
@@ -188,10 +157,6 @@ protected: // #i69629#
 public:
     SwXMLDocContext_Impl( SwXMLImport& rImport );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const Reference< xml::sax::XAttributeList > & xAttrList ) override;
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -238,26 +203,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::c
             GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             return new SwXMLBodyContext_Impl( GetSwImport() );
             break;
+        case XML_ELEMENT(XFORMS, XML_MODEL):
+            return createXFormsModelContext(GetImport());
+            break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ELEMENT("sw", nElement);
     }
     return nullptr;
-}
-
-SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
-{
-    SvXMLImportContext *pContext = nullptr;
-
-    const SvXMLTokenMap& rTokenMap = GetSwImport().GetDocElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
-    {
-    case XML_TOK_DOC_XFORMS:
-        pContext = createXFormsModelContext(GetImport());
-        break;
-    }
-
-    return pContext;
 }
 
 namespace {
@@ -338,14 +290,6 @@ void SwXMLDocStylesContext_Impl::endFastElement(sal_Int32 )
             bool(rSwImport.GetStyleFamilyMask() & SfxStyleFamily::Para));
 }
 
-const SvXMLTokenMap& SwXMLImport::GetDocElemTokenMap()
-{
-    if( !m_pDocElemTokenMap )
-        m_pDocElemTokenMap.reset( new SvXMLTokenMap( aDocTokenMap ) );
-
-    return *m_pDocElemTokenMap;
-}
-
 SvXMLImportContext *SwXMLImport::CreateFastContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
@@ -398,7 +342,6 @@ SwXMLImport::~SwXMLImport() throw ()
         SAL_WARN("sw", "endDocument skipped, dropping shapes now to avoid dangling SvTextShapeImportHelper pointing to this");
         ClearShapeImport();
     }
-    m_pDocElemTokenMap.reset();
     m_pTableElemTokenMap.reset();
     m_pTableCellAttrTokenMap.reset();
     FinitItemImport();
