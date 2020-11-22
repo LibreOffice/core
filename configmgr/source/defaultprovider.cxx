@@ -46,7 +46,7 @@ OUString getImplementationName() { return "com.sun.star.comp.configuration.Defau
 
 css::uno::Sequence<OUString> getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{ "com.sun.star.configuration.DefaultProvider" };
+    return { "com.sun.star.configuration.DefaultProvider" };
 }
 }
 
