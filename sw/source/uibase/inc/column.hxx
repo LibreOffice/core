@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_COLUMN_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_COLUMN_HXX
+#pragma once
 
 #include <svtools/ctrlbox.hxx>
 #include <svtools/valueset.hxx>
@@ -200,7 +198,5 @@ public:
     weld::Label* GetApplyLabel() { return m_xApplyToFT.get(); }
     weld::ComboBox* GetApplyComboBox() { return m_xApplyToLB.get(); }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
