@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "datwin.hxx"
 #include <o3tl/numeric.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
-
 
 void ButtonFrame::Draw( OutputDevice& rDev )
 {
