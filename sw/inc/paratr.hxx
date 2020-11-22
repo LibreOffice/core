@@ -39,9 +39,21 @@
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/pgrditem.hxx>
 
+class SwTextNode;
 class IntlWrapper;
 
 #define DROP_WHOLEWORD ((sal_uInt16)0x0001)
+
+class SwFormatDrop;
+
+namespace sw {
+    class SW_DLLPUBLIC FormatDropDefiner {
+        protected:
+            virtual ~FormatDropDefiner() {};
+        public:
+            virtual void FormatDropNotify(const SwFormatDrop&) =0;
+    };
+}
 
 /** If SwFormatDrop is a Client, it is the CharFormat that describes the font for the
    DropCaps. If it is not a Client, formatting uses the CharFormat of the paragraph.
@@ -49,8 +61,7 @@ class IntlWrapper;
    via the Modify of SwFormatDrop. */
 class SW_DLLPUBLIC SwFormatDrop: public SfxPoolItem, public SwClient
 {
-    sw::BroadcastingModify* m_pDefinedIn;       /**< Modify-Object, that contains DropCaps.
-                                  Can only be TextFormatCollection/TextNode. */
+    sw::FormatDropDefiner* m_pDefinedIn;  ///< TextNode or FormatColl that contains the CapDrops.
     sal_uInt16 m_nDistance;       ///< Distance to beginning of text.
     sal_uInt8  m_nLines;          ///< Line count.
     sal_uInt8  m_nChars;          ///< Character count.
@@ -68,7 +79,8 @@ private:
     SwFormatDrop & operator= (const SwFormatDrop &) = delete;
 
 protected:
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override
+        { m_pDefinedIn->FormatDropNotify(*this); };
 
 public:
 
@@ -102,9 +114,10 @@ public:
     virtual bool GetInfo( SfxPoolItem& ) const override;
 
     /// Get and set Modify pointer.
-    const sw::BroadcastingModify* GetDefinedIn() const { return m_pDefinedIn; }
-    void ChgDefinedIn( const sw::BroadcastingModify* pNew )
-    { m_pDefinedIn = const_cast<sw::BroadcastingModify*>(pNew); }
+    const sw::FormatDropDefiner* GetDefinedIn() const
+            { return m_pDefinedIn; };
+    void ChgDefinedIn( const sw::FormatDropDefiner* pDefiner )
+            { m_pDefinedIn = const_cast<sw::FormatDropDefiner*>(pDefiner); };
 };
 
 class SwRegisterItem : public SfxBoolItem
