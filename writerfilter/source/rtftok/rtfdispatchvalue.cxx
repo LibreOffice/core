@@ -164,13 +164,13 @@ bool RTFDocumentImpl::dispatchCharacterSprmValue(RTFKeyword nKeyword, int nParam
                 case RTFParserState::RunType::HICH:
                 case RTFParserState::RunType::RTLCH_LTRCH_1:
                 case RTFParserState::RunType::LTRCH_RTLCH_2:
-                case RTFParserState::RunType::DBCH:
                     nSprm = NS_ooxml::LN_EG_RPrBase_szCs;
                     break;
                 case RTFParserState::RunType::NONE:
                 case RTFParserState::RunType::LOCH:
                 case RTFParserState::RunType::LTRCH_RTLCH_1:
                 case RTFParserState::RunType::RTLCH_LTRCH_2:
+                case RTFParserState::RunType::DBCH:
                 default:
                     nSprm = NS_ooxml::LN_EG_RPrBase_sz;
                     break;
@@ -762,7 +762,6 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_AF:
             switch (m_aStates.top().getRunType())
             {
-                case RTFParserState::RunType::HICH:
                 case RTFParserState::RunType::RTLCH_LTRCH_1:
                 case RTFParserState::RunType::LTRCH_RTLCH_2:
                     nSprm = NS_ooxml::LN_CT_Fonts_cs;
@@ -772,6 +771,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     break;
                 case RTFParserState::RunType::NONE:
                 case RTFParserState::RunType::LOCH:
+                case RTFParserState::RunType::HICH:
                 case RTFParserState::RunType::LTRCH_RTLCH_1:
                 case RTFParserState::RunType::RTLCH_LTRCH_2:
                 default:
