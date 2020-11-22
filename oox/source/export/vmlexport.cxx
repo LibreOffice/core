@@ -542,7 +542,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         rProps.GetOpt( ESCHER_Prop_geoRight, nRight );
                     }
 
-                    if(nTop!=0 && nLeft!=0 &&  nBottom!=0 &&  nRight!=0 )
+                    if(nBottom!=0 &&  nRight!=0 )
                         m_pShapeAttrList->add( XML_coordsize,
                                 OStringBuffer( 20 ).append( sal_Int32( nRight ) - sal_Int32( nLeft ) )
                                 .append( "," ).append( sal_Int32( nBottom ) - sal_Int32( nTop ) )
