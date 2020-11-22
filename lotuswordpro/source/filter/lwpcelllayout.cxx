@@ -66,6 +66,8 @@
 #include <lwpfilehdr.hxx>
 #include <lwpglobalmgr.hxx>
 
+#include <sal/log.hxx>
+
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xfcell.hxx>
 #include <xfilter/xfcellstyle.hxx>
@@ -345,7 +347,11 @@ LwpPara* LwpCellLayout::GetLastParaOfPreviousStory()
     if (pPreStoryID && !(pPreStoryID->IsNull()))
     {
         LwpStory* pPreStory = dynamic_cast<LwpStory*>(pPreStoryID->obj(VO_STORY).get());
-        assert(pPreStory);
+        if (!pPreStory)
+        {
+            SAL_WARN("lwp", "unexpected null VO_STORY");
+            return nullptr;
+        }
         return dynamic_cast<LwpPara*>(pPreStory->GetLastPara().obj(VO_PARA).get());
     }
     else
