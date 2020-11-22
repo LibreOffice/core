@@ -55,9 +55,7 @@ public:
 
     XMLFootnoteImportContext(
         SvXMLImport& rImport,
-        XMLTextImportHelper& rHlp,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName );
+        XMLTextImportHelper& rHlp );
 
 protected:
 
