@@ -116,6 +116,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_bDefaultPos(true)
     , m_bFullScreen(false)
     , m_bFullScreenSpanAll(false)
+    , m_nInputLanguage(LANGUAGE_DONTKNOW)
 {
     Qt5Instance* pInst = static_cast<Qt5Instance*>(GetSalData()->m_pInstance);
     pInst->insertFrame(this);
@@ -995,10 +996,14 @@ bool Qt5Frame::MapUnicodeToKeyCode(sal_Unicode /*aUnicode*/, LanguageType /*aLan
     return false;
 }
 
-LanguageType Qt5Frame::GetInputLanguage()
+LanguageType Qt5Frame::GetInputLanguage() { return m_nInputLanguage; }
+
+void Qt5Frame::setInputLanguage(LanguageType nInputLanguage)
 {
-    // fallback
-    return LANGUAGE_DONTKNOW;
+    if (nInputLanguage == m_nInputLanguage)
+        return;
+    m_nInputLanguage = nInputLanguage;
+    CallCallback(SalEvent::InputLanguageChange, nullptr);
 }
 
 static Color toColor(const QColor& rColor)

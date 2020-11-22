@@ -109,6 +109,8 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     ScreenSaverInhibitor m_ScreenSaverInhibitor;
 #endif
 
+    LanguageType m_nInputLanguage;
+
     void SetDefaultPos();
     Size CalcDefaultSize();
     void SetDefaultSize();
@@ -211,6 +213,8 @@ public:
     virtual void SetApplicationID(const OUString&) override;
 
     inline bool CallCallback(SalEvent nEvent, const void* pEvent) const;
+
+    void setInputLanguage(LanguageType);
 };
 
 inline bool Qt5Frame::CallCallback(SalEvent nEvent, const void* pEvent) const
