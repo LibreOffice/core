@@ -106,7 +106,7 @@ string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
     // note: always use -debug so a PDB file is created
     string linkargs(" -link -debug");
 
-    // instead of using synced PDB access (-FS), use inidividual PDB files based on output
+    // instead of using synced PDB access (-FS), use individual PDB files based on output
     const char *const pEnvIndividualPDBs(getenv("MSVC_USE_INDIVIDUAL_PDBS"));
     const bool bIndividualPDBs = (pEnvIndividualPDBs && !strcmp(pEnvIndividualPDBs, "TRUE"));
 
