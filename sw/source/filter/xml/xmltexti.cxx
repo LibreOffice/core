@@ -179,11 +179,10 @@ SwXMLTextImportHelper::~SwXMLTextImportHelper()
 
 SvXMLImportContext *SwXMLTextImportHelper::CreateTableChildContext(
                 SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const OUString& rLocalName,
+                sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/,
                 const uno::Reference< XAttributeList > & xAttrList )
 {
-    return new SwXMLTableContext(
-                static_cast<SwXMLImport&>(rImport), nPrefix, rLocalName, xAttrList );
+    return new SwXMLTableContext( static_cast<SwXMLImport&>(rImport), xAttrList );
 }
 
 bool SwXMLTextImportHelper::IsInHeaderFooter() const
