@@ -22,6 +22,7 @@
 #include "swdllapi.h"
 #include "format.hxx"
 #include "hintids.hxx"
+#include "paratr.hxx"
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 
@@ -31,7 +32,7 @@
 class SwAttrPool;
 namespace sw{ class DocumentStylePoolManager; }
 
-class SAL_DLLPUBLIC_RTTI SwFormatColl : public SwFormat
+class SAL_DLLPUBLIC_RTTI SwFormatColl: public SwFormat
 {
 protected:
     SwFormatColl( SwAttrPool& rPool, const char* pFormatName,
@@ -52,7 +53,9 @@ private:
 };
 
 /// Represents the style of a paragraph.
-class SW_DLLPUBLIC SwTextFormatColl: public SwFormatColl
+class SW_DLLPUBLIC SwTextFormatColl
+    : public SwFormatColl
+    , public sw::FormatDropDefiner
 {
     friend class SwDoc;
     friend class ::sw::DocumentStylePoolManager;
@@ -66,7 +69,6 @@ class SW_DLLPUBLIC SwTextFormatColl: public SwFormatColl
     SwTextFormatColl *mpNextTextFormatColl;
 
 protected:
-
     SwTextFormatColl( SwAttrPool& rPool, const char* pFormatCollName,
                     SwTextFormatColl* pDerFrom = nullptr,
                     sal_uInt16 nFormatWh = RES_TXTFMTCOLL )
@@ -91,8 +93,6 @@ protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
-
-
     inline void SetNextTextFormatColl(SwTextFormatColl& rNext);
     SwTextFormatColl& GetNextTextFormatColl() const { return *mpNextTextFormatColl; }
 
@@ -133,6 +133,11 @@ public:
     bool AreListLevelIndentsApplicable() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    virtual void FormatDropNotify(const SwFormatDrop& rDrop) override
+    {
+        if(HasWriterListeners() && !IsModifyLocked())
+            CallSwClientNotify(sw::LegacyModifyHint(&rDrop, &rDrop));
+    };
 };
 
 class SwGrfFormatColl final : public SwFormatColl
