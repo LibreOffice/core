@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a50fdace_95dabd75",
+        "filename": "sfx2/uiconfig/ui/tabbarcontents.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-11-22T08:46:31Z",
+      "side": 1,
+      "message": "I suppose it\u0027s ok but don\u0027t know the impact",
+      "range": {
+        "startLine": 57,
+        "startChar": 55,
+        "endLine": 57,
+        "endChar": 65
+      },
+      "revId": "bf905084a553f145005b5580c99312b489ff0eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

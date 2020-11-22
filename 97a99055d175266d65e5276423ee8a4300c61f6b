@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb0a4004_a2d0af4a",
+        "filename": "starmath/inc/starmathdatabase.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-11-22T08:46:31Z",
+      "side": 1,
+      "message": "No it\u0027s \"appropriate\" (with an \"r\").\nI\u0027ve already submitted a patch about these here:\nhttps://gerrit.libreoffice.org/c/core/+/106338",
+      "range": {
+        "startLine": 210,
+        "startChar": 33,
+        "endLine": 210,
+        "endChar": 43
+      },
+      "revId": "97a99055d175266d65e5276423ee8a4300c61f6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
