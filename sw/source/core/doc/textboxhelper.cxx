@@ -58,7 +58,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     if (pShape->GetAttrSet().HasItem(RES_CNTNT) && pShape->GetOtherTextBoxFormat())
         return;
 
-    // Store the current text conent of the shape
+    // Store the current text content of the shape
     OUString sCopyableText;
 
     if (bCopyText)

@@ -307,7 +307,7 @@ std::unique_ptr<SmColorTokenTableEntry> Identify_ColorName_Parser(const OUString
   *
   * This finds color values for the color names loaded by mathmlimport.
   * In theory mathml only supports HTML4 colors, but most browsers support all HTML5 colors.
-  * Thats why there is a hight risk of finding them inside mathml and have to give support.
+  * That's why there is an high risk of finding them inside mathml and have to give support.
   *
   * @param cColor
   * @param parser color

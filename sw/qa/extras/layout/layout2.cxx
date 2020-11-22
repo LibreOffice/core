@@ -2545,7 +2545,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137185)
 
     CPPUNIT_ASSERT_EQUAL(OUString("Align me!"), xTextFrame->getText()->getString());
     CPPUNIT_ASSERT_EQUAL(OUString(), xTxt->getText()->getString());
-    // Before the patch it failled, because the text appeared 2 times on each other.
+    // Before the patch it failed, because the text appeared 2 times on each other.
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf135035)

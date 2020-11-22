@@ -91,7 +91,7 @@ public:
 private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
-    // This unusual auxillary builder is because without a toplevel GtkWindow
+    // This unusual auxiliary builder is because without a toplevel GtkWindow
     // gtk will warn on loading a .ui with an accelerator defined, so use a
     // temporary toplevel to suppress that and move the contents after load
     std::unique_ptr<weld::Builder> mxAuxBuilder;
