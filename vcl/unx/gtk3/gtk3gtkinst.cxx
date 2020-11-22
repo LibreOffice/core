@@ -16877,7 +16877,7 @@ public:
         if (!pButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
-        // gtk doesn't come with exactly the the concept
+        // gtk doesn't come with exactly the same concept
         GtkBuilder* pMenuToggleButton = makeMenuToggleButtonBuilder();
         return std::make_unique<GtkInstanceMenuToggleButton>(pMenuToggleButton, pButton, this, false);
     }
