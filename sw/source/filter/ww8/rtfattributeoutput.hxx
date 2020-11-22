@@ -525,7 +525,11 @@ private:
     /*
      * This is the same as m_aStyles but the contents of it is Assoc.
      */
-    OStringBuffer m_aStylesAssoc;
+    OStringBuffer m_aStylesAssocHich;
+    OStringBuffer m_aStylesAssocDbch;
+    OStringBuffer m_aStylesAssocRtlch;
+    OStringBuffer m_aStylesAssocLtrch;
+
     bool m_bIsRTL;
     sal_uInt16 m_nScript;
     bool m_bControlLtrRtl;
