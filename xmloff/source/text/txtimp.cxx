@@ -2182,7 +2182,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             XMLTextType::HeaderFooter == eType )
         {
             pContext = new XMLVariableDeclsImportContext(
-                rImport, *this, nPrefix, rLocalName, VarTypeSequence);
+                rImport, *this, VarTypeSequence);
             bContent = false;
         }
         break;
@@ -2192,7 +2192,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             XMLTextType::HeaderFooter == eType )
         {
             pContext = new XMLVariableDeclsImportContext(
-                rImport, *this, nPrefix, rLocalName, VarTypeSimple);
+                rImport, *this, VarTypeSimple);
             bContent = false;
         }
         break;
@@ -2202,7 +2202,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             XMLTextType::HeaderFooter == eType )
         {
             pContext = new XMLVariableDeclsImportContext(
-                rImport, *this, nPrefix, rLocalName, VarTypeUserField);
+                rImport, *this, VarTypeUserField);
             bContent = false;
         }
         break;
@@ -2211,8 +2211,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
             XMLTextType::HeaderFooter == eType )
         {
-            pContext = new XMLDdeFieldDeclsImportContext(
-                rImport, nPrefix, rLocalName);
+            pContext = new XMLDdeFieldDeclsImportContext(rImport);
             bContent = false;
         }
         break;
@@ -2273,7 +2272,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_CHANGE_START:
     case XML_TOK_TEXT_CHANGE_END:
         pContext = new XMLChangeImportContext(
-            rImport, nPrefix, rLocalName,
+            rImport,
             ((nToken == XML_TOK_TEXT_CHANGE_END)
                 ? XMLChangeImportContext::Element::END
                 : (nToken == XML_TOK_TEXT_CHANGE_START)

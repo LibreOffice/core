@@ -72,6 +72,11 @@ public:
             const css::uno::Reference<
                 css::xml::sax::XAttributeList > & xAttrList,
             css::text::TextContentAnchorType eDfltAnchorType );
+    XMLTextFrameContext( SvXMLImport& rImport,
+            sal_Int32 nElement,
+            const css::uno::Reference<
+                css::xml::sax::XFastAttributeList > & xAttrList,
+            css::text::TextContentAnchorType eDfltAnchorType );
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 

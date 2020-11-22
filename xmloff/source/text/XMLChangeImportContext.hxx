@@ -49,8 +49,6 @@ public:
      */
     XMLChangeImportContext(
         SvXMLImport& rImport,
-        sal_Int16 nPrefix,
-        const OUString& rLocalName,
         Element eElement,
         /// true if change mark is encountered outside of a paragraph
         /// (usually before a section or table)

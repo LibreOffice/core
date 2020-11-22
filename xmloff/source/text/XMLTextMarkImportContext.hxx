@@ -81,9 +81,7 @@ public:
     XMLTextMarkImportContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,
-        css::uno::Reference<css::uno::XInterface> & io_rxCrossRefHeadingBookmark,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName );
+        css::uno::Reference<css::uno::XInterface> & io_rxCrossRefHeadingBookmark );
 
 protected:
 
