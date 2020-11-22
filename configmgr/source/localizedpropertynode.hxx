@@ -49,9 +49,8 @@ private:
 
     virtual Kind kind() const override;
 
-    Type staticType_;
-    // as specified in the component-schema (TYPE_ANY, ...,
-    // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
+    Type staticType_; // as specified in the component-schema (TYPE_ANY, ..., TYPE_HEXBINARY_LIST;
+        // not TYPE_ERROR or TYPE_NIL)
     bool nillable_;
     NodeMap members_;
 };
