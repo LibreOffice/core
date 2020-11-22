@@ -22,12 +22,13 @@
 #include <cppuhelper/weakref.hxx>
 
 #include "swdllapi.h"
-#include "node.hxx"
-#include "hintids.hxx"
-#include "ndhints.hxx"
-#include "SwNumberTreeTypes.hxx"
 #include "IDocumentContentOperations.hxx"
+#include "SwNumberTreeTypes.hxx"
+#include "hintids.hxx"
 #include "modeltoviewhelper.hxx"
+#include "ndhints.hxx"
+#include "node.hxx"
+#include "paratr.hxx"
 
 #include <sfx2/Metadatable.hxx>
 #include <o3tl/sorted_vector.hxx>
@@ -79,6 +80,7 @@ typedef o3tl::sorted_vector< sal_Int32 > SwSoftPageBreakList;
 class SW_DLLPUBLIC SwTextNode
     : public SwContentNode
     , public ::sfx2::Metadatable
+    , public sw::FormatDropDefiner
 {
     friend class SwContentNode;
     /// For creating the first TextNode.
@@ -805,6 +807,8 @@ public:
 
     /// In MS Word, the font underline setting of the paragraph end position won't affect the formatting of numbering, so we ignore it
     static bool IsIgnoredCharFormatForNumbering(const sal_uInt16 nWhich);
+    void FormatDropNotify(const SwFormatDrop& rDrop) override
+            { TriggerNodeUpdate(sw::LegacyModifyHint(&rDrop, &rDrop)); };
 };
 
 inline SwpHints & SwTextNode::GetSwpHints()

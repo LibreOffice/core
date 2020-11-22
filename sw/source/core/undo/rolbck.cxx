@@ -85,7 +85,7 @@ SwHistorySetFormat::SwHistorySetFormat( const SfxPoolItem* pFormatHt, sal_uLong 
             static_cast<SwFormatPageDesc&>(*m_pAttr).ChgDefinedIn( nullptr );
             break;
         case RES_PARATR_DROP:
-            static_cast<SwFormatDrop&>(*m_pAttr).ChgDefinedIn( nullptr );
+            static_cast<SwFormatDrop&>(*m_pAttr).ChgDefinedIn(nullptr);
             break;
         case RES_BOXATR_FORMULA:
         {
@@ -854,7 +854,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
 
                 case RES_PARATR_DROP:
                     static_cast<SwFormatDrop*>(
-                        const_cast<SfxPoolItem*>(pItem))->ChgDefinedIn( nullptr );
+                        const_cast<SfxPoolItem*>(pItem))->ChgDefinedIn(nullptr);
                     break;
 
                 case RES_BOXATR_FORMULA:
