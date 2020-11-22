@@ -22,6 +22,30 @@
       "revId": "bf905084a553f145005b5580c99312b489ff0eac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e7d6ddb_8c6a9df8",
+        "filename": "sfx2/uiconfig/ui/tabbarcontents.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-11-22T20:01:43Z",
+      "side": 1,
+      "message": "this is ok to change in this specific case cause AFAICS noone relies on the name",
+      "parentUuid": "a50fdace_95dabd75",
+      "range": {
+        "startLine": 57,
+        "startChar": 55,
+        "endLine": 57,
+        "endChar": 65
+      },
+      "revId": "bf905084a553f145005b5580c99312b489ff0eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
