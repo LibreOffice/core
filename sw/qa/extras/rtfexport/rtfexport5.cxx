@@ -1260,6 +1260,22 @@ DECLARE_RTFEXPORT_TEST(testTdf138210, "tdf138210.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf137894, "tdf137894.odt")
+{
+    lang::Locale locale1(getProperty<lang::Locale>(getRun(getParagraph(1), 1), "CharLocaleAsian"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ja"), locale1.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("MS UI Gothic"),
+                         getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontNameAsian"));
+    CPPUNIT_ASSERT_EQUAL(20.f, getProperty<float>(getRun(getParagraph(1), 1), "CharHeightAsian"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mangal"),
+                         getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontNameComplex"));
+    CPPUNIT_ASSERT_EQUAL(20.f, getProperty<float>(getRun(getParagraph(1), 1), "CharHeightComplex"));
+    lang::Locale locale2(
+        getProperty<lang::Locale>(getRun(getParagraph(2), 1), "CharLocaleComplex"));
+    CPPUNIT_ASSERT_EQUAL(OUString("he"), locale2.Language);
+    CPPUNIT_ASSERT_EQUAL(32.f, getProperty<float>(getRun(getParagraph(2), 1), "CharHeightComplex"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
