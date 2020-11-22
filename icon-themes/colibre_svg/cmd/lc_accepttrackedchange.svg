@@ -1,21 +1,15 @@
 <?xml-stylesheet type="text/css" href="icons.css" ?>
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path
+  <g id="background"
      class="icn icn--area-color"
-	 d="m 4.5,21.5 h 15 V 7 L 15,2.5 H 4.5 Z"
      fill="#fafafa"
-     stroke="#3a3a38" 
-	 stroke-linecap="round" 
-	 stroke-linejoin="round"
-     />
-  <path
-     class="icn icn--area-color"
-	 d="m 14.5,7.5 h 5 V 7 L 15,2.5 h -0.5 z"
-     fill="#fafafa"
-     stroke="#3a3a38" 
-	 stroke-linecap="round" 
-	 stroke-linejoin="round"
-     />
+     stroke="#3a3a38"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     >
+      <path d="m 4.5,21.5 h 15 V 7 L 15,2.5 H 4.5 Z" />
+      <path d="m 14.5,7.5 h 5 V 7 L 15,2.5 h -0.5 z" />
+  </g>
   <path
      class="icn icn--line-color"
 	 d="M 7,5.5 H 12 Z m 0,4 H 10 Z m -0,6 h 4 z"
@@ -31,12 +25,23 @@
 	 stroke-linecap= "round"
 	 stroke-linejoin= "round"
      />
-  <path
-     class="icn icn--highlight-color-line"
-	 d="m 22.5,12.5 -8.5,10 -3.5,-3"
+  <g id="symbol-background"
+	 class="icn icn--background-line"
+     fill="none"
+     stroke="#fff" 
+     stroke-width="3px"
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+      >
+      <path d="m 22.5,12.5 -8.5,10 -3.5,-3" />
+  </g>
+  <g id="symbol"
+	 class="icn icn--highlight-color-line"
      fill="none" 
      stroke="#1e8bcd" 
 	 stroke-linecap="round" 
 	 stroke-linejoin="round"
-     />
+      >
+      <path d="m 22.5,12.5 -8.5,10 -3.5,-3" />
+  </g>
 </svg>
