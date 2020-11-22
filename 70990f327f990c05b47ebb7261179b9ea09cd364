@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1504b51_74c58834",
+        "filename": "sw/source/uibase/lingu/sdrhhcwrap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-11-22T11:29:25Z",
+      "side": 1,
+      "message": "No need to keep this blank line",
+      "revId": "70990f327f990c05b47ebb7261179b9ea09cd364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
