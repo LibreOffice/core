@@ -207,7 +207,7 @@ extern const SmColorTokenTableEntry aColorTokenTableDVIPSNAMES[5];
   * Identifies from char cChar
   *
   * While loading MO or MI elements might find an unicode16 symbol.
-  * This code allows to generate apropiate token for them.
+  * This code allows to generate appropriate token for them.
   *
   * @param cChar
   * @return closing fences' token
@@ -219,7 +219,7 @@ SmToken Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, bool bIsStretchy =
   * Identifies from char cChar
   *
   * While loading MO fenced elements might find braces symbols.
-  * This code allows to generate apropiate token for them.
+  * This code allows to generate appropriate token for them.
   *
   * @param cChar
   * @return closing fences' token
@@ -231,7 +231,7 @@ SmToken Identify_PrefixPostfix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
   * Identifies from char cChar
   *
   * While loading MO elements ( with prefix value for form attribute ) might find braces symbols.
-  * This code allows to generate apropiate token for them.
+  * This code allows to generate appropriate token for them.
   *
   * @param cChar
   * @return closing fences' token
@@ -243,7 +243,7 @@ SmToken Identify_Prefix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
   * Identifies from char cChar
   *
   * While loading MO elements ( with postfix value for form attribute ) might find braces symbols.
-  * This code allows to generate apropiate token for them.
+  * This code allows to generate appropriate token for them.
   *
   * @param cChar
   * @return closing fences' token
