@@ -423,49 +423,58 @@ void RtfAttributeOutput::EndRunProperties(const SwRedlineData* /*pRedlineData*/)
 
 OString RtfAttributeOutput::MoveCharacterProperties(bool aAutoWriteRtlLtr)
 {
-    const OString aAssoc = m_aStylesAssoc.makeStringAndClear();
+    const OString aAssocHich = m_aStylesAssocHich.makeStringAndClear();
+    const OString aAssocDbch = m_aStylesAssocDbch.makeStringAndClear();
+    const OString aAssocRtlch = m_aStylesAssocRtlch.makeStringAndClear();
+    const OString aAssocLtrch = m_aStylesAssocLtrch.makeStringAndClear();
     const OString aNormal = m_aStyles.makeStringAndClear();
     OStringBuffer aBuf;
 
     if (aAutoWriteRtlLtr && !m_bControlLtrRtl)
     {
-        m_bControlLtrRtl = !aAssoc.isEmpty();
+        m_bControlLtrRtl = !aAssocRtlch.isEmpty();
         m_bIsRTL = false;
         m_nScript = i18n::ScriptType::LATIN;
+    }
+
+    if (m_bIsRTL)
+    {
+        if (!aAssocRtlch.isEmpty())
+        {
+            aBuf.append(OOO_STRING_SVTOOLS_RTF_LTRCH)
+                .append(aAssocLtrch)
+                .append(' ')
+                .append(OOO_STRING_SVTOOLS_RTF_RTLCH)
+                .append(aAssocRtlch);
+        }
+    }
+    else
+    {
+        if (!aAssocRtlch.isEmpty())
+        {
+            aBuf.append(OOO_STRING_SVTOOLS_RTF_RTLCH)
+                .append(aAssocRtlch)
+                .append(' ')
+                .append(OOO_STRING_SVTOOLS_RTF_LTRCH)
+                .append(aAssocLtrch);
+        }
+        if (!aAssocHich.isEmpty())
+        {
+            aBuf.append(OOO_STRING_SVTOOLS_RTF_HICH).append(aAssocHich);
+        }
+        if (!aNormal.isEmpty())
+        {
+            aBuf.append(OOO_STRING_SVTOOLS_RTF_LOCH).append(aNormal);
+        }
+        if (!aAssocDbch.isEmpty())
+        {
+            aBuf.append(OOO_STRING_SVTOOLS_RTF_DBCH).append(aAssocDbch);
+        }
     }
 
     if (m_bControlLtrRtl)
     {
         m_bControlLtrRtl = false;
-
-        /*
-           You would have thought that
-           m_rExport.Strm() << (bIsRTL ? OOO_STRING_SVTOOLS_RTF_RTLCH : OOO_STRING_SVTOOLS_RTF_LTRCH); would be sufficient here ,
-           but looks like word needs to see the other directional token to be
-           satisfied that all is kosher, otherwise it seems in ver 2003 to go and
-           semi-randomly stick strike through about the place. Perhaps
-           strikethrough is some ms developers "something is wrong signal" debugging
-           code that we're triggering ?
-           */
-        if (!aAssoc.isEmpty() || !aNormal.isEmpty())
-        {
-            if (m_bIsRTL)
-            {
-                aBuf.append(OOO_STRING_SVTOOLS_RTF_LTRCH)
-                    .append(aAssoc)
-                    .append(' ')
-                    .append(OOO_STRING_SVTOOLS_RTF_RTLCH)
-                    .append(aNormal);
-            }
-            else
-            {
-                aBuf.append(OOO_STRING_SVTOOLS_RTF_RTLCH)
-                    .append(aAssoc)
-                    .append(' ')
-                    .append(OOO_STRING_SVTOOLS_RTF_LTRCH)
-                    .append(aNormal);
-            }
-        }
 
         switch (m_nScript)
         {
@@ -481,10 +490,6 @@ OString RtfAttributeOutput::MoveCharacterProperties(bool aAutoWriteRtlLtr)
                 /* should not happen? */
                 break;
         }
-    }
-    else
-    {
-        aBuf.append(aAssoc).append(aNormal);
     }
 
     return aBuf.makeStringAndClear();
@@ -2454,18 +2459,13 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
 
 void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LOCH);
+    // Insert \loch in MoveCharacterProperties
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_F);
     m_aStyles.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
 
-    if (!m_rExport.HasItem(RES_CHRATR_CJK_FONT) && !m_rExport.HasItem(RES_CHRATR_CTL_FONT))
-    {
-        // Be explicit about that the given font should be used everywhere, not
-        // just for the loch range.
-        m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_HICH);
-        m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_AF);
-        m_aStylesAssoc.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
-    }
+    // Insert \hich in MoveCharacterProperties
+    m_aStylesAssocHich.append(OOO_STRING_SVTOOLS_RTF_AF);
+    m_aStylesAssocHich.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
 
     // FIXME: this may be a tad expensive... but the charset needs to be
     // consistent with what wwFont::WriteRtf() does
@@ -2486,12 +2486,12 @@ void RtfAttributeOutput::CharFontSize(const SvxFontHeightItem& rFontSize)
             m_aStyles.append(static_cast<sal_Int32>(rFontSize.GetHeight() / 10));
             break;
         case RES_CHRATR_CJK_FONTSIZE:
-            m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_FS);
-            m_aStylesAssoc.append(static_cast<sal_Int32>(rFontSize.GetHeight() / 10));
+            m_aStylesAssocDbch.append(OOO_STRING_SVTOOLS_RTF_AFS);
+            m_aStylesAssocDbch.append(static_cast<sal_Int32>(rFontSize.GetHeight() / 10));
             break;
         case RES_CHRATR_CTL_FONTSIZE:
-            m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_AFS);
-            m_aStylesAssoc.append(static_cast<sal_Int32>(rFontSize.GetHeight() / 10));
+            m_aStylesAssocRtlch.append(OOO_STRING_SVTOOLS_RTF_AFS);
+            m_aStylesAssocRtlch.append(static_cast<sal_Int32>(rFontSize.GetHeight() / 10));
             break;
     }
 }
@@ -2513,15 +2513,21 @@ void RtfAttributeOutput::CharLanguage(const SvxLanguageItem& rLanguage)
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LANG);
             m_aStyles.append(
                 static_cast<sal_Int32>(static_cast<sal_uInt16>(rLanguage.GetLanguage())));
+            m_aStylesAssocLtrch.append(OOO_STRING_SVTOOLS_RTF_LANG);
+            m_aStylesAssocLtrch.append(
+                static_cast<sal_Int32>(static_cast<sal_uInt16>(rLanguage.GetLanguage())));
             break;
         case RES_CHRATR_CJK_LANGUAGE:
-            m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_LANGFE);
-            m_aStylesAssoc.append(
+            m_aStylesAssocDbch.append(OOO_STRING_SVTOOLS_RTF_LANGFE);
+            m_aStylesAssocDbch.append(
+                static_cast<sal_Int32>(static_cast<sal_uInt16>(rLanguage.GetLanguage())));
+            m_aStylesAssocLtrch.append(OOO_STRING_SVTOOLS_RTF_LANGFE);
+            m_aStylesAssocLtrch.append(
                 static_cast<sal_Int32>(static_cast<sal_uInt16>(rLanguage.GetLanguage())));
             break;
         case RES_CHRATR_CTL_LANGUAGE:
-            m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_ALANG);
-            m_aStylesAssoc.append(
+            m_aStylesAssocRtlch.append(OOO_STRING_SVTOOLS_RTF_ALANG);
+            m_aStylesAssocRtlch.append(
                 static_cast<sal_Int32>(static_cast<sal_uInt16>(rLanguage.GetLanguage())));
             break;
     }
@@ -2645,9 +2651,9 @@ void RtfAttributeOutput::CharBackground(const SvxBrushItem& rBrush)
 
 void RtfAttributeOutput::CharFontCJK(const SvxFontItem& rFont)
 {
-    m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_DBCH);
-    m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_AF);
-    m_aStylesAssoc.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
+    // Insert \dbch in MoveCharacterProperties
+    m_aStylesAssocDbch.append(OOO_STRING_SVTOOLS_RTF_AF);
+    m_aStylesAssocDbch.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
 }
 
 void RtfAttributeOutput::CharFontSizeCJK(const SvxFontHeightItem& rFontSize)
@@ -2662,23 +2668,23 @@ void RtfAttributeOutput::CharLanguageCJK(const SvxLanguageItem& rLanguageItem)
 
 void RtfAttributeOutput::CharPostureCJK(const SvxPostureItem& rPosture)
 {
-    m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_I);
+    m_aStylesAssocDbch.append(OOO_STRING_SVTOOLS_RTF_I);
     if (rPosture.GetPosture() == ITALIC_NONE)
-        m_aStylesAssoc.append(sal_Int32(0));
+        m_aStylesAssocDbch.append(sal_Int32(0));
 }
 
 void RtfAttributeOutput::CharWeightCJK(const SvxWeightItem& rWeight)
 {
-    m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_B);
+    m_aStylesAssocDbch.append(OOO_STRING_SVTOOLS_RTF_AB);
     if (rWeight.GetWeight() != WEIGHT_BOLD)
-        m_aStylesAssoc.append(sal_Int32(0));
+        m_aStylesAssocDbch.append(sal_Int32(0));
 }
 
 void RtfAttributeOutput::CharFontCTL(const SvxFontItem& rFont)
 {
-    m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_DBCH);
-    m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_AF);
-    m_aStylesAssoc.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
+    // Insert \rtlch in MoveCharacterProperties
+    m_aStylesAssocRtlch.append(OOO_STRING_SVTOOLS_RTF_AF);
+    m_aStylesAssocRtlch.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
 }
 
 void RtfAttributeOutput::CharFontSizeCTL(const SvxFontHeightItem& rFontSize)
@@ -2693,16 +2699,16 @@ void RtfAttributeOutput::CharLanguageCTL(const SvxLanguageItem& rLanguageItem)
 
 void RtfAttributeOutput::CharPostureCTL(const SvxPostureItem& rPosture)
 {
-    m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_AI);
+    m_aStylesAssocRtlch.append(OOO_STRING_SVTOOLS_RTF_AI);
     if (rPosture.GetPosture() == ITALIC_NONE)
-        m_aStylesAssoc.append(sal_Int32(0));
+        m_aStylesAssocRtlch.append(sal_Int32(0));
 }
 
 void RtfAttributeOutput::CharWeightCTL(const SvxWeightItem& rWeight)
 {
-    m_aStylesAssoc.append(OOO_STRING_SVTOOLS_RTF_AB);
+    m_aStylesAssocRtlch.append(OOO_STRING_SVTOOLS_RTF_AB);
     if (rWeight.GetWeight() != WEIGHT_BOLD)
-        m_aStylesAssoc.append(sal_Int32(0));
+        m_aStylesAssocRtlch.append(sal_Int32(0));
 }
 
 void RtfAttributeOutput::CharBidiRTL(const SfxPoolItem& /*rItem*/) {}
