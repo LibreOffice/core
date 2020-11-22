@@ -74,17 +74,7 @@ void SwFormatDrop::SwClientNotify(const SwModify&, const SfxHint&)
 {
     if(!m_pDefinedIn)
         return;
-    if(dynamic_cast<const SwFormat*>(m_pDefinedIn) == nullptr)
-    {
-        sw::BroadcastingModify aMod;
-        m_pDefinedIn->SwClientNotifyCall(aMod, sw::LegacyModifyHint(this, this));
-    }
-    else if(m_pDefinedIn->HasWriterListeners() && !m_pDefinedIn->IsModifyLocked())
-    {
-        // Notify those who are dependent on the format on our own.
-        // The format itself wouldn't pass on the notify as it does not get past the check.
-        m_pDefinedIn->CallSwClientNotify(sw::LegacyModifyHint(this, this));
-    }
+    m_pDefinedIn->CallSwClientNotify(sw::LegacyModifyHint(this, this));
 }
 
 bool SwFormatDrop::GetInfo( SfxPoolItem& ) const
