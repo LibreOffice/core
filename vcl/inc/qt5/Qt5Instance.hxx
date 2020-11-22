@@ -73,6 +73,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
 private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
     static void deleteObjectLater(QObject* pObject);
+    static void localeChanged();
 
 Q_SIGNALS:
     bool ImplYieldSignal(bool bWait, bool bHandleAllCurrentEvents);
