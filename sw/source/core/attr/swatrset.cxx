@@ -259,18 +259,18 @@ bool SwAttrSet::SetModifyAtAttr( const sw::BroadcastingModify* pModify )
         bSet = true;
     }
 
-    if( SfxItemState::SET == GetItemState( RES_PARATR_DROP, false, &pItem ) &&
-        static_cast<const SwFormatDrop*>(pItem)->GetDefinedIn() != pModify )
+    if( SfxItemState::SET == GetItemState( RES_PARATR_DROP, false, &pItem ) && static_cast<const SwFormatDrop*>(pItem)->GetDefinedIn() != pModify )
     {
+        auto pFormatDrop = const_cast<SwFormatDrop*>(static_cast<const SwFormatDrop*>(pItem));
         // If CharFormat is set and it is set in different attribute pools then
         // the CharFormat has to be copied.
-        SwCharFormat* pCharFormat = const_cast<SwFormatDrop*>(static_cast<const SwFormatDrop*>(pItem))->GetCharFormat();
+        SwCharFormat* pCharFormat = pFormatDrop->GetCharFormat();
         if( pCharFormat && GetPool() != pCharFormat->GetAttrSet().GetPool() )
         {
            pCharFormat = GetDoc()->CopyCharFormat( *pCharFormat );
-           const_cast<SwFormatDrop*>(static_cast<const SwFormatDrop*>(pItem))->SetCharFormat( pCharFormat );
+           pFormatDrop->SetCharFormat( pCharFormat );
         }
-        const_cast<SwFormatDrop*>(static_cast<const SwFormatDrop*>(pItem))->ChgDefinedIn( pModify );
+        pFormatDrop->ChgDefinedIn( pModify );
         bSet = true;
     }
 

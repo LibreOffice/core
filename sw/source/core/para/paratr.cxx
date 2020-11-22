@@ -38,7 +38,8 @@ SfxPoolItem* SwNumRuleItem::CreateDefault() { return new SwNumRuleItem; }
 SwFormatDrop::SwFormatDrop()
     : SfxPoolItem( RES_PARATR_DROP ),
     SwClient( nullptr ),
-    m_pDefinedIn( nullptr ),
+    m_pTextNode( nullptr ),
+    m_pFormatColl( nullptr ),
     m_nDistance( 0 ),
     m_nLines( 0 ),
     m_nChars( 0 ),
@@ -49,7 +50,8 @@ SwFormatDrop::SwFormatDrop()
 SwFormatDrop::SwFormatDrop( const SwFormatDrop &rCpy )
     : SfxPoolItem( RES_PARATR_DROP ),
     SwClient( rCpy.GetRegisteredInNonConst() ),
-    m_pDefinedIn( nullptr ),
+    m_pTextNode( nullptr ),
+    m_pFormatColl( nullptr ),
     m_nDistance( rCpy.GetDistance() ),
     m_nLines( rCpy.GetLines() ),
     m_nChars( rCpy.GetChars() ),
@@ -72,19 +74,10 @@ void SwFormatDrop::SetCharFormat( SwCharFormat *pNew )
 
 void SwFormatDrop::SwClientNotify(const SwModify&, const SfxHint&)
 {
-    if(!m_pDefinedIn)
-        return;
-    if(dynamic_cast<const SwFormat*>(m_pDefinedIn) == nullptr)
-    {
-        sw::BroadcastingModify aMod;
-        m_pDefinedIn->SwClientNotifyCall(aMod, sw::LegacyModifyHint(this, this));
-    }
-    else if(m_pDefinedIn->HasWriterListeners() && !m_pDefinedIn->IsModifyLocked())
-    {
-        // Notify those who are dependent on the format on our own.
-        // The format itself wouldn't pass on the notify as it does not get past the check.
-        m_pDefinedIn->CallSwClientNotify(sw::LegacyModifyHint(this, this));
-    }
+    if(m_pTextNode)
+        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(this, this));
+    else if(m_pFormatColl && !m_pFormatColl->IsModifyLocked())
+        m_pFormatColl->CallSwClientNotify(sw::LegacyModifyHint(this, this));
 }
 
 bool SwFormatDrop::GetInfo( SfxPoolItem& ) const
@@ -100,7 +93,8 @@ bool SwFormatDrop::operator==( const SfxPoolItem& rAttr ) const
              m_nDistance ==  static_cast<const SwFormatDrop&>(rAttr).GetDistance() &&
              m_bWholeWord == static_cast<const SwFormatDrop&>(rAttr).GetWholeWord() &&
              GetCharFormat() == static_cast<const SwFormatDrop&>(rAttr).GetCharFormat() &&
-             m_pDefinedIn == static_cast<const SwFormatDrop&>(rAttr).m_pDefinedIn );
+             m_pTextNode == static_cast<const SwFormatDrop&>(rAttr).m_pTextNode &&
+             m_pFormatColl == static_cast<const SwFormatDrop&>(rAttr).m_pFormatColl );
 }
 
 SwFormatDrop* SwFormatDrop::Clone( SfxItemPool* ) const

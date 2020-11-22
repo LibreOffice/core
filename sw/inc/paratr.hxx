@@ -26,6 +26,7 @@
 #include "swatrset.hxx"
 #include "format.hxx"
 #include "charfmt.hxx"
+#include "ndtxt.hxx"
 #include <editeng/adjustitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/spltitem.hxx>
@@ -39,6 +40,7 @@
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/pgrditem.hxx>
 
+class SwTextNode;
 class IntlWrapper;
 
 #define DROP_WHOLEWORD ((sal_uInt16)0x0001)
@@ -49,8 +51,8 @@ class IntlWrapper;
    via the Modify of SwFormatDrop. */
 class SW_DLLPUBLIC SwFormatDrop: public SfxPoolItem, public SwClient
 {
-    sw::BroadcastingModify* m_pDefinedIn;       /**< Modify-Object, that contains DropCaps.
-                                  Can only be TextFormatCollection/TextNode. */
+    SwTextNode* m_pTextNode; ///< TextNode, that contains the CapDrops.
+    SwTextFormatColl* m_pFormatColl;  ///< FormatCollection, that contains the CapDrops. Can only be set, if m_pTextnode is nullptr.
     sal_uInt16 m_nDistance;       ///< Distance to beginning of text.
     sal_uInt8  m_nLines;          ///< Line count.
     sal_uInt8  m_nChars;          ///< Character count.
@@ -102,9 +104,23 @@ public:
     virtual bool GetInfo( SfxPoolItem& ) const override;
 
     /// Get and set Modify pointer.
-    const sw::BroadcastingModify* GetDefinedIn() const { return m_pDefinedIn; }
+    const sw::BroadcastingModify* GetDefinedIn() const
+    {
+        if(m_pTextNode)
+            return m_pTextNode;
+        return m_pFormatColl;
+    };
     void ChgDefinedIn( const sw::BroadcastingModify* pNew )
-    { m_pDefinedIn = const_cast<sw::BroadcastingModify*>(pNew); }
+    {
+        auto pNewNonConst = const_cast<sw::BroadcastingModify*>(pNew);
+        if(auto pTextNode = dynamic_cast<SwTextNode*>(pNewNonConst))
+        {
+            m_pTextNode = pTextNode, m_pFormatColl = nullptr;
+            return;
+        }
+        assert(dynamic_cast<SwTextFormatCollection*>(pNewNonConst));
+        m_pFormatColl = static_cast<SwTextFormatColl*>(pNewNonConst), m_pTextNode = nullptr;
+    }
 };
 
 class SwRegisterItem : public SfxBoolItem
