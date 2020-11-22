@@ -30,18 +30,18 @@
 #include <memory>
 
 SbiImage::SbiImage()
+    : bError(false)
+    , nFlags(SbiImageFlags::NONE)
+    , nStringSize(0)
+    , nCodeSize(0)
+    , nLegacyCodeSize(0)
+    , nDimBase(0)
+    , eCharSet(osl_getThreadTextEncoding())
+    , nStringIdx(0)
+    , nStringOff(0)
+    , bInit(false)
+    , bFirstInit(true)
 {
-    nFlags     = SbiImageFlags::NONE;
-    nStringSize= 0;
-    nCodeSize  = 0;
-    nLegacyCodeSize  =
-    nDimBase   = 0;
-    bInit      =
-    bError     = false;
-    bFirstInit = true;
-    eCharSet   = osl_getThreadTextEncoding();
-    nStringIdx = 0;
-    nStringOff = 0;
 }
 
 SbiImage::~SbiImage()
