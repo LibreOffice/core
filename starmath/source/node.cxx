@@ -1632,6 +1632,7 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TRGB :
         case TRGBA :
         case THTMLCOL :
+        case TMATHMLCOL :
         case TDVIPSNAMESCOL:
         case TICONICCOL :
         case THEX :

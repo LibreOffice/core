@@ -443,7 +443,7 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableParse[]
         { "lightslategrey", "lightslategrey", THTMLCOL, COL_SM_LIGHTSLATEGREY },
         { "lightsteelblue", "lightsteelblue", THTMLCOL, COL_SM_LIGHTSTEELBLUE },
         { "lightyellow", "lightyellow", THTMLCOL, COL_SM_LIGHTYELLOW },
-        { "lime", "lime", THTMLCOL, COL_SM_LIME },
+        { "lime", "lime", TMATHMLCOL, COL_SM_LIME },
         { "limegreen", "limegreen", THTMLCOL, COL_SM_LIMEGREEN },
         { "linen", "linen", THTMLCOL, COL_SM_LINEN },
         { "lo", "", TICONICCOL, COL_SM_LO_GREEN },
