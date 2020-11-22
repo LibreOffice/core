@@ -66,13 +66,6 @@
 using namespace ::com::sun::star;
 
 namespace {
-
-    void lcl_SwClientNotify(sw::BroadcastingModify& rModify, const SfxPoolItem* pOldNew)
-    {
-        const sw::LegacyModifyHint aHint(pOldNew, pOldNew);
-        rModify.SwClientNotifyCall(rModify, aHint);
-    }
-
     class SwIntrnlSectRefLink : public SwBaseLink
     {
         SwSectionFormat& m_rSectFormat;
@@ -318,8 +311,8 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
             // This should be shown by the bHiddenFlag.
 
             // Tell all Children that they are hidden
-            SwMsgPoolItem aMsgItem( RES_SECTION_HIDDEN );
-            lcl_SwClientNotify(*pFormat, &aMsgItem);
+            const SwMsgPoolItem aMsgItem( RES_SECTION_HIDDEN );
+            pFormat->CallSwClientNotify(sw::LegacyModifyHint(&aMsgItem, &aMsgItem));
 
             // Delete all Frames
             pFormat->DelFrames();
@@ -333,8 +326,8 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
         if( !pParentSect || !pParentSect->IsHiddenFlag() )
         {
             // Tell all Children that the Parent is not hidden anymore
-            SwMsgPoolItem aMsgItem( RES_SECTION_NOT_HIDDEN );
-            lcl_SwClientNotify(*pFormat, &aMsgItem);
+            const SwMsgPoolItem aMsgItem( RES_SECTION_NOT_HIDDEN );
+            pFormat->CallSwClientNotify(sw::LegacyModifyHint(&aMsgItem, &aMsgItem));
 
             pFormat->MakeFrames();
         }
@@ -719,8 +712,8 @@ void SwSectionFormat::DelFrames()
     SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection( &aNextNd, true, false );
     if( pCNd )
     {
-        const SfxPoolItem& rItem = pCNd->GetSwAttrSet().Get( RES_PAGEDESC );
-        lcl_SwClientNotify(*pCNd, &rItem);
+        const SfxPoolItem& rItem = pCNd->GetSwAttrSet().Get(RES_PAGEDESC);
+        pCNd->CallSwClientNotify(sw::LegacyModifyHint(&rItem, &rItem));
     }
 }
 
@@ -945,22 +938,19 @@ void SwSectionFormat::UpdateParent()
         bIsHidden = pPS->IsHiddenFlag();
     }
     SwIterator<SwSectionFormat,SwSectionFormat> aIter(*this);
-    for(SwSectionFormat* pLast = aIter.First(); pLast; pLast = aIter.Next())
+    if(!pProtect->IsContentProtected() != !pSection->IsProtectFlag())
+        CallSwClientNotify(sw::LegacyModifyHint(pProtect, pProtect));
+
+    // edit in readonly sections
+    if(!pEditInReadonly->GetValue() != !pSection->IsEditInReadonlyFlag())
+        CallSwClientNotify(sw::LegacyModifyHint(pEditInReadonly, pEditInReadonly));
+
+    if(bIsHidden == pSection->IsHiddenFlag())
     {
-        if(!pProtect->IsContentProtected() != !pSection->IsProtectFlag())
-            lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), static_cast<SfxPoolItem const *>(pProtect));
-
-        // edit in readonly sections
-        if(!pEditInReadonly->GetValue() != !pSection->IsEditInReadonlyFlag())
-            lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), static_cast<SfxPoolItem const *>(pEditInReadonly));
-
-        if(bIsHidden == pSection->IsHiddenFlag())
-        {
-            SwMsgPoolItem aMsgItem( static_cast<sal_uInt16>(bIsHidden
-                        ? RES_SECTION_HIDDEN
-                        : RES_SECTION_NOT_HIDDEN ) );
-            lcl_SwClientNotify(*static_cast<sw::BroadcastingModify*>(pLast), &aMsgItem);
-        }
+        SwMsgPoolItem aMsgItem(static_cast<sal_uInt16>(bIsHidden
+                ? RES_SECTION_HIDDEN
+                : RES_SECTION_NOT_HIDDEN));
+        CallSwClientNotify(sw::LegacyModifyHint(&aMsgItem, &aMsgItem));
     }
 }
 
