@@ -229,6 +229,9 @@ Qt5Instance::Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, [this]() { m_bSleeping = false; });
     connect(dispatcher, &QAbstractEventDispatcher::aboutToBlock, this,
             [this]() { m_bSleeping = true; });
+
+    connect(QGuiApplication::inputMethod(), &QInputMethod::localeChanged, this,
+            &Qt5Instance::localeChanged);
 }
 
 Qt5Instance::~Qt5Instance()
@@ -246,6 +249,19 @@ void Qt5Instance::AfterAppInit()
         QGuiApplication::setDesktopFileName(QStringLiteral("libreoffice-startcenter.desktop"));
     QGuiApplication::setLayoutDirection(AllSettings::GetLayoutRTL() ? Qt::RightToLeft
                                                                     : Qt::LeftToRight);
+}
+
+void Qt5Instance::localeChanged()
+{
+    SolarMutexGuard aGuard;
+    const vcl::Window* pFocusWindow = Application::GetFocusWindow();
+    SalFrame* const pFocusFrame = pFocusWindow ? pFocusWindow->ImplGetFrame() : nullptr;
+    if (!pFocusFrame)
+        return;
+
+    const LanguageTag aTag(
+        toOUString(QGuiApplication::inputMethod()->locale().name().replace("_", "-")));
+    static_cast<Qt5Frame*>(pFocusFrame)->setInputLanguage(aTag.getLanguageType());
 }
 
 void Qt5Instance::deleteObjectLater(QObject* pObject) { pObject->deleteLater(); }
