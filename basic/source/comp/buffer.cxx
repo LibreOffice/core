@@ -29,14 +29,14 @@ const sal_uInt32 UP_LIMIT=0xFFFFFF00;
 // of x*16 Bytes.
 
 SbiBuffer::SbiBuffer( SbiParser* p, short n )
+    : pParser(p)
+    , pCur(nullptr)
+    , nOff(0)
+    , nSize(0)
 {
-    pParser = p;
     n = ( (n + 15 ) / 16 ) * 16;
     if( !n ) n = 16;
-    pCur  = nullptr;
     nInc  = n;
-    nSize =
-    nOff  = 0;
 }
 
 SbiBuffer::~SbiBuffer()

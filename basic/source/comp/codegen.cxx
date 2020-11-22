@@ -37,13 +37,14 @@
 // nInc is the increment size of the buffers
 
 SbiCodeGen::SbiCodeGen( SbModule& r, SbiParser* p, short nInc )
-         : rMod( r ), aCode( p, nInc )
+    : pParser(p)
+    , rMod(r)
+    , aCode(p, nInc)
+    , nLine(0)
+    , nCol(0)
+    , nForLevel(0)
+    , bStmnt(false)
 {
-    pParser = p;
-    bStmnt = false;
-    nLine = 0;
-    nCol = 0;
-    nForLevel = 0;
 }
 
 sal_uInt32 SbiCodeGen::GetPC() const

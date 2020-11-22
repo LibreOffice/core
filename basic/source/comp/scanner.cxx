@@ -27,31 +27,32 @@
 #include <svl/zforlist.hxx>
 #include <rtl/character.hxx>
 
-SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
+SbiScanner::SbiScanner(const OUString& rBuf, StarBASIC* p)
+    : aBuf(rBuf)
+    , nLineIdx(-1)
+    , nSaveLineIdx(-1)
+    , pBasic(p)
+    , eScanType(SbxVARIANT)
+    , nVal(0)
+    , nSavedCol1(0)
+    , nCol(0)
+    , nErrors(0)
+    , nColLock(0)
+    , nBufPos(0)
+    , nLine(0)
+    , nCol1(0)
+    , nCol2(0)
+    , bSymbol(false)
+    , bNumber(false)
+    , bSpaces(false)
+    , bAbort(false)
+    , bHash(true)
+    , bError(false)
+    , bCompatible(false)
+    , bVBASupportOn(false)
+    , bPrevLineExtentsComment(false)
+    , bInStatement(false)
 {
-    pBasic   = p;
-    nLineIdx = -1;
-    nVal     = 0;
-    eScanType = SbxVARIANT;
-    nErrors  = 0;
-    nBufPos  = 0;
-    nSavedCol1 = 0;
-    nColLock = 0;
-    nLine    = 0;
-    nCol1    = 0;
-    nCol2    = 0;
-    nCol     = 0;
-    bError   =
-    bAbort   =
-    bSpaces  =
-    bNumber  =
-    bSymbol  =
-    bCompatible =
-    bVBASupportOn =
-    bInStatement =
-    bPrevLineExtentsComment = false;
-    bHash    = true;
-    nSaveLineIdx = -1;
 }
 
 void SbiScanner::LockColumn()

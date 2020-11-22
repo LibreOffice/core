@@ -31,19 +31,20 @@ SbiGlobals* GetSbData()
 }
 
 SbiGlobals::SbiGlobals()
+    : pInst(nullptr)
+    , pMod(nullptr)
+    , pCompMod(nullptr) // JSM
+    , nInst(0)
+    , nCode(ERRCODE_NONE)
+    , nLine(0)
+    , nCol1(0)
+    , nCol2(0)
+    , bCompilerError(false)
+    , bGlobalInitErr(false)
+    , bRunInit(false)
+    , bBlockCompilerError(false)
+    , pMSOMacroRuntimLib(nullptr)
 {
-    pInst = nullptr;
-    pMod = nullptr;
-    pCompMod = nullptr; // JSM
-    nInst = 0;
-    nCode = ERRCODE_NONE;
-    nLine = 0;
-    nCol1 = nCol2 = 0;
-    bCompilerError = false;
-    bGlobalInitErr = false;
-    bRunInit = false;
-    bBlockCompilerError = false;
-    pMSOMacroRuntimLib = nullptr;
 }
 
 SbiGlobals::~SbiGlobals() = default;
