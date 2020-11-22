@@ -2174,7 +2174,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         // Source cell value. We need to clone the value since it may be inserted repeatedly.
         ScCellValue aSrcCell = aCol[nCol].GetCellValue(static_cast<SCROW>(nRow));
 
-        // Maybe another source cell need to be searched, if the fill is going trough merged cells,
+        // Maybe another source cell need to be searched, if the fill is going through merged cells,
         // where overlapped parts does not contain any information, so they can be skipped.
         if (bSkipOverlappedCells)
         {
