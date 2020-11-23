@@ -151,6 +151,67 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
+{
+    ScModelObj* pModelObj = createDoc("tdf131455.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    checkCurrentCell(0, 4);
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+    checkCurrentCell(1, 4);
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+    checkCurrentCell(4, 4);
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+    checkCurrentCell(5, 4);
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+    checkCurrentCell(8, 4);
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+    checkCurrentCell(9, 4);
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+    checkCurrentCell(12, 4);
+
+    //Cursor can't move forward to the right
+    for (size_t i = 0; i < 5; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:GoRight", {});
+        checkCurrentCell(13, 4);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ScDocShell::GetViewData()->GetTabNo());
+
+    dispatchCommand(mxComponent, ".uno:JumpToNextTable", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), ScDocShell::GetViewData()->GetTabNo());
+    checkCurrentCell(0, 3);
+
+    // Go to row 9
+    for (size_t i = 0; i < 6; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:GoDown", {});
+    }
+
+    checkCurrentCell(0, 9);
+
+    dispatchCommand(mxComponent, ".uno:SelectRow", {});
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    dispatchCommand(mxComponent, ".uno:JumpToPrevTable", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ScDocShell::GetViewData()->GetTabNo());
+    checkCurrentCell(13, 4);
+
+    // Cursor can't move forward to the right
+    // Without the fix in place, this test would have failed with
+    // - Expected: 13
+    // - Actual  : 64
+    for (size_t i = 0; i < 5; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:GoRight", {});
+        checkCurrentCell(13, 4);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126904)
 {
     ScModelObj* pModelObj = createDoc("tdf126904.ods");
