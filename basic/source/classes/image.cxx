@@ -33,8 +33,6 @@ SbiImage::SbiImage()
     : bError(false)
     , nFlags(SbiImageFlags::NONE)
     , nStringSize(0)
-    , nCodeSize(0)
-    , nLegacyCodeSize(0)
     , nDimBase(0)
     , eCharSet(osl_getThreadTextEncoding())
     , nStringIdx(0)
@@ -52,12 +50,10 @@ void SbiImage::Clear()
 {
     mvStringOffsets.clear();
     pStrings.reset();
-    pCode.reset();
-    pLegacyPCode.reset();
+    aCode.clear();
+    aLegacyPCode.clear();
     nFlags     = SbiImageFlags::NONE;
     nStringSize= 0;
-    nLegacyCodeSize  = 0;
-    nCodeSize  = 0;
     eCharSet   = osl_getThreadTextEncoding();
     nDimBase   = 0;
     bError     = false;
@@ -177,18 +173,16 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
             }
             case FileOffset::PCode:
                 if( bBadVer ) break;
-                pCode.reset(new char[ nLen ]);
-                nCodeSize = nLen;
-                r.ReadBytes(pCode.get(), nCodeSize);
+                aCode.resize(nLen);
+                r.ReadBytes(aCode.data(), aCode.size());
                 if ( bLegacy )
                 {
-                    nLegacyCodeSize = static_cast<sal_uInt16>(nCodeSize);
-                    pLegacyPCode = std::move(pCode);
+                    aLegacyPCode = std::move(aCode);
 
-                    PCodeBuffConvertor< sal_uInt16, sal_uInt32 > aLegacyToNew( reinterpret_cast<sal_uInt8*>(pLegacyPCode.get()), nLegacyCodeSize );
+                    PCodeBuffConvertor<sal_uInt16, sal_uInt32> aLegacyToNew(aLegacyPCode.data(),
+                                                                            aLegacyPCode.size());
                     aLegacyToNew.convert();
-                    pCode.reset(reinterpret_cast<char*>(aLegacyToNew.GetBuffer()));
-                    nCodeSize = aLegacyToNew.GetSize();
+                    aCode = aLegacyToNew.GetBuffer();
                     // we don't release the legacy buffer
                     // right now, that's because the module
                     // needs it to fix up the method
@@ -434,20 +428,19 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         SbiCloseRecord( r, nPos );
     }
     // Binary data?
-    if( pCode && SbiGood( r ) )
+    if (aCode.size() && SbiGood(r))
     {
         nPos = SbiOpenRecord( r, FileOffset::PCode, 1 );
         if ( bLegacy )
         {
-            PCodeBuffConvertor< sal_uInt32, sal_uInt16 > aNewToLegacy( reinterpret_cast<sal_uInt8*>(pCode.get()), nCodeSize );
+            PCodeBuffConvertor<sal_uInt32, sal_uInt16> aNewToLegacy(aCode.data(), aCode.size());
             aNewToLegacy.convert();
-            pLegacyPCode.reset(reinterpret_cast<char*>(aNewToLegacy.GetBuffer()));
-            nLegacyCodeSize = aNewToLegacy.GetSize();
-            r.WriteBytes(pLegacyPCode.get(), nLegacyCodeSize);
+            aLegacyPCode = aNewToLegacy.GetBuffer();
+            r.WriteBytes(aLegacyPCode.data(), aLegacyPCode.size());
         }
         else
         {
-            r.WriteBytes(pCode.get(), nCodeSize);
+            r.WriteBytes(aCode.data(), aCode.size());
         }
         SbiCloseRecord( r, nPos );
     }
@@ -626,10 +619,9 @@ void SbiImage::AddString( const OUString& r )
 // The block was fetched by the compiler from class SbBuffer and
 // is already created with new. Additionally it contains all Integers
 // in Big Endian format, so can be directly read/written.
-void SbiImage::AddCode( std::unique_ptr<char[]> p, sal_uInt32 s )
+void SbiImage::AddCode(std::vector<sal_uInt8>&& v)
 {
-    pCode = std::move(p);
-    nCodeSize = s;
+    aCode = std::move(v);
 }
 
 // Add user type
@@ -685,23 +677,22 @@ const SbxObject* SbiImage::FindType (const OUString& aTypeName) const
 
 sal_uInt16 SbiImage::CalcLegacyOffset( sal_Int32 nOffset )
 {
-    return SbiCodeGen::calcLegacyOffSet( reinterpret_cast<sal_uInt8*>(pCode.get()), nOffset ) ;
+    return SbiCodeGen::calcLegacyOffSet(aCode.data(), nOffset);
 }
 
 sal_uInt32 SbiImage::CalcNewOffset( sal_Int16 nOffset )
 {
-    return SbiCodeGen::calcNewOffSet( reinterpret_cast<sal_uInt8*>(pLegacyPCode.get()), nOffset ) ;
+    return SbiCodeGen::calcNewOffSet(aLegacyPCode.data(), nOffset);
 }
 
 void  SbiImage::ReleaseLegacyBuffer()
 {
-    pLegacyPCode.reset();
-    nLegacyCodeSize = 0;
+    aLegacyPCode.clear();
 }
 
 bool SbiImage::ExceedsLegacyLimits()
 {
-    return ( nStringSize > 0xFF00 ) || ( CalcLegacyOffset( nCodeSize ) > 0xFF00 );
+    return (nStringSize > 0xFF00) || (CalcLegacyOffset(aCode.size()) > 0xFF00);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
