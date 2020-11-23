@@ -90,8 +90,9 @@ void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast< SdrGrafObj *>( pObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap ) )
-            bEnable = true;
+        if( auto pGrafObj = dynamic_cast< SdrGrafObj *>( pObj ) )
+            if( pGrafObj->GetGraphicType() == GraphicType::Bitmap )
+                bEnable = true;
     }
 
     if( !bEnable )
@@ -106,28 +107,29 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest const & rReq )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast< SdrGrafObj *>( pObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
-        {
-            GraphicObject aFilterObj( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
-
-            if( SvxGraphicFilterResult::NONE ==
-                SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
+        if( auto pGrafObj = dynamic_cast< SdrGrafObj *>( pObj ) )
+            if( pGrafObj->GetGraphicType() == GraphicType::Bitmap )
             {
-                SdrPageView* pPageView = mpView->GetSdrPageView();
+                GraphicObject aFilterObj( pGrafObj->GetGraphicObject() );
 
-                if( pPageView )
+                if( SvxGraphicFilterResult::NONE ==
+                    SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
                 {
-                    SdrGrafObj* pFilteredObj = static_cast<SdrGrafObj*>( pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject()) );
-                    OUString aStr = mpView->GetDescriptionOfMarkedObjects() +
-                        " " + SdResId(STR_UNDO_GRAFFILTER);
-                    mpView->BegUndo( aStr );
-                    pFilteredObj->SetGraphicObject( aFilterObj );
-                    ::sd::View* const pView = mpView;
-                    pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
-                    pView->EndUndo();
-                    return;
+                    SdrPageView* pPageView = mpView->GetSdrPageView();
+
+                    if( pPageView )
+                    {
+                        SdrGrafObj* pFilteredObj = static_cast<SdrGrafObj*>( pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject()) );
+                        OUString aStr = mpView->GetDescriptionOfMarkedObjects() +
+                            " " + SdResId(STR_UNDO_GRAFFILTER);
+                        mpView->BegUndo( aStr );
+                        pFilteredObj->SetGraphicObject( aFilterObj );
+                        ::sd::View* const pView = mpView;
+                        pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
+                        pView->EndUndo();
+                        return;
+                    }
                 }
-            }
         }
     }
 

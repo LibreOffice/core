@@ -817,29 +817,29 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
         {
             if( !bVectorType )
             {
-                SdrObject* pObj = aShapes.front();
-                if( dynamic_cast<const SdrGrafObj*>( pObj) && !static_cast<SdrGrafObj*>(pObj)->HasText() )
-                {
-                    aGraphic = static_cast<SdrGrafObj*>(pObj)->GetTransformedGraphic();
-                    if ( aGraphic.GetType() == GraphicType::Bitmap )
+                if( auto pGrafObj = dynamic_cast<const SdrGrafObj*>(aShapes.front()) )
+                    if (pGrafObj->HasText() )
                     {
-                        Size aSizePixel( aGraphic.GetSizePixel() );
-                        if( rSettings.mnWidth && rSettings.mnHeight &&
-                            ( ( rSettings.mnWidth != aSizePixel.Width() ) ||
-                              ( rSettings.mnHeight != aSizePixel.Height() ) ) )
+                        aGraphic = pGrafObj->GetTransformedGraphic();
+                        if ( aGraphic.GetType() == GraphicType::Bitmap )
                         {
-                            BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
-                            // export: use highest quality
-                            aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ), BmpScaleFlag::Lanczos );
-                            aGraphic = aBmpEx;
-                        }
+                            Size aSizePixel( aGraphic.GetSizePixel() );
+                            if( rSettings.mnWidth && rSettings.mnHeight &&
+                                ( ( rSettings.mnWidth != aSizePixel.Width() ) ||
+                                  ( rSettings.mnHeight != aSizePixel.Height() ) ) )
+                            {
+                                BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
+                                // export: use highest quality
+                                aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ), BmpScaleFlag::Lanczos );
+                                aGraphic = aBmpEx;
+                            }
 
-                        // #118804# only accept for bitmap graphics, else the
-                        // conversion to bitmap will happen anywhere without size control
-                        // as evtl. defined in rSettings.mnWidth/mnHeight
-                        bSingleGraphic = true;
+                            // #118804# only accept for bitmap graphics, else the
+                            // conversion to bitmap will happen anywhere without size control
+                            // as evtl. defined in rSettings.mnWidth/mnHeight
+                            bSingleGraphic = true;
+                        }
                     }
-                }
             }
             else if( rSettings.mbScrollText )
             {

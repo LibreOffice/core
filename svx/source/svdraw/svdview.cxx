@@ -506,10 +506,9 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         tools::Rectangle aBoundRect(pHitObj->GetCurrentBoundRect());
 
         // Force to SnapRect when Fontwork
-        if( dynamic_cast<const SdrTextObj*>( pHitObj) != nullptr && static_cast<SdrTextObj*>(pHitObj)->IsFontwork())
-        {
-            aBoundRect = pHitObj->GetSnapRect();
-        }
+        if( auto pTextObj = dynamic_cast<const SdrTextObj*>(pHitObj) )
+            if( pTextObj->IsFontwork() )
+                aBoundRect = pHitObj->GetSnapRect();
 
         sal_Int32 nTolerance(mnHitTolLog);
         bool bBoundRectHit(false);

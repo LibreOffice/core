@@ -352,10 +352,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         bool bDisable = true;
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->getQrCode()))
-        {
-            bDisable = false;
-        }
+        if( auto pGrafObj = dynamic_cast<const SdrGrafObj*>( pObj) )
+            if( pGrafObj->getQrCode() )
+                bDisable = false;
         if(bDisable)
         {
             rSet.DisableItem(SID_EDIT_QRCODE);
