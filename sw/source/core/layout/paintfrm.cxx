@@ -147,30 +147,32 @@ namespace {
 // Classes collecting the border lines and help lines
 class SwLineRect : public SwRect
 {
-    Color             aColor;
-    SvxBorderLineStyle nStyle;
-    const SwTabFrame *pTab;
-    SubColFlags       nSubColor;  //colorize subsidiary lines
-    bool              bPainted;   //already painted?
-    sal_uInt8         nLock;      //To distinguish the line and the hell layer.
+    Color m_aColor;
+    SvxBorderLineStyle m_nStyle;
+    const SwTabFrame* m_pTabFrame;
+    SubColFlags m_nSubColor; //colorize subsidiary lines
+    bool m_bPainted; //already painted?
+    sal_uInt8 m_nLock; //To distinguish the line and the hell layer.
 public:
     SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderLineStyle nStyle,
                 const SwTabFrame *pT , const SubColFlags nSCol );
 
-    const Color&         GetColor() const { return aColor;}
-    SvxBorderLineStyle   GetStyle() const { return nStyle; }
-    const SwTabFrame      *GetTab()   const { return pTab;  }
-    void  SetPainted()                    { bPainted = true; }
-    void  Lock( bool bLock )              { if ( bLock )
-                                                ++nLock;
-                                            else if ( nLock )
-                                                --nLock;
-                                          }
-    bool        IsPainted()               const { return bPainted; }
-    bool        IsLocked()                const { return nLock != 0;  }
-    SubColFlags GetSubColor()             const { return nSubColor;}
+    const Color& GetColor() const { return m_aColor; }
+    SvxBorderLineStyle GetStyle() const { return m_nStyle; }
+    const SwTabFrame* GetTab() const { return m_pTabFrame; }
+    void SetPainted() { m_bPainted = true; }
+    void Lock(bool bLock)
+    {
+        if (bLock)
+            ++m_nLock;
+        else if (m_nLock)
+            --m_nLock;
+    }
+    bool IsPainted() const { return m_bPainted; }
+    bool IsLocked() const { return m_nLock != 0; }
+    SubColFlags GetSubColor() const { return m_nSubColor; }
 
-    bool MakeUnion( const SwRect &rRect, SwPaintProperties const &properties );
+    bool MakeUnion(const SwRect& rRect, SwPaintProperties const& properties);
 };
 
 }
@@ -512,17 +514,17 @@ void BorderLines::AddBorderLines(const drawinglayer::primitive2d::Primitive2DCon
     }
 }
 
-SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderLineStyle nStyl,
-                        const SwTabFrame *pT, const SubColFlags nSCol ) :
-    SwRect( rRect ),
-    nStyle( nStyl ),
-    pTab( pT ),
-    nSubColor( nSCol ),
-    bPainted( false ),
-    nLock( 0 )
+SwLineRect::SwLineRect(const SwRect& rRect, const Color* pCol, const SvxBorderLineStyle nStyl,
+                       const SwTabFrame* pT, const SubColFlags nSCol)
+    : SwRect(rRect)
+    , m_nStyle(nStyl)
+    , m_pTabFrame(pT)
+    , m_nSubColor(nSCol)
+    , m_bPainted(false)
+    , m_nLock(0)
 {
     if ( pCol != nullptr )
-        aColor = *pCol;
+        m_aColor = *pCol;
 }
 
 bool SwLineRect::MakeUnion( const SwRect &rRect, SwPaintProperties const & properties)

@@ -46,7 +46,7 @@ SwLayVout     *SwRootFrame::s_pVout = nullptr;
 bool           SwRootFrame::s_isInPaint = false;
 bool           SwRootFrame::s_isNoVirDev = false;
 
-SwCache *SwFrame::mpCache = nullptr;
+SwCache *SwFrame::spCache = nullptr;
 
 static tools::Long FirstMinusSecond( tools::Long nFirst, tools::Long nSecond )
     { return nFirst - nSecond; }
@@ -288,7 +288,7 @@ SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
 SwRectFn fnRectVertL2RB2T = &aVerticalLeftToRightBottomToTop;
 
 // #i65250#
-sal_uInt32 SwFrameAreaDefinition::mnLastFrameId=0;
+sal_uInt32 SwFrameAreaDefinition::snLastFrameId=0;
 
 
 void FrameInit()

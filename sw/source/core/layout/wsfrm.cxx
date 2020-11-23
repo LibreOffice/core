@@ -71,7 +71,7 @@ SwFrameAreaDefinition::SwFrameAreaDefinition()
     mbFrameAreaPositionValid(false),
     mbFrameAreaSizeValid(false),
     mbFramePrintAreaValid(false),
-    mnFrameId(SwFrameAreaDefinition::mnLastFrameId++)
+    mnFrameId(SwFrameAreaDefinition::snLastFrameId++)
 {
 }
 

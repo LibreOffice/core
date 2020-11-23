@@ -148,7 +148,7 @@ private:
 
     // #i65250#
     // frame ID is now in general available - used for layout loop control
-    static sal_uInt32 mnLastFrameId;
+    static sal_uInt32 snLastFrameId;
     const  sal_uInt32 mnFrameId;
 
 protected:
@@ -315,7 +315,7 @@ class SW_DLLPUBLIC SwFrame : public SwFrameAreaDefinition, public SwClient, publ
     friend void MakeNxt( SwFrame *pFrame, SwFrame *pNxt );
 
     // cache for (border) attributes
-    static SwCache *mpCache;
+    static SwCache *spCache;
 
     SwRootFrame   *mpRoot;
     SwLayoutFrame *mpUpper;
@@ -502,9 +502,9 @@ public:
 
     SwFrameType GetType() const { return mnFrameType; }
 
-    static SwCache &GetCache()                { return *mpCache; }
-    static SwCache *GetCachePtr()             { return mpCache;  }
-    static void     SetCache( SwCache *pNew ) { mpCache = pNew;  }
+    static SwCache &GetCache()                { return *spCache; }
+    static SwCache *GetCachePtr()             { return spCache;  }
+    static void     SetCache( SwCache *pNew ) { spCache = pNew;  }
 
     // change PrtArea size and FrameSize
     SwTwips Shrink( SwTwips, bool bTst = false, bool bInfo = false );
