@@ -382,9 +382,17 @@ void ScCaptionCreator::CreateCaption( bool bShown, bool bTailFront )
             *mrDoc.GetDrawLayer(), // TTTT should ret a ref?
             aTextRect,
             aTailPos));
+
     // tdf#114956 a way to recognize that this SdrCaption is for a ScPostit in
     // SdrTextObj::AdjustTextFrameWidthAndHeight
+    SdrModel& rModel = mxCaption->getSdrModelFromSdrObject();
+    const bool bUndoEnabled = rModel.IsUndoEnabled();
+    if (bUndoEnabled)
+        rModel.EnableUndo(false);
     mxCaption->SetName("ScPostIt");
+    if (bUndoEnabled)
+        rModel.EnableUndo(true);
+
     // basic caption settings
     ScCaptionUtil::SetBasicCaptionSettings( *mxCaption, bShown );
 }
