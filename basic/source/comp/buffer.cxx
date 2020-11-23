@@ -74,29 +74,19 @@ bool SbiBuffer::Check( sal_Int32 n )
         {
             nn = nn + nInc;
         }
-        char* p;
         if( ( nSize + nn ) > UP_LIMIT )
-        {
-            p = nullptr;
-        }
-        else
-        {
-            p = new char [nSize + nn];
-        }
-        if( !p )
         {
             pParser->Error( ERRCODE_BASIC_PROG_TOO_LARGE );
             nInc = 0;
             pBuf.reset();
             return false;
         }
-        else
-        {
-            if( nSize ) memcpy( p, pBuf.get(), nSize );
-            pBuf.reset(p);
-            pCur = pBuf.get() + nOff;
-            nSize = nSize + nn;
-        }
+        auto p(std::make_unique<char[]>(nSize + nn));
+        if (nSize)
+            memcpy(p.get(), pBuf.get(), nSize);
+        pBuf = std::move(p);
+        pCur = pBuf.get() + nOff;
+        nSize += nn;
     }
     return true;
 }
