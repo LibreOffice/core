@@ -339,6 +339,13 @@ namespace svt
     public:
         ComboBoxControl(vcl::Window* pParent);
 
+        virtual void GetFocus() override
+        {
+            if (m_xWidget)
+                m_xWidget->grab_focus();
+            InterimItemWindow::GetFocus();
+        }
+
         weld::ComboBox& get_widget() { return *m_xWidget; }
 
         // sets a link to call when the selection is changed by the user
@@ -399,6 +406,13 @@ namespace svt
 
     public:
         ListBoxControl(vcl::Window* pParent);
+
+        virtual void GetFocus() override
+        {
+            if (m_xWidget)
+                m_xWidget->grab_focus();
+            InterimItemWindow::GetFocus();
+        }
 
         weld::ComboBox& get_widget() { return *m_xWidget; }
 
