@@ -57,10 +57,6 @@ class OLEHandler : public LoggedProperties
 
     css::uno::Reference<css::drawing::XShape> m_xShape;
 
-    css::awt::Size m_aShapeSize;
-
-    css::uno::Reference<css::graphic::XGraphic> m_xReplacement;
-
     css::uno::Reference<css::io::XInputStream> m_xInputStream;
     DomainMapper& m_rDomainMapper;
 
@@ -90,8 +86,8 @@ public:
 
     OUString copyOLEOStream(css::uno::Reference<css::text::XTextDocument> const& xTextDocument);
 
-    const css::awt::Size& getSize() const { return m_aShapeSize; }
-    const css::uno::Reference<css::graphic::XGraphic>& getReplacement() const { return m_xReplacement; }
+    css::awt::Size getSize() const;
+    css::uno::Reference<css::graphic::XGraphic> getReplacement() const;
 
 };
 }

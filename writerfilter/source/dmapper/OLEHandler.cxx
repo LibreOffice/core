@@ -105,23 +105,22 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
             if( xTempShape.is() )
             {
                 m_xShape.set( xTempShape );
-                uno::Reference< beans::XPropertySet > xShapeProps( xTempShape, uno::UNO_QUERY );
 
-                try
-                {
-                    // Shapes in the header or footer should be in the background, since the default is WrapTextMode_THROUGH.
-                    if (m_rDomainMapper.IsInHeaderFooter())
-                        xShapeProps->setPropertyValue("Opaque", uno::makeAny(false));
-
-                    m_aShapeSize = xTempShape->getSize();
-
-                    xShapeProps->getPropertyValue( getPropertyName( PROP_BITMAP ) ) >>= m_xReplacement;
-                }
-                catch( const uno::Exception& )
-                {
-                    TOOLS_WARN_EXCEPTION("writerfilter", "Exception in OLE Handler");
-                }
                 // No need to set the wrapping here as it's either set in oox or will be set later
+
+                // Shapes in the header or footer should be in the background, since the default is WrapTextMode_THROUGH.
+                if (m_rDomainMapper.IsInHeaderFooter())
+                {
+                    try
+                    {
+                        uno::Reference<beans::XPropertySet> xShapeProps(m_xShape, uno::UNO_QUERY);
+                        xShapeProps->setPropertyValue("Opaque", uno::makeAny(false));
+                    }
+                    catch( const uno::Exception& )
+                    {
+                        TOOLS_WARN_EXCEPTION("writerfilter", "Exception in OLE Handler");
+                    }
+                }
             }
         }
         break;
@@ -130,6 +129,22 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
     }
 }
 
+css::awt::Size OLEHandler::getSize() const
+{
+    if (!m_xShape)
+        return css::awt::Size();
+    return m_xShape->getSize();
+}
+
+css::uno::Reference<css::graphic::XGraphic> OLEHandler::getReplacement() const
+{
+    if (!m_xShape)
+        return nullptr;
+    uno::Reference<beans::XPropertySet> xShapeProps(m_xShape, uno::UNO_QUERY);
+    css::uno::Reference<css::graphic::XGraphic> xReplacement;
+    xShapeProps->getPropertyValue(getPropertyName(PROP_BITMAP)) >>= xReplacement;
+    return xReplacement;
+}
 
 void OLEHandler::lcl_sprm(Sprm & rSprm)
 {
