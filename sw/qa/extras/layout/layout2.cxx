@@ -700,6 +700,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHorizontal_multilevel)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7945, nYposition, 20);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)
+{
+    SwDoc* pDoc = createDoc("xaxis-labelbreak.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 8
+    // - Actual  : 7
+    // i.e. the X axis label flowed out of chart area.
+    assertXPath(pXmlDoc, "//textarray", 8);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124796)
 {
     SwDoc* pDoc = createDoc("tdf124796.odt");
