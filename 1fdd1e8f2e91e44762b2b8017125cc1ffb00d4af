@@ -22,6 +22,30 @@
       "revId": "1fdd1e8f2e91e44762b2b8017125cc1ffb00d4af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44b3fcb4_7180c2cb",
+        "filename": "basic/source/comp/buffer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-23T06:04:43Z",
+      "side": 1,
+      "message": "To clarify: of course, the expression I wrote is not equivalent to the original one, since it does not behave the same way with negative n; but given the description in the comment above ctor, it\u0027s clear that negative n doesn\u0027t make sense.",
+      "parentUuid": "35869f2e_89886e24",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 14
+      },
+      "revId": "1fdd1e8f2e91e44762b2b8017125cc1ffb00d4af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
