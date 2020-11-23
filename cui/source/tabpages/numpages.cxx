@@ -163,7 +163,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(weld::Container* pPage, weld::D
     , bModified(false)
     , bPreset(false)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
-    , m_xExamplesVS(new SvxNumValueSet(nullptr))
+    , m_xExamplesVS(new SvxNumValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
     , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xExamplesVS))
 {
     SetExchangeSupport();
@@ -342,7 +342,7 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(weld::Container* pPage, weld::DialogC
     , bModified(false)
     , bPreset(false)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
-    , m_xExamplesVS(new SvxNumValueSet(nullptr))
+    , m_xExamplesVS(new SvxNumValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
     , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xExamplesVS))
 {
     SetExchangeSupport();
@@ -491,7 +491,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(weld::Container* pPage, weld::DialogControl
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
     , bPreset(false)
-    , m_xExamplesVS(new SvxNumValueSet(nullptr))
+    , m_xExamplesVS(new SvxNumValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
     , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xExamplesVS))
 {
     SetExchangeSupport();
