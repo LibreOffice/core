@@ -30,16 +30,7 @@ const sal_uInt32 UP_LIMIT=0xFFFFFF00;
 
 SbiBuffer::SbiBuffer( SbiParser* p, short n )
     : pParser(p)
-    , pCur(nullptr)
-    , nOff(0)
-    , nSize(0)
-{
-    n = ( (n + 15 ) / 16 ) * 16;
-    if( !n ) n = 16;
-    nInc  = n;
-}
-
-SbiBuffer::~SbiBuffer()
+    , nInc(std::max(16, ((n + 15) / 16) * 16))
 {
 }
 
@@ -48,9 +39,8 @@ SbiBuffer::~SbiBuffer()
 
 char* SbiBuffer::GetBuffer()
 {
-    char* p = pBuf.release();
     pCur = nullptr;
-    return p;
+    return pBuf.release();
 }
 
 // Test, if the buffer can contain n Bytes.
@@ -96,15 +86,7 @@ bool SbiBuffer::Check( sal_Int32 n )
 void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
 {
     if( ( off + sizeof( sal_uInt32 ) ) < nOff )
-    {
-        sal_uInt16 val1 = static_cast<sal_uInt16>( val & 0xFFFF );
-        sal_uInt16 val2 = static_cast<sal_uInt16>( val >> 16 );
-        sal_uInt8* p = reinterpret_cast<sal_uInt8*>(pBuf.get()) + off;
-        *p++ = static_cast<char>( val1 & 0xFF );
-        *p++ = static_cast<char>( val1 >> 8 );
-        *p++ = static_cast<char>( val2 & 0xFF );
-        *p   = static_cast<char>( val2 >> 8 );
-    }
+        write(pBuf.get() + off, val);
 }
 
 // Forward References upon label and procedures
@@ -113,98 +95,21 @@ void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
 
 void SbiBuffer::Chain( sal_uInt32 off )
 {
-    if( !(off && pBuf) )
+    if (!pBuf)
         return;
 
-    sal_uInt8 *ip;
-    sal_uInt32 i = off;
-    sal_uInt32 val1 = (nOff & 0xFFFF);
-    sal_uInt32 val2 = (nOff >> 16);
-    do
+    for (sal_uInt32 i = off; i;)
     {
-        ip = reinterpret_cast<sal_uInt8*>(pBuf.get()) + i;
-        sal_uInt8* pTmp = ip;
-        i =  *pTmp++; i |= *pTmp++ << 8; i |= *pTmp++ << 16; i |= *pTmp++ << 24;
-
         if( i >= nOff )
         {
             pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "BACKCHAIN" );
             break;
         }
-        *ip++ = static_cast<char>( val1 & 0xFF );
-        *ip++ = static_cast<char>( val1 >> 8 );
-        *ip++ = static_cast<char>( val2 & 0xFF );
-        *ip   = static_cast<char>( val2 >> 8 );
-    } while( i );
-}
-
-void SbiBuffer::operator +=( sal_Int8 n )
-{
-    if( Check( 1 ) )
-    {
-        *pCur++ = static_cast<char>(n);
-        nOff += 1;
+        char* ip = pBuf.get() + i;
+        sal_uInt8* pTmp = reinterpret_cast<sal_uInt8*>(ip);
+        i = pTmp[0] | (pTmp[1] << 8) | (pTmp[2] << 16) | (pTmp[3] << 24);
+        write(ip, nOff);
     }
 }
-
-bool SbiBuffer::operator +=( sal_uInt8 n )
-{
-    if( Check( 1 ) )
-    {
-        *pCur++ = static_cast<char>(n);
-        nOff += 1;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void SbiBuffer::operator +=( sal_Int16 n )
-{
-    if( Check( 2 ) )
-    {
-        *pCur++ = static_cast<char>( n & 0xFF );
-        *pCur++ = static_cast<char>( n >> 8 );
-        nOff += 2;
-    }
-}
-
-bool SbiBuffer::operator +=( sal_uInt16 n )
-{
-    if( Check( 2 ) )
-    {
-        *pCur++ = static_cast<char>( n & 0xFF );
-        *pCur++ = static_cast<char>( n >> 8 );
-        nOff += 2;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-bool SbiBuffer::operator +=( sal_uInt32 n )
-{
-    if( Check( 4 ) )
-    {
-        sal_uInt16 n1 = static_cast<sal_uInt16>( n & 0xFFFF );
-        sal_uInt16 n2 = static_cast<sal_uInt16>( n >> 16 );
-        operator +=(n1) && operator +=(n2);
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void SbiBuffer::operator +=( sal_Int32 n )
-{
-    operator +=( static_cast<sal_uInt32>(n) );
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

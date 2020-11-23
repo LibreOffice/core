@@ -27,22 +27,42 @@ class SbiParser;
 class SbiBuffer {
     SbiParser* pParser;             // for error messages
     std::unique_ptr<char[]>  pBuf;
-    char*   pCur;
-    sal_uInt32  nOff;
-    sal_uInt32  nSize;
+    char* pCur = nullptr;
+    sal_uInt32 nOff = 0;
+    sal_uInt32 nSize = 0;
     short   nInc;
     bool    Check( sal_Int32 );
+    template <typename T> static char* write(char* p, T n)
+    {
+        *p++ = static_cast<char>(n & 0xFF);
+        if constexpr (sizeof(n) > 1)
+        {
+            for (std::size_t i = 1; i < sizeof(n); ++i)
+            {
+                n >>= 8;
+                *p++ = static_cast<char>(n & 0xFF);
+            }
+        }
+        return p;
+    }
+    template <typename T> void append(T n)
+    {
+        if (!Check(sizeof(n)))
+            return;
+        pCur = write(pCur, n);
+        nOff += sizeof(n);
+    }
+
 public:
     SbiBuffer( SbiParser*, short ); // increment
-   ~SbiBuffer();
     void Patch( sal_uInt32, sal_uInt32 );
     void Chain( sal_uInt32 );
-    void operator += (sal_Int8);        // save character
-    void operator += (sal_Int16);       // save integer
-    bool operator += (sal_uInt8);       // save character
-    bool operator += (sal_uInt16);      // save integer
-    bool operator += (sal_uInt32);      // save integer
-    void operator += (sal_Int32);       // save integer
+    void operator+=(sal_Int8 n) { append(n); } // save character
+    void operator+=(sal_Int16 n) { append(n); } // save integer
+    void operator+=(sal_uInt8 n) { append(n); } // save character
+    void operator+=(sal_uInt16 n) { append(n); } // save integer
+    void operator+=(sal_uInt32 n) { append(n); } // save integer
+    void operator+=(sal_Int32 n) { append(n); } // save integer
     char*  GetBuffer();             // give out buffer (delete yourself!)
     sal_uInt32 GetSize() const { return nOff; }
 };
