@@ -679,6 +679,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135655, "tdf135655.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("#00A933"), sXFillColVal);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf138374, "tdf138374.odt")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:pict/v:shape", "fillcolor", "#ffd320");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:pict/v:shape", "coordsize", "1315,6116");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:pict/v:shape", "path",
+            "m0,0l1314,0l1314,5914l416,5914l416,6115l106,5715l416,5415l416,5715l1014,5715l1014,224l0,224l0,16l0,0e");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:pict/v:shape", "style",
+            "position:absolute;margin-left:394.3pt;margin-top:204pt;width:37.2pt;height:173.3pt;mso-wrap-style:none;v-text-anchor:middle");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf134609_gridAfter, "tdf134609_gridAfter.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
