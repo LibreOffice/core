@@ -121,7 +121,7 @@ public:
     // height to fit the rest of space.
     bool IsInSplit() const { return m_bIsInSplit; }
     void SetInSplit(bool bNew = true) { m_bIsInSplit = bNew; }
-    void OnFrameSize(const SwFormatFrameSize&);
+    void OnFrameSize(const SfxPoolItem&);
 };
 
 #endif

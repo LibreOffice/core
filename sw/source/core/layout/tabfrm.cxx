@@ -3849,7 +3849,7 @@ void SwRowFrame::RegistFlys( SwPageFrame *pPage )
     ::RegistFlys( pPage ? pPage : FindPageFrame(), this );
 }
 
-void SwRowFrame::OnFrameSize(const SwFormatFrameSize& rSize)
+void SwRowFrame::OnFrameSize(const SfxPoolItem& rSize)
 {
     SwTabFrame* pTab = FindTabFrame();
     if(pTab)
@@ -3897,7 +3897,7 @@ void SwRowFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
             if(!pItem)
                 pChgSet->GetItemState(RES_ROW_SPLIT, false, &pItem);
             if(pItem)
-                OnFrameSize(*static_cast<const SwFormatFrameSize*>(pItem));
+                OnFrameSize(*pItem);
             else
                 SwLayoutFrame::SwClientNotify(rModify, rHint); // possibly not needed?
             return;
