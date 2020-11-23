@@ -1205,23 +1205,23 @@ void GtkSalMenu::DispatchCommand(const gchar *pCommand)
 
 void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
 {
-    for (GtkSalMenuItem* pSalItem : maItems)
+    // We can re-enter this method via the new event loop that gets created
+    // in GtkClipboardTransferable::getTransferDataFlavorsAsVector, so use the InActivateCallback
+    // flag to detect that and skip some startup work.
+    if (!mbInActivateCallback)
     {
-        if ( pSalItem->mpSubMenu != nullptr )
+        mbInActivateCallback = true;
+        pMenuBar->HandleMenuActivateEvent(GetMenu());
+        mbInActivateCallback = false;
+        for (GtkSalMenuItem* pSalItem : maItems)
         {
-            // We can re-enter this method via the new event loop that gets created
-            // in GtkClipboardTransferable::getTransferDataFlavorsAsVector, so use the InActivateCallback
-            // flag to detect that and skip some startup work.
-            if (!pSalItem->mpSubMenu->mbInActivateCallback)
+            if ( pSalItem->mpSubMenu != nullptr )
             {
-                pSalItem->mpSubMenu->mbInActivateCallback = true;
-                pMenuBar->HandleMenuActivateEvent(pSalItem->mpSubMenu->GetMenu());
-                pSalItem->mpSubMenu->mbInActivateCallback = false;
                 pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);
-                pSalItem->mpSubMenu->Update();
-                pMenuBar->HandleMenuDeActivateEvent(pSalItem->mpSubMenu->GetMenu());
             }
         }
+        Update();
+        pMenuBar->HandleMenuDeActivateEvent(GetMenu());
     }
 }
 
