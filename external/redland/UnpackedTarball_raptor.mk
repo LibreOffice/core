@@ -28,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,raptor,\
 	$(if $(SYSTEM_LIBXML),,external/redland/raptor/rpath.patch) \
 	external/redland/raptor/xml2-config.patch \
 	external/redland/raptor/0001-Calcualte-max-nspace-declarations-correctly-for-XML-.patch.1 \
+	external/redland/raptor/0001-CVE-2020-25713-raptor2-malformed-input-file-can-lead.patch.1 \
 	external/redland/raptor/libtool.patch \
 ))
 
