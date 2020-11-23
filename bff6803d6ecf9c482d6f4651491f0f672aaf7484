@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "eaee9f9e_389f2fd7",
+        "filename": "svx/uiconfig/ui/crashreportdlg.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-23T10:45:00Z",
+      "side": 1,
+      "message": "You add the linkbutton into the void, don\u0027t think this works. You need to make space on the vbox or the treeview and add the control there.",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 9
+      },
+      "revId": "bff6803d6ecf9c482d6f4651491f0f672aaf7484",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c5a99c0_7ffef421",
         "filename": "svx/uiconfig/ui/crashreportdlg.ui",
         "patchSetId": 5
