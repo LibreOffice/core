@@ -155,6 +155,13 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
                 pSdrObject->setUnoShape(nullptr);
             }
         }
+        if (m_pFrameFormat->Which() == RES_DRAWFRMFMT)
+        {
+            // This is a draw format and we just set the fly format's textbox pointer to this draw
+            // format.  Sync the draw format's content with the fly format's content.
+            SwFrameFormat* pFlyFormat = m_pFrameFormat->GetOtherTextBoxFormat();
+            m_pFrameFormat->SetFormatAttr(pFlyFormat->GetContent());
+        }
     }
 
     m_pFrameFormat->MakeFrames();
