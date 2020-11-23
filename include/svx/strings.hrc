@@ -1292,7 +1292,7 @@
 #define RID_SVXSTR_DOC_MODIFIED_NO                          NC_("RID_SVXSTR_DOC_MODIFIED_NO", "The document has not been modified since the last save.")
 #define RID_SVXSTR_DOC_LOAD                                 NC_("RID_SVXSTR_DOC_LOAD", "Loading document...")
 #define RID_SVXSTR_FIT_SLIDE                                NC_("RID_SVXSTR_FIT_SLIDE", "Fit slide to current window.")
-#define RID_SVXSTR_WARN_MISSING_SMARTART                    NC_("RID_SVXSTR_WARN_MISSING_SMARTART", "Could not load all SmartArts. Saving in Microsoft Office 2010 or later would avoid this issue.")
+#define RID_SVXSTR_WARN_MISSING_SMARTART                    NC_("RID_SVXSTR_WARN_MISSING_SMARTART", "Could not load all SmartArt objects. Saving in Microsoft Office 2010 or later would avoid this issue.")
 #define RID_SVXSTR_ZOOMTOOL_HINT                            NC_("RID_SVXSTR_ZOOMTOOL_HINT", "Zoom factor. Right-click to change zoom factor or click to open Zoom dialog.")
 #define RID_SVXSTR_ZOOM_IN                                  NC_("RID_SVXSTR_ZOOM_IN", "Zoom In")
 #define RID_SVXSTR_ZOOM_OUT                                 NC_("RID_SVXSTR_ZOOM_OUT", "Zoom Out")
