@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d05f18fb_e6b822f8",
+        "filename": "svx/source/dialog/docrecovery.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-23T11:49:05Z",
+      "side": 1,
+      "message": "With changes to the columns you should also update the col width. Right now I get a very small column after Recover with the name and the Document Name is empty. Maybe it\u0027s not needed to change the col width but the assignment. \nPlus, the total size of the dialog has changed not to better. Let\u0027s see if that is getting better.",
+      "range": {
+        "startLine": 692,
+        "startChar": 21,
+        "endLine": 692,
+        "endChar": 28
+      },
+      "revId": "93a9cd87e7594fa3d2c24ab72ecdcfb0d6d59c00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
