@@ -123,6 +123,11 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
     {
         m_xName->set_can_focus(true);
         m_xName->set_editable(true);
+        m_xName->set_sensitive(true);
+    }
+    else
+    {
+        m_xName->set_sensitive(false);
     }
 
     if ( pStyle->HasFollowSupport() && pPool )
