@@ -31,7 +31,6 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/intlwrapper.hxx>
 
-#include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
 #include <rtl/math.hxx>
 
