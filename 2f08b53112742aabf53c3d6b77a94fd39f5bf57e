@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bb5478d_4acaae50",
+        "filename": "sw/source/core/para/paratr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-11-23T08:01:56Z",
+      "side": 1,
+      "message": "This looks and smells like a dynamic dispatch, so it would be better to implement it as a minimal TriggerFormatDrop function in a sw::FormatDropDefiner ABC.",
+      "range": {
+        "startLine": 77,
+        "startChar": 1,
+        "endLine": 80,
+        "endChar": 76
+      },
+      "revId": "2f08b53112742aabf53c3d6b77a94fd39f5bf57e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
