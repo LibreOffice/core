@@ -6561,7 +6561,7 @@
       </node>
       <node oor:name=".uno:ObjectAlign" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Alig~n</value>
+          <value xml:lang="en-US">Alig~n Objects</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -6569,7 +6569,7 @@
       </node>
       <node oor:name=".uno:TextAlign" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Alig~n</value>
+          <value xml:lang="en-US">Align Tex~t</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
