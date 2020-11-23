@@ -1930,10 +1930,6 @@ o3tl/qa/cow_wrapper_clients.hxx:41
     void o3tltests::cow_wrapper_client1::cow_wrapper_client1(int)
     int nVal
     1
-oox/inc/drawingml/chart/objectformatter.hxx:146
-    _Bool oox::drawingml::chart::ObjectFormatter::getTextRotation(const class oox::drawingml::chart::ModelRef<class oox::drawingml::TextBody> &,int)
-    int nDefaultRotation
-    0
 oox/inc/drawingml/chart/typegroupconverter.hxx:153
     void oox::drawingml::chart::TypeGroupConverter::convertLineSmooth(class oox::PropertySet &,_Bool) const
     _Bool bOoxSmooth
