@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35869f2e_89886e24",
+        "filename": "basic/source/comp/buffer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-23T06:02:07Z",
+      "side": 1,
+      "message": "This simplifies to\n\n    nInc(std::max(((n + 15) / 16) * 16, 16))\n\nallowing to move the initialization to initializer list, too :-)",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 14
+      },
+      "revId": "1fdd1e8f2e91e44762b2b8017125cc1ffb00d4af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
