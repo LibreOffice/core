@@ -33,7 +33,7 @@ class SbiCodeGen {
     bool bStmnt;            // true: statement-opcode is pending
 
 public:
-    SbiCodeGen( SbModule&, SbiParser*, short );
+    SbiCodeGen(SbModule&, SbiParser*);
     SbiParser* GetParser() { return pParser; }
     SbModule& GetModule() { return rMod; }
     sal_uInt32 Gen( SbiOpcode );
@@ -60,18 +60,21 @@ template < class T, class S >
 class PCodeBuffConvertor
 {
     T m_nSize;
-    sal_uInt8* m_pStart;
-    sal_uInt8* m_pCnvtdBuf;
-    S m_nCnvtdSize;
+    const sal_uInt8* m_pStart;
+    std::vector<sal_uInt8> m_aCnvtdBuf;
 
     PCodeBuffConvertor(const PCodeBuffConvertor& ) = delete;
     PCodeBuffConvertor& operator = ( const PCodeBuffConvertor& ) = delete;
 public:
-    PCodeBuffConvertor( sal_uInt8* pCode, T nSize ): m_nSize( nSize ),  m_pStart( pCode ), m_pCnvtdBuf( nullptr ), m_nCnvtdSize( 0 ){ convert(); }
-    S GetSize(){ return m_nCnvtdSize; }
+    PCodeBuffConvertor(const sal_uInt8* pCode, T nSize)
+        : m_nSize(nSize)
+        , m_pStart(pCode)
+    {
+        convert();
+    }
     void convert();
-    // Caller owns the buffer returned
-    sal_uInt8* GetBuffer() { return m_pCnvtdBuf; }
+    // pass ownership
+    std::vector<sal_uInt8>&& GetBuffer() { return std::move(m_aCnvtdBuf); }
 };
 
 // #111897 PARAM_INFO flags start at 0x00010000 to not

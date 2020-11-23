@@ -36,10 +36,9 @@
 
 // nInc is the increment size of the buffers
 
-SbiCodeGen::SbiCodeGen( SbModule& r, SbiParser* p, short nInc )
+SbiCodeGen::SbiCodeGen(SbModule& r, SbiParser* p)
     : pParser(p)
     , rMod(r)
-    , aCode(p, nInc)
     , nLine(0)
     , nCol(0)
     , nForLevel(0)
@@ -356,8 +355,12 @@ void SbiCodeGen::Save()
             }   // for( iPass...
         }
     }
+    if (aCode.GetErrCode())
+    {
+        pParser->Error(aCode.GetErrCode(), aCode.GetErrMessage());
+    }
     // The code
-    p->AddCode( std::unique_ptr<char[]>(aCode.GetBuffer()), aCode.GetSize() );
+    p->AddCode(aCode.GetBuffer());
 
     // The global StringPool. 0 is not occupied.
     SbiStringPool* pPool = &pParser->aGblStrings;
@@ -498,7 +501,7 @@ class BufferTransformer : public PCodeVisitor< T >
     const sal_uInt8* m_pStart;
     SbiBuffer m_ConvertedBuf;
 public:
-    BufferTransformer():m_pStart(nullptr), m_ConvertedBuf( nullptr, 1024 ) {}
+    BufferTransformer():m_pStart(nullptr) {}
     virtual void start( const sal_uInt8* pStart ) override { m_pStart = pStart; }
     virtual void processOpCode0( SbiOpcode eOp ) override
     {
@@ -576,8 +579,8 @@ PCodeBuffConvertor<T,S>::convert()
     PCodeBufferWalker< T > aBuf( m_pStart, m_nSize );
     BufferTransformer< T, S > aTrnsfrmer;
     aBuf.visitBuffer( aTrnsfrmer );
-    m_pCnvtdBuf = reinterpret_cast<sal_uInt8*>(aTrnsfrmer.buffer().GetBuffer());
-    m_nCnvtdSize = static_cast<S>( aTrnsfrmer.buffer().GetSize() );
+    // TODO: handle buffer errors
+    m_aCnvtdBuf = aTrnsfrmer.buffer().GetBuffer();
 }
 
 template class PCodeBuffConvertor< sal_uInt16, sal_uInt32 >;

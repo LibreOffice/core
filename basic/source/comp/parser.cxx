@@ -121,7 +121,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
           aGlobals( aGblStrings, SbGLOBAL, this ),
           aPublics( aGblStrings, SbPUBLIC, this ),
           aRtlSyms( aGblStrings, SbRTL, this ),
-          aGen( *pm, this, 1024 )
+          aGen( *pm, this )
 {
     eEndTok  = NIL;
     pProc    = nullptr;

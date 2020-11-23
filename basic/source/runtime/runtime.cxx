@@ -609,7 +609,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     pRestart  = nullptr;
     pNext     = nullptr;
     pCode     =
-    pStmnt    = reinterpret_cast<const sal_uInt8*>(pImg->GetCode()) + nStart;
+    pStmnt    = pImg->GetCode() + nStart;
     bRun      =
     bError    = true;
     bInError  = false;
@@ -2972,7 +2972,7 @@ void SbiRuntime::StepJUMP( sal_uInt32 nOp1 )
     if( nOp1 >= pImg->GetCodeSize() )
         StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
 #endif
-    pCode = reinterpret_cast<const sal_uInt8*>(pImg->GetCode()) + nOp1;
+    pCode = pImg->GetCode() + nOp1;
 }
 
 // evaluate TOS, conditional jump (+target)
@@ -3014,7 +3014,7 @@ void SbiRuntime::StepONJUMP( sal_uInt32 nOp1 )
     }
     if( n < 1 || o3tl::make_unsigned(n) > nOp1 )
         n = static_cast<sal_Int16>( nOp1 + 1 );
-    nOp1 = static_cast<sal_uInt32>( reinterpret_cast<const char*>(pCode) - pImg->GetCode() ) + 5 * --n;
+    nOp1 = static_cast<sal_uInt32>(pCode - pImg->GetCode()) + 5 * --n;
     StepJUMP( nOp1 );
 }
 
@@ -3025,7 +3025,7 @@ void SbiRuntime::StepGOSUB( sal_uInt32 nOp1 )
     PushGosub( pCode );
     if( nOp1 >= pImg->GetCodeSize() )
         StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
-    pCode = reinterpret_cast<const sal_uInt8*>(pImg->GetCode()) + nOp1;
+    pCode = pImg->GetCode() + nOp1;
 }
 
 // UP-return (+0 or target)
