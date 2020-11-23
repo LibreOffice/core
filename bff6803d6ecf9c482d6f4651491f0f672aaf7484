@@ -45,6 +45,29 @@
       "revId": "bff6803d6ecf9c482d6f4651491f0f672aaf7484",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc957424_f4a59370",
+        "filename": "svx/uiconfig/ui/crashreportdlg.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-23T14:25:05Z",
+      "side": 1,
+      "message": "Just \"no\" (and remove context\u003d\"crashreportdlg|ed_crashurl\")",
+      "range": {
+        "startLine": 11,
+        "startChar": 41,
+        "endLine": 11,
+        "endChar": 44
+      },
+      "revId": "bff6803d6ecf9c482d6f4651491f0f672aaf7484",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
