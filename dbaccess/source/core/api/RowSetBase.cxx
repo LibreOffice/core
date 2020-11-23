@@ -231,11 +231,16 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
             OSL_ENSURE( pTemp != reinterpret_cast<void*>(0xfeeefeee),"HALT!" );
         }
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow < m_pCache->getEnd() && aCacheIter != m_pCache->m_aCacheIterators.end(),"Invalid iterator set for currentrow!");
-        ORowSetRow rRow = *m_aCurrentRow;
-        OSL_ENSURE(rRow.is() && o3tl::make_unsigned(columnIndex) < rRow->size(),"Invalid size of vector!");
 #endif
+        ORowSetRow rRow = *m_aCurrentRow;
+        bool bValidPosition = rRow.is() && o3tl::make_unsigned(columnIndex) < rRow->size();
+        if (!bValidPosition)
+        {
+            SAL_WARN("dbaccess", "ORowSetBase::getValue: Invalid size of vector!");
+            ::dbtools::throwSQLException( DBA_RES( RID_STR_CURSOR_BEFORE_OR_AFTER ), StandardSQLState::INVALID_CURSOR_POSITION, *m_pMySelf );
+        }
         m_nLastColumnIndex = columnIndex;
-        return (**m_aCurrentRow)[m_nLastColumnIndex];
+        return (*rRow)[m_nLastColumnIndex];
     }
 
     // we should normally never reach this
