@@ -1899,6 +1899,107 @@ XMLParaContext::XMLParaContext(
         sStyleName = aCondStyleName;
 }
 
+XMLParaContext::XMLParaContext(
+        SvXMLImport& rImport,
+        sal_Int32 nElement,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList ) :
+    SvXMLImportContext( rImport ),
+    xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
+    m_bHaveAbout(false),
+    nOutlineLevel( (nElement & TOKEN_MASK) == XML_H ? 1 : -1 ),
+    // Lost outline numbering in master document (#i73509#)
+    mbOutlineLevelAttrFound( false ),
+    mbOutlineContentVisible(true),
+    bIgnoreLeadingSpace( true ),
+    bHeading( (nElement & TOKEN_MASK) == XML_H ),
+    bIsListHeader( false ),
+    bIsRestart (false),
+    nStartValue(0),
+    nStarFontsConvFlags( 0 )
+{
+    bool bHaveXmlId( false );
+    OUString aCondStyleName;
+
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+    {
+        OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
+        {
+        case XML_ELEMENT(XML, XML_ID):
+            m_sXmlId = sValue;
+            bHaveXmlId = true;
+            break;
+        case XML_ELEMENT(XHTML, XML_ABOUT):
+            m_sAbout = sValue;
+            m_bHaveAbout = true;
+            break;
+        case XML_ELEMENT(XHTML, XML_PROPERTY):
+            m_sProperty = sValue;
+            break;
+        case XML_ELEMENT(XHTML, XML_CONTENT):
+            m_sContent = sValue;
+            break;
+        case XML_ELEMENT(XHTML, XML_DATATYPE):
+            m_sDatatype = sValue;
+            break;
+        case XML_ELEMENT(TEXT, XML_ID):
+            if (!bHaveXmlId) { m_sXmlId = sValue; }
+            break;
+        case XML_ELEMENT(TEXT, XML_STYLE_NAME):
+            sStyleName = sValue;
+            break;
+        case XML_ELEMENT(TEXT, XML_COND_STYLE_NAME):
+            aCondStyleName = sValue;
+            break;
+        case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
+            {
+                sal_Int32 nTmp = sValue.toInt32();
+                if( nTmp > 0 )
+                {
+                    if( nTmp > 127 )
+                        nTmp = 127;
+                    nOutlineLevel = static_cast<sal_Int8>(nTmp);
+                }
+                // Lost outline numbering in master document (#i73509#)
+                mbOutlineLevelAttrFound = true;
+            }
+            break;
+        case XML_ELEMENT(LO_EXT, XML_OUTLINE_CONTENT_VISIBLE):
+            {
+                bool bBool(false);
+                if (::sax::Converter::convertBool(bBool, sValue))
+                    mbOutlineContentVisible = bBool;
+            }
+            break;
+        case XML_ELEMENT(TEXT, XML_IS_LIST_HEADER):
+            {
+                bool bBool(false);
+                if (::sax::Converter::convertBool(bBool, sValue))
+                    bIsListHeader = bBool;
+            }
+            break;
+        case XML_ELEMENT(TEXT, XML_RESTART_NUMBERING):
+            {
+                bool bBool(false);
+                if (::sax::Converter::convertBool(bBool, sValue))
+                    bIsRestart = bBool;
+            }
+            break;
+        case XML_ELEMENT(TEXT, XML_START_VALUE):
+            {
+                nStartValue = sal::static_int_cast< sal_Int16 >(
+                    sValue.toInt32());
+            }
+            break;
+        default:
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+        }
+    }
+
+    if( !aCondStyleName.isEmpty() )
+        sStyleName = aCondStyleName;
+}
+
 void XMLParaContext::endFastElement(sal_Int32 )
 {
     rtl::Reference < XMLTextImportHelper > xTxtImport(
@@ -2292,24 +2393,21 @@ void XMLNumberedParaContext::endFastElement(sal_Int32 )
     }
 }
 
-SvXMLImportContextRef XMLNumberedParaContext::CreateChildContext(
-    sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
-    const Reference< xml::sax::XAttributeList > & i_xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLNumberedParaContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    if ( XML_NAMESPACE_TEXT == i_nPrefix ||
-            XML_NAMESPACE_LO_EXT == i_nPrefix )
+    switch (nElement)
     {
-        bool bIsHeader( IsXMLToken( i_rLocalName, XML_H ) );
-        if ( bIsHeader || IsXMLToken( i_rLocalName, XML_P ) )
-        {
-            xContext = new XMLParaContext( GetImport(),
-                i_nPrefix, i_rLocalName, i_xAttrList, bIsHeader );
-        }
+        case XML_ELEMENT(TEXT, XML_H):
+        case XML_ELEMENT(LO_EXT, XML_H):
+        case XML_ELEMENT(TEXT, XML_P):
+        case XML_ELEMENT(LO_EXT, XML_P):
+            return new XMLParaContext( GetImport(), nElement, xAttrList );
+        default:
+            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
-    return xContext;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
