@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1b86a05_51203cd7",
+        "filename": "basic/source/comp/buffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-23T19:51:33Z",
+      "side": 1,
+      "message": "should probably just use the standard doubling approach of std::vector, which is generally regarded as the best bet",
+      "revId": "dad8d298606eeba322da2223c5dcadf1dcd4d89e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4789fea_ee6984e1",
+        "filename": "basic/source/comp/buffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-23T19:51:33Z",
+      "side": 1,
+      "message": "this should return std::unique_ptr\u003cchar[]\u003e to enforce passing ownership to the caller",
+      "revId": "dad8d298606eeba322da2223c5dcadf1dcd4d89e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
