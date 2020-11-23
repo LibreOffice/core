@@ -2615,7 +2615,10 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case OWN_ATTR_ISFONTWORK:
     {
-        rValue <<= dynamic_cast<const SdrTextObj*>(GetSdrObject()) != nullptr && static_cast<SdrTextObj*>(GetSdrObject())->IsFontwork();
+        bool bIsFontwork = false;
+        if (const SdrTextObj* pTextObj = dynamic_cast<const SdrTextObj*>(GetSdrObject()))
+            bIsFontwork = pTextObj->IsFontwork();
+        rValue <<= bIsFontwork;
         break;
     }
 
