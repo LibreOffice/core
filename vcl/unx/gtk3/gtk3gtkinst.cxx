@@ -15630,9 +15630,17 @@ public:
     {
         if (m_pEntry && gtk_widget_has_focus(m_pEntry))
             return true;
-        return gtk_widget_has_focus(m_pToggleButton) ||
-               gtk_widget_has_focus(GTK_WIDGET(m_pOverlayButton)) ||
-               gtk_widget_has_focus(GTK_WIDGET(m_pTreeView)) || GtkInstanceWidget::has_focus();
+
+        if (gtk_widget_has_focus(m_pToggleButton))
+            return true;
+
+        if (gtk_widget_get_visible(GTK_WIDGET(m_pMenuWindow)))
+        {
+            if (gtk_widget_has_focus(GTK_WIDGET(m_pOverlayButton)) || gtk_widget_has_focus(GTK_WIDGET(m_pTreeView)))
+                return true;
+        }
+
+        return GtkInstanceWidget::has_focus();
     }
 
     virtual bool changed_by_direct_pick() const override
