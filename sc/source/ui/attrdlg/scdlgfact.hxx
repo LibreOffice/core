@@ -180,13 +180,14 @@ public:
 
 class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTypeDlg
 {
-    std::unique_ptr<ScDataPilotSourceTypeDlg> m_xDlg;
+    std::shared_ptr<ScDataPilotSourceTypeDlg> m_xDlg;
 public:
-    explicit AbstractScDataPilotSourceTypeDlg_Impl(std::unique_ptr<ScDataPilotSourceTypeDlg> p)
+    explicit AbstractScDataPilotSourceTypeDlg_Impl(std::shared_ptr<ScDataPilotSourceTypeDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &) override;
     virtual bool IsDatabase() const override;
     virtual bool IsExternal() const override;
     virtual bool IsNamedRange() const override;
