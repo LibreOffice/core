@@ -19,32 +19,34 @@
 
 #pragma once
 
+#include <basic/sberrors.hxx>
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <memory>
+#include <vector>
 
-class SbiParser;
+// Stores all numbers big endian
 
 class SbiBuffer {
-    SbiParser* pParser;             // for error messages
-    std::unique_ptr<char[]>  pBuf;
-    char*   pCur;
-    sal_uInt32  nOff;
-    sal_uInt32  nSize;
-    short   nInc;
-    bool    Check( sal_Int32 );
+    std::vector<sal_uInt8> m_aBuf;
+    ErrCode m_aErrCode;
+    OUString m_sErrMsg;
+
+    template <typename T> void append(T n);
+
 public:
-    SbiBuffer( SbiParser*, short ); // increment
-   ~SbiBuffer();
+    SbiBuffer() { m_aBuf.reserve(1024); }
     void Patch( sal_uInt32, sal_uInt32 );
     void Chain( sal_uInt32 );
     void operator += (sal_Int8);        // save character
     void operator += (sal_Int16);       // save integer
-    bool operator += (sal_uInt8);       // save character
-    bool operator += (sal_uInt16);      // save integer
-    bool operator += (sal_uInt32);      // save integer
+    void operator += (sal_uInt8);       // save character
+    void operator += (sal_uInt16);      // save integer
+    void operator += (sal_uInt32);      // save integer
     void operator += (sal_Int32);       // save integer
-    char*  GetBuffer();             // give out buffer (delete yourself!)
-    sal_uInt32 GetSize() const { return nOff; }
+    std::vector<sal_uInt8>&& GetBuffer() { return std::move(m_aBuf); } // pass ownership
+    sal_uInt32 GetSize() const { return m_aBuf.size(); }
+    ErrCode GetErrCode() const { return m_aErrCode; }
+    OUString GetErrMessage() const { return m_sErrMsg; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

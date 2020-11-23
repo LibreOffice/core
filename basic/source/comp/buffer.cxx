@@ -18,93 +18,54 @@
  */
 
 #include <buffer.hxx>
-#include <parser.hxx>
 
-#include <basic/sberrors.hxx>
-
+namespace
+{
 const sal_uInt32 UP_LIMIT=0xFFFFFF00;
 
-// The SbiBuffer will be expanded in increments of at least 16 Bytes.
-// This is necessary, because many classes emanate from a buffer length
-// of x*16 Bytes.
-
-SbiBuffer::SbiBuffer( SbiParser* p, short n )
-    : pParser(p)
-    , pCur(nullptr)
-    , nOff(0)
-    , nSize(0)
+template <class I, typename T> void write(I it, T n)
 {
-    n = ( (n + 15 ) / 16 ) * 16;
-    if( !n ) n = 16;
-    nInc  = n;
-}
-
-SbiBuffer::~SbiBuffer()
-{
-}
-
-// Reach out the buffer
-// This lead to the deletion of the buffer!
-
-char* SbiBuffer::GetBuffer()
-{
-    char* p = pBuf.release();
-    pCur = nullptr;
-    return p;
-}
-
-// Test, if the buffer can contain n Bytes.
-// In case of doubt it will be enlarged
-
-bool SbiBuffer::Check( sal_Int32 n )
-{
-    if( !n )
+    *it = static_cast<sal_uInt8>(n & 0xFF);
+    if constexpr (sizeof(n) > 1)
     {
-        return true;
+        for (std::size_t i = 1; i < sizeof(n); ++i)
+        {
+            n >>= 8;
+            *++it = static_cast<sal_uInt8>(n & 0xFF);
+        }
     }
-    if( nOff + n  >  nSize )
-    {
-        if( nInc == 0 )
-        {
-            return false;
-        }
-
-        sal_Int32 nn = 0;
-        while( nn < n )
-        {
-            nn = nn + nInc;
-        }
-        if( ( nSize + nn ) > UP_LIMIT )
-        {
-            pParser->Error( ERRCODE_BASIC_PROG_TOO_LARGE );
-            nInc = 0;
-            pBuf.reset();
-            return false;
-        }
-        auto p(std::make_unique<char[]>(nSize + nn));
-        if (nSize)
-            memcpy(p.get(), pBuf.get(), nSize);
-        pBuf = std::move(p);
-        pCur = pBuf.get() + nOff;
-        nSize += nn;
-    }
-    return true;
 }
+}
+
+template <typename T> void SbiBuffer::append(T n)
+{
+    if (m_aErrCode)
+        return;
+    if ((m_aBuf.size() + sizeof(n)) > UP_LIMIT)
+    {
+        m_aErrCode = ERRCODE_BASIC_PROG_TOO_LARGE;
+        m_aBuf.clear();
+        return;
+    }
+    m_aBuf.reserve(m_aBuf.size() + sizeof(n));
+    write(std::back_inserter(m_aBuf), n);
+}
+
+void SbiBuffer::operator+=(sal_Int8 n) { append(n); }
+void SbiBuffer::operator+=(sal_Int16 n) { append(n); }
+void SbiBuffer::operator+=(sal_uInt8 n) { append(n); }
+void SbiBuffer::operator+=(sal_uInt16 n) { append(n); }
+void SbiBuffer::operator+=(sal_uInt32 n) { append(n); }
+void SbiBuffer::operator+=(sal_Int32 n) { append(n); }
 
 // Patch of a Location
 
 void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
 {
-    if( ( off + sizeof( sal_uInt32 ) ) < nOff )
-    {
-        sal_uInt16 val1 = static_cast<sal_uInt16>( val & 0xFFFF );
-        sal_uInt16 val2 = static_cast<sal_uInt16>( val >> 16 );
-        sal_uInt8* p = reinterpret_cast<sal_uInt8*>(pBuf.get()) + off;
-        *p++ = static_cast<char>( val1 & 0xFF );
-        *p++ = static_cast<char>( val1 >> 8 );
-        *p++ = static_cast<char>( val2 & 0xFF );
-        *p   = static_cast<char>( val2 >> 8 );
-    }
+    if (m_aErrCode)
+        return;
+    if ((off + sizeof(sal_uInt32)) <= GetSize())
+        write(m_aBuf.begin() + off, val);
 }
 
 // Forward References upon label and procedures
@@ -113,98 +74,20 @@ void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
 
 void SbiBuffer::Chain( sal_uInt32 off )
 {
-    if( !(off && pBuf) )
+    if (m_aErrCode)
         return;
-
-    sal_uInt8 *ip;
-    sal_uInt32 i = off;
-    sal_uInt32 val1 = (nOff & 0xFFFF);
-    sal_uInt32 val2 = (nOff >> 16);
-    do
+    for (sal_uInt32 i = off; i;)
     {
-        ip = reinterpret_cast<sal_uInt8*>(pBuf.get()) + i;
-        sal_uInt8* pTmp = ip;
-        i =  *pTmp++; i |= *pTmp++ << 8; i |= *pTmp++ << 16; i |= *pTmp++ << 24;
-
-        if( i >= nOff )
+        if ((i + sizeof(sal_uInt32)) > GetSize())
         {
-            pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "BACKCHAIN" );
+            m_aErrCode = ERRCODE_BASIC_INTERNAL_ERROR;
+            m_sErrMsg = OUStringLiteral(u"BACKCHAIN");
             break;
         }
-        *ip++ = static_cast<char>( val1 & 0xFF );
-        *ip++ = static_cast<char>( val1 >> 8 );
-        *ip++ = static_cast<char>( val2 & 0xFF );
-        *ip   = static_cast<char>( val2 >> 8 );
-    } while( i );
-}
-
-void SbiBuffer::operator +=( sal_Int8 n )
-{
-    if( Check( 1 ) )
-    {
-        *pCur++ = static_cast<char>(n);
-        nOff += 1;
+        auto ip = m_aBuf.begin() + i;
+        i = ip[0] | (ip[1] << 8) | (ip[2] << 16) | (ip[3] << 24);
+        write(ip, GetSize());
     }
 }
-
-bool SbiBuffer::operator +=( sal_uInt8 n )
-{
-    if( Check( 1 ) )
-    {
-        *pCur++ = static_cast<char>(n);
-        nOff += 1;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void SbiBuffer::operator +=( sal_Int16 n )
-{
-    if( Check( 2 ) )
-    {
-        *pCur++ = static_cast<char>( n & 0xFF );
-        *pCur++ = static_cast<char>( n >> 8 );
-        nOff += 2;
-    }
-}
-
-bool SbiBuffer::operator +=( sal_uInt16 n )
-{
-    if( Check( 2 ) )
-    {
-        *pCur++ = static_cast<char>( n & 0xFF );
-        *pCur++ = static_cast<char>( n >> 8 );
-        nOff += 2;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-bool SbiBuffer::operator +=( sal_uInt32 n )
-{
-    if( Check( 4 ) )
-    {
-        sal_uInt16 n1 = static_cast<sal_uInt16>( n & 0xFFFF );
-        sal_uInt16 n2 = static_cast<sal_uInt16>( n >> 16 );
-        operator +=(n1) && operator +=(n2);
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void SbiBuffer::operator +=( sal_Int32 n )
-{
-    operator +=( static_cast<sal_uInt32>(n) );
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
