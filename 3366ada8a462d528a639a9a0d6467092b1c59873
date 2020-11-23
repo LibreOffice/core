@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76d673f5_4660030f",
+        "filename": "sfx2/source/control/listview.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-23T10:28:42Z",
+      "side": 1,
+      "message": "Annoying that tooltips come up without any delay. But not your fault.",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 37
+      },
+      "revId": "3366ada8a462d528a639a9a0d6467092b1c59873",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
