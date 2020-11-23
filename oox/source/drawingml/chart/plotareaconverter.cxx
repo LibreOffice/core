@@ -70,7 +70,8 @@ public:
                             const Reference< XDiagram >& rxDiagram,
                             View3DModel& rView3DModel,
                             sal_Int32 nAxesSetIdx,
-                            bool bSupportsVaryColorsByPoint );
+                            bool bSupportsVaryColorsByPoint,
+                            bool bUseFixedInnerSize );
 
     /** Returns the automatic chart title if the axes set contains only one series. */
     const OUString& getAutomaticTitle() const { return maAutoTitle; }
@@ -105,7 +106,8 @@ ModelRef< AxisModel > lclGetOrCreateAxis( const AxesSetModel::AxisMap& rFromAxes
 }
 
 void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
-        View3DModel& rView3DModel, sal_Int32 nAxesSetIdx, bool bSupportsVaryColorsByPoint )
+                                        View3DModel& rView3DModel, sal_Int32 nAxesSetIdx,
+                                        bool bSupportsVaryColorsByPoint, bool bUseFixedInnerSize)
 {
     // create type group converter objects for all type groups
     typedef RefVector< TypeGroupConverter > TypeGroupConvVector;
@@ -165,15 +167,18 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             ModelRef< AxisModel > xYAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Y_AXIS, C_TOKEN( valAx ), bMSO2007Doc );
 
             AxisConverter aXAxisConv( *this, *xXAxis );
-            aXAxisConv.convertFromModel( xCoordSystem, aTypeGroups, xYAxis.get(), nAxesSetIdx, API_X_AXIS );
+            aXAxisConv.convertFromModel(xCoordSystem, aTypeGroups, xYAxis.get(), nAxesSetIdx,
+                                        API_X_AXIS, bUseFixedInnerSize);
             AxisConverter aYAxisConv( *this, *xYAxis );
-            aYAxisConv.convertFromModel( xCoordSystem, aTypeGroups, xXAxis.get(), nAxesSetIdx, API_Y_AXIS );
+            aYAxisConv.convertFromModel(xCoordSystem, aTypeGroups, xXAxis.get(), nAxesSetIdx,
+                                        API_Y_AXIS, bUseFixedInnerSize);
 
             if( rFirstTypeGroup.isDeep3dChart() )
             {
                 ModelRef< AxisModel > xZAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Z_AXIS, C_TOKEN( serAx ), bMSO2007Doc );
                 AxisConverter aZAxisConv( *this, *xZAxis );
-                aZAxisConv.convertFromModel( xCoordSystem, aTypeGroups, nullptr, nAxesSetIdx, API_Z_AXIS );
+                aZAxisConv.convertFromModel(xCoordSystem, aTypeGroups, nullptr, nAxesSetIdx,
+                                            API_Z_AXIS, bUseFixedInnerSize);
             }
 
             // convert all chart type groups, this converts all series data and formatting
@@ -420,10 +425,15 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
             && aAxesSets[0]->maAxes[ API_Y_AXIS ]->mnAxisId != rValAxisIds[0] ) ? 1 : 0;
     sal_Int32 nAxesSetIdx = nStartAxesSetIdx;
 
+    bool bUseFixedInnerSize = false;
+    if (mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout)
+        bUseFixedInnerSize = mrModel.mxLayout->mnTarget == XML_inner;
+
     for (auto const& axesSet : aAxesSets)
     {
         AxesSetConverter aAxesSetConv(*this, *axesSet);
-        aAxesSetConv.convertFromModel( xDiagram, rView3DModel, nAxesSetIdx, bSupportsVaryColorsByPoint );
+        aAxesSetConv.convertFromModel(xDiagram, rView3DModel, nAxesSetIdx,
+                                      bSupportsVaryColorsByPoint, bUseFixedInnerSize);
         if(nAxesSetIdx == nStartAxesSetIdx)
         {
             maAutoTitle = aAxesSetConv.getAutomaticTitle();

@@ -137,9 +137,10 @@ AxisConverter::~AxisConverter()
 {
 }
 
-void AxisConverter::convertFromModel(
-    const Reference< XCoordinateSystem >& rxCoordSystem,
-    RefVector<TypeGroupConverter>& rTypeGroups, const AxisModel* pCrossingAxis, sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx )
+void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoordSystem,
+                                     RefVector<TypeGroupConverter>& rTypeGroups,
+                                     const AxisModel* pCrossingAxis, sal_Int32 nAxesSetIdx,
+                                     sal_Int32 nAxisIdx, bool bUseFixedInnerSize)
 {
     if (rTypeGroups.empty())
         return;
@@ -269,10 +270,17 @@ void AxisConverter::convertFromModel(
                 }
                 else
                 {
-                    // do not overlap text unless all labels are visible
-                    aAxisProp.setProperty( PROP_TextOverlap, mrModel.mnTickLabelSkip == 1 );
-                    // do not break text into several lines unless the rotation is 0 degree
-                    aAxisProp.setProperty( PROP_TextBreak, ObjectFormatter::getTextRotation( mrModel.mxTextProp ) );
+                    aAxisProp.setProperty(PROP_TextOverlap, true);
+                    /* do not break text into several lines unless the rotation is 0 degree,
+                       or the rotation is 90 degree and the inner size of the chart is not fixed,
+                       or the rotation is 270 degree and the inner size of the chart is not fixed */
+                    bool bTextBreak = true;
+                    double fRotationAngle = 0.0;
+                    if (aAxisProp.getProperty(fRotationAngle, PROP_TextRotation)
+                        && fRotationAngle != 0.0)
+                        bTextBreak = !bUseFixedInnerSize
+                                     && (fRotationAngle == 90.0 || fRotationAngle == 270.0);
+                    aAxisProp.setProperty(PROP_TextBreak, bTextBreak);
                     // do not stagger labels in two lines
                     aAxisProp.setProperty( PROP_ArrangeOrder, cssc::ChartAxisArrangeOrderType_SIDE_BY_SIDE );
                     //! TODO #i58731# show n-th category
