@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <sal/log.hxx>
 #include "loader.hxx"
 #include <cassert>
 #include <systools/win32/uwinapi.h>
@@ -75,6 +75,24 @@ std::wstring EscapeArg(LPCWSTR sArg)
     sResult.append(1, L'"');
 
     return sResult;
+}
+
+void AddEscapedArg(LPCWSTR sArg, std::vector<std::wstring>& aEscapedArgs, std::size_t& iLengthAccumulator)
+{
+    std::wstring sEscapedArg = EscapeArg(sArg);
+    aEscapedArgs.push_back(sEscapedArg);
+    iLengthAccumulator += sEscapedArg.length() + 1; // a space between args
+}
+
+bool HasWildCard(LPCWSTR sArg)
+{
+    while (*sArg != L'\0')
+    {
+        if (*sArg == L'*' || *sArg == L'?')
+            return true;
+        sArg++;
+    }
+    return false;
 }
 
 }
@@ -214,9 +232,36 @@ int officeloader_impl(bool bAllowConsole)
             std::size_t n = 0;
             for (int i = 0; i < argc; ++i)
             {
-                std::wstring sEscapedArg = EscapeArg(argv[i]);
-                aEscapedArgs.push_back(sEscapedArg);
-                n += sEscapedArg.length() + 1; // a space between args
+                // check for wildCards in arguments- windows does not expand automatically
+                if (HasWildCard(argv[i]))
+                {
+                    WIN32_FIND_DATAW aFindData;
+                    HANDLE h= FindFirstFileW(argv[i],&aFindData);
+                    if (h==INVALID_HANDLE_VALUE)
+                    {
+                        AddEscapedArg(argv[i], aEscapedArgs,n);
+                    }
+                    else
+                    {
+                        wchar_t drive[_MAX_DRIVE];
+                        wchar_t dir[_MAX_DIR];
+                        wchar_t path[_MAX_PATH];
+                        _wsplitpath_s(argv[i], drive,_MAX_DRIVE,dir, _MAX_DIR,nullptr,0,nullptr, 0);
+                        _wmakepath_s(path, _MAX_PATH, drive, dir, aFindData.cFileName, nullptr);
+                        AddEscapedArg(path,aEscapedArgs,n);
+
+                        while (FindNextFileW(h, &aFindData))
+                        {
+                            _wmakepath_s(path, _MAX_PATH, drive, dir, aFindData.cFileName, nullptr);
+                            AddEscapedArg(path,aEscapedArgs,n);
+                        }
+                        FindClose(h);
+                    }
+                }
+                else
+                {
+                    AddEscapedArg(argv[i], aEscapedArgs,n);
+                }
             }
             LocalFree(argv);
             n += MY_LENGTH(L" \"-env:OOO_CWD=2") + 4 * cwdLen + MY_LENGTH(L"\"") + 1;
