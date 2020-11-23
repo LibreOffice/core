@@ -1189,10 +1189,9 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                 SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
                 if(pObj)
                 {
-                    if(nullptr != dynamic_cast< const E3dScene* >(pObj) && static_cast< E3dScene* >(pObj)->getRootE3dSceneFromE3dObject() == pObj)
-                    {
-                        bThereAreRootScenes = true;
-                    }
+                    if( auto pScene = dynamic_cast< const E3dScene* >(pObj) )
+                        if( pScene->getRootE3dSceneFromE3dObject() == pObj )
+                            bThereAreRootScenes = true;
 
                     if(dynamic_cast< const E3dObject* >(pObj) !=  nullptr)
                     {

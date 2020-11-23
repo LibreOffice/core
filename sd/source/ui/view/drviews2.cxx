@@ -1425,14 +1425,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rMarkList.GetMarkCount() == 1 )
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if( dynamic_cast< const SdrGrafObj *>( pObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
-                {
-                    GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
-                    m_ExternalEdits.push_back(
-                        std::make_unique<SdrExternalToolEdit>(
-                            mpDrawView.get(), pObj));
-                    m_ExternalEdits.back()->Edit( &aGraphicObject );
-                }
+                if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj ) )
+                    if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
+                    {
+                        GraphicObject aGraphicObject( pGraphicObj->GetGraphicObject() );
+                        m_ExternalEdits.push_back(
+                            std::make_unique<SdrExternalToolEdit>(
+                                mpDrawView.get(), pObj));
+                        m_ExternalEdits.back()->Edit( &aGraphicObject );
+                    }
             }
             Cancel();
             rReq.Ignore();
@@ -1446,20 +1447,20 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-                if( dynamic_cast< const SdrGrafObj *>( pObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
-                {
-                    SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
-                    CompressGraphicsDialog dialog(GetFrameWeld(), pGraphicObj, GetViewFrame()->GetBindings() );
-                    if (dialog.run() == RET_OK)
+                if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj ) )
+                    if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
                     {
-                        SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
-                        SdrPageView* pPageView = mpDrawView->GetSdrPageView();
-                        OUString aUndoString = mpDrawView->GetDescriptionOfMarkedObjects() + " Compress";
-                        mpDrawView->BegUndo( aUndoString );
-                        mpDrawView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
-                        mpDrawView->EndUndo();
+                        CompressGraphicsDialog dialog(GetFrameWeld(), pGraphicObj, GetViewFrame()->GetBindings() );
+                        if (dialog.run() == RET_OK)
+                        {
+                            SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
+                            SdrPageView* pPageView = mpDrawView->GetSdrPageView();
+                            OUString aUndoString = mpDrawView->GetDescriptionOfMarkedObjects() + " Compress";
+                            mpDrawView->BegUndo( aUndoString );
+                            mpDrawView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
+                            mpDrawView->EndUndo();
+                        }
                     }
-                }
             }
             Cancel();
             rReq.Ignore();

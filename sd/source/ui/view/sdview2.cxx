@@ -109,18 +109,19 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
     {
         SdrObject* pObj = GetMarkedObjectByIndex(0);
 
-        if( dynamic_cast< const SdrOle2Obj *>( pObj ) && static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
-        {
-            // If object has no persistence it must be copied as part of the document
-            try
+        if( auto pOle2Obj = dynamic_cast< const SdrOle2Obj *>( pObj ) )
+            if( pOle2Obj->GetObjRef() )
             {
-                uno::Reference< embed::XEmbedPersist > xPersObj( static_cast<SdrOle2Obj*>(pObj)->GetObjRef(), uno::UNO_QUERY );
-                if ( xPersObj.is() && xPersObj->hasEntry() )
-                     pSdrOleObj = static_cast<SdrOle2Obj*>(pObj);
+                // If object has no persistence it must be copied as part of the document
+                try
+                {
+                    uno::Reference< embed::XEmbedPersist > xPersObj( pOle2Obj->GetObjRef(), uno::UNO_QUERY );
+                    if ( xPersObj.is() && xPersObj->hasEntry() )
+                         pSdrOleObj = static_cast<SdrOle2Obj*>(pObj);
+                }
+                catch( uno::Exception& )
+                {}
             }
-            catch( uno::Exception& )
-            {}
-        }
     }
 
     if( pSdrOleObj )
@@ -155,18 +156,19 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObje
     {
         SdrObject* pObj = GetMarkedObjectByIndex( 0 );
 
-        if( dynamic_cast< const SdrOle2Obj *>( pObj ) && static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
-        {
-            // If object has no persistence it must be copied as part of the document
-            try
+        if( auto pOle2Obj = dynamic_cast< const SdrOle2Obj *>( pObj ) )
+            if( pOle2Obj->GetObjRef() )
             {
-                uno::Reference< embed::XEmbedPersist > xPersObj( static_cast<SdrOle2Obj*>(pObj)->GetObjRef(), uno::UNO_QUERY );
-                if ( xPersObj.is() && xPersObj->hasEntry() )
-                     pSdrOleObj = static_cast<SdrOle2Obj*>(pObj);
+                // If object has no persistence it must be copied as part of the document
+                try
+                {
+                    uno::Reference< embed::XEmbedPersist > xPersObj( pOle2Obj->GetObjRef(), uno::UNO_QUERY );
+                    if ( xPersObj.is() && xPersObj->hasEntry() )
+                         pSdrOleObj = static_cast<SdrOle2Obj*>(pObj);
+                }
+                catch( uno::Exception& )
+                {}
             }
-            catch( uno::Exception& )
-            {}
-        }
     }
 
     if( mpDocSh )

@@ -90,7 +90,8 @@ void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap ) )
+        if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj) )
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
             bEnable = true;
     }
 
@@ -107,26 +108,27 @@ void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
-        {
-            GraphicObject aFilterObj( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
-
-            if( SvxGraphicFilterResult::NONE ==
-                SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
+        if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj) )
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
             {
-                SdrPageView* pPageView = pView->GetSdrPageView();
+                GraphicObject aFilterObj( pGraphicObj->GetGraphicObject() );
 
-                if( pPageView )
+                if( SvxGraphicFilterResult::NONE ==
+                    SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
                 {
-                    SdrGrafObj* pFilteredObj(static_cast<SdrGrafObj*>(pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject())));
-                    OUString    aStr = pView->GetDescriptionOfMarkedObjects() + " " + ScResId(SCSTR_UNDO_GRAFFILTER);
-                    pView->BegUndo( aStr );
-                    pFilteredObj->SetGraphicObject( aFilterObj );
-                    pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
-                    pView->EndUndo();
+                    SdrPageView* pPageView = pView->GetSdrPageView();
+
+                    if( pPageView )
+                    {
+                        SdrGrafObj* pFilteredObj(static_cast<SdrGrafObj*>(pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject())));
+                        OUString    aStr = pView->GetDescriptionOfMarkedObjects() + " " + ScResId(SCSTR_UNDO_GRAFFILTER);
+                        pView->BegUndo( aStr );
+                        pFilteredObj->SetGraphicObject( aFilterObj );
+                        pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
+                        pView->EndUndo();
+                    }
                 }
             }
-        }
     }
 
     Invalidate();
@@ -141,7 +143,8 @@ void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap ) )
+        if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj) )
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
             bEnable = true;
     }
 
@@ -161,13 +164,14 @@ void ScGraphicShell::ExecuteExternalEdit( SAL_UNUSED_PARAMETER SfxRequest& )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
-        {
-            GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
-            m_ExternalEdits.push_back( std::make_unique<SdrExternalToolEdit>(
-                        pView, pObj));
-            m_ExternalEdits.back()->Edit( &aGraphicObject );
-        }
+        if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj) )
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
+            {
+                GraphicObject aGraphicObject( pGraphicObj->GetGraphicObject() );
+                m_ExternalEdits.push_back( std::make_unique<SdrExternalToolEdit>(
+                            pView, pObj));
+                m_ExternalEdits.back()->Edit( &aGraphicObject );
+            }
     }
 
     Invalidate();
@@ -182,8 +186,9 @@ void ScGraphicShell::GetCompressGraphicState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap ) )
-            bEnable = true;
+        if( auto pGraphicObj = dynamic_cast<const SdrGrafObj*>( pObj) )
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
+                bEnable = true;
     }
 
     if( !bEnable )
@@ -199,20 +204,20 @@ void ScGraphicShell::ExecuteCompressGraphic( SAL_UNUSED_PARAMETER SfxRequest& )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
-        {
-            SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
-            CompressGraphicsDialog dialog(GetViewData().GetDialogParent(), pGraphicObj, GetViewData().GetBindings());
-            if (dialog.run() == RET_OK)
+        if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj) )
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
             {
-                SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
-                SdrPageView* pPageView = pView->GetSdrPageView();
-                OUString aUndoString = pView->GetDescriptionOfMarkedObjects() + " Compress";
-                pView->BegUndo( aUndoString );
-                pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
-                pView->EndUndo();
+                CompressGraphicsDialog dialog(GetViewData().GetDialogParent(), pGraphicObj, GetViewData().GetBindings());
+                if (dialog.run() == RET_OK)
+                {
+                    SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
+                    SdrPageView* pPageView = pView->GetSdrPageView();
+                    OUString aUndoString = pView->GetDescriptionOfMarkedObjects() + " Compress";
+                    pView->BegUndo( aUndoString );
+                    pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
+                    pView->EndUndo();
+                }
             }
-        }
     }
 
     Invalidate();
@@ -227,8 +232,9 @@ void ScGraphicShell::GetCropGraphicState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap ) )
-            bEnable = true;
+        if( auto pGraphicObj = dynamic_cast<const SdrGrafObj*>( pObj) )
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
+                bEnable = true;
     }
 
     if( !bEnable )
@@ -244,11 +250,12 @@ void ScGraphicShell::ExecuteCropGraphic( SAL_UNUSED_PARAMETER SfxRequest& )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
-        {
-            pView->SetEditMode(SdrViewEditMode::Edit);
-            pView->SetDragMode(SdrDragMode::Crop);
-        }
+        if( auto pGraphicObj = dynamic_cast<const SdrGrafObj*>( pObj) )
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
+            {
+                pView->SetEditMode(SdrViewEditMode::Edit);
+                pView->SetDragMode(SdrDragMode::Crop);
+            }
     }
 
     Invalidate();
@@ -303,8 +310,9 @@ void ScGraphicShell::GetSaveGraphicState(SfxItemSet &rSet)
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap ) )
-            bEnable = true;
+        if( auto pGraphicObj = dynamic_cast<const SdrGrafObj*>( pObj) )
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
+                bEnable = true;
     }
 
     if (GetObjectShell()->isExportLocked())
@@ -323,28 +331,28 @@ void ScGraphicShell::ExecuteChangePicture( SAL_UNUSED_PARAMETER SfxRequest& /*rR
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
-        {
-            SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
-            vcl::Window* pWin = GetViewData().GetActiveWin();
-            SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin ? pWin->GetFrameWeld() : nullptr);
-
-            if( aDlg.Execute() == ERRCODE_NONE )
+        if( auto pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj) )
+            if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
             {
-                Graphic aGraphic;
-                ErrCode nError = aDlg.GetGraphic(aGraphic);
-                if( nError == ERRCODE_NONE )
+                vcl::Window* pWin = GetViewData().GetActiveWin();
+                SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin ? pWin->GetFrameWeld() : nullptr);
+
+                if( aDlg.Execute() == ERRCODE_NONE )
                 {
-                    SdrGrafObj* pNewObject(pGraphicObj->CloneSdrObject(pGraphicObj->getSdrModelFromSdrObject()));
-                    pNewObject->SetGraphic( aGraphic );
-                    SdrPageView* pPageView = pView->GetSdrPageView();
-                    OUString aUndoString = pView->GetDescriptionOfMarkedObjects() + " Change";
-                    pView->BegUndo( aUndoString );
-                    pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
-                    pView->EndUndo();
+                    Graphic aGraphic;
+                    ErrCode nError = aDlg.GetGraphic(aGraphic);
+                    if( nError == ERRCODE_NONE )
+                    {
+                        SdrGrafObj* pNewObject(pGraphicObj->CloneSdrObject(pGraphicObj->getSdrModelFromSdrObject()));
+                        pNewObject->SetGraphic( aGraphic );
+                        SdrPageView* pPageView = pView->GetSdrPageView();
+                        OUString aUndoString = pView->GetDescriptionOfMarkedObjects() + " Change";
+                        pView->BegUndo( aUndoString );
+                        pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
+                        pView->EndUndo();
+                    }
                 }
             }
-        }
     }
 
     Invalidate();
@@ -359,8 +367,9 @@ void ScGraphicShell::GetChangePictureState(SfxItemSet &rSet)
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap ) )
-            bEnable = true;
+        if( auto pGrafObj = dynamic_cast<const SdrGrafObj*>( pObj) )
+            if( pGrafObj->GetGraphicType() == GraphicType::Bitmap )
+                bEnable = true;
     }
 
     if( !bEnable )
