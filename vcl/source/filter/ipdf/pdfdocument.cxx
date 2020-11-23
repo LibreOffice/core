@@ -3274,7 +3274,7 @@ size_t PDFObjectParser::parse(PDFElement* pParsingElement, size_t nStartIndex, i
         }
         else
         {
-            SAL_INFO("vcl.filter", "Unhandeled element while parsing.");
+            SAL_INFO("vcl.filter", "Unhandled element while parsing.");
         }
     }
 
