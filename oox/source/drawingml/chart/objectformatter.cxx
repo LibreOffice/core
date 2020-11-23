@@ -1139,26 +1139,6 @@ bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
     return !rxShapeProp || !rxShapeProp->getFillProperties().moFillType.has();
 }
 
-bool ObjectFormatter::getTextRotation( const ModelRef< TextBody >& rxTextProp, sal_Int32 nDefaultRotation )
-{
-    if( rxTextProp.is() )
-    {
-        double fAnglevalue = static_cast< double >( rxTextProp->getTextProperties().moRotation.get( nDefaultRotation ) );
-        if( fAnglevalue < -5400000.0 || fAnglevalue > 5400000.0 || fAnglevalue == 0.0 )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    else
-    {
-        return true;
-    }
-}
-
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
