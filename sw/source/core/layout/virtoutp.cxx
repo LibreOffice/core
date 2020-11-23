@@ -84,26 +84,26 @@ bool SwLayVout::DoesFit( const Size &rNew )
         return false;
     if( rNew.IsEmpty() )
         return false;
-    if( rNew.Width() <= aSize.Width() )
+    if( rNew.Width() <= m_aSize.Width() )
         return true;
-    if( !pVirDev )
+    if( !m_pVirDev )
     {
-        pVirDev = VclPtr<VirtualDevice>::Create();
-        pVirDev->SetLineColor();
-        if( pOut )
+        m_pVirDev = VclPtr<VirtualDevice>::Create();
+        m_pVirDev->SetLineColor();
+        if( m_pOut )
         {
-            if( pVirDev->GetFillColor() != pOut->GetFillColor() )
-                pVirDev->SetFillColor( pOut->GetFillColor() );
+            if( m_pVirDev->GetFillColor() != m_pOut->GetFillColor() )
+                m_pVirDev->SetFillColor( m_pOut->GetFillColor() );
         }
     }
 
-    if( rNew.Width() > aSize.Width() )
+    if( rNew.Width() > m_aSize.Width() )
     {
-        aSize.setWidth( rNew.Width() );
-        if( !pVirDev->SetOutputSizePixel( aSize ) )
+        m_aSize.setWidth( rNew.Width() );
+        if( !m_pVirDev->SetOutputSizePixel( m_aSize ) )
         {
-            pVirDev.disposeAndClear();
-            aSize.setWidth( 0 );
+            m_pVirDev.disposeAndClear();
+            m_aSize.setWidth( 0 );
             return false;
         }
     }
@@ -122,67 +122,67 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
 #ifdef DBG_UTIL
     if( pShell->GetViewOptions()->IsTest3() )
     {
-        ++nCount;
+        ++m_nCount;
         return;
     }
 #endif
 
-    bOn = bOn && !nCount && rRect.HasArea() && pShell->GetWin();
-    ++nCount;
+    bOn = bOn && !m_nCount && rRect.HasArea() && pShell->GetWin();
+    ++m_nCount;
     if( !bOn )
         return;
 
-    pSh = pShell;
-    pOut = nullptr;
-    OutputDevice *pO = pSh->GetOut();
+    m_pShell = pShell;
+    m_pOut = nullptr;
+    OutputDevice *pO = m_pShell->GetOut();
 // We don't cheat on printers or virtual output devices...
     if( OUTDEV_WINDOW != pO->GetOutDevType() )
         return;
 
-    pOut = pO;
-    Size aPixSz( pOut->PixelToLogic( Size( 1,1 )) );
+    m_pOut = pO;
+    Size aPixSz( m_pOut->PixelToLogic( Size( 1,1 )) );
     SwRect aTmp( rRect );
     aTmp.AddWidth(aPixSz.Width()/2 + 1 );
     aTmp.AddHeight(aPixSz.Height()/2 + 1 );
     tools::Rectangle aTmpRect( pO->LogicToPixel( aTmp.SVRect() ) );
 
-    OSL_ENSURE( !pSh->GetWin()->IsReallyVisible() ||
-            aTmpRect.GetWidth() <= pSh->GetWin()->GetOutputSizePixel().Width() + 2,
+    OSL_ENSURE( !m_pShell->GetWin()->IsReallyVisible() ||
+            aTmpRect.GetWidth() <= m_pShell->GetWin()->GetOutputSizePixel().Width() + 2,
             "Paintwidth bigger than visarea?" );
     // Does the rectangle fit in our buffer?
     if( !DoesFit( aTmpRect.GetSize() ) )
     {
-        pOut = nullptr;
+        m_pOut = nullptr;
         return;
     }
 
-    aRect = SwRect( pO->PixelToLogic( aTmpRect ) );
+    m_aRect = SwRect( pO->PixelToLogic( aTmpRect ) );
 
-    SetOutDev( pSh, pVirDev );
+    SetOutDev( m_pShell, m_pVirDev );
 
-    if( pVirDev->GetFillColor() != pOut->GetFillColor() )
-        pVirDev->SetFillColor( pOut->GetFillColor() );
+    if( m_pVirDev->GetFillColor() != m_pOut->GetFillColor() )
+        m_pVirDev->SetFillColor( m_pOut->GetFillColor() );
 
-    MapMode aMapMode( pOut->GetMapMode() );
+    MapMode aMapMode( m_pOut->GetMapMode() );
     // use method to set mapping
     //aMapMode.SetOrigin( Point(0,0) - aRect.Pos() );
-    ::SetMappingForVirtDev( aRect.Pos(), pOut, pVirDev );
+    ::SetMappingForVirtDev( m_aRect.Pos(), m_pOut, m_pVirDev );
 
-    if( aMapMode != pVirDev->GetMapMode() )
-        pVirDev->SetMapMode( aMapMode );
+    if( aMapMode != m_pVirDev->GetMapMode() )
+        m_pVirDev->SetMapMode( aMapMode );
 
     // set value of parameter <rRect>
-    rRect = aRect;
+    rRect = m_aRect;
 
 }
 
 void SwLayVout::Flush_()
 {
-    OSL_ENSURE( pVirDev, "SwLayVout::DrawOut: nothing left Toulouse" );
-    pOut->DrawOutDev( aRect.Pos(), aRect.SSize(),
-                      aRect.Pos(), aRect.SSize(), *pVirDev );
-    SetOutDev( pSh, pOut );
-    pOut = nullptr;
+    OSL_ENSURE( m_pVirDev, "SwLayVout::DrawOut: nothing left Toulouse" );
+    m_pOut->DrawOutDev( m_aRect.Pos(), m_aRect.SSize(),
+                      m_aRect.Pos(), m_aRect.SSize(), *m_pVirDev );
+    SetOutDev( m_pShell, m_pOut );
+    m_pOut = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

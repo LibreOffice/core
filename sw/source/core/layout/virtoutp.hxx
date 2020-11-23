@@ -30,30 +30,30 @@ class SwLayVout
 {
     friend void FrameFinit();    //deletes Vout
 private:
-    SwViewShell*      pSh;
-    VclPtr<OutputDevice>  pOut;
-    VclPtr<VirtualDevice> pVirDev;
-    SwRect          aRect;
-    SwRect          aOrgRect;
-    Size            aSize;
-    sal_uInt16          nCount;
+    SwViewShell*      m_pShell;
+    VclPtr<OutputDevice>  m_pOut;
+    VclPtr<VirtualDevice> m_pVirDev;
+    SwRect          m_aRect;
+    SwRect          m_aOrgRect;
+    Size            m_aSize;
+    sal_uInt16          m_nCount;
 
     bool DoesFit( const Size &rOut );
 
 public:
-    SwLayVout() : pSh(nullptr), pOut(nullptr), pVirDev(nullptr), aSize(0, VIRTUALHEIGHT), nCount(0) {}
-    ~SwLayVout() { pVirDev.disposeAndClear(); }
+    SwLayVout() : m_pShell(nullptr), m_pOut(nullptr), m_pVirDev(nullptr), m_aSize(0, VIRTUALHEIGHT), m_nCount(0) {}
+    ~SwLayVout() { m_pVirDev.disposeAndClear(); }
 
     /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
     void Enter( SwViewShell *pShell, SwRect &rRect, bool bOn );
-    void Leave() { --nCount; Flush(); }
+    void Leave() { --m_nCount; Flush(); }
 
-    void SetOrgRect( SwRect const &rRect ) { aOrgRect = rRect; }
-    const SwRect& GetOrgRect() const { return aOrgRect; }
+    void SetOrgRect( SwRect const &rRect ) { m_aOrgRect = rRect; }
+    const SwRect& GetOrgRect() const { return m_aOrgRect; }
 
-    bool IsFlushable() const { return bool(pOut); }
+    bool IsFlushable() const { return bool(m_pOut); }
     void Flush_();
-    void Flush() { if( pOut ) Flush_(); }
+    void Flush() { if( m_pOut ) Flush_(); }
 };
 
 #endif
