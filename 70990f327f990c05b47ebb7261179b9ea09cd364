@@ -16,6 +16,24 @@
       "revId": "70990f327f990c05b47ebb7261179b9ea09cd364",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6588b00_cf15714c",
+        "filename": "sw/source/uibase/lingu/sdrhhcwrap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-11-23T17:57:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1504b51_74c58834",
+      "revId": "70990f327f990c05b47ebb7261179b9ea09cd364",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
