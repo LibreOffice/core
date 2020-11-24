@@ -1113,8 +1113,7 @@ uno::Reference<container::XEnumeration> SwXCell::createEnumeration()
     pUnoCursor->Move(fnMoveForward, GoInNode);
     // remember table and start node for later travelling
     // (used in export of tables in tables)
-    SwTable const*const pTable(&pSttNd->FindTableNode()->GetTable());
-    return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::TableText, pSttNd, pTable);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::TableText, m_pBox);
 }
 
 uno::Type SAL_CALL SwXCell::getElementType()

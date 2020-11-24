@@ -2909,12 +2909,7 @@ SwXTextCursor::createEnumeration()
     }
     const CursorType eSetType = (CursorType::TableText == m_pImpl->m_eType)
             ? CursorType::SelectionInTable : CursorType::Selection;
-    SwTableNode const*const pStartNode( (CursorType::TableText == m_pImpl->m_eType)
-            ? rUnoCursor.GetPoint()->nNode.GetNode().FindTableNode()
-            : nullptr);
-    SwTable const*const pTable(
-            pStartNode ? & pStartNode->GetTable() : nullptr );
-    return SwXParagraphEnumeration::Create(pParentText, pNewCursor, eSetType, pStartNode, pTable);
+    return SwXParagraphEnumeration::Create(pParentText, pNewCursor, eSetType);
 }
 
 uno::Type SAL_CALL

@@ -31,6 +31,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
+#include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -494,6 +495,32 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtEnd)
     CPPUNIT_ASSERT_EQUAL(OUString(/*"quux" SAL_NEWLINE_STRING */
                                   "foobar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING),
                          xCursor->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextRangeInTable)
+{
+    load(DATA_DIRECTORY, "bookmarkintable.fodt");
+
+    uno::Reference<text::XBookmarksSupplier> const xBS(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> const xMarks(xBS->getBookmarks());
+    uno::Reference<text::XTextContent> const xMark(xMarks->getByName("Bookmark 1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> const xAnchor(xMark->getAnchor(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> const xEnum(xAnchor->createEnumeration());
+    uno::Reference<lang::XServiceInfo> const xPara(xEnum->nextElement(), uno::UNO_QUERY);
+    // not the top-level table!
+    CPPUNIT_ASSERT(!xPara->supportsService("com.sun.star.text.TextTable"));
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+    uno::Reference<container::XEnumerationAccess> const xParaEA(xPara, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> const xPortions(xParaEA->createEnumeration());
+    uno::Reference<beans::XPropertySet> const xP1(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Bookmark"), getProperty<OUString>(xP1, "TextPortionType"));
+    uno::Reference<beans::XPropertySet> const xP2(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xP2, "TextPortionType"));
+    uno::Reference<text::XTextRange> const xP2R(xP2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), xP2R->getString());
+    uno::Reference<beans::XPropertySet> const xP3(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Bookmark"), getProperty<OUString>(xP3, "TextPortionType"));
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXURI)

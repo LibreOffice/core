@@ -395,10 +395,9 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
         , m_pCursor(pCursor)
     {
         OSL_ENSURE(m_xParentText.is(), "SwXParagraphEnumeration: no parent?");
-        OSL_ENSURE(   !((CursorType::SelectionInTable == eType) ||
-                        (CursorType::TableText == eType))
-                   || (m_pOwnTable && m_pOwnStartNode),
-            "SwXParagraphEnumeration: table type but no start node or table?");
+        assert( !((CursorType::SelectionInTable == eType)
+                      || (CursorType::TableText == eType))
+            || (m_pOwnTable && m_pOwnStartNode));
 
         if ((CursorType::Selection == m_eCursorType) ||
             (CursorType::SelectionInTable == m_eCursorType))
@@ -451,9 +450,30 @@ SwXParagraphEnumeration* SwXParagraphEnumeration::Create(
     uno::Reference< text::XText > const& xParent,
     const std::shared_ptr<SwUnoCursor>& pCursor,
     const CursorType eType,
-    SwStartNode const*const pStartNode,
-    SwTable const*const pTable)
+    SwTableBox const*const pTableBox)
 {
+    SwStartNode const* pStartNode(nullptr);
+    SwTable const* pTable(nullptr);
+    assert((eType == CursorType::TableText) == (pTableBox != nullptr));
+    switch (eType)
+    {
+        case CursorType::TableText:
+        {
+            pStartNode = pTableBox->GetSttNd();
+            pTable = & pStartNode->FindTableNode()->GetTable();
+            break;
+        }
+        case CursorType::SelectionInTable:
+        {
+            SwTableNode const*const pTableNode(
+                pCursor->GetPoint()->nNode.GetNode().FindTableNode());
+            pStartNode = pTableNode;
+            pTable = & pTableNode->GetTable();
+            break;
+        }
+        default:
+            break;
+    }
     return new SwXParagraphEnumerationImpl(xParent, pCursor, eType, pStartNode, pTable);
 }
 
