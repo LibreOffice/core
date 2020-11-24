@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <comphelper/scopeguard.hxx>
 #include <config_folders.h>
 
@@ -102,9 +106,9 @@ OUString getBaseInstallation()
 #endif
 
 
-bool isObsoleteUpdateInfo(const OUString& rBuildId)
+bool isObsoleteUpdateInfo(std::u16string_view rBuildId)
 {
-    return rBuildId != getBuildId() && !rBuildId.isEmpty();
+    return rBuildId != getBuildId() && !rBuildId.empty();
 }
 
 
