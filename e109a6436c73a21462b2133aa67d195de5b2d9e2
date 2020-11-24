@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a8c343e_d92de76b",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2020-11-24T11:46:57Z",
+      "side": 1,
+      "message": "I wouldn\u0027t use \"else if\", instead only an \"if\" - because with \"else if\" only the existence of the param will be enough to ignore the provided aDocName; but I guess we want to use it even in case \"UseCurrentDocument\" param is exiplicitly false?\n\nSo we could change the conditions to:\n\nif (...HasItem(FN_PARAM_3...)\n    bUseCurrentDocument \u003d ...\n\nif (bUseCurrentDocument)\n    aDocName \u003d ...\nelse if (...HasItem(FID_TAB_MOVE...)\n    aDocName \u003d ...",
+      "range": {
+        "startLine": 480,
+        "startChar": 20,
+        "endLine": 480,
+        "endChar": 27
+      },
+      "revId": "e109a6436c73a21462b2133aa67d195de5b2d9e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
