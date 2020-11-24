@@ -34,6 +34,7 @@ public:
 
     InsertDeleteFlags GetInsContentsCmdBits() const;
     ScPasteFunc       GetFormulaCmdBits() const;
+
     bool            IsSkipEmptyCells() const;
     bool            IsTranspose() const;
     bool            IsLink() const;
@@ -50,11 +51,10 @@ private:
     bool              bChangeTrack;
     bool              bMoveDownDisabled;
     bool              bMoveRightDisabled;
-    bool              bUsedShortCut;
-
-    InsertDeleteFlags nShortCutInsContentsCmdBits;
-    bool              bShortCutTranspose;
-
+    void SetInsContentsCmdBits(const InsertDeleteFlags eFlags);
+    void SetFormulaCmdBits(const ScPasteFunc eFlags);
+    void SetCellCmdFlags(const InsCellCmd eFlags);
+    void SetContentsFlags(const InsertContentsFlags eFlags);
 
     std::unique_ptr<weld::CheckButton>        mxBtnInsAll;
     std::unique_ptr<weld::CheckButton>        mxBtnInsStrings;
@@ -82,12 +82,15 @@ private:
     std::unique_ptr<weld::Button>      mxBtnShortCutPasteValuesOnly;
     std::unique_ptr<weld::Button>      mxBtnShortCutPasteValuesFormats;
     std::unique_ptr<weld::Button>      mxBtnShortCutPasteTranspose;
+    std::unique_ptr<weld::Button>      mxBtnShortCutPasteFormats;
+
+    std::unique_ptr<weld::CheckButton>     mxImmediately;
 
     static bool         bPreviousAllCheck;
     static InsertDeleteFlags nPreviousChecks;
     static InsertContentsFlags nPreviousChecks2;
     static ScPasteFunc  nPreviousFormulaChecks;
-    static sal_uInt16   nPreviousMoveMode;          // enum InsCellCmd
+    static InsCellCmd   nPreviousMoveMode;
 
     void DisableChecks( bool bInsAllChecked );
     void TestModes();
