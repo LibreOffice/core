@@ -68,6 +68,30 @@
       "revId": "bff6803d6ecf9c482d6f4651491f0f672aaf7484",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e31be13_7b7d7a2c",
+        "filename": "svx/uiconfig/ui/crashreportdlg.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-11-24T00:25:27Z",
+      "side": 1,
+      "message": "Have changed to \"no\" for translatable, but I think the context is needed for the link button.",
+      "parentUuid": "cc957424_f4a59370",
+      "range": {
+        "startLine": 11,
+        "startChar": 41,
+        "endLine": 11,
+        "endChar": 44
+      },
+      "revId": "bff6803d6ecf9c482d6f4651491f0f672aaf7484",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
