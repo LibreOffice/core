@@ -169,7 +169,7 @@ namespace connectivity::evoab
         return nType == G_TYPE_STRING ? DataType::VARCHAR : DataType::BIT;
     }
 
-    guint findEvoabField(const OUString& aColName)
+    guint findEvoabField(std::u16string_view aColName)
     {
         guint nRet = guint(-1);
         bool bFound = false;

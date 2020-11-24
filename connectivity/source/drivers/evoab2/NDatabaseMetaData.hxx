@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NDATABASEMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NDATABASEMETADATA_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "NConnection.hxx"
 #include <TDatabaseMetaDataBase.hxx>
 #include <FDatabaseMetaDataResultSet.hxx>
@@ -54,7 +58,7 @@ namespace connectivity::evoab
         sal_Int32             getFieldType(guint nCol) ;
         OUString         getFieldTypeName(guint nCol) ;
         OUString         getFieldName(guint nCol) ;
-        guint                 findEvoabField(const OUString& aColName);
+        guint                 findEvoabField(std::u16string_view aColName);
 
         void free_column_resources();
 
