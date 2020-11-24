@@ -169,7 +169,7 @@ sal_Int16 SvXMLUnitConverter::GetMeasureUnit(FieldUnit const nFieldUnit)
 
 /** convert string to measure using optional min and max values*/
 bool SvXMLUnitConverter::convertMeasureToCore( sal_Int32& nValue,
-                                         const OUString& rString,
+                                         std::u16string_view rString,
                                          sal_Int32 nMin, sal_Int32 nMax ) const
 {
     return ::sax::Converter::convertMeasure( nValue, rString,
@@ -292,7 +292,7 @@ void SvXMLUnitConverter::convertDouble(OUStringBuffer& rBuffer,
 
 /** convert string to double number (using ::rtl::math) */
 bool SvXMLUnitConverter::convertDouble(double& rValue,
-    const OUString& rString) const
+    std::u16string_view rString) const
 {
     sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
             rString, m_pImpl->m_eCoreMeasureUnit);
@@ -322,7 +322,7 @@ void SvXMLUnitConverter::convertDateTime(OUStringBuffer& rBuffer,
 
 /** convert ISO Date Time String to double */
 bool SvXMLUnitConverter::convertDateTime(double& fDateTime,
-                     const OUString& rString)
+                     std::u16string_view rString)
 {
     return convertDateTime(fDateTime, rString, m_pImpl->m_aNullDate);
 }
@@ -416,7 +416,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
 
 /** convert ISO Date Time String to double */
 bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
-                            const OUString& rString, const css::util::Date& aTempNullDate)
+                            std::u16string_view rString, const css::util::Date& aTempNullDate)
 {
     css::util::DateTime aDateTime;
     bool bSuccess = ::sax::Converter::parseDateTime(aDateTime, rString);

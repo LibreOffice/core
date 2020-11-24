@@ -56,7 +56,7 @@ XFormsSubmissionContext::XFormsSubmissionContext(
 
 namespace {
 
-Any toBool( const OUString& rValue )
+Any toBool( std::u16string_view rValue )
 {
     Any aValue;
     bool bValue(false);

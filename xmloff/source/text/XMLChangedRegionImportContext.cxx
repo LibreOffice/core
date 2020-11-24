@@ -144,7 +144,7 @@ void XMLChangedRegionImportContext::SetChangeInfo(
     const OUString& rType,
     const OUString& rAuthor,
     const OUString& rComment,
-    const OUString& rDate)
+    std::u16string_view rDate)
 {
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime, rDate))
