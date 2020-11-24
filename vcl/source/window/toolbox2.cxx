@@ -1731,13 +1731,13 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     DockingWindow::DumpAsPropertyTree(rJsonWriter);
 
-    auto childrenNode = rJsonWriter.startNode("children");
+    auto childrenNode = rJsonWriter.startArray("children");
     for (ToolBox::ImplToolItems::size_type i = 0; i < GetItemCount(); ++i)
     {
         ToolBoxItemType type = GetItemType(i);
         if (type == ToolBoxItemType::BUTTON)
         {
-            auto childNode = rJsonWriter.startNode("");
+            auto childNode = rJsonWriter.startStruct();
             int nId = GetItemId(i);
             if (!IsItemVisible(nId))
                 continue;
