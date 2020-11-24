@@ -43,7 +43,7 @@ class SwPaM;
 class SwUnoCursor;
 class SwStartNode;
 class SwTextNode;
-class SwTable;
+class SwTableBox;
 class SwXText;
 
 typedef ::cppu::ImplInheritanceHelper
@@ -216,8 +216,8 @@ struct SwXParagraphEnumeration
         css::uno::Reference< css::text::XText > const & xParent,
         const std::shared_ptr<SwUnoCursor>& pCursor,
         const CursorType eType,
-        SwStartNode const*const pStartNode = nullptr,
-        SwTable const*const pTable = nullptr);
+        /// only for CursorType::TableText
+        SwTableBox const*const pTableBox = nullptr);
 };
 
 #endif // INCLUDED_SW_INC_UNOPARAGRAPH_HXX
