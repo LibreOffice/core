@@ -24,6 +24,7 @@
 #include "PriorityHBox.hxx"
 #include "NotebookbarPopup.hxx"
 #include <sfx2/viewfrm.hxx>
+#include <comphelper/lok.hxx>
 
 #define DUMMY_WIDTH 50
 #define BUTTON_WIDTH 30
@@ -58,6 +59,9 @@ public:
 
     virtual void Resize() override
     {
+        if (comphelper::LibreOfficeKit::isActive())
+            return VclHBox::Resize();
+
         if (!m_bInitialized && SfxViewFrame::Current())
             Initialize();
 
