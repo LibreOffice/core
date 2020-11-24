@@ -57,9 +57,7 @@ public:
     XMLIndexSimpleEntryContext(
         SvXMLImport& rImport,
         const OUString& rEntry,
-        XMLIndexTemplateContext& rTemplate,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName );
+        XMLIndexTemplateContext& rTemplate );
 
     virtual ~XMLIndexSimpleEntryContext() override;
 
