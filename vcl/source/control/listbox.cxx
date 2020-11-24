@@ -1400,22 +1400,20 @@ void ListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     Control::DumpAsPropertyTree(rJsonWriter);
 
     {
-        auto entriesNode = rJsonWriter.startNode("entries");
+        auto entriesNode = rJsonWriter.startArray("entries");
         for (int i = 0; i < GetEntryCount(); ++i)
         {
-            auto entryNode = rJsonWriter.startNode("");
-            rJsonWriter.put("", GetEntry(i));
+            rJsonWriter.putSimpleValue(GetEntry(i));
         }
     }
 
     rJsonWriter.put("selectedCount", GetSelectedEntryCount());
 
     {
-        auto entriesNode = rJsonWriter.startNode("selectedEntries");
+        auto entriesNode = rJsonWriter.startArray("selectedEntries");
         for (int i = 0; i < GetSelectedEntryCount(); ++i)
         {
-            auto entryNode = rJsonWriter.startNode("");
-            rJsonWriter.put("", GetSelectedEntryPos(i));
+            rJsonWriter.putSimpleValue(OUString::number(GetSelectedEntryPos(i)));
         }
     }
 }
