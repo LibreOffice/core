@@ -510,8 +510,10 @@ namespace emfio
 
         sal_Int32 nResult;
         const bool bFail = o3tl::checked_multiply(mnWinExtX, mnWinExtY, nResult);
+
         if (!bFail && nResult < 0)
             rFont.SetOrientation( Degree10(3600) - rFont.GetOrientation() );
+            // rFont.SetOrientation( Degree10(3600) - rFont.GetOrientation() - Degree10(::basegfx::fround(atan2(-maXForm.eM12, maXForm.eM22) * 1800.0 / M_PI )) );
     }
 
     tools::Polygon& MtfTools::ImplMap( tools::Polygon& rPolygon )
@@ -1504,27 +1506,10 @@ namespace emfio
             aTmp.SetTransparent( false );
 
         aTmp.SetAlignment( eTextAlign );
-
-        if ( nGfxMode == GM_ADVANCED )
+        //if (maXForm.eM12 != 0.0f)
         {
-            // check whether there is a font rotation applied via transformation
-            Point aP1( ImplMap( Point() ) );
-            Point aP2( ImplMap( Point( 0, 100 ) ) );
-            aP2.AdjustX( -(aP1.X()) );
-            aP2.AdjustY( -(aP1.Y()) );
-            double fX = aP2.X();
-            double fY = aP2.Y();
-            if ( fX )
-            {
-                double fOrientation = acos( fX / sqrt( fX * fX + fY * fY ) ) * 57.29577951308;
-                if ( fY > 0 )
-                    fOrientation = 360 - fOrientation;
-                fOrientation += 90;
-                fOrientation *= 10;
-                aTmp.SetOrientation( aTmp.GetOrientation() + Degree10( static_cast<sal_Int16>(fOrientation) ) );
-            }
+            aTmp.SetOrientation( aTmp.GetOrientation() - Degree10(::basegfx::fround(atan2(-maXForm.eM12, maXForm.eM22) * 1800.0 / M_PI )));
         }
-
         if( mnTextAlign & ( TA_UPDATECP | TA_RIGHT_CENTER ) )
         {
             // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
