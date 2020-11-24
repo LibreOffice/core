@@ -22,6 +22,30 @@
       "revId": "a3638ec207b6aa2ee8e5b4255c3b73e15c479852",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e97ce85_db0e0bdd",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3898,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-24T10:05:04Z",
+      "side": 1,
+      "message": "Yes, but it wasn\u0027t clear to me whether it actually makes sense to pass that SwFormatRowSplit into SwRowFrame::OnFrameSize.",
+      "parentUuid": "0ca289eb_bfacf7f3",
+      "range": {
+        "startLine": 3898,
+        "startChar": 16,
+        "endLine": 3898,
+        "endChar": 68
+      },
+      "revId": "a3638ec207b6aa2ee8e5b4255c3b73e15c479852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
