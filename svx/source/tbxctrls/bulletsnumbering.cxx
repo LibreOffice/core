@@ -68,7 +68,7 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     : WeldToolbarPopup(rController.getFrameInterface(), pParent, "svx/ui/numberingwindow.ui", "NumberingWindow")
     , mePageType(ePageType)
     , mrController(rController)
-    , mxValueSet(new SvxNumValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
+    , mxValueSet(new SvxNumValueSet(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
     , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxValueSet))
     , mxMoreButton(m_xBuilder->weld_button("more"))
 {
