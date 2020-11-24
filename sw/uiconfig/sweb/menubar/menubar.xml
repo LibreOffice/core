@@ -598,6 +598,7 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:EditGlossary" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ImageMapDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:BmpMask"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ChapterNumberingDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:LineNumberingDialog" menu:style="text"/>

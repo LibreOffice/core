@@ -740,6 +740,7 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:EditGlossary" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ImageMapDialog"/>
+      <menu:menuitem menu:id=".uno:BmpMask"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:RedactDoc" menu:style="text"/>
       <menu:menuitem menu:id=".uno:AutoRedactDoc" menu:style="text"/>
