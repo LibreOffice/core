@@ -44,10 +44,8 @@ using ::xmloff::token::XML_TOKEN_INVALID;
 
 XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
-        XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
+        XMLIndexSourceBaseContext(rImport,
                                   rPropSet, false),
         bUseCalc(false),
         bUseChart(false),

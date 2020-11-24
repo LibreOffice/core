@@ -140,11 +140,9 @@ const SvXMLTokenMapEntry aIndexSourceTokenMap[] =
 
 XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet,
     bool bLevelFormats)
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+:   SvXMLImportContext(rImport)
 ,   bUseLevelFormats(bLevelFormats)
 ,   bChapterIndex(false)
 ,   bRelativeTabs(true)

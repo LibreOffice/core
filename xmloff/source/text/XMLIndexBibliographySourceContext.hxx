@@ -38,11 +38,8 @@ class XMLIndexBibliographySourceContext : public XMLIndexSourceBaseContext
 
 public:
 
-
     XMLIndexBibliographySourceContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     virtual ~XMLIndexBibliographySourceContext() override;

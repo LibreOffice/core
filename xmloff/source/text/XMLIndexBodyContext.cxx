@@ -27,12 +27,9 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-XMLIndexBodyContext::XMLIndexBodyContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        bHasContent(false)
+XMLIndexBodyContext::XMLIndexBodyContext( SvXMLImport& rImport ) :
+    SvXMLImportContext(rImport),
+    bHasContent(false)
 {
 }
 

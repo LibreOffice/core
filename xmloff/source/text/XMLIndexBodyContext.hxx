@@ -42,10 +42,7 @@ class XMLIndexBodyContext : public SvXMLImportContext
 public:
 
 
-    XMLIndexBodyContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName );
+    XMLIndexBodyContext( SvXMLImport& rImport );
 
     virtual ~XMLIndexBodyContext() override;
 

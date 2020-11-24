@@ -39,10 +39,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet)
-:   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, true)
+:   XMLIndexSourceBaseContext(rImport, rPropSet, true)
     // use all chapters by default
 ,   nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->getCount())
 ,   bUseOutline(true)
