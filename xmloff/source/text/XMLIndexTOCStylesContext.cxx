@@ -106,27 +106,20 @@ void XMLIndexTOCStylesContext::endFastElement(sal_Int32 )
     xIndexReplace->replaceByIndex(nOutlineLevel, Any(aStyleNamesSequence));
 }
 
-SvXMLImportContextRef XMLIndexTOCStylesContext::CreateChildContext(
-    sal_uInt16 p_nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCStylesContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // check for index-source-style
-    if ( (XML_NAMESPACE_TEXT == p_nPrefix) &&
-         IsXMLToken( rLocalName, XML_INDEX_SOURCE_STYLE ) )
+    if ( nElement == XML_ELEMENT(TEXT, XML_INDEX_SOURCE_STYLE) )
     {
         // find text:style-name attribute and record in aStyleNames
-        sal_Int16 nCount = xAttrList->getLength();
-        for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         {
-            OUString sLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                                  &sLocalName );
-            if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-                 IsXMLToken( sLocalName, XML_STYLE_NAME ) )
+            if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_STYLE_NAME) )
             {
-                aStyleNames.push_back(xAttrList->getValueByIndex(nAttr));
+                aStyleNames.push_back(aIter.toString());
+                break;
             }
         }
     }
