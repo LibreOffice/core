@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_ABPILOT_FIELDMAPPINGPAGE_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_ABPILOT_FIELDMAPPINGPAGE_HXX
+#pragma once
 
 #include "abspage.hxx"
 #include <vcl/weld.hxx>
@@ -44,8 +43,4 @@ namespace abp
         void implUpdateHint();
     };
 }   // namespace abp
-
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_FIELDMAPPINGPAGE_HXX
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
