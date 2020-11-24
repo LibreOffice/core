@@ -339,14 +339,22 @@ void lcl_LOKInvalidateStartEndFrames(SwShellCursor& rCursor)
                             FRM_CNTNT, &rCursor.GetEndPos());
 }
 
+bool lcl_LOKRedlineNotificationEnabled()
+{
+    static bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
+    if (comphelper::LibreOfficeKit::isActive() && !bDisableRedlineComments)
+        return true;
+
+    return false;
+}
+
 } // anonymous namespace
 
 /// Emits LOK notification about one addition / removal of a redline item.
 void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
 {
     // Disable since usability is very low beyond some small number of changes.
-    static bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
-    if (!comphelper::LibreOfficeKit::isActive() || bDisableRedlineComments)
+    if (!lcl_LOKRedlineNotificationEnabled())
         return;
 
     boost::property_tree::ptree aRedline;
@@ -1031,7 +1039,7 @@ SwRangeRedline::~SwRangeRedline()
 
 void MaybeNotifyRedlineModification(SwRangeRedline* pRedline, SwDoc* pDoc)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!lcl_LOKRedlineNotificationEnabled())
         return;
 
     const SwRedlineTable& rRedTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
@@ -1047,7 +1055,7 @@ void MaybeNotifyRedlineModification(SwRangeRedline* pRedline, SwDoc* pDoc)
 
 void SwRangeRedline::MaybeNotifyRedlinePositionModification(long nTop)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!lcl_LOKRedlineNotificationEnabled())
         return;
 
     if(!m_oLOKLastNodeTop || *m_oLOKLastNodeTop != nTop)
