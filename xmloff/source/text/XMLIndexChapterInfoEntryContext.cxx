@@ -45,13 +45,11 @@ using ::com::sun::star::xml::sax::XAttributeList;
 XMLIndexChapterInfoEntryContext::XMLIndexChapterInfoEntryContext(
     SvXMLImport& rImport,
     XMLIndexTemplateContext& rTemplate,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     bool bT ) :
         XMLIndexSimpleEntryContext(rImport,
                                    (bT ? OUString("TokenEntryNumber")
                                        : OUString("TokenChapterInfo")),
-                                   rTemplate, nPrfx, rLocalName),
+                                   rTemplate),
         nChapterInfo(ChapterFormat::NAME_NUMBER),
         bChapterInfoOK(false),
         bTOC( bT ),

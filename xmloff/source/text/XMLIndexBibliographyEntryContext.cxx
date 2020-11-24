@@ -40,13 +40,10 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 XMLIndexBibliographyEntryContext::XMLIndexBibliographyEntryContext(
     SvXMLImport& rImport,
-    XMLIndexTemplateContext& rTemplate,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
+    XMLIndexTemplateContext& rTemplate ) :
         XMLIndexSimpleEntryContext(rImport,
                                    "TokenBibliographyDataField",
-                                   rTemplate,
-                                   nPrfx, rLocalName),
+                                   rTemplate),
         nBibliographyInfo(BibliographyDataField::IDENTIFIER),
         bBibliographyInfoOK(false)
 {

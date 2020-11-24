@@ -41,11 +41,9 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 XMLIndexTabStopEntryContext::XMLIndexTabStopEntryContext(
     SvXMLImport& rImport,
-    XMLIndexTemplateContext& rTemplate,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
+    XMLIndexTemplateContext& rTemplate ) :
         XMLIndexSimpleEntryContext(rImport, "TokenTabStop",
-                                   rTemplate, nPrfx, rLocalName),
+                                   rTemplate),
         sLeaderChar(),
         nTabPosition(0),
         bTabPositionOK(false),

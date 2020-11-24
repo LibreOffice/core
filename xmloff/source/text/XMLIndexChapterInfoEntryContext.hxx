@@ -49,8 +49,6 @@ public:
     XMLIndexChapterInfoEntryContext(
         SvXMLImport& rImport,
         XMLIndexTemplateContext& rTemplate,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         bool bTOC );
 
     virtual ~XMLIndexChapterInfoEntryContext() override;

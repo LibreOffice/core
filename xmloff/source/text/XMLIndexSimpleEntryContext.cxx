@@ -41,10 +41,8 @@ using ::xmloff::token::XML_STYLE_NAME;
 XMLIndexSimpleEntryContext::XMLIndexSimpleEntryContext(
     SvXMLImport& rImport,
     const OUString& rEntry,
-    XMLIndexTemplateContext& rTemplate,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+    XMLIndexTemplateContext& rTemplate )
+:   SvXMLImportContext(rImport)
 ,   m_rEntryType(rEntry)
 ,   m_bCharStyleNameOK(false)
 ,   m_rTemplateContext(rTemplate)
