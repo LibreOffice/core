@@ -37,10 +37,8 @@ using ::xmloff::token::XML_TOKEN_INVALID;
 
 XMLIndexIllustrationSourceContext::XMLIndexIllustrationSourceContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
-        XMLIndexTableSourceContext(rImport, nPrfx, rLocalName, rPropSet)
+        XMLIndexTableSourceContext(rImport, rPropSet)
 {
 }
 

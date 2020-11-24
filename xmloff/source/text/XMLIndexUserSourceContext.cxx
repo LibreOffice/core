@@ -38,10 +38,8 @@ using ::xmloff::token::XML_OUTLINE_LEVEL;
 
 XMLIndexUserSourceContext::XMLIndexUserSourceContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
-        XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
+        XMLIndexSourceBaseContext(rImport,
                                   rPropSet, true),
         bUseObjects(false),
         bUseGraphic(false),

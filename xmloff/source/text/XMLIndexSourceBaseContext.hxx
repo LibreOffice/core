@@ -89,8 +89,6 @@ public:
 
     XMLIndexSourceBaseContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet,
         bool bLevelFormats);
 

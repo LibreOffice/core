@@ -52,7 +52,7 @@ class XMLIndexBodyContext;
  * indices, and hence is named inappropriately. Depending on the
  * element name it decides which index source element context to create.
  */
-class XMLIndexTOCContext : public SvXMLImportContext
+class XMLIndexTOCContext final : public SvXMLImportContext
 {
     /** XPropertySet of the index */
     css::uno::Reference<css::beans::XPropertySet> xTOCPropertySet;
@@ -65,7 +65,6 @@ class XMLIndexTOCContext : public SvXMLImportContext
 
 public:
 
-
     XMLIndexTOCContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -73,17 +72,14 @@ public:
 
     virtual ~XMLIndexTOCContext() override;
 
-protected:
-
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 #endif
