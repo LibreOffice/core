@@ -25,7 +25,6 @@
 #include <vcl/IContext.hxx>
 
 class ScrollBar;
-class ScrollBarBox;
 
 class VCL_DLLPUBLIC TabPage
     : public vcl::Window
@@ -40,7 +39,6 @@ private:
 
     VclPtr<ScrollBar>    m_pVScroll;
     VclPtr<ScrollBar>    m_pHScroll;
-    VclPtr<ScrollBarBox> m_aScrollBarBox;
     Size                 maScrollArea;
     bool                 mbHasHoriBar;
     bool                 mbHasVertBar;
