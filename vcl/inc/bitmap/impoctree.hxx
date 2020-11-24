@@ -24,9 +24,9 @@
 
 class ImpErrorQuad
 {
-    sal_uInt16 nRed;
-    sal_uInt16 nGreen;
-    sal_uInt16 nBlue;
+    sal_uInt32 nRed;
+    sal_uInt32 nGreen;
+    sal_uInt32 nBlue;
 
 public:
     ImpErrorQuad()
