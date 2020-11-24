@@ -63,6 +63,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
+#include <comphelper/lok.hxx>
 
 static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
 {
@@ -445,7 +446,17 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     else
     {
         pWrtShell->setOutputToWindow(true);
+        bool bTiledPainting = false;
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            bTiledPainting = comphelper::LibreOfficeKit::isTiledPainting();
+            comphelper::LibreOfficeKit::setTiledPainting(true);
+        }
         pWrtShell->Paint(rRenderContext, rRect);
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            comphelper::LibreOfficeKit::setTiledPainting(bTiledPainting);
+        }
         pWrtShell->setOutputToWindow(false);
     }
 
