@@ -70,6 +70,30 @@
       "revId": "3ea6a9ecb27348e91552f3246bac912f27f34af0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ac4d144_de17fc32",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 5568,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-24T08:28:14Z",
+      "side": 1,
+      "message": "\u003e I only found one other use of dynamic_cast\u003cSwCharFormat\u003e - in sw/source/core/doc/docfmt. I\u0027ll leave it up to you if you think anything is worth chasing here.\n\nThat one is presumably OK, assuming that both the point of instantiation of that SwCharFormat and the point of the dynamic_cast are in the same Library_sw.  (At least, it appears to be there ever since \u003chttps://git.libreoffice.org/core/+/295baaa700e7118b40e8162c0e12f50b30c0cf9d%5E!/\u003e \"INTEGRATION: CWS swwarnings\" from 2007.)",
+      "parentUuid": "d7c63e13_e76ef527",
+      "range": {
+        "startLine": 5568,
+        "startChar": 8,
+        "endLine": 5568,
+        "endChar": 155
+      },
+      "revId": "3ea6a9ecb27348e91552f3246bac912f27f34af0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
