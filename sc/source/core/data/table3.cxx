@@ -2986,14 +2986,46 @@ public:
 
     void operator() (ScQueryEntry::Item& rItem)
     {
-        // Double-check if the query by date is really appropriate.
-
-        if (rItem.meType != ScQueryEntry::ByDate)
+        if (rItem.meType != ScQueryEntry::ByString && rItem.meType != ScQueryEntry::ByDate)
             return;
 
         sal_uInt32 nIndex = 0;
         bool bNumber = mrDoc.GetFormatTable()->
             IsNumberFormat(rItem.maString.getString(), nIndex, rItem.mfVal);
+
+        // Advanced Filter creates only ByString queries that need to be
+        // converted to ByValue if appropriate. rItem.mfVal now holds the value
+        // if bNumber==true.
+
+        if (rItem.meType == ScQueryEntry::ByString)
+        {
+            if (bNumber)
+            {
+                // tdf#105629: The problem with this optimization is that the filter
+                // dialog apparently converts the value to text and then converts that
+                // back to a number for filtering. If that leads to any change of value
+                // (such as when time is rounded to seconds), even matching values
+                // will be filtered out. Therefore query by value only for formats
+                // where no such change should occur.
+                const SvNumberformat* pEntry = mrDoc.GetFormatTable()->GetEntry(nIndex);
+                if (pEntry)
+                {
+                    switch(pEntry->GetType())
+                    {
+                    case SvNumFormatType::NUMBER:
+                    case SvNumFormatType::FRACTION:
+                    case SvNumFormatType::SCIENTIFIC:
+                        rItem.meType = ScQueryEntry::ByValue;
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            }
+            return;
+        }
+
+        // Double-check if the query by date is really appropriate.
 
         if (bNumber && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
         {
@@ -3358,22 +3390,12 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     if (!bValid)
         bValid = CreateExcelQuery(nCol1, nRow1, nCol2, nRow2, rQueryParam);
 
-    SvNumberFormatter* pFormatter = rDocument.GetFormatTable();
     nCount = rQueryParam.GetEntryCount();
-
     if (bValid)
     {
         //  bQueryByString must be set
         for (i=0; i < nCount; i++)
-        {
-            ScQueryEntry::Item& rItem = rQueryParam.GetEntry(i).GetQueryItem();
-
-            sal_uInt32 nIndex = 0;
-            bool bNumber = pFormatter->IsNumberFormat(
-                rItem.maString.getString(), nIndex, rItem.mfVal);
-
-            rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
-        }
+            rQueryParam.GetEntry(i).GetQueryItem().meType = ScQueryEntry::ByString;
     }
     else
     {
