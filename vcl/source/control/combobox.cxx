@@ -1544,18 +1544,20 @@ void ComboBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     Control::DumpAsPropertyTree(rJsonWriter);
 
-    auto entriesNode = rJsonWriter.startNode("entries");
-    for (int i = 0; i < GetEntryCount(); ++i)
     {
-        auto entryNode = rJsonWriter.startNode("");
-        rJsonWriter.put("", GetEntry(i));
+        auto entriesNode = rJsonWriter.startArray("entries");
+        for (int i = 0; i < GetEntryCount(); ++i)
+        {
+            rJsonWriter.putSimpleValue(GetEntry(i));
+        }
     }
 
-    auto selectedNode = rJsonWriter.startNode("selectedEntries");
-    for (int i = 0; i < GetSelectedEntryCount(); ++i)
     {
-        auto entryNode = rJsonWriter.startNode("");
-        rJsonWriter.put("", GetSelectedEntryPos(i));
+        auto selectedNode = rJsonWriter.startArray("selectedEntries");
+        for (int i = 0; i < GetSelectedEntryCount(); ++i)
+        {
+            rJsonWriter.putSimpleValue(OUString::number(GetSelectedEntryPos(i)));
+        }
     }
 
     rJsonWriter.put("selectedCount", GetSelectedEntryCount());

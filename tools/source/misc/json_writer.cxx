@@ -120,21 +120,8 @@ void JsonWriter::endStruct()
     mbFirstFieldInNode = false;
 }
 
-void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
+void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
 {
-    auto nPropNameLength = strlen(pPropName);
-    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
-    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
-
-    addCommaBeforeField();
-
-    *mPos = '"';
-    ++mPos;
-    memcpy(mPos, pPropName, nPropNameLength);
-    mPos += nPropNameLength;
-    memcpy(mPos, "\": \"", 4);
-    mPos += 4;
-
     // Convert from UTF-16 to UTF-8 and perform escaping
     for (int i = 0; i < rPropVal.getLength(); ++i)
     {
@@ -175,6 +162,24 @@ void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
             ++mPos;
         }
     }
+}
+
+void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
+{
+    auto nPropNameLength = strlen(pPropName);
+    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
+    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
+
+    addCommaBeforeField();
+
+    *mPos = '"';
+    ++mPos;
+    memcpy(mPos, pPropName, nPropNameLength);
+    mPos += nPropNameLength;
+    memcpy(mPos, "\": \"", 4);
+    mPos += 4;
+
+    writeEscapedOUString(rPropVal);
 
     *mPos = '"';
     ++mPos;
@@ -330,6 +335,22 @@ void JsonWriter::put(const char* pPropName, bool nPropVal)
         pVal = "false";
     memcpy(mPos, pVal, strlen(pVal));
     mPos += strlen(pVal);
+}
+
+void JsonWriter::putSimpleValue(const OUString& rPropVal)
+{
+    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
+    ensureSpace(nWorstCasePropValLength + 4);
+
+    addCommaBeforeField();
+
+    *mPos = '"';
+    ++mPos;
+
+    writeEscapedOUString(rPropVal);
+
+    *mPos = '"';
+    ++mPos;
 }
 
 void JsonWriter::putRaw(const rtl::OStringBuffer& rRawBuf)

@@ -64,6 +64,8 @@ public:
     void put(const char* pPropName, bool);
     void put(const char* pPropName, double);
 
+    void putSimpleValue(const OUString& rPropValue);
+
     /// This assumes that this data belongs at this point in the stream, and is valid, and properly encoded
     void putRaw(const rtl::OStringBuffer&);
 
@@ -82,6 +84,7 @@ private:
     void endStruct();
     void addCommaBeforeField();
     void reallocBuffer(int noMoreBytesRequired);
+    void writeEscapedOUString(const OUString& rPropVal);
 
     // this part inline to speed up the fast path
     inline void ensureSpace(int noMoreBytesRequired)
