@@ -828,17 +828,14 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
     const SfxPoolItem* pItem = aIter.GetCurItem();
 
     const RndStdIds aAnchId = rShape.GetAnchor().GetAnchorId();
-    if ((aAnchId == RndStdIds::FLY_AT_PAGE && rShape.GetAnchor().GetPageNum() != 0)
-        || ((aAnchId == RndStdIds::FLY_AT_PARA || aAnchId == RndStdIds::FLY_AT_CHAR)
-            && rShape.GetAnchor().GetContentAnchor()))
+    if (aAnchId == RndStdIds::FLY_AT_PAGE && rShape.GetAnchor().GetPageNum() != 0)
     {
-        SwFormatAnchor aNewAnch = pFormat->GetAnchor();
-        if (rShape.GetAnchor().GetContentAnchor())
-            aNewAnch.SetAnchor(rShape.GetAnchor().GetContentAnchor());
-        if (rShape.GetAnchor().GetPageNum() > 0)
-            aNewAnch.SetPageNum(rShape.GetAnchor().GetPageNum());
-        aNewAnch.SetType(rShape.GetAnchor().GetAnchorId());
-        aTextBoxSet.Put(aNewAnch);
+        aTextBoxSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, rShape.GetAnchor().GetPageNum()));
+    }
+    if ((aAnchId == RndStdIds::FLY_AT_PARA || aAnchId == RndStdIds::FLY_AT_CHAR)
+        && rShape.GetAnchor().GetContentAnchor())
+    {
+        aTextBoxSet.Put(rShape.GetAnchor());
     }
     do
     {
