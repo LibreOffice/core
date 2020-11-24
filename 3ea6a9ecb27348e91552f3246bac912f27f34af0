@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cbbbf9f_8bf28df1",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 5568,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-11-24T06:50:17Z",
+      "side": 1,
+      "message": "I find this very bizarre. Linux fails (and probably everything else fails) with this assert, but not Mac. I could always switch to the \"Mac\" version of the equation, but should something else be done?  SwCharFormat certainly looks like the \"correct\" thing to be checking for. (And there is an include charfmt.hxx...).\n\nThis feels like a compiler / optimizer bug to me. Should I be asking someone to investigate? Or just document that this is a compiler workaround for an unknown issue and proceed?",
+      "range": {
+        "startLine": 5568,
+        "startChar": 8,
+        "endLine": 5568,
+        "endChar": 155
+      },
+      "revId": "3ea6a9ecb27348e91552f3246bac912f27f34af0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
