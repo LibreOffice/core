@@ -1463,8 +1463,18 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    if (comphelper::LibreOfficeKit::isTiledPainting() && nType != LOK_CALLBACK_FORM_FIELD_BUTTON)
-        return;
+    if (comphelper::LibreOfficeKit::isTiledPainting())
+    {
+        switch (nType)
+        {
+        case LOK_CALLBACK_FORM_FIELD_BUTTON:
+        case LOK_CALLBACK_TEXT_SELECTION:
+            break;
+        default:
+            // Reject e.g. invalidate during paint.
+            return;
+        }
+    }
 
     if (pImpl->m_bTiledSearching)
     {
