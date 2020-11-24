@@ -2837,6 +2837,11 @@ public:
         return OString(pStr, pStr ? strlen(pStr) : 0);
     }
 
+    virtual void set_buildable_name(const OString& rId) override
+    {
+        gtk_buildable_set_name(GTK_BUILDABLE(m_pWidget), rId.getStr());
+    }
+
     virtual void set_help_id(const OString& rHelpId) override
     {
         ::set_help_id(m_pWidget, rHelpId);

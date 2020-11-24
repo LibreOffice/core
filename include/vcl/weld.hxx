@@ -117,15 +117,25 @@ public:
 
     // The name of the widget in the GtkBuilder UI definition used to construct it.
     virtual OString get_buildable_name() const = 0;
+    /*
+       Typically there is no need to change the buildable name at runtime, changing
+       the id in .ui file itself is preferred.
 
-    /* The help id of the widget used to identify help for this widget.
-     *
-     * By default the help id of a widget is a path-like sequence of
-     * buildable-names from the widgets UI definition ancestor to this
-     * widget, e.g. grandparent/parent/widget.
-     *
-     * The default can be overwritten with set_help_id
-     */
+       But for ui-testing purposes it can sometimes be useful to rename
+       different widgets, that were loaded from the same .ui, to unique names
+       in order to distinguish between them
+    */
+    virtual void set_buildable_name(const OString& rName) = 0;
+
+    /*
+      The help id of the widget used to identify help for this widget.
+
+      By default the help id of a widget is a path-like sequence of (load-time)
+      buildable-names from the widgets UI definition ancestor to this widget,
+      e.g. grandparent/parent/widget.
+
+      The default can be overwritten with set_help_id
+    */
     virtual OString get_help_id() const = 0;
     virtual void set_help_id(const OString& rName) = 0;
 
