@@ -55,6 +55,8 @@
 #include <scmod.hxx>
 #include <appoptio.hxx>
 #include <postit.hxx>
+#include <validat.hxx>
+#include <detfunc.hxx>
 
 #include <colorscale.hxx>
 
@@ -1829,6 +1831,15 @@ void ScOutputData::FindChanged()
                 nCol2 = std::max(rPos.Col(), nCol2);
                 nRow1 = std::min(rPos.Row(), nRow1);
                 nRow2 = std::max(rPos.Row(), nRow2);
+
+                const SfxUInt32Item* pItem = mpDoc->GetAttr(rPos, ATTR_VALIDDATA);
+                const ScValidationData* pData = mpDoc->GetValidationEntry(pItem->GetValue());
+                if (pData)
+                {
+                    ScRefCellValue aCell(*mpDoc, rPos);
+                    if (pData->IsDataValid(aCell, rPos))
+                        ScDetectiveFunc(*mpDoc, rPos.Tab()).DeleteCirclesAt(rPos.Col(), rPos.Row());
+                }
             }
         }
     }
