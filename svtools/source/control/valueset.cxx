@@ -549,14 +549,15 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
     QueueReformat();
 }
 
-void ValueSet::TurnOffScrollBar()
+bool ValueSet::TurnOffScrollBar()
 {
     if (mxScrolledWindow->get_vpolicy() == VclPolicyType::NEVER)
-        return;
+        return false;
     mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
     weld::DrawingArea* pDrawingArea = GetDrawingArea();
     Size aPrefSize(pDrawingArea->get_preferred_size());
     pDrawingArea->set_size_request(aPrefSize.Width() + GetScrollWidth(), aPrefSize.Height());
+    return true;
 }
 
 void ValueSet::TurnOnScrollBar()
@@ -571,11 +572,16 @@ void ValueSet::TurnOnScrollBar()
 
 void ValueSet::RecalcScrollBar()
 {
-    // reset scrolled window state to initial value
-    // so it will get configured to the right adjustment
-    WinBits nStyle = GetStyle();
-    if (mxScrolledWindow && (nStyle & WB_VSCROLL))
-        TurnOffScrollBar();
+    if (!mxScrolledWindow)
+        return;
+    const bool bScrollAllowed = GetStyle() & WB_VSCROLL;
+    if (!bScrollAllowed)
+        return;
+    // reset scrolled window state to initial value so it will get configured
+    // to the right adjustment on the next format which we toggle on to happen
+    // if the scrolledwindow wasn't in its initial state already
+    if (TurnOffScrollBar())
+        mbFormat = true;
 }
 
 void ValueSet::Clear()
