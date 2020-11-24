@@ -131,6 +131,7 @@ public:
     void testDropDownFormFieldButtonNoSelection();
     void testDropDownFormFieldButtonNoItem();
     void testSpellOnlineRenderParameter();
+    void testTablePaintInvalidate();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -200,6 +201,7 @@ public:
     CPPUNIT_TEST(testDropDownFormFieldButtonNoSelection);
     CPPUNIT_TEST(testDropDownFormFieldButtonNoItem);
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
+    CPPUNIT_TEST(testTablePaintInvalidate);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2758,6 +2760,37 @@ void SwTiledRenderingTest::testSpellOnlineRenderParameter()
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
+}
+
+void SwTiledRenderingTest::testTablePaintInvalidate()
+{
+    // Load a document with a table in it.
+    SwXTextDocument* pXTextDocument = createDoc("table-paint-invalidate.odt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+    // Enter the table.
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    m_nInvalidations = 0;
+
+    // Paint a tile.
+    size_t nCanvasWidth = 256;
+    size_t nCanvasHeight = 256;
+    std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
+                                                    Fraction(1.0), Point(), aPixmap.data());
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, m_aInvalidation.getX(),
+                              m_aInvalidation.getY(), /*nTileWidth=*/1000,
+                              /*nTileHeight=*/1000);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the accompanying fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 5
+    // i.e. paint generated an invalidation, which caused a loop.
+    CPPUNIT_ASSERT_EQUAL(0, m_nInvalidations);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
