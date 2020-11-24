@@ -43,9 +43,7 @@ public:
     XMLTextListItemContext(
             SvXMLImport& rImport,
             XMLTextImportHelper& rTxtImp,
-            const sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             const bool bIsHeader );
     virtual ~XMLTextListItemContext() override;
 

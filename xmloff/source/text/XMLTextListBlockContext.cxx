@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
@@ -247,26 +248,24 @@ void XMLTextListBlockContext::endFastElement(sal_Int32 )
     mrTxtImport.GetTextListHelper().SetListItem( nullptr );
 }
 
-SvXMLImportContextRef XMLTextListBlockContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextListBlockContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    const SvXMLTokenMap& rTokenMap =
-                        mrTxtImport.GetTextListBlockElemTokenMap();
     bool bHeader = false;
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-    case XML_TOK_TEXT_LIST_HEADER:
+    case XML_ELEMENT(TEXT, XML_LIST_HEADER):
         bHeader = true;
         [[fallthrough]];
-    case XML_TOK_TEXT_LIST_ITEM:
+    case XML_ELEMENT(TEXT, XML_LIST_ITEM):
         pContext = new XMLTextListItemContext( GetImport(), mrTxtImport,
-                                                nPrefix, rLocalName,
                                               xAttrList, bHeader );
         break;
+    default:
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
 
