@@ -49,9 +49,7 @@ public:
 
     XMLIndexTabStopEntryContext(
         SvXMLImport& rImport,
-        XMLIndexTemplateContext& rTemplate,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName );
+        XMLIndexTemplateContext& rTemplate );
 
     virtual ~XMLIndexTabStopEntryContext() override;
 

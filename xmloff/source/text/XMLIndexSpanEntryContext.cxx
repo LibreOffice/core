@@ -30,11 +30,9 @@ using ::com::sun::star::beans::PropertyValue;
 
 XMLIndexSpanEntryContext::XMLIndexSpanEntryContext(
     SvXMLImport& rImport,
-    XMLIndexTemplateContext& rTemplate,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
+    XMLIndexTemplateContext& rTemplate ) :
         XMLIndexSimpleEntryContext(rImport, "TokenText",
-                                   rTemplate, nPrfx, rLocalName)
+                                   rTemplate)
 {
     m_nValues++;  // one more for the text string
 }

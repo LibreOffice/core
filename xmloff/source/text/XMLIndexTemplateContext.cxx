@@ -212,17 +212,16 @@ SvXMLEnumMapEntry<TemplateTokenType> const aTemplateTokenTypeMap[] =
     { XML_TOKEN_INVALID, TemplateTokenType(0) }
 };
 
-SvXMLImportContextRef XMLIndexTemplateContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTemplateContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     SvXMLImportContext* pContext = nullptr;
 
-    if (XML_NAMESPACE_TEXT == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix)
+    if (IsTokenInNamespace(nElement, XML_NAMESPACE_TEXT) || IsTokenInNamespace(nElement, XML_NAMESPACE_LO_EXT))
     {
         TemplateTokenType nToken;
-        if (SvXMLUnitConverter::convertEnum(nToken, rLocalName,
+        if (SvXMLUnitConverter::convertEnum(nToken, SvXMLImport::getNameFromToken(nElement),
                                             aTemplateTokenTypeMap))
         {
             // can this index accept this kind of token?
@@ -232,46 +231,42 @@ SvXMLImportContextRef XMLIndexTemplateContext::CreateChildContext(
                 {
                     case XML_TOK_INDEX_TYPE_ENTRY_TEXT:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), "TokenEntryText", *this,
-                            nPrefix, rLocalName);
+                            GetImport(), "TokenEntryText", *this);
                         break;
 
                     case XML_TOK_INDEX_TYPE_PAGE_NUMBER:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), "TokenPageNumber", *this,
-                            nPrefix, rLocalName);
+                            GetImport(), "TokenPageNumber", *this);
                         break;
 
                     case XML_TOK_INDEX_TYPE_LINK_START:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), "TokenHyperlinkStart", *this,
-                            nPrefix, rLocalName);
+                            GetImport(), "TokenHyperlinkStart", *this);
                         break;
 
                     case XML_TOK_INDEX_TYPE_LINK_END:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), "TokenHyperlinkEnd", *this,
-                            nPrefix, rLocalName);
+                            GetImport(), "TokenHyperlinkEnd", *this);
                         break;
 
                     case XML_TOK_INDEX_TYPE_TEXT:
                         pContext = new XMLIndexSpanEntryContext(
-                            GetImport(), *this, nPrefix, rLocalName);
+                            GetImport(), *this);
                         break;
 
                     case XML_TOK_INDEX_TYPE_TAB_STOP:
                         pContext = new XMLIndexTabStopEntryContext(
-                            GetImport(), *this, nPrefix, rLocalName);
+                            GetImport(), *this);
                         break;
 
                     case XML_TOK_INDEX_TYPE_BIBLIOGRAPHY:
                         pContext = new XMLIndexBibliographyEntryContext(
-                            GetImport(), *this, nPrefix, rLocalName);
+                            GetImport(), *this);
                         break;
 
                     case XML_TOK_INDEX_TYPE_CHAPTER:
                         pContext = new XMLIndexChapterInfoEntryContext(
-                            GetImport(), *this, nPrefix, rLocalName, bTOC );
+                            GetImport(), *this, bTOC );
                         break;
 
                     default:
