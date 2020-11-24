@@ -16,6 +16,24 @@
       "revId": "59301a4ab8ffc1bb8d5516825627a9a371c640f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4e9c24e_affe5db0",
+        "filename": "sw/inc/AccessibilityCheckStrings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-24T13:42:09Z",
+      "side": 1,
+      "message": "Agree. The idea is \"make sure that the actual text of the object is not important to understand the document\".",
+      "parentUuid": "70fe3eaf_af5bb45e",
+      "revId": "59301a4ab8ffc1bb8d5516825627a9a371c640f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
