@@ -60,6 +60,7 @@ ScInsertContentsDlg::ScInsertContentsDlg(weld::Window* pParent,
     , mxBtnShortCutPasteValuesOnly(m_xBuilder->weld_button("paste_values_only"))
     , mxBtnShortCutPasteValuesFormats(m_xBuilder->weld_button("paste_values_formats"))
     , mxBtnShortCutPasteTranspose(m_xBuilder->weld_button("paste_transpose"))
+    , mxImmediately(m_xBuilder->weld_check_button("cbImmediately"))
 {
     if (pStrTitle)
         m_xDialog->set_title(*pStrTitle);
@@ -290,21 +291,21 @@ IMPL_LINK(ScInsertContentsDlg, ShortCutHdl, weld::Button&, rBtn, void)
         bUsedShortCut = true;
         nShortCutInsContentsCmdBits = InsertDeleteFlags::STRING | InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME;
         bShortCutTranspose = false;
-        m_xDialog->response(RET_OK);
+        if (mxImmediately->get_active()) m_xDialog->response(RET_OK);
     }
     else if (&rBtn == mxBtnShortCutPasteValuesFormats.get())
     {
         bUsedShortCut = true;
         nShortCutInsContentsCmdBits = InsertDeleteFlags::STRING | InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::ATTRIB;
         bShortCutTranspose = false;
-        m_xDialog->response(RET_OK);
+        if (mxImmediately->get_active()) m_xDialog->response(RET_OK);
     }
     else if (&rBtn == mxBtnShortCutPasteTranspose.get())
     {
         bUsedShortCut = true;
         nShortCutInsContentsCmdBits = InsertDeleteFlags::ALL;
         bShortCutTranspose = true;
-        m_xDialog->response(RET_OK);
+        if (mxImmediately->get_active()) m_xDialog->response(RET_OK);
     }
 }
 

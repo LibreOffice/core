@@ -83,6 +83,8 @@ private:
     std::unique_ptr<weld::Button>      mxBtnShortCutPasteValuesFormats;
     std::unique_ptr<weld::Button>      mxBtnShortCutPasteTranspose;
 
+    std::unique_ptr<weld::CheckButton>     mxImmediately;
+
     static bool         bPreviousAllCheck;
     static InsertDeleteFlags nPreviousChecks;
     static InsertContentsFlags nPreviousChecks2;
