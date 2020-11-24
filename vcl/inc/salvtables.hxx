@@ -234,6 +234,8 @@ public:
 
     virtual OString get_buildable_name() const override;
 
+    virtual void set_buildable_name(const OString& rId) override;
+
     virtual void set_help_id(const OString& rId) override;
 
     virtual OString get_help_id() const override;
