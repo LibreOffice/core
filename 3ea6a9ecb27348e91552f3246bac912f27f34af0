@@ -22,6 +22,30 @@
       "revId": "3ea6a9ecb27348e91552f3246bac912f27f34af0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3f7af3e_342e0b62",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 5568,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-24T08:09:14Z",
+      "side": 1,
+      "message": "macOS (and anything using LLVM\u0027s libc++abi, for that matter) is using the original Itanium ABI rules when comparing RTTI (strictly by pointer, not by name).  This requires a single instance of the RTTI of SwCharFormat to be visible across the involved libraries (Library_msword here, presumably together with Library_sw), by marking SwCharFormat (sw/inc/charfmt.hxx) as SAL_DLLPUBLIC_RTTI.  (That class might also benefit from a key function at which to anchor vtable and RTTI emission, i.e., a non-inline dtor, but that\u0027s somewhat orthogonal.  Exporting weak RTTI symbols from the libraries should suffice.)\n\n(The heuristics in loplugin:dyncastvisibility did not catch this; for them to work, SwCharFormat would need to be declared in a global include/sw/ file, and Library_msword would need to move to its own top-level module.)\n\n(That said, basing the bConvertToShading decision on dynamic_cast here may or may not be considered too brittle.)",
+      "parentUuid": "9cbbbf9f_8bf28df1",
+      "range": {
+        "startLine": 5568,
+        "startChar": 8,
+        "endLine": 5568,
+        "endChar": 155
+      },
+      "revId": "3ea6a9ecb27348e91552f3246bac912f27f34af0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
