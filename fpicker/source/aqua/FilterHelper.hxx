@@ -95,7 +95,7 @@ public:
     //XFilterGroupManager delegates
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void appendFilterGroup( const OUString& sGroupTitle, const css::uno::Sequence< css::beans::StringPair >& aFilters );
+    void appendFilterGroup( const css::uno::Sequence< css::beans::StringPair >& aFilters );
 
 
     //accessor

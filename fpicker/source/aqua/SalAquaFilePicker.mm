@@ -325,12 +325,12 @@ OUString SAL_CALL SalAquaFilePicker::getCurrentFilter()
 
 #pragma mark XFilterGroupManager
 
-void SAL_CALL SalAquaFilePicker::appendFilterGroup( const OUString& sGroupTitle, const uno::Sequence<beans::StringPair>& aFilters )
+void SAL_CALL SalAquaFilePicker::appendFilterGroup( const OUString&, const uno::Sequence<beans::StringPair>& aFilters )
 {
     SolarMutexGuard aGuard;
 
     ensureFilterHelper();
-    m_pFilterHelper->appendFilterGroup(sGroupTitle, aFilters);
+    m_pFilterHelper->appendFilterGroup(aFilters);
     m_pControlHelper->setFilterControlNeeded(true);
 }
 
