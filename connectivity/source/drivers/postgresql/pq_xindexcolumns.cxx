@@ -35,6 +35,8 @@
  ************************************************************************/
 
 #include <sal/log.hxx>
+
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -84,7 +86,7 @@ IndexColumns::IndexColumns(
 IndexColumns::~IndexColumns()
 {}
 
-static sal_Int32 findInSequence( const Sequence< OUString > & seq , const OUString &str)
+static sal_Int32 findInSequence( const Sequence< OUString > & seq , std::u16string_view str)
 {
     int index;
     for( index = 0 ; index < seq.getLength() ; index ++ )
