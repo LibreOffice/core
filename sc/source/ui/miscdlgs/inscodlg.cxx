@@ -21,11 +21,10 @@
 
 #include <inscodlg.hxx>
 
-bool       ScInsertContentsDlg::bPreviousAllCheck = false;
 InsertDeleteFlags ScInsertContentsDlg::nPreviousChecks   = InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING;
 ScPasteFunc  ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::NONE;
 InsertContentsFlags ScInsertContentsDlg::nPreviousChecks2 = InsertContentsFlags::NONE;
-sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
+InsCellCmd ScInsertContentsDlg::nPreviousMoveMode = InsCellCmd::INS_NONE;
 
 ScInsertContentsDlg::ScInsertContentsDlg(weld::Window* pParent,
                                          const OUString* pStrTitle )
@@ -35,9 +34,6 @@ ScInsertContentsDlg::ScInsertContentsDlg(weld::Window* pParent,
     , bChangeTrack(false)
     , bMoveDownDisabled(false)
     , bMoveRightDisabled(false)
-    , bUsedShortCut(false)
-    , nShortCutInsContentsCmdBits(InsertDeleteFlags::NONE )
-    , bShortCutTranspose(false)
     , mxBtnInsAll(m_xBuilder->weld_check_button("paste_all"))
     , mxBtnInsStrings(m_xBuilder->weld_check_button("text"))
     , mxBtnInsNumbers(m_xBuilder->weld_check_button("numbers"))
@@ -60,47 +56,25 @@ ScInsertContentsDlg::ScInsertContentsDlg(weld::Window* pParent,
     , mxBtnShortCutPasteValuesOnly(m_xBuilder->weld_button("paste_values_only"))
     , mxBtnShortCutPasteValuesFormats(m_xBuilder->weld_button("paste_values_formats"))
     , mxBtnShortCutPasteTranspose(m_xBuilder->weld_button("paste_transpose"))
+    , mxBtnShortCutPasteFormats(m_xBuilder->weld_button("paste_formats"))
+    , mxImmediately(m_xBuilder->weld_check_button("cbImmediately"))
 {
     if (pStrTitle)
         m_xDialog->set_title(*pStrTitle);
 
-    mxBtnInsAll->set_active( ScInsertContentsDlg::bPreviousAllCheck );
-    mxBtnInsStrings->set_active( bool(InsertDeleteFlags::STRING & ScInsertContentsDlg::nPreviousChecks) );
-    mxBtnInsNumbers->set_active( bool(InsertDeleteFlags::VALUE & ScInsertContentsDlg::nPreviousChecks) );
-    mxBtnInsDateTime->set_active( bool(InsertDeleteFlags::DATETIME & ScInsertContentsDlg::nPreviousChecks) );
-    mxBtnInsFormulas->set_active( bool(InsertDeleteFlags::FORMULA & ScInsertContentsDlg::nPreviousChecks) );
-    mxBtnInsNotes->set_active( bool(InsertDeleteFlags::NOTE & ScInsertContentsDlg::nPreviousChecks) );
-    mxBtnInsAttrs->set_active( (InsertDeleteFlags::ATTRIB & ScInsertContentsDlg::nPreviousChecks) == InsertDeleteFlags::ATTRIB );
-    mxBtnInsObjects->set_active ( bool(InsertDeleteFlags::OBJECTS & ScInsertContentsDlg::nPreviousChecks) );
-
-    switch( ScInsertContentsDlg::nPreviousFormulaChecks )
-    {
-        case ScPasteFunc::NONE: mxRbNoOp->set_active(true); break;
-        case ScPasteFunc::ADD:    mxRbAdd->set_active(true); break;
-        case ScPasteFunc::SUB:    mxRbSub->set_active(true); break;
-        case ScPasteFunc::MUL:    mxRbMul->set_active(true); break;
-        case ScPasteFunc::DIV:    mxRbDiv->set_active(true); break;
-    }
-
-    switch( ScInsertContentsDlg::nPreviousMoveMode )
-    {
-        case INS_NONE:       mxRbMoveNone->set_active(true); break;
-        case INS_CELLSDOWN:  mxRbMoveDown->set_active(true); break;
-        case INS_CELLSRIGHT: mxRbMoveRight->set_active(true); break;
-    }
-
-    mxBtnSkipEmptyCells->set_active( bool( ScInsertContentsDlg::nPreviousChecks2 & InsertContentsFlags::NoEmpty ));
-    mxBtnTranspose->set_active( bool( ScInsertContentsDlg::nPreviousChecks2    & InsertContentsFlags::Trans ));
-    mxBtnLink->set_active( bool( ScInsertContentsDlg::nPreviousChecks2             & InsertContentsFlags::Link  ));
-
+    SetInsContentsCmdBits( ScInsertContentsDlg::nPreviousChecks );
+    SetFormulaCmdBits( ScInsertContentsDlg::nPreviousFormulaChecks );
+    SetCellCmdFlags( ScInsertContentsDlg::nPreviousMoveMode );
+    SetContentsFlags( ScInsertContentsDlg::nPreviousChecks2 );
     DisableChecks( mxBtnInsAll->get_active() );
 
     mxBtnInsAll->connect_toggled( LINK( this, ScInsertContentsDlg, InsAllHdl ) );
     mxBtnLink->connect_toggled( LINK( this, ScInsertContentsDlg, LinkBtnHdl ) );
-
+    mxBtnShortCutPasteValuesOnly->set_label("Values Only");
     mxBtnShortCutPasteValuesOnly->connect_clicked( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
     mxBtnShortCutPasteValuesFormats->connect_clicked( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
     mxBtnShortCutPasteTranspose->connect_clicked( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
+    mxBtnShortCutPasteFormats->connect_clicked( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
 }
 
 InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const
@@ -122,20 +96,59 @@ InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const
     if ( mxBtnInsObjects->get_active() )
         ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::OBJECTS;
 
-    ScInsertContentsDlg::bPreviousAllCheck = mxBtnInsAll->get_active();
-
-    if (bUsedShortCut)
-        return nShortCutInsContentsCmdBits;
-
-    return ( ScInsertContentsDlg::bPreviousAllCheck
+    return ( mxBtnInsAll->get_active()
                 ? InsertDeleteFlags::ALL
                 : ScInsertContentsDlg::nPreviousChecks );
 }
 
+void ScInsertContentsDlg::SetInsContentsCmdBits(const InsertDeleteFlags eFlags)
+{
+    mxBtnInsNumbers->set_active((InsertDeleteFlags::VALUE & eFlags) == InsertDeleteFlags::VALUE);
+    mxBtnInsDateTime->set_active((InsertDeleteFlags::DATETIME & eFlags) == InsertDeleteFlags::DATETIME);
+    mxBtnInsStrings->set_active((InsertDeleteFlags::STRING & eFlags) == InsertDeleteFlags::STRING);
+    mxBtnInsNotes->set_active((InsertDeleteFlags::NOTE & eFlags) == InsertDeleteFlags::NOTE);
+    mxBtnInsFormulas->set_active((InsertDeleteFlags::FORMULA & eFlags) == InsertDeleteFlags::FORMULA);
+    mxBtnInsAttrs->set_active((InsertDeleteFlags::ATTRIB & eFlags) == InsertDeleteFlags::ATTRIB);
+    mxBtnInsObjects->set_active((InsertDeleteFlags::OBJECTS & eFlags) == InsertDeleteFlags::OBJECTS);
+    mxBtnInsAll->set_active((InsertDeleteFlags::ALL & eFlags) == InsertDeleteFlags::ALL);
+    DisableChecks( mxBtnInsAll->get_active() );
+}
+
+void ScInsertContentsDlg::SetFormulaCmdBits(const ScPasteFunc eFlags)
+{
+    switch( eFlags )
+    {
+        case ScPasteFunc::NONE: mxRbNoOp->set_active(true); break;
+        case ScPasteFunc::ADD:  mxRbAdd->set_active(true); break;
+        case ScPasteFunc::SUB:  mxRbSub->set_active(true); break;
+        case ScPasteFunc::MUL:  mxRbMul->set_active(true); break;
+        case ScPasteFunc::DIV:  mxRbDiv->set_active(true); break;
+    }
+}
+
+void ScInsertContentsDlg::SetCellCmdFlags(const InsCellCmd eFlags)
+{
+    switch( eFlags )
+    {
+        case INS_NONE:       mxRbMoveNone->set_active(true); break;
+        case INS_CELLSDOWN:  mxRbMoveDown->set_active(true); break;
+        case INS_CELLSRIGHT: mxRbMoveRight->set_active(true); break;
+        case INS_INSROWS_BEFORE:
+        case INS_INSCOLS_BEFORE:
+        case INS_INSROWS_AFTER:
+        case INS_INSCOLS_AFTER: break;
+    }
+}
+
+void ScInsertContentsDlg::SetContentsFlags(const InsertContentsFlags eFlags)
+{
+    mxBtnSkipEmptyCells->set_active(bool(InsertContentsFlags::NoEmpty & eFlags));
+    mxBtnTranspose->set_active(bool(InsertContentsFlags::Trans & eFlags));
+    mxBtnLink->set_active(bool(InsertContentsFlags::Link & eFlags));
+}
+
 InsCellCmd ScInsertContentsDlg::GetMoveMode() const
 {
-    if (bUsedShortCut)
-        return INS_NONE;
     if ( mxRbMoveDown->get_active() )
         return INS_CELLSDOWN;
     if ( mxRbMoveRight->get_active() )
@@ -146,22 +159,16 @@ InsCellCmd ScInsertContentsDlg::GetMoveMode() const
 
 bool ScInsertContentsDlg::IsSkipEmptyCells() const
 {
-    if (bUsedShortCut)
-        return false;
     return mxBtnSkipEmptyCells->get_active();
 }
 
 bool ScInsertContentsDlg::IsTranspose() const
 {
-    if (bUsedShortCut)
-        return bShortCutTranspose;
     return mxBtnTranspose->get_active();
 }
 
 bool ScInsertContentsDlg::IsLink() const
 {
-    if (bUsedShortCut)
-        return false;
     return mxBtnLink->get_active();
 }
 
@@ -287,25 +294,30 @@ IMPL_LINK(ScInsertContentsDlg, ShortCutHdl, weld::Button&, rBtn, void)
 {
     if (&rBtn == mxBtnShortCutPasteValuesOnly.get())
     {
-        bUsedShortCut = true;
-        nShortCutInsContentsCmdBits = InsertDeleteFlags::STRING | InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME;
-        bShortCutTranspose = false;
-        m_xDialog->response(RET_OK);
+        SetInsContentsCmdBits( InsertDeleteFlags::STRING | InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME );
+        SetContentsFlags( InsertContentsFlags::NONE );
     }
     else if (&rBtn == mxBtnShortCutPasteValuesFormats.get())
     {
-        bUsedShortCut = true;
-        nShortCutInsContentsCmdBits = InsertDeleteFlags::STRING | InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::ATTRIB;
-        bShortCutTranspose = false;
-        m_xDialog->response(RET_OK);
+        SetInsContentsCmdBits( InsertDeleteFlags::STRING | InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::ATTRIB );
+        SetContentsFlags( InsertContentsFlags::NONE );
     }
     else if (&rBtn == mxBtnShortCutPasteTranspose.get())
     {
-        bUsedShortCut = true;
-        nShortCutInsContentsCmdBits = InsertDeleteFlags::ALL;
-        bShortCutTranspose = true;
-        m_xDialog->response(RET_OK);
+        SetInsContentsCmdBits( InsertDeleteFlags::ALL );
+        SetContentsFlags( InsertContentsFlags::Trans );
     }
+    else if (&rBtn == mxBtnShortCutPasteFormats.get())
+    {
+        SetInsContentsCmdBits( InsertDeleteFlags::ATTRIB );
+        SetContentsFlags( InsertContentsFlags::NONE );
+    }
+    else
+        return;
+
+    SetCellCmdFlags( InsCellCmd::INS_NONE );
+    SetFormulaCmdBits(ScPasteFunc::NONE);
+    if (mxImmediately->get_active()) m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl, weld::ToggleButton&, void)
@@ -350,8 +362,6 @@ ScPasteFunc  ScInsertContentsDlg::GetFormulaCmdBits() const
         ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::MUL;
     else if(mxRbDiv->get_active())
         ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::DIV;
-    if (bUsedShortCut)
-        return ScPasteFunc::NONE;
     return ScInsertContentsDlg::nPreviousFormulaChecks;
 }
 
