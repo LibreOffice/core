@@ -28,7 +28,7 @@ MacabOrder::~MacabOrder()
 {
 }
 
-MacabSimpleOrder::MacabSimpleOrder(MacabHeader const *header, OUString const &sColumnName, bool bAscending)
+MacabSimpleOrder::MacabSimpleOrder(MacabHeader const *header, std::u16string_view sColumnName, bool bAscending)
     : MacabOrder(),
       m_nFieldNumber(header->getColumnNumber(sColumnName)),
       m_bAscending(bAscending)

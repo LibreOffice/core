@@ -23,6 +23,7 @@
 #include "MacabRecords.hxx"
 #include "MacabGroup.hxx"
 
+#include <string_view>
 #include <vector>
 
 #include <premac.h>
@@ -48,8 +49,8 @@ namespace connectivity::macab
                 MacabRecords *getMacabRecords();
                 std::vector<MacabGroup *> getMacabGroups();
 
-                MacabGroup *getMacabGroup(const OUString& _groupName);
-                MacabRecords *getMacabRecords(const OUString& _tableName);
+                MacabGroup *getMacabGroup(std::u16string_view _groupName);
+                MacabRecords *getMacabRecords(std::u16string_view _tableName);
 
                 MacabGroup *getMacabGroupMatch(const OUString& _groupName);
                 MacabRecords *getMacabRecordsMatch(const OUString& _tableName);

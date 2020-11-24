@@ -244,7 +244,8 @@ macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const sal_Int3
 }
 
 
-macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const OUString& _columnName) const
+macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, std::u16string_view _columnName)
+    const
 {
     if(header != nullptr)
     {
@@ -262,7 +263,7 @@ macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const OUString
 }
 
 
-sal_Int32 MacabRecords::getFieldNumber(const OUString& _columnName) const
+sal_Int32 MacabRecords::getFieldNumber(std::u16string_view _columnName) const
 {
     if(header != nullptr)
         return header->getColumnNumber(_columnName);
