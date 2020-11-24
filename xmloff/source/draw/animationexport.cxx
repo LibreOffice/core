@@ -605,7 +605,9 @@ void AnimationsExporterImpl::exportTransitionNode()
         if( !bDirection )
             mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_DIRECTION, XML_REVERSE );
 
-        if( (nTransition == TransitionType::FADE) && ((nSubtype == TransitionSubType::FADETOCOLOR) || (nSubtype == TransitionSubType::FADEFROMCOLOR) ))
+        if( (nTransition == TransitionType::FADE)
+                && ((nSubtype == TransitionSubType::FADETOCOLOR) || (nSubtype == TransitionSubType::FADEFROMCOLOR)
+                    || (nSubtype == TransitionSubType::FADEOVERCOLOR)))
         {
             ::sax::Converter::convertColor( sTmp, nFadeColor );
             mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_FADECOLOR, sTmp.makeStringAndClear() );
