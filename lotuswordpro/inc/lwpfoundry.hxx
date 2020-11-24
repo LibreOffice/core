@@ -268,7 +268,7 @@ public:
     LwpBulletStyleMgr* GetBulletStyleMgr() { return m_xBulletStyleMgr.get(); }
 
     LwpObjectID* FindParaStyleByName(std::u16string_view name);
-    OUString FindActuralStyleName(const OUString& name);
+    OUString FindActualStyleName(const OUString& name);
 };
 
 class LwpStyleManager

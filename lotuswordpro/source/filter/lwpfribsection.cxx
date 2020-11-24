@@ -177,7 +177,7 @@ void LwpFribSection::ParseSection()
 void LwpFribSection::SetDefaultAlphaIndex(XFIndex* pXFIndex)
 {
     LwpFoundry* pFoundry = m_pPara->GetFoundry();
-    OUString styleName = pFoundry->FindActuralStyleName("Separator");
+    OUString styleName = pFoundry->FindActualStyleName("Separator");
 
     LwpIndexSection* pIndexSection = dynamic_cast<LwpIndexSection*>(m_Section.obj().get());
     XFIndexTemplate* pTemplateSep = new XFIndexTemplate();
@@ -189,7 +189,7 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex* pXFIndex)
     //pXFIndex->AddTemplate("separator","Separator",pTemplateSep);
     pXFIndex->AddTemplate("separator", styleName, pTemplateSep);
 
-    styleName = pFoundry->FindActuralStyleName("Primary");
+    styleName = pFoundry->FindActualStyleName("Primary");
 
     XFIndexTemplate* pTemplate1 = new XFIndexTemplate();
     pTemplate1->AddEntry(enumXFIndexTemplateText, "");
@@ -218,7 +218,7 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex* pXFIndex)
     {
         //pXFIndex->AddTemplate(OUString::number(2),"Secondary",pTemplate2);
         //pXFIndex->AddTemplate(OUString::number(3),"Secondary",pTemplate3);
-        styleName = pFoundry->FindActuralStyleName("Secondary");
+        styleName = pFoundry->FindActualStyleName("Secondary");
         pXFIndex->AddTemplate(OUString::number(2), styleName, pTemplate2);
         pXFIndex->AddTemplate(OUString::number(3), styleName, pTemplate3);
     }

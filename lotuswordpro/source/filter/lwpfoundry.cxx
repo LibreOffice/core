@@ -286,7 +286,7 @@ LwpObjectID * LwpFoundry::FindParaStyleByName(std::u16string_view name)
 * @descr:   Get style name registered according the original style name
 *
 */
-OUString LwpFoundry::FindActuralStyleName(const OUString& name)
+OUString LwpFoundry::FindActualStyleName(const OUString& name)
 {
     LwpObjectID* pID = FindParaStyleByName(name);
     if(pID)
