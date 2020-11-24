@@ -62,10 +62,6 @@ void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     if ( mbHasHoriBar || mbHasVertBar )
     {
-        m_aScrollBarBox.set(
-            VclPtr<ScrollBarBox>::Create(this,
-                                         ((nStyle & (WB_VSCROLL|WB_HSCROLL)) ? WB_HIDE : 0)));
-        m_aScrollBarBox->Show();
         SetStyle( GetStyle() | WB_CLIPCHILDREN );
     }
 
@@ -130,7 +126,6 @@ void TabPage::dispose()
     disposeBuilder();
     m_pVScroll.disposeAndClear();
     m_pHScroll.disposeAndClear();
-    m_aScrollBarBox.disposeAndClear();
     vcl::Window::dispose();
 }
 
