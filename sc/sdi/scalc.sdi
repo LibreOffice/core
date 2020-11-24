@@ -3412,7 +3412,7 @@ SfxVoidItem Mirror SID_OBJECT_MIRROR
 
 
 SfxVoidItem Move FID_TAB_MOVE
-(SfxStringItem DocName FID_TAB_MOVE,SfxUInt16Item Index FN_PARAM_1,SfxBoolItem Copy FN_PARAM_2)
+(SfxStringItem DocName FID_TAB_MOVE,SfxUInt16Item Index FN_PARAM_1,SfxBoolItem Copy FN_PARAM_2,SfxBoolItem UseCurrentDocument FN_PARAM_3)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
