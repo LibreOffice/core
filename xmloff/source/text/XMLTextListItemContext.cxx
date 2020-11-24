@@ -31,6 +31,7 @@
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "XMLTextListItemContext.hxx"
+#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star;
@@ -41,37 +42,25 @@ using namespace ::xmloff::token;
 XMLTextListItemContext::XMLTextListItemContext(
                         SvXMLImport& rImport,
                         XMLTextImportHelper& rTxtImp,
-                        const sal_uInt16 nPrfx,
-                        const OUString& rLName,
-                        const Reference< xml::sax::XAttributeList > & xAttrList,
+                        const Reference< xml::sax::XFastAttributeList > & xAttrList,
                         const bool bIsHeader )
-    : SvXMLImportContext( rImport, nPrfx, rLName ),
+    : SvXMLImportContext( rImport ),
       rTxtImport( rTxtImp ),
       nStartValue( -1 ),
       mnSubListCount( 0 ),
       mxNumRulesOverride()
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        if( !bIsHeader && XML_NAMESPACE_TEXT == nPrefix &&
-            IsXMLToken( aLocalName, XML_START_VALUE ) )
+        if( !bIsHeader && aIter.getToken() == XML_ELEMENT(TEXT, XML_START_VALUE) )
         {
-            sal_Int32 nTmp = rValue.toInt32();
+            sal_Int32 nTmp = aIter.toInt32();
             if( nTmp >= 0 && nTmp <= SHRT_MAX )
                 nStartValue = static_cast<sal_Int16>(nTmp);
         }
-        else if ( nPrefix == XML_NAMESPACE_TEXT &&
-                  IsXMLToken( aLocalName, XML_STYLE_OVERRIDE ) )
+        else if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_STYLE_OVERRIDE) )
         {
-            const OUString& sListStyleOverrideName = rValue;
+            OUString sListStyleOverrideName = aIter.toString();
             if ( !sListStyleOverrideName.isEmpty() )
             {
                 OUString sDisplayStyleName(
@@ -105,11 +94,12 @@ XMLTextListItemContext::XMLTextListItemContext(
                 }
             }
         }
-        else if ( (XML_NAMESPACE_XML == nPrefix) &&
-             IsXMLToken(aLocalName, XML_ID)   )
+        else if ( aIter.getToken() == XML_ELEMENT(XML, XML_ID) )
         {
 //FIXME: there is no UNO API for list items
         }
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 
     // If this is a <text:list-item> element, then remember it as a sign
