@@ -3336,11 +3336,11 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     if (vcl::Window* pChild = mpWindowImpl->mpFirstChild)
     {
-        auto childrenNode = rJsonWriter.startNode("children");
+        auto childrenNode = rJsonWriter.startArray("children");
         while (pChild)
         {
             if (pChild->IsVisible()) {
-                auto childNode = rJsonWriter.startNode("");
+                auto childNode = rJsonWriter.startStruct();
                 pChild->DumpAsPropertyTree(rJsonWriter);
                 sal_Int32 nLeft = pChild->get_grid_left_attach();
                 sal_Int32 nTop = pChild->get_grid_top_attach();
