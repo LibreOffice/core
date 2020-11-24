@@ -120,35 +120,31 @@ void XMLTextListItemContext::endFastElement(sal_Int32 )
     rTxtImport.GetTextListHelper().SetListItem( nullptr );
 }
 
-SvXMLImportContextRef XMLTextListItemContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextListItemContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    const SvXMLTokenMap& rTokenMap = rTxtImport.GetTextElemTokenMap();
-    bool bHeading = false;
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-    case XML_TOK_TEXT_H:
-        bHeading = true;
-        [[fallthrough]];
-    case XML_TOK_TEXT_P:
-        pContext = new XMLParaContext( GetImport(),
-                                       nPrefix, rLocalName,
-                                       xAttrList, bHeading );
+    case XML_ELEMENT(TEXT, XML_H):
+    case XML_ELEMENT(TEXT, XML_P):
+    case XML_ELEMENT(LO_EXT, XML_P):
+        pContext = new XMLParaContext( GetImport(), nElement,
+                                       xAttrList );
         if (rTxtImport.IsProgress())
             GetImport().GetProgressBarHelper()->Increment();
 
         break;
-    case XML_TOK_TEXT_LIST:
+    case XML_ELEMENT(TEXT, XML_LIST):
         ++mnSubListCount;
         pContext = new XMLTextListBlockContext( GetImport(), rTxtImport,
-                                                nPrefix, rLocalName,
                                                 xAttrList,
                                                 (mnSubListCount > 1) );
         break;
+    default:
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
     return pContext;
