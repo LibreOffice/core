@@ -46,6 +46,30 @@
       "revId": "3ea6a9ecb27348e91552f3246bac912f27f34af0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7c63e13_e76ef527",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 5568,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-11-24T08:21:31Z",
+      "side": 1,
+      "message": "OK - thanks. I\u0027ve probably found an alternate way to check...\n\n(I didn\u0027t expect that I would understand much of your answer - and I don\u0027t. That\u0027s OK. I only found one other use of dynamic_cast\u003cSwCharFormat\u003e - in sw/source/core/doc/docfmt. I\u0027ll leave it up to you if you think anything is worth chasing here.)",
+      "parentUuid": "e3f7af3e_342e0b62",
+      "range": {
+        "startLine": 5568,
+        "startChar": 8,
+        "endLine": 5568,
+        "endChar": 155
+      },
+      "revId": "3ea6a9ecb27348e91552f3246bac912f27f34af0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
