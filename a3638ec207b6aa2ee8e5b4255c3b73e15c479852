@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ca289eb_bfacf7f3",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3898,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-24T09:55:25Z",
+      "side": 1,
+      "message": "This line suggests that SwFormatRowSplit is indeed the expected type of the item here...",
+      "range": {
+        "startLine": 3898,
+        "startChar": 16,
+        "endLine": 3898,
+        "endChar": 68
+      },
+      "revId": "a3638ec207b6aa2ee8e5b4255c3b73e15c479852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
