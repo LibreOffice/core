@@ -45,15 +45,23 @@ class DomBuilderContext final : public SvXMLImportContext
 {
     css::uno::Reference<css::xml::dom::XNode> mxNode;
 
+    void HandleAttributes(const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs);
+
 public:
 
     /** default constructor: create new DOM tree */
     DomBuilderContext( SvXMLImport& rImport,
                        sal_Int32 nElement );
+    DomBuilderContext( SvXMLImport& rImport,
+                       const OUString & Namespace, const OUString & Name );
 
     /** constructor: create DOM subtree under the given node */
     DomBuilderContext( SvXMLImport& rImport,
                        sal_Int32 nElement,
+                       css::uno::Reference<css::xml::dom::XNode> const & );
+    /** constructor: create DOM subtree under the given node */
+    DomBuilderContext( SvXMLImport& rImport,
+                       const OUString & Namespace, const OUString & Name,
                        css::uno::Reference<css::xml::dom::XNode> const & );
 
     virtual ~DomBuilderContext() override;
@@ -70,10 +78,15 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext(
+        const OUString& Namespace, const OUString& Name,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 
     virtual void SAL_CALL startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startUnknownElement(const OUString & Namespace, const OUString & Name,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     virtual void SAL_CALL characters( const OUString& rChars ) override;
 };

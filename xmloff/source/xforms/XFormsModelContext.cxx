@@ -33,6 +33,7 @@
 #include <xmloff/xmlerror.hxx>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
@@ -53,16 +54,17 @@ void XFormsModelContext::HandleAttribute(
     sal_Int32 nAttributeToken,
     const OUString& rValue )
 {
-    switch( nAttributeToken )
+    switch( nAttributeToken & TOKEN_MASK)
     {
-    case XML_ELEMENT(NONE, XML_ID):
+    case XML_ID:
         mxModel->setPropertyValue( "ID", makeAny( rValue ) );
         break;
-    case XML_ELEMENT(NONE, XML_SCHEMA):
+    case XML_SCHEMA:
         GetImport().SetError( XMLERROR_XFORMS_NO_SCHEMA_SUPPORT );
         break;
     default:
-        OSL_FAIL( "this should not happen" );
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
+        assert( false && "this should not happen" );
         break;
     }
 }
@@ -88,7 +90,8 @@ SvXMLImportContext* XFormsModelContext::HandleChild(
         pContext = new SchemaContext( GetImport(), mxModel->getDataTypeRepository() );
         break;
     default:
-        OSL_FAIL( "Boooo!" );
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElementToken);
+        assert( false && "Boooo!" );
         break;
     }
 

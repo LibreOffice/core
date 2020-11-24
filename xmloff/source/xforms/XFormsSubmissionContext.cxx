@@ -72,56 +72,57 @@ Any toBool( const OUString& rValue )
 void XFormsSubmissionContext::HandleAttribute( sal_Int32 nAttributeToken,
                                                const OUString& rValue )
 {
-    switch( nAttributeToken )
+    switch( nAttributeToken & TOKEN_MASK )
     {
-    case XML_ELEMENT(NONE, XML_ID):
+    case XML_ID:
         xforms_setValue( mxSubmission, "ID", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_BIND):
+    case XML_BIND:
         xforms_setValue( mxSubmission, "Bind", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_REF):
+    case XML_REF:
         xforms_setValue( mxSubmission, "Ref", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_ACTION):
+    case XML_ACTION:
         xforms_setValue( mxSubmission, "Action", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_METHOD):
+    case XML_METHOD:
         xforms_setValue( mxSubmission, "Method", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_VERSION):
+    case XML_VERSION:
         xforms_setValue( mxSubmission, "Version", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_INDENT):
+    case XML_INDENT:
         xforms_setValue( mxSubmission, "Indent", toBool( rValue ) );
         break;
-    case XML_ELEMENT(NONE, XML_MEDIATYPE):
+    case XML_MEDIATYPE:
         xforms_setValue( mxSubmission, "MediaType", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_ENCODING):
+    case XML_ENCODING:
         xforms_setValue( mxSubmission, "Encoding", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_OMIT_XML_DECLARATION):
+    case XML_OMIT_XML_DECLARATION:
         xforms_setValue( mxSubmission, "OmitXmlDeclaration",
                       toBool( rValue ) );
         break;
-    case XML_ELEMENT(NONE, XML_STANDALONE):
+    case XML_STANDALONE:
         xforms_setValue( mxSubmission, "Standalone", toBool( rValue ) );
         break;
-    case XML_ELEMENT(NONE, XML_CDATA_SECTION_ELEMENTS):
+    case XML_CDATA_SECTION_ELEMENTS:
         xforms_setValue( mxSubmission, "CDataSectionElement", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_REPLACE):
+    case XML_REPLACE:
         xforms_setValue( mxSubmission, "Replace", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_SEPARATOR):
+    case XML_SEPARATOR:
         xforms_setValue( mxSubmission, "Separator", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_INCLUDENAMESPACEPREFIXES):
+    case XML_INCLUDENAMESPACEPREFIXES:
         xforms_setValue( mxSubmission, "IncludeNamespacePrefixes", rValue );
         break;
     default:
-        OSL_FAIL( "unknown attribute" );
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
+        assert( false && "unknown attribute" );
         break;
     }
 }
@@ -131,7 +132,7 @@ SvXMLImportContext* XFormsSubmissionContext::HandleChild(
     sal_Int32,
     const Reference<css::xml::sax::XFastAttributeList>& )
 {
-    OSL_FAIL( "no children supported" );
+    assert( false && "no children supported" );
     return nullptr;
 }
 

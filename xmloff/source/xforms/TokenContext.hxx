@@ -52,6 +52,10 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext(
+        const OUString& Namespace, const OUString& Name,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+
     /** Create a warning for all non-namespace character
      * content. Classes that wish to deal with character content have
      * to override this method anyway, and will thus get rid of the

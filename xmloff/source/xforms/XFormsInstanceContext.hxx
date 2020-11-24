@@ -52,8 +52,12 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext(
+        const OUString& Namespace, const OUString& Name,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void SAL_CALL endUnknownElement(const OUString & Namespace, const OUString & Name) override;
 
 protected:
     virtual void HandleAttribute(
