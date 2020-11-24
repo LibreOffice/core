@@ -817,7 +817,7 @@ bool SchXMLPositionAttributesHelper::isAutomatic() const
     return m_bAutoSize || m_bAutoPosition;
 }
 
-void SchXMLPositionAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
+void SchXMLPositionAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, std::u16string_view rValue )
 {
     if( XML_NAMESPACE_SVG != nPrefix )
         return;

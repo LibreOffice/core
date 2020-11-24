@@ -73,7 +73,7 @@ const SvXMLEnumMapEntry<sal_uInt16> aXML_GluePointEnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 static void GetBool( std::vector< css::beans::PropertyValue >& rDest,
-                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        std::u16string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     bool bAttrBool;
     if (::sax::Converter::convertBool( bAttrBool, rValue ))
@@ -99,7 +99,7 @@ static void GetInt32( std::vector< css::beans::PropertyValue >& rDest,
 }
 
 static void GetDouble( std::vector< css::beans::PropertyValue >& rDest,
-                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        std::u16string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     double fAttrDouble;
     if (::sax::Converter::convertDouble( fAttrDouble, rValue ))

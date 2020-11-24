@@ -53,7 +53,7 @@ const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 14;
 
 /** convert string to measure using optional min and max values*/
 bool Converter::convertMeasure( sal_Int32& rValue,
-                                const OUString& rString,
+                                std::u16string_view rString,
                                 sal_Int16 nTargetUnit /* = MeasureUnit::MM_100TH */,
                                 sal_Int32 nMin /* = SAL_MIN_INT32 */,
                                 sal_Int32 nMax /* = SAL_MAX_INT32 */ )
@@ -62,7 +62,7 @@ bool Converter::convertMeasure( sal_Int32& rValue,
     double nVal = 0;
 
     sal_Int32 nPos = 0;
-    sal_Int32 const nLen = rString.getLength();
+    sal_Int32 const nLen = rString.size();
 
     // skip white space
     while( (nPos < nLen) && (rString[nPos] <= ' ') )
@@ -424,11 +424,11 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
 }
 
 /** convert string to boolean */
-bool Converter::convertBool( bool& rBool, const OUString& rString )
+bool Converter::convertBool( bool& rBool, std::u16string_view rString )
 {
-    rBool = rString == "true";
+    rBool = rString == u"true";
 
-    return rBool || (rString == "false");
+    return rBool || (rString == u"false");
 }
 
 /** convert boolean to string */
@@ -438,7 +438,7 @@ void Converter::convertBool( OUStringBuffer& rBuffer, bool bValue )
 }
 
 /** convert string to percent */
-bool Converter::convertPercent( sal_Int32& rPercent, const OUString& rString )
+bool Converter::convertPercent( sal_Int32& rPercent, std::u16string_view rString )
 {
     return convertMeasure( rPercent, rString, MeasureUnit::PERCENT );
 }
@@ -451,7 +451,7 @@ void Converter::convertPercent( OUStringBuffer& rBuffer, sal_Int32 nValue )
 }
 
 /** convert string to pixel measure */
-bool Converter::convertMeasurePx( sal_Int32& rPixel, const OUString& rString )
+bool Converter::convertMeasurePx( sal_Int32& rPixel, std::u16string_view rString )
 {
     return convertMeasure( rPixel, rString, MeasureUnit::PIXEL );
 }
@@ -477,9 +477,9 @@ static int lcl_gethex( int nChar )
 }
 
 /** convert string to rgb color */
-bool Converter::convertColor( sal_Int32& rColor, const OUString& rValue )
+bool Converter::convertColor( sal_Int32& rColor, std::u16string_view rValue )
 {
-    if( rValue.getLength() != 7 || rValue[0] != '#' )
+    if( rValue.size() != 7 || rValue[0] != '#' )
         return false;
 
     rColor = lcl_gethex( rValue[1] ) * 16 + lcl_gethex( rValue[2] );
@@ -597,7 +597,7 @@ void Converter::convertDouble( OUStringBuffer& rBuffer, double fNumber)
 
 /** convert string to double number (using ::rtl::math) */
 bool Converter::convertDouble(double& rValue,
-    const OUString& rString, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
+    std::u16string_view rString, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
 {
     rtl_math_ConversionStatus eStatus;
     rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus );
@@ -616,7 +616,7 @@ bool Converter::convertDouble(double& rValue,
 }
 
 /** convert string to double number (using ::rtl::math) */
-bool Converter::convertDouble(double& rValue, const OUString& rString)
+bool Converter::convertDouble(double& rValue, std::u16string_view rString)
 {
     rtl_math_ConversionStatus eStatus;
     rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus );
@@ -641,7 +641,7 @@ void Converter::convertAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle,
 }
 
 /** convert SVG angle to number, 10th of degrees with range [0..3600] */
-bool Converter::convertAngle(sal_Int16& rAngle, OUString const& rString,
+bool Converter::convertAngle(sal_Int16& rAngle, std::u16string_view rString,
         bool const isWrongOOo10thDegAngle)
 {
     // ODF 1.1 leaves it undefined what the number means, but ODF 1.2 says it's
@@ -653,15 +653,15 @@ bool Converter::convertAngle(sal_Int16& rAngle, OUString const& rString,
     sal_Int32 nValue(0);
     double fValue(0.0);
     bool bRet = ::sax::Converter::convertDouble(fValue, rString);
-    if (-1 != rString.indexOf("deg"))
+    if (std::u16string_view::npos != rString.find(u"deg"))
     {
         nValue = fValue * 10.0;
     }
-    else if (-1 != rString.indexOf("grad"))
+    else if (std::u16string_view::npos != rString.find(u"grad"))
     {
         nValue = (fValue * 9.0 / 10.0) * 10.0;
     }
-    else if (-1 != rString.indexOf("rad"))
+    else if (std::u16string_view::npos != rString.find(u"rad"))
     {
         nValue = basegfx::rad2deg(fValue) * 10.0;
     }
@@ -761,12 +761,25 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
     rBuffer.append( 'S');
 }
 
+static std::u16string_view trim(std::u16string_view in) {
+  auto left = in.begin();
+  for (;; ++left) {
+    if (left == in.end())
+      return std::u16string_view();
+    if (!isspace(*left))
+      break;
+  }
+  auto right = in.end() - 1;
+  for (; right > left && isspace(*right); --right);
+  return std::u16string_view(&*left, std::distance(left, right) + 1);
+}
+
 /** convert ISO "duration" string to double; negative durations allowed */
 bool Converter::convertDuration(double& rfTime,
-                                const OUString& rString)
+                                std::u16string_view rString)
 {
-    OUString aTrimmed = rString.trim().toAsciiUpperCase();
-    const sal_Unicode* pStr = aTrimmed.getStr();
+    std::u16string_view aTrimmed = trim(rString);
+    const sal_Unicode* pStr = aTrimmed.data();
 
     // negative time duration?
     bool bIsNegativeDuration = false;
@@ -776,8 +789,9 @@ bool Converter::convertDuration(double& rfTime,
         pStr++;
     }
 
-    if ( *(pStr++) != 'P' )            // duration must start with "P"
+    if ( *pStr != 'P' && *pStr != 'p' )            // duration must start with "P"
         return false;
+    pStr++;
 
     OUStringBuffer sDoubleStr;
     bool bSuccess = true;
@@ -814,12 +828,12 @@ bool Converter::convertDuration(double& rfTime,
         }
         else if ( bTimePart )
         {
-            if ( c == 'H' )
+            if ( c == 'H' || c == 'h' )
             {
                 nHours = nTemp;
                 nTemp = 0;
             }
-            else if ( c == 'M' )
+            else if ( c == 'M' || c == 'm')
             {
                 nMins = nTemp;
                 nTemp = 0;
@@ -831,7 +845,7 @@ bool Converter::convertDuration(double& rfTime,
                 bIsFraction = true;
                 sDoubleStr = "0.";
             }
-            else if ( c == 'S' )
+            else if ( c == 'S' || c == 's' )
             {
                 if ( !bIsFraction )
                 {
@@ -845,14 +859,14 @@ bool Converter::convertDuration(double& rfTime,
         }
         else
         {
-            if ( c == 'T' )            // "T" starts time part
+            if ( c == 'T' || c == 't' )            // "T" starts time part
                 bTimePart = true;
-            else if ( c == 'D' )
+            else if ( c == 'D' || c == 'd')
             {
                 nDays = nTemp;
                 nTemp = 0;
             }
-            else if ( c == 'Y' || c == 'M' )
+            else if ( c == 'Y' || c == 'y' || c == 'M' || c == 'm' )
             {
                 //! how many days is a year or month?
 
@@ -1050,11 +1064,11 @@ readDurationT(const OUString & rString, sal_Int32 & io_rnPos)
 static bool
 readDurationComponent(const OUString & rString,
     sal_Int32 & io_rnPos, sal_Int32 & io_rnTemp, bool & io_rbTimePart,
-    sal_Int32 & o_rnTarget, const sal_Unicode c)
+    sal_Int32 & o_rnTarget, const sal_Unicode cLower, const sal_Unicode cUpper)
 {
     if (io_rnPos < rString.getLength())
     {
-        if (c == rString[io_rnPos])
+        if (cLower == rString[io_rnPos] || cUpper == rString[io_rnPos])
         {
             ++io_rnPos;
             if (-1 != io_rnTemp)
@@ -1079,20 +1093,20 @@ readDurationComponent(const OUString & rString,
 
 /** convert ISO8601 "duration" string to util::Duration */
 bool Converter::convertDuration(util::Duration& rDuration,
-                                const OUString& rString)
+                                std::u16string_view rString)
 {
-    const OUString string = rString.trim().toAsciiUpperCase();
+    std::u16string_view string = trim(rString);
     sal_Int32 nPos(0);
 
     bool bIsNegativeDuration(false);
-    if (!string.isEmpty() && ('-' == string[0]))
+    if (!string.empty() && ('-' == string[0]))
     {
         bIsNegativeDuration = true;
         ++nPos;
     }
 
-    if ((nPos < string.getLength())
-        && (string[nPos] != 'P')) // duration must start with "P"
+    if (nPos < static_cast<sal_Int32>(string.size())
+        && string[nPos] != 'P' && string[nPos] != 'p') // duration must start with "P"
     {
         return false;
     }
@@ -1117,19 +1131,19 @@ bool Converter::convertDuration(util::Duration& rDuration,
     if (!bTimePart && bSuccess)
     {
         bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                     nYears, 'Y');
+                     nYears, 'y', 'Y');
     }
 
     if (!bTimePart && bSuccess)
     {
         bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                     nMonths, 'M');
+                     nMonths, 'm', 'M');
     }
 
     if (!bTimePart && bSuccess)
     {
         bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                     nDays, 'D');
+                     nDays, 'd', 'D');
     }
 
     if (bTimePart)
@@ -1142,17 +1156,17 @@ bool Converter::convertDuration(util::Duration& rDuration,
         if (bSuccess)
         {
             bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                         nHours, 'H');
+                         nHours, 'h', 'H');
         }
 
         if (bSuccess)
         {
             bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                         nMinutes, 'M');
+                         nMinutes, 'm', 'M');
         }
 
         // eeek! seconds are icky.
-        if ((nPos < string.getLength()) && bSuccess)
+        if ((nPos < static_cast<sal_Int32>(string.size())) && bSuccess)
         {
             if (string[nPos] == '.' ||
                 string[nPos] == ',')
@@ -1164,7 +1178,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
                     nTemp = -1;
                     const sal_Int32 nStart(nPos);
                     bSuccess = readUnsignedNumberMaxDigits(9, string, nPos, nTemp) == R_SUCCESS;
-                    if ((nPos < string.getLength()) && bSuccess)
+                    if ((nPos < static_cast<sal_Int32>(string.size())) && bSuccess)
                     {
                         if (-1 != nTemp)
                         {
@@ -1176,7 +1190,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
                                 nNanoSeconds *= 10;
                             }
                             nTemp=-1;
-                            if ('S' == string[nPos])
+                            if ('S' == string[nPos] || 's' == string[nPos])
                             {
                                 ++nPos;
                             }
@@ -1196,7 +1210,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
                     bSuccess = false;
                 }
             }
-            else if ('S' == string[nPos])
+            else if ('S' == string[nPos] || 's' == string[nPos])
             {
                 ++nPos;
                 if (-1 != nTemp)
@@ -1212,7 +1226,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
         }
     }
 
-    if (nPos != string.getLength()) // string not processed completely?
+    if (nPos != static_cast<sal_Int32>(string.size())) // string not processed completely?
     {
         bSuccess = false;
     }
@@ -1393,7 +1407,7 @@ void Converter::convertDateTime(
 
 /** convert ISO "date" or "dateTime" string to util::DateTime */
 bool Converter::parseDateTime(   util::DateTime& rDateTime,
-                                 const OUString& rString )
+                                 std::u16string_view rString )
 {
     bool isDateTime;
     return parseDateOrDateTime(nullptr, rDateTime, isDateTime, nullptr,
@@ -1832,7 +1846,7 @@ static bool lcl_parseDateTime(
 /** convert ISO "time" or "dateTime" string to util::DateTime */
 bool Converter::parseTimeOrDateTime(
                 util::DateTime & rDateTime,
-                const OUString & rString)
+                std::u16string_view rString)
 {
     bool dummy;
     return lcl_parseDateTime(
@@ -1844,7 +1858,7 @@ bool Converter::parseDateOrDateTime(
                 util::Date *const pDate, util::DateTime & rDateTime,
                 bool & rbDateTime,
                 std::optional<sal_Int16> *const pTimeZoneOffset,
-                const OUString & rString )
+                std::u16string_view rString )
 {
     return lcl_parseDateTime(
                 pDate, rDateTime, rbDateTime, pTimeZoneOffset, rString, false);
@@ -1853,11 +1867,11 @@ bool Converter::parseDateOrDateTime(
 
 /** gets the position of the first comma after npos in the string
     rStr. Commas inside '"' pairs are not matched */
-sal_Int32 Converter::indexOfComma( const OUString& rStr,
+sal_Int32 Converter::indexOfComma( std::u16string_view rStr,
                                             sal_Int32 nPos )
 {
     sal_Unicode cQuote = 0;
-    sal_Int32 nLen = rStr.getLength();
+    sal_Int32 nLen = rStr.size();
     for( ; nPos < nLen; nPos++ )
     {
         sal_Unicode c = rStr[nPos];
@@ -2243,10 +2257,10 @@ double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUn
     return fRetval;
 }
 
-sal_Int16 Converter::GetUnitFromString(const OUString& rString, sal_Int16 nDefaultUnit)
+sal_Int16 Converter::GetUnitFromString(std::u16string_view rString, sal_Int16 nDefaultUnit)
 {
     sal_Int32 nPos = 0;
-    sal_Int32 nLen = rString.getLength();
+    sal_Int32 nLen = rString.size();
     sal_Int16 nRetUnit = nDefaultUnit;
 
     // skip white space

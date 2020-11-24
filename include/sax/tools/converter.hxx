@@ -59,7 +59,7 @@ class SAX_DLLPUBLIC Converter
 public:
     /** convert string to measure using optional min and max values*/
     static bool convertMeasure( sal_Int32& rValue,
-                                const OUString& rString,
+                                std::u16string_view rString,
                                 sal_Int16 nTargetUnit = css::util::MeasureUnit::MM_100TH,
                                 sal_Int32 nMin = SAL_MIN_INT32,
                                 sal_Int32 nMax = SAL_MAX_INT32 );
@@ -72,7 +72,7 @@ public:
 
     /** convert string to boolean */
     static bool convertBool( bool& rBool,
-                             const OUString& rString );
+                             std::u16string_view rString );
 
     /** convert boolean to string */
     static void convertBool( OUStringBuffer& rBuffer,
@@ -80,7 +80,7 @@ public:
 
     /** convert string to percent */
     static bool convertPercent( sal_Int32& rValue,
-                                const OUString& rString );
+                                std::u16string_view rString );
 
     /** convert percent to string */
     static void convertPercent( OUStringBuffer& rBuffer,
@@ -88,7 +88,7 @@ public:
 
     /** convert string to pixel measure unite */
     static bool convertMeasurePx( sal_Int32& rValue,
-                                  const OUString& rString );
+                                  std::u16string_view rString );
 
     /** convert pixel measure unit to string */
     static void convertMeasurePx( OUStringBuffer& rBuffer,
@@ -96,9 +96,9 @@ public:
 
     /** convert string to rgb color */
     static bool convertColor( sal_Int32& rColor,
-                              const OUString&rValue );
+                              std::u16string_view rValue );
     static bool convertColor( ::Color& rColor,
-                              const OUString&rValue )
+                              std::u16string_view rValue )
     {
         sal_Int32 n(rColor);
         bool b = convertColor( n, rValue );
@@ -139,19 +139,19 @@ public:
     /** convert string to double number (using ::rtl::math) and DO convert from
         source unit to target unit. */
     static bool convertDouble(  double& rValue,
-                                const OUString& rString,
+                                std::u16string_view rString,
                                 sal_Int16 nSourceUnit,
                                 sal_Int16 nTargetUnit );
 
     /** convert string to double number (using ::rtl::math) without unit conversion */
-    static bool convertDouble(double& rValue, const OUString& rString);
+    static bool convertDouble(double& rValue, std::u16string_view rString);
 
     /** convert number, 10th of degrees with range [0..3600] to SVG angle */
     static void convertAngle(OUStringBuffer& rBuffer, sal_Int16 nAngle,
             SvtSaveOptions::ODFSaneDefaultVersion nVersion);
 
     /** convert SVG angle to number, 10th of degrees with range [0..3600] */
-    static bool convertAngle(sal_Int16& rAngle, OUString const& rString,
+    static bool convertAngle(sal_Int16& rAngle, std::u16string_view rString,
             bool isWrongOOo10thDegAngle);
 
     /** convert double to XMLSchema-2 "duration" string; negative durations allowed */
@@ -164,11 +164,11 @@ public:
 
     /** convert XMLSchema-2 "duration" string to double; negative durations allowed */
     static bool convertDuration(double & rfTime,
-                                const OUString& rString);
+                                std::u16string_view rString);
 
     /** convert XMLSchema-2 "duration" string to util::Duration */
     static bool convertDuration(css::util::Duration& rDuration,
-                        const OUString& rString);
+                        std::u16string_view rString);
 
     /** convert util::Date to XMLSchema-2 "date" string */
     static void convertDate( OUStringBuffer& rBuffer,
@@ -187,11 +187,11 @@ public:
 
     /** convert XMLSchema-2 "date" or "dateTime" string to util::DateTime */
     static bool parseDateTime( css::util::DateTime& rDateTime,
-                                 const OUString& rString );
+                               std::u16string_view rString );
 
     /** convert XMLSchema-2 "time" or "dateTime" string to util::DateTime */
     static bool parseTimeOrDateTime(css::util::DateTime& rDateTime,
-                                 const OUString& rString);
+                                 std::u16string_view rString);
 
     /** convert XMLSchema-2 "date" or "dateTime" string to util::DateTime or
         util::Date */
@@ -200,15 +200,15 @@ public:
                     css::util::DateTime & rDateTime,
                     bool & rbDateTime,
                     std::optional<sal_Int16> * pTimeZoneOffset,
-                    const OUString & rString );
+                    std::u16string_view rString );
 
     /** gets the position of the first comma after npos in the string
         rStr. Commas inside '"' pairs are not matched */
-    static sal_Int32 indexOfComma( const OUString& rStr,
+    static sal_Int32 indexOfComma( std::u16string_view rStr,
                                    sal_Int32 nPos );
 
     static double GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit);
-    static sal_Int16 GetUnitFromString(const OUString& rString, sal_Int16 nDefaultUnit);
+    static sal_Int16 GetUnitFromString(std::u16string_view rString, sal_Int16 nDefaultUnit);
 
     /** convert an Any to string (typesafe) */
     static bool convertAny(OUStringBuffer&          rsValue,
