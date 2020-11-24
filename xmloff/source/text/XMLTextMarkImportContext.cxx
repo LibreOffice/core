@@ -56,10 +56,8 @@ using namespace ::xmloff::token;
 
 XMLFieldParamImportContext::XMLFieldParamImportContext(
     SvXMLImport& rImport,
-    XMLTextImportHelper& rHlp,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
+    XMLTextImportHelper& rHlp ) :
+        SvXMLImportContext(rImport),
         rHelper(rHlp)
 {
 }
@@ -427,12 +425,11 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 )
     }
 }
 
-SvXMLImportContextRef XMLTextMarkImportContext::CreateChildContext( sal_uInt16 nPrefix,
-                                        const OUString& rLocalName,
-                                        const css::uno::Reference< css::xml::sax::XAttributeList >&  )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextMarkImportContext::createFastChildContext(
+    sal_Int32 ,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    return new XMLFieldParamImportContext(GetImport(), m_rHelper,
-                nPrefix, rLocalName);
+    return new XMLFieldParamImportContext(GetImport(), m_rHelper);
 }
 
 
